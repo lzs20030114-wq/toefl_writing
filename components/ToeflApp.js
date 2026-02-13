@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 
 const BS_DATA = [
+  // Set 1 (9 questions)
   { id:"bs1", prompt:"What did you think of the city tour?", chunks:["The tour guides","who showed","us around","the old city","were","fantastic"], answer:"The tour guides who showed us around the old city were fantastic", gp:"relative clause" },
   { id:"bs2", prompt:"Did your mom ask about your college plans?", chunks:["She wanted","to know","which colleges","I'm","considering"], answer:"She wanted to know which colleges I'm considering", gp:"indirect question" },
   { id:"bs3", prompt:"Do you want me to send you a copy?", chunks:["Do you","want","me","to send","you","a copy"], answer:"Do you want me to send you a copy", gp:"complex object" },
@@ -11,17 +12,48 @@ const BS_DATA = [
   { id:"bs7", prompt:"Did the advisor help with course selection?", chunks:["She recommended","that I","take","statistics","before","enrolling in","the research methods class"], answer:"She recommended that I take statistics before enrolling in the research methods class", gp:"subjunctive + gerund" },
   { id:"bs8", prompt:"Why didn't you submit the paper on time?", chunks:["I didn't","realize","that","the deadline","had been","moved up","by a week"], answer:"I didn't realize that the deadline had been moved up by a week", gp:"past perfect passive" },
   { id:"bs9", prompt:"What happened at the student council meeting?", chunks:["They decided","to postpone","the vote","until","more students","could attend"], answer:"They decided to postpone the vote until more students could attend", gp:"infinitive + temporal" },
+  // Set 2 (9 questions)
+  { id:"bs10", prompt:"Why is the library so crowded today?", chunks:["The students","who have","final exams","next week","are all","studying there"], answer:"The students who have final exams next week are all studying there", gp:"relative clause" },
+  { id:"bs11", prompt:"Did you find out about the scholarship?", chunks:["I was told","that the application","had already","been submitted","on my behalf"], answer:"I was told that the application had already been submitted on my behalf", gp:"past perfect passive" },
+  { id:"bs12", prompt:"What did the doctor say?", chunks:["She suggested","that I","get","more sleep","and reduce","my caffeine intake"], answer:"She suggested that I get more sleep and reduce my caffeine intake", gp:"subjunctive + parallel structure" },
+  { id:"bs13", prompt:"How do you like your new apartment?", chunks:["The only thing","I don't like","is that","the neighbors","are sometimes","too noisy","at night"], answer:"The only thing I don't like is that the neighbors are sometimes too noisy at night", gp:"noun clause + adverb placement" },
+  { id:"bs14", prompt:"Did the teacher explain the homework?", chunks:["She asked us","to read","the article","and write","a summary","by Friday"], answer:"She asked us to read the article and write a summary by Friday", gp:"complex object + parallel infinitive" },
+  { id:"bs15", prompt:"What are you doing this weekend?", chunks:["I'm planning","to visit","the museum","that just opened","near the campus"], answer:"I'm planning to visit the museum that just opened near the campus", gp:"infinitive + relative clause" },
+  { id:"bs16", prompt:"Why did you change your major?", chunks:["I realized","that I","was more interested","in psychology","than","in engineering"], answer:"I realized that I was more interested in psychology than in engineering", gp:"comparative structure" },
+  { id:"bs17", prompt:"How was the group project?", chunks:["Despite","having different opinions","we managed","to finish","the project","on time"], answer:"Despite having different opinions we managed to finish the project on time", gp:"concessive + gerund" },
+  { id:"bs18", prompt:"What did the email from the registrar say?", chunks:["It stated","that all students","must register","for courses","before","the end of","the month"], answer:"It stated that all students must register for courses before the end of the month", gp:"noun clause + modal" },
+  // Set 3 (9 questions)
+  { id:"bs19", prompt:"Why didn't you go to the party?", chunks:["By the time","I finished","my assignment","the party","had already","ended"], answer:"By the time I finished my assignment the party had already ended", gp:"past perfect + temporal clause" },
+  { id:"bs20", prompt:"What makes this university special?", chunks:["Not only","does it","have","excellent professors","but it also","offers","great research opportunities"], answer:"Not only does it have excellent professors but it also offers great research opportunities", gp:"inversion + correlative conjunction" },
+  { id:"bs21", prompt:"Did you talk to the financial aid office?", chunks:["They informed me","that my scholarship","would be renewed","provided that","I maintain","a 3.5 GPA"], answer:"They informed me that my scholarship would be renewed provided that I maintain a 3.5 GPA", gp:"conditional + passive" },
+  { id:"bs22", prompt:"How did the interview go?", chunks:["The interviewer","asked me","what skills","I could bring","to the company"], answer:"The interviewer asked me what skills I could bring to the company", gp:"embedded question" },
+  { id:"bs23", prompt:"What happened to the study abroad program?", chunks:["Had the university","received","enough funding","the program","would not","have been","canceled"], answer:"Had the university received enough funding the program would not have been canceled", gp:"inverted conditional (3rd)" },
+  { id:"bs24", prompt:"Why do you prefer online classes?", chunks:["What I appreciate","most about","online learning","is the flexibility","it provides","for working students"], answer:"What I appreciate most about online learning is the flexibility it provides for working students", gp:"cleft sentence" },
+  { id:"bs25", prompt:"Did you enjoy the conference?", chunks:["The keynote speaker","whose research","focuses on","artificial intelligence","gave","a fascinating","presentation"], answer:"The keynote speaker whose research focuses on artificial intelligence gave a fascinating presentation", gp:"non-restrictive relative clause" },
+  { id:"bs26", prompt:"What did your roommate complain about?", chunks:["She said","that if","the heating","were fixed","she would not","have to","wear a coat","indoors"], answer:"She said that if the heating were fixed she would not have to wear a coat indoors", gp:"reported speech + subjunctive" },
+  { id:"bs27", prompt:"How is the new cafeteria?", chunks:["Compared to","the old one","the new cafeteria","has","a much wider","selection of","healthy options"], answer:"Compared to the old one the new cafeteria has a much wider selection of healthy options", gp:"participial phrase + comparison" },
 ];
 
 const EM_DATA = [
   { id:"em1", scenario:"You are a student in Professor Kim's sociology class. Last week, you submitted your midterm essay via the class website. Yesterday, you checked your grade and were surprised to see it was much lower than you expected. When you opened the file that was graded, you realized it was an older draft, not the final version.", direction:"Write an email to Professor Kim:", goals:["Explain the situation with your midterm essay submission","Ask if you can resubmit the correct version","Describe how this grade would affect your overall performance"], to:"Professor Kim", from:"You (Sociology 201)" },
   { id:"em2", scenario:"You recently saw a poster on campus for an international cultural exchange program. The program allows students to host visiting scholars and attend lectures by international faculty. You are interested but have questions.", direction:"Write an email to the International Programs Office:", goals:["Express your interest in the program","Ask specific questions about logistics","Suggest an idea for a cultural activity"], to:"International Programs Office", from:"You (student)" },
   { id:"em3", scenario:"You subscribe to a poetry magazine called Verse & Voice. You tried to submit a poem through their online form last week, but the form gave an error after you clicked Submit. You are not sure if your poem was received.", direction:"Write an email to the editor:", goals:["Tell the editor what you like about the magazine","Describe the technical problem","Ask about the status of your submission"], to:"Editor, Verse & Voice", from:"You (subscriber)" },
+  { id:"em4", scenario:"You are a junior who recently completed an internship at a local environmental nonprofit. Your supervisor, Ms. Rivera, mentioned that the organization might offer a part-time position in the fall. You are very interested and want to follow up.", direction:"Write an email to Ms. Rivera:", goals:["Thank her for the internship experience and mention something specific you learned","Ask about the part-time position and your eligibility","Explain how the role fits your academic and career goals"], to:"Ms. Rivera, GreenFuture Nonprofit", from:"You (former intern)" },
+  { id:"em5", scenario:"Your university library recently changed its weekend hours, closing two hours earlier than before. As a student who works during the week, weekends are your main study time. You and several classmates are concerned.", direction:"Write an email to the Library Director:", goals:["Explain why the old weekend hours were important to you","Describe the impact of the change on your studies","Propose a compromise or alternative solution"], to:"Library Director", from:"You (undergraduate student)" },
+  { id:"em6", scenario:"You enrolled in a biology lab section that meets on Tuesdays and Thursdays. However, you just received your updated work schedule and now have a conflict on Thursdays. Another lab section is available on Wednesdays but is currently full.", direction:"Write an email to the Biology Department:", goals:["Explain the scheduling conflict you are facing","Request to be added to the Wednesday lab section","Describe the consequences if you cannot resolve this issue"], to:"Biology Department", from:"You (Biology 110)" },
+  { id:"em7", scenario:"Your dormitory has been experiencing frequent Wi-Fi outages over the past two weeks. You have an important online exam coming up next Monday and are worried about connectivity. Other residents on your floor have the same complaint.", direction:"Write an email to the Campus IT Help Desk:", goals:["Describe the Wi-Fi problems you have been experiencing","Explain why reliable internet is urgent for you right now","Ask what steps are being taken and suggest a temporary solution"], to:"IT Help Desk", from:"You (Residence Hall student)" },
+  { id:"em8", scenario:"You attended a guest lecture on campus last week by Dr. Thompson, a well-known marine biologist. The lecture inspired you and you are now considering changing your research topic for your senior thesis. You would like to contact Dr. Thompson for guidance.", direction:"Write an email to Dr. Thompson:", goals:["Express your appreciation for the lecture and mention a specific point that resonated with you","Explain how the lecture connects to your academic interests","Ask if Dr. Thompson would be willing to provide brief advice or recommend resources"], to:"Dr. Thompson", from:"You (senior, Environmental Science)" },
 ];
 
 const AD_DATA = [
   { id:"ad1", professor:{ name:"Dr. Gupta", text:"This week we examine urban development. Some cities create car-free zones downtown to reduce pollution and encourage walking. Critics say this hurts businesses and limits access for people with mobility challenges. State whether you support or oppose car-free zones and explain why." }, students:[{ name:"Yuki", text:"I support car-free zones because they create a healthier environment. In my hometown in Japan, a shopping street closed to traffic became very popular. Shops reported higher sales because foot traffic increased." },{ name:"Carlos", text:"I think a complete ban is too extreme. Many people depend on cars. Cities should invest in public transit and bike lanes while allowing limited car access." }] },
   { id:"ad2", professor:{ name:"Dr. Chen", text:"Some universities require all students to take at least one computer science course, regardless of major. Supporters say coding is fundamental; opponents say it takes time from primary studies. What is your position?" }, students:[{ name:"Aisha", text:"I believe a programming requirement makes sense. Even journalism and biology rely on data analysis. Basic coding helps graduates be competitive." },{ name:"Marco", text:"I disagree with making it mandatory. Students already have heavy course loads. Forcing a music student to take programming causes unnecessary stress." }] },
+  { id:"ad3", professor:{ name:"Dr. Patel", text:"Many universities now allow students to take most of their courses online. Some argue that online learning offers flexibility and accessibility, while others claim that in-person classes provide a richer educational experience. What do you think is the better approach for university education?" }, students:[{ name:"Lena", text:"Online learning is the future. I took several courses online and was able to work part-time simultaneously. The recorded lectures let me review material at my own pace." },{ name:"James", text:"I strongly prefer in-person classes. The discussions and group activities just don't work the same way over video. You also miss out on networking with classmates." }] },
+  { id:"ad4", professor:{ name:"Dr. Williams", text:"Social media platforms have become a primary news source for many young people. Some experts say this democratizes information, while others warn about misinformation and echo chambers. Should universities teach media literacy as a required course? Share your opinion." }, students:[{ name:"Sofia", text:"Absolutely. I've seen so many of my friends share news articles without checking if they're true. A media literacy course would help students think critically about what they read online." },{ name:"Ryan", text:"I don't think it needs to be a separate required course. Critical thinking should be taught across all subjects. Adding another requirement just adds to students' workloads." }] },
+  { id:"ad5", professor:{ name:"Dr. Nakamura", text:"Some companies have adopted a four-day work week, claiming it increases productivity and employee well-being. Others argue that reducing work hours leads to missed deadlines and lost revenue. Do you think the four-day work week is a good idea? Why or why not?" }, students:[{ name:"Emma", text:"I think a four-day work week is great for mental health. Studies show that well-rested employees make fewer mistakes. Companies in Iceland and Japan have seen positive results." },{ name:"David", text:"It depends on the industry. For office jobs it might work, but hospitals, restaurants, and service industries can't just close an extra day. It's not a one-size-fits-all solution." }] },
+  { id:"ad6", professor:{ name:"Dr. Okafor", text:"Zoos have long been debated. Supporters argue they play a crucial role in conservation and education. Critics say keeping animals in enclosures is unethical, regardless of the purpose. Should modern zoos continue to exist? Take a position and explain your reasoning." }, students:[{ name:"Priya", text:"I believe well-managed zoos are essential for conservation. Many species would be extinct without captive breeding programs. Zoos also educate children about wildlife." },{ name:"Tom", text:"Even the best zoos can't replicate natural habitats. Animals in captivity show signs of stress and abnormal behavior. We should fund wildlife reserves instead." }] },
+  { id:"ad7", professor:{ name:"Dr. Kim", text:"Some educators argue that students should be graded purely on exams, while others believe that participation, attendance, and group projects should also count toward the final grade. What grading approach do you think is most fair and effective?" }, students:[{ name:"Mei", text:"I think a mix is best. Exams test knowledge, but participation shows engagement. My best learning happened during group discussions, not just studying for tests." },{ name:"Alex", text:"Exams are the most objective measure. Participation grades are subjective—quiet students get penalized even if they understand the material. Grading should be based on demonstrated knowledge." }] },
+  { id:"ad8", professor:{ name:"Dr. Santos", text:"With the rise of AI tools like ChatGPT, some professors have banned their use entirely in coursework, while others encourage students to use AI as a learning aid. What is your position on the use of AI tools in academic work?" }, students:[{ name:"Hannah", text:"AI tools should be allowed as long as students cite them. They help with brainstorming and understanding difficult concepts. Banning them entirely is unrealistic since they're everywhere." },{ name:"Kevin", text:"Using AI for assignments defeats the purpose of learning. If a student uses ChatGPT to write an essay, they haven't actually practiced writing. Schools should ban AI tools for graded work." }] },
 ];
 
 function fmt(s) { return String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0"); }
@@ -43,9 +75,9 @@ async function callAI(system, message, maxTokens) {
   return d.content;
 }
 
-const EMAIL_SYS = "You are a STRICT ETS TOEFL iBT 2026 Writing scorer. Score the email 0-5 with ZERO inflation. RUBRIC: 5(RARE)=CONSISTENT facility,PRECISE/IDIOMATIC,almost NO errors. 4=MOSTLY effective,ADEQUATE,FEW errors. 3=GENERALLY accomplishes but NOTICEABLE errors. 2=MOSTLY UNSUCCESSFUL. 1=UNSUCCESSFUL. Most score 3-4. BAND: 5=5.0-6.0,4=4.0-4.5,3=3.0-3.5,2=2.0-2.5,1=1.0-1.5. Find ALL weaknesses first. Return ONLY JSON: {\"score\":0,\"band\":0.0,\"goals_met\":[false,false,false],\"summary\":\"...\",\"weaknesses\":[\"...\"],\"strengths\":[\"...\"],\"grammar_issues\":[\"...\"],\"vocabulary_note\":\"...\",\"next_steps\":[\"...\"],\"sample\":\"model response\"}";
+const EMAIL_SYS = "You are a STRICT ETS TOEFL iBT 2026 Writing scorer. Score the email 0-5 with ZERO inflation. RUBRIC: 5(RARE)=CONSISTENT facility,PRECISE/IDIOMATIC,almost NO errors. 4=MOSTLY effective,ADEQUATE,FEW errors. 3=GENERALLY accomplishes but NOTICEABLE errors. 2=MOSTLY UNSUCCESSFUL. 1=UNSUCCESSFUL. Most score 3-4. BAND: 5=5.0-6.0,4=4.0-4.5,3=3.0-3.5,2=2.0-2.5,1=1.0-1.5. Find ALL weaknesses first. IMPORTANT: Write summary, weaknesses, strengths, grammar_issues, vocabulary_note, next_steps ALL in Chinese (简体中文). The sample model response should remain in English. Return ONLY JSON: {\"score\":0,\"band\":0.0,\"goals_met\":[false,false,false],\"summary\":\"中文总结...\",\"weaknesses\":[\"中文弱点...\"],\"strengths\":[\"中文优点...\"],\"grammar_issues\":[\"中文语法问题...\"],\"vocabulary_note\":\"中文词汇点评...\",\"next_steps\":[\"中文改进建议...\"],\"sample\":\"English model response\"}";
 
-const DISC_SYS = "You are a STRICT ETS TOEFL iBT 2026 Writing scorer. Score the discussion post 0-5 with ZERO inflation. RUBRIC: 5(RARE)=VERY CLEAR,WELL-ELABORATED,PRECISE/IDIOMATIC. 4=RELEVANT,ADEQUATELY elaborated,FEW errors. 3=MOSTLY relevant,NOTICEABLE errors. 2=MOSTLY UNSUCCESSFUL. 1=UNSUCCESSFUL. Most score 3-4. BAND: 5=5.0-6.0,4=4.0-4.5,3=3.0-3.5,2=2.0-2.5,1=1.0-1.5. Find ALL weaknesses first. Return ONLY JSON: {\"score\":0,\"band\":0.0,\"engages_professor\":false,\"engages_students\":false,\"summary\":\"...\",\"weaknesses\":[\"...\"],\"strengths\":[\"...\"],\"grammar_issues\":[\"...\"],\"vocabulary_note\":\"...\",\"argument_quality\":\"...\",\"next_steps\":[\"...\"],\"sample\":\"model response\"}";
+const DISC_SYS = "You are a STRICT ETS TOEFL iBT 2026 Writing scorer. Score the discussion post 0-5 with ZERO inflation. RUBRIC: 5(RARE)=VERY CLEAR,WELL-ELABORATED,PRECISE/IDIOMATIC. 4=RELEVANT,ADEQUATELY elaborated,FEW errors. 3=MOSTLY relevant,NOTICEABLE errors. 2=MOSTLY UNSUCCESSFUL. 1=UNSUCCESSFUL. Most score 3-4. BAND: 5=5.0-6.0,4=4.0-4.5,3=3.0-3.5,2=2.0-2.5,1=1.0-1.5. Find ALL weaknesses first. IMPORTANT: Write summary, weaknesses, strengths, grammar_issues, vocabulary_note, argument_quality, next_steps ALL in Chinese (简体中文). The sample model response should remain in English. Return ONLY JSON: {\"score\":0,\"band\":0.0,\"engages_professor\":false,\"engages_students\":false,\"summary\":\"中文总结...\",\"weaknesses\":[\"中文弱点...\"],\"strengths\":[\"中文优点...\"],\"grammar_issues\":[\"中文语法问题...\"],\"vocabulary_note\":\"中文词汇点评...\",\"argument_quality\":\"中文论证质量评价...\",\"next_steps\":[\"中文改进建议...\"],\"sample\":\"English model response\"}";
 
 async function aiEval(type, pd, text) {
   const sys = type === "email" ? EMAIL_SYS : DISC_SYS;
@@ -158,23 +190,65 @@ function ScorePanel({ result, type }) {
   );
 }
 
+function getRandomSet() {
+  const sets = [BS_DATA.slice(0, 9), BS_DATA.slice(9, 18), BS_DATA.slice(18, 27)];
+  return sets[Math.floor(Math.random() * sets.length)];
+}
+
 function BuildSentenceTask({ onExit }) {
-  const [qs, setQs] = useState(BS_DATA);
+  const [qs, setQs] = useState(() => getRandomSet());
   const [idx, setIdx] = useState(0);
   const [slots, setSlots] = useState([]);
   const [bank, setBank] = useState([]);
   const [results, setResults] = useState([]);
-  const [phase, setPhase] = useState("active");
+  const [phase, setPhase] = useState("instruction");
   const [tl, setTl] = useState(360);
-  const [run, setRun] = useState(true);
+  const [run, setRun] = useState(false);
   const [gen, setGen] = useState(false);
   const tr = useRef(null);
 
+  const autoSubmitRef = useRef(false);
+  const resultsRef = useRef([]);
+  const idxRef = useRef(0);
+  const slotsRef = useRef([]);
+
+  function startTimer() {
+    setPhase("active");
+    setRun(true);
+    initQ(0, qs);
+    tr.current = setInterval(() => setTl(p => {
+      if (p <= 1) {
+        clearInterval(tr.current);
+        setRun(false);
+        autoSubmitRef.current = true;
+        return 0;
+      }
+      return p - 1;
+    }), 1000);
+  }
+
+  useEffect(() => { resultsRef.current = results; }, [results]);
+  useEffect(() => { idxRef.current = idx; }, [idx]);
+  useEffect(() => { slotsRef.current = slots; }, [slots]);
+
   useEffect(() => {
-    initQ(0, BS_DATA);
-    tr.current = setInterval(() => setTl(p => { if (p <= 1) { clearInterval(tr.current); setRun(false); return 0; } return p - 1; }), 1000);
-    return () => clearInterval(tr.current);
-  }, []);
+    if (tl === 0 && autoSubmitRef.current && phase === "active") {
+      autoSubmitRef.current = false;
+      // Submit current answer and all remaining as empty
+      const curAnswer = slotsRef.current.map(x => x.text).join(" ");
+      const curQ = qs[idxRef.current];
+      const curOk = curAnswer.toLowerCase().replace(/[.,!?]/g, "").trim() === curQ.answer.toLowerCase().replace(/[.,!?]/g, "").trim();
+      let nr = [...resultsRef.current, { q: curQ, userAnswer: curAnswer || "(no answer)", isCorrect: curOk }];
+      for (let i = idxRef.current + 1; i < qs.length; i++) {
+        nr.push({ q: qs[i], userAnswer: "(no answer)", isCorrect: false });
+      }
+      setResults(nr);
+      setPhase("review");
+      saveSess({ type: "bs", correct: nr.filter(r => r.isCorrect).length, total: nr.length, errors: nr.filter(r => !r.isCorrect).map(r => r.q.gp) });
+    }
+  }, [tl, phase, qs]);
+
+  useEffect(() => () => clearInterval(tr.current), []);
 
   function initQ(i, q) { setBank(shuffle(q[i].chunks.map((c, j) => ({ text: c, id: i + "-" + j })))); setSlots([]); }
   function pick(it) { setSlots(p => [...p, it]); setBank(p => p.filter(x => x.id !== it.id)); }
@@ -232,6 +306,26 @@ function BuildSentenceTask({ onExit }) {
     );
   }
 
+  if (phase === "instruction") {
+    return (
+      <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
+        <TopBar title="Build a Sentence" section="Writing · Task 1" onExit={onExit} />
+        <div style={{ maxWidth: 760, margin: "24px auto", padding: "0 20px" }}>
+          <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: "32px 40px" }}>
+            <h2 style={{ margin: "0 0 16px", fontSize: 20, color: C.nav }}>Task 1: Build a Sentence</h2>
+            <div style={{ fontSize: 14, color: C.t1, lineHeight: 1.8 }}>
+              <p><b>Directions:</b> In this task, you will see a prompt and a set of word chunks. Click the chunks in the correct order to form a grammatically correct sentence.</p>
+              <p><b>Questions:</b> 9</p>
+              <p><b>Time limit:</b> 6 minutes</p>
+              <p>The timer will start when you click <b>Start</b>. When time runs out, your answers will be submitted automatically.</p>
+            </div>
+            <div style={{ marginTop: 24, textAlign: "center" }}><Btn onClick={startTimer}>Start</Btn></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const q = qs[idx];
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
@@ -267,8 +361,34 @@ function WritingTask({ onExit, type }) {
   const [gen, setGen] = useState(false);
   const tr = useRef(null);
 
+  const submitRef = useRef(null);
+  const phaseRef = useRef(phase);
+  useEffect(() => { phaseRef.current = phase; }, [phase]);
+
   function start() { setPhase("writing"); setRun(true); tr.current = setInterval(() => setTl(p => { if (p <= 1) { clearInterval(tr.current); setRun(false); return 0; } return p - 1; }), 1000); }
+
   async function submitScore() { clearInterval(tr.current); setRun(false); setPhase("scoring"); const r = await aiEval(type, pd, text); setFb(r); setPhase("done"); if (r) saveSess({ type, score: r.score, band: r.band, wordCount: wc(text), weaknesses: r.weaknesses, next_steps: r.next_steps }); }
+  submitRef.current = submitScore;
+
+  // Auto-submit when time runs out
+  useEffect(() => {
+    if (tl === 0 && phaseRef.current === "writing") {
+      submitRef.current();
+    }
+  }, [tl]);
+
+  // Ctrl+Enter shortcut
+  useEffect(() => {
+    function handleKey(e) {
+      if (e.ctrlKey && e.key === "Enter" && phaseRef.current === "writing") {
+        e.preventDefault();
+        submitRef.current();
+      }
+    }
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, []);
+
   function next() { clearInterval(tr.current); const n = (pi + 1) % data.length; setPi(n); setPd(data[n]); setText(""); setTl(limit); setRun(false); setPhase("ready"); setFb(null); }
   async function genNew() { setGen(true); const d = await aiGen(type); if (d) { setPd({ id: "gen", ...d }); setText(""); setTl(limit); setRun(false); setPhase("ready"); setFb(null); } setGen(false); }
   useEffect(() => () => clearInterval(tr.current), []);
@@ -317,7 +437,7 @@ function WritingTask({ onExit, type }) {
                   <div style={{ background: "#e8e8e8", padding: "10px 16px", fontSize: 12, fontWeight: 700, color: C.t2, borderBottom: "1px solid " + C.bdr, display: "flex", justifyContent: "space-between" }}><span>YOUR RESPONSE</span><span style={{ color: w < minW ? C.orange : C.green }}>{w} words {w < minW ? "(" + (minW - w) + " more)" : "✓"}</span></div>
                   <textarea value={text} onChange={e => setText(e.target.value)} disabled={phase === "scoring" || phase === "done"} placeholder={type === "email" ? "Dear " + pd.to + ",\n\nI am writing to..." : "I think this is an interesting question..."} style={{ flex: 1, minHeight: type === "email" ? 280 : 320, border: "none", padding: 16, fontSize: 14, fontFamily: FONT, lineHeight: 1.7, color: C.t1, resize: "none", outline: "none", background: phase === "done" ? "#fafafa" : "#fff" }} />
                 </div>
-                {phase === "writing" && <Btn onClick={submitScore} disabled={w < 10} variant="success">Submit for Scoring</Btn>}
+                {phase === "writing" && <div style={{ display: "flex", alignItems: "center", gap: 12 }}><Btn onClick={submitScore} disabled={w < 10} variant="success">Submit for Scoring</Btn><span style={{ fontSize: 11, color: C.t2 }}>Ctrl+Enter</span></div>}
               </>
             )}
             {phase === "scoring" && <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 4, padding: 32, textAlign: "center", color: C.t2 }}>AI evaluating...</div>}
@@ -387,9 +507,9 @@ export default function ToeflApp() {
           <p style={{ color: C.t2, fontSize: 14, margin: "8px 0 0" }}>New TOEFL iBT — January 21, 2026</p>
         </div>
         {[
-          { k: "build", n: "Task 1", t: "Build a Sentence", d: "Arrange word chunks into correct sentences.", ti: "~6 min", it: "9 Qs", tag: true },
-          { k: "email", n: "Task 2", t: "Write an Email", d: "Write a professional email. 3 goals.", ti: "7 min", it: "80-120w", tag: true },
-          { k: "disc", n: "Task 3", t: "Academic Discussion", d: "Respond on a discussion board.", ti: "10 min", it: "100+w", tag: false },
+          { k: "build", n: "Task 1", t: "Build a Sentence", d: "Arrange word chunks into correct sentences. 3 sets available.", ti: "~6 min", it: "9 Qs/set", tag: true },
+          { k: "email", n: "Task 2", t: "Write an Email", d: "Write a professional email. 3 goals. 8 prompts.", ti: "7 min", it: "80-120w", tag: true },
+          { k: "disc", n: "Task 3", t: "Academic Discussion", d: "Respond on a discussion board. 8 topics.", ti: "10 min", it: "100+w", tag: false },
         ].map(c => (
           <button key={c.k} onClick={() => setV(c.k)} style={{ display: "flex", width: "100%", textAlign: "left", background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 0, marginBottom: 12, cursor: "pointer", overflow: "hidden", fontFamily: FONT }}>
             <div style={{ width: 6, background: C.blue, flexShrink: 0 }} />
@@ -407,6 +527,9 @@ export default function ToeflApp() {
           <div style={{ padding: "16px 20px", display: "flex", alignItems: "center", color: C.blue, fontSize: 20 }}>→</div>
         </button>
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: "14px 20px", fontSize: 12, color: C.t2 }}><b style={{ color: C.t1 }}>Powered by DeepSeek AI</b> · ETS 0–5 scoring · Grammar diagnostics · Weakness tracking · AI question generation</div>
+        <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: "14px 20px", marginTop: 12, fontSize: 11, color: C.t2, lineHeight: 1.6 }}>
+          <b style={{ color: C.t1 }}>Disclaimer:</b> This tool is an independent practice resource and is not affiliated with, endorsed by, or associated with ETS or the TOEFL program. TOEFL and TOEFL iBT are registered trademarks of ETS. AI scoring is based on publicly available ETS rubric criteria and is intended for self-study reference only. Scores may not reflect actual TOEFL exam results.
+        </div>
       </div>
     </div>
   );
