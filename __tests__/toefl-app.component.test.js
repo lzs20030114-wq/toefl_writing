@@ -37,7 +37,7 @@ describe("ToeflApp navigation", () => {
       jest.advanceTimersByTime(1000);
     });
 
-    expect(screen.getByText("05:59")).toBeInTheDocument();
+    expect(screen.getByText("05:49")).toBeInTheDocument();
   });
 
   test("renders context, given token and slots", () => {

@@ -49,16 +49,16 @@ describe("toefl utils", () => {
     expect(ids.sort()).toEqual(["em1", "em2"]);
   });
 
-  test("selectBSQuestions returns 9 with 3 per difficulty", () => {
+  test("selectBSQuestions returns 10 with 3/3/4 default distribution", () => {
     const qs = selectBSQuestions();
-    expect(qs).toHaveLength(9);
+    expect(qs).toHaveLength(10);
     const counts = qs.reduce(
       (acc, q) => ({ ...acc, [q.difficulty]: (acc[q.difficulty] || 0) + 1 }),
       {}
     );
     expect(counts.easy).toBe(3);
     expect(counts.medium).toBe(3);
-    expect(counts.hard).toBe(3);
+    expect(counts.hard).toBe(4);
   });
 
   test("selectBSQuestions supports configurable distribution", () => {
@@ -75,7 +75,7 @@ describe("toefl utils", () => {
 
   test("selectBSQuestions has no duplicate id or rendered content in one session", () => {
     const qs = selectBSQuestions();
-    expect(qs).toHaveLength(9);
+    expect(qs).toHaveLength(10);
 
     const ids = qs.map((q) => q.id);
     expect(new Set(ids).size).toBe(ids.length);

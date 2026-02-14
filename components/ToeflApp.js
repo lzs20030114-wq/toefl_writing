@@ -27,7 +27,7 @@ export function clearAllSessions() { try { localStorage.setItem("toefl-hist", JS
 export function loadDoneIds(key) { try { return new Set(JSON.parse(localStorage.getItem(key) || "[]")); } catch { return new Set(); } }
 export function addDoneIds(key, ids) { try { const done = loadDoneIds(key); ids.forEach(id => done.add(id)); localStorage.setItem(key, JSON.stringify([...done])); } catch (e) { console.error(e); } }
 
-/* --- Build a Sentence question selection (3 easy + 3 medium + 3 hard) --- */
+/* --- Build a Sentence question selection (default: 3 easy + 3 medium + 4 hard) --- */
 export function selectBSQuestions(options = {}) {
   const toCount = (v, fallback) => {
     const n = Number(v);
@@ -37,7 +37,7 @@ export function selectBSQuestions(options = {}) {
   const distribution = {
     easy: toCount(options?.easy, 3),
     medium: toCount(options?.medium, 3),
-    hard: toCount(options?.hard, 3),
+    hard: toCount(options?.hard, 4),
   };
   const totalNeeded = distribution.easy + distribution.medium + distribution.hard;
   const doneIds = loadDoneIds("toefl-bs-done");
@@ -187,7 +187,7 @@ async function aiEval(type, pd, text) {
 
 async function aiGen(type) {
   const prompts = {
-    buildSentence: 'Generate 9 TOEFL iBT Build a Sentence items as a JSON array only. Use schema: {"id":"bs2_xxx","difficulty":"easy|medium|hard","context":"...","responseSuffix":"? or .","given":"1-3 words","bank":["..."],"answerOrder":["..."],"gp":"grammar point"}. Rules: given appears exactly once and is fixed; bank must not include given; bank length must be >=4; answerOrder must be a permutation of bank; avoid given fragments like "to the" or "before the"; avoid ambiguous multiple preposition fragments; sentence must be natural, grammatical, unambiguous, campus/daily style.',
+    buildSentence: 'Generate 10 TOEFL iBT Build a Sentence items as a JSON array only. Use schema: {"id":"bs2_xxx","difficulty":"easy|medium|hard","context":"...","responseSuffix":"? or .","given":"1-3 words","bank":["..."],"answerOrder":["..."],"gp":"grammar point"}. Rules: given appears exactly once and is fixed; bank must not include given; bank length must be >=4; answerOrder must be a permutation of bank; avoid given fragments like "to the" or "before the"; avoid ambiguous multiple preposition fragments; sentence must be natural, grammatical, unambiguous, campus/daily style.',
     email: 'Generate 1 TOEFL 2026 email prompt as JSON: {"scenario":"...","direction":"Write an email:","goals":["g1","g2","g3"],"to":"...","from":"You"}',
     discussion: 'Generate 1 TOEFL 2026 discussion prompt as JSON: {"professor":{"name":"Dr. X","text":"..."},"students":[{"name":"A","text":"..."},{"name":"B","text":"..."}]}'
   };
@@ -325,7 +325,7 @@ export function BuildSentenceTask({ onExit, questions }) {
   const [bank, setBank] = useState([]);
   const [results, setResults] = useState([]);
   const [phase, setPhase] = useState("instruction");
-  const [tl, setTl] = useState(360);
+  const [tl, setTl] = useState(350);
   const [run, setRun] = useState(false);
   const [toast, setToast] = useState(null);
   const tr = useRef(null);
@@ -546,8 +546,8 @@ export function BuildSentenceTask({ onExit, questions }) {
             <h2 style={{ margin: "0 0 16px", fontSize: 20, color: C.nav }}>Task 1: Build a Sentence</h2>
             <div style={{ fontSize: 14, color: C.t1, lineHeight: 1.8 }}>
               <p><b>Directions:</b> Move the words in the boxes to the blank spaces to create a grammatically correct sentence.</p>
-              <p><b>Questions:</b> 9 (3 easy + 3 medium + 3 hard)</p>
-              <p><b>Time limit:</b> 6 minutes</p>
+              <p><b>Questions:</b> 10 (3 easy + 3 medium + 4 hard)</p>
+              <p><b>Time limit:</b> 5 minutes 50 seconds</p>
               <p>The timer will start when you click <b>Start</b>. When time runs out, your answers will be submitted automatically.</p>
             </div>
             <div style={{ marginTop: 24, textAlign: "center" }}><Btn data-testid="build-start" onClick={startTimer}>Start</Btn></div>
