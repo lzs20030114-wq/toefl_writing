@@ -17,3 +17,7 @@ components/
 - DeepSeek Chat API
 - Vercel (免费hosting)
 - localStorage (成绩记录)
+
+## 测试
+- 单测 + 组件测: `npm run test:unit`
+- E2E: `npm run test:e2e`
