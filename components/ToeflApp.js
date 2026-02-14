@@ -1,11 +1,11 @@
 ﻿"use client";
 import React, { useState, useEffect, useRef } from "react";
-import BS_EASY_DATA from "../data/questionBank/v1/build_sentence/easy.json";
-import BS_MEDIUM_DATA from "../data/questionBank/v1/build_sentence/medium.json";
-import BS_HARD_DATA from "../data/questionBank/v1/build_sentence/hard.json";
+import BS_EASY_DATA from "../data/questionBank/v2/build_sentence/easy.json";
+import BS_MEDIUM_DATA from "../data/questionBank/v2/build_sentence/medium.json";
+import BS_HARD_DATA from "../data/questionBank/v2/build_sentence/hard.json";
 import EM_DATA from "../data/emailPrompts.json";
 import AD_DATA from "../data/discussionPrompts.json";
-import { renderSentence } from "../lib/questionBank/renderSentence";
+import { renderResponseSentence } from "../lib/questionBank/renderResponseSentence";
 import {
   hardFailReasons,
 } from "../lib/questionBank/qualityGateBuildSentence";
@@ -28,7 +28,18 @@ export function loadDoneIds(key) { try { return new Set(JSON.parse(localStorage.
 export function addDoneIds(key, ids) { try { const done = loadDoneIds(key); ids.forEach(id => done.add(id)); localStorage.setItem(key, JSON.stringify([...done])); } catch (e) { console.error(e); } }
 
 /* --- Build a Sentence question selection (3 easy + 3 medium + 3 hard) --- */
-export function selectBSQuestions() {
+export function selectBSQuestions(options = {}) {
+  const toCount = (v, fallback) => {
+    const n = Number(v);
+    if (!Number.isFinite(n) || n < 0) return fallback;
+    return Math.floor(n);
+  };
+  const distribution = {
+    easy: toCount(options?.easy, 3),
+    medium: toCount(options?.medium, 3),
+    hard: toCount(options?.hard, 3),
+  };
+  const totalNeeded = distribution.easy + distribution.medium + distribution.hard;
   const doneIds = loadDoneIds("toefl-bs-done");
   const byDiff = { easy: [], medium: [], hard: [] };
   BS_DATA.forEach(q => {
@@ -42,9 +53,9 @@ export function selectBSQuestions() {
   const usedRendered = new Set();
 
   const renderKey = (q) => {
-    const sentence = renderSentence(q.promptTokens || [], q.answerOrder || []);
+    const sentence = renderResponseSentence(q).correctSentenceFull;
     if (sentence) return sentence.trim().toLowerCase();
-    return JSON.stringify(q.promptTokens || []);
+    return JSON.stringify([q.given || "", ...(q.answerOrder || []), q.responseSuffix || ""]);
   };
 
   const inSessionAvailable = (q) => !usedSourceIds.has(q.id) && !usedRendered.has(renderKey(q));
@@ -79,11 +90,11 @@ export function selectBSQuestions() {
   }
 
   const selected = [
-    ...pickN(byDiff.easy, 3, "easy"),
-    ...pickN(byDiff.medium, 3, "medium"),
-    ...pickN(byDiff.hard, 3, "hard"),
+    ...pickN(byDiff.easy, distribution.easy, "easy"),
+    ...pickN(byDiff.medium, distribution.medium, "medium"),
+    ...pickN(byDiff.hard, distribution.hard, "hard"),
   ];
-  if (selected.length < 9) {
+  if (selected.length < totalNeeded) {
     throw new Error("Build sentence bank quality gate rejected too many questions.");
   }
   return shuffle(selected);
@@ -176,7 +187,7 @@ async function aiEval(type, pd, text) {
 
 async function aiGen(type) {
   const prompts = {
-    buildSentence: 'Generate 9 TOEFL iBT Build a Sentence items as a JSON array only. Use schema: {"id":"bs_xxx","difficulty":"easy|medium|hard","promptTokens":[{"type":"text|blank|given","value":"..."}],"bank":["..."],"answerOrder":["..."],"gp":"grammar point"}. Rules: exactly one given token; given must be 1-2 words; given must not be a preposition fragment like "to the" or "in the"; bank must not include given; blank count must equal bank length; answerOrder must be a permutation of bank. Difficulty constraints: easy bank length=4; medium=5-6; hard=6-7. Sentences must be natural, unambiguous campus/daily English.',
+    buildSentence: 'Generate 9 TOEFL iBT Build a Sentence items as a JSON array only. Use schema: {"id":"bs2_xxx","difficulty":"easy|medium|hard","context":"...","responseSuffix":"? or .","given":"1-3 words","bank":["..."],"answerOrder":["..."],"gp":"grammar point"}. Rules: given appears exactly once and is fixed; bank must not include given; bank length must be >=4; answerOrder must be a permutation of bank; avoid given fragments like "to the" or "before the"; avoid ambiguous multiple preposition fragments; sentence must be natural, grammatical, unambiguous, campus/daily style.',
     email: 'Generate 1 TOEFL 2026 email prompt as JSON: {"scenario":"...","direction":"Write an email:","goals":["g1","g2","g3"],"to":"...","from":"You"}',
     discussion: 'Generate 1 TOEFL 2026 discussion prompt as JSON: {"professor":{"name":"Dr. X","text":"..."},"students":[{"name":"A","text":"..."},{"name":"B","text":"..."}]}'
   };
@@ -358,12 +369,11 @@ export function BuildSentenceTask({ onExit, questions }) {
       const curSlots = slotsRef.current;
       const curQ = qs[idxRef.current];
       const curAnswerOrder = curSlots.map(s => (s ? s.text : ""));
-      const curAnswer = renderSentence(curQ.promptTokens, curAnswerOrder);
+      const curRender = renderResponseSentence(curQ, curAnswerOrder);
       const curOk = curAnswerOrder.join(" ") === (curQ.answerOrder || []).join(" ");
-      const correctSentence = renderSentence(curQ.promptTokens, curQ.answerOrder || []);
-      let nr = [...resultsRef.current, { q: curQ, userAnswer: curAnswer || "(no answer)", correctAnswer: correctSentence, isCorrect: curOk }];
+      let nr = [...resultsRef.current, { q: curQ, userAnswer: curRender.userSentenceFull || "(no answer)", correctAnswer: curRender.correctSentenceFull, isCorrect: curOk }];
       for (let i = idxRef.current + 1; i < qs.length; i++) {
-        nr.push({ q: qs[i], userAnswer: "(no answer)", correctAnswer: renderSentence(qs[i].promptTokens, qs[i].answerOrder || []), isCorrect: false });
+        nr.push({ q: qs[i], userAnswer: "(no answer)", correctAnswer: renderResponseSentence(qs[i]).correctSentenceFull, isCorrect: false });
       }
       setResults(nr);
       setPhase("review");
@@ -459,10 +469,9 @@ export function BuildSentenceTask({ onExit, questions }) {
     submitLockRef.current = true;
     const q = qs[idx];
     const filledOrder = slots.map(s => (s ? s.text : ""));
-    const ua = renderSentence(q.promptTokens, filledOrder);
-    const correctSentence = renderSentence(q.promptTokens, q.answerOrder || []);
+    const rendered = renderResponseSentence(q, filledOrder);
     const ok = filledOrder.join(" ") === (q.answerOrder || []).join(" ");
-    const nr = [...results, { q, userAnswer: ua || "(no answer)", correctAnswer: correctSentence, isCorrect: ok }];
+    const nr = [...results, { q, userAnswer: rendered.userSentenceFull || "(no answer)", correctAnswer: rendered.correctSentenceFull, isCorrect: ok }];
     setResults(nr);
     if (idx < qs.length - 1) { setIdx(idx + 1); initQ(idx + 1, qs); submitLockRef.current = false; }
     else {
@@ -498,10 +507,10 @@ export function BuildSentenceTask({ onExit, questions }) {
           )}
           {results.map((r, i) => (
             <div data-testid={`build-result-${i}`} data-correct={r.isCorrect ? "true" : "false"} key={i} style={{ background: "#fff", border: "1px solid " + (r.isCorrect ? "#c6f6d5" : "#fed7d7"), borderLeft: "4px solid " + (r.isCorrect ? C.green : C.red), borderRadius: 4, padding: 14, marginBottom: 8 }}>
-              <div style={{ fontSize: 12, color: C.t2, marginBottom: 4 }}>Q{i + 1}: {(r.q.promptTokens || []).map(t => ((t.type || t.t) === "blank" ? "___" : (t.value || t.v || ""))).join(" ")} <span style={{ color: C.blue }}>({r.q.gp || "build_sentence"})</span></div>
+              <div style={{ fontSize: 12, color: C.t2, marginBottom: 4 }}>Q{i + 1}: {r.q.context} <span style={{ color: C.blue }}>({r.q.gp || "build_sentence"})</span></div>
               <div style={{ fontSize: 14, color: r.isCorrect ? C.green : C.red }}>{r.isCorrect ? "Correct" : "Incorrect"}</div>
-              <div data-testid={`build-your-sentence-${i}`} style={{ fontSize: 13, color: C.t1, marginTop: 4 }}><b>Your sentence:</b> {capitalize(r.userAnswer)}</div>
-              <div data-testid={`build-correct-answer-${i}`} style={{ fontSize: 13, color: C.blue, marginTop: 4 }}><b>Correct sentence:</b> {capitalize(r.correctAnswer || renderSentence(r.q.promptTokens, r.q.answerOrder || []))}</div>
+              <div data-testid={`build-your-sentence-${i}`} style={{ fontSize: 13, color: C.t1, marginTop: 4 }}><b>Your full response sentence:</b> {capitalize(r.userAnswer)}</div>
+              <div data-testid={`build-correct-answer-${i}`} style={{ fontSize: 13, color: C.blue, marginTop: 4 }}><b>Correct full response sentence:</b> {capitalize(r.correctAnswer || renderResponseSentence(r.q).correctSentenceFull)}</div>
             </div>
           ))}
           <div style={{ display: "flex", gap: 12, marginTop: 20 }}>
@@ -551,8 +560,6 @@ export function BuildSentenceTask({ onExit, questions }) {
   /* ---- Active phase (slot-based UI) ---- */
   const q = qs[idx];
   const allFilled = slots.length > 0 && slots.every(s => s !== null);
-  const tokenType = (t) => t?.t || t?.type;
-  const tokenValue = (t) => t?.v || t?.value || "";
 
   const slotStyle = (i) => {
     const filled = slots[i] !== null;
@@ -596,46 +603,38 @@ export function BuildSentenceTask({ onExit, questions }) {
           <b>Directions:</b> Move the words in the boxes to the blank spaces to create a grammatically correct sentence.
         </div>
 
-        {/* Prompt + in-sentence slots */}
+        {/* Context + response builder */}
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 4, padding: 20, marginBottom: 20 }}>
-          <div style={{ fontSize: 11, color: C.t2, letterSpacing: 1, marginBottom: 8 }}>PROMPT</div>
+          <div style={{ fontSize: 11, color: C.t2, letterSpacing: 1, marginBottom: 8 }}>CONTEXT</div>
+          <div style={{ fontSize: 15, color: C.t1, marginBottom: 14, lineHeight: 1.5 }}>{q.context}</div>
+          <div style={{ fontSize: 11, color: C.t2, letterSpacing: 1, marginBottom: 8 }}>RESPONSE</div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8, minHeight: 48, alignItems: "center", lineHeight: 1.6 }}>
-            {(() => {
-              let blankIndex = 0;
-              return (q.promptTokens || []).map((token, ti) => {
-                const tt = tokenType(token);
-                if (tt === "text") {
-                  return <span key={`text-${ti}`} style={{ fontSize: 16, color: C.t1 }}>{tokenValue(token)}</span>;
-                }
-                if (tt === "given") {
-                  return (
-                    <span key={`given-${ti}`} data-testid="given-token" style={{ fontSize: 14, color: C.nav, background: "#e6f0ff", border: "1px solid #b3d4fc", borderRadius: 4, padding: "4px 10px", fontWeight: 600 }}>{tokenValue(token)}</span>
-                  );
-                }
-                if (tt === "blank") {
-                  const sidx = blankIndex;
-                  blankIndex += 1;
-                  const slot = slots[sidx];
-                  return (
-                    <div
-                      key={`blank-${ti}`}
-                      data-testid={`slot-${sidx}`}
-                      style={slotStyle(sidx)}
-                      draggable={!!slot}
-                      onDragStart={slot ? (e) => onDragStartSlot(e, slot, sidx) : undefined}
-                      onDragEnd={slot ? onDragEnd : undefined}
-                      onDragOver={(e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; setHoverSlot(sidx); }}
-                      onDragLeave={() => setHoverSlot(null)}
-                      onDrop={(e) => onDropSlot(e, sidx)}
-                      onClick={() => slot && removeChunk(sidx)}
-                    >
-                      {slot ? slot.text : (sidx + 1)}
-                    </div>
-                  );
-                }
-                return null;
-              });
-            })()}
+            <span
+              data-testid="given-token"
+              style={{ fontSize: 14, color: C.nav, background: "#e6f0ff", border: "1px solid #b3d4fc", borderRadius: 4, padding: "4px 10px", fontWeight: 600 }}
+            >
+              {q.given}
+            </span>
+            {Array.from({ length: (q.bank || []).length }, (_, sidx) => {
+              const slot = slots[sidx];
+              return (
+                <div
+                  key={`slot-${sidx}`}
+                  data-testid={`slot-${sidx}`}
+                  style={slotStyle(sidx)}
+                  draggable={!!slot}
+                  onDragStart={slot ? (e) => onDragStartSlot(e, slot, sidx) : undefined}
+                  onDragEnd={slot ? onDragEnd : undefined}
+                  onDragOver={(e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; setHoverSlot(sidx); }}
+                  onDragLeave={() => setHoverSlot(null)}
+                  onDrop={(e) => onDropSlot(e, sidx)}
+                  onClick={() => slot && removeChunk(sidx)}
+                >
+                  {slot ? slot.text : (sidx + 1)}
+                </div>
+              );
+            })}
+            {q.responseSuffix && <span style={{ fontSize: 18, color: C.t1 }}>{q.responseSuffix}</span>}
           </div>
         </div>
 

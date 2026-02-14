@@ -11,7 +11,7 @@ const BANK_DIR = path.join(
   ROOT,
   "data",
   "questionBank",
-  "v1",
+  "v2",
   "build_sentence"
 );
 const TARGET_FILES = ["easy.json", "medium.json", "hard.json"];

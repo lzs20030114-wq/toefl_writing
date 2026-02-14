@@ -1,55 +1,46 @@
-/** @jest-environment node */
-const { evaluateForSave } = require("../scripts/save-build-sentence-bank");
+const {
+  evaluateForSave,
+} = require("../scripts/save-build-sentence-bank");
 
-describe("save-build-sentence-bank gate", () => {
-  test("rejects hard-fail items", () => {
-    const bad = [
+describe("save-build-sentence-bank quality gates", () => {
+  test("rejects hard-fail questions", () => {
+    const items = [
       {
-        id: "bad_001",
+        id: "bad_1",
         difficulty: "easy",
-        promptTokens: [
-          { type: "text", value: "please" },
-          { type: "blank" },
-          { type: "given", value: "to the" },
-          { type: "blank" },
-          { type: "blank" },
-          { type: "blank" },
-        ],
-        bank: ["bring", "her notebook", "right after", "class"],
-        answerOrder: ["bring", "her notebook", "right after", "class"],
+        context: "Could you help me after class today?",
+        given: "Please",
+        responseSuffix: ".",
+        bank: ["bring", "to the", "her notebook", "today"],
+        answerOrder: ["bring", "her notebook", "to the", "today"],
       },
     ];
 
-    const result = evaluateForSave(bad);
-    expect(result.ok).toBe(false);
-    expect(result.kind).toBe("hard_fail");
-    expect(result.hardFails[0].id).toBe("bad_001");
+    const out = evaluateForSave(items, { allowWarnings: false });
+    expect(out.ok).toBe(false);
+    expect(out.kind).toBe("hard_fail");
+    expect(out.hardFails).toHaveLength(1);
   });
 
-  test("rejects warnings by default", () => {
-    const warn = [
+  test("warnings are blocked by default and allowed with flag", () => {
+    const items = [
       {
-        id: "warn_001",
-        difficulty: "easy",
-        promptTokens: [
-          { type: "given", value: "book your" },
-          { type: "blank" },
-          { type: "blank" },
-          { type: "blank" },
-          { type: "blank" },
-        ],
-        bank: ["advising appointment", "for next week", "online", "today"],
-        answerOrder: ["advising appointment", "for next week", "online", "today"],
+        id: "warn_1",
+        difficulty: "medium",
+        context: "Can we finish this before the review meeting?",
+        given: "After class",
+        responseSuffix: ".",
+        bank: ["review", "the file", "with me", "today", "please"],
+        answerOrder: ["review", "the file", "with me", "today", "please"],
       },
     ];
 
-    const blocked = evaluateForSave(warn);
+    const blocked = evaluateForSave(items, { allowWarnings: false });
     expect(blocked.ok).toBe(false);
     expect(blocked.kind).toBe("warning_blocked");
 
-    const allowed = evaluateForSave(warn, { allowWarnings: true });
+    const allowed = evaluateForSave(items, { allowWarnings: true });
     expect(allowed.ok).toBe(true);
     expect(allowed.warnings.length).toBeGreaterThan(0);
   });
 });
-

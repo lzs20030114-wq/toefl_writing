@@ -3,68 +3,46 @@ const {
   warnings,
 } = require("../lib/questionBank/qualityGateBuildSentence");
 
-describe("qualityGateBuildSentence", () => {
-  test("hard-fails prepositional given inserted between verb and object", () => {
+describe("qualityGateBuildSentence v2", () => {
+  test("hard-fails on half preposition given", () => {
     const q = {
-      id: "bad_001",
+      id: "bad_1",
       difficulty: "easy",
-      promptTokens: [
-        { type: "text", value: "please" },
-        { type: "blank" },
-        { type: "given", value: "to the biology lab" },
-        { type: "blank" },
-        { type: "blank" },
-        { type: "blank" },
-      ],
-      bank: ["bring", "her notebook", "right after", "class"],
-      answerOrder: ["bring", "her notebook", "right after", "class"],
-    };
-
-    const reasons = hardFailReasons(q);
-    expect(reasons.length).toBeGreaterThan(0);
-    expect(
-      reasons.some(
-        (r) =>
-          r.includes("splits verb and direct object") ||
-          r.includes("ordering risk")
-      )
-    ).toBe(true);
-  });
-
-  test("hard-fails incomplete given preposition fragment", () => {
-    const q = {
-      id: "bad_002",
-      difficulty: "easy",
-      promptTokens: [
-        { type: "text", value: "please" },
-        { type: "blank" },
-        { type: "given", value: "to the" },
-        { type: "blank" },
-        { type: "blank" },
-        { type: "blank" },
-      ],
+      context: "Could you help me after class today?",
+      given: "to the",
+      responseSuffix: ".",
       bank: ["bring", "her notebook", "right after", "class"],
       answerOrder: ["bring", "her notebook", "right after", "class"],
     };
     const reasons = hardFailReasons(q);
-    expect(reasons.some((r) => r.includes("incomplete prepositional fragment"))).toBe(true);
+    expect(reasons.some((r) => r.includes("incomplete functional fragment"))).toBe(true);
   });
 
-  test("warning for given chunk at boundary", () => {
+  test("hard-fails on multiple prep fragments in bank", () => {
     const q = {
-      id: "warn_001",
+      id: "bad_2",
       difficulty: "easy",
-      promptTokens: [
-        { type: "given", value: "book your" },
-        { type: "blank" },
-        { type: "blank" },
-        { type: "blank" },
-        { type: "blank" },
-      ],
-      bank: ["advising appointment", "for next week", "online", "today"],
-      answerOrder: ["advising appointment", "for next week", "online", "today"],
+      context: "Could you help me after class today?",
+      given: "Please",
+      responseSuffix: ".",
+      bank: ["bring", "to the", "in the", "notebook"],
+      answerOrder: ["bring", "notebook", "to the", "in the"],
     };
-    expect(hardFailReasons(q)).toEqual([]);
-    expect(warnings(q).some((w) => w.includes("sentence boundary"))).toBe(true);
+    const reasons = hardFailReasons(q);
+    expect(reasons.some((r) => r.includes("incomplete preposition/link fragment"))).toBe(true);
+  });
+
+  test("emits warning when given starts with preposition", () => {
+    const q = {
+      id: "warn_1",
+      difficulty: "medium",
+      context: "Can we finish the plan before the meeting?",
+      given: "After class",
+      responseSuffix: ".",
+      bank: ["review", "the outline", "with me", "today", "please"],
+      answerOrder: ["review", "the outline", "with me", "today", "please"],
+    };
+    const list = warnings(q);
+    expect(list.some((w) => w.includes("given starts with preposition"))).toBe(true);
   });
 });

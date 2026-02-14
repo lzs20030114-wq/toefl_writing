@@ -11,7 +11,7 @@ import {
   selectBSQuestions,
   wc,
 } from "../components/ToeflApp";
-import { renderSentence } from "../lib/questionBank/renderSentence";
+import { renderResponseSentence } from "../lib/questionBank/renderResponseSentence";
 
 describe("toefl utils", () => {
   beforeEach(() => {
@@ -61,6 +61,18 @@ describe("toefl utils", () => {
     expect(counts.hard).toBe(3);
   });
 
+  test("selectBSQuestions supports configurable distribution", () => {
+    const qs = selectBSQuestions({ easy: 5, medium: 2, hard: 2 });
+    expect(qs).toHaveLength(9);
+    const counts = qs.reduce(
+      (acc, q) => ({ ...acc, [q.difficulty]: (acc[q.difficulty] || 0) + 1 }),
+      {}
+    );
+    expect(counts.easy).toBe(5);
+    expect(counts.medium).toBe(2);
+    expect(counts.hard).toBe(2);
+  });
+
   test("selectBSQuestions has no duplicate id or rendered content in one session", () => {
     const qs = selectBSQuestions();
     expect(qs).toHaveLength(9);
@@ -68,9 +80,7 @@ describe("toefl utils", () => {
     const ids = qs.map((q) => q.id);
     expect(new Set(ids).size).toBe(ids.length);
 
-    const rendered = qs.map((q) =>
-      renderSentence(q.promptTokens || [], q.answerOrder || []).trim().toLowerCase()
-    );
+    const rendered = qs.map((q) => renderResponseSentence(q).correctSentenceFull.trim().toLowerCase());
     expect(new Set(rendered).size).toBe(rendered.length);
   });
 

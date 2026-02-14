@@ -3,69 +3,70 @@ const {
   validateBuildSentenceBank,
 } = require("../lib/questionBank/buildSentenceSchema");
 
-describe("build sentence bank schema", () => {
+describe("build sentence bank schema v2", () => {
   test("valid item passes", () => {
     const item = {
-      id: "easy_001",
+      id: "bs2_easy_001",
       difficulty: "easy",
-      promptTokens: [
-        { type: "text", value: "you should" },
-        { type: "blank" },
-        { type: "given", value: "for the" },
-        { type: "blank" },
-        { type: "blank" },
-        { type: "blank" },
-      ],
-      bank: ["sign up", "lab section", "online", "today"],
-      answerOrder: ["sign up", "lab section", "online", "today"],
+      context: "You missed class and need slides.",
+      responseSuffix: "?",
+      given: "Could you",
+      bank: ["send me", "the slides", "after class", "today"],
+      answerOrder: ["send me", "the slides", "after class", "today"],
     };
     expect(validateBuildSentenceItem(item, 0)).toEqual([]);
   });
 
   test("bank must not contain given", () => {
     const item = {
-      id: "easy_002",
+      id: "bs2_easy_002",
       difficulty: "easy",
-      promptTokens: [
-        { type: "blank" },
-        { type: "given", value: "on time" },
-      ],
-      bank: ["on time"],
-      answerOrder: ["on time"],
+      context: "Could you send me the file today?",
+      given: "Could you",
+      bank: ["Could you", "send me", "the file", "today"],
+      answerOrder: ["Could you", "send me", "the file", "today"],
     };
     const errors = validateBuildSentenceItem(item, 0);
-    expect(errors.some((e) => e.includes("must not contain the given chunk"))).toBe(true);
+    expect(errors.some((e) => e.includes("must not contain given"))).toBe(true);
   });
 
-  test("blank count must equal bank length", () => {
+  test("bank length must be >= 4", () => {
     const item = {
-      id: "easy_003",
+      id: "bs2_easy_003",
       difficulty: "easy",
-      promptTokens: [
-        { type: "blank" },
-        { type: "given", value: "at noon" },
-      ],
-      bank: ["meet", "me"],
-      answerOrder: ["meet", "me"],
+      context: "Could you send me the file today?",
+      given: "I can",
+      bank: ["review", "it", "today"],
+      answerOrder: ["review", "it", "today"],
     };
     const errors = validateBuildSentenceItem(item, 0);
-    expect(errors.some((e) => e.includes("blank count"))).toBe(true);
+    expect(errors.some((e) => e.includes("length must be >= 4"))).toBe(true);
   });
 
   test("answerOrder must be permutation of bank", () => {
     const item = {
-      id: "easy_004",
+      id: "bs2_easy_004",
       difficulty: "easy",
-      promptTokens: [
-        { type: "blank" },
-        { type: "given", value: "after class" },
-        { type: "blank" },
-      ],
-      bank: ["come", "by"],
-      answerOrder: ["by", "later"],
+      context: "Could you send me the file today?",
+      given: "Please",
+      bank: ["submit", "the form", "before class", "today"],
+      answerOrder: ["submit", "the file", "before class", "today"],
     };
     const errors = validateBuildSentenceItem(item, 0);
     expect(errors.some((e) => e.includes("permutation"))).toBe(true);
+  });
+
+  test("given half preposition is rejected", () => {
+    const item = {
+      id: "bs2_easy_005",
+      difficulty: "easy",
+      context: "Could you send me the file today?",
+      given: "to the",
+      bank: ["bring", "book", "lab", "today"],
+      answerOrder: ["bring", "book", "lab", "today"],
+    };
+    const errors = validateBuildSentenceItem(item, 0);
+    expect(errors.some((e) => e.includes("half preposition phrase"))).toBe(true);
   });
 
   test("bank validator catches duplicate ids", () => {
@@ -73,22 +74,18 @@ describe("build sentence bank schema", () => {
       {
         id: "dup",
         difficulty: "easy",
-        promptTokens: [
-          { type: "blank" },
-          { type: "given", value: "after class" },
-        ],
-        bank: ["stay"],
-        answerOrder: ["stay"],
+        context: "Could you send me the file today?",
+        given: "Please",
+        bank: ["check", "the doc", "before class", "today"],
+        answerOrder: ["check", "the doc", "before class", "today"],
       },
       {
         id: "dup",
         difficulty: "easy",
-        promptTokens: [
-          { type: "blank" },
-          { type: "given", value: "after class" },
-        ],
-        bank: ["leave"],
-        answerOrder: ["leave"],
+        context: "Could you send me the file today?",
+        given: "I can",
+        bank: ["review", "your draft", "after dinner", "tonight"],
+        answerOrder: ["review", "your draft", "after dinner", "tonight"],
       },
     ];
     const result = validateBuildSentenceBank(items);

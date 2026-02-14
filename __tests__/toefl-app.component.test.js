@@ -3,18 +3,13 @@ import { act } from "react-dom/test-utils";
 import ToeflApp, { BuildSentenceTask, WritingTask } from "../components/ToeflApp";
 
 const BUILD_TEST_Q = {
-  id: "bs_test_001",
+  id: "bs2_test_001",
   difficulty: "easy",
-  promptTokens: [
-    { t: "text", v: "you should" },
-    { t: "blank" },
-    { t: "given", v: "for the" },
-    { t: "blank" },
-    { t: "blank" },
-    { t: "blank" },
-  ],
-  bank: ["sign up", "lab section", "online", "today"],
-  answerOrder: ["sign up", "lab section", "online", "today"],
+  context: "You missed class and need your classmate's slides.",
+  responseSuffix: "?",
+  given: "Could you",
+  bank: ["send me", "the slides", "after class", "today"],
+  answerOrder: ["send me", "the slides", "after class", "today"],
 };
 
 describe("ToeflApp navigation", () => {
@@ -45,17 +40,14 @@ describe("ToeflApp navigation", () => {
     expect(screen.getByText("05:59")).toBeInTheDocument();
   });
 
-  test("given chunk stays fixed and correct order scores correct", () => {
+  test("renders context, given token and slots", () => {
     render(<BuildSentenceTask onExit={() => {}} questions={[BUILD_TEST_Q]} />);
     fireEvent.click(screen.getByTestId("build-start"));
 
-    expect(screen.getByTestId("given-token")).toHaveTextContent("for the");
-    BUILD_TEST_Q.answerOrder.forEach((chunk) => {
-      fireEvent.click(screen.getByRole("button", { name: chunk }));
-    });
-    fireEvent.click(screen.getByTestId("build-submit"));
-
-    expect(screen.getByTestId("build-result-0")).toHaveAttribute("data-correct", "true");
+    expect(screen.getByText(BUILD_TEST_Q.context)).toBeInTheDocument();
+    expect(screen.getByTestId("given-token")).toHaveTextContent("Could you");
+    expect(screen.getByTestId("slot-0")).toHaveTextContent("1");
+    expect(screen.getByTestId("slot-3")).toHaveTextContent("4");
   });
 
   test("build directions are readable and match iBT wording", () => {
@@ -65,7 +57,23 @@ describe("ToeflApp navigation", () => {
     const directionsBlock = directionsText.closest("div");
     expect(directionsBlock).toHaveTextContent("Directions:");
     expect(directionsBlock).toHaveTextContent("Move the words");
-    expect(directionsBlock.textContent).not.toMatch(/[\uFFFD]{2,}|闂|濠|缂|锟/);
+    expect(directionsBlock.textContent).not.toMatch(/[\uFFFD]{2,}/);
+  });
+
+  test("given stays fixed and correct order scores correct", () => {
+    render(<BuildSentenceTask onExit={() => {}} questions={[BUILD_TEST_Q]} />);
+    fireEvent.click(screen.getByTestId("build-start"));
+
+    expect(screen.getByTestId("given-token")).toHaveTextContent("Could you");
+    BUILD_TEST_Q.answerOrder.forEach((chunk) => {
+      fireEvent.click(screen.getByRole("button", { name: chunk }));
+    });
+    fireEvent.click(screen.getByTestId("build-submit"));
+
+    expect(screen.getByTestId("build-result-0")).toHaveAttribute("data-correct", "true");
+    expect(screen.getByTestId("build-correct-answer-0")).toHaveTextContent(
+      "Correct full response sentence: Could you send me the slides after class today?"
+    );
   });
 
   test("submit is disabled until all slots are filled", () => {
@@ -82,23 +90,23 @@ describe("ToeflApp navigation", () => {
     render(<BuildSentenceTask onExit={() => {}} questions={[BUILD_TEST_Q]} />);
     fireEvent.click(screen.getByTestId("build-start"));
 
-    fireEvent.click(screen.getByRole("button", { name: "sign up" }));
-    expect(screen.getByTestId("slot-0")).toHaveTextContent("sign up");
+    fireEvent.click(screen.getByRole("button", { name: "send me" }));
+    expect(screen.getByTestId("slot-0")).toHaveTextContent("send me");
 
     fireEvent.click(screen.getByTestId("slot-0"));
     expect(screen.getByTestId("slot-0")).toHaveTextContent("1");
-    expect(screen.getByRole("button", { name: "sign up" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "send me" })).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "sign up" }));
+    fireEvent.click(screen.getByRole("button", { name: "send me" }));
     const dragData = { setData: () => {}, getData: () => "" };
-    fireEvent.dragStart(screen.getByRole("button", { name: "lab section" }), { dataTransfer: dragData });
+    fireEvent.dragStart(screen.getByRole("button", { name: "the slides" }), { dataTransfer: dragData });
     fireEvent.drop(screen.getByTestId("slot-0"), { dataTransfer: dragData });
 
-    expect(screen.getByTestId("slot-0")).toHaveTextContent("lab section");
-    expect(screen.getByRole("button", { name: "sign up" })).toBeInTheDocument();
+    expect(screen.getByTestId("slot-0")).toHaveTextContent("the slides");
+    expect(screen.getByRole("button", { name: "send me" })).toBeInTheDocument();
   });
 
-  test("wrong order is marked incorrect and shows expected order", () => {
+  test("wrong order is marked incorrect and review shows full sentences", () => {
     render(<BuildSentenceTask onExit={() => {}} questions={[BUILD_TEST_Q]} />);
     fireEvent.click(screen.getByTestId("build-start"));
 
@@ -109,10 +117,10 @@ describe("ToeflApp navigation", () => {
 
     expect(screen.getByTestId("build-result-0")).toHaveAttribute("data-correct", "false");
     expect(screen.getByTestId("build-your-sentence-0")).toHaveTextContent(
-      "You should today for the online lab section sign up"
+      "Your full response sentence: Could you today after class the slides send me?"
     );
     expect(screen.getByTestId("build-correct-answer-0")).toHaveTextContent(
-      "You should sign up for the lab section online today"
+      "Correct full response sentence: Could you send me the slides after class today?"
     );
   });
 

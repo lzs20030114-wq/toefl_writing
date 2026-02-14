@@ -14,7 +14,7 @@ const OUT_DIR = path.join(
   ROOT,
   "data",
   "questionBank",
-  "v1",
+  "v2",
   "build_sentence"
 );
 
@@ -151,9 +151,9 @@ function main() {
 
   writeBuckets(items);
   console.log("Saved build_sentence question bank:");
-  console.log(path.join("data", "questionBank", "v1", "build_sentence", "easy.json"));
-  console.log(path.join("data", "questionBank", "v1", "build_sentence", "medium.json"));
-  console.log(path.join("data", "questionBank", "v1", "build_sentence", "hard.json"));
+  console.log(path.join("data", "questionBank", "v2", "build_sentence", "easy.json"));
+  console.log(path.join("data", "questionBank", "v2", "build_sentence", "medium.json"));
+  console.log(path.join("data", "questionBank", "v2", "build_sentence", "hard.json"));
 }
 
 if (require.main === module) {
