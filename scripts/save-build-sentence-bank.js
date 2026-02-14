@@ -1,4 +1,4 @@
-const fs = require("fs");
+﻿const fs = require("fs");
 const path = require("path");
 const {
   DIFFICULTIES,
@@ -18,8 +18,30 @@ const OUT_DIR = path.join(
   "build_sentence"
 );
 
+const PREP_OR_LINK_START = new Set([
+  "to",
+  "in",
+  "on",
+  "at",
+  "for",
+  "with",
+  "from",
+  "about",
+  "into",
+  "over",
+  "under",
+  "before",
+  "after",
+  "by",
+  "of",
+  "as",
+  "than",
+]);
+
+const ARTICLES = new Set(["a", "an", "the", "this", "that", "these", "those"]);
+
 function parseArgs(argv) {
-  const out = { input: null, allowWarnings: false };
+  const out = { input: null, allowWarnings: false, shuffleRetries: 30 };
   for (let i = 0; i < argv.length; i += 1) {
     if (argv[i] === "--input" || argv[i] === "-i") {
       out.input = argv[i + 1] || null;
@@ -28,6 +50,11 @@ function parseArgs(argv) {
     }
     if (argv[i] === "--allow-warnings") {
       out.allowWarnings = true;
+      continue;
+    }
+    if (argv[i] === "--shuffle-retries") {
+      out.shuffleRetries = Number(argv[i + 1] || 30) || 30;
+      i += 1;
     }
   }
   return out;
@@ -40,6 +67,105 @@ function readInput(inputPath) {
   const abs = path.isAbsolute(inputPath) ? inputPath : path.join(ROOT, inputPath);
   const raw = fs.readFileSync(abs, "utf8");
   return JSON.parse(raw);
+}
+
+function normalizeChunk(v) {
+  return String(v || "").trim();
+}
+
+function words(v) {
+  return normalizeChunk(v).toLowerCase().split(/\s+/).filter(Boolean);
+}
+
+function isHalfFunctionalStart(chunk) {
+  const ws = words(chunk);
+  if (ws.length === 0) return false;
+  if (!PREP_OR_LINK_START.has(ws[0])) return false;
+  if (ws.length === 1) return true;
+  return ws.length <= 2 && ARTICLES.has(ws[1]);
+}
+
+function shuffle(a) {
+  const b = [...a];
+  for (let i = b.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [b[i], b[j]] = [b[j], b[i]];
+  }
+  return b;
+}
+
+function samePositionCount(a, b) {
+  const n = Math.min(a.length, b.length);
+  let count = 0;
+  for (let i = 0; i < n; i += 1) {
+    if (a[i] === b[i]) count += 1;
+  }
+  return count;
+}
+
+function isLeakyOrder(bank, answerOrder) {
+  if (bank.join("||") === answerOrder.join("||")) return true;
+  return samePositionCount(bank, answerOrder) >= Math.ceil(answerOrder.length / 2);
+}
+
+function shuffleBankSafely(answerOrder, retries = 30) {
+  for (let i = 0; i < retries; i += 1) {
+    const candidate = shuffle(answerOrder);
+    if (!isLeakyOrder(candidate, answerOrder)) return candidate;
+  }
+  return null;
+}
+
+function deriveGivenFromCorrectChunks(correctChunks) {
+  const chunks = (correctChunks || []).map(normalizeChunk).filter(Boolean);
+  const candidateIndexes = [];
+  chunks.forEach((chunk, idx) => {
+    const nWords = words(chunk).length;
+    if (nWords < 1 || nWords > 3) return;
+    if (isHalfFunctionalStart(chunk)) return;
+    candidateIndexes.push(idx);
+  });
+  if (candidateIndexes.length === 0) return null;
+
+  const chosen = candidateIndexes[Math.floor(Math.random() * candidateIndexes.length)];
+  const given = chunks[chosen];
+  const answerOrder = chunks.filter((_, idx) => idx !== chosen);
+  return { given, givenIndex: chosen, answerOrder };
+}
+
+function normalizeItem(item, { shuffleRetries = 30 } = {}) {
+  const out = { ...item };
+  if (Array.isArray(item.correctChunks) && item.correctChunks.length > 0) {
+    const derived = deriveGivenFromCorrectChunks(item.correctChunks);
+    if (!derived) {
+      throw new Error(`${item.id || "(unknown id)"}: cannot derive valid given from correctChunks`);
+    }
+    out.given = derived.given;
+    out.givenIndex = derived.givenIndex;
+    out.answerOrder = derived.answerOrder;
+  }
+
+  if (!Array.isArray(out.answerOrder) || out.answerOrder.length === 0) {
+    throw new Error(`${out.id || "(unknown id)"}: missing answerOrder`);
+  }
+  if (!Number.isInteger(out.givenIndex) || out.givenIndex < 0 || out.givenIndex > out.answerOrder.length) {
+    throw new Error(`${out.id || "(unknown id)"}: invalid givenIndex`);
+  }
+
+  const safeBank = shuffleBankSafely(out.answerOrder.map(normalizeChunk), shuffleRetries);
+  if (!safeBank) {
+    throw new Error(
+      `${out.id || "(unknown id)"}: cannot build non-leaky bank order after ${shuffleRetries} retries`
+    );
+  }
+  out.bank = safeBank;
+  delete out.correctChunks;
+  return out;
+}
+
+function normalizeItemsForSave(items, opts = {}) {
+  if (!Array.isArray(items)) return items;
+  return items.map((item) => normalizeItem(item, opts));
 }
 
 function writeBuckets(items) {
@@ -118,8 +244,16 @@ function evaluateForSave(items, { allowWarnings = false } = {}) {
 }
 
 function main() {
-  const { input, allowWarnings } = parseArgs(process.argv.slice(2));
-  const items = readInput(input);
+  const { input, allowWarnings, shuffleRetries } = parseArgs(process.argv.slice(2));
+  const rawItems = readInput(input);
+  let items;
+  try {
+    items = normalizeItemsForSave(rawItems, { shuffleRetries });
+  } catch (e) {
+    console.error(`Input transform failed: ${e.message}`);
+    process.exit(1);
+  }
+
   const evalResult = evaluateForSave(items, { allowWarnings });
 
   if (!evalResult.ok) {
@@ -164,4 +298,6 @@ module.exports = {
   collectHardFails,
   collectWarnings,
   evaluateForSave,
+  normalizeItemsForSave,
+  isLeakyOrder,
 };

@@ -9,7 +9,6 @@ import {
   pickRandomPrompt,
   saveSess,
   selectBSQuestions,
-  generateGivenInsertIndex,
   wc,
 } from "../components/ToeflApp";
 import { renderResponseSentence } from "../lib/questionBank/renderResponseSentence";
@@ -85,12 +84,16 @@ describe("toefl utils", () => {
     expect(new Set(rendered).size).toBe(rendered.length);
   });
 
-  test("given insert index is not always identical across runs", () => {
-    const seen = new Set();
-    for (let i = 0; i < 40; i += 1) {
-      seen.add(generateGivenInsertIndex(4));
-    }
-    expect(seen.size).toBeGreaterThan(1);
+  test("same question render keeps fixed given insertion index", () => {
+    const q = {
+      given: "Could you",
+      givenIndex: 2,
+      answerOrder: ["send me", "the slides", "after class", "today"],
+      responseSuffix: "?",
+    };
+    const out1 = renderResponseSentence(q).correctSentenceFull;
+    const out2 = renderResponseSentence(q).correctSentenceFull;
+    expect(out1).toBe(out2);
   });
 
   test("pickRandomPrompt prefers undone + unused prompt", () => {

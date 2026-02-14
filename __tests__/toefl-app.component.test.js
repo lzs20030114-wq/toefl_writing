@@ -8,7 +8,7 @@ const BUILD_TEST_Q = {
   context: "You missed class and need your classmate's slides.",
   responseSuffix: "?",
   given: "Could you",
-  __givenInsertIndex: 2,
+  givenIndex: 2,
   bank: ["send me", "the slides", "after class", "today"],
   answerOrder: ["send me", "the slides", "after class", "today"],
 };

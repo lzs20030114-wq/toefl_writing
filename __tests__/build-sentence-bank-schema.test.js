@@ -11,6 +11,7 @@ describe("build sentence bank schema v2", () => {
       context: "You missed class and need slides.",
       responseSuffix: "?",
       given: "Could you",
+      givenIndex: 0,
       bank: ["send me", "the slides", "after class", "today"],
       answerOrder: ["send me", "the slides", "after class", "today"],
     };
@@ -23,6 +24,7 @@ describe("build sentence bank schema v2", () => {
       difficulty: "easy",
       context: "Could you send me the file today?",
       given: "Could you",
+      givenIndex: 0,
       bank: ["Could you", "send me", "the file", "today"],
       answerOrder: ["Could you", "send me", "the file", "today"],
     };
@@ -36,6 +38,7 @@ describe("build sentence bank schema v2", () => {
       difficulty: "easy",
       context: "Could you send me the file today?",
       given: "I can",
+      givenIndex: 0,
       bank: ["review", "it", "today"],
       answerOrder: ["review", "it", "today"],
     };
@@ -49,6 +52,7 @@ describe("build sentence bank schema v2", () => {
       difficulty: "easy",
       context: "Could you send me the file today?",
       given: "Please",
+      givenIndex: 0,
       bank: ["submit", "the form", "before class", "today"],
       answerOrder: ["submit", "the file", "before class", "today"],
     };
@@ -62,6 +66,7 @@ describe("build sentence bank schema v2", () => {
       difficulty: "easy",
       context: "Could you send me the file today?",
       given: "to the",
+      givenIndex: 0,
       bank: ["bring", "book", "lab", "today"],
       answerOrder: ["bring", "book", "lab", "today"],
     };
@@ -76,6 +81,7 @@ describe("build sentence bank schema v2", () => {
         difficulty: "easy",
         context: "Could you send me the file today?",
         given: "Please",
+        givenIndex: 0,
         bank: ["check", "the doc", "before class", "today"],
         answerOrder: ["check", "the doc", "before class", "today"],
       },
@@ -84,6 +90,7 @@ describe("build sentence bank schema v2", () => {
         difficulty: "easy",
         context: "Could you send me the file today?",
         given: "I can",
+        givenIndex: 0,
         bank: ["review", "your draft", "after dinner", "tonight"],
         answerOrder: ["review", "your draft", "after dinner", "tonight"],
       },

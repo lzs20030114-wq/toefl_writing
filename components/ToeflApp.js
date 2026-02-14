@@ -17,30 +17,6 @@ export function wc(t) { return t.trim() ? t.trim().split(/\s+/).length : 0; }
 export function shuffle(a) { const b = [...a]; for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; }
 function capitalize(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
 export function norm(s) { return s.toLowerCase().replace(/[.,!?]/g, "").trim(); }
-function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
-
-export function generateGivenInsertIndex(bankLength) {
-  const n = Math.max(0, Number(bankLength) || 0);
-  if (n <= 1) return n === 0 ? 0 : randInt(0, 1);
-  if (n < 3) return randInt(0, n);
-
-  const allowed = [];
-  for (let i = 1; i <= n - 1; i += 1) allowed.push(i);
-  const third = Math.max(1, Math.floor(allowed.length / 3));
-  const front = allowed.slice(0, third);
-  const mid = allowed.slice(third, allowed.length - third);
-  const back = allowed.slice(allowed.length - third);
-  const roll = Math.random();
-  const bucket = roll < 0.3 ? front : roll < 0.7 ? (mid.length > 0 ? mid : front) : back;
-  return bucket[randInt(0, bucket.length - 1)];
-}
-
-function withGivenInsertIndex(items) {
-  return (items || []).map((q) => {
-    if (Number.isInteger(q?.__givenInsertIndex)) return q;
-    return { ...q, __givenInsertIndex: generateGivenInsertIndex((q?.answerOrder || []).length) };
-  });
-}
 
 /* --- localStorage helpers --- */
 export function loadHist() { try { return JSON.parse(localStorage.getItem("toefl-hist") || '{"sessions":[]}'); } catch { return { sessions: [] }; } }
@@ -77,7 +53,7 @@ export function selectBSQuestions(options = {}) {
   const usedRendered = new Set();
 
   const renderKey = (q) => {
-    const sentence = renderResponseSentence(q, null, { givenInsertIndex: 0 }).correctSentenceFull;
+    const sentence = renderResponseSentence(q).correctSentenceFull;
     if (sentence) return sentence.trim().toLowerCase();
     return JSON.stringify([q.given || "", ...(q.answerOrder || []), q.responseSuffix || ""]);
   };
@@ -121,7 +97,7 @@ export function selectBSQuestions(options = {}) {
   if (selected.length < totalNeeded) {
     throw new Error("Build sentence bank quality gate rejected too many questions.");
   }
-  return withGivenInsertIndex(shuffle(selected));
+  return shuffle(selected);
 }
 
 /* --- Pick random prompt for Email/Discussion, preferring undone --- */
@@ -211,7 +187,7 @@ async function aiEval(type, pd, text) {
 
 async function aiGen(type) {
   const prompts = {
-    buildSentence: 'Generate 10 TOEFL iBT Build a Sentence items as a JSON array only. Use schema: {"id":"bs2_xxx","difficulty":"easy|medium|hard","context":"...","responseSuffix":"? or .","given":"1-3 words","bank":["..."],"answerOrder":["..."],"gp":"grammar point"}. Rules: given appears exactly once and is fixed; bank must not include given; bank length must be >=4; answerOrder must be a permutation of bank; avoid given fragments like "to the" or "before the"; avoid ambiguous multiple preposition fragments; sentence must be natural, grammatical, unambiguous, campus/daily style.',
+    buildSentence: 'Generate 10 TOEFL iBT Build a Sentence items as a JSON array only. Use schema: {"id":"bs2_xxx","difficulty":"easy|medium|hard","context":"...","responseSuffix":"? or .","given":"1-3 words","givenIndex":0,"bank":["..."],"answerOrder":["..."],"gp":"grammar point"}. Rules: given appears exactly once at givenIndex in the full response; bank must not include given; bank length must be >=4; answerOrder must be a permutation of bank; avoid given fragments like "to the" or "before the"; avoid ambiguous multiple preposition fragments; sentence must be natural, grammatical, unambiguous, campus/daily style.',
     email: 'Generate 1 TOEFL 2026 email prompt as JSON: {"scenario":"...","direction":"Write an email:","goals":["g1","g2","g3"],"to":"...","from":"You"}',
     discussion: 'Generate 1 TOEFL 2026 discussion prompt as JSON: {"professor":{"name":"Dr. X","text":"..."},"students":[{"name":"A","text":"..."},{"name":"B","text":"..."}]}'
   };
@@ -334,9 +310,9 @@ function ScorePanel({ result, type }) {
 
 export function BuildSentenceTask({ onExit, questions }) {
   const initialBuildState = (() => {
-    if (questions) return { qs: withGivenInsertIndex(questions), error: null };
+    if (questions) return { qs: questions, error: null };
     try {
-      return { qs: withGivenInsertIndex(selectBSQuestions()), error: null };
+      return { qs: selectBSQuestions(), error: null };
     } catch (e) {
       return { qs: [], error: e?.message || "Question bank is unavailable." };
     }
@@ -393,11 +369,11 @@ export function BuildSentenceTask({ onExit, questions }) {
       const curSlots = slotsRef.current;
       const curQ = qs[idxRef.current];
       const curAnswerOrder = curSlots.map(s => (s ? s.text : ""));
-      const curRender = renderResponseSentence(curQ, curAnswerOrder, { givenInsertIndex: curQ.__givenInsertIndex });
+      const curRender = renderResponseSentence(curQ, curAnswerOrder);
       const curOk = curAnswerOrder.join(" ") === (curQ.answerOrder || []).join(" ");
       let nr = [...resultsRef.current, { q: curQ, userAnswer: curRender.userSentenceFull || "(no answer)", correctAnswer: curRender.correctSentenceFull, isCorrect: curOk }];
       for (let i = idxRef.current + 1; i < qs.length; i++) {
-        nr.push({ q: qs[i], userAnswer: "(no answer)", correctAnswer: renderResponseSentence(qs[i], null, { givenInsertIndex: qs[i].__givenInsertIndex }).correctSentenceFull, isCorrect: false });
+        nr.push({ q: qs[i], userAnswer: "(no answer)", correctAnswer: renderResponseSentence(qs[i]).correctSentenceFull, isCorrect: false });
       }
       setResults(nr);
       setPhase("review");
@@ -493,7 +469,7 @@ export function BuildSentenceTask({ onExit, questions }) {
     submitLockRef.current = true;
     const q = qs[idx];
     const filledOrder = slots.map(s => (s ? s.text : ""));
-    const rendered = renderResponseSentence(q, filledOrder, { givenInsertIndex: q.__givenInsertIndex });
+    const rendered = renderResponseSentence(q, filledOrder);
     const ok = filledOrder.join(" ") === (q.answerOrder || []).join(" ");
     const nr = [...results, { q, userAnswer: rendered.userSentenceFull || "(no answer)", correctAnswer: rendered.correctSentenceFull, isCorrect: ok }];
     setResults(nr);
@@ -534,7 +510,7 @@ export function BuildSentenceTask({ onExit, questions }) {
               <div style={{ fontSize: 12, color: C.t2, marginBottom: 4 }}>Q{i + 1}: {r.q.context} <span style={{ color: C.blue }}>({r.q.gp || "build_sentence"})</span></div>
               <div style={{ fontSize: 14, color: r.isCorrect ? C.green : C.red }}>{r.isCorrect ? "Correct" : "Incorrect"}</div>
               <div data-testid={`build-your-sentence-${i}`} style={{ fontSize: 13, color: C.t1, marginTop: 4 }}><b>Your full response sentence:</b> {capitalize(r.userAnswer)}</div>
-              <div data-testid={`build-correct-answer-${i}`} style={{ fontSize: 13, color: C.blue, marginTop: 4 }}><b>Correct full response sentence:</b> {capitalize(r.correctAnswer || renderResponseSentence(r.q, null, { givenInsertIndex: r.q.__givenInsertIndex }).correctSentenceFull)}</div>
+              <div data-testid={`build-correct-answer-${i}`} style={{ fontSize: 13, color: C.blue, marginTop: 4 }}><b>Correct full response sentence:</b> {capitalize(r.correctAnswer || renderResponseSentence(r.q).correctSentenceFull)}</div>
             </div>
           ))}
           <div style={{ display: "flex", gap: 12, marginTop: 20 }}>
@@ -635,7 +611,7 @@ export function BuildSentenceTask({ onExit, questions }) {
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8, minHeight: 48, alignItems: "center", lineHeight: 1.6 }}>
             {Array.from({ length: (q.bank || []).length + 1 }, (_, pos) => (
               <React.Fragment key={`resp-pos-${pos}`}>
-                {pos === q.__givenInsertIndex && (
+                {pos === (Number.isInteger(q.givenIndex) ? q.givenIndex : 0) && (
                   <span
                     data-testid="given-token"
                     style={{ fontSize: 14, color: C.nav, background: "#e6f0ff", border: "1px solid #b3d4fc", borderRadius: 4, padding: "4px 10px", fontWeight: 600 }}
