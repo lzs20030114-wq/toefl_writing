@@ -58,6 +58,16 @@ describe("ToeflApp navigation", () => {
     expect(screen.getByTestId("build-result-0")).toHaveAttribute("data-correct", "true");
   });
 
+  test("build directions are readable and match iBT wording", () => {
+    render(<BuildSentenceTask onExit={() => {}} questions={[BUILD_TEST_Q]} />);
+
+    const directionsText = screen.getByText(/Directions:/);
+    const directionsBlock = directionsText.closest("div");
+    expect(directionsBlock).toHaveTextContent("Directions:");
+    expect(directionsBlock).toHaveTextContent("Move the words");
+    expect(directionsBlock.textContent).not.toMatch(/[\uFFFD]{2,}|闂|濠|缂|锟/);
+  });
+
   test("submit is disabled until all slots are filled", () => {
     render(<BuildSentenceTask onExit={() => {}} questions={[BUILD_TEST_Q]} />);
     fireEvent.click(screen.getByTestId("build-start"));
@@ -98,7 +108,12 @@ describe("ToeflApp navigation", () => {
     fireEvent.click(screen.getByTestId("build-submit"));
 
     expect(screen.getByTestId("build-result-0")).toHaveAttribute("data-correct", "false");
-    expect(screen.getByTestId("build-correct-answer-0")).toBeInTheDocument();
+    expect(screen.getByTestId("build-your-sentence-0")).toHaveTextContent(
+      "You should today for the online lab section sign up"
+    );
+    expect(screen.getByTestId("build-correct-answer-0")).toHaveTextContent(
+      "You should sign up for the lab section online today"
+    );
   });
 
   test("writing duplicate submit only triggers one API call", async () => {

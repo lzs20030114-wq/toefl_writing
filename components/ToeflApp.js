@@ -5,6 +5,7 @@ import BS_MEDIUM_DATA from "../data/questionBank/v1/build_sentence/medium.json";
 import BS_HARD_DATA from "../data/questionBank/v1/build_sentence/hard.json";
 import EM_DATA from "../data/emailPrompts.json";
 import AD_DATA from "../data/discussionPrompts.json";
+import { renderSentence } from "../lib/questionBank/renderSentence";
 
 const BS_DATA = [...BS_EASY_DATA, ...BS_MEDIUM_DATA, ...BS_HARD_DATA];
 
@@ -29,20 +30,43 @@ export function selectBSQuestions() {
   const byDiff = { easy: [], medium: [], hard: [] };
   BS_DATA.forEach(q => { if (byDiff[q.difficulty]) byDiff[q.difficulty].push(q); });
 
+  const usedSourceIds = new Set();
+  const usedRendered = new Set();
+
+  const renderKey = (q) => {
+    if (q.renderedSentence) return String(q.renderedSentence).trim().toLowerCase();
+    if (Array.isArray(q.answerOrder)) return q.answerOrder.join(" ").trim().toLowerCase();
+    return JSON.stringify(q.promptTokens || []);
+  };
+
+  const inSessionAvailable = (q) => !usedSourceIds.has(q.id) && !usedRendered.has(renderKey(q));
+
   function pickN(pool, n, targetDifficulty) {
-    if (!pool || pool.length === 0) {
-      // Fallback: synthesize target difficulty items when a bucket is empty.
-      return shuffle(BS_DATA)
-        .slice(0, Math.min(n, BS_DATA.length))
-        .map((q, i) => ({
+    const bucket = Array.isArray(pool) ? pool : [];
+    const basePool = bucket.length > 0 ? bucket : BS_DATA;
+    const preferred = shuffle(basePool.filter(q => !doneIds.has(q.id)));
+    const fallback = shuffle(basePool.filter(q => doneIds.has(q.id)));
+    const ordered = [...preferred, ...fallback];
+
+    const picked = [];
+    for (let i = 0; i < ordered.length && picked.length < n; i += 1) {
+      const q = ordered[i];
+      if (!inSessionAvailable(q)) continue;
+
+      usedSourceIds.add(q.id);
+      usedRendered.add(renderKey(q));
+
+      if (bucket.length > 0) {
+        picked.push(q);
+      } else {
+        picked.push({
           ...q,
-          id: `${q.id}__${targetDifficulty}_${i}`,
+          id: `${q.id}__${targetDifficulty}_${picked.length}`,
           difficulty: targetDifficulty,
-        }));
+        });
+      }
     }
-    const undone = pool.filter(q => !doneIds.has(q.id));
-    const source = undone.length >= n ? undone : pool;
-    return shuffle(source).slice(0, Math.min(n, source.length));
+    return picked;
   }
 
   const selected = [
@@ -123,9 +147,9 @@ export function mapScoringError(err) {
   return "评分失败";
 }
 
-const EMAIL_SYS = "You are a STRICT ETS TOEFL iBT 2026 Writing scorer. Score the email 0-5 with ZERO inflation. RUBRIC: 5(RARE)=CONSISTENT facility,PRECISE/IDIOMATIC,almost NO errors. 4=MOSTLY effective,ADEQUATE,FEW errors. 3=GENERALLY accomplishes but NOTICEABLE errors. 2=MOSTLY UNSUCCESSFUL. 1=UNSUCCESSFUL. Most score 3-4. BAND: 5=5.0-6.0,4=4.0-4.5,3=3.0-3.5,2=2.0-2.5,1=1.0-1.5. Find ALL weaknesses first. IMPORTANT: Write summary, weaknesses, strengths, grammar_issues, vocabulary_note, next_steps ALL in Chinese (缂傚倷鑳舵慨顓㈠磻閹捐秮褰掓晲閸℃ê鐭梺鐓庣仛閸ㄥ灝顕?. The sample model response should remain in English. Return ONLY JSON: {\"score\":0,\"band\":0.0,\"goals_met\":[false,false,false],\"summary\":\"濠电偞鍨堕幖鈺呭储娴犲鍑犻柛鎰靛枛缁犳垿鏌ゆ慨鎰偓妤€鈻?..\",\"weaknesses\":[\"濠电偞鍨堕幖鈺呭储娴犲鍑犻柛鎰电厛閸ゆ洟寮堕崼姘珔濞?..\"],\"strengths\":[\"濠电偞鍨堕幖鈺呭储娴犲鍑犻柛鎰ㄦ櫅椤曡鲸淇婇婊冨付濞?..\"],\"grammar_issues\":[\"濠电偞鍨堕幖鈺呭储娴犲鍑犻柛鎰典簼鐎氭碍銇勯幘璺烘灁闁靛棗锕濠氬磼閵堝懏鐝濆?..\"],\"vocabulary_note\":\"濠电偞鍨堕幖鈺呭储娴犲鍑犻柛鎰典簼鐎氭氨鈧箍鍎卞Λ娑橈耿娴犲鐓熼柟閭﹀櫘閺€浼存煟?..\",\"next_steps\":[\"濠电偞鍨堕幖鈺呭储娴犲鍑犻柛鎰靛枛缂佲晝鐥鐐村櫧缂佺姾宕甸埀顒傚仯閸婃繄绱撳棰濇晩?..\"],\"sample\":\"English model response\"}";
+const EMAIL_SYS = "You are a STRICT ETS TOEFL iBT 2026 Writing scorer. Score the email 0-5 with ZERO inflation. RUBRIC: 5(RARE)=CONSISTENT facility,PRECISE/IDIOMATIC,almost NO errors. 4=MOSTLY effective,ADEQUATE,FEW errors. 3=GENERALLY accomplishes but NOTICEABLE errors. 2=MOSTLY UNSUCCESSFUL. 1=UNSUCCESSFUL. Most score 3-4. BAND: 5=5.0-6.0,4=4.0-4.5,3=3.0-3.5,2=2.0-2.5,1=1.0-1.5. Find ALL weaknesses first. IMPORTANT: Write summary, weaknesses, strengths, grammar_issues, vocabulary_note, and next_steps in Chinese. Keep sample in English. Return ONLY JSON: {\"score\":0,\"band\":0.0,\"goals_met\":[false,false,false],\"summary\":\"\",\"weaknesses\":[\"\"],\"strengths\":[\"\"],\"grammar_issues\":[\"\"],\"vocabulary_note\":\"\",\"next_steps\":[\"\"],\"sample\":\"English model response\"}";
 
-const DISC_SYS = "You are a STRICT ETS TOEFL iBT 2026 Writing scorer. Score the discussion post 0-5 with ZERO inflation. RUBRIC: 5(RARE)=VERY CLEAR,WELL-ELABORATED,PRECISE/IDIOMATIC. 4=RELEVANT,ADEQUATELY elaborated,FEW errors. 3=MOSTLY relevant,NOTICEABLE errors. 2=MOSTLY UNSUCCESSFUL. 1=UNSUCCESSFUL. Most score 3-4. BAND: 5=5.0-6.0,4=4.0-4.5,3=3.0-3.5,2=2.0-2.5,1=1.0-1.5. Find ALL weaknesses first. IMPORTANT: Write summary, weaknesses, strengths, grammar_issues, vocabulary_note, argument_quality, next_steps ALL in Chinese (缂傚倷鑳舵慨顓㈠磻閹捐秮褰掓晲閸℃ê鐭梺鐓庣仛閸ㄥ灝顕?. The sample model response should remain in English. Return ONLY JSON: {\"score\":0,\"band\":0.0,\"engages_professor\":false,\"engages_students\":false,\"summary\":\"濠电偞鍨堕幖鈺呭储娴犲鍑犻柛鎰靛枛缁犳垿鏌ゆ慨鎰偓妤€鈻?..\",\"weaknesses\":[\"濠电偞鍨堕幖鈺呭储娴犲鍑犻柛鎰电厛閸ゆ洟寮堕崼姘珔濞?..\"],\"strengths\":[\"濠电偞鍨堕幖鈺呭储娴犲鍑犻柛鎰ㄦ櫅椤曡鲸淇婇婊冨付濞?..\"],\"grammar_issues\":[\"濠电偞鍨堕幖鈺呭储娴犲鍑犻柛鎰典簼鐎氭碍銇勯幘璺烘灁闁靛棗锕濠氬磼閵堝懏鐝濆?..\"],\"vocabulary_note\":\"濠电偞鍨堕幖鈺呭储娴犲鍑犻柛鎰典簼鐎氭氨鈧箍鍎卞Λ娑橈耿娴犲鐓熼柟閭﹀櫘閺€浼存煟?..\",\"argument_quality\":\"濠电偞鍨堕幖鈺呭储娴犲鍑犻柛鎰典簼婵厧螖閿曚焦纭舵俊鎻掔墦閹綊骞囬埡浣割潎闂侀潻缍€濞咃綁骞忛悩璇茬妞ゅ繐妫楃粻?..\",\"next_steps\":[\"濠电偞鍨堕幖鈺呭储娴犲鍑犻柛鎰靛枛缂佲晝鐥鐐村櫧缂佺姾宕甸埀顒傚仯閸婃繄绱撳棰濇晩?..\"],\"sample\":\"English model response\"}";
+const DISC_SYS = "You are a STRICT ETS TOEFL iBT 2026 Writing scorer. Score the discussion post 0-5 with ZERO inflation. RUBRIC: 5(RARE)=VERY CLEAR,WELL-ELABORATED,PRECISE/IDIOMATIC. 4=RELEVANT,ADEQUATELY elaborated,FEW errors. 3=MOSTLY relevant,NOTICEABLE errors. 2=MOSTLY UNSUCCESSFUL. 1=UNSUCCESSFUL. Most score 3-4. BAND: 5=5.0-6.0,4=4.0-4.5,3=3.0-3.5,2=2.0-2.5,1=1.0-1.5. Find ALL weaknesses first. IMPORTANT: Write summary, weaknesses, strengths, grammar_issues, vocabulary_note, argument_quality, and next_steps in Chinese. Keep sample in English. Return ONLY JSON: {\"score\":0,\"band\":0.0,\"engages_professor\":false,\"engages_students\":false,\"summary\":\"\",\"weaknesses\":[\"\"],\"strengths\":[\"\"],\"grammar_issues\":[\"\"],\"vocabulary_note\":\"\",\"argument_quality\":\"\",\"next_steps\":[\"\"],\"sample\":\"English model response\"}";
 
 async function aiEval(type, pd, text) {
   const sys = type === "email" ? EMAIL_SYS : DISC_SYS;
@@ -312,11 +336,12 @@ export function BuildSentenceTask({ onExit, questions }) {
       const curSlots = slotsRef.current;
       const curQ = qs[idxRef.current];
       const curAnswerOrder = curSlots.map(s => (s ? s.text : ""));
-      const curAnswer = curAnswerOrder.join(" ").trim();
+      const curAnswer = renderSentence(curQ.promptTokens, curAnswerOrder);
       const curOk = curAnswerOrder.join(" ") === (curQ.answerOrder || []).join(" ");
-      let nr = [...resultsRef.current, { q: curQ, userAnswer: curAnswer || "(no answer)", isCorrect: curOk }];
+      const correctSentence = renderSentence(curQ.promptTokens, curQ.answerOrder || []);
+      let nr = [...resultsRef.current, { q: curQ, userAnswer: curAnswer || "(no answer)", correctAnswer: correctSentence, isCorrect: curOk }];
       for (let i = idxRef.current + 1; i < qs.length; i++) {
-        nr.push({ q: qs[i], userAnswer: "(no answer)", isCorrect: false });
+        nr.push({ q: qs[i], userAnswer: "(no answer)", correctAnswer: renderSentence(qs[i].promptTokens, qs[i].answerOrder || []), isCorrect: false });
       }
       setResults(nr);
       setPhase("review");
@@ -412,9 +437,10 @@ export function BuildSentenceTask({ onExit, questions }) {
     submitLockRef.current = true;
     const q = qs[idx];
     const filledOrder = slots.map(s => (s ? s.text : ""));
-    const ua = filledOrder.join(" ");
+    const ua = renderSentence(q.promptTokens, filledOrder);
+    const correctSentence = renderSentence(q.promptTokens, q.answerOrder || []);
     const ok = filledOrder.join(" ") === (q.answerOrder || []).join(" ");
-    const nr = [...results, { q, userAnswer: ua || "(no answer)", isCorrect: ok }];
+    const nr = [...results, { q, userAnswer: ua || "(no answer)", correctAnswer: correctSentence, isCorrect: ok }];
     setResults(nr);
     if (idx < qs.length - 1) { setIdx(idx + 1); initQ(idx + 1, qs); submitLockRef.current = false; }
     else {
@@ -451,8 +477,9 @@ export function BuildSentenceTask({ onExit, questions }) {
           {results.map((r, i) => (
             <div data-testid={`build-result-${i}`} data-correct={r.isCorrect ? "true" : "false"} key={i} style={{ background: "#fff", border: "1px solid " + (r.isCorrect ? "#c6f6d5" : "#fed7d7"), borderLeft: "4px solid " + (r.isCorrect ? C.green : C.red), borderRadius: 4, padding: 14, marginBottom: 8 }}>
               <div style={{ fontSize: 12, color: C.t2, marginBottom: 4 }}>Q{i + 1}: {(r.q.promptTokens || []).map(t => ((t.type || t.t) === "blank" ? "___" : (t.value || t.v || ""))).join(" ")} <span style={{ color: C.blue }}>({r.q.gp || "build_sentence"})</span></div>
-              <div style={{ fontSize: 14, color: r.isCorrect ? C.green : C.red }}>{r.isCorrect ? "Correct" : "Incorrect"} {capitalize(r.userAnswer)}</div>
-              {!r.isCorrect && <div data-testid={`build-correct-answer-${i}`} style={{ fontSize: 13, color: C.blue, marginTop: 4 }}>Correct answer: {capitalize((r.q.answerOrder || []).join(" "))}</div>}
+              <div style={{ fontSize: 14, color: r.isCorrect ? C.green : C.red }}>{r.isCorrect ? "Correct" : "Incorrect"}</div>
+              <div data-testid={`build-your-sentence-${i}`} style={{ fontSize: 13, color: C.t1, marginTop: 4 }}><b>Your sentence:</b> {capitalize(r.userAnswer)}</div>
+              <div data-testid={`build-correct-answer-${i}`} style={{ fontSize: 13, color: C.blue, marginTop: 4 }}><b>Correct sentence:</b> {capitalize(r.correctAnswer || renderSentence(r.q.promptTokens, r.q.answerOrder || []))}</div>
             </div>
           ))}
           <div style={{ display: "flex", gap: 12, marginTop: 20 }}>
@@ -467,12 +494,12 @@ export function BuildSentenceTask({ onExit, questions }) {
   if (phase === "instruction") {
     return (
       <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
-        <TopBar title="Build a Sentence" section="Writing 闁?Task 1" onExit={onExit} />
+        <TopBar title="Build a Sentence" section="Writing | Task 1" onExit={onExit} />
         <div style={{ maxWidth: 760, margin: "24px auto", padding: "0 20px" }}>
           <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: "32px 40px" }}>
             <h2 style={{ margin: "0 0 16px", fontSize: 20, color: C.nav }}>Task 1: Build a Sentence</h2>
             <div style={{ fontSize: 14, color: C.t1, lineHeight: 1.8 }}>
-              <p><b>Directions:</b> In this task, you will see prompt tokens and a set of bank chunks below. Drag or click the chunks to place them into the blank slots and form a grammatically correct sentence.</p>
+              <p><b>Directions:</b> Move the words in the boxes to the blank spaces to create a grammatically correct sentence.</p>
               <p><b>Questions:</b> 9 (3 easy + 3 medium + 3 hard)</p>
               <p><b>Time limit:</b> 6 minutes</p>
               <p>The timer will start when you click <b>Start</b>. When time runs out, your answers will be submitted automatically.</p>
@@ -525,11 +552,11 @@ export function BuildSentenceTask({ onExit, questions }) {
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
-      <TopBar title="Build a Sentence" section="Writing 闁?Task 1" timeLeft={tl} isRunning={run} qInfo={(idx + 1) + " / " + qs.length} onExit={onExit} />
+      <TopBar title="Build a Sentence" section="Writing | Task 1" timeLeft={tl} isRunning={run} qInfo={(idx + 1) + " / " + qs.length} onExit={onExit} />
       <div style={{ maxWidth: 760, margin: "24px auto", padding: "0 20px" }}>
         {/* Directions */}
         <div style={{ background: C.ltB, border: "1px solid #b3d4fc", borderRadius: 4, padding: 14, marginBottom: 20, fontSize: 13 }}>
-          <b>Directions:</b> 闂備礁缍婇弨閬嶆偋濡ゅ啠鍋撳顒佸仴妤犵偛顑夊浠嬵敃椤厼瀵查梻浣告啞閸ㄨ泛危閹烘鍎婃繝闈涱儏闁裤倖淇婇妶鍌氫壕闂佹寧绻勯崑銈呯暦濡ゅ懎唯闁靛牆娲ㄩ幉顕€姊洪崫鍕偓绋匡耿闁秴鐓橀柡宥冨妽婵鈧箍鍎辩换鎺旂矆婢跺瞼纾藉ù锝囶焾椤忣亪鏌涢妸锕佸妞ゎ偁鍨介弫鎰板炊閿濆倸浜炬慨妞诲亾闁诡垰鍟村畷鐔碱敃閵忋垻鈼ら梺璇插缁嬫帡宕濋幋锕€鐒?
+          <b>Directions:</b> Move the words in the boxes to the blank spaces to create a grammatically correct sentence.
         </div>
 
         {/* Prompt + in-sentence slots */}
@@ -545,9 +572,7 @@ export function BuildSentenceTask({ onExit, questions }) {
                 }
                 if (tt === "given") {
                   return (
-                    <span key={`given-${ti}`} data-testid="given-token" style={{ fontSize: 14, color: C.nav, background: "#e6f0ff", border: "1px solid #b3d4fc", borderRadius: 4, padding: "4px 10px", fontWeight: 600 }}>
-                      <span style={{ fontSize: 10, opacity: 0.8, marginRight: 6 }}>GIVEN</span>{tokenValue(token)}
-                    </span>
+                    <span key={`given-${ti}`} data-testid="given-token" style={{ fontSize: 14, color: C.nav, background: "#e6f0ff", border: "1px solid #b3d4fc", borderRadius: 4, padding: "4px 10px", fontWeight: 600 }}>{tokenValue(token)}</span>
                   );
                 }
                 if (tt === "blank") {
@@ -595,7 +620,7 @@ export function BuildSentenceTask({ onExit, questions }) {
           }}
         >
           <div style={{ fontSize: 11, color: C.t2, width: "100%", marginBottom: 4, letterSpacing: 1 }}>WORD BANK</div>
-          {bank.length === 0 && <span style={{ fontSize: 13, color: "#aaa", fontStyle: "italic" }}>闂備礁婀遍。浠嬪磻閹剧粯鐓涢柛顐ｇ箥濡插ジ鏌ｉ敂鐣岀疄鐎规洜顭堣灃闁逞屽墴瀹曟瑩鏁撻悩鑼摋闂佽鍨庨崘銊﹁緢</span>}
+          {bank.length === 0 && <span style={{ fontSize: 13, color: "#aaa", fontStyle: "italic" }}>All chunks are placed. Click a filled slot to return one to the bank.</span>}
           {bank.map(chunk => (
             <button
               data-testid={`bank-chunk-${chunk.id}`}
@@ -738,7 +763,7 @@ export function WritingTask({ onExit, type }) {
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
-      <TopBar title={taskTitle} section={"Writing 闁?" + (type === "email" ? "Task 2" : "Task 3")} timeLeft={phase !== "ready" ? tl : undefined} isRunning={run} onExit={onExit} />
+      <TopBar title={taskTitle} section={"Writing | " + (type === "email" ? "Task 2" : "Task 3")} timeLeft={phase !== "ready" ? tl : undefined} isRunning={run} onExit={onExit} />
       <div style={{ maxWidth: 860, margin: "24px auto", padding: "0 20px" }}>
         <div style={{ background: C.ltB, border: "1px solid #b3d4fc", borderRadius: 4, padding: 14, marginBottom: 20, fontSize: 13 }}><b>Directions:</b> {type === "email" ? "Write an email addressing all 3 goals. 7 min. 80-120 words." : "Read the discussion and write a response. 10 min. 100+ words."}</div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
