@@ -31,7 +31,7 @@ describe("save-build-sentence-bank quality gates", () => {
         given: "After class",
         responseSuffix: ".",
         bank: ["review", "the file", "with me", "today", "please"],
-        answerOrder: ["review", "the file", "with me", "today", "please"],
+        answerOrder: ["the file", "review", "today", "with me", "please"],
       },
     ];
 

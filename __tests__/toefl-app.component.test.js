@@ -8,6 +8,7 @@ const BUILD_TEST_Q = {
   context: "You missed class and need your classmate's slides.",
   responseSuffix: "?",
   given: "Could you",
+  __givenInsertIndex: 2,
   bank: ["send me", "the slides", "after class", "today"],
   answerOrder: ["send me", "the slides", "after class", "today"],
 };
@@ -72,7 +73,7 @@ describe("ToeflApp navigation", () => {
 
     expect(screen.getByTestId("build-result-0")).toHaveAttribute("data-correct", "true");
     expect(screen.getByTestId("build-correct-answer-0")).toHaveTextContent(
-      "Correct full response sentence: Could you send me the slides after class today?"
+      "Correct full response sentence: Send me the slides Could you after class today?"
     );
   });
 
@@ -117,10 +118,10 @@ describe("ToeflApp navigation", () => {
 
     expect(screen.getByTestId("build-result-0")).toHaveAttribute("data-correct", "false");
     expect(screen.getByTestId("build-your-sentence-0")).toHaveTextContent(
-      "Your full response sentence: Could you today after class the slides send me?"
+      "Your full response sentence: Today after class Could you the slides send me?"
     );
     expect(screen.getByTestId("build-correct-answer-0")).toHaveTextContent(
-      "Correct full response sentence: Could you send me the slides after class today?"
+      "Correct full response sentence: Send me the slides Could you after class today?"
     );
   });
 

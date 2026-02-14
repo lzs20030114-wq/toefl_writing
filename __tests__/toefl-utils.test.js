@@ -9,6 +9,7 @@ import {
   pickRandomPrompt,
   saveSess,
   selectBSQuestions,
+  generateGivenInsertIndex,
   wc,
 } from "../components/ToeflApp";
 import { renderResponseSentence } from "../lib/questionBank/renderResponseSentence";
@@ -82,6 +83,14 @@ describe("toefl utils", () => {
 
     const rendered = qs.map((q) => renderResponseSentence(q).correctSentenceFull.trim().toLowerCase());
     expect(new Set(rendered).size).toBe(rendered.length);
+  });
+
+  test("given insert index is not always identical across runs", () => {
+    const seen = new Set();
+    for (let i = 0; i < 40; i += 1) {
+      seen.add(generateGivenInsertIndex(4));
+    }
+    expect(seen.size).toBeGreaterThan(1);
   });
 
   test("pickRandomPrompt prefers undone + unused prompt", () => {
