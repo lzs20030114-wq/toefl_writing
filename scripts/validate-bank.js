@@ -1,7 +1,10 @@
 const fs = require("fs");
 const path = require("path");
 const { validateBuildSentenceBank } = require("../lib/questionBank/buildSentenceSchema");
-const { renderSentence } = require("../lib/questionBank/renderSentence");
+const {
+  hardFailReasons,
+  warnings: qualityWarnings,
+} = require("../lib/questionBank/qualityGateBuildSentence");
 
 const ROOT = path.resolve(__dirname, "..");
 const BANK_DIR = path.join(
@@ -18,38 +21,38 @@ function readJson(filePath) {
   return JSON.parse(raw);
 }
 
-function collectWarnings(items) {
-  const warnings = [];
+function parseArgs(argv) {
+  return {
+    strict: argv.includes("--strict"),
+  };
+}
 
+function collectHardFails(items) {
+  const out = [];
   items.forEach((item, index) => {
-    if (!item || typeof item !== "object") return;
-
-    const id = item.id || `item[${index}]`;
-    const issues = [];
-    const tokens = Array.isArray(item.promptTokens) ? item.promptTokens : [];
-    const givenIndex = tokens.findIndex((t) => (t?.type || t?.t) === "given");
-
-    if (givenIndex === 0 || givenIndex === tokens.length - 1) {
-      issues.push("given chunk is at sentence boundary (start/end)");
-    }
-
-    const sentence = renderSentence(tokens, item.answerOrder || []);
-    if (/\s+[,.!?;:]/.test(sentence)) {
-      issues.push("space before punctuation");
-    }
-    if (/\s{2,}/.test(sentence)) {
-      issues.push("double spaces");
-    }
-
-    if (issues.length > 0) warnings.push({ id, issues });
+    const id = item?.id || `item[${index}]`;
+    const reasons = hardFailReasons(item || {});
+    if (reasons.length > 0) out.push({ id, reasons });
   });
+  return out;
+}
 
-  return warnings;
+function collectWarnings(items) {
+  const out = [];
+  items.forEach((item, index) => {
+    const id = item?.id || `item[${index}]`;
+    const reasons = qualityWarnings(item || {});
+    if (reasons.length > 0) out.push({ id, reasons });
+  });
+  return out;
 }
 
 function main() {
+  const { strict } = parseArgs(process.argv.slice(2));
   const failures = [];
   const warningByFile = [];
+  const hardFailByFile = [];
+  let strictFailed = false;
 
   TARGET_FILES.forEach((name) => {
     const filePath = path.join(BANK_DIR, name);
@@ -65,9 +68,17 @@ function main() {
         result.errors.forEach((e) => failures.push(`  - ${e}`));
       }
 
-      const warnings = collectWarnings(data);
-      if (warnings.length > 0) {
-        warningByFile.push({ file: name, warnings });
+      if (strict) {
+        const hardFails = collectHardFails(data);
+        const warnings = collectWarnings(data);
+        if (hardFails.length > 0) {
+          strictFailed = true;
+          hardFailByFile.push({ file: name, entries: hardFails });
+        }
+        if (warnings.length > 0) {
+          strictFailed = true;
+          warningByFile.push({ file: name, entries: warnings });
+        }
       }
     } catch (e) {
       failures.push(`${name}: invalid JSON (${e.message})`);
@@ -80,15 +91,30 @@ function main() {
     process.exit(1);
   }
 
-  if (warningByFile.length > 0) {
-    console.warn("Question bank warnings (non-blocking):");
-    warningByFile.forEach(({ file, warnings }) => {
-      console.warn(`${file}: ${warnings.length} warning item(s)`);
-      warnings.forEach((w) => {
-        console.warn(`  - ${w.id}: ${w.issues.join("; ")}`);
+  if (strict && hardFailByFile.length > 0) {
+    console.error("Strict mode hard-fail list:");
+    hardFailByFile.forEach(({ file, entries }) => {
+      console.error(`${file}: ${entries.length} rejected item(s)`);
+      entries.forEach((w) => {
+        console.error(`  - ${w.id}: ${w.reasons.join("; ")}`);
       });
-      console.warn(`  ids: ${warnings.map((w) => w.id).join(", ")}`);
+      console.error(`  ids: ${entries.map((w) => w.id).join(", ")}`);
     });
+  }
+
+  if (strict && warningByFile.length > 0) {
+    console.error("Strict mode warning list:");
+    warningByFile.forEach(({ file, entries }) => {
+      console.error(`${file}: ${entries.length} warning item(s)`);
+      entries.forEach((w) => {
+        console.error(`  - ${w.id}: ${w.reasons.join("; ")}`);
+      });
+      console.error(`  ids: ${entries.map((w) => w.id).join(", ")}`);
+    });
+  }
+
+  if (strict && strictFailed) {
+    process.exit(1);
   }
 
   console.log("Question bank validation passed.");

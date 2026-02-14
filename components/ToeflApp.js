@@ -6,6 +6,9 @@ import BS_HARD_DATA from "../data/questionBank/v1/build_sentence/hard.json";
 import EM_DATA from "../data/emailPrompts.json";
 import AD_DATA from "../data/discussionPrompts.json";
 import { renderSentence } from "../lib/questionBank/renderSentence";
+import {
+  hardFailReasons,
+} from "../lib/questionBank/qualityGateBuildSentence";
 
 const BS_DATA = [...BS_EASY_DATA, ...BS_MEDIUM_DATA, ...BS_HARD_DATA];
 
@@ -28,14 +31,19 @@ export function addDoneIds(key, ids) { try { const done = loadDoneIds(key); ids.
 export function selectBSQuestions() {
   const doneIds = loadDoneIds("toefl-bs-done");
   const byDiff = { easy: [], medium: [], hard: [] };
-  BS_DATA.forEach(q => { if (byDiff[q.difficulty]) byDiff[q.difficulty].push(q); });
+  BS_DATA.forEach(q => {
+    if (!byDiff[q.difficulty]) return;
+    if (hardFailReasons(q).length > 0) return;
+    byDiff[q.difficulty].push(q);
+  });
+  const validAll = [...byDiff.easy, ...byDiff.medium, ...byDiff.hard];
 
   const usedSourceIds = new Set();
   const usedRendered = new Set();
 
   const renderKey = (q) => {
-    if (q.renderedSentence) return String(q.renderedSentence).trim().toLowerCase();
-    if (Array.isArray(q.answerOrder)) return q.answerOrder.join(" ").trim().toLowerCase();
+    const sentence = renderSentence(q.promptTokens || [], q.answerOrder || []);
+    if (sentence) return sentence.trim().toLowerCase();
     return JSON.stringify(q.promptTokens || []);
   };
 
@@ -43,7 +51,8 @@ export function selectBSQuestions() {
 
   function pickN(pool, n, targetDifficulty) {
     const bucket = Array.isArray(pool) ? pool : [];
-    const basePool = bucket.length > 0 ? bucket : BS_DATA;
+    const basePool = bucket.length > 0 ? bucket : validAll;
+    if (basePool.length === 0) return [];
     const preferred = shuffle(basePool.filter(q => !doneIds.has(q.id)));
     const fallback = shuffle(basePool.filter(q => doneIds.has(q.id)));
     const ordered = [...preferred, ...fallback];
@@ -74,6 +83,9 @@ export function selectBSQuestions() {
     ...pickN(byDiff.medium, 3, "medium"),
     ...pickN(byDiff.hard, 3, "hard"),
   ];
+  if (selected.length < 9) {
+    throw new Error("Build sentence bank quality gate rejected too many questions.");
+  }
   return shuffle(selected);
 }
 
@@ -164,7 +176,7 @@ async function aiEval(type, pd, text) {
 
 async function aiGen(type) {
   const prompts = {
-    buildSentence: 'Generate 9 TOEFL 2026 Build a Sentence items as JSON array. All chunks and answer must be lowercase, answer has no punctuation. Mix difficulties. Format: [{"prompt":"context question","chunks":["lowercase","word","chunks"],"answer":"lowercase answer no punctuation","hasDistractor":false,"gp":"grammar point","difficulty":"medium"}]',
+    buildSentence: 'Generate 9 TOEFL iBT Build a Sentence items as a JSON array only. Use schema: {"id":"bs_xxx","difficulty":"easy|medium|hard","promptTokens":[{"type":"text|blank|given","value":"..."}],"bank":["..."],"answerOrder":["..."],"gp":"grammar point"}. Rules: exactly one given token; given must be 1-2 words; given must not be a preposition fragment like "to the" or "in the"; bank must not include given; blank count must equal bank length; answerOrder must be a permutation of bank. Difficulty constraints: easy bank length=4; medium=5-6; hard=6-7. Sentences must be natural, unambiguous campus/daily English.',
     email: 'Generate 1 TOEFL 2026 email prompt as JSON: {"scenario":"...","direction":"Write an email:","goals":["g1","g2","g3"],"to":"...","from":"You"}',
     discussion: 'Generate 1 TOEFL 2026 discussion prompt as JSON: {"professor":{"name":"Dr. X","text":"..."},"students":[{"name":"A","text":"..."},{"name":"B","text":"..."}]}'
   };
@@ -286,7 +298,17 @@ function ScorePanel({ result, type }) {
 /* ========== BUILD A SENTENCE (Slot-based UI) ========== */
 
 export function BuildSentenceTask({ onExit, questions }) {
-  const [qs, setQs] = useState(() => questions || selectBSQuestions());
+  const initialBuildState = (() => {
+    if (questions) return { qs: questions, error: null };
+    try {
+      return { qs: selectBSQuestions(), error: null };
+    } catch (e) {
+      return { qs: [], error: e?.message || "Question bank is unavailable." };
+    }
+  })();
+
+  const [qs, setQs] = useState(() => initialBuildState.qs);
+  const [selectionError] = useState(() => initialBuildState.error);
   const [idx, setIdx] = useState(0);
   const [slots, setSlots] = useState([]);
   const [bank, setBank] = useState([]);
@@ -483,6 +505,21 @@ export function BuildSentenceTask({ onExit, questions }) {
             </div>
           ))}
           <div style={{ display: "flex", gap: 12, marginTop: 20 }}>
+            <Btn onClick={onExit} variant="secondary">Back to Practice</Btn>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (selectionError) {
+    return (
+      <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
+        <TopBar title="Build a Sentence" section="Writing | Task 1" onExit={onExit} />
+        <div style={{ maxWidth: 760, margin: "24px auto", padding: "0 20px" }}>
+          <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 28 }}>
+            <div style={{ fontSize: 16, fontWeight: 700, color: C.red, marginBottom: 8 }}>Question bank blocked by quality gate</div>
+            <div style={{ fontSize: 14, color: C.t2, marginBottom: 16 }}>{selectionError}</div>
             <Btn onClick={onExit} variant="secondary">Back to Practice</Btn>
           </div>
         </div>

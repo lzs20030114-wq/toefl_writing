@@ -11,6 +11,7 @@ import {
   selectBSQuestions,
   wc,
 } from "../components/ToeflApp";
+import { renderSentence } from "../lib/questionBank/renderSentence";
 
 describe("toefl utils", () => {
   beforeEach(() => {
@@ -68,9 +69,7 @@ describe("toefl utils", () => {
     expect(new Set(ids).size).toBe(ids.length);
 
     const rendered = qs.map((q) =>
-      q.renderedSentence
-        ? String(q.renderedSentence).trim().toLowerCase()
-        : (q.answerOrder || []).join(" ").trim().toLowerCase()
+      renderSentence(q.promptTokens || [], q.answerOrder || []).trim().toLowerCase()
     );
     expect(new Set(rendered).size).toBe(rendered.length);
   });
