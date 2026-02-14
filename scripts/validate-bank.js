@@ -7,13 +7,7 @@ const {
 } = require("../lib/questionBank/qualityGateBuildSentence");
 
 const ROOT = path.resolve(__dirname, "..");
-const BANK_DIR = path.join(
-  ROOT,
-  "data",
-  "questionBank",
-  "v2",
-  "build_sentence"
-);
+const BANK_DIR = path.join(ROOT, "data", "buildSentence");
 const TARGET_FILES = ["easy.json", "medium.json", "hard.json"];
 
 function readJson(filePath) {
@@ -47,53 +41,88 @@ function collectWarnings(items) {
   return out;
 }
 
-function main() {
-  const { strict } = parseArgs(process.argv.slice(2));
+function validateBankDataByFile(bankDataByFile, { strict = false } = {}) {
   const failures = [];
   const warningByFile = [];
   const hardFailByFile = [];
   let strictFailed = false;
 
   TARGET_FILES.forEach((name) => {
-    const filePath = path.join(BANK_DIR, name);
-    if (!fs.existsSync(filePath)) {
-      failures.push(`${name}: file not found`);
+    const data = bankDataByFile[name];
+    if (!Array.isArray(data)) {
+      failures.push(`${name}: file not found or invalid data`);
       return;
     }
-    try {
-      const data = readJson(filePath);
-      const result = validateBuildSentenceBank(data);
-      if (!result.ok) {
-        failures.push(`${name}:`);
-        result.errors.forEach((e) => failures.push(`  - ${e}`));
-      }
+    const result = validateBuildSentenceBank(data);
+    if (!result.ok) {
+      failures.push(`${name}:`);
+      result.errors.forEach((e) => failures.push(`  - ${e}`));
+    }
 
-      if (strict) {
-        const hardFails = collectHardFails(data);
-        const warnings = collectWarnings(data);
-        if (hardFails.length > 0) {
-          strictFailed = true;
-          hardFailByFile.push({ file: name, entries: hardFails });
-        }
-        if (warnings.length > 0) {
-          strictFailed = true;
-          warningByFile.push({ file: name, entries: warnings });
-        }
+    if (strict) {
+      const hardFails = collectHardFails(data);
+      const warnings = collectWarnings(data);
+      if (hardFails.length > 0) {
+        strictFailed = true;
+        hardFailByFile.push({ file: name, entries: hardFails });
       }
-    } catch (e) {
-      failures.push(`${name}: invalid JSON (${e.message})`);
+      if (warnings.length > 0) {
+        strictFailed = true;
+        warningByFile.push({ file: name, entries: warnings });
+      }
     }
   });
 
-  if (failures.length > 0) {
+  return {
+    ok: failures.length === 0 && (!strict || !strictFailed),
+    failures,
+    hardFailByFile,
+    warningByFile,
+    strictFailed,
+  };
+}
+
+function readBankDataFromDisk() {
+  const out = {};
+  TARGET_FILES.forEach((name) => {
+    const filePath = path.join(BANK_DIR, name);
+    if (!fs.existsSync(filePath)) {
+      out[name] = null;
+      return;
+    }
+    try {
+      out[name] = readJson(filePath);
+    } catch (e) {
+      out[name] = { __readError: e.message };
+    }
+  });
+  return out;
+}
+
+function main() {
+  const { strict } = parseArgs(process.argv.slice(2));
+  const raw = readBankDataFromDisk();
+  const readFailures = [];
+  TARGET_FILES.forEach((name) => {
+    if (raw[name] === null) readFailures.push(`${name}: file not found`);
+    if (raw[name] && raw[name].__readError) readFailures.push(`${name}: invalid JSON (${raw[name].__readError})`);
+  });
+  if (readFailures.length > 0) {
     console.error("Question bank validation failed:");
-    failures.forEach((f) => console.error(f));
+    readFailures.forEach((f) => console.error(f));
+    process.exit(1);
+  }
+  const result = validateBankDataByFile(raw, { strict });
+
+  if (result.failures.length > 0) {
+    console.error("Question bank validation failed:");
+    result.failures.forEach((f) => console.error(f));
     process.exit(1);
   }
 
-  if (strict && hardFailByFile.length > 0) {
+  if (strict && result.hardFailByFile.length > 0) {
     console.error("Strict mode hard-fail list:");
-    hardFailByFile.forEach(({ file, entries }) => {
+    result.hardFailByFile.forEach(({ file, entries }) => {
       console.error(`${file}: ${entries.length} rejected item(s)`);
       entries.forEach((w) => {
         console.error(`  - ${w.id}: ${w.reasons.join("; ")}`);
@@ -102,9 +131,9 @@ function main() {
     });
   }
 
-  if (strict && warningByFile.length > 0) {
+  if (strict && result.warningByFile.length > 0) {
     console.error("Strict mode warning list:");
-    warningByFile.forEach(({ file, entries }) => {
+    result.warningByFile.forEach(({ file, entries }) => {
       console.error(`${file}: ${entries.length} warning item(s)`);
       entries.forEach((w) => {
         console.error(`  - ${w.id}: ${w.reasons.join("; ")}`);
@@ -113,11 +142,19 @@ function main() {
     });
   }
 
-  if (strict && strictFailed) {
+  if (strict && result.strictFailed) {
     process.exit(1);
   }
 
   console.log("Question bank validation passed.");
 }
 
-main();
+if (require.main === module) {
+  main();
+}
+
+module.exports = {
+  validateBankDataByFile,
+  collectHardFails,
+  collectWarnings,
+};

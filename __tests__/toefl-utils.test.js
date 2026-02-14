@@ -1,16 +1,7 @@
-import {
-  addDoneIds,
-  callAI,
-  fmt,
-  loadDoneIds,
-  loadHist,
-  mapScoringError,
-  norm,
-  pickRandomPrompt,
-  saveSess,
-  selectBSQuestions,
-  wc,
-} from "../components/ToeflApp";
+import { fmt, wc, norm } from "../lib/utils";
+import { loadHist, saveSess, loadDoneIds, addDoneIds } from "../lib/sessionStore";
+import { callAI, mapScoringError } from "../lib/ai/client";
+import { selectBSQuestions, pickRandomPrompt } from "../lib/questionSelector";
 import { renderResponseSentence } from "../lib/questionBank/renderResponseSentence";
 
 describe("toefl utils", () => {

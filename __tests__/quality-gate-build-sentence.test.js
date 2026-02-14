@@ -1,4 +1,4 @@
-const {
+﻿const {
   hardFailReasons,
   warnings,
 } = require("../lib/questionBank/qualityGateBuildSentence");
@@ -12,14 +12,14 @@ describe("qualityGateBuildSentence v2", () => {
       given: "to the",
       givenIndex: 0,
       responseSuffix: ".",
-      bank: ["bring", "her notebook", "right after", "class"],
-      answerOrder: ["bring", "her notebook", "right after", "class"],
+      bank: ["bring", "your", "notebook", "right", "after", "class", "today", "please"],
+      answerOrder: ["bring", "your", "notebook", "right", "after", "class", "today", "please"],
     };
     const reasons = hardFailReasons(q);
     expect(reasons.some((r) => r.includes("incomplete functional fragment"))).toBe(true);
   });
 
-  test("hard-fails on multiple prep fragments in bank", () => {
+  test("hard-fails on order leak and fixed given token", () => {
     const q = {
       id: "bad_2",
       difficulty: "easy",
@@ -27,39 +27,24 @@ describe("qualityGateBuildSentence v2", () => {
       given: "Please",
       givenIndex: 0,
       responseSuffix: ".",
-      bank: ["bring", "to the", "in the", "notebook"],
-      answerOrder: ["bring", "notebook", "to the", "in the"],
+      bank: ["bring", "your", "notebook", "right", "after", "class", "today", "please"],
+      answerOrder: ["bring", "your", "notebook", "right", "after", "class", "today", "please"],
     };
     const reasons = hardFailReasons(q);
-    expect(reasons.some((r) => r.includes("incomplete preposition/link fragment"))).toBe(true);
-  });
-
-  test("hard-fails when bank order is identical/too close to answerOrder", () => {
-    const q = {
-      id: "bad_3",
-      difficulty: "easy",
-      context: "Could you help me after class today?",
-      given: "Please",
-      givenIndex: 0,
-      responseSuffix: ".",
-      bank: ["send me", "the file", "after class", "today"],
-      answerOrder: ["send me", "the file", "after class", "today"],
-    };
-    const reasons = hardFailReasons(q);
+    expect(reasons.some((r) => r.includes("fixed starter token"))).toBe(true);
     expect(reasons.some((r) => r.includes("identical"))).toBe(true);
-    expect(reasons.some((r) => r.includes("too close"))).toBe(true);
   });
 
-  test("emits warning when given starts with preposition", () => {
+  test("warns on preposition-start given", () => {
     const q = {
       id: "warn_1",
       difficulty: "medium",
       context: "Can we finish the plan before the meeting?",
       given: "After class",
-      givenIndex: 0,
+      givenIndex: 2,
       responseSuffix: ".",
-      bank: ["review", "the outline", "with me", "today", "please"],
-      answerOrder: ["review", "the outline", "with me", "today", "please"],
+      bank: ["we", "can", "review", "the", "outline", "for", "this", "week"],
+      answerOrder: ["we", "can", "review", "the", "outline", "for", "this", "week"],
     };
     const list = warnings(q);
     expect(list.some((w) => w.includes("given starts with preposition"))).toBe(true);

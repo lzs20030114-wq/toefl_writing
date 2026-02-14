@@ -1,6 +1,8 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
-import ToeflApp, { BuildSentenceTask, WritingTask } from "../components/ToeflApp";
+import ToeflApp from "../components/ToeflApp";
+import { BuildSentenceTask } from "../components/buildSentence/BuildSentenceTask";
+import { WritingTask } from "../components/writing/WritingTask";
 
 const BUILD_TEST_Q = {
   id: "bs2_test_001",
@@ -11,6 +13,18 @@ const BUILD_TEST_Q = {
   givenIndex: 2,
   bank: ["send me", "the slides", "after class", "today"],
   answerOrder: ["send me", "the slides", "after class", "today"],
+};
+const BUILD_ALT_Q = {
+  id: "bs2_test_alt_001",
+  difficulty: "easy",
+  context: "You need your classmate to upload a file tonight.",
+  responseSuffix: ".",
+  given: "Could you",
+  givenIndex: 1,
+  bank: ["upload", "the file", "tonight", "please"],
+  answerOrder: ["upload", "the file", "tonight", "please"],
+  acceptedAnswerOrders: [["upload", "the file", "please", "tonight"]],
+  acceptedReasons: ["adverbial_shift"],
 };
 
 describe("ToeflApp navigation", () => {
@@ -122,6 +136,24 @@ describe("ToeflApp navigation", () => {
     );
     expect(screen.getByTestId("build-correct-answer-0")).toHaveTextContent(
       "Correct full response sentence: Send me the slides Could you after class today?"
+    );
+  });
+
+  test("alternate accepted order is scored correct and shows alternate label", () => {
+    render(<BuildSentenceTask onExit={() => {}} questions={[BUILD_ALT_Q]} />);
+    fireEvent.click(screen.getByTestId("build-start"));
+
+    BUILD_ALT_Q.acceptedAnswerOrders[0].forEach((chunk) => {
+      fireEvent.click(screen.getByRole("button", { name: chunk }));
+    });
+    fireEvent.click(screen.getByTestId("build-submit"));
+
+    expect(screen.getByTestId("build-result-0")).toHaveAttribute("data-correct", "true");
+    expect(screen.getByTestId("build-alternate-accepted-0")).toHaveTextContent(
+      "Accepted alternative answer"
+    );
+    expect(screen.getByTestId("build-correct-answer-0")).toHaveTextContent(
+      "Correct full response sentence: Upload Could you the file tonight please."
     );
   });
 

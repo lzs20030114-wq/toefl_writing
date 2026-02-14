@@ -1,0 +1,622 @@
+[
+  {
+    "id": "bs2_easy_001",
+    "difficulty": "easy",
+    "context": "You missed class and need your classmate's slides.",
+    "gp": "polite_request",
+    "given": "Could you send",
+    "givenIndex": 0,
+    "answerOrder": [
+      "me",
+      "the",
+      "slides",
+      "after",
+      "class",
+      "today",
+      "for",
+      "this",
+      "assignment"
+    ],
+    "responseSuffix": "?",
+    "bank": [
+      "slides",
+      "for",
+      "assignment",
+      "this",
+      "after",
+      "today",
+      "class",
+      "me",
+      "the"
+    ]
+  },
+  {
+    "id": "bs2_easy_002",
+    "difficulty": "easy",
+    "context": "Your advisor asked you to arrange a meeting.",
+    "gp": "schedule",
+    "given": "office next",
+    "givenIndex": 5,
+    "answerOrder": [
+      "Can",
+      "we",
+      "meet",
+      "in",
+      "your",
+      "Tuesday",
+      "afternoon",
+      "for",
+      "this",
+      "assignment"
+    ],
+    "responseSuffix": "?",
+    "bank": [
+      "assignment",
+      "in",
+      "we",
+      "for",
+      "this",
+      "Tuesday",
+      "Can",
+      "meet",
+      "afternoon",
+      "your"
+    ]
+  },
+  {
+    "id": "bs2_easy_003",
+    "difficulty": "easy",
+    "context": "Your friend forgot to register for a lab section.",
+    "gp": "advice",
+    "given": "lab online today",
+    "givenIndex": 6,
+    "answerOrder": [
+      "You",
+      "should",
+      "sign",
+      "up",
+      "for",
+      "the",
+      "for",
+      "this",
+      "assignment"
+    ],
+    "responseSuffix": ".",
+    "bank": [
+      "should",
+      "assignment",
+      "You",
+      "this",
+      "sign",
+      "for",
+      "for",
+      "the",
+      "up"
+    ]
+  },
+  {
+    "id": "bs2_easy_004",
+    "difficulty": "easy",
+    "context": "Your classmate asks where to submit homework.",
+    "gp": "instruction",
+    "given": "Canvas before",
+    "givenIndex": 4,
+    "answerOrder": [
+      "Please",
+      "upload",
+      "it",
+      "to",
+      "midnight",
+      "tonight",
+      "for",
+      "this",
+      "assignment"
+    ],
+    "responseSuffix": ".",
+    "bank": [
+      "upload",
+      "for",
+      "tonight",
+      "to",
+      "this",
+      "assignment",
+      "it",
+      "midnight",
+      "Please"
+    ]
+  },
+  {
+    "id": "bs2_easy_005",
+    "difficulty": "easy",
+    "context": "A student asks you to share your notes.",
+    "gp": "offer",
+    "given": "notes after",
+    "givenIndex": 4,
+    "answerOrder": [
+      "I",
+      "can",
+      "share",
+      "my",
+      "the",
+      "lecture",
+      "tomorrow",
+      "for",
+      "this",
+      "assignment"
+    ],
+    "responseSuffix": ".",
+    "bank": [
+      "the",
+      "for",
+      "can",
+      "my",
+      "share",
+      "lecture",
+      "assignment",
+      "I",
+      "tomorrow",
+      "this"
+    ]
+  },
+  {
+    "id": "bs2_easy_006",
+    "difficulty": "easy",
+    "context": "You need a classmate to hold a seat for you.",
+    "gp": "polite_request",
+    "given": "save a",
+    "givenIndex": 2,
+    "answerOrder": [
+      "Would",
+      "you",
+      "seat",
+      "for",
+      "me",
+      "near",
+      "the",
+      "front"
+    ],
+    "responseSuffix": "?",
+    "bank": [
+      "the",
+      "me",
+      "you",
+      "front",
+      "Would",
+      "near",
+      "for",
+      "seat"
+    ]
+  },
+  {
+    "id": "bs2_easy_007",
+    "difficulty": "easy",
+    "context": "Your friend asks where to find the article.",
+    "gp": "location",
+    "given": "the database under",
+    "givenIndex": 3,
+    "answerOrder": [
+      "It",
+      "is",
+      "in",
+      "psychology",
+      "for",
+      "this",
+      "week",
+      "reading",
+      "list"
+    ],
+    "responseSuffix": ".",
+    "bank": [
+      "It",
+      "psychology",
+      "this",
+      "week",
+      "in",
+      "reading",
+      "is",
+      "list",
+      "for"
+    ]
+  },
+  {
+    "id": "bs2_easy_008",
+    "difficulty": "easy",
+    "context": "You want to check if your partner finished the draft.",
+    "gp": "past_question",
+    "given": "you finish the",
+    "givenIndex": 1,
+    "answerOrder": [
+      "Did",
+      "first",
+      "draft",
+      "for",
+      "our",
+      "project",
+      "last",
+      "night"
+    ],
+    "responseSuffix": "?",
+    "bank": [
+      "first",
+      "last",
+      "for",
+      "Did",
+      "night",
+      "our",
+      "project",
+      "draft"
+    ]
+  },
+  {
+    "id": "bs2_easy_009",
+    "difficulty": "easy",
+    "context": "Your professor asked for office-hour sign-ups.",
+    "gp": "present_perfect_like",
+    "given": "morning for",
+    "givenIndex": 8,
+    "answerOrder": [
+      "I",
+      "already",
+      "booked",
+      "an",
+      "office-hour",
+      "slot",
+      "for",
+      "Friday",
+      "this",
+      "assignment"
+    ],
+    "responseSuffix": ".",
+    "bank": [
+      "for",
+      "this",
+      "office-hour",
+      "already",
+      "assignment",
+      "slot",
+      "booked",
+      "I",
+      "Friday",
+      "an"
+    ]
+  },
+  {
+    "id": "bs2_easy_010",
+    "difficulty": "easy",
+    "context": "A classmate asks if you can review their paragraph.",
+    "gp": "future",
+    "given": "dinner tonight",
+    "givenIndex": 7,
+    "answerOrder": [
+      "I",
+      "will",
+      "look",
+      "over",
+      "your",
+      "paragraph",
+      "after",
+      "for",
+      "this",
+      "assignment"
+    ],
+    "responseSuffix": ".",
+    "bank": [
+      "this",
+      "will",
+      "over",
+      "I",
+      "assignment",
+      "paragraph",
+      "for",
+      "your",
+      "after",
+      "look"
+    ]
+  },
+  {
+    "id": "bs2_easy_011",
+    "difficulty": "easy",
+    "context": "You are telling a teammate when to meet.",
+    "gp": "suggestion",
+    "given": "library at",
+    "givenIndex": 4,
+    "answerOrder": [
+      "Let's",
+      "meet",
+      "outside",
+      "the",
+      "eight",
+      "tomorrow",
+      "morning",
+      "for",
+      "this",
+      "assignment"
+    ],
+    "responseSuffix": ".",
+    "bank": [
+      "morning",
+      "outside",
+      "tomorrow",
+      "for",
+      "Let's",
+      "assignment",
+      "the",
+      "eight",
+      "this",
+      "meet"
+    ]
+  },
+  {
+    "id": "bs2_easy_012",
+    "difficulty": "easy",
+    "context": "Your roommate asks about dinner plans.",
+    "gp": "invitation",
+    "given": "student center after",
+    "givenIndex": 8,
+    "answerOrder": [
+      "Do",
+      "you",
+      "want",
+      "to",
+      "grab",
+      "dinner",
+      "at",
+      "the",
+      "class"
+    ],
+    "responseSuffix": "?",
+    "bank": [
+      "dinner",
+      "at",
+      "you",
+      "grab",
+      "want",
+      "the",
+      "Do",
+      "class",
+      "to"
+    ]
+  },
+  {
+    "id": "bs2_easy_013",
+    "difficulty": "easy",
+    "context": "You need to remind a partner about a deadline.",
+    "gp": "negative_imperative",
+    "given": "noon for this",
+    "givenIndex": 8,
+    "answerOrder": [
+      "Don't",
+      "forget",
+      "to",
+      "submit",
+      "the",
+      "final",
+      "file",
+      "before",
+      "assignment"
+    ],
+    "responseSuffix": ".",
+    "bank": [
+      "assignment",
+      "file",
+      "to",
+      "final",
+      "Don't",
+      "the",
+      "before",
+      "forget",
+      "submit"
+    ]
+  },
+  {
+    "id": "bs2_easy_014",
+    "difficulty": "easy",
+    "context": "Your classmate asks why you are leaving early.",
+    "gp": "infinitive",
+    "given": "shuttle to my",
+    "givenIndex": 6,
+    "answerOrder": [
+      "I",
+      "need",
+      "to",
+      "catch",
+      "the",
+      "campus",
+      "lab",
+      "right",
+      "now"
+    ],
+    "responseSuffix": ".",
+    "bank": [
+      "to",
+      "I",
+      "need",
+      "catch",
+      "campus",
+      "right",
+      "lab",
+      "now",
+      "the"
+    ]
+  },
+  {
+    "id": "bs2_easy_015",
+    "difficulty": "easy",
+    "context": "You are checking if your classmate can print something.",
+    "gp": "request",
+    "given": "this handout",
+    "givenIndex": 3,
+    "answerOrder": [
+      "Can",
+      "you",
+      "print",
+      "for",
+      "our",
+      "seminar",
+      "this",
+      "afternoon"
+    ],
+    "responseSuffix": "?",
+    "bank": [
+      "you",
+      "Can",
+      "seminar",
+      "for",
+      "print",
+      "this",
+      "afternoon",
+      "our"
+    ]
+  },
+  {
+    "id": "bs2_easy_016",
+    "difficulty": "easy",
+    "context": "A friend asks where to buy lab materials.",
+    "gp": "advice",
+    "given": "You can",
+    "givenIndex": 0,
+    "answerOrder": [
+      "buy",
+      "them",
+      "at",
+      "the",
+      "bookstore",
+      "near",
+      "the",
+      "entrance",
+      "today"
+    ],
+    "responseSuffix": ".",
+    "bank": [
+      "near",
+      "buy",
+      "at",
+      "them",
+      "bookstore",
+      "the",
+      "entrance",
+      "today",
+      "the"
+    ]
+  },
+  {
+    "id": "bs2_easy_017",
+    "difficulty": "easy",
+    "context": "You want to tell your teammate to review comments.",
+    "gp": "instruction",
+    "given": "check",
+    "givenIndex": 1,
+    "answerOrder": [
+      "Please",
+      "the",
+      "instructor",
+      "comments",
+      "in",
+      "Google Docs",
+      "before",
+      "revising"
+    ],
+    "responseSuffix": ".",
+    "bank": [
+      "before",
+      "Please",
+      "instructor",
+      "comments",
+      "Google Docs",
+      "in",
+      "the",
+      "revising"
+    ]
+  },
+  {
+    "id": "bs2_easy_018",
+    "difficulty": "easy",
+    "context": "Your friend asks what time the tutoring center opens.",
+    "gp": "factual_statement",
+    "given": "students this",
+    "givenIndex": 8,
+    "answerOrder": [
+      "It",
+      "opens",
+      "at",
+      "nine",
+      "on",
+      "weekdays",
+      "for",
+      "all",
+      "semester"
+    ],
+    "responseSuffix": ".",
+    "bank": [
+      "at",
+      "on",
+      "nine",
+      "It",
+      "for",
+      "all",
+      "opens",
+      "semester",
+      "weekdays"
+    ]
+  },
+  {
+    "id": "bs2_easy_019",
+    "difficulty": "easy",
+    "context": "You are asking a classmate to split presentation parts.",
+    "gp": "planning",
+    "given": "presentation into",
+    "givenIndex": 4,
+    "answerOrder": [
+      "Should",
+      "we",
+      "divide",
+      "the",
+      "two",
+      "parts",
+      "for",
+      "tomorrow"
+    ],
+    "responseSuffix": "?",
+    "bank": [
+      "parts",
+      "divide",
+      "two",
+      "the",
+      "Should",
+      "tomorrow",
+      "for",
+      "we"
+    ]
+  },
+  {
+    "id": "bs2_easy_020",
+    "difficulty": "easy",
+    "context": "Your classmate asks what to bring to lab.",
+    "gp": "instruction",
+    "given": "student ID to",
+    "givenIndex": 3,
+    "answerOrder": [
+      "Please",
+      "bring",
+      "your",
+      "the",
+      "lab",
+      "tomorrow",
+      "for",
+      "this",
+      "assignment"
+    ],
+    "responseSuffix": ".",
+    "bank": [
+      "tomorrow",
+      "assignment",
+      "bring",
+      "this",
+      "your",
+      "the",
+      "lab",
+      "for",
+      "Please"
+    ]
+  }
+]
