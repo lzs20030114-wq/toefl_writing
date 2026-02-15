@@ -1,5 +1,5 @@
 {
-  "version": "1.0",
+  "version": "1.1",
   "question_sets": [
     {
       "set_id": 1,
@@ -7,112 +7,162 @@
         {
           "id": "ets_s1_q1",
           "prompt": "Your presentation yesterday was impressive.",
-          "answer": "Do you want me to send you a copy of it?",
-          "chunks": ["you want", "of it", "me", "you", "to send", "do", "a copy"],
+          "answer": "Would you like me to send you a copy of it?",
+          "chunks": ["you like", "of it", "me", "you", "to send", "would", "a copy"],
           "prefilled": [],
           "prefilled_positions": {},
           "distractor": null,
           "has_question_mark": true,
-          "grammar_points": ["yes/no疑问句倒装", "want+宾语+to不定式", "send双宾语"]
+          "grammar_points": [
+            "modal question (would)",
+            "question inversion",
+            "like + object + to infinitive",
+            "double object verb (send)"
+          ]
         },
         {
           "id": "ets_s1_q2",
-          "prompt": "I'm not sure about the deadline for this assignment.",
-          "answer": "Do you know when the assignment is due?",
-          "chunks": ["when the", "is due", "do", "you know", "assignment"],
-          "prefilled": [],
-          "prefilled_positions": {},
+          "prompt": "I wish I had not missed the conference last week.",
+          "answer": "Don't you know where to get the recordings of the sessions?",
+          "chunks": ["don't", "know", "where to get", "the recordings", "of the", "sessions"],
+          "prefilled": ["you"],
+          "prefilled_positions": {
+            "you": 1
+          },
           "distractor": null,
           "has_question_mark": true,
-          "grammar_points": ["间接疑问句语序", "wh-词引导", "yes/no疑问句倒装"]
+          "grammar_points": [
+            "negative question inversion",
+            "embedded question (where)",
+            "wh + to infinitive",
+            "preposition phrase (of)"
+          ]
         },
         {
           "id": "ets_s1_q3",
-          "prompt": "The library has a new reservation system now.",
-          "answer": "Can you tell me how the new system works?",
-          "chunks": ["can you", "the new system", "how", "tell me", "works"],
+          "prompt": "The new yoga class was very relaxing.",
+          "answer": "I wonder if a few classes can be held on Saturdays.",
+          "chunks": ["i wonder", "if", "a few", "classes", "can be held", "on saturdays"],
           "prefilled": [],
           "prefilled_positions": {},
-          "distractor": "already",
-          "has_question_mark": true,
-          "grammar_points": ["间接疑问句语序", "wh-词引导", "tell+间接宾语"]
+          "distractor": null,
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question (if)",
+            "modal verb (can)",
+            "quantifier (a few)",
+            "passive voice"
+          ]
         },
         {
           "id": "ets_s1_q4",
-          "prompt": "The professor changed the exam format.",
-          "answer": "I wonder whether the students were informed about the change.",
-          "chunks": ["were informed", "whether", "the students", "about the change", "i wonder"],
+          "prompt": "We had a blast at the national park yesterday.",
+          "answer": "Does anybody know whether it is open all year long?",
+          "chunks": ["does", "anybody know", "whether", "it is open", "all year", "long", "they"],
           "prefilled": [],
           "prefilled_positions": {},
-          "distractor": null,
-          "has_question_mark": false,
-          "grammar_points": ["间接疑问句语序", "whether/if引导", "被动语态"]
+          "distractor": "they",
+          "has_question_mark": true,
+          "grammar_points": [
+            "question inversion",
+            "embedded question (whether)",
+            "indefinite pronoun (anybody)",
+            "pronoun reference (it)"
+          ]
         },
         {
           "id": "ets_s1_q5",
-          "prompt": "I need to register for the biology course.",
-          "answer": "Could you ask the advisor where to submit the form?",
-          "chunks": ["the advisor", "to submit", "could you", "where", "the form", "ask"],
+          "prompt": "The film festival this weekend was amazing.",
+          "answer": "Can we find out if they are planning another one?",
+          "chunks": ["can", "we", "find out", "if", "they are", "planning", "another one"],
           "prefilled": [],
           "prefilled_positions": {},
           "distractor": null,
           "has_question_mark": true,
-          "grammar_points": ["间接疑问句语序", "wh-词引导", "ask+宾语+wh不定式"]
+          "grammar_points": [
+            "modal question (can)",
+            "embedded question (if)",
+            "pronoun replacement (another one)"
+          ]
         },
         {
           "id": "ets_s1_q6",
-          "prompt": "The tutoring center has changed its schedule.",
-          "answer": "Do you know what time the center opens on Monday?",
-          "chunks": ["the center opens", "what time", "do", "on monday", "you know"],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": "usually",
+          "prompt": "The workshop on graphic design was very helpful.",
+          "answer": "Could you tell me how long each workshop session was?",
+          "chunks": ["could", "tell me", "how long", "each", "workshop session", "was", "why"],
+          "prefilled": ["you"],
+          "prefilled_positions": {
+            "you": 1
+          },
+          "distractor": "why",
           "has_question_mark": true,
-          "grammar_points": ["间接疑问句语序", "wh-词引导"]
+          "grammar_points": [
+            "modal question (could)",
+            "embedded question (how long)",
+            "double object verb (tell)",
+            "quantifier (each)"
+          ]
         },
         {
           "id": "ets_s1_q7",
-          "prompt": "I want to borrow some reference books.",
-          "answer": "Could you show me where the reference section is located?",
-          "chunks": ["where", "could you", "is located", "show me", "the reference section"],
+          "prompt": "The new art exhibit at the museum is stunning.",
+          "answer": "Would you happen to know the exhibit information center?",
+          "chunks": ["would", "you happen", "to know", "the exhibit", "information", "center"],
           "prefilled": [],
           "prefilled_positions": {},
           "distractor": null,
           "has_question_mark": true,
-          "grammar_points": ["间接疑问句语序", "wh-词引导", "show+双宾语"]
+          "grammar_points": [
+            "modal question (would)",
+            "polite question frame",
+            "noun phrase precision"
+          ]
         },
         {
           "id": "ets_s1_q8",
-          "prompt": "There is a guest lecture tomorrow afternoon.",
-          "answer": "I need to find out where the lecture will be held.",
-          "chunks": ["will be held", "where", "the lecture", "to find out", "i need"],
+          "prompt": "Let's go to that new gym this afternoon.",
+          "answer": "Do you know if it is usually crowded at this time?",
+          "chunks": ["do", "you know", "if", "it is", "usually crowded", "at this time", "daily"],
           "prefilled": [],
           "prefilled_positions": {},
-          "distractor": "soon",
-          "has_question_mark": false,
-          "grammar_points": ["间接疑问句语序", "wh-词引导", "被动语态"]
+          "distractor": "daily",
+          "has_question_mark": true,
+          "grammar_points": [
+            "question inversion",
+            "embedded question (if)",
+            "adverb placement (usually)"
+          ]
         },
         {
           "id": "ets_s1_q9",
-          "prompt": "The group project deadline is coming up.",
-          "answer": "Can you tell me when the group needs to meet?",
-          "chunks": ["when", "the group", "can you", "needs to meet", "tell me"],
+          "prompt": "I really enjoyed the documentary we watched yesterday.",
+          "answer": "Have you heard any details about how they filmed it?",
+          "chunks": ["have you heard", "any details", "about", "how", "they filmed", "it"],
           "prefilled": [],
           "prefilled_positions": {},
           "distractor": null,
           "has_question_mark": true,
-          "grammar_points": ["间接疑问句语序", "wh-词引导", "tell+间接宾语"]
+          "grammar_points": [
+            "present perfect question",
+            "embedded question (how)",
+            "quantifier (any)",
+            "pronoun reference (it)"
+          ]
         },
         {
           "id": "ets_s1_q10",
-          "prompt": "The campus shuttle schedule changed this semester.",
-          "answer": "Do you know what time the last shuttle leaves on Friday?",
-          "chunks": ["the last shuttle", "what time", "do", "on friday", "leaves", "you know"],
+          "prompt": "I'm applying for a position at that new technology hub.",
+          "answer": "I wonder how many open positions they have.",
+          "chunks": ["i wonder", "how many", "open", "positions", "they", "have"],
           "prefilled": [],
           "prefilled_positions": {},
           "distractor": null,
-          "has_question_mark": true,
-          "grammar_points": ["间接疑问句语序", "wh-词引导", "时间状语从句"]
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question (how many)",
+            "quantifier (how many)",
+            "statement order in embedded clause"
+          ]
         }
       ]
     }
