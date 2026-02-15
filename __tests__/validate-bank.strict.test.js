@@ -42,4 +42,23 @@ describe("validate-bank strict mode", () => {
     expect(out.ok).toBe(false);
     expect(out.failures.join("\n")).toContain("FATAL: chunks (minus distractor) + prefilled words must equal answer words");
   });
+
+  test("strict mode fails when runtime slot model cannot normalize fixed chunks", () => {
+    const data = { question_sets: [makeValidSet()] };
+    data.question_sets[0].questions[0] = {
+      id: "q_multi_prefilled",
+      prompt: "Prompt",
+      answer: "Do you know if the lab is open tonight now?",
+      chunks: ["do", "know", "if", "the lab", "is open", "tonight"],
+      prefilled: ["you", "now"],
+      prefilled_positions: { you: 1, now: 8 },
+      distractor: null,
+      has_question_mark: true,
+      grammar_points: ["embedded question (if)"],
+    };
+
+    const out = validateAllSets(data, { strict: true });
+    expect(out.ok).toBe(false);
+    expect(out.strictHardFails.some((x) => x.reasons.join(" ").includes("multiple prefilled chunks"))).toBe(true);
+  });
 });

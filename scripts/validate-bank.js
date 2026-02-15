@@ -5,6 +5,10 @@ const {
   hardFailReasons,
   warnings: qualityWarnings,
 } = require("../lib/questionBank/qualityGateBuildSentence");
+const {
+  normalizeRuntimeQuestion,
+  validateRuntimeQuestion,
+} = require("../lib/questionBank/runtimeModel");
 
 const ROOT = path.resolve(__dirname, "..");
 const QUESTIONS_FILE = path.join(ROOT, "data", "buildSentence", "questions.json");
@@ -47,6 +51,12 @@ function validateAllSets(data, { strict = false } = {}) {
       if (hf.length > 0) strictHardFails.push({ label: qLabel, reasons: hf });
       const ws = qualityWarnings(q || {});
       if (ws.length > 0) strictWarnings.push({ label: qLabel, reasons: ws });
+      try {
+        const rq = normalizeRuntimeQuestion(q || {});
+        validateRuntimeQuestion(rq);
+      } catch (e) {
+        strictHardFails.push({ label: qLabel, reasons: [e.message] });
+      }
     });
   });
 

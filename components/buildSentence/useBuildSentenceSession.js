@@ -4,146 +4,7 @@ import { renderResponseSentence } from "../../lib/questionBank/renderResponseSen
 import { shuffle, evaluateBuildSentenceOrder } from "../../lib/utils";
 import { saveSess } from "../../lib/sessionStore";
 import { selectBSQuestions } from "../../lib/questionSelector";
-
-function normalizeWord(s) {
-  return String(s || "").toLowerCase().replace(/[.,!?;:]/g, "").trim();
-}
-
-function splitWords(s) {
-  return normalizeWord(s).split(/\s+/).filter(Boolean);
-}
-
-function getEffectiveChunks(q) {
-  const chunks = Array.isArray(q?.chunks) ? q.chunks : [];
-  const distractor = q?.distractor;
-  if (!distractor) return chunks;
-  return chunks.filter((c) => c !== distractor);
-}
-
-function deriveChunkOrderFromAnswer(q, effectiveChunks) {
-  const answerWords = splitWords(q?.answer || "");
-  if (answerWords.length === 0 || effectiveChunks.length === 0) return [...effectiveChunks];
-
-  const locked = new Set();
-  for (const [chunk, pos] of Object.entries(q?.prefilled_positions || {})) {
-    const ws = splitWords(chunk);
-    for (let i = 0; i < ws.length; i++) locked.add(pos + i);
-  }
-
-  const remainingWords = [];
-  for (let i = 0; i < answerWords.length; i++) {
-    if (!locked.has(i)) remainingWords.push(answerWords[i]);
-  }
-
-  const candidates = effectiveChunks.map((chunk, idx) => ({
-    idx,
-    chunk,
-    words: splitWords(chunk),
-    used: false,
-  }));
-
-  const ordered = [];
-  let wi = 0;
-  while (wi < remainingWords.length) {
-    const matches = candidates
-      .filter((c) => !c.used && c.words.length > 0)
-      .filter((c) => c.words.every((w, i) => remainingWords[wi + i] === w))
-      .sort((a, b) => b.words.length - a.words.length);
-
-    if (matches.length === 0) return [...effectiveChunks];
-    const chosen = matches[0];
-    chosen.used = true;
-    ordered.push(chosen.chunk);
-    wi += chosen.words.length;
-  }
-
-  if (ordered.length !== effectiveChunks.length) return [...effectiveChunks];
-  return ordered;
-}
-
-function normalizeRuntimeQuestion(raw) {
-  if (!raw || typeof raw !== "object") throw new Error("question must be an object");
-
-  const isLegacy = Array.isArray(raw.answerOrder) && Array.isArray(raw.bank);
-  if (isLegacy) {
-    return {
-      ...raw,
-      id: raw.id,
-      prompt: raw.prompt || raw.context || "",
-      grammar_points: Array.isArray(raw.grammar_points)
-        ? raw.grammar_points
-        : raw.gp
-          ? [raw.gp]
-          : [],
-      answerOrder: raw.answerOrder.map((c) => String(c || "").trim()),
-      bank: raw.bank.map((c) => String(c || "").trim()),
-      given: raw.given || null,
-      givenIndex: Number.isInteger(raw.givenIndex) ? raw.givenIndex : 0,
-      responseSuffix: raw.responseSuffix || (raw.has_question_mark ? "?" : "."),
-    };
-  }
-
-  const effectiveChunks = getEffectiveChunks(raw).map((c) => String(c || "").trim());
-  const answerOrder = deriveChunkOrderFromAnswer(raw, effectiveChunks);
-  return {
-    ...raw,
-    prompt: raw.prompt || raw.context || "",
-    answerOrder,
-    bank: [...effectiveChunks],
-    given: null,
-    givenIndex: 0,
-    responseSuffix: raw.has_question_mark ? "?" : ".",
-    grammar_points: Array.isArray(raw.grammar_points) ? raw.grammar_points : [],
-  };
-}
-
-function validateRuntimeQuestion(q) {
-  if (!q?.id) throw new Error("question id is missing");
-  if (!Array.isArray(q.bank) || !Array.isArray(q.answerOrder)) {
-    throw new Error(`question ${q.id}: bank/answerOrder must be arrays`);
-  }
-  if (q.bank.length !== q.answerOrder.length) {
-    throw new Error(`question ${q.id}: bank length (${q.bank.length}) must equal answerOrder length (${q.answerOrder.length})`);
-  }
-  if (q.given != null) {
-    if (!Number.isInteger(q.givenIndex) || q.givenIndex < 0 || q.givenIndex > q.answerOrder.length) {
-      throw new Error(`question ${q.id}: givenIndex out of range`);
-    }
-  }
-
-  const bankSet = new Set(q.bank);
-  const answerSet = new Set(q.answerOrder);
-  if (bankSet.size !== q.bank.length) {
-    throw new Error(`question ${q.id}: bank must not contain duplicates`);
-  }
-  if (answerSet.size !== q.answerOrder.length) {
-    throw new Error(`question ${q.id}: answerOrder must not contain duplicates`);
-  }
-  if (bankSet.size !== answerSet.size || [...bankSet].some((x) => !answerSet.has(x))) {
-    throw new Error(`question ${q.id}: answerOrder must be a permutation of bank`);
-  }
-}
-
-function prepareQuestions(list) {
-  const out = [];
-  const errors = [];
-  const isDev = process.env.NODE_ENV !== "production";
-
-  (Array.isArray(list) ? list : []).forEach((raw) => {
-    try {
-      const q = normalizeRuntimeQuestion(raw);
-      validateRuntimeQuestion(q);
-      out.push(q);
-    } catch (e) {
-      const msg = `题库数据异常（id=${raw?.id || "unknown"}）：${e.message}`;
-      errors.push(msg);
-      console.error(msg, raw);
-      if (isDev) throw new Error(msg);
-    }
-  });
-
-  return { questions: out, errors };
-}
+import runtimeModel from "../../lib/questionBank/runtimeModel";
 
 function getUserChunks(slotsArr) {
   return slotsArr.filter((s) => s !== null).map((s) => s.text);
@@ -153,7 +14,7 @@ export function useBuildSentenceSession(questions) {
   const initialBuildState = (() => {
     try {
       const source = questions || selectBSQuestions();
-      const prepared = prepareQuestions(source);
+      const prepared = runtimeModel.prepareQuestions(source, { strictThrow: process.env.NODE_ENV !== "production" });
       if (prepared.questions.length === 0) {
         return { qs: [], error: prepared.errors[0] || "Question bank is unavailable." };
       }
@@ -187,7 +48,7 @@ export function useBuildSentenceSession(questions) {
 
   function initQ(i, list) {
     const q = list[i];
-    validateRuntimeQuestion(q);
+    runtimeModel.validateRuntimeQuestion(q);
     const shuffled = shuffle(q.bank.map((c, j) => ({ text: c, id: i + "-" + j })));
     const slotCount = q.answerOrder.length;
     const nextSlots = Array(slotCount).fill(null);
@@ -380,12 +241,7 @@ export function useBuildSentenceSession(questions) {
   }
 
   const q = qs[idx];
-  const prefilledChunks = useMemo(() => {
-    if (!q) return [];
-    if (q.given) return [q.given];
-    if (Array.isArray(q.prefilled)) return q.prefilled;
-    return [];
-  }, [q]);
+  const prefilledChunks = useMemo(() => (q?.given ? [q.given] : []), [q]);
   const allFilled = slots.length > 0 && slots.every((s) => s !== null);
   const punct = q?.responseSuffix || (q?.has_question_mark ? "?" : ".");
 
@@ -424,8 +280,8 @@ export function useBuildSentenceSession(questions) {
 }
 
 export const __internal = {
-  normalizeRuntimeQuestion,
-  validateRuntimeQuestion,
-  prepareQuestions,
+  normalizeRuntimeQuestion: runtimeModel.normalizeRuntimeQuestion,
+  validateRuntimeQuestion: runtimeModel.validateRuntimeQuestion,
+  prepareQuestions: runtimeModel.prepareQuestions,
 };
 

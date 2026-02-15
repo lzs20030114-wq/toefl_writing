@@ -174,39 +174,42 @@ export function BuildSentenceTask({ onExit, questions }) {
           <div style={{ fontSize: 15, color: C.t1, marginBottom: 14, lineHeight: 1.5 }}>{q.prompt}</div>
           <div style={{ fontSize: 11, color: C.t2, letterSpacing: 1, marginBottom: 8 }}>RESPONSE</div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8, minHeight: 48, alignItems: "center", lineHeight: 1.6 }}>
-            {prefilledChunks.map((chunk, i) => (
-              <span
-                key={`prefilled-${i}`}
-                data-testid={i === 0 ? "given-token" : undefined}
-                style={{
-                  fontSize: 14,
-                  color: "#666",
-                  background: "#e8e8e8",
-                  border: "1px solid #ccc",
-                  borderRadius: 4,
-                  padding: "4px 10px",
-                  fontWeight: 600,
-                  opacity: 0.8,
-                }}
-              >
-                {chunk}
-              </span>
-            ))}
-            {slots.map((slot, sidx) => (
-              <div
-                key={`slot-${sidx}`}
-                data-testid={`slot-${sidx}`}
-                style={slotStyle(sidx)}
-                draggable={!!slot}
-                onDragStart={slot ? (e) => onDragStartSlot(e, slot, sidx) : undefined}
-                onDragEnd={slot ? onDragEnd : undefined}
-                onDragOver={(e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; setHoverSlot(sidx); }}
-                onDragLeave={() => setHoverSlot(null)}
-                onDrop={(e) => onDropSlot(e, sidx)}
-                onClick={() => slot && removeChunk(sidx)}
-              >
-                {slot ? slot.text : sidx + 1}
-              </div>
+            {Array.from({ length: slots.length + 1 }, (_, i) => i).map((i) => (
+              <React.Fragment key={`resp-${i}`}>
+                {prefilledChunks.length > 0 && q.givenIndex === i && (
+                  <span
+                    data-testid="given-token"
+                    style={{
+                      fontSize: 14,
+                      color: "#666",
+                      background: "#e8e8e8",
+                      border: "1px solid #ccc",
+                      borderRadius: 4,
+                      padding: "4px 10px",
+                      fontWeight: 600,
+                      opacity: 0.8,
+                    }}
+                  >
+                    {prefilledChunks[0]}
+                  </span>
+                )}
+                {i < slots.length && (
+                  <div
+                    key={`slot-${i}`}
+                    data-testid={`slot-${i}`}
+                    style={slotStyle(i)}
+                    draggable={!!slots[i]}
+                    onDragStart={slots[i] ? (e) => onDragStartSlot(e, slots[i], i) : undefined}
+                    onDragEnd={slots[i] ? onDragEnd : undefined}
+                    onDragOver={(e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; setHoverSlot(i); }}
+                    onDragLeave={() => setHoverSlot(null)}
+                    onDrop={(e) => onDropSlot(e, i)}
+                    onClick={() => slots[i] && removeChunk(i)}
+                  >
+                    {slots[i] ? slots[i].text : i + 1}
+                  </div>
+                )}
+              </React.Fragment>
             ))}
             <span style={{ fontSize: 18, color: C.t1, fontWeight: 700 }}>{punct}</span>
           </div>

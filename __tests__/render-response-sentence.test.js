@@ -23,4 +23,18 @@ describe("renderResponseSentence", () => {
     const out = renderResponseSentence(q, ["please", "sit down", "everyone"]);
     expect(out.correctSentenceFull).toBe("Please sit down everyone.");
   });
+
+  test("legacy given is inserted at givenIndex and matches correct sentence", () => {
+    const q = {
+      given: "you",
+      givenIndex: 2,
+      has_question_mark: true,
+      responseSuffix: "?",
+      answerOrder: ["would", "like", "to send", "me", "a copy", "of it"],
+      bank: ["a copy", "like", "to send", "would", "me", "of it"],
+      answer: "Would like you to send me a copy of it?",
+    };
+    const out = renderResponseSentence(q, q.answerOrder);
+    expect(out.correctSentenceFull).toBe("Would like you to send me a copy of it?");
+  });
 });
