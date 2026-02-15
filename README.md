@@ -54,13 +54,17 @@ It includes timed practice, AI scoring, structured feedback reports, progress hi
 ## Core modules
 
 - `components/buildSentence/BuildSentenceTask.js`
-  - Task 1 interaction logic (drag/click chunks, timer, scoring, report)
+  - Task 1 UI rendering (instruction / active / review)
+- `components/buildSentence/useBuildSentenceSession.js`
+  - Task 1 runtime state machine (init, timer, drag/drop, submit, auto-submit)
 - `lib/questionSelector.js`
   - Selects valid BS question set and rotates by set id
 - `lib/questionBank/buildSentenceSchema.js`
   - BS schema validation (`validateQuestion`, `validateQuestionSet`)
 - `lib/questionBank/qualityGateBuildSentence.js`
   - Quality gate wrapper for hard-fail + warning checks
+- `lib/questionBank/sentenceEngine.js`
+  - Shared sentence assembly engine used by render + scoring
 - `lib/questionBank/renderResponseSentence.js`
   - Renders correct/user sentence from `answer + prefilled + user chunks`
 - `lib/utils.js`
@@ -85,6 +89,24 @@ Top-level:
 }
 ```
 
+## Build Sentence Runtime Invariants
+
+- Runtime question model is normalized to:
+  - `answerOrder` (movable chunks)
+  - `bank` (same members as `answerOrder`, shuffled for display)
+  - optional fixed segment (`given/givenIndex`) for legacy items
+- Slot count is always initialized as:
+  - `slotCount = q.answerOrder.length`
+- Runtime guards (in `useBuildSentenceSession`) enforce:
+  - `q.bank.length === q.answerOrder.length`
+  - `0 <= givenIndex <= q.answerOrder.length` (if given exists)
+  - `answerOrder` is a permutation of `bank` (no duplicates / no missing)
+- If a question violates invariants:
+  - development: throw immediately with `id`
+  - production: block invalid item and show data-error message instead of broken UI
+
+This prevents the historical bug where all chunks could be placed while empty slots still remained.
+
 Each question:
 
 ```json
@@ -108,6 +130,18 @@ Each question:
   - `npm run validate:bank -- --strict`
 - Generate BS sets via API script:
   - `node scripts/generateBSQuestions.mjs`
+
+## Legacy Input Compatibility (Testing Only)
+
+- Runtime Task 1 uses only: `data/buildSentence/questions.json` (v2 set-based schema).
+- `scripts/save-build-sentence-bank.js` still accepts some legacy fields for migration/testing:
+  - `response` / `correctSentence` / `correctChunks(+responseSuffix)` -> `responseSentence`
+  - `alternateAnswerOrders` / `alternateOrders` -> `acceptedAnswerOrders`
+  - `alternateReasons` -> `acceptedReasons`
+- When legacy fields are detected, the script prints a warning line starting with `[legacy-input]`.
+- Recommendation:
+  - New data should use the current schema directly.
+  - Keep legacy input only for temporary backfill/regression tests.
 
 ## AI scoring calibration
 

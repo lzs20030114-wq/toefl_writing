@@ -40,28 +40,21 @@ describe("toefl utils", () => {
     expect(ids.sort()).toEqual(["em1", "em2"]);
   });
 
-  test("selectBSQuestions returns 10 with 3/3/4 default distribution", () => {
+  test("selectBSQuestions returns 10 valid questions", () => {
     const qs = selectBSQuestions();
     expect(qs).toHaveLength(10);
-    const counts = qs.reduce(
-      (acc, q) => ({ ...acc, [q.difficulty]: (acc[q.difficulty] || 0) + 1 }),
-      {}
-    );
-    expect(counts.easy).toBe(3);
-    expect(counts.medium).toBe(3);
-    expect(counts.hard).toBe(4);
+    qs.forEach((q) => {
+      expect(q).toHaveProperty("id");
+      expect(q).toHaveProperty("prompt");
+      expect(q).toHaveProperty("answer");
+      expect(Array.isArray(q.chunks)).toBe(true);
+      expect(typeof q.has_question_mark).toBe("boolean");
+    });
   });
 
-  test("selectBSQuestions supports configurable distribution", () => {
+  test("selectBSQuestions ignores legacy distribution options and still returns one full set", () => {
     const qs = selectBSQuestions({ easy: 5, medium: 2, hard: 2 });
-    expect(qs).toHaveLength(9);
-    const counts = qs.reduce(
-      (acc, q) => ({ ...acc, [q.difficulty]: (acc[q.difficulty] || 0) + 1 }),
-      {}
-    );
-    expect(counts.easy).toBe(5);
-    expect(counts.medium).toBe(2);
-    expect(counts.hard).toBe(2);
+    expect(qs).toHaveLength(10);
   });
 
   test("selectBSQuestions has no duplicate id or rendered content in one session", () => {
@@ -75,15 +68,16 @@ describe("toefl utils", () => {
     expect(new Set(rendered).size).toBe(rendered.length);
   });
 
-  test("same question render keeps fixed given insertion index", () => {
+  test("same question render remains deterministic with prefilled positions", () => {
     const q = {
-      given: "Could you",
-      givenIndex: 2,
-      answerOrder: ["send me", "the slides", "after class", "today"],
-      responseSuffix: "?",
+      answer: "Could you send me the slides after class today?",
+      has_question_mark: true,
+      prefilled: ["you"],
+      prefilled_positions: { you: 1 },
     };
-    const out1 = renderResponseSentence(q).correctSentenceFull;
-    const out2 = renderResponseSentence(q).correctSentenceFull;
+    const order = ["could", "send me", "the slides", "after class", "today"];
+    const out1 = renderResponseSentence(q, order).correctSentenceFull;
+    const out2 = renderResponseSentence(q, order).correctSentenceFull;
     expect(out1).toBe(out2);
   });
 

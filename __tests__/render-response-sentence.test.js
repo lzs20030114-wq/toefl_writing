@@ -3,24 +3,24 @@
 describe("renderResponseSentence", () => {
   test("renders complete correct/user response sentences", () => {
     const q = {
-      given: "Could you",
-      givenIndex: 2,
-      responseSuffix: "?",
-      answerOrder: ["send me", "the slides", "after class", "today"],
+      answer: "Could you send me the slides after class today?",
+      has_question_mark: true,
+      prefilled: ["you"],
+      prefilled_positions: { you: 1 },
     };
-    const out = renderResponseSentence(q, ["send me", "the slides", "today", "after class"]);
-    expect(out.correctSentenceFull).toBe("Send me the slides Could you after class today?");
-    expect(out.userSentenceFull).toBe("Send me the slides Could you today after class?");
+    const out = renderResponseSentence(q, ["could", "send me", "the slides", "today", "after class"]);
+    expect(out.correctSentenceFull).toBe("Could you send me the slides after class today?");
+    expect(out.userSentenceFull).toBe("Could you send me the slides today after class?");
   });
 
   test("fixes punctuation spacing and collapses double spaces", () => {
     const q = {
-      given: "Please",
-      givenIndex: 0,
-      responseSuffix: ".",
-      answerOrder: ["sit down", ",", "everyone"],
+      answer: "Please sit down everyone.",
+      has_question_mark: false,
+      prefilled: [],
+      prefilled_positions: {},
     };
-    const out = renderResponseSentence(q);
-    expect(out.correctSentenceFull).toBe("Please sit down, everyone.");
+    const out = renderResponseSentence(q, ["please", "sit down", "everyone"]);
+    expect(out.correctSentenceFull).toBe("Please sit down everyone.");
   });
 });

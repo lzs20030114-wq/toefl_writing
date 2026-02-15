@@ -5,27 +5,42 @@ import { BuildSentenceTask } from "../components/buildSentence/BuildSentenceTask
 import { WritingTask } from "../components/writing/WritingTask";
 
 const BUILD_TEST_Q = {
-  id: "bs2_test_001",
-  difficulty: "easy",
-  context: "You missed class and need your classmate's slides.",
-  responseSuffix: "?",
-  given: "Could you",
-  givenIndex: 2,
-  bank: ["send me", "the slides", "after class", "today"],
-  answerOrder: ["send me", "the slides", "after class", "today"],
+  id: "ets_test_001",
+  prompt: "You missed class and need your classmate's slides.",
+  answer: "Could you send the slides after class today please?",
+  chunks: ["could", "send", "the", "slides", "after", "class", "today", "please"],
+  prefilled: ["you"],
+  prefilled_positions: { you: 1 },
+  distractor: null,
+  has_question_mark: true,
+  grammar_points: ["embedded question (whether)"],
 };
 const BUILD_ALT_Q = {
-  id: "bs2_test_alt_001",
-  difficulty: "easy",
-  context: "You need your classmate to upload a file tonight.",
-  responseSuffix: ".",
-  given: "Could you",
-  givenIndex: 1,
-  bank: ["upload", "the file", "tonight", "please"],
-  answerOrder: ["upload", "the file", "tonight", "please"],
-  acceptedAnswerOrders: [["upload", "the file", "please", "tonight"]],
-  acceptedReasons: ["adverbial_shift"],
+  id: "ets_test_alt_001",
+  prompt: "You need your classmate to upload a file tonight.",
+  answer: "Could you upload the file tonight please now.",
+  chunks: ["could", "upload", "the", "file", "tonight", "please", "now"],
+  prefilled: ["you"],
+  prefilled_positions: { you: 1 },
+  distractor: null,
+  has_question_mark: false,
+  grammar_points: ["statement order in embedded clause"],
 };
+
+function makeLegacyQ(i) {
+  const answerOrder = ["send", "me", "the", "slides", "after", "class", "today"];
+  const bank = [...answerOrder].sort(() => Math.random() - 0.5);
+  return {
+    id: `legacy_${i}`,
+    context: `Legacy prompt ${i}`,
+    given: "Could you",
+    givenIndex: 0,
+    responseSuffix: "?",
+    answerOrder,
+    bank,
+    grammar_points: [],
+  };
+}
 
 describe("ToeflApp navigation", () => {
   afterEach(() => {
@@ -55,14 +70,13 @@ describe("ToeflApp navigation", () => {
     expect(screen.getByText("05:49")).toBeInTheDocument();
   });
 
-  test("renders context, given token and slots", () => {
+  test("renders prompt and slots", () => {
     render(<BuildSentenceTask onExit={() => {}} questions={[BUILD_TEST_Q]} />);
     fireEvent.click(screen.getByTestId("build-start"));
 
-    expect(screen.getByText(BUILD_TEST_Q.context)).toBeInTheDocument();
-    expect(screen.getByTestId("given-token")).toHaveTextContent("Could you");
+    expect(screen.getByText(BUILD_TEST_Q.prompt)).toBeInTheDocument();
     expect(screen.getByTestId("slot-0")).toHaveTextContent("1");
-    expect(screen.getByTestId("slot-3")).toHaveTextContent("4");
+    expect(screen.getByTestId("slot-7")).toHaveTextContent("8");
   });
 
   test("build directions are readable and match iBT wording", () => {
@@ -71,23 +85,22 @@ describe("ToeflApp navigation", () => {
     const directionsText = screen.getByText(/Directions:/);
     const directionsBlock = directionsText.closest("div");
     expect(directionsBlock).toHaveTextContent("Directions:");
-    expect(directionsBlock).toHaveTextContent("Move the words");
+    expect(directionsBlock).toHaveTextContent("word chunks");
     expect(directionsBlock.textContent).not.toMatch(/[\uFFFD]{2,}/);
   });
 
-  test("given stays fixed and correct order scores correct", () => {
+  test("prefilled token stays fixed and correct order scores correct", () => {
     render(<BuildSentenceTask onExit={() => {}} questions={[BUILD_TEST_Q]} />);
     fireEvent.click(screen.getByTestId("build-start"));
 
-    expect(screen.getByTestId("given-token")).toHaveTextContent("Could you");
-    BUILD_TEST_Q.answerOrder.forEach((chunk) => {
+    ["could", "send", "the", "slides", "after", "class", "today", "please"].forEach((chunk) => {
       fireEvent.click(screen.getByRole("button", { name: chunk }));
     });
     fireEvent.click(screen.getByTestId("build-submit"));
 
     expect(screen.getByTestId("build-result-0")).toHaveAttribute("data-correct", "true");
     expect(screen.getByTestId("build-correct-answer-0")).toHaveTextContent(
-      "Correct full response sentence: Send me the slides Could you after class today?"
+      "Correct answer: Could you send the slides after class today please?"
     );
   });
 
@@ -97,7 +110,7 @@ describe("ToeflApp navigation", () => {
 
     const submit = screen.getByTestId("build-submit");
     expect(submit).toBeDisabled();
-    fireEvent.click(screen.getByRole("button", { name: BUILD_TEST_Q.bank[0] }));
+    fireEvent.click(screen.getByRole("button", { name: "send" }));
     expect(submit).toBeDisabled();
   });
 
@@ -105,56 +118,75 @@ describe("ToeflApp navigation", () => {
     render(<BuildSentenceTask onExit={() => {}} questions={[BUILD_TEST_Q]} />);
     fireEvent.click(screen.getByTestId("build-start"));
 
-    fireEvent.click(screen.getByRole("button", { name: "send me" }));
-    expect(screen.getByTestId("slot-0")).toHaveTextContent("send me");
+    fireEvent.click(screen.getByRole("button", { name: "send" }));
+    expect(screen.getByTestId("slot-0")).toHaveTextContent("send");
 
     fireEvent.click(screen.getByTestId("slot-0"));
     expect(screen.getByTestId("slot-0")).toHaveTextContent("1");
-    expect(screen.getByRole("button", { name: "send me" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "send" })).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "send me" }));
-    const dragData = { setData: () => {}, getData: () => "" };
-    fireEvent.dragStart(screen.getByRole("button", { name: "the slides" }), { dataTransfer: dragData });
+    fireEvent.click(screen.getByRole("button", { name: "send" }));
+    const dragData = { setData: () => {}, getData: () => "x" };
+    fireEvent.dragStart(screen.getByRole("button", { name: "the" }), { dataTransfer: dragData });
     fireEvent.drop(screen.getByTestId("slot-0"), { dataTransfer: dragData });
 
-    expect(screen.getByTestId("slot-0")).toHaveTextContent("the slides");
-    expect(screen.getByRole("button", { name: "send me" })).toBeInTheDocument();
+    expect(screen.getByTestId("slot-0")).toHaveTextContent("the");
+    expect(screen.getByRole("button", { name: "send" })).toBeInTheDocument();
   });
 
   test("wrong order is marked incorrect and review shows full sentences", () => {
     render(<BuildSentenceTask onExit={() => {}} questions={[BUILD_TEST_Q]} />);
     fireEvent.click(screen.getByTestId("build-start"));
 
-    [...BUILD_TEST_Q.answerOrder].reverse().forEach((chunk) => {
+    [...["could", "send", "the", "slides", "after", "class", "today", "please"]].reverse().forEach((chunk) => {
       fireEvent.click(screen.getByRole("button", { name: chunk }));
     });
     fireEvent.click(screen.getByTestId("build-submit"));
 
     expect(screen.getByTestId("build-result-0")).toHaveAttribute("data-correct", "false");
     expect(screen.getByTestId("build-your-sentence-0")).toHaveTextContent(
-      "Your full response sentence: Today after class Could you the slides send me?"
+      "Your answer: Please you today class after slides the send could?"
     );
     expect(screen.getByTestId("build-correct-answer-0")).toHaveTextContent(
-      "Correct full response sentence: Send me the slides Could you after class today?"
+      "Correct answer: Could you send the slides after class today please?"
     );
   });
 
-  test("alternate accepted order is scored correct and shows alternate label", () => {
+  test("alternate order is not accepted automatically", () => {
     render(<BuildSentenceTask onExit={() => {}} questions={[BUILD_ALT_Q]} />);
     fireEvent.click(screen.getByTestId("build-start"));
 
-    BUILD_ALT_Q.acceptedAnswerOrders[0].forEach((chunk) => {
+    ["upload", "the", "file", "please", "tonight", "now", "could"].forEach((chunk) => {
       fireEvent.click(screen.getByRole("button", { name: chunk }));
     });
     fireEvent.click(screen.getByTestId("build-submit"));
 
-    expect(screen.getByTestId("build-result-0")).toHaveAttribute("data-correct", "true");
-    expect(screen.getByTestId("build-alternate-accepted-0")).toHaveTextContent(
-      "Accepted alternative answer"
-    );
+    expect(screen.getByTestId("build-result-0")).toHaveAttribute("data-correct", "false");
     expect(screen.getByTestId("build-correct-answer-0")).toHaveTextContent(
-      "Correct full response sentence: Upload Could you the file tonight please."
+      "Correct answer: Could you upload the file tonight please now."
     );
+  });
+
+  test("20-question loop: when bank is empty submit is enabled", () => {
+    const questions = Array.from({ length: 20 }, (_, i) => makeLegacyQ(i + 1));
+    render(<BuildSentenceTask onExit={() => {}} questions={questions} />);
+    fireEvent.click(screen.getByTestId("build-start"));
+
+    for (let i = 0; i < 20; i++) {
+      let guard = 0;
+      while (true) {
+        const bankButtons = screen.queryAllByTestId(/bank-chunk-/);
+        if (bankButtons.length === 0) break;
+        fireEvent.click(bankButtons[0]);
+        guard += 1;
+        if (guard > 50) throw new Error("bank did not drain as expected");
+      }
+      const submit = screen.getByTestId("build-submit");
+      expect(submit).not.toBeDisabled();
+      fireEvent.click(submit);
+    }
+
+    expect(screen.getByTestId("build-result-0")).toBeInTheDocument();
   });
 
   test("writing duplicate submit only triggers one API call", async () => {

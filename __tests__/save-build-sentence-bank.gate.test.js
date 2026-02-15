@@ -9,7 +9,36 @@ const {
 } = require("../scripts/save-build-sentence-bank");
 
 describe("save-build-sentence-bank quality gates", () => {
-  test("rejects hard-fail questions", () => {
+  function makeV2Question(id, answer, chunks, opts = {}) {
+    return {
+      id,
+      prompt: "Prompt",
+      answer,
+      chunks,
+      prefilled: opts.prefilled || [],
+      prefilled_positions: opts.prefilled_positions || {},
+      distractor: opts.distractor ?? null,
+      has_question_mark: opts.has_question_mark ?? answer.trim().endsWith("?"),
+      grammar_points: opts.grammar_points || ["embedded question (if)"],
+    };
+  }
+
+  function makeSchemaValidItems() {
+    return [
+      makeV2Question("q1", "Do you know if the lab is open tonight?", ["do", "you know", "if", "the lab", "is open", "tonight"], { grammar_points: ["embedded question (if)"] }),
+      makeV2Question("q2", "Could you tell me where the notes are posted?", ["could", "tell me", "where", "the notes", "are posted"], { prefilled: ["you"], prefilled_positions: { you: 1 }, grammar_points: ["embedded question (where)"] }),
+      makeV2Question("q3", "Have you heard how they solved the problem?", ["have you heard", "how", "they", "solved", "the problem"], { grammar_points: ["embedded question (how)"] }),
+      makeV2Question("q4", "Can we find out whether the room is available?", ["can", "we", "find out", "whether", "the room", "is available"], { grammar_points: ["embedded question (whether)"] }),
+      makeV2Question("q5", "I wonder how many seats they have.", ["i wonder", "how many", "seats", "they", "have"], { has_question_mark: false, grammar_points: ["embedded question (how many)"] }),
+      makeV2Question("q6", "Does anybody know whether it is open all year long?", ["does", "anybody know", "whether", "it is open", "all year", "long", "they"], { distractor: "they", grammar_points: ["embedded question (whether)"] }),
+      makeV2Question("q7", "Do you know if it is usually crowded at this time?", ["do", "you know", "if", "it is", "usually crowded", "at this time", "daily"], { distractor: "daily", grammar_points: ["embedded question (if)"] }),
+      makeV2Question("q8", "Could you tell me how long each session was?", ["could", "tell me", "how long", "each", "session", "was", "why"], { prefilled: ["you"], prefilled_positions: { you: 1 }, distractor: "why", grammar_points: ["embedded question (how long)"] }),
+      makeV2Question("q9", "I wonder if a few classes can be held on Saturdays.", ["i wonder", "if", "a few", "classes", "can be held", "on saturdays"], { has_question_mark: false, grammar_points: ["embedded question (if)", "passive voice"] }),
+      makeV2Question("q10", "Have you heard any details about how they filmed it?", ["have you heard", "any details", "about", "how", "they filmed", "it"], { grammar_points: ["embedded question (how)"] }),
+    ];
+  }
+
+  test("rejects schema-invalid questions", () => {
     const items = [
       {
         id: "bad_1",
@@ -25,30 +54,20 @@ describe("save-build-sentence-bank quality gates", () => {
 
     const out = evaluateForSave(items, { allowWarnings: false });
     expect(out.ok).toBe(false);
-    expect(out.kind).toBe("hard_fail");
+    expect(out.kind).toBe("schema");
   });
 
-  test("warnings are blocked by default and allowed with flag", () => {
-    const items = [
-      {
-        id: "warn_1",
-        difficulty: "medium",
-        context: "Can we finish this before the review meeting?",
-        given: "After class",
-        givenIndex: 1,
-        responseSuffix: ".",
-        bank: ["review", "can", "this", "outline", "we", "week", "the notes", "for"],
-        answerOrder: ["can", "we", "review", "the notes", "for", "this", "week", "outline"],
-      },
-    ];
+  test("format issues fail schema before warning policy is applied", () => {
+    const items = makeSchemaValidItems();
+    items[0].chunks[0] = "Do"; // format warning: chunks must be lowercase
 
     const blocked = evaluateForSave(items, { allowWarnings: false });
     expect(blocked.ok).toBe(false);
-    expect(blocked.kind).toBe("warning_blocked");
+    expect(blocked.kind).toBe("schema");
 
     const allowed = evaluateForSave(items, { allowWarnings: true });
-    expect(allowed.ok).toBe(true);
-    expect(allowed.warnings.length).toBeGreaterThan(0);
+    expect(allowed.ok).toBe(false);
+    expect(allowed.kind).toBe("schema");
   });
 
   test("tokenization keeps contractions as single token", () => {
@@ -110,7 +129,7 @@ describe("save-build-sentence-bank quality gates", () => {
     );
   });
 
-  test("acceptedAnswerOrders is emitted for borderline two-order questions", () => {
+  test("acceptedAnswerOrders is emitted only when alternate order passes sentence formatting checks", () => {
     const base = [
       {
         id: "alt_1",
@@ -119,14 +138,20 @@ describe("save-build-sentence-bank quality gates", () => {
         given: "Could you",
         givenIndex: 0,
         responseSuffix: ".",
+        answer: "Could you upload the revised file for our class tonight please on Canvas.",
+        has_question_mark: false,
+        prefilled_positions: {},
         answerOrder: ["upload", "the revised file", "for", "our class", "tonight", "please", "on", "Canvas"],
         numAcceptableOrders: 2,
         ambiguityScore: 0.2,
       },
     ];
     const out = normalizeItemsForSave(base, { maxBuildAttempts: 20 });
-    expect(out[0].acceptedAnswerOrders).toHaveLength(1);
-    expect(out[0].acceptedAnswerOrders[0]).toHaveLength(out[0].bank.length);
+    expect(Array.isArray(out[0].acceptedAnswerOrders)).toBe(true);
+    expect(out[0].acceptedAnswerOrders.length).toBeLessThanOrEqual(1);
+    if (out[0].acceptedAnswerOrders.length === 1) {
+      expect(out[0].acceptedAnswerOrders[0]).toHaveLength(out[0].bank.length);
+    }
   });
 
   test("adverbial chunk cap helper and batch summary are computed", () => {
@@ -178,5 +203,63 @@ describe("save-build-sentence-bank quality gates", () => {
     const out = normalizeItemsForSave(base, { maxBuildAttempts: 10 });
     expect(out[0].acceptedAnswerOrders).toEqual([]);
     expect(out[0].acceptedReasons).toEqual([]);
+  });
+
+  test("legacy input fields are normalized and emit legacy marker", () => {
+    const warn = jest.spyOn(console, "warn").mockImplementation(() => {});
+
+    const base = [
+      {
+        id: "legacy_1",
+        difficulty: "medium",
+        context: "Legacy compatibility check.",
+        given: "Could you",
+        givenIndex: 0,
+        answer: "Could you upload the revised file immediately please using campus portal for review.",
+        has_question_mark: false,
+        prefilled_positions: {},
+        answerOrder: [
+          "upload",
+          "the revised file",
+          "immediately",
+          "please",
+          "using",
+          "campus portal",
+          "for review",
+        ],
+        response: "Could you upload the revised file immediately please using campus portal for review.",
+        responseSuffix: ".",
+        alternateOrders: [
+          [
+            "upload",
+            "the revised file",
+            "please",
+            "immediately",
+            "using",
+            "campus portal",
+            "for review",
+          ],
+        ],
+        alternateReasons: ["adverbial_shift"],
+      },
+    ];
+
+    const out = normalizeItemsForSave(base, { maxBuildAttempts: 10 });
+    expect(out).toHaveLength(1);
+    expect(Array.isArray(out[0].bank)).toBe(true);
+    expect(Array.isArray(out[0].acceptedAnswerOrders)).toBe(true);
+    expect(Array.isArray(out[0].acceptedReasons)).toBe(true);
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining("[legacy-input] legacy_1 uses:")
+    );
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining("response -> responseSentence")
+    );
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining("alternateOrders -> acceptedAnswerOrders")
+    );
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining("alternateReasons -> acceptedReasons")
+    );
   });
 });

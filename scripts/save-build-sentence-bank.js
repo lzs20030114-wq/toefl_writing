@@ -47,6 +47,26 @@ const ALLOWED_ALT_REASONS = new Set([
   "possessive_optional",
 ]);
 
+function detectLegacyMappings(item) {
+  const q = item || {};
+  const used = [];
+  if (isNonEmptyString(q.response)) used.push("response -> responseSentence");
+  if (isNonEmptyString(q.correctSentence)) used.push("correctSentence -> responseSentence");
+  if (Array.isArray(q.correctChunks) && q.correctChunks.length > 0) {
+    used.push("correctChunks(+responseSuffix) -> responseSentence");
+  }
+  if (Array.isArray(q.alternateAnswerOrders) && q.alternateAnswerOrders.length > 0) {
+    used.push("alternateAnswerOrders -> acceptedAnswerOrders");
+  }
+  if (Array.isArray(q.alternateOrders) && q.alternateOrders.length > 0) {
+    used.push("alternateOrders -> acceptedAnswerOrders");
+  }
+  if (Array.isArray(q.alternateReasons) && q.alternateReasons.length > 0) {
+    used.push("alternateReasons -> acceptedReasons");
+  }
+  return used;
+}
+
 function parseArgs(argv) {
   const out = {
     input: null,
@@ -458,9 +478,14 @@ function normalizeItem(
     ambiguityThreshold = 0.35,
     maxAcceptableOrders = 2,
     stats,
+    legacyLogger = console.warn,
   } = {}
 ) {
   const out = { ...item };
+  const legacyMappings = detectLegacyMappings(out);
+  if (legacyMappings.length > 0 && typeof legacyLogger === "function") {
+    legacyLogger(`[legacy-input] ${out.id || "(unknown id)"} uses: ${legacyMappings.join("; ")}`);
+  }
   const { orders: sourceAltOrders, reasons: sourceAltReasons } = normalizeAlternateSources(out);
 
   let responseSentence = "";
