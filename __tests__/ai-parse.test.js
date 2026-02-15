@@ -50,6 +50,7 @@ Dear Professor, I would appreciate it if...
 重要性: 会直接影响语言准确性评分。
 行动: 记忆并应用 subscribe to / apply for / depend on 三组搭配。
 `;
+
     const out = parseReport(raw);
     expect(out.error).toBe(false);
     expect(out.score).toBe(4);
@@ -72,7 +73,7 @@ Band: 3.5
 ===ACTION===
 短板1: 展开不足
 重要性: 会影响说服力
-行动: 使用for example引入细节
+行动: 使用 for example 引入细节
 `;
     const out = parseScoreReport(raw, "discussion");
     expect(out.score).toBe(3);

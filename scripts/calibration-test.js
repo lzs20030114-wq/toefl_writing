@@ -1,57 +1,36 @@
 /* eslint-disable no-console */
 // Usage:
-//   set DEEPSEEK_API_KEY=sk-xxx && node scripts/calibration-test.js
+//   PowerShell:
+//   $env:DEEPSEEK_API_KEY="sk-xxx"; npm run calibration:test
+
+const MIN_DISCUSSION_WORDS_FOR_GUARDRAIL = 60;
 
 const DISCUSSION_SYSTEM_PROMPT = `
-你是ETS认证级别的托福写作评分专家。请严格按照ETS Academic Discussion 0-5分标准评分。
-先诊断后打分，必须执行：
-1) 立场清晰度
-2) 论证质量（是否有具体理由/例子）
-3) 互动性（是否回应教授/学生）
-4) 逻辑连贯性
-5) 语言准确性
-6) 句式多样性
-7) 综合评分
-硬规则：
-- 未明确立场：最高3分
-- 未回应教授或任何学生：最高3分
-- 无复合句：最高3分
-- 空洞重复无新信息：最高2分
-- 少于60词：最高2分
-按以下格式输出：
+You are a strict ETS-level TOEFL Academic Discussion scorer.
+Follow ETS 0-5 writing rubric.
+Return in section format:
 ===SCORE===
 分数: [0-5]
 Band: [1.0-5.5]
 总评: [...]
 ===ANNOTATION===
-...<r>...</r><n level="red|orange|blue" fix="...">...</n>...
-===PATTERNS===
-{"patterns":[{"tag":"...","count":1,"summary":"..."}]}
-===COMPARISON===
-[范文]
 ...
-[对比]
-1. ...
+===PATTERNS===
+{"patterns":[...]}
+===COMPARISON===
+...
 ===ACTION===
-短板1: ...
-重要性: ...
-行动: ...
+...
+Rules:
+- If no clear stance or no engagement with professor/students, max 3.
+- If <60 words, max 2.
+- Keep explanations in Chinese, quotes/fixes in English.
 `.trim();
 
 const EMAIL_SYSTEM_PROMPT = `
-你是ETS认证级别的托福写作评分专家。请严格按照ETS Write an Email 0-5分标准评分。
-先诊断后打分，必须执行：
-1) 三个Goal逐一判定（OK/PARTIAL/MISSING）
-2) 语域得体性（格式与礼貌策略）
-3) 细节充分度
-4) 语言准确性
-5) 综合评分（Goal40%+语域20%+细节20%+语言20%）
-硬规则：
-- 任一goal缺失：最高3分
-- 两个以上goal是PARTIAL：最高3分
-- 无正式开头或结尾：最高3分
-- 少于50词：最高2分
-按以下格式输出：
+You are a strict ETS-level TOEFL Write an Email scorer.
+Follow ETS 0-5 writing rubric.
+Return in section format:
 ===SCORE===
 分数: [0-5]
 Band: [1.0-5.5]
@@ -61,18 +40,18 @@ Goal1: [OK|PARTIAL|MISSING] ...
 Goal2: ...
 Goal3: ...
 ===ANNOTATION===
-...<r>...</r><n level="red|orange|blue" fix="...">...</n>...
-===PATTERNS===
-{"patterns":[{"tag":"...","count":1,"summary":"..."}]}
-===COMPARISON===
-[范文]
 ...
-[对比]
-1. ...
+===PATTERNS===
+{"patterns":[...]}
+===COMPARISON===
+...
 ===ACTION===
-短板1: ...
-重要性: ...
-行动: ...
+...
+Rules:
+- Any missing goal => max 3.
+- 2+ partial goals => max 3.
+- <50 words => max 2.
+- Keep explanations in Chinese, quotes/fixes in English.
 `.trim();
 
 const CALIBRATION_SAMPLES = {
@@ -161,10 +140,55 @@ function reasonSignalCount(text) {
 
 function applyDiscussionGuardrail(score, responseText) {
   if (score !== 2) return score;
-  if (wordCount(responseText) < 60) return score;
+  if (wordCount(responseText) < MIN_DISCUSSION_WORDS_FOR_GUARDRAIL) return score;
   if (!hasClearStance(responseText)) return score;
   if (reasonSignalCount(responseText) < 2) return score;
   return 3;
+}
+
+function emailGenericSignalCount(text) {
+  const t = String(text || "").toLowerCase();
+  const phrases = [
+    "really enjoyed",
+    "strong impression",
+    "connects to my interest",
+    "i would like to ask if",
+    "some brief advice",
+    "thank you for your time",
+  ];
+  return phrases.reduce((n, p) => n + (t.includes(p) ? 1 : 0), 0);
+}
+
+function emailConcreteSignalCount(text) {
+  const t = String(text || "").toLowerCase();
+  const markers = [
+    "error message",
+    "submit button",
+    "last week",
+    "resubmit",
+    "deadline",
+    "schedule",
+    "section",
+    "grade",
+    "attachment",
+    "specific",
+    "resource",
+    "because",
+    "for example",
+  ];
+  return markers.reduce((n, p) => n + (t.includes(p) ? 1 : 0), 0);
+}
+
+function applyEmailGuardrail(score, responseText) {
+  const t = String(responseText || "").toLowerCase();
+  if (score === 5 && /\bsubscriber of\b/.test(t)) return 4;
+  if (score < 4) return score;
+  if (wordCount(responseText) < 50) return 3;
+  const genericCount = emailGenericSignalCount(responseText);
+  const concreteCount = emailConcreteSignalCount(responseText);
+  if (genericCount >= 3 && concreteCount <= 3) return 3;
+  if (genericCount >= 2 && concreteCount < 2) return 3;
+  return score;
 }
 
 function median(nums) {
@@ -190,6 +214,7 @@ async function callDeepSeek(systemPrompt, userMessage) {
       ],
     }),
   });
+
   if (!res.ok) {
     const txt = await res.text();
     throw new Error(`DeepSeek ${res.status}: ${txt}`);
@@ -205,16 +230,17 @@ async function runOne(systemPrompt, sample, mode) {
       : `题目：${sample.prompt}\n\n考生回答：\n${sample.response}`;
 
   const scores = [];
-    for (let i = 0; i < 3; i += 1) {
-      const output = await callDeepSeek(systemPrompt, userMsg);
+  for (let i = 0; i < 3; i += 1) {
+    const output = await callDeepSeek(systemPrompt, userMsg);
     const rawScore = extractScore(output);
     const score =
       mode === "discussion"
         ? applyDiscussionGuardrail(rawScore, sample.response)
-        : rawScore;
+        : applyEmailGuardrail(rawScore, sample.response);
     scores.push(score);
     await new Promise((r) => setTimeout(r, 1000));
   }
+
   const valid = scores.filter((s) => Number.isInteger(s));
   const med = valid.length > 0 ? median(valid) : null;
   const diff = med === null ? Infinity : Math.abs(med - sample.expectedScore);
@@ -226,18 +252,26 @@ async function runCalibration() {
   if (!process.env.DEEPSEEK_API_KEY) {
     throw new Error("Missing DEEPSEEK_API_KEY");
   }
+
   console.log("=== Calibration Test ===");
   const rows = [];
+
   for (const s of CALIBRATION_SAMPLES.discussion) {
     const r = await runOne(DISCUSSION_SYSTEM_PROMPT, s, "discussion");
     rows.push(r);
-    console.log(`${r.pass ? "PASS" : "FAIL"} ${r.id} expected=${s.expectedScore} scores=${r.scores.join(",")} median=${r.median}`);
+    console.log(
+      `${r.pass ? "PASS" : "FAIL"} ${r.id} expected=${s.expectedScore} scores=${r.scores.join(",")} median=${r.median}`
+    );
   }
+
   for (const s of CALIBRATION_SAMPLES.email) {
     const r = await runOne(EMAIL_SYSTEM_PROMPT, s, "email");
     rows.push(r);
-    console.log(`${r.pass ? "PASS" : "FAIL"} ${r.id} expected=${s.expectedScore} scores=${r.scores.join(",")} median=${r.median}`);
+    console.log(
+      `${r.pass ? "PASS" : "FAIL"} ${r.id} expected=${s.expectedScore} scores=${r.scores.join(",")} median=${r.median}`
+    );
   }
+
   const total = rows.length;
   const passed = rows.filter((r) => r.pass).length;
   const rate = Math.round((passed / total) * 100);
