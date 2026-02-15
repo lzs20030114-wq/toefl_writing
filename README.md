@@ -125,6 +125,10 @@ This prevents the historical bug where all chunks could be placed while empty sl
 - Extended repeated check (50 rounds):
   - `node scripts/validate-bank-50.js`
 - Generation pipeline (`scripts/generateBSQuestions.mjs`) retries when a generated set drifts too far from target ratio.
+- Generator enforces exact 10-question mix before accepting a set:
+  - `easy=2, medium=5, hard=3`
+- You can rebuild balanced sets from an existing pooled bank:
+  - `npm run rebuild:balanced:bank`
 
 Each question:
 
@@ -203,6 +207,7 @@ npm run build
 - E2E tests: `npm run test:e2e`
 - Bank validation: `npm run validate:bank`
 - Strict bank + difficulty profile validation: `npm run validate:bank -- --strict`
+- Rebuild balanced 10-question sets: `npm run rebuild:balanced:bank`
 - Calibration: `npm run calibration:test`
 
 ## Notes

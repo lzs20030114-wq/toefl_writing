@@ -199,8 +199,11 @@ async function generateOneSet(setNum) {
       }
 
       const diffResult = evaluateSetDifficultyAgainstTarget(questions);
-      if (!diffResult.ok) {
+      if (!diffResult.ok || !diffResult.meetsTargetCount10) {
         console.log(`  Difficulty profile drift: ${formatDifficultyProfile(diffResult)}`);
+        if (!diffResult.meetsTargetCount10) {
+          console.log("  Exact 10-question mix required: easy=2, medium=5, hard=3.");
+        }
         console.log("  Retrying to get a better 10-question difficulty mix...");
         continue;
       }

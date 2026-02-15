@@ -10,6 +10,7 @@
     "test:unit": "jest --runInBand",
     "test:e2e": "playwright test",
     "validate:bank": "node scripts/validate-bank.js",
+    "rebuild:balanced:bank": "node scripts/rebuild-balanced-sets.js",
     "calibration:test": "node scripts/calibration-test.js"
   },
   "dependencies": {

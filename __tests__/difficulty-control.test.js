@@ -2,6 +2,7 @@ const {
   estimateQuestionDifficulty,
   profileQuestionSetDifficulty,
   evaluateSetDifficultyAgainstTarget,
+  ETS_2026_TARGET_COUNTS_10,
 } = require("../lib/questionBank/difficultyControl");
 
 function makeQuestion(id, answer, chunks, opts = {}) {
@@ -79,6 +80,7 @@ describe("difficulty control", () => {
 
     expect(profile.total).toBe(10);
     expect(result.ok).toBe(true);
+    expect(result.meetsTargetCount10).toBe(true);
+    expect(profile.counts).toEqual(ETS_2026_TARGET_COUNTS_10);
   });
 });
-
