@@ -77,7 +77,7 @@ export function ProgressView({ onBack }) {
                                 {d.isCorrect ? "✓" : "✗"}
                               </span>
                               <span style={{ color: C.t2 }}>Q{j + 1}: {d.prompt}</span>
-                              <span style={{ fontSize: 11, color: C.blue, marginLeft: "auto" }}>({d.gp})</span>
+                              <span style={{ fontSize: 11, color: C.blue, marginLeft: "auto" }}>({Array.isArray(d.grammar_points) ? d.grammar_points.join(", ") : d.gp || ""})</span>
                             </div>
                             <div style={{ paddingLeft: 24 }}>
                               <div style={{ color: d.isCorrect ? C.green : C.red }}>

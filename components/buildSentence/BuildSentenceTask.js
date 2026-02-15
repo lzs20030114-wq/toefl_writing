@@ -6,6 +6,52 @@ import { saveSess, addDoneIds } from "../../lib/sessionStore";
 import { selectBSQuestions } from "../../lib/questionSelector";
 import { C, FONT, Btn, Toast, TopBar } from "../shared/ui";
 
+/**
+ * Get the effective (non-distractor) chunks for a question.
+ * These are the chunks the user must arrange.
+ */
+function getEffectiveChunks(q) {
+  const chunks = q.chunks || [];
+  const distractor = q.distractor;
+  if (!distractor) return chunks;
+  return chunks; // distractor stays in bank — user may select it (wrong choice)
+}
+
+/**
+ * Get slot count = answer word count - prefilled word count
+ */
+function getSlotCount(q) {
+  const answerWords = (q.answer || "").replace(/[.,!?;:]/g, "").split(/\s+/).filter(Boolean);
+  const prefilledWordCount = (q.prefilled || []).reduce((sum, pf) => {
+    return sum + pf.replace(/[.,!?;:]/g, "").split(/\s+/).filter(Boolean).length;
+  }, 0);
+  return answerWords.length - prefilledWordCount;
+}
+
+/**
+ * Build prefilled slot map: slotIndex → word
+ * We need to figure out which "user slots" correspond to prefilled positions.
+ */
+function getPrefilledSlotMap(q) {
+  const answerWords = (q.answer || "").replace(/[.,!?;:]/g, "").split(/\s+/).filter(Boolean);
+  const prefilledPositions = q.prefilled_positions || {};
+  const lockedWordIndices = new Set();
+
+  for (const [chunk, pos] of Object.entries(prefilledPositions)) {
+    const ws = chunk.replace(/[.,!?;:]/g, "").split(/\s+/).filter(Boolean);
+    for (let i = 0; i < ws.length; i++) {
+      lockedWordIndices.add(pos + i);
+    }
+  }
+
+  // Map: answer-word-index → { isLocked, word }
+  const map = [];
+  for (let i = 0; i < answerWords.length; i++) {
+    map.push({ isLocked: lockedWordIndices.has(i), word: answerWords[i] });
+  }
+  return map;
+}
+
 export function BuildSentenceTask({ onExit, questions }) {
   const initialBuildState = (() => {
     if (questions) return { qs: questions, error: null };
@@ -35,14 +81,16 @@ export function BuildSentenceTask({ onExit, questions }) {
   const submitLockRef = useRef(false);
 
   /* Drag state */
-  const [dragItem, setDragItem] = useState(null); // { from: "bank"|"slot", chunk, slotIndex? }
+  const [dragItem, setDragItem] = useState(null);
   const [hoverSlot, setHoverSlot] = useState(null);
   const [hoverBank, setHoverBank] = useState(false);
 
   function initQ(i, questions) {
     const q = questions[i];
-    setBank(shuffle((q.bank || []).map((c, j) => ({ text: c, id: i + "-" + j }))));
-    setSlots(Array((q.bank || []).length).fill(null));
+    const allChunks = getEffectiveChunks(q);
+    setBank(shuffle(allChunks.map((c, j) => ({ text: c, id: i + "-" + j }))));
+    const slotCount = getSlotCount(q);
+    setSlots(Array(slotCount).fill(null));
   }
 
   function startTimer() {
@@ -61,40 +109,58 @@ export function BuildSentenceTask({ onExit, questions }) {
   useEffect(() => { idxRef.current = idx; }, [idx]);
   useEffect(() => { slotsRef.current = slots; }, [slots]);
 
+  /** Build user chunk order from slots (filter nulls, return text values) */
+  function getUserChunks(slotsArr) {
+    return slotsArr.filter(s => s !== null).map(s => s.text);
+  }
+
   useEffect(() => {
     if (tl === 0 && autoSubmitRef.current && phase === "active") {
       autoSubmitRef.current = false;
       const curSlots = slotsRef.current;
       const curQ = qs[idxRef.current];
-      const curAnswerOrder = curSlots.map(s => (s ? s.text : ""));
-      const curRender = renderResponseSentence(curQ, curAnswerOrder);
-      const curEval = evaluateBuildSentenceOrder(curQ, curAnswerOrder);
-      let nr = [...resultsRef.current, { q: curQ, userAnswer: curRender.userSentenceFull || "(no answer)", correctAnswer: curRender.correctSentenceFull, isCorrect: curEval.isCorrect, alternateAccepted: curEval.alternateAccepted, acceptedReason: curEval.acceptedReason }];
+      const curChunks = getUserChunks(curSlots);
+      const curRender = renderResponseSentence(curQ, curChunks);
+      const curEval = evaluateBuildSentenceOrder(curQ, curChunks);
+      let nr = [...resultsRef.current, {
+        q: curQ,
+        userAnswer: curRender.userSentenceFull || "(no answer)",
+        correctAnswer: curRender.correctSentenceFull,
+        isCorrect: curEval.isCorrect,
+      }];
       for (let i = idxRef.current + 1; i < qs.length; i++) {
-        nr.push({ q: qs[i], userAnswer: "(no answer)", correctAnswer: renderResponseSentence(qs[i]).correctSentenceFull, isCorrect: false });
+        nr.push({
+          q: qs[i],
+          userAnswer: "(no answer)",
+          correctAnswer: renderResponseSentence(qs[i]).correctSentenceFull,
+          isCorrect: false,
+        });
       }
       setResults(nr);
       setPhase("review");
-      saveSess({
-        type: "bs",
-        correct: nr.filter(r => r.isCorrect).length,
-        total: nr.length,
-        errors: nr.filter(r => !r.isCorrect).map(r => r.q.gp),
-        details: nr.map(r => ({
-          prompt: r.q.prompt,
-          userAnswer: r.userAnswer,
-          correctAnswer: r.q.answer,
-          isCorrect: r.isCorrect,
-          gp: r.q.gp,
-          difficulty: r.q.difficulty || "medium"
-        }))
-      });
-      addDoneIds("toefl-bs-done", qs.map(q => q.id));
+      saveSession(nr);
       submitLockRef.current = false;
     }
   }, [tl, phase, qs]);
 
   useEffect(() => () => clearInterval(tr.current), []);
+
+  function saveSession(nr) {
+    saveSess({
+      type: "bs",
+      correct: nr.filter(r => r.isCorrect).length,
+      total: nr.length,
+      errors: nr.filter(r => !r.isCorrect).flatMap(r => r.q.grammar_points || []),
+      details: nr.map(r => ({
+        prompt: r.q.prompt,
+        userAnswer: r.userAnswer,
+        correctAnswer: r.q.answer,
+        isCorrect: r.isCorrect,
+        grammar_points: r.q.grammar_points || [],
+      }))
+    });
+    addDoneIds("toefl-bs-done", qs.map(q => q.id));
+  }
 
   /* --- Click interactions --- */
   function pickChunk(chunk) {
@@ -145,8 +211,7 @@ export function BuildSentenceTask({ onExit, questions }) {
         setSlots(p => { const n = [...p]; n[targetIdx] = dragItem.chunk; return n; });
       }
     } else if (dragItem.from === "slot") {
-      if (targetIdx === dragItem.slotIndex) { /* dropped on self, no-op */ }
-      else {
+      if (targetIdx !== dragItem.slotIndex) {
         setSlots(p => {
           const n = [...p];
           n[targetIdx] = dragItem.chunk;
@@ -175,29 +240,25 @@ export function BuildSentenceTask({ onExit, questions }) {
     if (submitLockRef.current) return;
     submitLockRef.current = true;
     const q = qs[idx];
-    const filledOrder = slots.map(s => (s ? s.text : ""));
-    const rendered = renderResponseSentence(q, filledOrder);
-    const score = evaluateBuildSentenceOrder(q, filledOrder);
-    const nr = [...results, { q, userAnswer: rendered.userSentenceFull || "(no answer)", correctAnswer: rendered.correctSentenceFull, isCorrect: score.isCorrect, alternateAccepted: score.alternateAccepted, acceptedReason: score.acceptedReason }];
+    const userChunks = getUserChunks(slots);
+    const rendered = renderResponseSentence(q, userChunks);
+    const score = evaluateBuildSentenceOrder(q, userChunks);
+    const nr = [...results, {
+      q,
+      userAnswer: rendered.userSentenceFull || "(no answer)",
+      correctAnswer: rendered.correctSentenceFull,
+      isCorrect: score.isCorrect,
+    }];
     setResults(nr);
-    if (idx < qs.length - 1) { setIdx(idx + 1); initQ(idx + 1, qs); submitLockRef.current = false; }
-    else {
-      clearInterval(tr.current); setRun(false); setPhase("review");
-      saveSess({
-        type: "bs",
-        correct: nr.filter(r => r.isCorrect).length,
-        total: nr.length,
-        errors: nr.filter(r => !r.isCorrect).map(r => r.q.gp),
-        details: nr.map(r => ({
-          prompt: r.q.prompt,
-          userAnswer: r.userAnswer,
-          correctAnswer: r.q.answer,
-          isCorrect: r.isCorrect,
-          gp: r.q.gp,
-          difficulty: r.q.difficulty || "medium"
-        }))
-      });
-      addDoneIds("toefl-bs-done", qs.map(q => q.id));
+    if (idx < qs.length - 1) {
+      setIdx(idx + 1);
+      initQ(idx + 1, qs);
+      submitLockRef.current = false;
+    } else {
+      clearInterval(tr.current);
+      setRun(false);
+      setPhase("review");
+      saveSession(nr);
       submitLockRef.current = false;
     }
   }
@@ -205,8 +266,13 @@ export function BuildSentenceTask({ onExit, questions }) {
   /* ---- Review phase ---- */
   if (phase === "review") {
     const ok = results.filter(r => r.isCorrect).length;
+    // Collect weak grammar points from incorrect answers
     const ge = {};
-    results.filter(r => !r.isCorrect).forEach(r => { const g = r.q.gp || "general"; ge[g] = (ge[g] || 0) + 1; });
+    results.filter(r => !r.isCorrect).forEach(r => {
+      (r.q.grammar_points || []).forEach(gp => {
+        ge[gp] = (ge[gp] || 0) + 1;
+      });
+    });
     const te = Object.entries(ge).sort((a, b) => b[1] - a[1]);
 
     return (
@@ -227,11 +293,15 @@ export function BuildSentenceTask({ onExit, questions }) {
           )}
           {results.map((r, i) => (
             <div data-testid={`build-result-${i}`} data-correct={r.isCorrect ? "true" : "false"} key={i} style={{ background: "#fff", border: "1px solid " + (r.isCorrect ? "#c6f6d5" : "#fed7d7"), borderLeft: "4px solid " + (r.isCorrect ? C.green : C.red), borderRadius: 4, padding: 14, marginBottom: 8 }}>
-              <div style={{ fontSize: 12, color: C.t2, marginBottom: 4 }}>Q{i + 1}: {r.q.context} <span style={{ color: C.blue }}>({r.q.gp || "build_sentence"})</span></div>
+              <div style={{ fontSize: 12, color: C.t2, marginBottom: 4 }}>Q{i + 1}: {r.q.prompt}</div>
               <div style={{ fontSize: 14, color: r.isCorrect ? C.green : C.red }}>{r.isCorrect ? "Correct" : "Incorrect"}</div>
-              {r.alternateAccepted && <div data-testid={`build-alternate-accepted-${i}`} style={{ fontSize: 12, color: C.blue, marginTop: 4 }}><b>Accepted alternative answer</b>{r.acceptedReason ? ` (${r.acceptedReason})` : ""}</div>}
-              <div data-testid={`build-your-sentence-${i}`} style={{ fontSize: 13, color: C.t1, marginTop: 4 }}><b>Your full response sentence:</b> {capitalize(r.userAnswer)}</div>
-              <div data-testid={`build-correct-answer-${i}`} style={{ fontSize: 13, color: C.blue, marginTop: 4 }}><b>Correct full response sentence:</b> {capitalize(r.correctAnswer || renderResponseSentence(r.q).correctSentenceFull)}</div>
+              <div data-testid={`build-your-sentence-${i}`} style={{ fontSize: 13, color: C.t1, marginTop: 4 }}><b>Your answer:</b> {r.userAnswer}</div>
+              <div data-testid={`build-correct-answer-${i}`} style={{ fontSize: 13, color: C.blue, marginTop: 4 }}><b>Correct answer:</b> {r.correctAnswer}</div>
+              {(r.q.grammar_points || []).length > 0 && (
+                <div style={{ fontSize: 12, color: C.t2, marginTop: 6 }}>
+                  <b>Grammar:</b> {r.q.grammar_points.join(", ")}
+                </div>
+              )}
             </div>
           ))}
           <div style={{ display: "flex", gap: 12, marginTop: 20 }}>
@@ -266,8 +336,8 @@ export function BuildSentenceTask({ onExit, questions }) {
           <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: "32px 40px" }}>
             <h2 style={{ margin: "0 0 16px", fontSize: 20, color: C.nav }}>Task 1: Build a Sentence</h2>
             <div style={{ fontSize: 14, color: C.t1, lineHeight: 1.8 }}>
-              <p><b>Directions:</b> Move the words in the boxes to the blank spaces to create a grammatically correct sentence.</p>
-              <p><b>Questions:</b> 10 (3 easy + 3 medium + 4 hard)</p>
+              <p><b>Directions:</b> Use the word chunks below to build a grammatically correct sentence. Some words may already be placed for you. One chunk may be a distractor that does not belong.</p>
+              <p><b>Questions:</b> 9</p>
               <p><b>Time limit:</b> 5 minutes 50 seconds</p>
               <p>The timer will start when you click <b>Start</b>. When time runs out, your answers will be submitted automatically.</p>
             </div>
@@ -280,7 +350,10 @@ export function BuildSentenceTask({ onExit, questions }) {
 
   /* ---- Active phase (slot-based UI) ---- */
   const q = qs[idx];
+  const slotCount = getSlotCount(q);
+  const wordMap = getPrefilledSlotMap(q);
   const allFilled = slots.length > 0 && slots.every(s => s !== null);
+  const punct = q.has_question_mark ? "?" : ".";
 
   const slotStyle = (i) => {
     const filled = slots[i] !== null;
@@ -314,6 +387,75 @@ export function BuildSentenceTask({ onExit, questions }) {
     };
   };
 
+  // Build the response area: interleave prefilled tokens (locked) and user slots
+  const responseElements = [];
+  let userSlotIdx = 0;
+  for (let wi = 0; wi < wordMap.length; wi++) {
+    const entry = wordMap[wi];
+    if (entry.isLocked) {
+      // Check if this is the start of a multi-word prefilled chunk
+      let isStart = true;
+      if (wi > 0 && wordMap[wi - 1].isLocked) {
+        // Check if previous word is part of same chunk
+        for (const [chunk, pos] of Object.entries(q.prefilled_positions || {})) {
+          const ws = chunk.replace(/[.,!?;:]/g, "").split(/\s+/).filter(Boolean);
+          if (pos < wi && pos + ws.length > wi) {
+            isStart = false;
+            break;
+          }
+        }
+      }
+      if (isStart) {
+        // Find the full chunk text
+        let chunkText = entry.word;
+        for (const [chunk, pos] of Object.entries(q.prefilled_positions || {})) {
+          const ws = chunk.replace(/[.,!?;:]/g, "").split(/\s+/).filter(Boolean);
+          if (pos === wi) {
+            chunkText = chunk;
+            break;
+          }
+        }
+        responseElements.push(
+          <span
+            key={`prefilled-${wi}`}
+            style={{
+              fontSize: 14,
+              color: "#666",
+              background: "#e8e8e8",
+              border: "1px solid #ccc",
+              borderRadius: 4,
+              padding: "4px 10px",
+              fontWeight: 600,
+              opacity: 0.8,
+            }}
+          >
+            {chunkText}
+          </span>
+        );
+      }
+    } else {
+      const sidx = userSlotIdx;
+      userSlotIdx++;
+      const slot = slots[sidx];
+      responseElements.push(
+        <div
+          key={`slot-${sidx}`}
+          data-testid={`slot-${sidx}`}
+          style={slotStyle(sidx)}
+          draggable={!!slot}
+          onDragStart={slot ? (e) => onDragStartSlot(e, slot, sidx) : undefined}
+          onDragEnd={slot ? onDragEnd : undefined}
+          onDragOver={(e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; setHoverSlot(sidx); }}
+          onDragLeave={() => setHoverSlot(null)}
+          onDrop={(e) => onDropSlot(e, sidx)}
+          onClick={() => slot && removeChunk(sidx)}
+        >
+          {slot ? slot.text : (sidx + 1)}
+        </div>
+      );
+    }
+  }
+
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
@@ -321,52 +463,21 @@ export function BuildSentenceTask({ onExit, questions }) {
       <div style={{ maxWidth: 760, margin: "24px auto", padding: "0 20px" }}>
         {/* Directions */}
         <div style={{ background: C.ltB, border: "1px solid #b3d4fc", borderRadius: 4, padding: 14, marginBottom: 20, fontSize: 13 }}>
-          <b>Directions:</b> Move the words in the boxes to the blank spaces to create a grammatically correct sentence.
+          <b>Directions:</b> Use the word chunks below to build a grammatically correct sentence. One chunk may be a distractor.
         </div>
 
-        {/* Context + response builder */}
+        {/* Prompt + response builder */}
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 4, padding: 20, marginBottom: 20 }}>
-          <div style={{ fontSize: 11, color: C.t2, letterSpacing: 1, marginBottom: 8 }}>CONTEXT</div>
-          <div style={{ fontSize: 15, color: C.t1, marginBottom: 14, lineHeight: 1.5 }}>{q.context}</div>
+          <div style={{ fontSize: 11, color: C.t2, letterSpacing: 1, marginBottom: 8 }}>PROMPT</div>
+          <div style={{ fontSize: 15, color: C.t1, marginBottom: 14, lineHeight: 1.5 }}>{q.prompt}</div>
           <div style={{ fontSize: 11, color: C.t2, letterSpacing: 1, marginBottom: 8 }}>RESPONSE</div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8, minHeight: 48, alignItems: "center", lineHeight: 1.6 }}>
-            {Array.from({ length: (q.bank || []).length + 1 }, (_, pos) => (
-              <React.Fragment key={`resp-pos-${pos}`}>
-                {pos === (Number.isInteger(q.givenIndex) ? q.givenIndex : 0) && (
-                  <span
-                    data-testid="given-token"
-                    style={{ fontSize: 14, color: C.nav, background: "#e6f0ff", border: "1px solid #b3d4fc", borderRadius: 4, padding: "4px 10px", fontWeight: 600 }}
-                  >
-                    {q.given}
-                  </span>
-                )}
-                {pos < (q.bank || []).length && (() => {
-                  const sidx = pos;
-                  const slot = slots[sidx];
-                  return (
-                    <div
-                      key={`slot-${sidx}`}
-                      data-testid={`slot-${sidx}`}
-                      style={slotStyle(sidx)}
-                      draggable={!!slot}
-                      onDragStart={slot ? (e) => onDragStartSlot(e, slot, sidx) : undefined}
-                      onDragEnd={slot ? onDragEnd : undefined}
-                      onDragOver={(e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; setHoverSlot(sidx); }}
-                      onDragLeave={() => setHoverSlot(null)}
-                      onDrop={(e) => onDropSlot(e, sidx)}
-                      onClick={() => slot && removeChunk(sidx)}
-                    >
-                      {slot ? slot.text : (sidx + 1)}
-                    </div>
-                  );
-                })()}
-              </React.Fragment>
-            ))}
-            {q.responseSuffix && <span style={{ fontSize: 18, color: C.t1 }}>{q.responseSuffix}</span>}
+            {responseElements}
+            <span style={{ fontSize: 18, color: C.t1, fontWeight: 700 }}>{punct}</span>
           </div>
         </div>
 
-        {/* Word Bank */}
+        {/* Chunk Bank */}
         <div
           onDragOver={(e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; setHoverBank(true); }}
           onDragLeave={() => setHoverBank(false)}
@@ -383,8 +494,8 @@ export function BuildSentenceTask({ onExit, questions }) {
             minHeight: 48,
           }}
         >
-          <div style={{ fontSize: 11, color: C.t2, width: "100%", marginBottom: 4, letterSpacing: 1 }}>WORD BANK</div>
-          {bank.length === 0 && <span style={{ fontSize: 13, color: "#aaa", fontStyle: "italic" }}>All chunks are placed. Click a filled slot to return one to the bank.</span>}
+          <div style={{ fontSize: 11, color: C.t2, width: "100%", marginBottom: 4, letterSpacing: 1 }}>CHUNK BANK</div>
+          {bank.length === 0 && <span style={{ fontSize: 13, color: "#aaa", fontStyle: "italic" }}>All chunks are placed. Click a filled slot to return one.</span>}
           {bank.map(chunk => (
             <button
               data-testid={`bank-chunk-${chunk.id}`}
