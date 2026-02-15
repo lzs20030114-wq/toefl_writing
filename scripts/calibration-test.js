@@ -4,6 +4,7 @@
 //   $env:DEEPSEEK_API_KEY="sk-xxx"; npm run calibration:test
 
 const MIN_DISCUSSION_WORDS_FOR_GUARDRAIL = 60;
+const { callDeepSeekViaCurl, resolveProxyUrl } = require("../lib/ai/deepseekHttp");
 
 const DISCUSSION_SYSTEM_PROMPT = `
 You are a strict ETS-level TOEFL Academic Discussion scorer.
@@ -197,13 +198,11 @@ function median(nums) {
 }
 
 async function callDeepSeek(systemPrompt, userMessage) {
-  const res = await fetch("https://api.deepseek.com/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + process.env.DEEPSEEK_API_KEY,
-    },
-    body: JSON.stringify({
+  return callDeepSeekViaCurl({
+    apiKey: process.env.DEEPSEEK_API_KEY,
+    proxyUrl: resolveProxyUrl(),
+    timeoutMs: 70000,
+    payload: {
       model: "deepseek-chat",
       max_tokens: 2400,
       temperature: 0.3,
@@ -212,15 +211,8 @@ async function callDeepSeek(systemPrompt, userMessage) {
         { role: "system", content: systemPrompt },
         { role: "user", content: userMessage },
       ],
-    }),
+    },
   });
-
-  if (!res.ok) {
-    const txt = await res.text();
-    throw new Error(`DeepSeek ${res.status}: ${txt}`);
-  }
-  const data = await res.json();
-  return data.choices?.[0]?.message?.content || "";
 }
 
 async function runOne(systemPrompt, sample, mode) {

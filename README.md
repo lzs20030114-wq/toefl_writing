@@ -172,6 +172,11 @@ Each question:
   - `npm run calibration:test`
 - Requires:
   - `DEEPSEEK_API_KEY` in environment
+- Optional proxy for restricted networks:
+  - `DEEPSEEK_PROXY_URL` (preferred), e.g. `http://127.0.0.1:10809`
+  - fallback envs: `HTTPS_PROXY` / `HTTP_PROXY`
+  - Note: current Node transport expects an `http://` or `https://` proxy URL.
+    If you only have SOCKS (`socks5://`), enable an HTTP proxy port in your proxy client first.
 - Purpose:
   - Re-run anchor samples and check score stability against expected ranges
 

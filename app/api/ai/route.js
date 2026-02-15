@@ -1,6 +1,30 @@
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url);
+const { callDeepSeekViaCurl, resolveProxyUrl } = require("../../../lib/ai/deepseekHttp");
+
 export async function POST(request) {
   try {
     const { system, message, maxTokens, temperature } = await request.json();
+    const proxyUrl = resolveProxyUrl();
+    if (proxyUrl) {
+      const content = callDeepSeekViaCurl({
+        apiKey: process.env.DEEPSEEK_API_KEY,
+        proxyUrl,
+        timeoutMs: 70000,
+        payload: {
+          model: "deepseek-chat",
+          max_tokens: maxTokens || 2000,
+          temperature: Number.isFinite(Number(temperature)) ? Number(temperature) : 0.3,
+          stream: false,
+          messages: [
+            { role: "system", content: system },
+            { role: "user", content: message },
+          ],
+        },
+      });
+      return Response.json({ content });
+    }
 
     const res = await fetch("https://api.deepseek.com/chat/completions", {
       method: "POST",

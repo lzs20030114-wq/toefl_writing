@@ -33,6 +33,7 @@ if (!API_KEY) {
 // Load validation functions
 const { validateQuestion, validateQuestionSet } = require("../lib/questionBank/buildSentenceSchema.js");
 const { evaluateSetDifficultyAgainstTarget, formatDifficultyProfile } = require("../lib/questionBank/difficultyControl.js");
+const { callDeepSeekViaCurl, resolveProxyUrl } = require("../lib/ai/deepseekHttp.js");
 
 const OUTPUT_PATH = resolve(__dirname, "..", "data", "buildSentence", "questions.json");
 const NUM_SETS = 5;
@@ -103,27 +104,17 @@ const REVIEW_PROMPT = `你是一位英语语言学专家。请审核以下 Build
 `;
 
 async function callDeepSeek(prompt, temperature = 0.7) {
-  const res = await fetch("https://api.deepseek.com/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${API_KEY}`,
-    },
-    body: JSON.stringify({
+  return callDeepSeekViaCurl({
+    apiKey: API_KEY,
+    proxyUrl: resolveProxyUrl(),
+    timeoutMs: 90000,
+    payload: {
       model: "deepseek-chat",
       messages: [{ role: "user", content: prompt }],
       temperature,
       max_tokens: 4096,
-    }),
+    },
   });
-
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`DeepSeek API error ${res.status}: ${text}`);
-  }
-
-  const data = await res.json();
-  return data.choices[0].message.content;
 }
 
 function parseJsonArray(text) {
