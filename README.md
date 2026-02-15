@@ -1,155 +1,157 @@
-# TOEFL iBT 2026 Writing Practice Tool
+# TOEFL iBT Writing Practice (Next.js)
 
-一个基于 Next.js 14 的托福写作练习项目，覆盖 TOEFL Writing 三类任务：
+This project is a TOEFL Writing practice tool with 3 tasks:
 
 - Task 1: Build a Sentence
 - Task 2: Write an Email
 - Task 3: Academic Discussion
 
-项目支持 AI 评分、逐句批注、短板行动建议、范文对比，并记录练习历史。
+It includes timed practice, AI scoring, structured feedback reports, progress history, and question bank quality gates.
 
-## 功能概览
+## Features
 
-### 1) 练习任务
+### Task 1 (Build a Sentence, ETS-aligned v2)
 
-- `Build a Sentence`
-  - 拖拽/点击式排句
-  - 倒计时
-  - 自动判分（支持可接受替代答案）
-  - 语法点薄弱项统计
+- Set-based delivery: one set = **10 questions**
+- Chunk-based sentence building (multi-word chunks, not single-word tokens)
+- Supports prefilled locked chunks (`prefilled`, `prefilled_positions`)
+- Supports optional distractor chunk (`distractor`)
+- Answer checking by normalized text match against `answer`
+- Grammar point tagging (`grammar_points[]`) for weak-point summary
+- Set rotation tracking with `localStorage` key: `toefl-bs-done-sets`
 
-- `Write an Email` / `Academic Discussion`
-  - 计时写作
-  - AI 评分与诊断
-  - 失败重试
-  - AI 生成新题（可选）
+### Task 2/3 (Email / Discussion)
 
-### 2) 报告（Task 2/3）
+- Timed writing UI
+- AI scoring with ETS-aligned prompts
+- Structured report pipeline:
+  - `===SCORE===`
+  - `===GOALS===` (Email only)
+  - `===ANNOTATION===`
+  - `===PATTERNS===`
+  - `===COMPARISON===`
+  - `===ACTION===`
+- Section-level fallback parsing (one section fails, others still render)
 
-评分报告已升级为 5 板块结构：
+### Progress and Storage
 
-- 默认展开
-  - 分数 + 总评（Email 含 Goal Checklist）
-  - 短板行动卡（1-2 个，可立刻执行）
-- 折叠展开
-  - 逐句批注（红/橙/蓝三级）
-  - 模式总结（标准化标签）
-  - 范文对比（范文 + 差异点）
+- Session history persisted in browser `localStorage`
+- Stores score details and grammar weakness traces
+- Supports delete/clear history operations
+- SSR-safe storage guards in `lib/sessionStore.js`
 
-### 3) 历史记录
+## Architecture
 
-- 使用 `localStorage` 持久化最近练习记录
-- 支持查看、删除单条、清空全部
+## App routes
 
-## 技术栈
-
-- Next.js 14 (App Router)
-- React 18
-- DeepSeek Chat API（经服务端代理）
-- Jest + Testing Library（单测）
-- Playwright（E2E）
-
-## 核心实现逻辑
-
-### 1) 路由与页面
-
-- `app/page.js`: 任务入口
+- `app/page.js`: home menu
 - `app/build-sentence/page.js`: Task 1
 - `app/email-writing/page.js`: Task 2
 - `app/academic-writing/page.js`: Task 3
-- `app/progress/page.js`: 历史页面
+- `app/progress/page.js`: progress page
+- `app/api/ai/route.js`: AI proxy endpoint
 
-### 2) AI 调用链
+## Core modules
 
-- 前端通过 `lib/ai/client.js` 调用 `/api/ai`
-  - 默认 30 秒超时
-  - 分类错误提示（超时/鉴权/限流/网络等）
-- 服务端代理在 `app/api/ai/route.js`
-  - 使用 `DEEPSEEK_API_KEY`
-  - 隐藏真实 API Key
+- `components/buildSentence/BuildSentenceTask.js`
+  - Task 1 interaction logic (drag/click chunks, timer, scoring, report)
+- `lib/questionSelector.js`
+  - Selects valid BS question set and rotates by set id
+- `lib/questionBank/buildSentenceSchema.js`
+  - BS schema validation (`validateQuestion`, `validateQuestionSet`)
+- `lib/questionBank/qualityGateBuildSentence.js`
+  - Quality gate wrapper for hard-fail + warning checks
+- `lib/questionBank/renderResponseSentence.js`
+  - Renders correct/user sentence from `answer + prefilled + user chunks`
+- `lib/utils.js`
+  - `evaluateBuildSentenceOrder` normalized answer matching
+- `lib/ai/parse.js`
+  - Parses structured AI report sections with fallbacks
 
-### 3) 报告解析链路（Task 2/3）
+## Build a Sentence v2 Data Schema
 
-- Prompt 要求模型按 `===SECTION===` 输出（SCORE/GOALS/ANNOTATION/PATTERNS/COMPARISON/ACTION）
-- `lib/ai/parse.js` 逐段解析并容错：
-  - 单板块解析失败不影响其他板块
-  - 兼容旧版 JSON 报告格式
+Question file: `data/buildSentence/questions.json`
 
-### 4) Build Sentence 题库质量门禁
+Top-level:
 
-- Schema 校验：`lib/questionBank/buildSentenceSchema.js`
-- 质量校验：`lib/questionBank/qualityGateBuildSentence.js`
-- 抽题策略：`lib/questionSelector.js`
-  - 默认 `easy/medium/hard = 3/3/4`
-  - 会话内去重（题目 ID + 渲染句子）
-
-## 项目结构
-
-```text
-app/
-  api/ai/route.js
-  page.js
-  build-sentence/page.js
-  email-writing/page.js
-  academic-writing/page.js
-  progress/page.js
-
-components/
-  buildSentence/BuildSentenceTask.js
-  writing/WritingTask.js
-  writing/ScoringReport.js
-  ProgressView.js
-
-lib/
-  ai/client.js
-  ai/parse.js
-  ai/prompts/
-  questionBank/
-  questionSelector.js
-  sessionStore.js
-  utils.js
-
-data/
-  buildSentence/
-  emailWriting/prompts.json
-  academicWriting/prompts.json
+```json
+{
+  "question_sets": [
+    {
+      "set_id": 1,
+      "questions": []
+    }
+  ]
+}
 ```
 
-## 本地运行
+Each question:
 
-### 1) 安装依赖
+```json
+{
+  "id": "ets_s1_q1",
+  "prompt": "context shown to user",
+  "answer": "Do you know ...?",
+  "chunks": ["do", "you know", "what time", "..."],
+  "prefilled": [],
+  "prefilled_positions": {},
+  "distractor": null,
+  "has_question_mark": true,
+  "grammar_points": ["indirect question", "passive voice"]
+}
+```
+
+## Validation and generation
+
+- Validate question bank:
+  - `npm run validate:bank`
+  - `npm run validate:bank -- --strict`
+- Generate BS sets via API script:
+  - `node scripts/generateBSQuestions.mjs`
+
+## AI scoring calibration
+
+- Calibration script:
+  - `npm run calibration:test`
+- Requires:
+  - `DEEPSEEK_API_KEY` in environment
+- Purpose:
+  - Re-run anchor samples and check score stability against expected ranges
+
+## Local development
+
+1. Install
 
 ```bash
 npm install
 ```
 
-### 2) 配置环境变量
-
-创建 `.env.local`：
+2. Create `.env.local`
 
 ```bash
-DEEPSEEK_API_KEY=your_deepseek_key
+DEEPSEEK_API_KEY=your_key_here
 ```
 
-### 3) 启动开发服务器
+3. Start dev server
 
 ```bash
 npm run dev
 ```
 
-访问：`http://localhost:3000`
+4. Build
 
-## 测试
+```bash
+npm run build
+```
 
-- 单测：`npm run test:unit`
-- E2E：`npm run test:e2e`
+## Test commands
 
-## 题库脚本
+- Unit tests: `npm run test:unit`
+- E2E tests: `npm run test:e2e`
+- Bank validation: `npm run validate:bank`
+- Calibration: `npm run calibration:test`
 
-- 校验题库：`npm run validate:bank`
-- 生成并保存 Build Sentence 题库：`node scripts/save-build-sentence-bank.js --input <json-file>`
+## Notes
 
-## 备注
-
-- 本项目为练习工具，不隶属于 ETS。
-- AI 评分用于学习参考，不等同于真实考试评分。
+- This is a practice tool, not an official ETS system.
+- AI scoring is for learning guidance, not an official TOEFL score.

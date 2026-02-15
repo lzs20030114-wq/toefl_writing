@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { renderResponseSentence } from "../../lib/questionBank/renderResponseSentence";
 import { shuffle, capitalize, evaluateBuildSentenceOrder } from "../../lib/utils";
-import { saveSess, addDoneIds } from "../../lib/sessionStore";
+import { saveSess } from "../../lib/sessionStore";
 import { selectBSQuestions } from "../../lib/questionSelector";
 import { C, FONT, Btn, Toast, TopBar } from "../shared/ui";
 
@@ -14,7 +14,8 @@ function getEffectiveChunks(q) {
   const chunks = q.chunks || [];
   const distractor = q.distractor;
   if (!distractor) return chunks;
-  return chunks; // distractor stays in bank — user may select it (wrong choice)
+  // Mix one distractor chunk into the bank if it is not already present.
+  return chunks.includes(distractor) ? chunks : [...chunks, distractor];
 }
 
 /**
@@ -159,7 +160,6 @@ export function BuildSentenceTask({ onExit, questions }) {
         grammar_points: r.q.grammar_points || [],
       }))
     });
-    addDoneIds("toefl-bs-done", qs.map(q => q.id));
   }
 
   /* --- Click interactions --- */
