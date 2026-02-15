@@ -9,6 +9,10 @@ const {
   normalizeRuntimeQuestion,
   validateRuntimeQuestion,
 } = require("../lib/questionBank/runtimeModel");
+const {
+  evaluateSetDifficultyAgainstTarget,
+  formatDifficultyProfile,
+} = require("../lib/questionBank/difficultyControl");
 
 const ROOT = path.resolve(__dirname, "..");
 const QUESTIONS_FILE = path.join(ROOT, "data", "buildSentence", "questions.json");
@@ -45,6 +49,13 @@ function validateAllSets(data, { strict = false } = {}) {
 
     if (!strict) return;
     const questions = Array.isArray(set?.questions) ? set.questions : [];
+    const diff = evaluateSetDifficultyAgainstTarget(questions);
+    if (!diff.ok) {
+      strictWarnings.push({
+        label: `set ${setId}`,
+        reasons: [`difficulty ratio drift: ${formatDifficultyProfile(diff)}`],
+      });
+    }
     questions.forEach((q, qIndex) => {
       const qLabel = `set ${setId} q[${qIndex}] ${q?.id || "(no-id)"}`;
       const hf = hardFailReasons(q || {});

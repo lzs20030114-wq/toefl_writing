@@ -13,6 +13,7 @@ It includes timed practice, AI scoring, structured feedback reports, progress hi
 ### Task 1 (Build a Sentence, ETS-aligned v2)
 
 - Set-based delivery: one set = **10 questions**
+- Difficulty profile control for each 10-question set (ETS-like target mix)
 - Chunk-based sentence building (multi-word chunks, not single-word tokens)
 - Supports prefilled locked chunks (`prefilled`, `prefilled_positions`)
 - Supports optional distractor chunk (`distractor`)
@@ -107,6 +108,24 @@ Top-level:
 
 This prevents the historical bug where all chunks could be placed while empty slots still remained.
 
+## Build Sentence Difficulty Control (ETS 2026-aligned)
+
+- Target ratio per 10-question set:
+  - `easy`: 20%
+  - `medium`: 50%
+  - `hard`: 30%
+- A heuristic estimator (`lib/questionBank/difficultyControl.js`) computes per-question difficulty from:
+  - answer length
+  - effective chunk count
+  - distractor presence
+  - embedded-question signal
+  - prefilled-token reduction
+- Strict validation fails on large ratio drift:
+  - `npm run validate:bank -- --strict`
+- Extended repeated check (50 rounds):
+  - `node scripts/validate-bank-50.js`
+- Generation pipeline (`scripts/generateBSQuestions.mjs`) retries when a generated set drifts too far from target ratio.
+
 Each question:
 
 ```json
@@ -183,6 +202,7 @@ npm run build
 - Unit tests: `npm run test:unit`
 - E2E tests: `npm run test:e2e`
 - Bank validation: `npm run validate:bank`
+- Strict bank + difficulty profile validation: `npm run validate:bank -- --strict`
 - Calibration: `npm run calibration:test`
 
 ## Notes

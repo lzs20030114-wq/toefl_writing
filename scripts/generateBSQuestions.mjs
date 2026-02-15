@@ -32,6 +32,7 @@ if (!API_KEY) {
 
 // Load validation functions
 const { validateQuestion, validateQuestionSet } = require("../lib/questionBank/buildSentenceSchema.js");
+const { evaluateSetDifficultyAgainstTarget, formatDifficultyProfile } = require("../lib/questionBank/difficultyControl.js");
 
 const OUTPUT_PATH = resolve(__dirname, "..", "data", "buildSentence", "questions.json");
 const NUM_SETS = 5;
@@ -195,6 +196,13 @@ async function generateOneSet(setNum) {
         console.log("  Set validation failed:", setResult.errors);
         // Don't retry for set-level — accept with warnings
         console.log("  (Accepting with set-level warnings)");
+      }
+
+      const diffResult = evaluateSetDifficultyAgainstTarget(questions);
+      if (!diffResult.ok) {
+        console.log(`  Difficulty profile drift: ${formatDifficultyProfile(diffResult)}`);
+        console.log("  Retrying to get a better 10-question difficulty mix...");
+        continue;
       }
 
       console.log(`  Set ${setNum} generated successfully!`);
