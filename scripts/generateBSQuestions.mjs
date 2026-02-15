@@ -35,7 +35,7 @@ const { validateQuestion, validateQuestionSet } = require("../lib/questionBank/b
 
 const OUTPUT_PATH = resolve(__dirname, "..", "data", "buildSentence", "questions.json");
 const NUM_SETS = 5;
-const QUESTIONS_PER_SET = 9;
+const QUESTIONS_PER_SET = 10;
 
 const GRAMMAR_REQUIREMENTS = [
   "间接疑问句（embedded question）",
@@ -47,6 +47,7 @@ const GRAMMAR_REQUIREMENTS = [
   "一般疑问句 + send/give双宾语",
   "特殊疑问句 + 间接疑问句语序",
   "陈述句 + 间接疑问句（wonder）",
+  "间接疑问句 + 时间状语从句",
 ];
 
 const GEN_PROMPT = `你是一位 TOEFL iBT Writing Section Task 1 "Build a Sentence" 的出题专家。
@@ -66,7 +67,7 @@ const GEN_PROMPT = `你是一位 TOEFL iBT Writing Section Task 1 "Build a Sente
   "grammar_points": ["语法点1", "语法点2"]
 }
 
-## 9 题语法点分配（按顺序生成）
+## 10 题语法点分配（按顺序生成）
 ${GRAMMAR_REQUIREMENTS.map((g, i) => `${i + 1}. ${g}`).join("\n")}
 
 ## chunks 规则
@@ -85,7 +86,7 @@ ${GRAMMAR_REQUIREMENTS.map((g, i) => `${i + 1}. ${g}`).join("\n")}
 - 校园生活、学术讨论、图书馆、宿舍、课程选择等 TOEFL 常见场景
 
 ## 输出
-仅输出 JSON 数组，不要输出任何其他文字。id 格式为 ets_s{SET_NUM}_q{1-9}。`;
+仅输出 JSON 数组，不要输出任何其他文字。id 格式为 ets_s{SET_NUM}_q{1-10}。`;
 
 const REVIEW_PROMPT = `你是一位英语语言学专家。请审核以下 Build a Sentence 题目：
 
