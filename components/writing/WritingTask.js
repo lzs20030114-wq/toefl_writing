@@ -19,7 +19,7 @@ async function aiEval(type, pd, text) {
     ? buildEmailUserPrompt(pd, text)
     : buildDiscussionUserPrompt(pd, text);
   try {
-    const raw = await callAI(sys, up, 1200);
+    const raw = await callAI(sys, up, 2600);
     const result = parseReport(raw);
     if (result.error) throw new Error(result.errorReason || "AI evaluation failed");
     return result;

@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { act } from "react-dom/test-utils";
+import { act } from "react";
 import ToeflApp from "../components/ToeflApp";
 import { BuildSentenceTask } from "../components/buildSentence/BuildSentenceTask";
 import { WritingTask } from "../components/writing/WritingTask";
@@ -188,7 +188,12 @@ describe("ToeflApp navigation", () => {
     fireEvent.click(submitBtn);
     fireEvent.click(submitBtn);
 
-    expect(global.fetch).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+    });
+    await waitFor(() => {
+      expect(screen.getByTestId("score-panel")).toBeInTheDocument();
+    });
   });
 
   test("manual submit at deadline edge still sends one request", async () => {
@@ -227,10 +232,16 @@ describe("ToeflApp navigation", () => {
       jest.advanceTimersByTime(2000);
     });
 
-    expect(global.fetch).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+    });
+    await waitFor(() => {
+      expect(screen.getByTestId("score-panel")).toBeInTheDocument();
+    });
   });
 
   test("shows categorized error reason when scoring request fails", async () => {
+    jest.spyOn(console, "error").mockImplementation(() => {});
     global.fetch = jest.fn().mockResolvedValue({
       ok: false,
       status: 429,
