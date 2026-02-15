@@ -106,7 +106,7 @@ describe("toefl utils", () => {
   });
 
   test("mapScoringError maps key categories", () => {
-    expect(mapScoringError(new Error("API timeout"))).toContain("超时");
+    expect(mapScoringError(new Error("API timeout"))).toContain("请求超时");
     expect(mapScoringError(new Error("API error 401"))).toContain("鉴权失败");
     expect(mapScoringError(new Error("API error 429"))).toContain("429");
     expect(mapScoringError(new Error("Unexpected token x in JSON"))).toContain("返回格式异常");

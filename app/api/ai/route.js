@@ -1,16 +1,17 @@
 export async function POST(request) {
   try {
-    const { system, message, maxTokens } = await request.json();
+    const { system, message, maxTokens, temperature } = await request.json();
 
     const res = await fetch("https://api.deepseek.com/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer " + process.env.DEEPSEEK_API_KEY,
+        Authorization: "Bearer " + process.env.DEEPSEEK_API_KEY,
       },
       body: JSON.stringify({
         model: "deepseek-chat",
-        max_tokens: maxTokens || 1200,
+        max_tokens: maxTokens || 2000,
+        temperature: Number.isFinite(Number(temperature)) ? Number(temperature) : 0.3,
         stream: false,
         messages: [
           { role: "system", content: system },
@@ -21,7 +22,10 @@ export async function POST(request) {
 
     if (!res.ok) {
       const errText = await res.text();
-      return Response.json({ error: "DeepSeek API error: " + res.status, detail: errText }, { status: res.status });
+      return Response.json(
+        { error: "DeepSeek API error: " + res.status, detail: errText },
+        { status: res.status }
+      );
     }
 
     const data = await res.json();

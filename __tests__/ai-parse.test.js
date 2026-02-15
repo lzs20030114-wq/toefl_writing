@@ -1,4 +1,4 @@
-import { parseReport } from "../lib/ai/parse";
+import { parseReport, parseScoreReport } from "../lib/ai/parse";
 
 describe("parseReport", () => {
   test("parses legacy JSON response", () => {
@@ -15,7 +15,7 @@ describe("parseReport", () => {
     expect(out.band).toBe(4);
   });
 
-  test("parses sectioned report with goals/annotation/patterns/action", () => {
+  test("parses sectioned report", () => {
     const raw = `
 ===SCORE===
 分数: 4
@@ -60,6 +60,24 @@ Dear Professor, I would appreciate it if...
     expect(out.patterns[0].tag).toBe("介词搭配");
     expect(out.actions).toHaveLength(1);
     expect(out.next_steps[0]).toContain("subscribe to");
+  });
+
+  test("parseScoreReport returns board-friendly shape", () => {
+    const raw = `
+===SCORE===
+分数: 3
+Band: 3.5
+总评: 展开不足。
+
+===ACTION===
+短板1: 展开不足
+重要性: 会影响说服力
+行动: 使用for example引入细节
+`;
+    const out = parseScoreReport(raw, "discussion");
+    expect(out.score).toBe(3);
+    expect(out.actions).toHaveLength(1);
+    expect(out.goals).toBeNull();
   });
 
   test("returns fallback when section markers are missing", () => {

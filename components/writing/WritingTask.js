@@ -9,6 +9,7 @@ import { EMAIL_SYS, buildEmailUserPrompt, EMAIL_GEN_PROMPT } from "../../lib/ai/
 import { DISC_SYS, buildDiscussionUserPrompt, DISC_GEN_PROMPT } from "../../lib/ai/prompts/academicWriting";
 import { BS_GEN_PROMPT } from "../../lib/ai/prompts/buildSentence";
 import { parseReport } from "../../lib/ai/parse";
+import { calibrateScoreReport } from "../../lib/ai/calibration";
 import { pickRandomPrompt } from "../../lib/questionSelector";
 import { C, FONT, Btn, Toast, TopBar } from "../shared/ui";
 import { ScoringReport } from "./ScoringReport";
@@ -19,10 +20,10 @@ async function aiEval(type, pd, text) {
     ? buildEmailUserPrompt(pd, text)
     : buildDiscussionUserPrompt(pd, text);
   try {
-    const raw = await callAI(sys, up, 2600);
-    const result = parseReport(raw);
-    if (result.error) throw new Error(result.errorReason || "AI evaluation failed");
-    return result;
+    const raw = await callAI(sys, up, 2600, 30000, 0.3);
+    const parsed = parseReport(raw);
+    if (parsed.error) throw new Error(parsed.errorReason || "AI evaluation failed");
+    return calibrateScoreReport(type, parsed, text);
   } catch (e) { console.error(e); throw new Error(e?.message || "AI evaluation failed"); }
 }
 
@@ -33,7 +34,7 @@ async function aiGen(type) {
     discussion: DISC_GEN_PROMPT,
   };
   try {
-    const raw = await callAI("Generate TOEFL 2026 questions. Output ONLY valid JSON.", prompts[type], 1500);
+    const raw = await callAI("Generate TOEFL 2026 questions. Output ONLY valid JSON.", prompts[type], 1500, 30000, 0.7);
     return JSON.parse(raw.replace(/```json/g, "").replace(/```/g, "").trim());
   } catch (e) { console.error(e); return null; }
 }
