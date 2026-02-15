@@ -2,9 +2,11 @@
 import React, { useState, useEffect } from "react";
 import { loadHist, deleteSession, clearAllSessions } from "../lib/sessionStore";
 import { C, FONT, Btn, TopBar } from "./shared/ui";
+import { ScoringReport } from "./writing/ScoringReport";
 
 export function ProgressView({ onBack }) {
   const [hist, setHist] = useState(null);
+  const [expandedIdx, setExpandedIdx] = useState(null);
   useEffect(() => { setHist(loadHist()); }, []);
   if (!hist) return <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT, display: "flex", alignItems: "center", justifyContent: "center" }}>Loading...</div>;
   const ss = hist.sessions || [];
@@ -16,12 +18,14 @@ export function ProgressView({ onBack }) {
     if (!window.confirm("Delete this record?")) return;
     const newHist = deleteSession(realIndex);
     setHist({ ...newHist });
+    if (expandedIdx === realIndex) setExpandedIdx(null);
   }
 
   function handleClearAll() {
     if (!window.confirm("Delete all history records?")) return;
     const newHist = clearAllSessions();
     setHist({ ...newHist });
+    setExpandedIdx(null);
   }
 
   return (
@@ -45,12 +49,80 @@ export function ProgressView({ onBack }) {
               {ss.slice(-10).reverse().map((s, i) => {
                 const realIndex = ss.length - 1 - i;
                 return (
-                  <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 0", borderBottom: i < Math.min(ss.length, 10) - 1 ? "1px solid #eee" : "none" }}>
-                    <div><span style={{ fontSize: 13, fontWeight: 600 }}>{s.type === "bs" ? "Build" : s.type === "email" ? "Email" : "Discussion"}</span><span style={{ fontSize: 11, color: C.t2, marginLeft: 8 }}>{new Date(s.date).toLocaleDateString()}</span></div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                      <span style={{ fontSize: 14, fontWeight: 700, color: s.type === "bs" ? (s.correct / s.total >= 0.8 ? C.green : C.orange) : (s.score >= 4 ? C.green : s.score >= 3 ? C.orange : C.red) }}>{s.type === "bs" ? s.correct + "/" + s.total : s.score + "/5"}</span>
-                      <button onClick={() => handleDelete(realIndex)} title="Delete this entry" style={{ background: "none", border: "none", color: C.red, cursor: "pointer", fontSize: 16, padding: "2px 6px", lineHeight: 1, fontWeight: 700, opacity: 0.6 }} onMouseOver={e => e.currentTarget.style.opacity = "1"} onMouseOut={e => e.currentTarget.style.opacity = "0.6"}>x</button>
+                  <div key={i}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 0", borderBottom: i < Math.min(ss.length, 10) - 1 ? "1px solid #eee" : "none", cursor: "pointer" }} onClick={() => setExpandedIdx(expandedIdx === realIndex ? null : realIndex)}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                        <span style={{ fontSize: 11, color: C.t2, userSelect: "none" }}>{expandedIdx === realIndex ? "▼" : "▶"}</span>
+                        <span style={{ fontSize: 13, fontWeight: 600 }}>{s.type === "bs" ? "Build" : s.type === "email" ? "Email" : "Discussion"}</span>
+                        <span style={{ fontSize: 11, color: C.t2 }}>{new Date(s.date).toLocaleDateString()}</span>
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                        <span style={{ fontSize: 14, fontWeight: 700, color: s.type === "bs" ? (s.correct / s.total >= 0.8 ? C.green : C.orange) : (s.score >= 4 ? C.green : s.score >= 3 ? C.orange : C.red) }}>{s.type === "bs" ? s.correct + "/" + s.total : s.score + "/5"}</span>
+                        <button onClick={(e) => { e.stopPropagation(); handleDelete(realIndex); }} title="Delete this entry" style={{ background: "none", border: "none", color: C.red, cursor: "pointer", fontSize: 16, padding: "2px 6px", lineHeight: 1, fontWeight: 700, opacity: 0.6 }} onMouseOver={e => e.currentTarget.style.opacity = "1"} onMouseOut={e => e.currentTarget.style.opacity = "0.6"}>x</button>
+                      </div>
                     </div>
+                    {expandedIdx === realIndex && s.details && s.type === "bs" && Array.isArray(s.details) && (
+                      <div style={{ background: "#f9f9f9", border: "1px solid #eee", borderRadius: 4, padding: 16, margin: "4px 0 8px 0" }}>
+                        <div style={{ fontSize: 12, color: C.t2, marginBottom: 8 }}>
+                          正确 {s.correct}/{s.total}
+                        </div>
+                        {s.details.map((d, j) => (
+                          <div key={j} style={{
+                            padding: "8px 0",
+                            borderBottom: j < s.details.length - 1 ? "1px solid #eee" : "none",
+                            fontSize: 13
+                          }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                              <span style={{ color: d.isCorrect ? C.green : C.red, fontWeight: 700 }}>
+                                {d.isCorrect ? "✓" : "✗"}
+                              </span>
+                              <span style={{ color: C.t2 }}>Q{j + 1}: {d.prompt}</span>
+                              <span style={{ fontSize: 11, color: C.blue, marginLeft: "auto" }}>({d.gp})</span>
+                            </div>
+                            <div style={{ paddingLeft: 24 }}>
+                              <div style={{ color: d.isCorrect ? C.green : C.red }}>
+                                我的答案：{d.userAnswer || "(未作答)"}
+                              </div>
+                              {!d.isCorrect && (
+                                <div style={{ color: C.blue, marginTop: 2 }}>
+                                  正确答案：{d.correctAnswer}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {expandedIdx === realIndex && s.details && (s.type === "email" || s.type === "discussion") && s.details.userText && (
+                      <div style={{ background: "#f9f9f9", border: "1px solid #eee", borderRadius: 4, padding: 16, margin: "4px 0 8px 0" }}>
+                        {s.details.promptSummary && (
+                          <div style={{ fontSize: 12, color: C.t2, marginBottom: 8 }}>
+                            题目：{s.details.promptSummary}
+                          </div>
+                        )}
+                        <div style={{
+                          background: "#fff",
+                          border: "1px solid " + C.bdr,
+                          borderRadius: 4,
+                          padding: 12,
+                          marginBottom: 12,
+                          fontSize: 13,
+                          lineHeight: 1.7,
+                          whiteSpace: "pre-wrap"
+                        }}>
+                          <div style={{ fontSize: 11, fontWeight: 700, color: C.t2, marginBottom: 6 }}>我的回答</div>
+                          {s.details.userText}
+                        </div>
+                        {s.details.feedback && (
+                          <ScoringReport result={s.details.feedback} type={s.type} />
+                        )}
+                      </div>
+                    )}
+                    {expandedIdx === realIndex && !s.details && (
+                      <div style={{ background: "#f9f9f9", border: "1px solid #eee", borderRadius: 4, padding: 16, margin: "4px 0 8px 0", fontSize: 13, color: C.t2, textAlign: "center" }}>
+                        该记录无详细数据（旧版本记录）
+                      </div>
+                    )}
                   </div>
                 );
               })}

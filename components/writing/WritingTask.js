@@ -93,7 +93,16 @@ export function WritingTask({ onExit, type }) {
       setFb(r);
       setPhase("done");
       if (r) {
-        saveSess({ type, score: r.score, band: r.band, wordCount: wc(text), weaknesses: r.weaknesses, next_steps: r.next_steps });
+        saveSess({
+          type, score: r.score, band: r.band, wordCount: wc(text), weaknesses: r.weaknesses, next_steps: r.next_steps,
+          details: {
+            promptSummary: type === "email"
+              ? pd.scenario.substring(0, 80) + "..."
+              : pd.professor.text.substring(0, 80) + "...",
+            userText: text,
+            feedback: r
+          }
+        });
         addDoneIds(storageKey, [pd.id]);
         setRequestState("success");
       } else {

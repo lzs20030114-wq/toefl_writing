@@ -75,7 +75,20 @@ export function BuildSentenceTask({ onExit, questions }) {
       }
       setResults(nr);
       setPhase("review");
-      saveSess({ type: "bs", correct: nr.filter(r => r.isCorrect).length, total: nr.length, errors: nr.filter(r => !r.isCorrect).map(r => r.q.gp) });
+      saveSess({
+        type: "bs",
+        correct: nr.filter(r => r.isCorrect).length,
+        total: nr.length,
+        errors: nr.filter(r => !r.isCorrect).map(r => r.q.gp),
+        details: nr.map(r => ({
+          prompt: r.q.prompt,
+          userAnswer: r.userAnswer,
+          correctAnswer: r.q.answer,
+          isCorrect: r.isCorrect,
+          gp: r.q.gp,
+          difficulty: r.q.difficulty || "medium"
+        }))
+      });
       addDoneIds("toefl-bs-done", qs.map(q => q.id));
       submitLockRef.current = false;
     }
@@ -170,7 +183,20 @@ export function BuildSentenceTask({ onExit, questions }) {
     if (idx < qs.length - 1) { setIdx(idx + 1); initQ(idx + 1, qs); submitLockRef.current = false; }
     else {
       clearInterval(tr.current); setRun(false); setPhase("review");
-      saveSess({ type: "bs", correct: nr.filter(r => r.isCorrect).length, total: nr.length, errors: nr.filter(r => !r.isCorrect).map(r => r.q.gp) });
+      saveSess({
+        type: "bs",
+        correct: nr.filter(r => r.isCorrect).length,
+        total: nr.length,
+        errors: nr.filter(r => !r.isCorrect).map(r => r.q.gp),
+        details: nr.map(r => ({
+          prompt: r.q.prompt,
+          userAnswer: r.userAnswer,
+          correctAnswer: r.q.answer,
+          isCorrect: r.isCorrect,
+          gp: r.q.gp,
+          difficulty: r.q.difficulty || "medium"
+        }))
+      });
       addDoneIds("toefl-bs-done", qs.map(q => q.id));
       submitLockRef.current = false;
     }
