@@ -202,7 +202,7 @@ export function WritingTask({ onExit, type }) {
                   <div style={{ background: "#e8e8e8", padding: "10px 16px", fontSize: 12, fontWeight: 700, color: C.t2, borderBottom: "1px solid " + C.bdr, display: "flex", justifyContent: "space-between" }}><span>Your response</span><span style={{ color: w < minW ? C.orange : C.green }}>{w} words {w < minW ? "(" + (minW - w) + " more)" : ""}</span></div>
                   <textarea data-testid="writing-textarea" value={text} onChange={e => setText(e.target.value)} disabled={phase === "scoring" || phase === "done"} placeholder={type === "email" ? "Dear " + pd.to + ",\n\nI am writing to..." : "I think this is an interesting question..."} style={{ flex: 1, minHeight: type === "email" ? 280 : 320, border: "none", padding: 16, fontSize: 14, fontFamily: FONT, lineHeight: 1.7, color: C.t1, resize: "none", outline: "none", background: phase === "done" ? "#fafafa" : "#fff" }} />
                 </div>
-                {phase === "writing" && <div style={{ display: "flex", alignItems: "center", gap: 12 }}><Btn data-testid="writing-submit" onClick={submitScore} disabled={w < 10} variant="success">Submit for Scoring</Btn><span style={{ fontSize: 11, color: C.t2 }}>Ctrl+Enter</span></div>}
+                {phase === "writing" && <div style={{ display: "flex", alignItems: "center", gap: 12 }}><Btn data-testid="writing-submit" onClick={submitScore} variant="success">Submit for Scoring</Btn><span style={{ fontSize: 11, color: C.t2 }}>Ctrl+Enter</span></div>}
               </>
             )}
             {phase === "scoring" && <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 4, padding: 32, textAlign: "center", color: C.t2 }}>AI is scoring your response...</div>}
