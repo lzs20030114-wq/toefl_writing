@@ -160,8 +160,8 @@ function normalizeQuestion(raw, tempId) {
   // Auto-fix: split any chunk with >3 words
   chunks = chunks.flatMap((c) => autoSplitChunk(c, 3));
 
-  // Auto-fix: ensure at least 4 effective chunks
-  chunks = ensureMinChunkCount(chunks, distractor, 5);
+  // Auto-fix: ensure at least 4 effective chunks (TPO minimum)
+  chunks = ensureMinChunkCount(chunks, distractor, 4);
 
   const answer = normalizeText(q.answer);
   return {
@@ -208,7 +208,7 @@ function buildRejectFeedbackHints(rejectReasons) {
       hints.push("Maintain question/statement ratio within set-level target.");
     }
     if (r.includes("embedded")) {
-      hints.push("Include 6-8 embedded-question items in DECLARATIVE form (not questions). Use wanted to know, asked, was curious.");
+      hints.push("Include 6-8 embedded-question items in DECLARATIVE form (not questions). Use wanted to know, asked, was curious. Ensure 7-9 items have single-word distractors.");
     }
     if (r.includes("review:blocker") || r.includes("solvability")) {
       hints.push("Avoid ambiguous chunk order; each item should have one clearly best arrangement.");
@@ -227,7 +227,7 @@ Difficulty target for this 10-question batch:
 - all 10 should be EASY/MEDIUM (lower end)
 - answer length 7-10 words
 - effective chunks 5-6
-- distractor: include in about 5 items (extra auxiliary did/do/does)
+- distractor: include in about 5 items (extra auxiliary did/do/does, always single word)
 - straightforward indirect questions with simple clause structure
 `
     : mode === "hard"
@@ -236,9 +236,9 @@ Difficulty target for this 10-question batch:
 - all 10 should be HARD
 - answer length 11-15 words
 - effective chunks 7-8
-- include distractor in at least 8 items
+- include distractor in at least 8 items (always single word, mostly did/do/does)
 - include embedded question in at least 7 items
-- multi-layer nesting (indirect question + passive/perfect/comparative)
+- multi-layer nesting (3+ grammar layers: indirect question + passive progressive / perfect + negation / ability expression)
 - complex but natural sentence structure
 `
     : `
@@ -247,12 +247,14 @@ Difficulty distribution target (TPO standard):
 - 7-8 medium
 - 2-3 hard
 TPO is significantly harder than ETS examples. Almost no easy items.
-Hard item profile:
+Hard item profile (Layer 3 — 3+ grammar layers):
 - answer length 11-15 words
 - effective chunks 7-8
-- at least one 3-word chunk
 - has distractor (extra auxiliary)
-- multi-layer nesting (indirect question + passive/perfect/comparative)
+- multi-layer nesting examples:
+  * indirect question + passive progressive: "He found out where the new road was being built."
+  * indirect question + present perfect + negation: "She wanted to know if I had finished the proposal yet."
+  * indirect question + ability expression: "He wanted to know how we were able to make improvements."
 Easy item profile (max 1):
 - answer length 7-9 words
 - effective chunks 5-6
@@ -315,17 +317,19 @@ TPO specialty: omitted relative pronoun (contact clause)
 - Other narrative/comment: 2 items
 Use diverse names: Matthew, Mariana, Julian, Alison, Emma, Professor Cho, etc.
 
-## Distractor rules ★MAJOR CHANGE — 72% have distractors★
-6-8 items MUST have a distractor. This is the real exam rate.
+## Distractor rules ★MAJOR CHANGE — 88% have distractors★
+7-9 items MUST have a distractor. This is the real TPO exam rate.
+★CRITICAL: Distractor must ALWAYS be a SINGLE WORD (never a phrase)★
 
 ### Distractor strategies (by priority):
-1. ★EXTRA AUXILIARY (at least 4 items)★: did, do, does
-   THE core TPO distractor! Place extra did/do/does in indirect questions
+1. ★EXTRA AUXILIARY (at least 5 items)★: did, do, does
+   THE core TPO distractor! "did" alone appears in ~1/3 of ALL questions.
+   Place extra did/do/does in indirect questions
    to tempt examinees into using inverted (direct question) word order.
    Example: answer "She wanted to know if I went anywhere interesting", distractor "did"
 2. Tense/form variant (1-2 items): staying/stay, gone/going, choose/chose, taken/took
 3. Similar function word (1 item): which/what, where/when, no/not/none
-4. Extra structure word (0-1 items): to be, that, because, on
+4. Extra structure word (0-1 items): that, because, was
 
 ## Prefilled rules:
 About 60% of items (6) should have prefilled. TPO prefers mid/end positions:
@@ -337,12 +341,15 @@ About 60% of items (6) should have prefilled. TPO prefers mid/end positions:
 - Prefilled words must NOT appear in chunks
 - chunks (minus distractor) + prefilled = ALL answer words (excluding punctuation)
 
-## Chunk rules (TPO style):
-- Effective chunk count (excluding distractor): 5-8, concentrated 6-7
+## Chunk rules (TPO style) ★IMPORTANT★:
+- ★Effective chunk count (excluding distractor): 4-8, TARGET 5-7★ — this is the PRIMARY constraint
 - Each chunk max 3 words, all lowercase
-- About 60% should be 2-3 word natural collocations
+- Use a MIX of single-word and multi-word chunks to hit the 5-7 target:
+  * Each item should have 2-4 multi-word chunks (natural collocations like "to know", "wanted to", "no longer", "the bookstore", "last week", "had no idea")
+  * Remaining chunks are single words
+  * Do NOT make all chunks single-word — that exceeds the chunk count limit!
 - chunks (minus distractor) + prefilled = all answer words (excluding punctuation)
-- Distractor words must NOT appear in answer
+- ★Distractor must be a SINGLE WORD★ — never a phrase
 
 ## Scene distribution:
 - Relaying someone's question (What did XXX ask you?): 3-4 items
@@ -421,7 +428,8 @@ Evaluate each item against real TPO exam standards.
 TPO key characteristics:
 - 92% of answers are STATEMENTS (declarative sentences)
 - 63% test indirect/embedded questions with declarative word order
-- 72% have distractors, mainly extra auxiliary verbs (did/do/does)
+- 88% have distractors, mainly extra single-word auxiliary verbs (did/do/does)
+- ~77% of chunks are single words; multi-word chunks only for natural collocations
 - Core test: "indirect questions do NOT invert" — distractor did/do tests this
 
 Return ONLY JSON:
@@ -634,24 +642,24 @@ function composeOneSet(pool, setId, maxRetries = 500) {
     return { total, qmark, distractor, embedded, avgWords, avgChunks };
   }
 
-  // TPO style gates: 92% statements, 72% distractors, 63% embedded
+  // TPO style gates: 92% statements, 88% distractors, 63% embedded
   function stylePassStrict(p) {
     return (
       p.qmark >= 0 && p.qmark <= 2 &&
-      p.distractor >= 6 && p.distractor <= 9 &&
+      p.distractor >= 7 && p.distractor <= 10 &&
       p.embedded >= 5 && p.embedded <= 8 &&
       p.avgWords >= 9.0 && p.avgWords <= 13.0 &&
-      p.avgChunks >= 5.5 && p.avgChunks <= 7.5
+      p.avgChunks >= 4.5 && p.avgChunks <= 7.5
     );
   }
 
   function stylePassRelaxed(p) {
     return (
       p.qmark >= 0 && p.qmark <= 3 &&
-      p.distractor >= 5 && p.distractor <= 10 &&
+      p.distractor >= 6 && p.distractor <= 10 &&
       p.embedded >= 4 && p.embedded <= 9 &&
       p.avgWords >= 8.5 && p.avgWords <= 14.0 &&
-      p.avgChunks >= 5.0 && p.avgChunks <= 8.0
+      p.avgChunks >= 4.0 && p.avgChunks <= 8.0
     );
   }
 
