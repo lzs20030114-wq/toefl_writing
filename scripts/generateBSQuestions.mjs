@@ -3,7 +3,7 @@
  * 1) online candidate generation
  * 2) hard validation (schema/runtime)
  * 3) AI quality scoring filter
- * 4) pool-based set assembly with exact difficulty mix (3/5/2)
+ * 4) pool-based set assembly with TPO difficulty mix (1/7/2)
  *
  * Usage:
  *   node scripts/generateBSQuestions.mjs
@@ -161,7 +161,7 @@ function normalizeQuestion(raw, tempId) {
   chunks = chunks.flatMap((c) => autoSplitChunk(c, 3));
 
   // Auto-fix: ensure at least 4 effective chunks
-  chunks = ensureMinChunkCount(chunks, distractor, 4);
+  chunks = ensureMinChunkCount(chunks, distractor, 5);
 
   const answer = normalizeText(q.answer);
   return {
@@ -208,7 +208,7 @@ function buildRejectFeedbackHints(rejectReasons) {
       hints.push("Maintain question/statement ratio within set-level target.");
     }
     if (r.includes("embedded")) {
-      hints.push("Include 3-4 embedded-question items and clearly label grammar_points.");
+      hints.push("Include 6-8 embedded-question items in DECLARATIVE form (not questions). Use wanted to know, asked, was curious.");
     }
     if (r.includes("review:blocker") || r.includes("solvability")) {
       hints.push("Avoid ambiguous chunk order; each item should have one clearly best arrangement.");
@@ -224,147 +224,144 @@ function buildGeneratePrompt(round, mode = "balanced", rejectFeedback = "") {
   const difficultySection = mode === "easy"
     ? `
 Difficulty target for this 10-question batch:
-- all 10 should be EASY
-- answer length 7-9 words
-- effective chunks 4-5
-- distractor must be null
-- simple syntax and high-frequency vocabulary
+- all 10 should be EASY/MEDIUM (lower end)
+- answer length 7-10 words
+- effective chunks 5-6
+- distractor: include in about 5 items (extra auxiliary did/do/does)
+- straightforward indirect questions with simple clause structure
 `
     : mode === "hard"
       ? `
 Difficulty target for this 10-question batch:
 - all 10 should be HARD
-- answer length 10-14 words
-- effective chunks 6-8
-- include distractor in at least 5 items
-- include embedded question in at least 6 items
-- multi-layer nesting or multiple grammar points per item
+- answer length 11-15 words
+- effective chunks 7-8
+- include distractor in at least 8 items
+- include embedded question in at least 7 items
+- multi-layer nesting (indirect question + passive/perfect/comparative)
 - complex but natural sentence structure
 `
     : `
-Difficulty distribution target for this 10-question batch:
-- 3 easy
-- 5 medium
-- 2 hard
-Reflect difficulty in sentence length, chunk complexity, and distractor usage.
+Difficulty distribution target (TPO standard):
+- 0-1 easy
+- 7-8 medium
+- 2-3 hard
+TPO is significantly harder than ETS examples. Almost no easy items.
 Hard item profile:
-- answer length 10-14 words
-- effective chunks 6-8
+- answer length 11-15 words
+- effective chunks 7-8
 - at least one 3-word chunk
-- usually has distractor
-- multi-layer nesting or multiple grammar points
-Easy item profile:
+- has distractor (extra auxiliary)
+- multi-layer nesting (indirect question + passive/perfect/comparative)
+Easy item profile (max 1):
 - answer length 7-9 words
-- effective chunks 4-5
-- no distractor
-- single-layer sentence, straightforward syntax
-Medium item profile:
-- answer length 8-11 words
-- effective chunks 5-7
-- may have distractor
-- two-layer sentence (main + subordinate/infinitive/passive)
+- effective chunks 5-6
+- simple negation or single-layer structure
+Medium item profile (majority):
+- answer length 9-13 words
+- effective chunks 6-7
+- has distractor (usually extra auxiliary did/do/does)
+- indirect question with declarative word order
 `;
 
   return `
 You are a TOEFL iBT Writing Task 1 "Build a Sentence" item writer.
-All rules below are based on statistical analysis of 7 official ETS sets (70 items).
+All rules below are based on statistical analysis of 6 TPO real exam sets (60 items).
+TPO represents actual test difficulty — much harder than ETS examples.
 Return ONLY a JSON array with exactly 10 question objects.
 
 Required schema for each item:
 {
   "id": "tmp_r${round}_q1",
-  "prompt": "conversational context sentence from speaker A (5-15 words, ends with ? or .)",
-  "answer": "speaker B's response, the correct sentence (6-14 words, concentrated 8-12)",
+  "prompt": "conversational context sentence (5-15 words, ends with ? or .)",
+  "answer": "the correct sentence to build (7-15 words, concentrated 9-13)",
   "chunks": ["lowercase chunk", "..."],
-  "prefilled": ["I"] or [],
-  "prefilled_positions": {"I": 3} or {},
-  "distractor": null or "lowercase distractor chunk not in answer",
+  "prefilled": ["word1"] or [],
+  "prefilled_positions": {"word1": 0} or {},
+  "distractor": null or "lowercase distractor word not in answer",
   "has_question_mark": true/false,
   "grammar_points": ["grammar point 1", "grammar point 2"]
 }
 
-## Sentence type distribution (strict):
-- Indirect/embedded questions: 3-4 items
-  Lead-in variety: Do you know if/whether, Can you tell me, wanted to know, wondering, curious if, find out
-  Embedded word distribution: if(33%), where(23%), when(20%), how(17%), whether(7%)
-- Direct wh-questions (Which/What/Where/When/Why/How): 2-3 items
-  Emphasize wh-word + noun patterns: Which breed of dog, What type of photography, What kind of animal
-  Also test wh + to-infinitive: where to get, how to find, what to bring
-- Negation structures: 1-2 items
-  Types: do not, did not, am not, haven't, have no, never, was not
-- Yes/No direct questions (Do you have, Have you, Did they): 1-2 items
-- Other (relative clause who/that/where, passive voice, exclamation how+adj, would you like): 0-1 items
+## CRITICAL: 92% of answers are STATEMENTS (has_question_mark=false)
+- Statements: 8-9 items (indirect questions in declarative form, e.g. "She wanted to know if...")
+- Questions: 1-2 items ONLY (only for "Can/Could you tell me...?")
 
-## Question vs statement ratio:
-- Questions (has_question_mark=true): 5-6 items
-- Statements (has_question_mark=false): 4-5 items
+## Sentence type distribution (TPO core):
+### Indirect/embedded questions (DECLARATIVE form): 6-8 items ★CORE★
+Lead-in verb distribution (must diversify):
+- wanted to know: 3-4 items (47% of embedded questions)
+- asked (me): 1 item
+- wants to know: 1 item
+- was curious about / curious if: 1 item
+- other (was wondering, found out, would love to know, needed to know): 1-2 items
+Clause word distribution: if(32%), what(21%), where(18%), why(13%), when(8%), how(5%), who(5%)
 
-## Prefilled rules (MANDATORY — do not skip):
-YOU MUST include prefilled words in exactly 5-6 items out of 10. This is NOT optional.
-Items WITHOUT prefilled: set prefilled=[] and prefilled_positions={}
-Items WITH prefilled (5-6 items): set prefilled=["word1"] or ["word1","word2"] etc.
+### Negation structures: 2-3 items
+At least 1 combined with indirect question (e.g. "I did not understand what he said")
+Types: did not, do not, have not, was not, could not, no longer, have no
 
-How to create prefilled:
-1. Pick 1-2 words from the answer that are positionally unambiguous (beginning or end)
-2. Put them in "prefilled" array and remove them from "chunks"
-3. Set their 0-indexed word position in "prefilled_positions"
-4. Example: answer="I have no idea where to go"
-   → prefilled=["I"], prefilled_positions={"I":0}, chunks=["have no idea","where to","go"]
+### Relative clause / contact clause: 1-2 items
+TPO specialty: omitted relative pronoun (contact clause)
+- The bookstore [that] I stopped by...
+- The desk [that] you ordered...
 
-Prefilled word types (pick from these):
-- Subject pronouns at position 0: I, She, He, We, They
-- Sentence-end words: yet, soon, afterward, online
-- Function words at fixed positions: The, In, On, Have, Did
-- Fixed collocations: "I did not" (positions 0,1,2)
+### Other: 0-1 items (comparative, passive, find/make + object + complement)
 
-CRITICAL: chunks (minus distractor) + prefilled words = ALL answer words (excluding punctuation)
+## Prompt patterns (must follow this distribution):
+- "What did [Name] ask you?": 3-4 items (37%) — directly elicits indirect question answers
+- "Did you enjoy/finish/attend...?": 2 items
+- "Where/Why did you...?": 2 items
+- Other narrative/comment: 2 items
+Use diverse names: Matthew, Mariana, Julian, Alison, Emma, Professor Cho, etc.
 
-## Distractor rules:
-2-4 items have a distractor, max 1 per item.
-Distractor design strategies (must use one of these, no random words):
-1. Tense confusion: answer uses "have", distractor is "has"; answer uses "was", distractor is "were"
-2. Synonym/form confusion: answer uses "plan", distractor is "planning"; answer uses "choose", distractor is "chosen"
-3. Extra function word: because, so, however, too, already
-4. Negation confusion: not vs none, already vs yet
+## Distractor rules ★MAJOR CHANGE — 72% have distractors★
+6-8 items MUST have a distractor. This is the real exam rate.
 
-## Chunk rules (important — ETS style):
-Chunks should be natural collocations, NOT single words! ETS characteristics:
-- Effective chunk count (excluding distractor): 4-8, concentrated 5-7
-- Each chunk max 3 words
-- All chunks lowercase
-- About 60% of chunks should be 2-3 word collocations, such as:
-  · Verb phrases: do you know, can you tell, would you like, find out
-  · Prepositional phrases: of the, in the, at the, for the
-  · Clause introductions: if she, when the, where to, how many
-  · Noun phrases: what kind, which breed, the movie
-  · Verb-object pairs: tell me, book your, send you
-- Only function words (auxiliaries, pronouns, articles) remain as single-word chunks (e.g., do, I, the, a)
-- chunks (minus distractor) + prefilled words = all answer words (excluding punctuation)
+### Distractor strategies (by priority):
+1. ★EXTRA AUXILIARY (at least 4 items)★: did, do, does
+   THE core TPO distractor! Place extra did/do/does in indirect questions
+   to tempt examinees into using inverted (direct question) word order.
+   Example: answer "She wanted to know if I went anywhere interesting", distractor "did"
+2. Tense/form variant (1-2 items): staying/stay, gone/going, choose/chose, taken/took
+3. Similar function word (1 item): which/what, where/when, no/not/none
+4. Extra structure word (0-1 items): to be, that, because, on
+
+## Prefilled rules:
+About 60% of items (6) should have prefilled. TPO prefers mid/end positions:
+- Opening subject + collocation: "He wanted to know", "Unfortunately, I"
+- Sentence-end modifiers: "yet", "weekends", "quickly"
+- Mid-sentence connectors: "when", "about"
+- 0-4 prefilled per item
+- prefilled_positions: 0-indexed word position in answer
+- Prefilled words must NOT appear in chunks
+- chunks (minus distractor) + prefilled = ALL answer words (excluding punctuation)
+
+## Chunk rules (TPO style):
+- Effective chunk count (excluding distractor): 5-8, concentrated 6-7
+- Each chunk max 3 words, all lowercase
+- About 60% should be 2-3 word natural collocations
+- chunks (minus distractor) + prefilled = all answer words (excluding punctuation)
 - Distractor words must NOT appear in answer
 
-## Scene diversity (important):
-Do NOT only write campus/academic scenes! Distribute as follows:
-- Leisure/entertainment (movies, concerts, exhibitions, documentaries, camping, hiking): 2-3 items
-- Academic/work (interviews, projects, papers, assignments, seminars): 2 items
-- Life planning (travel, moving, study abroad, shopping, pets): 2-3 items
-- Daily errands (groceries, gym, restaurant, coffee shop): 1-2 items
-- Interpersonal/reporting (someone said/asked something, relaying messages): 1-2 items
-Language style: casual two-person daily conversation, friendly and natural, no academic vocabulary.
+## Scene distribution:
+- Relaying someone's question (What did XXX ask you?): 3-4 items
+- Work/projects (interviews, project updates, meetings, reports): 2-3 items
+- Daily life (shopping, restaurants, gym, transportation): 2 items
+- Campus/study (assignments, workshops, seminars): 1 item
+- Social (parties, concerts, travel): 1 item
 
-## Grammar point labeling (important — difficulty estimator depends on these):
-grammar_points MUST use these standard labels:
+## Grammar point labeling (difficulty estimator depends on these):
 - Indirect/embedded questions: must include "embedded question" or "indirect question"
-- Negation structures: must include "negation"
-- Relative clauses: must include "relative clause"
+- Negation: must include "negation"
+- Relative/contact clause: must include "relative clause" or "contact clause"
 - Passive voice: must include "passive voice"
-- wh + to-infinitive: write "wh-word + to-infinitive"
-- want + object + to do: write "want + object + to-infinitive"
-- You may append details, e.g. "embedded question (if clause)", "negation (have no)"
-- Each item must have at least 1 grammar point
+- You may append details: "embedded question (wanted to know + if)", "negation (did not)"
 
 ## Answer uniqueness:
-- Each item must have exactly one grammatically correct and semantically coherent arrangement
-- Avoid prepositional phrases that can be inserted at multiple positions
+- Each item must have exactly one grammatically correct arrangement
+- Indirect question clauses MUST use declarative word order (no inversion)
+- The distractor did/do/does cannot be inserted into the correct answer
 
 ${difficultySection}
 ${rejectFeedback}
@@ -382,7 +379,7 @@ No markdown. No extra explanation. JSON array only.
 
 function buildReviewPrompt(questions) {
   return `
-You are a strict TOEFL item quality reviewer.
+You are a strict TOEFL TPO item quality reviewer.
 Review the Build a Sentence items and return ONLY JSON:
 {
   "overall_score": 0-100,
@@ -395,19 +392,21 @@ Review the Build a Sentence items and return ONLY JSON:
 Blockers (ONLY use for these critical issues):
 - multiple valid chunk orders (ambiguous arrangement)
 - grammar incorrect in the answer sentence
-- distractor could be a valid answer chunk
+- distractor could be a valid answer chunk (inserting it creates another valid sentence)
 - prompt/answer mismatch (answer doesn't respond to prompt)
+- indirect question clause uses inverted word order (MUST be declarative)
 
 NOT blockers (deduct points instead):
-- chunk composition style (single-word vs multi-word)
+- chunk composition style
 - grammar_points label format
 - scene variety
 
-Scoring:
+TPO-specific scoring:
 - >=85 means production ready
-- <78 means reject that question
-- Deduct 3-5 points if >60% of chunks are single words
-- Deduct 2-3 points if scene is too academic
+- <78 means reject
+- Verify that indirect questions use declarative word order (no auxiliary inversion)
+- Verify that distractor did/do/does CANNOT be inserted into the correct answer
+- Deduct 3-5 points if answer is a direct question when it should be a statement
 
 Items:
 ${JSON.stringify(questions, null, 2)}
@@ -416,10 +415,14 @@ ${JSON.stringify(questions, null, 2)}
 
 function buildConsistencyPrompt(questions) {
   return `
-You are an ETS-style Build-a-Sentence auditor.
-Evaluate each item on:
-1) solvability (single best ordering)
-2) ETS-style similarity (prompt tone, sentence complexity, grammar target naturalness)
+You are a TPO Build-a-Sentence auditor.
+Evaluate each item against real TPO exam standards.
+
+TPO key characteristics:
+- 92% of answers are STATEMENTS (declarative sentences)
+- 63% test indirect/embedded questions with declarative word order
+- 72% have distractors, mainly extra auxiliary verbs (did/do/does)
+- Core test: "indirect questions do NOT invert" — distractor did/do tests this
 
 Return ONLY JSON:
 {
@@ -431,20 +434,14 @@ Return ONLY JSON:
   ]
 }
 
-Blockers (ONLY use for these critical issues):
+Blockers (ONLY for critical issues):
 - clearly ambiguous order (multiple valid answers)
 - ungrammatical answer
 - distractor likely valid in answer
+- indirect question uses inverted word order
 
-NOT blockers (reflect in ets_similarity score instead):
-- chunk composition style
-- grammar_points labeling
-- scene variety
-
-Scoring guidelines:
-- ets_similarity: how closely does this match real ETS Build a Sentence items in tone, difficulty, and naturalness
-- solvability: how clearly can a test-taker determine the single correct arrangement
-- Deduct ets_similarity points (not blockers) for mostly single-word chunks or stiff language
+NOT blockers (reflect in score):
+- chunk style, grammar labels, scene variety
 
 Items:
 ${JSON.stringify(questions, null, 2)}
@@ -637,23 +634,24 @@ function composeOneSet(pool, setId, maxRetries = 500) {
     return { total, qmark, distractor, embedded, avgWords, avgChunks };
   }
 
+  // TPO style gates: 92% statements, 72% distractors, 63% embedded
   function stylePassStrict(p) {
     return (
-      p.qmark >= 5 && p.qmark <= 6 &&
-      p.distractor >= 2 && p.distractor <= 4 &&
-      p.embedded >= 3 && p.embedded <= 5 &&
-      p.avgWords >= 8.8 && p.avgWords <= 11.2 &&
-      p.avgChunks >= 5.0 && p.avgChunks <= 6.5
+      p.qmark >= 0 && p.qmark <= 2 &&
+      p.distractor >= 6 && p.distractor <= 9 &&
+      p.embedded >= 5 && p.embedded <= 8 &&
+      p.avgWords >= 9.0 && p.avgWords <= 13.0 &&
+      p.avgChunks >= 5.5 && p.avgChunks <= 7.5
     );
   }
 
   function stylePassRelaxed(p) {
     return (
-      p.qmark >= 4 && p.qmark <= 8 &&
-      p.distractor >= 2 && p.distractor <= 5 &&
-      p.embedded >= 2 && p.embedded <= 7 &&
-      p.avgWords >= 8.0 && p.avgWords <= 12.0 &&
-      p.avgChunks >= 4.5 && p.avgChunks <= 7.0
+      p.qmark >= 0 && p.qmark <= 3 &&
+      p.distractor >= 5 && p.distractor <= 10 &&
+      p.embedded >= 4 && p.embedded <= 9 &&
+      p.avgWords >= 8.5 && p.avgWords <= 14.0 &&
+      p.avgChunks >= 5.0 && p.avgChunks <= 8.0
     );
   }
 

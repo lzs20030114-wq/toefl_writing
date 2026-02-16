@@ -1,216 +1,208 @@
 {
   "version": "1.2",
-  "generated_at": "2026-02-16T12:24:50.441Z",
+  "generated_at": "2026-02-16T17:30:16.056Z",
   "question_sets": [
     {
       "set_id": 1,
       "questions": [
         {
           "id": "ets_s1_q1",
-          "prompt": "We need to decide on a gift for the office farewell party.",
-          "answer": "What kind of present would be most appreciated by the entire department?",
+          "prompt": "Why did you leave the meeting early?",
+          "answer": "I had no idea what the final decision was.",
           "chunks": [
-            "what kind",
-            "of present",
-            "would be",
-            "most appreciated",
-            "by the",
-            "entire department"
+            "i",
+            "had no idea",
+            "what",
+            "the final decision",
+            "was"
           ],
           "prefilled": [],
           "prefilled_positions": {},
-          "distractor": "gift",
-          "has_question_mark": true,
+          "distractor": null,
+          "has_question_mark": false,
           "grammar_points": [
-            "wh-question (what kind)",
-            "passive voice"
+            "embedded question (what)",
+            "negation (had no)"
           ]
         },
         {
           "id": "ets_s1_q2",
-          "prompt": "What kind of pet is easiest for a small apartment?",
-          "answer": "Which breed of cat is the most low-maintenance?",
+          "prompt": "Where did Mariana go?",
+          "answer": "She was curious about where I went yesterday.",
           "chunks": [
-            "which breed",
-            "of cat",
-            "is",
-            "the most",
-            "low-maintenance"
+            "she was",
+            "curious about",
+            "where",
+            "i",
+            "went",
+            "yesterday"
           ],
           "prefilled": [],
           "prefilled_positions": {},
-          "distractor": null,
-          "has_question_mark": true,
+          "distractor": "did",
+          "has_question_mark": false,
           "grammar_points": [
-            "direct wh-question (which + noun)"
+            "embedded question (was curious about + where)"
           ]
         },
         {
           "id": "ets_s1_q3",
-          "prompt": "What kind of animal did you see on your hike?",
-          "answer": "We saw a family of deer near the river.",
+          "prompt": "Did you like the book I recommended?",
+          "answer": "The bookstore you recommended no longer carries that title.",
           "chunks": [
-            "saw",
-            "a family",
-            "of deer",
-            "near the river"
+            "the bookstore",
+            "you recommended",
+            "no longer",
+            "carries",
+            "that title"
           ],
-          "prefilled": [
-            "We"
-          ],
-          "prefilled_positions": {
-            "We": 0
-          },
-          "distractor": "however",
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "which",
           "has_question_mark": false,
           "grammar_points": [
-            "direct wh-question response",
-            "past simple"
+            "contact clause (bookstore you recommended)",
+            "negation (no longer)"
           ]
         },
         {
           "id": "ets_s1_q4",
-          "prompt": "Which breed of dog is best for apartments?",
-          "answer": "I think a pug is the best choice for small spaces.",
+          "prompt": "Was the desk delivered to the office?",
+          "answer": "The desk you ordered last week has not arrived yet.",
           "chunks": [
-            "think",
-            "a pug",
-            "is the",
-            "best choice",
-            "for small spaces"
+            "the desk",
+            "you ordered",
+            "last week",
+            "has not arrived",
+            "yet"
           ],
-          "prefilled": [
-            "I"
-          ],
-          "prefilled_positions": {
-            "I": 0
-          },
-          "distractor": "choosing",
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "was",
           "has_question_mark": false,
           "grammar_points": [
-            "direct wh-question response",
-            "comparative (best)"
+            "contact clause (relative pronoun omitted)",
+            "negation (has not)",
+            "present perfect"
           ]
         },
         {
           "id": "ets_s1_q5",
-          "prompt": "Where should we meet for coffee tomorrow?",
-          "answer": "Let's meet at the cafe on Maple Street at ten.",
+          "prompt": "What did Alison want?",
+          "answer": "She wanted to know when the project is due.",
           "chunks": [
-            "let's meet",
-            "at the cafe",
-            "on maple street",
-            "at ten"
+            "she wanted",
+            "to know",
+            "when",
+            "the project",
+            "is due"
           ],
           "prefilled": [],
           "prefilled_positions": {},
-          "distractor": "already",
+          "distractor": "does",
           "has_question_mark": false,
           "grammar_points": [
-            "suggestion with let's",
-            "prepositional phrases for location/time"
+            "embedded question (wanted to know + when)"
           ]
         },
         {
           "id": "ets_s1_q6",
-          "prompt": "Have you finished the group project report yet?",
-          "answer": "We have not completed the final section.",
+          "prompt": "What did Emma ask about the trip?",
+          "answer": "She wanted to know if we saw any famous landmarks.",
           "chunks": [
-            "have not",
-            "completed",
-            "the final",
-            "section"
+            "she wanted",
+            "to know",
+            "if",
+            "we",
+            "saw",
+            "any famous landmarks"
           ],
-          "prefilled": [
-            "We"
-          ],
-          "prefilled_positions": {
-            "We": 0
-          },
-          "distractor": null,
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "did",
           "has_question_mark": false,
           "grammar_points": [
-            "negation (have not)"
+            "embedded question (wanted to know + if)"
           ]
         },
         {
           "id": "ets_s1_q7",
-          "prompt": "My friend was wondering about the concert schedule.",
-          "answer": "She wanted to know when the main act starts.",
+          "prompt": "Did you enjoy the workshop?",
+          "answer": "I did not attend the workshop last week.",
           "chunks": [
-            "she",
-            "wanted to know",
-            "when the",
-            "main act starts"
+            "i",
+            "did not",
+            "attend",
+            "the workshop",
+            "last week"
           ],
           "prefilled": [],
           "prefilled_positions": {},
-          "distractor": "planning",
+          "distractor": null,
           "has_question_mark": false,
           "grammar_points": [
-            "embedded question (when clause)",
-            "want + object + to-infinitive"
+            "negation (did not)"
           ]
         },
         {
           "id": "ets_s1_q8",
-          "prompt": "Do you know the schedule for the documentary screening?",
-          "answer": "Can you tell me when the documentary starts?",
+          "prompt": "What did Matthew ask you?",
+          "answer": "He wanted to know if I finished the report.",
           "chunks": [
-            "can you",
-            "tell me",
-            "when",
-            "the documentary",
-            "starts"
+            "he wanted",
+            "to know",
+            "if",
+            "i",
+            "finished",
+            "the report"
           ],
           "prefilled": [],
           "prefilled_positions": {},
-          "distractor": null,
-          "has_question_mark": true,
+          "distractor": "did",
+          "has_question_mark": false,
           "grammar_points": [
-            "embedded question (when clause)"
+            "embedded question (wanted to know + if)"
           ]
         },
         {
           "id": "ets_s1_q9",
-          "prompt": "Do you know when the new documentary about coral reefs is coming out?",
-          "answer": "I have no idea when it will be released.",
+          "prompt": "Can you tell me what Julian said?",
+          "answer": "He wanted to know what time the seminar would start.",
           "chunks": [
-            "have no idea",
-            "when",
-            "it will be",
-            "released"
+            "he wanted",
+            "to know",
+            "what time",
+            "the seminar",
+            "would start"
           ],
-          "prefilled": [
-            "I"
-          ],
-          "prefilled_positions": {
-            "I": 0
-          },
-          "distractor": null,
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "did",
           "has_question_mark": false,
           "grammar_points": [
-            "embedded question (when clause)",
-            "negation (have no)"
+            "embedded question (wanted to know + what)"
           ]
         },
         {
           "id": "ets_s1_q10",
-          "prompt": "I'm not sure how to get to the new art exhibition.",
-          "answer": "Do you know where to find the directions online?",
+          "prompt": "What did Professor Cho ask you?",
+          "answer": "She wanted to know if I had finished the research proposal yet.",
           "chunks": [
-            "do you know",
-            "where to find",
-            "the directions",
-            "online"
+            "she wanted",
+            "to know",
+            "if",
+            "i",
+            "had finished",
+            "the research proposal",
+            "yet"
           ],
           "prefilled": [],
           "prefilled_positions": {},
-          "distractor": null,
-          "has_question_mark": true,
+          "distractor": "did",
+          "has_question_mark": false,
           "grammar_points": [
-            "embedded question",
-            "wh-word + to-infinitive (where to find)"
+            "embedded question (wanted to know + if)",
+            "past perfect"
           ]
         }
       ]
@@ -220,209 +212,199 @@
       "questions": [
         {
           "id": "ets_s2_q1",
-          "prompt": "I'm wondering about the best hiking trail.",
-          "answer": "Can you tell me where the trailhead is located?",
+          "prompt": "Why is Julian late?",
+          "answer": "I have no idea why he is late.",
           "chunks": [
-            "can you",
-            "tell me",
-            "where the",
-            "trailhead is",
-            "located"
+            "i have",
+            "no idea",
+            "why",
+            "he is",
+            "late"
           ],
           "prefilled": [],
           "prefilled_positions": {},
-          "distractor": "if",
-          "has_question_mark": true,
+          "distractor": "not",
+          "has_question_mark": false,
           "grammar_points": [
-            "embedded question"
+            "negation (have no)",
+            "embedded question (why)"
           ]
         },
         {
           "id": "ets_s2_q2",
-          "prompt": "What's your favorite thing to do on weekends?",
-          "answer": "I usually go hiking in the mountains.",
+          "prompt": "What did Emma need to know?",
+          "answer": "She needed to know why the manager had canceled the weekly team meeting.",
           "chunks": [
-            "usually",
-            "go hiking",
-            "in the",
-            "mountains"
+            "she needed",
+            "to know",
+            "why",
+            "the manager",
+            "had canceled",
+            "the weekly",
+            "team meeting"
           ],
-          "prefilled": [
-            "I"
-          ],
-          "prefilled_positions": {
-            "I": 0
-          },
-          "distractor": null,
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "did",
           "has_question_mark": false,
           "grammar_points": [
-            "simple present"
+            "embedded question (needed to know + why)",
+            "past perfect"
           ]
         },
         {
           "id": "ets_s2_q3",
-          "prompt": "Have you booked your flight for the conference yet?",
-          "answer": "I have not booked my flight yet.",
+          "prompt": "Did you enjoy the concert?",
+          "answer": "The concert we attended last night was absolutely fantastic.",
           "chunks": [
-            "have",
-            "not booked",
-            "my flight",
-            "yet"
+            "the concert",
+            "we attended",
+            "last night",
+            "was absolutely",
+            "fantastic"
           ],
-          "prefilled": [
-            "I"
-          ],
-          "prefilled_positions": {
-            "I": 0
-          },
-          "distractor": null,
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "that",
           "has_question_mark": false,
           "grammar_points": [
-            "negation (have not)",
-            "present perfect"
+            "contact clause (concert we attended)"
           ]
         },
         {
           "id": "ets_s2_q4",
-          "prompt": "Have you decided where to go for your vacation?",
-          "answer": "We are still trying to figure that out.",
+          "prompt": "Where did you find that interesting article?",
+          "answer": "The online journal I mentioned in class published it last month.",
           "chunks": [
-            "are still",
-            "trying to",
-            "figure that",
-            "out"
+            "the online journal",
+            "i mentioned",
+            "in class",
+            "published it",
+            "last month"
           ],
-          "prefilled": [
-            "We"
-          ],
-          "prefilled_positions": {
-            "We": 0
-          },
-          "distractor": null,
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "that",
           "has_question_mark": false,
           "grammar_points": [
-            "present continuous",
-            "phrasal verb"
+            "contact clause (journal I mentioned)"
           ]
         },
         {
           "id": "ets_s2_q5",
-          "prompt": "Can you tell me about the documentary you watched?",
-          "answer": "It was about how animals adapt to city life.",
+          "prompt": "Can you tell me what the assignment is?",
+          "answer": "The professor wants to know what the main topic of your paper is.",
           "chunks": [
-            "it",
-            "was about",
-            "how animals",
-            "adapt to",
-            "city life"
+            "the professor wants",
+            "to know",
+            "what",
+            "the main topic",
+            "of your paper",
+            "is"
           ],
           "prefilled": [],
           "prefilled_positions": {},
-          "distractor": "adapting",
+          "distractor": null,
           "has_question_mark": false,
           "grammar_points": [
-            "embedded question (how clause)"
+            "embedded question (wants to know + what)"
           ]
         },
         {
           "id": "ets_s2_q6",
-          "prompt": "Can you tell me if the gym is open on public holidays?",
-          "answer": "I am not sure whether it will be open.",
+          "prompt": "What did Mariana ask you?",
+          "answer": "She asked me when the project report was due.",
           "chunks": [
-            "am not sure",
-            "whether",
-            "it will be",
-            "open"
+            "she asked",
+            "me",
+            "when",
+            "the project report",
+            "was due"
           ],
-          "prefilled": [
-            "I"
-          ],
-          "prefilled_positions": {
-            "I": 0
-          },
-          "distractor": null,
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "did",
           "has_question_mark": false,
           "grammar_points": [
-            "embedded question (whether clause)",
-            "negation (am not)"
+            "embedded question (asked + when)"
           ]
         },
         {
           "id": "ets_s2_q7",
-          "prompt": "I'm trying to plan my trip to the coast next month.",
-          "answer": "Do you know where I can find the best seafood restaurants in that area?",
+          "prompt": "Where did you go for lunch?",
+          "answer": "Mariana was curious about where we decided to eat.",
           "chunks": [
-            "do you know",
+            "mariana was",
+            "curious about",
             "where",
-            "i can find",
-            "the best",
-            "seafood restaurants",
-            "in that area"
+            "we decided",
+            "to eat"
           ],
           "prefilled": [],
           "prefilled_positions": {},
-          "distractor": "there",
-          "has_question_mark": true,
+          "distractor": "did",
+          "has_question_mark": false,
           "grammar_points": [
-            "embedded question (where clause)"
+            "embedded question (was curious about + where)"
           ]
         },
         {
           "id": "ets_s2_q8",
-          "prompt": "What should we bring for the camping trip this weekend?",
-          "answer": "Did you check the list of recommended items?",
+          "prompt": "Why did you leave the meeting early?",
+          "answer": "I had no more questions about the new marketing strategy.",
           "chunks": [
-            "did you",
-            "check",
-            "the list",
-            "of recommended items"
+            "i had",
+            "no more",
+            "questions",
+            "about the new",
+            "marketing strategy"
           ],
           "prefilled": [],
           "prefilled_positions": {},
-          "distractor": "bring",
-          "has_question_mark": true,
+          "distractor": "not",
+          "has_question_mark": false,
           "grammar_points": [
-            "direct yes/no question (did)",
-            "past simple"
+            "negation (had no)"
           ]
         },
         {
           "id": "ets_s2_q9",
-          "prompt": "My boss asked about the project deadline.",
-          "answer": "I am not sure when the final report is due.",
+          "prompt": "What did Professor Cho say?",
+          "answer": "He asked me what time the meeting starts.",
           "chunks": [
-            "i am",
-            "not sure",
-            "when the",
-            "final report",
-            "is due"
+            "he asked",
+            "me",
+            "what time",
+            "the meeting",
+            "starts"
           ],
           "prefilled": [],
           "prefilled_positions": {},
-          "distractor": "planning",
+          "distractor": "does",
           "has_question_mark": false,
           "grammar_points": [
-            "negation",
-            "embedded question (when clause)"
+            "embedded question (asked + what)"
           ]
         },
         {
           "id": "ets_s2_q10",
-          "prompt": "Where can I get a good cup of coffee around here?",
-          "answer": "Do you know where to find the best local roaster?",
+          "prompt": "Can you tell me why the meeting was delayed?",
+          "answer": "Emma was wondering why the manager had not arrived yet.",
           "chunks": [
-            "do you know",
-            "where to find",
-            "the best",
-            "local roaster"
+            "emma was wondering",
+            "why",
+            "the manager",
+            "had not arrived",
+            "yet"
           ],
           "prefilled": [],
           "prefilled_positions": {},
-          "distractor": null,
-          "has_question_mark": true,
+          "distractor": "did",
+          "has_question_mark": false,
           "grammar_points": [
-            "embedded question",
-            "wh-word + to-infinitive"
+            "embedded question (was wondering + why)",
+            "negation (had not)",
+            "past perfect"
           ]
         }
       ]
