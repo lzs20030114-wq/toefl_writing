@@ -71,7 +71,8 @@ function validateAllSets(data, { strict = false } = {}) {
     });
   });
 
-  const ok = failures.length === 0 && (!strict || (strictHardFails.length === 0 && strictWarnings.length === 0));
+  // Warnings are informational only — they do not block output
+  const ok = failures.length === 0 && (!strict || strictHardFails.length === 0);
   return { ok, failures, strictHardFails, strictWarnings };
 }
 

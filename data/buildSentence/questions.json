@@ -1,199 +1,207 @@
 {
   "version": "1.2",
-  "generated_at": "2026-02-16T06:00:11.232Z",
+  "generated_at": "2026-02-16T12:24:50.441Z",
   "question_sets": [
     {
       "set_id": 1,
       "questions": [
         {
           "id": "ets_s1_q1",
-          "prompt": "The campus cafe is introducing a new policy.",
-          "answer": "Reusable mugs are now required to receive a discount.",
+          "prompt": "We need to decide on a gift for the office farewell party.",
+          "answer": "What kind of present would be most appreciated by the entire department?",
           "chunks": [
-            "reusable mugs",
-            "are now",
-            "required",
-            "to receive",
-            "a discount"
+            "what kind",
+            "of present",
+            "would be",
+            "most appreciated",
+            "by the",
+            "entire department"
           ],
           "prefilled": [],
           "prefilled_positions": {},
-          "distractor": null,
-          "has_question_mark": false,
+          "distractor": "gift",
+          "has_question_mark": true,
           "grammar_points": [
-            "passive voice",
-            "infinitive phrase"
+            "wh-question (what kind)",
+            "passive voice"
           ]
         },
         {
           "id": "ets_s1_q2",
-          "prompt": "A student asks about a missed class.",
-          "answer": "Would you mind telling me what the professor discussed yesterday?",
+          "prompt": "What kind of pet is easiest for a small apartment?",
+          "answer": "Which breed of cat is the most low-maintenance?",
           "chunks": [
-            "would you mind",
-            "telling me",
-            "what",
-            "the professor",
-            "discussed",
-            "yesterday"
+            "which breed",
+            "of cat",
+            "is",
+            "the most",
+            "low-maintenance"
           ],
           "prefilled": [],
           "prefilled_positions": {},
           "distractor": null,
           "has_question_mark": true,
           "grammar_points": [
-            "embedded question"
+            "direct wh-question (which + noun)"
           ]
         },
         {
           "id": "ets_s1_q3",
-          "prompt": "A student is talking about a missed class.",
-          "answer": "I wonder if the professor posted the lecture notes online yet.",
+          "prompt": "What kind of animal did you see on your hike?",
+          "answer": "We saw a family of deer near the river.",
           "chunks": [
-            "i wonder",
-            "if",
-            "the professor",
-            "posted",
-            "the lecture notes",
-            "online yet"
+            "saw",
+            "a family",
+            "of deer",
+            "near the river"
           ],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": null,
+          "prefilled": [
+            "We"
+          ],
+          "prefilled_positions": {
+            "We": 0
+          },
+          "distractor": "however",
           "has_question_mark": false,
           "grammar_points": [
-            "embedded question",
-            "present perfect"
+            "direct wh-question response",
+            "past simple"
           ]
         },
         {
           "id": "ets_s1_q4",
-          "prompt": "Two students are discussing a lecture.",
-          "answer": "What did the professor say about the final exam format?",
+          "prompt": "Which breed of dog is best for apartments?",
+          "answer": "I think a pug is the best choice for small spaces.",
           "chunks": [
-            "what",
-            "did the professor",
-            "say",
-            "about",
-            "the final exam",
-            "format"
+            "think",
+            "a pug",
+            "is the",
+            "best choice",
+            "for small spaces"
           ],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": "last week",
-          "has_question_mark": true,
+          "prefilled": [
+            "I"
+          ],
+          "prefilled_positions": {
+            "I": 0
+          },
+          "distractor": "choosing",
+          "has_question_mark": false,
           "grammar_points": [
-            "wh-question",
-            "simple past"
+            "direct wh-question response",
+            "comparative (best)"
           ]
         },
         {
           "id": "ets_s1_q5",
-          "prompt": "Two students discuss a campus event.",
-          "answer": "Do you know what time the guest lecture starts tomorrow?",
+          "prompt": "Where should we meet for coffee tomorrow?",
+          "answer": "Let's meet at the cafe on Maple Street at ten.",
           "chunks": [
-            "do you know",
-            "what time",
-            "the guest lecture",
-            "starts",
-            "tomorrow"
+            "let's meet",
+            "at the cafe",
+            "on maple street",
+            "at ten"
           ],
           "prefilled": [],
           "prefilled_positions": {},
-          "distractor": null,
-          "has_question_mark": true,
+          "distractor": "already",
+          "has_question_mark": false,
           "grammar_points": [
-            "embedded question"
+            "suggestion with let's",
+            "prepositional phrases for location/time"
           ]
         },
         {
           "id": "ets_s1_q6",
-          "prompt": "A student is looking for a quiet place.",
-          "answer": "Would you mind telling me if this study room is available now?",
+          "prompt": "Have you finished the group project report yet?",
+          "answer": "We have not completed the final section.",
           "chunks": [
-            "would you mind",
-            "telling me",
-            "if",
-            "this study room",
-            "is available",
-            "now"
+            "have not",
+            "completed",
+            "the final",
+            "section"
           ],
-          "prefilled": [],
-          "prefilled_positions": {},
+          "prefilled": [
+            "We"
+          ],
+          "prefilled_positions": {
+            "We": 0
+          },
           "distractor": null,
-          "has_question_mark": true,
+          "has_question_mark": false,
           "grammar_points": [
-            "embedded question"
+            "negation (have not)"
           ]
         },
         {
           "id": "ets_s1_q7",
-          "prompt": "A student asks about a missed class.",
-          "answer": "Would you mind telling me what material I missed yesterday?",
+          "prompt": "My friend was wondering about the concert schedule.",
+          "answer": "She wanted to know when the main act starts.",
           "chunks": [
-            "would you mind",
-            "telling me",
-            "what material",
-            "i missed",
-            "yesterday"
+            "she",
+            "wanted to know",
+            "when the",
+            "main act starts"
           ],
           "prefilled": [],
           "prefilled_positions": {},
-          "distractor": "the important",
-          "has_question_mark": true,
+          "distractor": "planning",
+          "has_question_mark": false,
           "grammar_points": [
-            "embedded question"
+            "embedded question (when clause)",
+            "want + object + to-infinitive"
           ]
         },
         {
           "id": "ets_s1_q8",
-          "prompt": "A student is talking to an advisor.",
-          "answer": "I wonder if the deadline has been extended yet.",
+          "prompt": "Do you know the schedule for the documentary screening?",
+          "answer": "Can you tell me when the documentary starts?",
           "chunks": [
-            "i wonder",
-            "if",
-            "the deadline",
-            "has been extended",
-            "yet"
+            "can you",
+            "tell me",
+            "when",
+            "the documentary",
+            "starts"
           ],
           "prefilled": [],
           "prefilled_positions": {},
           "distractor": null,
-          "has_question_mark": false,
+          "has_question_mark": true,
           "grammar_points": [
-            "embedded question",
-            "present perfect"
+            "embedded question (when clause)"
           ]
         },
         {
           "id": "ets_s1_q9",
-          "prompt": "An email was sent to all club members.",
-          "answer": "The meeting was postponed due to unexpected circumstances.",
+          "prompt": "Do you know when the new documentary about coral reefs is coming out?",
+          "answer": "I have no idea when it will be released.",
           "chunks": [
-            "the meeting",
-            "was postponed",
-            "due to",
-            "unexpected circumstances",
-            "."
+            "have no idea",
+            "when",
+            "it will be",
+            "released"
           ],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": "cancelled",
+          "prefilled": [
+            "I"
+          ],
+          "prefilled_positions": {
+            "I": 0
+          },
+          "distractor": null,
           "has_question_mark": false,
           "grammar_points": [
-            "passive voice",
-            "prepositional phrase"
+            "embedded question (when clause)",
+            "negation (have no)"
           ]
         },
         {
           "id": "ets_s1_q10",
-          "prompt": "A student is emailing a department secretary.",
-          "answer": "Can you explain how I submit my application online?",
+          "prompt": "I'm not sure how to get to the new art exhibition.",
+          "answer": "Do you know where to find the directions online?",
           "chunks": [
-            "can you explain",
-            "how i",
-            "submit",
-            "my application",
+            "do you know",
+            "where to find",
+            "the directions",
             "online"
           ],
           "prefilled": [],
@@ -201,7 +209,8 @@
           "distractor": null,
           "has_question_mark": true,
           "grammar_points": [
-            "embedded question"
+            "embedded question",
+            "wh-word + to-infinitive (where to find)"
           ]
         }
       ]
@@ -211,611 +220,209 @@
       "questions": [
         {
           "id": "ets_s2_q1",
-          "prompt": "A student asks about a missed class.",
-          "answer": "Would you mind telling me what material was covered yesterday?",
+          "prompt": "I'm wondering about the best hiking trail.",
+          "answer": "Can you tell me where the trailhead is located?",
           "chunks": [
-            "would you mind",
-            "telling me",
-            "what material",
-            "was covered",
-            "yesterday"
+            "can you",
+            "tell me",
+            "where the",
+            "trailhead is",
+            "located"
           ],
           "prefilled": [],
           "prefilled_positions": {},
-          "distractor": null,
+          "distractor": "if",
           "has_question_mark": true,
           "grammar_points": [
-            "embedded question",
-            "passive voice"
+            "embedded question"
           ]
         },
         {
           "id": "ets_s2_q2",
-          "prompt": "An email from the housing office.",
-          "answer": "When will the application results for dormitory rooms be announced?",
+          "prompt": "What's your favorite thing to do on weekends?",
+          "answer": "I usually go hiking in the mountains.",
           "chunks": [
-            "when",
-            "will",
-            "the application results",
-            "for dormitory rooms",
-            "be announced"
+            "usually",
+            "go hiking",
+            "in the",
+            "mountains"
           ],
-          "prefilled": [],
-          "prefilled_positions": {},
+          "prefilled": [
+            "I"
+          ],
+          "prefilled_positions": {
+            "I": 0
+          },
           "distractor": null,
-          "has_question_mark": true,
+          "has_question_mark": false,
           "grammar_points": [
-            "embedded question",
-            "passive voice",
-            "future tense"
+            "simple present"
           ]
         },
         {
           "id": "ets_s2_q3",
-          "prompt": "A student is confused about the course schedule.",
-          "answer": "Do you know where our psychology class is being held this afternoon?",
+          "prompt": "Have you booked your flight for the conference yet?",
+          "answer": "I have not booked my flight yet.",
           "chunks": [
-            "do you know",
-            "where",
-            "our psychology class",
-            "is being held",
-            "this afternoon"
+            "have",
+            "not booked",
+            "my flight",
+            "yet"
           ],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": "tomorrow morning",
-          "has_question_mark": true,
-          "grammar_points": [
-            "embedded question",
-            "present continuous passive"
-          ]
-        },
-        {
-          "id": "ets_s2_q4",
-          "prompt": "A student missed an important lecture.",
-          "answer": "Can you explain what the professor said yesterday?",
-          "chunks": [
-            "can you explain",
-            "what",
-            "the professor",
-            "said",
-            "yesterday"
+          "prefilled": [
+            "I"
           ],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": null,
-          "has_question_mark": true,
-          "grammar_points": [
-            "embedded question"
-          ]
-        },
-        {
-          "id": "ets_s2_q5",
-          "prompt": "A student is emailing a department.",
-          "answer": "Can you tell me where the chemistry lab is located?",
-          "chunks": [
-            "can you",
-            "tell me",
-            "where",
-            "the chemistry lab",
-            "is located"
-          ],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": null,
-          "has_question_mark": true,
-          "grammar_points": [
-            "embedded question",
-            "modal verb"
-          ]
-        },
-        {
-          "id": "ets_s2_q6",
-          "prompt": "A student discusses a group project with a classmate.",
-          "answer": "Have you decided which topic our presentation will focus on next week?",
-          "chunks": [
-            "have you decided",
-            "which topic",
-            "our presentation",
-            "will focus on",
-            "next week"
-          ],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": "last month",
-          "has_question_mark": true,
-          "grammar_points": [
-            "embedded question"
-          ]
-        },
-        {
-          "id": "ets_s2_q7",
-          "prompt": "A student is confused about an assignment.",
-          "answer": "Do you know when the research paper is due?",
-          "chunks": [
-            "do you know",
-            "when",
-            "the research paper",
-            "is",
-            "due"
-          ],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": null,
-          "has_question_mark": true,
-          "grammar_points": [
-            "embedded question",
-            "present simple"
-          ]
-        },
-        {
-          "id": "ets_s2_q8",
-          "prompt": "Two students are planning a study session.",
-          "answer": "Would you mind telling me what the main topics for the review are?",
-          "chunks": [
-            "would you mind",
-            "telling me",
-            "what",
-            "the main topics",
-            "for the review",
-            "are"
-          ],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": null,
-          "has_question_mark": true,
-          "grammar_points": [
-            "embedded question",
-            "gerund phrase",
-            "polite request"
-          ]
-        },
-        {
-          "id": "ets_s2_q9",
-          "prompt": "Two students are discussing a lecture.",
-          "answer": "I did not understand what the professor meant.",
-          "chunks": [
-            "i did not",
-            "understand",
-            "what",
-            "the professor",
-            "meant"
-          ],
-          "prefilled": [],
-          "prefilled_positions": {},
+          "prefilled_positions": {
+            "I": 0
+          },
           "distractor": null,
           "has_question_mark": false,
           "grammar_points": [
-            "embedded question",
-            "past tense"
-          ]
-        },
-        {
-          "id": "ets_s2_q10",
-          "prompt": "A student is discussing a group project.",
-          "answer": "I wonder if we should meet on Friday afternoon.",
-          "chunks": [
-            "i wonder",
-            "if",
-            "we should meet",
-            "on friday",
-            "afternoon"
-          ],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": "tomorrow morning",
-          "has_question_mark": false,
-          "grammar_points": [
-            "embedded question"
-          ]
-        }
-      ]
-    },
-    {
-      "set_id": 3,
-      "questions": [
-        {
-          "id": "ets_s3_q1",
-          "prompt": "A student is confused about the course selection website.",
-          "answer": "Could you clarify which prerequisite courses I need to complete first?",
-          "chunks": [
-            "could you clarify",
-            "which",
-            "prerequisite courses",
-            "i need to",
-            "complete first"
-          ],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": null,
-          "has_question_mark": true,
-          "grammar_points": [
-            "embedded question",
-            "relative clause"
-          ]
-        },
-        {
-          "id": "ets_s3_q2",
-          "prompt": "A student is emailing the housing office.",
-          "answer": "Do you know when the dormitory application deadline is?",
-          "chunks": [
-            "do you know",
-            "when",
-            "the dormitory application",
-            "deadline",
-            "is"
-          ],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": "submitted",
-          "has_question_mark": true,
-          "grammar_points": [
-            "embedded question"
-          ]
-        },
-        {
-          "id": "ets_s3_q3",
-          "prompt": "A student is confused about an assignment.",
-          "answer": "Would you mind telling me what the main topic is?",
-          "chunks": [
-            "would you mind",
-            "telling me",
-            "what",
-            "the main topic",
-            "is"
-          ],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": null,
-          "has_question_mark": true,
-          "grammar_points": [
-            "embedded question",
-            "polite request"
-          ]
-        },
-        {
-          "id": "ets_s3_q4",
-          "prompt": "Planning a group study session.",
-          "answer": "I wonder what time everyone is available tomorrow.",
-          "chunks": [
-            "i wonder",
-            "what time",
-            "everyone",
-            "is available",
-            "tomorrow"
-          ],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": null,
-          "has_question_mark": false,
-          "grammar_points": [
-            "embedded question"
-          ]
-        },
-        {
-          "id": "ets_s3_q5",
-          "prompt": "Two students are discussing a group project.",
-          "answer": "I wonder if we need to schedule another meeting this week.",
-          "chunks": [
-            "i wonder",
-            "if",
-            "we need to",
-            "schedule",
-            "another meeting",
-            "this week"
-          ],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": null,
-          "has_question_mark": false,
-          "grammar_points": [
-            "embedded question",
-            "verb pattern"
-          ]
-        },
-        {
-          "id": "ets_s3_q6",
-          "prompt": "Two students are planning their weekend.",
-          "answer": "Would you mind telling me what time the film starts?",
-          "chunks": [
-            "would you mind",
-            "telling me",
-            "what time",
-            "the film",
-            "starts"
-          ],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": null,
-          "has_question_mark": true,
-          "grammar_points": [
-            "embedded question",
-            "gerund"
-          ]
-        },
-        {
-          "id": "ets_s3_q7",
-          "prompt": "A student is talking to an advisor.",
-          "answer": "I wonder if I should change my major to environmental science.",
-          "chunks": [
-            "i wonder",
-            "if",
-            "i should change",
-            "my major",
-            "to",
-            "environmental science"
-          ],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": "take more classes",
-          "has_question_mark": false,
-          "grammar_points": [
-            "embedded question"
-          ]
-        },
-        {
-          "id": "ets_s3_q8",
-          "prompt": "The campus wifi is unreliable in the dorms.",
-          "answer": "Students often complain about the slow internet connection there.",
-          "chunks": [
-            "students often",
-            "complain about",
-            "the slow",
-            "internet connection",
-            "there"
-          ],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": null,
-          "has_question_mark": false,
-          "grammar_points": [
-            "adverb of frequency",
-            "prepositional phrase"
-          ]
-        },
-        {
-          "id": "ets_s3_q9",
-          "prompt": "An email was sent to all club members.",
-          "answer": "Could you please let me know who is leading the next meeting?",
-          "chunks": [
-            "could you please",
-            "let me know",
-            "who",
-            "is leading",
-            "the next meeting"
-          ],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": null,
-          "has_question_mark": true,
-          "grammar_points": [
-            "embedded question",
-            "polite request"
-          ]
-        },
-        {
-          "id": "ets_s3_q10",
-          "prompt": "A student is confused about an assignment.",
-          "answer": "Can you explain how the final project will be graded?",
-          "chunks": [
-            "can you explain",
-            "how",
-            "the final project",
-            "will be",
-            "graded"
-          ],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": null,
-          "has_question_mark": true,
-          "grammar_points": [
-            "embedded question",
-            "passive voice"
-          ]
-        }
-      ]
-    },
-    {
-      "set_id": 4,
-      "questions": [
-        {
-          "id": "ets_s4_q1",
-          "prompt": "Could you tell me",
-          "answer": "Could you tell me where the main auditorium is located?",
-          "chunks": [
-            "could you",
-            "tell me",
-            "where",
-            "the main auditorium",
-            "is located"
-          ],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": null,
-          "has_question_mark": true,
-          "grammar_points": [
-            "embedded question"
-          ]
-        },
-        {
-          "id": "ets_s4_q2",
-          "prompt": "An announcement about the science lab.",
-          "answer": "All equipment must be thoroughly cleaned after each experiment.",
-          "chunks": [
-            "all equipment",
-            "must be",
-            "thoroughly cleaned",
-            "after",
-            "each experiment"
-          ],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": null,
-          "has_question_mark": false,
-          "grammar_points": [
-            "passive voice",
-            "modal verb",
-            "adverb"
-          ]
-        },
-        {
-          "id": "ets_s4_q3",
-          "prompt": "The lab report requirements are unclear.",
-          "answer": "Would you mind clarifying how long the report should be?",
-          "chunks": [
-            "would you mind",
-            "clarifying",
-            "how long",
-            "the report",
-            "should be"
-          ],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": "submitting it early",
-          "has_question_mark": true,
-          "grammar_points": [
-            "embedded question"
-          ]
-        },
-        {
-          "id": "ets_s4_q4",
-          "prompt": "A student is asking about a missed assignment.",
-          "answer": "Could you clarify whether the late penalty applies in this situation?",
-          "chunks": [
-            "could you clarify",
-            "whether",
-            "the late penalty",
-            "applies",
-            "in this situation"
-          ],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": null,
-          "has_question_mark": true,
-          "grammar_points": [
-            "embedded question"
-          ]
-        },
-        {
-          "id": "ets_s4_q5",
-          "prompt": "Two students discuss a problem.",
-          "answer": "I wonder why the lecture was canceled yesterday.",
-          "chunks": [
-            "i wonder",
-            "why",
-            "the lecture",
-            "was canceled",
-            "yesterday"
-          ],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": null,
-          "has_question_mark": false,
-          "grammar_points": [
-            "embedded question"
-          ]
-        },
-        {
-          "id": "ets_s4_q6",
-          "prompt": "Asking about a professor's policy.",
-          "answer": "Could you clarify whether late submissions will be accepted under any circumstances?",
-          "chunks": [
-            "could you clarify",
-            "whether",
-            "late submissions",
-            "will be accepted",
-            "under any circumstances"
-          ],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": "by the professor",
-          "has_question_mark": true,
-          "grammar_points": [
-            "embedded question",
-            "passive voice"
-          ]
-        },
-        {
-          "id": "ets_s4_q7",
-          "prompt": "A student is asking about a missed assignment.",
-          "answer": "Can you tell me what the deadline for the essay is?",
-          "chunks": [
-            "can you",
-            "tell me",
-            "what",
-            "the deadline",
-            "for the essay",
-            "is"
-          ],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": null,
-          "has_question_mark": true,
-          "grammar_points": [
-            "embedded question",
-            "yes/no question"
-          ]
-        },
-        {
-          "id": "ets_s4_q8",
-          "prompt": "Two students are discussing their schedules.",
-          "answer": "I wonder if the psychology lecture has been canceled.",
-          "chunks": [
-            "i wonder",
-            "if",
-            "the psychology lecture",
-            "has been",
-            "canceled"
-          ],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": null,
-          "has_question_mark": false,
-          "grammar_points": [
-            "embedded question",
+            "negation (have not)",
             "present perfect"
           ]
         },
         {
-          "id": "ets_s4_q9",
-          "prompt": "The campus newsletter is announcing a change.",
-          "answer": "The new policy will be implemented starting next semester.",
+          "id": "ets_s2_q4",
+          "prompt": "Have you decided where to go for your vacation?",
+          "answer": "We are still trying to figure that out.",
           "chunks": [
-            "the new policy",
-            "will be",
-            "implemented",
-            "starting",
-            "next semester"
+            "are still",
+            "trying to",
+            "figure that",
+            "out"
+          ],
+          "prefilled": [
+            "We"
+          ],
+          "prefilled_positions": {
+            "We": 0
+          },
+          "distractor": null,
+          "has_question_mark": false,
+          "grammar_points": [
+            "present continuous",
+            "phrasal verb"
+          ]
+        },
+        {
+          "id": "ets_s2_q5",
+          "prompt": "Can you tell me about the documentary you watched?",
+          "answer": "It was about how animals adapt to city life.",
+          "chunks": [
+            "it",
+            "was about",
+            "how animals",
+            "adapt to",
+            "city life"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "adapting",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question (how clause)"
+          ]
+        },
+        {
+          "id": "ets_s2_q6",
+          "prompt": "Can you tell me if the gym is open on public holidays?",
+          "answer": "I am not sure whether it will be open.",
+          "chunks": [
+            "am not sure",
+            "whether",
+            "it will be",
+            "open"
+          ],
+          "prefilled": [
+            "I"
+          ],
+          "prefilled_positions": {
+            "I": 0
+          },
+          "distractor": null,
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question (whether clause)",
+            "negation (am not)"
+          ]
+        },
+        {
+          "id": "ets_s2_q7",
+          "prompt": "I'm trying to plan my trip to the coast next month.",
+          "answer": "Do you know where I can find the best seafood restaurants in that area?",
+          "chunks": [
+            "do you know",
+            "where",
+            "i can find",
+            "the best",
+            "seafood restaurants",
+            "in that area"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "there",
+          "has_question_mark": true,
+          "grammar_points": [
+            "embedded question (where clause)"
+          ]
+        },
+        {
+          "id": "ets_s2_q8",
+          "prompt": "What should we bring for the camping trip this weekend?",
+          "answer": "Did you check the list of recommended items?",
+          "chunks": [
+            "did you",
+            "check",
+            "the list",
+            "of recommended items"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "bring",
+          "has_question_mark": true,
+          "grammar_points": [
+            "direct yes/no question (did)",
+            "past simple"
+          ]
+        },
+        {
+          "id": "ets_s2_q9",
+          "prompt": "My boss asked about the project deadline.",
+          "answer": "I am not sure when the final report is due.",
+          "chunks": [
+            "i am",
+            "not sure",
+            "when the",
+            "final report",
+            "is due"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "planning",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation",
+            "embedded question (when clause)"
+          ]
+        },
+        {
+          "id": "ets_s2_q10",
+          "prompt": "Where can I get a good cup of coffee around here?",
+          "answer": "Do you know where to find the best local roaster?",
+          "chunks": [
+            "do you know",
+            "where to find",
+            "the best",
+            "local roaster"
           ],
           "prefilled": [],
           "prefilled_positions": {},
           "distractor": null,
-          "has_question_mark": false,
-          "grammar_points": [
-            "passive voice"
-          ]
-        },
-        {
-          "id": "ets_s4_q10",
-          "prompt": "A group is planning their final project.",
-          "answer": "Have we decided who is going to present our findings to the class?",
-          "chunks": [
-            "have we",
-            "decided",
-            "who",
-            "is going to",
-            "present",
-            "our findings",
-            "to the class"
-          ],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": "written report",
           "has_question_mark": true,
           "grammar_points": [
             "embedded question",
-            "present perfect",
-            "future intention"
+            "wh-word + to-infinitive"
           ]
         }
       ]

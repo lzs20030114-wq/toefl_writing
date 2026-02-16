@@ -59,6 +59,11 @@ describe("validate-bank strict mode", () => {
 
     const out = validateAllSets(data, { strict: true });
     expect(out.ok).toBe(false);
-    expect(out.strictHardFails.some((x) => x.reasons.join(" ").includes("multiple prefilled chunks"))).toBe(true);
+    expect(
+      out.strictHardFails.some((x) => {
+        const msg = x.reasons.join(" ");
+        return msg.includes("multiple prefilled chunks") || msg.includes("prefilled_positions");
+      }),
+    ).toBe(true);
   });
 });

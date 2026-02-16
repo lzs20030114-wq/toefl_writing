@@ -22,7 +22,7 @@ export function BuildSentenceTask({ onExit, questions }) {
     hoverBank,
     setHoverSlot,
     setHoverBank,
-    prefilledChunks,
+    givenSlots,
     allFilled,
     punct,
     startTimer,
@@ -176,9 +176,10 @@ export function BuildSentenceTask({ onExit, questions }) {
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8, minHeight: 48, alignItems: "center", lineHeight: 1.6 }}>
             {Array.from({ length: slots.length + 1 }, (_, i) => i).map((i) => (
               <React.Fragment key={`resp-${i}`}>
-                {prefilledChunks.length > 0 && q.givenIndex === i && (
+                {givenSlots.filter((gs) => gs.givenIndex === i).map((gs, gi) => (
                   <span
-                    data-testid="given-token"
+                    key={`given-${i}-${gi}`}
+                    data-testid={`given-token-${i}`}
                     style={{
                       fontSize: 14,
                       color: "#666",
@@ -190,9 +191,9 @@ export function BuildSentenceTask({ onExit, questions }) {
                       opacity: 0.8,
                     }}
                   >
-                    {prefilledChunks[0]}
+                    {gs.chunk}
                   </span>
-                )}
+                ))}
                 {i < slots.length && (
                   <div
                     key={`slot-${i}`}

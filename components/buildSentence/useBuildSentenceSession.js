@@ -53,8 +53,11 @@ export function useBuildSentenceSession(questions) {
     const slotCount = q.answerOrder.length;
     const nextSlots = Array(slotCount).fill(null);
 
-    if (shuffled.length !== q.answerOrder.length || nextSlots.length !== q.answerOrder.length) {
-      const msg = `题库数据异常（id=${q.id}）：slots/bank 与 answerOrder 长度不一致`;
+    // bank may be answerOrder.length (no distractor) or answerOrder.length + 1 (with distractor)
+    const hasDistractor = q.distractor != null;
+    const expectedBankLen = hasDistractor ? slotCount + 1 : slotCount;
+    if (shuffled.length !== expectedBankLen) {
+      const msg = `题库数据异常（id=${q.id}）：bank 长度 ${shuffled.length} 与预期 ${expectedBankLen} 不一致`;
       setToast(msg);
       throw new Error(msg);
     }
@@ -241,7 +244,7 @@ export function useBuildSentenceSession(questions) {
   }
 
   const q = qs[idx];
-  const prefilledChunks = useMemo(() => (q?.given ? [q.given] : []), [q]);
+  const givenSlots = useMemo(() => (Array.isArray(q?.givenSlots) ? q.givenSlots : q?.given ? [{ chunk: q.given, givenIndex: q.givenIndex || 0 }] : []), [q]);
   const allFilled = slots.length > 0 && slots.every((s) => s !== null);
   const punct = q?.responseSuffix || (q?.has_question_mark ? "?" : ".");
 
@@ -263,7 +266,7 @@ export function useBuildSentenceSession(questions) {
     hoverBank,
     setHoverSlot,
     setHoverBank,
-    prefilledChunks,
+    givenSlots,
     allFilled,
     punct,
     startTimer,

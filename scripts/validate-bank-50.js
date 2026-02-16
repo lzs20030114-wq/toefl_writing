@@ -3,6 +3,7 @@ const path = require('path');
 const { validateQuestionSet } = require('../lib/questionBank/buildSentenceSchema');
 const { normalizeRuntimeQuestion, validateRuntimeQuestion, renderCorrectSentence, normalizeWord, splitWords } = require('../lib/questionBank/runtimeModel');
 const { evaluateSetDifficultyAgainstTarget, formatDifficultyProfile } = require('../lib/questionBank/difficultyControl');
+const { ETS_STYLE_TARGETS } = require('../lib/questionBank/etsProfile');
 
 const file = path.join(__dirname, '..', 'data', 'buildSentence', 'questions.json');
 const data = JSON.parse(fs.readFileSync(file, 'utf8'));
@@ -81,11 +82,18 @@ for (let i = 0; i < rounds; i++) {
   if (formatOk) passFormat += 1;
   if (givenOk && runtimeOk) passGiven += 1;
 
-  const embeddedCount = questions.filter((q) => hasPattern(q, ['embedded question', 'whether', 'how many', 'how long', 'how)'])).length;
+  const embeddedCount = questions.filter((q) => hasPattern(q, ['embedded', 'indirect question', 'whether', 'if'])).length;
   const qMarkCount = questions.filter((q) => q.has_question_mark === true).length;
   const distractorCount = questions.filter((q) => q.distractor != null).length;
   const passiveCount = questions.filter((q) => hasPattern(q, ['passive'])).length;
-  const etsOk = embeddedCount >= 5 && qMarkCount >= 6 && distractorCount >= 2 && distractorCount <= 3 && passiveCount >= 1;
+  const etsOk =
+    embeddedCount >= ETS_STYLE_TARGETS.embeddedMin &&
+    embeddedCount <= ETS_STYLE_TARGETS.embeddedMax &&
+    qMarkCount >= ETS_STYLE_TARGETS.qmarkMin &&
+    qMarkCount <= ETS_STYLE_TARGETS.qmarkMax &&
+    distractorCount >= ETS_STYLE_TARGETS.distractorMin &&
+    distractorCount <= ETS_STYLE_TARGETS.distractorMax &&
+    passiveCount >= ETS_STYLE_TARGETS.passiveMin;
   if (etsOk) passEts += 1;
   else failures.push(`[round ${i+1} set ${setId}] ETS profile fail: embedded=${embeddedCount}, qmark=${qMarkCount}, distractor=${distractorCount}, passive=${passiveCount}`);
 
