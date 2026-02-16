@@ -31,7 +31,7 @@ export function useBuildSentenceSession(questions) {
   const [bank, setBank] = useState([]);
   const [results, setResults] = useState([]);
   const [phase, setPhase] = useState("instruction");
-  const [tl, setTl] = useState(350);
+  const [tl, setTl] = useState(410);
   const [run, setRun] = useState(false);
   const [toast, setToast] = useState(initialBuildState.error || null);
 

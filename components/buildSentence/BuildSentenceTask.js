@@ -119,7 +119,7 @@ export function BuildSentenceTask({ onExit, questions }) {
             <div style={{ fontSize: 14, color: C.t1, lineHeight: 1.8 }}>
               <p><b>Directions:</b> Use the word chunks below to build a grammatically correct sentence. Some words may already be placed for you. One chunk may be a distractor that does not belong.</p>
               <p><b>Questions:</b> 10</p>
-              <p><b>Time limit:</b> 5 minutes 50 seconds</p>
+              <p><b>Time limit:</b> 6 minutes 50 seconds</p>
               <p>The timer will start when you click <b>Start</b>. When time runs out, your answers will be submitted automatically.</p>
             </div>
             <div style={{ marginTop: 24, textAlign: "center" }}><Btn data-testid="build-start" onClick={startTimer}>Start</Btn></div>
