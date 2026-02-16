@@ -3,7 +3,7 @@ import React from "react";
 import { C, FONT, Btn, Toast, TopBar } from "../shared/ui";
 import { useBuildSentenceSession } from "./useBuildSentenceSession";
 
-export function BuildSentenceTask({ onExit, questions }) {
+export function BuildSentenceTask({ onExit, questions, embedded = false, persistSession = true, onComplete = null, onTimerChange = null }) {
   const {
     qs,
     q,
@@ -35,7 +35,7 @@ export function BuildSentenceTask({ onExit, questions }) {
     onDragEnd,
     onDropSlot,
     onDropBank,
-  } = useBuildSentenceSession(questions);
+  } = useBuildSentenceSession(questions, { persistSession, onComplete, onTimerChange });
 
   if (phase === "review") {
     const ok = results.filter((r) => r.isCorrect).length;
@@ -52,7 +52,7 @@ export function BuildSentenceTask({ onExit, questions }) {
     return (
       <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
         {toast && <Toast message={toast} onClose={() => setToast(null)} />}
-        <TopBar title="Build a Sentence Report" section="Writing" onExit={onExit} />
+        {!embedded && <TopBar title="Build a Sentence Report" section="Writing" onExit={onExit} />}
         <div style={{ maxWidth: 760, margin: "24px auto", padding: "0 20px" }}>
           <div style={{ background: C.nav, color: "#fff", borderRadius: 6, padding: 24, textAlign: "center", marginBottom: 20 }}>
             <div style={{ fontSize: 48, fontWeight: 800 }}>{ok}/{results.length}</div>
@@ -86,7 +86,7 @@ export function BuildSentenceTask({ onExit, questions }) {
             </div>
           ))}
           <div style={{ display: "flex", gap: 12, marginTop: 20 }}>
-            <Btn onClick={onExit} variant="secondary">Back to Practice</Btn>
+            <Btn onClick={onExit} variant="secondary">{embedded ? "Back" : "Back to Practice"}</Btn>
           </div>
         </div>
       </div>
@@ -97,12 +97,12 @@ export function BuildSentenceTask({ onExit, questions }) {
     return (
       <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
         {toast && <Toast message={toast} onClose={() => setToast(null)} />}
-        <TopBar title="Build a Sentence" section="Writing | Task 1" onExit={onExit} />
+        {!embedded && <TopBar title="Build a Sentence" section="Writing | Task 1" onExit={onExit} />}
         <div style={{ maxWidth: 760, margin: "24px auto", padding: "0 20px" }}>
           <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 28 }}>
             <div style={{ fontSize: 16, fontWeight: 700, color: C.red, marginBottom: 8 }}>Question bank blocked by quality gate</div>
             <div style={{ fontSize: 14, color: C.t2, marginBottom: 16 }}>{selectionError}</div>
-            <Btn onClick={onExit} variant="secondary">Back to Practice</Btn>
+            <Btn onClick={onExit} variant="secondary">{embedded ? "Back" : "Back to Practice"}</Btn>
           </div>
         </div>
       </div>
@@ -112,7 +112,7 @@ export function BuildSentenceTask({ onExit, questions }) {
   if (phase === "instruction") {
     return (
       <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
-        <TopBar title="Build a Sentence" section="Writing | Task 1" onExit={onExit} />
+        {!embedded && <TopBar title="Build a Sentence" section="Writing | Task 1" onExit={onExit} />}
         <div style={{ maxWidth: 760, margin: "24px auto", padding: "0 20px" }}>
           <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: "32px 40px" }}>
             <h2 style={{ margin: "0 0 16px", fontSize: 20, color: C.nav }}>Task 1: Build a Sentence</h2>
@@ -163,7 +163,7 @@ export function BuildSentenceTask({ onExit, questions }) {
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
-      <TopBar title="Build a Sentence" section="Writing | Task 1" timeLeft={tl} isRunning={run} qInfo={idx + 1 + " / " + qs.length} onExit={onExit} />
+      {!embedded && <TopBar title="Build a Sentence" section="Writing | Task 1" timeLeft={tl} isRunning={run} qInfo={idx + 1 + " / " + qs.length} onExit={onExit} />}
       <div style={{ maxWidth: 760, margin: "24px auto", padding: "0 20px" }}>
         <div style={{ background: C.ltB, border: "1px solid #b3d4fc", borderRadius: 4, padding: 14, marginBottom: 20, fontSize: 13 }}>
           <b>Directions:</b> Use the word chunks below to build a grammatically correct sentence. One chunk may be a distractor.
@@ -270,4 +270,3 @@ export function BuildSentenceTask({ onExit, questions }) {
     </div>
   );
 }
-

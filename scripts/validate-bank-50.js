@@ -86,6 +86,7 @@ for (let i = 0; i < rounds; i++) {
   const qMarkCount = questions.filter((q) => q.has_question_mark === true).length;
   const distractorCount = questions.filter((q) => q.distractor != null).length;
   const passiveCount = questions.filter((q) => hasPattern(q, ['passive'])).length;
+  const passiveGateEnabled = Number.isFinite(ETS_STYLE_TARGETS.passiveMin);
   const etsOk =
     embeddedCount >= ETS_STYLE_TARGETS.embeddedMin &&
     embeddedCount <= ETS_STYLE_TARGETS.embeddedMax &&
@@ -93,9 +94,9 @@ for (let i = 0; i < rounds; i++) {
     qMarkCount <= ETS_STYLE_TARGETS.qmarkMax &&
     distractorCount >= ETS_STYLE_TARGETS.distractorMin &&
     distractorCount <= ETS_STYLE_TARGETS.distractorMax &&
-    passiveCount >= ETS_STYLE_TARGETS.passiveMin;
+    (!passiveGateEnabled || passiveCount >= ETS_STYLE_TARGETS.passiveMin);
   if (etsOk) passEts += 1;
-  else failures.push(`[round ${i+1} set ${setId}] ETS profile fail: embedded=${embeddedCount}, qmark=${qMarkCount}, distractor=${distractorCount}, passive=${passiveCount}`);
+  else failures.push(`[round ${i+1} set ${setId}] style profile fail: embedded=${embeddedCount}, qmark=${qMarkCount}, distractor=${distractorCount}, passive=${passiveCount}`);
 
   const diff = evaluateSetDifficultyAgainstTarget(normalizedQuestions);
   const diffOk = diff.ok;
@@ -107,7 +108,7 @@ console.log('=== 50-Group Strict Validation Report ===');
 console.log(`Groups: ${rounds}`);
 console.log(`Format+Runtime strict: ${passFormat}/${rounds}`);
 console.log(`Given position consistency: ${passGiven}/${rounds}`);
-console.log(`ETS-like profile checks: ${passEts}/${rounds}`);
+console.log(`TPO-style profile checks: ${passEts}/${rounds}`);
 console.log(`Difficulty ratio similarity (heuristic): ${passDifficulty}/${rounds}`);
 
 if (failures.length > 0) {

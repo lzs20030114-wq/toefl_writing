@@ -1,0 +1,146 @@
+"use client";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { C, FONT, TopBar } from "../shared/ui";
+import { mockExamRunner } from "../../lib/mockExam/runner";
+import { MOCK_EXAM_STATUS, TASK_IDS } from "../../lib/mockExam/contracts";
+import { loadMockExamHistory, saveMockExamSession } from "../../lib/mockExam/storage";
+import { upsertMockSess } from "../../lib/sessionStore";
+import { buildPersistPayload, finalizeDeferredScoringSession } from "../../lib/mockExam/service";
+import { evaluateWritingResponse } from "../../lib/ai/writingEval";
+import { SectionTimerPanel } from "./SectionTimerPanel";
+import { MockExamStartCard } from "./MockExamStartCard";
+import { MockExamMainPanel } from "./MockExamMainPanel";
+
+export function MockExamShell({ onExit }) {
+  const [session, setSession] = useState(null);
+  const [hist] = useState(() => loadMockExamHistory());
+  const [sectionTimer, setSectionTimer] = useState(null);
+  const [scoringPhase, setScoringPhase] = useState("idle"); // idle | pending | done | error
+  const [scoringError, setScoringError] = useState("");
+  const finalizedSessionIdsRef = useRef(new Set());
+
+  const progress = useMemo(() => mockExamRunner.getExamProgress(session), [session]);
+  const currentTask = useMemo(() => mockExamRunner.getCurrentTask(session), [session]);
+
+  function persistFinalSession(finalSession, phase = "done", err = "") {
+    const payload = buildPersistPayload(finalSession, { phase, error: err });
+    saveMockExamSession(payload.sessionSnapshot);
+    upsertMockSess(payload.historyPayload, payload.mockSessionId);
+  }
+
+  function startExam() {
+    const next = mockExamRunner.startNewExam();
+    setSession(next);
+    setSectionTimer(null);
+    setScoringPhase("idle");
+    setScoringError("");
+  }
+
+  function submitTaskResult(payload) {
+    if (!session) return;
+    const next = mockExamRunner.submitAndAdvance(session, payload);
+    setSession(next);
+  }
+
+  function abortExam() {
+    if (!session) return;
+    const next = mockExamRunner.abort(session);
+    setSession(next);
+    persistFinalSession(next, "aborted", "");
+  }
+
+  useEffect(() => {
+    async function finalizeDeferredScoring() {
+      if (!session || session.status !== MOCK_EXAM_STATUS.COMPLETED) return;
+      if (scoringPhase !== "idle") return;
+      if (finalizedSessionIdsRef.current.has(session.id)) return;
+      const hasDeferred = [TASK_IDS.EMAIL_WRITING, TASK_IDS.ACADEMIC_WRITING].some((taskId) => {
+        const a = session.attempts?.[taskId];
+        return a && a.score == null && a.meta?.deferredPayload;
+      });
+      if (!hasDeferred) {
+        persistFinalSession(session, "done", "");
+        finalizedSessionIdsRef.current.add(session.id);
+        return;
+      }
+
+      setScoringPhase("pending");
+      setScoringError("");
+
+      try {
+        const result = await finalizeDeferredScoringSession(session, {
+          evaluateResponse: evaluateWritingResponse,
+          updateTaskScore: mockExamRunner.updateTaskScore,
+        });
+
+        setSession(result.session);
+        setScoringError(result.error || "");
+        persistFinalSession(result.session, result.phase, result.error || "");
+        setScoringPhase(result.phase);
+        finalizedSessionIdsRef.current.add(result.session.id);
+      } catch (e) {
+        const msg = e?.message || "AI scoring failed";
+        setScoringError(msg);
+        setSession(session);
+        persistFinalSession(session, "error", msg);
+        finalizedSessionIdsRef.current.add(session.id);
+        setScoringPhase("error");
+      }
+    }
+
+    finalizeDeferredScoring();
+  }, [session, scoringPhase]);
+
+  const examResultRows = useMemo(() => {
+    if (!session) return [];
+    return session.blueprint.map((task) => {
+      const a = session.attempts[task.taskId];
+      const scoreText = Number.isFinite(a?.score) ? `${a.score}/${a.maxScore}` : "pending";
+      return {
+        id: task.taskId,
+        title: task.title,
+        scoreText,
+        meta: a?.meta || null,
+      };
+    });
+  }, [session]);
+
+  return (
+    <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
+      <TopBar title="Full Mock Exam" section="Writing | Mock Mode" onExit={onExit} />
+      <div style={{ maxWidth: 1200, margin: "24px auto", padding: "0 20px" }}>
+        <div style={{ background: C.ltB, border: "1px solid #b3d4fc", borderRadius: 4, padding: 14, marginBottom: 20, fontSize: 13 }}>
+          <b>Architecture scaffold:</b> This mode now has an isolated state machine and storage layer. Task embedding can be connected in the next step without touching existing task pages.
+        </div>
+
+        {!session && (
+          <MockExamStartCard savedCount={(hist.sessions || []).length} onStart={startExam} />
+        )}
+
+        {!!session && (
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 280px", gap: 16, alignItems: "start" }}>
+            <MockExamMainPanel
+              session={session}
+              currentTask={currentTask}
+              scoringPhase={scoringPhase}
+              scoringError={scoringError}
+              examResultRows={examResultRows}
+              onTimerChange={({ timeLeft }) => setSectionTimer(timeLeft)}
+              onSubmitTaskResult={submitTaskResult}
+              onAbort={abortExam}
+              onStartNew={startExam}
+              onExit={onExit}
+            />
+            <SectionTimerPanel
+              currentTask={currentTask}
+              progress={progress}
+              sectionTimer={sectionTimer}
+              status={session.status}
+              scoringPhase={scoringPhase}
+            />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

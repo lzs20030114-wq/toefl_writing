@@ -6,6 +6,7 @@ const TASKS = [
   { k: "build-sentence", n: "Task 1", t: "Build a Sentence", d: "Arrange chunks into a correct sentence. Easy / medium / hard sets.", ti: "6m 50s", it: "10 Qs", tag: true },
   { k: "email-writing", n: "Task 2", t: "Write an Email", d: "Write a professional email. 3 goals. 8 prompts.", ti: "7 min", it: "80-120w", tag: true },
   { k: "academic-writing", n: "Task 3", t: "Academic Discussion", d: "Respond on a discussion board. 8 topics.", ti: "10 min", it: "100+w", tag: false },
+  { k: "mock-exam", n: "Full Test", t: "Mock Exam Mode", d: "Run Task 1 + Task 2 + Task 3 in one session with standalone score record.", ti: "24 min", it: "3 Tasks", tag: true },
 ];
 
 export default function Page() {

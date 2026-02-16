@@ -43,12 +43,29 @@ It includes timed practice, AI scoring, structured feedback reports, progress hi
 
 ## Architecture
 
+### Mock Exam Scaffold (new, minimal interference)
+
+- Route: `app/mock-exam/page.js`
+- UI shell: `components/mockExam/MockExamShell.js`
+- Isolated domain layer: `lib/mockExam/*`
+  - `contracts.js`: status/task constants and max-score contract
+  - `planner.js`: default 3-task blueprint (Task1->Task2->Task3)
+  - `stateMachine.js`: pure state transitions (create/start/submit/next/abort/complete)
+  - `runner.js`: orchestration facade for UI usage
+  - `storage.js`: separate localStorage history (`toefl-mock-exam-history`)
+
+Current scope includes runnable orchestration:
+- Mock mode can execute Task1 -> Task2 -> Task3 sequentially.
+- In mock mode, per-task history persistence is disabled and results are stored as one unified mock-exam record.
+- Existing single-task pages and scoring flows remain unchanged.
+
 ## App routes
 
 - `app/page.js`: home menu
 - `app/build-sentence/page.js`: Task 1
 - `app/email-writing/page.js`: Task 2
 - `app/academic-writing/page.js`: Task 3
+- `app/mock-exam/page.js`: mock exam shell (framework stage)
 - `app/progress/page.js`: progress page
 - `app/api/ai/route.js`: AI proxy endpoint
 

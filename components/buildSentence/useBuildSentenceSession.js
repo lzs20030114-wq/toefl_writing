@@ -10,7 +10,10 @@ function getUserChunks(slotsArr) {
   return slotsArr.filter((s) => s !== null).map((s) => s.text);
 }
 
-export function useBuildSentenceSession(questions) {
+export function useBuildSentenceSession(questions, options = {}) {
+  const persistSession = options.persistSession !== false;
+  const onComplete = typeof options.onComplete === "function" ? options.onComplete : null;
+  const onTimerChange = typeof options.onTimerChange === "function" ? options.onTimerChange : null;
   const initialBuildState = (() => {
     try {
       const source = questions || selectBSQuestions();
@@ -45,6 +48,7 @@ export function useBuildSentenceSession(questions) {
   const idxRef = useRef(0);
   const slotsRef = useRef([]);
   const submitLockRef = useRef(false);
+  const completionSentRef = useRef(false);
 
   function initQ(i, list) {
     const q = list[i];
@@ -86,9 +90,14 @@ export function useBuildSentenceSession(questions) {
   useEffect(() => { resultsRef.current = results; }, [results]);
   useEffect(() => { idxRef.current = idx; }, [idx]);
   useEffect(() => { slotsRef.current = slots; }, [slots]);
+  useEffect(() => {
+    if (onTimerChange) {
+      onTimerChange({ timeLeft: tl, isRunning: run, phase });
+    }
+  }, [tl, run, phase, onTimerChange]);
 
   function saveSession(nr) {
-    saveSess({
+    const payload = {
       type: "bs",
       correct: nr.filter((r) => r.isCorrect).length,
       total: nr.length,
@@ -100,7 +109,14 @@ export function useBuildSentenceSession(questions) {
         isCorrect: r.isCorrect,
         grammar_points: r.q.grammar_points || [],
       })),
-    });
+    };
+    if (persistSession) {
+      saveSess(payload);
+    }
+    if (onComplete && !completionSentRef.current) {
+      completionSentRef.current = true;
+      onComplete(payload);
+    }
   }
 
   useEffect(() => {
@@ -287,4 +303,3 @@ export const __internal = {
   validateRuntimeQuestion: runtimeModel.validateRuntimeQuestion,
   prepareQuestions: runtimeModel.prepareQuestions,
 };
-
