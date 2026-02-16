@@ -22,7 +22,7 @@ export default function ToeflApp() {
           <p style={{ color: C.t2, fontSize: 14, margin: "8px 0 0" }}>New TOEFL iBT format practice</p>
         </div>
         {[
-          { k: "build", n: "Task 1", t: "Build a Sentence", d: "Arrange chunks into a correct sentence. Easy / medium / hard sets.", ti: "5m 50s", it: "10 Qs", tag: true },
+          { k: "build", n: "Task 1", t: "Build a Sentence", d: "Arrange chunks into a correct sentence. Easy / medium / hard sets.", ti: "6m 50s", it: "10 Qs", tag: true },
           { k: "email", n: "Task 2", t: "Write an Email", d: "Write a professional email. 3 goals. 8 prompts.", ti: "7 min", it: "80-120w", tag: true },
           { k: "disc", n: "Task 3", t: "Academic Discussion", d: "Respond on a discussion board. 8 topics.", ti: "10 min", it: "100+w", tag: false },
         ].map(c => (
