@@ -1,9 +1,18 @@
 /**
- * Generate Build a Sentence question sets via DeepSeek API.
+ * Robust Build a Sentence generator pipeline:
+ * 1) online candidate generation
+ * 2) hard validation (schema/runtime)
+ * 3) AI quality scoring filter
+ * 4) pool-based set assembly with exact difficulty mix (2/5/3)
  *
- * Usage: node scripts/generateBSQuestions.mjs
+ * Usage:
+ *   node scripts/generateBSQuestions.mjs
  *
- * Requires DEEPSEEK_API_KEY in .env
+ * Env:
+ *   DEEPSEEK_API_KEY=...
+ *   DEEPSEEK_PROXY_URL=http://127.0.0.1:10808   (optional)
+ *   BS_TARGET_SETS=6                              (optional)
+ *   BS_CANDIDATE_ROUNDS=40                        (optional)
  */
 
 import { readFileSync, writeFileSync } from "fs";
@@ -14,243 +23,511 @@ import { createRequire } from "module";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
 
-// Load .env manually
-const envPath = resolve(__dirname, "..", ".env");
-try {
-  const envContent = readFileSync(envPath, "utf-8");
-  envContent.split("\n").forEach(line => {
-    const match = line.match(/^\s*([\w]+)\s*=\s*(.*)$/);
-    if (match) process.env[match[1]] = match[2].trim().replace(/^["']|["']$/g, "");
-  });
-} catch { /* no .env file */ }
-
-const API_KEY = process.env.DEEPSEEK_API_KEY;
-if (!API_KEY) {
-  console.error("ERROR: DEEPSEEK_API_KEY not found in .env");
-  process.exit(1);
-}
-
-// Load validation functions
-const { validateQuestion, validateQuestionSet } = require("../lib/questionBank/buildSentenceSchema.js");
-const { evaluateSetDifficultyAgainstTarget, formatDifficultyProfile } = require("../lib/questionBank/difficultyControl.js");
 const { callDeepSeekViaCurl, resolveProxyUrl } = require("../lib/ai/deepseekHttp.js");
+const { validateQuestionSet, validateQuestion } = require("../lib/questionBank/buildSentenceSchema.js");
+const { hardFailReasons, warnings: qualityWarnings } = require("../lib/questionBank/qualityGateBuildSentence.js");
+const {
+  normalizeRuntimeQuestion,
+  validateRuntimeQuestion,
+} = require("../lib/questionBank/runtimeModel.js");
+const {
+  estimateQuestionDifficulty,
+  evaluateSetDifficultyAgainstTarget,
+  ETS_2026_TARGET_COUNTS_10,
+} = require("../lib/questionBank/difficultyControl.js");
+const { validateAllSets } = require("./validate-bank.js");
 
 const OUTPUT_PATH = resolve(__dirname, "..", "data", "buildSentence", "questions.json");
-const NUM_SETS = 5;
-const QUESTIONS_PER_SET = 10;
+const TARGET_SET_COUNT = Number(process.env.BS_TARGET_SETS || 6);
+const CANDIDATE_ROUNDS = Number(process.env.BS_CANDIDATE_ROUNDS || 40);
+const EASY_BOOST_ROUNDS = Number(process.env.BS_EASY_BOOST_ROUNDS || 16);
+const MIN_REVIEW_SCORE = Number(process.env.BS_MIN_REVIEW_SCORE || 78);
+const MIN_REVIEW_OVERALL = Number(process.env.BS_MIN_REVIEW_OVERALL || 84);
 
-const GRAMMAR_REQUIREMENTS = [
-  "间接疑问句（embedded question）",
-  "间接疑问句 + whether/if引导",
-  "间接疑问句 + wh-词引导",
-  "间接疑问句 + 被动语态",
-  "间接疑问句 + wh-词引导（地点）",
-  "一般疑问句 + want+宾语+to不定式",
-  "一般疑问句 + send/give双宾语",
-  "特殊疑问句 + 间接疑问句语序",
-  "陈述句 + 间接疑问句（wonder）",
-  "间接疑问句 + 时间状语从句",
-];
-
-const GEN_PROMPT = `你是一位 TOEFL iBT Writing Section Task 1 "Build a Sentence" 的出题专家。
-
-## 任务
-生成 ${QUESTIONS_PER_SET} 道 Build a Sentence 题目，输出为 JSON 数组。每道题须严格符合以下 schema：
-
-{
-  "id": "ets_sN_qM",
-  "prompt": "对话情境句（5-15词，以?或.结尾）",
-  "answer": "完整正确答案句（7-13词，自然流畅）",
-  "chunks": ["多词块1", "多词块2", ...],
-  "prefilled": [],
-  "prefilled_positions": {},
-  "distractor": null 或 "干扰词块",
-  "has_question_mark": true/false,
-  "grammar_points": ["语法点1", "语法点2"]
+function loadEnv() {
+  const paths = [
+    resolve(__dirname, "..", ".env.local"),
+    resolve(__dirname, "..", ".env"),
+  ];
+  for (const p of paths) {
+    try {
+      const txt = readFileSync(p, "utf8");
+      txt.split(/\r?\n/).forEach((line) => {
+        const m = line.match(/^\s*([\w]+)\s*=\s*(.*)$/);
+        if (!m) return;
+        if (process.env[m[1]]) return;
+        process.env[m[1]] = m[2].trim().replace(/^['"]|['"]$/g, "");
+      });
+    } catch (_) {
+      // ignore missing env file
+    }
+  }
 }
 
-## 10 题语法点分配（按顺序生成）
-${GRAMMAR_REQUIREMENTS.map((g, i) => `${i + 1}. ${g}`).join("\n")}
+function normalizeText(s) {
+  return String(s || "").trim();
+}
 
-## chunks 规则
-- chunks 数量：5-7 个（不含 distractor）
-- 每个 chunk 最多 3 个词
-- chunks 全部小写
-- chunks（去掉 distractor）的所有词拼起来 = answer 的所有词（去掉标点后）
-- distractor 的词不在 answer 中
-- 恰好 2-3 道题有 distractor（非 null）
+function endsWithQuestionMark(answer) {
+  return normalizeText(answer).endsWith("?");
+}
 
-## 答案唯一性
-- 每道题只能有一个语法正确且语义通顺的排列方式
-- 避免介词短语可以在多个位置插入的情况
+function uniqBy(list, keyFn) {
+  const seen = new Set();
+  const out = [];
+  for (const item of list) {
+    const key = keyFn(item);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(item);
+  }
+  return out;
+}
 
-## prompt 情境
-- 校园生活、学术讨论、图书馆、宿舍、课程选择等 TOEFL 常见场景
+function shuffle(arr) {
+  const out = [...arr];
+  for (let i = out.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
 
-## 输出
-仅输出 JSON 数组，不要输出任何其他文字。id 格式为 ets_s{SET_NUM}_q{1-10}。`;
+function parseJsonArray(text) {
+  const body = String(text || "");
+  const start = body.indexOf("[");
+  const end = body.lastIndexOf("]");
+  if (start < 0 || end <= start) {
+    throw new Error("no JSON array in model output");
+  }
+  return JSON.parse(body.slice(start, end + 1));
+}
 
-const REVIEW_PROMPT = `你是一位英语语言学专家。请审核以下 Build a Sentence 题目：
+function normalizeQuestion(raw, tempId) {
+  const q = raw && typeof raw === "object" ? raw : {};
+  const chunks = Array.isArray(q.chunks)
+    ? q.chunks.map((c) => normalizeText(c).toLowerCase()).filter(Boolean)
+    : [];
+  const prefilled = Array.isArray(q.prefilled)
+    ? q.prefilled.map((c) => normalizeText(c).toLowerCase()).filter(Boolean)
+    : [];
+  const prefilled_positions = (q.prefilled_positions && typeof q.prefilled_positions === "object")
+    ? q.prefilled_positions
+    : {};
 
-1. 答案句是否自然流畅、语法正确？
-2. chunks 排列是否只有唯一正确答案？（关键！如果有多种合理排列则不通过）
-3. distractor（如有）是否真的不属于答案句？
-4. prompt 情境是否合理？
+  const answer = normalizeText(q.answer);
+  return {
+    id: normalizeText(q.id) || tempId,
+    prompt: normalizeText(q.prompt),
+    answer,
+    chunks,
+    prefilled,
+    prefilled_positions,
+    distractor: normalizeText(q.distractor) || null,
+    has_question_mark: typeof q.has_question_mark === "boolean" ? q.has_question_mark : endsWithQuestionMark(answer),
+    grammar_points: Array.isArray(q.grammar_points)
+      ? q.grammar_points.map((g) => normalizeText(g)).filter(Boolean)
+      : [],
+  };
+}
 
-如果全部通过，回复 "PASS"。
-如果有问题，回复 "FAIL: " 加具体原因。
+function stableAnswerKey(q) {
+  return normalizeText(q.answer).toLowerCase();
+}
 
-题目：
+function buildGeneratePrompt(round, mode = "balanced") {
+  const difficultySection = mode === "easy"
+    ? `
+Difficulty target for this 10-question batch:
+- all 10 should be EASY
+- answer length 7-9 words
+- effective chunks exactly 5
+- distractor must be null
+- simple syntax and high-frequency campus vocabulary
+`
+    : `
+Difficulty distribution target for this 10-question batch:
+- 2 easy
+- 5 medium
+- 3 hard
+Reflect difficulty in sentence length, chunk complexity, and distractor usage.
+Hard item profile (important):
+- answer length 11-13 words
+- effective chunks 7
+- at least one 3-word chunk
+- include distractor in about half of hard items
+- include embedded-question structure and less frequent collocations
+Easy item profile:
+- answer length 7-9 words
+- effective chunks 5
+- no distractor
+- straightforward syntax and high-frequency vocabulary
 `;
 
-async function callDeepSeek(prompt, temperature = 0.7) {
+  return `
+You are generating TOEFL iBT Writing Task 1 "Build a Sentence" items.
+Return ONLY a JSON array with exactly 10 question objects.
+
+Required schema for each item:
+{
+  "id": "tmp_r${round}_q1",
+  "prompt": "short campus context sentence",
+  "answer": "final natural sentence, 7-13 words, ends with ? or .",
+  "chunks": ["lowercase chunk", "..."],
+  "prefilled": [],
+  "prefilled_positions": {},
+  "distractor": null or "lowercase chunk not in answer",
+  "has_question_mark": true/false,
+  "grammar_points": ["...","..."]
+}
+
+Hard constraints:
+- chunk count excluding distractor: 5-7
+- each chunk max 3 words
+- chunks lowercase
+- chunks (+prefilled) must reconstruct answer words exactly
+- distractor must not appear in answer
+- at least 6 questions with has_question_mark=true
+- exactly 2 or 3 questions with non-null distractor
+- at least 5 questions include "embedded question" in grammar_points
+- at least 1 question include "passive voice" in grammar_points
+- avoid ambiguous order; each item should have one clear best order
+
+${difficultySection}
+Before returning JSON, self-check every item against chunk-count and chunk-length constraints.
+
+No markdown. No extra explanation. JSON array only.
+`.trim();
+}
+
+function buildReviewPrompt(questions) {
+  return `
+You are a strict TOEFL item quality reviewer.
+Review the 10 Build a Sentence items and return ONLY JSON:
+{
+  "overall_score": 0-100,
+  "blockers": ["critical issue..."],
+  "question_scores": [
+    {"id":"...", "score":0-100, "issues":["..."]}
+  ]
+}
+
+Blocker examples:
+- multiple valid chunk orders
+- grammar incorrect
+- distractor could be a valid answer chunk
+- prompt/answer mismatch
+
+Scoring:
+- >=85 means production ready
+- <78 means reject that question
+
+Items:
+${JSON.stringify(questions, null, 2)}
+`.trim();
+}
+
+function parseReviewJson(text) {
+  const body = String(text || "");
+  const start = body.indexOf("{");
+  const end = body.lastIndexOf("}");
+  if (start < 0 || end <= start) {
+    throw new Error("no JSON object in review output");
+  }
+  const parsed = JSON.parse(body.slice(start, end + 1));
+  return {
+    overall_score: Number(parsed?.overall_score || 0),
+    blockers: Array.isArray(parsed?.blockers) ? parsed.blockers.map((x) => String(x || "")) : [],
+    question_scores: Array.isArray(parsed?.question_scores) ? parsed.question_scores : [],
+  };
+}
+
+function hardValidateQuestion(q) {
+  const v = validateQuestion(q);
+  if (v.fatal.length > 0) return { ok: false, reason: `fatal: ${v.fatal.join("; ")}` };
+  if (v.format.length > 0) return { ok: false, reason: `format: ${v.format.join("; ")}` };
+  if (v.content.length > 0) return { ok: false, reason: `content: ${v.content.join("; ")}` };
+
+  const hard = hardFailReasons(q);
+  if (hard.length > 0) return { ok: false, reason: `hard-fail: ${hard.join("; ")}` };
+  const warn = qualityWarnings(q);
+  if (warn.length > 0) return { ok: false, reason: `warning: ${warn.join("; ")}` };
+
+  try {
+    const rq = normalizeRuntimeQuestion(q);
+    validateRuntimeQuestion(rq);
+  } catch (e) {
+    return { ok: false, reason: `runtime: ${e.message}` };
+  }
+
+  return { ok: true };
+}
+
+async function callModel(userPrompt) {
   return callDeepSeekViaCurl({
-    apiKey: API_KEY,
+    apiKey: process.env.DEEPSEEK_API_KEY,
     proxyUrl: resolveProxyUrl(),
-    timeoutMs: 90000,
+    timeoutMs: 120000,
     payload: {
       model: "deepseek-chat",
-      messages: [{ role: "user", content: prompt }],
-      temperature,
-      max_tokens: 4096,
+      temperature: 0.35,
+      max_tokens: 5000,
+      messages: [{ role: "user", content: userPrompt }],
     },
   });
 }
 
-function parseJsonArray(text) {
-  // Extract JSON array from response
-  const match = text.match(/\[[\s\S]*\]/);
-  if (!match) throw new Error("No JSON array found in response");
-  return JSON.parse(match[0]);
-}
+async function generateCandidateRound(round, mode = "balanced") {
+  const out = {
+    generated: 0,
+    accepted: 0,
+    rejected: 0,
+    rejectReasons: {},
+    questions: [],
+  };
 
-async function generateOneSet(setNum) {
-  console.log(`\n=== Generating Set ${setNum} ===`);
-
-  const prompt = GEN_PROMPT.replace(/\{SET_NUM\}/g, String(setNum));
-  let attempts = 0;
-  const MAX_ATTEMPTS = 3;
-
-  while (attempts < MAX_ATTEMPTS) {
-    attempts++;
-    console.log(`  Attempt ${attempts}/${MAX_ATTEMPTS}...`);
-
-    try {
-      const raw = await callDeepSeek(prompt);
-      const questions = parseJsonArray(raw);
-
-      if (!Array.isArray(questions) || questions.length !== QUESTIONS_PER_SET) {
-        console.log(`  Got ${questions?.length} questions, need ${QUESTIONS_PER_SET}. Retrying...`);
-        continue;
-      }
-
-      // Fix IDs
-      questions.forEach((q, i) => {
-        q.id = `ets_s${setNum}_q${i + 1}`;
-        // Ensure prefilled defaults
-        if (!q.prefilled) q.prefilled = [];
-        if (!q.prefilled_positions) q.prefilled_positions = {};
-      });
-
-      // Validate each question
-      let allValid = true;
-      for (let i = 0; i < questions.length; i++) {
-        const result = validateQuestion(questions[i]);
-        if (result.fatal.length > 0) {
-          console.log(`  Q${i + 1} fatal errors:`, result.fatal);
-          allValid = false;
-        }
-        if (result.format.length > 0) {
-          console.log(`  Q${i + 1} format warnings:`, result.format);
-        }
-      }
-
-      if (!allValid) {
-        console.log("  Some questions have fatal errors. Retrying...");
-        continue;
-      }
-
-      // AI review for uniqueness + naturalness
-      console.log("  Running AI review...");
-      const reviewText = REVIEW_PROMPT + JSON.stringify(questions, null, 2);
-      const reviewResult = await callDeepSeek(reviewText, 0.3);
-      console.log(`  Review result: ${reviewResult.substring(0, 100)}...`);
-
-      if (!reviewResult.toUpperCase().includes("PASS")) {
-        console.log("  AI review failed. Retrying...");
-        continue;
-      }
-
-      // Validate set-level distribution
-      const setResult = validateQuestionSet(questions);
-      if (!setResult.ok) {
-        console.log("  Set validation failed:", setResult.errors);
-        // Don't retry for set-level — accept with warnings
-        console.log("  (Accepting with set-level warnings)");
-      }
-
-      const diffResult = evaluateSetDifficultyAgainstTarget(questions);
-      if (!diffResult.ok || !diffResult.meetsTargetCount10) {
-        console.log(`  Difficulty profile drift: ${formatDifficultyProfile(diffResult)}`);
-        if (!diffResult.meetsTargetCount10) {
-          console.log("  Exact 10-question mix required: easy=2, medium=5, hard=3.");
-        }
-        console.log("  Retrying to get a better 10-question difficulty mix...");
-        continue;
-      }
-
-      console.log(`  Set ${setNum} generated successfully!`);
-      return { set_id: setNum, questions };
-
-    } catch (e) {
-      console.error(`  Error: ${e.message}`);
-      if (attempts >= MAX_ATTEMPTS) throw e;
-    }
+  const generatedRaw = await callModel(buildGeneratePrompt(round, mode));
+  const arr = parseJsonArray(generatedRaw);
+  if (!Array.isArray(arr) || arr.length !== 10) {
+    throw new Error(`round ${round}: model did not return 10 questions`);
   }
 
-  throw new Error(`Failed to generate Set ${setNum} after ${MAX_ATTEMPTS} attempts`);
+  const normalized = arr.map((q, i) => normalizeQuestion(q, `tmp_r${round}_q${i + 1}`));
+  out.generated = normalized.length;
+
+  // hard filter first
+  const hardPassed = [];
+  for (const q of normalized) {
+    const hv = hardValidateQuestion(q);
+    if (!hv.ok) {
+      out.rejected += 1;
+      out.rejectReasons[hv.reason] = (out.rejectReasons[hv.reason] || 0) + 1;
+      continue;
+    }
+    hardPassed.push(q);
+  }
+
+  if (hardPassed.length === 0) return out;
+
+  // set-level schema gate (soft; for logging only in this stage)
+  const setGate = validateQuestionSet({ set_id: round, questions: hardPassed.slice(0, Math.min(10, hardPassed.length)) });
+  if (!setGate.ok) {
+    setGate.errors.forEach((e) => {
+      out.rejectReasons[`set-gate:${e}`] = (out.rejectReasons[`set-gate:${e}`] || 0) + 1;
+    });
+  }
+
+  // AI review score
+  const reviewRaw = await callModel(buildReviewPrompt(hardPassed));
+  const review = parseReviewJson(reviewRaw);
+  const scoreMap = new Map(
+    review.question_scores.map((qs) => [String(qs?.id || ""), Number(qs?.score || 0)]),
+  );
+
+  for (const q of hardPassed) {
+    const score = scoreMap.has(q.id) ? scoreMap.get(q.id) : 0;
+    const blocked = review.blockers.length > 0 && review.overall_score < MIN_REVIEW_OVERALL;
+    if (blocked || score < MIN_REVIEW_SCORE) {
+      out.rejected += 1;
+      const r = blocked
+        ? `review:blocker:${review.blockers.join("|")}`
+        : `review:score<${MIN_REVIEW_SCORE}`;
+      out.rejectReasons[r] = (out.rejectReasons[r] || 0) + 1;
+      continue;
+    }
+    out.accepted += 1;
+    out.questions.push(q);
+  }
+
+  return out;
+}
+
+function splitPoolByDifficulty(questions) {
+  const pool = { easy: [], medium: [], hard: [] };
+  questions.forEach((q) => {
+    const est = estimateQuestionDifficulty(q);
+    pool[est.bucket].push(q);
+  });
+  pool.easy = shuffle(uniqBy(pool.easy, stableAnswerKey));
+  pool.medium = shuffle(uniqBy(pool.medium, stableAnswerKey));
+  pool.hard = shuffle(uniqBy(pool.hard, stableAnswerKey));
+  return pool;
+}
+
+function cloneQuestion(q) {
+  return JSON.parse(JSON.stringify(q));
+}
+
+function composeOneSet(pool, setId, maxRetries = 500) {
+  for (let attempt = 0; attempt < maxRetries; attempt += 1) {
+    if (
+      pool.easy.length < ETS_2026_TARGET_COUNTS_10.easy ||
+      pool.medium.length < ETS_2026_TARGET_COUNTS_10.medium ||
+      pool.hard.length < ETS_2026_TARGET_COUNTS_10.hard
+    ) {
+      return null;
+    }
+
+    const easyPick = shuffle(pool.easy).slice(0, ETS_2026_TARGET_COUNTS_10.easy);
+    const mediumPick = shuffle(pool.medium).slice(0, ETS_2026_TARGET_COUNTS_10.medium);
+    const hardPick = shuffle(pool.hard).slice(0, ETS_2026_TARGET_COUNTS_10.hard);
+    const merged = shuffle([...easyPick, ...mediumPick, ...hardPick]).map(cloneQuestion);
+
+    // re-id for final bank
+    merged.forEach((q, i) => {
+      q.id = `ets_s${setId}_q${i + 1}`;
+    });
+
+    const set = { set_id: setId, questions: merged };
+    const schemaOk = validateQuestionSet(set).ok;
+    const diff = evaluateSetDifficultyAgainstTarget(merged);
+    if (!schemaOk || !diff.ok || !diff.meetsTargetCount10) continue;
+
+    // runtime strict check
+    let runtimeOk = true;
+    for (const q of merged) {
+      try {
+        const rq = normalizeRuntimeQuestion(q);
+        validateRuntimeQuestion(rq);
+      } catch (_) {
+        runtimeOk = false;
+        break;
+      }
+    }
+    if (!runtimeOk) continue;
+
+    // consume used questions from pool (by answer key)
+    const usedKeys = new Set(merged.map(stableAnswerKey));
+    pool.easy = pool.easy.filter((q) => !usedKeys.has(stableAnswerKey(q)));
+    pool.medium = pool.medium.filter((q) => !usedKeys.has(stableAnswerKey(q)));
+    pool.hard = pool.hard.filter((q) => !usedKeys.has(stableAnswerKey(q)));
+
+    return set;
+  }
+  return null;
+}
+
+function buildFinalSetsFromPool(pool, targetCount) {
+  const sets = [];
+  for (let i = 1; i <= targetCount; i += 1) {
+    const set = composeOneSet(pool, i);
+    if (!set) break;
+    sets.push(set);
+  }
+  return sets;
+}
+
+function summarizeRejectReasons(map) {
+  return Object.entries(map)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 12);
 }
 
 async function main() {
-  console.log("Build a Sentence Question Generator");
-  console.log("====================================");
-  console.log(`Target: ${NUM_SETS} sets x ${QUESTIONS_PER_SET} questions`);
+  loadEnv();
+  if (!process.env.DEEPSEEK_API_KEY) {
+    console.error("ERROR: DEEPSEEK_API_KEY missing");
+    process.exit(1);
+  }
 
-  const questionSets = [];
+  console.log("Build Sentence Robust Generator");
+  console.log("==============================");
+  console.log(`Target sets: ${TARGET_SET_COUNT}`);
+  console.log(`Candidate rounds: ${CANDIDATE_ROUNDS}`);
+  console.log(`Proxy: ${resolveProxyUrl() || "(direct)"}`);
 
-  for (let i = 1; i <= NUM_SETS; i++) {
+  const acceptedPool = [];
+  const rejectReasons = {};
+
+  for (let round = 1; round <= CANDIDATE_ROUNDS; round += 1) {
     try {
-      const set = await generateOneSet(i);
-      questionSets.push(set);
+      const res = await generateCandidateRound(round, "balanced");
+      acceptedPool.push(...res.questions);
+      Object.entries(res.rejectReasons).forEach(([k, v]) => {
+        rejectReasons[k] = (rejectReasons[k] || 0) + v;
+      });
+      const pool = splitPoolByDifficulty(acceptedPool);
+      console.log(
+        `round ${round}: generated=${res.generated} accepted=${res.accepted} rejected=${res.rejected} | pool easy=${pool.easy.length} medium=${pool.medium.length} hard=${pool.hard.length}`,
+      );
+
+      const canBuildTargetSets =
+        pool.easy.length >= ETS_2026_TARGET_COUNTS_10.easy * TARGET_SET_COUNT &&
+        pool.medium.length >= ETS_2026_TARGET_COUNTS_10.medium * TARGET_SET_COUNT &&
+        pool.hard.length >= ETS_2026_TARGET_COUNTS_10.hard * TARGET_SET_COUNT;
+      if (canBuildTargetSets && acceptedPool.length > TARGET_SET_COUNT * 14) {
+        console.log("pool is large enough, stopping early");
+        break;
+      }
     } catch (e) {
-      console.error(`\nFailed to generate Set ${i}: ${e.message}`);
-      console.log("Continuing with remaining sets...");
+      console.log(`round ${round}: failed -> ${e.message}`);
     }
   }
 
-  if (questionSets.length === 0) {
-    console.error("\nNo sets generated! Exiting.");
+  let boostedPool = splitPoolByDifficulty(acceptedPool);
+  const easyTarget = ETS_2026_TARGET_COUNTS_10.easy * TARGET_SET_COUNT;
+  if (boostedPool.easy.length < easyTarget && EASY_BOOST_ROUNDS > 0) {
+    console.log(`easy pool insufficient (${boostedPool.easy.length}/${easyTarget}), starting easy boost rounds...`);
+    for (let i = 1; i <= EASY_BOOST_ROUNDS; i += 1) {
+      try {
+        const res = await generateCandidateRound(1000 + i, "easy");
+        acceptedPool.push(...res.questions);
+        Object.entries(res.rejectReasons).forEach(([k, v]) => {
+          rejectReasons[k] = (rejectReasons[k] || 0) + v;
+        });
+        boostedPool = splitPoolByDifficulty(acceptedPool);
+        console.log(
+          `easy-boost ${i}: accepted=${res.accepted} rejected=${res.rejected} | pool easy=${boostedPool.easy.length} medium=${boostedPool.medium.length} hard=${boostedPool.hard.length}`,
+        );
+        if (boostedPool.easy.length >= easyTarget) break;
+      } catch (e) {
+        console.log(`easy-boost ${i}: failed -> ${e.message}`);
+      }
+    }
+  }
+
+  const dedupedPool = uniqBy(acceptedPool, stableAnswerKey);
+  const poolByDiff = splitPoolByDifficulty(dedupedPool);
+  console.log(`final pool: easy=${poolByDiff.easy.length} medium=${poolByDiff.medium.length} hard=${poolByDiff.hard.length}`);
+
+  const finalSets = buildFinalSetsFromPool(poolByDiff, TARGET_SET_COUNT);
+  if (finalSets.length === 0) {
+    console.error("No valid set could be assembled from candidate pool.");
+    console.error("Top reject reasons:");
+    summarizeRejectReasons(rejectReasons).forEach(([k, v]) => console.error(`- ${k}: ${v}`));
     process.exit(1);
   }
 
   const output = {
-    version: "1.0",
-    question_sets: questionSets,
+    version: "1.2",
+    generated_at: new Date().toISOString(),
+    question_sets: finalSets,
   };
 
-  writeFileSync(OUTPUT_PATH, JSON.stringify(output, null, 2), "utf-8");
-  console.log(`\nDone! Generated ${questionSets.length} sets → ${OUTPUT_PATH}`);
+  // global strict validation
+  const check = validateAllSets(output, { strict: true });
+  if (!check.ok) {
+    console.error("Final output failed strict validation.");
+    check.failures.forEach((x) => console.error(x));
+    check.strictHardFails.forEach((x) => console.error(`${x.label}: ${x.reasons.join("; ")}`));
+    check.strictWarnings.forEach((x) => console.error(`${x.label}: ${x.reasons.join("; ")}`));
+    process.exit(1);
+  }
 
-  // Summary
-  questionSets.forEach(s => {
-    const qCount = s.questions.length;
-    const dCount = s.questions.filter(q => q.distractor).length;
-    const qmCount = s.questions.filter(q => q.has_question_mark).length;
-    console.log(`  Set ${s.set_id}: ${qCount} questions, ${dCount} distractors, ${qmCount} questions with ?`);
+  writeFileSync(OUTPUT_PATH, `${JSON.stringify(output, null, 2)}\n`, "utf8");
+  console.log(`Saved ${finalSets.length} set(s) to ${OUTPUT_PATH}`);
+  finalSets.forEach((s) => {
+    const diff = evaluateSetDifficultyAgainstTarget(s.questions);
+    console.log(
+      `- set ${s.set_id}: easy=${diff.profile.counts.easy} medium=${diff.profile.counts.medium} hard=${diff.profile.counts.hard}`,
+    );
   });
+
+  console.log("Top reject reasons:");
+  summarizeRejectReasons(rejectReasons).forEach(([k, v]) => console.log(`- ${k}: ${v}`));
 }
 
-main().catch(e => {
-  console.error("Fatal error:", e);
+main().catch((e) => {
+  console.error(`Fatal: ${e.message}`);
   process.exit(1);
 });

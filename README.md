@@ -153,6 +153,17 @@ Each question:
   - `npm run validate:bank -- --strict`
 - Generate BS sets via API script:
   - `node scripts/generateBSQuestions.mjs`
+  - optional envs:
+    - `BS_TARGET_SETS` (default `6`)
+    - `BS_CANDIDATE_ROUNDS` (default `40`)
+    - `BS_EASY_BOOST_ROUNDS` (default `16`)
+    - `BS_MIN_REVIEW_SCORE` (default `78`)
+    - `BS_MIN_REVIEW_OVERALL` (default `84`)
+  - generation pipeline:
+    - online candidate generation
+    - hard schema/runtime gate
+    - AI quality scoring
+    - difficulty-balanced assembly (`2 easy + 5 medium + 3 hard`)
 
 ## Legacy Input Compatibility (Testing Only)
 

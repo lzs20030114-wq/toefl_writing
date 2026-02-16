@@ -1,248 +1,206 @@
 {
-  "version": "1.1",
+  "version": "1.2",
+  "generated_at": "2026-02-15T23:35:02.696Z",
   "question_sets": [
     {
       "set_id": 1,
       "questions": [
         {
           "id": "ets_s1_q1",
-          "prompt": "Your presentation yesterday was impressive.",
-          "answer": "Would you like me to send you a copy of it?",
+          "prompt": "The professor is giving instructions for the lab.",
+          "answer": "All experimental data must be recorded in the provided notebook immediately.",
           "chunks": [
-            "you like",
-            "of it",
-            "me",
-            "you",
-            "to send",
-            "would",
-            "a copy"
+            "all experimental data",
+            "must be recorded",
+            "in",
+            "the provided notebook",
+            "immediately"
           ],
           "prefilled": [],
           "prefilled_positions": {},
-          "distractor": null,
-          "has_question_mark": true,
+          "distractor": "carefully",
+          "has_question_mark": false,
           "grammar_points": [
-            "modal question (would)",
-            "question inversion",
-            "like + object + to infinitive",
-            "double object verb (send)"
+            "passive voice",
+            "modal verb"
           ]
         },
         {
           "id": "ets_s1_q2",
-          "prompt": "I wish I had not missed the conference last week.",
-          "answer": "Don't you know where to get the recordings of the sessions?",
+          "prompt": "A student emails the housing office.",
+          "answer": "Can you explain how the roommate selection process works?",
           "chunks": [
-            "don't",
-            "know",
-            "where to get",
-            "the recordings",
-            "of the",
-            "sessions"
+            "can you explain",
+            "how",
+            "the roommate",
+            "selection process",
+            "works"
           ],
-          "prefilled": [
-            "you"
-          ],
-          "prefilled_positions": {
-            "you": 1
-          },
+          "prefilled": [],
+          "prefilled_positions": {},
           "distractor": null,
           "has_question_mark": true,
           "grammar_points": [
-            "negative question inversion",
-            "embedded question (where)",
-            "wh + to infinitive",
-            "preposition phrase (of)"
+            "embedded question"
           ]
         },
         {
           "id": "ets_s1_q3",
-          "prompt": "The new yoga class was very relaxing.",
-          "answer": "I wonder if a few classes can be held on Saturdays.",
+          "prompt": "A student is unsure about a topic.",
+          "answer": "Could you clarify how this process works?",
           "chunks": [
-            "i wonder",
-            "if",
-            "a few",
-            "classes",
-            "can be held",
-            "on saturdays"
+            "could you",
+            "clarify",
+            "how",
+            "this process",
+            "works"
           ],
           "prefilled": [],
           "prefilled_positions": {},
           "distractor": null,
-          "has_question_mark": false,
+          "has_question_mark": true,
           "grammar_points": [
-            "embedded question (if)",
-            "modal verb (can)",
-            "quantifier (a few)",
-            "passive voice"
+            "embedded question"
           ]
         },
         {
           "id": "ets_s1_q4",
-          "prompt": "We had a blast at the national park yesterday.",
-          "answer": "Does anybody know whether it is open all year long?",
+          "prompt": "A student is confused about an assignment.",
+          "answer": "Would you mind explaining how the final project should be submitted?",
           "chunks": [
-            "does",
-            "anybody know",
-            "whether",
-            "it is open",
-            "all year",
-            "long",
-            "they"
+            "would you mind",
+            "explaining",
+            "how",
+            "the final project",
+            "should be submitted"
           ],
           "prefilled": [],
           "prefilled_positions": {},
-          "distractor": "they",
+          "distractor": "to the professor",
           "has_question_mark": true,
           "grammar_points": [
-            "question inversion",
-            "embedded question (whether)",
-            "indefinite pronoun (anybody)",
-            "pronoun reference (it)"
+            "embedded question",
+            "passive voice",
+            "modal verb"
           ]
         },
         {
           "id": "ets_s1_q5",
-          "prompt": "The film festival this weekend was amazing.",
-          "answer": "Can we find out if they are planning another one?",
+          "prompt": "A club leader is asking for clarification from an administrator.",
+          "answer": "Could you clarify whether our funding request has been formally approved yet?",
           "chunks": [
-            "can",
-            "we",
-            "find out",
-            "if",
-            "they are",
-            "planning",
-            "another one"
+            "could you clarify",
+            "whether",
+            "our funding request",
+            "has been",
+            "formally approved yet"
           ],
           "prefilled": [],
           "prefilled_positions": {},
           "distractor": null,
           "has_question_mark": true,
           "grammar_points": [
-            "modal question (can)",
-            "embedded question (if)",
-            "pronoun replacement (another one)"
+            "embedded question",
+            "passive voice"
           ]
         },
         {
           "id": "ets_s1_q6",
-          "prompt": "The workshop on graphic design was very helpful.",
-          "answer": "Could you tell me how long each workshop session was?",
+          "prompt": "The professor is making an announcement.",
+          "answer": "The lecture will be held in the main hall.",
           "chunks": [
-            "could",
-            "tell me",
-            "how long",
-            "each",
-            "workshop session",
-            "was",
-            "why"
-          ],
-          "prefilled": [
-            "you"
-          ],
-          "prefilled_positions": {
-            "you": 1
-          },
-          "distractor": "why",
-          "has_question_mark": true,
-          "grammar_points": [
-            "modal question (could)",
-            "embedded question (how long)",
-            "double object verb (tell)",
-            "quantifier (each)"
-          ]
-        },
-        {
-          "id": "ets_s1_q7",
-          "prompt": "The new art exhibit at the museum is stunning.",
-          "answer": "Would you happen to know where the exhibit information center is?",
-          "chunks": [
-            "would",
-            "you happen",
-            "to know",
-            "where",
-            "the exhibit",
-            "information center",
-            "is"
-          ],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": null,
-          "has_question_mark": true,
-          "grammar_points": [
-            "modal question (would)",
-            "polite question frame",
-            "embedded question (where)",
-            "statement order in embedded clause"
-          ]
-        },
-        {
-          "id": "ets_s1_q8",
-          "prompt": "Let's go to that new gym this afternoon.",
-          "answer": "Do you know if it is usually crowded at this time?",
-          "chunks": [
-            "do",
-            "you know",
-            "if",
-            "it is",
-            "usually crowded",
-            "at this time",
-            "daily"
-          ],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": "daily",
-          "has_question_mark": true,
-          "grammar_points": [
-            "question inversion",
-            "embedded question (if)",
-            "adverb placement (usually)"
-          ]
-        },
-        {
-          "id": "ets_s1_q9",
-          "prompt": "I really enjoyed the documentary we watched yesterday.",
-          "answer": "Have you heard any details about how they filmed it?",
-          "chunks": [
-            "have you heard",
-            "any details",
-            "about",
-            "how",
-            "they filmed",
-            "it"
-          ],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": null,
-          "has_question_mark": true,
-          "grammar_points": [
-            "present perfect question",
-            "embedded question (how)",
-            "quantifier (any)",
-            "pronoun reference (it)"
-          ]
-        },
-        {
-          "id": "ets_s1_q10",
-          "prompt": "I'm applying for a position at that new technology hub.",
-          "answer": "I wonder how many open positions they have.",
-          "chunks": [
-            "i wonder",
-            "how many",
-            "open",
-            "positions",
-            "they",
-            "have"
+            "the lecture",
+            "will be",
+            "held",
+            "in the",
+            "main hall"
           ],
           "prefilled": [],
           "prefilled_positions": {},
           "distractor": null,
           "has_question_mark": false,
           "grammar_points": [
-            "embedded question (how many)",
-            "quantifier (how many)",
-            "statement order in embedded clause"
+            "future tense",
+            "passive voice"
+          ]
+        },
+        {
+          "id": "ets_s1_q7",
+          "prompt": "A student is emailing a professor.",
+          "answer": "I was wondering whether you had reviewed my draft yet.",
+          "chunks": [
+            "i was wondering",
+            "whether",
+            "you had reviewed",
+            "my draft",
+            "yet"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": null,
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question",
+            "past perfect"
+          ]
+        },
+        {
+          "id": "ets_s1_q8",
+          "prompt": "Two students are discussing a problem.",
+          "answer": "Do you know why the campus Wi-Fi is not working today?",
+          "chunks": [
+            "do you know",
+            "why",
+            "the campus wi-fi",
+            "is not working",
+            "today"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": null,
+          "has_question_mark": true,
+          "grammar_points": [
+            "embedded question",
+            "present continuous"
+          ]
+        },
+        {
+          "id": "ets_s1_q9",
+          "prompt": "A student is talking to a friend about a class.",
+          "answer": "I wonder when the next exam will be scheduled.",
+          "chunks": [
+            "i wonder",
+            "when",
+            "the next exam",
+            "will be",
+            "scheduled"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": null,
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question",
+            "passive voice"
+          ]
+        },
+        {
+          "id": "ets_s1_q10",
+          "prompt": "A student is discussing a group project.",
+          "answer": "Do you know when our final report is due next week?",
+          "chunks": [
+            "do you know",
+            "when",
+            "our final report",
+            "is due",
+            "next week"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": null,
+          "has_question_mark": true,
+          "grammar_points": [
+            "embedded question"
           ]
         }
       ]
@@ -252,13 +210,172 @@
       "questions": [
         {
           "id": "ets_s2_q1",
-          "prompt": "You are helping a classmate find a study service.",
-          "answer": "Do you know where the tutoring center is?",
+          "prompt": "Discussing a campus event.",
+          "answer": "The guest lecture was attended by over two hundred students.",
+          "chunks": [
+            "the guest lecture",
+            "was attended by",
+            "over",
+            "two hundred",
+            "students"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": null,
+          "has_question_mark": false,
+          "grammar_points": [
+            "passive voice"
+          ]
+        },
+        {
+          "id": "ets_s2_q2",
+          "prompt": "A student is talking to an advisor.",
+          "answer": "Can you explain how I can add a new course to my schedule?",
+          "chunks": [
+            "can you explain",
+            "how",
+            "i can add",
+            "a new course",
+            "to my schedule"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": null,
+          "has_question_mark": true,
+          "grammar_points": [
+            "embedded question",
+            "modal verb"
+          ]
+        },
+        {
+          "id": "ets_s2_q3",
+          "prompt": "A student is confused about an assignment.",
+          "answer": "Do you know what the main topic of the essay should be?",
           "chunks": [
             "do you know",
-            "where",
-            "the tutoring",
-            "center",
+            "what",
+            "the main topic",
+            "of the essay",
+            "should be"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": null,
+          "has_question_mark": true,
+          "grammar_points": [
+            "embedded question"
+          ]
+        },
+        {
+          "id": "ets_s2_q4",
+          "prompt": "A student is discussing a campus event.",
+          "answer": "Can you explain why the lecture was canceled yesterday?",
+          "chunks": [
+            "can you explain",
+            "why",
+            "the lecture",
+            "was canceled",
+            "yesterday"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "rescheduled",
+          "has_question_mark": true,
+          "grammar_points": [
+            "embedded question",
+            "passive voice"
+          ]
+        },
+        {
+          "id": "ets_s2_q5",
+          "prompt": "The campus cafe is changing its hours.",
+          "answer": "It will open later but close earlier on weekends.",
+          "chunks": [
+            "it will",
+            "open later",
+            "but",
+            "close earlier",
+            "on weekends"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": null,
+          "has_question_mark": false,
+          "grammar_points": [
+            "comparative adverbs",
+            "future simple"
+          ]
+        },
+        {
+          "id": "ets_s2_q6",
+          "prompt": "The library hours are changing.",
+          "answer": "The new schedule will be posted online next week.",
+          "chunks": [
+            "the new schedule",
+            "will be",
+            "posted",
+            "online",
+            "next week"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": null,
+          "has_question_mark": false,
+          "grammar_points": [
+            "passive voice",
+            "future tense"
+          ]
+        },
+        {
+          "id": "ets_s2_q7",
+          "prompt": "A student is confused about a new campus policy.",
+          "answer": "Can you explain why parking permits are now required on weekends?",
+          "chunks": [
+            "can you explain",
+            "why",
+            "parking permits",
+            "are now required",
+            "on weekends"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": null,
+          "has_question_mark": true,
+          "grammar_points": [
+            "embedded question",
+            "passive voice"
+          ]
+        },
+        {
+          "id": "ets_s2_q8",
+          "prompt": "A student inquires at the registrar's office.",
+          "answer": "I was wondering whether the deadline for course withdrawal has been extended.",
+          "chunks": [
+            "i was wondering",
+            "whether",
+            "the deadline",
+            "for course withdrawal",
+            "has been",
+            "extended"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": null,
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question",
+            "present perfect passive"
+          ]
+        },
+        {
+          "id": "ets_s2_q9",
+          "prompt": "Two friends are talking about a class.",
+          "answer": "Do you know when the next exam is?",
+          "chunks": [
+            "do you",
+            "know",
+            "when",
+            "the next exam",
             "is"
           ],
           "prefilled": [],
@@ -266,82 +383,100 @@
           "distractor": null,
           "has_question_mark": true,
           "grammar_points": [
-            "embedded question (where)",
-            "question inversion"
+            "embedded question"
           ]
         },
         {
-          "id": "ets_s2_q2",
-          "prompt": "Your teammate asks you for a quick reminder.",
-          "answer": "Please upload the file before class today.",
+          "id": "ets_s2_q10",
+          "prompt": "A student is asking about research opportunities.",
+          "answer": "Would you mind telling me whom I should contact first?",
           "chunks": [
-            "please",
-            "upload",
-            "the file",
-            "before class",
-            "today"
+            "would you mind",
+            "telling me",
+            "whom i should",
+            "contact",
+            "first"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "about the application",
+          "has_question_mark": true,
+          "grammar_points": [
+            "embedded question"
+          ]
+        }
+      ]
+    },
+    {
+      "set_id": 3,
+      "questions": [
+        {
+          "id": "ets_s3_q1",
+          "prompt": "A student is emailing the housing office.",
+          "answer": "Do you know when the dormitory assignment results come out?",
+          "chunks": [
+            "do you know",
+            "when",
+            "the dormitory assignment",
+            "results",
+            "come out"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": null,
+          "has_question_mark": true,
+          "grammar_points": [
+            "embedded question",
+            "phrasal verb"
+          ]
+        },
+        {
+          "id": "ets_s3_q2",
+          "prompt": "A student is confused about an assignment.",
+          "answer": "I do not understand what the professor wants.",
+          "chunks": [
+            "i do not",
+            "understand",
+            "what",
+            "the professor",
+            "wants"
           ],
           "prefilled": [],
           "prefilled_positions": {},
           "distractor": null,
           "has_question_mark": false,
           "grammar_points": [
-            "imperative sentence",
-            "instruction"
+            "embedded question"
           ]
         },
         {
-          "id": "ets_s2_q3",
-          "prompt": "You want the latest library information.",
-          "answer": "Could you tell me when the library closes tonight?",
+          "id": "ets_s3_q3",
+          "prompt": "A student is asking about a missed class.",
+          "answer": "Would you mind telling me what I missed last week?",
           "chunks": [
-            "could you",
-            "tell me",
-            "when",
-            "the library",
-            "closes",
-            "tonight"
+            "would you mind",
+            "telling me",
+            "what",
+            "i missed",
+            "last week"
           ],
           "prefilled": [],
           "prefilled_positions": {},
           "distractor": null,
           "has_question_mark": true,
           "grammar_points": [
-            "embedded question (when)",
-            "modal question (could)"
+            "embedded question"
           ]
         },
         {
-          "id": "ets_s2_q4",
-          "prompt": "Your partner suggests planning after lunch.",
-          "answer": "Can we review the outline after lunch today together?",
+          "id": "ets_s3_q4",
+          "prompt": "The library hours have changed.",
+          "answer": "The new schedule was posted on the main door yesterday.",
           "chunks": [
-            "can we",
-            "review",
-            "the outline",
-            "after lunch",
-            "today",
-            "together"
-          ],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": null,
-          "has_question_mark": true,
-          "grammar_points": [
-            "modal question (can)",
-            "planning expression"
-          ]
-        },
-        {
-          "id": "ets_s2_q5",
-          "prompt": "You describe a completed lab process.",
-          "answer": "The samples were labeled before the experiment began yesterday.",
-          "chunks": [
-            "the samples",
-            "were labeled",
-            "before",
-            "the experiment",
-            "began",
+            "the new schedule",
+            "was posted",
+            "on",
+            "the main door",
             "yesterday"
           ],
           "prefilled": [],
@@ -350,119 +485,125 @@
           "has_question_mark": false,
           "grammar_points": [
             "passive voice",
-            "past tense process"
+            "simple past"
           ]
         },
         {
-          "id": "ets_s2_q6",
-          "prompt": "You are checking if feedback is online.",
-          "answer": "Do you remember if the professor posted feedback yet?",
+          "id": "ets_s3_q5",
+          "prompt": "A student is discussing a challenging group project requirement.",
+          "answer": "Do you have any idea when our group report will be evaluated?",
           "chunks": [
-            "do you",
-            "remember",
-            "if",
-            "the professor",
-            "posted feedback",
-            "yet"
+            "do you have",
+            "any idea",
+            "when",
+            "our group report",
+            "will be evaluated"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "graded",
+          "has_question_mark": true,
+          "grammar_points": [
+            "embedded question",
+            "passive voice"
+          ]
+        },
+        {
+          "id": "ets_s3_q6",
+          "prompt": "A student is confused about an assignment.",
+          "answer": "Can you explain how the research paper should be formatted and submitted?",
+          "chunks": [
+            "can you explain",
+            "how",
+            "the research paper",
+            "should be formatted",
+            "and submitted"
           ],
           "prefilled": [],
           "prefilled_positions": {},
           "distractor": null,
           "has_question_mark": true,
           "grammar_points": [
-            "embedded question (if)",
-            "question inversion"
+            "embedded question",
+            "passive voice"
           ]
         },
         {
-          "id": "ets_s2_q7",
-          "prompt": "Your group is deciding room availability.",
-          "answer": "I wonder whether the meeting room is still available.",
+          "id": "ets_s3_q7",
+          "prompt": "The campus cafeteria is introducing new options.",
+          "answer": "Many students have requested more vegetarian meals recently.",
           "chunks": [
-            "i wonder",
-            "whether",
-            "the meeting room",
-            "is",
-            "still",
-            "available"
+            "many students",
+            "have requested",
+            "more",
+            "vegetarian meals",
+            "recently"
           ],
           "prefilled": [],
           "prefilled_positions": {},
           "distractor": null,
           "has_question_mark": false,
           "grammar_points": [
-            "embedded question (whether)",
-            "statement order in embedded clause"
+            "present perfect"
           ]
         },
         {
-          "id": "ets_s2_q8",
-          "prompt": "Your class discusses fieldwork methods.",
-          "answer": "Could you explain how the data were collected during the field study?",
+          "id": "ets_s3_q8",
+          "prompt": "A student is asking a professor.",
+          "answer": "Could you explain how the grading rubric will be applied?",
           "chunks": [
-            "could you",
-            "explain",
+            "could you explain",
             "how",
-            "the data",
-            "were collected",
-            "during the",
-            "field study",
-            "quickly"
-          ],
-          "prefilled": [],
-          "prefilled_positions": {},
-          "distractor": "quickly",
-          "has_question_mark": true,
-          "grammar_points": [
-            "embedded question (how)",
-            "passive voice",
-            "modal question (could)"
-          ]
-        },
-        {
-          "id": "ets_s2_q9",
-          "prompt": "You ask for advising office information.",
-          "answer": "Would you happen to know where the advising office is this semester?",
-          "chunks": [
-            "would you",
-            "happen to",
-            "know",
-            "where",
-            "the advising",
-            "office is",
-            "this semester"
+            "the grading rubric",
+            "will be",
+            "applied"
           ],
           "prefilled": [],
           "prefilled_positions": {},
           "distractor": null,
           "has_question_mark": true,
           "grammar_points": [
-            "embedded question (where)",
-            "polite question frame"
+            "embedded question",
+            "modal verb"
           ]
         },
         {
-          "id": "ets_s2_q10",
-          "prompt": "You ask about the delayed final report.",
-          "answer": "Can you tell me why the final report was delayed again?",
+          "id": "ets_s3_q9",
+          "prompt": "A student is discussing a group project.",
+          "answer": "I wonder if we should meet in the study lounge.",
           "chunks": [
-            "can you",
-            "tell me",
-            "why",
-            "the final",
-            "report",
-            "was delayed",
-            "again",
-            "overall"
+            "i wonder",
+            "if",
+            "we should meet",
+            "in",
+            "the study lounge"
           ],
           "prefilled": [],
           "prefilled_positions": {},
-          "distractor": "overall",
+          "distractor": null,
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question"
+          ]
+        },
+        {
+          "id": "ets_s3_q10",
+          "prompt": "A student is inquiring about a complex administrative process.",
+          "answer": "Could you clarify how my transfer credits will be evaluated by the department?",
+          "chunks": [
+            "could you clarify",
+            "how",
+            "my transfer credits",
+            "will be evaluated",
+            "by the department"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "academic advisor",
           "has_question_mark": true,
           "grammar_points": [
-            "embedded question (why)",
-            "passive voice",
-            "double object verb (tell)"
+            "embedded question",
+            "passive voice"
           ]
         }
       ]
