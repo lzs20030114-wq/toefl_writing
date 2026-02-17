@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import EM_DATA from "../../data/emailWriting/prompts.json";
 import AD_DATA from "../../data/academicWriting/prompts.json";
 import { wc } from "../../lib/utils";
@@ -29,6 +29,59 @@ async function aiGen(type) {
   } catch (e) { console.error(e); return null; }
 }
 
+function normalizeEmailPrompt(input, fallbackId = "gen-email") {
+  if (!input || typeof input !== "object") return null;
+  const scenario = String(input.scenario || "").trim();
+  const direction = String(input.direction || "").trim();
+  const goals = Array.isArray(input.goals)
+    ? input.goals.map((g) => String(g || "").trim()).filter(Boolean).slice(0, 3)
+    : [];
+  if (!scenario || !direction || goals.length < 3) return null;
+  return {
+    id: String(input.id || fallbackId),
+    to: String(input.to || "Professor").trim() || "Professor",
+    from: String(input.from || "You").trim() || "You",
+    scenario,
+    direction,
+    goals,
+  };
+}
+
+function normalizeDiscussionPrompt(input, fallbackId = "gen-discussion") {
+  if (!input || typeof input !== "object") return null;
+  const professorName = String(input?.professor?.name || "").trim();
+  const professorText = String(input?.professor?.text || "").trim();
+  const students = Array.isArray(input?.students)
+    ? input.students
+      .map((s) => ({
+        name: String(s?.name || "").trim(),
+        text: String(s?.text || "").trim(),
+      }))
+      .filter((s) => s.name && s.text)
+      .slice(0, 2)
+    : [];
+  if (!professorName || !professorText || students.length < 2) return null;
+  return {
+    id: String(input.id || fallbackId),
+    professor: { name: professorName, text: professorText },
+    students,
+  };
+}
+
+function normalizePrompt(type, input, fallbackId) {
+  return type === "email"
+    ? normalizeEmailPrompt(input, fallbackId)
+    : normalizeDiscussionPrompt(input, fallbackId);
+}
+
+function summarizePrompt(type, pd) {
+  if (!pd) return "";
+  const src = type === "email" ? pd.scenario : pd?.professor?.text;
+  const text = String(src || "").trim();
+  if (!text) return "";
+  return text.length > 80 ? `${text.slice(0, 80)}...` : text;
+}
+
 export function WritingTask({
   onExit,
   type,
@@ -44,15 +97,33 @@ export function WritingTask({
   reportLanguage,
 }) {
   const uiReportLanguage = normalizeReportLanguage(reportLanguage || readReportLanguage());
-  const data = type === "email" ? EM_DATA : AD_DATA;
+  const dataRaw = type === "email" ? EM_DATA : AD_DATA;
+  const data = useMemo(
+    () =>
+      (Array.isArray(dataRaw)
+        ? dataRaw
+          .map((d, i) => normalizePrompt(type, d, `${type}-${i + 1}`))
+          .filter(Boolean)
+        : []),
+    [dataRaw, type]
+  );
   const defaultLimit = type === "email" ? 420 : 600;
   const limit = Number.isFinite(timeLimitSeconds) && timeLimitSeconds > 0 ? timeLimitSeconds : defaultLimit;
   const minW = type === "email" ? 80 : 100;
   const storageKey = type === "email" ? "toefl-em-done" : "toefl-disc-done";
 
   const usedRef = useRef(new Set());
-  const [pi, setPi] = useState(() => { const i = pickRandomPrompt(data, usedRef.current, storageKey); usedRef.current.add(i); return i; });
-  const [pd, setPd] = useState(() => data[pi]);
+  const [initialError] = useState(() => (data.length === 0 ? "Prompt bank is empty or invalid." : ""));
+  const [pi, setPi] = useState(() => {
+    try {
+      const i = pickRandomPrompt(data, usedRef.current, storageKey);
+      usedRef.current.add(i);
+      return i;
+    } catch {
+      return 0;
+    }
+  });
+  const [pd, setPd] = useState(() => data[pi] || null);
   const [text, setText] = useState("");
   const [tl, setTl] = useState(limit);
   const [run, setRun] = useState(false);
@@ -66,7 +137,7 @@ export function WritingTask({
   const tr = useRef(null);
   const submitLockRef = useRef(false);
 
-  useEffect(() => { setPd(data[pi]); }, [pi, data]);
+  useEffect(() => { setPd(data[pi] || null); }, [pi, data]);
   useEffect(() => { setIntro(showTaskIntro); }, [showTaskIntro, type]);
 
   const submitRef = useRef(null);
@@ -103,6 +174,9 @@ export function WritingTask({
     setScoreError("");
     setFb(null);
     try {
+      if (!pd) {
+        throw new Error("Prompt data is missing.");
+      }
       const r = await evaluateWritingResponse(type, pd, text, uiReportLanguage);
       setFb(r);
       setPhase("done");
@@ -110,9 +184,7 @@ export function WritingTask({
         const payload = {
           type, score: r.score, band: r.band, wordCount: wc(text), weaknesses: r.weaknesses, next_steps: r.next_steps, mode: practiceMode,
           details: {
-            promptSummary: type === "email"
-              ? pd.scenario.substring(0, 80) + "..."
-              : pd.professor.text.substring(0, 80) + "...",
+            promptSummary: summarizePrompt(type, pd),
             userText: text,
             feedback: r
           }
@@ -154,6 +226,12 @@ export function WritingTask({
       setPhase("done");
       setRequestState("success");
       setScoreError("");
+      if (!pd) {
+        submitLockRef.current = false;
+        setRequestState("error");
+        setScoreError("Prompt data is missing.");
+        return;
+      }
       if (typeof onComplete === "function" && !completionSentRef.current) {
         completionSentRef.current = true;
         onComplete({
@@ -162,9 +240,7 @@ export function WritingTask({
           mode: practiceMode,
           details: {
             promptData: pd,
-            promptSummary: type === "email"
-              ? pd.scenario.substring(0, 80) + "..."
-              : pd.professor.text.substring(0, 80) + "...",
+            promptSummary: summarizePrompt(type, pd),
             userText: text,
             reportLanguage: uiReportLanguage,
           },
@@ -189,14 +265,21 @@ export function WritingTask({
 
   function next() {
     clearInterval(tr.current);
-    const n = pickRandomPrompt(data, usedRef.current, storageKey);
+    let n = 0;
+    try {
+      n = pickRandomPrompt(data, usedRef.current, storageKey);
+    } catch {
+      setToast("Prompt bank is empty or invalid.");
+      return;
+    }
     usedRef.current.add(n);
     setPi(n); setPd(data[n]); setText(""); setTl(limit); setRun(false); setPhase("ready"); setFb(null); setRequestState("idle"); setScoreError(""); submitLockRef.current = false; completionSentRef.current = false; setIntro(showTaskIntro);
   }
   async function genNew() {
     setGen(true);
     const d = await aiGen(type);
-    if (d) { setPd({ id: "gen", ...d }); setText(""); setTl(limit); setRun(false); setPhase("ready"); setFb(null); setRequestState("idle"); setScoreError(""); submitLockRef.current = false; completionSentRef.current = false; setIntro(showTaskIntro); }
+    const normalized = normalizePrompt(type, d, `gen-${Date.now()}`);
+    if (normalized) { setPd(normalized); setText(""); setTl(limit); setRun(false); setPhase("ready"); setFb(null); setRequestState("idle"); setScoreError(""); submitLockRef.current = false; completionSentRef.current = false; setIntro(showTaskIntro); }
     else { setToast("Generation failed. Please retry."); }
     setGen(false);
   }
@@ -214,6 +297,21 @@ export function WritingTask({
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
       {!embedded && <TopBar title={taskTitle} section={"Writing | " + (type === "email" ? "Task 2" : "Task 3")} timeLeft={phase !== "ready" ? tl : undefined} isRunning={run} onExit={onExit} />}
       <div style={{ maxWidth: 860, margin: "24px auto", padding: "0 20px" }}>
+        {initialError && (
+          <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 28, marginBottom: 16 }}>
+            <div style={{ fontSize: 16, fontWeight: 700, color: C.red, marginBottom: 8 }}>Prompt bank unavailable</div>
+            <div style={{ fontSize: 14, color: C.t2 }}>{initialError}</div>
+            <div style={{ marginTop: 16 }}><Btn onClick={onExit} variant="secondary">{embedded ? "Back" : "Back to Practice"}</Btn></div>
+          </div>
+        )}
+        {!initialError && !pd && (
+          <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 28, marginBottom: 16 }}>
+            <div style={{ fontSize: 16, fontWeight: 700, color: C.red, marginBottom: 8 }}>Prompt unavailable</div>
+            <div style={{ fontSize: 14, color: C.t2 }}>Please refresh and try again.</div>
+          </div>
+        )}
+        {!initialError && pd && (
+          <>
         {intro && phase === "ready" ? (
           <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 28 }}>
             <div style={{ fontSize: 20, fontWeight: 700, color: C.nav, marginBottom: 10 }}>{introTitle}</div>
@@ -269,6 +367,8 @@ export function WritingTask({
         )}
         {phase === "done" && fb && (
           <div style={{ marginTop: 20 }}><ScoringReport result={fb} type={type} uiLang={uiReportLanguage} /><div style={{ display: "flex", gap: 12, marginTop: 16 }}><Btn onClick={next} variant="secondary">Next Prompt</Btn><Btn onClick={genNew} disabled={gen}>{gen ? "Generating..." : "Generate New Prompt"}</Btn><Btn onClick={onExit} variant="secondary">{embedded ? "Back" : "Back to Practice"}</Btn></div></div>
+        )}
+          </>
         )}
       </div>
     </div>

@@ -18,6 +18,17 @@ function getClientIp(request) {
   return "unknown";
 }
 
+function getRateLimitKey(request) {
+  const ip = getClientIp(request);
+  if (ip && ip !== "unknown") return `ip:${ip}`;
+  const ua = request.headers.get("user-agent") || "";
+  const origin = request.headers.get("origin") || "";
+  const host = request.headers.get("host") || "";
+  const fallback = `${ua}|${origin}|${host}`.trim();
+  if (!fallback) return null;
+  return `fallback:${fallback}`;
+}
+
 function isRateLimited(ip, now = Date.now()) {
   for (const [key, meta] of rateLimitBuckets.entries()) {
     if (now - meta.windowStart > RATE_LIMIT_WINDOW_MS) {
@@ -35,8 +46,8 @@ function isRateLimited(ip, now = Date.now()) {
 
 export async function POST(request) {
   try {
-    const clientIp = getClientIp(request);
-    if (isRateLimited(clientIp)) {
+    const rateKey = getRateLimitKey(request);
+    if (rateKey && isRateLimited(rateKey)) {
       return Response.json({ error: "Rate limit exceeded. Please retry shortly." }, { status: 429 });
     }
     const { system, message, maxTokens, temperature } = await request.json();
