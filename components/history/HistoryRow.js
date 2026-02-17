@@ -26,7 +26,12 @@ function typeIcon(type) {
 
 function getScoreLabel(s) {
   if (!s || typeof s !== "object") return "--";
-  if (s.type === "bs") return `${s.correct}/${s.total}`;
+  if (s.type === "bs") {
+    const total = Number(s.total || 0);
+    const correct = Number(s.correct || 0);
+    if (total <= 0) return "--";
+    return `${correct}/${total}`;
+  }
   if (s.type === "mock") {
     if (Number.isFinite(s.band)) return `${s.band.toFixed(1)} /6`;
     return `${s.score || 0}%`;
@@ -36,7 +41,12 @@ function getScoreLabel(s) {
 
 function getScoreColor(s) {
   if (!s || typeof s !== "object") return C.t2;
-  if (s.type === "bs") return s.correct / s.total >= 0.8 ? C.green : C.orange;
+  if (s.type === "bs") {
+    const total = Number(s.total || 0);
+    const correct = Number(s.correct || 0);
+    if (total <= 0) return C.t2;
+    return correct / total >= 0.8 ? C.green : C.orange;
+  }
   if (s.type === "mock") {
     const band = s.band;
     if (Number.isFinite(band)) {
@@ -59,6 +69,7 @@ function getScoreColor(s) {
 function fmtDate(d) {
   try {
     const dt = new Date(d);
+    if (Number.isNaN(dt.getTime())) return String(d || "");
     const pad = (n) => String(n).padStart(2, "0");
     return `${dt.getFullYear()}/${pad(dt.getMonth() + 1)}/${pad(dt.getDate())} ${pad(dt.getHours())}:${pad(dt.getMinutes())}`;
   } catch {

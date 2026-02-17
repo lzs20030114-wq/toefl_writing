@@ -41,4 +41,20 @@ describe("HistoryRow", () => {
     expect(screen.getByText("Mock Exam")).toBeInTheDocument();
     expect(screen.getByText(/Email 3\/5/)).toBeInTheDocument();
   });
+
+  test("handles invalid date and empty bs totals gracefully", () => {
+    const entry = {
+      sourceIndex: 9,
+      session: {
+        type: "bs",
+        correct: 0,
+        total: 0,
+        date: "bad-date",
+        details: [],
+      },
+    };
+    render(<HistoryRow entry={entry} isExpanded={false} isLast={true} onToggle={() => {}} onDelete={() => {}} />);
+    expect(screen.getByText("bad-date")).toBeInTheDocument();
+    expect(screen.getByText("--")).toBeInTheDocument();
+  });
 });
