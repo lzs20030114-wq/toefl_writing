@@ -2,9 +2,43 @@ import { createRequire } from "module";
 
 const require = createRequire(import.meta.url);
 const { callDeepSeekViaCurl, resolveProxyUrl } = require("../../../lib/ai/deepseekHttp");
+const RATE_LIMIT_WINDOW_MS = 60 * 1000;
+const RATE_LIMIT_MAX_REQUESTS = 45;
+
+const rateLimitBuckets = globalThis.__toeflRateLimitBuckets || new Map();
+if (!globalThis.__toeflRateLimitBuckets) {
+  globalThis.__toeflRateLimitBuckets = rateLimitBuckets;
+}
+
+function getClientIp(request) {
+  const xff = request.headers.get("x-forwarded-for");
+  if (xff) return xff.split(",")[0].trim();
+  const xri = request.headers.get("x-real-ip");
+  if (xri) return xri.trim();
+  return "unknown";
+}
+
+function isRateLimited(ip, now = Date.now()) {
+  for (const [key, meta] of rateLimitBuckets.entries()) {
+    if (now - meta.windowStart > RATE_LIMIT_WINDOW_MS) {
+      rateLimitBuckets.delete(key);
+    }
+  }
+  const bucket = rateLimitBuckets.get(ip);
+  if (!bucket || now - bucket.windowStart > RATE_LIMIT_WINDOW_MS) {
+    rateLimitBuckets.set(ip, { windowStart: now, count: 1 });
+    return false;
+  }
+  bucket.count += 1;
+  return bucket.count > RATE_LIMIT_MAX_REQUESTS;
+}
 
 export async function POST(request) {
   try {
+    const clientIp = getClientIp(request);
+    if (isRateLimited(clientIp)) {
+      return Response.json({ error: "Rate limit exceeded. Please retry shortly." }, { status: 429 });
+    }
     const { system, message, maxTokens, temperature } = await request.json();
     const proxyUrl = resolveProxyUrl();
     if (proxyUrl) {

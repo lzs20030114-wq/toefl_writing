@@ -75,9 +75,15 @@ export function useBuildSentenceSession(questions, options = {}) {
   function startTimer() {
     if (phase !== "instruction") return;
     if (tr.current) clearInterval(tr.current);
+    try {
+      initQ(0, qs);
+    } catch {
+      setPhase("instruction");
+      setRun(false);
+      return;
+    }
     setPhase("active");
     setRun(true);
-    initQ(0, qs);
     tr.current = setInterval(() => setTl((p) => {
       if (p <= 1) {
         clearInterval(tr.current);
