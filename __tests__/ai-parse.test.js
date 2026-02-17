@@ -77,6 +77,23 @@ Action: Use "for example" to add concrete detail.
     expect(out.goals).toBeNull();
   });
 
+  test("parses inline <n> annotation format and keeps counts non-zero", () => {
+    const raw = `
+===SCORE===
+Score: 4
+Band: 4.0
+Summary: Mostly clear.
+===ANNOTATION===
+Dear Professor, <n level="red" fix="I have received your feedback.">I receive your feedback.</n>
+Thanks for your time.
+`;
+    const out = parseReport(raw);
+    expect(out.error).toBe(false);
+    expect(out.annotationCounts.red).toBeGreaterThan(0);
+    expect(out.annotationParsed.plainText).not.toContain("<n");
+    expect(out.annotationSegments.some((s) => s.type === "mark")).toBe(true);
+  });
+
   test("returns fallback when section markers are missing", () => {
     const out = parseReport("plain text");
     expect(out.error).toBe(true);

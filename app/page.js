@@ -3,11 +3,12 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { C, FONT } from "../components/shared/ui";
 import { loadHist, SESSION_STORE_EVENTS } from "../lib/sessionStore";
+import { formatMinutesLabel, getTaskTimeSeconds, normalizePracticeMode, PRACTICE_MODE } from "../lib/practiceMode";
 
 const PRACTICE_TASKS = [
-  { k: "build-sentence", n: "Task 1", t: "Build a Sentence", d: "Reorder words to form a grammatically correct response.", ti: "6 min", it: "10 questions" },
-  { k: "email-writing", n: "Task 2", t: "Write an Email", d: "Respond appropriately to a workplace situation.", ti: "7 min", it: "80-120 words" },
-  { k: "academic-writing", n: "Task 3", t: "Academic Discussion", d: "Respond to an academic discussion prompt.", ti: "10 min", it: "100+ words" },
+  { k: "build-sentence", modeKey: "build", n: "Task 1", t: "Build a Sentence", d: "Reorder words to form a grammatically correct response.", it: "10 questions" },
+  { k: "email-writing", modeKey: "email", n: "Task 2", t: "Write an Email", d: "Respond appropriately to a workplace situation.", it: "80-120 words" },
+  { k: "academic-writing", modeKey: "discussion", n: "Task 3", t: "Academic Discussion", d: "Respond to an academic discussion prompt.", it: "100+ words" },
 ];
 
 const MOCK_TASK = {
@@ -15,7 +16,6 @@ const MOCK_TASK = {
   n: "Full Writing Section",
   t: "Mock Exam Mode",
   d: "Simulated exam environment",
-  ti: "24 min",
   it: "Task 1 + Task 2 + Task 3",
 };
 
@@ -30,6 +30,7 @@ function timeBadge(time, bg = "#e8f0fe", color = C.nav) {
 export default function Page() {
   const [hoverKey, setHoverKey] = useState("");
   const [sessionCount, setSessionCount] = useState(0);
+  const [mode, setMode] = useState(PRACTICE_MODE.STANDARD);
 
   useEffect(() => {
     const refresh = () => {
@@ -64,6 +65,10 @@ export default function Page() {
     transition: "box-shadow 120ms ease, transform 120ms ease, border-color 120ms ease",
   };
 
+  const modeSuffix = mode === PRACTICE_MODE.CHALLENGE ? "?mode=challenge" : "";
+  const mockTotalSeconds =
+    getTaskTimeSeconds("build", mode) + getTaskTimeSeconds("email", mode) + getTaskTimeSeconds("discussion", mode);
+
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
       <div style={{ background: C.nav, color: "#fff", padding: "0 20px", height: 48, display: "flex", alignItems: "center", borderBottom: "3px solid " + C.navDk }}>
@@ -75,11 +80,34 @@ export default function Page() {
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: "32px 40px", marginBottom: 24, textAlign: "center" }}>
           <h1 style={{ margin: 0, fontSize: 26, fontWeight: 700, color: C.nav }}>TOEFL iBT Writing Practice (2026)</h1>
           <p style={{ color: C.t2, fontSize: 14, margin: "8px 0 0" }}>ETS-style timing & AI feedback for all 3 tasks</p>
+          <div style={{ display: "inline-flex", gap: 8, background: "#f8fafc", border: "1px solid #cbd5e1", borderRadius: 999, marginTop: 14, padding: 4 }}>
+            {[
+              { value: PRACTICE_MODE.STANDARD, label: "Standard" },
+              { value: PRACTICE_MODE.CHALLENGE, label: "Challenge" },
+            ].map((opt) => (
+              <button
+                key={opt.value}
+                onClick={() => setMode(normalizePracticeMode(opt.value))}
+                style={{
+                  border: "1px solid " + (mode === opt.value ? C.blue : "transparent"),
+                  background: mode === opt.value ? "#e8f0fe" : "transparent",
+                  color: mode === opt.value ? C.nav : C.t2,
+                  borderRadius: 999,
+                  padding: "4px 12px",
+                  fontSize: 12,
+                  fontWeight: 700,
+                  cursor: "pointer",
+                }}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {PRACTICE_TASKS.map((c) => (
           <Link
-            href={"/" + c.k}
+            href={`/${c.k}${modeSuffix}`}
             key={c.k}
             onMouseEnter={() => setHoverKey(c.k)}
             onMouseLeave={() => setHoverKey("")}
@@ -90,7 +118,7 @@ export default function Page() {
               transform: hoverKey === c.k ? "translateY(-1px)" : "none",
             }}
           >
-            {timeBadge(c.ti)}
+            {timeBadge(formatMinutesLabel(getTaskTimeSeconds(c.modeKey, mode)))}
             <div style={{ padding: "14px 16px", flex: 1, minWidth: 0, display: "flex", flexDirection: "column", justifyContent: "center" }}>
               <div style={{ fontSize: 11, color: "#6b7280", fontWeight: 600, marginBottom: 3 }}>{c.n}</div>
               <div style={{ fontSize: 18, fontWeight: 700, color: C.t1, marginBottom: 4, lineHeight: 1.2 }}>{c.t}</div>
@@ -104,7 +132,7 @@ export default function Page() {
         ))}
 
         <Link
-          href={"/" + MOCK_TASK.k}
+          href={`/${MOCK_TASK.k}${modeSuffix}`}
           onMouseEnter={() => setHoverKey(MOCK_TASK.k)}
           onMouseLeave={() => setHoverKey("")}
           style={{
@@ -115,7 +143,7 @@ export default function Page() {
             background: "linear-gradient(180deg, #f8fbff 0%, #eef5ff 100%)",
           }}
         >
-          {timeBadge(MOCK_TASK.ti, "#dbeafe", C.nav)}
+          {timeBadge(formatMinutesLabel(mockTotalSeconds), "#dbeafe", C.nav)}
           <div style={{ padding: "14px 16px", flex: 1, minWidth: 0, display: "flex", flexDirection: "column", justifyContent: "center" }}>
             <div style={{ fontSize: 11, color: "#334155", fontWeight: 700, marginBottom: 3 }}>{MOCK_TASK.n}</div>
             <div style={{ fontSize: 18, fontWeight: 800, color: C.nav, marginBottom: 4, lineHeight: 1.2 }}>{MOCK_TASK.t}</div>
@@ -123,7 +151,7 @@ export default function Page() {
               Full TOEFL iBT Writing Section
             </div>
             <div style={{ fontSize: 12, color: "#475569", marginTop: 4, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-              24 minutes | Task 1 + Task 2 + Task 3
+              {`${formatMinutesLabel(mockTotalSeconds)} | Task 1 + Task 2 + Task 3`}
             </div>
             <div style={{ fontSize: 12, color: "#475569", marginTop: 2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
               {MOCK_TASK.d}
@@ -131,6 +159,7 @@ export default function Page() {
           </div>
           <div style={{ padding: "14px 12px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "flex-end", borderLeft: "1px solid #bfdbfe", minWidth: 108 }}>
             <div style={{ fontSize: 12, color: "#334155", whiteSpace: "nowrap" }}>{MOCK_TASK.it}</div>
+            {mode === PRACTICE_MODE.CHALLENGE && <div style={{ fontSize: 11, color: C.red, fontWeight: 700, marginTop: 4 }}>Challenge</div>}
             <div style={{ color: C.nav, fontSize: 18, lineHeight: 1, marginTop: 4 }}>&gt;</div>
           </div>
         </Link>

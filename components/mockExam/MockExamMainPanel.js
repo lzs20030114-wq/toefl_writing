@@ -17,6 +17,7 @@ export function MockExamMainPanel({
   onAbort,
   onStartNew,
   onExit,
+  mode,
 }) {
   return (
     <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 24 }}>
@@ -26,6 +27,8 @@ export function MockExamMainPanel({
           persistSession={false}
           onExit={onAbort}
           onTimerChange={onTimerChange}
+          timeLimitSeconds={currentTask?.seconds}
+          practiceMode={mode}
           onComplete={(payload) => {
             onSubmitTaskResult({
               score: payload.correct || 0,
@@ -48,6 +51,8 @@ export function MockExamMainPanel({
           deferScoring
           onExit={onAbort}
           onTimerChange={onTimerChange}
+          timeLimitSeconds={currentTask?.seconds}
+          practiceMode={mode}
           onComplete={(payload) => {
             onSubmitTaskResult({
               score: null,
@@ -71,6 +76,8 @@ export function MockExamMainPanel({
           deferScoring
           onExit={onAbort}
           onTimerChange={onTimerChange}
+          timeLimitSeconds={currentTask?.seconds}
+          practiceMode={mode}
           onComplete={(payload) => {
             onSubmitTaskResult({
               score: null,

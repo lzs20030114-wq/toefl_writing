@@ -14,6 +14,7 @@ import { C, FONT, Btn, Toast, TopBar } from "../shared/ui";
 import { ScoringReport } from "./ScoringReport";
 import { WritingPromptPanel } from "./WritingPromptPanel";
 import { WritingResponsePanel } from "./WritingResponsePanel";
+import { formatMinutesLabel, PRACTICE_MODE } from "../../lib/practiceMode";
 
 async function aiGen(type) {
   const prompts = {
@@ -27,9 +28,20 @@ async function aiGen(type) {
   } catch (e) { console.error(e); return null; }
 }
 
-export function WritingTask({ onExit, type, embedded = false, persistSession = true, onComplete = null, deferScoring = false, onTimerChange = null }) {
+export function WritingTask({
+  onExit,
+  type,
+  embedded = false,
+  persistSession = true,
+  onComplete = null,
+  deferScoring = false,
+  onTimerChange = null,
+  timeLimitSeconds = null,
+  practiceMode = PRACTICE_MODE.STANDARD,
+}) {
   const data = type === "email" ? EM_DATA : AD_DATA;
-  const limit = type === "email" ? 420 : 600;
+  const defaultLimit = type === "email" ? 420 : 600;
+  const limit = Number.isFinite(timeLimitSeconds) && timeLimitSeconds > 0 ? timeLimitSeconds : defaultLimit;
   const minW = type === "email" ? 80 : 100;
   const storageKey = type === "email" ? "toefl-em-done" : "toefl-disc-done";
 
@@ -89,7 +101,7 @@ export function WritingTask({ onExit, type, embedded = false, persistSession = t
       setPhase("done");
       if (r) {
         const payload = {
-          type, score: r.score, band: r.band, wordCount: wc(text), weaknesses: r.weaknesses, next_steps: r.next_steps,
+          type, score: r.score, band: r.band, wordCount: wc(text), weaknesses: r.weaknesses, next_steps: r.next_steps, mode: practiceMode,
           details: {
             promptSummary: type === "email"
               ? pd.scenario.substring(0, 80) + "..."
@@ -133,6 +145,7 @@ export function WritingTask({ onExit, type, embedded = false, persistSession = t
         onComplete({
           type,
           wordCount: wc(text),
+          mode: practiceMode,
           details: {
             promptData: pd,
             promptSummary: type === "email"
@@ -182,7 +195,10 @@ export function WritingTask({ onExit, type, embedded = false, persistSession = t
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
       {!embedded && <TopBar title={taskTitle} section={"Writing | " + (type === "email" ? "Task 2" : "Task 3")} timeLeft={phase !== "ready" ? tl : undefined} isRunning={run} onExit={onExit} />}
       <div style={{ maxWidth: 860, margin: "24px auto", padding: "0 20px" }}>
-        <div style={{ background: C.ltB, border: "1px solid #b3d4fc", borderRadius: 4, padding: 14, marginBottom: 20, fontSize: 13 }}><b>Directions:</b> {type === "email" ? "Write an email addressing all 3 goals. 7 min. 80-120 words." : "Read the discussion and write a response. 10 min. 100+ words."}</div>
+        <div style={{ background: C.ltB, border: "1px solid #b3d4fc", borderRadius: 4, padding: 14, marginBottom: 20, fontSize: 13 }}>
+          <b>Directions:</b> {type === "email" ? `Write an email addressing all 3 goals. ${formatMinutesLabel(limit)}. 80-120 words.` : `Read the discussion and write a response. ${formatMinutesLabel(limit)}. 100+ words.`}
+          {practiceMode === PRACTICE_MODE.CHALLENGE && <span> Challenge mode: compressed timing.</span>}
+        </div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
           <WritingPromptPanel type={type} pd={pd} />
           <WritingResponsePanel

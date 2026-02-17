@@ -2,6 +2,7 @@
 import React from "react";
 import { C, FONT, Btn, Toast, TopBar } from "../shared/ui";
 import { useBuildSentenceSession } from "./useBuildSentenceSession";
+import { formatLongDuration, PRACTICE_MODE } from "../../lib/practiceMode";
 
 function formatChunkDisplay(text) {
   return String(text || "")
@@ -18,7 +19,16 @@ function formatChunkDisplay(text) {
     .join(" ");
 }
 
-export function BuildSentenceTask({ onExit, questions, embedded = false, persistSession = true, onComplete = null, onTimerChange = null }) {
+export function BuildSentenceTask({
+  onExit,
+  questions,
+  embedded = false,
+  persistSession = true,
+  onComplete = null,
+  onTimerChange = null,
+  timeLimitSeconds = 410,
+  practiceMode = PRACTICE_MODE.STANDARD,
+}) {
   const {
     qs,
     q,
@@ -50,7 +60,7 @@ export function BuildSentenceTask({ onExit, questions, embedded = false, persist
     onDragEnd,
     onDropSlot,
     onDropBank,
-  } = useBuildSentenceSession(questions, { persistSession, onComplete, onTimerChange });
+  } = useBuildSentenceSession(questions, { persistSession, onComplete, onTimerChange, timeLimitSeconds, practiceMode });
 
   if (phase === "review") {
     const ok = results.filter((r) => r.isCorrect).length;
@@ -134,7 +144,8 @@ export function BuildSentenceTask({ onExit, questions, embedded = false, persist
             <div style={{ fontSize: 14, color: C.t1, lineHeight: 1.8 }}>
               <p><b>Directions:</b> Use the word chunks below to build a grammatically correct sentence. Some words may already be placed for you. One chunk may be a distractor that does not belong.</p>
               <p><b>Questions:</b> 10</p>
-              <p><b>Time limit:</b> 6 minutes 50 seconds</p>
+              <p><b>Time limit:</b> {formatLongDuration(timeLimitSeconds)}</p>
+              {practiceMode === PRACTICE_MODE.CHALLENGE && <p><b>Mode:</b> Challenge (compressed timing)</p>}
               <p>The timer will start when you click <b>Start</b>. When time runs out, your answers will be submitted automatically.</p>
             </div>
             <div style={{ marginTop: 24, textAlign: "center" }}><Btn data-testid="build-start" onClick={startTimer}>Start</Btn></div>

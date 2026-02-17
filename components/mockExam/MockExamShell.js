@@ -10,8 +10,10 @@ import { evaluateWritingResponse } from "../../lib/ai/writingEval";
 import { SectionTimerPanel } from "./SectionTimerPanel";
 import { MockExamStartCard } from "./MockExamStartCard";
 import { MockExamMainPanel } from "./MockExamMainPanel";
+import { formatMinutesLabel, PRACTICE_MODE } from "../../lib/practiceMode";
+import { getDefaultMockExamBlueprint } from "../../lib/mockExam/planner";
 
-export function MockExamShell({ onExit }) {
+export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD }) {
   const [session, setSession] = useState(null);
   const [hist] = useState(() => loadMockExamHistory());
   const [sectionTimer, setSectionTimer] = useState(null);
@@ -29,8 +31,9 @@ export function MockExamShell({ onExit }) {
   }
 
   function startExam() {
-    const next = mockExamRunner.startNewExam();
-    setSession(next);
+    const blueprint = getDefaultMockExamBlueprint(mode);
+    const next = mockExamRunner.startNewExam(blueprint);
+    setSession({ ...next, mode });
     setSectionTimer(null);
     setScoringPhase("idle");
     setScoringError("");
@@ -108,10 +111,15 @@ export function MockExamShell({ onExit }) {
 
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
-      <TopBar title="Full Mock Exam" section="Writing | Mock Mode" onExit={onExit} />
+      <TopBar title={mode === PRACTICE_MODE.CHALLENGE ? "Full Mock Exam (Challenge)" : "Full Mock Exam"} section="Writing | Mock Mode" onExit={onExit} />
       <div style={{ maxWidth: 1200, margin: "24px auto", padding: "0 20px" }}>
         {!session && (
-          <MockExamStartCard savedCount={(hist.sessions || []).length} onStart={startExam} />
+          <MockExamStartCard
+            savedCount={(hist.sessions || []).length}
+            onStart={startExam}
+            mode={mode}
+            totalTimeLabel={formatMinutesLabel(getDefaultMockExamBlueprint(mode).reduce((sum, t) => sum + (t.seconds || 0), 0))}
+          />
         )}
 
         {!!session && (
@@ -127,6 +135,7 @@ export function MockExamShell({ onExit }) {
               onAbort={abortExam}
               onStartNew={startExam}
               onExit={onExit}
+              mode={mode}
             />
             <SectionTimerPanel
               currentTask={currentTask}

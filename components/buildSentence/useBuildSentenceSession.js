@@ -14,6 +14,8 @@ export function useBuildSentenceSession(questions, options = {}) {
   const persistSession = options.persistSession !== false;
   const onComplete = typeof options.onComplete === "function" ? options.onComplete : null;
   const onTimerChange = typeof options.onTimerChange === "function" ? options.onTimerChange : null;
+  const timeLimitSeconds = Number.isFinite(options.timeLimitSeconds) && options.timeLimitSeconds > 0 ? options.timeLimitSeconds : 410;
+  const practiceMode = options.practiceMode || "standard";
   const initialBuildState = (() => {
     try {
       const source = questions || selectBSQuestions();
@@ -34,7 +36,7 @@ export function useBuildSentenceSession(questions, options = {}) {
   const [bank, setBank] = useState([]);
   const [results, setResults] = useState([]);
   const [phase, setPhase] = useState("instruction");
-  const [tl, setTl] = useState(410);
+  const [tl, setTl] = useState(timeLimitSeconds);
   const [run, setRun] = useState(false);
   const [toast, setToast] = useState(initialBuildState.error || null);
 
@@ -99,6 +101,7 @@ export function useBuildSentenceSession(questions, options = {}) {
   function saveSession(nr) {
     const payload = {
       type: "bs",
+      mode: practiceMode,
       correct: nr.filter((r) => r.isCorrect).length,
       total: nr.length,
       errors: nr.filter((r) => !r.isCorrect).flatMap((r) => r.q.grammar_points || []),

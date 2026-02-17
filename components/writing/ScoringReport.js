@@ -1,6 +1,9 @@
 "use client";
 import React, { useMemo, useState } from "react";
 import { C } from "../shared/ui";
+import { buildAnnotationSegments, countAnnotations, parseAnnotations } from "../../lib/annotations/parseAnnotations";
+
+const warnedParseFallback = new Set();
 
 function Collapse({ title, defaultOpen = false, children, subtitle }) {
   const [open, setOpen] = useState(defaultOpen);
@@ -54,7 +57,74 @@ export function ScoringReport({ result, type }) {
         .sort((a, b) => Number(b.count || 0) - Number(a.count || 0)),
     [result.patterns]
   );
-  const markCounts = result.annotationCounts || { red: 0, orange: 0, blue: 0 };
+  const annotationView = useMemo(() => {
+    const parsedFromResult = result?.annotationParsed;
+    if (parsedFromResult && Array.isArray(parsedFromResult.annotations) && typeof parsedFromResult.plainText === "string") {
+      if (parsedFromResult.parseError && parsedFromResult.hasMarkup) {
+        const taskId = result?.taskId || result?.type || "unknown-task";
+        const sessionId = result?.sessionId || result?.mockSessionId || "unknown-session";
+        const warnKey = `${taskId}/${sessionId}`;
+        if (!warnedParseFallback.has(warnKey)) {
+          warnedParseFallback.add(warnKey);
+          console.warn(`[annotations] parse failed for ${taskId}/${sessionId}; fallback to plain text`);
+        }
+      }
+      return {
+        plainText: parsedFromResult.plainText,
+        annotations: parsedFromResult.annotations,
+        segments: buildAnnotationSegments(parsedFromResult),
+        counts: countAnnotations(parsedFromResult.annotations),
+      };
+    }
+
+    const raw = String(result?.annotationRaw || "");
+    if (/<\s*n\b/i.test(raw)) {
+      const parsed = parseAnnotations(raw);
+      if (parsed.parseError) {
+        const taskId = result?.taskId || result?.type || "unknown-task";
+        const sessionId = result?.sessionId || result?.mockSessionId || "unknown-session";
+        const warnKey = `${taskId}/${sessionId}`;
+        if (!warnedParseFallback.has(warnKey)) {
+          warnedParseFallback.add(warnKey);
+          console.warn(`[annotations] parse failed for ${taskId}/${sessionId}; fallback to plain text`);
+        }
+      }
+      return {
+        plainText: parsed.plainText,
+        annotations: parsed.annotations,
+        segments: buildAnnotationSegments(parsed),
+        counts: countAnnotations(parsed.annotations),
+      };
+    }
+
+    const segs = Array.isArray(result?.annotationSegments) ? result.annotationSegments : [];
+    const annotations = [];
+    let pos = 0;
+    segs.forEach((s) => {
+      const text = String(s?.text || "");
+      if (s?.type === "mark") {
+        const start = pos;
+        const end = pos + text.length;
+        annotations.push({
+          level: s.level,
+          message: s.note || "",
+          fix: s.fix || "",
+          start,
+          end,
+        });
+      }
+      pos += text.length;
+    });
+    const plainText = segs.map((s) => String(s?.text || "")).join("");
+    return {
+      plainText,
+      annotations,
+      segments: segs.length > 0 ? segs : buildAnnotationSegments({ plainText, annotations: [] }),
+      counts: countAnnotations(annotations),
+    };
+  }, [result]);
+
+  const markCounts = annotationView.counts || { red: 0, orange: 0, blue: 0 };
   const comparison = result.comparison || { modelEssay: "", points: [] };
   const comparisonPoints = Array.isArray(comparison.points) ? comparison.points : [];
 
@@ -115,9 +185,9 @@ export function ScoringReport({ result, type }) {
         title="Sentence Annotations"
         subtitle={`${markCounts.red || 0} grammar errors | ${markCounts.orange || 0} wording suggestions | ${markCounts.blue || 0} upgrade suggestions`}
       >
-        {result.annotationSegments && result.annotationSegments.length > 0 ? (
+        {annotationView.segments && annotationView.segments.length > 0 ? (
           <div style={{ fontSize: 14, lineHeight: 1.9, whiteSpace: "pre-wrap" }}>
-            {result.annotationSegments.map((seg, idx) => {
+            {annotationView.segments.map((seg, idx) => {
               if (seg.type === "text") return <span key={idx}>{seg.text}</span>;
               const map = {
                 red: { bg: "#fee2e2", bd: "#fca5a5" },
@@ -136,24 +206,25 @@ export function ScoringReport({ result, type }) {
                     cursor: "pointer",
                     fontSize: "inherit",
                   }}
+                  title={seg.fix || ""}
                 >
                   {seg.text}
                 </button>
               );
             })}
-            {activeNote !== null && (result.annotationSegments[activeNote] || {}).type === "mark" ? (
+            {activeNote !== null && (annotationView.segments[activeNote] || {}).type === "mark" ? (
               <div style={{ marginTop: 12, border: "1px solid " + C.bdr, borderRadius: 6, padding: 10, background: "#fff" }}>
                 <div style={{ fontSize: 13, marginBottom: 6 }}>
-                  <b>Suggested rewrite:</b> {(result.annotationSegments[activeNote] || {}).fix || "This section is unavailable."}
+                  <b>Suggested rewrite:</b> {(annotationView.segments[activeNote] || {}).fix || "This section is unavailable."}
                 </div>
                 <div style={{ fontSize: 13 }}>
-                  <b>Issue note:</b> {(result.annotationSegments[activeNote] || {}).note || "This section is unavailable."}
+                  <b>Issue note:</b> {(annotationView.segments[activeNote] || {}).note || "This section is unavailable."}
                 </div>
               </div>
             ) : null}
           </div>
         ) : (
-          <div style={{ fontSize: 13, color: C.t2 }}>{result.annotationRaw || "This section is unavailable."}</div>
+          <div style={{ fontSize: 13, color: C.t2 }}>{annotationView.plainText || "This section is unavailable."}</div>
         )}
       </Collapse>
 
