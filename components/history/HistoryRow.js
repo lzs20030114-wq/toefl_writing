@@ -13,13 +13,23 @@ function getTypeLabel(type) {
 
 function getScoreLabel(s) {
   if (s.type === "bs") return `${s.correct}/${s.total}`;
-  if (s.type === "mock") return `${s.score || 0}%`;
+  if (s.type === "mock") {
+    if (Number.isFinite(s.band)) return `Band ${s.band.toFixed(1)}`;
+    return `${s.score || 0}%`;
+  }
   return `${s.score}/5`;
 }
 
 function getScoreColor(s) {
   if (s.type === "bs") return s.correct / s.total >= 0.8 ? C.green : C.orange;
   if (s.type === "mock") {
+    const band = s.band;
+    if (Number.isFinite(band)) {
+      if (band >= 5.5) return C.green;
+      if (band >= 4.5) return "#0066cc";
+      if (band >= 3.5) return C.orange;
+      return C.red;
+    }
     const p = s.score || 0;
     if (p >= 80) return C.green;
     if (p >= 60) return C.orange;
@@ -90,7 +100,10 @@ export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete }) {
 
       {isExpanded && s.type === "mock" && s.details && (
         <div style={{ background: "#f9f9f9", border: "1px solid #eee", borderRadius: 4, padding: 16, margin: "4px 0 8px 0" }}>
-          <div style={{ fontSize: 12, color: C.t2, marginBottom: 8 }}>Status: {s.status || s.details.scoringPhase || "completed"} | Overall: {s.score || 0}%</div>
+          <div style={{ fontSize: 12, color: C.t2, marginBottom: 8 }}>
+            {Number.isFinite(s.band) ? `Band ${s.band.toFixed(1)} | Scaled ${s.scaledScore ?? "--"}/30 | CEFR ${s.cefr ?? "--"} | ` : ""}
+            Overall: {s.score || 0}%
+          </div>
           {Array.isArray(s.details.tasks) && s.details.tasks.map((t, j) => (
             <div key={j} style={{ padding: "8px 0", borderBottom: j < s.details.tasks.length - 1 ? "1px solid #eee" : "none" }}>
               <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13 }}>

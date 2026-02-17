@@ -3,7 +3,7 @@ import React from "react";
 import { C } from "../shared/ui";
 import { fmt } from "../../lib/utils";
 
-export function SectionTimerPanel({ currentTask, progress, sectionTimer, status, scoringPhase }) {
+export function SectionTimerPanel({ currentTask, progress, sectionTimer, status, scoringPhase, aggregate, isAborted }) {
   return (
     <div style={{ position: "sticky", top: 72 }}>
       <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 16, marginBottom: 12 }}>
@@ -24,6 +24,12 @@ export function SectionTimerPanel({ currentTask, progress, sectionTimer, status,
         <div style={{ fontSize: 13, fontWeight: 700, color: C.t1, marginBottom: 4 }}>{status}</div>
         {scoringPhase === "pending" && <div style={{ fontSize: 12, color: C.blue }}>AI scoring in progress...</div>}
         {scoringPhase === "done" && <div style={{ fontSize: 12, color: C.green }}>AI scoring completed</div>}
+        {!isAborted && (scoringPhase === "done" || scoringPhase === "error") && aggregate && Number.isFinite(aggregate.band) && (
+          <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px solid #eee" }}>
+            <div style={{ fontSize: 20, fontWeight: 800, color: C.nav }}>{aggregate.band.toFixed(1)}</div>
+            <div style={{ fontSize: 11, color: C.t2 }}>Band (Scaled {aggregate.scaledScore}/30)</div>
+          </div>
+        )}
       </div>
     </div>
   );

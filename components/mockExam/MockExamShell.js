@@ -71,6 +71,7 @@ export function MockExamShell({ onExit }) {
         const result = await finalizeDeferredScoringSession(session, {
           evaluateResponse: evaluateWritingResponse,
           updateTaskScore: mockExamRunner.updateTaskScore,
+          recomputeAggregate: mockExamRunner.recomputeAggregate,
         });
 
         setSession(result.session);
@@ -109,10 +110,6 @@ export function MockExamShell({ onExit }) {
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
       <TopBar title="Full Mock Exam" section="Writing | Mock Mode" onExit={onExit} />
       <div style={{ maxWidth: 1200, margin: "24px auto", padding: "0 20px" }}>
-        <div style={{ background: C.ltB, border: "1px solid #b3d4fc", borderRadius: 4, padding: 14, marginBottom: 20, fontSize: 13 }}>
-          <b>Architecture scaffold:</b> This mode now has an isolated state machine and storage layer. Task embedding can be connected in the next step without touching existing task pages.
-        </div>
-
         {!session && (
           <MockExamStartCard savedCount={(hist.sessions || []).length} onStart={startExam} />
         )}
@@ -137,6 +134,8 @@ export function MockExamShell({ onExit }) {
               sectionTimer={sectionTimer}
               status={session.status}
               scoringPhase={scoringPhase}
+              aggregate={session.aggregate}
+              isAborted={session.status === MOCK_EXAM_STATUS.ABORTED}
             />
           </div>
         )}

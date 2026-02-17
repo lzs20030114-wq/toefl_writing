@@ -4,6 +4,7 @@ import { C, Btn } from "../shared/ui";
 import { MOCK_EXAM_STATUS, TASK_IDS } from "../../lib/mockExam/contracts";
 import { BuildSentenceTask } from "../buildSentence/BuildSentenceTask";
 import { WritingTask } from "../writing/WritingTask";
+import { MockExamResult } from "./MockExamResult";
 
 export function MockExamMainPanel({
   session,
@@ -86,49 +87,32 @@ export function MockExamMainPanel({
       )}
 
       {session.status === MOCK_EXAM_STATUS.COMPLETED && session.aggregate && (
-        <div style={{ background: "#f8fff8", border: "1px solid #cce8cc", borderRadius: 4, padding: 16, marginBottom: 12 }}>
-          <div style={{ fontSize: 15, fontWeight: 700, color: C.green, marginBottom: 6 }}>Mock Exam Completed</div>
-          <div style={{ fontSize: 13, color: C.t1, marginBottom: 8 }}>
-            Overall percent: {session.aggregate.percent}%
-          </div>
-          {scoringPhase === "pending" && (
-            <div style={{ fontSize: 13, color: C.blue }}>
-              AI is scoring Task 2 and Task 3 in background. Please wait...
-            </div>
-          )}
-          {scoringPhase === "error" && (
-            <div style={{ fontSize: 13, color: C.red }}>
-              AI scoring partially failed: {scoringError}
-            </div>
-          )}
-          {(scoringPhase === "done" || scoringPhase === "error" || scoringPhase === "idle") && (
-            <div style={{ marginTop: 10, borderTop: "1px solid #dfeadf", paddingTop: 10 }}>
-              {examResultRows.map((row) => (
-                <div key={row.id} style={{ display: "flex", justifyContent: "space-between", fontSize: 13, padding: "4px 0" }}>
-                  <span>{row.title}</span>
-                  <span>{row.scoreText}</span>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        <MockExamResult
+          session={session}
+          scoringPhase={scoringPhase}
+          scoringError={scoringError}
+          examResultRows={examResultRows}
+          onStartNew={onStartNew}
+          onExit={onExit}
+        />
       )}
 
       {session.status === MOCK_EXAM_STATUS.ABORTED && (
         <div style={{ background: "#fff6f6", border: "1px solid #f0cccc", borderRadius: 4, padding: 16, marginBottom: 12 }}>
           <div style={{ fontSize: 15, fontWeight: 700, color: C.red }}>Mock Exam Aborted</div>
+          <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
+            <Btn onClick={onStartNew}>Start New Mock Exam</Btn>
+            <Btn onClick={onExit} variant="secondary">Back</Btn>
+          </div>
         </div>
       )}
 
-      <div style={{ display: "flex", gap: 10 }}>
-        {session.status === MOCK_EXAM_STATUS.RUNNING && (
+      {session.status === MOCK_EXAM_STATUS.RUNNING && (
+        <div style={{ display: "flex", gap: 10 }}>
           <Btn onClick={onAbort} variant="danger">Abort</Btn>
-        )}
-        {(session.status === MOCK_EXAM_STATUS.COMPLETED || session.status === MOCK_EXAM_STATUS.ABORTED) && (
-          <Btn onClick={onStartNew}>Start New Mock Exam</Btn>
-        )}
-        <Btn onClick={onExit} variant="secondary">Back</Btn>
-      </div>
+          <Btn onClick={onExit} variant="secondary">Back</Btn>
+        </div>
+      )}
     </div>
   );
 }

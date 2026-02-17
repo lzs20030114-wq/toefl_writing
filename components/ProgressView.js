@@ -80,7 +80,7 @@ export function ProgressView({ onBack }) {
                 { l: "Build", n: bs.length, s: bs.length ? Math.round(bs.reduce((a, s) => a + (s.correct / s.total) * 100, 0) / bs.length) + "%" : "-" },
                 { l: "Email", n: em.length, s: em.length ? (em.reduce((a, s) => a + s.score, 0) / em.length).toFixed(1) + "/5" : "-" },
                 { l: "Discussion", n: di.length, s: di.length ? (di.reduce((a, s) => a + s.score, 0) / di.length).toFixed(1) + "/5" : "-" },
-                { l: "Mock", n: mk.length, s: mk.length ? Math.round(mk.reduce((a, s) => a + (s.score || 0), 0) / mk.length) + "%" : "-" },
+                { l: "Mock", n: mk.length, s: mk.length ? (() => { const withBand = mk.filter((m) => Number.isFinite(m.band)); return withBand.length ? "Band " + (withBand.reduce((a, m) => a + m.band, 0) / withBand.length).toFixed(1) : Math.round(mk.reduce((a, m) => a + (m.score || 0), 0) / mk.length) + "%"; })() : "-" },
               ].map((c, i) => (
                 <div key={i} style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 16, textAlign: "center" }}>
                   <div style={{ fontSize: 11, color: C.t2, marginBottom: 6 }}>{c.l}</div>
