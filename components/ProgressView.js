@@ -248,7 +248,7 @@ export function ProgressView({ onBack }) {
         {!isEmpty && (
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
 
-            {{/* MOCK EXAMS SECTION */}}
+            {/* MOCK EXAMS SECTION */}
             <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 10, overflow: "hidden" }}>
               <SectionBar color={C.nav} label="Mock Exams" count={mockEntries.length} />
 
@@ -312,7 +312,7 @@ export function ProgressView({ onBack }) {
               )}
             </div>
 
-            {{/* PRACTICE SECTION */}}
+            {/* PRACTICE SECTION */}
             <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 10, overflow: "hidden" }}>
               <SectionBar color="#3b82f6" label="Practice" count={practiceEntries.length} />
 
@@ -373,7 +373,7 @@ export function ProgressView({ onBack }) {
               </div>
             </div>
 
-            {{/* BOTTOM BUTTONS */}}
+            {/* BOTTOM BUTTONS */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <Btn onClick={onBack}>Back to Menu</Btn>
               <button
