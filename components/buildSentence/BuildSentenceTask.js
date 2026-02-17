@@ -3,6 +3,21 @@ import React from "react";
 import { C, FONT, Btn, Toast, TopBar } from "../shared/ui";
 import { useBuildSentenceSession } from "./useBuildSentenceSession";
 
+function formatChunkDisplay(text) {
+  return String(text || "")
+    .split(/\s+/)
+    .map((w) => {
+      const lower = w.toLowerCase();
+      if (lower === "i") return "I";
+      if (lower === "i'm") return "I'm";
+      if (lower === "i've") return "I've";
+      if (lower === "i'll") return "I'll";
+      if (lower === "i'd") return "I'd";
+      return w;
+    })
+    .join(" ");
+}
+
 export function BuildSentenceTask({ onExit, questions, embedded = false, persistSession = true, onComplete = null, onTimerChange = null }) {
   const {
     qs,
@@ -191,7 +206,7 @@ export function BuildSentenceTask({ onExit, questions, embedded = false, persist
                       opacity: 0.8,
                     }}
                   >
-                    {gs.chunk}
+                    {formatChunkDisplay(gs.chunk)}
                   </span>
                 ))}
                 {i < slots.length && (
@@ -207,7 +222,7 @@ export function BuildSentenceTask({ onExit, questions, embedded = false, persist
                     onDrop={(e) => onDropSlot(e, i)}
                     onClick={() => slots[i] && removeChunk(i)}
                   >
-                    {slots[i] ? slots[i].text : i + 1}
+                    {slots[i] ? formatChunkDisplay(slots[i].text) : i + 1}
                   </div>
                 )}
               </React.Fragment>
@@ -255,7 +270,7 @@ export function BuildSentenceTask({ onExit, questions, embedded = false, persist
                 opacity: dragItem && dragItem.from === "bank" && dragItem.chunk.id === chunk.id ? 0.4 : 1,
               }}
             >
-              {chunk.text}
+              {formatChunkDisplay(chunk.text)}
             </button>
           ))}
         </div>
