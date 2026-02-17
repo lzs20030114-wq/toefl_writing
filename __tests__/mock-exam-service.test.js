@@ -1,4 +1,4 @@
-import { buildPersistPayload, finalizeDeferredScoringSession } from "../lib/mockExam/service";
+import { buildPersistPayload, finalizeDeferredScoringSession, retryTimeoutScoringSession } from "../lib/mockExam/service";
 import { updateTaskScore, recomputeAggregate } from "../lib/mockExam/stateMachine";
 
 describe("mock exam service", () => {
@@ -134,5 +134,56 @@ describe("mock exam service", () => {
     expect(result.phase).toBe("error");
     expect(result.session.attempts["email-writing"].score).toBe(0);
     expect(result.session.attempts["email-writing"].meta.error).toBeTruthy();
+  });
+
+  test("timeout failure keeps retry payload and retry API rescoring recalculates aggregate", async () => {
+    const session = {
+      id: "mock-5",
+      status: "completed",
+      aggregate: { percent: 0 },
+      blueprint: [
+        { taskId: "build-sentence", title: "Task 1", weight: 0.34 },
+        { taskId: "email-writing", title: "Task 2", weight: 0.33 },
+        { taskId: "academic-writing", title: "Task 3", weight: 0.33 },
+      ],
+      attempts: {
+        "build-sentence": { taskId: "build-sentence", status: "submitted", score: 8, maxScore: 10, meta: {} },
+        "email-writing": {
+          taskId: "email-writing",
+          status: "submitted",
+          score: null,
+          maxScore: 5,
+          meta: { deferredPayload: { promptData: { x: 1 }, promptSummary: "p", userText: "text" } },
+        },
+        "academic-writing": {
+          taskId: "academic-writing",
+          status: "submitted",
+          score: 4,
+          maxScore: 5,
+          meta: { feedback: { score: 4 } },
+        },
+      },
+    };
+
+    const firstPass = await finalizeDeferredScoringSession(session, {
+      evaluateResponse: async () => {
+        throw new Error("API timeout");
+      },
+      updateTaskScore,
+      recomputeAggregate,
+    });
+    expect(firstPass.phase).toBe("error");
+    expect(firstPass.session.attempts["email-writing"].meta.retryPayload).toBeTruthy();
+    expect(firstPass.session.attempts["email-writing"].meta.error).toContain("timeout");
+
+    const retried = await retryTimeoutScoringSession(firstPass.session, {
+      evaluateResponse: async () => ({ score: 4, band: 4.5, summary: "ok" }),
+      updateTaskScore,
+      recomputeAggregate,
+    });
+    expect(retried.phase).toBe("done");
+    expect(retried.session.attempts["email-writing"].score).toBe(4);
+    expect(retried.session.attempts["email-writing"].meta.retryPayload).toBeFalsy();
+    expect(retried.session.aggregate.band).toBeTruthy();
   });
 });

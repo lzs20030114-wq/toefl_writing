@@ -5,7 +5,7 @@ import { mockExamRunner } from "../../lib/mockExam/runner";
 import { MOCK_EXAM_STATUS, TASK_IDS } from "../../lib/mockExam/contracts";
 import { loadMockExamHistory, saveMockExamSession } from "../../lib/mockExam/storage";
 import { upsertMockSess } from "../../lib/sessionStore";
-import { buildPersistPayload, finalizeDeferredScoringSession } from "../../lib/mockExam/service";
+import { buildPersistPayload, finalizeDeferredScoringSession, isTimeoutError, retryTimeoutScoringSession } from "../../lib/mockExam/service";
 import { evaluateWritingResponse } from "../../lib/ai/writingEval";
 import { SectionTimerPanel } from "./SectionTimerPanel";
 import { MockExamStartCard } from "./MockExamStartCard";
@@ -109,6 +109,36 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD }) {
     });
   }, [session]);
 
+  const canRetryTimeoutScoring = useMemo(() => {
+    if (!session || session.status !== MOCK_EXAM_STATUS.COMPLETED) return false;
+    return [TASK_IDS.EMAIL_WRITING, TASK_IDS.ACADEMIC_WRITING].some((taskId) => {
+      const err = session?.attempts?.[taskId]?.meta?.error;
+      return isTimeoutError(err);
+    });
+  }, [session]);
+
+  async function retryTimedOutScoring() {
+    if (!session || !canRetryTimeoutScoring) return;
+    setScoringPhase("pending");
+    setScoringError("");
+    try {
+      const result = await retryTimeoutScoringSession(session, {
+        evaluateResponse: evaluateWritingResponse,
+        updateTaskScore: mockExamRunner.updateTaskScore,
+        recomputeAggregate: mockExamRunner.recomputeAggregate,
+      });
+      setSession(result.session);
+      setScoringError(result.error || "");
+      persistFinalSession(result.session, result.phase, result.error || "");
+      setScoringPhase(result.phase);
+    } catch (e) {
+      const msg = e?.message || "Retry scoring failed";
+      setScoringError(msg);
+      persistFinalSession(session, "error", msg);
+      setScoringPhase("error");
+    }
+  }
+
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
       <TopBar title={mode === PRACTICE_MODE.CHALLENGE ? "Full Mock Exam (Challenge)" : "Full Mock Exam"} section="Writing | Mock Mode" onExit={onExit} />
@@ -136,6 +166,8 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD }) {
               onStartNew={startExam}
               onExit={onExit}
               mode={mode}
+              canRetryTimeoutScoring={canRetryTimeoutScoring}
+              onRetryTimeoutScoring={retryTimedOutScoring}
             />
             <SectionTimerPanel
               currentTask={currentTask}

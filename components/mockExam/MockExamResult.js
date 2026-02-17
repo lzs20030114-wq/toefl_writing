@@ -34,6 +34,8 @@ export function MockExamResult({
   examResultRows,
   onStartNew,
   onExit,
+  canRetryTimeoutScoring = false,
+  onRetryTimeoutScoring = null,
 }) {
   const [expandedTask, setExpandedTask] = useState(null);
   const agg = session?.aggregate || {};
@@ -175,6 +177,9 @@ export function MockExamResult({
 
       {/* Actions */}
       <div style={{ display: "flex", gap: 10 }}>
+        {scoringPhase !== "pending" && canRetryTimeoutScoring && typeof onRetryTimeoutScoring === "function" && (
+          <Btn onClick={onRetryTimeoutScoring} variant="secondary">Retry Timed-out Scoring</Btn>
+        )}
         <Btn onClick={onStartNew}>Start New Mock Exam</Btn>
         <Btn onClick={onExit} variant="secondary">Back</Btn>
       </div>
