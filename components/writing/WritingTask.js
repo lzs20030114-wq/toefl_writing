@@ -113,7 +113,7 @@ export function WritingTask({
   const storageKey = type === "email" ? "toefl-em-done" : "toefl-disc-done";
 
   const usedRef = useRef(new Set());
-  const [initialError] = useState(() => (data.length === 0 ? "Prompt bank is empty or invalid." : ""));
+  const initialError = data.length === 0 ? "Prompt bank is empty or invalid." : "";
   const [pi, setPi] = useState(() => {
     try {
       const i = pickRandomPrompt(data, usedRef.current, storageKey);
@@ -224,14 +224,14 @@ export function WritingTask({
       clearInterval(tr.current);
       setRun(false);
       setPhase("done");
-      setRequestState("success");
-      setScoreError("");
       if (!pd) {
         submitLockRef.current = false;
         setRequestState("error");
         setScoreError("Prompt data is missing.");
         return;
       }
+      setRequestState("success");
+      setScoreError("");
       if (typeof onComplete === "function" && !completionSentRef.current) {
         completionSentRef.current = true;
         onComplete({

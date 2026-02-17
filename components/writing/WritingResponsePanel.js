@@ -67,13 +67,25 @@ export function WritingResponsePanel({
         </div>
       )}
 
-      {phase === "done" && deferScoring && !fb && (
+      {phase === "done" && deferScoring && !fb && requestState !== "error" && (
         <div style={{ marginTop: 20 }}>
           <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 24 }}>
             <div style={{ fontSize: 15, fontWeight: 700, color: C.green, marginBottom: 6 }}>Response submitted</div>
             <div style={{ fontSize: 13, color: C.t2 }}>
               Scoring is deferred and will be processed in mock exam summary.
             </div>
+          </div>
+        </div>
+      )}
+
+      {phase === "done" && deferScoring && !fb && requestState === "error" && (
+        <div style={{ marginTop: 20 }}>
+          <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 24 }}>
+            <div style={{ fontSize: 15, fontWeight: 700, color: C.red, marginBottom: 6 }}>Submit failed</div>
+            <div style={{ fontSize: 13, color: C.t2, marginBottom: 10 }}>
+              Deferred scoring payload was not saved. Please retry this task.
+            </div>
+            {!!scoreError && <div style={{ fontSize: 12, color: C.red }}>{scoreError}</div>}
           </div>
         </div>
       )}

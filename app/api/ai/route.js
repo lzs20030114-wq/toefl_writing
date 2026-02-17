@@ -21,12 +21,7 @@ function getClientIp(request) {
 function getRateLimitKey(request) {
   const ip = getClientIp(request);
   if (ip && ip !== "unknown") return `ip:${ip}`;
-  const ua = request.headers.get("user-agent") || "";
-  const origin = request.headers.get("origin") || "";
-  const host = request.headers.get("host") || "";
-  const fallback = `${ua}|${origin}|${host}`.trim();
-  if (!fallback) return null;
-  return `fallback:${fallback}`;
+  return null;
 }
 
 function isRateLimited(ip, now = Date.now()) {
@@ -53,7 +48,7 @@ export async function POST(request) {
     const { system, message, maxTokens, temperature } = await request.json();
     const proxyUrl = resolveProxyUrl();
     if (proxyUrl) {
-      const content = callDeepSeekViaCurl({
+      const content = await callDeepSeekViaCurl({
         apiKey: process.env.DEEPSEEK_API_KEY,
         proxyUrl,
         timeoutMs: 70000,
