@@ -66,4 +66,16 @@ describe("/api/ai route", () => {
     expect(res.status).toBe(403);
     expect(body.error).toMatch(/forbidden origin/i);
   });
+
+  test("rejects oversized request by content-length header", async () => {
+    const req = new Request("http://localhost/api/ai", {
+      method: "POST",
+      headers: { "content-length": "130000" },
+      body: JSON.stringify({ system: "s", message: "m", maxTokens: 100 }),
+    });
+    const res = await POST(req);
+    const body = await res.json();
+    expect(res.status).toBe(413);
+    expect(body.error).toMatch(/too large/i);
+  });
 });

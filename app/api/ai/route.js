@@ -5,6 +5,7 @@ const require = createRequire(import.meta.url);
 const { callDeepSeekViaCurl, resolveProxyUrl } = require("../../../lib/ai/deepseekHttp");
 const RATE_LIMIT_WINDOW_MS = 60 * 1000;
 const RATE_LIMIT_MAX_REQUESTS = 45;
+const MAX_BODY_BYTES = 120000;
 const MAX_SYSTEM_CHARS = 12000;
 const MAX_MESSAGE_CHARS = 40000;
 const MAX_TOKENS = 3000;
@@ -99,6 +100,10 @@ function validateBody(body) {
 
 export async function POST(request) {
   try {
+    const contentLength = Number(request.headers.get("content-length") || 0);
+    if (Number.isFinite(contentLength) && contentLength > MAX_BODY_BYTES) {
+      return Response.json({ error: `Request body too large (>${MAX_BODY_BYTES} bytes).` }, { status: 413 });
+    }
     if (!isOriginAllowed(request)) {
       return Response.json({ error: "Forbidden origin." }, { status: 403 });
     }
