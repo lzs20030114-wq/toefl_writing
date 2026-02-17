@@ -2,10 +2,56 @@
 import React, { useMemo, useState } from "react";
 import { C } from "../shared/ui";
 import { buildAnnotationSegments, countAnnotations, parseAnnotations } from "../../lib/annotations/parseAnnotations";
+import { normalizeReportLanguage } from "../../lib/reportLanguage";
 
 const warnedParseFallback = new Set();
 
-function Collapse({ title, defaultOpen = false, children, subtitle }) {
+const I18N = {
+  zh: {
+    hide: "收起",
+    show: "展开",
+    empty: "暂无可用内容。",
+    scoreBand: "Band",
+    goalPrefix: "目标",
+    actionPlan: "改进建议",
+    actionReason: "原因：",
+    actionNow: "现在就做：",
+    annotationTitle: "句子级批注",
+    annotationStats: (c) => `${c.red || 0} 条语法问题 | ${c.orange || 0} 条措辞建议 | ${c.blue || 0} 条升级建议`,
+    noSentenceIssues: "未检测到句子级问题",
+    fixLabel: "修改建议（英文）：",
+    noteLabel: "问题说明：",
+    patterns: "问题模式总结",
+    comparison: "范文对比",
+    viewModel: "查看完整范文",
+    yours: "你的句子：",
+    model: "范文句子：",
+    diff: "差异说明：",
+  },
+  en: {
+    hide: "Hide",
+    show: "Show",
+    empty: "No content available.",
+    scoreBand: "Band",
+    goalPrefix: "Goal",
+    actionPlan: "Action Plan",
+    actionReason: "Why it matters:",
+    actionNow: "Do this now:",
+    annotationTitle: "Sentence Annotations",
+    annotationStats: (c) => `${c.red || 0} grammar errors | ${c.orange || 0} wording suggestions | ${c.blue || 0} upgrade suggestions`,
+    noSentenceIssues: "No sentence-level issues detected",
+    fixLabel: "Suggested rewrite (English):",
+    noteLabel: "Issue note:",
+    patterns: "Pattern Summary",
+    comparison: "Model Comparison",
+    viewModel: "View full model response",
+    yours: "Yours:",
+    model: "Model:",
+    diff: "Difference:",
+  },
+};
+
+function Collapse({ title, defaultOpen = false, children, subtitle, ui }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
     <div style={{ border: "1px solid " + C.bdr, borderRadius: 6, overflow: "hidden", background: "#fff" }}>
@@ -30,7 +76,7 @@ function Collapse({ title, defaultOpen = false, children, subtitle }) {
           {title}
           {subtitle ? <span style={{ marginLeft: 8, fontWeight: 500, color: C.t2, fontSize: 12 }}>{subtitle}</span> : null}
         </span>
-        <span style={{ color: C.t2, fontSize: 12 }}>{open ? "收起" : "展开"}</span>
+        <span style={{ color: C.t2, fontSize: 12 }}>{open ? ui.hide : ui.show}</span>
       </button>
       {open ? <div style={{ padding: 14 }}>{children}</div> : null}
     </div>
@@ -43,7 +89,9 @@ function statusStyle(status) {
   return { icon: "MISSING", color: C.red, bg: "#fef2f2" };
 }
 
-export function ScoringReport({ result, type }) {
+export function ScoringReport({ result, type, uiLang = "zh" }) {
+  const lang = normalizeReportLanguage(result?.reportLanguage || uiLang);
+  const ui = I18N[lang];
   const [activeNote, setActiveNote] = useState(null);
   if (!result) return null;
 
@@ -57,6 +105,7 @@ export function ScoringReport({ result, type }) {
         .sort((a, b) => Number(b.count || 0) - Number(a.count || 0)),
     [result.patterns]
   );
+
   const annotationView = useMemo(() => {
     const parsedFromResult = result?.annotationParsed;
     if (parsedFromResult && Array.isArray(parsedFromResult.annotations) && typeof parsedFromResult.plainText === "string") {
@@ -103,14 +152,12 @@ export function ScoringReport({ result, type }) {
     segs.forEach((s) => {
       const text = String(s?.text || "");
       if (s?.type === "mark") {
-        const start = pos;
-        const end = pos + text.length;
         annotations.push({
           level: s.level,
           message: s.note || "",
           fix: s.fix || "",
-          start,
-          end,
+          start: pos,
+          end: pos + text.length,
         });
       }
       pos += text.length;
@@ -138,10 +185,10 @@ export function ScoringReport({ result, type }) {
             <span style={{ opacity: 0.8 }}>/ 5</span>
           </div>
           <span style={{ background: scoreColor, borderRadius: 14, padding: "3px 10px", fontSize: 12, fontWeight: 700 }}>
-            Band {result.band ?? "-"}
+            {ui.scoreBand} {result.band ?? "-"}
           </span>
         </div>
-        <div style={{ fontSize: 14, lineHeight: 1.6 }}>{result.summary || "暂无可用内容。"}</div>
+        <div style={{ fontSize: 14, lineHeight: 1.6 }}>{result.summary || ui.empty}</div>
         {type === "email" ? (
           <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
             {goals.length > 0 ? (
@@ -150,45 +197,42 @@ export function ScoringReport({ result, type }) {
                 return (
                   <div key={i} style={{ background: s.bg, color: "#111827", borderRadius: 4, padding: "8px 10px", fontSize: 13 }}>
                     <b style={{ color: s.color, marginRight: 8 }}>{s.icon}</b>
-                    目标 {g.index}: {g.reason || "暂无说明。"}
+                    {ui.goalPrefix} {g.index}: {g.reason || ui.empty}
                   </div>
                 );
               })
             ) : (
-              <div style={{ fontSize: 13, opacity: 0.85 }}>暂无可用内容。</div>
+              <div style={{ fontSize: 13, opacity: 0.85 }}>{ui.empty}</div>
             )}
           </div>
         ) : null}
       </div>
 
       <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 14 }}>
-        <div style={{ fontWeight: 700, marginBottom: 10 }}>改进建议</div>
+        <div style={{ fontWeight: 700, marginBottom: 10 }}>{ui.actionPlan}</div>
         {actions.length > 0 ? (
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {actions.map((a, i) => (
               <div key={i} style={{ border: "1px solid " + C.bdr, borderLeft: "4px solid " + (i === 0 ? C.red : C.orange), borderRadius: 4, padding: 10 }}>
                 <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 6 }}>{a.title || `Action ${i + 1}`}</div>
                 <div style={{ fontSize: 13, color: C.t1, marginBottom: 6 }}>
-                  <b>原因：</b> {a.importance || "暂无可用内容。"}
+                  <b>{ui.actionReason}</b> {a.importance || ui.empty}
                 </div>
                 <div style={{ fontSize: 13, background: "#f8fafc", borderRadius: 4, padding: "8px 10px" }}>
-                  <b>现在就做：</b> {a.action || "暂无可用内容。"}
+                  <b>{ui.actionNow}</b> {a.action || ui.empty}
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <div style={{ fontSize: 13, color: C.t2 }}>暂无可用内容。</div>
+          <div style={{ fontSize: 13, color: C.t2 }}>{ui.empty}</div>
         )}
       </div>
 
       <Collapse
-        title="句子级批注"
-        subtitle={
-          annotationTotal > 0
-            ? `${markCounts.red || 0} 条语法问题 | ${markCounts.orange || 0} 条措辞建议 | ${markCounts.blue || 0} 条升级建议`
-            : "未检测到句子级问题"
-        }
+        title={ui.annotationTitle}
+        subtitle={annotationTotal > 0 ? ui.annotationStats(markCounts) : ui.noSentenceIssues}
+        ui={ui}
       >
         {annotationTotal > 0 && annotationView.segments && annotationView.segments.length > 0 ? (
           <div style={{ fontSize: 14, lineHeight: 1.9, whiteSpace: "pre-wrap" }}>
@@ -220,40 +264,40 @@ export function ScoringReport({ result, type }) {
             {activeNote !== null && (annotationView.segments[activeNote] || {}).type === "mark" ? (
               <div style={{ marginTop: 12, border: "1px solid " + C.bdr, borderRadius: 6, padding: 10, background: "#fff" }}>
                 <div style={{ fontSize: 13, marginBottom: 6 }}>
-                  <b>修改建议（英文）：</b> {(annotationView.segments[activeNote] || {}).fix || "暂无可用内容。"}
+                  <b>{ui.fixLabel}</b> {(annotationView.segments[activeNote] || {}).fix || ui.empty}
                 </div>
                 <div style={{ fontSize: 13 }}>
-                  <b>问题说明（中文）：</b> {(annotationView.segments[activeNote] || {}).note || "暂无可用内容。"}
+                  <b>{ui.noteLabel}</b> {(annotationView.segments[activeNote] || {}).note || ui.empty}
                 </div>
               </div>
             ) : null}
           </div>
         ) : (
-          <div style={{ fontSize: 13, color: C.t2 }}>未检测到句子级问题。</div>
+          <div style={{ fontSize: 13, color: C.t2 }}>{ui.noSentenceIssues}</div>
         )}
       </Collapse>
 
-      <Collapse title="问题模式总结">
+      <Collapse title={ui.patterns} ui={ui}>
         {patterns.length > 0 ? (
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {patterns.map((p, i) => (
               <div key={i} style={{ border: "1px solid " + C.bdr, borderRadius: 4, padding: "8px 10px", fontSize: 13 }}>
                 <b style={{ color: C.blue }}>{p.tag}</b>
                 <span style={{ marginLeft: 8, color: C.t2 }}>x{Number(p.count || 0)}</span>
-                <div style={{ marginTop: 4 }}>{p.summary || "暂无可用内容。"}</div>
+                <div style={{ marginTop: 4 }}>{p.summary || ui.empty}</div>
               </div>
             ))}
           </div>
         ) : (
-          <div style={{ fontSize: 13, color: C.t2 }}>暂无可用内容。</div>
+          <div style={{ fontSize: 13, color: C.t2 }}>{ui.empty}</div>
         )}
       </Collapse>
 
-      <Collapse title="范文对比">
+      <Collapse title={ui.comparison} ui={ui}>
         <details style={{ marginBottom: 10 }}>
-          <summary style={{ cursor: "pointer", fontWeight: 700 }}>查看完整范文</summary>
+          <summary style={{ cursor: "pointer", fontWeight: 700 }}>{ui.viewModel}</summary>
           <div style={{ marginTop: 8, whiteSpace: "pre-wrap", fontSize: 13, lineHeight: 1.8 }}>
-            {comparison.modelEssay || "暂无可用内容。"}
+            {comparison.modelEssay || ui.empty}
           </div>
         </details>
         {comparisonPoints.length > 0 ? (
@@ -262,21 +306,22 @@ export function ScoringReport({ result, type }) {
               <div key={i} style={{ border: "1px solid " + C.bdr, borderRadius: 4, padding: 10 }}>
                 <div style={{ fontWeight: 700, marginBottom: 6 }}>{p.title || `Comparison ${i + 1}`}</div>
                 <div style={{ fontSize: 13, marginBottom: 4 }}>
-                  <b>你的句子：</b> {p.yours || "暂无可用内容。"}
+                  <b>{ui.yours}</b> {p.yours || ui.empty}
                 </div>
                 <div style={{ fontSize: 13, marginBottom: 4 }}>
-                  <b>范文句子：</b> {p.model || "暂无可用内容。"}
+                  <b>{ui.model}</b> {p.model || ui.empty}
                 </div>
                 <div style={{ fontSize: 13 }}>
-                  <b>差异说明：</b> {p.difference || "暂无可用内容。"}
+                  <b>{ui.diff}</b> {p.difference || ui.empty}
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <div style={{ fontSize: 13, color: C.t2 }}>暂无可用内容。</div>
+          <div style={{ fontSize: 13, color: C.t2 }}>{ui.empty}</div>
         )}
       </Collapse>
     </div>
   );
 }
+

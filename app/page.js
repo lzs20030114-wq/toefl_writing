@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { C, FONT } from "../components/shared/ui";
 import { loadHist, SESSION_STORE_EVENTS } from "../lib/sessionStore";
 import { formatMinutesLabel, getTaskTimeSeconds, normalizePracticeMode, PRACTICE_MODE } from "../lib/practiceMode";
+import { normalizeReportLanguage, REPORT_LANGUAGE } from "../lib/reportLanguage";
 
 const PRACTICE_TASKS = [
   { k: "build-sentence", modeKey: "build", n: "Task 1", t: "Build a Sentence", d: "Reorder words to form a grammatically correct response.", it: "10 questions" },
@@ -31,6 +32,24 @@ export default function Page() {
   const [hoverKey, setHoverKey] = useState("");
   const [sessionCount, setSessionCount] = useState(0);
   const [mode, setMode] = useState(PRACTICE_MODE.STANDARD);
+  const [reportLanguage, setReportLanguage] = useState(REPORT_LANGUAGE.ZH);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("toefl-report-language");
+      if (saved) setReportLanguage(normalizeReportLanguage(saved));
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("toefl-report-language", reportLanguage);
+    } catch {
+      // ignore
+    }
+  }, [reportLanguage]);
 
   useEffect(() => {
     const refresh = () => {
@@ -65,7 +84,13 @@ export default function Page() {
     transition: "box-shadow 120ms ease, transform 120ms ease, border-color 120ms ease",
   };
 
-  const modeSuffix = mode === PRACTICE_MODE.CHALLENGE ? "?mode=challenge" : "";
+  const querySuffix = (() => {
+    const params = new URLSearchParams();
+    if (mode === PRACTICE_MODE.CHALLENGE) params.set("mode", "challenge");
+    if (reportLanguage === REPORT_LANGUAGE.EN) params.set("lang", "en");
+    const q = params.toString();
+    return q ? `?${q}` : "";
+  })();
   const mockTotalSeconds =
     getTaskTimeSeconds("build", mode) + getTaskTimeSeconds("email", mode) + getTaskTimeSeconds("discussion", mode);
 
@@ -103,11 +128,34 @@ export default function Page() {
               </button>
             ))}
           </div>
+          <div style={{ display: "inline-flex", gap: 8, background: "#f8fafc", border: "1px solid #cbd5e1", borderRadius: 999, marginTop: 10, padding: 4 }}>
+            {[
+              { value: REPORT_LANGUAGE.ZH, label: "中文" },
+              { value: REPORT_LANGUAGE.EN, label: "English" },
+            ].map((opt) => (
+              <button
+                key={opt.value}
+                onClick={() => setReportLanguage(normalizeReportLanguage(opt.value))}
+                style={{
+                  border: "1px solid " + (reportLanguage === opt.value ? C.blue : "transparent"),
+                  background: reportLanguage === opt.value ? "#e8f0fe" : "transparent",
+                  color: reportLanguage === opt.value ? C.nav : C.t2,
+                  borderRadius: 999,
+                  padding: "4px 12px",
+                  fontSize: 12,
+                  fontWeight: 700,
+                  cursor: "pointer",
+                }}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {PRACTICE_TASKS.map((c) => (
           <Link
-            href={`/${c.k}${modeSuffix}`}
+            href={`/${c.k}${querySuffix}`}
             key={c.k}
             onMouseEnter={() => setHoverKey(c.k)}
             onMouseLeave={() => setHoverKey("")}
@@ -132,7 +180,7 @@ export default function Page() {
         ))}
 
         <Link
-          href={`/${MOCK_TASK.k}${modeSuffix}`}
+          href={`/${MOCK_TASK.k}${querySuffix}`}
           onMouseEnter={() => setHoverKey(MOCK_TASK.k)}
           onMouseLeave={() => setHoverKey("")}
           style={{

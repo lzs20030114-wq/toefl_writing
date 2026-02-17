@@ -23,6 +23,7 @@ export function MockExamMainPanel({
   mode,
   canRetryTimeoutScoring,
   onRetryTimeoutScoring,
+  reportLanguage,
 }) {
   const [transitionTaskId, setTransitionTaskId] = useState("");
   const [transitionLeft, setTransitionLeft] = useState(0);
@@ -97,6 +98,7 @@ export function MockExamMainPanel({
           practiceMode={mode}
           showTaskIntro={false}
           autoStartOnMount
+          reportLanguage={reportLanguage}
           onComplete={(payload) => {
             onSubmitTaskResult({
               score: null,
@@ -106,6 +108,7 @@ export function MockExamMainPanel({
                 deferred: true,
                 wordCount: payload.wordCount || 0,
                 deferredPayload: payload?.details || null,
+                reportLanguage: payload?.details?.reportLanguage || reportLanguage,
               },
             });
           }}
@@ -124,6 +127,7 @@ export function MockExamMainPanel({
           practiceMode={mode}
           showTaskIntro={false}
           autoStartOnMount
+          reportLanguage={reportLanguage}
           onComplete={(payload) => {
             onSubmitTaskResult({
               score: null,
@@ -133,6 +137,7 @@ export function MockExamMainPanel({
                 deferred: true,
                 wordCount: payload.wordCount || 0,
                 deferredPayload: payload?.details || null,
+                reportLanguage: payload?.details?.reportLanguage || reportLanguage,
               },
             });
           }}
@@ -149,6 +154,7 @@ export function MockExamMainPanel({
           onExit={onExit}
           canRetryTimeoutScoring={canRetryTimeoutScoring}
           onRetryTimeoutScoring={onRetryTimeoutScoring}
+          reportLanguage={reportLanguage}
         />
       )}
 

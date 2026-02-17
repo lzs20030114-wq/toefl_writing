@@ -19,13 +19,13 @@ describe("ScoringReport annotation rendering", () => {
       sessionId: "sess-1",
     };
 
-    render(<ScoringReport result={result} type="email" />);
+    render(<ScoringReport result={result} type="email" uiLang="en" />);
 
     expect(
-      screen.getByText(/1 条语法问题 \| 0 条措辞建议 \| 1 条升级建议/i)
+      screen.getByText(/1 grammar errors \| 0 wording suggestions \| 1 upgrade suggestions/i)
     ).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: /句子级批注/i }));
+    fireEvent.click(screen.getByRole("button", { name: /sentence annotations/i }));
     expect(screen.queryByText(/<n/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/<r/i)).not.toBeInTheDocument();
     expect(screen.getByText(/I receive your feedback\./i)).toBeInTheDocument();
@@ -42,7 +42,7 @@ describe("ScoringReport annotation rendering", () => {
       comparison: { modelEssay: "", points: [] },
       annotationParsed: { plainText: "Clean response.", annotations: [] },
     };
-    render(<ScoringReport result={result} type="discussion" />);
-    expect(screen.getByText(/未检测到句子级问题/i)).toBeInTheDocument();
+    render(<ScoringReport result={result} type="discussion" uiLang="en" />);
+    expect(screen.getByText(/no sentence-level issues detected/i)).toBeInTheDocument();
   });
 });

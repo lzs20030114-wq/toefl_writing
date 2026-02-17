@@ -12,8 +12,10 @@ import { MockExamStartCard } from "./MockExamStartCard";
 import { MockExamMainPanel } from "./MockExamMainPanel";
 import { formatMinutesLabel, PRACTICE_MODE } from "../../lib/practiceMode";
 import { getDefaultMockExamBlueprint } from "../../lib/mockExam/planner";
+import { normalizeReportLanguage } from "../../lib/reportLanguage";
 
-export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD }) {
+export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLanguage = "zh" }) {
+  const uiReportLanguage = normalizeReportLanguage(reportLanguage);
   const [session, setSession] = useState(null);
   const [hist] = useState(() => loadMockExamHistory());
   const [sectionTimer, setSectionTimer] = useState(null);
@@ -168,6 +170,7 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD }) {
               mode={mode}
               canRetryTimeoutScoring={canRetryTimeoutScoring}
               onRetryTimeoutScoring={retryTimedOutScoring}
+              reportLanguage={uiReportLanguage}
             />
             <SectionTimerPanel
               currentTask={currentTask}

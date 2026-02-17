@@ -36,6 +36,7 @@ export function MockExamResult({
   onExit,
   canRetryTimeoutScoring = false,
   onRetryTimeoutScoring = null,
+  reportLanguage = "zh",
 }) {
   const [expandedTask, setExpandedTask] = useState(null);
   const agg = session?.aggregate || {};
@@ -167,7 +168,11 @@ export function MockExamResult({
               </div>
               {isExpanded && canExpand && (
                 <div style={{ padding: "12px 16px", borderBottom: "1px solid #f0f0f0", background: "#fafbfc" }}>
-                  <ScoringReport result={getFeedback(row.id)} type={taskType} />
+                  <ScoringReport
+                    result={getFeedback(row.id)}
+                    type={taskType}
+                    uiLang={getFeedback(row.id)?.reportLanguage || reportLanguage}
+                  />
                 </div>
               )}
             </div>

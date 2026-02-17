@@ -15,6 +15,7 @@ import { ScoringReport } from "./ScoringReport";
 import { WritingPromptPanel } from "./WritingPromptPanel";
 import { WritingResponsePanel } from "./WritingResponsePanel";
 import { formatMinutesLabel, PRACTICE_MODE } from "../../lib/practiceMode";
+import { normalizeReportLanguage } from "../../lib/reportLanguage";
 
 async function aiGen(type) {
   const prompts = {
@@ -40,7 +41,9 @@ export function WritingTask({
   practiceMode = PRACTICE_MODE.STANDARD,
   showTaskIntro = true,
   autoStartOnMount = false,
+  reportLanguage = "zh",
 }) {
+  const uiReportLanguage = normalizeReportLanguage(reportLanguage);
   const data = type === "email" ? EM_DATA : AD_DATA;
   const defaultLimit = type === "email" ? 420 : 600;
   const limit = Number.isFinite(timeLimitSeconds) && timeLimitSeconds > 0 ? timeLimitSeconds : defaultLimit;
@@ -100,7 +103,7 @@ export function WritingTask({
     setScoreError("");
     setFb(null);
     try {
-      const r = await evaluateWritingResponse(type, pd, text);
+      const r = await evaluateWritingResponse(type, pd, text, uiReportLanguage);
       setFb(r);
       setPhase("done");
       if (r) {
@@ -163,6 +166,7 @@ export function WritingTask({
               ? pd.scenario.substring(0, 80) + "..."
               : pd.professor.text.substring(0, 80) + "...",
             userText: text,
+            reportLanguage: uiReportLanguage,
           },
         });
       }
@@ -264,7 +268,7 @@ export function WritingTask({
           </>
         )}
         {phase === "done" && fb && (
-          <div style={{ marginTop: 20 }}><ScoringReport result={fb} type={type} /><div style={{ display: "flex", gap: 12, marginTop: 16 }}><Btn onClick={next} variant="secondary">Next Prompt</Btn><Btn onClick={genNew} disabled={gen}>{gen ? "Generating..." : "Generate New Prompt"}</Btn><Btn onClick={onExit} variant="secondary">{embedded ? "Back" : "Back to Practice"}</Btn></div></div>
+          <div style={{ marginTop: 20 }}><ScoringReport result={fb} type={type} uiLang={uiReportLanguage} /><div style={{ display: "flex", gap: 12, marginTop: 16 }}><Btn onClick={next} variant="secondary">Next Prompt</Btn><Btn onClick={genNew} disabled={gen}>{gen ? "Generating..." : "Generate New Prompt"}</Btn><Btn onClick={onExit} variant="secondary">{embedded ? "Back" : "Back to Practice"}</Btn></div></div>
         )}
       </div>
     </div>

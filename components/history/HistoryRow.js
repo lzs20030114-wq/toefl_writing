@@ -353,7 +353,7 @@ function MockExamDetails({ session }) {
         )}
 
         {feedback && typeof feedback === "object" ? (
-          <ScoringReport result={feedback} type={reportType} />
+          <ScoringReport result={feedback} type={reportType} uiLang={feedback?.reportLanguage || "zh"} />
         ) : (
           <div style={{ fontSize: 12, color: task?.meta?.error ? C.red : C.t2 }}>
             {task?.meta?.error ? `Scoring error: ${task.meta.error}` : "No AI feedback yet."}
@@ -531,7 +531,7 @@ export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, show
             <div style={{ fontSize: 11, fontWeight: 700, color: C.t2, marginBottom: 6 }}>Your response</div>
             {s.details.userText}
           </div>
-          {s.details.feedback && <ScoringReport result={s.details.feedback} type={s.type} />}
+          {s.details.feedback && <ScoringReport result={s.details.feedback} type={s.type} uiLang={s.details.feedback?.reportLanguage || "zh"} />}
         </div>
       )}
 
