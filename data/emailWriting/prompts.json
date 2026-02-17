@@ -1,10 +1,278 @@
 [
-  { "id": "em1", "scenario": "You are a student in Professor Kim's sociology class. Last week, you submitted your midterm essay via the class website. Yesterday, you checked your grade and were surprised to see it was much lower than you expected. When you opened the file that was graded, you realized it was an older draft, not the final version.", "direction": "Write an email to Professor Kim:", "goals": ["Explain the situation with your midterm essay submission", "Ask if you can resubmit the correct version", "Describe how this grade would affect your overall performance"], "to": "Professor Kim", "from": "You (Sociology 201)" },
-  { "id": "em2", "scenario": "You recently saw a poster on campus for an international cultural exchange program. The program allows students to host visiting scholars and attend lectures by international faculty. You are interested but have questions.", "direction": "Write an email to the International Programs Office:", "goals": ["Express your interest in the program", "Ask specific questions about logistics", "Suggest an idea for a cultural activity"], "to": "International Programs Office", "from": "You (student)" },
-  { "id": "em3", "scenario": "You subscribe to a poetry magazine called Verse & Voice. You tried to submit a poem through their online form last week, but the form gave an error after you clicked Submit. You are not sure if your poem was received.", "direction": "Write an email to the editor:", "goals": ["Tell the editor what you like about the magazine", "Describe the technical problem", "Ask about the status of your submission"], "to": "Editor, Verse & Voice", "from": "You (subscriber)" },
-  { "id": "em4", "scenario": "You are a junior who recently completed an internship at a local environmental nonprofit. Your supervisor, Ms. Rivera, mentioned that the organization might offer a part-time position in the fall. You are very interested and want to follow up.", "direction": "Write an email to Ms. Rivera:", "goals": ["Thank her for the internship experience and mention something specific you learned", "Ask about the part-time position and your eligibility", "Explain how the role fits your academic and career goals"], "to": "Ms. Rivera, GreenFuture Nonprofit", "from": "You (former intern)" },
-  { "id": "em5", "scenario": "Your university library recently changed its weekend hours, closing two hours earlier than before. As a student who works during the week, weekends are your main study time. You and several classmates are concerned.", "direction": "Write an email to the Library Director:", "goals": ["Explain why the old weekend hours were important to you", "Describe the impact of the change on your studies", "Propose a compromise or alternative solution"], "to": "Library Director", "from": "You (undergraduate student)" },
-  { "id": "em6", "scenario": "You enrolled in a biology lab section that meets on Tuesdays and Thursdays. However, you just received your updated work schedule and now have a conflict on Thursdays. Another lab section is available on Wednesdays but is currently full.", "direction": "Write an email to the Biology Department:", "goals": ["Explain the scheduling conflict you are facing", "Request to be added to the Wednesday lab section", "Describe the consequences if you cannot resolve this issue"], "to": "Biology Department", "from": "You (Biology 110)" },
-  { "id": "em7", "scenario": "Your dormitory has been experiencing frequent Wi-Fi outages over the past two weeks. You have an important online exam coming up next Monday and are worried about connectivity. Other residents on your floor have the same complaint.", "direction": "Write an email to the Campus IT Help Desk:", "goals": ["Describe the Wi-Fi problems you have been experiencing", "Explain why reliable internet is urgent for you right now", "Ask what steps are being taken and suggest a temporary solution"], "to": "IT Help Desk", "from": "You (Residence Hall student)" },
-  { "id": "em8", "scenario": "You attended a guest lecture on campus last week by Dr. Thompson, a well-known marine biologist. The lecture inspired you and you are now considering changing your research topic for your senior thesis. You would like to contact Dr. Thompson for guidance.", "direction": "Write an email to Dr. Thompson:", "goals": ["Express your appreciation for the lecture and mention a specific point that resonated with you", "Explain how the lecture connects to your academic interests", "Ask if Dr. Thompson would be willing to provide brief advice or recommend resources"], "to": "Dr. Thompson", "from": "You (senior, Environmental Science)" }
+  {
+    "id": "em1",
+    "scenario": "You are a student in Professor Kim's sociology class. Last week, you submitted your midterm essay via the class website. Yesterday, you checked your grade and were surprised to see it was much lower than you expected. When you opened the file that was graded, you realized it was an older draft, not the final version.",
+    "direction": "Write an email to Professor Kim:",
+    "goals": [
+      "Explain the situation with your midterm essay submission",
+      "Ask if you can resubmit the correct version",
+      "Describe how this grade would affect your overall performance"
+    ],
+    "to": "Professor Kim",
+    "from": "You (Sociology 201)"
+  },
+  {
+    "id": "em2",
+    "scenario": "You recently saw a poster on campus for an international cultural exchange program. The program allows students to host visiting scholars and attend lectures by international faculty. You are interested but have questions.",
+    "direction": "Write an email to the International Programs Office:",
+    "goals": [
+      "Express your interest in the program",
+      "Ask specific questions about logistics",
+      "Suggest an idea for a cultural activity"
+    ],
+    "to": "International Programs Office",
+    "from": "You (student)"
+  },
+  {
+    "id": "em3",
+    "scenario": "You subscribe to a poetry magazine called Verse & Voice. You tried to submit a poem through their online form last week, but the form gave an error after you clicked Submit. You are not sure if your poem was received.",
+    "direction": "Write an email to the editor:",
+    "goals": [
+      "Tell the editor what you like about the magazine",
+      "Describe the technical problem",
+      "Ask about the status of your submission"
+    ],
+    "to": "Editor, Verse & Voice",
+    "from": "You (subscriber)"
+  },
+  {
+    "id": "em4",
+    "scenario": "You are a junior who recently completed an internship at a local environmental nonprofit. Your supervisor, Ms. Rivera, mentioned that the organization might offer a part-time position in the fall. You are very interested and want to follow up.",
+    "direction": "Write an email to Ms. Rivera:",
+    "goals": [
+      "Thank her for the internship experience and mention something specific you learned",
+      "Ask about the part-time position and your eligibility",
+      "Explain how the role fits your academic and career goals"
+    ],
+    "to": "Ms. Rivera, GreenFuture Nonprofit",
+    "from": "You (former intern)"
+  },
+  {
+    "id": "em5",
+    "scenario": "Your university library recently changed its weekend hours, closing two hours earlier than before. As a student who works during the week, weekends are your main study time. You and several classmates are concerned.",
+    "direction": "Write an email to the Library Director:",
+    "goals": [
+      "Explain why the old weekend hours were important to you",
+      "Describe the impact of the change on your studies",
+      "Propose a compromise or alternative solution"
+    ],
+    "to": "Library Director",
+    "from": "You (undergraduate student)"
+  },
+  {
+    "id": "em6",
+    "scenario": "You enrolled in a biology lab section that meets on Tuesdays and Thursdays. However, you just received your updated work schedule and now have a conflict on Thursdays. Another lab section is available on Wednesdays but is currently full.",
+    "direction": "Write an email to the Biology Department:",
+    "goals": [
+      "Explain the scheduling conflict you are facing",
+      "Request to be added to the Wednesday lab section",
+      "Describe the consequences if you cannot resolve this issue"
+    ],
+    "to": "Biology Department",
+    "from": "You (Biology 110)"
+  },
+  {
+    "id": "em7",
+    "scenario": "Your dormitory has been experiencing frequent Wi-Fi outages over the past two weeks. You have an important online exam coming up next Monday and are worried about connectivity. Other residents on your floor have the same complaint.",
+    "direction": "Write an email to the Campus IT Help Desk:",
+    "goals": [
+      "Describe the Wi-Fi problems you have been experiencing",
+      "Explain why reliable internet is urgent for you right now",
+      "Ask what steps are being taken and suggest a temporary solution"
+    ],
+    "to": "IT Help Desk",
+    "from": "You (Residence Hall student)"
+  },
+  {
+    "id": "em8",
+    "scenario": "You attended a guest lecture on campus last week by Dr. Thompson, a well-known marine biologist. The lecture inspired you and you are now considering changing your research topic for your senior thesis. You would like to contact Dr. Thompson for guidance.",
+    "direction": "Write an email to Dr. Thompson:",
+    "goals": [
+      "Express your appreciation for the lecture and mention a specific point that resonated with you",
+      "Explain how the lecture connects to your academic interests",
+      "Ask if Dr. Thompson would be willing to provide brief advice or recommend resources"
+    ],
+    "to": "Dr. Thompson",
+    "from": "You (senior, Environmental Science)"
+  },
+  {
+    "id": "em9",
+    "scenario": "You are a university student dealing with computer lab reservation. A recent change has created an issue that may affect your academic plans, and you need clarification quickly regarding weekend project access.",
+    "direction": "Write an email to Technology Services Office:",
+    "goals": [
+      "Clearly explain your current situation related to computer lab reservation",
+      "Ask two specific questions about policy, timeline, or next steps",
+      "Propose a practical solution and explain why it would help"
+    ],
+    "to": "Technology Services Office",
+    "from": "You (student)"
+  },
+  {
+    "id": "em10",
+    "scenario": "You are a university student dealing with internship recommendation letter. A recent change has created an issue that may affect your academic plans, and you need clarification quickly regarding application deadline.",
+    "direction": "Write an email to Career Center Advisor:",
+    "goals": [
+      "Clearly explain your current situation related to internship recommendation letter",
+      "Ask two specific questions about policy, timeline, or next steps",
+      "Propose a practical solution and explain why it would help"
+    ],
+    "to": "Career Center Advisor",
+    "from": "You (student)"
+  },
+  {
+    "id": "em11",
+    "scenario": "You are a university student dealing with late tuition fee appeal. A recent change has created an issue that may affect your academic plans, and you need clarification quickly regarding payment plan options.",
+    "direction": "Write an email to Student Accounts Office:",
+    "goals": [
+      "Clearly explain your current situation related to late tuition fee appeal",
+      "Ask two specific questions about policy, timeline, or next steps",
+      "Propose a practical solution and explain why it would help"
+    ],
+    "to": "Student Accounts Office",
+    "from": "You (student)"
+  },
+  {
+    "id": "em12",
+    "scenario": "You are a university student dealing with research assistant schedule. A recent change has created an issue that may affect your academic plans, and you need clarification quickly regarding exam-week conflict.",
+    "direction": "Write an email to Lab Coordinator:",
+    "goals": [
+      "Clearly explain your current situation related to research assistant schedule",
+      "Ask two specific questions about policy, timeline, or next steps",
+      "Propose a practical solution and explain why it would help"
+    ],
+    "to": "Lab Coordinator",
+    "from": "You (student)"
+  },
+  {
+    "id": "em13",
+    "scenario": "You are a university student dealing with club funding request. A recent change has created an issue that may affect your academic plans, and you need clarification quickly regarding community event budget.",
+    "direction": "Write an email to Student Activities Office:",
+    "goals": [
+      "Clearly explain your current situation related to club funding request",
+      "Ask two specific questions about policy, timeline, or next steps",
+      "Propose a practical solution and explain why it would help"
+    ],
+    "to": "Student Activities Office",
+    "from": "You (student)"
+  },
+  {
+    "id": "em14",
+    "scenario": "You are a university student dealing with language center appointment. A recent change has created an issue that may affect your academic plans, and you need clarification quickly regarding speaking assessment.",
+    "direction": "Write an email to Language Center Director:",
+    "goals": [
+      "Clearly explain your current situation related to language center appointment",
+      "Ask two specific questions about policy, timeline, or next steps",
+      "Propose a practical solution and explain why it would help"
+    ],
+    "to": "Language Center Director",
+    "from": "You (student)"
+  },
+  {
+    "id": "em15",
+    "scenario": "You are a university student dealing with library noise complaint. A recent change has created an issue that may affect your academic plans, and you need clarification quickly regarding quiet-floor policy.",
+    "direction": "Write an email to Library Operations Manager:",
+    "goals": [
+      "Clearly explain your current situation related to library noise complaint",
+      "Ask two specific questions about policy, timeline, or next steps",
+      "Propose a practical solution and explain why it would help"
+    ],
+    "to": "Library Operations Manager",
+    "from": "You (student)"
+  },
+  {
+    "id": "em16",
+    "scenario": "You are a university student dealing with study-abroad housing. A recent change has created an issue that may affect your academic plans, and you need clarification quickly regarding arrival logistics.",
+    "direction": "Write an email to Global Programs Staff:",
+    "goals": [
+      "Clearly explain your current situation related to study-abroad housing",
+      "Ask two specific questions about policy, timeline, or next steps",
+      "Propose a practical solution and explain why it would help"
+    ],
+    "to": "Global Programs Staff",
+    "from": "You (student)"
+  },
+  {
+    "id": "em17",
+    "scenario": "You are a university student dealing with missed quiz makeup. A recent change has created an issue that may affect your academic plans, and you need clarification quickly regarding documented illness.",
+    "direction": "Write an email to Course Instructor:",
+    "goals": [
+      "Clearly explain your current situation related to missed quiz makeup",
+      "Ask two specific questions about policy, timeline, or next steps",
+      "Propose a practical solution and explain why it would help"
+    ],
+    "to": "Course Instructor",
+    "from": "You (student)"
+  },
+  {
+    "id": "em18",
+    "scenario": "You are a university student dealing with volunteer hour verification. A recent change has created an issue that may affect your academic plans, and you need clarification quickly regarding scholarship requirement.",
+    "direction": "Write an email to Program Supervisor:",
+    "goals": [
+      "Clearly explain your current situation related to volunteer hour verification",
+      "Ask two specific questions about policy, timeline, or next steps",
+      "Propose a practical solution and explain why it would help"
+    ],
+    "to": "Program Supervisor",
+    "from": "You (student)"
+  },
+  {
+    "id": "em19",
+    "scenario": "You are a university student dealing with campus shuttle route. A recent change has created an issue that may affect your academic plans, and you need clarification quickly regarding evening safety.",
+    "direction": "Write an email to Transportation Office:",
+    "goals": [
+      "Clearly explain your current situation related to campus shuttle route",
+      "Ask two specific questions about policy, timeline, or next steps",
+      "Propose a practical solution and explain why it would help"
+    ],
+    "to": "Transportation Office",
+    "from": "You (student)"
+  },
+  {
+    "id": "em20",
+    "scenario": "You are a university student dealing with lab equipment access. A recent change has created an issue that may affect your academic plans, and you need clarification quickly regarding time-sensitive experiment.",
+    "direction": "Write an email to Department Technician:",
+    "goals": [
+      "Clearly explain your current situation related to lab equipment access",
+      "Ask two specific questions about policy, timeline, or next steps",
+      "Propose a practical solution and explain why it would help"
+    ],
+    "to": "Department Technician",
+    "from": "You (student)"
+  },
+  {
+    "id": "em21",
+    "scenario": "You are a university student dealing with group project mediation. A recent change has created an issue that may affect your academic plans, and you need clarification quickly regarding workload imbalance.",
+    "direction": "Write an email to Teaching Assistant:",
+    "goals": [
+      "Clearly explain your current situation related to group project mediation",
+      "Ask two specific questions about policy, timeline, or next steps",
+      "Propose a practical solution and explain why it would help"
+    ],
+    "to": "Teaching Assistant",
+    "from": "You (student)"
+  },
+  {
+    "id": "em22",
+    "scenario": "You are a university student dealing with transcript processing. A recent change has created an issue that may affect your academic plans, and you need clarification quickly regarding graduate application.",
+    "direction": "Write an email to Registrar Office:",
+    "goals": [
+      "Clearly explain your current situation related to transcript processing",
+      "Ask two specific questions about policy, timeline, or next steps",
+      "Propose a practical solution and explain why it would help"
+    ],
+    "to": "Registrar Office",
+    "from": "You (student)"
+  },
+  {
+    "id": "em23",
+    "scenario": "You are a university student dealing with work-study schedule. A recent change has created an issue that may affect your academic plans, and you need clarification quickly regarding class-time overlap.",
+    "direction": "Write an email to Campus Employer:",
+    "goals": [
+      "Clearly explain your current situation related to work-study schedule",
+      "Ask two specific questions about policy, timeline, or next steps",
+      "Propose a practical solution and explain why it would help"
+    ],
+    "to": "Campus Employer",
+    "from": "You (student)"
+  }
 ]

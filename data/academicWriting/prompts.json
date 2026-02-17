@@ -1,10 +1,393 @@
 [
-  { "id": "ad1", "professor": { "name": "Dr. Gupta", "text": "This week we examine urban development. Some cities create car-free zones downtown to reduce pollution and encourage walking. Critics say this hurts businesses and limits access for people with mobility challenges. State whether you support or oppose car-free zones and explain why." }, "students": [{ "name": "Yuki", "text": "I support car-free zones because they create a healthier environment. In my hometown in Japan, a shopping street closed to traffic became very popular. Shops reported higher sales because foot traffic increased." }, { "name": "Carlos", "text": "I think a complete ban is too extreme. Many people depend on cars. Cities should invest in public transit and bike lanes while allowing limited car access." }] },
-  { "id": "ad2", "professor": { "name": "Dr. Chen", "text": "Some universities require all students to take at least one computer science course, regardless of major. Supporters say coding is fundamental; opponents say it takes time from primary studies. What is your position?" }, "students": [{ "name": "Aisha", "text": "I believe a programming requirement makes sense. Even journalism and biology rely on data analysis. Basic coding helps graduates be competitive." }, { "name": "Marco", "text": "I disagree with making it mandatory. Students already have heavy course loads. Forcing a music student to take programming causes unnecessary stress." }] },
-  { "id": "ad3", "professor": { "name": "Dr. Patel", "text": "Many universities now allow students to take most of their courses online. Some argue that online learning offers flexibility and accessibility, while others claim that in-person classes provide a richer educational experience. What do you think is the better approach for university education?" }, "students": [{ "name": "Lena", "text": "Online learning is the future. I took several courses online and was able to work part-time simultaneously. The recorded lectures let me review material at my own pace." }, { "name": "James", "text": "I strongly prefer in-person classes. The discussions and group activities just don't work the same way over video. You also miss out on networking with classmates." }] },
-  { "id": "ad4", "professor": { "name": "Dr. Williams", "text": "Social media platforms have become a primary news source for many young people. Some experts say this democratizes information, while others warn about misinformation and echo chambers. Should universities teach media literacy as a required course? Share your opinion." }, "students": [{ "name": "Sofia", "text": "Absolutely. I've seen so many of my friends share news articles without checking if they're true. A media literacy course would help students think critically about what they read online." }, { "name": "Ryan", "text": "I don't think it needs to be a separate required course. Critical thinking should be taught across all subjects. Adding another requirement just adds to students' workloads." }] },
-  { "id": "ad5", "professor": { "name": "Dr. Nakamura", "text": "Some companies have adopted a four-day work week, claiming it increases productivity and employee well-being. Others argue that reducing work hours leads to missed deadlines and lost revenue. Do you think the four-day work week is a good idea? Why or why not?" }, "students": [{ "name": "Emma", "text": "I think a four-day work week is great for mental health. Studies show that well-rested employees make fewer mistakes. Companies in Iceland and Japan have seen positive results." }, { "name": "David", "text": "It depends on the industry. For office jobs it might work, but hospitals, restaurants, and service industries can't just close an extra day. It's not a one-size-fits-all solution." }] },
-  { "id": "ad6", "professor": { "name": "Dr. Okafor", "text": "Zoos have long been debated. Supporters argue they play a crucial role in conservation and education. Critics say keeping animals in enclosures is unethical, regardless of the purpose. Should modern zoos continue to exist? Take a position and explain your reasoning." }, "students": [{ "name": "Priya", "text": "I believe well-managed zoos are essential for conservation. Many species would be extinct without captive breeding programs. Zoos also educate children about wildlife." }, { "name": "Tom", "text": "Even the best zoos can't replicate natural habitats. Animals in captivity show signs of stress and abnormal behavior. We should fund wildlife reserves instead." }] },
-  { "id": "ad7", "professor": { "name": "Dr. Kim", "text": "Some educators argue that students should be graded purely on exams, while others believe that participation, attendance, and group projects should also count toward the final grade. What grading approach do you think is most fair and effective?" }, "students": [{ "name": "Mei", "text": "I think a mix is best. Exams test knowledge, but participation shows engagement. My best learning happened during group discussions, not just studying for tests." }, { "name": "Alex", "text": "Exams are the most objective measure. Participation grades are subjective—quiet students get penalized even if they understand the material. Grading should be based on demonstrated knowledge." }] },
-  { "id": "ad8", "professor": { "name": "Dr. Santos", "text": "With the rise of AI tools like ChatGPT, some professors have banned their use entirely in coursework, while others encourage students to use AI as a learning aid. What is your position on the use of AI tools in academic work?" }, "students": [{ "name": "Hannah", "text": "AI tools should be allowed as long as students cite them. They help with brainstorming and understanding difficult concepts. Banning them entirely is unrealistic since they're everywhere." }, { "name": "Kevin", "text": "Using AI for assignments defeats the purpose of learning. If a student uses ChatGPT to write an essay, they haven't actually practiced writing. Schools should ban AI tools for graded work." }] }
+  {
+    "id": "ad1",
+    "professor": {
+      "name": "Dr. Gupta",
+      "text": "This week we examine urban development. Some cities create car-free zones downtown to reduce pollution and encourage walking. Critics say this hurts businesses and limits access for people with mobility challenges. State whether you support or oppose car-free zones and explain why."
+    },
+    "students": [
+      {
+        "name": "Yuki",
+        "text": "I support car-free zones because they create a healthier environment. In my hometown in Japan, a shopping street closed to traffic became very popular. Shops reported higher sales because foot traffic increased."
+      },
+      {
+        "name": "Carlos",
+        "text": "I think a complete ban is too extreme. Many people depend on cars. Cities should invest in public transit and bike lanes while allowing limited car access."
+      }
+    ]
+  },
+  {
+    "id": "ad2",
+    "professor": {
+      "name": "Dr. Chen",
+      "text": "Some universities require all students to take at least one computer science course, regardless of major. Supporters say coding is fundamental; opponents say it takes time from primary studies. What is your position?"
+    },
+    "students": [
+      {
+        "name": "Aisha",
+        "text": "I believe a programming requirement makes sense. Even journalism and biology rely on data analysis. Basic coding helps graduates be competitive."
+      },
+      {
+        "name": "Marco",
+        "text": "I disagree with making it mandatory. Students already have heavy course loads. Forcing a music student to take programming causes unnecessary stress."
+      }
+    ]
+  },
+  {
+    "id": "ad3",
+    "professor": {
+      "name": "Dr. Patel",
+      "text": "Many universities now allow students to take most of their courses online. Some argue that online learning offers flexibility and accessibility, while others claim that in-person classes provide a richer educational experience. What do you think is the better approach for university education?"
+    },
+    "students": [
+      {
+        "name": "Lena",
+        "text": "Online learning is the future. I took several courses online and was able to work part-time simultaneously. The recorded lectures let me review material at my own pace."
+      },
+      {
+        "name": "James",
+        "text": "I strongly prefer in-person classes. The discussions and group activities just don't work the same way over video. You also miss out on networking with classmates."
+      }
+    ]
+  },
+  {
+    "id": "ad4",
+    "professor": {
+      "name": "Dr. Williams",
+      "text": "Social media platforms have become a primary news source for many young people. Some experts say this democratizes information, while others warn about misinformation and echo chambers. Should universities teach media literacy as a required course? Share your opinion."
+    },
+    "students": [
+      {
+        "name": "Sofia",
+        "text": "Absolutely. I've seen so many of my friends share news articles without checking if they're true. A media literacy course would help students think critically about what they read online."
+      },
+      {
+        "name": "Ryan",
+        "text": "I don't think it needs to be a separate required course. Critical thinking should be taught across all subjects. Adding another requirement just adds to students' workloads."
+      }
+    ]
+  },
+  {
+    "id": "ad5",
+    "professor": {
+      "name": "Dr. Nakamura",
+      "text": "Some companies have adopted a four-day work week, claiming it increases productivity and employee well-being. Others argue that reducing work hours leads to missed deadlines and lost revenue. Do you think the four-day work week is a good idea? Why or why not?"
+    },
+    "students": [
+      {
+        "name": "Emma",
+        "text": "I think a four-day work week is great for mental health. Studies show that well-rested employees make fewer mistakes. Companies in Iceland and Japan have seen positive results."
+      },
+      {
+        "name": "David",
+        "text": "It depends on the industry. For office jobs it might work, but hospitals, restaurants, and service industries can't just close an extra day. It's not a one-size-fits-all solution."
+      }
+    ]
+  },
+  {
+    "id": "ad6",
+    "professor": {
+      "name": "Dr. Okafor",
+      "text": "Zoos have long been debated. Supporters argue they play a crucial role in conservation and education. Critics say keeping animals in enclosures is unethical, regardless of the purpose. Should modern zoos continue to exist? Take a position and explain your reasoning."
+    },
+    "students": [
+      {
+        "name": "Priya",
+        "text": "I believe well-managed zoos are essential for conservation. Many species would be extinct without captive breeding programs. Zoos also educate children about wildlife."
+      },
+      {
+        "name": "Tom",
+        "text": "Even the best zoos can't replicate natural habitats. Animals in captivity show signs of stress and abnormal behavior. We should fund wildlife reserves instead."
+      }
+    ]
+  },
+  {
+    "id": "ad7",
+    "professor": {
+      "name": "Dr. Kim",
+      "text": "Some educators argue that students should be graded purely on exams, while others believe that participation, attendance, and group projects should also count toward the final grade. What grading approach do you think is most fair and effective?"
+    },
+    "students": [
+      {
+        "name": "Mei",
+        "text": "I think a mix is best. Exams test knowledge, but participation shows engagement. My best learning happened during group discussions, not just studying for tests."
+      },
+      {
+        "name": "Alex",
+        "text": "Exams are the most objective measure. Participation grades are subjective—quiet students get penalized even if they understand the material. Grading should be based on demonstrated knowledge."
+      }
+    ]
+  },
+  {
+    "id": "ad8",
+    "professor": {
+      "name": "Dr. Santos",
+      "text": "With the rise of AI tools like ChatGPT, some professors have banned their use entirely in coursework, while others encourage students to use AI as a learning aid. What is your position on the use of AI tools in academic work?"
+    },
+    "students": [
+      {
+        "name": "Hannah",
+        "text": "AI tools should be allowed as long as students cite them. They help with brainstorming and understanding difficult concepts. Banning them entirely is unrealistic since they're everywhere."
+      },
+      {
+        "name": "Kevin",
+        "text": "Using AI for assignments defeats the purpose of learning. If a student uses ChatGPT to write an essay, they haven't actually practiced writing. Schools should ban AI tools for graded work."
+      }
+    ]
+  },
+  {
+    "id": "ad9",
+    "professor": {
+      "name": "Dr. Rivera-9",
+      "text": "In this week's discussion, consider whether universities should prioritize practical job skills over broad liberal-arts learning. Supporters argue it improves fairness and outcomes, while critics argue it may reduce flexibility or increase pressure on students. State your position and explain your reasoning with specific support."
+    },
+    "students": [
+      {
+        "name": "Student A",
+        "text": "I support this policy because clear standards help students plan better and can improve accountability across courses."
+      },
+      {
+        "name": "Student B",
+        "text": "I disagree because one policy cannot fit all departments, and strict rules can create unintended disadvantages for some learners."
+      }
+    ]
+  },
+  {
+    "id": "ad10",
+    "professor": {
+      "name": "Dr. Rivera-10",
+      "text": "In this week's discussion, consider whether attendance should count toward final grades in large lecture courses. Supporters argue it improves fairness and outcomes, while critics argue it may reduce flexibility or increase pressure on students. State your position and explain your reasoning with specific support."
+    },
+    "students": [
+      {
+        "name": "Student A",
+        "text": "I support this policy because clear standards help students plan better and can improve accountability across courses."
+      },
+      {
+        "name": "Student B",
+        "text": "I disagree because one policy cannot fit all departments, and strict rules can create unintended disadvantages for some learners."
+      }
+    ]
+  },
+  {
+    "id": "ad11",
+    "professor": {
+      "name": "Dr. Rivera-11",
+      "text": "In this week's discussion, consider whether first-year students should be required to live on campus. Supporters argue it improves fairness and outcomes, while critics argue it may reduce flexibility or increase pressure on students. State your position and explain your reasoning with specific support."
+    },
+    "students": [
+      {
+        "name": "Student A",
+        "text": "I support this policy because clear standards help students plan better and can improve accountability across courses."
+      },
+      {
+        "name": "Student B",
+        "text": "I disagree because one policy cannot fit all departments, and strict rules can create unintended disadvantages for some learners."
+      }
+    ]
+  },
+  {
+    "id": "ad12",
+    "professor": {
+      "name": "Dr. Rivera-12",
+      "text": "In this week's discussion, consider whether AI-assisted writing tools should be allowed in draft stages. Supporters argue it improves fairness and outcomes, while critics argue it may reduce flexibility or increase pressure on students. State your position and explain your reasoning with specific support."
+    },
+    "students": [
+      {
+        "name": "Student A",
+        "text": "I support this policy because clear standards help students plan better and can improve accountability across courses."
+      },
+      {
+        "name": "Student B",
+        "text": "I disagree because one policy cannot fit all departments, and strict rules can create unintended disadvantages for some learners."
+      }
+    ]
+  },
+  {
+    "id": "ad13",
+    "professor": {
+      "name": "Dr. Rivera-13",
+      "text": "In this week's discussion, consider whether internships should be mandatory for graduation in applied majors. Supporters argue it improves fairness and outcomes, while critics argue it may reduce flexibility or increase pressure on students. State your position and explain your reasoning with specific support."
+    },
+    "students": [
+      {
+        "name": "Student A",
+        "text": "I support this policy because clear standards help students plan better and can improve accountability across courses."
+      },
+      {
+        "name": "Student B",
+        "text": "I disagree because one policy cannot fit all departments, and strict rules can create unintended disadvantages for some learners."
+      }
+    ]
+  },
+  {
+    "id": "ad14",
+    "professor": {
+      "name": "Dr. Rivera-14",
+      "text": "In this week's discussion, consider whether campuses should replace printed textbooks with digital-only materials. Supporters argue it improves fairness and outcomes, while critics argue it may reduce flexibility or increase pressure on students. State your position and explain your reasoning with specific support."
+    },
+    "students": [
+      {
+        "name": "Student A",
+        "text": "I support this policy because clear standards help students plan better and can improve accountability across courses."
+      },
+      {
+        "name": "Student B",
+        "text": "I disagree because one policy cannot fit all departments, and strict rules can create unintended disadvantages for some learners."
+      }
+    ]
+  },
+  {
+    "id": "ad15",
+    "professor": {
+      "name": "Dr. Rivera-15",
+      "text": "In this week's discussion, consider whether group projects should include anonymous peer scoring. Supporters argue it improves fairness and outcomes, while critics argue it may reduce flexibility or increase pressure on students. State your position and explain your reasoning with specific support."
+    },
+    "students": [
+      {
+        "name": "Student A",
+        "text": "I support this policy because clear standards help students plan better and can improve accountability across courses."
+      },
+      {
+        "name": "Student B",
+        "text": "I disagree because one policy cannot fit all departments, and strict rules can create unintended disadvantages for some learners."
+      }
+    ]
+  },
+  {
+    "id": "ad16",
+    "professor": {
+      "name": "Dr. Rivera-16",
+      "text": "In this week's discussion, consider whether tuition discounts should reward early degree completion. Supporters argue it improves fairness and outcomes, while critics argue it may reduce flexibility or increase pressure on students. State your position and explain your reasoning with specific support."
+    },
+    "students": [
+      {
+        "name": "Student A",
+        "text": "I support this policy because clear standards help students plan better and can improve accountability across courses."
+      },
+      {
+        "name": "Student B",
+        "text": "I disagree because one policy cannot fit all departments, and strict rules can create unintended disadvantages for some learners."
+      }
+    ]
+  },
+  {
+    "id": "ad17",
+    "professor": {
+      "name": "Dr. Rivera-17",
+      "text": "In this week's discussion, consider whether universities should cap class sizes in writing-intensive courses. Supporters argue it improves fairness and outcomes, while critics argue it may reduce flexibility or increase pressure on students. State your position and explain your reasoning with specific support."
+    },
+    "students": [
+      {
+        "name": "Student A",
+        "text": "I support this policy because clear standards help students plan better and can improve accountability across courses."
+      },
+      {
+        "name": "Student B",
+        "text": "I disagree because one policy cannot fit all departments, and strict rules can create unintended disadvantages for some learners."
+      }
+    ]
+  },
+  {
+    "id": "ad18",
+    "professor": {
+      "name": "Dr. Rivera-18",
+      "text": "In this week's discussion, consider whether public speaking should be a general-education requirement. Supporters argue it improves fairness and outcomes, while critics argue it may reduce flexibility or increase pressure on students. State your position and explain your reasoning with specific support."
+    },
+    "students": [
+      {
+        "name": "Student A",
+        "text": "I support this policy because clear standards help students plan better and can improve accountability across courses."
+      },
+      {
+        "name": "Student B",
+        "text": "I disagree because one policy cannot fit all departments, and strict rules can create unintended disadvantages for some learners."
+      }
+    ]
+  },
+  {
+    "id": "ad19",
+    "professor": {
+      "name": "Dr. Rivera-19",
+      "text": "In this week's discussion, consider whether undergraduates should be allowed to retake major-required exams. Supporters argue it improves fairness and outcomes, while critics argue it may reduce flexibility or increase pressure on students. State your position and explain your reasoning with specific support."
+    },
+    "students": [
+      {
+        "name": "Student A",
+        "text": "I support this policy because clear standards help students plan better and can improve accountability across courses."
+      },
+      {
+        "name": "Student B",
+        "text": "I disagree because one policy cannot fit all departments, and strict rules can create unintended disadvantages for some learners."
+      }
+    ]
+  },
+  {
+    "id": "ad20",
+    "professor": {
+      "name": "Dr. Rivera-20",
+      "text": "In this week's discussion, consider whether campus jobs should prioritize financial-need applicants. Supporters argue it improves fairness and outcomes, while critics argue it may reduce flexibility or increase pressure on students. State your position and explain your reasoning with specific support."
+    },
+    "students": [
+      {
+        "name": "Student A",
+        "text": "I support this policy because clear standards help students plan better and can improve accountability across courses."
+      },
+      {
+        "name": "Student B",
+        "text": "I disagree because one policy cannot fit all departments, and strict rules can create unintended disadvantages for some learners."
+      }
+    ]
+  },
+  {
+    "id": "ad21",
+    "professor": {
+      "name": "Dr. Rivera-21",
+      "text": "In this week's discussion, consider whether universities should adopt year-round trimester calendars. Supporters argue it improves fairness and outcomes, while critics argue it may reduce flexibility or increase pressure on students. State your position and explain your reasoning with specific support."
+    },
+    "students": [
+      {
+        "name": "Student A",
+        "text": "I support this policy because clear standards help students plan better and can improve accountability across courses."
+      },
+      {
+        "name": "Student B",
+        "text": "I disagree because one policy cannot fit all departments, and strict rules can create unintended disadvantages for some learners."
+      }
+    ]
+  },
+  {
+    "id": "ad22",
+    "professor": {
+      "name": "Dr. Rivera-22",
+      "text": "In this week's discussion, consider whether students should be required to complete a service-learning course. Supporters argue it improves fairness and outcomes, while critics argue it may reduce flexibility or increase pressure on students. State your position and explain your reasoning with specific support."
+    },
+    "students": [
+      {
+        "name": "Student A",
+        "text": "I support this policy because clear standards help students plan better and can improve accountability across courses."
+      },
+      {
+        "name": "Student B",
+        "text": "I disagree because one policy cannot fit all departments, and strict rules can create unintended disadvantages for some learners."
+      }
+    ]
+  },
+  {
+    "id": "ad23",
+    "professor": {
+      "name": "Dr. Rivera-23",
+      "text": "In this week's discussion, consider whether departments should publish grade distribution data every term. Supporters argue it improves fairness and outcomes, while critics argue it may reduce flexibility or increase pressure on students. State your position and explain your reasoning with specific support."
+    },
+    "students": [
+      {
+        "name": "Student A",
+        "text": "I support this policy because clear standards help students plan better and can improve accountability across courses."
+      },
+      {
+        "name": "Student B",
+        "text": "I disagree because one policy cannot fit all departments, and strict rules can create unintended disadvantages for some learners."
+      }
+    ]
+  }
 ]
