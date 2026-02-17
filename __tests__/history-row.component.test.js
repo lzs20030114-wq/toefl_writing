@@ -23,4 +23,22 @@ describe("HistoryRow", () => {
     fireEvent.click(screen.getByTitle("Delete this entry"));
     expect(onDelete).toHaveBeenCalledWith(3);
   });
+
+  test("does not crash when mock task list contains malformed legacy items", () => {
+    const entry = {
+      sourceIndex: 1,
+      session: {
+        type: "mock",
+        score: 70,
+        date: "2026-02-16T00:00:00.000Z",
+        details: {
+          tasks: [null, { taskId: "email-writing", score: 3, maxScore: 5 }, { nope: true }],
+        },
+      },
+    };
+
+    render(<HistoryRow entry={entry} isExpanded={true} isLast={true} onToggle={() => {}} onDelete={() => {}} />);
+    expect(screen.getByText("Mock Exam")).toBeInTheDocument();
+    expect(screen.getByText(/Email 3\/5/)).toBeInTheDocument();
+  });
 });

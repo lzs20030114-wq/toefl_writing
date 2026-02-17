@@ -25,6 +25,7 @@ function typeIcon(type) {
 }
 
 function getScoreLabel(s) {
+  if (!s || typeof s !== "object") return "--";
   if (s.type === "bs") return `${s.correct}/${s.total}`;
   if (s.type === "mock") {
     if (Number.isFinite(s.band)) return `${s.band.toFixed(1)} /6`;
@@ -34,6 +35,7 @@ function getScoreLabel(s) {
 }
 
 function getScoreColor(s) {
+  if (!s || typeof s !== "object") return C.t2;
   if (s.type === "bs") return s.correct / s.total >= 0.8 ? C.green : C.orange;
   if (s.type === "mock") {
     const band = s.band;
@@ -135,7 +137,9 @@ function MockExamDetails({ session }) {
   const byId = useMemo(() => {
     const map = {};
     tasks.forEach((t) => {
-      map[t.taskId] = t;
+      const taskId = t?.taskId;
+      if (!taskId) return;
+      map[taskId] = t;
     });
     return map;
   }, [tasks]);
@@ -409,13 +413,13 @@ function MockExamDetails({ session }) {
 }
 
 export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, showIcon }) {
-  const s = entry.session;
-  const sourceIndex = entry.sourceIndex;
+  const s = entry?.session || {};
+  const sourceIndex = entry?.sourceIndex;
 
   const mockTasks = Array.isArray(s?.details?.tasks) ? s.details.tasks : [];
-  const mockBuild = mockTasks.find((t) => t.taskId === MOCK_TASK_IDS.BUILD);
-  const mockEmail = mockTasks.find((t) => t.taskId === MOCK_TASK_IDS.EMAIL);
-  const mockDisc = mockTasks.find((t) => t.taskId === MOCK_TASK_IDS.DISC);
+  const mockBuild = mockTasks.find((t) => t?.taskId === MOCK_TASK_IDS.BUILD);
+  const mockEmail = mockTasks.find((t) => t?.taskId === MOCK_TASK_IDS.EMAIL);
+  const mockDisc = mockTasks.find((t) => t?.taskId === MOCK_TASK_IDS.DISC);
 
   const mockChip = (label, task) => (
     <Chip key={label} color="#1d4ed8" bg="#dbeafe">
@@ -436,7 +440,7 @@ export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, show
           gap: 10,
           flexWrap: "wrap",
         }}
-        onClick={onToggle}
+        onClick={() => onToggle?.()}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0, flex: 1 }}>
           <span style={{ fontSize: 11, color: C.t2, userSelect: "none", flexShrink: 0 }}>{isExpanded ? "\u25BC" : "\u25B6"}</span>
@@ -464,7 +468,7 @@ export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, show
           <button
             onClick={(e) => {
               e.stopPropagation();
-              onToggle();
+              onToggle?.();
             }}
             style={{
               border: "1px solid #cbd5e1",
@@ -483,7 +487,7 @@ export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, show
           <button
             onClick={(e) => {
               e.stopPropagation();
-              onDelete(sourceIndex);
+              onDelete?.(sourceIndex);
             }}
             title="Delete this entry"
             style={{
