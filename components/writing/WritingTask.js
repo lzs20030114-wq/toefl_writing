@@ -82,6 +82,18 @@ function summarizePrompt(type, pd) {
   return text.length > 80 ? `${text.slice(0, 80)}...` : text;
 }
 
+function confirmEarlySubmit() {
+  if (process.env.NODE_ENV === "test") return true;
+  try {
+    if (typeof window !== "undefined" && typeof window.confirm === "function") {
+      return window.confirm("还有剩余时间，确定要提前提交吗？");
+    }
+  } catch {
+    // jsdom and some embedded contexts do not implement confirm; default allow.
+  }
+  return true;
+}
+
 export function WritingTask({
   onExit,
   type,
@@ -217,7 +229,16 @@ export function WritingTask({
     if (phase !== "ready") return;
     start();
   }, [intro, autoStartOnMount, phase]);
-  async function submitScore() {
+
+  function shouldConfirmEarlySubmit() {
+    return phaseRef.current === "writing" && Number.isFinite(tl) && tl > 0;
+  }
+
+  async function submitScore({ skipConfirm = false } = {}) {
+    if (!skipConfirm && shouldConfirmEarlySubmit()) {
+      const ok = confirmEarlySubmit();
+      if (!ok) return;
+    }
     if (deferScoring) {
       if (submitLockRef.current) return;
       submitLockRef.current = true;
@@ -255,7 +276,7 @@ export function WritingTask({
 
   async function retryScore() { await runScoringAttempt(); }
 
-  useEffect(() => { if (tl === 0 && phaseRef.current === "writing") { submitRef.current(); } }, [tl]);
+  useEffect(() => { if (tl === 0 && phaseRef.current === "writing") { submitRef.current({ skipConfirm: true }); } }, [tl]);
 
   useEffect(() => {
     function handleKey(e) { if (e.ctrlKey && e.key === "Enter" && phaseRef.current === "writing") { e.preventDefault(); submitRef.current(); } }

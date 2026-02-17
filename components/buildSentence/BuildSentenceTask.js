@@ -19,6 +19,18 @@ function formatChunkDisplay(text) {
     .join(" ");
 }
 
+function confirmEarlySubmit() {
+  if (process.env.NODE_ENV === "test") return true;
+  try {
+    if (typeof window !== "undefined" && typeof window.confirm === "function") {
+      return window.confirm("还有剩余时间，确定要提前提交吗？");
+    }
+  } catch {
+    // jsdom and some embedded contexts do not implement confirm; default allow.
+  }
+  return true;
+}
+
 export function BuildSentenceTask({
   onExit,
   questions,
@@ -61,6 +73,16 @@ export function BuildSentenceTask({
     onDropSlot,
     onDropBank,
   } = useBuildSentenceSession(questions, { persistSession, onComplete, onTimerChange, timeLimitSeconds, practiceMode });
+
+  function handleSubmitClick() {
+    const isFinalQuestion = idx >= qs.length - 1;
+    const hasRemainingTime = Number.isFinite(tl) && tl > 0;
+    if (isFinalQuestion && hasRemainingTime) {
+      const ok = confirmEarlySubmit();
+      if (!ok) return;
+    }
+    submit();
+  }
 
   if (phase === "review") {
     const ok = results.filter((r) => r.isCorrect).length;
@@ -288,7 +310,7 @@ export function BuildSentenceTask({
 
         <div style={{ display: "flex", gap: 12 }}>
           <Btn onClick={resetQ} variant="secondary">Reset</Btn>
-          <Btn data-testid="build-submit" onClick={submit} disabled={!allFilled}>
+          <Btn data-testid="build-submit" onClick={handleSubmitClick} disabled={!allFilled}>
             {idx < qs.length - 1 ? "Next Question" : "Finish and Review"}
           </Btn>
         </div>
