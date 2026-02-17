@@ -2,7 +2,7 @@
 import React, { useMemo, useState } from "react";
 import { C } from "../shared/ui";
 import { buildAnnotationSegments, countAnnotations, parseAnnotations } from "../../lib/annotations/parseAnnotations";
-import { normalizeReportLanguage } from "../../lib/reportLanguage";
+import { normalizeReportLanguage, readReportLanguage, saveReportLanguage, REPORT_LANGUAGE } from "../../lib/reportLanguage";
 
 const warnedParseFallback = new Set();
 
@@ -89,8 +89,38 @@ function statusStyle(status) {
   return { icon: "MISSING", color: C.red, bg: "#fef2f2" };
 }
 
+function LangToggle({ lang, onChange }) {
+  const opts = [
+    { value: REPORT_LANGUAGE.ZH, label: "\u4E2D\u6587" },
+    { value: REPORT_LANGUAGE.EN, label: "EN" },
+  ];
+  return (
+    <div style={{ display: "inline-flex", gap: 4, background: "#f1f5f9", borderRadius: 999, padding: 2 }}>
+      {opts.map((o) => (
+        <button
+          key={o.value}
+          onClick={() => onChange(o.value)}
+          style={{
+            border: "none",
+            background: lang === o.value ? "#fff" : "transparent",
+            boxShadow: lang === o.value ? "0 1px 3px rgba(0,0,0,0.12)" : "none",
+            color: lang === o.value ? C.nav : C.t2,
+            borderRadius: 999, padding: "2px 10px", fontSize: 11,
+            fontWeight: 700, cursor: "pointer", lineHeight: "20px",
+          }}
+        >
+          {o.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 export function ScoringReport({ result, type, uiLang = "zh" }) {
-  const lang = normalizeReportLanguage(result?.reportLanguage || uiLang);
+  const storedLang = (() => { try { const s = localStorage.getItem("toefl-report-language"); return s ? normalizeReportLanguage(s) : null; } catch { return null; } })();
+  const defaultLang = storedLang || normalizeReportLanguage(result?.reportLanguage || uiLang);
+  const [langOverride, setLangOverride] = useState(defaultLang);
+  const lang = langOverride;
   const ui = I18N[lang];
   const [activeNote, setActiveNote] = useState(null);
   if (!result) return null;
@@ -178,6 +208,9 @@ export function ScoringReport({ result, type, uiLang = "zh" }) {
 
   return (
     <div data-testid="score-panel" style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: -4 }}>
+        <LangToggle lang={lang} onChange={(v) => { setLangOverride(v); saveReportLanguage(v); }} />
+      </div>
       <div style={{ background: C.nav, color: "#fff", borderRadius: 6, padding: "16px 20px" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "end", gap: 16, marginBottom: 10 }}>
           <div style={{ display: "flex", alignItems: "baseline", gap: 10 }}>

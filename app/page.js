@@ -4,7 +4,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { C, FONT } from "../components/shared/ui";
 import { loadHist, SESSION_STORE_EVENTS } from "../lib/sessionStore";
 import { formatMinutesLabel, getTaskTimeSeconds, normalizePracticeMode, PRACTICE_MODE, STANDARD_TIME_SECONDS } from "../lib/practiceMode";
-import { normalizeReportLanguage, REPORT_LANGUAGE } from "../lib/reportLanguage";
 
 /* ───── Challenge theme palette ───── */
 const CH = {
@@ -112,22 +111,10 @@ export default function Page() {
   const [hoverKey, setHoverKey] = useState("");
   const [sessionCount, setSessionCount] = useState(0);
   const [mode, setMode] = useState(PRACTICE_MODE.STANDARD);
-  const [reportLanguage, setReportLanguage] = useState(REPORT_LANGUAGE.ZH);
   const [crtFlash, setCrtFlash] = useState(false);
   const [shaking, setShaking] = useState(false);
 
   const isChallenge = mode === PRACTICE_MODE.CHALLENGE;
-
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem("toefl-report-language");
-      if (saved) setReportLanguage(normalizeReportLanguage(saved));
-    } catch { /* ignore */ }
-  }, []);
-
-  useEffect(() => {
-    try { localStorage.setItem("toefl-report-language", reportLanguage); } catch { /* ignore */ }
-  }, [reportLanguage]);
 
   useEffect(() => {
     const refresh = () => { setSessionCount((loadHist().sessions || []).length); };
@@ -151,13 +138,7 @@ export default function Page() {
     setTimeout(() => setShaking(false), 600);
   }
 
-  const querySuffix = (() => {
-    const p = new URLSearchParams();
-    if (isChallenge) p.set("mode", "challenge");
-    if (reportLanguage === REPORT_LANGUAGE.EN) p.set("lang", "en");
-    const q = p.toString();
-    return q ? `?${q}` : "";
-  })();
+  const querySuffix = isChallenge ? "?mode=challenge" : "";
 
   const mockTotalSeconds = getTaskTimeSeconds("build", mode) + getTaskTimeSeconds("email", mode) + getTaskTimeSeconds("discussion", mode);
   const mockStandardTotal = STANDARD_TIME_SECONDS.build + STANDARD_TIME_SECONDS.email + STANDARD_TIME_SECONDS.discussion;
@@ -299,27 +280,6 @@ export default function Page() {
               })}
             </div>
 
-            {/* Language toggle */}
-            <div style={{ display: "inline-flex", gap: 8, background: isChallenge ? "rgba(255,255,255,0.05)" : "#f8fafc", border: "1px solid " + (isChallenge ? "rgba(255,255,255,0.1)" : "#cbd5e1"), borderRadius: 999, marginTop: 10, padding: 4, transition: "background .3s, border-color .3s" }}>
-              {[
-                { value: REPORT_LANGUAGE.ZH, label: "\u4E2D\u6587" },
-                { value: REPORT_LANGUAGE.EN, label: "English" },
-              ].map((opt) => (
-                <button
-                  key={opt.value}
-                  onClick={() => setReportLanguage(normalizeReportLanguage(opt.value))}
-                  style={{
-                    border: "1px solid " + (reportLanguage === opt.value ? (isChallenge ? CH.blue : C.blue) : "transparent"),
-                    background: reportLanguage === opt.value ? (isChallenge ? "rgba(68,136,255,0.12)" : "#e8f0fe") : "transparent",
-                    color: reportLanguage === opt.value ? (isChallenge ? CH.blue : C.nav) : (isChallenge ? CH.t2 : C.t2),
-                    borderRadius: 999, padding: "4px 12px", fontSize: 12,
-                    fontWeight: 700, cursor: "pointer", transition: "all .15s",
-                  }}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
           </div>
 
           {/* ── Task cards ── */}

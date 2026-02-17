@@ -15,7 +15,7 @@ import { ScoringReport } from "./ScoringReport";
 import { WritingPromptPanel } from "./WritingPromptPanel";
 import { WritingResponsePanel } from "./WritingResponsePanel";
 import { formatMinutesLabel, PRACTICE_MODE } from "../../lib/practiceMode";
-import { normalizeReportLanguage } from "../../lib/reportLanguage";
+import { normalizeReportLanguage, readReportLanguage } from "../../lib/reportLanguage";
 
 async function aiGen(type) {
   const prompts = {
@@ -41,9 +41,9 @@ export function WritingTask({
   practiceMode = PRACTICE_MODE.STANDARD,
   showTaskIntro = true,
   autoStartOnMount = false,
-  reportLanguage = "zh",
+  reportLanguage,
 }) {
-  const uiReportLanguage = normalizeReportLanguage(reportLanguage);
+  const uiReportLanguage = normalizeReportLanguage(reportLanguage || readReportLanguage());
   const data = type === "email" ? EM_DATA : AD_DATA;
   const defaultLimit = type === "email" ? 420 : 600;
   const limit = Number.isFinite(timeLimitSeconds) && timeLimitSeconds > 0 ? timeLimitSeconds : defaultLimit;

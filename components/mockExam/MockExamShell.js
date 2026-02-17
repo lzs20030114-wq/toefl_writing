@@ -12,10 +12,10 @@ import { MockExamStartCard } from "./MockExamStartCard";
 import { MockExamMainPanel } from "./MockExamMainPanel";
 import { formatMinutesLabel, PRACTICE_MODE } from "../../lib/practiceMode";
 import { getDefaultMockExamBlueprint } from "../../lib/mockExam/planner";
-import { normalizeReportLanguage } from "../../lib/reportLanguage";
+import { normalizeReportLanguage, readReportLanguage } from "../../lib/reportLanguage";
 
-export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLanguage = "zh" }) {
-  const uiReportLanguage = normalizeReportLanguage(reportLanguage);
+export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLanguage }) {
+  const uiReportLanguage = normalizeReportLanguage(reportLanguage || readReportLanguage());
   const [session, setSession] = useState(null);
   const [hist] = useState(() => loadMockExamHistory());
   const [sectionTimer, setSectionTimer] = useState(null);
