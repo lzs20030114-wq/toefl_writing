@@ -1,15 +1,69 @@
 "use client";
 import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
 import { C, FONT } from "../components/shared/ui";
+import { loadHist, SESSION_STORE_EVENTS } from "../lib/sessionStore";
 
-const TASKS = [
-  { k: "build-sentence", n: "Task 1", t: "Build a Sentence", d: "Arrange chunks into a correct sentence. Easy / medium / hard sets.", ti: "6m 50s", it: "10 Qs", tag: true },
-  { k: "email-writing", n: "Task 2", t: "Write an Email", d: "Write a professional email. 3 goals. 8 prompts.", ti: "7 min", it: "80-120w", tag: true },
-  { k: "academic-writing", n: "Task 3", t: "Academic Discussion", d: "Respond on a discussion board. 8 topics.", ti: "10 min", it: "100+w", tag: false },
-  { k: "mock-exam", n: "Full Test", t: "Mock Exam Mode", d: "Run Task 1 + Task 2 + Task 3 in one session with standalone score record.", ti: "24 min", it: "3 Tasks", tag: true },
+const PRACTICE_TASKS = [
+  { k: "build-sentence", n: "Task 1", t: "Build a Sentence", d: "Reorder words to form a grammatically correct response.", ti: "6 min", it: "10 questions" },
+  { k: "email-writing", n: "Task 2", t: "Write an Email", d: "Respond appropriately to a workplace situation.", ti: "7 min", it: "80-120 words" },
+  { k: "academic-writing", n: "Task 3", t: "Academic Discussion", d: "Respond to an academic discussion prompt.", ti: "10 min", it: "100+ words" },
 ];
 
+const MOCK_TASK = {
+  k: "mock-exam",
+  n: "Full Writing Section",
+  t: "Mock Exam Mode",
+  d: "Simulated exam environment",
+  ti: "24 min",
+  it: "Task 1 + Task 2 + Task 3",
+};
+
+function timeBadge(time, bg = "#e8f0fe", color = C.nav) {
+  return (
+    <div style={{ width: 90, minWidth: 90, display: "flex", alignItems: "center", justifyContent: "center", background: bg, borderRight: "1px solid " + C.bdr, padding: "8px 4px" }}>
+      <div style={{ fontSize: 22, lineHeight: 1, fontWeight: 800, color, whiteSpace: "nowrap" }}>{time}</div>
+    </div>
+  );
+}
+
 export default function Page() {
+  const [hoverKey, setHoverKey] = useState("");
+  const [sessionCount, setSessionCount] = useState(0);
+
+  useEffect(() => {
+    const refresh = () => {
+      const sessions = loadHist().sessions || [];
+      setSessionCount(sessions.length);
+    };
+    refresh();
+    window.addEventListener(SESSION_STORE_EVENTS.HISTORY_UPDATED_EVENT, refresh);
+    return () => window.removeEventListener(SESSION_STORE_EVENTS.HISTORY_UPDATED_EVENT, refresh);
+  }, []);
+
+  const historyText = useMemo(() => {
+    if (sessionCount > 0) return `${sessionCount} sessions recorded. Review progress and weak areas.`;
+    return "Track progress over time and identify weak areas.";
+  }, [sessionCount]);
+
+  const cardBase = {
+    display: "flex",
+    width: "100%",
+    textAlign: "left",
+    background: "#fff",
+    border: "1px solid " + C.bdr,
+    borderRadius: 8,
+    padding: 0,
+    marginBottom: 12,
+    cursor: "pointer",
+    overflow: "hidden",
+    fontFamily: FONT,
+    textDecoration: "none",
+    color: "inherit",
+    minHeight: 106,
+    transition: "box-shadow 120ms ease, transform 120ms ease, border-color 120ms ease",
+  };
+
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
       <div style={{ background: C.nav, color: "#fff", padding: "0 20px", height: 48, display: "flex", alignItems: "center", borderBottom: "3px solid " + C.navDk }}>
@@ -19,34 +73,93 @@ export default function Page() {
       </div>
       <div style={{ maxWidth: 800, margin: "32px auto", padding: "0 20px" }}>
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: "32px 40px", marginBottom: 24, textAlign: "center" }}>
-          <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, color: C.nav }}>Writing Section</h1>
-          <p style={{ color: C.t2, fontSize: 14, margin: "8px 0 0" }}>New TOEFL iBT format practice</p>
+          <h1 style={{ margin: 0, fontSize: 26, fontWeight: 700, color: C.nav }}>TOEFL iBT Writing Practice (2026)</h1>
+          <p style={{ color: C.t2, fontSize: 14, margin: "8px 0 0" }}>ETS-style timing & AI feedback for all 3 tasks</p>
         </div>
-        {TASKS.map(c => (
-          <Link href={"/" + c.k} key={c.k} style={{ display: "flex", width: "100%", textAlign: "left", background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 0, marginBottom: 12, cursor: "pointer", overflow: "hidden", fontFamily: FONT, textDecoration: "none", color: "inherit" }}>
-            <div style={{ width: 6, background: C.blue, flexShrink: 0 }} />
-            <div style={{ padding: "16px 20px", flex: 1 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
-                <span style={{ fontSize: 11, color: C.blue, fontWeight: 700, letterSpacing: 1 }}>{c.n}</span>
-                {c.tag && <span style={{ fontSize: 10, color: "#fff", background: C.orange, padding: "1px 8px", borderRadius: 3, fontWeight: 700 }}>NEW</span>}
-              </div>
-              <div style={{ fontSize: 16, fontWeight: 700, color: C.t1, marginBottom: 4 }}>{c.t}</div>
-              <div style={{ fontSize: 13, color: C.t2 }}>{c.d}</div>
+
+        {PRACTICE_TASKS.map((c) => (
+          <Link
+            href={"/" + c.k}
+            key={c.k}
+            onMouseEnter={() => setHoverKey(c.k)}
+            onMouseLeave={() => setHoverKey("")}
+            style={{
+              ...cardBase,
+              borderColor: hoverKey === c.k ? "#94a3b8" : C.bdr,
+              boxShadow: hoverKey === c.k ? "0 4px 14px rgba(0, 51, 102, 0.12)" : "none",
+              transform: hoverKey === c.k ? "translateY(-1px)" : "none",
+            }}
+          >
+            {timeBadge(c.ti)}
+            <div style={{ padding: "14px 16px", flex: 1, minWidth: 0, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+              <div style={{ fontSize: 11, color: "#6b7280", fontWeight: 600, marginBottom: 3 }}>{c.n}</div>
+              <div style={{ fontSize: 18, fontWeight: 700, color: C.t1, marginBottom: 4, lineHeight: 1.2 }}>{c.t}</div>
+              <div style={{ fontSize: 13, color: C.t2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{c.d}</div>
             </div>
-            <div style={{ padding: "16px 20px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "flex-end", borderLeft: "1px solid " + C.bdr, minWidth: 110 }}>
-              <div style={{ fontSize: 14, fontWeight: 700, color: C.nav }}>{c.ti}</div>
-              <div style={{ fontSize: 12, color: C.t2 }}>{c.it}</div>
+            <div style={{ padding: "14px 12px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "flex-end", borderLeft: "1px solid " + C.bdr, minWidth: 108 }}>
+              <div style={{ fontSize: 12, color: C.t2, whiteSpace: "nowrap" }}>{c.it}</div>
+              <div style={{ color: C.blue, fontSize: 18, lineHeight: 1, marginTop: 4 }}>&gt;</div>
             </div>
           </Link>
         ))}
-        <Link href="/progress" style={{ display: "flex", width: "100%", textAlign: "left", background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 0, marginTop: 8, marginBottom: 12, cursor: "pointer", fontFamily: FONT, textDecoration: "none", color: "inherit" }}>
-          <div style={{ width: 6, background: C.green, flexShrink: 0 }} />
-          <div style={{ padding: "16px 20px", flex: 1 }}>
-            <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 4 }}>Practice History</div>
-            <div style={{ fontSize: 13, color: C.t2 }}>View recent attempts and score trends.</div>
+
+        <Link
+          href={"/" + MOCK_TASK.k}
+          onMouseEnter={() => setHoverKey(MOCK_TASK.k)}
+          onMouseLeave={() => setHoverKey("")}
+          style={{
+            ...cardBase,
+            marginBottom: 16,
+            border: "2px solid " + (hoverKey === MOCK_TASK.k ? C.nav : "#2f528a"),
+            boxShadow: hoverKey === MOCK_TASK.k ? "0 6px 18px rgba(0, 51, 102, 0.2)" : "0 2px 10px rgba(0, 51, 102, 0.12)",
+            background: "linear-gradient(180deg, #f8fbff 0%, #eef5ff 100%)",
+          }}
+        >
+          {timeBadge(MOCK_TASK.ti, "#dbeafe", C.nav)}
+          <div style={{ padding: "14px 16px", flex: 1, minWidth: 0, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+            <div style={{ fontSize: 11, color: "#334155", fontWeight: 700, marginBottom: 3 }}>{MOCK_TASK.n}</div>
+            <div style={{ fontSize: 18, fontWeight: 800, color: C.nav, marginBottom: 4, lineHeight: 1.2 }}>{MOCK_TASK.t}</div>
+            <div style={{ fontSize: 13, color: "#334155", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+              Full TOEFL iBT Writing Section
+            </div>
+            <div style={{ fontSize: 12, color: "#475569", marginTop: 4, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+              24 minutes | Task 1 + Task 2 + Task 3
+            </div>
+            <div style={{ fontSize: 12, color: "#475569", marginTop: 2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+              {MOCK_TASK.d}
+            </div>
           </div>
-          <div style={{ padding: "16px 20px", display: "flex", alignItems: "center", color: C.blue, fontSize: 20 }}>&gt;</div>
+          <div style={{ padding: "14px 12px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "flex-end", borderLeft: "1px solid #bfdbfe", minWidth: 108 }}>
+            <div style={{ fontSize: 12, color: "#334155", whiteSpace: "nowrap" }}>{MOCK_TASK.it}</div>
+            <div style={{ color: C.nav, fontSize: 18, lineHeight: 1, marginTop: 4 }}>&gt;</div>
+          </div>
         </Link>
+
+        <Link
+          href="/progress"
+          onMouseEnter={() => setHoverKey("progress")}
+          onMouseLeave={() => setHoverKey("")}
+          style={{
+            ...cardBase,
+            marginTop: 8,
+            borderColor: hoverKey === "progress" ? "#86efac" : C.bdr,
+            boxShadow: hoverKey === "progress" ? "0 4px 14px rgba(22, 163, 74, 0.15)" : "none",
+            transform: hoverKey === "progress" ? "translateY(-1px)" : "none",
+          }}
+        >
+          <div style={{ width: 90, minWidth: 90, display: "flex", alignItems: "center", justifyContent: "center", background: "#dcfce7", borderRight: "1px solid " + C.bdr, padding: "8px 4px" }}>
+            <div style={{ fontSize: 20, lineHeight: 1, fontWeight: 800, color: "#166534", whiteSpace: "nowrap" }}>Progress</div>
+          </div>
+          <div style={{ padding: "14px 16px", flex: 1, minWidth: 0, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+            <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 4, color: C.t1, lineHeight: 1.2 }}>Practice History</div>
+            <div style={{ fontSize: 13, color: C.t2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{historyText}</div>
+          </div>
+          <div style={{ padding: "14px 12px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "flex-end", borderLeft: "1px solid " + C.bdr, minWidth: 108 }}>
+            <div style={{ fontSize: 12, color: "#166534", fontWeight: 700 }}>{sessionCount} sessions</div>
+            <div style={{ color: C.blue, fontSize: 18, lineHeight: 1, marginTop: 4 }}>&gt;</div>
+          </div>
+        </Link>
+
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: "14px 20px", fontSize: 12, color: C.t2 }}>
           <b style={{ color: C.t1 }}>Powered by DeepSeek AI</b> | ETS-style scoring | Grammar diagnostics | Weakness tracking | AI question generation
         </div>
