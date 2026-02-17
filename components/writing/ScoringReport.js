@@ -1,32 +1,32 @@
-"use client";
+﻿"use client";
 import React, { useMemo, useState } from "react";
 import { C } from "../shared/ui";
 import { buildAnnotationSegments, countAnnotations, parseAnnotations } from "../../lib/annotations/parseAnnotations";
-import { normalizeReportLanguage, readReportLanguage, saveReportLanguage, REPORT_LANGUAGE } from "../../lib/reportLanguage";
+import { normalizeReportLanguage, saveReportLanguage, REPORT_LANGUAGE } from "../../lib/reportLanguage";
 
 const warnedParseFallback = new Set();
 
 const I18N = {
   zh: {
-    hide: "收起",
-    show: "展开",
-    empty: "暂无可用内容。",
+    hide: "\u6536\u8d77",
+    show: "\u5c55\u5f00",
+    empty: "\u6682\u65e0\u53ef\u7528\u5185\u5bb9\u3002",
     scoreBand: "Band",
-    goalPrefix: "目标",
-    actionPlan: "改进建议",
-    actionReason: "原因：",
-    actionNow: "现在就做：",
-    annotationTitle: "句子级批注",
-    annotationStats: (c) => `${c.red || 0} 条语法问题 | ${c.orange || 0} 条措辞建议 | ${c.blue || 0} 条升级建议`,
-    noSentenceIssues: "未检测到句子级问题",
-    fixLabel: "修改建议（英文）：",
-    noteLabel: "问题说明：",
-    patterns: "问题模式总结",
-    comparison: "范文对比",
-    viewModel: "查看完整范文",
-    yours: "你的句子：",
-    model: "范文句子：",
-    diff: "差异说明：",
+    goalPrefix: "\u76ee\u6807",
+    actionPlan: "\u6539\u8fdb\u5efa\u8bae",
+    actionReason: "\u539f\u56e0\uff1a",
+    actionNow: "\u73b0\u5728\u5c31\u505a\uff1a",
+    annotationTitle: "\u53e5\u5b50\u7ea7\u6279\u6ce8",
+    annotationStats: (c) => `${c.red || 0} \u6761\u8bed\u6cd5\u95ee\u9898 | ${c.orange || 0} \u6761\u63aa\u8f9e\u5efa\u8bae | ${c.blue || 0} \u6761\u5347\u7ea7\u5efa\u8bae`,
+    noSentenceIssues: "\u672a\u68c0\u6d4b\u5230\u53e5\u5b50\u7ea7\u95ee\u9898",
+    fixLabel: "\u4fee\u6539\u5efa\u8bae\uff08\u82f1\u6587\uff09\uff1a",
+    noteLabel: "\u95ee\u9898\u8bf4\u660e\uff1a",
+    patterns: "\u95ee\u9898\u6a21\u5f0f\u603b\u7ed3",
+    comparison: "\u8303\u6587\u5bf9\u6bd4",
+    viewModel: "\u67e5\u770b\u5b8c\u6574\u8303\u6587",
+    yours: "\u4f60\u7684\u53e5\u5b50\uff1a",
+    model: "\u8303\u6587\u53e5\u5b50\uff1a",
+    diff: "\u5dee\u5f02\u8bf4\u660e\uff1a",
   },
   en: {
     hide: "Hide",
@@ -357,4 +357,5 @@ export function ScoringReport({ result, type, uiLang = "zh" }) {
     </div>
   );
 }
+
 
