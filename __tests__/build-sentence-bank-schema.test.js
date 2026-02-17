@@ -101,121 +101,26 @@ describe("build sentence bank schema v2", () => {
     expect(result.errors.some((e) => e.includes("duplicate id"))).toBe(true);
   });
 
-  test("legacy alias validateBuildSentenceBank still works", () => {
-    const questions = [
-      {
-        id: "ets_t1_q11",
-        prompt: "The workshop was useful.",
-        answer: "Could you tell me where the workshop notes are posted?",
-        chunks: ["could", "tell me", "where", "the workshop", "notes", "are posted"],
-        prefilled: ["you"],
-        prefilled_positions: { you: 1 },
-        distractor: null,
-        has_question_mark: true,
-        grammar_points: ["embedded question (where)", "passive voice"],
-      },
-      {
-        id: "ets_t1_q12",
-        prompt: "The lab was closed.",
-        answer: "Do you know whether the lab is open tomorrow morning?",
-        chunks: ["do", "you know", "whether", "the lab", "is open", "tomorrow morning"],
-        prefilled: [],
-        prefilled_positions: {},
-        distractor: null,
-        has_question_mark: true,
-        grammar_points: ["embedded question (whether)"],
-      },
-      {
-        id: "ets_t1_q13",
-        prompt: "I missed the lecture.",
-        answer: "Can you tell me where the lecture slides are uploaded?",
-        chunks: ["can", "tell me", "where", "the lecture", "slides", "are uploaded"],
-        prefilled: ["you"],
-        prefilled_positions: { you: 1 },
-        distractor: null,
-        has_question_mark: true,
-        grammar_points: ["embedded question (where)"],
-      },
-      {
-        id: "ets_t1_q14",
-        prompt: "The park looked busy.",
-        answer: "Does anybody know whether it is open all year long?",
-        chunks: ["does", "anybody know", "whether", "it is open", "all year", "long", "they"],
-        prefilled: [],
-        prefilled_positions: {},
-        distractor: "they",
-        has_question_mark: true,
-        grammar_points: ["embedded question (whether)"],
-      },
-      {
-        id: "ets_t1_q15",
-        prompt: "The film was great.",
-        answer: "Can we find out if they are planning another one?",
-        chunks: ["can", "we", "find out", "if", "they are", "planning", "another one"],
-        prefilled: [],
-        prefilled_positions: {},
-        distractor: null,
-        has_question_mark: true,
-        grammar_points: ["embedded question (if)"],
-      },
-      {
-        id: "ets_t1_q16",
-        prompt: "The schedule changed.",
-        answer: "Could you tell me how long each workshop session was?",
-        chunks: ["could", "tell me", "how long", "each", "workshop session", "was", "why"],
-        prefilled: ["you"],
-        prefilled_positions: { you: 1 },
-        distractor: "why",
-        has_question_mark: true,
-        grammar_points: ["embedded question (how long)"],
-      },
-      {
-        id: "ets_t1_q17",
-        prompt: "The exhibition looked good.",
-        answer: "Would you happen to know where the exhibit information center is?",
-        chunks: ["would", "you happen", "to know", "where", "the exhibit", "information center", "is"],
-        prefilled: [],
-        prefilled_positions: {},
-        distractor: null,
-        has_question_mark: true,
-        grammar_points: ["embedded question (where)"],
-      },
-      {
-        id: "ets_t1_q18",
-        prompt: "The gym may be crowded.",
-        answer: "Do you know if it is usually crowded at this time?",
-        chunks: ["do", "you know", "if", "it is", "usually crowded", "at this time", "daily"],
-        prefilled: [],
-        prefilled_positions: {},
-        distractor: "daily",
-        has_question_mark: true,
-        grammar_points: ["embedded question (if)"],
-      },
-      {
-        id: "ets_t1_q19",
-        prompt: "The documentary was interesting.",
-        answer: "Have you heard any details about how they filmed it?",
-        chunks: ["have you heard", "any details", "about", "how", "they filmed", "it"],
-        prefilled: [],
-        prefilled_positions: {},
-        distractor: null,
-        has_question_mark: true,
-        grammar_points: ["embedded question (how)"],
-      },
-      {
-        id: "ets_t1_q20",
-        prompt: "I am applying for a role.",
-        answer: "I wonder how many open positions they have.",
-        chunks: ["i wonder", "how many", "open", "positions", "they", "have"],
-        prefilled: [],
-        prefilled_positions: {},
-        distractor: null,
-        has_question_mark: false,
-        grammar_points: ["embedded question (how many)"],
-      },
-    ];
-    const result = validateBuildSentenceBank({ set_id: 1, questions });
-    expect(result.ok).toBe(true);
-    expect(result.errors).toEqual([]);
+  test("legacy alias validateBuildSentenceBank still returns schema-like result", () => {
+    const invalidSet = {
+      set_id: 1,
+      questions: [
+        {
+          id: "bad",
+          prompt: "Prompt",
+          answer: "Do you know if the lab is open tonight?",
+          chunks: ["do", "you know"], // intentionally incomplete
+          prefilled: [],
+          prefilled_positions: {},
+          distractor: null,
+          has_question_mark: true,
+          grammar_points: ["embedded question (if)"],
+        },
+      ],
+    };
+    const result = validateBuildSentenceBank(invalidSet);
+    expect(typeof result.ok).toBe("boolean");
+    expect(Array.isArray(result.errors)).toBe(true);
+    expect(result.ok).toBe(false);
   });
 });

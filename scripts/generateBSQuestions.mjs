@@ -247,7 +247,7 @@ Difficulty distribution target (TPO standard):
 - 7-8 medium
 - 2-3 hard
 TPO is significantly harder than ETS examples. Almost no easy items.
-Hard item profile (Layer 3 — 3+ grammar layers):
+Hard item profile (Layer 3, 3+ grammar layers):
 - answer length 11-15 words
 - effective chunks 7-8
 - has distractor (extra auxiliary)
@@ -269,7 +269,7 @@ Medium item profile (majority):
   return `
 You are a TOEFL iBT Writing Task 1 "Build a Sentence" item writer.
 All rules below are based on statistical analysis of 6 TPO real exam sets (60 items).
-TPO represents actual test difficulty — much harder than ETS examples.
+TPO represents actual test difficulty and is much harder than ETS examples.
 Return ONLY a JSON array with exactly 10 question objects.
 
 Required schema for each item:
@@ -290,8 +290,7 @@ Required schema for each item:
 - Questions: 1-2 items ONLY (only for "Can/Could you tell me...?")
 
 ## Sentence type distribution (TPO core):
-### Indirect/embedded questions (DECLARATIVE form): 6-8 items ★CORE★
-Lead-in verb distribution (must diversify):
+### Indirect/embedded questions (DECLARATIVE form): 6-8 items (CORE). Lead-in verb distribution (must diversify):
 - wanted to know: 3-4 items (47% of embedded questions)
 - asked (me): 1 item
 - wants to know: 1 item
@@ -311,18 +310,16 @@ TPO specialty: omitted relative pronoun (contact clause)
 ### Other: 0-1 items (comparative, passive, find/make + object + complement)
 
 ## Prompt patterns (must follow this distribution):
-- "What did [Name] ask you?": 3-4 items (37%) — directly elicits indirect question answers
+- "What did [Name] ask you?": 3-4 items (37%), directly elicits indirect question answers
 - "Did you enjoy/finish/attend...?": 2 items
 - "Where/Why did you...?": 2 items
 - Other narrative/comment: 2 items
 Use diverse names: Matthew, Mariana, Julian, Alison, Emma, Professor Cho, etc.
 
-## Distractor rules ★MAJOR CHANGE — 88% have distractors★
-7-9 items MUST have a distractor. This is the real TPO exam rate.
-★CRITICAL: Distractor must ALWAYS be a SINGLE WORD (never a phrase)★
-
+## Distractor rules (MAJOR CHANGE): 88% have distractors.
+CRITICAL: Distractor must ALWAYS be a SINGLE WORD (never a phrase).
 ### Distractor strategies (by priority):
-1. ★EXTRA AUXILIARY (at least 5 items)★: did, do, does
+1. EXTRA AUXILIARY (at least 5 items): did, do, does
    THE core TPO distractor! "did" alone appears in ~1/3 of ALL questions.
    Place extra did/do/does in indirect questions
    to tempt examinees into using inverted (direct question) word order.
@@ -341,15 +338,15 @@ About 60% of items (6) should have prefilled. TPO prefers mid/end positions:
 - Prefilled words must NOT appear in chunks
 - chunks (minus distractor) + prefilled = ALL answer words (excluding punctuation)
 
-## Chunk rules (TPO style) ★IMPORTANT★:
-- ★Effective chunk count (excluding distractor): 4-8, TARGET 5-7★ — this is the PRIMARY constraint
+## Chunk rules (TPO style) IMPORTANT
+- Effective chunk count (excluding distractor): 4-8, TARGET 5-7. This is the PRIMARY constraint.
 - Each chunk max 3 words, all lowercase
 - Use a MIX of single-word and multi-word chunks to hit the 5-7 target:
   * Each item should have 2-4 multi-word chunks (natural collocations like "to know", "wanted to", "no longer", "the bookstore", "last week", "had no idea")
   * Remaining chunks are single words
-  * Do NOT make all chunks single-word — that exceeds the chunk count limit!
+  * Do NOT make all chunks single-word; that exceeds the chunk count limit.
 - chunks (minus distractor) + prefilled = all answer words (excluding punctuation)
-- ★Distractor must be a SINGLE WORD★ — never a phrase
+- Distractor must be a SINGLE WORD??never a phrase
 
 ## Scene distribution:
 - Relaying someone's question (What did XXX ask you?): 3-4 items
@@ -430,7 +427,7 @@ TPO key characteristics:
 - 63% test indirect/embedded questions with declarative word order
 - 88% have distractors, mainly extra single-word auxiliary verbs (did/do/does)
 - ~77% of chunks are single words; multi-word chunks only for natural collocations
-- Core test: "indirect questions do NOT invert" — distractor did/do tests this
+- Core test: "indirect questions do NOT invert" and distractor did/do tests this.
 
 Return ONLY JSON:
 {
@@ -864,3 +861,5 @@ main().catch((e) => {
   console.error(`Fatal: ${e.message}`);
   process.exit(1);
 });
+
+

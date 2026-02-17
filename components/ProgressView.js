@@ -5,7 +5,7 @@ import { buildHistoryEntries, buildHistoryStats } from "../lib/history/viewModel
 import { C, FONT, Btn, TopBar } from "./shared/ui";
 import { HistoryRow } from "./history/HistoryRow";
 
-/* ── helpers ─────────────────────────────────────────────── */
+/* helpers */
 
 function getBandColor(band) {
   if (band >= 5.5) return "#16a34a";
@@ -39,7 +39,7 @@ function getTaskScoreFromMock(s, taskId) {
   return `${t.score}/${t.maxScore}`;
 }
 
-/* ── SVG components ──────────────────────────────────────── */
+/* SVG components */
 
 function BandRing({ band, size = 88 }) {
   const color = getBandColor(band);
@@ -88,7 +88,7 @@ function MockTrend({ mocks }) {
   );
 }
 
-/* ── section bar ─────────────────────────────────────────── */
+/* section bar */
 
 function SectionBar({ color, label, count }) {
   return (
@@ -102,7 +102,7 @@ function SectionBar({ color, label, count }) {
   );
 }
 
-/* ── tab filter ───────────────────────────────────────────── */
+/* tab filter */
 
 const PRACTICE_TABS = [
   { key: "all", label: "All" },
@@ -141,7 +141,7 @@ function TabBar({ active, onChange }) {
   );
 }
 
-/* ── type icon helper ─────────────────────────────────────── */
+/* type icon helper */
 
 function typeIcon(type) {
   if (type === "bs") return "\u{1F9E9}";
@@ -150,7 +150,7 @@ function typeIcon(type) {
   return "";
 }
 
-/* ── main component ───────────────────────────────────────── */
+/* main component */
 
 export function ProgressView({ onBack }) {
   const [hist, setHist] = useState(null);
@@ -248,7 +248,7 @@ export function ProgressView({ onBack }) {
         {!isEmpty && (
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
 
-            {/* ═══════ MOCK EXAMS SECTION ═══════ */}
+            {{/* MOCK EXAMS SECTION */}}
             <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 10, overflow: "hidden" }}>
               <SectionBar color={C.nav} label="Mock Exams" count={mockEntries.length} />
 
@@ -312,7 +312,7 @@ export function ProgressView({ onBack }) {
               )}
             </div>
 
-            {/* ═══════ PRACTICE SECTION ═══════ */}
+            {{/* PRACTICE SECTION */}}
             <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 10, overflow: "hidden" }}>
               <SectionBar color="#3b82f6" label="Practice" count={practiceEntries.length} />
 
@@ -373,7 +373,7 @@ export function ProgressView({ onBack }) {
               </div>
             </div>
 
-            {/* ═══════ BOTTOM BUTTONS ═══════ */}
+            {{/* BOTTOM BUTTONS */}}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <Btn onClick={onBack}>Back to Menu</Btn>
               <button

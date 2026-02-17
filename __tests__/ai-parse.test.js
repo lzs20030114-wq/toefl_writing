@@ -18,47 +18,44 @@ describe("parseReport", () => {
   test("parses sectioned report", () => {
     const raw = `
 ===SCORE===
-分数: 4
+Score: 4
 Band: 4.0
-总评: 三个目标基本完成，但语域偏口语。
-
+Summary: Goals are mostly covered, but tone is somewhat informal.
 ===GOALS===
-Goal1: OK 已解释提交问题
-Goal2: PARTIAL 提到了重提请求但不具体
-Goal3: MISSING 未说明成绩影响
-
+Goal1: OK situation explained clearly
+Goal2: PARTIAL resubmission request lacks detail
+Goal3: MISSING impact on grade is unclear
 ===ANNOTATION===
 Dear Professor,
-<r>I am a subscriber of your magazine.</r><n level="red" fix="I am a subscriber to your magazine.">介词搭配错误。</n>
+<r>I am a subscriber of your magazine.</r><n level="red" fix="I am a subscriber to your magazine.">Wrong collocation.</n>
 Thanks.
 
 ===PATTERNS===
-{"patterns":[{"tag":"介词搭配","count":1,"summary":"固定搭配错误"},{"tag":"目标完成不充分","count":1,"summary":"第三目标缺失"}]}
+{"patterns":[{"tag":"collocation","count":1,"summary":"fixed phrase misuse"},{"tag":"goal coverage","count":1,"summary":"third goal missing"}]}
 
 ===COMPARISON===
-[范文]
+[Model]
 Dear Professor, I would appreciate it if...
 
-[对比]
-1. 开头表达
-   你的：I am a subscriber of your magazine.
-   范文：I am a subscriber to your magazine.
-   差异：固定搭配更准确。
-
+[Comparison]
+1. Opening tone
+   Yours: I am a subscriber of your magazine.
+   Model: I am a subscriber to your magazine.
+   Difference: Fixed collocation improves accuracy.
 ===ACTION===
-短板1: 介词搭配错误
-重要性: 会直接影响语言准确性评分。
-行动: 记忆并应用 subscribe to / apply for / depend on 三组搭配。
+Action1: Collocation accuracy
+Importance: Directly impacts language accuracy score.
+Action: Memorize and apply "subscribe to", "apply for", and "depend on".
 `;
 
     const out = parseReport(raw);
     expect(out.error).toBe(false);
     expect(out.score).toBe(4);
-    expect(out.summary).toContain("语域");
+    expect(out.summary).toContain("Goals are mostly covered");
     expect(out.goals).toHaveLength(3);
     expect(out.goals_met).toEqual([true, false, false]);
     expect(out.annotationCounts.red).toBe(1);
-    expect(out.patterns[0].tag).toBe("介词搭配");
+    expect(out.patterns[0].tag).toBe("collocation");
     expect(out.actions).toHaveLength(1);
     expect(out.next_steps[0]).toContain("subscribe to");
   });
@@ -66,14 +63,13 @@ Dear Professor, I would appreciate it if...
   test("parseScoreReport returns board-friendly shape", () => {
     const raw = `
 ===SCORE===
-分数: 3
+Score: 3
 Band: 3.5
-总评: 展开不足。
-
+Summary: Development is limited.
 ===ACTION===
-短板1: 展开不足
-重要性: 会影响说服力
-行动: 使用 for example 引入细节
+Action1: Add support
+Importance: Weak support lowers persuasiveness.
+Action: Use "for example" to add concrete detail.
 `;
     const out = parseScoreReport(raw, "discussion");
     expect(out.score).toBe(3);
@@ -84,6 +80,6 @@ Band: 3.5
   test("returns fallback when section markers are missing", () => {
     const out = parseReport("plain text");
     expect(out.error).toBe(true);
-    expect(out.summary).toContain("评分解析失败");
+    expect(out.summary).toContain("Scoring parse failed");
   });
 });

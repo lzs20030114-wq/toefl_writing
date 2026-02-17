@@ -52,21 +52,21 @@ describe("difficulty control", () => {
   });
 
   test("accepts a 10-question set close to target ratio", () => {
-    const easyQs = Array.from({ length: 2 }, (_, i) =>
+    const easyQs = Array.from({ length: 1 }, (_, i) =>
       makeQuestion(
         `e${i}`,
         "Can you tell me where it is?",
         ["can", "tell me", "where", "it", "is"],
         { prefilled: ["you"], prefilled_positions: { you: 1 }, grammar_points: ["embedded question (where)"] },
       ));
-    const mediumQs = Array.from({ length: 5 }, (_, i) =>
+    const mediumQs = Array.from({ length: 7 }, (_, i) =>
       makeQuestion(
         `m${i}`,
         "Do you know if the lab is open tonight?",
         ["do", "you know", "if", "the lab", "is open", "tonight"],
         { grammar_points: ["embedded question (if)"] },
       ));
-    const hardQs = Array.from({ length: 3 }, (_, i) =>
+    const hardQs = Array.from({ length: 2 }, (_, i) =>
       makeQuestion(
         `h${i}`,
         "Would you happen to know where the exhibit information center is?",

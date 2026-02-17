@@ -100,11 +100,11 @@ describe("toefl utils", () => {
   });
 
   test("mapScoringError maps key categories", () => {
-    expect(mapScoringError(new Error("API timeout"))).toContain("请求超时");
-    expect(mapScoringError(new Error("API error 401"))).toContain("鉴权失败");
+    expect(mapScoringError(new Error("API timeout"))).toContain("timed out");
+    expect(mapScoringError(new Error("API error 401"))).toContain("Authentication failed");
     expect(mapScoringError(new Error("API error 429"))).toContain("429");
-    expect(mapScoringError(new Error("Unexpected token x in JSON"))).toContain("返回格式异常");
-    expect(mapScoringError(new Error("API error 500"))).toContain("服务暂时不可用");
-    expect(mapScoringError(new Error("Failed to fetch"))).toContain("网络连接异常");
+    expect(mapScoringError(new Error("Unexpected token x in JSON"))).toContain("Invalid response format");
+    expect(mapScoringError(new Error("API error 500"))).toContain("temporarily unavailable");
+    expect(mapScoringError(new Error("Failed to fetch"))).toContain("Network connection error");
   });
 });

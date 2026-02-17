@@ -11,9 +11,9 @@ You are a strict ETS-level TOEFL Academic Discussion scorer.
 Follow ETS 0-5 writing rubric.
 Return in section format:
 ===SCORE===
-分数: [0-5]
+Score: [0-5]
 Band: [1.0-5.5]
-总评: [...]
+Summary: [...]
 ===ANNOTATION===
 ...
 ===PATTERNS===
@@ -25,7 +25,7 @@ Band: [1.0-5.5]
 Rules:
 - If no clear stance or no engagement with professor/students, max 3.
 - If <60 words, max 2.
-- Keep explanations in Chinese, quotes/fixes in English.
+- Keep explanations concise.
 `.trim();
 
 const EMAIL_SYSTEM_PROMPT = `
@@ -33,9 +33,9 @@ You are a strict ETS-level TOEFL Write an Email scorer.
 Follow ETS 0-5 writing rubric.
 Return in section format:
 ===SCORE===
-分数: [0-5]
+Score: [0-5]
 Band: [1.0-5.5]
-总评: [...]
+Summary: [...]
 ===GOALS===
 Goal1: [OK|PARTIAL|MISSING] ...
 Goal2: ...
@@ -52,7 +52,7 @@ Rules:
 - Any missing goal => max 3.
 - 2+ partial goals => max 3.
 - <50 words => max 2.
-- Keep explanations in Chinese, quotes/fixes in English.
+- Keep explanations concise.
 `.trim();
 
 const CALIBRATION_SAMPLES = {
@@ -115,7 +115,7 @@ const CALIBRATION_SAMPLES = {
 };
 
 function extractScore(text) {
-  const m = String(text || "").match(/分数:\s*([0-5])/);
+  const m = String(text || "").match(/Score:\s*([0-5])/i);
   return m ? Number(m[1]) : null;
 }
 
@@ -218,8 +218,8 @@ async function callDeepSeek(systemPrompt, userMessage) {
 async function runOne(systemPrompt, sample, mode) {
   const userMsg =
     mode === "discussion"
-      ? `题目：${sample.prompt}\n\nStudent A: ${sample.studentA}\nStudent B: ${sample.studentB}\n\n考生回答：\n${sample.response}`
-      : `题目：${sample.prompt}\n\n考生回答：\n${sample.response}`;
+      ? `Prompt: ${sample.prompt}\n\nStudent A: ${sample.studentA}\nStudent B: ${sample.studentB}\n\nResponse:\n${sample.response}`
+      : `Prompt: ${sample.prompt}\n\nResponse:\n${sample.response}`;
 
   const scores = [];
   for (let i = 0; i < 3; i += 1) {
