@@ -45,4 +45,22 @@ describe("ScoringReport annotation rendering", () => {
     render(<ScoringReport result={result} type="discussion" uiLang="en" />);
     expect(screen.getByText(/no sentence-level issues detected/i)).toBeInTheDocument();
   });
+
+  test("renders readable zh labels when language is zh", () => {
+    const result = {
+      score: 4.5,
+      band: 5,
+      summary: "Summary",
+      goals: [],
+      actions: [],
+      patterns: [],
+      comparison: { modelEssay: "", points: [] },
+      annotationParsed: { plainText: "Text", annotations: [] },
+      reportLanguage: "zh",
+    };
+    render(<ScoringReport result={result} type="email" uiLang="zh" />);
+    expect(screen.getByText("句子级批注")).toBeInTheDocument();
+    expect(screen.getByText("改进建议")).toBeInTheDocument();
+    expect(screen.getByText("未检测到句子级问题")).toBeInTheDocument();
+  });
 });
