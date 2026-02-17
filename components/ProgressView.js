@@ -34,7 +34,7 @@ function fmtDate(d) {
 }
 
 function getTaskScoreFromMock(s, taskId) {
-  const t = Array.isArray(s?.details?.tasks) ? s.details.tasks.find((x) => x.taskId === taskId) : null;
+  const t = Array.isArray(s?.details?.tasks) ? s.details.tasks.find((x) => x?.taskId === taskId) : null;
   if (!t || !Number.isFinite(t.score)) return null;
   return `${t.score}/${t.maxScore}`;
 }
@@ -323,7 +323,19 @@ export function ProgressView({ onBack }) {
                     icon: "\u{1F9E9}",
                     label: "Build",
                     n: bs.length,
-                    stat: bs.length ? Math.round(bs.reduce((a, s) => a + (s.correct / s.total) * 100, 0) / bs.length) + "%" : "-",
+                    stat: (() => {
+                      if (!bs.length) return "-";
+                      let valid = 0;
+                      const sum = bs.reduce((a, s) => {
+                        const total = Number(s?.total || 0);
+                        const correct = Number(s?.correct || 0);
+                        if (total <= 0) return a;
+                        valid += 1;
+                        return a + (correct / total) * 100;
+                      }, 0);
+                      if (!valid) return "-";
+                      return `${Math.round(sum / valid)}%`;
+                    })(),
                   },
                   {
                     icon: "\u{1F4E7}",
