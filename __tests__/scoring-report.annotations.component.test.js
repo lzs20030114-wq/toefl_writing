@@ -22,10 +22,10 @@ describe("ScoringReport annotation rendering", () => {
     render(<ScoringReport result={result} type="email" />);
 
     expect(
-      screen.getByText(/1 grammar errors \| 0 wording suggestions \| 1 upgrade suggestions/i)
+      screen.getByText(/1 条语法问题 \| 0 条措辞建议 \| 1 条升级建议/i)
     ).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: /Sentence Annotations/i }));
+    fireEvent.click(screen.getByRole("button", { name: /句子级批注/i }));
     expect(screen.queryByText(/<n/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/<r/i)).not.toBeInTheDocument();
     expect(screen.getByText(/I receive your feedback\./i)).toBeInTheDocument();
@@ -43,6 +43,6 @@ describe("ScoringReport annotation rendering", () => {
       annotationParsed: { plainText: "Clean response.", annotations: [] },
     };
     render(<ScoringReport result={result} type="discussion" />);
-    expect(screen.getByText(/No sentence-level issues detected/i)).toBeInTheDocument();
+    expect(screen.getByText(/未检测到句子级问题/i)).toBeInTheDocument();
   });
 });

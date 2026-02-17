@@ -30,7 +30,7 @@ function Collapse({ title, defaultOpen = false, children, subtitle }) {
           {title}
           {subtitle ? <span style={{ marginLeft: 8, fontWeight: 500, color: C.t2, fontSize: 12 }}>{subtitle}</span> : null}
         </span>
-        <span style={{ color: C.t2, fontSize: 12 }}>{open ? "Hide" : "Show"}</span>
+        <span style={{ color: C.t2, fontSize: 12 }}>{open ? "收起" : "展开"}</span>
       </button>
       {open ? <div style={{ padding: 14 }}>{children}</div> : null}
     </div>
@@ -141,7 +141,7 @@ export function ScoringReport({ result, type }) {
             Band {result.band ?? "-"}
           </span>
         </div>
-        <div style={{ fontSize: 14, lineHeight: 1.6 }}>{result.summary || "This section is unavailable."}</div>
+        <div style={{ fontSize: 14, lineHeight: 1.6 }}>{result.summary || "暂无可用内容。"}</div>
         {type === "email" ? (
           <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
             {goals.length > 0 ? (
@@ -150,44 +150,44 @@ export function ScoringReport({ result, type }) {
                 return (
                   <div key={i} style={{ background: s.bg, color: "#111827", borderRadius: 4, padding: "8px 10px", fontSize: 13 }}>
                     <b style={{ color: s.color, marginRight: 8 }}>{s.icon}</b>
-                    Goal {g.index}: {g.reason || "No explanation provided."}
+                    目标 {g.index}: {g.reason || "暂无说明。"}
                   </div>
                 );
               })
             ) : (
-              <div style={{ fontSize: 13, opacity: 0.85 }}>This section is unavailable.</div>
+              <div style={{ fontSize: 13, opacity: 0.85 }}>暂无可用内容。</div>
             )}
           </div>
         ) : null}
       </div>
 
       <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 14 }}>
-        <div style={{ fontWeight: 700, marginBottom: 10 }}>Action Plan</div>
+        <div style={{ fontWeight: 700, marginBottom: 10 }}>改进建议</div>
         {actions.length > 0 ? (
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {actions.map((a, i) => (
               <div key={i} style={{ border: "1px solid " + C.bdr, borderLeft: "4px solid " + (i === 0 ? C.red : C.orange), borderRadius: 4, padding: 10 }}>
                 <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 6 }}>{a.title || `Action ${i + 1}`}</div>
                 <div style={{ fontSize: 13, color: C.t1, marginBottom: 6 }}>
-                  <b>Why it matters:</b> {a.importance || "This section is unavailable."}
+                  <b>原因：</b> {a.importance || "暂无可用内容。"}
                 </div>
                 <div style={{ fontSize: 13, background: "#f8fafc", borderRadius: 4, padding: "8px 10px" }}>
-                  <b>Do this now:</b> {a.action || "This section is unavailable."}
+                  <b>现在就做：</b> {a.action || "暂无可用内容。"}
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <div style={{ fontSize: 13, color: C.t2 }}>This section is unavailable.</div>
+          <div style={{ fontSize: 13, color: C.t2 }}>暂无可用内容。</div>
         )}
       </div>
 
       <Collapse
-        title="Sentence Annotations"
+        title="句子级批注"
         subtitle={
           annotationTotal > 0
-            ? `${markCounts.red || 0} grammar errors | ${markCounts.orange || 0} wording suggestions | ${markCounts.blue || 0} upgrade suggestions`
-            : "No sentence-level issues detected"
+            ? `${markCounts.red || 0} 条语法问题 | ${markCounts.orange || 0} 条措辞建议 | ${markCounts.blue || 0} 条升级建议`
+            : "未检测到句子级问题"
         }
       >
         {annotationTotal > 0 && annotationView.segments && annotationView.segments.length > 0 ? (
@@ -220,40 +220,40 @@ export function ScoringReport({ result, type }) {
             {activeNote !== null && (annotationView.segments[activeNote] || {}).type === "mark" ? (
               <div style={{ marginTop: 12, border: "1px solid " + C.bdr, borderRadius: 6, padding: 10, background: "#fff" }}>
                 <div style={{ fontSize: 13, marginBottom: 6 }}>
-                  <b>Suggested rewrite:</b> {(annotationView.segments[activeNote] || {}).fix || "This section is unavailable."}
+                  <b>修改建议（英文）：</b> {(annotationView.segments[activeNote] || {}).fix || "暂无可用内容。"}
                 </div>
                 <div style={{ fontSize: 13 }}>
-                  <b>Issue note:</b> {(annotationView.segments[activeNote] || {}).note || "This section is unavailable."}
+                  <b>问题说明（中文）：</b> {(annotationView.segments[activeNote] || {}).note || "暂无可用内容。"}
                 </div>
               </div>
             ) : null}
           </div>
         ) : (
-          <div style={{ fontSize: 13, color: C.t2 }}>No sentence-level issues detected.</div>
+          <div style={{ fontSize: 13, color: C.t2 }}>未检测到句子级问题。</div>
         )}
       </Collapse>
 
-      <Collapse title="Pattern Summary">
+      <Collapse title="问题模式总结">
         {patterns.length > 0 ? (
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {patterns.map((p, i) => (
               <div key={i} style={{ border: "1px solid " + C.bdr, borderRadius: 4, padding: "8px 10px", fontSize: 13 }}>
                 <b style={{ color: C.blue }}>{p.tag}</b>
                 <span style={{ marginLeft: 8, color: C.t2 }}>x{Number(p.count || 0)}</span>
-                <div style={{ marginTop: 4 }}>{p.summary || "This section is unavailable."}</div>
+                <div style={{ marginTop: 4 }}>{p.summary || "暂无可用内容。"}</div>
               </div>
             ))}
           </div>
         ) : (
-          <div style={{ fontSize: 13, color: C.t2 }}>This section is unavailable.</div>
+          <div style={{ fontSize: 13, color: C.t2 }}>暂无可用内容。</div>
         )}
       </Collapse>
 
-      <Collapse title="Model Comparison">
+      <Collapse title="范文对比">
         <details style={{ marginBottom: 10 }}>
-          <summary style={{ cursor: "pointer", fontWeight: 700 }}>View full model response</summary>
+          <summary style={{ cursor: "pointer", fontWeight: 700 }}>查看完整范文</summary>
           <div style={{ marginTop: 8, whiteSpace: "pre-wrap", fontSize: 13, lineHeight: 1.8 }}>
-            {comparison.modelEssay || "This section is unavailable."}
+            {comparison.modelEssay || "暂无可用内容。"}
           </div>
         </details>
         {comparisonPoints.length > 0 ? (
@@ -262,19 +262,19 @@ export function ScoringReport({ result, type }) {
               <div key={i} style={{ border: "1px solid " + C.bdr, borderRadius: 4, padding: 10 }}>
                 <div style={{ fontWeight: 700, marginBottom: 6 }}>{p.title || `Comparison ${i + 1}`}</div>
                 <div style={{ fontSize: 13, marginBottom: 4 }}>
-                  <b>Yours:</b> {p.yours || "This section is unavailable."}
+                  <b>你的句子：</b> {p.yours || "暂无可用内容。"}
                 </div>
                 <div style={{ fontSize: 13, marginBottom: 4 }}>
-                  <b>Model:</b> {p.model || "This section is unavailable."}
+                  <b>范文句子：</b> {p.model || "暂无可用内容。"}
                 </div>
                 <div style={{ fontSize: 13 }}>
-                  <b>Difference:</b> {p.difference || "This section is unavailable."}
+                  <b>差异说明：</b> {p.difference || "暂无可用内容。"}
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <div style={{ fontSize: 13, color: C.t2 }}>This section is unavailable.</div>
+          <div style={{ fontSize: 13, color: C.t2 }}>暂无可用内容。</div>
         )}
       </Collapse>
     </div>
