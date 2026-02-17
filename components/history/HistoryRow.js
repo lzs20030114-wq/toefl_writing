@@ -335,15 +335,7 @@ function MockExamDetails({ session }) {
     const words = Number.isFinite(task?.meta?.wordCount)
       ? task.meta.wordCount
       : countWords(response?.userText || "");
-
-    const sections = [
-      { key: "summary", title: "Summary", content: feedback?.summary },
-      { key: "strengths", title: "Strengths", content: (feedback?.strengths || []).join("\n") },
-      { key: "weaknesses", title: "Weaknesses", content: (feedback?.weaknesses || []).join("\n") },
-      { key: "grammar", title: "Grammar", content: (feedback?.grammar_issues || []).join("\n") },
-      { key: "next", title: "Next steps", content: (feedback?.next_steps || []).join("\n") },
-      { key: "sample", title: "Sample", content: feedback?.sample },
-    ];
+    const reportType = task?.taskId === MOCK_TASK_IDS.EMAIL ? "email" : "discussion";
 
     return (
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -360,15 +352,8 @@ function MockExamDetails({ session }) {
           </div>
         )}
 
-        {feedback ? (
-          sections.map((sec) => (
-            <details key={sec.key} style={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: 8, padding: 10 }}>
-              <summary style={{ cursor: "pointer", fontSize: 13, fontWeight: 700, color: C.t1 }}>{sec.title}</summary>
-              <div style={{ marginTop: 8, fontSize: 12, color: C.t2, whiteSpace: "pre-wrap", lineHeight: 1.6 }}>
-                {sec.content || "No content."}
-              </div>
-            </details>
-          ))
+        {feedback && typeof feedback === "object" ? (
+          <ScoringReport result={feedback} type={reportType} />
         ) : (
           <div style={{ fontSize: 12, color: task?.meta?.error ? C.red : C.t2 }}>
             {task?.meta?.error ? `Scoring error: ${task.meta.error}` : "No AI feedback yet."}
