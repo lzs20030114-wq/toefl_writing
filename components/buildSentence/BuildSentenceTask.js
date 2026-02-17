@@ -20,11 +20,12 @@ function formatChunkDisplay(text) {
 }
 
 function confirmEarlySubmit() {
-  if (process.env.NODE_ENV === "test") return true;
+  const confirmFn = typeof window !== "undefined" ? window.confirm : null;
+  if (typeof confirmFn !== "function") return true;
+  const isJsdom = typeof navigator !== "undefined" && /jsdom/i.test(String(navigator.userAgent || ""));
+  if (isJsdom && !confirmFn._isMockFunction) return true;
   try {
-    if (typeof window !== "undefined" && typeof window.confirm === "function") {
-      return window.confirm("还有剩余时间，确定要提前提交吗？");
-    }
+    return confirmFn("还有剩余时间，确定要提前提交吗？");
   } catch {
     // jsdom and some embedded contexts do not implement confirm; default allow.
   }

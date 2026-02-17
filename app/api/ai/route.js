@@ -4,6 +4,9 @@ const require = createRequire(import.meta.url);
 const { callDeepSeekViaCurl, resolveProxyUrl } = require("../../../lib/ai/deepseekHttp");
 const RATE_LIMIT_WINDOW_MS = 60 * 1000;
 const RATE_LIMIT_MAX_REQUESTS = 45;
+const MAX_SYSTEM_CHARS = 12000;
+const MAX_MESSAGE_CHARS = 40000;
+const MAX_TOKENS = 3000;
 
 const rateLimitBuckets = globalThis.__toeflRateLimitBuckets || new Map();
 if (!globalThis.__toeflRateLimitBuckets) {
@@ -21,6 +24,8 @@ function getClientIp(request) {
 function getRateLimitKey(request) {
   const ip = getClientIp(request);
   if (ip && ip !== "unknown") return `ip:${ip}`;
+  const clientId = String(request.headers.get("x-client-id") || "").trim();
+  if (clientId) return `cid:${clientId}`;
   return null;
 }
 
@@ -39,13 +44,53 @@ function isRateLimited(ip, now = Date.now()) {
   return bucket.count > RATE_LIMIT_MAX_REQUESTS;
 }
 
+function isOriginAllowed(request) {
+  const origin = request.headers.get("origin");
+  if (!origin) return true;
+  const host = request.headers.get("host");
+  if (!host) return false;
+  try {
+    const originHost = new URL(origin).host;
+    return originHost === host;
+  } catch {
+    return false;
+  }
+}
+
+function validateBody(body) {
+  if (!body || typeof body !== "object") return "Invalid request body.";
+  const system = String(body.system || "");
+  const message = String(body.message || "");
+  const maxTokensRaw = Number(body.maxTokens ?? 2000);
+  const temperatureRaw = Number(body.temperature ?? 0.3);
+  if (!system.trim()) return "Missing system prompt.";
+  if (!message.trim()) return "Missing user prompt.";
+  if (system.length > MAX_SYSTEM_CHARS) return `System prompt too long (>${MAX_SYSTEM_CHARS}).`;
+  if (message.length > MAX_MESSAGE_CHARS) return `User prompt too long (>${MAX_MESSAGE_CHARS}).`;
+  if (!Number.isFinite(maxTokensRaw) || maxTokensRaw <= 0 || maxTokensRaw > MAX_TOKENS) {
+    return `maxTokens must be between 1 and ${MAX_TOKENS}.`;
+  }
+  if (!Number.isFinite(temperatureRaw) || temperatureRaw < 0 || temperatureRaw > 2) {
+    return "temperature must be between 0 and 2.";
+  }
+  return "";
+}
+
 export async function POST(request) {
   try {
+    if (!isOriginAllowed(request)) {
+      return Response.json({ error: "Forbidden origin." }, { status: 403 });
+    }
     const rateKey = getRateLimitKey(request);
     if (rateKey && isRateLimited(rateKey)) {
       return Response.json({ error: "Rate limit exceeded. Please retry shortly." }, { status: 429 });
     }
-    const { system, message, maxTokens, temperature } = await request.json();
+    const payload = await request.json();
+    const bodyError = validateBody(payload);
+    if (bodyError) {
+      return Response.json({ error: bodyError }, { status: 400 });
+    }
+    const { system, message, maxTokens, temperature } = payload;
     const proxyUrl = resolveProxyUrl();
     if (proxyUrl) {
       const content = await callDeepSeekViaCurl({

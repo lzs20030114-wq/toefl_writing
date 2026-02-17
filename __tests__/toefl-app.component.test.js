@@ -294,4 +294,37 @@ describe("ToeflApp navigation", () => {
       expect(screen.getByTestId("score-error-reason")).toHaveTextContent("429");
     });
   });
+
+  test("writing early submit can be canceled by confirm dialog", async () => {
+    global.fetch = jest.fn();
+    const confirmSpy = jest.spyOn(window, "confirm").mockReturnValue(false);
+
+    render(<WritingTask onExit={() => {}} type="email" />);
+    fireEvent.click(screen.getByTestId("writing-intro-start"));
+    fireEvent.change(screen.getByTestId("writing-textarea"), {
+      target: { value: "this response has enough words to pass submit threshold quickly" },
+    });
+    fireEvent.click(screen.getByTestId("writing-submit"));
+
+    await waitFor(() => {
+      expect(confirmSpy).toHaveBeenCalled();
+    });
+    expect(global.fetch).not.toHaveBeenCalled();
+    expect(screen.getByTestId("writing-submit")).toBeInTheDocument();
+  });
+
+  test("build final submit can be canceled by confirm dialog", () => {
+    const confirmSpy = jest.spyOn(window, "confirm").mockReturnValue(false);
+
+    render(<BuildSentenceTask onExit={() => {}} questions={[BUILD_TEST_Q]} />);
+    fireEvent.click(screen.getByTestId("build-start"));
+    ["could", "send", "the", "slides", "after", "class", "today", "please"].forEach((chunk) => {
+      fireEvent.click(screen.getByRole("button", { name: chunk }));
+    });
+    fireEvent.click(screen.getByTestId("build-submit"));
+
+    expect(confirmSpy).toHaveBeenCalled();
+    expect(screen.queryByTestId("build-result-0")).not.toBeInTheDocument();
+    expect(screen.getByTestId("build-submit")).toBeInTheDocument();
+  });
 });
