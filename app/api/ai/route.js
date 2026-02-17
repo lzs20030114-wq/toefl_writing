@@ -1,4 +1,5 @@
 import { createRequire } from "module";
+import { createHash } from "crypto";
 
 const require = createRequire(import.meta.url);
 const { callDeepSeekViaCurl, resolveProxyUrl } = require("../../../lib/ai/deepseekHttp");
@@ -14,6 +15,8 @@ if (!globalThis.__toeflRateLimitBuckets) {
 }
 
 function getClientIp(request) {
+  const cf = request.headers.get("cf-connecting-ip");
+  if (cf) return cf.trim();
   const xff = request.headers.get("x-forwarded-for");
   if (xff) return xff.split(",")[0].trim();
   const xri = request.headers.get("x-real-ip");
@@ -25,8 +28,15 @@ function getRateLimitKey(request) {
   const ip = getClientIp(request);
   if (ip && ip !== "unknown") return `ip:${ip}`;
   const clientId = String(request.headers.get("x-client-id") || "").trim();
-  if (clientId) return `cid:${clientId}`;
-  return null;
+  if (clientId && clientId.length <= 128) return `cid:${clientId}`;
+  const ua = request.headers.get("user-agent") || "";
+  const lang = request.headers.get("accept-language") || "";
+  const secUa = request.headers.get("sec-ch-ua") || "";
+  const host = request.headers.get("host") || "";
+  const origin = request.headers.get("origin") || "";
+  const raw = `${ua}|${lang}|${secUa}|${host}|${origin}`;
+  const digest = createHash("sha1").update(raw).digest("hex");
+  return `fp:${digest}`;
 }
 
 function isRateLimited(ip, now = Date.now()) {
@@ -44,17 +54,28 @@ function isRateLimited(ip, now = Date.now()) {
   return bucket.count > RATE_LIMIT_MAX_REQUESTS;
 }
 
+function normalizeHost(raw) {
+  const input = String(raw || "").trim();
+  if (!input) return "";
+  try {
+    if (input.includes("://")) return new URL(input).host.toLowerCase();
+    return new URL(`http://${input}`).host.toLowerCase();
+  } catch {
+    return input.toLowerCase();
+  }
+}
+
 function isOriginAllowed(request) {
   const origin = request.headers.get("origin");
   if (!origin) return true;
-  const host = request.headers.get("host");
-  if (!host) return false;
-  try {
-    const originHost = new URL(origin).host;
-    return originHost === host;
-  } catch {
-    return false;
-  }
+  const originHost = normalizeHost(origin);
+  if (!originHost) return false;
+  const host = normalizeHost(request.headers.get("host"));
+  const xfh = String(request.headers.get("x-forwarded-host") || "")
+    .split(",")
+    .map((v) => normalizeHost(v))
+    .filter(Boolean);
+  return [host, ...xfh].includes(originHost);
 }
 
 function validateBody(body) {
