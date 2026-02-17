@@ -38,6 +38,8 @@ export function WritingTask({
   onTimerChange = null,
   timeLimitSeconds = null,
   practiceMode = PRACTICE_MODE.STANDARD,
+  showTaskIntro = true,
+  autoStartOnMount = false,
 }) {
   const data = type === "email" ? EM_DATA : AD_DATA;
   const defaultLimit = type === "email" ? 420 : 600;
@@ -57,10 +59,12 @@ export function WritingTask({
   const [scoreError, setScoreError] = useState("");
   const [gen, setGen] = useState(false);
   const [toast, setToast] = useState(null);
+  const [intro, setIntro] = useState(showTaskIntro);
   const tr = useRef(null);
   const submitLockRef = useRef(false);
 
   useEffect(() => { setPd(data[pi]); }, [pi, data]);
+  useEffect(() => { setIntro(showTaskIntro); }, [showTaskIntro, type]);
 
   const submitRef = useRef(null);
   const phaseRef = useRef(phase);
@@ -131,6 +135,13 @@ export function WritingTask({
       submitLockRef.current = false;
     }
   }
+
+  useEffect(() => {
+    if (intro) return;
+    if (!autoStartOnMount) return;
+    if (phase !== "ready") return;
+    start();
+  }, [intro, autoStartOnMount, phase]);
   async function submitScore() {
     if (deferScoring) {
       if (submitLockRef.current) return;
@@ -176,12 +187,12 @@ export function WritingTask({
     clearInterval(tr.current);
     const n = pickRandomPrompt(data, usedRef.current, storageKey);
     usedRef.current.add(n);
-    setPi(n); setPd(data[n]); setText(""); setTl(limit); setRun(false); setPhase("ready"); setFb(null); setRequestState("idle"); setScoreError(""); submitLockRef.current = false; completionSentRef.current = false;
+    setPi(n); setPd(data[n]); setText(""); setTl(limit); setRun(false); setPhase("ready"); setFb(null); setRequestState("idle"); setScoreError(""); submitLockRef.current = false; completionSentRef.current = false; setIntro(showTaskIntro);
   }
   async function genNew() {
     setGen(true);
     const d = await aiGen(type);
-    if (d) { setPd({ id: "gen", ...d }); setText(""); setTl(limit); setRun(false); setPhase("ready"); setFb(null); setRequestState("idle"); setScoreError(""); submitLockRef.current = false; completionSentRef.current = false; }
+    if (d) { setPd({ id: "gen", ...d }); setText(""); setTl(limit); setRun(false); setPhase("ready"); setFb(null); setRequestState("idle"); setScoreError(""); submitLockRef.current = false; completionSentRef.current = false; setIntro(showTaskIntro); }
     else { setToast("Generation failed. Please retry."); }
     setGen(false);
   }
@@ -189,12 +200,39 @@ export function WritingTask({
 
   const w = wc(text);
   const taskTitle = type === "email" ? "Write an Email" : "Academic Discussion";
+  const introTitle = type === "email" ? "Task 2: Write an Email" : "Task 3: Academic Discussion";
+  const introDesc = type === "email"
+    ? "You will read a workplace scenario and write an email that addresses all required goals."
+    : "You will read a discussion board prompt and write a focused academic response.";
 
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
       {!embedded && <TopBar title={taskTitle} section={"Writing | " + (type === "email" ? "Task 2" : "Task 3")} timeLeft={phase !== "ready" ? tl : undefined} isRunning={run} onExit={onExit} />}
       <div style={{ maxWidth: 860, margin: "24px auto", padding: "0 20px" }}>
+        {intro && phase === "ready" ? (
+          <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 28 }}>
+            <div style={{ fontSize: 20, fontWeight: 700, color: C.nav, marginBottom: 10 }}>{introTitle}</div>
+            <div style={{ fontSize: 14, color: C.t1, lineHeight: 1.7, marginBottom: 12 }}>{introDesc}</div>
+            <div style={{ fontSize: 13, color: C.t2, lineHeight: 1.7 }}>
+              <div>Time limit: <b>{formatMinutesLabel(limit)}</b></div>
+              <div>Minimum words: <b>{minW}</b></div>
+              {practiceMode === PRACTICE_MODE.CHALLENGE && <div>Mode: <b>Challenge</b> (compressed timing)</div>}
+            </div>
+            <div style={{ marginTop: 18 }}>
+              <Btn
+                data-testid="writing-intro-start"
+                onClick={() => {
+                  setIntro(false);
+                  start();
+                }}
+              >
+                Continue and start timer
+              </Btn>
+            </div>
+          </div>
+        ) : (
+          <>
         <div style={{ background: C.ltB, border: "1px solid #b3d4fc", borderRadius: 4, padding: 14, marginBottom: 20, fontSize: 13 }}>
           <b>Directions:</b> {type === "email" ? `Write an email addressing all 3 goals. ${formatMinutesLabel(limit)}. 80-120 words.` : `Read the discussion and write a response. ${formatMinutesLabel(limit)}. 100+ words.`}
           {practiceMode === PRACTICE_MODE.CHALLENGE && <span> Challenge mode: compressed timing.</span>}
@@ -223,6 +261,8 @@ export function WritingTask({
             embedded={embedded}
           />
         </div>
+          </>
+        )}
         {phase === "done" && fb && (
           <div style={{ marginTop: 20 }}><ScoringReport result={fb} type={type} /><div style={{ display: "flex", gap: 12, marginTop: 16 }}><Btn onClick={next} variant="secondary">Next Prompt</Btn><Btn onClick={genNew} disabled={gen}>{gen ? "Generating..." : "Generate New Prompt"}</Btn><Btn onClick={onExit} variant="secondary">{embedded ? "Back" : "Back to Practice"}</Btn></div></div>
         )}

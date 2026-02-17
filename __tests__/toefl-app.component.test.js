@@ -51,8 +51,9 @@ describe("ToeflApp navigation", () => {
   test("can open email task from menu", () => {
     render(<ToeflApp />);
     fireEvent.click(screen.getByTestId("task-email"));
-    expect(screen.getByText("SCENARIO")).toBeInTheDocument();
-    expect(screen.getByTestId("writing-start")).toBeInTheDocument();
+    expect(screen.getByText("Task 2: Write an Email")).toBeInTheDocument();
+    expect(screen.getByTestId("writing-intro-start")).toBeInTheDocument();
+    expect(screen.queryByText("SCENARIO")).not.toBeInTheDocument();
   });
 
   test("build start double-click does not create multiple timers", () => {
@@ -209,7 +210,7 @@ describe("ToeflApp navigation", () => {
     });
 
     render(<WritingTask onExit={() => {}} type="email" />);
-    fireEvent.click(screen.getByTestId("writing-start"));
+    fireEvent.click(screen.getByTestId("writing-intro-start"));
     fireEvent.change(screen.getByTestId("writing-textarea"), {
       target: {
         value: "this response has enough words to pass submit threshold quickly",
@@ -249,7 +250,7 @@ describe("ToeflApp navigation", () => {
     });
 
     render(<WritingTask onExit={() => {}} type="email" />);
-    fireEvent.click(screen.getByTestId("writing-start"));
+    fireEvent.click(screen.getByTestId("writing-intro-start"));
     fireEvent.change(screen.getByTestId("writing-textarea"), {
       target: {
         value: "this response has enough words to pass submit threshold quickly",
@@ -281,7 +282,7 @@ describe("ToeflApp navigation", () => {
     });
 
     render(<WritingTask onExit={() => {}} type="email" />);
-    fireEvent.click(screen.getByTestId("writing-start"));
+    fireEvent.click(screen.getByTestId("writing-intro-start"));
     fireEvent.change(screen.getByTestId("writing-textarea"), {
       target: {
         value: "this response has enough words to pass submit threshold quickly",
