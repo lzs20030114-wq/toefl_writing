@@ -12,7 +12,7 @@ describe("ScoringReport annotation rendering", () => {
       patterns: [],
       comparison: { modelEssay: "", points: [] },
       annotationRaw:
-        'Dear Professor, <n level="red" fix="I have received your feedback.">I receive your feedback.</n> Also, <n level="blue" fix="I would appreciate your advice.">please advise.</n>',
+        'Dear Professor, <r>I receive your feedback.</r><n level="red" fix="I have received your feedback.">tense</n> Also, <n level="blue" fix="I would appreciate your advice.">please advise.</n>',
       annotationSegments: [],
       annotationCounts: { red: 0, orange: 0, blue: 0 },
       taskId: "email-writing",
@@ -27,6 +27,22 @@ describe("ScoringReport annotation rendering", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /Sentence Annotations/i }));
     expect(screen.queryByText(/<n/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/<r/i)).not.toBeInTheDocument();
     expect(screen.getByText(/I receive your feedback\./i)).toBeInTheDocument();
+  });
+
+  test("shows no-issues message when annotation list is empty", () => {
+    const result = {
+      score: 5,
+      band: 5.5,
+      summary: "Strong.",
+      goals: [],
+      actions: [],
+      patterns: [],
+      comparison: { modelEssay: "", points: [] },
+      annotationParsed: { plainText: "Clean response.", annotations: [] },
+    };
+    render(<ScoringReport result={result} type="discussion" />);
+    expect(screen.getByText(/No sentence-level issues detected/i)).toBeInTheDocument();
   });
 });

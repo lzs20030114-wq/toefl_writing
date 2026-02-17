@@ -125,6 +125,7 @@ export function ScoringReport({ result, type }) {
   }, [result]);
 
   const markCounts = annotationView.counts || { red: 0, orange: 0, blue: 0 };
+  const annotationTotal = (annotationView.annotations || []).length;
   const comparison = result.comparison || { modelEssay: "", points: [] };
   const comparisonPoints = Array.isArray(comparison.points) ? comparison.points : [];
 
@@ -183,9 +184,13 @@ export function ScoringReport({ result, type }) {
 
       <Collapse
         title="Sentence Annotations"
-        subtitle={`${markCounts.red || 0} grammar errors | ${markCounts.orange || 0} wording suggestions | ${markCounts.blue || 0} upgrade suggestions`}
+        subtitle={
+          annotationTotal > 0
+            ? `${markCounts.red || 0} grammar errors | ${markCounts.orange || 0} wording suggestions | ${markCounts.blue || 0} upgrade suggestions`
+            : "No sentence-level issues detected"
+        }
       >
-        {annotationView.segments && annotationView.segments.length > 0 ? (
+        {annotationTotal > 0 && annotationView.segments && annotationView.segments.length > 0 ? (
           <div style={{ fontSize: 14, lineHeight: 1.9, whiteSpace: "pre-wrap" }}>
             {annotationView.segments.map((seg, idx) => {
               if (seg.type === "text") return <span key={idx}>{seg.text}</span>;
@@ -224,7 +229,7 @@ export function ScoringReport({ result, type }) {
             ) : null}
           </div>
         ) : (
-          <div style={{ fontSize: 13, color: C.t2 }}>{annotationView.plainText || "This section is unavailable."}</div>
+          <div style={{ fontSize: 13, color: C.t2 }}>No sentence-level issues detected.</div>
         )}
       </Collapse>
 

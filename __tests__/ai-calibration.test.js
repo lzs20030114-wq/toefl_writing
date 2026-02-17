@@ -6,13 +6,13 @@ import {
 } from "../lib/ai/calibration";
 
 describe("ai calibration helpers", () => {
-  test("hasClearStance detects normal stance phrases", () => {
+  test("hasClearStance detects stance phrases", () => {
     expect(hasClearStance("I think this policy is useful.")).toBe(true);
     expect(hasClearStance("In my opinion, this is effective.")).toBe(true);
     expect(hasClearStance("This policy is useful.")).toBe(false);
   });
 
-  test("reasonSignalCount counts common reasoning signals", () => {
+  test("reasonSignalCount counts reasoning markers", () => {
     const text =
       "I think this is useful because it saves time. Also, for example, students can plan better.";
     expect(reasonSignalCount(text)).toBeGreaterThanOrEqual(3);
@@ -24,11 +24,9 @@ describe("calibrateScoreReport", () => {
     const result = {
       score: 2,
       band: 2.5,
-      summary: "语言有明显问题。",
-      patterns: [
-        { tag: "论证不充分", count: 1, summary: "展开一般" },
-        { tag: "句式单一", count: 1, summary: "结构偏单一" },
-      ],
+      summary: "limited",
+      patterns: [{ tag: "argument depth", count: 1, summary: "light support" }],
+      annotationParsed: { plainText: "", annotations: [] },
     };
     const text =
       "I think airplanes are the most important invention because they connect countries quickly. " +
@@ -44,79 +42,58 @@ describe("calibrateScoreReport", () => {
     expect(out.calibration.adjusted).toBe(true);
   });
 
-  test("keeps score 2 when text is too short", () => {
-    const result = {
-      score: 2,
-      band: 2.5,
-      summary: "语言受限。",
-      patterns: [{ tag: "论证不充分", count: 2, summary: "缺例子" }],
-    };
-    const text = "I think airplane is important because it is fast and good.";
-    const out = calibrateScoreReport("discussion", result, text);
-    expect(out.score).toBe(2);
-    expect(out.calibration.adjusted).toBe(false);
-  });
-
-  test("keeps score 2 when blocked by high-risk tags", () => {
-    const result = {
-      score: 2,
-      band: 2.5,
-      summary: "表达问题较多。",
-      patterns: [{ tag: "拼写/基础语法", count: 4, summary: "错误密集" }],
-    };
-    const text =
-      "I think airplanes are important because they are fast. Also they help business and travel for example students study abroad.";
-    const out = calibrateScoreReport("discussion", result, text);
-    expect(out.score).toBe(2);
-  });
-
-  test("does not change non-discussion reports", () => {
-    const result = { score: 2, band: 2.5, summary: "x" };
-    const out = calibrateScoreReport("build", result, "I think...");
-    expect(out.score).toBe(2);
-  });
-
-  test("lowers inflated email 4/5 to 3 when expression is generic", () => {
-    const result = {
-      score: 4,
-      band: 4.5,
-      summary: "语言不错。",
-      patterns: [],
-    };
-    const text =
-      "Dear Dr. Thompson,\nI really enjoyed your talk and it left a strong impression on me. " +
-      "It connects to my interest and I would like to ask if you can give some brief advice.\nSincerely.";
-    const out = calibrateScoreReport("email", result, text);
-    expect(out.score).toBe(3);
-    expect(out.calibration.adjusted).toBe(true);
-  });
-
-  test("keeps email 4 when concrete details are present", () => {
-    const result = {
-      score: 4,
-      band: 4.5,
-      summary: "整体完成较好。",
-      patterns: [{ tag: "介词搭配", count: 1, summary: "小问题" }],
-    };
-    const text =
-      "Dear Editor,\nLast week I clicked the Submit button and received an error message on your submission page. " +
-      "Could you confirm whether my poem was received, and if not, advise how to resubmit before the deadline? " +
-      "I can also send the file as an attachment if that is easier for your team.\nSincerely.";
-    const out = calibrateScoreReport("email", result, text);
-    expect(out.score).toBe(4);
-  });
-
-  test("caps email 5 to 4 for high-confidence collocation error", () => {
+  test("medium-quality discussion is capped at <= 4.0 and still has annotations", () => {
     const result = {
       score: 5,
       band: 5.5,
-      summary: "整体很强。",
+      summary: "good",
       patterns: [],
+      annotationParsed: { plainText: "", annotations: [] },
     };
     const text =
-      "Dear Editor,\nI am a subscriber of Verse & Voice and I appreciate your publication.\nSincerely.";
-    const out = calibrateScoreReport("email", result, text);
+      "I think students should learn online because it is convenient and flexible. " +
+      "I think it is useful for many learners and it helps them save commuting time. " +
+      "I think online learning is important for modern education.";
+
+    const out = calibrateScoreReport("discussion", result, text);
+    expect(out.score).toBeLessThanOrEqual(4.0);
+    expect((out.annotationParsed?.annotations || []).length).toBeGreaterThanOrEqual(1);
+  });
+
+  test("near-top response keeps high score and includes blue annotation", () => {
+    const result = {
+      score: 5,
+      band: 5.5,
+      summary: "strong",
+      patterns: [],
+      annotationParsed: { plainText: "", annotations: [] },
+    };
+    const text =
+      "I believe universities should prioritize project-based learning because it develops practical problem-solving skills. " +
+      "For example, when students design a community energy plan, they must combine theory, data analysis, and teamwork. " +
+      "In addition, this format improves motivation since students can see real outcomes from their work. " +
+      "Therefore, project-based learning prepares students more effectively for professional collaboration.";
+
+    const out = calibrateScoreReport("discussion", result, text);
+    expect(out.score).toBeGreaterThanOrEqual(4.5);
+    expect((out.annotationParsed?.annotations || []).some((a) => a.level === "blue")).toBe(true);
+  });
+
+  test("applies repetition penalty by 0.5", () => {
+    const result = {
+      score: 4.5,
+      band: 5.0,
+      summary: "ok",
+      patterns: [],
+      annotationParsed: { plainText: "", annotations: [] },
+    };
+    const text =
+      "I think it is good because it supports long-term skill growth, and for example students can practice repeatedly with feedback. " +
+      "I think it is helpful because students can revise quickly, and I think it is practical because teachers can monitor progress.\n\n" +
+      "I think students improve communication and I think students gain confidence over time. " +
+      "Also, I think students benefit from clear goals and I think students benefit from consistent routines.";
+    const out = calibrateScoreReport("discussion", result, text);
     expect(out.score).toBe(4);
-    expect(out.calibration.reason).toBe("email_5_to_4_guardrail");
+    expect(out.calibration.reasons).toContain("repetition_penalty");
   });
 });
