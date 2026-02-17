@@ -11,10 +11,17 @@ function getTypeLabel(type) {
   return "Unknown";
 }
 
+function typeIcon(type) {
+  if (type === "bs") return "\u{1F9E9} ";
+  if (type === "email") return "\u{1F4E7} ";
+  if (type === "discussion") return "\u{1F4AC} ";
+  return "";
+}
+
 function getScoreLabel(s) {
   if (s.type === "bs") return `${s.correct}/${s.total}`;
   if (s.type === "mock") {
-    if (Number.isFinite(s.band)) return `Band ${s.band.toFixed(1)}`;
+    if (Number.isFinite(s.band)) return `${s.band.toFixed(1)} /6`;
     return `${s.score || 0}%`;
   }
   return `${s.score}/5`;
@@ -25,10 +32,11 @@ function getScoreColor(s) {
   if (s.type === "mock") {
     const band = s.band;
     if (Number.isFinite(band)) {
-      if (band >= 5.5) return C.green;
-      if (band >= 4.5) return "#0066cc";
-      if (band >= 3.5) return C.orange;
-      return C.red;
+      if (band >= 5.5) return "#16a34a";
+      if (band >= 4.5) return "#2563eb";
+      if (band >= 3.5) return "#d97706";
+      if (band >= 2.5) return "#ea580c";
+      return "#dc2626";
     }
     const p = s.score || 0;
     if (p >= 80) return C.green;
@@ -40,7 +48,17 @@ function getScoreColor(s) {
   return C.red;
 }
 
-export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete }) {
+function fmtDate(d) {
+  try {
+    const dt = new Date(d);
+    const pad = (n) => String(n).padStart(2, "0");
+    return `${dt.getFullYear()}/${pad(dt.getMonth() + 1)}/${pad(dt.getDate())} ${pad(dt.getHours())}:${pad(dt.getMinutes())}`;
+  } catch {
+    return String(d || "");
+  }
+}
+
+export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, showIcon }) {
   const s = entry.session;
   const sourceIndex = entry.sourceIndex;
 
@@ -50,17 +68,19 @@ export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete }) {
         style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 0", borderBottom: isLast ? "none" : "1px solid #eee", cursor: "pointer" }}
         onClick={onToggle}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ fontSize: 11, color: C.t2, userSelect: "none" }}>{isExpanded ? "▼" : "▶"}</span>
-          <span style={{ fontSize: 13, fontWeight: 600 }}>{getTypeLabel(s.type)}</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
+          <span style={{ fontSize: 11, color: C.t2, userSelect: "none", flexShrink: 0 }}>{isExpanded ? "\u25BC" : "\u25B6"}</span>
+          <span style={{ fontSize: 13, fontWeight: 600, whiteSpace: "nowrap" }}>
+            {showIcon ? typeIcon(s.type) : ""}{getTypeLabel(s.type)}
+          </span>
           {s.type === "mock" && (
-            <span style={{ fontSize: 10, fontWeight: 700, padding: "1px 8px", borderRadius: 10, background: s.details?.scoringPhase === "error" ? "#fee2e2" : s.details?.scoringPhase === "done" ? "#dcfce7" : "#dbeafe", color: s.details?.scoringPhase === "error" ? C.red : s.details?.scoringPhase === "done" ? C.green : C.blue }}>
+            <span style={{ fontSize: 10, fontWeight: 700, padding: "1px 8px", borderRadius: 10, flexShrink: 0, background: s.details?.scoringPhase === "error" ? "#fee2e2" : s.details?.scoringPhase === "done" ? "#dcfce7" : "#dbeafe", color: s.details?.scoringPhase === "error" ? C.red : s.details?.scoringPhase === "done" ? C.green : C.blue }}>
               {s.details?.scoringPhase === "error" ? "error" : s.details?.scoringPhase === "done" ? "done" : "scoring..."}
             </span>
           )}
-          <span style={{ fontSize: 11, color: C.t2 }}>{new Date(s.date).toLocaleDateString()}</span>
+          <span style={{ fontSize: 11, color: C.t2, whiteSpace: "nowrap" }}>{fmtDate(s.date)}</span>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, flexShrink: 0 }}>
           <span style={{ fontSize: 14, fontWeight: 700, color: getScoreColor(s) }}>{getScoreLabel(s)}</span>
           <button onClick={(e) => { e.stopPropagation(); onDelete(sourceIndex); }} title="Delete this entry" style={{ background: "none", border: "none", color: C.red, cursor: "pointer", fontSize: 16, padding: "2px 6px", lineHeight: 1, fontWeight: 700, opacity: 0.6 }} onMouseOver={(e) => (e.currentTarget.style.opacity = "1")} onMouseOut={(e) => (e.currentTarget.style.opacity = "0.6")}>
             x
