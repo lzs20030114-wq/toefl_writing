@@ -28,8 +28,6 @@ function getClientIp(request) {
 function getRateLimitKey(request) {
   const ip = getClientIp(request);
   if (ip && ip !== "unknown") return `ip:${ip}`;
-  const clientId = String(request.headers.get("x-client-id") || "").trim();
-  if (clientId && clientId.length <= 128) return `cid:${clientId}`;
   const ua = request.headers.get("user-agent") || "";
   const lang = request.headers.get("accept-language") || "";
   const secUa = request.headers.get("sec-ch-ua") || "";
