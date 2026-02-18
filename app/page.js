@@ -1,8 +1,9 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
+import LoginGate from "../components/LoginGate";
 import { C, FONT } from "../components/shared/ui";
-import { loadHist, SESSION_STORE_EVENTS } from "../lib/sessionStore";
+import { loadHist, SESSION_STORE_EVENTS, setCurrentUser } from "../lib/sessionStore";
 import { formatMinutesLabel, getTaskTimeSeconds, normalizePracticeMode, PRACTICE_MODE, STANDARD_TIME_SECONDS } from "../lib/practiceMode";
 
 /* ───── Challenge theme palette ───── */
@@ -107,7 +108,7 @@ function challengeTimeBadge(standardSec, challengeSec) {
 }
 
 /* ───── Page component ───── */
-export default function Page() {
+function HomePage({ userCode, onLogout }) {
   const [hoverKey, setHoverKey] = useState("");
   const [sessionCount, setSessionCount] = useState(0);
   const [mode, setMode] = useState(PRACTICE_MODE.STANDARD);
@@ -200,11 +201,36 @@ export default function Page() {
           <span style={{ fontWeight: 700, fontSize: 15, position: "relative", zIndex: 1 }}>TOEFL iBT</span>
           <span style={{ opacity: 0.5, margin: "0 12px", position: "relative", zIndex: 1 }}>|</span>
           <span style={{ fontSize: 13, position: "relative", zIndex: 1 }}>Writing Section 2026</span>
-          {isChallenge && (
-            <span style={{ marginLeft: "auto", fontSize: 11, fontWeight: 700, color: CH.accent, letterSpacing: 1, textTransform: "uppercase", position: "relative", zIndex: 1 }}>
-              CHALLENGE
-            </span>
-          )}
+          <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 10, position: "relative", zIndex: 1 }}>
+            {isChallenge && (
+              <span style={{ fontSize: 11, fontWeight: 700, color: CH.accent, letterSpacing: 1, textTransform: "uppercase" }}>
+                CHALLENGE
+              </span>
+            )}
+            {userCode ? (
+              <>
+                <span style={{ fontSize: 11, color: "rgba(255,255,255,0.75)", fontFamily: "monospace" }}>
+                  当前登录码：{userCode}
+                </span>
+                <button
+                  onClick={onLogout}
+                  style={{
+                    border: "1px solid rgba(255,255,255,0.35)",
+                    background: "transparent",
+                    color: "#fff",
+                    borderRadius: 6,
+                    fontSize: 11,
+                    fontWeight: 700,
+                    padding: "3px 8px",
+                    cursor: "pointer",
+                    fontFamily: FONT,
+                  }}
+                >
+                  退出
+                </button>
+              </>
+            ) : null}
+          </div>
           {/* Scanlines overlay */}
           {isChallenge && (
             <div style={{
@@ -472,6 +498,17 @@ export default function Page() {
         </div>
       </div>
     </>
+  );
+}
+
+export default function Page() {
+  return (
+    <LoginGate>
+      {({ userCode, onLogout }) => {
+        setCurrentUser(userCode);
+        return <HomePage userCode={userCode} onLogout={onLogout} />;
+      }}
+    </LoginGate>
   );
 }
 
