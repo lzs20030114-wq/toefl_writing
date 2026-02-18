@@ -129,4 +129,26 @@ describe("calibrateScoreReport", () => {
     expect(Array.isArray(out.score_confidence.uncertain_aspects)).toBe(true);
     expect(out.score_confidence.uncertain_aspects.length).toBeGreaterThan(0);
   });
+
+  test("does not force low confidence when response is long and signals are reliable", () => {
+    const result = {
+      score: 4.5,
+      band: 5.0,
+      summary: "strong",
+      patterns: [],
+      annotationParsed: { plainText: "", annotations: [] },
+    };
+    const text =
+      "I believe universities should expand internship-based courses because students need direct exposure to workplace expectations. " +
+      "For example, business students who collaborate with local companies can apply classroom models to real budgeting decisions. " +
+      "In addition, supervisors can provide targeted feedback that improves communication and decision-making under time pressure. " +
+      "Therefore, internship-based learning creates a stronger bridge between academic knowledge and practical performance. " +
+      "This structure also helps students identify skill gaps earlier and improve before they enter full-time positions.";
+
+    const out = calibrateScoreReport("discussion", result, text);
+    expect(Array.isArray(out.key_problems)).toBe(true);
+    expect(out.key_problems.length).toBe(0);
+    expect(out.confidence_state).toBeTruthy();
+    expect(out.confidence_state.level).toBe("normal");
+  });
 });

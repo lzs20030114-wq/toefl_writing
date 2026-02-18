@@ -15,6 +15,19 @@ describe("parseReport", () => {
     expect(out.band).toBe(4);
   });
 
+  test("accepts numeric strings in JSON score fields", () => {
+    const out = parseReport(
+      JSON.stringify({
+        score: "4.5",
+        band: "5.0",
+        summary: "ok",
+      })
+    );
+    expect(out.error).toBeUndefined();
+    expect(out.score).toBe(4.5);
+    expect(out.band).toBe(5);
+  });
+
   test("parses sectioned report", () => {
     const raw = `
 ===RUBRIC===
@@ -84,6 +97,20 @@ Action: Use "for example" to add concrete detail.
     expect(out.score).toBe(3);
     expect(out.actions).toHaveLength(1);
     expect(out.goals).toBeNull();
+  });
+
+  test("parses SCORE section with full-width colon", () => {
+    const raw = `
+===SCORE===
+Score：4.5
+Band：5.0
+Summary：Response is clear and focused.
+`;
+    const out = parseReport(raw);
+    expect(out.error).toBe(false);
+    expect(out.score).toBe(4.5);
+    expect(out.band).toBe(5);
+    expect(out.summary).toContain("clear and focused");
   });
 
   test("parses inline <n> annotation format and keeps counts non-zero", () => {
