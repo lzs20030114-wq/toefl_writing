@@ -26,6 +26,27 @@ describe("/api/ai route", () => {
     expect(body.content).toBe("{\"score\":4}");
   });
 
+  test("normalizes maxTokens and temperature to numbers before upstream call", async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ choices: [{ message: { content: "ok" } }] }),
+    });
+
+    const req = new Request("http://localhost/api/ai", {
+      method: "POST",
+      body: JSON.stringify({ system: "s", message: "m", maxTokens: "100", temperature: "0.8" }),
+    });
+    const res = await POST(req);
+    expect(res.status).toBe(200);
+
+    const [, options] = global.fetch.mock.calls[0];
+    const parsedBody = JSON.parse(options.body);
+    expect(parsedBody.max_tokens).toBe(100);
+    expect(typeof parsedBody.max_tokens).toBe("number");
+    expect(parsedBody.temperature).toBe(0.8);
+    expect(typeof parsedBody.temperature).toBe("number");
+  });
+
   test("passes through upstream error status", async () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: false,

@@ -269,7 +269,7 @@ export function useBuildSentenceSession(questions, options = {}) {
   }
 
   const q = qs[idx];
-  const givenSlots = useMemo(() => (Array.isArray(q?.givenSlots) ? q.givenSlots : q?.given ? [{ chunk: q.given, givenIndex: q.givenIndex || 0 }] : []), [q]);
+  const givenSlots = useMemo(() => (Array.isArray(q?.givenSlots) ? q.givenSlots : []), [q]);
   const allFilled = slots.length > 0 && slots.every((s) => s !== null);
   const punct = q?.responseSuffix || (q?.has_question_mark ? "?" : ".");
 

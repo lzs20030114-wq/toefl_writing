@@ -1,7 +1,7 @@
 import { parseReport, parseScoreReport } from "../lib/ai/parse";
 
 describe("parseReport", () => {
-  test("parses legacy JSON response", () => {
+  test("parses JSON response", () => {
     const out = parseReport(
       JSON.stringify({
         score: 4,
@@ -17,6 +17,12 @@ describe("parseReport", () => {
 
   test("parses sectioned report", () => {
     const raw = `
+===RUBRIC===
+TaskFulfillment: 4.0 | Goals mostly covered with minor gaps.
+OrganizationCoherence: 3.5 | Flow is understandable but transitions are uneven.
+LanguageUse: 3.5 | Errors exist but mostly do not block comprehension.
+Weights: TaskFulfillment=0.40, OrganizationCoherence=0.30, LanguageUse=0.30
+WeightedScore: 3.7
 ===SCORE===
 Score: 4
 Band: 4.0
@@ -54,6 +60,9 @@ Action: Memorize and apply "subscribe to", "apply for", and "depend on".
     expect(out.summary).toContain("Goals are mostly covered");
     expect(out.goals).toHaveLength(3);
     expect(out.goals_met).toEqual([true, false, false]);
+    expect(out.rubric).toBeTruthy();
+    expect(out.rubric.method).toBe("weighted_combination");
+    expect(out.rubric.dimensions.task_fulfillment.score).toBe(4);
     expect(out.annotationCounts.red).toBe(1);
     expect(out.patterns[0].tag).toBe("collocation");
     expect(out.actions).toHaveLength(1);

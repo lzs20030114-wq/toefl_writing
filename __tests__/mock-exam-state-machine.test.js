@@ -5,6 +5,7 @@ import {
   moveToNextTask,
   startMockExam,
   submitCurrentTask,
+  updateTaskScore,
 } from "../lib/mockExam/stateMachine";
 import { MOCK_EXAM_STATUS } from "../lib/mockExam/contracts";
 
@@ -50,5 +51,16 @@ describe("mock exam state machine", () => {
     const unchanged = moveToNextTask(running);
     expect(unchanged.currentTaskIndex).toBe(0);
     expect(getCurrentTask(unchanged).taskId).toBe("build-sentence");
+  });
+
+  test("updateTaskScore keeps existing score when only metadata is updated", () => {
+    const blueprint = getDefaultMockExamBlueprint();
+    let session = startMockExam(createMockExamState(blueprint));
+    session = submitCurrentTask(session, { score: 8, maxScore: 10 });
+    session = moveToNextTask(session);
+
+    const next = updateTaskScore(session, "build-sentence", { meta: { reviewed: true } });
+    expect(next.attempts["build-sentence"].score).toBe(8);
+    expect(next.attempts["build-sentence"].meta?.reviewed).toBe(true);
   });
 });

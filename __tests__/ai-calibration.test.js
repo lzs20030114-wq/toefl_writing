@@ -96,4 +96,37 @@ describe("calibrateScoreReport", () => {
     expect(out.score).toBe(4);
     expect(out.calibration.reasons).toContain("repetition_penalty");
   });
+
+  test("builds compact key_problems with explanation, example, and action", () => {
+    const result = {
+      score: 3,
+      band: 3.5,
+      summary: "needs work",
+      patterns: [],
+      annotationParsed: {
+        plainText: "I receive your feedback yesterday. This idea is good for many things.",
+        annotations: [
+          { level: "red", message: "Verb tense is incorrect.", fix: "Use past tense: received.", start: 0, end: 31 },
+          { level: "orange", message: "This is too vague.", fix: "Add one concrete detail.", start: 33, end: 70 },
+        ],
+      },
+    };
+    const out = calibrateScoreReport("email", result, result.annotationParsed.plainText);
+    expect(Array.isArray(out.key_problems)).toBe(true);
+    expect(out.key_problems.length).toBeGreaterThanOrEqual(1);
+    expect(out.key_problems.length).toBeLessThanOrEqual(3);
+    out.key_problems.forEach((p) => {
+      expect(typeof p.explanation).toBe("string");
+      expect(p.explanation.length).toBeGreaterThan(0);
+      expect(typeof p.example).toBe("string");
+      expect(p.example.length).toBeGreaterThan(0);
+      expect(typeof p.action).toBe("string");
+      expect(p.action.length).toBeGreaterThan(0);
+    });
+    expect(out.score_confidence).toBeTruthy();
+    expect(Array.isArray(out.score_confidence.reliable_aspects)).toBe(true);
+    expect(out.score_confidence.reliable_aspects.length).toBeGreaterThan(0);
+    expect(Array.isArray(out.score_confidence.uncertain_aspects)).toBe(true);
+    expect(out.score_confidence.uncertain_aspects.length).toBeGreaterThan(0);
+  });
 });

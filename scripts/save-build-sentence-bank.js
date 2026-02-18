@@ -47,26 +47,6 @@ const ALLOWED_ALT_REASONS = new Set([
   "possessive_optional",
 ]);
 
-function detectLegacyMappings(item) {
-  const q = item || {};
-  const used = [];
-  if (isNonEmptyString(q.response)) used.push("response -> responseSentence");
-  if (isNonEmptyString(q.correctSentence)) used.push("correctSentence -> responseSentence");
-  if (Array.isArray(q.correctChunks) && q.correctChunks.length > 0) {
-    used.push("correctChunks(+responseSuffix) -> responseSentence");
-  }
-  if (Array.isArray(q.alternateAnswerOrders) && q.alternateAnswerOrders.length > 0) {
-    used.push("alternateAnswerOrders -> acceptedAnswerOrders");
-  }
-  if (Array.isArray(q.alternateOrders) && q.alternateOrders.length > 0) {
-    used.push("alternateOrders -> acceptedAnswerOrders");
-  }
-  if (Array.isArray(q.alternateReasons) && q.alternateReasons.length > 0) {
-    used.push("alternateReasons -> acceptedReasons");
-  }
-  return used;
-}
-
 function parseArgs(argv) {
   const out = {
     input: null,
@@ -421,8 +401,8 @@ function shouldRejectForAmbiguity(question, opts = {}) {
 }
 
 function normalizeAlternateSources(item) {
-  const altOrders = item?.acceptedAnswerOrders || item?.alternateAnswerOrders || item?.alternateOrders || [];
-  const altReasons = item?.acceptedReasons || item?.alternateReasons || [];
+  const altOrders = item?.acceptedAnswerOrders || [];
+  const altReasons = item?.acceptedReasons || [];
   return {
     orders: Array.isArray(altOrders) ? altOrders : [],
     reasons: Array.isArray(altReasons) ? altReasons : [],
@@ -478,23 +458,12 @@ function normalizeItem(
     ambiguityThreshold = 0.35,
     maxAcceptableOrders = 2,
     stats,
-    legacyLogger = console.warn,
   } = {}
 ) {
   const out = { ...item };
-  const legacyMappings = detectLegacyMappings(out);
-  if (legacyMappings.length > 0 && typeof legacyLogger === "function") {
-    legacyLogger(`[legacy-input] ${out.id || "(unknown id)"} uses: ${legacyMappings.join("; ")}`);
-  }
   const { orders: sourceAltOrders, reasons: sourceAltReasons } = normalizeAlternateSources(out);
 
-  let responseSentence = "";
-  if (isNonEmptyString(out.responseSentence)) responseSentence = out.responseSentence;
-  if (!responseSentence && isNonEmptyString(out.response)) responseSentence = out.response;
-  if (!responseSentence && isNonEmptyString(out.correctSentence)) responseSentence = out.correctSentence;
-  if (!responseSentence && Array.isArray(out.correctChunks) && out.correctChunks.length > 0) {
-    responseSentence = `${out.correctChunks.join(" ")}${out.responseSuffix || "."}`;
-  }
+  const responseSentence = isNonEmptyString(out.responseSentence) ? out.responseSentence : "";
 
   const recordDiscard = (reason) => {
     if (!stats) return;

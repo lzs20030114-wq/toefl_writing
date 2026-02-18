@@ -27,18 +27,17 @@ const BUILD_ALT_Q = {
   grammar_points: ["statement order in embedded clause"],
 };
 
-function makeLegacyQ(i) {
-  const answerOrder = ["send", "me", "the", "slides", "after", "class", "today"];
-  const bank = [...answerOrder].sort(() => Math.random() - 0.5);
+function makeBuildQ(i) {
   return {
-    id: `legacy_${i}`,
-    context: `Legacy prompt ${i}`,
-    given: "Could you",
-    givenIndex: 0,
-    responseSuffix: "?",
-    answerOrder,
-    bank,
-    grammar_points: [],
+    id: `q_${i}`,
+    prompt: `Prompt ${i}`,
+    answer: "Could you send me the slides after class today?",
+    chunks: ["could", "send me", "the slides", "after class", "today"],
+    prefilled: ["you"],
+    prefilled_positions: { you: 1 },
+    distractor: null,
+    has_question_mark: true,
+    grammar_points: ["embedded question (if)"],
   };
 }
 
@@ -169,7 +168,7 @@ describe("ToeflApp navigation", () => {
   });
 
   test("20-question loop: when bank is empty submit is enabled", () => {
-    const questions = Array.from({ length: 20 }, (_, i) => makeLegacyQ(i + 1));
+    const questions = Array.from({ length: 20 }, (_, i) => makeBuildQ(i + 1));
     render(<BuildSentenceTask onExit={() => {}} questions={questions} />);
     fireEvent.click(screen.getByTestId("build-start"));
 

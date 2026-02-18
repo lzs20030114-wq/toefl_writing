@@ -552,7 +552,7 @@ export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, show
 
       {isExpanded && !s.details && (
         <div style={{ background: "#f9f9f9", border: "1px solid #eee", borderRadius: 4, padding: 16, margin: "4px 0 8px 0", fontSize: 13, color: C.t2, textAlign: "center" }}>
-          No detail data for this record (legacy entry).
+          No detail data for this record (older entry).
         </div>
       )}
     </div>

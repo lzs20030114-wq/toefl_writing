@@ -112,12 +112,12 @@ Top-level:
 - Runtime question model is normalized to:
   - `answerOrder` (movable chunks)
   - `bank` (same members as `answerOrder`, shuffled for display)
-  - optional fixed segment (`given/givenIndex`) for legacy items
+  - optional fixed segments (`givenSlots`) from `prefilled_positions`
 - Slot count is always initialized as:
   - `slotCount = q.answerOrder.length`
 - Runtime guards (in `useBuildSentenceSession`) enforce:
   - `q.bank.length === q.answerOrder.length`
-  - `0 <= givenIndex <= q.answerOrder.length` (if given exists)
+  - `0 <= givenSlots[i].givenIndex <= q.answerOrder.length` (if given slots exist)
   - `answerOrder` is a permutation of `bank` (no duplicates / no missing)
 - If a question violates invariants:
   - development: throw immediately with `id`
@@ -181,18 +181,6 @@ Each question:
     - hard schema/runtime gate
     - AI quality scoring
     - difficulty-balanced assembly (`2 easy + 5 medium + 3 hard`)
-
-## Legacy Input Compatibility (Testing Only)
-
-- Runtime Task 1 uses only: `data/buildSentence/questions.json` (v2 set-based schema).
-- `scripts/save-build-sentence-bank.js` still accepts some legacy fields for migration/testing:
-  - `response` / `correctSentence` / `correctChunks(+responseSuffix)` -> `responseSentence`
-  - `alternateAnswerOrders` / `alternateOrders` -> `acceptedAnswerOrders`
-  - `alternateReasons` -> `acceptedReasons`
-- When legacy fields are detected, the script prints a warning line starting with `[legacy-input]`.
-- Recommendation:
-  - New data should use the current schema directly.
-  - Keep legacy input only for temporary backfill/regression tests.
 
 ## AI scoring calibration
 

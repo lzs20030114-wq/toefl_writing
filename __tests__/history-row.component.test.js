@@ -24,7 +24,7 @@ describe("HistoryRow", () => {
     expect(onDelete).toHaveBeenCalledWith(3);
   });
 
-  test("does not crash when mock task list contains malformed legacy items", () => {
+  test("does not crash when mock task list contains malformed items", () => {
     const entry = {
       sourceIndex: 1,
       session: {

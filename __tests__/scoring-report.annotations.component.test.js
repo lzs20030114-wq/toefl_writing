@@ -1,66 +1,57 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { ScoringReport } from "../components/writing/ScoringReport";
 
-describe("ScoringReport annotation rendering", () => {
-  test("does not render raw <n> tags and uses parsed counts", () => {
+describe("ScoringReport compact feedback", () => {
+  test("renders AI disclaimer and caps key problems at 3", () => {
     const result = {
-      score: 4,
+      score: 3.5,
       band: 4,
-      summary: "Good response overall.",
-      goals: [],
-      actions: [],
-      patterns: [],
-      comparison: { modelEssay: "", points: [] },
-      annotationRaw:
-        'Dear Professor, <r>I receive your feedback.</r><n level="red" fix="I have received your feedback.">tense</n> Also, <n level="blue" fix="I would appreciate your advice.">please advise.</n>',
-      annotationSegments: [],
-      annotationCounts: { red: 0, orange: 0, blue: 0 },
-      taskId: "email-writing",
-      sessionId: "sess-1",
+      summary: "Needs clearer grammar and wording.",
+      rubric: {
+        weighted_score: 3.7,
+        method: "weighted_combination",
+        dimensions: {
+          task_fulfillment: { score: 4, weight: 0.4, definition: "Task coverage", reason: "Most goals addressed." },
+          organization_coherence: { score: 3.5, weight: 0.3, definition: "Flow", reason: "Transitions can improve." },
+          language_use: { score: 3.5, weight: 0.3, definition: "Language quality", reason: "Some grammar slips." },
+        },
+      },
+      score_confidence: {
+        reliable_aspects: ["task_fulfillment", "language_use"],
+        uncertain_aspects: ["nuanced_argument_quality"],
+        qualitative_only: true,
+      },
+      key_problems: [
+        { explanation: "Verb tense is inconsistent.", example: "I receive your feedback yesterday", action: "Use past tense for past events." },
+        { explanation: "Sentence is too vague.", example: "This is good for many things", action: "Replace vague words with one concrete detail." },
+        { explanation: "Connector is missing.", example: "I agree this policy helps", action: "Add a reason connector like because/therefore." },
+        { explanation: "Should not show", example: "extra", action: "extra" },
+      ],
     };
 
     render(<ScoringReport result={result} type="email" uiLang="en" />);
-
-    expect(
-      screen.getByText(/1 grammar errors \| 0 wording suggestions \| 1 upgrade suggestions/i)
-    ).toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole("button", { name: /sentence annotations/i }));
-    expect(screen.queryByText(/<n/i)).not.toBeInTheDocument();
-    expect(screen.queryByText(/<r/i)).not.toBeInTheDocument();
-    expect(screen.getByText(/I receive your feedback\./i)).toBeInTheDocument();
+    expect(screen.getByTestId("score-disclaimer-note")).toBeInTheDocument();
+    expect(screen.getByText(/Scores are AI-assisted training estimates\./i)).toBeInTheDocument();
+    expect(screen.getByText(/not official score prediction/i)).toBeInTheDocument();
+    expect(screen.getByText(/Score Confidence/i)).toBeInTheDocument();
+    expect(screen.getByText(/Reliable:/i)).toBeInTheDocument();
+    expect(screen.getByText(/Uncertain:/i)).toBeInTheDocument();
+    expect(screen.getByText(/Rubric Breakdown/i)).toBeInTheDocument();
+    expect(screen.getByText(/Weighted score/i)).toBeInTheDocument();
+    expect(screen.getByText(/Key Problems \(ranked by impact\)/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Diagnosis/i)).toHaveLength(3);
+    expect(screen.queryByText("Should not show")).not.toBeInTheDocument();
   });
 
-  test("shows no-issues message when annotation list is empty", () => {
+  test("shows compact no-problem state for discussion report", () => {
     const result = {
       score: 5,
       band: 5.5,
-      summary: "Strong.",
-      goals: [],
-      actions: [],
-      patterns: [],
-      comparison: { modelEssay: "", points: [] },
-      annotationParsed: { plainText: "Clean response.", annotations: [] },
+      summary: "Strong response.",
+      key_problems: [],
     };
     render(<ScoringReport result={result} type="discussion" uiLang="en" />);
-    expect(screen.getByText(/no sentence-level issues detected/i)).toBeInTheDocument();
-  });
-
-  test("renders readable zh labels when language is zh", () => {
-    const result = {
-      score: 4.5,
-      band: 5,
-      summary: "Summary",
-      goals: [],
-      actions: [],
-      patterns: [],
-      comparison: { modelEssay: "", points: [] },
-      annotationParsed: { plainText: "Text", annotations: [] },
-      reportLanguage: "zh",
-    };
-    render(<ScoringReport result={result} type="email" uiLang="zh" />);
-    expect(screen.getByText("句子级批注")).toBeInTheDocument();
-    expect(screen.getByText("改进建议")).toBeInTheDocument();
-    expect(screen.getByText("未检测到句子级问题")).toBeInTheDocument();
+    expect(screen.getByText(/No major problems detected/i)).toBeInTheDocument();
+    expect(screen.getByTestId("score-disclaimer-note")).toBeInTheDocument();
   });
 });

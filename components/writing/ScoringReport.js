@@ -1,97 +1,58 @@
 ﻿"use client";
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { C } from "../shared/ui";
-import { buildAnnotationSegments, countAnnotations, parseAnnotations } from "../../lib/annotations/parseAnnotations";
 import { normalizeReportLanguage, saveReportLanguage, REPORT_LANGUAGE } from "../../lib/reportLanguage";
-
-const warnedParseFallback = new Set();
 
 const I18N = {
   zh: {
-    hide: "\u6536\u8d77",
-    show: "\u5c55\u5f00",
-    empty: "\u6682\u65e0\u53ef\u7528\u5185\u5bb9\u3002",
     scoreBand: "Band",
-    goalPrefix: "\u76ee\u6807",
-    actionPlan: "\u6539\u8fdb\u5efa\u8bae",
-    actionReason: "\u539f\u56e0\uff1a",
-    actionNow: "\u73b0\u5728\u5c31\u505a\uff1a",
-    annotationTitle: "\u53e5\u5b50\u7ea7\u6279\u6ce8",
-    annotationStats: (c) => `${c.red || 0} \u6761\u8bed\u6cd5\u95ee\u9898 | ${c.orange || 0} \u6761\u63aa\u8f9e\u5efa\u8bae | ${c.blue || 0} \u6761\u5347\u7ea7\u5efa\u8bae`,
-    noSentenceIssues: "\u672a\u68c0\u6d4b\u5230\u53e5\u5b50\u7ea7\u95ee\u9898",
-    fixLabel: "\u4fee\u6539\u5efa\u8bae\uff08\u82f1\u6587\uff09\uff1a",
-    noteLabel: "\u95ee\u9898\u8bf4\u660e\uff1a",
-    patterns: "\u95ee\u9898\u6a21\u5f0f\u603b\u7ed3",
-    comparison: "\u8303\u6587\u5bf9\u6bd4",
-    viewModel: "\u67e5\u770b\u5b8c\u6574\u8303\u6587",
-    yours: "\u4f60\u7684\u53e5\u5b50\uff1a",
-    model: "\u8303\u6587\u53e5\u5b50\uff1a",
-    diff: "\u5dee\u5f02\u8bf4\u660e\uff1a",
+    lowConfidenceTitle: "低可信度评分状态",
+    lowConfidenceBody: "本次输入信号不足，分数仅作临时估计。请优先根据下面的定性反馈修改后再重测。",
+    provisional: "临时估计",
+    priorityFeedback: "优先改进反馈",
+    confidenceTitle: "评分可信度",
+    confidenceReliable: "可靠项",
+    confidenceUncertain: "不确定项",
+    confidenceNote: "这是定性解释，不是概率值。建议把分数作为训练参考并结合多次练习观察趋势。",
+    rubricTitle: "Rubric 维度拆解",
+    weightedScore: "加权总分",
+    weightedMethod: "计算方式",
+    keyProblems: "关键问题（按影响排序）",
+    noProblems: "未检测到明显问题。继续保持当前表达质量。",
+    diagnosis: "诊断",
+    whyMatters: "影响说明",
+    example: "你的原句示例",
+    action: "行动建议",
+    aiNote1: "当前分数是 AI 辅助训练估计值。",
+    aiNote2: "反馈用于学习改进，不代表官方成绩预测。",
   },
   en: {
-    hide: "Hide",
-    show: "Show",
-    empty: "No content available.",
     scoreBand: "Band",
-    goalPrefix: "Goal",
-    actionPlan: "Action Plan",
-    actionReason: "Why it matters:",
-    actionNow: "Do this now:",
-    annotationTitle: "Sentence Annotations",
-    annotationStats: (c) => `${c.red || 0} grammar errors | ${c.orange || 0} wording suggestions | ${c.blue || 0} upgrade suggestions`,
-    noSentenceIssues: "No sentence-level issues detected",
-    fixLabel: "Suggested rewrite (English):",
-    noteLabel: "Issue note:",
-    patterns: "Pattern Summary",
-    comparison: "Model Comparison",
-    viewModel: "View full model response",
-    yours: "Yours:",
-    model: "Model:",
-    diff: "Difference:",
+    lowConfidenceTitle: "Low-confidence scoring state",
+    lowConfidenceBody: "Signal quality is limited for this response, so the numeric score is provisional. Prioritize the qualitative feedback below, then retry.",
+    provisional: "Provisional estimate",
+    priorityFeedback: "Priority qualitative feedback",
+    confidenceTitle: "Score Confidence",
+    confidenceReliable: "Reliable",
+    confidenceUncertain: "Uncertain",
+    confidenceNote: "This is a qualitative confidence note, not a probability. Use the score as a training estimate and compare trends across attempts.",
+    rubricTitle: "Rubric Breakdown",
+    weightedScore: "Weighted score",
+    weightedMethod: "Method",
+    keyProblems: "Key Problems (ranked by impact)",
+    noProblems: "No major problems detected. Keep this level of clarity.",
+    diagnosis: "Diagnosis",
+    whyMatters: "Why it matters",
+    example: "Example from your response",
+    action: "Action",
+    aiNote1: "Scores are AI-assisted training estimates.",
+    aiNote2: "Feedback focuses on learning improvement, not official score prediction.",
   },
 };
 
-function Collapse({ title, defaultOpen = false, children, subtitle, ui }) {
-  const [open, setOpen] = useState(defaultOpen);
-  return (
-    <div style={{ border: "1px solid " + C.bdr, borderRadius: 6, overflow: "hidden", background: "#fff" }}>
-      <button
-        onClick={() => setOpen((v) => !v)}
-        style={{
-          width: "100%",
-          textAlign: "left",
-          background: "#f8fafc",
-          border: "none",
-          borderBottom: open ? "1px solid " + C.bdr : "none",
-          padding: "12px 14px",
-          cursor: "pointer",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          fontWeight: 700,
-          color: C.t1,
-        }}
-      >
-        <span>
-          {title}
-          {subtitle ? <span style={{ marginLeft: 8, fontWeight: 500, color: C.t2, fontSize: 12 }}>{subtitle}</span> : null}
-        </span>
-        <span style={{ color: C.t2, fontSize: 12 }}>{open ? ui.hide : ui.show}</span>
-      </button>
-      {open ? <div style={{ padding: 14 }}>{children}</div> : null}
-    </div>
-  );
-}
-
-function statusStyle(status) {
-  if (status === "OK") return { icon: "OK", color: C.green, bg: "#ecfdf3" };
-  if (status === "PARTIAL") return { icon: "PARTIAL", color: C.orange, bg: "#fff7ed" };
-  return { icon: "MISSING", color: C.red, bg: "#fef2f2" };
-}
-
 function LangToggle({ lang, onChange }) {
   const opts = [
-    { value: REPORT_LANGUAGE.ZH, label: "\u4E2D\u6587" },
+    { value: REPORT_LANGUAGE.ZH, label: "中文" },
     { value: REPORT_LANGUAGE.EN, label: "EN" },
   ];
   return (
@@ -105,8 +66,12 @@ function LangToggle({ lang, onChange }) {
             background: lang === o.value ? "#fff" : "transparent",
             boxShadow: lang === o.value ? "0 1px 3px rgba(0,0,0,0.12)" : "none",
             color: lang === o.value ? C.nav : C.t2,
-            borderRadius: 999, padding: "2px 10px", fontSize: 11,
-            fontWeight: 700, cursor: "pointer", lineHeight: "20px",
+            borderRadius: 999,
+            padding: "2px 10px",
+            fontSize: 11,
+            fontWeight: 700,
+            cursor: "pointer",
+            lineHeight: "20px",
           }}
         >
           {o.label}
@@ -117,245 +82,162 @@ function LangToggle({ lang, onChange }) {
 }
 
 export function ScoringReport({ result, type, uiLang = "zh" }) {
-  const storedLang = (() => { try { const s = localStorage.getItem("toefl-report-language"); return s ? normalizeReportLanguage(s) : null; } catch { return null; } })();
+  const storedLang = (() => {
+    try {
+      const s = localStorage.getItem("toefl-report-language");
+      return s ? normalizeReportLanguage(s) : null;
+    } catch {
+      return null;
+    }
+  })();
   const defaultLang = storedLang || normalizeReportLanguage(result?.reportLanguage || uiLang);
   const [langOverride, setLangOverride] = useState(defaultLang);
-  const lang = langOverride;
-  const ui = I18N[lang];
-  const [activeNote, setActiveNote] = useState(null);
+  const ui = I18N[langOverride] || I18N.en;
   if (!result) return null;
 
-  const scoreColor = result.score >= 4 ? C.green : result.score >= 3 ? C.orange : C.red;
-  const goals = Array.isArray(result.goals) ? result.goals : [];
-  const actions = Array.isArray(result.actions) ? result.actions : [];
-  const patterns = useMemo(
-    () =>
-      (Array.isArray(result.patterns) ? result.patterns : [])
-        .filter((p) => p && typeof p.tag === "string")
-        .sort((a, b) => Number(b.count || 0) - Number(a.count || 0)),
-    [result.patterns]
+  const score = Number.isFinite(Number(result.score)) ? Number(result.score) : 0;
+  const band = Number.isFinite(Number(result.band)) ? Number(result.band) : null;
+  const scoreColor = score >= 4 ? C.green : score >= 3 ? C.orange : C.red;
+  const keyProblems = (Array.isArray(result.key_problems) ? result.key_problems : [])
+    .filter((p) => p && p.explanation && p.example && p.action)
+    .slice(0, 3);
+  const rubric = result?.rubric || null;
+  const rubricDims = rubric?.dimensions || null;
+  const confidence = result?.score_confidence || null;
+  const confidenceState = result?.confidence_state || null;
+  const lowConfidence = confidenceState?.level === "low";
+  const reliableAspects = Array.isArray(confidence?.reliable_aspects) ? confidence.reliable_aspects : [];
+  const uncertainAspects = Array.isArray(confidence?.uncertain_aspects) ? confidence.uncertain_aspects : [];
+  const aspectLabel = (key) => {
+    const labels = {
+      task_fulfillment: { zh: "任务完成度", en: "task fulfillment" },
+      organization_coherence: { zh: "组织与连贯", en: "organization and coherence" },
+      language_use: { zh: "语言使用", en: "language use" },
+      nuanced_argument_quality: { zh: "细微论证质量", en: "nuanced argument quality" },
+      support_depth_in_short_response: { zh: "短文本支持深度", en: "depth of support in shorter responses" },
+      tone_register_nuance: { zh: "语气与语域细节", en: "tone/register nuance" },
+      specificity_depth_in_short_response: { zh: "短文本具体性深度", en: "specificity in shorter responses" },
+    };
+    return labels[key]?.[langOverride] || key;
+  };
+  const listText = (arr) => (arr.length > 0 ? arr.map(aspectLabel).join(langOverride === "zh" ? "、" : ", ") : (langOverride === "zh" ? "语言准确性与任务对齐" : "language use and task alignment"));
+
+  const rubricCard = rubricDims && (
+    <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 14 }}>
+      <div style={{ fontWeight: 700, marginBottom: 10 }}>{ui.rubricTitle}</div>
+      <div style={{ display: "grid", gap: 8 }}>
+        {[
+          ["Task fulfillment", rubricDims.task_fulfillment],
+          ["Organization & coherence", rubricDims.organization_coherence],
+          ["Language use", rubricDims.language_use],
+        ].map(([name, d]) => (
+          <div key={name} style={{ border: "1px solid #e2e8f0", borderRadius: 4, padding: 8 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", gap: 12, marginBottom: 4 }}>
+              <b style={{ fontSize: 13 }}>{name}</b>
+              <span style={{ fontSize: 12, color: C.t2 }}>{Number(d?.score ?? 0).toFixed(1)} x {Number(d?.weight ?? 0).toFixed(2)}</span>
+            </div>
+            <div style={{ fontSize: 12, color: C.t2, marginBottom: 4 }}>{d?.definition || ""}</div>
+            <div style={{ fontSize: 12, color: C.t1 }}>{d?.reason || ""}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ marginTop: 10, fontSize: 12, color: C.t2 }}>
+        <b>{ui.weightedScore}:</b> {Number(rubric.weighted_score || 0).toFixed(2)} | <b>{ui.weightedMethod}:</b> {rubric.method || "weighted_combination"}
+      </div>
+    </div>
   );
 
-  const annotationView = useMemo(() => {
-    const parsedFromResult = result?.annotationParsed;
-    if (parsedFromResult && Array.isArray(parsedFromResult.annotations) && typeof parsedFromResult.plainText === "string") {
-      if (parsedFromResult.parseError && parsedFromResult.hasMarkup) {
-        const taskId = result?.taskId || result?.type || "unknown-task";
-        const sessionId = result?.sessionId || result?.mockSessionId || "unknown-session";
-        const warnKey = `${taskId}/${sessionId}`;
-        if (!warnedParseFallback.has(warnKey)) {
-          warnedParseFallback.add(warnKey);
-          console.warn(`[annotations] parse failed for ${taskId}/${sessionId}; fallback to plain text`);
-        }
-      }
-      return {
-        plainText: parsedFromResult.plainText,
-        annotations: parsedFromResult.annotations,
-        segments: buildAnnotationSegments(parsedFromResult),
-        counts: countAnnotations(parsedFromResult.annotations),
-      };
-    }
-
-    const raw = String(result?.annotationRaw || "");
-    if (/<\s*n\b/i.test(raw)) {
-      const parsed = parseAnnotations(raw);
-      if (parsed.parseError) {
-        const taskId = result?.taskId || result?.type || "unknown-task";
-        const sessionId = result?.sessionId || result?.mockSessionId || "unknown-session";
-        const warnKey = `${taskId}/${sessionId}`;
-        if (!warnedParseFallback.has(warnKey)) {
-          warnedParseFallback.add(warnKey);
-          console.warn(`[annotations] parse failed for ${taskId}/${sessionId}; fallback to plain text`);
-        }
-      }
-      return {
-        plainText: parsed.plainText,
-        annotations: parsed.annotations,
-        segments: buildAnnotationSegments(parsed),
-        counts: countAnnotations(parsed.annotations),
-      };
-    }
-
-    const segs = Array.isArray(result?.annotationSegments) ? result.annotationSegments : [];
-    const annotations = [];
-    let pos = 0;
-    segs.forEach((s) => {
-      const text = String(s?.text || "");
-      if (s?.type === "mark") {
-        annotations.push({
-          level: s.level,
-          message: s.note || "",
-          fix: s.fix || "",
-          start: pos,
-          end: pos + text.length,
-        });
-      }
-      pos += text.length;
-    });
-    const plainText = segs.map((s) => String(s?.text || "")).join("");
-    return {
-      plainText,
-      annotations,
-      segments: segs.length > 0 ? segs : buildAnnotationSegments({ plainText, annotations: [] }),
-      counts: countAnnotations(annotations),
-    };
-  }, [result]);
-
-  const markCounts = annotationView.counts || { red: 0, orange: 0, blue: 0 };
-  const annotationTotal = (annotationView.annotations || []).length;
-  const comparison = result.comparison || { modelEssay: "", points: [] };
-  const comparisonPoints = Array.isArray(comparison.points) ? comparison.points : [];
+  const keyProblemsCard = (
+    <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 14 }}>
+      <div style={{ fontWeight: 700, marginBottom: 10 }}>{lowConfidence ? ui.priorityFeedback : ui.keyProblems}</div>
+      {keyProblems.length === 0 ? (
+        <div style={{ fontSize: 13, color: C.t2 }}>{ui.noProblems}</div>
+      ) : (
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          {keyProblems.map((p, i) => (
+            <div key={i} style={{ border: "1px solid " + C.bdr, borderLeft: "4px solid " + (i === 0 ? C.red : C.orange), borderRadius: 4, padding: 10 }}>
+              <div style={{ marginBottom: 8 }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: C.t2, marginBottom: 4 }}>{ui.diagnosis}</div>
+                <div style={{ fontSize: 13, color: C.t1, marginBottom: 6 }}>
+                  <b>{ui.whyMatters}:</b> {p.explanation}
+                </div>
+                <div style={{ fontSize: 13, color: C.t2, background: "#f8fafc", borderRadius: 4, padding: "6px 8px" }}>
+                  <b>{ui.example}:</b> "{p.example}"
+                </div>
+              </div>
+              <div style={{ borderTop: "1px dashed " + C.bdr, paddingTop: 8 }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: C.t2, marginBottom: 4 }}>{ui.action}</div>
+                <div style={{ fontSize: 13, color: C.t1 }}>{p.action}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 
   return (
     <div data-testid="score-panel" style={{ display: "flex", flexDirection: "column", gap: 12 }}>
       <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: -4 }}>
-        <LangToggle lang={lang} onChange={(v) => { setLangOverride(v); saveReportLanguage(v); }} />
+        <LangToggle lang={langOverride} onChange={(v) => { setLangOverride(v); saveReportLanguage(v); }} />
       </div>
-      <div style={{ background: C.nav, color: "#fff", borderRadius: 6, padding: "16px 20px" }}>
+
+      <div style={{ background: C.nav, color: "#fff", borderRadius: 6, padding: "16px 20px", opacity: lowConfidence ? 0.92 : 1 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "end", gap: 16, marginBottom: 10 }}>
           <div style={{ display: "flex", alignItems: "baseline", gap: 10 }}>
-            <span style={{ fontSize: 38, fontWeight: 800 }}>{result.score}</span>
-            <span style={{ opacity: 0.8 }}>/ 5</span>
+            <span style={{ fontSize: lowConfidence ? 30 : 38, fontWeight: 800 }}>{lowConfidence ? `~${score}` : score}</span>
+            <span style={{ opacity: 0.8 }}>{lowConfidence ? ui.provisional : "/ 5"}</span>
           </div>
-          <span style={{ background: scoreColor, borderRadius: 14, padding: "3px 10px", fontSize: 12, fontWeight: 700 }}>
-            {ui.scoreBand} {result.band ?? "-"}
+          <span style={{ background: lowConfidence ? "#64748b" : scoreColor, borderRadius: 14, padding: "3px 10px", fontSize: 12, fontWeight: 700 }}>
+            {ui.scoreBand} {lowConfidence ? "-" : (band ?? "-")}
           </span>
         </div>
-        <div style={{ fontSize: 14, lineHeight: 1.6 }}>{result.summary || ui.empty}</div>
-        {type === "email" ? (
-          <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
-            {goals.length > 0 ? (
-              goals.map((g, i) => {
-                const s = statusStyle(g.status);
-                return (
-                  <div key={i} style={{ background: s.bg, color: "#111827", borderRadius: 4, padding: "8px 10px", fontSize: 13 }}>
-                    <b style={{ color: s.color, marginRight: 8 }}>{s.icon}</b>
-                    {ui.goalPrefix} {g.index}: {g.reason || ui.empty}
-                  </div>
-                );
-              })
-            ) : (
-              <div style={{ fontSize: 13, opacity: 0.85 }}>{ui.empty}</div>
-            )}
-          </div>
-        ) : null}
+        <div style={{ fontSize: 14, lineHeight: 1.6 }}>{result.summary || ""}</div>
+      </div>
+
+      {lowConfidence && (
+        <div data-testid="low-confidence-state" style={{ background: "#fffbeb", border: "1px solid #f59e0b", borderRadius: 6, padding: "10px 12px", fontSize: 13, color: "#92400e", lineHeight: 1.6 }}>
+          <div style={{ fontWeight: 700, marginBottom: 2 }}>{ui.lowConfidenceTitle}</div>
+          <div>{ui.lowConfidenceBody}</div>
+        </div>
+      )}
+
+      <div
+        data-testid="score-disclaimer-note"
+        style={{
+          background: "#f8fafc",
+          border: "1px solid #e2e8f0",
+          borderRadius: 6,
+          padding: "10px 12px",
+          fontSize: 12,
+          color: C.t2,
+          lineHeight: 1.6,
+        }}
+      >
+        <div>{ui.aiNote1}</div>
+        <div>{ui.aiNote2}</div>
       </div>
 
       <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 14 }}>
-        <div style={{ fontWeight: 700, marginBottom: 10 }}>{ui.actionPlan}</div>
-        {actions.length > 0 ? (
-          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            {actions.map((a, i) => (
-              <div key={i} style={{ border: "1px solid " + C.bdr, borderLeft: "4px solid " + (i === 0 ? C.red : C.orange), borderRadius: 4, padding: 10 }}>
-                <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 6 }}>{a.title || `Action ${i + 1}`}</div>
-                <div style={{ fontSize: 13, color: C.t1, marginBottom: 6 }}>
-                  <b>{ui.actionReason}</b> {a.importance || ui.empty}
-                </div>
-                <div style={{ fontSize: 13, background: "#f8fafc", borderRadius: 4, padding: "8px 10px" }}>
-                  <b>{ui.actionNow}</b> {a.action || ui.empty}
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div style={{ fontSize: 13, color: C.t2 }}>{ui.empty}</div>
-        )}
+        <div style={{ fontWeight: 700, marginBottom: 8 }}>{ui.confidenceTitle}</div>
+        <div style={{ fontSize: 13, color: C.t1, lineHeight: 1.7 }}>
+          <div><b>{ui.confidenceReliable}:</b> {listText(reliableAspects)}.</div>
+          <div><b>{ui.confidenceUncertain}:</b> {listText(uncertainAspects)}.</div>
+          <div style={{ color: C.t2 }}>{ui.confidenceNote}</div>
+        </div>
       </div>
 
-      <Collapse
-        title={ui.annotationTitle}
-        subtitle={annotationTotal > 0 ? ui.annotationStats(markCounts) : ui.noSentenceIssues}
-        ui={ui}
-      >
-        {annotationTotal > 0 && annotationView.segments && annotationView.segments.length > 0 ? (
-          <div style={{ fontSize: 14, lineHeight: 1.9, whiteSpace: "pre-wrap" }}>
-            {annotationView.segments.map((seg, idx) => {
-              if (seg.type === "text") return <span key={idx}>{seg.text}</span>;
-              const map = {
-                red: { bg: "#fee2e2", bd: "#fca5a5" },
-                orange: { bg: "#ffedd5", bd: "#fdba74" },
-                blue: { bg: "#dbeafe", bd: "#93c5fd" },
-              }[seg.level] || { bg: "#eef2ff", bd: "#c7d2fe" };
-              return (
-                <button
-                  key={idx}
-                  onClick={() => setActiveNote(activeNote === idx ? null : idx)}
-                  style={{
-                    background: map.bg,
-                    border: "1px solid " + map.bd,
-                    borderRadius: 4,
-                    padding: "1px 4px",
-                    cursor: "pointer",
-                    fontSize: "inherit",
-                  }}
-                  title={seg.fix || ""}
-                >
-                  {seg.text}
-                </button>
-              );
-            })}
-            {activeNote !== null && (annotationView.segments[activeNote] || {}).type === "mark" ? (
-              <div style={{ marginTop: 12, border: "1px solid " + C.bdr, borderRadius: 6, padding: 10, background: "#fff" }}>
-                <div style={{ fontSize: 13, marginBottom: 6 }}>
-                  <b>{ui.fixLabel}</b> {(annotationView.segments[activeNote] || {}).fix || ui.empty}
-                </div>
-                <div style={{ fontSize: 13 }}>
-                  <b>{ui.noteLabel}</b> {(annotationView.segments[activeNote] || {}).note || ui.empty}
-                </div>
-              </div>
-            ) : null}
-          </div>
-        ) : (
-          <div style={{ fontSize: 13, color: C.t2 }}>{ui.noSentenceIssues}</div>
-        )}
-      </Collapse>
-
-      <Collapse title={ui.patterns} ui={ui}>
-        {patterns.length > 0 ? (
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {patterns.map((p, i) => (
-              <div key={i} style={{ border: "1px solid " + C.bdr, borderRadius: 4, padding: "8px 10px", fontSize: 13 }}>
-                <b style={{ color: C.blue }}>{p.tag}</b>
-                <span style={{ marginLeft: 8, color: C.t2 }}>x{Number(p.count || 0)}</span>
-                <div style={{ marginTop: 4 }}>{p.summary || ui.empty}</div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div style={{ fontSize: 13, color: C.t2 }}>{ui.empty}</div>
-        )}
-      </Collapse>
-
-      <Collapse title={ui.comparison} ui={ui}>
-        <details style={{ marginBottom: 10 }}>
-          <summary style={{ cursor: "pointer", fontWeight: 700 }}>{ui.viewModel}</summary>
-          <div style={{ marginTop: 8, whiteSpace: "pre-wrap", fontSize: 13, lineHeight: 1.8 }}>
-            {comparison.modelEssay || ui.empty}
-          </div>
-        </details>
-        {comparisonPoints.length > 0 ? (
-          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            {comparisonPoints.map((p, i) => (
-              <div key={i} style={{ border: "1px solid " + C.bdr, borderRadius: 4, padding: 10 }}>
-                <div style={{ fontWeight: 700, marginBottom: 6 }}>{p.title || `Comparison ${i + 1}`}</div>
-                <div style={{ fontSize: 13, marginBottom: 4 }}>
-                  <b>{ui.yours}</b> {p.yours || ui.empty}
-                </div>
-                <div style={{ fontSize: 13, marginBottom: 4 }}>
-                  <b>{ui.model}</b> {p.model || ui.empty}
-                </div>
-                <div style={{ fontSize: 13 }}>
-                  <b>{ui.diff}</b> {p.difference || ui.empty}
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div style={{ fontSize: 13, color: C.t2 }}>{ui.empty}</div>
-        )}
-      </Collapse>
+      {lowConfidence ? (
+        <>
+          {keyProblemsCard}
+          {rubricCard}
+        </>
+      ) : (
+        <>
+          {rubricCard}
+          {keyProblemsCard}
+        </>
+      )}
     </div>
   );
 }
-
-

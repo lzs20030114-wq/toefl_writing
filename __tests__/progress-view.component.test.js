@@ -28,11 +28,10 @@ jest.mock("../lib/sessionStore", () => ({
 }));
 
 describe("ProgressView", () => {
-  test("renders with malformed legacy history data without crashing", () => {
+  test("renders with malformed history data without crashing", () => {
     render(<ProgressView onBack={() => {}} />);
     expect(screen.getByText("Practice History")).toBeInTheDocument();
     expect(screen.getByText("Mock Exams")).toBeInTheDocument();
     expect(screen.getByText("Practice")).toBeInTheDocument();
   });
 });
-

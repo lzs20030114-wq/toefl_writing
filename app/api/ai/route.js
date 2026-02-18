@@ -87,13 +87,22 @@ function validateBody(body) {
   if (!message.trim()) return "Missing user prompt.";
   if (system.length > MAX_SYSTEM_CHARS) return `System prompt too long (>${MAX_SYSTEM_CHARS}).`;
   if (message.length > MAX_MESSAGE_CHARS) return `User prompt too long (>${MAX_MESSAGE_CHARS}).`;
-  if (!Number.isFinite(maxTokensRaw) || maxTokensRaw <= 0 || maxTokensRaw > MAX_TOKENS) {
-    return `maxTokens must be between 1 and ${MAX_TOKENS}.`;
+  if (!Number.isInteger(maxTokensRaw) || maxTokensRaw <= 0 || maxTokensRaw > MAX_TOKENS) {
+    return `maxTokens must be an integer between 1 and ${MAX_TOKENS}.`;
   }
   if (!Number.isFinite(temperatureRaw) || temperatureRaw < 0 || temperatureRaw > 2) {
     return "temperature must be between 0 and 2.";
   }
   return "";
+}
+
+function normalizeGenerationParams(body) {
+  const maxTokensRaw = Number(body?.maxTokens ?? 2000);
+  const temperatureRaw = Number(body?.temperature ?? 0.3);
+  return {
+    maxTokens: Math.trunc(maxTokensRaw),
+    temperature: temperatureRaw,
+  };
 }
 
 export async function POST(request) {
@@ -114,7 +123,8 @@ export async function POST(request) {
     if (bodyError) {
       return Response.json({ error: bodyError }, { status: 400 });
     }
-    const { system, message, maxTokens, temperature } = payload;
+    const { system, message } = payload;
+    const { maxTokens, temperature } = normalizeGenerationParams(payload);
     const proxyUrl = resolveProxyUrl();
     if (proxyUrl) {
       const content = await callDeepSeekViaCurl({
@@ -123,8 +133,8 @@ export async function POST(request) {
         timeoutMs: 70000,
         payload: {
           model: "deepseek-chat",
-          max_tokens: maxTokens || 2000,
-          temperature: Number.isFinite(Number(temperature)) ? Number(temperature) : 0.3,
+          max_tokens: maxTokens,
+          temperature,
           stream: false,
           messages: [
             { role: "system", content: system },
@@ -143,8 +153,8 @@ export async function POST(request) {
       },
       body: JSON.stringify({
         model: "deepseek-chat",
-        max_tokens: maxTokens || 2000,
-        temperature: Number.isFinite(Number(temperature)) ? Number(temperature) : 0.3,
+        max_tokens: maxTokens,
+        temperature,
         stream: false,
         messages: [
           { role: "system", content: system },

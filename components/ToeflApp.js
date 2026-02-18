@@ -19,17 +19,17 @@ export default function ToeflApp() {
       <div style={{ maxWidth: 800, margin: "32px auto", padding: "0 20px" }}>
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: "32px 40px", marginBottom: 24, textAlign: "center" }}>
           <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, color: C.nav }}>Writing Section</h1>
-          <p style={{ color: C.t2, fontSize: 14, margin: "8px 0 0" }}>New TOEFL iBT format practice</p>
+          <p style={{ color: C.t2, fontSize: 14, margin: "8px 0 0" }}>TOEFL iBT writing practice</p>
         </div>
         {[
-          { k: "build", n: "Task 1", t: "Build a Sentence", d: "Arrange chunks into a correct sentence. Easy / medium / hard sets.", ti: "6m 50s", it: "10 Qs", tag: true },
-          { k: "email", n: "Task 2", t: "Write an Email", d: "Write a professional email. 3 goals. 8 prompts.", ti: "7 min", it: "80-120w", tag: true },
-          { k: "disc", n: "Task 3", t: "Academic Discussion", d: "Respond on a discussion board. 8 topics.", ti: "10 min", it: "100+w", tag: false },
+          { k: "build", n: "Task 1", t: "Build a Sentence", d: "Arrange chunks into a correct sentence. Easy / medium / hard sets.", ti: "6m 50s", it: "10 Qs" },
+          { k: "email", n: "Task 2", t: "Write an Email", d: "Write a professional email. 3 goals. 8 prompts.", ti: "7 min", it: "80-120w" },
+          { k: "disc", n: "Task 3", t: "Academic Discussion", d: "Respond on a discussion board. 8 topics.", ti: "10 min", it: "100+w" },
         ].map(c => (
           <button data-testid={"task-" + c.k} key={c.k} onClick={() => setV(c.k)} style={{ display: "flex", width: "100%", textAlign: "left", background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 0, marginBottom: 12, cursor: "pointer", overflow: "hidden", fontFamily: FONT }}>
             <div style={{ width: 6, background: C.blue, flexShrink: 0 }} />
             <div style={{ padding: "16px 20px", flex: 1 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}><span style={{ fontSize: 11, color: C.blue, fontWeight: 700, letterSpacing: 1 }}>{c.n}</span>{c.tag && <span style={{ fontSize: 10, color: "#fff", background: C.orange, padding: "1px 8px", borderRadius: 3, fontWeight: 700 }}>NEW</span>}</div>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}><span style={{ fontSize: 11, color: C.blue, fontWeight: 700, letterSpacing: 1 }}>{c.n}</span></div>
               <div style={{ fontSize: 16, fontWeight: 700, color: C.t1, marginBottom: 4 }}>{c.t}</div>
               <div style={{ fontSize: 13, color: C.t2 }}>{c.d}</div>
             </div>

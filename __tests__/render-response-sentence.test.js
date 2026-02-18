@@ -24,17 +24,13 @@ describe("renderResponseSentence", () => {
     expect(out.correctSentenceFull).toBe("Please sit down everyone.");
   });
 
-  test("legacy given is inserted at givenIndex and matches correct sentence", () => {
+  test("builds correct sentence with multiple prefilled spans", () => {
     const q = {
-      given: "you",
-      givenIndex: 2,
+      answer: "Could you send me the slides after class today?",
       has_question_mark: true,
-      responseSuffix: "?",
-      answerOrder: ["would", "like", "to send", "me", "a copy", "of it"],
-      bank: ["a copy", "like", "to send", "would", "me", "of it"],
-      answer: "Would like you to send me a copy of it?",
+      prefilled_positions: { you: 1, "after class": 5 },
     };
-    const out = renderResponseSentence(q, q.answerOrder);
-    expect(out.correctSentenceFull).toBe("Would like you to send me a copy of it?");
+    const out = renderResponseSentence(q, ["could", "send me", "the slides", "today"]);
+    expect(out.correctSentenceFull).toBe("Could you send me the slides after class today?");
   });
 });

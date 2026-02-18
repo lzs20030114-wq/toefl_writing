@@ -205,14 +205,12 @@ describe("save-build-sentence-bank quality gates", () => {
     expect(out[0].acceptedReasons).toEqual([]);
   });
 
-  test("legacy input fields are normalized and emit legacy marker", () => {
-    const warn = jest.spyOn(console, "warn").mockImplementation(() => {});
-
+  test("only canonical input fields are used for normalization", () => {
     const base = [
       {
-        id: "legacy_1",
+        id: "canonical_1",
         difficulty: "medium",
-        context: "Legacy compatibility check.",
+        context: "Canonical input check.",
         given: "Could you",
         givenIndex: 0,
         answer: "Could you upload the revised file immediately please using campus portal for review.",
@@ -227,9 +225,9 @@ describe("save-build-sentence-bank quality gates", () => {
           "campus portal",
           "for review",
         ],
-        response: "Could you upload the revised file immediately please using campus portal for review.",
+        responseSentence: "Could you upload the revised file immediately please using campus portal for review.",
         responseSuffix: ".",
-        alternateOrders: [
+        acceptedAnswerOrders: [
           [
             "upload",
             "the revised file",
@@ -240,7 +238,7 @@ describe("save-build-sentence-bank quality gates", () => {
             "for review",
           ],
         ],
-        alternateReasons: ["adverbial_shift"],
+        acceptedReasons: ["adverbial_shift"],
       },
     ];
 
@@ -249,17 +247,6 @@ describe("save-build-sentence-bank quality gates", () => {
     expect(Array.isArray(out[0].bank)).toBe(true);
     expect(Array.isArray(out[0].acceptedAnswerOrders)).toBe(true);
     expect(Array.isArray(out[0].acceptedReasons)).toBe(true);
-    expect(warn).toHaveBeenCalledWith(
-      expect.stringContaining("[legacy-input] legacy_1 uses:")
-    );
-    expect(warn).toHaveBeenCalledWith(
-      expect.stringContaining("response -> responseSentence")
-    );
-    expect(warn).toHaveBeenCalledWith(
-      expect.stringContaining("alternateOrders -> acceptedAnswerOrders")
-    );
-    expect(warn).toHaveBeenCalledWith(
-      expect.stringContaining("alternateReasons -> acceptedReasons")
-    );
+    expect(out[0].id).toBe("canonical_1");
   });
 });

@@ -52,7 +52,7 @@ describe("toefl utils", () => {
     });
   });
 
-  test("selectBSQuestions ignores legacy distribution options and still returns one full set", () => {
+  test("selectBSQuestions returns one full set when extra options are passed", () => {
     const qs = selectBSQuestions({ easy: 5, medium: 2, hard: 2 });
     expect(qs).toHaveLength(10);
   });

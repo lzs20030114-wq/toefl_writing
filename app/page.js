@@ -282,6 +282,22 @@ export default function Page() {
 
           </div>
 
+          <div style={{
+            background: isChallenge ? "rgba(17,17,24,0.7)" : "#fff",
+            border: "1px solid " + (isChallenge ? CH.cardBorder : C.bdr),
+            borderRadius: 6,
+            padding: "12px 16px",
+            marginBottom: 14,
+            color: isChallenge ? CH.t2 : C.t2,
+            fontSize: 12,
+            lineHeight: 1.6,
+          }}>
+            <ul style={{ margin: 0, paddingLeft: 18 }}>
+              <li>Designed for the current TOEFL iBT Writing format.</li>
+              <li>Covers Build a Sentence, Write an Email, and Academic Discussion.</li>
+              <li>Training-focused practice only, not official ETS scoring.</li>
+            </ul>
+          </div>
           {/* ── Task cards ── */}
           {PRACTICE_TASKS.map((c) => {
             const stdSec = STANDARD_TIME_SECONDS[c.modeKey] || 0;
@@ -458,3 +474,4 @@ export default function Page() {
     </>
   );
 }
+

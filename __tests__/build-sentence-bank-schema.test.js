@@ -101,7 +101,7 @@ describe("build sentence bank schema v2", () => {
     expect(result.errors.some((e) => e.includes("duplicate id"))).toBe(true);
   });
 
-  test("legacy alias validateBuildSentenceBank still returns schema-like result", () => {
+  test("validateBuildSentenceBank returns schema-like result", () => {
     const invalidSet = {
       set_id: 1,
       questions: [

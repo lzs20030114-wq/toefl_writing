@@ -6,7 +6,7 @@
   - `slotCount = answerOrder.length`
   - `bank.length === answerOrder.length`
   - `answerOrder` must be a permutation of `bank`
-  - `givenIndex` range validation for legacy items
+  - `givenSlots[].givenIndex` range validation
 - Added question normalization/validation in runtime session init to prevent broken UI states.
 - Refactored Build Sentence architecture:
   - extracted `useBuildSentenceSession` (state machine)
@@ -16,6 +16,5 @@
 - Added regression coverage:
   - init invariant test (`__tests__/build-sentence-init.invariant.test.js`)
   - 20-question flow guard in component tests
-  - legacy-input normalization/warning coverage in save-bank tests
-- Updated `README.md` with runtime invariant and legacy compatibility notes.
-
+  - input normalization coverage in save-bank tests
+- Updated `README.md` with runtime invariant notes.
