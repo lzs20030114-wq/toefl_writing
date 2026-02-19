@@ -208,6 +208,10 @@ npm install
 
 ```bash
 DEEPSEEK_API_KEY=your_key_here
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+ADMIN_DASHBOARD_TOKEN=your_admin_token
 ```
 
 3. Start dev server
@@ -235,3 +239,15 @@ npm run build
 
 - This is a practice tool, not an official ETS system.
 - AI scoring is for learning guidance, not an official TOEFL score.
+
+## Admin Code Issuance
+
+- Admin page: `/admin-codes`
+- API: `app/api/admin/codes/route.js`
+- Verification API: `app/api/auth/verify-code/route.js`
+- Required env:
+  - `SUPABASE_SERVICE_ROLE_KEY`
+  - `ADMIN_DASHBOARD_TOKEN`
+- SQL setup:
+  - Run `scripts/sql/login-code-management.sql` in Supabase SQL Editor
+  - `access_codes` is managed server-side only; self-service code creation is disabled.
