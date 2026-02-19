@@ -41,8 +41,7 @@ const { validateAllSets } = require("./validate-bank.js");
 const OUTPUT_PATH = resolve(__dirname, "..", "data", "buildSentence", "questions.json");
 const TARGET_SET_COUNT = Number(process.env.BS_TARGET_SETS || 6);
 const CANDIDATE_ROUNDS = Number(process.env.BS_CANDIDATE_ROUNDS || 40);
-const EASY_BOOST_ROUNDS = Number(process.env.BS_EASY_BOOST_ROUNDS || 16);
-const HARD_BOOST_ROUNDS = Number(process.env.BS_HARD_BOOST_ROUNDS || 16);
+const ADAPTIVE_BOOST_ROUNDS = Number(process.env.BS_ADAPTIVE_BOOST_ROUNDS || 80);
 const MIN_REVIEW_SCORE = Number(process.env.BS_MIN_REVIEW_SCORE || 78);
 const MIN_REVIEW_OVERALL = Number(process.env.BS_MIN_REVIEW_OVERALL || 84);
 const MIN_ETS_SIMILARITY = Number(process.env.BS_MIN_ETS_SIMILARITY || 72);
@@ -230,6 +229,16 @@ Difficulty target for this 10-question batch:
 - distractor: include in about 5 items (extra auxiliary did/do/does, always single word)
 - straightforward indirect questions with simple clause structure
 `
+    : mode === "medium"
+      ? `
+Difficulty target for this 10-question batch:
+- all 10 should be MEDIUM
+- answer length 9-13 words
+- effective chunks 6-7
+- include distractor in 7-9 items (always single-word distractor)
+- include embedded question in 5-8 items
+- keep structure clear and unambiguous (single best arrangement)
+`
     : mode === "hard"
       ? `
 Difficulty target for this 10-question batch:
@@ -379,6 +388,23 @@ Before returning JSON, self-check every item:
 
 No markdown. No extra explanation. JSON array only.
 `.trim();
+}
+
+function modeFromDeficit(pool, easyTarget, mediumTarget, hardTarget) {
+  const deficits = {
+    easy: Math.max(0, easyTarget - pool.easy.length),
+    medium: Math.max(0, mediumTarget - pool.medium.length),
+    hard: Math.max(0, hardTarget - pool.hard.length),
+  };
+
+  if (deficits.easy === 0 && deficits.medium === 0 && deficits.hard === 0) {
+    return "balanced";
+  }
+
+  const sorted = Object.entries(deficits).sort((a, b) => b[1] - a[1]);
+  const [topMode, topGap] = sorted[0];
+  if (topGap <= 0) return "balanced";
+  return topMode;
 }
 
 function buildReviewPrompt(questions) {
@@ -748,10 +774,15 @@ async function main() {
   const acceptedPool = [];
   const rejectReasons = {};
   let rollingRejectFeedback = "";
+  const easyTarget = ETS_2026_TARGET_COUNTS_10.easy * TARGET_SET_COUNT;
+  const mediumTarget = ETS_2026_TARGET_COUNTS_10.medium * TARGET_SET_COUNT;
+  const hardTarget = ETS_2026_TARGET_COUNTS_10.hard * TARGET_SET_COUNT;
 
   for (let round = 1; round <= CANDIDATE_ROUNDS; round += 1) {
     try {
-      const res = await generateCandidateRound(round, "balanced", rollingRejectFeedback);
+      const livePool = splitPoolByDifficulty(acceptedPool);
+      const mode = modeFromDeficit(livePool, easyTarget, mediumTarget, hardTarget);
+      const res = await generateCandidateRound(round, mode, rollingRejectFeedback);
       acceptedPool.push(...res.questions);
       Object.entries(res.rejectReasons).forEach(([k, v]) => {
         rejectReasons[k] = (rejectReasons[k] || 0) + v;
@@ -759,13 +790,13 @@ async function main() {
       rollingRejectFeedback = buildRejectFeedbackHints(rejectReasons);
       const pool = splitPoolByDifficulty(acceptedPool);
       console.log(
-        `round ${round}: generated=${res.generated} accepted=${res.accepted} rejected=${res.rejected} | pool easy=${pool.easy.length} medium=${pool.medium.length} hard=${pool.hard.length}`,
+        `round ${round} [${mode}]: generated=${res.generated} accepted=${res.accepted} rejected=${res.rejected} | pool easy=${pool.easy.length} medium=${pool.medium.length} hard=${pool.hard.length}`,
       );
 
       const canBuildTargetSets =
-        pool.easy.length >= ETS_2026_TARGET_COUNTS_10.easy * TARGET_SET_COUNT &&
-        pool.medium.length >= ETS_2026_TARGET_COUNTS_10.medium * TARGET_SET_COUNT &&
-        pool.hard.length >= ETS_2026_TARGET_COUNTS_10.hard * TARGET_SET_COUNT;
+        pool.easy.length >= easyTarget &&
+        pool.medium.length >= mediumTarget &&
+        pool.hard.length >= hardTarget;
       if (canBuildTargetSets && acceptedPool.length > TARGET_SET_COUNT * 14) {
         console.log("pool is large enough, stopping early");
         break;
@@ -776,13 +807,21 @@ async function main() {
   }
 
   let boostedPool = splitPoolByDifficulty(acceptedPool);
-  const easyTarget = ETS_2026_TARGET_COUNTS_10.easy * TARGET_SET_COUNT;
-  const hardTarget = ETS_2026_TARGET_COUNTS_10.hard * TARGET_SET_COUNT;
-  if (boostedPool.easy.length < easyTarget && EASY_BOOST_ROUNDS > 0) {
-    console.log(`easy pool insufficient (${boostedPool.easy.length}/${easyTarget}), starting easy boost rounds...`);
-    for (let i = 1; i <= EASY_BOOST_ROUNDS; i += 1) {
+  if (
+    (boostedPool.easy.length < easyTarget ||
+      boostedPool.medium.length < mediumTarget ||
+      boostedPool.hard.length < hardTarget) &&
+    ADAPTIVE_BOOST_ROUNDS > 0
+  ) {
+    console.log(
+      `pool insufficient (easy ${boostedPool.easy.length}/${easyTarget}, medium ${boostedPool.medium.length}/${mediumTarget}, hard ${boostedPool.hard.length}/${hardTarget}), starting adaptive boost rounds...`,
+    );
+    for (let i = 1; i <= ADAPTIVE_BOOST_ROUNDS; i += 1) {
+      boostedPool = splitPoolByDifficulty(acceptedPool);
+      const mode = modeFromDeficit(boostedPool, easyTarget, mediumTarget, hardTarget);
+      if (mode === "balanced") break;
       try {
-        const res = await generateCandidateRound(1000 + i, "easy", rollingRejectFeedback);
+        const res = await generateCandidateRound(3000 + i, mode, rollingRejectFeedback);
         acceptedPool.push(...res.questions);
         Object.entries(res.rejectReasons).forEach(([k, v]) => {
           rejectReasons[k] = (rejectReasons[k] || 0) + v;
@@ -790,33 +829,17 @@ async function main() {
         rollingRejectFeedback = buildRejectFeedbackHints(rejectReasons);
         boostedPool = splitPoolByDifficulty(acceptedPool);
         console.log(
-          `easy-boost ${i}: accepted=${res.accepted} rejected=${res.rejected} | pool easy=${boostedPool.easy.length} medium=${boostedPool.medium.length} hard=${boostedPool.hard.length}`,
+          `boost ${i} [${mode}]: accepted=${res.accepted} rejected=${res.rejected} | pool easy=${boostedPool.easy.length} medium=${boostedPool.medium.length} hard=${boostedPool.hard.length}`,
         );
-        if (boostedPool.easy.length >= easyTarget) break;
+        if (
+          boostedPool.easy.length >= easyTarget &&
+          boostedPool.medium.length >= mediumTarget &&
+          boostedPool.hard.length >= hardTarget
+        ) {
+          break;
+        }
       } catch (e) {
-        console.log(`easy-boost ${i}: failed -> ${errMsg(e)}`);
-      }
-    }
-  }
-
-  boostedPool = splitPoolByDifficulty(acceptedPool);
-  if (boostedPool.hard.length < hardTarget && HARD_BOOST_ROUNDS > 0) {
-    console.log(`hard pool insufficient (${boostedPool.hard.length}/${hardTarget}), starting hard boost rounds...`);
-    for (let i = 1; i <= HARD_BOOST_ROUNDS; i += 1) {
-      try {
-        const res = await generateCandidateRound(2000 + i, "hard", rollingRejectFeedback);
-        acceptedPool.push(...res.questions);
-        Object.entries(res.rejectReasons).forEach(([k, v]) => {
-          rejectReasons[k] = (rejectReasons[k] || 0) + v;
-        });
-        rollingRejectFeedback = buildRejectFeedbackHints(rejectReasons);
-        boostedPool = splitPoolByDifficulty(acceptedPool);
-        console.log(
-          `hard-boost ${i}: accepted=${res.accepted} rejected=${res.rejected} | pool easy=${boostedPool.easy.length} medium=${boostedPool.medium.length} hard=${boostedPool.hard.length}`,
-        );
-        if (boostedPool.hard.length >= hardTarget) break;
-      } catch (e) {
-        console.log(`hard-boost ${i}: failed -> ${errMsg(e)}`);
+        console.log(`boost ${i} [${mode}]: failed -> ${errMsg(e)}`);
       }
     }
   }
@@ -826,8 +849,12 @@ async function main() {
   console.log(`final pool: easy=${poolByDiff.easy.length} medium=${poolByDiff.medium.length} hard=${poolByDiff.hard.length}`);
 
   const finalSets = buildFinalSetsFromPool(poolByDiff, TARGET_SET_COUNT);
-  if (finalSets.length === 0) {
-    console.error("No valid set could be assembled from candidate pool.");
+  if (finalSets.length !== TARGET_SET_COUNT) {
+    console.error(
+      `Could not assemble target set count: target=${TARGET_SET_COUNT}, built=${finalSets.length}. ` +
+      "Generation aborted without writing output.",
+    );
+    console.error(`Pool snapshot: easy=${poolByDiff.easy.length} medium=${poolByDiff.medium.length} hard=${poolByDiff.hard.length}`);
     console.error("Top reject reasons:");
     summarizeRejectReasons(rejectReasons).forEach(([k, v]) => console.error(`- ${k}: ${v}`));
     process.exit(1);
