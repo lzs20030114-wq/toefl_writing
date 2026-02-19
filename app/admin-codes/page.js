@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { C, FONT } from "../../components/shared/ui";
 
@@ -159,7 +160,10 @@ async function callAdminApi(path, options = {}) {
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT, padding: 20 }}>
       <div style={{ maxWidth: 980, margin: "0 auto", display: "flex", flexDirection: "column", gap: 14 }}>
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 16 }}>
-          <div style={{ fontSize: 20, fontWeight: 800, color: C.nav, marginBottom: 8 }}>登录码管理后台</div>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 20, fontWeight: 800, color: C.nav }}>登录码管理后台</div>
+            <Link href="/admin-api-errors" style={{ color: C.blue, textDecoration: "none", fontSize: 13 }}>查看 API 失效反馈</Link>
+          </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: 8, alignItems: "center" }}>
             <input
               value={token}

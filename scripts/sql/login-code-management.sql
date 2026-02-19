@@ -48,6 +48,38 @@ BEGIN
   END IF;
 END $$;
 
+-- API failure feedback logs for admin diagnosis.
+CREATE TABLE IF NOT EXISTS api_error_feedback (
+  id BIGSERIAL PRIMARY KEY,
+  endpoint TEXT NOT NULL,
+  stage TEXT NULL,
+  http_status INT NULL,
+  error_type TEXT NOT NULL DEFAULT 'unknown',
+  error_message TEXT NOT NULL,
+  error_detail TEXT NULL,
+  client_id TEXT NULL,
+  client_ip TEXT NULL,
+  origin TEXT NULL,
+  user_agent TEXT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_api_error_feedback_created_at ON api_error_feedback(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_api_error_feedback_status ON api_error_feedback(http_status);
+CREATE INDEX IF NOT EXISTS idx_api_error_feedback_type ON api_error_feedback(error_type);
+
+ALTER TABLE api_error_feedback ENABLE ROW LEVEL SECURITY;
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'public' AND tablename = 'api_error_feedback' AND policyname = 'deny all api_error_feedback'
+  ) THEN
+    CREATE POLICY "deny all api_error_feedback" ON api_error_feedback
+      FOR ALL USING (false) WITH CHECK (false);
+  END IF;
+END $$;
+
 -- Keep existing open policies for users/sessions if you still use anon frontend writes.
 ALTER TABLE users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE sessions ENABLE ROW LEVEL SECURITY;
@@ -73,4 +105,3 @@ BEGIN
       FOR ALL USING (true) WITH CHECK (true);
   END IF;
 END $$;
-

@@ -1,5 +1,6 @@
 import { createRequire } from "module";
 import { createHash } from "crypto";
+import { isSupabaseAdminConfigured, supabaseAdmin } from "../../../lib/supabaseAdmin";
 
 const require = createRequire(import.meta.url);
 const { callDeepSeekViaCurl, resolveProxyUrl } = require("../../../lib/ai/deepseekHttp");
@@ -105,23 +106,59 @@ function normalizeGenerationParams(body) {
   };
 }
 
+async function logApiFailure(meta) {
+  if (!isSupabaseAdminConfigured) return;
+  try {
+    await supabaseAdmin.from("api_error_feedback").insert({
+      endpoint: "/api/ai",
+      stage: meta.stage || null,
+      http_status: Number(meta.httpStatus || 0) || null,
+      error_type: String(meta.errorType || "unknown"),
+      error_message: String(meta.errorMessage || "").slice(0, 500),
+      error_detail: meta.errorDetail ? String(meta.errorDetail).slice(0, 4000) : null,
+      client_id: meta.clientId ? String(meta.clientId).slice(0, 120) : null,
+      client_ip: meta.clientIp ? String(meta.clientIp).slice(0, 64) : null,
+      origin: meta.origin ? String(meta.origin).slice(0, 300) : null,
+      user_agent: meta.userAgent ? String(meta.userAgent).slice(0, 500) : null,
+    });
+  } catch {
+    // Do not block API response when logging fails.
+  }
+}
+
+async function fail(meta, status, payload) {
+  await logApiFailure({
+    ...meta,
+    httpStatus: status,
+    errorMessage: payload?.error || "Unknown error",
+    errorDetail: payload?.detail || "",
+  });
+  return Response.json(payload, { status });
+}
+
 export async function POST(request) {
+  const requestMeta = {
+    clientId: request.headers.get("x-client-id") || "",
+    clientIp: getClientIp(request),
+    origin: request.headers.get("origin") || "",
+    userAgent: request.headers.get("user-agent") || "",
+  };
   try {
     const contentLength = Number(request.headers.get("content-length") || 0);
     if (Number.isFinite(contentLength) && contentLength > MAX_BODY_BYTES) {
-      return Response.json({ error: `Request body too large (>${MAX_BODY_BYTES} bytes).` }, { status: 413 });
+      return fail({ ...requestMeta, stage: "input" }, 413, { error: `Request body too large (>${MAX_BODY_BYTES} bytes).` });
     }
     if (!isOriginAllowed(request)) {
-      return Response.json({ error: "Forbidden origin." }, { status: 403 });
+      return fail({ ...requestMeta, stage: "origin" }, 403, { error: "Forbidden origin." });
     }
     const rateKey = getRateLimitKey(request);
     if (rateKey && isRateLimited(rateKey)) {
-      return Response.json({ error: "Rate limit exceeded. Please retry shortly." }, { status: 429 });
+      return fail({ ...requestMeta, stage: "rate_limit", errorType: "rate_limit" }, 429, { error: "Rate limit exceeded. Please retry shortly." });
     }
     const payload = await request.json();
     const bodyError = validateBody(payload);
     if (bodyError) {
-      return Response.json({ error: bodyError }, { status: 400 });
+      return fail({ ...requestMeta, stage: "input", errorType: "validation" }, 400, { error: bodyError });
     }
     const { system, message } = payload;
     const { maxTokens, temperature } = normalizeGenerationParams(payload);
@@ -165,9 +202,10 @@ export async function POST(request) {
 
     if (!res.ok) {
       const errText = await res.text();
-      return Response.json(
+      return fail(
+        { ...requestMeta, stage: "deepseek", errorType: "upstream" },
+        res.status,
         { error: "DeepSeek API error: " + res.status, detail: errText },
-        { status: res.status }
       );
     }
 
@@ -175,6 +213,10 @@ export async function POST(request) {
     const content = data.choices?.[0]?.message?.content || "";
     return Response.json({ content });
   } catch (e) {
-    return Response.json({ error: e.message }, { status: 500 });
+    return fail(
+      { ...requestMeta, stage: "server", errorType: "internal" },
+      500,
+      { error: e.message || "Unexpected server error" }
+    );
   }
 }

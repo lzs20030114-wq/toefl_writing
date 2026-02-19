@@ -243,7 +243,9 @@ npm run build
 ## Admin Code Issuance
 
 - Admin page: `/admin-codes`
+- API failure dashboard: `/admin-api-errors`
 - API: `app/api/admin/codes/route.js`
+- API failure query API: `app/api/admin/api-errors/route.js`
 - Verification API: `app/api/auth/verify-code/route.js`
 - Required env:
   - `SUPABASE_SERVICE_ROLE_KEY`
@@ -251,3 +253,4 @@ npm run build
 - SQL setup:
   - Run `scripts/sql/login-code-management.sql` in Supabase SQL Editor
   - `access_codes` is managed server-side only; self-service code creation is disabled.
+  - `api_error_feedback` stores `/api/ai` failure logs for admin troubleshooting.
