@@ -242,6 +242,7 @@ npm run build
 
 ## Admin Code Issuance
 
+- Admin hub: `/admin`
 - Admin page: `/admin-codes`
 - API failure dashboard: `/admin-api-errors`
 - API: `app/api/admin/codes/route.js`
@@ -254,3 +255,29 @@ npm run build
   - Run `scripts/sql/login-code-management.sql` in Supabase SQL Editor
   - `access_codes` is managed server-side only; self-service code creation is disabled.
   - `api_error_feedback` stores `/api/ai` failure logs for admin troubleshooting.
+
+## Backend Ops Guide
+
+1. Environment check (Vercel `Settings -> Environment Variables`)
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `SUPABASE_SERVICE_ROLE_KEY` (Supabase Secret key / service role)
+   - `ADMIN_DASHBOARD_TOKEN`
+2. Database setup (Supabase SQL Editor)
+   - Run `scripts/sql/login-code-management.sql`
+3. Access admin hub
+   - Open `/admin`
+   - Enter `ADMIN_DASHBOARD_TOKEN` in admin pages when prompted
+4. Private beta code operations
+   - Use `/admin-codes` to generate and issue login codes
+   - For legacy user recovery, re-issue legacy code or let auto-activation handle first login
+5. API failure diagnosis
+   - Open `/admin-api-errors`
+   - Check recent `http_status`, `error_type`, and message details
+6. Common failures and quick fixes
+   - `Supabase admin is not configured`
+     - missing `SUPABASE_SERVICE_ROLE_KEY` or URL in runtime env
+   - `Could not find table 'public.access_codes'`
+     - SQL schema not applied yet
+   - `Missing admin token`
+     - wrong or empty `ADMIN_DASHBOARD_TOKEN` input in admin page
