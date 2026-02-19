@@ -23,7 +23,7 @@ import { createRequire } from "module";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
 
-const { callDeepSeekViaCurl, resolveProxyUrl } = require("../lib/ai/deepseekHttp.js");
+const { callDeepSeekViaCurl, resolveProxyUrl, formatDeepSeekError } = require("../lib/ai/deepseekHttp.js");
 const { validateQuestionSet, validateQuestion } = require("../lib/questionBank/buildSentenceSchema.js");
 const { hardFailReasons, warnings: qualityWarnings } = require("../lib/questionBank/qualityGateBuildSentence.js");
 const {
@@ -517,6 +517,11 @@ async function callModel(userPrompt) {
   });
 }
 
+function errMsg(e) {
+  const msg = formatDeepSeekError ? formatDeepSeekError(e) : String(e?.message || e || "");
+  return msg || String(e?.code || "unknown_error");
+}
+
 async function generateCandidateRound(round, mode = "balanced", rejectFeedback = "") {
   const out = {
     generated: 0,
@@ -766,7 +771,7 @@ async function main() {
         break;
       }
     } catch (e) {
-      console.log(`round ${round}: failed -> ${e.message}`);
+      console.log(`round ${round}: failed -> ${errMsg(e)}`);
     }
   }
 
@@ -789,7 +794,7 @@ async function main() {
         );
         if (boostedPool.easy.length >= easyTarget) break;
       } catch (e) {
-        console.log(`easy-boost ${i}: failed -> ${e.message}`);
+        console.log(`easy-boost ${i}: failed -> ${errMsg(e)}`);
       }
     }
   }
@@ -811,7 +816,7 @@ async function main() {
         );
         if (boostedPool.hard.length >= hardTarget) break;
       } catch (e) {
-        console.log(`hard-boost ${i}: failed -> ${e.message}`);
+        console.log(`hard-boost ${i}: failed -> ${errMsg(e)}`);
       }
     }
   }
@@ -858,7 +863,7 @@ async function main() {
 }
 
 main().catch((e) => {
-  console.error(`Fatal: ${e.message}`);
+  console.error(`Fatal: ${errMsg(e)}`);
   process.exit(1);
 });
 

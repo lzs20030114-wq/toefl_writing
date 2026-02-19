@@ -12,7 +12,8 @@
     "validate:bank": "node scripts/validate-bank.js",
     "rebuild:balanced:bank": "node scripts/rebuild-balanced-sets.js",
     "compare:ets": "node scripts/compare-ets-consistency.js",
-    "calibration:test": "node scripts/calibration-test.js"
+    "calibration:test": "node scripts/calibration-test.js",
+    "deepseek:check": "node scripts/check-deepseek.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.97.0",
