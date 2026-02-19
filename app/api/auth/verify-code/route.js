@@ -27,11 +27,35 @@ export async function POST(request) {
       .from("access_codes")
       .select("code,status,expires_at")
       .eq("code", code)
-      .single();
+      .maybeSingle();
 
-    if (accessError || !accessRow) return jsonError(401, "Invalid code");
-    if (String(accessRow.status || "") !== "issued") return jsonError(401, "Code not active");
-    if (isExpired(accessRow.expires_at)) return jsonError(401, "Code expired");
+    if (accessError) return jsonError(400, accessError.message || "Access code query failed");
+
+    let effectiveAccess = accessRow;
+    if (!effectiveAccess) {
+      const { data: legacyUser, error: legacyError } = await supabaseAdmin
+        .from("users")
+        .select("code")
+        .eq("code", code)
+        .maybeSingle();
+      if (legacyError) return jsonError(400, legacyError.message || "Legacy user query failed");
+      if (!legacyUser?.code) return jsonError(401, "Invalid code");
+
+      const issuedAt = new Date().toISOString();
+      const { data: migratedAccess, error: migrateError } = await supabaseAdmin
+        .from("access_codes")
+        .upsert(
+          { code, status: "issued", issued_to: "legacy-user", issued_at: issuedAt, revoked_at: null },
+          { onConflict: "code" }
+        )
+        .select("code,status,expires_at")
+        .single();
+      if (migrateError) return jsonError(400, migrateError.message || "Legacy code activation failed");
+      effectiveAccess = migratedAccess;
+    }
+
+    if (String(effectiveAccess.status || "") !== "issued") return jsonError(401, "Code not active");
+    if (isExpired(effectiveAccess.expires_at)) return jsonError(401, "Code expired");
 
     const now = new Date().toISOString();
     const { error: userUpsertError } = await supabaseAdmin
@@ -46,4 +70,3 @@ export async function POST(request) {
     return jsonError(500, e.message || "Unexpected server error");
   }
 }
-
