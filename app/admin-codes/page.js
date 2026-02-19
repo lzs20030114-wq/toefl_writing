@@ -46,7 +46,10 @@ export default function AdminCodesPage() {
     }
   }
 
-  async function callAdminApi(path, options = {}) {
+async function callAdminApi(path, options = {}) {
+    if (!token.trim()) {
+      throw new Error("Missing admin token. Please input ADMIN_DASHBOARD_TOKEN first.");
+    }
     const res = await fetch(path, {
       ...options,
       headers: {
@@ -55,7 +58,13 @@ export default function AdminCodesPage() {
         ...(options.headers || {}),
       },
     });
-    const body = await res.json();
+    const text = await res.text();
+    let body = {};
+    try {
+      body = text ? JSON.parse(text) : {};
+    } catch {
+      body = {};
+    }
     if (!res.ok) throw new Error(body?.error || `HTTP ${res.status}`);
     return body;
   }
@@ -142,7 +151,7 @@ export default function AdminCodesPage() {
 
   useEffect(() => {
     if (ready && hasToken) refresh();
-  }, [ready, statusFilter]);
+  }, [ready, statusFilter, token]);
 
   const rowsView = useMemo(() => rows.slice(0, 200), [rows]);
 
@@ -158,7 +167,7 @@ export default function AdminCodesPage() {
               placeholder="ADMIN_DASHBOARD_TOKEN"
               style={{ border: "1px solid #cbd5e1", borderRadius: 6, padding: "8px 10px", fontFamily: "monospace", fontSize: 12 }}
             />
-            <button onClick={refresh} disabled={!hasToken || busy} style={{ border: "1px solid " + C.blue, background: C.blue, color: "#fff", borderRadius: 6, padding: "8px 10px", cursor: "pointer" }}>
+            <button onClick={refresh} disabled={busy} style={{ border: "1px solid " + C.blue, background: C.blue, color: "#fff", borderRadius: 6, padding: "8px 10px", cursor: busy ? "not-allowed" : "pointer", opacity: busy ? 0.6 : 1 }}>
               Refresh
             </button>
             <button onClick={() => { persistToken(""); setRows([]); setStats({ available: 0, issued: 0, revoked: 0, total: 0 }); }} style={{ border: "1px solid #cbd5e1", background: "#fff", color: C.t2, borderRadius: 6, padding: "8px 10px", cursor: "pointer" }}>
@@ -186,7 +195,7 @@ export default function AdminCodesPage() {
           <div style={{ fontWeight: 700 }}>Generate Codes</div>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             <input type="number" min={1} max={500} value={count} onChange={(e) => setCount(Number(e.target.value || 10))} style={{ width: 120, border: "1px solid #cbd5e1", borderRadius: 6, padding: "8px 10px" }} />
-            <button onClick={onGenerate} disabled={!hasToken || busy} style={{ border: "1px solid " + C.blue, background: C.blue, color: "#fff", borderRadius: 6, padding: "8px 10px", cursor: "pointer" }}>
+            <button onClick={onGenerate} disabled={busy} style={{ border: "1px solid " + C.blue, background: C.blue, color: "#fff", borderRadius: 6, padding: "8px 10px", cursor: busy ? "not-allowed" : "pointer", opacity: busy ? 0.6 : 1 }}>
               Generate
             </button>
           </div>
@@ -199,7 +208,7 @@ export default function AdminCodesPage() {
             <input value={issueTo} onChange={(e) => setIssueTo(e.target.value)} placeholder="issued_to (email/nickname)" style={{ border: "1px solid #cbd5e1", borderRadius: 6, padding: "8px 10px" }} />
             <input value={expiresAt} onChange={(e) => setExpiresAt(e.target.value)} placeholder="expires_at (ISO, optional)" style={{ border: "1px solid #cbd5e1", borderRadius: 6, padding: "8px 10px" }} />
             <div />
-            <button onClick={onIssue} disabled={!hasToken || busy} style={{ border: "1px solid " + C.blue, background: C.blue, color: "#fff", borderRadius: 6, padding: "8px 10px", cursor: "pointer" }}>
+            <button onClick={onIssue} disabled={busy} style={{ border: "1px solid " + C.blue, background: C.blue, color: "#fff", borderRadius: 6, padding: "8px 10px", cursor: busy ? "not-allowed" : "pointer", opacity: busy ? 0.6 : 1 }}>
               Issue
             </button>
           </div>
@@ -209,7 +218,7 @@ export default function AdminCodesPage() {
           <div style={{ fontWeight: 700 }}>Revoke Code</div>
           <div style={{ display: "flex", gap: 8 }}>
             <input value={revokeCode} onChange={(e) => setRevokeCode(e.target.value.toUpperCase())} placeholder="Code to revoke" style={{ border: "1px solid #cbd5e1", borderRadius: 6, padding: "8px 10px", fontFamily: "monospace", minWidth: 220 }} />
-            <button onClick={onRevoke} disabled={!hasToken || busy} style={{ border: "1px solid " + C.red, background: C.red, color: "#fff", borderRadius: 6, padding: "8px 10px", cursor: "pointer" }}>
+            <button onClick={onRevoke} disabled={busy} style={{ border: "1px solid " + C.red, background: C.red, color: "#fff", borderRadius: 6, padding: "8px 10px", cursor: busy ? "not-allowed" : "pointer", opacity: busy ? 0.6 : 1 }}>
               Revoke
             </button>
           </div>
@@ -261,7 +270,7 @@ export default function AdminCodesPage() {
         </div>
 
         {msg ? (
-          <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8, padding: 10, fontSize: 12, color: C.t2 }}>
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 8, padding: 10, fontSize: 12, color: "#9a3412" }}>
             {msg}
           </div>
         ) : null}
@@ -269,4 +278,3 @@ export default function AdminCodesPage() {
     </div>
   );
 }
-
