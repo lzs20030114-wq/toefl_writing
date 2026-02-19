@@ -162,7 +162,10 @@ async function callAdminApi(path, options = {}) {
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 16 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 20, fontWeight: 800, color: C.nav }}>登录码管理后台</div>
-            <Link href="/admin-api-errors" style={{ color: C.blue, textDecoration: "none", fontSize: 13 }}>查看 API 失效反馈</Link>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <Link href="/admin" style={{ color: C.t2, textDecoration: "none", fontSize: 13 }}>返回总后台</Link>
+              <Link href="/admin-api-errors" style={{ color: C.blue, textDecoration: "none", fontSize: 13 }}>查看 API 失效反馈</Link>
+            </div>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: 8, alignItems: "center" }}>
             <input
