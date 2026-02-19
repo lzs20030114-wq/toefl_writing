@@ -237,10 +237,10 @@ export default function LoginGate({ children }) {
     }
     setLoading(true);
     setError("");
-    const { valid } = await verifyCode(normalized);
+    const { valid, error: verifyError } = await verifyCode(normalized);
     setLoading(false);
     if (!valid) {
-      setError(t.invalidCode);
+      setError(verifyError || t.invalidCode);
       return;
     }
     saveCode(normalized);

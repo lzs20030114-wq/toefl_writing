@@ -45,7 +45,7 @@ export async function POST(request) {
       const { data: migratedAccess, error: migrateError } = await supabaseAdmin
         .from("access_codes")
         .upsert(
-          { code, status: "issued", issued_to: "legacy-user", issued_at: issuedAt, revoked_at: null },
+          { code, status: "issued", issued_to: "legacy-user", issued_at: issuedAt, expires_at: null },
           { onConflict: "code" }
         )
         .select("code,status,expires_at")
