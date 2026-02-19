@@ -48,7 +48,7 @@ export default function AdminCodesPage() {
 
 async function callAdminApi(path, options = {}) {
     if (!token.trim()) {
-      throw new Error("Missing admin token. Please input ADMIN_DASHBOARD_TOKEN first.");
+      throw new Error("缺少管理员口令，请先输入 ADMIN_DASHBOARD_TOKEN。");
     }
     const res = await fetch(path, {
       ...options,
@@ -93,7 +93,7 @@ async function callAdminApi(path, options = {}) {
         method: "POST",
         body: JSON.stringify({ action: "generate", count: Number(count) || 10 }),
       });
-      setMsg(`Generated ${body.generated} codes.`);
+      setMsg(`已生成 ${body.generated} 个登录码。`);
       await refresh();
     } catch (e) {
       setMsg(String(e.message || e));
@@ -115,7 +115,7 @@ async function callAdminApi(path, options = {}) {
           expiresAt: expiresAt.trim() || undefined,
         }),
       });
-      setMsg(`Issued code: ${body?.issued?.code || "(unknown)"}`);
+      setMsg(`发放成功：${body?.issued?.code || "未知"}`);
       setIssueCode("");
       setIssueTo("");
       setExpiresAt("");
@@ -139,7 +139,7 @@ async function callAdminApi(path, options = {}) {
           code: revokeCode.trim().toUpperCase(),
         }),
       });
-      setMsg(`Revoked code: ${body?.revoked?.code || revokeCode.trim().toUpperCase()}`);
+      setMsg(`已吊销：${body?.revoked?.code || revokeCode.trim().toUpperCase()}`);
       setRevokeCode("");
       await refresh();
     } catch (e) {
@@ -159,7 +159,7 @@ async function callAdminApi(path, options = {}) {
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT, padding: 20 }}>
       <div style={{ maxWidth: 980, margin: "0 auto", display: "flex", flexDirection: "column", gap: 14 }}>
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 16 }}>
-          <div style={{ fontSize: 20, fontWeight: 800, color: C.nav, marginBottom: 8 }}>Access Code Admin</div>
+          <div style={{ fontSize: 20, fontWeight: 800, color: C.nav, marginBottom: 8 }}>登录码管理后台</div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: 8, alignItems: "center" }}>
             <input
               value={token}
@@ -168,21 +168,21 @@ async function callAdminApi(path, options = {}) {
               style={{ border: "1px solid #cbd5e1", borderRadius: 6, padding: "8px 10px", fontFamily: "monospace", fontSize: 12 }}
             />
             <button onClick={refresh} disabled={busy} style={{ border: "1px solid " + C.blue, background: C.blue, color: "#fff", borderRadius: 6, padding: "8px 10px", cursor: busy ? "not-allowed" : "pointer", opacity: busy ? 0.6 : 1 }}>
-              Refresh
+              刷新
             </button>
             <button onClick={() => { persistToken(""); setRows([]); setStats({ available: 0, issued: 0, revoked: 0, total: 0 }); }} style={{ border: "1px solid #cbd5e1", background: "#fff", color: C.t2, borderRadius: 6, padding: "8px 10px", cursor: "pointer" }}>
-              Clear
+              清空
             </button>
           </div>
-          <div style={{ marginTop: 8, fontSize: 12, color: C.t2 }}>This page is controlled by `ADMIN_DASHBOARD_TOKEN` via server-side API.</div>
+          <div style={{ marginTop: 8, fontSize: 12, color: C.t2 }}>本页面通过服务端 API + `ADMIN_DASHBOARD_TOKEN` 进行鉴权。</div>
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10 }}>
           {[
-            ["Total", stats.total],
-            ["Available", stats.available],
-            ["Issued", stats.issued],
-            ["Revoked", stats.revoked],
+            ["总量", stats.total],
+            ["可发放", stats.available],
+            ["已发放", stats.issued],
+            ["已吊销", stats.revoked],
           ].map(([k, v]) => (
             <div key={k} style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 12 }}>
               <div style={{ fontSize: 12, color: C.t2 }}>{k}</div>
@@ -192,58 +192,58 @@ async function callAdminApi(path, options = {}) {
         </div>
 
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 14, display: "grid", gap: 12 }}>
-          <div style={{ fontWeight: 700 }}>Generate Codes</div>
+          <div style={{ fontWeight: 700 }}>批量生成登录码</div>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             <input type="number" min={1} max={500} value={count} onChange={(e) => setCount(Number(e.target.value || 10))} style={{ width: 120, border: "1px solid #cbd5e1", borderRadius: 6, padding: "8px 10px" }} />
             <button onClick={onGenerate} disabled={busy} style={{ border: "1px solid " + C.blue, background: C.blue, color: "#fff", borderRadius: 6, padding: "8px 10px", cursor: busy ? "not-allowed" : "pointer", opacity: busy ? 0.6 : 1 }}>
-              Generate
+              生成
             </button>
           </div>
         </div>
 
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 14, display: "grid", gap: 12 }}>
-          <div style={{ fontWeight: 700 }}>Issue Code</div>
+          <div style={{ fontWeight: 700 }}>发放登录码</div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(160px, 1fr)) auto", gap: 8 }}>
-            <input value={issueCode} onChange={(e) => setIssueCode(e.target.value.toUpperCase())} placeholder="Specific code (optional)" style={{ border: "1px solid #cbd5e1", borderRadius: 6, padding: "8px 10px", fontFamily: "monospace" }} />
-            <input value={issueTo} onChange={(e) => setIssueTo(e.target.value)} placeholder="issued_to (email/nickname)" style={{ border: "1px solid #cbd5e1", borderRadius: 6, padding: "8px 10px" }} />
-            <input value={expiresAt} onChange={(e) => setExpiresAt(e.target.value)} placeholder="expires_at (ISO, optional)" style={{ border: "1px solid #cbd5e1", borderRadius: 6, padding: "8px 10px" }} />
+            <input value={issueCode} onChange={(e) => setIssueCode(e.target.value.toUpperCase())} placeholder="指定登录码（可选）" style={{ border: "1px solid #cbd5e1", borderRadius: 6, padding: "8px 10px", fontFamily: "monospace" }} />
+            <input value={issueTo} onChange={(e) => setIssueTo(e.target.value)} placeholder="发放对象（邮箱/昵称）" style={{ border: "1px solid #cbd5e1", borderRadius: 6, padding: "8px 10px" }} />
+            <input value={expiresAt} onChange={(e) => setExpiresAt(e.target.value)} placeholder="到期时间（ISO，可选）" style={{ border: "1px solid #cbd5e1", borderRadius: 6, padding: "8px 10px" }} />
             <div />
             <button onClick={onIssue} disabled={busy} style={{ border: "1px solid " + C.blue, background: C.blue, color: "#fff", borderRadius: 6, padding: "8px 10px", cursor: busy ? "not-allowed" : "pointer", opacity: busy ? 0.6 : 1 }}>
-              Issue
+              发放
             </button>
           </div>
         </div>
 
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 14, display: "grid", gap: 12 }}>
-          <div style={{ fontWeight: 700 }}>Revoke Code</div>
+          <div style={{ fontWeight: 700 }}>吊销登录码</div>
           <div style={{ display: "flex", gap: 8 }}>
-            <input value={revokeCode} onChange={(e) => setRevokeCode(e.target.value.toUpperCase())} placeholder="Code to revoke" style={{ border: "1px solid #cbd5e1", borderRadius: 6, padding: "8px 10px", fontFamily: "monospace", minWidth: 220 }} />
+            <input value={revokeCode} onChange={(e) => setRevokeCode(e.target.value.toUpperCase())} placeholder="输入要吊销的登录码" style={{ border: "1px solid #cbd5e1", borderRadius: 6, padding: "8px 10px", fontFamily: "monospace", minWidth: 220 }} />
             <button onClick={onRevoke} disabled={busy} style={{ border: "1px solid " + C.red, background: C.red, color: "#fff", borderRadius: 6, padding: "8px 10px", cursor: busy ? "not-allowed" : "pointer", opacity: busy ? 0.6 : 1 }}>
-              Revoke
+              吊销
             </button>
           </div>
         </div>
 
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 14 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-            <div style={{ fontWeight: 700 }}>Code List</div>
+            <div style={{ fontWeight: 700 }}>登录码列表</div>
             <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} style={{ border: "1px solid #cbd5e1", borderRadius: 6, padding: "6px 8px" }}>
-              <option value="">All</option>
-              <option value="available">available</option>
-              <option value="issued">issued</option>
-              <option value="revoked">revoked</option>
+              <option value="">全部</option>
+              <option value="available">可发放</option>
+              <option value="issued">已发放</option>
+              <option value="revoked">已吊销</option>
             </select>
           </div>
           <div style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
               <thead>
                 <tr style={{ background: "#f8fafc", color: C.t2 }}>
-                  <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>Code</th>
-                  <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>Status</th>
-                  <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>Issued To</th>
-                  <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>Issued At</th>
-                  <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>Expires</th>
-                  <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>Created</th>
+                  <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>登录码</th>
+                  <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>状态</th>
+                  <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>发放对象</th>
+                  <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>发放时间</th>
+                  <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>到期时间</th>
+                  <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>创建时间</th>
                 </tr>
               </thead>
               <tbody>
@@ -260,7 +260,7 @@ async function callAdminApi(path, options = {}) {
                 {rowsView.length === 0 && (
                   <tr>
                     <td colSpan={6} style={{ padding: 12, color: C.t2 }}>
-                      No rows.
+                      暂无数据。
                     </td>
                   </tr>
                 )}
