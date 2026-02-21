@@ -31,6 +31,16 @@ function scoreColor(scoreText) {
   return C.nav;
 }
 
+function groupAttempts(attempts) {
+  const list = Array.isArray(attempts) ? attempts : [];
+  return {
+    build: list.filter((a) => a?.taskType === "build-sentence" && a?.sourceType !== "mock"),
+    email: list.filter((a) => a?.taskType === "email" && a?.sourceType !== "mock"),
+    discussion: list.filter((a) => a?.taskType === "discussion" && a?.sourceType !== "mock"),
+    mock: list.filter((a) => a?.sourceType === "mock"),
+  };
+}
+
 export default function AdminActivityPage() {
   const [token, setToken] = useState("");
   const [ready, setReady] = useState(false);
@@ -43,6 +53,7 @@ export default function AdminActivityPage() {
   const [activityByCode, setActivityByCode] = useState({});
   const [activityLoadingByCode, setActivityLoadingByCode] = useState({});
   const [activityErrorByCode, setActivityErrorByCode] = useState({});
+  const [sectionOpenByCode, setSectionOpenByCode] = useState({});
 
   useEffect(() => {
     try {
@@ -93,7 +104,9 @@ export default function AdminActivityPage() {
     setBusy(true);
     setMsg("");
     try {
-      const q = statusFilter ? `?status=${encodeURIComponent(statusFilter)}&limit=200&includeUsage=1` : "?limit=200&includeUsage=1";
+      const q = statusFilter
+        ? `?status=${encodeURIComponent(statusFilter)}&limit=200&includeUsage=1`
+        : "?limit=200&includeUsage=1";
       const body = await callAdminApi(`/api/admin/codes${q}`, { method: "GET" });
       setRows(Array.isArray(body.codes) ? body.codes : []);
       setUsageByCode(body.usageByCode || {});
@@ -101,6 +114,7 @@ export default function AdminActivityPage() {
       setActivityByCode({});
       setActivityLoadingByCode({});
       setActivityErrorByCode({});
+      setSectionOpenByCode({});
     } catch (e) {
       setMsg(String(e.message || e));
     } finally {
@@ -127,8 +141,19 @@ export default function AdminActivityPage() {
   function toggleExpand(code) {
     setExpanded((prev) => ({ ...prev, [code]: !prev[code] }));
     if (!activityByCode[code] && !activityLoadingByCode[code]) {
+      setSectionOpenByCode((prev) => ({
+        ...prev,
+        [code]: { build: false, email: false, discussion: false, mock: false },
+      }));
       fetchCodeActivity(code);
     }
+  }
+
+  function toggleSection(code, section) {
+    setSectionOpenByCode((prev) => {
+      const cur = prev[code] || { build: false, email: false, discussion: false, mock: false };
+      return { ...prev, [code]: { ...cur, [section]: !cur[section] } };
+    });
   }
 
   useEffect(() => {
@@ -188,11 +213,24 @@ export default function AdminActivityPage() {
               <tbody>
                 {rowsView.map((r) => {
                   const code = r.code;
-                  const usage = usageByCode?.[code] || { sessions: 0, answered: { build: 0, email: 0, discussion: 0, total: 0 }, lastActiveAt: null };
+                  const usage = usageByCode?.[code] || {
+                    sessions: 0,
+                    answered: { build: 0, email: 0, discussion: 0, total: 0 },
+                    lastActiveAt: null,
+                  };
                   const isOpen = !!expanded[code];
                   const activity = activityByCode[code];
                   const loading = !!activityLoadingByCode[code];
                   const error = activityErrorByCode[code];
+                  const sectionMap = sectionOpenByCode[code] || { build: false, email: false, discussion: false, mock: false };
+                  const grouped = groupAttempts(activity?.attempts || []);
+                  const sections = [
+                    { key: "build", title: "Task 1", items: grouped.build },
+                    { key: "email", title: "Task 2", items: grouped.email },
+                    { key: "discussion", title: "Task 3", items: grouped.discussion },
+                    { key: "mock", title: "Mock Exam", items: grouped.mock },
+                  ];
+
                   return (
                     <Fragment key={code}>
                       <tr>
@@ -220,35 +258,53 @@ export default function AdminActivityPage() {
                             {loading && <div style={{ color: C.t2 }}>正在加载详情...</div>}
                             {!loading && error && <div style={{ color: C.red }}>{error}</div>}
                             {!loading && !error && activity && (
-                              <div style={{ maxHeight: 420, overflow: "auto", border: "1px solid #e2e8f0", borderRadius: 6, background: "#fff" }}>
-                                {Array.isArray(activity.attempts) && activity.attempts.length > 0 ? (
-                                  activity.attempts.map((a) => (
-                                    <div key={a.id} style={{ borderBottom: "1px solid #f1f5f9", padding: 10 }}>
-                                      <div style={{ display: "flex", justifyContent: "space-between", gap: 12, marginBottom: 6 }}>
-                                        <div style={{ fontWeight: 700, color: C.nav }}>
-                                          {a.taskType === "build-sentence" ? "Task 1" : a.taskType === "email" ? "Task 2" : "Task 3"}
+                              <div style={{ display: "grid", gap: 8 }}>
+                                {sections.map((section) => {
+                                  const open = !!sectionMap[section.key];
+                                  return (
+                                    <div key={section.key} style={{ border: "1px solid #e2e8f0", borderRadius: 6, background: "#fff" }}>
+                                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 10px", borderBottom: open ? "1px solid #f1f5f9" : "none" }}>
+                                        <div style={{ fontWeight: 700, color: C.nav }}>{section.title} ({section.items.length})</div>
+                                        <button
+                                          onClick={() => toggleSection(code, section.key)}
+                                          style={{ border: "1px solid " + C.blue, background: open ? "#dbeafe" : "#fff", color: C.blue, borderRadius: 6, padding: "3px 8px", cursor: "pointer", fontSize: 12 }}
+                                        >
+                                          {open ? "收起" : "展开"}
+                                        </button>
+                                      </div>
+                                      {open && (
+                                        <div style={{ maxHeight: 320, overflow: "auto" }}>
+                                          {section.items.length > 0 ? (
+                                            section.items.map((a) => (
+                                              <div key={a.id} style={{ borderBottom: "1px solid #f1f5f9", padding: 10 }}>
+                                                <div style={{ display: "flex", justifyContent: "space-between", gap: 12, marginBottom: 6 }}>
+                                                  <div style={{ fontWeight: 700, color: C.nav }}>{section.title}</div>
+                                                  <div style={{ color: scoreColor(a.scoreText), fontWeight: 700 }}>{a.scoreText || "-"}</div>
+                                                </div>
+                                                <div style={{ fontSize: 11, color: C.t2, marginBottom: 6 }}>
+                                                  {fmtDate(a.date)} | 来源: {a.sourceType || "-"}
+                                                </div>
+                                                <div style={{ fontSize: 12, color: C.t1, marginBottom: 4 }}>
+                                                  <b>题干:</b> {previewText(a.prompt, 260)}
+                                                </div>
+                                                <div style={{ fontSize: 12, color: C.t1, marginBottom: 4 }}>
+                                                  <b>作答:</b> {previewText(a.answer, 320)}
+                                                </div>
+                                                {a.correctAnswer ? (
+                                                  <div style={{ fontSize: 12, color: C.t2 }}>
+                                                    <b>参考答案:</b> {previewText(a.correctAnswer, 260)}
+                                                  </div>
+                                                ) : null}
+                                              </div>
+                                            ))
+                                          ) : (
+                                            <div style={{ padding: 12, color: C.t2 }}>该分区暂无记录。</div>
+                                          )}
                                         </div>
-                                        <div style={{ color: scoreColor(a.scoreText), fontWeight: 700 }}>{a.scoreText || "-"}</div>
-                                      </div>
-                                      <div style={{ fontSize: 11, color: C.t2, marginBottom: 6 }}>
-                                        {fmtDate(a.date)} | 来源: {a.sourceType || "-"}
-                                      </div>
-                                      <div style={{ fontSize: 12, color: C.t1, marginBottom: 4 }}>
-                                        <b>题干:</b> {previewText(a.prompt, 260)}
-                                      </div>
-                                      <div style={{ fontSize: 12, color: C.t1, marginBottom: 4 }}>
-                                        <b>作答:</b> {previewText(a.answer, 320)}
-                                      </div>
-                                      {a.correctAnswer ? (
-                                        <div style={{ fontSize: 12, color: C.t2 }}>
-                                          <b>参考答案:</b> {previewText(a.correctAnswer, 260)}
-                                        </div>
-                                      ) : null}
+                                      )}
                                     </div>
-                                  ))
-                                ) : (
-                                  <div style={{ padding: 12, color: C.t2 }}>暂无可展示的作答详情。</div>
-                                )}
+                                  );
+                                })}
                               </div>
                             )}
                           </td>
@@ -259,9 +315,7 @@ export default function AdminActivityPage() {
                 })}
                 {rowsView.length === 0 && (
                   <tr>
-                    <td colSpan={10} style={{ padding: 12, color: C.t2 }}>
-                      暂无数据。
-                    </td>
+                    <td colSpan={10} style={{ padding: 12, color: C.t2 }}>暂无数据。</td>
                   </tr>
                 )}
               </tbody>
