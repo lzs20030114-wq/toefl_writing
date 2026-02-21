@@ -4,6 +4,8 @@ import { C, Btn } from "../shared/ui";
 import { MOCK_EXAM_STATUS, TASK_IDS } from "../../lib/mockExam/contracts";
 import { BuildSentenceTask } from "../buildSentence/BuildSentenceTask";
 import { WritingTask } from "../writing/WritingTask";
+import { addDoneIds } from "../../lib/sessionStore";
+import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
 import { MockExamResult } from "./MockExamResult";
 import { TaskTransitionCard } from "./TaskTransitionCard";
 
@@ -100,6 +102,10 @@ export function MockExamMainPanel({
           autoStartOnMount
           reportLanguage={reportLanguage}
           onComplete={(payload) => {
+            const promptId = payload?.details?.promptData?.id;
+            if (promptId) {
+              addDoneIds(DONE_STORAGE_KEYS.EMAIL, [promptId]);
+            }
             onSubmitTaskResult({
               score: null,
               maxScore: 5,
@@ -129,6 +135,10 @@ export function MockExamMainPanel({
           autoStartOnMount
           reportLanguage={reportLanguage}
           onComplete={(payload) => {
+            const promptId = payload?.details?.promptData?.id;
+            if (promptId) {
+              addDoneIds(DONE_STORAGE_KEYS.DISCUSSION, [promptId]);
+            }
             onSubmitTaskResult({
               score: null,
               maxScore: 5,

@@ -9,7 +9,7 @@ import { EMAIL_GEN_PROMPT } from "../../lib/ai/prompts/emailWriting";
 import { DISC_GEN_PROMPT } from "../../lib/ai/prompts/academicWriting";
 import { BS_GEN_PROMPT } from "../../lib/ai/prompts/buildSentence";
 import { evaluateWritingResponse } from "../../lib/ai/writingEval";
-import { pickRandomPrompt } from "../../lib/questionSelector";
+import { BANK_EXHAUSTED_ERRORS, DONE_STORAGE_KEYS, pickRandomPrompt } from "../../lib/questionSelector";
 import { C, FONT, Btn, Toast, TopBar } from "../shared/ui";
 import { ScoringReport } from "./ScoringReport";
 import { WritingPromptPanel } from "./WritingPromptPanel";
@@ -95,6 +95,10 @@ function confirmEarlySubmit() {
   return true;
 }
 
+function isPromptExhaustedError(err) {
+  return String(err?.message || "").includes(BANK_EXHAUSTED_ERRORS.PROMPT);
+}
+
 export function WritingTask({
   onExit,
   type,
@@ -123,20 +127,25 @@ export function WritingTask({
   const defaultLimit = type === "email" ? 420 : 600;
   const limit = Number.isFinite(timeLimitSeconds) && timeLimitSeconds > 0 ? timeLimitSeconds : defaultLimit;
   const minW = type === "email" ? 80 : 100;
-  const storageKey = type === "email" ? "toefl-em-done" : "toefl-disc-done";
+  const storageKey = type === "email" ? DONE_STORAGE_KEYS.EMAIL : DONE_STORAGE_KEYS.DISCUSSION;
 
   const usedRef = useRef(new Set());
-  const initialError = data.length === 0 ? "Prompt bank is empty or invalid." : "";
-  const [pi, setPi] = useState(() => {
+  const [initialError] = useState(() => {
+    if (data.length === 0) return "Prompt bank is empty or invalid.";
     try {
       const i = pickRandomPrompt(data, usedRef.current, storageKey);
       usedRef.current.add(i);
-      return i;
-    } catch {
-      return 0;
+      return "";
+    } catch (e) {
+      return isPromptExhaustedError(e) ? "当前账号该题库已全部答完。" : "Prompt bank is empty or invalid.";
     }
   });
-  const [pd, setPd] = useState(() => data[pi] || null);
+  const [pi, setPi] = useState(() => {
+    if (initialError) return -1;
+    const first = Array.from(usedRef.current)[0];
+    return Number.isInteger(first) ? first : 0;
+  });
+  const [pd, setPd] = useState(() => (pi >= 0 ? data[pi] || null : null));
   const [text, setText] = useState("");
   const [tl, setTl] = useState(limit);
   const [run, setRun] = useState(false);
@@ -150,7 +159,7 @@ export function WritingTask({
   const tr = useRef(null);
   const submitLockRef = useRef(false);
 
-  useEffect(() => { setPd(data[pi] || null); }, [pi, data]);
+  useEffect(() => { setPd(pi >= 0 ? data[pi] || null : null); }, [pi, data]);
   useEffect(() => { setIntro(showTaskIntro); }, [showTaskIntro, type]);
 
   const submitRef = useRef(null);
@@ -290,8 +299,8 @@ export function WritingTask({
     let n = 0;
     try {
       n = pickRandomPrompt(data, usedRef.current, storageKey);
-    } catch {
-      setToast("Prompt bank is empty or invalid.");
+    } catch (e) {
+      setToast(isPromptExhaustedError(e) ? "当前账号该题库已全部答完。" : "Prompt bank is empty or invalid.");
       return;
     }
     usedRef.current.add(n);

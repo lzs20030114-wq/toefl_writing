@@ -2,8 +2,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { renderResponseSentence } from "../../lib/questionBank/renderResponseSentence";
 import { shuffle, evaluateBuildSentenceOrder } from "../../lib/utils";
-import { saveSess } from "../../lib/sessionStore";
-import { selectBSQuestions } from "../../lib/questionSelector";
+import { addDoneIds, saveSess } from "../../lib/sessionStore";
+import { DONE_STORAGE_KEYS, selectBSQuestions } from "../../lib/questionSelector";
 import runtimeModel from "../../lib/questionBank/runtimeModel";
 
 function getUserChunks(slotsArr) {
@@ -105,6 +105,15 @@ export function useBuildSentenceSession(questions, options = {}) {
   }, [tl, run, phase, onTimerChange]);
 
   function saveSession(nr) {
+    const doneSetIds = new Set(
+      nr
+        .map((r) => Number(r?.q?.__sourceSetId))
+        .filter((id) => Number.isInteger(id) && id > 0)
+    );
+    if (doneSetIds.size > 0) {
+      addDoneIds(DONE_STORAGE_KEYS.BUILD_SENTENCE, [...doneSetIds]);
+    }
+
     const payload = {
       type: "bs",
       mode: practiceMode,

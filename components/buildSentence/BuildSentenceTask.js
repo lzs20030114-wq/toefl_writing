@@ -3,6 +3,7 @@ import React from "react";
 import { C, FONT, Btn, Toast, TopBar } from "../shared/ui";
 import { useBuildSentenceSession } from "./useBuildSentenceSession";
 import { formatLongDuration, PRACTICE_MODE } from "../../lib/practiceMode";
+import { BANK_EXHAUSTED_ERRORS } from "../../lib/questionSelector";
 
 function formatChunkDisplay(text) {
   return String(text || "")
@@ -74,6 +75,7 @@ export function BuildSentenceTask({
     onDropSlot,
     onDropBank,
   } = useBuildSentenceSession(questions, { persistSession, onComplete, onTimerChange, timeLimitSeconds, practiceMode });
+  const exhausted = String(selectionError || "").includes(BANK_EXHAUSTED_ERRORS.BUILD_SENTENCE);
 
   function handleSubmitClick() {
     const isFinalQuestion = idx >= qs.length - 1;
@@ -148,8 +150,12 @@ export function BuildSentenceTask({
         {!embedded && <TopBar title="Build a Sentence" section="Writing | Task 1" onExit={onExit} />}
         <div style={{ maxWidth: 760, margin: "24px auto", padding: "0 20px" }}>
           <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 28 }}>
-            <div style={{ fontSize: 16, fontWeight: 700, color: C.red, marginBottom: 8 }}>Question bank blocked by quality gate</div>
-            <div style={{ fontSize: 14, color: C.t2, marginBottom: 16 }}>{selectionError}</div>
+            <div style={{ fontSize: 16, fontWeight: 700, color: C.red, marginBottom: 8 }}>
+              {exhausted ? "题目已答完" : "Question bank blocked by quality gate"}
+            </div>
+            <div style={{ fontSize: 14, color: C.t2, marginBottom: 16 }}>
+              {exhausted ? "当前账号 Build a Sentence 题库已全部答完。" : selectionError}
+            </div>
             <Btn onClick={onExit} variant="secondary">{embedded ? "Back" : "Back to Practice"}</Btn>
           </div>
         </div>
