@@ -119,6 +119,7 @@ export async function GET(request) {
     const url = new URL(request.url);
     const status = String(url.searchParams.get("status") || "").trim();
     const limit = Math.min(500, Math.max(1, Number(url.searchParams.get("limit") || 100)));
+    const includeUsage = String(url.searchParams.get("includeUsage") || "").trim() === "1";
 
     let query = supabaseAdmin
       .from("access_codes")
@@ -143,6 +144,10 @@ export async function GET(request) {
     });
 
     const codes = data || [];
+    if (!includeUsage) {
+      return Response.json({ codes, stats });
+    }
+
     const codeList = codes.map((x) => x.code).filter(Boolean);
     const usageByCode = {};
     codeList.forEach((code) => {
