@@ -8,6 +8,47 @@ function jsonError(status, error) {
   return Response.json({ error }, { status });
 }
 
+function safeNum(v, fallback = 0) {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : fallback;
+}
+
+function countMockAnswered(score) {
+  const tasks = Array.isArray(score?.tasks) ? score.tasks : [];
+  let build = 0;
+  let email = 0;
+  let discussion = 0;
+  for (const t of tasks) {
+    const taskId = String(t?.taskId || "");
+    if (taskId === "build-sentence") {
+      const detailCount = safeNum(t?.meta?.detailCount, 0);
+      build += detailCount > 0 ? detailCount : 10;
+      continue;
+    }
+    if (taskId === "email-writing") {
+      email += 1;
+      continue;
+    }
+    if (taskId === "academic-writing") {
+      discussion += 1;
+    }
+  }
+  return { build, email, discussion, total: build + email + discussion };
+}
+
+function countAnsweredBySession(row) {
+  const type = String(row?.type || "");
+  const score = row?.score || {};
+  if (type === "bs") {
+    const total = safeNum(score?.total, 0);
+    return { build: total, email: 0, discussion: 0, total };
+  }
+  if (type === "email") return { build: 0, email: 1, discussion: 0, total: 1 };
+  if (type === "discussion") return { build: 0, email: 0, discussion: 1, total: 1 };
+  if (type === "mock") return countMockAnswered(score);
+  return { build: 0, email: 0, discussion: 0, total: 0 };
+}
+
 function randomCode() {
   let code = "";
   for (let i = 0; i < CODE_LEN; i += 1) {
@@ -101,7 +142,43 @@ export async function GET(request) {
       if (s === "available" || s === "issued" || s === "revoked") stats[s] += 1;
     });
 
-    return Response.json({ codes: data || [], stats });
+    const codes = data || [];
+    const codeList = codes.map((x) => x.code).filter(Boolean);
+    const usageByCode = {};
+    codeList.forEach((code) => {
+      usageByCode[code] = {
+        sessions: 0,
+        answered: { build: 0, email: 0, discussion: 0, total: 0 },
+        lastActiveAt: null,
+      };
+    });
+
+    if (codeList.length > 0) {
+      const { data: sessionRows, error: sessionError } = await supabaseAdmin
+        .from("sessions")
+        .select("user_code,type,date,score")
+        .in("user_code", codeList)
+        .order("date", { ascending: false })
+        .limit(20000);
+      if (sessionError) return jsonError(400, sessionError.message || "Usage query failed");
+
+      for (const row of sessionRows || []) {
+        const code = String(row.user_code || "");
+        if (!code || !usageByCode[code]) continue;
+        const usage = usageByCode[code];
+        usage.sessions += 1;
+        if (!usage.lastActiveAt || String(row.date || "") > String(usage.lastActiveAt || "")) {
+          usage.lastActiveAt = row.date || null;
+        }
+        const c = countAnsweredBySession(row);
+        usage.answered.build += c.build;
+        usage.answered.email += c.email;
+        usage.answered.discussion += c.discussion;
+        usage.answered.total += c.total;
+      }
+    }
+
+    return Response.json({ codes, stats, usageByCode });
   } catch (e) {
     return jsonError(500, e.message || "Unexpected server error");
   }
@@ -148,4 +225,3 @@ export async function POST(request) {
     return jsonError(500, e.message || "Unexpected server error");
   }
 }
-
