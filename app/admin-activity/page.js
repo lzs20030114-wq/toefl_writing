@@ -23,6 +23,11 @@ function previewText(v, max = 180) {
   return s.length > max ? `${s.slice(0, max)}...` : s;
 }
 
+function fullText(v) {
+  const s = String(v || "").trim();
+  return s || "-";
+}
+
 function scoreColor(scoreText) {
   const s = String(scoreText || "").toLowerCase();
   if (s.includes("correct")) return C.green;
@@ -288,7 +293,10 @@ export default function AdminActivityPage() {
                                                   <b>题干:</b> {previewText(a.prompt, 260)}
                                                 </div>
                                                 <div style={{ fontSize: 12, color: C.t1, marginBottom: 4 }}>
-                                                  <b>作答:</b> {previewText(a.answer, 320)}
+                                                  <b>作答:</b>
+                                                  <div style={{ marginTop: 4, whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
+                                                    {fullText(a.answer)}
+                                                  </div>
                                                 </div>
                                                 {a.correctAnswer ? (
                                                   <div style={{ fontSize: 12, color: C.t2 }}>
