@@ -90,7 +90,7 @@ export function ScoringReport({ result, type }) {
         )}
       </div>
 
-      <Section title="短板行动卡" defaultOpen preview={actions.length > 0 ? `${actions.length} 个重点` : "暂无"}>
+      <Section title="提分行动指南" defaultOpen preview={actions.length > 0 ? `${actions.length} 个重点` : "暂无"}>
         {sectionStates.ACTION && !sectionStates.ACTION.ok ? (
           <div style={{ color: C.red }}>此部分暂时无法加载</div>
         ) : actions.length === 0 ? (

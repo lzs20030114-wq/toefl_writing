@@ -17,7 +17,6 @@ export function WritingResponsePanel({
   onStart,
   onSubmit,
   onRetry,
-  onNext,
   onExit,
   embedded,
 }) {
@@ -54,15 +53,6 @@ export function WritingResponsePanel({
       )}
 
       {phase === "scoring" && <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 4, padding: 32, textAlign: "center", color: C.t2 }}>AI 正在评分，请稍候...</div>}
-
-      {phase === "done" && fb && (
-        <div style={{ marginTop: 20 }}>
-          <div style={{ display: "flex", gap: 12, marginTop: 16 }}>
-            <Btn onClick={onNext} variant="secondary">下一题</Btn>
-            <Btn onClick={onExit} variant="secondary">{embedded ? "返回" : "返回练习"}</Btn>
-          </div>
-        </div>
-      )}
 
       {phase === "done" && deferScoring && !fb && requestState !== "error" && (
         <div style={{ marginTop: 20 }}>

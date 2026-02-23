@@ -105,6 +105,67 @@ Band：5.0
     expect(out.summary).toContain("clear and focused");
   });
 
+  test("accepts score in decimal format like 4.0", () => {
+    const raw = `
+===SCORE===
+分数: 4.0
+Band: 4.5
+总评: clear
+`;
+    const out = parseReport(raw);
+    expect(out.error).toBe(false);
+    expect(out.score).toBe(4);
+  });
+
+  test("treats empty pattern array as successfully parsed section", () => {
+    const raw = `
+===SCORE===
+分数: 3
+Band: 3.5
+总评: clear
+===PATTERNS===
+[]
+`;
+    const out = parseReport(raw);
+    expect(out.error).toBe(false);
+    expect(out.sectionStates.PATTERNS.ok).toBe(true);
+  });
+
+  test("annotation section stays available when parse error has recovered marks", () => {
+    const raw = `
+===SCORE===
+分数: 3
+Band: 3.5
+总评: clear
+===ANNOTATION===
+<r>He go school.</r><n level="red" fix="He goes to school.">语法错误。</n>
+<r>broken<n level="red" fix="x">y
+`;
+    const out = parseReport(raw);
+    expect(out.error).toBe(false);
+    expect(out.annotationCounts.red).toBeGreaterThan(0);
+    expect(out.sectionStates.ANNOTATION.ok).toBe(true);
+  });
+
+  test("normalizes ACTION suggestions to Chinese when AI returns English", () => {
+    const raw = `
+===SCORE===
+分数: 3
+Band: 3.5
+总评: clear
+===ACTION===
+Action1: Improve transitions
+Importance: Weak transitions reduce coherence.
+Action: Use linking words like however, therefore, and for example.
+`;
+    const out = parseReport(raw);
+    expect(out.error).toBe(false);
+    expect(out.actions).toHaveLength(1);
+    expect(/[\u4e00-\u9fff]/.test(out.actions[0].title)).toBe(true);
+    expect(/[\u4e00-\u9fff]/.test(out.actions[0].importance)).toBe(true);
+    expect(/[\u4e00-\u9fff]/.test(out.actions[0].action)).toBe(true);
+  });
+
   test("parses inline <n> annotation format and keeps counts non-zero", () => {
     const raw = `
 ===SCORE===

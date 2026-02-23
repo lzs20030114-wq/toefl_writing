@@ -226,6 +226,7 @@ describe("ToeflApp navigation", () => {
     await waitFor(() => {
       expect(screen.getByTestId("score-panel")).toBeInTheDocument();
     });
+    expect(screen.queryAllByText("下一题")).toHaveLength(1);
   });
 
   test("manual submit at deadline edge still sends one request", async () => {

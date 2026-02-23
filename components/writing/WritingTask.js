@@ -73,7 +73,7 @@ function confirmEarlySubmit() {
   const isJsdom = typeof navigator !== "undefined" && /jsdom/i.test(String(navigator.userAgent || ""));
   if (isJsdom && !confirmFn._isMockFunction) return true;
   try {
-    return confirmFn("杩樻湁鍓╀綑鏃堕棿锛岀‘瀹氳鎻愬墠鎻愪氦鍚楋紵");
+    return confirmFn("还有剩余时间，确定要提前提交吗？");
   } catch {
     // jsdom and some embedded contexts do not implement confirm; default allow.
   }
@@ -293,11 +293,11 @@ export function WritingTask({
   useEffect(() => () => clearInterval(tr.current), []);
 
   const w = wc(text);
-  const taskTitle = type === "email" ? "Write an Email" : "Academic Discussion";
+  const taskTitle = type === "email" ? "写邮件" : "学术讨论";
   const introTitle = type === "email" ? "Task 2: Write an Email" : "Task 3: Academic Discussion";
   const introDesc = type === "email"
-    ? "You will read a workplace scenario and write an email that addresses all required goals."
-    : "You will read a discussion board prompt and write a focused academic response.";
+    ? "你将阅读一个场景，并写一封覆盖全部目标的邮件。"
+    : "你将阅读讨论内容，并写出聚焦且有论证的回应。";
 
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
@@ -336,7 +336,7 @@ export function WritingTask({
                   start();
                 }}
               >
-                Continue and start timer
+                继续并开始计时
               </Btn>
             </div>
           </div>
@@ -363,7 +363,6 @@ export function WritingTask({
             onStart={start}
             onSubmit={submitScore}
             onRetry={retryScore}
-            onNext={next}
             onExit={onExit}
             embedded={embedded}
           />
