@@ -85,4 +85,18 @@ describe("parseAnnotations", () => {
     const mark = out.annotations[0];
     expect(out.plainText.slice(mark.start, mark.end)).toBe("service-learning course");
   });
+
+  test("removes orphan detached marker line when it cannot be mapped back", () => {
+    const raw = [
+      "I think this policy is useful.",
+      "<r>lexical precision</r><n level=\"orange\" fix=\"more precise wording\">表达不够精准。</n>",
+      "Next paragraph starts here.",
+    ].join("\n");
+    const out = parseAnnotations(raw);
+
+    expect(out.plainText).toContain("I think this policy is useful.");
+    expect(out.plainText).toContain("Next paragraph starts here.");
+    expect(out.plainText).not.toContain("lexical precision");
+    expect(out.annotations).toHaveLength(0);
+  });
 });
