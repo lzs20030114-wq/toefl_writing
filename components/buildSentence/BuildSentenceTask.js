@@ -171,9 +171,8 @@ export function BuildSentenceTask({
           <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: "32px 40px" }}>
             <h2 style={{ margin: "0 0 16px", fontSize: 20, color: C.nav }}>Task 1: Build a Sentence</h2>
             <div style={{ fontSize: 14, color: C.t1, lineHeight: 1.8 }}>
-              <p><b>Directions:</b> Use the word chunks below to build a grammatically correct sentence. Some words may already be placed for you. One chunk may be a distractor that does not belong.</p>
-              <p><b>Questions:</b> 10</p>
-              <p><b>Time limit:</b> {formatLongDuration(timeLimitSeconds)}</p>
+              <p>You will use word chunks to build grammatically correct responses.</p>
+              <p>You will have {formatLongDuration(timeLimitSeconds)} to complete 10 questions.</p>
               {practiceMode === PRACTICE_MODE.CHALLENGE && <p><b>Mode:</b> Challenge (compressed timing)</p>}
               <p>The timer will start when you click <b>Start</b>. When time runs out, your answers will be submitted automatically.</p>
             </div>

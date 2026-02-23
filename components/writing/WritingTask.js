@@ -331,9 +331,12 @@ export function WritingTask({
   const w = wc(text);
   const taskTitle = type === "email" ? "Write an Email" : "Academic Discussion";
   const introTitle = type === "email" ? "Task 2: Write an Email" : "Task 3: Academic Discussion";
-  const introDesc = type === "email"
-    ? "You will read a workplace scenario and write an email that addresses all required goals."
-    : "You will read a discussion board prompt and write a focused academic response.";
+  const introDescLine1 = type === "email"
+    ? "You will read some information and use the information to write an email."
+    : "You will read a question and responses from other students.";
+  const introDescLine2 = type === "email"
+    ? "You will have 7 minutes to write the email."
+    : "You will have 10 minutes to write your response.";
 
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
@@ -358,10 +361,11 @@ export function WritingTask({
         {intro && phase === "ready" ? (
           <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 28 }}>
             <div style={{ fontSize: 20, fontWeight: 700, color: C.nav, marginBottom: 10 }}>{introTitle}</div>
-            <div style={{ fontSize: 14, color: C.t1, lineHeight: 1.7, marginBottom: 12 }}>{introDesc}</div>
+            <div style={{ fontSize: 14, color: C.t1, lineHeight: 1.7, marginBottom: 12 }}>
+              <div>{introDescLine1}</div>
+              <div>{introDescLine2}</div>
+            </div>
             <div style={{ fontSize: 13, color: C.t2, lineHeight: 1.7 }}>
-              <div>Time limit: <b>{formatMinutesLabel(limit)}</b></div>
-              <div>Minimum words: <b>{minW}</b></div>
               {practiceMode === PRACTICE_MODE.CHALLENGE && <div>Mode: <b>Challenge</b> (compressed timing)</div>}
             </div>
             <div style={{ marginTop: 18 }}>
