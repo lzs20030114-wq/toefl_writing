@@ -105,6 +105,9 @@ export function WritingTask({
   showTaskIntro = true,
   autoStartOnMount = false,
   reportLanguage,
+  initialPromptId = "",
+  initialPracticeRootId = "",
+  initialPracticeAttempt = 1,
 }) {
   const uiReportLanguage = normalizeReportLanguage(reportLanguage || readReportLanguage());
   const dataRaw = type === "email" ? EM_DATA : AD_DATA;
@@ -123,18 +126,29 @@ export function WritingTask({
   const storageKey = type === "email" ? DONE_STORAGE_KEYS.EMAIL : DONE_STORAGE_KEYS.DISCUSSION;
 
   const usedRef = useRef(new Set());
-  const [initialError] = useState(() => {
-    if (data.length === 0) return "题库为空或数据异常。";
+  const [initialSelection] = useState(() => {
+    if (data.length === 0) return { error: "题库为空或数据异常。", index: -1 };
+    const forcedPromptId = String(initialPromptId || "").trim();
+    if (forcedPromptId) {
+      const forcedIdx = data.findIndex((x) => String(x?.id || "") === forcedPromptId);
+      if (forcedIdx >= 0) {
+        usedRef.current.add(forcedIdx);
+        return { error: "", index: forcedIdx };
+      }
+      return { error: "指定题目不存在或已下线。", index: -1 };
+    }
     try {
       const i = pickRandomPrompt(data, usedRef.current, storageKey);
       usedRef.current.add(i);
-      return "";
+      return { error: "", index: i };
     } catch (e) {
-      return isPromptExhaustedError(e) ? "当前账号该题库已全部答完。" : "题库为空或数据异常。";
+      return { error: isPromptExhaustedError(e) ? "当前账号该题库已全部答完。" : "题库为空或数据异常。", index: -1 };
     }
   });
+  const initialError = initialSelection?.error || "";
   const [pi, setPi] = useState(() => {
     if (initialError) return -1;
+    if (Number.isInteger(initialSelection?.index)) return initialSelection.index;
     const first = Array.from(usedRef.current)[0];
     return Number.isInteger(first) ? first : 0;
   });
@@ -155,9 +169,16 @@ export function WritingTask({
 
   useEffect(() => {
     if (!pd?.id) return;
+    const forcedRoot = String(initialPracticeRootId || "").trim();
+    if (forcedRoot && !practiceRootIdRef.current) {
+      practiceRootIdRef.current = forcedRoot;
+      const parsedAttempt = Number(initialPracticeAttempt);
+      practiceAttemptRef.current = Number.isFinite(parsedAttempt) && parsedAttempt > 0 ? Math.floor(parsedAttempt) : 1;
+      return;
+    }
     practiceRootIdRef.current = createPracticeRootId(type, pd.id);
     practiceAttemptRef.current = 1;
-  }, [type, pd?.id]);
+  }, [type, pd?.id, initialPracticeRootId, initialPracticeAttempt]);
 
   useEffect(() => { setPd(pi >= 0 ? data[pi] || null : null); }, [pi, data]);
   useEffect(() => { setIntro(showTaskIntro); }, [showTaskIntro, type]);
@@ -207,6 +228,8 @@ export function WritingTask({
           type, score: r.score, band: r.band, wordCount: wc(text), weaknesses: r.weaknesses, next_steps: r.next_steps, mode: practiceMode,
           details: {
             promptSummary: summarizePrompt(type, pd),
+            promptId: String(pd?.id || ""),
+            promptData: pd,
             userText: text,
             feedback: r,
             practiceRootId: practiceRootIdRef.current || createPracticeRootId(type, pd?.id),

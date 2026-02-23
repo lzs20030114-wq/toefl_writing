@@ -10,6 +10,9 @@ function AcademicWritingPageClient() {
   const searchParams = useSearchParams();
   const mode = normalizePracticeMode(searchParams.get("mode"));
   const reportLanguage = normalizeReportLanguage(searchParams.get("lang"));
+  const retryPromptId = String(searchParams.get("retryPromptId") || "").trim();
+  const initialPracticeRootId = String(searchParams.get("practiceRootId") || "").trim();
+  const retryFromAttempt = Number(searchParams.get("retryFromAttempt") || 0);
   return (
     <WritingTask
       onExit={() => router.push("/")}
@@ -17,6 +20,9 @@ function AcademicWritingPageClient() {
       timeLimitSeconds={getTaskTimeSeconds("discussion", mode)}
       practiceMode={mode}
       reportLanguage={reportLanguage}
+      initialPromptId={retryPromptId}
+      initialPracticeRootId={initialPracticeRootId}
+      initialPracticeAttempt={Number.isFinite(retryFromAttempt) && retryFromAttempt > 0 ? retryFromAttempt + 1 : 1}
     />
   );
 }

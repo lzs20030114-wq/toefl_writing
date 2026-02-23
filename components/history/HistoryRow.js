@@ -77,6 +77,25 @@ function fmtDate(d) {
   }
 }
 
+function buildRetryHref(session) {
+  const s = session || {};
+  if (s.type !== "email" && s.type !== "discussion") return "";
+  const promptId = String(s?.details?.promptId || s?.details?.promptData?.id || "").trim();
+  if (!promptId) return "";
+  const path = s.type === "email" ? "/email-writing" : "/academic-writing";
+  const qs = new URLSearchParams();
+  qs.set("retryPromptId", promptId);
+  const rootId = String(s?.details?.practiceRootId || "").trim();
+  if (rootId) qs.set("practiceRootId", rootId);
+  const attempt = Number(s?.details?.practiceAttempt || 1);
+  if (Number.isFinite(attempt) && attempt > 0) qs.set("retryFromAttempt", String(Math.floor(attempt)));
+  const mode = String(s?.mode || "").trim();
+  if (mode && mode !== "standard") qs.set("mode", mode);
+  const lang = String(s?.details?.feedback?.reportLanguage || "").trim();
+  if (lang) qs.set("lang", lang);
+  return `${path}?${qs.toString()}`;
+}
+
 function truncate(text, max = 40) {
   const s = String(text || "").trim();
   if (!s) return "(empty)";
@@ -427,6 +446,7 @@ export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, show
   const s = entry?.session || {};
   const sourceIndex = entry?.sourceIndex;
   const practiceAttempt = Number(s?.details?.practiceAttempt || 1);
+  const retryHref = buildRetryHref(s);
 
   const mockTasks = Array.isArray(s?.details?.tasks) ? s.details.tasks : [];
   const mockBuild = mockTasks.find((t) => t?.taskId === MOCK_TASK_IDS.BUILD);
@@ -546,6 +566,27 @@ export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, show
       {isExpanded && s.details && (s.type === "email" || s.type === "discussion") && s.details.userText && (
         <div style={{ background: "#f9f9f9", border: "1px solid #eee", borderRadius: 4, padding: 16, margin: "4px 0 8px 0" }}>
           {s.details.promptSummary && <div style={{ fontSize: 12, color: C.t2, marginBottom: 8 }}>Prompt: {s.details.promptSummary}</div>}
+          {retryHref && (
+            <div style={{ marginBottom: 10 }}>
+              <button
+                onClick={() => {
+                  window.location.href = retryHref;
+                }}
+                style={{
+                  border: "1px solid " + C.blue,
+                  background: "#fff",
+                  color: C.blue,
+                  borderRadius: 6,
+                  fontSize: 12,
+                  fontWeight: 700,
+                  padding: "6px 10px",
+                  cursor: "pointer",
+                }}
+              >
+                再练一遍（同题）
+              </button>
+            </div>
+          )}
           <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 4, padding: 12, marginBottom: 12, fontSize: 13, lineHeight: 1.7, whiteSpace: "pre-wrap" }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: C.t2, marginBottom: 6 }}>Your response</div>
             {s.details.userText}
