@@ -101,7 +101,7 @@ export function ScoringReport({ result, type }) {
               <div key={idx} style={{ border: "1px solid #e5e7eb", borderLeft: `4px solid ${idx === 0 ? "#dc2626" : "#f97316"}`, borderRadius: 6, padding: 12 }}>
                 <div style={{ fontSize: 14, fontWeight: 700, color: C.t1, marginBottom: 6 }}>{a.title || `短板${idx + 1}`}</div>
                 <div style={{ fontSize: 13, color: C.t2, lineHeight: 1.7, marginBottom: 8 }}><b>为什么重要：</b>{a.importance || "未提供"}</div>
-                <div style={{ fontSize: 13, color: C.t1, lineHeight: 1.7, background: "#f8fafc", borderRadius: 6, padding: "8px 10px" }}><b>现在就可以做的一件事：</b>{a.action || "未提供"}</div>
+                <div style={{ fontSize: 13, color: C.t1, lineHeight: 1.7, background: "#f8fafc", borderRadius: 6, padding: "8px 10px" }}><b>现在可做的：</b>{a.action || "未提供"}</div>
               </div>
             ))}
           </div>
