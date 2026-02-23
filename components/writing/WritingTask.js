@@ -1,13 +1,10 @@
-"use client";
+﻿"use client";
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import EM_DATA from "../../data/emailWriting/prompts.json";
 import AD_DATA from "../../data/academicWriting/prompts.json";
 import { wc } from "../../lib/utils";
 import { saveSess, addDoneIds } from "../../lib/sessionStore";
-import { callAI, mapScoringError } from "../../lib/ai/client";
-import { EMAIL_GEN_PROMPT } from "../../lib/ai/prompts/emailWriting";
-import { DISC_GEN_PROMPT } from "../../lib/ai/prompts/academicWriting";
-import { BS_GEN_PROMPT } from "../../lib/ai/prompts/buildSentence";
+import { mapScoringError } from "../../lib/ai/client";
 import { evaluateWritingResponse } from "../../lib/ai/writingEval";
 import { BANK_EXHAUSTED_ERRORS, DONE_STORAGE_KEYS, pickRandomPrompt } from "../../lib/questionSelector";
 import { C, FONT, Btn, Toast, TopBar } from "../shared/ui";
@@ -16,18 +13,6 @@ import { WritingPromptPanel } from "./WritingPromptPanel";
 import { WritingResponsePanel } from "./WritingResponsePanel";
 import { formatMinutesLabel, PRACTICE_MODE } from "../../lib/practiceMode";
 import { normalizeReportLanguage, readReportLanguage } from "../../lib/reportLanguage";
-
-async function aiGen(type) {
-  const prompts = {
-    buildSentence: BS_GEN_PROMPT,
-    email: EMAIL_GEN_PROMPT,
-    discussion: DISC_GEN_PROMPT,
-  };
-  try {
-    const raw = await callAI("Generate TOEFL 2026 questions. Output ONLY valid JSON.", prompts[type], 1500, 30000, 0.7);
-    return JSON.parse(raw.replace(/```json/g, "").replace(/```/g, "").trim());
-  } catch (e) { console.error(e); return null; }
-}
 
 function normalizeEmailPrompt(input, fallbackId = "gen-email") {
   if (!input || typeof input !== "object") return null;
@@ -88,7 +73,7 @@ function confirmEarlySubmit() {
   const isJsdom = typeof navigator !== "undefined" && /jsdom/i.test(String(navigator.userAgent || ""));
   if (isJsdom && !confirmFn._isMockFunction) return true;
   try {
-    return confirmFn("还有剩余时间，确定要提前提交吗？");
+    return confirmFn("杩樻湁鍓╀綑鏃堕棿锛岀‘瀹氳鎻愬墠鎻愪氦鍚楋紵");
   } catch {
     // jsdom and some embedded contexts do not implement confirm; default allow.
   }
@@ -131,13 +116,13 @@ export function WritingTask({
 
   const usedRef = useRef(new Set());
   const [initialError] = useState(() => {
-    if (data.length === 0) return "Prompt bank is empty or invalid.";
+    if (data.length === 0) return "题库为空或数据异常。";
     try {
       const i = pickRandomPrompt(data, usedRef.current, storageKey);
       usedRef.current.add(i);
       return "";
     } catch (e) {
-      return isPromptExhaustedError(e) ? "当前账号该题库已全部答完。" : "Prompt bank is empty or invalid.";
+      return isPromptExhaustedError(e) ? "当前账号该题库已全部答完。" : "题库为空或数据异常。";
     }
   });
   const [pi, setPi] = useState(() => {
@@ -153,7 +138,6 @@ export function WritingTask({
   const [fb, setFb] = useState(null);
   const [requestState, setRequestState] = useState("idle");
   const [scoreError, setScoreError] = useState("");
-  const [gen, setGen] = useState(false);
   const [toast, setToast] = useState(null);
   const [intro, setIntro] = useState(showTaskIntro);
   const tr = useRef(null);
@@ -300,19 +284,11 @@ export function WritingTask({
     try {
       n = pickRandomPrompt(data, usedRef.current, storageKey);
     } catch (e) {
-      setToast(isPromptExhaustedError(e) ? "当前账号该题库已全部答完。" : "Prompt bank is empty or invalid.");
+      setToast(isPromptExhaustedError(e) ? "题库中没有新题了，你已完成该题库全部题目。" : "题库不可用，请稍后重试。");
       return;
     }
     usedRef.current.add(n);
     setPi(n); setPd(data[n]); setText(""); setTl(limit); setRun(false); setPhase("ready"); setFb(null); setRequestState("idle"); setScoreError(""); submitLockRef.current = false; completionSentRef.current = false; setIntro(showTaskIntro);
-  }
-  async function genNew() {
-    setGen(true);
-    const d = await aiGen(type);
-    const normalized = normalizePrompt(type, d, `gen-${Date.now()}`);
-    if (normalized) { setPd(normalized); setText(""); setTl(limit); setRun(false); setPhase("ready"); setFb(null); setRequestState("idle"); setScoreError(""); submitLockRef.current = false; completionSentRef.current = false; setIntro(showTaskIntro); }
-    else { setToast("生成失败，请重试。"); }
-    setGen(false);
   }
   useEffect(() => () => clearInterval(tr.current), []);
 
@@ -380,7 +356,6 @@ export function WritingTask({
             onTextChange={setText}
             w={w}
             minW={minW}
-            gen={gen}
             fb={fb}
             deferScoring={deferScoring}
             requestState={requestState}
@@ -389,7 +364,6 @@ export function WritingTask({
             onSubmit={submitScore}
             onRetry={retryScore}
             onNext={next}
-            onGenNew={genNew}
             onExit={onExit}
             embedded={embedded}
           />
@@ -397,7 +371,7 @@ export function WritingTask({
           </>
         )}
         {phase === "done" && fb && (
-          <div style={{ marginTop: 20 }}><ScoringReport result={fb} type={type} uiLang={uiReportLanguage} /><div style={{ display: "flex", gap: 12, marginTop: 16 }}><Btn onClick={next} variant="secondary">下一题</Btn><Btn onClick={genNew} disabled={gen}>{gen ? "生成中..." : "生成新题"}</Btn><Btn onClick={onExit} variant="secondary">{embedded ? "返回" : "返回练习"}</Btn></div></div>
+          <div style={{ marginTop: 20 }}><ScoringReport result={fb} type={type} uiLang={uiReportLanguage} /><div style={{ display: "flex", gap: 12, marginTop: 16 }}><Btn onClick={next} variant="secondary">下一题</Btn><Btn onClick={onExit} variant="secondary">{embedded ? "返回" : "返回练习"}</Btn></div></div>
         )}
           </>
         )}
@@ -405,3 +379,4 @@ export function WritingTask({
     </div>
   );
 }
+

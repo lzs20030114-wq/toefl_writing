@@ -10,7 +10,6 @@ export function WritingResponsePanel({
   onTextChange,
   w,
   minW,
-  gen,
   fb,
   deferScoring,
   requestState,
@@ -19,7 +18,6 @@ export function WritingResponsePanel({
   onSubmit,
   onRetry,
   onNext,
-  onGenNew,
   onExit,
   embedded,
 }) {
@@ -61,7 +59,6 @@ export function WritingResponsePanel({
         <div style={{ marginTop: 20 }}>
           <div style={{ display: "flex", gap: 12, marginTop: 16 }}>
             <Btn onClick={onNext} variant="secondary">下一题</Btn>
-            <Btn onClick={onGenNew} disabled={gen}>{gen ? "生成中..." : "生成新题"}</Btn>
             <Btn onClick={onExit} variant="secondary">{embedded ? "返回" : "返回练习"}</Btn>
           </div>
         </div>
