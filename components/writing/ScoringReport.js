@@ -129,10 +129,12 @@ export function ScoringReport({ result, type }) {
                       cursor: "pointer",
                       padding: "0 2px",
                       margin: 0,
-                      background: style.bg,
-                      color: style.color,
+                      background: isActive ? style.color : style.bg,
+                      color: isActive ? "#fff" : style.color,
                       borderRadius: 3,
                       font: "inherit",
+                      outline: isActive ? `2px solid ${style.color}` : "none",
+                      outlineOffset: 1,
                     }}
                   >
                     {seg.text}
