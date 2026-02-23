@@ -20,6 +20,20 @@ jest.mock("../lib/sessionStore", () => ({
         total: 0,
         details: [],
       },
+      {
+        id: 11,
+        type: "email",
+        date: "2026-02-13T10:00:00.000Z",
+        score: 3,
+        details: { practiceRootId: "root-a", practiceAttempt: 1, userText: "a", feedback: {} },
+      },
+      {
+        id: 12,
+        type: "email",
+        date: "2026-02-13T11:00:00.000Z",
+        score: 4,
+        details: { practiceRootId: "root-a", practiceAttempt: 2, userText: "b", feedback: {} },
+      },
     ],
   })),
   deleteSession: jest.fn(() => ({ sessions: [] })),
@@ -33,5 +47,10 @@ describe("ProgressView", () => {
     expect(screen.getByText("Practice History")).toBeInTheDocument();
     expect(screen.getByText("Mock Exams")).toBeInTheDocument();
     expect(screen.getByText("Practice")).toBeInTheDocument();
+  });
+
+  test("shows collapsed retry records in practice history", () => {
+    render(<ProgressView onBack={() => {}} />);
+    expect(screen.getByText("展开附加练习 (1)")).toBeInTheDocument();
   });
 });

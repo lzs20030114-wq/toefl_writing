@@ -313,6 +313,43 @@ describe("ToeflApp navigation", () => {
     expect(screen.getByTestId("writing-submit")).toBeInTheDocument();
   });
 
+  test("writing report shows retry button and retry resets to same prompt", async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        content: JSON.stringify({
+          score: 4,
+          band: 4,
+          goals_met: [true, true, true],
+          summary: "ok",
+          weaknesses: [],
+          strengths: [],
+          grammar_issues: [],
+          vocabulary_note: "",
+          next_steps: [],
+          sample: "sample",
+        }),
+      }),
+    });
+
+    render(<WritingTask onExit={() => {}} type="email" />);
+    fireEvent.click(screen.getByTestId("writing-intro-start"));
+    fireEvent.change(screen.getByTestId("writing-textarea"), {
+      target: { value: "this response has enough words to pass submit threshold quickly" },
+    });
+    fireEvent.click(screen.getByTestId("writing-submit"));
+
+    await waitFor(() => {
+      expect(screen.getByText("再练一遍")).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText("再练一遍"));
+    expect(screen.getByTestId("writing-intro-start")).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId("writing-intro-start"));
+    expect(screen.getByTestId("writing-textarea")).toHaveValue("");
+    expect(global.fetch).toHaveBeenCalledTimes(1);
+  });
+
   test("build final submit can be canceled by confirm dialog", () => {
     const confirmSpy = jest.spyOn(window, "confirm").mockReturnValue(false);
 

@@ -423,9 +423,10 @@ function MockExamDetails({ session }) {
   );
 }
 
-export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, showIcon }) {
+export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, showIcon, compact = false }) {
   const s = entry?.session || {};
   const sourceIndex = entry?.sourceIndex;
+  const practiceAttempt = Number(s?.details?.practiceAttempt || 1);
 
   const mockTasks = Array.isArray(s?.details?.tasks) ? s.details.tasks : [];
   const mockBuild = mockTasks.find((t) => t?.taskId === MOCK_TASK_IDS.BUILD);
@@ -445,7 +446,7 @@ export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, show
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          padding: "10px 0",
+          padding: compact ? "8px 0" : "10px 0",
           borderBottom: isLast ? "none" : "1px solid #eee",
           cursor: "pointer",
           gap: 10,
@@ -458,6 +459,9 @@ export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, show
           <span style={{ fontSize: 13, fontWeight: 700, whiteSpace: "nowrap" }}>
             {showIcon ? typeIcon(s.type) : ""}{getTypeLabel(s.type)}
           </span>
+          {(s.type === "email" || s.type === "discussion") && practiceAttempt > 1 && (
+            <Chip color="#0f766e" bg="#ccfbf1">第{practiceAttempt}次练习</Chip>
+          )}
           {s.type === "mock" && Number.isFinite(s?.band) && (
             <Chip color="#1d4ed8" bg="#dbeafe">Band {s.band.toFixed(1)}</Chip>
           )}

@@ -84,6 +84,14 @@ function isPromptExhaustedError(err) {
   return String(err?.message || "").includes(BANK_EXHAUSTED_ERRORS.PROMPT);
 }
 
+function createPracticeRootId(type, promptId) {
+  const safeType = String(type || "writing");
+  const safePrompt = String(promptId || "prompt");
+  const ts = Date.now().toString(36);
+  const rand = Math.random().toString(36).slice(2, 8);
+  return `${safeType}-${safePrompt}-${ts}-${rand}`;
+}
+
 export function WritingTask({
   onExit,
   type,
@@ -142,6 +150,14 @@ export function WritingTask({
   const [intro, setIntro] = useState(showTaskIntro);
   const tr = useRef(null);
   const submitLockRef = useRef(false);
+  const practiceRootIdRef = useRef("");
+  const practiceAttemptRef = useRef(1);
+
+  useEffect(() => {
+    if (!pd?.id) return;
+    practiceRootIdRef.current = createPracticeRootId(type, pd.id);
+    practiceAttemptRef.current = 1;
+  }, [type, pd?.id]);
 
   useEffect(() => { setPd(pi >= 0 ? data[pi] || null : null); }, [pi, data]);
   useEffect(() => { setIntro(showTaskIntro); }, [showTaskIntro, type]);
@@ -192,7 +208,9 @@ export function WritingTask({
           details: {
             promptSummary: summarizePrompt(type, pd),
             userText: text,
-            feedback: r
+            feedback: r,
+            practiceRootId: practiceRootIdRef.current || createPracticeRootId(type, pd?.id),
+            practiceAttempt: practiceAttemptRef.current,
           }
         };
         if (persistSession) {
@@ -288,7 +306,25 @@ export function WritingTask({
       return;
     }
     usedRef.current.add(n);
+    practiceRootIdRef.current = createPracticeRootId(type, data[n]?.id);
+    practiceAttemptRef.current = 1;
     setPi(n); setPd(data[n]); setText(""); setTl(limit); setRun(false); setPhase("ready"); setFb(null); setRequestState("idle"); setScoreError(""); submitLockRef.current = false; completionSentRef.current = false; setIntro(showTaskIntro);
+  }
+
+  function retryCurrentPrompt() {
+    if (!pd) return;
+    clearInterval(tr.current);
+    practiceAttemptRef.current += 1;
+    setText("");
+    setTl(limit);
+    setRun(false);
+    setPhase("ready");
+    setFb(null);
+    setRequestState("idle");
+    setScoreError("");
+    submitLockRef.current = false;
+    completionSentRef.current = false;
+    setIntro(showTaskIntro);
   }
   useEffect(() => () => clearInterval(tr.current), []);
 
@@ -370,7 +406,7 @@ export function WritingTask({
           </>
         )}
         {phase === "done" && fb && (
-          <div style={{ marginTop: 20 }}><ScoringReport result={fb} type={type} uiLang={uiReportLanguage} /><div style={{ display: "flex", gap: 12, marginTop: 16 }}><Btn onClick={next} variant="secondary">下一题</Btn><Btn onClick={onExit} variant="secondary">{embedded ? "返回" : "返回练习"}</Btn></div></div>
+          <div style={{ marginTop: 20 }}><ScoringReport result={fb} type={type} uiLang={uiReportLanguage} /><div style={{ display: "flex", gap: 12, marginTop: 16, flexWrap: "wrap" }}><Btn onClick={next} variant="secondary">下一题</Btn><Btn onClick={retryCurrentPrompt} variant="secondary">再练一遍</Btn><Btn onClick={onExit} variant="secondary">{embedded ? "返回" : "返回练习"}</Btn></div></div>
         )}
           </>
         )}

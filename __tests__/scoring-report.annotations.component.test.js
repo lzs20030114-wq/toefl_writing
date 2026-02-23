@@ -36,8 +36,8 @@ describe("ScoringReport redesigned layout", () => {
     expect(screen.getByText("/ 5")).toBeInTheDocument();
     expect(screen.getByText(/Band 4.5/)).toBeInTheDocument();
     expect(screen.getByText(/Goal1:/)).toBeInTheDocument();
-    expect(screen.getByText(/提分行动指南/)).toBeInTheDocument();
-    expect(screen.getByText(/现在就可以做的一件事/)).toBeInTheDocument();
+    expect(screen.getByText(/薄弱点修改建议/)).toBeInTheDocument();
+    expect(screen.getByText(/现在可做的/)).toBeInTheDocument();
   });
 
   test("shows fallback message when a section fails", () => {

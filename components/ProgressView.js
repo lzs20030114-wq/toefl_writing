@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
 import { loadHist, deleteSession, clearAllSessions, SESSION_STORE_EVENTS } from "../lib/sessionStore";
-import { buildHistoryEntries, buildHistoryStats } from "../lib/history/viewModel";
+import { buildHistoryEntries, buildHistoryStats, buildPracticeGroups } from "../lib/history/viewModel";
 import { C, FONT, Btn, TopBar } from "./shared/ui";
 import { HistoryRow } from "./history/HistoryRow";
 
@@ -156,6 +156,8 @@ export function ProgressView({ onBack }) {
   const [hist, setHist] = useState(null);
   const [expandedMock, setExpandedMock] = useState(null);
   const [expandedPractice, setExpandedPractice] = useState(null);
+  const [expandedPracticeRetryGroups, setExpandedPracticeRetryGroups] = useState({});
+  const [expandedPracticeRetryRows, setExpandedPracticeRetryRows] = useState({});
   const [tab, setTab] = useState("all");
 
   useEffect(() => {
@@ -200,6 +202,7 @@ export function ProgressView({ onBack }) {
     const t = PRACTICE_TABS.find((x) => x.key === tab);
     return t?.type ? practiceEntries.filter((e) => e.session.type === t.type) : practiceEntries;
   }, [practiceEntries, tab]);
+  const filteredPracticeGroups = useMemo(() => buildPracticeGroups(filteredPractice), [filteredPractice]);
 
   // Auto-poll for pending mock scoring
   useEffect(() => {
@@ -222,6 +225,20 @@ export function ProgressView({ onBack }) {
     setHist({ ...newHist });
     if (expandedMock === sourceIndex) setExpandedMock(null);
     if (expandedPractice === sourceIndex) setExpandedPractice(null);
+  }
+
+  function handleTogglePracticeRetryGroup(parentSourceIndex) {
+    setExpandedPracticeRetryGroups((prev) => ({
+      ...prev,
+      [parentSourceIndex]: !prev[parentSourceIndex],
+    }));
+  }
+
+  function handleTogglePracticeRetryRow(parentSourceIndex, childSourceIndex) {
+    setExpandedPracticeRetryRows((prev) => ({
+      ...prev,
+      [parentSourceIndex]: prev[parentSourceIndex] === childSourceIndex ? null : childSourceIndex,
+    }));
   }
 
   function handleClearAll() {
@@ -370,17 +387,57 @@ export function ProgressView({ onBack }) {
                       : "No records for this filter."}
                   </div>
                 ) : (
-                  filteredPractice.map((entry, i) => (
-                    <HistoryRow
-                      key={entry.sourceIndex}
-                      entry={entry}
-                      isExpanded={expandedPractice === entry.sourceIndex}
-                      isLast={i === filteredPractice.length - 1}
-                      onToggle={() => setExpandedPractice(expandedPractice === entry.sourceIndex ? null : entry.sourceIndex)}
-                      onDelete={handleDelete}
-                      showIcon
-                    />
-                  ))
+                  filteredPracticeGroups.map((group, i) => {
+                    const parent = group.parent;
+                    const parentId = parent?.sourceIndex;
+                    const hasRetries = Array.isArray(group.children) && group.children.length > 0;
+                    const retryListOpen = !!expandedPracticeRetryGroups[parentId];
+                    const expandedChildId = expandedPracticeRetryRows[parentId] || null;
+                    return (
+                      <div key={group.groupKey}>
+                        <HistoryRow
+                          entry={parent}
+                          isExpanded={expandedPractice === parentId}
+                          isLast={i === filteredPracticeGroups.length - 1 && (!hasRetries || !retryListOpen)}
+                          onToggle={() => setExpandedPractice(expandedPractice === parentId ? null : parentId)}
+                          onDelete={handleDelete}
+                          showIcon
+                        />
+                        {hasRetries && (
+                          <div style={{ margin: "-2px 0 8px 22px", borderLeft: "2px solid #e5e7eb", paddingLeft: 10 }}>
+                            <button
+                              onClick={() => handleTogglePracticeRetryGroup(parentId)}
+                              style={{
+                                border: "1px solid #d1d5db",
+                                background: "#fff",
+                                borderRadius: 6,
+                                fontSize: 12,
+                                padding: "4px 8px",
+                                cursor: "pointer",
+                                color: C.blue,
+                                fontWeight: 700,
+                                marginBottom: retryListOpen ? 6 : 0,
+                              }}
+                            >
+                              {retryListOpen ? "收起附加练习" : "展开附加练习"} ({group.children.length})
+                            </button>
+                            {retryListOpen && group.children.map((child, childIdx) => (
+                              <HistoryRow
+                                key={child.sourceIndex}
+                                entry={child}
+                                isExpanded={expandedChildId === child.sourceIndex}
+                                isLast={childIdx === group.children.length - 1}
+                                onToggle={() => handleTogglePracticeRetryRow(parentId, child.sourceIndex)}
+                                onDelete={handleDelete}
+                                showIcon={false}
+                                compact
+                              />
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })
                 )}
               </div>
             </div>

@@ -1,4 +1,4 @@
-import { buildHistoryEntries, buildHistoryStats, buildRecentEntries } from "../lib/history/viewModel";
+import { buildHistoryEntries, buildHistoryStats, buildRecentEntries, buildPracticeGroups } from "../lib/history/viewModel";
 
 describe("history view model", () => {
   test("dedupes mock sessions by mockSessionId and keeps latest", () => {
@@ -49,5 +49,28 @@ describe("history view model", () => {
     const mock = entries.find((e) => e.session.type === "mock");
     expect(entries.length).toBe(2);
     expect(mock.session.score).toBe(80);
+  });
+
+  test("groups retry practice records under the same root id", () => {
+    const entries = [
+      {
+        sourceIndex: 1,
+        session: { type: "email", date: "2026-02-10T10:00:00.000Z", details: { practiceRootId: "r1", practiceAttempt: 1 } },
+      },
+      {
+        sourceIndex: 2,
+        session: { type: "email", date: "2026-02-10T11:00:00.000Z", details: { practiceRootId: "r1", practiceAttempt: 2 } },
+      },
+      {
+        sourceIndex: 3,
+        session: { type: "discussion", date: "2026-02-10T12:00:00.000Z", details: { practiceRootId: "r2", practiceAttempt: 1 } },
+      },
+    ];
+    const groups = buildPracticeGroups(entries);
+    expect(groups).toHaveLength(2);
+    const emailGroup = groups.find((g) => g.type === "email");
+    expect(emailGroup.parent.sourceIndex).toBe(1);
+    expect(emailGroup.children).toHaveLength(1);
+    expect(emailGroup.children[0].sourceIndex).toBe(2);
   });
 });
