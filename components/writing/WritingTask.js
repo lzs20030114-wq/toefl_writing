@@ -293,11 +293,11 @@ export function WritingTask({
   useEffect(() => () => clearInterval(tr.current), []);
 
   const w = wc(text);
-  const taskTitle = type === "email" ? "写邮件" : "学术讨论";
+  const taskTitle = type === "email" ? "Write an Email" : "Academic Discussion";
   const introTitle = type === "email" ? "Task 2: Write an Email" : "Task 3: Academic Discussion";
   const introDesc = type === "email"
-    ? "你将阅读一个场景，并写一封覆盖全部目标的邮件。"
-    : "你将阅读讨论内容，并写出聚焦且有论证的回应。";
+    ? "You will read a workplace scenario and write an email that addresses all required goals."
+    : "You will read a discussion board prompt and write a focused academic response.";
 
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
@@ -336,14 +336,14 @@ export function WritingTask({
                   start();
                 }}
               >
-                继续并开始计时
+                Continue and start timer
               </Btn>
             </div>
           </div>
         ) : (
           <>
         <div style={{ background: C.ltB, border: "1px solid #b3d4fc", borderRadius: 4, padding: 14, marginBottom: 20, fontSize: 13 }}>
-          <b>作答说明：</b> {type === "email" ? `写一封邮件并覆盖全部 3 个目标。${formatMinutesLabel(limit)}。80-120 词。` : `阅读讨论并写出你的回应。${formatMinutesLabel(limit)}。100+ 词。`}
+          <b>Directions:</b> {type === "email" ? `Write an email addressing all 3 goals. ${formatMinutesLabel(limit)}. 80-120 words.` : `Read the discussion and write a response. ${formatMinutesLabel(limit)}. 100+ words.`}
           {practiceMode === PRACTICE_MODE.CHALLENGE && <span> Challenge mode: compressed timing.</span>}
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>

@@ -24,8 +24,8 @@ export function WritingResponsePanel({
     <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
       {phase === "ready" ? (
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 4, padding: 40, textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-          <div style={{ fontSize: 14, color: C.t2 }}>阅读题目后，点击开始作答。</div>
-          <Btn data-testid="writing-start" onClick={onStart}>开始写作</Btn>
+          <div style={{ fontSize: 14, color: C.t2 }}>Read the prompt, then click start to begin writing.</div>
+          <Btn data-testid="writing-start" onClick={onStart}>Start Writing</Btn>
         </div>
       ) : (
         <>
