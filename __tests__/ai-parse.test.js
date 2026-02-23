@@ -1,4 +1,4 @@
-import { parseReport, parseScoreReport } from "../lib/ai/parse";
+﻿import { parseReport, parseScoreReport } from "../lib/ai/parse";
 
 describe("parseReport", () => {
   test("parses JSON response", () => {
@@ -28,70 +28,62 @@ describe("parseReport", () => {
     expect(out.band).toBe(5);
   });
 
-  test("parses sectioned report", () => {
+  test("parses sectioned report in new format", () => {
     const raw = `
-===RUBRIC===
-TaskFulfillment: 4.0 | Goals mostly covered with minor gaps.
-OrganizationCoherence: 3.5 | Flow is understandable but transitions are uneven.
-LanguageUse: 3.5 | Errors exist but mostly do not block comprehension.
-Weights: TaskFulfillment=0.40, OrganizationCoherence=0.30, LanguageUse=0.30
-WeightedScore: 3.7
 ===SCORE===
-Score: 4
-Band: 4.0
-Summary: Goals are mostly covered, but tone is somewhat informal.
+分数: 4
+Band: 4.5
+总评: 三个目标基本完成，但语域偏口语化。
 ===GOALS===
-Goal1: OK situation explained clearly
-Goal2: PARTIAL resubmission request lacks detail
-Goal3: MISSING impact on grade is unclear
+Goal1: OK 已说明写信目的
+Goal2: PARTIAL 请求细节不够具体
+Goal3: MISSING 未提到截止时间影响
 ===ANNOTATION===
 Dear Professor,
-<r>I am a subscriber of your magazine.</r><n level="red" fix="I am a subscriber to your magazine.">Wrong collocation.</n>
+<r>I am a subscriber of your magazine.</r><n level="red" fix="I am a subscriber to your magazine.">介词搭配错误。</n>
 Thanks.
 
 ===PATTERNS===
-{"patterns":[{"tag":"collocation","count":1,"summary":"fixed phrase misuse"},{"tag":"goal coverage","count":1,"summary":"third goal missing"}]}
+[{"tag":"介词搭配","count":1,"summary":"固定搭配错误"},{"tag":"礼貌用语缺失","count":1,"summary":"缺少正式礼貌句型"}]
 
 ===COMPARISON===
-[Model]
+[范文]
 Dear Professor, I would appreciate it if...
 
-[Comparison]
-1. Opening tone
-   Yours: I am a subscriber of your magazine.
-   Model: I am a subscriber to your magazine.
-   Difference: Fixed collocation improves accuracy.
+[对比]
+1. 开头表达
+   你的: I am a subscriber of your magazine.
+   范文: I am a subscriber to your magazine.
+   差异: 固定搭配更准确。
 ===ACTION===
-Action1: Collocation accuracy
-Importance: Directly impacts language accuracy score.
-Action: Memorize and apply "subscribe to", "apply for", and "depend on".
+短板1: 介词搭配
+重要性: 影响语言准确度评分。
+行动: 背诵并使用 subscribe to / apply for / depend on。
 `;
 
     const out = parseReport(raw);
     expect(out.error).toBe(false);
     expect(out.score).toBe(4);
-    expect(out.summary).toContain("Goals are mostly covered");
+    expect(out.summary).toContain("语域偏口语化");
     expect(out.goals).toHaveLength(3);
     expect(out.goals_met).toEqual([true, false, false]);
-    expect(out.rubric).toBeTruthy();
-    expect(out.rubric.method).toBe("weighted_combination");
-    expect(out.rubric.dimensions.task_fulfillment.score).toBe(4);
     expect(out.annotationCounts.red).toBe(1);
-    expect(out.patterns[0].tag).toBe("collocation");
+    expect(out.patterns[0].tag).toBe("介词搭配");
     expect(out.actions).toHaveLength(1);
     expect(out.next_steps[0]).toContain("subscribe to");
+    expect(out.sectionStates.PATTERNS.ok).toBe(true);
   });
 
   test("parseScoreReport returns board-friendly shape", () => {
     const raw = `
 ===SCORE===
-Score: 3
+分数: 3
 Band: 3.5
-Summary: Development is limited.
+总评: 论证展开有限。
 ===ACTION===
-Action1: Add support
-Importance: Weak support lowers persuasiveness.
-Action: Use "for example" to add concrete detail.
+短板1: 增加支撑
+重要性: 支撑薄弱会降低说服力。
+行动: 使用 for example 增加具体细节。
 `;
     const out = parseScoreReport(raw, "discussion");
     expect(out.score).toBe(3);
@@ -102,9 +94,9 @@ Action: Use "for example" to add concrete detail.
   test("parses SCORE section with full-width colon", () => {
     const raw = `
 ===SCORE===
-Score：4.5
+分数：4.5
 Band：5.0
-Summary：Response is clear and focused.
+总评：Response is clear and focused.
 `;
     const out = parseReport(raw);
     expect(out.error).toBe(false);
@@ -116,9 +108,9 @@ Summary：Response is clear and focused.
   test("parses inline <n> annotation format and keeps counts non-zero", () => {
     const raw = `
 ===SCORE===
-Score: 4
+分数: 4
 Band: 4.0
-Summary: Mostly clear.
+总评: Mostly clear.
 ===ANNOTATION===
 Dear Professor, <n level="red" fix="I have received your feedback.">I receive your feedback.</n>
 Thanks for your time.
@@ -136,3 +128,4 @@ Thanks for your time.
     expect(out.summary).toContain("Scoring parse failed");
   });
 });
+

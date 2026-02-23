@@ -197,7 +197,7 @@ export function WritingTask({
     setFb(null);
     try {
       if (!pd) {
-        throw new Error("Prompt data is missing.");
+        throw new Error("题目数据缺失。");
       }
       const r = await evaluateWritingResponse(type, pd, text, uiReportLanguage);
       setFb(r);
@@ -222,7 +222,7 @@ export function WritingTask({
         setRequestState("success");
       } else {
         setRequestState("error");
-        setScoreError("Scoring did not return a valid result. Please try again.");
+        setScoreError("评分结果无效，请重试");
       }
     } catch (e) {
       setPhase("done");
@@ -258,7 +258,7 @@ export function WritingTask({
       if (!pd) {
         submitLockRef.current = false;
         setRequestState("error");
-        setScoreError("Prompt data is missing.");
+        setScoreError("题目数据缺失。");
         return;
       }
       setRequestState("success");
@@ -311,7 +311,7 @@ export function WritingTask({
     const d = await aiGen(type);
     const normalized = normalizePrompt(type, d, `gen-${Date.now()}`);
     if (normalized) { setPd(normalized); setText(""); setTl(limit); setRun(false); setPhase("ready"); setFb(null); setRequestState("idle"); setScoreError(""); submitLockRef.current = false; completionSentRef.current = false; setIntro(showTaskIntro); }
-    else { setToast("Generation failed. Please retry."); }
+    else { setToast("生成失败，请重试。"); }
     setGen(false);
   }
   useEffect(() => () => clearInterval(tr.current), []);
@@ -330,15 +330,15 @@ export function WritingTask({
       <div style={{ maxWidth: 860, margin: "24px auto", padding: "0 20px" }}>
         {initialError && (
           <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 28, marginBottom: 16 }}>
-            <div style={{ fontSize: 16, fontWeight: 700, color: C.red, marginBottom: 8 }}>Prompt bank unavailable</div>
+            <div style={{ fontSize: 16, fontWeight: 700, color: C.red, marginBottom: 8 }}>题库不可用</div>
             <div style={{ fontSize: 14, color: C.t2 }}>{initialError}</div>
-            <div style={{ marginTop: 16 }}><Btn onClick={onExit} variant="secondary">{embedded ? "Back" : "Back to Practice"}</Btn></div>
+            <div style={{ marginTop: 16 }}><Btn onClick={onExit} variant="secondary">{embedded ? "返回" : "返回练习"}</Btn></div>
           </div>
         )}
         {!initialError && !pd && (
           <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 28, marginBottom: 16 }}>
-            <div style={{ fontSize: 16, fontWeight: 700, color: C.red, marginBottom: 8 }}>Prompt unavailable</div>
-            <div style={{ fontSize: 14, color: C.t2 }}>Please refresh and try again.</div>
+            <div style={{ fontSize: 16, fontWeight: 700, color: C.red, marginBottom: 8 }}>题目不可用</div>
+            <div style={{ fontSize: 14, color: C.t2 }}>请刷新后重试。</div>
           </div>
         )}
         {!initialError && pd && (
@@ -367,7 +367,7 @@ export function WritingTask({
         ) : (
           <>
         <div style={{ background: C.ltB, border: "1px solid #b3d4fc", borderRadius: 4, padding: 14, marginBottom: 20, fontSize: 13 }}>
-          <b>Directions:</b> {type === "email" ? `Write an email addressing all 3 goals. ${formatMinutesLabel(limit)}. 80-120 words.` : `Read the discussion and write a response. ${formatMinutesLabel(limit)}. 100+ words.`}
+          <b>作答说明：</b> {type === "email" ? `写一封邮件并覆盖全部 3 个目标。${formatMinutesLabel(limit)}。80-120 词。` : `阅读讨论并写出你的回应。${formatMinutesLabel(limit)}。100+ 词。`}
           {practiceMode === PRACTICE_MODE.CHALLENGE && <span> Challenge mode: compressed timing.</span>}
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
@@ -397,7 +397,7 @@ export function WritingTask({
           </>
         )}
         {phase === "done" && fb && (
-          <div style={{ marginTop: 20 }}><ScoringReport result={fb} type={type} uiLang={uiReportLanguage} /><div style={{ display: "flex", gap: 12, marginTop: 16 }}><Btn onClick={next} variant="secondary">Next Prompt</Btn><Btn onClick={genNew} disabled={gen}>{gen ? "Generating..." : "Generate New Prompt"}</Btn><Btn onClick={onExit} variant="secondary">{embedded ? "Back" : "Back to Practice"}</Btn></div></div>
+          <div style={{ marginTop: 20 }}><ScoringReport result={fb} type={type} uiLang={uiReportLanguage} /><div style={{ display: "flex", gap: 12, marginTop: 16 }}><Btn onClick={next} variant="secondary">下一题</Btn><Btn onClick={genNew} disabled={gen}>{gen ? "生成中..." : "生成新题"}</Btn><Btn onClick={onExit} variant="secondary">{embedded ? "返回" : "返回练习"}</Btn></div></div>
         )}
           </>
         )}

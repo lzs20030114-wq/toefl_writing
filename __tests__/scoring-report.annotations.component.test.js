@@ -1,57 +1,120 @@
-import { render, screen } from "@testing-library/react";
+﻿import { fireEvent, render, screen } from "@testing-library/react";
 import { ScoringReport } from "../components/writing/ScoringReport";
 
-describe("ScoringReport compact feedback", () => {
-  test("renders AI disclaimer and caps key problems at 3", () => {
+describe("ScoringReport redesigned layout", () => {
+  test("renders score card, goals, and action cards", () => {
     const result = {
-      score: 3.5,
-      band: 4,
-      summary: "Needs clearer grammar and wording.",
-      rubric: {
-        weighted_score: 3.7,
-        method: "weighted_combination",
-        dimensions: {
-          task_fulfillment: { score: 4, weight: 0.4, definition: "Task coverage", reason: "Most goals addressed." },
-          organization_coherence: { score: 3.5, weight: 0.3, definition: "Flow", reason: "Transitions can improve." },
-          language_use: { score: 3.5, weight: 0.3, definition: "Language quality", reason: "Some grammar slips." },
-        },
-      },
-      score_confidence: {
-        reliable_aspects: ["task_fulfillment", "language_use"],
-        uncertain_aspects: ["nuanced_argument_quality"],
-        qualitative_only: true,
-      },
-      key_problems: [
-        { explanation: "Verb tense is inconsistent.", example: "I receive your feedback yesterday", action: "Use past tense for past events." },
-        { explanation: "Sentence is too vague.", example: "This is good for many things", action: "Replace vague words with one concrete detail." },
-        { explanation: "Connector is missing.", example: "I agree this policy helps", action: "Add a reason connector like because/therefore." },
-        { explanation: "Should not show", example: "extra", action: "extra" },
+      score: 4,
+      band: 4.5,
+      summary: "三个目标完成了，但礼貌语域不足。",
+      goals: [
+        { index: 1, status: "OK", reason: "说明了写信目的" },
+        { index: 2, status: "PARTIAL", reason: "请求细节不完整" },
+        { index: 3, status: "MISSING", reason: "未说明截止时间" },
       ],
+      actions: [
+        {
+          title: "邮件语域偏口语化",
+          importance: "语域不当会拉低任务完成度。",
+          action: "下次至少使用 3 个礼貌句型：I would appreciate it if... / Could you kindly... / I look forward to hearing from you.",
+        },
+      ],
+      annotationCounts: { red: 1, orange: 2, blue: 1 },
+      annotationSegments: [{ type: "text", text: "plain" }],
+      patterns: [{ tag: "礼貌用语缺失", count: 2, summary: "正式礼貌表达不足" }],
+      comparison: { modelEssay: "model", points: [] },
+      sectionStates: {
+        ACTION: { ok: true },
+        ANNOTATION: { ok: true },
+        PATTERNS: { ok: true },
+        COMPARISON: { ok: true },
+      },
     };
 
-    render(<ScoringReport result={result} type="email" uiLang="en" />);
-    expect(screen.getByTestId("score-disclaimer-note")).toBeInTheDocument();
-    expect(screen.getByText(/Scores are AI-assisted training estimates\./i)).toBeInTheDocument();
-    expect(screen.getByText(/not official score prediction/i)).toBeInTheDocument();
-    expect(screen.getByText(/Score Confidence/i)).toBeInTheDocument();
-    expect(screen.getByText(/Reliable:/i)).toBeInTheDocument();
-    expect(screen.getByText(/Uncertain:/i)).toBeInTheDocument();
-    expect(screen.getByText(/Rubric Breakdown/i)).toBeInTheDocument();
-    expect(screen.getByText(/Weighted score/i)).toBeInTheDocument();
-    expect(screen.getByText(/Key Problems \(ranked by impact\)/i)).toBeInTheDocument();
-    expect(screen.getAllByText(/Diagnosis/i)).toHaveLength(3);
-    expect(screen.queryByText("Should not show")).not.toBeInTheDocument();
+    render(<ScoringReport result={result} type="email" />);
+    expect(screen.getByTestId("score-panel")).toBeInTheDocument();
+    expect(screen.getByText("/ 5")).toBeInTheDocument();
+    expect(screen.getByText(/Band 4.5/)).toBeInTheDocument();
+    expect(screen.getByText(/Goal1:/)).toBeInTheDocument();
+    expect(screen.getByText(/短板行动卡/)).toBeInTheDocument();
+    expect(screen.getByText(/现在就可以做的一件事/)).toBeInTheDocument();
   });
 
-  test("shows compact no-problem state for discussion report", () => {
+  test("shows fallback message when a section fails", () => {
     const result = {
-      score: 5,
-      band: 5.5,
-      summary: "Strong response.",
-      key_problems: [],
+      score: 3,
+      band: 3.5,
+      summary: "总评",
+      actions: [],
+      annotationCounts: { red: 0, orange: 0, blue: 0 },
+      annotationSegments: [],
+      patterns: [],
+      comparison: { modelEssay: "", points: [] },
+      sectionStates: {
+        ACTION: { ok: false },
+        ANNOTATION: { ok: false },
+        PATTERNS: { ok: false },
+        COMPARISON: { ok: false },
+      },
     };
-    render(<ScoringReport result={result} type="discussion" uiLang="en" />);
-    expect(screen.getByText(/No major problems detected/i)).toBeInTheDocument();
-    expect(screen.getByTestId("score-disclaimer-note")).toBeInTheDocument();
+
+    render(<ScoringReport result={result} type="discussion" />);
+    expect(screen.getAllByText("此部分暂时无法加载").length).toBeGreaterThan(0);
+  });
+
+  test("one failed section does not block other sections", () => {
+    const result = {
+      score: 4,
+      band: 4.5,
+      summary: "总评",
+      actions: [],
+      annotationCounts: { red: 1, orange: 0, blue: 0 },
+      annotationSegments: [
+        { type: "text", text: "Dear Editor, " },
+        { type: "mark", text: "I am a subscriber of", level: "red", fix: "I am a subscriber to", note: "介词搭配错误" },
+      ],
+      patterns: [{ tag: "介词搭配", count: 1, summary: "固定搭配错误" }],
+      comparison: { modelEssay: "sample", points: [] },
+      sectionStates: {
+        ACTION: { ok: false },
+        ANNOTATION: { ok: true },
+        PATTERNS: { ok: true },
+        COMPARISON: { ok: true },
+      },
+    };
+
+    render(<ScoringReport result={result} type="email" />);
+    expect(screen.getByText("此部分暂时无法加载")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "I am a subscriber of" })).toBeInTheDocument();
+    expect(screen.getByText("介词搭配")).toBeInTheDocument();
+  });
+
+  test("annotation mark click shows note card", () => {
+    const result = {
+      score: 4,
+      band: 4.5,
+      summary: "总评",
+      actions: [],
+      annotationCounts: { red: 1, orange: 0, blue: 0 },
+      annotationSegments: [
+        { type: "text", text: "Dear Editor, " },
+        { type: "mark", text: "I am a subscriber of", level: "red", fix: "I am a subscriber to", note: "介词搭配错误" },
+      ],
+      patterns: [],
+      comparison: { modelEssay: "", points: [] },
+      sectionStates: {
+        ACTION: { ok: true },
+        ANNOTATION: { ok: true },
+        PATTERNS: { ok: true },
+        COMPARISON: { ok: true },
+      },
+    };
+
+    render(<ScoringReport result={result} type="email" />);
+    fireEvent.click(screen.getByRole("button", { name: "I am a subscriber of" }));
+    expect(screen.getByText("改写建议（英文）")).toBeInTheDocument();
+    expect(screen.getByText("I am a subscriber to")).toBeInTheDocument();
+    expect(screen.getByText("介词搭配错误")).toBeInTheDocument();
   });
 });
+
