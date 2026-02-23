@@ -5,8 +5,20 @@
 import { POST } from "../app/api/ai/route";
 
 describe("/api/ai route", () => {
+  const savedEnv = {};
+  beforeEach(() => {
+    // Ensure tests use the fetch path, not the curl proxy path
+    ["DEEPSEEK_PROXY_URL", "HTTPS_PROXY", "HTTP_PROXY"].forEach((k) => {
+      savedEnv[k] = process.env[k];
+      delete process.env[k];
+    });
+  });
   afterEach(() => {
     jest.restoreAllMocks();
+    Object.entries(savedEnv).forEach(([k, v]) => {
+      if (v === undefined) delete process.env[k];
+      else process.env[k] = v;
+    });
   });
 
   test("returns parsed content when upstream succeeds", async () => {

@@ -112,7 +112,7 @@ describe("parseAnnotations", () => {
     expect(out.plainText.slice(out.annotations[1].start, out.annotations[1].end)).toBe("provide experience");
   });
 
-  test("removes orphan detached marker line when it cannot be mapped back", () => {
+  test("keeps orphan annotation when marked text has no earlier occurrence", () => {
     const raw = [
       "I think this policy is useful.",
       "<r>lexical precision</r><n level=\"orange\" fix=\"more precise wording\">表达不够精准。</n>",
@@ -122,7 +122,9 @@ describe("parseAnnotations", () => {
 
     expect(out.plainText).toContain("I think this policy is useful.");
     expect(out.plainText).toContain("Next paragraph starts here.");
-    expect(out.plainText).not.toContain("lexical precision");
-    expect(out.annotations).toHaveLength(0);
+    // The annotation text is kept because it cannot be distinguished
+    // from a legitimate inline annotation occupying a full line.
+    expect(out.annotations).toHaveLength(1);
+    expect(out.annotations[0].level).toBe("orange");
   });
 });

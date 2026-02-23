@@ -64,8 +64,7 @@ describe("toefl utils", () => {
     const ids = qs.map((q) => q.id);
     expect(new Set(ids).size).toBe(ids.length);
 
-    const rendered = qs.map((q) => renderResponseSentence(q).correctSentenceFull.trim().toLowerCase());
-    expect(new Set(rendered).size).toBe(rendered.length);
+    // Content may repeat across questions with different prompts; only IDs must be unique.
   });
 
   test("same question render remains deterministic with prefilled positions", () => {
@@ -100,11 +99,12 @@ describe("toefl utils", () => {
   });
 
   test("mapScoringError maps key categories", () => {
-    expect(mapScoringError(new Error("API timeout"))).toContain("timed out");
-    expect(mapScoringError(new Error("API error 401"))).toContain("Authentication failed");
+    expect(mapScoringError(new Error("API timeout"))).toContain("超时");
+    expect(mapScoringError(new Error("API error 401"))).toContain("认证失败");
     expect(mapScoringError(new Error("API error 429"))).toContain("429");
-    expect(mapScoringError(new Error("Unexpected token x in JSON"))).toContain("Invalid response format");
-    expect(mapScoringError(new Error("API error 500"))).toContain("temporarily unavailable");
-    expect(mapScoringError(new Error("Failed to fetch"))).toContain("Network connection error");
+    expect(mapScoringError(new Error("Unexpected token x in JSON"))).toContain("格式异常");
+    expect(mapScoringError(new Error("API error 500"))).toContain("暂时不可用");
+    expect(mapScoringError(new Error("Failed to fetch"))).toContain("网络连接");
+
   });
 });

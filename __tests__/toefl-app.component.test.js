@@ -81,6 +81,7 @@ describe("ToeflApp navigation", () => {
 
   test("build directions are readable and match iBT wording", () => {
     render(<BuildSentenceTask onExit={() => {}} questions={[BUILD_TEST_Q]} />);
+    fireEvent.click(screen.getByTestId("build-start"));
 
     const directionsText = screen.getByText(/Directions:/);
     const directionsBlock = directionsText.closest("div");
