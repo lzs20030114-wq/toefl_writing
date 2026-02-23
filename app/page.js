@@ -114,6 +114,10 @@ function HomePage({ userCode, onLogout }) {
   const [mode, setMode] = useState(PRACTICE_MODE.STANDARD);
   const [crtFlash, setCrtFlash] = useState(false);
   const [shaking, setShaking] = useState(false);
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
+  const [feedbackText, setFeedbackText] = useState("");
+  const [feedbackBusy, setFeedbackBusy] = useState(false);
+  const [feedbackMsg, setFeedbackMsg] = useState("");
 
   const isChallenge = mode === PRACTICE_MODE.CHALLENGE;
 
@@ -137,6 +141,35 @@ function HomePage({ userCode, onLogout }) {
     setTimeout(() => { setMode(m); setShaking(true); }, 150);
     setTimeout(() => setCrtFlash(false), 400);
     setTimeout(() => setShaking(false), 600);
+  }
+
+  async function submitFeedback() {
+    const content = String(feedbackText || "").trim();
+    if (!content) {
+      setFeedbackMsg("请输入你的建议内容。");
+      return;
+    }
+    setFeedbackBusy(true);
+    setFeedbackMsg("");
+    try {
+      const res = await fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userCode,
+          content,
+          page: "/",
+        }),
+      });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(body?.error || `HTTP ${res.status}`);
+      setFeedbackText("");
+      setFeedbackMsg("提交成功，感谢你的反馈。");
+    } catch (e) {
+      setFeedbackMsg(`提交失败：${String(e.message || e)}`);
+    } finally {
+      setFeedbackBusy(false);
+    }
   }
 
   const querySuffix = isChallenge ? "?mode=challenge" : "";
@@ -496,6 +529,115 @@ function HomePage({ userCode, onLogout }) {
             <b style={{ color: isChallenge ? CH.t1 : C.t1 }}>Disclaimer:</b> This tool is an independent practice resource and is not affiliated with, endorsed by, or associated with ETS or the TOEFL program. TOEFL and TOEFL iBT are registered trademarks of ETS. AI scoring is based on publicly available ETS rubric criteria and is intended for self-study reference only. Scores may not reflect actual TOEFL exam results.
           </div>
         </div>
+
+        <button
+          onClick={() => {
+            setFeedbackOpen(true);
+            setFeedbackMsg("");
+          }}
+          style={{
+            position: "fixed",
+            right: 20,
+            bottom: 20,
+            zIndex: 20,
+            border: "1px solid " + (isChallenge ? CH.accent : C.blue),
+            background: isChallenge ? CH.card : "#fff",
+            color: isChallenge ? CH.accent : C.blue,
+            borderRadius: 999,
+            fontSize: 13,
+            fontWeight: 700,
+            padding: "10px 14px",
+            cursor: "pointer",
+            boxShadow: isChallenge ? "0 4px 18px rgba(255,30,30,0.25)" : "0 4px 14px rgba(59,130,246,0.2)",
+          }}
+        >
+          提交改进建议
+        </button>
+
+        {feedbackOpen && (
+          <div
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: 30,
+              background: "rgba(0,0,0,0.45)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: 16,
+            }}
+            onClick={() => setFeedbackOpen(false)}
+          >
+            <div
+              style={{
+                width: "100%",
+                maxWidth: 580,
+                background: "#fff",
+                border: "1px solid " + C.bdr,
+                borderRadius: 10,
+                padding: 16,
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div style={{ fontSize: 18, fontWeight: 800, color: C.nav, marginBottom: 4 }}>内测反馈</div>
+              <div style={{ fontSize: 12, color: C.t2, marginBottom: 10 }}>
+                你当前的用户码：<b style={{ fontFamily: "monospace" }}>{userCode || "-"}</b>
+              </div>
+              <textarea
+                value={feedbackText}
+                onChange={(e) => setFeedbackText(e.target.value)}
+                placeholder="请写下你希望改进的点，例如：哪里不好用、哪里有 bug、你希望新增什么功能。"
+                maxLength={2000}
+                style={{
+                  width: "100%",
+                  minHeight: 150,
+                  resize: "vertical",
+                  border: "1px solid #cbd5e1",
+                  borderRadius: 8,
+                  padding: 10,
+                  fontSize: 13,
+                  lineHeight: 1.6,
+                  boxSizing: "border-box",
+                  fontFamily: FONT,
+                }}
+              />
+              <div style={{ fontSize: 11, color: C.t2, marginTop: 6 }}>{feedbackText.length}/2000</div>
+              {feedbackMsg ? (
+                <div style={{ marginTop: 8, fontSize: 12, color: feedbackMsg.includes("成功") ? "#166534" : C.red }}>{feedbackMsg}</div>
+              ) : null}
+              <div style={{ marginTop: 12, display: "flex", justifyContent: "flex-end", gap: 8 }}>
+                <button
+                  onClick={() => setFeedbackOpen(false)}
+                  style={{
+                    border: "1px solid #cbd5e1",
+                    background: "#fff",
+                    color: C.t2,
+                    borderRadius: 6,
+                    padding: "8px 10px",
+                    cursor: "pointer",
+                  }}
+                >
+                  关闭
+                </button>
+                <button
+                  onClick={submitFeedback}
+                  disabled={feedbackBusy}
+                  style={{
+                    border: "1px solid " + C.blue,
+                    background: C.blue,
+                    color: "#fff",
+                    borderRadius: 6,
+                    padding: "8px 12px",
+                    cursor: feedbackBusy ? "not-allowed" : "pointer",
+                    opacity: feedbackBusy ? 0.6 : 1,
+                  }}
+                >
+                  {feedbackBusy ? "提交中..." : "提交反馈"}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );

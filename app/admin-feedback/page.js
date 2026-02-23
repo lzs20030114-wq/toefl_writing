@@ -1,0 +1,163 @@
+"use client";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { C, FONT } from "../../components/shared/ui";
+
+const TOKEN_KEY = "toefl-admin-token";
+
+function fmtDate(v) {
+  if (!v) return "-";
+  const d = new Date(v);
+  if (Number.isNaN(d.getTime())) return String(v);
+  return d.toLocaleString();
+}
+
+function clip(v, n = 140) {
+  const s = String(v || "");
+  if (s.length <= n) return s;
+  return `${s.slice(0, n)}...`;
+}
+
+export default function AdminFeedbackPage() {
+  const [token, setToken] = useState("");
+  const [ready, setReady] = useState(false);
+  const [rows, setRows] = useState([]);
+  const [userCode, setUserCode] = useState("");
+  const [msg, setMsg] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    try {
+      setToken(localStorage.getItem(TOKEN_KEY) || "");
+    } catch {
+      // no-op
+    } finally {
+      setReady(true);
+    }
+  }, []);
+
+  function persistToken(v) {
+    setToken(v);
+    try {
+      localStorage.setItem(TOKEN_KEY, v);
+    } catch {
+      // no-op
+    }
+  }
+
+  async function callApi(path) {
+    if (!token.trim()) throw new Error("缺少管理员口令，请先输入 ADMIN_DASHBOARD_TOKEN。");
+    const res = await fetch(path, {
+      method: "GET",
+      headers: { "x-admin-token": token.trim() },
+    });
+    const text = await res.text();
+    let body = {};
+    try {
+      body = text ? JSON.parse(text) : {};
+    } catch {
+      body = {};
+    }
+    if (!res.ok) throw new Error(body?.error || `HTTP ${res.status}`);
+    return body;
+  }
+
+  async function refresh() {
+    if (!token.trim()) return;
+    setBusy(true);
+    setMsg("");
+    try {
+      const p = new URLSearchParams();
+      p.set("limit", "300");
+      if (userCode.trim()) p.set("userCode", userCode.trim().toUpperCase());
+      const body = await callApi(`/api/admin/feedback?${p.toString()}`);
+      setRows(Array.isArray(body?.rows) ? body.rows : []);
+      if (!Array.isArray(body?.rows) || body.rows.length === 0) {
+        setMsg("暂无反馈记录。");
+      }
+    } catch (e) {
+      setMsg(String(e.message || e));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  useEffect(() => {
+    if (ready && token.trim()) refresh();
+  }, [ready, token]);
+
+  return (
+    <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT, padding: 20 }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto", display: "grid", gap: 12 }}>
+        <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 16 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 20, fontWeight: 800, color: C.nav }}>用户反馈后台</div>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <Link href="/admin" style={{ color: C.t2, textDecoration: "none", fontSize: 13 }}>返回总后台</Link>
+              <Link href="/admin-activity" style={{ color: C.blue, textDecoration: "none", fontSize: 13 }}>去答题情况</Link>
+            </div>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: 8, alignItems: "center" }}>
+            <input
+              value={token}
+              onChange={(e) => persistToken(e.target.value)}
+              placeholder="ADMIN_DASHBOARD_TOKEN"
+              style={{ border: "1px solid #cbd5e1", borderRadius: 6, padding: "8px 10px", fontFamily: "monospace", fontSize: 12 }}
+            />
+            <button onClick={refresh} disabled={busy} style={{ border: "1px solid " + C.blue, background: C.blue, color: "#fff", borderRadius: 6, padding: "8px 10px", cursor: busy ? "not-allowed" : "pointer", opacity: busy ? 0.6 : 1 }}>
+              刷新
+            </button>
+            <button onClick={() => { persistToken(""); setRows([]); setMsg(""); }} style={{ border: "1px solid #cbd5e1", background: "#fff", color: C.t2, borderRadius: 6, padding: "8px 10px", cursor: "pointer" }}>
+              清空
+            </button>
+          </div>
+          <div style={{ marginTop: 10, display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+            <input
+              value={userCode}
+              onChange={(e) => setUserCode(e.target.value)}
+              placeholder="按用户码过滤（如 ABC123）"
+              style={{ width: 240, border: "1px solid #cbd5e1", borderRadius: 6, padding: "6px 8px" }}
+            />
+            <button onClick={refresh} style={{ border: "1px solid #cbd5e1", background: "#fff", color: C.t2, borderRadius: 6, padding: "6px 10px", cursor: "pointer" }}>
+              应用筛选
+            </button>
+          </div>
+          <div style={{ marginTop: 8, fontSize: 12, color: C.t2 }}>查看内测用户提交的改进建议，包含内容、来源用户码、提交时间。</div>
+        </div>
+
+        <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 14 }}>
+          <div style={{ overflowX: "auto" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
+              <thead>
+                <tr style={{ background: "#f8fafc", color: C.t2 }}>
+                  <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>提交时间</th>
+                  <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>用户码</th>
+                  <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>反馈内容</th>
+                  <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>页面</th>
+                  <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>来源</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((r) => (
+                  <tr key={r.id}>
+                    <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", whiteSpace: "nowrap" }}>{fmtDate(r.created_at)}</td>
+                    <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", fontFamily: "monospace" }}>{r.user_code || "-"}</td>
+                    <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }} title={String(r.content || "")}>{clip(r.content, 260)}</td>
+                    <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{r.page || "-"}</td>
+                    <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{clip(r.origin || r.client_ip || "-", 120)}</td>
+                  </tr>
+                ))}
+                {rows.length === 0 && (
+                  <tr>
+                    <td colSpan={5} style={{ padding: 12, color: C.t2 }}>暂无记录。</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        {msg ? <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 8, padding: 10, fontSize: 12, color: "#9a3412" }}>{msg}</div> : null}
+      </div>
+    </div>
+  );
+}

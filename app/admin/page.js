@@ -1,22 +1,27 @@
-"use client";
+﻿"use client";
 import Link from "next/link";
 import { C, FONT } from "../../components/shared/ui";
 
 const CARDS = [
   {
     title: "登录码管理",
-    desc: "生成、发放、吊销登录码，查看登录码状态与库存。",
+    desc: "生成、分发、回收登录码，查看登录码状态和库存。",
     href: "/admin-codes",
   },
   {
     title: "用户答题情况",
-    desc: "按登录码查看作答数量、答案内容和评分情况，支持默认折叠展开查看。",
+    desc: "按用户码查看作答次数、作答内容和评分详情，支持展开查看明细。",
     href: "/admin-activity",
   },
   {
-    title: "API 失败反馈",
+    title: "API 失败日志",
     desc: "查看 DeepSeek/API 错误日志、状态码分布和错误类型趋势。",
     href: "/admin-api-errors",
+  },
+  {
+    title: "用户反馈",
+    desc: "查看内测用户提交的改进建议，包含反馈内容、来源用户码和提交时间。",
+    href: "/admin-feedback",
   },
 ];
 
@@ -27,7 +32,9 @@ export default function AdminHomePage() {
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 16 }}>
           <div style={{ fontSize: 24, fontWeight: 800, color: C.nav, marginBottom: 8 }}>管理员后台</div>
           <div style={{ fontSize: 13, color: C.t2 }}>
-            集中管理登录码、用户答题情况与 API 稳定性。请先确认 `ADMIN_DASHBOARD_TOKEN` 与 Supabase 服务端环境变量已配置。
+            集中管理登录码、用户答题情况、API 稳定性与用户反馈。请确认
+            <code style={{ margin: "0 4px" }}>ADMIN_DASHBOARD_TOKEN</code>
+            和 Supabase 服务端环境变量已配置。
           </div>
         </div>
 
