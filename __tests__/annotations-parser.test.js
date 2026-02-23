@@ -69,4 +69,20 @@ describe("parseAnnotations", () => {
     expect(out.annotations[0].fix).toContain("received");
     expect(counts.red).toBe(1);
   });
+
+  test("keeps original layout when model emits detached marker lines", () => {
+    const raw = [
+      "I think service-learning course is good idea.",
+      "<r>service-learning course</r><n level=\"red\" fix=\"the service-learning course\">冠词缺失。</n>",
+      "",
+      "Another sentence.",
+    ].join("\n");
+    const out = parseAnnotations(raw);
+
+    expect(out.plainText).toContain("I think service-learning course is good idea.");
+    expect(out.plainText).not.toMatch(/\nservice-learning course\n/);
+    expect(out.annotations.length).toBeGreaterThan(0);
+    const mark = out.annotations[0];
+    expect(out.plainText.slice(mark.start, mark.end)).toBe("service-learning course");
+  });
 });
