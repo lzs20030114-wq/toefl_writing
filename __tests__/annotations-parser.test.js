@@ -86,6 +86,32 @@ describe("parseAnnotations", () => {
     expect(out.plainText.slice(mark.start, mark.end)).toBe("service-learning course");
   });
 
+  test("anchors trailing annotation at end of line without duplicating text", () => {
+    const raw =
+      'I think service-learning courses are important. ' +
+      '<r>service-learning courses</r><n level="red" fix="the service-learning courses">冠词缺失。</n>';
+    const out = parseAnnotations(raw);
+
+    expect(out.plainText).toBe("I think service-learning courses are important. ");
+    expect(out.annotations).toHaveLength(1);
+    const mark = out.annotations[0];
+    expect(out.plainText.slice(mark.start, mark.end)).toBe("service-learning courses");
+    // Should point to the original position (8), not be duplicated at the end
+    expect(mark.start).toBe(8);
+  });
+
+  test("anchors multiple trailing annotations on the same line", () => {
+    const raw =
+      'I think courses provide experience. ' +
+      '<r>courses</r><n level="red" fix="the courses">冠词缺失。</n> ' +
+      '<r>provide experience</r><n level="orange" fix="offer hands-on experience">表达建议。</n>';
+    const out = parseAnnotations(raw);
+
+    expect(out.annotations).toHaveLength(2);
+    expect(out.plainText.slice(out.annotations[0].start, out.annotations[0].end)).toBe("courses");
+    expect(out.plainText.slice(out.annotations[1].start, out.annotations[1].end)).toBe("provide experience");
+  });
+
   test("removes orphan detached marker line when it cannot be mapped back", () => {
     const raw = [
       "I think this policy is useful.",
