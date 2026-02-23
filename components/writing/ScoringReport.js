@@ -29,9 +29,9 @@ function GoalBadge({ status }) {
 }
 
 function levelStyles(level) {
-  if (level === "red") return { border: "#ef4444", bg: "#fee2e2", color: "#991b1b" };
-  if (level === "orange") return { border: "#f97316", bg: "#ffedd5", color: "#9a3412" };
-  return { border: "#3b82f6", bg: "#dbeafe", color: "#1e3a8a" };
+  if (level === "red") return { bg: "#fee2e2", color: "#991b1b" };
+  if (level === "orange") return { bg: "#ffedd5", color: "#9a3412" };
+  return { bg: "#dbeafe", color: "#1e3a8a" };
 }
 
 function PatternTag({ tag }) {
@@ -121,35 +121,33 @@ export function ScoringReport({ result, type }) {
                 const style = levelStyles(seg.level);
                 const isActive = activeMark === idx;
                 return (
-                  <span key={idx} style={{ position: "relative" }}>
-                    <button
-                      onClick={() => setActiveMark(isActive ? null : idx)}
-                      style={{
-                        border: "none",
-                        cursor: "pointer",
-                        padding: 0,
-                        background: style.bg,
-                        color: style.color,
-                        textDecoration: "underline",
-                        textDecorationColor: style.border,
-                        textUnderlineOffset: "3px",
-                        borderRadius: 4,
-                      }}
-                    >
-                      {seg.text}
-                    </button>
-                    {isActive ? (
-                      <span style={{ display: "block", marginTop: 8, marginBottom: 10, border: "1px solid #cbd5e1", borderRadius: 8, background: "#fff", padding: "10px 12px" }}>
-                        <div style={{ fontSize: 12, color: C.nav, fontWeight: 700, marginBottom: 4 }}>改写建议（英文）</div>
-                        <div style={{ fontSize: 13, marginBottom: 6 }}>{seg.fix || "暂无"}</div>
-                        <div style={{ fontSize: 12, color: C.nav, fontWeight: 700, marginBottom: 4 }}>问题说明</div>
-                        <div style={{ fontSize: 13, color: C.t2 }}>{seg.note || "暂无"}</div>
-                      </span>
-                    ) : null}
-                  </span>
+                  <button
+                    key={idx}
+                    onClick={() => setActiveMark(isActive ? null : idx)}
+                    style={{
+                      border: "none",
+                      cursor: "pointer",
+                      padding: "0 2px",
+                      margin: 0,
+                      background: style.bg,
+                      color: style.color,
+                      borderRadius: 3,
+                      font: "inherit",
+                    }}
+                  >
+                    {seg.text}
+                  </button>
                 );
               })}
             </div>
+            {Number.isInteger(activeMark) && marks[activeMark]?.type === "mark" ? (
+              <div style={{ marginTop: 12, border: "1px solid #cbd5e1", borderRadius: 8, background: "#fff", padding: "10px 12px" }}>
+                <div style={{ fontSize: 12, color: C.nav, fontWeight: 700, marginBottom: 4 }}>修改建议（中文）</div>
+                <div style={{ fontSize: 13, marginBottom: 8 }}>{marks[activeMark].fix || "暂无"}</div>
+                <div style={{ fontSize: 12, color: C.nav, fontWeight: 700, marginBottom: 4 }}>问题说明</div>
+                <div style={{ fontSize: 13, color: C.t2 }}>{marks[activeMark].note || "暂无"}</div>
+              </div>
+            ) : null}
           </div>
         )}
       </Section>

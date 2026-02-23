@@ -112,7 +112,7 @@ describe("ScoringReport redesigned layout", () => {
 
     render(<ScoringReport result={result} type="email" />);
     fireEvent.click(screen.getByRole("button", { name: "I am a subscriber of" }));
-    expect(screen.getByText("改写建议（英文）")).toBeInTheDocument();
+    expect(screen.getByText("修改建议（中文）")).toBeInTheDocument();
     expect(screen.getByText("I am a subscriber to")).toBeInTheDocument();
     expect(screen.getByText("介词搭配错误")).toBeInTheDocument();
   });
