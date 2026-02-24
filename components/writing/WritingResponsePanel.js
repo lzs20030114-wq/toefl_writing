@@ -1,10 +1,10 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { C, Btn, FONT } from "../shared/ui";
 
 const CJK_RE = /[\u2E80-\u9FFF\uF900-\uFAFF\uFE30-\uFE4F\uFF00-\uFFEF\u3000-\u303F\u3040-\u30FF]/g;
 
-function ExamToolbar({ taRef, text, onTextChange, disabled }) {
+function ExamToolbar({ taRef, text, onTextChange, disabled, historyRef, prevTextRef }) {
   // Copy — 复制选中文字到剪贴板
   function handleCopy() {
     const ta = taRef.current;
@@ -24,7 +24,6 @@ function ExamToolbar({ taRef, text, onTextChange, disabled }) {
       const end = ta.selectionEnd;
       const next = ta.value.slice(0, start) + cleaned + ta.value.slice(end);
       onTextChange(next);
-      // 还原光标
       setTimeout(() => {
         ta.focus();
         ta.selectionStart = ta.selectionEnd = start + cleaned.length;
@@ -34,12 +33,13 @@ function ExamToolbar({ taRef, text, onTextChange, disabled }) {
     }
   }
 
-  // Undo — 撤销（浏览器原生撤销栈）
+  // Undo — 从自维护历史栈中恢复上一个文本状态
   function handleUndo() {
-    const ta = taRef.current;
-    if (!ta) return;
-    ta.focus();
-    document.execCommand("undo");
+    if (historyRef.current.length === 0) return;
+    const prev = historyRef.current.pop();
+    prevTextRef.current = prev;
+    onTextChange(prev);
+    setTimeout(() => taRef.current?.focus(), 0);
   }
 
   const btnStyle = {
@@ -84,7 +84,18 @@ export function WritingResponsePanel({
   embedded,
 }) {
   const taRef = useRef(null);
+  const historyRef = useRef([]);   // 历史文本栈
+  const prevTextRef = useRef(text); // 上一次的文本值
   const isEditable = phase === "writing";
+
+  // 每次 text 变化时将旧值压栈（最多保留 200 步）
+  useEffect(() => {
+    if (text !== prevTextRef.current) {
+      historyRef.current.push(prevTextRef.current);
+      if (historyRef.current.length > 200) historyRef.current.shift();
+      prevTextRef.current = text;
+    }
+  }, [text]);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
@@ -103,7 +114,7 @@ export function WritingResponsePanel({
             </div>
 
             {/* 工具栏：Copy / Paste / Undo */}
-            <ExamToolbar taRef={taRef} text={text} onTextChange={onTextChange} disabled={!isEditable} />
+            <ExamToolbar taRef={taRef} text={text} onTextChange={onTextChange} disabled={!isEditable} historyRef={historyRef} prevTextRef={prevTextRef} />
 
             {/* 答题区 */}
             <textarea
@@ -117,7 +128,14 @@ export function WritingResponsePanel({
               onKeyDown={(e) => {
                 if (e.ctrlKey || e.metaKey) {
                   const k = e.key.toLowerCase();
-                  if (!["c", "v", "z", "a", "enter"].includes(k)) {
+                  if (k === "z") {
+                    e.preventDefault();
+                    if (historyRef.current.length > 0) {
+                      const prev = historyRef.current.pop();
+                      prevTextRef.current = prev;
+                      onTextChange(prev);
+                    }
+                  } else if (!["c", "v", "a", "enter"].includes(k)) {
                     e.preventDefault();
                   }
                 }
