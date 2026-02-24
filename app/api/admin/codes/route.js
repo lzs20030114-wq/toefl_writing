@@ -123,7 +123,7 @@ export async function GET(request) {
 
     let query = supabaseAdmin
       .from("access_codes")
-      .select("code,status,issued_to,issued_at,expires_at,created_at")
+      .select("code,status,issued_to,issued_at,expires_at,created_at,note")
       .order("created_at", { ascending: false })
       .limit(limit);
     if (status) query = query.eq("status", status);
@@ -223,6 +223,20 @@ export async function POST(request) {
         .single();
       if (error) return jsonError(400, error.message || "Revoke failed");
       return Response.json({ ok: true, revoked: data });
+    }
+
+    if (action === "update-note") {
+      const code = String(body?.code || "").toUpperCase().trim();
+      if (!code) return jsonError(400, "Missing code");
+      const note = body?.note != null ? String(body.note).slice(0, 500) : "";
+      const { data, error } = await supabaseAdmin
+        .from("access_codes")
+        .update({ note })
+        .eq("code", code)
+        .select("code,note")
+        .single();
+      if (error) return jsonError(400, error.message || "Update note failed");
+      return Response.json({ ok: true, updated: data });
     }
 
     return jsonError(400, "Unsupported action");

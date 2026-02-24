@@ -8,7 +8,8 @@ CREATE TABLE IF NOT EXISTS access_codes (
   issued_to TEXT NULL,
   issued_at TIMESTAMPTZ NULL,
   expires_at TIMESTAMPTZ NULL,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  note TEXT NULL
 );
 
 CREATE INDEX IF NOT EXISTS idx_access_codes_status ON access_codes(status);

@@ -26,6 +26,8 @@ export default function AdminCodesPage() {
   const [msg, setMsg] = useState("");
   const [busy, setBusy] = useState(false);
   const [selectedByCode, setSelectedByCode] = useState({});
+  const [editingNote, setEditingNote] = useState(null);
+  const [editingNoteText, setEditingNoteText] = useState("");
 
   useEffect(() => {
     try {
@@ -247,6 +249,35 @@ export default function AdminCodesPage() {
     }
   }
 
+  function startEditNote(code, currentNote) {
+    setEditingNote(code);
+    setEditingNoteText(currentNote || "");
+  }
+
+  function cancelEditNote() {
+    setEditingNote(null);
+    setEditingNoteText("");
+  }
+
+  async function saveNote(code) {
+    setBusy(true);
+    setMsg("");
+    try {
+      await callAdminApi("/api/admin/codes", {
+        method: "POST",
+        body: JSON.stringify({ action: "update-note", code, note: editingNoteText.trim() }),
+      });
+      setRows((prev) => prev.map((r) => r.code === code ? { ...r, note: editingNoteText.trim() } : r));
+      setEditingNote(null);
+      setEditingNoteText("");
+      setMsg(`备注已更新：${code}`);
+    } catch (e) {
+      setMsg(String(e.message || e));
+    } finally {
+      setBusy(false);
+    }
+  }
+
   useEffect(() => {
     if (ready && hasToken) refresh();
   }, [ready, statusFilter, token]);
@@ -368,6 +399,7 @@ export default function AdminCodesPage() {
                   <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>发放时间</th>
                   <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>到期时间</th>
                   <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>创建时间</th>
+                  <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0", minWidth: 160 }}>备注</th>
                   <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0", minWidth: 220 }}>操作</th>
                 </tr>
               </thead>
@@ -388,6 +420,34 @@ export default function AdminCodesPage() {
                     <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{fmtDate(r.issued_at)}</td>
                     <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{fmtDate(r.expires_at)}</td>
                     <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{fmtDate(r.created_at)}</td>
+                    <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>
+                      {editingNote === r.code ? (
+                        <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
+                          <input
+                            value={editingNoteText}
+                            onChange={(e) => setEditingNoteText(e.target.value)}
+                            onKeyDown={(e) => { if (e.key === "Enter") saveNote(r.code); if (e.key === "Escape") cancelEditNote(); }}
+                            autoFocus
+                            maxLength={500}
+                            style={{ border: "1px solid #cbd5e1", borderRadius: 4, padding: "3px 6px", fontSize: 12, width: 120 }}
+                          />
+                          <button onClick={() => saveNote(r.code)} disabled={busy} style={{ border: "1px solid " + C.blue, background: C.blue, color: "#fff", borderRadius: 4, padding: "2px 6px", fontSize: 11, cursor: busy ? "not-allowed" : "pointer" }}>
+                            保存
+                          </button>
+                          <button onClick={cancelEditNote} disabled={busy} style={{ border: "1px solid #cbd5e1", background: "#fff", color: C.t2, borderRadius: 4, padding: "2px 6px", fontSize: 11, cursor: "pointer" }}>
+                            取消
+                          </button>
+                        </div>
+                      ) : (
+                        <span
+                          onClick={() => startEditNote(r.code, r.note)}
+                          title="点击编辑备注"
+                          style={{ cursor: "pointer", color: r.note ? C.nav : C.t2, borderBottom: "1px dashed #cbd5e1", minWidth: 40, display: "inline-block" }}
+                        >
+                          {r.note || "添加备注"}
+                        </span>
+                      )}
+                    </td>
                     <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", display: "flex", gap: 6, flexWrap: "wrap" }}>
                       <button onClick={() => setIssueCode(r.code)} disabled={busy} style={{ border: "1px solid #cbd5e1", background: "#fff", color: C.t2, borderRadius: 6, padding: "3px 8px", cursor: busy ? "not-allowed" : "pointer", opacity: busy ? 0.6 : 1 }}>
                         填入发放框
@@ -407,7 +467,7 @@ export default function AdminCodesPage() {
                 ))}
                 {rowsView.length === 0 && (
                   <tr>
-                    <td colSpan={8} style={{ padding: 12, color: C.t2 }}>
+                    <td colSpan={9} style={{ padding: 12, color: C.t2 }}>
                       暂无数据。
                     </td>
                   </tr>
