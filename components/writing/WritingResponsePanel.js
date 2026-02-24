@@ -1,6 +1,69 @@
-﻿"use client";
-import React from "react";
+"use client";
+import React, { useRef } from "react";
 import { C, Btn, FONT } from "../shared/ui";
+
+const CJK_RE = /[\u2E80-\u9FFF\uF900-\uFAFF\uFE30-\uFE4F\uFF00-\uFFEF\u3000-\u303F\u3040-\u30FF]/g;
+
+function ExamToolbar({ taRef, text, onTextChange, disabled }) {
+  // Copy — 复制选中文字到剪贴板
+  function handleCopy() {
+    const ta = taRef.current;
+    if (!ta) return;
+    const selected = ta.value.slice(ta.selectionStart, ta.selectionEnd);
+    if (selected) navigator.clipboard.writeText(selected).catch(() => {});
+  }
+
+  // Paste — 从剪贴板读取并插入光标位置，自动过滤汉字
+  async function handlePaste() {
+    const ta = taRef.current;
+    if (!ta) return;
+    try {
+      const raw = await navigator.clipboard.readText();
+      const cleaned = raw.replace(CJK_RE, "");
+      const start = ta.selectionStart;
+      const end = ta.selectionEnd;
+      const next = ta.value.slice(0, start) + cleaned + ta.value.slice(end);
+      onTextChange(next);
+      // 还原光标
+      setTimeout(() => {
+        ta.focus();
+        ta.selectionStart = ta.selectionEnd = start + cleaned.length;
+      }, 0);
+    } catch {
+      // 浏览器拒绝权限时静默忽略
+    }
+  }
+
+  // Undo — 撤销（浏览器原生撤销栈）
+  function handleUndo() {
+    const ta = taRef.current;
+    if (!ta) return;
+    ta.focus();
+    document.execCommand("undo");
+  }
+
+  const btnStyle = {
+    padding: "3px 14px",
+    fontSize: 12,
+    fontWeight: 600,
+    border: "1px solid #b0b8c4",
+    borderRadius: 3,
+    background: disabled ? "#e8e8e8" : "#f0f0f0",
+    color: disabled ? "#aaa" : "#333",
+    cursor: disabled ? "not-allowed" : "pointer",
+    userSelect: "none",
+    letterSpacing: "0.02em",
+  };
+
+  return (
+    <div style={{ background: "#dde2e8", borderBottom: "1px solid " + C.bdr, padding: "5px 12px", display: "flex", gap: 6, alignItems: "center" }}>
+      <button style={btnStyle} disabled={disabled} onMouseDown={(e) => e.preventDefault()} onClick={handleCopy}>Copy</button>
+      <button style={btnStyle} disabled={disabled} onMouseDown={(e) => e.preventDefault()} onClick={handlePaste}>Paste</button>
+      <button style={btnStyle} disabled={disabled} onMouseDown={(e) => e.preventDefault()} onClick={handleUndo}>Undo</button>
+      <span style={{ marginLeft: 6, fontSize: 11, color: "#94a3b8" }}>仅限英文输入</span>
+    </div>
+  );
+}
 
 export function WritingResponsePanel({
   type,
@@ -20,6 +83,9 @@ export function WritingResponsePanel({
   onExit,
   embedded,
 }) {
+  const taRef = useRef(null);
+  const isEditable = phase === "writing";
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
       {phase === "ready" ? (
@@ -30,23 +96,25 @@ export function WritingResponsePanel({
       ) : (
         <>
           <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 4, overflow: "hidden", flex: 1, display: "flex", flexDirection: "column" }}>
+            {/* 标题栏：词数 */}
             <div style={{ background: "#e8e8e8", padding: "10px 16px", fontSize: 12, fontWeight: 700, color: C.t2, borderBottom: "1px solid " + C.bdr, display: "flex", justifyContent: "space-between" }}>
-              <span>你的作答 <span style={{ fontWeight: 400, color: "#94a3b8", fontSize: 11 }}>· 仅限英文 · Copy / Paste / Undo</span></span>
+              <span>你的作答</span>
               <span style={{ color: w < minW ? C.orange : C.green }}>{w} 词 {w < minW ? "(还差 " + (minW - w) + " 词)" : ""}</span>
             </div>
+
+            {/* 工具栏：Copy / Paste / Undo */}
+            <ExamToolbar taRef={taRef} text={text} onTextChange={onTextChange} disabled={!isEditable} />
+
+            {/* 答题区 */}
             <textarea
+              ref={taRef}
               data-testid="writing-textarea"
               value={text}
               onChange={(e) => {
-                // 过滤所有 CJK 汉字及全角字符，只保留英文内容
-                const cleaned = e.target.value.replace(
-                  /[\u2E80-\u9FFF\uF900-\uFAFF\uFE30-\uFE4F\uFF00-\uFFEF\u3000-\u303F\u3040-\u30FF]/g,
-                  ""
-                );
+                const cleaned = e.target.value.replace(CJK_RE, "");
                 onTextChange(cleaned);
               }}
               onKeyDown={(e) => {
-                // 仅允许 Ctrl/Cmd + C（复制）、V（粘贴）、Z（撤销）、A（全选）、Enter（提交）
                 if (e.ctrlKey || e.metaKey) {
                   const k = e.key.toLowerCase();
                   if (!["c", "v", "z", "a", "enter"].includes(k)) {
@@ -54,11 +122,12 @@ export function WritingResponsePanel({
                   }
                 }
               }}
-              disabled={phase === "scoring" || phase === "done"}
+              disabled={!isEditable}
               placeholder={type === "email" ? "Dear " + pd.to + ",\n\nI am writing to..." : "I think this is an interesting question..."}
               style={{ flex: 1, minHeight: type === "email" ? 280 : 320, border: "none", padding: 16, fontSize: 14, fontFamily: FONT, lineHeight: 1.7, color: C.t1, resize: "none", outline: "none", background: phase === "done" ? "#fafafa" : "#fff" }}
             />
           </div>
+
           {phase === "writing" && (
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
               <Btn data-testid="writing-submit" onClick={onSubmit} variant="success">提交评分</Btn>
