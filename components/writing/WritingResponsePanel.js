@@ -31,13 +31,29 @@ export function WritingResponsePanel({
         <>
           <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 4, overflow: "hidden", flex: 1, display: "flex", flexDirection: "column" }}>
             <div style={{ background: "#e8e8e8", padding: "10px 16px", fontSize: 12, fontWeight: 700, color: C.t2, borderBottom: "1px solid " + C.bdr, display: "flex", justifyContent: "space-between" }}>
-              <span>你的作答</span>
+              <span>你的作答 <span style={{ fontWeight: 400, color: "#94a3b8", fontSize: 11 }}>· 仅限英文 · Copy / Paste / Undo</span></span>
               <span style={{ color: w < minW ? C.orange : C.green }}>{w} 词 {w < minW ? "(还差 " + (minW - w) + " 词)" : ""}</span>
             </div>
             <textarea
               data-testid="writing-textarea"
               value={text}
-              onChange={(e) => onTextChange(e.target.value)}
+              onChange={(e) => {
+                // 过滤所有 CJK 汉字及全角字符，只保留英文内容
+                const cleaned = e.target.value.replace(
+                  /[\u2E80-\u9FFF\uF900-\uFAFF\uFE30-\uFE4F\uFF00-\uFFEF\u3000-\u303F\u3040-\u30FF]/g,
+                  ""
+                );
+                onTextChange(cleaned);
+              }}
+              onKeyDown={(e) => {
+                // 仅允许 Ctrl/Cmd + C（复制）、V（粘贴）、Z（撤销）、A（全选）、Enter（提交）
+                if (e.ctrlKey || e.metaKey) {
+                  const k = e.key.toLowerCase();
+                  if (!["c", "v", "z", "a", "enter"].includes(k)) {
+                    e.preventDefault();
+                  }
+                }
+              }}
               disabled={phase === "scoring" || phase === "done"}
               placeholder={type === "email" ? "Dear " + pd.to + ",\n\nI am writing to..." : "I think this is an interesting question..."}
               style={{ flex: 1, minHeight: type === "email" ? 280 : 320, border: "none", padding: 16, fontSize: 14, fontFamily: FONT, lineHeight: 1.7, color: C.t1, resize: "none", outline: "none", background: phase === "done" ? "#fafafa" : "#fff" }}
