@@ -22,6 +22,7 @@ export default function AdminFeedbackPage() {
   const [token, setToken] = useState("");
   const [ready, setReady] = useState(false);
   const [rows, setRows] = useState([]);
+  const [noteByCode, setNoteByCode] = useState({});
   const [userCode, setUserCode] = useState("");
   const [msg, setMsg] = useState("");
   const [busy, setBusy] = useState(false);
@@ -70,9 +71,16 @@ export default function AdminFeedbackPage() {
       const p = new URLSearchParams();
       p.set("limit", "300");
       if (userCode.trim()) p.set("userCode", userCode.trim().toUpperCase());
-      const body = await callApi(`/api/admin/feedback?${p.toString()}`);
-      setRows(Array.isArray(body?.rows) ? body.rows : []);
-      if (!Array.isArray(body?.rows) || body.rows.length === 0) {
+      const [feedbackBody, codesBody] = await Promise.all([
+        callApi(`/api/admin/feedback?${p.toString()}`),
+        callApi("/api/admin/codes?limit=500"),
+      ]);
+      setRows(Array.isArray(feedbackBody?.rows) ? feedbackBody.rows : []);
+      // 建立 code -> note 映射
+      const map = {};
+      (codesBody?.codes || []).forEach((c) => { if (c.code) map[c.code] = c.note || ""; });
+      setNoteByCode(map);
+      if (!Array.isArray(feedbackBody?.rows) || feedbackBody.rows.length === 0) {
         setMsg("暂无反馈记录。");
       }
     } catch (e) {
@@ -132,6 +140,7 @@ export default function AdminFeedbackPage() {
                 <tr style={{ background: "#f8fafc", color: C.t2 }}>
                   <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>提交时间</th>
                   <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>用户码</th>
+                  <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0", minWidth: 90 }}>备注</th>
                   <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>反馈内容</th>
                   <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>页面</th>
                   <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>来源</th>
@@ -142,6 +151,7 @@ export default function AdminFeedbackPage() {
                   <tr key={r.id}>
                     <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", whiteSpace: "nowrap" }}>{fmtDate(r.created_at)}</td>
                     <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", fontFamily: "monospace" }}>{r.user_code || "-"}</td>
+                    <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", color: noteByCode[r.user_code] ? C.nav : C.t2 }}>{noteByCode[r.user_code] || "-"}</td>
                     <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }} title={String(r.content || "")}>{clip(r.content, 260)}</td>
                     <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{r.page || "-"}</td>
                     <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{clip(r.origin || r.client_ip || "-", 120)}</td>
@@ -149,7 +159,7 @@ export default function AdminFeedbackPage() {
                 ))}
                 {rows.length === 0 && (
                   <tr>
-                    <td colSpan={5} style={{ padding: 12, color: C.t2 }}>暂无记录。</td>
+                    <td colSpan={6} style={{ padding: 12, color: C.t2 }}>暂无记录。</td>
                   </tr>
                 )}
               </tbody>

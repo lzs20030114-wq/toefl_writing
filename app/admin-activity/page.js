@@ -206,6 +206,7 @@ export default function AdminActivityPage() {
                   <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>登录码</th>
                   <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>状态</th>
                   <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>发放对象</th>
+                  <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0", minWidth: 100 }}>备注</th>
                   <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>总答题</th>
                   <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>Task1</th>
                   <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>Task2</th>
@@ -242,6 +243,7 @@ export default function AdminActivityPage() {
                         <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", fontFamily: "monospace", fontWeight: 700 }}>{code}</td>
                         <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{r.status || "-"}</td>
                         <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{r.issued_to || "-"}</td>
+                        <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", color: r.note ? C.nav : C.t2 }}>{r.note || "-"}</td>
                         <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", fontWeight: 700 }}>{safeNum(usage?.answered?.total, 0)}</td>
                         <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{safeNum(usage?.answered?.build, 0)}</td>
                         <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{safeNum(usage?.answered?.email, 0)}</td>
@@ -259,7 +261,7 @@ export default function AdminActivityPage() {
                       </tr>
                       {isOpen && (
                         <tr>
-                          <td colSpan={10} style={{ padding: "10px 12px", background: "#f8fafc", borderBottom: "1px solid #e2e8f0" }}>
+                          <td colSpan={11} style={{ padding: "10px 12px", background: "#f8fafc", borderBottom: "1px solid #e2e8f0" }}>
                             {loading && <div style={{ color: C.t2 }}>正在加载详情...</div>}
                             {!loading && error && <div style={{ color: C.red }}>{error}</div>}
                             {!loading && !error && activity && (
@@ -323,7 +325,7 @@ export default function AdminActivityPage() {
                 })}
                 {rowsView.length === 0 && (
                   <tr>
-                    <td colSpan={10} style={{ padding: 12, color: C.t2 }}>暂无数据。</td>
+                    <td colSpan={11} style={{ padding: 12, color: C.t2 }}>暂无数据。</td>
                   </tr>
                 )}
               </tbody>
