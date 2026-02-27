@@ -3,6 +3,7 @@ import React from "react";
 import { C, FONT, Btn, Toast, TopBar } from "../shared/ui";
 import { useBuildSentenceSession } from "./useBuildSentenceSession";
 import { formatLongDuration, PRACTICE_MODE } from "../../lib/practiceMode";
+import { translateGrammarPoint } from "../../lib/utils";
 import { BANK_EXHAUSTED_ERRORS } from "../../lib/questionSelector";
 
 function formatChunkDisplay(text) {
@@ -113,12 +114,12 @@ export function BuildSentenceTask({
               <div style={{ fontSize: 13, fontWeight: 700, color: C.red, marginBottom: 12 }}>Weak grammar points</div>
               {te.map(([g, n], i) => (
                 <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "8px 0", borderBottom: i < te.length - 1 ? "1px solid #eee" : "none" }}>
-                  <span>{g}</span>
+                  <span>{translateGrammarPoint(g)}</span>
                   <span style={{ background: "#fee2e2", color: C.red, padding: "2px 10px", borderRadius: 10, fontSize: 12, fontWeight: 600 }}>{n}x</span>
                 </div>
               ))}
               <div style={{ marginTop: 12, fontSize: 13, color: C.blue, background: C.ltB, padding: 10, borderRadius: 4 }}>
-                <b>Suggestion:</b> Review these points first: {te.map((e) => e[0]).join(", ")}
+                <b>建议优先复习：</b>{te.map((e) => translateGrammarPoint(e[0])).join("、")}
               </div>
             </div>
           )}
@@ -130,7 +131,7 @@ export function BuildSentenceTask({
               <div data-testid={`build-correct-answer-${i}`} style={{ fontSize: 13, color: C.blue, marginTop: 4 }}><b>Correct answer:</b> {r.correctAnswer}</div>
               {(r.q.grammar_points || []).length > 0 && (
                 <div style={{ fontSize: 12, color: C.t2, marginTop: 6 }}>
-                  <b>Grammar:</b> {r.q.grammar_points.join(", ")}
+                  <b>语法点：</b>{r.q.grammar_points.map(translateGrammarPoint).join("、")}
                 </div>
               )}
             </div>

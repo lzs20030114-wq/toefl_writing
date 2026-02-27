@@ -2,6 +2,7 @@
 import React, { useMemo, useState } from "react";
 import { C } from "../shared/ui";
 import { ScoringReport } from "../writing/ScoringReport";
+import { translateGrammarPoint } from "../../lib/utils";
 
 const MOCK_TASK_IDS = {
   BUILD: "build-sentence",
@@ -264,7 +265,7 @@ function MockExamDetails({ session }) {
           </div>
           <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
             {topGrammarTags.map((x) => (
-              <Chip key={x.tag} color="#1d4ed8" bg="#dbeafe">{x.tag} x{x.n}</Chip>
+              <Chip key={x.tag} color="#1d4ed8" bg="#dbeafe">{translateGrammarPoint(x.tag)} x{x.n}</Chip>
             ))}
             {topGrammarTags.length === 0 && <Chip color="#6b7280" bg="#f3f4f6">No tags</Chip>}
           </div>
@@ -375,7 +376,7 @@ function MockExamDetails({ session }) {
 
                       <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
                         {(Array.isArray(d?.grammar_points) ? d.grammar_points : []).map((g, gi) => (
-                          <Chip key={`${rowKey}-g-${gi}`} color="#1d4ed8" bg="#dbeafe">{g}</Chip>
+                          <Chip key={`${rowKey}-g-${gi}`} color="#1d4ed8" bg="#dbeafe">{translateGrammarPoint(g)}</Chip>
                         ))}
                         {(!Array.isArray(d?.grammar_points) || d.grammar_points.length === 0) && (
                           <Chip color="#6b7280" bg="#f3f4f6">No grammar tags</Chip>
@@ -611,7 +612,7 @@ export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, show
                     {Array.isArray(d.grammar_points) && d.grammar_points.length > 0 && (
                       <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
                         {d.grammar_points.map((g, gi) => (
-                          <Chip key={gi} color="#1d4ed8" bg="#dbeafe">{g}</Chip>
+                          <Chip key={gi} color="#1d4ed8" bg="#dbeafe">{translateGrammarPoint(g)}</Chip>
                         ))}
                       </div>
                     )}
