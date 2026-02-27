@@ -268,7 +268,16 @@ function chooseGivenSpan(tokens) {
       if (remainder >= 8 && remainder <= 12) possibleLens.push(len);
     }
     if (possibleLens.length === 0) continue;
-    const len = possibleLens[Math.floor(Math.random() * possibleLens.length)];
+    // Weighted length selection matching TPO distribution:
+    // 1-word ~10%, 2-word ~56%, 3-word ~34% (derived from 32 TPO reference questions)
+    const WEIGHTS = { 1: 0.10, 2: 0.56, 3: 0.34 };
+    const totalWeight = possibleLens.reduce((s, l) => s + (WEIGHTS[l] || 0), 0);
+    let r = Math.random() * (totalWeight || 1);
+    let len = possibleLens[possibleLens.length - 1];
+    for (const l of possibleLens) {
+      r -= WEIGHTS[l] || 0;
+      if (r <= 0) { len = l; break; }
+    }
     const span = tokens.slice(start, start + len);
     if (!isValidGivenSpan(span)) continue;
     return { start, end: start + len - 1, tokens: span };
