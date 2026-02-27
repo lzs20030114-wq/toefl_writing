@@ -103,6 +103,36 @@ function truncate(text, max = 40) {
   return `${s.slice(0, max)}...`;
 }
 
+function renderWordDiff(userText, correctText) {
+  if (!userText) return <span style={{ color: "#9ca3af", fontStyle: "italic" }}>(no answer)</span>;
+  const normalize = (w) => String(w).toLowerCase().replace(/[.,!?;:'"]/g, "");
+  const userWords = String(userText).trim().split(/\s+/);
+  const correctWords = String(correctText || "").trim().split(/\s+/);
+  return (
+    <>
+      {userWords.map((word, i) => {
+        const isWrong = normalize(word) !== normalize(correctWords[i] || "");
+        return (
+          <React.Fragment key={i}>
+            <span
+              style={{
+                textDecoration: isWrong ? "underline" : "none",
+                textDecorationColor: "#ef4444",
+                textDecorationThickness: 2,
+                color: isWrong ? "#ef4444" : "#111827",
+                fontWeight: isWrong ? 600 : 400,
+              }}
+            >
+              {word}
+            </span>
+            {i < userWords.length - 1 ? " " : ""}
+          </React.Fragment>
+        );
+      })}
+    </>
+  );
+}
+
 function countWords(text) {
   const s = String(text || "").trim();
   if (!s) return 0;
@@ -320,8 +350,10 @@ function MockExamDetails({ session }) {
                     <div style={{ padding: "0 12px 12px", display: "flex", flexDirection: "column", gap: 8 }}>
                       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 8 }}>
                         <div style={{ background: "#f8fafc", border: "1px solid #e5e7eb", borderRadius: 8, padding: 10 }}>
-                          <div style={{ fontSize: 11, color: C.t2, marginBottom: 6 }}>Your full response</div>
-                          <div style={{ fontSize: 13, color: C.t1, lineHeight: 1.55 }}>{d?.userAnswer || "(empty)"}</div>
+                          <div style={{ fontSize: 11, color: C.t2, marginBottom: 6 }}>Your answer</div>
+                          <div style={{ fontSize: 15, lineHeight: 1.8 }}>
+                            {renderWordDiff(d?.userAnswer, d?.correctAnswer)}
+                          </div>
                           <button
                             onClick={() => onCopy("Your response", d?.userAnswer)}
                             style={{ marginTop: 8, border: "1px solid #cbd5e1", background: "#fff", borderRadius: 6, fontSize: 11, padding: "4px 8px", cursor: "pointer" }}
@@ -330,8 +362,8 @@ function MockExamDetails({ session }) {
                           </button>
                         </div>
                         <div style={{ background: "#f8fafc", border: "1px solid #e5e7eb", borderRadius: 8, padding: 10 }}>
-                          <div style={{ fontSize: 11, color: C.t2, marginBottom: 6 }}>Correct full response</div>
-                          <div style={{ fontSize: 13, color: C.t1, lineHeight: 1.55 }}>{d?.correctAnswer || "(empty)"}</div>
+                          <div style={{ fontSize: 11, color: C.t2, marginBottom: 6 }}>Correct answer</div>
+                          <div style={{ fontSize: 15, color: C.blue, lineHeight: 1.8 }}>{d?.correctAnswer || "(empty)"}</div>
                           <button
                             onClick={() => onCopy("Correct response", d?.correctAnswer)}
                             style={{ marginTop: 8, border: "1px solid #cbd5e1", background: "#fff", borderRadius: 6, fontSize: 11, padding: "4px 8px", cursor: "pointer" }}
@@ -445,6 +477,7 @@ function MockExamDetails({ session }) {
 export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, showIcon, compact = false }) {
   const s = entry?.session || {};
   const sourceIndex = entry?.sourceIndex;
+  const [expandedBsItems, setExpandedBsItems] = useState({});
   const practiceAttempt = Number(s?.details?.practiceAttempt || 1);
   const retryHref = buildRetryHref(s);
 
@@ -543,21 +576,50 @@ export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, show
       </div>
 
       {isExpanded && s.type === "bs" && s.details && Array.isArray(s.details) && (
-        <div style={{ background: "#f9f9f9", border: "1px solid #eee", borderRadius: 4, padding: 16, margin: "4px 0 8px 0" }}>
-          <div style={{ fontSize: 12, color: C.t2, marginBottom: 8 }}>Correct {s.correct}/{s.total}</div>
-          {s.details.map((d, j) => (
-            <div key={j} style={{ padding: "8px 0", borderBottom: j < s.details.length - 1 ? "1px solid #eee" : "none", fontSize: 13 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-                <span style={{ color: d.isCorrect ? C.green : C.red, fontWeight: 700 }}>{d.isCorrect ? "OK" : "X"}</span>
-                <span style={{ color: C.t2 }}>Q{j + 1}: {d.prompt}</span>
-                <span style={{ fontSize: 11, color: C.blue, marginLeft: "auto" }}>({Array.isArray(d.grammar_points) ? d.grammar_points.join(", ") : d.gp || ""})</span>
+        <div style={{ background: "#f9f9f9", border: "1px solid #eee", borderRadius: 4, padding: "12px 16px", margin: "4px 0 8px 0" }}>
+          <div style={{ fontSize: 12, color: C.t2, marginBottom: 10 }}>Correct {s.correct}/{s.total}</div>
+          {s.details.map((d, j) => {
+            const itemOpen = !!expandedBsItems[j];
+            const statusColor = d.isCorrect ? C.green : C.red;
+            return (
+              <div key={j} style={{ borderBottom: j < s.details.length - 1 ? "1px solid #e5e7eb" : "none" }}>
+                <div
+                  onClick={() => setExpandedBsItems((p) => ({ ...p, [j]: !p[j] }))}
+                  style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 0", cursor: "pointer" }}
+                >
+                  <span style={{ color: statusColor, fontWeight: 700, fontSize: 16, flexShrink: 0, width: 20, textAlign: "center" }}>
+                    {d.isCorrect ? "✓" : "✗"}
+                  </span>
+                  <span style={{ fontSize: 14, fontWeight: 600, color: C.t1, flexShrink: 0 }}>Q{j + 1}</span>
+                  <span style={{ fontSize: 13, color: C.t2, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{d.prompt}</span>
+                  <span style={{ fontSize: 12, color: C.t2, flexShrink: 0 }}>{itemOpen ? "▲" : "▼"}</span>
+                </div>
+                {itemOpen && (
+                  <div style={{ paddingLeft: 30, paddingBottom: 14, display: "flex", flexDirection: "column", gap: 8 }}>
+                    <div>
+                      <div style={{ fontSize: 11, color: C.t2, marginBottom: 4 }}>Your answer:</div>
+                      <div style={{ fontSize: 15, lineHeight: 1.8 }}>
+                        {renderWordDiff(d.userAnswer, d.correctAnswer)}
+                      </div>
+                    </div>
+                    {!d.isCorrect && (
+                      <div>
+                        <div style={{ fontSize: 11, color: C.t2, marginBottom: 4 }}>Correct answer:</div>
+                        <div style={{ fontSize: 15, color: C.blue, lineHeight: 1.8 }}>{d.correctAnswer}</div>
+                      </div>
+                    )}
+                    {Array.isArray(d.grammar_points) && d.grammar_points.length > 0 && (
+                      <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
+                        {d.grammar_points.map((g, gi) => (
+                          <Chip key={gi} color="#1d4ed8" bg="#dbeafe">{g}</Chip>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
-              <div style={{ paddingLeft: 24 }}>
-                <div style={{ color: d.isCorrect ? C.green : C.red }}>Your answer: {d.userAnswer || "(no answer)"}</div>
-                {!d.isCorrect && <div style={{ color: C.blue, marginTop: 2 }}>Correct answer: {d.correctAnswer}</div>}
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
