@@ -13,11 +13,11 @@ const BAND_COLORS = {
 };
 
 const LEVEL_LABELS = {
-  green:  "Advanced",
-  blue:   "Upper-Intermediate",
-  yellow: "Intermediate",
-  orange: "Pre-Intermediate",
-  red:    "Elementary",
+  green:  "高级",
+  blue:   "中高级",
+  yellow: "中级",
+  orange: "初中级",
+  red:    "初级",
 };
 
 function TaskIcon({ taskId }) {
@@ -75,7 +75,7 @@ export function MockExamResult({
         textAlign: "center",
       }}>
         <div style={{ fontSize: 13, color: C.t2, marginBottom: 8, letterSpacing: 1, textTransform: "uppercase" }}>
-          Writing Section Result
+          写作部分结果
         </div>
 
         {/* Band circle */}
@@ -94,11 +94,11 @@ export function MockExamResult({
           <span style={{ fontSize: 42, fontWeight: 800, color: palette.text, lineHeight: 1, fontFamily: FONT }}>
             {band}
           </span>
-          <span style={{ fontSize: 13, fontWeight: 600, color: palette.text, marginTop: 2 }}>Band</span>
+          <span style={{ fontSize: 13, fontWeight: 600, color: palette.text, marginTop: 2 }}>段位</span>
         </div>
 
         <div style={{ fontSize: 14, color: C.t1, marginBottom: 4 }}>
-          Scaled: <b>{scaledScore}</b> / 30
+          换算分：<b>{scaledScore}</b> / 30
         </div>
         <div style={{
           display: "inline-block",
@@ -110,17 +110,17 @@ export function MockExamResult({
           fontWeight: 600,
           color: palette.text,
         }}>
-          CEFR: {cefr} {levelLabel && `\u00B7 ${levelLabel}`}
+          欧框：{cefr} {levelLabel && `\u00B7 ${levelLabel}`}
         </div>
 
         {scoringPhase === "pending" && (
           <div style={{ marginTop: 14, fontSize: 13, color: C.blue }}>
-            AI is scoring Task 2 and Task 3... Please wait.
+            AI 正在评分任务 2 和任务 3，请稍候。
           </div>
         )}
         {scoringPhase === "error" && (
           <div style={{ marginTop: 14, fontSize: 13, color: C.red }}>
-            AI scoring partially failed: {scoringError}
+            AI 评分部分失败：{scoringError}
           </div>
         )}
       </div>
@@ -133,7 +133,7 @@ export function MockExamResult({
         overflow: "hidden",
       }}>
         <div style={{ padding: "12px 16px", borderBottom: "1px solid " + C.bdr, fontSize: 13, fontWeight: 700, color: C.t1 }}>
-          Score Breakdown
+          分项结果
         </div>
         {examResultRows.map((row) => {
           const taskType = getTaskType(row.id);
@@ -161,7 +161,7 @@ export function MockExamResult({
                   <span style={{ fontSize: 15, fontWeight: 700, color: C.nav }}>{row.scoreText}</span>
                   {canExpand && (
                     <span style={{ fontSize: 11, color: C.blue }}>
-                      {isExpanded ? "\u25B2 hide" : "\u25BC detail"}
+                      {isExpanded ? "\u25B2 收起" : "\u25BC 详情"}
                     </span>
                   )}
                 </span>
@@ -183,10 +183,10 @@ export function MockExamResult({
       {/* Actions */}
       <div style={{ display: "flex", gap: 10 }}>
         {scoringPhase !== "pending" && canRetryTimeoutScoring && typeof onRetryTimeoutScoring === "function" && (
-          <Btn onClick={onRetryTimeoutScoring} variant="secondary">Retry Timed-out Scoring</Btn>
+          <Btn onClick={onRetryTimeoutScoring} variant="secondary">重试超时评分</Btn>
         )}
-        <Btn onClick={onStartNew}>Start New Mock Exam</Btn>
-        <Btn onClick={onExit} variant="secondary">Back</Btn>
+        <Btn onClick={onStartNew}>开始新模考</Btn>
+        <Btn onClick={onExit} variant="secondary">返回</Btn>
       </div>
 
       {/* Disclaimer */}
@@ -199,7 +199,7 @@ export function MockExamResult({
         color: "#92400e",
         lineHeight: 1.6,
       }}>
-        This score is an approximation based on publicly available ETS conversion tables and AI-powered rubric scoring. It does not represent an official ETS score.
+        该分数基于公开可用的 ETS 换算表与 AI 评分标准进行估算，不代表官方 ETS 成绩。
       </div>
     </div>
   );

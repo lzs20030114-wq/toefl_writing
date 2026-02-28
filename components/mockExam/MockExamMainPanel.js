@@ -170,18 +170,18 @@ export function MockExamMainPanel({
 
       {session.status === MOCK_EXAM_STATUS.ABORTED && (
         <div style={{ background: "#fff6f6", border: "1px solid #f0cccc", borderRadius: 4, padding: 16, marginBottom: 12 }}>
-          <div style={{ fontSize: 15, fontWeight: 700, color: C.red }}>Mock Exam Aborted</div>
+          <div style={{ fontSize: 15, fontWeight: 700, color: C.red }}>模考已中止</div>
           <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
-            <Btn onClick={onStartNew}>Start New Mock Exam</Btn>
-            <Btn onClick={onExit} variant="secondary">Back</Btn>
+            <Btn onClick={onStartNew}>开始新模考</Btn>
+            <Btn onClick={onExit} variant="secondary">返回</Btn>
           </div>
         </div>
       )}
 
       {session.status === MOCK_EXAM_STATUS.RUNNING && (
         <div style={{ display: "flex", gap: 10 }}>
-          <Btn onClick={onAbort} variant="danger">Abort</Btn>
-          <Btn onClick={onExit} variant="secondary">Back</Btn>
+          <Btn onClick={onAbort} variant="danger">中止</Btn>
+          <Btn onClick={onExit} variant="secondary">返回</Btn>
         </div>
       )}
     </div>

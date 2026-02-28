@@ -79,7 +79,7 @@ export default function HomePageClient({ userCode, onLogout }) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }).catch(() => {
-      setFeedbackMsg({ ok: false, text: "Clipboard access failed." });
+      setFeedbackMsg({ ok: false, text: "无法访问剪贴板。" });
     });
   }
 
@@ -98,7 +98,7 @@ export default function HomePageClient({ userCode, onLogout }) {
       if (!res.ok) throw new Error(body?.error || `HTTP ${res.status}`);
       setFbText("");
       setFbSent(true);
-      setFeedbackMsg({ ok: true, text: "Feedback submitted." });
+      setFeedbackMsg({ ok: true, text: "反馈已提交。" });
       setTimeout(() => setFbSent(false), 2500);
     } catch (error) {
       setFeedbackMsg({ ok: false, text: error.message || String(error) });
@@ -152,8 +152,8 @@ export default function HomePageClient({ userCode, onLogout }) {
           <div style={{ position: "sticky", top: 0, zIndex: 10, background: CH.nav, color: "#fff", padding: "0 36px", height: 52, display: "flex", alignItems: "center", borderBottom: `3px solid ${CH.navBorder}`, overflow: "hidden" }}>
             <span style={{ fontWeight: 700, fontSize: 15, position: "relative", zIndex: 1 }}>TOEFL iBT</span>
             <span style={{ opacity: 0.5, margin: "0 12px", position: "relative", zIndex: 1 }}>|</span>
-            <span style={{ fontSize: 13, position: "relative", zIndex: 1 }}>Writing Section 2026</span>
-            <div style={{ marginLeft: "auto", fontSize: 11, fontWeight: 700, color: CH.accent, letterSpacing: 1, textTransform: "uppercase", position: "relative", zIndex: 1 }}>Challenge</div>
+            <span style={{ fontSize: 13, position: "relative", zIndex: 1 }}>写作部分 2026</span>
+            <div style={{ marginLeft: "auto", fontSize: 11, fontWeight: 700, color: CH.accent, letterSpacing: 1, textTransform: "uppercase", position: "relative", zIndex: 1 }}>挑战</div>
             <div style={{ position: "absolute", inset: 0, pointerEvents: "none", background: "repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,0.03) 2px,rgba(255,255,255,0.03) 4px)", zIndex: 0 }} />
             <div style={{ position: "absolute", top: 0, bottom: 0, width: "30%", background: "linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent)", animation: "ch-sweep 4s ease-in-out infinite", pointerEvents: "none", zIndex: 0 }} />
           </div>
@@ -163,17 +163,17 @@ export default function HomePageClient({ userCode, onLogout }) {
               <div style={{ width: 28, height: 28, borderRadius: 8, background: "linear-gradient(135deg,#087355,#0891B2)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                 <span style={{ color: "#fff", fontSize: 13, fontWeight: 800 }}>T</span>
               </div>
-              <span style={{ fontWeight: 700, fontSize: 15, color: T.t1 }}>TOEFL Writing</span>
+              <span style={{ fontWeight: 700, fontSize: 15, color: T.t1 }}>TOEFL 写作</span>
               <span style={{ fontSize: 10, fontWeight: 700, color: T.primary, background: T.primarySoft, border: `1px solid ${T.primaryMist}`, borderRadius: 5, padding: "1px 6px", letterSpacing: 0.3 }}>2026</span>
             </div>
-            <div style={{ marginLeft: "auto", fontSize: 12, color: T.t3 }}>Powered by DeepSeek AI</div>
+            <div style={{ marginLeft: "auto", fontSize: 12, color: T.t3 }}>由 DeepSeek AI 提供支持</div>
           </div>
         )}
 
         {isChallenge ? (
           <div style={{ overflow: "hidden", background: "rgba(255,20,20,0.06)", borderBottom: "1px solid rgba(255,30,30,0.25)", padding: "5px 0" }}>
             <div style={{ display: "flex", whiteSpace: "nowrap", animation: "ch-ticker 25s linear infinite", fontSize: 11, fontWeight: 700, color: CH.accent, letterSpacing: 2, textTransform: "uppercase", fontFamily: "Consolas,monospace" }}>
-              <span>Challenge mode active / Reduced time limits / Prove your skills under pressure / No mercy / Challenge mode active / Reduced time limits / Prove your skills under pressure / No mercy / </span>
+              <span>挑战模式已开启 / 限时更紧 / 在压力下证明你的水平 / 不留余地 / 挑战模式已开启 / 限时更紧 / 在压力下证明你的水平 / 不留余地 / </span>
             </div>
           </div>
         ) : null}
@@ -185,16 +185,16 @@ export default function HomePageClient({ userCode, onLogout }) {
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ marginBottom: 16, ...fadeIn(50) }}>
                 <h1 style={{ margin: "0 0 10px", fontSize: 30, fontWeight: 800, color: isChallenge ? CH.t1 : T.t1, letterSpacing: -0.5, lineHeight: 1.2 }}>
-                  {isChallenge ? <>TOEFL iBT Writing <span style={{ color: CH.accent }}>Challenge Mode</span></> : "TOEFL iBT Writing Practice"}
+                  {isChallenge ? <>TOEFL iBT 写作 <span style={{ color: CH.accent }}>挑战模式</span></> : "TOEFL iBT 写作练习"}
                 </h1>
                 <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
                   <p style={{ margin: 0, fontSize: 13, color: isChallenge ? CH.accent : T.t2, fontWeight: isChallenge ? 600 : 400 }}>
-                    {isChallenge ? "Prove your skills under pressure. Reduced time. No mercy." : "ETS-style timing, AI scoring, and all three writing task types in one place."}
+                    {isChallenge ? "在压力下证明你的水平。时间更短，要求更高。" : "提供 ETS 风格计时、AI 评分与三类写作任务练习。"}
                   </p>
                   <div style={{ display: "inline-flex", gap: 4, flexShrink: 0, background: isChallenge ? "rgba(255,255,255,0.05)" : T.card, border: `1px solid ${isChallenge ? "rgba(255,30,30,0.3)" : T.bdr}`, borderRadius: 999, padding: 4, boxShadow: T.shadow }}>
                     {[
-                      { value: PRACTICE_MODE.STANDARD, label: "Standard" },
-                      { value: PRACTICE_MODE.CHALLENGE, label: "Challenge" },
+                      { value: PRACTICE_MODE.STANDARD, label: "标准" },
+                      { value: PRACTICE_MODE.CHALLENGE, label: "挑战" },
                     ].map((option) => {
                       const selected = mode === option.value;
                       const challengeOption = option.value === PRACTICE_MODE.CHALLENGE;
@@ -206,10 +206,10 @@ export default function HomePageClient({ userCode, onLogout }) {
 
               <div style={{ background: isChallenge ? "rgba(17,17,24,0.7)" : T.card, border: `1px solid ${isChallenge ? CH.cardBorder : T.bdr}`, borderRadius: 10, padding: "10px 16px", marginBottom: 16, boxShadow: isChallenge ? "none" : T.shadow, ...fadeIn(120) }}>
                 <div style={{ display: "flex", gap: 20, flexWrap: "wrap", fontSize: 12, color: isChallenge ? CH.t2 : T.t2 }}>
-                  <span>- Covers all 2026 TOEFL iBT Writing task types</span>
-                  <span>- ETS-style timed practice</span>
-                  <span>- AI scoring and feedback</span>
-                  <span>- Practice use only, not official ETS scoring</span>
+                  <span>- 覆盖 2026 TOEFL iBT 全部写作任务类型</span>
+                  <span>- ETS 风格限时练习</span>
+                  <span>- AI 评分与反馈</span>
+                  <span>- 仅供练习使用，不代表官方 ETS 评分</span>
                 </div>
               </div>
 
@@ -221,14 +221,14 @@ export default function HomePageClient({ userCode, onLogout }) {
                 ))}
               </div>
 
-              {iapEnabled ? <div style={{ marginBottom: 12, ...fadeIn(440) }}><HomeLinkCard href="/iap" cardKey="iap" hoverKey={hoverKey} setHoverKey={setHoverKey} isChallenge={isChallenge} icon="IAP" eyebrow="PRIVATE" title="In-App Purchase" description="Private staging workspace for payment flow." tone="warning" /></div> : null}
+              {iapEnabled ? <div style={{ marginBottom: 12, ...fadeIn(440) }}><HomeLinkCard href="/iap" cardKey="iap" hoverKey={hoverKey} setHoverKey={setHoverKey} isChallenge={isChallenge} icon="IAP" eyebrow="内部" title="内购工作台" description="用于支付流程联调的内部预览页面。" tone="warning" /></div> : null}
 
               <div style={{ marginBottom: 28, ...fadeIn(iapEnabled ? 480 : 440) }}>
-                <HomeLinkCard href="/progress" cardKey="progress" hoverKey={hoverKey} setHoverKey={setHoverKey} isChallenge={isChallenge} icon="P" eyebrow="PROGRESS" title="Practice History" description={sessions.length > 0 ? `${sessions.length} recorded sessions. Review trends and weak areas.` : "Track practice trends and identify weak areas."} badge={sessions.length > 0 ? `${sessions.length} sessions` : "0 sessions"} />
+                <HomeLinkCard href="/progress" cardKey="progress" hoverKey={hoverKey} setHoverKey={setHoverKey} isChallenge={isChallenge} icon="P" eyebrow="记录" title="练习记录" description={sessions.length > 0 ? `已记录 ${sessions.length} 次练习，可查看趋势和薄弱点。` : "查看练习趋势并定位薄弱点。"} badge={sessions.length > 0 ? `${sessions.length} 条记录` : "暂无记录"} />
               </div>
 
               <div style={{ fontSize: 10, color: isChallenge ? CH.t2 : T.t3, opacity: 0.65, lineHeight: 1.6, textAlign: "center", ...fadeIn(iapEnabled ? 520 : 480) }}>
-                This tool is an independent practice resource and is not affiliated with ETS or the TOEFL program. TOEFL is a registered trademark of ETS. AI scoring is for self-study reference only.
+                该工具为独立练习资源，与 ETS 或 TOEFL 项目无关联。TOEFL 为 ETS 注册商标。AI 评分仅供自学参考。
               </div>
             </div>
           </div>
