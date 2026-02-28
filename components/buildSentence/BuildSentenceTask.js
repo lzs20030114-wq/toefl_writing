@@ -103,7 +103,7 @@ export function BuildSentenceTask({
     return (
       <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
         {toast && <Toast message={toast} onClose={() => setToast(null)} />}
-        {!embedded && <TopBar title="Build a Sentence Report" section="Writing" onExit={onExit} />}
+        {!embedded && <TopBar title="拼句练习报告" section="写作练习" onExit={onExit} />}
         <PageShell narrow>
           <SurfaceCard style={{ background: C.nav, color: "#fff", padding: 24, textAlign: "center", marginBottom: 20 }}>
             <div style={{ fontSize: 48, fontWeight: 800 }}>{ok}/{results.length}</div>
@@ -148,7 +148,7 @@ export function BuildSentenceTask({
     return (
       <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
         {toast && <Toast message={toast} onClose={() => setToast(null)} />}
-        {!embedded && <TopBar title="Build a Sentence" section="Writing | Task 1" onExit={onExit} />}
+        {!embedded && <TopBar title="拼句练习" section="写作练习｜任务 1" onExit={onExit} />}
         <PageShell narrow>
           <SurfaceCard style={{ padding: 28 }}>
             <div style={{ fontSize: 16, fontWeight: 700, color: C.red, marginBottom: 8 }}>
@@ -167,7 +167,7 @@ export function BuildSentenceTask({
   if (phase === "instruction") {
     return (
       <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
-        {!embedded && <TopBar title="Build a Sentence" section="Writing | Task 1" onExit={onExit} />}
+        {!embedded && <TopBar title="拼句练习" section="写作练习｜任务 1" onExit={onExit} />}
         <PageShell narrow>
           <SurfaceCard style={{ padding: "32px 40px" }}>
             <h2 style={{ margin: "0 0 16px", fontSize: 20, color: C.nav }}>Task 1: Build a Sentence</h2>
@@ -218,7 +218,7 @@ export function BuildSentenceTask({
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
-      {!embedded && <TopBar title="Build a Sentence" section="Writing | Task 1" timeLeft={tl} isRunning={run} qInfo={idx + 1 + " / " + qs.length} onExit={onExit} />}
+      {!embedded && <TopBar title="拼句练习" section="写作练习｜任务 1" timeLeft={tl} isRunning={run} qInfo={idx + 1 + " / " + qs.length} onExit={onExit} />}
       <PageShell narrow>
         <InfoStrip style={{ marginBottom: 20 }}>
           <b>Directions:</b> Use the word chunks below to build a grammatically correct sentence. One chunk may be a distractor.

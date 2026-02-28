@@ -1,18 +1,6 @@
 ﻿"use client";
 import React, { useMemo, useState } from "react";
-import { C } from "../shared/ui";
-
-function Section({ title, defaultOpen = false, preview = "", children }) {
-  return (
-    <details open={defaultOpen} style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8 }}>
-      <summary style={{ cursor: "pointer", listStyle: "none", padding: "12px 14px", fontWeight: 700, color: C.nav, borderBottom: "1px solid #e5e7eb" }}>
-        <span>{title}</span>
-        {preview ? <span style={{ fontWeight: 500, color: C.t2, marginLeft: 8 }}>{preview}</span> : null}
-      </summary>
-      <div style={{ padding: 14 }}>{children}</div>
-    </details>
-  );
-}
+import { C, DisclosureSection } from "../shared/ui";
 
 function GoalBadge({ status }) {
   const map = {
@@ -90,7 +78,7 @@ export function ScoringReport({ result, type }) {
         )}
       </div>
 
-      <Section title="薄弱点修改建议" defaultOpen preview={actions.length > 0 ? `${actions.length} 个重点` : "暂无"}>
+      <DisclosureSection title="薄弱点修改建议" defaultOpen preview={actions.length > 0 ? `${actions.length} 个重点` : "暂无"} contentStyle={{ padding: 14 }}>
         {sectionStates.ACTION && !sectionStates.ACTION.ok ? (
           <div style={{ color: C.red }}>此部分暂时无法加载</div>
         ) : actions.length === 0 ? (
@@ -106,9 +94,9 @@ export function ScoringReport({ result, type }) {
             ))}
           </div>
         )}
-      </Section>
+      </DisclosureSection>
 
-      <Section title="逐句批注" preview={`${counts.red} 个语法错误 · ${counts.orange} 个表达建议 · ${counts.blue} 个拔高建议`}>
+      <DisclosureSection title="逐句批注" preview={`${counts.red} 个语法错误 · ${counts.orange} 个表达建议 · ${counts.blue} 个拔高建议`} contentStyle={{ padding: 14 }}>
         {sectionStates.ANNOTATION && !sectionStates.ANNOTATION.ok ? (
           <div style={{ color: C.red }}>此部分暂时无法加载</div>
         ) : marks.length === 0 ? (
@@ -152,9 +140,9 @@ export function ScoringReport({ result, type }) {
             ) : null}
           </div>
         )}
-      </Section>
+      </DisclosureSection>
 
-      <Section title="模式总结" preview={patternRows.length > 0 ? `${patternRows.length} 个规律` : "暂无"}>
+      <DisclosureSection title="模式总结" preview={patternRows.length > 0 ? `${patternRows.length} 个规律` : "暂无"} contentStyle={{ padding: 14 }}>
         {sectionStates.PATTERNS && !sectionStates.PATTERNS.ok ? (
           <div style={{ color: C.red }}>此部分暂时无法加载</div>
         ) : patternRows.length === 0 ? (
@@ -172,9 +160,9 @@ export function ScoringReport({ result, type }) {
             ))}
           </div>
         )}
-      </Section>
+      </DisclosureSection>
 
-      <Section title="范文对比" preview={Array.isArray(comparison.points) ? `${comparison.points.length} 个对比点` : "暂无"}>
+      <DisclosureSection title="范文对比" preview={Array.isArray(comparison.points) ? `${comparison.points.length} 个对比点` : "暂无"} contentStyle={{ padding: 14 }}>
         {sectionStates.COMPARISON && !sectionStates.COMPARISON.ok ? (
           <div style={{ color: C.red }}>此部分暂时无法加载</div>
         ) : (
@@ -202,7 +190,7 @@ export function ScoringReport({ result, type }) {
             )}
           </div>
         )}
-      </Section>
+      </DisclosureSection>
     </div>
   );
 }

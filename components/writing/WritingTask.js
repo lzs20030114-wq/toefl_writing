@@ -352,7 +352,6 @@ export function WritingTask({
   useEffect(() => () => clearInterval(tr.current), []);
 
   const w = wc(text);
-  const taskTitle = type === "email" ? "Write an Email" : "Academic Discussion";
   const introTitle = type === "email" ? "Task 2: Write an Email" : "Task 3: Academic Discussion";
   const introDescLine1 = type === "email"
     ? "You will read some information and use the information to write an email."
@@ -364,7 +363,7 @@ export function WritingTask({
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
-      {!embedded && <TopBar title={taskTitle} section={"Writing | " + (type === "email" ? "Task 2" : "Task 3")} timeLeft={phase !== "ready" ? tl : undefined} isRunning={run} onExit={onExit} />}
+      {!embedded && <TopBar title={type === "email" ? "邮件写作" : "学术讨论写作"} section={type === "email" ? "写作练习｜任务 2" : "写作练习｜任务 3"} timeLeft={phase !== "ready" ? tl : undefined} isRunning={run} onExit={onExit} />}
       <PageShell narrow>
         {initialError && (
           <SurfaceCard style={{ padding: 28, marginBottom: 16 }}>

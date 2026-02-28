@@ -2,25 +2,15 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { clearAllSessions, deleteSession, loadHist, SESSION_STORE_EVENTS } from "../lib/sessionStore";
 import { buildHistoryEntries, buildHistoryStats } from "../lib/history/viewModel";
-import { Btn, C, PageShell, SurfaceCard, TopBar } from "./shared/ui";
+import { formatLocalDateTime } from "../lib/utils";
+import { Btn, C, ChevronIcon, DisclosureSection, PageShell, SurfaceCard, TopBar } from "./shared/ui";
 import { HistoryRow } from "./history/HistoryRow";
 
 const TASK_UI = {
-  bs: { label: "拼句练习", short: "拼句", color: "#d97706", soft: "#fffbeb", icon: "🧩" },
-  email: { label: "邮件写作", short: "邮件", color: "#0891b2", soft: "#ecfeff", icon: "📧" },
-  discussion: { label: "学术讨论", short: "讨论", color: "#0d9668", soft: "#ecfdf5", icon: "💬" },
+  bs: { label: "拼句练习", color: "#d97706", soft: "#fffbeb", icon: "🧩" },
+  email: { label: "邮件写作", color: "#0891b2", soft: "#ecfeff", icon: "📧" },
+  discussion: { label: "学术讨论", color: "#0d9668", soft: "#ecfdf5", icon: "💬" },
 };
-
-function fmtDate(value) {
-  try {
-    const dt = new Date(value);
-    if (Number.isNaN(dt.getTime())) return String(value || "");
-    const pad = (n) => String(n).padStart(2, "0");
-    return `${dt.getFullYear()}/${pad(dt.getMonth() + 1)}/${pad(dt.getDate())} ${pad(dt.getHours())}:${pad(dt.getMinutes())}`;
-  } catch {
-    return String(value || "");
-  }
-}
 
 function smoothPath(points) {
   if (!points || points.length === 0) return "";
@@ -100,46 +90,6 @@ function StatCard({ icon, title, value, hint, color, soft }) {
   );
 }
 
-function Chevron({ open }) {
-  return (
-    <span
-      aria-hidden="true"
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-        width: 18,
-        height: 18,
-        color: C.t3,
-        transform: open ? "rotate(180deg)" : "rotate(0deg)",
-        transition: "transform 180ms ease",
-        flexShrink: 0,
-      }}
-    >
-      <svg viewBox="0 0 12 12" width="12" height="12" fill="none">
-        <path d="M2.5 4.25 6 7.75l3.5-3.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    </span>
-  );
-}
-
-function SectionCard({ icon, title, badge, open, onToggle, children }) {
-  return (
-    <SurfaceCard style={{ overflow: "hidden" }}>
-      <button onClick={onToggle} aria-expanded={open} style={{ width: "100%", display: "flex", alignItems: "center", gap: 9, padding: "11px 13px", background: "transparent", border: "none", cursor: "pointer", textAlign: "left" }}>
-        <div style={{ width: 29, height: 29, borderRadius: 9, background: C.ltB, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15 }}>{icon}</div>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontSize: 14, fontWeight: 800, color: C.t1 }}>{title}</div>
-        </div>
-        {badge != null ? <span style={{ fontSize: 10.5, fontWeight: 700, color: C.blue, background: C.softBlue, borderRadius: 999, padding: "2px 8px" }}>{badge}</span> : null}
-        <span style={{ fontSize: 10.5, color: C.t3 }}>{open ? "收起" : "展开"}</span>
-        <Chevron open={open} />
-      </button>
-      {open ? <div style={{ borderTop: "1px solid " + C.bdrSubtle }}>{children}</div> : null}
-    </SurfaceCard>
-  );
-}
-
 function SkeletonView() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
@@ -147,7 +97,7 @@ function SkeletonView() {
         <div style={{ height: 20, width: 168, background: "#e5e7eb", borderRadius: 999, marginBottom: 8 }} />
         <div style={{ height: 14, width: 240, background: "#eef2f7", borderRadius: 999 }} />
       </SurfaceCard>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10 }}>
         {[1, 2, 3].map((i) => <SurfaceCard key={i} style={{ padding: 16, minHeight: 108, background: "#ffffff" }} />)}
       </div>
       {[1, 2, 3, 4].map((i) => <SurfaceCard key={i} style={{ minHeight: 80 }} />)}
@@ -196,11 +146,11 @@ function MockSection({ mockEntries }) {
           const buildTask = getTask(session, "build-sentence");
           return (
             <SurfaceCard key={entry.sourceIndex} style={{ padding: 0, overflow: "hidden", boxShadow: "none" }}>
-              <button onClick={() => setExpanded(open ? null : entry.sourceIndex)} style={{ width: "100%", display: "flex", alignItems: "center", gap: 9, padding: "10px 12px", border: "none", background: "transparent", cursor: "pointer", textAlign: "left" }}>
+              <button onClick={() => setExpanded(open ? null : entry.sourceIndex)} style={{ width: "100%", display: "flex", alignItems: "center", gap: 9, padding: "10px 12px", border: "none", background: "transparent", cursor: "pointer", textAlign: "left", flexWrap: "wrap" }}>
                 {Number.isFinite(session.band) ? <span style={{ fontSize: 10.5, fontWeight: 700, background: getBandColor(session.band) + "20", color: getBandColor(session.band), borderRadius: 999, padding: "2px 6px" }}>{session.band.toFixed(1)}</span> : <span style={{ fontSize: 10.5, color: C.t3 }}>待评分</span>}
-                <span style={{ fontSize: 11, color: C.t2, flex: 1 }}>{fmtDate(session.date)}</span>
-                <span style={{ fontSize: 10.5, color: C.t2, whiteSpace: "nowrap" }}>拼句 {Number.isFinite(buildTask?.score) ? `${buildTask.score}/${buildTask.maxScore}` : "待定"} / 邮件 {Number.isFinite(emailTask?.score) ? `${emailTask.score}/${emailTask.maxScore}` : "待定"} / 讨论 {Number.isFinite(discTask?.score) ? `${discTask.score}/${discTask.maxScore}` : "待定"}</span>
-                <Chevron open={open} />
+                <span style={{ fontSize: 11, color: C.t2, flex: "1 1 140px", minWidth: 0 }}>{formatLocalDateTime(session.date)}</span>
+                <span style={{ fontSize: 10.5, color: C.t2, flex: "1 1 220px", minWidth: 0 }}>拼句 {Number.isFinite(buildTask?.score) ? `${buildTask.score}/${buildTask.maxScore}` : "待定"} / 邮件 {Number.isFinite(emailTask?.score) ? `${emailTask.score}/${emailTask.maxScore}` : "待定"} / 讨论 {Number.isFinite(discTask?.score) ? `${discTask.score}/${discTask.maxScore}` : "待定"}</span>
+                <ChevronIcon open={open} />
               </button>
               {open ? <div style={{ padding: "0 13px 13px" }}><HistoryRow entry={entry} isExpanded={true} isLast={true} onToggle={() => {}} onDelete={() => {}} detailOnly={true} /></div> : null}
             </SurfaceCard>
@@ -520,21 +470,21 @@ export function ProgressView({ onBack }) {
                   <StatCard icon={TASK_UI.discussion.icon} title="学术讨论" value={String(discussion.length)} hint={discussionAvg !== null ? `平均 ${discussionAvg.toFixed(1)}/5` : "暂无平均值"} color={TASK_UI.discussion.color} soft={TASK_UI.discussion.soft} />
                 </div>
 
-                <SectionCard icon="🎯" title="模考成绩" badge={mockEntries.length || null} open={openSections.mock} onToggle={() => toggleSection("mock")}>
+                <DisclosureSection icon="🎯" title="模考成绩" badge={mockEntries.length || null} open={openSections.mock} onToggle={() => toggleSection("mock")}>
                   <MockSection mockEntries={mockEntries} />
-                </SectionCard>
+                </DisclosureSection>
 
-                <SectionCard icon="📈" title="进步追踪" open={openSections.progress} onToggle={() => toggleSection("progress")}>
+                <DisclosureSection icon="📈" title="进步追踪" open={openSections.progress} onToggle={() => toggleSection("progress")}>
                   <ProgressSection bs={bs} email={email} discussion={discussion} />
-                </SectionCard>
+                </DisclosureSection>
 
-                <SectionCard icon="🔍" title="薄弱点分析" open={openSections.weakness} onToggle={() => toggleSection("weakness")}>
+                <DisclosureSection icon="🔍" title="薄弱点分析" open={openSections.weakness} onToggle={() => toggleSection("weakness")}>
                   <WeaknessSection email={email} discussion={discussion} />
-                </SectionCard>
+                </DisclosureSection>
 
-                <SectionCard icon="📋" title="练习详情" badge={practiceEntries.length} open={openSections.practice} onToggle={() => toggleSection("practice")}>
+                <DisclosureSection icon="📋" title="练习详情" badge={practiceEntries.length} open={openSections.practice} onToggle={() => toggleSection("practice")}>
                   <PracticeSection practiceEntries={practiceEntries} typeAvgs={typeAvgs} onDelete={handleDelete} />
-                </SectionCard>
+                </DisclosureSection>
 
                 <div style={{ fontSize: 12, color: C.t3, textAlign: "center" }}>共 {totalSessions} 条记录。展开详情可查看作答内容、评分反馈与历史操作入口。</div>
               </>

@@ -143,7 +143,7 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
 
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
-      <TopBar title={mode === PRACTICE_MODE.CHALLENGE ? "Full Mock Exam (Challenge)" : "Full Mock Exam"} section="Writing | Mock Mode" onExit={onExit} />
+      <TopBar title={mode === PRACTICE_MODE.CHALLENGE ? "整套模考（挑战模式）" : "整套模考"} section="写作练习｜模考模式" onExit={onExit} />
       <div style={{ maxWidth: 1200, margin: "24px auto", padding: "0 20px" }}>
         {!session && (
           <MockExamStartCard

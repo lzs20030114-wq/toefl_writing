@@ -1,8 +1,8 @@
 ﻿"use client";
 import React, { useMemo, useState } from "react";
-import { C, SurfaceCard } from "../shared/ui";
+import { formatLocalDateTime, translateGrammarPoint } from "../../lib/utils";
+import { C, ChevronIcon, SurfaceCard } from "../shared/ui";
 import { ScoringReport } from "../writing/ScoringReport";
-import { translateGrammarPoint } from "../../lib/utils";
 
 const MOCK_TASK_IDS = {
   BUILD: "build-sentence",
@@ -16,14 +16,6 @@ function getTypeLabel(type) {
   if (type === "discussion") return "学术讨论";
   if (type === "mock") return "整套模考";
   return "未知类型";
-}
-
-function typeIcon(type) {
-  if (type === "bs") return "🧩";
-  if (type === "email") return "📧";
-  if (type === "discussion") return "💬";
-  if (type === "mock") return "🎯";
-  return "•";
 }
 
 function getScoreLabel(session) {
@@ -66,17 +58,6 @@ function getScoreColor(session) {
   if (session.score >= 4) return C.green;
   if (session.score >= 3) return C.orange;
   return C.red;
-}
-
-function fmtDate(value) {
-  try {
-    const dt = new Date(value);
-    if (Number.isNaN(dt.getTime())) return String(value || "");
-    const pad = (n) => String(n).padStart(2, "0");
-    return `${dt.getFullYear()}/${pad(dt.getMonth() + 1)}/${pad(dt.getDate())} ${pad(dt.getHours())}:${pad(dt.getMinutes())}`;
-  } catch {
-    return String(value || "");
-  }
 }
 
 function buildRetryHref(session) {
@@ -182,29 +163,6 @@ function OutlineButton({ children, onClick, active = false }) {
   );
 }
 
-function Chevron({ open, size = 12 }) {
-  return (
-    <span
-      aria-hidden="true"
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-        width: size + 6,
-        height: size + 6,
-        color: C.t3,
-        transform: open ? "rotate(180deg)" : "rotate(0deg)",
-        transition: "transform 180ms ease",
-        flexShrink: 0,
-      }}
-    >
-      <svg viewBox="0 0 12 12" width={size} height={size} fill="none">
-        <path d="M2.5 4.25 6 7.75l3.5-3.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    </span>
-  );
-}
-
 function MockExamDetails({ session }) {
   const [activeTab, setActiveTab] = useState(MOCK_TASK_IDS.BUILD);
   const [bsFilter, setBsFilter] = useState("all");
@@ -298,7 +256,7 @@ function MockExamDetails({ session }) {
                   <div style={{ fontSize: 11.5, color: C.t2 }}>{truncate(detail?.correctAnswer, 40)}</div>
                   <button onClick={() => setExpandedBsRows((prev) => ({ ...prev, [rowKey]: !open }))} aria-expanded={open} style={{ display: "inline-flex", alignItems: "center", gap: 4, border: "1px solid " + C.bdr, background: "#fff", color: C.t2, borderRadius: 999, fontSize: 11, fontWeight: 700, padding: "4px 8px", cursor: "pointer" }}>
                     <span>{open ? "收起" : "展开"}</span>
-                    <Chevron open={open} size={10} />
+                    <ChevronIcon open={open} size={10} />
                   </button>
                 </div>
                 {open ? (
@@ -386,7 +344,7 @@ function MockExamDetails({ session }) {
   );
 }
 
-export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, showIcon, compact = false, typeAvgs, detailOnly = false }) {
+export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, typeAvgs, detailOnly = false }) {
   const session = entry?.session || {};
   const sourceIndex = entry?.sourceIndex;
 
@@ -415,13 +373,13 @@ export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, show
   return (
     <div>
       {!detailOnly ? (
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: compact ? "7px 0" : "8px 0", borderBottom: isLast ? "none" : "1px solid #eef2f7", gap: 8, flexWrap: "wrap" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 0", borderBottom: isLast ? "none" : "1px solid #eef2f7", gap: 8, flexWrap: "wrap" }}>
           <button onClick={() => onToggle?.()} style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0, flex: 1, border: "none", background: "transparent", padding: 0, cursor: "pointer", textAlign: "left" }}>
-            <Chevron open={isExpanded} size={10} />
-            <span style={{ fontSize: 11, fontWeight: 700, whiteSpace: "nowrap" }}>{showIcon ? `${typeIcon(session.type)} ` : ""}{getTypeLabel(session.type)}</span>
+            <ChevronIcon open={isExpanded} size={10} />
+            <span style={{ fontSize: 11, fontWeight: 700, whiteSpace: "nowrap" }}>{getTypeLabel(session.type)}</span>
             {(session.type === "email" || session.type === "discussion") && practiceAttempt > 1 ? <Chip color="#0f766e" bg="#ccfbf1">第 {practiceAttempt} 次练习</Chip> : null}
             {session.type === "mock" && Number.isFinite(session?.band) ? <Chip>{session.band.toFixed(1)}</Chip> : null}
-            <span style={{ fontSize: 10.5, color: C.t2, whiteSpace: "nowrap" }}>{fmtDate(session.date)}</span>
+            <span style={{ fontSize: 10.5, color: C.t2, whiteSpace: "nowrap" }}>{formatLocalDateTime(session.date)}</span>
           </button>
 
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", justifyContent: "flex-end" }}>
@@ -440,7 +398,7 @@ export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, show
             </span>
             <button onClick={() => onToggle?.()} aria-expanded={isExpanded} style={{ display: "inline-flex", alignItems: "center", gap: 4, border: "1px solid " + C.bdr, background: "#fff", color: C.t2, borderRadius: 999, fontSize: 10.5, fontWeight: 700, padding: "4px 9px", cursor: "pointer" }}>
               <span>{isExpanded ? "收起详情" : "查看详情"}</span>
-              <Chevron open={isExpanded} size={10} />
+              <ChevronIcon open={isExpanded} size={10} />
             </button>
             <button onClick={() => onDelete?.(sourceIndex)} title="删除记录" style={{ background: "none", border: "none", color: C.red, cursor: "pointer", fontSize: 15, padding: "2px 6px", lineHeight: 1, fontWeight: 700, opacity: 0.75 }}>×</button>
           </div>
@@ -459,7 +417,7 @@ export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, show
                   <span style={{ color: statusColor, fontWeight: 700, fontSize: 15, flexShrink: 0, width: 18, textAlign: "center" }}>{detail.isCorrect ? "✓" : "!"}</span>
                   <span style={{ fontSize: 12, fontWeight: 600, color: C.t1, flexShrink: 0 }}>第 {index + 1} 题</span>
                   <span style={{ fontSize: 11, color: C.t2, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{detail.prompt}</span>
-                  <Chevron open={itemOpen} size={10} />
+                  <ChevronIcon open={itemOpen} size={10} />
                 </button>
                 {itemOpen ? (
                   <div style={{ paddingLeft: 26, paddingBottom: 10, display: "flex", flexDirection: "column", gap: 7 }}>
@@ -488,7 +446,7 @@ export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, show
 
       {isExpanded && session.type === "mock" && session.details ? <MockExamDetails session={session} /> : null}
 
-      {isExpanded && session.details && (session.type === "email" || session.type === "discussion") && session.details.userText ? (
+      {isExpanded && session.details && (session.type === "email" || session.type === "discussion") ? (
         <SurfaceCard style={{ background: "#f9fafb", padding: 12, margin: "5px 0 7px", boxShadow: "none" }}>
           {session.details.promptSummary ? <div style={{ fontSize: 11, color: C.t2, marginBottom: 7 }}>题目摘要：{session.details.promptSummary}</div> : null}
           {retryHref ? (
@@ -496,11 +454,23 @@ export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, show
               <OutlineButton onClick={() => { window.location.href = retryHref; }}>再练一遍（同题）</OutlineButton>
             </div>
           ) : null}
-          <SurfaceCard style={{ padding: 10, marginBottom: 8, boxShadow: "none" }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: C.t2, marginBottom: 6 }}>你的作答</div>
-            <div style={{ fontSize: 11.5, lineHeight: 1.6, whiteSpace: "pre-wrap" }}>{session.details.userText}</div>
-          </SurfaceCard>
-          {session.details.feedback ? <ScoringReport result={session.details.feedback} type={session.type} uiLang={session.details.feedback?.reportLanguage || "zh"} /> : null}
+          {session.details.userText ? (
+            <SurfaceCard style={{ padding: 10, marginBottom: 8, boxShadow: "none" }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: C.t2, marginBottom: 6 }}>你的作答</div>
+              <div style={{ fontSize: 11.5, lineHeight: 1.6, whiteSpace: "pre-wrap" }}>{session.details.userText}</div>
+            </SurfaceCard>
+          ) : (
+            <SurfaceCard style={{ padding: 10, marginBottom: 8, boxShadow: "none", fontSize: 11, color: C.t2 }}>
+              这条历史记录没有保存作答文本。
+            </SurfaceCard>
+          )}
+          {session.details.feedback ? (
+            <ScoringReport result={session.details.feedback} type={session.type} uiLang={session.details.feedback?.reportLanguage || "zh"} />
+          ) : (
+            <SurfaceCard style={{ padding: 10, fontSize: 11, color: C.t2, boxShadow: "none" }}>
+              这条历史记录没有可展示的评分反馈。
+            </SurfaceCard>
+          )}
         </SurfaceCard>
       ) : null}
 
