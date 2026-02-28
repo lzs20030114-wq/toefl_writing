@@ -475,7 +475,7 @@ function MockExamDetails({ session }) {
   );
 }
 
-export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, showIcon, compact = false, typeAvgs }) {
+export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, showIcon, compact = false, typeAvgs, detailOnly = false }) {
   const s = entry?.session || {};
   const sourceIndex = entry?.sourceIndex;
 
@@ -507,7 +507,7 @@ export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, show
 
   return (
     <div>
-      <div
+      {!detailOnly && <div
         style={{
           display: "flex",
           justifyContent: "space-between",
@@ -593,7 +593,7 @@ export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, show
             x
           </button>
         </div>
-      </div>
+      </div>}
 
       {isExpanded && s.type === "bs" && s.details && Array.isArray(s.details) && (
         <div style={{ background: "#f9f9f9", border: "1px solid #eee", borderRadius: 4, padding: "12px 16px", margin: "4px 0 8px 0" }}>
