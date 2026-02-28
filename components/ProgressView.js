@@ -163,8 +163,22 @@ function CollapsibleCard({ emoji, title, badge, children, defaultOpen = false })
           display: "inline-block",
         }}>▼</span>
       </button>
-      <div style={{ maxHeight: open ? 3000 : 0, overflow: "hidden", transition: "max-height 0.4s cubic-bezier(0.25,1,0.5,1)" }}>
-        <div style={{ borderTop: `1px solid ${T.bdr}` }}>{children}</div>
+      {/* grid-template-rows 0fr→1fr animates to the actual content height */}
+      <div style={{
+        display: "grid",
+        gridTemplateRows: open ? "1fr" : "0fr",
+        transition: "grid-template-rows 0.4s cubic-bezier(0.25, 1, 0.5, 1)",
+      }}>
+        <div style={{ overflow: "hidden" }}>
+          <div style={{
+            borderTop: `1px solid ${T.bdr}`,
+            opacity: open ? 1 : 0,
+            transform: open ? "translateY(0)" : "translateY(-6px)",
+            transition: open
+              ? "opacity 0.28s ease 0.06s, transform 0.28s ease 0.06s"
+              : "opacity 0.15s ease, transform 0.15s ease",
+          }}>{children}</div>
+        </div>
       </div>
     </div>
   );
