@@ -1,6 +1,6 @@
-"use client";
+﻿"use client";
 import React, { useMemo, useState } from "react";
-import { C } from "../shared/ui";
+import { C, SurfaceCard } from "../shared/ui";
 import { ScoringReport } from "../writing/ScoringReport";
 import { translateGrammarPoint } from "../../lib/utils";
 
@@ -11,45 +11,46 @@ const MOCK_TASK_IDS = {
 };
 
 function getTypeLabel(type) {
-  if (type === "bs") return "Build";
-  if (type === "email") return "Email";
-  if (type === "discussion") return "Discussion";
-  if (type === "mock") return "Mock Exam";
-  return "Unknown";
+  if (type === "bs") return "拼句练习";
+  if (type === "email") return "邮件写作";
+  if (type === "discussion") return "学术讨论";
+  if (type === "mock") return "整套模考";
+  return "未知类型";
 }
 
 function typeIcon(type) {
-  if (type === "bs") return "\u{1F9E9} ";
-  if (type === "email") return "\u{1F4E7} ";
-  if (type === "discussion") return "\u{1F4AC} ";
-  return "";
+  if (type === "bs") return "🧩";
+  if (type === "email") return "📧";
+  if (type === "discussion") return "💬";
+  if (type === "mock") return "🎯";
+  return "•";
 }
 
-function getScoreLabel(s) {
-  if (!s || typeof s !== "object") return "--";
-  if (s.type === "bs") {
-    const total = Number(s.total || 0);
-    const correct = Number(s.correct || 0);
+function getScoreLabel(session) {
+  if (!session || typeof session !== "object") return "--";
+  if (session.type === "bs") {
+    const total = Number(session.total || 0);
+    const correct = Number(session.correct || 0);
     if (total <= 0) return "--";
     return `${correct}/${total}`;
   }
-  if (s.type === "mock") {
-    if (Number.isFinite(s.band)) return `${s.band.toFixed(1)} /6`;
-    return `${s.score || 0}%`;
+  if (session.type === "mock") {
+    if (Number.isFinite(session.band)) return `${session.band.toFixed(1)} / 6`;
+    return `${session.score || 0}%`;
   }
-  return `${s.score}/5`;
+  return Number.isFinite(session.score) ? `${session.score}/5` : "--";
 }
 
-function getScoreColor(s) {
-  if (!s || typeof s !== "object") return C.t2;
-  if (s.type === "bs") {
-    const total = Number(s.total || 0);
-    const correct = Number(s.correct || 0);
+function getScoreColor(session) {
+  if (!session || typeof session !== "object") return C.t2;
+  if (session.type === "bs") {
+    const total = Number(session.total || 0);
+    const correct = Number(session.correct || 0);
     if (total <= 0) return C.t2;
     return correct / total >= 0.8 ? C.green : C.orange;
   }
-  if (s.type === "mock") {
-    const band = s.band;
+  if (session.type === "mock") {
+    const band = session.band;
     if (Number.isFinite(band)) {
       if (band >= 5.5) return "#16a34a";
       if (band >= 4.5) return "#2563eb";
@@ -57,24 +58,24 @@ function getScoreColor(s) {
       if (band >= 2.5) return "#ea580c";
       return "#dc2626";
     }
-    const p = s.score || 0;
+    const p = session.score || 0;
     if (p >= 80) return C.green;
     if (p >= 60) return C.orange;
     return C.red;
   }
-  if (s.score >= 4) return C.green;
-  if (s.score >= 3) return C.orange;
+  if (session.score >= 4) return C.green;
+  if (session.score >= 3) return C.orange;
   return C.red;
 }
 
-function fmtDate(d) {
+function fmtDate(value) {
   try {
-    const dt = new Date(d);
-    if (Number.isNaN(dt.getTime())) return String(d || "");
+    const dt = new Date(value);
+    if (Number.isNaN(dt.getTime())) return String(value || "");
     const pad = (n) => String(n).padStart(2, "0");
     return `${dt.getFullYear()}/${pad(dt.getMonth() + 1)}/${pad(dt.getDate())} ${pad(dt.getHours())}:${pad(dt.getMinutes())}`;
   } catch {
-    return String(d || "");
+    return String(value || "");
   }
 }
 
@@ -99,34 +100,24 @@ function buildRetryHref(session) {
 
 function truncate(text, max = 40) {
   const s = String(text || "").trim();
-  if (!s) return "(empty)";
+  if (!s) return "（空）";
   if (s.length <= max) return s;
   return `${s.slice(0, max)}...`;
 }
 
 function renderWordDiff(userText, correctText) {
-  if (!userText) return <span style={{ color: "#9ca3af", fontStyle: "italic" }}>(no answer)</span>;
-  const normalize = (w) => String(w).toLowerCase().replace(/[.,!?;:'"]/g, "");
+  if (!userText) return <span style={{ color: "#9ca3af", fontStyle: "italic" }}>（未作答）</span>;
+  const normalize = (word) => String(word).toLowerCase().replace(/[.,!?;:'"]/g, "");
   const userWords = String(userText).trim().split(/\s+/);
   const correctWords = String(correctText || "").trim().split(/\s+/);
   return (
     <>
-      {userWords.map((word, i) => {
-        const isWrong = normalize(word) !== normalize(correctWords[i] || "");
+      {userWords.map((word, index) => {
+        const isWrong = normalize(word) !== normalize(correctWords[index] || "");
         return (
-          <React.Fragment key={i}>
-            <span
-              style={{
-                textDecoration: isWrong ? "underline" : "none",
-                textDecorationColor: "#ef4444",
-                textDecorationThickness: 2,
-                color: isWrong ? "#ef4444" : "#111827",
-                fontWeight: isWrong ? 600 : 400,
-              }}
-            >
-              {word}
-            </span>
-            {i < userWords.length - 1 ? " " : ""}
+          <React.Fragment key={index}>
+            <span style={{ textDecoration: isWrong ? "underline" : "none", textDecorationColor: "#ef4444", textDecorationThickness: 2, color: isWrong ? "#ef4444" : "#111827", fontWeight: isWrong ? 600 : 400 }}>{word}</span>
+            {index < userWords.length - 1 ? " " : ""}
           </React.Fragment>
         );
       })}
@@ -167,23 +158,27 @@ async function copyText(text) {
   }
 }
 
-function Chip({ children, color = "#3b82f6", bg = "#eff6ff" }) {
+function Chip({ children, color = C.blue, bg = C.softBlue }) {
+  return <span style={{ display: "inline-flex", alignItems: "center", padding: "2px 8px", borderRadius: 999, fontSize: 11, fontWeight: 700, color, background: bg, whiteSpace: "nowrap" }}>{children}</span>;
+}
+
+function OutlineButton({ children, onClick, active = false }) {
   return (
-    <span
+    <button
+      onClick={onClick}
       style={{
-        display: "inline-flex",
-        alignItems: "center",
-        padding: "2px 8px",
+        border: "1px solid " + (active ? C.blue : C.bdr),
+        background: active ? C.softBlue : "#fff",
+        color: active ? C.blue : C.t2,
         borderRadius: 999,
-        fontSize: 11,
+        fontSize: 12,
         fontWeight: 700,
-        color,
-        background: bg,
-        whiteSpace: "nowrap",
+        padding: "6px 12px",
+        cursor: "pointer",
       }}
     >
       {children}
-    </span>
+    </button>
   );
 }
 
@@ -197,10 +192,9 @@ function MockExamDetails({ session }) {
   const tasks = Array.isArray(session?.details?.tasks) ? session.details.tasks : [];
   const byId = useMemo(() => {
     const map = {};
-    tasks.forEach((t) => {
-      const taskId = t?.taskId;
-      if (!taskId) return;
-      map[taskId] = t;
+    tasks.forEach((task) => {
+      const taskId = task?.taskId;
+      if (taskId) map[taskId] = task;
     });
     return map;
   }, [tasks]);
@@ -208,51 +202,42 @@ function MockExamDetails({ session }) {
   const bsTask = byId[MOCK_TASK_IDS.BUILD] || null;
   const emailTask = byId[MOCK_TASK_IDS.EMAIL] || null;
   const discTask = byId[MOCK_TASK_IDS.DISC] || null;
-
   const bsDetails = Array.isArray(bsTask?.meta?.details) ? bsTask.meta.details : [];
-  const bsCorrect = bsDetails.filter((d) => d?.isCorrect).length;
+  const bsCorrect = bsDetails.filter((detail) => detail?.isCorrect).length;
 
   const topGrammarTags = useMemo(() => {
     const freq = {};
-    bsDetails.forEach((d) => {
-      const list = Array.isArray(d?.grammar_points) ? d.grammar_points : [];
+    bsDetails.forEach((detail) => {
+      const list = Array.isArray(detail?.grammar_points) ? detail.grammar_points : [];
       list.forEach((g) => {
         const tag = String(g || "").trim();
         if (!tag) return;
         freq[tag] = (freq[tag] || 0) + 1;
       });
     });
-    return Object.entries(freq)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 5)
-      .map(([tag, n]) => ({ tag, n }));
+    return Object.entries(freq).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([tag, n]) => ({ tag, n }));
   }, [bsDetails]);
 
   const filteredBs = useMemo(() => {
-    const q = bsQuery.trim().toLowerCase();
-    return bsDetails.filter((d) => {
-      const passFilter =
-        bsFilter === "all" ||
-        (bsFilter === "correct" && d?.isCorrect) ||
-        (bsFilter === "incorrect" && !d?.isCorrect);
+    const query = bsQuery.trim().toLowerCase();
+    return bsDetails.filter((detail) => {
+      const passFilter = bsFilter === "all" || (bsFilter === "correct" && detail?.isCorrect) || (bsFilter === "incorrect" && !detail?.isCorrect);
       if (!passFilter) return false;
-      if (!q) return true;
-      return [d?.prompt, d?.userAnswer, d?.correctAnswer]
-        .map((x) => String(x || "").toLowerCase())
-        .some((x) => x.includes(q));
+      if (!query) return true;
+      return [detail?.prompt, detail?.userAnswer, detail?.correctAnswer].map((x) => String(x || "").toLowerCase()).some((x) => x.includes(query));
     });
   }, [bsDetails, bsFilter, bsQuery]);
 
-  function taskChip(taskId, short) {
-    const t = byId[taskId];
-    if (!t) return <Chip key={taskId}>{short}: --</Chip>;
-    const score = Number.isFinite(t.score) ? t.score : "pending";
-    return <Chip key={taskId}>{short}: {score}/{t.maxScore}</Chip>;
+  function taskChip(taskId, shortLabel) {
+    const task = byId[taskId];
+    if (!task) return <Chip key={taskId}>{shortLabel}：--</Chip>;
+    const score = Number.isFinite(task.score) ? task.score : "待定";
+    return <Chip key={taskId}>{shortLabel}：{score}/{task.maxScore}</Chip>;
   }
 
   async function onCopy(label, text) {
     const ok = await copyText(text);
-    setCopyHint(ok ? `${label} copied` : `Copy failed`);
+    setCopyHint(ok ? `${label}已复制` : "复制失败");
     setTimeout(() => setCopyHint(""), 1200);
   }
 
@@ -260,135 +245,60 @@ function MockExamDetails({ session }) {
     return (
       <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
-          <div style={{ fontSize: 13, fontWeight: 700, color: C.t1 }}>
-            Correct {bsCorrect}/{bsDetails.length}
-          </div>
+          <div style={{ fontSize: 13, fontWeight: 700, color: C.t1 }}>答对 {bsCorrect}/{bsDetails.length}</div>
           <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-            {topGrammarTags.map((x) => (
-              <Chip key={x.tag} color="#1d4ed8" bg="#dbeafe">{translateGrammarPoint(x.tag)} x{x.n}</Chip>
-            ))}
-            {topGrammarTags.length === 0 && <Chip color="#6b7280" bg="#f3f4f6">No tags</Chip>}
+            {topGrammarTags.map((item) => <Chip key={item.tag}>{translateGrammarPoint(item.tag)} x{item.n}</Chip>)}
+            {topGrammarTags.length === 0 ? <Chip color={C.t2} bg="#f3f4f6">暂无语法标签</Chip> : null}
           </div>
         </div>
 
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
-          {["all", "correct", "incorrect"].map((f) => (
-            <button
-              key={f}
-              onClick={() => setBsFilter(f)}
-              style={{
-                border: "1px solid " + (bsFilter === f ? C.blue : "#d1d5db"),
-                background: bsFilter === f ? "#eff6ff" : "#fff",
-                color: bsFilter === f ? C.blue : C.t2,
-                borderRadius: 6,
-                fontSize: 12,
-                fontWeight: 700,
-                padding: "4px 10px",
-                cursor: "pointer",
-              }}
-            >
-              {f[0].toUpperCase() + f.slice(1)}
-            </button>
-          ))}
-          <input
-            value={bsQuery}
-            onChange={(e) => setBsQuery(e.target.value)}
-            placeholder="Search prompt/answer"
-            style={{
-              border: "1px solid #d1d5db",
-              borderRadius: 6,
-              padding: "5px 8px",
-              fontSize: 12,
-              minWidth: 180,
-              flex: "1 1 220px",
-            }}
-          />
+          <OutlineButton active={bsFilter === "all"} onClick={() => setBsFilter("all")}>全部</OutlineButton>
+          <OutlineButton active={bsFilter === "correct"} onClick={() => setBsFilter("correct")}>正确</OutlineButton>
+          <OutlineButton active={bsFilter === "incorrect"} onClick={() => setBsFilter("incorrect")}>错误</OutlineButton>
+          <input value={bsQuery} onChange={(e) => setBsQuery(e.target.value)} placeholder="搜索题目或答案" style={{ border: "1px solid " + C.bdr, borderRadius: 10, padding: "7px 10px", fontSize: 12, minWidth: 180, flex: "1 1 220px" }} />
         </div>
 
-        <div style={{ border: "1px solid #e5e7eb", borderRadius: 8, overflow: "hidden" }}>
+        <SurfaceCard style={{ overflow: "hidden", boxShadow: "none" }}>
           {filteredBs.length === 0 ? (
-            <div style={{ padding: 12, fontSize: 12, color: C.t2 }}>No questions match current filter.</div>
-          ) : (
-            filteredBs.map((d, i) => {
-              const rowKey = `${d?.prompt || ""}-${i}`;
-              const open = !!expandedBsRows[rowKey];
-              const statusColor = d?.isCorrect ? C.green : C.red;
-              return (
-                <div key={rowKey} style={{ borderBottom: i === filteredBs.length - 1 ? "none" : "1px solid #eef2f7" }}>
-                  <div
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: "64px 120px 1fr 1fr auto",
-                      gap: 8,
-                      padding: "10px 12px",
-                      alignItems: "center",
-                    }}
-                  >
-                    <div style={{ fontSize: 12, color: C.t2 }}>Q{i + 1}</div>
-                    <Chip color={statusColor} bg={d?.isCorrect ? "#dcfce7" : "#fee2e2"}>
-                      {d?.isCorrect ? "Correct" : "Incorrect"}
-                    </Chip>
-                    <div style={{ fontSize: 12, color: C.t1 }}>{truncate(d?.userAnswer, 40)}</div>
-                    <div style={{ fontSize: 12, color: C.t2 }}>{truncate(d?.correctAnswer, 40)}</div>
-                    <button
-                      onClick={() => setExpandedBsRows((p) => ({ ...p, [rowKey]: !open }))}
-                      style={{
-                        border: "1px solid #cbd5e1",
-                        background: "#fff",
-                        borderRadius: 6,
-                        fontSize: 12,
-                        padding: "4px 8px",
-                        cursor: "pointer",
-                        color: C.blue,
-                        fontWeight: 700,
-                      }}
-                    >
-                      {open ? "Collapse" : "Expand"}
-                    </button>
-                  </div>
-
-                  {open && (
-                    <div style={{ padding: "0 12px 12px", display: "flex", flexDirection: "column", gap: 8 }}>
-                      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 8 }}>
-                        <div style={{ background: "#f8fafc", border: "1px solid #e5e7eb", borderRadius: 8, padding: 10 }}>
-                          <div style={{ fontSize: 11, color: C.t2, marginBottom: 6 }}>Your answer</div>
-                          <div style={{ fontSize: 15, lineHeight: 1.8 }}>
-                            {renderWordDiff(d?.userAnswer, d?.correctAnswer)}
-                          </div>
-                          <button
-                            onClick={() => onCopy("Your response", d?.userAnswer)}
-                            style={{ marginTop: 8, border: "1px solid #cbd5e1", background: "#fff", borderRadius: 6, fontSize: 11, padding: "4px 8px", cursor: "pointer" }}
-                          >
-                            Copy your
-                          </button>
-                        </div>
-                        <div style={{ background: "#f8fafc", border: "1px solid #e5e7eb", borderRadius: 8, padding: 10 }}>
-                          <div style={{ fontSize: 11, color: C.t2, marginBottom: 6 }}>Correct answer</div>
-                          <div style={{ fontSize: 15, color: C.blue, lineHeight: 1.8 }}>{d?.correctAnswer || "(empty)"}</div>
-                          <button
-                            onClick={() => onCopy("Correct response", d?.correctAnswer)}
-                            style={{ marginTop: 8, border: "1px solid #cbd5e1", background: "#fff", borderRadius: 6, fontSize: 11, padding: "4px 8px", cursor: "pointer" }}
-                          >
-                            Copy correct
-                          </button>
-                        </div>
-                      </div>
-
-                      <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                        {(Array.isArray(d?.grammar_points) ? d.grammar_points : []).map((g, gi) => (
-                          <Chip key={`${rowKey}-g-${gi}`} color="#1d4ed8" bg="#dbeafe">{translateGrammarPoint(g)}</Chip>
-                        ))}
-                        {(!Array.isArray(d?.grammar_points) || d.grammar_points.length === 0) && (
-                          <Chip color="#6b7280" bg="#f3f4f6">No grammar tags</Chip>
-                        )}
-                      </div>
-                    </div>
-                  )}
+            <div style={{ padding: 14, fontSize: 12, color: C.t2 }}>当前筛选条件下暂无题目。</div>
+          ) : filteredBs.map((detail, index) => {
+            const rowKey = `${detail?.prompt || ""}-${index}`;
+            const open = !!expandedBsRows[rowKey];
+            const statusColor = detail?.isCorrect ? C.green : C.red;
+            return (
+              <div key={rowKey} style={{ borderBottom: index === filteredBs.length - 1 ? "none" : "1px solid #eef2f7" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "64px 96px 1fr 1fr auto", gap: 8, padding: "12px 14px", alignItems: "center" }}>
+                  <div style={{ fontSize: 12, color: C.t2 }}>第 {index + 1} 题</div>
+                  <Chip color={statusColor} bg={detail?.isCorrect ? "#dcfce7" : "#fee2e2"}>{detail?.isCorrect ? "答对" : "答错"}</Chip>
+                  <div style={{ fontSize: 12, color: C.t1 }}>{truncate(detail?.userAnswer, 40)}</div>
+                  <div style={{ fontSize: 12, color: C.t2 }}>{truncate(detail?.correctAnswer, 40)}</div>
+                  <OutlineButton onClick={() => setExpandedBsRows((prev) => ({ ...prev, [rowKey]: !open }))}>{open ? "收起" : "展开"}</OutlineButton>
                 </div>
-              );
-            })
-          )}
-        </div>
+                {open ? (
+                  <div style={{ padding: "0 14px 14px", display: "flex", flexDirection: "column", gap: 10 }}>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10 }}>
+                      <SurfaceCard style={{ padding: 12, boxShadow: "none" }}>
+                        <div style={{ fontSize: 11, color: C.t2, marginBottom: 6 }}>你的答案</div>
+                        <div style={{ fontSize: 15, lineHeight: 1.8 }}>{renderWordDiff(detail?.userAnswer, detail?.correctAnswer)}</div>
+                        <button onClick={() => onCopy("你的答案", detail?.userAnswer)} style={{ marginTop: 8, border: "1px solid " + C.bdr, background: "#fff", borderRadius: 8, fontSize: 11, padding: "4px 8px", cursor: "pointer", color: C.t2 }}>复制我的答案</button>
+                      </SurfaceCard>
+                      <SurfaceCard style={{ padding: 12, boxShadow: "none" }}>
+                        <div style={{ fontSize: 11, color: C.t2, marginBottom: 6 }}>正确答案</div>
+                        <div style={{ fontSize: 15, color: C.blue, lineHeight: 1.8 }}>{detail?.correctAnswer || "（空）"}</div>
+                        <button onClick={() => onCopy("正确答案", detail?.correctAnswer)} style={{ marginTop: 8, border: "1px solid " + C.bdr, background: "#fff", borderRadius: 8, fontSize: 11, padding: "4px 8px", cursor: "pointer", color: C.t2 }}>复制正确答案</button>
+                      </SurfaceCard>
+                    </div>
+                    <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                      {(Array.isArray(detail?.grammar_points) ? detail.grammar_points : []).map((g, gi) => <Chip key={`${rowKey}-g-${gi}`}>{translateGrammarPoint(g)}</Chip>)}
+                      {(!Array.isArray(detail?.grammar_points) || detail.grammar_points.length === 0) ? <Chip color={C.t2} bg="#f3f4f6">暂无语法标签</Chip> : null}
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            );
+          })}
+        </SurfaceCard>
 
         {copyHint ? <div style={{ fontSize: 11, color: C.green }}>{copyHint}</div> : null}
       </div>
@@ -396,292 +306,180 @@ function MockExamDetails({ session }) {
   }
 
   function renderWritingTask(task, taskTypeLabel) {
-    if (!task) return <div style={{ fontSize: 12, color: C.t2 }}>No data.</div>;
+    if (!task) return <div style={{ fontSize: 12, color: C.t2 }}>暂无数据。</div>;
     const response = task?.meta?.response || null;
     const feedback = task?.meta?.feedback || null;
-    const words = Number.isFinite(task?.meta?.wordCount)
-      ? task.meta.wordCount
-      : countWords(response?.userText || "");
+    const words = Number.isFinite(task?.meta?.wordCount) ? task.meta.wordCount : countWords(response?.userText || "");
     const reportType = task?.taskId === MOCK_TASK_IDS.EMAIL ? "email" : "discussion";
 
     return (
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-          <Chip>{taskTypeLabel} score: {Number.isFinite(task.score) ? `${task.score}/${task.maxScore}` : "pending"}</Chip>
-          <Chip color="#0f766e" bg="#ccfbf1">Words: {words || 0}</Chip>
-          {Number.isFinite(task?.meta?.secondsUsed) && <Chip color="#7c3aed" bg="#ede9fe">Time: {task.meta.secondsUsed}s</Chip>}
+          <Chip>{taskTypeLabel}得分：{Number.isFinite(task.score) ? `${task.score}/${task.maxScore}` : "待定"}</Chip>
+          <Chip color="#0f766e" bg="#ccfbf1">字数：{words || 0}</Chip>
+          {Number.isFinite(task?.meta?.secondsUsed) ? <Chip color="#7c3aed" bg="#ede9fe">用时：{task.meta.secondsUsed} 秒</Chip> : null}
         </div>
-
-        {response?.userText && (
-          <div style={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: 8, padding: 10 }}>
-            <div style={{ fontSize: 11, color: C.t2, marginBottom: 6 }}>Your response</div>
+        {response?.userText ? (
+          <SurfaceCard style={{ padding: 12, boxShadow: "none" }}>
+            <div style={{ fontSize: 11, color: C.t2, marginBottom: 6 }}>你的作答</div>
             <div style={{ fontSize: 13, color: C.t1, whiteSpace: "pre-wrap", lineHeight: 1.6 }}>{response.userText}</div>
-          </div>
-        )}
-
+          </SurfaceCard>
+        ) : null}
         {feedback && typeof feedback === "object" ? (
           <ScoringReport result={feedback} type={reportType} uiLang={feedback?.reportLanguage || "zh"} />
         ) : (
-          <div style={{ fontSize: 12, color: task?.meta?.error ? C.red : C.t2 }}>
-            {task?.meta?.error ? `Scoring error: ${task.meta.error}` : "No AI feedback yet."}
-          </div>
+          <div style={{ fontSize: 12, color: task?.meta?.error ? C.red : C.t2 }}>{task?.meta?.error ? `评分失败：${task.meta.error}` : "暂无 AI 反馈。"}</div>
         )}
       </div>
     );
   }
 
   const mockTabs = [
-    { id: MOCK_TASK_IDS.BUILD, label: "Build Sentence" },
-    { id: MOCK_TASK_IDS.EMAIL, label: "Email" },
-    { id: MOCK_TASK_IDS.DISC, label: "Discussion" },
+    { id: MOCK_TASK_IDS.BUILD, label: "拼句" },
+    { id: MOCK_TASK_IDS.EMAIL, label: "邮件写作" },
+    { id: MOCK_TASK_IDS.DISC, label: "学术讨论" },
   ];
 
   return (
-    <div style={{ background: "#f9fafb", border: "1px solid #e5e7eb", borderRadius: 8, padding: 12, marginTop: 8 }}>
+    <SurfaceCard style={{ background: "#f9fafb", padding: 12, marginTop: 8, boxShadow: "none" }}>
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 10 }}>
-        <Chip>Band: {Number.isFinite(session?.band) ? session.band.toFixed(1) : "--"}</Chip>
-        <Chip>Scaled: {session?.scaledScore ?? "--"}/30</Chip>
-        <Chip>CEFR: {session?.cefr || "--"}</Chip>
-        {taskChip(MOCK_TASK_IDS.BUILD, "BS")}
-        {taskChip(MOCK_TASK_IDS.EMAIL, "Email")}
-        {taskChip(MOCK_TASK_IDS.DISC, "Disc")}
+        <Chip>段位：{Number.isFinite(session?.band) ? session.band.toFixed(1) : "--"}</Chip>
+        <Chip>换算分：{session?.scaledScore ?? "--"}/30</Chip>
+        <Chip>CEFR：{session?.cefr || "--"}</Chip>
+        {taskChip(MOCK_TASK_IDS.BUILD, "拼句")}
+        {taskChip(MOCK_TASK_IDS.EMAIL, "邮件")}
+        {taskChip(MOCK_TASK_IDS.DISC, "讨论")}
       </div>
-
       <div style={{ display: "flex", gap: 8, marginBottom: 10, flexWrap: "wrap" }}>
-        {mockTabs.map((t) => (
-          <button
-            key={t.id}
-            onClick={() => setActiveTab(t.id)}
-            style={{
-              border: "1px solid " + (activeTab === t.id ? C.blue : "#d1d5db"),
-              background: activeTab === t.id ? "#eff6ff" : "#fff",
-              color: activeTab === t.id ? C.blue : C.t2,
-              borderRadius: 6,
-              fontSize: 12,
-              fontWeight: 700,
-              padding: "5px 10px",
-              cursor: "pointer",
-            }}
-          >
-            {t.label}
-          </button>
-        ))}
+        {mockTabs.map((tab) => <OutlineButton key={tab.id} active={activeTab === tab.id} onClick={() => setActiveTab(tab.id)}>{tab.label}</OutlineButton>)}
       </div>
-
-      {activeTab === MOCK_TASK_IDS.BUILD && renderBs()}
-      {activeTab === MOCK_TASK_IDS.EMAIL && renderWritingTask(emailTask, "Email")}
-      {activeTab === MOCK_TASK_IDS.DISC && renderWritingTask(discTask, "Discussion")}
-    </div>
+      {activeTab === MOCK_TASK_IDS.BUILD ? renderBs() : null}
+      {activeTab === MOCK_TASK_IDS.EMAIL ? renderWritingTask(emailTask, "邮件写作") : null}
+      {activeTab === MOCK_TASK_IDS.DISC ? renderWritingTask(discTask, "学术讨论") : null}
+    </SurfaceCard>
   );
 }
 
 export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, showIcon, compact = false, typeAvgs, detailOnly = false }) {
-  const s = entry?.session || {};
+  const session = entry?.session || {};
   const sourceIndex = entry?.sourceIndex;
 
-  // Score vs. type average
   let sessionNorm = null;
-  if (s.type === "bs") {
-    const t = Number(s.total || 0), c = Number(s.correct || 0);
-    if (t > 0) sessionNorm = (c / t) * 100;
-  } else if (s.type === "email" || s.type === "discussion") {
-    if (Number.isFinite(s.score)) sessionNorm = s.score;
+  if (session.type === "bs") {
+    const total = Number(session.total || 0);
+    const correct = Number(session.correct || 0);
+    if (total > 0) sessionNorm = (correct / total) * 100;
+  } else if (session.type === "email" || session.type === "discussion") {
+    if (Number.isFinite(session.score)) sessionNorm = session.score;
   }
-  const typeAvg = typeAvgs?.[s.type] ?? null;
+  const typeAvg = typeAvgs?.[session.type] ?? null;
   const showTrend = sessionNorm !== null && typeAvg !== null;
   const isAboveAvg = showTrend && sessionNorm > typeAvg;
   const [expandedBsItems, setExpandedBsItems] = useState({});
-  const practiceAttempt = Number(s?.details?.practiceAttempt || 1);
-  const retryHref = buildRetryHref(s);
+  const practiceAttempt = Number(session?.details?.practiceAttempt || 1);
+  const retryHref = buildRetryHref(session);
 
-  const mockTasks = Array.isArray(s?.details?.tasks) ? s.details.tasks : [];
-  const mockBuild = mockTasks.find((t) => t?.taskId === MOCK_TASK_IDS.BUILD);
-  const mockEmail = mockTasks.find((t) => t?.taskId === MOCK_TASK_IDS.EMAIL);
-  const mockDisc = mockTasks.find((t) => t?.taskId === MOCK_TASK_IDS.DISC);
+  const mockTasks = Array.isArray(session?.details?.tasks) ? session.details.tasks : [];
+  const mockBuild = mockTasks.find((task) => task?.taskId === MOCK_TASK_IDS.BUILD);
+  const mockEmail = mockTasks.find((task) => task?.taskId === MOCK_TASK_IDS.EMAIL);
+  const mockDisc = mockTasks.find((task) => task?.taskId === MOCK_TASK_IDS.DISC);
 
-  const mockChip = (label, task) => (
-    <Chip key={label} color="#1d4ed8" bg="#dbeafe">
-      {label} {Number.isFinite(task?.score) ? `${task.score}/${task.maxScore}` : `pending/${task?.maxScore || "--"}`}
-    </Chip>
-  );
+  const mockChip = (label, task) => <Chip key={label}>{label} {Number.isFinite(task?.score) ? `${task.score}/${task.maxScore}` : `待定/${task?.maxScore || "--"}`}</Chip>;
 
   return (
     <div>
-      {!detailOnly && <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: compact ? "8px 0" : "10px 0",
-          borderBottom: isLast ? "none" : "1px solid #eee",
-          cursor: "pointer",
-          gap: 10,
-          flexWrap: "wrap",
-        }}
-        onClick={() => onToggle?.()}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0, flex: 1 }}>
-          <span style={{ fontSize: 11, color: C.t2, userSelect: "none", flexShrink: 0 }}>{isExpanded ? "\u25BC" : "\u25B6"}</span>
-          <span style={{ fontSize: 13, fontWeight: 700, whiteSpace: "nowrap" }}>
-            {showIcon ? typeIcon(s.type) : ""}{getTypeLabel(s.type)}
-          </span>
-          {(s.type === "email" || s.type === "discussion") && practiceAttempt > 1 && (
-            <Chip color="#0f766e" bg="#ccfbf1">第{practiceAttempt}次练习</Chip>
-          )}
-          {s.type === "mock" && Number.isFinite(s?.band) && (
-            <Chip color="#1d4ed8" bg="#dbeafe">Band {s.band.toFixed(1)}</Chip>
-          )}
-          <span style={{ fontSize: 11, color: C.t2, whiteSpace: "nowrap" }}>{fmtDate(s.date)}</span>
-        </div>
-
-        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", justifyContent: "flex-end" }}>
-          {s.type === "mock" && (
-            <>
-              <Chip color="#0f766e" bg="#ccfbf1">Scaled {s.scaledScore ?? "--"}/30</Chip>
-              <Chip color="#4b5563" bg="#f3f4f6">CEFR {s.cefr || "--"}</Chip>
-              {mockChip("BS", mockBuild)}
-              {mockChip("Email", mockEmail)}
-              {mockChip("Disc", mockDisc)}
-            </>
-          )}
-          <span style={{ fontSize: 14, fontWeight: 700, color: getScoreColor(s), whiteSpace: "nowrap" }}>
-            {getScoreLabel(s)}
-            {showTrend && (
-              <span style={{ fontSize: 11, marginLeft: 3, color: isAboveAvg ? "#16a34a" : "#9ca3af" }}>
-                {isAboveAvg ? "\u2B06" : "\u2B07"}
-              </span>
-            )}
-          </span>
-
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onToggle?.();
-            }}
-            style={{
-              border: "1px solid #cbd5e1",
-              background: "#fff",
-              borderRadius: 6,
-              fontSize: 12,
-              padding: "4px 8px",
-              cursor: "pointer",
-              color: C.blue,
-              fontWeight: 700,
-            }}
-          >
-            {isExpanded ? "Hide details" : "View details"}
+      {!detailOnly ? (
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: compact ? "10px 0" : "12px 0", borderBottom: isLast ? "none" : "1px solid #eef2f7", gap: 10, flexWrap: "wrap" }}>
+          <button onClick={() => onToggle?.()} style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0, flex: 1, border: "none", background: "transparent", padding: 0, cursor: "pointer", textAlign: "left" }}>
+            <span style={{ fontSize: 11, color: C.t2, userSelect: "none", flexShrink: 0 }}>{isExpanded ? "▼" : "▶"}</span>
+            <span style={{ fontSize: 13, fontWeight: 700, whiteSpace: "nowrap" }}>{showIcon ? `${typeIcon(session.type)} ` : ""}{getTypeLabel(session.type)}</span>
+            {(session.type === "email" || session.type === "discussion") && practiceAttempt > 1 ? <Chip color="#0f766e" bg="#ccfbf1">第 {practiceAttempt} 次练习</Chip> : null}
+            {session.type === "mock" && Number.isFinite(session?.band) ? <Chip>段位 {session.band.toFixed(1)}</Chip> : null}
+            <span style={{ fontSize: 11, color: C.t2, whiteSpace: "nowrap" }}>{fmtDate(session.date)}</span>
           </button>
 
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onDelete?.(sourceIndex);
-            }}
-            title="Delete this entry"
-            style={{
-              background: "none",
-              border: "none",
-              color: C.red,
-              cursor: "pointer",
-              fontSize: 16,
-              padding: "2px 6px",
-              lineHeight: 1,
-              fontWeight: 700,
-              opacity: 0.7,
-            }}
-          >
-            x
-          </button>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", justifyContent: "flex-end" }}>
+            {session.type === "mock" ? (
+              <>
+                <Chip color="#0f766e" bg="#ccfbf1">换算分 {session.scaledScore ?? "--"}/30</Chip>
+                <Chip color="#4b5563" bg="#f3f4f6">CEFR {session.cefr || "--"}</Chip>
+                {mockChip("拼句", mockBuild)}
+                {mockChip("邮件", mockEmail)}
+                {mockChip("讨论", mockDisc)}
+              </>
+            ) : null}
+            <span style={{ fontSize: 14, fontWeight: 700, color: getScoreColor(session), whiteSpace: "nowrap" }}>
+              {getScoreLabel(session)}
+              {showTrend ? <span style={{ fontSize: 11, marginLeft: 3, color: isAboveAvg ? "#16a34a" : "#9ca3af" }}>{isAboveAvg ? "↑" : "↓"}</span> : null}
+            </span>
+            <OutlineButton onClick={() => onToggle?.()}>{isExpanded ? "收起详情" : "查看详情"}</OutlineButton>
+            <button onClick={() => onDelete?.(sourceIndex)} title="删除记录" style={{ background: "none", border: "none", color: C.red, cursor: "pointer", fontSize: 16, padding: "2px 6px", lineHeight: 1, fontWeight: 700, opacity: 0.75 }}>×</button>
+          </div>
         </div>
-      </div>}
+      ) : null}
 
-      {isExpanded && s.type === "bs" && s.details && Array.isArray(s.details) && (
-        <div style={{ background: "#f9f9f9", border: "1px solid #eee", borderRadius: 4, padding: "12px 16px", margin: "4px 0 8px 0" }}>
-          <div style={{ fontSize: 12, color: C.t2, marginBottom: 10 }}>Correct {s.correct}/{s.total}</div>
-          {s.details.map((d, j) => {
-            const itemOpen = !!expandedBsItems[j];
-            const statusColor = d.isCorrect ? C.green : C.red;
+      {isExpanded && session.type === "bs" && session.details && Array.isArray(session.details) ? (
+        <SurfaceCard style={{ background: "#f9fafb", padding: 16, margin: "8px 0 10px", boxShadow: "none" }}>
+          <div style={{ fontSize: 12, color: C.t2, marginBottom: 10 }}>答对 {session.correct}/{session.total}</div>
+          {session.details.map((detail, index) => {
+            const itemOpen = !!expandedBsItems[index];
+            const statusColor = detail.isCorrect ? C.green : C.red;
             return (
-              <div key={j} style={{ borderBottom: j < s.details.length - 1 ? "1px solid #e5e7eb" : "none" }}>
-                <div
-                  onClick={() => setExpandedBsItems((p) => ({ ...p, [j]: !p[j] }))}
-                  style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 0", cursor: "pointer" }}
-                >
-                  <span style={{ color: statusColor, fontWeight: 700, fontSize: 16, flexShrink: 0, width: 20, textAlign: "center" }}>
-                    {d.isCorrect ? "✓" : "✗"}
-                  </span>
-                  <span style={{ fontSize: 14, fontWeight: 600, color: C.t1, flexShrink: 0 }}>Q{j + 1}</span>
-                  <span style={{ fontSize: 13, color: C.t2, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{d.prompt}</span>
-                  <span style={{ fontSize: 12, color: C.t2, flexShrink: 0 }}>{itemOpen ? "▲" : "▼"}</span>
-                </div>
-                {itemOpen && (
+              <div key={index} style={{ borderBottom: index < session.details.length - 1 ? "1px solid #e5e7eb" : "none" }}>
+                <button onClick={() => setExpandedBsItems((prev) => ({ ...prev, [index]: !prev[index] }))} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 0", cursor: "pointer", width: "100%", border: "none", background: "transparent", textAlign: "left" }}>
+                  <span style={{ color: statusColor, fontWeight: 700, fontSize: 16, flexShrink: 0, width: 20, textAlign: "center" }}>{detail.isCorrect ? "✓" : "!"}</span>
+                  <span style={{ fontSize: 14, fontWeight: 600, color: C.t1, flexShrink: 0 }}>第 {index + 1} 题</span>
+                  <span style={{ fontSize: 13, color: C.t2, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{detail.prompt}</span>
+                  <span style={{ fontSize: 12, color: C.t2, flexShrink: 0 }}>{itemOpen ? "收起" : "展开"}</span>
+                </button>
+                {itemOpen ? (
                   <div style={{ paddingLeft: 30, paddingBottom: 14, display: "flex", flexDirection: "column", gap: 8 }}>
                     <div>
-                      <div style={{ fontSize: 11, color: C.t2, marginBottom: 4 }}>Your answer:</div>
-                      <div style={{ fontSize: 15, lineHeight: 1.8 }}>
-                        {renderWordDiff(d.userAnswer, d.correctAnswer)}
-                      </div>
+                      <div style={{ fontSize: 11, color: C.t2, marginBottom: 4 }}>你的答案</div>
+                      <div style={{ fontSize: 15, lineHeight: 1.8 }}>{renderWordDiff(detail.userAnswer, detail.correctAnswer)}</div>
                     </div>
-                    {!d.isCorrect && (
+                    {!detail.isCorrect ? (
                       <div>
-                        <div style={{ fontSize: 11, color: C.t2, marginBottom: 4 }}>Correct answer:</div>
-                        <div style={{ fontSize: 15, color: C.blue, lineHeight: 1.8 }}>{d.correctAnswer}</div>
+                        <div style={{ fontSize: 11, color: C.t2, marginBottom: 4 }}>正确答案</div>
+                        <div style={{ fontSize: 15, color: C.blue, lineHeight: 1.8 }}>{detail.correctAnswer}</div>
                       </div>
-                    )}
-                    {Array.isArray(d.grammar_points) && d.grammar_points.length > 0 && (
+                    ) : null}
+                    {Array.isArray(detail.grammar_points) && detail.grammar_points.length > 0 ? (
                       <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
-                        {d.grammar_points.map((g, gi) => (
-                          <Chip key={gi} color="#1d4ed8" bg="#dbeafe">{translateGrammarPoint(g)}</Chip>
-                        ))}
+                        {detail.grammar_points.map((g, gi) => <Chip key={gi}>{translateGrammarPoint(g)}</Chip>)}
                       </div>
-                    )}
+                    ) : null}
                   </div>
-                )}
+                ) : null}
               </div>
             );
           })}
-        </div>
-      )}
+        </SurfaceCard>
+      ) : null}
 
-      {isExpanded && s.type === "mock" && s.details && <MockExamDetails session={s} />}
+      {isExpanded && session.type === "mock" && session.details ? <MockExamDetails session={session} /> : null}
 
-      {isExpanded && s.details && (s.type === "email" || s.type === "discussion") && s.details.userText && (
-        <div style={{ background: "#f9f9f9", border: "1px solid #eee", borderRadius: 4, padding: 16, margin: "4px 0 8px 0" }}>
-          {s.details.promptSummary && <div style={{ fontSize: 12, color: C.t2, marginBottom: 8 }}>Prompt: {s.details.promptSummary}</div>}
-          {retryHref && (
+      {isExpanded && session.details && (session.type === "email" || session.type === "discussion") && session.details.userText ? (
+        <SurfaceCard style={{ background: "#f9fafb", padding: 16, margin: "8px 0 10px", boxShadow: "none" }}>
+          {session.details.promptSummary ? <div style={{ fontSize: 12, color: C.t2, marginBottom: 8 }}>题目摘要：{session.details.promptSummary}</div> : null}
+          {retryHref ? (
             <div style={{ marginBottom: 10 }}>
-              <button
-                onClick={() => {
-                  window.location.href = retryHref;
-                }}
-                style={{
-                  border: "1px solid " + C.blue,
-                  background: "#fff",
-                  color: C.blue,
-                  borderRadius: 6,
-                  fontSize: 12,
-                  fontWeight: 700,
-                  padding: "6px 10px",
-                  cursor: "pointer",
-                }}
-              >
-                再练一遍（同题）
-              </button>
+              <OutlineButton onClick={() => { window.location.href = retryHref; }}>再练一遍（同题）</OutlineButton>
             </div>
-          )}
-          <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 4, padding: 12, marginBottom: 12, fontSize: 13, lineHeight: 1.7, whiteSpace: "pre-wrap" }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: C.t2, marginBottom: 6 }}>Your response</div>
-            {s.details.userText}
-          </div>
-          {s.details.feedback && <ScoringReport result={s.details.feedback} type={s.type} uiLang={s.details.feedback?.reportLanguage || "zh"} />}
-        </div>
-      )}
+          ) : null}
+          <SurfaceCard style={{ padding: 12, marginBottom: 12, boxShadow: "none" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: C.t2, marginBottom: 6 }}>你的作答</div>
+            <div style={{ fontSize: 13, lineHeight: 1.7, whiteSpace: "pre-wrap" }}>{session.details.userText}</div>
+          </SurfaceCard>
+          {session.details.feedback ? <ScoringReport result={session.details.feedback} type={session.type} uiLang={session.details.feedback?.reportLanguage || "zh"} /> : null}
+        </SurfaceCard>
+      ) : null}
 
-      {isExpanded && !s.details && (
-        <div style={{ background: "#f9f9f9", border: "1px solid #eee", borderRadius: 4, padding: 16, margin: "4px 0 8px 0", fontSize: 13, color: C.t2, textAlign: "center" }}>
-          No detail data for this record (older entry).
-        </div>
-      )}
+      {isExpanded && !session.details ? (
+        <SurfaceCard style={{ background: "#f9fafb", padding: 16, margin: "8px 0 10px", fontSize: 13, color: C.t2, textAlign: "center", boxShadow: "none" }}>
+          这条记录缺少详情数据，通常是较早生成的历史记录。
+        </SurfaceCard>
+      ) : null}
     </div>
   );
 }

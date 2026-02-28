@@ -16,9 +16,9 @@ function Section({ title, defaultOpen = false, preview = "", children }) {
 
 function GoalBadge({ status }) {
   const map = {
-    OK: { icon: "OK", color: "#16a34a", bg: "#ecfdf3" },
-    PARTIAL: { icon: "PARTIAL", color: "#ea580c", bg: "#fff7ed" },
-    MISSING: { icon: "MISSING", color: "#dc2626", bg: "#fef2f2" },
+    OK: { icon: "已达成", color: "#16a34a", bg: "#ecfdf3" },
+    PARTIAL: { icon: "部分达成", color: "#ea580c", bg: "#fff7ed" },
+    MISSING: { icon: "未覆盖", color: "#dc2626", bg: "#fef2f2" },
   };
   const ui = map[String(status || "").toUpperCase()] || map.PARTIAL;
   return (
@@ -71,7 +71,7 @@ export function ScoringReport({ result, type }) {
             <span style={{ fontSize: 38, fontWeight: 800 }}>{score}</span>
             <span style={{ opacity: 0.85 }}>/ 5</span>
           </div>
-          <span style={{ background: "rgba(255,255,255,0.18)", borderRadius: 14, padding: "3px 10px", fontSize: 12, fontWeight: 700 }}>Band {band ?? "-"}</span>
+          <span style={{ background: "rgba(255,255,255,0.18)", borderRadius: 14, padding: "3px 10px", fontSize: 12, fontWeight: 700 }}>段位 {band ?? "-"}</span>
         </div>
         <div style={{ marginTop: 10, fontSize: 14, lineHeight: 1.7 }}>{summary || "总评暂缺。"}</div>
         {type === "email" && (
@@ -80,11 +80,11 @@ export function ScoringReport({ result, type }) {
               goals.map((g) => (
                 <div key={g.index} style={{ display: "grid", gridTemplateColumns: "90px 1fr", gap: 10, alignItems: "start", background: "rgba(255,255,255,0.1)", borderRadius: 6, padding: "8px 10px" }}>
                   <GoalBadge status={g.status} />
-                  <div style={{ fontSize: 13, lineHeight: 1.6 }}>Goal{g.index}: {g.reason || "未提供判断依据"}</div>
+                  <div style={{ fontSize: 13, lineHeight: 1.6 }}>目标{g.index}：{g.reason || "未提供判断依据"}</div>
                 </div>
               ))
             ) : (
-              <div style={{ fontSize: 13, opacity: 0.9 }}>Goal Checklist 暂时无法加载</div>
+              <div style={{ fontSize: 13, opacity: 0.9 }}>目标检查暂时无法加载</div>
             )}
           </div>
         )}
@@ -206,4 +206,3 @@ export function ScoringReport({ result, type }) {
     </div>
   );
 }
-

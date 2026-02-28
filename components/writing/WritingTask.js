@@ -7,7 +7,7 @@ import { saveSess, addDoneIds } from "../../lib/sessionStore";
 import { mapScoringError } from "../../lib/ai/client";
 import { evaluateWritingResponse } from "../../lib/ai/writingEval";
 import { BANK_EXHAUSTED_ERRORS, DONE_STORAGE_KEYS, pickRandomPrompt } from "../../lib/questionSelector";
-import { C, FONT, Btn, Toast, TopBar } from "../shared/ui";
+import { C, FONT, Btn, InfoStrip, PageShell, SurfaceCard, Toast, TopBar } from "../shared/ui";
 import { ScoringReport } from "./ScoringReport";
 import { WritingPromptPanel } from "./WritingPromptPanel";
 import { WritingResponsePanel } from "./WritingResponsePanel";
@@ -365,24 +365,24 @@ export function WritingTask({
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
       {!embedded && <TopBar title={taskTitle} section={"Writing | " + (type === "email" ? "Task 2" : "Task 3")} timeLeft={phase !== "ready" ? tl : undefined} isRunning={run} onExit={onExit} />}
-      <div style={{ maxWidth: 860, margin: "24px auto", padding: "0 20px" }}>
+      <PageShell narrow>
         {initialError && (
-          <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 28, marginBottom: 16 }}>
+          <SurfaceCard style={{ padding: 28, marginBottom: 16 }}>
             <div style={{ fontSize: 16, fontWeight: 700, color: C.red, marginBottom: 8 }}>题库不可用</div>
             <div style={{ fontSize: 14, color: C.t2 }}>{initialError}</div>
             <div style={{ marginTop: 16 }}><Btn onClick={onExit} variant="secondary">{embedded ? "返回" : "返回练习"}</Btn></div>
-          </div>
+          </SurfaceCard>
         )}
         {!initialError && !pd && (
-          <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 28, marginBottom: 16 }}>
+          <SurfaceCard style={{ padding: 28, marginBottom: 16 }}>
             <div style={{ fontSize: 16, fontWeight: 700, color: C.red, marginBottom: 8 }}>题目不可用</div>
             <div style={{ fontSize: 14, color: C.t2 }}>请刷新后重试。</div>
-          </div>
+          </SurfaceCard>
         )}
         {!initialError && pd && (
           <>
         {intro && phase === "ready" ? (
-          <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 28 }}>
+          <SurfaceCard style={{ padding: 28 }}>
             <div style={{ fontSize: 20, fontWeight: 700, color: C.nav, marginBottom: 10 }}>{introTitle}</div>
             <div style={{ fontSize: 14, color: C.t1, lineHeight: 1.7, marginBottom: 12 }}>
               <div>{introDescLine1}</div>
@@ -402,13 +402,13 @@ export function WritingTask({
                 Continue and start timer
               </Btn>
             </div>
-          </div>
+          </SurfaceCard>
         ) : (
           <>
-        <div style={{ background: C.ltB, border: "1px solid #b3d4fc", borderRadius: 4, padding: 14, marginBottom: 20, fontSize: 13 }}>
+        <InfoStrip style={{ marginBottom: 20 }}>
           <b>Directions:</b> {type === "email" ? `Write an email addressing all 3 goals. ${formatMinutesLabel(limit)}. 80-120 words.` : `Read the discussion and write a response. ${formatMinutesLabel(limit)}. 100+ words.`}
           {practiceMode === PRACTICE_MODE.CHALLENGE && <span> Challenge mode: compressed timing.</span>}
-        </div>
+        </InfoStrip>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
           <WritingPromptPanel type={type} pd={pd} />
           <WritingResponsePanel
@@ -437,7 +437,7 @@ export function WritingTask({
         )}
           </>
         )}
-      </div>
+      </PageShell>
     </div>
   );
 }

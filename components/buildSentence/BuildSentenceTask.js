@@ -1,6 +1,6 @@
 ﻿"use client";
 import React from "react";
-import { C, FONT, Btn, Toast, TopBar } from "../shared/ui";
+import { C, FONT, Btn, InfoStrip, PageShell, SurfaceCard, Toast, TopBar } from "../shared/ui";
 import { useBuildSentenceSession } from "./useBuildSentenceSession";
 import { formatLongDuration, PRACTICE_MODE } from "../../lib/practiceMode";
 import { translateGrammarPoint } from "../../lib/utils";
@@ -104,13 +104,13 @@ export function BuildSentenceTask({
       <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
         {toast && <Toast message={toast} onClose={() => setToast(null)} />}
         {!embedded && <TopBar title="Build a Sentence Report" section="Writing" onExit={onExit} />}
-        <div style={{ maxWidth: 760, margin: "24px auto", padding: "0 20px" }}>
-          <div style={{ background: C.nav, color: "#fff", borderRadius: 6, padding: 24, textAlign: "center", marginBottom: 20 }}>
+        <PageShell narrow>
+          <SurfaceCard style={{ background: C.nav, color: "#fff", padding: 24, textAlign: "center", marginBottom: 20 }}>
             <div style={{ fontSize: 48, fontWeight: 800 }}>{ok}/{results.length}</div>
             <div style={{ fontSize: 14, opacity: 0.7 }}>Correct answers</div>
-          </div>
+          </SurfaceCard>
           {te.length > 0 && (
-            <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 20, marginBottom: 16 }}>
+            <SurfaceCard style={{ padding: 20, marginBottom: 16 }}>
               <div style={{ fontSize: 13, fontWeight: 700, color: C.red, marginBottom: 12 }}>Weak grammar points</div>
               {te.map(([g, n], i) => (
                 <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "8px 0", borderBottom: i < te.length - 1 ? "1px solid #eee" : "none" }}>
@@ -121,7 +121,7 @@ export function BuildSentenceTask({
               <div style={{ marginTop: 12, fontSize: 13, color: C.blue, background: C.ltB, padding: 10, borderRadius: 4 }}>
                 <b>建议优先复习：</b>{te.map((e) => translateGrammarPoint(e[0])).join("、")}
               </div>
-            </div>
+            </SurfaceCard>
           )}
           {results.map((r, i) => (
             <div data-testid={`build-result-${i}`} data-correct={r.isCorrect ? "true" : "false"} key={i} style={{ background: "#fff", border: "1px solid " + (r.isCorrect ? "#c6f6d5" : "#fed7d7"), borderLeft: "4px solid " + (r.isCorrect ? C.green : C.red), borderRadius: 4, padding: 14, marginBottom: 8 }}>
@@ -139,7 +139,7 @@ export function BuildSentenceTask({
           <div style={{ display: "flex", gap: 12, marginTop: 20 }}>
             <Btn onClick={onExit} variant="secondary">{embedded ? "Back" : "Back to Practice"}</Btn>
           </div>
-        </div>
+        </PageShell>
       </div>
     );
   }
@@ -149,8 +149,8 @@ export function BuildSentenceTask({
       <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
         {toast && <Toast message={toast} onClose={() => setToast(null)} />}
         {!embedded && <TopBar title="Build a Sentence" section="Writing | Task 1" onExit={onExit} />}
-        <div style={{ maxWidth: 760, margin: "24px auto", padding: "0 20px" }}>
-          <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 28 }}>
+        <PageShell narrow>
+          <SurfaceCard style={{ padding: 28 }}>
             <div style={{ fontSize: 16, fontWeight: 700, color: C.red, marginBottom: 8 }}>
               {exhausted ? "题目已答完" : "Question bank blocked by quality gate"}
             </div>
@@ -158,8 +158,8 @@ export function BuildSentenceTask({
               {exhausted ? "当前账号 Build a Sentence 题库已全部答完。" : selectionError}
             </div>
             <Btn onClick={onExit} variant="secondary">{embedded ? "Back" : "Back to Practice"}</Btn>
-          </div>
-        </div>
+          </SurfaceCard>
+        </PageShell>
       </div>
     );
   }
@@ -168,8 +168,8 @@ export function BuildSentenceTask({
     return (
       <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
         {!embedded && <TopBar title="Build a Sentence" section="Writing | Task 1" onExit={onExit} />}
-        <div style={{ maxWidth: 760, margin: "24px auto", padding: "0 20px" }}>
-          <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: "32px 40px" }}>
+        <PageShell narrow>
+          <SurfaceCard style={{ padding: "32px 40px" }}>
             <h2 style={{ margin: "0 0 16px", fontSize: 20, color: C.nav }}>Task 1: Build a Sentence</h2>
             <div style={{ fontSize: 14, color: C.t1, lineHeight: 1.8 }}>
               <p>You will use word chunks to build grammatically correct responses.</p>
@@ -178,8 +178,8 @@ export function BuildSentenceTask({
               <p>The timer will start when you click <b>Start</b>. When time runs out, your answers will be submitted automatically.</p>
             </div>
             <div style={{ marginTop: 24, textAlign: "center" }}><Btn data-testid="build-start" onClick={startTimer}>Start</Btn></div>
-          </div>
-        </div>
+          </SurfaceCard>
+        </PageShell>
       </div>
     );
   }
@@ -219,12 +219,12 @@ export function BuildSentenceTask({
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
       {!embedded && <TopBar title="Build a Sentence" section="Writing | Task 1" timeLeft={tl} isRunning={run} qInfo={idx + 1 + " / " + qs.length} onExit={onExit} />}
-      <div style={{ maxWidth: 760, margin: "24px auto", padding: "0 20px" }}>
-        <div style={{ background: C.ltB, border: "1px solid #b3d4fc", borderRadius: 4, padding: 14, marginBottom: 20, fontSize: 13 }}>
+      <PageShell narrow>
+        <InfoStrip style={{ marginBottom: 20 }}>
           <b>Directions:</b> Use the word chunks below to build a grammatically correct sentence. One chunk may be a distractor.
-        </div>
+        </InfoStrip>
 
-        <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 4, padding: 20, marginBottom: 20 }}>
+        <SurfaceCard style={{ padding: 20, marginBottom: 20 }}>
           <div style={{ fontSize: 11, color: C.t2, letterSpacing: 1, marginBottom: 8 }}>PROMPT</div>
           <div style={{ fontSize: 15, color: C.t1, marginBottom: 14, lineHeight: 1.5 }}>{q.prompt}</div>
           <div style={{ fontSize: 11, color: C.t2, letterSpacing: 1, marginBottom: 8 }}>RESPONSE</div>
@@ -269,7 +269,7 @@ export function BuildSentenceTask({
             ))}
             <span style={{ fontSize: 18, color: C.t1, fontWeight: 700 }}>{punct}</span>
           </div>
-        </div>
+        </SurfaceCard>
 
         <div
           onDragOver={(e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; setHoverBank(true); }}
@@ -321,7 +321,7 @@ export function BuildSentenceTask({
             {idx < qs.length - 1 ? "Next Question" : "Finish and Review"}
           </Btn>
         </div>
-      </div>
+      </PageShell>
     </div>
   );
 }

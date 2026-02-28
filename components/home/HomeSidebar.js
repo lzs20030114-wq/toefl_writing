@@ -1,0 +1,94 @@
+﻿"use client";
+
+import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
+
+function sectionTitle(isChallenge) {
+  return {
+    fontSize: 11,
+    fontWeight: 700,
+    color: isChallenge ? CH.t2 : T.t3,
+    textTransform: "uppercase",
+    letterSpacing: "0.06em",
+    marginBottom: 10,
+  };
+}
+
+export function HomeSidebar({
+  userCode,
+  onLogout,
+  totalCount,
+  weekCount,
+  bestMock,
+  isChallenge,
+  copied,
+  copyCode,
+  logoutHover,
+  setLogoutHover,
+  fbOpen,
+  setFbOpen,
+  fbText,
+  setFbText,
+  fbBusy,
+  fbSent,
+  feedbackMsg,
+  submitFeedback,
+  sideCard,
+  fadeIn,
+}) {
+  return (
+    <div className="home-sidebar" style={{ width: 240, minWidth: 240, flexShrink: 0, display: "flex", flexDirection: "column", gap: 10, position: "sticky", top: 80, alignSelf: "flex-start" }}>
+      <div style={{ ...sideCard({ padding: "20px 18px" }), ...fadeIn(100) }}>
+        <div style={{ width: 44, height: 44, borderRadius: 12, background: "linear-gradient(135deg,#087355,#0891B2)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14, flexShrink: 0 }}>
+          <span style={{ color: "#fff", fontSize: 20, fontWeight: 800 }}>T</span>
+        </div>
+        <div style={sectionTitle(isChallenge)}>Access Code</div>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+          <span style={{ fontSize: 18, fontWeight: 800, color: isChallenge ? CH.t1 : T.t1, fontVariantNumeric: "tabular-nums", letterSpacing: "0.05em", fontFamily: "monospace" }}>
+            {userCode || "-"}
+          </span>
+          {userCode ? <button onClick={copyCode} style={{ border: `1px solid ${copied ? T.primary : (isChallenge ? CH.cardBorder : T.bdr)}`, background: copied ? T.primarySoft : (isChallenge ? "rgba(255,255,255,0.05)" : T.bg), color: copied ? T.primary : (isChallenge ? CH.t2 : T.t2), borderRadius: 6, padding: "2px 7px", fontSize: 11, fontWeight: 600, cursor: "pointer", transition: "all .15s", fontFamily: HOME_FONT }}>{copied ? "Copied" : "Copy"}</button> : null}
+        </div>
+        <div style={{ fontSize: 11, color: isChallenge ? CH.t2 : T.t3, lineHeight: 1.5, marginBottom: 14 }}>
+          Keep this code available so your login and learning history stay synced.
+        </div>
+        <button onClick={onLogout} onMouseEnter={() => setLogoutHover(true)} onMouseLeave={() => setLogoutHover(false)} style={{ width: "100%", padding: "8px 0", fontSize: 12, fontWeight: 600, border: `1px solid ${logoutHover ? T.rose : (isChallenge ? CH.cardBorder : T.bdr)}`, color: logoutHover ? T.rose : (isChallenge ? CH.t2 : T.t2), background: logoutHover ? T.roseSoft : "transparent", borderRadius: 8, cursor: "pointer", transition: "all .15s", fontFamily: HOME_FONT }}>
+          Sign Out
+        </button>
+      </div>
+
+      <div style={{ ...sideCard({}), ...fadeIn(180) }}>
+        <button onClick={() => setFbOpen((v) => !v)} style={{ width: "100%", display: "flex", alignItems: "center", gap: 8, padding: "14px 18px", background: "transparent", border: "none", cursor: "pointer", fontFamily: HOME_FONT, textAlign: "left" }}>
+          <span style={{ fontSize: 14 }}>Feedback</span>
+          <span style={{ fontSize: 13, fontWeight: 700, color: isChallenge ? CH.t1 : T.t1, flex: 1 }}>Product Feedback</span>
+          <span style={{ fontSize: 11, color: isChallenge ? CH.t2 : T.t3, display: "inline-block", transform: fbOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.25s ease" }}>v</span>
+        </button>
+        <div style={{ maxHeight: fbOpen ? 260 : 0, overflow: "hidden", transition: "max-height 0.35s cubic-bezier(0.25,1,0.5,1)" }}>
+          <div style={{ padding: "0 18px 16px" }}>
+            <textarea value={fbText} onChange={(e) => setFbText(e.target.value)} placeholder="Tell me what is unclear, broken, or missing." style={{ width: "100%", height: 88, resize: "none", background: isChallenge ? "rgba(255,255,255,0.04)" : T.bg, border: `1px solid ${isChallenge ? CH.cardBorder : T.bdr}`, borderRadius: 8, padding: "8px 10px", fontSize: 12, lineHeight: 1.5, color: isChallenge ? CH.t1 : T.t1, fontFamily: HOME_FONT, outline: "none", boxSizing: "border-box" }} />
+            <button onClick={submitFeedback} disabled={!fbText.trim() || fbBusy || fbSent} style={{ width: "100%", marginTop: 8, padding: "8px 0", fontSize: 12, fontWeight: 700, borderRadius: 8, border: "none", cursor: fbText.trim() && !fbBusy && !fbSent ? "pointer" : "default", background: fbSent ? T.primarySoft : (fbText.trim() ? T.primary : (isChallenge ? "rgba(255,255,255,0.07)" : T.bg)), color: fbSent ? T.primary : (fbText.trim() ? "#fff" : (isChallenge ? CH.t2 : T.t3)), transition: "all .15s", fontFamily: HOME_FONT }}>
+              {fbSent ? "Submitted" : fbBusy ? "Submitting..." : "Submit"}
+            </button>
+            {feedbackMsg ? <div style={{ marginTop: 8, fontSize: 11, color: feedbackMsg.ok ? T.primary : T.rose }}>{feedbackMsg.text}</div> : null}
+          </div>
+        </div>
+      </div>
+
+      <div style={{ ...sideCard({ padding: "16px 18px" }), ...fadeIn(260) }}>
+        <div style={sectionTitle(isChallenge)}>Overview</div>
+        {[
+          { label: "All sessions", value: totalCount > 0 ? String(totalCount) : "-", color: T.primary },
+          { label: "Last 7 days", value: String(weekCount), color: T.cyan },
+          { label: "Best mock", value: bestMock !== null ? `Band ${bestMock.toFixed(1)}` : "-", color: T.amber },
+        ].map(({ label, value, color }, index) => (
+          <div key={label}>
+            {index > 0 ? <div style={{ height: 1, background: isChallenge ? CH.cardBorder : T.bdrSubtle, margin: "9px 0" }} /> : null}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <span style={{ fontSize: 12, color: isChallenge ? CH.t2 : T.t2 }}>{label}</span>
+              <span style={{ fontSize: 13, fontWeight: 700, color: isChallenge ? CH.t1 : color, fontVariantNumeric: "tabular-nums" }}>{value}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}

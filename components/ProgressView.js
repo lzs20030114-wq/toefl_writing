@@ -1,297 +1,185 @@
-"use client";
+﻿"use client";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { loadHist, deleteSession, clearAllSessions, SESSION_STORE_EVENTS } from "../lib/sessionStore";
+import { clearAllSessions, deleteSession, loadHist, SESSION_STORE_EVENTS } from "../lib/sessionStore";
 import { buildHistoryEntries, buildHistoryStats } from "../lib/history/viewModel";
-import { TopBar } from "./shared/ui";
+import { Btn, C, PageShell, SurfaceCard, TopBar } from "./shared/ui";
 import { HistoryRow } from "./history/HistoryRow";
 
-/* ─── Design Tokens ─────────────────────────────────────── */
-const T = {
-  bg: "#F6F5F1",
-  card: "#FFFFFF",
-  bdr: "#E8E6E1",
-  shadow: "0 1px 3px rgba(0,0,0,0.05), 0 0 0 1px rgba(0,0,0,0.02)",
-  t1: "#1A1A1E",
-  t2: "#6B6B76",
-  t3: "#A0A0AC",
-  email: "#0EA5E9",
-  emailSoft: "#F0F9FF",
-  disc: "#10B981",
-  discSoft: "#ECFDF5",
-  build: "#F59E0B",
-  buildSoft: "#FFFBEB",
-  accent: "#4F46E5",
-  accentSoft: "#EEF2FF",
-  red: "#EF4444",
-  redSoft: "#FEF2F2",
-  green: "#10B981",
-  greenSoft: "#ECFDF5",
+const TASK_UI = {
+  bs: { label: "拼句练习", short: "拼句", color: "#d97706", soft: "#fffbeb", icon: "🧩" },
+  email: { label: "邮件写作", short: "邮件", color: "#0891b2", soft: "#ecfeff", icon: "📧" },
+  discussion: { label: "学术讨论", short: "讨论", color: "#0d9668", soft: "#ecfdf5", icon: "💬" },
 };
-const JFONT = "'Plus Jakarta Sans','Noto Sans SC','Segoe UI',sans-serif";
 
-/* ─── Helpers ────────────────────────────────────────────── */
-function getBandColor(b) {
-  if (b >= 5.5) return "#10B981";
-  if (b >= 4.5) return "#4F46E5";
-  if (b >= 3.5) return "#F59E0B";
-  if (b >= 2.5) return "#F97316";
-  return "#EF4444";
-}
-function fmtDate(d) {
+function fmtDate(value) {
   try {
-    const dt = new Date(d);
-    if (isNaN(dt.getTime())) return String(d || "");
-    const p = (n) => String(n).padStart(2, "0");
-    return `${dt.getFullYear()}/${p(dt.getMonth() + 1)}/${p(dt.getDate())} ${p(dt.getHours())}:${p(dt.getMinutes())}`;
-  } catch { return String(d || ""); }
+    const dt = new Date(value);
+    if (Number.isNaN(dt.getTime())) return String(value || "");
+    const pad = (n) => String(n).padStart(2, "0");
+    return `${dt.getFullYear()}/${pad(dt.getMonth() + 1)}/${pad(dt.getDate())} ${pad(dt.getHours())}:${pad(dt.getMinutes())}`;
+  } catch {
+    return String(value || "");
+  }
 }
-function typeColor(t) { return { email: T.email, discussion: T.disc, bs: T.build }[t] || T.accent; }
-function typeSoft(t) { return { email: T.emailSoft, discussion: T.discSoft, bs: T.buildSoft }[t] || T.accentSoft; }
-function typeEmoji(t) { return { bs: "🧩", email: "📧", discussion: "💬" }[t] || ""; }
-function typeLabel(t) { return { bs: "Build a Sentence", email: "Email", discussion: "Discussion" }[t] || t; }
-function getScorePct(s) {
-  if (!s) return null;
-  if (s.type === "bs") { const t = Number(s.total || 0), c = Number(s.correct || 0); return t > 0 ? (c / t) * 100 : null; }
-  if (s.type === "email" || s.type === "discussion") return Number.isFinite(s.score) ? (s.score / 5) * 100 : null;
-  return null;
-}
-function getScoreLabel(s) {
-  if (!s) return "--";
-  if (s.type === "bs") { const t = Number(s.total || 0), c = Number(s.correct || 0); return t <= 0 ? "--" : `${c}/${t}`; }
-  if (s.type === "email" || s.type === "discussion") return Number.isFinite(s.score) ? `${s.score}/5` : "--";
-  return "--";
-}
-function scorePctColor(pct) {
-  if (pct === null) return T.t3;
-  if (pct >= 80) return T.green;
-  if (pct >= 60) return "#F59E0B";
-  return T.red;
-}
-function aggregateByDay(sessions, getV) {
-  const map = {};
-  sessions.forEach((s) => {
-    const d = new Date(s.date);
-    if (isNaN(d.getTime())) return;
-    const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-    if (!map[key]) map[key] = { date: key, ts: new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime(), vals: [] };
-    const v = getV(s);
-    if (v !== null && Number.isFinite(v)) map[key].vals.push(v);
-  });
-  return Object.values(map)
-    .filter((x) => x.vals.length > 0)
-    .map((x) => ({ date: x.date, ts: x.ts, avg: x.vals.reduce((a, b) => a + b, 0) / x.vals.length }))
-    .sort((a, b) => a.ts - b.ts);
-}
-/* Cardinal spline: smooth bezier curve through points */
-function smoothPath(pts) {
-  if (!pts || pts.length === 0) return "";
-  if (pts.length === 1) return `M ${pts[0].x.toFixed(1)} ${pts[0].y.toFixed(1)}`;
-  let d = `M ${pts[0].x.toFixed(1)} ${pts[0].y.toFixed(1)}`;
-  for (let i = 0; i < pts.length - 1; i++) {
-    const p0 = pts[Math.max(0, i - 1)];
-    const p1 = pts[i];
-    const p2 = pts[i + 1];
-    const p3 = pts[Math.min(pts.length - 1, i + 2)];
+
+function smoothPath(points) {
+  if (!points || points.length === 0) return "";
+  if (points.length === 1) return `M ${points[0].x.toFixed(1)} ${points[0].y.toFixed(1)}`;
+  let path = `M ${points[0].x.toFixed(1)} ${points[0].y.toFixed(1)}`;
+  for (let i = 0; i < points.length - 1; i += 1) {
+    const p0 = points[Math.max(0, i - 1)];
+    const p1 = points[i];
+    const p2 = points[i + 1];
+    const p3 = points[Math.min(points.length - 1, i + 2)];
     const cp1x = p1.x + (p2.x - p0.x) / 6;
     const cp1y = p1.y + (p2.y - p0.y) / 6;
     const cp2x = p2.x - (p3.x - p1.x) / 6;
     const cp2y = p2.y - (p3.y - p1.y) / 6;
-    d += ` C ${cp1x.toFixed(1)} ${cp1y.toFixed(1)}, ${cp2x.toFixed(1)} ${cp2y.toFixed(1)}, ${p2.x.toFixed(1)} ${p2.y.toFixed(1)}`;
+    path += ` C ${cp1x.toFixed(1)} ${cp1y.toFixed(1)}, ${cp2x.toFixed(1)} ${cp2y.toFixed(1)}, ${p2.x.toFixed(1)} ${p2.y.toFixed(1)}`;
   }
-  return d;
+  return path;
 }
 
-/* ─── Sparkline ──────────────────────────────────────────── */
-function Sparkline({ data, color, uid }) {
-  if (!data || data.length === 0) return <svg width={80} height={24} style={{ display: "block" }} />;
-  const W = 80, H = 24, PAD = 2;
-  const min = Math.min(...data);
-  const max = Math.max(...data);
-  const range = max - min || 1;
-  const pts = data.map((v, i) => ({
-    x: PAD + (i / Math.max(data.length - 1, 1)) * (W - PAD * 2),
-    y: PAD + (1 - (v - min) / range) * (H - PAD * 2),
-  }));
-  const linePath = smoothPath(pts);
-  const areaPath = pts.length > 1 ? linePath + ` L ${pts[pts.length - 1].x.toFixed(1)} ${H} L ${pts[0].x.toFixed(1)} ${H} Z` : "";
-  const gid = `spk-${uid}`;
-  return (
-    <svg width={W} height={H} style={{ display: "block" }}>
-      <defs>
-        <linearGradient id={gid} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={color} stopOpacity={0.16} />
-          <stop offset="100%" stopColor={color} stopOpacity={0} />
-        </linearGradient>
-      </defs>
-      {areaPath && <path d={areaPath} fill={`url(#${gid})`} />}
-      <path d={linePath} fill="none" stroke={color} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
-      <circle cx={pts[pts.length - 1].x.toFixed(1)} cy={pts[pts.length - 1].y.toFixed(1)} r={2.5} fill="#fff" stroke={color} strokeWidth={1.5} />
-    </svg>
-  );
+function aggregateByDay(sessions, getValue) {
+  const map = {};
+  sessions.forEach((session) => {
+    const date = new Date(session.date);
+    if (Number.isNaN(date.getTime())) return;
+    const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+    if (!map[key]) map[key] = { date: key, ts: new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime(), values: [] };
+    const value = getValue(session);
+    if (value !== null && Number.isFinite(value)) map[key].values.push(value);
+  });
+  return Object.values(map)
+    .filter((item) => item.values.length > 0)
+    .map((item) => ({ date: item.date, ts: item.ts, avg: item.values.reduce((sum, value) => sum + value, 0) / item.values.length }))
+    .sort((a, b) => a.ts - b.ts);
 }
 
-/* ─── Stat Card ──────────────────────────────────────────── */
-function StatCard({ icon, label, color, n, stat, sparkData, uid }) {
-  return (
-    <div style={{ background: T.card, border: `1px solid ${T.bdr}`, borderRadius: 14, padding: "14px 14px 10px", boxShadow: T.shadow }}>
-      <div style={{ fontSize: 10, fontWeight: 700, color, letterSpacing: 0.8, textTransform: "uppercase", marginBottom: 2 }}>{icon} {label}</div>
-      <div style={{ fontSize: 26, fontWeight: 800, color: T.t1, lineHeight: 1.1, fontVariantNumeric: "tabular-nums" }}>{n}</div>
-      <div style={{ fontSize: 11, color: T.t2, marginBottom: 4 }}>{stat}</div>
-      <Sparkline data={sparkData} color={color} uid={uid} />
-    </div>
-  );
+function getBandColor(band) {
+  if (band >= 5.5) return "#16a34a";
+  if (band >= 4.5) return "#2563eb";
+  if (band >= 3.5) return "#d97706";
+  if (band >= 2.5) return "#ea580c";
+  return "#dc2626";
 }
 
-/* ─── Collapsible Card ───────────────────────────────────── */
-function CollapsibleCard({ emoji, title, badge, children, defaultOpen = false }) {
-  const [open, setOpen] = useState(defaultOpen);
+function getBuildAvgPercent(sessions) {
+  let valid = 0;
+  let sum = 0;
+  sessions.forEach((session) => {
+    const total = Number(session.total || 0);
+    const correct = Number(session.correct || 0);
+    if (total > 0) {
+      sum += (correct / total) * 100;
+      valid += 1;
+    }
+  });
+  return valid > 0 ? sum / valid : null;
+}
+
+function getWritingAvg(sessions) {
+  if (!sessions.length) return null;
+  const values = sessions.map((session) => Number(session.score)).filter((value) => Number.isFinite(value));
+  if (!values.length) return null;
+  return values.reduce((sum, value) => sum + value, 0) / values.length;
+}
+
+function StatCard({ icon, title, value, hint, color, soft }) {
   return (
-    <div style={{ background: T.card, border: `1px solid ${T.bdr}`, borderRadius: 14, boxShadow: T.shadow, overflow: "hidden" }}>
-      <button
-        onClick={() => setOpen((v) => !v)}
-        style={{ width: "100%", display: "flex", alignItems: "center", gap: 8, padding: "14px 16px", background: "none", border: "none", cursor: "pointer", fontFamily: JFONT }}
-      >
-        <span style={{ fontSize: 16 }}>{emoji}</span>
-        <span style={{ fontSize: 13, fontWeight: 650, color: T.t1, flex: 1, textAlign: "left" }}>{title}</span>
-        {badge != null && (
-          <span style={{ fontSize: 11, fontWeight: 700, background: T.accentSoft, color: T.accent, borderRadius: 6, padding: "1px 7px", marginRight: 4 }}>{badge}</span>
-        )}
-        <span style={{
-          fontSize: 10, color: T.t3, flexShrink: 0,
-          transform: open ? "rotate(180deg)" : "rotate(0deg)",
-          transition: "transform 0.35s cubic-bezier(0.34,1.56,0.64,1)",
-          display: "inline-block",
-        }}>▼</span>
-      </button>
-      {/* grid-template-rows 0fr→1fr animates to the actual content height */}
-      <div style={{
-        display: "grid",
-        gridTemplateRows: open ? "1fr" : "0fr",
-        transition: "grid-template-rows 0.4s cubic-bezier(0.25, 1, 0.5, 1)",
-      }}>
-        <div style={{ overflow: "hidden" }}>
-          <div style={{
-            borderTop: `1px solid ${T.bdr}`,
-            opacity: open ? 1 : 0,
-            transform: open ? "translateY(0)" : "translateY(-6px)",
-            transition: open
-              ? "opacity 0.28s ease 0.06s, transform 0.28s ease 0.06s"
-              : "opacity 0.15s ease, transform 0.15s ease",
-          }}>{children}</div>
+    <SurfaceCard style={{ padding: "16px 16px 14px" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+        <div style={{ width: 38, height: 38, borderRadius: 12, background: soft, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>{icon}</div>
+        <div>
+          <div style={{ fontSize: 12, fontWeight: 700, color }}>{title}</div>
+          <div style={{ fontSize: 11, color: C.t3 }}>{hint}</div>
         </div>
       </div>
-    </div>
+      <div style={{ fontSize: 28, fontWeight: 800, color: C.t1, lineHeight: 1.1 }}>{value}</div>
+    </SurfaceCard>
   );
 }
 
-/* ─── Band Ring ──────────────────────────────────────────── */
-function BandRing({ band, size = 56 }) {
-  const color = getBandColor(band);
-  const r = (size - 7) / 2;
-  const circ = 2 * Math.PI * r;
-  const offset = circ * (1 - Math.max(0, Math.min(1, (band - 1) / 5)));
+function SectionCard({ icon, title, badge, open, onToggle, children }) {
   return (
-    <div style={{ position: "relative", width: size, height: size, flexShrink: 0 }}>
-      <svg width={size} height={size} style={{ transform: "rotate(-90deg)", display: "block" }}>
-        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#e5e7eb" strokeWidth={4} />
-        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={color} strokeWidth={4}
-          strokeDasharray={circ} strokeDashoffset={offset} strokeLinecap="round"
-          style={{ transition: "stroke-dashoffset 0.6s ease" }} />
-      </svg>
-      <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <span style={{ fontSize: size * 0.28, fontWeight: 800, color, fontVariantNumeric: "tabular-nums" }}>{band.toFixed(1)}</span>
+    <SurfaceCard style={{ overflow: "hidden" }}>
+      <button onClick={onToggle} aria-expanded={open} style={{ width: "100%", display: "flex", alignItems: "center", gap: 12, padding: "16px 18px", background: "transparent", border: "none", cursor: "pointer", textAlign: "left" }}>
+        <div style={{ width: 36, height: 36, borderRadius: 12, background: C.ltB, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>{icon}</div>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontSize: 16, fontWeight: 800, color: C.t1 }}>{title}</div>
+        </div>
+        {badge != null ? <span style={{ fontSize: 11, fontWeight: 700, color: C.blue, background: C.softBlue, borderRadius: 999, padding: "4px 10px" }}>{badge}</span> : null}
+        <span style={{ fontSize: 12, color: C.t3 }}>{open ? "收起" : "展开"}</span>
+      </button>
+      {open ? <div style={{ borderTop: "1px solid " + C.bdrSubtle }}>{children}</div> : null}
+    </SurfaceCard>
+  );
+}
+
+function SkeletonView() {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+      <SurfaceCard style={{ padding: 20 }}>
+        <div style={{ height: 22, width: 180, background: "#e5e7eb", borderRadius: 999, marginBottom: 10 }} />
+        <div style={{ height: 14, width: 240, background: "#eef2f7", borderRadius: 999 }} />
+      </SurfaceCard>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
+        {[1, 2, 3].map((i) => <SurfaceCard key={i} style={{ padding: 18, minHeight: 120, background: "#ffffff" }} />)}
       </div>
+      {[1, 2, 3, 4].map((i) => <SurfaceCard key={i} style={{ minHeight: 88 }} />)}
     </div>
   );
 }
 
-/* ─── Mock Section ───────────────────────────────────────── */
 function MockSection({ mockEntries }) {
   const [expanded, setExpanded] = useState(null);
   if (mockEntries.length === 0) {
-    return <div style={{ padding: "32px 20px", textAlign: "center", fontSize: 13, color: T.t2 }}>还没有模考记录</div>;
+    return <div style={{ padding: "24px 18px", textAlign: "center", color: C.t2, fontSize: 13 }}>暂无模考记录。</div>;
   }
+
   const latest = mockEntries[0].session;
-  const scored = mockEntries.map((e) => e.session).filter((s) => Number.isFinite(s.band));
-  const bestBand = scored.length > 1 ? Math.max(...scored.map((s) => s.band)) : null;
-  function getTask(s, id) {
-    return Array.isArray(s?.details?.tasks) ? s.details.tasks.find((t) => t?.taskId === id) : null;
+  const scored = mockEntries.map((entry) => entry.session).filter((session) => Number.isFinite(session.band));
+  const bestBand = scored.length ? Math.max(...scored.map((session) => session.band)) : null;
+
+  function getTask(session, taskId) {
+    return Array.isArray(session?.details?.tasks) ? session.details.tasks.find((task) => task?.taskId === taskId) : null;
   }
+
   return (
-    <div style={{ padding: "14px 16px 16px" }}>
-      {Number.isFinite(latest?.band) && (
-        <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "12px 14px", background: T.accentSoft, borderRadius: 10, marginBottom: 14 }}>
-          <BandRing band={latest.band} size={56} />
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontSize: 10, fontWeight: 700, color: T.t2, letterSpacing: 0.6, textTransform: "uppercase", marginBottom: 3 }}>最近一次</div>
-            <div style={{ display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }}>
-              <span style={{ fontSize: 16, fontWeight: 800, color: getBandColor(latest.band), fontVariantNumeric: "tabular-nums" }}>Band {latest.band.toFixed(1)}</span>
-              {latest.cefr && <span style={{ fontSize: 10, fontWeight: 700, background: T.accent, color: "#fff", borderRadius: 5, padding: "1px 6px" }}>{latest.cefr}</span>}
-              <span style={{ fontSize: 11, color: T.t2 }}>Scaled {latest.scaledScore ?? "--"}/30</span>
-            </div>
-          </div>
-          {bestBand && (
-            <div style={{ textAlign: "right", flexShrink: 0 }}>
-              <div style={{ fontSize: 10, fontWeight: 700, color: T.t2, letterSpacing: 0.6, textTransform: "uppercase", marginBottom: 2 }}>历史最佳</div>
-              <div style={{ fontSize: 22, fontWeight: 800, color: getBandColor(bestBand), fontVariantNumeric: "tabular-nums" }}>{bestBand.toFixed(1)}</div>
-            </div>
-          )}
-        </div>
-      )}
-      <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        {mockEntries.map((entry) => {
-          const s = entry.session;
-          const open = expanded === entry.sourceIndex;
-          const emT = getTask(s, "email-writing");
-          const diT = getTask(s, "academic-writing");
-          const bsT = getTask(s, "build-sentence");
-          return (
-            <div key={entry.sourceIndex} style={{ borderRadius: 8, overflow: "hidden", background: open ? T.bg : "transparent" }}>
-              <div
-                onClick={() => setExpanded(open ? null : entry.sourceIndex)}
-                style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 10px", cursor: "pointer" }}
-              >
-                {Number.isFinite(s.band) && (
-                  <span style={{ fontSize: 11, fontWeight: 700, background: getBandColor(s.band) + "20", color: getBandColor(s.band), borderRadius: 5, padding: "2px 7px", flexShrink: 0, fontVariantNumeric: "tabular-nums" }}>
-                    {s.band.toFixed(1)}
-                  </span>
-                )}
-                <span style={{ fontSize: 11, color: T.t2, flex: 1 }}>{fmtDate(s.date)}</span>
-                <span style={{ fontSize: 11, color: T.t2 }}>
-                  📧 {Number.isFinite(emT?.score) ? `${emT.score}/${emT.maxScore}` : "--"} · 💬 {Number.isFinite(diT?.score) ? `${diT.score}/${diT.maxScore}` : "--"}
-                </span>
-                <span style={{ fontSize: 9, color: T.t3, transform: open ? "rotate(180deg)" : "rotate(0)", transition: "transform 0.2s", display: "inline-block" }}>▼</span>
+    <div style={{ padding: "16px 18px 18px" }}>
+      {Number.isFinite(latest?.band) ? (
+        <SurfaceCard style={{ padding: 16, marginBottom: 14, background: C.softBlue, borderColor: "#bfdbfe", boxShadow: "none" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 700, color: C.t2, marginBottom: 6 }}>最近一次模考</div>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+                <span style={{ fontSize: 28, fontWeight: 800, color: getBandColor(latest.band) }}>段位 {latest.band.toFixed(1)}</span>
+                <span style={{ fontSize: 12, color: C.t2 }}>换算分 {latest.scaledScore ?? "--"}/30</span>
+                {latest.cefr ? <span style={{ fontSize: 12, color: C.t2 }}>CEFR {latest.cefr}</span> : null}
               </div>
-              {open && (
-                <div style={{ padding: "0 10px 12px", animation: "slideDown 0.2s ease" }}>
-                  {/* Score overview */}
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginBottom: 10 }}>
-                    {[
-                      { emoji: "🧩", label: "Build", color: T.build, task: bsT },
-                      { emoji: "📧", label: "Email", color: T.email, task: emT },
-                      { emoji: "💬", label: "Discussion", color: T.disc, task: diT },
-                    ].map(({ emoji, label, color, task }) => (
-                      <div key={label} style={{ background: T.card, border: `1px solid ${T.bdr}`, borderRadius: 8, padding: "10px", textAlign: "center" }}>
-                        <div style={{ fontSize: 14, marginBottom: 2 }}>{emoji}</div>
-                        <div style={{ fontSize: 10, color: T.t2, marginBottom: 3 }}>{label}</div>
-                        <div style={{ fontSize: 16, fontWeight: 800, color, fontVariantNumeric: "tabular-nums" }}>
-                          {Number.isFinite(task?.score) ? `${task.score}/${task.maxScore}` : "pending"}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  {/* Full details: tabbed Build/Email/Discussion with AI feedback */}
-                  <HistoryRow
-                    entry={entry}
-                    isExpanded={true}
-                    isLast={true}
-                    onToggle={() => {}}
-                    onDelete={() => {}}
-                    detailOnly={true}
-                  />
-                </div>
-              )}
             </div>
+            {bestBand !== null ? <div style={{ fontSize: 13, color: C.t2 }}>历史最好：<b style={{ color: getBandColor(bestBand) }}>{bestBand.toFixed(1)}</b></div> : null}
+          </div>
+        </SurfaceCard>
+      ) : null}
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        {mockEntries.map((entry) => {
+          const session = entry.session;
+          const open = expanded === entry.sourceIndex;
+          const emailTask = getTask(session, "email-writing");
+          const discTask = getTask(session, "academic-writing");
+          const buildTask = getTask(session, "build-sentence");
+          return (
+            <SurfaceCard key={entry.sourceIndex} style={{ padding: 0, overflow: "hidden", boxShadow: "none" }}>
+              <button onClick={() => setExpanded(open ? null : entry.sourceIndex)} style={{ width: "100%", display: "flex", alignItems: "center", gap: 10, padding: "14px 16px", border: "none", background: "transparent", cursor: "pointer", textAlign: "left" }}>
+                {Number.isFinite(session.band) ? <span style={{ fontSize: 11, fontWeight: 700, background: getBandColor(session.band) + "20", color: getBandColor(session.band), borderRadius: 999, padding: "4px 8px" }}>{session.band.toFixed(1)}</span> : <span style={{ fontSize: 11, color: C.t3 }}>待评分</span>}
+                <span style={{ fontSize: 12, color: C.t2, flex: 1 }}>{fmtDate(session.date)}</span>
+                <span style={{ fontSize: 12, color: C.t2, whiteSpace: "nowrap" }}>拼句 {Number.isFinite(buildTask?.score) ? `${buildTask.score}/${buildTask.maxScore}` : "待定"} / 邮件 {Number.isFinite(emailTask?.score) ? `${emailTask.score}/${emailTask.maxScore}` : "待定"} / 讨论 {Number.isFinite(discTask?.score) ? `${discTask.score}/${discTask.maxScore}` : "待定"}</span>
+                <span style={{ fontSize: 12, color: C.t3 }}>{open ? "收起" : "展开"}</span>
+              </button>
+              {open ? <div style={{ padding: "0 16px 16px" }}><HistoryRow entry={entry} isExpanded={true} isLast={true} onToggle={() => {}} onDelete={() => {}} detailOnly={true} /></div> : null}
+            </SurfaceCard>
           );
         })}
       </div>
@@ -299,326 +187,237 @@ function MockSection({ mockEntries }) {
   );
 }
 
-/* ─── Trend Chart ──────────────────────────────────────────── */
 function TrendChart({ bs, email, discussion }) {
   const [hidden, setHidden] = useState({ bs: false, email: false, discussion: false });
   const [tooltip, setTooltip] = useState(null);
   const svgRef = useRef(null);
-  const VW = 440, VH = 180, ML = 34, MT = 12, MR = 10, MB = 26;
-  const CW = VW - ML - MR, CH = VH - MT - MB;
-  const wrV = (s) => Number.isFinite(s.score) ? s.score : null;
-  const bsV = (s) => { const t = Number(s.total || 0), c = Number(s.correct || 0); return t > 0 ? (c / t) * 5 : null; };
-  const LINES = [
-    { key: "email", label: "Email", color: T.email, pts: aggregateByDay(email, wrV) },
-    { key: "discussion", label: "Discussion", color: T.disc, pts: aggregateByDay(discussion, wrV) },
-    { key: "bs", label: "Build", color: T.build, pts: aggregateByDay(bs, bsV) },
+  const width = 520;
+  const height = 200;
+  const marginLeft = 34;
+  const marginTop = 12;
+  const marginRight = 12;
+  const marginBottom = 28;
+  const chartWidth = width - marginLeft - marginRight;
+  const chartHeight = height - marginTop - marginBottom;
+  const emailValue = (session) => Number.isFinite(session.score) ? session.score : null;
+  const buildValue = (session) => {
+    const total = Number(session.total || 0);
+    const correct = Number(session.correct || 0);
+    return total > 0 ? (correct / total) * 5 : null;
+  };
+  const lines = [
+    { key: "email", label: "邮件写作", color: TASK_UI.email.color, pts: aggregateByDay(email, emailValue) },
+    { key: "discussion", label: "学术讨论", color: TASK_UI.discussion.color, pts: aggregateByDay(discussion, emailValue) },
+    { key: "bs", label: "拼句练习", color: TASK_UI.bs.color, pts: aggregateByDay(bs, buildValue) },
   ];
-  const allPts = LINES.flatMap((l) => l.pts);
-  if (allPts.length === 0) return <div style={{ padding: "20px", fontSize: 12, color: T.t2, textAlign: "center" }}>暂无数据</div>;
-  const minTs = Math.min(...allPts.map((p) => p.ts));
-  const maxTs = Math.max(...allPts.map((p) => p.ts));
-  const tsSpan = maxTs - minTs || 864e5;
-  const toX = (ts) => ML + ((ts - minTs) / tsSpan) * CW;
-  const toY = (v) => MT + (1 - v / 5) * CH;
+  const allPoints = lines.flatMap((line) => line.pts);
+  if (!allPoints.length) return <div style={{ padding: "20px", fontSize: 12, color: C.t2, textAlign: "center" }}>暂无趋势数据。</div>;
+  const minTs = Math.min(...allPoints.map((point) => point.ts));
+  const maxTs = Math.max(...allPoints.map((point) => point.ts));
+  const span = maxTs - minTs || 864e5;
+  const toX = (ts) => marginLeft + ((ts - minTs) / span) * chartWidth;
+  const toY = (value) => marginTop + (1 - value / 5) * chartHeight;
+  const yGrid = [0, 1, 2, 3, 4, 5];
+  const allDates = [...new Set(allPoints.map((point) => point.date))].sort();
+  const shownDates = allDates.length <= 5 ? allDates : [allDates[0], allDates[Math.floor(allDates.length / 2)], allDates[allDates.length - 1]];
 
-  function handleMouseMove(e) {
+  function handleMouseMove(event) {
     const el = svgRef.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
-    const px = e.clientX - rect.left;
-    const svgX = (px / rect.width) * VW;
-    let bestDist = 22, bestTs = null;
-    LINES.forEach((l) => {
-      if (hidden[l.key]) return;
-      l.pts.forEach((p) => { const d = Math.abs(toX(p.ts) - svgX); if (d < bestDist) { bestDist = d; bestTs = p.ts; } });
+    const px = event.clientX - rect.left;
+    const svgX = (px / rect.width) * width;
+    let bestDist = 22;
+    let bestTs = null;
+    lines.forEach((line) => {
+      if (hidden[line.key]) return;
+      line.pts.forEach((point) => {
+        const dist = Math.abs(toX(point.ts) - svgX);
+        if (dist < bestDist) {
+          bestDist = dist;
+          bestTs = point.ts;
+        }
+      });
     });
-    if (bestTs === null) { setTooltip(null); return; }
-    const near = LINES.filter((l) => !hidden[l.key])
-      .flatMap((l) => l.pts.filter((p) => p.ts === bestTs).map((p) => ({ key: l.key, label: l.label, color: l.color, avg: p.avg, date: p.date })));
-    const svgXPos = toX(bestTs);
-    setTooltip({ px: px > rect.width * 0.6 ? px - 135 : px + 14, py: 6, svgX: svgXPos, near });
+    if (bestTs === null) {
+      setTooltip(null);
+      return;
+    }
+    const near = lines.filter((line) => !hidden[line.key]).flatMap((line) => line.pts.filter((point) => point.ts === bestTs).map((point) => ({ key: line.key, label: line.label, color: line.color, avg: point.avg, date: point.date })));
+    setTooltip({ left: px > rect.width * 0.6 ? px - 140 : px + 16, top: 8, svgX: toX(bestTs), near });
   }
-
-  const allDates = [...new Set(allPts.map((p) => p.date))].sort();
-  const showDates = allDates.length <= 5 ? allDates : [allDates[0], allDates[Math.floor(allDates.length / 2)], allDates[allDates.length - 1]];
-  const yGrid = [0, 1, 2, 3, 4, 5];
 
   return (
     <div>
-      <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 10 }}>
-        {LINES.map((l) => (
-          <button key={l.key} onClick={() => setHidden((h) => ({ ...h, [l.key]: !h[l.key] }))}
-            style={{
-              display: "inline-flex", alignItems: "center", gap: 5,
-              border: `1px solid ${hidden[l.key] ? T.bdr : l.color}`,
-              background: hidden[l.key] ? T.bg : l.color + "15",
-              borderRadius: 20, padding: "2px 10px",
-              fontSize: 11, fontWeight: 600, color: hidden[l.key] ? T.t3 : l.color,
-              cursor: "pointer", fontFamily: JFONT,
-            }}
-          >
-            <span style={{ width: 14, height: 2, background: hidden[l.key] ? T.bdr : l.color, borderRadius: 1, display: "inline-block" }} />
-            {l.label}
-          </button>
-        ))}
+      <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 12 }}>
+        {lines.map((line) => <button key={line.key} onClick={() => setHidden((prev) => ({ ...prev, [line.key]: !prev[line.key] }))} style={{ display: "inline-flex", alignItems: "center", gap: 6, border: "1px solid " + (hidden[line.key] ? C.bdr : line.color), background: hidden[line.key] ? "#fff" : line.color + "12", color: hidden[line.key] ? C.t3 : line.color, borderRadius: 999, padding: "5px 10px", fontSize: 12, fontWeight: 700, cursor: "pointer" }}><span style={{ width: 10, height: 10, borderRadius: 999, background: hidden[line.key] ? C.bdr : line.color }} />{line.label}</button>)}
       </div>
       <div style={{ position: "relative" }}>
-        <svg ref={svgRef} viewBox={`0 0 ${VW} ${VH}`} width="100%" style={{ display: "block", overflow: "visible" }}
-          onMouseMove={handleMouseMove} onMouseLeave={() => setTooltip(null)}>
+        <svg ref={svgRef} viewBox={`0 0 ${width} ${height}`} width="100%" style={{ display: "block", overflow: "visible" }} onMouseMove={handleMouseMove} onMouseLeave={() => setTooltip(null)}>
           {yGrid.map((y) => (
             <g key={y}>
-              <line x1={ML} y1={toY(y)} x2={ML + CW} y2={toY(y)}
-                stroke={y === 0 ? T.bdr : "#ece9e3"} strokeWidth={1}
-                strokeDasharray={y === 0 ? "none" : "3,3"} />
-              <text x={ML - 5} y={toY(y) + 3.5} fontSize={9} fill={T.t3} textAnchor="end" fontFamily={JFONT}>{y}</text>
+              <line x1={marginLeft} y1={toY(y)} x2={marginLeft + chartWidth} y2={toY(y)} stroke={y === 0 ? C.bdr : "#edf2ef"} strokeWidth={1} strokeDasharray={y === 0 ? "none" : "3,3"} />
+              <text x={marginLeft - 5} y={toY(y) + 3.5} fontSize={9} fill={C.t3} textAnchor="end">{y}</text>
             </g>
           ))}
-          <line x1={ML} y1={MT} x2={ML} y2={MT + CH} stroke={T.bdr} strokeWidth={1} />
-          {showDates.map((d) => {
-            const pt = allPts.find((p) => p.date === d);
-            if (!pt) return null;
-            const [, m, dd] = d.split("-");
-            return <text key={d} x={toX(pt.ts)} y={VH - 2} fontSize={9} fill={T.t3} textAnchor="middle" fontFamily={JFONT}>{m}/{dd}</text>;
+          <line x1={marginLeft} y1={marginTop} x2={marginLeft} y2={marginTop + chartHeight} stroke={C.bdr} strokeWidth={1} />
+          {shownDates.map((date) => {
+            const point = allPoints.find((item) => item.date === date);
+            if (!point) return null;
+            const [, month, day] = date.split("-");
+            return <text key={date} x={toX(point.ts)} y={height - 4} fontSize={9} fill={C.t3} textAnchor="middle">{month}/{day}</text>;
           })}
-          {tooltip && (
-            <rect x={tooltip.svgX - 16} y={MT} width={32} height={CH} fill={T.accentSoft} opacity={0.55} rx={4} />
-          )}
-          {LINES.map((l) => {
-            if (hidden[l.key] || l.pts.length === 0) return null;
-            const coords = l.pts.map((p) => ({ x: toX(p.ts), y: toY(p.avg) }));
+          {tooltip ? <rect x={tooltip.svgX - 16} y={marginTop} width={32} height={chartHeight} fill={C.softBlue} opacity={0.65} rx={4} /> : null}
+          {lines.map((line) => {
+            if (hidden[line.key] || !line.pts.length) return null;
+            const coords = line.pts.map((point) => ({ x: toX(point.ts), y: toY(point.avg) }));
             return (
-              <g key={l.key}>
-                {l.pts.length > 1 && <path d={smoothPath(coords)} fill="none" stroke={l.color} strokeWidth={2} strokeLinecap="round" />}
-                {coords.map((c, i) => (
-                  <circle key={i} cx={c.x.toFixed(1)} cy={c.y.toFixed(1)}
-                    r={l.pts.length === 1 ? 5 : 3.5} fill="#fff" stroke={l.color} strokeWidth={1.5} />
-                ))}
+              <g key={line.key}>
+                {line.pts.length > 1 ? <path d={smoothPath(coords)} fill="none" stroke={line.color} strokeWidth={2} strokeLinecap="round" /> : null}
+                {coords.map((point, index) => <circle key={index} cx={point.x.toFixed(1)} cy={point.y.toFixed(1)} r={line.pts.length === 1 ? 5 : 3.5} fill="#fff" stroke={line.color} strokeWidth={1.5} />)}
               </g>
             );
           })}
-          {tooltip && <line x1={tooltip.svgX} y1={MT} x2={tooltip.svgX} y2={MT + CH} stroke={T.accent} strokeWidth={1} strokeDasharray="2,2" opacity={0.4} />}
+          {tooltip ? <line x1={tooltip.svgX} y1={marginTop} x2={tooltip.svgX} y2={marginTop + chartHeight} stroke={C.blue} strokeWidth={1} strokeDasharray="2,2" opacity={0.45} /> : null}
         </svg>
-        {tooltip && tooltip.near.length > 0 && (
-          <div style={{
-            position: "absolute", left: tooltip.px, top: tooltip.py,
-            background: T.card, border: `1px solid ${T.bdr}`, borderRadius: 10,
-            padding: "8px 12px", fontSize: 12, pointerEvents: "none", zIndex: 10,
-            boxShadow: "0 4px 16px rgba(0,0,0,0.10)", minWidth: 110,
-            animation: "tooltipIn 0.12s ease",
-          }}>
-            <div style={{ fontSize: 10, color: T.t3, marginBottom: 5, fontWeight: 600 }}>{tooltip.near[0].date}</div>
-            {tooltip.near.map((pt) => (
-              <div key={pt.key} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 3 }}>
-                <span style={{ width: 7, height: 7, borderRadius: "50%", background: pt.color, display: "inline-block", border: "1.5px solid #fff", boxShadow: `0 0 0 1.5px ${pt.color}`, flexShrink: 0 }} />
-                <span style={{ color: pt.color, fontWeight: 600 }}>{pt.label}</span>
-                <span style={{ color: T.t1, fontVariantNumeric: "tabular-nums" }}>{pt.avg.toFixed(1)}/5</span>
-              </div>
-            ))}
+        {tooltip && tooltip.near.length ? (
+          <div style={{ position: "absolute", left: tooltip.left, top: tooltip.top, background: "#fff", border: "1px solid " + C.bdr, borderRadius: 12, padding: "8px 12px", fontSize: 12, pointerEvents: "none", zIndex: 10, boxShadow: "0 10px 30px rgba(0,0,0,0.08)", minWidth: 126 }}>
+            <div style={{ fontSize: 10, color: C.t3, marginBottom: 6, fontWeight: 700 }}>{tooltip.near[0].date}</div>
+            {tooltip.near.map((point) => <div key={point.key} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}><span style={{ width: 7, height: 7, borderRadius: 999, background: point.color }} /><span style={{ color: point.color, fontWeight: 700 }}>{point.label}</span><span style={{ color: C.t1 }}>{point.avg.toFixed(1)}/5</span></div>)}
           </div>
-        )}
+        ) : null}
       </div>
     </div>
   );
 }
 
-/* ─── Progress Section ───────────────────────────────────── */
 function ProgressSection({ bs, email, discussion }) {
-  function halfStats(sessions, getV) {
-    const valid = sessions.map((s) => ({ s, v: getV(s) })).filter((x) => x.v !== null && Number.isFinite(x.v))
-      .sort((a, b) => new Date(a.s.date) - new Date(b.s.date));
+  function halfStats(sessions, getValue) {
+    const valid = sessions.map((session) => ({ session, value: getValue(session) })).filter((item) => item.value !== null && Number.isFinite(item.value)).sort((a, b) => new Date(a.session.date) - new Date(b.session.date));
     if (valid.length < 4) return null;
     const mid = Math.floor(valid.length / 2);
-    const earlyAvg = valid.slice(0, mid).reduce((a, x) => a + x.v, 0) / mid;
-    const lateAvg = valid.slice(mid).reduce((a, x) => a + x.v, 0) / (valid.length - mid);
+    const earlyAvg = valid.slice(0, mid).reduce((sum, item) => sum + item.value, 0) / mid;
+    const lateAvg = valid.slice(mid).reduce((sum, item) => sum + item.value, 0) / (valid.length - mid);
     return { earlyAvg, lateAvg, diff: lateAvg - earlyAvg };
   }
-  const bsV = (s) => { const t = Number(s.total || 0), c = Number(s.correct || 0); return t > 0 ? (c / t) * 5 : null; };
-  const wrV = (s) => Number.isFinite(s.score) ? s.score : null;
+  const buildValue = (session) => {
+    const total = Number(session.total || 0);
+    const correct = Number(session.correct || 0);
+    return total > 0 ? (correct / total) * 5 : null;
+  };
+  const writeValue = (session) => Number.isFinite(session.score) ? session.score : null;
   const comparisons = [
-    { key: "email", icon: "📧", label: "Email", color: T.email, stats: halfStats(email, wrV) },
-    { key: "disc", icon: "💬", label: "Discussion", color: T.disc, stats: halfStats(discussion, wrV) },
-    { key: "bs", icon: "🧩", label: "Build", color: T.build, stats: halfStats(bs, bsV) },
+    { key: "email", icon: TASK_UI.email.icon, label: TASK_UI.email.label, color: TASK_UI.email.color, stats: halfStats(email, writeValue) },
+    { key: "discussion", icon: TASK_UI.discussion.icon, label: TASK_UI.discussion.label, color: TASK_UI.discussion.color, stats: halfStats(discussion, writeValue) },
+    { key: "bs", icon: TASK_UI.bs.icon, label: TASK_UI.bs.label, color: TASK_UI.bs.color, stats: halfStats(bs, buildValue) },
   ];
   return (
-    <div style={{ padding: "16px" }}>
+    <div style={{ padding: "16px 18px 18px" }}>
       <TrendChart bs={bs} email={email} discussion={discussion} />
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginTop: 14 }}>
-        {comparisons.map(({ key, icon, label, color, stats }) => (
-          <div key={key} style={{ background: T.bg, borderRadius: 10, padding: "10px 12px" }}>
-            <div style={{ fontSize: 11, color: T.t2, marginBottom: 6 }}>{icon} {label}</div>
-            {!stats ? (
-              <div style={{ fontSize: 11, color: T.t3, fontStyle: "italic" }}>数据不足</div>
-            ) : (
-              <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
-                <span style={{ fontSize: 11, color: T.t2, fontVariantNumeric: "tabular-nums" }}>{stats.earlyAvg.toFixed(1)}</span>
-                <span style={{ fontSize: 11, color: T.t3 }}>→</span>
-                <span style={{ fontSize: 13, fontWeight: 700, color: T.t1, fontVariantNumeric: "tabular-nums" }}>{stats.lateAvg.toFixed(1)}/5</span>
-                <span style={{
-                  fontSize: 11, fontWeight: 700, padding: "1px 5px", borderRadius: 4,
-                  background: stats.diff >= 0 ? T.greenSoft : T.redSoft,
-                  color: stats.diff >= 0 ? T.green : T.red,
-                }}>
-                  {stats.diff >= 0 ? "↑" : "↓"} {Math.abs(stats.diff).toFixed(1)}
-                </span>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10, marginTop: 14 }}>
+        {comparisons.map((item) => (
+          <SurfaceCard key={item.key} style={{ padding: "12px 14px", background: item.stats ? "#fff" : "#fafafa", boxShadow: "none" }}>
+            <div style={{ fontSize: 12, color: C.t2, marginBottom: 8 }}>{item.icon} {item.label}</div>
+            {!item.stats ? <div style={{ fontSize: 12, color: C.t3 }}>数据不足，暂时无法判断趋势。</div> : (
+              <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                <span style={{ fontSize: 12, color: C.t2 }}>{item.stats.earlyAvg.toFixed(1)}</span>
+                <span style={{ fontSize: 12, color: C.t3 }}>→</span>
+                <span style={{ fontSize: 15, fontWeight: 800, color: C.t1 }}>{item.stats.lateAvg.toFixed(1)}/5</span>
+                <span style={{ fontSize: 11, fontWeight: 700, padding: "2px 6px", borderRadius: 999, background: item.stats.diff >= 0 ? "#dcfce7" : "#fee2e2", color: item.stats.diff >= 0 ? C.green : C.red }}>{item.stats.diff >= 0 ? "提升" : "回落"} {Math.abs(item.stats.diff).toFixed(1)}</span>
               </div>
             )}
-          </div>
+          </SurfaceCard>
         ))}
       </div>
     </div>
   );
 }
 
-/* ─── Weakness Section ───────────────────────────────────── */
 function WeaknessSection({ email, discussion }) {
-  const allSessions = [...email, ...discussion]
-    .filter((s) => s.details?.feedback)
-    .sort((a, b) => new Date(a.date) - new Date(b.date));
-  if (allSessions.length < 2)
-    return <div style={{ padding: "24px 16px", textAlign: "center", fontSize: 12, color: T.t2 }}>继续练习，系统将分析你的薄弱点</div>;
-  function getTags(s) {
-    const fb = s.details?.feedback;
-    if (!fb) return [];
-    if (Array.isArray(fb.weaknesses) && fb.weaknesses.length > 0)
-      return fb.weaknesses.map((w) => ({ tag: String(w || "").split(":")[0].trim(), text: String(w || "").trim() })).filter((x) => x.tag);
-    if (Array.isArray(fb.patterns))
-      return fb.patterns.filter((p) => Number(p?.count || 0) > 0)
-        .map((p) => ({ tag: String(p.tag || "").trim(), text: `${p.tag}: ${p.summary || ""}`.trim() })).filter((x) => x.tag);
+  const allSessions = [...email, ...discussion].filter((session) => session.details?.feedback).sort((a, b) => new Date(a.date) - new Date(b.date));
+  if (allSessions.length < 2) {
+    return <div style={{ padding: "24px 18px", textAlign: "center", fontSize: 12, color: C.t2 }}>继续练习后，系统会逐步总结你的高频薄弱点。</div>;
+  }
+
+  function getTags(session) {
+    const feedback = session.details?.feedback;
+    if (!feedback) return [];
+    if (Array.isArray(feedback.weaknesses) && feedback.weaknesses.length > 0) {
+      return feedback.weaknesses.map((item) => ({ tag: String(item || "").split(":")[0].trim(), text: String(item || "").trim() })).filter((item) => item.tag);
+    }
+    if (Array.isArray(feedback.patterns)) {
+      return feedback.patterns.filter((item) => Number(item?.count || 0) > 0).map((item) => ({ tag: String(item.tag || "").trim(), text: `${item.tag}: ${item.summary || ""}`.trim() })).filter((item) => item.tag);
+    }
     return [];
   }
-  const tagFreq = {}, tagText = {};
-  allSessions.forEach((s) => getTags(s).forEach(({ tag, text }) => { tagFreq[tag] = (tagFreq[tag] || 0) + 1; tagText[tag] = text; }));
-  const recurring = Object.entries(tagFreq).filter(([, n]) => n >= 2).sort((a, b) => b[1] - a[1]).slice(0, 6);
-  if (recurring.length === 0)
-    return <div style={{ padding: "24px 16px", textAlign: "center", fontSize: 12, color: T.t2 }}>继续练习，系统将分析你的薄弱点</div>;
-  const last5 = allSessions.slice(-5);
-  const last5Sets = last5.map((s) => new Set(getTags(s).map((x) => x.tag)));
+
+  const tagFreq = {};
+  const tagText = {};
+  allSessions.forEach((session) => {
+    getTags(session).forEach(({ tag, text }) => {
+      tagFreq[tag] = (tagFreq[tag] || 0) + 1;
+      tagText[tag] = text;
+    });
+  });
+  const recurring = Object.entries(tagFreq).filter(([, count]) => count >= 2).sort((a, b) => b[1] - a[1]).slice(0, 6);
+  if (!recurring.length) {
+    return <div style={{ padding: "24px 18px", textAlign: "center", fontSize: 12, color: C.t2 }}>继续练习后，系统会逐步总结你的高频薄弱点。</div>;
+  }
+
+  const lastFive = allSessions.slice(-5);
+  const lastFiveSets = lastFive.map((session) => new Set(getTags(session).map((item) => item.tag)));
+
   return (
-    <div style={{ padding: "12px 16px 16px" }}>
-      {recurring.map(([tag, n], ri) => {
-        const inLast5 = last5Sets.filter((ts) => ts.has(tag)).length;
-        const improved = inLast5 === 0;
-        const persistent = last5.length >= 3 && inLast5 >= Math.ceil(last5.length * 0.6);
+    <div style={{ padding: "14px 18px 18px", display: "flex", flexDirection: "column", gap: 8 }}>
+      {recurring.map(([tag, count]) => {
+        const inLastFive = lastFiveSets.filter((set) => set.has(tag)).length;
+        const improved = inLastFive === 0;
+        const persistent = lastFive.length >= 3 && inLastFive >= Math.ceil(lastFive.length * 0.6);
         return (
-          <div key={tag} style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 0", borderBottom: ri < recurring.length - 1 ? `1px solid ${T.bdr}` : "none" }}>
-            <span style={{
-              fontSize: 12, flex: 1, minWidth: 0, color: improved ? T.t3 : T.t1,
-              textDecoration: improved ? "line-through" : "none", opacity: improved ? 0.6 : 1,
-              overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-            }}>{tagText[tag] || tag}</span>
-            <span style={{ fontSize: 11, color: T.t3, flexShrink: 0, fontVariantNumeric: "tabular-nums" }}>×{n}</span>
-            {improved && <span style={{ fontSize: 10, fontWeight: 700, background: T.greenSoft, color: T.green, borderRadius: 5, padding: "1px 6px", flexShrink: 0, whiteSpace: "nowrap" }}>已改善 ✓</span>}
-            {!improved && persistent && <span style={{ fontSize: 10, fontWeight: 700, background: T.redSoft, color: T.red, borderRadius: 5, padding: "1px 6px", flexShrink: 0, whiteSpace: "nowrap" }}>需关注</span>}
-          </div>
+          <SurfaceCard key={tag} style={{ padding: "12px 14px", boxShadow: "none" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+              <div style={{ flex: 1, minWidth: 240, fontSize: 13, color: improved ? C.t3 : C.t1, textDecoration: improved ? "line-through" : "none", opacity: improved ? 0.7 : 1 }}>{tagText[tag] || tag}</div>
+              <span style={{ fontSize: 11, color: C.t3 }}>出现 {count} 次</span>
+              {improved ? <span style={{ fontSize: 11, fontWeight: 700, background: "#dcfce7", color: C.green, borderRadius: 999, padding: "3px 8px" }}>近期已改善</span> : null}
+              {!improved && persistent ? <span style={{ fontSize: 11, fontWeight: 700, background: "#fee2e2", color: C.red, borderRadius: 999, padding: "3px 8px" }}>近期仍高频</span> : null}
+            </div>
+          </SurfaceCard>
         );
       })}
     </div>
   );
 }
 
-/* ─── Practice Row ───────────────────────────────────────── */
-function PracticeRow({ entry, isExpanded, onToggle, onDelete, typeAvgs }) {
-  const s = entry.session;
-  const pct = getScorePct(s);
-  const sColor = scorePctColor(pct);
-  const rawAvg = typeAvgs?.[s.type] ?? null;
-  const avgPct = s.type === "bs" ? rawAvg : (rawAvg !== null ? (rawAvg / 5) * 100 : null);
-  const showTrend = pct !== null && avgPct !== null;
-  const isAbove = showTrend && pct > avgPct;
-  const attempt = Number(s?.details?.practiceAttempt || 1);
-  return (
-    <div>
-      <div
-        onClick={() => onToggle?.()}
-        style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 14px", cursor: "pointer", borderRadius: 8, transition: "background 0.12s" }}
-        onMouseEnter={(e) => (e.currentTarget.style.background = T.bg)}
-        onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
-      >
-        <div style={{ width: 32, height: 32, borderRadius: 8, background: typeSoft(s.type), display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15, flexShrink: 0 }}>
-          {typeEmoji(s.type)}
-        </div>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontSize: 13, fontWeight: 650, color: T.t1, display: "flex", alignItems: "center", gap: 5 }}>
-            {typeLabel(s.type)}
-            {attempt > 1 && <span style={{ fontSize: 9, fontWeight: 700, background: T.discSoft, color: T.disc, borderRadius: 4, padding: "0 4px" }}>第{attempt}次</span>}
-          </div>
-          <div style={{ fontSize: 11, color: T.t2, marginTop: 1 }}>{fmtDate(s.date)}</div>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 3, flexShrink: 0 }}>
-          <span style={{ fontSize: 13, fontWeight: 700, color: sColor, fontVariantNumeric: "tabular-nums" }}>{getScoreLabel(s)}</span>
-          {showTrend && <span style={{ fontSize: 10, color: isAbove ? T.green : T.t3 }}>{isAbove ? "⬆" : "⬇"}</span>}
-        </div>
-        <button onClick={(e) => { e.stopPropagation(); onDelete?.(entry.sourceIndex); }}
-          style={{ background: "none", border: "none", color: T.t3, cursor: "pointer", fontSize: 14, padding: "2px 4px", flexShrink: 0, lineHeight: 1 }}>×</button>
-        <span style={{ fontSize: 9, color: T.t3, transform: isExpanded ? "rotate(180deg)" : "rotate(0)", transition: "transform 0.22s", display: "inline-block", flexShrink: 0 }}>▼</span>
-      </div>
-      {isExpanded && (
-        <div style={{ margin: "0 8px 8px", background: T.bg, borderRadius: 8, overflow: "hidden", animation: "slideDown 0.18s ease" }}>
-          <HistoryRow
-            entry={entry}
-            isExpanded={true}
-            isLast={true}
-            onToggle={() => {}}
-            onDelete={onDelete}
-            detailOnly={true}
-          />
-        </div>
-      )}
-    </div>
-  );
-}
-
-/* ─── Practice Section ───────────────────────────────────── */
 function PracticeSection({ practiceEntries, typeAvgs, onDelete }) {
   const [tab, setTab] = useState("all");
   const [expandedId, setExpandedId] = useState(null);
-  const TABS = [
+  const tabs = [
     { key: "all", label: "全部" },
-    { key: "bs", label: "🧩 Build" },
-    { key: "email", label: "📧 Email" },
-    { key: "discussion", label: "💬 Discussion" },
+    { key: "bs", label: "拼句" },
+    { key: "email", label: "邮件" },
+    { key: "discussion", label: "讨论" },
   ];
   const filtered = useMemo(() => {
     if (tab === "all") return practiceEntries;
-    return practiceEntries.filter((e) => e.session.type === tab);
+    return practiceEntries.filter((entry) => entry.session.type === tab);
   }, [practiceEntries, tab]);
+
   return (
-    <div>
-      <div style={{ display: "flex", gap: 6, padding: "12px 14px 8px", flexWrap: "wrap" }}>
-        {TABS.map((t) => (
-          <button key={t.key} onClick={() => setTab(t.key)}
-            style={{
-              border: `1px solid ${tab === t.key ? T.accent : T.bdr}`,
-              background: tab === t.key ? T.accentSoft : "transparent",
-              color: tab === t.key ? T.accent : T.t2,
-              borderRadius: 8, padding: "4px 12px", fontSize: 12, fontWeight: 600,
-              cursor: "pointer", fontFamily: JFONT,
-            }}
-          >{t.label}</button>
-        ))}
+    <div style={{ padding: "16px 18px 18px" }}>
+      <div style={{ display: "flex", gap: 8, paddingBottom: 10, flexWrap: "wrap" }}>
+        {tabs.map((item) => <button key={item.key} onClick={() => setTab(item.key)} style={{ border: "1px solid " + (tab === item.key ? C.blue : C.bdr), background: tab === item.key ? C.softBlue : "#fff", color: tab === item.key ? C.blue : C.t2, borderRadius: 999, padding: "6px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer" }}>{item.label}</button>)}
       </div>
-      <div style={{ maxHeight: 440, overflowY: "auto", padding: "0 4px 8px" }}>
-        {filtered.length === 0
-          ? <div style={{ padding: "20px", textAlign: "center", fontSize: 12, color: T.t2 }}>暂无记录</div>
-          : filtered.map((entry) => (
-            <PracticeRow
-              key={entry.sourceIndex}
-              entry={entry}
-              isExpanded={expandedId === entry.sourceIndex}
-              onToggle={() => setExpandedId(expandedId === entry.sourceIndex ? null : entry.sourceIndex)}
-              onDelete={onDelete}
-              typeAvgs={typeAvgs}
-            />
-          ))
-        }
+      <div style={{ maxHeight: 520, overflowY: "auto", paddingRight: 4 }}>
+        {!filtered.length ? <div style={{ padding: "24px 0", textAlign: "center", fontSize: 13, color: C.t2 }}>当前筛选下暂无练习记录。</div> : filtered.map((entry, index) => <HistoryRow key={entry.sourceIndex} entry={entry} isExpanded={expandedId === entry.sourceIndex} isLast={index === filtered.length - 1} onToggle={() => setExpandedId(expandedId === entry.sourceIndex ? null : entry.sourceIndex)} onDelete={onDelete} typeAvgs={typeAvgs} />)}
       </div>
     </div>
   );
 }
 
-/* ─── Main ProgressView ──────────────────────────────────── */
 export function ProgressView({ onBack }) {
   const [hist, setHist] = useState(null);
+  const [openSections, setOpenSections] = useState({ mock: true, progress: true, weakness: true, practice: true });
+
   useEffect(() => {
     const refresh = () => setHist(loadHist());
     refresh();
@@ -629,137 +428,96 @@ export function ProgressView({ onBack }) {
       window.removeEventListener("storage", refresh);
     };
   }, []);
+
   const entries = useMemo(() => buildHistoryEntries(hist), [hist]);
   const stats = useMemo(() => buildHistoryStats(entries), [entries]);
-  const mockEntries = useMemo(
-    () => entries.filter((e) => e.session.type === "mock").sort((a, b) => new Date(b.session.date) - new Date(a.session.date)),
-    [entries],
-  );
-  const practiceEntries = useMemo(
-    () => entries.filter((e) => e.session.type !== "mock").sort((a, b) => new Date(b.session.date) - new Date(a.session.date)),
-    [entries],
-  );
+  const mockEntries = useMemo(() => entries.filter((entry) => entry.session.type === "mock").sort((a, b) => new Date(b.session.date) - new Date(a.session.date)), [entries]);
+  const practiceEntries = useMemo(() => entries.filter((entry) => entry.session.type !== "mock").sort((a, b) => new Date(b.session.date) - new Date(a.session.date)), [entries]);
   const bs = stats.byType.bs;
-  const em = stats.byType.email;
-  const di = stats.byType.discussion;
+  const email = stats.byType.email;
+  const discussion = stats.byType.discussion;
 
-  const sparkData = useMemo(() => {
-    const srt = (arr, getV) => [...arr].sort((a, b) => new Date(a.date) - new Date(b.date)).map(getV).filter((v) => v !== null && Number.isFinite(v));
-    const bsV = (s) => { const t = Number(s.total || 0), c = Number(s.correct || 0); return t > 0 ? (c / t) * 5 : null; };
-    return {
-      bs: srt(bs, bsV),
-      email: srt(em, (s) => Number.isFinite(s.score) ? s.score : null),
-      discussion: srt(di, (s) => Number.isFinite(s.score) ? s.score : null),
-    };
-  }, [bs, em, di]);
-
-  const typeAvgs = useMemo(() => {
-    let bsValid = 0, bsSum = 0;
-    bs.forEach((s) => { const t = Number(s.total || 0), c = Number(s.correct || 0); if (t > 0) { bsSum += (c / t) * 100; bsValid++; } });
-    return {
-      bs: bsValid > 0 ? bsSum / bsValid : null,
-      email: em.length > 0 ? em.reduce((a, s) => a + s.score, 0) / em.length : null,
-      discussion: di.length > 0 ? di.reduce((a, s) => a + s.score, 0) / di.length : null,
-    };
-  }, [bs, em, di]);
+  const typeAvgs = useMemo(() => ({ bs: getBuildAvgPercent(bs), email: getWritingAvg(email), discussion: getWritingAvg(discussion) }), [bs, email, discussion]);
 
   useEffect(() => {
     if (!hist || !stats.hasPendingMock) return;
-    const t = setInterval(() => setHist(loadHist()), 3000);
-    return () => clearInterval(t);
+    const timer = setInterval(() => setHist(loadHist()), 3000);
+    return () => clearInterval(timer);
   }, [hist, stats.hasPendingMock]);
+
+  function toggleSection(key) {
+    setOpenSections((prev) => ({ ...prev, [key]: !prev[key] }));
+  }
 
   function handleDelete(sourceIndex) {
     if (!window.confirm("删除这条记录？")) return;
     setHist({ ...deleteSession(sourceIndex) });
   }
+
   function handleClearAll() {
-    if (!window.confirm("删除所有练习记录？")) return;
+    if (!window.confirm("删除全部练习记录？")) return;
     setHist({ ...clearAllSessions() });
   }
 
-  // Stats for stat cards
-  const bsAvgStat = (() => {
-    let v = 0, s = 0;
-    bs.forEach((x) => { const t = Number(x.total || 0), c = Number(x.correct || 0); if (t > 0) { s += (c / t) * 100; v++; } });
-    return v ? `均 ${Math.round(s / v)}%` : "—";
-  })();
-  const emAvgStat = em.length ? `均 ${(em.reduce((a, s) => a + s.score, 0) / em.length).toFixed(1)}/5` : "—";
-  const diAvgStat = di.length ? `均 ${(di.reduce((a, s) => a + s.score, 0) / di.length).toFixed(1)}/5` : "—";
-
-  if (!hist) {
-    return (
-      <div style={{ minHeight: "100vh", background: T.bg, fontFamily: JFONT, display: "flex", alignItems: "center", justifyContent: "center", color: T.t2 }}>
-        加载中…
-      </div>
-    );
-  }
-
-  const isEmpty = entries.length === 0;
+  const totalSessions = practiceEntries.length + mockEntries.length;
+  const buildAvg = getBuildAvgPercent(bs);
+  const emailAvg = getWritingAvg(email);
+  const discussionAvg = getWritingAvg(discussion);
 
   return (
-    <div style={{ minHeight: "100vh", background: T.bg, fontFamily: JFONT }}>
-      <style>{`
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes tooltipIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-      `}</style>
-      <TopBar title="练习记录" section="Progress" onExit={onBack} />
-      <div style={{ maxWidth: 720, margin: "0 auto", padding: "20px 16px 48px" }}>
-        {/* Header */}
-        <div style={{ marginBottom: 20 }}>
-          <h1 style={{ fontSize: 24, fontWeight: 800, color: T.t1, margin: 0, lineHeight: 1.2, fontFamily: JFONT }}>练习记录</h1>
-          <p style={{ fontSize: 13, color: T.t2, margin: "4px 0 0", fontFamily: JFONT }}>
-            {practiceEntries.length} 次练习 · {mockEntries.length} 次模考
-          </p>
-        </div>
+    <div style={{ minHeight: "100vh", background: C.bg }}>
+      <TopBar title="练习记录" section="练习记录" onExit={onBack} />
+      <PageShell>
+        {!hist ? <SkeletonView /> : (
+          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+            <SurfaceCard style={{ padding: "22px 22px 18px" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16, flexWrap: "wrap" }}>
+                <div>
+                  <h1 style={{ fontSize: 28, fontWeight: 800, color: C.t1, margin: 0, lineHeight: 1.2 }}>练习记录</h1>
+                  <p style={{ fontSize: 13, color: C.t2, margin: "6px 0 0" }}>{practiceEntries.length} 次练习，{mockEntries.length} 次模考，按时间倒序展示。</p>
+                </div>
+                <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
+                  <Btn onClick={onBack} variant="secondary">返回</Btn>
+                  <Btn onClick={handleClearAll} variant="danger">清除全部</Btn>
+                </div>
+              </div>
+            </SurfaceCard>
 
-        {isEmpty ? (
-          <div style={{ background: T.card, border: `1px solid ${T.bdr}`, borderRadius: 14, padding: 48, textAlign: "center", color: T.t2, fontSize: 13 }}>
-            还没有任何记录，开始你的第一次练习吧
-          </div>
-        ) : (
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            {/* Stat Cards */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
-              <StatCard icon="🧩" label="Build" color={T.build} n={bs.length} stat={bsAvgStat} sparkData={sparkData.bs} uid="bs" />
-              <StatCard icon="📧" label="Email" color={T.email} n={em.length} stat={emAvgStat} sparkData={sparkData.email} uid="email" />
-              <StatCard icon="💬" label="Discussion" color={T.disc} n={di.length} stat={diAvgStat} sparkData={sparkData.discussion} uid="disc" />
-            </div>
+            {!entries.length ? (
+              <SurfaceCard style={{ padding: 48, textAlign: "center" }}>
+                <div style={{ fontSize: 16, fontWeight: 700, color: C.t1, marginBottom: 8 }}>还没有练习记录</div>
+                <div style={{ fontSize: 13, color: C.t2 }}>从主页开始一次练习后，这里会自动记录你的成绩、反馈与历史详情。</div>
+              </SurfaceCard>
+            ) : (
+              <>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10 }}>
+                  <StatCard icon={TASK_UI.bs.icon} title="拼句练习" value={String(bs.length)} hint={buildAvg !== null ? `平均正确率 ${Math.round(buildAvg)}%` : "暂无平均值"} color={TASK_UI.bs.color} soft={TASK_UI.bs.soft} />
+                  <StatCard icon={TASK_UI.email.icon} title="邮件写作" value={String(email.length)} hint={emailAvg !== null ? `平均 ${emailAvg.toFixed(1)}/5` : "暂无平均值"} color={TASK_UI.email.color} soft={TASK_UI.email.soft} />
+                  <StatCard icon={TASK_UI.discussion.icon} title="学术讨论" value={String(discussion.length)} hint={discussionAvg !== null ? `平均 ${discussionAvg.toFixed(1)}/5` : "暂无平均值"} color={TASK_UI.discussion.color} soft={TASK_UI.discussion.soft} />
+                </div>
 
-            {/* Mock Exams */}
-            <CollapsibleCard emoji="🎯" title="模考成绩" badge={mockEntries.length || null}>
-              <MockSection mockEntries={mockEntries} />
-            </CollapsibleCard>
+                <SectionCard icon="🎯" title="模考成绩" badge={mockEntries.length || null} open={openSections.mock} onToggle={() => toggleSection("mock")}>
+                  <MockSection mockEntries={mockEntries} />
+                </SectionCard>
 
-            {/* Progress Tracking */}
-            <CollapsibleCard emoji="📈" title="进步追踪">
-              <ProgressSection bs={bs} email={em} discussion={di} />
-            </CollapsibleCard>
+                <SectionCard icon="📈" title="进步追踪" open={openSections.progress} onToggle={() => toggleSection("progress")}>
+                  <ProgressSection bs={bs} email={email} discussion={discussion} />
+                </SectionCard>
 
-            {/* Weakness Analysis */}
-            <CollapsibleCard emoji="🔍" title="薄弱点分析">
-              <WeaknessSection email={em} discussion={di} />
-            </CollapsibleCard>
+                <SectionCard icon="🔍" title="薄弱点分析" open={openSections.weakness} onToggle={() => toggleSection("weakness")}>
+                  <WeaknessSection email={email} discussion={discussion} />
+                </SectionCard>
 
-            {/* Practice Details */}
-            <CollapsibleCard emoji="📋" title="练习详情" badge={practiceEntries.length} defaultOpen={true}>
-              <PracticeSection practiceEntries={practiceEntries} typeAvgs={typeAvgs} onDelete={handleDelete} />
-            </CollapsibleCard>
+                <SectionCard icon="📋" title="练习详情" badge={practiceEntries.length} open={openSections.practice} onToggle={() => toggleSection("practice")}>
+                  <PracticeSection practiceEntries={practiceEntries} typeAvgs={typeAvgs} onDelete={handleDelete} />
+                </SectionCard>
 
-            {/* Footer */}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: 4 }}>
-              <button onClick={onBack}
-                style={{ background: T.card, color: T.accent, border: `1px solid ${T.bdr}`, borderRadius: 8, padding: "8px 18px", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: JFONT }}>
-                ← 返回
-              </button>
-              <button onClick={handleClearAll}
-                style={{ background: "none", color: T.red, border: `1px solid ${T.red}30`, borderRadius: 8, padding: "6px 14px", fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: JFONT }}>
-                清除全部
-              </button>
-            </div>
+                <div style={{ fontSize: 12, color: C.t3, textAlign: "center" }}>共 {totalSessions} 条记录。展开详情可查看作答内容、评分反馈与历史操作入口。</div>
+              </>
+            )}
           </div>
         )}
-      </div>
+      </PageShell>
     </div>
   );
 }

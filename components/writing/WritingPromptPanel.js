@@ -1,6 +1,6 @@
 ﻿"use client";
 import React from "react";
-import { C } from "../shared/ui";
+import { C, SurfaceCard } from "../shared/ui";
 
 export function WritingPromptPanel({ type, pd }) {
   const emailGoals = Array.isArray(pd?.goals) ? pd.goals : [];
@@ -10,8 +10,8 @@ export function WritingPromptPanel({ type, pd }) {
   const professorInitial = professorName.trim() ? professorName.trim().slice(0, 1).toUpperCase() : "P";
 
   return (
-    <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 4, overflow: "hidden" }}>
-      <div style={{ background: "#e8e8e8", padding: "10px 16px", fontSize: 12, fontWeight: 700, color: C.t2, borderBottom: "1px solid " + C.bdr }}>
+    <SurfaceCard style={{ overflow: "hidden" }}>
+      <div style={{ background: C.ltB, padding: "12px 16px", fontSize: 12, fontWeight: 700, color: C.t2, borderBottom: "1px solid " + C.bdrSubtle }}>
         {type === "email" ? "SCENARIO" : "DISCUSSION BOARD"}
       </div>
       {type === "email" ? (
@@ -56,6 +56,6 @@ export function WritingPromptPanel({ type, pd }) {
           ))}
         </div>
       )}
-    </div>
+    </SurfaceCard>
   );
 }
