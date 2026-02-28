@@ -475,9 +475,21 @@ function MockExamDetails({ session }) {
   );
 }
 
-export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, showIcon, compact = false }) {
+export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, showIcon, compact = false, typeAvgs }) {
   const s = entry?.session || {};
   const sourceIndex = entry?.sourceIndex;
+
+  // Score vs. type average
+  let sessionNorm = null;
+  if (s.type === "bs") {
+    const t = Number(s.total || 0), c = Number(s.correct || 0);
+    if (t > 0) sessionNorm = (c / t) * 100;
+  } else if (s.type === "email" || s.type === "discussion") {
+    if (Number.isFinite(s.score)) sessionNorm = s.score;
+  }
+  const typeAvg = typeAvgs?.[s.type] ?? null;
+  const showTrend = sessionNorm !== null && typeAvg !== null;
+  const isAboveAvg = showTrend && sessionNorm > typeAvg;
   const [expandedBsItems, setExpandedBsItems] = useState({});
   const practiceAttempt = Number(s?.details?.practiceAttempt || 1);
   const retryHref = buildRetryHref(s);
@@ -532,7 +544,14 @@ export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, show
               {mockChip("Disc", mockDisc)}
             </>
           )}
-          <span style={{ fontSize: 14, fontWeight: 700, color: getScoreColor(s), whiteSpace: "nowrap" }}>{getScoreLabel(s)}</span>
+          <span style={{ fontSize: 14, fontWeight: 700, color: getScoreColor(s), whiteSpace: "nowrap" }}>
+            {getScoreLabel(s)}
+            {showTrend && (
+              <span style={{ fontSize: 11, marginLeft: 3, color: isAboveAvg ? "#16a34a" : "#9ca3af" }}>
+                {isAboveAvg ? "\u2B06" : "\u2B07"}
+              </span>
+            )}
+          </span>
 
           <button
             onClick={(e) => {
