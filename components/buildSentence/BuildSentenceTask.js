@@ -107,11 +107,11 @@ export function BuildSentenceTask({
         <PageShell narrow>
           <SurfaceCard style={{ background: C.nav, color: "#fff", padding: 24, textAlign: "center", marginBottom: 20 }}>
             <div style={{ fontSize: 48, fontWeight: 800 }}>{ok}/{results.length}</div>
-            <div style={{ fontSize: 14, opacity: 0.7 }}>Correct answers</div>
+            <div style={{ fontSize: 14, opacity: 0.7 }}>答对题数</div>
           </SurfaceCard>
           {te.length > 0 && (
             <SurfaceCard style={{ padding: 20, marginBottom: 16 }}>
-              <div style={{ fontSize: 13, fontWeight: 700, color: C.red, marginBottom: 12 }}>Weak grammar points</div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: C.red, marginBottom: 12 }}>高频薄弱语法点</div>
               {te.map(([g, n], i) => (
                 <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "8px 0", borderBottom: i < te.length - 1 ? "1px solid #eee" : "none" }}>
                   <span>{translateGrammarPoint(g)}</span>
@@ -125,10 +125,10 @@ export function BuildSentenceTask({
           )}
           {results.map((r, i) => (
             <div data-testid={`build-result-${i}`} data-correct={r.isCorrect ? "true" : "false"} key={i} style={{ background: "#fff", border: "1px solid " + (r.isCorrect ? "#c6f6d5" : "#fed7d7"), borderLeft: "4px solid " + (r.isCorrect ? C.green : C.red), borderRadius: 4, padding: 14, marginBottom: 8 }}>
-              <div style={{ fontSize: 12, color: C.t2, marginBottom: 4 }}>Q{i + 1}: {r.q.prompt}</div>
-              <div style={{ fontSize: 14, color: r.isCorrect ? C.green : C.red }}>{r.isCorrect ? "Correct" : "Incorrect"}</div>
-              <div data-testid={`build-your-sentence-${i}`} style={{ fontSize: 13, color: C.t1, marginTop: 4 }}><b>Your answer:</b> {r.userAnswer}</div>
-              <div data-testid={`build-correct-answer-${i}`} style={{ fontSize: 13, color: C.blue, marginTop: 4 }}><b>Correct answer:</b> {r.correctAnswer}</div>
+              <div style={{ fontSize: 12, color: C.t2, marginBottom: 4 }}>第 {i + 1} 题：{r.q.prompt}</div>
+              <div style={{ fontSize: 14, color: r.isCorrect ? C.green : C.red }}>{r.isCorrect ? "答对" : "答错"}</div>
+              <div data-testid={`build-your-sentence-${i}`} style={{ fontSize: 13, color: C.t1, marginTop: 4 }}><b>你的答案：</b>{r.userAnswer}</div>
+              <div data-testid={`build-correct-answer-${i}`} style={{ fontSize: 13, color: C.blue, marginTop: 4 }}><b>正确答案：</b>{r.correctAnswer}</div>
               {(r.q.grammar_points || []).length > 0 && (
                 <div style={{ fontSize: 12, color: C.t2, marginTop: 6 }}>
                   <b>语法点：</b>{r.q.grammar_points.map(translateGrammarPoint).join("、")}
@@ -137,7 +137,7 @@ export function BuildSentenceTask({
             </div>
           ))}
           <div style={{ display: "flex", gap: 12, marginTop: 20 }}>
-            <Btn onClick={onExit} variant="secondary">{embedded ? "Back" : "Back to Practice"}</Btn>
+            <Btn onClick={onExit} variant="secondary">{embedded ? "返回" : "返回练习"}</Btn>
           </div>
         </PageShell>
       </div>
@@ -152,12 +152,12 @@ export function BuildSentenceTask({
         <PageShell narrow>
           <SurfaceCard style={{ padding: 28 }}>
             <div style={{ fontSize: 16, fontWeight: 700, color: C.red, marginBottom: 8 }}>
-              {exhausted ? "题目已答完" : "Question bank blocked by quality gate"}
+              {exhausted ? "题目已答完" : "题库暂时不可用"}
             </div>
             <div style={{ fontSize: 14, color: C.t2, marginBottom: 16 }}>
-              {exhausted ? "当前账号 Build a Sentence 题库已全部答完。" : selectionError}
+              {exhausted ? "当前账号拼句练习题库已全部答完。" : selectionError}
             </div>
-            <Btn onClick={onExit} variant="secondary">{embedded ? "Back" : "Back to Practice"}</Btn>
+            <Btn onClick={onExit} variant="secondary">{embedded ? "返回" : "返回练习"}</Btn>
           </SurfaceCard>
         </PageShell>
       </div>
@@ -170,14 +170,14 @@ export function BuildSentenceTask({
         {!embedded && <TopBar title="拼句练习" section="写作练习｜任务 1" onExit={onExit} />}
         <PageShell narrow>
           <SurfaceCard style={{ padding: "32px 40px" }}>
-            <h2 style={{ margin: "0 0 16px", fontSize: 20, color: C.nav }}>Task 1: Build a Sentence</h2>
+            <h2 style={{ margin: "0 0 16px", fontSize: 20, color: C.nav }}>任务 1：拼句练习</h2>
             <div style={{ fontSize: 14, color: C.t1, lineHeight: 1.8 }}>
-              <p>You will use word chunks to build grammatically correct responses.</p>
-              <p>You will have {formatLongDuration(timeLimitSeconds)} to complete 10 questions.</p>
-              {practiceMode === PRACTICE_MODE.CHALLENGE && <p><b>Mode:</b> Challenge (compressed timing)</p>}
-              <p>The timer will start when you click <b>Start</b>. When time runs out, your answers will be submitted automatically.</p>
+              <p>你需要使用给定词块拼出语法正确的句子。</p>
+              <p>你将有 {formatLongDuration(timeLimitSeconds)} 完成 10 道题。</p>
+              {practiceMode === PRACTICE_MODE.CHALLENGE && <p><b>模式：</b>挑战模式（限时更紧）</p>}
+              <p>点击<b>开始</b>后计时启动。时间结束后，系统会自动提交当前答案。</p>
             </div>
-            <div style={{ marginTop: 24, textAlign: "center" }}><Btn data-testid="build-start" onClick={startTimer}>Start</Btn></div>
+            <div style={{ marginTop: 24, textAlign: "center" }}><Btn data-testid="build-start" onClick={startTimer}>开始</Btn></div>
           </SurfaceCard>
         </PageShell>
       </div>
@@ -221,13 +221,13 @@ export function BuildSentenceTask({
       {!embedded && <TopBar title="拼句练习" section="写作练习｜任务 1" timeLeft={tl} isRunning={run} qInfo={idx + 1 + " / " + qs.length} onExit={onExit} />}
       <PageShell narrow>
         <InfoStrip style={{ marginBottom: 20 }}>
-          <b>Directions:</b> Use the word chunks below to build a grammatically correct sentence. One chunk may be a distractor.
+          <b>作答说明：</b>使用下方词块拼出语法正确的句子，其中可能有一个干扰词块。
         </InfoStrip>
 
         <SurfaceCard style={{ padding: 20, marginBottom: 20 }}>
-          <div style={{ fontSize: 11, color: C.t2, letterSpacing: 1, marginBottom: 8 }}>PROMPT</div>
+          <div style={{ fontSize: 11, color: C.t2, letterSpacing: 1, marginBottom: 8 }}>题目</div>
           <div style={{ fontSize: 15, color: C.t1, marginBottom: 14, lineHeight: 1.5 }}>{q.prompt}</div>
-          <div style={{ fontSize: 11, color: C.t2, letterSpacing: 1, marginBottom: 8 }}>RESPONSE</div>
+          <div style={{ fontSize: 11, color: C.t2, letterSpacing: 1, marginBottom: 8 }}>作答区</div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8, minHeight: 48, alignItems: "center", lineHeight: 1.6 }}>
             {Array.from({ length: slots.length + 1 }, (_, i) => i).map((i) => (
               <React.Fragment key={`resp-${i}`}>
@@ -287,8 +287,8 @@ export function BuildSentenceTask({
             minHeight: 48,
           }}
         >
-          <div style={{ fontSize: 11, color: C.t2, width: "100%", marginBottom: 4, letterSpacing: 1 }}>CHUNK BANK</div>
-          {bank.length === 0 && <span style={{ fontSize: 13, color: "#aaa", fontStyle: "italic" }}>All chunks are placed. Click a filled slot to return one.</span>}
+          <div style={{ fontSize: 11, color: C.t2, width: "100%", marginBottom: 4, letterSpacing: 1 }}>词块区</div>
+          {bank.length === 0 && <span style={{ fontSize: 13, color: "#aaa", fontStyle: "italic" }}>所有词块都已放入句子，可点击已填槽位退回词块。</span>}
           {bank.map((chunk) => (
             <button
               data-testid={`bank-chunk-${chunk.id}`}
@@ -316,9 +316,9 @@ export function BuildSentenceTask({
         </div>
 
         <div style={{ display: "flex", gap: 12 }}>
-          <Btn onClick={resetQ} variant="secondary">Reset</Btn>
+          <Btn onClick={resetQ} variant="secondary">重置</Btn>
           <Btn data-testid="build-submit" onClick={handleSubmitClick} disabled={!allFilled}>
-            {idx < qs.length - 1 ? "Next Question" : "Finish and Review"}
+            {idx < qs.length - 1 ? "下一题" : "完成并查看结果"}
           </Btn>
         </div>
       </PageShell>

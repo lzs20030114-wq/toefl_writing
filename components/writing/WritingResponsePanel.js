@@ -54,10 +54,10 @@ function ExamToolbar({ taRef, onTextChange, disabled, historyRef, prevTextRef })
 
   return (
     <div style={{ background: "#f8fafc", borderBottom: "1px solid " + C.bdrSubtle, padding: "8px 12px", display: "flex", gap: 6, alignItems: "center" }}>
-      <button style={btnStyle} disabled={disabled} onMouseDown={(e) => e.preventDefault()} onClick={handleCopy}>Copy</button>
-      <button style={btnStyle} disabled={disabled} onMouseDown={(e) => e.preventDefault()} onClick={handlePaste}>Paste</button>
-      <button style={btnStyle} disabled={disabled} onMouseDown={(e) => e.preventDefault()} onClick={handleUndo}>Undo</button>
-      <span style={{ marginLeft: 6, fontSize: 11, color: "#94a3b8" }}>English input only</span>
+      <button style={btnStyle} disabled={disabled} onMouseDown={(e) => e.preventDefault()} onClick={handleCopy}>复制</button>
+      <button style={btnStyle} disabled={disabled} onMouseDown={(e) => e.preventDefault()} onClick={handlePaste}>粘贴</button>
+      <button style={btnStyle} disabled={disabled} onMouseDown={(e) => e.preventDefault()} onClick={handleUndo}>撤销</button>
+      <span style={{ marginLeft: 6, fontSize: 11, color: "#94a3b8" }}>仅保留英文输入</span>
     </div>
   );
 }
@@ -97,15 +97,15 @@ export function WritingResponsePanel({
     <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
       {phase === "ready" ? (
         <SurfaceCard style={{ padding: 40, textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-          <div style={{ fontSize: 14, color: C.t2 }}>Read the prompt, then click start to begin writing.</div>
-          <Btn data-testid="writing-start" onClick={onStart}>Start Writing</Btn>
+          <div style={{ fontSize: 14, color: C.t2 }}>先阅读题目，再点击开始进入写作。</div>
+          <Btn data-testid="writing-start" onClick={onStart}>开始写作</Btn>
         </SurfaceCard>
       ) : (
         <>
           <SurfaceCard style={{ overflow: "hidden", flex: 1, display: "flex", flexDirection: "column" }}>
             <div style={{ background: C.ltB, padding: "12px 16px", fontSize: 12, fontWeight: 700, color: C.t2, borderBottom: "1px solid " + C.bdrSubtle, display: "flex", justifyContent: "space-between" }}>
-              <span>Your Response</span>
-              <span style={{ color: w < minW ? C.orange : C.green }}>{w} words {w < minW ? `(need ${minW - w} more)` : ""}</span>
+              <span>作答内容</span>
+              <span style={{ color: w < minW ? C.orange : C.green }}>{w} 词{w < minW ? `（还差 ${minW - w} 词）` : ""}</span>
             </div>
 
             <ExamToolbar taRef={taRef} onTextChange={onTextChange} disabled={!isEditable} historyRef={historyRef} prevTextRef={prevTextRef} />
@@ -134,27 +134,27 @@ export function WritingResponsePanel({
                 }
               }}
               disabled={!isEditable}
-              placeholder={type === "email" ? "Dear " + pd.to + ",\n\nI am writing to..." : "I think this is an interesting question..."}
+              placeholder={type === "email" ? "Dear " + pd.to + ",\n\n" : ""}
               style={{ flex: 1, minHeight: type === "email" ? 280 : 320, border: "none", padding: 16, fontSize: 14, fontFamily: FONT, lineHeight: 1.7, color: C.t1, resize: "none", outline: "none", background: phase === "done" ? "#fafafa" : "#fff" }}
             />
           </SurfaceCard>
 
           {phase === "writing" ? (
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <Btn data-testid="writing-submit" onClick={onSubmit} variant="success">Submit for Scoring</Btn>
-              <span style={{ fontSize: 11, color: C.t2 }}>Ctrl+Enter</span>
+              <Btn data-testid="writing-submit" onClick={onSubmit} variant="success">提交评分</Btn>
+              <span style={{ fontSize: 11, color: C.t2 }}>快捷键 Ctrl+Enter</span>
             </div>
           ) : null}
         </>
       )}
 
-      {phase === "scoring" ? <SurfaceCard style={{ padding: 32, textAlign: "center", color: C.t2 }}>AI is scoring your response. Please wait...</SurfaceCard> : null}
+      {phase === "scoring" ? <SurfaceCard style={{ padding: 32, textAlign: "center", color: C.t2 }}>AI 正在评分，请稍候...</SurfaceCard> : null}
 
       {phase === "done" && deferScoring && !fb && requestState !== "error" ? (
         <div style={{ marginTop: 20 }}>
           <SurfaceCard style={{ padding: 24 }}>
-            <div style={{ fontSize: 15, fontWeight: 700, color: C.green, marginBottom: 6 }}>Response submitted</div>
-            <div style={{ fontSize: 13, color: C.t2 }}>This task will be scored later and shown in the final mock exam summary.</div>
+            <div style={{ fontSize: 15, fontWeight: 700, color: C.green, marginBottom: 6 }}>已提交作答</div>
+            <div style={{ fontSize: 13, color: C.t2 }}>该任务会在稍后评分，并显示在模考总结果中。</div>
           </SurfaceCard>
         </div>
       ) : null}
@@ -162,8 +162,8 @@ export function WritingResponsePanel({
       {phase === "done" && deferScoring && !fb && requestState === "error" ? (
         <div style={{ marginTop: 20 }}>
           <SurfaceCard style={{ padding: 24 }}>
-            <div style={{ fontSize: 15, fontWeight: 700, color: C.red, marginBottom: 6 }}>Submission failed</div>
-            <div style={{ fontSize: 13, color: C.t2, marginBottom: 10 }}>Deferred scoring data was not saved successfully. Please retry this prompt.</div>
+            <div style={{ fontSize: 15, fontWeight: 700, color: C.red, marginBottom: 6 }}>提交失败</div>
+            <div style={{ fontSize: 13, color: C.t2, marginBottom: 10 }}>延迟评分数据未成功保存，请重新完成这道题。</div>
             {!!scoreError ? <div style={{ fontSize: 12, color: C.red }}>{scoreError}</div> : null}
           </SurfaceCard>
         </div>
@@ -173,12 +173,12 @@ export function WritingResponsePanel({
         <div style={{ marginTop: 20 }}>
           <SurfaceCard style={{ padding: 32, textAlign: "center" }}>
             <div style={{ fontSize: 40, marginBottom: 12 }}>!</div>
-            <div style={{ fontSize: 16, fontWeight: 700, color: C.red, marginBottom: 8 }}>Scoring failed</div>
-            <div style={{ fontSize: 14, color: C.t2, marginBottom: 20 }}>{scoreError || "Scoring is temporarily unavailable for this response."}</div>
+            <div style={{ fontSize: 16, fontWeight: 700, color: C.red, marginBottom: 8 }}>评分失败</div>
+            <div style={{ fontSize: 14, color: C.t2, marginBottom: 20 }}>{scoreError || "当前暂时无法完成评分，请稍后重试。"}</div>
             {requestState === "error" && !!scoreError ? <div data-testid="score-error-reason" style={{ fontSize: 12, color: C.red, marginBottom: 12 }}>{scoreError}</div> : null}
             <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
-              <Btn onClick={onRetry}>Retry Scoring</Btn>
-              <Btn onClick={onExit} variant="secondary">{embedded ? "Back" : "Back to Menu"}</Btn>
+              <Btn onClick={onRetry}>重新评分</Btn>
+              <Btn onClick={onExit} variant="secondary">{embedded ? "返回" : "返回菜单"}</Btn>
             </div>
           </SurfaceCard>
         </div>

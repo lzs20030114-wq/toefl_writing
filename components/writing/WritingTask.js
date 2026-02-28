@@ -352,13 +352,13 @@ export function WritingTask({
   useEffect(() => () => clearInterval(tr.current), []);
 
   const w = wc(text);
-  const introTitle = type === "email" ? "Task 2: Write an Email" : "Task 3: Academic Discussion";
+  const introTitle = type === "email" ? "任务 2：邮件写作" : "任务 3：学术讨论写作";
   const introDescLine1 = type === "email"
-    ? "You will read some information and use the information to write an email."
-    : "You will read a question and responses from other students.";
+    ? "你需要阅读题目信息，并据此完成一封邮件。"
+    : "你需要阅读题目和其他学生的回应，再写出自己的观点。";
   const introDescLine2 = type === "email"
-    ? "You will have 7 minutes to write the email."
-    : "You will have 10 minutes to write your response.";
+    ? "你将有 7 分钟完成邮件写作。"
+    : "你将有 10 分钟完成作答。";
 
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
@@ -388,7 +388,7 @@ export function WritingTask({
               <div>{introDescLine2}</div>
             </div>
             <div style={{ fontSize: 13, color: C.t2, lineHeight: 1.7 }}>
-              {practiceMode === PRACTICE_MODE.CHALLENGE && <div>Mode: <b>Challenge</b> (compressed timing)</div>}
+              {practiceMode === PRACTICE_MODE.CHALLENGE && <div>模式：<b>挑战模式</b>（限时更紧）</div>}
             </div>
             <div style={{ marginTop: 18 }}>
               <Btn
@@ -398,15 +398,15 @@ export function WritingTask({
                   start();
                 }}
               >
-                Continue and start timer
+                继续并开始计时
               </Btn>
             </div>
           </SurfaceCard>
         ) : (
           <>
         <InfoStrip style={{ marginBottom: 20 }}>
-          <b>Directions:</b> {type === "email" ? `Write an email addressing all 3 goals. ${formatMinutesLabel(limit)}. 80-120 words.` : `Read the discussion and write a response. ${formatMinutesLabel(limit)}. 100+ words.`}
-          {practiceMode === PRACTICE_MODE.CHALLENGE && <span> Challenge mode: compressed timing.</span>}
+          <b>作答说明：</b>{type === "email" ? `请完成一封覆盖 3 个目标点的邮件。${formatMinutesLabel(limit)}。建议 80-120 词。` : `阅读讨论内容并写出你的回应。${formatMinutesLabel(limit)}。建议不少于 100 词。`}
+          {practiceMode === PRACTICE_MODE.CHALLENGE && <span> 当前为挑战模式，限时更紧。</span>}
         </InfoStrip>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
           <WritingPromptPanel type={type} pd={pd} />
