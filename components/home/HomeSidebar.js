@@ -58,8 +58,7 @@ export function HomeSidebar({
 
       <div style={{ ...sideCard({}), ...fadeIn(180) }}>
         <button onClick={() => setFbOpen((v) => !v)} style={{ width: "100%", display: "flex", alignItems: "center", gap: 8, padding: "14px 18px", background: "transparent", border: "none", cursor: "pointer", fontFamily: HOME_FONT, textAlign: "left" }}>
-          <span style={{ fontSize: 14 }}>反馈</span>
-          <span style={{ fontSize: 13, fontWeight: 700, color: isChallenge ? CH.t1 : T.t1, flex: 1 }}>产品反馈</span>
+          <span style={{ fontSize: 13, fontWeight: 700, color: isChallenge ? CH.t1 : T.t1, flex: 1 }}>反馈窗口</span>
           <span style={{ fontSize: 11, color: isChallenge ? CH.t2 : T.t3, display: "inline-block", transform: fbOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.25s ease" }}>v</span>
         </button>
         <div style={{ maxHeight: fbOpen ? 260 : 0, overflow: "hidden", transition: "max-height 0.35s cubic-bezier(0.25,1,0.5,1)" }}>

@@ -153,7 +153,7 @@ export default function HomePageClient({ userCode, onLogout }) {
             <span style={{ fontWeight: 700, fontSize: 15, position: "relative", zIndex: 1 }}>TOEFL iBT</span>
             <span style={{ opacity: 0.5, margin: "0 12px", position: "relative", zIndex: 1 }}>|</span>
             <span style={{ fontSize: 13, position: "relative", zIndex: 1 }}>写作部分 2026</span>
-            <div style={{ marginLeft: "auto", fontSize: 11, fontWeight: 700, color: CH.accent, letterSpacing: 1, textTransform: "uppercase", position: "relative", zIndex: 1 }}>挑战</div>
+            <div style={{ marginLeft: "auto", fontSize: 11, fontWeight: 700, color: CH.accent, letterSpacing: 1, textTransform: "uppercase", position: "relative", zIndex: 1 }}>Challenge</div>
             <div style={{ position: "absolute", inset: 0, pointerEvents: "none", background: "repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,0.03) 2px,rgba(255,255,255,0.03) 4px)", zIndex: 0 }} />
             <div style={{ position: "absolute", top: 0, bottom: 0, width: "30%", background: "linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent)", animation: "ch-sweep 4s ease-in-out infinite", pointerEvents: "none", zIndex: 0 }} />
           </div>
@@ -173,7 +173,7 @@ export default function HomePageClient({ userCode, onLogout }) {
         {isChallenge ? (
           <div style={{ overflow: "hidden", background: "rgba(255,20,20,0.06)", borderBottom: "1px solid rgba(255,30,30,0.25)", padding: "5px 0" }}>
             <div style={{ display: "flex", whiteSpace: "nowrap", animation: "ch-ticker 25s linear infinite", fontSize: 11, fontWeight: 700, color: CH.accent, letterSpacing: 2, textTransform: "uppercase", fontFamily: "Consolas,monospace" }}>
-              <span>挑战模式已开启 / 限时更紧 / 在压力下证明你的水平 / 不留余地 / 挑战模式已开启 / 限时更紧 / 在压力下证明你的水平 / 不留余地 / </span>
+              <span>Challenge mode active / Reduced time limits / Prove your skills under pressure / No mercy / Challenge mode active / Reduced time limits / Prove your skills under pressure / No mercy / </span>
             </div>
           </div>
         ) : null}
@@ -185,7 +185,7 @@ export default function HomePageClient({ userCode, onLogout }) {
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ marginBottom: 16, ...fadeIn(50) }}>
                 <h1 style={{ margin: "0 0 10px", fontSize: 30, fontWeight: 800, color: isChallenge ? CH.t1 : T.t1, letterSpacing: -0.5, lineHeight: 1.2 }}>
-                  {isChallenge ? <>TOEFL iBT 写作 <span style={{ color: CH.accent }}>挑战模式</span></> : "TOEFL iBT 写作练习"}
+                  {isChallenge ? <>TOEFL iBT 写作 <span style={{ color: CH.accent }}>Challenge Mode</span></> : "TOEFL iBT 写作练习"}
                 </h1>
                 <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
                   <p style={{ margin: 0, fontSize: 13, color: isChallenge ? CH.accent : T.t2, fontWeight: isChallenge ? 600 : 400 }}>
@@ -193,8 +193,8 @@ export default function HomePageClient({ userCode, onLogout }) {
                   </p>
                   <div style={{ display: "inline-flex", gap: 4, flexShrink: 0, background: isChallenge ? "rgba(255,255,255,0.05)" : T.card, border: `1px solid ${isChallenge ? "rgba(255,30,30,0.3)" : T.bdr}`, borderRadius: 999, padding: 4, boxShadow: T.shadow }}>
                     {[
-                      { value: PRACTICE_MODE.STANDARD, label: "标准" },
-                      { value: PRACTICE_MODE.CHALLENGE, label: "挑战" },
+                      { value: PRACTICE_MODE.STANDARD, label: "Standard" },
+                      { value: PRACTICE_MODE.CHALLENGE, label: "Challenge" },
                     ].map((option) => {
                       const selected = mode === option.value;
                       const challengeOption = option.value === PRACTICE_MODE.CHALLENGE;
