@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import LoginGate from "../components/LoginGate";
 import { C, FONT } from "../components/shared/ui";
+import { isIapEnabledClient } from "../lib/featureFlags";
 import { loadHist, SESSION_STORE_EVENTS, setCurrentUser } from "../lib/sessionStore";
 import { formatMinutesLabel, getTaskTimeSeconds, normalizePracticeMode, PRACTICE_MODE, STANDARD_TIME_SECONDS } from "../lib/practiceMode";
 
@@ -84,6 +85,7 @@ const PRACTICE_TASKS = [
   { k: "academic-writing", modeKey: "discussion", n: "Task 3", t: "Academic Discussion", d: "Respond to an academic discussion prompt.", it: "100+ words" },
 ];
 const MOCK_TASK = { k: "mock-exam", n: "Full Writing Section", t: "Mock Exam Mode", d: "Simulated exam environment", it: "Task 1 + Task 2 + Task 3" };
+const IAP_ENABLED = isIapEnabledClient();
 
 /* ───── Helpers ───── */
 function timeBadge(time, bg = "#e8f0fe", color = C.nav) {
@@ -474,6 +476,42 @@ function HomePage({ userCode, onLogout }) {
           </div>
 
           {/* ── Progress card ── */}
+          {IAP_ENABLED && (
+            <Link
+              href="/iap"
+              onMouseEnter={() => setHoverKey("iap")}
+              onMouseLeave={() => setHoverKey("")}
+              style={{
+                ...cardBase,
+                marginTop: 8,
+                borderColor: hoverKey === "iap"
+                  ? (isChallenge ? "rgba(251,191,36,0.45)" : "#f59e0b")
+                  : (isChallenge ? CH.cardBorder : C.bdr),
+                boxShadow: hoverKey === "iap"
+                  ? (isChallenge ? "0 4px 14px rgba(251,191,36,0.12)" : "0 4px 14px rgba(245,158,11,0.15)")
+                  : "none",
+                transform: hoverKey === "iap" ? "translateY(-1px)" : "none",
+              }}
+            >
+              <div style={{
+                width: 90, minWidth: 90, display: "flex", alignItems: "center", justifyContent: "center",
+                background: isChallenge ? "rgba(120,53,15,0.25)" : "#fef3c7",
+                borderRight: "1px solid " + (isChallenge ? CH.cardBorder : C.bdr),
+                padding: "8px 4px",
+              }}>
+                <div style={{ fontSize: 16, lineHeight: 1, fontWeight: 800, color: isChallenge ? "#fbbf24" : "#92400e", whiteSpace: "nowrap" }}>IAP</div>
+              </div>
+              <div style={{ padding: "14px 16px", flex: 1, minWidth: 0, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 4, color: isChallenge ? CH.t1 : C.t1, lineHeight: 1.2 }}>In-App Purchase</div>
+                <div style={{ fontSize: 13, color: isChallenge ? CH.t2 : C.t2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>Private staging workspace for payment flow.</div>
+              </div>
+              <div style={{ padding: "14px 12px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "flex-end", borderLeft: "1px solid " + (isChallenge ? CH.cardBorder : C.bdr), minWidth: 108 }}>
+                <div style={{ fontSize: 12, color: isChallenge ? "#fbbf24" : "#92400e", fontWeight: 700 }}>Flag Protected</div>
+                <div style={{ color: isChallenge ? "#fbbf24" : "#92400e", fontSize: 18, lineHeight: 1, marginTop: 4 }}>&gt;</div>
+              </div>
+            </Link>
+          )}
+
           <Link
             href="/progress"
             onMouseEnter={() => setHoverKey("progress")}
