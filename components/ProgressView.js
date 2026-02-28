@@ -250,7 +250,8 @@ function MockSection({ mockEntries }) {
               </div>
               {open && (
                 <div style={{ padding: "0 10px 12px", animation: "slideDown 0.2s ease" }}>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
+                  {/* Score overview */}
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginBottom: 10 }}>
                     {[
                       { emoji: "🧩", label: "Build", color: T.build, task: bsT },
                       { emoji: "📧", label: "Email", color: T.email, task: emT },
@@ -265,6 +266,15 @@ function MockSection({ mockEntries }) {
                       </div>
                     ))}
                   </div>
+                  {/* Full details: tabbed Build/Email/Discussion with AI feedback */}
+                  <HistoryRow
+                    entry={entry}
+                    isExpanded={true}
+                    isLast={true}
+                    onToggle={() => {}}
+                    onDelete={() => {}}
+                    detailOnly={true}
+                  />
                 </div>
               )}
             </div>
