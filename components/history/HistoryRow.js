@@ -159,7 +159,7 @@ async function copyText(text) {
 }
 
 function Chip({ children, color = C.blue, bg = C.softBlue }) {
-  return <span style={{ display: "inline-flex", alignItems: "center", padding: "2px 7px", borderRadius: 999, fontSize: 10.5, fontWeight: 700, color, background: bg, whiteSpace: "nowrap" }}>{children}</span>;
+  return <span style={{ display: "inline-flex", alignItems: "center", padding: "1px 6px", borderRadius: 999, fontSize: 10, fontWeight: 700, color, background: bg, whiteSpace: "nowrap" }}>{children}</span>;
 }
 
 function OutlineButton({ children, onClick, active = false }) {
@@ -171,14 +171,37 @@ function OutlineButton({ children, onClick, active = false }) {
         background: active ? C.softBlue : "#fff",
         color: active ? C.blue : C.t2,
         borderRadius: 999,
-        fontSize: 11,
+        fontSize: 10.5,
         fontWeight: 700,
-        padding: "5px 10px",
+        padding: "4px 9px",
         cursor: "pointer",
       }}
     >
       {children}
     </button>
+  );
+}
+
+function Chevron({ open, size = 12 }) {
+  return (
+    <span
+      aria-hidden="true"
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: size + 6,
+        height: size + 6,
+        color: C.t3,
+        transform: open ? "rotate(180deg)" : "rotate(0deg)",
+        transition: "transform 180ms ease",
+        flexShrink: 0,
+      }}
+    >
+      <svg viewBox="0 0 12 12" width={size} height={size} fill="none">
+        <path d="M2.5 4.25 6 7.75l3.5-3.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </span>
   );
 }
 
@@ -273,7 +296,10 @@ function MockExamDetails({ session }) {
                   <Chip color={statusColor} bg={detail?.isCorrect ? "#dcfce7" : "#fee2e2"}>{detail?.isCorrect ? "答对" : "答错"}</Chip>
                   <div style={{ fontSize: 11.5, color: C.t1 }}>{truncate(detail?.userAnswer, 40)}</div>
                   <div style={{ fontSize: 11.5, color: C.t2 }}>{truncate(detail?.correctAnswer, 40)}</div>
-                  <OutlineButton onClick={() => setExpandedBsRows((prev) => ({ ...prev, [rowKey]: !open }))}>{open ? "收起" : "展开"}</OutlineButton>
+                  <button onClick={() => setExpandedBsRows((prev) => ({ ...prev, [rowKey]: !open }))} aria-expanded={open} style={{ display: "inline-flex", alignItems: "center", gap: 4, border: "1px solid " + C.bdr, background: "#fff", color: C.t2, borderRadius: 999, fontSize: 11, fontWeight: 700, padding: "4px 8px", cursor: "pointer" }}>
+                    <span>{open ? "收起" : "展开"}</span>
+                    <Chevron open={open} size={10} />
+                  </button>
                 </div>
                 {open ? (
                   <div style={{ padding: "0 12px 12px", display: "flex", flexDirection: "column", gap: 8 }}>
@@ -341,16 +367,16 @@ function MockExamDetails({ session }) {
   ];
 
   return (
-    <SurfaceCard style={{ background: "#f9fafb", padding: 11, marginTop: 8, boxShadow: "none" }}>
-      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 10 }}>
-        <Chip>段位：{Number.isFinite(session?.band) ? session.band.toFixed(1) : "--"}</Chip>
+    <SurfaceCard style={{ background: "#f9fafb", padding: 10, marginTop: 7, boxShadow: "none" }}>
+      <div style={{ display: "flex", gap: 7, flexWrap: "wrap", marginBottom: 8 }}>
+        <Chip>{Number.isFinite(session?.band) ? session.band.toFixed(1) : "--"}</Chip>
         <Chip>换算分：{session?.scaledScore ?? "--"}/30</Chip>
         <Chip>CEFR：{session?.cefr || "--"}</Chip>
         {taskChip(MOCK_TASK_IDS.BUILD, "拼句")}
         {taskChip(MOCK_TASK_IDS.EMAIL, "邮件")}
         {taskChip(MOCK_TASK_IDS.DISC, "讨论")}
       </div>
-      <div style={{ display: "flex", gap: 8, marginBottom: 10, flexWrap: "wrap" }}>
+      <div style={{ display: "flex", gap: 7, marginBottom: 8, flexWrap: "wrap" }}>
         {mockTabs.map((tab) => <OutlineButton key={tab.id} active={activeTab === tab.id} onClick={() => setActiveTab(tab.id)}>{tab.label}</OutlineButton>)}
       </div>
       {activeTab === MOCK_TASK_IDS.BUILD ? renderBs() : null}
@@ -389,13 +415,13 @@ export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, show
   return (
     <div>
       {!detailOnly ? (
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: compact ? "8px 0" : "10px 0", borderBottom: isLast ? "none" : "1px solid #eef2f7", gap: 10, flexWrap: "wrap" }}>
-          <button onClick={() => onToggle?.()} style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0, flex: 1, border: "none", background: "transparent", padding: 0, cursor: "pointer", textAlign: "left" }}>
-            <span style={{ fontSize: 11, color: C.t2, userSelect: "none", flexShrink: 0 }}>{isExpanded ? "▼" : "▶"}</span>
-            <span style={{ fontSize: 12, fontWeight: 700, whiteSpace: "nowrap" }}>{showIcon ? `${typeIcon(session.type)} ` : ""}{getTypeLabel(session.type)}</span>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: compact ? "7px 0" : "8px 0", borderBottom: isLast ? "none" : "1px solid #eef2f7", gap: 8, flexWrap: "wrap" }}>
+          <button onClick={() => onToggle?.()} style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0, flex: 1, border: "none", background: "transparent", padding: 0, cursor: "pointer", textAlign: "left" }}>
+            <Chevron open={isExpanded} size={10} />
+            <span style={{ fontSize: 11, fontWeight: 700, whiteSpace: "nowrap" }}>{showIcon ? `${typeIcon(session.type)} ` : ""}{getTypeLabel(session.type)}</span>
             {(session.type === "email" || session.type === "discussion") && practiceAttempt > 1 ? <Chip color="#0f766e" bg="#ccfbf1">第 {practiceAttempt} 次练习</Chip> : null}
-            {session.type === "mock" && Number.isFinite(session?.band) ? <Chip>段位 {session.band.toFixed(1)}</Chip> : null}
-            <span style={{ fontSize: 11, color: C.t2, whiteSpace: "nowrap" }}>{fmtDate(session.date)}</span>
+            {session.type === "mock" && Number.isFinite(session?.band) ? <Chip>{session.band.toFixed(1)}</Chip> : null}
+            <span style={{ fontSize: 10.5, color: C.t2, whiteSpace: "nowrap" }}>{fmtDate(session.date)}</span>
           </button>
 
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", justifyContent: "flex-end" }}>
@@ -408,40 +434,43 @@ export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, show
                 {mockChip("讨论", mockDisc)}
               </>
             ) : null}
-            <span style={{ fontSize: 13, fontWeight: 700, color: getScoreColor(session), whiteSpace: "nowrap" }}>
+            <span style={{ fontSize: 12, fontWeight: 700, color: getScoreColor(session), whiteSpace: "nowrap" }}>
               {getScoreLabel(session)}
-              {showTrend ? <span style={{ fontSize: 11, marginLeft: 3, color: isAboveAvg ? "#16a34a" : "#9ca3af" }}>{isAboveAvg ? "↑" : "↓"}</span> : null}
+              {showTrend ? <span style={{ fontSize: 10.5, marginLeft: 3, color: isAboveAvg ? "#16a34a" : "#9ca3af" }}>{isAboveAvg ? "↑" : "↓"}</span> : null}
             </span>
-            <OutlineButton onClick={() => onToggle?.()}>{isExpanded ? "收起详情" : "查看详情"}</OutlineButton>
+            <button onClick={() => onToggle?.()} aria-expanded={isExpanded} style={{ display: "inline-flex", alignItems: "center", gap: 4, border: "1px solid " + C.bdr, background: "#fff", color: C.t2, borderRadius: 999, fontSize: 10.5, fontWeight: 700, padding: "4px 9px", cursor: "pointer" }}>
+              <span>{isExpanded ? "收起详情" : "查看详情"}</span>
+              <Chevron open={isExpanded} size={10} />
+            </button>
             <button onClick={() => onDelete?.(sourceIndex)} title="删除记录" style={{ background: "none", border: "none", color: C.red, cursor: "pointer", fontSize: 15, padding: "2px 6px", lineHeight: 1, fontWeight: 700, opacity: 0.75 }}>×</button>
           </div>
         </div>
       ) : null}
 
       {isExpanded && session.type === "bs" && session.details && Array.isArray(session.details) ? (
-        <SurfaceCard style={{ background: "#f9fafb", padding: 14, margin: "6px 0 8px", boxShadow: "none" }}>
-          <div style={{ fontSize: 12, color: C.t2, marginBottom: 10 }}>答对 {session.correct}/{session.total}</div>
+        <SurfaceCard style={{ background: "#f9fafb", padding: 12, margin: "5px 0 7px", boxShadow: "none" }}>
+          <div style={{ fontSize: 11, color: C.t2, marginBottom: 8 }}>答对 {session.correct}/{session.total}</div>
           {session.details.map((detail, index) => {
             const itemOpen = !!expandedBsItems[index];
             const statusColor = detail.isCorrect ? C.green : C.red;
             return (
               <div key={index} style={{ borderBottom: index < session.details.length - 1 ? "1px solid #e5e7eb" : "none" }}>
-                <button onClick={() => setExpandedBsItems((prev) => ({ ...prev, [index]: !prev[index] }))} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 0", cursor: "pointer", width: "100%", border: "none", background: "transparent", textAlign: "left" }}>
+                <button onClick={() => setExpandedBsItems((prev) => ({ ...prev, [index]: !prev[index] }))} style={{ display: "flex", alignItems: "center", gap: 8, padding: "7px 0", cursor: "pointer", width: "100%", border: "none", background: "transparent", textAlign: "left" }}>
                   <span style={{ color: statusColor, fontWeight: 700, fontSize: 15, flexShrink: 0, width: 18, textAlign: "center" }}>{detail.isCorrect ? "✓" : "!"}</span>
-                  <span style={{ fontSize: 13, fontWeight: 600, color: C.t1, flexShrink: 0 }}>第 {index + 1} 题</span>
-                  <span style={{ fontSize: 12, color: C.t2, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{detail.prompt}</span>
-                  <span style={{ fontSize: 12, color: C.t2, flexShrink: 0 }}>{itemOpen ? "收起" : "展开"}</span>
+                  <span style={{ fontSize: 12, fontWeight: 600, color: C.t1, flexShrink: 0 }}>第 {index + 1} 题</span>
+                  <span style={{ fontSize: 11, color: C.t2, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{detail.prompt}</span>
+                  <Chevron open={itemOpen} size={10} />
                 </button>
                 {itemOpen ? (
-                  <div style={{ paddingLeft: 28, paddingBottom: 12, display: "flex", flexDirection: "column", gap: 8 }}>
+                  <div style={{ paddingLeft: 26, paddingBottom: 10, display: "flex", flexDirection: "column", gap: 7 }}>
                     <div>
                       <div style={{ fontSize: 11, color: C.t2, marginBottom: 4 }}>你的答案</div>
-                      <div style={{ fontSize: 14, lineHeight: 1.7 }}>{renderWordDiff(detail.userAnswer, detail.correctAnswer)}</div>
+                      <div style={{ fontSize: 13, lineHeight: 1.65 }}>{renderWordDiff(detail.userAnswer, detail.correctAnswer)}</div>
                     </div>
                     {!detail.isCorrect ? (
                       <div>
                         <div style={{ fontSize: 11, color: C.t2, marginBottom: 4 }}>正确答案</div>
-                        <div style={{ fontSize: 14, color: C.blue, lineHeight: 1.7 }}>{detail.correctAnswer}</div>
+                        <div style={{ fontSize: 13, color: C.blue, lineHeight: 1.65 }}>{detail.correctAnswer}</div>
                       </div>
                     ) : null}
                     {Array.isArray(detail.grammar_points) && detail.grammar_points.length > 0 ? (
@@ -460,23 +489,23 @@ export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, show
       {isExpanded && session.type === "mock" && session.details ? <MockExamDetails session={session} /> : null}
 
       {isExpanded && session.details && (session.type === "email" || session.type === "discussion") && session.details.userText ? (
-        <SurfaceCard style={{ background: "#f9fafb", padding: 14, margin: "6px 0 8px", boxShadow: "none" }}>
-          {session.details.promptSummary ? <div style={{ fontSize: 12, color: C.t2, marginBottom: 8 }}>题目摘要：{session.details.promptSummary}</div> : null}
+        <SurfaceCard style={{ background: "#f9fafb", padding: 12, margin: "5px 0 7px", boxShadow: "none" }}>
+          {session.details.promptSummary ? <div style={{ fontSize: 11, color: C.t2, marginBottom: 7 }}>题目摘要：{session.details.promptSummary}</div> : null}
           {retryHref ? (
-            <div style={{ marginBottom: 10 }}>
+            <div style={{ marginBottom: 8 }}>
               <OutlineButton onClick={() => { window.location.href = retryHref; }}>再练一遍（同题）</OutlineButton>
             </div>
           ) : null}
-          <SurfaceCard style={{ padding: 11, marginBottom: 10, boxShadow: "none" }}>
+          <SurfaceCard style={{ padding: 10, marginBottom: 8, boxShadow: "none" }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: C.t2, marginBottom: 6 }}>你的作答</div>
-            <div style={{ fontSize: 12.5, lineHeight: 1.65, whiteSpace: "pre-wrap" }}>{session.details.userText}</div>
+            <div style={{ fontSize: 11.5, lineHeight: 1.6, whiteSpace: "pre-wrap" }}>{session.details.userText}</div>
           </SurfaceCard>
           {session.details.feedback ? <ScoringReport result={session.details.feedback} type={session.type} uiLang={session.details.feedback?.reportLanguage || "zh"} /> : null}
         </SurfaceCard>
       ) : null}
 
       {isExpanded && !session.details ? (
-        <SurfaceCard style={{ background: "#f9fafb", padding: 14, margin: "6px 0 8px", fontSize: 12, color: C.t2, textAlign: "center", boxShadow: "none" }}>
+        <SurfaceCard style={{ background: "#f9fafb", padding: 12, margin: "5px 0 7px", fontSize: 11, color: C.t2, textAlign: "center", boxShadow: "none" }}>
           这条记录缺少详情数据，通常是较早生成的历史记录。
         </SurfaceCard>
       ) : null}

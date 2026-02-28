@@ -87,29 +87,53 @@ function getWritingAvg(sessions) {
 
 function StatCard({ icon, title, value, hint, color, soft }) {
   return (
-    <SurfaceCard style={{ padding: "14px 14px 12px" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 8 }}>
-        <div style={{ width: 34, height: 34, borderRadius: 11, background: soft, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>{icon}</div>
+    <SurfaceCard style={{ padding: "12px 12px 11px" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 7 }}>
+        <div style={{ width: 30, height: 30, borderRadius: 10, background: soft, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15 }}>{icon}</div>
         <div>
-          <div style={{ fontSize: 11, fontWeight: 700, color }}>{title}</div>
-          <div style={{ fontSize: 11, color: C.t3 }}>{hint}</div>
+          <div style={{ fontSize: 10.5, fontWeight: 700, color }}>{title}</div>
+          <div style={{ fontSize: 10.5, color: C.t3 }}>{hint}</div>
         </div>
       </div>
-      <div style={{ fontSize: 24, fontWeight: 800, color: C.t1, lineHeight: 1.05 }}>{value}</div>
+      <div style={{ fontSize: 21, fontWeight: 800, color: C.t1, lineHeight: 1.05 }}>{value}</div>
     </SurfaceCard>
+  );
+}
+
+function Chevron({ open }) {
+  return (
+    <span
+      aria-hidden="true"
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: 18,
+        height: 18,
+        color: C.t3,
+        transform: open ? "rotate(180deg)" : "rotate(0deg)",
+        transition: "transform 180ms ease",
+        flexShrink: 0,
+      }}
+    >
+      <svg viewBox="0 0 12 12" width="12" height="12" fill="none">
+        <path d="M2.5 4.25 6 7.75l3.5-3.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </span>
   );
 }
 
 function SectionCard({ icon, title, badge, open, onToggle, children }) {
   return (
     <SurfaceCard style={{ overflow: "hidden" }}>
-      <button onClick={onToggle} aria-expanded={open} style={{ width: "100%", display: "flex", alignItems: "center", gap: 10, padding: "13px 15px", background: "transparent", border: "none", cursor: "pointer", textAlign: "left" }}>
-        <div style={{ width: 32, height: 32, borderRadius: 10, background: C.ltB, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>{icon}</div>
+      <button onClick={onToggle} aria-expanded={open} style={{ width: "100%", display: "flex", alignItems: "center", gap: 9, padding: "11px 13px", background: "transparent", border: "none", cursor: "pointer", textAlign: "left" }}>
+        <div style={{ width: 29, height: 29, borderRadius: 9, background: C.ltB, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15 }}>{icon}</div>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontSize: 15, fontWeight: 800, color: C.t1 }}>{title}</div>
+          <div style={{ fontSize: 14, fontWeight: 800, color: C.t1 }}>{title}</div>
         </div>
-        {badge != null ? <span style={{ fontSize: 11, fontWeight: 700, color: C.blue, background: C.softBlue, borderRadius: 999, padding: "3px 9px" }}>{badge}</span> : null}
-        <span style={{ fontSize: 11, color: C.t3 }}>{open ? "收起" : "展开"}</span>
+        {badge != null ? <span style={{ fontSize: 10.5, fontWeight: 700, color: C.blue, background: C.softBlue, borderRadius: 999, padding: "2px 8px" }}>{badge}</span> : null}
+        <span style={{ fontSize: 10.5, color: C.t3 }}>{open ? "收起" : "展开"}</span>
+        <Chevron open={open} />
       </button>
       {open ? <div style={{ borderTop: "1px solid " + C.bdrSubtle }}>{children}</div> : null}
     </SurfaceCard>
@@ -148,17 +172,17 @@ function MockSection({ mockEntries }) {
   return (
     <div style={{ padding: "14px 15px 16px" }}>
       {Number.isFinite(latest?.band) ? (
-        <SurfaceCard style={{ padding: 14, marginBottom: 12, background: C.softBlue, borderColor: "#bfdbfe", boxShadow: "none" }}>
+        <SurfaceCard style={{ padding: 12, marginBottom: 10, background: C.softBlue, borderColor: "#bfdbfe", boxShadow: "none" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
             <div>
-              <div style={{ fontSize: 11, fontWeight: 700, color: C.t2, marginBottom: 6 }}>最近一次模考</div>
+              <div style={{ fontSize: 10.5, fontWeight: 700, color: C.t2, marginBottom: 5 }}>最近一次模考</div>
               <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-                <span style={{ fontSize: 24, fontWeight: 800, color: getBandColor(latest.band) }}>段位 {latest.band.toFixed(1)}</span>
-                <span style={{ fontSize: 12, color: C.t2 }}>换算分 {latest.scaledScore ?? "--"}/30</span>
-                {latest.cefr ? <span style={{ fontSize: 12, color: C.t2 }}>CEFR {latest.cefr}</span> : null}
+                <span style={{ fontSize: 21, fontWeight: 800, color: getBandColor(latest.band) }}>{latest.band.toFixed(1)}</span>
+                <span style={{ fontSize: 11, color: C.t2 }}>换算分 {latest.scaledScore ?? "--"}/30</span>
+                {latest.cefr ? <span style={{ fontSize: 11, color: C.t2 }}>CEFR {latest.cefr}</span> : null}
               </div>
             </div>
-            {bestBand !== null ? <div style={{ fontSize: 13, color: C.t2 }}>历史最好：<b style={{ color: getBandColor(bestBand) }}>{bestBand.toFixed(1)}</b></div> : null}
+            {bestBand !== null ? <div style={{ fontSize: 12, color: C.t2 }}>历史最好：<b style={{ color: getBandColor(bestBand) }}>{bestBand.toFixed(1)}</b></div> : null}
           </div>
         </SurfaceCard>
       ) : null}
@@ -172,11 +196,11 @@ function MockSection({ mockEntries }) {
           const buildTask = getTask(session, "build-sentence");
           return (
             <SurfaceCard key={entry.sourceIndex} style={{ padding: 0, overflow: "hidden", boxShadow: "none" }}>
-              <button onClick={() => setExpanded(open ? null : entry.sourceIndex)} style={{ width: "100%", display: "flex", alignItems: "center", gap: 10, padding: "11px 13px", border: "none", background: "transparent", cursor: "pointer", textAlign: "left" }}>
-                {Number.isFinite(session.band) ? <span style={{ fontSize: 11, fontWeight: 700, background: getBandColor(session.band) + "20", color: getBandColor(session.band), borderRadius: 999, padding: "3px 7px" }}>{session.band.toFixed(1)}</span> : <span style={{ fontSize: 11, color: C.t3 }}>待评分</span>}
-                <span style={{ fontSize: 12, color: C.t2, flex: 1 }}>{fmtDate(session.date)}</span>
-                <span style={{ fontSize: 11, color: C.t2, whiteSpace: "nowrap" }}>拼句 {Number.isFinite(buildTask?.score) ? `${buildTask.score}/${buildTask.maxScore}` : "待定"} / 邮件 {Number.isFinite(emailTask?.score) ? `${emailTask.score}/${emailTask.maxScore}` : "待定"} / 讨论 {Number.isFinite(discTask?.score) ? `${discTask.score}/${discTask.maxScore}` : "待定"}</span>
-                <span style={{ fontSize: 11, color: C.t3 }}>{open ? "收起" : "展开"}</span>
+              <button onClick={() => setExpanded(open ? null : entry.sourceIndex)} style={{ width: "100%", display: "flex", alignItems: "center", gap: 9, padding: "10px 12px", border: "none", background: "transparent", cursor: "pointer", textAlign: "left" }}>
+                {Number.isFinite(session.band) ? <span style={{ fontSize: 10.5, fontWeight: 700, background: getBandColor(session.band) + "20", color: getBandColor(session.band), borderRadius: 999, padding: "2px 6px" }}>{session.band.toFixed(1)}</span> : <span style={{ fontSize: 10.5, color: C.t3 }}>待评分</span>}
+                <span style={{ fontSize: 11, color: C.t2, flex: 1 }}>{fmtDate(session.date)}</span>
+                <span style={{ fontSize: 10.5, color: C.t2, whiteSpace: "nowrap" }}>拼句 {Number.isFinite(buildTask?.score) ? `${buildTask.score}/${buildTask.maxScore}` : "待定"} / 邮件 {Number.isFinite(emailTask?.score) ? `${emailTask.score}/${emailTask.maxScore}` : "待定"} / 讨论 {Number.isFinite(discTask?.score) ? `${discTask.score}/${discTask.maxScore}` : "待定"}</span>
+                <Chevron open={open} />
               </button>
               {open ? <div style={{ padding: "0 13px 13px" }}><HistoryRow entry={entry} isExpanded={true} isLast={true} onToggle={() => {}} onDelete={() => {}} detailOnly={true} /></div> : null}
             </SurfaceCard>
@@ -191,12 +215,12 @@ function TrendChart({ bs, email, discussion }) {
   const [hidden, setHidden] = useState({ bs: false, email: false, discussion: false });
   const [tooltip, setTooltip] = useState(null);
   const svgRef = useRef(null);
-  const width = 520;
-  const height = 200;
-  const marginLeft = 34;
-  const marginTop = 12;
-  const marginRight = 12;
-  const marginBottom = 28;
+  const width = 440;
+  const height = 156;
+  const marginLeft = 30;
+  const marginTop = 10;
+  const marginRight = 10;
+  const marginBottom = 24;
   const chartWidth = width - marginLeft - marginRight;
   const chartHeight = height - marginTop - marginBottom;
   const emailValue = (session) => Number.isFinite(session.score) ? session.score : null;
@@ -227,7 +251,7 @@ function TrendChart({ bs, email, discussion }) {
     const rect = el.getBoundingClientRect();
     const px = event.clientX - rect.left;
     const svgX = (px / rect.width) * width;
-    let bestDist = 22;
+    let bestDist = 18;
     let bestTs = null;
     lines.forEach((line) => {
       if (hidden[line.key]) return;
@@ -249,8 +273,8 @@ function TrendChart({ bs, email, discussion }) {
 
   return (
     <div>
-      <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 10 }}>
-        {lines.map((line) => <button key={line.key} onClick={() => setHidden((prev) => ({ ...prev, [line.key]: !prev[line.key] }))} style={{ display: "inline-flex", alignItems: "center", gap: 6, border: "1px solid " + (hidden[line.key] ? C.bdr : line.color), background: hidden[line.key] ? "#fff" : line.color + "12", color: hidden[line.key] ? C.t3 : line.color, borderRadius: 999, padding: "4px 9px", fontSize: 11, fontWeight: 700, cursor: "pointer" }}><span style={{ width: 9, height: 9, borderRadius: 999, background: hidden[line.key] ? C.bdr : line.color }} />{line.label}</button>)}
+      <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 8 }}>
+        {lines.map((line) => <button key={line.key} onClick={() => setHidden((prev) => ({ ...prev, [line.key]: !prev[line.key] }))} style={{ display: "inline-flex", alignItems: "center", gap: 6, border: "1px solid " + (hidden[line.key] ? C.bdr : line.color), background: hidden[line.key] ? "#fff" : line.color + "12", color: hidden[line.key] ? C.t3 : line.color, borderRadius: 999, padding: "3px 8px", fontSize: 10.5, fontWeight: 700, cursor: "pointer" }}><span style={{ width: 8, height: 8, borderRadius: 999, background: hidden[line.key] ? C.bdr : line.color }} />{line.label}</button>)}
       </div>
       <div style={{ position: "relative" }}>
         <svg ref={svgRef} viewBox={`0 0 ${width} ${height}`} width="100%" style={{ display: "block", overflow: "visible" }} onMouseMove={handleMouseMove} onMouseLeave={() => setTooltip(null)}>
@@ -281,7 +305,7 @@ function TrendChart({ bs, email, discussion }) {
           {tooltip ? <line x1={tooltip.svgX} y1={marginTop} x2={tooltip.svgX} y2={marginTop + chartHeight} stroke={C.blue} strokeWidth={1} strokeDasharray="2,2" opacity={0.45} /> : null}
         </svg>
         {tooltip && tooltip.near.length ? (
-          <div style={{ position: "absolute", left: tooltip.left, top: tooltip.top, background: "#fff", border: "1px solid " + C.bdr, borderRadius: 12, padding: "7px 10px", fontSize: 11, pointerEvents: "none", zIndex: 10, boxShadow: "0 10px 30px rgba(0,0,0,0.08)", minWidth: 118 }}>
+          <div style={{ position: "absolute", left: tooltip.left, top: tooltip.top, background: "#fff", border: "1px solid " + C.bdr, borderRadius: 12, padding: "6px 9px", fontSize: 10.5, pointerEvents: "none", zIndex: 10, boxShadow: "0 10px 30px rgba(0,0,0,0.08)", minWidth: 108 }}>
             <div style={{ fontSize: 10, color: C.t3, marginBottom: 6, fontWeight: 700 }}>{tooltip.near[0].date}</div>
             {tooltip.near.map((point) => <div key={point.key} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}><span style={{ width: 7, height: 7, borderRadius: 999, background: point.color }} /><span style={{ color: point.color, fontWeight: 700 }}>{point.label}</span><span style={{ color: C.t1 }}>{point.avg.toFixed(1)}/5</span></div>)}
           </div>
@@ -312,18 +336,18 @@ function ProgressSection({ bs, email, discussion }) {
     { key: "bs", icon: TASK_UI.bs.icon, label: TASK_UI.bs.label, color: TASK_UI.bs.color, stats: halfStats(bs, buildValue) },
   ];
   return (
-    <div style={{ padding: "14px 15px 16px" }}>
+    <div style={{ padding: "12px 13px 14px" }}>
       <TrendChart bs={bs} email={email} discussion={discussion} />
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10, marginTop: 12 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 9, marginTop: 10 }}>
         {comparisons.map((item) => (
-          <SurfaceCard key={item.key} style={{ padding: "11px 12px", background: item.stats ? "#fff" : "#fafafa", boxShadow: "none" }}>
-            <div style={{ fontSize: 12, color: C.t2, marginBottom: 8 }}>{item.icon} {item.label}</div>
-            {!item.stats ? <div style={{ fontSize: 12, color: C.t3 }}>数据不足，暂时无法判断趋势。</div> : (
+          <SurfaceCard key={item.key} style={{ padding: "10px 11px", background: item.stats ? "#fff" : "#fafafa", boxShadow: "none" }}>
+            <div style={{ fontSize: 11, color: C.t2, marginBottom: 7 }}>{item.icon} {item.label}</div>
+            {!item.stats ? <div style={{ fontSize: 11, color: C.t3 }}>数据不足，暂时无法判断趋势。</div> : (
               <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-                <span style={{ fontSize: 12, color: C.t2 }}>{item.stats.earlyAvg.toFixed(1)}</span>
-                <span style={{ fontSize: 12, color: C.t3 }}>→</span>
-                <span style={{ fontSize: 15, fontWeight: 800, color: C.t1 }}>{item.stats.lateAvg.toFixed(1)}/5</span>
-                <span style={{ fontSize: 11, fontWeight: 700, padding: "2px 6px", borderRadius: 999, background: item.stats.diff >= 0 ? "#dcfce7" : "#fee2e2", color: item.stats.diff >= 0 ? C.green : C.red }}>{item.stats.diff >= 0 ? "提升" : "回落"} {Math.abs(item.stats.diff).toFixed(1)}</span>
+                <span style={{ fontSize: 11, color: C.t2 }}>{item.stats.earlyAvg.toFixed(1)}</span>
+                <span style={{ fontSize: 11, color: C.t3 }}>→</span>
+                <span style={{ fontSize: 14, fontWeight: 800, color: C.t1 }}>{item.stats.lateAvg.toFixed(1)}/5</span>
+                <span style={{ fontSize: 10.5, fontWeight: 700, padding: "2px 6px", borderRadius: 999, background: item.stats.diff >= 0 ? "#dcfce7" : "#fee2e2", color: item.stats.diff >= 0 ? C.green : C.red }}>{item.stats.diff >= 0 ? "提升" : "回落"} {Math.abs(item.stats.diff).toFixed(1)}</span>
               </div>
             )}
           </SurfaceCard>
@@ -368,18 +392,18 @@ function WeaknessSection({ email, discussion }) {
   const lastFiveSets = lastFive.map((session) => new Set(getTags(session).map((item) => item.tag)));
 
   return (
-    <div style={{ padding: "12px 15px 15px", display: "flex", flexDirection: "column", gap: 8 }}>
+    <div style={{ padding: "11px 13px 13px", display: "flex", flexDirection: "column", gap: 8 }}>
       {recurring.map(([tag, count]) => {
         const inLastFive = lastFiveSets.filter((set) => set.has(tag)).length;
         const improved = inLastFive === 0;
         const persistent = lastFive.length >= 3 && inLastFive >= Math.ceil(lastFive.length * 0.6);
         return (
-          <SurfaceCard key={tag} style={{ padding: "11px 12px", boxShadow: "none" }}>
+          <SurfaceCard key={tag} style={{ padding: "10px 11px", boxShadow: "none" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-              <div style={{ flex: 1, minWidth: 240, fontSize: 13, color: improved ? C.t3 : C.t1, textDecoration: improved ? "line-through" : "none", opacity: improved ? 0.7 : 1 }}>{tagText[tag] || tag}</div>
-              <span style={{ fontSize: 11, color: C.t3 }}>出现 {count} 次</span>
-              {improved ? <span style={{ fontSize: 11, fontWeight: 700, background: "#dcfce7", color: C.green, borderRadius: 999, padding: "3px 8px" }}>近期已改善</span> : null}
-              {!improved && persistent ? <span style={{ fontSize: 11, fontWeight: 700, background: "#fee2e2", color: C.red, borderRadius: 999, padding: "3px 8px" }}>近期仍高频</span> : null}
+              <div style={{ flex: 1, minWidth: 240, fontSize: 12, color: improved ? C.t3 : C.t1, textDecoration: improved ? "line-through" : "none", opacity: improved ? 0.7 : 1 }}>{tagText[tag] || tag}</div>
+              <span style={{ fontSize: 10.5, color: C.t3 }}>出现 {count} 次</span>
+              {improved ? <span style={{ fontSize: 10.5, fontWeight: 700, background: "#dcfce7", color: C.green, borderRadius: 999, padding: "2px 7px" }}>近期已改善</span> : null}
+              {!improved && persistent ? <span style={{ fontSize: 10.5, fontWeight: 700, background: "#fee2e2", color: C.red, borderRadius: 999, padding: "2px 7px" }}>近期仍高频</span> : null}
             </div>
           </SurfaceCard>
         );
@@ -403,9 +427,9 @@ function PracticeSection({ practiceEntries, typeAvgs, onDelete }) {
   }, [practiceEntries, tab]);
 
   return (
-    <div style={{ padding: "14px 15px 16px" }}>
+    <div style={{ padding: "12px 13px 14px" }}>
       <div style={{ display: "flex", gap: 8, paddingBottom: 10, flexWrap: "wrap" }}>
-        {tabs.map((item) => <button key={item.key} onClick={() => setTab(item.key)} style={{ border: "1px solid " + (tab === item.key ? C.blue : C.bdr), background: tab === item.key ? C.softBlue : "#fff", color: tab === item.key ? C.blue : C.t2, borderRadius: 999, padding: "5px 11px", fontSize: 11, fontWeight: 700, cursor: "pointer" }}>{item.label}</button>)}
+        {tabs.map((item) => <button key={item.key} onClick={() => setTab(item.key)} style={{ border: "1px solid " + (tab === item.key ? C.blue : C.bdr), background: tab === item.key ? C.softBlue : "#fff", color: tab === item.key ? C.blue : C.t2, borderRadius: 999, padding: "4px 10px", fontSize: 10.5, fontWeight: 700, cursor: "pointer" }}>{item.label}</button>)}
       </div>
       <div style={{ maxHeight: 520, overflowY: "auto", paddingRight: 4 }}>
         {!filtered.length ? <div style={{ padding: "22px 0", textAlign: "center", fontSize: 12, color: C.t2 }}>当前筛选下暂无练习记录。</div> : filtered.map((entry, index) => <HistoryRow key={entry.sourceIndex} entry={entry} isExpanded={expandedId === entry.sourceIndex} isLast={index === filtered.length - 1} onToggle={() => setExpandedId(expandedId === entry.sourceIndex ? null : entry.sourceIndex)} onDelete={onDelete} typeAvgs={typeAvgs} />)}
@@ -469,12 +493,12 @@ export function ProgressView({ onBack }) {
       <TopBar title="练习记录" section="练习记录" onExit={onBack} />
       <PageShell>
         {!hist ? <SkeletonView /> : (
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            <SurfaceCard style={{ padding: "18px 18px 16px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <SurfaceCard style={{ padding: "15px 15px 13px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16, flexWrap: "wrap" }}>
                 <div>
-                  <h1 style={{ fontSize: 24, fontWeight: 800, color: C.t1, margin: 0, lineHeight: 1.2 }}>练习记录</h1>
-                  <p style={{ fontSize: 12, color: C.t2, margin: "5px 0 0" }}>{practiceEntries.length} 次练习，{mockEntries.length} 次模考，按时间倒序展示。</p>
+                  <h1 style={{ fontSize: 21, fontWeight: 800, color: C.t1, margin: 0, lineHeight: 1.2 }}>练习记录</h1>
+                  <p style={{ fontSize: 11, color: C.t2, margin: "4px 0 0" }}>{practiceEntries.length} 次练习，{mockEntries.length} 次模考，按时间倒序展示。</p>
                 </div>
                 <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
                   <Btn onClick={onBack} variant="secondary">返回</Btn>
@@ -484,13 +508,13 @@ export function ProgressView({ onBack }) {
             </SurfaceCard>
 
             {!entries.length ? (
-              <SurfaceCard style={{ padding: 40, textAlign: "center" }}>
-                <div style={{ fontSize: 15, fontWeight: 700, color: C.t1, marginBottom: 8 }}>还没有练习记录</div>
-                <div style={{ fontSize: 12, color: C.t2 }}>从主页开始一次练习后，这里会自动记录你的成绩、反馈与历史详情。</div>
+              <SurfaceCard style={{ padding: 34, textAlign: "center" }}>
+                <div style={{ fontSize: 14, fontWeight: 700, color: C.t1, marginBottom: 8 }}>还没有练习记录</div>
+                <div style={{ fontSize: 11, color: C.t2 }}>从主页开始一次练习后，这里会自动记录你的成绩、反馈与历史详情。</div>
               </SurfaceCard>
             ) : (
               <>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 9 }}>
                   <StatCard icon={TASK_UI.bs.icon} title="拼句练习" value={String(bs.length)} hint={buildAvg !== null ? `平均正确率 ${Math.round(buildAvg)}%` : "暂无平均值"} color={TASK_UI.bs.color} soft={TASK_UI.bs.soft} />
                   <StatCard icon={TASK_UI.email.icon} title="邮件写作" value={String(email.length)} hint={emailAvg !== null ? `平均 ${emailAvg.toFixed(1)}/5` : "暂无平均值"} color={TASK_UI.email.color} soft={TASK_UI.email.soft} />
                   <StatCard icon={TASK_UI.discussion.icon} title="学术讨论" value={String(discussion.length)} hint={discussionAvg !== null ? `平均 ${discussionAvg.toFixed(1)}/5` : "暂无平均值"} color={TASK_UI.discussion.color} soft={TASK_UI.discussion.soft} />

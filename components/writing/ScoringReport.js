@@ -71,7 +71,7 @@ export function ScoringReport({ result, type }) {
             <span style={{ fontSize: 38, fontWeight: 800 }}>{score}</span>
             <span style={{ opacity: 0.85 }}>/ 5</span>
           </div>
-          <span style={{ background: "rgba(255,255,255,0.18)", borderRadius: 14, padding: "3px 10px", fontSize: 12, fontWeight: 700 }}>段位 {band ?? "-"}</span>
+          <span style={{ background: "rgba(255,255,255,0.18)", borderRadius: 14, padding: "3px 10px", fontSize: 12, fontWeight: 700 }}>{band ?? "-"}</span>
         </div>
         <div style={{ marginTop: 10, fontSize: 14, lineHeight: 1.7 }}>{summary || "总评暂缺。"}</div>
         {type === "email" && (
