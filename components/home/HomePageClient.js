@@ -38,6 +38,8 @@ export default function HomePageClient({ userCode, onLogout }) {
   const [fbBusy, setFbBusy] = useState(false);
   const [fbSent, setFbSent] = useState(false);
   const [feedbackMsg, setFeedbackMsg] = useState(null);
+  const [fbHistory, setFbHistory] = useState([]);
+  const [fbHistLoading, setFbHistLoading] = useState(false);
   const [copied, setCopied] = useState(false);
   const [logoutHover, setLogoutHover] = useState(false);
 
@@ -83,6 +85,20 @@ export default function HomePageClient({ userCode, onLogout }) {
     });
   }
 
+  async function loadFbHistory() {
+    if (!userCode) return;
+    setFbHistLoading(true);
+    try {
+      const res = await fetch(`/api/feedback?userCode=${encodeURIComponent(userCode)}`);
+      const body = await parseJsonSafe(res);
+      if (res.ok) setFbHistory(Array.isArray(body?.rows) ? body.rows : []);
+    } catch { /* silent */ } finally {
+      setFbHistLoading(false);
+    }
+  }
+
+  useEffect(() => { if (fbOpen) loadFbHistory(); }, [fbOpen]);
+
   async function submitFeedback() {
     const content = String(fbText || "").trim();
     if (!content || fbBusy || fbSent) return;
@@ -100,6 +116,7 @@ export default function HomePageClient({ userCode, onLogout }) {
       setFbSent(true);
       setFeedbackMsg({ ok: true, text: "反馈已提交。" });
       setTimeout(() => setFbSent(false), 2500);
+      loadFbHistory();
     } catch (error) {
       setFeedbackMsg({ ok: false, text: error.message || String(error) });
     } finally {
@@ -180,7 +197,7 @@ export default function HomePageClient({ userCode, onLogout }) {
 
         <div className="home-shell" style={{ maxWidth: 1120, margin: "0 auto", padding: "28px 36px 60px", display: "flex", gap: 28, alignItems: "flex-start" }}>
           <div className="home-layout" style={{ display: "flex", gap: 28, alignItems: "flex-start", width: "100%" }}>
-            <HomeSidebar userCode={userCode} onLogout={onLogout} totalCount={totalCount} weekCount={weekCount} bestMock={bestMock} isChallenge={isChallenge} copied={copied} copyCode={copyCode} logoutHover={logoutHover} setLogoutHover={setLogoutHover} fbOpen={fbOpen} setFbOpen={setFbOpen} fbText={fbText} setFbText={setFbText} fbBusy={fbBusy} fbSent={fbSent} feedbackMsg={feedbackMsg} submitFeedback={submitFeedback} sideCard={sideCard} fadeIn={fadeIn} />
+            <HomeSidebar userCode={userCode} onLogout={onLogout} totalCount={totalCount} weekCount={weekCount} bestMock={bestMock} isChallenge={isChallenge} copied={copied} copyCode={copyCode} logoutHover={logoutHover} setLogoutHover={setLogoutHover} fbOpen={fbOpen} setFbOpen={setFbOpen} fbText={fbText} setFbText={setFbText} fbBusy={fbBusy} fbSent={fbSent} feedbackMsg={feedbackMsg} submitFeedback={submitFeedback} fbHistory={fbHistory} fbHistLoading={fbHistLoading} sideCard={sideCard} fadeIn={fadeIn} />
 
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ marginBottom: 16, ...fadeIn(50) }}>

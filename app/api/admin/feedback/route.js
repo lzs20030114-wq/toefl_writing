@@ -16,7 +16,7 @@ export async function GET(request) {
 
     let query = supabaseAdmin
       .from("user_feedback")
-      .select("id,user_code,content,page,origin,user_agent,client_ip,created_at")
+      .select("id,user_code,content,page,origin,user_agent,client_ip,created_at,status,admin_reply")
       .order("created_at", { ascending: false })
       .limit(limit);
 
@@ -31,6 +31,25 @@ export async function GET(request) {
         total: Array.isArray(data) ? data.length : 0,
       },
     });
+  } catch (e) {
+    return jsonError(500, e.message || "Unexpected server error");
+  }
+}
+
+export async function PATCH(request) {
+  try {
+    if (!isAdminAuthorized(request)) return jsonError(401, "Unauthorized");
+    if (!isSupabaseAdminConfigured) return jsonError(503, "Supabase admin is not configured");
+    const body = await request.json().catch(() => ({}));
+    const id = Number(body?.id);
+    if (!id) return jsonError(400, "Missing id");
+    const updates = {};
+    if (body.status !== undefined) updates.status = String(body.status).slice(0, 50);
+    if (body.admin_reply !== undefined) updates.admin_reply = body.admin_reply ? String(body.admin_reply).slice(0, 1000) : null;
+    if (Object.keys(updates).length === 0) return jsonError(400, "No fields to update");
+    const { error } = await supabaseAdmin.from("user_feedback").update(updates).eq("id", id);
+    if (error) return jsonError(400, error.message);
+    return Response.json({ ok: true });
   } catch (e) {
     return jsonError(500, e.message || "Unexpected server error");
   }

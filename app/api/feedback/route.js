@@ -1,5 +1,24 @@
 import { isSupabaseAdminConfigured, supabaseAdmin } from "../../../lib/supabaseAdmin";
 
+export async function GET(request) {
+  try {
+    if (!isSupabaseAdminConfigured) return jsonError(503, "Supabase admin is not configured");
+    const url = new URL(request.url);
+    const userCode = String(url.searchParams.get("userCode") || "").trim().toUpperCase();
+    if (!userCode) return jsonError(400, "Missing userCode");
+    const { data, error } = await supabaseAdmin
+      .from("user_feedback")
+      .select("id,content,status,admin_reply,created_at")
+      .eq("user_code", userCode)
+      .order("created_at", { ascending: false })
+      .limit(10);
+    if (error) return jsonError(400, error.message);
+    return Response.json({ rows: data || [] });
+  } catch (e) {
+    return jsonError(500, e.message || "Unexpected error");
+  }
+}
+
 function jsonError(status, error) {
   return Response.json({ error }, { status });
 }

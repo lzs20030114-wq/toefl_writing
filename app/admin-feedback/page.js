@@ -26,6 +26,8 @@ export default function AdminFeedbackPage() {
   const [userCode, setUserCode] = useState("");
   const [msg, setMsg] = useState("");
   const [busy, setBusy] = useState(false);
+  const [replyInputs, setReplyInputs] = useState({});
+  const [patchBusy, setPatchBusy] = useState({});
 
   useEffect(() => {
     try {
@@ -61,6 +63,24 @@ export default function AdminFeedbackPage() {
     }
     if (!res.ok) throw new Error(body?.error || `HTTP ${res.status}`);
     return body;
+  }
+
+  async function patchFeedback(id, updates) {
+    setPatchBusy((p) => ({ ...p, [id]: true }));
+    try {
+      const res = await fetch("/api/admin/feedback", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", "x-admin-token": token.trim() },
+        body: JSON.stringify({ id, ...updates }),
+      });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(body?.error || `HTTP ${res.status}`);
+      setRows((prev) => prev.map((r) => r.id === id ? { ...r, ...updates } : r));
+    } catch (e) {
+      setMsg(String(e.message || e));
+    } finally {
+      setPatchBusy((p) => ({ ...p, [id]: false }));
+    }
   }
 
   async function refresh() {
@@ -138,25 +158,58 @@ export default function AdminFeedbackPage() {
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
               <thead>
                 <tr style={{ background: "#f8fafc", color: C.t2 }}>
-                  <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>提交时间</th>
+                  <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0", whiteSpace: "nowrap" }}>提交时间</th>
                   <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>用户码</th>
                   <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0", minWidth: 90 }}>备注</th>
                   <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>反馈内容</th>
-                  <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>页面</th>
-                  <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>来源</th>
+                  <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0", minWidth: 80 }}>状态</th>
+                  <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0", minWidth: 200 }}>管理员回复</th>
                 </tr>
               </thead>
               <tbody>
-                {rows.map((r) => (
-                  <tr key={r.id}>
-                    <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", whiteSpace: "nowrap" }}>{fmtDate(r.created_at)}</td>
-                    <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", fontFamily: "monospace" }}>{r.user_code || "-"}</td>
-                    <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", color: noteByCode[r.user_code] ? C.nav : C.t2 }}>{noteByCode[r.user_code] || "-"}</td>
-                    <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }} title={String(r.content || "")}>{clip(r.content, 260)}</td>
-                    <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{r.page || "-"}</td>
-                    <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{clip(r.origin || r.client_ip || "-", 120)}</td>
-                  </tr>
-                ))}
+                {rows.map((r) => {
+                  const isResolved = r.status === "resolved";
+                  const replyVal = replyInputs[r.id] ?? (r.admin_reply || "");
+                  const patching = !!patchBusy[r.id];
+                  return (
+                    <tr key={r.id} style={{ background: isResolved ? "#f0fdf4" : "transparent" }}>
+                      <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", whiteSpace: "nowrap", verticalAlign: "top" }}>{fmtDate(r.created_at)}</td>
+                      <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", fontFamily: "monospace", verticalAlign: "top" }}>{r.user_code || "-"}</td>
+                      <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", color: noteByCode[r.user_code] ? C.nav : C.t2, verticalAlign: "top" }}>{noteByCode[r.user_code] || "-"}</td>
+                      <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", verticalAlign: "top" }} title={String(r.content || "")}>{clip(r.content, 200)}</td>
+                      <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", verticalAlign: "top" }}>
+                        <button
+                          onClick={() => patchFeedback(r.id, { status: isResolved ? "new" : "resolved" })}
+                          disabled={patching}
+                          style={{ padding: "4px 10px", borderRadius: 6, border: `1px solid ${isResolved ? "#86efac" : "#cbd5e1"}`, background: isResolved ? "#dcfce7" : "#fff", color: isResolved ? "#15803d" : C.t2, fontSize: 11, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap" }}
+                        >
+                          {isResolved ? "✓ 已修改" : "标为已修改"}
+                        </button>
+                      </td>
+                      <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", verticalAlign: "top" }}>
+                        <div style={{ display: "flex", gap: 4, alignItems: "flex-start" }}>
+                          <textarea
+                            value={replyVal}
+                            onChange={(e) => setReplyInputs((p) => ({ ...p, [r.id]: e.target.value }))}
+                            placeholder="写回复..."
+                            rows={2}
+                            style={{ flex: 1, fontSize: 11, padding: "4px 6px", border: "1px solid #cbd5e1", borderRadius: 6, resize: "vertical", fontFamily: "inherit", minWidth: 0 }}
+                          />
+                          <button
+                            onClick={() => patchFeedback(r.id, { admin_reply: replyVal || null }).then(() => setReplyInputs((p) => { const n = { ...p }; delete n[r.id]; return n; }))}
+                            disabled={patching || replyVal === (r.admin_reply || "")}
+                            style={{ padding: "4px 8px", borderRadius: 6, border: "1px solid " + C.blue, background: C.blue, color: "#fff", fontSize: 11, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap", opacity: (patching || replyVal === (r.admin_reply || "")) ? 0.5 : 1 }}
+                          >
+                            发送
+                          </button>
+                        </div>
+                        {r.admin_reply && replyInputs[r.id] === undefined && (
+                          <div style={{ marginTop: 4, fontSize: 10, color: C.t2 }}>当前：{clip(r.admin_reply, 60)}</div>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
                 {rows.length === 0 && (
                   <tr>
                     <td colSpan={6} style={{ padding: 12, color: C.t2 }}>暂无记录。</td>
