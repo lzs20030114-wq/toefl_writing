@@ -831,6 +831,11 @@ export function ProgressView({ onBack }) {
     };
   }, []);
 
+  // Linkage: expanding a writing detail auto-collapses the chart panel
+  useEffect(() => {
+    setShowStats(activePracticeSrcIdx === null);
+  }, [activePracticeSrcIdx]);
+
   const entries = useMemo(() => buildHistoryEntries(hist), [hist]);
   const stats = useMemo(() => buildHistoryStats(entries), [entries]);
 
@@ -998,8 +1003,8 @@ export function ProgressView({ onBack }) {
                     <span style={{ fontSize: 13, fontWeight: 700, color: P.text }}>📊 数据概览</span>
                     <ChevronIcon open={showStats} color={P.textDim} />
                   </button>
-                  {showStats && (
-                    <div style={{ animation: "expandDown 0.3s cubic-bezier(0.16,1,0.3,1)", display: "flex", borderTop: `1px solid ${P.borderSubtle}` }}>
+                  <div style={{ maxHeight: showStats ? "500px" : "0px", overflow: "hidden", transition: "max-height 0.45s cubic-bezier(0.16,1,0.3,1)" }}>
+                    <div style={{ display: "flex", borderTop: `1px solid ${P.borderSubtle}` }}>
                       {/* Left: latest mock score ring */}
                       <div style={{ width: "32%", flexShrink: 0, padding: "24px 20px", background: "#fafbfa", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", position: "relative", borderRight: `1px solid ${P.borderSubtle}` }}>
                         <div style={{ position: "absolute", top: 12, left: 16, fontSize: 10, fontWeight: 700, color: P.textDim, textTransform: "uppercase", letterSpacing: "0.08em" }}>最新模考</div>
@@ -1030,7 +1035,7 @@ export function ProgressView({ onBack }) {
                         )}
                       </div>
                     </div>
-                  )}
+                  </div>
                 </div>
 
                 {/* Stat cards — always visible, filter both chart and session list */}
@@ -1080,8 +1085,8 @@ export function ProgressView({ onBack }) {
                             onDelete={handleDelete}
                             typeAvgs={typeAvgs}
                           />
-                          {isWritingEntry && isExpanded && (
-                            <div style={{ borderLeft: `3px solid ${mc}`, marginBottom: 4, animation: "expandDown 0.35s cubic-bezier(0.16,1,0.3,1)" }}>
+                          {isWritingEntry && (
+                            <div style={{ maxHeight: isExpanded ? "760px" : "0px", overflow: "hidden", transition: "max-height 0.45s cubic-bezier(0.16,1,0.3,1)", borderLeft: isExpanded ? `3px solid ${mc}` : "none" }}>
                               <WritingFeedbackPanel
                                 key={entry.sourceIndex}
                                 fb={fb}
