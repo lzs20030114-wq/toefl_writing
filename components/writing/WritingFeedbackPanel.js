@@ -97,6 +97,7 @@ function PromptCollapse({ type, pd }) {
 export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, onExit, topBarHeight = 56, containerHeight }) {
   const [secondaryTab, setSecondaryTab] = useState("macro");
   const [activeErrorId, setActiveErrorId] = useState(null);
+  const [tooltipFlip, setTooltipFlip] = useState(false);
   const leftPanelRef = useRef(null);
 
   useEffect(() => {
@@ -290,7 +291,15 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
                   e.stopPropagation();
                   const next = isActive ? null : token.id;
                   setActiveErrorId(next);
-                  if (!isActive) setSecondaryTab("linebyline");
+                  if (!isActive) {
+                    setSecondaryTab("linebyline");
+                    const btnRect = e.currentTarget.getBoundingClientRect();
+                    const panelEl = leftPanelRef.current;
+                    if (panelEl) {
+                      const panelRect = panelEl.getBoundingClientRect();
+                      setTooltipFlip(btnRect.left + 292 > panelRect.right - 8);
+                    }
+                  }
                 }}
                 style={{ border: "none", cursor: "pointer", background: isActive ? catBg : `${catColor}18`, color: catColor, borderBottom: `2px solid ${catColor}`, borderRadius: "2px 2px 0 0", padding: "0 2px", margin: "0 1px", font: "inherit", fontSize: 14, lineHeight: "inherit", fontWeight: isActive ? 700 : 400, transition: "all 0.15s" }}
               >
@@ -299,7 +308,7 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
               {isActive ? (
                 <span
                   data-error-token="true"
-                  style={{ position: "absolute", top: "calc(100% + 6px)", left: 0, width: 292, background: P.surface, borderRadius: 12, boxShadow: "0 8px 32px rgba(0,0,0,0.14), 0 2px 8px rgba(0,0,0,0.08)", border: `1px solid ${P.border}`, zIndex: 50, display: "flex", flexDirection: "column", overflow: "hidden", animation: "wfpTabFade 0.2s ease" }}
+                  style={{ position: "absolute", top: "calc(100% + 6px)", ...(tooltipFlip ? { right: 0 } : { left: 0 }), width: 292, background: P.surface, borderRadius: 12, boxShadow: "0 8px 32px rgba(0,0,0,0.14), 0 2px 8px rgba(0,0,0,0.08)", border: `1px solid ${P.border}`, zIndex: 50, display: "flex", flexDirection: "column", overflow: "hidden", animation: "wfpTabFade 0.2s ease" }}
                   onClick={(e) => e.stopPropagation()}
                 >
                   <div style={{ background: catBg, padding: "8px 12px", borderBottom: `1px solid ${catColor}20`, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
