@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { clearAllSessions, deleteSession, loadHist, SESSION_STORE_EVENTS } from "../lib/sessionStore";
+import { clearAllSessions, deleteSession, loadHist, SESSION_STORE_EVENTS, setCurrentUser } from "../lib/sessionStore";
+import { getSavedCode } from "../lib/AuthContext";
 import { buildHistoryEntries, buildHistoryStats } from "../lib/history/viewModel";
 import { formatLocalDateTime, translateGrammarPoint } from "../lib/utils";
 import { ChevronIcon, FONT } from "./shared/ui";
@@ -785,6 +786,9 @@ export function ProgressView({ onBack }) {
   const [expandedSrcIdx, setExpandedSrcIdx] = useState(null);
 
   useEffect(() => {
+    // Re-initialize user context in case this page was loaded directly (e.g. refresh),
+    // bypassing the home page where setCurrentUser is normally called.
+    setCurrentUser(getSavedCode());
     const refresh = () => setHist(loadHist());
     refresh();
     window.addEventListener(SESSION_STORE_EVENTS.HISTORY_UPDATED_EVENT, refresh);
