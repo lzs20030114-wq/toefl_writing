@@ -8,7 +8,7 @@ import { mapScoringError } from "../../lib/ai/client";
 import { evaluateWritingResponse } from "../../lib/ai/writingEval";
 import { BANK_EXHAUSTED_ERRORS, DONE_STORAGE_KEYS, pickRandomPrompt } from "../../lib/questionSelector";
 import { C, FONT, Btn, InfoStrip, PageShell, SurfaceCard, Toast, TopBar } from "../shared/ui";
-import { ScoringReport } from "./ScoringReport";
+import { WritingFeedbackPanel } from "./WritingFeedbackPanel";
 import { WritingPromptPanel } from "./WritingPromptPanel";
 import { WritingResponsePanel } from "./WritingResponsePanel";
 import { formatMinutesLabel, PRACTICE_MODE } from "../../lib/practiceMode";
@@ -360,83 +360,93 @@ export function WritingTask({
     ? "你将有 7 分钟完成邮件写作。"
     : "你将有 10 分钟完成作答。";
 
+  const topBarHeight = embedded ? 0 : 56;
+
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
       {!embedded && <TopBar title={type === "email" ? "邮件写作" : "学术讨论写作"} section={type === "email" ? "写作练习｜任务 2" : "写作练习｜任务 3"} timeLeft={phase !== "ready" ? tl : undefined} isRunning={run} onExit={onExit} />}
-      <PageShell narrow>
-        {initialError && (
-          <SurfaceCard style={{ padding: 28, marginBottom: 16 }}>
-            <div style={{ fontSize: 16, fontWeight: 700, color: C.red, marginBottom: 8 }}>题库不可用</div>
-            <div style={{ fontSize: 14, color: C.t2 }}>{initialError}</div>
-            <div style={{ marginTop: 16 }}><Btn onClick={onExit} variant="secondary">{embedded ? "返回" : "返回练习"}</Btn></div>
-          </SurfaceCard>
-        )}
-        {!initialError && !pd && (
-          <SurfaceCard style={{ padding: 28, marginBottom: 16 }}>
-            <div style={{ fontSize: 16, fontWeight: 700, color: C.red, marginBottom: 8 }}>题目不可用</div>
-            <div style={{ fontSize: 14, color: C.t2 }}>请刷新后重试。</div>
-          </SurfaceCard>
-        )}
-        {!initialError && pd && (
-          <>
-        {intro && phase === "ready" ? (
-          <SurfaceCard style={{ padding: 28 }}>
-            <div style={{ fontSize: 20, fontWeight: 700, color: C.nav, marginBottom: 10 }}>{introTitle}</div>
-            <div style={{ fontSize: 14, color: C.t1, lineHeight: 1.7, marginBottom: 12 }}>
-              <div>{introDescLine1}</div>
-              <div>{introDescLine2}</div>
-            </div>
-            <div style={{ fontSize: 13, color: C.t2, lineHeight: 1.7 }}>
-              {practiceMode === PRACTICE_MODE.CHALLENGE && <div>模式：<b>挑战模式</b>（限时更紧）</div>}
-            </div>
-            <div style={{ marginTop: 18 }}>
-              <Btn
-                data-testid="writing-intro-start"
-                onClick={() => {
-                  setIntro(false);
-                  start();
-                }}
-              >
-                继续并开始计时
-              </Btn>
-            </div>
-          </SurfaceCard>
-        ) : (
-          <>
-        <InfoStrip style={{ marginBottom: 20 }}>
-          <b>作答说明：</b>{type === "email" ? `请完成一封覆盖 3 个目标点的邮件。${formatMinutesLabel(limit)}。建议 80-120 词。` : `阅读讨论内容并写出你的回应。${formatMinutesLabel(limit)}。建议不少于 100 词。`}
-          {practiceMode === PRACTICE_MODE.CHALLENGE && <span> 当前为挑战模式，限时更紧。</span>}
-        </InfoStrip>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
-          <WritingPromptPanel type={type} pd={pd} />
-          <WritingResponsePanel
-            type={type}
-            pd={pd}
-            phase={phase}
-            text={text}
-            onTextChange={setText}
-            w={w}
-            minW={minW}
-            fb={fb}
-            deferScoring={deferScoring}
-            requestState={requestState}
-            scoreError={scoreError}
-            onStart={start}
-            onSubmit={submitScore}
-            onRetry={retryScore}
-            onExit={onExit}
-            embedded={embedded}
-          />
-        </div>
-          </>
-        )}
-        {phase === "done" && fb && (
-          <div style={{ marginTop: 20 }}><ScoringReport result={fb} type={type} uiLang={uiReportLanguage} /><div style={{ display: "flex", gap: 12, marginTop: 16, flexWrap: "wrap" }}><Btn onClick={next} variant="secondary">下一题</Btn><Btn onClick={retryCurrentPrompt} variant="secondary">再练一遍</Btn><Btn onClick={onExit} variant="secondary">{embedded ? "返回" : "返回练习"}</Btn></div></div>
-        )}
-          </>
-        )}
-      </PageShell>
+
+      {phase === "done" && fb ? (
+        <WritingFeedbackPanel
+          fb={fb}
+          type={type}
+          pd={pd}
+          userText={text}
+          topBarHeight={topBarHeight}
+          onNext={next}
+          onRetry={retryCurrentPrompt}
+          onExit={onExit}
+        />
+      ) : (
+        <PageShell narrow>
+          {initialError && (
+            <SurfaceCard style={{ padding: 28, marginBottom: 16 }}>
+              <div style={{ fontSize: 16, fontWeight: 700, color: C.red, marginBottom: 8 }}>题库不可用</div>
+              <div style={{ fontSize: 14, color: C.t2 }}>{initialError}</div>
+              <div style={{ marginTop: 16 }}><Btn onClick={onExit} variant="secondary">{embedded ? "返回" : "返回练习"}</Btn></div>
+            </SurfaceCard>
+          )}
+          {!initialError && !pd && (
+            <SurfaceCard style={{ padding: 28, marginBottom: 16 }}>
+              <div style={{ fontSize: 16, fontWeight: 700, color: C.red, marginBottom: 8 }}>题目不可用</div>
+              <div style={{ fontSize: 14, color: C.t2 }}>请刷新后重试。</div>
+            </SurfaceCard>
+          )}
+          {!initialError && pd && (
+            <>
+              {intro && phase === "ready" ? (
+                <SurfaceCard style={{ padding: 28 }}>
+                  <div style={{ fontSize: 20, fontWeight: 700, color: C.nav, marginBottom: 10 }}>{introTitle}</div>
+                  <div style={{ fontSize: 14, color: C.t1, lineHeight: 1.7, marginBottom: 12 }}>
+                    <div>{introDescLine1}</div>
+                    <div>{introDescLine2}</div>
+                  </div>
+                  <div style={{ fontSize: 13, color: C.t2, lineHeight: 1.7 }}>
+                    {practiceMode === PRACTICE_MODE.CHALLENGE && <div>模式：<b>挑战模式</b>（限时更紧）</div>}
+                  </div>
+                  <div style={{ marginTop: 18 }}>
+                    <Btn
+                      data-testid="writing-intro-start"
+                      onClick={() => { setIntro(false); start(); }}
+                    >
+                      继续并开始计时
+                    </Btn>
+                  </div>
+                </SurfaceCard>
+              ) : (
+                <>
+                  <InfoStrip style={{ marginBottom: 20 }}>
+                    <b>作答说明：</b>{type === "email" ? `请完成一封覆盖 3 个目标点的邮件。${formatMinutesLabel(limit)}。建议 80-120 词。` : `阅读讨论内容并写出你的回应。${formatMinutesLabel(limit)}。建议不少于 100 词。`}
+                    {practiceMode === PRACTICE_MODE.CHALLENGE && <span> 当前为挑战模式，限时更紧。</span>}
+                  </InfoStrip>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+                    <WritingPromptPanel type={type} pd={pd} />
+                    <WritingResponsePanel
+                      type={type}
+                      pd={pd}
+                      phase={phase}
+                      text={text}
+                      onTextChange={setText}
+                      w={w}
+                      minW={minW}
+                      fb={fb}
+                      deferScoring={deferScoring}
+                      requestState={requestState}
+                      scoreError={scoreError}
+                      onStart={start}
+                      onSubmit={submitScore}
+                      onRetry={retryScore}
+                      onExit={onExit}
+                      embedded={embedded}
+                    />
+                  </div>
+                </>
+              )}
+            </>
+          )}
+        </PageShell>
+      )}
     </div>
   );
 }
