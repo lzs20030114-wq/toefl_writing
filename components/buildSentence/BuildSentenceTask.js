@@ -103,7 +103,7 @@ export function BuildSentenceTask({
     return (
       <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
         {toast && <Toast message={toast} onClose={() => setToast(null)} />}
-        {!embedded && <TopBar title="拼句练习报告" section="写作练习" onExit={onExit} />}
+        {!embedded && <TopBar title="Build a Sentence — Results" section="Writing Practice" onExit={onExit} />}
         <PageShell narrow>
           <SurfaceCard style={{ background: C.nav, color: "#fff", padding: 24, textAlign: "center", marginBottom: 20 }}>
             <div style={{ fontSize: 48, fontWeight: 800 }}>{ok}/{results.length}</div>
@@ -148,7 +148,7 @@ export function BuildSentenceTask({
     return (
       <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
         {toast && <Toast message={toast} onClose={() => setToast(null)} />}
-        {!embedded && <TopBar title="拼句练习" section="写作练习｜任务 1" onExit={onExit} />}
+        {!embedded && <TopBar title="Build a Sentence" section="Writing Practice | Task 1" onExit={onExit} />}
         <PageShell narrow>
           <SurfaceCard style={{ padding: 28 }}>
             <div style={{ fontSize: 16, fontWeight: 700, color: C.red, marginBottom: 8 }}>
@@ -167,17 +167,17 @@ export function BuildSentenceTask({
   if (phase === "instruction") {
     return (
       <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
-        {!embedded && <TopBar title="拼句练习" section="写作练习｜任务 1" onExit={onExit} />}
+        {!embedded && <TopBar title="Build a Sentence" section="Writing Practice | Task 1" onExit={onExit} />}
         <PageShell narrow>
           <SurfaceCard style={{ padding: "32px 40px" }}>
-            <h2 style={{ margin: "0 0 16px", fontSize: 20, color: C.nav }}>任务 1：拼句练习</h2>
+            <h2 style={{ margin: "0 0 16px", fontSize: 20, color: C.nav }}>Task 1: Build a Sentence</h2>
             <div style={{ fontSize: 14, color: C.t1, lineHeight: 1.8 }}>
-              <p>你需要使用给定词块拼出语法正确的句子。</p>
-              <p>你将有 {formatLongDuration(timeLimitSeconds)} 完成 10 道题。</p>
-              {practiceMode === PRACTICE_MODE.CHALLENGE && <p><b>模式：</b>挑战模式（限时更紧）</p>}
-              <p>点击<b>开始</b>后计时启动。时间结束后，系统会自动提交当前答案。</p>
+              <p>You will be given a set of word chunks. Arrange them to form a grammatically correct sentence.</p>
+              <p>You will have {formatLongDuration(timeLimitSeconds)} to complete 10 questions.</p>
+              {practiceMode === PRACTICE_MODE.CHALLENGE && <p>Mode: <b>Challenge</b> (reduced time limit)</p>}
+              <p>The timer starts when you click <b>Start</b>. Your answers will be submitted automatically when time runs out.</p>
             </div>
-            <div style={{ marginTop: 24, textAlign: "center" }}><Btn data-testid="build-start" onClick={startTimer}>开始</Btn></div>
+            <div style={{ marginTop: 24, textAlign: "center" }}><Btn data-testid="build-start" onClick={startTimer}>Start</Btn></div>
           </SurfaceCard>
         </PageShell>
       </div>
@@ -218,10 +218,10 @@ export function BuildSentenceTask({
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
-      {!embedded && <TopBar title="拼句练习" section="写作练习｜任务 1" timeLeft={tl} isRunning={run} qInfo={idx + 1 + " / " + qs.length} onExit={onExit} />}
+      {!embedded && <TopBar title="Build a Sentence" section="Writing Practice | Task 1" timeLeft={tl} isRunning={run} qInfo={idx + 1 + " / " + qs.length} onExit={onExit} />}
       <PageShell narrow>
         <InfoStrip style={{ marginBottom: 20 }}>
-          <b>作答说明：</b>使用下方词块拼出语法正确的句子，其中可能有一个干扰词块。
+          <b>Directions: </b>Use the word chunks below to form a grammatically correct sentence. There may be one distractor chunk that does not belong.
         </InfoStrip>
 
         <SurfaceCard style={{ padding: 20, marginBottom: 20 }}>
