@@ -54,9 +54,9 @@ function ExamToolbar({ taRef, onTextChange, disabled, historyRef, prevTextRef })
 
   return (
     <div style={{ background: "#f8fafc", borderBottom: "1px solid " + C.bdrSubtle, padding: "8px 12px", display: "flex", gap: 6, alignItems: "center" }}>
-      <button style={btnStyle} disabled={disabled} onMouseDown={(e) => e.preventDefault()} onClick={handleCopy}>复制</button>
-      <button style={btnStyle} disabled={disabled} onMouseDown={(e) => e.preventDefault()} onClick={handlePaste}>粘贴</button>
-      <button style={btnStyle} disabled={disabled} onMouseDown={(e) => e.preventDefault()} onClick={handleUndo}>撤销</button>
+      <button style={btnStyle} disabled={disabled} onMouseDown={(e) => e.preventDefault()} onClick={handleCopy}>Copy</button>
+      <button style={btnStyle} disabled={disabled} onMouseDown={(e) => e.preventDefault()} onClick={handlePaste}>Paste</button>
+      <button style={btnStyle} disabled={disabled} onMouseDown={(e) => e.preventDefault()} onClick={handleUndo}>Undo</button>
       <span style={{ marginLeft: 6, fontSize: 11, color: "#94a3b8" }}>仅保留英文输入</span>
     </div>
   );
