@@ -135,8 +135,16 @@ function CircularProgress({ value, max = 5, color = P.amber }) {
 
 // — Trend chart —
 
-function TrendChart({ bs, email, discussion }) {
+function TrendChart({ bs, email, discussion, filter }) {
   const [hidden, setHidden] = useState({ bs: false, email: false, discussion: false });
+
+  useEffect(() => {
+    if (!filter || filter === "all" || filter === "mock") {
+      setHidden({ bs: false, email: false, discussion: false });
+    } else {
+      setHidden({ bs: filter !== "bs", email: filter !== "email", discussion: filter !== "discussion" });
+    }
+  }, [filter]);
   const [tooltip, setTooltip] = useState(null);
   const svgRef = useRef(null);
   const W = 440, H = 156, ML = 30, MT = 10, MR = 10, MB = 24;
@@ -1038,7 +1046,7 @@ export function ProgressView({ onBack }) {
                       <div style={{ flex: 1, minWidth: 0, padding: "16px 20px 18px" }}>
                         <div style={{ fontSize: 12, fontWeight: 700, color: P.text, marginBottom: 10 }}>📈 进步趋势</div>
                         {(bs.length > 0 || email.length > 0 || discussion.length > 0) ? (
-                          <TrendChart bs={bs} email={email} discussion={discussion} />
+                          <TrendChart bs={bs} email={email} discussion={discussion} filter={filter} />
                         ) : (
                           <div style={{ padding: "28px 0", textAlign: "center", fontSize: 12, color: P.textDim }}>完成练习后，这里会显示你的进步曲线。</div>
                         )}
