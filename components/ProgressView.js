@@ -6,6 +6,7 @@ import { buildHistoryEntries, buildHistoryStats } from "../lib/history/viewModel
 import { formatLocalDateTime, translateGrammarPoint } from "../lib/utils";
 import { ChevronIcon, FONT } from "./shared/ui";
 import { HistoryRow } from "./history/HistoryRow";
+import { WritingFeedbackPanel } from "./writing/WritingFeedbackPanel";
 
 // — Extended color palette —
 const P = {
@@ -319,9 +320,10 @@ function StatCard({ icon, short, count, avg, color, active, onClick }) {
 
 // — Overview: session row —
 
-function SessionRow({ entry, expanded, onToggle, onDelete, typeAvgs }) {
+function SessionRow({ entry, expanded, onToggle, onDelete, typeAvgs, isActive, onSelect }) {
   const s = entry.session;
   const m = TYPE[s.type] || TYPE.email;
+  const isWriting = s.type === "email" || s.type === "discussion";
   let scoreStr, pct;
   if (s.type === "bs") {
     const t = Number(s.total || 0), c = Number(s.correct || 0);
@@ -334,23 +336,30 @@ function SessionRow({ entry, expanded, onToggle, onDelete, typeAvgs }) {
   const scoreColor = pct >= 0.8 ? P.primary : pct >= 0.6 ? P.amber : P.rose;
   const weaknesses = getWeaknesses(s);
 
+  function handleClick() {
+    if (isWriting && onSelect) onSelect(entry.sourceIndex);
+    else onToggle();
+  }
+
   return (
-    <div style={{ borderBottom: `1px solid ${P.borderSubtle}` }}>
+    <div style={{ borderBottom: `1px solid ${P.borderSubtle}`, borderLeft: isActive ? `3px solid ${m.color}` : "3px solid transparent", transition: "border-color 0.2s" }}>
       <button
-        onClick={onToggle}
-        style={{ width: "100%", display: "flex", alignItems: "center", gap: 10, padding: "11px 10px", background: "none", border: "none", cursor: "pointer", transition: "background 0.15s" }}
-        onMouseEnter={(e) => e.currentTarget.style.background = P.bg}
-        onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
+        onClick={handleClick}
+        style={{ width: "100%", display: "flex", alignItems: "center", gap: 10, padding: "11px 10px", background: isActive ? `${m.color}06` : "none", border: "none", cursor: "pointer", transition: "background 0.15s" }}
+        onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.background = P.bg; }}
+        onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.background = "transparent"; }}
       >
         <div style={{ width: 30, height: 30, borderRadius: 8, background: m.soft, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, flexShrink: 0 }}>{m.icon}</div>
         <div style={{ flex: 1, textAlign: "left" }}>
-          <div style={{ fontSize: 13, fontWeight: 640, color: P.text }}>{m.label}</div>
+          <div style={{ fontSize: 13, fontWeight: isActive ? 700 : 640, color: P.text }}>{m.label}</div>
           <div style={{ fontSize: 11, color: P.textDim, marginTop: 1 }}>{formatLocalDateTime(s.date)}</div>
         </div>
         <span style={{ fontVariantNumeric: "tabular-nums", fontSize: 14, fontWeight: 720, color: scoreColor }}>{scoreStr}</span>
-        <ChevronIcon open={expanded} color={P.textDim} />
+        {isWriting
+          ? <span style={{ fontSize: 16, color: isActive ? m.color : P.border, transition: "color 0.2s" }}>→</span>
+          : <ChevronIcon open={expanded} color={P.textDim} />}
       </button>
-      {expanded && (
+      {!isWriting && expanded && (
         <div style={{ padding: "0 10px 12px", animation: "expandDown 0.35s cubic-bezier(0.16,1,0.3,1)" }}>
           {weaknesses.length > 0 && (
             <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginBottom: 8 }}>
@@ -802,6 +811,7 @@ function FullMockReport({ entry, onClose }) {
 export function ProgressView({ onBack }) {
   const [hist, setHist] = useState(null);
   const [activeMockSrcIdx, setActiveMockSrcIdx] = useState(null);
+  const [activePracticeSrcIdx, setActivePracticeSrcIdx] = useState(null);
   const [filter, setFilter] = useState("all");
   const [selectedWeak, setSelectedWeak] = useState(null);
   const [expandedSrcIdx, setExpandedSrcIdx] = useState(null);
@@ -852,6 +862,7 @@ export function ProgressView({ onBack }) {
   }), [bs, email, discussion]);
 
   const activeMockEntry = mockEntries.find((e) => e.sourceIndex === activeMockSrcIdx) || null;
+  const activePracticeEntry = practiceEntries.find((e) => e.sourceIndex === activePracticeSrcIdx && (e.session.type === "email" || e.session.type === "discussion")) || null;
 
   const filteredPractice = useMemo(() => {
     let list = practiceEntries;
@@ -975,7 +986,27 @@ export function ProgressView({ onBack }) {
           <div style={{ flex: 1, minWidth: 0 }}>
             {activeMockEntry ? (
               <FullMockReport key={activeMockEntry.sourceIndex} entry={activeMockEntry} onClose={() => setActiveMockSrcIdx(null)} />
-            ) : (
+            ) : activePracticeEntry ? (() => {
+              const s = activePracticeEntry.session;
+              const fb = s.details?.feedback || null;
+              const pd = s.details?.promptData || null;
+              const userText = s.details?.userText || "";
+              const promptId = String(s.details?.promptId || pd?.id || "").trim();
+              const retryHref = promptId ? `/${s.type === "email" ? "email-writing" : "academic-writing"}?retryPromptId=${promptId}` : null;
+              return (
+                <WritingFeedbackPanel
+                  key={activePracticeEntry.sourceIndex}
+                  fb={fb}
+                  type={s.type}
+                  pd={pd}
+                  userText={userText}
+                  containerHeight="calc(100vh - 90px)"
+                  onRetry={retryHref ? () => { window.location.href = retryHref; } : null}
+                  onNext={null}
+                  onExit={() => setActivePracticeSrcIdx(null)}
+                />
+              );
+            })() : (
               <div key="overview" style={{ animation: "slideInLeft 0.4s cubic-bezier(0.16,1,0.3,1)" }}>
 
                 {/* Hero card: latest mock + trend chart */}
@@ -1042,7 +1073,9 @@ export function ProgressView({ onBack }) {
                         key={entry.sourceIndex}
                         entry={entry}
                         expanded={expandedSrcIdx === entry.sourceIndex}
+                        isActive={activePracticeSrcIdx === entry.sourceIndex}
                         onToggle={() => setExpandedSrcIdx(expandedSrcIdx === entry.sourceIndex ? null : entry.sourceIndex)}
+                        onSelect={(idx) => { setActivePracticeSrcIdx(idx); setActiveMockSrcIdx(null); setSelectedWeak(null); }}
                         onDelete={handleDelete}
                         typeAvgs={typeAvgs}
                       />

@@ -94,7 +94,7 @@ function PromptCollapse({ type, pd }) {
   );
 }
 
-export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, onExit, topBarHeight = 56 }) {
+export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, onExit, topBarHeight = 56, containerHeight }) {
   const [secondaryTab, setSecondaryTab] = useState("macro");
   const [activeErrorId, setActiveErrorId] = useState(null);
   const leftPanelRef = useRef(null);
@@ -330,7 +330,7 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
         @keyframes wfpTabFade { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes wfpSlideIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
       `}</style>
-      <div style={{ display: "flex", flexDirection: "column", height: `calc(100vh - ${topBarHeight}px)`, background: P.bg, animation: "wfpSlideIn 0.35s cubic-bezier(0.16,1,0.3,1)", fontFamily: FONT }}>
+      <div style={{ display: "flex", flexDirection: "column", height: containerHeight || `calc(100vh - ${topBarHeight}px)`, background: P.bg, animation: "wfpSlideIn 0.35s cubic-bezier(0.16,1,0.3,1)", fontFamily: FONT }}>
 
         {/* Header */}
         <div style={{ flexShrink: 0, padding: "13px 28px", borderBottom: `1px solid ${P.borderSubtle}`, background: P.surface, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -341,8 +341,8 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
             )}
           </div>
           <div style={{ display: "flex", gap: 8 }}>
-            <ActionBtn onClick={onRetry}>再练一遍</ActionBtn>
-            <ActionBtn onClick={onNext}>下一题</ActionBtn>
+            {onRetry && <ActionBtn onClick={onRetry}>再练一遍</ActionBtn>}
+            {onNext && <ActionBtn onClick={onNext}>下一题</ActionBtn>}
             <ActionBtn onClick={onExit} danger>返回</ActionBtn>
           </div>
         </div>
