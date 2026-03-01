@@ -815,6 +815,7 @@ export function ProgressView({ onBack }) {
   const [filter, setFilter] = useState("all");
   const [selectedWeak, setSelectedWeak] = useState(null);
   const [expandedSrcIdx, setExpandedSrcIdx] = useState(null);
+  const [showStats, setShowStats] = useState(true);
 
   useEffect(() => {
     // Re-initialize user context in case this page was loaded directly (e.g. refresh),
@@ -988,53 +989,67 @@ export function ProgressView({ onBack }) {
             ) : (
               <div key="overview" style={{ animation: "slideInLeft 0.4s cubic-bezier(0.16,1,0.3,1)" }}>
 
-                {/* Hero card: latest mock + trend chart */}
-                <div style={{ background: P.surface, borderRadius: 16, border: `1px solid ${P.border}`, display: "flex", overflow: "hidden", marginBottom: 16, boxShadow: P.shadow }}>
-                  {/* Left: latest mock score ring */}
-                  <div style={{ width: "32%", flexShrink: 0, padding: "28px 24px", background: "#fafbfa", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", position: "relative", borderRight: `1px solid ${P.borderSubtle}` }}>
-                    <div style={{ position: "absolute", top: 14, left: 18, fontSize: 10, fontWeight: 700, color: P.textDim, textTransform: "uppercase", letterSpacing: "0.08em" }}>最新模考</div>
-                    {mockEntries.length > 0 ? (() => {
-                      const lm = mockEntries[0].session;
-                      const bc = Number.isFinite(lm.band) ? getBandColor(lm.band) : P.textDim;
-                      return (
-                        <div style={{ display: "flex", alignItems: "center", gap: 18, marginTop: 10 }}>
-                          <CircularProgress value={Number.isFinite(lm.band) ? lm.band : 0} max={5} color={bc} />
-                          <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
-                            {lm.cefr && <Tag color={P.textSec} style={{ fontSize: 11, fontWeight: 700, border: `1px solid ${P.border}`, background: P.bg }}>CEFR {lm.cefr}</Tag>}
-                            <Tag color={P.primary} bg={P.primarySoft} style={{ border: `1px solid ${P.primary}22`, fontSize: 11, fontWeight: 700 }}>换算 {lm.scaledScore ?? "--"}/30</Tag>
-                            <Tag color={P.textDim} style={{ fontSize: 10.5, background: "transparent" }}>{new Date(lm.date).toLocaleDateString("zh-CN")}</Tag>
-                          </div>
+                {/* Collapsible stats section */}
+                <div style={{ background: P.surface, borderRadius: 16, border: `1px solid ${P.border}`, overflow: "hidden", marginBottom: 16, boxShadow: P.shadow }}>
+                  <button
+                    onClick={() => setShowStats(v => !v)}
+                    style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 18px", background: "none", border: "none", cursor: "pointer", borderBottom: showStats ? `1px solid ${P.borderSubtle}` : "none", transition: "border-color 0.2s" }}
+                  >
+                    <span style={{ fontSize: 13, fontWeight: 700, color: P.text }}>📊 数据概览</span>
+                    <ChevronIcon open={showStats} color={P.textDim} />
+                  </button>
+                  {showStats && (
+                    <div style={{ animation: "expandDown 0.3s cubic-bezier(0.16,1,0.3,1)" }}>
+                      {/* Hero card: latest mock + trend chart */}
+                      <div style={{ display: "flex", borderBottom: `1px solid ${P.borderSubtle}` }}>
+                        {/* Left: latest mock score ring */}
+                        <div style={{ width: "32%", flexShrink: 0, padding: "28px 24px", background: "#fafbfa", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", position: "relative", borderRight: `1px solid ${P.borderSubtle}` }}>
+                          <div style={{ position: "absolute", top: 14, left: 18, fontSize: 10, fontWeight: 700, color: P.textDim, textTransform: "uppercase", letterSpacing: "0.08em" }}>最新模考</div>
+                          {mockEntries.length > 0 ? (() => {
+                            const lm = mockEntries[0].session;
+                            const bc = Number.isFinite(lm.band) ? getBandColor(lm.band) : P.textDim;
+                            return (
+                              <div style={{ display: "flex", alignItems: "center", gap: 18, marginTop: 10 }}>
+                                <CircularProgress value={Number.isFinite(lm.band) ? lm.band : 0} max={5} color={bc} />
+                                <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
+                                  {lm.cefr && <Tag color={P.textSec} style={{ fontSize: 11, fontWeight: 700, border: `1px solid ${P.border}`, background: P.bg }}>CEFR {lm.cefr}</Tag>}
+                                  <Tag color={P.primary} bg={P.primarySoft} style={{ border: `1px solid ${P.primary}22`, fontSize: 11, fontWeight: 700 }}>换算 {lm.scaledScore ?? "--"}/30</Tag>
+                                  <Tag color={P.textDim} style={{ fontSize: 10.5, background: "transparent" }}>{new Date(lm.date).toLocaleDateString("zh-CN")}</Tag>
+                                </div>
+                              </div>
+                            );
+                          })() : (
+                            <div style={{ fontSize: 12, color: P.textDim, marginTop: 10 }}>暂无模考数据</div>
+                          )}
                         </div>
-                      );
-                    })() : (
-                      <div style={{ fontSize: 12, color: P.textDim, marginTop: 10 }}>暂无模考数据</div>
-                    )}
-                  </div>
-                  {/* Right: trend chart */}
-                  <div style={{ flex: 1, minWidth: 0, padding: "18px 24px 20px" }}>
-                    <div style={{ fontSize: 12, fontWeight: 700, color: P.text, marginBottom: 10 }}>📈 进步趋势</div>
-                    {(bs.length > 0 || email.length > 0 || discussion.length > 0) ? (
-                      <TrendChart bs={bs} email={email} discussion={discussion} />
-                    ) : (
-                      <div style={{ padding: "28px 0", textAlign: "center", fontSize: 12, color: P.textDim }}>完成练习后，这里会显示你的进步曲线。</div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Stat cards */}
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 10, marginBottom: 16 }}>
-                  {statItems.map((item) => (
-                    <StatCard
-                      key={item.key}
-                      icon={item.icon}
-                      short={item.short}
-                      count={item.count}
-                      avg={item.avg}
-                      color={item.color}
-                      active={filter === item.key}
-                      onClick={() => { setFilter(item.key); setSelectedWeak(null); }}
-                    />
-                  ))}
+                        {/* Right: trend chart */}
+                        <div style={{ flex: 1, minWidth: 0, padding: "18px 24px 20px" }}>
+                          <div style={{ fontSize: 12, fontWeight: 700, color: P.text, marginBottom: 10 }}>📈 进步趋势</div>
+                          {(bs.length > 0 || email.length > 0 || discussion.length > 0) ? (
+                            <TrendChart bs={bs} email={email} discussion={discussion} />
+                          ) : (
+                            <div style={{ padding: "28px 0", textAlign: "center", fontSize: 12, color: P.textDim }}>完成练习后，这里会显示你的进步曲线。</div>
+                          )}
+                        </div>
+                      </div>
+                      {/* Stat cards */}
+                      <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 0, borderTop: "none" }}>
+                        {statItems.map((item, i) => (
+                          <div key={item.key} style={{ borderRight: i < statItems.length - 1 ? `1px solid ${P.borderSubtle}` : "none" }}>
+                            <StatCard
+                              icon={item.icon}
+                              short={item.short}
+                              count={item.count}
+                              avg={item.avg}
+                              color={item.color}
+                              active={filter === item.key}
+                              onClick={() => { setFilter(item.key); setSelectedWeak(null); }}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Session list */}
