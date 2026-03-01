@@ -97,15 +97,15 @@ export function WritingResponsePanel({
     <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
       {phase === "ready" ? (
         <SurfaceCard style={{ padding: 40, textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-          <div style={{ fontSize: 14, color: C.t2 }}>先阅读题目，再点击开始进入写作。</div>
-          <Btn data-testid="writing-start" onClick={onStart}>开始写作</Btn>
+          <div style={{ fontSize: 14, color: C.t2 }}>Read the prompt carefully, then click below to begin writing.</div>
+          <Btn data-testid="writing-start" onClick={onStart}>Start Writing</Btn>
         </SurfaceCard>
       ) : (
         <>
           <SurfaceCard style={{ overflow: "hidden", flex: 1, display: "flex", flexDirection: "column" }}>
             <div style={{ background: C.ltB, padding: "12px 16px", fontSize: 12, fontWeight: 700, color: C.t2, borderBottom: "1px solid " + C.bdrSubtle, display: "flex", justifyContent: "space-between" }}>
-              <span>作答内容</span>
-              <span style={{ color: w < minW ? C.orange : C.green }}>{w} 词{w < minW ? `（还差 ${minW - w} 词）` : ""}</span>
+              <span>Your Response</span>
+              <span style={{ color: w < minW ? C.orange : C.green }}>{w} words{w < minW ? ` (${minW - w} more needed)` : ""}</span>
             </div>
 
             <ExamToolbar taRef={taRef} onTextChange={onTextChange} disabled={!isEditable} historyRef={historyRef} prevTextRef={prevTextRef} />
@@ -141,8 +141,8 @@ export function WritingResponsePanel({
 
           {phase === "writing" ? (
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <Btn data-testid="writing-submit" onClick={onSubmit} variant="success">提交评分</Btn>
-              <span style={{ fontSize: 11, color: C.t2 }}>快捷键 Ctrl+Enter</span>
+              <Btn data-testid="writing-submit" onClick={onSubmit} variant="success">Submit</Btn>
+              <span style={{ fontSize: 11, color: C.t2 }}>Shortcut: Ctrl+Enter</span>
             </div>
           ) : null}
         </>

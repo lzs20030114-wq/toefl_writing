@@ -4,7 +4,7 @@ import { C, SurfaceCard } from "../shared/ui";
 
 export function WritingPromptPanel({ type, pd }) {
   const emailGoals = Array.isArray(pd?.goals) ? pd.goals : [];
-  const professorName = String(pd?.professor?.name || "教师");
+  const professorName = String(pd?.professor?.name || "Professor");
   const professorText = String(pd?.professor?.text || "");
   const students = Array.isArray(pd?.students) ? pd.students : [];
   const professorInitial = professorName.trim() ? professorName.trim().slice(0, 1).toUpperCase() : "P";
@@ -12,16 +12,16 @@ export function WritingPromptPanel({ type, pd }) {
   return (
     <SurfaceCard style={{ overflow: "hidden" }}>
       <div style={{ background: C.ltB, padding: "12px 16px", fontSize: 12, fontWeight: 700, color: C.t2, borderBottom: "1px solid " + C.bdrSubtle }}>
-        {type === "email" ? "题目信息" : "讨论区"}
+        {type === "email" ? "Email Prompt" : "Discussion Board"}
       </div>
       {type === "email" ? (
         <div style={{ padding: 20 }}>
           <div style={{ fontSize: 12, color: C.t2, marginBottom: 6 }}>
-            <b>收件人：</b>{pd?.to || "教师"} | <b>发件人：</b>{pd?.from || "你"}
+            <b>To:</b> {pd?.to || "Professor"} &nbsp;|&nbsp; <b>From:</b> {pd?.from || "Student"}
           </div>
           <p style={{ fontSize: 14, color: C.t1, lineHeight: 1.7, margin: "12px 0" }}>{pd?.scenario || ""}</p>
           <div style={{ borderTop: "1px solid " + C.bdr, paddingTop: 12, marginTop: 12 }}>
-            <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8 }}>{pd?.direction || "请完成邮件写作。"}</div>
+            <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8 }}>{pd?.direction || "Complete the email writing task."}</div>
             {emailGoals.map((g, i) => (
               <div key={i} style={{ fontSize: 13, paddingLeft: 16, marginBottom: 4 }}>
                 {i + 1}. {g}
@@ -38,7 +38,7 @@ export function WritingPromptPanel({ type, pd }) {
               </div>
               <div>
                 <div style={{ fontSize: 13, fontWeight: 700 }}>{professorName}</div>
-                <div style={{ fontSize: 11, color: C.t2 }}>教师</div>
+                <div style={{ fontSize: 11, color: C.t2 }}>Professor</div>
               </div>
             </div>
             <p style={{ fontSize: 13, color: C.t1, lineHeight: 1.6, margin: 0 }}>{professorText}</p>
@@ -49,7 +49,7 @@ export function WritingPromptPanel({ type, pd }) {
                 <div style={{ width: 28, height: 28, borderRadius: "50%", background: i ? "#e8913a" : "#4a90d9", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700 }}>
                   {String(s?.name || "学生").slice(0, 1)}
                 </div>
-                <div style={{ fontSize: 13, fontWeight: 600 }}>{s?.name || "学生"}</div>
+                <div style={{ fontSize: 13, fontWeight: 600 }}>{s?.name || "Student"}</div>
               </div>
               <p style={{ fontSize: 13, color: C.t1, lineHeight: 1.6, margin: 0 }}>{s?.text || ""}</p>
             </div>

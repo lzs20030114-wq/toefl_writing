@@ -352,20 +352,20 @@ export function WritingTask({
   useEffect(() => () => clearInterval(tr.current), []);
 
   const w = wc(text);
-  const introTitle = type === "email" ? "任务 2：邮件写作" : "任务 3：学术讨论写作";
+  const introTitle = type === "email" ? "Task 2: Integrated Writing — Email" : "Task 3: Writing for an Academic Discussion";
   const introDescLine1 = type === "email"
-    ? "你需要阅读题目信息，并据此完成一封邮件。"
-    : "你需要阅读题目和其他学生的回应，再写出自己的观点。";
+    ? "Read the prompt carefully, then write an email addressing all three goals."
+    : "Read the professor's prompt and two student responses, then write your own contribution.";
   const introDescLine2 = type === "email"
-    ? "你将有 7 分钟完成邮件写作。"
-    : "你将有 10 分钟完成作答。";
+    ? "You will have 7 minutes to complete your response."
+    : "You will have 10 minutes to complete your response.";
 
   const topBarHeight = embedded ? 0 : 56;
 
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
-      {!embedded && <TopBar title={type === "email" ? "邮件写作" : "学术讨论写作"} section={type === "email" ? "写作练习｜任务 2" : "写作练习｜任务 3"} timeLeft={phase !== "ready" ? tl : undefined} isRunning={run} onExit={onExit} />}
+      {!embedded && <TopBar title={type === "email" ? "Email Writing" : "Academic Discussion Writing"} section={type === "email" ? "Writing Practice | Task 2" : "Writing Practice | Task 3"} timeLeft={phase !== "ready" ? tl : undefined} isRunning={run} onExit={onExit} />}
 
       {phase === "done" && fb ? (
         <WritingFeedbackPanel
@@ -403,22 +403,22 @@ export function WritingTask({
                     <div>{introDescLine2}</div>
                   </div>
                   <div style={{ fontSize: 13, color: C.t2, lineHeight: 1.7 }}>
-                    {practiceMode === PRACTICE_MODE.CHALLENGE && <div>模式：<b>挑战模式</b>（限时更紧）</div>}
+                    {practiceMode === PRACTICE_MODE.CHALLENGE && <div>Mode: <b>Challenge</b> (reduced time limit)</div>}
                   </div>
                   <div style={{ marginTop: 18 }}>
                     <Btn
                       data-testid="writing-intro-start"
                       onClick={() => { setIntro(false); start(); }}
                     >
-                      继续并开始计时
+                      Start Writing
                     </Btn>
                   </div>
                 </SurfaceCard>
               ) : (
                 <>
                   <InfoStrip style={{ marginBottom: 20 }}>
-                    <b>作答说明：</b>{type === "email" ? `请完成一封覆盖 3 个目标点的邮件。${formatMinutesLabel(limit)}。建议 80-120 词。` : `阅读讨论内容并写出你的回应。${formatMinutesLabel(limit)}。建议不少于 100 词。`}
-                    {practiceMode === PRACTICE_MODE.CHALLENGE && <span> 当前为挑战模式，限时更紧。</span>}
+                    <b>Directions: </b>{type === "email" ? `Write an email addressing all 3 goals. ${formatMinutesLabel(limit)}. Aim for 80–120 words.` : `Read the discussion and write your response. ${formatMinutesLabel(limit)}. Aim for 100+ words.`}
+                    {practiceMode === PRACTICE_MODE.CHALLENGE && <span> Challenge mode active — time limit is reduced.</span>}
                   </InfoStrip>
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
                     <WritingPromptPanel type={type} pd={pd} />
