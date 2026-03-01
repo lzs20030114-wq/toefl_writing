@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { verifyCode } from "../lib/authCode";
 import { clearCode, getSavedCode, saveCode } from "../lib/AuthContext";
-import { getLocalSessionCount, importLocalSessionsToCloud } from "../lib/sessionStore";
+import { clearLocalSessions, getLocalSessionCount, importLocalSessionsToCloud } from "../lib/sessionStore";
 import { isSupabaseConfigured } from "../lib/supabase";
 import { C, FONT } from "./shared/ui";
 
@@ -25,6 +25,11 @@ const I18N = {
     import: "导入",
     importing: "导入中...",
     skip: "跳过",
+    dismiss: "不再提示",
+    dismissConfirmTitle: "删除本地记录？",
+    dismissConfirmBody: "将清除本设备上的旧练习记录，并不再显示此提示。此操作不可恢复。",
+    dismissConfirmOk: "确认删除",
+    dismissConfirmCancel: "取消",
     langZh: "中文",
     langEn: "EN",
   },
@@ -44,10 +49,17 @@ const I18N = {
     import: "Import",
     importing: "Importing...",
     skip: "Skip",
+    dismiss: "Don't ask again",
+    dismissConfirmTitle: "Delete local records?",
+    dismissConfirmBody: "This will permanently delete the old practice records on this device and hide this prompt forever.",
+    dismissConfirmOk: "Delete & Dismiss",
+    dismissConfirmCancel: "Cancel",
     langZh: "中文",
     langEn: "EN",
   },
 };
+
+const IMPORT_DISMISSED_KEY = "toefl-import-dismissed";
 
 function normalizeInputCode(v) {
   return String(v || "").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6);
@@ -159,21 +171,55 @@ function LoginScreen({ t, lang, setLang, inputCode, setInputCode, error, loading
   );
 }
 
-function ImportPrompt({ t, count, onImport, onSkip, loading }) {
+function ImportPrompt({ t, count, onImport, onSkip, onDismiss, loading }) {
+  const [confirmOpen, setConfirmOpen] = useState(false);
   return (
-    <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 8, padding: 12, marginBottom: 14, fontSize: 13, color: "#7c2d12" }}>
-      <div style={{ marginBottom: 8 }}>
-        {t.importPrefix} {count} {t.importSuffix}
+    <>
+      <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 8, padding: 12, marginBottom: 14, fontSize: 13, color: "#7c2d12" }}>
+        <div style={{ marginBottom: 8 }}>
+          {t.importPrefix} {count} {t.importSuffix}
+        </div>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          <button onClick={onImport} disabled={loading} style={{ border: "1px solid #fdba74", background: "#ffedd5", borderRadius: 6, padding: "6px 10px", cursor: "pointer", fontFamily: FONT }}>
+            {loading ? t.importing : t.import}
+          </button>
+          <button onClick={onSkip} disabled={loading} style={{ border: "1px solid #fdba74", background: "#fff", borderRadius: 6, padding: "6px 10px", cursor: "pointer", fontFamily: FONT }}>
+            {t.skip}
+          </button>
+          <button onClick={() => setConfirmOpen(true)} disabled={loading} style={{ border: "none", background: "none", color: "#9a3412", fontSize: 12, padding: "6px 4px", cursor: "pointer", textDecoration: "underline", fontFamily: FONT }}>
+            {t.dismiss}
+          </button>
+        </div>
       </div>
-      <div style={{ display: "flex", gap: 8 }}>
-        <button onClick={onImport} disabled={loading} style={{ border: "1px solid #fdba74", background: "#ffedd5", borderRadius: 6, padding: "6px 10px", cursor: "pointer" }}>
-          {loading ? t.importing : t.import}
-        </button>
-        <button onClick={onSkip} disabled={loading} style={{ border: "1px solid #fdba74", background: "#fff", borderRadius: 6, padding: "6px 10px", cursor: "pointer" }}>
-          {t.skip}
-        </button>
-      </div>
-    </div>
+
+      {confirmOpen && (
+        <div
+          onClick={() => setConfirmOpen(false)}
+          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.35)", backdropFilter: "blur(4px)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center" }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{ background: "#fff", borderRadius: 12, padding: "24px 24px 20px", width: 320, boxShadow: "0 10px 40px rgba(0,0,0,0.12)", display: "flex", flexDirection: "column", gap: 14, fontFamily: FONT }}
+          >
+            <div>
+              <div style={{ fontSize: 15, fontWeight: 800, color: "#1a2420", marginBottom: 6 }}>{t.dismissConfirmTitle}</div>
+              <div style={{ fontSize: 13, color: "#5a6b62", lineHeight: 1.6 }}>{t.dismissConfirmBody}</div>
+            </div>
+            <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+              <button onClick={() => setConfirmOpen(false)} style={{ padding: "7px 16px", borderRadius: 8, border: "1px solid #dde5df", background: "#fff", color: "#5a6b62", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: FONT }}>
+                {t.dismissConfirmCancel}
+              </button>
+              <button
+                onClick={() => { setConfirmOpen(false); onDismiss(); }}
+                style={{ padding: "7px 16px", borderRadius: 8, border: "none", background: "#dc2626", color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: FONT }}
+              >
+                {t.dismissConfirmOk}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
@@ -217,7 +263,7 @@ export default function LoginGate({ children }) {
         if (valid) {
           const normalized = normalizeInputCode(saved);
           setUserCode(normalized);
-          setShowImportPrompt(getLocalSessionCount() > 0);
+          setShowImportPrompt((() => { try { return localStorage.getItem(IMPORT_DISMISSED_KEY) !== "1"; } catch { return true; } })() && getLocalSessionCount() > 0);
           setState("authenticated");
         } else {
           clearCode();
@@ -245,7 +291,7 @@ export default function LoginGate({ children }) {
     }
     saveCode(normalized);
     setUserCode(normalized);
-    setShowImportPrompt(getLocalSessionCount() > 0);
+    setShowImportPrompt((() => { try { return localStorage.getItem(IMPORT_DISMISSED_KEY) !== "1"; } catch { return true; } })() && getLocalSessionCount() > 0);
     setState("authenticated");
   };
 
@@ -255,6 +301,12 @@ export default function LoginGate({ children }) {
     setInputCode("");
     setShowImportPrompt(false);
     setState(isSupabaseConfigured ? "login" : "authenticated");
+  };
+
+  const handleDismiss = () => {
+    clearLocalSessions();
+    try { localStorage.setItem(IMPORT_DISMISSED_KEY, "1"); } catch { /* no-op */ }
+    setShowImportPrompt(false);
   };
 
   const handleImport = async () => {
@@ -289,7 +341,7 @@ export default function LoginGate({ children }) {
       <>
         {showImportPrompt ? (
           <div style={{ maxWidth: 760, margin: "12px auto 0", padding: "0 20px" }}>
-            <ImportPrompt t={t} count={getLocalSessionCount()} onImport={handleImport} onSkip={() => setShowImportPrompt(false)} loading={importing} />
+            <ImportPrompt t={t} count={getLocalSessionCount()} onImport={handleImport} onSkip={() => setShowImportPrompt(false)} onDismiss={handleDismiss} loading={importing} />
           </div>
         ) : null}
         {children({ userCode, onLogout: handleLogout })}
