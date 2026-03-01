@@ -4,7 +4,6 @@ import { clearAllSessions, deleteSession, loadHist, SESSION_STORE_EVENTS } from 
 import { buildHistoryEntries, buildHistoryStats } from "../lib/history/viewModel";
 import { formatLocalDateTime, translateGrammarPoint } from "../lib/utils";
 import { ChevronIcon, FONT } from "./shared/ui";
-import { ScoringReport } from "./writing/ScoringReport";
 import { HistoryRow } from "./history/HistoryRow";
 
 // — Extended color palette —
@@ -345,9 +344,24 @@ function SessionRow({ entry, expanded, onToggle, onDelete, typeAvgs }) {
 
 // — Full mock report panel —
 
+const SECONDARY_TABS = [
+  { id: "actions", label: "修改建议", icon: "✨" },
+  { id: "annotations", label: "逐句批注", icon: "📝" },
+  { id: "patterns", label: "错误规律", icon: "🔄" },
+  { id: "comparison", label: "范文对比", icon: "📖" },
+];
+
+function annStyle(level) {
+  if (level === "red") return { bg: "#fee2e2", color: "#991b1b", label: "语法错误" };
+  if (level === "orange") return { bg: "#ffedd5", color: "#9a3412", label: "表达建议" };
+  return { bg: "#dbeafe", color: "#1e3a8a", label: "拔高建议" };
+}
+
 function FullMockReport({ entry, onClose }) {
   const s = entry.session;
-  const [activeTab, setActiveTab] = useState(MOCK_IDS.EMAIL);
+  const [primaryTab, setPrimaryTab] = useState(MOCK_IDS.EMAIL);
+  const [secondaryTab, setSecondaryTab] = useState("actions");
+  const [activeMark, setActiveMark] = useState(null);
 
   const tasks = Array.isArray(s?.details?.tasks) ? s.details.tasks : [];
   const byId = useMemo(() => {
@@ -365,29 +379,32 @@ function FullMockReport({ entry, onClose }) {
   const bc = Number.isFinite(s.band) ? getBandColor(s.band) : P.textDim;
   const bandStr = Number.isFinite(s.band) ? s.band.toFixed(1) : "--";
 
-  const tabs = [
+  const primaryTabs = [
     { key: MOCK_IDS.EMAIL, label: "邮件写作", score: emailTask ? `${emailTask.score ?? "--"}/${emailTask.maxScore}` : "--", color: P.teal },
     { key: MOCK_IDS.DISC, label: "学术讨论", score: discTask ? `${discTask.score ?? "--"}/${discTask.maxScore}` : "--", color: P.indigo },
     { key: MOCK_IDS.BUILD, label: "拼句练习", score: `${bsCorrect}/${bsDetails.length}`, color: P.amber },
   ];
 
-  function renderBs() {
-    if (bsDetails.length === 0) {
-      return <div style={{ padding: "40px 0", textAlign: "center", color: P.textDim, fontSize: 13 }}>暂无拼句详情数据。</div>;
-    }
+  function switchPrimary(tab) {
+    setPrimaryTab(tab);
+    setSecondaryTab("actions");
+    setActiveMark(null);
+  }
+
+  // — Secondary tab renderers —
+
+  function renderActions(actions) {
+    if (!actions.length) return <div style={{ padding: "32px 0", textAlign: "center", color: P.textDim, fontSize: 13 }}>暂无修改建议。</div>;
     return (
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 10 }}>
-        {bsDetails.map((d, i) => (
-          <div key={i} style={{ display: "flex", gap: 10, padding: 12, background: P.bg, borderRadius: 10, border: `1px solid ${P.borderSubtle}` }}>
-            <span style={{ color: d.isCorrect ? P.primary : P.rose, fontWeight: 800, fontSize: 15, flexShrink: 0 }}>{d.isCorrect ? "✓" : "✗"}</span>
-            <div style={{ minWidth: 0 }}>
-              <div style={{ fontSize: 12, color: P.text, marginBottom: 4, wordBreak: "break-word" }}>{d.correctAnswer || d.prompt || `第 ${i + 1} 题`}</div>
-              {!d.isCorrect && d.userAnswer ? <div style={{ fontSize: 11, color: P.rose, marginBottom: 4 }}>你的答案：{d.userAnswer}</div> : null}
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
-                {(Array.isArray(d.grammar_points) ? d.grammar_points : []).map((g, gi) => (
-                  <Tag key={gi} color={P.teal} bg={P.tealSoft}>{translateGrammarPoint(g)}</Tag>
-                ))}
-              </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {actions.map((a, i) => (
+          <div key={i} style={{ background: P.surface, borderRadius: 12, border: `1px solid ${P.borderSubtle}`, borderLeft: `4px solid ${i === 0 ? P.rose : P.amber}`, padding: "14px 16px" }}>
+            <div style={{ fontSize: 14, fontWeight: 700, color: P.text, marginBottom: 8 }}>{a.title || `短板 ${i + 1}`}</div>
+            <div style={{ fontSize: 13, color: P.textSec, lineHeight: 1.7, marginBottom: 8 }}>
+              <b style={{ color: P.text }}>为什么重要：</b>{a.importance || "未提供"}
+            </div>
+            <div style={{ fontSize: 13, lineHeight: 1.7, background: P.bg, borderRadius: 8, padding: "8px 10px" }}>
+              <b>现在可做的：</b>{a.action || "未提供"}
             </div>
           </div>
         ))}
@@ -395,26 +412,246 @@ function FullMockReport({ entry, onClose }) {
     );
   }
 
+  function renderAnnotations(marks, counts) {
+    if (!marks.length) {
+      return <div style={{ padding: "32px", textAlign: "center", color: P.textDim, fontSize: 13, background: P.bg, borderRadius: 12, border: `1px dashed ${P.borderSubtle}` }}>暂无逐句批注数据。</div>;
+    }
+    return (
+      <div>
+        {/* Legend */}
+        <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 12 }}>
+          {[{ level: "red", count: counts.red }, { level: "orange", count: counts.orange }, { level: "blue", count: counts.blue }].map(({ level, count }) => {
+            const st = annStyle(level);
+            return <span key={level} style={{ padding: "2px 10px", borderRadius: 999, background: st.bg, color: st.color, fontSize: 11, fontWeight: 700 }}>{st.label} × {count}</span>;
+          })}
+        </div>
+        {/* Annotated text */}
+        <div style={{ lineHeight: 1.95, fontSize: 14, whiteSpace: "pre-wrap", padding: "18px 20px", background: P.surface, borderRadius: 12, border: `1px solid ${P.border}` }}>
+          {marks.map((seg, idx) => {
+            if (seg.type !== "mark") return <React.Fragment key={idx}>{seg.text}</React.Fragment>;
+            const st = annStyle(seg.level);
+            const isActive = activeMark === idx;
+            return (
+              <button
+                key={idx}
+                onClick={() => setActiveMark(isActive ? null : idx)}
+                style={{ border: "none", cursor: "pointer", padding: "0 2px", background: isActive ? st.color : st.bg, color: isActive ? "#fff" : st.color, borderRadius: 3, font: "inherit", outline: isActive ? `2px solid ${st.color}` : "none", outlineOffset: 1, transition: "all 0.15s" }}
+              >
+                {seg.text}
+              </button>
+            );
+          })}
+        </div>
+        {/* Active mark detail */}
+        {Number.isInteger(activeMark) && marks[activeMark]?.type === "mark" ? (
+          <div style={{ marginTop: 10, background: P.surface, borderRadius: 10, border: `1px solid ${P.border}`, padding: "12px 14px", animation: "tabFade 0.2s ease" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: P.text, marginBottom: 5 }}>修改建议</div>
+            <div style={{ fontSize: 13, color: P.textSec, lineHeight: 1.7, marginBottom: 10 }}>{marks[activeMark].fix || "暂无"}</div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: P.text, marginBottom: 5 }}>问题说明</div>
+            <div style={{ fontSize: 13, color: P.textSec, lineHeight: 1.7 }}>{marks[activeMark].note || "暂无"}</div>
+          </div>
+        ) : null}
+      </div>
+    );
+  }
+
+  function renderPatterns(patterns) {
+    const sorted = [...patterns].sort((a, b) => Number(b?.count || 0) - Number(a?.count || 0));
+    if (!sorted.length) return <div style={{ padding: "32px 0", textAlign: "center", color: P.textDim, fontSize: 13 }}>暂无错误规律数据。</div>;
+    return (
+      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        {sorted.map((p, i) => (
+          <div key={i} style={{ background: P.surface, borderRadius: 10, border: `1px solid ${P.border}`, padding: "12px 14px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 5 }}>
+              <span style={{ fontWeight: 700, fontSize: 13, color: P.text }}>{p.tag || "未分类"}</span>
+              <span style={{ fontSize: 11, color: P.textDim }}>出现 {Number(p.count || 0)} 次</span>
+            </div>
+            <div style={{ fontSize: 13, color: P.textSec, lineHeight: 1.65 }}>{p.summary || ""}</div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  function renderComparison(comparison) {
+    const modelEssay = String(comparison.modelEssay || "").trim();
+    const points = Array.isArray(comparison.points) ? comparison.points : [];
+    if (!modelEssay && !points.length) return <div style={{ padding: "32px 0", textAlign: "center", color: P.textDim, fontSize: 13 }}>暂无范文对比数据。</div>;
+    return (
+      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        {modelEssay ? (
+          <div style={{ background: P.primarySoft, borderRadius: 12, padding: "16px 18px", border: `1px solid ${P.primary}25` }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: P.primaryDeep, marginBottom: 10, textTransform: "uppercase" }}>Official Band 5.0 Sample</div>
+            <div style={{ fontSize: 13, lineHeight: 1.85, color: P.text, whiteSpace: "pre-wrap" }}>{modelEssay}</div>
+          </div>
+        ) : null}
+        {points.map((pt, i) => (
+          <div key={i} style={{ background: P.surface, borderRadius: 10, border: `1px solid ${P.border}`, padding: "12px 14px" }}>
+            <div style={{ fontWeight: 700, fontSize: 13, color: P.text, marginBottom: 10 }}>{pt.index}. {pt.title}</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              <div style={{ background: P.bg, borderRadius: 7, padding: "8px 10px", fontSize: 13 }}><b>你的：</b>{pt.yours || ""}</div>
+              <div style={{ background: P.tealSoft, borderRadius: 7, padding: "8px 10px", fontSize: 13 }}><b>范文：</b>{pt.model || ""}</div>
+              <div style={{ fontSize: 13, color: P.textSec, lineHeight: 1.7 }}><b>差异：</b>{pt.difference || ""}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  // — BS tab (full-width grid) —
+  function renderBs() {
+    if (bsDetails.length === 0) return <div style={{ padding: "48px 0", textAlign: "center", color: P.textDim, fontSize: 13 }}>暂无拼句详情数据。</div>;
+    const correct = bsDetails.filter((d) => d?.isCorrect).length;
+    return (
+      <div>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+          <div style={{ background: "#0f172a", borderRadius: 12, padding: "14px 20px", display: "flex", alignItems: "baseline", gap: 6 }}>
+            <span style={{ fontSize: 32, fontWeight: 800, color: "#fff", lineHeight: 1 }}>{correct}</span>
+            <span style={{ fontSize: 13, color: "rgba(255,255,255,0.5)" }}>/ {bsDetails.length} 题正确</span>
+          </div>
+          <div style={{ fontSize: 13, color: P.textSec }}>正确率 {bsDetails.length > 0 ? Math.round((correct / bsDetails.length) * 100) : 0}%</div>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 10 }}>
+          {bsDetails.map((d, i) => (
+            <div key={i} style={{ display: "flex", gap: 10, padding: "12px 14px", background: P.surface, borderRadius: 10, border: `1px solid ${P.borderSubtle}`, borderLeft: `3px solid ${d.isCorrect ? P.primary : P.rose}` }}>
+              <span style={{ color: d.isCorrect ? P.primary : P.rose, fontWeight: 800, fontSize: 15, flexShrink: 0, marginTop: 1 }}>{d.isCorrect ? "✓" : "✗"}</span>
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontSize: 12, color: P.text, marginBottom: 4, wordBreak: "break-word", lineHeight: 1.5 }}>{d.correctAnswer || d.prompt || `第 ${i + 1} 题`}</div>
+                {!d.isCorrect && d.userAnswer ? <div style={{ fontSize: 11, color: P.rose, marginBottom: 5 }}>你的答案：{d.userAnswer}</div> : null}
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
+                  {(Array.isArray(d.grammar_points) ? d.grammar_points : []).map((g, gi) => (
+                    <Tag key={gi} color={P.teal} bg={P.tealSoft}>{translateGrammarPoint(g)}</Tag>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // — Writing tab (40/60 split) —
   function renderWriting(task) {
-    if (!task) return <div style={{ padding: "40px 0", textAlign: "center", color: P.textDim, fontSize: 13 }}>暂无数据。</div>;
+    if (!task) return <div style={{ padding: "48px 0", textAlign: "center", color: P.textDim, fontSize: 13 }}>暂无数据。</div>;
     const response = task?.meta?.response || null;
     const feedback = task?.meta?.feedback || null;
     const reportType = task?.taskId === MOCK_IDS.EMAIL ? "email" : "discussion";
+
+    const promptText = response?.promptData?.summary
+      || response?.promptData?.body
+      || response?.promptData?.instructions
+      || task?.meta?.promptSummary
+      || null;
+    const userText = response?.userText || null;
+
+    const score = Number.isFinite(Number(feedback?.score)) ? Number(feedback.score) : null;
+    const band = Number.isFinite(Number(feedback?.band)) ? Number(feedback.band) : null;
+    const summary = String(feedback?.summary || "").trim();
+    const goals = Array.isArray(feedback?.goals) ? feedback.goals : [];
+    const actions = Array.isArray(feedback?.actions) ? feedback.actions : [];
+    const patterns = Array.isArray(feedback?.patterns) ? feedback.patterns : [];
+    const counts = feedback?.annotationCounts || { red: 0, orange: 0, blue: 0 };
+    const marks = Array.isArray(feedback?.annotationSegments) ? feedback.annotationSegments : [];
+    const comparison = feedback?.comparison || { modelEssay: "", points: [] };
+
+    const secondaryContent = {
+      actions: () => renderActions(actions),
+      annotations: () => renderAnnotations(marks, counts),
+      patterns: () => renderPatterns(patterns),
+      comparison: () => renderComparison(comparison),
+    };
+
     return (
-      <div style={{ display: "flex", gap: 20, alignItems: "flex-start", flexWrap: "wrap" }}>
-        <div style={{ flex: "3 1 320px", background: P.bg, borderRadius: 12, padding: 18, border: `1px solid ${P.borderSubtle}` }}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: P.textDim, marginBottom: 10, textTransform: "uppercase", letterSpacing: 0.5 }}>Your Response</div>
-          {response?.userText ? (
-            <div style={{ fontSize: 13, lineHeight: 1.8, color: P.text, whiteSpace: "pre-wrap" }}>{response.userText}</div>
-          ) : (
-            <div style={{ fontSize: 12, color: P.textDim, fontStyle: "italic" }}>未保存作答文本。</div>
-          )}
+      <div style={{ display: "flex", gap: 28, alignItems: "flex-start" }}>
+
+        {/* Left — static, sticky (40%) */}
+        <div style={{ width: "40%", flexShrink: 0, position: "sticky", top: 0, alignSelf: "flex-start", display: "flex", flexDirection: "column", gap: 12, maxHeight: "calc(100vh - 180px)", overflowY: "auto" }}>
+          {/* Prompt */}
+          {promptText ? (
+            <div style={{ background: P.surface, borderRadius: 12, padding: "16px 18px", border: `1px solid ${P.border}` }}>
+              <div style={{ fontSize: 10.5, fontWeight: 700, color: P.textDim, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
+                <span style={{ width: 6, height: 6, borderRadius: 999, background: "#60a5fa", flexShrink: 0 }} /> The Prompt
+              </div>
+              <p style={{ fontSize: 13, color: P.textSec, lineHeight: 1.75, margin: 0 }}>{promptText}</p>
+            </div>
+          ) : null}
+
+          {/* Your Response */}
+          <div style={{ background: P.surface, borderRadius: 12, padding: "16px 18px", border: `1px solid ${P.border}` }}>
+            <div style={{ fontSize: 10.5, fontWeight: 700, color: P.textDim, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
+              <span style={{ width: 6, height: 6, borderRadius: 999, background: "#34d399", flexShrink: 0 }} /> Your Response
+            </div>
+            {userText ? (
+              <div style={{ fontSize: 13, lineHeight: 1.85, color: P.text, whiteSpace: "pre-wrap" }}>{userText}</div>
+            ) : (
+              <div style={{ fontSize: 12, color: P.textDim, fontStyle: "italic" }}>未保存作答文本。</div>
+            )}
+          </div>
         </div>
-        <div style={{ flex: "2 1 240px" }}>
-          {feedback ? (
-            <ScoringReport result={feedback} type={reportType} uiLang={feedback?.reportLanguage || "zh"} />
+
+        {/* Right — dynamic (60%) */}
+        <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 14 }}>
+
+          {/* Score dashboard */}
+          <div style={{ background: "#0f172a", borderRadius: 14, padding: "20px 24px" }}>
+            <div style={{ display: "flex", alignItems: "flex-end", gap: 8, marginBottom: summary ? 10 : 0 }}>
+              <span style={{ fontSize: 42, fontWeight: 800, color: "#fff", lineHeight: 1 }}>{score ?? "--"}</span>
+              <span style={{ fontSize: 13, color: "rgba(255,255,255,0.45)", marginBottom: 7 }}>/ 5 分</span>
+              {band != null ? (
+                <span style={{ marginLeft: "auto", background: "rgba(255,255,255,0.12)", borderRadius: 20, padding: "3px 10px", fontSize: 12, fontWeight: 700, color: "rgba(255,255,255,0.75)" }}>
+                  Band {band}
+                </span>
+              ) : null}
+            </div>
+            {summary ? <p style={{ fontSize: 13, color: "rgba(255,255,255,0.72)", lineHeight: 1.75, margin: 0, marginBottom: goals.length ? 12 : 0 }}>{summary}</p> : null}
+            {reportType === "email" && goals.length > 0 ? (
+              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                {goals.map((g) => {
+                  const statusMap = {
+                    OK: { label: "已达成", color: "#4ade80", bg: "rgba(74,222,128,0.15)" },
+                    PARTIAL: { label: "部分达成", color: "#fb923c", bg: "rgba(251,146,60,0.15)" },
+                    MISSING: { label: "未覆盖", color: "#f87171", bg: "rgba(248,113,113,0.15)" },
+                  };
+                  const ui = statusMap[String(g.status || "").toUpperCase()] || statusMap.PARTIAL;
+                  return (
+                    <div key={g.index} style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: 10, alignItems: "start", background: "rgba(255,255,255,0.06)", borderRadius: 8, padding: "8px 10px" }}>
+                      <span style={{ padding: "2px 8px", borderRadius: 999, background: ui.bg, color: ui.color, fontSize: 11, fontWeight: 700, whiteSpace: "nowrap" }}>{ui.label}</span>
+                      <span style={{ fontSize: 12, lineHeight: 1.6, color: "rgba(255,255,255,0.82)" }}>目标 {g.index}：{g.reason || "无说明"}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : null}
+          </div>
+
+          {/* Secondary tabs + content */}
+          {!feedback ? (
+            <div style={{ padding: "40px", textAlign: "center", color: P.textDim, fontSize: 13, background: P.bg, borderRadius: 12, border: `1px solid ${P.borderSubtle}` }}>暂无 AI 反馈。</div>
           ) : (
-            <div style={{ padding: "24px", textAlign: "center", color: P.textDim, fontSize: 13, background: P.bg, borderRadius: 12, border: `1px solid ${P.borderSubtle}` }}>暂无 AI 反馈。</div>
+            <>
+              {/* Tab bar */}
+              <div style={{ display: "flex", gap: 3, paddingBottom: 10, borderBottom: `1px solid ${P.borderSubtle}` }}>
+                {SECONDARY_TABS.map((t) => {
+                  const isA = secondaryTab === t.id;
+                  return (
+                    <button
+                      key={t.id}
+                      onClick={() => { setSecondaryTab(t.id); setActiveMark(null); }}
+                      style={{ display: "flex", alignItems: "center", gap: 5, padding: "7px 11px", borderRadius: 8, border: "none", cursor: "pointer", fontSize: 12, fontWeight: isA ? 700 : 500, background: isA ? P.surface : "transparent", color: isA ? P.text : P.textSec, boxShadow: isA ? "0 1px 4px rgba(0,0,0,0.08)" : "none", transition: "all 0.18s" }}
+                    >
+                      <span>{t.icon}</span>{t.label}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Tab content */}
+              <div key={secondaryTab} style={{ animation: "tabFade 0.3s cubic-bezier(0.16,1,0.3,1)" }}>
+                {(secondaryContent[secondaryTab] || secondaryContent.actions)()}
+              </div>
+            </>
           )}
         </div>
       </div>
@@ -423,8 +660,9 @@ function FullMockReport({ entry, onClose }) {
 
   return (
     <div style={{ animation: "slideInRight 0.5s cubic-bezier(0.16,1,0.3,1)", background: P.surface, borderRadius: 16, border: `1px solid ${P.border}`, boxShadow: P.shadowLg, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+
       {/* Header */}
-      <div style={{ padding: "20px 28px", borderBottom: `1px solid ${P.borderSubtle}`, display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+      <div style={{ padding: "20px 28px", borderBottom: `1px solid ${P.borderSubtle}`, display: "flex", justifyContent: "space-between", alignItems: "flex-start", background: `${P.bg}80` }}>
         <div>
           <button
             onClick={onClose}
@@ -432,10 +670,10 @@ function FullMockReport({ entry, onClose }) {
             onMouseEnter={(e) => e.currentTarget.style.color = P.text}
             onMouseLeave={(e) => e.currentTarget.style.color = P.textDim}
           >
-            ← 收起详情，返回大盘
+            ← 返回全局概览
           </button>
           <div style={{ display: "flex", alignItems: "baseline", gap: 10, flexWrap: "wrap" }}>
-            <h2 style={{ fontSize: 20, fontWeight: 800, color: P.text, margin: 0 }}>模考详细报告</h2>
+            <h2 style={{ fontSize: 20, fontWeight: 800, color: P.text, margin: 0, letterSpacing: "-0.3px" }}>模考详细报告</h2>
             <span style={{ fontSize: 12, color: P.textDim }}>{formatLocalDateTime(s.date)}</span>
           </div>
           <div style={{ marginTop: 6, display: "flex", gap: 6, flexWrap: "wrap" }}>
@@ -444,27 +682,38 @@ function FullMockReport({ entry, onClose }) {
           </div>
         </div>
         <div style={{ textAlign: "right", flexShrink: 0 }}>
-          <div style={{ fontSize: 11, color: P.textDim, marginBottom: 4 }}>Overall Band</div>
-          <div style={{ fontSize: 30, fontWeight: 800, color: bc, lineHeight: 1 }}>{bandStr}</div>
+          <div style={{ fontSize: 10.5, fontWeight: 700, color: P.textDim, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>Overall Band</div>
+          <div style={{ fontSize: 36, fontWeight: 800, color: bc, lineHeight: 1 }}>{bandStr}</div>
         </div>
       </div>
 
-      {/* Tabs */}
-      <div style={{ padding: "0 28px", display: "flex", gap: 20, borderBottom: `1px solid ${P.borderSubtle}`, background: P.bg }}>
-        {tabs.map((t) => {
-          const isA = activeTab === t.key;
+      {/* Primary tabs */}
+      <div style={{ padding: "0 28px", display: "flex", gap: 24, borderBottom: `1px solid ${P.borderSubtle}`, background: P.surface }}>
+        {primaryTabs.map((t) => {
+          const isA = primaryTab === t.key;
           return (
-            <button key={t.key} onClick={() => setActiveTab(t.key)} style={{ padding: "14px 0", background: "none", border: "none", borderBottom: `3px solid ${isA ? t.color : "transparent"}`, cursor: "pointer", display: "flex", alignItems: "center", gap: 8, transition: "border-color 0.25s" }}>
+            <button
+              key={t.key}
+              onClick={() => switchPrimary(t.key)}
+              style={{ padding: "14px 0", background: "none", border: "none", borderBottom: `2.5px solid ${isA ? t.color : "transparent"}`, cursor: "pointer", display: "flex", alignItems: "center", gap: 8, transition: "border-color 0.2s", opacity: isA ? 1 : 0.6 }}
+            >
               <span style={{ fontSize: 13, fontWeight: isA ? 700 : 500, color: isA ? P.text : P.textSec }}>{t.label}</span>
-              <Tag color={isA ? t.color : P.textDim}>{t.score}</Tag>
+              <span style={{ fontSize: 11, fontWeight: 700, padding: "2px 7px", borderRadius: 999, background: isA ? `${t.color}18` : P.bg, color: isA ? t.color : P.textDim, transition: "all 0.2s" }}>{t.score}</span>
             </button>
           );
         })}
       </div>
 
-      {/* Tab content */}
-      <div key={activeTab} style={{ padding: 28, animation: "tabFade 0.35s cubic-bezier(0.16,1,0.3,1)", flex: 1, minHeight: 400, overflowY: "auto" }}>
-        {activeTab === MOCK_IDS.BUILD ? renderBs() : activeTab === MOCK_IDS.EMAIL ? renderWriting(emailTask) : renderWriting(discTask)}
+      {/* Content (scrollable) */}
+      <div
+        key={primaryTab}
+        style={{ padding: 28, animation: "tabFade 0.35s cubic-bezier(0.16,1,0.3,1)", flex: 1, overflowY: "auto", background: "#fafafa" }}
+      >
+        {primaryTab === MOCK_IDS.BUILD
+          ? renderBs()
+          : primaryTab === MOCK_IDS.EMAIL
+            ? renderWriting(emailTask)
+            : renderWriting(discTask)}
       </div>
     </div>
   );
