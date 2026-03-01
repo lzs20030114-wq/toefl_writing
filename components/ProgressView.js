@@ -924,10 +924,14 @@ export function ProgressView({ onBack }) {
           from { opacity: 0; transform: translateY(5px); }
           to { opacity: 1; transform: translateY(0); }
         }
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(14px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
       `}</style>
 
       {/* Top bar */}
-      <div style={{ background: "rgba(255,255,255,0.92)", padding: "0 32px", display: "flex", alignItems: "center", justifyContent: "space-between", height: 52, borderBottom: `1px solid ${P.borderSubtle}`, backdropFilter: "blur(12px)", position: "sticky", top: 0, zIndex: 100 }}>
+      <div style={{ background: "rgba(255,255,255,0.92)", padding: "0 32px", display: "flex", alignItems: "center", justifyContent: "space-between", height: 52, borderBottom: `1px solid ${P.borderSubtle}`, backdropFilter: "blur(12px)", position: "sticky", top: 0, zIndex: 100, animation: "fadeUp 0.4s cubic-bezier(0.25,1,0.5,1) 0ms both" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <div style={{ width: 26, height: 26, borderRadius: 7, background: "linear-gradient(135deg,#087355,#0891B2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <span style={{ color: "#fff", fontSize: 12, fontWeight: 800 }}>T</span>
@@ -956,7 +960,7 @@ export function ProgressView({ onBack }) {
         <div style={{ maxWidth: 1520, margin: "0 auto", padding: "24px 24px 60px", display: "flex", gap: 24, alignItems: "flex-start" }}>
 
           {/* Left sidebar */}
-          <div style={{ width: 320, flexShrink: 0, position: "sticky", top: 68 }}>
+          <div style={{ width: 320, flexShrink: 0, position: "sticky", top: 68, animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 60ms both" }}>
             <div style={{ marginBottom: 16 }}>
               <h1 style={{ fontSize: 22, fontWeight: 800, color: P.text, marginBottom: 4 }}>练习记录</h1>
               <p style={{ fontSize: 11, color: P.textDim }}>点击模考条目，在右侧展开详情报告</p>
@@ -987,7 +991,7 @@ export function ProgressView({ onBack }) {
           </div>
 
           {/* Right content */}
-          <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ flex: 1, minWidth: 0, animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 120ms both" }}>
             {activeMockEntry ? (
               <FullMockReport key={activeMockEntry.sourceIndex} entry={activeMockEntry} onClose={() => setActiveMockSrcIdx(null)} />
             ) : (
@@ -1038,7 +1042,7 @@ export function ProgressView({ onBack }) {
                 </div>
 
                 {/* Stat cards — always visible, filter both chart and session list */}
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 10, marginBottom: 16 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 10, marginBottom: 16, animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 200ms both" }}>
                   {statItems.map((item) => (
                     <StatCard
                       key={item.key}
@@ -1054,7 +1058,7 @@ export function ProgressView({ onBack }) {
                 </div>
 
                 {/* Session list */}
-                <div style={{ background: P.surface, borderRadius: 14, border: `1px solid ${P.border}`, overflow: "hidden", boxShadow: P.shadow }}>
+                <div style={{ background: P.surface, borderRadius: 14, border: `1px solid ${P.border}`, overflow: "hidden", boxShadow: P.shadow, animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 280ms both" }}>
                   <div style={{ padding: "12px 16px", background: P.bg, borderBottom: `1px solid ${P.borderSubtle}`, fontSize: 13, fontWeight: 700, color: P.text }}>
                     日常练习明细 ({filteredPractice.length})
                   </div>
