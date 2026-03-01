@@ -337,7 +337,7 @@ function SessionRow({ entry, expanded, onToggle, onDelete, typeAvgs, isActive, o
   const weaknesses = getWeaknesses(s);
 
   function handleClick() {
-    if (isWriting && onSelect) onSelect(entry.sourceIndex);
+    if (isWriting && onSelect) onSelect(isActive ? null : entry.sourceIndex);
     else onToggle();
   }
 
@@ -356,7 +356,7 @@ function SessionRow({ entry, expanded, onToggle, onDelete, typeAvgs, isActive, o
         </div>
         <span style={{ fontVariantNumeric: "tabular-nums", fontSize: 14, fontWeight: 720, color: scoreColor }}>{scoreStr}</span>
         {isWriting
-          ? <span style={{ fontSize: 16, color: isActive ? m.color : P.border, transition: "color 0.2s" }}>→</span>
+          ? <span style={{ fontSize: 18, fontWeight: 400, color: isActive ? m.color : P.border, transition: "color 0.2s, transform 0.2s", display: "inline-block", transform: isActive ? "rotate(45deg)" : "none" }}>+</span>
           : <ChevronIcon open={expanded} color={P.textDim} />}
       </button>
       {!isWriting && expanded && (
@@ -862,7 +862,6 @@ export function ProgressView({ onBack }) {
   }), [bs, email, discussion]);
 
   const activeMockEntry = mockEntries.find((e) => e.sourceIndex === activeMockSrcIdx) || null;
-  const activePracticeEntry = practiceEntries.find((e) => e.sourceIndex === activePracticeSrcIdx && (e.session.type === "email" || e.session.type === "discussion")) || null;
 
   const filteredPractice = useMemo(() => {
     let list = practiceEntries;
@@ -986,27 +985,7 @@ export function ProgressView({ onBack }) {
           <div style={{ flex: 1, minWidth: 0 }}>
             {activeMockEntry ? (
               <FullMockReport key={activeMockEntry.sourceIndex} entry={activeMockEntry} onClose={() => setActiveMockSrcIdx(null)} />
-            ) : activePracticeEntry ? (() => {
-              const s = activePracticeEntry.session;
-              const fb = s.details?.feedback || null;
-              const pd = s.details?.promptData || null;
-              const userText = s.details?.userText || "";
-              const promptId = String(s.details?.promptId || pd?.id || "").trim();
-              const retryHref = promptId ? `/${s.type === "email" ? "email-writing" : "academic-writing"}?retryPromptId=${promptId}` : null;
-              return (
-                <WritingFeedbackPanel
-                  key={activePracticeEntry.sourceIndex}
-                  fb={fb}
-                  type={s.type}
-                  pd={pd}
-                  userText={userText}
-                  containerHeight="calc(100vh - 90px)"
-                  onRetry={retryHref ? () => { window.location.href = retryHref; } : null}
-                  onNext={null}
-                  onExit={() => setActivePracticeSrcIdx(null)}
-                />
-              );
-            })() : (
+            ) : (
               <div key="overview" style={{ animation: "slideInLeft 0.4s cubic-bezier(0.16,1,0.3,1)" }}>
 
                 {/* Hero card: latest mock + trend chart */}
@@ -1063,23 +1042,50 @@ export function ProgressView({ onBack }) {
                   <div style={{ padding: "12px 16px", background: P.bg, borderBottom: `1px solid ${P.borderSubtle}`, fontSize: 13, fontWeight: 700, color: P.text }}>
                     日常练习明细 ({filteredPractice.length})
                   </div>
-                  <div style={{ padding: "8px 14px 14px", maxHeight: 520, overflowY: "auto" }}>
+                  <div style={{ padding: "8px 14px 14px" }}>
                     {filteredPractice.length === 0 ? (
                       <div style={{ padding: "24px 0", textAlign: "center", fontSize: 12, color: P.textDim }}>
                         {selectedWeak ? `没有包含「${selectedWeak}」薄弱点的记录。` : "当前筛选下暂无练习记录。"}
                       </div>
-                    ) : filteredPractice.map((entry) => (
-                      <SessionRow
-                        key={entry.sourceIndex}
-                        entry={entry}
-                        expanded={expandedSrcIdx === entry.sourceIndex}
-                        isActive={activePracticeSrcIdx === entry.sourceIndex}
-                        onToggle={() => setExpandedSrcIdx(expandedSrcIdx === entry.sourceIndex ? null : entry.sourceIndex)}
-                        onSelect={(idx) => { setActivePracticeSrcIdx(idx); setActiveMockSrcIdx(null); setSelectedWeak(null); }}
-                        onDelete={handleDelete}
-                        typeAvgs={typeAvgs}
-                      />
-                    ))}
+                    ) : filteredPractice.map((entry) => {
+                      const isExpanded = activePracticeSrcIdx === entry.sourceIndex;
+                      const s = entry.session;
+                      const isWritingEntry = s.type === "email" || s.type === "discussion";
+                      const fb = s.details?.feedback || null;
+                      const pd = s.details?.promptData || null;
+                      const userText = s.details?.userText || "";
+                      const promptId = String(s.details?.promptId || pd?.id || "").trim();
+                      const retryHref = promptId ? `/${s.type === "email" ? "email-writing" : "academic-writing"}?retryPromptId=${promptId}` : null;
+                      const mc = TYPE[s.type]?.color || P.border;
+                      return (
+                        <React.Fragment key={entry.sourceIndex}>
+                          <SessionRow
+                            entry={entry}
+                            expanded={expandedSrcIdx === entry.sourceIndex}
+                            isActive={isExpanded}
+                            onToggle={() => setExpandedSrcIdx(expandedSrcIdx === entry.sourceIndex ? null : entry.sourceIndex)}
+                            onSelect={(idx) => { setActivePracticeSrcIdx(idx); setActiveMockSrcIdx(null); setSelectedWeak(null); }}
+                            onDelete={handleDelete}
+                            typeAvgs={typeAvgs}
+                          />
+                          {isWritingEntry && isExpanded && (
+                            <div style={{ borderLeft: `3px solid ${mc}`, marginBottom: 4, animation: "expandDown 0.35s cubic-bezier(0.16,1,0.3,1)" }}>
+                              <WritingFeedbackPanel
+                                key={entry.sourceIndex}
+                                fb={fb}
+                                type={s.type}
+                                pd={pd}
+                                userText={userText}
+                                containerHeight="720px"
+                                onRetry={retryHref ? () => { window.location.href = retryHref; } : null}
+                                onNext={null}
+                                onExit={() => setActivePracticeSrcIdx(null)}
+                              />
+                            </div>
+                          )}
+                        </React.Fragment>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
