@@ -937,7 +937,6 @@ export function ProgressView({ onBack }) {
           <span style={{ fontSize: 12, color: P.textSec }}>练习记录</span>
         </div>
         <div style={{ display: "flex", gap: 8 }}>
-          <button onClick={handleClearAll} style={{ background: P.surface, border: `1px solid ${P.border}`, color: "#dc2626", padding: "7px 12px", borderRadius: 9, cursor: "pointer", fontSize: 12, fontWeight: 700 }}>清除全部</button>
           <button onClick={onBack} style={{ background: P.surface, border: `1px solid ${P.border}`, color: P.textSec, padding: "7px 12px", borderRadius: 9, cursor: "pointer", fontSize: 12, fontWeight: 700 }}>返回</button>
         </div>
       </div>
@@ -1109,6 +1108,20 @@ export function ProgressView({ onBack }) {
             )}
           </div>
 
+        </div>
+      )}
+
+      {/* Danger zone at bottom */}
+      {hist && entries.length > 0 && (
+        <div style={{ maxWidth: 1520, margin: "0 auto", padding: "0 32px 40px", display: "flex", justifyContent: "center" }}>
+          <button
+            onClick={handleClearAll}
+            style={{ background: "none", border: `1px solid ${P.borderSubtle}`, color: P.textDim, padding: "8px 18px", borderRadius: 9, cursor: "pointer", fontSize: 12, fontWeight: 600, transition: "all 0.2s" }}
+            onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#dc2626"; e.currentTarget.style.color = "#dc2626"; e.currentTarget.style.background = "#fef2f2"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.borderColor = P.borderSubtle; e.currentTarget.style.color = P.textDim; e.currentTarget.style.background = "none"; }}
+          >
+            清除全部记录
+          </button>
         </div>
       )}
     </div>
