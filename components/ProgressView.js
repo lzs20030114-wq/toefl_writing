@@ -887,8 +887,14 @@ export function ProgressView({ onBack }) {
     setHist({ ...deleteSession(sourceIndex) });
   }
 
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
+
   function handleClearAll() {
-    if (!window.confirm("删除全部练习记录？")) return;
+    setShowClearConfirm(true);
+  }
+
+  function confirmClearAll() {
+    setShowClearConfirm(false);
     setHist({ ...clearAllSessions() });
   }
 
@@ -1126,6 +1132,38 @@ export function ProgressView({ onBack }) {
           >
             清除全部记录
           </button>
+        </div>
+      )}
+
+      {/* Clear all confirm modal */}
+      {showClearConfirm && (
+        <div
+          onClick={() => setShowClearConfirm(false)}
+          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.35)", backdropFilter: "blur(4px)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", animation: "fadeUp 0.2s cubic-bezier(0.25,1,0.5,1) both" }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{ background: P.surface, borderRadius: 16, padding: "28px 28px 24px", width: 320, boxShadow: P.shadowLg, display: "flex", flexDirection: "column", gap: 16 }}
+          >
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              <div style={{ fontSize: 16, fontWeight: 800, color: P.text }}>清除全部记录？</div>
+              <div style={{ fontSize: 13, color: P.textSec, lineHeight: 1.6 }}>所有练习记录和模考数据将被永久删除，无法恢复。</div>
+            </div>
+            <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+              <button
+                onClick={() => setShowClearConfirm(false)}
+                style={{ padding: "8px 18px", borderRadius: 9, border: `1px solid ${P.border}`, background: P.surface, color: P.textSec, fontSize: 13, fontWeight: 600, cursor: "pointer" }}
+              >
+                取消
+              </button>
+              <button
+                onClick={confirmClearAll}
+                style={{ padding: "8px 18px", borderRadius: 9, border: "none", background: "#dc2626", color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer" }}
+              >
+                确认清除
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
