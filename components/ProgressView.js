@@ -708,7 +708,7 @@ function FullMockReport({ entry, onClose }) {
             })}
           </div>
           <div key={secondaryTab} style={{ flex: 1, overflowY: "auto", padding: "22px 28px 24px 22px", animation: "tabFade 0.3s cubic-bezier(0.16,1,0.3,1)" }}>
-            <div style={{ maxWidth: 520 }}>
+            <div>
               {(tabContent[secondaryTab] || tabContent.macro)()}
             </div>
           </div>
@@ -902,21 +902,21 @@ export function ProgressView({ onBack }) {
       </div>
 
       {!hist ? (
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "32px" }}>
+        <div style={{ maxWidth: 1520, margin: "0 auto", padding: "32px" }}>
           <div style={{ background: P.surface, borderRadius: 14, border: `1px solid ${P.border}`, padding: 32, textAlign: "center", color: P.textDim, fontSize: 13 }}>加载中…</div>
         </div>
       ) : entries.length === 0 ? (
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "32px" }}>
+        <div style={{ maxWidth: 1520, margin: "0 auto", padding: "32px" }}>
           <div style={{ background: P.surface, borderRadius: 14, border: `1px solid ${P.border}`, padding: 40, textAlign: "center" }}>
             <div style={{ fontSize: 14, fontWeight: 700, color: P.text, marginBottom: 8 }}>还没有练习记录</div>
             <div style={{ fontSize: 12, color: P.textDim }}>从主页开始一次练习后，这里会自动记录你的成绩、反馈与历史详情。</div>
           </div>
         </div>
       ) : (
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "24px 32px 60px", display: "flex", gap: 28, alignItems: "flex-start" }}>
+        <div style={{ maxWidth: 1520, margin: "0 auto", padding: "24px 24px 60px", display: "flex", gap: 24, alignItems: "flex-start" }}>
 
           {/* Left sidebar */}
-          <div style={{ width: 296, flexShrink: 0, position: "sticky", top: 68 }}>
+          <div style={{ width: 320, flexShrink: 0, position: "sticky", top: 68 }}>
             <div style={{ marginBottom: 16 }}>
               <h1 style={{ fontSize: 22, fontWeight: 800, color: P.text, marginBottom: 4 }}>练习记录</h1>
               <p style={{ fontSize: 11, color: P.textDim }}>点击模考条目，在右侧展开详情报告</p>
