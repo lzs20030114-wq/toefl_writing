@@ -999,12 +999,12 @@ export function ProgressView({ onBack }) {
                     <ChevronIcon open={showStats} color={P.textDim} />
                   </button>
                   {showStats && (
-                    <div style={{ animation: "expandDown 0.3s cubic-bezier(0.16,1,0.3,1)" }}>
+                    <div style={{ animation: "expandDown 0.3s cubic-bezier(0.16,1,0.3,1)", padding: 16, display: "flex", flexDirection: "column", gap: 12 }}>
                       {/* Hero card: latest mock + trend chart */}
-                      <div style={{ display: "flex", borderBottom: `1px solid ${P.borderSubtle}` }}>
+                      <div style={{ display: "flex", borderRadius: 12, border: `1px solid ${P.borderSubtle}`, overflow: "hidden" }}>
                         {/* Left: latest mock score ring */}
-                        <div style={{ width: "32%", flexShrink: 0, padding: "28px 24px", background: "#fafbfa", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", position: "relative", borderRight: `1px solid ${P.borderSubtle}` }}>
-                          <div style={{ position: "absolute", top: 14, left: 18, fontSize: 10, fontWeight: 700, color: P.textDim, textTransform: "uppercase", letterSpacing: "0.08em" }}>最新模考</div>
+                        <div style={{ width: "32%", flexShrink: 0, padding: "24px 20px", background: "#fafbfa", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", position: "relative", borderRight: `1px solid ${P.borderSubtle}` }}>
+                          <div style={{ position: "absolute", top: 12, left: 16, fontSize: 10, fontWeight: 700, color: P.textDim, textTransform: "uppercase", letterSpacing: "0.08em" }}>最新模考</div>
                           {mockEntries.length > 0 ? (() => {
                             const lm = mockEntries[0].session;
                             const bc = Number.isFinite(lm.band) ? getBandColor(lm.band) : P.textDim;
@@ -1023,7 +1023,7 @@ export function ProgressView({ onBack }) {
                           )}
                         </div>
                         {/* Right: trend chart */}
-                        <div style={{ flex: 1, minWidth: 0, padding: "18px 24px 20px" }}>
+                        <div style={{ flex: 1, minWidth: 0, padding: "16px 20px 18px" }}>
                           <div style={{ fontSize: 12, fontWeight: 700, color: P.text, marginBottom: 10 }}>📈 进步趋势</div>
                           {(bs.length > 0 || email.length > 0 || discussion.length > 0) ? (
                             <TrendChart bs={bs} email={email} discussion={discussion} />
@@ -1033,19 +1033,18 @@ export function ProgressView({ onBack }) {
                         </div>
                       </div>
                       {/* Stat cards */}
-                      <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 0, borderTop: "none" }}>
-                        {statItems.map((item, i) => (
-                          <div key={item.key} style={{ borderRight: i < statItems.length - 1 ? `1px solid ${P.borderSubtle}` : "none" }}>
-                            <StatCard
-                              icon={item.icon}
-                              short={item.short}
-                              count={item.count}
-                              avg={item.avg}
-                              color={item.color}
-                              active={filter === item.key}
-                              onClick={() => { setFilter(item.key); setSelectedWeak(null); }}
-                            />
-                          </div>
+                      <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 10 }}>
+                        {statItems.map((item) => (
+                          <StatCard
+                            key={item.key}
+                            icon={item.icon}
+                            short={item.short}
+                            count={item.count}
+                            avg={item.avg}
+                            color={item.color}
+                            active={filter === item.key}
+                            onClick={() => { setFilter(item.key); setSelectedWeak(null); }}
+                          />
                         ))}
                       </div>
                     </div>
