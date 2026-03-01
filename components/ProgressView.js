@@ -246,7 +246,7 @@ function CompactMockList({ mockEntries, activeSrcIdx, onSelect }) {
         <span style={{ fontSize: 11, color: P.textDim }}>{isExpanded ? "收起" : "展开"}</span>
       </button>
       {isExpanded && (
-        <div style={{ display: "flex", flexDirection: "column", animation: "expandDown 0.35s cubic-bezier(0.16,1,0.3,1)" }}>
+        <div style={{ maxHeight: 270, overflowY: "auto", display: "flex", flexDirection: "column", animation: "expandDown 0.35s cubic-bezier(0.16,1,0.3,1)" }}>
           {mockEntries.length === 0 ? (
             <div style={{ padding: "16px", textAlign: "center", fontSize: 12, color: P.textDim }}>暂无模考记录。</div>
           ) : mockEntries.map((entry, i) => {
