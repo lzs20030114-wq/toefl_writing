@@ -65,6 +65,7 @@ export async function POST(request) {
   }
 
   const { type, data } = body;
+  const source = body.source === "official" ? "official" : "regular";
 
   // Auto-generate question_id
   let question_id;
@@ -90,11 +91,11 @@ export async function POST(request) {
     return Response.json({ error: "Invalid type" }, { status: 400 });
   }
 
-  const dataWithId = { ...data, id: question_id };
+  const dataWithId = { ...data, id: question_id, source };
 
   const { error } = await supabaseAdmin
     .from("admin_questions")
-    .insert({ type, question_id, data: dataWithId });
+    .insert({ type, question_id, data: dataWithId, source });
 
   if (error) {
     return Response.json({ error: error.message }, { status: 500 });

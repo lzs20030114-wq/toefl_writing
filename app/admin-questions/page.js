@@ -103,6 +103,7 @@ function AcademicCard({ item, idx }) {
         }}
       >
         <Badge color={C.blue}>{item.id}</Badge>
+        {item.source === "official" && <Badge color="#d97706" bg="#fef3c7">真题</Badge>}
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontSize: 12, color: C.t3, marginBottom: 2 }}>
             Prof. {item.professor.name}
@@ -188,6 +189,7 @@ function EmailCard({ item }) {
         }}
       >
         <Badge color="#7c3aed">{item.id}</Badge>
+        {item.source === "official" && <Badge color="#d97706" bg="#fef3c7">真题</Badge>}
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 4 }}>
             <span style={{ fontSize: 12, color: C.t3 }}>
@@ -320,6 +322,7 @@ function BuildQuestionRow({ q, idx }) {
         >
           {idx + 1}
         </span>
+        {q.source === "official" && <Badge color="#d97706" bg="#fef3c7">真题</Badge>}
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontSize: 13, color: C.t3, marginBottom: 2 }}>PROMPT</div>
           <div style={{ fontSize: 14, color: C.t2, lineHeight: 1.5 }}>{q.prompt}</div>
@@ -497,6 +500,58 @@ function SearchBar({ value, onChange }) {
   );
 }
 
+// ── Source Toggle ─────────────────────────────────────────────────────────────
+function SourceToggle({ value, onChange }) {
+  return (
+    <div style={{ display: "grid", gap: 6 }}>
+      <div style={{ display: "flex", borderRadius: 8, border: "1px solid " + C.bdr, overflow: "hidden" }}>
+        <button
+          type="button"
+          onClick={() => onChange("regular")}
+          style={{
+            flex: 1,
+            padding: "8px 12px",
+            border: "none",
+            borderRight: "1px solid " + C.bdr,
+            background: value === "regular" ? "#ecfdf5" : "#fff",
+            color: value === "regular" ? C.green : C.t3,
+            fontSize: 13,
+            fontWeight: 700,
+            cursor: "pointer",
+            fontFamily: FONT,
+            transition: "all 150ms",
+          }}
+        >
+          普通题库
+        </button>
+        <button
+          type="button"
+          onClick={() => onChange("official")}
+          style={{
+            flex: 1,
+            padding: "8px 12px",
+            border: "none",
+            background: value === "official" ? "#fef3c7" : "#fff",
+            color: value === "official" ? "#d97706" : C.t3,
+            fontSize: 13,
+            fontWeight: 700,
+            cursor: "pointer",
+            fontFamily: FONT,
+            transition: "all 150ms",
+          }}
+        >
+          真题库
+        </button>
+      </div>
+      {value === "official" && (
+        <div style={{ fontSize: 12, color: "#d97706", background: "#fef3c7", borderRadius: 6, padding: "5px 10px" }}>
+          将存入真题库，暂不参与练习轮换
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── Form field helpers ────────────────────────────────────────────────────────
 function FieldLabel({ children, optional }) {
   return (
@@ -557,6 +612,7 @@ function FieldTextarea({ value, onChange, placeholder, rows = 3 }) {
 // ── Add Question Modal ────────────────────────────────────────────────────────
 function AddQuestionModal({ type: initialType, token, onClose, onSuccess }) {
   const [formType, setFormType] = useState(initialType);
+  const [source, setSource] = useState("regular");
   const [submitting, setSubmitting] = useState(false);
   const [err, setErr] = useState("");
 
@@ -640,7 +696,7 @@ function AddQuestionModal({ type: initialType, token, onClose, onSuccess }) {
       const res = await fetch("/api/admin/questions", {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-admin-token": token },
-        body: JSON.stringify({ type: formType, data }),
+        body: JSON.stringify({ type: formType, data, source }),
       });
       const body = await res.json();
       if (!res.ok) throw new Error(body?.error || `HTTP ${res.status}`);
@@ -741,6 +797,8 @@ function AddQuestionModal({ type: initialType, token, onClose, onSuccess }) {
           onSubmit={handleSubmit}
           style={{ overflowY: "auto", padding: "18px 20px", display: "grid", gap: 14, flex: 1 }}
         >
+          <SourceToggle value={source} onChange={setSource} />
+
           {/* ── Academic form ── */}
           {formType === "academic" && (
             <>
@@ -979,6 +1037,7 @@ const BULK_STEPS = { input: "input", parsing: "parsing", preview: "preview", sav
 
 function BulkImportModal({ defaultType, token, onClose, onSuccess }) {
   const [formType, setFormType] = useState(defaultType);
+  const [source, setSource] = useState("regular");
   const [text, setText] = useState("");
   const [step, setStep] = useState(BULK_STEPS.input);
   const [parsed, setParsed] = useState([]); // array of question objects
@@ -1021,7 +1080,7 @@ function BulkImportModal({ defaultType, token, onClose, onSuccess }) {
         const res = await fetch("/api/admin/questions", {
           method: "POST",
           headers: { "Content-Type": "application/json", "x-admin-token": token },
-          body: JSON.stringify({ type: formType, data: q }),
+          body: JSON.stringify({ type: formType, data: q, source }),
         });
         const body = await res.json();
         if (!res.ok) throw new Error(body?.error || `HTTP ${res.status}`);
@@ -1140,6 +1199,7 @@ function BulkImportModal({ defaultType, token, onClose, onSuccess }) {
                   {formType === "academic" ? "学术写作" : formType === "email" ? "邮件写作" : "连词成句"}
                 </strong>题目的文本直接粘贴进来，AI 会逐道识别并结构化。
               </div>
+              <SourceToggle value={source} onChange={setSource} />
               <textarea
                 value={text}
                 onChange={(e) => setText(e.target.value)}
@@ -1405,6 +1465,9 @@ export default function AdminQuestionsPage() {
   const emailCount = data?.email?.length ?? 0;
   const buildSets = data?.buildSentence?.question_sets ?? [];
   const buildTotal = buildSets.reduce((s, set) => s + (set.questions?.length ?? 0), 0);
+  const officialAcademic = (data?.academic ?? []).filter((i) => i.source === "official").length;
+  const officialEmail = (data?.email ?? []).filter((i) => i.source === "official").length;
+  const officialBuild = buildSets.flatMap((s) => s.questions).filter((q) => q.source === "official").length;
 
   // ── filtered data ──
   const q = search.trim().toLowerCase();
@@ -1587,19 +1650,19 @@ export default function AdminQuestionsPage() {
             <StatCard
               label="学术写作 Academic"
               count={academicCount}
-              sub="道讨论题"
+              sub={`${officialAcademic ? officialAcademic + " 道真题 · " : ""}道讨论题`}
               color={C.blue}
             />
             <StatCard
               label="邮件写作 Email"
               count={emailCount}
-              sub="道情景写作题"
+              sub={`${officialEmail ? officialEmail + " 道真题 · " : ""}道情景写作题`}
               color="#7c3aed"
             />
             <StatCard
               label="连词成句 Build"
               count={buildTotal}
-              sub={`道题 · ${buildSets.length} 套`}
+              sub={`${officialBuild ? officialBuild + " 道真题 · " : ""}道题 · ${buildSets.length} 套`}
               color="#d97706"
             />
           </div>
