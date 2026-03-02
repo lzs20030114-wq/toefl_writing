@@ -47,13 +47,16 @@ Return ONLY a valid JSON array (no markdown, no explanation) where each element 
   "answer": "string",
   "chunks": ["string"],
   "prefilled": ["string"],
-  "distractor": "string",
+  "distractor": "string or null",
   "grammar_points": ["string"]
 }
-Rules:
-- Extract every distinct sentence-building question you find.
-- "chunks" must be a non-empty array of word/phrase strings.
-- "prefilled", "distractor", "grammar_points" are optional — omit or set to [] / "" if not present.
+
+CRITICAL RULES for chunks vs prefilled:
+- "chunks" = word/phrase tiles the student must arrange (scrambled). All lowercase except pronouns (I, I'm, I've, I'll, I'd).
+- "prefilled" = tiles already placed for the student in a fixed position. These are NOT scrambled and must NOT appear in "chunks".
+- Every word in the answer must appear in either chunks or prefilled (excluding the distractor word).
+- If the input does not mention any prefilled items, set prefilled to [].
+- "distractor" is a single word that looks plausible but does NOT appear in the answer. Set to null if not present.
 - Return [] if nothing can be parsed.`,
 };
 
@@ -137,5 +140,52 @@ export async function POST(request) {
     );
   }
 
+  // Post-process build questions: compute prefilled_positions and has_question_mark
+  // so the AI never has to count word indices (error-prone).
+  if (type === "build") {
+    questions = questions.map((q) => postProcessBuild(q));
+  }
+
   return Response.json({ questions });
+}
+
+// ── Build post-processor ──────────────────────────────────────────────────────
+// Compute prefilled_positions from answer text (server-side, no AI needed).
+// prefilled_positions[chunk] = 0-based index of chunk's first word in the answer.
+function postProcessBuild(q) {
+  const answer = String(q.answer || "").trim();
+  const prefilled = Array.isArray(q.prefilled) ? q.prefilled : [];
+
+  // Tokenise answer (strip punctuation for matching, preserve original words for indexing)
+  const answerWords = answer
+    .replace(/[.,!?;:]/g, " ")
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((w) => w.toLowerCase());
+
+  const prefilled_positions = {};
+  for (const pf of prefilled) {
+    const pfWords = String(pf)
+      .replace(/[.,!?;:]/g, " ")
+      .split(/\s+/)
+      .filter(Boolean)
+      .map((w) => w.toLowerCase());
+    if (pfWords.length === 0) continue;
+
+    for (let i = 0; i <= answerWords.length - pfWords.length; i++) {
+      if (pfWords.every((w, j) => w === answerWords[i + j])) {
+        prefilled_positions[pf] = i;
+        break;
+      }
+    }
+  }
+
+  return {
+    ...q,
+    prefilled: prefilled,
+    prefilled_positions,
+    distractor: q.distractor || null,
+    has_question_mark: answer.endsWith("?"),
+    grammar_points: Array.isArray(q.grammar_points) ? q.grammar_points : [],
+  };
 }
