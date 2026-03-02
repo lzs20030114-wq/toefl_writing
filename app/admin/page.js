@@ -23,6 +23,11 @@ const CARDS = [
     desc: "查看内测用户提交的改进建议，包含反馈内容、来源用户码和提交时间。",
     href: "/admin-feedback",
   },
+  {
+    title: "题库管理",
+    desc: "查看当前全部练习题目，包括学术写作、邮件写作和连词成句的题目内容与详情，支持关键词搜索。",
+    href: "/admin-questions",
+  },
 ];
 
 export default function AdminHomePage() {
