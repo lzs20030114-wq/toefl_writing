@@ -974,6 +974,362 @@ function SuccessToast({ message, onClose }) {
   );
 }
 
+// ── Bulk Import Modal ─────────────────────────────────────────────────────────
+const BULK_STEPS = { input: "input", parsing: "parsing", preview: "preview", saving: "saving" };
+
+function BulkImportModal({ defaultType, token, onClose, onSuccess }) {
+  const [formType, setFormType] = useState(defaultType);
+  const [text, setText] = useState("");
+  const [step, setStep] = useState(BULK_STEPS.input);
+  const [parsed, setParsed] = useState([]); // array of question objects
+  const [removed, setRemoved] = useState(new Set()); // indices removed in preview
+  const [parseErr, setParseErr] = useState("");
+  const [saveErr, setSaveErr] = useState("");
+
+  const typeColor = { academic: C.blue, email: "#7c3aed", build: C.orange };
+
+  async function handleParse() {
+    if (!text.trim()) return;
+    setStep(BULK_STEPS.parsing);
+    setParseErr("");
+    try {
+      const res = await fetch("/api/admin/parse-questions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-token": token },
+        body: JSON.stringify({ type: formType, text: text.trim() }),
+      });
+      const body = await res.json();
+      if (!res.ok) throw new Error(body?.error || `HTTP ${res.status}`);
+      if (!body.questions?.length) throw new Error("AI 未能识别任何题目，请检查格式后重试");
+      setParsed(body.questions);
+      setRemoved(new Set());
+      setStep(BULK_STEPS.preview);
+    } catch (e) {
+      setParseErr(e.message);
+      setStep(BULK_STEPS.input);
+    }
+  }
+
+  async function handleSave() {
+    const toSave = parsed.filter((_, i) => !removed.has(i));
+    if (toSave.length === 0) return;
+    setStep(BULK_STEPS.saving);
+    setSaveErr("");
+    const results = [];
+    for (const q of toSave) {
+      try {
+        const res = await fetch("/api/admin/questions", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "x-admin-token": token },
+          body: JSON.stringify({ type: formType, data: q }),
+        });
+        const body = await res.json();
+        if (!res.ok) throw new Error(body?.error || `HTTP ${res.status}`);
+        results.push(body.question_id);
+      } catch (e) {
+        setSaveErr(`写入失败：${e.message}`);
+        setStep(BULK_STEPS.preview);
+        return;
+      }
+    }
+    onSuccess(results.length);
+  }
+
+  function toggleRemove(i) {
+    setRemoved((prev) => {
+      const next = new Set(prev);
+      next.has(i) ? next.delete(i) : next.add(i);
+      return next;
+    });
+  }
+
+  const activeCount = parsed.length - removed.size;
+
+  return (
+    <div
+      onClick={(e) => { if (e.target === e.currentTarget && step !== BULK_STEPS.saving) onClose(); }}
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "rgba(10,30,20,0.45)",
+        zIndex: 1000,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "20px 16px",
+      }}
+    >
+      <div
+        style={{
+          background: "#fff",
+          borderRadius: 14,
+          width: "100%",
+          maxWidth: 660,
+          maxHeight: "90vh",
+          overflow: "hidden",
+          display: "flex",
+          flexDirection: "column",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.2)",
+        }}
+      >
+        {/* header */}
+        <div
+          style={{
+            padding: "16px 20px",
+            borderBottom: "1px solid " + C.bdrSubtle,
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
+            flexShrink: 0,
+          }}
+        >
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 16, fontWeight: 800, color: C.nav }}>AI 批量导入</div>
+            <div style={{ fontSize: 12, color: C.t3, marginTop: 2 }}>
+              {step === BULK_STEPS.input && "粘贴原始题目文本，AI 自动识别结构"}
+              {step === BULK_STEPS.parsing && "AI 识别中…"}
+              {step === BULK_STEPS.preview && `识别到 ${parsed.length} 道题，已选 ${activeCount} 道`}
+              {step === BULK_STEPS.saving && `写入中…`}
+            </div>
+          </div>
+          {step !== BULK_STEPS.saving && (
+            <button
+              onClick={onClose}
+              style={{ background: "none", border: "none", fontSize: 20, cursor: "pointer", color: C.t3, padding: "2px 6px", fontFamily: FONT }}
+            >
+              ×
+            </button>
+          )}
+        </div>
+
+        {/* type tabs — only in input step */}
+        {step === BULK_STEPS.input && (
+          <div style={{ display: "flex", borderBottom: "1px solid " + C.bdrSubtle, flexShrink: 0 }}>
+            {TABS.map((t) => (
+              <button
+                key={t.key}
+                onClick={() => setFormType(t.key)}
+                style={{
+                  flex: 1,
+                  padding: "10px 8px",
+                  border: "none",
+                  borderBottom: formType === t.key ? `2px solid ${typeColor[t.key]}` : "2px solid transparent",
+                  background: formType === t.key ? typeColor[t.key] + "08" : "none",
+                  color: formType === t.key ? typeColor[t.key] : C.t3,
+                  fontSize: 12,
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  fontFamily: FONT,
+                  transition: "all 150ms",
+                }}
+              >
+                {t.icon} {t.label.split(" ")[0]}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* body */}
+        <div style={{ flex: 1, overflowY: "auto", padding: "18px 20px", display: "grid", gap: 14 }}>
+
+          {/* ── INPUT step ── */}
+          {step === BULK_STEPS.input && (
+            <>
+              <div style={{ fontSize: 13, color: C.t2 }}>
+                将多道<strong style={{ color: typeColor[formType] }}>
+                  {formType === "academic" ? "学术写作" : formType === "email" ? "邮件写作" : "连词成句"}
+                </strong>题目的文本直接粘贴进来，AI 会逐道识别并结构化。
+              </div>
+              <textarea
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                placeholder={"在此粘贴题目原文…"}
+                rows={12}
+                style={{
+                  width: "100%",
+                  padding: "10px 14px",
+                  border: "1px solid " + C.bdr,
+                  borderRadius: 8,
+                  fontSize: 14,
+                  fontFamily: FONT,
+                  color: C.t1,
+                  background: "#fafafa",
+                  outline: "none",
+                  resize: "vertical",
+                  boxSizing: "border-box",
+                  lineHeight: 1.6,
+                }}
+              />
+              {parseErr && (
+                <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 8, padding: "8px 12px", fontSize: 13, color: C.red }}>
+                  {parseErr}
+                </div>
+              )}
+            </>
+          )}
+
+          {/* ── PARSING step ── */}
+          {step === BULK_STEPS.parsing && (
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16, padding: "40px 0" }}>
+              <div
+                style={{
+                  width: 40, height: 40, borderRadius: "50%",
+                  border: `3px solid ${typeColor[formType]}30`,
+                  borderTop: `3px solid ${typeColor[formType]}`,
+                  animation: "spin 0.8s linear infinite",
+                }}
+              />
+              <div style={{ fontSize: 14, color: C.t2 }}>DeepSeek 识别中，请稍候…</div>
+              <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+            </div>
+          )}
+
+          {/* ── PREVIEW step ── */}
+          {(step === BULK_STEPS.preview || step === BULK_STEPS.saving) && (
+            <>
+              <div style={{ fontSize: 13, color: C.t2 }}>
+                点击题目卡片可<strong>取消选中</strong>（灰色 = 不写入）。确认后将批量写入数据库。
+              </div>
+              {saveErr && (
+                <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 8, padding: "8px 12px", fontSize: 13, color: C.red }}>
+                  {saveErr}
+                </div>
+              )}
+              {parsed.map((q, i) => {
+                const isRemoved = removed.has(i);
+                return (
+                  <div
+                    key={i}
+                    onClick={() => step !== BULK_STEPS.saving && toggleRemove(i)}
+                    style={{
+                      border: "1px solid " + (isRemoved ? C.bdr : typeColor[formType] + "60"),
+                      borderRadius: 10,
+                      padding: "12px 14px",
+                      cursor: step === BULK_STEPS.saving ? "default" : "pointer",
+                      opacity: isRemoved ? 0.4 : 1,
+                      background: isRemoved ? "#f9fafb" : "#fff",
+                      transition: "all 150ms",
+                      display: "grid",
+                      gap: 6,
+                      userSelect: "none",
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <span
+                        style={{
+                          width: 18, height: 18, borderRadius: 4, flexShrink: 0,
+                          background: isRemoved ? C.bdr : typeColor[formType],
+                          display: "flex", alignItems: "center", justifyContent: "center",
+                          fontSize: 11, color: "#fff", fontWeight: 800,
+                        }}
+                      >
+                        {isRemoved ? "✕" : i + 1}
+                      </span>
+                      <span style={{ fontSize: 11, fontWeight: 700, color: isRemoved ? C.t3 : typeColor[formType], letterSpacing: 0.3 }}>
+                        题目 {i + 1}
+                      </span>
+                    </div>
+
+                    {formType === "academic" && (
+                      <>
+                        <div style={{ fontSize: 13, color: C.t2 }}>
+                          <strong>Prof. {q.professor?.name}</strong>：{q.professor?.text?.slice(0, 80)}{q.professor?.text?.length > 80 ? "…" : ""}
+                        </div>
+                        <div style={{ fontSize: 12, color: C.t3 }}>
+                          {q.students?.map((s) => s.name).join("  ·  ")}
+                        </div>
+                      </>
+                    )}
+                    {formType === "email" && (
+                      <>
+                        <div style={{ fontSize: 13, color: C.t2 }}>
+                          To: <strong>{q.to}</strong>  ·  From: <strong>{q.from}</strong>
+                        </div>
+                        <div style={{ fontSize: 12, color: C.t3 }}>
+                          {q.scenario?.slice(0, 80)}{q.scenario?.length > 80 ? "…" : ""}
+                        </div>
+                      </>
+                    )}
+                    {formType === "build" && (
+                      <>
+                        <div style={{ fontSize: 13, color: C.t2 }}>{q.prompt}</div>
+                        <div style={{ fontSize: 12, color: C.green, fontStyle: "italic" }}>→ {q.answer}</div>
+                        <div style={{ fontSize: 12, color: C.t3 }}>
+                          {q.chunks?.slice(0, 5).join(" / ")}{q.chunks?.length > 5 ? " …" : ""}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                );
+              })}
+            </>
+          )}
+        </div>
+
+        {/* footer buttons */}
+        <div
+          style={{
+            padding: "14px 20px",
+            borderTop: "1px solid " + C.bdrSubtle,
+            display: "flex",
+            gap: 10,
+            justifyContent: "flex-end",
+            flexShrink: 0,
+          }}
+        >
+          {step === BULK_STEPS.input && (
+            <>
+              <button
+                onClick={onClose}
+                style={{ padding: "9px 18px", background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, fontSize: 14, fontWeight: 600, color: C.t2, cursor: "pointer", fontFamily: FONT }}
+              >
+                取消
+              </button>
+              <button
+                onClick={handleParse}
+                disabled={!text.trim()}
+                style={{
+                  padding: "9px 20px",
+                  background: !text.trim() ? "#9ca3af" : typeColor[formType],
+                  color: "#fff", border: "none", borderRadius: 8, fontSize: 14, fontWeight: 700,
+                  cursor: !text.trim() ? "not-allowed" : "pointer", fontFamily: FONT,
+                }}
+              >
+                AI 识别 →
+              </button>
+            </>
+          )}
+          {step === BULK_STEPS.preview && (
+            <>
+              <button
+                onClick={() => setStep(BULK_STEPS.input)}
+                style={{ padding: "9px 18px", background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, fontSize: 14, fontWeight: 600, color: C.t2, cursor: "pointer", fontFamily: FONT }}
+              >
+                ← 重新识别
+              </button>
+              <button
+                onClick={handleSave}
+                disabled={activeCount === 0}
+                style={{
+                  padding: "9px 20px",
+                  background: activeCount === 0 ? "#9ca3af" : C.green,
+                  color: "#fff", border: "none", borderRadius: 8, fontSize: 14, fontWeight: 700,
+                  cursor: activeCount === 0 ? "not-allowed" : "pointer", fontFamily: FONT,
+                }}
+              >
+                确认写入 {activeCount} 道题
+              </button>
+            </>
+          )}
+          {step === BULK_STEPS.saving && (
+            <div style={{ fontSize: 13, color: C.t2, padding: "9px 0" }}>写入中，请勿关闭…</div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── Main page ─────────────────────────────────────────────────────────────────
 export default function AdminQuestionsPage() {
   const [token, setToken] = useState("");
@@ -984,6 +1340,7 @@ export default function AdminQuestionsPage() {
   const [tab, setTab] = useState("academic");
   const [search, setSearch] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showBulkModal, setShowBulkModal] = useState(false);
   const [toast, setToast] = useState(null);
 
   useEffect(() => {
@@ -1033,6 +1390,12 @@ export default function AdminQuestionsPage() {
     setShowAddModal(false);
     load();
     setToast(`✓ 题目已添加 (${question_id})`);
+  }
+
+  function handleBulkSuccess(count) {
+    setShowBulkModal(false);
+    load();
+    setToast(`✓ 已批量写入 ${count} 道题`);
   }
 
   if (!ready) return null;
@@ -1092,6 +1455,14 @@ export default function AdminQuestionsPage() {
           onSuccess={handleAddSuccess}
         />
       )}
+      {showBulkModal && (
+        <BulkImportModal
+          defaultType={tab}
+          token={token.trim()}
+          onClose={() => setShowBulkModal(false)}
+          onSuccess={handleBulkSuccess}
+        />
+      )}
 
       <div style={{ maxWidth: 860, margin: "0 auto", display: "grid", gap: 16 }}>
 
@@ -1116,22 +1487,40 @@ export default function AdminQuestionsPage() {
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             {data && (
-              <button
-                onClick={() => setShowAddModal(true)}
-                style={{
-                  padding: "8px 16px",
-                  background: C.blue,
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: 8,
-                  fontSize: 13,
-                  fontWeight: 700,
-                  cursor: "pointer",
-                  fontFamily: FONT,
-                }}
-              >
-                + 添加题目
-              </button>
+              <>
+                <button
+                  onClick={() => setShowBulkModal(true)}
+                  style={{
+                    padding: "8px 16px",
+                    background: "#fff",
+                    color: C.orange,
+                    border: "1px solid " + C.orange + "80",
+                    borderRadius: 8,
+                    fontSize: 13,
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    fontFamily: FONT,
+                  }}
+                >
+                  AI 批量导入
+                </button>
+                <button
+                  onClick={() => setShowAddModal(true)}
+                  style={{
+                    padding: "8px 16px",
+                    background: C.blue,
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: 8,
+                    fontSize: 13,
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    fontFamily: FONT,
+                  }}
+                >
+                  + 添加题目
+                </button>
+              </>
             )}
             <Link href="/admin" style={{ fontSize: 13, color: C.blue, fontWeight: 600, textDecoration: "none" }}>
               ← 返回后台首页
