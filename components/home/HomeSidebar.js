@@ -1,5 +1,6 @@
 ﻿"use client";
 
+import { useState } from "react";
 import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
 
 function sectionTitle(isChallenge) {
@@ -43,8 +44,34 @@ export function HomeSidebar({
   sideCard,
   fadeIn,
 }) {
+  const [logoutConfirm, setLogoutConfirm] = useState(false);
+
   return (
     <div className="home-sidebar" style={{ width: 240, minWidth: 240, flexShrink: 0, display: "flex", flexDirection: "column", gap: 10, position: "sticky", top: 80, alignSelf: "flex-start" }}>
+      {logoutConfirm && (
+        <div
+          onClick={() => setLogoutConfirm(false)}
+          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.35)", backdropFilter: "blur(4px)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center" }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{ background: "#fff", borderRadius: 12, padding: "24px 24px 20px", width: 300, boxShadow: "0 10px 40px rgba(0,0,0,0.12)", display: "flex", flexDirection: "column", gap: 14, fontFamily: HOME_FONT }}
+          >
+            <div>
+              <div style={{ fontSize: 15, fontWeight: 800, color: "#1a2420", marginBottom: 6 }}>确认退出登录？</div>
+              <div style={{ fontSize: 13, color: "#5a6b62", lineHeight: 1.6 }}>退出后需重新输入登录码才能继续使用。</div>
+            </div>
+            <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+              <button onClick={() => setLogoutConfirm(false)} style={{ padding: "7px 16px", borderRadius: 8, border: "1px solid #dde5df", background: "#fff", color: "#5a6b62", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: HOME_FONT }}>
+                取消
+              </button>
+              <button onClick={() => { setLogoutConfirm(false); onLogout(); }} style={{ padding: "7px 16px", borderRadius: 8, border: "none", background: "#dc2626", color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: HOME_FONT }}>
+                确认退出
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <div style={{ ...sideCard({ padding: "20px 18px" }), ...fadeIn(100) }}>
         <div style={{ width: 44, height: 44, borderRadius: 12, background: "linear-gradient(135deg,#087355,#0891B2)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14, flexShrink: 0 }}>
           <span style={{ color: "#fff", fontSize: 20, fontWeight: 800 }}>T</span>
@@ -59,7 +86,7 @@ export function HomeSidebar({
         <div style={{ fontSize: 11, color: isChallenge ? CH.t2 : T.t3, lineHeight: 1.5, marginBottom: 14 }}>
           请妥善保存登录码，以便同步你的登录状态和练习记录。
         </div>
-        <button onClick={onLogout} onMouseEnter={() => setLogoutHover(true)} onMouseLeave={() => setLogoutHover(false)} style={{ width: "100%", padding: "8px 0", fontSize: 12, fontWeight: 600, border: `1px solid ${logoutHover ? T.rose : (isChallenge ? CH.cardBorder : T.bdr)}`, color: logoutHover ? T.rose : (isChallenge ? CH.t2 : T.t2), background: logoutHover ? T.roseSoft : "transparent", borderRadius: 8, cursor: "pointer", transition: "all .15s", fontFamily: HOME_FONT }}>
+        <button onClick={() => setLogoutConfirm(true)} onMouseEnter={() => setLogoutHover(true)} onMouseLeave={() => setLogoutHover(false)} style={{ width: "100%", padding: "8px 0", fontSize: 12, fontWeight: 600, border: `1px solid ${logoutHover ? T.rose : (isChallenge ? CH.cardBorder : T.bdr)}`, color: logoutHover ? T.rose : (isChallenge ? CH.t2 : T.t2), background: logoutHover ? T.roseSoft : "transparent", borderRadius: 8, cursor: "pointer", transition: "all .15s", fontFamily: HOME_FONT }}>
           退出登录
         </button>
       </div>
