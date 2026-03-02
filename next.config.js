@@ -1,3 +1,9 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  experimental: {
+    outputFileTracingIncludes: {
+      "/api/admin/questions": ["./data/**/*"],
+    },
+  },
+};
 module.exports = nextConfig;
