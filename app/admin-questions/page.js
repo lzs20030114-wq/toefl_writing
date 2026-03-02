@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { C, FONT } from "../../components/shared/ui";
 
 const TOKEN_KEY = "toefl-admin-token";
@@ -497,6 +497,483 @@ function SearchBar({ value, onChange }) {
   );
 }
 
+// ── Form field helpers ────────────────────────────────────────────────────────
+function FieldLabel({ children, optional }) {
+  return (
+    <div style={{ fontSize: 12, fontWeight: 700, color: C.t2, marginBottom: 4, letterSpacing: 0.3 }}>
+      {children}
+      {optional && <span style={{ fontWeight: 400, color: C.t3, marginLeft: 4 }}>(可选)</span>}
+    </div>
+  );
+}
+
+function FieldInput({ value, onChange, placeholder, type = "text" }) {
+  return (
+    <input
+      type={type}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={placeholder}
+      style={{
+        width: "100%",
+        padding: "8px 12px",
+        border: "1px solid " + C.bdr,
+        borderRadius: 8,
+        fontSize: 14,
+        fontFamily: FONT,
+        color: C.t1,
+        background: "#fff",
+        outline: "none",
+        boxSizing: "border-box",
+      }}
+    />
+  );
+}
+
+function FieldTextarea({ value, onChange, placeholder, rows = 3 }) {
+  return (
+    <textarea
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={placeholder}
+      rows={rows}
+      style={{
+        width: "100%",
+        padding: "8px 12px",
+        border: "1px solid " + C.bdr,
+        borderRadius: 8,
+        fontSize: 14,
+        fontFamily: FONT,
+        color: C.t1,
+        background: "#fff",
+        outline: "none",
+        resize: "vertical",
+        boxSizing: "border-box",
+      }}
+    />
+  );
+}
+
+// ── Add Question Modal ────────────────────────────────────────────────────────
+function AddQuestionModal({ type: initialType, token, onClose, onSuccess }) {
+  const [formType, setFormType] = useState(initialType);
+  const [submitting, setSubmitting] = useState(false);
+  const [err, setErr] = useState("");
+
+  // Academic form state
+  const [acProfName, setAcProfName] = useState("");
+  const [acProfText, setAcProfText] = useState("");
+  const [acS1Name, setAcS1Name] = useState("");
+  const [acS1Text, setAcS1Text] = useState("");
+  const [acS2Name, setAcS2Name] = useState("");
+  const [acS2Text, setAcS2Text] = useState("");
+
+  // Email form state
+  const [emTo, setEmTo] = useState("");
+  const [emFrom, setEmFrom] = useState("");
+  const [emScenario, setEmScenario] = useState("");
+  const [emDirection, setEmDirection] = useState("");
+  const [emGoals, setEmGoals] = useState([""]);
+
+  // Build form state
+  const [bPrompt, setBPrompt] = useState("");
+  const [bAnswer, setBAnswer] = useState("");
+  const [bChunks, setBChunks] = useState("");
+  const [bPrefilled, setBPrefilled] = useState("");
+  const [bDistractor, setBDistractor] = useState("");
+  const [bGrammar, setBGrammar] = useState("");
+
+  function addGoal() { setEmGoals((g) => [...g, ""]); }
+  function removeGoal(i) { setEmGoals((g) => g.filter((_, idx) => idx !== i)); }
+  function updateGoal(i, v) { setEmGoals((g) => g.map((x, idx) => idx === i ? v : x)); }
+
+  function parseCsv(str) {
+    return str.split(",").map((s) => s.trim()).filter(Boolean);
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setErr("");
+
+    let data;
+    if (formType === "academic") {
+      if (!acProfName.trim() || !acProfText.trim() || !acS1Name.trim() || !acS1Text.trim() || !acS2Name.trim() || !acS2Text.trim()) {
+        setErr("请填写所有必填字段");
+        return;
+      }
+      data = {
+        professor: { name: acProfName.trim(), text: acProfText.trim() },
+        students: [
+          { name: acS1Name.trim(), text: acS1Text.trim() },
+          { name: acS2Name.trim(), text: acS2Text.trim() },
+        ],
+      };
+    } else if (formType === "email") {
+      const goals = emGoals.map((g) => g.trim()).filter(Boolean);
+      if (!emTo.trim() || !emFrom.trim() || !emScenario.trim() || !emDirection.trim() || goals.length === 0) {
+        setErr("请填写所有必填字段（至少一条 Goal）");
+        return;
+      }
+      data = {
+        to: emTo.trim(),
+        from: emFrom.trim(),
+        scenario: emScenario.trim(),
+        direction: emDirection.trim(),
+        goals,
+      };
+    } else {
+      const chunks = parseCsv(bChunks);
+      if (!bPrompt.trim() || !bAnswer.trim() || chunks.length === 0) {
+        setErr("请填写 Prompt、Answer 和 Chunks");
+        return;
+      }
+      data = { prompt: bPrompt.trim(), answer: bAnswer.trim(), chunks };
+      const prefilled = parseCsv(bPrefilled);
+      if (prefilled.length > 0) data.prefilled = prefilled;
+      if (bDistractor.trim()) data.distractor = bDistractor.trim();
+      const gp = parseCsv(bGrammar);
+      if (gp.length > 0) data.grammar_points = gp;
+    }
+
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/admin/questions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-token": token },
+        body: JSON.stringify({ type: formType, data }),
+      });
+      const body = await res.json();
+      if (!res.ok) throw new Error(body?.error || `HTTP ${res.status}`);
+      onSuccess(body.question_id);
+    } catch (e) {
+      setErr(e.message);
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  // Tab bar colors
+  const typeColor = { academic: C.blue, email: "#7c3aed", build: C.orange };
+
+  return (
+    <div
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "rgba(10,30,20,0.45)",
+        zIndex: 1000,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "20px 16px",
+      }}
+    >
+      <div
+        style={{
+          background: "#fff",
+          borderRadius: 14,
+          width: "100%",
+          maxWidth: 600,
+          maxHeight: "90vh",
+          overflow: "hidden",
+          display: "flex",
+          flexDirection: "column",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.2)",
+        }}
+      >
+        {/* modal header */}
+        <div
+          style={{
+            padding: "16px 20px",
+            borderBottom: "1px solid " + C.bdrSubtle,
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
+            flexShrink: 0,
+          }}
+        >
+          <div style={{ flex: 1, fontSize: 16, fontWeight: 800, color: C.nav }}>添加新题目</div>
+          <button
+            onClick={onClose}
+            style={{
+              background: "none",
+              border: "none",
+              fontSize: 20,
+              cursor: "pointer",
+              color: C.t3,
+              lineHeight: 1,
+              padding: "2px 6px",
+              fontFamily: FONT,
+            }}
+          >
+            ×
+          </button>
+        </div>
+
+        {/* type tabs */}
+        <div style={{ display: "flex", gap: 0, borderBottom: "1px solid " + C.bdrSubtle, flexShrink: 0 }}>
+          {TABS.map((t) => (
+            <button
+              key={t.key}
+              onClick={() => { setFormType(t.key); setErr(""); }}
+              style={{
+                flex: 1,
+                padding: "10px 8px",
+                border: "none",
+                borderBottom: formType === t.key ? `2px solid ${typeColor[t.key]}` : "2px solid transparent",
+                background: formType === t.key ? typeColor[t.key] + "08" : "none",
+                color: formType === t.key ? typeColor[t.key] : C.t3,
+                fontSize: 12,
+                fontWeight: 700,
+                cursor: "pointer",
+                fontFamily: FONT,
+                transition: "all 150ms",
+              }}
+            >
+              {t.icon} {t.label.split(" ")[0]}
+            </button>
+          ))}
+        </div>
+
+        {/* form body */}
+        <form
+          onSubmit={handleSubmit}
+          style={{ overflowY: "auto", padding: "18px 20px", display: "grid", gap: 14, flex: 1 }}
+        >
+          {/* ── Academic form ── */}
+          {formType === "academic" && (
+            <>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 10 }}>
+                <div>
+                  <FieldLabel>Professor Name</FieldLabel>
+                  <FieldInput value={acProfName} onChange={setAcProfName} placeholder="e.g. Smith" />
+                </div>
+                <div>
+                  <FieldLabel>Professor Text</FieldLabel>
+                  <FieldTextarea value={acProfText} onChange={setAcProfText} placeholder="Professor's discussion prompt…" rows={3} />
+                </div>
+              </div>
+              <div style={{ height: 1, background: C.bdrSubtle }} />
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 10 }}>
+                <div>
+                  <FieldLabel>Student 1 Name</FieldLabel>
+                  <FieldInput value={acS1Name} onChange={setAcS1Name} placeholder="e.g. Alice" />
+                </div>
+                <div>
+                  <FieldLabel>Student 1 Text</FieldLabel>
+                  <FieldTextarea value={acS1Text} onChange={setAcS1Text} placeholder="Student's response…" rows={3} />
+                </div>
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 10 }}>
+                <div>
+                  <FieldLabel>Student 2 Name</FieldLabel>
+                  <FieldInput value={acS2Name} onChange={setAcS2Name} placeholder="e.g. Bob" />
+                </div>
+                <div>
+                  <FieldLabel>Student 2 Text</FieldLabel>
+                  <FieldTextarea value={acS2Text} onChange={setAcS2Text} placeholder="Student's response…" rows={3} />
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* ── Email form ── */}
+          {formType === "email" && (
+            <>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+                <div>
+                  <FieldLabel>To</FieldLabel>
+                  <FieldInput value={emTo} onChange={setEmTo} placeholder="e.g. Professor Lee" />
+                </div>
+                <div>
+                  <FieldLabel>From</FieldLabel>
+                  <FieldInput value={emFrom} onChange={setEmFrom} placeholder="e.g. A student" />
+                </div>
+              </div>
+              <div>
+                <FieldLabel>Scenario</FieldLabel>
+                <FieldTextarea value={emScenario} onChange={setEmScenario} placeholder="Describe the situation…" rows={3} />
+              </div>
+              <div>
+                <FieldLabel>Direction</FieldLabel>
+                <FieldInput value={emDirection} onChange={setEmDirection} placeholder="Writing task direction…" />
+              </div>
+              <div>
+                <FieldLabel>Goals</FieldLabel>
+                <div style={{ display: "grid", gap: 6 }}>
+                  {emGoals.map((g, i) => (
+                    <div key={i} style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                      <span style={{ fontSize: 12, color: C.t3, minWidth: 16 }}>{i + 1}.</span>
+                      <div style={{ flex: 1 }}>
+                        <FieldInput
+                          value={g}
+                          onChange={(v) => updateGoal(i, v)}
+                          placeholder={`Goal ${i + 1}…`}
+                        />
+                      </div>
+                      {emGoals.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removeGoal(i)}
+                          style={{
+                            background: "none",
+                            border: "1px solid " + C.bdr,
+                            borderRadius: 6,
+                            padding: "4px 8px",
+                            cursor: "pointer",
+                            fontSize: 12,
+                            color: C.t3,
+                            fontFamily: FONT,
+                          }}
+                        >
+                          ✕
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={addGoal}
+                    style={{
+                      background: "none",
+                      border: "1px dashed " + C.bdr,
+                      borderRadius: 8,
+                      padding: "7px 12px",
+                      cursor: "pointer",
+                      fontSize: 13,
+                      color: C.t2,
+                      fontFamily: FONT,
+                      textAlign: "left",
+                    }}
+                  >
+                    + 添加 Goal
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* ── Build form ── */}
+          {formType === "build" && (
+            <>
+              <div>
+                <FieldLabel>Prompt</FieldLabel>
+                <FieldInput value={bPrompt} onChange={setBPrompt} placeholder="The sentence to build…" />
+              </div>
+              <div>
+                <FieldLabel>Answer</FieldLabel>
+                <FieldInput value={bAnswer} onChange={setBAnswer} placeholder="Correct assembled sentence…" />
+              </div>
+              <div>
+                <FieldLabel>Chunks</FieldLabel>
+                <FieldInput value={bChunks} onChange={setBChunks} placeholder="word1, word2, phrase three, …（逗号分隔）" />
+                <div style={{ fontSize: 11, color: C.t3, marginTop: 3 }}>用英文逗号分隔每个词块</div>
+              </div>
+              <div>
+                <FieldLabel optional>Prefilled</FieldLabel>
+                <FieldInput value={bPrefilled} onChange={setBPrefilled} placeholder="pre1, pre2, …（逗号分隔，可选）" />
+                <div style={{ fontSize: 11, color: C.t3, marginTop: 3 }}>预填入的词块，需包含在 Chunks 中</div>
+              </div>
+              <div>
+                <FieldLabel optional>Distractor</FieldLabel>
+                <FieldInput value={bDistractor} onChange={setBDistractor} placeholder="干扰词（可选）" />
+              </div>
+              <div>
+                <FieldLabel optional>Grammar Points</FieldLabel>
+                <FieldInput value={bGrammar} onChange={setBGrammar} placeholder="subject-verb agreement, tense, …（逗号分隔，可选）" />
+              </div>
+            </>
+          )}
+
+          {/* error */}
+          {err && (
+            <div
+              style={{
+                background: "#fef2f2",
+                border: "1px solid #fca5a5",
+                borderRadius: 8,
+                padding: "8px 12px",
+                fontSize: 13,
+                color: C.red,
+              }}
+            >
+              {err}
+            </div>
+          )}
+
+          {/* submit row */}
+          <div style={{ display: "flex", gap: 10, justifyContent: "flex-end", paddingTop: 4 }}>
+            <button
+              type="button"
+              onClick={onClose}
+              style={{
+                padding: "9px 18px",
+                background: "#fff",
+                border: "1px solid " + C.bdr,
+                borderRadius: 8,
+                fontSize: 14,
+                fontWeight: 600,
+                color: C.t2,
+                cursor: "pointer",
+                fontFamily: FONT,
+              }}
+            >
+              取消
+            </button>
+            <button
+              type="submit"
+              disabled={submitting}
+              style={{
+                padding: "9px 20px",
+                background: submitting ? "#9ca3af" : C.blue,
+                color: "#fff",
+                border: "none",
+                borderRadius: 8,
+                fontSize: 14,
+                fontWeight: 700,
+                cursor: submitting ? "not-allowed" : "pointer",
+                fontFamily: FONT,
+              }}
+            >
+              {submitting ? "提交中…" : "添加题目"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+// ── Success Toast ─────────────────────────────────────────────────────────────
+function SuccessToast({ message, onClose }) {
+  useEffect(() => {
+    const t = setTimeout(onClose, 3500);
+    return () => clearTimeout(t);
+  }, [onClose]);
+  return (
+    <div
+      style={{
+        position: "fixed",
+        top: 60,
+        left: "50%",
+        transform: "translateX(-50%)",
+        background: C.green,
+        color: "#fff",
+        padding: "10px 24px",
+        borderRadius: 10,
+        fontSize: 14,
+        fontWeight: 700,
+        zIndex: 9999,
+        boxShadow: "0 10px 30px rgba(0,0,0,0.18)",
+        whiteSpace: "nowrap",
+      }}
+    >
+      {message}
+    </div>
+  );
+}
+
 // ── Main page ─────────────────────────────────────────────────────────────────
 export default function AdminQuestionsPage() {
   const [token, setToken] = useState("");
@@ -506,6 +983,8 @@ export default function AdminQuestionsPage() {
   const [err, setErr] = useState("");
   const [tab, setTab] = useState("academic");
   const [search, setSearch] = useState("");
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [toast, setToast] = useState(null);
 
   useEffect(() => {
     try {
@@ -526,7 +1005,7 @@ export default function AdminQuestionsPage() {
     }
   }
 
-  async function load() {
+  const load = useCallback(async () => {
     if (!token.trim()) return;
     setLoading(true);
     setErr("");
@@ -542,13 +1021,19 @@ export default function AdminQuestionsPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [token]);
 
   // auto-load when token is ready from localStorage
   useEffect(() => {
     if (ready && token.trim()) load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready]);
+
+  function handleAddSuccess(question_id) {
+    setShowAddModal(false);
+    load();
+    setToast(`✓ 题目已添加 (${question_id})`);
+  }
 
   if (!ready) return null;
 
@@ -598,6 +1083,16 @@ export default function AdminQuestionsPage() {
   // ── render ──
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT, padding: "20px 16px" }}>
+      {toast && <SuccessToast message={toast} onClose={() => setToast(null)} />}
+      {showAddModal && (
+        <AddQuestionModal
+          type={tab}
+          token={token.trim()}
+          onClose={() => setShowAddModal(false)}
+          onSuccess={handleAddSuccess}
+        />
+      )}
+
       <div style={{ maxWidth: 860, margin: "0 auto", display: "grid", gap: 16 }}>
 
         {/* header */}
@@ -619,9 +1114,29 @@ export default function AdminQuestionsPage() {
               查看所有练习题目内容，支持展开详情与关键词搜索。
             </div>
           </div>
-          <Link href="/admin" style={{ fontSize: 13, color: C.blue, fontWeight: 600, textDecoration: "none" }}>
-            ← 返回后台首页
-          </Link>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            {data && (
+              <button
+                onClick={() => setShowAddModal(true)}
+                style={{
+                  padding: "8px 16px",
+                  background: C.blue,
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: 8,
+                  fontSize: 13,
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  fontFamily: FONT,
+                }}
+              >
+                + 添加题目
+              </button>
+            )}
+            <Link href="/admin" style={{ fontSize: 13, color: C.blue, fontWeight: 600, textDecoration: "none" }}>
+              ← 返回后台首页
+            </Link>
+          </div>
         </div>
 
         {/* token input */}
