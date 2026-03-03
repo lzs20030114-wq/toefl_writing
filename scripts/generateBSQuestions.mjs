@@ -144,17 +144,20 @@ function ensureMinChunkCount(chunks, distractor, minCount = 4) {
 
 function normalizeQuestion(raw, tempId) {
   const q = raw && typeof raw === "object" ? raw : {};
+
+  // Fix 1: lowercase chunks and distractor BEFORE intermediate processing
+  // so ensureMinChunkCount's `c !== distractor` comparison is always case-consistent.
   let chunks = Array.isArray(q.chunks)
-    ? q.chunks.map((c) => normalizeText(c)).filter(Boolean)
+    ? q.chunks.map((c) => normalizeText(c).toLowerCase()).filter(Boolean)
     : [];
   const prefilled = Array.isArray(q.prefilled)
     ? q.prefilled.map((c) => normalizeText(c)).filter(Boolean)
     : [];
-  let prefilled_positions = (q.prefilled_positions && typeof q.prefilled_positions === "object" && !Array.isArray(q.prefilled_positions))
+  const rawPositions = (q.prefilled_positions && typeof q.prefilled_positions === "object" && !Array.isArray(q.prefilled_positions))
     ? q.prefilled_positions
     : {};
 
-  const distractor = normalizeText(q.distractor) || null;
+  const distractor = normalizeText(q.distractor)?.toLowerCase() || null;
   const answer = normalizeText(q.answer);
   const answerWords = answer.toLowerCase().replace(/[.,!?;:]/g, "").split(/\s+/).filter(Boolean);
 
@@ -164,13 +167,16 @@ function normalizeQuestion(raw, tempId) {
   // Auto-fix: Ensure at least 4 effective chunks
   chunks = ensureMinChunkCount(chunks, distractor, 4);
 
-  // Auto-fix: Correct prefilled_positions based on actual answer text
+  // Auto-fix: Correct prefilled_positions based on actual answer text.
+  // Fix 2: fallback lookup is case-insensitive so AI key-case mismatches don't lose positions.
+  const rawPositionsLower = Object.fromEntries(
+    Object.entries(rawPositions).map(([k, v]) => [k.toLowerCase(), v])
+  );
   const correctedPositions = {};
   prefilled.forEach((pf) => {
     const pfWords = pf.toLowerCase().replace(/[.,!?;:]/g, "").split(/\s+/).filter(Boolean);
     if (pfWords.length === 0) return;
 
-    // Search for the sequence in answerWords
     let found = false;
     for (let i = 0; i <= answerWords.length - pfWords.length; i++) {
       const slice = answerWords.slice(i, i + pfWords.length);
@@ -180,21 +186,21 @@ function normalizeQuestion(raw, tempId) {
         break;
       }
     }
-    // If not found, keep original or it will fail validation
-    if (!found && prefilled_positions[pf] !== undefined) {
-      correctedPositions[pf] = prefilled_positions[pf];
+    // Fallback: case-insensitive key lookup on original AI-provided positions
+    if (!found) {
+      const fallback = rawPositionsLower[pf.toLowerCase()];
+      if (fallback !== undefined) correctedPositions[pf] = fallback;
     }
   });
-  prefilled_positions = correctedPositions;
 
   return {
     id: normalizeText(q.id) || tempId,
     prompt: normalizeText(q.prompt),
     answer,
-    chunks: chunks.map(c => c.toLowerCase()), // Schema expects lowercase except special pronouns
+    chunks,
     prefilled,
-    prefilled_positions,
-    distractor: distractor?.toLowerCase() || null,
+    prefilled_positions: correctedPositions,
+    distractor,
     has_question_mark: typeof q.has_question_mark === "boolean" ? q.has_question_mark : endsWithQuestionMark(answer),
     grammar_points: Array.isArray(q.grammar_points)
       ? q.grammar_points.map((g) => normalizeText(g)).filter(Boolean)
@@ -668,11 +674,30 @@ async function generateCandidateRound(round, mode = "balanced", rejectFeedback =
   return out;
 }
 
+// Pre-compute per-question style metadata once so profileStyle() is O(n) sums
+// instead of re-splitting strings on every retry attempt.
+function attachMeta(q) {
+  if (q._meta) return q; // already computed
+  const wordCount = String(q.answer || "")
+    .replace(/[.,!?;:]/g, " ").trim().split(/\s+/).filter(Boolean).length;
+  const effectiveChunks = Array.isArray(q.chunks)
+    ? q.chunks.filter((c) => c !== q.distractor).length
+    : 0;
+  q._meta = {
+    wordCount,
+    effectiveChunks,
+    hasDistractor: q.distractor != null,
+    isEmbedded: isEmbeddedQuestion(q.grammar_points),
+    hasQuestionMark: q.has_question_mark === true,
+  };
+  return q;
+}
+
 function splitPoolByDifficulty(questions) {
   const pool = { easy: [], medium: [], hard: [] };
   questions.forEach((q) => {
     const est = estimateQuestionDifficulty(q);
-    pool[est.bucket].push(q);
+    pool[est.bucket].push(attachMeta(q));
   });
   pool.easy = shuffle(uniqBy(pool.easy, stableAnswerKey));
   pool.medium = shuffle(uniqBy(pool.medium, stableAnswerKey));
@@ -681,22 +706,27 @@ function splitPoolByDifficulty(questions) {
 }
 
 function cloneQuestion(q) {
-  return JSON.parse(JSON.stringify(q));
+  const c = JSON.parse(JSON.stringify(q));
+  delete c._meta; // _meta is internal; don't persist to output JSON
+  return c;
 }
 
 function composeOneSet(pool, setId, maxRetries = 500) {
+  const { easy: eN, medium: mN, hard: hN } = ETS_2026_TARGET_COUNTS_10;
+
+  // Use pre-computed _meta for cheap O(n) profile — no string splitting per attempt
   function profileStyle(items) {
     const total = items.length || 1;
-    const qmark = items.filter((q) => q.has_question_mark === true).length;
-    const distractor = items.filter((q) => q.distractor != null).length;
-    const embedded = items.filter((q) => isEmbeddedQuestion(q.grammar_points)).length;
-    const avgWords = items.reduce((sum, q) => (
-      sum + String(q?.answer || "").replace(/[.,!?;:]/g, " ").trim().split(/\s+/).filter(Boolean).length
-    ), 0) / total;
-    const avgChunks = items.reduce((sum, q) => (
-      sum + (Array.isArray(q?.chunks) ? q.chunks.filter((c) => c !== q?.distractor).length : 0)
-    ), 0) / total;
-    return { total, qmark, distractor, embedded, avgWords, avgChunks };
+    let qmark = 0, distractor = 0, embedded = 0, sumWords = 0, sumChunks = 0;
+    for (const q of items) {
+      const m = q._meta;
+      if (m.hasQuestionMark) qmark++;
+      if (m.hasDistractor) distractor++;
+      if (m.isEmbedded) embedded++;
+      sumWords += m.wordCount;
+      sumChunks += m.effectiveChunks;
+    }
+    return { total, qmark, distractor, embedded, avgWords: sumWords / total, avgChunks: sumChunks / total };
   }
 
   // TPO style gates: 92% statements, 88% distractors, 63% embedded
@@ -720,34 +750,61 @@ function composeOneSet(pool, setId, maxRetries = 500) {
     );
   }
 
+  // Pre-flight feasibility check: bail early if style gate can never be satisfied.
+  // Compute the best-case embedded/distractor counts achievable from this pool.
+  function isFeasible() {
+    if (
+      pool.easy.length < eN ||
+      pool.medium.length < mN ||
+      pool.hard.length < hN
+    ) return false;
+
+    const maxEmbedded =
+      Math.min(eN, pool.easy.filter((q) => q._meta.isEmbedded).length) +
+      Math.min(mN, pool.medium.filter((q) => q._meta.isEmbedded).length) +
+      Math.min(hN, pool.hard.filter((q) => q._meta.isEmbedded).length);
+    if (maxEmbedded < 4) return false; // relaxed gate minimum
+
+    const maxDistractor =
+      Math.min(eN, pool.easy.filter((q) => q._meta.hasDistractor).length) +
+      Math.min(mN, pool.medium.filter((q) => q._meta.hasDistractor).length) +
+      Math.min(hN, pool.hard.filter((q) => q._meta.hasDistractor).length);
+    if (maxDistractor < 6) return false; // relaxed gate minimum
+
+    return true;
+  }
+
+  if (!isFeasible()) return null;
+
   for (let attempt = 0; attempt < maxRetries; attempt += 1) {
     if (
-      pool.easy.length < ETS_2026_TARGET_COUNTS_10.easy ||
-      pool.medium.length < ETS_2026_TARGET_COUNTS_10.medium ||
-      pool.hard.length < ETS_2026_TARGET_COUNTS_10.hard
-    ) {
-      return null;
-    }
+      pool.easy.length < eN ||
+      pool.medium.length < mN ||
+      pool.hard.length < hN
+    ) return null;
 
-    const easyPick = shuffle(pool.easy).slice(0, ETS_2026_TARGET_COUNTS_10.easy);
-    const mediumPick = shuffle(pool.medium).slice(0, ETS_2026_TARGET_COUNTS_10.medium);
-    const hardPick = shuffle(pool.hard).slice(0, ETS_2026_TARGET_COUNTS_10.hard);
-    const merged = shuffle([...easyPick, ...mediumPick, ...hardPick]).map(cloneQuestion);
+    const picked = [
+      ...shuffle(pool.easy).slice(0, eN),
+      ...shuffle(pool.medium).slice(0, mN),
+      ...shuffle(pool.hard).slice(0, hN),
+    ];
 
-    // re-id for final bank
-    merged.forEach((q, i) => {
-      q.id = `ets_s${setId}_q${i + 1}`;
-    });
+    // 1. Style gate first — cheap, uses pre-computed _meta, no clone needed
+    const style = profileStyle(picked);
+    const styleGate = attempt < Math.floor(maxRetries * 0.6) ? stylePassStrict : stylePassRelaxed;
+    if (!styleGate(style)) continue;
 
+    // 2. Clone + re-id only after style passes (avoids wasted deep-clones)
+    const merged = shuffle(picked).map(cloneQuestion);
+    merged.forEach((q, i) => { q.id = `ets_s${setId}_q${i + 1}`; });
+
+    // 3. Schema + difficulty validation (rare failures; done after cheap gate)
     const set = { set_id: setId, questions: merged };
     const schemaOk = validateQuestionSet(set).ok;
     const diff = evaluateSetDifficultyAgainstTarget(merged);
     if (!schemaOk || !diff.ok || !diff.meetsTargetCount10) continue;
-    const style = profileStyle(merged);
-    const styleGate = attempt < Math.floor(maxRetries * 0.6) ? stylePassStrict : stylePassRelaxed;
-    if (!styleGate(style)) continue;
 
-    // runtime strict check
+    // 4. Runtime strict check
     let runtimeOk = true;
     for (const q of merged) {
       try {
@@ -760,8 +817,8 @@ function composeOneSet(pool, setId, maxRetries = 500) {
     }
     if (!runtimeOk) continue;
 
-    // consume used questions from pool (by answer key)
-    const usedKeys = new Set(merged.map(stableAnswerKey));
+    // Consume used questions from pool (by answer key)
+    const usedKeys = new Set(picked.map(stableAnswerKey));
     pool.easy = pool.easy.filter((q) => !usedKeys.has(stableAnswerKey(q)));
     pool.medium = pool.medium.filter((q) => !usedKeys.has(stableAnswerKey(q)));
     pool.hard = pool.hard.filter((q) => !usedKeys.has(stableAnswerKey(q)));
