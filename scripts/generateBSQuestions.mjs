@@ -145,32 +145,56 @@ function ensureMinChunkCount(chunks, distractor, minCount = 4) {
 function normalizeQuestion(raw, tempId) {
   const q = raw && typeof raw === "object" ? raw : {};
   let chunks = Array.isArray(q.chunks)
-    ? q.chunks.map((c) => normalizeText(c).toLowerCase()).filter(Boolean)
+    ? q.chunks.map((c) => normalizeText(c)).filter(Boolean)
     : [];
   const prefilled = Array.isArray(q.prefilled)
     ? q.prefilled.map((c) => normalizeText(c)).filter(Boolean)
     : [];
-  const prefilled_positions = (q.prefilled_positions && typeof q.prefilled_positions === "object" && !Array.isArray(q.prefilled_positions))
+  let prefilled_positions = (q.prefilled_positions && typeof q.prefilled_positions === "object" && !Array.isArray(q.prefilled_positions))
     ? q.prefilled_positions
     : {};
 
-  const distractor = normalizeText(q.distractor)?.toLowerCase() || null;
+  const distractor = normalizeText(q.distractor) || null;
+  const answer = normalizeText(q.answer);
+  const answerWords = answer.toLowerCase().replace(/[.,!?;:]/g, "").split(/\s+/).filter(Boolean);
 
-  // Auto-fix: split any chunk with >3 words
+  // Auto-fix: Split any chunk with >3 words
   chunks = chunks.flatMap((c) => autoSplitChunk(c, 3));
 
-  // Auto-fix: ensure at least 4 effective chunks (TPO minimum)
+  // Auto-fix: Ensure at least 4 effective chunks
   chunks = ensureMinChunkCount(chunks, distractor, 4);
 
-  const answer = normalizeText(q.answer);
+  // Auto-fix: Correct prefilled_positions based on actual answer text
+  const correctedPositions = {};
+  prefilled.forEach((pf) => {
+    const pfWords = pf.toLowerCase().replace(/[.,!?;:]/g, "").split(/\s+/).filter(Boolean);
+    if (pfWords.length === 0) return;
+
+    // Search for the sequence in answerWords
+    let found = false;
+    for (let i = 0; i <= answerWords.length - pfWords.length; i++) {
+      const slice = answerWords.slice(i, i + pfWords.length);
+      if (slice.every((w, idx) => w === pfWords[idx])) {
+        correctedPositions[pf] = i;
+        found = true;
+        break;
+      }
+    }
+    // If not found, keep original or it will fail validation
+    if (!found && prefilled_positions[pf] !== undefined) {
+      correctedPositions[pf] = prefilled_positions[pf];
+    }
+  });
+  prefilled_positions = correctedPositions;
+
   return {
     id: normalizeText(q.id) || tempId,
     prompt: normalizeText(q.prompt),
     answer,
-    chunks,
+    chunks: chunks.map(c => c.toLowerCase()), // Schema expects lowercase except special pronouns
     prefilled,
     prefilled_positions,
-    distractor,
+    distractor: distractor?.toLowerCase() || null,
     has_question_mark: typeof q.has_question_mark === "boolean" ? q.has_question_mark : endsWithQuestionMark(answer),
     grammar_points: Array.isArray(q.grammar_points)
       ? q.grammar_points.map((g) => normalizeText(g)).filter(Boolean)
@@ -248,6 +272,7 @@ Difficulty target for this 10-question batch:
 - include distractor in at least 8 items (always single word, mostly did/do/does)
 - include embedded question in at least 7 items
 - multi-layer nesting (3+ grammar layers: indirect question + passive progressive / perfect + negation / ability expression)
+- must include at least 1 morphological distractor (tense/form variant) that matches the sentence's context but violates tense/aspect rules
 - complex but natural sentence structure
 `
     : `
@@ -312,9 +337,11 @@ At least 1 combined with indirect question (e.g. "I did not understand what he s
 Types: did not, do not, have not, was not, could not, no longer, have no
 
 ### Relative clause / contact clause: 1-2 items
-TPO specialty: omitted relative pronoun (contact clause)
-- The bookstore [that] I stopped by...
-- The desk [that] you ordered...
+TPO specialty: naturally omitted relative pronoun (contact clause). Build sentences where omission is the most natural phrasing — object relatives only:
+- "The bookstore [that] I stopped by had the novel in stock." ✓ (object, naturally omissible)
+- "The desk [that] you ordered arrived this morning." ✓ (object, naturally omissible)
+- "The man [who] called me" ✗ — subject relatives CANNOT be omitted.
+Keep the relative clause fragment as a coherent chunk unit; avoid stranding prepositions from their clause.
 
 ### Other: 0-1 items (comparative, passive, find/make + object + complement)
 
@@ -328,13 +355,15 @@ Use diverse names: Matthew, Mariana, Julian, Alison, Emma, Professor Cho, etc.
 ## Distractor rules (MAJOR CHANGE): 88% have distractors.
 CRITICAL: Distractor must ALWAYS be a SINGLE WORD (never a phrase).
 ### Distractor strategies (by priority):
-1. EXTRA AUXILIARY (at least 5 items): did, do, does
-   THE core TPO distractor! "did" alone appears in ~1/3 of ALL questions.
-   Place extra did/do/does in indirect questions
-   to tempt examinees into using inverted (direct question) word order.
+1. EXTRA AUXILIARY (4-5 items): did, do, does
+   Core TPO distractor for embedded questions — tests no-inversion rule.
    Example: answer "She wanted to know if I went anywhere interesting", distractor "did"
-2. Tense/form variant (1-2 items): staying/stay, gone/going, choose/chose, taken/took
-3. Similar function word (1 item): which/what, where/when, no/not/none
+   PASSIVE VOICE EXCEPTION: NEVER use "did" for passive voice sentences. Use morphological variant instead (e.g., "gets", "have", "been").
+2. Tense/form variant (2-3 items, RAISED PRIORITY): staying/stay, gone/going, choose/chose, taken/took, revised/revise, chosen/chose
+   Pick a form that matches the sentence's tense context but violates tense/aspect rules.
+   HARD mode: MUST include at least 1 morphological distractor per batch.
+3. Similar function word (1-2 items, RAISED PRIORITY): which/what, where/when, no/not/none, who/whom
+   Subtle semantic traps — plausible in context but grammatically wrong.
 4. Extra structure word (0-1 items): that, because, was
 
 ## Prefilled rules:

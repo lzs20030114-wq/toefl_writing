@@ -40,24 +40,54 @@ Rules:
 - "goals" must be a non-empty array of strings.
 - Return [] if nothing can be parsed.`,
 
-  build: `You are a JSON extractor. Parse the user's text into TOEFL build-sentence questions.
-Return ONLY a valid JSON array (no markdown, no explanation) where each element has this exact shape:
+  build: `You are a JSON extractor. Parse TOEFL "Build a Sentence" questions from the user's text.
+
+INPUT FORMAT (TPO style — each question has 3 parts):
+  Part 1 – Person A's spoken question  →  becomes "prompt"
+  Part 2 – Person B's incomplete response with _____ blanks  →  assemble into "answer"
+  Part 3 – word/phrase tiles separated by " / "  →  one tile is the distractor, rest become "chunks"
+
+Return ONLY a valid JSON array. Each element:
 {
-  "prompt": "string",
-  "answer": "string",
-  "chunks": ["string"],
-  "prefilled": ["string"],
-  "distractor": "string or null",
-  "grammar_points": ["string"]
+  "prompt": "Person A's spoken question",
+  "answer": "Person B's complete, grammatically correct response",
+  "chunks": ["tile1", "tile2", ...],
+  "prefilled": ["tile"],
+  "distractor": "single wrong tile or null",
+  "grammar_points": ["tag"]
 }
 
-CRITICAL RULES for chunks vs prefilled:
-- "chunks" = word/phrase tiles the student must arrange (scrambled). All lowercase except pronouns (I, I'm, I've, I'll, I'd).
-- "prefilled" = tiles already placed for the student in a fixed position. These are NOT scrambled and must NOT appear in "chunks".
-- Every word in the answer must appear in either chunks or prefilled (excluding the distractor word).
-- If the input does not mention any prefilled items, set prefilled to [].
-- "distractor" is a single word that looks plausible but does NOT appear in the answer. Set to null if not present.
-- Return [] if nothing can be parsed.`,
+CHUNK RULES:
+- Every word in "answer" must appear in either "chunks" or "prefilled".
+- "prefilled" = tiles already placed in Person B's line (not scrambled). Must NOT appear in "chunks".
+- Chunks are all lowercase except: I, I'm, I've, I'll, I'd.
+- Multi-word phrases that belong together stay as one chunk (e.g. "to know", "had changed").
+
+DISTRACTOR RULES — CRITICAL:
+Pick the distractor that tests the SPECIFIC grammar weakness of that sentence.
+Use this table:
+
+  grammar_point contains "passive voice"
+      → distractor: "gets", "have", "been", "will", or "does"
+      → NEVER use "did" for passive voice sentences
+
+  grammar_point contains "embedded question" (wanted/needed/asked + wh-word or if/whether)
+      → "did" is the PRIMARY distractor (tests no-inversion rule); use it freely
+      → if "did" already appears in ≥50% of the batch, alternate with "does", "do", "is", "are"
+
+  grammar_point contains "past perfect" (had + past participle)
+      → distractor: "was", "is", "have"
+
+  grammar_point contains "negation" or "modal"
+      → distractor: "can", "does", "did" (vary; avoid repeating)
+
+  other / general
+      → pick a plausible but grammatically wrong word specific to this sentence
+
+DIVERSITY RULE: Across the entire batch, no single distractor word may appear more than 2 times.
+Set distractor to null only if no plausible wrong tile exists.
+
+Return [] if nothing can be parsed.`,
 };
 
 async function callDeepSeek(systemPrompt, userText) {
