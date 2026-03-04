@@ -39,6 +39,7 @@ const { isEmbeddedQuestion } = require("../lib/questionBank/etsProfile.js");
 const { validateAllSets } = require("./validate-bank.js");
 
 const OUTPUT_PATH = resolve(__dirname, "..", "data", "buildSentence", "questions.json");
+const RESERVE_PATH = resolve(__dirname, "..", "data", "buildSentence", "reserve_pool.json");
 const TARGET_SET_COUNT = Number(process.env.BS_TARGET_SETS || 6);
 const CANDIDATE_ROUNDS = Number(process.env.BS_CANDIDATE_ROUNDS || 40);
 const ADAPTIVE_BOOST_ROUNDS = Number(process.env.BS_ADAPTIVE_BOOST_ROUNDS || 80);
@@ -426,20 +427,21 @@ No markdown. No extra explanation. JSON array only.
 }
 
 function modeFromDeficit(pool, easyTarget, mediumTarget, hardTarget) {
-  const deficits = {
-    easy: Math.max(0, easyTarget - pool.easy.length),
-    medium: Math.max(0, mediumTarget - pool.medium.length),
-    hard: Math.max(0, hardTarget - pool.hard.length),
-  };
+  const targets = { easy: easyTarget, medium: mediumTarget, hard: hardTarget };
+  const current = { easy: pool.easy.length, medium: pool.medium.length, hard: pool.hard.length };
 
-  if (deficits.easy === 0 && deficits.medium === 0 && deficits.hard === 0) {
-    return "balanced";
-  }
+  // Sort by completion ratio (ascending) so the least-complete bucket is prioritised.
+  // Absolute deficit is misleading: easy needs 10 total while medium needs 70,
+  // so medium's absolute gap is always larger even when easy is the real bottleneck.
+  const ratios = Object.entries(targets).map(([mode, target]) => ({
+    mode,
+    ratio: target > 0 ? current[mode] / target : 1,
+  }));
 
-  const sorted = Object.entries(deficits).sort((a, b) => b[1] - a[1]);
-  const [topMode, topGap] = sorted[0];
-  if (topGap <= 0) return "balanced";
-  return topMode;
+  if (ratios.every(({ ratio }) => ratio >= 1)) return "balanced";
+
+  ratios.sort((a, b) => a.ratio - b.ratio);
+  return ratios[0].ratio >= 1 ? "balanced" : ratios[0].mode;
 }
 
 function buildReviewPrompt(questions) {
@@ -844,6 +846,20 @@ function summarizeRejectReasons(map) {
     .slice(0, 12);
 }
 
+function flushPoolCheckpoint(pool) {
+  try {
+    const snapshot = uniqBy(pool, stableAnswerKey).map((q) => {
+      const c = cloneQuestion(q);
+      delete c._meta;
+      return c;
+    });
+    writeFileSync(RESERVE_PATH, `${JSON.stringify(snapshot, null, 2)}\n`, "utf8");
+    console.log(`[checkpoint] saved ${snapshot.length} questions to reserve_pool.json`);
+  } catch (_) {
+    // non-fatal
+  }
+}
+
 async function main() {
   loadEnv();
   if (!process.env.DEEPSEEK_API_KEY) {
@@ -857,7 +873,24 @@ async function main() {
   console.log(`Candidate rounds: ${CANDIDATE_ROUNDS}`);
   console.log(`Proxy: ${resolveProxyUrl() || "(direct)"}`);
 
+  // Seed pool from questions.json (active bank) + reserve_pool.json (leftovers)
   const acceptedPool = [];
+  for (const [label, filePath] of [["questions.json", OUTPUT_PATH], ["reserve_pool.json", RESERVE_PATH]]) {
+    try {
+      const data = JSON.parse(readFileSync(filePath, "utf8"));
+      // questions.json stores sets; reserve_pool.json stores a flat array
+      const seeded = Array.isArray(data)
+        ? data
+        : (data.question_sets || []).flatMap((s) => s.questions || []);
+      if (seeded.length > 0) {
+        acceptedPool.push(...seeded);
+        console.log(`Seeded ${seeded.length} questions from ${label}`);
+      }
+    } catch (_) {
+      // file missing or invalid — skip
+    }
+  }
+
   const rejectReasons = {};
   let rollingRejectFeedback = "";
   const easyTarget = ETS_2026_TARGET_COUNTS_10.easy * TARGET_SET_COUNT;
@@ -889,7 +922,11 @@ async function main() {
       }
     } catch (e) {
       console.log(`round ${round}: failed -> ${errMsg(e)}`);
+      // Save current pool as checkpoint so next run can seed from it
+      flushPoolCheckpoint(acceptedPool);
     }
+    // Brief pause between rounds to avoid proxy rate limiting
+    await new Promise((r) => setTimeout(r, 3000));
   }
 
   let boostedPool = splitPoolByDifficulty(acceptedPool);
@@ -926,7 +963,9 @@ async function main() {
         }
       } catch (e) {
         console.log(`boost ${i} [${mode}]: failed -> ${errMsg(e)}`);
+        flushPoolCheckpoint(acceptedPool);
       }
+      await new Promise((r) => setTimeout(r, 3000));
     }
   }
 
@@ -935,15 +974,17 @@ async function main() {
   console.log(`final pool: easy=${poolByDiff.easy.length} medium=${poolByDiff.medium.length} hard=${poolByDiff.hard.length}`);
 
   const finalSets = buildFinalSetsFromPool(poolByDiff, TARGET_SET_COUNT);
-  if (finalSets.length !== TARGET_SET_COUNT) {
-    console.error(
-      `Could not assemble target set count: target=${TARGET_SET_COUNT}, built=${finalSets.length}. ` +
-      "Generation aborted without writing output.",
-    );
-    console.error(`Pool snapshot: easy=${poolByDiff.easy.length} medium=${poolByDiff.medium.length} hard=${poolByDiff.hard.length}`);
-    console.error("Top reject reasons:");
-    summarizeRejectReasons(rejectReasons).forEach(([k, v]) => console.error(`- ${k}: ${v}`));
+  if (finalSets.length === 0) {
+    console.error("No sets assembled at all — aborting.");
     process.exit(1);
+  }
+  if (finalSets.length < TARGET_SET_COUNT) {
+    console.warn(
+      `Warning: only assembled ${finalSets.length}/${TARGET_SET_COUNT} sets. Writing partial output.`,
+    );
+    console.warn(`Pool snapshot: easy=${poolByDiff.easy.length} medium=${poolByDiff.medium.length} hard=${poolByDiff.hard.length}`);
+    console.warn("Top reject reasons:");
+    summarizeRejectReasons(rejectReasons).forEach(([k, v]) => console.warn(`- ${k}: ${v}`));
   }
 
   const output = {
@@ -970,6 +1011,19 @@ async function main() {
       `- set ${s.set_id}: easy=${diff.profile.counts.easy} medium=${diff.profile.counts.medium} hard=${diff.profile.counts.hard}`,
     );
   });
+
+  // Save leftover questions (passed quality gates but not assembled into sets) to reserve pool
+  const usedAnswers = new Set(
+    finalSets.flatMap((s) => s.questions.map((q) => stableAnswerKey(q)))
+  );
+  const reserve = uniqBy(
+    [...poolByDiff.easy, ...poolByDiff.medium, ...poolByDiff.hard]
+      .filter((q) => !usedAnswers.has(stableAnswerKey(q)))
+      .map((q) => { const c = cloneQuestion(q); delete c._meta; return c; }),
+    stableAnswerKey
+  );
+  writeFileSync(RESERVE_PATH, `${JSON.stringify(reserve, null, 2)}\n`, "utf8");
+  console.log(`Reserve pool: ${reserve.length} questions saved to reserve_pool.json`);
 
   console.log("Top reject reasons:");
   summarizeRejectReasons(rejectReasons).forEach(([k, v]) => console.log(`- ${k}: ${v}`));
