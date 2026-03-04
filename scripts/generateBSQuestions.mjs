@@ -213,6 +213,66 @@ function stableAnswerKey(q) {
   return normalizeText(q.answer).toLowerCase();
 }
 
+/**
+ * Classify a question's answer into one of 6 TPO structural types.
+ * Used for quota tracking and targeted generation.
+ */
+function classifyAnswerType(q) {
+  const a = String(q.answer || "").toLowerCase();
+  // Interrogative frame: answer starts with Can/Could you tell me
+  if (/^(can you tell me|could you tell me)/i.test(q.answer)) return "interrogative";
+  // 3rd-person reporting
+  if (/\b(wanted to know|asked me|asked him|asked her|asked us|was curious|were curious|needed to know|was wondering|were wondering|wants to know|needs to know|curious about)\b/.test(a))
+    return "3rd-reporting";
+  // 1st-person embedded
+  if (/\b(have no idea|had no idea|don't understand|didn't understand|couldn't understand|found out|would love to know|can't decide|don't know|didn't know|do not know|did not know|does not know)\b/.test(a))
+    return "1st-embedded";
+  // Negation
+  if (/\b(did not|didn't|have not|haven't|could not|couldn't|was not|wasn't|is not|isn't|am not|are not|aren't|has not|hasn't|do not|don't|no longer|not able|were not|weren't)\b/.test(a))
+    return "negation";
+  // Relative/contact clause
+  if (/\bthe \w+.*(?: i | you | he | she | we | they )|\b(?:that|which|who) (?:i |you |he |she |we |they )/i.test(a))
+    return "relative";
+  return "direct";
+}
+
+/**
+ * Per-set quota: how many questions of each type × difficulty per 10-question set.
+ * Derived from statistical analysis of 60 real TPO questions across 6 sets.
+ * Difficulty distribution per set: easy=1, medium=7, hard=2.
+ * Type distribution within each difficulty: from TPO analysis.
+ *
+ * easy  (1/set):  negation≈55%, 3rd-reporting≈18%, interrogative≈18%, 1st-embedded≈9%
+ * medium (7/set): 3rd-reporting≈58%, negation≈12%, 1st-embedded≈12%, interrogative≈6%, direct≈6%, relative≈6%
+ * hard  (2/set):  3rd-reporting≈25%, 1st-embedded≈25%, relative≈19%, interrogative≈13%, direct≈13%, negation≈6%
+ */
+const TYPE_QUOTAS_PER_SET = {
+  easy: {
+    "negation":      0.55,
+    "3rd-reporting": 0.18,
+    "interrogative": 0.18,
+    "1st-embedded":  0.09,
+    "direct":        0,
+    "relative":      0,
+  },
+  medium: {
+    "3rd-reporting": 0.58,
+    "negation":      0.12,
+    "1st-embedded":  0.12,
+    "interrogative": 0.06,
+    "direct":        0.06,
+    "relative":      0.06,
+  },
+  hard: {
+    "3rd-reporting": 0.25,
+    "1st-embedded":  0.25,
+    "relative":      0.19,
+    "interrogative": 0.13,
+    "direct":        0.13,
+    "negation":      0.05,
+  },
+};
+
 function buildRejectFeedbackHints(rejectReasons) {
   const entries = Object.entries(rejectReasons || {})
     .sort((a, b) => b[1] - a[1])
@@ -250,198 +310,236 @@ function buildRejectFeedbackHints(rejectReasons) {
   return `\nRecent rejection feedback (must fix):\n- ${uniq.join("\n- ")}\n`;
 }
 
-function buildGeneratePrompt(round, mode = "balanced", rejectFeedback = "") {
-  const difficultySection = mode === "easy"
-    ? `
-Difficulty target for this 10-question batch:
-- all 10 should be EASY/MEDIUM (lower end)
-- answer length 7-10 words
-- effective chunks 5-6
-- distractor: include in about 5 items (extra auxiliary did/do/does, always single word)
-- straightforward indirect questions with simple clause structure
-`
-    : mode === "medium"
-      ? `
-Difficulty target for this 10-question batch:
-- all 10 should be MEDIUM
-- answer length 9-13 words
-- effective chunks 6-7
-- include distractor in 7-9 items (always single-word distractor)
-- include embedded question in 5-8 items
-- keep structure clear and unambiguous (single best arrangement)
-`
-    : mode === "hard"
-      ? `
-Difficulty target for this 10-question batch:
-- all 10 should be HARD
-- answer length 11-15 words
-- effective chunks 7-8
-- include distractor in at least 8 items (always single word, mostly did/do/does)
-- include embedded question in at least 7 items
-- multi-layer nesting (3+ grammar layers: indirect question + passive progressive / perfect + negation / ability expression)
-- must include at least 1 morphological distractor (tense/form variant) that matches the sentence's context but violates tense/aspect rules
-- complex but natural sentence structure
-`
-    : `
-Difficulty distribution target (TPO standard):
-- 0-1 easy
-- 7-8 medium
-- 2-3 hard
-TPO is significantly harder than ETS examples. Almost no easy items.
-Hard item profile (Layer 3, 3+ grammar layers):
-- answer length 11-15 words
-- effective chunks 7-8
-- has distractor (extra auxiliary)
-- multi-layer nesting examples:
-  * indirect question + passive progressive: "He found out where the new road was being built."
-  * indirect question + present perfect + negation: "She wanted to know if I had finished the proposal yet."
-  * indirect question + ability expression: "He wanted to know how we were able to make improvements."
-Easy item profile (max 1):
-- answer length 7-9 words
-- effective chunks 5-6
-- simple negation or single-layer structure
-Medium item profile (majority):
-- answer length 9-13 words
-- effective chunks 6-7
-- has distractor (usually extra auxiliary did/do/does)
-- indirect question with declarative word order
-`;
+// Type × difficulty specific instructions for targeted generation
+const TYPE_DIFFICULTY_HINTS = {
+  "negation": {
+    easy: `ALL 10 answers: simple negative statement, 7-10 words.
+Structure: "I did not [verb]…" / "I could not [verb]…" / "I am not [adj]…" / "I have not [past-p] yet."
+NO embedded questions. NO relative clauses. Direct and clear.
+Prompt: YES/NO question ("Did you attend…?", "Have you…?", "Are you going…?")
+Distractor: "did" or "do" or morphological variant (e.g. "going" for "go").`,
+    medium: `ALL 10 answers: negative statement 9-12 words, optionally with short embedded element.
+Examples:
+- "Unfortunately, I could not attend due to a prior commitment."
+- "I did not understand what the manager explained."
+- "I have not received the workshop details yet."
+Prompt: direct question or narrative context. Distractor: "did"/"do" or morphological variant.`,
+    hard: `ALL 10 answers: negation + embedded/perfect complexity, 11-14 words.
+Examples:
+- "I had not realized how quickly the project deadline was approaching."
+- "I did not understand why the meeting had been postponed again."
+Include past perfect negation or negation + embedded clause.
+Distractor: morphological variant (e.g. "realized/realize", "approaching/approach").`,
+  },
+  "3rd-reporting": {
+    easy: `ALL 10 answers: short third-person reporting, 8-10 words.
+Structure: "[Name] wanted to know if [short clause]." / "[Name] asked me what time…"
+Examples:
+- "He wants to know if you need a ride."
+- "She asked me what time the meeting starts."
+Prompt: "What did [Name] ask/want?" Distractor: "did" or "do".`,
+    medium: `ALL 10 answers: third-person reporting, 10-13 words.
+Structure: "[Name/They] [wanted to know / asked / was curious / needed to know] [wh/if clause]"
+Vary subjects: he / she / they / the manager / the professor / some colleagues
+Vary wh-words across the batch: if(3), what(2), where(2), why(2), when(1)
+Declarative word order in clause (NO inversion). Distractor: "did"/"do" for most.`,
+    hard: `ALL 10 answers: third-person reporting with complex embedded clause, 12-15 words.
+Complexity options:
+- Past perfect in clause: "He wanted to know where all the files had gone."
+- Passive in clause: "She wanted to know when the report would be submitted."
+- whom: "She wanted to know whom I would give the presentation to."
+- Two-layer: "The manager wanted to know how we had been able to finish on time."
+Distractor: morphological variant or "whom/who", "where/when" function-word swap.`,
+  },
+  "1st-embedded": {
+    easy: `ALL 10 answers: first-person "no idea" structure, 8-10 words.
+Examples:
+- "I have no idea where they are going."
+- "I have no idea what time the event starts."
+Prompt: direct question the speaker can't answer ("Do you know…?", "Where is…?")
+Distractor: "do" or "did".`,
+    medium: `ALL 10 answers: first-person embedded, 10-13 words.
+Examples:
+- "I don't understand why he decided to quit the team."
+- "I found out where the new office supplies are kept."
+- "I can't decide which project topic is the most important."
+- "I have no idea who will be leading the committee."
+Distractor: "did"/"does" or function-word variant.`,
+    hard: `ALL 10 answers: complex first-person embedded, 12-15 words.
+Examples:
+- "I would love to know which restaurant you enjoyed the most." (superlative)
+- "I have not been told who will be responsible for the final report." (passive + embedded)
+- "We just found out where the new library equipment is being stored." (passive progressive)
+Include passive voice OR superlative OR perfect aspect in embedded clause.
+Distractor: morphological variant (e.g. "enjoyed/enjoy", "stored/store").`,
+  },
+  "interrogative": {
+    easy: `ALL 10 answers use "Can you tell me…?" or "Could you tell me…?" frame, 8-11 words.
+Examples:
+- "Can you tell me what your plans are for tomorrow?"
+- "Can you tell me if the professor covered any new material?"
+Prompt: conversational comment that leads to a question.
+Distractor: "did"/"do" or "can".`,
+    medium: `ALL 10 answers use interrogative frame, 10-13 words, moderate embedded complexity.
+Examples:
+- "Could you tell me how you are feeling about the new policy?"
+- "Can you tell me what you did not enjoy about the presentation?"
+Distractor: morphological variant or "can"/"could" swap.`,
+    hard: `ALL 10 answers use interrogative frame with complex embedded question, 12-14 words.
+Examples:
+- "Can you tell me why you decided to choose this particular research topic?"
+- "Could you tell me how the project team managed to finish ahead of schedule?"
+- "Did he ask you why you chose this particular career path?"
+Distractor: morphological variant (e.g. "decided/decide", "managed/manage").`,
+  },
+  "direct": {
+    medium: `ALL 10 answers: direct declarative statement (no reporting verb, no negation), 9-12 words.
+Describe a situation, location, preference, or fact.
+Examples:
+- "I found the work environment at this company to be much more relaxed."
+- "The store next to the post office sells all types of winter apparel."
+Prompt: direct question about what happened or what the speaker did.
+Distractor: morphological variant (e.g. "relaxed/relax", "sells/sold").`,
+    hard: `ALL 10 answers: complex direct statement, 12-15 words, with prepositional depth or comparative.
+Examples:
+- "This coffee tastes better than all of the other brands I have tried."
+- "I found it in the back of the furniture section at the local superstore."
+- "The library is only temporarily closed in town for major structural renovations."
+Distractor: morphological variant or comparative swap ("better/good", "only/once").`,
+  },
+  "relative": {
+    medium: `ALL 10 answers: contact/relative clause structure, 9-12 words.
+"The [noun] [I/you] [verb]…" (contact clause — omitted relative pronoun, object only)
+Examples:
+- "The bookstore I stopped by had the novel in stock."
+- "The diner that opened last week serves many delicious entrees."
+Prompt: question about where/what the speaker found.
+Distractor: morphological variant (e.g. "stopped/stop", "opened/open").`,
+    hard: `ALL 10 answers: relative/contact clause with additional complexity, 12-15 words.
+Combine relative clause with:
+- Passive: "The desk you ordered is scheduled to arrive on Friday."
+- Comparative: "This coffee tastes better than all the other brands I've tried."
+- Long modifier: "The store I found near the post office sells winter apparel at a discount."
+Distractor: passive helper swap or morphological variant ("scheduled/schedule", "ordered/order").`,
+  },
+};
+
+function buildGeneratePrompt(round, type = "3rd-reporting", difficulty = "medium", rejectFeedback = "") {
+  const hints = (TYPE_DIFFICULTY_HINTS[type] || {})[difficulty] || "";
+  const difficultySpec = difficulty === "easy"
+    ? "Answer length: 7-10 words. Effective chunks: 5-6. Distractor in ~5 items."
+    : difficulty === "medium"
+    ? "Answer length: 9-13 words. Effective chunks: 6-7. Distractor in 7-9 items."
+    : "Answer length: 11-15 words. Effective chunks: 7-8. Distractor in 8-10 items. Include ≥1 morphological distractor.";
 
   return `
 You are a TOEFL iBT Writing Task 1 "Build a Sentence" item writer.
-All rules below are based on statistical analysis of 6 TPO real exam sets (60 items).
-TPO represents actual test difficulty and is much harder than ETS examples.
+Based on statistical analysis of 6 real TPO exam sets (60 items).
 Return ONLY a JSON array with exactly 10 question objects.
 
-Required schema for each item:
+## BATCH FOCUS (overrides general distribution below)
+Type: ${type.toUpperCase()} | Difficulty: ${difficulty.toUpperCase()}
+${hints}
+${difficultySpec}
+
+## Schema (each item):
 {
   "id": "tmp_r${round}_q1",
-  "prompt": "conversational context sentence (5-15 words, ends with ? or .)",
-  "answer": "the correct sentence to build (7-15 words, concentrated 9-13)",
+  "prompt": "conversational context (5-15 words)",
+  "answer": "correct sentence to build (7-15 words)",
   "chunks": ["lowercase chunk", "..."],
-  "prefilled": ["word1"] or [],
-  "prefilled_positions": {"word1": 0} or {},
-  "distractor": null or "lowercase distractor word not in answer",
+  "prefilled": ["word"] or [],
+  "prefilled_positions": {"word": 0} or {},
+  "distractor": null or "single lowercase word not in answer",
   "has_question_mark": true/false,
-  "grammar_points": ["grammar point 1", "grammar point 2"]
+  "grammar_points": ["tag1", "tag2"]
 }
 
-## CRITICAL: 92% of answers are STATEMENTS (has_question_mark=false)
-- Statements: 8-9 items (indirect questions in declarative form, e.g. "She wanted to know if...")
-- Questions: 1-2 items ONLY (only for "Can/Could you tell me...?")
+## PROMPT-ANSWER LOGIC (critical):
+- If answer is "[X] wanted to know / asked / wondered [wh-clause]", prompt MUST ask "What did X ask/want?" — NEVER the direct form of the wh-clause.
+- WRONG: prompt="Where did you go?" answer="Emma wanted to know where I went."
+- RIGHT: prompt="What did Emma want to know?" answer="Emma wanted to know where I went."
+- If answer is a direct 1st-person reply, prompt should be a direct question to that person.
 
-## Sentence type distribution (TPO core):
-### Indirect/embedded questions (DECLARATIVE form): 6-8 items (CORE). Lead-in verb distribution (must diversify):
-- wanted to know: 3-4 items (47% of embedded questions)
-- asked (me): 1 item
-- wants to know: 1 item
-- was curious about / curious if: 1 item
-- other (was wondering, found out, would love to know, needed to know): 1-2 items
-Clause word distribution: if(32%), what(21%), where(18%), why(13%), when(8%), how(5%), who(5%)
+## Distractor rules:
+- ALWAYS single word, NEVER a phrase.
+- PASSIVE VOICE: NEVER use "did" — use morphological variant ("gets", "have", "been") instead.
+- Distribution: ~50% extra auxiliary (did/do/does), ~30% morphological variant (staying/stay, chose/choose), ~20% function word (which/what, no/not, who/whom).
 
-### Negation structures: 2-3 items
-At least 1 combined with indirect question (e.g. "I did not understand what he said")
-Types: did not, do not, have not, was not, could not, no longer, have no
+## Prefilled rules (~60% of items have prefilled):
+- Common: opening subject+verb ("He wanted to know", "Unfortunately, I"), end modifier ("yet", "quickly"), mid pivot ("when", "about").
+- prefilled_positions: 0-indexed word position in answer.
+- Prefilled words must NOT appear in chunks.
+- chunks (minus distractor) + prefilled = ALL answer words exactly.
 
-### Relative clause / contact clause: 1-2 items
-TPO specialty: naturally omitted relative pronoun (contact clause). Build sentences where omission is the most natural phrasing — object relatives only:
-- "The bookstore [that] I stopped by had the novel in stock." ✓ (object, naturally omissible)
-- "The desk [that] you ordered arrived this morning." ✓ (object, naturally omissible)
-- "The man [who] called me" ✗ — subject relatives CANNOT be omitted.
-Keep the relative clause fragment as a coherent chunk unit; avoid stranding prepositions from their clause.
+## Chunk rules:
+- Effective chunk count (excl. distractor): 4-8, TARGET 5-7.
+- Max 3 words per chunk, all lowercase.
+- Mix single-word and multi-word chunks (2-4 multi-word collocations per item).
+- chunks (minus distractor) + prefilled = all answer words exactly.
 
-### Other: 0-1 items (comparative, passive, find/make + object + complement)
-
-## Prompt patterns (must follow this distribution):
-- "What did [Name] ask you?": 3-4 items (37%), directly elicits indirect question answers
-- "Did you enjoy/finish/attend...?": 2 items
-- "Where/Why did you...?": 2 items
-- Other narrative/comment: 2 items
-Use diverse names: Matthew, Mariana, Julian, Alison, Emma, Professor Cho, etc.
-
-## Distractor rules (MAJOR CHANGE): 88% have distractors.
-CRITICAL: Distractor must ALWAYS be a SINGLE WORD (never a phrase).
-### Distractor strategies (by priority):
-1. EXTRA AUXILIARY (4-5 items): did, do, does
-   Core TPO distractor for embedded questions — tests no-inversion rule.
-   Example: answer "She wanted to know if I went anywhere interesting", distractor "did"
-   PASSIVE VOICE EXCEPTION: NEVER use "did" for passive voice sentences. Use morphological variant instead (e.g., "gets", "have", "been").
-2. Tense/form variant (2-3 items, RAISED PRIORITY): staying/stay, gone/going, choose/chose, taken/took, revised/revise, chosen/chose
-   Pick a form that matches the sentence's tense context but violates tense/aspect rules.
-   HARD mode: MUST include at least 1 morphological distractor per batch.
-3. Similar function word (1-2 items, RAISED PRIORITY): which/what, where/when, no/not/none, who/whom
-   Subtle semantic traps — plausible in context but grammatically wrong.
-4. Extra structure word (0-1 items): that, because, was
-
-## Prefilled rules:
-About 60% of items (6) should have prefilled. TPO prefers mid/end positions:
-- Opening subject + collocation: "He wanted to know", "Unfortunately, I"
-- Sentence-end modifiers: "yet", "weekends", "quickly"
-- Mid-sentence connectors: "when", "about"
-- 0-4 prefilled per item
-- prefilled_positions: 0-indexed word position in answer
-- Prefilled words must NOT appear in chunks
-- chunks (minus distractor) + prefilled = ALL answer words (excluding punctuation)
-
-## Chunk rules (TPO style) IMPORTANT
-- Effective chunk count (excluding distractor): 4-8, TARGET 5-7. This is the PRIMARY constraint.
-- Each chunk max 3 words, all lowercase
-- Use a MIX of single-word and multi-word chunks to hit the 5-7 target:
-  * Each item should have 2-4 multi-word chunks (natural collocations like "to know", "wanted to", "no longer", "the bookstore", "last week", "had no idea")
-  * Remaining chunks are single words
-  * Do NOT make all chunks single-word; that exceeds the chunk count limit.
-- chunks (minus distractor) + prefilled = all answer words (excluding punctuation)
-- Distractor must be a SINGLE WORD??never a phrase
-
-## Scene distribution:
-- Relaying someone's question (What did XXX ask you?): 3-4 items
-- Work/projects (interviews, project updates, meetings, reports): 2-3 items
-- Daily life (shopping, restaurants, gym, transportation): 2 items
-- Campus/study (assignments, workshops, seminars): 1 item
-- Social (parties, concerts, travel): 1 item
-
-## Grammar point labeling (difficulty estimator depends on these):
-- Indirect/embedded questions: must include "embedded question" or "indirect question"
-- Negation: must include "negation"
-- Relative/contact clause: must include "relative clause" or "contact clause"
-- Passive voice: must include "passive voice"
-- You may append details: "embedded question (wanted to know + if)", "negation (did not)"
+## Grammar point labels:
+- embedded/indirect question → "embedded question"
+- negation → "negation"
+- relative/contact clause → "relative clause" or "contact clause"
+- passive → "passive voice"
 
 ## Answer uniqueness:
-- Each item must have exactly one grammatically correct arrangement
-- Indirect question clauses MUST use declarative word order (no inversion)
-- The distractor did/do/does cannot be inserted into the correct answer
+- Exactly one correct arrangement.
+- Indirect question clauses: declarative word order (NO inversion).
+- Distractor did/do/does must NOT be insertable into the answer.
 
-${difficultySection}
 ${rejectFeedback}
-Before returning JSON, self-check every item:
-1. chunk count and chunk length constraints
-2. chunks (minus distractor) + prefilled = answer words exactly
-3. distractor not in answer
-4. prefilled_positions match actual word positions in answer
-5. prefilled words do NOT appear in chunks
-6. only one valid arrangement exists
+Self-check before returning:
+1. chunks (minus distractor) + prefilled = answer words exactly
+2. distractor not in answer
+3. prefilled_positions match actual word positions
+4. prefilled words not in chunks
+5. only one valid arrangement
 
-No markdown. No extra explanation. JSON array only.
+No markdown. No explanation. JSON array only.
 `.trim();
 }
 
-function modeFromDeficit(pool, easyTarget, mediumTarget, hardTarget) {
-  const targets = { easy: easyTarget, medium: mediumTarget, hard: hardTarget };
-  const current = { easy: pool.easy.length, medium: pool.medium.length, hard: pool.hard.length };
+/**
+ * Find the (type, difficulty) cell with the lowest fill ratio in the pool.
+ * scaledQuotas: { easy: { "negation": N, ... }, medium: {...}, hard: {...} }
+ * Returns { type, difficulty } for the next generation round.
+ */
+function typeFromDeficit(pool, scaledQuotas) {
+  // Count current pool by type × difficulty
+  const counts = {};
+  for (const diff of ["easy", "medium", "hard"]) {
+    counts[diff] = {};
+    for (const type of Object.keys(TYPE_QUOTAS_PER_SET.easy)) {
+      counts[diff][type] = 0;
+    }
+  }
+  for (const q of pool) {
+    const meta = q._meta || {};
+    const type = meta.answerType || classifyAnswerType(q);
+    const diff = (estimateQuestionDifficulty(q) || {}).bucket || "medium";
+    if (counts[diff] && type in counts[diff]) {
+      counts[diff][type]++;
+    }
+  }
 
-  // Sort by completion ratio (ascending) so the least-complete bucket is prioritised.
-  // Absolute deficit is misleading: easy needs 10 total while medium needs 70,
-  // so medium's absolute gap is always larger even when easy is the real bottleneck.
-  const ratios = Object.entries(targets).map(([mode, target]) => ({
-    mode,
-    ratio: target > 0 ? current[mode] / target : 1,
-  }));
+  let minRatio = Infinity;
+  let target = { type: "3rd-reporting", difficulty: "medium" };
 
-  if (ratios.every(({ ratio }) => ratio >= 1)) return "balanced";
+  for (const [diff, typeMap] of Object.entries(scaledQuotas)) {
+    for (const [type, quota] of Object.entries(typeMap)) {
+      if (quota <= 0) continue;
+      const current = counts[diff][type] || 0;
+      const ratio = current / quota;
+      if (ratio < minRatio) {
+        minRatio = ratio;
+        target = { type, difficulty: diff };
+      }
+    }
+  }
 
-  ratios.sort((a, b) => a.ratio - b.ratio);
-  return ratios[0].ratio >= 1 ? "balanced" : ratios[0].mode;
+  return target;
 }
 
 function buildReviewPrompt(questions) {
@@ -585,7 +683,7 @@ function errMsg(e) {
   return msg || String(e?.code || "unknown_error");
 }
 
-async function generateCandidateRound(round, mode = "balanced", rejectFeedback = "") {
+async function generateCandidateRound(round, type = "3rd-reporting", difficulty = "medium", rejectFeedback = "") {
   const out = {
     generated: 0,
     accepted: 0,
@@ -594,7 +692,7 @@ async function generateCandidateRound(round, mode = "balanced", rejectFeedback =
     questions: [],
   };
 
-  const generatedRaw = await callModel(buildGeneratePrompt(round, mode, rejectFeedback));
+  const generatedRaw = await callModel(buildGeneratePrompt(round, type, difficulty, rejectFeedback));
   const arr = parseJsonArray(generatedRaw);
   if (!Array.isArray(arr) || arr.length !== 10) {
     throw new Error(`round ${round}: model did not return 10 questions`);
@@ -691,6 +789,7 @@ function attachMeta(q) {
     hasDistractor: q.distractor != null,
     isEmbedded: isEmbeddedQuestion(q.grammar_points),
     hasQuestionMark: q.has_question_mark === true,
+    answerType: classifyAnswerType(q),
   };
   return q;
 }
@@ -897,11 +996,21 @@ async function main() {
   const mediumTarget = ETS_2026_TARGET_COUNTS_10.medium * TARGET_SET_COUNT;
   const hardTarget = ETS_2026_TARGET_COUNTS_10.hard * TARGET_SET_COUNT;
 
+  // Scale type quotas to target set count (with 1.5x buffer for rejection overhead)
+  const BUFFER = 1.5;
+  const scaledQuotas = {};
+  for (const [diff, typeMap] of Object.entries(TYPE_QUOTAS_PER_SET)) {
+    const diffTarget = diff === "easy" ? easyTarget : diff === "medium" ? mediumTarget : hardTarget;
+    scaledQuotas[diff] = {};
+    for (const [type, ratio] of Object.entries(typeMap)) {
+      scaledQuotas[diff][type] = Math.ceil(diffTarget * ratio * BUFFER);
+    }
+  }
+
   for (let round = 1; round <= CANDIDATE_ROUNDS; round += 1) {
     try {
-      const livePool = splitPoolByDifficulty(acceptedPool);
-      const mode = modeFromDeficit(livePool, easyTarget, mediumTarget, hardTarget);
-      const res = await generateCandidateRound(round, mode, rollingRejectFeedback);
+      const { type, difficulty } = typeFromDeficit(acceptedPool, scaledQuotas);
+      const res = await generateCandidateRound(round, type, difficulty, rollingRejectFeedback);
       acceptedPool.push(...res.questions);
       Object.entries(res.rejectReasons).forEach(([k, v]) => {
         rejectReasons[k] = (rejectReasons[k] || 0) + v;
@@ -909,7 +1018,7 @@ async function main() {
       rollingRejectFeedback = buildRejectFeedbackHints(rejectReasons);
       const pool = splitPoolByDifficulty(acceptedPool);
       console.log(
-        `round ${round} [${mode}]: generated=${res.generated} accepted=${res.accepted} rejected=${res.rejected} | pool easy=${pool.easy.length} medium=${pool.medium.length} hard=${pool.hard.length}`,
+        `round ${round} [${type}/${difficulty}]: generated=${res.generated} accepted=${res.accepted} rejected=${res.rejected} | pool easy=${pool.easy.length} medium=${pool.medium.length} hard=${pool.hard.length}`,
       );
 
       const canBuildTargetSets =
@@ -922,7 +1031,6 @@ async function main() {
       }
     } catch (e) {
       console.log(`round ${round}: failed -> ${errMsg(e)}`);
-      // Save current pool as checkpoint so next run can seed from it
       flushPoolCheckpoint(acceptedPool);
     }
     // Brief pause between rounds to avoid proxy rate limiting
@@ -941,10 +1049,20 @@ async function main() {
     );
     for (let i = 1; i <= ADAPTIVE_BOOST_ROUNDS; i += 1) {
       boostedPool = splitPoolByDifficulty(acceptedPool);
-      const mode = modeFromDeficit(boostedPool, easyTarget, mediumTarget, hardTarget);
-      if (mode === "balanced") break;
+      const { type, difficulty } = typeFromDeficit(acceptedPool, scaledQuotas);
+      const allFilled = Object.entries(scaledQuotas).every(([diff, typeMap]) =>
+        Object.entries(typeMap).every(([t, quota]) => {
+          const cnt = acceptedPool.filter((q) => {
+            const at = (q._meta || {}).answerType || classifyAnswerType(q);
+            const db = (estimateQuestionDifficulty(q) || {}).bucket || "medium";
+            return at === t && db === diff;
+          }).length;
+          return cnt >= quota / BUFFER; // check against un-buffered quota
+        })
+      );
+      if (allFilled) break;
       try {
-        const res = await generateCandidateRound(3000 + i, mode, rollingRejectFeedback);
+        const res = await generateCandidateRound(3000 + i, type, difficulty, rollingRejectFeedback);
         acceptedPool.push(...res.questions);
         Object.entries(res.rejectReasons).forEach(([k, v]) => {
           rejectReasons[k] = (rejectReasons[k] || 0) + v;
@@ -952,7 +1070,7 @@ async function main() {
         rollingRejectFeedback = buildRejectFeedbackHints(rejectReasons);
         boostedPool = splitPoolByDifficulty(acceptedPool);
         console.log(
-          `boost ${i} [${mode}]: accepted=${res.accepted} rejected=${res.rejected} | pool easy=${boostedPool.easy.length} medium=${boostedPool.medium.length} hard=${boostedPool.hard.length}`,
+          `boost ${i} [${type}/${difficulty}]: accepted=${res.accepted} rejected=${res.rejected} | pool easy=${boostedPool.easy.length} medium=${boostedPool.medium.length} hard=${boostedPool.hard.length}`,
         );
         if (
           boostedPool.easy.length >= easyTarget &&
@@ -962,7 +1080,7 @@ async function main() {
           break;
         }
       } catch (e) {
-        console.log(`boost ${i} [${mode}]: failed -> ${errMsg(e)}`);
+        console.log(`boost ${i} [${type}/${difficulty}]: failed -> ${errMsg(e)}`);
         flushPoolCheckpoint(acceptedPool);
       }
       await new Promise((r) => setTimeout(r, 3000));
