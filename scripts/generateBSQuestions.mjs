@@ -424,27 +424,64 @@ Distractor: passive helper swap or morphological variant ("scheduled/schedule", 
   },
 };
 
-function buildGeneratePrompt(round, type = "3rd-reporting", difficulty = "medium", rejectFeedback = "") {
-  const hints = (TYPE_DIFFICULTY_HINTS[type] || {})[difficulty] || "";
-  const difficultySpec = difficulty === "easy"
-    ? "Answer length: 7-10 words. Effective chunks: 5-6. Distractor in ~5 items."
-    : difficulty === "medium"
-    ? "Answer length: 9-13 words. Effective chunks: 6-7. Distractor in 7-9 items."
-    : "Answer length: 11-15 words. Effective chunks: 7-8. Distractor in 8-10 items. Include ≥1 morphological distractor.";
+const SCENARIO_POOL = [
+  "Airport/Travel: check-in counter, flight delay, customs, tour guide",
+  "Technology/Digital: software update, lost password, tech support, social media",
+  "Home/Family: grocery shopping, home repair, neighbor interaction, cooking",
+  "Leisure/Hobbies: local library, cinema, gym trainer, art gallery, bookstore",
+  "Service/Retail: restaurant waiter, clothing store, post office, hair salon",
+  "Education/Academic: student study group, campus cafe, registrar office, internship interview",
+  "Health/Wellness: dental appointment, pharmacy, yoga class, medical clinic",
+  "Nature/Environment: local park, botanical garden, weather forecast, hiking trail"
+];
 
-  return `
-You are a TOEFL iBT Writing Task 1 "Build a Sentence" item writer.
-Based on statistical analysis of 6 real TPO exam sets (60 items).
-Return ONLY a JSON array with exactly 10 question objects.
+const PERSONA_POOL = [
+  "The flight attendant", "A young architect", "The local librarian", "A frustrated customer",
+  "The software developer", "An exchange student", "The elderly neighbor", "The yoga instructor",
+  "A travel blogger", "The store clerk", "A delivery driver", "The project supervisor",
+  "A volunteer", "The museum curator", "An enthusiastic intern", "The shop owner"
+];
 
-## BATCH FOCUS (overrides general distribution below)
-Type: ${type.toUpperCase()} | Difficulty: ${difficulty.toUpperCase()}
+function buildGeneratePrompt(round, spec, rejectFeedback = "") {
+  // spec: [{type, difficulty, count}, ...]
+  const totalCount = spec.reduce((s, x) => s + x.count, 0);
+  
+  // Pick 3 random scenarios and 5 random personas to prime the AI
+  const pickedScenarios = shuffle(SCENARIO_POOL).slice(0, 3).join("; ");
+  const pickedPersonas = shuffle(PERSONA_POOL).slice(0, 5).join(", ");
+
+  let qIndex = 1;
+  const groupSections = spec.map((item, i) => {
+    const { type, difficulty, count } = item;
+    const hints = (TYPE_DIFFICULTY_HINTS[type] || {})[difficulty] || "";
+    const diffSpec = difficulty === "easy"
+      ? "Answer length: 7-10 words. Effective chunks: 5-6."
+      : difficulty === "medium"
+      ? "Answer length: 9-13 words. Effective chunks: 6-7."
+      : "Answer length: 11-15 words. Effective chunks: 7-8. Include ≥1 morphological distractor.";
+    const ids = Array.from({ length: count }, (_, j) => `tmp_r${round}_q${qIndex + j}`).join(", ");
+    qIndex += count;
+    return `### GROUP ${i + 1}: ${count} item${count > 1 ? "s" : ""} — ${type.toUpperCase()} / ${difficulty.toUpperCase()}
+IDs: ${ids}
 ${hints}
-${difficultySpec}
+${diffSpec}`;
+  }).join("\n\n");
+
+  return `You are a TOEFL iBT Writing Task 1 "Build a Sentence" item writer.
+Return ONLY a JSON array with exactly ${totalCount} objects.
+
+## SCENARIO & PERSONA CONTEXT (Use these to vary the scenes):
+- Scenarios: ${pickedScenarios}
+- Personas: ${pickedPersonas}
+- DO NOT repeat the same character or setting across the batch.
+- Mix modern life, technology, and travel with traditional school/work scenes.
+
+${groupSections}
 
 ## Schema (each item):
 {
   "id": "tmp_r${round}_q1",
+  "answer_type": "negation" | "3rd-reporting" | "1st-embedded" | "interrogative" | "direct" | "relative",
   "prompt": "conversational context (5-15 words)",
   "answer": "correct sentence to build (7-15 words)",
   "chunks": ["lowercase chunk", "..."],
@@ -455,91 +492,138 @@ ${difficultySpec}
   "grammar_points": ["tag1", "tag2"]
 }
 
-## PROMPT-ANSWER LOGIC (critical):
-- If answer is "[X] wanted to know / asked / wondered [wh-clause]", prompt MUST ask "What did X ask/want?" — NEVER the direct form of the wh-clause.
-- WRONG: prompt="Where did you go?" answer="Emma wanted to know where I went."
+## PROMPT-ANSWER LOGIC:
+- If answer is "[X] wanted to know / asked / wondered [wh-clause]", prompt MUST ask "What did X ask/want?"
 - RIGHT: prompt="What did Emma want to know?" answer="Emma wanted to know where I went."
-- If answer is a direct 1st-person reply, prompt should be a direct question to that person.
 
 ## Distractor rules:
-- ALWAYS single word, NEVER a phrase.
-- PASSIVE VOICE: NEVER use "did" — use morphological variant ("gets", "have", "been") instead.
-- Distribution: ~50% extra auxiliary (did/do/does), ~30% morphological variant (staying/stay, chose/choose), ~20% function word (which/what, no/not, who/whom).
-
-## Prefilled rules (~60% of items have prefilled):
-- Common: opening subject+verb ("He wanted to know", "Unfortunately, I"), end modifier ("yet", "quickly"), mid pivot ("when", "about").
-- prefilled_positions: 0-indexed word position in answer.
-- Prefilled words must NOT appear in chunks.
-- chunks (minus distractor) + prefilled = ALL answer words exactly.
+- ALWAYS single word.
+- PASSIVE VOICE: NEVER use "did" — use "gets", "have", "been".
+- Distribution: ~50% extra auxiliary (did/do/does), ~30% morphological variant, ~20% function word.
 
 ## Chunk rules:
 - Effective chunk count (excl. distractor): 4-8, TARGET 5-7.
-- Max 3 words per chunk, all lowercase.
-- Mix single-word and multi-word chunks (2-4 multi-word collocations per item).
-- chunks (minus distractor) + prefilled = all answer words exactly.
-
-## Grammar point labels:
-- embedded/indirect question → "embedded question"
-- negation → "negation"
-- relative/contact clause → "relative clause" or "contact clause"
-- passive → "passive voice"
-
-## Answer uniqueness:
-- Exactly one correct arrangement.
-- Indirect question clauses: declarative word order (NO inversion).
-- Distractor did/do/does must NOT be insertable into the answer.
+- Max 3 words per chunk.
+- No single correct arrangement ambiguity. Ensure that prefilled words and chunks have only ONE valid combination.
 
 ${rejectFeedback}
-Self-check before returning:
-1. chunks (minus distractor) + prefilled = answer words exactly
-2. distractor not in answer
-3. prefilled_positions match actual word positions
-4. prefilled words not in chunks
-5. only one valid arrangement
-
-No markdown. No explanation. JSON array only.
-`.trim();
+Output JSON array only. No markdown.`.trim();
 }
 
 /**
- * Find the (type, difficulty) cell with the lowest fill ratio in the pool.
- * scaledQuotas: { easy: { "negation": N, ... }, medium: {...}, hard: {...} }
- * Returns { type, difficulty } for the next generation round.
+ * Brute-force check for multiple valid arrangements of chunks.
+ * Only practical for small number of chunks (<= 8).
  */
-function typeFromDeficit(pool, scaledQuotas) {
-  // Count current pool by type × difficulty
-  const counts = {};
+function hasAmbiguousArrangements(q) {
+  const effectiveChunks = q.chunks.filter(c => c !== q.distractor);
+  if (effectiveChunks.length > 8) return false; // Too expensive to check exhaustively
+
+  // Simple heuristic: if there are multiple adverbs or mobile prepositional phrases,
+  // there's a higher risk. This is a placeholder for a more complex permutation check.
+  // For now, we rely on the AI Reviewer for semantic ambiguity,
+  // but we can catch exact word-order collisions here if we implement full permutations.
+  return false; 
+}
+
+/**
+ * Improved classification using the AI-provided answer_type, 
+ * falling back to regex if missing.
+ */
+function getAnswerType(q) {
+  if (q.answer_type && q.answer_type !== "unknown") return q.answer_type;
+  return classifyAnswerType(q);
+}
+
+/**
+ * Compute current pool type×difficulty counts.
+ * Returns { easy: { negation: N, ... }, medium: {...}, hard: {...} }
+ */
+function computePoolState(pool) {
+  const state = {};
   for (const diff of ["easy", "medium", "hard"]) {
-    counts[diff] = {};
+    state[diff] = {};
     for (const type of Object.keys(TYPE_QUOTAS_PER_SET.easy)) {
-      counts[diff][type] = 0;
+      state[diff][type] = 0;
     }
   }
   for (const q of pool) {
-    const meta = q._meta || {};
-    const type = meta.answerType || classifyAnswerType(q);
+    const type = (q._meta || {}).answerType || classifyAnswerType(q);
     const diff = (estimateQuestionDifficulty(q) || {}).bucket || "medium";
-    if (counts[diff] && type in counts[diff]) {
-      counts[diff][type]++;
+    if (state[diff] && type in state[diff]) {
+      state[diff][type]++;
     }
   }
+  return state;
+}
 
-  let minRatio = Infinity;
-  let target = { type: "3rd-reporting", difficulty: "medium" };
-
-  for (const [diff, typeMap] of Object.entries(scaledQuotas)) {
-    for (const [type, quota] of Object.entries(typeMap)) {
-      if (quota <= 0) continue;
-      const current = counts[diff][type] || 0;
-      const ratio = current / quota;
-      if (ratio < minRatio) {
-        minRatio = ratio;
-        target = { type, difficulty: diff };
-      }
+/**
+ * Build planner prompt: AI analyzes pool gaps and outputs a mixed batch spec.
+ */
+function buildPlannerPrompt(poolState, scaledQuotas) {
+  const rows = [];
+  for (const diff of ["easy", "medium", "hard"]) {
+    for (const type of Object.keys(TYPE_QUOTAS_PER_SET.easy)) {
+      const need = (scaledQuotas[diff] || {})[type] || 0;
+      if (need === 0) continue;
+      const have = (poolState[diff] || {})[type] || 0;
+      const gap = Math.max(0, need - have);
+      rows.push({ diff, type, have, need, gap });
     }
   }
+  rows.sort((a, b) => b.gap - a.gap);
 
-  return target;
+  const tableLines = rows.map((r) =>
+    `  ${r.diff.padEnd(8)} ${r.type.padEnd(16)} have=${String(r.have).padStart(3)}  need=${String(r.need).padStart(3)}  gap=${String(r.gap).padStart(3)}`
+  );
+
+  return `You are a TOEFL Build-a-Sentence generation planner.
+
+Pool status (sorted by gap, largest first):
+  difficulty type             have  need  gap
+${tableLines.join("\n")}
+
+Design the next generation batch (exactly 10 questions total) to most efficiently fill the largest gaps.
+Rules:
+- Sum of all count fields must equal exactly 10.
+- Prioritize cells with the largest gap. Skip cells with gap ≤ 0.
+- Minimum 1, maximum 8 questions per included cell.
+- Valid types: negation, 3rd-reporting, 1st-embedded, interrogative, direct, relative
+- Valid difficulties: easy, medium, hard
+- If all gaps are ≤ 0, return: [{"type":"3rd-reporting","difficulty":"medium","count":10}]
+
+Return ONLY a JSON array. No markdown. No explanation.
+[{"type":"...","difficulty":"...","count":N},...]`.trim();
+}
+
+/**
+ * Parse planner AI output into a validated spec array totaling exactly 10 questions.
+ */
+function parsePlannerSpec(text) {
+  try {
+    const arr = parseJsonArray(text);
+    if (!Array.isArray(arr) || arr.length === 0) throw new Error("empty");
+    const valid = arr
+      .filter((x) => x && typeof x.type === "string" && typeof x.difficulty === "string" && Number(x.count) > 0)
+      .map((x) => ({ type: String(x.type), difficulty: String(x.difficulty), count: Number(x.count) }));
+    if (valid.length === 0) throw new Error("no valid items");
+    // Normalize to exactly 10
+    const total = valid.reduce((s, x) => s + x.count, 0);
+    if (total !== 10) {
+      const scale = 10 / total;
+      let remaining = 10;
+      valid.forEach((x, i) => {
+        if (i < valid.length - 1) {
+          x.count = Math.max(1, Math.round(x.count * scale));
+          remaining -= x.count;
+        } else {
+          x.count = Math.max(1, remaining);
+        }
+      });
+    }
+    return valid;
+  } catch (_) {
+    return [{ type: "3rd-reporting", difficulty: "medium", count: 10 }];
+  }
 }
 
 function buildReviewPrompt(questions) {
@@ -683,7 +767,9 @@ function errMsg(e) {
   return msg || String(e?.code || "unknown_error");
 }
 
-async function generateCandidateRound(round, type = "3rd-reporting", difficulty = "medium", rejectFeedback = "") {
+async function generateCandidateRound(round, spec, rejectFeedback = "") {
+  // spec: [{type, difficulty, count}, ...]
+  const totalCount = spec.reduce((s, x) => s + x.count, 0);
   const out = {
     generated: 0,
     accepted: 0,
@@ -692,10 +778,10 @@ async function generateCandidateRound(round, type = "3rd-reporting", difficulty 
     questions: [],
   };
 
-  const generatedRaw = await callModel(buildGeneratePrompt(round, type, difficulty, rejectFeedback));
+  const generatedRaw = await callModel(buildGeneratePrompt(round, spec, rejectFeedback));
   const arr = parseJsonArray(generatedRaw);
-  if (!Array.isArray(arr) || arr.length !== 10) {
-    throw new Error(`round ${round}: model did not return 10 questions`);
+  if (!Array.isArray(arr) || arr.length < Math.floor(totalCount * 0.7)) {
+    throw new Error(`round ${round}: model returned ${arr?.length ?? 0} questions, expected ~${totalCount}`);
   }
 
   const normalized = arr.map((q, i) => normalizeQuestion(q, `tmp_r${round}_q${i + 1}`));
@@ -812,6 +898,61 @@ function cloneQuestion(q) {
   return c;
 }
 
+/**
+ * Balanced 10-item set targets (1 Easy, 7 Medium, 2 Hard).
+ * Derived from analysis of 7 real TPO exam sets (70 items).
+ */
+const SET_TYPE_TARGETS = {
+  easy: [
+    { type: "negation", count: 1 },
+  ],
+  medium: [
+    { type: "3rd-reporting", count: 4 },
+    { type: "negation", count: 1 },
+    { type: "1st-embedded", count: 1 },
+    { type: "any", count: 1 },
+  ],
+  hard: [
+    { type: "3rd-reporting", count: 1 },
+    { type: "any", count: 1 },
+  ],
+};
+
+/**
+ * Pick items from a difficulty pool while respecting type quotas.
+ * Falls back to any type in the same pool if a specific type is unavailable.
+ */
+function pickDiversified(pool, targets) {
+  const result = [];
+  const usedIds = new Set();
+
+  // 1. First pass: satisfying specific type quotas
+  for (const target of targets) {
+    if (target.type === "any") continue;
+    const candidates = pool.filter(
+      (q) => !usedIds.has(q.id) && (q._meta || {}).answerType === target.type
+    );
+    const picked = shuffle(candidates).slice(0, target.count);
+    picked.forEach((q) => {
+      result.push(q);
+      usedIds.add(q.id);
+    });
+  }
+
+  // 2. Second pass: filling "any" slots and handling shortfalls
+  const totalNeeded = targets.reduce((sum, t) => sum + t.count, 0);
+  if (result.length < totalNeeded) {
+    const remaining = pool.filter((q) => !usedIds.has(q.id));
+    const gap = totalNeeded - result.length;
+    shuffle(remaining).slice(0, gap).forEach((q) => {
+      result.push(q);
+      usedIds.add(q.id);
+    });
+  }
+
+  return result;
+}
+
 function composeOneSet(pool, setId, maxRetries = 500) {
   const { easy: eN, medium: mN, hard: hN } = ETS_2026_TARGET_COUNTS_10;
 
@@ -819,6 +960,8 @@ function composeOneSet(pool, setId, maxRetries = 500) {
   function profileStyle(items) {
     const total = items.length || 1;
     let qmark = 0, distractor = 0, embedded = 0, sumWords = 0, sumChunks = 0;
+    const typeCounts = {};
+
     for (const q of items) {
       const m = q._meta;
       if (m.hasQuestionMark) qmark++;
@@ -826,28 +969,47 @@ function composeOneSet(pool, setId, maxRetries = 500) {
       if (m.isEmbedded) embedded++;
       sumWords += m.wordCount;
       sumChunks += m.effectiveChunks;
+      const t = m.answerType || "unknown";
+      typeCounts[t] = (typeCounts[t] || 0) + 1;
     }
-    return { total, qmark, distractor, embedded, avgWords: sumWords / total, avgChunks: sumChunks / total };
+    return { total, qmark, distractor, embedded, avgWords: sumWords / total, avgChunks: sumChunks / total, typeCounts, items };
   }
 
   // TPO style gates: 92% statements, 88% distractors, 63% embedded
   function stylePassStrict(p) {
+    // Type monopoly check: no single type should exceed 6 items (3rd-reporting avg is 5.4)
+    const maxTypeCount = Math.max(...Object.values(p.typeCounts));
+    
+    // Prompt uniqueness check: no identical prompts within a 10-item set
+    const prompts = p.items.map(q => q.prompt.toLowerCase().trim());
+    const uniquePrompts = new Set(prompts);
+    const hasDuplicatePrompts = uniquePrompts.size < prompts.length;
+
     return (
+      !hasDuplicatePrompts &&
       p.qmark >= 0 && p.qmark <= 2 &&
       p.distractor >= 7 && p.distractor <= 10 &&
       p.embedded >= 5 && p.embedded <= 8 &&
       p.avgWords >= 9.0 && p.avgWords <= 13.0 &&
-      p.avgChunks >= 4.5 && p.avgChunks <= 7.5
+      p.avgChunks >= 4.5 && p.avgChunks <= 7.5 &&
+      maxTypeCount <= 6
     );
   }
 
   function stylePassRelaxed(p) {
+    const maxTypeCount = Math.max(...Object.values(p.typeCounts));
+    const prompts = p.items.map(q => q.prompt.toLowerCase().trim());
+    const uniquePrompts = new Set(prompts);
+    const hasManyDuplicatePrompts = uniquePrompts.size < prompts.length - 1; // Allow max 1 duplicate in relaxed mode
+
     return (
+      !hasManyDuplicatePrompts &&
       p.qmark >= 0 && p.qmark <= 3 &&
       p.distractor >= 6 && p.distractor <= 10 &&
       p.embedded >= 4 && p.embedded <= 9 &&
       p.avgWords >= 8.5 && p.avgWords <= 14.0 &&
-      p.avgChunks >= 4.0 && p.avgChunks <= 8.0
+      p.avgChunks >= 4.0 && p.avgChunks <= 8.0 &&
+      maxTypeCount <= 8
     );
   }
 
@@ -885,10 +1047,13 @@ function composeOneSet(pool, setId, maxRetries = 500) {
     ) return null;
 
     const picked = [
-      ...shuffle(pool.easy).slice(0, eN),
-      ...shuffle(pool.medium).slice(0, mN),
-      ...shuffle(pool.hard).slice(0, hN),
+      ...pickDiversified(pool.easy, SET_TYPE_TARGETS.easy),
+      ...pickDiversified(pool.medium, SET_TYPE_TARGETS.medium),
+      ...pickDiversified(pool.hard, SET_TYPE_TARGETS.hard),
     ];
+
+    // Safety check
+    if (picked.length !== 10) continue;
 
     // 1. Style gate first — cheap, uses pre-computed _meta, no clone needed
     const style = profileStyle(picked);
@@ -1009,8 +1174,14 @@ async function main() {
 
   for (let round = 1; round <= CANDIDATE_ROUNDS; round += 1) {
     try {
-      const { type, difficulty } = typeFromDeficit(acceptedPool, scaledQuotas);
-      const res = await generateCandidateRound(round, type, difficulty, rollingRejectFeedback);
+      // Planner: AI analyzes pool gaps and decides the mixed batch composition
+      const poolState = computePoolState(acceptedPool);
+      const plannerRaw = await callModel(buildPlannerPrompt(poolState, scaledQuotas));
+      const spec = parsePlannerSpec(plannerRaw);
+      const specLabel = spec.map((s) => `${s.count}×${s.type}/${s.difficulty}`).join(", ");
+      console.log(`round ${round}: planner → [${specLabel}]`);
+
+      const res = await generateCandidateRound(round, spec, rollingRejectFeedback);
       acceptedPool.push(...res.questions);
       Object.entries(res.rejectReasons).forEach(([k, v]) => {
         rejectReasons[k] = (rejectReasons[k] || 0) + v;
@@ -1018,16 +1189,25 @@ async function main() {
       rollingRejectFeedback = buildRejectFeedbackHints(rejectReasons);
       const pool = splitPoolByDifficulty(acceptedPool);
       console.log(
-        `round ${round} [${type}/${difficulty}]: generated=${res.generated} accepted=${res.accepted} rejected=${res.rejected} | pool easy=${pool.easy.length} medium=${pool.medium.length} hard=${pool.hard.length}`,
+        `round ${round}: generated=${res.generated} accepted=${res.accepted} rejected=${res.rejected} | pool easy=${pool.easy.length} medium=${pool.medium.length} hard=${pool.hard.length}`,
       );
 
-      const canBuildTargetSets =
+      // Early stop: difficulty quota met AND type distribution balanced
+      const diffOk =
         pool.easy.length >= easyTarget &&
         pool.medium.length >= mediumTarget &&
         pool.hard.length >= hardTarget;
-      if (canBuildTargetSets && acceptedPool.length > TARGET_SET_COUNT * 14) {
-        console.log("pool is large enough, stopping early");
-        break;
+      if (diffOk && acceptedPool.length > TARGET_SET_COUNT * 14) {
+        const finalState = computePoolState(acceptedPool);
+        const allTypesFilled = Object.entries(scaledQuotas).every(([diff, typeMap]) =>
+          Object.entries(typeMap).every(([type, quota]) =>
+            quota <= 0 || (finalState[diff] || {})[type] >= Math.ceil(quota / BUFFER)
+          )
+        );
+        if (allTypesFilled) {
+          console.log("pool sufficient (difficulty + type balanced), stopping early");
+          break;
+        }
       }
     } catch (e) {
       console.log(`round ${round}: failed -> ${errMsg(e)}`);
@@ -1049,20 +1229,18 @@ async function main() {
     );
     for (let i = 1; i <= ADAPTIVE_BOOST_ROUNDS; i += 1) {
       boostedPool = splitPoolByDifficulty(acceptedPool);
-      const { type, difficulty } = typeFromDeficit(acceptedPool, scaledQuotas);
+      const boostState = computePoolState(acceptedPool);
       const allFilled = Object.entries(scaledQuotas).every(([diff, typeMap]) =>
-        Object.entries(typeMap).every(([t, quota]) => {
-          const cnt = acceptedPool.filter((q) => {
-            const at = (q._meta || {}).answerType || classifyAnswerType(q);
-            const db = (estimateQuestionDifficulty(q) || {}).bucket || "medium";
-            return at === t && db === diff;
-          }).length;
-          return cnt >= quota / BUFFER; // check against un-buffered quota
-        })
+        Object.entries(typeMap).every(([type, quota]) =>
+          quota <= 0 || (boostState[diff] || {})[type] >= Math.ceil(quota / BUFFER)
+        )
       );
       if (allFilled) break;
       try {
-        const res = await generateCandidateRound(3000 + i, type, difficulty, rollingRejectFeedback);
+        const boostPlannerRaw = await callModel(buildPlannerPrompt(boostState, scaledQuotas));
+        const boostSpec = parsePlannerSpec(boostPlannerRaw);
+        const boostLabel = boostSpec.map((s) => `${s.count}×${s.type}/${s.difficulty}`).join(", ");
+        const res = await generateCandidateRound(3000 + i, boostSpec, rollingRejectFeedback);
         acceptedPool.push(...res.questions);
         Object.entries(res.rejectReasons).forEach(([k, v]) => {
           rejectReasons[k] = (rejectReasons[k] || 0) + v;
@@ -1070,7 +1248,7 @@ async function main() {
         rollingRejectFeedback = buildRejectFeedbackHints(rejectReasons);
         boostedPool = splitPoolByDifficulty(acceptedPool);
         console.log(
-          `boost ${i} [${type}/${difficulty}]: accepted=${res.accepted} rejected=${res.rejected} | pool easy=${boostedPool.easy.length} medium=${boostedPool.medium.length} hard=${boostedPool.hard.length}`,
+          `boost ${i} [${boostLabel}]: accepted=${res.accepted} rejected=${res.rejected} | pool easy=${boostedPool.easy.length} medium=${boostedPool.medium.length} hard=${boostedPool.hard.length}`,
         );
         if (
           boostedPool.easy.length >= easyTarget &&
@@ -1080,7 +1258,7 @@ async function main() {
           break;
         }
       } catch (e) {
-        console.log(`boost ${i} [${type}/${difficulty}]: failed -> ${errMsg(e)}`);
+        console.log(`boost ${i}: failed -> ${errMsg(e)}`);
         flushPoolCheckpoint(acceptedPool);
       }
       await new Promise((r) => setTimeout(r, 3000));
