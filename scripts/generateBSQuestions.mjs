@@ -445,7 +445,7 @@ const PERSONA_POOL = [
 function buildGeneratePrompt(round, spec, rejectFeedback = "") {
   // spec: [{type, difficulty, count}, ...]
   const totalCount = spec.reduce((s, x) => s + x.count, 0);
-  
+
   // Pick 3 random scenarios and 5 random personas to prime the AI
   const pickedScenarios = shuffle(SCENARIO_POOL).slice(0, 3).join("; ");
   const pickedPersonas = shuffle(PERSONA_POOL).slice(0, 5).join(", ");
@@ -457,7 +457,7 @@ function buildGeneratePrompt(round, spec, rejectFeedback = "") {
     const diffSpec = difficulty === "easy"
       ? "Answer length: 7-10 words. Chunks: 5-6."
       : difficulty === "medium"
-      ? "Answer length: 10-13 words. Chunks: 6-7. Mix standard and complex syntax."
+      ? "Answer length: 10-13 words. Chunks: 6-7."
       : "Answer length: 12-15 words. Chunks: 7-8. MUST use advanced collocations or perfect/passive aspects.";
     const ids = Array.from({ length: count }, (_, j) => `tmp_r${round}_q${qIndex + j}`).join(", ");
     qIndex += count;
@@ -467,17 +467,23 @@ ${hints}
 ${diffSpec}`;
   }).join("\n\n");
 
-  return `You are a TOEFL iBT Writing Task 1 "Build a Sentence" item writer.
+  return `You are a TOEFL iBT Writing Task 1 "Build a Sentence" content architect.
 Return ONLY a JSON array with exactly ${totalCount} objects.
 
-## ANTI-OVERFITTING RULES (CRITICAL):
-1. VERB DIVERSITY: DO NOT use the same reporting verb (e.g., "wanted to know") more than twice in this batch. 
-   Use: inquired, wondered, asked, was curious, needed to find out, was not sure, requested information.
-2. DISTRACTOR UPGRADE: At least 40% of distractors MUST be morphological variants (e.g., "taking/taken", "chose/choose", "was/been", "where/when") rather than simple auxiliaries like "did".
-3. SITUATIONAL LOGIC: The sentence structure must feel natural to the scenario. 
-   - Travel/Airport -> use passive voice or negation regarding delays/rules.
-   - Technology -> use complex 1st-person embedded regarding software/steps.
-4. NO TEMPLATE CHUNKING: Vary how chunks are cut. Don't always keep [Subject + Verb] together. Sometimes split them to test agreement.
+## CORE MISSION:
+Generate high-quality conversational sentences. Focus on natural language flow.
+
+## DISTRACTOR ANNOTATION RULES (CRITICAL):
+For each item, set "has_distractor" to true/false based on these TPO rules:
+1. Set "has_distractor": false ONLY when:
+   - Simple Negation: basic negative statement < 9 words.
+   - High Complexity: 3+ nested grammar points (e.g. Embedded + Passive + Perfect).
+   - Contact Clause: relative pronoun is omitted.
+2. Set "has_distractor": true for ALL other cases (~80-90% of batch).
+
+## VERB DIVERSITY:
+DO NOT use the same reporting verb (e.g., "wanted to know") more than twice in this batch.
+Vary with: inquired, wondered, asked, was curious, needed to find out, was not sure.
 
 ## SCENARIO & PERSONA CONTEXT:
 - Scenarios: ${pickedScenarios}
@@ -488,13 +494,14 @@ ${groupSections}
 ## Schema:
 {
   "id": "tmp_r${round}_q1",
+  "has_distractor": boolean,
   "answer_type": "negation" | "3rd-reporting" | "1st-embedded" | "interrogative" | "direct" | "relative",
-  "prompt": "conversational context (5-15 words)",
-  "answer": "correct sentence to build (7-15 words)",
-  "chunks": ["lowercase chunk", "..."],
-  "prefilled": ["word"] or [],
-  "prefilled_positions": {"word": 0} or {},
-  "distractor": "single word trap",
+  "prompt": "...",
+  "answer": "...",
+  "chunks": ["...", "..."],
+  "prefilled": [],
+  "prefilled_positions": {},
+  "distractor": null,
   "has_question_mark": true/false,
   "grammar_points": ["tag1", "tag2"]
 }
@@ -503,6 +510,35 @@ ${rejectFeedback}
 Output JSON array only. No markdown.`.trim();
 }
 
+function buildTrapSpecialistPrompt(questions) {
+  const itemsToTrap = questions.filter(q => q.has_distractor === true);
+  const total = itemsToTrap.length;
+
+  return `You are a TOEFL iBT Writing Task 1 Trap Specialist.
+Your goal is to add a single lowercase distractor word to items where "has_distractor" is true.
+
+## THE TACTICAL PLAYBOOK (Apply based on grammar_points):
+1. EMBEDDED QUESTIONS: 
+   - Preferred: Wh-word swap (e.g., where -> which, if -> that) OR Tense mismatch within the clause (e.g., goes -> went).
+   - Fallback: Use "did/do" only if the clause verb is a simple base form.
+2. RELATIVE/CONTACT CLAUSES:
+   - Preferred: Relative pronoun swap (e.g., that -> which, who -> whom) OR Clause verb agreement.
+   - NEVER use "did" for these items.
+3. PERFECT/PASSIVE/PROGRESSIVE:
+   - Mandatory: Use morphological variants (e.g., chosen -> chose, taking -> taken, built -> build).
+   - NEVER use "did" for these items.
+4. NEGATION:
+   - Preferred: Verb form辨析 (e.g., attend -> attending) OR Modal swap (e.g., could -> can).
+
+## PHILOSOPHY:
+Search for the "Evil Twin" of a word in the sentence—a word that looks plausible but breaks the tested rule. 
+Keep "distractor": null for items where "has_distractor" is false.
+
+## INPUT ITEMS:
+${JSON.stringify(questions, null, 2)}
+
+Return ONLY a JSON array.`.trim();
+}
 /**
  * Brute-force check for multiple valid arrangements of chunks.
  * Only practical for small number of chunks (<= 8).
