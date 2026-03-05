@@ -455,10 +455,10 @@ function buildGeneratePrompt(round, spec, rejectFeedback = "") {
     const { type, difficulty, count } = item;
     const hints = (TYPE_DIFFICULTY_HINTS[type] || {})[difficulty] || "";
     const diffSpec = difficulty === "easy"
-      ? "Answer length: 7-10 words. Effective chunks: 5-6."
+      ? "Answer length: 7-10 words. Chunks: 5-6."
       : difficulty === "medium"
-      ? "Answer length: 9-13 words. Effective chunks: 6-7."
-      : "Answer length: 11-15 words. Effective chunks: 7-8. Include ≥1 morphological distractor.";
+      ? "Answer length: 10-13 words. Chunks: 6-7. Mix standard and complex syntax."
+      : "Answer length: 12-15 words. Chunks: 7-8. MUST use advanced collocations or perfect/passive aspects.";
     const ids = Array.from({ length: count }, (_, j) => `tmp_r${round}_q${qIndex + j}`).join(", ");
     qIndex += count;
     return `### GROUP ${i + 1}: ${count} item${count > 1 ? "s" : ""} — ${type.toUpperCase()} / ${difficulty.toUpperCase()}
@@ -470,15 +470,22 @@ ${diffSpec}`;
   return `You are a TOEFL iBT Writing Task 1 "Build a Sentence" item writer.
 Return ONLY a JSON array with exactly ${totalCount} objects.
 
-## SCENARIO & PERSONA CONTEXT (Use these to vary the scenes):
+## ANTI-OVERFITTING RULES (CRITICAL):
+1. VERB DIVERSITY: DO NOT use the same reporting verb (e.g., "wanted to know") more than twice in this batch. 
+   Use: inquired, wondered, asked, was curious, needed to find out, was not sure, requested information.
+2. DISTRACTOR UPGRADE: At least 40% of distractors MUST be morphological variants (e.g., "taking/taken", "chose/choose", "was/been", "where/when") rather than simple auxiliaries like "did".
+3. SITUATIONAL LOGIC: The sentence structure must feel natural to the scenario. 
+   - Travel/Airport -> use passive voice or negation regarding delays/rules.
+   - Technology -> use complex 1st-person embedded regarding software/steps.
+4. NO TEMPLATE CHUNKING: Vary how chunks are cut. Don't always keep [Subject + Verb] together. Sometimes split them to test agreement.
+
+## SCENARIO & PERSONA CONTEXT:
 - Scenarios: ${pickedScenarios}
 - Personas: ${pickedPersonas}
-- DO NOT repeat the same character or setting across the batch.
-- Mix modern life, technology, and travel with traditional school/work scenes.
 
 ${groupSections}
 
-## Schema (each item):
+## Schema:
 {
   "id": "tmp_r${round}_q1",
   "answer_type": "negation" | "3rd-reporting" | "1st-embedded" | "interrogative" | "direct" | "relative",
@@ -487,24 +494,10 @@ ${groupSections}
   "chunks": ["lowercase chunk", "..."],
   "prefilled": ["word"] or [],
   "prefilled_positions": {"word": 0} or {},
-  "distractor": null or "single lowercase word not in answer",
+  "distractor": "single word trap",
   "has_question_mark": true/false,
   "grammar_points": ["tag1", "tag2"]
 }
-
-## PROMPT-ANSWER LOGIC:
-- If answer is "[X] wanted to know / asked / wondered [wh-clause]", prompt MUST ask "What did X ask/want?"
-- RIGHT: prompt="What did Emma want to know?" answer="Emma wanted to know where I went."
-
-## Distractor rules:
-- ALWAYS single word.
-- PASSIVE VOICE: NEVER use "did" — use "gets", "have", "been".
-- Distribution: ~50% extra auxiliary (did/do/does), ~30% morphological variant, ~20% function word.
-
-## Chunk rules:
-- Effective chunk count (excl. distractor): 4-8, TARGET 5-7.
-- Max 3 words per chunk.
-- No single correct arrangement ambiguity. Ensure that prefilled words and chunks have only ONE valid combination.
 
 ${rejectFeedback}
 Output JSON array only. No markdown.`.trim();
