@@ -165,6 +165,32 @@ function normalizeQuestion(raw, tempId) {
   // Auto-fix: Split any chunk with >3 words
   chunks = chunks.flatMap((c) => autoSplitChunk(c, 3));
 
+  // Auto-fix: Remove prefilled coverage from chunks.
+  // AI often duplicates prefilled words into chunks in two ways:
+  //   (a) exact phrase match: prefilled=["the report"], chunks includes "the report"
+  //   (b) split words: prefilled=["the report"], chunks includes "the" and "report" separately
+  // Strategy: greedily consume prefilled words from chunks (single-word first).
+  if (prefilled.length > 0) {
+    // Build a word-level budget of what prefilled covers
+    const prefilledWordBudget = [];
+    prefilled.forEach((pf) => {
+      pf.toLowerCase().split(/\s+/).filter(Boolean).forEach((w) => prefilledWordBudget.push(w));
+    });
+    // Remove exact-phrase matches first
+    const prefilledPhraseSet = new Set(prefilled.map((p) => p.toLowerCase()));
+    chunks = chunks.filter((c) => !prefilledPhraseSet.has(c.toLowerCase()));
+    // Then remove single-word chunks that are covered by the prefilled budget
+    const budget = [...prefilledWordBudget];
+    chunks = chunks.filter((c) => {
+      const cWords = c.toLowerCase().split(/\s+/);
+      if (cWords.length === 1) {
+        const idx = budget.indexOf(cWords[0]);
+        if (idx !== -1) { budget.splice(idx, 1); return false; }
+      }
+      return true;
+    });
+  }
+
   // Auto-fix: Ensure at least 4 effective chunks
   chunks = ensureMinChunkCount(chunks, distractor, 4);
 
@@ -194,15 +220,20 @@ function normalizeQuestion(raw, tempId) {
     }
   });
 
+  // Auto-fix: drop any prefilled item that couldn't be located in the answer.
+  // If AI invents a prefilled phrase not present in answer, discard it silently
+  // (question becomes harder but word bag stays valid).
+  const validPrefilled = prefilled.filter((pf) => correctedPositions[pf] !== undefined);
+
   return {
     id: normalizeText(q.id) || tempId,
     prompt: normalizeText(q.prompt),
     answer,
     chunks,
-    prefilled,
+    prefilled: validPrefilled,
     prefilled_positions: correctedPositions,
     distractor,
-    has_question_mark: typeof q.has_question_mark === "boolean" ? q.has_question_mark : endsWithQuestionMark(answer),
+    has_question_mark: endsWithQuestionMark(answer),
     grammar_points: Array.isArray(q.grammar_points)
       ? q.grammar_points.map((g) => normalizeText(g)).filter(Boolean)
       : [],
@@ -324,11 +355,11 @@ Examples:
 - "I did not understand what the manager explained."
 - "I have not received the workshop details yet."
 Prompt: direct question or narrative context. Distractor: "did"/"do" or morphological variant.`,
-    hard: `ALL 10 answers: negation + embedded/perfect complexity, 11-14 words.
+    hard: `ALL 10 answers: negation + advanced grammar complexity, usually 10-13 words.
 Examples:
 - "I had not realized how quickly the project deadline was approaching."
 - "I did not understand why the meeting had been postponed again."
-Include past perfect negation or negation + embedded clause.
+Hard MUST be created by structure, not by extra length alone. Prefer past perfect negation, passive/passive-progressive inside the clause, or negation + embedded grammar traps. Hard MUST be created by structure, not by extra length alone. Prefer past perfect negation, passive/passive-progressive inside the clause, or negation + embedded grammar traps.
 Distractor: morphological variant (e.g. "realized/realize", "approaching/approach").`,
   },
   "3rd-reporting": {
@@ -343,12 +374,13 @@ Structure: "[Name/They] [wanted to know / asked / was curious / needed to know] 
 Vary subjects: he / she / they / the manager / the professor / some colleagues
 Vary wh-words across the batch: if(3), what(2), where(2), why(2), when(1)
 Declarative word order in clause (NO inversion). Distractor: "did"/"do" for most.`,
-    hard: `ALL 10 answers: third-person reporting with complex embedded clause, 12-15 words.
+    hard: `ALL 10 answers: third-person reporting with structurally complex embedded clause, usually 10-13 words.
 Complexity options:
 - Past perfect in clause: "He wanted to know where all the files had gone."
 - Passive in clause: "She wanted to know when the report would be submitted."
 - whom: "She wanted to know whom I would give the presentation to."
 - Two-layer: "The manager wanted to know how we had been able to finish on time."
+Hard MUST come from grammar complexity, not from padding the sentence. Hard MUST come from grammar complexity, not from padding the sentence.
 Distractor: morphological variant or "whom/who", "where/when" function-word swap.`,
   },
   "1st-embedded": {
@@ -365,12 +397,12 @@ Examples:
 - "I can't decide which project topic is the most important."
 - "I have no idea who will be leading the committee."
 Distractor: "did"/"does" or function-word variant.`,
-    hard: `ALL 10 answers: complex first-person embedded, 12-15 words.
+    hard: `ALL 10 answers: complex first-person embedded, usually 10-13 words.
 Examples:
 - "I would love to know which restaurant you enjoyed the most." (superlative)
 - "I have not been told who will be responsible for the final report." (passive + embedded)
 - "We just found out where the new library equipment is being stored." (passive progressive)
-Include passive voice OR superlative OR perfect aspect in embedded clause.
+Include passive voice OR superlative/comparative OR perfect aspect in the embedded clause. Hard MUST be signaled by grammar structure rather than answer length. Include passive voice OR superlative/comparative OR perfect aspect in the embedded clause. Hard MUST be signaled by grammar structure rather than answer length.
 Distractor: morphological variant (e.g. "enjoyed/enjoy", "stored/store").`,
   },
   "interrogative": {
@@ -385,11 +417,12 @@ Examples:
 - "Could you tell me how you are feeling about the new policy?"
 - "Can you tell me what you did not enjoy about the presentation?"
 Distractor: morphological variant or "can"/"could" swap.`,
-    hard: `ALL 10 answers use interrogative frame with complex embedded question, 12-14 words.
+    hard: `ALL 10 answers use interrogative frame with complex embedded question, usually 10-13 words.
 Examples:
 - "Can you tell me why you decided to choose this particular research topic?"
 - "Could you tell me how the project team managed to finish ahead of schedule?"
 - "Did he ask you why you chose this particular career path?"
+Hard MUST come from the embedded grammar challenge: tense/aspect mismatch risk, double-layer reporting, or other learner-unfamiliar clause structure. Do not make it hard just by adding length. Hard MUST come from the embedded grammar challenge: tense/aspect mismatch risk, double-layer reporting, or other learner-unfamiliar clause structure. Do not make it hard just by adding length.
 Distractor: morphological variant (e.g. "decided/decide", "managed/manage").`,
   },
   "direct": {
@@ -400,11 +433,12 @@ Examples:
 - "The store next to the post office sells all types of winter apparel."
 Prompt: direct question about what happened or what the speaker did.
 Distractor: morphological variant (e.g. "relaxed/relax", "sells/sold").`,
-    hard: `ALL 10 answers: complex direct statement, 12-15 words, with prepositional depth or comparative.
+    hard: `ALL 10 answers: complex direct statement, usually 10-13 words, with comparative or structurally dense modification.
 Examples:
 - "This coffee tastes better than all of the other brands I have tried."
 - "I found it in the back of the furniture section at the local superstore."
 - "The library is only temporarily closed in town for major structural renovations."
+Prefer comparative/superlative structures, dense modifiers, or other learner-unfamiliar grammar. Do not inflate difficulty by length alone. Prefer comparative/superlative structures, dense modifiers, or other learner-unfamiliar grammar. Do not inflate difficulty by length alone.
 Distractor: morphological variant or comparative swap ("better/good", "only/once").`,
   },
   "relative": {
@@ -415,11 +449,12 @@ Examples:
 - "The diner that opened last week serves many delicious entrees."
 Prompt: question about where/what the speaker found.
 Distractor: morphological variant (e.g. "stopped/stop", "opened/open").`,
-    hard: `ALL 10 answers: relative/contact clause with additional complexity, 12-15 words.
+    hard: `ALL 10 answers: relative/contact clause with additional complexity, usually 10-13 words.
 Combine relative clause with:
 - Passive: "The desk you ordered is scheduled to arrive on Friday."
 - Comparative: "This coffee tastes better than all the other brands I've tried."
 - Long modifier: "The store I found near the post office sells winter apparel at a discount."
+Hard MUST come from the relative/contact-clause structure plus one extra grammatical challenge, not from sentence length alone. Hard MUST come from the relative/contact-clause structure plus one extra grammatical challenge, not from sentence length alone.
 Distractor: passive helper swap or morphological variant ("scheduled/schedule", "ordered/order").`,
   },
 };
@@ -458,7 +493,7 @@ function buildGeneratePrompt(round, spec, rejectFeedback = "") {
       ? "Answer length: 7-10 words. Chunks: 5-6."
       : difficulty === "medium"
       ? "Answer length: 10-13 words. Chunks: 6-7."
-      : "Answer length: 12-15 words. Chunks: 7-8. MUST use advanced collocations or perfect/passive aspects.";
+      : "Answer length: usually 10-13 words. Chunks: 6-8. MUST be hard because of advanced grammar structure: e.g. passive, past perfect, relative/contact clause, whom, comparative/superlative, or multi-layer embedding. Do NOT make an item hard by length alone. Answer length: usually 10-13 words. Chunks: 6-8. MUST be hard because of advanced grammar structure: e.g. passive, past perfect, relative/contact clause, whom, comparative/superlative, or multi-layer embedding. Do NOT make an item hard by length alone.";
     const ids = Array.from({ length: count }, (_, j) => `tmp_r${round}_q${qIndex + j}`).join(", ");
     qIndex += count;
     return `### GROUP ${i + 1}: ${count} item${count > 1 ? "s" : ""} — ${type.toUpperCase()} / ${difficulty.toUpperCase()}
@@ -480,6 +515,7 @@ For each item, set "has_distractor" to true/false based on these TPO rules:
    - High Complexity: 3+ nested grammar points (e.g. Embedded + Passive + Perfect).
    - Contact Clause: relative pronoun is omitted.
 2. Set "has_distractor": true for ALL other cases (~80-90% of batch).
+3. A distractor is INVALID if inserting it can still produce a grammatical or semantically plausible answer. Distractors must break the tested grammar point, not act like another acceptable chunk.
 
 ## VERB DIVERSITY:
 DO NOT use the same reporting verb (e.g., "wanted to know") more than twice in this batch.
@@ -491,22 +527,99 @@ Vary with: inquired, wondered, asked, was curious, needed to find out, was not s
 
 ${groupSections}
 
+## GIVEN WORD (PREFILLED) — CRITICAL CONCEPT:
+In the real TOEFL exercise, 6-7 out of every 10 questions give the student one word or short phrase already placed in the sentence (a "given word"). This makes the task slightly easier.
+- "prefilled": a phrase pre-placed for the student (shown on screen, not draggable)
+- "prefilled_positions": its 0-based word index in the answer
+- That phrase must be REMOVED from "chunks" — chunks covers only the draggable pieces
+- 3-4 questions per batch have prefilled=[] (no given word, harder)
+- Every output item must pass a strict WORD-BAG check:
+  answer words = (chunks minus distractor) + prefilled words
+  no missing words, no extra words, no duplicate coverage
+
+## CHUNK GRANULARITY — CRITICAL:
+- Effective chunk count (excluding distractor) MUST be 4-8. Never output 9+ effective chunks.
+- Do NOT split almost every word into a separate chunk.
+- Prefer meaningful 2-3 word structure chunks when needed:
+  - "wanted to know"
+  - "had gone"
+  - "would be submitted"
+  - "the desk"
+  - "on Friday"
+- BAD over-split example:
+  answer: "He wanted to know where all the accountants had gone."
+  bad chunks: ["he", "wanted", "to", "know", "where", "all", "the accountants", "had", "gone"]  -> 9 effective chunks -> REJECT
+- GOOD chunking example:
+  answer: "He wanted to know where all the accountants had gone."
+  good chunks: ["he", "wanted to know", "where", "all the accountants", "had gone"] -> 5 effective chunks -> ACCEPTABLE
+- Another BAD over-split example:
+  answer: "The desk you ordered is scheduled to arrive on Friday."
+  bad chunks: ["the", "desk", "you", "ordered", "is", "scheduled", "to", "arrive", "on", "Friday"] -> 10 effective chunks -> REJECT
+- GOOD chunking example:
+  answer: "The desk you ordered is scheduled to arrive on Friday."
+  good chunks: ["the desk", "you ordered", "is scheduled", "to arrive", "on Friday"] -> 5 effective chunks -> ACCEPTABLE
+
+## UNIQUE-SOLUTION RULE — CRITICAL:
+- Every item must have exactly ONE clearly best arrangement.
+- Do NOT create items where the distractor can be inserted without obviously breaking grammar.
+- Do NOT create items where adverbs, prepositional phrases, or reporting chunks can move around and still sound correct.
+- If two arrangements could plausibly be accepted by a careful learner, the item is invalid.
+- BAD ambiguous idea:
+  chunks: ["he", "asked", "me", "yesterday", "why", "the store closed"]
+  problem: "yesterday" may attach in multiple plausible positions.
+- GOOD idea:
+  use tighter structure chunks so only one order is grammatical, e.g. "asked me", "closed early", "on Friday".
+
+HOW PREFILLED WORKS — two pattern examples:
+
+Pattern A (negation, prefilled = single function word):
+  answer:            "I did not finish the assignment on time."
+  word indices:       I(0) did(1) not(2) finish(3) the(4) assignment(5) on(6) time(7)  → 8 words
+  prefilled:         ["not"]
+  prefilled_positions: {"not": 2}
+  chunks:            ["I", "did", "finish", "the", "assignment", "on", "time", "never"]
+  distractor:        "never"
+  word bag check:    effective chunks = I+did+finish+the+assignment+on+time = 7 words
+                     prefilled = not = 1 word  →  7 + 1 = 8 ✓
+  chunk style:       all single-word — distractor "never" is morphological trap (not vs never)
+
+Pattern B (3rd-reporting, prefilled = noun phrase):
+  answer:            "She asked whether the deadline had been extended."
+  word indices:       She(0) asked(1) whether(2) the(3) deadline(4) had(5) been(6) extended(7)  → 8 words
+  prefilled:         ["the deadline"]
+  prefilled_positions: {"the deadline": 3}
+  chunks:            ["she", "asked", "whether", "had", "been", "extended", "have"]
+  distractor:        "have"
+  word bag check:    effective chunks = she+asked+whether+had+been+extended = 6 words
+                     prefilled = the+deadline = 2 words  →  6 + 2 = 8 ✓
+  chunk style:       "the deadline" kept as unit (semantic noun phrase); all others single-word
+                     distractor "have" is morphological trap (have vs had)
+
 ## Schema:
 {
   "id": "tmp_r${round}_q1",
   "has_distractor": boolean,
   "answer_type": "negation" | "3rd-reporting" | "1st-embedded" | "interrogative" | "direct" | "relative",
   "prompt": "...",
-  "answer": "...",
-  "chunks": ["...", "..."],
-  "prefilled": [],
-  "prefilled_positions": {},
-  "distractor": null,
-  "has_question_mark": true/false,
+  "answer": "full correct sentence (7-13 words)",
+  "chunks": ["draggable1", "draggable2", "...and distractor if has_distractor=true"],
+  "prefilled": ["pre-placed phrase"] or [],
+  "prefilled_positions": {"pre-placed phrase": <0-based word index>} or {},
+  "distractor": "wrong-form word" or null,
+  "has_question_mark": true or false,
   "grammar_points": ["tag1", "tag2"]
 }
 
 ${rejectFeedback}
+## FINAL CHECKLIST — VERIFY BEFORE OUTPUT:
+1. WORD BAG: chunks (minus distractor) + prefilled words must equal EXACTLY the words in answer — no extras, no missing. Verify every item.
+2. DISTRACTOR: The distractor word must NOT appear anywhere in the answer string.
+3. PREFILLED: Use prefilled when it serves as a natural fixed anchor, including in hard items when TPO-style phrasing supports it. The prefilled word/phrase must NOT appear in chunks — remove it from chunks first. chunks + prefilled cover the answer exactly once.
+4. CHUNK GRANULARITY: Effective chunk count (chunks minus distractor) MUST be 4-8. Never output 9+ effective chunks. If a sentence would exceed 8 chunks, merge words into natural structure chunks such as "wanted to know", "had gone", "the desk", "you ordered", "on Friday". Do NOT over-split almost every word into a separate chunk.
+5. VERB DIVERSITY: No single reporting verb may appear more than twice in this batch.
+6. HARD DIFFICULTY: Hard items must be justified by advanced grammar signals, not by extra words. Valid hard signals include passive/passive-progressive, past perfect, relative/contact clause, whom, comparative/superlative, or multi-layer embedding.
+7. UNIQUE SOLUTION: Reject any item in your own internal check if the distractor could still fit grammatically or if more than one chunk order seems plausible.
+
 Output JSON array only. No markdown.`.trim();
 }
 
@@ -534,8 +647,19 @@ Your goal is to add a single lowercase distractor word to items where "has_distr
 Search for the "Evil Twin" of a word in the sentence—a word that looks plausible but breaks the tested rule. 
 Keep "distractor": null for items where "has_distractor" is false.
 
+## SAFETY CHECK:
+- The distractor must NOT create another grammatical answer if inserted.
+- The distractor must NOT behave like an optional modifier.
+- If the sentence still sounds acceptable with the distractor inserted, choose a different distractor.
+
 ## INPUT ITEMS:
 ${JSON.stringify(questions, null, 2)}
+
+## FINAL CHECK — VERIFY BEFORE OUTPUT:
+- PASSIVE / PERFECT / PROGRESSIVE items: distractor MUST be a morphological variant (e.g., chosen→chose, taking→taken). NEVER "did" or "do".
+- PASSIVE / PERFECT / PROGRESSIVE items: distractor MUST be a morphological variant. NEVER "did" or "do".
+- RELATIVE / CONTACT CLAUSE items: use pronoun swap or verb agreement. NEVER "did".
+- has_distractor=false items: distractor field must remain null.
 
 Return ONLY a JSON array.`.trim();
 }
@@ -564,8 +688,7 @@ function getAnswerType(q) {
 }
 
 /**
- * Compute current pool type×difficulty counts.
- * Returns { easy: { negation: N, ... }, medium: {...}, hard: {...} }
+ * Compute current pool type×difficulty counts plus style-feature coverage.
  */
 function computePoolState(pool) {
   const state = {};
@@ -575,12 +698,25 @@ function computePoolState(pool) {
       state[diff][type] = 0;
     }
   }
+  state.style = {
+    total: 0,
+    embedded: 0,
+    negation: 0,
+    distractor: 0,
+    qmark: 0,
+  };
   for (const q of pool) {
-    const type = (q._meta || {}).answerType || classifyAnswerType(q);
+    const meta = attachMeta(q)._meta || {};
+    const type = meta.answerType || classifyAnswerType(q);
     const diff = (estimateQuestionDifficulty(q) || {}).bucket || "medium";
     if (state[diff] && type in state[diff]) {
       state[diff][type]++;
     }
+    state.style.total += 1;
+    if (meta.isEmbedded) state.style.embedded += 1;
+    if (type === "negation") state.style.negation += 1;
+    if (meta.hasDistractor) state.style.distractor += 1;
+    if (meta.hasQuestionMark) state.style.qmark += 1;
   }
   return state;
 }
@@ -588,7 +724,7 @@ function computePoolState(pool) {
 /**
  * Build planner prompt: AI analyzes pool gaps and outputs a mixed batch spec.
  */
-function buildPlannerPrompt(poolState, scaledQuotas) {
+function buildPlannerPrompt(poolState, scaledQuotas, styleTargets = null) {
   const rows = [];
   for (const diff of ["easy", "medium", "hard"]) {
     for (const type of Object.keys(TYPE_QUOTAS_PER_SET.easy)) {
@@ -605,16 +741,32 @@ function buildPlannerPrompt(poolState, scaledQuotas) {
     `  ${r.diff.padEnd(8)} ${r.type.padEnd(16)} have=${String(r.have).padStart(3)}  need=${String(r.need).padStart(3)}  gap=${String(r.gap).padStart(3)}`
   );
 
+  const style = poolState.style || { total: 0, embedded: 0, negation: 0, distractor: 0, qmark: 0 };
+  const styleSection = styleTargets
+    ? `
+
+Style coverage needed to assemble the remaining target sets:
+  embedded questions   have=${String(style.embedded).padStart(3)}  need>=${String(styleTargets.embeddedMin).padStart(3)}  gap=${String(Math.max(0, styleTargets.embeddedMin - style.embedded)).padStart(3)}
+  negation items       have=${String(style.negation).padStart(3)}  need>=${String(styleTargets.negationMin).padStart(3)}  gap=${String(Math.max(0, styleTargets.negationMin - style.negation)).padStart(3)}
+  distractor items     have=${String(style.distractor).padStart(3)}  need>=${String(styleTargets.distractorMin).padStart(3)}  gap=${String(Math.max(0, styleTargets.distractorMin - style.distractor)).padStart(3)}
+  question-mark items  have=${String(style.qmark).padStart(3)}  max<=${String(styleTargets.qmarkMax).padStart(3)}
+`
+    : "";
+
   return `You are a TOEFL Build-a-Sentence generation planner.
 
 Pool status (sorted by gap, largest first):
   difficulty type             have  need  gap
 ${tableLines.join("\n")}
+${styleSection}
 
 Design the next generation batch (exactly 10 questions total) to most efficiently fill the largest gaps.
 Rules:
 - Sum of all count fields must equal exactly 10.
 - Prioritize cells with the largest gap. Skip cells with gap ≤ 0.
+- ALSO prioritize style-feature shortages that can block final set assembly, especially embedded-question and negation shortages.
+- If type-gap optimization conflicts with style-gap repair, repair the style gaps first.
+- Ensure the batch includes enough embedded-capable / negation-capable cells when those style gaps are positive.
 - Minimum 1, maximum 8 questions per included cell.
 - Valid types: negation, 3rd-reporting, 1st-embedded, interrogative, direct, relative
 - Valid difficulties: easy, medium, hard
@@ -653,6 +805,53 @@ function parsePlannerSpec(text) {
   } catch (_) {
     return [{ type: "3rd-reporting", difficulty: "medium", count: 10 }];
   }
+}
+
+function enforcePlannerStyleGaps(spec, poolState, styleTargets) {
+  const out = Array.isArray(spec) ? spec.map((x) => ({ ...x })) : [];
+  if (out.length === 0) return out;
+
+  const style = poolState?.style || { embedded: 0, negation: 0, distractor: 0, qmark: 0 };
+  const embeddedGap = Math.max(0, (styleTargets?.embeddedMin || 0) - style.embedded);
+  const negationGap = Math.max(0, (styleTargets?.negationMin || 0) - style.negation);
+
+  const total = out.reduce((sum, x) => sum + x.count, 0);
+  if (total !== 10) return out;
+
+  const replaceOne = (preferredType, preferredDifficulty = "medium") => {
+    const donor = out
+      .filter((x) => x.count > 1)
+      .sort((a, b) => b.count - a.count)[0];
+    if (!donor) return;
+    donor.count -= 1;
+    const existing = out.find((x) => x.type === preferredType && x.difficulty === preferredDifficulty);
+    if (existing) {
+      existing.count += 1;
+    } else {
+      out.push({ type: preferredType, difficulty: preferredDifficulty, count: 1 });
+    }
+  };
+
+  if (embeddedGap > 0) {
+    const embeddedPlanned = out
+      .filter((x) => x.type === "3rd-reporting" || x.type === "1st-embedded" || x.type === "interrogative")
+      .reduce((sum, x) => sum + x.count, 0);
+    if (embeddedPlanned < Math.min(6, embeddedGap)) {
+      replaceOne("1st-embedded", "medium");
+      replaceOne("3rd-reporting", "hard");
+    }
+  }
+
+  if (negationGap > 0) {
+    const negPlanned = out
+      .filter((x) => x.type === "negation")
+      .reduce((sum, x) => sum + x.count, 0);
+    if (negPlanned < Math.min(2, negationGap)) {
+      replaceOne("negation", embeddedGap > 0 ? "hard" : "medium");
+    }
+  }
+
+  return out.filter((x) => x.count > 0);
 }
 
 function buildReviewPrompt(questions) {
@@ -830,14 +1029,6 @@ async function generateCandidateRound(round, spec, rejectFeedback = "") {
 
   if (hardPassed.length === 0) return out;
 
-  // set-level schema gate (soft; for logging only in this stage)
-  const setGate = validateQuestionSet({ set_id: round, questions: hardPassed.slice(0, Math.min(10, hardPassed.length)) });
-  if (!setGate.ok) {
-    setGate.errors.forEach((e) => {
-      out.rejectReasons[`set-gate:${e}`] = (out.rejectReasons[`set-gate:${e}`] || 0) + 1;
-    });
-  }
-
   // AI review score
   const reviewRaw = await callModel(buildReviewPrompt(hardPassed));
   const review = parseReviewJson(reviewRaw);
@@ -933,7 +1124,7 @@ function cloneQuestion(q) {
  */
 const SET_TYPE_TARGETS = {
   easy: [
-    { type: "negation", count: 1 },
+    { type: "any", count: 1 },
   ],
   medium: [
     { type: "3rd-reporting", count: 4 },
@@ -1066,7 +1257,20 @@ function composeOneSet(pool, setId, maxRetries = 500) {
     return true;
   }
 
-  if (!isFeasible()) return null;
+  if (!isFeasible()) {
+    console.warn(`  [assembly set ${setId}] isFeasible=false: easy=${pool.easy.length}/${eN} medium=${pool.medium.length}/${mN} hard=${pool.hard.length}/${hN} embedded_max=${
+      Math.min(eN, pool.easy.filter(q=>q._meta.isEmbedded).length) +
+      Math.min(mN, pool.medium.filter(q=>q._meta.isEmbedded).length) +
+      Math.min(hN, pool.hard.filter(q=>q._meta.isEmbedded).length)
+    } distractor_max=${
+      Math.min(eN, pool.easy.filter(q=>q._meta.hasDistractor).length) +
+      Math.min(mN, pool.medium.filter(q=>q._meta.hasDistractor).length) +
+      Math.min(hN, pool.hard.filter(q=>q._meta.hasDistractor).length)
+    }`);
+    return null;
+  }
+
+  const diag = { styleStrict: 0, styleRelaxed: 0, schemaOk: 0, diffOk: 0, runtimeOk: 0 };
 
   for (let attempt = 0; attempt < maxRetries; attempt += 1) {
     if (
@@ -1086,8 +1290,12 @@ function composeOneSet(pool, setId, maxRetries = 500) {
 
     // 1. Style gate first — cheap, uses pre-computed _meta, no clone needed
     const style = profileStyle(picked);
-    const styleGate = attempt < Math.floor(maxRetries * 0.6) ? stylePassStrict : stylePassRelaxed;
-    if (!styleGate(style)) continue;
+    const isStrict = attempt < Math.floor(maxRetries * 0.6);
+    const styleGate = isStrict ? stylePassStrict : stylePassRelaxed;
+    if (!styleGate(style)) {
+      if (isStrict) diag.styleStrict++; else diag.styleRelaxed++;
+      continue;
+    }
 
     // 2. Clone + re-id only after style passes (avoids wasted deep-clones)
     const merged = shuffle(picked).map(cloneQuestion);
@@ -1095,9 +1303,12 @@ function composeOneSet(pool, setId, maxRetries = 500) {
 
     // 3. Schema + difficulty validation (rare failures; done after cheap gate)
     const set = { set_id: setId, questions: merged };
-    const schemaOk = validateQuestionSet(set).ok;
+    const schemaResult = validateQuestionSet(set);
     const diff = evaluateSetDifficultyAgainstTarget(merged);
-    if (!schemaOk || !diff.ok || !diff.meetsTargetCount10) continue;
+    if (!schemaResult.ok || !diff.ok || !diff.meetsTargetCount10) {
+      diag.schemaOk++;
+      continue;
+    }
 
     // 4. Runtime strict check
     let runtimeOk = true;
@@ -1110,7 +1321,7 @@ function composeOneSet(pool, setId, maxRetries = 500) {
         break;
       }
     }
-    if (!runtimeOk) continue;
+    if (!runtimeOk) { diag.runtimeOk++; continue; }
 
     // Consume used questions from pool (by answer key)
     const usedKeys = new Set(picked.map(stableAnswerKey));
@@ -1120,6 +1331,35 @@ function composeOneSet(pool, setId, maxRetries = 500) {
 
     return set;
   }
+
+  // Log detailed failure breakdown
+  const negationItems = [...pool.easy, ...pool.medium, ...pool.hard]
+    .filter(q => (q._meta || {}).answerType === "negation").length;
+  const embeddedItems = [...pool.easy, ...pool.medium, ...pool.hard]
+    .filter(q => (q._meta || {}).isEmbedded).length;
+  const poolTotal = pool.easy.length + pool.medium.length + pool.hard.length;
+  console.warn(`  [assembly set ${setId}] FAILED after ${maxRetries} retries`);
+  console.warn(`    pool: easy=${pool.easy.length} medium=${pool.medium.length} hard=${pool.hard.length} total=${poolTotal}`);
+  console.warn(`    pool stats: negation=${negationItems} embedded=${embeddedItems} (${Math.round(embeddedItems/poolTotal*100)}%)`);
+  console.warn(`    fail breakdown: styleStrict=${diag.styleStrict} styleRelaxed=${diag.styleRelaxed} schema/diff=${diag.schemaOk} runtime=${diag.runtimeOk}`);
+
+  // Sample a failed schema check to show actual errors
+  const samplePicked = [
+    ...pickDiversified(pool.easy, SET_TYPE_TARGETS.easy),
+    ...pickDiversified(pool.medium, SET_TYPE_TARGETS.medium),
+    ...pickDiversified(pool.hard, SET_TYPE_TARGETS.hard),
+  ];
+  if (samplePicked.length === 10) {
+    const sampleMerged = shuffle(samplePicked).map(cloneQuestion);
+    sampleMerged.forEach((q, i) => { q.id = `sample_q${i + 1}`; });
+    const sampleSchema = validateQuestionSet({ set_id: 0, questions: sampleMerged });
+    const sampleDiff = evaluateSetDifficultyAgainstTarget(sampleMerged);
+    const sampleStyle = profileStyle(samplePicked);
+    console.warn(`    sample pick: qmark=${sampleStyle.qmark} distractor=${sampleStyle.distractor} embedded=${sampleStyle.embedded} avgWords=${sampleStyle.avgWords.toFixed(1)} avgChunks=${sampleStyle.avgChunks.toFixed(1)} maxType=${Math.max(...Object.values(sampleStyle.typeCounts))}`);
+    if (!sampleSchema.ok) console.warn(`    schema errors: ${sampleSchema.errors.join(" | ")}`);
+    if (!sampleDiff.meetsTargetCount10) console.warn(`    diff counts: easy=${sampleDiff.profile.counts.easy} medium=${sampleDiff.profile.counts.medium} hard=${sampleDiff.profile.counts.hard}`);
+  }
+
   return null;
 }
 
@@ -1127,7 +1367,10 @@ function buildFinalSetsFromPool(pool, targetCount) {
   const sets = [];
   for (let i = 1; i <= targetCount; i += 1) {
     const set = composeOneSet(pool, i);
-    if (!set) break;
+    if (!set) {
+      console.warn(`  [assembly] set ${i} could not be assembled — continuing to next`);
+      continue;
+    }
     sets.push(set);
   }
   return sets;
@@ -1189,6 +1432,12 @@ async function main() {
   const easyTarget = ETS_2026_TARGET_COUNTS_10.easy * TARGET_SET_COUNT;
   const mediumTarget = ETS_2026_TARGET_COUNTS_10.medium * TARGET_SET_COUNT;
   const hardTarget = ETS_2026_TARGET_COUNTS_10.hard * TARGET_SET_COUNT;
+  const styleTargets = {
+    embeddedMin: 5 * TARGET_SET_COUNT,
+    negationMin: 2 * TARGET_SET_COUNT,
+    distractorMin: 7 * TARGET_SET_COUNT,
+    qmarkMax: 2 * TARGET_SET_COUNT,
+  };
 
   // Scale type quotas to target set count (with 1.5x buffer for rejection overhead)
   const BUFFER = 1.5;
@@ -1205,8 +1454,8 @@ async function main() {
     try {
       // Planner: AI analyzes pool gaps and decides the mixed batch composition
       const poolState = computePoolState(acceptedPool);
-      const plannerRaw = await callModel(buildPlannerPrompt(poolState, scaledQuotas));
-      const spec = parsePlannerSpec(plannerRaw);
+      const plannerRaw = await callModel(buildPlannerPrompt(poolState, scaledQuotas, styleTargets));
+      const spec = enforcePlannerStyleGaps(parsePlannerSpec(plannerRaw), poolState, styleTargets);
       const specLabel = spec.map((s) => `${s.count}×${s.type}/${s.difficulty}`).join(", ");
       console.log(`round ${round}: planner → [${specLabel}]`);
 
@@ -1220,23 +1469,22 @@ async function main() {
       console.log(
         `round ${round}: generated=${res.generated} accepted=${res.accepted} rejected=${res.rejected} | pool easy=${pool.easy.length} medium=${pool.medium.length} hard=${pool.hard.length}`,
       );
+      if (res.rejected > 0) {
+        const topReasons = Object.entries(res.rejectReasons).sort((a, b) => b[1] - a[1]).slice(0, 3);
+        topReasons.forEach(([r, n]) => console.log(`  reject: ${r} (×${n})`));
+      }
 
-      // Early stop: difficulty quota met AND type distribution balanced
+      // Persist pool after every round so progress survives failures
+      flushPoolCheckpoint(acceptedPool);
+
+      // Early stop: enough items by difficulty to assemble target sets with buffer
       const diffOk =
-        pool.easy.length >= easyTarget &&
-        pool.medium.length >= mediumTarget &&
-        pool.hard.length >= hardTarget;
-      if (diffOk && acceptedPool.length > TARGET_SET_COUNT * 14) {
-        const finalState = computePoolState(acceptedPool);
-        const allTypesFilled = Object.entries(scaledQuotas).every(([diff, typeMap]) =>
-          Object.entries(typeMap).every(([type, quota]) =>
-            quota <= 0 || (finalState[diff] || {})[type] >= Math.ceil(quota / BUFFER)
-          )
-        );
-        if (allTypesFilled) {
-          console.log("pool sufficient (difficulty + type balanced), stopping early");
-          break;
-        }
+        pool.easy.length >= easyTarget * BUFFER &&
+        pool.medium.length >= mediumTarget * BUFFER &&
+        pool.hard.length >= hardTarget * BUFFER;
+      if (diffOk) {
+        console.log(`pool sufficient (easy=${pool.easy.length}/${Math.ceil(easyTarget*BUFFER)} medium=${pool.medium.length}/${Math.ceil(mediumTarget*BUFFER)} hard=${pool.hard.length}/${Math.ceil(hardTarget*BUFFER)}), stopping early`);
+        break;
       }
     } catch (e) {
       console.log(`round ${round}: failed -> ${errMsg(e)}`);
@@ -1258,16 +1506,14 @@ async function main() {
     );
     for (let i = 1; i <= ADAPTIVE_BOOST_ROUNDS; i += 1) {
       boostedPool = splitPoolByDifficulty(acceptedPool);
-      const boostState = computePoolState(acceptedPool);
-      const allFilled = Object.entries(scaledQuotas).every(([diff, typeMap]) =>
-        Object.entries(typeMap).every(([type, quota]) =>
-          quota <= 0 || (boostState[diff] || {})[type] >= Math.ceil(quota / BUFFER)
-        )
-      );
-      if (allFilled) break;
+      if (
+        boostedPool.easy.length >= easyTarget * BUFFER &&
+        boostedPool.medium.length >= mediumTarget * BUFFER &&
+        boostedPool.hard.length >= hardTarget * BUFFER
+      ) break;
       try {
-        const boostPlannerRaw = await callModel(buildPlannerPrompt(boostState, scaledQuotas));
-        const boostSpec = parsePlannerSpec(boostPlannerRaw);
+        const boostPlannerRaw = await callModel(buildPlannerPrompt(boostState, scaledQuotas, styleTargets));
+        const boostSpec = enforcePlannerStyleGaps(parsePlannerSpec(boostPlannerRaw), boostState, styleTargets);
         const boostLabel = boostSpec.map((s) => `${s.count}×${s.type}/${s.difficulty}`).join(", ");
         const res = await generateCandidateRound(3000 + i, boostSpec, rollingRejectFeedback);
         acceptedPool.push(...res.questions);

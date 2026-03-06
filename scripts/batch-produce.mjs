@@ -55,8 +55,9 @@ function loadEnv() {
 }
 
 function printStats(data) {
-  const { isEmbeddedQuestion } = require("../lib/questionBank/etsProfile.js");
+  const { isEmbeddedQuestion, TPO_REFERENCE_PROFILE } = require("../lib/questionBank/etsProfile.js");
   const { estimateQuestionDifficulty } = require("../lib/questionBank/difficultyControl.js");
+  const T = TPO_REFERENCE_PROFILE;
   const sets = data.question_sets || [];
 
   let total = 0;
@@ -93,13 +94,13 @@ function printStats(data) {
   console.log(`\n${bar}`);
   console.log(`QUESTION BANK REPORT - ${total} questions, ${sets.length} sets`);
   console.log(bar);
-  console.log(`Prefilled     ${prefilled}/${total} (${pct(prefilled, total)}) [ETS target: 55%]`);
-  console.log(`Distractor    ${distractor}/${total} (${pct(distractor, total)}) [ETS target: 30%]`);
-  console.log(`Question mark ${qmark}/${total} (${pct(qmark, total)}) [ETS target: 57%]`);
-  console.log(`Embedded Q    ${embedded}/${total} (${pct(embedded, total)}) [ETS target: 43%]`);
-  console.log(`Negation      ${negation}/${total} (${pct(negation, total)}) [ETS target: 11%]`);
-  console.log(`Multi-word    ${multiWord}/${totalChunks} (${pct(multiWord, totalChunks)}) [target: ~60%]`);
-  console.log(`Avg answer    ${avg(answerLens)} words [ETS: 8-12]`);
+  console.log(`Prefilled     ${prefilled}/${total} (${pct(prefilled, total)}) [TPO: ${Math.round(T.givenWordRatio * 100)}%]`);
+  console.log(`Distractor    ${distractor}/${total} (${pct(distractor, total)}) [TPO: ${Math.round(T.distractorRatio * 100)}%]`);
+  console.log(`Question mark ${qmark}/${total} (${pct(qmark, total)}) [TPO: ${Math.round(T.qmarkRatio * 100)}%]`);
+  console.log(`Embedded Q    ${embedded}/${total} (${pct(embedded, total)}) [TPO: ${Math.round(T.embeddedRatio * 100)}%]`);
+  console.log(`Negation      ${negation}/${total} (${pct(negation, total)}) [TPO: ${Math.round(T.negationRatio * 100)}%]`);
+  console.log(`Multi-word    ${multiWord}/${totalChunks} (${pct(multiWord, totalChunks)}) [TPO: ~23% (77% are single-word)]`);
+  console.log(`Avg answer    ${avg(answerLens)} words [TPO: ~${T.avgAnswerWords}]`);
   console.log("-".repeat(50));
 
   sets.forEach((set) => {
@@ -155,18 +156,13 @@ async function generate(targetSets) {
   const genScript = resolve(__dirname, "generateBSQuestions.mjs");
 
   try {
-    const result = execSync(`node "${genScript}"`, {
+    execSync(`node "${genScript}"`, {
       env,
-      stdio: ["pipe", "pipe", "pipe"],
+      stdio: "inherit",
       timeout: 30 * 60 * 1000,
       cwd: resolve(__dirname, ".."),
     });
-    console.log(result.toString());
   } catch (e) {
-    const stdout = e.stdout?.toString() || "";
-    const stderr = e.stderr?.toString() || "";
-    console.log(stdout);
-    if (stderr) console.error(stderr);
     throw new Error("Generation failed. See output above.");
   }
 
