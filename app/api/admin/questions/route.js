@@ -2,6 +2,11 @@ import { isAdminAuthorized } from "../../../../lib/adminAuth";
 import { supabaseAdmin } from "../../../../lib/supabaseAdmin";
 import { readFileSync } from "fs";
 import { join } from "path";
+const {
+  validateStructuredPromptParts,
+  getStructuredPromptParts,
+  hasExplicitTaskInLegacyPrompt,
+} = require("../../../../lib/questionBank/buildSentencePromptContract");
 
 function readJson(relPath) {
   try {
@@ -91,7 +96,30 @@ export async function POST(request) {
     return Response.json({ error: "Invalid type" }, { status: 400 });
   }
 
-  const dataWithId = { ...data, id: question_id, source };
+  let nextData = { ...data };
+  if (type === "build") {
+    const promptContract = validateStructuredPromptParts(nextData, { requireStructured: false });
+    if (promptContract.hasStructured) {
+      if (promptContract.fatal.length > 0) {
+        return Response.json({ error: promptContract.fatal.join("; ") }, { status: 400 });
+      }
+      const parts = getStructuredPromptParts(nextData);
+      nextData = {
+        ...nextData,
+        prompt_context: parts.context,
+        prompt_task_kind: parts.taskKind,
+        prompt_task_text: parts.taskText,
+        prompt: promptContract.renderedPrompt,
+      };
+    } else if (!hasExplicitTaskInLegacyPrompt(nextData.prompt)) {
+      return Response.json(
+        { error: "Build prompt must include an explicit task. Background-only prompts are not allowed." },
+        { status: 400 }
+      );
+    }
+  }
+
+  const dataWithId = { ...nextData, id: question_id, source };
 
   const { error } = await supabaseAdmin
     .from("admin_questions")

@@ -34,7 +34,7 @@
         },
         {
           "id": "ets_s1_q2",
-          "prompt": "At the medical clinic, the patient was giving feedback.",
+          "prompt": "At the medical clinic, the patient was giving feedback. How do you respond?",
           "answer": "I did not understand what the nurse practitioner explained.",
           "chunks": [
             "i",
@@ -56,7 +56,10 @@
           "grammar_points": [
             "negation",
             "embedded clause"
-          ]
+          ],
+          "prompt_context": "At the medical clinic, the patient was giving feedback.",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "How do you respond?"
         },
         {
           "id": "ets_s1_q3",
@@ -105,7 +108,7 @@
         },
         {
           "id": "ets_s1_q5",
-          "prompt": "At the pharmacy, the customer was explaining why they couldn't get the medication.",
+          "prompt": "At the pharmacy, the customer was explaining why they couldn't get the medication. How do you respond?",
           "answer": "I did not bring the prescription from my doctor.",
           "chunks": [
             "i",
@@ -126,7 +129,10 @@
           "grammar_points": [
             "negation",
             "simple past"
-          ]
+          ],
+          "prompt_context": "At the pharmacy, the customer was explaining why they couldn't get the medication.",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "How do you respond?"
         },
         {
           "id": "ets_s1_q6",
@@ -152,7 +158,7 @@
         },
         {
           "id": "ets_s1_q7",
-          "prompt": "A patron at the local library is inquiring with the librarian.",
+          "prompt": "A patron at the local library is inquiring with the librarian. What do they ask?",
           "answer": "Could you tell me where the quiet study rooms are located?",
           "chunks": [
             "could you",
@@ -170,11 +176,14 @@
           "grammar_points": [
             "embedded question",
             "passive"
-          ]
+          ],
+          "prompt_context": "A patron at the local library is inquiring with the librarian.",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What do they ask?"
         },
         {
           "id": "ets_s1_q8",
-          "prompt": "A travel blogger is at a botanical garden information desk.",
+          "prompt": "A travel blogger is at a botanical garden information desk. What do they ask?",
           "answer": "Could you tell me when the guided tour of the orchid house begins?",
           "chunks": [
             "could",
@@ -193,7 +202,10 @@
           "grammar_points": [
             "interrogative",
             "embedded question"
-          ]
+          ],
+          "prompt_context": "A travel blogger is at a botanical garden information desk.",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What do they ask?"
         },
         {
           "id": "ets_s1_q9",
@@ -218,7 +230,7 @@
         },
         {
           "id": "ets_s1_q10",
-          "prompt": "You're at a hair salon and are confused about the stylist's suggestion.",
+          "prompt": "You're at a hair salon and are confused about the stylist's suggestion. How do you respond?",
           "answer": "I don't understand why he recommended such a drastic change.",
           "chunks": [
             "i",
@@ -237,7 +249,10 @@
           "grammar_points": [
             "1st-embedded",
             "negation"
-          ]
+          ],
+          "prompt_context": "You're at a hair salon and are confused about the stylist's suggestion.",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "How do you respond?"
         }
       ]
     },
@@ -246,7 +261,7 @@
       "questions": [
         {
           "id": "ets_s2_q1",
-          "prompt": "The exchange student was talking to the store clerk about a missing package.",
+          "prompt": "The exchange student was talking to the store clerk about a missing package. What did he ask?",
           "answer": "He asked where the delivery driver had left the parcel.",
           "chunks": [
             "he",
@@ -264,7 +279,10 @@
           "grammar_points": [
             "3rd-reporting",
             "past perfect"
-          ]
+          ],
+          "prompt_context": "The exchange student was talking to the store clerk about a missing package.",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did he ask?"
         },
         {
           "id": "ets_s2_q2",
@@ -294,7 +312,7 @@
         },
         {
           "id": "ets_s2_q3",
-          "prompt": "A visitor is asking the museum curator a question.",
+          "prompt": "A visitor is asking the museum curator a question. What do they ask?",
           "answer": "Could you let me know what the main theme of the new exhibit is?",
           "chunks": [
             "could",
@@ -314,11 +332,14 @@
           "grammar_points": [
             "interrogative",
             "embedded question"
-          ]
+          ],
+          "prompt_context": "A visitor is asking the museum curator a question.",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What do they ask?"
         },
         {
           "id": "ets_s2_q4",
-          "prompt": "You're checking the weather forecast for the park cleanup.",
+          "prompt": "You are helping plan the park cleanup with other volunteers. How do you respond?",
           "answer": "I can't decide which volunteer task is the most important.",
           "chunks": [
             "i",
@@ -335,7 +356,10 @@
           "grammar_points": [
             "1st-embedded",
             "superlative"
-          ]
+          ],
+          "prompt_context": "You are helping plan the park cleanup with other volunteers.",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "How do you respond?"
         },
         {
           "id": "ets_s2_q5",
@@ -360,7 +384,7 @@
         },
         {
           "id": "ets_s2_q6",
-          "prompt": "A student in the campus cafe is asking a classmate about a group project.",
+          "prompt": "A student in the campus cafe is asking a classmate about a group project. What do they ask?",
           "answer": "Can you tell me what you did not understand about the assignment?",
           "chunks": [
             "can you",
@@ -379,11 +403,14 @@
             "embedded question",
             "negation",
             "past tense"
-          ]
+          ],
+          "prompt_context": "A student in the campus cafe is asking a classmate about a group project.",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What do they ask?"
         },
         {
           "id": "ets_s2_q7",
-          "prompt": "The local librarian was helping a patron find a specific book.",
+          "prompt": "The local librarian was helping a patron plan for the author's talk. What did she want to know?",
           "answer": "She wondered what time the author's talk would begin.",
           "chunks": [
             "she",
@@ -400,11 +427,14 @@
           "grammar_points": [
             "3rd-reporting",
             "future-in-the-past"
-          ]
+          ],
+          "prompt_context": "The local librarian was helping a patron plan for the author's talk.",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did she want to know?"
         },
         {
           "id": "ets_s2_q8",
-          "prompt": "You're telling a friend about a great place you found for yoga.",
+          "prompt": "You're telling a friend about a great place you found for yoga. Tell your friend about it.",
           "answer": "The studio I found offers classes for all skill levels.",
           "chunks": [
             "the studio",
@@ -422,7 +452,10 @@
           "grammar_points": [
             "contact clause",
             "present simple"
-          ]
+          ],
+          "prompt_context": "You're telling a friend about a great place you found for yoga.",
+          "prompt_task_kind": "tell",
+          "prompt_task_text": "Tell your friend about it."
         },
         {
           "id": "ets_s2_q9",
@@ -498,7 +531,7 @@
         },
         {
           "id": "ets_s3_q2",
-          "prompt": "You are confused about a decision your teammate made.",
+          "prompt": "You are confused about a decision your teammate made. How do you respond?",
           "answer": "I do not understand why he submitted the report early.",
           "chunks": [
             "i",
@@ -516,7 +549,10 @@
           "grammar_points": [
             "1st-person embedded",
             "negation"
-          ]
+          ],
+          "prompt_context": "You are confused about a decision your teammate made.",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "How do you respond?"
         },
         {
           "id": "ets_s3_q3",
@@ -542,7 +578,7 @@
         },
         {
           "id": "ets_s3_q4",
-          "prompt": "The young architect needed information. He asked the contractor:",
+          "prompt": "The young architect needed information. He asked the contractor. What did he want to know?",
           "answer": "He needed to find out when the materials would arrive.",
           "chunks": [
             "he",
@@ -560,11 +596,14 @@
           "grammar_points": [
             "3rd-reporting",
             "declarative word order"
-          ]
+          ],
+          "prompt_context": "The young architect needed information. He asked the contractor.",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did he want to know?"
         },
         {
           "id": "ets_s3_q5",
-          "prompt": "The software developer was discussing the project timeline with some colleagues.",
+          "prompt": "The software developer was discussing the project's status with some colleagues. What did they want to know?",
           "answer": "They needed to know if the client had approved the final design.",
           "chunks": [
             "they",
@@ -582,11 +621,14 @@
           "grammar_points": [
             "3rd-reporting",
             "past perfect"
-          ]
+          ],
+          "prompt_context": "The software developer was discussing the project's status with some colleagues.",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did they want to know?"
         },
         {
           "id": "ets_s3_q6",
-          "prompt": "The flight attendant inquired about the weather. She asked the pilot:",
+          "prompt": "The flight attendant inquired about the weather. She asked the pilot. What did she ask?",
           "answer": "She asked why the flight would be delayed.",
           "chunks": [
             "she",
@@ -603,7 +645,10 @@
           "grammar_points": [
             "3rd-reporting",
             "declarative word order"
-          ]
+          ],
+          "prompt_context": "The flight attendant inquired about the weather. She asked the pilot.",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did she ask?"
         },
         {
           "id": "ets_s3_q7",
@@ -655,7 +700,7 @@
         },
         {
           "id": "ets_s3_q9",
-          "prompt": "The exchange student was apologizing to their host family about dinner.",
+          "prompt": "The exchange student was apologizing to their host family about dinner. How do they respond?",
           "answer": "Unfortunately, I could not find the recipe you recommended.",
           "chunks": [
             "unfortunately",
@@ -677,7 +722,10 @@
           "grammar_points": [
             "negation",
             "contact clause"
-          ]
+          ],
+          "prompt_context": "The exchange student was apologizing to their host family about dinner.",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "How do they respond?"
         },
         {
           "id": "ets_s3_q10",
@@ -708,7 +756,7 @@
       "questions": [
         {
           "id": "ets_s4_q1",
-          "prompt": "Someone is calling a pharmacy to ask about a prescription.",
+          "prompt": "Someone is calling a pharmacy to ask about a prescription. What do they ask?",
           "answer": "Can you tell me where I should go to pick up my medication?",
           "chunks": [
             "can",
@@ -726,7 +774,10 @@
           "grammar_points": [
             "interrogative",
             "embedded question"
-          ]
+          ],
+          "prompt_context": "Someone is calling a pharmacy to ask about a prescription.",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What do they ask?"
         },
         {
           "id": "ets_s4_q2",
@@ -752,7 +803,7 @@
         },
         {
           "id": "ets_s4_q3",
-          "prompt": "Some colleagues were discussing the upcoming office relocation.",
+          "prompt": "Some colleagues were discussing the upcoming office relocation. What did they ask?",
           "answer": "They inquired where the new corporate headquarters would be located.",
           "chunks": [
             "they",
@@ -771,11 +822,14 @@
             "embedded question",
             "passive voice",
             "future tense"
-          ]
+          ],
+          "prompt_context": "Some colleagues were discussing the upcoming office relocation.",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did they ask?"
         },
         {
           "id": "ets_s4_q4",
-          "prompt": "The volunteer at the botanical garden was confused about the plant's origin.",
+          "prompt": "The volunteer at the botanical garden was confused about the plant's origin. What did he want to know?",
           "answer": "He wondered where that particular species of orchid had been discovered.",
           "chunks": [
             "he",
@@ -793,11 +847,14 @@
           "grammar_points": [
             "3rd-reporting",
             "past-perfect-passive"
-          ]
+          ],
+          "prompt_context": "The volunteer at the botanical garden was confused about the plant's origin.",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did he want to know?"
         },
         {
           "id": "ets_s4_q5",
-          "prompt": "Someone is apologizing to their gym trainer.",
+          "prompt": "Someone is apologizing to their gym trainer. How do you respond?",
           "answer": "I have not completed the fitness assessment you sent me.",
           "chunks": [
             "i",
@@ -819,11 +876,14 @@
             "negation",
             "present perfect",
             "contact clause"
-          ]
+          ],
+          "prompt_context": "Someone is apologizing to their gym trainer.",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "How do you respond?"
         },
         {
           "id": "ets_s4_q6",
-          "prompt": "A young architect is giving feedback on a design proposal.",
+          "prompt": "A young architect is giving feedback on a design proposal. How do they respond?",
           "answer": "The initial sketches did not incorporate the client's sustainability request.",
           "chunks": [
             "the initial sketches",
@@ -844,7 +904,10 @@
           "grammar_points": [
             "negation",
             "simple past"
-          ]
+          ],
+          "prompt_context": "A young architect is giving feedback on a design proposal.",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "How do they respond?"
         },
         {
           "id": "ets_s4_q7",
@@ -945,7 +1008,7 @@
       "questions": [
         {
           "id": "ets_s5_q1",
-          "prompt": "The store clerk was helping a customer with a return.",
+          "prompt": "The store clerk was helping a customer with a return. What did he ask?",
           "answer": "He inquired why the original receipt was not available.",
           "chunks": [
             "he",
@@ -968,7 +1031,10 @@
             "3rd-reporting",
             "embedded question",
             "negation"
-          ]
+          ],
+          "prompt_context": "The store clerk was helping a customer with a return.",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did he ask?"
         },
         {
           "id": "ets_s5_q2",
@@ -992,7 +1058,7 @@
         },
         {
           "id": "ets_s5_q3",
-          "prompt": "The manager at the internship interview had a question about the project's main goal.",
+          "prompt": "The manager at the internship interview had a question about the project's main goal. What did he ask?",
           "answer": "He asked what the primary objective of the project was.",
           "chunks": [
             "he",
@@ -1010,7 +1076,10 @@
           "grammar_points": [
             "3rd-reporting",
             "declarative word order"
-          ]
+          ],
+          "prompt_context": "The manager at the internship interview had a question about the project's main goal.",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did he ask?"
         },
         {
           "id": "ets_s5_q4",
@@ -1086,7 +1155,7 @@
         },
         {
           "id": "ets_s5_q7",
-          "prompt": "A patient is speaking with a receptionist at a medical clinic.",
+          "prompt": "A patient is speaking with a receptionist at a medical clinic. How do they respond?",
           "answer": "Can you explain why I have not received my test results yet?",
           "chunks": [
             "can",
@@ -1111,11 +1180,14 @@
             "interrogative",
             "negation",
             "present perfect"
-          ]
+          ],
+          "prompt_context": "A patient is speaking with a receptionist at a medical clinic.",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "How do they respond?"
         },
         {
           "id": "ets_s5_q8",
-          "prompt": "Your roommate asks, 'Do you know where my keys are?' You reply:",
+          "prompt": "Your roommate asks, 'Do you know where my keys are?'. Tell your friend about it.",
           "answer": "I have no idea where your keys are.",
           "chunks": [
             "i",
@@ -1132,11 +1204,14 @@
           "grammar_points": [
             "embedded question",
             "declarative word order"
-          ]
+          ],
+          "prompt_context": "Your roommate asks, 'Do you know where my keys are?'.",
+          "prompt_task_kind": "tell",
+          "prompt_task_text": "Tell your friend about it."
         },
         {
           "id": "ets_s5_q9",
-          "prompt": "The elderly neighbor was curious about the campus event.",
+          "prompt": "The elderly neighbor was curious about the campus event. What did she ask?",
           "answer": "She inquired what the student study group was discussing.",
           "chunks": [
             "she",
@@ -1153,11 +1228,14 @@
           "grammar_points": [
             "3rd-reporting",
             "past-progressive"
-          ]
+          ],
+          "prompt_context": "The elderly neighbor was curious about the campus event.",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did she ask?"
         },
         {
           "id": "ets_s5_q10",
-          "prompt": "A customer in a bookstore is asking the store clerk about a book's availability.",
+          "prompt": "A customer in a bookstore is asking the store clerk about a book's availability. What do they ask?",
           "answer": "Could you tell me when the new mystery novel will be released?",
           "chunks": [
             "could you",
@@ -1175,7 +1253,10 @@
           "grammar_points": [
             "embedded question",
             "future tense"
-          ]
+          ],
+          "prompt_context": "A customer in a bookstore is asking the store clerk about a book's availability.",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What do they ask?"
         }
       ]
     }

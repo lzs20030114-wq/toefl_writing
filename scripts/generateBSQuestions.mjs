@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Robust Build a Sentence generator pipeline:
  * 1) online candidate generation
  * 2) hard validation (schema/runtime)
@@ -17,7 +17,7 @@
 
 import { readFileSync, writeFileSync } from "fs";
 import { resolve, dirname } from "path";
-import { fileURLToPath } from "url";
+import { fileURLToPath, pathToFileURL } from "url";
 import { createRequire } from "module";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -26,6 +26,10 @@ const require = createRequire(import.meta.url);
 const { callDeepSeekViaCurl, resolveProxyUrl, formatDeepSeekError } = require("../lib/ai/deepseekHttp.js");
 const { validateQuestionSet, validateQuestion } = require("../lib/questionBank/buildSentenceSchema.js");
 const { hardFailReasons, warnings: qualityWarnings } = require("../lib/questionBank/qualityGateBuildSentence.js");
+const {
+  getStructuredPromptParts,
+  validateStructuredPromptParts,
+} = require("../lib/questionBank/buildSentencePromptContract.js");
 const {
   normalizeRuntimeQuestion,
   validateRuntimeQuestion,
@@ -40,6 +44,7 @@ const { validateAllSets } = require("./validate-bank.js");
 
 const OUTPUT_PATH = resolve(__dirname, "..", "data", "buildSentence", "questions.json");
 const RESERVE_PATH = resolve(__dirname, "..", "data", "buildSentence", "reserve_pool.json");
+const CIRCUIT_BREAKER_LOG_PATH = resolve(__dirname, "..", "data", "buildSentence", "circuit_breaker_log.json");
 const TARGET_SET_COUNT = Number(process.env.BS_TARGET_SETS || 6);
 const CANDIDATE_ROUNDS = Number(process.env.BS_CANDIDATE_ROUNDS || 40);
 const ADAPTIVE_BOOST_ROUNDS = Number(process.env.BS_ADAPTIVE_BOOST_ROUNDS || 80);
@@ -47,6 +52,10 @@ const MIN_REVIEW_SCORE = Number(process.env.BS_MIN_REVIEW_SCORE || 78);
 const MIN_REVIEW_OVERALL = Number(process.env.BS_MIN_REVIEW_OVERALL || 84);
 const MIN_ETS_SIMILARITY = Number(process.env.BS_MIN_ETS_SIMILARITY || 72);
 const MIN_SOLVABILITY = Number(process.env.BS_MIN_SOLVABILITY || 78);
+const CIRCUIT_BREAKER_WINDOW = 3;
+const CIRCUIT_BREAKER_MIN_GENERATED = 4;
+const CIRCUIT_BREAKER_MIN_ACCEPT_RATE = 0.2;
+const CIRCUIT_BREAKER_COOLDOWN_ROUNDS = 3;
 
 function loadEnv() {
   const paths = [
@@ -143,6 +152,71 @@ function ensureMinChunkCount(chunks, distractor, minCount = 4) {
   return result;
 }
 
+function wordCountsFromText(text) {
+  return String(text || "")
+    .toLowerCase()
+    .replace(/[.,!?;:]/g, " ")
+    .split(/\s+/)
+    .filter(Boolean)
+    .reduce((acc, word) => {
+      acc[word] = (acc[word] || 0) + 1;
+      return acc;
+    }, {});
+}
+
+function subtractWordCounts(base, minus) {
+  const out = { ...base };
+  Object.entries(minus || {}).forEach(([word, count]) => {
+    if (!out[word]) return;
+    out[word] = Math.max(0, out[word] - count);
+    if (out[word] === 0) delete out[word];
+  });
+  return out;
+}
+
+function chunkWordCounts(chunk) {
+  return wordCountsFromText(String(chunk || ""));
+}
+
+function canConsumeChunk(counts, chunk) {
+  const needed = chunkWordCounts(chunk);
+  return Object.entries(needed).every(([word, count]) => (counts[word] || 0) >= count);
+}
+
+function consumeChunk(counts, chunk) {
+  const out = { ...counts };
+  Object.entries(chunkWordCounts(chunk)).forEach(([word, count]) => {
+    out[word] = Math.max(0, (out[word] || 0) - count);
+    if (out[word] === 0) delete out[word];
+  });
+  return out;
+}
+
+function autoRepairWordBag(answer, prefilled, chunks, distractor) {
+  const answerCounts = wordCountsFromText(answer);
+  const prefilledCounts = wordCountsFromText((prefilled || []).join(" "));
+  let remaining = subtractWordCounts(answerCounts, prefilledCounts);
+  const repaired = [];
+
+  for (const chunk of (chunks || []).filter((c) => c !== distractor)) {
+    if (canConsumeChunk(remaining, chunk)) {
+      repaired.push(chunk);
+      remaining = consumeChunk(remaining, chunk);
+    }
+  }
+
+  const missingWords = Object.entries(remaining).flatMap(([word, count]) =>
+    Array.from({ length: count }, () => word),
+  );
+
+  // Only repair the safest case: exactly one single-word gap remains.
+  if (missingWords.length === 1) {
+    repaired.push(missingWords[0]);
+  }
+
+  return distractor == null ? repaired : [...repaired, distractor];
+}
+
 function normalizeQuestion(raw, tempId) {
   const q = raw && typeof raw === "object" ? raw : {};
 
@@ -191,6 +265,9 @@ function normalizeQuestion(raw, tempId) {
     });
   }
 
+  // Repair the most common deterministic word-bag failures before validation.
+  chunks = autoRepairWordBag(answer, prefilled, chunks, distractor);
+
   // Auto-fix: Ensure at least 4 effective chunks
   chunks = ensureMinChunkCount(chunks, distractor, 4);
 
@@ -225,9 +302,20 @@ function normalizeQuestion(raw, tempId) {
   // (question becomes harder but word bag stays valid).
   const validPrefilled = prefilled.filter((pf) => correctedPositions[pf] !== undefined);
 
+  const promptParts = getStructuredPromptParts(q);
+  const promptContract = validateStructuredPromptParts(q, { requireStructured: false });
+  const renderedPrompt = promptParts.hasStructured ? promptContract.renderedPrompt : normalizeText(q.prompt);
+
   return {
     id: normalizeText(q.id) || tempId,
-    prompt: normalizeText(q.prompt),
+    prompt: renderedPrompt,
+    ...(promptParts.hasStructured
+      ? {
+          prompt_context: promptParts.context,
+          prompt_task_kind: promptParts.taskKind,
+          prompt_task_text: promptParts.taskText,
+        }
+      : {}),
     answer,
     chunks,
     prefilled: validPrefilled,
@@ -251,8 +339,12 @@ function stableAnswerKey(q) {
 function classifyAnswerType(q) {
   const a = String(q.answer || "").toLowerCase();
   const gps = (Array.isArray(q?.grammar_points) ? q.grammar_points : []).map((x) => String(x || "").toLowerCase()).join(" | ");
-  // Interrogative frame: answer starts with Can/Could you tell me
-  if (/^(can you tell me|could you tell me)/i.test(q.answer)) return "interrogative";
+  // Interrogative frame: polite information-seeking question with embedded clause
+  if (
+    /^(can you tell me|could you tell me|do you know|would you mind telling me|could you explain|can you remind me)\b/i.test(q.answer) ||
+    /\b(interrogative frame|polite question frame)\b/.test(gps)
+  )
+    return "interrogative";
   // 3rd-person reporting
   if (
     /\b(wanted to know|asked|inquired|was curious|were curious|needed to know|was wondering|were wondering|wants to know|needs to know|curious about)\b/.test(a) ||
@@ -278,14 +370,14 @@ function classifyAnswerType(q) {
 }
 
 /**
- * Per-set quota: how many questions of each type × difficulty per 10-question set.
+ * Per-set quota: how many questions of each type 脳 difficulty per 10-question set.
  * Derived from statistical analysis of 60 real TPO questions across 6 sets.
  * Difficulty distribution per set: easy=1, medium=7, hard=2.
  * Type distribution within each difficulty: from TPO analysis.
  *
- * easy  (1/set):  negation�?5%, 3rd-reporting�?8%, interrogative�?8%, 1st-embedded�?%
- * medium (7/set): 3rd-reporting�?8%, negation�?2%, 1st-embedded�?2%, interrogative�?%, direct�?%, relative�?%
- * hard  (2/set):  3rd-reporting�?5%, 1st-embedded�?5%, relative�?9%, interrogative�?3%, direct�?3%, negation�?%
+ * easy  (1/set):  negation锟?5%, 3rd-reporting锟?8%, interrogative锟?8%, 1st-embedded锟?%
+ * medium (7/set): 3rd-reporting锟?8%, negation锟?2%, 1st-embedded锟?2%, interrogative锟?%, direct锟?%, relative锟?%
+ * hard  (2/set):  3rd-reporting锟?5%, 1st-embedded锟?5%, relative锟?9%, interrogative锟?3%, direct锟?3%, negation锟?%
  */
 const TYPE_LIST = ["negation", "3rd-reporting", "1st-embedded", "interrogative", "direct", "relative"];
 const TPO_TYPE_TARGET_RATIO = Object.freeze({
@@ -334,13 +426,13 @@ function buildRejectFeedbackHints(rejectReasons) {
   return `\nRecent rejection feedback (must fix):\n- ${uniq.join("\n- ")}\n`;
 }
 
-// Type × difficulty specific instructions for targeted generation
+// Type 脳 difficulty specific instructions for targeted generation
 const TYPE_DIFFICULTY_HINTS = {
   "negation": {
     easy: `ALL answers in this group: simple negative statement, 7-10 words.
-Structure: "I did not [verb]�? / "I could not [verb]�? / "I am not [adj]�? / "I have not [past-p] yet."
+Structure: "I did not [verb]锟? / "I could not [verb]锟? / "I am not [adj]锟? / "I have not [past-p] yet."
 NO embedded questions. NO relative clauses. Direct and clear.
-Prompt: YES/NO question ("Did you attend�?", "Have you�?", "Are you going�?")
+Prompt: YES/NO question ("Did you attend锟?", "Have you锟?", "Are you going锟?")
 Distractor: "did" or "do" or morphological variant (e.g. "going" for "go").`,
     medium: `ALL answers in this group: negative statement 9-12 words, optionally with short embedded element.
 Examples:
@@ -357,7 +449,7 @@ Distractor: morphological variant (e.g. "realized/realize", "approaching/approac
   },
   "3rd-reporting": {
     easy: `ALL answers in this group: short third-person reporting, 8-10 words.
-Structure: "[Name] wanted to know if [short clause]." / "[Name] asked me what time�?
+Structure: "[Name] wanted to know if [short clause]." / "[Name] asked me what time锟?
 Examples:
 - "He wants to know if you need a ride."
 - "She asked me what time the meeting starts."
@@ -381,7 +473,7 @@ Distractor: morphological variant or "whom/who", "where/when" function-word swap
 Examples:
 - "I have no idea where they are going."
 - "I have no idea what time the event starts."
-Prompt: direct question the speaker can't answer ("Do you know�?", "Where is�?")
+Prompt: direct question the speaker can't answer ("Do you know锟?", "Where is锟?")
 Distractor: "do" or "did".`,
     medium: `ALL answers in this group: first-person embedded, 10-13 words.
 Examples:
@@ -399,24 +491,40 @@ Include passive voice OR superlative/comparative OR perfect aspect in the embedd
 Distractor: morphological variant (e.g. "enjoyed/enjoy", "stored/store").`,
   },
   "interrogative": {
-    easy: `ALL answers in this group use "Can you tell me�?" or "Could you tell me�?" frame, 8-11 words.
+    easy: `ALL answers in this group use a NATURAL polite information-seeking question frame, 8-11 words.
+Allowed frame family (vary naturally across the batch; do NOT overuse one opener):
+- "Can you tell me ..."
+- "Could you tell me ..."
+- "Do you know ..."
+- "Would you mind telling me ..."
+- "Can you remind me ..."
+Core rule: the MAIN sentence may be a question, but the EMBEDDED clause must stay in declarative word order.
 Examples:
 - "Can you tell me what your plans are for tomorrow?"
-- "Can you tell me if the professor covered any new material?"
+- "Do you know if the professor covered any new material?"
+- "Would you mind telling me where the meeting room is?"
 Prompt: conversational comment that leads to a question.
-Distractor: "did"/"do" or "can".`,
-    medium: `ALL answers in this group use interrogative frame, 10-13 words, moderate embedded complexity.
+Avoid theatrical or overly long polite framing. The frame should be short and natural.
+Distractor: "did"/"do" or a nearby auxiliary/modal variant.`,
+    medium: `ALL answers in this group use a natural interrogative frame, 10-13 words, moderate embedded complexity.
+Use 2-4 different polite frames across the batch. Do NOT repeat the exact same opener more than twice.
+Core rule: embedded clause stays declarative. Keep the question frame short so the difficulty comes from the embedded clause, not from padding the opener.
 Examples:
 - "Could you tell me how you are feeling about the new policy?"
-- "Can you tell me what you did not enjoy about the presentation?"
-Distractor: morphological variant or "can"/"could" swap.`,
-    hard: `ALL answers in this group use interrogative frame with complex embedded question, usually 10-13 words.
+- "Do you know what you did not enjoy about the presentation?"
+- "Can you remind me when the department meeting was rescheduled?"
+Prefer one clear embedded clause, not stacked modifiers or awkward context loading.
+Distractor: morphological variant or nearby auxiliary/modal variant that clearly breaks the sentence.`,
+    hard: `ALL answers in this group use a natural interrogative frame with complex embedded question, usually 10-13 words.
+Use a varied polite-frame family; do NOT collapse the batch into one repeated opener.
+The question frame itself should remain simple. The HARDNESS must come from the embedded clause.
 Examples:
 - "Can you tell me why you decided to choose this particular research topic?"
 - "Could you tell me how the project team managed to finish ahead of schedule?"
-- "Did he ask you why you chose this particular career path?"
-Hard MUST come from the embedded grammar challenge: tense/aspect mismatch risk, double-layer reporting, or other learner-unfamiliar clause structure. Do not make it hard just by adding length. Hard MUST come from the embedded grammar challenge: tense/aspect mismatch risk, double-layer reporting, or other learner-unfamiliar clause structure. Do not make it hard just by adding length.
-Distractor: morphological variant (e.g. "decided/decide", "managed/manage").`,
+- "Do you know why the final report had not been submitted yet?"
+Hard MUST come from the embedded grammar challenge: tense/aspect mismatch risk, passive/perfect inside the clause, layered embedding, or another learner-unfamiliar clause structure. Do not make it hard just by adding length. Hard MUST come from the embedded grammar challenge: tense/aspect mismatch risk, passive/perfect inside the clause, layered embedding, or another learner-unfamiliar clause structure. Do not make it hard just by adding length.
+Avoid weird over-polite wording, long lead-ins, or unnatural spoken formulas.
+Distractor: morphological variant (e.g. "decided/decide", "managed/manage") or a nearby auxiliary/modal variant that clearly breaks grammar.`,
   },
   "direct": {
     medium: `ALL answers in this group: direct declarative statement (no reporting verb, no negation), 9-12 words.
@@ -436,7 +544,7 @@ Distractor: morphological variant or comparative swap ("better/good", "only/once
   },
   "relative": {
     medium: `ALL answers in this group: contact/relative clause structure, 9-12 words.
-"The [noun] [I/you] [verb]�? (contact clause �?omitted relative pronoun, object only)
+"The [noun] [I/you] [verb]锟? (contact clause 锟?omitted relative pronoun, object only)
 Examples:
 - "The bookstore I stopped by had the novel in stock."
 - "The diner that opened last week serves many delicious entrees."
@@ -489,7 +597,7 @@ function buildGeneratePrompt(round, spec, rejectFeedback = "") {
       : "Answer length: usually 10-13 words. Chunks: 6-8. MUST be hard because of advanced grammar structure: e.g. passive, past perfect, relative/contact clause, whom, comparative/superlative, or multi-layer embedding. Do NOT make an item hard by length alone. Answer length: usually 10-13 words. Chunks: 6-8. MUST be hard because of advanced grammar structure: e.g. passive, past perfect, relative/contact clause, whom, comparative/superlative, or multi-layer embedding. Do NOT make an item hard by length alone.";
     const ids = Array.from({ length: count }, (_, j) => `tmp_r${round}_q${qIndex + j}`).join(", ");
     qIndex += count;
-    return `### GROUP ${i + 1}: ${count} item${count > 1 ? "s" : ""} �?${type.toUpperCase()} / ${difficulty.toUpperCase()}
+    return `### GROUP ${i + 1}: ${count} item${count > 1 ? "s" : ""} 锟?${type.toUpperCase()} / ${difficulty.toUpperCase()}
 IDs: ${ids}
 ${hints}
 ${diffSpec}`;
@@ -514,45 +622,68 @@ For each item, set "has_distractor" to true/false based on these TPO rules:
 DO NOT use the same reporting verb (e.g., "wanted to know") more than twice in this batch.
 Vary with: inquired, wondered, asked, was curious, needed to find out, was not sure.
 
+## INTERROGATIVE FRAME DIVERSITY:
+- If this batch includes interrogative items, vary the polite opener naturally.
+- Do NOT repeat the exact same interrogative opener more than twice in one batch.
+- Prefer a small natural family such as "Can you tell me ...", "Could you tell me ...", "Do you know ...", "Would you mind telling me ...", "Can you remind me ...".
+- Do NOT use long, theatrical, or overly formal lead-ins just to create fake variety.
+- The opener should stay short; the tested difficulty should come from the embedded clause.
+
 ## SCENARIO & PERSONA CONTEXT:
 - Scenarios: ${pickedScenarios}
 - Personas: ${pickedPersonas}
 
 ${groupSections}
 
-## GIVEN WORD (PREFILLED) �?CRITICAL CONCEPT:
+## GIVEN WORD (PREFILLED) 鈥?CRITICAL CONCEPT:
 In the real TOEFL exercise, 6-7 out of every 10 questions give the student one word or short phrase already placed in the sentence (a "given word"). This makes the task slightly easier.
 - "prefilled": a phrase pre-placed for the student (shown on screen, not draggable)
 - "prefilled_positions": its 0-based word index in the answer
-- That phrase must be REMOVED from "chunks" �?chunks covers only the draggable pieces
-- 3-4 questions per batch have prefilled=[] (no given word, harder)
+- That phrase must be REMOVED from "chunks" 鈥?chunks covers only the draggable pieces
+- MANDATORY: exactly 6-7 items per batch MUST have a non-empty prefilled. Only 3-4 may have prefilled=[].
 - Every output item must pass a strict WORD-BAG check:
   answer words = (chunks minus distractor) + prefilled words
   no missing words, no extra words, no duplicate coverage
 
-## CHUNK GRANULARITY �?CRITICAL:
-- Effective chunk count (excluding distractor) MUST be 4-8. Never output 9+ effective chunks.
-- Do NOT split almost every word into a separate chunk.
-- Prefer meaningful 2-3 word structure chunks when needed:
-  - "wanted to know"
-  - "had gone"
-  - "would be submitted"
-  - "the desk"
-  - "on Friday"
-- BAD over-split example:
-  answer: "He wanted to know where all the accountants had gone."
-  bad chunks: ["he", "wanted", "to", "know", "where", "all", "the accountants", "had", "gone"]  -> 9 effective chunks -> REJECT
-- GOOD chunking example:
-  answer: "He wanted to know where all the accountants had gone."
-  good chunks: ["he", "wanted to know", "where", "all the accountants", "had gone"] -> 5 effective chunks -> ACCEPTABLE
-- Another BAD over-split example:
-  answer: "The desk you ordered is scheduled to arrive on Friday."
-  bad chunks: ["the", "desk", "you", "ordered", "is", "scheduled", "to", "arrive", "on", "Friday"] -> 10 effective chunks -> REJECT
-- GOOD chunking example:
-  answer: "The desk you ordered is scheduled to arrive on Friday."
-  good chunks: ["the desk", "you ordered", "is scheduled", "to arrive", "on Friday"] -> 5 effective chunks -> ACCEPTABLE
+WHAT TO USE AS PREFILLED (by answer type):
+- negation:       "not" 鈥?the negative particle, fixed in position
+- 3rd-reporting:  a UNIQUE object noun phrase from the answer, e.g. "the deadline", "the professor", "her schedule"
+- 1st-embedded:   subject "i" OR a UNIQUE topic noun phrase, e.g. "the assignment", "the lecture hall"
+- interrogative:  a UNIQUE topic noun phrase, e.g. "the library", "the registration deadline"
+- relative:       the head noun before the relative clause, e.g. "the book", "the policy"
+- direct:         subject noun phrase, e.g. "the committee", "my advisor"
+RULE: prefilled must appear EXACTLY ONCE in the answer (avoids position ambiguity).
+RULE: prefer 1-3 word noun phrases. Avoid bare function words like "the", "a", "is".
 
-## UNIQUE-SOLUTION RULE �?CRITICAL:
+## CHUNK GRANULARITY 鈥?CRITICAL:
+Single-word chunks are STRONGLY PREFERRED 鈥?they are more authentic and create harder, more meaningful exercises.
+Multi-word chunks are a LAST RESORT, only when the math forces it.
+
+THE KEY MATH: R = answer word count 鈭?prefilled word count.
+- If R 鈮?8: use ALL single-word chunks. This is the GOAL.
+- If R = 9-10: merge ONE tightly-bonded collocation into a 2-word chunk (e.g. "had gone", "on Friday").
+- If R > 10: your sentence is too long OR prefilled covers too few words. Increase prefilled coverage first.
+
+HOW PREFILLED ENABLES SINGLE-WORD CHUNKS (preferred pattern):
+  answer: "She wanted to know when the library would close." (9 words)
+  WITHOUT prefilled: R=9, must merge 鈫?["she", "wanted to know", "when", "the library", "would close"] 鈫?40% multi-word (BAD)
+  WITH prefilled=["the library"] (2 words): R=7, all single-word 鈫?["she", "wanted", "to", "know", "when", "would", "close"] 鈫?0% multi-word (GOOD 鉁?
+
+BAD 鈥?no prefilled, forced multi-word chunks when prefilled was possible:
+  answer: "He wanted to know where all the accountants had gone." (10 words)
+  BAD: prefilled=[], chunks=["he", "wanted to know", "where", "all the accountants", "had gone", "have"]
+  WHY BAD: could have used prefilled=["all the accountants"] 鈫?R=7 鈫?all single-word chunks
+
+GOOD 鈥?prefilled enables single-word chunks:
+  answer: "He wanted to know where all the accountants had gone." (10 words)
+  GOOD: prefilled=["all the accountants"], prefilled_positions={"all the accountants": 5},
+        chunks=["he", "wanted", "to", "know", "where", "had", "gone", "have"] 鈫?all single-word 鉁?
+
+ONLY FALLBACK (prefilled genuinely cannot be used for this item):
+  answer: "The desk you ordered is scheduled to arrive on Friday." (10 words)
+  prefilled=[], R=10, must merge 鈫?chunks=["the desk", "you ordered", "is scheduled", "to arrive", "on Friday"] 鈫?acceptable ONLY when no good prefilled anchor exists
+
+## UNIQUE-SOLUTION RULE 锟?CRITICAL:
 - Every item must have exactly ONE clearly best arrangement.
 - Do NOT create items where the distractor can be inserted without obviously breaking grammar.
 - Do NOT create items where adverbs, prepositional phrases, or reporting chunks can move around and still sound correct.
@@ -563,37 +694,52 @@ In the real TOEFL exercise, 6-7 out of every 10 questions give the student one w
 - GOOD idea:
   use tighter structure chunks so only one order is grammatical, e.g. "asked me", "closed early", "on Friday".
 
-HOW PREFILLED WORKS �?two pattern examples:
+HOW PREFILLED WORKS 鈥?four pattern examples:
 
-Pattern A (negation, prefilled = single function word):
-  answer:            "I did not finish the assignment on time."
-  word indices:       I(0) did(1) not(2) finish(3) the(4) assignment(5) on(6) time(7)  �?8 words
+Pattern A (negation, prefilled = "not"):
+  answer:            "I did not finish the assignment on time."  [8 words]
   prefilled:         ["not"]
   prefilled_positions: {"not": 2}
-  chunks:            ["I", "did", "finish", "the", "assignment", "on", "time", "never"]
-  distractor:        "never"
-  word bag check:    effective chunks = I+did+finish+the+assignment+on+time = 7 words
-                     prefilled = not = 1 word  �? 7 + 1 = 8 �?
-  chunk style:       all single-word �?distractor "never" is morphological trap (not vs never)
+  R = 8 - 1 = 7 remaining words -> all single-word chunks
+  chunks:            ["i", "did", "finish", "the", "assignment", "on", "time", "never"]
+  distractor:        "never"  (not vs never)
+  word bag check:    7 chunks + 1 prefilled = 8 words in answer OK
 
-Pattern B (3rd-reporting, prefilled = noun phrase):
-  answer:            "She asked whether the deadline had been extended."
-  word indices:       She(0) asked(1) whether(2) the(3) deadline(4) had(5) been(6) extended(7)  �?8 words
+Pattern B (3rd-reporting, prefilled = object noun phrase):
+  answer:            "She asked whether the deadline had been extended."  [8 words]
   prefilled:         ["the deadline"]
   prefilled_positions: {"the deadline": 3}
+  R = 8 - 2 = 6 remaining words -> all single-word chunks
   chunks:            ["she", "asked", "whether", "had", "been", "extended", "have"]
-  distractor:        "have"
-  word bag check:    effective chunks = she+asked+whether+had+been+extended = 6 words
-                     prefilled = the+deadline = 2 words  �? 6 + 2 = 8 �?
-  chunk style:       "the deadline" kept as unit (semantic noun phrase); all others single-word
-                     distractor "have" is morphological trap (have vs had)
+  distractor:        "have"  (have vs had)
+  word bag check:    6 chunks + 2 prefilled = 8 words in answer OK
 
+Pattern C (1st-embedded, prefilled = topic noun phrase):
+  answer:            "I wondered whether the scholarship application was still open."  [9 words]
+  prefilled:         ["the scholarship application"]
+  prefilled_positions: {"the scholarship application": 3}
+  R = 9 - 3 = 6 remaining words -> all single-word chunks
+  chunks:            ["i", "wondered", "whether", "was", "still", "open", "wonder"]
+  distractor:        "wonder"  (wondered vs wonder)
+  word bag check:    6 chunks + 3 prefilled = 9 words in answer OK
+
+Pattern D (interrogative, prefilled = topic noun phrase):
+  answer:            "Could you tell me when the registration deadline is?"  [10 words]
+  prefilled:         ["the registration deadline"]
+  prefilled_positions: {"the registration deadline": 5}
+  R = 10 - 3 = 7 remaining words -> all single-word chunks
+  chunks:            ["could", "you", "tell", "me", "when", "is", "was"]
+  distractor:        "was"  (is vs was 鈥?tense mismatch in embedded clause)
+  word bag check:    7 chunks + 3 prefilled = 10 words in answer OK
 ## Schema:
 {
   "id": "tmp_r${round}_q1",
   "has_distractor": boolean,
   "answer_type": "negation" | "3rd-reporting" | "1st-embedded" | "interrogative" | "direct" | "relative",
-  "prompt": "...",
+  "prompt_context": "background/context shown to the user",
+  "prompt_task_kind": "ask" | "report" | "respond" | "tell" | "explain",
+  "prompt_task_text": "explicit task such as 'What do they ask?' or 'Tell your friend about it.'",
+  "prompt": "optional; if provided, it must exactly match prompt_context + prompt_task_text rendered by the app",
   "answer": "full correct sentence (7-13 words)",
   "chunks": ["draggable1", "draggable2", "...and distractor if has_distractor=true"],
   "prefilled": ["pre-placed phrase"] or [],
@@ -603,15 +749,42 @@ Pattern B (3rd-reporting, prefilled = noun phrase):
   "grammar_points": ["tag1", "tag2"]
 }
 
+## PROMPT CONTRACT - CRITICAL:
+- Do NOT write a background-only prompt.
+- For every item, first write:
+  - "prompt_context" = scene/background
+  - "prompt_task_kind" = ask | report | respond | tell | explain
+  - "prompt_task_text" = the EXPLICIT task/instruction shown to the user
+- The visible prompt is: prompt_context + " " + prompt_task_text
+- Therefore prompt_task_text MUST explicitly request the answer utterance.
+- INVALID:
+  prompt_context="A visitor is asking the museum curator a question."
+  prompt_task_text=""    -> REJECT
+- VALID:
+  prompt_context="A visitor is speaking with the museum curator."
+  prompt_task_kind="ask"
+  prompt_task_text="What do they ask?"
+- VALID:
+  prompt_context="You found a great bookstore."
+  prompt_task_kind="tell"
+  prompt_task_text="Tell your friend about it."
+- VALID:
+  prompt_context="The manager had a question about the deadline."
+  prompt_task_kind="report"
+  prompt_task_text="What did he ask?"
+
 ${rejectFeedback}
-## FINAL CHECKLIST �?VERIFY BEFORE OUTPUT:
-1. WORD BAG: chunks (minus distractor) + prefilled words must equal EXACTLY the words in answer �?no extras, no missing. Verify every item.
+## FINAL CHECKLIST 锟?VERIFY BEFORE OUTPUT:
+1. WORD BAG: chunks (minus distractor) + prefilled words must equal EXACTLY the words in answer 锟?no extras, no missing. Verify every item.
 2. DISTRACTOR: The distractor word must NOT appear anywhere in the answer string.
-3. PREFILLED: Use prefilled when it serves as a natural fixed anchor, including in hard items when TPO-style phrasing supports it. The prefilled word/phrase must NOT appear in chunks �?remove it from chunks first. chunks + prefilled cover the answer exactly once.
-4. CHUNK GRANULARITY: Effective chunk count (chunks minus distractor) MUST be 4-8. Never output 9+ effective chunks. If a sentence would exceed 8 chunks, merge words into natural structure chunks such as "wanted to know", "had gone", "the desk", "you ordered", "on Friday". Do NOT over-split almost every word into a separate chunk.
-5. VERB DIVERSITY: No single reporting verb may appear more than twice in this batch.
-6. HARD DIFFICULTY: Hard items must be justified by advanced grammar signals, not by extra words. Valid hard signals include passive/passive-progressive, past perfect, relative/contact clause, whom, comparative/superlative, or multi-layer embedding.
-7. UNIQUE SOLUTION: Reject any item in your own internal check if the distractor could still fit grammatically or if more than one chunk order seems plausible.
+3. PREFILLED COUNT: Count your non-empty prefilled items. You MUST have 6-7 items with prefilled in this batch. If you have fewer than 6, go back and add prefilled to more items before outputting.
+4. PREFILLED CORRECTNESS: The prefilled word/phrase must appear EXACTLY in the answer string, at the stated index. Remove it from chunks 鈥?never include it in both prefilled and chunks. chunks + prefilled reconstruct the answer exactly once.
+5. CHUNK GRANULARITY: R = answer words - prefilled words. If R 鈮?8, use ALL single-word chunks. If R = 9-10, merge ONE collocation. If R > 10, something is wrong 鈥?increase prefilled coverage. Never output 9+ effective chunks.
+6. VERB DIVERSITY: No single reporting verb may appear more than twice in this batch.
+7. HARD DIFFICULTY: Hard items must be justified by advanced grammar signals, not by extra words. Valid hard signals include passive/passive-progressive, past perfect, relative/contact clause, whom, comparative/superlative, or multi-layer embedding.
+8. UNIQUE SOLUTION: Reject any item in your own internal check if the distractor could still fit grammatically or if more than one chunk order seems plausible.
+9. INTERROGATIVE QUALITY: For interrogative items, use a short natural polite frame, vary the opener across the batch, and keep the embedded clause in declarative order. Do not mass-produce one stock opener.
+10. PROMPT CONTRACT: Every item must include prompt_context + prompt_task_kind + prompt_task_text. Never leave the user with background only. The task text must explicitly ask for the answer utterance.
 
 Output JSON array only. No markdown.`.trim();
 }
@@ -634,10 +807,10 @@ Your goal is to add a single lowercase distractor word to items where "has_distr
    - Mandatory: Use morphological variants (e.g., chosen -> chose, taking -> taken, built -> build).
    - NEVER use "did" for these items.
 4. NEGATION:
-   - Preferred: Verb form辨析 (e.g., attend -> attending) OR Modal swap (e.g., could -> can).
+   - Preferred: Verb form杈ㄦ瀽 (e.g., attend -> attending) OR Modal swap (e.g., could -> can).
 
 ## PHILOSOPHY:
-Search for the "Evil Twin" of a word in the sentence—a word that looks plausible but breaks the tested rule. 
+Search for the "Evil Twin" of a word in the sentence鈥攁 word that looks plausible but breaks the tested rule. 
 Keep "distractor": null for items where "has_distractor" is false.
 
 ## SAFETY CHECK:
@@ -648,8 +821,8 @@ Keep "distractor": null for items where "has_distractor" is false.
 ## INPUT ITEMS:
 ${JSON.stringify(questions, null, 2)}
 
-## FINAL CHECK �?VERIFY BEFORE OUTPUT:
-- PASSIVE / PERFECT / PROGRESSIVE items: distractor MUST be a morphological variant (e.g., chosen→chose, taking→taken). NEVER "did" or "do".
+## FINAL CHECK 锟?VERIFY BEFORE OUTPUT:
+- PASSIVE / PERFECT / PROGRESSIVE items: distractor MUST be a morphological variant (e.g., chosen鈫抍hose, taking鈫抰aken). NEVER "did" or "do".
 - PASSIVE / PERFECT / PROGRESSIVE items: distractor MUST be a morphological variant. NEVER "did" or "do".
 - RELATIVE / CONTACT CLAUSE items: use pronoun swap or verb agreement. NEVER "did".
 - has_distractor=false items: distractor field must remain null.
@@ -680,8 +853,13 @@ function getAnswerType(q) {
   return classifyAnswerType(q);
 }
 
+function resolvedAnswerType(q) {
+  const type = getAnswerType(q);
+  return TYPE_LIST.includes(type) ? type : classifyAnswerType(q);
+}
+
 /**
- * Compute current pool type×difficulty counts plus style-feature coverage.
+ * Compute current pool type脳difficulty counts plus style-feature coverage.
  */
 function computePoolState(pool) {
   const state = {};
@@ -1302,6 +1480,8 @@ TPO-specific scoring:
 - Verify that indirect questions use declarative word order (no auxiliary inversion)
 - Verify that distractor did/do/does CANNOT be inserted into the correct answer
 - Deduct 3-5 points if answer is a direct question when it should be a statement
+- Deduct 3-5 points if an interrogative item uses a stiff, formulaic, or overlong polite opener
+- Deduct 3-5 points if a batch of interrogative items repeats the same opener too often
 
 Items:
 ${JSON.stringify(questions, null, 2)}
@@ -1375,7 +1555,140 @@ function parseConsistencyJson(text) {
   };
 }
 
+function createCircuitBreakerState() {
+  return {
+    history: [],
+    active: {},
+    events: [],
+  };
+}
+
+function aggregateTypeStats(entries, type) {
+  return (entries || []).reduce((acc, entry) => {
+    const stats = entry?.typeStats?.[type] || { generated: 0, accepted: 0, rejected: 0, reasons: {} };
+    acc.generated += stats.generated || 0;
+    acc.accepted += stats.accepted || 0;
+    acc.rejected += stats.rejected || 0;
+    Object.entries(stats.reasons || {}).forEach(([reason, count]) => {
+      acc.reasons[reason] = (acc.reasons[reason] || 0) + count;
+    });
+    return acc;
+  }, { generated: 0, accepted: 0, rejected: 0, reasons: {} });
+}
+
+function getActiveCircuitBreakerTypes(state, round) {
+  return new Set(
+    Object.entries(state?.active || {})
+      .filter(([, info]) => info && info.untilRound >= round)
+      .map(([type]) => type),
+  );
+}
+
+function fallbackTypesForDifficulty(diff, blockedTypes) {
+  const base = diff === "easy"
+    ? ["3rd-reporting", "1st-embedded", "negation"]
+    : diff === "hard"
+    ? ["3rd-reporting", "1st-embedded", "relative", "negation", "direct"]
+    : ["3rd-reporting", "1st-embedded", "negation", "relative", "direct", "interrogative"];
+  const blocked = blockedTypes || new Set();
+  return base.filter((type) => !blocked.has(type));
+}
+
+function applyCircuitBreakersToSpec(spec, blockedTypes, poolState, globalTypeTargets) {
+  const blocked = blockedTypes || new Set();
+  if (!Array.isArray(spec) || blocked.size === 0) return spec;
+  const rewritten = spec.map((cell) => ({ ...cell }));
+  for (const cell of rewritten) {
+    if (!blocked.has(cell.type)) continue;
+    const fallback = chooseGapWeightedType(
+      poolState,
+      globalTypeTargets,
+      fallbackTypesForDifficulty(cell.difficulty, blocked),
+      "3rd-reporting",
+    );
+    cell.type = fallback;
+  }
+  return rewritten.reduce((acc, cell) => {
+    const existing = acc.find((x) => x.type === cell.type && x.difficulty === cell.difficulty);
+    if (existing) existing.count += cell.count;
+    else acc.push(cell);
+    return acc;
+  }, []);
+}
+
+function updateCircuitBreakers(state, round, mode, spec, result) {
+  if (!state || mode !== "normal" || !result?.typeStats) return;
+  state.history.push({
+    round,
+    mode,
+    spec: Array.isArray(spec) ? spec.map((x) => ({ ...x })) : [],
+    typeStats: result.typeStats,
+  });
+  state.history = state.history.slice(-Math.max(CIRCUIT_BREAKER_WINDOW, 6));
+
+  const recent = state.history.slice(-CIRCUIT_BREAKER_WINDOW);
+  for (const type of TYPE_LIST) {
+    const aggregate = aggregateTypeStats(recent, type);
+    const acceptRate = aggregate.generated > 0 ? aggregate.accepted / aggregate.generated : 1;
+    const currentlyActive = state.active[type] && state.active[type].untilRound >= round;
+    if (
+      aggregate.generated >= CIRCUIT_BREAKER_MIN_GENERATED &&
+      acceptRate <= CIRCUIT_BREAKER_MIN_ACCEPT_RATE &&
+      !currentlyActive
+    ) {
+      const reasons = Object.entries(aggregate.reasons)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5);
+      const event = {
+        triggeredAt: new Date().toISOString(),
+        round,
+        mode,
+        type,
+        generated: aggregate.generated,
+        accepted: aggregate.accepted,
+        rejected: aggregate.rejected,
+        acceptRate: Number(acceptRate.toFixed(3)),
+        reasons,
+        recentRounds: recent.map((entry) => ({
+          round: entry.round,
+          spec: entry.spec,
+          stats: entry.typeStats[type] || null,
+        })),
+        blockedUntilRound: round + CIRCUIT_BREAKER_COOLDOWN_ROUNDS,
+      };
+      state.active[type] = {
+        sinceRound: round,
+        untilRound: round + CIRCUIT_BREAKER_COOLDOWN_ROUNDS,
+        lastEvent: event,
+      };
+      state.events.push(event);
+      console.warn(
+        `[circuit-breaker] round ${round} type=${type} acceptRate=${event.acceptRate} blockedUntil=${event.blockedUntilRound}`,
+      );
+    }
+  }
+
+  for (const [type, info] of Object.entries(state.active)) {
+    if (info && info.untilRound < round) delete state.active[type];
+  }
+}
+
+function flushCircuitBreakerLog(state) {
+  if (!state) return;
+  const payload = {
+    generated_at: new Date().toISOString(),
+    active: state.active,
+    events: state.events,
+    history: state.history,
+  };
+  writeFileSync(CIRCUIT_BREAKER_LOG_PATH, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
+}
+
 function hardValidateQuestion(q) {
+  const promptContract = validateStructuredPromptParts(q, { requireStructured: true });
+  if (promptContract.fatal.length > 0) return { ok: false, reason: `prompt: ${promptContract.fatal.join("; ")}` };
+  if (promptContract.format.length > 0) return { ok: false, reason: `prompt: ${promptContract.format.join("; ")}` };
+
   const v = validateQuestion(q);
   if (v.fatal.length > 0) return { ok: false, reason: `fatal: ${v.fatal.join("; ")}` };
   // format and content issues are soft warnings, not hard fails
@@ -1422,6 +1735,9 @@ async function generateCandidateRound(round, spec, rejectFeedback = "") {
     rejected: 0,
     rejectReasons: {},
     questions: [],
+    typeStats: Object.fromEntries(
+      TYPE_LIST.map((type) => [type, { generated: 0, accepted: 0, rejected: 0, reasons: {} }]),
+    ),
   };
 
   const generatedRaw = await callModel(buildGeneratePrompt(round, spec, rejectFeedback));
@@ -1432,14 +1748,21 @@ async function generateCandidateRound(round, spec, rejectFeedback = "") {
 
   const normalized = arr.map((q, i) => normalizeQuestion(q, `tmp_r${round}_q${i + 1}`));
   out.generated = normalized.length;
+  normalized.forEach((q) => {
+    const type = resolvedAnswerType(q);
+    out.typeStats[type].generated += 1;
+  });
 
   // hard filter first
   const hardPassed = [];
   for (const q of normalized) {
     const hv = hardValidateQuestion(q);
     if (!hv.ok) {
+      const type = resolvedAnswerType(q);
       out.rejected += 1;
       out.rejectReasons[hv.reason] = (out.rejectReasons[hv.reason] || 0) + 1;
+      out.typeStats[type].rejected += 1;
+      out.typeStats[type].reasons[hv.reason] = (out.typeStats[type].reasons[hv.reason] || 0) + 1;
       continue;
     }
     hardPassed.push(q);
@@ -1476,6 +1799,7 @@ async function generateCandidateRound(round, spec, rejectFeedback = "") {
       ))
     );
     if (blocked || score < MIN_REVIEW_SCORE || c.ets < MIN_ETS_SIMILARITY || c.solvability < MIN_SOLVABILITY) {
+      const type = resolvedAnswerType(q);
       out.rejected += 1;
       let r = "";
       if (blocked) {
@@ -1489,9 +1813,13 @@ async function generateCandidateRound(round, spec, rejectFeedback = "") {
         r = `review:solvability<${MIN_SOLVABILITY}`;
       }
       out.rejectReasons[r] = (out.rejectReasons[r] || 0) + 1;
+      out.typeStats[type].rejected += 1;
+      out.typeStats[type].reasons[r] = (out.typeStats[type].reasons[r] || 0) + 1;
       continue;
     }
+    const type = resolvedAnswerType(q);
     out.accepted += 1;
+    out.typeStats[type].accepted += 1;
     out.questions.push(q);
   }
 
@@ -1513,7 +1841,7 @@ function attachMeta(q) {
     hasDistractor: q.distractor != null,
     isEmbedded: isEmbeddedQuestion(q.grammar_points),
     hasQuestionMark: q.has_question_mark === true,
-    answerType: getAnswerType(q),
+    answerType: resolvedAnswerType(q),
   };
   return q;
 }
@@ -1587,7 +1915,7 @@ function pickDiversified(pool, targets) {
 function composeOneSet(pool, setId, maxRetries = 500) {
   const { easy: eN, medium: mN, hard: hN } = ETS_2026_TARGET_COUNTS_10;
 
-  // Use pre-computed _meta for cheap O(n) profile �?no string splitting per attempt
+  // Use pre-computed _meta for cheap O(n) profile 锟?no string splitting per attempt
   function profileStyle(items) {
     const total = items.length || 1;
     let qmark = 0, distractor = 0, embedded = 0, sumWords = 0, sumChunks = 0;
@@ -1699,7 +2027,7 @@ function composeOneSet(pool, setId, maxRetries = 500) {
     // Safety check
     if (picked.length !== 10) continue;
 
-    // 1. Style gate first �?cheap, uses pre-computed _meta, no clone needed
+    // 1. Style gate first 锟?cheap, uses pre-computed _meta, no clone needed
     const style = profileStyle(picked);
     const isStrict = attempt < Math.floor(maxRetries * 0.6);
     const styleGate = isStrict ? stylePassStrict : stylePassRelaxed;
@@ -1779,7 +2107,7 @@ function buildFinalSetsFromPool(pool, targetCount) {
   for (let i = 1; i <= targetCount; i += 1) {
     const set = composeOneSet(pool, i);
     if (!set) {
-      console.warn(`  [assembly] set ${i} could not be assembled �?continuing to next`);
+      console.warn(`  [assembly] set ${i} could not be assembled 锟?continuing to next`);
       continue;
     }
     sets.push(set);
@@ -1834,12 +2162,13 @@ async function main() {
         console.log(`Seeded ${seeded.length} questions from ${label}`);
       }
     } catch (_) {
-      // file missing or invalid �?skip
+      // file missing or invalid 锟?skip
     }
   }
 
   const rejectReasons = {};
   let rollingRejectFeedback = "";
+  const circuitBreakerState = createCircuitBreakerState();
   const easyTarget = ETS_2026_TARGET_COUNTS_10.easy * TARGET_SET_COUNT;
   const mediumTarget = ETS_2026_TARGET_COUNTS_10.medium * TARGET_SET_COUNT;
   const hardTarget = ETS_2026_TARGET_COUNTS_10.hard * TARGET_SET_COUNT;
@@ -1920,7 +2249,7 @@ async function main() {
       const plannerRaw = await callModel(
         buildPlannerPrompt(poolState, difficultyTargets, globalTypeTargets, styleTargets, 10, "normal"),
       );
-      const spec = enforcePlannerStyleGaps(
+      const plannedSpec = enforcePlannerStyleGaps(
         parsePlannerSpec(plannerRaw, 10),
         poolState,
         styleTargets,
@@ -1928,8 +2257,10 @@ async function main() {
         difficultyTargets,
         10,
       );
-      const specLabel = spec.map((s) => `${s.count}×${s.type}/${s.difficulty}`).join(", ");
-      console.log(`round ${round}: planner �?[${specLabel}]`);
+      const blockedTypes = getActiveCircuitBreakerTypes(circuitBreakerState, round);
+      const spec = applyCircuitBreakersToSpec(plannedSpec, blockedTypes, poolState, globalTypeTargets);
+      const specLabel = spec.map((s) => `${s.count}脳${s.type}/${s.difficulty}`).join(", ");
+      console.log(`round ${round}: planner 锟?[${specLabel}]`);
 
       const res = await generateCandidateRound(round, spec, rollingRejectFeedback);
       acceptedPool.push(...res.questions);
@@ -1943,8 +2274,11 @@ async function main() {
       );
       if (res.rejected > 0) {
         const topReasons = Object.entries(res.rejectReasons).sort((a, b) => b[1] - a[1]).slice(0, 3);
-        topReasons.forEach(([r, n]) => console.log(`  reject: ${r} (×${n})`));
+        topReasons.forEach(([r, n]) => console.log(`  reject: ${r} (脳${n})`));
       }
+
+      updateCircuitBreakers(circuitBreakerState, round, "normal", spec, res);
+      flushCircuitBreakerLog(circuitBreakerState);
 
       // Persist pool after every round so progress survives failures
       flushPoolCheckpoint(acceptedPool);
@@ -1983,7 +2317,8 @@ async function main() {
             globalTypeTargets,
             styleTargets,
           );
-          const boostTask = boostBacklog[0];
+          const blockedTypes = getActiveCircuitBreakerTypes(circuitBreakerState, 3000 + i);
+          const boostTask = boostBacklog.find((task) => !blockedTypes.has(task.type)) || boostBacklog[0];
           if (!boostTask) break;
           const boostSpec = [{ type: boostTask.type, difficulty: boostTask.difficulty, count: 1 }];
           const boostLabel = boostSpec.map((s) => `${s.count}?${s.type}/${s.difficulty}`).join(', ');
@@ -2004,6 +2339,7 @@ async function main() {
         } catch (e) {
           console.log(`boost ${i}: failed -> ${errMsg(e)}`);
           flushPoolCheckpoint(acceptedPool);
+          flushCircuitBreakerLog(circuitBreakerState);
         }
         await new Promise((r) => setTimeout(r, 3000));
       }
@@ -2016,7 +2352,7 @@ async function main() {
 
   const finalSets = buildFinalSetsFromPool(poolByDiff, TARGET_SET_COUNT);
   if (finalSets.length === 0) {
-    console.error("No sets assembled at all �?aborting.");
+    console.error("No sets assembled at all 锟?aborting.");
     process.exit(1);
   }
   if (finalSets.length < TARGET_SET_COUNT) {
@@ -2068,12 +2404,26 @@ async function main() {
 
   console.log("Top reject reasons:");
   summarizeRejectReasons(rejectReasons).forEach(([k, v]) => console.log(`- ${k}: ${v}`));
+  flushCircuitBreakerLog(circuitBreakerState);
 }
 
-main().catch((e) => {
-  console.error(`Fatal: ${errMsg(e)}`);
-  process.exit(1);
-});
+const isDirectRun = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
+
+export {
+  autoRepairWordBag,
+  resolvedAnswerType,
+  createCircuitBreakerState,
+  getActiveCircuitBreakerTypes,
+  applyCircuitBreakersToSpec,
+  updateCircuitBreakers,
+};
+
+if (isDirectRun) {
+  main().catch((e) => {
+    console.error(`Fatal: ${errMsg(e)}`);
+    process.exit(1);
+  });
+}
 
 
 
