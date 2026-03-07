@@ -1,14 +1,581 @@
 [
   {
-    "id": "tmp_r10_q1",
-    "prompt": "The yoga instructor was curious. She asked, 'What time does the meditation session start?'",
-    "answer": "She was curious what time the meditation session started.",
+    "id": "tmp_r6_q3",
+    "prompt": "The project supervisor inquired about a detail. What did she need to find out?",
+    "answer": "She needed to find out why the client canceled the meeting.",
     "chunks": [
       "she",
-      "was curious",
+      "needed to",
+      "find out",
+      "why",
+      "the client",
+      "canceled the meeting"
+    ],
+    "prefilled": [],
+    "prefilled_positions": {},
+    "distractor": null,
+    "has_question_mark": false,
+    "grammar_points": [
+      "3rd reporting",
+      "wh-clause",
+      "simple past"
+    ]
+  },
+  {
+    "id": "tmp_r12_q1",
+    "prompt": "The exchange student was not sure about the library's closing time.",
+    "answer": "She needed to find out when the library closed.",
+    "chunks": [
+      "she",
+      "needed to",
+      "find out",
+      "when",
+      "the library",
+      "closed",
+      "does"
+    ],
+    "prefilled": [],
+    "prefilled_positions": {},
+    "distractor": "does",
+    "has_question_mark": false,
+    "grammar_points": [
+      "3rd-reporting",
+      "declarative word order"
+    ]
+  },
+  {
+    "id": "tmp_r1_q4",
+    "prompt": "A frustrated customer is speaking to a restaurant waiter.",
+    "answer": "I did not order the spicy seafood pasta you brought.",
+    "chunks": [
+      "i",
+      "did",
+      "order",
+      "the spicy",
+      "seafood pasta",
+      "you brought",
+      "do"
+    ],
+    "prefilled": [
+      "not"
+    ],
+    "prefilled_positions": {
+      "not": 2
+    },
+    "distractor": "do",
+    "has_question_mark": false,
+    "grammar_points": [
+      "negation",
+      "simple past"
+    ]
+  },
+  {
+    "id": "tmp_r12_q3",
+    "prompt": "Some colleagues in the campus cafe were discussing the guest speaker.",
+    "answer": "They wondered if the speaker would take questions after the lecture.",
+    "chunks": [
+      "they",
+      "wondered",
+      "if",
+      "the speaker",
+      "would take questions",
+      "after the lecture"
+    ],
+    "prefilled": [],
+    "prefilled_positions": {},
+    "distractor": null,
+    "has_question_mark": false,
+    "grammar_points": [
+      "3rd-reporting",
+      "declarative word order",
+      "high complexity"
+    ]
+  },
+  {
+    "id": "tmp_r1_q1",
+    "prompt": "The elderly neighbor was curious about the park's new rules.",
+    "answer": "He wondered why the community garden was closed for maintenance.",
+    "chunks": [
+      "he",
+      "wondered",
+      "why",
+      "the community garden",
+      "was closed",
+      "for maintenance",
+      "did"
+    ],
+    "prefilled": [],
+    "prefilled_positions": {},
+    "distractor": "did",
+    "has_question_mark": false,
+    "grammar_points": [
+      "3rd-person reporting",
+      "declarative word order"
+    ]
+  },
+  {
+    "id": "tmp_r4_q7",
+    "prompt": "The software developer is explaining a problem to tech support. What do they say?",
+    "answer": "I did not receive the password reset email you mentioned.",
+    "chunks": [
+      "i",
+      "did",
+      "receive",
+      "the password",
+      "reset email",
+      "you mentioned",
+      "do"
+    ],
+    "prefilled": [
+      "not"
+    ],
+    "prefilled_positions": {
+      "not": 2
+    },
+    "distractor": "do",
+    "has_question_mark": false,
+    "grammar_points": [
+      "negation",
+      "simple past"
+    ]
+  },
+  {
+    "id": "tmp_r4_q10",
+    "prompt": "A colleague asks, 'What time is the meeting tomorrow?' You reply:",
+    "answer": "I have no idea what time the meeting starts.",
+    "chunks": [
+      "i",
+      "have no idea",
       "what time",
-      "the meditation session",
-      "started",
+      "the meeting",
+      "starts",
+      "did"
+    ],
+    "prefilled": [],
+    "prefilled_positions": {},
+    "distractor": "did",
+    "has_question_mark": false,
+    "grammar_points": [
+      "embedded question",
+      "declarative word order"
+    ]
+  },
+  {
+    "id": "tmp_r11_q9",
+    "prompt": "Your friend left a message. What did he ask?",
+    "answer": "He asked me what time the restaurant opened.",
+    "chunks": [
+      "he",
+      "asked me",
+      "what time",
+      "the restaurant",
+      "opened",
+      "did"
+    ],
+    "prefilled": [],
+    "prefilled_positions": {},
+    "distractor": "did",
+    "has_question_mark": false,
+    "grammar_points": [
+      "3rd-reporting",
+      "embedded question"
+    ]
+  },
+  {
+    "id": "tmp_r3012_q1",
+    "prompt": "Do you know where the nearest post office is?",
+    "answer": "I have no idea where the nearest post office is.",
+    "chunks": [
+      "i",
+      "have no idea",
+      "where",
+      "the nearest",
+      "post office",
+      "is",
+      "do"
+    ],
+    "prefilled": [],
+    "prefilled_positions": {},
+    "distractor": "do",
+    "has_question_mark": false,
+    "grammar_points": [
+      "embedded-question",
+      "1st-person"
+    ]
+  },
+  {
+    "id": "tmp_r3002_q1",
+    "prompt": "Do you know where the new art gallery is?",
+    "answer": "I have no idea where the new art gallery is.",
+    "chunks": [
+      "i",
+      "have no idea",
+      "where",
+      "the new",
+      "art gallery",
+      "is",
+      "do"
+    ],
+    "prefilled": [],
+    "prefilled_positions": {},
+    "distractor": "do",
+    "has_question_mark": false,
+    "grammar_points": [
+      "embedded-question",
+      "1st-person"
+    ]
+  },
+  {
+    "id": "tmp_r3009_q1",
+    "prompt": "Do you know where the volunteer left the new trail maps?",
+    "answer": "I have no idea where the volunteer left the new trail maps.",
+    "chunks": [
+      "i",
+      "have no idea",
+      "where",
+      "the volunteer",
+      "left",
+      "the new",
+      "trail maps",
+      "did"
+    ],
+    "prefilled": [],
+    "prefilled_positions": {},
+    "distractor": "did",
+    "has_question_mark": false,
+    "grammar_points": [
+      "embedded-question",
+      "1st-person"
+    ]
+  },
+  {
+    "id": "tmp_r3007_q1",
+    "prompt": "Do you know where the museum curator is?",
+    "answer": "I have no idea where the museum curator is.",
+    "chunks": [
+      "i",
+      "have no idea",
+      "where",
+      "the museum curator",
+      "is",
+      "do"
+    ],
+    "prefilled": [],
+    "prefilled_positions": {},
+    "distractor": "do",
+    "has_question_mark": false,
+    "grammar_points": [
+      "embedded-question",
+      "1st-person"
+    ]
+  },
+  {
+    "id": "tmp_r2_q7",
+    "prompt": "You're discussing a confusing internship interview question with a classmate. What do you say?",
+    "answer": "I wondered what the interviewer meant by that final remark.",
+    "chunks": [
+      "i",
+      "wondered",
+      "what",
+      "the interviewer",
+      "meant",
+      "by that",
+      "final remark",
+      "means"
+    ],
+    "prefilled": [],
+    "prefilled_positions": {},
+    "distractor": "means",
+    "has_question_mark": false,
+    "grammar_points": [
+      "1st-embedded",
+      "wh-clause"
+    ]
+  },
+  {
+    "id": "tmp_r11_q2",
+    "prompt": "The young architect was looking at the plans. What did he ask?",
+    "answer": "He wondered where the structural supports would be placed.",
+    "chunks": [
+      "he",
+      "wondered",
+      "where",
+      "the structural supports",
+      "would be placed",
+      "do"
+    ],
+    "prefilled": [],
+    "prefilled_positions": {},
+    "distractor": "do",
+    "has_question_mark": false,
+    "grammar_points": [
+      "3rd-reporting",
+      "embedded question"
+    ]
+  },
+  {
+    "id": "tmp_r2_q2",
+    "prompt": "Some colleagues were discussing the new software. What did they ask?",
+    "answer": "They asked if the new software would improve their workflow.",
+    "chunks": [
+      "they",
+      "asked",
+      "if",
+      "the new software",
+      "would improve",
+      "their workflow",
+      "does"
+    ],
+    "prefilled": [],
+    "prefilled_positions": {},
+    "distractor": "does",
+    "has_question_mark": false,
+    "grammar_points": [
+      "3rd-reporting",
+      "if-clause"
+    ]
+  },
+  {
+    "id": "tmp_r4_q1",
+    "prompt": "The yoga instructor was curious about something. What did she want to know?",
+    "answer": "She wanted to know if the studio would be open on the holiday.",
+    "chunks": [
+      "she",
+      "wanted to know",
+      "if",
+      "the studio",
+      "would be open",
+      "on the holiday",
+      "does"
+    ],
+    "prefilled": [],
+    "prefilled_positions": {},
+    "distractor": "does",
+    "has_question_mark": false,
+    "grammar_points": [
+      "embedded question",
+      "declarative word order"
+    ]
+  },
+  {
+    "id": "tmp_r2_q1",
+    "prompt": "The project supervisor was not sure about the timeline. What did she need to find out?",
+    "answer": "She needed to find out when the final report would be submitted.",
+    "chunks": [
+      "she",
+      "needed to",
+      "find out",
+      "when",
+      "the final report",
+      "would be submitted",
+      "will"
+    ],
+    "prefilled": [],
+    "prefilled_positions": {},
+    "distractor": "will",
+    "has_question_mark": false,
+    "grammar_points": [
+      "3rd-reporting",
+      "future-in-past"
+    ]
+  },
+  {
+    "id": "tmp_r3003_q1",
+    "prompt": "Do you know where the software update files are?",
+    "answer": "I have no idea where the software update files are.",
+    "chunks": [
+      "i",
+      "have no idea",
+      "where",
+      "the software",
+      "update files",
+      "are",
+      "do"
+    ],
+    "prefilled": [],
+    "prefilled_positions": {},
+    "distractor": "do",
+    "has_question_mark": false,
+    "grammar_points": [
+      "embedded-question",
+      "1st-person"
+    ]
+  },
+  {
+    "id": "tmp_r10_q5",
+    "prompt": "Some colleagues were discussing the new policy. They asked the manager:",
+    "answer": "They inquired where the team meeting would be held.",
+    "chunks": [
+      "they",
+      "inquired",
+      "where",
+      "the team meeting",
+      "would be held",
+      "did"
+    ],
+    "prefilled": [],
+    "prefilled_positions": {},
+    "distractor": "did",
+    "has_question_mark": false,
+    "grammar_points": [
+      "3rd-reporting",
+      "declarative word order",
+      "passive"
+    ]
+  },
+  {
+    "id": "tmp_r8_q1",
+    "prompt": "A volunteer at the local library is helping a patron. What does the volunteer ask?",
+    "answer": "Could you tell me what genre of books you usually enjoy?",
+    "chunks": [
+      "could you",
+      "tell me",
+      "what genre",
+      "of books",
+      "you",
+      "usually",
+      "enjoy",
+      "enjoyed"
+    ],
+    "prefilled": [],
+    "prefilled_positions": {},
+    "distractor": "enjoyed",
+    "has_question_mark": true,
+    "grammar_points": [
+      "interrogative",
+      "embedded question",
+      "tense consistency"
+    ]
+  },
+  {
+    "id": "tmp_r11_q3",
+    "prompt": "Some colleagues were discussing the new policy. What did they inquire about?",
+    "answer": "They inquired why the new security protocols were mandatory.",
+    "chunks": [
+      "they",
+      "inquired",
+      "why",
+      "the new",
+      "security protocols",
+      "were mandatory",
+      "did"
+    ],
+    "prefilled": [],
+    "prefilled_positions": {},
+    "distractor": "did",
+    "has_question_mark": false,
+    "grammar_points": [
+      "3rd-reporting",
+      "embedded question"
+    ]
+  },
+  {
+    "id": "tmp_r7_q8",
+    "prompt": "A young architect is explaining a situation to a client.",
+    "answer": "I did not realize the building permits would take so long.",
+    "chunks": [
+      "i",
+      "did",
+      "realize",
+      "the building permits",
+      "would take",
+      "so long",
+      "do"
+    ],
+    "prefilled": [
+      "not"
+    ],
+    "prefilled_positions": {
+      "not": 2
+    },
+    "distractor": "do",
+    "has_question_mark": false,
+    "grammar_points": [
+      "negation",
+      "past tense"
+    ]
+  },
+  {
+    "id": "tmp_r1_q5",
+    "prompt": "An enthusiastic intern is apologizing to the manager.",
+    "answer": "Unfortunately, I have not received the updated training manual yet.",
+    "chunks": [
+      "unfortunately",
+      "i",
+      "have",
+      "received",
+      "the updated",
+      "training manual",
+      "yet",
+      "had"
+    ],
+    "prefilled": [
+      "not"
+    ],
+    "prefilled_positions": {
+      "not": 3
+    },
+    "distractor": "had",
+    "has_question_mark": false,
+    "grammar_points": [
+      "negation",
+      "present perfect"
+    ]
+  },
+  {
+    "id": "tmp_r10_q4",
+    "prompt": "The software developer was not sure. He asked his colleague:",
+    "answer": "He wondered what the client had actually requested.",
+    "chunks": [
+      "he",
+      "wondered",
+      "what",
+      "the client",
+      "had actually requested"
+    ],
+    "prefilled": [],
+    "prefilled_positions": {},
+    "distractor": null,
+    "has_question_mark": false,
+    "grammar_points": [
+      "3rd-reporting",
+      "declarative word order",
+      "past perfect"
+    ]
+  },
+  {
+    "id": "tmp_r9_q5",
+    "prompt": "A client at a hair salon is asking the stylist about a service.",
+    "answer": "Can you tell me how much a haircut usually costs here?",
+    "chunks": [
+      "can you",
+      "tell me",
+      "how much",
+      "a haircut",
+      "usually costs",
+      "here",
+      "cost"
+    ],
+    "prefilled": [],
+    "prefilled_positions": {},
+    "distractor": "cost",
+    "has_question_mark": true,
+    "grammar_points": [
+      "embedded question",
+      "adverb"
+    ]
+  },
+  {
+    "id": "tmp_r10_q1",
+    "prompt": "The yoga instructor was curious. She asked the park ranger:",
+    "answer": "She wanted to know if the hiking trail was still open.",
+    "chunks": [
+      "she",
+      "wanted to know",
+      "if",
+      "the hiking trail",
+      "was",
+      "still open",
       "did"
     ],
     "prefilled": [],
@@ -21,67 +588,16 @@
     ]
   },
   {
-    "id": "tmp_r1_q6",
-    "prompt": "A student is apologizing to a study group. What might they say about missing the last meeting?",
-    "answer": "I did not receive the email about the changed location.",
+    "id": "tmp_r8_q5",
+    "prompt": "The shop owner spoke to a supplier. What did the owner want to know?",
+    "answer": "She inquired whether the new shipment would arrive before the weekend.",
     "chunks": [
-      "i",
-      "did",
-      "receive",
-      "the email",
-      "about the",
-      "changed location",
-      "do"
-    ],
-    "prefilled": [
-      "not"
-    ],
-    "prefilled_positions": {
-      "not": 2
-    },
-    "distractor": "do",
-    "has_question_mark": false,
-    "grammar_points": [
-      "negation",
-      "simple past"
-    ]
-  },
-  {
-    "id": "tmp_r7_q5",
-    "prompt": "At the airport check-in counter, the agent asked, 'Did you pack these bags yourself?'",
-    "answer": "I did not pack these bags myself.",
-    "chunks": [
-      "i",
-      "did",
-      "pack",
-      "these bags",
-      "myself",
-      "do"
-    ],
-    "prefilled": [
-      "not"
-    ],
-    "prefilled_positions": {
-      "not": 2
-    },
-    "distractor": "do",
-    "has_question_mark": false,
-    "grammar_points": [
-      "negation",
-      "simple past"
-    ]
-  },
-  {
-    "id": "tmp_r10_q5",
-    "prompt": "The manager at the gym wondered. He asked, 'When will the new fitness equipment arrive?'",
-    "answer": "The manager wondered when the new fitness equipment would arrive.",
-    "chunks": [
-      "the manager",
-      "wondered",
-      "when",
-      "the new",
-      "fitness equipment",
+      "she",
+      "inquired",
+      "whether",
+      "the new shipment",
       "would arrive",
+      "before the weekend",
       "will"
     ],
     "prefilled": [],
@@ -90,521 +606,88 @@
     "has_question_mark": false,
     "grammar_points": [
       "3rd-reporting",
-      "future-in-the-past"
-    ]
-  },
-  {
-    "id": "tmp_r7_q4",
-    "prompt": "The yoga instructor asked the frustrated customer, 'Are you going to the advanced class tomorrow?'",
-    "answer": "I am not going to the advanced class tomorrow.",
-    "chunks": [
-      "i",
-      "am",
-      "going",
-      "to the",
-      "advanced class",
-      "tomorrow",
-      "go"
-    ],
-    "prefilled": [
-      "not"
-    ],
-    "prefilled_positions": {
-      "not": 2
-    },
-    "distractor": "go",
-    "has_question_mark": false,
-    "grammar_points": [
-      "negation",
-      "present continuous"
-    ]
-  },
-  {
-    "id": "tmp_r11_q10",
-    "prompt": "Regarding the workshop invitation...",
-    "answer": "I have not received the detailed agenda yet.",
-    "chunks": [
-      "i",
-      "have",
-      "received",
-      "the detailed agenda",
-      "yet",
-      "never"
-    ],
-    "prefilled": [
-      "not"
-    ],
-    "prefilled_positions": {
-      "not": 2
-    },
-    "distractor": "never",
-    "has_question_mark": false,
-    "grammar_points": [
-      "negation",
-      "present-perfect"
-    ]
-  },
-  {
-    "id": "tmp_r1_q3",
-    "prompt": "An elderly neighbor saw a moving van next door. What did she tell her son?",
-    "answer": "She was curious why the family across the street was moving.",
-    "chunks": [
-      "she",
-      "was curious",
-      "why",
-      "the family",
-      "across the street",
-      "was moving",
-      "did"
-    ],
-    "prefilled": [],
-    "prefilled_positions": {},
-    "distractor": "did",
-    "has_question_mark": false,
-    "grammar_points": [
-      "3rd-reporting",
       "embedded question",
-      "past continuous"
+      "conditional"
     ]
   },
   {
-    "id": "tmp_r7_q1",
-    "prompt": "The travel blogger, frustrated by the long customs line, was asked, 'Did you manage to get a good photo of the arrival hall?'",
-    "answer": "I did not manage to get a good photo of the arrival hall.",
-    "chunks": [
-      "i",
-      "did",
-      "manage",
-      "to get",
-      "a good photo",
-      "of the",
-      "arrival hall",
-      "do"
-    ],
-    "prefilled": [
-      "not"
-    ],
-    "prefilled_positions": {
-      "not": 2
-    },
-    "distractor": "do",
-    "has_question_mark": false,
-    "grammar_points": [
-      "negation",
-      "simple past"
-    ]
-  },
-  {
-    "id": "tmp_r12_q1",
-    "prompt": "The yoga instructor was not sure about the schedule.",
-    "answer": "She wanted to know when the morning meditation class would start.",
-    "chunks": [
-      "she",
-      "wanted to know",
-      "when",
-      "the morning",
-      "meditation class",
-      "would start",
-      "do"
-    ],
-    "prefilled": [],
-    "prefilled_positions": {},
-    "distractor": "do",
-    "has_question_mark": false,
-    "grammar_points": [
-      "indirect question",
-      "future in the past"
-    ]
-  },
-  {
-    "id": "tmp_r10_q2",
-    "prompt": "The software developer needed to find out something. He asked, 'Where is the team meeting being held?'",
-    "answer": "He needed to find out where the team meeting was being held.",
+    "id": "tmp_r8_q10",
+    "prompt": "At the gym, a trainer relays a message from a client. What did the client ask?",
+    "answer": "He asked me what time the yoga class starts tomorrow.",
     "chunks": [
       "he",
-      "needed to",
-      "find out",
-      "where",
-      "the team meeting",
-      "was being held",
-      "is"
+      "asked me",
+      "what time",
+      "the yoga class",
+      "starts",
+      "tomorrow",
+      "start"
     ],
     "prefilled": [],
     "prefilled_positions": {},
-    "distractor": "is",
+    "distractor": "start",
     "has_question_mark": false,
     "grammar_points": [
       "3rd-reporting",
-      "passive progressive"
+      "embedded question"
     ]
   },
   {
-    "id": "tmp_r12_q4",
-    "prompt": "Some colleagues were discussing the new policy.",
-    "answer": "They wondered what the new policy would mean for their department.",
+    "id": "tmp_r11_q4",
+    "prompt": "The delivery driver was at the door. What did he want to know?",
+    "answer": "He asked where the pharmacy drop-off location was.",
     "chunks": [
-      "they",
-      "wondered",
-      "what",
-      "the new policy",
-      "would mean",
-      "for their department"
+      "he",
+      "asked",
+      "where",
+      "the pharmacy",
+      "drop-off location",
+      "was"
     ],
     "prefilled": [],
     "prefilled_positions": {},
     "distractor": null,
     "has_question_mark": false,
     "grammar_points": [
-      "indirect question",
-      "future in the past"
+      "3rd-reporting",
+      "embedded question",
+      "contact clause"
     ]
   },
   {
-    "id": "tmp_r9_q2",
-    "prompt": "The flight attendant is speaking to a passenger about their meal preference.",
-    "answer": "Can you tell me what you would like to drink with your meal?",
+    "id": "tmp_r9_q7",
+    "prompt": "An intern in an interview is being asked a challenging question by the manager.",
+    "answer": "Did she ask you whom you had worked with on your previous project?",
     "chunks": [
-      "can",
-      "you tell me",
-      "what",
-      "you would like",
-      "to drink",
-      "with your meal",
-      "could"
+      "did she",
+      "ask you",
+      "whom",
+      "you",
+      "had worked with",
+      "on your",
+      "previous project",
+      "work"
     ],
     "prefilled": [],
     "prefilled_positions": {},
-    "distractor": "could",
+    "distractor": "work",
     "has_question_mark": true,
     "grammar_points": [
-      "interrogative",
-      "embedded question"
-    ]
-  },
-  {
-    "id": "tmp_r3_q4",
-    "prompt": "The store clerk was talking to a customer about a home repair. What did the customer want to know?",
-    "answer": "She was not sure what kind of paint she should buy.",
-    "chunks": [
-      "she",
-      "was not sure",
-      "what kind",
-      "of paint",
-      "she should buy",
-      "do"
-    ],
-    "prefilled": [],
-    "prefilled_positions": {},
-    "distractor": "do",
-    "has_question_mark": false,
-    "grammar_points": [
-      "3rd-reporting",
-      "embedded question"
-    ]
-  },
-  {
-    "id": "tmp_r9_q6",
-    "prompt": "The young architect was unsure about a client's budget for the renovation.",
-    "answer": "She needed to find out what the final budget for the project was.",
-    "chunks": [
-      "she",
-      "needed to",
-      "find out",
-      "what",
-      "the final budget",
-      "for the project",
-      "was",
-      "is"
-    ],
-    "prefilled": [],
-    "prefilled_positions": {},
-    "distractor": "is",
-    "has_question_mark": false,
-    "grammar_points": [
-      "reporting verb",
-      "embedded question"
-    ]
-  },
-  {
-    "id": "tmp_r1_q5",
-    "prompt": "Some colleagues are discussing a project deadline. What did one of them report about the manager's concern?",
-    "answer": "They wondered when the revised proposal would be submitted.",
-    "chunks": [
-      "they",
-      "wondered",
-      "when",
-      "the revised proposal",
-      "would be submitted",
-      "did"
-    ],
-    "prefilled": [],
-    "prefilled_positions": {},
-    "distractor": "did",
-    "has_question_mark": false,
-    "grammar_points": [
-      "3rd-reporting",
       "embedded question",
-      "passive future"
+      "past perfect",
+      "whom"
     ]
   },
   {
-    "id": "tmp_r11_q3",
-    "prompt": "In the campus cafe, some colleagues were discussing the internship.",
-    "answer": "They asked if the software developer had accepted the offer.",
-    "chunks": [
-      "they",
-      "asked",
-      "if",
-      "the software developer",
-      "had accepted",
-      "the offer",
-      "has"
-    ],
-    "prefilled": [],
-    "prefilled_positions": {},
-    "distractor": "has",
-    "has_question_mark": false,
-    "grammar_points": [
-      "3rd-reporting",
-      "past-perfect"
-    ]
-  },
-  {
-    "id": "tmp_r9_q9",
-    "prompt": "Someone calling tech support is asking about a software update.",
-    "answer": "Could you tell me when the latest security patch was released?",
-    "chunks": [
-      "could",
-      "you tell me",
-      "when",
-      "the latest",
-      "security patch",
-      "was released",
-      "can"
-    ],
-    "prefilled": [],
-    "prefilled_positions": {},
-    "distractor": "can",
-    "has_question_mark": true,
-    "grammar_points": [
-      "interrogative",
-      "embedded question",
-      "passive voice"
-    ]
-  },
-  {
-    "id": "tmp_r11_q6",
-    "prompt": "During the home repair, the neighbor had a question.",
-    "answer": "He wanted to know where the extra tools were stored.",
-    "chunks": [
-      "he",
-      "wanted to know",
-      "where",
-      "the extra tools",
-      "were stored",
-      "are"
-    ],
-    "prefilled": [],
-    "prefilled_positions": {},
-    "distractor": "are",
-    "has_question_mark": false,
-    "grammar_points": [
-      "3rd-reporting",
-      "passive"
-    ]
-  },
-  {
-    "id": "tmp_r12_q3",
-    "prompt": "The project supervisor needed clarification from the team.",
-    "answer": "They needed to find out why the prototype had failed the test.",
-    "chunks": [
-      "they",
-      "needed to",
-      "find out",
-      "why",
-      "the prototype",
-      "had failed",
-      "the test",
-      "did"
-    ],
-    "prefilled": [],
-    "prefilled_positions": {},
-    "distractor": "did",
-    "has_question_mark": false,
-    "grammar_points": [
-      "indirect question",
-      "past perfect"
-    ]
-  },
-  {
-    "id": "tmp_r11_q7",
-    "prompt": "At the registrar's office, the student was reviewing requirements.",
-    "answer": "She asked whether the advanced course had been completed.",
-    "chunks": [
-      "she",
-      "asked",
-      "whether",
-      "had been completed",
-      "has"
-    ],
-    "prefilled": [
-      "the advanced course"
-    ],
-    "prefilled_positions": {
-      "the advanced course": 3
-    },
-    "distractor": "has",
-    "has_question_mark": false,
-    "grammar_points": [
-      "3rd-reporting",
-      "past-perfect-passive"
-    ]
-  },
-  {
-    "id": "tmp_r1_q1",
-    "prompt": "A student is talking to a professor after class. The professor mentions a change to the syllabus. What might the student say to a friend about this?",
-    "answer": "She needed to find out if the final exam date had changed.",
-    "chunks": [
-      "she",
-      "needed to",
-      "find out",
-      "if",
-      "the final",
-      "exam date",
-      "had changed",
-      "did"
-    ],
-    "prefilled": [],
-    "prefilled_positions": {},
-    "distractor": "did",
-    "has_question_mark": false,
-    "grammar_points": [
-      "3rd-reporting",
-      "embedded question",
-      "past perfect"
-    ]
-  },
-  {
-    "id": "tmp_r10_q6",
-    "prompt": "An enthusiastic intern asked a question at the registrar office. She asked, 'What documents are required for the application?'",
-    "answer": "She asked what documents were required for the application.",
-    "chunks": [
-      "she",
-      "asked",
-      "what documents",
-      "were required",
-      "for the application",
-      "are"
-    ],
-    "prefilled": [],
-    "prefilled_positions": {},
-    "distractor": "are",
-    "has_question_mark": false,
-    "grammar_points": [
-      "3rd-reporting",
-      "passive voice"
-    ]
-  },
-  {
-    "id": "tmp_r11_q9",
-    "prompt": "I was reviewing the project timeline with my team.",
-    "answer": "I cannot decide which task should be prioritized first.",
-    "chunks": [
-      "i",
-      "cannot decide",
-      "which task",
-      "should be prioritized",
-      "first",
-      "will"
-    ],
-    "prefilled": [],
-    "prefilled_positions": {},
-    "distractor": "will",
-    "has_question_mark": false,
-    "grammar_points": [
-      "1st-embedded",
-      "modal-passive"
-    ]
-  },
-  {
-    "id": "tmp_r1_q2",
-    "prompt": "A customer is at a clothing store looking for a specific item. What does the clerk report to the manager?",
-    "answer": "He inquired where the new shipment of winter coats was stored.",
-    "chunks": [
-      "he",
-      "inquired",
-      "where",
-      "the new shipment",
-      "of winter coats",
-      "was stored",
-      "did"
-    ],
-    "prefilled": [],
-    "prefilled_positions": {},
-    "distractor": "did",
-    "has_question_mark": false,
-    "grammar_points": [
-      "3rd-reporting",
-      "embedded question",
-      "passive voice"
-    ]
-  },
-  {
-    "id": "tmp_r3_q3",
-    "prompt": "Some colleagues were discussing the internship interview. What did they inquire about?",
-    "answer": "They asked why the candidate had arrived so late.",
-    "chunks": [
-      "they",
-      "asked",
-      "why",
-      "the candidate",
-      "had arrived",
-      "so late",
-      "arrive"
-    ],
-    "prefilled": [],
-    "prefilled_positions": {},
-    "distractor": "arrive",
-    "has_question_mark": false,
-    "grammar_points": [
-      "3rd-reporting",
-      "embedded question",
-      "past perfect"
-    ]
-  },
-  {
-    "id": "tmp_r3_q2",
-    "prompt": "The local librarian was helping a student. What did the student ask?",
-    "answer": "He wondered where the new science fiction novels were located.",
-    "chunks": [
-      "he",
-      "wondered",
-      "where",
-      "the new science",
-      "fiction novels",
-      "were located",
-      "did"
-    ],
-    "prefilled": [],
-    "prefilled_positions": {},
-    "distractor": "did",
-    "has_question_mark": false,
-    "grammar_points": [
-      "3rd-reporting",
-      "embedded question",
-      "passive"
-    ]
-  },
-  {
-    "id": "tmp_r1_q8",
-    "prompt": "An enthusiastic intern is reflecting on their first week. They realize they missed a key detail in the initial training. What might they admit?",
-    "answer": "I had not realized how important the safety protocols were.",
+    "id": "tmp_r6_q10",
+    "prompt": "The project supervisor is reflecting on a past misunderstanding. What did she say?",
+    "answer": "I had not realized the report you submitted was incomplete.",
     "chunks": [
       "i",
       "had not realized",
-      "how important",
-      "the safety protocols",
-      "were"
+      "the report",
+      "you submitted",
+      "was incomplete"
     ],
     "prefilled": [],
     "prefilled_positions": {},
@@ -613,21 +696,115 @@
     "grammar_points": [
       "negation",
       "past perfect",
-      "embedded clause",
-      "superlative-like"
+      "contact clause",
+      "embedded clause"
     ]
   },
   {
-    "id": "tmp_r8_q6",
-    "prompt": "The project supervisor needed information from the tech support team.",
-    "answer": "She inquired whether the server had been rebooted already.",
+    "id": "tmp_r8_q8",
+    "prompt": "A tour guide is answering questions about a historical site. What does a tourist ask?",
+    "answer": "Can you tell us when the castle you mentioned was finally completed?",
     "chunks": [
-      "she",
-      "inquired",
-      "whether",
-      "the server",
-      "had been rebooted",
-      "already",
+      "can you",
+      "tell us",
+      "when",
+      "the castle",
+      "you mentioned",
+      "was finally completed",
+      "complete"
+    ],
+    "prefilled": [],
+    "prefilled_positions": {},
+    "distractor": "complete",
+    "has_question_mark": true,
+    "grammar_points": [
+      "interrogative",
+      "embedded question",
+      "contact clause",
+      "passive voice"
+    ]
+  },
+  {
+    "id": "tmp_r2_q6",
+    "prompt": "You're helping a volunteer plan a community event. What's a simple thing you're unsure about?",
+    "answer": "I can't decide which meeting room is the largest.",
+    "chunks": [
+      "i",
+      "can't decide",
+      "which meeting room",
+      "is",
+      "the largest"
+    ],
+    "prefilled": [],
+    "prefilled_positions": {},
+    "distractor": null,
+    "has_question_mark": false,
+    "grammar_points": [
+      "1st-embedded",
+      "superlative",
+      "contact-clause"
+    ]
+  },
+  {
+    "id": "tmp_r7_q6",
+    "prompt": "Some colleagues were discussing the new office layout.",
+    "answer": "They wondered if the new desks had already been delivered.",
+    "chunks": [
+      "they",
+      "wondered",
+      "if",
+      "the new desks",
+      "had already",
+      "been delivered",
+      "did"
+    ],
+    "prefilled": [],
+    "prefilled_positions": {},
+    "distractor": "did",
+    "has_question_mark": false,
+    "grammar_points": [
+      "3rd-reporting",
+      "embedded question",
+      "past perfect passive"
+    ]
+  },
+  {
+    "id": "tmp_r5_q9",
+    "prompt": "The enthusiastic intern was reflecting on a missed opportunity.",
+    "answer": "I had not realized whom the project supervisor wanted me to contact.",
+    "chunks": [
+      "i",
+      "whom",
+      "the project supervisor",
+      "wanted me",
+      "to contact",
+      "who"
+    ],
+    "prefilled": [
+      "had not realized"
+    ],
+    "prefilled_positions": {
+      "had not realized": 1
+    },
+    "distractor": "who",
+    "has_question_mark": false,
+    "grammar_points": [
+      "negation",
+      "past-perfect",
+      "whom",
+      "complex-object"
+    ]
+  },
+  {
+    "id": "tmp_r6_q2",
+    "prompt": "A young architect needed some information. What did he ask?",
+    "answer": "He asked where the final blueprints had been sent.",
+    "chunks": [
+      "he",
+      "asked",
+      "where",
+      "the final blueprints",
+      "had been sent",
       "have"
     ],
     "prefilled": [],
@@ -635,77 +812,103 @@
     "distractor": "have",
     "has_question_mark": false,
     "grammar_points": [
-      "3rd-reporting",
-      "past perfect passive",
-      "embedded question"
+      "3rd reporting",
+      "wh-clause",
+      "past perfect passive"
     ]
   },
   {
-    "id": "tmp_r10_q8",
-    "prompt": "The professor at the study group session was not sure. He asked, 'Have all the students who were absent submitted their assignments?'",
-    "answer": "He was not sure if all the absent students had submitted their assignments.",
-    "chunks": [
-      "he",
-      "was not sure",
-      "if",
-      "all the",
-      "absent students",
-      "had submitted",
-      "their assignments"
-    ],
-    "prefilled": [],
-    "prefilled_positions": {},
-    "distractor": null,
-    "has_question_mark": false,
-    "grammar_points": [
-      "3rd-reporting",
-      "past perfect",
-      "reduced relative clause"
-    ]
-  },
-  {
-    "id": "tmp_r12_q2",
-    "prompt": "At the customs desk, the officer had a question about the traveler's declaration.",
-    "answer": "He asked if the passenger had anything to declare.",
-    "chunks": [
-      "he",
-      "asked",
-      "if",
-      "the passenger",
-      "had",
-      "anything to declare",
-      "does"
-    ],
-    "prefilled": [],
-    "prefilled_positions": {},
-    "distractor": "does",
-    "has_question_mark": false,
-    "grammar_points": [
-      "indirect question",
-      "past perfect"
-    ]
-  },
-  {
-    "id": "tmp_r10_q4",
-    "prompt": "The travel blogger inquired. She asked, 'Why did the art gallery close early on Tuesday?'",
-    "answer": "She inquired why the art gallery had closed early on Tuesday.",
+    "id": "tmp_r1_q2",
+    "prompt": "The software developer needed to confirm the meeting details.",
+    "answer": "She asked if the project review had been rescheduled.",
     "chunks": [
       "she",
-      "inquired",
-      "why",
-      "the art gallery",
-      "had closed",
-      "early",
-      "on tuesday",
-      "did"
+      "asked",
+      "if",
+      "the project review",
+      "had been rescheduled",
+      "has"
     ],
     "prefilled": [],
     "prefilled_positions": {},
-    "distractor": "did",
+    "distractor": "has",
+    "has_question_mark": false,
+    "grammar_points": [
+      "3rd-person reporting",
+      "embedded question",
+      "passive voice"
+    ]
+  },
+  {
+    "id": "tmp_r9_q6",
+    "prompt": "A student at the registrar's office is inquiring about a complex procedure.",
+    "answer": "Could you tell me why the application you submitted was rejected?",
+    "chunks": [
+      "could you",
+      "tell me",
+      "why",
+      "the application",
+      "you submitted",
+      "was rejected",
+      "submit"
+    ],
+    "prefilled": [],
+    "prefilled_positions": {},
+    "distractor": "submit",
+    "has_question_mark": true,
+    "grammar_points": [
+      "embedded question",
+      "contact clause",
+      "passive"
+    ]
+  },
+  {
+    "id": "tmp_r9_q8",
+    "prompt": "A member at the gym is asking the trainer about an advanced technique.",
+    "answer": "Can you explain how the weight you lifted was calculated for your program?",
+    "chunks": [
+      "can you explain",
+      "how",
+      "the weight",
+      "you lifted",
+      "was calculated",
+      "for your program",
+      "calculate"
+    ],
+    "prefilled": [],
+    "prefilled_positions": {},
+    "distractor": "calculate",
+    "has_question_mark": true,
+    "grammar_points": [
+      "embedded question",
+      "contact clause",
+      "passive"
+    ]
+  },
+  {
+    "id": "tmp_r5_q3",
+    "prompt": "Some colleagues were discussing the new software update.",
+    "answer": "They asked if the latest security patch had been installed yet.",
+    "chunks": [
+      "they",
+      "asked",
+      "if",
+      "the latest",
+      "security patch",
+      "had been installed",
+      "have"
+    ],
+    "prefilled": [
+      "yet"
+    ],
+    "prefilled_positions": {
+      "yet": 10
+    },
+    "distractor": "have",
     "has_question_mark": false,
     "grammar_points": [
       "3rd-reporting",
-      "past perfect"
+      "past-perfect-passive"
     ]
   }
 ]

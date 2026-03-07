@@ -337,18 +337,18 @@ function buildRejectFeedbackHints(rejectReasons) {
 // Type × difficulty specific instructions for targeted generation
 const TYPE_DIFFICULTY_HINTS = {
   "negation": {
-    easy: `ALL 10 answers: simple negative statement, 7-10 words.
+    easy: `ALL answers in this group: simple negative statement, 7-10 words.
 Structure: "I did not [verb]�? / "I could not [verb]�? / "I am not [adj]�? / "I have not [past-p] yet."
 NO embedded questions. NO relative clauses. Direct and clear.
 Prompt: YES/NO question ("Did you attend�?", "Have you�?", "Are you going�?")
 Distractor: "did" or "do" or morphological variant (e.g. "going" for "go").`,
-    medium: `ALL 10 answers: negative statement 9-12 words, optionally with short embedded element.
+    medium: `ALL answers in this group: negative statement 9-12 words, optionally with short embedded element.
 Examples:
 - "Unfortunately, I could not attend due to a prior commitment."
 - "I did not understand what the manager explained."
 - "I have not received the workshop details yet."
 Prompt: direct question or narrative context. Distractor: "did"/"do" or morphological variant.`,
-    hard: `ALL 10 answers: negation + advanced grammar complexity, usually 10-13 words.
+    hard: `ALL answers in this group: negation + advanced grammar complexity, usually 10-13 words.
 Examples:
 - "I had not realized how quickly the project deadline was approaching."
 - "I did not understand why the meeting had been postponed again."
@@ -356,18 +356,18 @@ Hard MUST be created by structure, not by extra length alone. Prefer past perfec
 Distractor: morphological variant (e.g. "realized/realize", "approaching/approach").`,
   },
   "3rd-reporting": {
-    easy: `ALL 10 answers: short third-person reporting, 8-10 words.
+    easy: `ALL answers in this group: short third-person reporting, 8-10 words.
 Structure: "[Name] wanted to know if [short clause]." / "[Name] asked me what time�?
 Examples:
 - "He wants to know if you need a ride."
 - "She asked me what time the meeting starts."
 Prompt: "What did [Name] ask/want?" Distractor: "did" or "do".`,
-    medium: `ALL 10 answers: third-person reporting, 10-13 words.
+    medium: `ALL answers in this group: third-person reporting, 10-13 words.
 Structure: "[Name/They] [wanted to know / asked / was curious / needed to know] [wh/if clause]"
 Vary subjects: he / she / they / the manager / the professor / some colleagues
 Vary wh-words across the batch: if(3), what(2), where(2), why(2), when(1)
 Declarative word order in clause (NO inversion). Distractor: "did"/"do" for most.`,
-    hard: `ALL 10 answers: third-person reporting with structurally complex embedded clause, usually 10-13 words.
+    hard: `ALL answers in this group: third-person reporting with structurally complex embedded clause, usually 10-13 words.
 Complexity options:
 - Past perfect in clause: "He wanted to know where all the files had gone."
 - Passive in clause: "She wanted to know when the report would be submitted."
@@ -377,20 +377,20 @@ Hard MUST come from grammar complexity, not from padding the sentence. Hard MUST
 Distractor: morphological variant or "whom/who", "where/when" function-word swap.`,
   },
   "1st-embedded": {
-    easy: `ALL 10 answers: first-person "no idea" structure, 8-10 words.
+    easy: `ALL answers in this group: first-person "no idea" structure, 8-10 words.
 Examples:
 - "I have no idea where they are going."
 - "I have no idea what time the event starts."
 Prompt: direct question the speaker can't answer ("Do you know�?", "Where is�?")
 Distractor: "do" or "did".`,
-    medium: `ALL 10 answers: first-person embedded, 10-13 words.
+    medium: `ALL answers in this group: first-person embedded, 10-13 words.
 Examples:
 - "I don't understand why he decided to quit the team."
 - "I found out where the new office supplies are kept."
 - "I can't decide which project topic is the most important."
 - "I have no idea who will be leading the committee."
 Distractor: "did"/"does" or function-word variant.`,
-    hard: `ALL 10 answers: complex first-person embedded, usually 10-13 words.
+    hard: `ALL answers in this group: complex first-person embedded, usually 10-13 words.
 Examples:
 - "I would love to know which restaurant you enjoyed the most." (superlative)
 - "I have not been told who will be responsible for the final report." (passive + embedded)
@@ -399,18 +399,18 @@ Include passive voice OR superlative/comparative OR perfect aspect in the embedd
 Distractor: morphological variant (e.g. "enjoyed/enjoy", "stored/store").`,
   },
   "interrogative": {
-    easy: `ALL 10 answers use "Can you tell me�?" or "Could you tell me�?" frame, 8-11 words.
+    easy: `ALL answers in this group use "Can you tell me�?" or "Could you tell me�?" frame, 8-11 words.
 Examples:
 - "Can you tell me what your plans are for tomorrow?"
 - "Can you tell me if the professor covered any new material?"
 Prompt: conversational comment that leads to a question.
 Distractor: "did"/"do" or "can".`,
-    medium: `ALL 10 answers use interrogative frame, 10-13 words, moderate embedded complexity.
+    medium: `ALL answers in this group use interrogative frame, 10-13 words, moderate embedded complexity.
 Examples:
 - "Could you tell me how you are feeling about the new policy?"
 - "Can you tell me what you did not enjoy about the presentation?"
 Distractor: morphological variant or "can"/"could" swap.`,
-    hard: `ALL 10 answers use interrogative frame with complex embedded question, usually 10-13 words.
+    hard: `ALL answers in this group use interrogative frame with complex embedded question, usually 10-13 words.
 Examples:
 - "Can you tell me why you decided to choose this particular research topic?"
 - "Could you tell me how the project team managed to finish ahead of schedule?"
@@ -419,14 +419,14 @@ Hard MUST come from the embedded grammar challenge: tense/aspect mismatch risk, 
 Distractor: morphological variant (e.g. "decided/decide", "managed/manage").`,
   },
   "direct": {
-    medium: `ALL 10 answers: direct declarative statement (no reporting verb, no negation), 9-12 words.
+    medium: `ALL answers in this group: direct declarative statement (no reporting verb, no negation), 9-12 words.
 Describe a situation, location, preference, or fact.
 Examples:
 - "I found the work environment at this company to be much more relaxed."
 - "The store next to the post office sells all types of winter apparel."
 Prompt: direct question about what happened or what the speaker did.
 Distractor: morphological variant (e.g. "relaxed/relax", "sells/sold").`,
-    hard: `ALL 10 answers: complex direct statement, usually 10-13 words, with comparative or structurally dense modification.
+    hard: `ALL answers in this group: complex direct statement, usually 10-13 words, with comparative or structurally dense modification.
 Examples:
 - "This coffee tastes better than all of the other brands I have tried."
 - "I found it in the back of the furniture section at the local superstore."
@@ -435,14 +435,14 @@ Prefer comparative/superlative structures, dense modifiers, or other learner-unf
 Distractor: morphological variant or comparative swap ("better/good", "only/once").`,
   },
   "relative": {
-    medium: `ALL 10 answers: contact/relative clause structure, 9-12 words.
+    medium: `ALL answers in this group: contact/relative clause structure, 9-12 words.
 "The [noun] [I/you] [verb]�? (contact clause �?omitted relative pronoun, object only)
 Examples:
 - "The bookstore I stopped by had the novel in stock."
 - "The diner that opened last week serves many delicious entrees."
 Prompt: question about where/what the speaker found.
 Distractor: morphological variant (e.g. "stopped/stop", "opened/open").`,
-    hard: `ALL 10 answers: relative/contact clause with additional complexity, usually 10-13 words.
+    hard: `ALL answers in this group: relative/contact clause with additional complexity, usually 10-13 words.
 Combine relative clause with:
 - Passive: "The desk you ordered is scheduled to arrive on Friday."
 - Comparative: "This coffee tastes better than all the other brands I've tried."
@@ -719,7 +719,324 @@ function computePoolState(pool) {
 /**
  * Build planner prompt: AI analyzes pool gaps and outputs a mixed batch spec.
  */
-function buildPlannerPrompt(poolState, difficultyTargets, globalTypeTargets, styleTargets = null) {
+function chooseGapWeightedType(poolState, globalTypeTargets, candidates, fallback) {
+  const totals = poolState?.typeTotals || {};
+  const ranked = (Array.isArray(candidates) ? candidates : []).map((type) => ({
+    type,
+    gap: Math.max(0, (globalTypeTargets?.[type] || 0) - (totals[type] || 0)),
+    have: totals[type] || 0,
+  })).sort((a, b) => {
+    if (b.gap !== a.gap) return b.gap - a.gap;
+    return a.have - b.have;
+  });
+  return ranked[0]?.type || fallback;
+}
+
+function buildBoostBacklog(poolState, pool, difficultyTargets, globalTypeTargets, styleTargets) {
+  const tasks = [];
+  const pushTask = (task, repeat = 1) => {
+    for (let i = 0; i < repeat; i += 1) tasks.push({ ...task });
+  };
+  const totals = poolState?.typeTotals || {};
+  const diffTargets = difficultyTargets || {};
+  const diffGaps = {
+    easy: Math.max(0, (diffTargets.easy || 0) - (pool.easy?.length || 0)),
+    medium: Math.max(0, (diffTargets.medium || 0) - (pool.medium?.length || 0)),
+    hard: Math.max(0, (diffTargets.hard || 0) - (pool.hard?.length || 0)),
+  };
+
+  const perSetNeeds = ETS_2026_TARGET_COUNTS_10;
+  const embeddedCounts = {
+    easy: (pool.easy || []).filter((q) => q._meta?.isEmbedded).length,
+    medium: (pool.medium || []).filter((q) => q._meta?.isEmbedded).length,
+    hard: (pool.hard || []).filter((q) => q._meta?.isEmbedded).length,
+  };
+  const distractorCounts = {
+    easy: (pool.easy || []).filter((q) => q._meta?.hasDistractor).length,
+    medium: (pool.medium || []).filter((q) => q._meta?.hasDistractor).length,
+    hard: (pool.hard || []).filter((q) => q._meta?.hasDistractor).length,
+  };
+
+  for (const diff of ['medium', 'hard', 'easy']) {
+    const missing = Math.max(0, (perSetNeeds[diff] || 0) - Math.min(perSetNeeds[diff] || 0, embeddedCounts[diff] || 0));
+    if (missing > 0) {
+      pushTask({
+        priority: 100,
+        kind: 'assembly_embedded',
+        type: chooseGapWeightedType(poolState, globalTypeTargets, diff === 'easy' ? ['3rd-reporting', '1st-embedded'] : ['1st-embedded', '3rd-reporting'], '1st-embedded'),
+        difficulty: diff,
+        hint: 'BOOST TARGET: generate exactly one embedded-capable item that helps the next set satisfy the embedded-question minimum. Avoid interrogative inversion errors. Prefer a safe single-word distractor if natural.',
+      }, missing);
+    }
+  }
+
+  for (const diff of ['medium', 'easy', 'hard']) {
+    const missing = Math.max(0, (perSetNeeds[diff] || 0) - Math.min(perSetNeeds[diff] || 0, distractorCounts[diff] || 0));
+    if (missing > 0) {
+      pushTask({
+        priority: 95,
+        kind: 'assembly_distractor',
+        type: chooseGapWeightedType(poolState, globalTypeTargets, diff === 'easy' ? ['3rd-reporting', 'negation'] : ['3rd-reporting', '1st-embedded', 'relative'], '3rd-reporting'),
+        difficulty: diff,
+        hint: 'BOOST TARGET: generate exactly one item with a valid single-word distractor. The distractor must not appear in the answer and must not create another valid sentence.',
+      }, missing);
+    }
+  }
+
+  for (const diff of ['medium', 'easy', 'hard']) {
+    const gap = diffGaps[diff] || 0;
+    if (gap > 0) {
+      const fallback = diff === 'easy' ? 'negation' : diff === 'hard' ? '3rd-reporting' : '3rd-reporting';
+      const candidates = diff === 'easy'
+        ? ['negation', '3rd-reporting']
+        : diff === 'hard'
+        ? ['3rd-reporting', '1st-embedded', 'relative']
+        : ['3rd-reporting', '1st-embedded', 'relative', 'negation'];
+      pushTask({
+        priority: 80,
+        kind: 'difficulty_gap',
+        type: chooseGapWeightedType(poolState, globalTypeTargets, candidates, fallback),
+        difficulty: diff,
+        hint: 'BOOST TARGET: generate exactly one ' + diff + ' item. Do not change the intended difficulty by using abnormal answer length; rely on the correct grammar profile.',
+      }, gap);
+    }
+  }
+
+  const style = poolState?.style || { embedded: 0, negation: 0, distractor: 0 };
+  const embeddedGap = Math.max(0, (styleTargets?.embeddedMin || 0) - style.embedded);
+  if (embeddedGap > 0) {
+    pushTask({
+      priority: 70,
+      kind: 'style_embedded',
+      type: chooseGapWeightedType(poolState, globalTypeTargets, ['1st-embedded', '3rd-reporting'], '1st-embedded'),
+      difficulty: diffGaps.hard > 0 ? 'hard' : 'medium',
+      hint: 'BOOST TARGET: generate exactly one embedded-question item with declarative word order inside the clause. Do not invert the embedded clause.',
+    }, embeddedGap);
+  }
+  const negationGap = Math.max(0, (styleTargets?.negationMin || 0) - style.negation);
+  if (negationGap > 0) {
+    pushTask({
+      priority: 68,
+      kind: 'style_negation',
+      type: 'negation',
+      difficulty: diffGaps.hard > 0 ? 'hard' : 'medium',
+      hint: 'BOOST TARGET: generate exactly one negation item. Verify the word bag carefully so every answer word is covered exactly once.',
+    }, negationGap);
+  }
+  const distractorGap = Math.max(0, (styleTargets?.distractorMin || 0) - style.distractor);
+  if (distractorGap > 0) {
+    pushTask({
+      priority: 66,
+      kind: 'style_distractor',
+      type: chooseGapWeightedType(poolState, globalTypeTargets, ['3rd-reporting', '1st-embedded', 'relative'], '3rd-reporting'),
+      difficulty: 'medium',
+      hint: 'BOOST TARGET: generate exactly one item with a safe single-word distractor. Avoid optional adverbs or words that could also fit the sentence.',
+    }, distractorGap);
+  }
+
+  for (const type of TYPE_LIST) {
+    const gap = Math.max(0, (globalTypeTargets?.[type] || 0) - (totals[type] || 0));
+    if (gap <= 0) continue;
+    if (type === 'interrogative') continue;
+    pushTask({
+      priority: type === '3rd-reporting' ? 60 : 55,
+      kind: 'type_gap',
+      type,
+      difficulty: type === 'negation' ? 'medium' : type === 'relative' ? 'medium' : diffGaps.hard > 0 && type === '3rd-reporting' ? 'hard' : 'medium',
+      hint: 'BOOST TARGET: generate exactly one ' + type + ' item that clearly matches its declared type and remains TPO-like.',
+    }, gap);
+  }
+
+  return tasks.sort((a, b) => b.priority - a.priority);
+}
+
+function buildBoostTaskHint(task) {
+  if (!task) return '';
+  return [
+    task.hint || '',
+    'BOOST TASK TYPE: ' + task.type,
+    'BOOST TASK DIFFICULTY: ' + task.difficulty,
+    'Return exactly one item for this task. Do not hedge by mixing multiple target structures.',
+  ].filter(Boolean).join('\n');
+}
+
+function buildBoostShortageRanking(poolState, pool, difficultyTargets, globalTypeTargets, styleTargets) {
+  const shortages = [];
+  const diffGaps = {
+    easy: Math.max(0, (difficultyTargets?.easy || 0) - (pool?.easy?.length || 0)),
+    medium: Math.max(0, (difficultyTargets?.medium || 0) - (pool?.medium?.length || 0)),
+    hard: Math.max(0, (difficultyTargets?.hard || 0) - (pool?.hard?.length || 0)),
+  };
+  const style = poolState?.style || { embedded: 0, negation: 0, distractor: 0, qmark: 0 };
+  const styleGaps = {
+    embedded: Math.max(0, (styleTargets?.embeddedMin || 0) - style.embedded),
+    negation: Math.max(0, (styleTargets?.negationMin || 0) - style.negation),
+    distractor: Math.max(0, (styleTargets?.distractorMin || 0) - style.distractor),
+  };
+  const typeTotals = poolState?.typeTotals || Object.fromEntries(TYPE_LIST.map((type) => [type, 0]));
+  const typeGaps = Object.fromEntries(
+    TYPE_LIST.map((type) => [type, Math.max(0, (globalTypeTargets?.[type] || 0) - (typeTotals[type] || 0))]),
+  );
+
+  if (styleGaps.embedded > 0) {
+    shortages.push({
+      key: 'embedded',
+      category: 'style',
+      gap: styleGaps.embedded,
+      priority: 100,
+      guidance: 'Generate embedded-capable items only. Prefer 1st-embedded or interrogative. Use 3rd-reporting only if it clearly contains an indirect question clause.',
+    });
+  }
+  if (styleGaps.negation > 0) {
+    shortages.push({
+      key: 'negation',
+      category: 'style',
+      gap: styleGaps.negation,
+      priority: 95,
+      guidance: 'Generate negation items only. Prefer medium negation unless the main difficulty gap is hard.',
+    });
+  }
+  if (diffGaps.hard > 0) {
+    shortages.push({
+      key: 'hard',
+      category: 'difficulty',
+      gap: diffGaps.hard,
+      priority: 90,
+      guidance: 'Generate hard items only, and make them hard through advanced grammar rather than length.',
+    });
+  }
+  if (diffGaps.medium > 0) {
+    shortages.push({
+      key: 'medium',
+      category: 'difficulty',
+      gap: diffGaps.medium,
+      priority: 70,
+      guidance: 'Generate medium items only. Do not spend this patch on easy or hard unless that is the blocking gap.',
+    });
+  }
+  if (diffGaps.easy > 0) {
+    shortages.push({
+      key: 'easy',
+      category: 'difficulty',
+      gap: diffGaps.easy,
+      priority: 60,
+      guidance: 'Generate easy items only. Keep syntax simple and avoid over-engineering.',
+    });
+  }
+
+  for (const [type, gap] of Object.entries(typeGaps)) {
+    if (gap <= 0) continue;
+    const priority = type === '3rd-reporting' ? 55 : type === 'direct' ? 25 : 45;
+    shortages.push({
+      key: type,
+      category: 'type',
+      gap,
+      priority,
+      guidance: 'Prefer ' + type + ' items when no higher-priority style or difficulty shortage is still open.',
+    });
+  }
+
+  if (styleGaps.distractor > 0) {
+    shortages.push({
+      key: 'distractor',
+      category: 'style',
+      gap: styleGaps.distractor,
+      priority: 20,
+      guidance: 'Only use this as a secondary objective. Prefer item types that naturally support a safe single-word distractor.',
+    });
+  }
+
+  return shortages.sort((a, b) => {
+    if (b.priority !== a.priority) return b.priority - a.priority;
+    return b.gap - a.gap;
+  });
+}
+
+function determineBoostGoals(shortages, targetTotal = 3) {
+  const ordered = Array.isArray(shortages) ? shortages : [];
+  const primary = ordered[0] || null;
+  let secondary = null;
+  if (!primary || targetTotal <= 1) return { primary, secondary };
+
+  const find = (predicate) => ordered.find((item, index) => index > 0 && predicate(item)) || null;
+
+  if (primary.key === 'embedded') {
+    secondary = find((item) => item.key === 'negation' || item.key === 'hard');
+  } else if (primary.key === 'negation') {
+    secondary = find((item) => item.key === 'embedded' || item.key === 'hard');
+  } else if (primary.key === 'hard') {
+    secondary = find((item) => item.key === 'embedded' || item.key === 'negation');
+  } else if (primary.key === 'medium' || primary.key === 'easy') {
+    secondary = find((item) => item.category === 'style');
+  } else if (primary.category === 'type') {
+    secondary = find((item) => item.category === 'style' || item.category === 'difficulty');
+  } else {
+    secondary = find((item) => item.category === 'style');
+  }
+
+  return { primary, secondary };
+}
+
+function getGoalAllowedTypes(goal) {
+  if (!goal) return TYPE_LIST.slice();
+  if (goal.key === 'embedded') return ['1st-embedded', 'interrogative', '3rd-reporting'];
+  if (goal.key === 'negation') return ['negation'];
+  if (goal.category === 'type') return [goal.key];
+  return TYPE_LIST.slice();
+}
+
+function getGoalAllowedDifficulties(goal) {
+  if (!goal) return ['easy', 'medium', 'hard'];
+  if (goal.key === 'hard') return ['hard'];
+  if (goal.key === 'medium') return ['medium'];
+  if (goal.key === 'easy') return ['easy'];
+  return ['easy', 'medium', 'hard'];
+}
+
+function buildBoostPlannerPrompt(poolState, pool, difficultyTargets, globalTypeTargets, styleTargets, targetTotal = 3, goals = null) {
+  const shortages = buildBoostShortageRanking(poolState, pool, difficultyTargets, globalTypeTargets, styleTargets);
+  const chosenGoals = goals || determineBoostGoals(shortages, targetTotal);
+  const primary = chosenGoals?.primary || null;
+  const secondary = chosenGoals?.secondary || null;
+  const primaryTypes = getGoalAllowedTypes(primary);
+  const primaryDifficulties = getGoalAllowedDifficulties(primary);
+  const secondaryTypes = getGoalAllowedTypes(secondary);
+  const secondaryDifficulties = getGoalAllowedDifficulties(secondary);
+
+  const goalLines = [
+    'Primary goal: ' + (primary ? (primary.category + ':' + primary.key + ' gap=' + primary.gap) : 'none'),
+    'Secondary goal: ' + (secondary ? (secondary.category + ':' + secondary.key + ' gap=' + secondary.gap) : 'none'),
+  ];
+
+  return `You are a TOEFL Build-a-Sentence BOOST planner.
+
+This is not a normal batch-planning task.
+You are patching the pool with a tiny surgical batch to fix the single most blocking shortage.
+
+Chosen goals:
+${goalLines.join("\n")}
+
+Allowed planning space:
+- Primary allowed types: ${primaryTypes.join(', ')}
+- Primary allowed difficulties: ${primaryDifficulties.join(', ')}
+- Secondary allowed types: ${secondaryTypes.join(', ')}
+- Secondary allowed difficulties: ${secondaryDifficulties.join(', ')}
+
+Rules for this boost patch:
+- Return a JSON array totaling exactly ${targetTotal} question(s).
+- Use at most 2 cells. One cell is preferred.
+- At least ${Math.max(1, targetTotal - (secondary ? 1 : 0))} question(s) must satisfy the primary goal.
+- If you use a secondary cell at all, it must satisfy the secondary goal shown above.
+- Do not plan any type or difficulty outside the allowed planning space.
+- Do not try to balance the whole pool.
+- Avoid direct items unless direct is explicitly listed in the chosen goals.
+- Keep the patch precise. This is a repair batch, not a broad exploration batch.
+
+Return ONLY a JSON array. No markdown. No explanation.
+[{"type":"...","difficulty":"...","count":N}, ...]`.trim();
+}
+
+function buildPlannerPrompt(poolState, difficultyTargets, globalTypeTargets, styleTargets = null, targetTotal = 10, mode = "normal") {
   const diffRows = ["easy", "medium", "hard"]
     .map((diff) => {
       const have = TYPE_LIST.reduce((sum, type) => sum + ((poolState[diff] || {})[type] || 0), 0);
@@ -766,9 +1083,9 @@ Global type coverage needed for the whole pool:
 ${typeLines.join("\n")}
 ${styleSection}
 
-Design the next generation batch (exactly 10 questions total) to most efficiently fill the largest GLOBAL gaps.
+Design the next generation batch (exactly ${targetTotal} questions total) to most efficiently fill the largest GLOBAL gaps.
 Rules:
-- Sum of all count fields must equal exactly 10.
+- Sum of all count fields must equal exactly ${targetTotal}.
 - First satisfy the largest difficulty gaps (easy / medium / hard).
 - Then satisfy the largest GLOBAL TYPE gaps across the whole pool. Do NOT assume every set needs the same fixed type recipe.
 - Skip categories with gap <= 0 unless needed to support style coverage.
@@ -779,6 +1096,7 @@ Rules:
 - Valid types: negation, 3rd-reporting, 1st-embedded, interrogative, direct, relative
 - Valid difficulties: easy, medium, hard
 - Avoid over-producing direct items when direct gap is already filled.
+- In boost mode, prioritize precision over breadth: target the single most blocking gap first.
 - If all gaps are <= 0, return a balanced mixed batch that does not overproduce direct items.
 
 Return ONLY a JSON array. No markdown. No explanation.
@@ -788,7 +1106,7 @@ Return ONLY a JSON array. No markdown. No explanation.
 /**
  * Parse planner AI output into a validated spec array totaling exactly 10 questions.
  */
-function parsePlannerSpec(text) {
+function parsePlannerSpec(text, targetTotal = 10) {
   try {
     const arr = parseJsonArray(text);
     if (!Array.isArray(arr) || arr.length === 0) throw new Error("empty");
@@ -796,27 +1114,31 @@ function parsePlannerSpec(text) {
       .filter((x) => x && typeof x.type === "string" && typeof x.difficulty === "string" && Number(x.count) > 0)
       .map((x) => ({ type: String(x.type), difficulty: String(x.difficulty), count: Number(x.count) }));
     if (valid.length === 0) throw new Error("no valid items");
-    // Normalize to exactly 10
-    const total = valid.reduce((s, x) => s + x.count, 0);
-    if (total !== 10) {
-      const scale = 10 / total;
-      let remaining = 10;
-      valid.forEach((x, i) => {
-        if (i < valid.length - 1) {
-          x.count = Math.max(1, Math.round(x.count * scale));
-          remaining -= x.count;
-        } else {
-          x.count = Math.max(1, remaining);
-        }
-      });
+    if (targetTotal <= 1) {
+      const top = valid.sort((a, b) => b.count - a.count)[0];
+      return [{ type: top.type, difficulty: top.difficulty, count: 1 }];
     }
-    return valid;
+
+    const ranked = valid.sort((a, b) => b.count - a.count);
+    if (ranked.length >= targetTotal) {
+      return ranked.slice(0, targetTotal).map((x) => ({ type: x.type, difficulty: x.difficulty, count: 1 }));
+    }
+
+    const normalized = ranked.map((x) => ({ ...x, count: 1 }));
+    let remaining = targetTotal - normalized.length;
+    let cursor = 0;
+    while (remaining > 0 && normalized.length > 0) {
+      normalized[cursor % normalized.length].count += 1;
+      remaining -= 1;
+      cursor += 1;
+    }
+    return normalized;
   } catch (_) {
-    return [{ type: "3rd-reporting", difficulty: "medium", count: 10 }];
+    return [{ type: "3rd-reporting", difficulty: "medium", count: targetTotal }];
   }
 }
 
-function enforcePlannerStyleGaps(spec, poolState, styleTargets, globalTypeTargets = null, difficultyTargets = null) {
+function enforcePlannerStyleGaps(spec, poolState, styleTargets, globalTypeTargets = null, difficultyTargets = null, targetTotal = 10) {
   const out = Array.isArray(spec) ? spec.map((x) => ({ ...x })) : [];
   if (out.length === 0) return out;
 
@@ -829,7 +1151,7 @@ function enforcePlannerStyleGaps(spec, poolState, styleTargets, globalTypeTarget
   );
 
   const total = out.reduce((sum, x) => sum + x.count, 0);
-  if (total !== 10) return out;
+  if (total !== targetTotal) return out;
 
   const difficultyGapOrder = ["easy", "medium", "hard"].sort((a, b) => {
     const aHave = TYPE_LIST.reduce((sum, type) => sum + ((poolState?.[a] || {})[type] || 0), 0);
@@ -848,7 +1170,12 @@ function enforcePlannerStyleGaps(spec, poolState, styleTargets, globalTypeTarget
         if (aPenalty !== bPenalty) return bPenalty - aPenalty;
         return b.count - a.count;
       })[0];
-    if (!donor) return;
+    if (!donor) {
+      if (out.length === 1 && targetTotal === 1) {
+        out[0] = { type: preferredType, difficulty: preferredDifficulty || difficultyGapOrder[0] || "medium", count: 1 };
+      }
+      return;
+    }
     donor.count -= 1;
     const targetDifficulty = preferredDifficulty || difficultyGapOrder[0] || "medium";
     const existing = out.find((x) => x.type === preferredType && x.difficulty === targetDifficulty);
@@ -892,6 +1219,58 @@ function enforcePlannerStyleGaps(spec, poolState, styleTargets, globalTypeTarget
 
   return out.filter((x) => x.count > 0);
 }
+
+function tightenBoostSpec(spec, shortages, targetTotal = 3) {
+  const out = Array.isArray(spec) ? spec.map((x) => ({ ...x })) : [];
+  if (out.length === 0 || !Array.isArray(shortages) || shortages.length === 0) return out;
+
+  const { primary, secondary } = determineBoostGoals(shortages, targetTotal);
+  if (!primary) return out;
+  const primaryAllowedTypes = getGoalAllowedTypes(primary);
+  const primaryAllowedDifficulties = getGoalAllowedDifficulties(primary);
+
+  const preferred = [];
+  const pushCell = (type, difficulty, count = 1) => {
+    if (count <= 0) return;
+    const existing = preferred.find((x) => x.type === type && x.difficulty === difficulty);
+    if (existing) existing.count += count;
+    else preferred.push({ type, difficulty, count });
+  };
+
+  const rankedPrimaryTypes = primaryAllowedTypes.filter(Boolean);
+  const primaryDifficulty = primaryAllowedDifficulties[0] || 'medium';
+  pushCell(rankedPrimaryTypes[0] || '3rd-reporting', primaryDifficulty, targetTotal);
+
+  if (targetTotal > 1 && secondary) {
+    const secondaryAllowedType = secondary.key === 'embedded'
+      ? '1st-embedded'
+      : secondary.key === 'negation'
+      ? 'negation'
+      : secondary.category === 'type'
+      ? secondary.key
+      : rankedPrimaryTypes[Math.min(1, Math.max(0, rankedPrimaryTypes.length - 1))] || rankedPrimaryTypes[0] || '3rd-reporting';
+    const secondaryDifficulty = secondary.key === 'hard'
+      ? 'hard'
+      : secondary.key === 'easy'
+      ? 'easy'
+      : secondary.key === 'medium'
+      ? 'medium'
+      : primaryDifficulty;
+    preferred[0].count = Math.max(1, preferred[0].count - 1);
+    pushCell(secondaryAllowedType, secondaryDifficulty, 1);
+  }
+
+  const focused = [];
+  let remaining = targetTotal;
+  for (const cell of preferred) {
+    if (remaining <= 0) break;
+    const take = Math.min(cell.count, remaining);
+    focused.push({ type: cell.type, difficulty: cell.difficulty, count: take });
+    remaining -= take;
+  }
+  return focused;
+}
+
 
 function buildReviewPrompt(questions) {
   return `
@@ -1477,10 +1856,48 @@ async function main() {
     medium: Math.ceil(mediumTarget * BUFFER),
     hard: Math.ceil(hardTarget * BUFFER),
   };
+  const boostDifficultyTargets = {
+    easy: easyTarget,
+    medium: mediumTarget,
+    hard: hardTarget,
+  };
   const globalTypeTargetTotal = TARGET_SET_COUNT * 10;
   const globalTypeTargets = Object.fromEntries(
     TYPE_LIST.map((type) => [type, Math.max(1, Math.ceil(globalTypeTargetTotal * TPO_TYPE_TARGET_RATIO[type]))]),
   );
+
+  function computeCoverageGaps(poolState, pool) {
+    return {
+      diff: {
+        easy: Math.max(0, difficultyTargets.easy - pool.easy.length),
+        medium: Math.max(0, difficultyTargets.medium - pool.medium.length),
+        hard: Math.max(0, difficultyTargets.hard - pool.hard.length),
+      },
+      style: {
+        embedded: Math.max(0, styleTargets.embeddedMin - poolState.style.embedded),
+        negation: Math.max(0, styleTargets.negationMin - poolState.style.negation),
+        distractor: Math.max(0, styleTargets.distractorMin - poolState.style.distractor),
+      },
+      type: Object.fromEntries(TYPE_LIST.map((type) => [type, Math.max(0, (globalTypeTargets[type] || 0) - (poolState.typeTotals[type] || 0))])),
+    };
+  }
+
+  function selectBoostBatchSize(poolState, pool) {
+    const gaps = computeCoverageGaps(poolState, pool);
+    const diffUnits = gaps.diff.easy + gaps.diff.medium + gaps.diff.hard;
+    const styleUnits = gaps.style.embedded + gaps.style.negation + gaps.style.distractor;
+    const activeTypeGaps = TYPE_LIST.filter((type) => gaps.type[type] > 0).length;
+    const activeGapKinds = [
+      diffUnits > 0 ? 1 : 0,
+      gaps.style.embedded > 0 ? 1 : 0,
+      gaps.style.negation > 0 ? 1 : 0,
+      gaps.style.distractor > 0 ? 1 : 0,
+      activeTypeGaps > 0 ? 1 : 0,
+    ].reduce((sum, x) => sum + x, 0);
+
+    if (diffUnits <= 1 && styleUnits <= 1 && activeTypeGaps <= 1 && activeGapKinds <= 2) return 1;
+    return 3;
+  }
 
   function hasSufficientPoolCoverage(poolState, pool) {
     const diffOk =
@@ -1501,14 +1918,15 @@ async function main() {
       // Planner: AI analyzes pool gaps and decides the mixed batch composition
       const poolState = computePoolState(acceptedPool);
       const plannerRaw = await callModel(
-        buildPlannerPrompt(poolState, difficultyTargets, globalTypeTargets, styleTargets),
+        buildPlannerPrompt(poolState, difficultyTargets, globalTypeTargets, styleTargets, 10, "normal"),
       );
       const spec = enforcePlannerStyleGaps(
-        parsePlannerSpec(plannerRaw),
+        parsePlannerSpec(plannerRaw, 10),
         poolState,
         styleTargets,
         globalTypeTargets,
         difficultyTargets,
+        10,
       );
       const specLabel = spec.map((s) => `${s.count}×${s.type}/${s.difficulty}`).join(", ");
       console.log(`round ${round}: planner �?[${specLabel}]`);
@@ -1558,18 +1976,19 @@ async function main() {
         const boostState = computePoolState(acceptedPool);
         if (hasSufficientPoolCoverage(boostState, boostedPool)) break;
         try {
-          const boostPlannerRaw = await callModel(
-            buildPlannerPrompt(boostState, difficultyTargets, globalTypeTargets, styleTargets),
-          );
-          const boostSpec = enforcePlannerStyleGaps(
-            parsePlannerSpec(boostPlannerRaw),
+          const boostBacklog = buildBoostBacklog(
             boostState,
-            styleTargets,
+            boostedPool,
+            boostDifficultyTargets,
             globalTypeTargets,
-            difficultyTargets,
+            styleTargets,
           );
+          const boostTask = boostBacklog[0];
+          if (!boostTask) break;
+          const boostSpec = [{ type: boostTask.type, difficulty: boostTask.difficulty, count: 1 }];
           const boostLabel = boostSpec.map((s) => `${s.count}?${s.type}/${s.difficulty}`).join(', ');
-          const res = await generateCandidateRound(3000 + i, boostSpec, rollingRejectFeedback);
+          const boostFeedback = [rollingRejectFeedback, buildBoostTaskHint(boostTask)].filter(Boolean).join('\n');
+          const res = await generateCandidateRound(3000 + i, boostSpec, boostFeedback);
           acceptedPool.push(...res.questions);
           Object.entries(res.rejectReasons).forEach(([k, v]) => {
             rejectReasons[k] = (rejectReasons[k] || 0) + v;
