@@ -2,6 +2,11 @@ import { isAdminAuthorized } from "../../../../lib/adminAuth";
 import { supabaseAdmin } from "../../../../lib/supabaseAdmin";
 import { readFileSync } from "fs";
 import { join } from "path";
+const { validateQuestion } = require("../../../../lib/questionBank/buildSentenceSchema");
+const {
+  normalizeRuntimeQuestion,
+  validateRuntimeQuestion,
+} = require("../../../../lib/questionBank/runtimeModel");
 const {
   validateStructuredPromptParts,
   getStructuredPromptParts,
@@ -120,6 +125,19 @@ export async function POST(request) {
   }
 
   const dataWithId = { ...nextData, id: question_id, source };
+  if (type === "build") {
+    const schema = validateQuestion(dataWithId);
+    const issues = [...schema.fatal, ...schema.format, ...schema.content];
+    if (issues.length > 0) {
+      return Response.json({ error: issues.join("; ") }, { status: 400 });
+    }
+    try {
+      const runtimeQuestion = normalizeRuntimeQuestion(dataWithId);
+      validateRuntimeQuestion(runtimeQuestion);
+    } catch (error) {
+      return Response.json({ error: error.message || "Invalid runtime question" }, { status: 400 });
+    }
+  }
 
   const { error } = await supabaseAdmin
     .from("admin_questions")

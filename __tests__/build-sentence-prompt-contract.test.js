@@ -41,6 +41,7 @@ describe("build sentence prompt contract", () => {
     expect(hasExplicitTaskInLegacyPrompt("A visitor is asking the museum curator a question.")).toBe(false);
     expect(hasExplicitTaskInLegacyPrompt("A visitor is speaking with the museum curator. What do they ask?")).toBe(true);
     expect(hasExplicitTaskInLegacyPrompt("You found a great bookstore. Tell your friend about it.")).toBe(true);
+    expect(hasExplicitTaskInLegacyPrompt("Where did Emma go?")).toBe(false);
   });
 
   test("prompt surface classifier spots statement-only prompts", () => {
@@ -61,6 +62,18 @@ describe("build sentence prompt contract", () => {
       has_question_mark: true,
       grammar_points: ["embedded question (when)"],
     });
+    expect(out.fatal.some((e) => e.includes("explicit task"))).toBe(true);
+  });
+
+  test("structured validation rejects naked content questions as task text", () => {
+    const out = validateStructuredPromptParts(
+      {
+        prompt_context: "A student is asking the librarian something.",
+        prompt_task_kind: "ask",
+        prompt_task_text: "Where did Emma go?",
+      },
+      { requireStructured: true }
+    );
     expect(out.fatal.some((e) => e.includes("explicit task"))).toBe(true);
   });
 });

@@ -4,7 +4,7 @@
 } = require("../lib/questionBank/qualityGateBuildSentence");
 
 describe("qualityGateBuildSentence v2", () => {
-  test("hard-fails when prefilled duplicates chunks", () => {
+  test("hard-fails duplicated prefilled chunks through word-bag mismatch", () => {
     const q = {
       id: "bad_1",
       prompt: "What do you ask?",
@@ -17,7 +17,7 @@ describe("qualityGateBuildSentence v2", () => {
       grammar_points: ["embedded question (where)"],
     };
     const reasons = hardFailReasons(q);
-    expect(reasons.some((r) => r.includes("must not also appear in chunks"))).toBe(true);
+    expect(reasons.some((r) => r.includes("must equal answer words"))).toBe(true);
   });
 
   test("hard-fails on answer/chunks mismatch", () => {

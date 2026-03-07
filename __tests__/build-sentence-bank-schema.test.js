@@ -20,7 +20,7 @@ describe("build sentence bank schema v2", () => {
     expect(validateQuestion(q)).toEqual({ fatal: [], format: [], content: [] });
   });
 
-  test("prefilled duplicated in chunks is rejected", () => {
+  test("prefilled duplicated in chunks is rejected via word-bag mismatch", () => {
     const q = {
       id: "ets_t1_q2",
       prompt: "What do you ask?",
@@ -33,7 +33,7 @@ describe("build sentence bank schema v2", () => {
       grammar_points: ["embedded question (where)"],
     };
     const res = validateQuestion(q);
-    expect(res.fatal.some((e) => e.includes("must not also appear in chunks"))).toBe(true);
+    expect(res.fatal.some((e) => e.includes("must equal answer words"))).toBe(true);
   });
 
   test("has_question_mark must match answer punctuation", () => {
