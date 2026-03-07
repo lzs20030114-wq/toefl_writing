@@ -8,7 +8,7 @@ describe("build sentence bank schema v2", () => {
   test("valid question passes", () => {
     const q = {
       id: "ets_t1_q1",
-      prompt: "The workshop was useful.",
+      prompt: "What do you ask?",
       answer: "Could you tell me where the workshop notes are posted?",
       chunks: ["could", "tell me", "where", "the workshop", "notes", "are posted"],
       prefilled: ["you"],
@@ -23,7 +23,7 @@ describe("build sentence bank schema v2", () => {
   test("prefilled duplicated in chunks is rejected", () => {
     const q = {
       id: "ets_t1_q2",
-      prompt: "The workshop was useful.",
+      prompt: "What do you ask?",
       answer: "Could you tell me where the workshop notes are posted?",
       chunks: ["could", "you", "tell me", "where", "the workshop", "notes", "are posted"],
       prefilled: ["you"],
@@ -39,7 +39,7 @@ describe("build sentence bank schema v2", () => {
   test("has_question_mark must match answer punctuation", () => {
     const q = {
       id: "ets_t1_q3",
-      prompt: "The workshop was useful.",
+      prompt: "What do you ask?",
       answer: "Could you tell me where the workshop notes are posted?",
       chunks: ["could", "tell me", "where", "the workshop", "notes", "are posted"],
       prefilled: ["you"],
@@ -55,7 +55,7 @@ describe("build sentence bank schema v2", () => {
   test("distractor appearing in answer is rejected", () => {
     const q = {
       id: "ets_t1_q4",
-      prompt: "The workshop was useful.",
+      prompt: "What do you ask?",
       answer: "Could you tell me where the workshop notes are posted?",
       chunks: ["could", "tell me", "where", "the workshop", "notes", "are posted", "workshop"],
       prefilled: ["you"],
@@ -74,7 +74,7 @@ describe("build sentence bank schema v2", () => {
       questions: [
         {
           id: "dup",
-          prompt: "The workshop was useful.",
+          prompt: "What do you ask?",
           answer: "Could you tell me where the workshop notes are posted?",
           chunks: ["could", "tell me", "where", "the workshop", "notes", "are posted"],
           prefilled: ["you"],
@@ -85,7 +85,7 @@ describe("build sentence bank schema v2", () => {
         },
         {
           id: "dup",
-          prompt: "The lab was closed.",
+          prompt: "What do you ask?",
           answer: "Do you know whether the lab is open tomorrow morning?",
           chunks: ["do", "you know", "whether", "the lab", "is open", "tomorrow morning"],
           prefilled: [],
@@ -107,7 +107,7 @@ describe("build sentence bank schema v2", () => {
       questions: [
         {
           id: "bad",
-          prompt: "Prompt",
+          prompt: "What do you ask?",
           answer: "Do you know if the lab is open tonight?",
           chunks: ["do", "you know"], // intentionally incomplete
           prefilled: [],

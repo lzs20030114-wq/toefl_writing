@@ -7,7 +7,7 @@ describe("qualityGateBuildSentence v2", () => {
   test("hard-fails when prefilled duplicates chunks", () => {
     const q = {
       id: "bad_1",
-      prompt: "The workshop was useful.",
+      prompt: "What do you ask?",
       answer: "Could you tell me where the workshop notes are posted?",
       chunks: ["could", "you", "tell me", "where", "the workshop", "notes", "are posted"],
       prefilled: ["you"],
@@ -23,7 +23,7 @@ describe("qualityGateBuildSentence v2", () => {
   test("hard-fails on answer/chunks mismatch", () => {
     const q = {
       id: "bad_2",
-      prompt: "The lab was closed.",
+      prompt: "What do you ask?",
       answer: "Do you know whether the lab is open tomorrow morning?",
       chunks: ["do", "you know", "whether", "the lab", "is open"],
       prefilled: [],
@@ -39,7 +39,7 @@ describe("qualityGateBuildSentence v2", () => {
   test("warns on has_question_mark mismatch", () => {
     const q = {
       id: "warn_1",
-      prompt: "The workshop was useful.",
+      prompt: "What do you ask?",
       answer: "Could you tell me where the workshop notes are posted?",
       chunks: ["could", "tell me", "where", "the workshop", "notes", "are posted"],
       prefilled: ["you"],

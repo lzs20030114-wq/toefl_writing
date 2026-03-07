@@ -23,7 +23,7 @@
   },
   {
     "id": "tmp_r12_q1",
-    "prompt": "The exchange student was not sure about the library's closing time.",
+    "prompt": "The exchange student was not sure about the library's closing time. What did she want to know?",
     "answer": "She needed to find out when the library closed.",
     "chunks": [
       "she",
@@ -41,11 +41,14 @@
     "grammar_points": [
       "3rd-reporting",
       "declarative word order"
-    ]
+    ],
+    "prompt_context": "The exchange student was not sure about the library's closing time.",
+    "prompt_task_kind": "report",
+    "prompt_task_text": "What did she want to know?"
   },
   {
     "id": "tmp_r1_q4",
-    "prompt": "A frustrated customer is speaking to a restaurant waiter.",
+    "prompt": "A frustrated customer is speaking to a restaurant waiter. How do you respond?",
     "answer": "I did not order the spicy seafood pasta you brought.",
     "chunks": [
       "i",
@@ -67,11 +70,14 @@
     "grammar_points": [
       "negation",
       "simple past"
-    ]
+    ],
+    "prompt_context": "A frustrated customer is speaking to a restaurant waiter.",
+    "prompt_task_kind": "respond",
+    "prompt_task_text": "How do you respond?"
   },
   {
     "id": "tmp_r12_q3",
-    "prompt": "Some colleagues in the campus cafe were discussing the guest speaker.",
+    "prompt": "Some colleagues in the campus cafe were discussing the guest speaker. What did they want to know?",
     "answer": "They wondered if the speaker would take questions after the lecture.",
     "chunks": [
       "they",
@@ -89,11 +95,14 @@
       "3rd-reporting",
       "declarative word order",
       "high complexity"
-    ]
+    ],
+    "prompt_context": "Some colleagues in the campus cafe were discussing the guest speaker.",
+    "prompt_task_kind": "report",
+    "prompt_task_text": "What did they want to know?"
   },
   {
     "id": "tmp_r1_q1",
-    "prompt": "The elderly neighbor was curious about the park's new rules.",
+    "prompt": "The elderly neighbor was curious about the park's new rules. What did he want to know?",
     "answer": "He wondered why the community garden was closed for maintenance.",
     "chunks": [
       "he",
@@ -111,7 +120,10 @@
     "grammar_points": [
       "3rd-person reporting",
       "declarative word order"
-    ]
+    ],
+    "prompt_context": "The elderly neighbor was curious about the park's new rules.",
+    "prompt_task_kind": "report",
+    "prompt_task_text": "What did he want to know?"
   },
   {
     "id": "tmp_r4_q7",
@@ -141,7 +153,7 @@
   },
   {
     "id": "tmp_r4_q10",
-    "prompt": "A colleague asks, 'What time is the meeting tomorrow?' You reply:",
+    "prompt": "A colleague asks, 'What time is the meeting tomorrow?'. How do you respond?",
     "answer": "I have no idea what time the meeting starts.",
     "chunks": [
       "i",
@@ -158,7 +170,10 @@
     "grammar_points": [
       "embedded question",
       "declarative word order"
-    ]
+    ],
+    "prompt_context": "A colleague asks, 'What time is the meeting tomorrow?'.",
+    "prompt_task_kind": "respond",
+    "prompt_task_text": "How do you respond?"
   },
   {
     "id": "tmp_r11_q9",
@@ -403,7 +418,7 @@
   },
   {
     "id": "tmp_r10_q5",
-    "prompt": "Some colleagues were discussing the new policy. They asked the manager:",
+    "prompt": "Some colleagues were discussing the new policy. They asked the manager. What did they ask?",
     "answer": "They inquired where the team meeting would be held.",
     "chunks": [
       "they",
@@ -421,7 +436,10 @@
       "3rd-reporting",
       "declarative word order",
       "passive"
-    ]
+    ],
+    "prompt_context": "Some colleagues were discussing the new policy. They asked the manager.",
+    "prompt_task_kind": "report",
+    "prompt_task_text": "What did they ask?"
   },
   {
     "id": "tmp_r8_q1",
@@ -471,7 +489,7 @@
   },
   {
     "id": "tmp_r7_q8",
-    "prompt": "A young architect is explaining a situation to a client.",
+    "prompt": "A young architect is explaining a situation to a client. How do you respond?",
     "answer": "I did not realize the building permits would take so long.",
     "chunks": [
       "i",
@@ -493,11 +511,14 @@
     "grammar_points": [
       "negation",
       "past tense"
-    ]
+    ],
+    "prompt_context": "A young architect is explaining a situation to a client.",
+    "prompt_task_kind": "respond",
+    "prompt_task_text": "How do you respond?"
   },
   {
     "id": "tmp_r1_q5",
-    "prompt": "An enthusiastic intern is apologizing to the manager.",
+    "prompt": "An enthusiastic intern is apologizing to the manager. How do they respond?",
     "answer": "Unfortunately, I have not received the updated training manual yet.",
     "chunks": [
       "unfortunately",
@@ -520,11 +541,14 @@
     "grammar_points": [
       "negation",
       "present perfect"
-    ]
+    ],
+    "prompt_context": "An enthusiastic intern is apologizing to the manager.",
+    "prompt_task_kind": "respond",
+    "prompt_task_text": "How do they respond?"
   },
   {
     "id": "tmp_r10_q4",
-    "prompt": "The software developer was not sure. He asked his colleague:",
+    "prompt": "The software developer was not sure. He asked his colleague. What did he want to know?",
     "answer": "He wondered what the client had actually requested.",
     "chunks": [
       "he",
@@ -541,11 +565,14 @@
       "3rd-reporting",
       "declarative word order",
       "past perfect"
-    ]
+    ],
+    "prompt_context": "The software developer was not sure. He asked his colleague.",
+    "prompt_task_kind": "report",
+    "prompt_task_text": "What did he want to know?"
   },
   {
     "id": "tmp_r9_q5",
-    "prompt": "A client at a hair salon is asking the stylist about a service.",
+    "prompt": "A client at a hair salon is asking the stylist about a service. What do they ask?",
     "answer": "Can you tell me how much a haircut usually costs here?",
     "chunks": [
       "can you",
@@ -563,11 +590,14 @@
     "grammar_points": [
       "embedded question",
       "adverb"
-    ]
+    ],
+    "prompt_context": "A client at a hair salon is asking the stylist about a service.",
+    "prompt_task_kind": "ask",
+    "prompt_task_text": "What do they ask?"
   },
   {
     "id": "tmp_r10_q1",
-    "prompt": "The yoga instructor was curious. She asked the park ranger:",
+    "prompt": "The yoga instructor was curious. She asked the park ranger. What did she want to know?",
     "answer": "She wanted to know if the hiking trail was still open.",
     "chunks": [
       "she",
@@ -585,7 +615,10 @@
     "grammar_points": [
       "3rd-reporting",
       "declarative word order"
-    ]
+    ],
+    "prompt_context": "The yoga instructor was curious. She asked the park ranger.",
+    "prompt_task_kind": "report",
+    "prompt_task_text": "What did she want to know?"
   },
   {
     "id": "tmp_r8_q5",
@@ -656,7 +689,7 @@
   },
   {
     "id": "tmp_r9_q7",
-    "prompt": "An intern in an interview is being asked a challenging question by the manager.",
+    "prompt": "An intern in an interview is being asked a challenging question by the manager. How do they respond?",
     "answer": "Did she ask you whom you had worked with on your previous project?",
     "chunks": [
       "did she",
@@ -676,7 +709,10 @@
       "embedded question",
       "past perfect",
       "whom"
-    ]
+    ],
+    "prompt_context": "An intern in an interview is being asked a challenging question by the manager.",
+    "prompt_task_kind": "respond",
+    "prompt_task_text": "How do they respond?"
   },
   {
     "id": "tmp_r6_q10",
@@ -747,7 +783,7 @@
   },
   {
     "id": "tmp_r7_q6",
-    "prompt": "Some colleagues were discussing the new office layout.",
+    "prompt": "Some colleagues were discussing the new office layout. What did they want to know?",
     "answer": "They wondered if the new desks had already been delivered.",
     "chunks": [
       "they",
@@ -766,11 +802,14 @@
       "3rd-reporting",
       "embedded question",
       "past perfect passive"
-    ]
+    ],
+    "prompt_context": "Some colleagues were discussing the new office layout.",
+    "prompt_task_kind": "report",
+    "prompt_task_text": "What did they want to know?"
   },
   {
     "id": "tmp_r5_q9",
-    "prompt": "The enthusiastic intern was reflecting on a missed opportunity.",
+    "prompt": "The enthusiastic intern was reflecting on a missed opportunity. How do you respond?",
     "answer": "I had not realized whom the project supervisor wanted me to contact.",
     "chunks": [
       "i",
@@ -793,7 +832,10 @@
       "past-perfect",
       "whom",
       "complex-object"
-    ]
+    ],
+    "prompt_context": "The enthusiastic intern was reflecting on a missed opportunity.",
+    "prompt_task_kind": "respond",
+    "prompt_task_text": "How do you respond?"
   },
   {
     "id": "tmp_r6_q2",
@@ -819,7 +861,7 @@
   },
   {
     "id": "tmp_r1_q2",
-    "prompt": "The software developer needed to confirm the meeting details.",
+    "prompt": "The software developer needed to confirm the meeting details. What did she ask?",
     "answer": "She asked if the project review had been rescheduled.",
     "chunks": [
       "she",
@@ -837,11 +879,14 @@
       "3rd-person reporting",
       "embedded question",
       "passive voice"
-    ]
+    ],
+    "prompt_context": "The software developer needed to confirm the meeting details.",
+    "prompt_task_kind": "report",
+    "prompt_task_text": "What did she ask?"
   },
   {
     "id": "tmp_r9_q6",
-    "prompt": "A student at the registrar's office is inquiring about a complex procedure.",
+    "prompt": "A student at the registrar's office is inquiring about a complex procedure. What do they ask?",
     "answer": "Could you tell me why the application you submitted was rejected?",
     "chunks": [
       "could you",
@@ -860,11 +905,14 @@
       "embedded question",
       "contact clause",
       "passive"
-    ]
+    ],
+    "prompt_context": "A student at the registrar's office is inquiring about a complex procedure.",
+    "prompt_task_kind": "ask",
+    "prompt_task_text": "What do they ask?"
   },
   {
     "id": "tmp_r9_q8",
-    "prompt": "A member at the gym is asking the trainer about an advanced technique.",
+    "prompt": "A member at the gym is asking the trainer about an advanced technique. How do they respond?",
     "answer": "Can you explain how the weight you lifted was calculated for your program?",
     "chunks": [
       "can you explain",
@@ -883,11 +931,14 @@
       "embedded question",
       "contact clause",
       "passive"
-    ]
+    ],
+    "prompt_context": "A member at the gym is asking the trainer about an advanced technique.",
+    "prompt_task_kind": "respond",
+    "prompt_task_text": "How do they respond?"
   },
   {
     "id": "tmp_r5_q3",
-    "prompt": "Some colleagues were discussing the new software update.",
+    "prompt": "Some colleagues were discussing the new software update. What did they ask?",
     "answer": "They asked if the latest security patch had been installed yet.",
     "chunks": [
       "they",
@@ -909,6 +960,9 @@
     "grammar_points": [
       "3rd-reporting",
       "past-perfect-passive"
-    ]
+    ],
+    "prompt_context": "Some colleagues were discussing the new software update.",
+    "prompt_task_kind": "report",
+    "prompt_task_text": "What did they ask?"
   }
 ]

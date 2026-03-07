@@ -12,7 +12,7 @@ describe("save-build-sentence-bank quality gates", () => {
   function makeV2Question(id, answer, chunks, opts = {}) {
     return {
       id,
-      prompt: "Prompt",
+      prompt: "What do you ask?",
       answer,
       chunks,
       prefilled: opts.prefilled || [],

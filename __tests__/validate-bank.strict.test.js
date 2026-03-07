@@ -3,7 +3,7 @@ const { validateAllSets } = require("../scripts/validate-bank");
 function makeQuestion(id, answer, chunks, opts = {}) {
   return {
     id,
-    prompt: "Prompt",
+    prompt: "What do you ask?",
     answer,
     chunks,
     prefilled: opts.prefilled || [],
@@ -47,7 +47,7 @@ describe("validate-bank strict mode", () => {
     const data = { question_sets: [makeValidSet()] };
     data.question_sets[0].questions[0] = {
       id: "q_multi_prefilled",
-      prompt: "Prompt",
+      prompt: "What do you ask?",
       answer: "Do you know if the lab is open tonight now?",
       chunks: ["do", "know", "if", "the lab", "is open", "tonight"],
       prefilled: ["you", "now"],

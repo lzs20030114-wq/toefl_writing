@@ -4,6 +4,7 @@ const {
   hasExplicitTaskInLegacyPrompt,
   classifyPromptSurface,
 } = require("../lib/questionBank/buildSentencePromptContract");
+const { validateQuestion } = require("../lib/questionBank/buildSentenceSchema");
 
 describe("build sentence prompt contract", () => {
   test("renders structured prompt from context and explicit task", () => {
@@ -46,5 +47,20 @@ describe("build sentence prompt contract", () => {
     expect(classifyPromptSurface("A visitor is asking the museum curator a question.")).toBe("statement-only");
     expect(classifyPromptSurface("A visitor is speaking with the museum curator. What do they ask?")).toBe("background+question");
     expect(classifyPromptSurface("What did he ask?")).toBe("question-only-or-mixed");
+  });
+
+  test("schema now fatally rejects background-only legacy prompts", () => {
+    const out = validateQuestion({
+      id: "legacy_bad_prompt",
+      prompt: "A visitor is asking the museum curator a question.",
+      answer: "Could you tell me when the new exhibit opens?",
+      chunks: ["could", "tell me", "when", "the new exhibit", "opens"],
+      prefilled: ["you"],
+      prefilled_positions: { you: 1 },
+      distractor: null,
+      has_question_mark: true,
+      grammar_points: ["embedded question (when)"],
+    });
+    expect(out.fatal.some((e) => e.includes("explicit task"))).toBe(true);
   });
 });
