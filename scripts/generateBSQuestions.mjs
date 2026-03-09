@@ -345,18 +345,19 @@ function classifyAnswerType(q) {
     /\b(interrogative frame|polite question frame)\b/.test(gps)
   )
     return "interrogative";
-  // 3rd-person reporting
+  // 1st-person embedded — check BEFORE 3rd-reporting to prevent "I asked..." being misclassified
+  if (
+    /\b(1st-embedded|1st person|1st-person)\b/.test(gps) ||
+    /\b(have no idea|had no idea|don't understand|didn't understand|couldn't understand|found out|would love to know|can't decide|don't know|didn't know|do not know|did not know|does not know)\b/.test(a) ||
+    (/^i\b/i.test(a) && /\b(what|when|where|who|how|whether|if)\b/.test(a) && !/^i (did not|didn't|do not|don't|have not|haven't|could not|couldn't|am not|was not|wasn't|are not|aren't)\b/i.test(a))
+  )
+    return "1st-embedded";
+  // 3rd-person reporting (only after ruling out 1st-person)
   if (
     /\b(wanted to know|asked|inquired|was curious|were curious|needed to know|was wondering|were wondering|wants to know|needs to know|curious about)\b/.test(a) ||
     /\b(3rd-reporting|reporting verb|indirect question)\b/.test(gps)
   )
     return "3rd-reporting";
-  // 1st-person embedded
-  if (
-    /\b(have no idea|had no idea|don't understand|didn't understand|couldn't understand|found out|would love to know|can't decide|don't know|didn't know|do not know|did not know|does not know)\b/.test(a) ||
-    /\b(1st-embedded)\b/.test(gps)
-  )
-    return "1st-embedded";
   // Relative/contact clause
   if (
     /\bthe \w+.*(?: i | you | he | she | we | they )|\b(?:that|which|who|whom) (?:i |you |he |she |we |they )/i.test(a) ||
@@ -380,6 +381,8 @@ function classifyAnswerType(q) {
  * hard  (2/set):  3rd-reporting锟?5%, 1st-embedded锟?5%, relative锟?9%, interrogative锟?3%, direct锟?3%, negation锟?%
  */
 const TYPE_LIST = ["negation", "3rd-reporting", "1st-embedded", "interrogative", "direct", "relative"];
+const WILLING_TYPES = ["3rd-reporting", "negation", "1st-embedded"]; // AI generates naturally
+const STUBBORN_TYPES = ["direct", "relative", "interrogative"]; // AI avoids, targeted by boost
 const TPO_TYPE_TARGET_RATIO = Object.freeze({
   "negation": 0.183,
   "3rd-reporting": 0.417,
@@ -419,6 +422,9 @@ function buildRejectFeedbackHints(rejectReasons) {
     if (r.includes("review:blocker") || r.includes("solvability")) {
       hints.push("Avoid ambiguous chunk order; each item should have one clearly best arrangement.");
     }
+    if (r.includes("prompt_task_text") || r.includes("prompt must include an explicit task")) {
+      hints.push("prompt_task_text MUST be an explicit task/question, NOT background. Use patterns: 'What did [person] ask?', 'How do you respond?', 'Tell your friend about it.', 'Describe what happened.' Put background/context in prompt_context, NOT in prompt_task_text.");
+    }
   });
 
   const uniq = [...new Set(hints)];
@@ -426,145 +432,179 @@ function buildRejectFeedbackHints(rejectReasons) {
   return `\nRecent rejection feedback (must fix):\n- ${uniq.join("\n- ")}\n`;
 }
 
-// Type 脳 difficulty specific instructions for targeted generation
 const TYPE_DIFFICULTY_HINTS = {
   "negation": {
     easy: `ALL answers in this group: simple negative statement, 7-10 words.
-Structure: "I did not [verb]锟? / "I could not [verb]锟? / "I am not [adj]锟? / "I have not [past-p] yet."
-NO embedded questions. NO relative clauses. Direct and clear.
-Prompt: YES/NO question ("Did you attend锟?", "Have you锟?", "Are you going锟?")
-Distractor: "did" or "do" or morphological variant (e.g. "going" for "go").`,
-    medium: `ALL answers in this group: negative statement 9-12 words, optionally with short embedded element.
+Structure: "I did not [verb]." / "I could not [verb]." / "I am not [adj]." / "I cannot [verb]."
 Examples:
-- "Unfortunately, I could not attend due to a prior commitment."
-- "I did not understand what the manager explained."
-- "I have not received the workshop details yet."
-Prompt: direct question or narrative context. Distractor: "did"/"do" or morphological variant.`,
-    hard: `ALL answers in this group: negation + advanced grammar complexity, usually 10-13 words.
+- "I did not have time to finish the report."
+- "I could not find the reservation confirmation."
+- "I am not going to sign for the package."
+Prompt: prompt_task_kind="respond", prompt_task_text="How do you respond?" or "What do you say?"
+Distractor: "did" or "do" or morphological variant.
+SCORER FENCE (easy): Only "did not" / "do not" / "cannot" / "could not" / "am not" / "is not". NO "have not been" (passive). NO "had not" (past perfect). NO comparative. NO relative clause. NO embedded wh-clause.
+PREFILLED (easy): Use prefilled=["i"] at position 0. NEVER ["not"].`,
+
+    medium: `ALL answers in this group: negative statement, 9-12 words, may include a short embedded element.
+Examples WITH correct prefilled (study these carefully):
+  answer: "I did not understand what the manager explained."  prefilled=["i"] pos=0 ✔
+  answer: "I have not received any confirmation about the schedule."  prefilled=["i"] pos=0 ✔
+  answer: "He did not know why the meeting was postponed."  prefilled=["he"] pos=0 ✔
+  BAD: answer="I did not attend the interview last week."  prefilled=["not"] ✘ WRONG
+  CORRECT: answer="I did not attend the interview last week."  prefilled=["i"] pos=0 ✔ RIGHT
+  BAD: answer="He did not know why the package was rerouted."  prefilled=["not"] ✘ WRONG
+  CORRECT: answer="He did not know why the package was rerouted."  prefilled=["he"] pos=0 ✔ RIGHT
+Prompt: prompt_task_kind="respond", prompt_task_text="How do you respond?" or "What do you say?" Distractor: "did"/"do" or morphological variant.
+SCORER FENCE (medium): Prefer simple past ("did not") or present perfect ("have not"). AVOID past perfect negation ("had not done" -> HARD). AVOID passive negation ("was not approved", "has not been sent" -> HARD). At most ONE advanced grammar feature.
+PREFILLED (medium/easy): ALL negation answers use the SUBJECT as prefilled. 1st-person ("I did not..."): prefilled=["i"] at position 0. 3rd-person: use a DESCRIPTIVE 2-word subject NP, e.g. prefilled=["the manager"], ["the professor"], ["the student"]. NEVER use bare ["he"]/["she"]/["they"] — always a descriptive NP. NEVER use ["not"] as prefilled — "not" belongs in chunks, not in prefilled.`,
+
+    hard: `ALL answers in this group: negation + advanced grammar complexity, 10-13 words.
 Examples:
 - "I had not realized how quickly the project deadline was approaching."
 - "I did not understand why the meeting had been postponed again."
-Hard MUST be created by structure, not by extra length alone. Prefer past perfect negation, passive/passive-progressive inside the clause, or negation + embedded grammar traps. Hard MUST be created by structure, not by extra length alone. Prefer past perfect negation, passive/passive-progressive inside the clause, or negation + embedded grammar traps.
-Distractor: morphological variant (e.g. "realized/realize", "approaching/approach").`,
+Hard MUST come from structure: past perfect negation, passive/passive-progressive inside clause, or negation + embedded grammar trap.
+Distractor: morphological variant (e.g. "realized/realize", "approaching/approach").
+PREFILLED REMINDER: Hard sentences are 10-13 words — chunks MUST still be ≤ 8. Give the SUBJECT as prefilled: subject pronoun ("i", "she", "he") or 2-word subject NP ("the professor", "the manager"). Example: answer=11 words, prefilled=["the professor"] (2 words) -> R=9 -> shorten sentence to 10 words -> R=8. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
   },
+
   "3rd-reporting": {
     easy: `ALL answers in this group: short third-person reporting, 8-10 words.
-Structure: "[Name] wanted to know if [short clause]." / "[Name] asked me what time锟?
+Structure: "[Descriptive NP] wanted to know if [short clause]." / "[Descriptive NP] asked what time..."
+Subject MUST be 3rd-person descriptive NP — NEVER "I/my/me". NEVER bare "he/she/they".
 Examples:
-- "He wants to know if you need a ride."
-- "She asked me what time the meeting starts."
-Prompt: "What did [Name] ask/want?" Distractor: "did" or "do".`,
+- "The manager wants to know if you need a ride."
+- "My advisor asked me what time the meeting starts."
+- "Some colleagues wanted to know if the library was open."
+Prompt: prompt_task_kind="report", prompt_task_text="What did the manager ask?" or "What does the professor want to know?" Distractor: "did" or "do".
+SCORER FENCE (easy): Embedded clause uses simple present or simple past only. NO passive ("was approved"). NO past perfect ("had gone"). NO "whom". NO comparative.`,
+
     medium: `ALL answers in this group: third-person reporting, 10-13 words.
-Structure: "[Name/They] [wanted to know / asked / was curious / needed to know] [wh/if clause]"
-Vary subjects: he / she / they / the manager / the professor / some colleagues
+Structure: "[Descriptive NP] [wanted to know / asked / was curious / needed to know] [wh/if clause]"
+Subject MUST be 3rd-person descriptive NP — NEVER "I/my/me" (not 1st-person). NEVER bare "he/she/they".
+Use: the manager / the professor / some colleagues / the supervisor / the librarian / the advisor / her study partner
 Vary wh-words across the batch: if(3), what(2), where(2), why(2), when(1)
-Declarative word order in clause (NO inversion). Distractor: "did"/"do" for most.`,
-    hard: `ALL answers in this group: third-person reporting with structurally complex embedded clause, usually 10-13 words.
-Complexity options:
+Declarative word order in clause (NO inversion). Distractor: "did"/"do" for most.
+SCORER FENCE (medium): Embedded clause uses simple past or simple present ONLY. STRICTLY AVOID past perfect in embedded clause ("had been done", "had gone" -> HARD). STRICTLY AVOID passive voice in embedded clause ("whether it had been approved", "when it would be submitted" -> HARD). AVOID "whom". Maximum ONE advanced grammar feature.
+PREFILLED (medium/easy): 3rd-person answers — use a DESCRIPTIVE SUBJECT NP as prefilled. NEVER use bare pronouns ["he"], ["she"], ["they"] — expand to the full subject noun phrase. 2-word NP: ["the manager"], ["the professor"], ["the student"], ["the librarian"], ["the ranger"]. 3-word NP: ["some colleagues"], ["her study partner"], ["the front desk"], ["the shop owner"]. Choose 2-word or 3-word based on what sounds most natural for the subject.`,
+
+    hard: `ALL answers in this group: third-person reporting with structurally complex embedded clause, 10-13 words.
+Complexity options (MUST include at least one):
 - Past perfect in clause: "He wanted to know where all the files had gone."
 - Passive in clause: "She wanted to know when the report would be submitted."
 - whom: "She wanted to know whom I would give the presentation to."
 - Two-layer: "The manager wanted to know how we had been able to finish on time."
-Hard MUST come from grammar complexity, not from padding the sentence. Hard MUST come from grammar complexity, not from padding the sentence.
-Distractor: morphological variant or "whom/who", "where/when" function-word swap.`,
+Hard MUST come from grammar complexity, not from padding the sentence.
+Distractor: morphological variant or "whom/who", "where/when" function-word swap.
+PREFILLED REMINDER: Hard sentences are 10-13 words — chunks MUST still be ≤ 8. Give the SUBJECT as prefilled: ALWAYS a descriptive 2-word subject NP ("the professor", "the manager", "the supervisor"). NEVER "i" (not 1st-person), NEVER bare "she"/"he". Example: answer=11 words, prefilled=["the professor"] (2 words) -> R=9 -> shorten sentence to 10 words -> R=8. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
   },
+
   "1st-embedded": {
-    easy: `ALL answers in this group: first-person "no idea" structure, 8-10 words.
+    easy: `ALL answers in this group: first-person embedded, 8-10 words, simple structure.
+Structure: "I have no idea [wh-clause]." / "I am not sure [wh-clause]."
 Examples:
 - "I have no idea where they are going."
-- "I have no idea what time the event starts."
-Prompt: direct question the speaker can't answer ("Do you know锟?", "Where is锟?")
-Distractor: "do" or "did".`,
+- "I am not sure what time the event starts."
+- "I do not know if the store is open."
+Prompt: prompt_task_kind="respond", prompt_task_text="What do you say?" or prompt_task_kind="tell", prompt_task_text="Tell your friend what you think."
+Distractor: "do" or "did".
+SCORER FENCE (easy): Embedded clause uses simple present only. NO passive. NO past perfect. NO comparative. NO "whom".`,
+
     medium: `ALL answers in this group: first-person embedded, 10-13 words.
 Examples:
-- "I don't understand why he decided to quit the team."
+- "I do not understand why he decided to quit the team."
 - "I found out where the new office supplies are kept."
-- "I can't decide which project topic is the most important."
-- "I have no idea who will be leading the committee."
-Distractor: "did"/"does" or function-word variant.`,
-    hard: `ALL answers in this group: complex first-person embedded, usually 10-13 words.
+- "I have no idea who will be leading the morning session."
+- "I am not sure when the package is going to arrive."
+Distractor: "did"/"does" or function-word variant.
+SCORER FENCE (medium): Embedded clause uses simple past or simple present only. AVOID past perfect ("had done" -> HARD). AVOID passive voice in embedded clause ("has been approved", "is being processed" -> HARD). AVOID "whom". AVOID combining two advanced grammar features.
+PREFILLED (medium/easy): 1st-embedded answers are always 1st-person. Use prefilled=["i"] at position 0. Simplest and most authentic.`,
+
+    hard: `ALL answers in this group: complex first-person embedded, 10-13 words.
 Examples:
 - "I would love to know which restaurant you enjoyed the most." (superlative)
 - "I have not been told who will be responsible for the final report." (passive + embedded)
 - "We just found out where the new library equipment is being stored." (passive progressive)
-Include passive voice OR superlative/comparative OR perfect aspect in the embedded clause. Hard MUST be signaled by grammar structure rather than answer length. Include passive voice OR superlative/comparative OR perfect aspect in the embedded clause. Hard MUST be signaled by grammar structure rather than answer length.
-Distractor: morphological variant (e.g. "enjoyed/enjoy", "stored/store").`,
+Include passive voice OR superlative/comparative OR perfect aspect in the embedded clause. Hard MUST be signaled by grammar structure rather than answer length.
+Distractor: morphological variant (e.g. "enjoyed/enjoy", "stored/store").
+PREFILLED REMINDER: Hard sentences are 10-13 words — chunks MUST still be ≤ 8. Give the SUBJECT as prefilled: subject pronoun ("i", "she", "he") or 2-word subject NP ("the professor", "the manager"). Example: answer=11 words, prefilled=["the professor"] (2 words) -> R=9 -> shorten sentence to 10 words -> R=8. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
   },
+
   "interrogative": {
-    easy: `ALL answers in this group use a NATURAL polite information-seeking question frame, 8-11 words.
-Allowed frame family (vary naturally across the batch; do NOT overuse one opener):
+    easy: `ALL answers in this group use a natural polite question frame, 8-11 words.
+Allowed frames (vary across batch):
 - "Can you tell me ..."
 - "Could you tell me ..."
 - "Do you know ..."
-- "Would you mind telling me ..."
-- "Can you remind me ..."
-Core rule: the MAIN sentence may be a question, but the EMBEDDED clause must stay in declarative word order.
+Core rule: embedded clause stays in declarative word order.
 Examples:
 - "Can you tell me what your plans are for tomorrow?"
 - "Do you know if the professor covered any new material?"
-- "Would you mind telling me where the meeting room is?"
-Prompt: conversational comment that leads to a question.
-Avoid theatrical or overly long polite framing. The frame should be short and natural.
-Distractor: "did"/"do" or a nearby auxiliary/modal variant.`,
+Prompt: prompt_task_kind="ask", prompt_task_text="What do you ask?" or "How do you ask about it?"
+Distractor: "did"/"do" or nearby auxiliary/modal variant.
+SCORER FENCE (easy): Embedded clause uses simple present or simple past only. NO passive. NO past perfect. NO comparative.`,
+
     medium: `ALL answers in this group use a natural interrogative frame, 10-13 words, moderate embedded complexity.
-Use 2-4 different polite frames across the batch. Do NOT repeat the exact same opener more than twice.
-Core rule: embedded clause stays declarative. Keep the question frame short so the difficulty comes from the embedded clause, not from padding the opener.
+Use 2-4 different polite frames across the batch. Core rule: embedded clause stays declarative.
+Examples WITH correct prefilled (the 2-word opener, NEVER the embedded topic noun):
+  answer: "Could you tell me how you are feeling about it?"  prefilled=["could you"] pos=0
+  answer: "Can you remind me when that event was rescheduled?"  prefilled=["can you"] pos=0
+  answer: "Do you know what time it opens on Sundays?"  prefilled=["do you"] pos=0
+  CRITICAL: the 2-word opener is ALWAYS prefilled. NEVER a noun phrase inside the clause.
+Distractor: morphological variant or nearby auxiliary/modal variant.
+SCORER FENCE (medium): AVOID past perfect in embedded clause ("had been done" -> HARD). AVOID passive in embedded clause ("has been approved" -> HARD). Simple past or present tense in embedded clause only.
+PREFILLED (medium/easy): ALWAYS use the 2-word opening frame as prefilled: ["could you"], ["can you"], ["do you"], ["would you"]. NEVER any noun phrase from the embedded clause as prefilled.`,
+
+    hard: `ALL answers in this group use a natural interrogative frame with complex embedded question, 10-13 words.
+The question frame stays simple. Hardness comes from the embedded clause.
 Examples:
-- "Could you tell me how you are feeling about the new policy?"
-- "Do you know what you did not enjoy about the presentation?"
-- "Can you remind me when the department meeting was rescheduled?"
-Prefer one clear embedded clause, not stacked modifiers or awkward context loading.
-Distractor: morphological variant or nearby auxiliary/modal variant that clearly breaks the sentence.`,
-    hard: `ALL answers in this group use a natural interrogative frame with complex embedded question, usually 10-13 words.
-Use a varied polite-frame family; do NOT collapse the batch into one repeated opener.
-The question frame itself should remain simple. The HARDNESS must come from the embedded clause.
-Examples:
-- "Can you tell me why you decided to choose this particular research topic?"
 - "Could you tell me how the project team managed to finish ahead of schedule?"
 - "Do you know why the final report had not been submitted yet?"
-Hard MUST come from the embedded grammar challenge: tense/aspect mismatch risk, passive/perfect inside the clause, layered embedding, or another learner-unfamiliar clause structure. Do not make it hard just by adding length. Hard MUST come from the embedded grammar challenge: tense/aspect mismatch risk, passive/perfect inside the clause, layered embedding, or another learner-unfamiliar clause structure. Do not make it hard just by adding length.
-Avoid weird over-polite wording, long lead-ins, or unnatural spoken formulas.
-Distractor: morphological variant (e.g. "decided/decide", "managed/manage") or a nearby auxiliary/modal variant that clearly breaks grammar.`,
+Hard MUST come from embedded grammar: tense/aspect mismatch, passive/perfect inside clause, layered embedding.
+Distractor: morphological variant (e.g. "decided/decide", "managed/manage").
+PREFILLED REMINDER: Hard sentences are 10-13 words — chunks MUST still be ≤ 8. Give the SUBJECT as prefilled: subject pronoun ("i", "she", "he") or 2-word subject NP ("the professor", "the manager"). Example: answer=11 words, prefilled=["the professor"] (2 words) -> R=9 -> shorten sentence to 10 words -> R=8. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
   },
+
   "direct": {
     medium: `ALL answers in this group: direct declarative statement (no reporting verb, no negation), 9-12 words.
 Describe a situation, location, preference, or fact.
 Examples:
 - "I found the work environment at this company to be much more relaxed."
 - "The store next to the post office sells all types of winter apparel."
-Prompt: direct question about what happened or what the speaker did.
-Distractor: morphological variant (e.g. "relaxed/relax", "sells/sold").`,
-    hard: `ALL answers in this group: complex direct statement, usually 10-13 words, with comparative or structurally dense modification.
+Prompt: prompt_task_kind="tell", prompt_task_text="Describe what happened." or "Tell your friend about it." or prompt_task_kind="respond", prompt_task_text="What do you say?"
+Distractor: morphological variant (e.g. "relaxed/relax", "sells/sold").
+PREFILLED (medium): use the SUBJECT as prefilled. 1st-person answers: ["i"]. 3rd-person: 2-word subject NP like ["the store"], ["the professor"]. NOT the object.`,
+
+    hard: `ALL answers in this group: complex direct statement, 10-13 words, with comparative or structurally dense modification.
 Examples:
 - "This coffee tastes better than all of the other brands I have tried."
 - "I found it in the back of the furniture section at the local superstore."
-- "The library is only temporarily closed in town for major structural renovations."
-Prefer comparative/superlative structures, dense modifiers, or other learner-unfamiliar grammar. Do not inflate difficulty by length alone. Prefer comparative/superlative structures, dense modifiers, or other learner-unfamiliar grammar. Do not inflate difficulty by length alone.
-Distractor: morphological variant or comparative swap ("better/good", "only/once").`,
+Prefer comparative/superlative structures, dense modifiers, or other learner-unfamiliar grammar. Do not inflate difficulty by length alone.
+Distractor: morphological variant or comparative swap ("better/good", "only/once").
+PREFILLED REMINDER: Hard sentences are 10-13 words — chunks MUST still be ≤ 8. Give the SUBJECT as prefilled: subject pronoun ("i", "she", "he") or 2-word subject NP ("the professor", "the manager"). Example: answer=11 words, prefilled=["the professor"] (2 words) -> R=9 -> shorten sentence to 10 words -> R=8. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
   },
+
   "relative": {
     medium: `ALL answers in this group: contact/relative clause structure, 9-12 words.
-"The [noun] [I/you] [verb]锟? (contact clause 锟?omitted relative pronoun, object only)
+"The [noun] [I/you] [verb]..." (contact clause - omitted relative pronoun)
 Examples:
 - "The bookstore I stopped by had the novel in stock."
 - "The diner that opened last week serves many delicious entrees."
-Prompt: question about where/what the speaker found.
-Distractor: morphological variant (e.g. "stopped/stop", "opened/open").`,
-    hard: `ALL answers in this group: relative/contact clause with additional complexity, usually 10-13 words.
-Combine relative clause with:
-- Passive: "The desk you ordered is scheduled to arrive on Friday."
-- Comparative: "This coffee tastes better than all the other brands I've tried."
-- Long modifier: "The store I found near the post office sells winter apparel at a discount."
-Hard MUST come from the relative/contact-clause structure plus one extra grammatical challenge, not from sentence length alone. Hard MUST come from the relative/contact-clause structure plus one extra grammatical challenge, not from sentence length alone.
-Distractor: passive helper swap or morphological variant ("scheduled/schedule", "ordered/order").`,
+Prompt: prompt_task_kind="tell", prompt_task_text="Describe what you found." or prompt_task_kind="respond", prompt_task_text="What do you tell your friend?"
+Distractor: morphological variant (e.g. "stopped/stop", "opened/open").
+PREFILLED (medium): use the SUBJECT as prefilled. Contact clause: subject NP like ["the bookstore"], ["the diner"]. 1st-person: ["i"]. NOT the object inside the relative clause.`,
+
+    hard: `ALL answers in this group: relative/contact clause with additional complexity, 10-13 words.
+Combine relative clause with passive or perfect:
+- "The desk you ordered is scheduled to arrive on Friday."
+- "The book she recommended had already been checked out."
+Distractor: morphological variant (e.g. "ordered/order", "recommended/recommend").
+PREFILLED REMINDER: Hard sentences are 10-13 words — chunks MUST still be ≤ 8. Give the SUBJECT as prefilled: subject pronoun ("i", "she", "he") or 2-word subject NP ("the professor", "the manager"). Example: answer=11 words, prefilled=["the professor"] (2 words) -> R=9 -> shorten sentence to 10 words -> R=8. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
   },
 };
 
 const SCENARIO_POOL = [
-  "Airport/Travel: check-in counter, flight delay, customs, tour guide",
-  "Technology/Digital: software update, lost password, tech support, social media",
   "Home/Family: grocery shopping, home repair, neighbor interaction, cooking",
-  "Leisure/Hobbies: local library, cinema, gym trainer, art gallery, bookstore",
+  "Leisure/Hobbies: local library, community center, sports class, art gallery, bookstore",
   "Service/Retail: restaurant waiter, clothing store, post office, hair salon",
   "Education/Academic: student study group, campus cafe, registrar office, internship interview",
   "Health/Wellness: dental appointment, pharmacy, yoga class, medical clinic",
@@ -635,53 +675,74 @@ Vary with: inquired, wondered, asked, was curious, needed to find out, was not s
 
 ${groupSections}
 
+## WARNING — PREFILLED STRATEGY HAS CHANGED:
+You may see older questions in context where prefilled=["not"] or prefilled=["the report"] (object noun phrase).
+That is the OLD incorrect style. Do NOT imitate it.
+CORRECT strategy: use the SUBJECT as prefilled.
+  • 1st-person sentences (I did/asked/found...): prefilled=["i"]
+  • 3rd-person sentences (She/He asked...): prefilled=["she"] or ["he"] or 2-word subject NP
+  • Interrogative (Could you.../Do you...): prefilled=["could you"] or ["do you"]
+  • Negation "not" belongs in CHUNKS, NOT prefilled.
+  • Bare pronouns ["he"], ["she"], ["they"] as prefilled for 3rd-person — WRONG ✘
+    Replace with descriptive NP: ["the professor"], ["the student"], ["some colleagues"].
+
 ## GIVEN WORD (PREFILLED) 鈥?CRITICAL CONCEPT:
-In the real TOEFL exercise, 6-7 out of every 10 questions give the student one word or short phrase already placed in the sentence (a "given word"). This makes the task slightly easier.
+In the real TOEFL exercise, 8-9 out of every 10 questions give the student one word or short phrase already placed in the sentence (a "given word"). This makes the task slightly easier.
 - "prefilled": a phrase pre-placed for the student (shown on screen, not draggable)
 - "prefilled_positions": its 0-based word index in the answer
 - That phrase must be REMOVED from "chunks" 鈥?chunks covers only the draggable pieces
-- MANDATORY: exactly 6-7 items per batch MUST have a non-empty prefilled. Only 3-4 may have prefilled=[].
+- TARGET: about 8-9 out of 10 items should have a non-empty prefilled (~85%, matching real TOEFL). prefilled=[] is acceptable ONLY for short sentences (≤8 words) with no natural subject anchor.
 - Every output item must pass a strict WORD-BAG check:
   answer words = (chunks minus distractor) + prefilled words
   no missing words, no extra words, no duplicate coverage
 
-WHAT TO USE AS PREFILLED (by answer type):
-- negation:       "not" 鈥?the negative particle, fixed in position
-- 3rd-reporting:  a UNIQUE object noun phrase from the answer, e.g. "the deadline", "the professor", "her schedule"
-- 1st-embedded:   subject "i" OR a UNIQUE topic noun phrase, e.g. "the assignment", "the lecture hall"
-- interrogative:  a UNIQUE topic noun phrase, e.g. "the library", "the registration deadline"
-- relative:       the head noun before the relative clause, e.g. "the book", "the policy"
-- direct:         subject noun phrase, e.g. "the committee", "my advisor"
-RULE: prefilled must appear EXACTLY ONCE in the answer (avoids position ambiguity).
-RULE: prefer 1-3 word noun phrases. Avoid bare function words like "the", "a", "is".
+WHAT TO USE AS PREFILLED (TPO authentic — give the SUBJECT, not the object):
+- 1st-person pronoun:    "i" for 1st-person sentences (I wondered/asked/noticed/told...)
+  → prefilled=["i"], always at position 0. Simplest and most authentic.
+- 3rd-person subject NP: 2-3 word descriptive subject noun phrase at sentence start
+  → 2-word: "the professor", "the student", "the manager", "my advisor", "the ranger"
+  → 3-word: "some colleagues", "her study partner", "the shop owner", "the front desk"
+  → NEVER use bare pronouns "he"/"she"/"they" alone — always a descriptive NP
+- Interrogative opener:  2-word opening frame (pronoun + aux)
+  → "could you", "did she", "do you"
+- Short sentences (≤8 words): prefilled=[] is acceptable when no subject anchor is natural.
+RULE: prefilled must appear EXACTLY ONCE in the answer.
+RULE: Prefer 1-word pronouns ("i") — shortest, most natural, unambiguous.
+RULE: Object noun phrases ("the library", "the report") belong in CHUNKS, NOT prefilled.
+RULE: prefilled is ≤3 words maximum. Prefer 2-word. A 4-word+ prefilled will be automatically rejected.
 
-## CHUNK GRANULARITY 鈥?CRITICAL:
-Single-word chunks are STRONGLY PREFERRED 鈥?they are more authentic and create harder, more meaningful exercises.
-Multi-word chunks are a LAST RESORT, only when the math forces it.
+## CHUNK GRANULARITY — CRITICAL:
+Real TOEFL data: ~77% single-word chunks, ~23% multi-word. Target 6-7 effective chunks per item.
 
-THE KEY MATH: R = answer word count 鈭?prefilled word count.
-- If R 鈮?8: use ALL single-word chunks. This is the GOAL.
-- If R = 9-10: merge ONE tightly-bonded collocation into a 2-word chunk (e.g. "had gone", "on Friday").
-- If R > 10: your sentence is too long OR prefilled covers too few words. Increase prefilled coverage first.
+MANDATORY multi-word chunks — NEVER atomize these:
+- Infinitives:        "to know", "to find", "to check", "to finish", "to attend", "to make"
+- Phrasal verbs:      "find out", "pick up", "carry out", "sign up"
+- Aux + participle:   "had gone", "had been", "has been", "will be", "been extended", "is scheduled"
+- Fixed collocations: "no idea", "what time", "on time", "in stock", "on Friday", "due to"
+Target: 1-2 multi-word chunks per question from the list above.
 
-HOW PREFILLED ENABLES SINGLE-WORD CHUNKS (preferred pattern):
-  answer: "She wanted to know when the library would close." (9 words)
-  WITHOUT prefilled: R=9, must merge 鈫?["she", "wanted to know", "when", "the library", "would close"] 鈫?40% multi-word (BAD)
-  WITH prefilled=["the library"] (2 words): R=7, all single-word 鈫?["she", "wanted", "to", "know", "when", "would", "close"] 鈫?0% multi-word (GOOD 鉁?
 
-BAD 鈥?no prefilled, forced multi-word chunks when prefilled was possible:
-  answer: "He wanted to know where all the accountants had gone." (10 words)
-  BAD: prefilled=[], chunks=["he", "wanted to know", "where", "all the accountants", "had gone", "have"]
-  WHY BAD: could have used prefilled=["all the accountants"] 鈫?R=7 鈫?all single-word chunks
+SINGLE-WORD: subject pronouns (i/he/she/they), question words (where/when/if/whether),
+standalone auxiliaries (did/was/were used alone).
 
-GOOD 鈥?prefilled enables single-word chunks:
-  answer: "He wanted to know where all the accountants had gone." (10 words)
-  GOOD: prefilled=["all the accountants"], prefilled_positions={"all the accountants": 5},
-        chunks=["he", "wanted", "to", "know", "where", "had", "gone", "have"] 鈫?all single-word 鉁?
+THE KEY MATH: R = answer word count − prefilled word count.
+- Target R = 6-7 (yields ~6-7 effective chunks). This is the goal.
+- HARD RULE: Choose the SUBJECT as prefilled (pronoun or subject NP), not the object.
+  For 1st-person sentences: prefilled=["i"] is almost always correct.
+  For 3rd-person sentences: use a DESCRIPTIVE 2-3 word subject NP. NEVER bare pronouns ["he"]/["she"]/["they"]. 2-word: ["the professor"], ["the manager"], ["the student"], ["the librarian"]. 3-word when natural: ["some colleagues"], ["her study partner"], ["the shop owner"].
+- HARD RULE: prefilled must be ≤3 words. Prefer 2-word (e.g. "the professor", "could you", "the manager"). 3-word is allowed only when the subject NP has no natural 2-word form. Phrases with 4+ words will be REJECTED — always shorten to the core noun.
+- If R > 8 (too many draggable words): shorten the sentence.
+- If R ≤5 (sentence too short): prefilled=[] is acceptable.
 
-ONLY FALLBACK (prefilled genuinely cannot be used for this item):
-  answer: "The desk you ordered is scheduled to arrive on Friday." (10 words)
-  prefilled=[], R=10, must merge 鈫?chunks=["the desk", "you ordered", "is scheduled", "to arrive", "on Friday"] 鈫?acceptable ONLY when no good prefilled anchor exists
+GOOD example (1st-person):
+  answer: "I asked whether the library would close early." (8 words)
+  prefilled=["i"] → R=7 → chunks=["asked","whether","the library","would","close","early","ask"]
+  "the library" stays as a draggable multi-word chunk ✔
+
+GOOD example (3rd-person, subject NP prefilled):
+  answer: "The professor mentioned that the deadline had been extended." (9 words)
+  prefilled=["the professor"] → R=7 → chunks=["mentioned","that","the deadline","had been","extended","extend"]
+  Multi-word: "had been" ✔  Distractor: "extend" (form mismatch)
 
 ## UNIQUE-SOLUTION RULE 锟?CRITICAL:
 - Every item must have exactly ONE clearly best arrangement.
@@ -693,44 +754,48 @@ ONLY FALLBACK (prefilled genuinely cannot be used for this item):
   problem: "yesterday" may attach in multiple plausible positions.
 - GOOD idea:
   use tighter structure chunks so only one order is grammatical, e.g. "asked me", "closed early", "on Friday".
+- HARD RULE: NEVER isolate time/place/frequency adverbs as standalone single-word chunks.
+  BANNED standalone chunks: "yesterday", "today", "tomorrow", "recently", "finally", "always", "often", "sometimes", "probably", "eventually", "suddenly", "already", "usually".
+  Instead, BIND them to the verb they modify: "discussed yesterday", "arrived recently", "finished finally".
+  Standalone adverbs will be AUTOMATICALLY REJECTED by the validation system.
 
-HOW PREFILLED WORKS 鈥?four pattern examples:
+HOW PREFILLED WORKS — four TPO-authentic pattern examples:
 
-Pattern A (negation, prefilled = "not"):
-  answer:            "I did not finish the assignment on time."  [8 words]
-  prefilled:         ["not"]
-  prefilled_positions: {"not": 2}
-  R = 8 - 1 = 7 remaining words -> all single-word chunks
-  chunks:            ["i", "did", "finish", "the", "assignment", "on", "time", "never"]
-  distractor:        "never"  (not vs never)
-  word bag check:    7 chunks + 1 prefilled = 8 words in answer OK
+Pattern A (1st-person sentence, prefilled = subject pronoun "i"):
+  answer:            "I asked whether the meeting had been canceled."  [8 words]
+  prefilled:         ["i"]
+  prefilled_positions: {"i": 0}
+  R = 8 - 1 = 7
+  chunks:            ["asked", "whether", "the meeting", "had been", "canceled", "cancel"]
+  distractor:        "cancel"  (past perfect passive vs base form)
+  word bag check:    asked(1)+whether(1)+the meeting(2)+had been(2)+canceled(1)=7 + i(1) = 8 ✓
 
-Pattern B (3rd-reporting, prefilled = object noun phrase):
-  answer:            "She asked whether the deadline had been extended."  [8 words]
-  prefilled:         ["the deadline"]
-  prefilled_positions: {"the deadline": 3}
-  R = 8 - 2 = 6 remaining words -> all single-word chunks
-  chunks:            ["she", "asked", "whether", "had", "been", "extended", "have"]
-  distractor:        "have"  (have vs had)
-  word bag check:    6 chunks + 2 prefilled = 8 words in answer OK
+Pattern B (3rd-person sentence, prefilled = 2-word subject NP "the manager"):
+  answer:            "The manager wanted to know if the order was ready."  [10 words]
+  prefilled:         ["the manager"]
+  prefilled_positions: {"the manager": 0}
+  R = 10 - 2 = 8
+  chunks:            ["wanted", "to know", "if", "the order", "was", "ready", "is"]
+  distractor:        "is"  (was vs is — tense mismatch)
+  word bag check:    wanted(1)+to know(2)+if(1)+the order(2)+was(1)+ready(1)=8 + the manager(2) = 10 ✓
 
-Pattern C (1st-embedded, prefilled = topic noun phrase):
-  answer:            "I wondered whether the scholarship application was still open."  [9 words]
-  prefilled:         ["the scholarship application"]
-  prefilled_positions: {"the scholarship application": 3}
-  R = 9 - 3 = 6 remaining words -> all single-word chunks
-  chunks:            ["i", "wondered", "whether", "was", "still", "open", "wonder"]
-  distractor:        "wonder"  (wondered vs wonder)
-  word bag check:    6 chunks + 3 prefilled = 9 words in answer OK
+Pattern C (interrogative, prefilled = opening frame "could you"):
+  answer:            "Could you tell me what time the library closes?"  [9 words]
+  prefilled:         ["could you"]
+  prefilled_positions: {"could you": 0}
+  R = 9 - 2 = 7
+  chunks:            ["tell", "me", "what time", "the library", "closes", "closed"]
+  distractor:        "closed"  (closes vs closed — tense)
+  word bag check:    tell(1)+me(1)+what time(2)+the library(2)+closes(1)=7 + could you(2) = 9 ✓
 
-Pattern D (interrogative, prefilled = topic noun phrase):
-  answer:            "Could you tell me when the registration deadline is?"  [10 words]
-  prefilled:         ["the registration deadline"]
-  prefilled_positions: {"the registration deadline": 5}
-  R = 10 - 3 = 7 remaining words -> all single-word chunks
-  chunks:            ["could", "you", "tell", "me", "when", "is", "was"]
-  distractor:        "was"  (is vs was 鈥?tense mismatch in embedded clause)
-  word bag check:    7 chunks + 3 prefilled = 10 words in answer OK
+Pattern D (short sentence ≤8 words, prefilled=[]):
+  answer:            "I did not submit the form on time."  [8 words]
+  prefilled:         []
+  R = 8 (all words draggable)
+  chunks:            ["i", "did", "not", "submit", "the form", "on time", "submitted"]
+  distractor:        "submitted"  (did not submit vs submitted — tense)
+  word bag check:    i(1)+did(1)+not(1)+submit(1)+the form(2)+on time(2)=8 + []=0 → 8 ✓
+
 ## Schema:
 {
   "id": "tmp_r${round}_q1",
@@ -777,14 +842,22 @@ ${rejectFeedback}
 ## FINAL CHECKLIST 锟?VERIFY BEFORE OUTPUT:
 1. WORD BAG: chunks (minus distractor) + prefilled words must equal EXACTLY the words in answer 锟?no extras, no missing. Verify every item.
 2. DISTRACTOR: The distractor word must NOT appear anywhere in the answer string.
-3. PREFILLED COUNT: Count your non-empty prefilled items. You MUST have 6-7 items with prefilled in this batch. If you have fewer than 6, go back and add prefilled to more items before outputting.
+3. PREFILLED COUNT: Count your non-empty prefilled items. You MUST have 8-9 items with prefilled in this batch. If you have fewer than 8, go back and add prefilled (subject pronoun or subject NP) to more items before outputting.
 4. PREFILLED CORRECTNESS: The prefilled word/phrase must appear EXACTLY in the answer string, at the stated index. Remove it from chunks 鈥?never include it in both prefilled and chunks. chunks + prefilled reconstruct the answer exactly once.
-5. CHUNK GRANULARITY: R = answer words - prefilled words. If R 鈮?8, use ALL single-word chunks. If R = 9-10, merge ONE collocation. If R > 10, something is wrong 鈥?increase prefilled coverage. Never output 9+ effective chunks.
+5. CHUNK GRANULARITY & R-VALUE: R = answer_words − prefilled_words. Target R=6-7. prefilled is ≤3 words max (4-word+ = REJECTED). Object noun phrases belong in CHUNKS, not prefilled. 1-2 multi-word chunks per question: infinitives ("to know"), phrasal verbs ("find out"), aux+participle ("had been"). Never 9+ effective chunks.
 6. VERB DIVERSITY: No single reporting verb may appear more than twice in this batch.
 7. HARD DIFFICULTY: Hard items must be justified by advanced grammar signals, not by extra words. Valid hard signals include passive/passive-progressive, past perfect, relative/contact clause, whom, comparative/superlative, or multi-layer embedding.
 8. UNIQUE SOLUTION: Reject any item in your own internal check if the distractor could still fit grammatically or if more than one chunk order seems plausible.
 9. INTERROGATIVE QUALITY: For interrogative items, use a short natural polite frame, vary the opener across the batch, and keep the embedded clause in declarative order. Do not mass-produce one stock opener.
 10. PROMPT CONTRACT: Every item must include prompt_context + prompt_task_kind + prompt_task_text. Never leave the user with background only. The task text must explicitly ask for the answer utterance.
+    prompt_task_text MUST start with one of these validated patterns (auto-rejected otherwise):
+    - ask/report: "What did [person] ask/want/say/mention/find out/discover/learn?" or "What does [person] want to know/need to find out?"
+    - respond:    "How do you respond?" / "What do you say?" / "What does [person] tell [person]?"
+    - tell:       "Tell your friend about it." / "Describe what happened." / "Complete the sentence."
+    - explain:    "Explain what you found." / "Share your experience."
+    WRONG: "The student is curious about the schedule." (background, not a task)
+    WRONG: "You are talking to a friend." (context, not a task — put this in prompt_context)
+    RIGHT: prompt_context="You are talking to a friend." prompt_task_text="What do you tell them?"
 
 Output JSON array only. No markdown.`.trim();
 }
@@ -913,115 +986,62 @@ function chooseGapWeightedType(poolState, globalTypeTargets, candidates, fallbac
 function buildBoostBacklog(poolState, pool, difficultyTargets, globalTypeTargets, styleTargets) {
   const tasks = [];
   const pushTask = (task, repeat = 1) => {
-    for (let i = 0; i < repeat; i += 1) tasks.push({ ...task });
+    for (let i = 0; i < repeat; i++) tasks.push({ ...task });
   };
   const totals = poolState?.typeTotals || {};
-  const diffTargets = difficultyTargets || {};
   const diffGaps = {
-    easy: Math.max(0, (diffTargets.easy || 0) - (pool.easy?.length || 0)),
-    medium: Math.max(0, (diffTargets.medium || 0) - (pool.medium?.length || 0)),
-    hard: Math.max(0, (diffTargets.hard || 0) - (pool.hard?.length || 0)),
+    easy: Math.max(0, (difficultyTargets?.easy || 0) - (pool.easy?.length || 0)),
+    medium: Math.max(0, (difficultyTargets?.medium || 0) - (pool.medium?.length || 0)),
+    hard: Math.max(0, (difficultyTargets?.hard || 0) - (pool.hard?.length || 0)),
   };
+  const style = poolState?.style || {};
 
-  const perSetNeeds = ETS_2026_TARGET_COUNTS_10;
-  const embeddedCounts = {
-    easy: (pool.easy || []).filter((q) => q._meta?.isEmbedded).length,
-    medium: (pool.medium || []).filter((q) => q._meta?.isEmbedded).length,
-    hard: (pool.hard || []).filter((q) => q._meta?.isEmbedded).length,
-  };
-  const distractorCounts = {
-    easy: (pool.easy || []).filter((q) => q._meta?.hasDistractor).length,
-    medium: (pool.medium || []).filter((q) => q._meta?.hasDistractor).length,
-    hard: (pool.hard || []).filter((q) => q._meta?.hasDistractor).length,
-  };
-
-  for (const diff of ['medium', 'hard', 'easy']) {
-    const missing = Math.max(0, (perSetNeeds[diff] || 0) - Math.min(perSetNeeds[diff] || 0, embeddedCounts[diff] || 0));
-    if (missing > 0) {
-      pushTask({
-        priority: 100,
-        kind: 'assembly_embedded',
-        type: chooseGapWeightedType(poolState, globalTypeTargets, diff === 'easy' ? ['3rd-reporting', '1st-embedded'] : ['1st-embedded', '3rd-reporting'], '1st-embedded'),
-        difficulty: diff,
-        hint: 'BOOST TARGET: generate exactly one embedded-capable item that helps the next set satisfy the embedded-question minimum. Avoid interrogative inversion errors. Prefer a safe single-word distractor if natural.',
-      }, missing);
-    }
+  // Priority 1 (highest): STUBBORN_TYPES — main purpose of boost
+  for (const type of STUBBORN_TYPES) {
+    const gap = Math.max(0, (globalTypeTargets?.[type] || 0) - (totals[type] || 0));
+    if (gap <= 0) continue;
+    pushTask({
+      priority: 120,
+      kind: 'type_gap_stubborn',
+      type,
+      difficulty: 'medium',
+      hint: 'BOOST TARGET: generate exactly one ' + type + ' item. This is a rare type — focus entirely on getting the structure right. Do not mix with other types.',
+    }, gap);
   }
 
-  for (const diff of ['medium', 'easy', 'hard']) {
-    const missing = Math.max(0, (perSetNeeds[diff] || 0) - Math.min(perSetNeeds[diff] || 0, distractorCounts[diff] || 0));
-    if (missing > 0) {
-      pushTask({
-        priority: 95,
-        kind: 'assembly_distractor',
-        type: chooseGapWeightedType(poolState, globalTypeTargets, diff === 'easy' ? ['3rd-reporting', 'negation'] : ['3rd-reporting', '1st-embedded', 'relative'], '3rd-reporting'),
-        difficulty: diff,
-        hint: 'BOOST TARGET: generate exactly one item with a valid single-word distractor. The distractor must not appear in the answer and must not create another valid sentence.',
-      }, missing);
-    }
-  }
-
-  for (const diff of ['medium', 'easy', 'hard']) {
-    const gap = diffGaps[diff] || 0;
-    if (gap > 0) {
-      const fallback = diff === 'easy' ? 'negation' : diff === 'hard' ? '3rd-reporting' : '3rd-reporting';
-      const candidates = diff === 'easy'
-        ? ['negation', '3rd-reporting']
-        : diff === 'hard'
-        ? ['3rd-reporting', '1st-embedded', 'relative']
-        : ['3rd-reporting', '1st-embedded', 'relative', 'negation'];
-      pushTask({
-        priority: 80,
-        kind: 'difficulty_gap',
-        type: chooseGapWeightedType(poolState, globalTypeTargets, candidates, fallback),
-        difficulty: diff,
-        hint: 'BOOST TARGET: generate exactly one ' + diff + ' item. Do not change the intended difficulty by using abnormal answer length; rely on the correct grammar profile.',
-      }, gap);
-    }
-  }
-
-  const style = poolState?.style || { embedded: 0, negation: 0, distractor: 0 };
-  const embeddedGap = Math.max(0, (styleTargets?.embeddedMin || 0) - style.embedded);
+  // Priority 2: style gaps (if not already satisfied)
+  const embeddedGap = Math.max(0, (styleTargets?.embeddedMin || 0) - (style.embedded || 0));
   if (embeddedGap > 0) {
     pushTask({
       priority: 70,
       kind: 'style_embedded',
       type: chooseGapWeightedType(poolState, globalTypeTargets, ['1st-embedded', '3rd-reporting'], '1st-embedded'),
-      difficulty: diffGaps.hard > 0 ? 'hard' : 'medium',
-      hint: 'BOOST TARGET: generate exactly one embedded-question item with declarative word order inside the clause. Do not invert the embedded clause.',
+      difficulty: 'medium',
+      hint: 'BOOST TARGET: generate exactly one embedded-question item with declarative word order inside the clause.',
     }, embeddedGap);
   }
-  const negationGap = Math.max(0, (styleTargets?.negationMin || 0) - style.negation);
+  const negationGap = Math.max(0, (styleTargets?.negationMin || 0) - (style.negation || 0));
   if (negationGap > 0) {
     pushTask({
       priority: 68,
       kind: 'style_negation',
       type: 'negation',
-      difficulty: diffGaps.hard > 0 ? 'hard' : 'medium',
-      hint: 'BOOST TARGET: generate exactly one negation item. Verify the word bag carefully so every answer word is covered exactly once.',
+      difficulty: 'medium',
+      hint: 'BOOST TARGET: generate exactly one negation item.',
     }, negationGap);
   }
-  const distractorGap = Math.max(0, (styleTargets?.distractorMin || 0) - style.distractor);
-  if (distractorGap > 0) {
-    pushTask({
-      priority: 66,
-      kind: 'style_distractor',
-      type: chooseGapWeightedType(poolState, globalTypeTargets, ['3rd-reporting', '1st-embedded', 'relative'], '3rd-reporting'),
-      difficulty: 'medium',
-      hint: 'BOOST TARGET: generate exactly one item with a safe single-word distractor. Avoid optional adverbs or words that could also fit the sentence.',
-    }, distractorGap);
-  }
 
-  for (const type of TYPE_LIST) {
-    const gap = Math.max(0, (globalTypeTargets?.[type] || 0) - (totals[type] || 0));
+  // Priority 3: difficulty gaps (fallback only)
+  for (const diff of ['medium', 'easy', 'hard']) {
+    const gap = diffGaps[diff] || 0;
     if (gap <= 0) continue;
-    if (type === 'interrogative') continue;
+    const candidates = diff === 'easy' ? ['negation', '3rd-reporting'] : ['3rd-reporting', '1st-embedded'];
     pushTask({
-      priority: type === '3rd-reporting' ? 60 : 55,
-      kind: 'type_gap',
-      type,
-      difficulty: type === 'negation' ? 'medium' : type === 'relative' ? 'medium' : diffGaps.hard > 0 && type === '3rd-reporting' ? 'hard' : 'medium',
-      hint: 'BOOST TARGET: generate exactly one ' + type + ' item that clearly matches its declared type and remains TPO-like.',
+      priority: 60,
+      kind: 'difficulty_gap',
+      type: chooseGapWeightedType(poolState, globalTypeTargets, candidates, '3rd-reporting'),
+      difficulty: diff,
+      hint: 'BOOST TARGET: generate exactly one ' + diff + ' difficulty item.',
     }, gap);
   }
 
@@ -2242,6 +2262,13 @@ async function main() {
     return diffOk && styleOk && typeOk;
   }
 
+  // Boost is complete when all STUBBORN_TYPE quotas are satisfied (or backlog is empty).
+  function hasBoostComplete(poolState) {
+    return STUBBORN_TYPES.every(type =>
+      (poolState.typeTotals[type] || 0) >= (globalTypeTargets[type] || 0)
+    );
+  }
+
   for (let round = 1; round <= CANDIDATE_ROUNDS; round += 1) {
     try {
       // Planner: AI analyzes pool gaps and decides the mixed batch composition
@@ -2284,9 +2311,9 @@ async function main() {
       flushPoolCheckpoint(acceptedPool);
 
       const currentState = computePoolState(acceptedPool);
-      if (hasSufficientPoolCoverage(currentState, pool)) {
+      if (hasSufficientPoolCoverage(currentState, splitPoolByDifficulty(acceptedPool))) {
         console.log(
-          `pool sufficient (easy=${pool.easy.length}/${difficultyTargets.easy} medium=${pool.medium.length}/${difficultyTargets.medium} hard=${pool.hard.length}/${difficultyTargets.hard}), stopping early`,
+          `pool sufficient (easy=${splitPoolByDifficulty(acceptedPool).easy.length}/${difficultyTargets.easy} medium=${splitPoolByDifficulty(acceptedPool).medium.length}/${difficultyTargets.medium} hard=${splitPoolByDifficulty(acceptedPool).hard.length}/${difficultyTargets.hard}), stopping early`,
         );
         break;
       }
@@ -2301,14 +2328,14 @@ async function main() {
   let boostedPool = splitPoolByDifficulty(acceptedPool);
   if (ADAPTIVE_BOOST_ROUNDS > 0) {
     const initialBoostState = computePoolState(acceptedPool);
-    if (!hasSufficientPoolCoverage(initialBoostState, boostedPool)) {
+    if (!hasBoostComplete(computePoolState(acceptedPool))) {
       console.log(
         `pool insufficient (easy ${boostedPool.easy.length}/${difficultyTargets.easy}, medium ${boostedPool.medium.length}/${difficultyTargets.medium}, hard ${boostedPool.hard.length}/${difficultyTargets.hard}), starting adaptive boost rounds...`,
       );
       for (let i = 1; i <= ADAPTIVE_BOOST_ROUNDS; i += 1) {
         boostedPool = splitPoolByDifficulty(acceptedPool);
         const boostState = computePoolState(acceptedPool);
-        if (hasSufficientPoolCoverage(boostState, boostedPool)) break;
+        if (hasBoostComplete(computePoolState(acceptedPool))) break;
         try {
           const boostBacklog = buildBoostBacklog(
             boostState,
@@ -2333,7 +2360,7 @@ async function main() {
           console.log(
             `boost ${i} [${boostLabel}]: accepted=${res.accepted} rejected=${res.rejected} | pool easy=${boostedPool.easy.length} medium=${boostedPool.medium.length} hard=${boostedPool.hard.length}`,
           );
-          if (hasSufficientPoolCoverage(computePoolState(acceptedPool), boostedPool)) {
+          if (hasBoostComplete(computePoolState(acceptedPool))) {
             break;
           }
         } catch (e) {

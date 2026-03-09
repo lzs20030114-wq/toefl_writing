@@ -1,0 +1,1465 @@
+{
+  "version": "1.2",
+  "generated_at": "2026-03-08T05:47:15.329Z",
+  "question_sets": [
+    {
+      "set_id": 1,
+      "questions": [
+        {
+          "id": "ets_s1_q1",
+          "prompt": "An enthusiastic intern is at the library information desk. What do they ask the librarian?",
+          "prompt_context": "An enthusiastic intern is at the library information desk.",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What do they ask the librarian?",
+          "answer": "Could you tell me when the new art history books arrive?",
+          "chunks": [
+            "could",
+            "you",
+            "tell",
+            "me",
+            "when",
+            "arrive",
+            "arrived"
+          ],
+          "prefilled": [
+            "the new art history books"
+          ],
+          "prefilled_positions": {
+            "the new art history books": 5
+          },
+          "distractor": "arrived",
+          "has_question_mark": true,
+          "grammar_points": [
+            "embedded question",
+            "present simple"
+          ]
+        },
+        {
+          "id": "ets_s1_q2",
+          "prompt": "You are planning a hike and checking the weather. What do you tell your friend?",
+          "prompt_context": "You are planning a hike and checking the weather.",
+          "prompt_task_kind": "tell",
+          "prompt_task_text": "What do you tell your friend?",
+          "answer": "I just found out when the storm is expected to arrive.",
+          "chunks": [
+            "i",
+            "just",
+            "found out",
+            "when",
+            "is",
+            "expected",
+            "to arrive",
+            "expect"
+          ],
+          "prefilled": [
+            "the storm"
+          ],
+          "prefilled_positions": {
+            "the storm": 5
+          },
+          "distractor": "expect",
+          "has_question_mark": false,
+          "grammar_points": [
+            "1st-embedded",
+            "embedded question",
+            "passive"
+          ]
+        },
+        {
+          "id": "ets_s1_q3",
+          "prompt": "You are at a medical clinic for an appointment. Explain the situation to the receptionist.",
+          "prompt_context": "You are at a medical clinic for an appointment.",
+          "prompt_task_kind": "explain",
+          "prompt_task_text": "Explain the situation to the receptionist.",
+          "answer": "I did not receive the email about my appointment time.",
+          "chunks": [
+            "i",
+            "did",
+            "receive",
+            "the email",
+            "about",
+            "my",
+            "appointment time",
+            "do"
+          ],
+          "prefilled": [
+            "not"
+          ],
+          "prefilled_positions": {
+            "not": 2
+          },
+          "distractor": "do",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation",
+            "simple-past"
+          ]
+        },
+        {
+          "id": "ets_s1_q4",
+          "prompt": "The local librarian was helping a patron. What did she inquire about?",
+          "prompt_context": "The local librarian was helping a patron.",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did she inquire about?",
+          "answer": "She inquired if the book club meeting was still on.",
+          "chunks": [
+            "she",
+            "inquired",
+            "if",
+            "was",
+            "still",
+            "on",
+            "is"
+          ],
+          "prefilled": [
+            "the book club meeting"
+          ],
+          "prefilled_positions": {
+            "the book club meeting": 3
+          },
+          "distractor": "is",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question",
+            "past tense"
+          ]
+        },
+        {
+          "id": "ets_s1_q5",
+          "prompt": "A young architect is telling a colleague about a new restaurant. Tell your colleague about the restaurant you discovered.",
+          "prompt_context": "A young architect is telling a colleague about a new restaurant.",
+          "prompt_task_kind": "tell",
+          "prompt_task_text": "Tell your colleague about the restaurant you discovered.",
+          "answer": "The restaurant I discovered serves authentic Italian cuisine.",
+          "chunks": [
+            "i",
+            "discovered",
+            "serves",
+            "authentic",
+            "italian",
+            "cuisine",
+            "discover"
+          ],
+          "prefilled": [
+            "the restaurant"
+          ],
+          "prefilled_positions": {
+            "the restaurant": 0
+          },
+          "distractor": "discover",
+          "has_question_mark": false,
+          "grammar_points": [
+            "relative",
+            "contact_clause"
+          ]
+        },
+        {
+          "id": "ets_s1_q6",
+          "prompt": "The museum curator is speaking with some colleagues. What did they wonder?",
+          "prompt_context": "The museum curator is speaking with some colleagues.",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did they wonder?",
+          "answer": "They wondered what time the new exhibit would open.",
+          "chunks": [
+            "they",
+            "wondered",
+            "what time",
+            "would",
+            "open",
+            "will"
+          ],
+          "prefilled": [
+            "the new exhibit"
+          ],
+          "prefilled_positions": {
+            "the new exhibit": 4
+          },
+          "distractor": "will",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question",
+            "tense agreement"
+          ]
+        },
+        {
+          "id": "ets_s1_q7",
+          "prompt": "Some colleagues were discussing a schedule change. What did they want to know?",
+          "prompt_context": "Some colleagues were discussing a schedule change.",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did they want to know?",
+          "answer": "They wondered why the weekly meeting had been moved.",
+          "chunks": [
+            "they",
+            "wondered",
+            "why",
+            "had",
+            "been",
+            "moved",
+            "has"
+          ],
+          "prefilled": [
+            "the weekly meeting"
+          ],
+          "prefilled_positions": {
+            "the weekly meeting": 3
+          },
+          "distractor": "has",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded-question",
+            "past-perfect-passive"
+          ]
+        },
+        {
+          "id": "ets_s1_q8",
+          "prompt": "An exchange student is talking to a classmate about a campus event. What do they say?",
+          "prompt_context": "An exchange student is talking to a classmate about a campus event.",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do they say?",
+          "answer": "I have no idea what time the lecture starts.",
+          "chunks": [
+            "i",
+            "have",
+            "no",
+            "idea",
+            "what",
+            "time",
+            "the lecture",
+            "starts",
+            "do"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "do",
+          "has_question_mark": false,
+          "grammar_points": [
+            "1st-embedded",
+            "easy"
+          ]
+        },
+        {
+          "id": "ets_s1_q9",
+          "prompt": "Some colleagues were discussing the software update. What did they ask the IT manager?",
+          "prompt_context": "Some colleagues were discussing the software update.",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did they ask the IT manager?",
+          "answer": "They inquired why the new system was running so slowly.",
+          "chunks": [
+            "they",
+            "inquired",
+            "why",
+            "was running",
+            "so slowly",
+            "is"
+          ],
+          "prefilled": [
+            "the new system"
+          ],
+          "prefilled_positions": {
+            "the new system": 3
+          },
+          "distractor": "is",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question",
+            "past continuous"
+          ]
+        },
+        {
+          "id": "ets_s1_q10",
+          "prompt": "At the dental clinic, the receptionist spoke with a patient. What did the patient ask?",
+          "prompt_context": "At the dental clinic, the receptionist spoke with a patient.",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did the patient ask?",
+          "answer": "She was not sure if the new insurance policy covered the procedure.",
+          "chunks": [
+            "she",
+            "was",
+            "not sure",
+            "if",
+            "covered",
+            "the procedure"
+          ],
+          "prefilled": [
+            "the new insurance policy"
+          ],
+          "prefilled_positions": {
+            "the new insurance policy": 5
+          },
+          "distractor": null,
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded-question",
+            "simple-negation"
+          ]
+        }
+      ]
+    },
+    {
+      "set_id": 2,
+      "questions": [
+        {
+          "id": "ets_s2_q1",
+          "prompt": "A friend asks if you finished the home repair. Tell them you did not.",
+          "prompt_context": "A friend asks if you finished the home repair.",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Tell them you did not.",
+          "answer": "I did not fix the leaky faucet yet.",
+          "chunks": [
+            "i",
+            "did",
+            "fix",
+            "the",
+            "leaky faucet",
+            "yet",
+            "do"
+          ],
+          "prefilled": [
+            "not"
+          ],
+          "prefilled_positions": {
+            "not": 2
+          },
+          "distractor": "do",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation",
+            "simple past"
+          ]
+        },
+        {
+          "id": "ets_s2_q2",
+          "prompt": "You're talking to a store clerk about a purchase. Explain your uncertainty.",
+          "prompt_context": "You're talking to a store clerk about a purchase.",
+          "prompt_task_kind": "explain",
+          "prompt_task_text": "Explain your uncertainty.",
+          "answer": "I can't decide which color jacket looks better on me.",
+          "chunks": [
+            "i",
+            "can't",
+            "decide",
+            "which",
+            "looks",
+            "better",
+            "on me",
+            "look"
+          ],
+          "prefilled": [
+            "color jacket"
+          ],
+          "prefilled_positions": {
+            "color jacket": 4
+          },
+          "distractor": "look",
+          "has_question_mark": false,
+          "grammar_points": [
+            "1st-embedded",
+            "embedded question",
+            "comparative"
+          ]
+        },
+        {
+          "id": "ets_s2_q3",
+          "prompt": "The shop owner spoke to a delivery person. What did the shop owner ask?",
+          "prompt_context": "The shop owner spoke to a delivery person.",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did the shop owner ask?",
+          "answer": "He inquired if the new shipment had arrived yet.",
+          "chunks": [
+            "he",
+            "inquired",
+            "if",
+            "had",
+            "arrived",
+            "yet",
+            "has"
+          ],
+          "prefilled": [
+            "the new shipment"
+          ],
+          "prefilled_positions": {
+            "the new shipment": 3
+          },
+          "distractor": "has",
+          "has_question_mark": false,
+          "grammar_points": [
+            "3rd-reporting",
+            "embedded question",
+            "past perfect"
+          ]
+        },
+        {
+          "id": "ets_s2_q4",
+          "prompt": "The flight attendant is speaking with a passenger. What did she ask?",
+          "prompt_context": "The flight attendant is speaking with a passenger.",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did she ask?",
+          "answer": "She asked me what time the flight would board.",
+          "chunks": [
+            "she",
+            "asked",
+            "me",
+            "what time",
+            "would",
+            "board",
+            "will"
+          ],
+          "prefilled": [
+            "the flight"
+          ],
+          "prefilled_positions": {
+            "the flight": 5
+          },
+          "distractor": "will",
+          "has_question_mark": false,
+          "grammar_points": [
+            "3rd-reporting",
+            "embedded question"
+          ]
+        },
+        {
+          "id": "ets_s2_q5",
+          "prompt": "An exchange student is talking to a campus advisor. What did the student ask?",
+          "prompt_context": "An exchange student is talking to a campus advisor.",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did the student ask?",
+          "answer": "She needed to find out where the campus health center was located.",
+          "chunks": [
+            "she",
+            "needed",
+            "to find out",
+            "where",
+            "was",
+            "located",
+            "is"
+          ],
+          "prefilled": [
+            "the campus health center"
+          ],
+          "prefilled_positions": {
+            "the campus health center": 6
+          },
+          "distractor": "is",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded-question",
+            "past-tense"
+          ]
+        },
+        {
+          "id": "ets_s2_q6",
+          "prompt": "You missed a friend's call about the hiking trip. What do you tell them?",
+          "prompt_context": "You missed a friend's call about the hiking trip.",
+          "prompt_task_kind": "explain",
+          "prompt_task_text": "What do you tell them?",
+          "answer": "I did not hear what the meeting time was.",
+          "chunks": [
+            "i",
+            "did",
+            "hear",
+            "what",
+            "the meeting time",
+            "was",
+            "do"
+          ],
+          "prefilled": [
+            "not"
+          ],
+          "prefilled_positions": {
+            "not": 2
+          },
+          "distractor": "do",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation",
+            "embedded clause"
+          ]
+        },
+        {
+          "id": "ets_s2_q7",
+          "prompt": "Some colleagues were discussing the software update. What did they want to know?",
+          "prompt_context": "Some colleagues were discussing the software update.",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did they want to know?",
+          "answer": "They wanted to know if the manager approved the changes.",
+          "chunks": [
+            "they",
+            "wanted",
+            "to know",
+            "if",
+            "approved",
+            "the changes"
+          ],
+          "prefilled": [
+            "the manager"
+          ],
+          "prefilled_positions": {
+            "the manager": 5
+          },
+          "distractor": null,
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded-question",
+            "past-tense"
+          ]
+        },
+        {
+          "id": "ets_s2_q8",
+          "prompt": "You are speaking with the gym trainer. What do you ask?",
+          "prompt_context": "You are speaking with the gym trainer.",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What do you ask?",
+          "answer": "Can you tell me who designed the new workout program?",
+          "chunks": [
+            "can",
+            "you",
+            "tell",
+            "me",
+            "who",
+            "designed",
+            "design"
+          ],
+          "prefilled": [
+            "the new workout program"
+          ],
+          "prefilled_positions": {
+            "the new workout program": 6
+          },
+          "distractor": "design",
+          "has_question_mark": true,
+          "grammar_points": [
+            "1st-embedded",
+            "interrogative"
+          ]
+        },
+        {
+          "id": "ets_s2_q9",
+          "prompt": "You are at a dental appointment. Explain your confusion to the receptionist.",
+          "prompt_context": "You are at a dental appointment.",
+          "prompt_task_kind": "explain",
+          "prompt_task_text": "Explain your confusion to the receptionist.",
+          "answer": "I have no idea who is covering the afternoon shift.",
+          "chunks": [
+            "i",
+            "have",
+            "no idea",
+            "who",
+            "is covering",
+            "does"
+          ],
+          "prefilled": [
+            "the afternoon shift"
+          ],
+          "prefilled_positions": {
+            "the afternoon shift": 7
+          },
+          "distractor": "does",
+          "has_question_mark": false,
+          "grammar_points": [
+            "1st-embedded",
+            "embedded-question"
+          ]
+        },
+        {
+          "id": "ets_s2_q10",
+          "prompt": "You found a great bookstore. Tell your friend about it.",
+          "prompt_context": "You found a great bookstore.",
+          "prompt_task_kind": "tell",
+          "prompt_task_text": "Tell your friend about it.",
+          "answer": "The bookstore I visited had a fantastic selection.",
+          "chunks": [
+            "the",
+            "bookstore",
+            "i",
+            "visited",
+            "had",
+            "a",
+            "fantastic",
+            "selection",
+            "visit"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "visit",
+          "has_question_mark": false,
+          "grammar_points": [
+            "contact clause",
+            "relative"
+          ]
+        }
+      ]
+    },
+    {
+      "set_id": 3,
+      "questions": [
+        {
+          "id": "ets_s3_q1",
+          "prompt": "You are looking for a book at the local library. What do you ask the librarian?",
+          "prompt_context": "You are looking for a book at the local library.",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What do you ask the librarian?",
+          "answer": "Do you know where the new science fiction section is located?",
+          "chunks": [
+            "do",
+            "you",
+            "know",
+            "where",
+            "is",
+            "located",
+            "was"
+          ],
+          "prefilled": [
+            "the new science fiction section"
+          ],
+          "prefilled_positions": {
+            "the new science fiction section": 4
+          },
+          "distractor": "was",
+          "has_question_mark": true,
+          "grammar_points": [
+            "1st-embedded",
+            "interrogative",
+            "passive voice"
+          ]
+        },
+        {
+          "id": "ets_s3_q2",
+          "prompt": "You are at the pharmacy. Tell the pharmacist you didn't get the instructions.",
+          "prompt_context": "You are at the pharmacy.",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Tell the pharmacist you didn't get the instructions.",
+          "answer": "I did not receive the dosage instructions with my medication.",
+          "chunks": [
+            "i",
+            "did",
+            "receive",
+            "the dosage instructions",
+            "with",
+            "my medication",
+            "do"
+          ],
+          "prefilled": [
+            "not"
+          ],
+          "prefilled_positions": {
+            "not": 2
+          },
+          "distractor": "do",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation",
+            "simple past"
+          ]
+        },
+        {
+          "id": "ets_s3_q3",
+          "prompt": "The project supervisor is talking to a team member. What did the supervisor ask?",
+          "prompt_context": "The project supervisor is talking to a team member.",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did the supervisor ask?",
+          "answer": "She needed to find out if the client approved the final design.",
+          "chunks": [
+            "she",
+            "needed",
+            "to find out",
+            "if",
+            "the client",
+            "approved",
+            "did"
+          ],
+          "prefilled": [
+            "the final design"
+          ],
+          "prefilled_positions": {
+            "the final design": 9
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "3rd-reporting",
+            "embedded-question"
+          ]
+        },
+        {
+          "id": "ets_s3_q4",
+          "prompt": "An enthusiastic intern spoke with the project lead. What did he wonder?",
+          "prompt_context": "An enthusiastic intern spoke with the project lead.",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did he wonder?",
+          "answer": "He wondered what time the final presentation would start.",
+          "chunks": [
+            "he",
+            "wondered",
+            "what time",
+            "would",
+            "start"
+          ],
+          "prefilled": [
+            "the final presentation"
+          ],
+          "prefilled_positions": {
+            "the final presentation": 4
+          },
+          "distractor": null,
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question",
+            "future in the past"
+          ]
+        },
+        {
+          "id": "ets_s3_q5",
+          "prompt": "A student is talking to a classmate after a study group. Answer their question: Did you finish the reading?",
+          "prompt_context": "A student is talking to a classmate after a study group.",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Answer their question: Did you finish the reading?",
+          "answer": "I have not finished the reading yet.",
+          "chunks": [
+            "i",
+            "have",
+            "finished",
+            "the",
+            "reading",
+            "yet",
+            "finish"
+          ],
+          "prefilled": [
+            "not"
+          ],
+          "prefilled_positions": {
+            "not": 2
+          },
+          "distractor": "finish",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation",
+            "present perfect"
+          ]
+        },
+        {
+          "id": "ets_s3_q6",
+          "prompt": "The software developer spoke with the project manager. What did he ask?",
+          "prompt_context": "The software developer spoke with the project manager.",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did he ask?",
+          "answer": "He asked if the client had approved the final design.",
+          "chunks": [
+            "he",
+            "asked",
+            "if",
+            "the client",
+            "had",
+            "approved",
+            "has"
+          ],
+          "prefilled": [
+            "the final design"
+          ],
+          "prefilled_positions": {
+            "the final design": 7
+          },
+          "distractor": "has",
+          "has_question_mark": false,
+          "grammar_points": [
+            "3rd-reporting",
+            "embedded question",
+            "past perfect"
+          ]
+        },
+        {
+          "id": "ets_s3_q7",
+          "prompt": "An enthusiastic intern is talking to a colleague about a yoga class. What do they say?",
+          "prompt_context": "An enthusiastic intern is talking to a colleague about a yoga class.",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do they say?",
+          "answer": "I have no idea what time the yoga class starts.",
+          "chunks": [
+            "i",
+            "have",
+            "no",
+            "idea",
+            "what",
+            "time",
+            "starts",
+            "do"
+          ],
+          "prefilled": [
+            "the yoga class"
+          ],
+          "prefilled_positions": {
+            "the yoga class": 6
+          },
+          "distractor": "do",
+          "has_question_mark": false,
+          "grammar_points": [
+            "1st-embedded",
+            "easy"
+          ]
+        },
+        {
+          "id": "ets_s3_q8",
+          "prompt": "You're telling your yoga instructor about a great new place you found. Tell them about the place.",
+          "prompt_context": "You're telling your yoga instructor about a great new place you found.",
+          "prompt_task_kind": "tell",
+          "prompt_task_text": "Tell them about the place.",
+          "answer": "The juice bar I discovered serves organic smoothies.",
+          "chunks": [
+            "the",
+            "i",
+            "discovered",
+            "serves",
+            "organic",
+            "smoothies",
+            "discover"
+          ],
+          "prefilled": [
+            "juice bar"
+          ],
+          "prefilled_positions": {
+            "juice bar": 1
+          },
+          "distractor": "discover",
+          "has_question_mark": false,
+          "grammar_points": [
+            "relative",
+            "contact clause"
+          ]
+        },
+        {
+          "id": "ets_s3_q9",
+          "prompt": "A delivery driver is explaining a delay to a customer. What did he admit?",
+          "prompt_context": "A delivery driver is explaining a delay to a customer.",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did he admit?",
+          "answer": "He did not know why the package had been rerouted.",
+          "chunks": [
+            "he",
+            "did",
+            "know",
+            "why",
+            "the package",
+            "had been",
+            "rerouted"
+          ],
+          "prefilled": [
+            "not"
+          ],
+          "prefilled_positions": {
+            "not": 2
+          },
+          "distractor": null,
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation",
+            "simple past",
+            "embedded question",
+            "past perfect passive"
+          ]
+        },
+        {
+          "id": "ets_s3_q10",
+          "prompt": "The museum curator was reviewing the schedule. What did she ask?",
+          "prompt_context": "The museum curator was reviewing the schedule.",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did she ask?",
+          "answer": "She inquired why the special exhibit was closing early.",
+          "chunks": [
+            "she",
+            "inquired",
+            "why",
+            "was",
+            "closing",
+            "early",
+            "did"
+          ],
+          "prefilled": [
+            "the special exhibit"
+          ],
+          "prefilled_positions": {
+            "the special exhibit": 3
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "3rd-reporting",
+            "embedded-wh"
+          ]
+        }
+      ]
+    },
+    {
+      "set_id": 4,
+      "questions": [
+        {
+          "id": "ets_s4_q1",
+          "prompt": "A volunteer at the registrar's office had a question for you. What did she ask?",
+          "prompt_context": "A volunteer at the registrar's office had a question for you.",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did she ask?",
+          "answer": "She inquired whether the professor had office hours.",
+          "chunks": [
+            "she",
+            "inquired",
+            "whether",
+            "the professor",
+            "had",
+            "office hours",
+            "has"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "has",
+          "has_question_mark": false,
+          "grammar_points": [
+            "reported-speech",
+            "past-tense"
+          ]
+        },
+        {
+          "id": "ets_s4_q2",
+          "prompt": "The professor was reviewing the syllabus with a student. What did the professor inquire about?",
+          "prompt_context": "The professor was reviewing the syllabus with a student.",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did the professor inquire about?",
+          "answer": "He inquired if the required textbook had been purchased.",
+          "chunks": [
+            "he",
+            "inquired",
+            "if",
+            "had",
+            "been",
+            "purchased"
+          ],
+          "prefilled": [
+            "the required textbook"
+          ],
+          "prefilled_positions": {
+            "the required textbook": 3
+          },
+          "distractor": null,
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded-question",
+            "past-perfect-passive"
+          ]
+        },
+        {
+          "id": "ets_s4_q3",
+          "prompt": "A travel blogger is researching a local botanical garden. What does the blogger need to find out?",
+          "prompt_context": "A travel blogger is researching a local botanical garden.",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What does the blogger need to find out?",
+          "answer": "I need to find out when the guided tour starts.",
+          "chunks": [
+            "i",
+            "need",
+            "to find out",
+            "when",
+            "the guided tour",
+            "starts",
+            "start"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "start",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded-question"
+          ]
+        },
+        {
+          "id": "ets_s4_q4",
+          "prompt": "Your friend wonders why the tour guide left early. You don't know the reason. What do you say?",
+          "prompt_context": "Your friend wonders why the tour guide left early.",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "You don't know the reason. What do you say?",
+          "answer": "I have no idea why she left so quickly.",
+          "chunks": [
+            "i",
+            "have",
+            "no idea",
+            "why",
+            "she",
+            "left",
+            "so quickly",
+            "do"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "do",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question",
+            "declarative order"
+          ]
+        },
+        {
+          "id": "ets_s4_q5",
+          "prompt": "The museum curator was reviewing the schedule. What was she curious about?",
+          "prompt_context": "The museum curator was reviewing the schedule.",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What was she curious about?",
+          "answer": "She was curious what special events the museum planned next month.",
+          "chunks": [
+            "she",
+            "was curious",
+            "what",
+            "the museum",
+            "planned",
+            "next month"
+          ],
+          "prefilled": [
+            "special events"
+          ],
+          "prefilled_positions": {
+            "special events": 4
+          },
+          "distractor": null,
+          "has_question_mark": false,
+          "grammar_points": [
+            "3rd-reporting",
+            "embedded question",
+            "contact clause"
+          ]
+        },
+        {
+          "id": "ets_s4_q6",
+          "prompt": "You are talking to a classmate about a campus event. What do you tell them?",
+          "prompt_context": "You are talking to a classmate about a campus event.",
+          "prompt_task_kind": "explain",
+          "prompt_task_text": "What do you tell them?",
+          "answer": "I have not received any confirmation about the workshop details.",
+          "chunks": [
+            "i",
+            "have",
+            "received",
+            "any confirmation",
+            "about",
+            "the workshop details",
+            "did"
+          ],
+          "prefilled": [
+            "not"
+          ],
+          "prefilled_positions": {
+            "not": 2
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation",
+            "present perfect"
+          ]
+        },
+        {
+          "id": "ets_s4_q7",
+          "prompt": "You are at a medical clinic. Explain to the nurse what you are unsure about.",
+          "prompt_context": "You are at a medical clinic.",
+          "prompt_task_kind": "explain",
+          "prompt_task_text": "Explain to the nurse what you are unsure about.",
+          "answer": "I am not sure when my next appointment is scheduled.",
+          "chunks": [
+            "i",
+            "am",
+            "not sure",
+            "when",
+            "my",
+            "next appointment",
+            "is scheduled",
+            "schedule"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "schedule",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question",
+            "passive voice"
+          ]
+        },
+        {
+          "id": "ets_s4_q8",
+          "prompt": "A frustrated customer is at the pharmacy counter. What do they ask the clerk?",
+          "prompt_context": "A frustrated customer is at the pharmacy counter.",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What do they ask the clerk?",
+          "answer": "Could you tell me when the new allergy medication is in stock?",
+          "chunks": [
+            "could",
+            "you",
+            "tell",
+            "me",
+            "when",
+            "is",
+            "in stock",
+            "was"
+          ],
+          "prefilled": [
+            "the new allergy medication"
+          ],
+          "prefilled_positions": {
+            "the new allergy medication": 5
+          },
+          "distractor": "was",
+          "has_question_mark": true,
+          "grammar_points": [
+            "interrogative",
+            "embedded question",
+            "present tense"
+          ]
+        },
+        {
+          "id": "ets_s4_q9",
+          "prompt": "You're telling a travel blogger about a great spot you discovered. Tell them about the place you found.",
+          "prompt_context": "You're telling a travel blogger about a great spot you discovered.",
+          "prompt_task_kind": "tell",
+          "prompt_task_text": "Tell them about the place you found.",
+          "answer": "The cafe I visited yesterday serves amazing vegan pastries.",
+          "chunks": [
+            "i",
+            "visited",
+            "yesterday",
+            "serves",
+            "amazing",
+            "vegan pastries",
+            "visit"
+          ],
+          "prefilled": [
+            "the cafe"
+          ],
+          "prefilled_positions": {
+            "the cafe": 0
+          },
+          "distractor": "visit",
+          "has_question_mark": false,
+          "grammar_points": [
+            "contact clause",
+            "relative"
+          ]
+        },
+        {
+          "id": "ets_s4_q10",
+          "prompt": "Your friend asks about the internship interview. Tell them you didn't go.",
+          "prompt_context": "Your friend asks about the internship interview.",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Tell them you didn't go.",
+          "answer": "I did not attend the interview last week.",
+          "chunks": [
+            "i",
+            "did",
+            "attend",
+            "the",
+            "interview",
+            "last week",
+            "do"
+          ],
+          "prefilled": [
+            "not"
+          ],
+          "prefilled_positions": {
+            "not": 2
+          },
+          "distractor": "do",
+          "has_question_mark": false,
+          "grammar_points": [
+            "simple negation",
+            "past tense"
+          ]
+        }
+      ]
+    },
+    {
+      "set_id": 5,
+      "questions": [
+        {
+          "id": "ets_s5_q1",
+          "prompt": "Some colleagues are discussing a project in the office. What did they inquire about?",
+          "prompt_context": "Some colleagues are discussing a project in the office.",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did they inquire about?",
+          "answer": "They wondered why the manager canceled the morning meeting.",
+          "chunks": [
+            "they",
+            "wondered",
+            "why",
+            "the manager",
+            "canceled",
+            "did"
+          ],
+          "prefilled": [
+            "the morning meeting"
+          ],
+          "prefilled_positions": {
+            "the morning meeting": 6
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question",
+            "declarative word order"
+          ]
+        },
+        {
+          "id": "ets_s5_q2",
+          "prompt": "You are explaining a problem to a friend. Tell your friend what happened.",
+          "prompt_context": "You are explaining a problem to a friend.",
+          "prompt_task_kind": "explain",
+          "prompt_task_text": "Tell your friend what happened.",
+          "answer": "I did not understand what the manager explained at the meeting.",
+          "chunks": [
+            "i",
+            "did",
+            "understand",
+            "what",
+            "the manager",
+            "explained",
+            "at the meeting",
+            "do"
+          ],
+          "prefilled": [
+            "not"
+          ],
+          "prefilled_positions": {
+            "not": 2
+          },
+          "distractor": "do",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation",
+            "embedded clause"
+          ]
+        },
+        {
+          "id": "ets_s5_q3",
+          "prompt": "You are discussing gym trainers with a fellow member. Explain your uncertainty about the schedule.",
+          "prompt_context": "You are discussing gym trainers with a fellow member.",
+          "prompt_task_kind": "explain",
+          "prompt_task_text": "Explain your uncertainty about the schedule.",
+          "answer": "I am not sure who will be leading the morning session.",
+          "chunks": [
+            "i",
+            "am",
+            "sure",
+            "who",
+            "will be",
+            "leading",
+            "not",
+            "would"
+          ],
+          "prefilled": [
+            "the morning session"
+          ],
+          "prefilled_positions": {
+            "the morning session": 8
+          },
+          "distractor": "would",
+          "has_question_mark": false,
+          "grammar_points": [
+            "1st-embedded",
+            "embedded-question",
+            "future-progressive"
+          ]
+        },
+        {
+          "id": "ets_s5_q4",
+          "prompt": "An enthusiastic intern is speaking with the shop owner. What did the intern inquire?",
+          "prompt_context": "An enthusiastic intern is speaking with the shop owner.",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did the intern inquire?",
+          "answer": "She inquired why the new inventory had not arrived.",
+          "chunks": [
+            "she",
+            "inquired",
+            "why",
+            "had",
+            "arrived",
+            "has"
+          ],
+          "prefilled": [
+            "the new inventory",
+            "not"
+          ],
+          "prefilled_positions": {
+            "the new inventory": 3,
+            "not": 7
+          },
+          "distractor": "has",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded-question",
+            "past-perfect",
+            "negation"
+          ]
+        },
+        {
+          "id": "ets_s5_q5",
+          "prompt": "A frustrated customer is at the airport check-in counter. What do they say to the agent?",
+          "prompt_context": "A frustrated customer is at the airport check-in counter.",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do they say to the agent?",
+          "answer": "I have no idea where my connecting flight is.",
+          "chunks": [
+            "i",
+            "have",
+            "no",
+            "idea",
+            "where",
+            "is",
+            "do"
+          ],
+          "prefilled": [
+            "my connecting flight"
+          ],
+          "prefilled_positions": {
+            "my connecting flight": 5
+          },
+          "distractor": "do",
+          "has_question_mark": false,
+          "grammar_points": [
+            "1st-embedded",
+            "easy"
+          ]
+        },
+        {
+          "id": "ets_s5_q6",
+          "prompt": "A manager is reviewing a project with a team. What did the manager ask?",
+          "prompt_context": "A manager is reviewing a project with a team.",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did the manager ask?",
+          "answer": "He asked why the final report had not been submitted on Friday.",
+          "chunks": [
+            "he",
+            "asked",
+            "why",
+            "the final report",
+            "had not been",
+            "submitted",
+            "on friday"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": null,
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question",
+            "past perfect passive",
+            "negation"
+          ]
+        },
+        {
+          "id": "ets_s5_q7",
+          "prompt": "You are planning a hike with a volunteer. Explain what you recently discovered.",
+          "prompt_context": "You are planning a hike with a volunteer.",
+          "prompt_task_kind": "explain",
+          "prompt_task_text": "Explain what you recently discovered.",
+          "answer": "I just found out which trail has been closed for repairs.",
+          "chunks": [
+            "i",
+            "just",
+            "found out",
+            "which",
+            "trail",
+            "has been",
+            "closed",
+            "for repairs",
+            "close"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "close",
+          "has_question_mark": false,
+          "grammar_points": [
+            "1st-embedded",
+            "present perfect passive"
+          ]
+        },
+        {
+          "id": "ets_s5_q8",
+          "prompt": "Your neighbor is at your door. What did he ask?",
+          "prompt_context": "Your neighbor is at your door.",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did he ask?",
+          "answer": "He wanted to know if you needed any sugar.",
+          "chunks": [
+            "he",
+            "wanted",
+            "to know",
+            "if",
+            "you",
+            "needed",
+            "need"
+          ],
+          "prefilled": [
+            "any sugar"
+          ],
+          "prefilled_positions": {
+            "any sugar": 7
+          },
+          "distractor": "need",
+          "has_question_mark": false,
+          "grammar_points": [
+            "3rd-reporting",
+            "embedded question"
+          ]
+        },
+        {
+          "id": "ets_s5_q9",
+          "prompt": "You are grocery shopping and can't find an item. Tell the store employee what happened.",
+          "prompt_context": "You are grocery shopping and can't find an item.",
+          "prompt_task_kind": "tell",
+          "prompt_task_text": "Tell the store employee what happened.",
+          "answer": "I did not see the organic apples in the produce section.",
+          "chunks": [
+            "i",
+            "did",
+            "see",
+            "in",
+            "the produce section",
+            "have"
+          ],
+          "prefilled": [
+            "not",
+            "the organic apples"
+          ],
+          "prefilled_positions": {
+            "not": 2,
+            "the organic apples": 4
+          },
+          "distractor": "have",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation",
+            "simple-past"
+          ]
+        },
+        {
+          "id": "ets_s5_q10",
+          "prompt": "A travel blogger is telling their audience about a recent discovery. Tell them about the park you visited.",
+          "prompt_context": "A travel blogger is telling their audience about a recent discovery.",
+          "prompt_task_kind": "tell",
+          "prompt_task_text": "Tell them about the park you visited.",
+          "answer": "The park I visited had a beautiful botanical garden.",
+          "chunks": [
+            "the",
+            "park",
+            "i",
+            "visited",
+            "had",
+            "a",
+            "beautiful",
+            "botanical garden",
+            "visit"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "visit",
+          "has_question_mark": false,
+          "grammar_points": [
+            "relative",
+            "contact_clause"
+          ]
+        }
+      ]
+    }
+  ]
+}
