@@ -16,7 +16,11 @@
     "rebuild:balanced:bank": "node scripts/rebuild-balanced-sets.js",
     "compare:ets": "node scripts/compare-ets-consistency.js",
     "calibration:test": "node scripts/calibration-test.js",
-    "deepseek:check": "node scripts/check-deepseek.js"
+    "deepseek:check": "node scripts/check-deepseek.js",
+    "ops:bank:update": "node scripts/ops/run-bank-update.mjs",
+    "ops:feedback:check": "node scripts/ops/check-feedback.mjs",
+    "ops:site:check": "node scripts/ops/check-site.mjs",
+    "ops:telegram:send": "node scripts/ops/send-telegram.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.97.0",
