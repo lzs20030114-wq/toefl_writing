@@ -26,104 +26,291 @@ function elapsed(startIso, endIso) {
   return `${Math.floor(sec / 60)}m ${sec % 60}s`;
 }
 
+function pct(n) {
+  if (n == null) return "-";
+  return `${Math.round(n * 100)}%`;
+}
+
 function StatusBadge({ status, conclusion }) {
   const map = {
     queued:      ["#fef3c7", "#92400e", "排队中"],
     in_progress: ["#dbeafe", "#1e40af", "生成中…"],
-    completed:   conclusion === "success"
-      ? ["#dcfce7", "#166534", "✓ 完成"]
-      : ["#fee2e2", "#991b1b", "失败"],
+    completed:   conclusion === "success" ? ["#dcfce7", "#166534", "✓ 完成"] : ["#fee2e2", "#991b1b", "失败"],
   };
   const [bg, color, label] = map[status] || ["#f3f4f6", "#374151", status];
   return (
-    <span style={{
-      display: "inline-block", padding: "3px 10px", borderRadius: 12,
-      background: bg, color, fontSize: 12, fontWeight: 700,
-    }}>
+    <span style={{ display: "inline-block", padding: "3px 10px", borderRadius: 12, background: bg, color, fontSize: 12, fontWeight: 700 }}>
       {label}
     </span>
   );
 }
 
+function StatBox({ label, value }) {
+  return (
+    <div style={{ background: C.bg, border: "1px solid " + C.bdr, borderRadius: 6, padding: "8px 12px", minWidth: 90 }}>
+      <div style={{ fontSize: 11, color: C.t2, marginBottom: 2 }}>{label}</div>
+      <div style={{ fontSize: 18, fontWeight: 800, color: C.nav }}>{value ?? "-"}</div>
+    </div>
+  );
+}
+
+function QuestionRow({ q }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div style={{ borderBottom: "1px solid " + C.bdrSubtle, paddingBottom: 6, marginBottom: 6 }}>
+      <button onClick={() => setOpen(v => !v)} style={{ background: "none", border: "none", cursor: "pointer", textAlign: "left", width: "100%", padding: 0, fontFamily: FONT }}>
+        <div style={{ fontSize: 12, color: C.t2, display: "flex", justifyContent: "space-between" }}>
+          <span style={{ color: C.t1 }}>{q.answer}</span>
+          <span>{open ? "▲" : "▼"}</span>
+        </div>
+      </button>
+      {open && (
+        <div style={{ marginTop: 6, fontSize: 12, color: C.t2, lineHeight: 1.8 }}>
+          <div><strong>提示：</strong>{q.prompt}</div>
+          <div><strong>词块：</strong>{(q.chunks || []).join(" / ")}{q.distractor ? <span style={{ color: C.red }}>（干扰：{q.distractor}）</span> : null}</div>
+          {q.prefilled?.length > 0 && <div><strong>预填：</strong>{q.prefilled.join(", ")}</div>}
+          {q.grammar_points?.length > 0 && <div><strong>语法点：</strong>{q.grammar_points.join(", ")}</div>}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function StatsPanel({ stats, runId, token, onDeployed, onDeleted }) {
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState("");
+  const [openSet, setOpenSet] = useState(null);
+
+  async function doDeploy() {
+    if (!confirm(`确认将本次生成的 ${stats.totalSets} 套题部署到正式题库？Vercel 将自动重新部署。`)) return;
+    setBusy(true); setMsg("");
+    try {
+      const res = await fetch(`/api/admin/staging/${runId}/deploy`, { method: "POST", headers: authHeaders(token) });
+      const data = await res.json();
+      if (res.ok) {
+        setMsg(`✓ 已部署 ${data.addedSets} 套，套题编号 ${(data.newSetIds || []).join(", ")}。Vercel 正在重新部署…`);
+        onDeployed(runId);
+      } else {
+        setMsg(`部署失败：${data.error}`);
+      }
+    } catch (e) { setMsg(`请求失败：${e.message}`); }
+    finally { setBusy(false); }
+  }
+
+  async function doDelete() {
+    if (!confirm("确认删除本次生成的题目？此操作不可撤销。")) return;
+    setBusy(true); setMsg("");
+    try {
+      const res = await fetch(`/api/admin/staging/${runId}`, { method: "DELETE", headers: authHeaders(token) });
+      const data = await res.json();
+      if (res.ok) { onDeleted(runId); }
+      else { setMsg(`删除失败：${data.error}`); setBusy(false); }
+    } catch (e) { setMsg(`请求失败：${e.message}`); setBusy(false); }
+  }
+
+  return (
+    <div style={{ marginTop: 12 }}>
+      {/* 数字指标 */}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 12 }}>
+        <StatBox label="套数" value={stats.totalSets} />
+        <StatBox label="题目数" value={stats.totalQuestions} />
+        <StatBox label="轮次" value={stats.totalRounds} />
+        <StatBox label="总生成" value={stats.totalGenerated} />
+        <StatBox label="接受率" value={pct(stats.acceptanceRate)} />
+      </div>
+
+      {/* 题型分布 */}
+      <div style={{ marginBottom: 10 }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: C.t1, marginBottom: 4 }}>题型分布</div>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+          {stats.typeDistribution && Object.entries({
+            "疑问句": stats.typeDistribution.hasQuestionMark,
+            "干扰词": stats.typeDistribution.hasDistractor,
+            "嵌入句": stats.typeDistribution.hasEmbedded,
+            "否定句": stats.typeDistribution.hasNegation,
+            "有预填": stats.typeDistribution.hasPrefilled,
+          }).map(([k, v]) => (
+            <span key={k} style={{ background: C.bg, border: "1px solid " + C.bdr, borderRadius: 10, padding: "2px 8px", fontSize: 12 }}>
+              {k} <strong>{v}</strong>
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* chunk 长度 */}
+      {stats.chunkStats && (
+        <div style={{ marginBottom: 10 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: C.t1, marginBottom: 4 }}>词块长度分布</div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+            {[
+              ["平均词数", stats.chunkStats.avgWords],
+              ["1词", stats.chunkStats.single],
+              ["2词", stats.chunkStats.double],
+              ["3词", stats.chunkStats.triple],
+            ].map(([k, v]) => (
+              <span key={k} style={{ background: C.bg, border: "1px solid " + C.bdr, borderRadius: 10, padding: "2px 8px", fontSize: 12 }}>
+                {k} <strong>{v}</strong>
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* prefilled 分布 */}
+      {stats.prefilledTop?.length > 0 && (
+        <div style={{ marginBottom: 12 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: C.t1, marginBottom: 4 }}>常见预填词</div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+            {stats.prefilledTop.map(({ word, count }) => (
+              <span key={word} style={{ background: C.bg, border: "1px solid " + C.bdr, borderRadius: 10, padding: "2px 8px", fontSize: 12 }}>
+                {word} <strong>×{count}</strong>
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* 题目详情 */}
+      <div style={{ marginBottom: 12 }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: C.t1, marginBottom: 6 }}>题目详情</div>
+        {(stats.sets || []).map((s) => (
+          <div key={s.set_id} style={{ border: "1px solid " + C.bdr, borderRadius: 6, marginBottom: 6 }}>
+            <button
+              onClick={() => setOpenSet(openSet === s.set_id ? null : s.set_id)}
+              style={{ width: "100%", textAlign: "left", background: "none", border: "none", padding: "8px 12px", cursor: "pointer", fontFamily: FONT, fontSize: 13, fontWeight: 700, color: C.nav, display: "flex", justifyContent: "space-between" }}
+            >
+              <span>套题 #{s.set_id}（{s.questions?.length || 0} 题）</span>
+              <span>{openSet === s.set_id ? "▲" : "▼"}</span>
+            </button>
+            {openSet === s.set_id && (
+              <div style={{ padding: "0 12px 10px" }}>
+                {(s.questions || []).map((q) => <QuestionRow key={q.id} q={q} />)}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* 操作按钮 */}
+      {msg && (
+        <div style={{ padding: "8px 12px", borderRadius: 6, marginBottom: 10, fontSize: 13, background: msg.startsWith("✓") ? "#dcfce7" : "#fee2e2", color: msg.startsWith("✓") ? "#166534" : C.red }}>
+          {msg}
+        </div>
+      )}
+      <div style={{ display: "flex", gap: 8 }}>
+        <button onClick={doDeploy} disabled={busy} style={{ background: C.green, color: "#fff", border: "none", borderRadius: 6, padding: "8px 18px", cursor: busy ? "not-allowed" : "pointer", fontFamily: FONT, fontSize: 13, fontWeight: 700, opacity: busy ? 0.6 : 1 }}>
+          部署到正式题库
+        </button>
+        <button onClick={doDelete} disabled={busy} style={{ background: C.red, color: "#fff", border: "none", borderRadius: 6, padding: "8px 18px", cursor: busy ? "not-allowed" : "pointer", fontFamily: FONT, fontSize: 13, fontWeight: 700, opacity: busy ? 0.6 : 1 }}>
+          删除
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function RunCard({ run: initial, token }) {
   const [run, setRun] = useState(initial);
+  const [expanded, setExpanded] = useState(false);
+  const [loadingStats, setLoadingStats] = useState(false);
+  const [stagingGone, setStagingGone] = useState(false);
   const timerRef = useRef(null);
 
-  const poll = useCallback(async () => {
+  const fetchDetail = useCallback(async () => {
     try {
-      const res = await fetch(`/api/admin/generate-bs/${run.id}`, {
-        headers: authHeaders(token),
-      });
+      const res = await fetch(`/api/admin/generate-bs/${initial.id}`, { headers: authHeaders(token) });
       if (res.ok) {
         const data = await res.json();
         setRun(data);
         if (data.status === "completed") clearInterval(timerRef.current);
       }
     } catch (_) {}
-  }, [run.id, token]);
+  }, [initial.id, token]);
 
-  useEffect(() => {
-    setRun(initial);
-  }, [initial]);
+  useEffect(() => { setRun(initial); }, [initial]);
 
   useEffect(() => {
     if (run.status !== "completed") {
-      timerRef.current = setInterval(poll, POLL_INTERVAL);
+      timerRef.current = setInterval(fetchDetail, POLL_INTERVAL);
       return () => clearInterval(timerRef.current);
     }
-  }, [run.status, poll]);
+  }, [run.status, fetchDetail]);
 
-  const targetSets = run.inputs?.target_sets || "-";
+  async function handleExpand() {
+    if (expanded) { setExpanded(false); return; }
+    setExpanded(true);
+    if (!run.stats && run.status === "completed" && run.conclusion === "success") {
+      setLoadingStats(true);
+      await fetchDetail();
+      setLoadingStats(false);
+    }
+  }
+
   const isDone = run.status === "completed";
   const isSuccess = isDone && run.conclusion === "success";
   const isFail = isDone && run.conclusion !== "success";
+  const targetSets = run.inputs?.target_sets || "-";
 
   return (
-    <div style={{
-      background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8,
-      padding: 16, marginBottom: 10,
-    }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+    <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 16, marginBottom: 10 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <StatusBadge status={run.status} conclusion={run.conclusion} />
-          <span style={{ fontSize: 14, fontWeight: 700, color: C.nav }}>
-            目标 {targetSets} 套
-          </span>
+          <span style={{ fontSize: 14, fontWeight: 700, color: C.nav }}>目标 {targetSets} 套</span>
+          <span style={{ fontSize: 12, color: C.t3 }}>耗时 {elapsed(run.createdAt, isDone ? run.updatedAt : null)}</span>
         </div>
-        <span style={{ fontSize: 12, color: C.t3 }}>{timeAgo(run.createdAt)}</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <span style={{ fontSize: 12, color: C.t3 }}>{timeAgo(run.createdAt)}</span>
+          {isSuccess && !stagingGone && (
+            <button onClick={handleExpand} style={{ background: "none", border: "1px solid " + C.bdr, borderRadius: 6, padding: "4px 10px", cursor: "pointer", fontSize: 12, color: C.t2, fontFamily: FONT }}>
+              {expanded ? "收起" : "展开详情"}
+            </button>
+          )}
+        </div>
       </div>
 
-      <div style={{ fontSize: 12, color: C.t2, marginBottom: 8 }}>
-        耗时：{elapsed(run.createdAt, isDone ? run.updatedAt : null)}
-        {!isDone && <span style={{ marginLeft: 8, color: C.orange }}>每 5 秒自动刷新</span>}
-      </div>
-
-      {isSuccess && (
-        <div style={{
-          background: "#dcfce7", color: "#166534", padding: "8px 12px",
-          borderRadius: 6, fontSize: 13, fontWeight: 600, marginBottom: 8,
-        }}>
-          题库已更新，Vercel 正在自动重新部署新题目，约 1～2 分钟后生效。
-        </div>
+      {!isDone && (
+        <div style={{ marginTop: 8, fontSize: 12, color: C.orange }}>生成中，每 5 秒自动刷新…</div>
       )}
 
       {isFail && (
-        <div style={{
-          background: "#fee2e2", color: "#991b1b", padding: "8px 12px",
-          borderRadius: 6, fontSize: 13, marginBottom: 8,
-        }}>
-          生成失败，请查看日志了解详情。
-        </div>
+        <div style={{ marginTop: 8, fontSize: 13, color: C.red }}>生成失败，请查看日志。</div>
       )}
 
-      <a
-        href={run.htmlUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{ fontSize: 13, color: C.blue, textDecoration: "none", fontWeight: 600 }}
-      >
-        在 GitHub 查看详细日志 →
-      </a>
+      {isSuccess && stagingGone && (
+        <div style={{ marginTop: 8, fontSize: 13, color: C.green, fontWeight: 600 }}>已处理（部署或删除）</div>
+      )}
+
+      {isSuccess && !stagingGone && run.stagingReady === false && !expanded && (
+        <div style={{ marginTop: 8, fontSize: 13, color: C.t2 }}>临时库文件已不存在（可能已部署或删除）</div>
+      )}
+
+      <div style={{ marginTop: 8 }}>
+        <a href={run.htmlUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, color: C.blue, textDecoration: "none" }}>
+          在 GitHub 查看日志 →
+        </a>
+      </div>
+
+      {expanded && (
+        <div style={{ marginTop: 12, borderTop: "1px solid " + C.bdr, paddingTop: 12 }}>
+          {loadingStats && <div style={{ fontSize: 13, color: C.t2 }}>加载统计数据…</div>}
+          {!loadingStats && run.stats && (
+            <StatsPanel
+              stats={run.stats}
+              runId={run.id}
+              token={token}
+              onDeployed={() => { setStagingGone(true); setExpanded(false); }}
+              onDeleted={() => { setStagingGone(true); setExpanded(false); }}
+            />
+          )}
+          {!loadingStats && !run.stats && run.stagingReady === false && (
+            <div style={{ fontSize: 13, color: C.t2 }}>临时库文件不存在，可能已处理过。</div>
+          )}
+          {!loadingStats && run.statsError && (
+            <div style={{ fontSize: 13, color: C.red }}>读取失败：{run.statsError}</div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -157,18 +344,13 @@ export default function AdminGenerateBSPage() {
         const data = await res.json().catch(() => ({}));
         setLoadError(data.error || `加载失败 ${res.status}`);
       }
-    } catch (e) {
-      setLoadError(e.message);
-    }
+    } catch (e) { setLoadError(e.message); }
   }
 
-  useEffect(() => {
-    if (token) loadRuns(token);
-  }, [token]);
+  useEffect(() => { if (token) loadRuns(token); }, [token]);
 
   async function trigger() {
-    setTriggering(true);
-    setTriggerMsg("");
+    setTriggering(true); setTriggerMsg("");
     try {
       const res = await fetch("/api/admin/generate-bs", {
         method: "POST",
@@ -177,119 +359,73 @@ export default function AdminGenerateBSPage() {
       });
       const data = await res.json();
       if (res.ok) {
-        setTriggerMsg("已触发，GitHub Actions 正在启动，稍后刷新可看到任务…");
-        setTimeout(() => loadRuns(), 4000);
+        setTriggerMsg("已触发，GitHub Actions 正在启动，约 10 秒后刷新可见任务…");
+        setTimeout(() => loadRuns(), 10000);
       } else {
         setTriggerMsg(`错误：${data.error || res.status}`);
       }
-    } catch (e) {
-      setTriggerMsg(`请求失败：${e.message}`);
-    } finally {
-      setTriggering(false);
-    }
+    } catch (e) { setTriggerMsg(`请求失败：${e.message}`); }
+    finally { setTriggering(false); }
   }
 
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT, padding: 20 }}>
-      <div style={{ maxWidth: 800, margin: "0 auto" }}>
+      <div style={{ maxWidth: 820, margin: "0 auto" }}>
 
         <div style={{ marginBottom: 14 }}>
-          <Link href="/admin" style={{ color: C.blue, fontSize: 13, textDecoration: "none", fontWeight: 700 }}>
-            ← 返回管理后台
-          </Link>
+          <Link href="/admin" style={{ color: C.blue, fontSize: 13, textDecoration: "none", fontWeight: 700 }}>← 返回管理后台</Link>
         </div>
 
-        {/* 配置区 */}
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 16, marginBottom: 14 }}>
-          <div style={{ fontSize: 22, fontWeight: 800, color: C.nav, marginBottom: 4 }}>
-            自动生成题目
-          </div>
+          <div style={{ fontSize: 22, fontWeight: 800, color: C.nav, marginBottom: 4 }}>自动生成题目</div>
           <div style={{ fontSize: 13, color: C.t2, marginBottom: 14 }}>
-            在 GitHub Actions 上运行生成脚本（可运行 3 小时），完成后自动更新题库并触发 Vercel 重新部署。
+            生成完成后题目先存入临时库，由你确认后再部署到正式题库（触发 Vercel 重新部署）。
           </div>
 
           <input
             value={token}
             onChange={(e) => persistToken(e.target.value)}
             placeholder="ADMIN_DASHBOARD_TOKEN"
-            style={{
-              width: "100%", boxSizing: "border-box", border: "1px solid " + C.bdr,
-              borderRadius: 6, padding: "8px 10px", fontFamily: "monospace",
-              fontSize: 12, marginBottom: 12,
-            }}
+            style={{ width: "100%", boxSizing: "border-box", border: "1px solid " + C.bdr, borderRadius: 6, padding: "8px 10px", fontFamily: "monospace", fontSize: 12, marginBottom: 12 }}
           />
 
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <label style={{ fontSize: 13, fontWeight: 700, color: C.t1, whiteSpace: "nowrap" }}>
-              套数：
-            </label>
+            <label style={{ fontSize: 13, fontWeight: 700, color: C.t1, whiteSpace: "nowrap" }}>套数：</label>
             <input
-              type="number"
-              min={1}
-              max={20}
-              value={targetSets}
+              type="number" min={1} max={20} value={targetSets}
               onChange={(e) => setTargetSets(Number(e.target.value))}
-              style={{
-                width: 70, padding: "7px 10px", border: "1px solid " + C.bdr,
-                borderRadius: 6, fontSize: 14, fontFamily: FONT,
-              }}
+              style={{ width: 70, padding: "7px 10px", border: "1px solid " + C.bdr, borderRadius: 6, fontSize: 14, fontFamily: FONT }}
             />
             <button
-              onClick={trigger}
-              disabled={triggering || !token}
-              style={{
-                background: triggering || !token ? "#9ca3af" : C.blue,
-                color: "#fff", border: "none", borderRadius: 6,
-                padding: "8px 20px", cursor: triggering || !token ? "not-allowed" : "pointer",
-                fontFamily: FONT, fontSize: 14, fontWeight: 700,
-              }}
+              onClick={trigger} disabled={triggering || !token}
+              style={{ background: triggering || !token ? "#9ca3af" : C.blue, color: "#fff", border: "none", borderRadius: 6, padding: "8px 20px", cursor: triggering || !token ? "not-allowed" : "pointer", fontFamily: FONT, fontSize: 14, fontWeight: 700 }}
             >
               {triggering ? "触发中…" : "开始生成"}
             </button>
             <button
-              onClick={() => loadRuns()}
-              disabled={!token}
-              style={{
-                background: "none", border: "1px solid " + C.bdr, borderRadius: 6,
-                padding: "8px 14px", cursor: "pointer", color: C.t2,
-                fontFamily: FONT, fontSize: 13,
-              }}
+              onClick={() => loadRuns()} disabled={!token}
+              style={{ background: "none", border: "1px solid " + C.bdr, borderRadius: 6, padding: "8px 14px", cursor: "pointer", color: C.t2, fontFamily: FONT, fontSize: 13 }}
             >
               刷新列表
             </button>
           </div>
 
           {triggerMsg && (
-            <div style={{
-              marginTop: 10, fontSize: 13, padding: "7px 10px", borderRadius: 6,
-              background: triggerMsg.startsWith("错误") || triggerMsg.startsWith("请求") ? "#fee2e2" : "#dbeafe",
-              color: triggerMsg.startsWith("错误") || triggerMsg.startsWith("请求") ? C.red : "#1e40af",
-            }}>
+            <div style={{ marginTop: 10, fontSize: 13, padding: "7px 10px", borderRadius: 6, background: triggerMsg.startsWith("错误") || triggerMsg.startsWith("请求") ? "#fee2e2" : "#dbeafe", color: triggerMsg.startsWith("错误") || triggerMsg.startsWith("请求") ? C.red : "#1e40af" }}>
               {triggerMsg}
             </div>
           )}
         </div>
 
-        {/* 错误 */}
         {loadError && (
-          <div style={{
-            background: "#fee2e2", color: C.red, padding: "10px 14px",
-            borderRadius: 6, fontSize: 13, marginBottom: 12,
-          }}>
+          <div style={{ background: "#fee2e2", color: C.red, padding: "10px 14px", borderRadius: 6, fontSize: 13, marginBottom: 12 }}>
             {loadError}
-            {loadError.includes("GH_PAT") && (
-              <div style={{ marginTop: 6, fontWeight: 600 }}>
-                请在 Vercel 环境变量中配置 GH_PAT（GitHub Personal Access Token）
-              </div>
-            )}
+            {loadError.includes("GH_PAT") && <div style={{ marginTop: 6, fontWeight: 600 }}>请在 Vercel 环境变量中配置 GH_PAT</div>}
           </div>
         )}
 
-        {/* 任务列表 */}
         {runs.length === 0 && !loadError && token && (
-          <div style={{ textAlign: "center", color: C.t3, fontSize: 13, padding: 32 }}>
-            暂无任务记录
-          </div>
+          <div style={{ textAlign: "center", color: C.t3, fontSize: 13, padding: 32 }}>暂无任务记录</div>
         )}
 
         {runs.map((run) => (

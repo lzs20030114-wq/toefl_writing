@@ -30,19 +30,21 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Generate questions
+      - name: Generate questions (to staging)
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
           BS_TARGET_SETS: ${{ github.event.inputs.target_sets }}
+          BS_OUTPUT_PATH: data/buildSentence/staging/${{ github.run_id }}.json
         run: node scripts/generateBSQuestions.mjs
 
-      - name: Commit updated questions
+      - name: Commit staging file
         env:
+          RUN_ID: ${{ github.run_id }}
           BS_TARGET_SETS: ${{ github.event.inputs.target_sets }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/buildSentence/questions.json
+          git add data/buildSentence/staging/${RUN_ID}.json
           git add data/buildSentence/reserve_pool.json || true
-          git diff --staged --quiet || git commit -m "chore: auto-generate ${BS_TARGET_SETS} BS question sets [skip ci]"
+          git diff --staged --quiet || git commit -m "chore: stage ${BS_TARGET_SETS} BS sets (run ${RUN_ID}) [skip ci]"
           git push

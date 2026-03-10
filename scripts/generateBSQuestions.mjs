@@ -2241,6 +2241,9 @@ async function main() {
 
   const rejectReasons = {};
   let rollingRejectFeedback = "";
+  let statTotalRounds = 0;
+  let statTotalGenerated = 0;
+  let statTotalAccepted = 0;
   const circuitBreakerState = createCircuitBreakerState();
   const easyTarget = ETS_2026_TARGET_COUNTS_10.easy * TARGET_SET_COUNT;
   const mediumTarget = ETS_2026_TARGET_COUNTS_10.medium * TARGET_SET_COUNT;
@@ -2344,6 +2347,9 @@ async function main() {
 
       const res = await generateCandidateRound(round, spec, rollingRejectFeedback);
       acceptedPool.push(...res.questions);
+      statTotalRounds += 1;
+      statTotalGenerated += res.generated;
+      statTotalAccepted += res.accepted;
       Object.entries(res.rejectReasons).forEach(([k, v]) => {
         rejectReasons[k] = (rejectReasons[k] || 0) + v;
       });
@@ -2405,6 +2411,9 @@ async function main() {
           const boostFeedback = [rollingRejectFeedback, buildBoostTaskHint(boostTask)].filter(Boolean).join('\n');
           const res = await generateCandidateRound(3000 + i, boostSpec, boostFeedback);
           acceptedPool.push(...res.questions);
+          statTotalRounds += 1;
+          statTotalGenerated += res.generated;
+          statTotalAccepted += res.accepted;
           Object.entries(res.rejectReasons).forEach(([k, v]) => {
             rejectReasons[k] = (rejectReasons[k] || 0) + v;
           });
@@ -2447,6 +2456,13 @@ async function main() {
   const output = {
     version: "1.2",
     generated_at: new Date().toISOString(),
+    _meta: {
+      target_sets: TARGET_SET_COUNT,
+      total_rounds: statTotalRounds,
+      total_generated: statTotalGenerated,
+      total_accepted: statTotalAccepted,
+      acceptance_rate: statTotalGenerated > 0 ? Number((statTotalAccepted / statTotalGenerated).toFixed(3)) : 0,
+    },
     question_sets: finalSets,
   };
 
