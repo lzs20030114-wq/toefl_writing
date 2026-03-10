@@ -2141,6 +2141,17 @@ async function main() {
   console.log(`Proxy: ${resolveProxyUrl() || "(direct)"}`);
 
   // Seed pool from questions.json (active bank) + reserve_pool.json (leftovers)
+  // Filter out legacy questions with multi-sentence prompts so they are regenerated fresh.
+  function hasLegacyMultiSentencePrompt(q) {
+    const kind = (q.prompt_task_kind || "").toLowerCase();
+    if (!["ask", "report", "respond"].includes(kind)) return false;
+    const ctx = (q.prompt_context || "").trim();
+    if (ctx) return true; // separate context sentence — old two-part format
+    const task = (q.prompt_task_text || "").trim();
+    const sentences = task.split(/(?<=[.!?])\s+/).filter(Boolean);
+    return sentences.length >= 2; // background embedded in task_text as multiple sentences
+  }
+
   const acceptedPool = [];
   for (const [label, filePath] of [["questions.json", OUTPUT_PATH], ["reserve_pool.json", RESERVE_PATH]]) {
     try {
@@ -2149,12 +2160,14 @@ async function main() {
       const seeded = Array.isArray(data)
         ? data
         : (data.question_sets || []).flatMap((s) => s.questions || []);
-      if (seeded.length > 0) {
-        acceptedPool.push(...seeded);
-        console.log(`Seeded ${seeded.length} questions from ${label}`);
+      const clean = seeded.filter(q => !hasLegacyMultiSentencePrompt(q));
+      const dropped = seeded.length - clean.length;
+      if (clean.length > 0) {
+        acceptedPool.push(...clean);
+        console.log(`Seeded ${clean.length} questions from ${label}${dropped > 0 ? ` (dropped ${dropped} with legacy multi-sentence prompts)` : ""}`);
       }
     } catch (_) {
-      // file missing or invalid 锟?skip
+      // file missing or invalid — skip
     }
   }
 
