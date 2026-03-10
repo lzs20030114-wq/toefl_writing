@@ -37,6 +37,30 @@ describe("build sentence prompt contract", () => {
     expect(out.fatal.some((e) => e.includes("explicit task"))).toBe(true);
   });
 
+  test("strict structured validation rejects ask/report/respond with separate context sentence", () => {
+    const out = validateStructuredPromptParts(
+      {
+        prompt_context: "A visitor is speaking with the museum curator.",
+        prompt_task_kind: "ask",
+        prompt_task_text: "What do they ask?",
+      },
+      { requireStructured: true }
+    );
+    expect(out.fatal.some((e) => e.includes("prompt_context"))).toBe(true);
+  });
+
+  test("strict structured validation rejects ask/report/respond task text without question mark", () => {
+    const out = validateStructuredPromptParts(
+      {
+        prompt_context: "",
+        prompt_task_kind: "report",
+        prompt_task_text: "What did the museum curator want to know",
+      },
+      { requireStructured: true }
+    );
+    expect(out.fatal.some((e) => e.includes("question mark"))).toBe(true);
+  });
+
   test("legacy explicit task detection distinguishes background-only prompts", () => {
     expect(hasExplicitTaskInLegacyPrompt("A visitor is asking the museum curator a question.")).toBe(false);
     expect(hasExplicitTaskInLegacyPrompt("A visitor is speaking with the museum curator. What do they ask?")).toBe(true);
