@@ -61,6 +61,38 @@ function StatBox({ label, value }) {
   );
 }
 
+function CompareTable({ rows }) {
+  // rows: [{label, actual, tpo, format, warn}]
+  // warn: (actual, tpo) => bool — true = amber highlight
+  return (
+    <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
+      <thead>
+        <tr>
+          <th style={{ textAlign: "left", color: C.t3, fontWeight: 600, paddingBottom: 4, width: "40%" }}>指标</th>
+          <th style={{ textAlign: "right", color: C.t1, fontWeight: 700, paddingBottom: 4, width: "30%" }}>本批</th>
+          <th style={{ textAlign: "right", color: C.t3, fontWeight: 500, paddingBottom: 4, width: "30%" }}>TPO参考</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map(({ label, actual, tpo, format = (v) => v, warn }) => {
+          const isWarn = warn ? warn(actual, tpo) : false;
+          return (
+            <tr key={label} style={{ borderTop: "1px solid " + C.bdrSubtle }}>
+              <td style={{ padding: "5px 0", color: C.t2 }}>{label}</td>
+              <td style={{ padding: "5px 0", textAlign: "right", fontWeight: 800, color: isWarn ? "#92400e" : C.nav }}>{format(actual)}</td>
+              <td style={{ padding: "5px 0", textAlign: "right", color: C.t3 }}>{format(tpo)}</td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  );
+}
+
+function SectionTitle({ children }) {
+  return <div style={{ fontSize: 12, fontWeight: 700, color: C.t1, marginBottom: 6, marginTop: 12 }}>{children}</div>;
+}
+
 function QuestionRow({ q }) {
   const [open, setOpen] = useState(false);
   return (
@@ -145,46 +177,46 @@ function StatsPanel({ stats, runId, token, onDeployed, onDeleted }) {
       })()}
 
       {/* 题型分布 */}
-      <div style={{ marginBottom: 10 }}>
-        <div style={{ fontSize: 12, fontWeight: 700, color: C.t1, marginBottom: 4 }}>题型分布</div>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-          {stats.typeDistribution && Object.entries({
-            "疑问句": stats.typeDistribution.hasQuestionMark,
-            "干扰词": stats.typeDistribution.hasDistractor,
-            "嵌入句": stats.typeDistribution.hasEmbedded,
-            "否定句": stats.typeDistribution.hasNegation,
-            "有预填": stats.typeDistribution.hasPrefilled,
-          }).map(([k, v]) => (
-            <span key={k} style={{ background: C.bg, border: "1px solid " + C.bdr, borderRadius: 10, padding: "2px 8px", fontSize: 12 }}>
-              {k} <strong>{v}</strong>
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* chunk 长度 */}
-      {stats.chunkStats && (
-        <div style={{ marginBottom: 10 }}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: C.t1, marginBottom: 4 }}>词块长度分布</div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-            {[
-              ["平均词数", stats.chunkStats.avgWords],
-              ["1词", stats.chunkStats.single],
-              ["2词", stats.chunkStats.double],
-              ["3词", stats.chunkStats.triple],
-            ].map(([k, v]) => (
-              <span key={k} style={{ background: C.bg, border: "1px solid " + C.bdr, borderRadius: 10, padding: "2px 8px", fontSize: 12 }}>
-                {k} <strong>{v}</strong>
-              </span>
-            ))}
-          </div>
+      {stats.typeDistribution && (
+        <div style={{ marginBottom: 4 }}>
+          <SectionTitle>题型分布</SectionTitle>
+          <CompareTable rows={[
+            { label: "疑问句", actual: stats.typeDistribution.pct?.hasQuestionMark ?? stats.typeDistribution.hasQuestionMark / (stats.totalQuestions || 1), tpo: 0.08, format: p => `${Math.round(p * 100)}%`, warn: (a) => a > 0.15 },
+            { label: "干扰词", actual: stats.typeDistribution.pct?.hasDistractor ?? stats.typeDistribution.hasDistractor / (stats.totalQuestions || 1), tpo: 0.88, format: p => `${Math.round(p * 100)}%`, warn: (a) => a < 0.80 },
+            { label: "嵌入句", actual: stats.typeDistribution.pct?.hasEmbedded ?? stats.typeDistribution.hasEmbedded / (stats.totalQuestions || 1), tpo: 0.63, format: p => `${Math.round(p * 100)}%`, warn: (a) => a < 0.50 || a > 0.80 },
+            { label: "否定句", actual: stats.typeDistribution.pct?.hasNegation ?? stats.typeDistribution.hasNegation / (stats.totalQuestions || 1), tpo: 0.20, format: p => `${Math.round(p * 100)}%`, warn: (a) => a > 0.30 },
+            { label: "有预填词", actual: stats.typeDistribution.pct?.hasPrefilled ?? stats.typeDistribution.hasPrefilled / (stats.totalQuestions || 1), tpo: 0.85, format: p => `${Math.round(p * 100)}%`, warn: (a) => a < 0.75 },
+          ]} />
         </div>
       )}
 
-      {/* prefilled 分布 */}
+      {/* 词块统计 */}
+      {stats.chunkStats && (
+        <div style={{ marginBottom: 4 }}>
+          <SectionTitle>词块统计</SectionTitle>
+          <CompareTable rows={[
+            { label: "每题有效词块均数", actual: stats.chunkStats.avgEffectiveChunks ?? "-", tpo: 5.8, format: v => v === "-" ? "-" : String(v), warn: (a) => a !== "-" && (a < 5.0 || a > 7.0) },
+            { label: "多词块占比", actual: stats.chunkStats.multiWordPct ?? (1 - stats.chunkStats.single / (stats.chunkStats.total || 1)), tpo: 0.23, format: p => `${Math.round(p * 100)}%`, warn: (a) => a > 0.35 },
+          ]} />
+        </div>
+      )}
+
+      {/* 预填词长度分布 */}
+      {stats.prefilledLengthDist && (
+        <div style={{ marginBottom: 4 }}>
+          <SectionTitle>预填词长度分布（占有预填题数）</SectionTitle>
+          <CompareTable rows={[
+            { label: "1词（i / she）", actual: stats.prefilledLengthDist.pf1Pct, tpo: null, format: p => `${Math.round(p * 100)}%` },
+            { label: "2词（the professor）", actual: stats.prefilledLengthDist.pf2Pct, tpo: null, format: p => `${Math.round(p * 100)}%` },
+            { label: "3词+（some colleagues）", actual: stats.prefilledLengthDist.pf3Pct, tpo: null, format: p => `${Math.round(p * 100)}%` },
+          ].map(r => ({ ...r, tpo: r.tpo ?? "—" }))} />
+        </div>
+      )}
+
+      {/* 常见预填词 */}
       {stats.prefilledTop?.length > 0 && (
         <div style={{ marginBottom: 12 }}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: C.t1, marginBottom: 4 }}>常见预填词</div>
+          <SectionTitle>常见预填词</SectionTitle>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
             {stats.prefilledTop.map(({ word, count }) => (
               <span key={word} style={{ background: C.bg, border: "1px solid " + C.bdr, borderRadius: 10, padding: "2px 8px", fontSize: 12 }}>

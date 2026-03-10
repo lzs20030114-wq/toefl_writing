@@ -76,29 +76,61 @@ function computeStats(data) {
   const sets = data.question_sets || [];
   const allQ = sets.flatMap((s) => s.questions || []);
   const meta = data._meta || {};
+  const total = allQ.length || 1;
 
-  // 题型分布
+  // 题型分布（含百分比）
+  const qmarkCount    = allQ.filter((q) => q.has_question_mark).length;
+  const distractorCount = allQ.filter((q) => q.distractor != null).length;
+  const embeddedCount = allQ.filter((q) => isEmbeddedQuestion(q.grammar_points)).length;
+  const negationCount = allQ.filter((q) => isNegation(q.grammar_points)).length;
+  const prefilledCount = allQ.filter((q) => Array.isArray(q.prefilled) && q.prefilled.length > 0).length;
   const typeDistribution = {
-    hasQuestionMark: allQ.filter((q) => q.has_question_mark).length,
-    hasDistractor: allQ.filter((q) => q.distractor != null).length,
-    hasEmbedded: allQ.filter((q) => isEmbeddedQuestion(q.grammar_points)).length,
-    hasNegation: allQ.filter((q) => isNegation(q.grammar_points)).length,
-    hasPrefilled: allQ.filter((q) => Array.isArray(q.prefilled) && q.prefilled.length > 0).length,
+    hasQuestionMark: qmarkCount,
+    hasDistractor: distractorCount,
+    hasEmbedded: embeddedCount,
+    hasNegation: negationCount,
+    hasPrefilled: prefilledCount,
+    pct: {
+      hasQuestionMark: qmarkCount / total,
+      hasDistractor: distractorCount / total,
+      hasEmbedded: embeddedCount / total,
+      hasNegation: negationCount / total,
+      hasPrefilled: prefilledCount / total,
+    },
   };
 
   // chunk 长度分布
   const allChunks = allQ.flatMap((q) =>
     (q.chunks || []).filter((c) => c !== q.distractor).map((c) => c.trim().split(/\s+/).filter(Boolean).length)
   );
+  const effectiveChunkCounts = allQ.map((q) =>
+    (q.chunks || []).filter((c) => c !== q.distractor).length
+  );
+  const multiWordCount = allChunks.filter((n) => n > 1).length;
   const chunkStats = {
     total: allChunks.length,
     avgWords: allChunks.length ? Number((allChunks.reduce((a, b) => a + b, 0) / allChunks.length).toFixed(2)) : 0,
+    avgEffectiveChunks: effectiveChunkCounts.length
+      ? Number((effectiveChunkCounts.reduce((a, b) => a + b, 0) / effectiveChunkCounts.length).toFixed(1))
+      : 0,
     single: allChunks.filter((n) => n === 1).length,
     double: allChunks.filter((n) => n === 2).length,
     triple: allChunks.filter((n) => n === 3).length,
+    multiWordCount,
+    multiWordPct: allChunks.length ? multiWordCount / allChunks.length : 0,
   };
 
-  // prefilled 数据
+  // prefilled 长度分布（按题计算，每题 prefilled 的总词数）
+  const prefilledWordCounts = allQ
+    .filter((q) => Array.isArray(q.prefilled) && q.prefilled.length > 0)
+    .map((q) => q.prefilled.join(" ").trim().split(/\s+/).filter(Boolean).length);
+  const pf1 = prefilledWordCounts.filter((n) => n === 1).length;
+  const pf2 = prefilledWordCounts.filter((n) => n === 2).length;
+  const pf3 = prefilledWordCounts.filter((n) => n >= 3).length;
+  const pfTotal = prefilledWordCounts.length || 1;
+  const prefilledLengthDist = { pf1, pf2, pf3, pf1Pct: pf1 / pfTotal, pf2Pct: pf2 / pfTotal, pf3Pct: pf3 / pfTotal };
+
+  // prefilled 频次 Top 8
   const prefilledAll = allQ.flatMap((q) => q.prefilled || []);
   const prefilledFreq = {};
   prefilledAll.forEach((w) => { prefilledFreq[w] = (prefilledFreq[w] || 0) + 1; });
@@ -121,6 +153,7 @@ function computeStats(data) {
     noveltyLabel: noveltyLabel(noveltyScore),
     typeDistribution,
     chunkStats,
+    prefilledLengthDist,
     prefilledTop,
     sets: sets.map((s) => ({
       set_id: s.set_id,
