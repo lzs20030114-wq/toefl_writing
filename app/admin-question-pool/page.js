@@ -3,13 +3,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { C, FONT } from "../../components/shared/ui";
 
-function useAdminToken() {
-  const [token, setToken] = useState("");
-  useEffect(() => {
-    setToken(localStorage.getItem("adminToken") || "");
-  }, []);
-  return token;
-}
+const TOKEN_KEY = "toefl-admin-token";
 
 function authHeaders(token) {
   return { "Content-Type": "application/json", "x-admin-token": token };
@@ -184,10 +178,19 @@ function PoolEntryCard({ entry, token, onRemoved }) {
 }
 
 export default function AdminQuestionPoolPage() {
-  const token = useAdminToken();
+  const [token, setToken] = useState("");
   const [entries, setEntries] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    try { setToken(localStorage.getItem(TOKEN_KEY) || ""); } catch (_) {}
+  }, []);
+
+  function persistToken(v) {
+    setToken(v);
+    try { localStorage.setItem(TOKEN_KEY, v); } catch (_) {}
+  }
 
   async function loadPool() {
     if (!token) return;
@@ -227,16 +230,19 @@ export default function AdminQuestionPoolPage() {
 
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 16, marginBottom: 16 }}>
           <div style={{ fontSize: 22, fontWeight: 800, color: C.nav, marginBottom: 4 }}>题目池</div>
-          <div style={{ fontSize: 13, color: C.t2 }}>
+          <div style={{ fontSize: 13, color: C.t2, marginBottom: 12 }}>
             已生成但尚未入库的题目集合。可选择上传到正式题库或销毁。
           </div>
+          <input
+            value={token}
+            onChange={(e) => persistToken(e.target.value)}
+            placeholder="ADMIN_DASHBOARD_TOKEN"
+            style={{
+              width: "100%", boxSizing: "border-box", border: "1px solid " + C.bdr,
+              borderRadius: 6, padding: "8px 10px", fontFamily: "monospace", fontSize: 12,
+            }}
+          />
         </div>
-
-        {!token && (
-          <div style={{ background: "#fee2e2", color: C.red, padding: 10, borderRadius: 6, marginBottom: 12, fontSize: 13 }}>
-            请先在 localStorage 中设置 adminToken
-          </div>
-        )}
 
         {loading && (
           <div style={{ color: C.t3, fontSize: 13, textAlign: "center", padding: 32 }}>加载中…</div>

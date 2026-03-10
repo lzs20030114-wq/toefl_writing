@@ -4,14 +4,7 @@ import Link from "next/link";
 import { C, FONT } from "../../components/shared/ui";
 
 const POLL_INTERVAL = 3000;
-
-function useAdminToken() {
-  const [token, setToken] = useState("");
-  useEffect(() => {
-    setToken(localStorage.getItem("adminToken") || "");
-  }, []);
-  return token;
-}
+const TOKEN_KEY = "toefl-admin-token";
 
 function authHeaders(token) {
   return { "Content-Type": "application/json", "x-admin-token": token };
@@ -290,11 +283,20 @@ function JobCard({ job: initialJob, token, onDestroyed }) {
 }
 
 export default function AdminGenerateBSPage() {
-  const token = useAdminToken();
+  const [token, setToken] = useState("");
   const [jobs, setJobs] = useState([]);
   const [targetSets, setTargetSets] = useState(6);
   const [starting, setStarting] = useState(false);
   const [loadError, setLoadError] = useState("");
+
+  useEffect(() => {
+    try { setToken(localStorage.getItem(TOKEN_KEY) || ""); } catch (_) {}
+  }, []);
+
+  function persistToken(v) {
+    setToken(v);
+    try { localStorage.setItem(TOKEN_KEY, v); } catch (_) {}
+  }
 
   async function loadJobs() {
     if (!token) return;
@@ -353,8 +355,20 @@ export default function AdminGenerateBSPage() {
           <div style={{ fontSize: 22, fontWeight: 800, color: C.nav, marginBottom: 4 }}>
             自动生成 Build Sentence 题目
           </div>
-          <div style={{ fontSize: 13, color: C.t2, marginBottom: 16 }}>
+          <div style={{ fontSize: 13, color: C.t2, marginBottom: 12 }}>
             选择套数，后台自动运行生成管道，完成后查看报告并选择处置方式。
+          </div>
+
+          <div style={{ marginBottom: 14 }}>
+            <input
+              value={token}
+              onChange={(e) => persistToken(e.target.value)}
+              placeholder="ADMIN_DASHBOARD_TOKEN"
+              style={{
+                width: "100%", boxSizing: "border-box", border: "1px solid " + C.bdr,
+                borderRadius: 6, padding: "8px 10px", fontFamily: "monospace", fontSize: 12,
+              }}
+            />
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -385,7 +399,7 @@ export default function AdminGenerateBSPage() {
 
           {!token && (
             <div style={{ marginTop: 8, fontSize: 12, color: C.red }}>
-              请先在 localStorage 中设置 adminToken
+              请先填写 ADMIN_DASHBOARD_TOKEN
             </div>
           )}
         </div>
