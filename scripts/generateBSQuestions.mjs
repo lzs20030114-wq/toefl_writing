@@ -1675,7 +1675,52 @@ function hardValidateQuestion(q) {
   return { ok: true };
 }
 
+async function callOpenAICompatibleRelay({ apiKey, baseUrl, model, temperature, maxTokens, userPrompt, timeoutMs = 120000 }) {
+  const url = `${String(baseUrl || "").replace(/\/$/, "")}/chat/completions`;
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model,
+        temperature,
+        max_tokens: maxTokens,
+        messages: [{ role: "user", content: userPrompt }],
+      }),
+      signal: controller.signal,
+    });
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(`Relay API ${res.status}: ${text.slice(0, 300)}`);
+    }
+    const data = await res.json();
+    const content = data?.choices?.[0]?.message?.content;
+    if (typeof content !== "string") {
+      throw new Error(`Relay response missing content: ${JSON.stringify(data).slice(0, 200)}`);
+    }
+    return content;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 async function callModelCreative(userPrompt) {
+  if (process.env.CLAUDE_RELAY_API_KEY) {
+    return callOpenAICompatibleRelay({
+      apiKey: process.env.CLAUDE_RELAY_API_KEY,
+      baseUrl: process.env.CLAUDE_RELAY_BASE_URL || "https://api.yuegle.com/v1",
+      model: process.env.CLAUDE_GENERATOR_MODEL || "claude-sonnet-4-6",
+      temperature: 0.7,
+      maxTokens: 8000,
+      userPrompt,
+      timeoutMs: 180000,
+    });
+  }
   return callDeepSeekViaCurl({
     apiKey: process.env.DEEPSEEK_API_KEY,
     proxyUrl: resolveProxyUrl(),
@@ -2150,6 +2195,7 @@ async function main() {
   console.log("Build Sentence Robust Generator");
   console.log("==============================");
   console.log(`Target sets: ${TARGET_SET_COUNT}`);
+  console.log(`Generator: ${process.env.CLAUDE_RELAY_API_KEY ? `Claude relay → ${process.env.CLAUDE_GENERATOR_MODEL || "claude-sonnet-4-6"} (${process.env.CLAUDE_RELAY_BASE_URL || "https://api.yuegle.com/v1"})` : "DeepSeek (deepseek-chat)"}`);
   console.log(`Proxy: ${resolveProxyUrl() || "(direct)"}`);
 
   // Seed pool from questions.json (active bank) + reserve_pool.json (leftovers)
