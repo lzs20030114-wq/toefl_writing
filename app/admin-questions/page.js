@@ -425,8 +425,34 @@ function BuildQuestionRow({ q, idx }) {
   );
 }
 
-function BuildSetCard({ set }) {
+function BuildSetCard({ set, token, onDeleted }) {
   const [open, setOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteMsg, setDeleteMsg] = useState("");
+
+  async function handleDelete(e) {
+    e.stopPropagation();
+    if (!confirm(`确认删除套题 #${set.set_id}（共 ${set.questions.length} 道题）？此操作将直接修改正式题库，不可撤销。`)) return;
+    setDeleting(true);
+    setDeleteMsg("");
+    try {
+      const res = await fetch(`/api/admin/questions/sets/${set.set_id}`, {
+        method: "DELETE",
+        headers: { "x-admin-token": token },
+      });
+      const data = await res.json();
+      if (res.ok) {
+        onDeleted(set.set_id);
+      } else {
+        setDeleteMsg(`删除失败：${data.error}`);
+        setDeleting(false);
+      }
+    } catch (e) {
+      setDeleteMsg(`请求失败：${e.message}`);
+      setDeleting(false);
+    }
+  }
+
   return (
     <div
       style={{
@@ -437,33 +463,59 @@ function BuildSetCard({ set }) {
         boxShadow: open ? "0 2px 8px rgba(13,150,104,0.07)" : C.shadow,
       }}
     >
-      <button
-        onClick={() => setOpen((v) => !v)}
+      <div
         style={{
-          width: "100%",
           background: open ? "#f0fdf7" : "#fff",
-          border: "none",
           padding: "13px 16px",
-          cursor: "pointer",
           display: "flex",
           alignItems: "center",
           gap: 12,
-          fontFamily: FONT,
           transition: "background 150ms",
         }}
       >
-        <Badge color={C.blue} bg={C.blue + "18"}>Set {set.set_id}</Badge>
-        <div style={{ flex: 1, textAlign: "left" }}>
-          <span style={{ fontSize: 14, fontWeight: 700, color: C.t1 }}>
-            {set.questions.length} questions
-          </span>
-          <span style={{ fontSize: 13, color: C.t3, marginLeft: 10 }}>
-            {set.questions.map((q) => q.id).slice(0, 3).join("  ·  ")}
-            {set.questions.length > 3 ? "  …" : ""}
-          </span>
+        <button
+          onClick={() => setOpen((v) => !v)}
+          style={{ display: "flex", alignItems: "center", gap: 12, flex: 1, background: "none", border: "none", cursor: "pointer", fontFamily: FONT, textAlign: "left", padding: 0 }}
+        >
+          <Badge color={C.blue} bg={C.blue + "18"}>Set {set.set_id}</Badge>
+          <div style={{ flex: 1 }}>
+            <span style={{ fontSize: 14, fontWeight: 700, color: C.t1 }}>
+              {set.questions.length} questions
+            </span>
+            <span style={{ fontSize: 13, color: C.t3, marginLeft: 10 }}>
+              {set.questions.map((q) => q.id).slice(0, 3).join("  ·  ")}
+              {set.questions.length > 3 ? "  …" : ""}
+            </span>
+          </div>
+          <Chevron open={open} />
+        </button>
+        <button
+          onClick={handleDelete}
+          disabled={deleting}
+          title={`删除套题 #${set.set_id}`}
+          style={{
+            flexShrink: 0,
+            background: "none",
+            border: "1px solid #fca5a5",
+            color: "#dc2626",
+            borderRadius: 6,
+            padding: "3px 10px",
+            cursor: deleting ? "not-allowed" : "pointer",
+            fontSize: 12,
+            fontWeight: 700,
+            fontFamily: FONT,
+            opacity: deleting ? 0.5 : 1,
+          }}
+        >
+          {deleting ? "删除中…" : "删除"}
+        </button>
+      </div>
+
+      {deleteMsg && (
+        <div style={{ padding: "6px 16px", fontSize: 12, color: "#dc2626", background: "#fef2f2" }}>
+          {deleteMsg}
         </div>
-        <Chevron open={open} />
-      </button>
+      )}
 
       {open && (
         <div style={{ borderTop: "1px solid " + C.bdrSubtle }}>
@@ -1745,7 +1797,21 @@ export default function AdminQuestionsPage() {
               </div>
             )}
             {filteredBuildSets.map((set) => (
-              <BuildSetCard key={set.set_id} set={set} />
+              <BuildSetCard
+                key={set.set_id}
+                set={set}
+                token={token.trim()}
+                onDeleted={(setId) => {
+                  setData(prev => ({
+                    ...prev,
+                    buildSentence: {
+                      ...prev.buildSentence,
+                      question_sets: prev.buildSentence.question_sets.filter(s => s.set_id !== setId),
+                    },
+                  }));
+                  setToast(`✓ 套题 #${setId} 已从题库删除`);
+                }}
+              />
             ))}
           </div>
         )}
