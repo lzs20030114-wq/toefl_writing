@@ -1,96 +1,77 @@
 import { isAdminAuthorized } from "../../../../lib/adminAuth";
-import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync, openSync, closeSync } from "fs";
-import { join } from "path";
-import { randomUUID } from "crypto";
-import { spawn } from "child_process";
 
-const JOBS_DIR = join(process.cwd(), "data", "buildSentence", "jobs");
+const GH_OWNER = process.env.GH_OWNER || "lzs20030114-wq";
+const GH_REPO = process.env.GH_REPO || "toefl_writing";
+const WORKFLOW_FILE = "generate-bs.yml";
 
-function ensureJobsDir() {
-  if (!existsSync(JOBS_DIR)) mkdirSync(JOBS_DIR, { recursive: true });
+function ghHeaders() {
+  const pat = process.env.GH_PAT;
+  if (!pat) throw new Error("GH_PAT 未配置");
+  return {
+    Authorization: `Bearer ${pat}`,
+    Accept: "application/vnd.github+json",
+    "X-GitHub-Api-Version": "2022-11-28",
+  };
 }
 
-function jobStatePath(jobId) {
-  return join(JOBS_DIR, `${jobId}.json`);
+function formatRun(r) {
+  return {
+    id: r.id,
+    status: r.status,
+    conclusion: r.conclusion,
+    createdAt: r.created_at,
+    updatedAt: r.updated_at,
+    htmlUrl: r.html_url,
+    inputs: r.inputs || {},
+  };
 }
 
-function readJobState(jobId) {
-  try {
-    return JSON.parse(readFileSync(jobStatePath(jobId), "utf8"));
-  } catch {
-    return null;
-  }
-}
-
-function listJobs() {
-  ensureJobsDir();
-  try {
-    return readdirSync(JOBS_DIR)
-      .filter((f) => f.endsWith(".json") && !f.includes("_output") && !f.includes("_pool"))
-      .map((f) => {
-        try {
-          return JSON.parse(readFileSync(join(JOBS_DIR, f), "utf8"));
-        } catch {
-          return null;
-        }
-      })
-      .filter(Boolean)
-      .sort((a, b) => new Date(b.startedAt) - new Date(a.startedAt));
-  } catch {
-    return [];
-  }
-}
-
-// POST /api/admin/generate-bs — start a new job
+// POST /api/admin/generate-bs — 触发 workflow
 export async function POST(request) {
   if (!isAdminAuthorized(request)) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  let headers;
+  try { headers = ghHeaders(); } catch (e) {
+    return Response.json({ error: e.message }, { status: 503 });
+  }
+
   const body = await request.json().catch(() => ({}));
   const targetSets = Math.max(1, Math.min(20, Number(body.targetSets) || 6));
 
-  const jobId = randomUUID();
-  const outputPath = join(JOBS_DIR, `${jobId}_output.json`);
-  const logPath = join(JOBS_DIR, `${jobId}_log.txt`);
-
-  ensureJobsDir();
-
-  const state = {
-    jobId,
-    status: "running",
-    targetSets,
-    startedAt: new Date().toISOString(),
-    finishedAt: null,
-    error: null,
-  };
-  writeFileSync(jobStatePath(jobId), JSON.stringify(state, null, 2), "utf8");
-
-  const env = {
-    ...process.env,
-    BS_TARGET_SETS: String(targetSets),
-    BS_OUTPUT_PATH: outputPath,
-    BS_JOB_ID: jobId,
-    BS_JOB_STATE_PATH: jobStatePath(jobId),
-  };
-
-  const logFd = openSync(logPath, "w");
-  const child = spawn(process.execPath, ["scripts/generateBSQuestions.mjs"], {
-    cwd: process.cwd(),
-    env,
-    detached: true,
-    stdio: ["ignore", logFd, logFd],
+  const url = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/actions/workflows/${WORKFLOW_FILE}/dispatches`;
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { ...headers, "Content-Type": "application/json" },
+    body: JSON.stringify({ ref: "main", inputs: { target_sets: String(targetSets) } }),
   });
-  child.unref();
-  closeSync(logFd);
 
-  return Response.json({ jobId, status: "running", targetSets });
+  if (res.status !== 204) {
+    const text = await res.text();
+    return Response.json({ error: `GitHub API 错误 ${res.status}: ${text}` }, { status: 500 });
+  }
+
+  return Response.json({ triggered: true, targetSets, triggeredAt: new Date().toISOString() });
 }
 
-// GET /api/admin/generate-bs — list all jobs
+// GET /api/admin/generate-bs — 列出最近的 workflow runs
 export async function GET(request) {
   if (!isAdminAuthorized(request)) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
-  return Response.json({ jobs: listJobs() });
+
+  let headers;
+  try { headers = ghHeaders(); } catch (e) {
+    return Response.json({ error: e.message }, { status: 503 });
+  }
+
+  const url = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/actions/workflows/${WORKFLOW_FILE}/runs?per_page=15`;
+  const res = await fetch(url, { headers });
+  if (!res.ok) {
+    return Response.json({ error: `GitHub API 错误 ${res.status}` }, { status: 500 });
+  }
+
+  const data = await res.json();
+  return Response.json({ runs: (data.workflow_runs || []).map(formatRun) });
 }
