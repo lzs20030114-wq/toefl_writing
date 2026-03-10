@@ -653,14 +653,18 @@ function jaccardSimilarity(setA, setB) {
 }
 
 /**
- * Returns true if candidate question is too topically similar to any question in the pool.
+ * Returns true if candidate question is too topically similar to recent pool questions.
+ * Only compares against the most recent TOPIC_REPEAT_WINDOW questions — comparing against
+ * the entire pool causes over-rejection as the pool grows large (100+ questions).
  * Threshold 0.45: share >45% of meaningful topic words → reject as topic repeat.
  */
+const TOPIC_REPEAT_WINDOW = 40;
 function isTopicRepeat(q, pool, threshold = 0.45) {
   if (!pool || pool.length === 0) return false;
   const words = extractTopicWords(q);
   if (words.size < 2) return false; // too few topic words to compare reliably
-  for (const existing of pool) {
+  const recent = pool.slice(-TOPIC_REPEAT_WINDOW);
+  for (const existing of recent) {
     if (jaccardSimilarity(words, extractTopicWords(existing)) >= threshold) return true;
   }
   return false;
@@ -1677,7 +1681,8 @@ async function reformatPrompts(questions) {
     const newCtx  = String(u.prompt_context  ?? q.prompt_context  ?? "").trim();
     const newTask = String(u.prompt_task_text ?? q.prompt_task_text ?? "").trim();
     if (!newTask) return q; // safety: never blank out the task
-    return { ...q, prompt_context: newCtx, prompt_task_text: newTask };
+    // Clear prompt so validator doesn't flag the mismatch after reformatting
+    return { ...q, prompt_context: newCtx, prompt_task_text: newTask, prompt: "" };
   });
 }
 // ─────────────────────────────────────────────────────────────────────────────
