@@ -1589,6 +1589,99 @@ function tightenBoostSpec(spec, shortages, targetTotal = 3) {
 }
 
 
+// ── Prompt Reformatter ───────────────────────────────────────────────────────
+// Dedicated pass: converts two-part prompts (context + short task) into
+// single direct questions (TPO authentic style). Only fires on questions
+// where prompt_context is non-empty AND task_kind is ask/report/respond.
+
+function buildPromptReformatterPrompt(questions) {
+  const items = questions.map(q => ({
+    id: q.id,
+    prompt_context: q.prompt_context || "",
+    prompt_task_kind: q.prompt_task_kind || "",
+    prompt_task_text: q.prompt_task_text || "",
+  }));
+  return `You are a TOEFL prompt style editor. Your ONLY job: rewrite two-part prompts into single direct questions.
+
+## RULE:
+For each item where prompt_task_kind is "ask", "report", or "respond":
+- Merge prompt_context + prompt_task_text into ONE self-contained question.
+- Set prompt_context = "" (empty string).
+- Set prompt_task_text = the merged single question.
+
+For "tell" or "explain" items: leave BOTH fields UNCHANGED.
+
+## HOW TO MERGE (ask/report/respond):
+Take the person/scene from context and embed it directly into the question.
+
+EXAMPLES:
+  IN:  context="The yoga instructor is speaking with a student about the schedule."
+       task="What does she ask?"
+  OUT: context=""
+       task="What did the yoga instructor ask the student about the schedule?"
+
+  IN:  context="A customer is at the front desk of a clothing store."
+       task="What did the shop owner ask?"
+  OUT: context=""
+       task="What did the shop owner at the clothing store ask the customer?"
+
+  IN:  context="Some colleagues are discussing a project deadline."
+       task="What did they need to know?"
+  OUT: context=""
+       task="What did the colleagues need to know about the project deadline?"
+
+  IN:  context="You are at a hair salon for an appointment."
+       task="What do you tell the stylist?"   ← "tell" type — DO NOT CHANGE
+  OUT: context="You are at a hair salon for an appointment."   ← unchanged
+       task="What do you tell the stylist?"                    ← unchanged
+
+## CONSTRAINTS:
+- The merged task_text MUST be a natural, grammatical question.
+- Do NOT change the person being described or invent new details.
+- Return ONLY a JSON array with objects containing: id, prompt_context, prompt_task_text.
+- Do NOT include any other fields.
+
+## ITEMS TO PROCESS:
+${JSON.stringify(items, null, 2)}
+
+Return ONLY a JSON array. No markdown.`.trim();
+}
+
+/**
+ * Reformat two-part prompts into single-question TPO style.
+ * Returns the same question list with prompt fields updated.
+ * Falls back to original on any error.
+ */
+async function reformatPrompts(questions) {
+  const toReformat = questions.filter(q => {
+    const ctx = (q.prompt_context || "").trim();
+    const kind = (q.prompt_task_kind || "").toLowerCase();
+    return ctx && ["ask", "report", "respond"].includes(kind);
+  });
+  if (toReformat.length === 0) return questions;
+
+  let updates;
+  try {
+    const raw = await callModelDeterministic(buildPromptReformatterPrompt(toReformat));
+    const arr = parseJsonArray(raw);
+    if (!Array.isArray(arr)) throw new Error("not an array");
+    updates = new Map(arr.map(u => [String(u.id || ""), u]));
+  } catch (e) {
+    console.log(`  reformatter: failed (${e.message}), using originals`);
+    return questions;
+  }
+
+  return questions.map(q => {
+    const u = updates.get(q.id);
+    if (!u) return q;
+    const newCtx  = String(u.prompt_context  ?? q.prompt_context  ?? "").trim();
+    const newTask = String(u.prompt_task_text ?? q.prompt_task_text ?? "").trim();
+    if (!newTask) return q; // safety: never blank out the task
+    return { ...q, prompt_context: newCtx, prompt_task_text: newTask };
+  });
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
 function buildReviewPrompt(questions) {
   return `
 You are a strict TOEFL TPO item quality reviewer.
@@ -1910,9 +2003,14 @@ async function generateCandidateRound(round, spec, rejectFeedback = "", recentPo
     out.typeStats[type].generated += 1;
   });
 
+  // Prompt Reformatter: convert two-part prompts to single-question TPO style
+  const reformatted = await reformatPrompts(normalized);
+  const reformatCount = reformatted.filter((q, i) => !(q.prompt_context || "") !== !(normalized[i].prompt_context || "")).length;
+  if (reformatCount > 0) console.log(`  reformatter: converted ${reformatCount} two-part prompts to single-question style`);
+
   // hard filter first
   const hardPassed = [];
-  for (const q of normalized) {
+  for (const q of reformatted) {
     const hv = hardValidateQuestion(q);
     if (!hv.ok) {
       const type = resolvedAnswerType(q);

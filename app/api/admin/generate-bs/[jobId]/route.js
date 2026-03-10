@@ -45,29 +45,29 @@ function jaccardSimilarity(setA, setB) {
 }
 
 /**
- * Compute topic novelty score (0–100) for a list of questions.
- * Score = (1 − avg pairwise Jaccard similarity) × 100.
- * Thresholds: ≥80 优秀, 70–79 良好, 60–69 合格, <60 需改进.
+ * Compute topic novelty score (0–100).
+ * Metric: percentage of question pairs with Jaccard similarity < 0.4.
+ * (Avg-based score was misleading — rare high-similarity pairs got drowned out.)
+ * Thresholds: ≥90 优秀, 80–89 良好, 70–79 合格, <70 需改进.
  */
 function computeNoveltyScore(questions) {
   if (questions.length < 2) return 100;
   const wordSets = questions.map(extractTopicWords);
-  let total = 0;
-  let pairs = 0;
+  let novelPairs = 0;
+  let totalPairs = 0;
   for (let i = 0; i < wordSets.length; i++) {
     for (let j = i + 1; j < wordSets.length; j++) {
-      total += jaccardSimilarity(wordSets[i], wordSets[j]);
-      pairs++;
+      totalPairs++;
+      if (jaccardSimilarity(wordSets[i], wordSets[j]) < 0.4) novelPairs++;
     }
   }
-  const avgSimilarity = pairs > 0 ? total / pairs : 0;
-  return Math.round((1 - avgSimilarity) * 100);
+  return totalPairs > 0 ? Math.round((novelPairs / totalPairs) * 100) : 100;
 }
 
 function noveltyLabel(score) {
-  if (score >= 80) return "优秀";
-  if (score >= 70) return "良好";
-  if (score >= 60) return "合格";
+  if (score >= 90) return "优秀";
+  if (score >= 80) return "良好";
+  if (score >= 70) return "合格";
   return "需改进";
 }
 // ─────────────────────────────────────────────────────────────────────────────

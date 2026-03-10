@@ -123,8 +123,8 @@ function StatsPanel({ stats, runId, token, onDeployed, onDeleted }) {
       {stats.noveltyScore != null && (() => {
         const score = stats.noveltyScore;
         const label = stats.noveltyLabel || "";
-        const color = score >= 80 ? "#166534" : score >= 70 ? "#1e40af" : score >= 60 ? "#92400e" : "#991b1b";
-        const bg    = score >= 80 ? "#dcfce7" : score >= 70 ? "#dbeafe" : score >= 60 ? "#fef3c7" : "#fee2e2";
+        const color = score >= 90 ? "#166534" : score >= 80 ? "#1e40af" : score >= 70 ? "#92400e" : "#991b1b";
+        const bg    = score >= 90 ? "#dcfce7" : score >= 80 ? "#dbeafe" : score >= 70 ? "#fef3c7" : "#fee2e2";
         return (
           <div style={{ marginBottom: 12, display: "flex", alignItems: "center", gap: 10 }}>
             <span style={{ fontSize: 12, fontWeight: 700, color: C.t1 }}>话题新颖度</span>
@@ -132,7 +132,7 @@ function StatsPanel({ stats, runId, token, onDeployed, onDeleted }) {
               {score} / 100
             </span>
             <span style={{ fontSize: 12, color, fontWeight: 700 }}>{label}</span>
-            <span style={{ fontSize: 11, color: C.t3 }}>（≥80 优秀，70-79 良好，60-69 合格，&lt;60 需改进）</span>
+            <span style={{ fontSize: 11, color: C.t3 }}>（≥90 优秀，80-89 良好，70-79 合格，&lt;70 需改进）</span>
           </div>
         );
       })()}
