@@ -420,13 +420,13 @@ function buildRejectFeedbackHints(rejectReasons) {
       hints.push("Avoid ambiguous chunk order; each item should have one clearly best arrangement.");
     }
     if (r.includes("prompt_task_text") || r.includes("prompt must include an explicit task")) {
-      hints.push("prompt_task_text MUST be an explicit task/question, NOT background. Use patterns: 'What did [person] ask?', 'How do you respond?', 'Tell your friend about it.', 'Describe what happened.' Put background/context in prompt_context, NOT in prompt_task_text.");
+      hints.push("prompt_task_text MUST be an explicit question, NOT background. Use ONLY ask/report/respond patterns such as 'What did [person] ask?', 'What did [person] want to know?', 'How do you respond?', or 'What do you say?'.");
     }
     if (r.includes("must be a single sentence")) {
       hints.push("prompt_task_text for ask/report/respond MUST be ONE sentence only. NEVER start with a background sentence. WRONG: 'A student is at the office. What did she ask?' RIGHT: 'What did the student at the registrar's office ask?'");
     }
-    if (r.includes("prompt_context: must be non-empty for tell/explain")) {
-      hints.push("tell/explain items MUST have a non-empty prompt_context scene sentence. WRONG: prompt_context='', task='Describe the park you explored.' RIGHT: prompt_context='You explored a park over the weekend.', task='Tell your friend about it.'");
+    if (r.includes("prompt_task_kind")) {
+      hints.push("Use ONLY these prompt_task_kind values: ask, report, respond. Do NOT use tell or explain.");
     }
   });
 
@@ -508,7 +508,7 @@ Examples:
 - "I have no idea where they are going."
 - "I am not sure what time the event starts."
 - "I do not know if the store is open."
-Prompt: prompt_task_kind="respond", prompt_task_text="What do you say?" or prompt_task_kind="tell", prompt_task_text="Tell your friend what you think."
+Prompt: prompt_task_kind="respond", prompt_task_text="What do you say?" or "How do you respond?"
 Distractor: "do" or "did".
 SCORER FENCE (easy): Embedded clause uses simple present only. NO passive. NO past perfect. NO comparative. NO "whom".`,
 
@@ -573,7 +573,7 @@ Describe a situation, location, preference, or fact.
 Examples:
 - "I found the work environment at this company to be much more relaxed."
 - "The store next to the post office sells all types of winter apparel."
-Prompt: prompt_task_kind="tell", prompt_task_text="Describe what happened." or "Tell your friend about it." or prompt_task_kind="respond", prompt_task_text="What do you say?"
+Prompt: prompt_task_kind="respond", prompt_task_text="What do you say?" or "What do you say about it?"
 Distractor: morphological variant (e.g. "relaxed/relax", "sells/sold").
 PREFILLED (medium): use the SUBJECT as prefilled. 1st-person answers: ["i"]. 3rd-person: 2-word subject NP like ["the store"], ["the professor"]. NOT the object.`,
 
@@ -592,7 +592,7 @@ PREFILLED REMINDER: Hard sentences are 10-13 words — chunks MUST still be ≤ 
 Examples:
 - "The bookstore I stopped by had the novel in stock."
 - "The diner that opened last week serves many delicious entrees."
-Prompt: prompt_task_kind="tell", prompt_task_text="Describe what you found." or prompt_task_kind="respond", prompt_task_text="What do you tell your friend?"
+Prompt: prompt_task_kind="respond", prompt_task_text="What do you tell your friend?" or "What do you say about it?"
 Distractor: morphological variant (e.g. "stopped/stop", "opened/open").
 PREFILLED (medium): use the SUBJECT as prefilled. Contact clause: subject NP like ["the bookstore"], ["the diner"]. 1st-person: ["i"]. NOT the object inside the relative clause.`,
 
@@ -879,9 +879,9 @@ Pattern D (short sentence ≤8 words, prefilled=[]):
   "id": "tmp_r${round}_q1",
   "has_distractor": boolean,
   "answer_type": "negation" | "3rd-reporting" | "1st-embedded" | "interrogative" | "direct" | "relative",
-  "prompt_context": "" or "one background sentence (only for tell/explain; MUST be empty string for ask/report/respond)",
-  "prompt_task_kind": "ask" | "report" | "respond" | "tell" | "explain",
-  "prompt_task_text": "ONE sentence only — no period in the middle. For ask/report/respond: a self-contained question with scene embedded. For tell/explain: a short instruction.",
+  "prompt_context": "" (MUST be empty string for every item)",
+  "prompt_task_kind": "ask" | "report" | "respond",
+  "prompt_task_text": "ONE sentence only — a self-contained question with scene embedded, ending with ?",
   "prompt": "optional; if provided, it must exactly match prompt_context + prompt_task_text rendered by the app",
   "answer": "full correct sentence (7-13 words)",
   "chunks": ["draggable1", "draggable2", "...and distractor if has_distractor=true"],
@@ -910,11 +910,7 @@ TPO EXAMPLES (single-question style, authentic):
   ✓ "Did you enjoy the pottery class you attended last week?"
   ✓ "What did the travel agent ask about your vacation plans?"
 
-Only "tell" and "explain" types naturally need a short context sentence:
-  prompt_context = "You went to a pottery class last Saturday."
-  prompt_task_text = "Tell your friend about it."
-
-For "ask", "report", and "respond" types: embed the context INTO the question.
+For "ask", "report", and "respond" types: always embed the context INTO the question.
 WRONG ✗ (two-part format — NOT TPO style):
   prompt_context = "The yoga instructor has a question about the schedule."
   prompt_task_text = "What does she ask?"
@@ -923,8 +919,8 @@ RIGHT ✓ (single-question style — TPO authentic):
   prompt_task_text = "What did the yoga instructor ask about the schedule change?"
 
 ### PROMPT FIELDS:
-- "prompt_context" = brief scene sentence, OR empty string "" for single-question style
-- "prompt_task_kind" = ask | report | respond | tell | explain
+- "prompt_context" = ALWAYS empty string ""
+- "prompt_task_kind" = ask | report | respond
 - "prompt_task_text" = the EXPLICIT task/question shown to the user (required, never empty)
 - The visible prompt is: prompt_context + " " + prompt_task_text (or just prompt_task_text if context is "")
 
@@ -932,8 +928,6 @@ prompt_task_text MUST match one of these validated patterns (auto-rejected other
   - ask/report: "What did [person] ask/want/say/mention/find out/discover/learn/wonder/need to know?"
                OR "What does [person] ask about [topic]?" — context embedded in the question ✓
   - respond:    "How do you respond?" / "What do you say?" / "What does [person] tell [person]?"
-  - tell:       "Tell your friend about it." / "Describe what happened." / "Complete the sentence."
-  - explain:    "Explain what you found." / "Share your experience."
 
 ${rejectFeedback}
 ## FINAL CHECKLIST 锟?VERIFY BEFORE OUTPUT:
@@ -951,9 +945,7 @@ ${rejectFeedback}
     WRONG ✗: prompt_task_text = "The student needed help with her paper. What did she ask the professor?"
     RIGHT ✓: prompt_task_text = "What did the student ask the professor about her paper?"
     prompt_task_text MUST start with a validated cue pattern — see PROMPT CONTRACT above.
-    For "tell"/"explain" types: prompt_context MUST be non-empty. A bare instruction with no context will be REJECTED.
-    WRONG ✗: prompt_context="", prompt_task_text="Describe the park you explored over the weekend."
-    RIGHT ✓: prompt_context="You explored a local park over the weekend.", prompt_task_text="Tell your friend about it."
+    Use ONLY these task kinds: ask, report, respond. "tell" and "explain" are not allowed.
 
 Output JSON array only. No markdown.`.trim();
 }
@@ -1659,15 +1651,6 @@ function hardValidateQuestion(q) {
     const sentences = taskText.split(/(?<=[.!?])\s+/).filter(Boolean);
     if (sentences.length >= 2) {
       return { ok: false, reason: "prompt_task_text: must be a single sentence — embed background context into the question itself" };
-    }
-  }
-
-  // tell/explain types must have a non-empty prompt_context to establish conversational setting.
-  // "Describe X." alone is not acceptable — the context sentence is required.
-  if (["tell", "explain"].includes(taskKind)) {
-    const ctx = normalizeText(q.prompt_context);
-    if (!ctx) {
-      return { ok: false, reason: "prompt_context: must be non-empty for tell/explain — provide a scene-setting sentence (e.g. 'You visited a park over the weekend.')" };
     }
   }
 

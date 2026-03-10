@@ -110,7 +110,7 @@ function inferPromptTask(question) {
   }
 
   if (/\b(friend|roommate)\b/i.test(prompt)) {
-    return { kind: "tell", text: "Tell your friend about it." };
+    return { kind: "respond", text: "What do you tell your friend?" };
   }
 
   if (perspective === "you") return { kind: "respond", text: "How do you respond?" };

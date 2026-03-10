@@ -61,6 +61,18 @@ describe("build sentence prompt contract", () => {
     expect(out.fatal.some((e) => e.includes("question mark"))).toBe(true);
   });
 
+  test("strict structured validation rejects deprecated tell/explain task kinds", () => {
+    const out = validateStructuredPromptParts(
+      {
+        prompt_context: "You are describing your new apartment to a friend.",
+        prompt_task_kind: "tell",
+        prompt_task_text: "Tell your friend about it.",
+      },
+      { requireStructured: true }
+    );
+    expect(out.fatal.some((e) => e.includes("must be one of ask, report, respond"))).toBe(true);
+  });
+
   test("legacy explicit task detection distinguishes background-only prompts", () => {
     expect(hasExplicitTaskInLegacyPrompt("A visitor is asking the museum curator a question.")).toBe(false);
     expect(hasExplicitTaskInLegacyPrompt("A visitor is speaking with the museum curator. What do they ask?")).toBe(true);
