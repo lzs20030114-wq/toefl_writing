@@ -12,7 +12,7 @@
  *   DEEPSEEK_API_KEY=...
  *   DEEPSEEK_PROXY_URL=http://127.0.0.1:10808   (optional)
  *   BS_TARGET_SETS=6                              (optional)
- *   BS_CANDIDATE_ROUNDS=40                        (optional)
+ *   BS_MAX_ROUNDS=32                              (optional)
  */
 
 import { readFileSync, writeFileSync } from "fs";
@@ -46,8 +46,6 @@ const OUTPUT_PATH = process.env.BS_OUTPUT_PATH ? resolve(String(process.env.BS_O
 const RESERVE_PATH = resolve(__dirname, "..", "data", "buildSentence", "reserve_pool.json");
 const CIRCUIT_BREAKER_LOG_PATH = resolve(__dirname, "..", "data", "buildSentence", "circuit_breaker_log.json");
 const TARGET_SET_COUNT = Number(process.env.BS_TARGET_SETS || 6);
-const CANDIDATE_ROUNDS = Number(process.env.BS_CANDIDATE_ROUNDS || 40);
-const ADAPTIVE_BOOST_ROUNDS = Number(process.env.BS_ADAPTIVE_BOOST_ROUNDS || 80);
 const MIN_REVIEW_SCORE = Number(process.env.BS_MIN_REVIEW_SCORE || 78);
 const MIN_REVIEW_OVERALL = Number(process.env.BS_MIN_REVIEW_OVERALL || 84);
 const MIN_ETS_SIMILARITY = Number(process.env.BS_MIN_ETS_SIMILARITY || 72);
@@ -382,7 +380,6 @@ function classifyAnswerType(q) {
  */
 const TYPE_LIST = ["negation", "3rd-reporting", "1st-embedded", "interrogative", "direct", "relative"];
 const WILLING_TYPES = ["3rd-reporting", "negation", "1st-embedded"]; // AI generates naturally
-const STUBBORN_TYPES = ["direct", "relative", "interrogative"]; // AI avoids, targeted by boost
 const TPO_TYPE_TARGET_RATIO = Object.freeze({
   "negation": 0.183,
   "3rd-reporting": 0.417,
@@ -1106,256 +1103,6 @@ function chooseGapWeightedType(poolState, globalTypeTargets, candidates, fallbac
   return ranked[0]?.type || fallback;
 }
 
-function buildBoostBacklog(poolState, pool, difficultyTargets, globalTypeTargets, styleTargets) {
-  const tasks = [];
-  const pushTask = (task, repeat = 1) => {
-    for (let i = 0; i < repeat; i++) tasks.push({ ...task });
-  };
-  const totals = poolState?.typeTotals || {};
-  const diffGaps = {
-    easy: Math.max(0, (difficultyTargets?.easy || 0) - (pool.easy?.length || 0)),
-    medium: Math.max(0, (difficultyTargets?.medium || 0) - (pool.medium?.length || 0)),
-    hard: Math.max(0, (difficultyTargets?.hard || 0) - (pool.hard?.length || 0)),
-  };
-  const style = poolState?.style || {};
-
-  // Priority 1 (highest): STUBBORN_TYPES — main purpose of boost
-  for (const type of STUBBORN_TYPES) {
-    const gap = Math.max(0, (globalTypeTargets?.[type] || 0) - (totals[type] || 0));
-    if (gap <= 0) continue;
-    pushTask({
-      priority: 120,
-      kind: 'type_gap_stubborn',
-      type,
-      difficulty: 'medium',
-      hint: 'BOOST TARGET: generate exactly one ' + type + ' item. This is a rare type — focus entirely on getting the structure right. Do not mix with other types.',
-    }, gap);
-  }
-
-  // Priority 2: style gaps (if not already satisfied)
-  const embeddedGap = Math.max(0, (styleTargets?.embeddedMin || 0) - (style.embedded || 0));
-  if (embeddedGap > 0) {
-    pushTask({
-      priority: 70,
-      kind: 'style_embedded',
-      type: chooseGapWeightedType(poolState, globalTypeTargets, ['1st-embedded', '3rd-reporting'], '1st-embedded'),
-      difficulty: 'medium',
-      hint: 'BOOST TARGET: generate exactly one embedded-question item with declarative word order inside the clause.',
-    }, embeddedGap);
-  }
-  const negationGap = Math.max(0, (styleTargets?.negationMin || 0) - (style.negation || 0));
-  if (negationGap > 0) {
-    pushTask({
-      priority: 68,
-      kind: 'style_negation',
-      type: 'negation',
-      difficulty: 'medium',
-      hint: 'BOOST TARGET: generate exactly one negation item.',
-    }, negationGap);
-  }
-
-  // Priority 3: difficulty gaps (fallback only)
-  for (const diff of ['medium', 'easy', 'hard']) {
-    const gap = diffGaps[diff] || 0;
-    if (gap <= 0) continue;
-    const candidates = diff === 'easy' ? ['negation', '3rd-reporting'] : ['3rd-reporting', '1st-embedded'];
-    pushTask({
-      priority: 60,
-      kind: 'difficulty_gap',
-      type: chooseGapWeightedType(poolState, globalTypeTargets, candidates, '3rd-reporting'),
-      difficulty: diff,
-      hint: 'BOOST TARGET: generate exactly one ' + diff + ' difficulty item.',
-    }, gap);
-  }
-
-  return tasks.sort((a, b) => b.priority - a.priority);
-}
-
-function buildBoostTaskHint(task) {
-  if (!task) return '';
-  return [
-    task.hint || '',
-    'BOOST TASK TYPE: ' + task.type,
-    'BOOST TASK DIFFICULTY: ' + task.difficulty,
-    'Return exactly one item for this task. Do not hedge by mixing multiple target structures.',
-  ].filter(Boolean).join('\n');
-}
-
-function buildBoostShortageRanking(poolState, pool, difficultyTargets, globalTypeTargets, styleTargets) {
-  const shortages = [];
-  const diffGaps = {
-    easy: Math.max(0, (difficultyTargets?.easy || 0) - (pool?.easy?.length || 0)),
-    medium: Math.max(0, (difficultyTargets?.medium || 0) - (pool?.medium?.length || 0)),
-    hard: Math.max(0, (difficultyTargets?.hard || 0) - (pool?.hard?.length || 0)),
-  };
-  const style = poolState?.style || { embedded: 0, negation: 0, distractor: 0, qmark: 0 };
-  const styleGaps = {
-    embedded: Math.max(0, (styleTargets?.embeddedMin || 0) - style.embedded),
-    negation: Math.max(0, (styleTargets?.negationMin || 0) - style.negation),
-    distractor: Math.max(0, (styleTargets?.distractorMin || 0) - style.distractor),
-  };
-  const typeTotals = poolState?.typeTotals || Object.fromEntries(TYPE_LIST.map((type) => [type, 0]));
-  const typeGaps = Object.fromEntries(
-    TYPE_LIST.map((type) => [type, Math.max(0, (globalTypeTargets?.[type] || 0) - (typeTotals[type] || 0))]),
-  );
-
-  if (styleGaps.embedded > 0) {
-    shortages.push({
-      key: 'embedded',
-      category: 'style',
-      gap: styleGaps.embedded,
-      priority: 100,
-      guidance: 'Generate embedded-capable items only. Prefer 1st-embedded or interrogative. Use 3rd-reporting only if it clearly contains an indirect question clause.',
-    });
-  }
-  if (styleGaps.negation > 0) {
-    shortages.push({
-      key: 'negation',
-      category: 'style',
-      gap: styleGaps.negation,
-      priority: 95,
-      guidance: 'Generate negation items only. Prefer medium negation unless the main difficulty gap is hard.',
-    });
-  }
-  if (diffGaps.hard > 0) {
-    shortages.push({
-      key: 'hard',
-      category: 'difficulty',
-      gap: diffGaps.hard,
-      priority: 90,
-      guidance: 'Generate hard items only, and make them hard through advanced grammar rather than length.',
-    });
-  }
-  if (diffGaps.medium > 0) {
-    shortages.push({
-      key: 'medium',
-      category: 'difficulty',
-      gap: diffGaps.medium,
-      priority: 70,
-      guidance: 'Generate medium items only. Do not spend this patch on easy or hard unless that is the blocking gap.',
-    });
-  }
-  if (diffGaps.easy > 0) {
-    shortages.push({
-      key: 'easy',
-      category: 'difficulty',
-      gap: diffGaps.easy,
-      priority: 60,
-      guidance: 'Generate easy items only. Keep syntax simple and avoid over-engineering.',
-    });
-  }
-
-  for (const [type, gap] of Object.entries(typeGaps)) {
-    if (gap <= 0) continue;
-    const priority = type === '3rd-reporting' ? 55 : type === 'direct' ? 25 : 45;
-    shortages.push({
-      key: type,
-      category: 'type',
-      gap,
-      priority,
-      guidance: 'Prefer ' + type + ' items when no higher-priority style or difficulty shortage is still open.',
-    });
-  }
-
-  if (styleGaps.distractor > 0) {
-    shortages.push({
-      key: 'distractor',
-      category: 'style',
-      gap: styleGaps.distractor,
-      priority: 20,
-      guidance: 'Only use this as a secondary objective. Prefer item types that naturally support a safe single-word distractor.',
-    });
-  }
-
-  return shortages.sort((a, b) => {
-    if (b.priority !== a.priority) return b.priority - a.priority;
-    return b.gap - a.gap;
-  });
-}
-
-function determineBoostGoals(shortages, targetTotal = 3) {
-  const ordered = Array.isArray(shortages) ? shortages : [];
-  const primary = ordered[0] || null;
-  let secondary = null;
-  if (!primary || targetTotal <= 1) return { primary, secondary };
-
-  const find = (predicate) => ordered.find((item, index) => index > 0 && predicate(item)) || null;
-
-  if (primary.key === 'embedded') {
-    secondary = find((item) => item.key === 'negation' || item.key === 'hard');
-  } else if (primary.key === 'negation') {
-    secondary = find((item) => item.key === 'embedded' || item.key === 'hard');
-  } else if (primary.key === 'hard') {
-    secondary = find((item) => item.key === 'embedded' || item.key === 'negation');
-  } else if (primary.key === 'medium' || primary.key === 'easy') {
-    secondary = find((item) => item.category === 'style');
-  } else if (primary.category === 'type') {
-    secondary = find((item) => item.category === 'style' || item.category === 'difficulty');
-  } else {
-    secondary = find((item) => item.category === 'style');
-  }
-
-  return { primary, secondary };
-}
-
-function getGoalAllowedTypes(goal) {
-  if (!goal) return TYPE_LIST.slice();
-  if (goal.key === 'embedded') return ['1st-embedded', 'interrogative', '3rd-reporting'];
-  if (goal.key === 'negation') return ['negation'];
-  if (goal.category === 'type') return [goal.key];
-  return TYPE_LIST.slice();
-}
-
-function getGoalAllowedDifficulties(goal) {
-  if (!goal) return ['easy', 'medium', 'hard'];
-  if (goal.key === 'hard') return ['hard'];
-  if (goal.key === 'medium') return ['medium'];
-  if (goal.key === 'easy') return ['easy'];
-  return ['easy', 'medium', 'hard'];
-}
-
-function buildBoostPlannerPrompt(poolState, pool, difficultyTargets, globalTypeTargets, styleTargets, targetTotal = 3, goals = null) {
-  const shortages = buildBoostShortageRanking(poolState, pool, difficultyTargets, globalTypeTargets, styleTargets);
-  const chosenGoals = goals || determineBoostGoals(shortages, targetTotal);
-  const primary = chosenGoals?.primary || null;
-  const secondary = chosenGoals?.secondary || null;
-  const primaryTypes = getGoalAllowedTypes(primary);
-  const primaryDifficulties = getGoalAllowedDifficulties(primary);
-  const secondaryTypes = getGoalAllowedTypes(secondary);
-  const secondaryDifficulties = getGoalAllowedDifficulties(secondary);
-
-  const goalLines = [
-    'Primary goal: ' + (primary ? (primary.category + ':' + primary.key + ' gap=' + primary.gap) : 'none'),
-    'Secondary goal: ' + (secondary ? (secondary.category + ':' + secondary.key + ' gap=' + secondary.gap) : 'none'),
-  ];
-
-  return `You are a TOEFL Build-a-Sentence BOOST planner.
-
-This is not a normal batch-planning task.
-You are patching the pool with a tiny surgical batch to fix the single most blocking shortage.
-
-Chosen goals:
-${goalLines.join("\n")}
-
-Allowed planning space:
-- Primary allowed types: ${primaryTypes.join(', ')}
-- Primary allowed difficulties: ${primaryDifficulties.join(', ')}
-- Secondary allowed types: ${secondaryTypes.join(', ')}
-- Secondary allowed difficulties: ${secondaryDifficulties.join(', ')}
-
-Rules for this boost patch:
-- Return a JSON array totaling exactly ${targetTotal} question(s).
-- Use at most 2 cells. One cell is preferred.
-- At least ${Math.max(1, targetTotal - (secondary ? 1 : 0))} question(s) must satisfy the primary goal.
-- If you use a secondary cell at all, it must satisfy the secondary goal shown above.
-- Do not plan any type or difficulty outside the allowed planning space.
-- Do not try to balance the whole pool.
-- Avoid direct items unless direct is explicitly listed in the chosen goals.
-- Keep the patch precise. This is a repair batch, not a broad exploration batch.
-
-Return ONLY a JSON array. No markdown. No explanation.
-[{"type":"...","difficulty":"...","count":N}, ...]`.trim();
-}
 
 function buildPlannerPrompt(poolState, difficultyTargets, globalTypeTargets, styleTargets = null, targetTotal = 10, mode = "normal") {
   const diffRows = ["easy", "medium", "hard"]
@@ -1540,58 +1287,6 @@ function enforcePlannerStyleGaps(spec, poolState, styleTargets, globalTypeTarget
 
   return out.filter((x) => x.count > 0);
 }
-
-function tightenBoostSpec(spec, shortages, targetTotal = 3) {
-  const out = Array.isArray(spec) ? spec.map((x) => ({ ...x })) : [];
-  if (out.length === 0 || !Array.isArray(shortages) || shortages.length === 0) return out;
-
-  const { primary, secondary } = determineBoostGoals(shortages, targetTotal);
-  if (!primary) return out;
-  const primaryAllowedTypes = getGoalAllowedTypes(primary);
-  const primaryAllowedDifficulties = getGoalAllowedDifficulties(primary);
-
-  const preferred = [];
-  const pushCell = (type, difficulty, count = 1) => {
-    if (count <= 0) return;
-    const existing = preferred.find((x) => x.type === type && x.difficulty === difficulty);
-    if (existing) existing.count += count;
-    else preferred.push({ type, difficulty, count });
-  };
-
-  const rankedPrimaryTypes = primaryAllowedTypes.filter(Boolean);
-  const primaryDifficulty = primaryAllowedDifficulties[0] || 'medium';
-  pushCell(rankedPrimaryTypes[0] || '3rd-reporting', primaryDifficulty, targetTotal);
-
-  if (targetTotal > 1 && secondary) {
-    const secondaryAllowedType = secondary.key === 'embedded'
-      ? '1st-embedded'
-      : secondary.key === 'negation'
-      ? 'negation'
-      : secondary.category === 'type'
-      ? secondary.key
-      : rankedPrimaryTypes[Math.min(1, Math.max(0, rankedPrimaryTypes.length - 1))] || rankedPrimaryTypes[0] || '3rd-reporting';
-    const secondaryDifficulty = secondary.key === 'hard'
-      ? 'hard'
-      : secondary.key === 'easy'
-      ? 'easy'
-      : secondary.key === 'medium'
-      ? 'medium'
-      : primaryDifficulty;
-    preferred[0].count = Math.max(1, preferred[0].count - 1);
-    pushCell(secondaryAllowedType, secondaryDifficulty, 1);
-  }
-
-  const focused = [];
-  let remaining = targetTotal;
-  for (const cell of preferred) {
-    if (remaining <= 0) break;
-    const take = Math.min(cell.count, remaining);
-    focused.push({ type: cell.type, difficulty: cell.difficulty, count: take });
-    remaining -= take;
-  }
-  return focused;
-}
-
 
 // ── Prompt Reformatter ───────────────────────────────────────────────────────
 // Dedicated pass: converts two-part prompts (context + short task) into
@@ -2030,13 +1725,30 @@ async function generateCandidateRound(round, spec, rejectFeedback = "", recentPo
 
   if (hardPassed.length === 0) return out;
 
-  // AI review score
-  const reviewRaw = await callModelDeterministic(buildReviewPrompt(hardPassed));
+  // Topic novelty check BEFORE reviewer — saves 2 API calls per topic-rejected question
+  const topicPassed = [];
+  for (const q of hardPassed) {
+    if (isTopicRepeat(q, recentPool)) {
+      const type = resolvedAnswerType(q);
+      out.rejected += 1;
+      const r = "topic:repeat";
+      out.rejectReasons[r] = (out.rejectReasons[r] || 0) + 1;
+      out.typeStats[type].rejected += 1;
+      out.typeStats[type].reasons[r] = (out.typeStats[type].reasons[r] || 0) + 1;
+      continue;
+    }
+    topicPassed.push(q);
+  }
+
+  if (topicPassed.length === 0) return out;
+
+  // AI review score — only on topic-passed questions
+  const reviewRaw = await callModelDeterministic(buildReviewPrompt(topicPassed));
   const review = parseReviewJson(reviewRaw);
   const scoreMap = new Map(
     review.question_scores.map((qs) => [String(qs?.id || ""), Number(qs?.score || 0)]),
   );
-  const consistencyRaw = await callModelDeterministic(buildConsistencyPrompt(hardPassed));
+  const consistencyRaw = await callModelDeterministic(buildConsistencyPrompt(topicPassed));
   const consistency = parseConsistencyJson(consistencyRaw);
   const cMap = new Map(
     consistency.question_scores.map((qs) => [
@@ -2048,7 +1760,7 @@ async function generateCandidateRound(round, spec, rejectFeedback = "", recentPo
     ]),
   );
 
-  for (const q of hardPassed) {
+  for (const q of topicPassed) {
     const score = scoreMap.has(q.id) ? scoreMap.get(q.id) : 0;
     const c = cMap.get(q.id) || { ets: 0, solvability: 0 };
     const blocked = (
@@ -2078,17 +1790,6 @@ async function generateCandidateRound(round, spec, rejectFeedback = "", recentPo
       continue;
     }
     const type = resolvedAnswerType(q);
-
-    // Topic novelty check: reject if too similar to an existing pool question
-    if (isTopicRepeat(q, recentPool)) {
-      out.rejected += 1;
-      const r = "topic:repeat";
-      out.rejectReasons[r] = (out.rejectReasons[r] || 0) + 1;
-      out.typeStats[type].rejected += 1;
-      out.typeStats[type].reasons[r] = (out.typeStats[type].reasons[r] || 0) + 1;
-      continue;
-    }
-
     out.accepted += 1;
     out.typeStats[type].accepted += 1;
     out.questions.push(q);
@@ -2416,7 +2117,6 @@ async function main() {
   console.log("Build Sentence Robust Generator");
   console.log("==============================");
   console.log(`Target sets: ${TARGET_SET_COUNT}`);
-  console.log(`Candidate rounds: ${CANDIDATE_ROUNDS}`);
   console.log(`Proxy: ${resolveProxyUrl() || "(direct)"}`);
 
   // Seed pool from questions.json (active bank) + reserve_pool.json (leftovers)
@@ -2459,11 +2159,6 @@ async function main() {
     medium: Math.ceil(mediumTarget * BUFFER),
     hard: Math.ceil(hardTarget * BUFFER),
   };
-  const boostDifficultyTargets = {
-    easy: easyTarget,
-    medium: mediumTarget,
-    hard: hardTarget,
-  };
   const globalTypeTargetTotal = TARGET_SET_COUNT * 10;
   const globalTypeTargets = Object.fromEntries(
     TYPE_LIST.map((type) => [type, Math.max(1, Math.ceil(globalTypeTargetTotal * TPO_TYPE_TARGET_RATIO[type]))]),
@@ -2485,65 +2180,108 @@ async function main() {
     };
   }
 
-  function selectBoostBatchSize(poolState, pool) {
-    const gaps = computeCoverageGaps(poolState, pool);
-    const diffUnits = gaps.diff.easy + gaps.diff.medium + gaps.diff.hard;
-    const styleUnits = gaps.style.embedded + gaps.style.negation + gaps.style.distractor;
-    const activeTypeGaps = TYPE_LIST.filter((type) => gaps.type[type] > 0).length;
-    const activeGapKinds = [
-      diffUnits > 0 ? 1 : 0,
-      gaps.style.embedded > 0 ? 1 : 0,
-      gaps.style.negation > 0 ? 1 : 0,
-      gaps.style.distractor > 0 ? 1 : 0,
-      activeTypeGaps > 0 ? 1 : 0,
-    ].reduce((sum, x) => sum + x, 0);
+  // ── Unified adaptive generation loop ──────────────────────────────────────
+  const MAX_ROUNDS = Number(process.env.BS_MAX_ROUNDS) || (8 + TARGET_SET_COUNT * 4);
+  const GAP_TOLERANCE = 5;
+  const STUCK_ROUNDS = 5;
+  console.log(`Max rounds: ${MAX_ROUNDS} (= 8 + ${TARGET_SET_COUNT} sets × 4)`);
 
-    if (diffUnits <= 1 && styleUnits <= 1 && activeTypeGaps <= 1 && activeGapKinds <= 2) return 1;
-    return 3;
+  // Total gap: diff + type (covers type-based style needs) + distractor (only style not covered by type)
+  // Does NOT double-count negation/embedded which appear in both type and style targets.
+  function computeTotalGap(poolState, pool) {
+    const diffGap =
+      Math.max(0, difficultyTargets.easy - pool.easy.length) +
+      Math.max(0, difficultyTargets.medium - pool.medium.length) +
+      Math.max(0, difficultyTargets.hard - pool.hard.length);
+    const typeGap = TYPE_LIST.reduce((sum, t) =>
+      sum + Math.max(0, (globalTypeTargets[t] || 0) - (poolState.typeTotals[t] || 0)), 0);
+    const distractorGap = Math.max(0, styleTargets.distractorMin - poolState.style.distractor);
+    return { total: diffGap + typeGap + distractorGap, diffGap, typeGap, distractorGap };
   }
 
-  function hasSufficientPoolCoverage(poolState, pool) {
-    const diffOk =
-      pool.easy.length >= difficultyTargets.easy &&
-      pool.medium.length >= difficultyTargets.medium &&
-      pool.hard.length >= difficultyTargets.hard;
-    const styleOk =
-      poolState.style.embedded >= styleTargets.embeddedMin &&
-      poolState.style.negation >= styleTargets.negationMin &&
-      poolState.style.distractor >= styleTargets.distractorMin &&
-      poolState.style.qmark <= styleTargets.qmarkMax;
-    const typeOk = TYPE_LIST.every((type) => (poolState.typeTotals[type] || 0) >= (globalTypeTargets[type] || 0));
-    return diffOk && styleOk && typeOk;
+  // Decide batch size and targeting based on current gap.
+  // Large gap → broad AI-planned batch. Small gap → micro targeted batch (no AI planner needed).
+  function scheduleNextBatch(gap, poolState, pool, cbState, roundNum) {
+    if (gap.total > 20) {
+      return { mode: "broad", batchSize: 10, useAIPlanner: true };
+    }
+    if (gap.total > 4) {
+      return { mode: "medium", batchSize: 5, useAIPlanner: true };
+    }
+    // Micro mode: directly target the most needed non-blocked type/difficulty
+    const blockedTypes = getActiveCircuitBreakerTypes(cbState, roundNum);
+    const bestType = TYPE_LIST
+      .filter((t) => !blockedTypes.has(t))
+      .map((t) => ({ type: t, gap: Math.max(0, (globalTypeTargets[t] || 0) - (poolState.typeTotals[t] || 0)) }))
+      .sort((a, b) => b.gap - a.gap)[0];
+    const bestDiff = ["hard", "medium", "easy"]
+      .find((d) => pool[d].length < difficultyTargets[d]) || "medium";
+    return {
+      mode: "micro",
+      batchSize: 2,
+      useAIPlanner: false,
+      spec: [{ type: bestType?.type || "3rd-reporting", difficulty: bestDiff, count: 2 }],
+    };
   }
 
-  // Boost is complete when all STUBBORN_TYPE quotas are satisfied (or backlog is empty).
-  function hasBoostComplete(poolState) {
-    return STUBBORN_TYPES.every(type =>
-      (poolState.typeTotals[type] || 0) >= (globalTypeTargets[type] || 0)
-    );
-  }
+  let totalRound = 0;
+  let minGapSeen = Infinity;
+  let roundsSinceNewMin = 0;
 
-  for (let round = 1; round <= CANDIDATE_ROUNDS; round += 1) {
+  while (true) {
+    const pool = splitPoolByDifficulty(acceptedPool);
+    const poolState = computePoolState(acceptedPool);
+    const gap = computeTotalGap(poolState, pool);
+
+    if (gap.total <= GAP_TOLERANCE) {
+      console.log(`✓ gap satisfied (total=${gap.total} ≤ ${GAP_TOLERANCE}), stopping`);
+      break;
+    }
+    if (totalRound >= MAX_ROUNDS) {
+      console.log(`⚠ max rounds (${MAX_ROUNDS}) reached, gap remaining=${gap.total}`);
+      break;
+    }
+
+    // Stuck detector: abort if gap hasn't reached a new minimum in STUCK_ROUNDS consecutive rounds
+    if (gap.total < minGapSeen) {
+      minGapSeen = gap.total;
+      roundsSinceNewMin = 0;
+    } else {
+      roundsSinceNewMin++;
+      if (roundsSinceNewMin >= STUCK_ROUNDS) {
+        console.log(`⚠ stuck for ${STUCK_ROUNDS} rounds without progress (gap=${gap.total}), aborting`);
+        break;
+      }
+    }
+
+    const roundNum = totalRound + 1;
+    const schedule = scheduleNextBatch(gap, poolState, pool, circuitBreakerState, roundNum);
+
+    let spec;
+    if (schedule.useAIPlanner) {
+      try {
+        const plannerRaw = await callModelDeterministic(
+          buildPlannerPrompt(poolState, difficultyTargets, globalTypeTargets, styleTargets, schedule.batchSize, "normal"),
+        );
+        const plannedSpec = enforcePlannerStyleGaps(
+          parsePlannerSpec(plannerRaw, schedule.batchSize),
+          poolState, styleTargets, globalTypeTargets, difficultyTargets, schedule.batchSize,
+        );
+        const blockedTypes = getActiveCircuitBreakerTypes(circuitBreakerState, roundNum);
+        spec = applyCircuitBreakersToSpec(plannedSpec, blockedTypes, poolState, globalTypeTargets);
+      } catch (e) {
+        console.log(`round ${roundNum}: planner failed (${errMsg(e)}), using fallback`);
+        spec = [{ type: "3rd-reporting", difficulty: "medium", count: schedule.batchSize }];
+      }
+    } else {
+      spec = schedule.spec;
+    }
+
+    const specLabel = spec.map((s) => `${s.count}×${s.type}/${s.difficulty}`).join(", ");
+    console.log(`round ${roundNum} [${schedule.mode}] gap=${gap.total} → [${specLabel}]`);
+
     try {
-      // Planner: AI analyzes pool gaps and decides the mixed batch composition
-      const poolState = computePoolState(acceptedPool);
-      const plannerRaw = await callModelDeterministic(
-        buildPlannerPrompt(poolState, difficultyTargets, globalTypeTargets, styleTargets, 10, "normal"),
-      );
-      const plannedSpec = enforcePlannerStyleGaps(
-        parsePlannerSpec(plannerRaw, 10),
-        poolState,
-        styleTargets,
-        globalTypeTargets,
-        difficultyTargets,
-        10,
-      );
-      const blockedTypes = getActiveCircuitBreakerTypes(circuitBreakerState, round);
-      const spec = applyCircuitBreakersToSpec(plannedSpec, blockedTypes, poolState, globalTypeTargets);
-      const specLabel = spec.map((s) => `${s.count}脳${s.type}/${s.difficulty}`).join(", ");
-      console.log(`round ${round}: planner 锟?[${specLabel}]`);
-
-      const res = await generateCandidateRound(round, spec, rollingRejectFeedback, acceptedPool);
+      const res = await generateCandidateRound(roundNum, spec, rollingRejectFeedback, acceptedPool);
       acceptedPool.push(...res.questions);
       statTotalRounds += 1;
       statTotalGenerated += res.generated;
@@ -2552,85 +2290,26 @@ async function main() {
         rejectReasons[k] = (rejectReasons[k] || 0) + v;
       });
       rollingRejectFeedback = buildRejectFeedbackHints(rejectReasons);
-      const pool = splitPoolByDifficulty(acceptedPool);
+
+      const newPool = splitPoolByDifficulty(acceptedPool);
+      const newGap = computeTotalGap(computePoolState(acceptedPool), newPool);
       console.log(
-        `round ${round}: generated=${res.generated} accepted=${res.accepted} rejected=${res.rejected} | pool easy=${pool.easy.length} medium=${pool.medium.length} hard=${pool.hard.length}`,
+        `round ${roundNum}: generated=${res.generated} accepted=${res.accepted} rejected=${res.rejected} gap=${gap.total}→${newGap.total} | easy=${newPool.easy.length} medium=${newPool.medium.length} hard=${newPool.hard.length}`,
       );
       if (res.rejected > 0) {
-        const topReasons = Object.entries(res.rejectReasons).sort((a, b) => b[1] - a[1]).slice(0, 3);
-        topReasons.forEach(([r, n]) => console.log(`  reject: ${r} (脳${n})`));
+        Object.entries(res.rejectReasons).sort((a, b) => b[1] - a[1]).slice(0, 3)
+          .forEach(([r, n]) => console.log(`  reject: ${r} (×${n})`));
       }
-
-      updateCircuitBreakers(circuitBreakerState, round, "normal", spec, res);
+      updateCircuitBreakers(circuitBreakerState, roundNum, "normal", spec, res);
       flushCircuitBreakerLog(circuitBreakerState);
-
-      // Persist pool after every round so progress survives failures
       flushPoolCheckpoint(acceptedPool);
-
-      const currentState = computePoolState(acceptedPool);
-      if (hasSufficientPoolCoverage(currentState, splitPoolByDifficulty(acceptedPool))) {
-        console.log(
-          `pool sufficient (easy=${splitPoolByDifficulty(acceptedPool).easy.length}/${difficultyTargets.easy} medium=${splitPoolByDifficulty(acceptedPool).medium.length}/${difficultyTargets.medium} hard=${splitPoolByDifficulty(acceptedPool).hard.length}/${difficultyTargets.hard}), stopping early`,
-        );
-        break;
-      }
     } catch (e) {
-      console.log(`round ${round}: failed -> ${errMsg(e)}`);
+      console.log(`round ${roundNum}: failed → ${errMsg(e)}`);
       flushPoolCheckpoint(acceptedPool);
     }
-    // Brief pause between rounds to avoid proxy rate limiting
-    await new Promise((r) => setTimeout(r, 3000));
-  }
 
-  let boostedPool = splitPoolByDifficulty(acceptedPool);
-  if (ADAPTIVE_BOOST_ROUNDS > 0) {
-    const initialBoostState = computePoolState(acceptedPool);
-    if (!hasBoostComplete(computePoolState(acceptedPool))) {
-      console.log(
-        `pool insufficient (easy ${boostedPool.easy.length}/${difficultyTargets.easy}, medium ${boostedPool.medium.length}/${difficultyTargets.medium}, hard ${boostedPool.hard.length}/${difficultyTargets.hard}), starting adaptive boost rounds...`,
-      );
-      for (let i = 1; i <= ADAPTIVE_BOOST_ROUNDS; i += 1) {
-        boostedPool = splitPoolByDifficulty(acceptedPool);
-        const boostState = computePoolState(acceptedPool);
-        if (hasBoostComplete(computePoolState(acceptedPool))) break;
-        try {
-          const boostBacklog = buildBoostBacklog(
-            boostState,
-            boostedPool,
-            boostDifficultyTargets,
-            globalTypeTargets,
-            styleTargets,
-          );
-          const blockedTypes = getActiveCircuitBreakerTypes(circuitBreakerState, 3000 + i);
-          const boostTask = boostBacklog.find((task) => !blockedTypes.has(task.type)) || boostBacklog[0];
-          if (!boostTask) break;
-          const boostSpec = [{ type: boostTask.type, difficulty: boostTask.difficulty, count: 1 }];
-          const boostLabel = boostSpec.map((s) => `${s.count}?${s.type}/${s.difficulty}`).join(', ');
-          const boostFeedback = [rollingRejectFeedback, buildBoostTaskHint(boostTask)].filter(Boolean).join('\n');
-          const res = await generateCandidateRound(3000 + i, boostSpec, boostFeedback, acceptedPool);
-          acceptedPool.push(...res.questions);
-          statTotalRounds += 1;
-          statTotalGenerated += res.generated;
-          statTotalAccepted += res.accepted;
-          Object.entries(res.rejectReasons).forEach(([k, v]) => {
-            rejectReasons[k] = (rejectReasons[k] || 0) + v;
-          });
-          rollingRejectFeedback = buildRejectFeedbackHints(rejectReasons);
-          boostedPool = splitPoolByDifficulty(acceptedPool);
-          console.log(
-            `boost ${i} [${boostLabel}]: accepted=${res.accepted} rejected=${res.rejected} | pool easy=${boostedPool.easy.length} medium=${boostedPool.medium.length} hard=${boostedPool.hard.length}`,
-          );
-          if (hasBoostComplete(computePoolState(acceptedPool))) {
-            break;
-          }
-        } catch (e) {
-          console.log(`boost ${i}: failed -> ${errMsg(e)}`);
-          flushPoolCheckpoint(acceptedPool);
-          flushCircuitBreakerLog(circuitBreakerState);
-        }
-        await new Promise((r) => setTimeout(r, 3000));
-      }
-    }
+    totalRound++;
+    await new Promise((r) => setTimeout(r, 3000));
   }
 
   const dedupedPool = uniqBy(acceptedPool, stableAnswerKey);
