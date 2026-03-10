@@ -227,12 +227,44 @@ function StatsPanel({ stats, runId, token, onDeployed, onDeleted }) {
   );
 }
 
+/**
+ * Estimate generation progress (0–100).
+ * Formula: 120s startup + 150s per target set. Capped at 90 until complete.
+ */
+function estimateProgress(createdAt, targetSets, status, conclusion) {
+  if (status === "completed") return conclusion === "success" ? 100 : 100;
+  if (!createdAt) return 0;
+  const elapsedSec = (Date.now() - new Date(createdAt)) / 1000;
+  const estimatedSec = 120 + (Number(targetSets) || 6) * 150;
+  return Math.min(90, Math.round((elapsedSec / estimatedSec) * 100));
+}
+
+function ProgressBar({ value, label }) {
+  const color = value >= 100 ? "#166534" : "#1e40af";
+  const bg    = value >= 100 ? "#dcfce7" : "#dbeafe";
+  const fill  = value >= 100 ? "#16a34a" : "#3b82f6";
+  return (
+    <div style={{ marginTop: 10 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+        <span style={{ fontSize: 12, color: "#6b7280" }}>估算进度</span>
+        <span style={{ fontSize: 13, fontWeight: 800, color }}>{value}%</span>
+        {label && <span style={{ fontSize: 11, color: "#9ca3af" }}>{label}</span>}
+      </div>
+      <div style={{ background: "#e5e7eb", borderRadius: 99, height: 8, overflow: "hidden" }}>
+        <div style={{ width: `${value}%`, height: "100%", background: fill, borderRadius: 99, transition: "width 0.8s ease" }} />
+      </div>
+    </div>
+  );
+}
+
 function RunCard({ run: initial, token }) {
   const [run, setRun] = useState(initial);
   const [expanded, setExpanded] = useState(false);
   const [loadingStats, setLoadingStats] = useState(false);
   const [stagingGone, setStagingGone] = useState(false);
+  const [progress, setProgress] = useState(0);
   const timerRef = useRef(null);
+  const progressRef = useRef(null);
 
   const fetchDetail = useCallback(async () => {
     try {
@@ -253,6 +285,17 @@ function RunCard({ run: initial, token }) {
       return () => clearInterval(timerRef.current);
     }
   }, [run.status, fetchDetail]);
+
+  // Update progress estimate every second while in progress
+  useEffect(() => {
+    const targetSets = run.inputs?.target_sets;
+    const tick = () => setProgress(estimateProgress(run.createdAt, targetSets, run.status, run.conclusion));
+    tick();
+    if (run.status !== "completed") {
+      progressRef.current = setInterval(tick, 1000);
+      return () => clearInterval(progressRef.current);
+    }
+  }, [run.status, run.conclusion, run.createdAt, run.inputs]);
 
   async function handleExpand() {
     if (expanded) { setExpanded(false); return; }
@@ -288,7 +331,10 @@ function RunCard({ run: initial, token }) {
       </div>
 
       {!isDone && (
-        <div style={{ marginTop: 8, fontSize: 12, color: C.orange }}>生成中，每 5 秒自动刷新…</div>
+        <ProgressBar
+          value={progress}
+          label={run.status === "queued" ? "排队等待中…" : "每 5 秒自动刷新，完成后自动更新"}
+        />
       )}
 
       {isFail && (
