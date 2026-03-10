@@ -16,6 +16,62 @@ function ghHeaders() {
   };
 }
 
+// ── Topic novelty helpers ────────────────────────────────────────────────────
+const TOPIC_STOPWORDS = new Set([
+  "the","a","an","is","are","was","were","be","been","being",
+  "do","does","did","have","has","had","will","would","could","should",
+  "what","how","when","where","who","whom","which","that","this",
+  "to","of","and","or","but","for","with","from","about","into",
+  "you","your","yours","i","me","my","he","she","they","them","their","it",
+  "not","no","any","some","if","then","than","so","very","just",
+  "tell","told","asked","ask","want","wanted","know","find","out",
+  "say","said","wonder","wondering","need","needs",
+]);
+
+function extractTopicWords(q) {
+  const text = [
+    String(q.prompt_context || ""),
+    String(q.prompt_task_text || q.prompt || ""),
+    String(q.answer || ""),
+  ].join(" ").toLowerCase().replace(/[^a-z\s]/g, " ");
+  return new Set(text.split(/\s+/).filter((w) => w.length > 4 && !TOPIC_STOPWORDS.has(w)));
+}
+
+function jaccardSimilarity(setA, setB) {
+  if (setA.size === 0 || setB.size === 0) return 0;
+  const intersection = [...setA].filter((w) => setB.has(w)).length;
+  const union = new Set([...setA, ...setB]).size;
+  return union === 0 ? 0 : intersection / union;
+}
+
+/**
+ * Compute topic novelty score (0–100) for a list of questions.
+ * Score = (1 − avg pairwise Jaccard similarity) × 100.
+ * Thresholds: ≥80 优秀, 70–79 良好, 60–69 合格, <60 需改进.
+ */
+function computeNoveltyScore(questions) {
+  if (questions.length < 2) return 100;
+  const wordSets = questions.map(extractTopicWords);
+  let total = 0;
+  let pairs = 0;
+  for (let i = 0; i < wordSets.length; i++) {
+    for (let j = i + 1; j < wordSets.length; j++) {
+      total += jaccardSimilarity(wordSets[i], wordSets[j]);
+      pairs++;
+    }
+  }
+  const avgSimilarity = pairs > 0 ? total / pairs : 0;
+  return Math.round((1 - avgSimilarity) * 100);
+}
+
+function noveltyLabel(score) {
+  if (score >= 80) return "优秀";
+  if (score >= 70) return "良好";
+  if (score >= 60) return "合格";
+  return "需改进";
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
 function computeStats(data) {
   const sets = data.question_sets || [];
   const allQ = sets.flatMap((s) => s.questions || []);
@@ -51,6 +107,9 @@ function computeStats(data) {
     .slice(0, 8)
     .map(([word, count]) => ({ word, count }));
 
+  // 话题新颖度
+  const noveltyScore = computeNoveltyScore(allQ);
+
   return {
     totalSets: sets.length,
     totalQuestions: allQ.length,
@@ -58,6 +117,8 @@ function computeStats(data) {
     totalGenerated: meta.total_generated,
     totalAccepted: meta.total_accepted,
     acceptanceRate: meta.acceptance_rate,
+    noveltyScore,
+    noveltyLabel: noveltyLabel(noveltyScore),
     typeDistribution,
     chunkStats,
     prefilledTop,

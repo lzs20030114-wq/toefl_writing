@@ -618,7 +618,73 @@ const PERSONA_POOL = [
   "A volunteer", "The museum curator", "An enthusiastic intern", "The shop owner"
 ];
 
-function buildGeneratePrompt(round, spec, rejectFeedback = "") {
+// Common words that carry no topic signal — filtered out before similarity comparison
+const TOPIC_STOPWORDS = new Set([
+  "the", "a", "an", "is", "are", "was", "were", "be", "been", "being",
+  "do", "does", "did", "have", "has", "had", "will", "would", "could", "should",
+  "what", "how", "when", "where", "who", "whom", "which", "that", "this",
+  "to", "of", "and", "or", "but", "for", "with", "from", "about", "into",
+  "you", "your", "yours", "i", "me", "my", "he", "she", "they", "them", "their", "it",
+  "not", "no", "any", "some", "if", "then", "than", "so", "very", "just",
+  "tell", "told", "asked", "ask", "want", "wanted", "know", "find", "out",
+  "say", "said", "wonder", "wondering", "need", "needs",
+]);
+
+/**
+ * Extract meaningful topic words from a question's prompts and answer.
+ * Excludes stopwords and short function words.
+ */
+function extractTopicWords(q) {
+  const text = [
+    String(q.prompt_context || ""),
+    String(q.prompt_task_text || q.prompt || ""),
+    String(q.answer || ""),
+  ].join(" ").toLowerCase().replace(/[^a-z\s]/g, " ");
+  return new Set(
+    text.split(/\s+/).filter((w) => w.length > 4 && !TOPIC_STOPWORDS.has(w))
+  );
+}
+
+function jaccardSimilarity(setA, setB) {
+  if (setA.size === 0 || setB.size === 0) return 0;
+  const intersection = [...setA].filter((w) => setB.has(w)).length;
+  const union = new Set([...setA, ...setB]).size;
+  return union === 0 ? 0 : intersection / union;
+}
+
+/**
+ * Returns true if candidate question is too topically similar to any question in the pool.
+ * Threshold 0.45: share >45% of meaningful topic words → reject as topic repeat.
+ */
+function isTopicRepeat(q, pool, threshold = 0.45) {
+  if (!pool || pool.length === 0) return false;
+  const words = extractTopicWords(q);
+  if (words.size < 2) return false; // too few topic words to compare reliably
+  for (const existing of pool) {
+    if (jaccardSimilarity(words, extractTopicWords(existing)) >= threshold) return true;
+  }
+  return false;
+}
+
+/**
+ * Extract recent topic phrases from the accepted pool to help the AI avoid repetition.
+ * Returns up to 20 short context/topic strings used in recent questions.
+ */
+function extractRecentTopics(pool, maxQuestions = 30) {
+  const recent = pool.slice(-maxQuestions);
+  const topics = [];
+  for (const q of recent) {
+    // Prefer prompt_context; fall back to first few words of prompt_task_text
+    const ctx = String(q.prompt_context || "").trim();
+    const task = String(q.prompt_task_text || q.prompt || "").trim();
+    const phrase = ctx || task;
+    if (phrase) topics.push(phrase);
+  }
+  // Deduplicate and limit
+  return [...new Set(topics)].slice(0, 20);
+}
+
+function buildGeneratePrompt(round, spec, rejectFeedback = "", recentTopics = []) {
   // spec: [{type, difficulty, count}, ...]
   const totalCount = spec.reduce((s, x) => s + x.count, 0);
 
@@ -672,7 +738,12 @@ Vary with: inquired, wondered, asked, was curious, needed to find out, was not s
 ## SCENARIO & PERSONA CONTEXT:
 - Scenarios: ${pickedScenarios}
 - Personas: ${pickedPersonas}
-
+${recentTopics.length > 0 ? `
+## TOPIC DIVERSITY — AVOID THESE RECENTLY USED SCENARIOS:
+The following topics/scenarios were already used in the current batch. Choose DIFFERENT settings, characters, and situations for this round:
+${recentTopics.map((t, i) => `${i + 1}. ${t}`).join("\n")}
+Pick fresh scenarios: different location, different relationship, different activity. Do NOT recycle the same topic even with different wording.
+` : ""}
 ${groupSections}
 
 ## WARNING — PREFILLED STRATEGY HAS CHANGED:
@@ -801,7 +872,7 @@ Pattern D (short sentence ≤8 words, prefilled=[]):
   "id": "tmp_r${round}_q1",
   "has_distractor": boolean,
   "answer_type": "negation" | "3rd-reporting" | "1st-embedded" | "interrogative" | "direct" | "relative",
-  "prompt_context": "background/context shown to the user",
+  "prompt_context": "" or "brief background sentence (only for tell/explain types; use empty string for ask/report/respond)",
   "prompt_task_kind": "ask" | "report" | "respond" | "tell" | "explain",
   "prompt_task_text": "explicit task such as 'What do they ask?' or 'Tell your friend about it.'",
   "prompt": "optional; if provided, it must exactly match prompt_context + prompt_task_text rendered by the app",
@@ -815,28 +886,47 @@ Pattern D (short sentence ≤8 words, prefilled=[]):
 }
 
 ## PROMPT CONTRACT - CRITICAL:
-- Do NOT write a background-only prompt.
-- For every item, first write:
-  - "prompt_context" = scene/background
-  - "prompt_task_kind" = ask | report | respond | tell | explain
-  - "prompt_task_text" = the EXPLICIT task/instruction shown to the user
-- The visible prompt is: prompt_context + " " + prompt_task_text
-- Therefore prompt_task_text MUST explicitly request the answer utterance.
-- INVALID:
-  prompt_context="A visitor is asking the museum curator a question."
-  prompt_task_text=""    -> REJECT
-- VALID:
-  prompt_context="A visitor is speaking with the museum curator."
-  prompt_task_kind="ask"
-  prompt_task_text="What do they ask?"
-- VALID:
-  prompt_context="You found a great bookstore."
-  prompt_task_kind="tell"
-  prompt_task_text="Tell your friend about it."
-- VALID:
-  prompt_context="The manager had a question about the deadline."
-  prompt_task_kind="report"
-  prompt_task_text="What did he ask?"
+
+### TPO AUTHENTIC STYLE — READ THIS FIRST:
+Real TOEFL Build-a-Sentence prompts are almost always a SINGLE DIRECT QUESTION.
+The scene/context is embedded naturally inside the question itself — there is NO separate context sentence.
+
+≥70% of your items MUST use the TPO single-question style:
+  prompt_context = ""   (empty string — no separate background sentence)
+  prompt_task_text = a self-contained question that tells the student everything they need
+
+TPO EXAMPLES (single-question style, authentic):
+  ✓ "What did the yoga instructor ask about the schedule change?"
+  ✓ "What did your friend want to know about the camping trip?"
+  ✓ "What did the librarian ask about the overdue book?"
+  ✓ "What does the professor ask the student about the assignment?"
+  ✓ "Did you enjoy the pottery class you attended last week?"
+  ✓ "What did the travel agent ask about your vacation plans?"
+
+Only "tell" and "explain" types naturally need a short context sentence:
+  prompt_context = "You went to a pottery class last Saturday."
+  prompt_task_text = "Tell your friend about it."
+
+For "ask", "report", and "respond" types: embed the context INTO the question.
+WRONG ✗ (two-part format — NOT TPO style):
+  prompt_context = "The yoga instructor has a question about the schedule."
+  prompt_task_text = "What does she ask?"
+RIGHT ✓ (single-question style — TPO authentic):
+  prompt_context = ""
+  prompt_task_text = "What did the yoga instructor ask about the schedule change?"
+
+### PROMPT FIELDS:
+- "prompt_context" = brief scene sentence, OR empty string "" for single-question style
+- "prompt_task_kind" = ask | report | respond | tell | explain
+- "prompt_task_text" = the EXPLICIT task/question shown to the user (required, never empty)
+- The visible prompt is: prompt_context + " " + prompt_task_text (or just prompt_task_text if context is "")
+
+prompt_task_text MUST match one of these validated patterns (auto-rejected otherwise):
+  - ask/report: "What did [person] ask/want/say/mention/find out/discover/learn/wonder/need to know?"
+               OR "What does [person] ask about [topic]?" — context embedded in the question ✓
+  - respond:    "How do you respond?" / "What do you say?" / "What does [person] tell [person]?"
+  - tell:       "Tell your friend about it." / "Describe what happened." / "Complete the sentence."
+  - explain:    "Explain what you found." / "Share your experience."
 
 ${rejectFeedback}
 ## FINAL CHECKLIST 锟?VERIFY BEFORE OUTPUT:
@@ -849,15 +939,8 @@ ${rejectFeedback}
 7. HARD DIFFICULTY: Hard items must be justified by advanced grammar signals, not by extra words. Valid hard signals include passive/passive-progressive, past perfect, relative/contact clause, whom, comparative/superlative, or multi-layer embedding.
 8. UNIQUE SOLUTION: Reject any item in your own internal check if the distractor could still fit grammatically or if more than one chunk order seems plausible.
 9. INTERROGATIVE QUALITY: For interrogative items, use a short natural polite frame, vary the opener across the batch, and keep the embedded clause in declarative order. Do not mass-produce one stock opener.
-10. PROMPT CONTRACT: Every item must include prompt_context + prompt_task_kind + prompt_task_text. Never leave the user with background only. The task text must explicitly ask for the answer utterance.
-    prompt_task_text MUST start with one of these validated patterns (auto-rejected otherwise):
-    - ask/report: "What did [person] ask/want/say/mention/find out/discover/learn?" or "What does [person] want to know/need to find out?"
-    - respond:    "How do you respond?" / "What do you say?" / "What does [person] tell [person]?"
-    - tell:       "Tell your friend about it." / "Describe what happened." / "Complete the sentence."
-    - explain:    "Explain what you found." / "Share your experience."
-    WRONG: "The student is curious about the schedule." (background, not a task)
-    WRONG: "You are talking to a friend." (context, not a task — put this in prompt_context)
-    RIGHT: prompt_context="You are talking to a friend." prompt_task_text="What do you tell them?"
+10. PROMPT STYLE: ≥70% of items must use single-question style (prompt_context=""). For "ask"/"report"/"respond" types, embed the scene context inside the question text itself. Two-part prompts (separate context sentence + short question) will be flagged.
+    prompt_task_text MUST start with a validated cue pattern — see PROMPT CONTRACT above.
 
 Output JSON array only. No markdown.`.trim();
 }
@@ -1799,7 +1882,7 @@ function errMsg(e) {
   return msg || String(e?.code || "unknown_error");
 }
 
-async function generateCandidateRound(round, spec, rejectFeedback = "") {
+async function generateCandidateRound(round, spec, rejectFeedback = "", recentPool = []) {
   // spec: [{type, difficulty, count}, ...]
   const totalCount = spec.reduce((s, x) => s + x.count, 0);
   const out = {
@@ -1813,7 +1896,8 @@ async function generateCandidateRound(round, spec, rejectFeedback = "") {
     ),
   };
 
-  const generatedRaw = await callModelCreative(buildGeneratePrompt(round, spec, rejectFeedback));
+  const recentTopics = extractRecentTopics(recentPool);
+  const generatedRaw = await callModelCreative(buildGeneratePrompt(round, spec, rejectFeedback, recentTopics));
   const arr = parseJsonArray(generatedRaw);
   if (!Array.isArray(arr) || arr.length < Math.floor(totalCount * 0.7)) {
     throw new Error(`round ${round}: model returned ${arr?.length ?? 0} questions, expected ~${totalCount}`);
@@ -1891,6 +1975,17 @@ async function generateCandidateRound(round, spec, rejectFeedback = "") {
       continue;
     }
     const type = resolvedAnswerType(q);
+
+    // Topic novelty check: reject if too similar to an existing pool question
+    if (isTopicRepeat(q, recentPool)) {
+      out.rejected += 1;
+      const r = "topic:repeat";
+      out.rejectReasons[r] = (out.rejectReasons[r] || 0) + 1;
+      out.typeStats[type].rejected += 1;
+      out.typeStats[type].reasons[r] = (out.typeStats[type].reasons[r] || 0) + 1;
+      continue;
+    }
+
     out.accepted += 1;
     out.typeStats[type].accepted += 1;
     out.questions.push(q);
@@ -2345,7 +2440,7 @@ async function main() {
       const specLabel = spec.map((s) => `${s.count}脳${s.type}/${s.difficulty}`).join(", ");
       console.log(`round ${round}: planner 锟?[${specLabel}]`);
 
-      const res = await generateCandidateRound(round, spec, rollingRejectFeedback);
+      const res = await generateCandidateRound(round, spec, rollingRejectFeedback, acceptedPool);
       acceptedPool.push(...res.questions);
       statTotalRounds += 1;
       statTotalGenerated += res.generated;
@@ -2409,7 +2504,7 @@ async function main() {
           const boostSpec = [{ type: boostTask.type, difficulty: boostTask.difficulty, count: 1 }];
           const boostLabel = boostSpec.map((s) => `${s.count}?${s.type}/${s.difficulty}`).join(', ');
           const boostFeedback = [rollingRejectFeedback, buildBoostTaskHint(boostTask)].filter(Boolean).join('\n');
-          const res = await generateCandidateRound(3000 + i, boostSpec, boostFeedback);
+          const res = await generateCandidateRound(3000 + i, boostSpec, boostFeedback, acceptedPool);
           acceptedPool.push(...res.questions);
           statTotalRounds += 1;
           statTotalGenerated += res.generated;

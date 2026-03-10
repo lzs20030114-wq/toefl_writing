@@ -119,6 +119,24 @@ function StatsPanel({ stats, runId, token, onDeployed, onDeleted }) {
         <StatBox label="接受率" value={pct(stats.acceptanceRate)} />
       </div>
 
+      {/* 话题新颖度 */}
+      {stats.noveltyScore != null && (() => {
+        const score = stats.noveltyScore;
+        const label = stats.noveltyLabel || "";
+        const color = score >= 80 ? "#166534" : score >= 70 ? "#1e40af" : score >= 60 ? "#92400e" : "#991b1b";
+        const bg    = score >= 80 ? "#dcfce7" : score >= 70 ? "#dbeafe" : score >= 60 ? "#fef3c7" : "#fee2e2";
+        return (
+          <div style={{ marginBottom: 12, display: "flex", alignItems: "center", gap: 10 }}>
+            <span style={{ fontSize: 12, fontWeight: 700, color: C.t1 }}>话题新颖度</span>
+            <span style={{ background: bg, color, borderRadius: 8, padding: "3px 12px", fontWeight: 800, fontSize: 15 }}>
+              {score} / 100
+            </span>
+            <span style={{ fontSize: 12, color, fontWeight: 700 }}>{label}</span>
+            <span style={{ fontSize: 11, color: C.t3 }}>（≥80 优秀，70-79 良好，60-69 合格，&lt;60 需改进）</span>
+          </div>
+        );
+      })()}
+
       {/* 题型分布 */}
       <div style={{ marginBottom: 10 }}>
         <div style={{ fontSize: 12, fontWeight: 700, color: C.t1, marginBottom: 4 }}>题型分布</div>
