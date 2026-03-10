@@ -18,6 +18,13 @@ function timeAgo(iso) {
   return `${Math.floor(sec / 3600)} 小时前`;
 }
 
+function formatDateTime(iso) {
+  if (!iso) return "-";
+  const d = new Date(iso);
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}/${pad(d.getMonth() + 1)}/${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
 function elapsed(startIso, endIso) {
   if (!startIso) return "-";
   const ms = (endIso ? new Date(endIso) : new Date()) - new Date(startIso);
@@ -290,6 +297,14 @@ function RunCard({ run: initial, token, onDelete }) {
     }
   }, [run.status, fetchDetail]);
 
+  // Auto-fetch stats for completed successful runs so actual set count shows without expanding
+  useEffect(() => {
+    if (initial.status === "completed" && initial.conclusion === "success" && !initial.stats) {
+      fetchDetail();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // Update progress estimate every second while in progress
   useEffect(() => {
     const targetSets = run.inputs?.target_sets;
@@ -346,19 +361,33 @@ function RunCard({ run: initial, token, onDelete }) {
   return (
     <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 16, marginBottom: 10 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
           <StatusBadge status={run.status} conclusion={run.conclusion} />
-          <span style={{ fontSize: 14, fontWeight: 700, color: C.nav }}>目标 {targetSets} 套</span>
-          <span style={{ fontSize: 12, color: C.t3 }}>耗时 {elapsed(run.createdAt, isDone ? run.updatedAt : null)}</span>
+          <span style={{ fontSize: 14, fontWeight: 700, color: C.nav }}>
+            目标 {targetSets} 套
+            {run.stats?.totalSets != null && (
+              <span style={{ fontWeight: 400, color: run.stats.totalSets >= Number(targetSets) ? "#166534" : "#92400e" }}>
+                {" → 实际 "}<strong>{run.stats.totalSets}</strong>{" 套 · "}<strong>{run.stats.totalQuestions}</strong>{" 题"}
+              </span>
+            )}
+          </span>
+          {isDone && (
+            <span style={{ fontSize: 12, color: C.t3 }}>耗时 {elapsed(run.createdAt, run.updatedAt)}</span>
+          )}
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <span style={{ fontSize: 12, color: C.t3 }}>{timeAgo(run.createdAt)}</span>
           {isSuccess && !stagingGone && (
             <button onClick={handleExpand} style={{ background: "none", border: "1px solid " + C.bdr, borderRadius: 6, padding: "4px 10px", cursor: "pointer", fontSize: 12, color: C.t2, fontFamily: FONT }}>
               {expanded ? "收起" : "展开详情"}
             </button>
           )}
         </div>
+      </div>
+      <div style={{ marginTop: 5, fontSize: 12, color: C.t3 }}>
+        {formatDateTime(run.createdAt)}
+        {isDone && run.updatedAt && run.updatedAt !== run.createdAt && (
+          <span>{"  →  "}{formatDateTime(run.updatedAt)}</span>
+        )}
       </div>
 
       {!isDone && (
