@@ -42,7 +42,7 @@ const {
 const { isEmbeddedQuestion } = require("../lib/questionBank/etsProfile.js");
 const { validateAllSets } = require("./validate-bank.js");
 
-const OUTPUT_PATH = resolve(__dirname, "..", "data", "buildSentence", "questions.json");
+const OUTPUT_PATH = process.env.BS_OUTPUT_PATH ? resolve(String(process.env.BS_OUTPUT_PATH)) : resolve(__dirname, "..", "data", "buildSentence", "questions.json");
 const RESERVE_PATH = resolve(__dirname, "..", "data", "buildSentence", "reserve_pool.json");
 const CIRCUIT_BREAKER_LOG_PATH = resolve(__dirname, "..", "data", "buildSentence", "circuit_breaker_log.json");
 const TARGET_SET_COUNT = Number(process.env.BS_TARGET_SETS || 6);
@@ -902,19 +902,55 @@ ${JSON.stringify(questions, null, 2)}
 
 Return ONLY a JSON array.`.trim();
 }
-/**
- * Brute-force check for multiple valid arrangements of chunks.
- * Only practical for small number of chunks (<= 8).
- */
-function hasAmbiguousArrangements(q) {
-  const effectiveChunks = q.chunks.filter(c => c !== q.distractor);
-  if (effectiveChunks.length > 8) return false; // Too expensive to check exhaustively
+const AMBIGUITY_FUNCTION_WORDS = new Set([
+  "the", "a", "an", "to", "of", "and", "or", "but", "from", "that", "this", "it",
+  "in", "on", "at", "for", "with", "by", "as", "if", "then", "than", "so", "be",
+  "is", "are", "was", "were", "am", "do", "does", "did", "have", "has", "had",
+  "before", "after", "about", "into", "over", "under", "already", "please",
+]);
 
-  // Simple heuristic: if there are multiple adverbs or mobile prepositional phrases,
-  // there's a higher risk. This is a placeholder for a more complex permutation check.
-  // For now, we rely on the AI Reviewer for semantic ambiguity,
-  // but we can catch exact word-order collisions here if we implement full permutations.
-  return false; 
+const AMBIGUITY_PREP_START_WORDS = new Set([
+  "to", "in", "on", "at", "for", "with", "from", "about", "into", "over", "under", "before", "after", "by",
+]);
+
+/**
+ * Heuristic ambiguity check on a runtime question (with answerOrder + bank).
+ * Returns true if the chunk set is structurally prone to multiple valid orderings.
+ *
+ * Scoring (threshold 0.35):
+ *   - Duplicate chunks in bank   +0.22 each
+ *   - Single function-word chunks beyond 3  +0.05 each
+ *   - Prepositional-start chunks beyond 1   +0.12 each
+ */
+function hasAmbiguousArrangements(rq) {
+  const answerOrder = Array.isArray(rq?.answerOrder) ? rq.answerOrder : [];
+  const bank = Array.isArray(rq?.bank) ? rq.bank : [];
+  if (answerOrder.length > 8) return false;
+
+  const seen = new Map();
+  bank.forEach((chunk) => {
+    const key = String(chunk || "").toLowerCase();
+    seen.set(key, (seen.get(key) || 0) + 1);
+  });
+  const duplicateChunks = [...seen.values()].filter((n) => n > 1).length;
+
+  const functionLike = answerOrder.filter((chunk) => {
+    const ws = String(chunk || "").toLowerCase().split(/\s+/).filter(Boolean);
+    return ws.length === 1 && AMBIGUITY_FUNCTION_WORDS.has(ws[0]);
+  }).length;
+
+  const prepStarts = answerOrder.filter((chunk) => {
+    const ws = String(chunk || "").toLowerCase().split(/\s+/).filter(Boolean);
+    return ws.length > 0 && AMBIGUITY_PREP_START_WORDS.has(ws[0]);
+  }).length;
+
+  const score =
+    0.05 +
+    duplicateChunks * 0.22 +
+    Math.max(0, functionLike - 3) * 0.05 +
+    Math.max(0, prepStarts - 1) * 0.12;
+
+  return score > 0.35;
 }
 
 /**
@@ -1720,6 +1756,9 @@ function hardValidateQuestion(q) {
   try {
     const rq = normalizeRuntimeQuestion(q);
     validateRuntimeQuestion(rq);
+    if (hasAmbiguousArrangements(rq)) {
+      return { ok: false, reason: "ambiguity: heuristic score exceeded threshold (duplicate chunks or too many mobile prepositional phrases)" };
+    }
   } catch (e) {
     return { ok: false, reason: `runtime: ${e.message}` };
   }
@@ -1727,14 +1766,28 @@ function hardValidateQuestion(q) {
   return { ok: true };
 }
 
-async function callModel(userPrompt) {
+async function callModelCreative(userPrompt) {
   return callDeepSeekViaCurl({
     apiKey: process.env.DEEPSEEK_API_KEY,
     proxyUrl: resolveProxyUrl(),
     timeoutMs: 120000,
     payload: {
       model: "deepseek-chat",
-      temperature: 0.35,
+      temperature: 0.7,
+      max_tokens: 5000,
+      messages: [{ role: "user", content: userPrompt }],
+    },
+  });
+}
+
+async function callModelDeterministic(userPrompt) {
+  return callDeepSeekViaCurl({
+    apiKey: process.env.DEEPSEEK_API_KEY,
+    proxyUrl: resolveProxyUrl(),
+    timeoutMs: 120000,
+    payload: {
+      model: "deepseek-chat",
+      temperature: 0,
       max_tokens: 5000,
       messages: [{ role: "user", content: userPrompt }],
     },
@@ -1760,7 +1813,7 @@ async function generateCandidateRound(round, spec, rejectFeedback = "") {
     ),
   };
 
-  const generatedRaw = await callModel(buildGeneratePrompt(round, spec, rejectFeedback));
+  const generatedRaw = await callModelCreative(buildGeneratePrompt(round, spec, rejectFeedback));
   const arr = parseJsonArray(generatedRaw);
   if (!Array.isArray(arr) || arr.length < Math.floor(totalCount * 0.7)) {
     throw new Error(`round ${round}: model returned ${arr?.length ?? 0} questions, expected ~${totalCount}`);
@@ -1791,12 +1844,12 @@ async function generateCandidateRound(round, spec, rejectFeedback = "") {
   if (hardPassed.length === 0) return out;
 
   // AI review score
-  const reviewRaw = await callModel(buildReviewPrompt(hardPassed));
+  const reviewRaw = await callModelDeterministic(buildReviewPrompt(hardPassed));
   const review = parseReviewJson(reviewRaw);
   const scoreMap = new Map(
     review.question_scores.map((qs) => [String(qs?.id || ""), Number(qs?.score || 0)]),
   );
-  const consistencyRaw = await callModel(buildConsistencyPrompt(hardPassed));
+  const consistencyRaw = await callModelDeterministic(buildConsistencyPrompt(hardPassed));
   const consistency = parseConsistencyJson(consistencyRaw);
   const cMap = new Map(
     consistency.question_scores.map((qs) => [
@@ -2273,7 +2326,7 @@ async function main() {
     try {
       // Planner: AI analyzes pool gaps and decides the mixed batch composition
       const poolState = computePoolState(acceptedPool);
-      const plannerRaw = await callModel(
+      const plannerRaw = await callModelDeterministic(
         buildPlannerPrompt(poolState, difficultyTargets, globalTypeTargets, styleTargets, 10, "normal"),
       );
       const plannedSpec = enforcePlannerStyleGaps(
@@ -2445,11 +2498,36 @@ export {
   updateCircuitBreakers,
 };
 
+function writeJobState(updates) {
+  const statePath = process.env.BS_JOB_STATE_PATH;
+  if (!statePath) return;
+  try {
+    let state = {};
+    try { state = JSON.parse(readFileSync(statePath, "utf8")); } catch (_) {}
+    writeFileSync(statePath, JSON.stringify({ ...state, ...updates }, null, 2), "utf8");
+  } catch (_) {}
+}
+
 if (isDirectRun) {
-  main().catch((e) => {
-    console.error(`Fatal: ${errMsg(e)}`);
-    process.exit(1);
-  });
+  // Intercept process.exit to capture failure state when BS_JOB_STATE_PATH is set
+  const _origExit = process.exit.bind(process);
+  process.exit = (code) => {
+    if (code && code !== 0) {
+      writeJobState({ status: "failed", finishedAt: new Date().toISOString(), error: `process exited with code ${code}` });
+    }
+    _origExit(code);
+  };
+
+  main()
+    .then(() => {
+      writeJobState({ status: "done", finishedAt: new Date().toISOString() });
+    })
+    .catch((e) => {
+      const msg = errMsg(e);
+      console.error(`Fatal: ${msg}`);
+      writeJobState({ status: "failed", finishedAt: new Date().toISOString(), error: msg });
+      _origExit(1);
+    });
 }
 
 

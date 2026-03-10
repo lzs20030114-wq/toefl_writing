@@ -28,6 +28,16 @@ const CARDS = [
     desc: "查看当前全部练习题目，包括学术写作、邮件写作和连词成句的题目内容与详情，支持关键词搜索。",
     href: "/admin-questions",
   },
+  {
+    title: "自动生题",
+    desc: "选择套数，后台自动运行 AI 生成管道，完成后查看报告（耗时、轮数、接受率、题型分布、题目详情），并选择销毁、存入题目池或直接上传正式题库。",
+    href: "/admin-generate-bs",
+  },
+  {
+    title: "题目池",
+    desc: "查看已保存但尚未入库的题目集，可展开查看每道题目详情，并选择上传到正式题库或销毁。",
+    href: "/admin-question-pool",
+  },
 ];
 
 export default function AdminHomePage() {

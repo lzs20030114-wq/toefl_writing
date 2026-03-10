@@ -3,6 +3,8 @@ const nextConfig = {
   experimental: {
     outputFileTracingIncludes: {
       "/api/admin/questions": ["./data/**/*"],
+      "/api/admin/generate-bs": ["./data/**/*", "./scripts/**/*"],
+      "/api/admin/question-pool": ["./data/**/*"],
     },
   },
 };
