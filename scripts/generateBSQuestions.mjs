@@ -422,6 +422,9 @@ function buildRejectFeedbackHints(rejectReasons) {
     if (r.includes("prompt_task_text") || r.includes("prompt must include an explicit task")) {
       hints.push("prompt_task_text MUST be an explicit task/question, NOT background. Use patterns: 'What did [person] ask?', 'How do you respond?', 'Tell your friend about it.', 'Describe what happened.' Put background/context in prompt_context, NOT in prompt_task_text.");
     }
+    if (r.includes("must be a single sentence")) {
+      hints.push("prompt_task_text for ask/report/respond MUST be ONE sentence only. NEVER start with a background sentence. WRONG: 'A student is at the office. What did she ask?' RIGHT: 'What did the student at the registrar's office ask?'");
+    }
   });
 
   const uniq = [...new Set(hints)];
@@ -1641,6 +1644,17 @@ function hardValidateQuestion(q) {
   const promptContract = validateStructuredPromptParts(q, { requireStructured: true });
   if (promptContract.fatal.length > 0) return { ok: false, reason: `prompt: ${promptContract.fatal.join("; ")}` };
   if (promptContract.format.length > 0) return { ok: false, reason: `prompt: ${promptContract.format.join("; ")}` };
+
+  // prompt_task_text must be a single sentence for ask/report/respond types.
+  // Background context must be embedded inside the question, not prepended as a separate sentence.
+  const taskKind = normalizeText(q.prompt_task_kind).toLowerCase();
+  if (["ask", "report", "respond"].includes(taskKind)) {
+    const taskText = normalizeText(q.prompt_task_text);
+    const sentences = taskText.split(/(?<=[.!?])\s+/).filter(Boolean);
+    if (sentences.length >= 2) {
+      return { ok: false, reason: "prompt_task_text: must be a single sentence — embed background context into the question itself" };
+    }
+  }
 
   const v = validateQuestion(q);
   if (v.fatal.length > 0) return { ok: false, reason: `fatal: ${v.fatal.join("; ")}` };
