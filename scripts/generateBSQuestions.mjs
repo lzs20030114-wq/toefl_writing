@@ -793,15 +793,17 @@ RULE: prefilled is ≤3 words maximum. Prefer 2-word. A 4-word+ prefilled will b
 Real TOEFL data: ~77% single-word chunks, ~23% multi-word. Target 6-7 effective chunks per item.
 
 MANDATORY multi-word chunks — NEVER atomize these:
+- Negation clusters:  "did not", "does not", "do not", "has not", "have not", "had not",
+                      "is not", "was not", "were not", "will not", "would not", "could not", "should not"
+  HARD RULE: NEVER split aux + not into separate chunks. ["did", "not"] = WRONG ✗. ["did not"] = RIGHT ✓.
 - Infinitives:        "to know", "to find", "to check", "to finish", "to attend", "to make"
 - Phrasal verbs:      "find out", "pick up", "carry out", "sign up"
 - Aux + participle:   "had gone", "had been", "has been", "will be", "been extended", "is scheduled"
 - Fixed collocations: "no idea", "what time", "on time", "in stock", "on Friday", "due to"
 Target: 1-2 multi-word chunks per question from the list above.
 
-
 SINGLE-WORD: subject pronouns (i/he/she/they), question words (where/when/if/whether),
-standalone auxiliaries (did/was/were used alone).
+standalone auxiliaries (did/was/were used alone — only when NOT followed by "not" in the answer).
 
 THE KEY MATH: R = answer word count − prefilled word count.
 - Target R = 6-7 (yields ~6-7 effective chunks). This is the goal.
@@ -936,6 +938,7 @@ ${rejectFeedback}
 3. PREFILLED COUNT: Count your non-empty prefilled items. You MUST have 8-9 items with prefilled in this batch. If you have fewer than 8, go back and add prefilled (subject pronoun or subject NP) to more items before outputting.
 4. PREFILLED CORRECTNESS: The prefilled word/phrase must appear EXACTLY in the answer string, at the stated index. Remove it from chunks 鈥?never include it in both prefilled and chunks. chunks + prefilled reconstruct the answer exactly once.
 5. CHUNK GRANULARITY & R-VALUE: R = answer_words − prefilled_words. Target R=6-7. prefilled is ≤3 words max (4-word+ = REJECTED). Object noun phrases belong in CHUNKS, not prefilled. 1-2 multi-word chunks per question: infinitives ("to know"), phrasal verbs ("find out"), aux+participle ("had been"). Never 9+ effective chunks.
+   NEGATION RULE: aux+not is ALWAYS one chunk. ["did not"] ✓  ["did","not"] ✗. Scan every negation item before output.
 6. VERB DIVERSITY: No single reporting verb may appear more than twice in this batch.
 7. HARD DIFFICULTY: Hard items must be justified by advanced grammar signals, not by extra words. Valid hard signals include passive/passive-progressive, past perfect, relative/contact clause, whom, comparative/superlative, or multi-layer embedding.
 8. UNIQUE SOLUTION: Reject any item in your own internal check if the distractor could still fit grammatically or if more than one chunk order seems plausible.
@@ -1652,6 +1655,15 @@ function hardValidateQuestion(q) {
     if (sentences.length >= 2) {
       return { ok: false, reason: "prompt_task_text: must be a single sentence — embed background context into the question itself" };
     }
+  }
+
+  // Negation cluster must not be split: ["did","not"] is invalid — must be ["did not"]
+  const NEG_AUX = ["did", "does", "do", "has", "have", "had", "is", "was", "were", "will", "would", "could", "should"];
+  const effectiveChunks = (q.chunks || []).filter((c) => c !== q.distractor);
+  const hasStandaloneNot = effectiveChunks.some((c) => normalizeText(c).toLowerCase() === "not");
+  const hasPrecedingAux = effectiveChunks.some((c) => NEG_AUX.includes(normalizeText(c).toLowerCase()));
+  if (hasStandaloneNot && hasPrecedingAux) {
+    return { ok: false, reason: 'chunks: negation must be a single chunk — use "did not" not ["did","not"]' };
   }
 
   const v = validateQuestion(q);
