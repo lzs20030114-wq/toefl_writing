@@ -425,6 +425,9 @@ function buildRejectFeedbackHints(rejectReasons) {
     if (r.includes("must be a single sentence")) {
       hints.push("prompt_task_text for ask/report/respond MUST be ONE sentence only. NEVER start with a background sentence. WRONG: 'A student is at the office. What did she ask?' RIGHT: 'What did the student at the registrar's office ask?'");
     }
+    if (r.includes("prompt_context: must be non-empty for tell/explain")) {
+      hints.push("tell/explain items MUST have a non-empty prompt_context scene sentence. WRONG: prompt_context='', task='Describe the park you explored.' RIGHT: prompt_context='You explored a park over the weekend.', task='Tell your friend about it.'");
+    }
   });
 
   const uniq = [...new Set(hints)];
@@ -948,6 +951,9 @@ ${rejectFeedback}
     WRONG ✗: prompt_task_text = "The student needed help with her paper. What did she ask the professor?"
     RIGHT ✓: prompt_task_text = "What did the student ask the professor about her paper?"
     prompt_task_text MUST start with a validated cue pattern — see PROMPT CONTRACT above.
+    For "tell"/"explain" types: prompt_context MUST be non-empty. A bare instruction with no context will be REJECTED.
+    WRONG ✗: prompt_context="", prompt_task_text="Describe the park you explored over the weekend."
+    RIGHT ✓: prompt_context="You explored a local park over the weekend.", prompt_task_text="Tell your friend about it."
 
 Output JSON array only. No markdown.`.trim();
 }
@@ -1653,6 +1659,15 @@ function hardValidateQuestion(q) {
     const sentences = taskText.split(/(?<=[.!?])\s+/).filter(Boolean);
     if (sentences.length >= 2) {
       return { ok: false, reason: "prompt_task_text: must be a single sentence — embed background context into the question itself" };
+    }
+  }
+
+  // tell/explain types must have a non-empty prompt_context to establish conversational setting.
+  // "Describe X." alone is not acceptable — the context sentence is required.
+  if (["tell", "explain"].includes(taskKind)) {
+    const ctx = normalizeText(q.prompt_context);
+    if (!ctx) {
+      return { ok: false, reason: "prompt_context: must be non-empty for tell/explain — provide a scene-setting sentence (e.g. 'You visited a park over the weekend.')" };
     }
   }
 
