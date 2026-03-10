@@ -723,17 +723,13 @@ Return ONLY a JSON array with exactly ${totalCount} objects.
 Generate high-quality conversational sentences. Focus on natural language flow.
 
 ## DISTRACTOR ANNOTATION RULES (CRITICAL):
-For each 10-item batch: EXACTLY 8-9 items must have has_distractor=true, EXACTLY 1-2 items must have has_distractor=false.
-- Too few (< 8 with distractor) = WRONG ✗
-- Too many (all 10 with distractor) = WRONG ✗
-- Target: 8 or 9 items with distractor, the rest without.
-
-Set has_distractor=false for 1-2 items using these cases:
-- Simple Negation: basic negative statement < 9 words.
-- High Complexity: 3+ nested grammar points (e.g. Embedded + Passive + Perfect).
-- Contact Clause: relative pronoun is omitted.
-
-A distractor is INVALID if inserting it can still produce a grammatical or semantically plausible answer. Distractors must break the tested grammar point, not act like another acceptable chunk.
+For each item, set "has_distractor" to true/false based on these TPO rules:
+1. Set "has_distractor": false ONLY when:
+   - Simple Negation: basic negative statement < 9 words.
+   - High Complexity: 3+ nested grammar points (e.g. Embedded + Passive + Perfect).
+   - Contact Clause: relative pronoun is omitted.
+2. Set "has_distractor": true for ALL other cases (~80-90% of batch).
+3. A distractor is INVALID if inserting it can still produce a grammatical or semantically plausible answer. Distractors must break the tested grammar point, not act like another acceptable chunk.
 
 ## VERB DIVERSITY:
 DO NOT use the same reporting verb (e.g., "wanted to know") more than twice in this batch.
@@ -939,11 +935,7 @@ ${rejectFeedback}
 ## FINAL CHECKLIST 锟?VERIFY BEFORE OUTPUT:
 1. WORD BAG: chunks (minus distractor) + prefilled words must equal EXACTLY the words in answer 锟?no extras, no missing. Verify every item.
 2. DISTRACTOR: The distractor word must NOT appear anywhere in the answer string.
-3. PREFILLED COUNT: Per 10-item batch — EXACTLY 8-9 items must have non-empty prefilled, EXACTLY 1-2 items must have prefilled=[].
-   - All 10 with prefilled = WRONG ✗
-   - Fewer than 8 with prefilled = WRONG ✗
-   - Short sentences (≤8 words) or sentences with no natural subject anchor are the right candidates for prefilled=[].
-   Count before output. If you have 10/10 or fewer than 8, fix it before submitting.
+3. PREFILLED COUNT: Count your non-empty prefilled items. You MUST have 8-9 items with prefilled in this batch. If you have fewer than 8, go back and add prefilled (subject pronoun or subject NP) to more items before outputting.
 4. PREFILLED CORRECTNESS: The prefilled word/phrase must appear EXACTLY in the answer string, at the stated index. Remove it from chunks 鈥?never include it in both prefilled and chunks. chunks + prefilled reconstruct the answer exactly once.
 5. CHUNK GRANULARITY & R-VALUE: R = answer_words − prefilled_words. Target R=6-7. prefilled is ≤3 words max (4-word+ = REJECTED). Object noun phrases belong in CHUNKS, not prefilled. 1-2 multi-word chunks per question: infinitives ("to know"), phrasal verbs ("find out"), aux+participle ("had been"). Never 9+ effective chunks.
    NEGATION RULE: aux+not is ALWAYS one chunk. ["did not"] ✓  ["did","not"] ✗. Scan every negation item before output.
@@ -2186,6 +2178,64 @@ function composeOneSet(pool, setId, maxRetries = 500) {
   return null;
 }
 
+/**
+ * Post-process a 10-question set to align distractor and prefilled rates with TPO targets.
+ * TPO: distractor ~88% (8-9/10), prefilled ~85% (8-9/10).
+ * If the generator produced 100% on either, strip 1 question's field deterministically.
+ * Mutates question clones — originals in pool are untouched.
+ */
+function normalizeSetStyleRates(questions) {
+  const qs = questions.map((q) => ({ ...q, chunks: [...(q.chunks || [])] }));
+  const n = qs.length;
+  if (n < 5) return qs;
+
+  // ── Distractor: if all have distractor, strip 1 ──────────────────────────
+  const distractorCount = qs.filter((q) => q.distractor != null).length;
+  if (distractorCount === n) {
+    // Pick the best candidate: prefer negation sentences (they're the canonical no-distractor case)
+    const candidates = qs
+      .map((q, i) => ({ i, q }))
+      .filter(({ q }) => q.distractor != null)
+      .sort((a, b) => {
+        const aNeg = (a.q.grammar_points || []).some((g) => /negat|negative/i.test(g)) ? 0 : 1;
+        const bNeg = (b.q.grammar_points || []).some((g) => /negat|negative/i.test(g)) ? 0 : 1;
+        const aLen = String(a.q.answer || "").split(/\s+/).length;
+        const bLen = String(b.q.answer || "").split(/\s+/).length;
+        return (aNeg - bNeg) || (aLen - bLen); // prefer negation, then shorter answer
+      });
+    if (candidates.length > 0) {
+      const { i, q } = candidates[0];
+      qs[i] = { ...q, has_distractor: false, distractor: null, chunks: q.chunks.filter((c) => c !== q.distractor) };
+      console.log(`  [normalize] stripped distractor from ${q.id} (was: "${q.distractor}") to align rate`);
+    }
+  }
+
+  // ── Prefilled: if all 10 have prefilled, strip 1 ─────────────────────────
+  const prefilledCount = qs.filter((q) => Array.isArray(q.prefilled) && q.prefilled.length > 0).length;
+  if (prefilledCount === n) {
+    // Pick the best candidate: prefer short answers (≤8 words) with 1-word prefilled
+    const candidates = qs
+      .map((q, i) => ({ i, q }))
+      .filter(({ q }) => Array.isArray(q.prefilled) && q.prefilled.length > 0)
+      .sort((a, b) => {
+        const aWords = String(a.q.answer || "").split(/\s+/).length;
+        const bWords = String(b.q.answer || "").split(/\s+/).length;
+        const aPfLen = (a.q.prefilled || []).join(" ").split(/\s+/).length;
+        const bPfLen = (b.q.prefilled || []).join(" ").split(/\s+/).length;
+        return (aPfLen - bPfLen) || (aWords - bWords); // prefer 1-word prefilled, then shorter
+      });
+    if (candidates.length > 0) {
+      const { i, q } = candidates[0];
+      const addBackChunks = [...(q.prefilled || [])];
+      const newChunks = [...q.chunks, ...addBackChunks];
+      qs[i] = { ...q, prefilled: [], prefilled_positions: {}, chunks: newChunks };
+      console.log(`  [normalize] stripped prefilled [${addBackChunks.join(", ")}] from ${q.id} to align rate`);
+    }
+  }
+
+  return qs;
+}
+
 function buildFinalSetsFromPool(pool, targetCount) {
   const sets = [];
   for (let i = 1; i <= targetCount; i += 1) {
@@ -2194,6 +2244,7 @@ function buildFinalSetsFromPool(pool, targetCount) {
       console.warn(`  [assembly] set ${i} could not be assembled 锟?continuing to next`);
       continue;
     }
+    set.questions = normalizeSetStyleRates(set.questions);
     sets.push(set);
   }
   return sets;
