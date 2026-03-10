@@ -724,11 +724,12 @@ Generate high-quality conversational sentences. Focus on natural language flow.
 
 ## DISTRACTOR ANNOTATION RULES (CRITICAL):
 For each item, set "has_distractor" to true/false based on these TPO rules:
-1. Set "has_distractor": false ONLY when:
+1. Set "has_distractor": false for these cases (target 1-2 items per 10-item batch):
    - Simple Negation: basic negative statement < 9 words.
    - High Complexity: 3+ nested grammar points (e.g. Embedded + Passive + Perfect).
    - Contact Clause: relative pronoun is omitted.
-2. Set "has_distractor": true for ALL other cases (~80-90% of batch).
+2. Set "has_distractor": true for all other cases (target ~8-9 items per batch, NOT all 10).
+   HARD RULE: Do NOT set has_distractor=true for every item. You MUST include 1-2 items with has_distractor=false per batch. A batch where every item has a distractor will be flagged.
 3. A distractor is INVALID if inserting it can still produce a grammatical or semantically plausible answer. Distractors must break the tested grammar point, not act like another acceptable chunk.
 
 ## VERB DIVERSITY:
@@ -935,7 +936,7 @@ ${rejectFeedback}
 ## FINAL CHECKLIST 锟?VERIFY BEFORE OUTPUT:
 1. WORD BAG: chunks (minus distractor) + prefilled words must equal EXACTLY the words in answer 锟?no extras, no missing. Verify every item.
 2. DISTRACTOR: The distractor word must NOT appear anywhere in the answer string.
-3. PREFILLED COUNT: Count your non-empty prefilled items. You MUST have 8-9 items with prefilled in this batch. If you have fewer than 8, go back and add prefilled (subject pronoun or subject NP) to more items before outputting.
+3. PREFILLED COUNT: Target exactly 8-9 items with non-empty prefilled per batch (matching real TPO 85%). This means 1-2 items MUST have prefilled=[]. Do NOT add prefilled to every item — a batch with 10/10 prefilled is wrong. Short sentences (≤8 words) or sentences with no natural subject anchor are good candidates for prefilled=[].
 4. PREFILLED CORRECTNESS: The prefilled word/phrase must appear EXACTLY in the answer string, at the stated index. Remove it from chunks 鈥?never include it in both prefilled and chunks. chunks + prefilled reconstruct the answer exactly once.
 5. CHUNK GRANULARITY & R-VALUE: R = answer_words − prefilled_words. Target R=6-7. prefilled is ≤3 words max (4-word+ = REJECTED). Object noun phrases belong in CHUNKS, not prefilled. 1-2 multi-word chunks per question: infinitives ("to know"), phrasal verbs ("find out"), aux+participle ("had been"). Never 9+ effective chunks.
    NEGATION RULE: aux+not is ALWAYS one chunk. ["did not"] ✓  ["did","not"] ✗. Scan every negation item before output.
