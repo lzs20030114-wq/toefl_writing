@@ -1,5 +1,5 @@
 import { isAdminAuthorized } from "../../../../lib/adminAuth";
-import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync } from "fs";
+import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync, openSync, closeSync } from "fs";
 import { join } from "path";
 import { randomUUID } from "crypto";
 import { spawn } from "child_process";
@@ -74,7 +74,7 @@ export async function POST(request) {
     BS_JOB_STATE_PATH: jobStatePath(jobId),
   };
 
-  const logFd = require("fs").openSync(logPath, "w");
+  const logFd = openSync(logPath, "w");
   const child = spawn(process.execPath, ["scripts/generateBSQuestions.mjs"], {
     cwd: process.cwd(),
     env,
@@ -82,7 +82,7 @@ export async function POST(request) {
     stdio: ["ignore", logFd, logFd],
   });
   child.unref();
-  require("fs").closeSync(logFd);
+  closeSync(logFd);
 
   return Response.json({ jobId, status: "running", targetSets });
 }
