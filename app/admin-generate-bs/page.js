@@ -257,12 +257,16 @@ function ProgressBar({ value, label }) {
   );
 }
 
-function RunCard({ run: initial, token }) {
+function RunCard({ run: initial, token, onDelete }) {
   const [run, setRun] = useState(initial);
   const [expanded, setExpanded] = useState(false);
   const [loadingStats, setLoadingStats] = useState(false);
   const [stagingGone, setStagingGone] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [cancelling, setCancelling] = useState(false);
+  const [cancelMsg, setCancelMsg] = useState("");
+  const [deleting, setDeleting] = useState(false);
+  const [deleteMsg, setDeleteMsg] = useState("");
   const timerRef = useRef(null);
   const progressRef = useRef(null);
 
@@ -296,6 +300,33 @@ function RunCard({ run: initial, token }) {
       return () => clearInterval(progressRef.current);
     }
   }, [run.status, run.conclusion, run.createdAt, run.inputs]);
+
+  async function handleCancel() {
+    if (!confirm("确认停止此次生成任务？")) return;
+    setCancelling(true); setCancelMsg("");
+    try {
+      const res = await fetch(`/api/admin/generate-bs/${run.id}`, { method: "POST", headers: authHeaders(token) });
+      const data = await res.json();
+      if (res.ok) {
+        setCancelMsg(data.alreadyDone ? "任务已完成，无需取消。" : "已发送停止请求，任务将在数秒内中止。");
+        setTimeout(fetchDetail, 4000);
+      } else {
+        setCancelMsg(`停止失败：${data.error}`);
+      }
+    } catch (e) { setCancelMsg(`请求失败：${e.message}`); }
+    finally { setCancelling(false); }
+  }
+
+  async function handleDeleteRun() {
+    if (!confirm("确认删除此条生成记录？同时清理临时库文件，不可撤销。")) return;
+    setDeleting(true); setDeleteMsg("");
+    try {
+      const res = await fetch(`/api/admin/generate-bs/${run.id}`, { method: "DELETE", headers: authHeaders(token) });
+      const data = await res.json();
+      if (res.ok) { onDelete(run.id); }
+      else { setDeleteMsg(`删除失败：${data.error}`); setDeleting(false); }
+    } catch (e) { setDeleteMsg(`请求失败：${e.message}`); setDeleting(false); }
+  }
 
   async function handleExpand() {
     if (expanded) { setExpanded(false); return; }
@@ -331,10 +362,23 @@ function RunCard({ run: initial, token }) {
       </div>
 
       {!isDone && (
-        <ProgressBar
-          value={progress}
-          label={run.status === "queued" ? "排队等待中…" : "每 5 秒自动刷新，完成后自动更新"}
-        />
+        <>
+          <ProgressBar
+            value={progress}
+            label={run.status === "queued" ? "排队等待中…" : "每 5 秒自动刷新，完成后自动更新"}
+          />
+          <div style={{ marginTop: 10, display: "flex", alignItems: "center", gap: 10 }}>
+            <button
+              onClick={handleCancel} disabled={cancelling}
+              style={{ background: "#dc2626", color: "#fff", border: "none", borderRadius: 6, padding: "6px 14px", cursor: cancelling ? "not-allowed" : "pointer", fontFamily: FONT, fontSize: 12, fontWeight: 700, opacity: cancelling ? 0.6 : 1 }}
+            >
+              {cancelling ? "停止中…" : "停止生成"}
+            </button>
+            {cancelMsg && (
+              <span style={{ fontSize: 12, color: cancelMsg.includes("失败") ? "#dc2626" : "#166534" }}>{cancelMsg}</span>
+            )}
+          </div>
+        </>
       )}
 
       {isFail && (
@@ -349,10 +393,21 @@ function RunCard({ run: initial, token }) {
         <div style={{ marginTop: 8, fontSize: 13, color: C.t2 }}>临时库文件已不存在（可能已部署或删除）</div>
       )}
 
-      <div style={{ marginTop: 8 }}>
+      <div style={{ marginTop: 8, display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
         <a href={run.htmlUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, color: C.blue, textDecoration: "none" }}>
           在 GitHub 查看日志 →
         </a>
+        {isDone && (
+          <>
+            <button
+              onClick={handleDeleteRun} disabled={deleting}
+              style={{ background: "none", border: "1px solid #dc2626", color: "#dc2626", borderRadius: 6, padding: "3px 10px", cursor: deleting ? "not-allowed" : "pointer", fontFamily: FONT, fontSize: 12, fontWeight: 700, opacity: deleting ? 0.6 : 1 }}
+            >
+              {deleting ? "删除中…" : "删除记录"}
+            </button>
+            {deleteMsg && <span style={{ fontSize: 12, color: "#dc2626" }}>{deleteMsg}</span>}
+          </>
+        )}
       </div>
 
       {expanded && (
@@ -493,7 +548,7 @@ export default function AdminGenerateBSPage() {
         )}
 
         {runs.map((run) => (
-          <RunCard key={run.id} run={run} token={token} />
+          <RunCard key={run.id} run={run} token={token} onDelete={(id) => setRuns(prev => prev.filter(r => r.id !== id))} />
         ))}
       </div>
     </div>

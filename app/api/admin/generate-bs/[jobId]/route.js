@@ -1,6 +1,6 @@
 import { isAdminAuthorized } from "../../../../../lib/adminAuth";
 
-const { getRepoFile } = require("../../../../../lib/githubApi");
+const { getRepoFile, deleteRepoFile } = require("../../../../../lib/githubApi");
 const { isEmbeddedQuestion, isNegation } = require("../../../../../lib/questionBank/etsProfile");
 
 const GH_OWNER = process.env.GH_OWNER || "lzs20030114-wq";
@@ -186,4 +186,66 @@ export async function GET(request, { params }) {
   }
 
   return Response.json(run);
+}
+
+// POST /api/admin/generate-bs/[jobId] — 取消正在运行的 workflow
+export async function POST(request, { params }) {
+  if (!isAdminAuthorized(request)) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  let headers;
+  try {
+    headers = ghHeaders();
+  } catch (e) {
+    return Response.json({ error: e.message }, { status: 503 });
+  }
+
+  const { jobId } = params;
+  const url = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/actions/runs/${jobId}/cancel`;
+  const res = await fetch(url, { method: "POST", headers });
+
+  // 202 = 取消请求已受理；409 = 任务已完成无需取消
+  if (res.status === 202 || res.status === 409) {
+    return Response.json({ ok: true, alreadyDone: res.status === 409 });
+  }
+  const text = await res.text();
+  return Response.json({ error: `GitHub API 错误 ${res.status}: ${text}` }, { status: res.status });
+}
+
+// DELETE /api/admin/generate-bs/[jobId] — 删除 workflow run 记录（同时清理临时库文件）
+export async function DELETE(request, { params }) {
+  if (!isAdminAuthorized(request)) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  let headers;
+  try {
+    headers = ghHeaders();
+  } catch (e) {
+    return Response.json({ error: e.message }, { status: 503 });
+  }
+
+  const { jobId } = params;
+  const url = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/actions/runs/${jobId}`;
+  const res = await fetch(url, { method: "DELETE", headers });
+
+  if (res.status !== 204) {
+    const text = await res.text();
+    return Response.json({ error: `GitHub API 错误 ${res.status}: ${text}` }, { status: res.status });
+  }
+
+  // 尝试同步清理临时库文件（失败不影响主流程）
+  try {
+    const stagingFile = await getRepoFile(`data/buildSentence/staging/${jobId}.json`);
+    if (stagingFile) {
+      await deleteRepoFile(
+        `data/buildSentence/staging/${jobId}.json`,
+        stagingFile.sha,
+        `chore: discard staged BS questions (run ${jobId}) [skip ci]`
+      );
+    }
+  } catch (_) {}
+
+  return Response.json({ ok: true });
 }
