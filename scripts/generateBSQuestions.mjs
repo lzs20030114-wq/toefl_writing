@@ -873,9 +873,9 @@ Pattern D (short sentence ≤8 words, prefilled=[]):
   "id": "tmp_r${round}_q1",
   "has_distractor": boolean,
   "answer_type": "negation" | "3rd-reporting" | "1st-embedded" | "interrogative" | "direct" | "relative",
-  "prompt_context": "" or "brief background sentence (only for tell/explain types; use empty string for ask/report/respond)",
+  "prompt_context": "" or "one background sentence (only for tell/explain; MUST be empty string for ask/report/respond)",
   "prompt_task_kind": "ask" | "report" | "respond" | "tell" | "explain",
-  "prompt_task_text": "explicit task such as 'What do they ask?' or 'Tell your friend about it.'",
+  "prompt_task_text": "ONE sentence only — no period in the middle. For ask/report/respond: a self-contained question with scene embedded. For tell/explain: a short instruction.",
   "prompt": "optional; if provided, it must exactly match prompt_context + prompt_task_text rendered by the app",
   "answer": "full correct sentence (7-13 words)",
   "chunks": ["draggable1", "draggable2", "...and distractor if has_distractor=true"],
@@ -941,6 +941,9 @@ ${rejectFeedback}
 8. UNIQUE SOLUTION: Reject any item in your own internal check if the distractor could still fit grammatically or if more than one chunk order seems plausible.
 9. INTERROGATIVE QUALITY: For interrogative items, use a short natural polite frame, vary the opener across the batch, and keep the embedded clause in declarative order. Do not mass-produce one stock opener.
 10. PROMPT STYLE: ≥70% of items must use single-question style (prompt_context=""). For "ask"/"report"/"respond" types, embed the scene context inside the question text itself. Two-part prompts (separate context sentence + short question) will be flagged.
+    prompt_task_text MUST be a SINGLE sentence — no period or question mark in the middle.
+    WRONG ✗: prompt_task_text = "The student needed help with her paper. What did she ask the professor?"
+    RIGHT ✓: prompt_task_text = "What did the student ask the professor about her paper?"
     prompt_task_text MUST start with a validated cue pattern — see PROMPT CONTRACT above.
 
 Output JSON array only. No markdown.`.trim();
@@ -1300,20 +1303,14 @@ function buildPromptReformatterPrompt(questions) {
     prompt_task_kind: q.prompt_task_kind || "",
     prompt_task_text: q.prompt_task_text || "",
   }));
-  return `You are a TOEFL prompt style editor. Your ONLY job: rewrite two-part prompts into single direct questions.
+  return `You are a TOEFL prompt style editor. Your ONLY job: rewrite prompts so that every "ask"/"report"/"respond" item has a SINGLE self-contained question sentence.
 
-## RULE:
-For each item where prompt_task_kind is "ask", "report", or "respond":
-- Merge prompt_context + prompt_task_text into ONE self-contained question.
-- Set prompt_context = "" (empty string).
-- Set prompt_task_text = the merged single question.
+## TWO CASES TO FIX (ask/report/respond only):
 
-For "tell" or "explain" items: leave BOTH fields UNCHANGED.
+### CASE 1: Separate context + short question
+prompt_context is non-empty AND prompt_task_text is a short question → merge them.
+Set prompt_context = "" and prompt_task_text = merged single question.
 
-## HOW TO MERGE (ask/report/respond):
-Take the person/scene from context and embed it directly into the question.
-
-EXAMPLES:
   IN:  context="The yoga instructor is speaking with a student about the schedule."
        task="What does she ask?"
   OUT: context=""
@@ -1329,14 +1326,33 @@ EXAMPLES:
   OUT: context=""
        task="What did the colleagues need to know about the project deadline?"
 
-  IN:  context="You are at a hair salon for an appointment."
-       task="What do you tell the stylist?"   ← "tell" type — DO NOT CHANGE
-  OUT: context="You are at a hair salon for an appointment."   ← unchanged
-       task="What do you tell the stylist?"                    ← unchanged
+### CASE 2: Multi-sentence prompt_task_text (context is already empty)
+prompt_context is "" AND prompt_task_text contains 2+ sentences → collapse into one question.
+Keep prompt_context = "" and rewrite prompt_task_text as a single question with context embedded.
+
+  IN:  context=""
+       task="The student was studying late for an exam. What did she want to know about the schedule?"
+  OUT: context=""
+       task="What did the student studying late for an exam want to know about the schedule?"
+
+  IN:  context=""
+       task="Your coworker is having trouble with the printer. What does he ask?"
+  OUT: context=""
+       task="What does your coworker ask about the printer problem?"
+
+  IN:  context=""
+       task="The manager called a meeting about the budget. What did she need to know?"
+  OUT: context=""
+       task="What did the manager need to know about the budget for the meeting?"
+
+## DO NOT CHANGE:
+- "tell" or "explain" items: leave BOTH fields exactly as-is.
+- Items that already have a single self-contained question in prompt_task_text (context is "" and task is one sentence): return them unchanged.
 
 ## CONSTRAINTS:
-- The merged task_text MUST be a natural, grammatical question.
-- Do NOT change the person being described or invent new details.
+- The output task_text MUST be ONE sentence. No period in the middle.
+- The output task_text MUST be a natural, grammatical question (for ask/report/respond).
+- Do NOT change the person, invent new details, or alter the grammar point being tested.
 - Return ONLY a JSON array with objects containing: id, prompt_context, prompt_task_text.
 - Do NOT include any other fields.
 
@@ -1353,9 +1369,14 @@ Return ONLY a JSON array. No markdown.`.trim();
  */
 async function reformatPrompts(questions) {
   const toReformat = questions.filter(q => {
-    const ctx = (q.prompt_context || "").trim();
     const kind = (q.prompt_task_kind || "").toLowerCase();
-    return ctx && ["ask", "report", "respond"].includes(kind);
+    if (!["ask", "report", "respond"].includes(kind)) return false;
+    const ctx = (q.prompt_context || "").trim();
+    if (ctx) return true; // Case 1: has separate context sentence
+    // Case 2: context is empty but prompt_task_text contains multiple sentences
+    const task = (q.prompt_task_text || "").trim();
+    const sentences = task.split(/(?<=[.!?])\s+/).filter(Boolean);
+    return sentences.length >= 2;
   });
   if (toReformat.length === 0) return questions;
 
