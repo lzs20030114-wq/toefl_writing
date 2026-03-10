@@ -115,6 +115,104 @@ function QuestionRow({ q }) {
   );
 }
 
+const CHECK_LABELS = {
+  contextViolations: { label: "上下文规则违反", desc: "ask/report/respond 带非空 prompt_context" },
+  standaloneNot:     { label: "独立 not 词块",  desc: '应合并为 "did not" 整体' },
+  prepFragments:     { label: "介词碎片词块",   desc: '"of the" / "in the" 等无意义块' },
+  repetition:        { label: "结构重复",       desc: "同一 distractor 出现 3+ 次" },
+  answerErrors:      { label: "答案含干扰词",   desc: "distractor 出现在 answer 里（答案可能有误）" },
+  standaloneAdverbs: { label: "独立时间副词",   desc: "yesterday / recently 等应绑定动词" },
+};
+
+function ReviewPanel({ runId, token }) {
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState("");
+  const [openCheck, setOpenCheck] = useState(null);
+
+  async function doReview() {
+    setLoading(true); setError(""); setResult(null);
+    try {
+      const res = await fetch(`/api/admin/staging/${runId}/review`, { headers: authHeaders(token) });
+      const data = await res.json();
+      if (!res.ok) { setError(data.error || `请求失败 ${res.status}`); return; }
+      setResult(data);
+    } catch (e) { setError(e.message); }
+    finally { setLoading(false); }
+  }
+
+  const scoreColor = result
+    ? result.totalIssues === 0 ? "#166534"
+      : result.totalIssues <= 5 ? "#1e40af"
+      : result.totalIssues <= 15 ? "#92400e"
+      : "#991b1b"
+    : C.t1;
+
+  return (
+    <div style={{ marginTop: 14, borderTop: "1px solid " + C.bdrSubtle, paddingTop: 12 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: result ? 10 : 0 }}>
+        <button
+          onClick={doReview} disabled={loading}
+          style={{ background: loading ? "#9ca3af" : "#6366f1", color: "#fff", border: "none", borderRadius: 6, padding: "6px 14px", cursor: loading ? "not-allowed" : "pointer", fontFamily: FONT, fontSize: 12, fontWeight: 700 }}
+        >
+          {loading ? "复查中…" : result ? "重新复查" : "规则复查"}
+        </button>
+        {result && (
+          <span style={{ fontSize: 13, fontWeight: 800, color: scoreColor }}>
+            {result.totalIssues === 0 ? "✓ 无问题" : `发现 ${result.totalIssues} 个问题`}
+            <span style={{ fontWeight: 400, color: C.t3, fontSize: 11 }}>（共 {result.total} 题）</span>
+          </span>
+        )}
+        {error && <span style={{ fontSize: 12, color: "#dc2626" }}>{error}</span>}
+      </div>
+
+      {result && (
+        <div>
+          {Object.entries(result.checks).map(([key, check]) => {
+            const meta = CHECK_LABELS[key] || { label: key, desc: "" };
+            const hasItems = check.count > 0;
+            const isOpen = openCheck === key;
+            return (
+              <div key={key} style={{ border: "1px solid " + (hasItems ? "#fcd34d" : C.bdrSubtle), borderRadius: 6, marginBottom: 6, background: hasItems ? "#fffbeb" : "#f9fafb" }}>
+                <button
+                  onClick={() => hasItems && setOpenCheck(isOpen ? null : key)}
+                  style={{ width: "100%", textAlign: "left", background: "none", border: "none", padding: "7px 12px", cursor: hasItems ? "pointer" : "default", fontFamily: FONT, display: "flex", justifyContent: "space-between", alignItems: "center" }}
+                >
+                  <span>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: hasItems ? "#92400e" : "#166534" }}>
+                      {hasItems ? `⚠ ${meta.label}` : `✓ ${meta.label}`}
+                    </span>
+                    <span style={{ fontSize: 11, color: C.t3, marginLeft: 6 }}>{meta.desc}</span>
+                  </span>
+                  <span style={{ fontSize: 12, fontWeight: 800, color: hasItems ? "#92400e" : "#166534" }}>
+                    {check.count} 题{hasItems ? (isOpen ? " ▲" : " ▼") : ""}
+                  </span>
+                </button>
+                {isOpen && hasItems && (
+                  <div style={{ padding: "0 12px 10px", borderTop: "1px solid #fcd34d" }}>
+                    {(check.items || []).map((item, i) => (
+                      <div key={i} style={{ fontSize: 11, color: C.t2, padding: "4px 0", borderBottom: "1px solid " + C.bdrSubtle, lineHeight: 1.6 }}>
+                        <span style={{ fontWeight: 700, color: C.t1 }}>{item.id}</span>
+                        {item.kind && <span style={{ marginLeft: 6, color: "#6366f1" }}>[{item.kind}]</span>}
+                        {item.context && <div style={{ color: "#92400e" }}>context: "{item.context}"</div>}
+                        {item.taskText && <div>task: {item.taskText}</div>}
+                        {item.answer && <div>answer: {item.answer}</div>}
+                        {item.distractor && <div style={{ color: "#dc2626" }}>distractor: "{item.distractor}"</div>}
+                        {item.badChunks && <div style={{ color: "#92400e" }}>问题词块: {item.badChunks.map(c => `"${c}"`).join(", ")}</div>}
+                        {item.ids && <div style={{ color: C.t3 }}>涉及题目: {item.ids.join(", ")}</div>}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function StatsPanel({ stats, runId, token, onDeployed, onDeleted }) {
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState("");
@@ -247,6 +345,9 @@ function StatsPanel({ stats, runId, token, onDeployed, onDeleted }) {
           </div>
         ))}
       </div>
+
+      {/* 规则复查 */}
+      <ReviewPanel runId={runId} token={token} />
 
       {/* 操作按钮 */}
       {msg && (
