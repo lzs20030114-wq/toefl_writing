@@ -1,0 +1,1861 @@
+{
+  "generated_at": "2026-03-11T16:33:08.758Z",
+  "active": {
+    "relative": {
+      "sinceRound": 30,
+      "untilRound": 33,
+      "lastEvent": {
+        "triggeredAt": "2026-03-11T16:32:09.403Z",
+        "round": 30,
+        "mode": "normal",
+        "type": "relative",
+        "generated": 7,
+        "accepted": 1,
+        "rejected": 6,
+        "acceptRate": 0.143,
+        "reasons": [
+          [
+            "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person",
+            2
+          ],
+          [
+            "fatal: prefilled \"he\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person",
+            1
+          ],
+          [
+            "review:blocker:distractor could be a valid answer chunk (inserting 'request' creates 'The meal you request is scheduled to arrive shortly' which is grammatically valid)",
+            1
+          ],
+          [
+            "fatal: distractor must be a single word (TPO standard)",
+            1
+          ],
+          [
+            "review:blocker:tmp_r30_q1: distractor 'serve' could be inserted to create 'The cafe I visited yesterday serve excellent pastries' - grammatically incorrect but structurally ambiguous|tmp_r30_q1: grammar_points lists 'contact_clause' but answer uses relative clause 'I visited yesterday' modifying 'cafe'",
+            1
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 28,
+            "spec": [
+              {
+                "type": "relative",
+                "difficulty": "hard",
+                "count": 3
+              },
+              {
+                "type": "negation",
+                "difficulty": "hard",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 3,
+              "accepted": 0,
+              "rejected": 3,
+              "reasons": {
+                "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1,
+                "fatal: prefilled \"he\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1,
+                "review:blocker:distractor could be a valid answer chunk (inserting 'request' creates 'The meal you request is scheduled to arrive shortly' which is grammatically valid)": 1
+              }
+            }
+          },
+          {
+            "round": 29,
+            "spec": [
+              {
+                "type": "relative",
+                "difficulty": "hard",
+                "count": 3
+              },
+              {
+                "type": "negation",
+                "difficulty": "hard",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 3,
+              "accepted": 1,
+              "rejected": 2,
+              "reasons": {
+                "fatal: distractor must be a single word (TPO standard)": 1,
+                "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1
+              }
+            }
+          },
+          {
+            "round": 30,
+            "spec": [
+              {
+                "type": "relative",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 3
+              }
+            ],
+            "stats": {
+              "generated": 1,
+              "accepted": 0,
+              "rejected": 1,
+              "reasons": {
+                "review:blocker:tmp_r30_q1: distractor 'serve' could be inserted to create 'The cafe I visited yesterday serve excellent pastries' - grammatically incorrect but structurally ambiguous|tmp_r30_q1: grammar_points lists 'contact_clause' but answer uses relative clause 'I visited yesterday' modifying 'cafe'": 1
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 33
+      }
+    },
+    "negation": {
+      "sinceRound": 30,
+      "untilRound": 33,
+      "lastEvent": {
+        "triggeredAt": "2026-03-11T16:32:09.403Z",
+        "round": 30,
+        "mode": "normal",
+        "type": "negation",
+        "generated": 5,
+        "accepted": 0,
+        "rejected": 5,
+        "acceptRate": 0,
+        "reasons": [
+          [
+            "pool:embedded_overflow",
+            2
+          ],
+          [
+            "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person",
+            1
+          ],
+          [
+            "topic:repeat",
+            1
+          ],
+          [
+            "review:blocker:tmp_r30_q1: distractor 'serve' could be inserted to create 'The cafe I visited yesterday serve excellent pastries' - grammatically incorrect but structurally ambiguous|tmp_r30_q1: grammar_points lists 'contact_clause' but answer uses relative clause 'I visited yesterday' modifying 'cafe'",
+            1
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 28,
+            "spec": [
+              {
+                "type": "relative",
+                "difficulty": "hard",
+                "count": 3
+              },
+              {
+                "type": "negation",
+                "difficulty": "hard",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 1,
+              "accepted": 0,
+              "rejected": 1,
+              "reasons": {
+                "pool:embedded_overflow": 1
+              }
+            }
+          },
+          {
+            "round": 29,
+            "spec": [
+              {
+                "type": "relative",
+                "difficulty": "hard",
+                "count": 3
+              },
+              {
+                "type": "negation",
+                "difficulty": "hard",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 1,
+              "accepted": 0,
+              "rejected": 1,
+              "reasons": {
+                "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1
+              }
+            }
+          },
+          {
+            "round": 30,
+            "spec": [
+              {
+                "type": "relative",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 3
+              }
+            ],
+            "stats": {
+              "generated": 3,
+              "accepted": 0,
+              "rejected": 3,
+              "reasons": {
+                "topic:repeat": 1,
+                "pool:embedded_overflow": 1,
+                "review:blocker:tmp_r30_q1: distractor 'serve' could be inserted to create 'The cafe I visited yesterday serve excellent pastries' - grammatically incorrect but structurally ambiguous|tmp_r30_q1: grammar_points lists 'contact_clause' but answer uses relative clause 'I visited yesterday' modifying 'cafe'": 1
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 33
+      }
+    }
+  },
+  "events": [
+    {
+      "triggeredAt": "2026-03-11T16:17:43.118Z",
+      "round": 3,
+      "mode": "normal",
+      "type": "relative",
+      "generated": 5,
+      "accepted": 1,
+      "rejected": 4,
+      "acceptRate": 0.2,
+      "reasons": [
+        [
+          "fatal: chunks[2]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "fatal: chunks[6]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "review:ets<72",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 1,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "easy",
+              "count": 2
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "fatal: chunks[2]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+            }
+          }
+        },
+        {
+          "round": 2,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "easy",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 1,
+            "rejected": 1,
+            "reasons": {
+              "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+            }
+          }
+        },
+        {
+          "round": 3,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "easy",
+              "count": 2
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "fatal: chunks[6]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "review:ets<72": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 6
+    },
+    {
+      "triggeredAt": "2026-03-11T16:23:56.082Z",
+      "round": 12,
+      "mode": "normal",
+      "type": "relative",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "fatal: chunks[2]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "pool:difficulty_surplus:easy",
+          1
+        ],
+        [
+          "runtime: question tmp_r12_q1: givenSlots/answerOrder do not reconstruct answer (got \"i the coffee shop visited yesterday has excellent pastries\", expected \"the coffee shop i visited yesterday has excellent pastries\")",
+          1
+        ],
+        [
+          "review:blocker:tmp_r12_q2: distractor 'make' could be inserted to create valid sentence 'The bakery you recommended make wonderful sourdough bread' (subject-verb agreement error but structurally insertable)|tmp_r12_q3: distractor 'did' could be inserted to create 'The landlord did needed to know...' (awkward but grammatically possible emphatic form)|tmp_r12_q4: distractor 'did' could be inserted to create 'The receptionist did inquired...' (awkward but grammatically possible emphatic form)",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 10,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 11,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "fatal: chunks[2]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "pool:difficulty_surplus:easy": 1
+            }
+          }
+        },
+        {
+          "round": 12,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "runtime: question tmp_r12_q1: givenSlots/answerOrder do not reconstruct answer (got \"i the coffee shop visited yesterday has excellent pastries\", expected \"the coffee shop i visited yesterday has excellent pastries\")": 1,
+              "review:blocker:tmp_r12_q2: distractor 'make' could be inserted to create valid sentence 'The bakery you recommended make wonderful sourdough bread' (subject-verb agreement error but structurally insertable)|tmp_r12_q3: distractor 'did' could be inserted to create 'The landlord did needed to know...' (awkward but grammatically possible emphatic form)|tmp_r12_q4: distractor 'did' could be inserted to create 'The receptionist did inquired...' (awkward but grammatically possible emphatic form)": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 15
+    },
+    {
+      "triggeredAt": "2026-03-11T16:24:32.845Z",
+      "round": 14,
+      "mode": "normal",
+      "type": "1st-embedded",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r14_q5: distractor 'mentioned' can be inserted to create valid sentence 'The recruiter mentioned when they would contact me.'",
+          2
+        ],
+        [
+          "fatal: distractor must be a single word (TPO standard)",
+          1
+        ],
+        [
+          "fatal: chunks[5]: isolated floating adverb \"tomorrow\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 11,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "fatal: distractor must be a single word (TPO standard)": 1
+            }
+          }
+        },
+        {
+          "round": 12,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "fatal: chunks[5]: isolated floating adverb \"tomorrow\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+            }
+          }
+        },
+        {
+          "round": 14,
+          "spec": [
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r14_q5: distractor 'mentioned' can be inserted to create valid sentence 'The recruiter mentioned when they would contact me.'": 2
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 17
+    },
+    {
+      "triggeredAt": "2026-03-11T16:25:03.355Z",
+      "round": 15,
+      "mode": "normal",
+      "type": "3rd-reporting",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r12_q2: distractor 'make' could be inserted to create valid sentence 'The bakery you recommended make wonderful sourdough bread' (subject-verb agreement error but structurally insertable)|tmp_r12_q3: distractor 'did' could be inserted to create 'The landlord did needed to know...' (awkward but grammatically possible emphatic form)|tmp_r12_q4: distractor 'did' could be inserted to create 'The receptionist did inquired...' (awkward but grammatically possible emphatic form)",
+          2
+        ],
+        [
+          "pool:difficulty_surplus:easy",
+          1
+        ],
+        [
+          "review:blocker:tmp_r15_q1: distractor 'prefer' could be inserted to create valid sentence 'The flight attendant asked if I prefer vegetarian or regular meals' (present tense reporting is grammatically valid)|tmp_r15_q1: Distractor 'prefer' is grammatically valid in answer position ('if I prefer'), creating ambiguity|tmp_r15_q4: Embedded question uses inverted word order ('how often I take' is correct, but 'how often do I take' would also be grammatically acceptable in direct speech context)",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 12,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r12_q2: distractor 'make' could be inserted to create valid sentence 'The bakery you recommended make wonderful sourdough bread' (subject-verb agreement error but structurally insertable)|tmp_r12_q3: distractor 'did' could be inserted to create 'The landlord did needed to know...' (awkward but grammatically possible emphatic form)|tmp_r12_q4: distractor 'did' could be inserted to create 'The receptionist did inquired...' (awkward but grammatically possible emphatic form)": 2
+            }
+          }
+        },
+        {
+          "round": 14,
+          "spec": [
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 15,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "pool:difficulty_surplus:easy": 1,
+              "review:blocker:tmp_r15_q1: distractor 'prefer' could be inserted to create valid sentence 'The flight attendant asked if I prefer vegetarian or regular meals' (present tense reporting is grammatically valid)|tmp_r15_q1: Distractor 'prefer' is grammatically valid in answer position ('if I prefer'), creating ambiguity|tmp_r15_q4: Embedded question uses inverted word order ('how often I take' is correct, but 'how often do I take' would also be grammatically acceptable in direct speech context)": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 18
+    },
+    {
+      "triggeredAt": "2026-03-11T16:25:24.994Z",
+      "round": 16,
+      "mode": "normal",
+      "type": "relative",
+      "generated": 5,
+      "accepted": 1,
+      "rejected": 4,
+      "acceptRate": 0.2,
+      "reasons": [
+        [
+          "review:blocker:tmp_r14_q5: distractor 'mentioned' can be inserted to create valid sentence 'The recruiter mentioned when they would contact me.'",
+          1
+        ],
+        [
+          "runtime: question tmp_r16_q1: givenSlots/answerOrder do not reconstruct answer (got \"i the coffee shop visited yesterday had excellent pastries\", expected \"the coffee shop i visited yesterday had excellent pastries\")",
+          1
+        ],
+        [
+          "runtime: question tmp_r16_q2: givenSlots/answerOrder do not reconstruct answer (got \"i the documentary watched last night explored ocean conservation\", expected \"the documentary i watched last night explored ocean conservation\")",
+          1
+        ],
+        [
+          "runtime: question tmp_r16_q4: givenSlots/answerOrder do not reconstruct answer (got \"i the podcast discovered recently covers fascinating historical topics\", expected \"the podcast i discovered recently covers fascinating historical topics\")",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 14,
+          "spec": [
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r14_q5: distractor 'mentioned' can be inserted to create valid sentence 'The recruiter mentioned when they would contact me.'": 1
+            }
+          }
+        },
+        {
+          "round": 15,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 16,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 4,
+            "accepted": 1,
+            "rejected": 3,
+            "reasons": {
+              "runtime: question tmp_r16_q1: givenSlots/answerOrder do not reconstruct answer (got \"i the coffee shop visited yesterday had excellent pastries\", expected \"the coffee shop i visited yesterday had excellent pastries\")": 1,
+              "runtime: question tmp_r16_q2: givenSlots/answerOrder do not reconstruct answer (got \"i the documentary watched last night explored ocean conservation\", expected \"the documentary i watched last night explored ocean conservation\")": 1,
+              "runtime: question tmp_r16_q4: givenSlots/answerOrder do not reconstruct answer (got \"i the podcast discovered recently covers fascinating historical topics\", expected \"the podcast i discovered recently covers fascinating historical topics\")": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 19
+    },
+    {
+      "triggeredAt": "2026-03-11T16:25:54.201Z",
+      "round": 17,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 5,
+      "accepted": 1,
+      "rejected": 4,
+      "acceptRate": 0.2,
+      "reasons": [
+        [
+          "pool:difficulty_surplus:easy",
+          3
+        ],
+        [
+          "review:ets<72",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 15,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "pool:difficulty_surplus:easy": 1
+            }
+          }
+        },
+        {
+          "round": 16,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 17,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 4,
+            "accepted": 1,
+            "rejected": 3,
+            "reasons": {
+              "pool:difficulty_surplus:easy": 2,
+              "review:ets<72": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 20
+    },
+    {
+      "triggeredAt": "2026-03-11T16:27:16.843Z",
+      "round": 20,
+      "mode": "normal",
+      "type": "3rd-reporting",
+      "generated": 5,
+      "accepted": 1,
+      "rejected": 4,
+      "acceptRate": 0.2,
+      "reasons": [
+        [
+          "fatal: distractor must be a single word (TPO standard)",
+          1
+        ],
+        [
+          "fatal: distractor must not appear in answer",
+          1
+        ],
+        [
+          "fatal: chunks (minus distractor) + prefilled words must equal answer words; distractor must not appear in answer",
+          1
+        ],
+        [
+          "review:blocker:tmp_r20_q4: distractor 'did' could be inserted after 'when' to create 'when did my passport expire' - another valid embedded question form|tmp_r20_q5: distractor 'did' could be inserted after 'if' to create 'if did I prefer' - though ungrammatical, this ambiguity exists",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 18,
+          "spec": [
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 19,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 4,
+            "accepted": 1,
+            "rejected": 3,
+            "reasons": {
+              "fatal: distractor must be a single word (TPO standard)": 1,
+              "fatal: distractor must not appear in answer": 1,
+              "fatal: chunks (minus distractor) + prefilled words must equal answer words; distractor must not appear in answer": 1
+            }
+          }
+        },
+        {
+          "round": 20,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r20_q4: distractor 'did' could be inserted after 'when' to create 'when did my passport expire' - another valid embedded question form|tmp_r20_q5: distractor 'did' could be inserted after 'if' to create 'if did I prefer' - though ungrammatical, this ambiguity exists": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 23
+    },
+    {
+      "triggeredAt": "2026-03-11T16:27:49.456Z",
+      "round": 21,
+      "mode": "normal",
+      "type": "relative",
+      "generated": 6,
+      "accepted": 0,
+      "rejected": 6,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "pool:difficulty_surplus:easy",
+          3
+        ],
+        [
+          "runtime: question tmp_r21_q1: givenSlots/answerOrder do not reconstruct answer (got \"i the coffee shop visited yesterday serves excellent pastries\", expected \"the coffee shop i visited yesterday serves excellent pastries\")",
+          1
+        ],
+        [
+          "runtime: question tmp_r21_q2: givenSlots/answerOrder do not reconstruct answer (got \"i the dental clinic called offers evening appointments\", expected \"the dental clinic i called offers evening appointments\")",
+          1
+        ],
+        [
+          "runtime: question tmp_r21_q3: givenSlots/answerOrder do not reconstruct answer (got \"you the grocery store recommended has fresh organic produce\", expected \"the grocery store you recommended has fresh organic produce\")",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 19,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 20,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "pool:difficulty_surplus:easy": 3
+            }
+          }
+        },
+        {
+          "round": 21,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "runtime: question tmp_r21_q1: givenSlots/answerOrder do not reconstruct answer (got \"i the coffee shop visited yesterday serves excellent pastries\", expected \"the coffee shop i visited yesterday serves excellent pastries\")": 1,
+              "runtime: question tmp_r21_q2: givenSlots/answerOrder do not reconstruct answer (got \"i the dental clinic called offers evening appointments\", expected \"the dental clinic i called offers evening appointments\")": 1,
+              "runtime: question tmp_r21_q3: givenSlots/answerOrder do not reconstruct answer (got \"you the grocery store recommended has fresh organic produce\", expected \"the grocery store you recommended has fresh organic produce\")": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 24
+    },
+    {
+      "triggeredAt": "2026-03-11T16:28:29.117Z",
+      "round": 22,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 7,
+      "accepted": 0,
+      "rejected": 7,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r22_q1: prompt/answer mismatch - prompt asks 'what do you say about the museum exhibit' but answer discusses gallery reopening timing, not the exhibit itself|tmp_r22_q2: prompt/answer mismatch - prompt asks 'how do you respond about registration' but answer discusses class capacity confirmation, not registration response|tmp_r22_q4: prompt/answer mismatch - prompt asks 'how do you respond about installation' but answer discusses system delay explanation, not installation response|tmp_r22_q5: prompt/answer mismatch - prompt asks 'what do you say about delivery' but answer discusses delivery schedule understanding, not a statement about the delivery itself",
+          4
+        ],
+        [
+          "pool:difficulty_surplus:easy",
+          2
+        ],
+        [
+          "review:blocker:distractor could be a valid answer chunk (inserting it creates another valid sentence)",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 20,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 21,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "pool:difficulty_surplus:easy": 1,
+              "review:blocker:distractor could be a valid answer chunk (inserting it creates another valid sentence)": 1
+            }
+          }
+        },
+        {
+          "round": 22,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 5,
+            "accepted": 0,
+            "rejected": 5,
+            "reasons": {
+              "pool:difficulty_surplus:easy": 1,
+              "review:blocker:tmp_r22_q1: prompt/answer mismatch - prompt asks 'what do you say about the museum exhibit' but answer discusses gallery reopening timing, not the exhibit itself|tmp_r22_q2: prompt/answer mismatch - prompt asks 'how do you respond about registration' but answer discusses class capacity confirmation, not registration response|tmp_r22_q4: prompt/answer mismatch - prompt asks 'how do you respond about installation' but answer discusses system delay explanation, not installation response|tmp_r22_q5: prompt/answer mismatch - prompt asks 'what do you say about delivery' but answer discusses delivery schedule understanding, not a statement about the delivery itself": 4
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 25
+    },
+    {
+      "triggeredAt": "2026-03-11T16:30:32.473Z",
+      "round": 26,
+      "mode": "normal",
+      "type": "relative",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r26_q1: prompt/answer mismatch - prompt asks what curator 'mentioned' but answer is a direct statement, not reported speech|tmp_r26_q3: prompt/answer mismatch - prompt asks what receptionist 'asked' but answer is a statement, not a question in reported form",
+          2
+        ],
+        [
+          "fatal: distractor must be a single word (TPO standard)",
+          1
+        ],
+        [
+          "fatal: chunks[5]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\"); chunks[6]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 24,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 25,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "fatal: distractor must be a single word (TPO standard)": 1
+            }
+          }
+        },
+        {
+          "round": 26,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "fatal: chunks[5]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\"); chunks[6]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "review:blocker:tmp_r26_q1: prompt/answer mismatch - prompt asks what curator 'mentioned' but answer is a direct statement, not reported speech|tmp_r26_q3: prompt/answer mismatch - prompt asks what receptionist 'asked' but answer is a statement, not a question in reported form": 2
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 29
+    },
+    {
+      "triggeredAt": "2026-03-11T16:32:09.403Z",
+      "round": 30,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 5,
+      "accepted": 0,
+      "rejected": 5,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "pool:embedded_overflow",
+          2
+        ],
+        [
+          "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person",
+          1
+        ],
+        [
+          "topic:repeat",
+          1
+        ],
+        [
+          "review:blocker:tmp_r30_q1: distractor 'serve' could be inserted to create 'The cafe I visited yesterday serve excellent pastries' - grammatically incorrect but structurally ambiguous|tmp_r30_q1: grammar_points lists 'contact_clause' but answer uses relative clause 'I visited yesterday' modifying 'cafe'",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 28,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "pool:embedded_overflow": 1
+            }
+          }
+        },
+        {
+          "round": 29,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1
+            }
+          }
+        },
+        {
+          "round": 30,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "topic:repeat": 1,
+              "pool:embedded_overflow": 1,
+              "review:blocker:tmp_r30_q1: distractor 'serve' could be inserted to create 'The cafe I visited yesterday serve excellent pastries' - grammatically incorrect but structurally ambiguous|tmp_r30_q1: grammar_points lists 'contact_clause' but answer uses relative clause 'I visited yesterday' modifying 'cafe'": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 33
+    },
+    {
+      "triggeredAt": "2026-03-11T16:32:09.403Z",
+      "round": 30,
+      "mode": "normal",
+      "type": "relative",
+      "generated": 7,
+      "accepted": 1,
+      "rejected": 6,
+      "acceptRate": 0.143,
+      "reasons": [
+        [
+          "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person",
+          2
+        ],
+        [
+          "fatal: prefilled \"he\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person",
+          1
+        ],
+        [
+          "review:blocker:distractor could be a valid answer chunk (inserting 'request' creates 'The meal you request is scheduled to arrive shortly' which is grammatically valid)",
+          1
+        ],
+        [
+          "fatal: distractor must be a single word (TPO standard)",
+          1
+        ],
+        [
+          "review:blocker:tmp_r30_q1: distractor 'serve' could be inserted to create 'The cafe I visited yesterday serve excellent pastries' - grammatically incorrect but structurally ambiguous|tmp_r30_q1: grammar_points lists 'contact_clause' but answer uses relative clause 'I visited yesterday' modifying 'cafe'",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 28,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1,
+              "fatal: prefilled \"he\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1,
+              "review:blocker:distractor could be a valid answer chunk (inserting 'request' creates 'The meal you request is scheduled to arrive shortly' which is grammatically valid)": 1
+            }
+          }
+        },
+        {
+          "round": 29,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 1,
+            "rejected": 2,
+            "reasons": {
+              "fatal: distractor must be a single word (TPO standard)": 1,
+              "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1
+            }
+          }
+        },
+        {
+          "round": 30,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r30_q1: distractor 'serve' could be inserted to create 'The cafe I visited yesterday serve excellent pastries' - grammatically incorrect but structurally ambiguous|tmp_r30_q1: grammar_points lists 'contact_clause' but answer uses relative clause 'I visited yesterday' modifying 'cafe'": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 33
+    }
+  ],
+  "history": [
+    {
+      "round": 27,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "relative",
+          "difficulty": "hard",
+          "count": 3
+        },
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "pool:embedded_overflow": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "pool:embedded_overflow": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 3,
+          "accepted": 0,
+          "rejected": 3,
+          "reasons": {
+            "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1,
+            "fatal: chunks[5]: isolated floating adverb \"tomorrow\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+            "fatal: prefilled \"he\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1
+          }
+        }
+      }
+    },
+    {
+      "round": 28,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "relative",
+          "difficulty": "hard",
+          "count": 3
+        },
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "pool:embedded_overflow": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "pool:embedded_overflow": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 3,
+          "accepted": 0,
+          "rejected": 3,
+          "reasons": {
+            "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1,
+            "fatal: prefilled \"he\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1,
+            "review:blocker:distractor could be a valid answer chunk (inserting 'request' creates 'The meal you request is scheduled to arrive shortly' which is grammatically valid)": 1
+          }
+        }
+      }
+    },
+    {
+      "round": 29,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "relative",
+          "difficulty": "hard",
+          "count": 3
+        },
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "fatal: chunks[7]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+          }
+        },
+        "relative": {
+          "generated": 3,
+          "accepted": 1,
+          "rejected": 2,
+          "reasons": {
+            "fatal: distractor must be a single word (TPO standard)": 1,
+            "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1
+          }
+        }
+      }
+    },
+    {
+      "round": 30,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 3
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 3,
+          "accepted": 0,
+          "rejected": 3,
+          "reasons": {
+            "topic:repeat": 1,
+            "pool:embedded_overflow": 1,
+            "review:blocker:tmp_r30_q1: distractor 'serve' could be inserted to create 'The cafe I visited yesterday serve excellent pastries' - grammatically incorrect but structurally ambiguous|tmp_r30_q1: grammar_points lists 'contact_clause' but answer uses relative clause 'I visited yesterday' modifying 'cafe'": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r30_q1: distractor 'serve' could be inserted to create 'The cafe I visited yesterday serve excellent pastries' - grammatically incorrect but structurally ambiguous|tmp_r30_q1: grammar_points lists 'contact_clause' but answer uses relative clause 'I visited yesterday' modifying 'cafe'": 1
+          }
+        },
+        "relative": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r30_q1: distractor 'serve' could be inserted to create 'The cafe I visited yesterday serve excellent pastries' - grammatically incorrect but structurally ambiguous|tmp_r30_q1: grammar_points lists 'contact_clause' but answer uses relative clause 'I visited yesterday' modifying 'cafe'": 1
+          }
+        }
+      }
+    },
+    {
+      "round": 31,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 3
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 3,
+          "accepted": 0,
+          "rejected": 3,
+          "reasons": {
+            "topic:repeat": 1,
+            "review:blocker:tmp_r31_q1: distractor 'serve' could be inserted to create 'The cafe I visited yesterday serve excellent pastries' - grammatically incorrect but structurally ambiguous|tmp_r31_q2: distractor 'offer' could be inserted to create 'The fitness center I joined recently offer yoga classes' - grammatically incorrect but structurally ambiguous": 2
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "review:blocker:tmp_r31_q1: distractor 'serve' could be inserted to create 'The cafe I visited yesterday serve excellent pastries' - grammatically incorrect but structurally ambiguous|tmp_r31_q2: distractor 'offer' could be inserted to create 'The fitness center I joined recently offer yoga classes' - grammatically incorrect but structurally ambiguous": 2
+          }
+        }
+      }
+    },
+    {
+      "round": 32,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 3
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 3,
+          "accepted": 0,
+          "rejected": 3,
+          "reasons": {
+            "topic:repeat": 1,
+            "pool:embedded_overflow": 1,
+            "review:blocker:distractor could be a valid answer chunk (inserting 'decide' creates 'I have not decide whether to sign the lease' which is grammatically incorrect but 'I decide whether to sign the lease' is valid if distractor replaces other chunks)": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+            "fatal: prefilled too long (4 words): shorten to 2-3 word subject NP": 1
+          }
+        }
+      }
+    }
+  ]
+}
