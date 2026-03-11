@@ -67,6 +67,7 @@ jobs:
           STAGING="data/buildSentence/staging/${RUN_ID}.json"
           RESERVE="data/buildSentence/staging/${RUN_ID}.reserve.json"
           CIRCUIT_BREAKER="data/buildSentence/staging/${RUN_ID}.circuit-breaker-log.json"
+          DIAGNOSTICS="data/buildSentence/staging/${RUN_ID}.diagnostics.json"
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -76,6 +77,7 @@ jobs:
           [ -f "$STAGING" ] && FILES+=("$STAGING")
           [ -f "$RESERVE" ] && FILES+=("$RESERVE")
           [ -f "$CIRCUIT_BREAKER" ] && FILES+=("$CIRCUIT_BREAKER")
+          [ -f "$DIAGNOSTICS" ] && FILES+=("$DIAGNOSTICS")
 
           if [ ${#FILES[@]} -eq 0 ]; then
             echo "No workflow artifacts found; nothing to commit."

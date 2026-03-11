@@ -49,6 +49,9 @@ const RESERVE_PATH = process.env.BS_RESERVE_PATH
 const CIRCUIT_BREAKER_LOG_PATH = process.env.BS_CIRCUIT_BREAKER_LOG_PATH
   ? resolve(String(process.env.BS_CIRCUIT_BREAKER_LOG_PATH))
   : resolve(__dirname, "..", "data", "buildSentence", "circuit_breaker_log.json");
+const DIAGNOSTICS_PATH = process.env.BS_DIAGNOSTICS_PATH
+  ? resolve(String(process.env.BS_DIAGNOSTICS_PATH))
+  : OUTPUT_PATH.replace(/\.json$/i, ".diagnostics.json");
 const TARGET_SET_COUNT = Number(process.env.BS_TARGET_SETS || 6);
 const MIN_REVIEW_SCORE = Number(process.env.BS_MIN_REVIEW_SCORE || 78);
 const MIN_REVIEW_OVERALL = Number(process.env.BS_MIN_REVIEW_OVERALL || 84);
@@ -483,6 +486,8 @@ function classifyAnswerType(q) {
  * hard  (2/set):  3rd-reporting锟?5%, 1st-embedded锟?5%, relative锟?9%, interrogative锟?3%, direct锟?3%, negation锟?%
  */
 const TYPE_LIST = ["negation", "3rd-reporting", "1st-embedded", "interrogative", "direct", "relative"];
+const EMBEDDED_HEAVY_TYPES = new Set(["3rd-reporting", "1st-embedded", "interrogative"]);
+const NON_EMBEDDED_TYPES = new Set(TYPE_LIST.filter((type) => !EMBEDDED_HEAVY_TYPES.has(type)));
 const WILLING_TYPES = ["3rd-reporting", "negation", "1st-embedded"]; // AI generates naturally
 const TPO_TYPE_TARGET_RATIO = Object.freeze({
   "negation": 0.183,
@@ -1196,6 +1201,136 @@ function computePoolState(pool) {
     if (meta.hasQuestionMark) state.style.qmark += 1;
   }
   return state;
+}
+
+function getDifficultyCounts(poolState) {
+  return Object.fromEntries(
+    ["easy", "medium", "hard"].map((diff) => [
+      diff,
+      TYPE_LIST.reduce((sum, type) => sum + ((poolState?.[diff] || {})[type] || 0), 0),
+    ]),
+  );
+}
+
+function clonePoolState(poolState) {
+  return JSON.parse(JSON.stringify(poolState || {}));
+}
+
+function incrementPoolStateWithQuestion(poolState, q) {
+  const next = poolState || computePoolState([]);
+  const meta = attachMeta(q)._meta || {};
+  const type = meta.answerType || resolvedAnswerType(q);
+  const diff = (estimateQuestionDifficulty(q) || {}).bucket || "medium";
+  if (next[diff] && type in next[diff]) next[diff][type] += 1;
+  if (next.typeTotals && type in next.typeTotals) next.typeTotals[type] += 1;
+  if (next.style) {
+    next.style.total += 1;
+    if (meta.isEmbedded) next.style.embedded += 1;
+    if (type === "negation") next.style.negation += 1;
+    if (meta.hasDistractor) next.style.distractor += 1;
+    if (meta.hasQuestionMark) next.style.qmark += 1;
+  }
+  return next;
+}
+
+function computeAssemblyState(poolState, targetSetCount = TARGET_SET_COUNT) {
+  const diffCounts = getDifficultyCounts(poolState);
+  const total = poolState?.style?.total || 0;
+  const embedded = poolState?.style?.embedded || 0;
+  const negation = poolState?.style?.negation || 0;
+  const distractor = poolState?.style?.distractor || 0;
+  const qmark = poolState?.style?.qmark || 0;
+  const nonEmbedded = Math.max(0, total - embedded);
+
+  const need = {
+    easy: ETS_2026_TARGET_COUNTS_10.easy * targetSetCount,
+    medium: ETS_2026_TARGET_COUNTS_10.medium * targetSetCount,
+    hard: ETS_2026_TARGET_COUNTS_10.hard * targetSetCount,
+    negationMin: (ETS_STYLE_TARGETS.negationMin || 0) * targetSetCount,
+    distractorMin: (ETS_STYLE_TARGETS.distractorMin || 0) * targetSetCount,
+    nonEmbeddedMin: Math.max(0, (10 - (ETS_STYLE_TARGETS.embeddedMax || 8)) * targetSetCount),
+    embeddedMax: (ETS_STYLE_TARGETS.embeddedMax || 8) * targetSetCount,
+    qmarkMax: (ETS_STYLE_TARGETS.qmarkMax || 2) * targetSetCount,
+  };
+
+  const assemblableBy = {
+    easy: Math.floor(diffCounts.easy / ETS_2026_TARGET_COUNTS_10.easy),
+    medium: Math.floor(diffCounts.medium / ETS_2026_TARGET_COUNTS_10.medium),
+    hard: Math.floor(diffCounts.hard / ETS_2026_TARGET_COUNTS_10.hard),
+    negation: need.negationMin > 0 ? Math.floor(negation / (ETS_STYLE_TARGETS.negationMin || 1)) : targetSetCount,
+    distractor: need.distractorMin > 0 ? Math.floor(distractor / (ETS_STYLE_TARGETS.distractorMin || 1)) : targetSetCount,
+    nonEmbedded: need.nonEmbeddedMin > 0 ? Math.floor(nonEmbedded / (10 - (ETS_STYLE_TARGETS.embeddedMax || 8))) : targetSetCount,
+  };
+
+  const assemblableSets = Math.max(0, Math.min(...Object.values(assemblableBy)));
+  return {
+    total,
+    diffCounts,
+    embedded,
+    negation,
+    distractor,
+    qmark,
+    nonEmbedded,
+    need,
+    assemblableBy,
+    assemblableSets,
+    deficits: {
+      easy: Math.max(0, need.easy - diffCounts.easy),
+      medium: Math.max(0, need.medium - diffCounts.medium),
+      hard: Math.max(0, need.hard - diffCounts.hard),
+      negation: Math.max(0, need.negationMin - negation),
+      distractor: Math.max(0, need.distractorMin - distractor),
+      nonEmbedded: Math.max(0, need.nonEmbeddedMin - nonEmbedded),
+      assemblableSets: Math.max(0, targetSetCount - assemblableSets),
+    },
+    embeddedOverflow: Math.max(0, embedded - need.embeddedMax),
+    qmarkOverflow: Math.max(0, qmark - need.qmarkMax),
+  };
+}
+
+function isCircuitBreakerCriticalType(type, assemblyState) {
+  if (!assemblyState) return false;
+  if (type === "negation" && assemblyState.deficits.negation > 0) return true;
+  if (NON_EMBEDDED_TYPES.has(type) && (assemblyState.deficits.nonEmbedded > 0 || assemblyState.embeddedOverflow > 0)) {
+    return true;
+  }
+  return false;
+}
+
+function evaluatePoolBalance(q, poolState, assemblyState, phase, difficultyTargets) {
+  if (phase !== "assembly" || !poolState || !assemblyState) return { ok: true };
+
+  const meta = attachMeta(q)._meta || {};
+  const type = meta.answerType || resolvedAnswerType(q);
+  const diff = (estimateQuestionDifficulty(q) || {}).bucket || "medium";
+  const diffCounts = getDifficultyCounts(poolState);
+  const diffDeficits = Object.fromEntries(
+    ["easy", "medium", "hard"].map((bucket) => [bucket, Math.max(0, (difficultyTargets?.[bucket] || 0) - (diffCounts[bucket] || 0))]),
+  );
+  const maxOtherDiffGap = Math.max(
+    ...Object.entries(diffDeficits)
+      .filter(([bucket]) => bucket !== diff)
+      .map(([, gap]) => gap),
+    0,
+  );
+
+  if (assemblyState.embeddedOverflow > 0 && meta.isEmbedded) {
+    return { ok: false, reason: "pool:embedded_overflow" };
+  }
+  if (assemblyState.deficits.nonEmbedded > 0 && meta.isEmbedded) {
+    return { ok: false, reason: "pool:non_embedded_shortage" };
+  }
+  if (assemblyState.deficits.negation > 0 && type !== "negation" && meta.isEmbedded) {
+    return { ok: false, reason: "pool:negation_shortage" };
+  }
+  if (diffDeficits[diff] === 0 && maxOtherDiffGap >= 3 && !isCircuitBreakerCriticalType(type, assemblyState)) {
+    return { ok: false, reason: `pool:difficulty_surplus:${diff}` };
+  }
+  if (assemblyState.qmarkOverflow > 0 && meta.hasQuestionMark) {
+    return { ok: false, reason: "pool:qmark_overflow" };
+  }
+
+  return { ok: true };
 }
 
 /**
@@ -1961,7 +2096,7 @@ function errMsg(e) {
   return msg || String(e?.code || "unknown_error");
 }
 
-async function generateCandidateRound(round, spec, rejectFeedback = "", recentPool = []) {
+async function generateCandidateRound(round, spec, rejectFeedback = "", recentPool = [], options = {}) {
   // spec: [{type, difficulty, count}, ...]
   const totalCount = spec.reduce((s, x) => s + x.count, 0);
   const out = {
@@ -2042,13 +2177,40 @@ async function generateCandidateRound(round, spec, rejectFeedback = "", recentPo
 
   if (topicPassed.length === 0) return out;
 
+  // Pool-balance gate BEFORE reviewer — prevents late-stage overproduction that blocks assembly.
+  const balancePassed = [];
+  let workingPoolState = options?.poolState ? clonePoolState(options.poolState) : null;
+  for (const q of topicPassed) {
+    const gate = evaluatePoolBalance(
+      q,
+      workingPoolState,
+      options?.assemblyState,
+      options?.phase,
+      options?.difficultyTargets,
+    );
+    if (!gate.ok) {
+      const type = resolvedAnswerType(q);
+      out.rejected += 1;
+      out.rejectReasons[gate.reason] = (out.rejectReasons[gate.reason] || 0) + 1;
+      out.typeStats[type].rejected += 1;
+      out.typeStats[type].reasons[gate.reason] = (out.typeStats[type].reasons[gate.reason] || 0) + 1;
+      continue;
+    }
+    balancePassed.push(q);
+    if (workingPoolState) {
+      workingPoolState = incrementPoolStateWithQuestion(workingPoolState, q);
+    }
+  }
+
+  if (balancePassed.length === 0) return out;
+
   // AI review score — only on topic-passed questions
-  const reviewRaw = await callModelDeterministic(buildReviewPrompt(topicPassed));
+  const reviewRaw = await callModelDeterministic(buildReviewPrompt(balancePassed));
   const review = parseReviewJson(reviewRaw);
   const scoreMap = new Map(
     review.question_scores.map((qs) => [String(qs?.id || ""), Number(qs?.score || 0)]),
   );
-  const consistencyRaw = await callModelDeterministic(buildConsistencyPrompt(topicPassed));
+  const consistencyRaw = await callModelDeterministic(buildConsistencyPrompt(balancePassed));
   const consistency = parseConsistencyJson(consistencyRaw);
   const cMap = new Map(
     consistency.question_scores.map((qs) => [
@@ -2060,7 +2222,7 @@ async function generateCandidateRound(round, spec, rejectFeedback = "", recentPo
     ]),
   );
 
-  for (const q of topicPassed) {
+  for (const q of balancePassed) {
     const score = scoreMap.has(q.id) ? scoreMap.get(q.id) : 0;
     const c = cMap.get(q.id) || { ets: 0, solvability: 0 };
     const blocked = (
@@ -2668,6 +2830,22 @@ async function main() {
   const globalTypeTargets = Object.fromEntries(
     TYPE_LIST.map((type) => [type, Math.max(1, Math.ceil(globalTypeTargetTotal * TPO_TYPE_TARGET_RATIO[type]))]),
   );
+  const diagnosticsState = {
+    generated_at: new Date().toISOString(),
+    targetSets: TARGET_SET_COUNT,
+    outputPath: OUTPUT_PATH,
+    rounds: [],
+    final: null,
+  };
+  const specCooldowns = {};
+
+  function flushDiagnostics() {
+    try {
+      writeFileSync(DIAGNOSTICS_PATH, `${JSON.stringify(diagnosticsState, null, 2)}\n`, "utf8");
+    } catch (_) {
+      // non-fatal
+    }
+  }
 
   function computeCoverageGaps(poolState, pool) {
     return {
@@ -2708,17 +2886,115 @@ async function main() {
     return `${gap.total} (diff=${gap.diffGap} type=${gap.typeGap} distractor=${gap.distractorGap})`;
   }
 
+  function formatAssemblyState(state) {
+    return `sets=${state.assemblableSets}/${TARGET_SET_COUNT} neg=${state.negation} nonEmb=${state.nonEmbedded} emb=${state.embedded}`;
+  }
+
+  function isAssemblyPhase(poolState, assemblyState) {
+    return (
+      (poolState?.style?.total || 0) >= Math.ceil(TARGET_SET_COUNT * 10 * 0.8) ||
+      assemblyState.assemblableSets >= Math.max(1, TARGET_SET_COUNT - 2)
+    );
+  }
+
+  function diffGapForBucket(workingPoolState, diff) {
+    const counts = getDifficultyCounts(workingPoolState);
+    return Math.max(0, (difficultyTargets?.[diff] || 0) - (counts[diff] || 0));
+  }
+
+  function chooseAssemblyDrivenSpec(poolState, assemblyState, blockedTypes, batchSize, forcedAvoidTypes = new Set()) {
+    const blocked = blockedTypes || new Set();
+    const avoid = forcedAvoidTypes || new Set();
+    const workingPoolState = clonePoolState(poolState);
+    const spec = [];
+
+    function addCell(type, difficulty) {
+      const existing = spec.find((cell) => cell.type === type && cell.difficulty === difficulty);
+      if (existing) existing.count += 1;
+      else spec.push({ type, difficulty, count: 1 });
+      incrementPoolStateWithQuestion(workingPoolState, {
+        answer: "",
+        chunks: [],
+        distractor: "did",
+        has_question_mark: type === "interrogative",
+        grammar_points: type === "negation"
+          ? ["negation"]
+          : EMBEDDED_HEAVY_TYPES.has(type)
+          ? ["embedded question"]
+          : [],
+        answer_type: type,
+      });
+    }
+
+    function chooseDiff(type) {
+      const ranked = ["medium", "hard", "easy"]
+        .map((diff) => ({ diff, gap: diffGapForBucket(workingPoolState, diff) }))
+        .sort((a, b) => b.gap - a.gap);
+      if (type === "negation" && ranked[0]?.gap === 0) return "medium";
+      return ranked[0]?.diff || "medium";
+    }
+
+    function scoreType(type) {
+      const critical = isCircuitBreakerCriticalType(type, assemblyState);
+      if (blocked.has(type) && !critical) return -1e6;
+      if (avoid.has(type) && !critical) return -1e5;
+
+      const typeGap = Math.max(0, (globalTypeTargets[type] || 0) - ((workingPoolState.typeTotals || {})[type] || 0));
+      let score = typeGap * 2;
+
+      if (type === "negation") score += assemblyState.deficits.negation * 12;
+      if (NON_EMBEDDED_TYPES.has(type)) score += assemblyState.deficits.nonEmbedded * 9;
+      if (EMBEDDED_HEAVY_TYPES.has(type)) score -= assemblyState.embeddedOverflow * 10;
+      if (EMBEDDED_HEAVY_TYPES.has(type) && assemblyState.deficits.nonEmbedded > 0) score -= 8;
+      if (type === "interrogative" && (workingPoolState.style?.qmark || 0) >= styleTargets.qmarkMax) score -= 10;
+      if (type === "direct" && assemblyState.deficits.nonEmbedded <= 0) score -= 2;
+
+      return score;
+    }
+
+    for (let i = 0; i < batchSize; i++) {
+      const rankedTypes = TYPE_LIST
+        .map((type) => ({ type, score: scoreType(type) }))
+        .sort((a, b) => b.score - a.score);
+      const chosenType = rankedTypes[0]?.type || "3rd-reporting";
+      addCell(chosenType, chooseDiff(chosenType));
+    }
+
+    return spec;
+  }
+
+  function specSignature(spec) {
+    return (Array.isArray(spec) ? spec : [])
+      .map((cell) => `${cell.type}:${cell.difficulty}:${cell.count}`)
+      .sort()
+      .join("|");
+  }
+
+  function isSpecCoolingDown(signature, roundNum) {
+    return signature && specCooldowns[signature] && specCooldowns[signature] >= roundNum;
+  }
+
   // Decide batch size and targeting based on current gap.
   // Large gap → broad AI-planned batch. Small gap → micro targeted batch (no AI planner needed).
-  function scheduleNextBatch(gap, poolState, pool, cbState, roundNum) {
+  function scheduleNextBatch(gap, poolState, pool, assemblyState, cbState, roundNum) {
+    const blockedTypes = getActiveCircuitBreakerTypes(cbState, roundNum);
+    if (isAssemblyPhase(poolState, assemblyState)) {
+      const batchSize = gap.total > 12 ? 5 : 4;
+      return {
+        phase: "assembly",
+        mode: gap.total > 12 ? "assembly-medium" : "assembly-precision",
+        batchSize,
+        useAIPlanner: false,
+        spec: chooseAssemblyDrivenSpec(poolState, assemblyState, blockedTypes, batchSize),
+      };
+    }
     if (gap.total > 20) {
-      return { mode: "broad", batchSize: 10, useAIPlanner: true };
+      return { phase: "broad", mode: "broad", batchSize: 10, useAIPlanner: true };
     }
     if (gap.total > 4) {
-      return { mode: "medium", batchSize: 5, useAIPlanner: true };
+      return { phase: "broad", mode: "medium", batchSize: 5, useAIPlanner: true };
     }
     // Micro mode: directly target the most needed non-blocked type/difficulty
-    const blockedTypes = getActiveCircuitBreakerTypes(cbState, roundNum);
     const bestType = TYPE_LIST
       .filter((t) => !blockedTypes.has(t))
       .map((t) => ({ type: t, gap: Math.max(0, (globalTypeTargets[t] || 0) - (poolState.typeTotals[t] || 0)) }))
@@ -2726,6 +3002,7 @@ async function main() {
     const bestDiff = ["hard", "medium", "easy"]
       .find((d) => pool[d].length < difficultyTargets[d]) || "medium";
     return {
+      phase: "broad",
       mode: "micro",
       batchSize: 2,
       useAIPlanner: false,
@@ -2741,13 +3018,14 @@ async function main() {
     const pool = splitPoolByDifficulty(acceptedPool);
     const poolState = computePoolState(acceptedPool);
     const gap = computeTotalGap(poolState, pool);
+    const assemblyState = computeAssemblyState(poolState);
 
     if (gap.total <= GAP_TOLERANCE) {
-      console.log(`✓ gap satisfied (${formatGap(gap)} ≤ tolerance ${GAP_TOLERANCE}), stopping`);
+      console.log(`✓ gap satisfied (${formatGap(gap)} ≤ tolerance ${GAP_TOLERANCE}), assembly=${formatAssemblyState(assemblyState)}, stopping`);
       break;
     }
     if (totalRound >= MAX_ROUNDS) {
-      console.log(`⚠ max rounds (${MAX_ROUNDS}) reached, gap remaining=${formatGap(gap)}`);
+      console.log(`⚠ max rounds (${MAX_ROUNDS}) reached, gap remaining=${formatGap(gap)}, assembly=${formatAssemblyState(assemblyState)}`);
       break;
     }
 
@@ -2764,7 +3042,7 @@ async function main() {
     }
 
     const roundNum = totalRound + 1;
-    const schedule = scheduleNextBatch(gap, poolState, pool, circuitBreakerState, roundNum);
+    const schedule = scheduleNextBatch(gap, poolState, pool, assemblyState, circuitBreakerState, roundNum);
 
     let spec;
     if (schedule.useAIPlanner) {
@@ -2786,11 +3064,30 @@ async function main() {
       spec = schedule.spec;
     }
 
+    let signature = specSignature(spec);
+    if (isSpecCoolingDown(signature, roundNum)) {
+      const dominantType = [...(spec || [])].sort((a, b) => b.count - a.count)[0]?.type;
+      const forcedAvoid = new Set(dominantType ? [dominantType] : []);
+      spec = chooseAssemblyDrivenSpec(
+        poolState,
+        assemblyState,
+        getActiveCircuitBreakerTypes(circuitBreakerState, roundNum),
+        schedule.batchSize,
+        forcedAvoid,
+      );
+      signature = specSignature(spec);
+    }
+
     const specLabel = spec.map((s) => `${s.count}×${s.type}/${s.difficulty}`).join(", ");
-    console.log(`round ${roundNum} [${schedule.mode}] gap=${formatGap(gap)} → [${specLabel}]`);
+    console.log(`round ${roundNum} [${schedule.mode}] gap=${formatGap(gap)} assembly=${formatAssemblyState(assemblyState)} → [${specLabel}]`);
 
     try {
-      const res = await generateCandidateRound(roundNum, spec, rollingRejectFeedback, acceptedPool);
+      const res = await generateCandidateRound(roundNum, spec, rollingRejectFeedback, acceptedPool, {
+        phase: schedule.phase,
+        poolState,
+        assemblyState,
+        difficultyTargets,
+      });
       acceptedPool.push(...res.questions);
       statTotalRounds += 1;
       statTotalGenerated += res.generated;
@@ -2801,20 +3098,53 @@ async function main() {
       rollingRejectFeedback = buildRejectFeedbackHints(rejectReasons);
 
       const newPool = splitPoolByDifficulty(acceptedPool);
-      const newGap = computeTotalGap(computePoolState(acceptedPool), newPool);
+      const newPoolState = computePoolState(acceptedPool);
+      const newGap = computeTotalGap(newPoolState, newPool);
+      const newAssemblyState = computeAssemblyState(newPoolState);
       console.log(
-        `round ${roundNum}: generated=${res.generated} accepted=${res.accepted} rejected=${res.rejected} gap=${formatGap(gap)} → ${formatGap(newGap)} | easy=${newPool.easy.length} medium=${newPool.medium.length} hard=${newPool.hard.length}`,
+        `round ${roundNum}: generated=${res.generated} accepted=${res.accepted} rejected=${res.rejected} gap=${formatGap(gap)} → ${formatGap(newGap)} assembly=${formatAssemblyState(newAssemblyState)} | easy=${newPool.easy.length} medium=${newPool.medium.length} hard=${newPool.hard.length}`,
       );
       if (res.rejected > 0) {
         Object.entries(res.rejectReasons).sort((a, b) => b[1] - a[1]).slice(0, 3)
           .forEach(([r, n]) => console.log(`  reject: ${r} (×${n})`));
       }
+      if (res.accepted === 0 || newGap.total >= gap.total) {
+        specCooldowns[signature] = roundNum + 2;
+      }
+      diagnosticsState.rounds.push({
+        round: roundNum,
+        phase: schedule.phase,
+        mode: schedule.mode,
+        gap,
+        assemblyState,
+        spec,
+        result: {
+          generated: res.generated,
+          accepted: res.accepted,
+          rejected: res.rejected,
+          rejectReasons: res.rejectReasons,
+        },
+        nextGap: newGap,
+        nextAssemblyState: newAssemblyState,
+      });
       updateCircuitBreakers(circuitBreakerState, roundNum, "normal", spec, res);
       flushCircuitBreakerLog(circuitBreakerState);
       flushPoolCheckpoint(acceptedPool);
+      flushDiagnostics();
     } catch (e) {
       console.log(`round ${roundNum}: failed → ${errMsg(e)}`);
+      specCooldowns[signature] = roundNum + 2;
+      diagnosticsState.rounds.push({
+        round: roundNum,
+        phase: schedule.phase,
+        mode: schedule.mode,
+        gap,
+        assemblyState,
+        spec,
+        error: errMsg(e),
+      });
       flushPoolCheckpoint(acceptedPool);
+      flushDiagnostics();
     }
 
     totalRound++;
@@ -2823,9 +3153,23 @@ async function main() {
 
   const dedupedPool = uniqBy(acceptedPool, stableAnswerKey);
   const poolByDiff = splitPoolByDifficulty(dedupedPool);
+  const finalPoolState = computePoolState(dedupedPool);
+  const finalAssemblyState = computeAssemblyState(finalPoolState);
   console.log(`final pool: easy=${poolByDiff.easy.length} medium=${poolByDiff.medium.length} hard=${poolByDiff.hard.length}`);
 
   const finalSets = buildFinalSetsFromPool(poolByDiff, TARGET_SET_COUNT);
+  diagnosticsState.final = {
+    pool: {
+      easy: poolByDiff.easy.length,
+      medium: poolByDiff.medium.length,
+      hard: poolByDiff.hard.length,
+    },
+    assemblyState: finalAssemblyState,
+    assembledSets: finalSets.length,
+    targetSets: TARGET_SET_COUNT,
+    topRejectReasons: summarizeRejectReasons(rejectReasons),
+  };
+  flushDiagnostics();
   if (finalSets.length === 0) {
     const topReasons = summarizeRejectReasons(rejectReasons).slice(0, 3).map(([k, v]) => `${k}(×${v})`).join(", ");
     const providerHint = _lastModelFailureReason ? `；最近一次模型错误：${_lastModelFailureReason}` : "";
