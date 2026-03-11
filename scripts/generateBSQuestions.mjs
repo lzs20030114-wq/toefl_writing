@@ -1789,36 +1789,58 @@ function hardValidateQuestion(q) {
 
 async function callOpenAICompatibleRelay({ apiKey, baseUrl, model, temperature, maxTokens, userPrompt, timeoutMs = 120000 }) {
   const url = `${String(baseUrl || "").replace(/\/$/, "")}/chat/completions`;
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
-  try {
-    const res = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model,
-        temperature,
-        max_tokens: maxTokens,
-        messages: [{ role: "user", content: userPrompt }],
-      }),
-      signal: controller.signal,
-    });
-    if (!res.ok) {
-      const text = await res.text();
-      throw new Error(`Relay API ${res.status}: ${text.slice(0, 300)}`);
+  const body = JSON.stringify({
+    model,
+    temperature,
+    max_tokens: maxTokens,
+    messages: [{ role: "user", content: userPrompt }],
+  });
+  const headers = {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${apiKey}`,
+  };
+
+  const RETRYABLE = new Set([429, 500, 502, 503, 504]);
+  const MAX_ATTEMPTS = 4;
+  let lastErr;
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const res = await fetch(url, { method: "POST", headers, body, signal: controller.signal });
+      clearTimeout(timer);
+      if (!res.ok) {
+        const text = await res.text();
+        const err = new Error(`Relay API ${res.status}: ${text.slice(0, 300)}`);
+        if (RETRYABLE.has(res.status) && attempt < MAX_ATTEMPTS) {
+          const delay = attempt * 15000; // 15s, 30s, 45s
+          console.warn(`  [relay] attempt ${attempt} got ${res.status}, retrying in ${delay / 1000}s…`);
+          lastErr = err;
+          await new Promise((r) => setTimeout(r, delay));
+          continue;
+        }
+        throw err;
+      }
+      const data = await res.json();
+      const content = data?.choices?.[0]?.message?.content;
+      if (typeof content !== "string") {
+        throw new Error(`Relay response missing content: ${JSON.stringify(data).slice(0, 200)}`);
+      }
+      return content;
+    } catch (e) {
+      clearTimeout(timer);
+      // Retry on network/abort errors too (except final attempt)
+      if (attempt < MAX_ATTEMPTS && (e.name === "AbortError" || e.code === "ECONNRESET" || e.code === "ECONNREFUSED")) {
+        const delay = attempt * 15000;
+        console.warn(`  [relay] attempt ${attempt} network error (${e.message}), retrying in ${delay / 1000}s…`);
+        lastErr = e;
+        await new Promise((r) => setTimeout(r, delay));
+        continue;
+      }
+      throw e;
     }
-    const data = await res.json();
-    const content = data?.choices?.[0]?.message?.content;
-    if (typeof content !== "string") {
-      throw new Error(`Relay response missing content: ${JSON.stringify(data).slice(0, 200)}`);
-    }
-    return content;
-  } finally {
-    clearTimeout(timer);
   }
+  throw lastErr;
 }
 
 async function callModelCreative(userPrompt) {
