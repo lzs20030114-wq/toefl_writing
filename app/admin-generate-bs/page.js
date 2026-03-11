@@ -544,7 +544,13 @@ function RunCard({ run: initial, token, onDelete }) {
       )}
 
       {isFail && (
-        <div style={{ marginTop: 8, fontSize: 13, color: C.red }}>生成失败，请查看日志。</div>
+        <div style={{ marginTop: 8, fontSize: 13, color: C.red }}>
+          生成失败。
+          {run.failureReason
+            ? <div style={{ marginTop: 4, fontSize: 12, color: "#7f1d1d", background: "#fee2e2", borderRadius: 5, padding: "5px 10px", fontFamily: "monospace", wordBreak: "break-all" }}>{run.failureReason}</div>
+            : <span style={{ color: C.t3 }}> 暂无详情（旧任务不含状态文件）</span>
+          }
+        </div>
       )}
 
       {isSuccess && stagingGone && (

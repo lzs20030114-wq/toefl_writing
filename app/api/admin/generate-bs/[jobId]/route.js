@@ -250,6 +250,16 @@ export async function GET(request, { params }) {
     }
   }
 
+  // 如果已完成但失败，尝试读取 state 文件获取失败原因
+  if (r.status === "completed" && r.conclusion !== "success") {
+    try {
+      const stateFile = await getRepoFile(`data/buildSentence/staging/${jobId}.state.json`);
+      if (stateFile?.content?.error) {
+        run.failureReason = stateFile.content.error;
+      }
+    } catch (_) {}
+  }
+
   return Response.json(run);
 }
 

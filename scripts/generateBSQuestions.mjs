@@ -2524,6 +2524,7 @@ async function main() {
   loadEnv();
   if (!process.env.DEEPSEEK_API_KEY) {
     console.error("ERROR: DEEPSEEK_API_KEY missing");
+    _lastFailureReason = "DEEPSEEK_API_KEY 未配置";
     process.exit(1);
   }
 
@@ -2745,7 +2746,9 @@ async function main() {
 
   const finalSets = buildFinalSetsFromPool(poolByDiff, TARGET_SET_COUNT);
   if (finalSets.length === 0) {
-    console.error("No sets assembled at all 锟?aborting.");
+    const topReasons = summarizeRejectReasons(rejectReasons).slice(0, 3).map(([k, v]) => `${k}(×${v})`).join(", ");
+    _lastFailureReason = `题目池为空，无法组套。主要拒绝原因：${topReasons || "未知"}`;
+    console.error("No sets assembled at all — aborting.");
     process.exit(1);
   }
   if (finalSets.length < TARGET_SET_COUNT) {
@@ -2777,6 +2780,11 @@ async function main() {
   // global strict validation
   const check = validateAllSets(output, { strict: true });
   if (!check.ok) {
+    const allErrors = [
+      ...check.failures,
+      ...check.strictHardFails.map((x) => `${x.label}: ${x.reasons.join("; ")}`),
+    ];
+    _lastFailureReason = `最终验证失败：${allErrors.slice(0, 3).join(" | ")}`;
     console.error("Final output failed strict validation.");
     check.failures.forEach((x) => console.error(x));
     check.strictHardFails.forEach((x) => console.error(`${x.label}: ${x.reasons.join("; ")}`));
@@ -2832,12 +2840,14 @@ function writeJobState(updates) {
   } catch (_) {}
 }
 
+let _lastFailureReason = null;
+
 if (isDirectRun) {
   // Intercept process.exit to capture failure state when BS_JOB_STATE_PATH is set
   const _origExit = process.exit.bind(process);
   process.exit = (code) => {
     if (code && code !== 0) {
-      writeJobState({ status: "failed", finishedAt: new Date().toISOString(), error: `process exited with code ${code}` });
+      writeJobState({ status: "failed", finishedAt: new Date().toISOString(), error: _lastFailureReason || `process exited with code ${code}` });
     }
     _origExit(code);
   };
