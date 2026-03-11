@@ -1234,6 +1234,40 @@ function incrementPoolStateWithQuestion(poolState, q) {
   return next;
 }
 
+function incrementPoolStateWithCell(poolState, type, diff) {
+  const next = poolState || computePoolState([]);
+  if (next[diff] && type in next[diff]) next[diff][type] += 1;
+  if (next.typeTotals && type in next.typeTotals) next.typeTotals[type] += 1;
+  if (next.style) {
+    next.style.total += 1;
+    if (EMBEDDED_HEAVY_TYPES.has(type)) next.style.embedded += 1;
+    if (type === "negation") next.style.negation += 1;
+    next.style.distractor += 1;
+    if (type === "interrogative") next.style.qmark += 1;
+  }
+  return next;
+}
+
+function getSlotInventory(poolState) {
+  const inventory = {};
+  for (const diff of ["easy", "medium", "hard"]) {
+    const bucket = poolState?.[diff] || {};
+    const embedded = TYPE_LIST
+      .filter((type) => EMBEDDED_HEAVY_TYPES.has(type))
+      .reduce((sum, type) => sum + (bucket[type] || 0), 0);
+    const nonEmbedded = TYPE_LIST
+      .filter((type) => NON_EMBEDDED_TYPES.has(type))
+      .reduce((sum, type) => sum + (bucket[type] || 0), 0);
+    inventory[diff] = {
+      total: embedded + nonEmbedded,
+      embedded,
+      nonEmbedded,
+      negation: bucket.negation || 0,
+    };
+  }
+  return inventory;
+}
+
 function computeAssemblyState(poolState, targetSetCount = TARGET_SET_COUNT) {
   const diffCounts = getDifficultyCounts(poolState);
   const total = poolState?.style?.total || 0;
@@ -1253,6 +1287,7 @@ function computeAssemblyState(poolState, targetSetCount = TARGET_SET_COUNT) {
     embeddedMax: (ETS_STYLE_TARGETS.embeddedMax || 8) * targetSetCount,
     qmarkMax: (ETS_STYLE_TARGETS.qmarkMax || 2) * targetSetCount,
   };
+  const slotInventory = getSlotInventory(poolState);
 
   const assemblableBy = {
     easy: Math.floor(diffCounts.easy / ETS_2026_TARGET_COUNTS_10.easy),
@@ -1264,6 +1299,45 @@ function computeAssemblyState(poolState, targetSetCount = TARGET_SET_COUNT) {
   };
 
   const assemblableSets = Math.max(0, Math.min(...Object.values(assemblableBy)));
+  const remainingSets = Math.max(0, targetSetCount - assemblableSets);
+  const deficits = {
+    easy: Math.max(0, need.easy - diffCounts.easy),
+    medium: Math.max(0, need.medium - diffCounts.medium),
+    hard: Math.max(0, need.hard - diffCounts.hard),
+    negation: Math.max(0, need.negationMin - negation),
+    distractor: Math.max(0, need.distractorMin - distractor),
+    nonEmbedded: Math.max(0, need.nonEmbeddedMin - nonEmbedded),
+    assemblableSets: remainingSets,
+  };
+  const embeddedOverflow = Math.max(0, embedded - need.embeddedMax);
+  const qmarkOverflow = Math.max(0, qmark - need.qmarkMax);
+  const remainingRecipe = {
+    sets: remainingSets,
+    diff: {
+      easy: deficits.easy,
+      medium: deficits.medium,
+      hard: deficits.hard,
+    },
+    style: {
+      negationMin: deficits.negation,
+      distractorMin: deficits.distractor,
+      nonEmbeddedMin: deficits.nonEmbedded,
+      embeddedCapacity: Math.max(0, need.embeddedMax - embedded),
+      qmarkCapacity: Math.max(0, need.qmarkMax - qmark),
+    },
+  };
+  const limitingFactors = [
+    { key: "hard_shortage", gap: deficits.hard, priority: deficits.hard * 8 },
+    { key: "medium_shortage", gap: deficits.medium, priority: deficits.medium * 6 },
+    { key: "non_embedded_shortage", gap: deficits.nonEmbedded, priority: deficits.nonEmbedded * 7 },
+    { key: "embedded_overflow", gap: embeddedOverflow, priority: embeddedOverflow * 7 },
+    { key: "negation_shortage", gap: deficits.negation, priority: deficits.negation * 5 },
+    { key: "distractor_shortage", gap: deficits.distractor, priority: deficits.distractor * 3 },
+    { key: "easy_shortage", gap: deficits.easy, priority: deficits.easy * 2 },
+  ]
+    .filter((item) => item.gap > 0)
+    .sort((a, b) => b.priority - a.priority);
+
   return {
     total,
     diffCounts,
@@ -1273,19 +1347,15 @@ function computeAssemblyState(poolState, targetSetCount = TARGET_SET_COUNT) {
     qmark,
     nonEmbedded,
     need,
+    slotInventory,
     assemblableBy,
     assemblableSets,
-    deficits: {
-      easy: Math.max(0, need.easy - diffCounts.easy),
-      medium: Math.max(0, need.medium - diffCounts.medium),
-      hard: Math.max(0, need.hard - diffCounts.hard),
-      negation: Math.max(0, need.negationMin - negation),
-      distractor: Math.max(0, need.distractorMin - distractor),
-      nonEmbedded: Math.max(0, need.nonEmbeddedMin - nonEmbedded),
-      assemblableSets: Math.max(0, targetSetCount - assemblableSets),
-    },
-    embeddedOverflow: Math.max(0, embedded - need.embeddedMax),
-    qmarkOverflow: Math.max(0, qmark - need.qmarkMax),
+    remainingSets,
+    remainingRecipe,
+    deficits,
+    embeddedOverflow,
+    qmarkOverflow,
+    limitingFactors,
   };
 }
 
@@ -1332,6 +1402,34 @@ function evaluatePoolBalance(q, poolState, assemblyState, phase, difficultyTarge
   }
 
   return { ok: true };
+}
+
+function computeQuestionAssemblyValue(q, poolState, assemblyState, options = {}) {
+  if (!poolState || !assemblyState) return 0;
+  const strongTargeting = options?.strongTargeting === true;
+  const typeReliability = options?.typeReliability || {};
+  const nextPoolState = incrementPoolStateWithQuestion(clonePoolState(poolState), q);
+  const nextAssemblyState = computeAssemblyState(nextPoolState);
+  const meta = attachMeta(q)._meta || {};
+  const type = meta.answerType || resolvedAnswerType(q);
+  const diff = (estimateQuestionDifficulty(q) || {}).bucket || "medium";
+
+  let score = 0;
+  score += (nextAssemblyState.assemblableSets - assemblyState.assemblableSets) * 160;
+  score += (assemblyState.deficits[diff] - nextAssemblyState.deficits[diff]) * (strongTargeting ? 18 : 10);
+  score += (assemblyState.deficits.nonEmbedded - nextAssemblyState.deficits.nonEmbedded) * (NON_EMBEDDED_TYPES.has(type) ? (strongTargeting ? 16 : 8) : 0);
+  score += (assemblyState.deficits.negation - nextAssemblyState.deficits.negation) * (type === "negation" ? 10 : 0);
+  score += (assemblyState.deficits.distractor - nextAssemblyState.deficits.distractor) * 3;
+  score += (assemblyState.embeddedOverflow - nextAssemblyState.embeddedOverflow) * 14;
+  score += ((typeReliability[type] || 0.7) - 0.7) * 24;
+
+  if (strongTargeting && assemblyState.deficits[diff] === 0) score -= 24;
+  if (strongTargeting && assemblyState.deficits.nonEmbedded > 0 && meta.isEmbedded) score -= 30;
+  if (strongTargeting && diff === "easy" && assemblyState.deficits.easy === 0) score -= 24;
+  if (meta.isEmbedded && assemblyState.embeddedOverflow > 0) score -= 36;
+  if (meta.hasQuestionMark && assemblyState.qmarkOverflow > 0) score -= 20;
+
+  return Math.round(score * 100) / 100;
 }
 
 /**
@@ -2182,11 +2280,12 @@ async function generateCandidateRound(round, spec, rejectFeedback = "", recentPo
   // Pool-balance gate BEFORE reviewer — prevents late-stage overproduction that blocks assembly.
   const balancePassed = [];
   let workingPoolState = options?.poolState ? clonePoolState(options.poolState) : null;
+  let workingAssemblyState = options?.assemblyState || null;
   for (const q of topicPassed) {
     const gate = evaluatePoolBalance(
       q,
       workingPoolState,
-      options?.assemblyState,
+      workingAssemblyState,
       options?.phase,
       options?.difficultyTargets,
     );
@@ -2198,13 +2297,29 @@ async function generateCandidateRound(round, spec, rejectFeedback = "", recentPo
       out.typeStats[type].reasons[gate.reason] = (out.typeStats[type].reasons[gate.reason] || 0) + 1;
       continue;
     }
+    const assemblyValue = computeQuestionAssemblyValue(q, workingPoolState, workingAssemblyState, {
+      strongTargeting: options?.strongTargeting,
+      typeReliability: options?.typeReliability,
+    });
+    if (options?.strongTargeting && assemblyValue <= 0) {
+      const type = resolvedAnswerType(q);
+      const reason = "pool:low_assembly_value";
+      out.rejected += 1;
+      out.rejectReasons[reason] = (out.rejectReasons[reason] || 0) + 1;
+      out.typeStats[type].rejected += 1;
+      out.typeStats[type].reasons[reason] = (out.typeStats[type].reasons[reason] || 0) + 1;
+      continue;
+    }
+    q._assemblyValue = assemblyValue;
     balancePassed.push(q);
     if (workingPoolState) {
       workingPoolState = incrementPoolStateWithQuestion(workingPoolState, q);
+      workingAssemblyState = computeAssemblyState(workingPoolState);
     }
   }
 
   if (balancePassed.length === 0) return out;
+  balancePassed.sort((a, b) => (b._assemblyValue || 0) - (a._assemblyValue || 0));
 
   // AI review score — only on topic-passed questions
   const reviewRaw = await callModelDeterministic(buildReviewPrompt(balancePassed));
@@ -2348,7 +2463,11 @@ function pickDiversified(pool, targets) {
 
   return result;
 }
-function composeOneSet(pool, setId, maxRetries = 500) {
+function flattenDifficultyPool(pool) {
+  return [...(pool.easy || []), ...(pool.medium || []), ...(pool.hard || [])];
+}
+
+function composeOneSet(pool, setId, maxRetries = 500, capture = null) {
   const { easy: eN, medium: mN, hard: hN } = ETS_2026_TARGET_COUNTS_10;
 
   // Use pre-computed _meta for cheap O(n) profile 锟?no string splitting per attempt
@@ -2432,6 +2551,43 @@ function composeOneSet(pool, setId, maxRetries = 500) {
     return true;
   }
 
+  function populateCapture(base = {}) {
+    if (!capture) return;
+    const all = flattenDifficultyPool(pool);
+    const poolState = computePoolState(all);
+    const assemblyState = computeAssemblyState(poolState);
+    const embeddedMax =
+      Math.min(eN, pool.easy.filter((q) => q._meta.isEmbedded).length) +
+      Math.min(mN, pool.medium.filter((q) => q._meta.isEmbedded).length) +
+      Math.min(hN, pool.hard.filter((q) => q._meta.isEmbedded).length);
+    const distractorMax =
+      Math.min(eN, pool.easy.filter((q) => q._meta.hasDistractor).length) +
+      Math.min(mN, pool.medium.filter((q) => q._meta.hasDistractor).length) +
+      Math.min(hN, pool.hard.filter((q) => q._meta.hasDistractor).length);
+    capture.data = {
+      setId,
+      pool: {
+        easy: pool.easy.length,
+        medium: pool.medium.length,
+        hard: pool.hard.length,
+        total: all.length,
+      },
+      assemblyState: {
+        assemblableSets: assemblyState.assemblableSets,
+        remainingSets: assemblyState.remainingSets,
+        deficits: assemblyState.deficits,
+        embeddedOverflow: assemblyState.embeddedOverflow,
+        qmarkOverflow: assemblyState.qmarkOverflow,
+        limitingFactors: assemblyState.limitingFactors,
+      },
+      maxStyleCapacity: {
+        embedded: embeddedMax,
+        distractor: distractorMax,
+      },
+      ...base,
+    };
+  }
+
   if (!isFeasible()) {
     console.warn(`  [assembly set ${setId}] isFeasible=false: easy=${pool.easy.length}/${eN} medium=${pool.medium.length}/${mN} hard=${pool.hard.length}/${hN} embedded_max=${
       Math.min(eN, pool.easy.filter(q=>q._meta.isEmbedded).length) +
@@ -2442,6 +2598,7 @@ function composeOneSet(pool, setId, maxRetries = 500) {
       Math.min(mN, pool.medium.filter(q=>q._meta.hasDistractor).length) +
       Math.min(hN, pool.hard.filter(q=>q._meta.hasDistractor).length)
     }`);
+    populateCapture({ reason: "infeasible_precheck" });
     return null;
   }
 
@@ -2533,6 +2690,37 @@ function composeOneSet(pool, setId, maxRetries = 500) {
     console.warn(`    sample pick: qmark=${sampleStyle.qmark} distractor=${sampleStyle.distractor} embedded=${sampleStyle.embedded} avgWords=${sampleStyle.avgWords.toFixed(1)} avgChunks=${sampleStyle.avgChunks.toFixed(1)} maxType=${Math.max(...Object.values(sampleStyle.typeCounts))}`);
     if (!sampleSchema.ok) console.warn(`    schema errors: ${sampleSchema.errors.join(" | ")}`);
     if (!sampleDiff.meetsTargetCount10) console.warn(`    diff counts: easy=${sampleDiff.profile.counts.easy} medium=${sampleDiff.profile.counts.medium} hard=${sampleDiff.profile.counts.hard}`);
+    populateCapture({
+      reason: "retry_exhausted",
+      failBreakdown: {
+        styleStrict: diag.styleStrict,
+        styleRelaxed: diag.styleRelaxed,
+        schemaDiff: diag.schemaOk,
+        runtime: diag.runtimeOk,
+      },
+      sample: {
+        style: {
+          qmark: sampleStyle.qmark,
+          distractor: sampleStyle.distractor,
+          embedded: sampleStyle.embedded,
+          avgWords: Number(sampleStyle.avgWords.toFixed(1)),
+          avgChunks: Number(sampleStyle.avgChunks.toFixed(1)),
+          maxType: Math.max(...Object.values(sampleStyle.typeCounts)),
+        },
+        schemaErrors: sampleSchema.ok ? [] : sampleSchema.errors,
+        diffCounts: sampleDiff.meetsTargetCount10 ? null : sampleDiff.profile.counts,
+      },
+    });
+  } else {
+    populateCapture({
+      reason: "retry_exhausted",
+      failBreakdown: {
+        styleStrict: diag.styleStrict,
+        styleRelaxed: diag.styleRelaxed,
+        schemaDiff: diag.schemaOk,
+        runtime: diag.runtimeOk,
+      },
+    });
   }
 
   return null;
@@ -2598,16 +2786,19 @@ function normalizeSetStyleRates(questions) {
 
 function buildFinalSetsFromPool(pool, targetCount) {
   const sets = [];
+  const diagnostics = [];
   for (let i = 1; i <= targetCount; i += 1) {
-    const set = composeOneSet(pool, i);
+    const capture = {};
+    const set = composeOneSet(pool, i, 500, capture);
     if (!set) {
+      if (capture.data) diagnostics.push(capture.data);
       console.warn(`  [assembly] set ${i} could not be assembled 锟?continuing to next`);
       continue;
     }
     set.questions = normalizeSetStyleRates(set.questions);
     sets.push(set);
   }
-  return sets;
+  return { sets, diagnostics };
 }
 
 function summarizeRejectReasons(map) {
@@ -2849,22 +3040,6 @@ async function main() {
     }
   }
 
-  function computeCoverageGaps(poolState, pool) {
-    return {
-      diff: {
-        easy: Math.max(0, difficultyTargets.easy - pool.easy.length),
-        medium: Math.max(0, difficultyTargets.medium - pool.medium.length),
-        hard: Math.max(0, difficultyTargets.hard - pool.hard.length),
-      },
-      style: {
-        embedded: Math.max(0, styleTargets.embeddedMin - poolState.style.embedded),
-        negation: Math.max(0, styleTargets.negationMin - poolState.style.negation),
-        distractor: Math.max(0, styleTargets.distractorMin - poolState.style.distractor),
-      },
-      type: Object.fromEntries(TYPE_LIST.map((type) => [type, Math.max(0, (globalTypeTargets[type] || 0) - (poolState.typeTotals[type] || 0))])),
-    };
-  }
-
   // ── Unified adaptive generation loop ──────────────────────────────────────
   const MAX_ROUNDS = Number(process.env.BS_MAX_ROUNDS) || (8 + TARGET_SET_COUNT * 4);
   const GAP_TOLERANCE = 5;
@@ -2892,7 +3067,102 @@ async function main() {
     return `sets=${state.assemblableSets}/${TARGET_SET_COUNT} neg=${state.negation} nonEmb=${state.nonEmbedded} emb=${state.embedded}`;
   }
 
-  function isAssemblyPhase(poolState, assemblyState) {
+  function formatLimitingFactors(state, count = 2) {
+    const top = (state?.limitingFactors || []).slice(0, count).map((item) => item.key);
+    return top.length > 0 ? top.join(",") : "none";
+  }
+
+  function computeTypeReliability(rounds, window = 6) {
+    const recent = (rounds || []).slice(-window).filter((round) => round?.result?.typeStats);
+    const stats = Object.fromEntries(TYPE_LIST.map((type) => [type, {
+      generated: 0,
+      accepted: 0,
+      blockers: 0,
+      hardFails: 0,
+    }]));
+    for (const round of recent) {
+      const typeStats = round.result.typeStats || {};
+      for (const type of TYPE_LIST) {
+        const s = typeStats[type] || {};
+        stats[type].generated += s.generated || 0;
+        stats[type].accepted += s.accepted || 0;
+        const reasons = s.reasons || {};
+        for (const [reason, count] of Object.entries(reasons)) {
+          if (/^review:blocker:/.test(reason)) stats[type].blockers += count;
+          if (/^fatal:|^runtime:|^format:|^chunks:/.test(reason)) stats[type].hardFails += count;
+        }
+      }
+    }
+
+    return Object.fromEntries(TYPE_LIST.map((type) => {
+      const s = stats[type];
+      if (s.generated === 0) return [type, 0.8];
+      const acceptRate = s.accepted / s.generated;
+      const blockerRate = s.blockers / s.generated;
+      const hardFailRate = s.hardFails / s.generated;
+      const reliability = Math.max(0.2, Math.min(1.25, 0.35 + acceptRate * 0.95 - blockerRate * 0.45 - hardFailRate * 0.35));
+      return [type, Math.round(reliability * 100) / 100];
+    }));
+  }
+
+  function computeAssemblyMomentum(rounds, window = 5) {
+    const recent = (rounds || []).slice(-window).filter((round) => round?.result && round?.nextAssemblyState);
+    const totals = {
+      windowCount: recent.length,
+      accepted: 0,
+      generated: 0,
+      poolGrowth: 0,
+      deltaAssemblable: 0,
+      zeroGainRounds: 0,
+    };
+    for (const round of recent) {
+      const accepted = round.result.accepted || 0;
+      const delta = (round.nextAssemblyState?.assemblableSets || 0) - (round.assemblyState?.assemblableSets || 0);
+      totals.accepted += accepted;
+      totals.generated += round.result.generated || 0;
+      totals.poolGrowth += accepted;
+      totals.deltaAssemblable += delta;
+      if (accepted > 0 && delta <= 0) totals.zeroGainRounds += 1;
+    }
+    totals.acceptedGainRate = totals.accepted > 0 ? totals.deltaAssemblable / totals.accepted : 0;
+    return totals;
+  }
+
+  function computePhaseSignals(poolState, assemblyState, rounds) {
+    const total = poolState?.style?.total || 0;
+    const embeddedRatio = total > 0 ? (assemblyState.embedded / total) : 0;
+    const remainingThreshold = Math.max(2, Math.ceil(TARGET_SET_COUNT * 0.1));
+    const momentum = computeAssemblyMomentum(rounds);
+    const strongReasons = [];
+    const repairReasons = [];
+
+    if (assemblyState.remainingSets <= remainingThreshold) strongReasons.push("remaining_sets");
+    if (assemblyState.assemblableSets >= TARGET_SET_COUNT - remainingThreshold) strongReasons.push("near_completion");
+    if (momentum.windowCount >= 4 && momentum.poolGrowth > 0 && momentum.deltaAssemblable <= 0) strongReasons.push("assembly_stagnation");
+    if (momentum.windowCount >= 4 && momentum.poolGrowth > 0 && momentum.acceptedGainRate <= 0.05) strongReasons.push("low_gain_rate");
+    if (total >= Math.ceil(TARGET_SET_COUNT * 10 * 1.15)) strongReasons.push("pool_oversupply");
+
+    if (strongReasons.length > 0) repairReasons.push(...strongReasons);
+    if (assemblyState.deficits.nonEmbedded > 0 && embeddedRatio >= 0.72 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.35)) {
+      repairReasons.push("non_embedded_shortage");
+    }
+    if (assemblyState.embeddedOverflow > 0 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.35)) {
+      repairReasons.push("embedded_overflow");
+    }
+    if (total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.7)) repairReasons.push("pool_size");
+    if (assemblyState.assemblableSets >= Math.max(1, TARGET_SET_COUNT - 3)) repairReasons.push("assemblable_near_target");
+
+    return {
+      strongTargeting: strongReasons.length > 0,
+      repairMode: repairReasons.length > 0,
+      strongReasons,
+      repairReasons: [...new Set(repairReasons)],
+      momentum,
+    };
+  }
+
+  function isAssemblyPhase(poolState, assemblyState, phaseSignals) {
+    if (phaseSignals?.repairMode) return true;
     const total = poolState?.style?.total || 0;
     const embeddedRatio = total > 0 ? (assemblyState.embedded / total) : 0;
     return (
@@ -2903,100 +3173,121 @@ async function main() {
     );
   }
 
-  function diffGapForBucket(workingPoolState, diff) {
-    const counts = getDifficultyCounts(workingPoolState);
-    return Math.max(0, (difficultyTargets?.[diff] || 0) - (counts[diff] || 0));
+  function scoreAssemblyCell(type, diff, workingPoolState, typeReliability, focus, blockedTypes, forcedAvoidTypes, strongTargeting) {
+    const currentAssemblyState = computeAssemblyState(workingPoolState);
+    const critical = isCircuitBreakerCriticalType(type, currentAssemblyState);
+    if ((blockedTypes || new Set()).has(type) && !critical) return -1e6;
+    if ((forcedAvoidTypes || new Set()).has(type) && !critical) return -1e5;
+
+    const nextPoolState = incrementPoolStateWithCell(clonePoolState(workingPoolState), type, diff);
+    const nextAssemblyState = computeAssemblyState(nextPoolState);
+    const typeGap = Math.max(0, (globalTypeTargets[type] || 0) - ((workingPoolState.typeTotals || {})[type] || 0));
+
+    let score = 0;
+    score += (nextAssemblyState.assemblableSets - currentAssemblyState.assemblableSets) * 240;
+    score += (currentAssemblyState.deficits[diff] - nextAssemblyState.deficits[diff]) * (strongTargeting ? 24 : 11);
+    score += (currentAssemblyState.deficits.nonEmbedded - nextAssemblyState.deficits.nonEmbedded) * (NON_EMBEDDED_TYPES.has(type) ? (strongTargeting ? 18 : 9) : 0);
+    score += (currentAssemblyState.deficits.negation - nextAssemblyState.deficits.negation) * (type === "negation" ? 14 : 0);
+    score += (currentAssemblyState.deficits.distractor - nextAssemblyState.deficits.distractor) * 3;
+    score += (currentAssemblyState.embeddedOverflow - nextAssemblyState.embeddedOverflow) * 18;
+    score += ((typeReliability?.[type] || 0.8) - 0.75) * 30;
+    score += typeGap * (strongTargeting ? 0.4 : 2);
+
+    if (focus === "hard" && diff === "hard") score += 16;
+    if (focus === "medium" && diff === "medium") score += 12;
+    if (focus === "nonEmbedded" && NON_EMBEDDED_TYPES.has(type)) score += 18;
+    if (focus === "negation" && type === "negation") score += 14;
+    if (focus === "balanced") score += 4;
+
+    if (strongTargeting && currentAssemblyState.deficits[diff] === 0) score -= 32;
+    if (strongTargeting && diff === "easy" && currentAssemblyState.deficits.easy === 0) score -= 28;
+    if (strongTargeting && currentAssemblyState.deficits.nonEmbedded > 0 && EMBEDDED_HEAVY_TYPES.has(type)) score -= 40;
+    if (currentAssemblyState.embeddedOverflow > 0 && EMBEDDED_HEAVY_TYPES.has(type)) score -= 36;
+    if (type === "interrogative" && currentAssemblyState.qmark >= styleTargets.qmarkMax) score -= 20;
+    if (type === "direct" && currentAssemblyState.deficits.nonEmbedded <= 0 && !strongTargeting) score -= 3;
+
+    return score;
   }
 
-  function chooseAssemblyDrivenSpec(poolState, assemblyState, blockedTypes, batchSize, forcedAvoidTypes = new Set()) {
-    const blocked = blockedTypes || new Set();
-    const avoid = forcedAvoidTypes || new Set();
-    const workingPoolState = clonePoolState(poolState);
+  function buildAssemblySpecCandidate(poolState, blockedTypes, batchSize, focus, typeReliability, strongTargeting, forcedAvoidTypes = new Set()) {
     const spec = [];
+    let workingPoolState = clonePoolState(poolState);
+    const diffOptions = strongTargeting ? ["hard", "medium", "easy"] : ["hard", "medium", "easy"];
 
-    function addCell(type, difficulty) {
-      const existing = spec.find((cell) => cell.type === type && cell.difficulty === difficulty);
-      if (existing) existing.count += 1;
-      else spec.push({ type, difficulty, count: 1 });
-      incrementPoolStateWithQuestion(workingPoolState, {
-        answer: "",
-        chunks: [],
-        distractor: "did",
-        has_question_mark: type === "interrogative",
-        grammar_points: type === "negation"
-          ? ["negation"]
-          : EMBEDDED_HEAVY_TYPES.has(type)
-          ? ["embedded question"]
-          : [],
-        answer_type: type,
-      });
-    }
-
-    function chooseDiff(type) {
-      const currentCounts = getDifficultyCounts(workingPoolState);
-      const ranked = ["hard", "medium", "easy"]
-        .map((diff) => {
-          const assemblyNeed = assemblyState?.need?.[diff] || 0;
-          const assemblyDeficit = Math.max(0, assemblyNeed - (currentCounts[diff] || 0));
-          const assemblyRatio = assemblyNeed > 0 ? assemblyDeficit / assemblyNeed : 0;
-          const bufferGap = diffGapForBucket(workingPoolState, diff);
-          const priority = assemblyRatio * 100 + bufferGap;
-          return { diff, priority, assemblyDeficit, bufferGap };
-        })
-        .sort((a, b) => {
-          if (b.priority !== a.priority) return b.priority - a.priority;
-          if (b.assemblyDeficit !== a.assemblyDeficit) return b.assemblyDeficit - a.assemblyDeficit;
-          return b.bufferGap - a.bufferGap;
-        });
-      if (type === "negation" && ranked[0]?.assemblyDeficit === 0 && ranked[0]?.bufferGap === 0) return "medium";
-      return ranked[0]?.diff || "medium";
-    }
-
-    if (assemblyState.deficits.nonEmbedded > 0) {
-      const preferredTypes = ["direct", "relative"];
-      for (let i = 0; i < batchSize; i++) {
-        const chosenType = preferredTypes
-          .map((type) => ({
+    for (let i = 0; i < batchSize; i += 1) {
+      const rankedCells = [];
+      for (const type of TYPE_LIST) {
+        for (const diff of diffOptions) {
+          rankedCells.push({
             type,
-            blocked: blocked.has(type) && !isCircuitBreakerCriticalType(type, assemblyState),
-            gap: Math.max(0, (globalTypeTargets[type] || 0) - ((workingPoolState.typeTotals || {})[type] || 0)),
-          }))
-          .sort((a, b) => {
-            if (a.blocked !== b.blocked) return a.blocked ? 1 : -1;
-            return b.gap - a.gap;
-          })[0]?.type || "direct";
-        addCell(chosenType, chooseDiff(chosenType));
+            diff,
+            score: scoreAssemblyCell(type, diff, workingPoolState, typeReliability, focus, blockedTypes, forcedAvoidTypes, strongTargeting),
+          });
+        }
       }
-      return spec;
+      rankedCells.sort((a, b) => b.score - a.score);
+      const chosen = rankedCells[0] || { type: "3rd-reporting", diff: "medium" };
+      const existing = spec.find((cell) => cell.type === chosen.type && cell.difficulty === chosen.diff);
+      if (existing) existing.count += 1;
+      else spec.push({ type: chosen.type, difficulty: chosen.diff, count: 1 });
+      workingPoolState = incrementPoolStateWithCell(workingPoolState, chosen.type, chosen.diff);
     }
 
-    function scoreType(type) {
-      const critical = isCircuitBreakerCriticalType(type, assemblyState);
-      if (blocked.has(type) && !critical) return -1e6;
-      if (avoid.has(type) && !critical) return -1e5;
-
-      const typeGap = Math.max(0, (globalTypeTargets[type] || 0) - ((workingPoolState.typeTotals || {})[type] || 0));
-      let score = typeGap * 2;
-
-      if (type === "negation") score += assemblyState.deficits.negation * 12;
-      if (NON_EMBEDDED_TYPES.has(type)) score += assemblyState.deficits.nonEmbedded * 9;
-      if (EMBEDDED_HEAVY_TYPES.has(type)) score -= assemblyState.embeddedOverflow * 10;
-      if (EMBEDDED_HEAVY_TYPES.has(type) && assemblyState.deficits.nonEmbedded > 0) score -= 8;
-      if (type === "interrogative" && (workingPoolState.style?.qmark || 0) >= styleTargets.qmarkMax) score -= 10;
-      if (type === "direct" && assemblyState.deficits.nonEmbedded <= 0) score -= 2;
-
-      return score;
-    }
-
-    for (let i = 0; i < batchSize; i++) {
-      const rankedTypes = TYPE_LIST
-        .map((type) => ({ type, score: scoreType(type) }))
-        .sort((a, b) => b.score - a.score);
-      const chosenType = rankedTypes[0]?.type || "3rd-reporting";
-      addCell(chosenType, chooseDiff(chosenType));
-    }
-
+    spec._focus = focus;
     return spec;
+  }
+
+  function evaluateAssemblySpec(spec, poolState, baseAssemblyState, strongTargeting) {
+    let workingPoolState = clonePoolState(poolState);
+    for (const cell of spec || []) {
+      for (let i = 0; i < cell.count; i += 1) {
+        workingPoolState = incrementPoolStateWithCell(workingPoolState, cell.type, cell.difficulty);
+      }
+    }
+    const nextAssemblyState = computeAssemblyState(workingPoolState);
+    let score = 0;
+    score += (nextAssemblyState.assemblableSets - baseAssemblyState.assemblableSets) * 320;
+    score += (baseAssemblyState.deficits.hard - nextAssemblyState.deficits.hard) * 20;
+    score += (baseAssemblyState.deficits.medium - nextAssemblyState.deficits.medium) * 11;
+    score += (baseAssemblyState.deficits.nonEmbedded - nextAssemblyState.deficits.nonEmbedded) * 18;
+    score += (baseAssemblyState.deficits.negation - nextAssemblyState.deficits.negation) * 8;
+    score += (baseAssemblyState.embeddedOverflow - nextAssemblyState.embeddedOverflow) * 22;
+    if (strongTargeting) {
+      score += (baseAssemblyState.remainingRecipe.diff.hard - nextAssemblyState.remainingRecipe.diff.hard) * 16;
+      score += (baseAssemblyState.remainingRecipe.diff.medium - nextAssemblyState.remainingRecipe.diff.medium) * 10;
+      score += (baseAssemblyState.remainingRecipe.style.nonEmbeddedMin - nextAssemblyState.remainingRecipe.style.nonEmbeddedMin) * 14;
+      score -= Math.max(0, nextAssemblyState.embeddedOverflow) * 12;
+    }
+    return { score, nextAssemblyState };
+  }
+
+  function chooseAssemblyDrivenSpec(poolState, assemblyState, blockedTypes, batchSize, typeReliability, strongTargeting = false, forcedAvoidTypes = new Set()) {
+    const blocked = blockedTypes || new Set();
+    const focuses = ["balanced"];
+    if (assemblyState.deficits.hard > 0) focuses.push("hard");
+    if (assemblyState.deficits.medium > 0) focuses.push("medium");
+    if (assemblyState.deficits.nonEmbedded > 0 || assemblyState.embeddedOverflow > 0) focuses.push("nonEmbedded");
+    if (assemblyState.deficits.negation > 0) focuses.push("negation");
+
+    const candidates = [...new Set(focuses)].map((focus) =>
+      buildAssemblySpecCandidate(poolState, blocked, batchSize, focus, typeReliability, strongTargeting, forcedAvoidTypes),
+    );
+    const ranked = candidates
+      .map((candidate) => ({
+        candidate,
+        focus: candidate._focus || "balanced",
+        ...evaluateAssemblySpec(candidate, poolState, assemblyState, strongTargeting),
+      }))
+      .sort((a, b) => b.score - a.score);
+    const selected = ranked[0]?.candidate || [{ type: "3rd-reporting", difficulty: "medium", count: batchSize }];
+    selected._selection = ranked[0]
+      ? {
+          focus: ranked[0].focus,
+          score: Math.round(ranked[0].score * 100) / 100,
+          projectedAssemblableSets: ranked[0].nextAssemblyState?.assemblableSets || assemblyState.assemblableSets,
+        }
+      : null;
+    return selected;
   }
 
   function specSignature(spec) {
@@ -3019,6 +3310,11 @@ async function main() {
       hints.push("Do NOT use embedded-question / reporting-verb frames such as asked, wondered, wanted to know, needed to know, was curious.");
       hints.push("Target zero embedded-question items in this batch.");
     }
+    if (assemblyState.remainingSets <= Math.max(2, Math.ceil(TARGET_SET_COUNT * 0.1))) {
+      const recipe = assemblyState.remainingRecipe;
+      hints.push(`LAST-MILE MODE: prioritize the remaining recipe only (medium=${recipe.diff.medium}, hard=${recipe.diff.hard}, easy=${recipe.diff.easy}, nonEmbedded=${recipe.style.nonEmbeddedMin}, negation=${recipe.style.negationMin}).`);
+      hints.push("Do NOT optimize for broad global coverage in this batch.");
+    }
     if (Array.isArray(spec) && spec.every((cell) => RELIABLE_NON_EMBEDDED_TYPES.has(cell.type))) {
       hints.push("For this batch, every item must be structurally non-embedded.");
     }
@@ -3027,23 +3323,25 @@ async function main() {
 
   // Decide batch size and targeting based on current gap.
   // Large gap → broad AI-planned batch. Small gap → micro targeted batch (no AI planner needed).
-  function scheduleNextBatch(gap, poolState, pool, assemblyState, cbState, roundNum) {
+  function scheduleNextBatch(gap, poolState, pool, assemblyState, cbState, roundNum, phaseSignals, typeReliability) {
     const blockedTypes = getActiveCircuitBreakerTypes(cbState, roundNum);
-    if (isAssemblyPhase(poolState, assemblyState)) {
-      const batchSize = gap.total > 12 ? 5 : 4;
+    if (isAssemblyPhase(poolState, assemblyState, phaseSignals)) {
+      const strongTargeting = phaseSignals?.strongTargeting === true;
+      const batchSize = strongTargeting ? Math.max(3, Math.min(5, assemblyState.remainingSets <= 1 ? 4 : 5)) : (gap.total > 12 ? 5 : 4);
       return {
         phase: "assembly",
-        mode: gap.total > 12 ? "assembly-medium" : "assembly-precision",
+        mode: strongTargeting ? "last-mile" : (gap.total > 12 ? "assembly-medium" : "assembly-precision"),
         batchSize,
         useAIPlanner: false,
-        spec: chooseAssemblyDrivenSpec(poolState, assemblyState, blockedTypes, batchSize),
+        strongTargeting,
+        spec: chooseAssemblyDrivenSpec(poolState, assemblyState, blockedTypes, batchSize, typeReliability, strongTargeting),
       };
     }
     if (gap.total > 20) {
-      return { phase: "broad", mode: "broad", batchSize: 10, useAIPlanner: true };
+      return { phase: "broad", mode: "broad", batchSize: 10, useAIPlanner: true, strongTargeting: false };
     }
     if (gap.total > 4) {
-      return { phase: "broad", mode: "medium", batchSize: 5, useAIPlanner: true };
+      return { phase: "broad", mode: "medium", batchSize: 5, useAIPlanner: true, strongTargeting: false };
     }
     // Micro mode: directly target the most needed non-blocked type/difficulty
     const bestType = TYPE_LIST
@@ -3057,6 +3355,7 @@ async function main() {
       mode: "micro",
       batchSize: 2,
       useAIPlanner: false,
+      strongTargeting: false,
       spec: [{ type: bestType?.type || "3rd-reporting", difficulty: bestDiff, count: 2 }],
     };
   }
@@ -3070,6 +3369,8 @@ async function main() {
     const poolState = computePoolState(acceptedPool);
     const gap = computeTotalGap(poolState, pool);
     const assemblyState = computeAssemblyState(poolState);
+    const typeReliability = computeTypeReliability(diagnosticsState.rounds);
+    const phaseSignals = computePhaseSignals(poolState, assemblyState, diagnosticsState.rounds);
 
     if (gap.total <= GAP_TOLERANCE) {
       console.log(`✓ gap satisfied (${formatGap(gap)} ≤ tolerance ${GAP_TOLERANCE}), assembly=${formatAssemblyState(assemblyState)}, stopping`);
@@ -3093,7 +3394,7 @@ async function main() {
     }
 
     const roundNum = totalRound + 1;
-    const schedule = scheduleNextBatch(gap, poolState, pool, assemblyState, circuitBreakerState, roundNum);
+    const schedule = scheduleNextBatch(gap, poolState, pool, assemblyState, circuitBreakerState, roundNum, phaseSignals, typeReliability);
 
     let spec;
     if (schedule.useAIPlanner) {
@@ -3124,13 +3425,23 @@ async function main() {
         assemblyState,
         getActiveCircuitBreakerTypes(circuitBreakerState, roundNum),
         schedule.batchSize,
+        typeReliability,
+        schedule.strongTargeting,
         forcedAvoid,
       );
       signature = specSignature(spec);
     }
 
     const specLabel = spec.map((s) => `${s.count}×${s.type}/${s.difficulty}`).join(", ");
-    console.log(`round ${roundNum} [${schedule.mode}] gap=${formatGap(gap)} assembly=${formatAssemblyState(assemblyState)} → [${specLabel}]`);
+    const momentumLabel = phaseSignals.momentum.windowCount > 0
+      ? ` yield=${phaseSignals.momentum.acceptedGainRate.toFixed(2)}`
+      : "";
+    const selectionLabel = spec?._selection
+      ? ` focus=${spec._selection.focus} proj=${spec._selection.projectedAssemblableSets}/${TARGET_SET_COUNT}`
+      : "";
+    console.log(
+      `round ${roundNum} [${schedule.mode}] gap=${formatGap(gap)} assembly=${formatAssemblyState(assemblyState)} limiting=${formatLimitingFactors(assemblyState)}${momentumLabel}${selectionLabel} → [${specLabel}]`,
+    );
 
     try {
       const res = await generateCandidateRound(roundNum, spec, rollingRejectFeedback, acceptedPool, {
@@ -3138,6 +3449,8 @@ async function main() {
         poolState,
         assemblyState,
         difficultyTargets,
+        strongTargeting: schedule.strongTargeting,
+        typeReliability,
         generationHints: schedule.phase === "assembly" ? buildAssemblyGenerationHints(assemblyState, spec) : "",
       });
       acceptedPool.push(...res.questions);
@@ -3153,9 +3466,14 @@ async function main() {
       const newPoolState = computePoolState(acceptedPool);
       const newGap = computeTotalGap(newPoolState, newPool);
       const newAssemblyState = computeAssemblyState(newPoolState);
+      const deltaAssemblable = newAssemblyState.assemblableSets - assemblyState.assemblableSets;
+      const acceptedGainRate = res.accepted > 0 ? deltaAssemblable / res.accepted : 0;
       console.log(
-        `round ${roundNum}: generated=${res.generated} accepted=${res.accepted} rejected=${res.rejected} gap=${formatGap(gap)} → ${formatGap(newGap)} assembly=${formatAssemblyState(newAssemblyState)} | easy=${newPool.easy.length} medium=${newPool.medium.length} hard=${newPool.hard.length}`,
+        `round ${roundNum}: generated=${res.generated} accepted=${res.accepted} rejected=${res.rejected} gap=${formatGap(gap)} → ${formatGap(newGap)} assembly=${formatAssemblyState(newAssemblyState)} Δasm=${deltaAssemblable >= 0 ? "+" : ""}${deltaAssemblable} yield=${acceptedGainRate.toFixed(2)} | easy=${newPool.easy.length} medium=${newPool.medium.length} hard=${newPool.hard.length}`,
       );
+      if (res.accepted > 0 && deltaAssemblable <= 0) {
+        console.log(`  [assembly] accepted but zero assembly gain; limiting=${formatLimitingFactors(newAssemblyState)}`);
+      }
       if (res.rejected > 0) {
         Object.entries(res.rejectReasons).sort((a, b) => b[1] - a[1]).slice(0, 3)
           .forEach(([r, n]) => console.log(`  reject: ${r} (×${n})`));
@@ -3170,14 +3488,20 @@ async function main() {
         gap,
         assemblyState,
         spec,
+        specSelection: spec?._selection || null,
         result: {
           generated: res.generated,
           accepted: res.accepted,
           rejected: res.rejected,
           rejectReasons: res.rejectReasons,
+          typeStats: res.typeStats,
+          deltaAssemblable,
+          acceptedGainRate,
         },
         nextGap: newGap,
         nextAssemblyState: newAssemblyState,
+        phaseSignals,
+        typeReliability,
       });
       updateCircuitBreakers(circuitBreakerState, roundNum, "normal", spec, res);
       flushCircuitBreakerLog(circuitBreakerState);
@@ -3193,7 +3517,10 @@ async function main() {
         gap,
         assemblyState,
         spec,
+        specSelection: spec?._selection || null,
         error: errMsg(e),
+        phaseSignals,
+        typeReliability,
       });
       flushPoolCheckpoint(acceptedPool);
       flushDiagnostics();
@@ -3209,7 +3536,8 @@ async function main() {
   const finalAssemblyState = computeAssemblyState(finalPoolState);
   console.log(`final pool: easy=${poolByDiff.easy.length} medium=${poolByDiff.medium.length} hard=${poolByDiff.hard.length}`);
 
-  const finalSets = buildFinalSetsFromPool(poolByDiff, TARGET_SET_COUNT);
+  const finalAssembly = buildFinalSetsFromPool(poolByDiff, TARGET_SET_COUNT);
+  const finalSets = finalAssembly.sets;
   diagnosticsState.final = {
     pool: {
       easy: poolByDiff.easy.length,
@@ -3219,6 +3547,7 @@ async function main() {
     assemblyState: finalAssemblyState,
     assembledSets: finalSets.length,
     targetSets: TARGET_SET_COUNT,
+    assemblyDiagnostics: finalAssembly.diagnostics,
     topRejectReasons: summarizeRejectReasons(rejectReasons),
   };
   flushDiagnostics();
@@ -3234,6 +3563,11 @@ async function main() {
       `Warning: only assembled ${finalSets.length}/${TARGET_SET_COUNT} sets. Writing partial output.`,
     );
     console.warn(`Pool snapshot: easy=${poolByDiff.easy.length} medium=${poolByDiff.medium.length} hard=${poolByDiff.hard.length}`);
+    if (finalAssembly.diagnostics.length > 0) {
+      const firstDiag = finalAssembly.diagnostics[0];
+      const blockers = (firstDiag.assemblyState?.limitingFactors || []).slice(0, 3).map((x) => x.key).join(", ");
+      console.warn(`Assembly diagnostics: reason=${firstDiag.reason} limiting=${blockers || "none"} remaining=${firstDiag.assemblyState?.remainingSets ?? "?"}`);
+    }
     console.warn("Top reject reasons:");
     summarizeRejectReasons(rejectReasons).forEach(([k, v]) => console.warn(`- ${k}: ${v}`));
   }
