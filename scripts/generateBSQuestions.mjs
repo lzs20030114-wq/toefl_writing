@@ -1578,6 +1578,8 @@ function enforcePlannerStyleGaps(spec, poolState, styleTargets, globalTypeTarget
 
   const style = poolState?.style || { embedded: 0, negation: 0, distractor: 0, qmark: 0 };
   const typeTotals = poolState?.typeTotals || Object.fromEntries(TYPE_LIST.map((type) => [type, 0]));
+  const totalPool = style.total || 0;
+  const bootstrapPhase = totalPool < Math.ceil(TARGET_SET_COUNT * 10 * 0.2);
   const embeddedGap = Math.max(0, (styleTargets?.embeddedMin || 0) - style.embedded);
   const negationGap = Math.max(0, (styleTargets?.negationMin || 0) - style.negation);
   const missingTypes = new Set(TYPE_LIST.filter((type) => (typeTotals[type] || 0) === 0));
@@ -1618,7 +1620,7 @@ function enforcePlannerStyleGaps(spec, poolState, styleTargets, globalTypeTarget
     }
   };
 
-  if (embeddedGap > 0) {
+  if (!bootstrapPhase && embeddedGap > 0) {
     const embeddedPlanned = out
       .filter((x) => x.type === "3rd-reporting" || x.type === "1st-embedded" || x.type === "interrogative")
       .reduce((sum, x) => sum + x.count, 0);
@@ -1632,12 +1634,13 @@ function enforcePlannerStyleGaps(spec, poolState, styleTargets, globalTypeTarget
     const negPlanned = out
       .filter((x) => x.type === "negation")
       .reduce((sum, x) => sum + x.count, 0);
-    if (negPlanned < Math.min(2, negationGap)) {
-      replaceOne("negation", embeddedGap > 0 ? "hard" : "medium");
+    const negationTarget = bootstrapPhase ? 1 : Math.min(2, negationGap);
+    if (negPlanned < negationTarget) {
+      replaceOne("negation", "medium");
     }
   }
 
-  const scarceTypes = TYPE_LIST
+  const scarceTypes = (bootstrapPhase ? ["direct", "relative", "3rd-reporting"] : TYPE_LIST)
     .filter((type) => missingTypes.has(type))
     .sort((a, b) => (typeTotals[a] || 0) - (typeTotals[b] || 0));
 
@@ -3247,6 +3250,7 @@ async function main() {
     const totalBefore = Math.max(1, workingPoolState?.style?.total || 0);
     const typeCountBefore = (workingPoolState?.typeTotals || {})[type] || 0;
     const typeShareBefore = typeCountBefore / totalBefore;
+    const bootstrapPhase = totalBefore < Math.ceil(TARGET_SET_COUNT * 10 * 0.2);
 
     let score = 0;
     score += (nextAssemblyState.assemblableSets - currentAssemblyState.assemblableSets) * 240;
@@ -3273,6 +3277,10 @@ async function main() {
     if (currentAssemblyState.embeddedOverflow > 0 && EMBEDDED_HEAVY_TYPES.has(type)) score -= 36;
     if (type === "interrogative" && currentAssemblyState.qmark >= styleTargets.qmarkMax) score -= 20;
     if (type === "direct" && currentAssemblyState.deficits.nonEmbedded <= 0 && !strongTargeting) score -= 3;
+    if (bootstrapPhase && diff === "hard") score -= 35;
+    if (bootstrapPhase && type === "negation" && diff !== "medium") score -= 25;
+    if (bootstrapPhase && type === "interrogative") score -= 18;
+    if (bootstrapPhase && EMBEDDED_HEAVY_TYPES.has(type) && diff === "hard") score -= 28;
 
     return score;
   }
@@ -3508,17 +3516,27 @@ async function main() {
 
     let signature = specSignature(spec);
     if (isSpecCoolingDown(signature, roundNum)) {
-      const dominantType = [...(spec || [])].sort((a, b) => b.count - a.count)[0]?.type;
-      const forcedAvoid = new Set(dominantType ? [dominantType] : []);
-      spec = chooseAssemblyDrivenSpec(
-        poolState,
-        assemblyState,
-        getActiveCircuitBreakerTypes(circuitBreakerState, roundNum),
-        schedule.batchSize,
-        typeReliability,
-        schedule.strongTargeting,
-        forcedAvoid,
-      );
+      const totalPool = poolState?.style?.total || 0;
+      if (totalPool < Math.ceil(TARGET_SET_COUNT * 10 * 0.2)) {
+        const fallbackDifficulty = pool.medium.length < difficultyTargets.medium ? "medium" : "easy";
+        spec = [
+          { type: "3rd-reporting", difficulty: fallbackDifficulty, count: Math.max(2, Math.ceil(schedule.batchSize / 2)) },
+          { type: "1st-embedded", difficulty: "medium", count: Math.max(1, Math.floor(schedule.batchSize / 4)) },
+          { type: "relative", difficulty: "medium", count: Math.max(1, schedule.batchSize - Math.max(2, Math.ceil(schedule.batchSize / 2)) - Math.max(1, Math.floor(schedule.batchSize / 4))) },
+        ].filter((cell) => cell.count > 0);
+      } else {
+        const dominantType = [...(spec || [])].sort((a, b) => b.count - a.count)[0]?.type;
+        const forcedAvoid = new Set(dominantType ? [dominantType] : []);
+        spec = chooseAssemblyDrivenSpec(
+          poolState,
+          assemblyState,
+          getActiveCircuitBreakerTypes(circuitBreakerState, roundNum),
+          schedule.batchSize,
+          typeReliability,
+          schedule.strongTargeting,
+          forcedAvoid,
+        );
+      }
       signature = specSignature(spec);
     }
 
