@@ -51,6 +51,7 @@ jobs:
           BS_OUTPUT_PATH: data/buildSentence/staging/${{ github.run_id }}.json
           BS_JOB_STATE_PATH: data/buildSentence/staging/${{ github.run_id }}.state.json
           BS_RESERVE_PATH: data/buildSentence/staging/${{ github.run_id }}.reserve.json
+          BS_CIRCUIT_BREAKER_LOG_PATH: data/buildSentence/staging/${{ github.run_id }}.circuit-breaker-log.json
         run: node scripts/generateBSQuestions.mjs
 
       - name: Persist generated artifacts
@@ -65,6 +66,7 @@ jobs:
           STATE="data/buildSentence/staging/${RUN_ID}.state.json"
           STAGING="data/buildSentence/staging/${RUN_ID}.json"
           RESERVE="data/buildSentence/staging/${RUN_ID}.reserve.json"
+          CIRCUIT_BREAKER="data/buildSentence/staging/${RUN_ID}.circuit-breaker-log.json"
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -73,6 +75,7 @@ jobs:
           [ -f "$STATE" ] && FILES+=("$STATE")
           [ -f "$STAGING" ] && FILES+=("$STAGING")
           [ -f "$RESERVE" ] && FILES+=("$RESERVE")
+          [ -f "$CIRCUIT_BREAKER" ] && FILES+=("$CIRCUIT_BREAKER")
 
           if [ ${#FILES[@]} -eq 0 ]; then
             echo "No workflow artifacts found; nothing to commit."
