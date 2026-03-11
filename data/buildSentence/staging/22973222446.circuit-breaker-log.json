@@ -1,0 +1,1056 @@
+{
+  "generated_at": "2026-03-11T20:49:48.937Z",
+  "active": {
+    "3rd-reporting": {
+      "sinceRound": 26,
+      "untilRound": 29,
+      "lastEvent": {
+        "triggeredAt": "2026-03-11T20:49:06.769Z",
+        "round": 26,
+        "mode": "normal",
+        "type": "3rd-reporting",
+        "generated": 5,
+        "accepted": 1,
+        "rejected": 4,
+        "acceptRate": 0.2,
+        "reasons": [
+          [
+            "pool:low_assembly_value",
+            4
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 24,
+            "spec": [
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 3
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "hard",
+                "count": 1
+              }
+            ],
+            "stats": {
+              "generated": 2,
+              "accepted": 1,
+              "rejected": 1,
+              "reasons": {
+                "pool:low_assembly_value": 1
+              }
+            }
+          },
+          {
+            "round": 25,
+            "spec": [
+              {
+                "type": "direct",
+                "difficulty": "hard",
+                "count": 4
+              }
+            ],
+            "stats": {
+              "generated": 0,
+              "accepted": 0,
+              "rejected": 0,
+              "reasons": {}
+            }
+          },
+          {
+            "round": 26,
+            "spec": [
+              {
+                "type": "3rd-reporting",
+                "difficulty": "hard",
+                "count": 4
+              }
+            ],
+            "stats": {
+              "generated": 3,
+              "accepted": 0,
+              "rejected": 3,
+              "reasons": {
+                "pool:low_assembly_value": 3
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 29
+      }
+    },
+    "direct": {
+      "sinceRound": 27,
+      "untilRound": 30,
+      "lastEvent": {
+        "triggeredAt": "2026-03-11T20:49:21.079Z",
+        "round": 27,
+        "mode": "normal",
+        "type": "direct",
+        "generated": 5,
+        "accepted": 0,
+        "rejected": 5,
+        "acceptRate": 0,
+        "reasons": [
+          [
+            "pool:low_assembly_value",
+            3
+          ],
+          [
+            "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person",
+            2
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 25,
+            "spec": [
+              {
+                "type": "direct",
+                "difficulty": "hard",
+                "count": 4
+              }
+            ],
+            "stats": {
+              "generated": 3,
+              "accepted": 0,
+              "rejected": 3,
+              "reasons": {
+                "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1,
+                "pool:low_assembly_value": 2
+              }
+            }
+          },
+          {
+            "round": 26,
+            "spec": [
+              {
+                "type": "3rd-reporting",
+                "difficulty": "hard",
+                "count": 4
+              }
+            ],
+            "stats": {
+              "generated": 1,
+              "accepted": 0,
+              "rejected": 1,
+              "reasons": {
+                "pool:low_assembly_value": 1
+              }
+            }
+          },
+          {
+            "round": 27,
+            "spec": [
+              {
+                "type": "1st-embedded",
+                "difficulty": "hard",
+                "count": 4
+              }
+            ],
+            "stats": {
+              "generated": 1,
+              "accepted": 0,
+              "rejected": 1,
+              "reasons": {
+                "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 30
+      }
+    },
+    "interrogative": {
+      "sinceRound": 28,
+      "untilRound": 31,
+      "lastEvent": {
+        "triggeredAt": "2026-03-11T20:49:33.980Z",
+        "round": 28,
+        "mode": "normal",
+        "type": "interrogative",
+        "generated": 4,
+        "accepted": 0,
+        "rejected": 4,
+        "acceptRate": 0,
+        "reasons": [
+          [
+            "pool:low_assembly_value",
+            3
+          ],
+          [
+            "topic:repeat",
+            1
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 26,
+            "spec": [
+              {
+                "type": "3rd-reporting",
+                "difficulty": "hard",
+                "count": 4
+              }
+            ],
+            "stats": {
+              "generated": 0,
+              "accepted": 0,
+              "rejected": 0,
+              "reasons": {}
+            }
+          },
+          {
+            "round": 27,
+            "spec": [
+              {
+                "type": "1st-embedded",
+                "difficulty": "hard",
+                "count": 4
+              }
+            ],
+            "stats": {
+              "generated": 0,
+              "accepted": 0,
+              "rejected": 0,
+              "reasons": {}
+            }
+          },
+          {
+            "round": 28,
+            "spec": [
+              {
+                "type": "interrogative",
+                "difficulty": "hard",
+                "count": 4
+              }
+            ],
+            "stats": {
+              "generated": 4,
+              "accepted": 0,
+              "rejected": 4,
+              "reasons": {
+                "topic:repeat": 1,
+                "pool:low_assembly_value": 3
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 31
+      }
+    }
+  },
+  "events": [
+    {
+      "triggeredAt": "2026-03-11T20:43:32.914Z",
+      "round": 13,
+      "mode": "normal",
+      "type": "3rd-reporting",
+      "generated": 5,
+      "accepted": 1,
+      "rejected": 4,
+      "acceptRate": 0.2,
+      "reasons": [
+        [
+          "fatal: distractor must be a single word (TPO standard)",
+          2
+        ],
+        [
+          "fatal: distractor must be a single word (TPO standard); chunks[4]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "review:ets<72",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 11,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 4
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "fatal: distractor must be a single word (TPO standard)": 2,
+              "fatal: distractor must be a single word (TPO standard); chunks[4]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+            }
+          }
+        },
+        {
+          "round": 12,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 1,
+            "rejected": 1,
+            "reasons": {
+              "review:ets<72": 1
+            }
+          }
+        },
+        {
+          "round": 13,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        }
+      ],
+      "blockedUntilRound": 16
+    },
+    {
+      "triggeredAt": "2026-03-11T20:44:08.604Z",
+      "round": 14,
+      "mode": "normal",
+      "type": "direct",
+      "generated": 5,
+      "accepted": 0,
+      "rejected": 5,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r14_q5: distractor 'discover' could be inserted as valid chunk (e.g., 'I discover the selection...' is grammatically valid present tense)|tmp_r14_q1: distractor 'find' could be inserted as valid chunk (e.g., 'I find the pastries...' is grammatically valid present tense)|tmp_r14_q3: distractor 'notice' could be inserted as valid chunk (e.g., 'I notice the atmosphere...' is grammatically valid present tense)",
+          5
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 12,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 13,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 14,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 5,
+            "accepted": 0,
+            "rejected": 5,
+            "reasons": {
+              "review:blocker:tmp_r14_q5: distractor 'discover' could be inserted as valid chunk (e.g., 'I discover the selection...' is grammatically valid present tense)|tmp_r14_q1: distractor 'find' could be inserted as valid chunk (e.g., 'I find the pastries...' is grammatically valid present tense)|tmp_r14_q3: distractor 'notice' could be inserted as valid chunk (e.g., 'I notice the atmosphere...' is grammatically valid present tense)": 5
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 17
+    },
+    {
+      "triggeredAt": "2026-03-11T20:44:43.554Z",
+      "round": 15,
+      "mode": "normal",
+      "type": "relative",
+      "generated": 7,
+      "accepted": 0,
+      "rejected": 7,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "runtime: question tmp_r13_q1: givenSlots/answerOrder do not reconstruct answer (got \"i the bakery visited this morning had fresh croissants available\", expected \"the bakery i visited this morning had fresh croissants available\")",
+          1
+        ],
+        [
+          "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "runtime: question tmp_r13_q3: givenSlots/answerOrder do not reconstruct answer (got \"i the restaurant tried last night offered authentic italian cuisine\", expected \"the restaurant i tried last night offered authentic italian cuisine\")",
+          1
+        ],
+        [
+          "fatal: chunks[1]: isolated floating adverb \"recently\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "runtime: question tmp_r13_q5: givenSlots/answerOrder do not reconstruct answer (got \"i the bookstore discovered downtown sells rare vintage comic books\", expected \"the bookstore i discovered downtown sells rare vintage comic books\")",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 13,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 5,
+            "accepted": 0,
+            "rejected": 5,
+            "reasons": {
+              "runtime: question tmp_r13_q1: givenSlots/answerOrder do not reconstruct answer (got \"i the bakery visited this morning had fresh croissants available\", expected \"the bakery i visited this morning had fresh croissants available\")": 1,
+              "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "runtime: question tmp_r13_q3: givenSlots/answerOrder do not reconstruct answer (got \"i the restaurant tried last night offered authentic italian cuisine\", expected \"the restaurant i tried last night offered authentic italian cuisine\")": 1,
+              "fatal: chunks[1]: isolated floating adverb \"recently\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "runtime: question tmp_r13_q5: givenSlots/answerOrder do not reconstruct answer (got \"i the bookstore discovered downtown sells rare vintage comic books\", expected \"the bookstore i discovered downtown sells rare vintage comic books\")": 1
+            }
+          }
+        },
+        {
+          "round": 14,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 15,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "runtime: question tmp_r15_q3: givenSlots/answerOrder do not reconstruct answer (got \"i the cafe visited yesterday serves excellent pastries daily\", expected \"the cafe i visited yesterday serves excellent pastries daily\")": 1,
+              "review:blocker:tmp_r15_q5: distractor 'try' could be inserted after 'we' to create valid sentence 'The bistro we try last night had incredible desserts' (grammatically acceptable in some dialects/contexts)": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 18
+    },
+    {
+      "triggeredAt": "2026-03-11T20:49:06.769Z",
+      "round": 26,
+      "mode": "normal",
+      "type": "3rd-reporting",
+      "generated": 5,
+      "accepted": 1,
+      "rejected": 4,
+      "acceptRate": 0.2,
+      "reasons": [
+        [
+          "pool:low_assembly_value",
+          4
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 24,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 1,
+            "rejected": 1,
+            "reasons": {
+              "pool:low_assembly_value": 1
+            }
+          }
+        },
+        {
+          "round": 25,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 26,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "pool:low_assembly_value": 3
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 29
+    },
+    {
+      "triggeredAt": "2026-03-11T20:49:21.079Z",
+      "round": 27,
+      "mode": "normal",
+      "type": "direct",
+      "generated": 5,
+      "accepted": 0,
+      "rejected": 5,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "pool:low_assembly_value",
+          3
+        ],
+        [
+          "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person",
+          2
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 25,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1,
+              "pool:low_assembly_value": 2
+            }
+          }
+        },
+        {
+          "round": 26,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "pool:low_assembly_value": 1
+            }
+          }
+        },
+        {
+          "round": 27,
+          "spec": [
+            {
+              "type": "1st-embedded",
+              "difficulty": "hard",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 30
+    },
+    {
+      "triggeredAt": "2026-03-11T20:49:33.980Z",
+      "round": 28,
+      "mode": "normal",
+      "type": "interrogative",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "pool:low_assembly_value",
+          3
+        ],
+        [
+          "topic:repeat",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 26,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 27,
+          "spec": [
+            {
+              "type": "1st-embedded",
+              "difficulty": "hard",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 28,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 4,
+            "accepted": 0,
+            "rejected": 4,
+            "reasons": {
+              "topic:repeat": 1,
+              "pool:low_assembly_value": 3
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 31
+    }
+  ],
+  "history": [
+    {
+      "round": 24,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "hard",
+          "count": 1
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 2,
+          "accepted": 1,
+          "rejected": 1,
+          "reasons": {
+            "pool:low_assembly_value": 1
+          }
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 2,
+          "accepted": 2,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 25,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "direct",
+          "difficulty": "hard",
+          "count": 4
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 3,
+          "accepted": 0,
+          "rejected": 3,
+          "reasons": {
+            "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1,
+            "pool:low_assembly_value": 2
+          }
+        },
+        "relative": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "pool:low_assembly_value": 1
+          }
+        }
+      }
+    },
+    {
+      "round": 26,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "3rd-reporting",
+          "difficulty": "hard",
+          "count": 4
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 3,
+          "accepted": 0,
+          "rejected": 3,
+          "reasons": {
+            "pool:low_assembly_value": 3
+          }
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "pool:low_assembly_value": 1
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 27,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "1st-embedded",
+          "difficulty": "hard",
+          "count": 4
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "fatal: prefilled \"he\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1
+          }
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "pool:low_assembly_value": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1
+          }
+        },
+        "relative": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "fatal: chunks[5]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+          }
+        }
+      }
+    },
+    {
+      "round": 28,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "interrogative",
+          "difficulty": "hard",
+          "count": 4
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 4,
+          "accepted": 0,
+          "rejected": 4,
+          "reasons": {
+            "topic:repeat": 1,
+            "pool:low_assembly_value": 3
+          }
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 29,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 4
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1,
+            "topic:repeat": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "pool:low_assembly_value": 1
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    }
+  ]
+}
