@@ -35,6 +35,10 @@ jobs:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
           CLAUDE_RELAY_API_KEY: ${{ secrets.CLAUDE_RELAY_API_KEY }}
           CLAUDE_RELAY_BASE_URL: ${{ vars.CLAUDE_RELAY_BASE_URL }}
+          CLAUDE_RELAY_API_KEY_2: ${{ secrets.CLAUDE_RELAY_API_KEY_2 }}
+          CLAUDE_RELAY_BASE_URL_2: ${{ vars.CLAUDE_RELAY_BASE_URL_2 }}
+          CLAUDE_RELAY_API_KEY_3: ${{ secrets.CLAUDE_RELAY_API_KEY_3 }}
+          CLAUDE_RELAY_BASE_URL_3: ${{ vars.CLAUDE_RELAY_BASE_URL_3 }}
           CLAUDE_GENERATOR_MODEL: ${{ vars.CLAUDE_GENERATOR_MODEL }}
           BS_TARGET_SETS: ${{ github.event.inputs.target_sets }}
           BS_OUTPUT_PATH: data/buildSentence/staging/${{ github.run_id }}.json

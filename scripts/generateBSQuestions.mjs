@@ -1843,17 +1843,41 @@ async function callOpenAICompatibleRelay({ apiKey, baseUrl, model, temperature, 
   throw lastErr;
 }
 
-async function callModelCreative(userPrompt) {
+/**
+ * Build ordered list of relay configs from env vars.
+ * Primary:  CLAUDE_RELAY_API_KEY  + CLAUDE_RELAY_BASE_URL
+ * Backup N: CLAUDE_RELAY_API_KEY_N + CLAUDE_RELAY_BASE_URL_N  (N = 2, 3, …)
+ */
+function getRelayConfigs() {
+  const model = process.env.CLAUDE_GENERATOR_MODEL || "claude-sonnet-4-6";
+  const configs = [];
   if (process.env.CLAUDE_RELAY_API_KEY) {
-    return callOpenAICompatibleRelay({
-      apiKey: process.env.CLAUDE_RELAY_API_KEY,
-      baseUrl: process.env.CLAUDE_RELAY_BASE_URL || "https://api.yuegle.com/v1",
-      model: process.env.CLAUDE_GENERATOR_MODEL || "claude-sonnet-4-6",
-      temperature: 0.7,
-      maxTokens: 8000,
-      userPrompt,
-      timeoutMs: 180000,
-    });
+    configs.push({ apiKey: process.env.CLAUDE_RELAY_API_KEY, baseUrl: process.env.CLAUDE_RELAY_BASE_URL || "https://api.yuegle.com/v1", model });
+  }
+  for (let n = 2; n <= 5; n++) {
+    const key = process.env[`CLAUDE_RELAY_API_KEY_${n}`];
+    if (!key) break;
+    configs.push({ apiKey: key, baseUrl: process.env[`CLAUDE_RELAY_BASE_URL_${n}`] || "https://api.yuegle.com/v1", model });
+  }
+  return configs;
+}
+
+async function callModelCreative(userPrompt) {
+  const relays = getRelayConfigs();
+  if (relays.length > 0) {
+    let lastErr;
+    for (let i = 0; i < relays.length; i++) {
+      const { apiKey, baseUrl, model } = relays[i];
+      try {
+        return await callOpenAICompatibleRelay({ apiKey, baseUrl, model, temperature: 0.7, maxTokens: 8000, userPrompt, timeoutMs: 180000 });
+      } catch (e) {
+        lastErr = e;
+        if (i < relays.length - 1) {
+          console.warn(`  [relay ${i + 1}/${relays.length}] failed (${e.message.slice(0, 80)}), trying next relay…`);
+        }
+      }
+    }
+    throw lastErr;
   }
   return callDeepSeekViaCurl({
     apiKey: process.env.DEEPSEEK_API_KEY,
