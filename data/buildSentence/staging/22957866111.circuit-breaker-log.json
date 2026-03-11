@@ -1,0 +1,2150 @@
+{
+  "generated_at": "2026-03-11T15:11:58.527Z",
+  "active": {
+    "interrogative": {
+      "sinceRound": 30,
+      "untilRound": 33,
+      "lastEvent": {
+        "triggeredAt": "2026-03-11T15:11:55.037Z",
+        "round": 30,
+        "mode": "normal",
+        "type": "interrogative",
+        "generated": 5,
+        "accepted": 0,
+        "rejected": 5,
+        "acceptRate": 0,
+        "reasons": [
+          [
+            "review:blocker:tmp_r30_q2: distractor 'recommend' can be inserted to create valid sentence 'Can you remind me which blend you recommend last time?' (present tense also grammatical)|tmp_r30_q3: distractor 'takes' can be inserted to create valid sentence 'Do you know how long the repair takes?' (present tense also valid)",
+            4
+          ],
+          [
+            "fatal: chunks[5]: isolated floating adverb \"tomorrow\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+            1
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 28,
+            "spec": [
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 3
+              },
+              {
+                "type": "relative",
+                "difficulty": "medium",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 0,
+              "accepted": 0,
+              "rejected": 0,
+              "reasons": {}
+            }
+          },
+          {
+            "round": 29,
+            "spec": [
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 3
+              },
+              {
+                "type": "relative",
+                "difficulty": "medium",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 0,
+              "accepted": 0,
+              "rejected": 0,
+              "reasons": {}
+            }
+          },
+          {
+            "round": 30,
+            "spec": [
+              {
+                "type": "interrogative",
+                "difficulty": "medium",
+                "count": 5
+              }
+            ],
+            "stats": {
+              "generated": 5,
+              "accepted": 0,
+              "rejected": 5,
+              "reasons": {
+                "fatal: chunks[5]: isolated floating adverb \"tomorrow\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+                "review:blocker:tmp_r30_q2: distractor 'recommend' can be inserted to create valid sentence 'Can you remind me which blend you recommend last time?' (present tense also grammatical)|tmp_r30_q3: distractor 'takes' can be inserted to create valid sentence 'Do you know how long the repair takes?' (present tense also valid)": 4
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 33
+      }
+    },
+    "3rd-reporting": {
+      "sinceRound": 29,
+      "untilRound": 32,
+      "lastEvent": {
+        "triggeredAt": "2026-03-11T15:10:56.202Z",
+        "round": 29,
+        "mode": "normal",
+        "type": "3rd-reporting",
+        "generated": 6,
+        "accepted": 0,
+        "rejected": 6,
+        "acceptRate": 0,
+        "reasons": [
+          [
+            "fatal: distractor must be a single word (TPO standard)",
+            3
+          ],
+          [
+            "review:blocker:tmp_r26_q1: distractor 'refill' could be inserted to create valid sentence 'The pharmacist needed to know when I last refill it' (non-standard but grammatically parseable)|tmp_r26_q1: answer uses 'when I last refilled it' but distractor 'refill' creates ambiguity with base form placement",
+            2
+          ],
+          [
+            "review:blocker:tmp_r29_q1: Distractor 'did' can be inserted to create valid inverted question 'The fitness coach did inquire if...' (emphasis construction)|tmp_r29_q4: Multiple valid chunk orders possible - 'The cafe I visited yesterday serves excellent pastries' vs 'The cafe serves excellent pastries I visited yesterday' (both grammatical)|tmp_r29_q5: Multiple valid chunk orders possible - relative clause chunks can be rearranged while maintaining grammaticality|tmp_r29_q1: Indirect question uses inverted word order ('inquired if the session was') - should be 'inquired if the session had been rescheduled' or similar non-inverted form",
+            1
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 26,
+            "spec": [
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 3
+              },
+              {
+                "type": "interrogative",
+                "difficulty": "medium",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 2,
+              "accepted": 0,
+              "rejected": 2,
+              "reasons": {
+                "review:blocker:tmp_r26_q1: distractor 'refill' could be inserted to create valid sentence 'The pharmacist needed to know when I last refill it' (non-standard but grammatically parseable)|tmp_r26_q1: answer uses 'when I last refilled it' but distractor 'refill' creates ambiguity with base form placement": 2
+              }
+            }
+          },
+          {
+            "round": 28,
+            "spec": [
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 3
+              },
+              {
+                "type": "relative",
+                "difficulty": "medium",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 2,
+              "accepted": 0,
+              "rejected": 2,
+              "reasons": {
+                "fatal: distractor must be a single word (TPO standard)": 2
+              }
+            }
+          },
+          {
+            "round": 29,
+            "spec": [
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 3
+              },
+              {
+                "type": "relative",
+                "difficulty": "medium",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 2,
+              "accepted": 0,
+              "rejected": 2,
+              "reasons": {
+                "fatal: distractor must be a single word (TPO standard)": 1,
+                "review:blocker:tmp_r29_q1: Distractor 'did' can be inserted to create valid inverted question 'The fitness coach did inquire if...' (emphasis construction)|tmp_r29_q4: Multiple valid chunk orders possible - 'The cafe I visited yesterday serves excellent pastries' vs 'The cafe serves excellent pastries I visited yesterday' (both grammatical)|tmp_r29_q5: Multiple valid chunk orders possible - relative clause chunks can be rearranged while maintaining grammaticality|tmp_r29_q1: Indirect question uses inverted word order ('inquired if the session was') - should be 'inquired if the session had been rescheduled' or similar non-inverted form": 1
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 32
+      }
+    },
+    "direct": {
+      "sinceRound": 29,
+      "untilRound": 32,
+      "lastEvent": {
+        "triggeredAt": "2026-03-11T15:10:56.202Z",
+        "round": 29,
+        "mode": "normal",
+        "type": "direct",
+        "generated": 4,
+        "accepted": 0,
+        "rejected": 4,
+        "acceptRate": 0,
+        "reasons": [
+          [
+            "fatal: distractor must be a single word (TPO standard)",
+            2
+          ],
+          [
+            "review:blocker:tmp_r26_q1: distractor 'refill' could be inserted to create valid sentence 'The pharmacist needed to know when I last refill it' (non-standard but grammatically parseable)|tmp_r26_q1: answer uses 'when I last refilled it' but distractor 'refill' creates ambiguity with base form placement",
+            1
+          ],
+          [
+            "review:blocker:tmp_r29_q1: Distractor 'did' can be inserted to create valid inverted question 'The fitness coach did inquire if...' (emphasis construction)|tmp_r29_q4: Multiple valid chunk orders possible - 'The cafe I visited yesterday serves excellent pastries' vs 'The cafe serves excellent pastries I visited yesterday' (both grammatical)|tmp_r29_q5: Multiple valid chunk orders possible - relative clause chunks can be rearranged while maintaining grammaticality|tmp_r29_q1: Indirect question uses inverted word order ('inquired if the session was') - should be 'inquired if the session had been rescheduled' or similar non-inverted form",
+            1
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 26,
+            "spec": [
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 3
+              },
+              {
+                "type": "interrogative",
+                "difficulty": "medium",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 1,
+              "accepted": 0,
+              "rejected": 1,
+              "reasons": {
+                "review:blocker:tmp_r26_q1: distractor 'refill' could be inserted to create valid sentence 'The pharmacist needed to know when I last refill it' (non-standard but grammatically parseable)|tmp_r26_q1: answer uses 'when I last refilled it' but distractor 'refill' creates ambiguity with base form placement": 1
+              }
+            }
+          },
+          {
+            "round": 28,
+            "spec": [
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 3
+              },
+              {
+                "type": "relative",
+                "difficulty": "medium",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 1,
+              "accepted": 0,
+              "rejected": 1,
+              "reasons": {
+                "fatal: distractor must be a single word (TPO standard)": 1
+              }
+            }
+          },
+          {
+            "round": 29,
+            "spec": [
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 3
+              },
+              {
+                "type": "relative",
+                "difficulty": "medium",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 2,
+              "accepted": 0,
+              "rejected": 2,
+              "reasons": {
+                "fatal: distractor must be a single word (TPO standard)": 1,
+                "review:blocker:tmp_r29_q1: Distractor 'did' can be inserted to create valid inverted question 'The fitness coach did inquire if...' (emphasis construction)|tmp_r29_q4: Multiple valid chunk orders possible - 'The cafe I visited yesterday serves excellent pastries' vs 'The cafe serves excellent pastries I visited yesterday' (both grammatical)|tmp_r29_q5: Multiple valid chunk orders possible - relative clause chunks can be rearranged while maintaining grammaticality|tmp_r29_q1: Indirect question uses inverted word order ('inquired if the session was') - should be 'inquired if the session had been rescheduled' or similar non-inverted form": 1
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 32
+      }
+    }
+  },
+  "events": [
+    {
+      "triggeredAt": "2026-03-11T14:38:25.010Z",
+      "round": 5,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 13,
+      "accepted": 0,
+      "rejected": 13,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r5_q1: distractor 'did' can be inserted to create valid sentence 'The delivery driver did asked where...' (non-standard but grammatical in some dialects)|tmp_r5_q3: distractor 'did' can be inserted to create valid sentence 'The dental receptionist did wondered when...' (non-standard but grammatical in some dialects)",
+          5
+        ],
+        [
+          "review:blocker:tmp_r4_q1: distractor 'did' can be inserted to create valid sentence 'The delivery driver did needed to know...' (non-standard but parseable)|tmp_r4_q7: distractor 'does' can be inserted to create valid sentence 'I do not does know...' (grammatically incorrect but structurally insertable)",
+          3
+        ],
+        [
+          "fatal: distractor must be a single word (TPO standard)",
+          2
+        ],
+        [
+          "fatal: distractor must be a single word (TPO standard); chunks[4]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "review:ets<72",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 3,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "easy",
+              "count": 3
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 4,
+            "accepted": 0,
+            "rejected": 4,
+            "reasons": {
+              "fatal: distractor must be a single word (TPO standard); chunks[4]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "fatal: distractor must be a single word (TPO standard)": 1,
+              "review:ets<72": 1,
+              "review:score<78": 1
+            }
+          }
+        },
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 4,
+            "accepted": 0,
+            "rejected": 4,
+            "reasons": {
+              "fatal: distractor must be a single word (TPO standard)": 1,
+              "review:blocker:tmp_r4_q1: distractor 'did' can be inserted to create valid sentence 'The delivery driver did needed to know...' (non-standard but parseable)|tmp_r4_q7: distractor 'does' can be inserted to create valid sentence 'I do not does know...' (grammatically incorrect but structurally insertable)": 3
+            }
+          }
+        },
+        {
+          "round": 5,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 5,
+            "accepted": 0,
+            "rejected": 5,
+            "reasons": {
+              "review:blocker:tmp_r5_q1: distractor 'did' can be inserted to create valid sentence 'The delivery driver did asked where...' (non-standard but grammatical in some dialects)|tmp_r5_q3: distractor 'did' can be inserted to create valid sentence 'The dental receptionist did wondered when...' (non-standard but grammatical in some dialects)": 5
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 8
+    },
+    {
+      "triggeredAt": "2026-03-11T14:38:25.010Z",
+      "round": 5,
+      "mode": "normal",
+      "type": "3rd-reporting",
+      "generated": 6,
+      "accepted": 1,
+      "rejected": 5,
+      "acceptRate": 0.167,
+      "reasons": [
+        [
+          "fatal: distractor must be a single word (TPO standard)",
+          2
+        ],
+        [
+          "review:blocker:tmp_r5_q1: distractor 'did' can be inserted to create valid sentence 'The delivery driver did asked where...' (non-standard but grammatical in some dialects)|tmp_r5_q3: distractor 'did' can be inserted to create valid sentence 'The dental receptionist did wondered when...' (non-standard but grammatical in some dialects)",
+          2
+        ],
+        [
+          "review:blocker:tmp_r4_q1: distractor 'did' can be inserted to create valid sentence 'The delivery driver did needed to know...' (non-standard but parseable)|tmp_r4_q7: distractor 'does' can be inserted to create valid sentence 'I do not does know...' (grammatically incorrect but structurally insertable)",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 3,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "easy",
+              "count": 3
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 1,
+            "rejected": 1,
+            "reasons": {
+              "fatal: distractor must be a single word (TPO standard)": 1
+            }
+          }
+        },
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "fatal: distractor must be a single word (TPO standard)": 1,
+              "review:blocker:tmp_r4_q1: distractor 'did' can be inserted to create valid sentence 'The delivery driver did needed to know...' (non-standard but parseable)|tmp_r4_q7: distractor 'does' can be inserted to create valid sentence 'I do not does know...' (grammatically incorrect but structurally insertable)": 1
+            }
+          }
+        },
+        {
+          "round": 5,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r5_q1: distractor 'did' can be inserted to create valid sentence 'The delivery driver did asked where...' (non-standard but grammatical in some dialects)|tmp_r5_q3: distractor 'did' can be inserted to create valid sentence 'The dental receptionist did wondered when...' (non-standard but grammatical in some dialects)": 2
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 8
+    },
+    {
+      "triggeredAt": "2026-03-11T14:44:00.222Z",
+      "round": 8,
+      "mode": "normal",
+      "type": "direct",
+      "generated": 8,
+      "accepted": 0,
+      "rejected": 8,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r8_q4: distractor 'expect' can be inserted to create valid sentence 'I enjoyed the performances much more than I expect' (present tense valid in informal speech)|tmp_r8_q5: distractor 'saw' can be inserted to create valid sentence 'I found it more informative than any documentary I saw' (past simple valid alternative)|All items use direct questions as prompts, not indirect/embedded questions (0% vs TPO's 63%)|Distractors are base verb forms, not auxiliary verbs did/do/does (0% vs TPO's 88%)|All prompts are questions, not statements (0% vs TPO's 92%)",
+          7
+        ],
+        [
+          "fatal: distractor must be a single word (TPO standard)",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 6,
+          "spec": [
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 8
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 7,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 3
+            },
+            {
+              "type": "relative",
+              "difficulty": "easy",
+              "count": 2
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 8,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 3
+            },
+            {
+              "type": "direct",
+              "difficulty": "easy",
+              "count": 2
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 8,
+            "accepted": 0,
+            "rejected": 8,
+            "reasons": {
+              "fatal: distractor must be a single word (TPO standard)": 1,
+              "review:blocker:tmp_r8_q4: distractor 'expect' can be inserted to create valid sentence 'I enjoyed the performances much more than I expect' (present tense valid in informal speech)|tmp_r8_q5: distractor 'saw' can be inserted to create valid sentence 'I found it more informative than any documentary I saw' (past simple valid alternative)|All items use direct questions as prompts, not indirect/embedded questions (0% vs TPO's 63%)|Distractors are base verb forms, not auxiliary verbs did/do/does (0% vs TPO's 88%)|All prompts are questions, not statements (0% vs TPO's 92%)": 7
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 11
+    },
+    {
+      "triggeredAt": "2026-03-11T14:46:46.407Z",
+      "round": 10,
+      "mode": "normal",
+      "type": "interrogative",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:score<78",
+          3
+        ],
+        [
+          "fatal: chunks[6]: isolated floating adverb \"tomorrow\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 8,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 3
+            },
+            {
+              "type": "direct",
+              "difficulty": "easy",
+              "count": 2
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "fatal: chunks[6]: isolated floating adverb \"tomorrow\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+            }
+          }
+        },
+        {
+          "round": 9,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "easy",
+              "count": 2
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:score<78": 1
+            }
+          }
+        },
+        {
+          "round": 10,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 3
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:score<78": 2
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 13
+    },
+    {
+      "triggeredAt": "2026-03-11T14:52:59.571Z",
+      "round": 14,
+      "mode": "normal",
+      "type": "interrogative",
+      "generated": 5,
+      "accepted": 0,
+      "rejected": 5,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r14_q9: distractor 'opened' could be inserted to create valid sentence 'Would you mind telling me what time you opened on weekends?' (past tense inquiry is grammatically valid)|tmp_r14_q9: distractor 'opened' could be valid in answer ('what time you opened'), creating ambiguity",
+          4
+        ],
+        [
+          "fatal: distractor must not appear in answer",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 12,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 13,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 4
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 14,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 3
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 3
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 5,
+            "accepted": 0,
+            "rejected": 5,
+            "reasons": {
+              "fatal: distractor must not appear in answer": 1,
+              "review:blocker:tmp_r14_q9: distractor 'opened' could be inserted to create valid sentence 'Would you mind telling me what time you opened on weekends?' (past tense inquiry is grammatically valid)|tmp_r14_q9: distractor 'opened' could be valid in answer ('what time you opened'), creating ambiguity": 4
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 17
+    },
+    {
+      "triggeredAt": "2026-03-11T14:54:59.483Z",
+      "round": 15,
+      "mode": "normal",
+      "type": "direct",
+      "generated": 5,
+      "accepted": 0,
+      "rejected": 5,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "fatal: distractor must be a single word (TPO standard)",
+          2
+        ],
+        [
+          "review:blocker:tmp_r14_q9: distractor 'opened' could be inserted to create valid sentence 'Would you mind telling me what time you opened on weekends?' (past tense inquiry is grammatically valid)|tmp_r14_q9: distractor 'opened' could be valid in answer ('what time you opened'), creating ambiguity",
+          1
+        ],
+        [
+          "fatal: prefilled too long (4 words): shorten to 2-3 word subject NP",
+          1
+        ],
+        [
+          "review:score<78",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 13,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 4
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "fatal: distractor must be a single word (TPO standard)": 2
+            }
+          }
+        },
+        {
+          "round": 14,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 3
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 3
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r14_q9: distractor 'opened' could be inserted to create valid sentence 'Would you mind telling me what time you opened on weekends?' (past tense inquiry is grammatically valid)|tmp_r14_q9: distractor 'opened' could be valid in answer ('what time you opened'), creating ambiguity": 1
+            }
+          }
+        },
+        {
+          "round": 15,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 10
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "fatal: prefilled too long (4 words): shorten to 2-3 word subject NP": 1,
+              "review:score<78": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 18
+    },
+    {
+      "triggeredAt": "2026-03-11T14:55:50.038Z",
+      "round": 16,
+      "mode": "normal",
+      "type": "relative",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "runtime: question tmp_r16_q4: givenSlots/answerOrder do not reconstruct answer (got \"she the yoga studio recommended offers classes for all levels\", expected \"the yoga studio she recommended offers classes for all levels\")",
+          1
+        ],
+        [
+          "runtime: question tmp_r16_q9: givenSlots/answerOrder do not reconstruct answer (got \"you the couch selected is scheduled to arrive next tuesday\", expected \"the couch you selected is scheduled to arrive next tuesday\")",
+          1
+        ],
+        [
+          "runtime: question tmp_r16_q10: givenSlots/answerOrder do not reconstruct answer (got \"he the documentary mentioned had already been released last month\", expected \"the documentary he mentioned had already been released last month\")",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 14,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 3
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 3
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 15,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 10
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 16,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 4,
+            "accepted": 0,
+            "rejected": 4,
+            "reasons": {
+              "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "runtime: question tmp_r16_q4: givenSlots/answerOrder do not reconstruct answer (got \"she the yoga studio recommended offers classes for all levels\", expected \"the yoga studio she recommended offers classes for all levels\")": 1,
+              "runtime: question tmp_r16_q9: givenSlots/answerOrder do not reconstruct answer (got \"you the couch selected is scheduled to arrive next tuesday\", expected \"the couch you selected is scheduled to arrive next tuesday\")": 1,
+              "runtime: question tmp_r16_q10: givenSlots/answerOrder do not reconstruct answer (got \"he the documentary mentioned had already been released last month\", expected \"the documentary he mentioned had already been released last month\")": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 19
+    },
+    {
+      "triggeredAt": "2026-03-11T15:00:36.459Z",
+      "round": 21,
+      "mode": "normal",
+      "type": "interrogative",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r19_q2: Distractor 'expired' can be inserted to create valid sentence 'The instructor inquired when the membership expired' (simple past is grammatically valid)|tmp_r19_q3: Distractor 'was' can be inserted to create valid sentence 'The editor wanted to know when it was revised' (simple past passive is grammatically valid)",
+          1
+        ],
+        [
+          "review:score<78",
+          1
+        ],
+        [
+          "fatal: chunks[5]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "review:blocker:tmp_r21_q2: Prompt uses inverted word order 'What did...inquire' which contradicts TPO's 63% indirect question testing pattern|tmp_r21_q4: Answer is a QUESTION (8% of TPO) but prompt 'What do you ask' makes this expected - acceptable but reduces TPO similarity",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 19,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r19_q2: Distractor 'expired' can be inserted to create valid sentence 'The instructor inquired when the membership expired' (simple past is grammatically valid)|tmp_r19_q3: Distractor 'was' can be inserted to create valid sentence 'The editor wanted to know when it was revised' (simple past passive is grammatically valid)": 1
+            }
+          }
+        },
+        {
+          "round": 20,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:score<78": 1
+            }
+          }
+        },
+        {
+          "round": 21,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "fatal: chunks[5]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "review:blocker:tmp_r21_q2: Prompt uses inverted word order 'What did...inquire' which contradicts TPO's 63% indirect question testing pattern|tmp_r21_q4: Answer is a QUESTION (8% of TPO) but prompt 'What do you ask' makes this expected - acceptable but reduces TPO similarity": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 24
+    },
+    {
+      "triggeredAt": "2026-03-11T15:04:48.164Z",
+      "round": 24,
+      "mode": "normal",
+      "type": "relative",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:ets<72",
+          1
+        ],
+        [
+          "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "runtime: question tmp_r24_q4: givenSlots/answerOrder do not reconstruct answer (got \"i the hiking trail explored yesterday offered stunning mountain views\", expected \"the hiking trail i explored yesterday offered stunning mountain views\")",
+          1
+        ],
+        [
+          "review:blocker:tmp_r24_q2: distractor 'did' can be inserted after 'wondered' to create 'wondered did when...' - while unnatural, this creates ambiguity in chunk arrangement|tmp_r24_q3: distractor 'did' can be inserted after 'inquired' to create 'inquired did why...' - while unnatural, this creates ambiguity in chunk arrangement",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 22,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:ets<72": 1
+            }
+          }
+        },
+        {
+          "round": 23,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+            }
+          }
+        },
+        {
+          "round": 24,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "runtime: question tmp_r24_q4: givenSlots/answerOrder do not reconstruct answer (got \"i the hiking trail explored yesterday offered stunning mountain views\", expected \"the hiking trail i explored yesterday offered stunning mountain views\")": 1,
+              "review:blocker:tmp_r24_q2: distractor 'did' can be inserted after 'wondered' to create 'wondered did when...' - while unnatural, this creates ambiguity in chunk arrangement|tmp_r24_q3: distractor 'did' can be inserted after 'inquired' to create 'inquired did why...' - while unnatural, this creates ambiguity in chunk arrangement": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 27
+    },
+    {
+      "triggeredAt": "2026-03-11T15:09:02.774Z",
+      "round": 26,
+      "mode": "normal",
+      "type": "interrogative",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r26_q1: distractor 'refill' could be inserted to create valid sentence 'The pharmacist needed to know when I last refill it' (non-standard but grammatically parseable)|tmp_r26_q1: answer uses 'when I last refilled it' but distractor 'refill' creates ambiguity with base form placement",
+          2
+        ],
+        [
+          "review:score<78",
+          1
+        ],
+        [
+          "review:ets<72",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 24,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 25,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:score<78": 1,
+              "review:ets<72": 1
+            }
+          }
+        },
+        {
+          "round": 26,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r26_q1: distractor 'refill' could be inserted to create valid sentence 'The pharmacist needed to know when I last refill it' (non-standard but grammatically parseable)|tmp_r26_q1: answer uses 'when I last refilled it' but distractor 'refill' creates ambiguity with base form placement": 2
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 29
+    },
+    {
+      "triggeredAt": "2026-03-11T15:10:56.202Z",
+      "round": 29,
+      "mode": "normal",
+      "type": "3rd-reporting",
+      "generated": 6,
+      "accepted": 0,
+      "rejected": 6,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "fatal: distractor must be a single word (TPO standard)",
+          3
+        ],
+        [
+          "review:blocker:tmp_r26_q1: distractor 'refill' could be inserted to create valid sentence 'The pharmacist needed to know when I last refill it' (non-standard but grammatically parseable)|tmp_r26_q1: answer uses 'when I last refilled it' but distractor 'refill' creates ambiguity with base form placement",
+          2
+        ],
+        [
+          "review:blocker:tmp_r29_q1: Distractor 'did' can be inserted to create valid inverted question 'The fitness coach did inquire if...' (emphasis construction)|tmp_r29_q4: Multiple valid chunk orders possible - 'The cafe I visited yesterday serves excellent pastries' vs 'The cafe serves excellent pastries I visited yesterday' (both grammatical)|tmp_r29_q5: Multiple valid chunk orders possible - relative clause chunks can be rearranged while maintaining grammaticality|tmp_r29_q1: Indirect question uses inverted word order ('inquired if the session was') - should be 'inquired if the session had been rescheduled' or similar non-inverted form",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 26,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r26_q1: distractor 'refill' could be inserted to create valid sentence 'The pharmacist needed to know when I last refill it' (non-standard but grammatically parseable)|tmp_r26_q1: answer uses 'when I last refilled it' but distractor 'refill' creates ambiguity with base form placement": 2
+            }
+          }
+        },
+        {
+          "round": 28,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "fatal: distractor must be a single word (TPO standard)": 2
+            }
+          }
+        },
+        {
+          "round": 29,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "fatal: distractor must be a single word (TPO standard)": 1,
+              "review:blocker:tmp_r29_q1: Distractor 'did' can be inserted to create valid inverted question 'The fitness coach did inquire if...' (emphasis construction)|tmp_r29_q4: Multiple valid chunk orders possible - 'The cafe I visited yesterday serves excellent pastries' vs 'The cafe serves excellent pastries I visited yesterday' (both grammatical)|tmp_r29_q5: Multiple valid chunk orders possible - relative clause chunks can be rearranged while maintaining grammaticality|tmp_r29_q1: Indirect question uses inverted word order ('inquired if the session was') - should be 'inquired if the session had been rescheduled' or similar non-inverted form": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 32
+    },
+    {
+      "triggeredAt": "2026-03-11T15:10:56.202Z",
+      "round": 29,
+      "mode": "normal",
+      "type": "direct",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "fatal: distractor must be a single word (TPO standard)",
+          2
+        ],
+        [
+          "review:blocker:tmp_r26_q1: distractor 'refill' could be inserted to create valid sentence 'The pharmacist needed to know when I last refill it' (non-standard but grammatically parseable)|tmp_r26_q1: answer uses 'when I last refilled it' but distractor 'refill' creates ambiguity with base form placement",
+          1
+        ],
+        [
+          "review:blocker:tmp_r29_q1: Distractor 'did' can be inserted to create valid inverted question 'The fitness coach did inquire if...' (emphasis construction)|tmp_r29_q4: Multiple valid chunk orders possible - 'The cafe I visited yesterday serves excellent pastries' vs 'The cafe serves excellent pastries I visited yesterday' (both grammatical)|tmp_r29_q5: Multiple valid chunk orders possible - relative clause chunks can be rearranged while maintaining grammaticality|tmp_r29_q1: Indirect question uses inverted word order ('inquired if the session was') - should be 'inquired if the session had been rescheduled' or similar non-inverted form",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 26,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r26_q1: distractor 'refill' could be inserted to create valid sentence 'The pharmacist needed to know when I last refill it' (non-standard but grammatically parseable)|tmp_r26_q1: answer uses 'when I last refilled it' but distractor 'refill' creates ambiguity with base form placement": 1
+            }
+          }
+        },
+        {
+          "round": 28,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "fatal: distractor must be a single word (TPO standard)": 1
+            }
+          }
+        },
+        {
+          "round": 29,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "fatal: distractor must be a single word (TPO standard)": 1,
+              "review:blocker:tmp_r29_q1: Distractor 'did' can be inserted to create valid inverted question 'The fitness coach did inquire if...' (emphasis construction)|tmp_r29_q4: Multiple valid chunk orders possible - 'The cafe I visited yesterday serves excellent pastries' vs 'The cafe serves excellent pastries I visited yesterday' (both grammatical)|tmp_r29_q5: Multiple valid chunk orders possible - relative clause chunks can be rearranged while maintaining grammaticality|tmp_r29_q1: Indirect question uses inverted word order ('inquired if the session was') - should be 'inquired if the session had been rescheduled' or similar non-inverted form": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 32
+    },
+    {
+      "triggeredAt": "2026-03-11T15:11:55.037Z",
+      "round": 30,
+      "mode": "normal",
+      "type": "interrogative",
+      "generated": 5,
+      "accepted": 0,
+      "rejected": 5,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r30_q2: distractor 'recommend' can be inserted to create valid sentence 'Can you remind me which blend you recommend last time?' (present tense also grammatical)|tmp_r30_q3: distractor 'takes' can be inserted to create valid sentence 'Do you know how long the repair takes?' (present tense also valid)",
+          4
+        ],
+        [
+          "fatal: chunks[5]: isolated floating adverb \"tomorrow\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 28,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 29,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 30,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 5,
+            "accepted": 0,
+            "rejected": 5,
+            "reasons": {
+              "fatal: chunks[5]: isolated floating adverb \"tomorrow\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "review:blocker:tmp_r30_q2: distractor 'recommend' can be inserted to create valid sentence 'Can you remind me which blend you recommend last time?' (present tense also grammatical)|tmp_r30_q3: distractor 'takes' can be inserted to create valid sentence 'Do you know how long the repair takes?' (present tense also valid)": 4
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 33
+    }
+  ],
+  "history": [
+    {
+      "round": 24,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "topic:repeat": 1,
+            "review:blocker:tmp_r24_q2: distractor 'did' can be inserted after 'wondered' to create 'wondered did when...' - while unnatural, this creates ambiguity in chunk arrangement|tmp_r24_q3: distractor 'did' can be inserted after 'inquired' to create 'inquired did why...' - while unnatural, this creates ambiguity in chunk arrangement": 1
+          }
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r24_q2: distractor 'did' can be inserted after 'wondered' to create 'wondered did when...' - while unnatural, this creates ambiguity in chunk arrangement|tmp_r24_q3: distractor 'did' can be inserted after 'inquired' to create 'inquired did why...' - while unnatural, this creates ambiguity in chunk arrangement": 1
+          }
+        },
+        "relative": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "runtime: question tmp_r24_q4: givenSlots/answerOrder do not reconstruct answer (got \"i the hiking trail explored yesterday offered stunning mountain views\", expected \"the hiking trail i explored yesterday offered stunning mountain views\")": 1,
+            "review:blocker:tmp_r24_q2: distractor 'did' can be inserted after 'wondered' to create 'wondered did when...' - while unnatural, this creates ambiguity in chunk arrangement|tmp_r24_q3: distractor 'did' can be inserted after 'inquired' to create 'inquired did why...' - while unnatural, this creates ambiguity in chunk arrangement": 1
+          }
+        }
+      }
+    },
+    {
+      "round": 25,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "interrogative",
+          "difficulty": "medium",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 3,
+          "accepted": 2,
+          "rejected": 1,
+          "reasons": {
+            "fatal: chunks[5]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+          }
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "review:score<78": 1,
+            "review:ets<72": 1
+          }
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 26,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "interrogative",
+          "difficulty": "medium",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "review:blocker:tmp_r26_q1: distractor 'refill' could be inserted to create valid sentence 'The pharmacist needed to know when I last refill it' (non-standard but grammatically parseable)|tmp_r26_q1: answer uses 'when I last refilled it' but distractor 'refill' creates ambiguity with base form placement": 2
+          }
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "review:blocker:tmp_r26_q1: distractor 'refill' could be inserted to create valid sentence 'The pharmacist needed to know when I last refill it' (non-standard but grammatically parseable)|tmp_r26_q1: answer uses 'when I last refilled it' but distractor 'refill' creates ambiguity with base form placement": 2
+          }
+        },
+        "direct": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r26_q1: distractor 'refill' could be inserted to create valid sentence 'The pharmacist needed to know when I last refill it' (non-standard but grammatically parseable)|tmp_r26_q1: answer uses 'when I last refilled it' but distractor 'refill' creates ambiguity with base form placement": 1
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 28,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "fatal: distractor must be a single word (TPO standard)": 2
+          }
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "fatal: distractor must be a single word (TPO standard)": 1
+          }
+        },
+        "relative": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+            "runtime: question tmp_r28_q5: givenSlots/answerOrder do not reconstruct answer (got \"you the workshop recommended last month was incredibly helpful and practical\", expected \"the workshop you recommended last month was incredibly helpful and practical\")": 1
+          }
+        }
+      }
+    },
+    {
+      "round": 29,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "fatal: distractor must be a single word (TPO standard)": 1,
+            "review:blocker:tmp_r29_q1: Distractor 'did' can be inserted to create valid inverted question 'The fitness coach did inquire if...' (emphasis construction)|tmp_r29_q4: Multiple valid chunk orders possible - 'The cafe I visited yesterday serves excellent pastries' vs 'The cafe serves excellent pastries I visited yesterday' (both grammatical)|tmp_r29_q5: Multiple valid chunk orders possible - relative clause chunks can be rearranged while maintaining grammaticality|tmp_r29_q1: Indirect question uses inverted word order ('inquired if the session was') - should be 'inquired if the session had been rescheduled' or similar non-inverted form": 1
+          }
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "fatal: distractor must be a single word (TPO standard)": 1,
+            "review:blocker:tmp_r29_q1: Distractor 'did' can be inserted to create valid inverted question 'The fitness coach did inquire if...' (emphasis construction)|tmp_r29_q4: Multiple valid chunk orders possible - 'The cafe I visited yesterday serves excellent pastries' vs 'The cafe serves excellent pastries I visited yesterday' (both grammatical)|tmp_r29_q5: Multiple valid chunk orders possible - relative clause chunks can be rearranged while maintaining grammaticality|tmp_r29_q1: Indirect question uses inverted word order ('inquired if the session was') - should be 'inquired if the session had been rescheduled' or similar non-inverted form": 1
+          }
+        },
+        "relative": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r29_q1: Distractor 'did' can be inserted to create valid inverted question 'The fitness coach did inquire if...' (emphasis construction)|tmp_r29_q4: Multiple valid chunk orders possible - 'The cafe I visited yesterday serves excellent pastries' vs 'The cafe serves excellent pastries I visited yesterday' (both grammatical)|tmp_r29_q5: Multiple valid chunk orders possible - relative clause chunks can be rearranged while maintaining grammaticality|tmp_r29_q1: Indirect question uses inverted word order ('inquired if the session was') - should be 'inquired if the session had been rescheduled' or similar non-inverted form": 1
+          }
+        }
+      }
+    },
+    {
+      "round": 30,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "interrogative",
+          "difficulty": "medium",
+          "count": 5
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 5,
+          "accepted": 0,
+          "rejected": 5,
+          "reasons": {
+            "fatal: chunks[5]: isolated floating adverb \"tomorrow\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+            "review:blocker:tmp_r30_q2: distractor 'recommend' can be inserted to create valid sentence 'Can you remind me which blend you recommend last time?' (present tense also grammatical)|tmp_r30_q3: distractor 'takes' can be inserted to create valid sentence 'Do you know how long the repair takes?' (present tense also valid)": 4
+          }
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    }
+  ]
+}
