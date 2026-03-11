@@ -488,6 +488,7 @@ function classifyAnswerType(q) {
 const TYPE_LIST = ["negation", "3rd-reporting", "1st-embedded", "interrogative", "direct", "relative"];
 const EMBEDDED_HEAVY_TYPES = new Set(["3rd-reporting", "1st-embedded", "interrogative"]);
 const NON_EMBEDDED_TYPES = new Set(TYPE_LIST.filter((type) => !EMBEDDED_HEAVY_TYPES.has(type)));
+const RELIABLE_NON_EMBEDDED_TYPES = new Set(["direct", "relative"]);
 const WILLING_TYPES = ["3rd-reporting", "negation", "1st-embedded"]; // AI generates naturally
 const TPO_TYPE_TARGET_RATIO = Object.freeze({
   "negation": 0.183,
@@ -2111,7 +2112,8 @@ async function generateCandidateRound(round, spec, rejectFeedback = "", recentPo
   };
 
   const recentTopics = extractRecentTopics(recentPool);
-  const generatedRaw = await callModelCreative(buildGeneratePrompt(round, spec, rejectFeedback, recentTopics));
+  const promptFeedback = [rejectFeedback, options?.generationHints].filter(Boolean).join("\n");
+  const generatedRaw = await callModelCreative(buildGeneratePrompt(round, spec, promptFeedback, recentTopics));
   const arr = parseJsonArray(generatedRaw);
   if (!Array.isArray(arr) || arr.length < Math.floor(totalCount * 0.7)) {
     throw new Error(`round ${round}: model returned ${arr?.length ?? 0} questions, expected ~${totalCount}`);
@@ -2891,9 +2893,12 @@ async function main() {
   }
 
   function isAssemblyPhase(poolState, assemblyState) {
+    const total = poolState?.style?.total || 0;
     return (
-      (poolState?.style?.total || 0) >= Math.ceil(TARGET_SET_COUNT * 10 * 0.8) ||
-      assemblyState.assemblableSets >= Math.max(1, TARGET_SET_COUNT - 2)
+      (assemblyState.deficits.nonEmbedded > 0 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.45)) ||
+      (assemblyState.embeddedOverflow > 0 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.4)) ||
+      total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.7) ||
+      assemblyState.assemblableSets >= Math.max(1, TARGET_SET_COUNT - 3)
     );
   }
 
@@ -2934,6 +2939,24 @@ async function main() {
       return ranked[0]?.diff || "medium";
     }
 
+    if (assemblyState.deficits.nonEmbedded > 0) {
+      const preferredTypes = ["direct", "relative"];
+      for (let i = 0; i < batchSize; i++) {
+        const chosenType = preferredTypes
+          .map((type) => ({
+            type,
+            blocked: blocked.has(type) && !isCircuitBreakerCriticalType(type, assemblyState),
+            gap: Math.max(0, (globalTypeTargets[type] || 0) - ((workingPoolState.typeTotals || {})[type] || 0)),
+          }))
+          .sort((a, b) => {
+            if (a.blocked !== b.blocked) return a.blocked ? 1 : -1;
+            return b.gap - a.gap;
+          })[0]?.type || "direct";
+        addCell(chosenType, chooseDiff(chosenType));
+      }
+      return spec;
+    }
+
     function scoreType(type) {
       const critical = isCircuitBreakerCriticalType(type, assemblyState);
       if (blocked.has(type) && !critical) return -1e6;
@@ -2972,6 +2995,21 @@ async function main() {
 
   function isSpecCoolingDown(signature, roundNum) {
     return signature && specCooldowns[signature] && specCooldowns[signature] >= roundNum;
+  }
+
+  function buildAssemblyGenerationHints(assemblyState, spec) {
+    if (!assemblyState) return "";
+    const hints = [];
+    if (assemblyState.deficits.nonEmbedded > 0) {
+      hints.push("ASSEMBLY REPAIR MODE: This batch MUST prioritize non-embedded items.");
+      hints.push("Generate DIRECT statements or RELATIVE / contact-clause items only.");
+      hints.push("Do NOT use embedded-question / reporting-verb frames such as asked, wondered, wanted to know, needed to know, was curious.");
+      hints.push("Target zero embedded-question items in this batch.");
+    }
+    if (Array.isArray(spec) && spec.every((cell) => RELIABLE_NON_EMBEDDED_TYPES.has(cell.type))) {
+      hints.push("For this batch, every item must be structurally non-embedded.");
+    }
+    return hints.length > 0 ? `\n## ASSEMBLY REPAIR PRIORITY:\n- ${hints.join("\n- ")}` : "";
   }
 
   // Decide batch size and targeting based on current gap.
@@ -3087,6 +3125,7 @@ async function main() {
         poolState,
         assemblyState,
         difficultyTargets,
+        generationHints: schedule.phase === "assembly" ? buildAssemblyGenerationHints(assemblyState, spec) : "",
       });
       acceptedPool.push(...res.questions);
       statTotalRounds += 1;
