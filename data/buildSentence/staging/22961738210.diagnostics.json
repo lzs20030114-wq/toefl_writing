@@ -1,0 +1,2579 @@
+{
+  "generated_at": "2026-03-11T15:57:38.383Z",
+  "targetSets": 6,
+  "outputPath": "/home/runner/work/toefl_writing/toefl_writing/data/buildSentence/staging/22961738210.json",
+  "rounds": [
+    {
+      "round": 1,
+      "phase": "broad",
+      "mode": "broad",
+      "gap": {
+        "total": 194,
+        "diffGap": 90,
+        "typeGap": 62,
+        "distractorGap": 42
+      },
+      "assemblyState": {
+        "total": 0,
+        "diffCounts": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0
+        },
+        "embedded": 0,
+        "negation": 0,
+        "distractor": 0,
+        "qmark": 0,
+        "nonEmbedded": 0,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "negation": 0,
+          "distractor": 0,
+          "nonEmbedded": 0
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negation": 12,
+          "distractor": 42,
+          "nonEmbedded": 12,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      },
+      "spec": [
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 1
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "easy",
+          "count": 2
+        },
+        {
+          "type": "interrogative",
+          "difficulty": "easy",
+          "count": 2
+        },
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "result": {
+        "generated": 10,
+        "accepted": 8,
+        "rejected": 2,
+        "rejectReasons": {
+          "fatal: chunks[5]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+          "fatal: chunks[2]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+        }
+      },
+      "nextGap": {
+        "total": 170,
+        "diffGap": 82,
+        "typeGap": 54,
+        "distractorGap": 34
+      },
+      "nextAssemblyState": {
+        "total": 8,
+        "diffCounts": {
+          "easy": 4,
+          "medium": 4,
+          "hard": 0
+        },
+        "embedded": 7,
+        "negation": 3,
+        "distractor": 8,
+        "qmark": 1,
+        "nonEmbedded": 1,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 4,
+          "medium": 0,
+          "hard": 0,
+          "negation": 1,
+          "distractor": 1,
+          "nonEmbedded": 0
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 2,
+          "medium": 38,
+          "hard": 12,
+          "negation": 9,
+          "distractor": 34,
+          "nonEmbedded": 11,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      }
+    },
+    {
+      "round": 2,
+      "phase": "broad",
+      "mode": "broad",
+      "gap": {
+        "total": 170,
+        "diffGap": 82,
+        "typeGap": 54,
+        "distractorGap": 34
+      },
+      "assemblyState": {
+        "total": 8,
+        "diffCounts": {
+          "easy": 4,
+          "medium": 4,
+          "hard": 0
+        },
+        "embedded": 7,
+        "negation": 3,
+        "distractor": 8,
+        "qmark": 1,
+        "nonEmbedded": 1,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 4,
+          "medium": 0,
+          "hard": 0,
+          "negation": 1,
+          "distractor": 1,
+          "nonEmbedded": 0
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 2,
+          "medium": 38,
+          "hard": 12,
+          "negation": 9,
+          "distractor": 34,
+          "nonEmbedded": 11,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      },
+      "spec": [
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "easy",
+          "count": 3
+        },
+        {
+          "type": "interrogative",
+          "difficulty": "medium",
+          "count": 1
+        },
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "result": {
+        "generated": 10,
+        "accepted": 8,
+        "rejected": 2,
+        "rejectReasons": {
+          "fatal: chunks[5]: isolated floating adverb \"tomorrow\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+          "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+        }
+      },
+      "nextGap": {
+        "total": 146,
+        "diffGap": 74,
+        "typeGap": 46,
+        "distractorGap": 26
+      },
+      "nextAssemblyState": {
+        "total": 16,
+        "diffCounts": {
+          "easy": 7,
+          "medium": 9,
+          "hard": 0
+        },
+        "embedded": 14,
+        "negation": 6,
+        "distractor": 16,
+        "qmark": 2,
+        "nonEmbedded": 2,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 7,
+          "medium": 1,
+          "hard": 0,
+          "negation": 3,
+          "distractor": 2,
+          "nonEmbedded": 1
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 33,
+          "hard": 12,
+          "negation": 6,
+          "distractor": 26,
+          "nonEmbedded": 10,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      }
+    },
+    {
+      "round": 3,
+      "phase": "broad",
+      "mode": "broad",
+      "gap": {
+        "total": 146,
+        "diffGap": 74,
+        "typeGap": 46,
+        "distractorGap": 26
+      },
+      "assemblyState": {
+        "total": 16,
+        "diffCounts": {
+          "easy": 7,
+          "medium": 9,
+          "hard": 0
+        },
+        "embedded": 14,
+        "negation": 6,
+        "distractor": 16,
+        "qmark": 2,
+        "nonEmbedded": 2,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 7,
+          "medium": 1,
+          "hard": 0,
+          "negation": 3,
+          "distractor": 2,
+          "nonEmbedded": 1
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 33,
+          "hard": 12,
+          "negation": 6,
+          "distractor": 26,
+          "nonEmbedded": 10,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      },
+      "spec": [
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "negation",
+          "difficulty": "easy",
+          "count": 3
+        },
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 1
+        },
+        {
+          "type": "interrogative",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "result": {
+        "generated": 10,
+        "accepted": 6,
+        "rejected": 4,
+        "rejectReasons": {
+          "fatal: chunks[6]: isolated floating adverb \"tomorrow\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+          "fatal: distractor must be a single word (TPO standard)": 1,
+          "review:score<78": 2
+        }
+      },
+      "nextGap": {
+        "total": 129,
+        "diffGap": 69,
+        "typeGap": 40,
+        "distractorGap": 20
+      },
+      "nextAssemblyState": {
+        "total": 22,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 12,
+          "hard": 0
+        },
+        "embedded": 16,
+        "negation": 9,
+        "distractor": 22,
+        "qmark": 2,
+        "nonEmbedded": 6,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 1,
+          "hard": 0,
+          "negation": 4,
+          "distractor": 3,
+          "nonEmbedded": 3
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 30,
+          "hard": 12,
+          "negation": 3,
+          "distractor": 20,
+          "nonEmbedded": 6,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      }
+    },
+    {
+      "round": 4,
+      "phase": "broad",
+      "mode": "broad",
+      "gap": {
+        "total": 129,
+        "diffGap": 69,
+        "typeGap": 40,
+        "distractorGap": 20
+      },
+      "assemblyState": {
+        "total": 22,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 12,
+          "hard": 0
+        },
+        "embedded": 16,
+        "negation": 9,
+        "distractor": 22,
+        "qmark": 2,
+        "nonEmbedded": 6,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 1,
+          "hard": 0,
+          "negation": 4,
+          "distractor": 3,
+          "nonEmbedded": 3
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 30,
+          "hard": 12,
+          "negation": 3,
+          "distractor": 20,
+          "nonEmbedded": 6,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      },
+      "spec": [
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 4
+        },
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 1
+        },
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 1
+        },
+        {
+          "type": "interrogative",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "result": {
+        "generated": 10,
+        "accepted": 6,
+        "rejected": 4,
+        "rejectReasons": {
+          "fatal: chunks[6]: isolated floating adverb \"tomorrow\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+          "fatal: chunks[3]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+          "review:ets<72": 1,
+          "review:score<78": 1
+        }
+      },
+      "nextGap": {
+        "total": 111,
+        "diffGap": 63,
+        "typeGap": 34,
+        "distractorGap": 14
+      },
+      "nextAssemblyState": {
+        "total": 28,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 18,
+          "hard": 0
+        },
+        "embedded": 22,
+        "negation": 10,
+        "distractor": 28,
+        "qmark": 2,
+        "nonEmbedded": 6,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 2,
+          "hard": 0,
+          "negation": 5,
+          "distractor": 4,
+          "nonEmbedded": 3
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 24,
+          "hard": 12,
+          "negation": 2,
+          "distractor": 14,
+          "nonEmbedded": 6,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      }
+    },
+    {
+      "round": 5,
+      "phase": "assembly",
+      "mode": "assembly-medium",
+      "gap": {
+        "total": 111,
+        "diffGap": 63,
+        "typeGap": 34,
+        "distractorGap": 14
+      },
+      "assemblyState": {
+        "total": 28,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 18,
+          "hard": 0
+        },
+        "embedded": 22,
+        "negation": 10,
+        "distractor": 28,
+        "qmark": 2,
+        "nonEmbedded": 6,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 2,
+          "hard": 0,
+          "negation": 5,
+          "distractor": 4,
+          "nonEmbedded": 3
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 24,
+          "hard": 12,
+          "negation": 2,
+          "distractor": 14,
+          "nonEmbedded": 6,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      },
+      "spec": [
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 2
+        }
+      ],
+      "result": {
+        "generated": 5,
+        "accepted": 0,
+        "rejected": 5,
+        "rejectReasons": {
+          "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+          "runtime: question tmp_r5_q2: givenSlots/answerOrder do not reconstruct answer (got \"we the path took offered stunning views of the valley\", expected \"the path we took offered stunning views of the valley\")": 1,
+          "runtime: question tmp_r5_q3: givenSlots/answerOrder do not reconstruct answer (got \"you the shop recommended has fresh bread every morning\", expected \"the shop you recommended has fresh bread every morning\")": 1,
+          "review:ets<72": 2
+        }
+      },
+      "nextGap": {
+        "total": 111,
+        "diffGap": 63,
+        "typeGap": 34,
+        "distractorGap": 14
+      },
+      "nextAssemblyState": {
+        "total": 28,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 18,
+          "hard": 0
+        },
+        "embedded": 22,
+        "negation": 10,
+        "distractor": 28,
+        "qmark": 2,
+        "nonEmbedded": 6,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 2,
+          "hard": 0,
+          "negation": 5,
+          "distractor": 4,
+          "nonEmbedded": 3
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 24,
+          "hard": 12,
+          "negation": 2,
+          "distractor": 14,
+          "nonEmbedded": 6,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      }
+    },
+    {
+      "round": 6,
+      "phase": "assembly",
+      "mode": "assembly-medium",
+      "gap": {
+        "total": 111,
+        "diffGap": 63,
+        "typeGap": 34,
+        "distractorGap": 14
+      },
+      "assemblyState": {
+        "total": 28,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 18,
+          "hard": 0
+        },
+        "embedded": 22,
+        "negation": 10,
+        "distractor": 28,
+        "qmark": 2,
+        "nonEmbedded": 6,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 2,
+          "hard": 0,
+          "negation": 5,
+          "distractor": 4,
+          "nonEmbedded": 3
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 24,
+          "hard": 12,
+          "negation": 2,
+          "distractor": 14,
+          "nonEmbedded": 6,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      },
+      "spec": [
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 2
+        }
+      ],
+      "result": {
+        "generated": 5,
+        "accepted": 0,
+        "rejected": 5,
+        "rejectReasons": {
+          "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+          "runtime: question tmp_r6_q2: givenSlots/answerOrder do not reconstruct answer (got \"we the trail explored last month offers stunning views\", expected \"the trail we explored last month offers stunning views\")": 1,
+          "runtime: question tmp_r6_q3: givenSlots/answerOrder do not reconstruct answer (got \"you the market recommended has fresh organic produce\", expected \"the market you recommended has fresh organic produce\")": 1,
+          "review:ets<72": 2
+        }
+      },
+      "nextGap": {
+        "total": 111,
+        "diffGap": 63,
+        "typeGap": 34,
+        "distractorGap": 14
+      },
+      "nextAssemblyState": {
+        "total": 28,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 18,
+          "hard": 0
+        },
+        "embedded": 22,
+        "negation": 10,
+        "distractor": 28,
+        "qmark": 2,
+        "nonEmbedded": 6,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 2,
+          "hard": 0,
+          "negation": 5,
+          "distractor": 4,
+          "nonEmbedded": 3
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 24,
+          "hard": 12,
+          "negation": 2,
+          "distractor": 14,
+          "nonEmbedded": 6,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      }
+    },
+    {
+      "round": 7,
+      "phase": "assembly",
+      "mode": "assembly-medium",
+      "gap": {
+        "total": 111,
+        "diffGap": 63,
+        "typeGap": 34,
+        "distractorGap": 14
+      },
+      "assemblyState": {
+        "total": 28,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 18,
+          "hard": 0
+        },
+        "embedded": 22,
+        "negation": 10,
+        "distractor": 28,
+        "qmark": 2,
+        "nonEmbedded": 6,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 2,
+          "hard": 0,
+          "negation": 5,
+          "distractor": 4,
+          "nonEmbedded": 3
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 24,
+          "hard": 12,
+          "negation": 2,
+          "distractor": 14,
+          "nonEmbedded": 6,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      },
+      "spec": [
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 2
+        }
+      ],
+      "result": {
+        "generated": 5,
+        "accepted": 0,
+        "rejected": 5,
+        "rejectReasons": {
+          "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+          "review:blocker:tmp_r7_q2: distractor 'recommend' could create valid sentence 'The trail you recommend recommended offers...' - inserting distractor between valid chunks creates grammatical ambiguity|tmp_r7_q3: distractor 'open' could create valid sentence 'The bakery she open opened last month...' - inserting distractor between valid chunks creates grammatical ambiguity": 4
+        }
+      },
+      "nextGap": {
+        "total": 111,
+        "diffGap": 63,
+        "typeGap": 34,
+        "distractorGap": 14
+      },
+      "nextAssemblyState": {
+        "total": 28,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 18,
+          "hard": 0
+        },
+        "embedded": 22,
+        "negation": 10,
+        "distractor": 28,
+        "qmark": 2,
+        "nonEmbedded": 6,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 2,
+          "hard": 0,
+          "negation": 5,
+          "distractor": 4,
+          "nonEmbedded": 3
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 24,
+          "hard": 12,
+          "negation": 2,
+          "distractor": 14,
+          "nonEmbedded": 6,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      }
+    },
+    {
+      "round": 8,
+      "phase": "assembly",
+      "mode": "assembly-medium",
+      "gap": {
+        "total": 111,
+        "diffGap": 63,
+        "typeGap": 34,
+        "distractorGap": 14
+      },
+      "assemblyState": {
+        "total": 28,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 18,
+          "hard": 0
+        },
+        "embedded": 22,
+        "negation": 10,
+        "distractor": 28,
+        "qmark": 2,
+        "nonEmbedded": 6,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 2,
+          "hard": 0,
+          "negation": 5,
+          "distractor": 4,
+          "nonEmbedded": 3
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 24,
+          "hard": 12,
+          "negation": 2,
+          "distractor": 14,
+          "nonEmbedded": 6,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      },
+      "spec": [
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 2
+        }
+      ],
+      "result": {
+        "generated": 5,
+        "accepted": 0,
+        "rejected": 5,
+        "rejectReasons": {
+          "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+          "review:blocker:tmp_r8_q5: distractor 'discover' could be inserted to create valid sentence 'I discover the hiking trail offers stunning views year-round' (present simple is grammatically valid)": 4
+        }
+      },
+      "nextGap": {
+        "total": 111,
+        "diffGap": 63,
+        "typeGap": 34,
+        "distractorGap": 14
+      },
+      "nextAssemblyState": {
+        "total": 28,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 18,
+          "hard": 0
+        },
+        "embedded": 22,
+        "negation": 10,
+        "distractor": 28,
+        "qmark": 2,
+        "nonEmbedded": 6,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 2,
+          "hard": 0,
+          "negation": 5,
+          "distractor": 4,
+          "nonEmbedded": 3
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 24,
+          "hard": 12,
+          "negation": 2,
+          "distractor": 14,
+          "nonEmbedded": 6,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      }
+    },
+    {
+      "round": 9,
+      "phase": "assembly",
+      "mode": "assembly-medium",
+      "gap": {
+        "total": 111,
+        "diffGap": 63,
+        "typeGap": 34,
+        "distractorGap": 14
+      },
+      "assemblyState": {
+        "total": 28,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 18,
+          "hard": 0
+        },
+        "embedded": 22,
+        "negation": 10,
+        "distractor": 28,
+        "qmark": 2,
+        "nonEmbedded": 6,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 2,
+          "hard": 0,
+          "negation": 5,
+          "distractor": 4,
+          "nonEmbedded": 3
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 24,
+          "hard": 12,
+          "negation": 2,
+          "distractor": 14,
+          "nonEmbedded": 6,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      },
+      "spec": [
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 2
+        }
+      ],
+      "result": {
+        "generated": 5,
+        "accepted": 1,
+        "rejected": 4,
+        "rejectReasons": {
+          "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+          "fatal: chunks[2]: isolated floating adverb \"recently\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+          "review:ets<72": 1,
+          "review:score<78": 1
+        }
+      },
+      "nextGap": {
+        "total": 108,
+        "diffGap": 62,
+        "typeGap": 33,
+        "distractorGap": 13
+      },
+      "nextAssemblyState": {
+        "total": 29,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 19,
+          "hard": 0
+        },
+        "embedded": 22,
+        "negation": 10,
+        "distractor": 29,
+        "qmark": 2,
+        "nonEmbedded": 7,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 2,
+          "hard": 0,
+          "negation": 5,
+          "distractor": 4,
+          "nonEmbedded": 3
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 23,
+          "hard": 12,
+          "negation": 2,
+          "distractor": 13,
+          "nonEmbedded": 5,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      }
+    },
+    {
+      "round": 10,
+      "phase": "assembly",
+      "mode": "assembly-medium",
+      "gap": {
+        "total": 108,
+        "diffGap": 62,
+        "typeGap": 33,
+        "distractorGap": 13
+      },
+      "assemblyState": {
+        "total": 29,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 19,
+          "hard": 0
+        },
+        "embedded": 22,
+        "negation": 10,
+        "distractor": 29,
+        "qmark": 2,
+        "nonEmbedded": 7,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 2,
+          "hard": 0,
+          "negation": 5,
+          "distractor": 4,
+          "nonEmbedded": 3
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 23,
+          "hard": 12,
+          "negation": 2,
+          "distractor": 13,
+          "nonEmbedded": 5,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      },
+      "spec": [
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 2
+        }
+      ],
+      "result": {
+        "generated": 5,
+        "accepted": 2,
+        "rejected": 3,
+        "rejectReasons": {
+          "fatal: chunks[2]: isolated floating adverb \"recently\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+          "review:ets<72": 2
+        }
+      },
+      "nextGap": {
+        "total": 102,
+        "diffGap": 60,
+        "typeGap": 31,
+        "distractorGap": 11
+      },
+      "nextAssemblyState": {
+        "total": 31,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 21,
+          "hard": 0
+        },
+        "embedded": 22,
+        "negation": 10,
+        "distractor": 31,
+        "qmark": 2,
+        "nonEmbedded": 9,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 3,
+          "hard": 0,
+          "negation": 5,
+          "distractor": 4,
+          "nonEmbedded": 4
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 21,
+          "hard": 12,
+          "negation": 2,
+          "distractor": 11,
+          "nonEmbedded": 3,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      }
+    },
+    {
+      "round": 11,
+      "phase": "assembly",
+      "mode": "assembly-medium",
+      "gap": {
+        "total": 102,
+        "diffGap": 60,
+        "typeGap": 31,
+        "distractorGap": 11
+      },
+      "assemblyState": {
+        "total": 31,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 21,
+          "hard": 0
+        },
+        "embedded": 22,
+        "negation": 10,
+        "distractor": 31,
+        "qmark": 2,
+        "nonEmbedded": 9,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 3,
+          "hard": 0,
+          "negation": 5,
+          "distractor": 4,
+          "nonEmbedded": 4
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 21,
+          "hard": 12,
+          "negation": 2,
+          "distractor": 11,
+          "nonEmbedded": 3,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      },
+      "spec": [
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 2
+        }
+      ],
+      "result": {
+        "generated": 5,
+        "accepted": 0,
+        "rejected": 5,
+        "rejectReasons": {
+          "review:blocker:tmp_r11_q1: distractor 'explore' likely valid in answer position (bare infinitive after 'we')|tmp_r11_q4: distractor 'visit' likely valid in answer position (bare infinitive after 'I')": 5
+        }
+      },
+      "nextGap": {
+        "total": 102,
+        "diffGap": 60,
+        "typeGap": 31,
+        "distractorGap": 11
+      },
+      "nextAssemblyState": {
+        "total": 31,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 21,
+          "hard": 0
+        },
+        "embedded": 22,
+        "negation": 10,
+        "distractor": 31,
+        "qmark": 2,
+        "nonEmbedded": 9,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 3,
+          "hard": 0,
+          "negation": 5,
+          "distractor": 4,
+          "nonEmbedded": 4
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 21,
+          "hard": 12,
+          "negation": 2,
+          "distractor": 11,
+          "nonEmbedded": 3,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      }
+    },
+    {
+      "round": 12,
+      "phase": "assembly",
+      "mode": "assembly-medium",
+      "gap": {
+        "total": 102,
+        "diffGap": 60,
+        "typeGap": 31,
+        "distractorGap": 11
+      },
+      "assemblyState": {
+        "total": 31,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 21,
+          "hard": 0
+        },
+        "embedded": 22,
+        "negation": 10,
+        "distractor": 31,
+        "qmark": 2,
+        "nonEmbedded": 9,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 3,
+          "hard": 0,
+          "negation": 5,
+          "distractor": 4,
+          "nonEmbedded": 4
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 21,
+          "hard": 12,
+          "negation": 2,
+          "distractor": 11,
+          "nonEmbedded": 3,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      },
+      "spec": [
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 2
+        }
+      ],
+      "result": {
+        "generated": 5,
+        "accepted": 0,
+        "rejected": 5,
+        "rejectReasons": {
+          "runtime: question tmp_r12_q3: bank must not contain duplicates": 1,
+          "fatal: chunks[4]: isolated floating adverb \"recently\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+          "topic:repeat": 1,
+          "review:ets<72": 2
+        }
+      },
+      "nextGap": {
+        "total": 102,
+        "diffGap": 60,
+        "typeGap": 31,
+        "distractorGap": 11
+      },
+      "nextAssemblyState": {
+        "total": 31,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 21,
+          "hard": 0
+        },
+        "embedded": 22,
+        "negation": 10,
+        "distractor": 31,
+        "qmark": 2,
+        "nonEmbedded": 9,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 3,
+          "hard": 0,
+          "negation": 5,
+          "distractor": 4,
+          "nonEmbedded": 4
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 21,
+          "hard": 12,
+          "negation": 2,
+          "distractor": 11,
+          "nonEmbedded": 3,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      }
+    },
+    {
+      "round": 13,
+      "phase": "assembly",
+      "mode": "assembly-medium",
+      "gap": {
+        "total": 102,
+        "diffGap": 60,
+        "typeGap": 31,
+        "distractorGap": 11
+      },
+      "assemblyState": {
+        "total": 31,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 21,
+          "hard": 0
+        },
+        "embedded": 22,
+        "negation": 10,
+        "distractor": 31,
+        "qmark": 2,
+        "nonEmbedded": 9,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 3,
+          "hard": 0,
+          "negation": 5,
+          "distractor": 4,
+          "nonEmbedded": 4
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 21,
+          "hard": 12,
+          "negation": 2,
+          "distractor": 11,
+          "nonEmbedded": 3,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      },
+      "spec": [
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 2
+        }
+      ],
+      "result": {
+        "generated": 5,
+        "accepted": 0,
+        "rejected": 5,
+        "rejectReasons": {
+          "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+          "fatal: chunks[2]: isolated floating adverb \"recently\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+          "review:ets<72": 3
+        }
+      },
+      "nextGap": {
+        "total": 102,
+        "diffGap": 60,
+        "typeGap": 31,
+        "distractorGap": 11
+      },
+      "nextAssemblyState": {
+        "total": 31,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 21,
+          "hard": 0
+        },
+        "embedded": 22,
+        "negation": 10,
+        "distractor": 31,
+        "qmark": 2,
+        "nonEmbedded": 9,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 3,
+          "hard": 0,
+          "negation": 5,
+          "distractor": 4,
+          "nonEmbedded": 4
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 21,
+          "hard": 12,
+          "negation": 2,
+          "distractor": 11,
+          "nonEmbedded": 3,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      }
+    },
+    {
+      "round": 14,
+      "phase": "assembly",
+      "mode": "assembly-medium",
+      "gap": {
+        "total": 102,
+        "diffGap": 60,
+        "typeGap": 31,
+        "distractorGap": 11
+      },
+      "assemblyState": {
+        "total": 31,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 21,
+          "hard": 0
+        },
+        "embedded": 22,
+        "negation": 10,
+        "distractor": 31,
+        "qmark": 2,
+        "nonEmbedded": 9,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 3,
+          "hard": 0,
+          "negation": 5,
+          "distractor": 4,
+          "nonEmbedded": 4
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 21,
+          "hard": 12,
+          "negation": 2,
+          "distractor": 11,
+          "nonEmbedded": 3,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      },
+      "spec": [
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 2
+        }
+      ],
+      "result": {
+        "generated": 5,
+        "accepted": 2,
+        "rejected": 3,
+        "rejectReasons": {
+          "fatal: chunks[2]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+          "review:ets<72": 2
+        }
+      },
+      "nextGap": {
+        "total": 96,
+        "diffGap": 58,
+        "typeGap": 29,
+        "distractorGap": 9
+      },
+      "nextAssemblyState": {
+        "total": 33,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 23,
+          "hard": 0
+        },
+        "embedded": 22,
+        "negation": 10,
+        "distractor": 33,
+        "qmark": 2,
+        "nonEmbedded": 11,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 3,
+          "hard": 0,
+          "negation": 5,
+          "distractor": 4,
+          "nonEmbedded": 5
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 19,
+          "hard": 12,
+          "negation": 2,
+          "distractor": 9,
+          "nonEmbedded": 1,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      }
+    },
+    {
+      "round": 15,
+      "phase": "assembly",
+      "mode": "assembly-medium",
+      "gap": {
+        "total": 96,
+        "diffGap": 58,
+        "typeGap": 29,
+        "distractorGap": 9
+      },
+      "assemblyState": {
+        "total": 33,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 23,
+          "hard": 0
+        },
+        "embedded": 22,
+        "negation": 10,
+        "distractor": 33,
+        "qmark": 2,
+        "nonEmbedded": 11,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 3,
+          "hard": 0,
+          "negation": 5,
+          "distractor": 4,
+          "nonEmbedded": 5
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 19,
+          "hard": 12,
+          "negation": 2,
+          "distractor": 9,
+          "nonEmbedded": 1,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      },
+      "spec": [
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 2
+        }
+      ],
+      "result": {
+        "generated": 5,
+        "accepted": 0,
+        "rejected": 5,
+        "rejectReasons": {
+          "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+          "runtime: question tmp_r15_q4: givenSlots/answerOrder do not reconstruct answer (got \"i the gallery visited last month featured contemporary sculpture and photography\", expected \"the gallery i visited last month featured contemporary sculpture and photography\")": 1,
+          "review:ets<72": 3
+        }
+      },
+      "nextGap": {
+        "total": 96,
+        "diffGap": 58,
+        "typeGap": 29,
+        "distractorGap": 9
+      },
+      "nextAssemblyState": {
+        "total": 33,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 23,
+          "hard": 0
+        },
+        "embedded": 22,
+        "negation": 10,
+        "distractor": 33,
+        "qmark": 2,
+        "nonEmbedded": 11,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 3,
+          "hard": 0,
+          "negation": 5,
+          "distractor": 4,
+          "nonEmbedded": 5
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 19,
+          "hard": 12,
+          "negation": 2,
+          "distractor": 9,
+          "nonEmbedded": 1,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      }
+    },
+    {
+      "round": 16,
+      "phase": "assembly",
+      "mode": "assembly-medium",
+      "gap": {
+        "total": 96,
+        "diffGap": 58,
+        "typeGap": 29,
+        "distractorGap": 9
+      },
+      "assemblyState": {
+        "total": 33,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 23,
+          "hard": 0
+        },
+        "embedded": 22,
+        "negation": 10,
+        "distractor": 33,
+        "qmark": 2,
+        "nonEmbedded": 11,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 3,
+          "hard": 0,
+          "negation": 5,
+          "distractor": 4,
+          "nonEmbedded": 5
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 19,
+          "hard": 12,
+          "negation": 2,
+          "distractor": 9,
+          "nonEmbedded": 1,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      },
+      "spec": [
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 2
+        }
+      ],
+      "result": {
+        "generated": 5,
+        "accepted": 0,
+        "rejected": 5,
+        "rejectReasons": {
+          "runtime: question tmp_r16_q4: givenSlots/answerOrder do not reconstruct answer (got \"i the cafe visited yesterday serves excellent homemade pastries daily\", expected \"the cafe i visited yesterday serves excellent homemade pastries daily\")": 1,
+          "review:blocker:tmp_r16_q1: distractor 'find' could be inserted to create valid sentence 'I find the sculpture collection...'|tmp_r16_q3: distractor 'sold' could be inserted to create valid sentence 'The vendor near the entrance sold fresh organic produce every Saturday'|tmp_r16_q5: distractor 'open' could be inserted to create valid sentence 'The fitness center that open recently...' (though ungrammatical, test-takers might not notice)": 4
+        }
+      },
+      "nextGap": {
+        "total": 96,
+        "diffGap": 58,
+        "typeGap": 29,
+        "distractorGap": 9
+      },
+      "nextAssemblyState": {
+        "total": 33,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 23,
+          "hard": 0
+        },
+        "embedded": 22,
+        "negation": 10,
+        "distractor": 33,
+        "qmark": 2,
+        "nonEmbedded": 11,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 3,
+          "hard": 0,
+          "negation": 5,
+          "distractor": 4,
+          "nonEmbedded": 5
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 19,
+          "hard": 12,
+          "negation": 2,
+          "distractor": 9,
+          "nonEmbedded": 1,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      }
+    },
+    {
+      "round": 17,
+      "phase": "assembly",
+      "mode": "assembly-medium",
+      "gap": {
+        "total": 96,
+        "diffGap": 58,
+        "typeGap": 29,
+        "distractorGap": 9
+      },
+      "assemblyState": {
+        "total": 33,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 23,
+          "hard": 0
+        },
+        "embedded": 22,
+        "negation": 10,
+        "distractor": 33,
+        "qmark": 2,
+        "nonEmbedded": 11,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 3,
+          "hard": 0,
+          "negation": 5,
+          "distractor": 4,
+          "nonEmbedded": 5
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 19,
+          "hard": 12,
+          "negation": 2,
+          "distractor": 9,
+          "nonEmbedded": 1,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      },
+      "spec": [
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 2
+        }
+      ],
+      "result": {
+        "generated": 5,
+        "accepted": 0,
+        "rejected": 5,
+        "rejectReasons": {
+          "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+          "fatal: chunks[2]: isolated floating adverb \"recently\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+          "review:blocker:tmp_r17_q1: distractor 'find' could be inserted to create valid sentence 'I find the ancient artifacts display to be incredibly fascinating'|tmp_r17_q2: distractor 'cover' could be inserted to create valid sentence 'The session on digital marketing strategies cover several useful techniques' (subject-verb agreement issue makes this less clear, but still potentially valid)|tmp_r17_q3: distractor 'served' could be inserted to create valid sentence 'The cafe near the train station served excellent breakfast options'": 3
+        }
+      },
+      "nextGap": {
+        "total": 96,
+        "diffGap": 58,
+        "typeGap": 29,
+        "distractorGap": 9
+      },
+      "nextAssemblyState": {
+        "total": 33,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 23,
+          "hard": 0
+        },
+        "embedded": 22,
+        "negation": 10,
+        "distractor": 33,
+        "qmark": 2,
+        "nonEmbedded": 11,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 3,
+          "hard": 0,
+          "negation": 5,
+          "distractor": 4,
+          "nonEmbedded": 5
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 19,
+          "hard": 12,
+          "negation": 2,
+          "distractor": 9,
+          "nonEmbedded": 1,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      }
+    },
+    {
+      "round": 18,
+      "phase": "assembly",
+      "mode": "assembly-medium",
+      "gap": {
+        "total": 96,
+        "diffGap": 58,
+        "typeGap": 29,
+        "distractorGap": 9
+      },
+      "assemblyState": {
+        "total": 33,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 23,
+          "hard": 0
+        },
+        "embedded": 22,
+        "negation": 10,
+        "distractor": 33,
+        "qmark": 2,
+        "nonEmbedded": 11,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 3,
+          "hard": 0,
+          "negation": 5,
+          "distractor": 4,
+          "nonEmbedded": 5
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 19,
+          "hard": 12,
+          "negation": 2,
+          "distractor": 9,
+          "nonEmbedded": 1,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      },
+      "spec": [
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 2
+        }
+      ],
+      "result": {
+        "generated": 5,
+        "accepted": 0,
+        "rejected": 5,
+        "rejectReasons": {
+          "fatal: chunks[2]: isolated floating adverb \"recently\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+          "review:blocker:tmp_r18_q3: distractor 'offer' could be inserted to create valid sentence 'The cafe across from the train station offer fresh pastries daily' (subject-verb agreement error is subtle and may not be caught by test-takers)": 4
+        }
+      },
+      "nextGap": {
+        "total": 96,
+        "diffGap": 58,
+        "typeGap": 29,
+        "distractorGap": 9
+      },
+      "nextAssemblyState": {
+        "total": 33,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 23,
+          "hard": 0
+        },
+        "embedded": 22,
+        "negation": 10,
+        "distractor": 33,
+        "qmark": 2,
+        "nonEmbedded": 11,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 3,
+          "hard": 0,
+          "negation": 5,
+          "distractor": 4,
+          "nonEmbedded": 5
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 19,
+          "hard": 12,
+          "negation": 2,
+          "distractor": 9,
+          "nonEmbedded": 1,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      }
+    },
+    {
+      "round": 19,
+      "phase": "assembly",
+      "mode": "assembly-medium",
+      "gap": {
+        "total": 96,
+        "diffGap": 58,
+        "typeGap": 29,
+        "distractorGap": 9
+      },
+      "assemblyState": {
+        "total": 33,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 23,
+          "hard": 0
+        },
+        "embedded": 22,
+        "negation": 10,
+        "distractor": 33,
+        "qmark": 2,
+        "nonEmbedded": 11,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 3,
+          "hard": 0,
+          "negation": 5,
+          "distractor": 4,
+          "nonEmbedded": 5
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 19,
+          "hard": 12,
+          "negation": 2,
+          "distractor": 9,
+          "nonEmbedded": 1,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      },
+      "spec": [
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 2
+        }
+      ],
+      "result": {
+        "generated": 5,
+        "accepted": 1,
+        "rejected": 4,
+        "rejectReasons": {
+          "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+          "runtime: question tmp_r19_q4: givenSlots/answerOrder do not reconstruct answer (got \"i the waiter spoke with recommended the seafood pasta dish\", expected \"the waiter i spoke with recommended the seafood pasta dish\")": 1,
+          "fatal: chunks[2]: isolated floating adverb \"recently\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+          "review:ets<72": 1
+        }
+      },
+      "nextGap": {
+        "total": 93,
+        "diffGap": 57,
+        "typeGap": 28,
+        "distractorGap": 8
+      },
+      "nextAssemblyState": {
+        "total": 34,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 24,
+          "hard": 0
+        },
+        "embedded": 22,
+        "negation": 10,
+        "distractor": 34,
+        "qmark": 2,
+        "nonEmbedded": 12,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 3,
+          "hard": 0,
+          "negation": 5,
+          "distractor": 4,
+          "nonEmbedded": 6
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 18,
+          "hard": 12,
+          "negation": 2,
+          "distractor": 8,
+          "nonEmbedded": 0,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      }
+    },
+    {
+      "round": 20,
+      "phase": "broad",
+      "mode": "broad",
+      "gap": {
+        "total": 93,
+        "diffGap": 57,
+        "typeGap": 28,
+        "distractorGap": 8
+      },
+      "assemblyState": {
+        "total": 34,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 24,
+          "hard": 0
+        },
+        "embedded": 22,
+        "negation": 10,
+        "distractor": 34,
+        "qmark": 2,
+        "nonEmbedded": 12,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 3,
+          "hard": 0,
+          "negation": 5,
+          "distractor": 4,
+          "nonEmbedded": 6
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 18,
+          "hard": 12,
+          "negation": 2,
+          "distractor": 8,
+          "nonEmbedded": 0,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      },
+      "spec": [
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 7
+        },
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 1
+        },
+        {
+          "type": "interrogative",
+          "difficulty": "medium",
+          "count": 1
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "result": {
+        "generated": 10,
+        "accepted": 0,
+        "rejected": 10,
+        "rejectReasons": {
+          "fatal: chunks[5]: isolated floating adverb \"tomorrow\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+          "fatal: chunks[6]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+          "review:blocker:tmp_r20_q1: prompt/answer mismatch - prompt asks about 'tour group size' but answer is about 'if the tour group had arrived yet' (arrival, not size)|tmp_r20_q4: distractor 'did' can be inserted to create valid alternative 'why did the doctor changed' (though ungrammatical, test-takers might attempt it)|tmp_r20_q6: distractor 'fitted' could create confusion as 'fitted' is valid past tense alternative to 'fit'": 8
+        }
+      },
+      "nextGap": {
+        "total": 93,
+        "diffGap": 57,
+        "typeGap": 28,
+        "distractorGap": 8
+      },
+      "nextAssemblyState": {
+        "total": 34,
+        "diffCounts": {
+          "easy": 10,
+          "medium": 24,
+          "hard": 0
+        },
+        "embedded": 22,
+        "negation": 10,
+        "distractor": 34,
+        "qmark": 2,
+        "nonEmbedded": 12,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "negationMin": 12,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "embeddedMax": 48,
+          "qmarkMax": 12
+        },
+        "assemblableBy": {
+          "easy": 10,
+          "medium": 3,
+          "hard": 0,
+          "negation": 5,
+          "distractor": 4,
+          "nonEmbedded": 6
+        },
+        "assemblableSets": 0,
+        "deficits": {
+          "easy": 0,
+          "medium": 18,
+          "hard": 12,
+          "negation": 2,
+          "distractor": 8,
+          "nonEmbedded": 0,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "qmarkOverflow": 0
+      }
+    }
+  ],
+  "final": null
+}
