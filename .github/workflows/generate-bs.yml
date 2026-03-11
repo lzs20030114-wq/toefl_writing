@@ -50,4 +50,10 @@ jobs:
           git add data/buildSentence/staging/${RUN_ID}.json
           git add data/buildSentence/reserve_pool.json || true
           git diff --staged --quiet || git commit -m "chore: stage ${BS_TARGET_SETS} BS sets (run ${RUN_ID}) [skip ci]"
-          git push
+          # Rebase on latest main then push (retried up to 4 times).
+          # Prevents failure when code pushes or admin ops land on main mid-run.
+          for i in 1 2 3 4; do
+            git pull --rebase origin main && git push && break
+            echo "Push attempt $i failed, retrying in 10s…"
+            sleep 10
+          done
