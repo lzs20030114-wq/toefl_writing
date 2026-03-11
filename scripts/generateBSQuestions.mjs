@@ -2894,9 +2894,10 @@ async function main() {
 
   function isAssemblyPhase(poolState, assemblyState) {
     const total = poolState?.style?.total || 0;
+    const embeddedRatio = total > 0 ? (assemblyState.embedded / total) : 0;
     return (
-      (assemblyState.deficits.nonEmbedded > 0 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.45)) ||
-      (assemblyState.embeddedOverflow > 0 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.4)) ||
+      (assemblyState.deficits.nonEmbedded > 0 && embeddedRatio >= 0.72 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.35)) ||
+      (assemblyState.embeddedOverflow > 0 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.35)) ||
       total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.7) ||
       assemblyState.assemblableSets >= Math.max(1, TARGET_SET_COUNT - 3)
     );
@@ -2932,10 +2933,22 @@ async function main() {
     }
 
     function chooseDiff(type) {
-      const ranked = ["medium", "hard", "easy"]
-        .map((diff) => ({ diff, gap: diffGapForBucket(workingPoolState, diff) }))
-        .sort((a, b) => b.gap - a.gap);
-      if (type === "negation" && ranked[0]?.gap === 0) return "medium";
+      const currentCounts = getDifficultyCounts(workingPoolState);
+      const ranked = ["hard", "medium", "easy"]
+        .map((diff) => {
+          const assemblyNeed = assemblyState?.need?.[diff] || 0;
+          const assemblyDeficit = Math.max(0, assemblyNeed - (currentCounts[diff] || 0));
+          const assemblyRatio = assemblyNeed > 0 ? assemblyDeficit / assemblyNeed : 0;
+          const bufferGap = diffGapForBucket(workingPoolState, diff);
+          const priority = assemblyRatio * 100 + bufferGap;
+          return { diff, priority, assemblyDeficit, bufferGap };
+        })
+        .sort((a, b) => {
+          if (b.priority !== a.priority) return b.priority - a.priority;
+          if (b.assemblyDeficit !== a.assemblyDeficit) return b.assemblyDeficit - a.assemblyDeficit;
+          return b.bufferGap - a.bufferGap;
+        });
+      if (type === "negation" && ranked[0]?.assemblyDeficit === 0 && ranked[0]?.bufferGap === 0) return "medium";
       return ranked[0]?.diff || "medium";
     }
 
