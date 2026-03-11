@@ -125,6 +125,97 @@ function autoSplitChunk(chunk, maxWords = 3) {
   return [words.slice(0, mid).join(" "), words.slice(mid).join(" ")];
 }
 
+// ── Multi-word chunk control ──────────────────────────────────────────────────
+// TPO data: ~77% single-word chunks, ~23% multi-word (1-2 per question).
+// These patterns must stay as multi-word units; everything else should be split.
+
+const _NEG_AUX = new Set([
+  "did","does","do","has","have","had","is","was","were","will",
+  "would","could","should","am","are","can","must",
+]);
+
+// Specific aux+word pairs that are legitimate grammar units
+const _AUX_PAIRS = new Set([
+  "had been","has been","have been","will be","would be","could be","should be",
+  "must be","can be","is being","was being","were being",
+  "had gone","had done","had finished","had arrived","had started","had received",
+  "had decided","had left","had found","had seen","had heard","had told",
+  "had made","had taken","had given","had said","had come","had read",
+  "had thought","had tried","had needed","had known","had expected","had hoped",
+  "had planned","had missed","has finished","has started","has arrived",
+  "has gone","have gone","have finished","have decided","have received",
+  "have found","will have","would have","could have","should have","might have",
+  "been extended","been approved","been submitted","been canceled","been completed",
+  "been rescheduled","been delayed","been assigned","is scheduled",
+  "was scheduled","were scheduled",
+]);
+
+// Common phrasal verbs that must stay intact
+const _PHRASAL_VERBS = new Set([
+  "find out","pick up","carry out","sign up","point out","give up","set up",
+  "look up","come up","take off","put off","turn on","turn off","work out",
+  "stand out","run out","hand in","look into","drop off","end up","fill out",
+  "get back","give back","go over","hang up","hold on","keep up","move on",
+  "pay back","show up","shut down","sit down","stay up","check in","check out",
+  "call back","turn up","bring up","go through","look after","take over",
+  "go ahead","get up","put down","lay out","come back","go back",
+]);
+
+// Fixed collocations that stay as a unit
+const _COLLOCATIONS = new Set([
+  "no idea","what time","on time","in stock","due to","of course","such as",
+  "as well","at least","at last","in fact","in general","so far","at all",
+  "in time","on schedule","in advance","by now","at once","in case",
+  "all right","right now","in charge","in touch","from now",
+]);
+
+/**
+ * Returns true if a multi-word chunk must stay as a unit (negation cluster,
+ * infinitive, aux+participle, phrasal verb, or fixed collocation).
+ */
+function isMandatoryMultiWord(chunk) {
+  const lower = String(chunk || "").toLowerCase().trim();
+  const words = lower.split(/\s+/);
+  if (words.length < 2) return false;
+  // Negation cluster: aux + "not"
+  if (words[words.length - 1] === "not" && _NEG_AUX.has(words[0])) return true;
+  // Infinitive: "to" + verb
+  if (words[0] === "to" && words.length === 2) return true;
+  // Specific aux pairs (aux+participle, passive helpers)
+  if (_AUX_PAIRS.has(lower)) return true;
+  // Phrasal verbs
+  if (_PHRASAL_VERBS.has(lower)) return true;
+  // Fixed collocations
+  if (_COLLOCATIONS.has(lower)) return true;
+  return false;
+}
+
+/**
+ * Split non-mandatory multi-word chunks until the total multi-word count
+ * across effective chunks is ≤ maxMultiWord (~2 matches the TPO 23% target).
+ * Mandatory chunks (negation, infinitives, phrasal verbs, etc.) are never split.
+ */
+function limitMultiWordChunks(chunks, distractor, maxMultiWord = 2) {
+  const effective = chunks.filter((c) => c !== distractor);
+  const multiCount = effective.filter((c) => c.split(/\s+/).length > 1).length;
+  if (multiCount <= maxMultiWord) return chunks;
+
+  let excess = multiCount - maxMultiWord;
+  const result = [];
+  for (const chunk of chunks) {
+    if (excess > 0 && chunk !== distractor) {
+      const words = chunk.split(/\s+/);
+      if (words.length > 1 && !isMandatoryMultiWord(chunk)) {
+        result.push(...words);
+        excess--;
+        continue;
+      }
+    }
+    result.push(chunk);
+  }
+  return result;
+}
+
 /**
  * Ensure effective chunk count is at least minCount by splitting longest chunks.
  */
@@ -268,6 +359,9 @@ function normalizeQuestion(raw, tempId) {
 
   // Auto-fix: Ensure at least 4 effective chunks
   chunks = ensureMinChunkCount(chunks, distractor, 4);
+
+  // Auto-fix: Limit non-mandatory multi-word chunks to ~2 per question (TPO: ~23% multi-word)
+  chunks = limitMultiWordChunks(chunks, distractor, 2);
 
   // Auto-fix: Correct prefilled_positions based on actual answer text.
   // Fix 2: fallback lookup is case-insensitive so AI key-case mismatches don't lose positions.
@@ -2270,6 +2364,116 @@ function flushPoolCheckpoint(pool) {
   }
 }
 
+// ── Post-generation rule checks and auto-fixes ───────────────────────────────
+// Mirrors the checks in /api/admin/staging/[runId]/review/route.js
+// Applied to final sets before writing, so deployed questions are clean.
+
+const _PREP_FRAGMENT = /^(of|in|at|for|on|to|by|with|from|into|after|before|during|about|all|per)\s+(the|a|an|our|your|their|his|her|my|its)\b/i;
+const _STANDALONE_ADVERBS = new Set([
+  "yesterday","today","tomorrow","recently","finally","always","often",
+  "sometimes","probably","eventually","suddenly","already","usually",
+  "still","again","now","soon","later","early","just","once","twice",
+]);
+
+function escapeRegexStr(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function postGenerationRuleCheck(sets) {
+  let fixCount = 0;
+  for (const set of sets) {
+    for (const q of set.questions || []) {
+      // Fix 1: contextViolations — ask/report/respond with non-empty prompt_context
+      if (
+        ["ask", "report", "respond"].includes(q.prompt_task_kind) &&
+        String(q.prompt_context || "").trim() !== ""
+      ) {
+        q.prompt_context = "";
+        q.prompt = String(q.prompt_task_text || "").trim();
+        fixCount++;
+        console.log(`  [post-fix] cleared prompt_context on ${q.id}`);
+      }
+
+      // Fix 2: prepFragments — split "of the" / "in the" etc. into individual words
+      {
+        const newChunks = [];
+        let changed = false;
+        for (const chunk of q.chunks || []) {
+          if (chunk !== q.distractor && _PREP_FRAGMENT.test(chunk.trim())) {
+            newChunks.push(...chunk.trim().split(/\s+/));
+            changed = true;
+          } else {
+            newChunks.push(chunk);
+          }
+        }
+        if (changed) {
+          q.chunks = newChunks;
+          fixCount++;
+          console.log(`  [post-fix] split prep-fragment chunks on ${q.id}`);
+        }
+      }
+
+      // Fix 3: answerErrors — distractor word appears in answer (remove distractor)
+      if (q.distractor) {
+        const re = new RegExp(`\\b${escapeRegexStr(q.distractor)}\\b`, "i");
+        if (re.test(q.answer)) {
+          q.chunks = (q.chunks || []).filter((c) => c !== q.distractor);
+          q.distractor = null;
+          q.has_distractor = false;
+          fixCount++;
+          console.log(`  [post-fix] removed bad distractor from ${q.id} (appeared in answer)`);
+        }
+      }
+
+      // Fix 4: standaloneNot — standalone "not" chunk alongside an aux chunk
+      // Attempt to merge with the preceding aux in the answer
+      {
+        const effectiveChunks = (q.chunks || []).filter((c) => c !== q.distractor);
+        const hasStandaloneNot = effectiveChunks.some((c) => c.trim().toLowerCase() === "not");
+        const hasPrecedingAux = effectiveChunks.some((c) =>
+          _NEG_AUX.has(c.trim().toLowerCase())
+        );
+        if (hasStandaloneNot && hasPrecedingAux) {
+          // Find which aux word precedes "not" in the answer
+          const answerWords = q.answer.toLowerCase().replace(/[.,!?;:]/g, "").split(/\s+/).filter(Boolean);
+          const notIdx = answerWords.indexOf("not");
+          if (notIdx > 0) {
+            const auxWord = answerWords[notIdx - 1];
+            if (_NEG_AUX.has(auxWord)) {
+              const merged = `${auxWord} not`;
+              // Remove standalone "not" and standalone aux, add merged chunk
+              q.chunks = [
+                ...(q.chunks || []).filter((c) => c !== q.distractor && c.trim().toLowerCase() !== "not" && c.trim().toLowerCase() !== auxWord),
+                merged,
+                ...(q.distractor ? [q.distractor] : []),
+              ];
+              fixCount++;
+              console.log(`  [post-fix] merged standalone not → "${merged}" on ${q.id}`);
+            }
+          }
+        }
+      }
+
+      // Log (no auto-fix): standaloneAdverbs — standalone time/frequency adverbs
+      {
+        const effectiveChunks = (q.chunks || []).filter((c) => c !== q.distractor);
+        const badAdverbs = effectiveChunks.filter((c) => {
+          const w = c.trim().split(/\s+/);
+          return w.length === 1 && _STANDALONE_ADVERBS.has(w[0].toLowerCase());
+        });
+        if (badAdverbs.length > 0) {
+          console.log(`  [post-fix] WARNING standalone adverb(s) on ${q.id}: ${badAdverbs.join(", ")} — needs manual review`);
+        }
+      }
+    }
+  }
+  if (fixCount > 0) {
+    console.log(`[post-generation-fix] applied ${fixCount} rule fix(es) across ${sets.length} set(s)`);
+  } else {
+    console.log(`[post-generation-fix] no issues found in ${sets.length} set(s)`);
+  }
+}
+
 async function main() {
   loadEnv();
   if (!process.env.DEEPSEEK_API_KEY) {
@@ -2506,6 +2710,10 @@ async function main() {
     console.warn("Top reject reasons:");
     summarizeRejectReasons(rejectReasons).forEach(([k, v]) => console.warn(`- ${k}: ${v}`));
   }
+
+  // Apply deterministic rule fixes to final sets (contextViolations, prepFragments,
+  // answerErrors, standaloneNot) before writing to disk.
+  postGenerationRuleCheck(finalSets);
 
   const output = {
     version: "1.2",

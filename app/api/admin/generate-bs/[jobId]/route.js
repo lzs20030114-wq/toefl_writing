@@ -46,13 +46,22 @@ function jaccardSimilarity(setA, setB) {
 
 /**
  * Compute topic novelty score (0–100).
- * Metric: percentage of question pairs with Jaccard similarity < 0.4.
- * (Avg-based score was misleading — rare high-similarity pairs got drowned out.)
+ *
+ * When bankQuestions is provided (the existing deployed question bank):
+ *   Cross-bank score = % of new questions that have max Jaccard < 0.35 vs every bank question.
+ *   Within-batch score = % of new-question pairs with Jaccard < 0.4.
+ *   Final = min(cross-bank, within-batch) — penalises if new Qs repeat each other OR the bank.
+ *
+ * When no bankQuestions (fallback):
+ *   Returns within-batch pairwise score only (less meaningful).
+ *
  * Thresholds: ≥90 优秀, 80–89 良好, 70–79 合格, <70 需改进.
  */
-function computeNoveltyScore(questions) {
+function computeNoveltyScore(questions, bankQuestions = []) {
   if (questions.length < 2) return 100;
   const wordSets = questions.map(extractTopicWords);
+
+  // Within-batch: pairwise Jaccard < 0.4
   let novelPairs = 0;
   let totalPairs = 0;
   for (let i = 0; i < wordSets.length; i++) {
@@ -61,7 +70,20 @@ function computeNoveltyScore(questions) {
       if (jaccardSimilarity(wordSets[i], wordSets[j]) < 0.4) novelPairs++;
     }
   }
-  return totalPairs > 0 ? Math.round((novelPairs / totalPairs) * 100) : 100;
+  const withinScore = totalPairs > 0 ? Math.round((novelPairs / totalPairs) * 100) : 100;
+
+  if (bankQuestions.length === 0) return withinScore;
+
+  // Cross-bank: each new question must be sufficiently distinct from every existing bank question
+  const bankWordSets = bankQuestions.map(extractTopicWords);
+  let crossNovel = 0;
+  for (const ws of wordSets) {
+    const maxSim = bankWordSets.reduce((m, bws) => Math.max(m, jaccardSimilarity(ws, bws)), 0);
+    if (maxSim < 0.35) crossNovel++;
+  }
+  const crossScore = Math.round((crossNovel / questions.length) * 100);
+
+  return Math.min(withinScore, crossScore);
 }
 
 function noveltyLabel(score) {
@@ -72,7 +94,7 @@ function noveltyLabel(score) {
 }
 // ─────────────────────────────────────────────────────────────────────────────
 
-function computeStats(data) {
+function computeStats(data, bankQuestions = []) {
   const sets = data.question_sets || [];
   const allQ = sets.flatMap((s) => s.questions || []);
   const meta = data._meta || {};
@@ -139,8 +161,8 @@ function computeStats(data) {
     .slice(0, 8)
     .map(([word, count]) => ({ word, count }));
 
-  // 话题新颖度
-  const noveltyScore = computeNoveltyScore(allQ);
+  // 话题新颖度（跟现有题库交叉比较，bankQuestions 为空时降级为批次内比较）
+  const noveltyScore = computeNoveltyScore(allQ, bankQuestions);
 
   return {
     totalSets: sets.length,
@@ -207,7 +229,17 @@ export async function GET(request, { params }) {
     try {
       const stagingFile = await getRepoFile(`data/buildSentence/staging/${jobId}.json`);
       if (stagingFile) {
-        run.stats = computeStats(stagingFile.content);
+        // 同时读取现有题库，用于跨库新颖度比较
+        let bankQuestions = [];
+        try {
+          const bankFile = await getRepoFile("data/buildSentence/questions.json");
+          if (bankFile) {
+            bankQuestions = (bankFile.content.question_sets || []).flatMap((s) => s.questions || []);
+          }
+        } catch (_) {
+          // 题库读取失败不影响主流程，降级为批次内新颖度
+        }
+        run.stats = computeStats(stagingFile.content, bankQuestions);
         run.stagingReady = true;
       } else {
         // 文件不存在，可能已部署或删除

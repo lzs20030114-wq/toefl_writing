@@ -269,7 +269,7 @@ function StatsPanel({ stats, runId, token, onDeployed, onDeleted }) {
               {score} / 100
             </span>
             <span style={{ fontSize: 12, color, fontWeight: 700 }}>{label}</span>
-            <span style={{ fontSize: 11, color: C.t3 }}>（≥90 优秀，80-89 良好，70-79 合格，&lt;70 需改进）</span>
+            <span style={{ fontSize: 11, color: C.t3 }}>（≥90 优秀，80-89 良好，70-79 合格，&lt;70 需改进）跨库+批次内取最低</span>
           </div>
         );
       })()}
