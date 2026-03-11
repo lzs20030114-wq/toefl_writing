@@ -1,0 +1,311 @@
+{
+  "version": "1.2",
+  "generated_at": "2026-03-11T15:50:22.489Z",
+  "_meta": {
+    "target_sets": 6,
+    "total_rounds": 14,
+    "total_generated": 115,
+    "total_accepted": 49,
+    "acceptance_rate": 0.426
+  },
+  "question_sets": [
+    {
+      "set_id": 1,
+      "questions": [
+        {
+          "id": "ets_s1_q1",
+          "prompt": "What do you tell your neighbor about the bookstore?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do you tell your neighbor about the bookstore?",
+          "answer": "I just found out where the rare books are being kept.",
+          "chunks": [
+            "just",
+            "found",
+            "out",
+            "where",
+            "the rare books",
+            "are being",
+            "kept",
+            "keep"
+          ],
+          "prefilled": [
+            "i"
+          ],
+          "prefilled_positions": {
+            "i": 0
+          },
+          "distractor": "keep",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded_question",
+            "passive_progressive"
+          ]
+        },
+        {
+          "id": "ets_s1_q2",
+          "prompt": "What did the museum curator need to know about the exhibition?",
+          "prompt_context": "",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did the museum curator need to know about the exhibition?",
+          "answer": "The museum curator needed to know when the paintings would arrive.",
+          "chunks": [
+            "needed",
+            "to know",
+            "when",
+            "the paintings",
+            "would",
+            "arrive",
+            "did"
+          ],
+          "prefilled": [
+            "the museum curator"
+          ],
+          "prefilled_positions": {
+            "the museum curator": 0
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded_question",
+            "when_clause",
+            "modal_verb"
+          ]
+        },
+        {
+          "id": "ets_s1_q3",
+          "prompt": "What do you say about the botanical garden tour?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do you say about the botanical garden tour?",
+          "answer": "I did not attend the guided tour last Saturday.",
+          "chunks": [
+            "did not",
+            "attend",
+            "the",
+            "guided",
+            "tour",
+            "last saturday",
+            "i"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": null,
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation",
+            "simple_past"
+          ],
+          "has_distractor": false
+        },
+        {
+          "id": "ets_s1_q4",
+          "prompt": "What do you say about the apartment you rented?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do you say about the apartment you rented?",
+          "answer": "The apartment I rented is located closer to campus than expected.",
+          "chunks": [
+            "the",
+            "apartment",
+            "rented",
+            "is",
+            "located",
+            "closer to",
+            "campus",
+            "than expected",
+            "rent"
+          ],
+          "prefilled": [
+            "i"
+          ],
+          "prefilled_positions": {
+            "i": 2
+          },
+          "distractor": "rent",
+          "has_question_mark": false,
+          "grammar_points": [
+            "contact_clause",
+            "comparative",
+            "passive_voice"
+          ]
+        },
+        {
+          "id": "ets_s1_q5",
+          "prompt": "What did the elderly neighbor inquire about the community garden?",
+          "prompt_context": "",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did the elderly neighbor inquire about the community garden?",
+          "answer": "The neighbor did not understand how the watering system worked.",
+          "chunks": [
+            "did not",
+            "understand",
+            "how",
+            "the watering system",
+            "worked",
+            "works"
+          ],
+          "prefilled": [
+            "the neighbor"
+          ],
+          "prefilled_positions": {
+            "the neighbor": 0
+          },
+          "distractor": "works",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation",
+            "embedded_question"
+          ]
+        },
+        {
+          "id": "ets_s1_q6",
+          "prompt": "What do you say about the hiking trail conditions?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do you say about the hiking trail conditions?",
+          "answer": "I have no idea why the trail was closed yesterday.",
+          "chunks": [
+            "have",
+            "no idea",
+            "why",
+            "the",
+            "trail",
+            "was",
+            "closed yesterday",
+            "did"
+          ],
+          "prefilled": [
+            "i"
+          ],
+          "prefilled_positions": {
+            "i": 0
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded_question",
+            "why_clause",
+            "passive_voice"
+          ]
+        },
+        {
+          "id": "ets_s1_q7",
+          "prompt": "What did the young architect wonder about the building permit?",
+          "prompt_context": "",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did the young architect wonder about the building permit?",
+          "answer": "The young architect wondered where the permit office was located.",
+          "chunks": [
+            "wondered",
+            "where",
+            "the permit office",
+            "was",
+            "located",
+            "did"
+          ],
+          "prefilled": [
+            "the young architect"
+          ],
+          "prefilled_positions": {
+            "the young architect": 0
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded_question",
+            "indirect_speech"
+          ]
+        },
+        {
+          "id": "ets_s1_q8",
+          "prompt": "What do you ask about the sports class schedule?",
+          "prompt_context": "",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What do you ask about the sports class schedule?",
+          "answer": "Do you know what time the session begins on Saturday?",
+          "chunks": [
+            "know",
+            "what time",
+            "the",
+            "session",
+            "begins",
+            "on saturday",
+            "began"
+          ],
+          "prefilled": [
+            "do you"
+          ],
+          "prefilled_positions": {
+            "do you": 0
+          },
+          "distractor": "began",
+          "has_question_mark": true,
+          "grammar_points": [
+            "embedded_question",
+            "what_time",
+            "present_tense"
+          ]
+        },
+        {
+          "id": "ets_s1_q9",
+          "prompt": "What did the landlord ask about the lease agreement?",
+          "prompt_context": "",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did the landlord ask about the lease agreement?",
+          "answer": "The landlord asked when the tenant signed the lease agreement.",
+          "chunks": [
+            "asked",
+            "when",
+            "the tenant",
+            "signed",
+            "the lease agreement",
+            "did"
+          ],
+          "prefilled": [
+            "the landlord"
+          ],
+          "prefilled_positions": {
+            "the landlord": 0
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "indirect_question",
+            "third_person_reporting",
+            "simple_past"
+          ]
+        },
+        {
+          "id": "ets_s1_q10",
+          "prompt": "What do you ask about the construction project?",
+          "prompt_context": "",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What do you ask about the construction project?",
+          "answer": "Do you know when the building will be completed?",
+          "chunks": [
+            "know",
+            "when",
+            "the building",
+            "will",
+            "be completed",
+            "complete"
+          ],
+          "prefilled": [
+            "do you"
+          ],
+          "prefilled_positions": {
+            "do you": 0
+          },
+          "distractor": "complete",
+          "has_question_mark": true,
+          "grammar_points": [
+            "indirect_question",
+            "future_tense",
+            "passive_voice"
+          ]
+        }
+      ]
+    }
+  ]
+}

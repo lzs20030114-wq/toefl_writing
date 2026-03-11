@@ -1,0 +1,763 @@
+{
+  "generated_at": "2026-03-11T15:50:22.494Z",
+  "active": {
+    "negation": {
+      "sinceRound": 11,
+      "untilRound": 14,
+      "lastEvent": {
+        "triggeredAt": "2026-03-11T15:48:51.273Z",
+        "round": 11,
+        "mode": "normal",
+        "type": "negation",
+        "generated": 17,
+        "accepted": 2,
+        "rejected": 15,
+        "acceptRate": 0.118,
+        "reasons": [
+          [
+            "review:ets<72",
+            6
+          ],
+          [
+            "pool:non_embedded_shortage",
+            4
+          ],
+          [
+            "review:blocker:tmp_r10_q2: distractor 'is' can be inserted to create valid sentence 'I did not attend because the location is changed' (present tense also grammatical)|tmp_r10_q4: distractor 'hear' can be inserted to create valid sentence 'I have not hear back...' - while ungrammatical, learners may not detect this error",
+            3
+          ],
+          [
+            "review:blocker:tmp_r11_q2: distractor 'download' can be inserted to create valid sentence 'I have not download downloaded the files from the portal' (grammatically awkward but structurally possible)",
+            2
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 9,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 10
+              }
+            ],
+            "stats": {
+              "generated": 8,
+              "accepted": 2,
+              "rejected": 6,
+              "reasons": {
+                "review:ets<72": 6
+              }
+            }
+          },
+          {
+            "round": 10,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 5
+              }
+            ],
+            "stats": {
+              "generated": 4,
+              "accepted": 0,
+              "rejected": 4,
+              "reasons": {
+                "pool:non_embedded_shortage": 1,
+                "review:blocker:tmp_r10_q2: distractor 'is' can be inserted to create valid sentence 'I did not attend because the location is changed' (present tense also grammatical)|tmp_r10_q4: distractor 'hear' can be inserted to create valid sentence 'I have not hear back...' - while ungrammatical, learners may not detect this error": 3
+              }
+            }
+          },
+          {
+            "round": 11,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 5
+              }
+            ],
+            "stats": {
+              "generated": 5,
+              "accepted": 0,
+              "rejected": 5,
+              "reasons": {
+                "pool:non_embedded_shortage": 3,
+                "review:blocker:tmp_r11_q2: distractor 'download' can be inserted to create valid sentence 'I have not download downloaded the files from the portal' (grammatically awkward but structurally possible)": 2
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 14
+      }
+    }
+  },
+  "events": [
+    {
+      "triggeredAt": "2026-03-11T15:40:31.326Z",
+      "round": 2,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 5,
+      "accepted": 1,
+      "rejected": 4,
+      "acceptRate": 0.2,
+      "reasons": [
+        [
+          "review:ets<72",
+          2
+        ],
+        [
+          "fatal: distractor must be a single word (TPO standard); chunks[5]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "review:score<78",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 1,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "easy",
+              "count": 2
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 1,
+            "rejected": 2,
+            "reasons": {
+              "fatal: distractor must be a single word (TPO standard); chunks[5]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "review:score<78": 1
+            }
+          }
+        },
+        {
+          "round": 2,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "easy",
+              "count": 3
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "hard",
+              "count": 3
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:ets<72": 2
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 5
+    },
+    {
+      "triggeredAt": "2026-03-11T15:41:51.594Z",
+      "round": 3,
+      "mode": "normal",
+      "type": "relative",
+      "generated": 5,
+      "accepted": 1,
+      "rejected": 4,
+      "acceptRate": 0.2,
+      "reasons": [
+        [
+          "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          3
+        ],
+        [
+          "fatal: chunks[7]: isolated floating adverb \"tomorrow\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 1,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "easy",
+              "count": 2
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+            }
+          }
+        },
+        {
+          "round": 2,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "easy",
+              "count": 3
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "hard",
+              "count": 3
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "fatal: chunks[7]: isolated floating adverb \"tomorrow\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+            }
+          }
+        },
+        {
+          "round": 3,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "easy",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 1,
+            "rejected": 1,
+            "reasons": {
+              "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 6
+    },
+    {
+      "triggeredAt": "2026-03-11T15:48:51.273Z",
+      "round": 11,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 17,
+      "accepted": 2,
+      "rejected": 15,
+      "acceptRate": 0.118,
+      "reasons": [
+        [
+          "review:ets<72",
+          6
+        ],
+        [
+          "pool:non_embedded_shortage",
+          4
+        ],
+        [
+          "review:blocker:tmp_r10_q2: distractor 'is' can be inserted to create valid sentence 'I did not attend because the location is changed' (present tense also grammatical)|tmp_r10_q4: distractor 'hear' can be inserted to create valid sentence 'I have not hear back...' - while ungrammatical, learners may not detect this error",
+          3
+        ],
+        [
+          "review:blocker:tmp_r11_q2: distractor 'download' can be inserted to create valid sentence 'I have not download downloaded the files from the portal' (grammatically awkward but structurally possible)",
+          2
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 9,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 10
+            }
+          ],
+          "stats": {
+            "generated": 8,
+            "accepted": 2,
+            "rejected": 6,
+            "reasons": {
+              "review:ets<72": 6
+            }
+          }
+        },
+        {
+          "round": 10,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 4,
+            "accepted": 0,
+            "rejected": 4,
+            "reasons": {
+              "pool:non_embedded_shortage": 1,
+              "review:blocker:tmp_r10_q2: distractor 'is' can be inserted to create valid sentence 'I did not attend because the location is changed' (present tense also grammatical)|tmp_r10_q4: distractor 'hear' can be inserted to create valid sentence 'I have not hear back...' - while ungrammatical, learners may not detect this error": 3
+            }
+          }
+        },
+        {
+          "round": 11,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 5,
+            "accepted": 0,
+            "rejected": 5,
+            "reasons": {
+              "pool:non_embedded_shortage": 3,
+              "review:blocker:tmp_r11_q2: distractor 'download' can be inserted to create valid sentence 'I have not download downloaded the files from the portal' (grammatically awkward but structurally possible)": 2
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 14
+    }
+  ],
+  "history": [
+    {
+      "round": 9,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 10
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 8,
+          "accepted": 2,
+          "rejected": 6,
+          "reasons": {
+            "review:ets<72": 6
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 2,
+          "accepted": 2,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 10,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 5
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 4,
+          "accepted": 0,
+          "rejected": 4,
+          "reasons": {
+            "pool:non_embedded_shortage": 1,
+            "review:blocker:tmp_r10_q2: distractor 'is' can be inserted to create valid sentence 'I did not attend because the location is changed' (present tense also grammatical)|tmp_r10_q4: distractor 'hear' can be inserted to create valid sentence 'I have not hear back...' - while ungrammatical, learners may not detect this error": 3
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "pool:non_embedded_shortage": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 11,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 5
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 5,
+          "accepted": 0,
+          "rejected": 5,
+          "reasons": {
+            "pool:non_embedded_shortage": 3,
+            "review:blocker:tmp_r11_q2: distractor 'download' can be inserted to create valid sentence 'I have not download downloaded the files from the portal' (grammatically awkward but structurally possible)": 2
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 12,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 5
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 4,
+          "accepted": 0,
+          "rejected": 4,
+          "reasons": {
+            "pool:non_embedded_shortage": 2,
+            "review:blocker:tmp_r12_q1: distractor 'received' could be inserted to create valid sentence 'I received any details about the location' (grammatically valid, though semantically odd)|tmp_r12_q4: distractor 'decide' could be inserted to create valid sentence 'I decide which vegetables to plant this season' (valid present simple alternative)": 2
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "pool:non_embedded_shortage": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 13,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 5
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 4,
+          "accepted": 0,
+          "rejected": 4,
+          "reasons": {
+            "pool:non_embedded_shortage": 3,
+            "review:blocker:distractor could be a valid answer chunk (inserting it creates another valid sentence)": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "pool:non_embedded_shortage": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 14,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 5
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 4,
+          "accepted": 0,
+          "rejected": 4,
+          "reasons": {
+            "pool:non_embedded_shortage": 2,
+            "review:blocker:tmp_r14_q1: distractor 'received' is grammatically valid in answer position ('I received any update' is grammatical in some contexts)|Both items: prompts use direct questions ('How do you respond...?') instead of embedded/indirect question format that TPO heavily tests (63%)": 2
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "pool:non_embedded_shortage": 1
+          }
+        }
+      }
+    }
+  ]
+}
