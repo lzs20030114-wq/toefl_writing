@@ -39,7 +39,7 @@ const {
   evaluateSetDifficultyAgainstTarget,
   ETS_2026_TARGET_COUNTS_10,
 } = require("../lib/questionBank/difficultyControl.js");
-const { isEmbeddedQuestion } = require("../lib/questionBank/etsProfile.js");
+const { isEmbeddedQuestion, ETS_STYLE_TARGETS } = require("../lib/questionBank/etsProfile.js");
 const { validateAllSets } = require("./validate-bank.js");
 
 const OUTPUT_PATH = process.env.BS_OUTPUT_PATH ? resolve(String(process.env.BS_OUTPUT_PATH)) : resolve(__dirname, "..", "data", "buildSentence", "questions.json");
@@ -2388,6 +2388,9 @@ function escapeRegexStr(s) {
 function postGenerationRuleCheck(sets) {
   let fixCount = 0;
   for (const set of sets) {
+    // Track distractor count per set for Fix 3 guard
+    const getSetDistractorCount = () => (set.questions || []).filter((q) => q.distractor != null).length;
+
     for (const q of set.questions || []) {
       // Fix 1: contextViolations — ask/report/respond with non-empty prompt_context
       if (
@@ -2401,13 +2404,22 @@ function postGenerationRuleCheck(sets) {
       }
 
       // Fix 2: prepFragments — split "of the" / "in the" etc. into individual words
+      // Guard: skip if splitting would push effective chunk count above 8
       {
+        const effectiveBefore = (q.chunks || []).filter((c) => c !== q.distractor).length;
         const newChunks = [];
         let changed = false;
+        let effectiveAfter = effectiveBefore;
         for (const chunk of q.chunks || []) {
           if (chunk !== q.distractor && _PREP_FRAGMENT.test(chunk.trim())) {
-            newChunks.push(...chunk.trim().split(/\s+/));
-            changed = true;
+            const parts = chunk.trim().split(/\s+/);
+            if (effectiveAfter + (parts.length - 1) <= 8) {
+              newChunks.push(...parts);
+              effectiveAfter += parts.length - 1;
+              changed = true;
+            } else {
+              newChunks.push(chunk); // skip: would overflow max effective chunks
+            }
           } else {
             newChunks.push(chunk);
           }
@@ -2420,26 +2432,32 @@ function postGenerationRuleCheck(sets) {
       }
 
       // Fix 3: answerErrors — distractor word appears in answer (remove distractor)
+      // Guard: skip if set is already at distractorMin to avoid failing validateQuestionSet
       if (q.distractor) {
         const re = new RegExp(`\\b${escapeRegexStr(q.distractor)}\\b`, "i");
         if (re.test(q.answer)) {
-          q.chunks = (q.chunks || []).filter((c) => c !== q.distractor);
-          q.distractor = null;
-          q.has_distractor = false;
-          fixCount++;
-          console.log(`  [post-fix] removed bad distractor from ${q.id} (appeared in answer)`);
+          if (getSetDistractorCount() > (ETS_STYLE_TARGETS.distractorMin ?? 7)) {
+            q.chunks = (q.chunks || []).filter((c) => c !== q.distractor);
+            q.distractor = null;
+            q.has_distractor = false;
+            fixCount++;
+            console.log(`  [post-fix] removed bad distractor from ${q.id} (appeared in answer)`);
+          } else {
+            console.warn(`  [post-fix] SKIPPED distractor removal on ${q.id} (set at distractorMin)`);
+          }
         }
       }
 
       // Fix 4: standaloneNot — standalone "not" chunk alongside an aux chunk
       // Attempt to merge with the preceding aux in the answer
+      // Guard: skip if merge would drop effective chunk count below 4
       {
         const effectiveChunks = (q.chunks || []).filter((c) => c !== q.distractor);
         const hasStandaloneNot = effectiveChunks.some((c) => c.trim().toLowerCase() === "not");
         const hasPrecedingAux = effectiveChunks.some((c) =>
           _NEG_AUX.has(c.trim().toLowerCase())
         );
-        if (hasStandaloneNot && hasPrecedingAux) {
+        if (hasStandaloneNot && hasPrecedingAux && effectiveChunks.length - 1 >= 4) {
           // Find which aux word precedes "not" in the answer
           const answerWords = q.answer.toLowerCase().replace(/[.,!?;:]/g, "").split(/\s+/).filter(Boolean);
           const notIdx = answerWords.indexOf("not");
