@@ -1801,7 +1801,10 @@ async function callOpenAICompatibleRelay({ apiKey, baseUrl, model, temperature, 
   };
 
   const RETRYABLE = new Set([429, 500, 502, 503, 504]);
-  const MAX_ATTEMPTS = 4;
+  const FAIL_FAST_STATUSES = new Set([502, 503, 504]);
+  const relayConfigs = getRelayConfigs();
+  const hasBackupRelay = relayConfigs.length > 1;
+  const MAX_ATTEMPTS = hasBackupRelay ? 2 : 4;
   let lastErr;
   for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
     const controller = new AbortController();
@@ -1812,8 +1815,9 @@ async function callOpenAICompatibleRelay({ apiKey, baseUrl, model, temperature, 
       if (!res.ok) {
         const text = await res.text();
         const err = new Error(`Relay API ${res.status}: ${text.slice(0, 300)}`);
-        if (RETRYABLE.has(res.status) && attempt < MAX_ATTEMPTS) {
-          const delay = attempt * 15000; // 15s, 30s, 45s
+        const shouldFailFastToNextRelay = hasBackupRelay && FAIL_FAST_STATUSES.has(res.status);
+        if (RETRYABLE.has(res.status) && attempt < MAX_ATTEMPTS && !shouldFailFastToNextRelay) {
+          const delay = res.status === 429 ? attempt * 15000 : attempt * 5000;
           console.warn(`  [relay] attempt ${attempt} got ${res.status}, retrying in ${delay / 1000}s…`);
           lastErr = err;
           await new Promise((r) => setTimeout(r, delay));
@@ -1830,8 +1834,17 @@ async function callOpenAICompatibleRelay({ apiKey, baseUrl, model, temperature, 
     } catch (e) {
       clearTimeout(timer);
       // Retry on network/abort errors too (except final attempt)
-      if (attempt < MAX_ATTEMPTS && (e.name === "AbortError" || e.code === "ECONNRESET" || e.code === "ECONNREFUSED")) {
-        const delay = attempt * 15000;
+      const errorCode = e?.code || e?.cause?.code || "";
+      const isRetryableNetworkError = (
+        e?.name === "AbortError" ||
+        errorCode === "ECONNRESET" ||
+        errorCode === "ECONNREFUSED" ||
+        errorCode === "ETIMEDOUT" ||
+        errorCode === "UND_ERR_CONNECT_TIMEOUT" ||
+        String(e?.message || "").toLowerCase().includes("fetch failed")
+      );
+      if (attempt < MAX_ATTEMPTS && isRetryableNetworkError) {
+        const delay = attempt * 5000;
         console.warn(`  [relay] attempt ${attempt} network error (${e.message}), retrying in ${delay / 1000}s…`);
         lastErr = e;
         await new Promise((r) => setTimeout(r, delay));
@@ -1856,28 +1869,47 @@ function getRelayConfigs() {
   }
   for (let n = 2; n <= 5; n++) {
     const key = process.env[`CLAUDE_RELAY_API_KEY_${n}`];
-    if (!key) break;
+    if (!key) continue;
     configs.push({ apiKey: key, baseUrl: process.env[`CLAUDE_RELAY_BASE_URL_${n}`] || "https://api.yuegle.com/v1", model });
   }
   return configs;
 }
 
-async function callModelCreative(userPrompt) {
+async function callRelayChain({ userPrompt, temperature, maxTokens, timeoutMs, purpose }) {
   const relays = getRelayConfigs();
-  if (relays.length > 0) {
-    let lastErr;
-    for (let i = 0; i < relays.length; i++) {
-      const { apiKey, baseUrl, model } = relays[i];
-      try {
-        return await callOpenAICompatibleRelay({ apiKey, baseUrl, model, temperature: 0.7, maxTokens: 8000, userPrompt, timeoutMs: 180000 });
-      } catch (e) {
-        lastErr = e;
-        if (i < relays.length - 1) {
-          console.warn(`  [relay ${i + 1}/${relays.length}] failed (${e.message.slice(0, 80)}), trying next relay…`);
-        }
+  if (relays.length === 0) return null;
+
+  let lastErr;
+  for (let i = 0; i < relays.length; i++) {
+    const { apiKey, baseUrl, model } = relays[i];
+    try {
+      console.log(`  [${purpose}] using relay ${i + 1}/${relays.length}: ${baseUrl}`);
+      return await callOpenAICompatibleRelay({ apiKey, baseUrl, model, temperature, maxTokens, userPrompt, timeoutMs });
+    } catch (e) {
+      lastErr = e;
+      _lastModelFailureReason = `${purpose}: ${errMsg(e)}`;
+      if (i < relays.length - 1) {
+        console.warn(`  [${purpose}] relay ${i + 1}/${relays.length} failed (${e.message.slice(0, 120)}), trying next relay…`);
       }
     }
-    throw lastErr;
+  }
+  throw lastErr;
+}
+
+async function callModelCreative(userPrompt) {
+  if (getRelayConfigs().length > 0) {
+    try {
+      return await callRelayChain({
+        userPrompt,
+        temperature: 0.7,
+        maxTokens: 8000,
+        timeoutMs: 180000,
+        purpose: "creative",
+      });
+    } catch (e) {
+      if (!process.env.DEEPSEEK_API_KEY) throw e;
+      console.warn(`  [creative] all relays failed (${errMsg(e)}), falling back to DeepSeek…`);
+    }
   }
   return callDeepSeekViaCurl({
     apiKey: process.env.DEEPSEEK_API_KEY,
@@ -1893,6 +1925,20 @@ async function callModelCreative(userPrompt) {
 }
 
 async function callModelDeterministic(userPrompt) {
+  if (getRelayConfigs().length > 0) {
+    try {
+      return await callRelayChain({
+        userPrompt,
+        temperature: 0,
+        maxTokens: 5000,
+        timeoutMs: 120000,
+        purpose: "deterministic",
+      });
+    } catch (e) {
+      if (!process.env.DEEPSEEK_API_KEY) throw e;
+      console.warn(`  [deterministic] all relays failed (${errMsg(e)}), falling back to DeepSeek…`);
+    }
+  }
   return callDeepSeekViaCurl({
     apiKey: process.env.DEEPSEEK_API_KEY,
     proxyUrl: resolveProxyUrl(),
@@ -2546,16 +2592,19 @@ function postGenerationRuleCheck(sets) {
 
 async function main() {
   loadEnv();
-  if (!process.env.DEEPSEEK_API_KEY) {
-    console.error("ERROR: DEEPSEEK_API_KEY missing");
-    _lastFailureReason = "DEEPSEEK_API_KEY 未配置";
+  const hasRelay = getRelayConfigs().length > 0;
+  const hasDeepSeek = Boolean(process.env.DEEPSEEK_API_KEY);
+  if (!hasRelay && !hasDeepSeek) {
+    console.error("ERROR: no model provider configured");
+    _lastFailureReason = "未配置可用模型提供方（Claude relay / DeepSeek）";
     process.exit(1);
   }
 
   console.log("Build Sentence Robust Generator");
   console.log("==============================");
   console.log(`Target sets: ${TARGET_SET_COUNT}`);
-  console.log(`Generator: ${process.env.CLAUDE_RELAY_API_KEY ? `Claude relay → ${process.env.CLAUDE_GENERATOR_MODEL || "claude-sonnet-4-6"} (${process.env.CLAUDE_RELAY_BASE_URL || "https://api.yuegle.com/v1"})` : "DeepSeek (deepseek-chat)"}`);
+  console.log(`Generator: ${hasRelay ? `Claude relay → ${process.env.CLAUDE_GENERATOR_MODEL || "claude-sonnet-4-6"} (${getRelayConfigs().map((x) => x.baseUrl).join(", ")})` : "DeepSeek (deepseek-chat)"}`);
+  console.log(`Fallback: ${hasDeepSeek ? "DeepSeek enabled" : "none"}`);
   console.log(`Proxy: ${resolveProxyUrl() || "(direct)"}`);
 
   // Seed pool from questions.json (active bank) + reserve_pool.json (leftovers)
@@ -2771,7 +2820,8 @@ async function main() {
   const finalSets = buildFinalSetsFromPool(poolByDiff, TARGET_SET_COUNT);
   if (finalSets.length === 0) {
     const topReasons = summarizeRejectReasons(rejectReasons).slice(0, 3).map(([k, v]) => `${k}(×${v})`).join(", ");
-    _lastFailureReason = `题目池为空，无法组套。主要拒绝原因：${topReasons || "未知"}`;
+    const providerHint = _lastModelFailureReason ? `；最近一次模型错误：${_lastModelFailureReason}` : "";
+    _lastFailureReason = `题目池为空，无法组套。主要拒绝原因：${topReasons || "未知"}${providerHint}`;
     console.error("No sets assembled at all — aborting.");
     process.exit(1);
   }
@@ -2865,6 +2915,7 @@ function writeJobState(updates) {
 }
 
 let _lastFailureReason = null;
+let _lastModelFailureReason = null;
 
 if (isDirectRun) {
   // Intercept process.exit to capture failure state when BS_JOB_STATE_PATH is set
