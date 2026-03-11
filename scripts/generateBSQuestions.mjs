@@ -1337,6 +1337,27 @@ function computeAssemblyState(poolState, targetSetCount = TARGET_SET_COUNT) {
   ]
     .filter((item) => item.gap > 0)
     .sort((a, b) => b.priority - a.priority);
+  const progressRatios = {
+    easy: need.easy > 0 ? Math.min(1, diffCounts.easy / need.easy) : 1,
+    medium: need.medium > 0 ? Math.min(1, diffCounts.medium / need.medium) : 1,
+    hard: need.hard > 0 ? Math.min(1, diffCounts.hard / need.hard) : 1,
+    nonEmbedded: need.nonEmbeddedMin > 0 ? Math.min(1, nonEmbedded / need.nonEmbeddedMin) : 1,
+    distractor: need.distractorMin > 0 ? Math.min(1, distractor / need.distractorMin) : 1,
+    negation: need.negationMin > 0 ? Math.min(1, negation / need.negationMin) : 1,
+  };
+  const progressWeights = {
+    easy: ETS_2026_TARGET_COUNTS_10.easy,
+    medium: ETS_2026_TARGET_COUNTS_10.medium,
+    hard: ETS_2026_TARGET_COUNTS_10.hard,
+    nonEmbedded: Math.max(1, 10 - (ETS_STYLE_TARGETS.embeddedMax || 8)),
+    distractor: Math.max(1, ETS_STYLE_TARGETS.distractorMin || 7),
+    negation: Math.max(1, ETS_STYLE_TARGETS.negationMin || 2),
+  };
+  const progressWeightTotal = Object.values(progressWeights).reduce((sum, value) => sum + value, 0);
+  const assemblyProgressScore = Object.entries(progressRatios).reduce(
+    (sum, [key, ratio]) => sum + ratio * (progressWeights[key] || 1),
+    0,
+  ) / Math.max(1, progressWeightTotal);
 
   return {
     total,
@@ -1356,6 +1377,8 @@ function computeAssemblyState(poolState, targetSetCount = TARGET_SET_COUNT) {
     embeddedOverflow,
     qmarkOverflow,
     limitingFactors,
+    progressRatios,
+    assemblyProgressScore,
   };
 }
 
@@ -1913,6 +1936,8 @@ function applyCircuitBreakersToSpec(spec, blockedTypes, poolState, globalTypeTar
 
 function updateCircuitBreakers(state, round, mode, spec, result) {
   if (!state || mode !== "normal" || !result?.typeStats) return;
+  const totalGenerated = Object.values(result.typeStats || {}).reduce((sum, stats) => sum + (stats?.generated || 0), 0);
+  if (round <= 3 || totalGenerated <= 0) return;
   state.history.push({
     round,
     mode,
@@ -3067,6 +3092,10 @@ async function main() {
     return `sets=${state.assemblableSets}/${TARGET_SET_COUNT} neg=${state.negation} nonEmb=${state.nonEmbedded} emb=${state.embedded}`;
   }
 
+  function formatAssemblyProgress(state) {
+    return `${((state?.assemblyProgressScore || 0) * 100).toFixed(0)}%`;
+  }
+
   function formatLimitingFactors(state, count = 2) {
     const top = (state?.limitingFactors || []).slice(0, count).map((item) => item.key);
     return top.length > 0 ? top.join(",") : "none";
@@ -3113,18 +3142,25 @@ async function main() {
       generated: 0,
       poolGrowth: 0,
       deltaAssemblable: 0,
+      deltaProgress: 0,
       zeroGainRounds: 0,
+      zeroProgressRounds: 0,
     };
     for (const round of recent) {
       const accepted = round.result.accepted || 0;
       const delta = (round.nextAssemblyState?.assemblableSets || 0) - (round.assemblyState?.assemblableSets || 0);
+      const progressDelta = (round.nextAssemblyState?.assemblyProgressScore || 0) - (round.assemblyState?.assemblyProgressScore || 0);
       totals.accepted += accepted;
       totals.generated += round.result.generated || 0;
       totals.poolGrowth += accepted;
       totals.deltaAssemblable += delta;
+      totals.deltaProgress += progressDelta;
       if (accepted > 0 && delta <= 0) totals.zeroGainRounds += 1;
+      if (accepted > 0 && progressDelta <= 0.005) totals.zeroProgressRounds += 1;
     }
-    totals.acceptedGainRate = totals.accepted > 0 ? totals.deltaAssemblable / totals.accepted : 0;
+    totals.acceptedGainRate = totals.accepted > 0
+      ? (totals.deltaAssemblable + totals.deltaProgress * 2.5) / totals.accepted
+      : 0;
     return totals;
   }
 
@@ -3133,29 +3169,52 @@ async function main() {
     const embeddedRatio = total > 0 ? (assemblyState.embedded / total) : 0;
     const remainingThreshold = Math.max(2, Math.ceil(TARGET_SET_COUNT * 0.1));
     const momentum = computeAssemblyMomentum(rounds);
+    const previousRound = (rounds || []).slice(-1)[0] || null;
+    const previousStrong = previousRound?.phaseSignals?.strongTargeting === true;
+    const previousRepair = previousRound?.phaseSignals?.repairMode === true;
     const strongReasons = [];
     const repairReasons = [];
+    const strongGateReady =
+      total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.45) &&
+      (assemblyState.assemblableSets >= 1 || total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.75));
+    const repairGateReady =
+      total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.3) ||
+      assemblyState.assemblableSets >= 1;
 
-    if (assemblyState.remainingSets <= remainingThreshold) strongReasons.push("remaining_sets");
-    if (assemblyState.assemblableSets >= TARGET_SET_COUNT - remainingThreshold) strongReasons.push("near_completion");
-    if (momentum.windowCount >= 4 && momentum.poolGrowth > 0 && momentum.deltaAssemblable <= 0) strongReasons.push("assembly_stagnation");
-    if (momentum.windowCount >= 4 && momentum.poolGrowth > 0 && momentum.acceptedGainRate <= 0.05) strongReasons.push("low_gain_rate");
-    if (total >= Math.ceil(TARGET_SET_COUNT * 10 * 1.15)) strongReasons.push("pool_oversupply");
+    if (strongGateReady) {
+      if (assemblyState.remainingSets <= remainingThreshold) strongReasons.push("remaining_sets");
+      if (assemblyState.assemblableSets >= TARGET_SET_COUNT - remainingThreshold) strongReasons.push("near_completion");
+      if (momentum.windowCount >= 4 && momentum.poolGrowth > 0 && momentum.deltaAssemblable <= 0 && momentum.deltaProgress <= 0.03) {
+        strongReasons.push("assembly_stagnation");
+      }
+      if (momentum.windowCount >= 4 && momentum.poolGrowth > 0 && momentum.acceptedGainRate <= 0.03) {
+        strongReasons.push("low_gain_rate");
+      }
+      if (total >= Math.ceil(TARGET_SET_COUNT * 10 * 1.15)) strongReasons.push("pool_oversupply");
+    }
 
     if (strongReasons.length > 0) repairReasons.push(...strongReasons);
-    if (assemblyState.deficits.nonEmbedded > 0 && embeddedRatio >= 0.72 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.35)) {
+    if (repairGateReady && assemblyState.deficits.nonEmbedded > 0 && embeddedRatio >= 0.72 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.35)) {
       repairReasons.push("non_embedded_shortage");
     }
-    if (assemblyState.embeddedOverflow > 0 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.35)) {
+    if (repairGateReady && assemblyState.embeddedOverflow > 0 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.35)) {
       repairReasons.push("embedded_overflow");
     }
-    if (total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.7)) repairReasons.push("pool_size");
-    if (assemblyState.assemblableSets >= Math.max(1, TARGET_SET_COUNT - 3)) repairReasons.push("assemblable_near_target");
+    if (repairGateReady && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.7)) repairReasons.push("pool_size");
+    if (repairGateReady && assemblyState.assemblableSets >= Math.max(1, TARGET_SET_COUNT - 3)) repairReasons.push("assemblable_near_target");
+    if (previousStrong && strongGateReady && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.5) && strongReasons.length > 0) {
+      strongReasons.push("sticky_last_mile");
+      repairReasons.push("sticky_last_mile");
+    } else if (previousRepair && repairGateReady && repairReasons.length > 0) {
+      repairReasons.push("sticky_repair");
+    }
 
     return {
       strongTargeting: strongReasons.length > 0,
       repairMode: repairReasons.length > 0,
-      strongReasons,
+      strongGateReady,
+      repairGateReady,
+      strongReasons: [...new Set(strongReasons)],
       repairReasons: [...new Set(repairReasons)],
       momentum,
     };
@@ -3440,7 +3499,7 @@ async function main() {
       ? ` focus=${spec._selection.focus} proj=${spec._selection.projectedAssemblableSets}/${TARGET_SET_COUNT}`
       : "";
     console.log(
-      `round ${roundNum} [${schedule.mode}] gap=${formatGap(gap)} assembly=${formatAssemblyState(assemblyState)} limiting=${formatLimitingFactors(assemblyState)}${momentumLabel}${selectionLabel} → [${specLabel}]`,
+      `round ${roundNum} [${schedule.mode}] gap=${formatGap(gap)} assembly=${formatAssemblyState(assemblyState)} progress=${formatAssemblyProgress(assemblyState)} limiting=${formatLimitingFactors(assemblyState)}${momentumLabel}${selectionLabel} → [${specLabel}]`,
     );
 
     try {
@@ -3467,11 +3526,12 @@ async function main() {
       const newGap = computeTotalGap(newPoolState, newPool);
       const newAssemblyState = computeAssemblyState(newPoolState);
       const deltaAssemblable = newAssemblyState.assemblableSets - assemblyState.assemblableSets;
-      const acceptedGainRate = res.accepted > 0 ? deltaAssemblable / res.accepted : 0;
+      const deltaProgress = newAssemblyState.assemblyProgressScore - assemblyState.assemblyProgressScore;
+      const acceptedGainRate = res.accepted > 0 ? (deltaAssemblable + deltaProgress * 2.5) / res.accepted : 0;
       console.log(
-        `round ${roundNum}: generated=${res.generated} accepted=${res.accepted} rejected=${res.rejected} gap=${formatGap(gap)} → ${formatGap(newGap)} assembly=${formatAssemblyState(newAssemblyState)} Δasm=${deltaAssemblable >= 0 ? "+" : ""}${deltaAssemblable} yield=${acceptedGainRate.toFixed(2)} | easy=${newPool.easy.length} medium=${newPool.medium.length} hard=${newPool.hard.length}`,
+        `round ${roundNum}: generated=${res.generated} accepted=${res.accepted} rejected=${res.rejected} gap=${formatGap(gap)} → ${formatGap(newGap)} assembly=${formatAssemblyState(newAssemblyState)} progress=${formatAssemblyProgress(newAssemblyState)} Δasm=${deltaAssemblable >= 0 ? "+" : ""}${deltaAssemblable} Δprog=${deltaProgress >= 0 ? "+" : ""}${deltaProgress.toFixed(3)} yield=${acceptedGainRate.toFixed(2)} | easy=${newPool.easy.length} medium=${newPool.medium.length} hard=${newPool.hard.length}`,
       );
-      if (res.accepted > 0 && deltaAssemblable <= 0) {
+      if (res.accepted > 0 && deltaAssemblable <= 0 && deltaProgress <= 0.005) {
         console.log(`  [assembly] accepted but zero assembly gain; limiting=${formatLimitingFactors(newAssemblyState)}`);
       }
       if (res.rejected > 0) {
@@ -3496,6 +3556,7 @@ async function main() {
           rejectReasons: res.rejectReasons,
           typeStats: res.typeStats,
           deltaAssemblable,
+          deltaProgress,
           acceptedGainRate,
         },
         nextGap: newGap,
