@@ -2704,6 +2704,10 @@ async function main() {
     return { total: diffGap + typeGap + distractorGap, diffGap, typeGap, distractorGap };
   }
 
+  function formatGap(gap) {
+    return `${gap.total} (diff=${gap.diffGap} type=${gap.typeGap} distractor=${gap.distractorGap})`;
+  }
+
   // Decide batch size and targeting based on current gap.
   // Large gap → broad AI-planned batch. Small gap → micro targeted batch (no AI planner needed).
   function scheduleNextBatch(gap, poolState, pool, cbState, roundNum) {
@@ -2739,11 +2743,11 @@ async function main() {
     const gap = computeTotalGap(poolState, pool);
 
     if (gap.total <= GAP_TOLERANCE) {
-      console.log(`✓ gap satisfied (total=${gap.total} ≤ ${GAP_TOLERANCE}), stopping`);
+      console.log(`✓ gap satisfied (${formatGap(gap)} ≤ tolerance ${GAP_TOLERANCE}), stopping`);
       break;
     }
     if (totalRound >= MAX_ROUNDS) {
-      console.log(`⚠ max rounds (${MAX_ROUNDS}) reached, gap remaining=${gap.total}`);
+      console.log(`⚠ max rounds (${MAX_ROUNDS}) reached, gap remaining=${formatGap(gap)}`);
       break;
     }
 
@@ -2783,7 +2787,7 @@ async function main() {
     }
 
     const specLabel = spec.map((s) => `${s.count}×${s.type}/${s.difficulty}`).join(", ");
-    console.log(`round ${roundNum} [${schedule.mode}] gap=${gap.total} → [${specLabel}]`);
+    console.log(`round ${roundNum} [${schedule.mode}] gap=${formatGap(gap)} → [${specLabel}]`);
 
     try {
       const res = await generateCandidateRound(roundNum, spec, rollingRejectFeedback, acceptedPool);
@@ -2799,7 +2803,7 @@ async function main() {
       const newPool = splitPoolByDifficulty(acceptedPool);
       const newGap = computeTotalGap(computePoolState(acceptedPool), newPool);
       console.log(
-        `round ${roundNum}: generated=${res.generated} accepted=${res.accepted} rejected=${res.rejected} gap=${gap.total}→${newGap.total} | easy=${newPool.easy.length} medium=${newPool.medium.length} hard=${newPool.hard.length}`,
+        `round ${roundNum}: generated=${res.generated} accepted=${res.accepted} rejected=${res.rejected} gap=${formatGap(gap)} → ${formatGap(newGap)} | easy=${newPool.easy.length} medium=${newPool.medium.length} hard=${newPool.hard.length}`,
       );
       if (res.rejected > 0) {
         Object.entries(res.rejectReasons).sort((a, b) => b[1] - a[1]).slice(0, 3)
