@@ -1,13 +1,17 @@
-name: 生成 Build Sentence 题目
+name: Generate Build Sentence Questions
 
 on:
   workflow_dispatch:
     inputs:
       target_sets:
-        description: '生成套数'
+        description: "Number of sets to generate"
         required: true
-        default: '6'
+        default: "6"
         type: string
+
+concurrency:
+  group: generate-bs-main
+  cancel-in-progress: false
 
 permissions:
   contents: write
@@ -20,17 +24,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Generate questions (to staging)
+      - name: Generate questions to staging
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
           CLAUDE_RELAY_API_KEY: ${{ secrets.CLAUDE_RELAY_API_KEY }}
@@ -43,40 +50,59 @@ jobs:
           BS_TARGET_SETS: ${{ github.event.inputs.target_sets }}
           BS_OUTPUT_PATH: data/buildSentence/staging/${{ github.run_id }}.json
           BS_JOB_STATE_PATH: data/buildSentence/staging/${{ github.run_id }}.state.json
+          BS_RESERVE_PATH: data/buildSentence/staging/${{ github.run_id }}.reserve.json
         run: node scripts/generateBSQuestions.mjs
 
-      - name: Commit state file (always — captures failure reason)
+      - name: Persist generated artifacts
         if: always()
         env:
           RUN_ID: ${{ github.run_id }}
-        run: |
-          STATE="data/buildSentence/staging/${RUN_ID}.state.json"
-          if [ -f "$STATE" ]; then
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add "$STATE"
-            git diff --staged --quiet || git commit -m "chore: job state (run ${RUN_ID}) [skip ci]"
-            for i in 1 2 3 4; do
-              git pull --rebase origin main && git push && break
-              echo "Push attempt $i failed, retrying in 10s…"
-              sleep 10
-            done
-          fi
-
-      - name: Commit staging file
-        env:
-          RUN_ID: ${{ github.run_id }}
           BS_TARGET_SETS: ${{ github.event.inputs.target_sets }}
+        shell: bash
         run: |
+          set -u
+
+          STATE="data/buildSentence/staging/${RUN_ID}.state.json"
+          STAGING="data/buildSentence/staging/${RUN_ID}.json"
+          RESERVE="data/buildSentence/staging/${RUN_ID}.reserve.json"
+
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/buildSentence/staging/${RUN_ID}.json
-          git add data/buildSentence/reserve_pool.json || true
-          git diff --staged --quiet || git commit -m "chore: stage ${BS_TARGET_SETS} BS sets (run ${RUN_ID}) [skip ci]"
-          # Rebase on latest main then push (retried up to 4 times).
-          # Prevents failure when code pushes or admin ops land on main mid-run.
+
+          FILES=()
+          [ -f "$STATE" ] && FILES+=("$STATE")
+          [ -f "$STAGING" ] && FILES+=("$STAGING")
+          [ -f "$RESERVE" ] && FILES+=("$RESERVE")
+
+          if [ ${#FILES[@]} -eq 0 ]; then
+            echo "No workflow artifacts found; nothing to commit."
+            exit 0
+          fi
+
+          git add -- "${FILES[@]}"
+
+          if git diff --staged --quiet; then
+            echo "No artifact changes to commit."
+            exit 0
+          fi
+
+          if [ -f "$STAGING" ]; then
+            COMMIT_MSG="chore: stage ${BS_TARGET_SETS} BS sets (run ${RUN_ID}) [skip ci]"
+          else
+            COMMIT_MSG="chore: job state (run ${RUN_ID}) [skip ci]"
+          fi
+
+          git commit -m "$COMMIT_MSG"
+
           for i in 1 2 3 4; do
-            git pull --rebase origin main && git push && break
-            echo "Push attempt $i failed, retrying in 10s…"
+            if git fetch origin main && git rebase origin/main && git push origin HEAD:main; then
+              echo "Push succeeded on attempt $i."
+              exit 0
+            fi
+            git rebase --abort >/dev/null 2>&1 || true
+            echo "Push attempt $i failed, retrying in 10s..."
             sleep 10
           done
+
+          echo "Push failed after 4 attempts."
+          exit 1

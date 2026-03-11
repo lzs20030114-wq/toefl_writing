@@ -43,7 +43,9 @@ const { isEmbeddedQuestion, ETS_STYLE_TARGETS } = require("../lib/questionBank/e
 const { validateAllSets } = require("./validate-bank.js");
 
 const OUTPUT_PATH = process.env.BS_OUTPUT_PATH ? resolve(String(process.env.BS_OUTPUT_PATH)) : resolve(__dirname, "..", "data", "buildSentence", "questions.json");
-const RESERVE_PATH = resolve(__dirname, "..", "data", "buildSentence", "reserve_pool.json");
+const RESERVE_PATH = process.env.BS_RESERVE_PATH
+  ? resolve(String(process.env.BS_RESERVE_PATH))
+  : resolve(__dirname, "..", "data", "buildSentence", "reserve_pool.json");
 const CIRCUIT_BREAKER_LOG_PATH = resolve(__dirname, "..", "data", "buildSentence", "circuit_breaker_log.json");
 const TARGET_SET_COUNT = Number(process.env.BS_TARGET_SETS || 6);
 const MIN_REVIEW_SCORE = Number(process.env.BS_MIN_REVIEW_SCORE || 78);
