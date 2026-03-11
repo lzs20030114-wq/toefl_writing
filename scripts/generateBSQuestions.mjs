@@ -194,21 +194,27 @@ function isMandatoryMultiWord(chunk) {
  * Split non-mandatory multi-word chunks until the total multi-word count
  * across effective chunks is ≤ maxMultiWord (~2 matches the TPO 23% target).
  * Mandatory chunks (negation, infinitives, phrasal verbs, etc.) are never split.
+ * Never splits a chunk if doing so would push effective chunk count above maxTotalChunks (8).
  */
-function limitMultiWordChunks(chunks, distractor, maxMultiWord = 2) {
+function limitMultiWordChunks(chunks, distractor, maxMultiWord = 2, maxTotalChunks = 8) {
   const effective = chunks.filter((c) => c !== distractor);
   const multiCount = effective.filter((c) => c.split(/\s+/).length > 1).length;
   if (multiCount <= maxMultiWord) return chunks;
 
   let excess = multiCount - maxMultiWord;
+  let effectiveCount = effective.length;
   const result = [];
   for (const chunk of chunks) {
     if (excess > 0 && chunk !== distractor) {
       const words = chunk.split(/\s+/);
       if (words.length > 1 && !isMandatoryMultiWord(chunk)) {
-        result.push(...words);
-        excess--;
-        continue;
+        // Only split if the resulting effective count stays within the schema limit
+        if (effectiveCount + (words.length - 1) <= maxTotalChunks) {
+          result.push(...words);
+          effectiveCount += words.length - 1;
+          excess--;
+          continue;
+        }
       }
     }
     result.push(chunk);
