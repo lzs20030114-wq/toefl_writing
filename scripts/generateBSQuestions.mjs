@@ -1462,10 +1462,10 @@ function chooseGapWeightedType(poolState, globalTypeTargets, candidates, fallbac
   const totals = poolState?.typeTotals || {};
   const ranked = (Array.isArray(candidates) ? candidates : []).map((type) => ({
     type,
-    gap: Math.max(0, (globalTypeTargets?.[type] || 0) - (totals[type] || 0)),
     have: totals[type] || 0,
+    softNeed: (totals[type] || 0) === 0 ? 2 : (totals[type] || 0) <= 1 ? 1 : 0,
   })).sort((a, b) => {
-    if (b.gap !== a.gap) return b.gap - a.gap;
+    if (b.softNeed !== a.softNeed) return b.softNeed - a.softNeed;
     return a.have - b.have;
   });
   return ranked[0]?.type || fallback;
@@ -1484,17 +1484,14 @@ function buildPlannerPrompt(poolState, difficultyTargets, globalTypeTargets, sty
   const typeRows = TYPE_LIST
     .map((type) => {
       const have = (poolState.typeTotals || {})[type] || 0;
-      const need = globalTypeTargets?.[type] || 0;
-      return { type, have, need, gap: Math.max(0, need - have) };
+      return { type, have };
     })
-    .sort((a, b) => b.gap - a.gap);
+    .sort((a, b) => a.have - b.have);
 
   const diffLines = diffRows.map((r) =>
     `  ${r.diff.padEnd(8)} have=${String(r.have).padStart(3)}  need=${String(r.need).padStart(3)}  gap=${String(r.gap).padStart(3)}`
   );
-  const typeLines = typeRows.map((r) =>
-    `  ${r.type.padEnd(16)} have=${String(r.have).padStart(3)}  need=${String(r.need).padStart(3)}  gap=${String(r.gap).padStart(3)}`
-  );
+  const typeLines = typeRows.map((r) => `  ${r.type.padEnd(16)} have=${String(r.have).padStart(3)}`);
 
   const style = poolState.style || { total: 0, embedded: 0, negation: 0, distractor: 0, qmark: 0 };
   const styleSection = styleTargets
@@ -1510,30 +1507,31 @@ Style coverage needed to assemble the remaining target sets:
 
   return `You are a TOEFL Build-a-Sentence generation planner.
 
-Difficulty coverage needed for the whole pool:
+Difficulty coverage needed for the remaining usable pool:
   difficulty have  need  gap
 ${diffLines.join("\n")}
 
-Global type coverage needed for the whole pool:
-  type             have  need  gap
+Current type mix (SOFT diversity reference only; do not optimize this aggressively):
+  type             have
 ${typeLines.join("\n")}
 ${styleSection}
 
-Design the next generation batch (exactly ${targetTotal} questions total) to most efficiently fill the largest GLOBAL gaps.
+Design the next generation batch (exactly ${targetTotal} questions total) to most efficiently improve near-term set assembly.
 Rules:
 - Sum of all count fields must equal exactly ${targetTotal}.
-- First satisfy the largest difficulty gaps (easy / medium / hard).
-- Then satisfy the largest GLOBAL TYPE gaps across the whole pool. Do NOT assume every set needs the same fixed type recipe.
-- Skip categories with gap <= 0 unless needed to support style coverage.
-- ALSO prioritize style-feature shortages that can block final set assembly, especially embedded-question and negation shortages.
-- If global-type optimization conflicts with style-gap repair, repair the style gaps first.
+- First satisfy the largest difficulty gaps (easy / medium / hard), especially medium and hard.
+- Prioritize what is most likely to help assemble the next one or two sets.
+- Treat global type balance as a SOFT tie-breaker only. Do NOT optimize for global type quotas.
+- Skip categories with no near-term assembly value unless needed to support style coverage.
+- Prioritize style-feature shortages that can block final set assembly, especially non-embedded capacity, distractor coverage, and necessary negation coverage.
+- If diversity conflicts with assembly repair, repair assembly first.
 - Ensure the batch includes enough embedded-capable / negation-capable cells when those style gaps are positive.
 - Minimum 1, maximum 8 questions per included cell.
 - Valid types: negation, 3rd-reporting, 1st-embedded, interrogative, direct, relative
 - Valid difficulties: easy, medium, hard
-- Avoid over-producing direct items when direct gap is already filled.
+- Avoid over-producing any single type just to satisfy diversity.
 - In boost mode, prioritize precision over breadth: target the single most blocking gap first.
-- If all gaps are <= 0, return a balanced mixed batch that does not overproduce direct items.
+- If all difficulty/style gaps are small, return a practical batch that still helps assemble the next set.
 
 Return ONLY a JSON array. No markdown. No explanation.
 [{"type":"...","difficulty":"...","count":N},...]`.trim();
@@ -1582,9 +1580,7 @@ function enforcePlannerStyleGaps(spec, poolState, styleTargets, globalTypeTarget
   const typeTotals = poolState?.typeTotals || Object.fromEntries(TYPE_LIST.map((type) => [type, 0]));
   const embeddedGap = Math.max(0, (styleTargets?.embeddedMin || 0) - style.embedded);
   const negationGap = Math.max(0, (styleTargets?.negationMin || 0) - style.negation);
-  const typeGaps = Object.fromEntries(
-    TYPE_LIST.map((type) => [type, Math.max(0, (globalTypeTargets?.[type] || 0) - (typeTotals[type] || 0))])
-  );
+  const missingTypes = new Set(TYPE_LIST.filter((type) => (typeTotals[type] || 0) === 0));
 
   const total = out.reduce((sum, x) => sum + x.count, 0);
   if (total !== targetTotal) return out;
@@ -1601,8 +1597,8 @@ function enforcePlannerStyleGaps(spec, poolState, styleTargets, globalTypeTarget
     const donor = out
       .filter((x) => x.count > 1)
       .sort((a, b) => {
-        const aPenalty = (typeGaps[a.type] || 0) === 0 ? 1 : 0;
-        const bPenalty = (typeGaps[b.type] || 0) === 0 ? 1 : 0;
+        const aPenalty = missingTypes.has(a.type) ? 0 : 1;
+        const bPenalty = missingTypes.has(b.type) ? 0 : 1;
         if (aPenalty !== bPenalty) return bPenalty - aPenalty;
         return b.count - a.count;
       })[0];
@@ -1642,12 +1638,10 @@ function enforcePlannerStyleGaps(spec, poolState, styleTargets, globalTypeTarget
   }
 
   const scarceTypes = TYPE_LIST
-    .filter((type) => !["3rd-reporting", "direct", "negation"].includes(type))
-    .sort((a, b) => (typeGaps[b] || 0) - (typeGaps[a] || 0));
+    .filter((type) => missingTypes.has(type))
+    .sort((a, b) => (typeTotals[a] || 0) - (typeTotals[b] || 0));
 
   for (const type of scarceTypes) {
-    const gap = typeGaps[type] || 0;
-    if (gap <= 0) continue;
     const planned = out.filter((x) => x.type === type).reduce((sum, x) => sum + x.count, 0);
     if (planned > 0) continue;
     replaceOne(type, difficultyGapOrder[0] || "medium");
@@ -3074,18 +3068,28 @@ async function main() {
   // Total gap: diff + type (covers type-based style needs) + distractor (only style not covered by type)
   // Does NOT double-count negation/embedded which appear in both type and style targets.
   function computeTotalGap(poolState, pool) {
+    const assemblyState = computeAssemblyState(poolState);
     const diffGap =
       Math.max(0, difficultyTargets.easy - pool.easy.length) +
       Math.max(0, difficultyTargets.medium - pool.medium.length) +
       Math.max(0, difficultyTargets.hard - pool.hard.length);
-    const typeGap = TYPE_LIST.reduce((sum, t) =>
-      sum + Math.max(0, (globalTypeTargets[t] || 0) - (poolState.typeTotals[t] || 0)), 0);
     const distractorGap = Math.max(0, styleTargets.distractorMin - poolState.style.distractor);
-    return { total: diffGap + typeGap + distractorGap, diffGap, typeGap, distractorGap };
+    const diversityGap = TYPE_LIST.reduce((sum, t) => sum + (((poolState.typeTotals[t] || 0) === 0) ? 1 : 0), 0);
+    const assemblyBlockingGap =
+      Math.max(0, assemblyState.deficits.nonEmbedded) +
+      Math.max(0, assemblyState.embeddedOverflow) +
+      Math.max(0, assemblyState.deficits.negation);
+    return {
+      total: diffGap + distractorGap + assemblyBlockingGap + diversityGap,
+      diffGap,
+      typeGap: diversityGap,
+      distractorGap,
+      assemblyBlockingGap,
+    };
   }
 
   function formatGap(gap) {
-    return `${gap.total} (diff=${gap.diffGap} type=${gap.typeGap} distractor=${gap.distractorGap})`;
+    return `${gap.total} (diff=${gap.diffGap} diversity=${gap.typeGap} distractor=${gap.distractorGap} assembly=${gap.assemblyBlockingGap || 0})`;
   }
 
   function formatAssemblyState(state) {
@@ -3240,7 +3244,9 @@ async function main() {
 
     const nextPoolState = incrementPoolStateWithCell(clonePoolState(workingPoolState), type, diff);
     const nextAssemblyState = computeAssemblyState(nextPoolState);
-    const typeGap = Math.max(0, (globalTypeTargets[type] || 0) - ((workingPoolState.typeTotals || {})[type] || 0));
+    const totalBefore = Math.max(1, workingPoolState?.style?.total || 0);
+    const typeCountBefore = (workingPoolState?.typeTotals || {})[type] || 0;
+    const typeShareBefore = typeCountBefore / totalBefore;
 
     let score = 0;
     score += (nextAssemblyState.assemblableSets - currentAssemblyState.assemblableSets) * 240;
@@ -3250,7 +3256,10 @@ async function main() {
     score += (currentAssemblyState.deficits.distractor - nextAssemblyState.deficits.distractor) * 3;
     score += (currentAssemblyState.embeddedOverflow - nextAssemblyState.embeddedOverflow) * 18;
     score += ((typeReliability?.[type] || 0.8) - 0.75) * 30;
-    score += typeGap * (strongTargeting ? 0.4 : 2);
+    if (typeCountBefore === 0) score += 3;
+    if (typeCountBefore <= 1) score += 2;
+    if (typeShareBefore > 0.32) score -= 10;
+    if (typeShareBefore > 0.42) score -= 18;
 
     if (focus === "hard" && diff === "hard") score += 16;
     if (focus === "medium" && diff === "medium") score += 12;
@@ -3384,6 +3393,8 @@ async function main() {
   // Large gap → broad AI-planned batch. Small gap → micro targeted batch (no AI planner needed).
   function scheduleNextBatch(gap, poolState, pool, assemblyState, cbState, roundNum, phaseSignals, typeReliability) {
     const blockedTypes = getActiveCircuitBreakerTypes(cbState, roundNum);
+    const total = poolState?.style?.total || 0;
+    const plannerAllowed = total < Math.ceil(TARGET_SET_COUNT * 10 * 0.2) && assemblyState.assemblableSets === 0;
     if (isAssemblyPhase(poolState, assemblyState, phaseSignals)) {
       const strongTargeting = phaseSignals?.strongTargeting === true;
       const batchSize = strongTargeting ? Math.max(3, Math.min(5, assemblyState.remainingSets <= 1 ? 4 : 5)) : (gap.total > 12 ? 5 : 4);
@@ -3397,10 +3408,30 @@ async function main() {
       };
     }
     if (gap.total > 20) {
-      return { phase: "broad", mode: "broad", batchSize: 10, useAIPlanner: true, strongTargeting: false };
+      if (plannerAllowed) {
+        return { phase: "broad", mode: "broad", batchSize: 10, useAIPlanner: true, strongTargeting: false };
+      }
+      return {
+        phase: "broad",
+        mode: "guided-broad",
+        batchSize: 8,
+        useAIPlanner: false,
+        strongTargeting: false,
+        spec: chooseAssemblyDrivenSpec(poolState, assemblyState, blockedTypes, 8, typeReliability, false),
+      };
     }
     if (gap.total > 4) {
-      return { phase: "broad", mode: "medium", batchSize: 5, useAIPlanner: true, strongTargeting: false };
+      if (plannerAllowed) {
+        return { phase: "broad", mode: "medium", batchSize: 5, useAIPlanner: true, strongTargeting: false };
+      }
+      return {
+        phase: "broad",
+        mode: "guided-medium",
+        batchSize: 5,
+        useAIPlanner: false,
+        strongTargeting: false,
+        spec: chooseAssemblyDrivenSpec(poolState, assemblyState, blockedTypes, 5, typeReliability, false),
+      };
     }
     // Micro mode: directly target the most needed non-blocked type/difficulty
     const bestType = TYPE_LIST
