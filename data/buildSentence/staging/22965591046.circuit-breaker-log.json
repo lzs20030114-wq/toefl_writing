@@ -1,0 +1,2214 @@
+{
+  "generated_at": "2026-03-11T17:46:16.486Z",
+  "active": {},
+  "events": [
+    {
+      "triggeredAt": "2026-03-11T17:28:52.120Z",
+      "round": 4,
+      "mode": "normal",
+      "type": "3rd-reporting",
+      "generated": 6,
+      "accepted": 0,
+      "rejected": 6,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r4_q8: prompt/answer mismatch - prompt asks 'what do you say about the theater performance' but answer discusses uncertainty about show start time, not an opinion about the performance",
+          6
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 6
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 6,
+            "accepted": 0,
+            "rejected": 6,
+            "reasons": {
+              "review:blocker:tmp_r4_q8: prompt/answer mismatch - prompt asks 'what do you say about the theater performance' but answer discusses uncertainty about show start time, not an opinion about the performance": 6
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 7
+    },
+    {
+      "triggeredAt": "2026-03-11T17:30:30.063Z",
+      "round": 6,
+      "mode": "normal",
+      "type": "direct",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:score<78",
+          2
+        ],
+        [
+          "fatal: chunks[6]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "review:ets<72",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 6
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "fatal: chunks[6]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+            }
+          }
+        },
+        {
+          "round": 5,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "easy",
+              "count": 2
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:score<78": 2
+            }
+          }
+        },
+        {
+          "round": 6,
+          "spec": [
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 7
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:ets<72": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 9
+    },
+    {
+      "triggeredAt": "2026-03-11T17:31:23.187Z",
+      "round": 7,
+      "mode": "normal",
+      "type": "interrogative",
+      "generated": 7,
+      "accepted": 0,
+      "rejected": 7,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r7_q8: prompt/answer mismatch - prompt asks what contractor said, answer is first-person statement not reporting contractor's words|tmp_r7_q6: distractor 'select' likely valid in answer position (could replace 'selected')|tmp_r7_q8: answer doesn't match prompt (contractor said vs. I realized mismatch)",
+          5
+        ],
+        [
+          "fatal: chunks[4]: isolated floating adverb \"tomorrow\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "fatal: chunks[5]: isolated floating adverb \"tomorrow\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 5,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "easy",
+              "count": 2
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "fatal: chunks[4]: isolated floating adverb \"tomorrow\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+            }
+          }
+        },
+        {
+          "round": 6,
+          "spec": [
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 7
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "fatal: chunks[5]: isolated floating adverb \"tomorrow\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+            }
+          }
+        },
+        {
+          "round": 7,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 5
+            },
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 5,
+            "accepted": 0,
+            "rejected": 5,
+            "reasons": {
+              "review:blocker:tmp_r7_q8: prompt/answer mismatch - prompt asks what contractor said, answer is first-person statement not reporting contractor's words|tmp_r7_q6: distractor 'select' likely valid in answer position (could replace 'selected')|tmp_r7_q8: answer doesn't match prompt (contractor said vs. I realized mismatch)": 5
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 10
+    },
+    {
+      "triggeredAt": "2026-03-11T17:31:23.187Z",
+      "round": 7,
+      "mode": "normal",
+      "type": "relative",
+      "generated": 5,
+      "accepted": 0,
+      "rejected": 5,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          2
+        ],
+        [
+          "fatal: chunks[3]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\"); chunks[4]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "fatal: chunks[2]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "review:blocker:tmp_r7_q8: prompt/answer mismatch - prompt asks what contractor said, answer is first-person statement not reporting contractor's words|tmp_r7_q6: distractor 'select' likely valid in answer position (could replace 'selected')|tmp_r7_q8: answer doesn't match prompt (contractor said vs. I realized mismatch)",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 5,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "easy",
+              "count": 2
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+            }
+          }
+        },
+        {
+          "round": 6,
+          "spec": [
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 7
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+            }
+          }
+        },
+        {
+          "round": 7,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 5
+            },
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "fatal: chunks[3]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\"); chunks[4]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "fatal: chunks[2]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "review:blocker:tmp_r7_q8: prompt/answer mismatch - prompt asks what contractor said, answer is first-person statement not reporting contractor's words|tmp_r7_q6: distractor 'select' likely valid in answer position (could replace 'selected')|tmp_r7_q8: answer doesn't match prompt (contractor said vs. I realized mismatch)": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 10
+    },
+    {
+      "triggeredAt": "2026-03-11T17:33:20.905Z",
+      "round": 10,
+      "mode": "normal",
+      "type": "3rd-reporting",
+      "generated": 17,
+      "accepted": 3,
+      "rejected": 14,
+      "acceptRate": 0.176,
+      "reasons": [
+        [
+          "fatal: distractor must be a single word (TPO standard)",
+          3
+        ],
+        [
+          "review:blocker:tmp_r9_q10: distractor 'began' can be inserted to create valid sentence 'I am not sure when the next pottery workshop began' (past tense is grammatically valid)",
+          3
+        ],
+        [
+          "topic:repeat",
+          2
+        ],
+        [
+          "fatal: chunks[3]: isolated floating adverb \"often\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "review:ets<72",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 8,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 5,
+            "accepted": 3,
+            "rejected": 2,
+            "reasons": {
+              "fatal: chunks[3]: isolated floating adverb \"often\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "review:ets<72": 1
+            }
+          }
+        },
+        {
+          "round": 9,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 6
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 6,
+            "accepted": 0,
+            "rejected": 6,
+            "reasons": {
+              "fatal: distractor must be a single word (TPO standard); chunks[5]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "fatal: distractor must be a single word (TPO standard)": 1,
+              "topic:repeat": 1,
+              "review:blocker:tmp_r9_q10: distractor 'began' can be inserted to create valid sentence 'I am not sure when the next pottery workshop began' (past tense is grammatically valid)": 3
+            }
+          }
+        },
+        {
+          "round": 10,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 6,
+            "accepted": 0,
+            "rejected": 6,
+            "reasons": {
+              "fatal: distractor must be a single word (TPO standard); chunks[6]: isolated floating adverb \"recently\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "fatal: distractor must be a single word (TPO standard)": 2,
+              "fatal: distractor must be a single word (TPO standard); chunks[5]: isolated floating adverb \"tomorrow\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "topic:repeat": 1,
+              "review:blocker:tmp_r10_q6: distractor 'who' could be inserted to create another valid sentence ('The accountant needed to know who I had submitted the receipts to')": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 13
+    },
+    {
+      "triggeredAt": "2026-03-11T17:33:20.905Z",
+      "round": 10,
+      "mode": "normal",
+      "type": "direct",
+      "generated": 5,
+      "accepted": 0,
+      "rejected": 5,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "fatal: distractor must be a single word (TPO standard)",
+          1
+        ],
+        [
+          "fatal: chunks[4]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "review:blocker:tmp_r9_q10: distractor 'began' can be inserted to create valid sentence 'I am not sure when the next pottery workshop began' (past tense is grammatically valid)",
+          1
+        ],
+        [
+          "fatal: chunks (minus distractor) + prefilled words must equal answer words",
+          1
+        ],
+        [
+          "review:blocker:tmp_r10_q6: distractor 'who' could be inserted to create another valid sentence ('The accountant needed to know who I had submitted the receipts to')",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 8,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 9,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 6
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "fatal: distractor must be a single word (TPO standard)": 1,
+              "fatal: chunks[4]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "review:blocker:tmp_r9_q10: distractor 'began' can be inserted to create valid sentence 'I am not sure when the next pottery workshop began' (past tense is grammatically valid)": 1
+            }
+          }
+        },
+        {
+          "round": 10,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "fatal: chunks (minus distractor) + prefilled words must equal answer words": 1,
+              "review:blocker:tmp_r10_q6: distractor 'who' could be inserted to create another valid sentence ('The accountant needed to know who I had submitted the receipts to')": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 13
+    },
+    {
+      "triggeredAt": "2026-03-11T17:34:05.303Z",
+      "round": 11,
+      "mode": "normal",
+      "type": "interrogative",
+      "generated": 5,
+      "accepted": 0,
+      "rejected": 5,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r11_q6: distractor 'request' could be inserted to create valid sentence 'The volume you request has been moved to storage'|tmp_r11_q8: distractor 'notice' could be inserted to create valid sentence 'I had not notice when...' (though ungrammatical, test-takers might accept it)",
+          2
+        ],
+        [
+          "fatal: chunks[6]: isolated floating adverb \"tomorrow\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "fatal: distractor must be a single word (TPO standard)",
+          1
+        ],
+        [
+          "fatal: chunks[6]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 9,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 6
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 10,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 11,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 5
+            },
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 5,
+            "accepted": 0,
+            "rejected": 5,
+            "reasons": {
+              "fatal: chunks[6]: isolated floating adverb \"tomorrow\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "fatal: distractor must be a single word (TPO standard)": 1,
+              "fatal: chunks[6]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "review:blocker:tmp_r11_q6: distractor 'request' could be inserted to create valid sentence 'The volume you request has been moved to storage'|tmp_r11_q8: distractor 'notice' could be inserted to create valid sentence 'I had not notice when...' (though ungrammatical, test-takers might accept it)": 2
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 14
+    },
+    {
+      "triggeredAt": "2026-03-11T17:34:51.051Z",
+      "round": 12,
+      "mode": "normal",
+      "type": "relative",
+      "generated": 11,
+      "accepted": 0,
+      "rejected": 11,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r11_q6: distractor 'request' could be inserted to create valid sentence 'The volume you request has been moved to storage'|tmp_r11_q8: distractor 'notice' could be inserted to create valid sentence 'I had not notice when...' (though ungrammatical, test-takers might accept it)",
+          2
+        ],
+        [
+          "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person",
+          2
+        ],
+        [
+          "review:ets<72",
+          2
+        ],
+        [
+          "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "fatal: chunks[2]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 10,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 11,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 5
+            },
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "review:blocker:tmp_r11_q6: distractor 'request' could be inserted to create valid sentence 'The volume you request has been moved to storage'|tmp_r11_q8: distractor 'notice' could be inserted to create valid sentence 'I had not notice when...' (though ungrammatical, test-takers might accept it)": 2
+            }
+          }
+        },
+        {
+          "round": 12,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 6
+            },
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 8,
+            "accepted": 0,
+            "rejected": 8,
+            "reasons": {
+              "fatal: chunks[2]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 2,
+              "fatal: distractor must be a single word (TPO standard)": 1,
+              "fatal: prefilled \"he\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1,
+              "review:ets<72": 2,
+              "review:score<78": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 15
+    },
+    {
+      "triggeredAt": "2026-03-11T17:36:08.508Z",
+      "round": 15,
+      "mode": "normal",
+      "type": "direct",
+      "generated": 6,
+      "accepted": 1,
+      "rejected": 5,
+      "acceptRate": 0.167,
+      "reasons": [
+        [
+          "pool:difficulty_surplus:easy",
+          3
+        ],
+        [
+          "fatal: distractor must not appear in answer",
+          1
+        ],
+        [
+          "review:ets<72",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 13,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "pool:difficulty_surplus:easy": 2
+            }
+          }
+        },
+        {
+          "round": 14,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "fatal: distractor must not appear in answer": 1
+            }
+          }
+        },
+        {
+          "round": 15,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 1,
+            "rejected": 2,
+            "reasons": {
+              "pool:difficulty_surplus:easy": 1,
+              "review:ets<72": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 18
+    },
+    {
+      "triggeredAt": "2026-03-11T17:36:51.066Z",
+      "round": 16,
+      "mode": "normal",
+      "type": "3rd-reporting",
+      "generated": 7,
+      "accepted": 1,
+      "rejected": 6,
+      "acceptRate": 0.143,
+      "reasons": [
+        [
+          "pool:non_embedded_shortage",
+          3
+        ],
+        [
+          "fatal: distractor must be a single word (TPO standard); chunks[5]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "fatal: distractor must be a single word (TPO standard)",
+          1
+        ],
+        [
+          "fatal: distractor must be a single word (TPO standard); chunks[5]: isolated floating adverb \"tomorrow\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 14,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "pool:non_embedded_shortage": 3
+            }
+          }
+        },
+        {
+          "round": 15,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 16,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 4,
+            "accepted": 1,
+            "rejected": 3,
+            "reasons": {
+              "fatal: distractor must be a single word (TPO standard); chunks[5]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "fatal: distractor must be a single word (TPO standard)": 1,
+              "fatal: distractor must be a single word (TPO standard); chunks[5]: isolated floating adverb \"tomorrow\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 19
+    },
+    {
+      "triggeredAt": "2026-03-11T17:38:21.105Z",
+      "round": 19,
+      "mode": "normal",
+      "type": "direct",
+      "generated": 5,
+      "accepted": 1,
+      "rejected": 4,
+      "acceptRate": 0.2,
+      "reasons": [
+        [
+          "review:blocker:tmp_r18_q4: distractor 'handle' could be inserted to create valid sentence 'I was told which dentist would handle my root canal procedure'|tmp_r18_q5: distractor 'warm' could be inserted to create valid sentence 'I learned which day would warm have the warmest temperatures this weekend' (grammatically awkward but structurally insertable)",
+          2
+        ],
+        [
+          "review:ets<72",
+          1
+        ],
+        [
+          "review:blocker:tmp_r19_q2: distractor 'run' could be inserted to create valid sentence 'This program run faster...' (grammatically incorrect but structurally insertable)|tmp_r19_q3: prompt/answer mismatch - prompt asks what pharmacist asked, answer is a statement not a question|tmp_r19_q5: prompt/answer mismatch - prompt asks what receptionist inquired, answer is a statement not a question",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 17,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 1,
+            "rejected": 1,
+            "reasons": {
+              "review:ets<72": 1
+            }
+          }
+        },
+        {
+          "round": 18,
+          "spec": [
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "hard",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r18_q4: distractor 'handle' could be inserted to create valid sentence 'I was told which dentist would handle my root canal procedure'|tmp_r18_q5: distractor 'warm' could be inserted to create valid sentence 'I learned which day would warm have the warmest temperatures this weekend' (grammatically awkward but structurally insertable)": 2
+            }
+          }
+        },
+        {
+          "round": 19,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r19_q2: distractor 'run' could be inserted to create valid sentence 'This program run faster...' (grammatically incorrect but structurally insertable)|tmp_r19_q3: prompt/answer mismatch - prompt asks what pharmacist asked, answer is a statement not a question|tmp_r19_q5: prompt/answer mismatch - prompt asks what receptionist inquired, answer is a statement not a question": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 22
+    },
+    {
+      "triggeredAt": "2026-03-11T17:38:21.106Z",
+      "round": 19,
+      "mode": "normal",
+      "type": "relative",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r19_q2: distractor 'run' could be inserted to create valid sentence 'This program run faster...' (grammatically incorrect but structurally insertable)|tmp_r19_q3: prompt/answer mismatch - prompt asks what pharmacist asked, answer is a statement not a question|tmp_r19_q5: prompt/answer mismatch - prompt asks what receptionist inquired, answer is a statement not a question",
+          2
+        ],
+        [
+          "runtime: question tmp_r19_q1: givenSlots/answerOrder do not reconstruct answer (got \"i the workshop attended covered advanced data visualization techniques\", expected \"the workshop i attended covered advanced data visualization techniques\")",
+          1
+        ],
+        [
+          "fatal: chunks[2]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 17,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 18,
+          "spec": [
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "hard",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 19,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 4,
+            "accepted": 0,
+            "rejected": 4,
+            "reasons": {
+              "runtime: question tmp_r19_q1: givenSlots/answerOrder do not reconstruct answer (got \"i the workshop attended covered advanced data visualization techniques\", expected \"the workshop i attended covered advanced data visualization techniques\")": 1,
+              "fatal: chunks[2]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "review:blocker:tmp_r19_q2: distractor 'run' could be inserted to create valid sentence 'This program run faster...' (grammatically incorrect but structurally insertable)|tmp_r19_q3: prompt/answer mismatch - prompt asks what pharmacist asked, answer is a statement not a question|tmp_r19_q5: prompt/answer mismatch - prompt asks what receptionist inquired, answer is a statement not a question": 2
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 22
+    },
+    {
+      "triggeredAt": "2026-03-11T17:40:10.814Z",
+      "round": 23,
+      "mode": "normal",
+      "type": "3rd-reporting",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "fatal: distractor must be a single word (TPO standard)",
+          3
+        ],
+        [
+          "topic:repeat",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 21,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 4,
+            "accepted": 0,
+            "rejected": 4,
+            "reasons": {
+              "fatal: distractor must be a single word (TPO standard)": 3,
+              "topic:repeat": 1
+            }
+          }
+        },
+        {
+          "round": 22,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 23,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        }
+      ],
+      "blockedUntilRound": 26
+    },
+    {
+      "triggeredAt": "2026-03-11T17:40:10.815Z",
+      "round": 23,
+      "mode": "normal",
+      "type": "direct",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "pool:difficulty_surplus:easy",
+          3
+        ],
+        [
+          "fatal: distractor must be a single word (TPO standard)",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 21,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "fatal: distractor must be a single word (TPO standard)": 1
+            }
+          }
+        },
+        {
+          "round": 22,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 23,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "pool:difficulty_surplus:easy": 3
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 26
+    },
+    {
+      "triggeredAt": "2026-03-11T17:40:45.011Z",
+      "round": 24,
+      "mode": "normal",
+      "type": "interrogative",
+      "generated": 6,
+      "accepted": 0,
+      "rejected": 6,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r24_q1: distractor 'store' could be inserted to create valid sentence 'Could you tell me if the luggage had been store properly?' (non-standard but parseable)|tmp_r24_q3: distractor 'were' could be inserted to create valid sentence 'Do you know where the new bins were located now?' (grammatically valid past tense)|tmp_r24_q1: Answer is interrogative (question), not statement - violates 92% TPO statement pattern|tmp_r24_q3: Answer is interrogative (question), not statement - violates 92% TPO statement pattern",
+          2
+        ],
+        [
+          "fatal: distractor must be a single word (TPO standard)",
+          1
+        ],
+        [
+          "topic:repeat",
+          1
+        ],
+        [
+          "review:blocker:Answer is a QUESTION (92% of TPO answers are statements)|Distractor 'collect' appears in answer as 'collected' - creates ambiguity",
+          1
+        ],
+        [
+          "fatal: chunks[6]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 22,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "fatal: distractor must be a single word (TPO standard)": 1,
+              "topic:repeat": 1,
+              "review:blocker:Answer is a QUESTION (92% of TPO answers are statements)|Distractor 'collect' appears in answer as 'collected' - creates ambiguity": 1
+            }
+          }
+        },
+        {
+          "round": 23,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 24,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "fatal: chunks[6]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "review:blocker:tmp_r24_q1: distractor 'store' could be inserted to create valid sentence 'Could you tell me if the luggage had been store properly?' (non-standard but parseable)|tmp_r24_q3: distractor 'were' could be inserted to create valid sentence 'Do you know where the new bins were located now?' (grammatically valid past tense)|tmp_r24_q1: Answer is interrogative (question), not statement - violates 92% TPO statement pattern|tmp_r24_q3: Answer is interrogative (question), not statement - violates 92% TPO statement pattern": 2
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 27
+    },
+    {
+      "triggeredAt": "2026-03-11T17:43:55.384Z",
+      "round": 28,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 5,
+      "accepted": 1,
+      "rejected": 4,
+      "acceptRate": 0.2,
+      "reasons": [
+        [
+          "prompt: prompt_task_text: must contain an explicit task/instruction, not only background context",
+          2
+        ],
+        [
+          "topic:repeat",
+          1
+        ],
+        [
+          "fatal: distractor must be a single word (TPO standard)",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 26,
+          "spec": [
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 1,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 27,
+          "spec": [
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "prompt: prompt_task_text: must contain an explicit task/instruction, not only background context": 2,
+              "topic:repeat": 1
+            }
+          }
+        },
+        {
+          "round": 28,
+          "spec": [
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "fatal: distractor must be a single word (TPO standard)": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 31
+    }
+  ],
+  "history": [
+    {
+      "round": 27,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 5
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 3,
+          "accepted": 0,
+          "rejected": 3,
+          "reasons": {
+            "prompt: prompt_task_text: must contain an explicit task/instruction, not only background context": 2,
+            "topic:repeat": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 2,
+          "accepted": 1,
+          "rejected": 1,
+          "reasons": {
+            "prompt: prompt_task_text: must contain an explicit task/instruction, not only background context": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 28,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 4
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "fatal: distractor must be a single word (TPO standard)": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 3,
+          "accepted": 2,
+          "rejected": 1,
+          "reasons": {
+            "topic:repeat": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 29,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 4
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]": 1,
+            "review:blocker:tmp_r29_q2: prompt/answer mismatch - prompt asks about schedule, answer discusses gym equipment location|tmp_r29_q2: distractor 'was' could create valid sentence 'I found out where the new gym equipment was located'|tmp_r29_q4: prompt/answer mismatch - prompt asks what receptionist asked, answer is a statement about breakfast uncertainty (not reporting a question)|tmp_r29_q2: Answer completely unrelated to prompt - asks about schedule, answer about gym equipment location|tmp_r29_q2: Distractor 'was' creates valid alternative 'where the new gym equipment was located' (past tense grammatically correct)|tmp_r29_q4: Answer unrelated to prompt - asks what receptionist asked, answer is speaker's uncertainty about breakfast": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "topic:repeat": 1,
+            "review:blocker:tmp_r29_q2: prompt/answer mismatch - prompt asks about schedule, answer discusses gym equipment location|tmp_r29_q2: distractor 'was' could create valid sentence 'I found out where the new gym equipment was located'|tmp_r29_q4: prompt/answer mismatch - prompt asks what receptionist asked, answer is a statement about breakfast uncertainty (not reporting a question)|tmp_r29_q2: Answer completely unrelated to prompt - asks about schedule, answer about gym equipment location|tmp_r29_q2: Distractor 'was' creates valid alternative 'where the new gym equipment was located' (past tense grammatically correct)|tmp_r29_q4: Answer unrelated to prompt - asks what receptionist asked, answer is speaker's uncertainty about breakfast": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 30,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]": 1,
+            "review:blocker:tmp_r30_q2: prompt/answer mismatch - prompt asks what trainer inquired about equipment, answer states speaker's knowledge about bands location (unrelated)|tmp_r30_q3: prompt/answer mismatch - prompt asks what vet needed to find out about pet, answer states speaker's memory about appointment time (unrelated)": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r30_q2: prompt/answer mismatch - prompt asks what trainer inquired about equipment, answer states speaker's knowledge about bands location (unrelated)|tmp_r30_q3: prompt/answer mismatch - prompt asks what vet needed to find out about pet, answer states speaker's memory about appointment time (unrelated)": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "pool:low_assembly_value": 1
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 31,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 2,
+          "accepted": 2,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 1,
+          "accepted": 1,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "pool:difficulty_surplus:easy": 1
+          }
+        }
+      }
+    },
+    {
+      "round": 32,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "direct",
+          "difficulty": "hard",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r32_q4: prompt/answer mismatch - prompt asks about repair service, answer discusses tools display section|tmp_r32_q4: distractor 'discover' can be inserted to create valid sentence 'I discover it in the section...' (present simple is grammatically valid)|tmp_r32_q2: distractor 'offer' can be inserted to create valid sentence 'The vendor near the entrance offer fresher produce...' (subject-verb agreement error makes it invalid, but structurally insertable)|tmp_r32_q4: Answer semantically mismatched with prompt - prompt asks about 'repair service' but answer discusses 'tools display section' with no connection to repair services": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "pool:low_assembly_value": 1,
+            "review:blocker:tmp_r32_q4: prompt/answer mismatch - prompt asks about repair service, answer discusses tools display section|tmp_r32_q4: distractor 'discover' can be inserted to create valid sentence 'I discover it in the section...' (present simple is grammatically valid)|tmp_r32_q2: distractor 'offer' can be inserted to create valid sentence 'The vendor near the entrance offer fresher produce...' (subject-verb agreement error makes it invalid, but structurally insertable)|tmp_r32_q4: Answer semantically mismatched with prompt - prompt asks about 'repair service' but answer discusses 'tools display section' with no connection to repair services": 1
+          }
+        },
+        "relative": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "pool:low_assembly_value": 1
+          }
+        }
+      }
+    }
+  ]
+}
