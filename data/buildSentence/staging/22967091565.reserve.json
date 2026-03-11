@@ -1,0 +1,97 @@
+[
+  {
+    "id": "tmp_r3_q6",
+    "prompt": "What did the dental receptionist say about the appointment?",
+    "prompt_context": "",
+    "prompt_task_kind": "report",
+    "prompt_task_text": "What did the dental receptionist say about the appointment?",
+    "answer": "The patient did not realize the procedure had been rescheduled.",
+    "chunks": [
+      "did not",
+      "realize",
+      "the",
+      "procedure",
+      "had been",
+      "rescheduled",
+      "reschedule"
+    ],
+    "prefilled": [
+      "the patient"
+    ],
+    "prefilled_positions": {
+      "the patient": 0
+    },
+    "distractor": "reschedule",
+    "has_question_mark": false,
+    "grammar_points": [
+      "past_negation",
+      "past_perfect_passive"
+    ],
+    "_assemblyValue": 19
+  },
+  {
+    "id": "tmp_r3_q2",
+    "prompt": "What did the exchange student say about the campus tour?",
+    "prompt_context": "",
+    "prompt_task_kind": "report",
+    "prompt_task_text": "What did the exchange student say about the campus tour?",
+    "answer": "I did not understand why the library had been closed early.",
+    "chunks": [
+      "did not",
+      "understand",
+      "why",
+      "the",
+      "library",
+      "had been",
+      "closed",
+      "early",
+      "close"
+    ],
+    "prefilled": [
+      "i"
+    ],
+    "prefilled_positions": {
+      "i": 0
+    },
+    "distractor": "close",
+    "has_question_mark": false,
+    "grammar_points": [
+      "past_negation",
+      "past_perfect_passive",
+      "embedded_question"
+    ],
+    "_assemblyValue": 11
+  },
+  {
+    "id": "tmp_r3_q7",
+    "prompt": "How do you respond when asked about the art class?",
+    "prompt_context": "",
+    "prompt_task_kind": "respond",
+    "prompt_task_text": "How do you respond when asked about the art class?",
+    "answer": "This workshop was more helpful than any other class I attended.",
+    "chunks": [
+      "this",
+      "workshop",
+      "was",
+      "more helpful",
+      "than",
+      "any other",
+      "class",
+      "attended",
+      "attend"
+    ],
+    "prefilled": [
+      "i"
+    ],
+    "prefilled_positions": {
+      "i": 9
+    },
+    "distractor": "attend",
+    "has_question_mark": false,
+    "grammar_points": [
+      "comparative",
+      "relative_clause"
+    ],
+    "_assemblyValue": 9
+  }
+]

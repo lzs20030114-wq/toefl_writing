@@ -1,0 +1,100 @@
+{
+  "generated_at": "2026-03-11T18:04:43.385Z",
+  "active": {},
+  "events": [],
+  "history": [
+    {
+      "round": 4,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 1
+        },
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "easy",
+          "count": 1
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "interrogative",
+          "difficulty": "medium",
+          "count": 1
+        },
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 1
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]": 1,
+            "review:blocker:tmp_r4_q6: distractor 'received' can be inserted to create valid sentence 'I received the confirmation email yet' (grammatically awkward but parseable)|tmp_r4_q1: distractor 'find' can be inserted to create valid sentence 'I find the equipment at this gym to be well maintained'": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r4_q6: distractor 'received' can be inserted to create valid sentence 'I received the confirmation email yet' (grammatically awkward but parseable)|tmp_r4_q1: distractor 'find' can be inserted to create valid sentence 'I find the equipment at this gym to be well maintained'": 1
+          }
+        },
+        "1st-embedded": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "review:blocker:tmp_r4_q6: distractor 'received' can be inserted to create valid sentence 'I received the confirmation email yet' (grammatically awkward but parseable)|tmp_r4_q1: distractor 'find' can be inserted to create valid sentence 'I find the equipment at this gym to be well maintained'": 2
+          }
+        },
+        "interrogative": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r4_q6: distractor 'received' can be inserted to create valid sentence 'I received the confirmation email yet' (grammatically awkward but parseable)|tmp_r4_q1: distractor 'find' can be inserted to create valid sentence 'I find the equipment at this gym to be well maintained'": 1
+          }
+        },
+        "direct": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "review:blocker:tmp_r4_q6: distractor 'received' can be inserted to create valid sentence 'I received the confirmation email yet' (grammatically awkward but parseable)|tmp_r4_q1: distractor 'find' can be inserted to create valid sentence 'I find the equipment at this gym to be well maintained'": 2
+          }
+        },
+        "relative": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "fatal: chunks[3]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+            "review:blocker:tmp_r4_q6: distractor 'received' can be inserted to create valid sentence 'I received the confirmation email yet' (grammatically awkward but parseable)|tmp_r4_q1: distractor 'find' can be inserted to create valid sentence 'I find the equipment at this gym to be well maintained'": 1
+          }
+        }
+      }
+    }
+  ]
+}
