@@ -1413,12 +1413,13 @@ function isCircuitBreakerCriticalType(type, assemblyState) {
   return false;
 }
 
-function evaluatePoolBalance(q, poolState, assemblyState, phase, difficultyTargets) {
+function evaluatePoolBalance(q, poolState, assemblyState, phase, difficultyTargets, primaryRepairTarget = null) {
   if (phase !== "assembly" || !poolState || !assemblyState) return { ok: true };
 
   const meta = attachMeta(q)._meta || {};
   const type = meta.answerType || resolvedAnswerType(q);
   const diff = (estimateQuestionDifficulty(q) || {}).bucket || "medium";
+  const repairTarget = primaryRepairTarget || null;
   const diffCounts = getDifficultyCounts(poolState);
   const diffDeficits = Object.fromEntries(
     ["easy", "medium", "hard"].map((bucket) => [bucket, Math.max(0, (difficultyTargets?.[bucket] || 0) - (diffCounts[bucket] || 0))]),
@@ -1436,13 +1437,13 @@ function evaluatePoolBalance(q, poolState, assemblyState, phase, difficultyTarge
   if (assemblyState.negationOverflow > 0 && type === "negation") {
     return { ok: false, reason: "pool:negation_overflow" };
   }
-  if (assemblyState.deficits.nonEmbedded > 0 && meta.isEmbedded) {
+  if (assemblyState.deficits.nonEmbedded > 0 && meta.isEmbedded && repairTarget !== "embedded") {
     return { ok: false, reason: "pool:non_embedded_shortage" };
   }
-  if (assemblyState.deficits.embedded > 0 && !meta.isEmbedded && assemblyState.deficits.nonEmbedded <= 0) {
+  if (assemblyState.deficits.embedded > 0 && !meta.isEmbedded && (repairTarget === "embedded" || assemblyState.deficits.nonEmbedded <= 0)) {
     return { ok: false, reason: "pool:embedded_shortage" };
   }
-  if (assemblyState.deficits.negation > 0 && type !== "negation" && meta.isEmbedded) {
+  if (assemblyState.deficits.negation > 0 && type !== "negation" && meta.isEmbedded && repairTarget !== "embedded") {
     return { ok: false, reason: "pool:negation_shortage" };
   }
   if (diffDeficits[diff] === 0 && maxOtherDiffGap >= 3 && !isCircuitBreakerCriticalType(type, assemblyState)) {
@@ -2342,6 +2343,7 @@ async function generateCandidateRound(round, spec, rejectFeedback = "", recentPo
       workingAssemblyState,
       options?.phase,
       options?.difficultyTargets,
+      options?.primaryRepairTarget,
     );
     if (!gate.ok) {
       const type = resolvedAnswerType(q);
@@ -3553,15 +3555,15 @@ async function main() {
     return signature && specCooldowns[signature] && specCooldowns[signature] >= roundNum;
   }
 
-  function buildAssemblyGenerationHints(assemblyState, spec) {
+  function buildAssemblyGenerationHints(assemblyState, spec, primaryRepairTarget = null) {
     if (!assemblyState) return "";
     const hints = [];
-    if (assemblyState.deficits.embedded > 0) {
+    if (primaryRepairTarget === "embedded" || (!primaryRepairTarget && assemblyState.deficits.embedded > 0)) {
       hints.push("ASSEMBLY REPAIR MODE: This batch MUST replenish embedded-question inventory.");
       hints.push("Prioritize 3rd-reporting, 1st-embedded, or interrogative items with clean reported-speech structure.");
-      hints.push("Avoid overproducing direct/relative-only batches unless non-embedded shortage is also active.");
+      hints.push("Avoid overproducing direct/relative-only batches unless non-embedded shortage is the explicit repair target.");
     }
-    if (assemblyState.deficits.nonEmbedded > 0) {
+    if (primaryRepairTarget === "nonEmbedded" || (!primaryRepairTarget && assemblyState.deficits.nonEmbedded > 0)) {
       hints.push("ASSEMBLY REPAIR MODE: This batch MUST prioritize non-embedded items.");
       hints.push("Generate DIRECT statements or RELATIVE / contact-clause items only.");
       hints.push("Do NOT use embedded-question / reporting-verb frames such as asked, wondered, wanted to know, needed to know, was curious.");
@@ -3587,18 +3589,20 @@ async function main() {
     if (isAssemblyPhase(poolState, assemblyState, phaseSignals)) {
       const strongTargeting = phaseSignals?.strongTargeting === true;
       const batchSize = strongTargeting ? Math.max(3, Math.min(5, assemblyState.remainingSets <= 1 ? 4 : 5)) : (gap.total > 12 ? 5 : 4);
+      const primaryRepairTarget = limiterToFocus(assemblyState.limitingFactors[0]?.key || "");
       return {
         phase: "assembly",
         mode: strongTargeting ? "last-mile" : (gap.total > 12 ? "assembly-medium" : "assembly-precision"),
         batchSize,
         useAIPlanner: false,
         strongTargeting,
+        primaryRepairTarget,
         spec: chooseAssemblyDrivenSpec(poolState, assemblyState, blockedTypes, batchSize, typeReliability, strongTargeting),
       };
     }
     if (gap.total > 20) {
       if (plannerAllowed) {
-        return { phase: "broad", mode: "broad", batchSize: 10, useAIPlanner: true, strongTargeting: false };
+        return { phase: "broad", mode: "broad", batchSize: 10, useAIPlanner: true, strongTargeting: false, primaryRepairTarget: null };
       }
       return {
         phase: "broad",
@@ -3606,12 +3610,13 @@ async function main() {
         batchSize: 8,
         useAIPlanner: false,
         strongTargeting: false,
+        primaryRepairTarget: null,
         spec: chooseAssemblyDrivenSpec(poolState, assemblyState, blockedTypes, 8, typeReliability, false),
       };
     }
     if (gap.total > 4) {
       if (plannerAllowed) {
-        return { phase: "broad", mode: "medium", batchSize: 5, useAIPlanner: true, strongTargeting: false };
+        return { phase: "broad", mode: "medium", batchSize: 5, useAIPlanner: true, strongTargeting: false, primaryRepairTarget: null };
       }
       return {
         phase: "broad",
@@ -3619,6 +3624,7 @@ async function main() {
         batchSize: 5,
         useAIPlanner: false,
         strongTargeting: false,
+        primaryRepairTarget: null,
         spec: chooseAssemblyDrivenSpec(poolState, assemblyState, blockedTypes, 5, typeReliability, false),
       };
     }
@@ -3635,6 +3641,7 @@ async function main() {
       batchSize: 2,
       useAIPlanner: false,
       strongTargeting: false,
+      primaryRepairTarget: null,
       spec: [{ type: bestType?.type || "3rd-reporting", difficulty: bestDiff, count: 2 }],
     };
   }
@@ -3745,8 +3752,9 @@ async function main() {
     const selectionLabel = spec?._selection
       ? ` focus=${spec._selection.focus} proj=${spec._selection.projectedAssemblableSets}/${TARGET_SET_COUNT}`
       : "";
+    const repairTargetLabel = schedule.primaryRepairTarget ? ` target=${schedule.primaryRepairTarget}` : "";
     console.log(
-      `round ${roundNum} [${schedule.mode}] gap=${formatGap(gap)} assembly=${formatAssemblyState(assemblyState)} progress=${formatAssemblyProgress(assemblyState)} limiting=${formatLimitingFactors(assemblyState)}${momentumLabel}${selectionLabel} → [${specLabel}]`,
+      `round ${roundNum} [${schedule.mode}] gap=${formatGap(gap)} assembly=${formatAssemblyState(assemblyState)} progress=${formatAssemblyProgress(assemblyState)} limiting=${formatLimitingFactors(assemblyState)}${repairTargetLabel}${momentumLabel}${selectionLabel} → [${specLabel}]`,
     );
 
     try {
@@ -3756,8 +3764,9 @@ async function main() {
         assemblyState,
         difficultyTargets,
         strongTargeting: schedule.strongTargeting,
+        primaryRepairTarget: schedule.primaryRepairTarget,
         typeReliability,
-        generationHints: schedule.phase === "assembly" ? buildAssemblyGenerationHints(assemblyState, spec) : "",
+        generationHints: schedule.phase === "assembly" ? buildAssemblyGenerationHints(assemblyState, spec, schedule.primaryRepairTarget) : "",
       });
       acceptedPool.push(...res.questions);
       statTotalRounds += 1;
