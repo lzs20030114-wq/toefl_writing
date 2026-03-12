@@ -1,0 +1,1344 @@
+{
+  "generated_at": "2026-03-12T07:34:11.953Z",
+  "active": {
+    "negation": {
+      "sinceRound": 9,
+      "untilRound": 12,
+      "lastEvent": {
+        "triggeredAt": "2026-03-12T07:31:25.398Z",
+        "round": 9,
+        "mode": "normal",
+        "type": "negation",
+        "generated": 4,
+        "accepted": 0,
+        "rejected": 4,
+        "acceptRate": 0,
+        "reasons": [
+          [
+            "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person",
+            2
+          ],
+          [
+            "review:blocker:tmp_r8_q8: distractor 'did' can be inserted to create valid sentence 'The piano instructor was curious if the venue did change locations' (past emphatic)|tmp_r8_q2: distractor 'delay' can be inserted to create valid sentence 'I did not understand why the opening had been delay delayed' is awkward but 'why delay the opening had been' could work",
+            2
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 7,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "hard",
+                "count": 5
+              },
+              {
+                "type": "interrogative",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 1
+              }
+            ],
+            "stats": {
+              "generated": 1,
+              "accepted": 0,
+              "rejected": 1,
+              "reasons": {
+                "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1
+              }
+            }
+          },
+          {
+            "round": 8,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "hard",
+                "count": 5
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "interrogative",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 1
+              }
+            ],
+            "stats": {
+              "generated": 2,
+              "accepted": 0,
+              "rejected": 2,
+              "reasons": {
+                "review:blocker:tmp_r8_q8: distractor 'did' can be inserted to create valid sentence 'The piano instructor was curious if the venue did change locations' (past emphatic)|tmp_r8_q2: distractor 'delay' can be inserted to create valid sentence 'I did not understand why the opening had been delay delayed' is awkward but 'why delay the opening had been' could work": 2
+              }
+            }
+          },
+          {
+            "round": 9,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "hard",
+                "count": 5
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "interrogative",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 1
+              }
+            ],
+            "stats": {
+              "generated": 1,
+              "accepted": 0,
+              "rejected": 1,
+              "reasons": {
+                "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 12
+      }
+    },
+    "direct": {
+      "sinceRound": 9,
+      "untilRound": 12,
+      "lastEvent": {
+        "triggeredAt": "2026-03-12T07:31:25.398Z",
+        "round": 9,
+        "mode": "normal",
+        "type": "direct",
+        "generated": 8,
+        "accepted": 0,
+        "rejected": 8,
+        "acceptRate": 0,
+        "reasons": [
+          [
+            "fatal: prefilled \"he\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person",
+            3
+          ],
+          [
+            "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person",
+            3
+          ],
+          [
+            "review:blocker:tmp_r7_q6: distractor 'finished' can be inserted to create valid sentence 'Do you know when the contractor will finished the work?' - grammatically incorrect but structurally plausible, creates ambiguity",
+            1
+          ],
+          [
+            "review:blocker:tmp_r9_q6: distractor 'complete' can be inserted to create valid sentence 'The coordinator inquired when the data analysis would be complete' (adjective use)|tmp_r9_q8: distractor 'enjoy' can be inserted to create valid sentence 'The guide was curious if the group enjoy the science building' (base form after 'group' in casual speech)",
+            1
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 7,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "hard",
+                "count": 5
+              },
+              {
+                "type": "interrogative",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 1
+              }
+            ],
+            "stats": {
+              "generated": 3,
+              "accepted": 0,
+              "rejected": 3,
+              "reasons": {
+                "fatal: prefilled \"he\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1,
+                "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1,
+                "review:blocker:tmp_r7_q6: distractor 'finished' can be inserted to create valid sentence 'Do you know when the contractor will finished the work?' - grammatically incorrect but structurally plausible, creates ambiguity": 1
+              }
+            }
+          },
+          {
+            "round": 8,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "hard",
+                "count": 5
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "interrogative",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 1
+              }
+            ],
+            "stats": {
+              "generated": 2,
+              "accepted": 0,
+              "rejected": 2,
+              "reasons": {
+                "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1,
+                "fatal: prefilled \"he\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1
+              }
+            }
+          },
+          {
+            "round": 9,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "hard",
+                "count": 5
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "interrogative",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 1
+              }
+            ],
+            "stats": {
+              "generated": 3,
+              "accepted": 0,
+              "rejected": 3,
+              "reasons": {
+                "fatal: prefilled \"he\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1,
+                "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1,
+                "review:blocker:tmp_r9_q6: distractor 'complete' can be inserted to create valid sentence 'The coordinator inquired when the data analysis would be complete' (adjective use)|tmp_r9_q8: distractor 'enjoy' can be inserted to create valid sentence 'The guide was curious if the group enjoy the science building' (base form after 'group' in casual speech)": 1
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 12
+      }
+    },
+    "3rd-reporting": {
+      "sinceRound": 8,
+      "untilRound": 11,
+      "lastEvent": {
+        "triggeredAt": "2026-03-12T07:29:52.455Z",
+        "round": 8,
+        "mode": "normal",
+        "type": "3rd-reporting",
+        "generated": 4,
+        "accepted": 0,
+        "rejected": 4,
+        "acceptRate": 0,
+        "reasons": [
+          [
+            "review:blocker:tmp_r7_q6: distractor 'finished' can be inserted to create valid sentence 'Do you know when the contractor will finished the work?' - grammatically incorrect but structurally plausible, creates ambiguity",
+            2
+          ],
+          [
+            "review:blocker:tmp_r8_q8: distractor 'did' can be inserted to create valid sentence 'The piano instructor was curious if the venue did change locations' (past emphatic)|tmp_r8_q2: distractor 'delay' can be inserted to create valid sentence 'I did not understand why the opening had been delay delayed' is awkward but 'why delay the opening had been' could work",
+            2
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 6,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "easy",
+                "count": 2
+              },
+              {
+                "type": "negation",
+                "difficulty": "hard",
+                "count": 4
+              },
+              {
+                "type": "direct",
+                "difficulty": "hard",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 0,
+              "accepted": 0,
+              "rejected": 0,
+              "reasons": {}
+            }
+          },
+          {
+            "round": 7,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "hard",
+                "count": 5
+              },
+              {
+                "type": "interrogative",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 1
+              }
+            ],
+            "stats": {
+              "generated": 2,
+              "accepted": 0,
+              "rejected": 2,
+              "reasons": {
+                "review:blocker:tmp_r7_q6: distractor 'finished' can be inserted to create valid sentence 'Do you know when the contractor will finished the work?' - grammatically incorrect but structurally plausible, creates ambiguity": 2
+              }
+            }
+          },
+          {
+            "round": 8,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "hard",
+                "count": 5
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "interrogative",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 1
+              }
+            ],
+            "stats": {
+              "generated": 2,
+              "accepted": 0,
+              "rejected": 2,
+              "reasons": {
+                "review:blocker:tmp_r8_q8: distractor 'did' can be inserted to create valid sentence 'The piano instructor was curious if the venue did change locations' (past emphatic)|tmp_r8_q2: distractor 'delay' can be inserted to create valid sentence 'I did not understand why the opening had been delay delayed' is awkward but 'why delay the opening had been' could work": 2
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 11
+      }
+    }
+  },
+  "events": [
+    {
+      "triggeredAt": "2026-03-12T07:22:26.813Z",
+      "round": 5,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 5,
+      "accepted": 0,
+      "rejected": 5,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r5_q1: distractor 'signed' can be inserted to create valid sentence 'I signed up for the internship interview' (contradicts negation but grammatically valid)|tmp_r5_q2: distractor 'familiarly' is not a valid word form that could create a grammatical sentence|tmp_r5_q4: extremely low assembly value (25.08) suggests quality issue|tmp_r5_q6: distractor 'closes' can be inserted to create valid sentence 'I did not understand why the campus cafe closes early' (present tense is grammatically valid)",
+          4
+        ],
+        [
+          "fatal: chunks[6]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 5
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "fatal: chunks[6]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+            }
+          }
+        },
+        {
+          "round": 5,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "easy",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 6
+            }
+          ],
+          "stats": {
+            "generated": 4,
+            "accepted": 0,
+            "rejected": 4,
+            "reasons": {
+              "review:blocker:tmp_r5_q1: distractor 'signed' can be inserted to create valid sentence 'I signed up for the internship interview' (contradicts negation but grammatically valid)|tmp_r5_q2: distractor 'familiarly' is not a valid word form that could create a grammatical sentence|tmp_r5_q4: extremely low assembly value (25.08) suggests quality issue|tmp_r5_q6: distractor 'closes' can be inserted to create valid sentence 'I did not understand why the campus cafe closes early' (present tense is grammatically valid)": 4
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 8
+    },
+    {
+      "triggeredAt": "2026-03-12T07:22:26.813Z",
+      "round": 5,
+      "mode": "normal",
+      "type": "direct",
+      "generated": 5,
+      "accepted": 1,
+      "rejected": 4,
+      "acceptRate": 0.2,
+      "reasons": [
+        [
+          "review:blocker:tmp_r5_q1: distractor 'signed' can be inserted to create valid sentence 'I signed up for the internship interview' (contradicts negation but grammatically valid)|tmp_r5_q2: distractor 'familiarly' is not a valid word form that could create a grammatical sentence|tmp_r5_q4: extremely low assembly value (25.08) suggests quality issue|tmp_r5_q6: distractor 'closes' can be inserted to create valid sentence 'I did not understand why the campus cafe closes early' (present tense is grammatically valid)",
+          2
+        ],
+        [
+          "fatal: chunks[2]: isolated floating adverb \"recently\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 5
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 1,
+            "rejected": 1,
+            "reasons": {
+              "fatal: chunks[2]: isolated floating adverb \"recently\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+            }
+          }
+        },
+        {
+          "round": 5,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "easy",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 6
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]": 1,
+              "review:blocker:tmp_r5_q1: distractor 'signed' can be inserted to create valid sentence 'I signed up for the internship interview' (contradicts negation but grammatically valid)|tmp_r5_q2: distractor 'familiarly' is not a valid word form that could create a grammatical sentence|tmp_r5_q4: extremely low assembly value (25.08) suggests quality issue|tmp_r5_q6: distractor 'closes' can be inserted to create valid sentence 'I did not understand why the campus cafe closes early' (present tense is grammatically valid)": 2
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 8
+    },
+    {
+      "triggeredAt": "2026-03-12T07:29:52.455Z",
+      "round": 8,
+      "mode": "normal",
+      "type": "3rd-reporting",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r7_q6: distractor 'finished' can be inserted to create valid sentence 'Do you know when the contractor will finished the work?' - grammatically incorrect but structurally plausible, creates ambiguity",
+          2
+        ],
+        [
+          "review:blocker:tmp_r8_q8: distractor 'did' can be inserted to create valid sentence 'The piano instructor was curious if the venue did change locations' (past emphatic)|tmp_r8_q2: distractor 'delay' can be inserted to create valid sentence 'I did not understand why the opening had been delay delayed' is awkward but 'why delay the opening had been' could work",
+          2
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 6,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "easy",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 4
+            },
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 7,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 5
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r7_q6: distractor 'finished' can be inserted to create valid sentence 'Do you know when the contractor will finished the work?' - grammatically incorrect but structurally plausible, creates ambiguity": 2
+            }
+          }
+        },
+        {
+          "round": 8,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 5
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r8_q8: distractor 'did' can be inserted to create valid sentence 'The piano instructor was curious if the venue did change locations' (past emphatic)|tmp_r8_q2: distractor 'delay' can be inserted to create valid sentence 'I did not understand why the opening had been delay delayed' is awkward but 'why delay the opening had been' could work": 2
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 11
+    },
+    {
+      "triggeredAt": "2026-03-12T07:31:25.398Z",
+      "round": 9,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person",
+          2
+        ],
+        [
+          "review:blocker:tmp_r8_q8: distractor 'did' can be inserted to create valid sentence 'The piano instructor was curious if the venue did change locations' (past emphatic)|tmp_r8_q2: distractor 'delay' can be inserted to create valid sentence 'I did not understand why the opening had been delay delayed' is awkward but 'why delay the opening had been' could work",
+          2
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 7,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 5
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1
+            }
+          }
+        },
+        {
+          "round": 8,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 5
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r8_q8: distractor 'did' can be inserted to create valid sentence 'The piano instructor was curious if the venue did change locations' (past emphatic)|tmp_r8_q2: distractor 'delay' can be inserted to create valid sentence 'I did not understand why the opening had been delay delayed' is awkward but 'why delay the opening had been' could work": 2
+            }
+          }
+        },
+        {
+          "round": 9,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 5
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 12
+    },
+    {
+      "triggeredAt": "2026-03-12T07:31:25.398Z",
+      "round": 9,
+      "mode": "normal",
+      "type": "direct",
+      "generated": 8,
+      "accepted": 0,
+      "rejected": 8,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "fatal: prefilled \"he\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person",
+          3
+        ],
+        [
+          "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person",
+          3
+        ],
+        [
+          "review:blocker:tmp_r7_q6: distractor 'finished' can be inserted to create valid sentence 'Do you know when the contractor will finished the work?' - grammatically incorrect but structurally plausible, creates ambiguity",
+          1
+        ],
+        [
+          "review:blocker:tmp_r9_q6: distractor 'complete' can be inserted to create valid sentence 'The coordinator inquired when the data analysis would be complete' (adjective use)|tmp_r9_q8: distractor 'enjoy' can be inserted to create valid sentence 'The guide was curious if the group enjoy the science building' (base form after 'group' in casual speech)",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 7,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 5
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "fatal: prefilled \"he\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1,
+              "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1,
+              "review:blocker:tmp_r7_q6: distractor 'finished' can be inserted to create valid sentence 'Do you know when the contractor will finished the work?' - grammatically incorrect but structurally plausible, creates ambiguity": 1
+            }
+          }
+        },
+        {
+          "round": 8,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 5
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1,
+              "fatal: prefilled \"he\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1
+            }
+          }
+        },
+        {
+          "round": 9,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 5
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "fatal: prefilled \"he\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1,
+              "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1,
+              "review:blocker:tmp_r9_q6: distractor 'complete' can be inserted to create valid sentence 'The coordinator inquired when the data analysis would be complete' (adjective use)|tmp_r9_q8: distractor 'enjoy' can be inserted to create valid sentence 'The guide was curious if the group enjoy the science building' (base form after 'group' in casual speech)": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 12
+    }
+  ],
+  "history": [
+    {
+      "round": 5,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "easy",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 6
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 4,
+          "accepted": 0,
+          "rejected": 4,
+          "reasons": {
+            "review:blocker:tmp_r5_q1: distractor 'signed' can be inserted to create valid sentence 'I signed up for the internship interview' (contradicts negation but grammatically valid)|tmp_r5_q2: distractor 'familiarly' is not a valid word form that could create a grammatical sentence|tmp_r5_q4: extremely low assembly value (25.08) suggests quality issue|tmp_r5_q6: distractor 'closes' can be inserted to create valid sentence 'I did not understand why the campus cafe closes early' (present tense is grammatically valid)": 4
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r5_q1: distractor 'signed' can be inserted to create valid sentence 'I signed up for the internship interview' (contradicts negation but grammatically valid)|tmp_r5_q2: distractor 'familiarly' is not a valid word form that could create a grammatical sentence|tmp_r5_q4: extremely low assembly value (25.08) suggests quality issue|tmp_r5_q6: distractor 'closes' can be inserted to create valid sentence 'I did not understand why the campus cafe closes early' (present tense is grammatically valid)": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 3,
+          "accepted": 0,
+          "rejected": 3,
+          "reasons": {
+            "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]": 1,
+            "review:blocker:tmp_r5_q1: distractor 'signed' can be inserted to create valid sentence 'I signed up for the internship interview' (contradicts negation but grammatically valid)|tmp_r5_q2: distractor 'familiarly' is not a valid word form that could create a grammatical sentence|tmp_r5_q4: extremely low assembly value (25.08) suggests quality issue|tmp_r5_q6: distractor 'closes' can be inserted to create valid sentence 'I did not understand why the campus cafe closes early' (present tense is grammatically valid)": 2
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 6,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "easy",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 4
+        },
+        {
+          "type": "direct",
+          "difficulty": "hard",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 4,
+          "accepted": 3,
+          "rejected": 1,
+          "reasons": {
+            "fatal: chunks[6]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 4,
+          "accepted": 2,
+          "rejected": 2,
+          "reasons": {
+            "review:score<78": 2
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 7,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 5
+        },
+        {
+          "type": "interrogative",
+          "difficulty": "hard",
+          "count": 1
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "hard",
+          "count": 1
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "review:blocker:tmp_r7_q6: distractor 'finished' can be inserted to create valid sentence 'Do you know when the contractor will finished the work?' - grammatically incorrect but structurally plausible, creates ambiguity": 2
+          }
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r7_q6: distractor 'finished' can be inserted to create valid sentence 'Do you know when the contractor will finished the work?' - grammatically incorrect but structurally plausible, creates ambiguity": 1
+          }
+        },
+        "interrogative": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r7_q6: distractor 'finished' can be inserted to create valid sentence 'Do you know when the contractor will finished the work?' - grammatically incorrect but structurally plausible, creates ambiguity": 1
+          }
+        },
+        "direct": {
+          "generated": 3,
+          "accepted": 0,
+          "rejected": 3,
+          "reasons": {
+            "fatal: prefilled \"he\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1,
+            "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1,
+            "review:blocker:tmp_r7_q6: distractor 'finished' can be inserted to create valid sentence 'Do you know when the contractor will finished the work?' - grammatically incorrect but structurally plausible, creates ambiguity": 1
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 8,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 5
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "hard",
+          "count": 1
+        },
+        {
+          "type": "interrogative",
+          "difficulty": "hard",
+          "count": 1
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "review:blocker:tmp_r8_q8: distractor 'did' can be inserted to create valid sentence 'The piano instructor was curious if the venue did change locations' (past emphatic)|tmp_r8_q2: distractor 'delay' can be inserted to create valid sentence 'I did not understand why the opening had been delay delayed' is awkward but 'why delay the opening had been' could work": 2
+          }
+        },
+        "3rd-reporting": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "review:blocker:tmp_r8_q8: distractor 'did' can be inserted to create valid sentence 'The piano instructor was curious if the venue did change locations' (past emphatic)|tmp_r8_q2: distractor 'delay' can be inserted to create valid sentence 'I did not understand why the opening had been delay delayed' is awkward but 'why delay the opening had been' could work": 2
+          }
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1
+          }
+        },
+        "interrogative": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r8_q8: distractor 'did' can be inserted to create valid sentence 'The piano instructor was curious if the venue did change locations' (past emphatic)|tmp_r8_q2: distractor 'delay' can be inserted to create valid sentence 'I did not understand why the opening had been delay delayed' is awkward but 'why delay the opening had been' could work": 1
+          }
+        },
+        "direct": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1,
+            "fatal: prefilled \"he\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 9,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 5
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "hard",
+          "count": 1
+        },
+        {
+          "type": "interrogative",
+          "difficulty": "hard",
+          "count": 1
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "review:blocker:tmp_r9_q6: distractor 'complete' can be inserted to create valid sentence 'The coordinator inquired when the data analysis would be complete' (adjective use)|tmp_r9_q8: distractor 'enjoy' can be inserted to create valid sentence 'The guide was curious if the group enjoy the science building' (base form after 'group' in casual speech)": 2
+          }
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "fatal: chunks[6]: isolated floating adverb \"recently\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+          }
+        },
+        "interrogative": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r9_q6: distractor 'complete' can be inserted to create valid sentence 'The coordinator inquired when the data analysis would be complete' (adjective use)|tmp_r9_q8: distractor 'enjoy' can be inserted to create valid sentence 'The guide was curious if the group enjoy the science building' (base form after 'group' in casual speech)": 1
+          }
+        },
+        "direct": {
+          "generated": 3,
+          "accepted": 0,
+          "rejected": 3,
+          "reasons": {
+            "fatal: prefilled \"he\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1,
+            "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1,
+            "review:blocker:tmp_r9_q6: distractor 'complete' can be inserted to create valid sentence 'The coordinator inquired when the data analysis would be complete' (adjective use)|tmp_r9_q8: distractor 'enjoy' can be inserted to create valid sentence 'The guide was curious if the group enjoy the science building' (base form after 'group' in casual speech)": 1
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 10,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 5
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "hard",
+          "count": 1
+        },
+        {
+          "type": "interrogative",
+          "difficulty": "hard",
+          "count": 1
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1,
+            "review:blocker:tmp_r10_q6: distractor 'is' can be inserted to create valid sentence 'The dance instructor inquired when the room is available' (present tense reporting is grammatically valid)|tmp_r10_q8: distractor 'did' can be inserted to create valid sentence 'The career advisor needed to know if I did submit the application' (emphatic past is grammatically valid)": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "review:blocker:tmp_r10_q6: distractor 'is' can be inserted to create valid sentence 'The dance instructor inquired when the room is available' (present tense reporting is grammatically valid)|tmp_r10_q8: distractor 'did' can be inserted to create valid sentence 'The career advisor needed to know if I did submit the application' (emphatic past is grammatically valid)": 2
+          }
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "fatal: prefilled \"he\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1
+          }
+        },
+        "interrogative": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r10_q6: distractor 'is' can be inserted to create valid sentence 'The dance instructor inquired when the room is available' (present tense reporting is grammatically valid)|tmp_r10_q8: distractor 'did' can be inserted to create valid sentence 'The career advisor needed to know if I did submit the application' (emphatic past is grammatically valid)": 1
+          }
+        },
+        "direct": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "review:blocker:tmp_r10_q6: distractor 'is' can be inserted to create valid sentence 'The dance instructor inquired when the room is available' (present tense reporting is grammatically valid)|tmp_r10_q8: distractor 'did' can be inserted to create valid sentence 'The career advisor needed to know if I did submit the application' (emphatic past is grammatically valid)": 2
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    }
+  ]
+}

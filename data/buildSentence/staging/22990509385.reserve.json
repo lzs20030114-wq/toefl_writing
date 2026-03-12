@@ -1,0 +1,64 @@
+[
+  {
+    "id": "tmp_r3_q1",
+    "prompt": "What did the yoga instructor ask about the class schedule?",
+    "prompt_context": "",
+    "prompt_task_kind": "ask",
+    "prompt_task_text": "What did the yoga instructor ask about the class schedule?",
+    "answer": "The yoga instructor asked if the morning session was canceled.",
+    "chunks": [
+      "asked",
+      "if",
+      "the morning",
+      "session",
+      "was",
+      "canceled",
+      "did"
+    ],
+    "prefilled": [
+      "the yoga instructor"
+    ],
+    "prefilled_positions": {
+      "the yoga instructor": 0
+    },
+    "distractor": "did",
+    "has_question_mark": false,
+    "grammar_points": [
+      "embedded_question",
+      "past_tense"
+    ],
+    "_assemblyValue": 24.12
+  },
+  {
+    "id": "tmp_r6_q4",
+    "prompt": "What did the intern say about the training session?",
+    "prompt_context": "",
+    "prompt_task_kind": "report",
+    "prompt_task_text": "What did the intern say about the training session?",
+    "answer": "The intern did not understand why the session had been rescheduled.",
+    "chunks": [
+      "did not",
+      "understand",
+      "why",
+      "the",
+      "session",
+      "had been",
+      "rescheduled",
+      "reschedule"
+    ],
+    "prefilled": [
+      "the intern"
+    ],
+    "prefilled_positions": {
+      "the intern": 0
+    },
+    "distractor": "reschedule",
+    "has_question_mark": false,
+    "grammar_points": [
+      "negation",
+      "past_perfect_passive",
+      "embedded_clause"
+    ],
+    "_assemblyValue": 179
+  }
+]
