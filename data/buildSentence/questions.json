@@ -1,6 +1,6 @@
 {
   "version": "1.2",
-  "generated_at": "2026-03-11T15:13:23.103Z",
+  "generated_at": "2026-03-12T06:00:54.454Z",
   "question_sets": [
     {
       "set_id": 2,
@@ -2362,6 +2362,941 @@
             "embedded_clause",
             "passive_voice"
           ]
+        }
+      ]
+    },
+    {
+      "set_id": 10,
+      "questions": [
+        {
+          "id": "ets_s10_q1",
+          "prompt": "What do you ask the pharmacy staff about your prescription?",
+          "prompt_context": "",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What do you ask the pharmacy staff about your prescription?",
+          "answer": "Can you tell me when my medication will be ready?",
+          "chunks": [
+            "tell",
+            "me",
+            "when",
+            "my medication",
+            "will be",
+            "ready",
+            "is"
+          ],
+          "prefilled": [
+            "can you"
+          ],
+          "prefilled_positions": {
+            "can you": 0
+          },
+          "distractor": "is",
+          "has_question_mark": true,
+          "grammar_points": [
+            "embedded_question",
+            "future"
+          ],
+          "_assemblyValue": 9
+        },
+        {
+          "id": "ets_s10_q2",
+          "prompt": "What do you say about the medical clinic?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do you say about the medical clinic?",
+          "answer": "The clinic that was recommended to me has been closed for renovations.",
+          "chunks": [
+            "that",
+            "was",
+            "recommended",
+            "to me",
+            "has been",
+            "closed",
+            "for",
+            "renovations",
+            "close"
+          ],
+          "prefilled": [
+            "the clinic"
+          ],
+          "prefilled_positions": {
+            "the clinic": 0
+          },
+          "distractor": "close",
+          "has_question_mark": false,
+          "grammar_points": [
+            "relative_clause",
+            "passive",
+            "present_perfect_passive"
+          ],
+          "_assemblyValue": 18.84
+        },
+        {
+          "id": "ets_s10_q3",
+          "prompt": "What do you say about the community garden?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do you say about the community garden?",
+          "answer": "I noticed the tomato plants were growing much faster than expected.",
+          "chunks": [
+            "noticed",
+            "the tomato plants",
+            "were",
+            "growing",
+            "much faster",
+            "than",
+            "expected",
+            "grow"
+          ],
+          "prefilled": [
+            "i"
+          ],
+          "prefilled_positions": {
+            "i": 0
+          },
+          "distractor": "grow",
+          "has_question_mark": false,
+          "grammar_points": [
+            "past_continuous",
+            "comparative"
+          ],
+          "_assemblyValue": 22.92
+        },
+        {
+          "id": "ets_s10_q4",
+          "prompt": "What do you say about the hiking trail conditions?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do you say about the hiking trail conditions?",
+          "answer": "The trail was much steeper than I had expected it to be.",
+          "chunks": [
+            "was",
+            "much",
+            "steeper",
+            "than",
+            "i",
+            "had expected",
+            "it",
+            "to be",
+            "steep"
+          ],
+          "prefilled": [
+            "the trail"
+          ],
+          "prefilled_positions": {
+            "the trail": 0
+          },
+          "distractor": "steep",
+          "has_question_mark": false,
+          "grammar_points": [
+            "comparative",
+            "past_perfect"
+          ],
+          "_assemblyValue": 9.24
+        },
+        {
+          "id": "ets_s10_q5",
+          "prompt": "What did the project supervisor want to know about the budget report?",
+          "prompt_context": "",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did the project supervisor want to know about the budget report?",
+          "answer": "The project supervisor wanted to know if the budget was approved.",
+          "chunks": [
+            "wanted",
+            "to know",
+            "if",
+            "the budget",
+            "was",
+            "approved",
+            "did"
+          ],
+          "prefilled": [
+            "the project supervisor"
+          ],
+          "prefilled_positions": {
+            "the project supervisor": 0
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "indirect_question",
+            "if_clause"
+          ],
+          "_assemblyValue": 23.4
+        },
+        {
+          "id": "ets_s10_q6",
+          "prompt": "What did the mechanic need to find out about the car repair?",
+          "prompt_context": "",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did the mechanic need to find out about the car repair?",
+          "answer": "The mechanic needed to find out why the engine overheated.",
+          "chunks": [
+            "needed",
+            "to find out",
+            "why",
+            "the engine",
+            "overheated",
+            "did"
+          ],
+          "prefilled": [
+            "the mechanic"
+          ],
+          "prefilled_positions": {
+            "the mechanic": 0
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "reported_speech",
+            "why_clause"
+          ],
+          "_assemblyValue": 8.6
+        },
+        {
+          "id": "ets_s10_q7",
+          "prompt": "What do you tell your study partner about the bookstore?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do you tell your study partner about the bookstore?",
+          "answer": "The bookstore I stopped by had the textbook in stock.",
+          "chunks": [
+            "stopped",
+            "by",
+            "had",
+            "the textbook",
+            "in stock",
+            "stop"
+          ],
+          "prefilled": [
+            "the bookstore i"
+          ],
+          "prefilled_positions": {
+            "the bookstore i": 0
+          },
+          "distractor": "stop",
+          "has_question_mark": false,
+          "grammar_points": [
+            "contact_clause",
+            "past_tense"
+          ],
+          "_assemblyValue": 23.4
+        },
+        {
+          "id": "ets_s10_q8",
+          "prompt": "What did the flight attendant say about the beverage service?",
+          "prompt_context": "",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did the flight attendant say about the beverage service?",
+          "answer": "The flight attendant did not know when service would resume.",
+          "chunks": [
+            "did not",
+            "know",
+            "when",
+            "service",
+            "would",
+            "resume"
+          ],
+          "prefilled": [
+            "the flight attendant"
+          ],
+          "prefilled_positions": {
+            "the flight attendant": 0
+          },
+          "distractor": null,
+          "has_question_mark": false,
+          "grammar_points": [
+            "simple_past_negation",
+            "embedded_wh_clause"
+          ],
+          "_assemblyValue": 184.12,
+          "has_distractor": false
+        },
+        {
+          "id": "ets_s10_q9",
+          "prompt": "What does the software developer say about the code review?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What does the software developer say about the code review?",
+          "answer": "The developer did not understand why the test failed repeatedly.",
+          "chunks": [
+            "did not",
+            "understand",
+            "why",
+            "the test",
+            "failed",
+            "repeatedly",
+            "fails"
+          ],
+          "prefilled": [
+            "the developer"
+          ],
+          "prefilled_positions": {
+            "the developer": 0
+          },
+          "distractor": "fails",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation",
+            "embedded_question"
+          ],
+          "_assemblyValue": 19.96
+        },
+        {
+          "id": "ets_s10_q10",
+          "prompt": "What do you say about the art exhibition?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do you say about the art exhibition?",
+          "answer": "I found out where the new gallery is located downtown.",
+          "chunks": [
+            "found out",
+            "where",
+            "the new gallery",
+            "is",
+            "located",
+            "downtown",
+            "was",
+            "i"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "was",
+          "has_question_mark": false,
+          "grammar_points": [
+            "phrasal_verb",
+            "embedded_wh_clause",
+            "passive_voice"
+          ],
+          "_assemblyValue": 24.12
+        }
+      ]
+    },
+    {
+      "set_id": 11,
+      "questions": [
+        {
+          "id": "ets_s11_q1",
+          "prompt": "What did the elderly neighbor inquire about?",
+          "prompt_context": "",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did the elderly neighbor inquire about?",
+          "answer": "The elderly neighbor inquired where the nearest post office was located.",
+          "chunks": [
+            "inquired",
+            "where",
+            "the nearest",
+            "post office",
+            "was",
+            "located",
+            "did"
+          ],
+          "prefilled": [
+            "the elderly neighbor"
+          ],
+          "prefilled_positions": {
+            "the elderly neighbor": 0
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "reporting_verb",
+            "embedded_wh_clause",
+            "simple_past"
+          ],
+          "_assemblyValue": 11.88
+        },
+        {
+          "id": "ets_s11_q2",
+          "prompt": "What do you say about the workshop registration?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do you say about the workshop registration?",
+          "answer": "I have no idea who will be teaching the session.",
+          "chunks": [
+            "have",
+            "no idea",
+            "who",
+            "will be",
+            "teaching",
+            "the",
+            "session",
+            "teaches"
+          ],
+          "prefilled": [
+            "i"
+          ],
+          "prefilled_positions": {
+            "i": 0
+          },
+          "distractor": "teaches",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded_wh_clause",
+            "future_progressive",
+            "fixed_collocation"
+          ],
+          "_assemblyValue": 24.12
+        },
+        {
+          "id": "ets_s11_q3",
+          "prompt": "What did the theater director say about the costume fitting?",
+          "prompt_context": "",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did the theater director say about the costume fitting?",
+          "answer": "The costume designer had not finished preparing the outfits for opening night.",
+          "chunks": [
+            "had not",
+            "finished",
+            "preparing",
+            "the",
+            "outfits",
+            "for",
+            "opening night",
+            "prepare"
+          ],
+          "prefilled": [
+            "the costume designer"
+          ],
+          "prefilled_positions": {
+            "the costume designer": 0
+          },
+          "distractor": "prepare",
+          "has_question_mark": false,
+          "grammar_points": [
+            "past_perfect",
+            "negation",
+            "gerund"
+          ],
+          "_assemblyValue": 18.84
+        },
+        {
+          "id": "ets_s11_q4",
+          "prompt": "What did the architect say about the building plans?",
+          "prompt_context": "",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did the architect say about the building plans?",
+          "answer": "The architect did not explain why the design was modified.",
+          "chunks": [
+            "did not",
+            "explain",
+            "why",
+            "the design",
+            "was",
+            "modified"
+          ],
+          "prefilled": [
+            "the architect"
+          ],
+          "prefilled_positions": {
+            "the architect": 0
+          },
+          "distractor": null,
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation",
+            "embedded_question",
+            "passive"
+          ],
+          "_assemblyValue": 33.4,
+          "has_distractor": false
+        },
+        {
+          "id": "ets_s11_q5",
+          "prompt": "What did the tour guide ask about the group size?",
+          "prompt_context": "",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did the tour guide ask about the group size?",
+          "answer": "The guide asked what the total number of visitors was.",
+          "chunks": [
+            "asked",
+            "what",
+            "the total number",
+            "of visitors",
+            "was",
+            "did"
+          ],
+          "prefilled": [
+            "the guide"
+          ],
+          "prefilled_positions": {
+            "the guide": 0
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "reported_speech",
+            "what_clause"
+          ],
+          "_assemblyValue": 5.4
+        },
+        {
+          "id": "ets_s11_q6",
+          "prompt": "What do you say about the botanical garden?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do you say about the botanical garden?",
+          "answer": "The botanical garden that opened recently features rare tropical plants inside.",
+          "chunks": [
+            "the",
+            "botanical",
+            "garden",
+            "that",
+            "opened recently",
+            "features",
+            "rare tropical plants",
+            "inside",
+            "open"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "open",
+          "has_question_mark": false,
+          "grammar_points": [
+            "relative_clause",
+            "present_simple"
+          ],
+          "_assemblyValue": 22.92
+        },
+        {
+          "id": "ets_s11_q7",
+          "prompt": "What did the piano teacher say about the recital preparation?",
+          "prompt_context": "",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did the piano teacher say about the recital preparation?",
+          "answer": "The student had not practiced the piece that was assigned.",
+          "chunks": [
+            "had not",
+            "practiced",
+            "the piece",
+            "that",
+            "was",
+            "assigned",
+            "practice"
+          ],
+          "prefilled": [
+            "the student"
+          ],
+          "prefilled_positions": {
+            "the student": 0
+          },
+          "distractor": "practice",
+          "has_question_mark": false,
+          "grammar_points": [
+            "past_perfect",
+            "negation",
+            "relative_clause",
+            "passive"
+          ],
+          "_assemblyValue": 18.84
+        },
+        {
+          "id": "ets_s11_q8",
+          "prompt": "What do you say about the volunteer coordinator?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do you say about the volunteer coordinator?",
+          "answer": "I have no idea where she posted the updated schedule.",
+          "chunks": [
+            "have",
+            "no idea",
+            "where",
+            "she",
+            "posted",
+            "the updated schedule",
+            "posts"
+          ],
+          "prefilled": [
+            "i"
+          ],
+          "prefilled_positions": {
+            "i": 0
+          },
+          "distractor": "posts",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded_question",
+            "past_simple"
+          ],
+          "_assemblyValue": 10.44
+        },
+        {
+          "id": "ets_s11_q9",
+          "prompt": "What did the volunteer coordinator need to know about the event?",
+          "prompt_context": "",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did the volunteer coordinator need to know about the event?",
+          "answer": "The volunteer coordinator needed to know if enough people signed up.",
+          "chunks": [
+            "needed",
+            "to know",
+            "if",
+            "enough",
+            "people",
+            "signed up",
+            "did"
+          ],
+          "prefilled": [
+            "the volunteer coordinator"
+          ],
+          "prefilled_positions": {
+            "the volunteer coordinator": 0
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "reported_speech",
+            "embedded_question",
+            "past_simple"
+          ],
+          "_assemblyValue": 19.8
+        },
+        {
+          "id": "ets_s11_q10",
+          "prompt": "What did the art gallery assistant say about the sculpture installation?",
+          "prompt_context": "",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did the art gallery assistant say about the sculpture installation?",
+          "answer": "I did not understand why the installation had been delayed.",
+          "chunks": [
+            "did not",
+            "understand",
+            "why",
+            "the",
+            "installation",
+            "had been",
+            "delayed",
+            "delay"
+          ],
+          "prefilled": [
+            "i"
+          ],
+          "prefilled_positions": {
+            "i": 0
+          },
+          "distractor": "delay",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation",
+            "past_perfect_passive",
+            "embedded_interrogative"
+          ],
+          "_assemblyValue": 28.36
+        }
+      ]
+    },
+    {
+      "set_id": 12,
+      "questions": [
+        {
+          "id": "ets_s12_q1",
+          "prompt": "What do you say about the dental appointment?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do you say about the dental appointment?",
+          "answer": "I had not realized how expensive the procedure would be.",
+          "chunks": [
+            "had not",
+            "realized",
+            "how",
+            "expensive",
+            "the procedure",
+            "would",
+            "be",
+            "i"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": null,
+          "has_question_mark": false,
+          "grammar_points": [
+            "past_perfect",
+            "negation",
+            "embedded_clause"
+          ],
+          "_assemblyValue": 9,
+          "has_distractor": false
+        },
+        {
+          "id": "ets_s12_q2",
+          "prompt": "What do you say about the grocery store hours?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do you say about the grocery store hours?",
+          "answer": "I am not sure if they open earlier on weekends.",
+          "chunks": [
+            "am",
+            "not sure",
+            "if",
+            "they",
+            "open",
+            "earlier",
+            "on weekends",
+            "opened"
+          ],
+          "prefilled": [
+            "i"
+          ],
+          "prefilled_positions": {
+            "i": 0
+          },
+          "distractor": "opened",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded_question",
+            "present_simple"
+          ],
+          "_assemblyValue": 179.96
+        },
+        {
+          "id": "ets_s12_q3",
+          "prompt": "What did the mechanic say about the car repair?",
+          "prompt_context": "",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did the mechanic say about the car repair?",
+          "answer": "The mechanic did not know when the parts would arrive.",
+          "chunks": [
+            "did not",
+            "know",
+            "when",
+            "the parts",
+            "would",
+            "arrive",
+            "will"
+          ],
+          "prefilled": [
+            "the mechanic"
+          ],
+          "prefilled_positions": {
+            "the mechanic": 0
+          },
+          "distractor": "will",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation",
+            "embedded_question",
+            "modal"
+          ],
+          "_assemblyValue": 15.72
+        },
+        {
+          "id": "ets_s12_q4",
+          "prompt": "What did the fitness instructor ask about the membership renewal?",
+          "prompt_context": "",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did the fitness instructor ask about the membership renewal?",
+          "answer": "The instructor inquired if the membership would expire soon.",
+          "chunks": [
+            "inquired",
+            "if",
+            "the membership",
+            "would",
+            "expire",
+            "soon",
+            "did"
+          ],
+          "prefilled": [
+            "the instructor"
+          ],
+          "prefilled_positions": {
+            "the instructor": 0
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "reported_speech",
+            "if_clause"
+          ],
+          "_assemblyValue": 15.4
+        },
+        {
+          "id": "ets_s12_q5",
+          "prompt": "What did the orchestra conductor say about the rehearsal schedule?",
+          "prompt_context": "",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did the orchestra conductor say about the rehearsal schedule?",
+          "answer": "I did not realize the rehearsal had been moved earlier.",
+          "chunks": [
+            "did not",
+            "realize",
+            "the",
+            "rehearsal",
+            "had been",
+            "moved",
+            "earlier",
+            "move"
+          ],
+          "prefilled": [
+            "i"
+          ],
+          "prefilled_positions": {
+            "i": 0
+          },
+          "distractor": "move",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation",
+            "past_perfect_passive",
+            "embedded_clause"
+          ],
+          "_assemblyValue": 28.36
+        },
+        {
+          "id": "ets_s12_q6",
+          "prompt": "What did the hair salon receptionist need to find out?",
+          "prompt_context": "",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did the hair salon receptionist need to find out?",
+          "answer": "The receptionist needed to know if I preferred morning appointments.",
+          "chunks": [
+            "needed",
+            "to know",
+            "if",
+            "preferred",
+            "morning",
+            "appointments",
+            "i",
+            "did"
+          ],
+          "prefilled": [
+            "the receptionist"
+          ],
+          "prefilled_positions": {
+            "the receptionist": 0
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "reporting_verb",
+            "embedded_if_clause",
+            "simple_past"
+          ],
+          "_assemblyValue": 11.88
+        },
+        {
+          "id": "ets_s12_q7",
+          "prompt": "What do you say about the new coffee shop downtown?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do you say about the new coffee shop downtown?",
+          "answer": "I found the atmosphere at this place to be quite cozy.",
+          "chunks": [
+            "found",
+            "the",
+            "atmosphere",
+            "at",
+            "this place",
+            "to be",
+            "quite",
+            "cozy",
+            "find"
+          ],
+          "prefilled": [
+            "i"
+          ],
+          "prefilled_positions": {
+            "i": 0
+          },
+          "distractor": "find",
+          "has_question_mark": false,
+          "grammar_points": [
+            "simple_past",
+            "infinitive"
+          ],
+          "_assemblyValue": 19.8
+        },
+        {
+          "id": "ets_s12_q8",
+          "prompt": "What did the landlord say about the lease renewal?",
+          "prompt_context": "",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did the landlord say about the lease renewal?",
+          "answer": "The landlord did not mention why the rent increased significantly.",
+          "chunks": [
+            "did not",
+            "mention",
+            "why",
+            "the rent",
+            "increased",
+            "significantly",
+            "increase"
+          ],
+          "prefilled": [
+            "the landlord"
+          ],
+          "prefilled_positions": {
+            "the landlord": 0
+          },
+          "distractor": "increase",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation",
+            "embedded_question"
+          ],
+          "_assemblyValue": 33.4
+        },
+        {
+          "id": "ets_s12_q9",
+          "prompt": "What do you say about the cooking class options?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do you say about the cooking class options?",
+          "answer": "I would like to know which instructor is considered the most experienced.",
+          "chunks": [
+            "would",
+            "like",
+            "to know",
+            "which",
+            "instructor",
+            "is",
+            "considered",
+            "the most experienced",
+            "consider"
+          ],
+          "prefilled": [
+            "i"
+          ],
+          "prefilled_positions": {
+            "i": 0
+          },
+          "distractor": "consider",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded_question",
+            "passive_voice",
+            "superlative"
+          ],
+          "_assemblyValue": 22.92
+        },
+        {
+          "id": "ets_s12_q10",
+          "prompt": "What do you say about the sports class?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do you say about the sports class?",
+          "answer": "The instructor that teaches the class explains everything very clearly.",
+          "chunks": [
+            "that",
+            "teaches",
+            "the class",
+            "explains",
+            "everything",
+            "very clearly",
+            "teach"
+          ],
+          "prefilled": [
+            "the instructor"
+          ],
+          "prefilled_positions": {
+            "the instructor": 0
+          },
+          "distractor": "teach",
+          "has_question_mark": false,
+          "grammar_points": [
+            "relative_clause",
+            "present_tense"
+          ],
+          "_assemblyValue": 23.4
         }
       ]
     }
