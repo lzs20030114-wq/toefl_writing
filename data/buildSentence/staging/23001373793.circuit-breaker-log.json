@@ -1,0 +1,1497 @@
+{
+  "generated_at": "2026-03-12T12:32:52.422Z",
+  "active": {
+    "direct": {
+      "sinceRound": 26,
+      "untilRound": 29,
+      "lastEvent": {
+        "triggeredAt": "2026-03-12T12:30:12.364Z",
+        "round": 26,
+        "mode": "normal",
+        "type": "direct",
+        "generated": 4,
+        "accepted": 0,
+        "rejected": 4,
+        "acceptRate": 0,
+        "reasons": [
+          [
+            "fatal: chunks[6]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+            1
+          ],
+          [
+            "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person",
+            1
+          ],
+          [
+            "fatal: distractor must be a single word (TPO standard)",
+            1
+          ],
+          [
+            "fatal: distractor must be a single word (TPO standard); chunks[5]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+            1
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 24,
+            "spec": [
+              {
+                "type": "relative",
+                "difficulty": "medium",
+                "count": 1
+              },
+              {
+                "type": "negation",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 3
+              }
+            ],
+            "stats": {
+              "generated": 1,
+              "accepted": 0,
+              "rejected": 1,
+              "reasons": {
+                "fatal: chunks[6]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+              }
+            }
+          },
+          {
+            "round": 25,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 4
+              }
+            ],
+            "stats": {
+              "generated": 1,
+              "accepted": 0,
+              "rejected": 1,
+              "reasons": {
+                "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1
+              }
+            }
+          },
+          {
+            "round": 26,
+            "spec": [
+              {
+                "type": "3rd-reporting",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 4
+              }
+            ],
+            "stats": {
+              "generated": 2,
+              "accepted": 0,
+              "rejected": 2,
+              "reasons": {
+                "fatal: distractor must be a single word (TPO standard)": 1,
+                "fatal: distractor must be a single word (TPO standard); chunks[5]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 29
+      }
+    },
+    "negation": {
+      "sinceRound": 27,
+      "untilRound": 30,
+      "lastEvent": {
+        "triggeredAt": "2026-03-12T12:31:17.481Z",
+        "round": 27,
+        "mode": "normal",
+        "type": "negation",
+        "generated": 5,
+        "accepted": 0,
+        "rejected": 5,
+        "acceptRate": 0,
+        "reasons": [
+          [
+            "pool:difficulty_surplus:easy",
+            2
+          ],
+          [
+            "review:blocker:tmp_r25_q4: distractor 'opened' could be inserted to create valid sentence 'I was not sure whether the hiking trail was opened'|tmp_r25_q2: distractor 'start' could be inserted to create valid sentence 'I did not know what time the yoga class start' (colloquial/dialectal)",
+            1
+          ],
+          [
+            "fatal: chunks[6]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+            1
+          ],
+          [
+            "review:blocker:tmp_r27_q2: Grammar incorrect in answer sentence — 'I did not know if the grocery store opens on Sunday' mixes simple past negation with simple present 'opens'; correct form requires 'opened' (backshift) making the sentence 'I did not know if the grocery store opened on Sunday'; the stated answer is grammatically anomalous in standard English|tmp_r27_q2: Distractor 'open' can be inserted in place of 'opens' to produce 'I did not know if the grocery store open on Sunday' — while ungrammatical alone, the chunk sequence 'if the grocery store open on Sunday' mirrors a valid bare-infinitive reading that test-takers may attempt, but more critically the intended answer itself with 'opens' is already grammatically defective (see above blocker), making the entire item invalid|tmp_r27_q3: distractor 'receive' is grammatically valid in answer position ('I have not receive...' sounds plausible to non-native speakers)|tmp_r27_q2: answer uses past tense 'did not know' but context suggests present uncertainty - creates ambiguity",
+            1
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 25,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 4
+              }
+            ],
+            "stats": {
+              "generated": 3,
+              "accepted": 0,
+              "rejected": 3,
+              "reasons": {
+                "pool:difficulty_surplus:easy": 2,
+                "review:blocker:tmp_r25_q4: distractor 'opened' could be inserted to create valid sentence 'I was not sure whether the hiking trail was opened'|tmp_r25_q2: distractor 'start' could be inserted to create valid sentence 'I did not know what time the yoga class start' (colloquial/dialectal)": 1
+              }
+            }
+          },
+          {
+            "round": 26,
+            "spec": [
+              {
+                "type": "3rd-reporting",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 4
+              }
+            ],
+            "stats": {
+              "generated": 0,
+              "accepted": 0,
+              "rejected": 0,
+              "reasons": {}
+            }
+          },
+          {
+            "round": 27,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 4
+              }
+            ],
+            "stats": {
+              "generated": 2,
+              "accepted": 0,
+              "rejected": 2,
+              "reasons": {
+                "fatal: chunks[6]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+                "review:blocker:tmp_r27_q2: Grammar incorrect in answer sentence — 'I did not know if the grocery store opens on Sunday' mixes simple past negation with simple present 'opens'; correct form requires 'opened' (backshift) making the sentence 'I did not know if the grocery store opened on Sunday'; the stated answer is grammatically anomalous in standard English|tmp_r27_q2: Distractor 'open' can be inserted in place of 'opens' to produce 'I did not know if the grocery store open on Sunday' — while ungrammatical alone, the chunk sequence 'if the grocery store open on Sunday' mirrors a valid bare-infinitive reading that test-takers may attempt, but more critically the intended answer itself with 'opens' is already grammatically defective (see above blocker), making the entire item invalid|tmp_r27_q3: distractor 'receive' is grammatically valid in answer position ('I have not receive...' sounds plausible to non-native speakers)|tmp_r27_q2: answer uses past tense 'did not know' but context suggests present uncertainty - creates ambiguity": 1
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 30
+      }
+    },
+    "relative": {
+      "sinceRound": 29,
+      "untilRound": 32,
+      "lastEvent": {
+        "triggeredAt": "2026-03-12T12:32:47.206Z",
+        "round": 29,
+        "mode": "normal",
+        "type": "relative",
+        "generated": 7,
+        "accepted": 0,
+        "rejected": 7,
+        "acceptRate": 0,
+        "reasons": [
+          [
+            "pool:difficulty_surplus:easy",
+            2
+          ],
+          [
+            "review:blocker:tmp_r29_q4: Distractor 'speak' is plausibly valid — 'the waiter you speak with' is grammatically acceptable English (generic/habitual present), making the distractor ambiguously usable and undermining the past-simple test.|tmp_r29_q1: Embedded question 'when the medication would be ready' uses correct declarative word order, but the answer is a direct interrogative sentence (inverted: 'Could you tell me...'), not an indirect/embedded question test in the TPO sense. The prefilled 'could you' forces a question frame, making 'will' a near-valid swap for 'would' — distractor is dangerously close to valid ('Could you tell me when the medication will be ready?' is natural English).",
+            2
+          ],
+          [
+            "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+            1
+          ],
+          [
+            "fatal: chunks[2]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+            1
+          ],
+          [
+            "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person",
+            1
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 27,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 4
+              }
+            ],
+            "stats": {
+              "generated": 0,
+              "accepted": 0,
+              "rejected": 0,
+              "reasons": {}
+            }
+          },
+          {
+            "round": 28,
+            "spec": [
+              {
+                "type": "interrogative",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "relative",
+                "difficulty": "medium",
+                "count": 4
+              }
+            ],
+            "stats": {
+              "generated": 3,
+              "accepted": 0,
+              "rejected": 3,
+              "reasons": {
+                "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+                "pool:difficulty_surplus:easy": 2
+              }
+            }
+          },
+          {
+            "round": 29,
+            "spec": [
+              {
+                "type": "interrogative",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "relative",
+                "difficulty": "medium",
+                "count": 4
+              }
+            ],
+            "stats": {
+              "generated": 4,
+              "accepted": 0,
+              "rejected": 4,
+              "reasons": {
+                "fatal: chunks[2]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+                "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1,
+                "review:blocker:tmp_r29_q4: Distractor 'speak' is plausibly valid — 'the waiter you speak with' is grammatically acceptable English (generic/habitual present), making the distractor ambiguously usable and undermining the past-simple test.|tmp_r29_q1: Embedded question 'when the medication would be ready' uses correct declarative word order, but the answer is a direct interrogative sentence (inverted: 'Could you tell me...'), not an indirect/embedded question test in the TPO sense. The prefilled 'could you' forces a question frame, making 'will' a near-valid swap for 'would' — distractor is dangerously close to valid ('Could you tell me when the medication will be ready?' is natural English).": 2
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 32
+      }
+    }
+  },
+  "events": [
+    {
+      "triggeredAt": "2026-03-12T12:16:02.016Z",
+      "round": 4,
+      "mode": "normal",
+      "type": "relative",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:ets<72",
+          3
+        ],
+        [
+          "fatal: prefilled too long (4 words): shorten to 2-3 word subject NP",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "easy",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 4,
+            "accepted": 0,
+            "rejected": 4,
+            "reasons": {
+              "fatal: prefilled too long (4 words): shorten to 2-3 word subject NP": 1,
+              "review:ets<72": 3
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 7
+    },
+    {
+      "triggeredAt": "2026-03-12T12:18:17.781Z",
+      "round": 8,
+      "mode": "normal",
+      "type": "interrogative",
+      "generated": 5,
+      "accepted": 0,
+      "rejected": 5,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:All items are QUESTIONS (100%), but TPO is 92% STATEMENTS - severe structural mismatch|All items use 'ask/respond' prompts forcing interrogative answers - TPO uses neutral 'say' prompts|tmp_r8_q5: distractor 'cost' is grammatically valid ('how much the monthly rent cost' works in some dialects)",
+          5
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 6,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 7,
+          "spec": [
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 8,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 5,
+            "accepted": 0,
+            "rejected": 5,
+            "reasons": {
+              "review:blocker:All items are QUESTIONS (100%), but TPO is 92% STATEMENTS - severe structural mismatch|All items use 'ask/respond' prompts forcing interrogative answers - TPO uses neutral 'say' prompts|tmp_r8_q5: distractor 'cost' is grammatically valid ('how much the monthly rent cost' works in some dialects)": 5
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 11
+    },
+    {
+      "triggeredAt": "2026-03-12T12:22:43.207Z",
+      "round": 13,
+      "mode": "normal",
+      "type": "1st-embedded",
+      "generated": 7,
+      "accepted": 1,
+      "rejected": 6,
+      "acceptRate": 0.143,
+      "reasons": [
+        [
+          "review:blocker:tmp_r11_q5: distractor 'submitted' can be inserted in place of 'submit' to form 'I did not submitted the registration form on time.' — wait, that is ungrammatical; however, 'submitted' could replace the chunk sequence 'did not submit' if a test-taker drops 'did not' and uses 'submitted' alone, but more critically: the answer 'I did not submit the registration form on time' uses 'did not submit' which splits into two chunks ('did not' + 'submit'). A learner could plausibly arrange 'I submitted the registration form on time' using 'submitted' (dropping 'did not'), making the distractor a constructible valid alternative sentence — this is a near-blocker but not fully conclusive. Flagged for human review.|tmp_r11_q5: prompt/answer mismatch — prompt asks 'What do you say about the sports class registration form?' (a vague, open-ended respond prompt), but the answer provides a very specific negative past statement with no scenario context to justify it; the prompt does not supply enough context for the learner to reconstruct this specific answer.",
+          4
+        ],
+        [
+          "review:blocker:tmp_r12_q1: The embedded clause 'when the textbook will arrive' uses declarative word order correctly, BUT the answer itself is a direct/polite interrogative ('Could you tell me…?') used to answer the prompt 'What did the bookstore clerk need to know?' — the answer is a question posed BY the clerk, so the prompt_task_kind 'ask' is internally consistent; however, the prefilled chunk 'could you' forces an inverted auxiliary structure as the OUTER clause, making the entire sentence a direct question with inverted word order rather than a declarative report. This constitutes a direct question answer where a declarative reporting sentence is expected for a 'what did X need to know' prompt, triggering prompt/answer mismatch: the prompt asks what the clerk needed to know (expects a reported/described statement), but the answer is the literal question itself with no reporting frame.",
+          2
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 11,
+          "spec": [
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 4,
+            "accepted": 0,
+            "rejected": 4,
+            "reasons": {
+              "review:blocker:tmp_r11_q5: distractor 'submitted' can be inserted in place of 'submit' to form 'I did not submitted the registration form on time.' — wait, that is ungrammatical; however, 'submitted' could replace the chunk sequence 'did not submit' if a test-taker drops 'did not' and uses 'submitted' alone, but more critically: the answer 'I did not submit the registration form on time' uses 'did not submit' which splits into two chunks ('did not' + 'submit'). A learner could plausibly arrange 'I submitted the registration form on time' using 'submitted' (dropping 'did not'), making the distractor a constructible valid alternative sentence — this is a near-blocker but not fully conclusive. Flagged for human review.|tmp_r11_q5: prompt/answer mismatch — prompt asks 'What do you say about the sports class registration form?' (a vague, open-ended respond prompt), but the answer provides a very specific negative past statement with no scenario context to justify it; the prompt does not supply enough context for the learner to reconstruct this specific answer.": 4
+            }
+          }
+        },
+        {
+          "round": 12,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r12_q1: The embedded clause 'when the textbook will arrive' uses declarative word order correctly, BUT the answer itself is a direct/polite interrogative ('Could you tell me…?') used to answer the prompt 'What did the bookstore clerk need to know?' — the answer is a question posed BY the clerk, so the prompt_task_kind 'ask' is internally consistent; however, the prefilled chunk 'could you' forces an inverted auxiliary structure as the OUTER clause, making the entire sentence a direct question with inverted word order rather than a declarative report. This constitutes a direct question answer where a declarative reporting sentence is expected for a 'what did X need to know' prompt, triggering prompt/answer mismatch: the prompt asks what the clerk needed to know (expects a reported/described statement), but the answer is the literal question itself with no reporting frame.": 2
+            }
+          }
+        },
+        {
+          "round": 13,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 1,
+            "rejected": 0,
+            "reasons": {}
+          }
+        }
+      ],
+      "blockedUntilRound": 16
+    },
+    {
+      "triggeredAt": "2026-03-12T12:27:49.967Z",
+      "round": 22,
+      "mode": "normal",
+      "type": "direct",
+      "generated": 9,
+      "accepted": 1,
+      "rejected": 8,
+      "acceptRate": 0.111,
+      "reasons": [
+        [
+          "pool:difficulty_surplus:easy",
+          2
+        ],
+        [
+          "review:blocker:tmp_r20_q5: distractor 'good' could be inserted to create valid sentence 'I believe this approach good works better...' or other arrangements",
+          2
+        ],
+        [
+          "review:blocker:tmp_r22_q2: Indirect question clause uses inverted word order — 'Do you know which campus buildings had been closed for renovation?' contains an embedded wh-clause ('which campus buildings had been closed') that is correctly declarative, BUT the outer frame itself is a direct yes/no question ('Do you know…?'). The answer is a direct question, not a reported/indirect question sentence. More critically, the embedded clause uses past perfect ('had been closed') with no logical past-perfect trigger in the sentence, making the grammar incorrect in the answer sentence as written in this context.|tmp_r22_q2: Grammar incorrect in the answer sentence — 'Do you know which campus buildings had been closed for renovation?' The past perfect 'had been closed' is grammatically unjustified without a reference past event; simple past 'were closed' is required here, making this a grammar error in the answer.|tmp_r22_q1: Distractor could be a valid answer chunk — 'was' can be inserted into 'Can you tell me when the refill was ready?' producing a grammatically correct and semantically plausible alternative sentence, meaning the distractor is not safely excluded.|tmp_r22_q5: Grammar incorrect in the answer sentence — 'The trail ranger needed to find out if the storm passed.' requires backshifted past perfect ('had passed') in the embedded clause for proper sequence-of-tense in reported speech; using simple past 'passed' is grammatically incorrect in standard reported-speech context.",
+          2
+        ],
+        [
+          "format: effective chunks count must be 4-8 (got 9)",
+          1
+        ],
+        [
+          "fatal: distractor must be a single word (TPO standard)",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 20,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 5,
+            "accepted": 0,
+            "rejected": 5,
+            "reasons": {
+              "format: effective chunks count must be 4-8 (got 9)": 1,
+              "pool:difficulty_surplus:easy": 2,
+              "review:blocker:tmp_r20_q5: distractor 'good' could be inserted to create valid sentence 'I believe this approach good works better...' or other arrangements": 2
+            }
+          }
+        },
+        {
+          "round": 21,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 1,
+            "rejected": 1,
+            "reasons": {
+              "fatal: distractor must be a single word (TPO standard)": 1
+            }
+          }
+        },
+        {
+          "round": 22,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r22_q2: Indirect question clause uses inverted word order — 'Do you know which campus buildings had been closed for renovation?' contains an embedded wh-clause ('which campus buildings had been closed') that is correctly declarative, BUT the outer frame itself is a direct yes/no question ('Do you know…?'). The answer is a direct question, not a reported/indirect question sentence. More critically, the embedded clause uses past perfect ('had been closed') with no logical past-perfect trigger in the sentence, making the grammar incorrect in the answer sentence as written in this context.|tmp_r22_q2: Grammar incorrect in the answer sentence — 'Do you know which campus buildings had been closed for renovation?' The past perfect 'had been closed' is grammatically unjustified without a reference past event; simple past 'were closed' is required here, making this a grammar error in the answer.|tmp_r22_q1: Distractor could be a valid answer chunk — 'was' can be inserted into 'Can you tell me when the refill was ready?' producing a grammatically correct and semantically plausible alternative sentence, meaning the distractor is not safely excluded.|tmp_r22_q5: Grammar incorrect in the answer sentence — 'The trail ranger needed to find out if the storm passed.' requires backshifted past perfect ('had passed') in the embedded clause for proper sequence-of-tense in reported speech; using simple past 'passed' is grammatically incorrect in standard reported-speech context.": 2
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 25
+    },
+    {
+      "triggeredAt": "2026-03-12T12:28:30.593Z",
+      "round": 23,
+      "mode": "normal",
+      "type": "interrogative",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r22_q2: Indirect question clause uses inverted word order — 'Do you know which campus buildings had been closed for renovation?' contains an embedded wh-clause ('which campus buildings had been closed') that is correctly declarative, BUT the outer frame itself is a direct yes/no question ('Do you know…?'). The answer is a direct question, not a reported/indirect question sentence. More critically, the embedded clause uses past perfect ('had been closed') with no logical past-perfect trigger in the sentence, making the grammar incorrect in the answer sentence as written in this context.|tmp_r22_q2: Grammar incorrect in the answer sentence — 'Do you know which campus buildings had been closed for renovation?' The past perfect 'had been closed' is grammatically unjustified without a reference past event; simple past 'were closed' is required here, making this a grammar error in the answer.|tmp_r22_q1: Distractor could be a valid answer chunk — 'was' can be inserted into 'Can you tell me when the refill was ready?' producing a grammatically correct and semantically plausible alternative sentence, meaning the distractor is not safely excluded.|tmp_r22_q5: Grammar incorrect in the answer sentence — 'The trail ranger needed to find out if the storm passed.' requires backshifted past perfect ('had passed') in the embedded clause for proper sequence-of-tense in reported speech; using simple past 'passed' is grammatically incorrect in standard reported-speech context.",
+          2
+        ],
+        [
+          "review:blocker:tmp_r23_q5: prompt/answer mismatch - prompt asks 'How do you respond about the campus cafe study group meeting?' but answer is about an elderly neighbor not knowing where the cafe is (unrelated to study group meeting response)|tmp_r23_q5: distractor 'is' can replace 'was' to create valid present tense sentence 'The elderly neighbor did not know where the campus cafe is' (valid in reported speech context)|tmp_r23_q2: Answer is interrogative (question), not statement - violates 92% TPO statement pattern|tmp_r23_q5: Distractor 'is' creates ambiguous valid alternative: 'where the campus cafe is' (present tense also grammatical)",
+          2
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 21,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 22,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r22_q2: Indirect question clause uses inverted word order — 'Do you know which campus buildings had been closed for renovation?' contains an embedded wh-clause ('which campus buildings had been closed') that is correctly declarative, BUT the outer frame itself is a direct yes/no question ('Do you know…?'). The answer is a direct question, not a reported/indirect question sentence. More critically, the embedded clause uses past perfect ('had been closed') with no logical past-perfect trigger in the sentence, making the grammar incorrect in the answer sentence as written in this context.|tmp_r22_q2: Grammar incorrect in the answer sentence — 'Do you know which campus buildings had been closed for renovation?' The past perfect 'had been closed' is grammatically unjustified without a reference past event; simple past 'were closed' is required here, making this a grammar error in the answer.|tmp_r22_q1: Distractor could be a valid answer chunk — 'was' can be inserted into 'Can you tell me when the refill was ready?' producing a grammatically correct and semantically plausible alternative sentence, meaning the distractor is not safely excluded.|tmp_r22_q5: Grammar incorrect in the answer sentence — 'The trail ranger needed to find out if the storm passed.' requires backshifted past perfect ('had passed') in the embedded clause for proper sequence-of-tense in reported speech; using simple past 'passed' is grammatically incorrect in standard reported-speech context.": 2
+            }
+          }
+        },
+        {
+          "round": 23,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r23_q5: prompt/answer mismatch - prompt asks 'How do you respond about the campus cafe study group meeting?' but answer is about an elderly neighbor not knowing where the cafe is (unrelated to study group meeting response)|tmp_r23_q5: distractor 'is' can replace 'was' to create valid present tense sentence 'The elderly neighbor did not know where the campus cafe is' (valid in reported speech context)|tmp_r23_q2: Answer is interrogative (question), not statement - violates 92% TPO statement pattern|tmp_r23_q5: Distractor 'is' creates ambiguous valid alternative: 'where the campus cafe is' (present tense also grammatical)": 2
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 26
+    },
+    {
+      "triggeredAt": "2026-03-12T12:30:12.364Z",
+      "round": 26,
+      "mode": "normal",
+      "type": "direct",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "fatal: chunks[6]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person",
+          1
+        ],
+        [
+          "fatal: distractor must be a single word (TPO standard)",
+          1
+        ],
+        [
+          "fatal: distractor must be a single word (TPO standard); chunks[5]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 24,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "fatal: chunks[6]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+            }
+          }
+        },
+        {
+          "round": 25,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1
+            }
+          }
+        },
+        {
+          "round": 26,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "fatal: distractor must be a single word (TPO standard)": 1,
+              "fatal: distractor must be a single word (TPO standard); chunks[5]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 29
+    },
+    {
+      "triggeredAt": "2026-03-12T12:31:17.481Z",
+      "round": 27,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 5,
+      "accepted": 0,
+      "rejected": 5,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "pool:difficulty_surplus:easy",
+          2
+        ],
+        [
+          "review:blocker:tmp_r25_q4: distractor 'opened' could be inserted to create valid sentence 'I was not sure whether the hiking trail was opened'|tmp_r25_q2: distractor 'start' could be inserted to create valid sentence 'I did not know what time the yoga class start' (colloquial/dialectal)",
+          1
+        ],
+        [
+          "fatal: chunks[6]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "review:blocker:tmp_r27_q2: Grammar incorrect in answer sentence — 'I did not know if the grocery store opens on Sunday' mixes simple past negation with simple present 'opens'; correct form requires 'opened' (backshift) making the sentence 'I did not know if the grocery store opened on Sunday'; the stated answer is grammatically anomalous in standard English|tmp_r27_q2: Distractor 'open' can be inserted in place of 'opens' to produce 'I did not know if the grocery store open on Sunday' — while ungrammatical alone, the chunk sequence 'if the grocery store open on Sunday' mirrors a valid bare-infinitive reading that test-takers may attempt, but more critically the intended answer itself with 'opens' is already grammatically defective (see above blocker), making the entire item invalid|tmp_r27_q3: distractor 'receive' is grammatically valid in answer position ('I have not receive...' sounds plausible to non-native speakers)|tmp_r27_q2: answer uses past tense 'did not know' but context suggests present uncertainty - creates ambiguity",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 25,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "pool:difficulty_surplus:easy": 2,
+              "review:blocker:tmp_r25_q4: distractor 'opened' could be inserted to create valid sentence 'I was not sure whether the hiking trail was opened'|tmp_r25_q2: distractor 'start' could be inserted to create valid sentence 'I did not know what time the yoga class start' (colloquial/dialectal)": 1
+            }
+          }
+        },
+        {
+          "round": 26,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 27,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "fatal: chunks[6]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "review:blocker:tmp_r27_q2: Grammar incorrect in answer sentence — 'I did not know if the grocery store opens on Sunday' mixes simple past negation with simple present 'opens'; correct form requires 'opened' (backshift) making the sentence 'I did not know if the grocery store opened on Sunday'; the stated answer is grammatically anomalous in standard English|tmp_r27_q2: Distractor 'open' can be inserted in place of 'opens' to produce 'I did not know if the grocery store open on Sunday' — while ungrammatical alone, the chunk sequence 'if the grocery store open on Sunday' mirrors a valid bare-infinitive reading that test-takers may attempt, but more critically the intended answer itself with 'opens' is already grammatically defective (see above blocker), making the entire item invalid|tmp_r27_q3: distractor 'receive' is grammatically valid in answer position ('I have not receive...' sounds plausible to non-native speakers)|tmp_r27_q2: answer uses past tense 'did not know' but context suggests present uncertainty - creates ambiguity": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 30
+    },
+    {
+      "triggeredAt": "2026-03-12T12:32:47.206Z",
+      "round": 29,
+      "mode": "normal",
+      "type": "relative",
+      "generated": 7,
+      "accepted": 0,
+      "rejected": 7,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "pool:difficulty_surplus:easy",
+          2
+        ],
+        [
+          "review:blocker:tmp_r29_q4: Distractor 'speak' is plausibly valid — 'the waiter you speak with' is grammatically acceptable English (generic/habitual present), making the distractor ambiguously usable and undermining the past-simple test.|tmp_r29_q1: Embedded question 'when the medication would be ready' uses correct declarative word order, but the answer is a direct interrogative sentence (inverted: 'Could you tell me...'), not an indirect/embedded question test in the TPO sense. The prefilled 'could you' forces a question frame, making 'will' a near-valid swap for 'would' — distractor is dangerously close to valid ('Could you tell me when the medication will be ready?' is natural English).",
+          2
+        ],
+        [
+          "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "fatal: chunks[2]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 27,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 28,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "pool:difficulty_surplus:easy": 2
+            }
+          }
+        },
+        {
+          "round": 29,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 4,
+            "accepted": 0,
+            "rejected": 4,
+            "reasons": {
+              "fatal: chunks[2]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1,
+              "review:blocker:tmp_r29_q4: Distractor 'speak' is plausibly valid — 'the waiter you speak with' is grammatically acceptable English (generic/habitual present), making the distractor ambiguously usable and undermining the past-simple test.|tmp_r29_q1: Embedded question 'when the medication would be ready' uses correct declarative word order, but the answer is a direct interrogative sentence (inverted: 'Could you tell me...'), not an indirect/embedded question test in the TPO sense. The prefilled 'could you' forces a question frame, making 'will' a near-valid swap for 'would' — distractor is dangerously close to valid ('Could you tell me when the medication will be ready?' is natural English).": 2
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 32
+    }
+  ],
+  "history": [
+    {
+      "round": 24,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 1
+        },
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 1
+        },
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 3
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 2,
+          "accepted": 2,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "fatal: chunks[6]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+          }
+        },
+        "relative": {
+          "generated": 2,
+          "accepted": 1,
+          "rejected": 1,
+          "reasons": {
+            "fatal: prefilled too long (4 words): shorten to 2-3 word subject NP": 1
+          }
+        }
+      }
+    },
+    {
+      "round": 25,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 1
+        },
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 4
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 3,
+          "accepted": 0,
+          "rejected": 3,
+          "reasons": {
+            "pool:difficulty_surplus:easy": 2,
+            "review:blocker:tmp_r25_q4: distractor 'opened' could be inserted to create valid sentence 'I was not sure whether the hiking trail was opened'|tmp_r25_q2: distractor 'start' could be inserted to create valid sentence 'I did not know what time the yoga class start' (colloquial/dialectal)": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r25_q4: distractor 'opened' could be inserted to create valid sentence 'I was not sure whether the hiking trail was opened'|tmp_r25_q2: distractor 'start' could be inserted to create valid sentence 'I did not know what time the yoga class start' (colloquial/dialectal)": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 26,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "3rd-reporting",
+          "difficulty": "hard",
+          "count": 1
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 4
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 3,
+          "accepted": 0,
+          "rejected": 3,
+          "reasons": {
+            "fatal: distractor must be a single word (TPO standard)": 1,
+            "fatal: prefilled too long (4 words): shorten to 2-3 word subject NP": 1,
+            "review:blocker:prompt/answer mismatch (answer doesn't respond to prompt): The prompt asks 'What did the local librarian inquire about the missing inventory records?' but the answer sentence omits 'the missing inventory records' entirely — the answer sentence is 'The local librarian inquired where the inventory records had been stored,' which drops 'missing' and reframes the object, making the answer non-responsive to the specific prompt wording)": 1
+          }
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "fatal: distractor must be a single word (TPO standard)": 1,
+            "fatal: distractor must be a single word (TPO standard); chunks[5]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 27,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 1
+        },
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 4
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "fatal: chunks[6]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+            "review:blocker:tmp_r27_q2: Grammar incorrect in answer sentence — 'I did not know if the grocery store opens on Sunday' mixes simple past negation with simple present 'opens'; correct form requires 'opened' (backshift) making the sentence 'I did not know if the grocery store opened on Sunday'; the stated answer is grammatically anomalous in standard English|tmp_r27_q2: Distractor 'open' can be inserted in place of 'opens' to produce 'I did not know if the grocery store open on Sunday' — while ungrammatical alone, the chunk sequence 'if the grocery store open on Sunday' mirrors a valid bare-infinitive reading that test-takers may attempt, but more critically the intended answer itself with 'opens' is already grammatically defective (see above blocker), making the entire item invalid|tmp_r27_q3: distractor 'receive' is grammatically valid in answer position ('I have not receive...' sounds plausible to non-native speakers)|tmp_r27_q2: answer uses past tense 'did not know' but context suggests present uncertainty - creates ambiguity": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "review:blocker:tmp_r27_q2: Grammar incorrect in answer sentence — 'I did not know if the grocery store opens on Sunday' mixes simple past negation with simple present 'opens'; correct form requires 'opened' (backshift) making the sentence 'I did not know if the grocery store opened on Sunday'; the stated answer is grammatically anomalous in standard English|tmp_r27_q2: Distractor 'open' can be inserted in place of 'opens' to produce 'I did not know if the grocery store open on Sunday' — while ungrammatical alone, the chunk sequence 'if the grocery store open on Sunday' mirrors a valid bare-infinitive reading that test-takers may attempt, but more critically the intended answer itself with 'opens' is already grammatically defective (see above blocker), making the entire item invalid|tmp_r27_q3: distractor 'receive' is grammatically valid in answer position ('I have not receive...' sounds plausible to non-native speakers)|tmp_r27_q2: answer uses past tense 'did not know' but context suggests present uncertainty - creates ambiguity": 2
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "prompt: prompt_task_text: must contain an explicit task/instruction, not only background context": 1
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 28,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "interrogative",
+          "difficulty": "hard",
+          "count": 1
+        },
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 4
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:indirect question clause uses inverted word order: the embedded clause 'where the package had been left' is correctly declarative, but the outer shell 'Could you tell me...' is itself a direct yes/no question when the prompt asks what the driver needed to find out — the answer should be a declarative statement (e.g., 'He needed to find out where the package had been left'), not a question directed at an interlocutor; prompt/answer mismatch because the prompt is third-person reportive ('What did the delivery driver need to find out?') but the answer is a first-person polite request ('Could you tell me...'), making the answer non-responsive to the prompt|Answer is a QUESTION, not a statement - violates 92% TPO pattern of declarative answers|Prompt asks 'What did...need to find out' but answer is the question itself, not what was needed": 1
+          }
+        },
+        "direct": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "fatal: chunks[2]: isolated floating adverb \"recently\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+          }
+        },
+        "relative": {
+          "generated": 3,
+          "accepted": 0,
+          "rejected": 3,
+          "reasons": {
+            "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+            "pool:difficulty_surplus:easy": 2
+          }
+        }
+      }
+    },
+    {
+      "round": 29,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "interrogative",
+          "difficulty": "hard",
+          "count": 1
+        },
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 4
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r29_q4: Distractor 'speak' is plausibly valid — 'the waiter you speak with' is grammatically acceptable English (generic/habitual present), making the distractor ambiguously usable and undermining the past-simple test.|tmp_r29_q1: Embedded question 'when the medication would be ready' uses correct declarative word order, but the answer is a direct interrogative sentence (inverted: 'Could you tell me...'), not an indirect/embedded question test in the TPO sense. The prefilled 'could you' forces a question frame, making 'will' a near-valid swap for 'would' — distractor is dangerously close to valid ('Could you tell me when the medication will be ready?' is natural English).": 1
+          }
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 4,
+          "accepted": 0,
+          "rejected": 4,
+          "reasons": {
+            "fatal: chunks[2]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+            "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1,
+            "review:blocker:tmp_r29_q4: Distractor 'speak' is plausibly valid — 'the waiter you speak with' is grammatically acceptable English (generic/habitual present), making the distractor ambiguously usable and undermining the past-simple test.|tmp_r29_q1: Embedded question 'when the medication would be ready' uses correct declarative word order, but the answer is a direct interrogative sentence (inverted: 'Could you tell me...'), not an indirect/embedded question test in the TPO sense. The prefilled 'could you' forces a question frame, making 'will' a near-valid swap for 'would' — distractor is dangerously close to valid ('Could you tell me when the medication will be ready?' is natural English).": 2
+          }
+        }
+      }
+    }
+  ]
+}
