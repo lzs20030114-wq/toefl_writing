@@ -1,0 +1,1663 @@
+{
+  "generated_at": "2026-03-12T17:48:44.264Z",
+  "active": {
+    "direct": {
+      "sinceRound": 8,
+      "untilRound": 11,
+      "lastEvent": {
+        "triggeredAt": "2026-03-12T17:48:44.264Z",
+        "round": 8,
+        "mode": "normal",
+        "type": "direct",
+        "generated": 10,
+        "accepted": 0,
+        "rejected": 10,
+        "acceptRate": 0,
+        "reasons": [
+          [
+            "review:blocker:tmp_r8_q2: chunk ambiguity — 'on saturday' and 'morning' are separate chunks but must be adjacent to form 'on Saturday morning'; a test-taker could plausibly place 'morning' before 'on saturday' yielding 'The yoga class morning on Saturday starts at eight o'clock', which is ungrammatical but the split itself invites mis-ordering; more critically, 'on saturday' + 'morning' can also be read as two discrete adjuncts, creating ambiguous ordering relative to 'starts' (e.g., 'The yoga class starts on Saturday morning at eight o'clock' is equally valid), giving multiple valid chunk orders.|tmp_r8_q4: distractor validity — 'reschedule' can be inserted in place of 'rescheduled' only with tense mismatch, but more critically the chunks 'for next' and 'thursday afternoon' are split across two separate chunks requiring obligatory adjacency with no signal to the test-taker; the phrase 'for next thursday afternoon' cannot be assembled correctly if a student places 'thursday afternoon' before 'for next', and no chunk boundary prevents this — multiple surface orderings are plausible, constituting ambiguous arrangement.|tmp_r8_q7: distractor could be a valid answer chunk — 'best' can replace 'better' to yield 'The salon I visited last month was far best than expected', which is ungrammatical, so this is NOT a blocker on that ground; however 'last' and 'month' are split into two separate chunks that must be adjacent, and 'visited last month' vs. 'last month visited' both parse as conceivable orderings within the contact clause, creating multiple valid chunk orders.|tmp_r8_q4: chunk 'for next' is an incomplete/unnatural fragment — 'for next Thursday afternoon' should be a single chunk or split as 'for' + 'next Thursday afternoon'; 'for next' alone is not a natural collocation and creates ambiguity in placement|tmp_r8_q7: distractor 'best' is plausible as a substitution for 'better' in casual usage and could tempt valid re-assembly; more critically, 'was far' as a single chunk is unnatural — 'far' modifies 'better' not 'was', so chunking forces an unnatural parse that may confuse solvers",
+            7
+          ],
+          [
+            "fatal: distractor must be a single word (TPO standard)",
+            2
+          ],
+          [
+            "review:blocker:tmp_r7_q1: indirect question clause 'when the reading room opens' is correct, but the outer frame 'Could you tell me' is an interrogative frame producing a polite request question — the embedded clause itself is declarative order (OK); however, the answer IS a direct question (interrogative sentence) used to respond to 'what did the student ask,' which is acceptable for ask-type prompts. No blocker here — re-evaluated.|tmp_r7_q4: chunk order ambiguity — 'which shelf the new arrivals are on' vs. possible reordering concern is minimal, but 'were' distractor: inserting 'were' yields 'Could you tell me which shelf the new arrivals were on?' which is a grammatically valid, natural English sentence. The distractor creates a valid alternative answer. BLOCKER: distractor could be a valid answer chunk.|tmp_r7_q8: prompt/answer mismatch — the prompt asks 'What did the museum curator SAY about the painting that was donated?' implying a report of content/opinion, but the answer 'The curator mentioned which painting had been donated by the family' does not report what was SAID about the painting; it reports which painting was identified. The answer deflects the prompt's implied content. BLOCKER: prompt/answer mismatch.|tmp_r7_q3: distractor 'were' is plausibly valid — 'how many seats were still available' is grammatically acceptable as an embedded clause in certain past-tense framings, making it a near-valid answer rather than a clean distractor|tmp_r7_q7: too many chunks (8 active) with multi-word collocations 'to know', 'the best', 'rated' creating multiple plausible partial orderings; assembly ambiguity is high|tmp_r7_q8: answer 'The curator mentioned which painting had been donated by the family' is semantically odd — 'mentioned which painting' implies selecting among multiple paintings, but the prompt says 'the painting that was donated', creating a logic mismatch that may confuse test-takers; borderline ungrammatical in context",
+            1
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 6,
+            "spec": [
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 6
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "hard",
+                "count": 2
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "easy",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 2,
+              "accepted": 0,
+              "rejected": 2,
+              "reasons": {
+                "fatal: distractor must be a single word (TPO standard)": 2
+              }
+            }
+          },
+          {
+            "round": 7,
+            "spec": [
+              {
+                "type": "interrogative",
+                "difficulty": "medium",
+                "count": 6
+              },
+              {
+                "type": "1st-embedded",
+                "difficulty": "hard",
+                "count": 2
+              },
+              {
+                "type": "1st-embedded",
+                "difficulty": "easy",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 1,
+              "accepted": 0,
+              "rejected": 1,
+              "reasons": {
+                "review:blocker:tmp_r7_q1: indirect question clause 'when the reading room opens' is correct, but the outer frame 'Could you tell me' is an interrogative frame producing a polite request question — the embedded clause itself is declarative order (OK); however, the answer IS a direct question (interrogative sentence) used to respond to 'what did the student ask,' which is acceptable for ask-type prompts. No blocker here — re-evaluated.|tmp_r7_q4: chunk order ambiguity — 'which shelf the new arrivals are on' vs. possible reordering concern is minimal, but 'were' distractor: inserting 'were' yields 'Could you tell me which shelf the new arrivals were on?' which is a grammatically valid, natural English sentence. The distractor creates a valid alternative answer. BLOCKER: distractor could be a valid answer chunk.|tmp_r7_q8: prompt/answer mismatch — the prompt asks 'What did the museum curator SAY about the painting that was donated?' implying a report of content/opinion, but the answer 'The curator mentioned which painting had been donated by the family' does not report what was SAID about the painting; it reports which painting was identified. The answer deflects the prompt's implied content. BLOCKER: prompt/answer mismatch.|tmp_r7_q3: distractor 'were' is plausibly valid — 'how many seats were still available' is grammatically acceptable as an embedded clause in certain past-tense framings, making it a near-valid answer rather than a clean distractor|tmp_r7_q7: too many chunks (8 active) with multi-word collocations 'to know', 'the best', 'rated' creating multiple plausible partial orderings; assembly ambiguity is high|tmp_r7_q8: answer 'The curator mentioned which painting had been donated by the family' is semantically odd — 'mentioned which painting' implies selecting among multiple paintings, but the prompt says 'the painting that was donated', creating a logic mismatch that may confuse test-takers; borderline ungrammatical in context": 1
+              }
+            }
+          },
+          {
+            "round": 8,
+            "spec": [
+              {
+                "type": "direct",
+                "difficulty": "medium",
+                "count": 6
+              },
+              {
+                "type": "direct",
+                "difficulty": "hard",
+                "count": 2
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "easy",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 7,
+              "accepted": 0,
+              "rejected": 7,
+              "reasons": {
+                "review:blocker:tmp_r8_q2: chunk ambiguity — 'on saturday' and 'morning' are separate chunks but must be adjacent to form 'on Saturday morning'; a test-taker could plausibly place 'morning' before 'on saturday' yielding 'The yoga class morning on Saturday starts at eight o'clock', which is ungrammatical but the split itself invites mis-ordering; more critically, 'on saturday' + 'morning' can also be read as two discrete adjuncts, creating ambiguous ordering relative to 'starts' (e.g., 'The yoga class starts on Saturday morning at eight o'clock' is equally valid), giving multiple valid chunk orders.|tmp_r8_q4: distractor validity — 'reschedule' can be inserted in place of 'rescheduled' only with tense mismatch, but more critically the chunks 'for next' and 'thursday afternoon' are split across two separate chunks requiring obligatory adjacency with no signal to the test-taker; the phrase 'for next thursday afternoon' cannot be assembled correctly if a student places 'thursday afternoon' before 'for next', and no chunk boundary prevents this — multiple surface orderings are plausible, constituting ambiguous arrangement.|tmp_r8_q7: distractor could be a valid answer chunk — 'best' can replace 'better' to yield 'The salon I visited last month was far best than expected', which is ungrammatical, so this is NOT a blocker on that ground; however 'last' and 'month' are split into two separate chunks that must be adjacent, and 'visited last month' vs. 'last month visited' both parse as conceivable orderings within the contact clause, creating multiple valid chunk orders.|tmp_r8_q4: chunk 'for next' is an incomplete/unnatural fragment — 'for next Thursday afternoon' should be a single chunk or split as 'for' + 'next Thursday afternoon'; 'for next' alone is not a natural collocation and creates ambiguity in placement|tmp_r8_q7: distractor 'best' is plausible as a substitution for 'better' in casual usage and could tempt valid re-assembly; more critically, 'was far' as a single chunk is unnatural — 'far' modifies 'better' not 'was', so chunking forces an unnatural parse that may confuse solvers": 7
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 11
+      }
+    },
+    "negation": {
+      "sinceRound": 5,
+      "untilRound": 8,
+      "lastEvent": {
+        "triggeredAt": "2026-03-12T17:42:12.224Z",
+        "round": 5,
+        "mode": "normal",
+        "type": "negation",
+        "generated": 9,
+        "accepted": 0,
+        "rejected": 9,
+        "acceptRate": 0,
+        "reasons": [
+          [
+            "review:blocker:tmp_r5_q8: prefilled 'you' at position 2 is structurally broken — the answer is 'The tool you lent me had been damaged before.' but 'the tool' is not prefilled and 'you' is given mid-sentence at index 2; learner cannot reconstruct sentence start without knowing 'the tool' is first, making order ambiguous and assembly logic contradictory.|tmp_r5_q8: distractor 'lend' (base form) is implausible enough to be non-functional as a real test of knowledge — but more critically, the contact clause structure 'the tool you lent me' requires learner to place 'you' correctly inside a relative clause with no subject prefill, creating genuine ambiguity about whether sentence starts with 'the tool' or 'you'.|tmp_r5_q2: chunking 'where / to / pick / up / the tickets' splits a natural phrasal verb collocation 'pick up' into separate single-word chunks, and also separates 'to pick up' into three pieces ('to', 'pick', 'up'), creating an unnaturally high number of adjacent positional choices that significantly increases solve difficulty beyond TPO norms and risks multiple plausible orderings for 'to / pick / up'.",
+            7
+          ],
+          [
+            "review:blocker:tmp_r4_q8: prompt/answer mismatch — the prompt asks the learner to respond as themselves ('your seat request was not processed'), but the answer speaks about the flight attendant in third person ('The flight attendant did not know why my request had been ignored'), making the answer a narrative report rather than a direct personal response to the flight attendant's question|tmp_r4_q8: Answer introduces 'the flight attendant' as subject saying they 'did not know why my request had been ignored' — but the prompt says the flight attendant is ASKING the student why the request was not processed. The student answering AS the flight attendant is incoherent; the answer contradicts the scenario, making the intended answer unrecoverable from context.|tmp_r4_q1: Multi-word chunk 'really comfortable' groups an adverb+adjective that are NOT a fixed collocation; 'really' could plausibly modify 'seating' instead, creating mild ambiguity. More critically, 'near campus' is chunked separately but the prefilled subject is 'the coffee shop', so the student must place 'near campus' before 'has' — the intended order 'near campus has' is unnatural as a standalone chunk sequence and learners may place 'near campus' after 'seating areas', producing a grammatically valid alternate: 'The coffee shop has really comfortable seating areas near campus.' This alternate is fully grammatical and semantically equivalent, constituting a clear ambiguity blocker.|tmp_r4_q6: Two verbs in chunks — 'recommended' and 'offered' — with no syntactic signal forcing their order. Learners could plausibly produce 'The hair salon offered my colleague recommended very reasonable pricing options' (ungrammatical but confusing) or, more critically, interpret the contact-clause structure incorrectly. The distractor 'offers' is NOT valid as main verb in past context, so that is safe. However, ordering of 'recommended' vs 'offered' is genuinely ambiguous without punctuation or a relative pronoun, constituting an ambiguous-order blocker.",
+            2
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 4,
+            "spec": [
+              {
+                "type": "direct",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "relative",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "negation",
+                "difficulty": "hard",
+                "count": 2
+              },
+              {
+                "type": "direct",
+                "difficulty": "easy",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 2,
+              "accepted": 0,
+              "rejected": 2,
+              "reasons": {
+                "review:blocker:tmp_r4_q8: prompt/answer mismatch — the prompt asks the learner to respond as themselves ('your seat request was not processed'), but the answer speaks about the flight attendant in third person ('The flight attendant did not know why my request had been ignored'), making the answer a narrative report rather than a direct personal response to the flight attendant's question|tmp_r4_q8: Answer introduces 'the flight attendant' as subject saying they 'did not know why my request had been ignored' — but the prompt says the flight attendant is ASKING the student why the request was not processed. The student answering AS the flight attendant is incoherent; the answer contradicts the scenario, making the intended answer unrecoverable from context.|tmp_r4_q1: Multi-word chunk 'really comfortable' groups an adverb+adjective that are NOT a fixed collocation; 'really' could plausibly modify 'seating' instead, creating mild ambiguity. More critically, 'near campus' is chunked separately but the prefilled subject is 'the coffee shop', so the student must place 'near campus' before 'has' — the intended order 'near campus has' is unnatural as a standalone chunk sequence and learners may place 'near campus' after 'seating areas', producing a grammatically valid alternate: 'The coffee shop has really comfortable seating areas near campus.' This alternate is fully grammatical and semantically equivalent, constituting a clear ambiguity blocker.|tmp_r4_q6: Two verbs in chunks — 'recommended' and 'offered' — with no syntactic signal forcing their order. Learners could plausibly produce 'The hair salon offered my colleague recommended very reasonable pricing options' (ungrammatical but confusing) or, more critically, interpret the contact-clause structure incorrectly. The distractor 'offers' is NOT valid as main verb in past context, so that is safe. However, ordering of 'recommended' vs 'offered' is genuinely ambiguous without punctuation or a relative pronoun, constituting an ambiguous-order blocker.": 2
+              }
+            }
+          },
+          {
+            "round": 5,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 6
+              },
+              {
+                "type": "relative",
+                "difficulty": "hard",
+                "count": 2
+              },
+              {
+                "type": "negation",
+                "difficulty": "easy",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 7,
+              "accepted": 0,
+              "rejected": 7,
+              "reasons": {
+                "review:blocker:tmp_r5_q8: prefilled 'you' at position 2 is structurally broken — the answer is 'The tool you lent me had been damaged before.' but 'the tool' is not prefilled and 'you' is given mid-sentence at index 2; learner cannot reconstruct sentence start without knowing 'the tool' is first, making order ambiguous and assembly logic contradictory.|tmp_r5_q8: distractor 'lend' (base form) is implausible enough to be non-functional as a real test of knowledge — but more critically, the contact clause structure 'the tool you lent me' requires learner to place 'you' correctly inside a relative clause with no subject prefill, creating genuine ambiguity about whether sentence starts with 'the tool' or 'you'.|tmp_r5_q2: chunking 'where / to / pick / up / the tickets' splits a natural phrasal verb collocation 'pick up' into separate single-word chunks, and also separates 'to pick up' into three pieces ('to', 'pick', 'up'), creating an unnaturally high number of adjacent positional choices that significantly increases solve difficulty beyond TPO norms and risks multiple plausible orderings for 'to / pick / up'.": 7
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 8
+      }
+    },
+    "relative": {
+      "sinceRound": 5,
+      "untilRound": 8,
+      "lastEvent": {
+        "triggeredAt": "2026-03-12T17:42:12.224Z",
+        "round": 5,
+        "mode": "normal",
+        "type": "relative",
+        "generated": 4,
+        "accepted": 0,
+        "rejected": 4,
+        "acceptRate": 0,
+        "reasons": [
+          [
+            "review:blocker:tmp_r4_q8: prompt/answer mismatch — the prompt asks the learner to respond as themselves ('your seat request was not processed'), but the answer speaks about the flight attendant in third person ('The flight attendant did not know why my request had been ignored'), making the answer a narrative report rather than a direct personal response to the flight attendant's question|tmp_r4_q8: Answer introduces 'the flight attendant' as subject saying they 'did not know why my request had been ignored' — but the prompt says the flight attendant is ASKING the student why the request was not processed. The student answering AS the flight attendant is incoherent; the answer contradicts the scenario, making the intended answer unrecoverable from context.|tmp_r4_q1: Multi-word chunk 'really comfortable' groups an adverb+adjective that are NOT a fixed collocation; 'really' could plausibly modify 'seating' instead, creating mild ambiguity. More critically, 'near campus' is chunked separately but the prefilled subject is 'the coffee shop', so the student must place 'near campus' before 'has' — the intended order 'near campus has' is unnatural as a standalone chunk sequence and learners may place 'near campus' after 'seating areas', producing a grammatically valid alternate: 'The coffee shop has really comfortable seating areas near campus.' This alternate is fully grammatical and semantically equivalent, constituting a clear ambiguity blocker.|tmp_r4_q6: Two verbs in chunks — 'recommended' and 'offered' — with no syntactic signal forcing their order. Learners could plausibly produce 'The hair salon offered my colleague recommended very reasonable pricing options' (ungrammatical but confusing) or, more critically, interpret the contact-clause structure incorrectly. The distractor 'offers' is NOT valid as main verb in past context, so that is safe. However, ordering of 'recommended' vs 'offered' is genuinely ambiguous without punctuation or a relative pronoun, constituting an ambiguous-order blocker.",
+            2
+          ],
+          [
+            "fatal: chunks[4]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+            1
+          ],
+          [
+            "review:blocker:tmp_r5_q8: prefilled 'you' at position 2 is structurally broken — the answer is 'The tool you lent me had been damaged before.' but 'the tool' is not prefilled and 'you' is given mid-sentence at index 2; learner cannot reconstruct sentence start without knowing 'the tool' is first, making order ambiguous and assembly logic contradictory.|tmp_r5_q8: distractor 'lend' (base form) is implausible enough to be non-functional as a real test of knowledge — but more critically, the contact clause structure 'the tool you lent me' requires learner to place 'you' correctly inside a relative clause with no subject prefill, creating genuine ambiguity about whether sentence starts with 'the tool' or 'you'.|tmp_r5_q2: chunking 'where / to / pick / up / the tickets' splits a natural phrasal verb collocation 'pick up' into separate single-word chunks, and also separates 'to pick up' into three pieces ('to', 'pick', 'up'), creating an unnaturally high number of adjacent positional choices that significantly increases solve difficulty beyond TPO norms and risks multiple plausible orderings for 'to / pick / up'.",
+            1
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 4,
+            "spec": [
+              {
+                "type": "direct",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "relative",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "negation",
+                "difficulty": "hard",
+                "count": 2
+              },
+              {
+                "type": "direct",
+                "difficulty": "easy",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 2,
+              "accepted": 0,
+              "rejected": 2,
+              "reasons": {
+                "review:blocker:tmp_r4_q8: prompt/answer mismatch — the prompt asks the learner to respond as themselves ('your seat request was not processed'), but the answer speaks about the flight attendant in third person ('The flight attendant did not know why my request had been ignored'), making the answer a narrative report rather than a direct personal response to the flight attendant's question|tmp_r4_q8: Answer introduces 'the flight attendant' as subject saying they 'did not know why my request had been ignored' — but the prompt says the flight attendant is ASKING the student why the request was not processed. The student answering AS the flight attendant is incoherent; the answer contradicts the scenario, making the intended answer unrecoverable from context.|tmp_r4_q1: Multi-word chunk 'really comfortable' groups an adverb+adjective that are NOT a fixed collocation; 'really' could plausibly modify 'seating' instead, creating mild ambiguity. More critically, 'near campus' is chunked separately but the prefilled subject is 'the coffee shop', so the student must place 'near campus' before 'has' — the intended order 'near campus has' is unnatural as a standalone chunk sequence and learners may place 'near campus' after 'seating areas', producing a grammatically valid alternate: 'The coffee shop has really comfortable seating areas near campus.' This alternate is fully grammatical and semantically equivalent, constituting a clear ambiguity blocker.|tmp_r4_q6: Two verbs in chunks — 'recommended' and 'offered' — with no syntactic signal forcing their order. Learners could plausibly produce 'The hair salon offered my colleague recommended very reasonable pricing options' (ungrammatical but confusing) or, more critically, interpret the contact-clause structure incorrectly. The distractor 'offers' is NOT valid as main verb in past context, so that is safe. However, ordering of 'recommended' vs 'offered' is genuinely ambiguous without punctuation or a relative pronoun, constituting an ambiguous-order blocker.": 2
+              }
+            }
+          },
+          {
+            "round": 5,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 6
+              },
+              {
+                "type": "relative",
+                "difficulty": "hard",
+                "count": 2
+              },
+              {
+                "type": "negation",
+                "difficulty": "easy",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 2,
+              "accepted": 0,
+              "rejected": 2,
+              "reasons": {
+                "fatal: chunks[4]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+                "review:blocker:tmp_r5_q8: prefilled 'you' at position 2 is structurally broken — the answer is 'The tool you lent me had been damaged before.' but 'the tool' is not prefilled and 'you' is given mid-sentence at index 2; learner cannot reconstruct sentence start without knowing 'the tool' is first, making order ambiguous and assembly logic contradictory.|tmp_r5_q8: distractor 'lend' (base form) is implausible enough to be non-functional as a real test of knowledge — but more critically, the contact clause structure 'the tool you lent me' requires learner to place 'you' correctly inside a relative clause with no subject prefill, creating genuine ambiguity about whether sentence starts with 'the tool' or 'you'.|tmp_r5_q2: chunking 'where / to / pick / up / the tickets' splits a natural phrasal verb collocation 'pick up' into separate single-word chunks, and also separates 'to pick up' into three pieces ('to', 'pick', 'up'), creating an unnaturally high number of adjacent positional choices that significantly increases solve difficulty beyond TPO norms and risks multiple plausible orderings for 'to / pick / up'.": 1
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 8
+      }
+    },
+    "3rd-reporting": {
+      "sinceRound": 6,
+      "untilRound": 9,
+      "lastEvent": {
+        "triggeredAt": "2026-03-12T17:43:49.780Z",
+        "round": 6,
+        "mode": "normal",
+        "type": "3rd-reporting",
+        "generated": 8,
+        "accepted": 0,
+        "rejected": 8,
+        "acceptRate": 0,
+        "reasons": [
+          [
+            "review:blocker:tmp_r6_q6: The answer sentence 'The project supervisor was curious why the budget report was incomplete.' is grammatically incorrect. The adjective 'curious' requires the preposition 'about' before an embedded clause in standard English ('curious about why...'), or alternatively 'curious as to why...'. The bare 'curious why' construction is non-standard and fails a grammar check for a TPO-level item.|tmp_r6_q4: distractor 'extend' is plausibly valid — 'could extend' is grammatically acceptable as an alternative to 'could be extended', creating ambiguity in chunk selection|tmp_r6_q8: splitting 'renovation contract' into three separate chunks ('the', 'renovation', 'contract') creates multiple valid orderings and raises cognitive load beyond TPO norms; also 'whom' vs 'who' distractor pair tests formal register knowledge, not the core indirect-question word-order principle",
+            7
+          ],
+          [
+            "fatal: distractor must be a single word (TPO standard)",
+            1
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 4,
+            "spec": [
+              {
+                "type": "direct",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "relative",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "negation",
+                "difficulty": "hard",
+                "count": 2
+              },
+              {
+                "type": "direct",
+                "difficulty": "easy",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 0,
+              "accepted": 0,
+              "rejected": 0,
+              "reasons": {}
+            }
+          },
+          {
+            "round": 5,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 6
+              },
+              {
+                "type": "relative",
+                "difficulty": "hard",
+                "count": 2
+              },
+              {
+                "type": "negation",
+                "difficulty": "easy",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 0,
+              "accepted": 0,
+              "rejected": 0,
+              "reasons": {}
+            }
+          },
+          {
+            "round": 6,
+            "spec": [
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 6
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "hard",
+                "count": 2
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "easy",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 8,
+              "accepted": 0,
+              "rejected": 8,
+              "reasons": {
+                "fatal: distractor must be a single word (TPO standard)": 1,
+                "review:blocker:tmp_r6_q6: The answer sentence 'The project supervisor was curious why the budget report was incomplete.' is grammatically incorrect. The adjective 'curious' requires the preposition 'about' before an embedded clause in standard English ('curious about why...'), or alternatively 'curious as to why...'. The bare 'curious why' construction is non-standard and fails a grammar check for a TPO-level item.|tmp_r6_q4: distractor 'extend' is plausibly valid — 'could extend' is grammatically acceptable as an alternative to 'could be extended', creating ambiguity in chunk selection|tmp_r6_q8: splitting 'renovation contract' into three separate chunks ('the', 'renovation', 'contract') creates multiple valid orderings and raises cognitive load beyond TPO norms; also 'whom' vs 'who' distractor pair tests formal register knowledge, not the core indirect-question word-order principle": 7
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 9
+      }
+    },
+    "1st-embedded": {
+      "sinceRound": 7,
+      "untilRound": 10,
+      "lastEvent": {
+        "triggeredAt": "2026-03-12T17:46:40.863Z",
+        "round": 7,
+        "mode": "normal",
+        "type": "1st-embedded",
+        "generated": 4,
+        "accepted": 0,
+        "rejected": 4,
+        "acceptRate": 0,
+        "reasons": [
+          [
+            "review:blocker:tmp_r7_q1: indirect question clause 'when the reading room opens' is correct, but the outer frame 'Could you tell me' is an interrogative frame producing a polite request question — the embedded clause itself is declarative order (OK); however, the answer IS a direct question (interrogative sentence) used to respond to 'what did the student ask,' which is acceptable for ask-type prompts. No blocker here — re-evaluated.|tmp_r7_q4: chunk order ambiguity — 'which shelf the new arrivals are on' vs. possible reordering concern is minimal, but 'were' distractor: inserting 'were' yields 'Could you tell me which shelf the new arrivals were on?' which is a grammatically valid, natural English sentence. The distractor creates a valid alternative answer. BLOCKER: distractor could be a valid answer chunk.|tmp_r7_q8: prompt/answer mismatch — the prompt asks 'What did the museum curator SAY about the painting that was donated?' implying a report of content/opinion, but the answer 'The curator mentioned which painting had been donated by the family' does not report what was SAID about the painting; it reports which painting was identified. The answer deflects the prompt's implied content. BLOCKER: prompt/answer mismatch.|tmp_r7_q3: distractor 'were' is plausibly valid — 'how many seats were still available' is grammatically acceptable as an embedded clause in certain past-tense framings, making it a near-valid answer rather than a clean distractor|tmp_r7_q7: too many chunks (8 active) with multi-word collocations 'to know', 'the best', 'rated' creating multiple plausible partial orderings; assembly ambiguity is high|tmp_r7_q8: answer 'The curator mentioned which painting had been donated by the family' is semantically odd — 'mentioned which painting' implies selecting among multiple paintings, but the prompt says 'the painting that was donated', creating a logic mismatch that may confuse test-takers; borderline ungrammatical in context",
+            3
+          ],
+          [
+            "review:blocker:tmp_r5_q8: prefilled 'you' at position 2 is structurally broken — the answer is 'The tool you lent me had been damaged before.' but 'the tool' is not prefilled and 'you' is given mid-sentence at index 2; learner cannot reconstruct sentence start without knowing 'the tool' is first, making order ambiguous and assembly logic contradictory.|tmp_r5_q8: distractor 'lend' (base form) is implausible enough to be non-functional as a real test of knowledge — but more critically, the contact clause structure 'the tool you lent me' requires learner to place 'you' correctly inside a relative clause with no subject prefill, creating genuine ambiguity about whether sentence starts with 'the tool' or 'you'.|tmp_r5_q2: chunking 'where / to / pick / up / the tickets' splits a natural phrasal verb collocation 'pick up' into separate single-word chunks, and also separates 'to pick up' into three pieces ('to', 'pick', 'up'), creating an unnaturally high number of adjacent positional choices that significantly increases solve difficulty beyond TPO norms and risks multiple plausible orderings for 'to / pick / up'.",
+            1
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 5,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 6
+              },
+              {
+                "type": "relative",
+                "difficulty": "hard",
+                "count": 2
+              },
+              {
+                "type": "negation",
+                "difficulty": "easy",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 1,
+              "accepted": 0,
+              "rejected": 1,
+              "reasons": {
+                "review:blocker:tmp_r5_q8: prefilled 'you' at position 2 is structurally broken — the answer is 'The tool you lent me had been damaged before.' but 'the tool' is not prefilled and 'you' is given mid-sentence at index 2; learner cannot reconstruct sentence start without knowing 'the tool' is first, making order ambiguous and assembly logic contradictory.|tmp_r5_q8: distractor 'lend' (base form) is implausible enough to be non-functional as a real test of knowledge — but more critically, the contact clause structure 'the tool you lent me' requires learner to place 'you' correctly inside a relative clause with no subject prefill, creating genuine ambiguity about whether sentence starts with 'the tool' or 'you'.|tmp_r5_q2: chunking 'where / to / pick / up / the tickets' splits a natural phrasal verb collocation 'pick up' into separate single-word chunks, and also separates 'to pick up' into three pieces ('to', 'pick', 'up'), creating an unnaturally high number of adjacent positional choices that significantly increases solve difficulty beyond TPO norms and risks multiple plausible orderings for 'to / pick / up'.": 1
+              }
+            }
+          },
+          {
+            "round": 6,
+            "spec": [
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 6
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "hard",
+                "count": 2
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "easy",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 0,
+              "accepted": 0,
+              "rejected": 0,
+              "reasons": {}
+            }
+          },
+          {
+            "round": 7,
+            "spec": [
+              {
+                "type": "interrogative",
+                "difficulty": "medium",
+                "count": 6
+              },
+              {
+                "type": "1st-embedded",
+                "difficulty": "hard",
+                "count": 2
+              },
+              {
+                "type": "1st-embedded",
+                "difficulty": "easy",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 3,
+              "accepted": 0,
+              "rejected": 3,
+              "reasons": {
+                "review:blocker:tmp_r7_q1: indirect question clause 'when the reading room opens' is correct, but the outer frame 'Could you tell me' is an interrogative frame producing a polite request question — the embedded clause itself is declarative order (OK); however, the answer IS a direct question (interrogative sentence) used to respond to 'what did the student ask,' which is acceptable for ask-type prompts. No blocker here — re-evaluated.|tmp_r7_q4: chunk order ambiguity — 'which shelf the new arrivals are on' vs. possible reordering concern is minimal, but 'were' distractor: inserting 'were' yields 'Could you tell me which shelf the new arrivals were on?' which is a grammatically valid, natural English sentence. The distractor creates a valid alternative answer. BLOCKER: distractor could be a valid answer chunk.|tmp_r7_q8: prompt/answer mismatch — the prompt asks 'What did the museum curator SAY about the painting that was donated?' implying a report of content/opinion, but the answer 'The curator mentioned which painting had been donated by the family' does not report what was SAID about the painting; it reports which painting was identified. The answer deflects the prompt's implied content. BLOCKER: prompt/answer mismatch.|tmp_r7_q3: distractor 'were' is plausibly valid — 'how many seats were still available' is grammatically acceptable as an embedded clause in certain past-tense framings, making it a near-valid answer rather than a clean distractor|tmp_r7_q7: too many chunks (8 active) with multi-word collocations 'to know', 'the best', 'rated' creating multiple plausible partial orderings; assembly ambiguity is high|tmp_r7_q8: answer 'The curator mentioned which painting had been donated by the family' is semantically odd — 'mentioned which painting' implies selecting among multiple paintings, but the prompt says 'the painting that was donated', creating a logic mismatch that may confuse test-takers; borderline ungrammatical in context": 3
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 10
+      }
+    },
+    "interrogative": {
+      "sinceRound": 7,
+      "untilRound": 10,
+      "lastEvent": {
+        "triggeredAt": "2026-03-12T17:46:40.863Z",
+        "round": 7,
+        "mode": "normal",
+        "type": "interrogative",
+        "generated": 6,
+        "accepted": 0,
+        "rejected": 6,
+        "acceptRate": 0,
+        "reasons": [
+          [
+            "review:blocker:tmp_r7_q1: indirect question clause 'when the reading room opens' is correct, but the outer frame 'Could you tell me' is an interrogative frame producing a polite request question — the embedded clause itself is declarative order (OK); however, the answer IS a direct question (interrogative sentence) used to respond to 'what did the student ask,' which is acceptable for ask-type prompts. No blocker here — re-evaluated.|tmp_r7_q4: chunk order ambiguity — 'which shelf the new arrivals are on' vs. possible reordering concern is minimal, but 'were' distractor: inserting 'were' yields 'Could you tell me which shelf the new arrivals were on?' which is a grammatically valid, natural English sentence. The distractor creates a valid alternative answer. BLOCKER: distractor could be a valid answer chunk.|tmp_r7_q8: prompt/answer mismatch — the prompt asks 'What did the museum curator SAY about the painting that was donated?' implying a report of content/opinion, but the answer 'The curator mentioned which painting had been donated by the family' does not report what was SAID about the painting; it reports which painting was identified. The answer deflects the prompt's implied content. BLOCKER: prompt/answer mismatch.|tmp_r7_q3: distractor 'were' is plausibly valid — 'how many seats were still available' is grammatically acceptable as an embedded clause in certain past-tense framings, making it a near-valid answer rather than a clean distractor|tmp_r7_q7: too many chunks (8 active) with multi-word collocations 'to know', 'the best', 'rated' creating multiple plausible partial orderings; assembly ambiguity is high|tmp_r7_q8: answer 'The curator mentioned which painting had been donated by the family' is semantically odd — 'mentioned which painting' implies selecting among multiple paintings, but the prompt says 'the painting that was donated', creating a logic mismatch that may confuse test-takers; borderline ungrammatical in context",
+            5
+          ],
+          [
+            "fatal: distractor must be a single word (TPO standard)",
+            1
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 5,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 6
+              },
+              {
+                "type": "relative",
+                "difficulty": "hard",
+                "count": 2
+              },
+              {
+                "type": "negation",
+                "difficulty": "easy",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 0,
+              "accepted": 0,
+              "rejected": 0,
+              "reasons": {}
+            }
+          },
+          {
+            "round": 6,
+            "spec": [
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 6
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "hard",
+                "count": 2
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "easy",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 0,
+              "accepted": 0,
+              "rejected": 0,
+              "reasons": {}
+            }
+          },
+          {
+            "round": 7,
+            "spec": [
+              {
+                "type": "interrogative",
+                "difficulty": "medium",
+                "count": 6
+              },
+              {
+                "type": "1st-embedded",
+                "difficulty": "hard",
+                "count": 2
+              },
+              {
+                "type": "1st-embedded",
+                "difficulty": "easy",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 6,
+              "accepted": 0,
+              "rejected": 6,
+              "reasons": {
+                "fatal: distractor must be a single word (TPO standard)": 1,
+                "review:blocker:tmp_r7_q1: indirect question clause 'when the reading room opens' is correct, but the outer frame 'Could you tell me' is an interrogative frame producing a polite request question — the embedded clause itself is declarative order (OK); however, the answer IS a direct question (interrogative sentence) used to respond to 'what did the student ask,' which is acceptable for ask-type prompts. No blocker here — re-evaluated.|tmp_r7_q4: chunk order ambiguity — 'which shelf the new arrivals are on' vs. possible reordering concern is minimal, but 'were' distractor: inserting 'were' yields 'Could you tell me which shelf the new arrivals were on?' which is a grammatically valid, natural English sentence. The distractor creates a valid alternative answer. BLOCKER: distractor could be a valid answer chunk.|tmp_r7_q8: prompt/answer mismatch — the prompt asks 'What did the museum curator SAY about the painting that was donated?' implying a report of content/opinion, but the answer 'The curator mentioned which painting had been donated by the family' does not report what was SAID about the painting; it reports which painting was identified. The answer deflects the prompt's implied content. BLOCKER: prompt/answer mismatch.|tmp_r7_q3: distractor 'were' is plausibly valid — 'how many seats were still available' is grammatically acceptable as an embedded clause in certain past-tense framings, making it a near-valid answer rather than a clean distractor|tmp_r7_q7: too many chunks (8 active) with multi-word collocations 'to know', 'the best', 'rated' creating multiple plausible partial orderings; assembly ambiguity is high|tmp_r7_q8: answer 'The curator mentioned which painting had been donated by the family' is semantically odd — 'mentioned which painting' implies selecting among multiple paintings, but the prompt says 'the painting that was donated', creating a logic mismatch that may confuse test-takers; borderline ungrammatical in context": 5
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 10
+      }
+    }
+  },
+  "events": [
+    {
+      "triggeredAt": "2026-03-12T17:40:46.249Z",
+      "round": 4,
+      "mode": "normal",
+      "type": "direct",
+      "generated": 5,
+      "accepted": 0,
+      "rejected": 5,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r4_q8: prompt/answer mismatch — the prompt asks the learner to respond as themselves ('your seat request was not processed'), but the answer speaks about the flight attendant in third person ('The flight attendant did not know why my request had been ignored'), making the answer a narrative report rather than a direct personal response to the flight attendant's question|tmp_r4_q8: Answer introduces 'the flight attendant' as subject saying they 'did not know why my request had been ignored' — but the prompt says the flight attendant is ASKING the student why the request was not processed. The student answering AS the flight attendant is incoherent; the answer contradicts the scenario, making the intended answer unrecoverable from context.|tmp_r4_q1: Multi-word chunk 'really comfortable' groups an adverb+adjective that are NOT a fixed collocation; 'really' could plausibly modify 'seating' instead, creating mild ambiguity. More critically, 'near campus' is chunked separately but the prefilled subject is 'the coffee shop', so the student must place 'near campus' before 'has' — the intended order 'near campus has' is unnatural as a standalone chunk sequence and learners may place 'near campus' after 'seating areas', producing a grammatically valid alternate: 'The coffee shop has really comfortable seating areas near campus.' This alternate is fully grammatical and semantically equivalent, constituting a clear ambiguity blocker.|tmp_r4_q6: Two verbs in chunks — 'recommended' and 'offered' — with no syntactic signal forcing their order. Learners could plausibly produce 'The hair salon offered my colleague recommended very reasonable pricing options' (ungrammatical but confusing) or, more critically, interpret the contact-clause structure incorrectly. The distractor 'offers' is NOT valid as main verb in past context, so that is safe. However, ordering of 'recommended' vs 'offered' is genuinely ambiguous without punctuation or a relative pronoun, constituting an ambiguous-order blocker.",
+          5
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 5,
+            "accepted": 0,
+            "rejected": 5,
+            "reasons": {
+              "review:blocker:tmp_r4_q8: prompt/answer mismatch — the prompt asks the learner to respond as themselves ('your seat request was not processed'), but the answer speaks about the flight attendant in third person ('The flight attendant did not know why my request had been ignored'), making the answer a narrative report rather than a direct personal response to the flight attendant's question|tmp_r4_q8: Answer introduces 'the flight attendant' as subject saying they 'did not know why my request had been ignored' — but the prompt says the flight attendant is ASKING the student why the request was not processed. The student answering AS the flight attendant is incoherent; the answer contradicts the scenario, making the intended answer unrecoverable from context.|tmp_r4_q1: Multi-word chunk 'really comfortable' groups an adverb+adjective that are NOT a fixed collocation; 'really' could plausibly modify 'seating' instead, creating mild ambiguity. More critically, 'near campus' is chunked separately but the prefilled subject is 'the coffee shop', so the student must place 'near campus' before 'has' — the intended order 'near campus has' is unnatural as a standalone chunk sequence and learners may place 'near campus' after 'seating areas', producing a grammatically valid alternate: 'The coffee shop has really comfortable seating areas near campus.' This alternate is fully grammatical and semantically equivalent, constituting a clear ambiguity blocker.|tmp_r4_q6: Two verbs in chunks — 'recommended' and 'offered' — with no syntactic signal forcing their order. Learners could plausibly produce 'The hair salon offered my colleague recommended very reasonable pricing options' (ungrammatical but confusing) or, more critically, interpret the contact-clause structure incorrectly. The distractor 'offers' is NOT valid as main verb in past context, so that is safe. However, ordering of 'recommended' vs 'offered' is genuinely ambiguous without punctuation or a relative pronoun, constituting an ambiguous-order blocker.": 5
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 7
+    },
+    {
+      "triggeredAt": "2026-03-12T17:42:12.224Z",
+      "round": 5,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 9,
+      "accepted": 0,
+      "rejected": 9,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r5_q8: prefilled 'you' at position 2 is structurally broken — the answer is 'The tool you lent me had been damaged before.' but 'the tool' is not prefilled and 'you' is given mid-sentence at index 2; learner cannot reconstruct sentence start without knowing 'the tool' is first, making order ambiguous and assembly logic contradictory.|tmp_r5_q8: distractor 'lend' (base form) is implausible enough to be non-functional as a real test of knowledge — but more critically, the contact clause structure 'the tool you lent me' requires learner to place 'you' correctly inside a relative clause with no subject prefill, creating genuine ambiguity about whether sentence starts with 'the tool' or 'you'.|tmp_r5_q2: chunking 'where / to / pick / up / the tickets' splits a natural phrasal verb collocation 'pick up' into separate single-word chunks, and also separates 'to pick up' into three pieces ('to', 'pick', 'up'), creating an unnaturally high number of adjacent positional choices that significantly increases solve difficulty beyond TPO norms and risks multiple plausible orderings for 'to / pick / up'.",
+          7
+        ],
+        [
+          "review:blocker:tmp_r4_q8: prompt/answer mismatch — the prompt asks the learner to respond as themselves ('your seat request was not processed'), but the answer speaks about the flight attendant in third person ('The flight attendant did not know why my request had been ignored'), making the answer a narrative report rather than a direct personal response to the flight attendant's question|tmp_r4_q8: Answer introduces 'the flight attendant' as subject saying they 'did not know why my request had been ignored' — but the prompt says the flight attendant is ASKING the student why the request was not processed. The student answering AS the flight attendant is incoherent; the answer contradicts the scenario, making the intended answer unrecoverable from context.|tmp_r4_q1: Multi-word chunk 'really comfortable' groups an adverb+adjective that are NOT a fixed collocation; 'really' could plausibly modify 'seating' instead, creating mild ambiguity. More critically, 'near campus' is chunked separately but the prefilled subject is 'the coffee shop', so the student must place 'near campus' before 'has' — the intended order 'near campus has' is unnatural as a standalone chunk sequence and learners may place 'near campus' after 'seating areas', producing a grammatically valid alternate: 'The coffee shop has really comfortable seating areas near campus.' This alternate is fully grammatical and semantically equivalent, constituting a clear ambiguity blocker.|tmp_r4_q6: Two verbs in chunks — 'recommended' and 'offered' — with no syntactic signal forcing their order. Learners could plausibly produce 'The hair salon offered my colleague recommended very reasonable pricing options' (ungrammatical but confusing) or, more critically, interpret the contact-clause structure incorrectly. The distractor 'offers' is NOT valid as main verb in past context, so that is safe. However, ordering of 'recommended' vs 'offered' is genuinely ambiguous without punctuation or a relative pronoun, constituting an ambiguous-order blocker.",
+          2
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r4_q8: prompt/answer mismatch — the prompt asks the learner to respond as themselves ('your seat request was not processed'), but the answer speaks about the flight attendant in third person ('The flight attendant did not know why my request had been ignored'), making the answer a narrative report rather than a direct personal response to the flight attendant's question|tmp_r4_q8: Answer introduces 'the flight attendant' as subject saying they 'did not know why my request had been ignored' — but the prompt says the flight attendant is ASKING the student why the request was not processed. The student answering AS the flight attendant is incoherent; the answer contradicts the scenario, making the intended answer unrecoverable from context.|tmp_r4_q1: Multi-word chunk 'really comfortable' groups an adverb+adjective that are NOT a fixed collocation; 'really' could plausibly modify 'seating' instead, creating mild ambiguity. More critically, 'near campus' is chunked separately but the prefilled subject is 'the coffee shop', so the student must place 'near campus' before 'has' — the intended order 'near campus has' is unnatural as a standalone chunk sequence and learners may place 'near campus' after 'seating areas', producing a grammatically valid alternate: 'The coffee shop has really comfortable seating areas near campus.' This alternate is fully grammatical and semantically equivalent, constituting a clear ambiguity blocker.|tmp_r4_q6: Two verbs in chunks — 'recommended' and 'offered' — with no syntactic signal forcing their order. Learners could plausibly produce 'The hair salon offered my colleague recommended very reasonable pricing options' (ungrammatical but confusing) or, more critically, interpret the contact-clause structure incorrectly. The distractor 'offers' is NOT valid as main verb in past context, so that is safe. However, ordering of 'recommended' vs 'offered' is genuinely ambiguous without punctuation or a relative pronoun, constituting an ambiguous-order blocker.": 2
+            }
+          }
+        },
+        {
+          "round": 5,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 6
+            },
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 7,
+            "accepted": 0,
+            "rejected": 7,
+            "reasons": {
+              "review:blocker:tmp_r5_q8: prefilled 'you' at position 2 is structurally broken — the answer is 'The tool you lent me had been damaged before.' but 'the tool' is not prefilled and 'you' is given mid-sentence at index 2; learner cannot reconstruct sentence start without knowing 'the tool' is first, making order ambiguous and assembly logic contradictory.|tmp_r5_q8: distractor 'lend' (base form) is implausible enough to be non-functional as a real test of knowledge — but more critically, the contact clause structure 'the tool you lent me' requires learner to place 'you' correctly inside a relative clause with no subject prefill, creating genuine ambiguity about whether sentence starts with 'the tool' or 'you'.|tmp_r5_q2: chunking 'where / to / pick / up / the tickets' splits a natural phrasal verb collocation 'pick up' into separate single-word chunks, and also separates 'to pick up' into three pieces ('to', 'pick', 'up'), creating an unnaturally high number of adjacent positional choices that significantly increases solve difficulty beyond TPO norms and risks multiple plausible orderings for 'to / pick / up'.": 7
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 8
+    },
+    {
+      "triggeredAt": "2026-03-12T17:42:12.224Z",
+      "round": 5,
+      "mode": "normal",
+      "type": "relative",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r4_q8: prompt/answer mismatch — the prompt asks the learner to respond as themselves ('your seat request was not processed'), but the answer speaks about the flight attendant in third person ('The flight attendant did not know why my request had been ignored'), making the answer a narrative report rather than a direct personal response to the flight attendant's question|tmp_r4_q8: Answer introduces 'the flight attendant' as subject saying they 'did not know why my request had been ignored' — but the prompt says the flight attendant is ASKING the student why the request was not processed. The student answering AS the flight attendant is incoherent; the answer contradicts the scenario, making the intended answer unrecoverable from context.|tmp_r4_q1: Multi-word chunk 'really comfortable' groups an adverb+adjective that are NOT a fixed collocation; 'really' could plausibly modify 'seating' instead, creating mild ambiguity. More critically, 'near campus' is chunked separately but the prefilled subject is 'the coffee shop', so the student must place 'near campus' before 'has' — the intended order 'near campus has' is unnatural as a standalone chunk sequence and learners may place 'near campus' after 'seating areas', producing a grammatically valid alternate: 'The coffee shop has really comfortable seating areas near campus.' This alternate is fully grammatical and semantically equivalent, constituting a clear ambiguity blocker.|tmp_r4_q6: Two verbs in chunks — 'recommended' and 'offered' — with no syntactic signal forcing their order. Learners could plausibly produce 'The hair salon offered my colleague recommended very reasonable pricing options' (ungrammatical but confusing) or, more critically, interpret the contact-clause structure incorrectly. The distractor 'offers' is NOT valid as main verb in past context, so that is safe. However, ordering of 'recommended' vs 'offered' is genuinely ambiguous without punctuation or a relative pronoun, constituting an ambiguous-order blocker.",
+          2
+        ],
+        [
+          "fatal: chunks[4]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "review:blocker:tmp_r5_q8: prefilled 'you' at position 2 is structurally broken — the answer is 'The tool you lent me had been damaged before.' but 'the tool' is not prefilled and 'you' is given mid-sentence at index 2; learner cannot reconstruct sentence start without knowing 'the tool' is first, making order ambiguous and assembly logic contradictory.|tmp_r5_q8: distractor 'lend' (base form) is implausible enough to be non-functional as a real test of knowledge — but more critically, the contact clause structure 'the tool you lent me' requires learner to place 'you' correctly inside a relative clause with no subject prefill, creating genuine ambiguity about whether sentence starts with 'the tool' or 'you'.|tmp_r5_q2: chunking 'where / to / pick / up / the tickets' splits a natural phrasal verb collocation 'pick up' into separate single-word chunks, and also separates 'to pick up' into three pieces ('to', 'pick', 'up'), creating an unnaturally high number of adjacent positional choices that significantly increases solve difficulty beyond TPO norms and risks multiple plausible orderings for 'to / pick / up'.",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r4_q8: prompt/answer mismatch — the prompt asks the learner to respond as themselves ('your seat request was not processed'), but the answer speaks about the flight attendant in third person ('The flight attendant did not know why my request had been ignored'), making the answer a narrative report rather than a direct personal response to the flight attendant's question|tmp_r4_q8: Answer introduces 'the flight attendant' as subject saying they 'did not know why my request had been ignored' — but the prompt says the flight attendant is ASKING the student why the request was not processed. The student answering AS the flight attendant is incoherent; the answer contradicts the scenario, making the intended answer unrecoverable from context.|tmp_r4_q1: Multi-word chunk 'really comfortable' groups an adverb+adjective that are NOT a fixed collocation; 'really' could plausibly modify 'seating' instead, creating mild ambiguity. More critically, 'near campus' is chunked separately but the prefilled subject is 'the coffee shop', so the student must place 'near campus' before 'has' — the intended order 'near campus has' is unnatural as a standalone chunk sequence and learners may place 'near campus' after 'seating areas', producing a grammatically valid alternate: 'The coffee shop has really comfortable seating areas near campus.' This alternate is fully grammatical and semantically equivalent, constituting a clear ambiguity blocker.|tmp_r4_q6: Two verbs in chunks — 'recommended' and 'offered' — with no syntactic signal forcing their order. Learners could plausibly produce 'The hair salon offered my colleague recommended very reasonable pricing options' (ungrammatical but confusing) or, more critically, interpret the contact-clause structure incorrectly. The distractor 'offers' is NOT valid as main verb in past context, so that is safe. However, ordering of 'recommended' vs 'offered' is genuinely ambiguous without punctuation or a relative pronoun, constituting an ambiguous-order blocker.": 2
+            }
+          }
+        },
+        {
+          "round": 5,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 6
+            },
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "fatal: chunks[4]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "review:blocker:tmp_r5_q8: prefilled 'you' at position 2 is structurally broken — the answer is 'The tool you lent me had been damaged before.' but 'the tool' is not prefilled and 'you' is given mid-sentence at index 2; learner cannot reconstruct sentence start without knowing 'the tool' is first, making order ambiguous and assembly logic contradictory.|tmp_r5_q8: distractor 'lend' (base form) is implausible enough to be non-functional as a real test of knowledge — but more critically, the contact clause structure 'the tool you lent me' requires learner to place 'you' correctly inside a relative clause with no subject prefill, creating genuine ambiguity about whether sentence starts with 'the tool' or 'you'.|tmp_r5_q2: chunking 'where / to / pick / up / the tickets' splits a natural phrasal verb collocation 'pick up' into separate single-word chunks, and also separates 'to pick up' into three pieces ('to', 'pick', 'up'), creating an unnaturally high number of adjacent positional choices that significantly increases solve difficulty beyond TPO norms and risks multiple plausible orderings for 'to / pick / up'.": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 8
+    },
+    {
+      "triggeredAt": "2026-03-12T17:43:49.780Z",
+      "round": 6,
+      "mode": "normal",
+      "type": "3rd-reporting",
+      "generated": 8,
+      "accepted": 0,
+      "rejected": 8,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r6_q6: The answer sentence 'The project supervisor was curious why the budget report was incomplete.' is grammatically incorrect. The adjective 'curious' requires the preposition 'about' before an embedded clause in standard English ('curious about why...'), or alternatively 'curious as to why...'. The bare 'curious why' construction is non-standard and fails a grammar check for a TPO-level item.|tmp_r6_q4: distractor 'extend' is plausibly valid — 'could extend' is grammatically acceptable as an alternative to 'could be extended', creating ambiguity in chunk selection|tmp_r6_q8: splitting 'renovation contract' into three separate chunks ('the', 'renovation', 'contract') creates multiple valid orderings and raises cognitive load beyond TPO norms; also 'whom' vs 'who' distractor pair tests formal register knowledge, not the core indirect-question word-order principle",
+          7
+        ],
+        [
+          "fatal: distractor must be a single word (TPO standard)",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 5,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 6
+            },
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 6,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 6
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 8,
+            "accepted": 0,
+            "rejected": 8,
+            "reasons": {
+              "fatal: distractor must be a single word (TPO standard)": 1,
+              "review:blocker:tmp_r6_q6: The answer sentence 'The project supervisor was curious why the budget report was incomplete.' is grammatically incorrect. The adjective 'curious' requires the preposition 'about' before an embedded clause in standard English ('curious about why...'), or alternatively 'curious as to why...'. The bare 'curious why' construction is non-standard and fails a grammar check for a TPO-level item.|tmp_r6_q4: distractor 'extend' is plausibly valid — 'could extend' is grammatically acceptable as an alternative to 'could be extended', creating ambiguity in chunk selection|tmp_r6_q8: splitting 'renovation contract' into three separate chunks ('the', 'renovation', 'contract') creates multiple valid orderings and raises cognitive load beyond TPO norms; also 'whom' vs 'who' distractor pair tests formal register knowledge, not the core indirect-question word-order principle": 7
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 9
+    },
+    {
+      "triggeredAt": "2026-03-12T17:46:40.863Z",
+      "round": 7,
+      "mode": "normal",
+      "type": "1st-embedded",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r7_q1: indirect question clause 'when the reading room opens' is correct, but the outer frame 'Could you tell me' is an interrogative frame producing a polite request question — the embedded clause itself is declarative order (OK); however, the answer IS a direct question (interrogative sentence) used to respond to 'what did the student ask,' which is acceptable for ask-type prompts. No blocker here — re-evaluated.|tmp_r7_q4: chunk order ambiguity — 'which shelf the new arrivals are on' vs. possible reordering concern is minimal, but 'were' distractor: inserting 'were' yields 'Could you tell me which shelf the new arrivals were on?' which is a grammatically valid, natural English sentence. The distractor creates a valid alternative answer. BLOCKER: distractor could be a valid answer chunk.|tmp_r7_q8: prompt/answer mismatch — the prompt asks 'What did the museum curator SAY about the painting that was donated?' implying a report of content/opinion, but the answer 'The curator mentioned which painting had been donated by the family' does not report what was SAID about the painting; it reports which painting was identified. The answer deflects the prompt's implied content. BLOCKER: prompt/answer mismatch.|tmp_r7_q3: distractor 'were' is plausibly valid — 'how many seats were still available' is grammatically acceptable as an embedded clause in certain past-tense framings, making it a near-valid answer rather than a clean distractor|tmp_r7_q7: too many chunks (8 active) with multi-word collocations 'to know', 'the best', 'rated' creating multiple plausible partial orderings; assembly ambiguity is high|tmp_r7_q8: answer 'The curator mentioned which painting had been donated by the family' is semantically odd — 'mentioned which painting' implies selecting among multiple paintings, but the prompt says 'the painting that was donated', creating a logic mismatch that may confuse test-takers; borderline ungrammatical in context",
+          3
+        ],
+        [
+          "review:blocker:tmp_r5_q8: prefilled 'you' at position 2 is structurally broken — the answer is 'The tool you lent me had been damaged before.' but 'the tool' is not prefilled and 'you' is given mid-sentence at index 2; learner cannot reconstruct sentence start without knowing 'the tool' is first, making order ambiguous and assembly logic contradictory.|tmp_r5_q8: distractor 'lend' (base form) is implausible enough to be non-functional as a real test of knowledge — but more critically, the contact clause structure 'the tool you lent me' requires learner to place 'you' correctly inside a relative clause with no subject prefill, creating genuine ambiguity about whether sentence starts with 'the tool' or 'you'.|tmp_r5_q2: chunking 'where / to / pick / up / the tickets' splits a natural phrasal verb collocation 'pick up' into separate single-word chunks, and also separates 'to pick up' into three pieces ('to', 'pick', 'up'), creating an unnaturally high number of adjacent positional choices that significantly increases solve difficulty beyond TPO norms and risks multiple plausible orderings for 'to / pick / up'.",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 5,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 6
+            },
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r5_q8: prefilled 'you' at position 2 is structurally broken — the answer is 'The tool you lent me had been damaged before.' but 'the tool' is not prefilled and 'you' is given mid-sentence at index 2; learner cannot reconstruct sentence start without knowing 'the tool' is first, making order ambiguous and assembly logic contradictory.|tmp_r5_q8: distractor 'lend' (base form) is implausible enough to be non-functional as a real test of knowledge — but more critically, the contact clause structure 'the tool you lent me' requires learner to place 'you' correctly inside a relative clause with no subject prefill, creating genuine ambiguity about whether sentence starts with 'the tool' or 'you'.|tmp_r5_q2: chunking 'where / to / pick / up / the tickets' splits a natural phrasal verb collocation 'pick up' into separate single-word chunks, and also separates 'to pick up' into three pieces ('to', 'pick', 'up'), creating an unnaturally high number of adjacent positional choices that significantly increases solve difficulty beyond TPO norms and risks multiple plausible orderings for 'to / pick / up'.": 1
+            }
+          }
+        },
+        {
+          "round": 6,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 6
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 7,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 6
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "review:blocker:tmp_r7_q1: indirect question clause 'when the reading room opens' is correct, but the outer frame 'Could you tell me' is an interrogative frame producing a polite request question — the embedded clause itself is declarative order (OK); however, the answer IS a direct question (interrogative sentence) used to respond to 'what did the student ask,' which is acceptable for ask-type prompts. No blocker here — re-evaluated.|tmp_r7_q4: chunk order ambiguity — 'which shelf the new arrivals are on' vs. possible reordering concern is minimal, but 'were' distractor: inserting 'were' yields 'Could you tell me which shelf the new arrivals were on?' which is a grammatically valid, natural English sentence. The distractor creates a valid alternative answer. BLOCKER: distractor could be a valid answer chunk.|tmp_r7_q8: prompt/answer mismatch — the prompt asks 'What did the museum curator SAY about the painting that was donated?' implying a report of content/opinion, but the answer 'The curator mentioned which painting had been donated by the family' does not report what was SAID about the painting; it reports which painting was identified. The answer deflects the prompt's implied content. BLOCKER: prompt/answer mismatch.|tmp_r7_q3: distractor 'were' is plausibly valid — 'how many seats were still available' is grammatically acceptable as an embedded clause in certain past-tense framings, making it a near-valid answer rather than a clean distractor|tmp_r7_q7: too many chunks (8 active) with multi-word collocations 'to know', 'the best', 'rated' creating multiple plausible partial orderings; assembly ambiguity is high|tmp_r7_q8: answer 'The curator mentioned which painting had been donated by the family' is semantically odd — 'mentioned which painting' implies selecting among multiple paintings, but the prompt says 'the painting that was donated', creating a logic mismatch that may confuse test-takers; borderline ungrammatical in context": 3
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 10
+    },
+    {
+      "triggeredAt": "2026-03-12T17:46:40.863Z",
+      "round": 7,
+      "mode": "normal",
+      "type": "interrogative",
+      "generated": 6,
+      "accepted": 0,
+      "rejected": 6,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r7_q1: indirect question clause 'when the reading room opens' is correct, but the outer frame 'Could you tell me' is an interrogative frame producing a polite request question — the embedded clause itself is declarative order (OK); however, the answer IS a direct question (interrogative sentence) used to respond to 'what did the student ask,' which is acceptable for ask-type prompts. No blocker here — re-evaluated.|tmp_r7_q4: chunk order ambiguity — 'which shelf the new arrivals are on' vs. possible reordering concern is minimal, but 'were' distractor: inserting 'were' yields 'Could you tell me which shelf the new arrivals were on?' which is a grammatically valid, natural English sentence. The distractor creates a valid alternative answer. BLOCKER: distractor could be a valid answer chunk.|tmp_r7_q8: prompt/answer mismatch — the prompt asks 'What did the museum curator SAY about the painting that was donated?' implying a report of content/opinion, but the answer 'The curator mentioned which painting had been donated by the family' does not report what was SAID about the painting; it reports which painting was identified. The answer deflects the prompt's implied content. BLOCKER: prompt/answer mismatch.|tmp_r7_q3: distractor 'were' is plausibly valid — 'how many seats were still available' is grammatically acceptable as an embedded clause in certain past-tense framings, making it a near-valid answer rather than a clean distractor|tmp_r7_q7: too many chunks (8 active) with multi-word collocations 'to know', 'the best', 'rated' creating multiple plausible partial orderings; assembly ambiguity is high|tmp_r7_q8: answer 'The curator mentioned which painting had been donated by the family' is semantically odd — 'mentioned which painting' implies selecting among multiple paintings, but the prompt says 'the painting that was donated', creating a logic mismatch that may confuse test-takers; borderline ungrammatical in context",
+          5
+        ],
+        [
+          "fatal: distractor must be a single word (TPO standard)",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 5,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 6
+            },
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 6,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 6
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 7,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 6
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 6,
+            "accepted": 0,
+            "rejected": 6,
+            "reasons": {
+              "fatal: distractor must be a single word (TPO standard)": 1,
+              "review:blocker:tmp_r7_q1: indirect question clause 'when the reading room opens' is correct, but the outer frame 'Could you tell me' is an interrogative frame producing a polite request question — the embedded clause itself is declarative order (OK); however, the answer IS a direct question (interrogative sentence) used to respond to 'what did the student ask,' which is acceptable for ask-type prompts. No blocker here — re-evaluated.|tmp_r7_q4: chunk order ambiguity — 'which shelf the new arrivals are on' vs. possible reordering concern is minimal, but 'were' distractor: inserting 'were' yields 'Could you tell me which shelf the new arrivals were on?' which is a grammatically valid, natural English sentence. The distractor creates a valid alternative answer. BLOCKER: distractor could be a valid answer chunk.|tmp_r7_q8: prompt/answer mismatch — the prompt asks 'What did the museum curator SAY about the painting that was donated?' implying a report of content/opinion, but the answer 'The curator mentioned which painting had been donated by the family' does not report what was SAID about the painting; it reports which painting was identified. The answer deflects the prompt's implied content. BLOCKER: prompt/answer mismatch.|tmp_r7_q3: distractor 'were' is plausibly valid — 'how many seats were still available' is grammatically acceptable as an embedded clause in certain past-tense framings, making it a near-valid answer rather than a clean distractor|tmp_r7_q7: too many chunks (8 active) with multi-word collocations 'to know', 'the best', 'rated' creating multiple plausible partial orderings; assembly ambiguity is high|tmp_r7_q8: answer 'The curator mentioned which painting had been donated by the family' is semantically odd — 'mentioned which painting' implies selecting among multiple paintings, but the prompt says 'the painting that was donated', creating a logic mismatch that may confuse test-takers; borderline ungrammatical in context": 5
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 10
+    },
+    {
+      "triggeredAt": "2026-03-12T17:48:44.264Z",
+      "round": 8,
+      "mode": "normal",
+      "type": "direct",
+      "generated": 10,
+      "accepted": 0,
+      "rejected": 10,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r8_q2: chunk ambiguity — 'on saturday' and 'morning' are separate chunks but must be adjacent to form 'on Saturday morning'; a test-taker could plausibly place 'morning' before 'on saturday' yielding 'The yoga class morning on Saturday starts at eight o'clock', which is ungrammatical but the split itself invites mis-ordering; more critically, 'on saturday' + 'morning' can also be read as two discrete adjuncts, creating ambiguous ordering relative to 'starts' (e.g., 'The yoga class starts on Saturday morning at eight o'clock' is equally valid), giving multiple valid chunk orders.|tmp_r8_q4: distractor validity — 'reschedule' can be inserted in place of 'rescheduled' only with tense mismatch, but more critically the chunks 'for next' and 'thursday afternoon' are split across two separate chunks requiring obligatory adjacency with no signal to the test-taker; the phrase 'for next thursday afternoon' cannot be assembled correctly if a student places 'thursday afternoon' before 'for next', and no chunk boundary prevents this — multiple surface orderings are plausible, constituting ambiguous arrangement.|tmp_r8_q7: distractor could be a valid answer chunk — 'best' can replace 'better' to yield 'The salon I visited last month was far best than expected', which is ungrammatical, so this is NOT a blocker on that ground; however 'last' and 'month' are split into two separate chunks that must be adjacent, and 'visited last month' vs. 'last month visited' both parse as conceivable orderings within the contact clause, creating multiple valid chunk orders.|tmp_r8_q4: chunk 'for next' is an incomplete/unnatural fragment — 'for next Thursday afternoon' should be a single chunk or split as 'for' + 'next Thursday afternoon'; 'for next' alone is not a natural collocation and creates ambiguity in placement|tmp_r8_q7: distractor 'best' is plausible as a substitution for 'better' in casual usage and could tempt valid re-assembly; more critically, 'was far' as a single chunk is unnatural — 'far' modifies 'better' not 'was', so chunking forces an unnatural parse that may confuse solvers",
+          7
+        ],
+        [
+          "fatal: distractor must be a single word (TPO standard)",
+          2
+        ],
+        [
+          "review:blocker:tmp_r7_q1: indirect question clause 'when the reading room opens' is correct, but the outer frame 'Could you tell me' is an interrogative frame producing a polite request question — the embedded clause itself is declarative order (OK); however, the answer IS a direct question (interrogative sentence) used to respond to 'what did the student ask,' which is acceptable for ask-type prompts. No blocker here — re-evaluated.|tmp_r7_q4: chunk order ambiguity — 'which shelf the new arrivals are on' vs. possible reordering concern is minimal, but 'were' distractor: inserting 'were' yields 'Could you tell me which shelf the new arrivals were on?' which is a grammatically valid, natural English sentence. The distractor creates a valid alternative answer. BLOCKER: distractor could be a valid answer chunk.|tmp_r7_q8: prompt/answer mismatch — the prompt asks 'What did the museum curator SAY about the painting that was donated?' implying a report of content/opinion, but the answer 'The curator mentioned which painting had been donated by the family' does not report what was SAID about the painting; it reports which painting was identified. The answer deflects the prompt's implied content. BLOCKER: prompt/answer mismatch.|tmp_r7_q3: distractor 'were' is plausibly valid — 'how many seats were still available' is grammatically acceptable as an embedded clause in certain past-tense framings, making it a near-valid answer rather than a clean distractor|tmp_r7_q7: too many chunks (8 active) with multi-word collocations 'to know', 'the best', 'rated' creating multiple plausible partial orderings; assembly ambiguity is high|tmp_r7_q8: answer 'The curator mentioned which painting had been donated by the family' is semantically odd — 'mentioned which painting' implies selecting among multiple paintings, but the prompt says 'the painting that was donated', creating a logic mismatch that may confuse test-takers; borderline ungrammatical in context",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 6,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 6
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "fatal: distractor must be a single word (TPO standard)": 2
+            }
+          }
+        },
+        {
+          "round": 7,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 6
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r7_q1: indirect question clause 'when the reading room opens' is correct, but the outer frame 'Could you tell me' is an interrogative frame producing a polite request question — the embedded clause itself is declarative order (OK); however, the answer IS a direct question (interrogative sentence) used to respond to 'what did the student ask,' which is acceptable for ask-type prompts. No blocker here — re-evaluated.|tmp_r7_q4: chunk order ambiguity — 'which shelf the new arrivals are on' vs. possible reordering concern is minimal, but 'were' distractor: inserting 'were' yields 'Could you tell me which shelf the new arrivals were on?' which is a grammatically valid, natural English sentence. The distractor creates a valid alternative answer. BLOCKER: distractor could be a valid answer chunk.|tmp_r7_q8: prompt/answer mismatch — the prompt asks 'What did the museum curator SAY about the painting that was donated?' implying a report of content/opinion, but the answer 'The curator mentioned which painting had been donated by the family' does not report what was SAID about the painting; it reports which painting was identified. The answer deflects the prompt's implied content. BLOCKER: prompt/answer mismatch.|tmp_r7_q3: distractor 'were' is plausibly valid — 'how many seats were still available' is grammatically acceptable as an embedded clause in certain past-tense framings, making it a near-valid answer rather than a clean distractor|tmp_r7_q7: too many chunks (8 active) with multi-word collocations 'to know', 'the best', 'rated' creating multiple plausible partial orderings; assembly ambiguity is high|tmp_r7_q8: answer 'The curator mentioned which painting had been donated by the family' is semantically odd — 'mentioned which painting' implies selecting among multiple paintings, but the prompt says 'the painting that was donated', creating a logic mismatch that may confuse test-takers; borderline ungrammatical in context": 1
+            }
+          }
+        },
+        {
+          "round": 8,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 6
+            },
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 7,
+            "accepted": 0,
+            "rejected": 7,
+            "reasons": {
+              "review:blocker:tmp_r8_q2: chunk ambiguity — 'on saturday' and 'morning' are separate chunks but must be adjacent to form 'on Saturday morning'; a test-taker could plausibly place 'morning' before 'on saturday' yielding 'The yoga class morning on Saturday starts at eight o'clock', which is ungrammatical but the split itself invites mis-ordering; more critically, 'on saturday' + 'morning' can also be read as two discrete adjuncts, creating ambiguous ordering relative to 'starts' (e.g., 'The yoga class starts on Saturday morning at eight o'clock' is equally valid), giving multiple valid chunk orders.|tmp_r8_q4: distractor validity — 'reschedule' can be inserted in place of 'rescheduled' only with tense mismatch, but more critically the chunks 'for next' and 'thursday afternoon' are split across two separate chunks requiring obligatory adjacency with no signal to the test-taker; the phrase 'for next thursday afternoon' cannot be assembled correctly if a student places 'thursday afternoon' before 'for next', and no chunk boundary prevents this — multiple surface orderings are plausible, constituting ambiguous arrangement.|tmp_r8_q7: distractor could be a valid answer chunk — 'best' can replace 'better' to yield 'The salon I visited last month was far best than expected', which is ungrammatical, so this is NOT a blocker on that ground; however 'last' and 'month' are split into two separate chunks that must be adjacent, and 'visited last month' vs. 'last month visited' both parse as conceivable orderings within the contact clause, creating multiple valid chunk orders.|tmp_r8_q4: chunk 'for next' is an incomplete/unnatural fragment — 'for next Thursday afternoon' should be a single chunk or split as 'for' + 'next Thursday afternoon'; 'for next' alone is not a natural collocation and creates ambiguity in placement|tmp_r8_q7: distractor 'best' is plausible as a substitution for 'better' in casual usage and could tempt valid re-assembly; more critically, 'was far' as a single chunk is unnatural — 'far' modifies 'better' not 'was', so chunking forces an unnatural parse that may confuse solvers": 7
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 11
+    }
+  ],
+  "history": [
+    {
+      "round": 4,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "direct",
+          "difficulty": "easy",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "review:blocker:tmp_r4_q8: prompt/answer mismatch — the prompt asks the learner to respond as themselves ('your seat request was not processed'), but the answer speaks about the flight attendant in third person ('The flight attendant did not know why my request had been ignored'), making the answer a narrative report rather than a direct personal response to the flight attendant's question|tmp_r4_q8: Answer introduces 'the flight attendant' as subject saying they 'did not know why my request had been ignored' — but the prompt says the flight attendant is ASKING the student why the request was not processed. The student answering AS the flight attendant is incoherent; the answer contradicts the scenario, making the intended answer unrecoverable from context.|tmp_r4_q1: Multi-word chunk 'really comfortable' groups an adverb+adjective that are NOT a fixed collocation; 'really' could plausibly modify 'seating' instead, creating mild ambiguity. More critically, 'near campus' is chunked separately but the prefilled subject is 'the coffee shop', so the student must place 'near campus' before 'has' — the intended order 'near campus has' is unnatural as a standalone chunk sequence and learners may place 'near campus' after 'seating areas', producing a grammatically valid alternate: 'The coffee shop has really comfortable seating areas near campus.' This alternate is fully grammatical and semantically equivalent, constituting a clear ambiguity blocker.|tmp_r4_q6: Two verbs in chunks — 'recommended' and 'offered' — with no syntactic signal forcing their order. Learners could plausibly produce 'The hair salon offered my colleague recommended very reasonable pricing options' (ungrammatical but confusing) or, more critically, interpret the contact-clause structure incorrectly. The distractor 'offers' is NOT valid as main verb in past context, so that is safe. However, ordering of 'recommended' vs 'offered' is genuinely ambiguous without punctuation or a relative pronoun, constituting an ambiguous-order blocker.": 2
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r4_q8: prompt/answer mismatch — the prompt asks the learner to respond as themselves ('your seat request was not processed'), but the answer speaks about the flight attendant in third person ('The flight attendant did not know why my request had been ignored'), making the answer a narrative report rather than a direct personal response to the flight attendant's question|tmp_r4_q8: Answer introduces 'the flight attendant' as subject saying they 'did not know why my request had been ignored' — but the prompt says the flight attendant is ASKING the student why the request was not processed. The student answering AS the flight attendant is incoherent; the answer contradicts the scenario, making the intended answer unrecoverable from context.|tmp_r4_q1: Multi-word chunk 'really comfortable' groups an adverb+adjective that are NOT a fixed collocation; 'really' could plausibly modify 'seating' instead, creating mild ambiguity. More critically, 'near campus' is chunked separately but the prefilled subject is 'the coffee shop', so the student must place 'near campus' before 'has' — the intended order 'near campus has' is unnatural as a standalone chunk sequence and learners may place 'near campus' after 'seating areas', producing a grammatically valid alternate: 'The coffee shop has really comfortable seating areas near campus.' This alternate is fully grammatical and semantically equivalent, constituting a clear ambiguity blocker.|tmp_r4_q6: Two verbs in chunks — 'recommended' and 'offered' — with no syntactic signal forcing their order. Learners could plausibly produce 'The hair salon offered my colleague recommended very reasonable pricing options' (ungrammatical but confusing) or, more critically, interpret the contact-clause structure incorrectly. The distractor 'offers' is NOT valid as main verb in past context, so that is safe. However, ordering of 'recommended' vs 'offered' is genuinely ambiguous without punctuation or a relative pronoun, constituting an ambiguous-order blocker.": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 5,
+          "accepted": 0,
+          "rejected": 5,
+          "reasons": {
+            "review:blocker:tmp_r4_q8: prompt/answer mismatch — the prompt asks the learner to respond as themselves ('your seat request was not processed'), but the answer speaks about the flight attendant in third person ('The flight attendant did not know why my request had been ignored'), making the answer a narrative report rather than a direct personal response to the flight attendant's question|tmp_r4_q8: Answer introduces 'the flight attendant' as subject saying they 'did not know why my request had been ignored' — but the prompt says the flight attendant is ASKING the student why the request was not processed. The student answering AS the flight attendant is incoherent; the answer contradicts the scenario, making the intended answer unrecoverable from context.|tmp_r4_q1: Multi-word chunk 'really comfortable' groups an adverb+adjective that are NOT a fixed collocation; 'really' could plausibly modify 'seating' instead, creating mild ambiguity. More critically, 'near campus' is chunked separately but the prefilled subject is 'the coffee shop', so the student must place 'near campus' before 'has' — the intended order 'near campus has' is unnatural as a standalone chunk sequence and learners may place 'near campus' after 'seating areas', producing a grammatically valid alternate: 'The coffee shop has really comfortable seating areas near campus.' This alternate is fully grammatical and semantically equivalent, constituting a clear ambiguity blocker.|tmp_r4_q6: Two verbs in chunks — 'recommended' and 'offered' — with no syntactic signal forcing their order. Learners could plausibly produce 'The hair salon offered my colleague recommended very reasonable pricing options' (ungrammatical but confusing) or, more critically, interpret the contact-clause structure incorrectly. The distractor 'offers' is NOT valid as main verb in past context, so that is safe. However, ordering of 'recommended' vs 'offered' is genuinely ambiguous without punctuation or a relative pronoun, constituting an ambiguous-order blocker.": 5
+          }
+        },
+        "relative": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "review:blocker:tmp_r4_q8: prompt/answer mismatch — the prompt asks the learner to respond as themselves ('your seat request was not processed'), but the answer speaks about the flight attendant in third person ('The flight attendant did not know why my request had been ignored'), making the answer a narrative report rather than a direct personal response to the flight attendant's question|tmp_r4_q8: Answer introduces 'the flight attendant' as subject saying they 'did not know why my request had been ignored' — but the prompt says the flight attendant is ASKING the student why the request was not processed. The student answering AS the flight attendant is incoherent; the answer contradicts the scenario, making the intended answer unrecoverable from context.|tmp_r4_q1: Multi-word chunk 'really comfortable' groups an adverb+adjective that are NOT a fixed collocation; 'really' could plausibly modify 'seating' instead, creating mild ambiguity. More critically, 'near campus' is chunked separately but the prefilled subject is 'the coffee shop', so the student must place 'near campus' before 'has' — the intended order 'near campus has' is unnatural as a standalone chunk sequence and learners may place 'near campus' after 'seating areas', producing a grammatically valid alternate: 'The coffee shop has really comfortable seating areas near campus.' This alternate is fully grammatical and semantically equivalent, constituting a clear ambiguity blocker.|tmp_r4_q6: Two verbs in chunks — 'recommended' and 'offered' — with no syntactic signal forcing their order. Learners could plausibly produce 'The hair salon offered my colleague recommended very reasonable pricing options' (ungrammatical but confusing) or, more critically, interpret the contact-clause structure incorrectly. The distractor 'offers' is NOT valid as main verb in past context, so that is safe. However, ordering of 'recommended' vs 'offered' is genuinely ambiguous without punctuation or a relative pronoun, constituting an ambiguous-order blocker.": 2
+          }
+        }
+      }
+    },
+    {
+      "round": 5,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 6
+        },
+        {
+          "type": "relative",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "easy",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 7,
+          "accepted": 0,
+          "rejected": 7,
+          "reasons": {
+            "review:blocker:tmp_r5_q8: prefilled 'you' at position 2 is structurally broken — the answer is 'The tool you lent me had been damaged before.' but 'the tool' is not prefilled and 'you' is given mid-sentence at index 2; learner cannot reconstruct sentence start without knowing 'the tool' is first, making order ambiguous and assembly logic contradictory.|tmp_r5_q8: distractor 'lend' (base form) is implausible enough to be non-functional as a real test of knowledge — but more critically, the contact clause structure 'the tool you lent me' requires learner to place 'you' correctly inside a relative clause with no subject prefill, creating genuine ambiguity about whether sentence starts with 'the tool' or 'you'.|tmp_r5_q2: chunking 'where / to / pick / up / the tickets' splits a natural phrasal verb collocation 'pick up' into separate single-word chunks, and also separates 'to pick up' into three pieces ('to', 'pick', 'up'), creating an unnaturally high number of adjacent positional choices that significantly increases solve difficulty beyond TPO norms and risks multiple plausible orderings for 'to / pick / up'.": 7
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r5_q8: prefilled 'you' at position 2 is structurally broken — the answer is 'The tool you lent me had been damaged before.' but 'the tool' is not prefilled and 'you' is given mid-sentence at index 2; learner cannot reconstruct sentence start without knowing 'the tool' is first, making order ambiguous and assembly logic contradictory.|tmp_r5_q8: distractor 'lend' (base form) is implausible enough to be non-functional as a real test of knowledge — but more critically, the contact clause structure 'the tool you lent me' requires learner to place 'you' correctly inside a relative clause with no subject prefill, creating genuine ambiguity about whether sentence starts with 'the tool' or 'you'.|tmp_r5_q2: chunking 'where / to / pick / up / the tickets' splits a natural phrasal verb collocation 'pick up' into separate single-word chunks, and also separates 'to pick up' into three pieces ('to', 'pick', 'up'), creating an unnaturally high number of adjacent positional choices that significantly increases solve difficulty beyond TPO norms and risks multiple plausible orderings for 'to / pick / up'.": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "fatal: chunks[4]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+            "review:blocker:tmp_r5_q8: prefilled 'you' at position 2 is structurally broken — the answer is 'The tool you lent me had been damaged before.' but 'the tool' is not prefilled and 'you' is given mid-sentence at index 2; learner cannot reconstruct sentence start without knowing 'the tool' is first, making order ambiguous and assembly logic contradictory.|tmp_r5_q8: distractor 'lend' (base form) is implausible enough to be non-functional as a real test of knowledge — but more critically, the contact clause structure 'the tool you lent me' requires learner to place 'you' correctly inside a relative clause with no subject prefill, creating genuine ambiguity about whether sentence starts with 'the tool' or 'you'.|tmp_r5_q2: chunking 'where / to / pick / up / the tickets' splits a natural phrasal verb collocation 'pick up' into separate single-word chunks, and also separates 'to pick up' into three pieces ('to', 'pick', 'up'), creating an unnaturally high number of adjacent positional choices that significantly increases solve difficulty beyond TPO norms and risks multiple plausible orderings for 'to / pick / up'.": 1
+          }
+        }
+      }
+    },
+    {
+      "round": 6,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 6
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "easy",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 8,
+          "accepted": 0,
+          "rejected": 8,
+          "reasons": {
+            "fatal: distractor must be a single word (TPO standard)": 1,
+            "review:blocker:tmp_r6_q6: The answer sentence 'The project supervisor was curious why the budget report was incomplete.' is grammatically incorrect. The adjective 'curious' requires the preposition 'about' before an embedded clause in standard English ('curious about why...'), or alternatively 'curious as to why...'. The bare 'curious why' construction is non-standard and fails a grammar check for a TPO-level item.|tmp_r6_q4: distractor 'extend' is plausibly valid — 'could extend' is grammatically acceptable as an alternative to 'could be extended', creating ambiguity in chunk selection|tmp_r6_q8: splitting 'renovation contract' into three separate chunks ('the', 'renovation', 'contract') creates multiple valid orderings and raises cognitive load beyond TPO norms; also 'whom' vs 'who' distractor pair tests formal register knowledge, not the core indirect-question word-order principle": 7
+          }
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "fatal: distractor must be a single word (TPO standard)": 2
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 7,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "interrogative",
+          "difficulty": "medium",
+          "count": 6
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "easy",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 3,
+          "accepted": 0,
+          "rejected": 3,
+          "reasons": {
+            "review:blocker:tmp_r7_q1: indirect question clause 'when the reading room opens' is correct, but the outer frame 'Could you tell me' is an interrogative frame producing a polite request question — the embedded clause itself is declarative order (OK); however, the answer IS a direct question (interrogative sentence) used to respond to 'what did the student ask,' which is acceptable for ask-type prompts. No blocker here — re-evaluated.|tmp_r7_q4: chunk order ambiguity — 'which shelf the new arrivals are on' vs. possible reordering concern is minimal, but 'were' distractor: inserting 'were' yields 'Could you tell me which shelf the new arrivals were on?' which is a grammatically valid, natural English sentence. The distractor creates a valid alternative answer. BLOCKER: distractor could be a valid answer chunk.|tmp_r7_q8: prompt/answer mismatch — the prompt asks 'What did the museum curator SAY about the painting that was donated?' implying a report of content/opinion, but the answer 'The curator mentioned which painting had been donated by the family' does not report what was SAID about the painting; it reports which painting was identified. The answer deflects the prompt's implied content. BLOCKER: prompt/answer mismatch.|tmp_r7_q3: distractor 'were' is plausibly valid — 'how many seats were still available' is grammatically acceptable as an embedded clause in certain past-tense framings, making it a near-valid answer rather than a clean distractor|tmp_r7_q7: too many chunks (8 active) with multi-word collocations 'to know', 'the best', 'rated' creating multiple plausible partial orderings; assembly ambiguity is high|tmp_r7_q8: answer 'The curator mentioned which painting had been donated by the family' is semantically odd — 'mentioned which painting' implies selecting among multiple paintings, but the prompt says 'the painting that was donated', creating a logic mismatch that may confuse test-takers; borderline ungrammatical in context": 3
+          }
+        },
+        "interrogative": {
+          "generated": 6,
+          "accepted": 0,
+          "rejected": 6,
+          "reasons": {
+            "fatal: distractor must be a single word (TPO standard)": 1,
+            "review:blocker:tmp_r7_q1: indirect question clause 'when the reading room opens' is correct, but the outer frame 'Could you tell me' is an interrogative frame producing a polite request question — the embedded clause itself is declarative order (OK); however, the answer IS a direct question (interrogative sentence) used to respond to 'what did the student ask,' which is acceptable for ask-type prompts. No blocker here — re-evaluated.|tmp_r7_q4: chunk order ambiguity — 'which shelf the new arrivals are on' vs. possible reordering concern is minimal, but 'were' distractor: inserting 'were' yields 'Could you tell me which shelf the new arrivals were on?' which is a grammatically valid, natural English sentence. The distractor creates a valid alternative answer. BLOCKER: distractor could be a valid answer chunk.|tmp_r7_q8: prompt/answer mismatch — the prompt asks 'What did the museum curator SAY about the painting that was donated?' implying a report of content/opinion, but the answer 'The curator mentioned which painting had been donated by the family' does not report what was SAID about the painting; it reports which painting was identified. The answer deflects the prompt's implied content. BLOCKER: prompt/answer mismatch.|tmp_r7_q3: distractor 'were' is plausibly valid — 'how many seats were still available' is grammatically acceptable as an embedded clause in certain past-tense framings, making it a near-valid answer rather than a clean distractor|tmp_r7_q7: too many chunks (8 active) with multi-word collocations 'to know', 'the best', 'rated' creating multiple plausible partial orderings; assembly ambiguity is high|tmp_r7_q8: answer 'The curator mentioned which painting had been donated by the family' is semantically odd — 'mentioned which painting' implies selecting among multiple paintings, but the prompt says 'the painting that was donated', creating a logic mismatch that may confuse test-takers; borderline ungrammatical in context": 5
+          }
+        },
+        "direct": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r7_q1: indirect question clause 'when the reading room opens' is correct, but the outer frame 'Could you tell me' is an interrogative frame producing a polite request question — the embedded clause itself is declarative order (OK); however, the answer IS a direct question (interrogative sentence) used to respond to 'what did the student ask,' which is acceptable for ask-type prompts. No blocker here — re-evaluated.|tmp_r7_q4: chunk order ambiguity — 'which shelf the new arrivals are on' vs. possible reordering concern is minimal, but 'were' distractor: inserting 'were' yields 'Could you tell me which shelf the new arrivals were on?' which is a grammatically valid, natural English sentence. The distractor creates a valid alternative answer. BLOCKER: distractor could be a valid answer chunk.|tmp_r7_q8: prompt/answer mismatch — the prompt asks 'What did the museum curator SAY about the painting that was donated?' implying a report of content/opinion, but the answer 'The curator mentioned which painting had been donated by the family' does not report what was SAID about the painting; it reports which painting was identified. The answer deflects the prompt's implied content. BLOCKER: prompt/answer mismatch.|tmp_r7_q3: distractor 'were' is plausibly valid — 'how many seats were still available' is grammatically acceptable as an embedded clause in certain past-tense framings, making it a near-valid answer rather than a clean distractor|tmp_r7_q7: too many chunks (8 active) with multi-word collocations 'to know', 'the best', 'rated' creating multiple plausible partial orderings; assembly ambiguity is high|tmp_r7_q8: answer 'The curator mentioned which painting had been donated by the family' is semantically odd — 'mentioned which painting' implies selecting among multiple paintings, but the prompt says 'the painting that was donated', creating a logic mismatch that may confuse test-takers; borderline ungrammatical in context": 1
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 8,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 6
+        },
+        {
+          "type": "direct",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "easy",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r8_q2: chunk ambiguity — 'on saturday' and 'morning' are separate chunks but must be adjacent to form 'on Saturday morning'; a test-taker could plausibly place 'morning' before 'on saturday' yielding 'The yoga class morning on Saturday starts at eight o'clock', which is ungrammatical but the split itself invites mis-ordering; more critically, 'on saturday' + 'morning' can also be read as two discrete adjuncts, creating ambiguous ordering relative to 'starts' (e.g., 'The yoga class starts on Saturday morning at eight o'clock' is equally valid), giving multiple valid chunk orders.|tmp_r8_q4: distractor validity — 'reschedule' can be inserted in place of 'rescheduled' only with tense mismatch, but more critically the chunks 'for next' and 'thursday afternoon' are split across two separate chunks requiring obligatory adjacency with no signal to the test-taker; the phrase 'for next thursday afternoon' cannot be assembled correctly if a student places 'thursday afternoon' before 'for next', and no chunk boundary prevents this — multiple surface orderings are plausible, constituting ambiguous arrangement.|tmp_r8_q7: distractor could be a valid answer chunk — 'best' can replace 'better' to yield 'The salon I visited last month was far best than expected', which is ungrammatical, so this is NOT a blocker on that ground; however 'last' and 'month' are split into two separate chunks that must be adjacent, and 'visited last month' vs. 'last month visited' both parse as conceivable orderings within the contact clause, creating multiple valid chunk orders.|tmp_r8_q4: chunk 'for next' is an incomplete/unnatural fragment — 'for next Thursday afternoon' should be a single chunk or split as 'for' + 'next Thursday afternoon'; 'for next' alone is not a natural collocation and creates ambiguity in placement|tmp_r8_q7: distractor 'best' is plausible as a substitution for 'better' in casual usage and could tempt valid re-assembly; more critically, 'was far' as a single chunk is unnatural — 'far' modifies 'better' not 'was', so chunking forces an unnatural parse that may confuse solvers": 1
+          }
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 7,
+          "accepted": 0,
+          "rejected": 7,
+          "reasons": {
+            "review:blocker:tmp_r8_q2: chunk ambiguity — 'on saturday' and 'morning' are separate chunks but must be adjacent to form 'on Saturday morning'; a test-taker could plausibly place 'morning' before 'on saturday' yielding 'The yoga class morning on Saturday starts at eight o'clock', which is ungrammatical but the split itself invites mis-ordering; more critically, 'on saturday' + 'morning' can also be read as two discrete adjuncts, creating ambiguous ordering relative to 'starts' (e.g., 'The yoga class starts on Saturday morning at eight o'clock' is equally valid), giving multiple valid chunk orders.|tmp_r8_q4: distractor validity — 'reschedule' can be inserted in place of 'rescheduled' only with tense mismatch, but more critically the chunks 'for next' and 'thursday afternoon' are split across two separate chunks requiring obligatory adjacency with no signal to the test-taker; the phrase 'for next thursday afternoon' cannot be assembled correctly if a student places 'thursday afternoon' before 'for next', and no chunk boundary prevents this — multiple surface orderings are plausible, constituting ambiguous arrangement.|tmp_r8_q7: distractor could be a valid answer chunk — 'best' can replace 'better' to yield 'The salon I visited last month was far best than expected', which is ungrammatical, so this is NOT a blocker on that ground; however 'last' and 'month' are split into two separate chunks that must be adjacent, and 'visited last month' vs. 'last month visited' both parse as conceivable orderings within the contact clause, creating multiple valid chunk orders.|tmp_r8_q4: chunk 'for next' is an incomplete/unnatural fragment — 'for next Thursday afternoon' should be a single chunk or split as 'for' + 'next Thursday afternoon'; 'for next' alone is not a natural collocation and creates ambiguity in placement|tmp_r8_q7: distractor 'best' is plausible as a substitution for 'better' in casual usage and could tempt valid re-assembly; more critically, 'was far' as a single chunk is unnatural — 'far' modifies 'better' not 'was', so chunking forces an unnatural parse that may confuse solvers": 7
+          }
+        },
+        "relative": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "fatal: chunks[2]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+            "review:blocker:tmp_r8_q2: chunk ambiguity — 'on saturday' and 'morning' are separate chunks but must be adjacent to form 'on Saturday morning'; a test-taker could plausibly place 'morning' before 'on saturday' yielding 'The yoga class morning on Saturday starts at eight o'clock', which is ungrammatical but the split itself invites mis-ordering; more critically, 'on saturday' + 'morning' can also be read as two discrete adjuncts, creating ambiguous ordering relative to 'starts' (e.g., 'The yoga class starts on Saturday morning at eight o'clock' is equally valid), giving multiple valid chunk orders.|tmp_r8_q4: distractor validity — 'reschedule' can be inserted in place of 'rescheduled' only with tense mismatch, but more critically the chunks 'for next' and 'thursday afternoon' are split across two separate chunks requiring obligatory adjacency with no signal to the test-taker; the phrase 'for next thursday afternoon' cannot be assembled correctly if a student places 'thursday afternoon' before 'for next', and no chunk boundary prevents this — multiple surface orderings are plausible, constituting ambiguous arrangement.|tmp_r8_q7: distractor could be a valid answer chunk — 'best' can replace 'better' to yield 'The salon I visited last month was far best than expected', which is ungrammatical, so this is NOT a blocker on that ground; however 'last' and 'month' are split into two separate chunks that must be adjacent, and 'visited last month' vs. 'last month visited' both parse as conceivable orderings within the contact clause, creating multiple valid chunk orders.|tmp_r8_q4: chunk 'for next' is an incomplete/unnatural fragment — 'for next Thursday afternoon' should be a single chunk or split as 'for' + 'next Thursday afternoon'; 'for next' alone is not a natural collocation and creates ambiguity in placement|tmp_r8_q7: distractor 'best' is plausible as a substitution for 'better' in casual usage and could tempt valid re-assembly; more critically, 'was far' as a single chunk is unnatural — 'far' modifies 'better' not 'was', so chunking forces an unnatural parse that may confuse solvers": 1
+          }
+        }
+      }
+    }
+  ]
+}

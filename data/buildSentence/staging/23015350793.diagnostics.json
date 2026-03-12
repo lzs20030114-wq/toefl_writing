@@ -1,0 +1,3800 @@
+{
+  "generated_at": "2026-03-12T17:33:59.217Z",
+  "targetSets": 6,
+  "outputPath": "/home/runner/work/toefl_writing/toefl_writing/data/buildSentence/staging/23015350793.json",
+  "rounds": [
+    {
+      "round": 1,
+      "phase": "broad",
+      "mode": "broad",
+      "gap": {
+        "total": 192,
+        "diffGap": 90,
+        "typeGap": 6,
+        "distractorGap": 42,
+        "assemblyBlockingGap": 54
+      },
+      "assemblyState": {
+        "total": 0,
+        "diffCounts": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0
+        },
+        "embedded": 0,
+        "negation": 0,
+        "distractor": 0,
+        "qmark": 0,
+        "nonEmbedded": 0,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 48,
+          "negationMin": 12,
+          "negationMax": 24,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "nonNegationMin": 36,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "medium": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "hard": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "negation": 0,
+          "negationCap": 0,
+          "distractor": 0,
+          "nonEmbedded": 0
+        },
+        "assemblableSets": 0,
+        "remainingSets": 6,
+        "remainingRecipe": {
+          "sets": 6,
+          "diff": {
+            "easy": 6,
+            "medium": 42,
+            "hard": 12
+          },
+          "style": {
+            "embeddedMin": 30,
+            "negationMin": 12,
+            "distractorMin": 42,
+            "nonEmbeddedMin": 12,
+            "embeddedCapacity": 48,
+            "negationCapacity": 24,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embedded": 30,
+          "negation": 12,
+          "distractor": 42,
+          "nonEmbedded": 12,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 42,
+            "priority": 252
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 30,
+            "priority": 210
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 42,
+            "priority": 126
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 12,
+            "priority": 96
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 12,
+            "priority": 84
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 12,
+            "priority": 60
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 6,
+            "priority": 12
+          }
+        ],
+        "progressRatios": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "nonEmbedded": 0,
+          "distractor": 0,
+          "negation": 0
+        },
+        "assemblyProgressScore": 0
+      },
+      "spec": [
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 1
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "specSelection": null,
+      "result": {
+        "generated": 10,
+        "accepted": 0,
+        "rejected": 10,
+        "rejectReasons": {
+          "fatal: chunks[2]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+          "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]": 1,
+          "review:blocker:tmp_r1_q4: distractor 'did' can be inserted to form 'I did found out where the team meeting is scheduled' — not valid, but more critically the chunk split of 'the team' + 'meeting' allows the sequence 'the team meeting' to be assembled as 'meeting the team' creating ambiguity; additionally 'did' as distractor is a blocker because a test-taker could attempt 'I did find out…' but 'find out' is not among the chunks — distractor 'did' is not insertable as a valid answer, however the indirect question 'where the team meeting is scheduled' correctly uses declarative order so no inversion blocker here. RESCINDED — not a blocker on distractor grounds.|tmp_r1_q5: distractor 'attended' is a valid replacement for the past-tense verb slot — the correct answer uses 'did not attend' but 'attended' could plausibly replace nothing cleanly; however inserting 'attended' alongside 'did not attend' would produce 'I did not attend attended the workshop last Friday' which is ungrammatical. RESCINDED.|tmp_r1_q4: The chunk list contains 'the team' and 'meeting' as separate chunks. A test-taker could assemble 'I found out where meeting the team is scheduled' — a meaningfully different (and arguably valid-sounding) arrangement exists, creating genuine chunk-order ambiguity for the sub-phrase. This is a multiple-valid-chunk-orders BLOCKER.|tmp_r1_q6: prompt is 'How do you respond about the email?' but the answer 'The manager did not explain why the deadline changed' is a third-person statement with no reference to email — prompt/answer mismatch BLOCKER.": 8
+        },
+        "typeStats": {
+          "negation": {
+            "generated": 4,
+            "accepted": 0,
+            "rejected": 4,
+            "reasons": {
+              "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]": 1,
+              "review:blocker:tmp_r1_q4: distractor 'did' can be inserted to form 'I did found out where the team meeting is scheduled' — not valid, but more critically the chunk split of 'the team' + 'meeting' allows the sequence 'the team meeting' to be assembled as 'meeting the team' creating ambiguity; additionally 'did' as distractor is a blocker because a test-taker could attempt 'I did find out…' but 'find out' is not among the chunks — distractor 'did' is not insertable as a valid answer, however the indirect question 'where the team meeting is scheduled' correctly uses declarative order so no inversion blocker here. RESCINDED — not a blocker on distractor grounds.|tmp_r1_q5: distractor 'attended' is a valid replacement for the past-tense verb slot — the correct answer uses 'did not attend' but 'attended' could plausibly replace nothing cleanly; however inserting 'attended' alongside 'did not attend' would produce 'I did not attend attended the workshop last Friday' which is ungrammatical. RESCINDED.|tmp_r1_q4: The chunk list contains 'the team' and 'meeting' as separate chunks. A test-taker could assemble 'I found out where meeting the team is scheduled' — a meaningfully different (and arguably valid-sounding) arrangement exists, creating genuine chunk-order ambiguity for the sub-phrase. This is a multiple-valid-chunk-orders BLOCKER.|tmp_r1_q6: prompt is 'How do you respond about the email?' but the answer 'The manager did not explain why the deadline changed' is a third-person statement with no reference to email — prompt/answer mismatch BLOCKER.": 3
+            }
+          },
+          "3rd-reporting": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r1_q4: distractor 'did' can be inserted to form 'I did found out where the team meeting is scheduled' — not valid, but more critically the chunk split of 'the team' + 'meeting' allows the sequence 'the team meeting' to be assembled as 'meeting the team' creating ambiguity; additionally 'did' as distractor is a blocker because a test-taker could attempt 'I did find out…' but 'find out' is not among the chunks — distractor 'did' is not insertable as a valid answer, however the indirect question 'where the team meeting is scheduled' correctly uses declarative order so no inversion blocker here. RESCINDED — not a blocker on distractor grounds.|tmp_r1_q5: distractor 'attended' is a valid replacement for the past-tense verb slot — the correct answer uses 'did not attend' but 'attended' could plausibly replace nothing cleanly; however inserting 'attended' alongside 'did not attend' would produce 'I did not attend attended the workshop last Friday' which is ungrammatical. RESCINDED.|tmp_r1_q4: The chunk list contains 'the team' and 'meeting' as separate chunks. A test-taker could assemble 'I found out where meeting the team is scheduled' — a meaningfully different (and arguably valid-sounding) arrangement exists, creating genuine chunk-order ambiguity for the sub-phrase. This is a multiple-valid-chunk-orders BLOCKER.|tmp_r1_q6: prompt is 'How do you respond about the email?' but the answer 'The manager did not explain why the deadline changed' is a third-person statement with no reference to email — prompt/answer mismatch BLOCKER.": 1
+            }
+          },
+          "1st-embedded": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r1_q4: distractor 'did' can be inserted to form 'I did found out where the team meeting is scheduled' — not valid, but more critically the chunk split of 'the team' + 'meeting' allows the sequence 'the team meeting' to be assembled as 'meeting the team' creating ambiguity; additionally 'did' as distractor is a blocker because a test-taker could attempt 'I did find out…' but 'find out' is not among the chunks — distractor 'did' is not insertable as a valid answer, however the indirect question 'where the team meeting is scheduled' correctly uses declarative order so no inversion blocker here. RESCINDED — not a blocker on distractor grounds.|tmp_r1_q5: distractor 'attended' is a valid replacement for the past-tense verb slot — the correct answer uses 'did not attend' but 'attended' could plausibly replace nothing cleanly; however inserting 'attended' alongside 'did not attend' would produce 'I did not attend attended the workshop last Friday' which is ungrammatical. RESCINDED.|tmp_r1_q4: The chunk list contains 'the team' and 'meeting' as separate chunks. A test-taker could assemble 'I found out where meeting the team is scheduled' — a meaningfully different (and arguably valid-sounding) arrangement exists, creating genuine chunk-order ambiguity for the sub-phrase. This is a multiple-valid-chunk-orders BLOCKER.|tmp_r1_q6: prompt is 'How do you respond about the email?' but the answer 'The manager did not explain why the deadline changed' is a third-person statement with no reference to email — prompt/answer mismatch BLOCKER.": 1
+            }
+          },
+          "interrogative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "direct": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r1_q4: distractor 'did' can be inserted to form 'I did found out where the team meeting is scheduled' — not valid, but more critically the chunk split of 'the team' + 'meeting' allows the sequence 'the team meeting' to be assembled as 'meeting the team' creating ambiguity; additionally 'did' as distractor is a blocker because a test-taker could attempt 'I did find out…' but 'find out' is not among the chunks — distractor 'did' is not insertable as a valid answer, however the indirect question 'where the team meeting is scheduled' correctly uses declarative order so no inversion blocker here. RESCINDED — not a blocker on distractor grounds.|tmp_r1_q5: distractor 'attended' is a valid replacement for the past-tense verb slot — the correct answer uses 'did not attend' but 'attended' could plausibly replace nothing cleanly; however inserting 'attended' alongside 'did not attend' would produce 'I did not attend attended the workshop last Friday' which is ungrammatical. RESCINDED.|tmp_r1_q4: The chunk list contains 'the team' and 'meeting' as separate chunks. A test-taker could assemble 'I found out where meeting the team is scheduled' — a meaningfully different (and arguably valid-sounding) arrangement exists, creating genuine chunk-order ambiguity for the sub-phrase. This is a multiple-valid-chunk-orders BLOCKER.|tmp_r1_q6: prompt is 'How do you respond about the email?' but the answer 'The manager did not explain why the deadline changed' is a third-person statement with no reference to email — prompt/answer mismatch BLOCKER.": 2
+            }
+          },
+          "relative": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "fatal: chunks[2]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "review:blocker:tmp_r1_q4: distractor 'did' can be inserted to form 'I did found out where the team meeting is scheduled' — not valid, but more critically the chunk split of 'the team' + 'meeting' allows the sequence 'the team meeting' to be assembled as 'meeting the team' creating ambiguity; additionally 'did' as distractor is a blocker because a test-taker could attempt 'I did find out…' but 'find out' is not among the chunks — distractor 'did' is not insertable as a valid answer, however the indirect question 'where the team meeting is scheduled' correctly uses declarative order so no inversion blocker here. RESCINDED — not a blocker on distractor grounds.|tmp_r1_q5: distractor 'attended' is a valid replacement for the past-tense verb slot — the correct answer uses 'did not attend' but 'attended' could plausibly replace nothing cleanly; however inserting 'attended' alongside 'did not attend' would produce 'I did not attend attended the workshop last Friday' which is ungrammatical. RESCINDED.|tmp_r1_q4: The chunk list contains 'the team' and 'meeting' as separate chunks. A test-taker could assemble 'I found out where meeting the team is scheduled' — a meaningfully different (and arguably valid-sounding) arrangement exists, creating genuine chunk-order ambiguity for the sub-phrase. This is a multiple-valid-chunk-orders BLOCKER.|tmp_r1_q6: prompt is 'How do you respond about the email?' but the answer 'The manager did not explain why the deadline changed' is a third-person statement with no reference to email — prompt/answer mismatch BLOCKER.": 1
+            }
+          }
+        },
+        "deltaAssemblable": 0,
+        "deltaProgress": 0,
+        "acceptedGainRate": 0
+      },
+      "nextGap": {
+        "total": 192,
+        "diffGap": 90,
+        "typeGap": 6,
+        "distractorGap": 42,
+        "assemblyBlockingGap": 54
+      },
+      "nextAssemblyState": {
+        "total": 0,
+        "diffCounts": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0
+        },
+        "embedded": 0,
+        "negation": 0,
+        "distractor": 0,
+        "qmark": 0,
+        "nonEmbedded": 0,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 48,
+          "negationMin": 12,
+          "negationMax": 24,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "nonNegationMin": 36,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "medium": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "hard": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "negation": 0,
+          "negationCap": 0,
+          "distractor": 0,
+          "nonEmbedded": 0
+        },
+        "assemblableSets": 0,
+        "remainingSets": 6,
+        "remainingRecipe": {
+          "sets": 6,
+          "diff": {
+            "easy": 6,
+            "medium": 42,
+            "hard": 12
+          },
+          "style": {
+            "embeddedMin": 30,
+            "negationMin": 12,
+            "distractorMin": 42,
+            "nonEmbeddedMin": 12,
+            "embeddedCapacity": 48,
+            "negationCapacity": 24,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embedded": 30,
+          "negation": 12,
+          "distractor": 42,
+          "nonEmbedded": 12,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 42,
+            "priority": 252
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 30,
+            "priority": 210
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 42,
+            "priority": 126
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 12,
+            "priority": 96
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 12,
+            "priority": 84
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 12,
+            "priority": 60
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 6,
+            "priority": 12
+          }
+        ],
+        "progressRatios": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "nonEmbedded": 0,
+          "distractor": 0,
+          "negation": 0
+        },
+        "assemblyProgressScore": 0
+      },
+      "phaseSignals": {
+        "strongTargeting": false,
+        "repairMode": false,
+        "strongGateReady": false,
+        "repairGateReady": false,
+        "strongReasons": [],
+        "repairReasons": [],
+        "momentum": {
+          "windowCount": 0,
+          "accepted": 0,
+          "generated": 0,
+          "poolGrowth": 0,
+          "deltaAssemblable": 0,
+          "deltaProgress": 0,
+          "zeroGainRounds": 0,
+          "zeroProgressRounds": 0,
+          "acceptedGainRate": 0
+        }
+      },
+      "typeReliability": {
+        "negation": 0.8,
+        "3rd-reporting": 0.8,
+        "1st-embedded": 0.8,
+        "interrogative": 0.8,
+        "direct": 0.8,
+        "relative": 0.8
+      }
+    },
+    {
+      "round": 2,
+      "phase": "broad",
+      "mode": "broad",
+      "gap": {
+        "total": 192,
+        "diffGap": 90,
+        "typeGap": 6,
+        "distractorGap": 42,
+        "assemblyBlockingGap": 54
+      },
+      "assemblyState": {
+        "total": 0,
+        "diffCounts": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0
+        },
+        "embedded": 0,
+        "negation": 0,
+        "distractor": 0,
+        "qmark": 0,
+        "nonEmbedded": 0,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 48,
+          "negationMin": 12,
+          "negationMax": 24,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "nonNegationMin": 36,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "medium": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "hard": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "negation": 0,
+          "negationCap": 0,
+          "distractor": 0,
+          "nonEmbedded": 0
+        },
+        "assemblableSets": 0,
+        "remainingSets": 6,
+        "remainingRecipe": {
+          "sets": 6,
+          "diff": {
+            "easy": 6,
+            "medium": 42,
+            "hard": 12
+          },
+          "style": {
+            "embeddedMin": 30,
+            "negationMin": 12,
+            "distractorMin": 42,
+            "nonEmbeddedMin": 12,
+            "embeddedCapacity": 48,
+            "negationCapacity": 24,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embedded": 30,
+          "negation": 12,
+          "distractor": 42,
+          "nonEmbedded": 12,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 42,
+            "priority": 252
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 30,
+            "priority": 210
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 42,
+            "priority": 126
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 12,
+            "priority": 96
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 12,
+            "priority": 84
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 12,
+            "priority": 60
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 6,
+            "priority": 12
+          }
+        ],
+        "progressRatios": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "nonEmbedded": 0,
+          "distractor": 0,
+          "negation": 0
+        },
+        "assemblyProgressScore": 0
+      },
+      "spec": [
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 1
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "direct",
+          "difficulty": "easy",
+          "count": 2
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "specSelection": null,
+      "result": {
+        "generated": 10,
+        "accepted": 0,
+        "rejected": 10,
+        "rejectReasons": {
+          "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]": 5,
+          "fatal: distractor must be a single word (TPO standard)": 2,
+          "review:blocker:tmp_r2_q3: The answer 'I found out where the campus cafe opens on weekends' is semantically anomalous as a statement told to a roommate — 'found out where X opens' implies learning the hours/days, but the embedded clause 'where the campus cafe opens on weekends' is logically ill-formed (WHERE conflates location with schedule; the intended meaning requires WHEN or THAT). This creates a grammar/meaning error in the answer sentence.|tmp_r2_q3: Indirect question clause 'where the campus cafe opens on weekends' uses 'where' as a temporal/conditional introducer, which is incorrect. The embedded clause is semantically incoherent and cannot be defended as standard academic English, constituting a grammar error in the answer sentence.": 3
+        },
+        "typeStats": {
+          "negation": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]": 3
+            }
+          },
+          "3rd-reporting": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "1st-embedded": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]": 2,
+              "review:blocker:tmp_r2_q3: The answer 'I found out where the campus cafe opens on weekends' is semantically anomalous as a statement told to a roommate — 'found out where X opens' implies learning the hours/days, but the embedded clause 'where the campus cafe opens on weekends' is logically ill-formed (WHERE conflates location with schedule; the intended meaning requires WHEN or THAT). This creates a grammar/meaning error in the answer sentence.|tmp_r2_q3: Indirect question clause 'where the campus cafe opens on weekends' uses 'where' as a temporal/conditional introducer, which is incorrect. The embedded clause is semantically incoherent and cannot be defended as standard academic English, constituting a grammar error in the answer sentence.": 1
+            }
+          },
+          "interrogative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "direct": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "fatal: distractor must be a single word (TPO standard)": 2,
+              "review:blocker:tmp_r2_q3: The answer 'I found out where the campus cafe opens on weekends' is semantically anomalous as a statement told to a roommate — 'found out where X opens' implies learning the hours/days, but the embedded clause 'where the campus cafe opens on weekends' is logically ill-formed (WHERE conflates location with schedule; the intended meaning requires WHEN or THAT). This creates a grammar/meaning error in the answer sentence.|tmp_r2_q3: Indirect question clause 'where the campus cafe opens on weekends' uses 'where' as a temporal/conditional introducer, which is incorrect. The embedded clause is semantically incoherent and cannot be defended as standard academic English, constituting a grammar error in the answer sentence.": 1
+            }
+          },
+          "relative": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r2_q3: The answer 'I found out where the campus cafe opens on weekends' is semantically anomalous as a statement told to a roommate — 'found out where X opens' implies learning the hours/days, but the embedded clause 'where the campus cafe opens on weekends' is logically ill-formed (WHERE conflates location with schedule; the intended meaning requires WHEN or THAT). This creates a grammar/meaning error in the answer sentence.|tmp_r2_q3: Indirect question clause 'where the campus cafe opens on weekends' uses 'where' as a temporal/conditional introducer, which is incorrect. The embedded clause is semantically incoherent and cannot be defended as standard academic English, constituting a grammar error in the answer sentence.": 1
+            }
+          }
+        },
+        "deltaAssemblable": 0,
+        "deltaProgress": 0,
+        "acceptedGainRate": 0
+      },
+      "nextGap": {
+        "total": 192,
+        "diffGap": 90,
+        "typeGap": 6,
+        "distractorGap": 42,
+        "assemblyBlockingGap": 54
+      },
+      "nextAssemblyState": {
+        "total": 0,
+        "diffCounts": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0
+        },
+        "embedded": 0,
+        "negation": 0,
+        "distractor": 0,
+        "qmark": 0,
+        "nonEmbedded": 0,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 48,
+          "negationMin": 12,
+          "negationMax": 24,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "nonNegationMin": 36,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "medium": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "hard": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "negation": 0,
+          "negationCap": 0,
+          "distractor": 0,
+          "nonEmbedded": 0
+        },
+        "assemblableSets": 0,
+        "remainingSets": 6,
+        "remainingRecipe": {
+          "sets": 6,
+          "diff": {
+            "easy": 6,
+            "medium": 42,
+            "hard": 12
+          },
+          "style": {
+            "embeddedMin": 30,
+            "negationMin": 12,
+            "distractorMin": 42,
+            "nonEmbeddedMin": 12,
+            "embeddedCapacity": 48,
+            "negationCapacity": 24,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embedded": 30,
+          "negation": 12,
+          "distractor": 42,
+          "nonEmbedded": 12,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 42,
+            "priority": 252
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 30,
+            "priority": 210
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 42,
+            "priority": 126
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 12,
+            "priority": 96
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 12,
+            "priority": 84
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 12,
+            "priority": 60
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 6,
+            "priority": 12
+          }
+        ],
+        "progressRatios": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "nonEmbedded": 0,
+          "distractor": 0,
+          "negation": 0
+        },
+        "assemblyProgressScore": 0
+      },
+      "phaseSignals": {
+        "strongTargeting": false,
+        "repairMode": false,
+        "strongGateReady": false,
+        "repairGateReady": false,
+        "strongReasons": [],
+        "repairReasons": [],
+        "momentum": {
+          "windowCount": 1,
+          "accepted": 0,
+          "generated": 10,
+          "poolGrowth": 0,
+          "deltaAssemblable": 0,
+          "deltaProgress": 0,
+          "zeroGainRounds": 0,
+          "zeroProgressRounds": 0,
+          "acceptedGainRate": 0
+        }
+      },
+      "typeReliability": {
+        "negation": 0.2,
+        "3rd-reporting": 0.2,
+        "1st-embedded": 0.2,
+        "interrogative": 0.8,
+        "direct": 0.2,
+        "relative": 0.2
+      }
+    },
+    {
+      "round": 3,
+      "phase": "broad",
+      "mode": "broad",
+      "gap": {
+        "total": 192,
+        "diffGap": 90,
+        "typeGap": 6,
+        "distractorGap": 42,
+        "assemblyBlockingGap": 54
+      },
+      "assemblyState": {
+        "total": 0,
+        "diffCounts": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0
+        },
+        "embedded": 0,
+        "negation": 0,
+        "distractor": 0,
+        "qmark": 0,
+        "nonEmbedded": 0,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 48,
+          "negationMin": 12,
+          "negationMax": 24,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "nonNegationMin": 36,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "medium": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "hard": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "negation": 0,
+          "negationCap": 0,
+          "distractor": 0,
+          "nonEmbedded": 0
+        },
+        "assemblableSets": 0,
+        "remainingSets": 6,
+        "remainingRecipe": {
+          "sets": 6,
+          "diff": {
+            "easy": 6,
+            "medium": 42,
+            "hard": 12
+          },
+          "style": {
+            "embeddedMin": 30,
+            "negationMin": 12,
+            "distractorMin": 42,
+            "nonEmbeddedMin": 12,
+            "embeddedCapacity": 48,
+            "negationCapacity": 24,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embedded": 30,
+          "negation": 12,
+          "distractor": 42,
+          "nonEmbedded": 12,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 42,
+            "priority": 252
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 30,
+            "priority": 210
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 42,
+            "priority": 126
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 12,
+            "priority": 96
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 12,
+            "priority": 84
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 12,
+            "priority": 60
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 6,
+            "priority": 12
+          }
+        ],
+        "progressRatios": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "nonEmbedded": 0,
+          "distractor": 0,
+          "negation": 0
+        },
+        "assemblyProgressScore": 0
+      },
+      "spec": [
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 1
+        },
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "interrogative",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "specSelection": null,
+      "result": {
+        "generated": 10,
+        "accepted": 4,
+        "rejected": 6,
+        "rejectReasons": {
+          "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+          "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]": 1,
+          "fatal: chunks (minus distractor) + prefilled words must equal answer words; distractor must not appear in answer; chunks[6]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+          "review:ets<72": 3
+        },
+        "typeStats": {
+          "negation": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]": 1,
+              "fatal: chunks (minus distractor) + prefilled words must equal answer words; distractor must not appear in answer; chunks[6]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+            }
+          },
+          "3rd-reporting": {
+            "generated": 1,
+            "accepted": 1,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "1st-embedded": {
+            "generated": 2,
+            "accepted": 2,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "interrogative": {
+            "generated": 2,
+            "accepted": 1,
+            "rejected": 1,
+            "reasons": {
+              "review:ets<72": 1
+            }
+          },
+          "direct": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:ets<72": 2
+            }
+          },
+          "relative": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+            }
+          }
+        },
+        "deltaAssemblable": 0,
+        "deltaProgress": 0.07692307692307693,
+        "acceptedGainRate": 0.04807692307692308
+      },
+      "nextGap": {
+        "total": 177,
+        "diffGap": 86,
+        "typeGap": 3,
+        "distractorGap": 38,
+        "assemblyBlockingGap": 50
+      },
+      "nextAssemblyState": {
+        "total": 4,
+        "diffCounts": {
+          "easy": 0,
+          "medium": 4,
+          "hard": 0
+        },
+        "embedded": 4,
+        "negation": 0,
+        "distractor": 4,
+        "qmark": 1,
+        "nonEmbedded": 0,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 48,
+          "negationMin": 12,
+          "negationMax": 24,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "nonNegationMin": 36,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "medium": {
+            "total": 4,
+            "embedded": 4,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "hard": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "negation": 0,
+          "negationCap": 0,
+          "distractor": 0,
+          "nonEmbedded": 0
+        },
+        "assemblableSets": 0,
+        "remainingSets": 6,
+        "remainingRecipe": {
+          "sets": 6,
+          "diff": {
+            "easy": 6,
+            "medium": 38,
+            "hard": 12
+          },
+          "style": {
+            "embeddedMin": 26,
+            "negationMin": 12,
+            "distractorMin": 38,
+            "nonEmbeddedMin": 12,
+            "embeddedCapacity": 44,
+            "negationCapacity": 24,
+            "qmarkCapacity": 11
+          }
+        },
+        "deficits": {
+          "easy": 6,
+          "medium": 38,
+          "hard": 12,
+          "embedded": 26,
+          "negation": 12,
+          "distractor": 38,
+          "nonEmbedded": 12,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 38,
+            "priority": 228
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 26,
+            "priority": 182
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 38,
+            "priority": 114
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 12,
+            "priority": 96
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 12,
+            "priority": 84
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 12,
+            "priority": 60
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 6,
+            "priority": 12
+          }
+        ],
+        "progressRatios": {
+          "easy": 0,
+          "medium": 0.09523809523809523,
+          "hard": 0,
+          "embedded": 0.13333333333333333,
+          "nonEmbedded": 0,
+          "distractor": 0.09523809523809523,
+          "negation": 0
+        },
+        "assemblyProgressScore": 0.07692307692307693
+      },
+      "phaseSignals": {
+        "strongTargeting": false,
+        "repairMode": false,
+        "strongGateReady": false,
+        "repairGateReady": false,
+        "strongReasons": [],
+        "repairReasons": [],
+        "momentum": {
+          "windowCount": 2,
+          "accepted": 0,
+          "generated": 20,
+          "poolGrowth": 0,
+          "deltaAssemblable": 0,
+          "deltaProgress": 0,
+          "zeroGainRounds": 0,
+          "zeroProgressRounds": 0,
+          "acceptedGainRate": 0
+        }
+      },
+      "typeReliability": {
+        "negation": 0.2,
+        "3rd-reporting": 0.2,
+        "1st-embedded": 0.2,
+        "interrogative": 0.8,
+        "direct": 0.2,
+        "relative": 0.2
+      }
+    },
+    {
+      "round": 4,
+      "phase": "broad",
+      "mode": "broad",
+      "gap": {
+        "total": 177,
+        "diffGap": 86,
+        "typeGap": 3,
+        "distractorGap": 38,
+        "assemblyBlockingGap": 50
+      },
+      "assemblyState": {
+        "total": 4,
+        "diffCounts": {
+          "easy": 0,
+          "medium": 4,
+          "hard": 0
+        },
+        "embedded": 4,
+        "negation": 0,
+        "distractor": 4,
+        "qmark": 1,
+        "nonEmbedded": 0,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 48,
+          "negationMin": 12,
+          "negationMax": 24,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "nonNegationMin": 36,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "medium": {
+            "total": 4,
+            "embedded": 4,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "hard": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "negation": 0,
+          "negationCap": 0,
+          "distractor": 0,
+          "nonEmbedded": 0
+        },
+        "assemblableSets": 0,
+        "remainingSets": 6,
+        "remainingRecipe": {
+          "sets": 6,
+          "diff": {
+            "easy": 6,
+            "medium": 38,
+            "hard": 12
+          },
+          "style": {
+            "embeddedMin": 26,
+            "negationMin": 12,
+            "distractorMin": 38,
+            "nonEmbeddedMin": 12,
+            "embeddedCapacity": 44,
+            "negationCapacity": 24,
+            "qmarkCapacity": 11
+          }
+        },
+        "deficits": {
+          "easy": 6,
+          "medium": 38,
+          "hard": 12,
+          "embedded": 26,
+          "negation": 12,
+          "distractor": 38,
+          "nonEmbedded": 12,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 38,
+            "priority": 228
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 26,
+            "priority": 182
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 38,
+            "priority": 114
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 12,
+            "priority": 96
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 12,
+            "priority": 84
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 12,
+            "priority": 60
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 6,
+            "priority": 12
+          }
+        ],
+        "progressRatios": {
+          "easy": 0,
+          "medium": 0.09523809523809523,
+          "hard": 0,
+          "embedded": 0.13333333333333333,
+          "nonEmbedded": 0,
+          "distractor": 0.09523809523809523,
+          "negation": 0
+        },
+        "assemblyProgressScore": 0.07692307692307693
+      },
+      "spec": [
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "direct",
+          "difficulty": "easy",
+          "count": 2
+        }
+      ],
+      "specSelection": null,
+      "result": {
+        "generated": 10,
+        "accepted": 0,
+        "rejected": 10,
+        "rejectReasons": {
+          "review:blocker:tmp_r4_q8: prompt/answer mismatch — the prompt asks the learner to respond as themselves ('your seat request was not processed'), but the answer speaks about the flight attendant in third person ('The flight attendant did not know why my request had been ignored'), making the answer a narrative report rather than a direct personal response to the flight attendant's question|tmp_r4_q8: Answer introduces 'the flight attendant' as subject saying they 'did not know why my request had been ignored' — but the prompt says the flight attendant is ASKING the student why the request was not processed. The student answering AS the flight attendant is incoherent; the answer contradicts the scenario, making the intended answer unrecoverable from context.|tmp_r4_q1: Multi-word chunk 'really comfortable' groups an adverb+adjective that are NOT a fixed collocation; 'really' could plausibly modify 'seating' instead, creating mild ambiguity. More critically, 'near campus' is chunked separately but the prefilled subject is 'the coffee shop', so the student must place 'near campus' before 'has' — the intended order 'near campus has' is unnatural as a standalone chunk sequence and learners may place 'near campus' after 'seating areas', producing a grammatically valid alternate: 'The coffee shop has really comfortable seating areas near campus.' This alternate is fully grammatical and semantically equivalent, constituting a clear ambiguity blocker.|tmp_r4_q6: Two verbs in chunks — 'recommended' and 'offered' — with no syntactic signal forcing their order. Learners could plausibly produce 'The hair salon offered my colleague recommended very reasonable pricing options' (ungrammatical but confusing) or, more critically, interpret the contact-clause structure incorrectly. The distractor 'offers' is NOT valid as main verb in past context, so that is safe. However, ordering of 'recommended' vs 'offered' is genuinely ambiguous without punctuation or a relative pronoun, constituting an ambiguous-order blocker.": 10
+        },
+        "typeStats": {
+          "negation": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r4_q8: prompt/answer mismatch — the prompt asks the learner to respond as themselves ('your seat request was not processed'), but the answer speaks about the flight attendant in third person ('The flight attendant did not know why my request had been ignored'), making the answer a narrative report rather than a direct personal response to the flight attendant's question|tmp_r4_q8: Answer introduces 'the flight attendant' as subject saying they 'did not know why my request had been ignored' — but the prompt says the flight attendant is ASKING the student why the request was not processed. The student answering AS the flight attendant is incoherent; the answer contradicts the scenario, making the intended answer unrecoverable from context.|tmp_r4_q1: Multi-word chunk 'really comfortable' groups an adverb+adjective that are NOT a fixed collocation; 'really' could plausibly modify 'seating' instead, creating mild ambiguity. More critically, 'near campus' is chunked separately but the prefilled subject is 'the coffee shop', so the student must place 'near campus' before 'has' — the intended order 'near campus has' is unnatural as a standalone chunk sequence and learners may place 'near campus' after 'seating areas', producing a grammatically valid alternate: 'The coffee shop has really comfortable seating areas near campus.' This alternate is fully grammatical and semantically equivalent, constituting a clear ambiguity blocker.|tmp_r4_q6: Two verbs in chunks — 'recommended' and 'offered' — with no syntactic signal forcing their order. Learners could plausibly produce 'The hair salon offered my colleague recommended very reasonable pricing options' (ungrammatical but confusing) or, more critically, interpret the contact-clause structure incorrectly. The distractor 'offers' is NOT valid as main verb in past context, so that is safe. However, ordering of 'recommended' vs 'offered' is genuinely ambiguous without punctuation or a relative pronoun, constituting an ambiguous-order blocker.": 2
+            }
+          },
+          "3rd-reporting": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "1st-embedded": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r4_q8: prompt/answer mismatch — the prompt asks the learner to respond as themselves ('your seat request was not processed'), but the answer speaks about the flight attendant in third person ('The flight attendant did not know why my request had been ignored'), making the answer a narrative report rather than a direct personal response to the flight attendant's question|tmp_r4_q8: Answer introduces 'the flight attendant' as subject saying they 'did not know why my request had been ignored' — but the prompt says the flight attendant is ASKING the student why the request was not processed. The student answering AS the flight attendant is incoherent; the answer contradicts the scenario, making the intended answer unrecoverable from context.|tmp_r4_q1: Multi-word chunk 'really comfortable' groups an adverb+adjective that are NOT a fixed collocation; 'really' could plausibly modify 'seating' instead, creating mild ambiguity. More critically, 'near campus' is chunked separately but the prefilled subject is 'the coffee shop', so the student must place 'near campus' before 'has' — the intended order 'near campus has' is unnatural as a standalone chunk sequence and learners may place 'near campus' after 'seating areas', producing a grammatically valid alternate: 'The coffee shop has really comfortable seating areas near campus.' This alternate is fully grammatical and semantically equivalent, constituting a clear ambiguity blocker.|tmp_r4_q6: Two verbs in chunks — 'recommended' and 'offered' — with no syntactic signal forcing their order. Learners could plausibly produce 'The hair salon offered my colleague recommended very reasonable pricing options' (ungrammatical but confusing) or, more critically, interpret the contact-clause structure incorrectly. The distractor 'offers' is NOT valid as main verb in past context, so that is safe. However, ordering of 'recommended' vs 'offered' is genuinely ambiguous without punctuation or a relative pronoun, constituting an ambiguous-order blocker.": 1
+            }
+          },
+          "interrogative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "direct": {
+            "generated": 5,
+            "accepted": 0,
+            "rejected": 5,
+            "reasons": {
+              "review:blocker:tmp_r4_q8: prompt/answer mismatch — the prompt asks the learner to respond as themselves ('your seat request was not processed'), but the answer speaks about the flight attendant in third person ('The flight attendant did not know why my request had been ignored'), making the answer a narrative report rather than a direct personal response to the flight attendant's question|tmp_r4_q8: Answer introduces 'the flight attendant' as subject saying they 'did not know why my request had been ignored' — but the prompt says the flight attendant is ASKING the student why the request was not processed. The student answering AS the flight attendant is incoherent; the answer contradicts the scenario, making the intended answer unrecoverable from context.|tmp_r4_q1: Multi-word chunk 'really comfortable' groups an adverb+adjective that are NOT a fixed collocation; 'really' could plausibly modify 'seating' instead, creating mild ambiguity. More critically, 'near campus' is chunked separately but the prefilled subject is 'the coffee shop', so the student must place 'near campus' before 'has' — the intended order 'near campus has' is unnatural as a standalone chunk sequence and learners may place 'near campus' after 'seating areas', producing a grammatically valid alternate: 'The coffee shop has really comfortable seating areas near campus.' This alternate is fully grammatical and semantically equivalent, constituting a clear ambiguity blocker.|tmp_r4_q6: Two verbs in chunks — 'recommended' and 'offered' — with no syntactic signal forcing their order. Learners could plausibly produce 'The hair salon offered my colleague recommended very reasonable pricing options' (ungrammatical but confusing) or, more critically, interpret the contact-clause structure incorrectly. The distractor 'offers' is NOT valid as main verb in past context, so that is safe. However, ordering of 'recommended' vs 'offered' is genuinely ambiguous without punctuation or a relative pronoun, constituting an ambiguous-order blocker.": 5
+            }
+          },
+          "relative": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r4_q8: prompt/answer mismatch — the prompt asks the learner to respond as themselves ('your seat request was not processed'), but the answer speaks about the flight attendant in third person ('The flight attendant did not know why my request had been ignored'), making the answer a narrative report rather than a direct personal response to the flight attendant's question|tmp_r4_q8: Answer introduces 'the flight attendant' as subject saying they 'did not know why my request had been ignored' — but the prompt says the flight attendant is ASKING the student why the request was not processed. The student answering AS the flight attendant is incoherent; the answer contradicts the scenario, making the intended answer unrecoverable from context.|tmp_r4_q1: Multi-word chunk 'really comfortable' groups an adverb+adjective that are NOT a fixed collocation; 'really' could plausibly modify 'seating' instead, creating mild ambiguity. More critically, 'near campus' is chunked separately but the prefilled subject is 'the coffee shop', so the student must place 'near campus' before 'has' — the intended order 'near campus has' is unnatural as a standalone chunk sequence and learners may place 'near campus' after 'seating areas', producing a grammatically valid alternate: 'The coffee shop has really comfortable seating areas near campus.' This alternate is fully grammatical and semantically equivalent, constituting a clear ambiguity blocker.|tmp_r4_q6: Two verbs in chunks — 'recommended' and 'offered' — with no syntactic signal forcing their order. Learners could plausibly produce 'The hair salon offered my colleague recommended very reasonable pricing options' (ungrammatical but confusing) or, more critically, interpret the contact-clause structure incorrectly. The distractor 'offers' is NOT valid as main verb in past context, so that is safe. However, ordering of 'recommended' vs 'offered' is genuinely ambiguous without punctuation or a relative pronoun, constituting an ambiguous-order blocker.": 2
+            }
+          }
+        },
+        "deltaAssemblable": 0,
+        "deltaProgress": 0,
+        "acceptedGainRate": 0
+      },
+      "nextGap": {
+        "total": 177,
+        "diffGap": 86,
+        "typeGap": 3,
+        "distractorGap": 38,
+        "assemblyBlockingGap": 50
+      },
+      "nextAssemblyState": {
+        "total": 4,
+        "diffCounts": {
+          "easy": 0,
+          "medium": 4,
+          "hard": 0
+        },
+        "embedded": 4,
+        "negation": 0,
+        "distractor": 4,
+        "qmark": 1,
+        "nonEmbedded": 0,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 48,
+          "negationMin": 12,
+          "negationMax": 24,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "nonNegationMin": 36,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "medium": {
+            "total": 4,
+            "embedded": 4,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "hard": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "negation": 0,
+          "negationCap": 0,
+          "distractor": 0,
+          "nonEmbedded": 0
+        },
+        "assemblableSets": 0,
+        "remainingSets": 6,
+        "remainingRecipe": {
+          "sets": 6,
+          "diff": {
+            "easy": 6,
+            "medium": 38,
+            "hard": 12
+          },
+          "style": {
+            "embeddedMin": 26,
+            "negationMin": 12,
+            "distractorMin": 38,
+            "nonEmbeddedMin": 12,
+            "embeddedCapacity": 44,
+            "negationCapacity": 24,
+            "qmarkCapacity": 11
+          }
+        },
+        "deficits": {
+          "easy": 6,
+          "medium": 38,
+          "hard": 12,
+          "embedded": 26,
+          "negation": 12,
+          "distractor": 38,
+          "nonEmbedded": 12,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 38,
+            "priority": 228
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 26,
+            "priority": 182
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 38,
+            "priority": 114
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 12,
+            "priority": 96
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 12,
+            "priority": 84
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 12,
+            "priority": 60
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 6,
+            "priority": 12
+          }
+        ],
+        "progressRatios": {
+          "easy": 0,
+          "medium": 0.09523809523809523,
+          "hard": 0,
+          "embedded": 0.13333333333333333,
+          "nonEmbedded": 0,
+          "distractor": 0.09523809523809523,
+          "negation": 0
+        },
+        "assemblyProgressScore": 0.07692307692307693
+      },
+      "phaseSignals": {
+        "strongTargeting": false,
+        "repairMode": false,
+        "strongGateReady": false,
+        "repairGateReady": false,
+        "strongReasons": [],
+        "repairReasons": [],
+        "momentum": {
+          "windowCount": 3,
+          "accepted": 4,
+          "generated": 30,
+          "poolGrowth": 4,
+          "deltaAssemblable": 0,
+          "deltaProgress": 0.07692307692307693,
+          "zeroGainRounds": 1,
+          "zeroProgressRounds": 0,
+          "acceptedGainRate": 0.04807692307692308
+        }
+      },
+      "typeReliability": {
+        "negation": 0.2,
+        "3rd-reporting": 0.6,
+        "1st-embedded": 0.4,
+        "interrogative": 0.83,
+        "direct": 0.2,
+        "relative": 0.2
+      }
+    },
+    {
+      "round": 5,
+      "phase": "broad",
+      "mode": "broad",
+      "gap": {
+        "total": 177,
+        "diffGap": 86,
+        "typeGap": 3,
+        "distractorGap": 38,
+        "assemblyBlockingGap": 50
+      },
+      "assemblyState": {
+        "total": 4,
+        "diffCounts": {
+          "easy": 0,
+          "medium": 4,
+          "hard": 0
+        },
+        "embedded": 4,
+        "negation": 0,
+        "distractor": 4,
+        "qmark": 1,
+        "nonEmbedded": 0,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 48,
+          "negationMin": 12,
+          "negationMax": 24,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "nonNegationMin": 36,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "medium": {
+            "total": 4,
+            "embedded": 4,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "hard": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "negation": 0,
+          "negationCap": 0,
+          "distractor": 0,
+          "nonEmbedded": 0
+        },
+        "assemblableSets": 0,
+        "remainingSets": 6,
+        "remainingRecipe": {
+          "sets": 6,
+          "diff": {
+            "easy": 6,
+            "medium": 38,
+            "hard": 12
+          },
+          "style": {
+            "embeddedMin": 26,
+            "negationMin": 12,
+            "distractorMin": 38,
+            "nonEmbeddedMin": 12,
+            "embeddedCapacity": 44,
+            "negationCapacity": 24,
+            "qmarkCapacity": 11
+          }
+        },
+        "deficits": {
+          "easy": 6,
+          "medium": 38,
+          "hard": 12,
+          "embedded": 26,
+          "negation": 12,
+          "distractor": 38,
+          "nonEmbedded": 12,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 38,
+            "priority": 228
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 26,
+            "priority": 182
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 38,
+            "priority": 114
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 12,
+            "priority": 96
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 12,
+            "priority": 84
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 12,
+            "priority": 60
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 6,
+            "priority": 12
+          }
+        ],
+        "progressRatios": {
+          "easy": 0,
+          "medium": 0.09523809523809523,
+          "hard": 0,
+          "embedded": 0.13333333333333333,
+          "nonEmbedded": 0,
+          "distractor": 0.09523809523809523,
+          "negation": 0
+        },
+        "assemblyProgressScore": 0.07692307692307693
+      },
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 6
+        },
+        {
+          "type": "relative",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "easy",
+          "count": 2
+        }
+      ],
+      "specSelection": null,
+      "result": {
+        "generated": 10,
+        "accepted": 0,
+        "rejected": 10,
+        "rejectReasons": {
+          "fatal: chunks[4]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+          "review:blocker:tmp_r5_q8: prefilled 'you' at position 2 is structurally broken — the answer is 'The tool you lent me had been damaged before.' but 'the tool' is not prefilled and 'you' is given mid-sentence at index 2; learner cannot reconstruct sentence start without knowing 'the tool' is first, making order ambiguous and assembly logic contradictory.|tmp_r5_q8: distractor 'lend' (base form) is implausible enough to be non-functional as a real test of knowledge — but more critically, the contact clause structure 'the tool you lent me' requires learner to place 'you' correctly inside a relative clause with no subject prefill, creating genuine ambiguity about whether sentence starts with 'the tool' or 'you'.|tmp_r5_q2: chunking 'where / to / pick / up / the tickets' splits a natural phrasal verb collocation 'pick up' into separate single-word chunks, and also separates 'to pick up' into three pieces ('to', 'pick', 'up'), creating an unnaturally high number of adjacent positional choices that significantly increases solve difficulty beyond TPO norms and risks multiple plausible orderings for 'to / pick / up'.": 9
+        },
+        "typeStats": {
+          "negation": {
+            "generated": 7,
+            "accepted": 0,
+            "rejected": 7,
+            "reasons": {
+              "review:blocker:tmp_r5_q8: prefilled 'you' at position 2 is structurally broken — the answer is 'The tool you lent me had been damaged before.' but 'the tool' is not prefilled and 'you' is given mid-sentence at index 2; learner cannot reconstruct sentence start without knowing 'the tool' is first, making order ambiguous and assembly logic contradictory.|tmp_r5_q8: distractor 'lend' (base form) is implausible enough to be non-functional as a real test of knowledge — but more critically, the contact clause structure 'the tool you lent me' requires learner to place 'you' correctly inside a relative clause with no subject prefill, creating genuine ambiguity about whether sentence starts with 'the tool' or 'you'.|tmp_r5_q2: chunking 'where / to / pick / up / the tickets' splits a natural phrasal verb collocation 'pick up' into separate single-word chunks, and also separates 'to pick up' into three pieces ('to', 'pick', 'up'), creating an unnaturally high number of adjacent positional choices that significantly increases solve difficulty beyond TPO norms and risks multiple plausible orderings for 'to / pick / up'.": 7
+            }
+          },
+          "3rd-reporting": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "1st-embedded": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r5_q8: prefilled 'you' at position 2 is structurally broken — the answer is 'The tool you lent me had been damaged before.' but 'the tool' is not prefilled and 'you' is given mid-sentence at index 2; learner cannot reconstruct sentence start without knowing 'the tool' is first, making order ambiguous and assembly logic contradictory.|tmp_r5_q8: distractor 'lend' (base form) is implausible enough to be non-functional as a real test of knowledge — but more critically, the contact clause structure 'the tool you lent me' requires learner to place 'you' correctly inside a relative clause with no subject prefill, creating genuine ambiguity about whether sentence starts with 'the tool' or 'you'.|tmp_r5_q2: chunking 'where / to / pick / up / the tickets' splits a natural phrasal verb collocation 'pick up' into separate single-word chunks, and also separates 'to pick up' into three pieces ('to', 'pick', 'up'), creating an unnaturally high number of adjacent positional choices that significantly increases solve difficulty beyond TPO norms and risks multiple plausible orderings for 'to / pick / up'.": 1
+            }
+          },
+          "interrogative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "direct": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "relative": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "fatal: chunks[4]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "review:blocker:tmp_r5_q8: prefilled 'you' at position 2 is structurally broken — the answer is 'The tool you lent me had been damaged before.' but 'the tool' is not prefilled and 'you' is given mid-sentence at index 2; learner cannot reconstruct sentence start without knowing 'the tool' is first, making order ambiguous and assembly logic contradictory.|tmp_r5_q8: distractor 'lend' (base form) is implausible enough to be non-functional as a real test of knowledge — but more critically, the contact clause structure 'the tool you lent me' requires learner to place 'you' correctly inside a relative clause with no subject prefill, creating genuine ambiguity about whether sentence starts with 'the tool' or 'you'.|tmp_r5_q2: chunking 'where / to / pick / up / the tickets' splits a natural phrasal verb collocation 'pick up' into separate single-word chunks, and also separates 'to pick up' into three pieces ('to', 'pick', 'up'), creating an unnaturally high number of adjacent positional choices that significantly increases solve difficulty beyond TPO norms and risks multiple plausible orderings for 'to / pick / up'.": 1
+            }
+          }
+        },
+        "deltaAssemblable": 0,
+        "deltaProgress": 0,
+        "acceptedGainRate": 0
+      },
+      "nextGap": {
+        "total": 177,
+        "diffGap": 86,
+        "typeGap": 3,
+        "distractorGap": 38,
+        "assemblyBlockingGap": 50
+      },
+      "nextAssemblyState": {
+        "total": 4,
+        "diffCounts": {
+          "easy": 0,
+          "medium": 4,
+          "hard": 0
+        },
+        "embedded": 4,
+        "negation": 0,
+        "distractor": 4,
+        "qmark": 1,
+        "nonEmbedded": 0,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 48,
+          "negationMin": 12,
+          "negationMax": 24,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "nonNegationMin": 36,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "medium": {
+            "total": 4,
+            "embedded": 4,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "hard": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "negation": 0,
+          "negationCap": 0,
+          "distractor": 0,
+          "nonEmbedded": 0
+        },
+        "assemblableSets": 0,
+        "remainingSets": 6,
+        "remainingRecipe": {
+          "sets": 6,
+          "diff": {
+            "easy": 6,
+            "medium": 38,
+            "hard": 12
+          },
+          "style": {
+            "embeddedMin": 26,
+            "negationMin": 12,
+            "distractorMin": 38,
+            "nonEmbeddedMin": 12,
+            "embeddedCapacity": 44,
+            "negationCapacity": 24,
+            "qmarkCapacity": 11
+          }
+        },
+        "deficits": {
+          "easy": 6,
+          "medium": 38,
+          "hard": 12,
+          "embedded": 26,
+          "negation": 12,
+          "distractor": 38,
+          "nonEmbedded": 12,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 38,
+            "priority": 228
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 26,
+            "priority": 182
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 38,
+            "priority": 114
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 12,
+            "priority": 96
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 12,
+            "priority": 84
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 12,
+            "priority": 60
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 6,
+            "priority": 12
+          }
+        ],
+        "progressRatios": {
+          "easy": 0,
+          "medium": 0.09523809523809523,
+          "hard": 0,
+          "embedded": 0.13333333333333333,
+          "nonEmbedded": 0,
+          "distractor": 0.09523809523809523,
+          "negation": 0
+        },
+        "assemblyProgressScore": 0.07692307692307693
+      },
+      "phaseSignals": {
+        "strongTargeting": false,
+        "repairMode": false,
+        "strongGateReady": false,
+        "repairGateReady": false,
+        "strongReasons": [],
+        "repairReasons": [],
+        "momentum": {
+          "windowCount": 4,
+          "accepted": 4,
+          "generated": 40,
+          "poolGrowth": 4,
+          "deltaAssemblable": 0,
+          "deltaProgress": 0.07692307692307693,
+          "zeroGainRounds": 1,
+          "zeroProgressRounds": 0,
+          "acceptedGainRate": 0.04807692307692308
+        }
+      },
+      "typeReliability": {
+        "negation": 0.2,
+        "3rd-reporting": 0.6,
+        "1st-embedded": 0.33,
+        "interrogative": 0.83,
+        "direct": 0.2,
+        "relative": 0.2
+      }
+    },
+    {
+      "round": 6,
+      "phase": "broad",
+      "mode": "broad",
+      "gap": {
+        "total": 177,
+        "diffGap": 86,
+        "typeGap": 3,
+        "distractorGap": 38,
+        "assemblyBlockingGap": 50
+      },
+      "assemblyState": {
+        "total": 4,
+        "diffCounts": {
+          "easy": 0,
+          "medium": 4,
+          "hard": 0
+        },
+        "embedded": 4,
+        "negation": 0,
+        "distractor": 4,
+        "qmark": 1,
+        "nonEmbedded": 0,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 48,
+          "negationMin": 12,
+          "negationMax": 24,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "nonNegationMin": 36,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "medium": {
+            "total": 4,
+            "embedded": 4,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "hard": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "negation": 0,
+          "negationCap": 0,
+          "distractor": 0,
+          "nonEmbedded": 0
+        },
+        "assemblableSets": 0,
+        "remainingSets": 6,
+        "remainingRecipe": {
+          "sets": 6,
+          "diff": {
+            "easy": 6,
+            "medium": 38,
+            "hard": 12
+          },
+          "style": {
+            "embeddedMin": 26,
+            "negationMin": 12,
+            "distractorMin": 38,
+            "nonEmbeddedMin": 12,
+            "embeddedCapacity": 44,
+            "negationCapacity": 24,
+            "qmarkCapacity": 11
+          }
+        },
+        "deficits": {
+          "easy": 6,
+          "medium": 38,
+          "hard": 12,
+          "embedded": 26,
+          "negation": 12,
+          "distractor": 38,
+          "nonEmbedded": 12,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 38,
+            "priority": 228
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 26,
+            "priority": 182
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 38,
+            "priority": 114
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 12,
+            "priority": 96
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 12,
+            "priority": 84
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 12,
+            "priority": 60
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 6,
+            "priority": 12
+          }
+        ],
+        "progressRatios": {
+          "easy": 0,
+          "medium": 0.09523809523809523,
+          "hard": 0,
+          "embedded": 0.13333333333333333,
+          "nonEmbedded": 0,
+          "distractor": 0.09523809523809523,
+          "negation": 0
+        },
+        "assemblyProgressScore": 0.07692307692307693
+      },
+      "spec": [
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 6
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "easy",
+          "count": 2
+        }
+      ],
+      "specSelection": null,
+      "result": {
+        "generated": 10,
+        "accepted": 0,
+        "rejected": 10,
+        "rejectReasons": {
+          "fatal: distractor must be a single word (TPO standard)": 3,
+          "review:blocker:tmp_r6_q6: The answer sentence 'The project supervisor was curious why the budget report was incomplete.' is grammatically incorrect. The adjective 'curious' requires the preposition 'about' before an embedded clause in standard English ('curious about why...'), or alternatively 'curious as to why...'. The bare 'curious why' construction is non-standard and fails a grammar check for a TPO-level item.|tmp_r6_q4: distractor 'extend' is plausibly valid — 'could extend' is grammatically acceptable as an alternative to 'could be extended', creating ambiguity in chunk selection|tmp_r6_q8: splitting 'renovation contract' into three separate chunks ('the', 'renovation', 'contract') creates multiple valid orderings and raises cognitive load beyond TPO norms; also 'whom' vs 'who' distractor pair tests formal register knowledge, not the core indirect-question word-order principle": 7
+        },
+        "typeStats": {
+          "negation": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "3rd-reporting": {
+            "generated": 8,
+            "accepted": 0,
+            "rejected": 8,
+            "reasons": {
+              "fatal: distractor must be a single word (TPO standard)": 1,
+              "review:blocker:tmp_r6_q6: The answer sentence 'The project supervisor was curious why the budget report was incomplete.' is grammatically incorrect. The adjective 'curious' requires the preposition 'about' before an embedded clause in standard English ('curious about why...'), or alternatively 'curious as to why...'. The bare 'curious why' construction is non-standard and fails a grammar check for a TPO-level item.|tmp_r6_q4: distractor 'extend' is plausibly valid — 'could extend' is grammatically acceptable as an alternative to 'could be extended', creating ambiguity in chunk selection|tmp_r6_q8: splitting 'renovation contract' into three separate chunks ('the', 'renovation', 'contract') creates multiple valid orderings and raises cognitive load beyond TPO norms; also 'whom' vs 'who' distractor pair tests formal register knowledge, not the core indirect-question word-order principle": 7
+            }
+          },
+          "1st-embedded": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "interrogative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "direct": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "fatal: distractor must be a single word (TPO standard)": 2
+            }
+          },
+          "relative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        "deltaAssemblable": 0,
+        "deltaProgress": 0,
+        "acceptedGainRate": 0
+      },
+      "nextGap": {
+        "total": 177,
+        "diffGap": 86,
+        "typeGap": 3,
+        "distractorGap": 38,
+        "assemblyBlockingGap": 50
+      },
+      "nextAssemblyState": {
+        "total": 4,
+        "diffCounts": {
+          "easy": 0,
+          "medium": 4,
+          "hard": 0
+        },
+        "embedded": 4,
+        "negation": 0,
+        "distractor": 4,
+        "qmark": 1,
+        "nonEmbedded": 0,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 48,
+          "negationMin": 12,
+          "negationMax": 24,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "nonNegationMin": 36,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "medium": {
+            "total": 4,
+            "embedded": 4,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "hard": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "negation": 0,
+          "negationCap": 0,
+          "distractor": 0,
+          "nonEmbedded": 0
+        },
+        "assemblableSets": 0,
+        "remainingSets": 6,
+        "remainingRecipe": {
+          "sets": 6,
+          "diff": {
+            "easy": 6,
+            "medium": 38,
+            "hard": 12
+          },
+          "style": {
+            "embeddedMin": 26,
+            "negationMin": 12,
+            "distractorMin": 38,
+            "nonEmbeddedMin": 12,
+            "embeddedCapacity": 44,
+            "negationCapacity": 24,
+            "qmarkCapacity": 11
+          }
+        },
+        "deficits": {
+          "easy": 6,
+          "medium": 38,
+          "hard": 12,
+          "embedded": 26,
+          "negation": 12,
+          "distractor": 38,
+          "nonEmbedded": 12,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 38,
+            "priority": 228
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 26,
+            "priority": 182
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 38,
+            "priority": 114
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 12,
+            "priority": 96
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 12,
+            "priority": 84
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 12,
+            "priority": 60
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 6,
+            "priority": 12
+          }
+        ],
+        "progressRatios": {
+          "easy": 0,
+          "medium": 0.09523809523809523,
+          "hard": 0,
+          "embedded": 0.13333333333333333,
+          "nonEmbedded": 0,
+          "distractor": 0.09523809523809523,
+          "negation": 0
+        },
+        "assemblyProgressScore": 0.07692307692307693
+      },
+      "phaseSignals": {
+        "strongTargeting": false,
+        "repairMode": false,
+        "strongGateReady": false,
+        "repairGateReady": false,
+        "strongReasons": [],
+        "repairReasons": [],
+        "momentum": {
+          "windowCount": 5,
+          "accepted": 4,
+          "generated": 50,
+          "poolGrowth": 4,
+          "deltaAssemblable": 0,
+          "deltaProgress": 0.07692307692307693,
+          "zeroGainRounds": 1,
+          "zeroProgressRounds": 0,
+          "acceptedGainRate": 0.04807692307692308
+        }
+      },
+      "typeReliability": {
+        "negation": 0.2,
+        "3rd-reporting": 0.6,
+        "1st-embedded": 0.27,
+        "interrogative": 0.83,
+        "direct": 0.2,
+        "relative": 0.2
+      }
+    },
+    {
+      "round": 7,
+      "phase": "broad",
+      "mode": "broad",
+      "gap": {
+        "total": 177,
+        "diffGap": 86,
+        "typeGap": 3,
+        "distractorGap": 38,
+        "assemblyBlockingGap": 50
+      },
+      "assemblyState": {
+        "total": 4,
+        "diffCounts": {
+          "easy": 0,
+          "medium": 4,
+          "hard": 0
+        },
+        "embedded": 4,
+        "negation": 0,
+        "distractor": 4,
+        "qmark": 1,
+        "nonEmbedded": 0,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 48,
+          "negationMin": 12,
+          "negationMax": 24,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "nonNegationMin": 36,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "medium": {
+            "total": 4,
+            "embedded": 4,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "hard": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "negation": 0,
+          "negationCap": 0,
+          "distractor": 0,
+          "nonEmbedded": 0
+        },
+        "assemblableSets": 0,
+        "remainingSets": 6,
+        "remainingRecipe": {
+          "sets": 6,
+          "diff": {
+            "easy": 6,
+            "medium": 38,
+            "hard": 12
+          },
+          "style": {
+            "embeddedMin": 26,
+            "negationMin": 12,
+            "distractorMin": 38,
+            "nonEmbeddedMin": 12,
+            "embeddedCapacity": 44,
+            "negationCapacity": 24,
+            "qmarkCapacity": 11
+          }
+        },
+        "deficits": {
+          "easy": 6,
+          "medium": 38,
+          "hard": 12,
+          "embedded": 26,
+          "negation": 12,
+          "distractor": 38,
+          "nonEmbedded": 12,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 38,
+            "priority": 228
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 26,
+            "priority": 182
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 38,
+            "priority": 114
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 12,
+            "priority": 96
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 12,
+            "priority": 84
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 12,
+            "priority": 60
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 6,
+            "priority": 12
+          }
+        ],
+        "progressRatios": {
+          "easy": 0,
+          "medium": 0.09523809523809523,
+          "hard": 0,
+          "embedded": 0.13333333333333333,
+          "nonEmbedded": 0,
+          "distractor": 0.09523809523809523,
+          "negation": 0
+        },
+        "assemblyProgressScore": 0.07692307692307693
+      },
+      "spec": [
+        {
+          "type": "interrogative",
+          "difficulty": "medium",
+          "count": 6
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "easy",
+          "count": 2
+        }
+      ],
+      "specSelection": null,
+      "result": {
+        "generated": 10,
+        "accepted": 0,
+        "rejected": 10,
+        "rejectReasons": {
+          "fatal: distractor must be a single word (TPO standard)": 1,
+          "review:blocker:tmp_r7_q1: indirect question clause 'when the reading room opens' is correct, but the outer frame 'Could you tell me' is an interrogative frame producing a polite request question — the embedded clause itself is declarative order (OK); however, the answer IS a direct question (interrogative sentence) used to respond to 'what did the student ask,' which is acceptable for ask-type prompts. No blocker here — re-evaluated.|tmp_r7_q4: chunk order ambiguity — 'which shelf the new arrivals are on' vs. possible reordering concern is minimal, but 'were' distractor: inserting 'were' yields 'Could you tell me which shelf the new arrivals were on?' which is a grammatically valid, natural English sentence. The distractor creates a valid alternative answer. BLOCKER: distractor could be a valid answer chunk.|tmp_r7_q8: prompt/answer mismatch — the prompt asks 'What did the museum curator SAY about the painting that was donated?' implying a report of content/opinion, but the answer 'The curator mentioned which painting had been donated by the family' does not report what was SAID about the painting; it reports which painting was identified. The answer deflects the prompt's implied content. BLOCKER: prompt/answer mismatch.|tmp_r7_q3: distractor 'were' is plausibly valid — 'how many seats were still available' is grammatically acceptable as an embedded clause in certain past-tense framings, making it a near-valid answer rather than a clean distractor|tmp_r7_q7: too many chunks (8 active) with multi-word collocations 'to know', 'the best', 'rated' creating multiple plausible partial orderings; assembly ambiguity is high|tmp_r7_q8: answer 'The curator mentioned which painting had been donated by the family' is semantically odd — 'mentioned which painting' implies selecting among multiple paintings, but the prompt says 'the painting that was donated', creating a logic mismatch that may confuse test-takers; borderline ungrammatical in context": 9
+        },
+        "typeStats": {
+          "negation": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "3rd-reporting": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "1st-embedded": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "review:blocker:tmp_r7_q1: indirect question clause 'when the reading room opens' is correct, but the outer frame 'Could you tell me' is an interrogative frame producing a polite request question — the embedded clause itself is declarative order (OK); however, the answer IS a direct question (interrogative sentence) used to respond to 'what did the student ask,' which is acceptable for ask-type prompts. No blocker here — re-evaluated.|tmp_r7_q4: chunk order ambiguity — 'which shelf the new arrivals are on' vs. possible reordering concern is minimal, but 'were' distractor: inserting 'were' yields 'Could you tell me which shelf the new arrivals were on?' which is a grammatically valid, natural English sentence. The distractor creates a valid alternative answer. BLOCKER: distractor could be a valid answer chunk.|tmp_r7_q8: prompt/answer mismatch — the prompt asks 'What did the museum curator SAY about the painting that was donated?' implying a report of content/opinion, but the answer 'The curator mentioned which painting had been donated by the family' does not report what was SAID about the painting; it reports which painting was identified. The answer deflects the prompt's implied content. BLOCKER: prompt/answer mismatch.|tmp_r7_q3: distractor 'were' is plausibly valid — 'how many seats were still available' is grammatically acceptable as an embedded clause in certain past-tense framings, making it a near-valid answer rather than a clean distractor|tmp_r7_q7: too many chunks (8 active) with multi-word collocations 'to know', 'the best', 'rated' creating multiple plausible partial orderings; assembly ambiguity is high|tmp_r7_q8: answer 'The curator mentioned which painting had been donated by the family' is semantically odd — 'mentioned which painting' implies selecting among multiple paintings, but the prompt says 'the painting that was donated', creating a logic mismatch that may confuse test-takers; borderline ungrammatical in context": 3
+            }
+          },
+          "interrogative": {
+            "generated": 6,
+            "accepted": 0,
+            "rejected": 6,
+            "reasons": {
+              "fatal: distractor must be a single word (TPO standard)": 1,
+              "review:blocker:tmp_r7_q1: indirect question clause 'when the reading room opens' is correct, but the outer frame 'Could you tell me' is an interrogative frame producing a polite request question — the embedded clause itself is declarative order (OK); however, the answer IS a direct question (interrogative sentence) used to respond to 'what did the student ask,' which is acceptable for ask-type prompts. No blocker here — re-evaluated.|tmp_r7_q4: chunk order ambiguity — 'which shelf the new arrivals are on' vs. possible reordering concern is minimal, but 'were' distractor: inserting 'were' yields 'Could you tell me which shelf the new arrivals were on?' which is a grammatically valid, natural English sentence. The distractor creates a valid alternative answer. BLOCKER: distractor could be a valid answer chunk.|tmp_r7_q8: prompt/answer mismatch — the prompt asks 'What did the museum curator SAY about the painting that was donated?' implying a report of content/opinion, but the answer 'The curator mentioned which painting had been donated by the family' does not report what was SAID about the painting; it reports which painting was identified. The answer deflects the prompt's implied content. BLOCKER: prompt/answer mismatch.|tmp_r7_q3: distractor 'were' is plausibly valid — 'how many seats were still available' is grammatically acceptable as an embedded clause in certain past-tense framings, making it a near-valid answer rather than a clean distractor|tmp_r7_q7: too many chunks (8 active) with multi-word collocations 'to know', 'the best', 'rated' creating multiple plausible partial orderings; assembly ambiguity is high|tmp_r7_q8: answer 'The curator mentioned which painting had been donated by the family' is semantically odd — 'mentioned which painting' implies selecting among multiple paintings, but the prompt says 'the painting that was donated', creating a logic mismatch that may confuse test-takers; borderline ungrammatical in context": 5
+            }
+          },
+          "direct": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r7_q1: indirect question clause 'when the reading room opens' is correct, but the outer frame 'Could you tell me' is an interrogative frame producing a polite request question — the embedded clause itself is declarative order (OK); however, the answer IS a direct question (interrogative sentence) used to respond to 'what did the student ask,' which is acceptable for ask-type prompts. No blocker here — re-evaluated.|tmp_r7_q4: chunk order ambiguity — 'which shelf the new arrivals are on' vs. possible reordering concern is minimal, but 'were' distractor: inserting 'were' yields 'Could you tell me which shelf the new arrivals were on?' which is a grammatically valid, natural English sentence. The distractor creates a valid alternative answer. BLOCKER: distractor could be a valid answer chunk.|tmp_r7_q8: prompt/answer mismatch — the prompt asks 'What did the museum curator SAY about the painting that was donated?' implying a report of content/opinion, but the answer 'The curator mentioned which painting had been donated by the family' does not report what was SAID about the painting; it reports which painting was identified. The answer deflects the prompt's implied content. BLOCKER: prompt/answer mismatch.|tmp_r7_q3: distractor 'were' is plausibly valid — 'how many seats were still available' is grammatically acceptable as an embedded clause in certain past-tense framings, making it a near-valid answer rather than a clean distractor|tmp_r7_q7: too many chunks (8 active) with multi-word collocations 'to know', 'the best', 'rated' creating multiple plausible partial orderings; assembly ambiguity is high|tmp_r7_q8: answer 'The curator mentioned which painting had been donated by the family' is semantically odd — 'mentioned which painting' implies selecting among multiple paintings, but the prompt says 'the painting that was donated', creating a logic mismatch that may confuse test-takers; borderline ungrammatical in context": 1
+            }
+          },
+          "relative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        "deltaAssemblable": 0,
+        "deltaProgress": 0,
+        "acceptedGainRate": 0
+      },
+      "nextGap": {
+        "total": 177,
+        "diffGap": 86,
+        "typeGap": 3,
+        "distractorGap": 38,
+        "assemblyBlockingGap": 50
+      },
+      "nextAssemblyState": {
+        "total": 4,
+        "diffCounts": {
+          "easy": 0,
+          "medium": 4,
+          "hard": 0
+        },
+        "embedded": 4,
+        "negation": 0,
+        "distractor": 4,
+        "qmark": 1,
+        "nonEmbedded": 0,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 48,
+          "negationMin": 12,
+          "negationMax": 24,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "nonNegationMin": 36,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "medium": {
+            "total": 4,
+            "embedded": 4,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "hard": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "negation": 0,
+          "negationCap": 0,
+          "distractor": 0,
+          "nonEmbedded": 0
+        },
+        "assemblableSets": 0,
+        "remainingSets": 6,
+        "remainingRecipe": {
+          "sets": 6,
+          "diff": {
+            "easy": 6,
+            "medium": 38,
+            "hard": 12
+          },
+          "style": {
+            "embeddedMin": 26,
+            "negationMin": 12,
+            "distractorMin": 38,
+            "nonEmbeddedMin": 12,
+            "embeddedCapacity": 44,
+            "negationCapacity": 24,
+            "qmarkCapacity": 11
+          }
+        },
+        "deficits": {
+          "easy": 6,
+          "medium": 38,
+          "hard": 12,
+          "embedded": 26,
+          "negation": 12,
+          "distractor": 38,
+          "nonEmbedded": 12,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 38,
+            "priority": 228
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 26,
+            "priority": 182
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 38,
+            "priority": 114
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 12,
+            "priority": 96
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 12,
+            "priority": 84
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 12,
+            "priority": 60
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 6,
+            "priority": 12
+          }
+        ],
+        "progressRatios": {
+          "easy": 0,
+          "medium": 0.09523809523809523,
+          "hard": 0,
+          "embedded": 0.13333333333333333,
+          "nonEmbedded": 0,
+          "distractor": 0.09523809523809523,
+          "negation": 0
+        },
+        "assemblyProgressScore": 0.07692307692307693
+      },
+      "phaseSignals": {
+        "strongTargeting": false,
+        "repairMode": false,
+        "strongGateReady": false,
+        "repairGateReady": false,
+        "strongReasons": [],
+        "repairReasons": [],
+        "momentum": {
+          "windowCount": 5,
+          "accepted": 4,
+          "generated": 50,
+          "poolGrowth": 4,
+          "deltaAssemblable": 0,
+          "deltaProgress": 0.07692307692307693,
+          "zeroGainRounds": 1,
+          "zeroProgressRounds": 0,
+          "acceptedGainRate": 0.04807692307692308
+        }
+      },
+      "typeReliability": {
+        "negation": 0.2,
+        "3rd-reporting": 0.2,
+        "1st-embedded": 0.27,
+        "interrogative": 0.83,
+        "direct": 0.2,
+        "relative": 0.2
+      }
+    },
+    {
+      "round": 8,
+      "phase": "broad",
+      "mode": "broad",
+      "gap": {
+        "total": 177,
+        "diffGap": 86,
+        "typeGap": 3,
+        "distractorGap": 38,
+        "assemblyBlockingGap": 50
+      },
+      "assemblyState": {
+        "total": 4,
+        "diffCounts": {
+          "easy": 0,
+          "medium": 4,
+          "hard": 0
+        },
+        "embedded": 4,
+        "negation": 0,
+        "distractor": 4,
+        "qmark": 1,
+        "nonEmbedded": 0,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 48,
+          "negationMin": 12,
+          "negationMax": 24,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "nonNegationMin": 36,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "medium": {
+            "total": 4,
+            "embedded": 4,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "hard": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "negation": 0,
+          "negationCap": 0,
+          "distractor": 0,
+          "nonEmbedded": 0
+        },
+        "assemblableSets": 0,
+        "remainingSets": 6,
+        "remainingRecipe": {
+          "sets": 6,
+          "diff": {
+            "easy": 6,
+            "medium": 38,
+            "hard": 12
+          },
+          "style": {
+            "embeddedMin": 26,
+            "negationMin": 12,
+            "distractorMin": 38,
+            "nonEmbeddedMin": 12,
+            "embeddedCapacity": 44,
+            "negationCapacity": 24,
+            "qmarkCapacity": 11
+          }
+        },
+        "deficits": {
+          "easy": 6,
+          "medium": 38,
+          "hard": 12,
+          "embedded": 26,
+          "negation": 12,
+          "distractor": 38,
+          "nonEmbedded": 12,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 38,
+            "priority": 228
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 26,
+            "priority": 182
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 38,
+            "priority": 114
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 12,
+            "priority": 96
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 12,
+            "priority": 84
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 12,
+            "priority": 60
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 6,
+            "priority": 12
+          }
+        ],
+        "progressRatios": {
+          "easy": 0,
+          "medium": 0.09523809523809523,
+          "hard": 0,
+          "embedded": 0.13333333333333333,
+          "nonEmbedded": 0,
+          "distractor": 0.09523809523809523,
+          "negation": 0
+        },
+        "assemblyProgressScore": 0.07692307692307693
+      },
+      "spec": [
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 6
+        },
+        {
+          "type": "direct",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "easy",
+          "count": 2
+        }
+      ],
+      "specSelection": null,
+      "result": {
+        "generated": 10,
+        "accepted": 0,
+        "rejected": 10,
+        "rejectReasons": {
+          "fatal: chunks[2]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+          "review:blocker:tmp_r8_q2: chunk ambiguity — 'on saturday' and 'morning' are separate chunks but must be adjacent to form 'on Saturday morning'; a test-taker could plausibly place 'morning' before 'on saturday' yielding 'The yoga class morning on Saturday starts at eight o'clock', which is ungrammatical but the split itself invites mis-ordering; more critically, 'on saturday' + 'morning' can also be read as two discrete adjuncts, creating ambiguous ordering relative to 'starts' (e.g., 'The yoga class starts on Saturday morning at eight o'clock' is equally valid), giving multiple valid chunk orders.|tmp_r8_q4: distractor validity — 'reschedule' can be inserted in place of 'rescheduled' only with tense mismatch, but more critically the chunks 'for next' and 'thursday afternoon' are split across two separate chunks requiring obligatory adjacency with no signal to the test-taker; the phrase 'for next thursday afternoon' cannot be assembled correctly if a student places 'thursday afternoon' before 'for next', and no chunk boundary prevents this — multiple surface orderings are plausible, constituting ambiguous arrangement.|tmp_r8_q7: distractor could be a valid answer chunk — 'best' can replace 'better' to yield 'The salon I visited last month was far best than expected', which is ungrammatical, so this is NOT a blocker on that ground; however 'last' and 'month' are split into two separate chunks that must be adjacent, and 'visited last month' vs. 'last month visited' both parse as conceivable orderings within the contact clause, creating multiple valid chunk orders.|tmp_r8_q4: chunk 'for next' is an incomplete/unnatural fragment — 'for next Thursday afternoon' should be a single chunk or split as 'for' + 'next Thursday afternoon'; 'for next' alone is not a natural collocation and creates ambiguity in placement|tmp_r8_q7: distractor 'best' is plausible as a substitution for 'better' in casual usage and could tempt valid re-assembly; more critically, 'was far' as a single chunk is unnatural — 'far' modifies 'better' not 'was', so chunking forces an unnatural parse that may confuse solvers": 9
+        },
+        "typeStats": {
+          "negation": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "3rd-reporting": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r8_q2: chunk ambiguity — 'on saturday' and 'morning' are separate chunks but must be adjacent to form 'on Saturday morning'; a test-taker could plausibly place 'morning' before 'on saturday' yielding 'The yoga class morning on Saturday starts at eight o'clock', which is ungrammatical but the split itself invites mis-ordering; more critically, 'on saturday' + 'morning' can also be read as two discrete adjuncts, creating ambiguous ordering relative to 'starts' (e.g., 'The yoga class starts on Saturday morning at eight o'clock' is equally valid), giving multiple valid chunk orders.|tmp_r8_q4: distractor validity — 'reschedule' can be inserted in place of 'rescheduled' only with tense mismatch, but more critically the chunks 'for next' and 'thursday afternoon' are split across two separate chunks requiring obligatory adjacency with no signal to the test-taker; the phrase 'for next thursday afternoon' cannot be assembled correctly if a student places 'thursday afternoon' before 'for next', and no chunk boundary prevents this — multiple surface orderings are plausible, constituting ambiguous arrangement.|tmp_r8_q7: distractor could be a valid answer chunk — 'best' can replace 'better' to yield 'The salon I visited last month was far best than expected', which is ungrammatical, so this is NOT a blocker on that ground; however 'last' and 'month' are split into two separate chunks that must be adjacent, and 'visited last month' vs. 'last month visited' both parse as conceivable orderings within the contact clause, creating multiple valid chunk orders.|tmp_r8_q4: chunk 'for next' is an incomplete/unnatural fragment — 'for next Thursday afternoon' should be a single chunk or split as 'for' + 'next Thursday afternoon'; 'for next' alone is not a natural collocation and creates ambiguity in placement|tmp_r8_q7: distractor 'best' is plausible as a substitution for 'better' in casual usage and could tempt valid re-assembly; more critically, 'was far' as a single chunk is unnatural — 'far' modifies 'better' not 'was', so chunking forces an unnatural parse that may confuse solvers": 1
+            }
+          },
+          "1st-embedded": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "interrogative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "direct": {
+            "generated": 7,
+            "accepted": 0,
+            "rejected": 7,
+            "reasons": {
+              "review:blocker:tmp_r8_q2: chunk ambiguity — 'on saturday' and 'morning' are separate chunks but must be adjacent to form 'on Saturday morning'; a test-taker could plausibly place 'morning' before 'on saturday' yielding 'The yoga class morning on Saturday starts at eight o'clock', which is ungrammatical but the split itself invites mis-ordering; more critically, 'on saturday' + 'morning' can also be read as two discrete adjuncts, creating ambiguous ordering relative to 'starts' (e.g., 'The yoga class starts on Saturday morning at eight o'clock' is equally valid), giving multiple valid chunk orders.|tmp_r8_q4: distractor validity — 'reschedule' can be inserted in place of 'rescheduled' only with tense mismatch, but more critically the chunks 'for next' and 'thursday afternoon' are split across two separate chunks requiring obligatory adjacency with no signal to the test-taker; the phrase 'for next thursday afternoon' cannot be assembled correctly if a student places 'thursday afternoon' before 'for next', and no chunk boundary prevents this — multiple surface orderings are plausible, constituting ambiguous arrangement.|tmp_r8_q7: distractor could be a valid answer chunk — 'best' can replace 'better' to yield 'The salon I visited last month was far best than expected', which is ungrammatical, so this is NOT a blocker on that ground; however 'last' and 'month' are split into two separate chunks that must be adjacent, and 'visited last month' vs. 'last month visited' both parse as conceivable orderings within the contact clause, creating multiple valid chunk orders.|tmp_r8_q4: chunk 'for next' is an incomplete/unnatural fragment — 'for next Thursday afternoon' should be a single chunk or split as 'for' + 'next Thursday afternoon'; 'for next' alone is not a natural collocation and creates ambiguity in placement|tmp_r8_q7: distractor 'best' is plausible as a substitution for 'better' in casual usage and could tempt valid re-assembly; more critically, 'was far' as a single chunk is unnatural — 'far' modifies 'better' not 'was', so chunking forces an unnatural parse that may confuse solvers": 7
+            }
+          },
+          "relative": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "fatal: chunks[2]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "review:blocker:tmp_r8_q2: chunk ambiguity — 'on saturday' and 'morning' are separate chunks but must be adjacent to form 'on Saturday morning'; a test-taker could plausibly place 'morning' before 'on saturday' yielding 'The yoga class morning on Saturday starts at eight o'clock', which is ungrammatical but the split itself invites mis-ordering; more critically, 'on saturday' + 'morning' can also be read as two discrete adjuncts, creating ambiguous ordering relative to 'starts' (e.g., 'The yoga class starts on Saturday morning at eight o'clock' is equally valid), giving multiple valid chunk orders.|tmp_r8_q4: distractor validity — 'reschedule' can be inserted in place of 'rescheduled' only with tense mismatch, but more critically the chunks 'for next' and 'thursday afternoon' are split across two separate chunks requiring obligatory adjacency with no signal to the test-taker; the phrase 'for next thursday afternoon' cannot be assembled correctly if a student places 'thursday afternoon' before 'for next', and no chunk boundary prevents this — multiple surface orderings are plausible, constituting ambiguous arrangement.|tmp_r8_q7: distractor could be a valid answer chunk — 'best' can replace 'better' to yield 'The salon I visited last month was far best than expected', which is ungrammatical, so this is NOT a blocker on that ground; however 'last' and 'month' are split into two separate chunks that must be adjacent, and 'visited last month' vs. 'last month visited' both parse as conceivable orderings within the contact clause, creating multiple valid chunk orders.|tmp_r8_q4: chunk 'for next' is an incomplete/unnatural fragment — 'for next Thursday afternoon' should be a single chunk or split as 'for' + 'next Thursday afternoon'; 'for next' alone is not a natural collocation and creates ambiguity in placement|tmp_r8_q7: distractor 'best' is plausible as a substitution for 'better' in casual usage and could tempt valid re-assembly; more critically, 'was far' as a single chunk is unnatural — 'far' modifies 'better' not 'was', so chunking forces an unnatural parse that may confuse solvers": 1
+            }
+          }
+        },
+        "deltaAssemblable": 0,
+        "deltaProgress": 0,
+        "acceptedGainRate": 0
+      },
+      "nextGap": {
+        "total": 177,
+        "diffGap": 86,
+        "typeGap": 3,
+        "distractorGap": 38,
+        "assemblyBlockingGap": 50
+      },
+      "nextAssemblyState": {
+        "total": 4,
+        "diffCounts": {
+          "easy": 0,
+          "medium": 4,
+          "hard": 0
+        },
+        "embedded": 4,
+        "negation": 0,
+        "distractor": 4,
+        "qmark": 1,
+        "nonEmbedded": 0,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 48,
+          "negationMin": 12,
+          "negationMax": 24,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "nonNegationMin": 36,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "medium": {
+            "total": 4,
+            "embedded": 4,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "hard": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "negation": 0,
+          "negationCap": 0,
+          "distractor": 0,
+          "nonEmbedded": 0
+        },
+        "assemblableSets": 0,
+        "remainingSets": 6,
+        "remainingRecipe": {
+          "sets": 6,
+          "diff": {
+            "easy": 6,
+            "medium": 38,
+            "hard": 12
+          },
+          "style": {
+            "embeddedMin": 26,
+            "negationMin": 12,
+            "distractorMin": 38,
+            "nonEmbeddedMin": 12,
+            "embeddedCapacity": 44,
+            "negationCapacity": 24,
+            "qmarkCapacity": 11
+          }
+        },
+        "deficits": {
+          "easy": 6,
+          "medium": 38,
+          "hard": 12,
+          "embedded": 26,
+          "negation": 12,
+          "distractor": 38,
+          "nonEmbedded": 12,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 38,
+            "priority": 228
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 26,
+            "priority": 182
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 38,
+            "priority": 114
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 12,
+            "priority": 96
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 12,
+            "priority": 84
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 12,
+            "priority": 60
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 6,
+            "priority": 12
+          }
+        ],
+        "progressRatios": {
+          "easy": 0,
+          "medium": 0.09523809523809523,
+          "hard": 0,
+          "embedded": 0.13333333333333333,
+          "nonEmbedded": 0,
+          "distractor": 0.09523809523809523,
+          "negation": 0
+        },
+        "assemblyProgressScore": 0.07692307692307693
+      },
+      "phaseSignals": {
+        "strongTargeting": false,
+        "repairMode": false,
+        "strongGateReady": false,
+        "repairGateReady": false,
+        "strongReasons": [],
+        "repairReasons": [],
+        "momentum": {
+          "windowCount": 5,
+          "accepted": 4,
+          "generated": 50,
+          "poolGrowth": 4,
+          "deltaAssemblable": 0,
+          "deltaProgress": 0.07692307692307693,
+          "zeroGainRounds": 1,
+          "zeroProgressRounds": 0,
+          "acceptedGainRate": 0.04807692307692308
+        }
+      },
+      "typeReliability": {
+        "negation": 0.2,
+        "3rd-reporting": 0.2,
+        "1st-embedded": 0.2,
+        "interrogative": 0.2,
+        "direct": 0.2,
+        "relative": 0.2
+      }
+    }
+  ],
+  "final": {
+    "pool": {
+      "easy": 0,
+      "medium": 4,
+      "hard": 0
+    },
+    "assemblyState": {
+      "total": 4,
+      "diffCounts": {
+        "easy": 0,
+        "medium": 4,
+        "hard": 0
+      },
+      "embedded": 4,
+      "negation": 0,
+      "distractor": 4,
+      "qmark": 1,
+      "nonEmbedded": 0,
+      "need": {
+        "easy": 6,
+        "medium": 42,
+        "hard": 12,
+        "embeddedMin": 30,
+        "embeddedMax": 48,
+        "negationMin": 12,
+        "negationMax": 24,
+        "distractorMin": 42,
+        "nonEmbeddedMin": 12,
+        "nonNegationMin": 36,
+        "qmarkMax": 12
+      },
+      "slotInventory": {
+        "easy": {
+          "total": 0,
+          "embedded": 0,
+          "nonEmbedded": 0,
+          "negation": 0
+        },
+        "medium": {
+          "total": 4,
+          "embedded": 4,
+          "nonEmbedded": 0,
+          "negation": 0
+        },
+        "hard": {
+          "total": 0,
+          "embedded": 0,
+          "nonEmbedded": 0,
+          "negation": 0
+        }
+      },
+      "assemblableBy": {
+        "easy": 0,
+        "medium": 0,
+        "hard": 0,
+        "embedded": 0,
+        "negation": 0,
+        "negationCap": 0,
+        "distractor": 0,
+        "nonEmbedded": 0
+      },
+      "assemblableSets": 0,
+      "remainingSets": 6,
+      "remainingRecipe": {
+        "sets": 6,
+        "diff": {
+          "easy": 6,
+          "medium": 38,
+          "hard": 12
+        },
+        "style": {
+          "embeddedMin": 26,
+          "negationMin": 12,
+          "distractorMin": 38,
+          "nonEmbeddedMin": 12,
+          "embeddedCapacity": 44,
+          "negationCapacity": 24,
+          "qmarkCapacity": 11
+        }
+      },
+      "deficits": {
+        "easy": 6,
+        "medium": 38,
+        "hard": 12,
+        "embedded": 26,
+        "negation": 12,
+        "distractor": 38,
+        "nonEmbedded": 12,
+        "assemblableSets": 6
+      },
+      "embeddedOverflow": 0,
+      "negationOverflow": 0,
+      "qmarkOverflow": 0,
+      "limitingFactors": [
+        {
+          "key": "medium_shortage",
+          "gap": 38,
+          "priority": 228
+        },
+        {
+          "key": "embedded_shortage",
+          "gap": 26,
+          "priority": 182
+        },
+        {
+          "key": "distractor_shortage",
+          "gap": 38,
+          "priority": 114
+        },
+        {
+          "key": "hard_shortage",
+          "gap": 12,
+          "priority": 96
+        },
+        {
+          "key": "non_embedded_shortage",
+          "gap": 12,
+          "priority": 84
+        },
+        {
+          "key": "negation_shortage",
+          "gap": 12,
+          "priority": 60
+        },
+        {
+          "key": "easy_shortage",
+          "gap": 6,
+          "priority": 12
+        }
+      ],
+      "progressRatios": {
+        "easy": 0,
+        "medium": 0.09523809523809523,
+        "hard": 0,
+        "embedded": 0.13333333333333333,
+        "nonEmbedded": 0,
+        "distractor": 0.09523809523809523,
+        "negation": 0
+      },
+      "assemblyProgressScore": 0.07692307692307693
+    },
+    "assembledSets": 0,
+    "targetSets": 6,
+    "assemblyDiagnostics": [
+      {
+        "setId": 1,
+        "pool": {
+          "easy": 0,
+          "medium": 4,
+          "hard": 0,
+          "total": 4
+        },
+        "assemblyState": {
+          "assemblableSets": 0,
+          "remainingSets": 6,
+          "deficits": {
+            "easy": 6,
+            "medium": 38,
+            "hard": 12,
+            "embedded": 26,
+            "negation": 12,
+            "distractor": 38,
+            "nonEmbedded": 12,
+            "assemblableSets": 6
+          },
+          "embeddedOverflow": 0,
+          "qmarkOverflow": 0,
+          "limitingFactors": [
+            {
+              "key": "medium_shortage",
+              "gap": 38,
+              "priority": 228
+            },
+            {
+              "key": "embedded_shortage",
+              "gap": 26,
+              "priority": 182
+            },
+            {
+              "key": "distractor_shortage",
+              "gap": 38,
+              "priority": 114
+            },
+            {
+              "key": "hard_shortage",
+              "gap": 12,
+              "priority": 96
+            },
+            {
+              "key": "non_embedded_shortage",
+              "gap": 12,
+              "priority": 84
+            },
+            {
+              "key": "negation_shortage",
+              "gap": 12,
+              "priority": 60
+            },
+            {
+              "key": "easy_shortage",
+              "gap": 6,
+              "priority": 12
+            }
+          ]
+        },
+        "maxStyleCapacity": {
+          "embedded": 4,
+          "distractor": 4
+        },
+        "reason": "infeasible_precheck"
+      },
+      {
+        "setId": 2,
+        "pool": {
+          "easy": 0,
+          "medium": 4,
+          "hard": 0,
+          "total": 4
+        },
+        "assemblyState": {
+          "assemblableSets": 0,
+          "remainingSets": 6,
+          "deficits": {
+            "easy": 6,
+            "medium": 38,
+            "hard": 12,
+            "embedded": 26,
+            "negation": 12,
+            "distractor": 38,
+            "nonEmbedded": 12,
+            "assemblableSets": 6
+          },
+          "embeddedOverflow": 0,
+          "qmarkOverflow": 0,
+          "limitingFactors": [
+            {
+              "key": "medium_shortage",
+              "gap": 38,
+              "priority": 228
+            },
+            {
+              "key": "embedded_shortage",
+              "gap": 26,
+              "priority": 182
+            },
+            {
+              "key": "distractor_shortage",
+              "gap": 38,
+              "priority": 114
+            },
+            {
+              "key": "hard_shortage",
+              "gap": 12,
+              "priority": 96
+            },
+            {
+              "key": "non_embedded_shortage",
+              "gap": 12,
+              "priority": 84
+            },
+            {
+              "key": "negation_shortage",
+              "gap": 12,
+              "priority": 60
+            },
+            {
+              "key": "easy_shortage",
+              "gap": 6,
+              "priority": 12
+            }
+          ]
+        },
+        "maxStyleCapacity": {
+          "embedded": 4,
+          "distractor": 4
+        },
+        "reason": "infeasible_precheck"
+      },
+      {
+        "setId": 3,
+        "pool": {
+          "easy": 0,
+          "medium": 4,
+          "hard": 0,
+          "total": 4
+        },
+        "assemblyState": {
+          "assemblableSets": 0,
+          "remainingSets": 6,
+          "deficits": {
+            "easy": 6,
+            "medium": 38,
+            "hard": 12,
+            "embedded": 26,
+            "negation": 12,
+            "distractor": 38,
+            "nonEmbedded": 12,
+            "assemblableSets": 6
+          },
+          "embeddedOverflow": 0,
+          "qmarkOverflow": 0,
+          "limitingFactors": [
+            {
+              "key": "medium_shortage",
+              "gap": 38,
+              "priority": 228
+            },
+            {
+              "key": "embedded_shortage",
+              "gap": 26,
+              "priority": 182
+            },
+            {
+              "key": "distractor_shortage",
+              "gap": 38,
+              "priority": 114
+            },
+            {
+              "key": "hard_shortage",
+              "gap": 12,
+              "priority": 96
+            },
+            {
+              "key": "non_embedded_shortage",
+              "gap": 12,
+              "priority": 84
+            },
+            {
+              "key": "negation_shortage",
+              "gap": 12,
+              "priority": 60
+            },
+            {
+              "key": "easy_shortage",
+              "gap": 6,
+              "priority": 12
+            }
+          ]
+        },
+        "maxStyleCapacity": {
+          "embedded": 4,
+          "distractor": 4
+        },
+        "reason": "infeasible_precheck"
+      },
+      {
+        "setId": 4,
+        "pool": {
+          "easy": 0,
+          "medium": 4,
+          "hard": 0,
+          "total": 4
+        },
+        "assemblyState": {
+          "assemblableSets": 0,
+          "remainingSets": 6,
+          "deficits": {
+            "easy": 6,
+            "medium": 38,
+            "hard": 12,
+            "embedded": 26,
+            "negation": 12,
+            "distractor": 38,
+            "nonEmbedded": 12,
+            "assemblableSets": 6
+          },
+          "embeddedOverflow": 0,
+          "qmarkOverflow": 0,
+          "limitingFactors": [
+            {
+              "key": "medium_shortage",
+              "gap": 38,
+              "priority": 228
+            },
+            {
+              "key": "embedded_shortage",
+              "gap": 26,
+              "priority": 182
+            },
+            {
+              "key": "distractor_shortage",
+              "gap": 38,
+              "priority": 114
+            },
+            {
+              "key": "hard_shortage",
+              "gap": 12,
+              "priority": 96
+            },
+            {
+              "key": "non_embedded_shortage",
+              "gap": 12,
+              "priority": 84
+            },
+            {
+              "key": "negation_shortage",
+              "gap": 12,
+              "priority": 60
+            },
+            {
+              "key": "easy_shortage",
+              "gap": 6,
+              "priority": 12
+            }
+          ]
+        },
+        "maxStyleCapacity": {
+          "embedded": 4,
+          "distractor": 4
+        },
+        "reason": "infeasible_precheck"
+      },
+      {
+        "setId": 5,
+        "pool": {
+          "easy": 0,
+          "medium": 4,
+          "hard": 0,
+          "total": 4
+        },
+        "assemblyState": {
+          "assemblableSets": 0,
+          "remainingSets": 6,
+          "deficits": {
+            "easy": 6,
+            "medium": 38,
+            "hard": 12,
+            "embedded": 26,
+            "negation": 12,
+            "distractor": 38,
+            "nonEmbedded": 12,
+            "assemblableSets": 6
+          },
+          "embeddedOverflow": 0,
+          "qmarkOverflow": 0,
+          "limitingFactors": [
+            {
+              "key": "medium_shortage",
+              "gap": 38,
+              "priority": 228
+            },
+            {
+              "key": "embedded_shortage",
+              "gap": 26,
+              "priority": 182
+            },
+            {
+              "key": "distractor_shortage",
+              "gap": 38,
+              "priority": 114
+            },
+            {
+              "key": "hard_shortage",
+              "gap": 12,
+              "priority": 96
+            },
+            {
+              "key": "non_embedded_shortage",
+              "gap": 12,
+              "priority": 84
+            },
+            {
+              "key": "negation_shortage",
+              "gap": 12,
+              "priority": 60
+            },
+            {
+              "key": "easy_shortage",
+              "gap": 6,
+              "priority": 12
+            }
+          ]
+        },
+        "maxStyleCapacity": {
+          "embedded": 4,
+          "distractor": 4
+        },
+        "reason": "infeasible_precheck"
+      },
+      {
+        "setId": 6,
+        "pool": {
+          "easy": 0,
+          "medium": 4,
+          "hard": 0,
+          "total": 4
+        },
+        "assemblyState": {
+          "assemblableSets": 0,
+          "remainingSets": 6,
+          "deficits": {
+            "easy": 6,
+            "medium": 38,
+            "hard": 12,
+            "embedded": 26,
+            "negation": 12,
+            "distractor": 38,
+            "nonEmbedded": 12,
+            "assemblableSets": 6
+          },
+          "embeddedOverflow": 0,
+          "qmarkOverflow": 0,
+          "limitingFactors": [
+            {
+              "key": "medium_shortage",
+              "gap": 38,
+              "priority": 228
+            },
+            {
+              "key": "embedded_shortage",
+              "gap": 26,
+              "priority": 182
+            },
+            {
+              "key": "distractor_shortage",
+              "gap": 38,
+              "priority": 114
+            },
+            {
+              "key": "hard_shortage",
+              "gap": 12,
+              "priority": 96
+            },
+            {
+              "key": "non_embedded_shortage",
+              "gap": 12,
+              "priority": 84
+            },
+            {
+              "key": "negation_shortage",
+              "gap": 12,
+              "priority": 60
+            },
+            {
+              "key": "easy_shortage",
+              "gap": 6,
+              "priority": 12
+            }
+          ]
+        },
+        "maxStyleCapacity": {
+          "embedded": 4,
+          "distractor": 4
+        },
+        "reason": "infeasible_precheck"
+      }
+    ],
+    "topRejectReasons": [
+      [
+        "review:blocker:tmp_r4_q8: prompt/answer mismatch — the prompt asks the learner to respond as themselves ('your seat request was not processed'), but the answer speaks about the flight attendant in third person ('The flight attendant did not know why my request had been ignored'), making the answer a narrative report rather than a direct personal response to the flight attendant's question|tmp_r4_q8: Answer introduces 'the flight attendant' as subject saying they 'did not know why my request had been ignored' — but the prompt says the flight attendant is ASKING the student why the request was not processed. The student answering AS the flight attendant is incoherent; the answer contradicts the scenario, making the intended answer unrecoverable from context.|tmp_r4_q1: Multi-word chunk 'really comfortable' groups an adverb+adjective that are NOT a fixed collocation; 'really' could plausibly modify 'seating' instead, creating mild ambiguity. More critically, 'near campus' is chunked separately but the prefilled subject is 'the coffee shop', so the student must place 'near campus' before 'has' — the intended order 'near campus has' is unnatural as a standalone chunk sequence and learners may place 'near campus' after 'seating areas', producing a grammatically valid alternate: 'The coffee shop has really comfortable seating areas near campus.' This alternate is fully grammatical and semantically equivalent, constituting a clear ambiguity blocker.|tmp_r4_q6: Two verbs in chunks — 'recommended' and 'offered' — with no syntactic signal forcing their order. Learners could plausibly produce 'The hair salon offered my colleague recommended very reasonable pricing options' (ungrammatical but confusing) or, more critically, interpret the contact-clause structure incorrectly. The distractor 'offers' is NOT valid as main verb in past context, so that is safe. However, ordering of 'recommended' vs 'offered' is genuinely ambiguous without punctuation or a relative pronoun, constituting an ambiguous-order blocker.",
+        10
+      ],
+      [
+        "review:blocker:tmp_r5_q8: prefilled 'you' at position 2 is structurally broken — the answer is 'The tool you lent me had been damaged before.' but 'the tool' is not prefilled and 'you' is given mid-sentence at index 2; learner cannot reconstruct sentence start without knowing 'the tool' is first, making order ambiguous and assembly logic contradictory.|tmp_r5_q8: distractor 'lend' (base form) is implausible enough to be non-functional as a real test of knowledge — but more critically, the contact clause structure 'the tool you lent me' requires learner to place 'you' correctly inside a relative clause with no subject prefill, creating genuine ambiguity about whether sentence starts with 'the tool' or 'you'.|tmp_r5_q2: chunking 'where / to / pick / up / the tickets' splits a natural phrasal verb collocation 'pick up' into separate single-word chunks, and also separates 'to pick up' into three pieces ('to', 'pick', 'up'), creating an unnaturally high number of adjacent positional choices that significantly increases solve difficulty beyond TPO norms and risks multiple plausible orderings for 'to / pick / up'.",
+        9
+      ],
+      [
+        "review:blocker:tmp_r7_q1: indirect question clause 'when the reading room opens' is correct, but the outer frame 'Could you tell me' is an interrogative frame producing a polite request question — the embedded clause itself is declarative order (OK); however, the answer IS a direct question (interrogative sentence) used to respond to 'what did the student ask,' which is acceptable for ask-type prompts. No blocker here — re-evaluated.|tmp_r7_q4: chunk order ambiguity — 'which shelf the new arrivals are on' vs. possible reordering concern is minimal, but 'were' distractor: inserting 'were' yields 'Could you tell me which shelf the new arrivals were on?' which is a grammatically valid, natural English sentence. The distractor creates a valid alternative answer. BLOCKER: distractor could be a valid answer chunk.|tmp_r7_q8: prompt/answer mismatch — the prompt asks 'What did the museum curator SAY about the painting that was donated?' implying a report of content/opinion, but the answer 'The curator mentioned which painting had been donated by the family' does not report what was SAID about the painting; it reports which painting was identified. The answer deflects the prompt's implied content. BLOCKER: prompt/answer mismatch.|tmp_r7_q3: distractor 'were' is plausibly valid — 'how many seats were still available' is grammatically acceptable as an embedded clause in certain past-tense framings, making it a near-valid answer rather than a clean distractor|tmp_r7_q7: too many chunks (8 active) with multi-word collocations 'to know', 'the best', 'rated' creating multiple plausible partial orderings; assembly ambiguity is high|tmp_r7_q8: answer 'The curator mentioned which painting had been donated by the family' is semantically odd — 'mentioned which painting' implies selecting among multiple paintings, but the prompt says 'the painting that was donated', creating a logic mismatch that may confuse test-takers; borderline ungrammatical in context",
+        9
+      ],
+      [
+        "review:blocker:tmp_r8_q2: chunk ambiguity — 'on saturday' and 'morning' are separate chunks but must be adjacent to form 'on Saturday morning'; a test-taker could plausibly place 'morning' before 'on saturday' yielding 'The yoga class morning on Saturday starts at eight o'clock', which is ungrammatical but the split itself invites mis-ordering; more critically, 'on saturday' + 'morning' can also be read as two discrete adjuncts, creating ambiguous ordering relative to 'starts' (e.g., 'The yoga class starts on Saturday morning at eight o'clock' is equally valid), giving multiple valid chunk orders.|tmp_r8_q4: distractor validity — 'reschedule' can be inserted in place of 'rescheduled' only with tense mismatch, but more critically the chunks 'for next' and 'thursday afternoon' are split across two separate chunks requiring obligatory adjacency with no signal to the test-taker; the phrase 'for next thursday afternoon' cannot be assembled correctly if a student places 'thursday afternoon' before 'for next', and no chunk boundary prevents this — multiple surface orderings are plausible, constituting ambiguous arrangement.|tmp_r8_q7: distractor could be a valid answer chunk — 'best' can replace 'better' to yield 'The salon I visited last month was far best than expected', which is ungrammatical, so this is NOT a blocker on that ground; however 'last' and 'month' are split into two separate chunks that must be adjacent, and 'visited last month' vs. 'last month visited' both parse as conceivable orderings within the contact clause, creating multiple valid chunk orders.|tmp_r8_q4: chunk 'for next' is an incomplete/unnatural fragment — 'for next Thursday afternoon' should be a single chunk or split as 'for' + 'next Thursday afternoon'; 'for next' alone is not a natural collocation and creates ambiguity in placement|tmp_r8_q7: distractor 'best' is plausible as a substitution for 'better' in casual usage and could tempt valid re-assembly; more critically, 'was far' as a single chunk is unnatural — 'far' modifies 'better' not 'was', so chunking forces an unnatural parse that may confuse solvers",
+        9
+      ],
+      [
+        "review:blocker:tmp_r1_q4: distractor 'did' can be inserted to form 'I did found out where the team meeting is scheduled' — not valid, but more critically the chunk split of 'the team' + 'meeting' allows the sequence 'the team meeting' to be assembled as 'meeting the team' creating ambiguity; additionally 'did' as distractor is a blocker because a test-taker could attempt 'I did find out…' but 'find out' is not among the chunks — distractor 'did' is not insertable as a valid answer, however the indirect question 'where the team meeting is scheduled' correctly uses declarative order so no inversion blocker here. RESCINDED — not a blocker on distractor grounds.|tmp_r1_q5: distractor 'attended' is a valid replacement for the past-tense verb slot — the correct answer uses 'did not attend' but 'attended' could plausibly replace nothing cleanly; however inserting 'attended' alongside 'did not attend' would produce 'I did not attend attended the workshop last Friday' which is ungrammatical. RESCINDED.|tmp_r1_q4: The chunk list contains 'the team' and 'meeting' as separate chunks. A test-taker could assemble 'I found out where meeting the team is scheduled' — a meaningfully different (and arguably valid-sounding) arrangement exists, creating genuine chunk-order ambiguity for the sub-phrase. This is a multiple-valid-chunk-orders BLOCKER.|tmp_r1_q6: prompt is 'How do you respond about the email?' but the answer 'The manager did not explain why the deadline changed' is a third-person statement with no reference to email — prompt/answer mismatch BLOCKER.",
+        8
+      ],
+      [
+        "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]",
+        7
+      ],
+      [
+        "review:blocker:tmp_r6_q6: The answer sentence 'The project supervisor was curious why the budget report was incomplete.' is grammatically incorrect. The adjective 'curious' requires the preposition 'about' before an embedded clause in standard English ('curious about why...'), or alternatively 'curious as to why...'. The bare 'curious why' construction is non-standard and fails a grammar check for a TPO-level item.|tmp_r6_q4: distractor 'extend' is plausibly valid — 'could extend' is grammatically acceptable as an alternative to 'could be extended', creating ambiguity in chunk selection|tmp_r6_q8: splitting 'renovation contract' into three separate chunks ('the', 'renovation', 'contract') creates multiple valid orderings and raises cognitive load beyond TPO norms; also 'whom' vs 'who' distractor pair tests formal register knowledge, not the core indirect-question word-order principle",
+        7
+      ],
+      [
+        "fatal: distractor must be a single word (TPO standard)",
+        6
+      ],
+      [
+        "review:blocker:tmp_r2_q3: The answer 'I found out where the campus cafe opens on weekends' is semantically anomalous as a statement told to a roommate — 'found out where X opens' implies learning the hours/days, but the embedded clause 'where the campus cafe opens on weekends' is logically ill-formed (WHERE conflates location with schedule; the intended meaning requires WHEN or THAT). This creates a grammar/meaning error in the answer sentence.|tmp_r2_q3: Indirect question clause 'where the campus cafe opens on weekends' uses 'where' as a temporal/conditional introducer, which is incorrect. The embedded clause is semantically incoherent and cannot be defended as standard academic English, constituting a grammar error in the answer sentence.",
+        3
+      ],
+      [
+        "review:ets<72",
+        3
+      ],
+      [
+        "fatal: chunks[2]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+        1
+      ],
+      [
+        "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+        1
+      ]
+    ]
+  }
+}
