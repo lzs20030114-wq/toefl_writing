@@ -1276,15 +1276,19 @@ function computeAssemblyState(poolState, targetSetCount = TARGET_SET_COUNT) {
   const distractor = poolState?.style?.distractor || 0;
   const qmark = poolState?.style?.qmark || 0;
   const nonEmbedded = Math.max(0, total - embedded);
+  const nonNegation = Math.max(0, total - negation);
 
   const need = {
     easy: ETS_2026_TARGET_COUNTS_10.easy * targetSetCount,
     medium: ETS_2026_TARGET_COUNTS_10.medium * targetSetCount,
     hard: ETS_2026_TARGET_COUNTS_10.hard * targetSetCount,
+    embeddedMin: (ETS_STYLE_TARGETS.embeddedMin || 0) * targetSetCount,
+    embeddedMax: (ETS_STYLE_TARGETS.embeddedMax || 8) * targetSetCount,
     negationMin: (ETS_STYLE_TARGETS.negationMin || 0) * targetSetCount,
+    negationMax: (ETS_STYLE_TARGETS.negationMax || 4) * targetSetCount,
     distractorMin: (ETS_STYLE_TARGETS.distractorMin || 0) * targetSetCount,
     nonEmbeddedMin: Math.max(0, (10 - (ETS_STYLE_TARGETS.embeddedMax || 8)) * targetSetCount),
-    embeddedMax: (ETS_STYLE_TARGETS.embeddedMax || 8) * targetSetCount,
+    nonNegationMin: Math.max(0, (10 - (ETS_STYLE_TARGETS.negationMax || 4)) * targetSetCount),
     qmarkMax: (ETS_STYLE_TARGETS.qmarkMax || 2) * targetSetCount,
   };
   const slotInventory = getSlotInventory(poolState);
@@ -1293,7 +1297,9 @@ function computeAssemblyState(poolState, targetSetCount = TARGET_SET_COUNT) {
     easy: Math.floor(diffCounts.easy / ETS_2026_TARGET_COUNTS_10.easy),
     medium: Math.floor(diffCounts.medium / ETS_2026_TARGET_COUNTS_10.medium),
     hard: Math.floor(diffCounts.hard / ETS_2026_TARGET_COUNTS_10.hard),
+    embedded: need.embeddedMin > 0 ? Math.floor(embedded / (ETS_STYLE_TARGETS.embeddedMin || 1)) : targetSetCount,
     negation: need.negationMin > 0 ? Math.floor(negation / (ETS_STYLE_TARGETS.negationMin || 1)) : targetSetCount,
+    negationCap: need.nonNegationMin > 0 ? Math.floor(nonNegation / Math.max(1, 10 - (ETS_STYLE_TARGETS.negationMax || 4))) : targetSetCount,
     distractor: need.distractorMin > 0 ? Math.floor(distractor / (ETS_STYLE_TARGETS.distractorMin || 1)) : targetSetCount,
     nonEmbedded: need.nonEmbeddedMin > 0 ? Math.floor(nonEmbedded / (10 - (ETS_STYLE_TARGETS.embeddedMax || 8))) : targetSetCount,
   };
@@ -1304,12 +1310,14 @@ function computeAssemblyState(poolState, targetSetCount = TARGET_SET_COUNT) {
     easy: Math.max(0, need.easy - diffCounts.easy),
     medium: Math.max(0, need.medium - diffCounts.medium),
     hard: Math.max(0, need.hard - diffCounts.hard),
+    embedded: Math.max(0, need.embeddedMin - embedded),
     negation: Math.max(0, need.negationMin - negation),
     distractor: Math.max(0, need.distractorMin - distractor),
     nonEmbedded: Math.max(0, need.nonEmbeddedMin - nonEmbedded),
     assemblableSets: remainingSets,
   };
   const embeddedOverflow = Math.max(0, embedded - need.embeddedMax);
+  const negationOverflow = Math.max(0, negation - need.negationMax);
   const qmarkOverflow = Math.max(0, qmark - need.qmarkMax);
   const remainingRecipe = {
     sets: remainingSets,
@@ -1319,19 +1327,23 @@ function computeAssemblyState(poolState, targetSetCount = TARGET_SET_COUNT) {
       hard: deficits.hard,
     },
     style: {
+      embeddedMin: deficits.embedded,
       negationMin: deficits.negation,
       distractorMin: deficits.distractor,
       nonEmbeddedMin: deficits.nonEmbedded,
       embeddedCapacity: Math.max(0, need.embeddedMax - embedded),
+      negationCapacity: Math.max(0, need.negationMax - negation),
       qmarkCapacity: Math.max(0, need.qmarkMax - qmark),
     },
   };
   const limitingFactors = [
     { key: "hard_shortage", gap: deficits.hard, priority: deficits.hard * 8 },
     { key: "medium_shortage", gap: deficits.medium, priority: deficits.medium * 6 },
+    { key: "embedded_shortage", gap: deficits.embedded, priority: deficits.embedded * 7 },
     { key: "non_embedded_shortage", gap: deficits.nonEmbedded, priority: deficits.nonEmbedded * 7 },
     { key: "embedded_overflow", gap: embeddedOverflow, priority: embeddedOverflow * 7 },
     { key: "negation_shortage", gap: deficits.negation, priority: deficits.negation * 5 },
+    { key: "negation_overflow", gap: negationOverflow, priority: negationOverflow * 6 },
     { key: "distractor_shortage", gap: deficits.distractor, priority: deficits.distractor * 3 },
     { key: "easy_shortage", gap: deficits.easy, priority: deficits.easy * 2 },
   ]
@@ -1341,14 +1353,22 @@ function computeAssemblyState(poolState, targetSetCount = TARGET_SET_COUNT) {
     easy: need.easy > 0 ? Math.min(1, diffCounts.easy / need.easy) : 1,
     medium: need.medium > 0 ? Math.min(1, diffCounts.medium / need.medium) : 1,
     hard: need.hard > 0 ? Math.min(1, diffCounts.hard / need.hard) : 1,
+    embedded: need.embeddedMin > 0 ? Math.min(1, embedded / need.embeddedMin) : 1,
     nonEmbedded: need.nonEmbeddedMin > 0 ? Math.min(1, nonEmbedded / need.nonEmbeddedMin) : 1,
     distractor: need.distractorMin > 0 ? Math.min(1, distractor / need.distractorMin) : 1,
-    negation: need.negationMin > 0 ? Math.min(1, negation / need.negationMin) : 1,
+    negation: need.negationMin > 0
+      ? (
+        negation < need.negationMin
+          ? Math.min(1, negation / need.negationMin)
+          : (negation <= need.negationMax ? 1 : Math.max(0, need.negationMax / Math.max(1, negation)))
+      )
+      : 1,
   };
   const progressWeights = {
     easy: ETS_2026_TARGET_COUNTS_10.easy,
     medium: ETS_2026_TARGET_COUNTS_10.medium,
     hard: ETS_2026_TARGET_COUNTS_10.hard,
+    embedded: Math.max(1, ETS_STYLE_TARGETS.embeddedMin || 5),
     nonEmbedded: Math.max(1, 10 - (ETS_STYLE_TARGETS.embeddedMax || 8)),
     distractor: Math.max(1, ETS_STYLE_TARGETS.distractorMin || 7),
     negation: Math.max(1, ETS_STYLE_TARGETS.negationMin || 2),
@@ -1375,6 +1395,7 @@ function computeAssemblyState(poolState, targetSetCount = TARGET_SET_COUNT) {
     remainingRecipe,
     deficits,
     embeddedOverflow,
+    negationOverflow,
     qmarkOverflow,
     limitingFactors,
     progressRatios,
@@ -1385,6 +1406,7 @@ function computeAssemblyState(poolState, targetSetCount = TARGET_SET_COUNT) {
 function isCircuitBreakerCriticalType(type, assemblyState) {
   if (!assemblyState) return false;
   if (type === "negation" && assemblyState.deficits.negation > 0) return true;
+  if (EMBEDDED_HEAVY_TYPES.has(type) && assemblyState.deficits.embedded > 0) return true;
   if (NON_EMBEDDED_TYPES.has(type) && (assemblyState.deficits.nonEmbedded > 0 || assemblyState.embeddedOverflow > 0)) {
     return true;
   }
@@ -1411,8 +1433,14 @@ function evaluatePoolBalance(q, poolState, assemblyState, phase, difficultyTarge
   if (assemblyState.embeddedOverflow > 0 && meta.isEmbedded) {
     return { ok: false, reason: "pool:embedded_overflow" };
   }
+  if (assemblyState.negationOverflow > 0 && type === "negation") {
+    return { ok: false, reason: "pool:negation_overflow" };
+  }
   if (assemblyState.deficits.nonEmbedded > 0 && meta.isEmbedded) {
     return { ok: false, reason: "pool:non_embedded_shortage" };
+  }
+  if (assemblyState.deficits.embedded > 0 && !meta.isEmbedded && assemblyState.deficits.nonEmbedded <= 0) {
+    return { ok: false, reason: "pool:embedded_shortage" };
   }
   if (assemblyState.deficits.negation > 0 && type !== "negation" && meta.isEmbedded) {
     return { ok: false, reason: "pool:negation_shortage" };
@@ -1440,16 +1468,20 @@ function computeQuestionAssemblyValue(q, poolState, assemblyState, options = {})
   let score = 0;
   score += (nextAssemblyState.assemblableSets - assemblyState.assemblableSets) * 160;
   score += (assemblyState.deficits[diff] - nextAssemblyState.deficits[diff]) * (strongTargeting ? 18 : 10);
+  score += (assemblyState.deficits.embedded - nextAssemblyState.deficits.embedded) * (meta.isEmbedded ? (strongTargeting ? 16 : 8) : 0);
   score += (assemblyState.deficits.nonEmbedded - nextAssemblyState.deficits.nonEmbedded) * (NON_EMBEDDED_TYPES.has(type) ? (strongTargeting ? 16 : 8) : 0);
   score += (assemblyState.deficits.negation - nextAssemblyState.deficits.negation) * (type === "negation" ? 10 : 0);
   score += (assemblyState.deficits.distractor - nextAssemblyState.deficits.distractor) * 3;
   score += (assemblyState.embeddedOverflow - nextAssemblyState.embeddedOverflow) * 14;
+  score += (assemblyState.negationOverflow - nextAssemblyState.negationOverflow) * 14;
   score += ((typeReliability[type] || 0.7) - 0.7) * 24;
 
   if (strongTargeting && assemblyState.deficits[diff] === 0) score -= 24;
+  if (strongTargeting && assemblyState.deficits.embedded > 0 && !meta.isEmbedded && assemblyState.deficits.nonEmbedded <= 0) score -= 22;
   if (strongTargeting && assemblyState.deficits.nonEmbedded > 0 && meta.isEmbedded) score -= 30;
   if (strongTargeting && diff === "easy" && assemblyState.deficits.easy === 0) score -= 24;
   if (meta.isEmbedded && assemblyState.embeddedOverflow > 0) score -= 36;
+  if (type === "negation" && assemblyState.negationOverflow > 0) score -= 34;
   if (meta.hasQuestionMark && assemblyState.qmarkOverflow > 0) score -= 20;
 
   return Math.round(score * 100) / 100;
@@ -2491,6 +2523,7 @@ function flattenDifficultyPool(pool) {
 
 function composeOneSet(pool, setId, maxRetries = 500, capture = null) {
   const { easy: eN, medium: mN, hard: hN } = ETS_2026_TARGET_COUNTS_10;
+  const targetSetCount = TARGET_SET_COUNT;
 
   // Use pre-computed _meta for cheap O(n) profile 锟?no string splitting per attempt
   function profileStyle(items) {
@@ -2625,6 +2658,33 @@ function composeOneSet(pool, setId, maxRetries = 500, capture = null) {
   }
 
   const diag = { styleStrict: 0, styleRelaxed: 0, schemaOk: 0, diffOk: 0, runtimeOk: 0 };
+  let bestValid = null;
+
+  function scoreRemainingPoolAfterPick(picked) {
+    const usedKeys = new Set(picked.map(stableAnswerKey));
+    const remainingPool = {
+      easy: pool.easy.filter((q) => !usedKeys.has(stableAnswerKey(q))),
+      medium: pool.medium.filter((q) => !usedKeys.has(stableAnswerKey(q))),
+      hard: pool.hard.filter((q) => !usedKeys.has(stableAnswerKey(q))),
+    };
+    const remainingNeed = Math.max(0, targetSetCount - setId);
+    if (remainingNeed <= 0) return { score: 0 };
+
+    const remainingAll = flattenDifficultyPool(remainingPool);
+    const remainingPoolState = computePoolState(remainingAll);
+    const remainingAssemblyState = computeAssemblyState(remainingPoolState, remainingNeed);
+    const score =
+      remainingAssemblyState.assemblableSets * 500 +
+      remainingAssemblyState.assemblyProgressScore * 140 -
+      remainingAssemblyState.deficits.hard * 22 -
+      remainingAssemblyState.deficits.medium * 11 -
+      remainingAssemblyState.deficits.embedded * 18 -
+      remainingAssemblyState.deficits.nonEmbedded * 14 -
+      remainingAssemblyState.deficits.negation * 8 -
+      remainingAssemblyState.negationOverflow * 14 -
+      remainingAssemblyState.embeddedOverflow * 18;
+    return { score };
+  }
 
   for (let attempt = 0; attempt < maxRetries; attempt += 1) {
     if (
@@ -2677,13 +2737,18 @@ function composeOneSet(pool, setId, maxRetries = 500, capture = null) {
     }
     if (!runtimeOk) { diag.runtimeOk++; continue; }
 
-    // Consume used questions from pool (by answer key)
-    const usedKeys = new Set(picked.map(stableAnswerKey));
+    const candidate = scoreRemainingPoolAfterPick(picked);
+    if (!bestValid || candidate.score > bestValid.score) {
+      bestValid = { set, picked, score: candidate.score };
+    }
+  }
+
+  if (bestValid) {
+    const usedKeys = new Set(bestValid.picked.map(stableAnswerKey));
     pool.easy = pool.easy.filter((q) => !usedKeys.has(stableAnswerKey(q)));
     pool.medium = pool.medium.filter((q) => !usedKeys.has(stableAnswerKey(q)));
     pool.hard = pool.hard.filter((q) => !usedKeys.has(stableAnswerKey(q)));
-
-    return set;
+    return bestValid.set;
   }
 
   // Log detailed failure breakdown
@@ -3079,9 +3144,11 @@ async function main() {
     const distractorGap = Math.max(0, styleTargets.distractorMin - poolState.style.distractor);
     const diversityGap = TYPE_LIST.reduce((sum, t) => sum + (((poolState.typeTotals[t] || 0) === 0) ? 1 : 0), 0);
     const assemblyBlockingGap =
+      Math.max(0, assemblyState.deficits.embedded) +
       Math.max(0, assemblyState.deficits.nonEmbedded) +
       Math.max(0, assemblyState.embeddedOverflow) +
-      Math.max(0, assemblyState.deficits.negation);
+      Math.max(0, assemblyState.deficits.negation) +
+      Math.max(0, assemblyState.negationOverflow);
     return {
       total: diffGap + distractorGap + assemblyBlockingGap + diversityGap,
       diffGap,
@@ -3204,8 +3271,14 @@ async function main() {
     if (repairGateReady && assemblyState.deficits.nonEmbedded > 0 && embeddedRatio >= 0.72 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.35)) {
       repairReasons.push("non_embedded_shortage");
     }
+    if (repairGateReady && assemblyState.deficits.embedded > 0 && embeddedRatio <= 0.58 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.35)) {
+      repairReasons.push("embedded_shortage");
+    }
     if (repairGateReady && assemblyState.embeddedOverflow > 0 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.35)) {
       repairReasons.push("embedded_overflow");
+    }
+    if (repairGateReady && assemblyState.negationOverflow > 0 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.35)) {
+      repairReasons.push("negation_overflow");
     }
     if (repairGateReady && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.7)) repairReasons.push("pool_size");
     if (repairGateReady && assemblyState.assemblableSets >= Math.max(1, TARGET_SET_COUNT - 3)) repairReasons.push("assemblable_near_target");
@@ -3232,8 +3305,10 @@ async function main() {
     const total = poolState?.style?.total || 0;
     const embeddedRatio = total > 0 ? (assemblyState.embedded / total) : 0;
     return (
+      (assemblyState.deficits.embedded > 0 && embeddedRatio <= 0.58 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.35)) ||
       (assemblyState.deficits.nonEmbedded > 0 && embeddedRatio >= 0.72 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.35)) ||
       (assemblyState.embeddedOverflow > 0 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.35)) ||
+      (assemblyState.negationOverflow > 0 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.35)) ||
       total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.7) ||
       assemblyState.assemblableSets >= Math.max(1, TARGET_SET_COUNT - 3)
     );
@@ -3255,10 +3330,12 @@ async function main() {
     let score = 0;
     score += (nextAssemblyState.assemblableSets - currentAssemblyState.assemblableSets) * 240;
     score += (currentAssemblyState.deficits[diff] - nextAssemblyState.deficits[diff]) * (strongTargeting ? 24 : 11);
+    score += (currentAssemblyState.deficits.embedded - nextAssemblyState.deficits.embedded) * (EMBEDDED_HEAVY_TYPES.has(type) ? (strongTargeting ? 18 : 9) : 0);
     score += (currentAssemblyState.deficits.nonEmbedded - nextAssemblyState.deficits.nonEmbedded) * (NON_EMBEDDED_TYPES.has(type) ? (strongTargeting ? 18 : 9) : 0);
     score += (currentAssemblyState.deficits.negation - nextAssemblyState.deficits.negation) * (type === "negation" ? 14 : 0);
     score += (currentAssemblyState.deficits.distractor - nextAssemblyState.deficits.distractor) * 3;
     score += (currentAssemblyState.embeddedOverflow - nextAssemblyState.embeddedOverflow) * 18;
+    score += (currentAssemblyState.negationOverflow - nextAssemblyState.negationOverflow) * 18;
     score += ((typeReliability?.[type] || 0.8) - 0.75) * 30;
     if (typeCountBefore === 0) score += 3;
     if (typeCountBefore <= 1) score += 2;
@@ -3267,14 +3344,17 @@ async function main() {
 
     if (focus === "hard" && diff === "hard") score += 16;
     if (focus === "medium" && diff === "medium") score += 12;
+    if (focus === "embedded" && EMBEDDED_HEAVY_TYPES.has(type)) score += 18;
     if (focus === "nonEmbedded" && NON_EMBEDDED_TYPES.has(type)) score += 18;
     if (focus === "negation" && type === "negation") score += 14;
     if (focus === "balanced") score += 4;
 
     if (strongTargeting && currentAssemblyState.deficits[diff] === 0) score -= 32;
     if (strongTargeting && diff === "easy" && currentAssemblyState.deficits.easy === 0) score -= 28;
+    if (strongTargeting && currentAssemblyState.deficits.embedded > 0 && NON_EMBEDDED_TYPES.has(type) && currentAssemblyState.deficits.nonEmbedded <= 0) score -= 30;
     if (strongTargeting && currentAssemblyState.deficits.nonEmbedded > 0 && EMBEDDED_HEAVY_TYPES.has(type)) score -= 40;
     if (currentAssemblyState.embeddedOverflow > 0 && EMBEDDED_HEAVY_TYPES.has(type)) score -= 36;
+    if (currentAssemblyState.negationOverflow > 0 && type === "negation") score -= 40;
     if (type === "interrogative" && currentAssemblyState.qmark >= styleTargets.qmarkMax) score -= 20;
     if (type === "direct" && currentAssemblyState.deficits.nonEmbedded <= 0 && !strongTargeting) score -= 3;
     if (bootstrapPhase && diff === "hard") score -= 35;
@@ -3325,14 +3405,18 @@ async function main() {
     score += (nextAssemblyState.assemblableSets - baseAssemblyState.assemblableSets) * 320;
     score += (baseAssemblyState.deficits.hard - nextAssemblyState.deficits.hard) * 20;
     score += (baseAssemblyState.deficits.medium - nextAssemblyState.deficits.medium) * 11;
+    score += (baseAssemblyState.deficits.embedded - nextAssemblyState.deficits.embedded) * 18;
     score += (baseAssemblyState.deficits.nonEmbedded - nextAssemblyState.deficits.nonEmbedded) * 18;
     score += (baseAssemblyState.deficits.negation - nextAssemblyState.deficits.negation) * 8;
     score += (baseAssemblyState.embeddedOverflow - nextAssemblyState.embeddedOverflow) * 22;
+    score += (baseAssemblyState.negationOverflow - nextAssemblyState.negationOverflow) * 18;
     if (strongTargeting) {
       score += (baseAssemblyState.remainingRecipe.diff.hard - nextAssemblyState.remainingRecipe.diff.hard) * 16;
       score += (baseAssemblyState.remainingRecipe.diff.medium - nextAssemblyState.remainingRecipe.diff.medium) * 10;
+      score += (baseAssemblyState.remainingRecipe.style.embeddedMin - nextAssemblyState.remainingRecipe.style.embeddedMin) * 16;
       score += (baseAssemblyState.remainingRecipe.style.nonEmbeddedMin - nextAssemblyState.remainingRecipe.style.nonEmbeddedMin) * 14;
       score -= Math.max(0, nextAssemblyState.embeddedOverflow) * 12;
+      score -= Math.max(0, nextAssemblyState.negationOverflow) * 12;
     }
     return { score, nextAssemblyState };
   }
@@ -3342,6 +3426,7 @@ async function main() {
     const focuses = ["balanced"];
     if (assemblyState.deficits.hard > 0) focuses.push("hard");
     if (assemblyState.deficits.medium > 0) focuses.push("medium");
+    if (assemblyState.deficits.embedded > 0) focuses.push("embedded");
     if (assemblyState.deficits.nonEmbedded > 0 || assemblyState.embeddedOverflow > 0) focuses.push("nonEmbedded");
     if (assemblyState.deficits.negation > 0) focuses.push("negation");
 
@@ -3380,6 +3465,11 @@ async function main() {
   function buildAssemblyGenerationHints(assemblyState, spec) {
     if (!assemblyState) return "";
     const hints = [];
+    if (assemblyState.deficits.embedded > 0) {
+      hints.push("ASSEMBLY REPAIR MODE: This batch MUST replenish embedded-question inventory.");
+      hints.push("Prioritize 3rd-reporting, 1st-embedded, or interrogative items with clean reported-speech structure.");
+      hints.push("Avoid overproducing direct/relative-only batches unless non-embedded shortage is also active.");
+    }
     if (assemblyState.deficits.nonEmbedded > 0) {
       hints.push("ASSEMBLY REPAIR MODE: This batch MUST prioritize non-embedded items.");
       hints.push("Generate DIRECT statements or RELATIVE / contact-clause items only.");
