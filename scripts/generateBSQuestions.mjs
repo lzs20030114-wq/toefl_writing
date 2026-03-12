@@ -3253,7 +3253,7 @@ async function main() {
       total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.45) &&
       (assemblyState.assemblableSets >= 1 || total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.75));
     const repairGateReady =
-      total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.3) ||
+      total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.2) ||
       assemblyState.assemblableSets >= 1;
 
     if (strongGateReady) {
@@ -3272,7 +3272,7 @@ async function main() {
     if (repairGateReady && assemblyState.deficits.nonEmbedded > 0 && embeddedRatio >= 0.72 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.35)) {
       repairReasons.push("non_embedded_shortage");
     }
-    if (repairGateReady && assemblyState.deficits.embedded > 0 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.3)) {
+    if (repairGateReady && assemblyState.deficits.embedded > 0 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.2)) {
       repairReasons.push("embedded_shortage");
     }
     if (repairGateReady && assemblyState.embeddedOverflow > 0 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.35)) {
@@ -3306,13 +3306,32 @@ async function main() {
     const total = poolState?.style?.total || 0;
     const embeddedRatio = total > 0 ? (assemblyState.embedded / total) : 0;
     return (
-      (assemblyState.deficits.embedded > 0 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.3)) ||
+      (assemblyState.deficits.embedded > 0 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.2)) ||
       (assemblyState.deficits.nonEmbedded > 0 && embeddedRatio >= 0.72 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.35)) ||
       (assemblyState.embeddedOverflow > 0 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.35)) ||
       (assemblyState.negationOverflow > 0 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.35)) ||
       total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.7) ||
       assemblyState.assemblableSets >= Math.max(1, TARGET_SET_COUNT - 3)
     );
+  }
+
+  function limiterToFocus(limiterKey) {
+    switch (limiterKey) {
+      case "embedded_shortage":
+        return "embedded";
+      case "non_embedded_shortage":
+      case "embedded_overflow":
+        return "nonEmbedded";
+      case "hard_shortage":
+        return "hard";
+      case "medium_shortage":
+        return "medium";
+      case "negation_shortage":
+      case "negation_overflow":
+        return "negation";
+      default:
+        return "balanced";
+    }
   }
 
   function scoreAssemblyCell(type, diff, workingPoolState, typeReliability, focus, blockedTypes, forcedAvoidTypes, strongTargeting) {
@@ -3356,8 +3375,11 @@ async function main() {
       if (EMBEDDED_HEAVY_TYPES.has(type) && diff === "medium") score += 28;
       else if (EMBEDDED_HEAVY_TYPES.has(type)) score += 10;
       else score -= 24;
-      if (type === "negation") score -= 36;
-      if (diff === "hard" && type === "negation") score -= 24;
+      if (type === "negation") score -= 56;
+      if (diff === "hard" && type === "negation") score -= 36;
+      if (NON_EMBEDDED_TYPES.has(type) && currentAssemblyState.deficits.nonEmbedded <= Math.max(2, Math.ceil(currentAssemblyState.deficits.embedded * 0.4))) {
+        score -= 34;
+      }
     }
     if (topLimiter === "medium_shortage" && diff === "medium") score += 10;
     if (negationCapacity <= Math.max(1, currentAssemblyState.remainingSets) && type === "negation") score -= 24;
@@ -3431,9 +3453,10 @@ async function main() {
     if (topLimiter === "embedded_shortage") {
       score += embeddedCells * 18;
       score += mediumCells * 6;
-      if (embeddedCells === 0) score -= 120;
-      if (negationCells >= Math.ceil(Math.max(1, totalCells) * 0.5)) score -= 90;
+      if (embeddedCells < Math.ceil(Math.max(1, totalCells) * 0.5)) score -= 140;
+      if (negationCells >= Math.ceil(Math.max(1, totalCells) * 0.35)) score -= 130;
     }
+    if (topLimiter === "medium_shortage" && mediumCells < Math.ceil(Math.max(1, totalCells) * 0.5)) score -= 80;
     if ((baseAssemblyState.remainingRecipe?.style?.negationCapacity ?? Infinity) <= Math.max(1, baseAssemblyState.remainingSets) && negationCells > 0) {
       score -= negationCells * 18;
     }
@@ -3450,12 +3473,15 @@ async function main() {
 
   function chooseAssemblyDrivenSpec(poolState, assemblyState, blockedTypes, batchSize, typeReliability, strongTargeting = false, forcedAvoidTypes = new Set()) {
     const blocked = blockedTypes || new Set();
-    const focuses = ["balanced"];
-    if (assemblyState.deficits.hard > 0) focuses.push("hard");
-    if (assemblyState.deficits.medium > 0) focuses.push("medium");
-    if (assemblyState.deficits.embedded > 0) focuses.push("embedded");
-    if (assemblyState.deficits.nonEmbedded > 0 || assemblyState.embeddedOverflow > 0) focuses.push("nonEmbedded");
-    if (assemblyState.deficits.negation > 0) focuses.push("negation");
+    const topLimiter = assemblyState.limitingFactors[0]?.key || "";
+    const secondLimiter = assemblyState.limitingFactors[1]?.key || "";
+    const primaryFocus = limiterToFocus(topLimiter);
+    const secondaryFocus = limiterToFocus(secondLimiter);
+    const focuses = [primaryFocus];
+    if (primaryFocus === "embedded" && assemblyState.deficits.medium > 0) focuses.push("medium");
+    if (primaryFocus === "medium" && assemblyState.deficits.embedded > 0) focuses.push("embedded");
+    if (secondaryFocus !== primaryFocus && secondaryFocus !== "balanced") focuses.push(secondaryFocus);
+    focuses.push("balanced");
 
     const candidates = [...new Set(focuses)].map((focus) =>
       buildAssemblySpecCandidate(poolState, blocked, batchSize, focus, typeReliability, strongTargeting, forcedAvoidTypes),
@@ -3465,6 +3491,10 @@ async function main() {
         candidate,
         focus: candidate._focus || "balanced",
         ...evaluateAssemblySpec(candidate, poolState, assemblyState, strongTargeting),
+      }))
+      .map((entry) => ({
+        ...entry,
+        score: entry.score + (entry.focus === primaryFocus ? 35 : 0) + (entry.focus === secondaryFocus ? 10 : 0),
       }))
       .sort((a, b) => b.score - a.score);
     const selected = ranked[0]?.candidate || [{ type: "3rd-reporting", difficulty: "medium", count: batchSize }];
