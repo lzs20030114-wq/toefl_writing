@@ -1419,7 +1419,6 @@ function evaluatePoolBalance(q, poolState, assemblyState, phase, difficultyTarge
   const meta = attachMeta(q)._meta || {};
   const type = meta.answerType || resolvedAnswerType(q);
   const diff = (estimateQuestionDifficulty(q) || {}).bucket || "medium";
-  const repairTarget = primaryRepairTarget || null;
   const diffCounts = getDifficultyCounts(poolState);
   const diffDeficits = Object.fromEntries(
     ["easy", "medium", "hard"].map((bucket) => [bucket, Math.max(0, (difficultyTargets?.[bucket] || 0) - (diffCounts[bucket] || 0))]),
@@ -1436,15 +1435,6 @@ function evaluatePoolBalance(q, poolState, assemblyState, phase, difficultyTarge
   }
   if (assemblyState.negationOverflow > 0 && type === "negation") {
     return { ok: false, reason: "pool:negation_overflow" };
-  }
-  if (assemblyState.deficits.nonEmbedded > 0 && meta.isEmbedded && repairTarget !== "embedded") {
-    return { ok: false, reason: "pool:non_embedded_shortage" };
-  }
-  if (assemblyState.deficits.embedded > 0 && !meta.isEmbedded && (repairTarget === "embedded" || assemblyState.deficits.nonEmbedded <= 0)) {
-    return { ok: false, reason: "pool:embedded_shortage" };
-  }
-  if (assemblyState.deficits.negation > 0 && type !== "negation" && meta.isEmbedded && repairTarget !== "embedded") {
-    return { ok: false, reason: "pool:negation_shortage" };
   }
   if (diffDeficits[diff] === 0 && maxOtherDiffGap >= 3 && !isCircuitBreakerCriticalType(type, assemblyState)) {
     return { ok: false, reason: `pool:difficulty_surplus:${diff}` };
