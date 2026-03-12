@@ -3118,6 +3118,7 @@ async function main() {
     final: null,
   };
   const specCooldowns = {};
+  const specFamilyCooldowns = {};
 
   function flushDiagnostics() {
     try {
@@ -3271,7 +3272,7 @@ async function main() {
     if (repairGateReady && assemblyState.deficits.nonEmbedded > 0 && embeddedRatio >= 0.72 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.35)) {
       repairReasons.push("non_embedded_shortage");
     }
-    if (repairGateReady && assemblyState.deficits.embedded > 0 && embeddedRatio <= 0.58 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.35)) {
+    if (repairGateReady && assemblyState.deficits.embedded > 0 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.3)) {
       repairReasons.push("embedded_shortage");
     }
     if (repairGateReady && assemblyState.embeddedOverflow > 0 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.35)) {
@@ -3305,7 +3306,7 @@ async function main() {
     const total = poolState?.style?.total || 0;
     const embeddedRatio = total > 0 ? (assemblyState.embedded / total) : 0;
     return (
-      (assemblyState.deficits.embedded > 0 && embeddedRatio <= 0.58 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.35)) ||
+      (assemblyState.deficits.embedded > 0 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.3)) ||
       (assemblyState.deficits.nonEmbedded > 0 && embeddedRatio >= 0.72 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.35)) ||
       (assemblyState.embeddedOverflow > 0 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.35)) ||
       (assemblyState.negationOverflow > 0 && total >= Math.ceil(TARGET_SET_COUNT * 10 * 0.35)) ||
@@ -3326,6 +3327,8 @@ async function main() {
     const typeCountBefore = (workingPoolState?.typeTotals || {})[type] || 0;
     const typeShareBefore = typeCountBefore / totalBefore;
     const bootstrapPhase = totalBefore < Math.ceil(TARGET_SET_COUNT * 10 * 0.2);
+    const topLimiter = currentAssemblyState.limitingFactors[0]?.key || "";
+    const negationCapacity = currentAssemblyState.remainingRecipe?.style?.negationCapacity ?? Infinity;
 
     let score = 0;
     score += (nextAssemblyState.assemblableSets - currentAssemblyState.assemblableSets) * 240;
@@ -3348,6 +3351,16 @@ async function main() {
     if (focus === "nonEmbedded" && NON_EMBEDDED_TYPES.has(type)) score += 18;
     if (focus === "negation" && type === "negation") score += 14;
     if (focus === "balanced") score += 4;
+
+    if (topLimiter === "embedded_shortage") {
+      if (EMBEDDED_HEAVY_TYPES.has(type) && diff === "medium") score += 28;
+      else if (EMBEDDED_HEAVY_TYPES.has(type)) score += 10;
+      else score -= 24;
+      if (type === "negation") score -= 36;
+      if (diff === "hard" && type === "negation") score -= 24;
+    }
+    if (topLimiter === "medium_shortage" && diff === "medium") score += 10;
+    if (negationCapacity <= Math.max(1, currentAssemblyState.remainingSets) && type === "negation") score -= 24;
 
     if (strongTargeting && currentAssemblyState.deficits[diff] === 0) score -= 32;
     if (strongTargeting && diff === "easy" && currentAssemblyState.deficits.easy === 0) score -= 28;
@@ -3401,6 +3414,11 @@ async function main() {
       }
     }
     const nextAssemblyState = computeAssemblyState(workingPoolState);
+    const totalCells = (spec || []).reduce((sum, cell) => sum + (cell.count || 0), 0);
+    const negationCells = (spec || []).reduce((sum, cell) => sum + (cell.type === "negation" ? cell.count || 0 : 0), 0);
+    const embeddedCells = (spec || []).reduce((sum, cell) => sum + (EMBEDDED_HEAVY_TYPES.has(cell.type) ? cell.count || 0 : 0), 0);
+    const mediumCells = (spec || []).reduce((sum, cell) => sum + (cell.difficulty === "medium" ? cell.count || 0 : 0), 0);
+    const topLimiter = baseAssemblyState.limitingFactors[0]?.key || "";
     let score = 0;
     score += (nextAssemblyState.assemblableSets - baseAssemblyState.assemblableSets) * 320;
     score += (baseAssemblyState.deficits.hard - nextAssemblyState.deficits.hard) * 20;
@@ -3410,6 +3428,15 @@ async function main() {
     score += (baseAssemblyState.deficits.negation - nextAssemblyState.deficits.negation) * 8;
     score += (baseAssemblyState.embeddedOverflow - nextAssemblyState.embeddedOverflow) * 22;
     score += (baseAssemblyState.negationOverflow - nextAssemblyState.negationOverflow) * 18;
+    if (topLimiter === "embedded_shortage") {
+      score += embeddedCells * 18;
+      score += mediumCells * 6;
+      if (embeddedCells === 0) score -= 120;
+      if (negationCells >= Math.ceil(Math.max(1, totalCells) * 0.5)) score -= 90;
+    }
+    if ((baseAssemblyState.remainingRecipe?.style?.negationCapacity ?? Infinity) <= Math.max(1, baseAssemblyState.remainingSets) && negationCells > 0) {
+      score -= negationCells * 18;
+    }
     if (strongTargeting) {
       score += (baseAssemblyState.remainingRecipe.diff.hard - nextAssemblyState.remainingRecipe.diff.hard) * 16;
       score += (baseAssemblyState.remainingRecipe.diff.medium - nextAssemblyState.remainingRecipe.diff.medium) * 10;
@@ -3449,6 +3476,40 @@ async function main() {
         }
       : null;
     return selected;
+  }
+
+  function specFamilyKey(spec) {
+    const cells = Array.isArray(spec) ? spec : [];
+    const total = cells.reduce((sum, cell) => sum + (cell.count || 0), 0);
+    if (total <= 0) return "empty";
+    const negation = cells.reduce((sum, cell) => sum + (cell.type === "negation" ? cell.count || 0 : 0), 0);
+    const embedded = cells.reduce((sum, cell) => sum + (EMBEDDED_HEAVY_TYPES.has(cell.type) ? cell.count || 0 : 0), 0);
+    const nonEmbedded = cells.reduce((sum, cell) => sum + (NON_EMBEDDED_TYPES.has(cell.type) ? cell.count || 0 : 0), 0);
+    const hard = cells.reduce((sum, cell) => sum + (cell.difficulty === "hard" ? cell.count || 0 : 0), 0);
+    const medium = cells.reduce((sum, cell) => sum + (cell.difficulty === "medium" ? cell.count || 0 : 0), 0);
+    const typeMode = negation / total >= 0.5
+      ? "negation-heavy"
+      : embedded / total >= 0.5
+        ? "embedded-heavy"
+        : nonEmbedded / total >= 0.5
+          ? "nonembedded-heavy"
+          : "mixed";
+    const diffMode = hard / total >= 0.5
+      ? "hard-heavy"
+      : medium / total >= 0.5
+        ? "medium-heavy"
+        : "mixed-diff";
+    return `${typeMode}|${diffMode}`;
+  }
+
+  function isSpecFamilyCoolingDown(familyKey, roundNum) {
+    return familyKey && specFamilyCooldowns[familyKey] && specFamilyCooldowns[familyKey] >= roundNum;
+  }
+
+  function dominantSpecTypes(spec) {
+    const cells = Array.isArray(spec) ? spec : [];
+    const maxCount = Math.max(0, ...cells.map((cell) => cell.count || 0));
+    return new Set(cells.filter((cell) => (cell.count || 0) >= Math.max(1, maxCount)).map((cell) => cell.type));
   }
 
   function specSignature(spec) {
@@ -3605,6 +3666,7 @@ async function main() {
     }
 
     let signature = specSignature(spec);
+    let familyKey = specFamilyKey(spec);
     if (isSpecCoolingDown(signature, roundNum)) {
       const totalPool = poolState?.style?.total || 0;
       if (totalPool < Math.ceil(TARGET_SET_COUNT * 10 * 0.2)) {
@@ -3628,6 +3690,22 @@ async function main() {
         );
       }
       signature = specSignature(spec);
+      familyKey = specFamilyKey(spec);
+    }
+
+    if (isSpecFamilyCoolingDown(familyKey, roundNum) && !schedule.useAIPlanner) {
+      const forcedAvoid = dominantSpecTypes(spec);
+      spec = chooseAssemblyDrivenSpec(
+        poolState,
+        assemblyState,
+        getActiveCircuitBreakerTypes(circuitBreakerState, roundNum),
+        schedule.batchSize,
+        typeReliability,
+        schedule.strongTargeting,
+        forcedAvoid,
+      );
+      signature = specSignature(spec);
+      familyKey = specFamilyKey(spec);
     }
 
     const specLabel = spec.map((s) => `${s.count}×${s.type}/${s.difficulty}`).join(", ");
@@ -3680,6 +3758,12 @@ async function main() {
       if (res.accepted === 0 || newGap.total >= gap.total) {
         specCooldowns[signature] = roundNum + 2;
       }
+      if (
+        res.accepted === 0 ||
+        (res.accepted > 0 && deltaAssemblable <= 0 && deltaProgress <= 0.01)
+      ) {
+        specFamilyCooldowns[familyKey] = roundNum + 3;
+      }
       diagnosticsState.rounds.push({
         round: roundNum,
         phase: schedule.phase,
@@ -3710,6 +3794,7 @@ async function main() {
     } catch (e) {
       console.log(`round ${roundNum}: failed → ${errMsg(e)}`);
       specCooldowns[signature] = roundNum + 2;
+      specFamilyCooldowns[familyKey] = roundNum + 3;
       diagnosticsState.rounds.push({
         round: roundNum,
         phase: schedule.phase,
