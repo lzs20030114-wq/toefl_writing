@@ -1,0 +1,1842 @@
+{
+  "generated_at": "2026-03-12T11:23:47.131Z",
+  "active": {
+    "interrogative": {
+      "sinceRound": 31,
+      "untilRound": 34,
+      "lastEvent": {
+        "triggeredAt": "2026-03-12T11:23:18.565Z",
+        "round": 31,
+        "mode": "normal",
+        "type": "interrogative",
+        "generated": 4,
+        "accepted": 0,
+        "rejected": 4,
+        "acceptRate": 0,
+        "reasons": [
+          [
+            "fatal: chunks[5]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+            1
+          ],
+          [
+            "review:blocker:tmp_r29_q1: distractor 'needs' can be inserted to create valid sentence 'I think the raised beds needs better drainage...' (subject-verb agreement error but structurally insertable)|tmp_r29_q4: distractor 'visit' can be inserted to create valid sentence 'The cafe I visit serves excellent pastries every morning.'",
+            1
+          ],
+          [
+            "topic:repeat",
+            1
+          ],
+          [
+            "review:blocker:tmp_r31_q2: distractor is null but required for TPO items|tmp_r31_q2: answer 'The conference I attended' uses contact clause but grammar_points lists 'contact_clause' AND 'relative_clause' - only contact_clause applies|tmp_r31_q2: Answer is a statement but prompt asks 'What do you tell' - should elicit direct speech/statement without 'What', not a relative clause description|tmp_r31_q4: Distractor 'looked' appears valid in answer position ('you are looked for' is ungrammatical but 'bedrooms you looked for' could work)",
+            1
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 29,
+            "spec": [
+              {
+                "type": "direct",
+                "difficulty": "medium",
+                "count": 1
+              },
+              {
+                "type": "interrogative",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "relative",
+                "difficulty": "medium",
+                "count": 1
+              }
+            ],
+            "stats": {
+              "generated": 2,
+              "accepted": 0,
+              "rejected": 2,
+              "reasons": {
+                "fatal: chunks[5]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+                "review:blocker:tmp_r29_q1: distractor 'needs' can be inserted to create valid sentence 'I think the raised beds needs better drainage...' (subject-verb agreement error but structurally insertable)|tmp_r29_q4: distractor 'visit' can be inserted to create valid sentence 'The cafe I visit serves excellent pastries every morning.'": 1
+              }
+            }
+          },
+          {
+            "round": 30,
+            "spec": [
+              {
+                "type": "relative",
+                "difficulty": "medium",
+                "count": 1
+              },
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 3
+              }
+            ],
+            "stats": {
+              "generated": 0,
+              "accepted": 0,
+              "rejected": 0,
+              "reasons": {}
+            }
+          },
+          {
+            "round": 31,
+            "spec": [
+              {
+                "type": "relative",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "interrogative",
+                "difficulty": "medium",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 2,
+              "accepted": 0,
+              "rejected": 2,
+              "reasons": {
+                "topic:repeat": 1,
+                "review:blocker:tmp_r31_q2: distractor is null but required for TPO items|tmp_r31_q2: answer 'The conference I attended' uses contact clause but grammar_points lists 'contact_clause' AND 'relative_clause' - only contact_clause applies|tmp_r31_q2: Answer is a statement but prompt asks 'What do you tell' - should elicit direct speech/statement without 'What', not a relative clause description|tmp_r31_q4: Distractor 'looked' appears valid in answer position ('you are looked for' is ungrammatical but 'bedrooms you looked for' could work)": 1
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 34
+      }
+    },
+    "relative": {
+      "sinceRound": 31,
+      "untilRound": 34,
+      "lastEvent": {
+        "triggeredAt": "2026-03-12T11:23:18.565Z",
+        "round": 31,
+        "mode": "normal",
+        "type": "relative",
+        "generated": 4,
+        "accepted": 0,
+        "rejected": 4,
+        "acceptRate": 0,
+        "reasons": [
+          [
+            "review:blocker:tmp_r29_q1: distractor 'needs' can be inserted to create valid sentence 'I think the raised beds needs better drainage...' (subject-verb agreement error but structurally insertable)|tmp_r29_q4: distractor 'visit' can be inserted to create valid sentence 'The cafe I visit serves excellent pastries every morning.'",
+            1
+          ],
+          [
+            "fatal: chunks[2]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+            1
+          ],
+          [
+            "pool:low_assembly_value",
+            1
+          ],
+          [
+            "review:blocker:tmp_r31_q2: distractor is null but required for TPO items|tmp_r31_q2: answer 'The conference I attended' uses contact clause but grammar_points lists 'contact_clause' AND 'relative_clause' - only contact_clause applies|tmp_r31_q2: Answer is a statement but prompt asks 'What do you tell' - should elicit direct speech/statement without 'What', not a relative clause description|tmp_r31_q4: Distractor 'looked' appears valid in answer position ('you are looked for' is ungrammatical but 'bedrooms you looked for' could work)",
+            1
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 29,
+            "spec": [
+              {
+                "type": "direct",
+                "difficulty": "medium",
+                "count": 1
+              },
+              {
+                "type": "interrogative",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "relative",
+                "difficulty": "medium",
+                "count": 1
+              }
+            ],
+            "stats": {
+              "generated": 1,
+              "accepted": 0,
+              "rejected": 1,
+              "reasons": {
+                "review:blocker:tmp_r29_q1: distractor 'needs' can be inserted to create valid sentence 'I think the raised beds needs better drainage...' (subject-verb agreement error but structurally insertable)|tmp_r29_q4: distractor 'visit' can be inserted to create valid sentence 'The cafe I visit serves excellent pastries every morning.'": 1
+              }
+            }
+          },
+          {
+            "round": 30,
+            "spec": [
+              {
+                "type": "relative",
+                "difficulty": "medium",
+                "count": 1
+              },
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 3
+              }
+            ],
+            "stats": {
+              "generated": 1,
+              "accepted": 0,
+              "rejected": 1,
+              "reasons": {
+                "fatal: chunks[2]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+              }
+            }
+          },
+          {
+            "round": 31,
+            "spec": [
+              {
+                "type": "relative",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "interrogative",
+                "difficulty": "medium",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 2,
+              "accepted": 0,
+              "rejected": 2,
+              "reasons": {
+                "pool:low_assembly_value": 1,
+                "review:blocker:tmp_r31_q2: distractor is null but required for TPO items|tmp_r31_q2: answer 'The conference I attended' uses contact clause but grammar_points lists 'contact_clause' AND 'relative_clause' - only contact_clause applies|tmp_r31_q2: Answer is a statement but prompt asks 'What do you tell' - should elicit direct speech/statement without 'What', not a relative clause description|tmp_r31_q4: Distractor 'looked' appears valid in answer position ('you are looked for' is ungrammatical but 'bedrooms you looked for' could work)": 1
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 34
+      }
+    },
+    "direct": {
+      "sinceRound": 32,
+      "untilRound": 35,
+      "lastEvent": {
+        "triggeredAt": "2026-03-12T11:23:42.151Z",
+        "round": 32,
+        "mode": "normal",
+        "type": "direct",
+        "generated": 4,
+        "accepted": 0,
+        "rejected": 4,
+        "acceptRate": 0,
+        "reasons": [
+          [
+            "format: effective chunks count must be 4-8 (got 9)",
+            2
+          ],
+          [
+            "review:ets<72",
+            2
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 30,
+            "spec": [
+              {
+                "type": "relative",
+                "difficulty": "medium",
+                "count": 1
+              },
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 3
+              }
+            ],
+            "stats": {
+              "generated": 0,
+              "accepted": 0,
+              "rejected": 0,
+              "reasons": {}
+            }
+          },
+          {
+            "round": 31,
+            "spec": [
+              {
+                "type": "relative",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "interrogative",
+                "difficulty": "medium",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 0,
+              "accepted": 0,
+              "rejected": 0,
+              "reasons": {}
+            }
+          },
+          {
+            "round": 32,
+            "spec": [
+              {
+                "type": "direct",
+                "difficulty": "medium",
+                "count": 4
+              }
+            ],
+            "stats": {
+              "generated": 4,
+              "accepted": 0,
+              "rejected": 4,
+              "reasons": {
+                "format: effective chunks count must be 4-8 (got 9)": 2,
+                "review:ets<72": 2
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 35
+      }
+    }
+  },
+  "events": [
+    {
+      "triggeredAt": "2026-03-12T11:11:02.770Z",
+      "round": 6,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 7,
+      "accepted": 1,
+      "rejected": 6,
+      "acceptRate": 0.143,
+      "reasons": [
+        [
+          "review:blocker:tmp_r5_q4: distractor 'arrives' can be inserted to create valid sentence 'I am not sure when the sofa arrives.' (present tense also grammatical)",
+          3
+        ],
+        [
+          "review:blocker:tmp_r6_q1: Distractor 'received' can be inserted to create valid sentence 'I received any details about the rehearsal schedule' (grammatically valid, though semantically odd)|tmp_r6_q2: Indirect question 'where the recipient lived' is correct, but answer doesn't match prompt - prompt asks what driver SAYS (present reporting), answer uses past tense 'did not know' without reporting frame",
+          2
+        ],
+        [
+          "runtime: question tmp_r6_q3: bank must not contain duplicates",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 5
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 1,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 5,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "review:blocker:tmp_r5_q4: distractor 'arrives' can be inserted to create valid sentence 'I am not sure when the sofa arrives.' (present tense also grammatical)": 3
+            }
+          }
+        },
+        {
+          "round": 6,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "runtime: question tmp_r6_q3: bank must not contain duplicates": 1,
+              "review:blocker:tmp_r6_q1: Distractor 'received' can be inserted to create valid sentence 'I received any details about the rehearsal schedule' (grammatically valid, though semantically odd)|tmp_r6_q2: Indirect question 'where the recipient lived' is correct, but answer doesn't match prompt - prompt asks what driver SAYS (present reporting), answer uses past tense 'did not know' without reporting frame": 2
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 9
+    },
+    {
+      "triggeredAt": "2026-03-12T11:11:02.771Z",
+      "round": 6,
+      "mode": "normal",
+      "type": "1st-embedded",
+      "generated": 5,
+      "accepted": 1,
+      "rejected": 4,
+      "acceptRate": 0.2,
+      "reasons": [
+        [
+          "review:blocker:tmp_r5_q4: distractor 'arrives' can be inserted to create valid sentence 'I am not sure when the sofa arrives.' (present tense also grammatical)",
+          2
+        ],
+        [
+          "fatal: chunks[5]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "review:blocker:tmp_r6_q1: Distractor 'received' can be inserted to create valid sentence 'I received any details about the rehearsal schedule' (grammatically valid, though semantically odd)|tmp_r6_q2: Indirect question 'where the recipient lived' is correct, but answer doesn't match prompt - prompt asks what driver SAYS (present reporting), answer uses past tense 'did not know' without reporting frame",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 5
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 1,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 5,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r5_q4: distractor 'arrives' can be inserted to create valid sentence 'I am not sure when the sofa arrives.' (present tense also grammatical)": 2
+            }
+          }
+        },
+        {
+          "round": 6,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "fatal: chunks[5]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "review:blocker:tmp_r6_q1: Distractor 'received' can be inserted to create valid sentence 'I received any details about the rehearsal schedule' (grammatically valid, though semantically odd)|tmp_r6_q2: Indirect question 'where the recipient lived' is correct, but answer doesn't match prompt - prompt asks what driver SAYS (present reporting), answer uses past tense 'did not know' without reporting frame": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 9
+    },
+    {
+      "triggeredAt": "2026-03-12T11:13:23.412Z",
+      "round": 10,
+      "mode": "normal",
+      "type": "3rd-reporting",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r10_q2: chunk 'the' is split from 'visitors', requiring the student to deduce adjacency with no syntactic signal — more critically, the chunk sequence 'what time | the | visitors | planned | to leave' is ambiguous because 'the visitors planned to leave' could also be parsed as 'what time the visitors planned to leave' vs edge mis-orders; however the deeper blocker is that splitting the article 'the' into its own standalone chunk creates a second plausible micro-order issue and is a non-standard chunk decomposition that undermines item validity|tmp_r10_q3: chunk 'the' is again split as a standalone chunk separate from 'tenant', same article-isolation issue as q2 — multiple locally valid placements of the bare article create arrangement ambiguity",
+          4
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 8,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 9,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 10,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 4,
+            "accepted": 0,
+            "rejected": 4,
+            "reasons": {
+              "review:blocker:tmp_r10_q2: chunk 'the' is split from 'visitors', requiring the student to deduce adjacency with no syntactic signal — more critically, the chunk sequence 'what time | the | visitors | planned | to leave' is ambiguous because 'the visitors planned to leave' could also be parsed as 'what time the visitors planned to leave' vs edge mis-orders; however the deeper blocker is that splitting the article 'the' into its own standalone chunk creates a second plausible micro-order issue and is a non-standard chunk decomposition that undermines item validity|tmp_r10_q3: chunk 'the' is again split as a standalone chunk separate from 'tenant', same article-isolation issue as q2 — multiple locally valid placements of the bare article create arrangement ambiguity": 4
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 13
+    },
+    {
+      "triggeredAt": "2026-03-12T11:15:23.972Z",
+      "round": 14,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 5,
+      "accepted": 1,
+      "rejected": 4,
+      "acceptRate": 0.2,
+      "reasons": [
+        [
+          "review:blocker:tmp_r14_q1: distractor 'start' can be inserted to create valid sentence 'I did not notice when the guided tour start' (missing -ed creates plausible learner error, not clearly invalid)|tmp_r14_q2: distractor 'change' can be inserted to create valid sentence 'The coordinator did not explain why the venue change' (missing -ed creates plausible learner error, not clearly invalid)",
+          3
+        ],
+        [
+          "review:blocker:tmp_r12_q5: prompt/answer mismatch - prompt asks what friend said, answer is first-person statement not reported speech|tmp_r12_q4: prompt/answer mismatch - prompt asks what guide asked (question), answer is a statement not a question",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 12,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r12_q5: prompt/answer mismatch - prompt asks what friend said, answer is first-person statement not reported speech|tmp_r12_q4: prompt/answer mismatch - prompt asks what guide asked (question), answer is a statement not a question": 1
+            }
+          }
+        },
+        {
+          "round": 13,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "hard",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 1,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 14,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "review:blocker:tmp_r14_q1: distractor 'start' can be inserted to create valid sentence 'I did not notice when the guided tour start' (missing -ed creates plausible learner error, not clearly invalid)|tmp_r14_q2: distractor 'change' can be inserted to create valid sentence 'The coordinator did not explain why the venue change' (missing -ed creates plausible learner error, not clearly invalid)": 3
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 17
+    },
+    {
+      "triggeredAt": "2026-03-12T11:15:23.972Z",
+      "round": 14,
+      "mode": "normal",
+      "type": "direct",
+      "generated": 5,
+      "accepted": 1,
+      "rejected": 4,
+      "acceptRate": 0.2,
+      "reasons": [
+        [
+          "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person",
+          2
+        ],
+        [
+          "review:blocker:tmp_r14_q1: distractor 'start' can be inserted to create valid sentence 'I did not notice when the guided tour start' (missing -ed creates plausible learner error, not clearly invalid)|tmp_r14_q2: distractor 'change' can be inserted to create valid sentence 'The coordinator did not explain why the venue change' (missing -ed creates plausible learner error, not clearly invalid)",
+          2
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 12,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1
+            }
+          }
+        },
+        {
+          "round": 13,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "hard",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 1,
+            "rejected": 1,
+            "reasons": {
+              "fatal: prefilled \"she\" is a banned bare word — use subject NP (e.g. \"the professor\") or \"i\" for 1st-person": 1
+            }
+          }
+        },
+        {
+          "round": 14,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r14_q1: distractor 'start' can be inserted to create valid sentence 'I did not notice when the guided tour start' (missing -ed creates plausible learner error, not clearly invalid)|tmp_r14_q2: distractor 'change' can be inserted to create valid sentence 'The coordinator did not explain why the venue change' (missing -ed creates plausible learner error, not clearly invalid)": 2
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 17
+    },
+    {
+      "triggeredAt": "2026-03-12T11:20:02.372Z",
+      "round": 22,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 7,
+      "accepted": 1,
+      "rejected": 6,
+      "acceptRate": 0.143,
+      "reasons": [
+        [
+          "pool:low_assembly_value",
+          6
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 20,
+          "spec": [
+            {
+              "type": "1st-embedded",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 1,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 21,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "pool:low_assembly_value": 3
+            }
+          }
+        },
+        {
+          "round": 22,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "pool:low_assembly_value": 3
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 25
+    },
+    {
+      "triggeredAt": "2026-03-12T11:20:29.141Z",
+      "round": 24,
+      "mode": "normal",
+      "type": "3rd-reporting",
+      "generated": 6,
+      "accepted": 1,
+      "rejected": 5,
+      "acceptRate": 0.167,
+      "reasons": [
+        [
+          "pool:low_assembly_value",
+          4
+        ],
+        [
+          "topic:repeat",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 22,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 1,
+            "rejected": 1,
+            "reasons": {
+              "topic:repeat": 1
+            }
+          }
+        },
+        {
+          "round": 23,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "pool:low_assembly_value": 2
+            }
+          }
+        },
+        {
+          "round": 24,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "pool:low_assembly_value": 2
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 27
+    },
+    {
+      "triggeredAt": "2026-03-12T11:20:29.141Z",
+      "round": 24,
+      "mode": "normal",
+      "type": "relative",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          2
+        ],
+        [
+          "pool:low_assembly_value",
+          2
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 22,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 23,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "pool:low_assembly_value": 1
+            }
+          }
+        },
+        {
+          "round": 24,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "pool:low_assembly_value": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 27
+    },
+    {
+      "triggeredAt": "2026-03-12T11:21:41.621Z",
+      "round": 27,
+      "mode": "normal",
+      "type": "direct",
+      "generated": 5,
+      "accepted": 1,
+      "rejected": 4,
+      "acceptRate": 0.2,
+      "reasons": [
+        [
+          "pool:low_assembly_value",
+          2
+        ],
+        [
+          "review:ets<72",
+          1
+        ],
+        [
+          "fatal: chunks (minus distractor) + prefilled words must equal answer words; distractor must not appear in answer",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 25,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "pool:low_assembly_value": 1,
+              "review:ets<72": 1
+            }
+          }
+        },
+        {
+          "round": 26,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 1,
+            "rejected": 1,
+            "reasons": {
+              "pool:low_assembly_value": 1
+            }
+          }
+        },
+        {
+          "round": 27,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "fatal: chunks (minus distractor) + prefilled words must equal answer words; distractor must not appear in answer": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 30
+    },
+    {
+      "triggeredAt": "2026-03-12T11:23:18.565Z",
+      "round": 31,
+      "mode": "normal",
+      "type": "interrogative",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "fatal: chunks[5]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "review:blocker:tmp_r29_q1: distractor 'needs' can be inserted to create valid sentence 'I think the raised beds needs better drainage...' (subject-verb agreement error but structurally insertable)|tmp_r29_q4: distractor 'visit' can be inserted to create valid sentence 'The cafe I visit serves excellent pastries every morning.'",
+          1
+        ],
+        [
+          "topic:repeat",
+          1
+        ],
+        [
+          "review:blocker:tmp_r31_q2: distractor is null but required for TPO items|tmp_r31_q2: answer 'The conference I attended' uses contact clause but grammar_points lists 'contact_clause' AND 'relative_clause' - only contact_clause applies|tmp_r31_q2: Answer is a statement but prompt asks 'What do you tell' - should elicit direct speech/statement without 'What', not a relative clause description|tmp_r31_q4: Distractor 'looked' appears valid in answer position ('you are looked for' is ungrammatical but 'bedrooms you looked for' could work)",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 29,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "fatal: chunks[5]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "review:blocker:tmp_r29_q1: distractor 'needs' can be inserted to create valid sentence 'I think the raised beds needs better drainage...' (subject-verb agreement error but structurally insertable)|tmp_r29_q4: distractor 'visit' can be inserted to create valid sentence 'The cafe I visit serves excellent pastries every morning.'": 1
+            }
+          }
+        },
+        {
+          "round": 30,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 31,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "topic:repeat": 1,
+              "review:blocker:tmp_r31_q2: distractor is null but required for TPO items|tmp_r31_q2: answer 'The conference I attended' uses contact clause but grammar_points lists 'contact_clause' AND 'relative_clause' - only contact_clause applies|tmp_r31_q2: Answer is a statement but prompt asks 'What do you tell' - should elicit direct speech/statement without 'What', not a relative clause description|tmp_r31_q4: Distractor 'looked' appears valid in answer position ('you are looked for' is ungrammatical but 'bedrooms you looked for' could work)": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 34
+    },
+    {
+      "triggeredAt": "2026-03-12T11:23:18.565Z",
+      "round": 31,
+      "mode": "normal",
+      "type": "relative",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r29_q1: distractor 'needs' can be inserted to create valid sentence 'I think the raised beds needs better drainage...' (subject-verb agreement error but structurally insertable)|tmp_r29_q4: distractor 'visit' can be inserted to create valid sentence 'The cafe I visit serves excellent pastries every morning.'",
+          1
+        ],
+        [
+          "fatal: chunks[2]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "pool:low_assembly_value",
+          1
+        ],
+        [
+          "review:blocker:tmp_r31_q2: distractor is null but required for TPO items|tmp_r31_q2: answer 'The conference I attended' uses contact clause but grammar_points lists 'contact_clause' AND 'relative_clause' - only contact_clause applies|tmp_r31_q2: Answer is a statement but prompt asks 'What do you tell' - should elicit direct speech/statement without 'What', not a relative clause description|tmp_r31_q4: Distractor 'looked' appears valid in answer position ('you are looked for' is ungrammatical but 'bedrooms you looked for' could work)",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 29,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r29_q1: distractor 'needs' can be inserted to create valid sentence 'I think the raised beds needs better drainage...' (subject-verb agreement error but structurally insertable)|tmp_r29_q4: distractor 'visit' can be inserted to create valid sentence 'The cafe I visit serves excellent pastries every morning.'": 1
+            }
+          }
+        },
+        {
+          "round": 30,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "fatal: chunks[2]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+            }
+          }
+        },
+        {
+          "round": 31,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "pool:low_assembly_value": 1,
+              "review:blocker:tmp_r31_q2: distractor is null but required for TPO items|tmp_r31_q2: answer 'The conference I attended' uses contact clause but grammar_points lists 'contact_clause' AND 'relative_clause' - only contact_clause applies|tmp_r31_q2: Answer is a statement but prompt asks 'What do you tell' - should elicit direct speech/statement without 'What', not a relative clause description|tmp_r31_q4: Distractor 'looked' appears valid in answer position ('you are looked for' is ungrammatical but 'bedrooms you looked for' could work)": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 34
+    },
+    {
+      "triggeredAt": "2026-03-12T11:23:42.151Z",
+      "round": 32,
+      "mode": "normal",
+      "type": "direct",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "format: effective chunks count must be 4-8 (got 9)",
+          2
+        ],
+        [
+          "review:ets<72",
+          2
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 30,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 31,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 32,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 4,
+            "accepted": 0,
+            "rejected": 4,
+            "reasons": {
+              "format: effective chunks count must be 4-8 (got 9)": 2,
+              "review:ets<72": 2
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 35
+    }
+  ],
+  "history": [
+    {
+      "round": 27,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "direct",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "pool:low_assembly_value": 2
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "fatal: chunks (minus distractor) + prefilled words must equal answer words; distractor must not appear in answer": 1
+          }
+        },
+        "relative": {
+          "generated": 1,
+          "accepted": 1,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 28,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "direct",
+          "difficulty": "hard",
+          "count": 1
+        },
+        {
+          "type": "interrogative",
+          "difficulty": "hard",
+          "count": 1
+        },
+        {
+          "type": "interrogative",
+          "difficulty": "medium",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 3,
+          "accepted": 2,
+          "rejected": 1,
+          "reasons": {
+            "review:ets<72": 1
+          }
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:ets<72": 1
+          }
+        }
+      }
+    },
+    {
+      "round": 29,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 1
+        },
+        {
+          "type": "interrogative",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "fatal: chunks[5]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+            "review:blocker:tmp_r29_q1: distractor 'needs' can be inserted to create valid sentence 'I think the raised beds needs better drainage...' (subject-verb agreement error but structurally insertable)|tmp_r29_q4: distractor 'visit' can be inserted to create valid sentence 'The cafe I visit serves excellent pastries every morning.'": 1
+          }
+        },
+        "direct": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r29_q1: distractor 'needs' can be inserted to create valid sentence 'I think the raised beds needs better drainage...' (subject-verb agreement error but structurally insertable)|tmp_r29_q4: distractor 'visit' can be inserted to create valid sentence 'The cafe I visit serves excellent pastries every morning.'": 1
+          }
+        },
+        "relative": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r29_q1: distractor 'needs' can be inserted to create valid sentence 'I think the raised beds needs better drainage...' (subject-verb agreement error but structurally insertable)|tmp_r29_q4: distractor 'visit' can be inserted to create valid sentence 'The cafe I visit serves excellent pastries every morning.'": 1
+          }
+        }
+      }
+    },
+    {
+      "round": 30,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 1
+        },
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 3
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 3,
+          "accepted": 0,
+          "rejected": 3,
+          "reasons": {
+            "fatal: distractor must be a single word (TPO standard)": 1,
+            "pool:low_assembly_value": 2
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "fatal: chunks[2]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+          }
+        }
+      }
+    },
+    {
+      "round": 31,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "interrogative",
+          "difficulty": "medium",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "topic:repeat": 1,
+            "review:blocker:tmp_r31_q2: distractor is null but required for TPO items|tmp_r31_q2: answer 'The conference I attended' uses contact clause but grammar_points lists 'contact_clause' AND 'relative_clause' - only contact_clause applies|tmp_r31_q2: Answer is a statement but prompt asks 'What do you tell' - should elicit direct speech/statement without 'What', not a relative clause description|tmp_r31_q4: Distractor 'looked' appears valid in answer position ('you are looked for' is ungrammatical but 'bedrooms you looked for' could work)": 1
+          }
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "pool:low_assembly_value": 1,
+            "review:blocker:tmp_r31_q2: distractor is null but required for TPO items|tmp_r31_q2: answer 'The conference I attended' uses contact clause but grammar_points lists 'contact_clause' AND 'relative_clause' - only contact_clause applies|tmp_r31_q2: Answer is a statement but prompt asks 'What do you tell' - should elicit direct speech/statement without 'What', not a relative clause description|tmp_r31_q4: Distractor 'looked' appears valid in answer position ('you are looked for' is ungrammatical but 'bedrooms you looked for' could work)": 1
+          }
+        }
+      }
+    },
+    {
+      "round": 32,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 4
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 4,
+          "accepted": 0,
+          "rejected": 4,
+          "reasons": {
+            "format: effective chunks count must be 4-8 (got 9)": 2,
+            "review:ets<72": 2
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    }
+  ]
+}
