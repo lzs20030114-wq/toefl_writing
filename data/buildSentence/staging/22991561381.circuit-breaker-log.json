@@ -1,0 +1,581 @@
+{
+  "generated_at": "2026-03-12T07:50:53.010Z",
+  "active": {
+    "negation": {
+      "sinceRound": 8,
+      "untilRound": 11,
+      "lastEvent": {
+        "triggeredAt": "2026-03-12T07:50:53.010Z",
+        "round": 8,
+        "mode": "normal",
+        "type": "negation",
+        "generated": 10,
+        "accepted": 1,
+        "rejected": 9,
+        "acceptRate": 0.1,
+        "reasons": [
+          [
+            "pool:non_embedded_shortage",
+            3
+          ],
+          [
+            "review:blocker:tmp_r7_q1: distractor 'received' could be inserted to create valid sentence 'I received confirmation about the seating arrangement'|tmp_r7_q3: distractor 'decide' could be inserted to create valid sentence 'I decide which gallery to visit first'|tmp_r7_q5: distractor 'found' could be inserted to create valid sentence 'I found the instruction manual'|All items use 'What do you say about X?' prompt pattern - TPO never uses this phrasing|No embedded questions tested despite 63% TPO frequency|Distractor placement inconsistent with TPO patterns (auxiliary verbs should tempt inversion errors)",
+            3
+          ],
+          [
+            "review:blocker:tmp_r8_q1: distractor 'received' could be inserted to create valid sentence 'I received the confirmation email for my order'",
+            2
+          ],
+          [
+            "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]",
+            1
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 6,
+            "spec": [
+              {
+                "type": "1st-embedded",
+                "difficulty": "easy",
+                "count": 1
+              },
+              {
+                "type": "1st-embedded",
+                "difficulty": "hard",
+                "count": 5
+              },
+              {
+                "type": "negation",
+                "difficulty": "hard",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 1,
+              "accepted": 1,
+              "rejected": 0,
+              "reasons": {}
+            }
+          },
+          {
+            "round": 7,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 4
+              },
+              {
+                "type": "negation",
+                "difficulty": "easy",
+                "count": 1
+              }
+            ],
+            "stats": {
+              "generated": 5,
+              "accepted": 0,
+              "rejected": 5,
+              "reasons": {
+                "pool:non_embedded_shortage": 2,
+                "review:blocker:tmp_r7_q1: distractor 'received' could be inserted to create valid sentence 'I received confirmation about the seating arrangement'|tmp_r7_q3: distractor 'decide' could be inserted to create valid sentence 'I decide which gallery to visit first'|tmp_r7_q5: distractor 'found' could be inserted to create valid sentence 'I found the instruction manual'|All items use 'What do you say about X?' prompt pattern - TPO never uses this phrasing|No embedded questions tested despite 63% TPO frequency|Distractor placement inconsistent with TPO patterns (auxiliary verbs should tempt inversion errors)": 3
+              }
+            }
+          },
+          {
+            "round": 8,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "1st-embedded",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "negation",
+                "difficulty": "easy",
+                "count": 1
+              }
+            ],
+            "stats": {
+              "generated": 4,
+              "accepted": 0,
+              "rejected": 4,
+              "reasons": {
+                "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]": 1,
+                "pool:non_embedded_shortage": 1,
+                "review:blocker:tmp_r8_q1: distractor 'received' could be inserted to create valid sentence 'I received the confirmation email for my order'": 2
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 11
+      }
+    }
+  },
+  "events": [
+    {
+      "triggeredAt": "2026-03-12T07:50:53.010Z",
+      "round": 8,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 10,
+      "accepted": 1,
+      "rejected": 9,
+      "acceptRate": 0.1,
+      "reasons": [
+        [
+          "pool:non_embedded_shortage",
+          3
+        ],
+        [
+          "review:blocker:tmp_r7_q1: distractor 'received' could be inserted to create valid sentence 'I received confirmation about the seating arrangement'|tmp_r7_q3: distractor 'decide' could be inserted to create valid sentence 'I decide which gallery to visit first'|tmp_r7_q5: distractor 'found' could be inserted to create valid sentence 'I found the instruction manual'|All items use 'What do you say about X?' prompt pattern - TPO never uses this phrasing|No embedded questions tested despite 63% TPO frequency|Distractor placement inconsistent with TPO patterns (auxiliary verbs should tempt inversion errors)",
+          3
+        ],
+        [
+          "review:blocker:tmp_r8_q1: distractor 'received' could be inserted to create valid sentence 'I received the confirmation email for my order'",
+          2
+        ],
+        [
+          "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 6,
+          "spec": [
+            {
+              "type": "1st-embedded",
+              "difficulty": "easy",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "hard",
+              "count": 5
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 1,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 7,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "negation",
+              "difficulty": "easy",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 5,
+            "accepted": 0,
+            "rejected": 5,
+            "reasons": {
+              "pool:non_embedded_shortage": 2,
+              "review:blocker:tmp_r7_q1: distractor 'received' could be inserted to create valid sentence 'I received confirmation about the seating arrangement'|tmp_r7_q3: distractor 'decide' could be inserted to create valid sentence 'I decide which gallery to visit first'|tmp_r7_q5: distractor 'found' could be inserted to create valid sentence 'I found the instruction manual'|All items use 'What do you say about X?' prompt pattern - TPO never uses this phrasing|No embedded questions tested despite 63% TPO frequency|Distractor placement inconsistent with TPO patterns (auxiliary verbs should tempt inversion errors)": 3
+            }
+          }
+        },
+        {
+          "round": 8,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "easy",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 4,
+            "accepted": 0,
+            "rejected": 4,
+            "reasons": {
+              "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]": 1,
+              "pool:non_embedded_shortage": 1,
+              "review:blocker:tmp_r8_q1: distractor 'received' could be inserted to create valid sentence 'I received the confirmation email for my order'": 2
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 11
+    }
+  ],
+  "history": [
+    {
+      "round": 4,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "relative",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "interrogative",
+          "difficulty": "easy",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "review:blocker:tmp_r4_q5: Distractor 'do' can be inserted to create valid alternative: 'I do not understand what the instructor demonstrated...' (present tense negation)|tmp_r4_q6: Distractor 'do' can be inserted to create valid alternative: 'The technician do not explain...' would be grammatically incorrect, but 'does not explain' is valid present tense": 2
+          }
+        },
+        "3rd-reporting": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "review:blocker:tmp_r4_q5: Distractor 'do' can be inserted to create valid alternative: 'I do not understand what the instructor demonstrated...' (present tense negation)|tmp_r4_q6: Distractor 'do' can be inserted to create valid alternative: 'The technician do not explain...' would be grammatically incorrect, but 'does not explain' is valid present tense": 2
+          }
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "fatal: chunks[5]: isolated floating adverb \"tomorrow\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+            "review:blocker:tmp_r4_q5: Distractor 'do' can be inserted to create valid alternative: 'I do not understand what the instructor demonstrated...' (present tense negation)|tmp_r4_q6: Distractor 'do' can be inserted to create valid alternative: 'The technician do not explain...' would be grammatically incorrect, but 'does not explain' is valid present tense": 1
+          }
+        },
+        "direct": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "review:blocker:tmp_r4_q5: Distractor 'do' can be inserted to create valid alternative: 'I do not understand what the instructor demonstrated...' (present tense negation)|tmp_r4_q6: Distractor 'do' can be inserted to create valid alternative: 'The technician do not explain...' would be grammatically incorrect, but 'does not explain' is valid present tense": 2
+          }
+        },
+        "relative": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "review:blocker:tmp_r4_q5: Distractor 'do' can be inserted to create valid alternative: 'I do not understand what the instructor demonstrated...' (present tense negation)|tmp_r4_q6: Distractor 'do' can be inserted to create valid alternative: 'The technician do not explain...' would be grammatically incorrect, but 'does not explain' is valid present tense": 2
+          }
+        }
+      }
+    },
+    {
+      "round": 5,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "relative",
+          "difficulty": "hard",
+          "count": 1
+        },
+        {
+          "type": "interrogative",
+          "difficulty": "easy",
+          "count": 1
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 3,
+          "accepted": 2,
+          "rejected": 1,
+          "reasons": {
+            "fatal: distractor must be a single word (TPO standard)": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 2,
+          "accepted": 1,
+          "rejected": 1,
+          "reasons": {
+            "review:score<78": 1
+          }
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 1,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "fatal: chunks[4]: isolated floating adverb \"tomorrow\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+          }
+        },
+        "direct": {
+          "generated": 2,
+          "accepted": 2,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "fatal: chunks[5]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+          }
+        }
+      }
+    },
+    {
+      "round": 6,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "1st-embedded",
+          "difficulty": "easy",
+          "count": 1
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "hard",
+          "count": 5
+        },
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 1,
+          "accepted": 1,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 1,
+          "accepted": 1,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 4,
+          "accepted": 4,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "review:score<78": 1,
+            "review:ets<72": 1
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 7,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 4
+        },
+        {
+          "type": "negation",
+          "difficulty": "easy",
+          "count": 1
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 5,
+          "accepted": 0,
+          "rejected": 5,
+          "reasons": {
+            "pool:non_embedded_shortage": 2,
+            "review:blocker:tmp_r7_q1: distractor 'received' could be inserted to create valid sentence 'I received confirmation about the seating arrangement'|tmp_r7_q3: distractor 'decide' could be inserted to create valid sentence 'I decide which gallery to visit first'|tmp_r7_q5: distractor 'found' could be inserted to create valid sentence 'I found the instruction manual'|All items use 'What do you say about X?' prompt pattern - TPO never uses this phrasing|No embedded questions tested despite 63% TPO frequency|Distractor placement inconsistent with TPO patterns (auxiliary verbs should tempt inversion errors)": 3
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 8,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "easy",
+          "count": 1
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 4,
+          "accepted": 0,
+          "rejected": 4,
+          "reasons": {
+            "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]": 1,
+            "pool:non_embedded_shortage": 1,
+            "review:blocker:tmp_r8_q1: distractor 'received' could be inserted to create valid sentence 'I received the confirmation email for my order'": 2
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "pool:non_embedded_shortage": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    }
+  ]
+}
