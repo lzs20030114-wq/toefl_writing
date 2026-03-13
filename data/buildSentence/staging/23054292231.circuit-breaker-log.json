@@ -1,0 +1,1285 @@
+{
+  "generated_at": "2026-03-13T14:40:35.981Z",
+  "active": {
+    "negation": {
+      "sinceRound": 31,
+      "untilRound": 34,
+      "lastEvent": {
+        "triggeredAt": "2026-03-13T14:40:16.199Z",
+        "round": 31,
+        "mode": "normal",
+        "type": "negation",
+        "generated": 11,
+        "accepted": 1,
+        "rejected": 10,
+        "acceptRate": 0.091,
+        "reasons": [
+          [
+            "pool:low_assembly_value",
+            6
+          ],
+          [
+            "review:blocker:tmp_r29_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'attended' can replace 'attend' (position 2) yielding 'I did not attended the cooking class last weekend.' — wait, that is ungrammatical. Re-evaluating: 'attended' cannot replace any single chunk to produce a grammatical sentence without rearrangement, so NOT a blocker. However, 'attended' as a standalone chunk alongside 'did not' creates ambiguity: a student might attempt 'I attended the cooking class last weekend' by dropping 'did not' and using 'attended' — but that requires removing a chunk, not a 1:1 swap. Flagging instead: tmp_r29_q1: distractor 'attended' is the past-tense form of the main verb already present as 'attend'; combined with the prefilled 'I' and chunks, a student could plausibly build 'I attended the cooking class last weekend' by ignoring 'did not' — this constitutes a clearly ambiguous order risk since both a positive and negative sentence are constructible from the chunk pool.",
+            1
+          ],
+          [
+            "review:ets<72",
+            1
+          ],
+          [
+            "fatal: chunks[3]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+            1
+          ],
+          [
+            "topic:repeat",
+            1
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 29,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 5
+              }
+            ],
+            "stats": {
+              "generated": 3,
+              "accepted": 1,
+              "rejected": 2,
+              "reasons": {
+                "review:blocker:tmp_r29_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'attended' can replace 'attend' (position 2) yielding 'I did not attended the cooking class last weekend.' — wait, that is ungrammatical. Re-evaluating: 'attended' cannot replace any single chunk to produce a grammatical sentence without rearrangement, so NOT a blocker. However, 'attended' as a standalone chunk alongside 'did not' creates ambiguity: a student might attempt 'I attended the cooking class last weekend' by dropping 'did not' and using 'attended' — but that requires removing a chunk, not a 1:1 swap. Flagging instead: tmp_r29_q1: distractor 'attended' is the past-tense form of the main verb already present as 'attend'; combined with the prefilled 'I' and chunks, a student could plausibly build 'I attended the cooking class last weekend' by ignoring 'did not' — this constitutes a clearly ambiguous order risk since both a positive and negative sentence are constructible from the chunk pool.": 1,
+                "review:ets<72": 1
+              }
+            }
+          },
+          {
+            "round": 30,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 4
+              },
+              {
+                "type": "1st-embedded",
+                "difficulty": "medium",
+                "count": 1
+              }
+            ],
+            "stats": {
+              "generated": 4,
+              "accepted": 0,
+              "rejected": 4,
+              "reasons": {
+                "pool:low_assembly_value": 4
+              }
+            }
+          },
+          {
+            "round": 31,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 4
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 1
+              }
+            ],
+            "stats": {
+              "generated": 4,
+              "accepted": 0,
+              "rejected": 4,
+              "reasons": {
+                "fatal: chunks[3]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+                "topic:repeat": 1,
+                "pool:low_assembly_value": 2
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 34
+      }
+    }
+  },
+  "events": [
+    {
+      "triggeredAt": "2026-03-13T14:08:03.360Z",
+      "round": 4,
+      "mode": "normal",
+      "type": "relative",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]",
+          1
+        ],
+        [
+          "review:blocker:tmp_r4_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'explore' can replace 'explored' at the same position ('The trail I explore last weekend was absolutely breathtaking' is ungrammatical, BUT 'The trail I explore...' — actually this requires tense shift and is ungrammatical, so re-evaluating: NOT a blocker)|tmp_r4_q10: distractor 'manage' can replace 'managed' at position 5 — 'The supervisor wanted to know how we had manage to finish on time.' — ungrammatical (modal perfect requires past participle), NOT a blocker",
+          1
+        ],
+        [
+          "review:ets<72",
+          1
+        ],
+        [
+          "review:blocker:tmp_r4_q3: distractor DIRECTLY replaces one word to form a valid sentence — 'open' can replace 'opened' in 'The pharmacy that open near campus...' — ungrammatical (bare infinitive after 'that' for 3rd-person singular fails), NOT a blocker",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "easy",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 4,
+            "accepted": 0,
+            "rejected": 4,
+            "reasons": {
+              "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]": 1,
+              "review:blocker:tmp_r4_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'explore' can replace 'explored' at the same position ('The trail I explore last weekend was absolutely breathtaking' is ungrammatical, BUT 'The trail I explore...' — actually this requires tense shift and is ungrammatical, so re-evaluating: NOT a blocker)|tmp_r4_q10: distractor 'manage' can replace 'managed' at position 5 — 'The supervisor wanted to know how we had manage to finish on time.' — ungrammatical (modal perfect requires past participle), NOT a blocker": 1,
+              "review:ets<72": 1,
+              "review:blocker:tmp_r4_q3: distractor DIRECTLY replaces one word to form a valid sentence — 'open' can replace 'opened' in 'The pharmacy that open near campus...' — ungrammatical (bare infinitive after 'that' for 3rd-person singular fails), NOT a blocker": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 7
+    },
+    {
+      "triggeredAt": "2026-03-13T14:11:44.151Z",
+      "round": 6,
+      "mode": "normal",
+      "type": "interrogative",
+      "generated": 5,
+      "accepted": 1,
+      "rejected": 4,
+      "acceptRate": 0.2,
+      "reasons": [
+        [
+          "review:blocker:tmp_r6_q1: distractor 'readied' directly replaces 'ready' in the same position to form a grammatical sentence ('Could you tell me when my prescription will be readied?') via simple 1:1 word swap",
+          1
+        ],
+        [
+          "review:blocker:tmp_r6_q2: distractor DIRECTLY replaces one word — 'open' replaces 'opens' at the same position: 'Do you know if the dental clinic open on Saturdays?' — ungrammatical (missing 3rd-person -s), so NOT a valid sentence; NOT a blocker — RETRACTED",
+          1
+        ],
+        [
+          "review:solvability<78",
+          1
+        ],
+        [
+          "review:ets<72",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "easy",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 6,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 5,
+            "accepted": 1,
+            "rejected": 4,
+            "reasons": {
+              "review:blocker:tmp_r6_q1: distractor 'readied' directly replaces 'ready' in the same position to form a grammatical sentence ('Could you tell me when my prescription will be readied?') via simple 1:1 word swap": 1,
+              "review:blocker:tmp_r6_q2: distractor DIRECTLY replaces one word — 'open' replaces 'opens' at the same position: 'Do you know if the dental clinic open on Saturdays?' — ungrammatical (missing 3rd-person -s), so NOT a valid sentence; NOT a blocker — RETRACTED": 1,
+              "review:solvability<78": 1,
+              "review:ets<72": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 9
+    },
+    {
+      "triggeredAt": "2026-03-13T14:17:38.320Z",
+      "round": 10,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 6,
+      "accepted": 1,
+      "rejected": 5,
+      "acceptRate": 0.167,
+      "reasons": [
+        [
+          "review:blocker:tmp_r8_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'did not confirmed' is ungrammatical, BUT 'confirmed' can replace 'confirm' (same position, same slot) yielding 'I did not confirmed my appointment at the salon' which is ungrammatical — however, more critically, removing 'did not' and placing 'confirmed' yields a valid sentence only with rearrangement, so this is borderline. Re-evaluating: 'confirmed' replaces 'confirm' at position 3 → 'I did not confirmed my appointment at the salon' — ungrammatical. No direct 1:1 valid substitution exists. NOT a blocker by rule. Removing from blockers.",
+          1
+        ],
+        [
+          "review:blocker:tmp_r9_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'rescheduled' can replace 'reschedule' in position 3 ('I did not rescheduled my appointment with the salon' is ungrammatical, but more critically 'rescheduled' appears as a standalone chunk that could replace 'reschedule' in the answer; however the resulting sentence 'I did not rescheduled...' is ungrammatical — NOT a blocker on reflection",
+          1
+        ],
+        [
+          "review:blocker:tmp_r9_q2: prompt/answer mismatch (prompt asks whether the package arrived on time; answer states the driver did not find the correct address — these are unrelated facts that do not respond to the question)|tmp_r9_q2: distractor DIRECTLY replaces one word to form a valid sentence — 'found' can replace 'find' in the answer ('The delivery driver did not found the correct address on the form' is ungrammatical after 'did not', so NOT a true 1:1 valid substitution — NOT a blocker on reflection",
+          1
+        ],
+        [
+          "review:blocker:tmp_r10_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'confirmed' can replace 'confirm' in 'I did not confirm my appointment at the salon' → 'I did not confirmed my appointment at the salon' which is ungrammatical. NOT a blocker. Retracting.",
+          1
+        ],
+        [
+          "review:ets<72",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 8,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 1,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r8_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'did not confirmed' is ungrammatical, BUT 'confirmed' can replace 'confirm' (same position, same slot) yielding 'I did not confirmed my appointment at the salon' which is ungrammatical — however, more critically, removing 'did not' and placing 'confirmed' yields a valid sentence only with rearrangement, so this is borderline. Re-evaluating: 'confirmed' replaces 'confirm' at position 3 → 'I did not confirmed my appointment at the salon' — ungrammatical. No direct 1:1 valid substitution exists. NOT a blocker by rule. Removing from blockers.": 1
+            }
+          }
+        },
+        {
+          "round": 9,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r9_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'rescheduled' can replace 'reschedule' in position 3 ('I did not rescheduled my appointment with the salon' is ungrammatical, but more critically 'rescheduled' appears as a standalone chunk that could replace 'reschedule' in the answer; however the resulting sentence 'I did not rescheduled...' is ungrammatical — NOT a blocker on reflection": 1,
+              "review:blocker:tmp_r9_q2: prompt/answer mismatch (prompt asks whether the package arrived on time; answer states the driver did not find the correct address — these are unrelated facts that do not respond to the question)|tmp_r9_q2: distractor DIRECTLY replaces one word to form a valid sentence — 'found' can replace 'find' in the answer ('The delivery driver did not found the correct address on the form' is ungrammatical after 'did not', so NOT a true 1:1 valid substitution — NOT a blocker on reflection": 1
+            }
+          }
+        },
+        {
+          "round": 10,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r10_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'confirmed' can replace 'confirm' in 'I did not confirm my appointment at the salon' → 'I did not confirmed my appointment at the salon' which is ungrammatical. NOT a blocker. Retracting.": 1,
+              "review:ets<72": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 13
+    },
+    {
+      "triggeredAt": "2026-03-13T14:19:02.603Z",
+      "round": 11,
+      "mode": "normal",
+      "type": "relative",
+      "generated": 5,
+      "accepted": 0,
+      "rejected": 5,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:ets<72",
+          2
+        ],
+        [
+          "review:blocker:tmp_r11_q2: distractor DIRECTLY replaces one word to form a valid sentence — 'visit' can replace 'visited' in position 2 ('The botanical garden we visit had hundreds of rare flowers' is ungrammatical, BUT 'The botanical garden we visited had...' — actually checking: 'visit' replaces 'visited' yielding 'The botanical garden we visit had...' which is non-standard but borderline; however more critically, 'visit' could replace 'visited' as the contact-clause verb directly as a 1:1 swap forming near-valid present-tense reading). NOTE: on closer inspection this is borderline — see score.",
+          1
+        ],
+        [
+          "review:score<78",
+          1
+        ],
+        [
+          "review:blocker:tmp_r11_q5: clearly ambiguous order — with prefilled 'the sports' and chunks 'class', 'i', 'joined', 'met', 'three times', 'a week', 'join', students must know to attach 'class' to 'the sports' before placing 'i joined' as a contact clause; the split of 'the sports' / 'class' across prefilled and free chunks creates a genuine assembly ambiguity ('The sports met class I joined three times a week' etc.) making correct order non-obvious without extra scaffolding.",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 9,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 10,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 11,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 5,
+            "accepted": 0,
+            "rejected": 5,
+            "reasons": {
+              "review:blocker:tmp_r11_q2: distractor DIRECTLY replaces one word to form a valid sentence — 'visit' can replace 'visited' in position 2 ('The botanical garden we visit had hundreds of rare flowers' is ungrammatical, BUT 'The botanical garden we visited had...' — actually checking: 'visit' replaces 'visited' yielding 'The botanical garden we visit had...' which is non-standard but borderline; however more critically, 'visit' could replace 'visited' as the contact-clause verb directly as a 1:1 swap forming near-valid present-tense reading). NOTE: on closer inspection this is borderline — see score.": 1,
+              "review:ets<72": 2,
+              "review:score<78": 1,
+              "review:blocker:tmp_r11_q5: clearly ambiguous order — with prefilled 'the sports' and chunks 'class', 'i', 'joined', 'met', 'three times', 'a week', 'join', students must know to attach 'class' to 'the sports' before placing 'i joined' as a contact clause; the split of 'the sports' / 'class' across prefilled and free chunks creates a genuine assembly ambiguity ('The sports met class I joined three times a week' etc.) making correct order non-obvious without extra scaffolding.": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 14
+    },
+    {
+      "triggeredAt": "2026-03-13T14:22:22.016Z",
+      "round": 14,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 5,
+      "accepted": 0,
+      "rejected": 5,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:ets<72",
+          3
+        ],
+        [
+          "review:blocker:tmp_r14_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'attended' can replace 'attend' (position 2) yielding 'I did not attended the campus career fair last week' is ungrammatical, but 'attended' as standalone answer 'I attended the campus career fair last week' is NOT a 1-for-1 swap of one chunk in the correct answer; however, 'attended' cannot directly replace any single chunk in the answer to produce a grammatical sentence, so this is NOT a blocker — rescoring only",
+          1
+        ],
+        [
+          "review:blocker:tmp_r14_q4: distractor DIRECTLY replaces one word to form a valid sentence — 'reserved' replaces 'reserve' (same position after 'did not'), yielding 'I did not reserved a spot on the trail tour' which is UNGRAMMATICAL, so this is not a true blocker by the rule; however, without 'did not', 'I reserved a spot on the trail tour' is valid — but that requires removing 'did not', not a 1-for-1 swap, so NOT a blocker — rescoring only",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 12,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:ets<72": 2
+            }
+          }
+        },
+        {
+          "round": 13,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 14,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "review:blocker:tmp_r14_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'attended' can replace 'attend' (position 2) yielding 'I did not attended the campus career fair last week' is ungrammatical, but 'attended' as standalone answer 'I attended the campus career fair last week' is NOT a 1-for-1 swap of one chunk in the correct answer; however, 'attended' cannot directly replace any single chunk in the answer to produce a grammatical sentence, so this is NOT a blocker — rescoring only": 1,
+              "review:ets<72": 1,
+              "review:blocker:tmp_r14_q4: distractor DIRECTLY replaces one word to form a valid sentence — 'reserved' replaces 'reserve' (same position after 'did not'), yielding 'I did not reserved a spot on the trail tour' which is UNGRAMMATICAL, so this is not a true blocker by the rule; however, without 'did not', 'I reserved a spot on the trail tour' is valid — but that requires removing 'did not', not a 1-for-1 swap, so NOT a blocker — rescoring only": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 17
+    },
+    {
+      "triggeredAt": "2026-03-13T14:33:08.838Z",
+      "round": 23,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r22_q4: distractor DIRECTLY replaces one word to form a valid sentence — 'signed' can replace 'sign up' (with removal of 'did not' and 'yet') BUT more critically: 'I signed up for the hiking trail group yet' is ungrammatical, so this is NOT a clean 1:1 substitution blocker. However, 'did not sign up' vs 'signed' — 'signed' cannot replace exactly one word in the same position to yield a grammatical sentence without rearrangement. NOT a blocker.",
+          1
+        ],
+        [
+          "review:blocker:tmp_r22_q5: distractor 'receive' cannot replace exactly one word in the answer without rearrangement (would need to remove 'have not' and restructure). NOT a blocker.",
+          1
+        ],
+        [
+          "review:blocker:tmp_r23_q2: distractor 'reschedule' — replacing 'rescheduled' with 'reschedule' yields 'the orientation had been reschedule' (ungrammatical). NOT a blocker.",
+          1
+        ],
+        [
+          "review:blocker:tmp_r23_q4: distractor DIRECTLY replaces one word to form a valid sentence — 'I attended the community meeting on Thursday evening' is grammatical with 'attended' replacing 'did not attend' (effectively swapping the negated auxiliary+verb for the simple past form at the same functional slot; 'attended' replaces 'attend' in position after removing 'did not', but more precisely: removing 'did not' and replacing 'attend' with 'attended' is a two-chunk change, NOT a direct 1:1 single-word substitution) — RE-EVALUATE: 'did not' + 'attend' are two separate chunks; replacing only 'attend' with 'attended' yields 'I did not attended…' (ungrammatical); replacing only 'did not' with nothing is deletion not substitution. No single 1:1 swap produces a valid sentence. NOT a blocker by strict rule.",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 21,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 22,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r22_q4: distractor DIRECTLY replaces one word to form a valid sentence — 'signed' can replace 'sign up' (with removal of 'did not' and 'yet') BUT more critically: 'I signed up for the hiking trail group yet' is ungrammatical, so this is NOT a clean 1:1 substitution blocker. However, 'did not sign up' vs 'signed' — 'signed' cannot replace exactly one word in the same position to yield a grammatical sentence without rearrangement. NOT a blocker.": 1,
+              "review:blocker:tmp_r22_q5: distractor 'receive' cannot replace exactly one word in the answer without rearrangement (would need to remove 'have not' and restructure). NOT a blocker.": 1
+            }
+          }
+        },
+        {
+          "round": 23,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r23_q2: distractor 'reschedule' — replacing 'rescheduled' with 'reschedule' yields 'the orientation had been reschedule' (ungrammatical). NOT a blocker.": 1,
+              "review:blocker:tmp_r23_q4: distractor DIRECTLY replaces one word to form a valid sentence — 'I attended the community meeting on Thursday evening' is grammatical with 'attended' replacing 'did not attend' (effectively swapping the negated auxiliary+verb for the simple past form at the same functional slot; 'attended' replaces 'attend' in position after removing 'did not', but more precisely: removing 'did not' and replacing 'attend' with 'attended' is a two-chunk change, NOT a direct 1:1 single-word substitution) — RE-EVALUATE: 'did not' + 'attend' are two separate chunks; replacing only 'attend' with 'attended' yields 'I did not attended…' (ungrammatical); replacing only 'did not' with nothing is deletion not substitution. No single 1:1 swap produces a valid sentence. NOT a blocker by strict rule.": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 26
+    },
+    {
+      "triggeredAt": "2026-03-13T14:34:07.740Z",
+      "round": 24,
+      "mode": "normal",
+      "type": "direct",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:solvability<78",
+          1
+        ],
+        [
+          "review:blocker:tmp_r23_q1: distractor 'realize' — replacing 'realized' with 'realize' yields 'I had not realize that…' (ungrammatical). NOT a blocker.",
+          1
+        ],
+        [
+          "fatal: chunks[6]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "topic:repeat",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 22,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:solvability<78": 1
+            }
+          }
+        },
+        {
+          "round": 23,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r23_q1: distractor 'realize' — replacing 'realized' with 'realize' yields 'I had not realize that…' (ungrammatical). NOT a blocker.": 1
+            }
+          }
+        },
+        {
+          "round": 24,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "fatal: chunks[6]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "topic:repeat": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 27
+    },
+    {
+      "triggeredAt": "2026-03-13T14:40:16.199Z",
+      "round": 31,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 11,
+      "accepted": 1,
+      "rejected": 10,
+      "acceptRate": 0.091,
+      "reasons": [
+        [
+          "pool:low_assembly_value",
+          6
+        ],
+        [
+          "review:blocker:tmp_r29_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'attended' can replace 'attend' (position 2) yielding 'I did not attended the cooking class last weekend.' — wait, that is ungrammatical. Re-evaluating: 'attended' cannot replace any single chunk to produce a grammatical sentence without rearrangement, so NOT a blocker. However, 'attended' as a standalone chunk alongside 'did not' creates ambiguity: a student might attempt 'I attended the cooking class last weekend' by dropping 'did not' and using 'attended' — but that requires removing a chunk, not a 1:1 swap. Flagging instead: tmp_r29_q1: distractor 'attended' is the past-tense form of the main verb already present as 'attend'; combined with the prefilled 'I' and chunks, a student could plausibly build 'I attended the cooking class last weekend' by ignoring 'did not' — this constitutes a clearly ambiguous order risk since both a positive and negative sentence are constructible from the chunk pool.",
+          1
+        ],
+        [
+          "review:ets<72",
+          1
+        ],
+        [
+          "fatal: chunks[3]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "topic:repeat",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 29,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 1,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r29_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'attended' can replace 'attend' (position 2) yielding 'I did not attended the cooking class last weekend.' — wait, that is ungrammatical. Re-evaluating: 'attended' cannot replace any single chunk to produce a grammatical sentence without rearrangement, so NOT a blocker. However, 'attended' as a standalone chunk alongside 'did not' creates ambiguity: a student might attempt 'I attended the cooking class last weekend' by dropping 'did not' and using 'attended' — but that requires removing a chunk, not a 1:1 swap. Flagging instead: tmp_r29_q1: distractor 'attended' is the past-tense form of the main verb already present as 'attend'; combined with the prefilled 'I' and chunks, a student could plausibly build 'I attended the cooking class last weekend' by ignoring 'did not' — this constitutes a clearly ambiguous order risk since both a positive and negative sentence are constructible from the chunk pool.": 1,
+              "review:ets<72": 1
+            }
+          }
+        },
+        {
+          "round": 30,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 4,
+            "accepted": 0,
+            "rejected": 4,
+            "reasons": {
+              "pool:low_assembly_value": 4
+            }
+          }
+        },
+        {
+          "round": 31,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 4,
+            "accepted": 0,
+            "rejected": 4,
+            "reasons": {
+              "fatal: chunks[3]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "topic:repeat": 1,
+              "pool:low_assembly_value": 2
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 34
+    }
+  ],
+  "history": [
+    {
+      "round": 27,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "interrogative",
+          "difficulty": "medium",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r27_q3: distractor DIRECTLY replaces one word to form a valid sentence — 'came from' can be replaced by 'come from' if 'came' is swapped, BUT more critically 'come' replaces 'came' in 'came from' only if the chunk 'came from.' is treated as a unit; however, since 'came from.' is a single chunk and 'come' would require restructuring that chunk, this is borderline — upon strict analysis: 'come' cannot replace exactly one chunk in the same position to yield a grammatical sentence without also changing 'did not' to 'does not', so this is NOT a blocker by the strict rule. Withdrawing.": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 2,
+          "accepted": 1,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r27_q2: distractor DIRECTLY replaces one word to form a valid sentence — 'signed' can replace 'sign' in 'sign up' only if 'up' is dropped, which requires rearrangement; however 'I signed up for the pottery class' is grammatical and 'signed' replaces 'did not sign' effectively — strict test: 'signed' cannot replace exactly ONE chunk at the same position while keeping all other chunks intact ('did not' + 'signed' + 'up' = 'I did not signed up…' which is ungrammatical). NOT a blocker by strict rule. Withdrawing.": 1
+          }
+        },
+        "interrogative": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "fatal: chunks[2]: isolated floating adverb \"often\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+            "review:ets<72": 1
+          }
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 28,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 4
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 3,
+          "accepted": 2,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r28_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'finished' can replace 'finish' (same position after 'did not') to yield 'I did not finished the outline before the deadline' — wait, that is ungrammatical; however 'finished' could replace 'did not finish' only as a restructuring, so this is NOT a simple 1:1 single-word substitution blocker. Retracting — see issues instead.": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "fatal: chunks (minus distractor) + prefilled words must equal answer words": 1
+          }
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r28_q3: indirect question uses inverted word order — the embedded clause 'when the class was rescheduled' is correctly non-inverted in the answer, BUT the prompt asks 'if the evening yoga class was rescheduled' and the answer pivots to 'did not know when the class was rescheduled,' which is a different proposition than the prompt implies (the instructor not knowing ≠ responding to whether it was rescheduled). This creates genuine ambiguity: a student could reasonably construct 'The fitness instructor did not reschedule the class' using the distractor, which is a grammatical and contextually plausible answer to the prompt. This constitutes clearly ambiguous order with multiple valid answers.|tmp_r28_q3: distractor DIRECTLY replaces one word — 'reschedule' can replace 'know' in position after 'did not' to yield 'The fitness instructor did not reschedule the class' (dropping 'when' and rearranging), but this requires rearrangement so it is NOT a strict 1:1 blocker. Retracting — see issues instead.": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 29,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 5
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 3,
+          "accepted": 1,
+          "rejected": 2,
+          "reasons": {
+            "review:blocker:tmp_r29_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'attended' can replace 'attend' (position 2) yielding 'I did not attended the cooking class last weekend.' — wait, that is ungrammatical. Re-evaluating: 'attended' cannot replace any single chunk to produce a grammatical sentence without rearrangement, so NOT a blocker. However, 'attended' as a standalone chunk alongside 'did not' creates ambiguity: a student might attempt 'I attended the cooking class last weekend' by dropping 'did not' and using 'attended' — but that requires removing a chunk, not a 1:1 swap. Flagging instead: tmp_r29_q1: distractor 'attended' is the past-tense form of the main verb already present as 'attend'; combined with the prefilled 'I' and chunks, a student could plausibly build 'I attended the cooking class last weekend' by ignoring 'did not' — this constitutes a clearly ambiguous order risk since both a positive and negative sentence are constructible from the chunk pool.": 1,
+            "review:ets<72": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 1,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:score<78": 1
+          }
+        }
+      }
+    },
+    {
+      "round": 30,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 4
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 4,
+          "accepted": 0,
+          "rejected": 4,
+          "reasons": {
+            "pool:low_assembly_value": 4
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "pool:low_assembly_value": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 31,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 4
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 4,
+          "accepted": 0,
+          "rejected": 4,
+          "reasons": {
+            "fatal: chunks[3]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+            "topic:repeat": 1,
+            "pool:low_assembly_value": 2
+          }
+        },
+        "3rd-reporting": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "fatal: distractor must not appear in answer": 1
+          }
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 32,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 4
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 3,
+          "accepted": 0,
+          "rejected": 3,
+          "reasons": {
+            "pool:low_assembly_value": 3
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "pool:low_assembly_value": 2
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    }
+  ]
+}
