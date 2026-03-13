@@ -1,0 +1,1269 @@
+{
+  "generated_at": "2026-03-13T13:58:16.840Z",
+  "active": {
+    "relative": {
+      "sinceRound": 4,
+      "untilRound": 7,
+      "lastEvent": {
+        "triggeredAt": "2026-03-13T13:54:05.298Z",
+        "round": 4,
+        "mode": "normal",
+        "type": "relative",
+        "generated": 4,
+        "accepted": 0,
+        "rejected": 4,
+        "acceptRate": 0,
+        "reasons": [
+          [
+            "review:ets<72",
+            2
+          ],
+          [
+            "review:blocker:tmp_r4_q2: distractor 'need' can replace 'needed' in 'i needed' chunk — but 'needed' is inside a multi-word chunk 'i needed', so substitution requires chunk-internal change, NOT a simple 1:1 chunk swap; NOT a blocker",
+            1
+          ],
+          [
+            "review:blocker:tmp_r4_q9: distractor 'carry' can replace 'carries' at exactly one position — 'The store I found downtown carry great winter coats' is ungrammatical (subject-verb agreement fails), so no valid sentence results; NOT a blocker",
+            1
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 4,
+            "spec": [
+              {
+                "type": "direct",
+                "difficulty": "medium",
+                "count": 1
+              },
+              {
+                "type": "relative",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "1st-embedded",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "direct",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "relative",
+                "difficulty": "easy",
+                "count": 1
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 1
+              }
+            ],
+            "stats": {
+              "generated": 4,
+              "accepted": 0,
+              "rejected": 4,
+              "reasons": {
+                "review:blocker:tmp_r4_q2: distractor 'need' can replace 'needed' in 'i needed' chunk — but 'needed' is inside a multi-word chunk 'i needed', so substitution requires chunk-internal change, NOT a simple 1:1 chunk swap; NOT a blocker": 1,
+                "review:ets<72": 2,
+                "review:blocker:tmp_r4_q9: distractor 'carry' can replace 'carries' at exactly one position — 'The store I found downtown carry great winter coats' is ungrammatical (subject-verb agreement fails), so no valid sentence results; NOT a blocker": 1
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 7
+      }
+    },
+    "negation": {
+      "sinceRound": 7,
+      "untilRound": 10,
+      "lastEvent": {
+        "triggeredAt": "2026-03-13T13:58:16.839Z",
+        "round": 7,
+        "mode": "normal",
+        "type": "negation",
+        "generated": 8,
+        "accepted": 0,
+        "rejected": 8,
+        "acceptRate": 0,
+        "reasons": [
+          [
+            "review:ets<72",
+            3
+          ],
+          [
+            "review:blocker:tmp_r4_q4: distractor DIRECTLY replaces one word to form a valid sentence — 'I received any notice about the package arriving' is ungrammatical, but 'I received no notice about the package arriving' would require chunk swap; however 'received' replaces 'did not receive' as a unit only if 'did not' is removed — NOT a simple 1:1 substitution, not a blocker",
+            1
+          ],
+          [
+            "review:blocker:tmp_r4_q5: distractor 'found' can replace 'find' in position after 'did not' — but 'did not found' is ungrammatical, so no valid sentence results; NOT a blocker",
+            1
+          ],
+          [
+            "format: answer word count must be 7-15 (got 6)",
+            1
+          ],
+          [
+            "review:blocker:tmp_r7_q10: prompt/answer mismatch (prompt asks about 'the front desk clerk' but answer uses 'the front desk', omitting 'clerk'; more critically, the prompt asks what the clerk asked about the weather forecast for the hiking trip, but the answer says 'whether the weather would affect the trail' — no mention of hiking trip, and the subject truncation makes the answer feel mismatched)|tmp_r7_q1: distractor 'thought' directly replaces 'think' (same position, same grammatical slot) to form 'I did not thought the soup was warm enough' — ungrammatical, so NOT a blocker by substitution rule; however 'thought' can replace 'did not think' only with rearrangement. No blocker.|tmp_r7_q10: subject mismatch — prompt says 'front desk clerk' but answer and prefilled use 'the front desk' (truncated, missing 'clerk'). Answer is technically ungrammatical as a noun phrase referencing a person.",
+            1
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 4,
+            "spec": [
+              {
+                "type": "direct",
+                "difficulty": "medium",
+                "count": 1
+              },
+              {
+                "type": "relative",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "1st-embedded",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "direct",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "relative",
+                "difficulty": "easy",
+                "count": 1
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 1
+              }
+            ],
+            "stats": {
+              "generated": 2,
+              "accepted": 0,
+              "rejected": 2,
+              "reasons": {
+                "review:blocker:tmp_r4_q4: distractor DIRECTLY replaces one word to form a valid sentence — 'I received any notice about the package arriving' is ungrammatical, but 'I received no notice about the package arriving' would require chunk swap; however 'received' replaces 'did not receive' as a unit only if 'did not' is removed — NOT a simple 1:1 substitution, not a blocker": 1,
+                "review:blocker:tmp_r4_q5: distractor 'found' can replace 'find' in position after 'did not' — but 'did not found' is ungrammatical, so no valid sentence results; NOT a blocker": 1
+              }
+            }
+          },
+          {
+            "round": 6,
+            "spec": [
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 5
+              },
+              {
+                "type": "1st-embedded",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "relative",
+                "difficulty": "medium",
+                "count": 3
+              }
+            ],
+            "stats": {
+              "generated": 0,
+              "accepted": 0,
+              "rejected": 0,
+              "reasons": {}
+            }
+          },
+          {
+            "round": 7,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "negation",
+                "difficulty": "easy",
+                "count": 4
+              },
+              {
+                "type": "negation",
+                "difficulty": "hard",
+                "count": 2
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 6,
+              "accepted": 0,
+              "rejected": 6,
+              "reasons": {
+                "format: answer word count must be 7-15 (got 6)": 1,
+                "review:blocker:tmp_r7_q10: prompt/answer mismatch (prompt asks about 'the front desk clerk' but answer uses 'the front desk', omitting 'clerk'; more critically, the prompt asks what the clerk asked about the weather forecast for the hiking trip, but the answer says 'whether the weather would affect the trail' — no mention of hiking trip, and the subject truncation makes the answer feel mismatched)|tmp_r7_q1: distractor 'thought' directly replaces 'think' (same position, same grammatical slot) to form 'I did not thought the soup was warm enough' — ungrammatical, so NOT a blocker by substitution rule; however 'thought' can replace 'did not think' only with rearrangement. No blocker.|tmp_r7_q10: subject mismatch — prompt says 'front desk clerk' but answer and prefilled use 'the front desk' (truncated, missing 'clerk'). Answer is technically ungrammatical as a noun phrase referencing a person.": 1,
+                "review:blocker:tmp_r7_q2: distractor 'seen' directly replaces 'see' in 'I did not see any jackets in my size' → 'I did not seen any jackets in my size' — ungrammatical. Not a valid 1:1 substitution blocker. No blocker.": 1,
+                "review:ets<72": 3
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 10
+      }
+    },
+    "1st-embedded": {
+      "sinceRound": 7,
+      "untilRound": 10,
+      "lastEvent": {
+        "triggeredAt": "2026-03-13T13:58:16.840Z",
+        "round": 7,
+        "mode": "normal",
+        "type": "1st-embedded",
+        "generated": 5,
+        "accepted": 1,
+        "rejected": 4,
+        "acceptRate": 0.2,
+        "reasons": [
+          [
+            "distractor:unsafe: \"were\" directly swaps with \"is\" in answer (be-verb tense change produces valid sentence)",
+            1
+          ],
+          [
+            "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]",
+            1
+          ],
+          [
+            "review:blocker:tmp_r6_q7: multiple valid chunk orders (chunks 'found', 'out', 'where', 'the', 'guided', 'nature tour', 'starts', 'each morning' are over-fragmented; 'the' and 'guided' as separate chunks allow ambiguous recombination, and 'out' can attach in multiple positions)|tmp_r6_q7: chunk fragmentation creates ambiguity — splitting 'found out' into 'found' + 'out' as separate chunks allows reordering; student could place 'out' elsewhere and produce a non-target but arguably parseable string",
+            1
+          ],
+          [
+            "review:solvability<78",
+            1
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 4,
+            "spec": [
+              {
+                "type": "direct",
+                "difficulty": "medium",
+                "count": 1
+              },
+              {
+                "type": "relative",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "1st-embedded",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "direct",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "relative",
+                "difficulty": "easy",
+                "count": 1
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 1
+              }
+            ],
+            "stats": {
+              "generated": 2,
+              "accepted": 0,
+              "rejected": 2,
+              "reasons": {
+                "distractor:unsafe: \"were\" directly swaps with \"is\" in answer (be-verb tense change produces valid sentence)": 1,
+                "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]": 1
+              }
+            }
+          },
+          {
+            "round": 6,
+            "spec": [
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 5
+              },
+              {
+                "type": "1st-embedded",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "relative",
+                "difficulty": "medium",
+                "count": 3
+              }
+            ],
+            "stats": {
+              "generated": 2,
+              "accepted": 1,
+              "rejected": 1,
+              "reasons": {
+                "review:blocker:tmp_r6_q7: multiple valid chunk orders (chunks 'found', 'out', 'where', 'the', 'guided', 'nature tour', 'starts', 'each morning' are over-fragmented; 'the' and 'guided' as separate chunks allow ambiguous recombination, and 'out' can attach in multiple positions)|tmp_r6_q7: chunk fragmentation creates ambiguity — splitting 'found out' into 'found' + 'out' as separate chunks allows reordering; student could place 'out' elsewhere and produce a non-target but arguably parseable string": 1
+              }
+            }
+          },
+          {
+            "round": 7,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "negation",
+                "difficulty": "easy",
+                "count": 4
+              },
+              {
+                "type": "negation",
+                "difficulty": "hard",
+                "count": 2
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 1,
+              "accepted": 0,
+              "rejected": 1,
+              "reasons": {
+                "review:solvability<78": 1
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 10
+      }
+    },
+    "direct": {
+      "sinceRound": 7,
+      "untilRound": 10,
+      "lastEvent": {
+        "triggeredAt": "2026-03-13T13:58:16.840Z",
+        "round": 7,
+        "mode": "normal",
+        "type": "direct",
+        "generated": 5,
+        "accepted": 1,
+        "rejected": 4,
+        "acceptRate": 0.2,
+        "reasons": [
+          [
+            "review:blocker:tmp_r4_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'wound' can replace 'winds' in the same position: 'The trail near the botanical garden wound through some beautiful scenery.' is grammatical (simple past, valid 1:1 swap)|tmp_r4_q1: distractor 'wound' can replace 'winds' at exactly one position — 'The trail near the botanical garden wound through some beautiful scenery' is fully grammatical. This IS a direct 1:1 substitution blocker.",
+            1
+          ],
+          [
+            "review:blocker:tmp_r6_q1: prompt/answer mismatch (prompt asks what the shop owner *asked*, but answer says they 'needed to find out' — this describes an internal need, not a reported question)|tmp_r6_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'The shop owner needed to find out when the driver arrive' is ungrammatical, BUT 'arrive' can replace 'arrived' at the same position to produce 'The shop owner needed to find out when the driver arrive' — wait, that is ungrammatical. No blocker. [RETRACTED — see note below]|tmp_r6_q10: prefilled 'the cooking' is a broken NP — the first student chunk must be 'class' to complete the noun, creating an artificial forced-first-move that is not standard TPO prefill practice; this is a structural blocker",
+            1
+          ],
+          [
+            "review:blocker:tmp_r7_q9: chunk 'arrive' is a distractor but also appears in the chunks array as a buildable piece alongside 'had arrived', creating potential ambiguity — student could attempt to use 'arrive' in place of 'had arrived' and produce a near-valid sentence with rearrangement.",
+            1
+          ],
+          [
+            "review:solvability<78",
+            1
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 4,
+            "spec": [
+              {
+                "type": "direct",
+                "difficulty": "medium",
+                "count": 1
+              },
+              {
+                "type": "relative",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "1st-embedded",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "direct",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "relative",
+                "difficulty": "easy",
+                "count": 1
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 1
+              }
+            ],
+            "stats": {
+              "generated": 1,
+              "accepted": 0,
+              "rejected": 1,
+              "reasons": {
+                "review:blocker:tmp_r4_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'wound' can replace 'winds' in the same position: 'The trail near the botanical garden wound through some beautiful scenery.' is grammatical (simple past, valid 1:1 swap)|tmp_r4_q1: distractor 'wound' can replace 'winds' at exactly one position — 'The trail near the botanical garden wound through some beautiful scenery' is fully grammatical. This IS a direct 1:1 substitution blocker.": 1
+              }
+            }
+          },
+          {
+            "round": 6,
+            "spec": [
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 5
+              },
+              {
+                "type": "1st-embedded",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "relative",
+                "difficulty": "medium",
+                "count": 3
+              }
+            ],
+            "stats": {
+              "generated": 2,
+              "accepted": 1,
+              "rejected": 1,
+              "reasons": {
+                "review:blocker:tmp_r6_q1: prompt/answer mismatch (prompt asks what the shop owner *asked*, but answer says they 'needed to find out' — this describes an internal need, not a reported question)|tmp_r6_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'The shop owner needed to find out when the driver arrive' is ungrammatical, BUT 'arrive' can replace 'arrived' at the same position to produce 'The shop owner needed to find out when the driver arrive' — wait, that is ungrammatical. No blocker. [RETRACTED — see note below]|tmp_r6_q10: prefilled 'the cooking' is a broken NP — the first student chunk must be 'class' to complete the noun, creating an artificial forced-first-move that is not standard TPO prefill practice; this is a structural blocker": 1
+              }
+            }
+          },
+          {
+            "round": 7,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "negation",
+                "difficulty": "easy",
+                "count": 4
+              },
+              {
+                "type": "negation",
+                "difficulty": "hard",
+                "count": 2
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 2,
+              "accepted": 0,
+              "rejected": 2,
+              "reasons": {
+                "review:blocker:tmp_r7_q9: chunk 'arrive' is a distractor but also appears in the chunks array as a buildable piece alongside 'had arrived', creating potential ambiguity — student could attempt to use 'arrive' in place of 'had arrived' and produce a near-valid sentence with rearrangement.": 1,
+                "review:solvability<78": 1
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 10
+      }
+    }
+  },
+  "events": [
+    {
+      "triggeredAt": "2026-03-13T13:54:05.298Z",
+      "round": 4,
+      "mode": "normal",
+      "type": "relative",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:ets<72",
+          2
+        ],
+        [
+          "review:blocker:tmp_r4_q2: distractor 'need' can replace 'needed' in 'i needed' chunk — but 'needed' is inside a multi-word chunk 'i needed', so substitution requires chunk-internal change, NOT a simple 1:1 chunk swap; NOT a blocker",
+          1
+        ],
+        [
+          "review:blocker:tmp_r4_q9: distractor 'carry' can replace 'carries' at exactly one position — 'The store I found downtown carry great winter coats' is ungrammatical (subject-verb agreement fails), so no valid sentence results; NOT a blocker",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "easy",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 4,
+            "accepted": 0,
+            "rejected": 4,
+            "reasons": {
+              "review:blocker:tmp_r4_q2: distractor 'need' can replace 'needed' in 'i needed' chunk — but 'needed' is inside a multi-word chunk 'i needed', so substitution requires chunk-internal change, NOT a simple 1:1 chunk swap; NOT a blocker": 1,
+              "review:ets<72": 2,
+              "review:blocker:tmp_r4_q9: distractor 'carry' can replace 'carries' at exactly one position — 'The store I found downtown carry great winter coats' is ungrammatical (subject-verb agreement fails), so no valid sentence results; NOT a blocker": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 7
+    },
+    {
+      "triggeredAt": "2026-03-13T13:58:16.839Z",
+      "round": 7,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 8,
+      "accepted": 0,
+      "rejected": 8,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:ets<72",
+          3
+        ],
+        [
+          "review:blocker:tmp_r4_q4: distractor DIRECTLY replaces one word to form a valid sentence — 'I received any notice about the package arriving' is ungrammatical, but 'I received no notice about the package arriving' would require chunk swap; however 'received' replaces 'did not receive' as a unit only if 'did not' is removed — NOT a simple 1:1 substitution, not a blocker",
+          1
+        ],
+        [
+          "review:blocker:tmp_r4_q5: distractor 'found' can replace 'find' in position after 'did not' — but 'did not found' is ungrammatical, so no valid sentence results; NOT a blocker",
+          1
+        ],
+        [
+          "format: answer word count must be 7-15 (got 6)",
+          1
+        ],
+        [
+          "review:blocker:tmp_r7_q10: prompt/answer mismatch (prompt asks about 'the front desk clerk' but answer uses 'the front desk', omitting 'clerk'; more critically, the prompt asks what the clerk asked about the weather forecast for the hiking trip, but the answer says 'whether the weather would affect the trail' — no mention of hiking trip, and the subject truncation makes the answer feel mismatched)|tmp_r7_q1: distractor 'thought' directly replaces 'think' (same position, same grammatical slot) to form 'I did not thought the soup was warm enough' — ungrammatical, so NOT a blocker by substitution rule; however 'thought' can replace 'did not think' only with rearrangement. No blocker.|tmp_r7_q10: subject mismatch — prompt says 'front desk clerk' but answer and prefilled use 'the front desk' (truncated, missing 'clerk'). Answer is technically ungrammatical as a noun phrase referencing a person.",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "easy",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r4_q4: distractor DIRECTLY replaces one word to form a valid sentence — 'I received any notice about the package arriving' is ungrammatical, but 'I received no notice about the package arriving' would require chunk swap; however 'received' replaces 'did not receive' as a unit only if 'did not' is removed — NOT a simple 1:1 substitution, not a blocker": 1,
+              "review:blocker:tmp_r4_q5: distractor 'found' can replace 'find' in position after 'did not' — but 'did not found' is ungrammatical, so no valid sentence results; NOT a blocker": 1
+            }
+          }
+        },
+        {
+          "round": 6,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 5
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 7,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "easy",
+              "count": 4
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 6,
+            "accepted": 0,
+            "rejected": 6,
+            "reasons": {
+              "format: answer word count must be 7-15 (got 6)": 1,
+              "review:blocker:tmp_r7_q10: prompt/answer mismatch (prompt asks about 'the front desk clerk' but answer uses 'the front desk', omitting 'clerk'; more critically, the prompt asks what the clerk asked about the weather forecast for the hiking trip, but the answer says 'whether the weather would affect the trail' — no mention of hiking trip, and the subject truncation makes the answer feel mismatched)|tmp_r7_q1: distractor 'thought' directly replaces 'think' (same position, same grammatical slot) to form 'I did not thought the soup was warm enough' — ungrammatical, so NOT a blocker by substitution rule; however 'thought' can replace 'did not think' only with rearrangement. No blocker.|tmp_r7_q10: subject mismatch — prompt says 'front desk clerk' but answer and prefilled use 'the front desk' (truncated, missing 'clerk'). Answer is technically ungrammatical as a noun phrase referencing a person.": 1,
+              "review:blocker:tmp_r7_q2: distractor 'seen' directly replaces 'see' in 'I did not see any jackets in my size' → 'I did not seen any jackets in my size' — ungrammatical. Not a valid 1:1 substitution blocker. No blocker.": 1,
+              "review:ets<72": 3
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 10
+    },
+    {
+      "triggeredAt": "2026-03-13T13:58:16.840Z",
+      "round": 7,
+      "mode": "normal",
+      "type": "1st-embedded",
+      "generated": 5,
+      "accepted": 1,
+      "rejected": 4,
+      "acceptRate": 0.2,
+      "reasons": [
+        [
+          "distractor:unsafe: \"were\" directly swaps with \"is\" in answer (be-verb tense change produces valid sentence)",
+          1
+        ],
+        [
+          "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]",
+          1
+        ],
+        [
+          "review:blocker:tmp_r6_q7: multiple valid chunk orders (chunks 'found', 'out', 'where', 'the', 'guided', 'nature tour', 'starts', 'each morning' are over-fragmented; 'the' and 'guided' as separate chunks allow ambiguous recombination, and 'out' can attach in multiple positions)|tmp_r6_q7: chunk fragmentation creates ambiguity — splitting 'found out' into 'found' + 'out' as separate chunks allows reordering; student could place 'out' elsewhere and produce a non-target but arguably parseable string",
+          1
+        ],
+        [
+          "review:solvability<78",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "easy",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "distractor:unsafe: \"were\" directly swaps with \"is\" in answer (be-verb tense change produces valid sentence)": 1,
+              "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]": 1
+            }
+          }
+        },
+        {
+          "round": 6,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 5
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 1,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r6_q7: multiple valid chunk orders (chunks 'found', 'out', 'where', 'the', 'guided', 'nature tour', 'starts', 'each morning' are over-fragmented; 'the' and 'guided' as separate chunks allow ambiguous recombination, and 'out' can attach in multiple positions)|tmp_r6_q7: chunk fragmentation creates ambiguity — splitting 'found out' into 'found' + 'out' as separate chunks allows reordering; student could place 'out' elsewhere and produce a non-target but arguably parseable string": 1
+            }
+          }
+        },
+        {
+          "round": 7,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "easy",
+              "count": 4
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:solvability<78": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 10
+    },
+    {
+      "triggeredAt": "2026-03-13T13:58:16.840Z",
+      "round": 7,
+      "mode": "normal",
+      "type": "direct",
+      "generated": 5,
+      "accepted": 1,
+      "rejected": 4,
+      "acceptRate": 0.2,
+      "reasons": [
+        [
+          "review:blocker:tmp_r4_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'wound' can replace 'winds' in the same position: 'The trail near the botanical garden wound through some beautiful scenery.' is grammatical (simple past, valid 1:1 swap)|tmp_r4_q1: distractor 'wound' can replace 'winds' at exactly one position — 'The trail near the botanical garden wound through some beautiful scenery' is fully grammatical. This IS a direct 1:1 substitution blocker.",
+          1
+        ],
+        [
+          "review:blocker:tmp_r6_q1: prompt/answer mismatch (prompt asks what the shop owner *asked*, but answer says they 'needed to find out' — this describes an internal need, not a reported question)|tmp_r6_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'The shop owner needed to find out when the driver arrive' is ungrammatical, BUT 'arrive' can replace 'arrived' at the same position to produce 'The shop owner needed to find out when the driver arrive' — wait, that is ungrammatical. No blocker. [RETRACTED — see note below]|tmp_r6_q10: prefilled 'the cooking' is a broken NP — the first student chunk must be 'class' to complete the noun, creating an artificial forced-first-move that is not standard TPO prefill practice; this is a structural blocker",
+          1
+        ],
+        [
+          "review:blocker:tmp_r7_q9: chunk 'arrive' is a distractor but also appears in the chunks array as a buildable piece alongside 'had arrived', creating potential ambiguity — student could attempt to use 'arrive' in place of 'had arrived' and produce a near-valid sentence with rearrangement.",
+          1
+        ],
+        [
+          "review:solvability<78",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "easy",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r4_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'wound' can replace 'winds' in the same position: 'The trail near the botanical garden wound through some beautiful scenery.' is grammatical (simple past, valid 1:1 swap)|tmp_r4_q1: distractor 'wound' can replace 'winds' at exactly one position — 'The trail near the botanical garden wound through some beautiful scenery' is fully grammatical. This IS a direct 1:1 substitution blocker.": 1
+            }
+          }
+        },
+        {
+          "round": 6,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 5
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 1,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r6_q1: prompt/answer mismatch (prompt asks what the shop owner *asked*, but answer says they 'needed to find out' — this describes an internal need, not a reported question)|tmp_r6_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'The shop owner needed to find out when the driver arrive' is ungrammatical, BUT 'arrive' can replace 'arrived' at the same position to produce 'The shop owner needed to find out when the driver arrive' — wait, that is ungrammatical. No blocker. [RETRACTED — see note below]|tmp_r6_q10: prefilled 'the cooking' is a broken NP — the first student chunk must be 'class' to complete the noun, creating an artificial forced-first-move that is not standard TPO prefill practice; this is a structural blocker": 1
+            }
+          }
+        },
+        {
+          "round": 7,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "easy",
+              "count": 4
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r7_q9: chunk 'arrive' is a distractor but also appears in the chunks array as a buildable piece alongside 'had arrived', creating potential ambiguity — student could attempt to use 'arrive' in place of 'had arrived' and produce a near-valid sentence with rearrangement.": 1,
+              "review:solvability<78": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 10
+    }
+  ],
+  "history": [
+    {
+      "round": 4,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 1
+        },
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "direct",
+          "difficulty": "hard",
+          "count": 1
+        },
+        {
+          "type": "relative",
+          "difficulty": "easy",
+          "count": 1
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "review:blocker:tmp_r4_q4: distractor DIRECTLY replaces one word to form a valid sentence — 'I received any notice about the package arriving' is ungrammatical, but 'I received no notice about the package arriving' would require chunk swap; however 'received' replaces 'did not receive' as a unit only if 'did not' is removed — NOT a simple 1:1 substitution, not a blocker": 1,
+            "review:blocker:tmp_r4_q5: distractor 'found' can replace 'find' in position after 'did not' — but 'did not found' is ungrammatical, so no valid sentence results; NOT a blocker": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 1,
+          "accepted": 1,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "distractor:unsafe: \"were\" directly swaps with \"is\" in answer (be-verb tense change produces valid sentence)": 1,
+            "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r4_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'wound' can replace 'winds' in the same position: 'The trail near the botanical garden wound through some beautiful scenery.' is grammatical (simple past, valid 1:1 swap)|tmp_r4_q1: distractor 'wound' can replace 'winds' at exactly one position — 'The trail near the botanical garden wound through some beautiful scenery' is fully grammatical. This IS a direct 1:1 substitution blocker.": 1
+          }
+        },
+        "relative": {
+          "generated": 4,
+          "accepted": 0,
+          "rejected": 4,
+          "reasons": {
+            "review:blocker:tmp_r4_q2: distractor 'need' can replace 'needed' in 'i needed' chunk — but 'needed' is inside a multi-word chunk 'i needed', so substitution requires chunk-internal change, NOT a simple 1:1 chunk swap; NOT a blocker": 1,
+            "review:ets<72": 2,
+            "review:blocker:tmp_r4_q9: distractor 'carry' can replace 'carries' at exactly one position — 'The store I found downtown carry great winter coats' is ungrammatical (subject-verb agreement fails), so no valid sentence results; NOT a blocker": 1
+          }
+        }
+      }
+    },
+    {
+      "round": 6,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 5
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 3
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 3,
+          "accepted": 3,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 2,
+          "accepted": 1,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r6_q7: multiple valid chunk orders (chunks 'found', 'out', 'where', 'the', 'guided', 'nature tour', 'starts', 'each morning' are over-fragmented; 'the' and 'guided' as separate chunks allow ambiguous recombination, and 'out' can attach in multiple positions)|tmp_r6_q7: chunk fragmentation creates ambiguity — splitting 'found out' into 'found' + 'out' as separate chunks allows reordering; student could place 'out' elsewhere and produce a non-target but arguably parseable string": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 2,
+          "accepted": 1,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r6_q1: prompt/answer mismatch (prompt asks what the shop owner *asked*, but answer says they 'needed to find out' — this describes an internal need, not a reported question)|tmp_r6_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'The shop owner needed to find out when the driver arrive' is ungrammatical, BUT 'arrive' can replace 'arrived' at the same position to produce 'The shop owner needed to find out when the driver arrive' — wait, that is ungrammatical. No blocker. [RETRACTED — see note below]|tmp_r6_q10: prefilled 'the cooking' is a broken NP — the first student chunk must be 'class' to complete the noun, creating an artificial forced-first-move that is not standard TPO prefill practice; this is a structural blocker": 1
+          }
+        },
+        "relative": {
+          "generated": 3,
+          "accepted": 0,
+          "rejected": 3,
+          "reasons": {
+            "review:blocker:tmp_r6_q8: distractor DIRECTLY replaces one word to form a valid sentence — 'visit' replaces 'visited' at the same position: 'The bookstore I visit last weekend had every cookbook in stock' is ungrammatical, so NOT a blocker. [RETRACTED] However, 'last' and 'weekend' as separate single-word chunks creates ambiguity — student could assemble 'The bookstore I visited weekend last had...' with no clear enforcement of order": 1,
+            "review:ets<72": 1,
+            "review:blocker:tmp_r6_q10: prefilled 'the cooking' is a broken NP — the first student chunk must be 'class' to complete the noun, creating an artificial forced-first-move that is not standard TPO prefill practice; this is a structural blocker": 1
+          }
+        }
+      }
+    },
+    {
+      "round": 7,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "easy",
+          "count": 4
+        },
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 6,
+          "accepted": 0,
+          "rejected": 6,
+          "reasons": {
+            "format: answer word count must be 7-15 (got 6)": 1,
+            "review:blocker:tmp_r7_q10: prompt/answer mismatch (prompt asks about 'the front desk clerk' but answer uses 'the front desk', omitting 'clerk'; more critically, the prompt asks what the clerk asked about the weather forecast for the hiking trip, but the answer says 'whether the weather would affect the trail' — no mention of hiking trip, and the subject truncation makes the answer feel mismatched)|tmp_r7_q1: distractor 'thought' directly replaces 'think' (same position, same grammatical slot) to form 'I did not thought the soup was warm enough' — ungrammatical, so NOT a blocker by substitution rule; however 'thought' can replace 'did not think' only with rearrangement. No blocker.|tmp_r7_q10: subject mismatch — prompt says 'front desk clerk' but answer and prefilled use 'the front desk' (truncated, missing 'clerk'). Answer is technically ungrammatical as a noun phrase referencing a person.": 1,
+            "review:blocker:tmp_r7_q2: distractor 'seen' directly replaces 'see' in 'I did not see any jackets in my size' → 'I did not seen any jackets in my size' — ungrammatical. Not a valid 1:1 substitution blocker. No blocker.": 1,
+            "review:ets<72": 3
+          }
+        },
+        "3rd-reporting": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r7_q10: prompt/answer mismatch (prompt asks about 'the front desk clerk' but answer uses 'the front desk', omitting 'clerk'; more critically, the prompt asks what the clerk asked about the weather forecast for the hiking trip, but the answer says 'whether the weather would affect the trail' — no mention of hiking trip, and the subject truncation makes the answer feel mismatched)|tmp_r7_q10: subject mismatch — prompt says 'front desk clerk' but answer and prefilled use 'the front desk' (truncated, missing 'clerk'). Answer is technically ungrammatical as a noun phrase referencing a person.": 1
+          }
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:solvability<78": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "review:blocker:tmp_r7_q9: chunk 'arrive' is a distractor but also appears in the chunks array as a buildable piece alongside 'had arrived', creating potential ambiguity — student could attempt to use 'arrive' in place of 'had arrived' and produce a near-valid sentence with rearrangement.": 1,
+            "review:solvability<78": 1
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    }
+  ]
+}
