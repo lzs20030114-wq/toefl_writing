@@ -405,6 +405,8 @@ function RunCard({ run: initial, token, onDelete }) {
   const [progress, setProgress] = useState(0);
   const [cancelling, setCancelling] = useState(false);
   const [cancelMsg, setCancelMsg] = useState("");
+  const [stopping, setStopping] = useState(false);
+  const [stopMsg, setStopMsg] = useState("");
   const [deleting, setDeleting] = useState(false);
   const [deleteMsg, setDeleteMsg] = useState("");
   const timerRef = useRef(null);
@@ -449,8 +451,23 @@ function RunCard({ run: initial, token, onDelete }) {
     }
   }, [run.status, run.conclusion, run.createdAt, run.inputs]);
 
+  async function handleGracefulStop() {
+    if (!confirm("确认优雅停止？脚本将在当前轮次结束后保存已生成的题目并组题。")) return;
+    setStopping(true); setStopMsg("");
+    try {
+      const res = await fetch(`/api/admin/generate-bs/${run.id}`, { method: "PUT", headers: authHeaders(token) });
+      const data = await res.json();
+      if (res.ok) {
+        setStopMsg(data.message || "已发送优雅停止信号。");
+      } else {
+        setStopMsg(`失败：${data.error}`);
+      }
+    } catch (e) { setStopMsg(`请求失败：${e.message}`); }
+    finally { setStopping(false); }
+  }
+
   async function handleCancel() {
-    if (!confirm("确认停止此次生成任务？")) return;
+    if (!confirm("确认强制停止？这将立即终止任务，不保存已生成的题目。")) return;
     setCancelling(true); setCancelMsg("");
     try {
       const res = await fetch(`/api/admin/generate-bs/${run.id}`, { method: "POST", headers: authHeaders(token) });
@@ -529,17 +546,26 @@ function RunCard({ run: initial, token, onDelete }) {
             value={progress}
             label={run.status === "queued" ? "排队等待中…" : "每 5 秒自动刷新，完成后自动更新"}
           />
-          <div style={{ marginTop: 10, display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{ marginTop: 10, display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+            <button
+              onClick={handleGracefulStop} disabled={stopping || stopMsg.includes("已发送")}
+              style={{ background: stopping || stopMsg.includes("已发送") ? "#9ca3af" : "#d97706", color: "#fff", border: "none", borderRadius: 6, padding: "6px 14px", cursor: stopping || stopMsg.includes("已发送") ? "not-allowed" : "pointer", fontFamily: FONT, fontSize: 12, fontWeight: 700, opacity: stopping || stopMsg.includes("已发送") ? 0.6 : 1 }}
+            >
+              {stopping ? "发送中…" : stopMsg.includes("已发送") ? "已发送停止信号" : "优雅停止（保存已出题）"}
+            </button>
             <button
               onClick={handleCancel} disabled={cancelling}
-              style={{ background: "#dc2626", color: "#fff", border: "none", borderRadius: 6, padding: "6px 14px", cursor: cancelling ? "not-allowed" : "pointer", fontFamily: FONT, fontSize: 12, fontWeight: 700, opacity: cancelling ? 0.6 : 1 }}
+              style={{ background: "none", border: "1px solid #dc2626", color: "#dc2626", borderRadius: 6, padding: "5px 14px", cursor: cancelling ? "not-allowed" : "pointer", fontFamily: FONT, fontSize: 12, fontWeight: 700, opacity: cancelling ? 0.6 : 1 }}
             >
-              {cancelling ? "停止中…" : "停止生成"}
+              {cancelling ? "停止中…" : "强制停止"}
             </button>
-            {cancelMsg && (
-              <span style={{ fontSize: 12, color: cancelMsg.includes("失败") ? "#dc2626" : "#166534" }}>{cancelMsg}</span>
-            )}
           </div>
+          {stopMsg && (
+            <div style={{ marginTop: 6, fontSize: 12, color: stopMsg.includes("失败") ? "#dc2626" : "#166534" }}>{stopMsg}</div>
+          )}
+          {cancelMsg && (
+            <div style={{ marginTop: 6, fontSize: 12, color: cancelMsg.includes("失败") ? "#dc2626" : "#166534" }}>{cancelMsg}</div>
+          )}
         </>
       )}
 

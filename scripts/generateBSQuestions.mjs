@@ -3429,6 +3429,27 @@ async function main() {
     }
   }
 
+  // ── Graceful stop signal ─────────────────────────────────────────────────
+  let _gracefulStopRequested = false;
+
+  async function checkStopSignal() {
+    // Check if a .stop file was created in the repo via admin UI
+    const ghToken = process.env.GITHUB_TOKEN;
+    const ghRepo = process.env.GITHUB_REPOSITORY;
+    const outputPath = process.env.BS_OUTPUT_PATH || "";
+    const runId = outputPath.match(/(\d+)\.json$/)?.[1];
+    if (!ghToken || !ghRepo || !runId) return false;
+    try {
+      const url = `https://api.github.com/repos/${ghRepo}/contents/data/buildSentence/staging/${runId}.stop`;
+      const res = await fetch(url, {
+        headers: { Authorization: `Bearer ${ghToken}`, Accept: "application/vnd.github+json" },
+      });
+      return res.status === 200;
+    } catch {
+      return false;
+    }
+  }
+
   // ── Unified adaptive generation loop ──────────────────────────────────────
   const MAX_ROUNDS = Number(process.env.BS_MAX_ROUNDS) || (8 + TARGET_SET_COUNT * 4);
   const GAP_TOLERANCE = 5;
@@ -4150,6 +4171,14 @@ async function main() {
     }
 
     totalRound++;
+
+    // Check for graceful stop signal (admin UI "优雅停止" button)
+    if (!_gracefulStopRequested && await checkStopSignal()) {
+      _gracefulStopRequested = true;
+      console.log(`🛑 graceful stop signal received — will assemble available questions and save`);
+      break;
+    }
+
     await new Promise((r) => setTimeout(r, 3000));
   }
 

@@ -263,6 +263,59 @@ export async function GET(request, { params }) {
   return Response.json(run);
 }
 
+// PUT /api/admin/generate-bs/[jobId] — 发送优雅停止信号（创建 .stop 文件）
+export async function PUT(request, { params }) {
+  if (!isAdminAuthorized(request)) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  let headers;
+  try {
+    headers = ghHeaders();
+  } catch (e) {
+    return Response.json({ error: e.message }, { status: 503 });
+  }
+
+  const { jobId } = params;
+
+  // First check if the job is still running
+  const runUrl = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/actions/runs/${jobId}`;
+  const runRes = await fetch(runUrl, { headers });
+  if (runRes.ok) {
+    const runData = await runRes.json();
+    if (runData.status === "completed") {
+      return Response.json({ ok: false, alreadyDone: true, message: "任务已完成，无需停止。" });
+    }
+  }
+
+  // Create stop signal file via GitHub Contents API
+  const filePath = `data/buildSentence/staging/${jobId}.stop`;
+  const content = Buffer.from(JSON.stringify({ stoppedAt: new Date().toISOString(), requestedBy: "admin" })).toString("base64");
+  const url = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${filePath}`;
+
+  // Check if file already exists (idempotent)
+  const existRes = await fetch(url, { headers });
+  if (existRes.status === 200) {
+    return Response.json({ ok: true, alreadySent: true, message: "停止信号已发送，脚本将在当前轮次结束后停止并组题。" });
+  }
+
+  const putRes = await fetch(url, {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({
+      message: `chore: graceful stop signal for run ${jobId} [skip ci]`,
+      content,
+    }),
+  });
+
+  if (!putRes.ok) {
+    const text = await putRes.text();
+    return Response.json({ error: `创建停止信号失败 ${putRes.status}: ${text}` }, { status: putRes.status });
+  }
+
+  return Response.json({ ok: true, message: "已发送优雅停止信号，脚本将在当前轮次结束后停止并保存已生成的题目。" });
+}
+
 // POST /api/admin/generate-bs/[jobId] — 取消正在运行的 workflow
 export async function POST(request, { params }) {
   if (!isAdminAuthorized(request)) {

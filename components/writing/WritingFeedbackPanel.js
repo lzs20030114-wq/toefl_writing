@@ -232,6 +232,7 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
                 </div>
                 <div style={{ fontSize: 13, color: P.textDim, textDecoration: "line-through", textDecorationColor: P.rose, marginBottom: 6 }}>{err.text}</div>
                 <div style={{ fontSize: 13, fontWeight: 700, color: P.primary }}>{err.suggestion || "（暂无建议）"}</div>
+                {err.note ? <div style={{ fontSize: 12, color: P.textSec, lineHeight: 1.6, marginTop: 4 }}>{err.note}</div> : null}
               </button>
             );
           })}

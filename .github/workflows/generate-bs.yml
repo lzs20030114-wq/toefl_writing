@@ -46,12 +46,16 @@ jobs:
           CLAUDE_RELAY_BASE_URL_2: ${{ vars.CLAUDE_RELAY_BASE_URL_2 }}
           CLAUDE_RELAY_API_KEY_3: ${{ secrets.CLAUDE_RELAY_API_KEY_3 }}
           CLAUDE_RELAY_BASE_URL_3: ${{ vars.CLAUDE_RELAY_BASE_URL_3 }}
+          CLAUDE_RELAY_API_KEY_4: ${{ secrets.CLAUDE_RELAY_API_KEY_4 }}
+          CLAUDE_RELAY_BASE_URL_4: ${{ vars.CLAUDE_RELAY_BASE_URL_4 }}
           CLAUDE_GENERATOR_MODEL: ${{ vars.CLAUDE_GENERATOR_MODEL }}
           BS_TARGET_SETS: ${{ github.event.inputs.target_sets }}
           BS_OUTPUT_PATH: data/buildSentence/staging/${{ github.run_id }}.json
           BS_JOB_STATE_PATH: data/buildSentence/staging/${{ github.run_id }}.state.json
           BS_RESERVE_PATH: data/buildSentence/staging/${{ github.run_id }}.reserve.json
           BS_CIRCUIT_BREAKER_LOG_PATH: data/buildSentence/staging/${{ github.run_id }}.circuit-breaker-log.json
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
         run: node scripts/generateBSQuestions.mjs
 
       - name: Persist generated artifacts
@@ -71,6 +75,8 @@ jobs:
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          STOP_SIGNAL="data/buildSentence/staging/${RUN_ID}.stop"
 
           FILES=()
           [ -f "$STATE" ] && FILES+=("$STATE")
@@ -102,6 +108,12 @@ jobs:
           for i in 1 2 3 4; do
             if git fetch origin main && git rebase origin/main && git push origin HEAD:main; then
               echo "Push succeeded on attempt $i."
+              # Clean up stop signal file if it exists in the repo
+              if git ls-tree origin/main -- "$STOP_SIGNAL" | grep -q .; then
+                git rm -f "$STOP_SIGNAL" 2>/dev/null || true
+                git commit -m "chore: clean up stop signal (run ${RUN_ID}) [skip ci]" 2>/dev/null || true
+                git push origin HEAD:main 2>/dev/null || true
+              fi
               exit 0
             fi
             git rebase --abort >/dev/null 2>&1 || true
