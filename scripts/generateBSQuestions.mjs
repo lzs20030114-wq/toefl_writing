@@ -4105,7 +4105,7 @@ async function main() {
         console.log(`  [assembly] accepted but zero assembly gain; limiting=${formatLimitingFactors(newAssemblyState)}`);
       }
       if (res.rejected > 0) {
-        Object.entries(res.rejectReasons).sort((a, b) => b[1] - a[1]).slice(0, 3)
+        Object.entries(res.rejectReasons).sort((a, b) => b[1] - a[1])
           .forEach(([r, n]) => console.log(`  reject: ${r} (×${n})`));
       }
       if (res.accepted === 0 || newGap.total >= gap.total) {
