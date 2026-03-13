@@ -1,0 +1,1130 @@
+{
+  "generated_at": "2026-03-13T16:17:08.602Z",
+  "active": {},
+  "events": [
+    {
+      "triggeredAt": "2026-03-13T15:36:12.728Z",
+      "round": 4,
+      "mode": "normal",
+      "type": "1st-embedded",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]",
+          2
+        ],
+        [
+          "review:blocker:tmp_r4_q4: prompt/answer mismatch (prompt asks what you say when the registrar asks if YOU submitted your application; answer deflects to whether the registrar received it, which is a non-sequitur response to that specific question — the registrar is asking the student, not the other way around)|tmp_r4_q4: distractor DIRECTLY replaces one word to form a valid sentence — 'receive' replaces 'received': 'I am not sure if the registrar receive my application' is ungrammatical (missing -s). NOT a blocker. Score deduction only.",
+          1
+        ],
+        [
+          "review:blocker:tmp_r4_q6: distractor DIRECTLY replaces one word to form a valid sentence — 'keep' replaces 'keeps': 'I found out where the post office keep the held packages' is ungrammatical. NOT a blocker. Score deduction only.",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 4,
+            "accepted": 0,
+            "rejected": 4,
+            "reasons": {
+              "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]": 2,
+              "review:blocker:tmp_r4_q4: prompt/answer mismatch (prompt asks what you say when the registrar asks if YOU submitted your application; answer deflects to whether the registrar received it, which is a non-sequitur response to that specific question — the registrar is asking the student, not the other way around)|tmp_r4_q4: distractor DIRECTLY replaces one word to form a valid sentence — 'receive' replaces 'received': 'I am not sure if the registrar receive my application' is ungrammatical (missing -s). NOT a blocker. Score deduction only.": 1,
+              "review:blocker:tmp_r4_q6: distractor DIRECTLY replaces one word to form a valid sentence — 'keep' replaces 'keeps': 'I found out where the post office keep the held packages' is ungrammatical. NOT a blocker. Score deduction only.": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 7
+    },
+    {
+      "triggeredAt": "2026-03-13T15:36:12.728Z",
+      "round": 4,
+      "mode": "normal",
+      "type": "relative",
+      "generated": 5,
+      "accepted": 0,
+      "rejected": 5,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "fatal: chunks[2]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "review:blocker:tmp_r4_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'offer' replaces 'offers' (same position, verb slot): 'The hair salon I visited last month offer great discounts' is ungrammatical (subject-verb agreement fails), so NOT a blocker. Score deduction only.|tmp_r4_q10: distractor DIRECTLY replaces one word to form a valid sentence — 'open' replaces 'opened': 'The restaurant that open nearby serves affordable lunch specials' is ungrammatical. NOT a blocker. Score deduction only.",
+          1
+        ],
+        [
+          "review:blocker:tmp_r4_q2: distractor DIRECTLY replaces one word to form a valid sentence — 'stop' replaces 'stopped' in the relative clause: 'the bookstore I stop by' is grammatical in present tense context, and the full sentence 'The bookstore I stop by had every title I needed' is grammatical. This is a direct 1:1 substitution at the same position.",
+          1
+        ],
+        [
+          "review:blocker:tmp_r4_q3: distractor DIRECTLY replaces one word to form a valid sentence — 'join' replaces 'joined' in 'joined this semester': 'The sports class I join this semester meets twice a week' is grammatical (simple present). Direct 1:1 substitution.",
+          1
+        ],
+        [
+          "review:blocker:tmp_r4_q10: distractor DIRECTLY replaces one word to form a valid sentence — 'open' replaces 'opened': 'The restaurant that open nearby serves affordable lunch specials' is ungrammatical. NOT a blocker. Score deduction only.",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 5,
+            "accepted": 0,
+            "rejected": 5,
+            "reasons": {
+              "fatal: chunks[2]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "review:blocker:tmp_r4_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'offer' replaces 'offers' (same position, verb slot): 'The hair salon I visited last month offer great discounts' is ungrammatical (subject-verb agreement fails), so NOT a blocker. Score deduction only.|tmp_r4_q10: distractor DIRECTLY replaces one word to form a valid sentence — 'open' replaces 'opened': 'The restaurant that open nearby serves affordable lunch specials' is ungrammatical. NOT a blocker. Score deduction only.": 1,
+              "review:blocker:tmp_r4_q2: distractor DIRECTLY replaces one word to form a valid sentence — 'stop' replaces 'stopped' in the relative clause: 'the bookstore I stop by' is grammatical in present tense context, and the full sentence 'The bookstore I stop by had every title I needed' is grammatical. This is a direct 1:1 substitution at the same position.": 1,
+              "review:blocker:tmp_r4_q3: distractor DIRECTLY replaces one word to form a valid sentence — 'join' replaces 'joined' in 'joined this semester': 'The sports class I join this semester meets twice a week' is grammatical (simple present). Direct 1:1 substitution.": 1,
+              "review:blocker:tmp_r4_q10: distractor DIRECTLY replaces one word to form a valid sentence — 'open' replaces 'opened': 'The restaurant that open nearby serves affordable lunch specials' is ungrammatical. NOT a blocker. Score deduction only.": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 7
+    },
+    {
+      "triggeredAt": "2026-03-13T15:40:08.546Z",
+      "round": 6,
+      "mode": "normal",
+      "type": "direct",
+      "generated": 6,
+      "accepted": 1,
+      "rejected": 5,
+      "acceptRate": 0.167,
+      "reasons": [
+        [
+          "review:score<78",
+          2
+        ],
+        [
+          "distractor:unsafe: \"were\" directly swaps with \"was\" in answer (be-verb tense change produces valid sentence)",
+          1
+        ],
+        [
+          "review:blocker:tmp_r6_q7: clearly ambiguous order — chunks 'the', 'permit', 'had been', 'denied' can be assembled as 'the permit had been denied' OR students may attempt 'the denied permit had been' or other orders; more critically, 'the' as a standalone single-word chunk is non-standard and creates assembly confusion with 'permit' as a separate chunk",
+          1
+        ],
+        [
+          "review:ets<72",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 5,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 6
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 1,
+            "rejected": 2,
+            "reasons": {
+              "distractor:unsafe: \"were\" directly swaps with \"was\" in answer (be-verb tense change produces valid sentence)": 1,
+              "review:score<78": 1
+            }
+          }
+        },
+        {
+          "round": 6,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 6
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "review:blocker:tmp_r6_q7: clearly ambiguous order — chunks 'the', 'permit', 'had been', 'denied' can be assembled as 'the permit had been denied' OR students may attempt 'the denied permit had been' or other orders; more critically, 'the' as a standalone single-word chunk is non-standard and creates assembly confusion with 'permit' as a separate chunk": 1,
+              "review:ets<72": 1,
+              "review:score<78": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 9
+    },
+    {
+      "triggeredAt": "2026-03-13T15:41:48.951Z",
+      "round": 7,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 5,
+      "accepted": 1,
+      "rejected": 4,
+      "acceptRate": 0.2,
+      "reasons": [
+        [
+          "review:blocker:tmp_r5_q7: grammar incorrect in the answer sentence — 'had already been due' is non-standard; 'been due' is not idiomatic English (correct form: 'was already due' or 'had already come due')|tmp_r5_q7: distractor DIRECTLY replaces one word to form a valid sentence — 'realized' replaces 'realize' in position after 'did not' → 'The student did not realized...' is ungrammatical, BUT 'realized' can replace the entire 'did not realize' chunk if student drops 'did not' and uses 'realized' alone: 'The student realized the assignment had already been due.' This is a rearrangement (removing 'did not'), NOT a simple 1:1 substitution at the same position, so this does NOT qualify as a blocker under the strict rule. RESCINDED.",
+          1
+        ],
+        [
+          "review:blocker:tmp_r6_q8: distractor DIRECTLY replaces one word to form a valid sentence — 'The delivery driver noticed that the address was incorrect.' replaces 'did not notice' with 'noticed' but this requires removing 'did not' AND replacing 'notice' with 'noticed', so NOT a simple 1:1 substitution — RETRACTED, not a blocker",
+          1
+        ],
+        [
+          "review:blocker:tmp_r7_q1: distractor 'booked' directly replaces 'book' (one word, same position) to form a grammatical sentence: 'I did not booked an appointment at the salon.' — wait, that is ungrammatical. NOT a blocker. Rescinding.",
+          1
+        ],
+        [
+          "review:blocker:tmp_r7_q4: distractor 'written' cannot replace any single word to form a grammatical sentence with 'did not'. NOT a blocker.",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 5,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 6
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r5_q7: grammar incorrect in the answer sentence — 'had already been due' is non-standard; 'been due' is not idiomatic English (correct form: 'was already due' or 'had already come due')|tmp_r5_q7: distractor DIRECTLY replaces one word to form a valid sentence — 'realized' replaces 'realize' in position after 'did not' → 'The student did not realized...' is ungrammatical, BUT 'realized' can replace the entire 'did not realize' chunk if student drops 'did not' and uses 'realized' alone: 'The student realized the assignment had already been due.' This is a rearrangement (removing 'did not'), NOT a simple 1:1 substitution at the same position, so this does NOT qualify as a blocker under the strict rule. RESCINDED.": 1
+            }
+          }
+        },
+        {
+          "round": 6,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 6
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r6_q8: distractor DIRECTLY replaces one word to form a valid sentence — 'The delivery driver noticed that the address was incorrect.' replaces 'did not notice' with 'noticed' but this requires removing 'did not' AND replacing 'notice' with 'noticed', so NOT a simple 1:1 substitution — RETRACTED, not a blocker": 1
+            }
+          }
+        },
+        {
+          "round": 7,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 5
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 1,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r7_q1: distractor 'booked' directly replaces 'book' (one word, same position) to form a grammatical sentence: 'I did not booked an appointment at the salon.' — wait, that is ungrammatical. NOT a blocker. Rescinding.": 1,
+              "review:blocker:tmp_r7_q4: distractor 'written' cannot replace any single word to form a grammatical sentence with 'did not'. NOT a blocker.": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 10
+    },
+    {
+      "triggeredAt": "2026-03-13T15:46:05.660Z",
+      "round": 10,
+      "mode": "normal",
+      "type": "direct",
+      "generated": 7,
+      "accepted": 1,
+      "rejected": 6,
+      "acceptRate": 0.143,
+      "reasons": [
+        [
+          "fatal: chunks[6]: isolated floating adverb \"recently\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "review:blocker:tmp_r9_q1: distractor 'keeps' directly replaces the verb within 'always kept' — but 'always kept' is a two-word chunk so substitution is not a clean 1:1 single-word swap at a single chunk position; however 'keeps' cannot slot in without breaking 'always kept' chunk, so this is NOT a blocker. Flagging instead: the multi-word chunk 'always kept' bundles adverb + verb, removing the key grammar decision point (simple past vs. present) from the student, which reduces pedagogical validity.",
+          1
+        ],
+        [
+          "review:blocker:tmp_r9_q3: prompt/answer mismatch — the flight attendant asks if you need anything right now, but the answer describes past actions ('ordered', 'requested') that presuppose a prior meal/blanket selection, making it a non-responsive reply to the prompt|tmp_r9_q3: answer ('I ordered the vegetarian meal and requested an extra blanket') is a past-tense response to a present-tense prompt ('asks if you need anything'), creating a tense-context mismatch that makes the scenario implausible and the answer pragmatically odd.",
+          1
+        ],
+        [
+          "review:blocker:tmp_r10_q1: distractor 'served' can directly replace 'serves' (single word, same position) yielding 'The coffee shop near my office served really fresh pastries every morning' — grammatical and meaningful — BLOCKER",
+          1
+        ],
+        [
+          "review:blocker:tmp_r10_q2: distractor 'carried' can directly replace 'carries' (single word, same position) yielding 'The clothing store on the corner carried a wide range of seasonal jackets' — grammatical and meaningful — BLOCKER",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 8,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "fatal: chunks[6]: isolated floating adverb \"recently\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+            }
+          }
+        },
+        {
+          "round": 9,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 1,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r9_q1: distractor 'keeps' directly replaces the verb within 'always kept' — but 'always kept' is a two-word chunk so substitution is not a clean 1:1 single-word swap at a single chunk position; however 'keeps' cannot slot in without breaking 'always kept' chunk, so this is NOT a blocker. Flagging instead: the multi-word chunk 'always kept' bundles adverb + verb, removing the key grammar decision point (simple past vs. present) from the student, which reduces pedagogical validity.": 1,
+              "review:blocker:tmp_r9_q3: prompt/answer mismatch — the flight attendant asks if you need anything right now, but the answer describes past actions ('ordered', 'requested') that presuppose a prior meal/blanket selection, making it a non-responsive reply to the prompt|tmp_r9_q3: answer ('I ordered the vegetarian meal and requested an extra blanket') is a past-tense response to a present-tense prompt ('asks if you need anything'), creating a tense-context mismatch that makes the scenario implausible and the answer pragmatically odd.": 1
+            }
+          }
+        },
+        {
+          "round": 10,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "review:blocker:tmp_r10_q1: distractor 'served' can directly replace 'serves' (single word, same position) yielding 'The coffee shop near my office served really fresh pastries every morning' — grammatical and meaningful — BLOCKER": 1,
+              "review:blocker:tmp_r10_q2: distractor 'carried' can directly replace 'carries' (single word, same position) yielding 'The clothing store on the corner carried a wide range of seasonal jackets' — grammatical and meaningful — BLOCKER": 1,
+              "review:score<78": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 13
+    },
+    {
+      "triggeredAt": "2026-03-13T15:47:28.890Z",
+      "round": 11,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 5,
+      "accepted": 1,
+      "rejected": 4,
+      "acceptRate": 0.2,
+      "reasons": [
+        [
+          "review:blocker:tmp_r9_q5: prompt/answer mismatch — the registrar asks if YOU submitted your form, but the answer speaks about 'the student' in third person, which is an unnatural and mismatched response to a direct second-person question|tmp_r9_q5: distractor 'submitted' directly replaces 'submit' (one word, same position) after 'did not' to form 'The student did not submitted the enrollment form before the deadline.' — wait, that is ungrammatical, so NOT a blocker on substitution grounds. However: the prompt asks the student to respond in first person ('if you have submitted your enrollment form') but the answer uses third person 'The student did not submit', creating a context mismatch that makes the item ambiguous in intent.|tmp_r9_q5: answer uses third-person 'The student' in response to a direct second-person question ('if you have submitted'), making the answer pragmatically unnatural and potentially ambiguous.",
+          1
+        ],
+        [
+          "review:blocker:tmp_r10_q4: distractor DIRECTLY replaces one word to form a valid sentence — 'received' replaces 'receive' in exact same position, yielding 'I did not received any tracking number for my package' which is ungrammatical, so NOT a blocker by rule; however 'did not' as a two-word chunk vs distractor 'received' creates no direct 1:1 substitution — NOT a blocker",
+          1
+        ],
+        [
+          "review:blocker:tmp_r11_q4: distractor 'signed' directly replaces 'sign' in position after 'did not', producing 'I did not signed up for the weekend class yet' — ungrammatical, so NOT a valid substitution blocker. However chunk fragmentation of 'sign up' into 'sign' + 'up' + 'for' is a structural concern only.",
+          1
+        ],
+        [
+          "review:solvability<78",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 9,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 1,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r9_q5: prompt/answer mismatch — the registrar asks if YOU submitted your form, but the answer speaks about 'the student' in third person, which is an unnatural and mismatched response to a direct second-person question|tmp_r9_q5: distractor 'submitted' directly replaces 'submit' (one word, same position) after 'did not' to form 'The student did not submitted the enrollment form before the deadline.' — wait, that is ungrammatical, so NOT a blocker on substitution grounds. However: the prompt asks the student to respond in first person ('if you have submitted your enrollment form') but the answer uses third person 'The student did not submit', creating a context mismatch that makes the item ambiguous in intent.|tmp_r9_q5: answer uses third-person 'The student' in response to a direct second-person question ('if you have submitted'), making the answer pragmatically unnatural and potentially ambiguous.": 1
+            }
+          }
+        },
+        {
+          "round": 10,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r10_q4: distractor DIRECTLY replaces one word to form a valid sentence — 'received' replaces 'receive' in exact same position, yielding 'I did not received any tracking number for my package' which is ungrammatical, so NOT a blocker by rule; however 'did not' as a two-word chunk vs distractor 'received' creates no direct 1:1 substitution — NOT a blocker": 1
+            }
+          }
+        },
+        {
+          "round": 11,
+          "spec": [
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r11_q4: distractor 'signed' directly replaces 'sign' in position after 'did not', producing 'I did not signed up for the weekend class yet' — ungrammatical, so NOT a valid substitution blocker. However chunk fragmentation of 'sign up' into 'sign' + 'up' + 'for' is a structural concern only.": 1,
+              "review:solvability<78": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 14
+    },
+    {
+      "triggeredAt": "2026-03-13T15:48:54.284Z",
+      "round": 12,
+      "mode": "normal",
+      "type": "1st-embedded",
+      "generated": 5,
+      "accepted": 1,
+      "rejected": 4,
+      "acceptRate": 0.2,
+      "reasons": [
+        [
+          "review:blocker:tmp_r11_q1: distractor 'saw' can replace 'could see' only if two chunks are swapped/removed — requires rearrangement, not a 1:1 substitution. No blocker.",
+          1
+        ],
+        [
+          "review:blocker:tmp_r11_q2: distractor 'opening' directly replaces 'open' in the same position to form a grammatical sentence ('I wondered if the trail was opening to visitors yet') — simple 1:1 substitution blocker",
+          1
+        ],
+        [
+          "review:blocker:tmp_r11_q3: distractor 'took' directly replaces 'would take' — wait, checking strictly: 'took' cannot replace exactly ONE word (would take is two words); however 'took' CAN replace 'would take' only if both words are removed and one inserted, so NOT a 1:1 single-word substitution. No blocker.",
+          1
+        ],
+        [
+          "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 10,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 1,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 11,
+          "spec": [
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "review:blocker:tmp_r11_q1: distractor 'saw' can replace 'could see' only if two chunks are swapped/removed — requires rearrangement, not a 1:1 substitution. No blocker.": 1,
+              "review:blocker:tmp_r11_q2: distractor 'opening' directly replaces 'open' in the same position to form a grammatical sentence ('I wondered if the trail was opening to visitors yet') — simple 1:1 substitution blocker": 1,
+              "review:blocker:tmp_r11_q3: distractor 'took' directly replaces 'would take' — wait, checking strictly: 'took' cannot replace exactly ONE word (would take is two words); however 'took' CAN replace 'would take' only if both words are removed and one inserted, so NOT a 1:1 single-word substitution. No blocker.": 1
+            }
+          }
+        },
+        {
+          "round": 12,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 15
+    },
+    {
+      "triggeredAt": "2026-03-13T16:01:55.569Z",
+      "round": 21,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:score<78",
+          4
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 19,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "review:score<78": 3
+            }
+          }
+        },
+        {
+          "round": 20,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 21,
+          "spec": [
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:score<78": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 24
+    }
+  ],
+  "history": [
+    {
+      "round": 27,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 5
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 4,
+          "accepted": 2,
+          "rejected": 2,
+          "reasons": {
+            "pool:difficulty_surplus:easy": 1,
+            "review:score<78": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:score<78": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 28,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 4
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "hard",
+          "count": 1
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 3,
+          "accepted": 2,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r28_q5: grammar incorrect in the answer sentence|tmp_r28_q5: indirect question clause uses inverted word order (MUST be declarative)": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 1,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 1,
+          "accepted": 1,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 29,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 5
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:score<78": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 4,
+          "accepted": 3,
+          "rejected": 1,
+          "reasons": {
+            "fatal: distractor must not appear in answer": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 30,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 4
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "fatal: distractor must not appear in answer": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 3,
+          "accepted": 2,
+          "rejected": 1,
+          "reasons": {
+            "distractor:unsafe: \"is\" directly swaps with \"was\" in answer (be-verb tense change produces valid sentence)": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 31,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 4
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "topic:repeat": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 2,
+          "accepted": 2,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r31_q3: indirect question clause uses inverted word order (MUST be declarative)": 1
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 32,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 4
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "fatal: distractor must not appear in answer": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 3,
+          "accepted": 2,
+          "rejected": 1,
+          "reasons": {
+            "pool:low_assembly_value": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    }
+  ]
+}
