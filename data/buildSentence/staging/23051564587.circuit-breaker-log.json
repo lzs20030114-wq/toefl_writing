@@ -1,0 +1,2180 @@
+{
+  "generated_at": "2026-03-13T13:24:57.749Z",
+  "active": {
+    "1st-embedded": {
+      "sinceRound": 32,
+      "untilRound": 35,
+      "lastEvent": {
+        "triggeredAt": "2026-03-13T13:24:57.749Z",
+        "round": 32,
+        "mode": "normal",
+        "type": "1st-embedded",
+        "generated": 5,
+        "accepted": 1,
+        "rejected": 4,
+        "acceptRate": 0.2,
+        "reasons": [
+          [
+            "distractor:unsafe: \"close\" directly swaps with \"closed\" in answer (tense change produces valid sentence)",
+            1
+          ],
+          [
+            "distractor:unsafe: \"start\" directly swaps with \"starts\" in answer (tense change produces valid sentence)",
+            1
+          ],
+          [
+            "distractor:unsafe: \"finish\" directly swaps with \"finished\" in answer (tense change produces valid sentence)",
+            1
+          ],
+          [
+            "review:blocker:tmp_r32_q5: distractor DIRECTLY replaces one word to form a valid sentence — 'meets' → 'meet' is a direct 1:1 substitution at the same position, and 'where the study group meet on Thursdays' is grammatical in some registers (though non-standard); more critically, 'I needed to find out where the study group meet on Thursdays' is borderline acceptable in informal/British English, making this a near-blocker. However, strictly in standard American English 'meet' is ungrammatical here with singular subject agreement, so this is flagged as a strong concern rather than a hard blocker — deduct accordingly.",
+            1
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 30,
+            "spec": [
+              {
+                "type": "3rd-reporting",
+                "difficulty": "hard",
+                "count": 3
+              },
+              {
+                "type": "negation",
+                "difficulty": "hard",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 0,
+              "accepted": 0,
+              "rejected": 0,
+              "reasons": {}
+            }
+          },
+          {
+            "round": 31,
+            "spec": [
+              {
+                "type": "relative",
+                "difficulty": "hard",
+                "count": 5
+              }
+            ],
+            "stats": {
+              "generated": 0,
+              "accepted": 0,
+              "rejected": 0,
+              "reasons": {}
+            }
+          },
+          {
+            "round": 32,
+            "spec": [
+              {
+                "type": "1st-embedded",
+                "difficulty": "medium",
+                "count": 5
+              }
+            ],
+            "stats": {
+              "generated": 5,
+              "accepted": 1,
+              "rejected": 4,
+              "reasons": {
+                "distractor:unsafe: \"close\" directly swaps with \"closed\" in answer (tense change produces valid sentence)": 1,
+                "distractor:unsafe: \"start\" directly swaps with \"starts\" in answer (tense change produces valid sentence)": 1,
+                "distractor:unsafe: \"finish\" directly swaps with \"finished\" in answer (tense change produces valid sentence)": 1,
+                "review:blocker:tmp_r32_q5: distractor DIRECTLY replaces one word to form a valid sentence — 'meets' → 'meet' is a direct 1:1 substitution at the same position, and 'where the study group meet on Thursdays' is grammatical in some registers (though non-standard); more critically, 'I needed to find out where the study group meet on Thursdays' is borderline acceptable in informal/British English, making this a near-blocker. However, strictly in standard American English 'meet' is ungrammatical here with singular subject agreement, so this is flagged as a strong concern rather than a hard blocker — deduct accordingly.": 1
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 35
+      }
+    }
+  },
+  "events": [
+    {
+      "triggeredAt": "2026-03-13T12:56:43.468Z",
+      "round": 5,
+      "mode": "normal",
+      "type": "direct",
+      "generated": 8,
+      "accepted": 1,
+      "rejected": 7,
+      "acceptRate": 0.125,
+      "reasons": [
+        [
+          "distractor:unsafe: \"find\" directly swaps with \"found\" in answer (tense change produces valid sentence)",
+          2
+        ],
+        [
+          "distractor:unsafe: \"close\" directly swaps with \"closes\" in answer (tense change produces valid sentence)",
+          1
+        ],
+        [
+          "review:blocker:tmp_r4_q2: chunk fragmentation ('the', 'cooking', 'class' as separate single-word chunks) creates ambiguous ordering — 'the cooking class' and 'the class cooking' are both assemblable, and 'cooking' could attach to either side",
+          1
+        ],
+        [
+          "review:solvability<78",
+          1
+        ],
+        [
+          "review:blocker:tmp_r5_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'offer' can replace 'offers' in the same position: 'The community center downtown offer a wide range of fitness classes' is ungrammatical, BUT the subject 'the community center' is singular third-person, so 'offer' is ungrammatical there. Re-evaluating: NOT a blocker. Removing.|tmp_r5_q1: distractor DIRECTLY replaces one word — 'offer' replaces 'offers' at the same position yielding 'The community center downtown offer a wide range of fitness classes' — ungrammatical, NOT a blocker",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "direct",
+              "difficulty": "easy",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 4,
+            "accepted": 1,
+            "rejected": 3,
+            "reasons": {
+              "distractor:unsafe: \"close\" directly swaps with \"closes\" in answer (tense change produces valid sentence)": 1,
+              "review:blocker:tmp_r4_q2: chunk fragmentation ('the', 'cooking', 'class' as separate single-word chunks) creates ambiguous ordering — 'the cooking class' and 'the class cooking' are both assemblable, and 'cooking' could attach to either side": 1,
+              "review:solvability<78": 1
+            }
+          }
+        },
+        {
+          "round": 5,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 4,
+            "accepted": 0,
+            "rejected": 4,
+            "reasons": {
+              "distractor:unsafe: \"find\" directly swaps with \"found\" in answer (tense change produces valid sentence)": 2,
+              "review:blocker:tmp_r5_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'offer' can replace 'offers' in the same position: 'The community center downtown offer a wide range of fitness classes' is ungrammatical, BUT the subject 'the community center' is singular third-person, so 'offer' is ungrammatical there. Re-evaluating: NOT a blocker. Removing.|tmp_r5_q1: distractor DIRECTLY replaces one word — 'offer' replaces 'offers' at the same position yielding 'The community center downtown offer a wide range of fitness classes' — ungrammatical, NOT a blocker": 1,
+              "review:blocker:tmp_r5_q8: multiple valid chunk orders — 'collected for the food drive' can be read as a verb phrase (simple past) rather than a participial modifier, creating ambiguity: 'The supplies collected for the food drive' vs assembling 'the supplies' + 'collected' + 'for' + 'the' + 'food' + 'drive' in that order is the only valid reading, but the fragmented chunking of 'for', 'the', 'food', 'drive' as separate chunks creates multiple plausible intermediate orderings before the correct sentence emerges — ambiguous arrangement risk is high|tmp_r5_q8: chunk granularity mismatch — 'for', 'the', 'food', 'drive' are split into single words while 'our initial goal' and 'by far' are multi-word; inconsistent chunking creates ambiguous assembly order for 'the food drive' segment": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 8
+    },
+    {
+      "triggeredAt": "2026-03-13T12:56:43.468Z",
+      "round": 5,
+      "mode": "normal",
+      "type": "relative",
+      "generated": 5,
+      "accepted": 0,
+      "rejected": 5,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "runtime: question tmp_r4_q3: bank must not contain duplicates",
+          1
+        ],
+        [
+          "review:blocker:tmp_r4_q4: multiple valid chunk orders — 'we hired' functions as a contact clause modifying 'the repair crew', but chunks 'we', 'hired', 'fixed' can be ambiguously arranged; a student could plausibly attempt 'The repair crew hired we fixed the fence in one day' or misread the contact clause structure, and more critically 'we hired fixed' vs 'we fixed hired' creates genuine ambiguity in chunk sequencing without clear syntactic signals separating the relative clause from the main clause|tmp_r4_q4: ambiguous order — 'we hired' and 'we fixed' are both grammatical contact clauses ('The repair crew we fixed...' is odd but 'The repair crew hired fixed' is also constructible), and 'fix' distractor directly replaces 'fixed' in the same position to form 'The repair crew we hired fix the fence in one day' — while ungrammatical, the 1:1 substitution test is met at position of 'fixed' as well",
+          1
+        ],
+        [
+          "runtime: question tmp_r5_q10: bank must not contain duplicates",
+          1
+        ],
+        [
+          "review:blocker:tmp_r5_q5: distractor DIRECTLY replaces one word — 'attend' replaces 'attended' at exact same position yielding 'The yoga class I attend last week was surprisingly well organized' — grammatically valid as present simple with time shift; this is a 1:1 substitution producing a grammatical sentence",
+          1
+        ],
+        [
+          "review:blocker:tmp_r5_q6: distractor DIRECTLY replaces one word — 'visit' replaces 'visited' at exact same position yielding 'The art gallery I visit had several impressive pieces on display' — grammatically valid as present simple; this is a 1:1 substitution producing a grammatical sentence",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "direct",
+              "difficulty": "easy",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "runtime: question tmp_r4_q3: bank must not contain duplicates": 1,
+              "review:blocker:tmp_r4_q4: multiple valid chunk orders — 'we hired' functions as a contact clause modifying 'the repair crew', but chunks 'we', 'hired', 'fixed' can be ambiguously arranged; a student could plausibly attempt 'The repair crew hired we fixed the fence in one day' or misread the contact clause structure, and more critically 'we hired fixed' vs 'we fixed hired' creates genuine ambiguity in chunk sequencing without clear syntactic signals separating the relative clause from the main clause|tmp_r4_q4: ambiguous order — 'we hired' and 'we fixed' are both grammatical contact clauses ('The repair crew we fixed...' is odd but 'The repair crew hired fixed' is also constructible), and 'fix' distractor directly replaces 'fixed' in the same position to form 'The repair crew we hired fix the fence in one day' — while ungrammatical, the 1:1 substitution test is met at position of 'fixed' as well": 1
+            }
+          }
+        },
+        {
+          "round": 5,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "runtime: question tmp_r5_q10: bank must not contain duplicates": 1,
+              "review:blocker:tmp_r5_q5: distractor DIRECTLY replaces one word — 'attend' replaces 'attended' at exact same position yielding 'The yoga class I attend last week was surprisingly well organized' — grammatically valid as present simple with time shift; this is a 1:1 substitution producing a grammatical sentence": 1,
+              "review:blocker:tmp_r5_q6: distractor DIRECTLY replaces one word — 'visit' replaces 'visited' at exact same position yielding 'The art gallery I visit had several impressive pieces on display' — grammatically valid as present simple; this is a 1:1 substitution producing a grammatical sentence": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 8
+    },
+    {
+      "triggeredAt": "2026-03-13T12:58:15.400Z",
+      "round": 6,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "distractor:unsafe: \"received\" directly swaps with \"receive\" in answer (tense change produces valid sentence)",
+          1
+        ],
+        [
+          "review:blocker:tmp_r5_q3: distractor DIRECTLY replaces one word to form a valid sentence — 'heard' replaces 'hear' in position after 'did not' to yield 'I did not heard any noise...' — wait, that is ungrammatical, NOT a blocker",
+          1
+        ],
+        [
+          "review:ets<72",
+          1
+        ],
+        [
+          "review:blocker:tmp_r6_q4: prompt/answer mismatch — prompt asks what YOU say when your neighbor asks about a noise complaint, but the answer speaks about 'the elderly neighbor' in third person, not the first-person respondent|tmp_r6_q4: distractor 'heard' can directly replace 'hear' (position 2) in 'The elderly neighbor did not hear anything unusual last night' → 'The elderly neighbor did not heard anything unusual last night' — ungrammatical, not a blocker. BUT 'heard' can replace 'did not hear' concept if student drops 'did not' and uses 'heard' with negation rearranged — requires rearrangement, not a simple 1:1 swap, so not a blocker.",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "direct",
+              "difficulty": "easy",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 5,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "distractor:unsafe: \"received\" directly swaps with \"receive\" in answer (tense change produces valid sentence)": 1,
+              "review:blocker:tmp_r5_q3: distractor DIRECTLY replaces one word to form a valid sentence — 'heard' replaces 'hear' in position after 'did not' to yield 'I did not heard any noise...' — wait, that is ungrammatical, NOT a blocker": 1,
+              "review:ets<72": 1
+            }
+          }
+        },
+        {
+          "round": 6,
+          "spec": [
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r6_q4: prompt/answer mismatch — prompt asks what YOU say when your neighbor asks about a noise complaint, but the answer speaks about 'the elderly neighbor' in third person, not the first-person respondent|tmp_r6_q4: distractor 'heard' can directly replace 'hear' (position 2) in 'The elderly neighbor did not hear anything unusual last night' → 'The elderly neighbor did not heard anything unusual last night' — ungrammatical, not a blocker. BUT 'heard' can replace 'did not hear' concept if student drops 'did not' and uses 'heard' with negation rearranged — requires rearrangement, not a simple 1:1 swap, so not a blocker.": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 9
+    },
+    {
+      "triggeredAt": "2026-03-13T12:58:15.400Z",
+      "round": 6,
+      "mode": "normal",
+      "type": "1st-embedded",
+      "generated": 10,
+      "accepted": 2,
+      "rejected": 8,
+      "acceptRate": 0.2,
+      "reasons": [
+        [
+          "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]",
+          2
+        ],
+        [
+          "distractor:unsafe: \"started\" directly swaps with \"start\" in answer (tense change produces valid sentence)",
+          1
+        ],
+        [
+          "distractor:unsafe: \"open\" directly swaps with \"opens\" in answer (tense change produces valid sentence)",
+          1
+        ],
+        [
+          "distractor:unsafe: \"received\" directly swaps with \"receive\" in answer (tense change produces valid sentence)",
+          1
+        ],
+        [
+          "distractor:unsafe: \"close\" directly swaps with \"closes\" in answer (tense change produces valid sentence)",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "direct",
+              "difficulty": "easy",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]": 2,
+              "distractor:unsafe: \"started\" directly swaps with \"start\" in answer (tense change produces valid sentence)": 1
+            }
+          }
+        },
+        {
+          "round": 5,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 6,
+          "spec": [
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 7,
+            "accepted": 2,
+            "rejected": 5,
+            "reasons": {
+              "distractor:unsafe: \"open\" directly swaps with \"opens\" in answer (tense change produces valid sentence)": 1,
+              "distractor:unsafe: \"received\" directly swaps with \"receive\" in answer (tense change produces valid sentence)": 1,
+              "distractor:unsafe: \"close\" directly swaps with \"closes\" in answer (tense change produces valid sentence)": 1,
+              "review:blocker:tmp_r6_q8: prompt/answer mismatch — prompt asks about 'the trail that was recently repaired' (specific trail), but answer reports finding out 'which trail has been fully repaired' (unknown trail), shifting the meaning entirely|tmp_r6_q8: chunk 'has been' + 'fully repaired' could be assembled as 'has been fully repaired' or student might attempt 'has been repair' — but more critically, 'repair' (distractor) directly replaces 'fully repaired' in position 6 to form 'I just found out which trail has been repair' — NOT grammatical, so not a blocker. However, 'fully repaired' is a multi-word chunk that is not a natural fixed collocation; splitting it creates ambiguity about chunk boundaries.": 1,
+              "review:blocker:tmp_r6_q7: 'the' appears as a standalone chunk between 'where' and 'donated furniture', making word order ambiguous — student could place 'the' after 'where' or elsewhere, and 'the donated furniture' vs 'donated the furniture' ordering is unclear from chunks alone. tmp_r6_q7: clearly ambiguous order — standalone 'the' chunk creates multiple plausible assemblies.": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 9
+    },
+    {
+      "triggeredAt": "2026-03-13T12:59:46.366Z",
+      "round": 7,
+      "mode": "normal",
+      "type": "interrogative",
+      "generated": 6,
+      "accepted": 0,
+      "rejected": 6,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "distractor:unsafe: \"open\" directly swaps with \"opens\" in answer (tense change produces valid sentence)",
+          1
+        ],
+        [
+          "distractor:unsafe: \"was\" directly swaps with \"is\" in answer (tense change produces valid sentence)",
+          1
+        ],
+        [
+          "distractor:unsafe: \"have\" directly swaps with \"has\" in answer (tense change produces valid sentence)",
+          1
+        ],
+        [
+          "review:blocker:tmp_r7_q1: indirect question clause uses inverted word order — 'when will my prescription be ready' would be inverted; however the answer uses 'when my prescription will be ready' which IS declarative order — no blocker",
+          1
+        ],
+        [
+          "review:blocker:tmp_r7_q3: distractor DIRECTLY replaces one word to form a valid sentence — 'meet' replaces 'meets' in the same position: 'Could you tell me which days the beginner class meet?' is grammatically marginal but 'meets'→'meet' is a near-direct substitution that many test-takers may accept; more critically, 'the beginner class meet' is ungrammatical, so this does NOT trigger the blocker — withdrawing flag|tmp_r7_q3: distractor DIRECTLY replaces one word to form a valid sentence — 'meets' → 'meet' is a direct 1:1 substitution at the same position ('the beginner class meet' is grammatically valid in some registers, but more critically 'Could you tell me which days the beginner class meet?' is acceptable in British English collective noun usage, making this a near-direct swap with no rearrangement needed)",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 5,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 6,
+          "spec": [
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 7,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 6
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "easy",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 6,
+            "accepted": 0,
+            "rejected": 6,
+            "reasons": {
+              "distractor:unsafe: \"open\" directly swaps with \"opens\" in answer (tense change produces valid sentence)": 1,
+              "distractor:unsafe: \"was\" directly swaps with \"is\" in answer (tense change produces valid sentence)": 1,
+              "distractor:unsafe: \"have\" directly swaps with \"has\" in answer (tense change produces valid sentence)": 1,
+              "review:blocker:tmp_r7_q1: indirect question clause uses inverted word order — 'when will my prescription be ready' would be inverted; however the answer uses 'when my prescription will be ready' which IS declarative order — no blocker": 1,
+              "review:blocker:tmp_r7_q3: distractor DIRECTLY replaces one word to form a valid sentence — 'meet' replaces 'meets' in the same position: 'Could you tell me which days the beginner class meet?' is grammatically marginal but 'meets'→'meet' is a near-direct substitution that many test-takers may accept; more critically, 'the beginner class meet' is ungrammatical, so this does NOT trigger the blocker — withdrawing flag|tmp_r7_q3: distractor DIRECTLY replaces one word to form a valid sentence — 'meets' → 'meet' is a direct 1:1 substitution at the same position ('the beginner class meet' is grammatically valid in some registers, but more critically 'Could you tell me which days the beginner class meet?' is acceptable in British English collective noun usage, making this a near-direct swap with no rearrangement needed)": 1,
+              "review:blocker:tmp_r7_q6: distractor DIRECTLY replaces one word to form a valid sentence — 'pick up' → 'picked' cannot replace it cleanly, BUT 'can' in the answer could be replaced by nothing and 'picked up' used differently; however the real issue is chunk 'can' is a standalone chunk and 'picked' as distractor requires rearrangement — NOT a blocker on reflection; withdrawing this flag": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 10
+    },
+    {
+      "triggeredAt": "2026-03-13T13:03:15.858Z",
+      "round": 10,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 6,
+      "accepted": 1,
+      "rejected": 5,
+      "acceptRate": 0.167,
+      "reasons": [
+        [
+          "distractor:unsafe: \"found\" directly swaps with \"find\" in answer (tense change produces valid sentence)",
+          1
+        ],
+        [
+          "review:blocker:tmp_r9_q2: distractor DIRECTLY replaces one word to form a valid sentence — 'I signed up for the yoga class yet' is ungrammatical, but 'I signed up for the yoga class' (dropping 'yet') is valid; however the direct 1:1 swap at the 'did not' position produces 'I signed up for the yoga class yet' which is awkward but the real issue is 'signed' can replace 'sign up' only with rearrangement — NOT a blocker by rule. Downgraded to score deduction.",
+          1
+        ],
+        [
+          "distractor:unsafe: \"receive\" directly swaps with \"received\" in answer (tense change produces valid sentence)",
+          1
+        ],
+        [
+          "review:blocker:tmp_r10_q2: distractor DIRECTLY replaces one word to form a valid sentence — 'signed' can replace 'sign up' (with 'up' dropped) but more critically, 'I signed up for the advanced class yet' is ungrammatical; however 'I did not signed up' is also ungrammatical, so 'signed' as a standalone chunk does not produce a valid 1:1 substitution without rearrangement — NOT a blocker on reflection",
+          1
+        ],
+        [
+          "review:blocker:tmp_r10_q3: prompt/answer mismatch (prompt asks what the supervisor said, implying a report of their words or opinion, but the answer states a negation fact not clearly attributable as a direct report of speech or stance — borderline, but the supervisor 'not approving' is a reasonable inference; however the prompt says 'say about' which expects a statement of opinion or comment, not an action report)",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 8,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 8
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "easy",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 9,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 1,
+            "rejected": 2,
+            "reasons": {
+              "distractor:unsafe: \"found\" directly swaps with \"find\" in answer (tense change produces valid sentence)": 1,
+              "review:blocker:tmp_r9_q2: distractor DIRECTLY replaces one word to form a valid sentence — 'I signed up for the yoga class yet' is ungrammatical, but 'I signed up for the yoga class' (dropping 'yet') is valid; however the direct 1:1 swap at the 'did not' position produces 'I signed up for the yoga class yet' which is awkward but the real issue is 'signed' can replace 'sign up' only with rearrangement — NOT a blocker by rule. Downgraded to score deduction.": 1
+            }
+          }
+        },
+        {
+          "round": 10,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "distractor:unsafe: \"receive\" directly swaps with \"received\" in answer (tense change produces valid sentence)": 1,
+              "review:blocker:tmp_r10_q2: distractor DIRECTLY replaces one word to form a valid sentence — 'signed' can replace 'sign up' (with 'up' dropped) but more critically, 'I signed up for the advanced class yet' is ungrammatical; however 'I did not signed up' is also ungrammatical, so 'signed' as a standalone chunk does not produce a valid 1:1 substitution without rearrangement — NOT a blocker on reflection": 1,
+              "review:blocker:tmp_r10_q3: prompt/answer mismatch (prompt asks what the supervisor said, implying a report of their words or opinion, but the answer states a negation fact not clearly attributable as a direct report of speech or stance — borderline, but the supervisor 'not approving' is a reasonable inference; however the prompt says 'say about' which expects a statement of opinion or comment, not an action report)": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 13
+    },
+    {
+      "triggeredAt": "2026-03-13T13:03:15.858Z",
+      "round": 10,
+      "mode": "normal",
+      "type": "direct",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r8_q3: multiple valid chunk orders — 'needed to find out' splits 'find' and 'out' into separate chunks, allowing ambiguous arrangements like 'needed to out find' is ungrammatical but 'to find out' vs assembling 'needed' + 'to' + 'find' + 'out' creates fragile ordering with 4 consecutive positional chunks that a test-taker could plausibly misorder (e.g., 'needed to out find why'); chunk granularity is the root cause|tmp_r8_q3: chunk fragmentation — 'to', 'find', 'out' are split into three separate single-word chunks instead of the natural collocation 'find out'; this creates ambiguous assembly order and risks ungrammatical arrangements",
+          1
+        ],
+        [
+          "review:blocker:tmp_r8_q7: distractor DIRECTLY replaces one word — 'move' can replace 'be moved' only with rearrangement, but more critically 'the deadline could move to Friday' is grammatical with 'move' substituting for 'be moved' in an intransitive reading, making this a near-direct substitution that produces a valid sentence|tmp_r8_q7: chunk 'the' and 'deadline' are split unnecessarily when 'the deadline' appears as a natural NP unit; minor but 'the' as a standalone chunk creates noise without testing anything meaningful",
+          1
+        ],
+        [
+          "review:blocker:tmp_r9_q1: prompt/answer mismatch (prompt asks what the dental receptionist said, but answer uses first-person 'I had not realized...', which reports the speaker's own realization, not the receptionist's statement)|tmp_r9_q1: prompt says 'what did the dental receptionist say' but the answer uses first-person 'I had not realized' — the task_kind is 'report' yet the answer is a first-person statement, creating a mismatch that makes the correct answer ambiguous or confusing to the test-taker",
+          1
+        ],
+        [
+          "review:blocker:tmp_r10_q1: multiple valid chunk orders (chunks 'she', 'had not', 'realized', 'how', 'serious', 'the software bug', 'was' — 'she' is not prefilled, so a student could plausibly place 'she' after 'had not' yielding 'Had not she realized...' which is ungrammatical, but more critically the subject 'she' is a free chunk with no prefill anchor, creating ambiguity about sentence-initial placement; additionally 'how serious the software bug was' is an embedded clause and the free chunks allow potential reordering like 'how serious was the software bug' which is a valid direct question form — this constitutes an ambiguous arrangement blocker)|tmp_r10_q1: distractor 'realize' directly replaces 'realized' in the same position ('She had not realize how serious the software bug was') — ungrammatical, so not a valid sentence; however the chunk 'she' is also in the pool with no prefilled subject, creating ambiguous starting point — tmp_r10_q1: clearly ambiguous order (both 'She' and 'she' chunk present with no prefill, and 'realize' vs 'realized' creates near-swap confusion)",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 8,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 8
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "easy",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r8_q3: multiple valid chunk orders — 'needed to find out' splits 'find' and 'out' into separate chunks, allowing ambiguous arrangements like 'needed to out find' is ungrammatical but 'to find out' vs assembling 'needed' + 'to' + 'find' + 'out' creates fragile ordering with 4 consecutive positional chunks that a test-taker could plausibly misorder (e.g., 'needed to out find why'); chunk granularity is the root cause|tmp_r8_q3: chunk fragmentation — 'to', 'find', 'out' are split into three separate single-word chunks instead of the natural collocation 'find out'; this creates ambiguous assembly order and risks ungrammatical arrangements": 1,
+              "review:blocker:tmp_r8_q7: distractor DIRECTLY replaces one word — 'move' can replace 'be moved' only with rearrangement, but more critically 'the deadline could move to Friday' is grammatical with 'move' substituting for 'be moved' in an intransitive reading, making this a near-direct substitution that produces a valid sentence|tmp_r8_q7: chunk 'the' and 'deadline' are split unnecessarily when 'the deadline' appears as a natural NP unit; minor but 'the' as a standalone chunk creates noise without testing anything meaningful": 1
+            }
+          }
+        },
+        {
+          "round": 9,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r9_q1: prompt/answer mismatch (prompt asks what the dental receptionist said, but answer uses first-person 'I had not realized...', which reports the speaker's own realization, not the receptionist's statement)|tmp_r9_q1: prompt says 'what did the dental receptionist say' but the answer uses first-person 'I had not realized' — the task_kind is 'report' yet the answer is a first-person statement, creating a mismatch that makes the correct answer ambiguous or confusing to the test-taker": 1
+            }
+          }
+        },
+        {
+          "round": 10,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r10_q1: multiple valid chunk orders (chunks 'she', 'had not', 'realized', 'how', 'serious', 'the software bug', 'was' — 'she' is not prefilled, so a student could plausibly place 'she' after 'had not' yielding 'Had not she realized...' which is ungrammatical, but more critically the subject 'she' is a free chunk with no prefill anchor, creating ambiguity about sentence-initial placement; additionally 'how serious the software bug was' is an embedded clause and the free chunks allow potential reordering like 'how serious was the software bug' which is a valid direct question form — this constitutes an ambiguous arrangement blocker)|tmp_r10_q1: distractor 'realize' directly replaces 'realized' in the same position ('She had not realize how serious the software bug was') — ungrammatical, so not a valid sentence; however the chunk 'she' is also in the pool with no prefilled subject, creating ambiguous starting point — tmp_r10_q1: clearly ambiguous order (both 'She' and 'she' chunk present with no prefill, and 'realize' vs 'realized' creates near-swap confusion)": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 13
+    },
+    {
+      "triggeredAt": "2026-03-13T13:08:51.855Z",
+      "round": 14,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 5,
+      "accepted": 0,
+      "rejected": 5,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "distractor:unsafe: \"received\" directly swaps with \"receive\" in answer (tense change produces valid sentence)",
+          2
+        ],
+        [
+          "distractor:unsafe: \"finish\" directly swaps with \"finished\" in answer (tense change produces valid sentence)",
+          1
+        ],
+        [
+          "distractor:unsafe: \"coming\" directly swaps with \"come\" in answer (tense change produces valid sentence)",
+          1
+        ],
+        [
+          "review:blocker:tmp_r14_q4: distractor DIRECTLY replaces one word to form a valid sentence — 'register' can replace 'registered' in the same position to yield 'I have not register for the camp yet.' — wait, that is ungrammatical after 'have not', so NOT a blocker by strict rule. No blocker here.",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 12,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "distractor:unsafe: \"received\" directly swaps with \"receive\" in answer (tense change produces valid sentence)": 1,
+              "distractor:unsafe: \"finish\" directly swaps with \"finished\" in answer (tense change produces valid sentence)": 1
+            }
+          }
+        },
+        {
+          "round": 13,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 14,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "distractor:unsafe: \"coming\" directly swaps with \"come\" in answer (tense change produces valid sentence)": 1,
+              "distractor:unsafe: \"received\" directly swaps with \"receive\" in answer (tense change produces valid sentence)": 1,
+              "review:blocker:tmp_r14_q4: distractor DIRECTLY replaces one word to form a valid sentence — 'register' can replace 'registered' in the same position to yield 'I have not register for the camp yet.' — wait, that is ungrammatical after 'have not', so NOT a blocker by strict rule. No blocker here.": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 17
+    },
+    {
+      "triggeredAt": "2026-03-13T13:10:03.724Z",
+      "round": 15,
+      "mode": "normal",
+      "type": "relative",
+      "generated": 5,
+      "accepted": 0,
+      "rejected": 5,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:ets<72",
+          2
+        ],
+        [
+          "review:blocker:tmp_r13_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'visit' can directly replace 'visited' in the contact clause position ('the dental clinic I visit last month') is ungrammatical, BUT 'visit' can replace 'visited' in the main verb position yielding 'The dental clinic I visited last month had very friendly staff' — re-examining: distractor 'visit' vs chunk 'visited'; a 1:1 swap of 'visited'→'visit' gives 'The dental clinic I visit last month had very friendly staff' which is ungrammatical due to 'last month'. NOT a blocker.|tmp_r13_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'visit' replaces 'visited' in position 2 ('The dental clinic I visit last month had very friendly staff.' is ungrammatical, but wait — 'The dental clinic I visit...' with 'last month' is ungrammatical, so this is NOT a blocker. Retracting.) [see note below]",
+          1
+        ],
+        [
+          "review:blocker:tmp_r13_q3: distractor DIRECTLY replaces one word to form a valid sentence — 'serve' replaces 'serves' at exactly one position: 'The campus cafe I found serve excellent coffee and fresh pastries.' — this is ungrammatical (subject-verb agreement fails with singular subject), NOT a blocker. [see note below]",
+          1
+        ],
+        [
+          "review:blocker:tmp_r13_q5: grammar incorrect in the answer sentence — 'registrar office' is non-standard; the correct form is 'registrar's office'|tmp_r13_q5: ungrammatical answer — 'at the registrar office' is non-standard; the correct form is 'registrar's office'. This is a lexical/grammatical error in the answer itself.",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 13,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 5,
+            "accepted": 0,
+            "rejected": 5,
+            "reasons": {
+              "review:blocker:tmp_r13_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'visit' can directly replace 'visited' in the contact clause position ('the dental clinic I visit last month') is ungrammatical, BUT 'visit' can replace 'visited' in the main verb position yielding 'The dental clinic I visited last month had very friendly staff' — re-examining: distractor 'visit' vs chunk 'visited'; a 1:1 swap of 'visited'→'visit' gives 'The dental clinic I visit last month had very friendly staff' which is ungrammatical due to 'last month'. NOT a blocker.|tmp_r13_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'visit' replaces 'visited' in position 2 ('The dental clinic I visit last month had very friendly staff.' is ungrammatical, but wait — 'The dental clinic I visit...' with 'last month' is ungrammatical, so this is NOT a blocker. Retracting.) [see note below]": 1,
+              "review:ets<72": 2,
+              "review:blocker:tmp_r13_q3: distractor DIRECTLY replaces one word to form a valid sentence — 'serve' replaces 'serves' at exactly one position: 'The campus cafe I found serve excellent coffee and fresh pastries.' — this is ungrammatical (subject-verb agreement fails with singular subject), NOT a blocker. [see note below]": 1,
+              "review:blocker:tmp_r13_q5: grammar incorrect in the answer sentence — 'registrar office' is non-standard; the correct form is 'registrar's office'|tmp_r13_q5: ungrammatical answer — 'at the registrar office' is non-standard; the correct form is 'registrar's office'. This is a lexical/grammatical error in the answer itself.": 1
+            }
+          }
+        },
+        {
+          "round": 14,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 15,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        }
+      ],
+      "blockedUntilRound": 18
+    },
+    {
+      "triggeredAt": "2026-03-13T13:14:06.402Z",
+      "round": 19,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 7,
+      "accepted": 0,
+      "rejected": 7,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "distractor:unsafe: \"submit\" directly swaps with \"submitted\" in answer (tense change produces valid sentence)",
+          3
+        ],
+        [
+          "review:blocker:tmp_r17_q2: distractor DIRECTLY replaces one word to form a valid sentence — 'arrived' can replace 'arrive' at the same position ('The repair crew did not arrived...' is ungrammatical, BUT 'arrived' as a standalone chunk invites students to drop 'did not' and build 'The repair crew arrived late in the afternoon.' which is a clean 1:1 swap of the entire verb phrase anchor, making it a valid alternate sentence without rearrangement concern — however, the core issue is that 'arrived' directly substitutes for 'arrive' only if 'did not' is also removed, which requires rearrangement, so this is NOT a blocker by rule; downgraded to score deduction)",
+          1
+        ],
+        [
+          "distractor:unsafe: \"close\" directly swaps with \"closed\" in answer (tense change produces valid sentence)",
+          1
+        ],
+        [
+          "review:blocker:tmp_r18_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'I fixed it' is grammatical if 'fixed' replaces 'did not have enough time to fix' but more critically, 'I fixed it' can be assembled by swapping 'did not' + 'have' + 'to fix' for 'fixed', which requires rearrangement — NOT a blocker on strict 1:1 rule. However, 'to fix' chunk contains the root 'fix', and 'fixed' is the distractor; a student could plausibly build 'I fixed it' by dropping 'did not', 'have', 'enough', 'time', 'to fix' and using 'fixed' + 'it' — this requires removing multiple chunks, so NOT a 1:1 substitution. Downgraded to score deduction only.",
+          1
+        ],
+        [
+          "review:blocker:tmp_r19_q2: distractor DIRECTLY replaces one word to form a valid sentence — 'I signed up for the food drive yet' is ungrammatical, but 'I signed up for the food drive' (dropping 'yet') is valid; however, more critically, 'signed' can replace 'sign up' only with rearrangement, so this is NOT a direct 1:1 substitution blocker. Downgraded to score deduction.",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 17,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "distractor:unsafe: \"submit\" directly swaps with \"submitted\" in answer (tense change produces valid sentence)": 1,
+              "review:blocker:tmp_r17_q2: distractor DIRECTLY replaces one word to form a valid sentence — 'arrived' can replace 'arrive' at the same position ('The repair crew did not arrived...' is ungrammatical, BUT 'arrived' as a standalone chunk invites students to drop 'did not' and build 'The repair crew arrived late in the afternoon.' which is a clean 1:1 swap of the entire verb phrase anchor, making it a valid alternate sentence without rearrangement concern — however, the core issue is that 'arrived' directly substitutes for 'arrive' only if 'did not' is also removed, which requires rearrangement, so this is NOT a blocker by rule; downgraded to score deduction)": 1
+            }
+          }
+        },
+        {
+          "round": 18,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "distractor:unsafe: \"submit\" directly swaps with \"submitted\" in answer (tense change produces valid sentence)": 1,
+              "distractor:unsafe: \"close\" directly swaps with \"closed\" in answer (tense change produces valid sentence)": 1,
+              "review:blocker:tmp_r18_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'I fixed it' is grammatical if 'fixed' replaces 'did not have enough time to fix' but more critically, 'I fixed it' can be assembled by swapping 'did not' + 'have' + 'to fix' for 'fixed', which requires rearrangement — NOT a blocker on strict 1:1 rule. However, 'to fix' chunk contains the root 'fix', and 'fixed' is the distractor; a student could plausibly build 'I fixed it' by dropping 'did not', 'have', 'enough', 'time', 'to fix' and using 'fixed' + 'it' — this requires removing multiple chunks, so NOT a 1:1 substitution. Downgraded to score deduction only.": 1
+            }
+          }
+        },
+        {
+          "round": 19,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "distractor:unsafe: \"submit\" directly swaps with \"submitted\" in answer (tense change produces valid sentence)": 1,
+              "review:blocker:tmp_r19_q2: distractor DIRECTLY replaces one word to form a valid sentence — 'I signed up for the food drive yet' is ungrammatical, but 'I signed up for the food drive' (dropping 'yet') is valid; however, more critically, 'signed' can replace 'sign up' only with rearrangement, so this is NOT a direct 1:1 substitution blocker. Downgraded to score deduction.": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 22
+    },
+    {
+      "triggeredAt": "2026-03-13T13:15:50.921Z",
+      "round": 21,
+      "mode": "normal",
+      "type": "interrogative",
+      "generated": 5,
+      "accepted": 0,
+      "rejected": 5,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "distractor:unsafe: \"started\" directly swaps with \"starts\" in answer (tense change produces valid sentence)",
+          1
+        ],
+        [
+          "review:blocker:tmp_r21_q1: indirect question clause uses inverted word order — 'Could you tell me which artifacts had been donated recently?' is acceptable as a polite request frame, but the embedded clause 'which artifacts had been donated recently' is declarative order ✓; however the prompt asks what the curator asked 'about the artifacts that had been donated' and the answer introduces 'recently' which is not implied by the prompt — prompt/answer mismatch|tmp_r21_q1: distractor 'donate' DIRECTLY replaces 'donated' (one word, same position) to form a grammatical sentence: 'Could you tell me which artifacts had been donate recently?' — wait, that is ungrammatical. However, 'donated recently' is a multi-word chunk while 'donate' is a single-word distractor; replacing only 'donated' within that chunk yields 'donate recently' which is ungrammatical. NOT a blocker on substitution grounds. Re-evaluating: chunk 'donated recently' is presented as one chunk, so distractor 'donate' cannot do a 1:1 chunk swap to produce a valid sentence. Removing blocker.|tmp_r21_q1: answer is an interrogative (question) — TPO Build-a-Sentence answers are 92% declarative statements. Using a question as the answer is a structural mismatch with ETS norms.",
+          1
+        ],
+        [
+          "review:blocker:tmp_r21_q2: answer is an interrogative — same declarative mismatch as q1.",
+          1
+        ],
+        [
+          "review:blocker:tmp_r21_q3: prompt/answer mismatch — prompt says the instructor wanted to know about 'new members' but the answer asks about 'students signed up for the class', shifting the referent; additionally 'new members' vs 'students who signed up' is a meaningful semantic gap|tmp_r21_q3: answer is an interrogative — same declarative mismatch.",
+          1
+        ],
+        [
+          "review:blocker:tmp_r21_q4: multiple valid chunk orders — chunks 'remind', 'me', 'which courses', 'chose', 'for next semester', 'you' can be arranged as 'remind me which courses you chose for next semester' OR 'remind me which courses chose for next semester you' is ungrammatical, but 'you' as a free-floating chunk creates ambiguity: learners may place 'you' before 'chose' (correct) or after 'for next semester' producing a non-target but plausible attempt; more critically the subject 'you' is a separate chunk from 'chose', making the intended order non-obvious and enabling multiple arrangements that learners could reasonably attempt|tmp_r21_q4: chunk order is ambiguous — 'you' and 'chose' are separate chunks, allowing 'you chose' or 'chose you' both to be attempted; indirect question requires 'you chose' but nothing in the chunk set enforces this order, creating a valid alternate assembly risk.",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 19,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 20,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 21,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 5,
+            "accepted": 0,
+            "rejected": 5,
+            "reasons": {
+              "distractor:unsafe: \"started\" directly swaps with \"starts\" in answer (tense change produces valid sentence)": 1,
+              "review:blocker:tmp_r21_q1: indirect question clause uses inverted word order — 'Could you tell me which artifacts had been donated recently?' is acceptable as a polite request frame, but the embedded clause 'which artifacts had been donated recently' is declarative order ✓; however the prompt asks what the curator asked 'about the artifacts that had been donated' and the answer introduces 'recently' which is not implied by the prompt — prompt/answer mismatch|tmp_r21_q1: distractor 'donate' DIRECTLY replaces 'donated' (one word, same position) to form a grammatical sentence: 'Could you tell me which artifacts had been donate recently?' — wait, that is ungrammatical. However, 'donated recently' is a multi-word chunk while 'donate' is a single-word distractor; replacing only 'donated' within that chunk yields 'donate recently' which is ungrammatical. NOT a blocker on substitution grounds. Re-evaluating: chunk 'donated recently' is presented as one chunk, so distractor 'donate' cannot do a 1:1 chunk swap to produce a valid sentence. Removing blocker.|tmp_r21_q1: answer is an interrogative (question) — TPO Build-a-Sentence answers are 92% declarative statements. Using a question as the answer is a structural mismatch with ETS norms.": 1,
+              "review:blocker:tmp_r21_q2: answer is an interrogative — same declarative mismatch as q1.": 1,
+              "review:blocker:tmp_r21_q3: prompt/answer mismatch — prompt says the instructor wanted to know about 'new members' but the answer asks about 'students signed up for the class', shifting the referent; additionally 'new members' vs 'students who signed up' is a meaningful semantic gap|tmp_r21_q3: answer is an interrogative — same declarative mismatch.": 1,
+              "review:blocker:tmp_r21_q4: multiple valid chunk orders — chunks 'remind', 'me', 'which courses', 'chose', 'for next semester', 'you' can be arranged as 'remind me which courses you chose for next semester' OR 'remind me which courses chose for next semester you' is ungrammatical, but 'you' as a free-floating chunk creates ambiguity: learners may place 'you' before 'chose' (correct) or after 'for next semester' producing a non-target but plausible attempt; more critically the subject 'you' is a separate chunk from 'chose', making the intended order non-obvious and enabling multiple arrangements that learners could reasonably attempt|tmp_r21_q4: chunk order is ambiguous — 'you' and 'chose' are separate chunks, allowing 'you chose' or 'chose you' both to be attempted; indirect question requires 'you chose' but nothing in the chunk set enforces this order, creating a valid alternate assembly risk.": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 24
+    },
+    {
+      "triggeredAt": "2026-03-13T13:17:53.025Z",
+      "round": 23,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 5,
+      "accepted": 0,
+      "rejected": 5,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "distractor:unsafe: \"submitted\" directly swaps with \"submit\" in answer (tense change produces valid sentence)",
+          1
+        ],
+        [
+          "review:blocker:tmp_r22_q3: indirect question clause uses inverted word order — 'what the developer explained' is fine, but the prompt asks what YOU say in response to the developer's question; the answer does not actually respond to 'did you understand the new update?' — it deflects rather than responds, creating a prompt/answer mismatch|tmp_r22_q3: distractor DIRECTLY replaces one word to form a valid sentence — 'explained' can be replaced by 'explain' if 'did not' is already present... actually re-evaluating: 'explain' cannot replace 'explained' at position 6 without also removing 'did not' or restructuring, so not a 1:1 blocker. No blocker.",
+          1
+        ],
+        [
+          "review:blocker:tmp_r22_q4: distractor DIRECTLY replaces one word to form a valid sentence — 'expected' can replace 'expect' at its position while removing 'did not' to yield 'The elderly neighbor expected the construction to last so long.' BUT that requires removing 'did not', not a 1:1 same-position substitution. Not a blocker.",
+          1
+        ],
+        [
+          "topic:repeat",
+          1
+        ],
+        [
+          "review:blocker:tmp_r23_q5: distractor DIRECTLY replaces one word to form a valid sentence — 'matched' can be replaced by 'match' if 'was not sure if' is kept, but more critically, removing 'was not' and swapping 'matched' → 'match' is a rearrangement, NOT a direct 1:1 swap in the same position. However, 'match' cannot directly replace any single word in 'I was not sure if my previous experience matched the role' to produce a grammatical sentence. NOT a blocker on distractor grounds. Re-evaluating: no blocker here.|tmp_r23_q5: distractor DIRECTLY replaces one word to form a valid sentence — 'matched' → 'match' produces 'I was not sure if my previous experience match the role' which is ungrammatical, BUT the chunk 'match' could replace 'matched' only if the learner also removes 'was not sure if', making this a rearrangement issue. However, 'match' as a standalone chunk sitting next to 'matched' creates near-identical visual confusion at assembly time — not a clean 1:1 blocker but flagged for review.",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 21,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 22,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "distractor:unsafe: \"submitted\" directly swaps with \"submit\" in answer (tense change produces valid sentence)": 1,
+              "review:blocker:tmp_r22_q3: indirect question clause uses inverted word order — 'what the developer explained' is fine, but the prompt asks what YOU say in response to the developer's question; the answer does not actually respond to 'did you understand the new update?' — it deflects rather than responds, creating a prompt/answer mismatch|tmp_r22_q3: distractor DIRECTLY replaces one word to form a valid sentence — 'explained' can be replaced by 'explain' if 'did not' is already present... actually re-evaluating: 'explain' cannot replace 'explained' at position 6 without also removing 'did not' or restructuring, so not a 1:1 blocker. No blocker.": 1,
+              "review:blocker:tmp_r22_q4: distractor DIRECTLY replaces one word to form a valid sentence — 'expected' can replace 'expect' at its position while removing 'did not' to yield 'The elderly neighbor expected the construction to last so long.' BUT that requires removing 'did not', not a 1:1 same-position substitution. Not a blocker.": 1
+            }
+          }
+        },
+        {
+          "round": 23,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "topic:repeat": 1,
+              "review:blocker:tmp_r23_q5: distractor DIRECTLY replaces one word to form a valid sentence — 'matched' can be replaced by 'match' if 'was not sure if' is kept, but more critically, removing 'was not' and swapping 'matched' → 'match' is a rearrangement, NOT a direct 1:1 swap in the same position. However, 'match' cannot directly replace any single word in 'I was not sure if my previous experience matched the role' to produce a grammatical sentence. NOT a blocker on distractor grounds. Re-evaluating: no blocker here.|tmp_r23_q5: distractor DIRECTLY replaces one word to form a valid sentence — 'matched' → 'match' produces 'I was not sure if my previous experience match the role' which is ungrammatical, BUT the chunk 'match' could replace 'matched' only if the learner also removes 'was not sure if', making this a rearrangement issue. However, 'match' as a standalone chunk sitting next to 'matched' creates near-identical visual confusion at assembly time — not a clean 1:1 blocker but flagged for review.": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 26
+    },
+    {
+      "triggeredAt": "2026-03-13T13:18:25.156Z",
+      "round": 24,
+      "mode": "normal",
+      "type": "1st-embedded",
+      "generated": 5,
+      "accepted": 1,
+      "rejected": 4,
+      "acceptRate": 0.2,
+      "reasons": [
+        [
+          "distractor:unsafe: \"knew\" directly swaps with \"know\" in answer (tense change produces valid sentence)",
+          1
+        ],
+        [
+          "review:blocker:tmp_r23_q4: multiple valid chunk orders — 'the', 'study', 'group' are split into individual word chunks, allowing potential reordering (e.g., 'the group study') that could produce an alternate but plausible arrangement. This is a moderate ambiguity risk.|tmp_r23_q4: distractor DIRECTLY replaces one word to form a valid sentence — 'meeting' can replace 'meets on thursdays' only with rearrangement, so NOT a true blocker. Downgraded to score deduction.",
+          1
+        ],
+        [
+          "distractor:unsafe: \"knowing\" directly swaps with \"know\" in answer (tense change produces valid sentence)",
+          1
+        ],
+        [
+          "distractor:unsafe: \"find\" directly swaps with \"found\" in answer (tense change produces valid sentence)",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 22,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 1,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 23,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "distractor:unsafe: \"knew\" directly swaps with \"know\" in answer (tense change produces valid sentence)": 1,
+              "review:blocker:tmp_r23_q4: multiple valid chunk orders — 'the', 'study', 'group' are split into individual word chunks, allowing potential reordering (e.g., 'the group study') that could produce an alternate but plausible arrangement. This is a moderate ambiguity risk.|tmp_r23_q4: distractor DIRECTLY replaces one word to form a valid sentence — 'meeting' can replace 'meets on thursdays' only with rearrangement, so NOT a true blocker. Downgraded to score deduction.": 1
+            }
+          }
+        },
+        {
+          "round": 24,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "distractor:unsafe: \"knowing\" directly swaps with \"know\" in answer (tense change produces valid sentence)": 1,
+              "distractor:unsafe: \"find\" directly swaps with \"found\" in answer (tense change produces valid sentence)": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 27
+    },
+    {
+      "triggeredAt": "2026-03-13T13:21:35.079Z",
+      "round": 27,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 5,
+      "accepted": 0,
+      "rejected": 5,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r25_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'fixed' can replace 'fix' in 'I did not have time to fix the pipe' → 'I did not have time to fixed the pipe' is ungrammatical, BUT 'fixed' can replace 'fix' only if 'to' is also removed, which requires rearrangement — NOT a blocker on closer inspection; however, the chunk list includes 'fixed' as both a chunk candidate and the distractor, and the answer uses 'fix' via 'to fix' chunk, so no direct 1:1 swap is possible — cleared|tmp_r25_q1: distractor 'fixed' directly replaces 'fix' in 'to fix' position — 'I did not have time to fixed the pipe' is ungrammatical, but 'fixed' could also replace the entire chunk 'did not have time to fix' if student reads it as past tense verb, creating ambiguity. More critically: with prefilled 'I' and chunks including both 'did not'+'have'+'to fix' AND 'fixed', a student could plausibly build 'I fixed the pipe' by using only 'fixed' and ignoring others — the distractor forms a grammatical short sentence fragment that competes directly.",
+          1
+        ],
+        [
+          "topic:repeat",
+          1
+        ],
+        [
+          "review:ets<72",
+          1
+        ],
+        [
+          "distractor:unsafe: \"submit\" directly swaps with \"submitted\" in answer (tense change produces valid sentence)",
+          1
+        ],
+        [
+          "review:blocker:tmp_r27_q4: distractor DIRECTLY replaces one word to form a valid sentence — 'registered' can replace 'register' in 'I did not register for the tournament on time' only if 'did not' is removed, BUT more critically: 'I registered for the tournament on time' is formed by simply swapping 'did not register' with 'registered', which is a chunk-level substitution. However, per the strict rule, 'registered' cannot replace 'register' in the same position while keeping 'did not' (yields ungrammatical 'I did not registered...'), so this is NOT a blocker by the direct 1:1 swap rule. Reclassifying: NOT a blocker.|tmp_r27_q4: distractor DIRECTLY replaces one word to form a valid sentence — 'I registered for the tournament on time' is grammatical and requires no rearrangement (registered replaces 'did not register' only if 'did not' is removed, BUT the chunk 'did not' is a single chunk, so 'registered' replaces the entire 'did not register' two-chunk sequence... re-evaluating: 'did not' and 'register' are separate chunks; replacing 'register' with 'registered' and dropping 'did not' produces a valid sentence, but that requires removing a chunk — NOT a direct 1:1 substitution at the same position. However, if the student places 'I' + 'registered' + 'for' + 'the' + 'tournament' + 'on time', this is a valid grammatical sentence using only available chunks while leaving 'did not' and 'register' unused. The distractor enables a fully valid alternate answer without any rearrangement of the chosen chunks. BLOCKER: ambiguous order — multiple valid sentences constructible from the chunk set.",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 25,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r25_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'fixed' can replace 'fix' in 'I did not have time to fix the pipe' → 'I did not have time to fixed the pipe' is ungrammatical, BUT 'fixed' can replace 'fix' only if 'to' is also removed, which requires rearrangement — NOT a blocker on closer inspection; however, the chunk list includes 'fixed' as both a chunk candidate and the distractor, and the answer uses 'fix' via 'to fix' chunk, so no direct 1:1 swap is possible — cleared|tmp_r25_q1: distractor 'fixed' directly replaces 'fix' in 'to fix' position — 'I did not have time to fixed the pipe' is ungrammatical, but 'fixed' could also replace the entire chunk 'did not have time to fix' if student reads it as past tense verb, creating ambiguity. More critically: with prefilled 'I' and chunks including both 'did not'+'have'+'to fix' AND 'fixed', a student could plausibly build 'I fixed the pipe' by using only 'fixed' and ignoring others — the distractor forms a grammatical short sentence fragment that competes directly.": 1
+            }
+          }
+        },
+        {
+          "round": 26,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "topic:repeat": 1,
+              "review:ets<72": 1
+            }
+          }
+        },
+        {
+          "round": 27,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "distractor:unsafe: \"submit\" directly swaps with \"submitted\" in answer (tense change produces valid sentence)": 1,
+              "review:blocker:tmp_r27_q4: distractor DIRECTLY replaces one word to form a valid sentence — 'registered' can replace 'register' in 'I did not register for the tournament on time' only if 'did not' is removed, BUT more critically: 'I registered for the tournament on time' is formed by simply swapping 'did not register' with 'registered', which is a chunk-level substitution. However, per the strict rule, 'registered' cannot replace 'register' in the same position while keeping 'did not' (yields ungrammatical 'I did not registered...'), so this is NOT a blocker by the direct 1:1 swap rule. Reclassifying: NOT a blocker.|tmp_r27_q4: distractor DIRECTLY replaces one word to form a valid sentence — 'I registered for the tournament on time' is grammatical and requires no rearrangement (registered replaces 'did not register' only if 'did not' is removed, BUT the chunk 'did not' is a single chunk, so 'registered' replaces the entire 'did not register' two-chunk sequence... re-evaluating: 'did not' and 'register' are separate chunks; replacing 'register' with 'registered' and dropping 'did not' produces a valid sentence, but that requires removing a chunk — NOT a direct 1:1 substitution at the same position. However, if the student places 'I' + 'registered' + 'for' + 'the' + 'tournament' + 'on time', this is a valid grammatical sentence using only available chunks while leaving 'did not' and 'register' unused. The distractor enables a fully valid alternate answer without any rearrangement of the chosen chunks. BLOCKER: ambiguous order — multiple valid sentences constructible from the chunk set.": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 30
+    },
+    {
+      "triggeredAt": "2026-03-13T13:24:57.749Z",
+      "round": 32,
+      "mode": "normal",
+      "type": "1st-embedded",
+      "generated": 5,
+      "accepted": 1,
+      "rejected": 4,
+      "acceptRate": 0.2,
+      "reasons": [
+        [
+          "distractor:unsafe: \"close\" directly swaps with \"closed\" in answer (tense change produces valid sentence)",
+          1
+        ],
+        [
+          "distractor:unsafe: \"start\" directly swaps with \"starts\" in answer (tense change produces valid sentence)",
+          1
+        ],
+        [
+          "distractor:unsafe: \"finish\" directly swaps with \"finished\" in answer (tense change produces valid sentence)",
+          1
+        ],
+        [
+          "review:blocker:tmp_r32_q5: distractor DIRECTLY replaces one word to form a valid sentence — 'meets' → 'meet' is a direct 1:1 substitution at the same position, and 'where the study group meet on Thursdays' is grammatical in some registers (though non-standard); more critically, 'I needed to find out where the study group meet on Thursdays' is borderline acceptable in informal/British English, making this a near-blocker. However, strictly in standard American English 'meet' is ungrammatical here with singular subject agreement, so this is flagged as a strong concern rather than a hard blocker — deduct accordingly.",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 30,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 31,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 32,
+          "spec": [
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 5,
+            "accepted": 1,
+            "rejected": 4,
+            "reasons": {
+              "distractor:unsafe: \"close\" directly swaps with \"closed\" in answer (tense change produces valid sentence)": 1,
+              "distractor:unsafe: \"start\" directly swaps with \"starts\" in answer (tense change produces valid sentence)": 1,
+              "distractor:unsafe: \"finish\" directly swaps with \"finished\" in answer (tense change produces valid sentence)": 1,
+              "review:blocker:tmp_r32_q5: distractor DIRECTLY replaces one word to form a valid sentence — 'meets' → 'meet' is a direct 1:1 substitution at the same position, and 'where the study group meet on Thursdays' is grammatical in some registers (though non-standard); more critically, 'I needed to find out where the study group meet on Thursdays' is borderline acceptable in informal/British English, making this a near-blocker. However, strictly in standard American English 'meet' is ungrammatical here with singular subject agreement, so this is flagged as a strong concern rather than a hard blocker — deduct accordingly.": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 35
+    }
+  ],
+  "history": [
+    {
+      "round": 26,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 3
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "topic:repeat": 1,
+            "review:ets<72": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 2,
+          "accepted": 2,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r26_q5: prompt/answer mismatch (prompt asks what the manager wanted to know about the membership plan, but answer shifts to finding out how many members signed up — unrelated to the membership plan topic; also 'needed to find out' ≠ 'wanted to know', changing the verb meaning without justification)|tmp_r26_q5: ungrammatical answer — prompt asks what the manager 'wanted to know' but answer uses 'needed to find out', which is a meaning shift; more critically, the embedded wh-clause 'how many members signed up' uses past tense 'signed up' while the distractor 'sign' implies present/base — however the core blocker is that 'to find out' is split across chunks 'to', 'find', 'out' as three separate single-word chunks, making the phrasal verb unnatural to assemble and creating ambiguous ordering between 'to', 'find', 'out'|tmp_r26_q5: distractor 'sign' directly replaces 'signed' in 'signed up' — but 'signed up' is a single chunk, so substituting 'sign' for the whole chunk yields 'sign up' which is grammatical in some readings; this is a borderline 1:1 chunk substitution producing a valid phrase": 1
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 27,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "distractor:unsafe: \"submit\" directly swaps with \"submitted\" in answer (tense change produces valid sentence)": 1,
+            "review:blocker:tmp_r27_q4: distractor DIRECTLY replaces one word to form a valid sentence — 'registered' can replace 'register' in 'I did not register for the tournament on time' only if 'did not' is removed, BUT more critically: 'I registered for the tournament on time' is formed by simply swapping 'did not register' with 'registered', which is a chunk-level substitution. However, per the strict rule, 'registered' cannot replace 'register' in the same position while keeping 'did not' (yields ungrammatical 'I did not registered...'), so this is NOT a blocker by the direct 1:1 swap rule. Reclassifying: NOT a blocker.|tmp_r27_q4: distractor DIRECTLY replaces one word to form a valid sentence — 'I registered for the tournament on time' is grammatical and requires no rearrangement (registered replaces 'did not register' only if 'did not' is removed, BUT the chunk 'did not' is a single chunk, so 'registered' replaces the entire 'did not register' two-chunk sequence... re-evaluating: 'did not' and 'register' are separate chunks; replacing 'register' with 'registered' and dropping 'did not' produces a valid sentence, but that requires removing a chunk — NOT a direct 1:1 substitution at the same position. However, if the student places 'I' + 'registered' + 'for' + 'the' + 'tournament' + 'on time', this is a valid grammatical sentence using only available chunks while leaving 'did not' and 'register' unused. The distractor enables a fully valid alternate answer without any rearrangement of the chosen chunks. BLOCKER: ambiguous order — multiple valid sentences constructible from the chunk set.": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 1,
+          "accepted": 1,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 2,
+          "accepted": 2,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 29,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "interrogative",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 1,
+          "accepted": 1,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "topic:repeat": 1,
+            "review:blocker:tmp_r29_q2: prompt/answer mismatch (prompt asks what YOU asked the sports coach, but answer is a direct question 'Do you know whether...' addressed to someone else, not a report of what was asked)|tmp_r29_q2: indirect question clause uses inverted word order ('Do you know' is a direct question frame used as the answer, not a declarative report of what was asked)|tmp_r29_q2: indirect question uses inverted word order — 'Do you know whether...' is a direct question frame, not a declarative reporting structure; the embedded clause itself is fine but the outer frame inverts subject-auxiliary": 1
+          }
+        },
+        "direct": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "runtime: question tmp_r29_q4: bank must not contain duplicates": 1,
+            "review:solvability<78": 1
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 30,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "3rd-reporting",
+          "difficulty": "hard",
+          "count": 3
+        },
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "distractor:unsafe: \"taken\" directly swaps with \"taking\" in answer (tense change produces valid sentence)": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 3,
+          "accepted": 0,
+          "rejected": 3,
+          "reasons": {
+            "topic:repeat": 1,
+            "review:blocker:tmp_r30_q3: distractor DIRECTLY replaces one word to form a valid sentence — 'arrange' can replace 'arranged' in 'how the paintings had been arranged' only if we consider 'arrange' as a base form swap, but 'had been arrange' is ungrammatical — NOT a blocker on reflection; however, the chunk list includes both 'arranged' and 'arrange' as separate chunks, and 'arrange' cannot directly substitute 'arranged' in the passive construction without breaking grammar — cleared|tmp_r30_q3: distractor 'arrange' directly replaces 'arranged' (same position, same verb base) to form a grammatical sentence — 'how the paintings had been arrange' is NOT grammatical, but 'arrange' vs 'arranged' is a morphological 1:1 swap at the same slot; however since 'had been arrange' is ungrammatical this does NOT qualify as a true blocker": 1,
+            "review:blocker:tmp_r30_q2: distractor 'chose' directly replaces 'had chosen' — 'whom the captain chose' is fully grammatical with no rearrangement needed, making this a clean 1:1 substitution blocker": 1
+          }
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r30_q4: prompt/answer mismatch — the prompt asks 'What did you say about the pharmacy pickup notice?' implying the answer should report something said about the notice, but the answer 'I had not noticed that the prescription had been refilled' is a confession of unawareness, not a statement about the pharmacy pickup notice itself": 1
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 31,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "relative",
+          "difficulty": "hard",
+          "count": 5
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 5,
+          "accepted": 3,
+          "rejected": 2,
+          "reasons": {
+            "review:blocker:tmp_r31_q3: prompt/answer mismatch (prompt says the clerk 'asked about' the coupon, implying a question, but the answer is a statement about the coupon having expired — the clerk stated a fact, not asked a question)|tmp_r31_q3: prompt_task_kind is 'ask' but the answer is a statement reporting a fact, not an indirect question — task kind mismatch creates ambiguity about expected answer form": 1,
+            "review:blocker:tmp_r31_q5: multi-word chunk 'properly sealed' bundles an adverb with a past participle; 'properly' is not a natural collocation lock with 'sealed' and should be a separate chunk per ~77% single-word rule": 1
+          }
+        }
+      }
+    },
+    {
+      "round": 32,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 5
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 5,
+          "accepted": 1,
+          "rejected": 4,
+          "reasons": {
+            "distractor:unsafe: \"close\" directly swaps with \"closed\" in answer (tense change produces valid sentence)": 1,
+            "distractor:unsafe: \"start\" directly swaps with \"starts\" in answer (tense change produces valid sentence)": 1,
+            "distractor:unsafe: \"finish\" directly swaps with \"finished\" in answer (tense change produces valid sentence)": 1,
+            "review:blocker:tmp_r32_q5: distractor DIRECTLY replaces one word to form a valid sentence — 'meets' → 'meet' is a direct 1:1 substitution at the same position, and 'where the study group meet on Thursdays' is grammatical in some registers (though non-standard); more critically, 'I needed to find out where the study group meet on Thursdays' is borderline acceptable in informal/British English, making this a near-blocker. However, strictly in standard American English 'meet' is ungrammatical here with singular subject agreement, so this is flagged as a strong concern rather than a hard blocker — deduct accordingly.": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    }
+  ]
+}
