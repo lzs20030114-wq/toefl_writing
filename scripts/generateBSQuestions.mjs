@@ -2428,6 +2428,16 @@ async function callOpenAICompatibleRelay({ apiKey, baseUrl, model, temperature, 
  * Primary:  CLAUDE_RELAY_API_KEY  + CLAUDE_RELAY_BASE_URL
  * Backup N: CLAUDE_RELAY_API_KEY_N + CLAUDE_RELAY_BASE_URL_N  (N = 2, 3, …)
  */
+// Track relays permanently disabled due to quota/auth errors (by index)
+const _deadRelays = new Set();
+
+function isQuotaOrAuthError(status, body) {
+  if (status === 401 || status === 402 || status === 403) return true;
+  // Some relays return 200 with error body, or 4xx with quota message
+  const lower = String(body || "").toLowerCase();
+  return /insufficient.*(balance|quota|credit)|quota.*(exceeded|exhausted)|billing|payment required|no.*(balance|credit)/i.test(lower);
+}
+
 function getRelayConfigs() {
   const model = process.env.CLAUDE_GENERATOR_MODEL || "claude-sonnet-4-6";
   const configs = [];
@@ -2442,29 +2452,46 @@ function getRelayConfigs() {
   return configs;
 }
 
+function getActiveRelayCount() {
+  return getRelayConfigs().length - _deadRelays.size;
+}
+
 async function callRelayChain({ userPrompt, temperature, maxTokens, timeoutMs, purpose }) {
   const relays = getRelayConfigs();
   if (relays.length === 0) return null;
 
   let lastErr;
+  let triedAny = false;
   for (let i = 0; i < relays.length; i++) {
+    if (_deadRelays.has(i)) continue; // skip quota-exhausted relays
+    triedAny = true;
     const { apiKey, baseUrl, model } = relays[i];
     try {
-      console.log(`  [${purpose}] using relay ${i + 1}/${relays.length}: ${baseUrl}`);
+      const activeCount = relays.length - _deadRelays.size;
+      console.log(`  [${purpose}] using relay ${i + 1}/${relays.length}${_deadRelays.size > 0 ? ` (${activeCount} active)` : ""}: ${baseUrl}`);
       return await callOpenAICompatibleRelay({ apiKey, baseUrl, model, temperature, maxTokens, userPrompt, timeoutMs });
     } catch (e) {
       lastErr = e;
       _lastModelFailureReason = `${purpose}: ${errMsg(e)}`;
-      if (i < relays.length - 1) {
+      // Detect quota/auth errors and permanently disable this relay
+      const statusMatch = e.message.match(/Relay API (\d+)/);
+      const status = statusMatch ? parseInt(statusMatch[1]) : 0;
+      if (isQuotaOrAuthError(status, e.message)) {
+        _deadRelays.add(i);
+        console.warn(`  [${purpose}] ⚠ relay ${i + 1}/${relays.length} (${baseUrl}) disabled — quota/auth error (${status}). ${relays.length - _deadRelays.size} relay(s) remaining.`);
+      } else if (i < relays.length - 1) {
         console.warn(`  [${purpose}] relay ${i + 1}/${relays.length} failed (${e.message.slice(0, 120)}), trying next relay…`);
       }
     }
+  }
+  if (!triedAny) {
+    throw new Error(`All ${relays.length} relay(s) disabled due to quota/auth errors`);
   }
   throw lastErr;
 }
 
 async function callModelCreative(userPrompt) {
-  if (getRelayConfigs().length > 0) {
+  if (getActiveRelayCount() > 0) {
     try {
       return await callRelayChain({
         userPrompt,
@@ -2492,7 +2519,7 @@ async function callModelCreative(userPrompt) {
 }
 
 async function callModelDeterministic(userPrompt) {
-  if (getRelayConfigs().length > 0) {
+  if (getActiveRelayCount() > 0) {
     try {
       return await callRelayChain({
         userPrompt,
