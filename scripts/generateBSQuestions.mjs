@@ -1991,12 +1991,13 @@ Review the Build a Sentence items and return ONLY JSON:
   ]
 }
 
-Blockers (ONLY use for these critical issues):
-- multiple valid chunk orders (ambiguous arrangement)
-- grammar incorrect in the answer sentence
-- distractor could be a valid answer chunk (inserting it creates another valid sentence)
-- prompt/answer mismatch (answer doesn't respond to prompt)
-- indirect question clause uses inverted word order (MUST be declarative)
+Blockers (ONLY use for these critical issues — ALWAYS prefix with the item ID like "tmp_r1_q3: ..."):
+- tmp_rN_qM: multiple valid chunk orders (ambiguous arrangement)
+- tmp_rN_qM: grammar incorrect in the answer sentence
+- tmp_rN_qM: distractor could be a valid answer chunk (inserting it creates another valid sentence)
+- tmp_rN_qM: prompt/answer mismatch (answer doesn't respond to prompt)
+- tmp_rN_qM: indirect question clause uses inverted word order (MUST be declarative)
+IMPORTANT: Each blocker must start with the specific item ID it applies to. Do NOT write batch-level blockers without item IDs.
 
 NOT blockers (deduct points instead):
 - chunk composition style
@@ -2039,11 +2040,12 @@ Return ONLY JSON:
   ]
 }
 
-Blockers (ONLY for critical issues):
-- clearly ambiguous order (multiple valid answers)
-- ungrammatical answer
-- distractor likely valid in answer
-- indirect question uses inverted word order
+Blockers (ONLY for critical issues — ALWAYS prefix with the item ID like "tmp_r1_q3: ..."):
+- tmp_rN_qM: clearly ambiguous order (multiple valid answers)
+- tmp_rN_qM: ungrammatical answer
+- tmp_rN_qM: distractor likely valid in answer
+- tmp_rN_qM: indirect question uses inverted word order
+IMPORTANT: Each blocker must start with the specific item ID it applies to.
 
 NOT blockers (reflect in score):
 - chunk style, grammar labels, scene variety
@@ -2215,6 +2217,96 @@ function flushCircuitBreakerLog(state) {
   writeFileSync(CIRCUIT_BREAKER_LOG_PATH, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
 }
 
+/**
+ * Deterministic distractor safety check.
+ * Catches the most common reviewer-blocker trigger: distractor can replace
+ * or be inserted alongside an existing word to form a plausible sentence.
+ * Returns null if safe, or a reason string if unsafe.
+ */
+function checkDistractorSafety(q) {
+  if (!q.distractor || q.has_distractor === false) return null;
+  const dist = String(q.distractor).toLowerCase().trim();
+  const answerLower = String(q.answer || "").toLowerCase().replace(/[.,!?;:]/g, "");
+  const answerWords = answerLower.split(/\s+/).filter(Boolean);
+
+  // 1. Distractor is a direct tense/form swap of a word already in the answer.
+  //    e.g. distractor="is" when answer contains "was" — trivial swap creates valid sentence.
+  const TENSE_SWAP_GROUPS = [
+    ["is", "was", "are", "were", "be", "been", "being"],
+    ["do", "does", "did", "done", "doing"],
+    ["has", "have", "had", "having"],
+    ["go", "goes", "went", "gone", "going"],
+    ["come", "comes", "came", "coming"],
+    ["get", "gets", "got", "gotten", "getting"],
+    ["take", "takes", "took", "taken", "taking"],
+    ["make", "makes", "made", "making"],
+    ["give", "gives", "gave", "given", "giving"],
+    ["see", "sees", "saw", "seen", "seeing"],
+    ["know", "knows", "knew", "known", "knowing"],
+    ["say", "says", "said", "saying"],
+    ["tell", "tells", "told", "telling"],
+    ["find", "finds", "found", "finding"],
+    ["think", "thinks", "thought", "thinking"],
+    ["open", "opens", "opened", "opening"],
+    ["close", "closes", "closed", "closing"],
+    ["start", "starts", "started", "starting"],
+    ["finish", "finishes", "finished", "finishing"],
+    ["submit", "submits", "submitted", "submitting"],
+    ["receive", "receives", "received", "receiving"],
+    ["speak", "speaks", "spoke", "spoken", "speaking"],
+    ["write", "writes", "wrote", "written", "writing"],
+    ["send", "sends", "sent", "sending"],
+    ["buy", "buys", "bought", "buying"],
+    ["can", "could"],
+    ["will", "would"],
+    ["shall", "should"],
+    ["may", "might"],
+  ];
+
+  const distGroup = TENSE_SWAP_GROUPS.find((g) => g.includes(dist));
+  if (distGroup) {
+    // Check if the answer contains ANOTHER word from the same group
+    // AND the distractor could directly swap in for it
+    for (const ansWord of answerWords) {
+      if (ansWord === dist) continue; // distractor shouldn't be in answer (caught elsewhere)
+      if (distGroup.includes(ansWord)) {
+        // Special case: be-verb swaps (is/was, are/were) are almost always valid
+        const BE_VERBS = new Set(["is", "was", "are", "were"]);
+        if (BE_VERBS.has(dist) && BE_VERBS.has(ansWord)) {
+          return `"${dist}" directly swaps with "${ansWord}" in answer (tense change produces valid sentence)`;
+        }
+        // Auxiliary swaps (can/could, will/would) are often valid
+        const MODAL_PAIRS = [["can", "could"], ["will", "would"], ["shall", "should"], ["may", "might"]];
+        for (const pair of MODAL_PAIRS) {
+          if (pair.includes(dist) && pair.includes(ansWord)) {
+            return `"${dist}" directly swaps with "${ansWord}" in answer (modal change produces valid sentence)`;
+          }
+        }
+        // do/does/did: "did" can swap with "do/does" in many contexts
+        const DO_GROUP = new Set(["do", "does", "did"]);
+        if (DO_GROUP.has(dist) && DO_GROUP.has(ansWord)) {
+          return `"${dist}" directly swaps with "${ansWord}" in answer (tense change produces valid sentence)`;
+        }
+      }
+    }
+  }
+
+  // 2. Distractor "did"/"do"/"does" when answer has negation "did not"/"do not" etc.
+  //    The distractor is redundant — it's already semantically present.
+  const DO_DISTRACTORS = new Set(["did", "do", "does"]);
+  if (DO_DISTRACTORS.has(dist)) {
+    // Check if the answer already has an auxiliary from the same do-group
+    const hasDoAux = answerWords.some((w) => DO_DISTRACTORS.has(w));
+    // "did"/"do" as distractor is OK when it can't be inserted — typically safe.
+    // But if the answer already uses the same word, it's problematic.
+    if (hasDoAux && answerWords.includes(dist)) {
+      return `"${dist}" already appears in the answer — distractor is a duplicate`;
+    }
+  }
+
+  return null;
+}
+
 function hardValidateQuestion(q) {
   const promptContract = validateStructuredPromptParts(q, { requireStructured: true });
   if (promptContract.fatal.length > 0) return { ok: false, reason: `prompt: ${promptContract.fatal.join("; ")}` };
@@ -2256,6 +2348,13 @@ function hardValidateQuestion(q) {
     }
   } catch (e) {
     return { ok: false, reason: `runtime: ${e.message}` };
+  }
+
+  // Deterministic distractor safety: catch the most common reviewer-blocker trigger
+  // before sending to the expensive AI reviewer.
+  const distractorIssue = checkDistractorSafety(q);
+  if (distractorIssue) {
+    return { ok: false, reason: `distractor:unsafe: ${distractorIssue}` };
   }
 
   return { ok: true };
@@ -2576,23 +2675,42 @@ async function generateCandidateRound(round, spec, rejectFeedback = "", recentPo
     ]),
   );
 
+  // Build per-item blocker set: extract item IDs mentioned in blocker strings.
+  // Only block the specific items mentioned, not the entire batch.
+  const allBlockerTexts = [...review.blockers, ...consistency.blockers].filter(Boolean);
+  const perItemBlockerIds = new Set();
+  const unmatchedBlockers = [];
+  for (const b of allBlockerTexts) {
+    const ids = b.match(/tmp_r\d+_q\d+/g);
+    if (ids && ids.length > 0) {
+      ids.forEach((id) => perItemBlockerIds.add(id));
+    } else {
+      // Blocker without specific item ID — applies to whole batch
+      unmatchedBlockers.push(b);
+    }
+  }
+
+  // Whole-batch blockers (no item IDs) still block all items, but only if overall scores are low
+  const batchBlocked = unmatchedBlockers.length > 0 && (
+    (review.overall_score < MIN_REVIEW_OVERALL) ||
+    (consistency.overall_ets_similarity < MIN_ETS_SIMILARITY) ||
+    (consistency.overall_solvability < MIN_SOLVABILITY)
+  );
+
   for (const q of balancePassed) {
     const score = scoreMap.has(q.id) ? scoreMap.get(q.id) : 0;
     const c = cMap.get(q.id) || { ets: 0, solvability: 0 };
-    const blocked = (
-      (review.blockers.length > 0 && review.overall_score < MIN_REVIEW_OVERALL) ||
-      (consistency.blockers.length > 0 && (
-        consistency.overall_ets_similarity < MIN_ETS_SIMILARITY ||
-        consistency.overall_solvability < MIN_SOLVABILITY
-      ))
-    );
-    if (blocked || score < MIN_REVIEW_SCORE || c.ets < MIN_ETS_SIMILARITY || c.solvability < MIN_SOLVABILITY) {
+    const itemBlocked = perItemBlockerIds.has(q.id) || batchBlocked;
+    if (itemBlocked || score < MIN_REVIEW_SCORE || c.ets < MIN_ETS_SIMILARITY || c.solvability < MIN_SOLVABILITY) {
       const type = resolvedAnswerType(q);
       out.rejected += 1;
       let r = "";
-      if (blocked) {
-        const b = [...review.blockers, ...consistency.blockers].filter(Boolean).join("|");
-        r = `review:blocker:${b}`;
+      if (itemBlocked) {
+        // Include only the blockers relevant to this item
+        const relevantBlockers = allBlockerTexts.filter((b) =>
+          b.includes(q.id) || (!b.match(/tmp_r\d+_q\d+/) && batchBlocked)
+        );
+        r = `review:blocker:${relevantBlockers.join("|") || "batch-level"}`;
       } else if (score < MIN_REVIEW_SCORE) {
         r = `review:score<${MIN_REVIEW_SCORE}`;
       } else if (c.ets < MIN_ETS_SIMILARITY) {
