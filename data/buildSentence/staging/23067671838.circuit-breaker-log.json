@@ -1,0 +1,1436 @@
+{
+  "generated_at": "2026-03-13T20:43:48.574Z",
+  "active": {
+    "direct": {
+      "sinceRound": 31,
+      "untilRound": 34,
+      "lastEvent": {
+        "triggeredAt": "2026-03-13T20:42:01.684Z",
+        "round": 31,
+        "mode": "normal",
+        "type": "direct",
+        "generated": 6,
+        "accepted": 1,
+        "rejected": 5,
+        "acceptRate": 0.167,
+        "reasons": [
+          [
+            "review:ets<72",
+            2
+          ],
+          [
+            "review:blocker:tmp_r29_q3: distractor DIRECTLY replaces one word to form a valid sentence — 'find' replaces 'found' in position 1 (after prefilled 'I'), producing 'I find the soup and the bread absolutely wonderful tonight.' which is grammatical (present simple, generic statement); this is an exact 1:1 positional substitution with no rearrangement required",
+            1
+          ],
+          [
+            "review:blocker:tmp_r29_q5: prompt/answer mismatch (prompt asks how the cooking class went last weekend, implying a past event with evaluative detail; answer omits any mention of last weekend and does not address 'how it went', making it a non-responsive reply)|tmp_r29_q5: distractor DIRECTLY replaces one word to form a valid sentence — 'enjoy' replaces 'enjoyed' in position 1 (after prefilled 'I'), producing 'I enjoy the hands-on cooking session at the community kitchen.' which is grammatical (present simple); this is an exact 1:1 positional substitution with no rearrangement required",
+            1
+          ],
+          [
+            "review:blocker:tmp_r31_q5: distractor DIRECTLY replaces one word to form a valid sentence — 'find' can directly replace 'found' in 'I found the repair work at home much harder than expected' to yield 'I find the repair work at home much harder than expected', which is grammatical (simple present, expressing ongoing opinion)|tmp_r31_q5: distractor DIRECTLY replaces one word to form a valid sentence — 'find' replaces 'found' in exactly the same position (I find the repair work at home much harder than expected) producing a grammatical sentence with no rearrangement needed",
+            1
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 29,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 1
+              },
+              {
+                "type": "direct",
+                "difficulty": "medium",
+                "count": 4
+              }
+            ],
+            "stats": {
+              "generated": 4,
+              "accepted": 1,
+              "rejected": 3,
+              "reasons": {
+                "review:ets<72": 1,
+                "review:blocker:tmp_r29_q3: distractor DIRECTLY replaces one word to form a valid sentence — 'find' replaces 'found' in position 1 (after prefilled 'I'), producing 'I find the soup and the bread absolutely wonderful tonight.' which is grammatical (present simple, generic statement); this is an exact 1:1 positional substitution with no rearrangement required": 1,
+                "review:blocker:tmp_r29_q5: prompt/answer mismatch (prompt asks how the cooking class went last weekend, implying a past event with evaluative detail; answer omits any mention of last weekend and does not address 'how it went', making it a non-responsive reply)|tmp_r29_q5: distractor DIRECTLY replaces one word to form a valid sentence — 'enjoy' replaces 'enjoyed' in position 1 (after prefilled 'I'), producing 'I enjoy the hands-on cooking session at the community kitchen.' which is grammatical (present simple); this is an exact 1:1 positional substitution with no rearrangement required": 1
+              }
+            }
+          },
+          {
+            "round": 30,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 5
+              }
+            ],
+            "stats": {
+              "generated": 0,
+              "accepted": 0,
+              "rejected": 0,
+              "reasons": {}
+            }
+          },
+          {
+            "round": 31,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 3
+              },
+              {
+                "type": "direct",
+                "difficulty": "medium",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 2,
+              "accepted": 0,
+              "rejected": 2,
+              "reasons": {
+                "review:ets<72": 1,
+                "review:blocker:tmp_r31_q5: distractor DIRECTLY replaces one word to form a valid sentence — 'find' can directly replace 'found' in 'I found the repair work at home much harder than expected' to yield 'I find the repair work at home much harder than expected', which is grammatical (simple present, expressing ongoing opinion)|tmp_r31_q5: distractor DIRECTLY replaces one word to form a valid sentence — 'find' replaces 'found' in exactly the same position (I find the repair work at home much harder than expected) producing a grammatical sentence with no rearrangement needed": 1
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 34
+      }
+    }
+  },
+  "events": [
+    {
+      "triggeredAt": "2026-03-13T19:55:10.349Z",
+      "round": 4,
+      "mode": "normal",
+      "type": "direct",
+      "generated": 6,
+      "accepted": 0,
+      "rejected": 6,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:score<78",
+          2
+        ],
+        [
+          "runtime: question tmp_r4_q2: bank must not contain duplicates",
+          1
+        ],
+        [
+          "review:blocker:tmp_r4_q1: multiple valid chunk orders — with chunks 'offers', 'a wide variety', 'of classes', 'downtown' and prefilled 'the yoga studio', the chunk 'downtown' can plausibly appear either before 'offers' (yielding 'The yoga studio downtown offers a wide variety of classes') or after 'of classes' (yielding 'The yoga studio offers a wide variety of classes downtown'), both of which are grammatically valid English sentences, creating ambiguous arrangement.",
+          1
+        ],
+        [
+          "review:blocker:tmp_r4_q9: distractor 'enjoy' directly replaces 'enjoyed' (one word, same position — simple base-form vs. past-form swap), producing 'I really enjoy the special exhibit on ancient cultures' which is a grammatical, natural English sentence in simple present tense",
+          1
+        ],
+        [
+          "review:ets<72",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 6,
+            "accepted": 0,
+            "rejected": 6,
+            "reasons": {
+              "runtime: question tmp_r4_q2: bank must not contain duplicates": 1,
+              "review:blocker:tmp_r4_q1: multiple valid chunk orders — with chunks 'offers', 'a wide variety', 'of classes', 'downtown' and prefilled 'the yoga studio', the chunk 'downtown' can plausibly appear either before 'offers' (yielding 'The yoga studio downtown offers a wide variety of classes') or after 'of classes' (yielding 'The yoga studio offers a wide variety of classes downtown'), both of which are grammatically valid English sentences, creating ambiguous arrangement.": 1,
+              "review:score<78": 2,
+              "review:blocker:tmp_r4_q9: distractor 'enjoy' directly replaces 'enjoyed' (one word, same position — simple base-form vs. past-form swap), producing 'I really enjoy the special exhibit on ancient cultures' which is a grammatical, natural English sentence in simple present tense": 1,
+              "review:ets<72": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 7
+    },
+    {
+      "triggeredAt": "2026-03-13T19:58:03.445Z",
+      "round": 5,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 5,
+      "accepted": 0,
+      "rejected": 5,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:ets<72",
+          2
+        ],
+        [
+          "review:blocker:tmp_r4_q4: distractor 'received' directly replaces 'receive' (one word, same position) and 'I did not received any confirmation about the delivery date' is ungrammatical — but more critically, 'received' could plausibly replace 'did not receive' block if student drops 'did not' and uses 'received' instead, creating confusion; however the core blocker is that 'received' sits in chunks alongside 'did not' + 'receive', making it ambiguous whether student should choose 'did not receive' or just 'received' (the distractor competes directly with 'receive' at position 2, one-to-one substitution producing an ungrammatical but tempting form — flag as distractor replaces one word at same position)",
+          1
+        ],
+        [
+          "review:solvability<78",
+          1
+        ],
+        [
+          "review:blocker:tmp_r5_q8: prompt/answer mismatch — the prompt asks what the frustrated customer SAYS about the home repair service, but the answer ('The frustrated customer did not understand what the repairman explained') describes a cognitive state/past event rather than a complaint or statement about the service; more critically, the answer does not meaningfully respond to a question about what the customer says about the service — the answer is plausible but borderline. Downgrading to point deduction only.",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "review:blocker:tmp_r4_q4: distractor 'received' directly replaces 'receive' (one word, same position) and 'I did not received any confirmation about the delivery date' is ungrammatical — but more critically, 'received' could plausibly replace 'did not receive' block if student drops 'did not' and uses 'received' instead, creating confusion; however the core blocker is that 'received' sits in chunks alongside 'did not' + 'receive', making it ambiguous whether student should choose 'did not receive' or just 'received' (the distractor competes directly with 'receive' at position 2, one-to-one substitution producing an ungrammatical but tempting form — flag as distractor replaces one word at same position)": 1,
+              "review:ets<72": 2
+            }
+          }
+        },
+        {
+          "round": 5,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "easy",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:solvability<78": 1,
+              "review:blocker:tmp_r5_q8: prompt/answer mismatch — the prompt asks what the frustrated customer SAYS about the home repair service, but the answer ('The frustrated customer did not understand what the repairman explained') describes a cognitive state/past event rather than a complaint or statement about the service; more critically, the answer does not meaningfully respond to a question about what the customer says about the service — the answer is plausible but borderline. Downgrading to point deduction only.": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 8
+    },
+    {
+      "triggeredAt": "2026-03-13T19:58:03.446Z",
+      "round": 5,
+      "mode": "normal",
+      "type": "interrogative",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:solvability<78",
+          2
+        ],
+        [
+          "review:blocker:tmp_r5_q1: indirect question clause uses inverted word order — 'when the new exhibition opens' is declarative and correct, but the outer frame 'Could you tell me when...' is an indirect question and the embedded clause is fine; however, the answer IS a direct question (interrogative sentence ending in '?') when the prompt asks what you ASK — this is acceptable for an 'ask' item, so no inversion blocker. Re-evaluating: embedded clause 'when the new exhibition opens' uses declarative order ✓. No inversion blocker.",
+          1
+        ],
+        [
+          "review:blocker:tmp_r5_q3: multiple valid chunk orders — 'the community center' and 'event' are separate chunks, allowing assembly as 'Can you remind me where the community center event is held?' (correct) but also potentially 'Can you remind me where event the community center is held?' which is ungrammatical, so order is constrained. However, 'event' as a standalone chunk adjacent to 'the community center' chunk creates ambiguity about whether the noun phrase is split across two chunks unnecessarily. Downgrading to point deduction.|tmp_r5_q3: clearly ambiguous order — chunks 'the community center' and 'event' are listed separately, allowing student to assemble 'where the community center event is held' OR potentially 'where the event the community center is held', creating ordering ambiguity for those two adjacent chunks",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 5,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "easy",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 4,
+            "accepted": 0,
+            "rejected": 4,
+            "reasons": {
+              "review:blocker:tmp_r5_q1: indirect question clause uses inverted word order — 'when the new exhibition opens' is declarative and correct, but the outer frame 'Could you tell me when...' is an indirect question and the embedded clause is fine; however, the answer IS a direct question (interrogative sentence ending in '?') when the prompt asks what you ASK — this is acceptable for an 'ask' item, so no inversion blocker. Re-evaluating: embedded clause 'when the new exhibition opens' uses declarative order ✓. No inversion blocker.": 1,
+              "review:solvability<78": 2,
+              "review:blocker:tmp_r5_q3: multiple valid chunk orders — 'the community center' and 'event' are separate chunks, allowing assembly as 'Can you remind me where the community center event is held?' (correct) but also potentially 'Can you remind me where event the community center is held?' which is ungrammatical, so order is constrained. However, 'event' as a standalone chunk adjacent to 'the community center' chunk creates ambiguity about whether the noun phrase is split across two chunks unnecessarily. Downgrading to point deduction.|tmp_r5_q3: clearly ambiguous order — chunks 'the community center' and 'event' are listed separately, allowing student to assemble 'where the community center event is held' OR potentially 'where the event the community center is held', creating ordering ambiguity for those two adjacent chunks": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 8
+    },
+    {
+      "triggeredAt": "2026-03-13T20:00:38.145Z",
+      "round": 6,
+      "mode": "normal",
+      "type": "relative",
+      "generated": 8,
+      "accepted": 1,
+      "rejected": 7,
+      "acceptRate": 0.125,
+      "reasons": [
+        [
+          "review:ets<72",
+          5
+        ],
+        [
+          "review:blocker:tmp_r5_q5: multiple valid chunk orders — chunks include 'i', 'attended', 'last weekend'; with prefilled 'the cooking class', a learner could plausibly arrange as 'The cooking class I attended was really enjoyable last weekend' (moving 'last weekend' to end), which is also grammatical. This constitutes an ambiguous arrangement blocker.",
+          1
+        ],
+        [
+          "fatal: chunks[3]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:ets<72": 1
+            }
+          }
+        },
+        {
+          "round": 5,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "easy",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r5_q5: multiple valid chunk orders — chunks include 'i', 'attended', 'last weekend'; with prefilled 'the cooking class', a learner could plausibly arrange as 'The cooking class I attended was really enjoyable last weekend' (moving 'last weekend' to end), which is also grammatical. This constitutes an ambiguous arrangement blocker.": 1
+            }
+          }
+        },
+        {
+          "round": 6,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 6,
+            "accepted": 1,
+            "rejected": 5,
+            "reasons": {
+              "fatal: chunks[3]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "review:ets<72": 4
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 9
+    },
+    {
+      "triggeredAt": "2026-03-13T20:17:40.569Z",
+      "round": 16,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:score<78",
+          3
+        ],
+        [
+          "review:blocker:tmp_r14_q1: chunk 'found' appears in both the chunk list and as the distractor AND 'found' is the past tense of 'find' — learners may attempt 'I found the cooking oil on that shelf' (dropping 'did not', repurposing 'found') producing a valid affirmative sentence; the presence of both 'did not' and 'found' as separate usable tiles creates genuine ambiguity about which to discard as the distractor, constituting an ambiguous-order blocker.",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 14,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r14_q1: chunk 'found' appears in both the chunk list and as the distractor AND 'found' is the past tense of 'find' — learners may attempt 'I found the cooking oil on that shelf' (dropping 'did not', repurposing 'found') producing a valid affirmative sentence; the presence of both 'did not' and 'found' as separate usable tiles creates genuine ambiguity about which to discard as the distractor, constituting an ambiguous-order blocker.": 1
+            }
+          }
+        },
+        {
+          "round": 15,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:score<78": 2
+            }
+          }
+        },
+        {
+          "round": 16,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:score<78": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 19
+    },
+    {
+      "triggeredAt": "2026-03-13T20:25:45.314Z",
+      "round": 20,
+      "mode": "normal",
+      "type": "interrogative",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r19_q1: grammar incorrect in the answer sentence — 'Do you know when the registration deadline had been extended?' uses past perfect ('had been extended') incorrectly; the embedded clause asks about a current status or recent event, requiring present perfect ('has been extended') or simple past ('was extended'), not past perfect|tmp_r19_q1: indirect question clause uses inverted word order — 'Do you know when the registration deadline had been extended?' is a direct yes/no question at the outer level, but the embedded 'when' clause is declarative order (acceptable); however the outer frame IS a direct polar question rather than a polite embedded structure, making this a borderline structural issue; more critically the past perfect is a grammar blocker as noted above|tmp_r19_q1: ungrammatical answer — 'Do you know when the registration deadline had been extended?' uses past perfect in a context requiring simple past or present perfect ('has been extended'); 'had been extended' implies a prior past reference point not established, making the sentence pragmatically and grammatically anomalous as a natural inquiry|tmp_r19_q1: indirect question uses inverted word order — prefilled 'do you' + 'know' produces 'Do you know when...?' which is a direct yes/no question with an embedded clause, but the outer frame IS inverted (do you), meaning the item is a direct interrogative, not a declarative; this violates the TPO core test that indirect/embedded questions use declarative word order in the OUTER frame",
+          1
+        ],
+        [
+          "review:blocker:tmp_r19_q3: indirect question uses inverted word order — 'Can you remind me when...?' uses inverted outer frame (can you), same violation as q1; the outer clause is a direct interrogative, not a declarative statement with embedded question",
+          1
+        ],
+        [
+          "review:blocker:tmp_r19_q2: indirect question uses inverted word order — 'Could you tell me whether...?' uses inverted outer frame (could you), same structural violation; not a declarative statement",
+          1
+        ],
+        [
+          "review:blocker:tmp_r20_q5: indirect question clause uses inverted word order — 'Could you tell me how the donations have been allocated?' contains the interrogative frame 'Could you…' which is a direct question, not a declarative indirect-question structure; the embedded clause 'how the donations have been allocated' is itself declarative order, but the overall sentence is a direct question when the item type requires an indirect/embedded statement",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 18,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 19,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 3
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "review:blocker:tmp_r19_q1: grammar incorrect in the answer sentence — 'Do you know when the registration deadline had been extended?' uses past perfect ('had been extended') incorrectly; the embedded clause asks about a current status or recent event, requiring present perfect ('has been extended') or simple past ('was extended'), not past perfect|tmp_r19_q1: indirect question clause uses inverted word order — 'Do you know when the registration deadline had been extended?' is a direct yes/no question at the outer level, but the embedded 'when' clause is declarative order (acceptable); however the outer frame IS a direct polar question rather than a polite embedded structure, making this a borderline structural issue; more critically the past perfect is a grammar blocker as noted above|tmp_r19_q1: ungrammatical answer — 'Do you know when the registration deadline had been extended?' uses past perfect in a context requiring simple past or present perfect ('has been extended'); 'had been extended' implies a prior past reference point not established, making the sentence pragmatically and grammatically anomalous as a natural inquiry|tmp_r19_q1: indirect question uses inverted word order — prefilled 'do you' + 'know' produces 'Do you know when...?' which is a direct yes/no question with an embedded clause, but the outer frame IS inverted (do you), meaning the item is a direct interrogative, not a declarative; this violates the TPO core test that indirect/embedded questions use declarative word order in the OUTER frame": 1,
+              "review:blocker:tmp_r19_q3: indirect question uses inverted word order — 'Can you remind me when...?' uses inverted outer frame (can you), same violation as q1; the outer clause is a direct interrogative, not a declarative statement with embedded question": 1,
+              "review:blocker:tmp_r19_q2: indirect question uses inverted word order — 'Could you tell me whether...?' uses inverted outer frame (could you), same structural violation; not a declarative statement": 1
+            }
+          }
+        },
+        {
+          "round": 20,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 4
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r20_q5: indirect question clause uses inverted word order — 'Could you tell me how the donations have been allocated?' contains the interrogative frame 'Could you…' which is a direct question, not a declarative indirect-question structure; the embedded clause 'how the donations have been allocated' is itself declarative order, but the overall sentence is a direct question when the item type requires an indirect/embedded statement": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 23
+    },
+    {
+      "triggeredAt": "2026-03-13T20:28:05.546Z",
+      "round": 22,
+      "mode": "normal",
+      "type": "direct",
+      "generated": 5,
+      "accepted": 0,
+      "rejected": 5,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r19_q5: distractor DIRECTLY replaces one word to form a valid sentence — distractor 'who' can directly replace 'whom' in the same position: 'The software developer wondered who the team had assigned the system update to.' — this is grammatically acceptable in standard/informal English and many style guides, making the distractor a near-valid 1:1 substitution that does not clearly distinguish correct from incorrect|tmp_r19_q5: distractor DIRECTLY replaces one word to form a valid sentence — 'who' can replace 'whom' at exactly the same position ('The software developer wondered who the team had assigned the system update to') producing a grammatical, commonly accepted sentence (object 'who' is widely accepted in informal/standard English), making this a direct 1:1 substitution blocker",
+          1
+        ],
+        [
+          "review:blocker:tmp_r20_q4: chunk fragmentation creates ambiguous assembly — 'needed', 'to', 'find', 'out' are four separate single-word chunks that form a phrasal verb collocation; students may plausibly order them as 'needed to out find', 'needed find to out', etc., making the assembly order unclear without positional anchoring. Multiple valid-seeming orderings exist.",
+          1
+        ],
+        [
+          "review:blocker:tmp_r22_q2: distractor DIRECTLY replaces one word to form a valid sentence — 'who' can replace 'whom' in the same position ('The supervisor wondered who the new menu had been approved by.') producing a grammatical, commonly accepted sentence via simple 1:1 substitution|tmp_r22_q2: distractor DIRECTLY replaces one word to form a valid sentence — 'who' can replace 'whom' in the same position ('The supervisor wondered who the new menu had been approved by.') producing a grammatical, natural sentence; simple 1:1 substitution blocker confirmed",
+          1
+        ],
+        [
+          "review:score<78",
+          1
+        ],
+        [
+          "review:ets<72",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 19,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 3
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r19_q5: distractor DIRECTLY replaces one word to form a valid sentence — distractor 'who' can directly replace 'whom' in the same position: 'The software developer wondered who the team had assigned the system update to.' — this is grammatically acceptable in standard/informal English and many style guides, making the distractor a near-valid 1:1 substitution that does not clearly distinguish correct from incorrect|tmp_r19_q5: distractor DIRECTLY replaces one word to form a valid sentence — 'who' can replace 'whom' at exactly the same position ('The software developer wondered who the team had assigned the system update to') producing a grammatical, commonly accepted sentence (object 'who' is widely accepted in informal/standard English), making this a direct 1:1 substitution blocker": 1
+            }
+          }
+        },
+        {
+          "round": 20,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 4
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r20_q4: chunk fragmentation creates ambiguous assembly — 'needed', 'to', 'find', 'out' are four separate single-word chunks that form a phrasal verb collocation; students may plausibly order them as 'needed to out find', 'needed find to out', etc., making the assembly order unclear without positional anchoring. Multiple valid-seeming orderings exist.": 1
+            }
+          }
+        },
+        {
+          "round": 22,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 4
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "review:blocker:tmp_r22_q2: distractor DIRECTLY replaces one word to form a valid sentence — 'who' can replace 'whom' in the same position ('The supervisor wondered who the new menu had been approved by.') producing a grammatical, commonly accepted sentence via simple 1:1 substitution|tmp_r22_q2: distractor DIRECTLY replaces one word to form a valid sentence — 'who' can replace 'whom' in the same position ('The supervisor wondered who the new menu had been approved by.') producing a grammatical, natural sentence; simple 1:1 substitution blocker confirmed": 1,
+              "review:score<78": 1,
+              "review:ets<72": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 25
+    },
+    {
+      "triggeredAt": "2026-03-13T20:29:24.192Z",
+      "round": 23,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]",
+          3
+        ],
+        [
+          "review:blocker:tmp_r23_q3: multiple valid chunk orders — the chunk 'i' (non-prefilled, appearing mid-sentence) and 'ordered' can be arranged ambiguously; additionally, the chunk list contains a standalone 'i' chunk alongside the prefilled 'i', creating a duplicate that enables at least two valid placements and structural ambiguity in assembly|tmp_r23_q3: distractor DIRECTLY replaces one word — 'order' can directly replace 'ordered' in position to yield 'I do not remember if I order dessert at the restaurant,' which, while a tense shift, follows the same structural slot; more critically, the standalone 'i' chunk in the chunk list is a second 'i' that duplicates the prefilled token, making the item unassemblable as designed|tmp_r23_q3: distractor 'order' directly replaces 'ordered' (same position, same slot) and produces a grammatical sentence 'I do not remember if I order dessert at the restaurant' — simple 1:1 substitution with only a morphological swap, qualifying as a direct single-word replacement blocker",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 20,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 4
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 22,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 4
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]": 1
+            }
+          }
+        },
+        {
+          "round": 23,
+          "spec": [
+            {
+              "type": "1st-embedded",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]": 2,
+              "review:blocker:tmp_r23_q3: multiple valid chunk orders — the chunk 'i' (non-prefilled, appearing mid-sentence) and 'ordered' can be arranged ambiguously; additionally, the chunk list contains a standalone 'i' chunk alongside the prefilled 'i', creating a duplicate that enables at least two valid placements and structural ambiguity in assembly|tmp_r23_q3: distractor DIRECTLY replaces one word — 'order' can directly replace 'ordered' in position to yield 'I do not remember if I order dessert at the restaurant,' which, while a tense shift, follows the same structural slot; more critically, the standalone 'i' chunk in the chunk list is a second 'i' that duplicates the prefilled token, making the item unassemblable as designed|tmp_r23_q3: distractor 'order' directly replaces 'ordered' (same position, same slot) and produces a grammatical sentence 'I do not remember if I order dessert at the restaurant' — simple 1:1 substitution with only a morphological swap, qualifying as a direct single-word replacement blocker": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 26
+    },
+    {
+      "triggeredAt": "2026-03-13T20:35:27.008Z",
+      "round": 27,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 9,
+      "accepted": 0,
+      "rejected": 9,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:ets<72",
+          2
+        ],
+        [
+          "review:solvability<78",
+          2
+        ],
+        [
+          "review:blocker:tmp_r25_q3: prompt/answer mismatch (prompt asks what you discovered at the career fair, but answer states you have not been told which position has been filled — reporting ignorance rather than a discovery, which does not respond to the prompt)|tmp_r25_q3: clearly ambiguous order — the prompt asks what you 'discovered' but the answer is 'I have not been told,' which contradicts the verb in the prompt ('discover'). The mismatch between prompt and answer creates a logic/content blocker: a student cannot reasonably infer 'I have not been told' as the answer to 'What did you discover.' This is a critical content-logic ambiguity blocker.",
+          1
+        ],
+        [
+          "review:blocker:tmp_r26_q3: prompt/answer mismatch — the prompt asks what the volunteer 'tells' the coordinator about the new map, implying communication of information, but the answer 'The volunteer did not receive the updated trail map yet' is a third-person report that does not plausibly represent what a volunteer would say to the coordinator about the map in a natural conversational context; the prompt_task_kind is 'respond' yet the answer reads as a narrator's report rather than a direct statement the volunteer would make.",
+          1
+        ],
+        [
+          "review:blocker:tmp_r26_q5: prompt/answer mismatch — the prompt asks 'What did the shop owner say about the new cooking supplies that arrived last week?' implying the shop owner commented on supplies that already arrived, but the answer 'The shop owner did not stock the new cooking supplies yet' contradicts the premise that the supplies arrived last week and is an odd response to the prompt.",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 25,
+          "spec": [
+            {
+              "type": "1st-embedded",
+              "difficulty": "hard",
+              "count": 4
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r25_q3: prompt/answer mismatch (prompt asks what you discovered at the career fair, but answer states you have not been told which position has been filled — reporting ignorance rather than a discovery, which does not respond to the prompt)|tmp_r25_q3: clearly ambiguous order — the prompt asks what you 'discovered' but the answer is 'I have not been told,' which contradicts the verb in the prompt ('discover'). The mismatch between prompt and answer creates a logic/content blocker: a student cannot reasonably infer 'I have not been told' as the answer to 'What did you discover.' This is a critical content-logic ambiguity blocker.": 1
+            }
+          }
+        },
+        {
+          "round": 26,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 4,
+            "accepted": 0,
+            "rejected": 4,
+            "reasons": {
+              "review:ets<72": 2,
+              "review:blocker:tmp_r26_q3: prompt/answer mismatch — the prompt asks what the volunteer 'tells' the coordinator about the new map, implying communication of information, but the answer 'The volunteer did not receive the updated trail map yet' is a third-person report that does not plausibly represent what a volunteer would say to the coordinator about the map in a natural conversational context; the prompt_task_kind is 'respond' yet the answer reads as a narrator's report rather than a direct statement the volunteer would make.": 1,
+              "review:blocker:tmp_r26_q5: prompt/answer mismatch — the prompt asks 'What did the shop owner say about the new cooking supplies that arrived last week?' implying the shop owner commented on supplies that already arrived, but the answer 'The shop owner did not stock the new cooking supplies yet' contradicts the premise that the supplies arrived last week and is an odd response to the prompt.": 1
+            }
+          }
+        },
+        {
+          "round": 27,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 4,
+            "accepted": 0,
+            "rejected": 4,
+            "reasons": {
+              "review:blocker:tmp_r27_q3: chunk 'the assigned' is a non-natural mid-phrase split — 'assigned' alone or 'the assigned reading' as one chunk would be more standard; splitting 'the' from 'assigned' creates an awkward two-word chunk that is not a natural collocation and may cause assembly confusion.": 1,
+              "review:solvability<78": 2,
+              "review:blocker:tmp_r27_q5: prompt/answer mismatch — the prompt asks what the intern said about 'understanding the training schedule,' but the answer 'The new intern did not understand what the training schedule said' shifts the embedded clause to report what the schedule said rather than whether the intern understood it; this is a meaningful semantic drift though arguably borderline.|tmp_r27_q5: ambiguous answer relative to prompt — prompt asks what the intern said 'about understanding the training schedule,' but answer shifts to 'did not understand what the training schedule said,' introducing a nested embedded clause ('what the training schedule said') not clearly cued by the prompt, creating potential ambiguity about intended meaning.": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 30
+    },
+    {
+      "triggeredAt": "2026-03-13T20:42:01.684Z",
+      "round": 31,
+      "mode": "normal",
+      "type": "direct",
+      "generated": 6,
+      "accepted": 1,
+      "rejected": 5,
+      "acceptRate": 0.167,
+      "reasons": [
+        [
+          "review:ets<72",
+          2
+        ],
+        [
+          "review:blocker:tmp_r29_q3: distractor DIRECTLY replaces one word to form a valid sentence — 'find' replaces 'found' in position 1 (after prefilled 'I'), producing 'I find the soup and the bread absolutely wonderful tonight.' which is grammatical (present simple, generic statement); this is an exact 1:1 positional substitution with no rearrangement required",
+          1
+        ],
+        [
+          "review:blocker:tmp_r29_q5: prompt/answer mismatch (prompt asks how the cooking class went last weekend, implying a past event with evaluative detail; answer omits any mention of last weekend and does not address 'how it went', making it a non-responsive reply)|tmp_r29_q5: distractor DIRECTLY replaces one word to form a valid sentence — 'enjoy' replaces 'enjoyed' in position 1 (after prefilled 'I'), producing 'I enjoy the hands-on cooking session at the community kitchen.' which is grammatical (present simple); this is an exact 1:1 positional substitution with no rearrangement required",
+          1
+        ],
+        [
+          "review:blocker:tmp_r31_q5: distractor DIRECTLY replaces one word to form a valid sentence — 'find' can directly replace 'found' in 'I found the repair work at home much harder than expected' to yield 'I find the repair work at home much harder than expected', which is grammatical (simple present, expressing ongoing opinion)|tmp_r31_q5: distractor DIRECTLY replaces one word to form a valid sentence — 'find' replaces 'found' in exactly the same position (I find the repair work at home much harder than expected) producing a grammatical sentence with no rearrangement needed",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 29,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 4,
+            "accepted": 1,
+            "rejected": 3,
+            "reasons": {
+              "review:ets<72": 1,
+              "review:blocker:tmp_r29_q3: distractor DIRECTLY replaces one word to form a valid sentence — 'find' replaces 'found' in position 1 (after prefilled 'I'), producing 'I find the soup and the bread absolutely wonderful tonight.' which is grammatical (present simple, generic statement); this is an exact 1:1 positional substitution with no rearrangement required": 1,
+              "review:blocker:tmp_r29_q5: prompt/answer mismatch (prompt asks how the cooking class went last weekend, implying a past event with evaluative detail; answer omits any mention of last weekend and does not address 'how it went', making it a non-responsive reply)|tmp_r29_q5: distractor DIRECTLY replaces one word to form a valid sentence — 'enjoy' replaces 'enjoyed' in position 1 (after prefilled 'I'), producing 'I enjoy the hands-on cooking session at the community kitchen.' which is grammatical (present simple); this is an exact 1:1 positional substitution with no rearrangement required": 1
+            }
+          }
+        },
+        {
+          "round": 30,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 31,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:ets<72": 1,
+              "review:blocker:tmp_r31_q5: distractor DIRECTLY replaces one word to form a valid sentence — 'find' can directly replace 'found' in 'I found the repair work at home much harder than expected' to yield 'I find the repair work at home much harder than expected', which is grammatical (simple present, expressing ongoing opinion)|tmp_r31_q5: distractor DIRECTLY replaces one word to form a valid sentence — 'find' replaces 'found' in exactly the same position (I find the repair work at home much harder than expected) producing a grammatical sentence with no rearrangement needed": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 34
+    }
+  ],
+  "history": [
+    {
+      "round": 27,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 5
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 4,
+          "accepted": 0,
+          "rejected": 4,
+          "reasons": {
+            "review:blocker:tmp_r27_q3: chunk 'the assigned' is a non-natural mid-phrase split — 'assigned' alone or 'the assigned reading' as one chunk would be more standard; splitting 'the' from 'assigned' creates an awkward two-word chunk that is not a natural collocation and may cause assembly confusion.": 1,
+            "review:solvability<78": 2,
+            "review:blocker:tmp_r27_q5: prompt/answer mismatch — the prompt asks what the intern said about 'understanding the training schedule,' but the answer 'The new intern did not understand what the training schedule said' shifts the embedded clause to report what the schedule said rather than whether the intern understood it; this is a meaningful semantic drift though arguably borderline.|tmp_r27_q5: ambiguous answer relative to prompt — prompt asks what the intern said 'about understanding the training schedule,' but answer shifts to 'did not understand what the training schedule said,' introducing a nested embedded clause ('what the training schedule said') not clearly cued by the prompt, creating potential ambiguity about intended meaning.": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 1,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 28,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 5
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 4,
+          "accepted": 0,
+          "rejected": 4,
+          "reasons": {
+            "topic:repeat": 1,
+            "review:score<78": 3
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 1,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 29,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 1
+        },
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 4
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "topic:repeat": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 4,
+          "accepted": 1,
+          "rejected": 3,
+          "reasons": {
+            "review:ets<72": 1,
+            "review:blocker:tmp_r29_q3: distractor DIRECTLY replaces one word to form a valid sentence — 'find' replaces 'found' in position 1 (after prefilled 'I'), producing 'I find the soup and the bread absolutely wonderful tonight.' which is grammatical (present simple, generic statement); this is an exact 1:1 positional substitution with no rearrangement required": 1,
+            "review:blocker:tmp_r29_q5: prompt/answer mismatch (prompt asks how the cooking class went last weekend, implying a past event with evaluative detail; answer omits any mention of last weekend and does not address 'how it went', making it a non-responsive reply)|tmp_r29_q5: distractor DIRECTLY replaces one word to form a valid sentence — 'enjoy' replaces 'enjoyed' in position 1 (after prefilled 'I'), producing 'I enjoy the hands-on cooking session at the community kitchen.' which is grammatical (present simple); this is an exact 1:1 positional substitution with no rearrangement required": 1
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 30,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 5
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 4,
+          "accepted": 2,
+          "rejected": 2,
+          "reasons": {
+            "review:blocker:tmp_r30_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'I did not renewed my membership before the deadline' is ungrammatical, BUT 'renewed' could replace 'renew' (same position, same slot) yielding 'I did not renewed...' which is ungrammatical. However, the real blocker is that the distractor chunk 'renewed' appears BOTH as a chunk and as the distractor, making it impossible to distinguish which is the answer token vs. the distractor — the chunk list contains 'renewed' as both a selectable chunk AND the labeled distractor, creating a presentation ambiguity where learners see two identical tokens.": 1,
+            "review:score<78": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 1,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 31,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 3,
+          "accepted": 0,
+          "rejected": 3,
+          "reasons": {
+            "pool:low_assembly_value": 2,
+            "review:ets<72": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "review:ets<72": 1,
+            "review:blocker:tmp_r31_q5: distractor DIRECTLY replaces one word to form a valid sentence — 'find' can directly replace 'found' in 'I found the repair work at home much harder than expected' to yield 'I find the repair work at home much harder than expected', which is grammatical (simple present, expressing ongoing opinion)|tmp_r31_q5: distractor DIRECTLY replaces one word to form a valid sentence — 'find' replaces 'found' in exactly the same position (I find the repair work at home much harder than expected) producing a grammatical sentence with no rearrangement needed": 1
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 32,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 2,
+          "accepted": 1,
+          "rejected": 1,
+          "reasons": {
+            "pool:low_assembly_value": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r32_q3: prompt/answer mismatch — the prompt asks 'What did the enthusiastic intern say about the project deadline?' implying the intern made a statement about the deadline, but the answer 'The intern did not know when the project deadline was' reports that the intern lacked knowledge, which does not constitute something the intern said; additionally the prompt introduces 'enthusiastic' as a character trait that is entirely absent and contradicted by the answer content": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "review:ets<72": 1,
+            "review:blocker:tmp_r32_q5: chunk 'many fresh' is a multi-word chunk that does NOT constitute a natural fixed collocation — 'many fresh' is an arbitrary adjective pairing, violating the ~77% single-word chunk norm without collocation justification.": 1
+          }
+        }
+      }
+    }
+  ]
+}
