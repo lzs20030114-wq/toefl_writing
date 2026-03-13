@@ -1,0 +1,865 @@
+{
+  "generated_at": "2026-03-13T12:41:08.224Z",
+  "active": {
+    "3rd-reporting": {
+      "sinceRound": 12,
+      "untilRound": 15,
+      "lastEvent": {
+        "triggeredAt": "2026-03-13T12:38:55.245Z",
+        "round": 12,
+        "mode": "normal",
+        "type": "3rd-reporting",
+        "generated": 7,
+        "accepted": 1,
+        "rejected": 6,
+        "acceptRate": 0.143,
+        "reasons": [
+          [
+            "distractor:unsafe: \"is\" directly swaps with \"was\" in answer (tense change produces valid sentence)",
+            3
+          ],
+          [
+            "review:blocker:tmp_r10_q3: distractor 'prefers' could be inserted in place of 'preferred' to create the grammatically valid sentence 'The flight attendant wanted to know if the passenger prefers a vegetarian meal' (backshift is optional in English indirect speech)",
+            1
+          ],
+          [
+            "review:blocker:tmp_r10_q5: distractor 'sign' could be inserted in place of 'signed up' to create the grammatically valid sentence 'The local librarian was curious whether enough students sign up for it' (present tense in indirect speech is acceptable)|tmp_r10_q5: distractor likely valid in answer — 'sign' could plausibly replace 'signed up' if the student reads 'sign up for it' as an alternative phrasing, but more critically the chunk 'signed up' is a multi-word chunk whereas 'sign' is the bare-form distractor; the real risk is that a test-taker might attempt 'sign up for it' by using the distractor 'sign' + the chunk 'up' — however 'up' is not a standalone chunk, so this is borderline. Flagged for review.",
+            1
+          ],
+          [
+            "review:blocker:tmp_r12_q1: distractor likely valid in answer — 'was' can form a grammatical alternative ('asked if the entrance code was changed'), creating ambiguity about which verb chunk to use",
+            1
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 10,
+            "spec": [
+              {
+                "type": "interrogative",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 3
+              }
+            ],
+            "stats": {
+              "generated": 3,
+              "accepted": 0,
+              "rejected": 3,
+              "reasons": {
+                "distractor:unsafe: \"is\" directly swaps with \"was\" in answer (tense change produces valid sentence)": 1,
+                "review:blocker:tmp_r10_q3: distractor 'prefers' could be inserted in place of 'preferred' to create the grammatically valid sentence 'The flight attendant wanted to know if the passenger prefers a vegetarian meal' (backshift is optional in English indirect speech)": 1,
+                "review:blocker:tmp_r10_q5: distractor 'sign' could be inserted in place of 'signed up' to create the grammatically valid sentence 'The local librarian was curious whether enough students sign up for it' (present tense in indirect speech is acceptable)|tmp_r10_q5: distractor likely valid in answer — 'sign' could plausibly replace 'signed up' if the student reads 'sign up for it' as an alternative phrasing, but more critically the chunk 'signed up' is a multi-word chunk whereas 'sign' is the bare-form distractor; the real risk is that a test-taker might attempt 'sign up for it' by using the distractor 'sign' + the chunk 'up' — however 'up' is not a standalone chunk, so this is borderline. Flagged for review.": 1
+              }
+            }
+          },
+          {
+            "round": 11,
+            "spec": [
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 3
+              },
+              {
+                "type": "interrogative",
+                "difficulty": "medium",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 1,
+              "accepted": 1,
+              "rejected": 0,
+              "reasons": {}
+            }
+          },
+          {
+            "round": 12,
+            "spec": [
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 5
+              }
+            ],
+            "stats": {
+              "generated": 3,
+              "accepted": 0,
+              "rejected": 3,
+              "reasons": {
+                "distractor:unsafe: \"is\" directly swaps with \"was\" in answer (tense change produces valid sentence)": 2,
+                "review:blocker:tmp_r12_q1: distractor likely valid in answer — 'was' can form a grammatical alternative ('asked if the entrance code was changed'), creating ambiguity about which verb chunk to use": 1
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 15
+      }
+    }
+  },
+  "events": [
+    {
+      "triggeredAt": "2026-03-13T12:31:35.752Z",
+      "round": 5,
+      "mode": "normal",
+      "type": "direct",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]",
+          1
+        ],
+        [
+          "review:score<78",
+          1
+        ],
+        [
+          "review:blocker:tmp_r4_q10: multiple valid chunk orders — 'the', 'meal', 'service' are three separate single-word chunks that can be arranged as 'the meal service' but the learner could also attempt 'the service meal' or mis-sequence them; splitting a fixed noun phrase into individual article + noun + noun chunks creates ambiguous arrangement and is a chunking design error that admits incorrect but plausible orders",
+          1
+        ],
+        [
+          "distractor:unsafe: \"was\" directly swaps with \"were\" in answer (tense change produces valid sentence)",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]": 1,
+              "review:score<78": 1,
+              "review:blocker:tmp_r4_q10: multiple valid chunk orders — 'the', 'meal', 'service' are three separate single-word chunks that can be arranged as 'the meal service' but the learner could also attempt 'the service meal' or mis-sequence them; splitting a fixed noun phrase into individual article + noun + noun chunks creates ambiguous arrangement and is a chunking design error that admits incorrect but plausible orders": 1
+            }
+          }
+        },
+        {
+          "round": 5,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "distractor:unsafe: \"was\" directly swaps with \"were\" in answer (tense change produces valid sentence)": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 8
+    },
+    {
+      "triggeredAt": "2026-03-13T12:32:36.059Z",
+      "round": 6,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 7,
+      "accepted": 1,
+      "rejected": 6,
+      "acceptRate": 0.143,
+      "reasons": [
+        [
+          "review:ets<72",
+          1
+        ],
+        [
+          "review:blocker:tmp_r5_q2: multiple valid chunk orders — 'yet' can precede 'submitted' to form the equally grammatical 'I have not yet submitted the report to the supervisor', creating an ambiguous arrangement|tmp_r5_q2: distractor likely valid in answer — 'submit' could plausibly replace 'submitted' if student misreads as base form prompt, but more critically the chunk 'to the supervisor' is redundant/awkward since the supervisor is the addressee (not a blocker-level ambiguity, but noted); no true blocker here upon review",
+          1
+        ],
+        [
+          "review:blocker:tmp_r5_q3: distractor 'found' can replace 'did not' + 'find' to build the valid sentence 'The librarian found the book on the shelf', making the distractor a usable answer chunk|tmp_r5_q3: distractor likely valid in answer — 'found' is the natural simple past of 'find' and could replace 'find' after 'did not' only if the student forgets 'did not' already marks past tense, but a non-negligible number of learners will attempt 'did not found' which is ungrammatical — the distractor choice creates a confusion trap that mirrors real TPO design; however the risk is that 'found' feels like the correct past form and students may swap it in, making the answer ungrammatical. This is a distractor-validity concern, not a multiple-valid-answer blocker. Downgraded to score penalty.",
+          1
+        ],
+        [
+          "runtime: question tmp_r6_q4: bank must not contain duplicates",
+          1
+        ],
+        [
+          "review:blocker:tmp_r6_q1: distractor likely valid in answer — 'submitted' is grammatically valid as the main verb yielding 'I submitted the internship application on time' (a coherent, affirmative response to the prompt, making it a plausible answer rather than a clear distractor)",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 1,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 5,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "review:ets<72": 1,
+              "review:blocker:tmp_r5_q2: multiple valid chunk orders — 'yet' can precede 'submitted' to form the equally grammatical 'I have not yet submitted the report to the supervisor', creating an ambiguous arrangement|tmp_r5_q2: distractor likely valid in answer — 'submit' could plausibly replace 'submitted' if student misreads as base form prompt, but more critically the chunk 'to the supervisor' is redundant/awkward since the supervisor is the addressee (not a blocker-level ambiguity, but noted); no true blocker here upon review": 1,
+              "review:blocker:tmp_r5_q3: distractor 'found' can replace 'did not' + 'find' to build the valid sentence 'The librarian found the book on the shelf', making the distractor a usable answer chunk|tmp_r5_q3: distractor likely valid in answer — 'found' is the natural simple past of 'find' and could replace 'find' after 'did not' only if the student forgets 'did not' already marks past tense, but a non-negligible number of learners will attempt 'did not found' which is ungrammatical — the distractor choice creates a confusion trap that mirrors real TPO design; however the risk is that 'found' feels like the correct past form and students may swap it in, making the answer ungrammatical. This is a distractor-validity concern, not a multiple-valid-answer blocker. Downgraded to score penalty.": 1
+            }
+          }
+        },
+        {
+          "round": 6,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "runtime: question tmp_r6_q4: bank must not contain duplicates": 1,
+              "review:blocker:tmp_r6_q1: distractor likely valid in answer — 'submitted' is grammatically valid as the main verb yielding 'I submitted the internship application on time' (a coherent, affirmative response to the prompt, making it a plausible answer rather than a clear distractor)": 1,
+              "review:blocker:tmp_r6_q3: prompt/answer mismatch — the prompt asks what the flight attendant says to the passenger (implying first-person speech), but the answer is a third-person narration about the flight attendant ('The flight attendant did not have…') rather than the attendant's own words|tmp_r6_q3: ungrammatical answer — the prompt asks what the flight attendant *says* (present-tense scenario), but the answer uses simple past 'did not have', creating a pragmatic mismatch; also, the flight attendant saying they *did not have* information is an odd, unnatural response in this service context, reducing both authenticity and solvability": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 9
+    },
+    {
+      "triggeredAt": "2026-03-13T12:32:36.060Z",
+      "round": 6,
+      "mode": "normal",
+      "type": "1st-embedded",
+      "generated": 5,
+      "accepted": 1,
+      "rejected": 4,
+      "acceptRate": 0.2,
+      "reasons": [
+        [
+          "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]",
+          1
+        ],
+        [
+          "review:blocker:tmp_r4_q6: clearly ambiguous order — 'are' and 'kept' are split into two separate chunks; learners can easily produce 'I found out where the art supplies kept are' or other mis-orders; splitting a passive auxiliary from its past participle is not a natural collocation boundary and creates genuine ordering ambiguity",
+          1
+        ],
+        [
+          "distractor:unsafe: \"is\" directly swaps with \"was\" in answer (tense change produces valid sentence)",
+          1
+        ],
+        [
+          "review:blocker:tmp_r6_q2: distractor likely valid in answer — 'move' could plausibly fit a reworded construction ('I did not know the lecture was going to move to another room'), and its closeness to 'moved' may confuse rather than cleanly distract",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 1,
+            "rejected": 2,
+            "reasons": {
+              "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]": 1,
+              "review:blocker:tmp_r4_q6: clearly ambiguous order — 'are' and 'kept' are split into two separate chunks; learners can easily produce 'I found out where the art supplies kept are' or other mis-orders; splitting a passive auxiliary from its past participle is not a natural collocation boundary and creates genuine ordering ambiguity": 1
+            }
+          }
+        },
+        {
+          "round": 5,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "distractor:unsafe: \"is\" directly swaps with \"was\" in answer (tense change produces valid sentence)": 1
+            }
+          }
+        },
+        {
+          "round": 6,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r6_q2: distractor likely valid in answer — 'move' could plausibly fit a reworded construction ('I did not know the lecture was going to move to another room'), and its closeness to 'moved' may confuse rather than cleanly distract": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 9
+    },
+    {
+      "triggeredAt": "2026-03-13T12:38:55.245Z",
+      "round": 12,
+      "mode": "normal",
+      "type": "3rd-reporting",
+      "generated": 7,
+      "accepted": 1,
+      "rejected": 6,
+      "acceptRate": 0.143,
+      "reasons": [
+        [
+          "distractor:unsafe: \"is\" directly swaps with \"was\" in answer (tense change produces valid sentence)",
+          3
+        ],
+        [
+          "review:blocker:tmp_r10_q3: distractor 'prefers' could be inserted in place of 'preferred' to create the grammatically valid sentence 'The flight attendant wanted to know if the passenger prefers a vegetarian meal' (backshift is optional in English indirect speech)",
+          1
+        ],
+        [
+          "review:blocker:tmp_r10_q5: distractor 'sign' could be inserted in place of 'signed up' to create the grammatically valid sentence 'The local librarian was curious whether enough students sign up for it' (present tense in indirect speech is acceptable)|tmp_r10_q5: distractor likely valid in answer — 'sign' could plausibly replace 'signed up' if the student reads 'sign up for it' as an alternative phrasing, but more critically the chunk 'signed up' is a multi-word chunk whereas 'sign' is the bare-form distractor; the real risk is that a test-taker might attempt 'sign up for it' by using the distractor 'sign' + the chunk 'up' — however 'up' is not a standalone chunk, so this is borderline. Flagged for review.",
+          1
+        ],
+        [
+          "review:blocker:tmp_r12_q1: distractor likely valid in answer — 'was' can form a grammatical alternative ('asked if the entrance code was changed'), creating ambiguity about which verb chunk to use",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 10,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "distractor:unsafe: \"is\" directly swaps with \"was\" in answer (tense change produces valid sentence)": 1,
+              "review:blocker:tmp_r10_q3: distractor 'prefers' could be inserted in place of 'preferred' to create the grammatically valid sentence 'The flight attendant wanted to know if the passenger prefers a vegetarian meal' (backshift is optional in English indirect speech)": 1,
+              "review:blocker:tmp_r10_q5: distractor 'sign' could be inserted in place of 'signed up' to create the grammatically valid sentence 'The local librarian was curious whether enough students sign up for it' (present tense in indirect speech is acceptable)|tmp_r10_q5: distractor likely valid in answer — 'sign' could plausibly replace 'signed up' if the student reads 'sign up for it' as an alternative phrasing, but more critically the chunk 'signed up' is a multi-word chunk whereas 'sign' is the bare-form distractor; the real risk is that a test-taker might attempt 'sign up for it' by using the distractor 'sign' + the chunk 'up' — however 'up' is not a standalone chunk, so this is borderline. Flagged for review.": 1
+            }
+          }
+        },
+        {
+          "round": 11,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 1,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 12,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "distractor:unsafe: \"is\" directly swaps with \"was\" in answer (tense change produces valid sentence)": 2,
+              "review:blocker:tmp_r12_q1: distractor likely valid in answer — 'was' can form a grammatical alternative ('asked if the entrance code was changed'), creating ambiguity about which verb chunk to use": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 15
+    }
+  ],
+  "history": [
+    {
+      "round": 9,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 1
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 4
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 1,
+          "accepted": 1,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 3,
+          "accepted": 2,
+          "rejected": 1,
+          "reasons": {
+            "distractor:unsafe: \"were\" directly swaps with \"was\" in answer (tense change produces valid sentence)": 1
+          }
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r9_q4: prompt/answer mismatch — the prompt asks what the clerk 'asked' but the answer uses 'needed to find out', and the embedded clause uses 'you had the receipt' rather than 'I had the receipt', making self-report incoherent|tmp_r9_q4: ungrammatical answer — 'The store clerk needed to find out if you had the receipt' is grammatically odd; 'needed to find out' is an unusual reporting verb construction and does not match the prompt ('asked'), creating a mismatch that could confuse solvers; additionally the chunk 'to' and 'find out' split awkwardly since 'find out' is a collocation and 'to' alone is not a natural standalone chunk per TPO ~77% single-word chunk norms when separated from its verb|tmp_r9_q4: distractor likely valid in answer — 'have' could plausibly fit as present tense in the embedded clause ('if you have the receipt'), making the distractor functionally ambiguous without clear past-tense anchoring from the reporting context alone": 1
+          }
+        }
+      }
+    },
+    {
+      "round": 10,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "interrogative",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 3
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 3,
+          "accepted": 0,
+          "rejected": 3,
+          "reasons": {
+            "distractor:unsafe: \"is\" directly swaps with \"was\" in answer (tense change produces valid sentence)": 1,
+            "review:blocker:tmp_r10_q3: distractor 'prefers' could be inserted in place of 'preferred' to create the grammatically valid sentence 'The flight attendant wanted to know if the passenger prefers a vegetarian meal' (backshift is optional in English indirect speech)": 1,
+            "review:blocker:tmp_r10_q5: distractor 'sign' could be inserted in place of 'signed up' to create the grammatically valid sentence 'The local librarian was curious whether enough students sign up for it' (present tense in indirect speech is acceptable)|tmp_r10_q5: distractor likely valid in answer — 'sign' could plausibly replace 'signed up' if the student reads 'sign up for it' as an alternative phrasing, but more critically the chunk 'signed up' is a multi-word chunk whereas 'sign' is the bare-form distractor; the real risk is that a test-taker might attempt 'sign up for it' by using the distractor 'sign' + the chunk 'up' — however 'up' is not a standalone chunk, so this is borderline. Flagged for review.": 1
+          }
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 2,
+          "accepted": 1,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r10_q1: distractor 'began' could replace 'begins' to create the grammatically valid sentence 'Can you tell me what time the tour began?' making the distractor a valid answer chunk|tmp_r10_q1: indirect question uses inverted word order — the embedded clause 'what time the tour begins' correctly uses declarative order, so NO inversion blocker applies here. Retracting. (No blocker for q1.)": 1
+          }
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 11,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "interrogative",
+          "difficulty": "medium",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 1,
+          "accepted": 1,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "review:blocker:tmp_r11_q4: distractor 'said' could be a valid answer chunk — 'Do you know what the weather forecast said for tomorrow?' is grammatically correct and natural|tmp_r11_q4: indirect question uses inverted word order — 'Do you know what the weather forecast says for tomorrow?' is a direct question (inverted auxiliary 'do'), not a declarative statement; 92% of TPO answers are statements, and the embedded wh-clause itself ('what the weather forecast says') correctly uses non-inverted order, but the outer frame is a direct interrogative, making this a rare interrogative-frame item that is still grammatically acceptable — however the core distractor 'said' is weakly placed since learners may confuse present/past tense rather than the inversion rule, reducing pedagogical clarity": 1,
+            "review:blocker:tmp_r11_q5: distractor 'met' could be a valid answer chunk — 'Could you tell me where the sports class met on Thursdays?' is grammatically correct and natural|tmp_r11_q5: indirect question uses inverted word order — same issue as q4; 'Could you tell me where the sports class meets on Thursdays?' is a direct polite question, not a statement; the embedded clause 'where the sports class meets' is correctly non-inverted, but the outer frame is interrogative; distractor 'met' tests present vs. past tense, NOT the core indirect-question inversion rule, which is a misalignment with the stated grammar points": 1
+          }
+        },
+        "direct": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "distractor:unsafe: \"is\" directly swaps with \"was\" in answer (tense change produces valid sentence)": 1,
+            "review:blocker:tmp_r11_q2: distractor 'starts' could be a valid answer chunk — 'The travel blogger needed to find out when the guided tour starts.' is grammatically correct (present tense in embedded clause after past main verb is acceptable in English)": 1
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 12,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 5
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 3,
+          "accepted": 0,
+          "rejected": 3,
+          "reasons": {
+            "distractor:unsafe: \"is\" directly swaps with \"was\" in answer (tense change produces valid sentence)": 2,
+            "review:blocker:tmp_r12_q1: distractor likely valid in answer — 'was' can form a grammatical alternative ('asked if the entrance code was changed'), creating ambiguity about which verb chunk to use": 1
+          }
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 2,
+          "accepted": 1,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r12_q5: clearly ambiguous order — 'the customer' is split into two chunks ('the' and 'customer') but 'the' also precedes 'to pick up', making multiple orderings plausible and creating unnecessary assembly confusion": 1
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 13,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 5
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 4,
+          "accepted": 3,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r13_q4: clearly ambiguous order — 'back' and 'from' are separate single-word chunks with no natural anchor; test-takers could plausibly attempt 'heard from back' or misplace 'from' before 'the community center' in non-standard but attempted sequences; 'from' isolated from 'back' splits a tight phrasal collocation ('heard back from') across three separate chunks, creating ordering ambiguity": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r13_q2: distractor could be a valid answer chunk — 'knew' can replace 'know' to form 'I knew which room the study session was in,' which is grammatically correct and contextually valid given the prompt asks about past knowledge|tmp_r13_q2: distractor likely valid in answer — 'knew' can replace 'know' yielding 'I did not knew...' is ungrammatical, BUT the prompt itself uses 'knew' ('if you knew which room'), making the distractor salient and potentially confusing; more critically, the answer sentence 'I did not know which room the study session was in' has a plausible alternate ordering ambiguity: 'in' as a dangling chunk at the end could be misplaced before 'which' by test-takers": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 14,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 2,
+          "accepted": 1,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r14_q1: distractor likely valid in answer — 'checked' can replace 'did not check whether' if the sentence is restructured as 'I did not checked...' is invalid, BUT 'checked' as a standalone past-tense verb could tempt learners into 'I checked whether the garden was open' which is a fully grammatical and contextually valid answer; the distractor is a plausible correct word, not merely a trap": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 1,
+          "accepted": 1,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "distractor:unsafe: \"is\" directly swaps with \"was\" in answer (tense change produces valid sentence)": 1,
+            "review:blocker:tmp_r14_q2: prompt/answer mismatch (prompt asks what YOU say when classmate asks about café hours, but answer uses third-person 'The café had not posted…' instead of a first-person response such as 'I don't think it has posted its new hours')|tmp_r14_q2: grammar incorrect in the answer sentence ('had not posted' is past perfect but no prior past event is established in the prompt context; the tense is unjustified and grammatically odd for this conversational register)|tmp_r14_q2: distractor likely valid in answer — 'post' (base form) is not valid in the target sentence, but the grammar label says 'present-perfect' while the answer uses past perfect ('had not posted'); the tense mismatch between label and answer may cause confusion, and 'post' could fit an alternate valid answer like 'The café did not post its new hours anywhere' making the distractor test ambiguous": 1
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    }
+  ]
+}

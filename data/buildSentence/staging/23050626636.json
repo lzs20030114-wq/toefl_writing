@@ -1,0 +1,325 @@
+{
+  "version": "1.2",
+  "generated_at": "2026-03-13T12:41:08.220Z",
+  "_meta": {
+    "target_sets": 6,
+    "total_rounds": 14,
+    "total_generated": 90,
+    "total_accepted": 31,
+    "acceptance_rate": 0.344
+  },
+  "question_sets": [
+    {
+      "set_id": 1,
+      "questions": [
+        {
+          "id": "ets_s1_q1",
+          "prompt": "What do you ask the community center staff about the art class?",
+          "prompt_context": "",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What do you ask the community center staff about the art class?",
+          "answer": "Do you know if the art class has limited spots?",
+          "chunks": [
+            "know",
+            "if",
+            "the art class",
+            "has",
+            "limited spots",
+            "have"
+          ],
+          "prefilled": [
+            "do you"
+          ],
+          "prefilled_positions": {
+            "do you": 0
+          },
+          "distractor": "have",
+          "has_question_mark": true,
+          "grammar_points": [
+            "interrogative",
+            "embedded-if-clause",
+            "present-simple"
+          ],
+          "_assemblyValue": 23.4
+        },
+        {
+          "id": "ets_s1_q2",
+          "prompt": "What did the project supervisor ask about the team's progress during the meeting?",
+          "prompt_context": "",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did the project supervisor ask about the team's progress during the meeting?",
+          "answer": "The project supervisor asked if the team finished the testing phase.",
+          "chunks": [
+            "asked",
+            "if",
+            "the team",
+            "finished",
+            "the testing phase",
+            "finish"
+          ],
+          "prefilled": [
+            "the project supervisor"
+          ],
+          "prefilled_positions": {
+            "the project supervisor": 0
+          },
+          "distractor": "finish",
+          "has_question_mark": false,
+          "grammar_points": [
+            "3rd-person reporting",
+            "embedded question",
+            "simple past"
+          ],
+          "_assemblyValue": 9
+        },
+        {
+          "id": "ets_s1_q3",
+          "prompt": "What do you say when your neighbor asks if the repair shop is still open?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do you say when your neighbor asks if the repair shop is still open?",
+          "answer": "The repair shop closes at six on weekdays.",
+          "chunks": [
+            "repair",
+            "shop",
+            "closes",
+            "at six",
+            "on weekdays",
+            "closed",
+            "the"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "closed",
+          "has_question_mark": false,
+          "grammar_points": [
+            "simple present",
+            "prepositional phrase"
+          ],
+          "_assemblyValue": 9
+        },
+        {
+          "id": "ets_s1_q4",
+          "prompt": "What do you say when your friend asks if you know when the pharmacy opens on weekends?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do you say when your friend asks if you know when the pharmacy opens on weekends?",
+          "answer": "I am not sure when the pharmacy opens on weekends.",
+          "chunks": [
+            "sure",
+            "when",
+            "the pharmacy",
+            "opens",
+            "on weekends",
+            "am not"
+          ],
+          "prefilled": [
+            "i"
+          ],
+          "prefilled_positions": {
+            "i": 0
+          },
+          "distractor": null,
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question",
+            "negation",
+            "present simple"
+          ],
+          "_assemblyValue": 26.92,
+          "has_distractor": false
+        },
+        {
+          "id": "ets_s1_q5",
+          "prompt": "What do you say about the soup you ordered at the campus cafe?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do you say about the soup you ordered at the campus cafe?",
+          "answer": "The soup I ordered tasted better than I expected.",
+          "chunks": [
+            "soup",
+            "i",
+            "ordered",
+            "tasted",
+            "better than",
+            "i expected",
+            "taste"
+          ],
+          "prefilled": [
+            "the"
+          ],
+          "prefilled_positions": {
+            "the": 0
+          },
+          "distractor": "taste",
+          "has_question_mark": false,
+          "grammar_points": [
+            "comparative",
+            "contact clause",
+            "simple past"
+          ],
+          "_assemblyValue": 16.68
+        },
+        {
+          "id": "ets_s1_q6",
+          "prompt": "What do you say about the new gym that opened near your apartment?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do you say about the new gym that opened near your apartment?",
+          "answer": "The equipment at the new gym looks much newer than expected.",
+          "chunks": [
+            "equipment",
+            "at",
+            "the",
+            "new",
+            "gym",
+            "looks",
+            "much newer",
+            "than expected",
+            "look"
+          ],
+          "prefilled": [
+            "the"
+          ],
+          "prefilled_positions": {
+            "the": 0
+          },
+          "distractor": "look",
+          "has_question_mark": false,
+          "grammar_points": [
+            "comparative",
+            "prepositional phrase"
+          ],
+          "_assemblyValue": 9
+        },
+        {
+          "id": "ets_s1_q7",
+          "prompt": "What does the store clerk say about the winter jacket a customer is looking at?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What does the store clerk say about the winter jacket a customer is looking at?",
+          "answer": "This jacket is warmer than any other coat we have carried this season.",
+          "chunks": [
+            "jacket",
+            "is",
+            "warmer",
+            "than",
+            "any other coat",
+            "we have carried",
+            "this",
+            "season",
+            "warm"
+          ],
+          "prefilled": [
+            "this"
+          ],
+          "prefilled_positions": {
+            "this": 0
+          },
+          "distractor": "warm",
+          "has_question_mark": false,
+          "grammar_points": [
+            "comparative",
+            "present perfect",
+            "relative clause"
+          ],
+          "_assemblyValue": 16.68
+        },
+        {
+          "id": "ets_s1_q8",
+          "prompt": "What do you say when your roommate asks if you found out where the pharmacy is?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do you say when your roommate asks if you found out where the pharmacy is?",
+          "answer": "I found out where the nearest pharmacy is located on campus.",
+          "chunks": [
+            "found",
+            "out",
+            "where",
+            "the",
+            "nearest",
+            "pharmacy",
+            "is located",
+            "on campus",
+            "find"
+          ],
+          "prefilled": [
+            "i"
+          ],
+          "prefilled_positions": {
+            "i": 0
+          },
+          "distractor": "find",
+          "has_question_mark": false,
+          "grammar_points": [
+            "phrasal verb",
+            "embedded question",
+            "simple present"
+          ],
+          "_assemblyValue": 12.6
+        },
+        {
+          "id": "ets_s1_q9",
+          "prompt": "What did the store clerk say about why the delivery had not arrived?",
+          "prompt_context": "",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did the store clerk say about why the delivery had not arrived?",
+          "answer": "The store clerk did not know why the package had been delayed.",
+          "chunks": [
+            "did not",
+            "know",
+            "why",
+            "the",
+            "package",
+            "had been",
+            "delayed",
+            "delay"
+          ],
+          "prefilled": [
+            "the store clerk"
+          ],
+          "prefilled_positions": {
+            "the store clerk": 0
+          },
+          "distractor": "delay",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation",
+            "past-perfect-passive",
+            "embedded-wh"
+          ],
+          "_assemblyValue": 16.68
+        },
+        {
+          "id": "ets_s1_q10",
+          "prompt": "What do you say about the gallery exhibit you attended last weekend?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do you say about the gallery exhibit you attended last weekend?",
+          "answer": "The gallery exhibit I attended last weekend featured stunning local artwork.",
+          "chunks": [
+            "i",
+            "attended last weekend",
+            "featured",
+            "stunning local artwork",
+            "feature"
+          ],
+          "prefilled": [
+            "the gallery exhibit"
+          ],
+          "prefilled_positions": {
+            "the gallery exhibit": 0
+          },
+          "distractor": "feature",
+          "has_question_mark": false,
+          "grammar_points": [
+            "contact clause",
+            "simple past",
+            "noun phrase"
+          ],
+          "_assemblyValue": 23.4
+        }
+      ]
+    }
+  ]
+}
