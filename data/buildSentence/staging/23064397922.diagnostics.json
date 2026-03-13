@@ -1,0 +1,419 @@
+{
+  "generated_at": "2026-03-13T18:12:26.566Z",
+  "targetSets": 6,
+  "outputPath": "/home/runner/work/toefl_writing/toefl_writing/data/buildSentence/staging/23064397922.json",
+  "rounds": [
+    {
+      "round": 1,
+      "phase": "broad",
+      "mode": "broad",
+      "gap": {
+        "total": 192,
+        "diffGap": 90,
+        "typeGap": 6,
+        "distractorGap": 42,
+        "assemblyBlockingGap": 54
+      },
+      "assemblyState": {
+        "total": 0,
+        "diffCounts": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0
+        },
+        "embedded": 0,
+        "negation": 0,
+        "distractor": 0,
+        "qmark": 0,
+        "nonEmbedded": 0,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 48,
+          "negationMin": 12,
+          "negationMax": 24,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "nonNegationMin": 36,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "medium": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "hard": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "negation": 0,
+          "negationCap": 0,
+          "distractor": 0,
+          "nonEmbedded": 0
+        },
+        "assemblableSets": 0,
+        "remainingSets": 6,
+        "remainingRecipe": {
+          "sets": 6,
+          "diff": {
+            "easy": 6,
+            "medium": 42,
+            "hard": 12
+          },
+          "style": {
+            "embeddedMin": 30,
+            "negationMin": 12,
+            "distractorMin": 42,
+            "nonEmbeddedMin": 12,
+            "embeddedCapacity": 48,
+            "negationCapacity": 24,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embedded": 30,
+          "negation": 12,
+          "distractor": 42,
+          "nonEmbedded": 12,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 42,
+            "priority": 252
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 30,
+            "priority": 210
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 42,
+            "priority": 126
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 12,
+            "priority": 96
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 12,
+            "priority": 84
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 12,
+            "priority": 60
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 6,
+            "priority": 12
+          }
+        ],
+        "progressRatios": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "nonEmbedded": 0,
+          "distractor": 0,
+          "negation": 0
+        },
+        "assemblyProgressScore": 0
+      },
+      "spec": [
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 1
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "specSelection": null,
+      "result": {
+        "generated": 10,
+        "accepted": 3,
+        "rejected": 7,
+        "rejectReasons": {
+          "review:blocker:tmp_r1_q6: prompt/answer mismatch — prompt asks how YOU respond about the pharmacy pickup, but the answer is a 3rd-person statement about the pharmacist, not a first-person response|tmp_r1_q6: distractor DIRECTLY replaces one word to form a valid sentence — 'The pharmacist explained when the prescription would be ready' replaces 'did not explain' but actually requires removing 'did not' and replacing 'explain' with 'explained', so this is NOT a simple 1:1 substitution; no blocker.|tmp_r1_q6: 'did not' is a two-word chunk and distractor is 'explained' — replacing 'did not explain' with 'explained' requires removing one chunk AND substituting another, not a simple 1:1 swap; not a blocker.": 1,
+          "review:ets<72": 3,
+          "review:blocker:tmp_r1_q4: distractor 'take' can replace 'takes' in the same position ('where the internship interview take place' is ungrammatical, so no blocker).": 1,
+          "review:blocker:tmp_r1_q7: chunk fragmentation is severe ('the', 'registration', 'deadline' as separate single chunks) creating ambiguous ordering — 'the registration deadline' vs 'the deadline registration' are both assemblable; tmp_r1_q7: clearly ambiguous order (multiple valid chunk arrangements for 'the', 'registration', 'deadline')": 1,
+          "review:blocker:tmp_r1_q8: same fragmentation issue — 'the' and 'report' are separate chunks, but with only two items the ambiguity is minimal; not a blocker.": 1
+        },
+        "typeStats": {
+          "negation": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r1_q6: prompt/answer mismatch — prompt asks how YOU respond about the pharmacy pickup, but the answer is a 3rd-person statement about the pharmacist, not a first-person response|tmp_r1_q6: distractor DIRECTLY replaces one word to form a valid sentence — 'The pharmacist explained when the prescription would be ready' replaces 'did not explain' but actually requires removing 'did not' and replacing 'explain' with 'explained', so this is NOT a simple 1:1 substitution; no blocker.|tmp_r1_q6: 'did not' is a two-word chunk and distractor is 'explained' — replacing 'did not explain' with 'explained' requires removing one chunk AND substituting another, not a simple 1:1 swap; not a blocker.": 1,
+              "review:ets<72": 1
+            }
+          },
+          "3rd-reporting": {
+            "generated": 1,
+            "accepted": 1,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "1st-embedded": {
+            "generated": 4,
+            "accepted": 1,
+            "rejected": 3,
+            "reasons": {
+              "review:blocker:tmp_r1_q4: distractor 'take' can replace 'takes' in the same position ('where the internship interview take place' is ungrammatical, so no blocker).": 1,
+              "review:blocker:tmp_r1_q7: chunk fragmentation is severe ('the', 'registration', 'deadline' as separate single chunks) creating ambiguous ordering — 'the registration deadline' vs 'the deadline registration' are both assemblable; tmp_r1_q7: clearly ambiguous order (multiple valid chunk arrangements for 'the', 'registration', 'deadline')": 1,
+              "review:blocker:tmp_r1_q8: same fragmentation issue — 'the' and 'report' are separate chunks, but with only two items the ambiguity is minimal; not a blocker.": 1
+            }
+          },
+          "interrogative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "direct": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "relative": {
+            "generated": 3,
+            "accepted": 1,
+            "rejected": 2,
+            "reasons": {
+              "review:ets<72": 2
+            }
+          }
+        },
+        "deltaAssemblable": 0,
+        "deltaProgress": 0.057692307692307696,
+        "acceptedGainRate": 0.04807692307692308
+      },
+      "nextGap": {
+        "total": 180,
+        "diffGap": 87,
+        "typeGap": 3,
+        "distractorGap": 39,
+        "assemblyBlockingGap": 51
+      },
+      "nextAssemblyState": {
+        "total": 3,
+        "diffCounts": {
+          "easy": 0,
+          "medium": 3,
+          "hard": 0
+        },
+        "embedded": 2,
+        "negation": 0,
+        "distractor": 3,
+        "qmark": 0,
+        "nonEmbedded": 1,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 48,
+          "negationMin": 12,
+          "negationMax": 24,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "nonNegationMin": 36,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "medium": {
+            "total": 3,
+            "embedded": 2,
+            "nonEmbedded": 1,
+            "negation": 0
+          },
+          "hard": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "negation": 0,
+          "negationCap": 0,
+          "distractor": 0,
+          "nonEmbedded": 0
+        },
+        "assemblableSets": 0,
+        "remainingSets": 6,
+        "remainingRecipe": {
+          "sets": 6,
+          "diff": {
+            "easy": 6,
+            "medium": 39,
+            "hard": 12
+          },
+          "style": {
+            "embeddedMin": 28,
+            "negationMin": 12,
+            "distractorMin": 39,
+            "nonEmbeddedMin": 11,
+            "embeddedCapacity": 46,
+            "negationCapacity": 24,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 6,
+          "medium": 39,
+          "hard": 12,
+          "embedded": 28,
+          "negation": 12,
+          "distractor": 39,
+          "nonEmbedded": 11,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 39,
+            "priority": 234
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 28,
+            "priority": 196
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 39,
+            "priority": 117
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 12,
+            "priority": 96
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 11,
+            "priority": 77
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 12,
+            "priority": 60
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 6,
+            "priority": 12
+          }
+        ],
+        "progressRatios": {
+          "easy": 0,
+          "medium": 0.07142857142857142,
+          "hard": 0,
+          "embedded": 0.06666666666666667,
+          "nonEmbedded": 0.08333333333333333,
+          "distractor": 0.07142857142857142,
+          "negation": 0
+        },
+        "assemblyProgressScore": 0.057692307692307696
+      },
+      "phaseSignals": {
+        "strongTargeting": false,
+        "repairMode": false,
+        "strongGateReady": false,
+        "repairGateReady": false,
+        "strongReasons": [],
+        "repairReasons": [],
+        "momentum": {
+          "windowCount": 0,
+          "accepted": 0,
+          "generated": 0,
+          "poolGrowth": 0,
+          "deltaAssemblable": 0,
+          "deltaProgress": 0,
+          "zeroGainRounds": 0,
+          "zeroProgressRounds": 0,
+          "acceptedGainRate": 0
+        }
+      },
+      "typeReliability": {
+        "negation": 0.8,
+        "3rd-reporting": 0.8,
+        "1st-embedded": 0.8,
+        "interrogative": 0.8,
+        "direct": 0.8,
+        "relative": 0.8
+      }
+    }
+  ],
+  "final": null
+}
