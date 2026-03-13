@@ -1,0 +1,1588 @@
+{
+  "generated_at": "2026-03-13T09:27:58.355Z",
+  "active": {
+    "negation": {
+      "sinceRound": 31,
+      "untilRound": 34,
+      "lastEvent": {
+        "triggeredAt": "2026-03-13T09:27:10.254Z",
+        "round": 31,
+        "mode": "normal",
+        "type": "negation",
+        "generated": 5,
+        "accepted": 1,
+        "rejected": 4,
+        "acceptRate": 0.2,
+        "reasons": [
+          [
+            "review:ets<72",
+            2
+          ],
+          [
+            "fatal: chunks[7]: isolated floating adverb \"recently\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+            1
+          ],
+          [
+            "pool:low_assembly_value",
+            1
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 29,
+            "spec": [
+              {
+                "type": "1st-embedded",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "1st-embedded",
+                "difficulty": "medium",
+                "count": 4
+              }
+            ],
+            "stats": {
+              "generated": 1,
+              "accepted": 1,
+              "rejected": 0,
+              "reasons": {}
+            }
+          },
+          {
+            "round": 30,
+            "spec": [
+              {
+                "type": "3rd-reporting",
+                "difficulty": "hard",
+                "count": 2
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 0,
+              "accepted": 0,
+              "rejected": 0,
+              "reasons": {}
+            }
+          },
+          {
+            "round": 31,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 3
+              },
+              {
+                "type": "1st-embedded",
+                "difficulty": "medium",
+                "count": 1
+              }
+            ],
+            "stats": {
+              "generated": 4,
+              "accepted": 0,
+              "rejected": 4,
+              "reasons": {
+                "fatal: chunks[7]: isolated floating adverb \"recently\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+                "pool:low_assembly_value": 1,
+                "review:ets<72": 2
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 34
+      }
+    },
+    "3rd-reporting": {
+      "sinceRound": 32,
+      "untilRound": 35,
+      "lastEvent": {
+        "triggeredAt": "2026-03-13T09:27:53.113Z",
+        "round": 32,
+        "mode": "normal",
+        "type": "3rd-reporting",
+        "generated": 5,
+        "accepted": 0,
+        "rejected": 5,
+        "acceptRate": 0,
+        "reasons": [
+          [
+            "distractor:unsafe: \"is\" directly swaps with \"was\" in answer (tense change produces valid sentence)",
+            2
+          ],
+          [
+            "topic:repeat",
+            1
+          ],
+          [
+            "pool:low_assembly_value",
+            1
+          ],
+          [
+            "distractor:unsafe: \"will\" directly swaps with \"would\" in answer (modal change produces valid sentence)",
+            1
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 30,
+            "spec": [
+              {
+                "type": "3rd-reporting",
+                "difficulty": "hard",
+                "count": 2
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 2,
+              "accepted": 0,
+              "rejected": 2,
+              "reasons": {
+                "topic:repeat": 1,
+                "pool:low_assembly_value": 1
+              }
+            }
+          },
+          {
+            "round": 31,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 3
+              },
+              {
+                "type": "1st-embedded",
+                "difficulty": "medium",
+                "count": 1
+              }
+            ],
+            "stats": {
+              "generated": 0,
+              "accepted": 0,
+              "rejected": 0,
+              "reasons": {}
+            }
+          },
+          {
+            "round": 32,
+            "spec": [
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 4
+              }
+            ],
+            "stats": {
+              "generated": 3,
+              "accepted": 0,
+              "rejected": 3,
+              "reasons": {
+                "distractor:unsafe: \"is\" directly swaps with \"was\" in answer (tense change produces valid sentence)": 2,
+                "distractor:unsafe: \"will\" directly swaps with \"would\" in answer (modal change produces valid sentence)": 1
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 35
+      }
+    }
+  },
+  "events": [
+    {
+      "triggeredAt": "2026-03-13T08:51:55.932Z",
+      "round": 6,
+      "mode": "normal",
+      "type": "1st-embedded",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r5_q3: distractor likely valid in answer — 'schedule' could plausibly replace 'is scheduled' if student constructs 'I found out when the internship interview will start' is not possible, but 'I found out when to schedule the internship interview' is a grammatically valid and natural alternate reading of the prompt, making 'schedule' a usable chunk rather than a pure distractor",
+          1
+        ],
+        [
+          "review:blocker:tmp_r5_q1: grammar incorrect in the answer sentence — 'how dangerous the trail had become' is an embedded exclamative, not an indirect question; while grammatically possible, the embedding of a degree/result clause here is borderline, but the deeper issue is that 'had not realized how dangerous' implies an exclamative reading that does not straightforwardly respond to 'What do you say about the hiking trail conditions?' — acceptable only marginally; however, 'the trail had become' uses past perfect inside a past-perfect-negation matrix without a clear prior reference point, making the tense logic questionable and potentially grammatically strained for a TOEFL item|tmp_r5_q1: clearly ambiguous order — 'how dangerous the trail had become' is an embedded exclamative, not a standard embedded question; the sequence of 'how', 'dangerous', 'the', 'trail', 'had become' has plausible reorderings (e.g., 'how dangerous had the trail become' is an inverted exclamative some students may attempt), and separating 'the' and 'trail' as individual chunks while 'had become' is multi-word creates genuine assembly ambiguity",
+          1
+        ],
+        [
+          "review:blocker:tmp_r5_q2: distractor could be a valid answer chunk — 'met' can replace 'meets' to produce 'I do not know if the study group met on Thursday,' which is a fully grammatical and semantically coherent English sentence, meaning the distractor is not safely blocked from insertion",
+          1
+        ],
+        [
+          "review:blocker:tmp_r6_q5: prompt/answer mismatch — the prompt asks what YOU say to your colleague about internship results, but the answer is a third-person statement about 'the enthusiastic intern'; a first-person response is required|tmp_r6_q5: distractor 'mean' can be inserted to form 'The enthusiastic intern did not know what the results mean' — a grammatically valid (if tense-mixed) sentence that a test-taker could plausibly accept, making the distractor ambiguous|tmp_r6_q5: prompt asks 'what do you say' (respond task) but the prefilled subject is 'the enthusiastic intern' (3rd person) — mismatch between prompt framing and answer subject is a critical internal inconsistency that would confuse test-takers about whose voice is being represented",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 5,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "review:blocker:tmp_r5_q3: distractor likely valid in answer — 'schedule' could plausibly replace 'is scheduled' if student constructs 'I found out when the internship interview will start' is not possible, but 'I found out when to schedule the internship interview' is a grammatically valid and natural alternate reading of the prompt, making 'schedule' a usable chunk rather than a pure distractor": 1,
+              "review:blocker:tmp_r5_q1: grammar incorrect in the answer sentence — 'how dangerous the trail had become' is an embedded exclamative, not an indirect question; while grammatically possible, the embedding of a degree/result clause here is borderline, but the deeper issue is that 'had not realized how dangerous' implies an exclamative reading that does not straightforwardly respond to 'What do you say about the hiking trail conditions?' — acceptable only marginally; however, 'the trail had become' uses past perfect inside a past-perfect-negation matrix without a clear prior reference point, making the tense logic questionable and potentially grammatically strained for a TOEFL item|tmp_r5_q1: clearly ambiguous order — 'how dangerous the trail had become' is an embedded exclamative, not a standard embedded question; the sequence of 'how', 'dangerous', 'the', 'trail', 'had become' has plausible reorderings (e.g., 'how dangerous had the trail become' is an inverted exclamative some students may attempt), and separating 'the' and 'trail' as individual chunks while 'had become' is multi-word creates genuine assembly ambiguity": 1,
+              "review:blocker:tmp_r5_q2: distractor could be a valid answer chunk — 'met' can replace 'meets' to produce 'I do not know if the study group met on Thursday,' which is a fully grammatical and semantically coherent English sentence, meaning the distractor is not safely blocked from insertion": 1
+            }
+          }
+        },
+        {
+          "round": 6,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r6_q5: prompt/answer mismatch — the prompt asks what YOU say to your colleague about internship results, but the answer is a third-person statement about 'the enthusiastic intern'; a first-person response is required|tmp_r6_q5: distractor 'mean' can be inserted to form 'The enthusiastic intern did not know what the results mean' — a grammatically valid (if tense-mixed) sentence that a test-taker could plausibly accept, making the distractor ambiguous|tmp_r6_q5: prompt asks 'what do you say' (respond task) but the prefilled subject is 'the enthusiastic intern' (3rd person) — mismatch between prompt framing and answer subject is a critical internal inconsistency that would confuse test-takers about whose voice is being represented": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 9
+    },
+    {
+      "triggeredAt": "2026-03-13T08:54:34.023Z",
+      "round": 8,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r6_q4: multi-word chunk 'open this morning' bundles an adjective with a time adverbial — not a natural collocation; 'this morning' should be a separate chunk per ~77% single-word TPO norm, and bundling it reduces distractor utility and solvability clarity|tmp_r6_q4: distractor 'checked' (simple past) vs answer verb 'check' (bare infinitive after 'did not') — 'checked' could be perceived as placeable by test-takers who mis-parse the negation structure, creating a near-blocker ambiguity; the contrast is valid but marginally risky",
+          1
+        ],
+        [
+          "review:blocker:tmp_r7_q2: distractor likely valid in answer — 'finished' can replace 'did not finish' if the sentence is reframed, but more critically 'did not' chunk paired with 'finished' distractor creates a near-synonym trap where solvers may attempt 'I finished…before' as an alternative reading; however the negation locks the sentence, so this is borderline — flagged for review",
+          1
+        ],
+        [
+          "review:blocker:tmp_r7_q3: prompt/answer mismatch — prompt asks what the exchange student 'says about' the orientation (implying a statement or opinion), but the answer describes an absence/non-attendance with no connection to what was 'said'; additionally, the present-tense prompt ('does the exchange student say') is inconsistent with the simple-past answer ('did not attend'), creating a tense-framing conflict",
+          1
+        ],
+        [
+          "review:blocker:tmp_r8_q1: distractor 'received' is likely valid in answer — 'I did not received' is ungrammatical but 'I received' (without negation) could be assembled as a plausible alternate sentence; more critically, with 'did not' and 'received' both present, a test-taker might attempt 'I received' dropping 'did not', producing a valid English sentence with wrong meaning but grammatically acceptable assembly",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 6,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r6_q4: multi-word chunk 'open this morning' bundles an adjective with a time adverbial — not a natural collocation; 'this morning' should be a separate chunk per ~77% single-word TPO norm, and bundling it reduces distractor utility and solvability clarity|tmp_r6_q4: distractor 'checked' (simple past) vs answer verb 'check' (bare infinitive after 'did not') — 'checked' could be perceived as placeable by test-takers who mis-parse the negation structure, creating a near-blocker ambiguity; the contrast is valid but marginally risky": 1
+            }
+          }
+        },
+        {
+          "round": 7,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r7_q2: distractor likely valid in answer — 'finished' can replace 'did not finish' if the sentence is reframed, but more critically 'did not' chunk paired with 'finished' distractor creates a near-synonym trap where solvers may attempt 'I finished…before' as an alternative reading; however the negation locks the sentence, so this is borderline — flagged for review": 1,
+              "review:blocker:tmp_r7_q3: prompt/answer mismatch — prompt asks what the exchange student 'says about' the orientation (implying a statement or opinion), but the answer describes an absence/non-attendance with no connection to what was 'said'; additionally, the present-tense prompt ('does the exchange student say') is inconsistent with the simple-past answer ('did not attend'), creating a tense-framing conflict": 1
+            }
+          }
+        },
+        {
+          "round": 8,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r8_q1: distractor 'received' is likely valid in answer — 'I did not received' is ungrammatical but 'I received' (without negation) could be assembled as a plausible alternate sentence; more critically, with 'did not' and 'received' both present, a test-taker might attempt 'I received' dropping 'did not', producing a valid English sentence with wrong meaning but grammatically acceptable assembly": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 11
+    },
+    {
+      "triggeredAt": "2026-03-13T08:57:22.705Z",
+      "round": 10,
+      "mode": "normal",
+      "type": "relative",
+      "generated": 5,
+      "accepted": 1,
+      "rejected": 4,
+      "acceptRate": 0.2,
+      "reasons": [
+        [
+          "review:blocker:tmp_r10_q4: distractor likely valid in answer — 'open' could replace 'opened' in the relative clause ('the café that open nearby' is ungrammatical, but the base-form distractor test is weakened because 'opened' is already prefilled-adjacent; more critically, the chunk 'open' vs 'opened' distinction is ambiguous since 'open' as adjective ('the café that is open nearby') is plausible to learners, reducing distractor clarity)|tmp_r10_q4: clearly ambiguous order — chunks 'that', 'opened', 'nearby', 'the', 'best', 'the café' allow multiple relative clause orderings; a learner could plausibly build 'The café opened nearby serves the best homemade soup' (omitting 'that'), which is also grammatical and natural, making the intended order non-unique",
+          1
+        ],
+        [
+          "review:solvability<78",
+          1
+        ],
+        [
+          "review:ets<72",
+          1
+        ],
+        [
+          "review:blocker:tmp_r10_q5: clearly ambiguous order — 'been' and 'delivered' are separate chunks but 'has already' is prefilled as a two-word unit at position 4; a learner could order 'been delivered' or attempt 'delivered been', and the split of the passive auxiliary across prefilled + free chunks creates genuine assembly ambiguity for 'has already been delivered'",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 8,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 9,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 10,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 5,
+            "accepted": 1,
+            "rejected": 4,
+            "reasons": {
+              "review:blocker:tmp_r10_q4: distractor likely valid in answer — 'open' could replace 'opened' in the relative clause ('the café that open nearby' is ungrammatical, but the base-form distractor test is weakened because 'opened' is already prefilled-adjacent; more critically, the chunk 'open' vs 'opened' distinction is ambiguous since 'open' as adjective ('the café that is open nearby') is plausible to learners, reducing distractor clarity)|tmp_r10_q4: clearly ambiguous order — chunks 'that', 'opened', 'nearby', 'the', 'best', 'the café' allow multiple relative clause orderings; a learner could plausibly build 'The café opened nearby serves the best homemade soup' (omitting 'that'), which is also grammatical and natural, making the intended order non-unique": 1,
+              "review:solvability<78": 1,
+              "review:ets<72": 1,
+              "review:blocker:tmp_r10_q5: clearly ambiguous order — 'been' and 'delivered' are separate chunks but 'has already' is prefilled as a two-word unit at position 4; a learner could order 'been delivered' or attempt 'delivered been', and the split of the passive auxiliary across prefilled + free chunks creates genuine assembly ambiguity for 'has already been delivered'": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 13
+    },
+    {
+      "triggeredAt": "2026-03-13T08:58:41.025Z",
+      "round": 11,
+      "mode": "normal",
+      "type": "interrogative",
+      "generated": 5,
+      "accepted": 0,
+      "rejected": 5,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "distractor:unsafe: \"was\" directly swaps with \"is\" in answer (tense change produces valid sentence)",
+          1
+        ],
+        [
+          "distractor:unsafe: \"were\" directly swaps with \"are\" in answer (tense change produces valid sentence)",
+          1
+        ],
+        [
+          "review:blocker:tmp_r11_q5: indirect question clause uses inverted word order — 'Do you know why the morning classes had been canceled?' contains a correctly ordered embedded clause, but the outer frame itself IS a direct yes/no question ('Do you know…?'), not a declarative statement; however the deeper blocker is grammar: past perfect 'had been canceled' is infelicitous here — simple past 'were canceled' is required for a present-tense inquiry about a recent schedule change, making the answer grammatically incorrect in context|tmp_r11_q5: multiple valid chunk orders — 'cancel' is listed both as a chunk and as the distractor label, creating internal data inconsistency; additionally the distractor 'cancel' could be substituted to yield 'Do you know why the morning classes had been cancel' which is ungrammatical but the presence of 'cancel' alongside 'canceled' in the chunk list means a test-taker could confuse the two, undermining distractor integrity|tmp_r11_q5: indirect question uses inverted word order — answer is a direct question ('Do you know why...') with subject-auxiliary inversion at the matrix level, and the embedded 'why the morning classes had been canceled' is declarative order, but the overall sentence is a direct interrogative, not a statement; TPO embedded-question items overwhelmingly produce declarative/statement answers (e.g., 'She asks if the classes were canceled'), not direct questions|tmp_r11_q5: ungrammatical answer — 'Do you know why the morning classes had been canceled?' uses past perfect passive in a context where simple past ('were canceled') or present perfect ('have been canceled') is strongly preferred; past perfect requires a prior reference point that is absent, making the tense selection grammatically strained|tmp_r11_q5: distractor likely valid in answer — 'cancel' (base form) could plausibly replace 'canceled' in a reformulation ('why did they cancel the morning classes'), and its presence alongside 'canceled' and 'had been' creates genuine ambiguity about which form to select",
+          1
+        ],
+        [
+          "review:blocker:tmp_r11_q1: distractor likely valid in answer — 'arrived' is a past-tense form that could plausibly slot into the embedded clause ('when my package arrived') as a grammatically complete alternative; both 'will arrive' and 'arrived' produce grammatical embedded clauses, creating true ambiguity",
+          1
+        ],
+        [
+          "review:blocker:tmp_r11_q4: clearly ambiguous order — 'would you' is prefilled at position 0, but the remaining chunks 'mind / telling / me / if / the event / starts on friday / started' can yield at least two surface-valid orderings: 'Would you mind telling me if the event starts on Friday?' and 'Would you mind telling me if the event started on Friday?' — the distractor 'started' produces a fully grammatical alternative answer, making the correct sequence non-deterministic",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 9,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 10,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 11,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 5,
+            "accepted": 0,
+            "rejected": 5,
+            "reasons": {
+              "distractor:unsafe: \"was\" directly swaps with \"is\" in answer (tense change produces valid sentence)": 1,
+              "distractor:unsafe: \"were\" directly swaps with \"are\" in answer (tense change produces valid sentence)": 1,
+              "review:blocker:tmp_r11_q5: indirect question clause uses inverted word order — 'Do you know why the morning classes had been canceled?' contains a correctly ordered embedded clause, but the outer frame itself IS a direct yes/no question ('Do you know…?'), not a declarative statement; however the deeper blocker is grammar: past perfect 'had been canceled' is infelicitous here — simple past 'were canceled' is required for a present-tense inquiry about a recent schedule change, making the answer grammatically incorrect in context|tmp_r11_q5: multiple valid chunk orders — 'cancel' is listed both as a chunk and as the distractor label, creating internal data inconsistency; additionally the distractor 'cancel' could be substituted to yield 'Do you know why the morning classes had been cancel' which is ungrammatical but the presence of 'cancel' alongside 'canceled' in the chunk list means a test-taker could confuse the two, undermining distractor integrity|tmp_r11_q5: indirect question uses inverted word order — answer is a direct question ('Do you know why...') with subject-auxiliary inversion at the matrix level, and the embedded 'why the morning classes had been canceled' is declarative order, but the overall sentence is a direct interrogative, not a statement; TPO embedded-question items overwhelmingly produce declarative/statement answers (e.g., 'She asks if the classes were canceled'), not direct questions|tmp_r11_q5: ungrammatical answer — 'Do you know why the morning classes had been canceled?' uses past perfect passive in a context where simple past ('were canceled') or present perfect ('have been canceled') is strongly preferred; past perfect requires a prior reference point that is absent, making the tense selection grammatically strained|tmp_r11_q5: distractor likely valid in answer — 'cancel' (base form) could plausibly replace 'canceled' in a reformulation ('why did they cancel the morning classes'), and its presence alongside 'canceled' and 'had been' creates genuine ambiguity about which form to select": 1,
+              "review:blocker:tmp_r11_q1: distractor likely valid in answer — 'arrived' is a past-tense form that could plausibly slot into the embedded clause ('when my package arrived') as a grammatically complete alternative; both 'will arrive' and 'arrived' produce grammatical embedded clauses, creating true ambiguity": 1,
+              "review:blocker:tmp_r11_q4: clearly ambiguous order — 'would you' is prefilled at position 0, but the remaining chunks 'mind / telling / me / if / the event / starts on friday / started' can yield at least two surface-valid orderings: 'Would you mind telling me if the event starts on Friday?' and 'Would you mind telling me if the event started on Friday?' — the distractor 'started' produces a fully grammatical alternative answer, making the correct sequence non-deterministic": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 14
+    },
+    {
+      "triggeredAt": "2026-03-13T09:06:45.920Z",
+      "round": 17,
+      "mode": "normal",
+      "type": "3rd-reporting",
+      "generated": 5,
+      "accepted": 1,
+      "rejected": 4,
+      "acceptRate": 0.2,
+      "reasons": [
+        [
+          "distractor:unsafe: \"is\" directly swaps with \"was\" in answer (tense change produces valid sentence)",
+          2
+        ],
+        [
+          "review:blocker:tmp_r16_q3: distractor likely valid in answer — 'prefer' is the base form and could tempt solvers into 'preferred a vegetarian meal' where 'prefer' reads as a near-synonym chunk; more critically, 'a vegetarian' is a non-standard chunk split (adjective without noun), creating ambiguous assembly with 'meal' as a separate chunk — solver could misorder 'a vegetarian meal' boundary",
+          1
+        ],
+        [
+          "review:blocker:tmp_r17_q1: distractor likely valid in answer — 'work' (base form) cannot follow 'still' as a standalone verb replacing 'still worked' without restructuring; however 'still worked' is a multi-word chunk bundling adverb+verb, which is non-standard for TPO where single-word chunks dominate (~77%); this inflates difficulty artificially",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 15,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 1,
+            "rejected": 1,
+            "reasons": {
+              "distractor:unsafe: \"is\" directly swaps with \"was\" in answer (tense change produces valid sentence)": 1
+            }
+          }
+        },
+        {
+          "round": 16,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r16_q3: distractor likely valid in answer — 'prefer' is the base form and could tempt solvers into 'preferred a vegetarian meal' where 'prefer' reads as a near-synonym chunk; more critically, 'a vegetarian' is a non-standard chunk split (adjective without noun), creating ambiguous assembly with 'meal' as a separate chunk — solver could misorder 'a vegetarian meal' boundary": 1
+            }
+          }
+        },
+        {
+          "round": 17,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "distractor:unsafe: \"is\" directly swaps with \"was\" in answer (tense change produces valid sentence)": 1,
+              "review:blocker:tmp_r17_q1: distractor likely valid in answer — 'work' (base form) cannot follow 'still' as a standalone verb replacing 'still worked' without restructuring; however 'still worked' is a multi-word chunk bundling adverb+verb, which is non-standard for TPO where single-word chunks dominate (~77%); this inflates difficulty artificially": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 20
+    },
+    {
+      "triggeredAt": "2026-03-13T09:07:53.528Z",
+      "round": 18,
+      "mode": "normal",
+      "type": "interrogative",
+      "generated": 5,
+      "accepted": 0,
+      "rejected": 5,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "distractor:unsafe: \"was\" directly swaps with \"is\" in answer (tense change produces valid sentence)",
+          1
+        ],
+        [
+          "distractor:unsafe: \"could\" directly swaps with \"can\" in answer (modal change produces valid sentence)",
+          1
+        ],
+        [
+          "distractor:unsafe: \"were\" directly swaps with \"are\" in answer (tense change produces valid sentence)",
+          1
+        ],
+        [
+          "review:blocker:tmp_r18_q3: indirect question uses inverted word order — 'Can you remind me when the guided tour starts' is a polite-frame direct question, not an indirect/embedded question in a statement frame; however the embedded clause 'when the guided tour starts' correctly uses declarative order, so the outer frame is an interrogative (answerType: interrogative), which conflicts with the TPO standard that 92% of answers are statements|tmp_r18_q3: distractor likely valid in answer — 'started' (past tense) vs 'starts on weekends' (present tense) is a legitimate distractor, but 'Can you remind me when the guided tour started on weekends?' is a grammatically well-formed and semantically plausible alternative sentence, making the distractor a near-valid answer rather than a clear wrong form",
+          1
+        ],
+        [
+          "review:blocker:tmp_r18_q5: indirect question uses inverted word order — 'Do you know why the error logs had not been reviewed?' is an interrogative outer frame; the embedded clause 'why the error logs had not been reviewed' correctly uses declarative order, but the answer is again a direct question (answerType: interrogative), violating the 92% statement standard|tmp_r18_q5: distractor likely valid in answer — 'review' could plausibly substitute or extend the passive construction ('had not been reviewed/review') in learner perception, reducing distractor clarity; the distinction between 'reviewed' and 'review' in a past-perfect-passive context requires very high grammatical awareness, making solvability low for the target CEFR band",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 16,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 17,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 18,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 5,
+            "accepted": 0,
+            "rejected": 5,
+            "reasons": {
+              "distractor:unsafe: \"was\" directly swaps with \"is\" in answer (tense change produces valid sentence)": 1,
+              "distractor:unsafe: \"could\" directly swaps with \"can\" in answer (modal change produces valid sentence)": 1,
+              "distractor:unsafe: \"were\" directly swaps with \"are\" in answer (tense change produces valid sentence)": 1,
+              "review:blocker:tmp_r18_q3: indirect question uses inverted word order — 'Can you remind me when the guided tour starts' is a polite-frame direct question, not an indirect/embedded question in a statement frame; however the embedded clause 'when the guided tour starts' correctly uses declarative order, so the outer frame is an interrogative (answerType: interrogative), which conflicts with the TPO standard that 92% of answers are statements|tmp_r18_q3: distractor likely valid in answer — 'started' (past tense) vs 'starts on weekends' (present tense) is a legitimate distractor, but 'Can you remind me when the guided tour started on weekends?' is a grammatically well-formed and semantically plausible alternative sentence, making the distractor a near-valid answer rather than a clear wrong form": 1,
+              "review:blocker:tmp_r18_q5: indirect question uses inverted word order — 'Do you know why the error logs had not been reviewed?' is an interrogative outer frame; the embedded clause 'why the error logs had not been reviewed' correctly uses declarative order, but the answer is again a direct question (answerType: interrogative), violating the 92% statement standard|tmp_r18_q5: distractor likely valid in answer — 'review' could plausibly substitute or extend the passive construction ('had not been reviewed/review') in learner perception, reducing distractor clarity; the distinction between 'reviewed' and 'review' in a past-perfect-passive context requires very high grammatical awareness, making solvability low for the target CEFR band": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 21
+    },
+    {
+      "triggeredAt": "2026-03-13T09:16:36.918Z",
+      "round": 24,
+      "mode": "normal",
+      "type": "direct",
+      "generated": 5,
+      "accepted": 0,
+      "rejected": 5,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:ets<72",
+          3
+        ],
+        [
+          "format: answer word count must be 7-15 (got 16)",
+          1
+        ],
+        [
+          "review:score<78",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 22,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 23,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 24,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 5,
+            "accepted": 0,
+            "rejected": 5,
+            "reasons": {
+              "format: answer word count must be 7-15 (got 16)": 1,
+              "review:score<78": 1,
+              "review:ets<72": 3
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 27
+    },
+    {
+      "triggeredAt": "2026-03-13T09:23:16.466Z",
+      "round": 28,
+      "mode": "normal",
+      "type": "relative",
+      "generated": 5,
+      "accepted": 1,
+      "rejected": 4,
+      "acceptRate": 0.2,
+      "reasons": [
+        [
+          "review:ets<72",
+          3
+        ],
+        [
+          "review:score<78",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 26,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 27,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 28,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 4
+            },
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 5,
+            "accepted": 1,
+            "rejected": 4,
+            "reasons": {
+              "review:score<78": 1,
+              "review:ets<72": 3
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 31
+    },
+    {
+      "triggeredAt": "2026-03-13T09:27:10.254Z",
+      "round": 31,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 5,
+      "accepted": 1,
+      "rejected": 4,
+      "acceptRate": 0.2,
+      "reasons": [
+        [
+          "review:ets<72",
+          2
+        ],
+        [
+          "fatal: chunks[7]: isolated floating adverb \"recently\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "pool:low_assembly_value",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 29,
+          "spec": [
+            {
+              "type": "1st-embedded",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 1,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 30,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 31,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 4,
+            "accepted": 0,
+            "rejected": 4,
+            "reasons": {
+              "fatal: chunks[7]: isolated floating adverb \"recently\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "pool:low_assembly_value": 1,
+              "review:ets<72": 2
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 34
+    },
+    {
+      "triggeredAt": "2026-03-13T09:27:53.113Z",
+      "round": 32,
+      "mode": "normal",
+      "type": "3rd-reporting",
+      "generated": 5,
+      "accepted": 0,
+      "rejected": 5,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "distractor:unsafe: \"is\" directly swaps with \"was\" in answer (tense change produces valid sentence)",
+          2
+        ],
+        [
+          "topic:repeat",
+          1
+        ],
+        [
+          "pool:low_assembly_value",
+          1
+        ],
+        [
+          "distractor:unsafe: \"will\" directly swaps with \"would\" in answer (modal change produces valid sentence)",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 30,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "topic:repeat": 1,
+              "pool:low_assembly_value": 1
+            }
+          }
+        },
+        {
+          "round": 31,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 32,
+          "spec": [
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "distractor:unsafe: \"is\" directly swaps with \"was\" in answer (tense change produces valid sentence)": 2,
+              "distractor:unsafe: \"will\" directly swaps with \"would\" in answer (modal change produces valid sentence)": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 35
+    }
+  ],
+  "history": [
+    {
+      "round": 27,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "interrogative",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 1
+        },
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 2,
+          "accepted": 2,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "review:blocker:tmp_r27_q1: indirect question clause uses inverted word order (MUST be declarative)|tmp_r27_q1: indirect question uses inverted word order": 1,
+            "review:blocker:tmp_r27_q2: indirect question clause uses inverted word order (MUST be declarative)|tmp_r27_q2: indirect question uses inverted word order": 1
+          }
+        },
+        "direct": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "fatal: chunks[7]: isolated floating adverb \"already\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 28,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 4
+        },
+        {
+          "type": "relative",
+          "difficulty": "hard",
+          "count": 1
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 5,
+          "accepted": 1,
+          "rejected": 4,
+          "reasons": {
+            "review:score<78": 1,
+            "review:ets<72": 3
+          }
+        }
+      }
+    },
+    {
+      "round": 29,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "1st-embedded",
+          "difficulty": "hard",
+          "count": 1
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 4
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 1,
+          "accepted": 1,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 1,
+          "accepted": 1,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 2,
+          "accepted": 1,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r29_q5: prompt/answer mismatch (answer doesn't respond to prompt)": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r29_q1: distractor could be a valid answer chunk (inserting it creates another valid sentence)": 1
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 30,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "3rd-reporting",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "topic:repeat": 1,
+            "pool:low_assembly_value": 1
+          }
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:score<78": 1
+          }
+        },
+        "relative": {
+          "generated": 1,
+          "accepted": 1,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 31,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 4,
+          "accepted": 0,
+          "rejected": 4,
+          "reasons": {
+            "fatal: chunks[7]: isolated floating adverb \"recently\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+            "pool:low_assembly_value": 1,
+            "review:ets<72": 2
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 32,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 4
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 3,
+          "accepted": 0,
+          "rejected": 3,
+          "reasons": {
+            "distractor:unsafe: \"is\" directly swaps with \"was\" in answer (tense change produces valid sentence)": 2,
+            "distractor:unsafe: \"will\" directly swaps with \"would\" in answer (modal change produces valid sentence)": 1
+          }
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "distractor:unsafe: \"is\" directly swaps with \"was\" in answer (tense change produces valid sentence)": 1
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    }
+  ]
+}
