@@ -1,0 +1,866 @@
+{
+  "generated_at": "2026-03-13T19:17:22.424Z",
+  "active": {
+    "negation": {
+      "sinceRound": 30,
+      "untilRound": 33,
+      "lastEvent": {
+        "triggeredAt": "2026-03-13T19:16:43.046Z",
+        "round": 30,
+        "mode": "normal",
+        "type": "negation",
+        "generated": 4,
+        "accepted": 0,
+        "rejected": 4,
+        "acceptRate": 0,
+        "reasons": [
+          [
+            "pool:low_assembly_value",
+            3
+          ],
+          [
+            "fatal: chunks (minus distractor) + prefilled words must equal answer words; prefilled_positions[\"the delivery driver\"]: chunk \"the delivery driver\" not found in answer",
+            1
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 28,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 1
+              },
+              {
+                "type": "relative",
+                "difficulty": "hard",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 0,
+              "accepted": 0,
+              "rejected": 0,
+              "reasons": {}
+            }
+          },
+          {
+            "round": 29,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "hard",
+                "count": 2
+              },
+              {
+                "type": "1st-embedded",
+                "difficulty": "hard",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 2,
+              "accepted": 0,
+              "rejected": 2,
+              "reasons": {
+                "pool:low_assembly_value": 2
+              }
+            }
+          },
+          {
+            "round": 30,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "hard",
+                "count": 2
+              },
+              {
+                "type": "1st-embedded",
+                "difficulty": "hard",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 2,
+              "accepted": 0,
+              "rejected": 2,
+              "reasons": {
+                "fatal: chunks (minus distractor) + prefilled words must equal answer words; prefilled_positions[\"the delivery driver\"]: chunk \"the delivery driver\" not found in answer": 1,
+                "pool:low_assembly_value": 1
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 33
+      }
+    }
+  },
+  "events": [
+    {
+      "triggeredAt": "2026-03-13T18:38:00.658Z",
+      "round": 5,
+      "mode": "normal",
+      "type": "1st-embedded",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "distractor:unsafe: \"have\" directly swaps with \"had\" in answer (have-group tense change produces valid sentence)",
+          1
+        ],
+        [
+          "review:blocker:tmp_r4_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'closed' can replace 'closes' in the same position to produce 'I found out when the post office closed on weekends,' which is grammatical (simple 1:1 substitution).",
+          1
+        ],
+        [
+          "review:solvability<78",
+          1
+        ],
+        [
+          "review:score<78",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "distractor:unsafe: \"have\" directly swaps with \"had\" in answer (have-group tense change produces valid sentence)": 1,
+              "review:blocker:tmp_r4_q1: distractor DIRECTLY replaces one word to form a valid sentence — 'closed' can replace 'closes' in the same position to produce 'I found out when the post office closed on weekends,' which is grammatical (simple 1:1 substitution).": 1,
+              "review:solvability<78": 1
+            }
+          }
+        },
+        {
+          "round": 5,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:score<78": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 8
+    },
+    {
+      "triggeredAt": "2026-03-13T18:55:43.297Z",
+      "round": 15,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]",
+          2
+        ],
+        [
+          "review:blocker:tmp_r15_q3: prompt/answer mismatch (prompt asks what YOU say about the cooking class schedule, but the answer speaks in third person about 'the chef' — the student is not responding about their own experience or knowledge of the schedule)",
+          1
+        ],
+        [
+          "review:ets<72",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 13,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 3
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 14,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]": 2
+            }
+          }
+        },
+        {
+          "round": 15,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r15_q3: prompt/answer mismatch (prompt asks what YOU say about the cooking class schedule, but the answer speaks in third person about 'the chef' — the student is not responding about their own experience or knowledge of the schedule)": 1,
+              "review:ets<72": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 18
+    },
+    {
+      "triggeredAt": "2026-03-13T19:09:47.542Z",
+      "round": 24,
+      "mode": "normal",
+      "type": "direct",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "pool:low_assembly_value",
+          2
+        ],
+        [
+          "review:blocker:tmp_r23_q4: multiple valid chunk orders (ambiguous arrangement) — chunks 'near' and 'campus' are listed as two separate tokens; a learner could attempt 'campus near' or place them non-adjacently, creating ambiguity about whether they must be joined as a prepositional phrase. The chunking should present 'near campus' as a single unit to enforce a unique correct order.",
+          1
+        ],
+        [
+          "review:blocker:tmp_r24_q5: 'to', 'find', 'out' are chunked as three separate single words instead of the natural collocation 'to find out' or 'find out', creating ambiguous assembly order and unnatural chunking that breaks the phrasal verb unnecessarily",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 22,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 23,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "pool:low_assembly_value": 2,
+              "review:blocker:tmp_r23_q4: multiple valid chunk orders (ambiguous arrangement) — chunks 'near' and 'campus' are listed as two separate tokens; a learner could attempt 'campus near' or place them non-adjacently, creating ambiguity about whether they must be joined as a prepositional phrase. The chunking should present 'near campus' as a single unit to enforce a unique correct order.": 1
+            }
+          }
+        },
+        {
+          "round": 24,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r24_q5: 'to', 'find', 'out' are chunked as three separate single words instead of the natural collocation 'to find out' or 'find out', creating ambiguous assembly order and unnatural chunking that breaks the phrasal verb unnecessarily": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 27
+    },
+    {
+      "triggeredAt": "2026-03-13T19:16:43.046Z",
+      "round": 30,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "pool:low_assembly_value",
+          3
+        ],
+        [
+          "fatal: chunks (minus distractor) + prefilled words must equal answer words; prefilled_positions[\"the delivery driver\"]: chunk \"the delivery driver\" not found in answer",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 28,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 29,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "hard",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "pool:low_assembly_value": 2
+            }
+          }
+        },
+        {
+          "round": 30,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "hard",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "fatal: chunks (minus distractor) + prefilled words must equal answer words; prefilled_positions[\"the delivery driver\"]: chunk \"the delivery driver\" not found in answer": 1,
+              "pool:low_assembly_value": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 33
+    }
+  ],
+  "history": [
+    {
+      "round": 27,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 1
+        },
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 1
+        },
+        {
+          "type": "relative",
+          "difficulty": "hard",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]": 1,
+            "review:blocker:tmp_r27_q2: 'had already closed' is a multi-word chunk that is NOT a natural collocation or fixed phrase — it is a constructed verb phrase. TPO norms require multi-word chunks only for natural collocations (e.g., 'by a specialist'). This violates the ~77% single-word chunk norm and reduces ETS similarity.": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "pool:low_assembly_value": 1,
+            "review:blocker:tmp_r27_q3: multiple valid chunk orders (ambiguous arrangement) — 'the gallery acquired' functions as a contact (zero-relative) clause modifying 'the painting', but because 'the painting' is prefilled and 'the', 'gallery', 'acquired' appear as separate chunks, learners may plausibly place 'the' before 'gallery acquired' in multiple ways, and more critically the passive perfect chunks 'had been' + 'restored' + 'by a specialist' can be read as allowing 'restored by a specialist had been' before the subject clause, creating ordering ambiguity.": 1
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 28,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 1
+        },
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 1
+        },
+        {
+          "type": "relative",
+          "difficulty": "hard",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 2,
+          "accepted": 1,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r28_q1: prompt/answer mismatch (the prompt asks about rescheduling a dental appointment, but the answer says 'the appointment would expire' — dental appointments do not 'expire'; this is semantically incoherent and the answer does not meaningfully respond to the rescheduling scenario)|tmp_r28_q1: ungrammatical answer — 'appointment would expire' is semantically anomalous/unnatural; appointments do not 'expire' in standard English usage (they are missed, cancelled, or lapsed); this risks being flagged as ungrammatical in context": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "pool:low_assembly_value": 2
+          }
+        }
+      }
+    },
+    {
+      "round": 29,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "hard",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "pool:low_assembly_value": 2
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 1,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "pool:low_assembly_value": 1
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 30,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "hard",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "fatal: chunks (minus distractor) + prefilled words must equal answer words; prefilled_positions[\"the delivery driver\"]: chunk \"the delivery driver\" not found in answer": 1,
+            "pool:low_assembly_value": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "pool:low_assembly_value": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "fatal: chunks (minus distractor) + prefilled words must equal answer words; prefilled_positions[\"the young architect\"]: chunk \"the young architect\" not found in answer": 1
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 31,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "hard",
+          "count": 1
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "hard",
+          "count": 1
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "pool:low_assembly_value": 2
+          }
+        },
+        "3rd-reporting": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "pool:low_assembly_value": 1
+          }
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "pool:low_assembly_value": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 32,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "relative",
+          "difficulty": "hard",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "pool:low_assembly_value": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "fatal: chunks (minus distractor) + prefilled words must equal answer words; prefilled_positions[\"the elderly neighbor\"]: chunk \"the elderly neighbor\" not found in answer": 1
+          }
+        },
+        "relative": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "pool:low_assembly_value": 2
+          }
+        }
+      }
+    }
+  ]
+}
