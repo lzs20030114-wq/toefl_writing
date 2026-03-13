@@ -1,0 +1,1839 @@
+{
+  "generated_at": "2026-03-13T18:15:51.512Z",
+  "targetSets": 6,
+  "outputPath": "/home/runner/work/toefl_writing/toefl_writing/data/buildSentence/staging/23064522948.json",
+  "rounds": [
+    {
+      "round": 1,
+      "phase": "broad",
+      "mode": "broad",
+      "gap": {
+        "total": 192,
+        "diffGap": 90,
+        "typeGap": 6,
+        "distractorGap": 42,
+        "assemblyBlockingGap": 54
+      },
+      "assemblyState": {
+        "total": 0,
+        "diffCounts": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0
+        },
+        "embedded": 0,
+        "negation": 0,
+        "distractor": 0,
+        "qmark": 0,
+        "nonEmbedded": 0,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 48,
+          "negationMin": 12,
+          "negationMax": 24,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "nonNegationMin": 36,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "medium": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "hard": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "negation": 0,
+          "negationCap": 0,
+          "distractor": 0,
+          "nonEmbedded": 0
+        },
+        "assemblableSets": 0,
+        "remainingSets": 6,
+        "remainingRecipe": {
+          "sets": 6,
+          "diff": {
+            "easy": 6,
+            "medium": 42,
+            "hard": 12
+          },
+          "style": {
+            "embeddedMin": 30,
+            "negationMin": 12,
+            "distractorMin": 42,
+            "nonEmbeddedMin": 12,
+            "embeddedCapacity": 48,
+            "negationCapacity": 24,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embedded": 30,
+          "negation": 12,
+          "distractor": 42,
+          "nonEmbedded": 12,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 42,
+            "priority": 252
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 30,
+            "priority": 210
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 42,
+            "priority": 126
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 12,
+            "priority": 96
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 12,
+            "priority": 84
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 12,
+            "priority": 60
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 6,
+            "priority": 12
+          }
+        ],
+        "progressRatios": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "nonEmbedded": 0,
+          "distractor": 0,
+          "negation": 0
+        },
+        "assemblyProgressScore": 0
+      },
+      "spec": [
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 1
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "specSelection": null,
+      "result": {
+        "generated": 10,
+        "accepted": 4,
+        "rejected": 6,
+        "rejectReasons": {
+          "review:solvability<78": 4,
+          "review:blocker:tmp_r1_q3: embedded wh-clause answer 'I found out where the campus cafe opens every morning' is semantically awkward — 'found out where X opens' implies learning the opening location, not hours; mismatch with prompt topic (hours) creates comprehension confusion, but more critically the distractor 'open' can replace 'opens' in exactly one position ('I found out where the campus cafe open every morning') — this is ungrammatical with singular subject, so NOT a substitution blocker; however flagging semantic mismatch as near-blocker in score": 1,
+          "review:blocker:tmp_r1_q9: multiple valid chunk orders — chunks 'next', 'to', 'the', 'post', 'office' are split into individual words, making alternative arrangements possible (e.g., 'the post office' could be assembled differently or 'next to' separated ambiguously from 'the post office' chain); the granular single-word chunking creates ambiguous assembly paths|tmp_r1_q9: chunk fragmentation creates ambiguous assembly — 'next', 'to', 'the', 'post', 'office' are five separate single-word chunks that could plausibly be recombined in variant orders (e.g., student might place 'to the post office next' or misorder prepositional fragments); multiple sub-orderings are locally plausible, creating ambiguity in assembly": 1
+        },
+        "typeStats": {
+          "negation": {
+            "generated": 2,
+            "accepted": 2,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "3rd-reporting": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "1st-embedded": {
+            "generated": 4,
+            "accepted": 1,
+            "rejected": 3,
+            "reasons": {
+              "review:blocker:tmp_r1_q3: embedded wh-clause answer 'I found out where the campus cafe opens every morning' is semantically awkward — 'found out where X opens' implies learning the opening location, not hours; mismatch with prompt topic (hours) creates comprehension confusion, but more critically the distractor 'open' can replace 'opens' in exactly one position ('I found out where the campus cafe open every morning') — this is ungrammatical with singular subject, so NOT a substitution blocker; however flagging semantic mismatch as near-blocker in score": 1,
+              "review:solvability<78": 2
+            }
+          },
+          "interrogative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "direct": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r1_q9: multiple valid chunk orders — chunks 'next', 'to', 'the', 'post', 'office' are split into individual words, making alternative arrangements possible (e.g., 'the post office' could be assembled differently or 'next to' separated ambiguously from 'the post office' chain); the granular single-word chunking creates ambiguous assembly paths|tmp_r1_q9: chunk fragmentation creates ambiguous assembly — 'next', 'to', 'the', 'post', 'office' are five separate single-word chunks that could plausibly be recombined in variant orders (e.g., student might place 'to the post office next' or misorder prepositional fragments); multiple sub-orderings are locally plausible, creating ambiguity in assembly": 1,
+              "review:solvability<78": 1
+            }
+          },
+          "relative": {
+            "generated": 2,
+            "accepted": 1,
+            "rejected": 1,
+            "reasons": {
+              "review:solvability<78": 1
+            }
+          }
+        },
+        "deltaAssemblable": 0,
+        "deltaProgress": 0.08974358974358974,
+        "acceptedGainRate": 0.05608974358974359
+      },
+      "nextGap": {
+        "total": 175,
+        "diffGap": 86,
+        "typeGap": 3,
+        "distractorGap": 38,
+        "assemblyBlockingGap": 48
+      },
+      "nextAssemblyState": {
+        "total": 4,
+        "diffCounts": {
+          "easy": 0,
+          "medium": 4,
+          "hard": 0
+        },
+        "embedded": 2,
+        "negation": 2,
+        "distractor": 4,
+        "qmark": 0,
+        "nonEmbedded": 2,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 48,
+          "negationMin": 12,
+          "negationMax": 24,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "nonNegationMin": 36,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "medium": {
+            "total": 4,
+            "embedded": 1,
+            "nonEmbedded": 3,
+            "negation": 2
+          },
+          "hard": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "negation": 1,
+          "negationCap": 0,
+          "distractor": 0,
+          "nonEmbedded": 1
+        },
+        "assemblableSets": 0,
+        "remainingSets": 6,
+        "remainingRecipe": {
+          "sets": 6,
+          "diff": {
+            "easy": 6,
+            "medium": 38,
+            "hard": 12
+          },
+          "style": {
+            "embeddedMin": 28,
+            "negationMin": 10,
+            "distractorMin": 38,
+            "nonEmbeddedMin": 10,
+            "embeddedCapacity": 46,
+            "negationCapacity": 22,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 6,
+          "medium": 38,
+          "hard": 12,
+          "embedded": 28,
+          "negation": 10,
+          "distractor": 38,
+          "nonEmbedded": 10,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 38,
+            "priority": 228
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 28,
+            "priority": 196
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 38,
+            "priority": 114
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 12,
+            "priority": 96
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 10,
+            "priority": 70
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 10,
+            "priority": 50
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 6,
+            "priority": 12
+          }
+        ],
+        "progressRatios": {
+          "easy": 0,
+          "medium": 0.09523809523809523,
+          "hard": 0,
+          "embedded": 0.06666666666666667,
+          "nonEmbedded": 0.16666666666666666,
+          "distractor": 0.09523809523809523,
+          "negation": 0.16666666666666666
+        },
+        "assemblyProgressScore": 0.08974358974358974
+      },
+      "phaseSignals": {
+        "strongTargeting": false,
+        "repairMode": false,
+        "strongGateReady": false,
+        "repairGateReady": false,
+        "strongReasons": [],
+        "repairReasons": [],
+        "momentum": {
+          "windowCount": 0,
+          "accepted": 0,
+          "generated": 0,
+          "poolGrowth": 0,
+          "deltaAssemblable": 0,
+          "deltaProgress": 0,
+          "zeroGainRounds": 0,
+          "zeroProgressRounds": 0,
+          "acceptedGainRate": 0
+        }
+      },
+      "typeReliability": {
+        "negation": 0.8,
+        "3rd-reporting": 0.8,
+        "1st-embedded": 0.8,
+        "interrogative": 0.8,
+        "direct": 0.8,
+        "relative": 0.8
+      }
+    },
+    {
+      "round": 2,
+      "phase": "broad",
+      "mode": "broad",
+      "gap": {
+        "total": 175,
+        "diffGap": 86,
+        "typeGap": 3,
+        "distractorGap": 38,
+        "assemblyBlockingGap": 48
+      },
+      "assemblyState": {
+        "total": 4,
+        "diffCounts": {
+          "easy": 0,
+          "medium": 4,
+          "hard": 0
+        },
+        "embedded": 2,
+        "negation": 2,
+        "distractor": 4,
+        "qmark": 0,
+        "nonEmbedded": 2,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 48,
+          "negationMin": 12,
+          "negationMax": 24,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "nonNegationMin": 36,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "medium": {
+            "total": 4,
+            "embedded": 1,
+            "nonEmbedded": 3,
+            "negation": 2
+          },
+          "hard": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "negation": 1,
+          "negationCap": 0,
+          "distractor": 0,
+          "nonEmbedded": 1
+        },
+        "assemblableSets": 0,
+        "remainingSets": 6,
+        "remainingRecipe": {
+          "sets": 6,
+          "diff": {
+            "easy": 6,
+            "medium": 38,
+            "hard": 12
+          },
+          "style": {
+            "embeddedMin": 28,
+            "negationMin": 10,
+            "distractorMin": 38,
+            "nonEmbeddedMin": 10,
+            "embeddedCapacity": 46,
+            "negationCapacity": 22,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 6,
+          "medium": 38,
+          "hard": 12,
+          "embedded": 28,
+          "negation": 10,
+          "distractor": 38,
+          "nonEmbedded": 10,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 38,
+            "priority": 228
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 28,
+            "priority": 196
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 38,
+            "priority": 114
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 12,
+            "priority": 96
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 10,
+            "priority": 70
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 10,
+            "priority": 50
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 6,
+            "priority": 12
+          }
+        ],
+        "progressRatios": {
+          "easy": 0,
+          "medium": 0.09523809523809523,
+          "hard": 0,
+          "embedded": 0.06666666666666667,
+          "nonEmbedded": 0.16666666666666666,
+          "distractor": 0.09523809523809523,
+          "negation": 0.16666666666666666
+        },
+        "assemblyProgressScore": 0.08974358974358974
+      },
+      "spec": [
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "interrogative",
+          "difficulty": "easy",
+          "count": 2
+        }
+      ],
+      "specSelection": null,
+      "result": {
+        "generated": 10,
+        "accepted": 1,
+        "rejected": 9,
+        "rejectReasons": {
+          "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+          "fatal: chunks (minus distractor) + prefilled words must equal answer words": 1,
+          "review:blocker:tmp_r2_q5: prompt/answer mismatch — prompt asks what the librarian asked about overdue books, but answer reports a question about whether borrowed books were returned on time (shifts topic from 'overdue books' to 'returned on time', changing the substance of the reported question in a misleading way); additionally the answer does not faithfully reflect the prompt's framing": 1,
+          "review:blocker:tmp_r2_q10: indirect question clause uses inverted word order — 'Do you know if the cooking class meets every Saturday morning?' begins with 'Do you know', making the outer clause an interrogative with subject-auxiliary inversion; the embedded if-clause itself is declarative, but the item is structured as a direct yes/no question rather than a polite indirect question frame, and the prefilled 'do you' forces auxiliary inversion at the sentence level, violating the declarative-word-order requirement for the interrogative framing expected in this item type": 1,
+          "review:solvability<78": 3,
+          "review:blocker:tmp_r2_q10: indirect question clause uses inverted word order — 'Do you know if the cooking class meets every Saturday morning?' begins with 'Do you know', making the outer clause an interrogative with subject-auxiliary inversion; the embedded if-clause itself is declarative, but the item is structured as a direct yes/no question rather than a polite indirect question frame, and the prefilled 'do you' forces auxiliary inversion at the sentence level, violating the declarative-word-order requirement for the interrogative framing expected in this item type|tmp_r2_q1: distractor 'feels' can replace 'felt' (single word, same position) and produce a grammatical sentence: 'The waiting room at that dental clinic feels surprisingly calm and comfortable.' This is a direct 1:1 substitution blocker.": 1,
+          "review:blocker:tmp_r2_q2: distractor 'demonstrate' cannot directly replace 'demonstrated' in a grammatical sentence without tense mismatch — 'The instructor...demonstrate every pose' is ungrammatical. NOT a 1:1 substitution blocker. Score deduction only.": 1
+        },
+        "typeStats": {
+          "negation": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "3rd-reporting": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r2_q5: prompt/answer mismatch — prompt asks what the librarian asked about overdue books, but answer reports a question about whether borrowed books were returned on time (shifts topic from 'overdue books' to 'returned on time', changing the substance of the reported question in a misleading way); additionally the answer does not faithfully reflect the prompt's framing": 1
+            }
+          },
+          "1st-embedded": {
+            "generated": 2,
+            "accepted": 1,
+            "rejected": 1,
+            "reasons": {
+              "review:solvability<78": 1
+            }
+          },
+          "interrogative": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "fatal: chunks (minus distractor) + prefilled words must equal answer words": 1,
+              "review:blocker:tmp_r2_q10: indirect question clause uses inverted word order — 'Do you know if the cooking class meets every Saturday morning?' begins with 'Do you know', making the outer clause an interrogative with subject-auxiliary inversion; the embedded if-clause itself is declarative, but the item is structured as a direct yes/no question rather than a polite indirect question frame, and the prefilled 'do you' forces auxiliary inversion at the sentence level, violating the declarative-word-order requirement for the interrogative framing expected in this item type": 1
+            }
+          },
+          "direct": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "review:blocker:tmp_r2_q10: indirect question clause uses inverted word order — 'Do you know if the cooking class meets every Saturday morning?' begins with 'Do you know', making the outer clause an interrogative with subject-auxiliary inversion; the embedded if-clause itself is declarative, but the item is structured as a direct yes/no question rather than a polite indirect question frame, and the prefilled 'do you' forces auxiliary inversion at the sentence level, violating the declarative-word-order requirement for the interrogative framing expected in this item type|tmp_r2_q1: distractor 'feels' can replace 'felt' (single word, same position) and produce a grammatical sentence: 'The waiting room at that dental clinic feels surprisingly calm and comfortable.' This is a direct 1:1 substitution blocker.": 1,
+              "review:blocker:tmp_r2_q2: distractor 'demonstrate' cannot directly replace 'demonstrated' in a grammatical sentence without tense mismatch — 'The instructor...demonstrate every pose' is ungrammatical. NOT a 1:1 substitution blocker. Score deduction only.": 1,
+              "review:solvability<78": 1
+            }
+          },
+          "relative": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "review:solvability<78": 1
+            }
+          }
+        },
+        "deltaAssemblable": 0,
+        "deltaProgress": 0.019230769230769232,
+        "acceptedGainRate": 0.04807692307692308
+      },
+      "nextGap": {
+        "total": 172,
+        "diffGap": 85,
+        "typeGap": 3,
+        "distractorGap": 37,
+        "assemblyBlockingGap": 47
+      },
+      "nextAssemblyState": {
+        "total": 5,
+        "diffCounts": {
+          "easy": 0,
+          "medium": 4,
+          "hard": 1
+        },
+        "embedded": 3,
+        "negation": 2,
+        "distractor": 5,
+        "qmark": 0,
+        "nonEmbedded": 2,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 48,
+          "negationMin": 12,
+          "negationMax": 24,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "nonNegationMin": 36,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "medium": {
+            "total": 4,
+            "embedded": 1,
+            "nonEmbedded": 3,
+            "negation": 2
+          },
+          "hard": {
+            "total": 1,
+            "embedded": 1,
+            "nonEmbedded": 0,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "negation": 1,
+          "negationCap": 0,
+          "distractor": 0,
+          "nonEmbedded": 1
+        },
+        "assemblableSets": 0,
+        "remainingSets": 6,
+        "remainingRecipe": {
+          "sets": 6,
+          "diff": {
+            "easy": 6,
+            "medium": 38,
+            "hard": 11
+          },
+          "style": {
+            "embeddedMin": 27,
+            "negationMin": 10,
+            "distractorMin": 37,
+            "nonEmbeddedMin": 10,
+            "embeddedCapacity": 45,
+            "negationCapacity": 22,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 6,
+          "medium": 38,
+          "hard": 11,
+          "embedded": 27,
+          "negation": 10,
+          "distractor": 37,
+          "nonEmbedded": 10,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 38,
+            "priority": 228
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 27,
+            "priority": 189
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 37,
+            "priority": 111
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 11,
+            "priority": 88
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 10,
+            "priority": 70
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 10,
+            "priority": 50
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 6,
+            "priority": 12
+          }
+        ],
+        "progressRatios": {
+          "easy": 0,
+          "medium": 0.09523809523809523,
+          "hard": 0.08333333333333333,
+          "embedded": 0.1,
+          "nonEmbedded": 0.16666666666666666,
+          "distractor": 0.11904761904761904,
+          "negation": 0.16666666666666666
+        },
+        "assemblyProgressScore": 0.10897435897435898
+      },
+      "phaseSignals": {
+        "strongTargeting": false,
+        "repairMode": false,
+        "strongGateReady": false,
+        "repairGateReady": false,
+        "strongReasons": [],
+        "repairReasons": [],
+        "momentum": {
+          "windowCount": 1,
+          "accepted": 4,
+          "generated": 10,
+          "poolGrowth": 4,
+          "deltaAssemblable": 0,
+          "deltaProgress": 0.08974358974358974,
+          "zeroGainRounds": 1,
+          "zeroProgressRounds": 0,
+          "acceptedGainRate": 0.05608974358974359
+        }
+      },
+      "typeReliability": {
+        "negation": 1.25,
+        "3rd-reporting": 0.8,
+        "1st-embedded": 0.47,
+        "interrogative": 0.8,
+        "direct": 0.2,
+        "relative": 0.83
+      }
+    },
+    {
+      "round": 3,
+      "phase": "broad",
+      "mode": "broad",
+      "gap": {
+        "total": 172,
+        "diffGap": 85,
+        "typeGap": 3,
+        "distractorGap": 37,
+        "assemblyBlockingGap": 47
+      },
+      "assemblyState": {
+        "total": 5,
+        "diffCounts": {
+          "easy": 0,
+          "medium": 4,
+          "hard": 1
+        },
+        "embedded": 3,
+        "negation": 2,
+        "distractor": 5,
+        "qmark": 0,
+        "nonEmbedded": 2,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 48,
+          "negationMin": 12,
+          "negationMax": 24,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "nonNegationMin": 36,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "medium": {
+            "total": 4,
+            "embedded": 1,
+            "nonEmbedded": 3,
+            "negation": 2
+          },
+          "hard": {
+            "total": 1,
+            "embedded": 1,
+            "nonEmbedded": 0,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "negation": 1,
+          "negationCap": 0,
+          "distractor": 0,
+          "nonEmbedded": 1
+        },
+        "assemblableSets": 0,
+        "remainingSets": 6,
+        "remainingRecipe": {
+          "sets": 6,
+          "diff": {
+            "easy": 6,
+            "medium": 38,
+            "hard": 11
+          },
+          "style": {
+            "embeddedMin": 27,
+            "negationMin": 10,
+            "distractorMin": 37,
+            "nonEmbeddedMin": 10,
+            "embeddedCapacity": 45,
+            "negationCapacity": 22,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 6,
+          "medium": 38,
+          "hard": 11,
+          "embedded": 27,
+          "negation": 10,
+          "distractor": 37,
+          "nonEmbedded": 10,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 38,
+            "priority": 228
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 27,
+            "priority": 189
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 37,
+            "priority": 111
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 11,
+            "priority": 88
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 10,
+            "priority": 70
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 10,
+            "priority": 50
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 6,
+            "priority": 12
+          }
+        ],
+        "progressRatios": {
+          "easy": 0,
+          "medium": 0.09523809523809523,
+          "hard": 0.08333333333333333,
+          "embedded": 0.1,
+          "nonEmbedded": 0.16666666666666666,
+          "distractor": 0.11904761904761904,
+          "negation": 0.16666666666666666
+        },
+        "assemblyProgressScore": 0.10897435897435898
+      },
+      "spec": [
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "direct",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "direct",
+          "difficulty": "easy",
+          "count": 1
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "hard",
+          "count": 1
+        }
+      ],
+      "specSelection": null,
+      "result": {
+        "generated": 10,
+        "accepted": 2,
+        "rejected": 8,
+        "rejectReasons": {
+          "review:blocker:tmp_r3_q7: distractor DIRECTLY replaces one word to form a valid sentence — 'I checked the weather forecast before leaving for the trail.' replaces 'did not check' with just 'checked' at the same position (1:1 verb substitution, no rearrangement needed)|tmp_r3_q7: distractor 'checked' replaces the two-chunk sequence 'did not' + 'check' effectively as a single verb form substitution; while two chunks are involved, the learner need only drop 'did not' and swap 'check' → 'checked' with no reordering required, making this functionally a direct replacement blocker.": 1,
+          "review:blocker:tmp_r3_q8: prompt/answer mismatch — the prompt asks how YOU respond when the delivery driver asks about YOUR package, but the answer speaks about 'the elderly neighbor,' a third party who is not the speaker or the driver|tmp_r3_q8: distractor DIRECTLY replaces one word to form a valid sentence — 'The elderly neighbor received any delivery notice from the driver.' — wait, 'any' makes this ungrammatical; however 'The elderly neighbor received a delivery notice from the driver' would require chunk swap. Re-evaluating: 'received' replaces 'did not' + 'receive' (two chunks), so this requires removing one chunk and replacing another — NOT a pure 1:1 substitution. Downgraded to score deduction only.": 1,
+          "review:blocker:tmp_r3_q4: prompt/answer mismatch — the prompt asks what you say when your neighbor asks where the yoga CLASS moved, but the answer reports that 'I found out where the yoga instructor relocated the morning class,' which is an unrelated piece of information rather than a direct response to the neighbor's question": 1,
+          "review:ets<72": 4,
+          "review:solvability<78": 1
+        },
+        "typeStats": {
+          "negation": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r3_q7: distractor DIRECTLY replaces one word to form a valid sentence — 'I checked the weather forecast before leaving for the trail.' replaces 'did not check' with just 'checked' at the same position (1:1 verb substitution, no rearrangement needed)|tmp_r3_q7: distractor 'checked' replaces the two-chunk sequence 'did not' + 'check' effectively as a single verb form substitution; while two chunks are involved, the learner need only drop 'did not' and swap 'check' → 'checked' with no reordering required, making this functionally a direct replacement blocker.": 1,
+              "review:blocker:tmp_r3_q8: prompt/answer mismatch — the prompt asks how YOU respond when the delivery driver asks about YOUR package, but the answer speaks about 'the elderly neighbor,' a third party who is not the speaker or the driver|tmp_r3_q8: distractor DIRECTLY replaces one word to form a valid sentence — 'The elderly neighbor received any delivery notice from the driver.' — wait, 'any' makes this ungrammatical; however 'The elderly neighbor received a delivery notice from the driver' would require chunk swap. Re-evaluating: 'received' replaces 'did not' + 'receive' (two chunks), so this requires removing one chunk and replacing another — NOT a pure 1:1 substitution. Downgraded to score deduction only.": 1
+            }
+          },
+          "3rd-reporting": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:solvability<78": 1
+            }
+          },
+          "1st-embedded": {
+            "generated": 2,
+            "accepted": 1,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r3_q4: prompt/answer mismatch — the prompt asks what you say when your neighbor asks where the yoga CLASS moved, but the answer reports that 'I found out where the yoga instructor relocated the morning class,' which is an unrelated piece of information rather than a direct response to the neighbor's question": 1
+            }
+          },
+          "interrogative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "direct": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "review:ets<72": 3
+            }
+          },
+          "relative": {
+            "generated": 2,
+            "accepted": 1,
+            "rejected": 1,
+            "reasons": {
+              "review:ets<72": 1
+            }
+          }
+        },
+        "deltaAssemblable": 0,
+        "deltaProgress": 0.038461538461538436,
+        "acceptedGainRate": 0.048076923076923045
+      },
+      "nextGap": {
+        "total": 166,
+        "diffGap": 83,
+        "typeGap": 3,
+        "distractorGap": 35,
+        "assemblyBlockingGap": 45
+      },
+      "nextAssemblyState": {
+        "total": 7,
+        "diffCounts": {
+          "easy": 0,
+          "medium": 5,
+          "hard": 2
+        },
+        "embedded": 4,
+        "negation": 2,
+        "distractor": 7,
+        "qmark": 0,
+        "nonEmbedded": 3,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 48,
+          "negationMin": 12,
+          "negationMax": 24,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 12,
+          "nonNegationMin": 36,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "medium": {
+            "total": 5,
+            "embedded": 2,
+            "nonEmbedded": 3,
+            "negation": 2
+          },
+          "hard": {
+            "total": 2,
+            "embedded": 1,
+            "nonEmbedded": 1,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 1,
+          "embedded": 0,
+          "negation": 1,
+          "negationCap": 0,
+          "distractor": 1,
+          "nonEmbedded": 1
+        },
+        "assemblableSets": 0,
+        "remainingSets": 6,
+        "remainingRecipe": {
+          "sets": 6,
+          "diff": {
+            "easy": 6,
+            "medium": 37,
+            "hard": 10
+          },
+          "style": {
+            "embeddedMin": 26,
+            "negationMin": 10,
+            "distractorMin": 35,
+            "nonEmbeddedMin": 9,
+            "embeddedCapacity": 44,
+            "negationCapacity": 22,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 6,
+          "medium": 37,
+          "hard": 10,
+          "embedded": 26,
+          "negation": 10,
+          "distractor": 35,
+          "nonEmbedded": 9,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 37,
+            "priority": 222
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 26,
+            "priority": 182
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 35,
+            "priority": 105
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 10,
+            "priority": 80
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 9,
+            "priority": 63
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 10,
+            "priority": 50
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 6,
+            "priority": 12
+          }
+        ],
+        "progressRatios": {
+          "easy": 0,
+          "medium": 0.11904761904761904,
+          "hard": 0.16666666666666666,
+          "embedded": 0.13333333333333333,
+          "nonEmbedded": 0.25,
+          "distractor": 0.16666666666666666,
+          "negation": 0.16666666666666666
+        },
+        "assemblyProgressScore": 0.1474358974358974
+      },
+      "phaseSignals": {
+        "strongTargeting": false,
+        "repairMode": false,
+        "strongGateReady": false,
+        "repairGateReady": false,
+        "strongReasons": [],
+        "repairReasons": [],
+        "momentum": {
+          "windowCount": 2,
+          "accepted": 5,
+          "generated": 20,
+          "poolGrowth": 5,
+          "deltaAssemblable": 0,
+          "deltaProgress": 0.10897435897435898,
+          "zeroGainRounds": 2,
+          "zeroProgressRounds": 0,
+          "acceptedGainRate": 0.054487179487179495
+        }
+      },
+      "typeReliability": {
+        "negation": 1.25,
+        "3rd-reporting": 0.2,
+        "1st-embedded": 0.59,
+        "interrogative": 0.2,
+        "direct": 0.2,
+        "relative": 0.5
+      }
+    }
+  ],
+  "final": {
+    "pool": {
+      "easy": 0,
+      "medium": 5,
+      "hard": 2
+    },
+    "assemblyState": {
+      "total": 7,
+      "diffCounts": {
+        "easy": 0,
+        "medium": 5,
+        "hard": 2
+      },
+      "embedded": 4,
+      "negation": 2,
+      "distractor": 7,
+      "qmark": 0,
+      "nonEmbedded": 3,
+      "need": {
+        "easy": 6,
+        "medium": 42,
+        "hard": 12,
+        "embeddedMin": 30,
+        "embeddedMax": 48,
+        "negationMin": 12,
+        "negationMax": 24,
+        "distractorMin": 42,
+        "nonEmbeddedMin": 12,
+        "nonNegationMin": 36,
+        "qmarkMax": 12
+      },
+      "slotInventory": {
+        "easy": {
+          "total": 0,
+          "embedded": 0,
+          "nonEmbedded": 0,
+          "negation": 0
+        },
+        "medium": {
+          "total": 5,
+          "embedded": 2,
+          "nonEmbedded": 3,
+          "negation": 2
+        },
+        "hard": {
+          "total": 2,
+          "embedded": 1,
+          "nonEmbedded": 1,
+          "negation": 0
+        }
+      },
+      "assemblableBy": {
+        "easy": 0,
+        "medium": 0,
+        "hard": 1,
+        "embedded": 0,
+        "negation": 1,
+        "negationCap": 0,
+        "distractor": 1,
+        "nonEmbedded": 1
+      },
+      "assemblableSets": 0,
+      "remainingSets": 6,
+      "remainingRecipe": {
+        "sets": 6,
+        "diff": {
+          "easy": 6,
+          "medium": 37,
+          "hard": 10
+        },
+        "style": {
+          "embeddedMin": 26,
+          "negationMin": 10,
+          "distractorMin": 35,
+          "nonEmbeddedMin": 9,
+          "embeddedCapacity": 44,
+          "negationCapacity": 22,
+          "qmarkCapacity": 12
+        }
+      },
+      "deficits": {
+        "easy": 6,
+        "medium": 37,
+        "hard": 10,
+        "embedded": 26,
+        "negation": 10,
+        "distractor": 35,
+        "nonEmbedded": 9,
+        "assemblableSets": 6
+      },
+      "embeddedOverflow": 0,
+      "negationOverflow": 0,
+      "qmarkOverflow": 0,
+      "limitingFactors": [
+        {
+          "key": "medium_shortage",
+          "gap": 37,
+          "priority": 222
+        },
+        {
+          "key": "embedded_shortage",
+          "gap": 26,
+          "priority": 182
+        },
+        {
+          "key": "distractor_shortage",
+          "gap": 35,
+          "priority": 105
+        },
+        {
+          "key": "hard_shortage",
+          "gap": 10,
+          "priority": 80
+        },
+        {
+          "key": "non_embedded_shortage",
+          "gap": 9,
+          "priority": 63
+        },
+        {
+          "key": "negation_shortage",
+          "gap": 10,
+          "priority": 50
+        },
+        {
+          "key": "easy_shortage",
+          "gap": 6,
+          "priority": 12
+        }
+      ],
+      "progressRatios": {
+        "easy": 0,
+        "medium": 0.11904761904761904,
+        "hard": 0.16666666666666666,
+        "embedded": 0.13333333333333333,
+        "nonEmbedded": 0.25,
+        "distractor": 0.16666666666666666,
+        "negation": 0.16666666666666666
+      },
+      "assemblyProgressScore": 0.1474358974358974
+    },
+    "assembledSets": 0,
+    "targetSets": 6,
+    "assemblyDiagnostics": [
+      {
+        "setId": 1,
+        "pool": {
+          "easy": 0,
+          "medium": 5,
+          "hard": 2,
+          "total": 7
+        },
+        "assemblyState": {
+          "assemblableSets": 0,
+          "remainingSets": 6,
+          "deficits": {
+            "easy": 6,
+            "medium": 37,
+            "hard": 10,
+            "embedded": 26,
+            "negation": 10,
+            "distractor": 35,
+            "nonEmbedded": 9,
+            "assemblableSets": 6
+          },
+          "embeddedOverflow": 0,
+          "qmarkOverflow": 0,
+          "limitingFactors": [
+            {
+              "key": "medium_shortage",
+              "gap": 37,
+              "priority": 222
+            },
+            {
+              "key": "embedded_shortage",
+              "gap": 26,
+              "priority": 182
+            },
+            {
+              "key": "distractor_shortage",
+              "gap": 35,
+              "priority": 105
+            },
+            {
+              "key": "hard_shortage",
+              "gap": 10,
+              "priority": 80
+            },
+            {
+              "key": "non_embedded_shortage",
+              "gap": 9,
+              "priority": 63
+            },
+            {
+              "key": "negation_shortage",
+              "gap": 10,
+              "priority": 50
+            },
+            {
+              "key": "easy_shortage",
+              "gap": 6,
+              "priority": 12
+            }
+          ]
+        },
+        "maxStyleCapacity": {
+          "embedded": 4,
+          "distractor": 7
+        },
+        "reason": "infeasible_precheck"
+      },
+      {
+        "setId": 2,
+        "pool": {
+          "easy": 0,
+          "medium": 5,
+          "hard": 2,
+          "total": 7
+        },
+        "assemblyState": {
+          "assemblableSets": 0,
+          "remainingSets": 6,
+          "deficits": {
+            "easy": 6,
+            "medium": 37,
+            "hard": 10,
+            "embedded": 26,
+            "negation": 10,
+            "distractor": 35,
+            "nonEmbedded": 9,
+            "assemblableSets": 6
+          },
+          "embeddedOverflow": 0,
+          "qmarkOverflow": 0,
+          "limitingFactors": [
+            {
+              "key": "medium_shortage",
+              "gap": 37,
+              "priority": 222
+            },
+            {
+              "key": "embedded_shortage",
+              "gap": 26,
+              "priority": 182
+            },
+            {
+              "key": "distractor_shortage",
+              "gap": 35,
+              "priority": 105
+            },
+            {
+              "key": "hard_shortage",
+              "gap": 10,
+              "priority": 80
+            },
+            {
+              "key": "non_embedded_shortage",
+              "gap": 9,
+              "priority": 63
+            },
+            {
+              "key": "negation_shortage",
+              "gap": 10,
+              "priority": 50
+            },
+            {
+              "key": "easy_shortage",
+              "gap": 6,
+              "priority": 12
+            }
+          ]
+        },
+        "maxStyleCapacity": {
+          "embedded": 4,
+          "distractor": 7
+        },
+        "reason": "infeasible_precheck"
+      },
+      {
+        "setId": 3,
+        "pool": {
+          "easy": 0,
+          "medium": 5,
+          "hard": 2,
+          "total": 7
+        },
+        "assemblyState": {
+          "assemblableSets": 0,
+          "remainingSets": 6,
+          "deficits": {
+            "easy": 6,
+            "medium": 37,
+            "hard": 10,
+            "embedded": 26,
+            "negation": 10,
+            "distractor": 35,
+            "nonEmbedded": 9,
+            "assemblableSets": 6
+          },
+          "embeddedOverflow": 0,
+          "qmarkOverflow": 0,
+          "limitingFactors": [
+            {
+              "key": "medium_shortage",
+              "gap": 37,
+              "priority": 222
+            },
+            {
+              "key": "embedded_shortage",
+              "gap": 26,
+              "priority": 182
+            },
+            {
+              "key": "distractor_shortage",
+              "gap": 35,
+              "priority": 105
+            },
+            {
+              "key": "hard_shortage",
+              "gap": 10,
+              "priority": 80
+            },
+            {
+              "key": "non_embedded_shortage",
+              "gap": 9,
+              "priority": 63
+            },
+            {
+              "key": "negation_shortage",
+              "gap": 10,
+              "priority": 50
+            },
+            {
+              "key": "easy_shortage",
+              "gap": 6,
+              "priority": 12
+            }
+          ]
+        },
+        "maxStyleCapacity": {
+          "embedded": 4,
+          "distractor": 7
+        },
+        "reason": "infeasible_precheck"
+      },
+      {
+        "setId": 4,
+        "pool": {
+          "easy": 0,
+          "medium": 5,
+          "hard": 2,
+          "total": 7
+        },
+        "assemblyState": {
+          "assemblableSets": 0,
+          "remainingSets": 6,
+          "deficits": {
+            "easy": 6,
+            "medium": 37,
+            "hard": 10,
+            "embedded": 26,
+            "negation": 10,
+            "distractor": 35,
+            "nonEmbedded": 9,
+            "assemblableSets": 6
+          },
+          "embeddedOverflow": 0,
+          "qmarkOverflow": 0,
+          "limitingFactors": [
+            {
+              "key": "medium_shortage",
+              "gap": 37,
+              "priority": 222
+            },
+            {
+              "key": "embedded_shortage",
+              "gap": 26,
+              "priority": 182
+            },
+            {
+              "key": "distractor_shortage",
+              "gap": 35,
+              "priority": 105
+            },
+            {
+              "key": "hard_shortage",
+              "gap": 10,
+              "priority": 80
+            },
+            {
+              "key": "non_embedded_shortage",
+              "gap": 9,
+              "priority": 63
+            },
+            {
+              "key": "negation_shortage",
+              "gap": 10,
+              "priority": 50
+            },
+            {
+              "key": "easy_shortage",
+              "gap": 6,
+              "priority": 12
+            }
+          ]
+        },
+        "maxStyleCapacity": {
+          "embedded": 4,
+          "distractor": 7
+        },
+        "reason": "infeasible_precheck"
+      },
+      {
+        "setId": 5,
+        "pool": {
+          "easy": 0,
+          "medium": 5,
+          "hard": 2,
+          "total": 7
+        },
+        "assemblyState": {
+          "assemblableSets": 0,
+          "remainingSets": 6,
+          "deficits": {
+            "easy": 6,
+            "medium": 37,
+            "hard": 10,
+            "embedded": 26,
+            "negation": 10,
+            "distractor": 35,
+            "nonEmbedded": 9,
+            "assemblableSets": 6
+          },
+          "embeddedOverflow": 0,
+          "qmarkOverflow": 0,
+          "limitingFactors": [
+            {
+              "key": "medium_shortage",
+              "gap": 37,
+              "priority": 222
+            },
+            {
+              "key": "embedded_shortage",
+              "gap": 26,
+              "priority": 182
+            },
+            {
+              "key": "distractor_shortage",
+              "gap": 35,
+              "priority": 105
+            },
+            {
+              "key": "hard_shortage",
+              "gap": 10,
+              "priority": 80
+            },
+            {
+              "key": "non_embedded_shortage",
+              "gap": 9,
+              "priority": 63
+            },
+            {
+              "key": "negation_shortage",
+              "gap": 10,
+              "priority": 50
+            },
+            {
+              "key": "easy_shortage",
+              "gap": 6,
+              "priority": 12
+            }
+          ]
+        },
+        "maxStyleCapacity": {
+          "embedded": 4,
+          "distractor": 7
+        },
+        "reason": "infeasible_precheck"
+      },
+      {
+        "setId": 6,
+        "pool": {
+          "easy": 0,
+          "medium": 5,
+          "hard": 2,
+          "total": 7
+        },
+        "assemblyState": {
+          "assemblableSets": 0,
+          "remainingSets": 6,
+          "deficits": {
+            "easy": 6,
+            "medium": 37,
+            "hard": 10,
+            "embedded": 26,
+            "negation": 10,
+            "distractor": 35,
+            "nonEmbedded": 9,
+            "assemblableSets": 6
+          },
+          "embeddedOverflow": 0,
+          "qmarkOverflow": 0,
+          "limitingFactors": [
+            {
+              "key": "medium_shortage",
+              "gap": 37,
+              "priority": 222
+            },
+            {
+              "key": "embedded_shortage",
+              "gap": 26,
+              "priority": 182
+            },
+            {
+              "key": "distractor_shortage",
+              "gap": 35,
+              "priority": 105
+            },
+            {
+              "key": "hard_shortage",
+              "gap": 10,
+              "priority": 80
+            },
+            {
+              "key": "non_embedded_shortage",
+              "gap": 9,
+              "priority": 63
+            },
+            {
+              "key": "negation_shortage",
+              "gap": 10,
+              "priority": 50
+            },
+            {
+              "key": "easy_shortage",
+              "gap": 6,
+              "priority": 12
+            }
+          ]
+        },
+        "maxStyleCapacity": {
+          "embedded": 4,
+          "distractor": 7
+        },
+        "reason": "infeasible_precheck"
+      }
+    ],
+    "topRejectReasons": [
+      [
+        "review:solvability<78",
+        8
+      ],
+      [
+        "review:ets<72",
+        4
+      ],
+      [
+        "review:blocker:tmp_r1_q3: embedded wh-clause answer 'I found out where the campus cafe opens every morning' is semantically awkward — 'found out where X opens' implies learning the opening location, not hours; mismatch with prompt topic (hours) creates comprehension confusion, but more critically the distractor 'open' can replace 'opens' in exactly one position ('I found out where the campus cafe open every morning') — this is ungrammatical with singular subject, so NOT a substitution blocker; however flagging semantic mismatch as near-blocker in score",
+        1
+      ],
+      [
+        "review:blocker:tmp_r1_q9: multiple valid chunk orders — chunks 'next', 'to', 'the', 'post', 'office' are split into individual words, making alternative arrangements possible (e.g., 'the post office' could be assembled differently or 'next to' separated ambiguously from 'the post office' chain); the granular single-word chunking creates ambiguous assembly paths|tmp_r1_q9: chunk fragmentation creates ambiguous assembly — 'next', 'to', 'the', 'post', 'office' are five separate single-word chunks that could plausibly be recombined in variant orders (e.g., student might place 'to the post office next' or misorder prepositional fragments); multiple sub-orderings are locally plausible, creating ambiguity in assembly",
+        1
+      ],
+      [
+        "fatal: chunks[1]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+        1
+      ],
+      [
+        "fatal: chunks (minus distractor) + prefilled words must equal answer words",
+        1
+      ],
+      [
+        "review:blocker:tmp_r2_q5: prompt/answer mismatch — prompt asks what the librarian asked about overdue books, but answer reports a question about whether borrowed books were returned on time (shifts topic from 'overdue books' to 'returned on time', changing the substance of the reported question in a misleading way); additionally the answer does not faithfully reflect the prompt's framing",
+        1
+      ],
+      [
+        "review:blocker:tmp_r2_q10: indirect question clause uses inverted word order — 'Do you know if the cooking class meets every Saturday morning?' begins with 'Do you know', making the outer clause an interrogative with subject-auxiliary inversion; the embedded if-clause itself is declarative, but the item is structured as a direct yes/no question rather than a polite indirect question frame, and the prefilled 'do you' forces auxiliary inversion at the sentence level, violating the declarative-word-order requirement for the interrogative framing expected in this item type",
+        1
+      ],
+      [
+        "review:blocker:tmp_r2_q10: indirect question clause uses inverted word order — 'Do you know if the cooking class meets every Saturday morning?' begins with 'Do you know', making the outer clause an interrogative with subject-auxiliary inversion; the embedded if-clause itself is declarative, but the item is structured as a direct yes/no question rather than a polite indirect question frame, and the prefilled 'do you' forces auxiliary inversion at the sentence level, violating the declarative-word-order requirement for the interrogative framing expected in this item type|tmp_r2_q1: distractor 'feels' can replace 'felt' (single word, same position) and produce a grammatical sentence: 'The waiting room at that dental clinic feels surprisingly calm and comfortable.' This is a direct 1:1 substitution blocker.",
+        1
+      ],
+      [
+        "review:blocker:tmp_r2_q2: distractor 'demonstrate' cannot directly replace 'demonstrated' in a grammatical sentence without tense mismatch — 'The instructor...demonstrate every pose' is ungrammatical. NOT a 1:1 substitution blocker. Score deduction only.",
+        1
+      ],
+      [
+        "review:blocker:tmp_r3_q7: distractor DIRECTLY replaces one word to form a valid sentence — 'I checked the weather forecast before leaving for the trail.' replaces 'did not check' with just 'checked' at the same position (1:1 verb substitution, no rearrangement needed)|tmp_r3_q7: distractor 'checked' replaces the two-chunk sequence 'did not' + 'check' effectively as a single verb form substitution; while two chunks are involved, the learner need only drop 'did not' and swap 'check' → 'checked' with no reordering required, making this functionally a direct replacement blocker.",
+        1
+      ],
+      [
+        "review:blocker:tmp_r3_q8: prompt/answer mismatch — the prompt asks how YOU respond when the delivery driver asks about YOUR package, but the answer speaks about 'the elderly neighbor,' a third party who is not the speaker or the driver|tmp_r3_q8: distractor DIRECTLY replaces one word to form a valid sentence — 'The elderly neighbor received any delivery notice from the driver.' — wait, 'any' makes this ungrammatical; however 'The elderly neighbor received a delivery notice from the driver' would require chunk swap. Re-evaluating: 'received' replaces 'did not' + 'receive' (two chunks), so this requires removing one chunk and replacing another — NOT a pure 1:1 substitution. Downgraded to score deduction only.",
+        1
+      ]
+    ]
+  }
+}
