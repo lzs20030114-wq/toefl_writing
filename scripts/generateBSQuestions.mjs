@@ -1019,6 +1019,17 @@ These 5 errors cause >60% of all rejections. Check EVERY item against them:
 3. PREFILLED = subject NP or "i". NEVER bare "he"/"she"/"they". Use "the professor"/"the manager"/"the student". Max 3 words.
 4. NEGATION = ONE CHUNK. "did not" ✓ ["did","not"] ✗. Always merge aux+not.
 5. DISTRACTOR MUST NOT create valid alternative. If inserting the distractor still produces a grammatical sentence, choose a different distractor.
+6. DISTRACTOR MUST NOT be a tense/modal variant of a word already in the answer. These are AUTO-REJECTED:
+   ✗ distractor="is" when answer has "was"  ✗ distractor="was" when answer has "were"
+   ✗ distractor="do" when answer has "did"  ✗ distractor="does" when answer has "did"
+   ✗ distractor="will" when answer has "would"  ✗ distractor="can" when answer has "could"
+   ✗ distractor="have" when answer has "had"  ✗ distractor="go" when answer has "went"
+   GOOD distractors use DIFFERENT word categories:
+   ✓ answer has "canceled" → distractor="cancel" (participle vs base form)
+   ✓ answer has "submitted" → distractor="submit" (past vs base)
+   ✓ answer has "extended" → distractor="extend" (past participle vs base)
+   ✓ answer has "chosen" → distractor="chose" (participle vs past)
+   The KEY rule: the distractor should test MORPHOLOGY (base vs inflected form of the SAME main verb), NOT tense-swap of an auxiliary/be-verb.
 
 ## CORE MISSION:
 Generate high-quality conversational sentences. Focus on natural language flow.
@@ -1156,18 +1167,20 @@ Pattern B (3rd-person sentence, prefilled = 2-word subject NP "the manager"):
   prefilled:         ["the manager"]
   prefilled_positions: {"the manager": 0}
   R = 10 - 2 = 8
-  chunks:            ["wanted", "to know", "if", "the order", "was", "ready", "is"]
-  distractor:        "is"  (was vs is — tense mismatch)
+  chunks:            ["wanted", "to know", "if", "the order", "was", "ready", "prepare"]
+  distractor:        "prepare"  (semantic decoy — wrong verb entirely)
   word bag check:    wanted(1)+to know(2)+if(1)+the order(2)+was(1)+ready(1)=8 + the manager(2) = 10 ✓
+  NOTE: "is" as distractor would be AUTO-REJECTED (tense swap of "was").
 
 Pattern C (interrogative, prefilled = opening frame "could you"):
   answer:            "Could you tell me what time the library closes?"  [9 words]
   prefilled:         ["could you"]
   prefilled_positions: {"could you": 0}
   R = 9 - 2 = 7
-  chunks:            ["tell", "me", "what time", "the library", "closes", "closed"]
-  distractor:        "closed"  (closes vs closed — tense)
+  chunks:            ["tell", "me", "what time", "the library", "closes", "close"]
+  distractor:        "close"  (base form vs 3rd-person -s; different morphology of same verb)
   word bag check:    tell(1)+me(1)+what time(2)+the library(2)+closes(1)=7 + could you(2) = 9 ✓
+  NOTE: "closed" as distractor would be risky (past tense swap). "close" (base form) is safer.
 
 Pattern D (short sentence ≤8 words, prefilled=[]):
   answer:            "I did not submit the form on time."  [8 words]
@@ -1994,21 +2007,29 @@ Review the Build a Sentence items and return ONLY JSON:
 Blockers (ONLY use for these critical issues — ALWAYS prefix with the item ID like "tmp_r1_q3: ..."):
 - tmp_rN_qM: multiple valid chunk orders (ambiguous arrangement)
 - tmp_rN_qM: grammar incorrect in the answer sentence
-- tmp_rN_qM: distractor could be a valid answer chunk (inserting it creates another valid sentence)
+- tmp_rN_qM: distractor DIRECTLY replaces one word to form a valid sentence (SIMPLE substitution only — do NOT consider rearranging other chunks)
 - tmp_rN_qM: prompt/answer mismatch (answer doesn't respond to prompt)
 - tmp_rN_qM: indirect question clause uses inverted word order (MUST be declarative)
 IMPORTANT: Each blocker must start with the specific item ID it applies to. Do NOT write batch-level blockers without item IDs.
+
+DISTRACTOR BLOCKER RULE — READ CAREFULLY:
+A distractor is ONLY a blocker if it can DIRECTLY REPLACE one word in the answer (in the same position) and still produce a grammatical sentence.
+Do NOT flag a distractor as a blocker if it requires REARRANGING or REMOVING other chunks to form a valid sentence.
+Example: answer="The intern did not complete the report", distractor="completed"
+  → "The intern did not completed the report" = UNGRAMMATICAL → NOT a blocker ✓
+  → "The intern completed the report" (by removing "did not") = requires rearrangement → NOT a blocker ✓
+  → Only flag if simple 1:1 word swap creates a grammatical sentence in the SAME structure.
 
 NOT blockers (deduct points instead):
 - chunk composition style
 - grammar_points label format
 - scene variety
+- distractor that requires chunk rearrangement to form valid sentence (deduct 2-3 points, not a blocker)
 
 TPO-specific scoring:
 - >=85 means production ready
 - <78 means reject
 - Verify that indirect questions use declarative word order (no auxiliary inversion)
-- Verify that distractor did/do/does CANNOT be inserted into the correct answer
 - Deduct 3-5 points if answer is a direct question when it should be a statement
 - Deduct 3-5 points if an interrogative item uses a stiff, formulaic, or overlong polite opener
 - Deduct 3-5 points if a batch of interrogative items repeats the same opener too often
@@ -2043,12 +2064,15 @@ Return ONLY JSON:
 Blockers (ONLY for critical issues — ALWAYS prefix with the item ID like "tmp_r1_q3: ..."):
 - tmp_rN_qM: clearly ambiguous order (multiple valid answers)
 - tmp_rN_qM: ungrammatical answer
-- tmp_rN_qM: distractor likely valid in answer
+- tmp_rN_qM: distractor DIRECTLY replaces one word to form a valid sentence (simple 1:1 substitution ONLY)
 - tmp_rN_qM: indirect question uses inverted word order
 IMPORTANT: Each blocker must start with the specific item ID it applies to.
 
+DISTRACTOR RULE: Only flag as blocker if the distractor can replace exactly ONE word in the answer (same position) and the resulting sentence is grammatical. Do NOT flag if it requires removing, adding, or rearranging other chunks. That is NOT a blocker — just deduct 2-3 points.
+
 NOT blockers (reflect in score):
 - chunk style, grammar labels, scene variety
+- distractor that requires rearrangement to produce valid sentence
 
 Items:
 ${JSON.stringify(questions, null, 2)}
@@ -2270,26 +2294,16 @@ function checkDistractorSafety(q) {
     for (const ansWord of answerWords) {
       if (ansWord === dist) continue; // distractor shouldn't be in answer (caught elsewhere)
       if (distGroup.includes(ansWord)) {
-        // Special case: be-verb swaps (is/was, are/were) are almost always valid
-        const BE_VERBS = new Set(["is", "was", "are", "were"]);
-        if (BE_VERBS.has(dist) && BE_VERBS.has(ansWord)) {
-          return `"${dist}" directly swaps with "${ansWord}" in answer (tense change produces valid sentence)`;
-        }
-        // Auxiliary swaps (can/could, will/would) are often valid
-        const MODAL_PAIRS = [["can", "could"], ["will", "would"], ["shall", "should"], ["may", "might"]];
-        for (const pair of MODAL_PAIRS) {
-          if (pair.includes(dist) && pair.includes(ansWord)) {
-            return `"${dist}" directly swaps with "${ansWord}" in answer (modal change produces valid sentence)`;
-          }
-        }
-        // do/does/did: "did" can swap with "do/does" in many contexts
-        const DO_GROUP = new Set(["do", "does", "did"]);
-        if (DO_GROUP.has(dist) && DO_GROUP.has(ansWord)) {
-          return `"${dist}" directly swaps with "${ansWord}" in answer (tense change produces valid sentence)`;
-        }
+        // ANY same-group swap is unsafe — be-verbs, modals, do-group, AND regular verbs
+        // e.g. is↔was, can↔could, do↔did, prefers↔preferred, handles↔handle
+        return `"${dist}" directly swaps with "${ansWord}" in answer (tense change produces valid sentence)`;
       }
     }
   }
+
+  // Note: regular verb form variants (cancel/canceled, submit/submitted, etc.) are NOT
+  // automatically rejected here — they are often GOOD distractors (base vs participle in passive).
+  // Only auxiliary/be/modal/do swaps are dangerous because they trivially produce valid sentences.
 
   // 2. Distractor "did"/"do"/"does" when answer has negation "did not"/"do not" etc.
   //    The distractor is redundant — it's already semantically present.
