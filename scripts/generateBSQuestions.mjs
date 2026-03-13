@@ -1521,9 +1521,34 @@ function computeAssemblyState(poolState, targetSetCount = TARGET_SET_COUNT) {
     nonEmbedded: Math.max(0, need.nonEmbeddedMin - nonEmbedded),
     assemblableSets: remainingSets,
   };
+
+  // Remaining-pool-aware composition check: after assemblable sets consume their
+  // share, will the leftover pool have enough non-embedded for the remaining sets?
+  // Only activates when pool is mature enough (≥3 sets assemblable) to avoid
+  // over-correcting in early rounds when the pool is still small.
+  if (remainingSets > 0 && assemblableSets >= 3 && total >= targetSetCount * 7) {
+    const perSetNonEmbeddedAvg = 10 - ((ETS_STYLE_TARGETS.embeddedMin || 5) + (ETS_STYLE_TARGETS.embeddedMax || 8)) / 2;
+    const consumedNonEmbedded = Math.round(assemblableSets * perSetNonEmbeddedAvg);
+    const remainingNonEmbedded = Math.max(0, nonEmbedded - consumedNonEmbedded);
+    const neededNonEmbedded = Math.ceil(remainingSets * perSetNonEmbeddedAvg);
+    const ratioDeficit = Math.max(0, neededNonEmbedded - remainingNonEmbedded);
+    if (ratioDeficit > deficits.nonEmbedded) {
+      deficits.nonEmbedded = ratioDeficit;
+    }
+  }
+
   const embeddedOverflow = Math.max(0, embedded - need.embeddedMax);
   const negationOverflow = Math.max(0, negation - need.negationMax);
   const qmarkOverflow = Math.max(0, qmark - need.qmarkMax);
+
+  // Ratio-based soft overflow: when embedded ratio exceeds safe assembly threshold
+  // (75%), flag it even if absolute count is below embeddedMax. This prevents the
+  // pool from becoming too embedded-heavy for the remaining sets.
+  const embeddedRatio = total > 0 ? embedded / total : 0;
+  const softEmbeddedOverflow = (embeddedRatio > 0.75 && remainingSets > 0)
+    ? Math.max(1, Math.ceil(embedded - total * 0.73))
+    : 0;
+  const effectiveEmbeddedOverflow = Math.max(embeddedOverflow, softEmbeddedOverflow);
   const remainingRecipe = {
     sets: remainingSets,
     diff: {
@@ -1546,7 +1571,7 @@ function computeAssemblyState(poolState, targetSetCount = TARGET_SET_COUNT) {
     { key: "medium_shortage", gap: deficits.medium, priority: deficits.medium * 6 },
     { key: "embedded_shortage", gap: deficits.embedded, priority: deficits.embedded * 7 },
     { key: "non_embedded_shortage", gap: deficits.nonEmbedded, priority: deficits.nonEmbedded * 7 },
-    { key: "embedded_overflow", gap: embeddedOverflow, priority: embeddedOverflow * 7 },
+    { key: "embedded_overflow", gap: effectiveEmbeddedOverflow, priority: effectiveEmbeddedOverflow * 7 },
     { key: "negation_shortage", gap: deficits.negation, priority: deficits.negation * 5 },
     { key: "negation_overflow", gap: negationOverflow, priority: negationOverflow * 6 },
     { key: "distractor_shortage", gap: deficits.distractor, priority: deficits.distractor * 3 },
@@ -1599,7 +1624,7 @@ function computeAssemblyState(poolState, targetSetCount = TARGET_SET_COUNT) {
     remainingSets,
     remainingRecipe,
     deficits,
-    embeddedOverflow,
+    embeddedOverflow: effectiveEmbeddedOverflow,
     negationOverflow,
     qmarkOverflow,
     limitingFactors,
