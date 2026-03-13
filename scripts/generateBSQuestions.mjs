@@ -1019,17 +1019,18 @@ These 5 errors cause >60% of all rejections. Check EVERY item against them:
 3. PREFILLED = subject NP or "i". NEVER bare "he"/"she"/"they". Use "the professor"/"the manager"/"the student". Max 3 words.
 4. NEGATION = ONE CHUNK. "did not" ✓ ["did","not"] ✗. Always merge aux+not.
 5. DISTRACTOR MUST NOT create valid alternative. If inserting the distractor still produces a grammatical sentence, choose a different distractor.
-6. DISTRACTOR MUST NOT be a tense/modal variant of a word already in the answer. These are AUTO-REJECTED:
+6. DISTRACTOR MUST NOT be an auxiliary/be-verb/modal swap of a word already in the answer. These are AUTO-REJECTED:
    ✗ distractor="is" when answer has "was"  ✗ distractor="was" when answer has "were"
    ✗ distractor="do" when answer has "did"  ✗ distractor="does" when answer has "did"
    ✗ distractor="will" when answer has "would"  ✗ distractor="can" when answer has "could"
-   ✗ distractor="have" when answer has "had"  ✗ distractor="go" when answer has "went"
-   GOOD distractors use DIFFERENT word categories:
+   ✗ distractor="have" when answer has "had"  ✗ distractor="has" when answer has "have"
+   Regular verb morphological variants ARE encouraged as distractors:
    ✓ answer has "canceled" → distractor="cancel" (participle vs base form)
    ✓ answer has "submitted" → distractor="submit" (past vs base)
-   ✓ answer has "extended" → distractor="extend" (past participle vs base)
+   ✓ answer has "opened" → distractor="open" (past participle vs base)
    ✓ answer has "chosen" → distractor="chose" (participle vs past)
-   The KEY rule: the distractor should test MORPHOLOGY (base vs inflected form of the SAME main verb), NOT tense-swap of an auxiliary/be-verb.
+   ✓ answer has "finished" → distractor="finish" (past vs base)
+   The KEY rule: aux/be/modal swaps (is↔was, can↔could, do↔did) are BANNED. Main verb form variants (submit↔submitted, open↔opened) are GOOD — they test morphology knowledge.
 
 ## CORE MISSION:
 Generate high-quality conversational sentences. Focus on natural language flow.
@@ -2253,57 +2254,36 @@ function checkDistractorSafety(q) {
   const answerLower = String(q.answer || "").toLowerCase().replace(/[.,!?;:]/g, "");
   const answerWords = answerLower.split(/\s+/).filter(Boolean);
 
-  // 1. Distractor is a direct tense/form swap of a word already in the answer.
+  // 1. Distractor is a direct tense/form swap of an AUXILIARY/BE/MODAL word in the answer.
   //    e.g. distractor="is" when answer contains "was" — trivial swap creates valid sentence.
-  const TENSE_SWAP_GROUPS = [
-    ["is", "was", "are", "were", "be", "been", "being"],
-    ["do", "does", "did", "done", "doing"],
-    ["has", "have", "had", "having"],
-    ["go", "goes", "went", "gone", "going"],
-    ["come", "comes", "came", "coming"],
-    ["get", "gets", "got", "gotten", "getting"],
-    ["take", "takes", "took", "taken", "taking"],
-    ["make", "makes", "made", "making"],
-    ["give", "gives", "gave", "given", "giving"],
-    ["see", "sees", "saw", "seen", "seeing"],
-    ["know", "knows", "knew", "known", "knowing"],
-    ["say", "says", "said", "saying"],
-    ["tell", "tells", "told", "telling"],
-    ["find", "finds", "found", "finding"],
-    ["think", "thinks", "thought", "thinking"],
-    ["open", "opens", "opened", "opening"],
-    ["close", "closes", "closed", "closing"],
-    ["start", "starts", "started", "starting"],
-    ["finish", "finishes", "finished", "finishing"],
-    ["submit", "submits", "submitted", "submitting"],
-    ["receive", "receives", "received", "receiving"],
-    ["speak", "speaks", "spoke", "spoken", "speaking"],
-    ["write", "writes", "wrote", "written", "writing"],
-    ["send", "sends", "sent", "sending"],
-    ["buy", "buys", "bought", "buying"],
-    ["can", "could"],
-    ["will", "would"],
-    ["shall", "should"],
-    ["may", "might"],
-  ];
+  //    Regular verb variants (submit↔submitted, open↔opened) are NOT caught here —
+  //    they are often GOOD distractors (base vs participle in passive/perfect constructions).
+  const BE_VERBS = new Set(["is", "was", "are", "were", "be", "been", "being"]);
+  const DO_GROUP = new Set(["do", "does", "did"]);
+  const HAS_GROUP = new Set(["has", "have", "had"]);
+  const MODAL_PAIRS = [["can", "could"], ["will", "would"], ["shall", "should"], ["may", "might"]];
 
-  const distGroup = TENSE_SWAP_GROUPS.find((g) => g.includes(dist));
-  if (distGroup) {
-    // Check if the answer contains ANOTHER word from the same group
-    // AND the distractor could directly swap in for it
-    for (const ansWord of answerWords) {
-      if (ansWord === dist) continue; // distractor shouldn't be in answer (caught elsewhere)
-      if (distGroup.includes(ansWord)) {
-        // ANY same-group swap is unsafe — be-verbs, modals, do-group, AND regular verbs
-        // e.g. is↔was, can↔could, do↔did, prefers↔preferred, handles↔handle
-        return `"${dist}" directly swaps with "${ansWord}" in answer (tense change produces valid sentence)`;
+  for (const ansWord of answerWords) {
+    if (ansWord === dist) continue;
+    // be-verb swaps: is↔was, are↔were, etc.
+    if (BE_VERBS.has(dist) && BE_VERBS.has(ansWord)) {
+      return `"${dist}" directly swaps with "${ansWord}" in answer (be-verb tense change produces valid sentence)`;
+    }
+    // do-group swaps: do↔did↔does
+    if (DO_GROUP.has(dist) && DO_GROUP.has(ansWord)) {
+      return `"${dist}" directly swaps with "${ansWord}" in answer (do-group tense change produces valid sentence)`;
+    }
+    // has/have/had swaps
+    if (HAS_GROUP.has(dist) && HAS_GROUP.has(ansWord)) {
+      return `"${dist}" directly swaps with "${ansWord}" in answer (have-group tense change produces valid sentence)`;
+    }
+    // modal pairs: can↔could, will↔would, etc.
+    for (const pair of MODAL_PAIRS) {
+      if (pair.includes(dist) && pair.includes(ansWord)) {
+        return `"${dist}" directly swaps with "${ansWord}" in answer (modal swap produces valid sentence)`;
       }
     }
   }
-
-  // Note: regular verb form variants (cancel/canceled, submit/submitted, etc.) are NOT
-  // automatically rejected here — they are often GOOD distractors (base vs participle in passive).
-  // Only auxiliary/be/modal/do swaps are dangerous because they trivially produce valid sentences.
 
   // 2. Distractor "did"/"do"/"does" when answer has negation "did not"/"do not" etc.
   //    The distractor is redundant — it's already semantically present.
