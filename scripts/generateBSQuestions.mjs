@@ -2671,7 +2671,18 @@ async function generateCandidateRound(round, spec, rejectFeedback = "", recentPo
 
   // Build per-item blocker set: extract item IDs mentioned in blocker strings.
   // Only block the specific items mentioned, not the entire batch.
-  const allBlockerTexts = [...review.blockers, ...consistency.blockers].filter(Boolean);
+  // IMPORTANT: filter out blockers the reviewer explicitly retracted/rescinded.
+  const RETRACT_PATTERN = /\b(NOT a blocker|not a blocker|Retracting|RETRACTED|Rescind|rescind|Withdrawing|SELF[- ]CORRECTION[:\s]*not a blocker|re-evaluat\w+:\s*no blocker|no blocker confirmed|removing from blockers)\b/i;
+  const rawBlockerTexts = [...review.blockers, ...consistency.blockers].filter(Boolean);
+  const allBlockerTexts = [];
+  for (const b of rawBlockerTexts) {
+    // Split multi-item blockers (separated by |) and evaluate each segment
+    const segments = b.split("|").map((s) => s.trim()).filter(Boolean);
+    const keptSegments = segments.filter((seg) => !RETRACT_PATTERN.test(seg));
+    if (keptSegments.length > 0) {
+      allBlockerTexts.push(keptSegments.join("|"));
+    }
+  }
   const perItemBlockerIds = new Set();
   const unmatchedBlockers = [];
   for (const b of allBlockerTexts) {
