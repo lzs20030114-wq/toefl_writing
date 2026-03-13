@@ -1,0 +1,391 @@
+{
+  "generated_at": "2026-03-13T08:14:37.630Z",
+  "active": {},
+  "events": [
+    {
+      "triggeredAt": "2026-03-13T08:02:19.070Z",
+      "round": 4,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "fatal: chunks[7]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "fatal: chunks[7]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "review:ets<72",
+          1
+        ],
+        [
+          "review:score<78",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 4,
+            "accepted": 0,
+            "rejected": 4,
+            "reasons": {
+              "fatal: chunks[7]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "fatal: chunks[7]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "review:ets<72": 1,
+              "review:score<78": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 7
+    }
+  ],
+  "history": [
+    {
+      "round": 4,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 1
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 4,
+          "accepted": 0,
+          "rejected": 4,
+          "reasons": {
+            "fatal: chunks[7]: isolated floating adverb \"today\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+            "fatal: chunks[7]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+            "review:ets<72": 1,
+            "review:score<78": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:score<78": 1
+          }
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 5,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "interrogative",
+          "difficulty": "medium",
+          "count": 1
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 1
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 1,
+          "accepted": 1,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:score<78": 1
+          }
+        },
+        "direct": {
+          "generated": 1,
+          "accepted": 1,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 2,
+          "accepted": 1,
+          "rejected": 1,
+          "reasons": {
+            "review:score<78": 1
+          }
+        }
+      }
+    },
+    {
+      "round": 6,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 2,
+          "accepted": 1,
+          "rejected": 1,
+          "reasons": {
+            "chunks: negation must be a single chunk — use \"did not\" not [\"did\",\"not\"]": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 2,
+          "accepted": 2,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 1,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 8,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 2,
+          "accepted": 2,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 2,
+          "accepted": 2,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "fatal: chunks[5]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 9,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 1
+        },
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 1
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 1,
+          "accepted": 1,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "review:score<78": 2
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:ets<72": 1
+          }
+        },
+        "relative": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:score<78": 1
+          }
+        }
+      }
+    }
+  ]
+}
