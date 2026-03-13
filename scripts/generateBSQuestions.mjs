@@ -294,6 +294,148 @@ function consumeChunk(counts, chunk) {
   return out;
 }
 
+/**
+ * Auto-fix: bind standalone floating adverbs to their adjacent verb in the answer.
+ * e.g. answer="I discussed yesterday..." chunks=["discussed","yesterday"] → ["discussed yesterday"]
+ * Only merges when the adverb is immediately adjacent to a content word in the answer.
+ */
+const _FLOATING_ADVERBS_SET = new Set([
+  "yesterday","today","tomorrow","recently","finally","always","often",
+  "sometimes","probably","eventually","suddenly","already","usually",
+  "still","again","now","soon","later","early","just","once","twice",
+]);
+
+function autoFixFloatingAdverbs(answer, chunks, distractor) {
+  const answerWords = String(answer || "").toLowerCase().replace(/[.,!?;:]/g, "").split(/\s+/).filter(Boolean);
+  const chunkLower = chunks.map(c => String(c || "").toLowerCase().trim());
+
+  // Pass 1: identify which adverb chunks to merge and with which neighbor
+  const mergeMap = new Map(); // adverbIdx → { neighborIdx, mergedChunk }
+  for (let i = 0; i < chunks.length; i++) {
+    const c = chunkLower[i];
+    if (c.split(/\s+/).length !== 1 || !_FLOATING_ADVERBS_SET.has(c) || chunks[i] === distractor) continue;
+
+    const adverb = c;
+    const adverbAnswerIdx = answerWords.indexOf(adverb);
+    if (adverbAnswerIdx < 0) continue;
+
+    // Try to merge with the word before or after in the answer
+    for (const neighborAnswerIdx of [adverbAnswerIdx - 1, adverbAnswerIdx + 1]) {
+      if (neighborAnswerIdx < 0 || neighborAnswerIdx >= answerWords.length) continue;
+      const neighbor = answerWords[neighborAnswerIdx];
+      const neighborChunkIdx = chunkLower.findIndex((ch, j) =>
+        j !== i && !mergeMap.has(j) && chunks[j] !== distractor &&
+        ch.split(/\s+/).length === 1 && ch === neighbor
+      );
+      if (neighborChunkIdx < 0) continue;
+
+      // Merge in answer order
+      const mergedChunk = neighborAnswerIdx < adverbAnswerIdx
+        ? `${neighbor} ${adverb}`
+        : `${adverb} ${neighbor}`;
+
+      // Verify contiguous in answer
+      const mergedWords = mergedChunk.split(/\s+/);
+      let found = false;
+      for (let k = 0; k <= answerWords.length - mergedWords.length; k++) {
+        if (mergedWords.every((w, wi) => answerWords[k + wi] === w)) { found = true; break; }
+      }
+      if (!found) continue;
+
+      mergeMap.set(i, { neighborIdx: neighborChunkIdx, mergedChunk });
+      break;
+    }
+  }
+
+  // Pass 2: build result, skipping consumed neighbors and replacing adverbs with merged chunks
+  const consumed = new Set();
+  for (const [advIdx, { neighborIdx }] of mergeMap) {
+    consumed.add(advIdx);
+    consumed.add(neighborIdx);
+  }
+
+  const result = [];
+  for (let i = 0; i < chunks.length; i++) {
+    if (mergeMap.has(i)) {
+      result.push(mergeMap.get(i).mergedChunk);
+    } else if (!consumed.has(i)) {
+      result.push(chunks[i]);
+    }
+    // else: this chunk was consumed as a neighbor — skip
+  }
+
+  return result;
+}
+
+/**
+ * Auto-fix: replace bare pronoun prefilled (he/she/they) with the full subject NP from the answer.
+ * e.g. answer="The professor wanted to know..." prefilled=["she"] → prefilled=["the professor"]
+ */
+const _BANNED_BARE_PREFILLED = new Set(["he", "she", "they", "him", "her", "them"]);
+
+function autoFixBarePrefilledPronoun(answer, prefilled, chunks, distractor) {
+  if (!Array.isArray(prefilled) || prefilled.length === 0) return { prefilled, chunks };
+  const pfNorm = prefilled[0].trim().toLowerCase();
+  if (!_BANNED_BARE_PREFILLED.has(pfNorm)) return { prefilled, chunks };
+
+  // Extract a 2-word subject NP from the start of the answer
+  const answerWords = String(answer || "").toLowerCase().replace(/[.,!?;:]/g, "").split(/\s+/).filter(Boolean);
+  if (answerWords.length < 3) return { prefilled, chunks };
+
+  // Common determiners/possessives that start subject NPs
+  const DET = new Set(["the","a","an","my","his","her","their","our","some","this","that","these","those"]);
+  if (DET.has(answerWords[0])) {
+    const newPf = `${answerWords[0]} ${answerWords[1]}`;
+    // Remove the new prefilled words from chunks if they appear
+    const newPfWords = newPf.split(/\s+/);
+    let newChunks = [...chunks];
+
+    // Try to remove exact phrase match first
+    const exactIdx = newChunks.findIndex(c =>
+      c !== distractor && c.toLowerCase().trim() === newPf
+    );
+    if (exactIdx >= 0) {
+      newChunks.splice(exactIdx, 1);
+    } else {
+      // Remove individual words
+      for (const w of newPfWords) {
+        const idx = newChunks.findIndex(c =>
+          c !== distractor && c.toLowerCase().trim() === w
+        );
+        if (idx >= 0) newChunks.splice(idx, 1);
+      }
+    }
+
+    return { prefilled: [newPf], chunks: newChunks };
+  }
+
+  // If first word is a proper noun or similar, try 2-word NP anyway
+  // But safer to just drop prefilled entirely than keep a banned one
+  return { prefilled: [], chunks };
+}
+
+/**
+ * Auto-fix: truncate multi-word distractors to a single word.
+ * Keeps the word that is NOT in the answer (the actual distractor).
+ * e.g. distractor="did submit" → "did" (if "submit" is in answer)
+ */
+function autoFixMultiWordDistractor(answer, distractor) {
+  if (!distractor) return distractor;
+  const words = String(distractor).trim().split(/\s+/);
+  if (words.length <= 1) return distractor;
+
+  const answerWordsLower = String(answer || "").toLowerCase().replace(/[.,!?;:]/g, "").split(/\s+/).filter(Boolean);
+  const answerSet = new Set(answerWordsLower);
+
+  // Prefer words NOT in the answer (that's the real distractor)
+  const notInAnswer = words.filter(w => !answerSet.has(w.toLowerCase()));
+  if (notInAnswer.length === 1) return notInAnswer[0].toLowerCase();
+  if (notInAnswer.length > 1) return notInAnswer[0].toLowerCase();
+
+  // All words appear in answer — just take the first one
+  return words[0].toLowerCase();
+}
+
 function autoRepairWordBag(answer, prefilled, chunks, distractor) {
   const answerCounts = wordCountsFromText(answer);
   const prefilledCounts = wordCountsFromText((prefilled || []).join(" "));
@@ -327,16 +469,36 @@ function normalizeQuestion(raw, tempId) {
   let chunks = Array.isArray(q.chunks)
     ? q.chunks.map((c) => normalizeText(c).toLowerCase()).filter(Boolean)
     : [];
-  const prefilled = Array.isArray(q.prefilled)
+  let prefilled = Array.isArray(q.prefilled)
     ? q.prefilled.map((c) => normalizeText(c)).filter(Boolean)
     : [];
   const rawPositions = (q.prefilled_positions && typeof q.prefilled_positions === "object" && !Array.isArray(q.prefilled_positions))
     ? q.prefilled_positions
     : {};
 
-  const distractor = normalizeText(q.distractor)?.toLowerCase() || null;
+  let distractor = normalizeText(q.distractor)?.toLowerCase() || null;
   const answer = normalizeText(q.answer);
   const answerWords = answer.toLowerCase().replace(/[.,!?;:]/g, "").split(/\s+/).filter(Boolean);
+
+  // Auto-fix: truncate multi-word distractors to single word
+  distractor = autoFixMultiWordDistractor(answer, distractor);
+
+  // Auto-fix: replace banned bare pronoun prefilled with subject NP from answer
+  const bareFix = autoFixBarePrefilledPronoun(answer, prefilled, chunks, distractor);
+  prefilled = bareFix.prefilled;
+  chunks = bareFix.chunks;
+
+  // Auto-fix: truncate prefilled longer than 3 words to 2-word subject NP
+  if (prefilled.length > 0) {
+    const pfWords = prefilled[0].trim().split(/\s+/);
+    if (pfWords.length >= 4) {
+      // Keep first 2 words as subject NP; move the rest back to chunks
+      const kept = pfWords.slice(0, 2).join(" ");
+      const overflow = pfWords.slice(2);
+      prefilled = [kept];
+      chunks = [...overflow.map(w => w.toLowerCase()), ...chunks];
+    }
+  }
 
   // Auto-fix: Split any chunk with >3 words
   chunks = chunks.flatMap((c) => autoSplitChunk(c, 3));
@@ -369,6 +531,9 @@ function normalizeQuestion(raw, tempId) {
 
   // Repair the most common deterministic word-bag failures before validation.
   chunks = autoRepairWordBag(answer, prefilled, chunks, distractor);
+
+  // Auto-fix: bind floating adverbs to adjacent verb (must happen after word-bag repair)
+  chunks = autoFixFloatingAdverbs(answer, chunks, distractor);
 
   // Auto-fix: Ensure at least 4 effective chunks
   chunks = ensureMinChunkCount(chunks, distractor, 4);
@@ -520,14 +685,26 @@ function buildRejectFeedbackHints(rejectReasons) {
     if (r.includes("distractor must not appear in answer")) {
       hints.push("Distractor tokens must never appear in answer.");
     }
+    if (r.includes("distractor must be a single word")) {
+      hints.push("CRITICAL: Distractor MUST be exactly ONE word (e.g. 'did', 'gone', 'open'). NEVER two words like 'did submit' or 'was not'. This is the #1 rejection cause.");
+    }
     if (r.includes("question mark")) {
       hints.push("Maintain question/statement ratio within set-level target.");
     }
     if (r.includes("embedded")) {
       hints.push("Include 6-8 embedded-question items in DECLARATIVE form (not questions). Use wanted to know, asked, was curious. Ensure 7-9 items have single-word distractors.");
     }
+    if (r.includes("floating adverb") || r.includes("isolated")) {
+      hints.push("CRITICAL: NEVER use standalone time/frequency adverbs as single-word chunks. BANNED: yesterday, today, tomorrow, recently, already, finally, usually, always, often, sometimes. ALWAYS bind to verb: 'discussed yesterday', 'arrived recently', 'finished finally'.");
+    }
+    if (r.includes("banned bare word") || r.includes("bare pronoun")) {
+      hints.push("CRITICAL: NEVER use bare pronouns he/she/they as prefilled. Use a 2-word descriptive subject NP: 'the professor', 'the manager', 'the student'. For 1st-person use 'i'.");
+    }
+    if (r.includes("negation must be a single chunk")) {
+      hints.push("CRITICAL: Negation clusters MUST be ONE chunk: 'did not' ✓, ['did','not'] ✗. Always merge aux+not.");
+    }
     if (r.includes("review:blocker") || r.includes("solvability")) {
-      hints.push("Avoid ambiguous chunk order; each item should have one clearly best arrangement.");
+      hints.push("Avoid ambiguous chunk order; each item should have one clearly best arrangement. Distractor must NOT create a valid alternative sentence.");
     }
     if (r.includes("prompt_task_text") || r.includes("prompt must include an explicit task")) {
       hints.push("prompt_task_text MUST be an explicit question, NOT background. Use ONLY ask/report/respond patterns such as 'What did [person] ask?', 'What did [person] want to know?', 'How do you respond?', or 'What do you say?'.");
@@ -537,6 +714,12 @@ function buildRejectFeedbackHints(rejectReasons) {
     }
     if (r.includes("prompt_task_kind")) {
       hints.push("Use ONLY these prompt_task_kind values: ask, report, respond. Do NOT use tell or explain.");
+    }
+    if (r.includes("prefilled too long")) {
+      hints.push("Prefilled must be ≤3 words. Use 1-word 'i' or 2-word subject NP like 'the professor'. Never 4+ word phrases.");
+    }
+    if (r.includes("inverted word order") || r.includes("prompt/answer mismatch")) {
+      hints.push("For 'What did X ask/want to know' prompts, the answer MUST be a DECLARATIVE statement (e.g. 'The manager wanted to know...'), NOT a question. Only interrogative-type items produce question answers.");
     }
   });
 
@@ -562,11 +745,11 @@ PREFILLED (easy): Use prefilled=["i"] at position 0. NEVER ["not"].`,
 Examples WITH correct prefilled (study these carefully):
   answer: "I did not understand what the manager explained."  prefilled=["i"] pos=0 ✔
   answer: "I have not received any confirmation about the schedule."  prefilled=["i"] pos=0 ✔
-  answer: "He did not know why the meeting was postponed."  prefilled=["he"] pos=0 ✔
+  answer: "The intern did not know why the meeting was postponed."  prefilled=["the intern"] pos=0 ✔
   BAD: answer="I did not attend the interview last week."  prefilled=["not"] ✘ WRONG
   CORRECT: answer="I did not attend the interview last week."  prefilled=["i"] pos=0 ✔ RIGHT
-  BAD: answer="He did not know why the package was rerouted."  prefilled=["not"] ✘ WRONG
-  CORRECT: answer="He did not know why the package was rerouted."  prefilled=["he"] pos=0 ✔ RIGHT
+  BAD: answer="The intern did not know why the package was rerouted."  prefilled=["he"] ✘ WRONG (bare pronoun)
+  CORRECT: answer="The intern did not know why the package was rerouted."  prefilled=["the intern"] pos=0 ✔ RIGHT
 Prompt: prompt_task_kind="respond", prompt_task_text="How do you respond?" or "What do you say?" Distractor: "did"/"do" or morphological variant.
 SCORER FENCE (medium): Prefer simple past ("did not") or present perfect ("have not"). AVOID past perfect negation ("had not done" -> HARD). AVOID passive negation ("was not approved", "has not been sent" -> HARD). At most ONE advanced grammar feature.
 PREFILLED (medium/easy): ALL negation answers use the SUBJECT as prefilled. 1st-person ("I did not..."): prefilled=["i"] at position 0. 3rd-person: use a DESCRIPTIVE 2-word subject NP, e.g. prefilled=["the manager"], ["the professor"], ["the student"]. NEVER use bare ["he"]/["she"]/["they"] — always a descriptive NP. NEVER use ["not"] as prefilled — "not" belongs in chunks, not in prefilled.`,
@@ -577,7 +760,7 @@ Examples:
 - "I did not understand why the meeting had been postponed again."
 Hard MUST come from structure: past perfect negation, passive/passive-progressive inside clause, or negation + embedded grammar trap.
 Distractor: morphological variant (e.g. "realized/realize", "approaching/approach").
-PREFILLED REMINDER: Hard sentences are 10-13 words — chunks MUST still be ≤ 8. Give the SUBJECT as prefilled: subject pronoun ("i", "she", "he") or 2-word subject NP ("the professor", "the manager"). Example: answer=11 words, prefilled=["the professor"] (2 words) -> R=9 -> shorten sentence to 10 words -> R=8. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
+PREFILLED REMINDER: Hard sentences are 10-13 words — chunks MUST still be ≤ 8. Give the SUBJECT as prefilled: "i" for 1st-person, or 2-word descriptive NP for 3rd-person ("the professor", "the manager"). NEVER bare "he"/"she"/"they". Example: answer=11 words, prefilled=["the professor"] (2 words) -> R=9 -> shorten sentence to 10 words -> R=8. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
   },
 
   "3rd-reporting": {
@@ -639,7 +822,7 @@ Examples:
 - "We just found out where the new library equipment is being stored." (passive progressive)
 Include passive voice OR superlative/comparative OR perfect aspect in the embedded clause. Hard MUST be signaled by grammar structure rather than answer length.
 Distractor: morphological variant (e.g. "enjoyed/enjoy", "stored/store").
-PREFILLED REMINDER: Hard sentences are 10-13 words — chunks MUST still be ≤ 8. Give the SUBJECT as prefilled: subject pronoun ("i", "she", "he") or 2-word subject NP ("the professor", "the manager"). Example: answer=11 words, prefilled=["the professor"] (2 words) -> R=9 -> shorten sentence to 10 words -> R=8. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
+PREFILLED REMINDER: Hard sentences are 10-13 words — chunks MUST still be ≤ 8. Give the SUBJECT as prefilled: "i" for 1st-person, or 2-word descriptive NP for 3rd-person ("the professor", "the manager"). NEVER bare "he"/"she"/"they". Example: answer=11 words, prefilled=["the professor"] (2 words) -> R=9 -> shorten sentence to 10 words -> R=8. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
   },
 
   "interrogative": {
@@ -674,7 +857,7 @@ Examples:
 - "Do you know why the final report had not been submitted yet?"
 Hard MUST come from embedded grammar: tense/aspect mismatch, passive/perfect inside clause, layered embedding.
 Distractor: morphological variant (e.g. "decided/decide", "managed/manage").
-PREFILLED REMINDER: Hard sentences are 10-13 words — chunks MUST still be ≤ 8. Give the SUBJECT as prefilled: subject pronoun ("i", "she", "he") or 2-word subject NP ("the professor", "the manager"). Example: answer=11 words, prefilled=["the professor"] (2 words) -> R=9 -> shorten sentence to 10 words -> R=8. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
+PREFILLED REMINDER: Hard sentences are 10-13 words — chunks MUST still be ≤ 8. Give the SUBJECT as prefilled: "i" for 1st-person, or 2-word descriptive NP for 3rd-person ("the professor", "the manager"). NEVER bare "he"/"she"/"they". Example: answer=11 words, prefilled=["the professor"] (2 words) -> R=9 -> shorten sentence to 10 words -> R=8. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
   },
 
   "direct": {
@@ -693,7 +876,7 @@ Examples:
 - "I found it in the back of the furniture section at the local superstore."
 Prefer comparative/superlative structures, dense modifiers, or other learner-unfamiliar grammar. Do not inflate difficulty by length alone.
 Distractor: morphological variant or comparative swap ("better/good", "only/once").
-PREFILLED REMINDER: Hard sentences are 10-13 words — chunks MUST still be ≤ 8. Give the SUBJECT as prefilled: subject pronoun ("i", "she", "he") or 2-word subject NP ("the professor", "the manager"). Example: answer=11 words, prefilled=["the professor"] (2 words) -> R=9 -> shorten sentence to 10 words -> R=8. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
+PREFILLED REMINDER: Hard sentences are 10-13 words — chunks MUST still be ≤ 8. Give the SUBJECT as prefilled: "i" for 1st-person, or 2-word descriptive NP for 3rd-person ("the professor", "the manager"). NEVER bare "he"/"she"/"they". Example: answer=11 words, prefilled=["the professor"] (2 words) -> R=9 -> shorten sentence to 10 words -> R=8. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
   },
 
   "relative": {
@@ -711,7 +894,7 @@ Combine relative clause with passive or perfect:
 - "The desk you ordered is scheduled to arrive on Friday."
 - "The book she recommended had already been checked out."
 Distractor: morphological variant (e.g. "ordered/order", "recommended/recommend").
-PREFILLED REMINDER: Hard sentences are 10-13 words — chunks MUST still be ≤ 8. Give the SUBJECT as prefilled: subject pronoun ("i", "she", "he") or 2-word subject NP ("the professor", "the manager"). Example: answer=11 words, prefilled=["the professor"] (2 words) -> R=9 -> shorten sentence to 10 words -> R=8. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
+PREFILLED REMINDER: Hard sentences are 10-13 words — chunks MUST still be ≤ 8. Give the SUBJECT as prefilled: "i" for 1st-person, or 2-word descriptive NP for 3rd-person ("the professor", "the manager"). NEVER bare "he"/"she"/"they". Example: answer=11 words, prefilled=["the professor"] (2 words) -> R=9 -> shorten sentence to 10 words -> R=8. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
   },
 };
 
@@ -817,7 +1000,7 @@ function buildGeneratePrompt(round, spec, rejectFeedback = "", recentTopics = []
       ? "Answer length: 7-10 words. Chunks: 5-6."
       : difficulty === "medium"
       ? "Answer length: 10-13 words. Chunks: 6-7."
-      : "Answer length: usually 10-13 words. Chunks: 6-8. MUST be hard because of advanced grammar structure: e.g. passive, past perfect, relative/contact clause, whom, comparative/superlative, or multi-layer embedding. Do NOT make an item hard by length alone. Answer length: usually 10-13 words. Chunks: 6-8. MUST be hard because of advanced grammar structure: e.g. passive, past perfect, relative/contact clause, whom, comparative/superlative, or multi-layer embedding. Do NOT make an item hard by length alone.";
+      : "Answer length: usually 10-13 words. Chunks: 6-8. MUST be hard because of advanced grammar structure: e.g. passive, past perfect, relative/contact clause, whom, comparative/superlative, or multi-layer embedding. Do NOT make an item hard by length alone.";
     const ids = Array.from({ length: count }, (_, j) => `tmp_r${round}_q${qIndex + j}`).join(", ");
     qIndex += count;
     return `### GROUP ${i + 1}: ${count} item${count > 1 ? "s" : ""} 锟?${type.toUpperCase()} / ${difficulty.toUpperCase()}
@@ -828,6 +1011,14 @@ ${diffSpec}`;
 
   return `You are a TOEFL iBT Writing Task 1 "Build a Sentence" content architect.
 Return ONLY a JSON array with exactly ${totalCount} objects.
+
+## ⛔ TOP REJECTION CAUSES — READ FIRST:
+These 5 errors cause >60% of all rejections. Check EVERY item against them:
+1. DISTRACTOR = ONE WORD ONLY. "did" ✓ "did submit" ✗ "was not" ✗. Multi-word distractors are auto-rejected.
+2. NO STANDALONE ADVERBS as chunks. "yesterday"/"today"/"tomorrow"/"recently"/"already"/"finally"/"usually" MUST be bound to verb: "discussed yesterday" ✓ "yesterday" alone ✗.
+3. PREFILLED = subject NP or "i". NEVER bare "he"/"she"/"they". Use "the professor"/"the manager"/"the student". Max 3 words.
+4. NEGATION = ONE CHUNK. "did not" ✓ ["did","not"] ✗. Always merge aux+not.
+5. DISTRACTOR MUST NOT create valid alternative. If inserting the distractor still produces a grammatical sentence, choose a different distractor.
 
 ## CORE MISSION:
 Generate high-quality conversational sentences. Focus on natural language flow.
@@ -868,11 +1059,11 @@ You may see older questions in context where prefilled=["not"] or prefilled=["th
 That is the OLD incorrect style. Do NOT imitate it.
 CORRECT strategy: use the SUBJECT as prefilled.
   • 1st-person sentences (I did/asked/found...): prefilled=["i"]
-  • 3rd-person sentences (She/He asked...): prefilled=["she"] or ["he"] or 2-word subject NP
+  • 3rd-person sentences: ALWAYS a 2-word descriptive NP like ["the professor"], ["the manager"], ["the student"]
   • Interrogative (Could you.../Do you...): prefilled=["could you"] or ["do you"]
   • Negation "not" belongs in CHUNKS, NOT prefilled.
-  • Bare pronouns ["he"], ["she"], ["they"] as prefilled for 3rd-person — WRONG ✘
-    Replace with descriptive NP: ["the professor"], ["the student"], ["some colleagues"].
+  • Bare pronouns ["he"], ["she"], ["they"] as prefilled — BANNED ✘ (auto-rejected)
+    ALWAYS use descriptive NP: ["the professor"], ["the student"], ["some colleagues"].
 
 ## GIVEN WORD (PREFILLED) 鈥?CRITICAL CONCEPT:
 In the real TOEFL exercise, 8-9 out of every 10 questions give the student one word or short phrase already placed in the sentence (a "given word"). This makes the task slightly easier.
@@ -3949,6 +4140,7 @@ const isDirectRun = process.argv[1] && import.meta.url === pathToFileURL(process
 
 export {
   autoRepairWordBag,
+  normalizeQuestion,
   resolvedAnswerType,
   createCircuitBreakerState,
   getActiveCircuitBreakerTypes,
