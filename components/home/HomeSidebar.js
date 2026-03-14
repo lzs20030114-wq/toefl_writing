@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { sendEmailOTP } from "../../lib/emailAuth";
 import { verifyBindEmail } from "../../lib/emailAuth";
+import { checkCanPractice, FREE_DAILY_LIMIT } from "../../lib/dailyUsage";
 import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
 
 function sectionTitle(isChallenge) {
@@ -168,8 +169,17 @@ export function HomeSidebar({
   const [logoutConfirm, setLogoutConfirm] = useState(false);
   const [bindEmailOpen, setBindEmailOpen] = useState(false);
   const [boundEmail, setBoundEmail] = useState(userEmail);
+  const [freeRemaining, setFreeRemaining] = useState(null);
 
   const tier = userTier || "free";
+
+  // Fetch daily remaining for free-tier users
+  useEffect(() => {
+    if (!isLoggedIn || tier !== "free" || !userCode) return;
+    checkCanPractice(userCode, tier).then(({ remaining }) => {
+      setFreeRemaining(remaining);
+    });
+  }, [isLoggedIn, tier, userCode]);
   const email = boundEmail || userEmail;
   const isCodeUser = authMethod === "code" || authMethod === "both";
   const isEmailUser = authMethod === "email" || authMethod === "both";
@@ -269,9 +279,14 @@ export function HomeSidebar({
           <span style={{ color: "#fff", fontSize: 20, fontWeight: 800 }}>T</span>
         </div>
 
-        {/* Tier badge */}
-        <div style={{ marginBottom: 10 }}>
+        {/* Tier badge + free usage remaining */}
+        <div style={{ marginBottom: 10, display: "flex", alignItems: "center", gap: 6 }}>
           <TierBadge tier={tier} isChallenge={isChallenge} />
+          {tier === "free" && freeRemaining !== null && (
+            <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 999, background: freeRemaining > 0 ? "#f0fdf4" : "#fff5f5", color: freeRemaining > 0 ? "#15803d" : "#dc2626" }}>
+              今日 {freeRemaining}/{FREE_DAILY_LIMIT}
+            </span>
+          )}
         </div>
 
         {/* Email display */}
