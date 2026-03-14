@@ -1,0 +1,6579 @@
+{
+  "generated_at": "2026-03-14T11:37:13.770Z",
+  "targetSets": 6,
+  "outputPath": "/home/runner/work/toefl_writing/toefl_writing/data/buildSentence/staging/23087167177.json",
+  "rounds": [
+    {
+      "round": 1,
+      "phase": "broad",
+      "mode": "broad",
+      "gap": {
+        "total": 186,
+        "diffGap": 90,
+        "typeGap": 6,
+        "distractorGap": 42,
+        "assemblyBlockingGap": 48
+      },
+      "assemblyState": {
+        "total": 0,
+        "diffCounts": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0
+        },
+        "embedded": 0,
+        "negation": 0,
+        "distractor": 0,
+        "qmark": 0,
+        "nonEmbedded": 0,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 18,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 42,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "medium": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "hard": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "negation": 0,
+          "negationCap": 0,
+          "distractor": 0,
+          "nonEmbedded": 0
+        },
+        "assemblableSets": 0,
+        "remainingSets": 6,
+        "remainingRecipe": {
+          "sets": 6,
+          "diff": {
+            "easy": 6,
+            "medium": 42,
+            "hard": 12
+          },
+          "style": {
+            "embeddedMin": 30,
+            "negationMin": 12,
+            "distractorMin": 42,
+            "nonEmbeddedMin": 6,
+            "embeddedCapacity": 54,
+            "negationCapacity": 18,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embedded": 30,
+          "negation": 12,
+          "distractor": 42,
+          "nonEmbedded": 6,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 42,
+            "priority": 252
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 30,
+            "priority": 210
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 42,
+            "priority": 126
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 12,
+            "priority": 96
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 12,
+            "priority": 60
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 6,
+            "priority": 42
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 6,
+            "priority": 12
+          }
+        ],
+        "progressRatios": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "nonEmbedded": 0,
+          "distractor": 0,
+          "negation": 0
+        },
+        "assemblyProgressScore": 0
+      },
+      "spec": [
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 1
+        },
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "interrogative",
+          "difficulty": "easy",
+          "count": 2
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "specSelection": null,
+      "result": {
+        "generated": 10,
+        "accepted": 5,
+        "rejected": 5,
+        "rejectReasons": {
+          "fatal: chunks[2]: isolated floating adverb \"recently\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+          "prompt: prompt_task_text: must contain an explicit task/instruction, not only background context": 1,
+          "review:ets<72": 2,
+          "review:score<78": 1
+        },
+        "typeStats": {
+          "negation": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "3rd-reporting": {
+            "generated": 2,
+            "accepted": 2,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "1st-embedded": {
+            "generated": 2,
+            "accepted": 1,
+            "rejected": 1,
+            "reasons": {
+              "review:score<78": 1
+            }
+          },
+          "interrogative": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:ets<72": 2
+            }
+          },
+          "direct": {
+            "generated": 2,
+            "accepted": 1,
+            "rejected": 1,
+            "reasons": {
+              "prompt: prompt_task_text: must contain an explicit task/instruction, not only background context": 1
+            }
+          },
+          "relative": {
+            "generated": 2,
+            "accepted": 1,
+            "rejected": 1,
+            "reasons": {
+              "fatal: chunks[2]: isolated floating adverb \"recently\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1
+            }
+          }
+        },
+        "deltaAssemblable": 0,
+        "deltaProgress": 0.1,
+        "acceptedGainRate": 0.05
+      },
+      "nextGap": {
+        "total": 167,
+        "diffGap": 85,
+        "typeGap": 2,
+        "distractorGap": 37,
+        "assemblyBlockingGap": 43
+      },
+      "nextAssemblyState": {
+        "total": 5,
+        "diffCounts": {
+          "easy": 1,
+          "medium": 3,
+          "hard": 1
+        },
+        "embedded": 3,
+        "negation": 0,
+        "distractor": 5,
+        "qmark": 0,
+        "nonEmbedded": 2,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 18,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 42,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 1,
+            "embedded": 0,
+            "nonEmbedded": 1,
+            "negation": 0
+          },
+          "medium": {
+            "total": 3,
+            "embedded": 2,
+            "nonEmbedded": 1,
+            "negation": 0
+          },
+          "hard": {
+            "total": 1,
+            "embedded": 1,
+            "nonEmbedded": 0,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 1,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "negation": 0,
+          "negationCap": 0,
+          "distractor": 0,
+          "nonEmbedded": 2
+        },
+        "assemblableSets": 0,
+        "remainingSets": 6,
+        "remainingRecipe": {
+          "sets": 6,
+          "diff": {
+            "easy": 5,
+            "medium": 39,
+            "hard": 11
+          },
+          "style": {
+            "embeddedMin": 27,
+            "negationMin": 12,
+            "distractorMin": 37,
+            "nonEmbeddedMin": 4,
+            "embeddedCapacity": 51,
+            "negationCapacity": 18,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 5,
+          "medium": 39,
+          "hard": 11,
+          "embedded": 27,
+          "negation": 12,
+          "distractor": 37,
+          "nonEmbedded": 4,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 39,
+            "priority": 234
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 27,
+            "priority": 189
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 37,
+            "priority": 111
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 11,
+            "priority": 88
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 12,
+            "priority": 60
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 4,
+            "priority": 28
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 5,
+            "priority": 10
+          }
+        ],
+        "progressRatios": {
+          "easy": 0.16666666666666666,
+          "medium": 0.07142857142857142,
+          "hard": 0.08333333333333333,
+          "embedded": 0.1,
+          "nonEmbedded": 0.3333333333333333,
+          "distractor": 0.11904761904761904,
+          "negation": 0
+        },
+        "assemblyProgressScore": 0.1
+      },
+      "phaseSignals": {
+        "strongTargeting": false,
+        "repairMode": false,
+        "strongGateReady": false,
+        "repairGateReady": false,
+        "strongReasons": [],
+        "repairReasons": [],
+        "momentum": {
+          "windowCount": 0,
+          "accepted": 0,
+          "generated": 0,
+          "poolGrowth": 0,
+          "deltaAssemblable": 0,
+          "deltaProgress": 0,
+          "zeroGainRounds": 0,
+          "zeroProgressRounds": 0,
+          "acceptedGainRate": 0
+        }
+      },
+      "typeReliability": {
+        "negation": 0.8,
+        "3rd-reporting": 0.8,
+        "1st-embedded": 0.8,
+        "interrogative": 0.8,
+        "direct": 0.8,
+        "relative": 0.8
+      }
+    },
+    {
+      "round": 2,
+      "phase": "broad",
+      "mode": "broad",
+      "gap": {
+        "total": 167,
+        "diffGap": 85,
+        "typeGap": 2,
+        "distractorGap": 37,
+        "assemblyBlockingGap": 43
+      },
+      "assemblyState": {
+        "total": 5,
+        "diffCounts": {
+          "easy": 1,
+          "medium": 3,
+          "hard": 1
+        },
+        "embedded": 3,
+        "negation": 0,
+        "distractor": 5,
+        "qmark": 0,
+        "nonEmbedded": 2,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 18,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 42,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 1,
+            "embedded": 0,
+            "nonEmbedded": 1,
+            "negation": 0
+          },
+          "medium": {
+            "total": 3,
+            "embedded": 2,
+            "nonEmbedded": 1,
+            "negation": 0
+          },
+          "hard": {
+            "total": 1,
+            "embedded": 1,
+            "nonEmbedded": 0,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 1,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "negation": 0,
+          "negationCap": 0,
+          "distractor": 0,
+          "nonEmbedded": 2
+        },
+        "assemblableSets": 0,
+        "remainingSets": 6,
+        "remainingRecipe": {
+          "sets": 6,
+          "diff": {
+            "easy": 5,
+            "medium": 39,
+            "hard": 11
+          },
+          "style": {
+            "embeddedMin": 27,
+            "negationMin": 12,
+            "distractorMin": 37,
+            "nonEmbeddedMin": 4,
+            "embeddedCapacity": 51,
+            "negationCapacity": 18,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 5,
+          "medium": 39,
+          "hard": 11,
+          "embedded": 27,
+          "negation": 12,
+          "distractor": 37,
+          "nonEmbedded": 4,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 39,
+            "priority": 234
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 27,
+            "priority": 189
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 37,
+            "priority": 111
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 11,
+            "priority": 88
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 12,
+            "priority": 60
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 4,
+            "priority": 28
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 5,
+            "priority": 10
+          }
+        ],
+        "progressRatios": {
+          "easy": 0.16666666666666666,
+          "medium": 0.07142857142857142,
+          "hard": 0.08333333333333333,
+          "embedded": 0.1,
+          "nonEmbedded": 0.3333333333333333,
+          "distractor": 0.11904761904761904,
+          "negation": 0
+        },
+        "assemblyProgressScore": 0.1
+      },
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 1
+        },
+        {
+          "type": "interrogative",
+          "difficulty": "medium",
+          "count": 1
+        },
+        {
+          "type": "direct",
+          "difficulty": "easy",
+          "count": 1
+        },
+        {
+          "type": "relative",
+          "difficulty": "hard",
+          "count": 1
+        }
+      ],
+      "specSelection": null,
+      "result": {
+        "generated": 10,
+        "accepted": 7,
+        "rejected": 3,
+        "rejectReasons": {
+          "prompt: prompt_task_text: must contain an explicit task/instruction, not only background context": 1,
+          "review:ets<72": 1,
+          "review:blocker:tmp_r2_q8: indirect question clause uses inverted word order (MUST be declarative)|tmp_r2_q8: indirect question uses inverted word order": 1
+        },
+        "typeStats": {
+          "negation": {
+            "generated": 1,
+            "accepted": 1,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "3rd-reporting": {
+            "generated": 1,
+            "accepted": 1,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "1st-embedded": {
+            "generated": 2,
+            "accepted": 2,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "interrogative": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r2_q8: indirect question clause uses inverted word order (MUST be declarative)|tmp_r2_q8: indirect question uses inverted word order": 1
+            }
+          },
+          "direct": {
+            "generated": 3,
+            "accepted": 2,
+            "rejected": 1,
+            "reasons": {
+              "prompt: prompt_task_text: must contain an explicit task/instruction, not only background context": 1
+            }
+          },
+          "relative": {
+            "generated": 2,
+            "accepted": 1,
+            "rejected": 1,
+            "reasons": {
+              "review:ets<72": 1
+            }
+          }
+        },
+        "deltaAssemblable": 0,
+        "deltaProgress": 0.14666666666666667,
+        "acceptedGainRate": 0.05238095238095238
+      },
+      "nextGap": {
+        "total": 144,
+        "diffGap": 78,
+        "typeGap": 1,
+        "distractorGap": 30,
+        "assemblyBlockingGap": 35
+      },
+      "nextAssemblyState": {
+        "total": 12,
+        "diffCounts": {
+          "easy": 1,
+          "medium": 9,
+          "hard": 2
+        },
+        "embedded": 8,
+        "negation": 1,
+        "distractor": 12,
+        "qmark": 0,
+        "nonEmbedded": 4,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 18,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 42,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 1,
+            "embedded": 0,
+            "nonEmbedded": 1,
+            "negation": 0
+          },
+          "medium": {
+            "total": 9,
+            "embedded": 5,
+            "nonEmbedded": 4,
+            "negation": 1
+          },
+          "hard": {
+            "total": 2,
+            "embedded": 1,
+            "nonEmbedded": 1,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 1,
+          "medium": 1,
+          "hard": 1,
+          "embedded": 1,
+          "negation": 0,
+          "negationCap": 1,
+          "distractor": 1,
+          "nonEmbedded": 4
+        },
+        "assemblableSets": 0,
+        "remainingSets": 6,
+        "remainingRecipe": {
+          "sets": 6,
+          "diff": {
+            "easy": 5,
+            "medium": 33,
+            "hard": 10
+          },
+          "style": {
+            "embeddedMin": 22,
+            "negationMin": 11,
+            "distractorMin": 30,
+            "nonEmbeddedMin": 2,
+            "embeddedCapacity": 46,
+            "negationCapacity": 17,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 5,
+          "medium": 33,
+          "hard": 10,
+          "embedded": 22,
+          "negation": 11,
+          "distractor": 30,
+          "nonEmbedded": 2,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 33,
+            "priority": 198
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 22,
+            "priority": 154
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 30,
+            "priority": 90
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 10,
+            "priority": 80
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 11,
+            "priority": 55
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 2,
+            "priority": 14
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 5,
+            "priority": 10
+          }
+        ],
+        "progressRatios": {
+          "easy": 0.16666666666666666,
+          "medium": 0.21428571428571427,
+          "hard": 0.16666666666666666,
+          "embedded": 0.26666666666666666,
+          "nonEmbedded": 0.6666666666666666,
+          "distractor": 0.2857142857142857,
+          "negation": 0.08333333333333333
+        },
+        "assemblyProgressScore": 0.24666666666666667
+      },
+      "phaseSignals": {
+        "strongTargeting": false,
+        "repairMode": false,
+        "strongGateReady": false,
+        "repairGateReady": false,
+        "strongReasons": [],
+        "repairReasons": [],
+        "momentum": {
+          "windowCount": 1,
+          "accepted": 5,
+          "generated": 10,
+          "poolGrowth": 5,
+          "deltaAssemblable": 0,
+          "deltaProgress": 0.1,
+          "zeroGainRounds": 1,
+          "zeroProgressRounds": 0,
+          "acceptedGainRate": 0.05
+        }
+      },
+      "typeReliability": {
+        "negation": 0.8,
+        "3rd-reporting": 1.25,
+        "1st-embedded": 0.83,
+        "interrogative": 0.35,
+        "direct": 0.83,
+        "relative": 0.65
+      }
+    },
+    {
+      "round": 3,
+      "phase": "assembly",
+      "mode": "assembly-medium",
+      "gap": {
+        "total": 144,
+        "diffGap": 78,
+        "typeGap": 1,
+        "distractorGap": 30,
+        "assemblyBlockingGap": 35
+      },
+      "assemblyState": {
+        "total": 12,
+        "diffCounts": {
+          "easy": 1,
+          "medium": 9,
+          "hard": 2
+        },
+        "embedded": 8,
+        "negation": 1,
+        "distractor": 12,
+        "qmark": 0,
+        "nonEmbedded": 4,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 18,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 42,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 1,
+            "embedded": 0,
+            "nonEmbedded": 1,
+            "negation": 0
+          },
+          "medium": {
+            "total": 9,
+            "embedded": 5,
+            "nonEmbedded": 4,
+            "negation": 1
+          },
+          "hard": {
+            "total": 2,
+            "embedded": 1,
+            "nonEmbedded": 1,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 1,
+          "medium": 1,
+          "hard": 1,
+          "embedded": 1,
+          "negation": 0,
+          "negationCap": 1,
+          "distractor": 1,
+          "nonEmbedded": 4
+        },
+        "assemblableSets": 0,
+        "remainingSets": 6,
+        "remainingRecipe": {
+          "sets": 6,
+          "diff": {
+            "easy": 5,
+            "medium": 33,
+            "hard": 10
+          },
+          "style": {
+            "embeddedMin": 22,
+            "negationMin": 11,
+            "distractorMin": 30,
+            "nonEmbeddedMin": 2,
+            "embeddedCapacity": 46,
+            "negationCapacity": 17,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 5,
+          "medium": 33,
+          "hard": 10,
+          "embedded": 22,
+          "negation": 11,
+          "distractor": 30,
+          "nonEmbedded": 2,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 33,
+            "priority": 198
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 22,
+            "priority": 154
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 30,
+            "priority": 90
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 10,
+            "priority": 80
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 11,
+            "priority": 55
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 2,
+            "priority": 14
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 5,
+            "priority": 10
+          }
+        ],
+        "progressRatios": {
+          "easy": 0.16666666666666666,
+          "medium": 0.21428571428571427,
+          "hard": 0.16666666666666666,
+          "embedded": 0.26666666666666666,
+          "nonEmbedded": 0.6666666666666666,
+          "distractor": 0.2857142857142857,
+          "negation": 0.08333333333333333
+        },
+        "assemblyProgressScore": 0.24666666666666667
+      },
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 3
+        }
+      ],
+      "specSelection": {
+        "focus": "embedded",
+        "score": 491,
+        "projectedAssemblableSets": 1
+      },
+      "result": {
+        "generated": 5,
+        "accepted": 4,
+        "rejected": 1,
+        "rejectReasons": {
+          "review:blocker:tmp_r3_q4: distractor DIRECTLY replaces one word to form a valid sentence": 1
+        },
+        "typeStats": {
+          "negation": {
+            "generated": 2,
+            "accepted": 2,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "3rd-reporting": {
+            "generated": 2,
+            "accepted": 2,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "1st-embedded": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "interrogative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "direct": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:blocker:tmp_r3_q4: distractor DIRECTLY replaces one word to form a valid sentence": 1
+            }
+          },
+          "relative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        "deltaAssemblable": 1,
+        "deltaProgress": 0.08000000000000004,
+        "acceptedGainRate": 0.30000000000000004
+      },
+      "nextGap": {
+        "total": 132,
+        "diffGap": 74,
+        "typeGap": 1,
+        "distractorGap": 28,
+        "assemblyBlockingGap": 29
+      },
+      "nextAssemblyState": {
+        "total": 16,
+        "diffCounts": {
+          "easy": 2,
+          "medium": 12,
+          "hard": 2
+        },
+        "embedded": 10,
+        "negation": 3,
+        "distractor": 14,
+        "qmark": 0,
+        "nonEmbedded": 6,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 18,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 42,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 2,
+            "embedded": 0,
+            "nonEmbedded": 2,
+            "negation": 1
+          },
+          "medium": {
+            "total": 12,
+            "embedded": 7,
+            "nonEmbedded": 5,
+            "negation": 2
+          },
+          "hard": {
+            "total": 2,
+            "embedded": 1,
+            "nonEmbedded": 1,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 2,
+          "medium": 1,
+          "hard": 1,
+          "embedded": 2,
+          "negation": 1,
+          "negationCap": 1,
+          "distractor": 2,
+          "nonEmbedded": 6
+        },
+        "assemblableSets": 1,
+        "remainingSets": 5,
+        "remainingRecipe": {
+          "sets": 5,
+          "diff": {
+            "easy": 4,
+            "medium": 30,
+            "hard": 10
+          },
+          "style": {
+            "embeddedMin": 20,
+            "negationMin": 9,
+            "distractorMin": 28,
+            "nonEmbeddedMin": 0,
+            "embeddedCapacity": 44,
+            "negationCapacity": 15,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 4,
+          "medium": 30,
+          "hard": 10,
+          "embedded": 20,
+          "negation": 9,
+          "distractor": 28,
+          "nonEmbedded": 0,
+          "assemblableSets": 5
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 30,
+            "priority": 180
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 20,
+            "priority": 140
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 28,
+            "priority": 84
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 10,
+            "priority": 80
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 9,
+            "priority": 45
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 4,
+            "priority": 8
+          }
+        ],
+        "progressRatios": {
+          "easy": 0.3333333333333333,
+          "medium": 0.2857142857142857,
+          "hard": 0.16666666666666666,
+          "embedded": 0.3333333333333333,
+          "nonEmbedded": 1,
+          "distractor": 0.3333333333333333,
+          "negation": 0.25
+        },
+        "assemblyProgressScore": 0.3266666666666667
+      },
+      "phaseSignals": {
+        "strongTargeting": false,
+        "repairMode": true,
+        "strongGateReady": false,
+        "repairGateReady": true,
+        "strongReasons": [],
+        "repairReasons": [
+          "embedded_shortage"
+        ],
+        "momentum": {
+          "windowCount": 2,
+          "accepted": 12,
+          "generated": 20,
+          "poolGrowth": 12,
+          "deltaAssemblable": 0,
+          "deltaProgress": 0.24666666666666667,
+          "zeroGainRounds": 2,
+          "zeroProgressRounds": 0,
+          "acceptedGainRate": 0.051388888888888894
+        }
+      },
+      "typeReliability": {
+        "negation": 1.25,
+        "3rd-reporting": 1.25,
+        "1st-embedded": 1.06,
+        "interrogative": 0.2,
+        "direct": 0.92,
+        "relative": 0.74
+      }
+    },
+    {
+      "round": 4,
+      "phase": "assembly",
+      "mode": "assembly-medium",
+      "gap": {
+        "total": 132,
+        "diffGap": 74,
+        "typeGap": 1,
+        "distractorGap": 28,
+        "assemblyBlockingGap": 29
+      },
+      "assemblyState": {
+        "total": 16,
+        "diffCounts": {
+          "easy": 2,
+          "medium": 12,
+          "hard": 2
+        },
+        "embedded": 10,
+        "negation": 3,
+        "distractor": 14,
+        "qmark": 0,
+        "nonEmbedded": 6,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 18,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 42,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 2,
+            "embedded": 0,
+            "nonEmbedded": 2,
+            "negation": 1
+          },
+          "medium": {
+            "total": 12,
+            "embedded": 7,
+            "nonEmbedded": 5,
+            "negation": 2
+          },
+          "hard": {
+            "total": 2,
+            "embedded": 1,
+            "nonEmbedded": 1,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 2,
+          "medium": 1,
+          "hard": 1,
+          "embedded": 2,
+          "negation": 1,
+          "negationCap": 1,
+          "distractor": 2,
+          "nonEmbedded": 6
+        },
+        "assemblableSets": 1,
+        "remainingSets": 5,
+        "remainingRecipe": {
+          "sets": 5,
+          "diff": {
+            "easy": 4,
+            "medium": 30,
+            "hard": 10
+          },
+          "style": {
+            "embeddedMin": 20,
+            "negationMin": 9,
+            "distractorMin": 28,
+            "nonEmbeddedMin": 0,
+            "embeddedCapacity": 44,
+            "negationCapacity": 15,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 4,
+          "medium": 30,
+          "hard": 10,
+          "embedded": 20,
+          "negation": 9,
+          "distractor": 28,
+          "nonEmbedded": 0,
+          "assemblableSets": 5
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 30,
+            "priority": 180
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 20,
+            "priority": 140
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 28,
+            "priority": 84
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 10,
+            "priority": 80
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 9,
+            "priority": 45
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 4,
+            "priority": 8
+          }
+        ],
+        "progressRatios": {
+          "easy": 0.3333333333333333,
+          "medium": 0.2857142857142857,
+          "hard": 0.16666666666666666,
+          "embedded": 0.3333333333333333,
+          "nonEmbedded": 1,
+          "distractor": 0.3333333333333333,
+          "negation": 0.25
+        },
+        "assemblyProgressScore": 0.3266666666666667
+      },
+      "spec": [
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 3
+        }
+      ],
+      "specSelection": {
+        "focus": "embedded",
+        "score": 155,
+        "projectedAssemblableSets": 1
+      },
+      "result": {
+        "generated": 5,
+        "accepted": 4,
+        "rejected": 1,
+        "rejectReasons": {
+          "review:score<78": 1
+        },
+        "typeStats": {
+          "negation": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "3rd-reporting": {
+            "generated": 3,
+            "accepted": 3,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "1st-embedded": {
+            "generated": 2,
+            "accepted": 1,
+            "rejected": 1,
+            "reasons": {
+              "review:score<78": 1
+            }
+          },
+          "interrogative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "direct": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "relative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        "deltaAssemblable": 0,
+        "deltaProgress": 0.0733333333333333,
+        "acceptedGainRate": 0.045833333333333316
+      },
+      "nextGap": {
+        "total": 121,
+        "diffGap": 70,
+        "typeGap": 1,
+        "distractorGap": 25,
+        "assemblyBlockingGap": 25
+      },
+      "nextAssemblyState": {
+        "total": 20,
+        "diffCounts": {
+          "easy": 2,
+          "medium": 16,
+          "hard": 2
+        },
+        "embedded": 14,
+        "negation": 3,
+        "distractor": 17,
+        "qmark": 0,
+        "nonEmbedded": 6,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 18,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 42,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 2,
+            "embedded": 0,
+            "nonEmbedded": 2,
+            "negation": 1
+          },
+          "medium": {
+            "total": 16,
+            "embedded": 11,
+            "nonEmbedded": 5,
+            "negation": 2
+          },
+          "hard": {
+            "total": 2,
+            "embedded": 1,
+            "nonEmbedded": 1,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 2,
+          "medium": 2,
+          "hard": 1,
+          "embedded": 2,
+          "negation": 1,
+          "negationCap": 2,
+          "distractor": 2,
+          "nonEmbedded": 6
+        },
+        "assemblableSets": 1,
+        "remainingSets": 5,
+        "remainingRecipe": {
+          "sets": 5,
+          "diff": {
+            "easy": 4,
+            "medium": 26,
+            "hard": 10
+          },
+          "style": {
+            "embeddedMin": 16,
+            "negationMin": 9,
+            "distractorMin": 25,
+            "nonEmbeddedMin": 0,
+            "embeddedCapacity": 40,
+            "negationCapacity": 15,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 4,
+          "medium": 26,
+          "hard": 10,
+          "embedded": 16,
+          "negation": 9,
+          "distractor": 25,
+          "nonEmbedded": 0,
+          "assemblableSets": 5
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 26,
+            "priority": 156
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 16,
+            "priority": 112
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 10,
+            "priority": 80
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 25,
+            "priority": 75
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 9,
+            "priority": 45
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 4,
+            "priority": 8
+          }
+        ],
+        "progressRatios": {
+          "easy": 0.3333333333333333,
+          "medium": 0.38095238095238093,
+          "hard": 0.16666666666666666,
+          "embedded": 0.4666666666666667,
+          "nonEmbedded": 1,
+          "distractor": 0.40476190476190477,
+          "negation": 0.25
+        },
+        "assemblyProgressScore": 0.4
+      },
+      "phaseSignals": {
+        "strongTargeting": false,
+        "repairMode": true,
+        "strongGateReady": false,
+        "repairGateReady": true,
+        "strongReasons": [],
+        "repairReasons": [
+          "embedded_shortage",
+          "sticky_repair"
+        ],
+        "momentum": {
+          "windowCount": 3,
+          "accepted": 16,
+          "generated": 25,
+          "poolGrowth": 16,
+          "deltaAssemblable": 1,
+          "deltaProgress": 0.3266666666666667,
+          "zeroGainRounds": 2,
+          "zeroProgressRounds": 0,
+          "acceptedGainRate": 0.11354166666666668
+        }
+      },
+      "typeReliability": {
+        "negation": 1.25,
+        "3rd-reporting": 1.25,
+        "1st-embedded": 1.06,
+        "interrogative": 0.2,
+        "direct": 0.75,
+        "relative": 0.74
+      }
+    },
+    {
+      "round": 5,
+      "phase": "assembly",
+      "mode": "assembly-medium",
+      "gap": {
+        "total": 121,
+        "diffGap": 70,
+        "typeGap": 1,
+        "distractorGap": 25,
+        "assemblyBlockingGap": 25
+      },
+      "assemblyState": {
+        "total": 20,
+        "diffCounts": {
+          "easy": 2,
+          "medium": 16,
+          "hard": 2
+        },
+        "embedded": 14,
+        "negation": 3,
+        "distractor": 17,
+        "qmark": 0,
+        "nonEmbedded": 6,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 18,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 42,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 2,
+            "embedded": 0,
+            "nonEmbedded": 2,
+            "negation": 1
+          },
+          "medium": {
+            "total": 16,
+            "embedded": 11,
+            "nonEmbedded": 5,
+            "negation": 2
+          },
+          "hard": {
+            "total": 2,
+            "embedded": 1,
+            "nonEmbedded": 1,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 2,
+          "medium": 2,
+          "hard": 1,
+          "embedded": 2,
+          "negation": 1,
+          "negationCap": 2,
+          "distractor": 2,
+          "nonEmbedded": 6
+        },
+        "assemblableSets": 1,
+        "remainingSets": 5,
+        "remainingRecipe": {
+          "sets": 5,
+          "diff": {
+            "easy": 4,
+            "medium": 26,
+            "hard": 10
+          },
+          "style": {
+            "embeddedMin": 16,
+            "negationMin": 9,
+            "distractorMin": 25,
+            "nonEmbeddedMin": 0,
+            "embeddedCapacity": 40,
+            "negationCapacity": 15,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 4,
+          "medium": 26,
+          "hard": 10,
+          "embedded": 16,
+          "negation": 9,
+          "distractor": 25,
+          "nonEmbedded": 0,
+          "assemblableSets": 5
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 26,
+            "priority": 156
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 16,
+            "priority": 112
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 10,
+            "priority": 80
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 25,
+            "priority": 75
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 9,
+            "priority": 45
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 4,
+            "priority": 8
+          }
+        ],
+        "progressRatios": {
+          "easy": 0.3333333333333333,
+          "medium": 0.38095238095238093,
+          "hard": 0.16666666666666666,
+          "embedded": 0.4666666666666667,
+          "nonEmbedded": 1,
+          "distractor": 0.40476190476190477,
+          "negation": 0.25
+        },
+        "assemblyProgressScore": 0.4
+      },
+      "spec": [
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 4
+        },
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "specSelection": {
+        "focus": "embedded",
+        "score": 145,
+        "projectedAssemblableSets": 1
+      },
+      "result": {
+        "generated": 5,
+        "accepted": 4,
+        "rejected": 1,
+        "rejectReasons": {
+          "review:score<78": 1
+        },
+        "typeStats": {
+          "negation": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "3rd-reporting": {
+            "generated": 2,
+            "accepted": 2,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "1st-embedded": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:score<78": 1
+            }
+          },
+          "interrogative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "direct": {
+            "generated": 2,
+            "accepted": 2,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "relative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        "deltaAssemblable": 0,
+        "deltaProgress": 0.07333333333333325,
+        "acceptedGainRate": 0.04583333333333328
+      },
+      "nextGap": {
+        "total": 110,
+        "diffGap": 66,
+        "typeGap": 1,
+        "distractorGap": 22,
+        "assemblyBlockingGap": 21
+      },
+      "nextAssemblyState": {
+        "total": 24,
+        "diffCounts": {
+          "easy": 2,
+          "medium": 20,
+          "hard": 2
+        },
+        "embedded": 18,
+        "negation": 3,
+        "distractor": 20,
+        "qmark": 0,
+        "nonEmbedded": 6,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 18,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 42,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 2,
+            "embedded": 0,
+            "nonEmbedded": 2,
+            "negation": 1
+          },
+          "medium": {
+            "total": 20,
+            "embedded": 13,
+            "nonEmbedded": 7,
+            "negation": 2
+          },
+          "hard": {
+            "total": 2,
+            "embedded": 1,
+            "nonEmbedded": 1,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 2,
+          "medium": 2,
+          "hard": 1,
+          "embedded": 3,
+          "negation": 1,
+          "negationCap": 3,
+          "distractor": 2,
+          "nonEmbedded": 6
+        },
+        "assemblableSets": 1,
+        "remainingSets": 5,
+        "remainingRecipe": {
+          "sets": 5,
+          "diff": {
+            "easy": 4,
+            "medium": 22,
+            "hard": 10
+          },
+          "style": {
+            "embeddedMin": 12,
+            "negationMin": 9,
+            "distractorMin": 22,
+            "nonEmbeddedMin": 0,
+            "embeddedCapacity": 36,
+            "negationCapacity": 15,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 4,
+          "medium": 22,
+          "hard": 10,
+          "embedded": 12,
+          "negation": 9,
+          "distractor": 22,
+          "nonEmbedded": 0,
+          "assemblableSets": 5
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 22,
+            "priority": 132
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 12,
+            "priority": 84
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 10,
+            "priority": 80
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 22,
+            "priority": 66
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 9,
+            "priority": 45
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 4,
+            "priority": 8
+          }
+        ],
+        "progressRatios": {
+          "easy": 0.3333333333333333,
+          "medium": 0.47619047619047616,
+          "hard": 0.16666666666666666,
+          "embedded": 0.6,
+          "nonEmbedded": 1,
+          "distractor": 0.47619047619047616,
+          "negation": 0.25
+        },
+        "assemblyProgressScore": 0.4733333333333333
+      },
+      "phaseSignals": {
+        "strongTargeting": false,
+        "repairMode": true,
+        "strongGateReady": false,
+        "repairGateReady": true,
+        "strongReasons": [],
+        "repairReasons": [
+          "embedded_shortage",
+          "sticky_repair"
+        ],
+        "momentum": {
+          "windowCount": 4,
+          "accepted": 20,
+          "generated": 30,
+          "poolGrowth": 20,
+          "deltaAssemblable": 1,
+          "deltaProgress": 0.4,
+          "zeroGainRounds": 3,
+          "zeroProgressRounds": 0,
+          "acceptedGainRate": 0.1
+        }
+      },
+      "typeReliability": {
+        "negation": 1.25,
+        "3rd-reporting": 1.25,
+        "1st-embedded": 0.98,
+        "interrogative": 0.2,
+        "direct": 0.75,
+        "relative": 0.74
+      }
+    },
+    {
+      "round": 6,
+      "phase": "assembly",
+      "mode": "assembly-medium",
+      "gap": {
+        "total": 110,
+        "diffGap": 66,
+        "typeGap": 1,
+        "distractorGap": 22,
+        "assemblyBlockingGap": 21
+      },
+      "assemblyState": {
+        "total": 24,
+        "diffCounts": {
+          "easy": 2,
+          "medium": 20,
+          "hard": 2
+        },
+        "embedded": 18,
+        "negation": 3,
+        "distractor": 20,
+        "qmark": 0,
+        "nonEmbedded": 6,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 18,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 42,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 2,
+            "embedded": 0,
+            "nonEmbedded": 2,
+            "negation": 1
+          },
+          "medium": {
+            "total": 20,
+            "embedded": 13,
+            "nonEmbedded": 7,
+            "negation": 2
+          },
+          "hard": {
+            "total": 2,
+            "embedded": 1,
+            "nonEmbedded": 1,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 2,
+          "medium": 2,
+          "hard": 1,
+          "embedded": 3,
+          "negation": 1,
+          "negationCap": 3,
+          "distractor": 2,
+          "nonEmbedded": 6
+        },
+        "assemblableSets": 1,
+        "remainingSets": 5,
+        "remainingRecipe": {
+          "sets": 5,
+          "diff": {
+            "easy": 4,
+            "medium": 22,
+            "hard": 10
+          },
+          "style": {
+            "embeddedMin": 12,
+            "negationMin": 9,
+            "distractorMin": 22,
+            "nonEmbeddedMin": 0,
+            "embeddedCapacity": 36,
+            "negationCapacity": 15,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 4,
+          "medium": 22,
+          "hard": 10,
+          "embedded": 12,
+          "negation": 9,
+          "distractor": 22,
+          "nonEmbedded": 0,
+          "assemblableSets": 5
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 22,
+            "priority": 132
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 12,
+            "priority": 84
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 10,
+            "priority": 80
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 22,
+            "priority": 66
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 9,
+            "priority": 45
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 4,
+            "priority": 8
+          }
+        ],
+        "progressRatios": {
+          "easy": 0.3333333333333333,
+          "medium": 0.47619047619047616,
+          "hard": 0.16666666666666666,
+          "embedded": 0.6,
+          "nonEmbedded": 1,
+          "distractor": 0.47619047619047616,
+          "negation": 0.25
+        },
+        "assemblyProgressScore": 0.4733333333333333
+      },
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "specSelection": {
+        "focus": "embedded",
+        "score": 135,
+        "projectedAssemblableSets": 1
+      },
+      "result": {
+        "generated": 5,
+        "accepted": 3,
+        "rejected": 2,
+        "rejectReasons": {
+          "review:score<78": 2
+        },
+        "typeStats": {
+          "negation": {
+            "generated": 1,
+            "accepted": 1,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "3rd-reporting": {
+            "generated": 2,
+            "accepted": 2,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "1st-embedded": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:score<78": 1
+            }
+          },
+          "interrogative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "direct": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "relative": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:score<78": 1
+            }
+          }
+        },
+        "deltaAssemblable": 0,
+        "deltaProgress": 0.06000000000000005,
+        "acceptedGainRate": 0.050000000000000044
+      },
+      "nextGap": {
+        "total": 101,
+        "diffGap": 63,
+        "typeGap": 1,
+        "distractorGap": 19,
+        "assemblyBlockingGap": 18
+      },
+      "nextAssemblyState": {
+        "total": 27,
+        "diffCounts": {
+          "easy": 2,
+          "medium": 23,
+          "hard": 2
+        },
+        "embedded": 20,
+        "negation": 4,
+        "distractor": 23,
+        "qmark": 0,
+        "nonEmbedded": 7,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 18,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 42,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 2,
+            "embedded": 0,
+            "nonEmbedded": 2,
+            "negation": 1
+          },
+          "medium": {
+            "total": 23,
+            "embedded": 15,
+            "nonEmbedded": 8,
+            "negation": 3
+          },
+          "hard": {
+            "total": 2,
+            "embedded": 1,
+            "nonEmbedded": 1,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 2,
+          "medium": 3,
+          "hard": 1,
+          "embedded": 4,
+          "negation": 2,
+          "negationCap": 3,
+          "distractor": 3,
+          "nonEmbedded": 7
+        },
+        "assemblableSets": 1,
+        "remainingSets": 5,
+        "remainingRecipe": {
+          "sets": 5,
+          "diff": {
+            "easy": 4,
+            "medium": 19,
+            "hard": 10
+          },
+          "style": {
+            "embeddedMin": 10,
+            "negationMin": 8,
+            "distractorMin": 19,
+            "nonEmbeddedMin": 0,
+            "embeddedCapacity": 34,
+            "negationCapacity": 14,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 4,
+          "medium": 19,
+          "hard": 10,
+          "embedded": 10,
+          "negation": 8,
+          "distractor": 19,
+          "nonEmbedded": 0,
+          "assemblableSets": 5
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 19,
+            "priority": 114
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 10,
+            "priority": 80
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 10,
+            "priority": 70
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 19,
+            "priority": 57
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 8,
+            "priority": 40
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 4,
+            "priority": 8
+          }
+        ],
+        "progressRatios": {
+          "easy": 0.3333333333333333,
+          "medium": 0.5476190476190477,
+          "hard": 0.16666666666666666,
+          "embedded": 0.6666666666666666,
+          "nonEmbedded": 1,
+          "distractor": 0.5476190476190477,
+          "negation": 0.3333333333333333
+        },
+        "assemblyProgressScore": 0.5333333333333333
+      },
+      "phaseSignals": {
+        "strongTargeting": false,
+        "repairMode": true,
+        "strongGateReady": false,
+        "repairGateReady": true,
+        "strongReasons": [],
+        "repairReasons": [
+          "embedded_shortage",
+          "sticky_repair"
+        ],
+        "momentum": {
+          "windowCount": 5,
+          "accepted": 24,
+          "generated": 35,
+          "poolGrowth": 24,
+          "deltaAssemblable": 1,
+          "deltaProgress": 0.4733333333333333,
+          "zeroGainRounds": 4,
+          "zeroProgressRounds": 0,
+          "acceptedGainRate": 0.09097222222222222
+        }
+      },
+      "typeReliability": {
+        "negation": 1.25,
+        "3rd-reporting": 1.25,
+        "1st-embedded": 0.89,
+        "interrogative": 0.2,
+        "direct": 0.89,
+        "relative": 0.74
+      }
+    },
+    {
+      "round": 7,
+      "phase": "assembly",
+      "mode": "assembly-medium",
+      "gap": {
+        "total": 101,
+        "diffGap": 63,
+        "typeGap": 1,
+        "distractorGap": 19,
+        "assemblyBlockingGap": 18
+      },
+      "assemblyState": {
+        "total": 27,
+        "diffCounts": {
+          "easy": 2,
+          "medium": 23,
+          "hard": 2
+        },
+        "embedded": 20,
+        "negation": 4,
+        "distractor": 23,
+        "qmark": 0,
+        "nonEmbedded": 7,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 18,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 42,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 2,
+            "embedded": 0,
+            "nonEmbedded": 2,
+            "negation": 1
+          },
+          "medium": {
+            "total": 23,
+            "embedded": 15,
+            "nonEmbedded": 8,
+            "negation": 3
+          },
+          "hard": {
+            "total": 2,
+            "embedded": 1,
+            "nonEmbedded": 1,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 2,
+          "medium": 3,
+          "hard": 1,
+          "embedded": 4,
+          "negation": 2,
+          "negationCap": 3,
+          "distractor": 3,
+          "nonEmbedded": 7
+        },
+        "assemblableSets": 1,
+        "remainingSets": 5,
+        "remainingRecipe": {
+          "sets": 5,
+          "diff": {
+            "easy": 4,
+            "medium": 19,
+            "hard": 10
+          },
+          "style": {
+            "embeddedMin": 10,
+            "negationMin": 8,
+            "distractorMin": 19,
+            "nonEmbeddedMin": 0,
+            "embeddedCapacity": 34,
+            "negationCapacity": 14,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 4,
+          "medium": 19,
+          "hard": 10,
+          "embedded": 10,
+          "negation": 8,
+          "distractor": 19,
+          "nonEmbedded": 0,
+          "assemblableSets": 5
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 19,
+            "priority": 114
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 10,
+            "priority": 80
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 10,
+            "priority": 70
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 19,
+            "priority": 57
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 8,
+            "priority": 40
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 4,
+            "priority": 8
+          }
+        ],
+        "progressRatios": {
+          "easy": 0.3333333333333333,
+          "medium": 0.5476190476190477,
+          "hard": 0.16666666666666666,
+          "embedded": 0.6666666666666666,
+          "nonEmbedded": 1,
+          "distractor": 0.5476190476190477,
+          "negation": 0.3333333333333333
+        },
+        "assemblyProgressScore": 0.5333333333333333
+      },
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 4
+        },
+        {
+          "type": "negation",
+          "difficulty": "easy",
+          "count": 1
+        }
+      ],
+      "specSelection": {
+        "focus": "hard",
+        "score": 690,
+        "projectedAssemblableSets": 3
+      },
+      "result": {
+        "generated": 5,
+        "accepted": 3,
+        "rejected": 2,
+        "rejectReasons": {
+          "fatal: chunks (minus distractor) + prefilled words must equal answer words; distractor must not appear in answer": 1,
+          "review:score<78": 1
+        },
+        "typeStats": {
+          "negation": {
+            "generated": 1,
+            "accepted": 1,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "3rd-reporting": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "1st-embedded": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "interrogative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "direct": {
+            "generated": 2,
+            "accepted": 1,
+            "rejected": 1,
+            "reasons": {
+              "review:score<78": 1
+            }
+          },
+          "relative": {
+            "generated": 2,
+            "accepted": 1,
+            "rejected": 1,
+            "reasons": {
+              "fatal: chunks (minus distractor) + prefilled words must equal answer words; distractor must not appear in answer": 1
+            }
+          }
+        },
+        "deltaAssemblable": 1,
+        "deltaProgress": 0.06000000000000005,
+        "acceptedGainRate": 0.38333333333333336
+      },
+      "nextGap": {
+        "total": 92,
+        "diffGap": 60,
+        "typeGap": 1,
+        "distractorGap": 16,
+        "assemblyBlockingGap": 15
+      },
+      "nextAssemblyState": {
+        "total": 30,
+        "diffCounts": {
+          "easy": 2,
+          "medium": 23,
+          "hard": 5
+        },
+        "embedded": 22,
+        "negation": 5,
+        "distractor": 26,
+        "qmark": 0,
+        "nonEmbedded": 8,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 18,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 42,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 2,
+            "embedded": 0,
+            "nonEmbedded": 2,
+            "negation": 1
+          },
+          "medium": {
+            "total": 23,
+            "embedded": 15,
+            "nonEmbedded": 8,
+            "negation": 3
+          },
+          "hard": {
+            "total": 5,
+            "embedded": 1,
+            "nonEmbedded": 4,
+            "negation": 1
+          }
+        },
+        "assemblableBy": {
+          "easy": 2,
+          "medium": 3,
+          "hard": 2,
+          "embedded": 4,
+          "negation": 2,
+          "negationCap": 3,
+          "distractor": 3,
+          "nonEmbedded": 8
+        },
+        "assemblableSets": 2,
+        "remainingSets": 4,
+        "remainingRecipe": {
+          "sets": 4,
+          "diff": {
+            "easy": 4,
+            "medium": 19,
+            "hard": 7
+          },
+          "style": {
+            "embeddedMin": 8,
+            "negationMin": 7,
+            "distractorMin": 16,
+            "nonEmbeddedMin": 0,
+            "embeddedCapacity": 32,
+            "negationCapacity": 13,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 4,
+          "medium": 19,
+          "hard": 7,
+          "embedded": 8,
+          "negation": 7,
+          "distractor": 16,
+          "nonEmbedded": 0,
+          "assemblableSets": 4
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 19,
+            "priority": 114
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 7,
+            "priority": 56
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 8,
+            "priority": 56
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 16,
+            "priority": 48
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 7,
+            "priority": 35
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 4,
+            "priority": 8
+          }
+        ],
+        "progressRatios": {
+          "easy": 0.3333333333333333,
+          "medium": 0.5476190476190477,
+          "hard": 0.4166666666666667,
+          "embedded": 0.7333333333333333,
+          "nonEmbedded": 1,
+          "distractor": 0.6190476190476191,
+          "negation": 0.4166666666666667
+        },
+        "assemblyProgressScore": 0.5933333333333334
+      },
+      "phaseSignals": {
+        "strongTargeting": false,
+        "repairMode": true,
+        "strongGateReady": true,
+        "repairGateReady": true,
+        "strongReasons": [],
+        "repairReasons": [
+          "embedded_shortage",
+          "sticky_repair"
+        ],
+        "momentum": {
+          "windowCount": 5,
+          "accepted": 22,
+          "generated": 30,
+          "poolGrowth": 22,
+          "deltaAssemblable": 1,
+          "deltaProgress": 0.43333333333333335,
+          "zeroGainRounds": 4,
+          "zeroProgressRounds": 0,
+          "acceptedGainRate": 0.09469696969696971
+        }
+      },
+      "typeReliability": {
+        "negation": 1.25,
+        "3rd-reporting": 1.25,
+        "1st-embedded": 0.83,
+        "interrogative": 0.2,
+        "direct": 0.89,
+        "relative": 0.66
+      }
+    },
+    {
+      "round": 8,
+      "phase": "assembly",
+      "mode": "assembly-medium",
+      "gap": {
+        "total": 92,
+        "diffGap": 60,
+        "typeGap": 1,
+        "distractorGap": 16,
+        "assemblyBlockingGap": 15
+      },
+      "assemblyState": {
+        "total": 30,
+        "diffCounts": {
+          "easy": 2,
+          "medium": 23,
+          "hard": 5
+        },
+        "embedded": 22,
+        "negation": 5,
+        "distractor": 26,
+        "qmark": 0,
+        "nonEmbedded": 8,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 18,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 42,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 2,
+            "embedded": 0,
+            "nonEmbedded": 2,
+            "negation": 1
+          },
+          "medium": {
+            "total": 23,
+            "embedded": 15,
+            "nonEmbedded": 8,
+            "negation": 3
+          },
+          "hard": {
+            "total": 5,
+            "embedded": 1,
+            "nonEmbedded": 4,
+            "negation": 1
+          }
+        },
+        "assemblableBy": {
+          "easy": 2,
+          "medium": 3,
+          "hard": 2,
+          "embedded": 4,
+          "negation": 2,
+          "negationCap": 3,
+          "distractor": 3,
+          "nonEmbedded": 8
+        },
+        "assemblableSets": 2,
+        "remainingSets": 4,
+        "remainingRecipe": {
+          "sets": 4,
+          "diff": {
+            "easy": 4,
+            "medium": 19,
+            "hard": 7
+          },
+          "style": {
+            "embeddedMin": 8,
+            "negationMin": 7,
+            "distractorMin": 16,
+            "nonEmbeddedMin": 0,
+            "embeddedCapacity": 32,
+            "negationCapacity": 13,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 4,
+          "medium": 19,
+          "hard": 7,
+          "embedded": 8,
+          "negation": 7,
+          "distractor": 16,
+          "nonEmbedded": 0,
+          "assemblableSets": 4
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 19,
+            "priority": 114
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 7,
+            "priority": 56
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 8,
+            "priority": 56
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 16,
+            "priority": 48
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 7,
+            "priority": 35
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 4,
+            "priority": 8
+          }
+        ],
+        "progressRatios": {
+          "easy": 0.3333333333333333,
+          "medium": 0.5476190476190477,
+          "hard": 0.4166666666666667,
+          "embedded": 0.7333333333333333,
+          "nonEmbedded": 1,
+          "distractor": 0.6190476190476191,
+          "negation": 0.4166666666666667
+        },
+        "assemblyProgressScore": 0.5933333333333334
+      },
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 4
+        },
+        {
+          "type": "negation",
+          "difficulty": "easy",
+          "count": 1
+        }
+      ],
+      "specSelection": {
+        "focus": "hard",
+        "score": 370,
+        "projectedAssemblableSets": 3
+      },
+      "result": {
+        "generated": 5,
+        "accepted": 3,
+        "rejected": 2,
+        "rejectReasons": {
+          "review:score<78": 2
+        },
+        "typeStats": {
+          "negation": {
+            "generated": 2,
+            "accepted": 2,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "3rd-reporting": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "1st-embedded": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "interrogative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "direct": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:score<78": 2
+            }
+          },
+          "relative": {
+            "generated": 1,
+            "accepted": 1,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        "deltaAssemblable": 0,
+        "deltaProgress": 0.06000000000000005,
+        "acceptedGainRate": 0.050000000000000044
+      },
+      "nextGap": {
+        "total": 83,
+        "diffGap": 57,
+        "typeGap": 1,
+        "distractorGap": 13,
+        "assemblyBlockingGap": 12
+      },
+      "nextAssemblyState": {
+        "total": 33,
+        "diffCounts": {
+          "easy": 2,
+          "medium": 24,
+          "hard": 7
+        },
+        "embedded": 23,
+        "negation": 7,
+        "distractor": 29,
+        "qmark": 0,
+        "nonEmbedded": 10,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 18,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 42,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 2,
+            "embedded": 0,
+            "nonEmbedded": 2,
+            "negation": 1
+          },
+          "medium": {
+            "total": 24,
+            "embedded": 15,
+            "nonEmbedded": 9,
+            "negation": 4
+          },
+          "hard": {
+            "total": 7,
+            "embedded": 1,
+            "nonEmbedded": 6,
+            "negation": 2
+          }
+        },
+        "assemblableBy": {
+          "easy": 2,
+          "medium": 3,
+          "hard": 3,
+          "embedded": 4,
+          "negation": 3,
+          "negationCap": 3,
+          "distractor": 4,
+          "nonEmbedded": 10
+        },
+        "assemblableSets": 2,
+        "remainingSets": 4,
+        "remainingRecipe": {
+          "sets": 4,
+          "diff": {
+            "easy": 4,
+            "medium": 18,
+            "hard": 5
+          },
+          "style": {
+            "embeddedMin": 7,
+            "negationMin": 5,
+            "distractorMin": 13,
+            "nonEmbeddedMin": 0,
+            "embeddedCapacity": 31,
+            "negationCapacity": 11,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 4,
+          "medium": 18,
+          "hard": 5,
+          "embedded": 7,
+          "negation": 5,
+          "distractor": 13,
+          "nonEmbedded": 0,
+          "assemblableSets": 4
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 18,
+            "priority": 108
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 7,
+            "priority": 49
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 5,
+            "priority": 40
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 13,
+            "priority": 39
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 5,
+            "priority": 25
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 4,
+            "priority": 8
+          }
+        ],
+        "progressRatios": {
+          "easy": 0.3333333333333333,
+          "medium": 0.5714285714285714,
+          "hard": 0.5833333333333334,
+          "embedded": 0.7666666666666667,
+          "nonEmbedded": 1,
+          "distractor": 0.6904761904761905,
+          "negation": 0.5833333333333334
+        },
+        "assemblyProgressScore": 0.6533333333333334
+      },
+      "phaseSignals": {
+        "strongTargeting": false,
+        "repairMode": true,
+        "strongGateReady": true,
+        "repairGateReady": true,
+        "strongReasons": [],
+        "repairReasons": [
+          "embedded_shortage",
+          "sticky_repair"
+        ],
+        "momentum": {
+          "windowCount": 5,
+          "accepted": 18,
+          "generated": 25,
+          "poolGrowth": 18,
+          "deltaAssemblable": 2,
+          "deltaProgress": 0.3466666666666667,
+          "zeroGainRounds": 3,
+          "zeroProgressRounds": 0,
+          "acceptedGainRate": 0.15925925925925927
+        }
+      },
+      "typeReliability": {
+        "negation": 1.25,
+        "3rd-reporting": 1.25,
+        "1st-embedded": 0.83,
+        "interrogative": 0.2,
+        "direct": 0.89,
+        "relative": 0.66
+      }
+    },
+    {
+      "round": 9,
+      "phase": "assembly",
+      "mode": "assembly-medium",
+      "gap": {
+        "total": 83,
+        "diffGap": 57,
+        "typeGap": 1,
+        "distractorGap": 13,
+        "assemblyBlockingGap": 12
+      },
+      "assemblyState": {
+        "total": 33,
+        "diffCounts": {
+          "easy": 2,
+          "medium": 24,
+          "hard": 7
+        },
+        "embedded": 23,
+        "negation": 7,
+        "distractor": 29,
+        "qmark": 0,
+        "nonEmbedded": 10,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 18,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 42,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 2,
+            "embedded": 0,
+            "nonEmbedded": 2,
+            "negation": 1
+          },
+          "medium": {
+            "total": 24,
+            "embedded": 15,
+            "nonEmbedded": 9,
+            "negation": 4
+          },
+          "hard": {
+            "total": 7,
+            "embedded": 1,
+            "nonEmbedded": 6,
+            "negation": 2
+          }
+        },
+        "assemblableBy": {
+          "easy": 2,
+          "medium": 3,
+          "hard": 3,
+          "embedded": 4,
+          "negation": 3,
+          "negationCap": 3,
+          "distractor": 4,
+          "nonEmbedded": 10
+        },
+        "assemblableSets": 2,
+        "remainingSets": 4,
+        "remainingRecipe": {
+          "sets": 4,
+          "diff": {
+            "easy": 4,
+            "medium": 18,
+            "hard": 5
+          },
+          "style": {
+            "embeddedMin": 7,
+            "negationMin": 5,
+            "distractorMin": 13,
+            "nonEmbeddedMin": 0,
+            "embeddedCapacity": 31,
+            "negationCapacity": 11,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 4,
+          "medium": 18,
+          "hard": 5,
+          "embedded": 7,
+          "negation": 5,
+          "distractor": 13,
+          "nonEmbedded": 0,
+          "assemblableSets": 4
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 18,
+            "priority": 108
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 7,
+            "priority": 49
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 5,
+            "priority": 40
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 13,
+            "priority": 39
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 5,
+            "priority": 25
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 4,
+            "priority": 8
+          }
+        ],
+        "progressRatios": {
+          "easy": 0.3333333333333333,
+          "medium": 0.5714285714285714,
+          "hard": 0.5833333333333334,
+          "embedded": 0.7666666666666667,
+          "nonEmbedded": 1,
+          "distractor": 0.6904761904761905,
+          "negation": 0.5833333333333334
+        },
+        "assemblyProgressScore": 0.6533333333333334
+      },
+      "spec": [
+        {
+          "type": "interrogative",
+          "difficulty": "easy",
+          "count": 1
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 4
+        }
+      ],
+      "specSelection": {
+        "focus": "embedded",
+        "score": 464,
+        "projectedAssemblableSets": 3
+      },
+      "error": "read ECONNRESET",
+      "phaseSignals": {
+        "strongTargeting": false,
+        "repairMode": true,
+        "strongGateReady": true,
+        "repairGateReady": true,
+        "strongReasons": [],
+        "repairReasons": [
+          "embedded_shortage",
+          "sticky_repair"
+        ],
+        "momentum": {
+          "windowCount": 5,
+          "accepted": 17,
+          "generated": 25,
+          "poolGrowth": 17,
+          "deltaAssemblable": 1,
+          "deltaProgress": 0.3266666666666667,
+          "zeroGainRounds": 4,
+          "zeroProgressRounds": 0,
+          "acceptedGainRate": 0.10686274509803922
+        }
+      },
+      "typeReliability": {
+        "negation": 1.25,
+        "3rd-reporting": 1.25,
+        "1st-embedded": 0.59,
+        "interrogative": 0.8,
+        "direct": 0.69,
+        "relative": 0.74
+      }
+    },
+    {
+      "round": 10,
+      "phase": "assembly",
+      "mode": "assembly-medium",
+      "gap": {
+        "total": 83,
+        "diffGap": 57,
+        "typeGap": 1,
+        "distractorGap": 13,
+        "assemblyBlockingGap": 12
+      },
+      "assemblyState": {
+        "total": 33,
+        "diffCounts": {
+          "easy": 2,
+          "medium": 24,
+          "hard": 7
+        },
+        "embedded": 23,
+        "negation": 7,
+        "distractor": 29,
+        "qmark": 0,
+        "nonEmbedded": 10,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 18,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 42,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 2,
+            "embedded": 0,
+            "nonEmbedded": 2,
+            "negation": 1
+          },
+          "medium": {
+            "total": 24,
+            "embedded": 15,
+            "nonEmbedded": 9,
+            "negation": 4
+          },
+          "hard": {
+            "total": 7,
+            "embedded": 1,
+            "nonEmbedded": 6,
+            "negation": 2
+          }
+        },
+        "assemblableBy": {
+          "easy": 2,
+          "medium": 3,
+          "hard": 3,
+          "embedded": 4,
+          "negation": 3,
+          "negationCap": 3,
+          "distractor": 4,
+          "nonEmbedded": 10
+        },
+        "assemblableSets": 2,
+        "remainingSets": 4,
+        "remainingRecipe": {
+          "sets": 4,
+          "diff": {
+            "easy": 4,
+            "medium": 18,
+            "hard": 5
+          },
+          "style": {
+            "embeddedMin": 7,
+            "negationMin": 5,
+            "distractorMin": 13,
+            "nonEmbeddedMin": 0,
+            "embeddedCapacity": 31,
+            "negationCapacity": 11,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 4,
+          "medium": 18,
+          "hard": 5,
+          "embedded": 7,
+          "negation": 5,
+          "distractor": 13,
+          "nonEmbedded": 0,
+          "assemblableSets": 4
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 18,
+            "priority": 108
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 7,
+            "priority": 49
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 5,
+            "priority": 40
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 13,
+            "priority": 39
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 5,
+            "priority": 25
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 4,
+            "priority": 8
+          }
+        ],
+        "progressRatios": {
+          "easy": 0.3333333333333333,
+          "medium": 0.5714285714285714,
+          "hard": 0.5833333333333334,
+          "embedded": 0.7666666666666667,
+          "nonEmbedded": 1,
+          "distractor": 0.6904761904761905,
+          "negation": 0.5833333333333334
+        },
+        "assemblyProgressScore": 0.6533333333333334
+      },
+      "spec": [
+        {
+          "type": "interrogative",
+          "difficulty": "easy",
+          "count": 1
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 4
+        }
+      ],
+      "specSelection": {
+        "focus": "embedded",
+        "score": 464,
+        "projectedAssemblableSets": 3
+      },
+      "result": {
+        "generated": 5,
+        "accepted": 1,
+        "rejected": 4,
+        "rejectReasons": {
+          "fatal: distractor must not appear in answer": 1,
+          "topic:repeat": 1,
+          "review:ets<72": 1,
+          "review:score<78": 1
+        },
+        "typeStats": {
+          "negation": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "3rd-reporting": {
+            "generated": 4,
+            "accepted": 1,
+            "rejected": 3,
+            "reasons": {
+              "fatal: distractor must not appear in answer": 1,
+              "topic:repeat": 1,
+              "review:score<78": 1
+            }
+          },
+          "1st-embedded": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "interrogative": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:ets<72": 1
+            }
+          },
+          "direct": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "relative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        "deltaAssemblable": 0,
+        "deltaProgress": 0.013333333333333308,
+        "acceptedGainRate": 0.03333333333333327
+      },
+      "nextGap": {
+        "total": 81,
+        "diffGap": 56,
+        "typeGap": 1,
+        "distractorGap": 13,
+        "assemblyBlockingGap": 11
+      },
+      "nextAssemblyState": {
+        "total": 34,
+        "diffCounts": {
+          "easy": 2,
+          "medium": 25,
+          "hard": 7
+        },
+        "embedded": 24,
+        "negation": 7,
+        "distractor": 29,
+        "qmark": 0,
+        "nonEmbedded": 10,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 18,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 42,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 2,
+            "embedded": 0,
+            "nonEmbedded": 2,
+            "negation": 1
+          },
+          "medium": {
+            "total": 25,
+            "embedded": 16,
+            "nonEmbedded": 9,
+            "negation": 4
+          },
+          "hard": {
+            "total": 7,
+            "embedded": 1,
+            "nonEmbedded": 6,
+            "negation": 2
+          }
+        },
+        "assemblableBy": {
+          "easy": 2,
+          "medium": 3,
+          "hard": 3,
+          "embedded": 4,
+          "negation": 3,
+          "negationCap": 3,
+          "distractor": 4,
+          "nonEmbedded": 10
+        },
+        "assemblableSets": 2,
+        "remainingSets": 4,
+        "remainingRecipe": {
+          "sets": 4,
+          "diff": {
+            "easy": 4,
+            "medium": 17,
+            "hard": 5
+          },
+          "style": {
+            "embeddedMin": 6,
+            "negationMin": 5,
+            "distractorMin": 13,
+            "nonEmbeddedMin": 0,
+            "embeddedCapacity": 30,
+            "negationCapacity": 11,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 4,
+          "medium": 17,
+          "hard": 5,
+          "embedded": 6,
+          "negation": 5,
+          "distractor": 13,
+          "nonEmbedded": 0,
+          "assemblableSets": 4
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 17,
+            "priority": 102
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 6,
+            "priority": 42
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 5,
+            "priority": 40
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 13,
+            "priority": 39
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 5,
+            "priority": 25
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 4,
+            "priority": 8
+          }
+        ],
+        "progressRatios": {
+          "easy": 0.3333333333333333,
+          "medium": 0.5952380952380952,
+          "hard": 0.5833333333333334,
+          "embedded": 0.8,
+          "nonEmbedded": 1,
+          "distractor": 0.6904761904761905,
+          "negation": 0.5833333333333334
+        },
+        "assemblyProgressScore": 0.6666666666666667
+      },
+      "phaseSignals": {
+        "strongTargeting": false,
+        "repairMode": true,
+        "strongGateReady": true,
+        "repairGateReady": true,
+        "strongReasons": [],
+        "repairReasons": [
+          "embedded_shortage",
+          "sticky_repair"
+        ],
+        "momentum": {
+          "windowCount": 4,
+          "accepted": 13,
+          "generated": 20,
+          "poolGrowth": 13,
+          "deltaAssemblable": 1,
+          "deltaProgress": 0.2533333333333334,
+          "zeroGainRounds": 3,
+          "zeroProgressRounds": 0,
+          "acceptedGainRate": 0.12564102564102567
+        }
+      },
+      "typeReliability": {
+        "negation": 1.25,
+        "3rd-reporting": 1.25,
+        "1st-embedded": 0.59,
+        "interrogative": 0.8,
+        "direct": 0.83,
+        "relative": 0.74
+      }
+    },
+    {
+      "round": 11,
+      "phase": "assembly",
+      "mode": "assembly-medium",
+      "gap": {
+        "total": 81,
+        "diffGap": 56,
+        "typeGap": 1,
+        "distractorGap": 13,
+        "assemblyBlockingGap": 11
+      },
+      "assemblyState": {
+        "total": 34,
+        "diffCounts": {
+          "easy": 2,
+          "medium": 25,
+          "hard": 7
+        },
+        "embedded": 24,
+        "negation": 7,
+        "distractor": 29,
+        "qmark": 0,
+        "nonEmbedded": 10,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 18,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 42,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 2,
+            "embedded": 0,
+            "nonEmbedded": 2,
+            "negation": 1
+          },
+          "medium": {
+            "total": 25,
+            "embedded": 16,
+            "nonEmbedded": 9,
+            "negation": 4
+          },
+          "hard": {
+            "total": 7,
+            "embedded": 1,
+            "nonEmbedded": 6,
+            "negation": 2
+          }
+        },
+        "assemblableBy": {
+          "easy": 2,
+          "medium": 3,
+          "hard": 3,
+          "embedded": 4,
+          "negation": 3,
+          "negationCap": 3,
+          "distractor": 4,
+          "nonEmbedded": 10
+        },
+        "assemblableSets": 2,
+        "remainingSets": 4,
+        "remainingRecipe": {
+          "sets": 4,
+          "diff": {
+            "easy": 4,
+            "medium": 17,
+            "hard": 5
+          },
+          "style": {
+            "embeddedMin": 6,
+            "negationMin": 5,
+            "distractorMin": 13,
+            "nonEmbeddedMin": 0,
+            "embeddedCapacity": 30,
+            "negationCapacity": 11,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 4,
+          "medium": 17,
+          "hard": 5,
+          "embedded": 6,
+          "negation": 5,
+          "distractor": 13,
+          "nonEmbedded": 0,
+          "assemblableSets": 4
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 17,
+            "priority": 102
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 6,
+            "priority": 42
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 5,
+            "priority": 40
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 13,
+            "priority": 39
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 5,
+            "priority": 25
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 4,
+            "priority": 8
+          }
+        ],
+        "progressRatios": {
+          "easy": 0.3333333333333333,
+          "medium": 0.5952380952380952,
+          "hard": 0.5833333333333334,
+          "embedded": 0.8,
+          "nonEmbedded": 1,
+          "distractor": 0.6904761904761905,
+          "negation": 0.5833333333333334
+        },
+        "assemblyProgressScore": 0.6666666666666667
+      },
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "easy",
+          "count": 1
+        },
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 4
+        }
+      ],
+      "specSelection": {
+        "focus": "medium",
+        "score": 439,
+        "projectedAssemblableSets": 3
+      },
+      "result": {
+        "generated": 5,
+        "accepted": 4,
+        "rejected": 1,
+        "rejectReasons": {
+          "review:score<78": 1
+        },
+        "typeStats": {
+          "negation": {
+            "generated": 5,
+            "accepted": 4,
+            "rejected": 1,
+            "reasons": {
+              "review:score<78": 1
+            }
+          },
+          "3rd-reporting": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "1st-embedded": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "interrogative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "direct": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "relative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        "deltaAssemblable": 1,
+        "deltaProgress": 0.07999999999999996,
+        "acceptedGainRate": 0.3
+      },
+      "nextGap": {
+        "total": 69,
+        "diffGap": 52,
+        "typeGap": 1,
+        "distractorGap": 9,
+        "assemblyBlockingGap": 7
+      },
+      "nextAssemblyState": {
+        "total": 38,
+        "diffCounts": {
+          "easy": 6,
+          "medium": 25,
+          "hard": 7
+        },
+        "embedded": 24,
+        "negation": 11,
+        "distractor": 33,
+        "qmark": 0,
+        "nonEmbedded": 14,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 18,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 42,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 6,
+            "embedded": 0,
+            "nonEmbedded": 6,
+            "negation": 5
+          },
+          "medium": {
+            "total": 25,
+            "embedded": 16,
+            "nonEmbedded": 9,
+            "negation": 4
+          },
+          "hard": {
+            "total": 7,
+            "embedded": 1,
+            "nonEmbedded": 6,
+            "negation": 2
+          }
+        },
+        "assemblableBy": {
+          "easy": 6,
+          "medium": 3,
+          "hard": 3,
+          "embedded": 4,
+          "negation": 5,
+          "negationCap": 3,
+          "distractor": 4,
+          "nonEmbedded": 14
+        },
+        "assemblableSets": 3,
+        "remainingSets": 3,
+        "remainingRecipe": {
+          "sets": 3,
+          "diff": {
+            "easy": 0,
+            "medium": 17,
+            "hard": 5
+          },
+          "style": {
+            "embeddedMin": 6,
+            "negationMin": 1,
+            "distractorMin": 9,
+            "nonEmbeddedMin": 0,
+            "embeddedCapacity": 30,
+            "negationCapacity": 7,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 0,
+          "medium": 17,
+          "hard": 5,
+          "embedded": 6,
+          "negation": 1,
+          "distractor": 9,
+          "nonEmbedded": 0,
+          "assemblableSets": 3
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 17,
+            "priority": 102
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 6,
+            "priority": 42
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 5,
+            "priority": 40
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 9,
+            "priority": 27
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 1,
+            "priority": 5
+          }
+        ],
+        "progressRatios": {
+          "easy": 1,
+          "medium": 0.5952380952380952,
+          "hard": 0.5833333333333334,
+          "embedded": 0.8,
+          "nonEmbedded": 1,
+          "distractor": 0.7857142857142857,
+          "negation": 0.9166666666666666
+        },
+        "assemblyProgressScore": 0.7466666666666667
+      },
+      "phaseSignals": {
+        "strongTargeting": false,
+        "repairMode": true,
+        "strongGateReady": true,
+        "repairGateReady": true,
+        "strongReasons": [],
+        "repairReasons": [
+          "embedded_shortage",
+          "sticky_repair"
+        ],
+        "momentum": {
+          "windowCount": 4,
+          "accepted": 10,
+          "generated": 20,
+          "poolGrowth": 10,
+          "deltaAssemblable": 1,
+          "deltaProgress": 0.19333333333333347,
+          "zeroGainRounds": 3,
+          "zeroProgressRounds": 0,
+          "acceptedGainRate": 0.14833333333333337
+        }
+      },
+      "typeReliability": {
+        "negation": 1.25,
+        "3rd-reporting": 0.9,
+        "1st-embedded": 0.35,
+        "interrogative": 0.35,
+        "direct": 0.83,
+        "relative": 0.74
+      }
+    },
+    {
+      "round": 12,
+      "phase": "assembly",
+      "mode": "assembly-medium",
+      "gap": {
+        "total": 69,
+        "diffGap": 52,
+        "typeGap": 1,
+        "distractorGap": 9,
+        "assemblyBlockingGap": 7
+      },
+      "assemblyState": {
+        "total": 38,
+        "diffCounts": {
+          "easy": 6,
+          "medium": 25,
+          "hard": 7
+        },
+        "embedded": 24,
+        "negation": 11,
+        "distractor": 33,
+        "qmark": 0,
+        "nonEmbedded": 14,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 18,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 42,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 6,
+            "embedded": 0,
+            "nonEmbedded": 6,
+            "negation": 5
+          },
+          "medium": {
+            "total": 25,
+            "embedded": 16,
+            "nonEmbedded": 9,
+            "negation": 4
+          },
+          "hard": {
+            "total": 7,
+            "embedded": 1,
+            "nonEmbedded": 6,
+            "negation": 2
+          }
+        },
+        "assemblableBy": {
+          "easy": 6,
+          "medium": 3,
+          "hard": 3,
+          "embedded": 4,
+          "negation": 5,
+          "negationCap": 3,
+          "distractor": 4,
+          "nonEmbedded": 14
+        },
+        "assemblableSets": 3,
+        "remainingSets": 3,
+        "remainingRecipe": {
+          "sets": 3,
+          "diff": {
+            "easy": 0,
+            "medium": 17,
+            "hard": 5
+          },
+          "style": {
+            "embeddedMin": 6,
+            "negationMin": 1,
+            "distractorMin": 9,
+            "nonEmbeddedMin": 0,
+            "embeddedCapacity": 30,
+            "negationCapacity": 7,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 0,
+          "medium": 17,
+          "hard": 5,
+          "embedded": 6,
+          "negation": 1,
+          "distractor": 9,
+          "nonEmbedded": 0,
+          "assemblableSets": 3
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 17,
+            "priority": 102
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 6,
+            "priority": 42
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 5,
+            "priority": 40
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 9,
+            "priority": 27
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 1,
+            "priority": 5
+          }
+        ],
+        "progressRatios": {
+          "easy": 1,
+          "medium": 0.5952380952380952,
+          "hard": 0.5833333333333334,
+          "embedded": 0.8,
+          "nonEmbedded": 1,
+          "distractor": 0.7857142857142857,
+          "negation": 0.9166666666666666
+        },
+        "assemblyProgressScore": 0.7466666666666667
+      },
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 4
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "hard",
+          "count": 1
+        }
+      ],
+      "specSelection": {
+        "focus": "medium",
+        "score": 445,
+        "projectedAssemblableSets": 4
+      },
+      "result": {
+        "generated": 5,
+        "accepted": 4,
+        "rejected": 1,
+        "rejectReasons": {
+          "review:score<78": 1
+        },
+        "typeStats": {
+          "negation": {
+            "generated": 4,
+            "accepted": 3,
+            "rejected": 1,
+            "reasons": {
+              "review:score<78": 1
+            }
+          },
+          "3rd-reporting": {
+            "generated": 1,
+            "accepted": 1,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "1st-embedded": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "interrogative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "direct": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "relative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        "deltaAssemblable": 0,
+        "deltaProgress": 0.05999999999999983,
+        "acceptedGainRate": 0.037499999999999895
+      },
+      "nextGap": {
+        "total": 60,
+        "diffGap": 48,
+        "typeGap": 1,
+        "distractorGap": 5,
+        "assemblyBlockingGap": 6
+      },
+      "nextAssemblyState": {
+        "total": 42,
+        "diffCounts": {
+          "easy": 7,
+          "medium": 27,
+          "hard": 8
+        },
+        "embedded": 25,
+        "negation": 14,
+        "distractor": 37,
+        "qmark": 0,
+        "nonEmbedded": 17,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 18,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 42,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 7,
+            "embedded": 0,
+            "nonEmbedded": 7,
+            "negation": 6
+          },
+          "medium": {
+            "total": 27,
+            "embedded": 16,
+            "nonEmbedded": 11,
+            "negation": 6
+          },
+          "hard": {
+            "total": 8,
+            "embedded": 2,
+            "nonEmbedded": 6,
+            "negation": 2
+          }
+        },
+        "assemblableBy": {
+          "easy": 7,
+          "medium": 3,
+          "hard": 4,
+          "embedded": 5,
+          "negation": 7,
+          "negationCap": 4,
+          "distractor": 5,
+          "nonEmbedded": 17
+        },
+        "assemblableSets": 3,
+        "remainingSets": 3,
+        "remainingRecipe": {
+          "sets": 3,
+          "diff": {
+            "easy": 0,
+            "medium": 15,
+            "hard": 4
+          },
+          "style": {
+            "embeddedMin": 5,
+            "negationMin": 0,
+            "distractorMin": 5,
+            "nonEmbeddedMin": 1,
+            "embeddedCapacity": 29,
+            "negationCapacity": 4,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 0,
+          "medium": 15,
+          "hard": 4,
+          "embedded": 5,
+          "negation": 0,
+          "distractor": 5,
+          "nonEmbedded": 1,
+          "assemblableSets": 3
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 15,
+            "priority": 90
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 5,
+            "priority": 35
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 4,
+            "priority": 32
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 5,
+            "priority": 15
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 1,
+            "priority": 7
+          }
+        ],
+        "progressRatios": {
+          "easy": 1,
+          "medium": 0.6428571428571429,
+          "hard": 0.6666666666666666,
+          "embedded": 0.8333333333333334,
+          "nonEmbedded": 1,
+          "distractor": 0.8809523809523809,
+          "negation": 1
+        },
+        "assemblyProgressScore": 0.8066666666666665
+      },
+      "phaseSignals": {
+        "strongTargeting": false,
+        "repairMode": true,
+        "strongGateReady": true,
+        "repairGateReady": true,
+        "strongReasons": [],
+        "repairReasons": [
+          "embedded_shortage",
+          "assemblable_near_target",
+          "sticky_repair"
+        ],
+        "momentum": {
+          "windowCount": 4,
+          "accepted": 11,
+          "generated": 20,
+          "poolGrowth": 11,
+          "deltaAssemblable": 2,
+          "deltaProgress": 0.21333333333333337,
+          "zeroGainRounds": 2,
+          "zeroProgressRounds": 0,
+          "acceptedGainRate": 0.2303030303030303
+        }
+      },
+      "typeReliability": {
+        "negation": 1.19,
+        "3rd-reporting": 0.77,
+        "1st-embedded": 0.35,
+        "interrogative": 0.35,
+        "direct": 0.59,
+        "relative": 0.74
+      }
+    },
+    {
+      "round": 13,
+      "phase": "assembly",
+      "mode": "assembly-medium",
+      "gap": {
+        "total": 60,
+        "diffGap": 48,
+        "typeGap": 1,
+        "distractorGap": 5,
+        "assemblyBlockingGap": 6
+      },
+      "assemblyState": {
+        "total": 42,
+        "diffCounts": {
+          "easy": 7,
+          "medium": 27,
+          "hard": 8
+        },
+        "embedded": 25,
+        "negation": 14,
+        "distractor": 37,
+        "qmark": 0,
+        "nonEmbedded": 17,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 18,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 42,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 7,
+            "embedded": 0,
+            "nonEmbedded": 7,
+            "negation": 6
+          },
+          "medium": {
+            "total": 27,
+            "embedded": 16,
+            "nonEmbedded": 11,
+            "negation": 6
+          },
+          "hard": {
+            "total": 8,
+            "embedded": 2,
+            "nonEmbedded": 6,
+            "negation": 2
+          }
+        },
+        "assemblableBy": {
+          "easy": 7,
+          "medium": 3,
+          "hard": 4,
+          "embedded": 5,
+          "negation": 7,
+          "negationCap": 4,
+          "distractor": 5,
+          "nonEmbedded": 17
+        },
+        "assemblableSets": 3,
+        "remainingSets": 3,
+        "remainingRecipe": {
+          "sets": 3,
+          "diff": {
+            "easy": 0,
+            "medium": 15,
+            "hard": 4
+          },
+          "style": {
+            "embeddedMin": 5,
+            "negationMin": 0,
+            "distractorMin": 5,
+            "nonEmbeddedMin": 1,
+            "embeddedCapacity": 29,
+            "negationCapacity": 4,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 0,
+          "medium": 15,
+          "hard": 4,
+          "embedded": 5,
+          "negation": 0,
+          "distractor": 5,
+          "nonEmbedded": 1,
+          "assemblableSets": 3
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 15,
+            "priority": 90
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 5,
+            "priority": 35
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 4,
+            "priority": 32
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 5,
+            "priority": 15
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 1,
+            "priority": 7
+          }
+        ],
+        "progressRatios": {
+          "easy": 1,
+          "medium": 0.6428571428571429,
+          "hard": 0.6666666666666666,
+          "embedded": 0.8333333333333334,
+          "nonEmbedded": 1,
+          "distractor": 0.8809523809523809,
+          "negation": 1
+        },
+        "assemblyProgressScore": 0.8066666666666665
+      },
+      "spec": [
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 1
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "specSelection": {
+        "focus": "medium",
+        "score": 482,
+        "projectedAssemblableSets": 4
+      },
+      "result": {
+        "generated": 5,
+        "accepted": 3,
+        "rejected": 2,
+        "rejectReasons": {
+          "review:ets<72": 1,
+          "review:score<78": 1
+        },
+        "typeStats": {
+          "negation": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "3rd-reporting": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "1st-embedded": {
+            "generated": 4,
+            "accepted": 3,
+            "rejected": 1,
+            "reasons": {
+              "review:score<78": 1
+            }
+          },
+          "interrogative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "direct": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:ets<72": 1
+            }
+          },
+          "relative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        "deltaAssemblable": 1,
+        "deltaProgress": 0.046666666666666745,
+        "acceptedGainRate": 0.3722222222222223
+      },
+      "nextGap": {
+        "total": 53,
+        "diffGap": 45,
+        "typeGap": 1,
+        "distractorGap": 4,
+        "assemblyBlockingGap": 3
+      },
+      "nextAssemblyState": {
+        "total": 45,
+        "diffCounts": {
+          "easy": 7,
+          "medium": 30,
+          "hard": 8
+        },
+        "embedded": 28,
+        "negation": 14,
+        "distractor": 38,
+        "qmark": 0,
+        "nonEmbedded": 17,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 18,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 42,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 7,
+            "embedded": 0,
+            "nonEmbedded": 7,
+            "negation": 6
+          },
+          "medium": {
+            "total": 30,
+            "embedded": 19,
+            "nonEmbedded": 11,
+            "negation": 6
+          },
+          "hard": {
+            "total": 8,
+            "embedded": 2,
+            "nonEmbedded": 6,
+            "negation": 2
+          }
+        },
+        "assemblableBy": {
+          "easy": 7,
+          "medium": 4,
+          "hard": 4,
+          "embedded": 5,
+          "negation": 7,
+          "negationCap": 4,
+          "distractor": 5,
+          "nonEmbedded": 17
+        },
+        "assemblableSets": 4,
+        "remainingSets": 2,
+        "remainingRecipe": {
+          "sets": 2,
+          "diff": {
+            "easy": 0,
+            "medium": 12,
+            "hard": 4
+          },
+          "style": {
+            "embeddedMin": 2,
+            "negationMin": 0,
+            "distractorMin": 4,
+            "nonEmbeddedMin": 1,
+            "embeddedCapacity": 26,
+            "negationCapacity": 4,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 0,
+          "medium": 12,
+          "hard": 4,
+          "embedded": 2,
+          "negation": 0,
+          "distractor": 4,
+          "nonEmbedded": 1,
+          "assemblableSets": 2
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 12,
+            "priority": 72
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 4,
+            "priority": 32
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 2,
+            "priority": 14
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 4,
+            "priority": 12
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 1,
+            "priority": 7
+          }
+        ],
+        "progressRatios": {
+          "easy": 1,
+          "medium": 0.7142857142857143,
+          "hard": 0.6666666666666666,
+          "embedded": 0.9333333333333333,
+          "nonEmbedded": 1,
+          "distractor": 0.9047619047619048,
+          "negation": 1
+        },
+        "assemblyProgressScore": 0.8533333333333333
+      },
+      "phaseSignals": {
+        "strongTargeting": false,
+        "repairMode": true,
+        "strongGateReady": true,
+        "repairGateReady": true,
+        "strongReasons": [],
+        "repairReasons": [
+          "embedded_shortage",
+          "pool_size",
+          "assemblable_near_target",
+          "sticky_repair"
+        ],
+        "momentum": {
+          "windowCount": 4,
+          "accepted": 12,
+          "generated": 20,
+          "poolGrowth": 12,
+          "deltaAssemblable": 1,
+          "deltaProgress": 0.21333333333333315,
+          "zeroGainRounds": 3,
+          "zeroProgressRounds": 0,
+          "acceptedGainRate": 0.12777777777777774
+        }
+      },
+      "typeReliability": {
+        "negation": 1.14,
+        "3rd-reporting": 0.66,
+        "1st-embedded": 0.8,
+        "interrogative": 0.35,
+        "direct": 0.59,
+        "relative": 0.87
+      }
+    },
+    {
+      "round": 14,
+      "phase": "assembly",
+      "mode": "last-mile",
+      "gap": {
+        "total": 53,
+        "diffGap": 45,
+        "typeGap": 1,
+        "distractorGap": 4,
+        "assemblyBlockingGap": 3
+      },
+      "assemblyState": {
+        "total": 45,
+        "diffCounts": {
+          "easy": 7,
+          "medium": 30,
+          "hard": 8
+        },
+        "embedded": 28,
+        "negation": 14,
+        "distractor": 38,
+        "qmark": 0,
+        "nonEmbedded": 17,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 18,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 42,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 7,
+            "embedded": 0,
+            "nonEmbedded": 7,
+            "negation": 6
+          },
+          "medium": {
+            "total": 30,
+            "embedded": 19,
+            "nonEmbedded": 11,
+            "negation": 6
+          },
+          "hard": {
+            "total": 8,
+            "embedded": 2,
+            "nonEmbedded": 6,
+            "negation": 2
+          }
+        },
+        "assemblableBy": {
+          "easy": 7,
+          "medium": 4,
+          "hard": 4,
+          "embedded": 5,
+          "negation": 7,
+          "negationCap": 4,
+          "distractor": 5,
+          "nonEmbedded": 17
+        },
+        "assemblableSets": 4,
+        "remainingSets": 2,
+        "remainingRecipe": {
+          "sets": 2,
+          "diff": {
+            "easy": 0,
+            "medium": 12,
+            "hard": 4
+          },
+          "style": {
+            "embeddedMin": 2,
+            "negationMin": 0,
+            "distractorMin": 4,
+            "nonEmbeddedMin": 1,
+            "embeddedCapacity": 26,
+            "negationCapacity": 4,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 0,
+          "medium": 12,
+          "hard": 4,
+          "embedded": 2,
+          "negation": 0,
+          "distractor": 4,
+          "nonEmbedded": 1,
+          "assemblableSets": 2
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 12,
+            "priority": 72
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 4,
+            "priority": 32
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 2,
+            "priority": 14
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 4,
+            "priority": 12
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 1,
+            "priority": 7
+          }
+        ],
+        "progressRatios": {
+          "easy": 1,
+          "medium": 0.7142857142857143,
+          "hard": 0.6666666666666666,
+          "embedded": 0.9333333333333333,
+          "nonEmbedded": 1,
+          "distractor": 0.9047619047619048,
+          "negation": 1
+        },
+        "assemblyProgressScore": 0.8533333333333333
+      },
+      "spec": [
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 2
+        }
+      ],
+      "specSelection": {
+        "focus": "medium",
+        "score": 240,
+        "projectedAssemblableSets": 4
+      },
+      "result": {
+        "generated": 5,
+        "accepted": 2,
+        "rejected": 3,
+        "rejectReasons": {
+          "pool:low_assembly_value": 1,
+          "review:blocker:tmp_r14_q5: indirect question clause uses inverted word order (MUST be declarative)": 1,
+          "review:score<78": 1
+        },
+        "typeStats": {
+          "negation": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "3rd-reporting": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "1st-embedded": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "interrogative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "direct": {
+            "generated": 3,
+            "accepted": 1,
+            "rejected": 2,
+            "reasons": {
+              "pool:low_assembly_value": 1,
+              "review:blocker:tmp_r14_q5: indirect question clause uses inverted word order (MUST be declarative)": 1
+            }
+          },
+          "relative": {
+            "generated": 2,
+            "accepted": 1,
+            "rejected": 1,
+            "reasons": {
+              "review:score<78": 1
+            }
+          }
+        },
+        "deltaAssemblable": 0,
+        "deltaProgress": 0.026666666666666727,
+        "acceptedGainRate": 0.03333333333333341
+      },
+      "nextGap": {
+        "total": 48,
+        "diffGap": 43,
+        "typeGap": 1,
+        "distractorGap": 3,
+        "assemblyBlockingGap": 1
+      },
+      "nextAssemblyState": {
+        "total": 47,
+        "diffCounts": {
+          "easy": 7,
+          "medium": 32,
+          "hard": 8
+        },
+        "embedded": 29,
+        "negation": 14,
+        "distractor": 39,
+        "qmark": 0,
+        "nonEmbedded": 18,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 18,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 42,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 7,
+            "embedded": 0,
+            "nonEmbedded": 7,
+            "negation": 6
+          },
+          "medium": {
+            "total": 32,
+            "embedded": 19,
+            "nonEmbedded": 13,
+            "negation": 6
+          },
+          "hard": {
+            "total": 8,
+            "embedded": 2,
+            "nonEmbedded": 6,
+            "negation": 2
+          }
+        },
+        "assemblableBy": {
+          "easy": 7,
+          "medium": 4,
+          "hard": 4,
+          "embedded": 5,
+          "negation": 7,
+          "negationCap": 4,
+          "distractor": 5,
+          "nonEmbedded": 18
+        },
+        "assemblableSets": 4,
+        "remainingSets": 2,
+        "remainingRecipe": {
+          "sets": 2,
+          "diff": {
+            "easy": 0,
+            "medium": 10,
+            "hard": 4
+          },
+          "style": {
+            "embeddedMin": 1,
+            "negationMin": 0,
+            "distractorMin": 3,
+            "nonEmbeddedMin": 0,
+            "embeddedCapacity": 25,
+            "negationCapacity": 4,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 0,
+          "medium": 10,
+          "hard": 4,
+          "embedded": 1,
+          "negation": 0,
+          "distractor": 3,
+          "nonEmbedded": 0,
+          "assemblableSets": 2
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 10,
+            "priority": 60
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 4,
+            "priority": 32
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 3,
+            "priority": 9
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 1,
+            "priority": 7
+          }
+        ],
+        "progressRatios": {
+          "easy": 1,
+          "medium": 0.7619047619047619,
+          "hard": 0.6666666666666666,
+          "embedded": 0.9666666666666667,
+          "nonEmbedded": 1,
+          "distractor": 0.9285714285714286,
+          "negation": 1
+        },
+        "assemblyProgressScore": 0.88
+      },
+      "phaseSignals": {
+        "strongTargeting": true,
+        "repairMode": true,
+        "strongGateReady": true,
+        "repairGateReady": true,
+        "strongReasons": [
+          "remaining_sets",
+          "near_completion"
+        ],
+        "repairReasons": [
+          "remaining_sets",
+          "near_completion",
+          "embedded_shortage",
+          "pool_size",
+          "assemblable_near_target",
+          "sticky_repair"
+        ],
+        "momentum": {
+          "windowCount": 4,
+          "accepted": 12,
+          "generated": 20,
+          "poolGrowth": 12,
+          "deltaAssemblable": 2,
+          "deltaProgress": 0.19999999999999984,
+          "zeroGainRounds": 2,
+          "zeroProgressRounds": 0,
+          "acceptedGainRate": 0.2083333333333333
+        }
+      },
+      "typeReliability": {
+        "negation": 1.13,
+        "3rd-reporting": 0.66,
+        "1st-embedded": 1.06,
+        "interrogative": 0.35,
+        "direct": 0.35,
+        "relative": 1.25
+      }
+    },
+    {
+      "round": 15,
+      "phase": "assembly",
+      "mode": "last-mile",
+      "gap": {
+        "total": 48,
+        "diffGap": 43,
+        "typeGap": 1,
+        "distractorGap": 3,
+        "assemblyBlockingGap": 1
+      },
+      "assemblyState": {
+        "total": 47,
+        "diffCounts": {
+          "easy": 7,
+          "medium": 32,
+          "hard": 8
+        },
+        "embedded": 29,
+        "negation": 14,
+        "distractor": 39,
+        "qmark": 0,
+        "nonEmbedded": 18,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 18,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 42,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 7,
+            "embedded": 0,
+            "nonEmbedded": 7,
+            "negation": 6
+          },
+          "medium": {
+            "total": 32,
+            "embedded": 19,
+            "nonEmbedded": 13,
+            "negation": 6
+          },
+          "hard": {
+            "total": 8,
+            "embedded": 2,
+            "nonEmbedded": 6,
+            "negation": 2
+          }
+        },
+        "assemblableBy": {
+          "easy": 7,
+          "medium": 4,
+          "hard": 4,
+          "embedded": 5,
+          "negation": 7,
+          "negationCap": 4,
+          "distractor": 5,
+          "nonEmbedded": 18
+        },
+        "assemblableSets": 4,
+        "remainingSets": 2,
+        "remainingRecipe": {
+          "sets": 2,
+          "diff": {
+            "easy": 0,
+            "medium": 10,
+            "hard": 4
+          },
+          "style": {
+            "embeddedMin": 1,
+            "negationMin": 0,
+            "distractorMin": 3,
+            "nonEmbeddedMin": 0,
+            "embeddedCapacity": 25,
+            "negationCapacity": 4,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 0,
+          "medium": 10,
+          "hard": 4,
+          "embedded": 1,
+          "negation": 0,
+          "distractor": 3,
+          "nonEmbedded": 0,
+          "assemblableSets": 2
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 10,
+            "priority": 60
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 4,
+            "priority": 32
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 3,
+            "priority": 9
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 1,
+            "priority": 7
+          }
+        ],
+        "progressRatios": {
+          "easy": 1,
+          "medium": 0.7619047619047619,
+          "hard": 0.6666666666666666,
+          "embedded": 0.9666666666666667,
+          "nonEmbedded": 1,
+          "distractor": 0.9285714285714286,
+          "negation": 1
+        },
+        "assemblyProgressScore": 0.88
+      },
+      "spec": [
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 3
+        },
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 2
+        }
+      ],
+      "specSelection": {
+        "focus": "medium",
+        "score": 174,
+        "projectedAssemblableSets": 4
+      },
+      "result": {
+        "generated": 5,
+        "accepted": 4,
+        "rejected": 1,
+        "rejectReasons": {
+          "review:score<78": 1
+        },
+        "typeStats": {
+          "negation": {
+            "generated": 1,
+            "accepted": 1,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "3rd-reporting": {
+            "generated": 2,
+            "accepted": 2,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "1st-embedded": {
+            "generated": 1,
+            "accepted": 1,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "interrogative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "direct": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:score<78": 1
+            }
+          },
+          "relative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        "deltaAssemblable": 0,
+        "deltaProgress": 0.053333333333333455,
+        "acceptedGainRate": 0.03333333333333341
+      },
+      "nextGap": {
+        "total": 40,
+        "diffGap": 39,
+        "typeGap": 1,
+        "distractorGap": 0,
+        "assemblyBlockingGap": 0
+      },
+      "nextAssemblyState": {
+        "total": 51,
+        "diffCounts": {
+          "easy": 7,
+          "medium": 36,
+          "hard": 8
+        },
+        "embedded": 33,
+        "negation": 15,
+        "distractor": 42,
+        "qmark": 0,
+        "nonEmbedded": 18,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 18,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 42,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 7,
+            "embedded": 0,
+            "nonEmbedded": 7,
+            "negation": 6
+          },
+          "medium": {
+            "total": 36,
+            "embedded": 22,
+            "nonEmbedded": 14,
+            "negation": 7
+          },
+          "hard": {
+            "total": 8,
+            "embedded": 2,
+            "nonEmbedded": 6,
+            "negation": 2
+          }
+        },
+        "assemblableBy": {
+          "easy": 7,
+          "medium": 5,
+          "hard": 4,
+          "embedded": 6,
+          "negation": 7,
+          "negationCap": 5,
+          "distractor": 6,
+          "nonEmbedded": 18
+        },
+        "assemblableSets": 4,
+        "remainingSets": 2,
+        "remainingRecipe": {
+          "sets": 2,
+          "diff": {
+            "easy": 0,
+            "medium": 6,
+            "hard": 4
+          },
+          "style": {
+            "embeddedMin": 0,
+            "negationMin": 0,
+            "distractorMin": 0,
+            "nonEmbeddedMin": 0,
+            "embeddedCapacity": 21,
+            "negationCapacity": 3,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 0,
+          "medium": 6,
+          "hard": 4,
+          "embedded": 0,
+          "negation": 0,
+          "distractor": 0,
+          "nonEmbedded": 0,
+          "assemblableSets": 2
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 6,
+            "priority": 36
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 4,
+            "priority": 32
+          }
+        ],
+        "progressRatios": {
+          "easy": 1,
+          "medium": 0.8571428571428571,
+          "hard": 0.6666666666666666,
+          "embedded": 1,
+          "nonEmbedded": 1,
+          "distractor": 1,
+          "negation": 1
+        },
+        "assemblyProgressScore": 0.9333333333333335
+      },
+      "phaseSignals": {
+        "strongTargeting": true,
+        "repairMode": true,
+        "strongGateReady": true,
+        "repairGateReady": true,
+        "strongReasons": [
+          "remaining_sets",
+          "near_completion",
+          "sticky_last_mile"
+        ],
+        "repairReasons": [
+          "remaining_sets",
+          "near_completion",
+          "embedded_shortage",
+          "pool_size",
+          "assemblable_near_target",
+          "sticky_last_mile"
+        ],
+        "momentum": {
+          "windowCount": 5,
+          "accepted": 14,
+          "generated": 25,
+          "poolGrowth": 14,
+          "deltaAssemblable": 2,
+          "deltaProgress": 0.22666666666666657,
+          "zeroGainRounds": 3,
+          "zeroProgressRounds": 0,
+          "acceptedGainRate": 0.18333333333333332
+        }
+      },
+      "typeReliability": {
+        "negation": 1.09,
+        "3rd-reporting": 0.66,
+        "1st-embedded": 1.06,
+        "interrogative": 0.35,
+        "direct": 0.47,
+        "relative": 0.83
+      }
+    },
+    {
+      "round": 16,
+      "phase": "assembly",
+      "mode": "last-mile",
+      "gap": {
+        "total": 40,
+        "diffGap": 39,
+        "typeGap": 1,
+        "distractorGap": 0,
+        "assemblyBlockingGap": 0
+      },
+      "assemblyState": {
+        "total": 51,
+        "diffCounts": {
+          "easy": 7,
+          "medium": 36,
+          "hard": 8
+        },
+        "embedded": 33,
+        "negation": 15,
+        "distractor": 42,
+        "qmark": 0,
+        "nonEmbedded": 18,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 18,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 42,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 7,
+            "embedded": 0,
+            "nonEmbedded": 7,
+            "negation": 6
+          },
+          "medium": {
+            "total": 36,
+            "embedded": 22,
+            "nonEmbedded": 14,
+            "negation": 7
+          },
+          "hard": {
+            "total": 8,
+            "embedded": 2,
+            "nonEmbedded": 6,
+            "negation": 2
+          }
+        },
+        "assemblableBy": {
+          "easy": 7,
+          "medium": 5,
+          "hard": 4,
+          "embedded": 6,
+          "negation": 7,
+          "negationCap": 5,
+          "distractor": 6,
+          "nonEmbedded": 18
+        },
+        "assemblableSets": 4,
+        "remainingSets": 2,
+        "remainingRecipe": {
+          "sets": 2,
+          "diff": {
+            "easy": 0,
+            "medium": 6,
+            "hard": 4
+          },
+          "style": {
+            "embeddedMin": 0,
+            "negationMin": 0,
+            "distractorMin": 0,
+            "nonEmbeddedMin": 0,
+            "embeddedCapacity": 21,
+            "negationCapacity": 3,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 0,
+          "medium": 6,
+          "hard": 4,
+          "embedded": 0,
+          "negation": 0,
+          "distractor": 0,
+          "nonEmbedded": 0,
+          "assemblableSets": 2
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 6,
+            "priority": 36
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 4,
+            "priority": 32
+          }
+        ],
+        "progressRatios": {
+          "easy": 1,
+          "medium": 0.8571428571428571,
+          "hard": 0.6666666666666666,
+          "embedded": 1,
+          "nonEmbedded": 1,
+          "distractor": 1,
+          "negation": 1
+        },
+        "assemblyProgressScore": 0.9333333333333335
+      },
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "specSelection": {
+        "focus": "balanced",
+        "score": 455,
+        "projectedAssemblableSets": 5
+      },
+      "result": {
+        "generated": 5,
+        "accepted": 3,
+        "rejected": 2,
+        "rejectReasons": {
+          "pool:low_assembly_value": 1,
+          "review:score<78": 1
+        },
+        "typeStats": {
+          "negation": {
+            "generated": 2,
+            "accepted": 1,
+            "rejected": 1,
+            "reasons": {
+              "pool:low_assembly_value": 1
+            }
+          },
+          "3rd-reporting": {
+            "generated": 1,
+            "accepted": 1,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "1st-embedded": {
+            "generated": 1,
+            "accepted": 1,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "interrogative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "direct": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:score<78": 1
+            }
+          },
+          "relative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        "deltaAssemblable": 0,
+        "deltaProgress": 0.019999999999999796,
+        "acceptedGainRate": 0.016666666666666496
+      },
+      "nextGap": {
+        "total": 37,
+        "diffGap": 36,
+        "typeGap": 1,
+        "distractorGap": 0,
+        "assemblyBlockingGap": 0
+      },
+      "nextAssemblyState": {
+        "total": 54,
+        "diffCounts": {
+          "easy": 7,
+          "medium": 38,
+          "hard": 9
+        },
+        "embedded": 35,
+        "negation": 16,
+        "distractor": 45,
+        "qmark": 0,
+        "nonEmbedded": 19,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 18,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 42,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 7,
+            "embedded": 0,
+            "nonEmbedded": 7,
+            "negation": 6
+          },
+          "medium": {
+            "total": 38,
+            "embedded": 23,
+            "nonEmbedded": 15,
+            "negation": 8
+          },
+          "hard": {
+            "total": 9,
+            "embedded": 3,
+            "nonEmbedded": 6,
+            "negation": 2
+          }
+        },
+        "assemblableBy": {
+          "easy": 7,
+          "medium": 5,
+          "hard": 4,
+          "embedded": 7,
+          "negation": 8,
+          "negationCap": 5,
+          "distractor": 6,
+          "nonEmbedded": 19
+        },
+        "assemblableSets": 4,
+        "remainingSets": 2,
+        "remainingRecipe": {
+          "sets": 2,
+          "diff": {
+            "easy": 0,
+            "medium": 4,
+            "hard": 3
+          },
+          "style": {
+            "embeddedMin": 0,
+            "negationMin": 0,
+            "distractorMin": 0,
+            "nonEmbeddedMin": 0,
+            "embeddedCapacity": 19,
+            "negationCapacity": 2,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 0,
+          "medium": 4,
+          "hard": 3,
+          "embedded": 0,
+          "negation": 0,
+          "distractor": 0,
+          "nonEmbedded": 0,
+          "assemblableSets": 2
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "hard_shortage",
+            "gap": 3,
+            "priority": 24
+          },
+          {
+            "key": "medium_shortage",
+            "gap": 4,
+            "priority": 24
+          }
+        ],
+        "progressRatios": {
+          "easy": 1,
+          "medium": 0.9047619047619048,
+          "hard": 0.75,
+          "embedded": 1,
+          "nonEmbedded": 1,
+          "distractor": 1,
+          "negation": 1
+        },
+        "assemblyProgressScore": 0.9533333333333333
+      },
+      "phaseSignals": {
+        "strongTargeting": true,
+        "repairMode": true,
+        "strongGateReady": true,
+        "repairGateReady": true,
+        "strongReasons": [
+          "remaining_sets",
+          "near_completion",
+          "sticky_last_mile"
+        ],
+        "repairReasons": [
+          "remaining_sets",
+          "near_completion",
+          "pool_size",
+          "assemblable_near_target",
+          "sticky_last_mile"
+        ],
+        "momentum": {
+          "windowCount": 5,
+          "accepted": 17,
+          "generated": 25,
+          "poolGrowth": 17,
+          "deltaAssemblable": 2,
+          "deltaProgress": 0.2666666666666667,
+          "zeroGainRounds": 3,
+          "zeroProgressRounds": 0,
+          "acceptedGainRate": 0.15686274509803924
+        }
+      },
+      "typeReliability": {
+        "negation": 1.11,
+        "3rd-reporting": 0.84,
+        "1st-embedded": 1.11,
+        "interrogative": 0.35,
+        "direct": 0.45,
+        "relative": 0.83
+      }
+    },
+    {
+      "round": 17,
+      "phase": "assembly",
+      "mode": "last-mile",
+      "gap": {
+        "total": 37,
+        "diffGap": 36,
+        "typeGap": 1,
+        "distractorGap": 0,
+        "assemblyBlockingGap": 0
+      },
+      "assemblyState": {
+        "total": 54,
+        "diffCounts": {
+          "easy": 7,
+          "medium": 38,
+          "hard": 9
+        },
+        "embedded": 35,
+        "negation": 16,
+        "distractor": 45,
+        "qmark": 0,
+        "nonEmbedded": 19,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 18,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 42,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 7,
+            "embedded": 0,
+            "nonEmbedded": 7,
+            "negation": 6
+          },
+          "medium": {
+            "total": 38,
+            "embedded": 23,
+            "nonEmbedded": 15,
+            "negation": 8
+          },
+          "hard": {
+            "total": 9,
+            "embedded": 3,
+            "nonEmbedded": 6,
+            "negation": 2
+          }
+        },
+        "assemblableBy": {
+          "easy": 7,
+          "medium": 5,
+          "hard": 4,
+          "embedded": 7,
+          "negation": 8,
+          "negationCap": 5,
+          "distractor": 6,
+          "nonEmbedded": 19
+        },
+        "assemblableSets": 4,
+        "remainingSets": 2,
+        "remainingRecipe": {
+          "sets": 2,
+          "diff": {
+            "easy": 0,
+            "medium": 4,
+            "hard": 3
+          },
+          "style": {
+            "embeddedMin": 0,
+            "negationMin": 0,
+            "distractorMin": 0,
+            "nonEmbeddedMin": 0,
+            "embeddedCapacity": 19,
+            "negationCapacity": 2,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 0,
+          "medium": 4,
+          "hard": 3,
+          "embedded": 0,
+          "negation": 0,
+          "distractor": 0,
+          "nonEmbedded": 0,
+          "assemblableSets": 2
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "hard_shortage",
+            "gap": 3,
+            "priority": 24
+          },
+          {
+            "key": "medium_shortage",
+            "gap": 4,
+            "priority": 24
+          }
+        ],
+        "progressRatios": {
+          "easy": 1,
+          "medium": 0.9047619047619048,
+          "hard": 0.75,
+          "embedded": 1,
+          "nonEmbedded": 1,
+          "distractor": 1,
+          "negation": 1
+        },
+        "assemblyProgressScore": 0.9533333333333333
+      },
+      "spec": [
+        {
+          "type": "3rd-reporting",
+          "difficulty": "hard",
+          "count": 1
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 1
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "specSelection": {
+        "focus": "hard",
+        "score": 505,
+        "projectedAssemblableSets": 5
+      },
+      "result": {
+        "generated": 5,
+        "accepted": 1,
+        "rejected": 4,
+        "rejectReasons": {
+          "format: answer word count must be 7-15 (got 16)": 2,
+          "review:score<78": 2
+        },
+        "typeStats": {
+          "negation": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "3rd-reporting": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "format: answer word count must be 7-15 (got 16)": 1,
+              "review:score<78": 1
+            }
+          },
+          "1st-embedded": {
+            "generated": 3,
+            "accepted": 1,
+            "rejected": 2,
+            "reasons": {
+              "format: answer word count must be 7-15 (got 16)": 1,
+              "review:score<78": 1
+            }
+          },
+          "interrogative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "direct": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "relative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        "deltaAssemblable": 1,
+        "deltaProgress": 0.00666666666666671,
+        "acceptedGainRate": 1.0166666666666668
+      },
+      "nextGap": {
+        "total": 36,
+        "diffGap": 35,
+        "typeGap": 1,
+        "distractorGap": 0,
+        "assemblyBlockingGap": 0
+      },
+      "nextAssemblyState": {
+        "total": 55,
+        "diffCounts": {
+          "easy": 7,
+          "medium": 38,
+          "hard": 10
+        },
+        "embedded": 36,
+        "negation": 16,
+        "distractor": 46,
+        "qmark": 0,
+        "nonEmbedded": 19,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 18,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 42,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 7,
+            "embedded": 0,
+            "nonEmbedded": 7,
+            "negation": 6
+          },
+          "medium": {
+            "total": 38,
+            "embedded": 23,
+            "nonEmbedded": 15,
+            "negation": 8
+          },
+          "hard": {
+            "total": 10,
+            "embedded": 4,
+            "nonEmbedded": 6,
+            "negation": 2
+          }
+        },
+        "assemblableBy": {
+          "easy": 7,
+          "medium": 5,
+          "hard": 5,
+          "embedded": 7,
+          "negation": 8,
+          "negationCap": 5,
+          "distractor": 6,
+          "nonEmbedded": 19
+        },
+        "assemblableSets": 5,
+        "remainingSets": 1,
+        "remainingRecipe": {
+          "sets": 1,
+          "diff": {
+            "easy": 0,
+            "medium": 4,
+            "hard": 2
+          },
+          "style": {
+            "embeddedMin": 0,
+            "negationMin": 0,
+            "distractorMin": 0,
+            "nonEmbeddedMin": 0,
+            "embeddedCapacity": 18,
+            "negationCapacity": 2,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 0,
+          "medium": 4,
+          "hard": 2,
+          "embedded": 0,
+          "negation": 0,
+          "distractor": 0,
+          "nonEmbedded": 0,
+          "assemblableSets": 1
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 4,
+            "priority": 24
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 2,
+            "priority": 16
+          }
+        ],
+        "progressRatios": {
+          "easy": 1,
+          "medium": 0.9047619047619048,
+          "hard": 0.8333333333333334,
+          "embedded": 1,
+          "nonEmbedded": 1,
+          "distractor": 1,
+          "negation": 1
+        },
+        "assemblyProgressScore": 0.96
+      },
+      "phaseSignals": {
+        "strongTargeting": true,
+        "repairMode": true,
+        "strongGateReady": true,
+        "repairGateReady": true,
+        "strongReasons": [
+          "remaining_sets",
+          "near_completion",
+          "sticky_last_mile"
+        ],
+        "repairReasons": [
+          "remaining_sets",
+          "near_completion",
+          "pool_size",
+          "assemblable_near_target",
+          "sticky_last_mile"
+        ],
+        "momentum": {
+          "windowCount": 5,
+          "accepted": 16,
+          "generated": 25,
+          "poolGrowth": 16,
+          "deltaAssemblable": 1,
+          "deltaProgress": 0.20666666666666655,
+          "zeroGainRounds": 4,
+          "zeroProgressRounds": 0,
+          "acceptedGainRate": 0.09479166666666665
+        }
+      },
+      "typeReliability": {
+        "negation": 1.06,
+        "3rd-reporting": 1.25,
+        "1st-embedded": 1.14,
+        "interrogative": 0.8,
+        "direct": 0.43,
+        "relative": 0.83
+      }
+    }
+  ],
+  "final": {
+    "pool": {
+      "easy": 3,
+      "medium": 10,
+      "hard": 2
+    },
+    "assemblyState": {
+      "total": 55,
+      "diffCounts": {
+        "easy": 7,
+        "medium": 38,
+        "hard": 10
+      },
+      "embedded": 36,
+      "negation": 16,
+      "distractor": 46,
+      "qmark": 0,
+      "nonEmbedded": 19,
+      "need": {
+        "easy": 6,
+        "medium": 42,
+        "hard": 12,
+        "embeddedMin": 30,
+        "embeddedMax": 54,
+        "negationMin": 12,
+        "negationMax": 18,
+        "distractorMin": 42,
+        "nonEmbeddedMin": 6,
+        "nonNegationMin": 42,
+        "qmarkMax": 12
+      },
+      "slotInventory": {
+        "easy": {
+          "total": 7,
+          "embedded": 0,
+          "nonEmbedded": 7,
+          "negation": 6
+        },
+        "medium": {
+          "total": 38,
+          "embedded": 23,
+          "nonEmbedded": 15,
+          "negation": 8
+        },
+        "hard": {
+          "total": 10,
+          "embedded": 4,
+          "nonEmbedded": 6,
+          "negation": 2
+        }
+      },
+      "assemblableBy": {
+        "easy": 7,
+        "medium": 5,
+        "hard": 5,
+        "embedded": 7,
+        "negation": 8,
+        "negationCap": 5,
+        "distractor": 6,
+        "nonEmbedded": 19
+      },
+      "assemblableSets": 5,
+      "remainingSets": 1,
+      "remainingRecipe": {
+        "sets": 1,
+        "diff": {
+          "easy": 0,
+          "medium": 4,
+          "hard": 2
+        },
+        "style": {
+          "embeddedMin": 0,
+          "negationMin": 0,
+          "distractorMin": 0,
+          "nonEmbeddedMin": 0,
+          "embeddedCapacity": 18,
+          "negationCapacity": 2,
+          "qmarkCapacity": 12
+        }
+      },
+      "deficits": {
+        "easy": 0,
+        "medium": 4,
+        "hard": 2,
+        "embedded": 0,
+        "negation": 0,
+        "distractor": 0,
+        "nonEmbedded": 0,
+        "assemblableSets": 1
+      },
+      "embeddedOverflow": 0,
+      "negationOverflow": 0,
+      "qmarkOverflow": 0,
+      "limitingFactors": [
+        {
+          "key": "medium_shortage",
+          "gap": 4,
+          "priority": 24
+        },
+        {
+          "key": "hard_shortage",
+          "gap": 2,
+          "priority": 16
+        }
+      ],
+      "progressRatios": {
+        "easy": 1,
+        "medium": 0.9047619047619048,
+        "hard": 0.8333333333333334,
+        "embedded": 1,
+        "nonEmbedded": 1,
+        "distractor": 1,
+        "negation": 1
+      },
+      "assemblyProgressScore": 0.96
+    },
+    "assembledSets": 4,
+    "targetSets": 6,
+    "assemblyDiagnostics": [
+      {
+        "setId": 5,
+        "pool": {
+          "easy": 3,
+          "medium": 10,
+          "hard": 2,
+          "total": 15
+        },
+        "assemblyState": {
+          "assemblableSets": 1,
+          "remainingSets": 5,
+          "deficits": {
+            "easy": 3,
+            "medium": 32,
+            "hard": 10,
+            "embedded": 20,
+            "negation": 5,
+            "distractor": 28,
+            "nonEmbedded": 1,
+            "assemblableSets": 5
+          },
+          "embeddedOverflow": 0,
+          "qmarkOverflow": 0,
+          "limitingFactors": [
+            {
+              "key": "medium_shortage",
+              "gap": 32,
+              "priority": 192
+            },
+            {
+              "key": "embedded_shortage",
+              "gap": 20,
+              "priority": 140
+            },
+            {
+              "key": "distractor_shortage",
+              "gap": 28,
+              "priority": 84
+            },
+            {
+              "key": "hard_shortage",
+              "gap": 10,
+              "priority": 80
+            },
+            {
+              "key": "negation_shortage",
+              "gap": 5,
+              "priority": 25
+            },
+            {
+              "key": "non_embedded_shortage",
+              "gap": 1,
+              "priority": 7
+            },
+            {
+              "key": "easy_shortage",
+              "gap": 3,
+              "priority": 6
+            }
+          ]
+        },
+        "maxStyleCapacity": {
+          "embedded": 9,
+          "distractor": 10
+        },
+        "reason": "retry_exhausted",
+        "failBreakdown": {
+          "styleStrict": 0,
+          "styleRelaxed": 0,
+          "schemaDiff": 500,
+          "runtime": 0
+        },
+        "sample": {
+          "style": {
+            "qmark": 0,
+            "distractor": 10,
+            "embedded": 8,
+            "avgWords": 11.6,
+            "avgChunks": 6.9,
+            "maxType": 4
+          },
+          "schemaErrors": [
+            "set: need 2-3 negation items (got 7)"
+          ],
+          "diffCounts": null
+        }
+      },
+      {
+        "setId": 6,
+        "pool": {
+          "easy": 3,
+          "medium": 10,
+          "hard": 2,
+          "total": 15
+        },
+        "assemblyState": {
+          "assemblableSets": 1,
+          "remainingSets": 5,
+          "deficits": {
+            "easy": 3,
+            "medium": 32,
+            "hard": 10,
+            "embedded": 20,
+            "negation": 5,
+            "distractor": 28,
+            "nonEmbedded": 1,
+            "assemblableSets": 5
+          },
+          "embeddedOverflow": 0,
+          "qmarkOverflow": 0,
+          "limitingFactors": [
+            {
+              "key": "medium_shortage",
+              "gap": 32,
+              "priority": 192
+            },
+            {
+              "key": "embedded_shortage",
+              "gap": 20,
+              "priority": 140
+            },
+            {
+              "key": "distractor_shortage",
+              "gap": 28,
+              "priority": 84
+            },
+            {
+              "key": "hard_shortage",
+              "gap": 10,
+              "priority": 80
+            },
+            {
+              "key": "negation_shortage",
+              "gap": 5,
+              "priority": 25
+            },
+            {
+              "key": "non_embedded_shortage",
+              "gap": 1,
+              "priority": 7
+            },
+            {
+              "key": "easy_shortage",
+              "gap": 3,
+              "priority": 6
+            }
+          ]
+        },
+        "maxStyleCapacity": {
+          "embedded": 9,
+          "distractor": 10
+        },
+        "reason": "retry_exhausted",
+        "failBreakdown": {
+          "styleStrict": 0,
+          "styleRelaxed": 0,
+          "schemaDiff": 500,
+          "runtime": 0
+        },
+        "sample": {
+          "style": {
+            "qmark": 0,
+            "distractor": 9,
+            "embedded": 8,
+            "avgWords": 11.6,
+            "avgChunks": 6.8,
+            "maxType": 4
+          },
+          "schemaErrors": [
+            "set: need 2-3 negation items (got 7)"
+          ],
+          "diffCounts": null
+        }
+      }
+    ],
+    "topRejectReasons": [
+      [
+        "review:score<78",
+        17
+      ],
+      [
+        "review:ets<72",
+        5
+      ],
+      [
+        "prompt: prompt_task_text: must contain an explicit task/instruction, not only background context",
+        2
+      ],
+      [
+        "pool:low_assembly_value",
+        2
+      ],
+      [
+        "format: answer word count must be 7-15 (got 16)",
+        2
+      ],
+      [
+        "fatal: chunks[2]: isolated floating adverb \"recently\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+        1
+      ],
+      [
+        "review:blocker:tmp_r2_q8: indirect question clause uses inverted word order (MUST be declarative)|tmp_r2_q8: indirect question uses inverted word order",
+        1
+      ],
+      [
+        "review:blocker:tmp_r3_q4: distractor DIRECTLY replaces one word to form a valid sentence",
+        1
+      ],
+      [
+        "fatal: chunks (minus distractor) + prefilled words must equal answer words; distractor must not appear in answer",
+        1
+      ],
+      [
+        "fatal: distractor must not appear in answer",
+        1
+      ],
+      [
+        "topic:repeat",
+        1
+      ],
+      [
+        "review:blocker:tmp_r14_q5: indirect question clause uses inverted word order (MUST be declarative)",
+        1
+      ]
+    ]
+  }
+}
