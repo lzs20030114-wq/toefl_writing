@@ -82,7 +82,7 @@ export default function UsageGateWrapper({ children, onExit }) {
 
   // Logged in but no usage remaining
   if (!canPractice) {
-    return <UsageLimitModal limit={limit} onClose={onExit} />;
+    return <UsageLimitModal limit={limit} onClose={onExit} userCode={code} />;
   }
 
   return typeof children === "function" ? children({}) : children;
