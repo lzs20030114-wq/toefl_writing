@@ -304,9 +304,9 @@ function StatsPanel({ stats, runId, token, onDeployed, onDeleted }) {
         <div style={{ marginBottom: 4 }}>
           <SectionTitle>预填词长度分布（占有预填题数）</SectionTitle>
           <CompareTable rows={[
-            { label: "1词（i / she）", actual: stats.prefilledLengthDist.pf1Pct, tpo: null, format: p => `${Math.round(p * 100)}%` },
-            { label: "2词（the professor）", actual: stats.prefilledLengthDist.pf2Pct, tpo: null, format: p => `${Math.round(p * 100)}%` },
-            { label: "3词+（some colleagues）", actual: stats.prefilledLengthDist.pf3Pct, tpo: null, format: p => `${Math.round(p * 100)}%` },
+            { label: "1词（i / she）", actual: stats.prefilledLengthDist.pf1Pct, tpo: 0.10, format: p => `${Math.round(p * 100)}%` },
+            { label: "2词（the professor）", actual: stats.prefilledLengthDist.pf2Pct, tpo: 0.56, format: p => `${Math.round(p * 100)}%` },
+            { label: "3词+（some colleagues）", actual: stats.prefilledLengthDist.pf3Pct, tpo: 0.34, format: p => `${Math.round(p * 100)}%` },
           ].map(r => ({ ...r, tpo: r.tpo ?? "—" }))} />
         </div>
       )}
