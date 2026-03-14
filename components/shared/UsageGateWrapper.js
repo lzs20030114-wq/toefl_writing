@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
 import { getSavedCode } from "../../lib/AuthContext";
 import { useUsageGate } from "../../lib/useUsageGate";
@@ -9,10 +10,10 @@ import { C, FONT } from "./ui";
 /**
  * Login prompt shown when an unauthenticated user tries to practice.
  */
-function LoginRequiredModal({ onClose }) {
+function LoginRequiredModal({ onGoLogin }) {
   return createPortal(
     <div
-      onClick={onClose}
+      onClick={onGoLogin}
       style={{
         position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)",
         backdropFilter: "blur(4px)", display: "flex", justifyContent: "center",
@@ -37,7 +38,7 @@ function LoginRequiredModal({ onClose }) {
           登录后即可开始练习。邮箱注册免费用户每日 3 次练习，登录码用户不限次。
         </p>
         <button
-          onClick={onClose}
+          onClick={onGoLogin}
           style={{
             width: "100%", padding: "12px 0", borderRadius: 10,
             border: "none", background: C.blue, color: "#fff",
@@ -61,6 +62,7 @@ function LoginRequiredModal({ onClose }) {
  */
 export default function UsageGateWrapper({ children, onExit }) {
   const code = getSavedCode();
+  const router = useRouter();
   const [showLoginPrompt, setShowLoginPrompt] = useState(!code);
   const { canPractice, limit, loading } = useUsageGate();
 
@@ -68,9 +70,9 @@ export default function UsageGateWrapper({ children, onExit }) {
   if (showLoginPrompt) {
     return (
       <LoginRequiredModal
-        onClose={() => {
+        onGoLogin={() => {
           setShowLoginPrompt(false);
-          onExit();
+          router.push("/?login=1");
         }}
       />
     );

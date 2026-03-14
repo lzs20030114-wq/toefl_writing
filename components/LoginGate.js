@@ -382,6 +382,21 @@ export default function LoginGate({ children }) {
     }
   }, []);
 
+  // ── Auto-open login modal if ?login=1 in URL ──
+  useEffect(() => {
+    if (!ready || isLoggedIn) return;
+    try {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("login") === "1") {
+        setLoginModalOpen(true);
+        // Clean up URL
+        const url = new URL(window.location.href);
+        url.searchParams.delete("login");
+        window.history.replaceState({}, "", url.pathname + url.search);
+      }
+    } catch { /* no-op */ }
+  }, [ready, isLoggedIn]);
+
   // ── Welcome toast ──
   const [welcomeMsg, setWelcomeMsg] = useState(null);
 
