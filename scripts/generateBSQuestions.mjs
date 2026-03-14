@@ -2059,13 +2059,29 @@ Blockers (ONLY use for these critical issues — ALWAYS prefix with the item ID 
 - tmp_rN_qM: indirect question clause uses inverted word order (MUST be declarative)
 IMPORTANT: Each blocker must start with the specific item ID it applies to. Do NOT write batch-level blockers without item IDs.
 
-DISTRACTOR BLOCKER RULE — READ CAREFULLY:
-A distractor is ONLY a blocker if it can DIRECTLY REPLACE one word in the answer (in the same position) and still produce a grammatical sentence.
-Do NOT flag a distractor as a blocker if it requires REARRANGING or REMOVING other chunks to form a valid sentence.
-Example: answer="The intern did not complete the report", distractor="completed"
-  → "The intern did not completed the report" = UNGRAMMATICAL → NOT a blocker ✓
-  → "The intern completed the report" (by removing "did not") = requires rearrangement → NOT a blocker ✓
-  → Only flag if simple 1:1 word swap creates a grammatical sentence in the SAME structure.
+DISTRACTOR BLOCKER RULE — READ VERY CAREFULLY (most common false-positive source):
+A distractor is a blocker ONLY IF replacing exactly one word produces a FULLY GRAMMATICAL English sentence.
+If the substitution is UNGRAMMATICAL in ANY way, it is NOT a blocker — it is a GOOD distractor.
+
+CRITICAL: Verb morphology distractors (base↔past↔3sg) are almost always SAFE because:
+- "did not" + past form = UNGRAMMATICAL (double past marking)
+- base form in 3sg slot = UNGRAMMATICAL (subject-verb disagreement)
+- past form in relative clause present = UNGRAMMATICAL (tense error)
+
+Examples of NOT blockers (do NOT flag these):
+✓ answer="did not finish the report", distractor="finished" → "did not finished" = UNGRAMMATICAL → GOOD distractor
+✓ answer="did not receive feedback", distractor="received" → "did not received" = UNGRAMMATICAL → GOOD distractor
+✓ answer="The garden opens every morning", distractor="open" → "The garden open every morning" = UNGRAMMATICAL (3sg) → GOOD distractor
+✓ answer="the trail that opened last week", distractor="open" → "the trail that open last week" = UNGRAMMATICAL → GOOD distractor
+✓ answer="The shop owner offered a discount", distractor="offer" → "The shop owner offer a discount" = UNGRAMMATICAL (3sg) → GOOD distractor
+
+Examples of REAL blockers (DO flag these):
+✗ answer="The trail winds through the forest", distractor="wound" → "The trail wound through the forest" = GRAMMATICAL → BLOCKER
+✗ answer="I enjoy the class", distractor="enjoyed" → "I enjoyed the class" = GRAMMATICAL → BLOCKER
+✗ answer="accepts my insurance", distractor="accepted" → "accepted my insurance" = GRAMMATICAL → BLOCKER
+
+The test: mentally substitute the distractor. Read the full sentence. Is it grammatical? If NO → not a blocker. If YES → blocker.
+Do NOT flag if it requires REARRANGING, REMOVING, or ADDING other chunks.
 
 NOT blockers (deduct points instead):
 - chunk composition style
@@ -2115,7 +2131,14 @@ Blockers (ONLY for critical issues — ALWAYS prefix with the item ID like "tmp_
 - tmp_rN_qM: indirect question uses inverted word order
 IMPORTANT: Each blocker must start with the specific item ID it applies to.
 
-DISTRACTOR RULE: Only flag as blocker if the distractor can replace exactly ONE word in the answer (same position) and the resulting sentence is grammatical. Do NOT flag if it requires removing, adding, or rearranging other chunks. That is NOT a blocker — just deduct 2-3 points.
+DISTRACTOR RULE — MOST COMMON FALSE POSITIVE:
+Only flag as blocker if substituting the distractor for one word produces a FULLY GRAMMATICAL sentence.
+Verb morphology distractors are almost always SAFE:
+✓ "did not finished" = UNGRAMMATICAL → NOT a blocker (good distractor)
+✓ "The shop offer a discount" = UNGRAMMATICAL (3sg agreement) → NOT a blocker
+✗ "I enjoyed the class" replacing "I enjoy the class" = GRAMMATICAL → IS a blocker
+The test: substitute, read the FULL sentence, check grammar. Ungrammatical = not a blocker.
+Do NOT flag if it requires removing, adding, or rearranging other chunks — just deduct 2-3 points.
 
 NOT blockers (reflect in score):
 - chunk style, grammar labels, scene variety
