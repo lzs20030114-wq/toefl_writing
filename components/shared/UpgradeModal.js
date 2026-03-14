@@ -216,6 +216,15 @@ export default function UpgradeModal({ userCode, currentTier, onClose, onUpgrade
               </div>
             )}
 
+            {/* Payment terms reminder */}
+            <div style={{
+              fontSize: 11, color: C.t3, lineHeight: 1.6, marginBottom: 10,
+              textAlign: "center",
+            }}>
+              付款即表示您同意：付费后不支持退款；服务有效期以所购方案为准，到期后恢复免费版。
+              <a href="/terms" target="_blank" rel="noopener" style={{ color: C.blue, marginLeft: 2 }}>完整条款</a>
+            </div>
+
             <button
               onClick={handleClose}
               style={{

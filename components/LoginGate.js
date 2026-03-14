@@ -158,6 +158,7 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [resendCooldown, setResendCooldown] = useState(0);
+  const [agreedTerms, setAgreedTerms] = useState(false);
 
   // Resend cooldown timer
   useEffect(() => {
@@ -167,6 +168,7 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
   }, [resendCooldown]);
 
   const handleSendOTP = async () => {
+    if (!agreedTerms) { setError(lang === "zh" ? "请先同意使用条款" : "Please agree to the terms first"); return; }
     const email = emailInput.trim();
     if (!email) { setError(t.invalidEmail); return; }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setError(t.invalidEmailFormat); return; }
@@ -202,6 +204,7 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
   };
 
   const handleCodeLogin = async () => {
+    if (!agreedTerms) { setError(lang === "zh" ? "请先同意使用条款" : "Please agree to the terms first"); return; }
     const normalized = normalizeInputCode(codeInput);
     if (normalized.length < 6) { setError(t.invalidCode); return; }
     setLoading(true);
@@ -331,6 +334,20 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
             <p style={{ fontSize: 12, color: C.t3, textAlign: "center", marginTop: 10, marginBottom: 0 }}>{t.codeHelper}</p>
           </div>
         )}
+
+        {/* Terms agreement */}
+        <label style={{ display: "flex", alignItems: "flex-start", gap: 8, marginTop: 14, cursor: "pointer", fontSize: 12, color: C.t2, lineHeight: 1.5 }}>
+          <input
+            type="checkbox"
+            checked={agreedTerms}
+            onChange={(e) => setAgreedTerms(e.target.checked)}
+            style={{ marginTop: 2, flexShrink: 0, cursor: "pointer" }}
+          />
+          <span>
+            我已阅读并同意
+            <a href="/terms" target="_blank" rel="noopener" style={{ color: C.blue, textDecoration: "underline" }}>《使用条款与隐私政策》</a>
+          </span>
+        </label>
 
         {/* Error */}
         {error && (

@@ -1,6 +1,7 @@
 import { isSupabaseAdminConfigured, supabaseAdmin } from "../../../lib/supabaseAdmin";
 
 const FREE_DAILY_LIMIT = 3;
+const PRO_DAILY_LIMIT = 100; // hidden abuse cap for pro/legacy
 
 function jsonError(status, error) {
   return Response.json({ error }, { status });
@@ -32,9 +33,7 @@ export async function GET(request) {
 
     if (!user) return jsonError(404, "User not found");
 
-    if (user.tier === "pro" || user.tier === "legacy") {
-      return Response.json({ remaining: -1, limit: -1 }); // -1 = unlimited
-    }
+    const isPro = user.tier === "pro" || user.tier === "legacy";
 
     const today = todayDate();
     const { data: usage } = await supabaseAdmin
@@ -45,6 +44,12 @@ export async function GET(request) {
       .maybeSingle();
 
     const used = usage?.usage_count || 0;
+
+    if (isPro) {
+      // Pro users see "unlimited" but server silently tracks usage
+      return Response.json({ remaining: -1, limit: -1 });
+    }
+
     return Response.json({
       remaining: Math.max(0, FREE_DAILY_LIMIT - used),
       limit: FREE_DAILY_LIMIT,
@@ -76,9 +81,8 @@ export async function POST(request) {
 
     if (!user) return jsonError(404, "User not found");
 
-    if (user.tier === "pro" || user.tier === "legacy") {
-      return Response.json({ remaining: -1 }); // unlimited
-    }
+    const isPro = user.tier === "pro" || user.tier === "legacy";
+    const limit = isPro ? PRO_DAILY_LIMIT : FREE_DAILY_LIMIT;
 
     const today = todayDate();
     const { data: existing } = await supabaseAdmin
@@ -88,19 +92,29 @@ export async function POST(request) {
       .eq("date", today)
       .maybeSingle();
 
+    const used = existing?.usage_count || 0;
+
+    // Silently block if over limit (pro users get a generic error, free users see normal limit)
+    if (used >= limit) {
+      if (isPro) {
+        return Response.json({ error: "服务繁忙，请稍后再试" }, { status: 429 });
+      }
+      return Response.json({ remaining: 0 });
+    }
+
     if (existing) {
-      const newCount = existing.usage_count + 1;
+      const newCount = used + 1;
       await supabaseAdmin
         .from("daily_usage")
         .update({ usage_count: newCount })
         .eq("user_code", code)
         .eq("date", today);
-      return Response.json({ remaining: Math.max(0, FREE_DAILY_LIMIT - newCount) });
+      return Response.json({ remaining: isPro ? -1 : Math.max(0, limit - newCount) });
     } else {
       await supabaseAdmin
         .from("daily_usage")
         .insert({ user_code: code, date: today, usage_count: 1 });
-      return Response.json({ remaining: FREE_DAILY_LIMIT - 1 });
+      return Response.json({ remaining: isPro ? -1 : limit - 1 });
     }
   } catch (e) {
     return jsonError(500, e.message || "Unexpected server error");
