@@ -303,6 +303,9 @@ const _FLOATING_ADVERBS_SET = new Set([
   "yesterday","today","tomorrow","recently","finally","always","often",
   "sometimes","probably","eventually","suddenly","already","usually",
   "still","again","now","soon","later","early","just","once","twice",
+  // Sync with buildSentenceSchema.js FLOATING_ADVERBS:
+  "certainly","definitely","immediately","perhaps","apparently",
+  "afterwards","meanwhile","generally","occasionally",
 ]);
 
 function autoFixFloatingAdverbs(answer, chunks, distractor) {
@@ -367,26 +370,64 @@ function autoFixFloatingAdverbs(answer, chunks, distractor) {
       merged = true;
       break;
     }
-    // Strategy 3 fallback: if no neighbor chunk found, try absorbing into ANY adjacent
-    // chunk in the answer that exists in chunks (even if not the immediate neighbor)
-    // — skip for now, strategies 1+2 should cover most cases
+    // Strategy 3 fallback: extract edge word from a multi-word chunk that contains
+    // the neighbor, split it off, and merge with the adverb
+    if (!merged) {
+      for (const neighborAnswerIdx of [adverbAnswerIdx - 1, adverbAnswerIdx + 1]) {
+        if (neighborAnswerIdx < 0 || neighborAnswerIdx >= answerWords.length) continue;
+        const neighbor = answerWords[neighborAnswerIdx];
+        const containerIdx = chunkLower.findIndex((ch, j) => {
+          if (j === i || mergeMap.has(j) || chunks[j] === distractor) return false;
+          const ws = ch.split(/\s+/);
+          if (ws.length < 2) return false;
+          const wi = ws.indexOf(neighbor);
+          return wi === 0 || wi === ws.length - 1; // edge word only
+        });
+        if (containerIdx < 0) continue;
+        const containerWords = chunkLower[containerIdx].split(/\s+/);
+        const mergedChunk = neighborAnswerIdx < adverbAnswerIdx
+          ? `${neighbor} ${adverb}` : `${adverb} ${neighbor}`;
+        if (mergedChunk.split(/\s+/).length > 3) continue;
+        const mergedWords = mergedChunk.split(/\s+/);
+        let found = false;
+        for (let k = 0; k <= answerWords.length - mergedWords.length; k++) {
+          if (mergedWords.every((w, wi) => answerWords[k + wi] === w)) { found = true; break; }
+        }
+        if (!found) continue;
+        const wi = containerWords.indexOf(neighbor);
+        const remaining = containerWords.filter((_, idx) => idx !== wi).join(" ");
+        mergeMap.set(i, { neighborIdx: containerIdx, mergedChunk, remainingContainer: remaining });
+        merged = true;
+        break;
+      }
+    }
   }
 
   // Pass 2: build result, skipping consumed neighbors and replacing adverbs with merged chunks
   const consumed = new Set();
-  for (const [advIdx, { neighborIdx }] of mergeMap) {
+  // Map consumed neighbor → remaining container (from Strategy 3 splits)
+  const remainingMap = new Map();
+  for (const [advIdx, entry] of mergeMap) {
     consumed.add(advIdx);
-    consumed.add(neighborIdx);
+    consumed.add(entry.neighborIdx);
+    if (entry.remainingContainer) {
+      remainingMap.set(entry.neighborIdx, entry.remainingContainer);
+    }
   }
 
   const result = [];
   for (let i = 0; i < chunks.length; i++) {
     if (mergeMap.has(i)) {
       result.push(mergeMap.get(i).mergedChunk);
-    } else if (!consumed.has(i)) {
+    } else if (consumed.has(i)) {
+      // If this consumed chunk had a remaining portion (Strategy 3), emit it
+      if (remainingMap.has(i)) {
+        result.push(remainingMap.get(i));
+      }
+      // else: fully consumed neighbor — skip
+    } else {
       result.push(chunks[i]);
     }
-    // else: this chunk was consumed as a neighbor — skip
   }
 
   return result;
@@ -437,6 +478,72 @@ function autoFixBarePrefilledPronoun(answer, prefilled, chunks, distractor) {
   // If first word is a proper noun or similar, try 2-word NP anyway
   // But safer to just drop prefilled entirely than keep a banned one
   return { prefilled: [], chunks };
+}
+
+/**
+ * Dedup effective chunks by merging duplicate single-word entries with their
+ * answer-adjacent neighbor to form a 2-word chunk.
+ * e.g. answer="the student told the professor", chunks has two "the":
+ *   → merge second "the" with "professor" → "the professor"
+ */
+function deduplicateChunks(answer, chunks, distractor) {
+  const effective = [];
+  const effectiveKeys = [];
+  for (const c of chunks) {
+    if (c === distractor) continue;
+    effective.push(c);
+    effectiveKeys.push(c.toLowerCase().trim());
+  }
+  // Find which keys appear more than once
+  const counts = {};
+  for (const k of effectiveKeys) counts[k] = (counts[k] || 0) + 1;
+  const dups = new Set(Object.keys(counts).filter((k) => counts[k] > 1));
+  if (dups.size === 0) return chunks;
+
+  const answerWords = answer.toLowerCase().replace(/[.,!?;:]/g, "").split(/\s+/).filter(Boolean);
+  const seen = new Set();
+  const result = [];
+
+  for (const c of chunks) {
+    if (c === distractor) { result.push(c); continue; }
+    const key = c.toLowerCase().trim();
+    if (!dups.has(key)) { result.push(c); continue; }
+    if (!seen.has(key)) { seen.add(key); result.push(c); continue; }
+
+    // This is a duplicate occurrence — try to merge with an adjacent answer word
+    // Find all positions of this word in the answer
+    let merged = false;
+    for (let pos = 0; pos < answerWords.length; pos++) {
+      if (answerWords[pos] !== key) continue;
+      for (const nPos of [pos + 1, pos - 1]) {
+        if (nPos < 0 || nPos >= answerWords.length) continue;
+        const neighbor = answerWords[nPos];
+        // Check this neighbor exists as a separate chunk in result
+        const nIdx = result.findIndex((rc) =>
+          rc !== distractor && rc.toLowerCase().trim() === neighbor
+        );
+        if (nIdx < 0) continue;
+        const mergedChunk = nPos > pos ? `${key} ${neighbor}` : `${neighbor} ${key}`;
+        if (mergedChunk.split(/\s+/).length > 3) continue;
+        // Verify contiguous in answer
+        const mw = mergedChunk.split(/\s+/);
+        let found = false;
+        for (let k2 = 0; k2 <= answerWords.length - mw.length; k2++) {
+          if (mw.every((w, wi) => answerWords[k2 + wi] === w)) { found = true; break; }
+        }
+        if (!found) continue;
+        // Replace the neighbor chunk with the merged version
+        result[nIdx] = mergedChunk;
+        merged = true;
+        break;
+      }
+      if (merged) break;
+    }
+    if (!merged) {
+      result.push(c); // can't merge — keep duplicate (will still fail validation)
+    }
+  }
+  return result;
 }
 
 /**
@@ -507,6 +614,17 @@ function normalizeQuestion(raw, tempId) {
 
   // Auto-fix: truncate multi-word distractors to single word
   distractor = autoFixMultiWordDistractor(answer, distractor);
+
+  // Auto-fix: strip unsafe distractors (be-verb/do-group/modal swaps) instead of rejecting.
+  // checkDistractorSafety would reject these in hardValidateQuestion; auto-stripping here
+  // converts the question to a no-distractor item, saving it from total rejection.
+  if (distractor) {
+    const safetyIssue = checkDistractorSafety({ distractor, answer, has_distractor: true });
+    if (safetyIssue) {
+      chunks = chunks.filter((c) => c !== distractor);
+      distractor = null;
+    }
+  }
 
   // Auto-fix: replace banned bare pronoun prefilled with subject NP from answer
   const bareFix = autoFixBarePrefilledPronoun(answer, prefilled, chunks, distractor);
@@ -586,6 +704,9 @@ function normalizeQuestion(raw, tempId) {
       }
     }
   }
+
+  // Auto-fix: deduplicate chunks by merging duplicate entries with answer neighbors
+  chunks = deduplicateChunks(answer, chunks, distractor);
 
   // Auto-fix: Correct prefilled_positions based on actual answer text.
   // Fix 2: fallback lookup is case-insensitive so AI key-case mismatches don't lose positions.
