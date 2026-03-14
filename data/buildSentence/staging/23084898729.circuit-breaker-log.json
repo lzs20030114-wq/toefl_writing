@@ -1,0 +1,896 @@
+{
+  "generated_at": "2026-03-14T09:46:17.044Z",
+  "active": {
+    "interrogative": {
+      "sinceRound": 22,
+      "untilRound": 25,
+      "lastEvent": {
+        "triggeredAt": "2026-03-14T09:44:20.485Z",
+        "round": 22,
+        "mode": "normal",
+        "type": "interrogative",
+        "generated": 4,
+        "accepted": 0,
+        "rejected": 4,
+        "acceptRate": 0,
+        "reasons": [
+          [
+            "pool:low_assembly_value",
+            3
+          ],
+          [
+            "format: effective chunks count must be 4-8 (got 9)",
+            1
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 20,
+            "spec": [
+              {
+                "type": "relative",
+                "difficulty": "medium",
+                "count": 4
+              }
+            ],
+            "stats": {
+              "generated": 0,
+              "accepted": 0,
+              "rejected": 0,
+              "reasons": {}
+            }
+          },
+          {
+            "round": 21,
+            "spec": [
+              {
+                "type": "relative",
+                "difficulty": "hard",
+                "count": 3
+              },
+              {
+                "type": "negation",
+                "difficulty": "hard",
+                "count": 1
+              }
+            ],
+            "stats": {
+              "generated": 0,
+              "accepted": 0,
+              "rejected": 0,
+              "reasons": {}
+            }
+          },
+          {
+            "round": 22,
+            "spec": [
+              {
+                "type": "interrogative",
+                "difficulty": "hard",
+                "count": 4
+              }
+            ],
+            "stats": {
+              "generated": 4,
+              "accepted": 0,
+              "rejected": 4,
+              "reasons": {
+                "format: effective chunks count must be 4-8 (got 9)": 1,
+                "pool:low_assembly_value": 3
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 25
+      }
+    },
+    "1st-embedded": {
+      "sinceRound": 24,
+      "untilRound": 27,
+      "lastEvent": {
+        "triggeredAt": "2026-03-14T09:45:33.768Z",
+        "round": 24,
+        "mode": "normal",
+        "type": "1st-embedded",
+        "generated": 4,
+        "accepted": 0,
+        "rejected": 4,
+        "acceptRate": 0,
+        "reasons": [
+          [
+            "pool:low_assembly_value",
+            4
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 22,
+            "spec": [
+              {
+                "type": "interrogative",
+                "difficulty": "hard",
+                "count": 4
+              }
+            ],
+            "stats": {
+              "generated": 0,
+              "accepted": 0,
+              "rejected": 0,
+              "reasons": {}
+            }
+          },
+          {
+            "round": 23,
+            "spec": [
+              {
+                "type": "1st-embedded",
+                "difficulty": "hard",
+                "count": 4
+              }
+            ],
+            "stats": {
+              "generated": 3,
+              "accepted": 0,
+              "rejected": 3,
+              "reasons": {
+                "pool:low_assembly_value": 3
+              }
+            }
+          },
+          {
+            "round": 24,
+            "spec": [
+              {
+                "type": "1st-embedded",
+                "difficulty": "hard",
+                "count": 4
+              }
+            ],
+            "stats": {
+              "generated": 1,
+              "accepted": 0,
+              "rejected": 1,
+              "reasons": {
+                "pool:low_assembly_value": 1
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 27
+      }
+    }
+  },
+  "events": [
+    {
+      "triggeredAt": "2026-03-14T09:23:02.681Z",
+      "round": 5,
+      "mode": "normal",
+      "type": "negation",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:score<78",
+          4
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:score<78": 2
+            }
+          }
+        },
+        {
+          "round": 5,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:score<78": 2
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 8
+    },
+    {
+      "triggeredAt": "2026-03-14T09:26:27.256Z",
+      "round": 7,
+      "mode": "normal",
+      "type": "3rd-reporting",
+      "generated": 5,
+      "accepted": 1,
+      "rejected": 4,
+      "acceptRate": 0.2,
+      "reasons": [
+        [
+          "review:score<78",
+          3
+        ],
+        [
+          "fatal: distractor must not appear in answer",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 5,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 1,
+            "rejected": 2,
+            "reasons": {
+              "review:score<78": 2
+            }
+          }
+        },
+        {
+          "round": 6,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "fatal: distractor must not appear in answer": 1,
+              "review:score<78": 1
+            }
+          }
+        },
+        {
+          "round": 7,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        }
+      ],
+      "blockedUntilRound": 10
+    },
+    {
+      "triggeredAt": "2026-03-14T09:29:14.880Z",
+      "round": 9,
+      "mode": "normal",
+      "type": "interrogative",
+      "generated": 5,
+      "accepted": 0,
+      "rejected": 5,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:blocker:tmp_r9_q1: indirect question uses inverted word order",
+          1
+        ],
+        [
+          "review:blocker:tmp_r9_q2: indirect question uses inverted word order",
+          1
+        ],
+        [
+          "review:blocker:tmp_r9_q3: indirect question uses inverted word order",
+          1
+        ],
+        [
+          "review:blocker:tmp_r9_q4: indirect question uses inverted word order",
+          1
+        ],
+        [
+          "review:blocker:tmp_r9_q5: indirect question uses inverted word order",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 7,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 8,
+          "spec": [
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 9,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 5
+            }
+          ],
+          "stats": {
+            "generated": 5,
+            "accepted": 0,
+            "rejected": 5,
+            "reasons": {
+              "review:blocker:tmp_r9_q1: indirect question uses inverted word order": 1,
+              "review:blocker:tmp_r9_q2: indirect question uses inverted word order": 1,
+              "review:blocker:tmp_r9_q3: indirect question uses inverted word order": 1,
+              "review:blocker:tmp_r9_q4: indirect question uses inverted word order": 1,
+              "review:blocker:tmp_r9_q5: indirect question uses inverted word order": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 12
+    },
+    {
+      "triggeredAt": "2026-03-14T09:44:20.485Z",
+      "round": 22,
+      "mode": "normal",
+      "type": "interrogative",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "pool:low_assembly_value",
+          3
+        ],
+        [
+          "format: effective chunks count must be 4-8 (got 9)",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 20,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 21,
+          "spec": [
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 3
+            },
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 22,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 4,
+            "accepted": 0,
+            "rejected": 4,
+            "reasons": {
+              "format: effective chunks count must be 4-8 (got 9)": 1,
+              "pool:low_assembly_value": 3
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 25
+    },
+    {
+      "triggeredAt": "2026-03-14T09:45:33.768Z",
+      "round": 24,
+      "mode": "normal",
+      "type": "1st-embedded",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "pool:low_assembly_value",
+          4
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 22,
+          "spec": [
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 23,
+          "spec": [
+            {
+              "type": "1st-embedded",
+              "difficulty": "hard",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "pool:low_assembly_value": 3
+            }
+          }
+        },
+        {
+          "round": 24,
+          "spec": [
+            {
+              "type": "1st-embedded",
+              "difficulty": "hard",
+              "count": 4
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "pool:low_assembly_value": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 27
+    }
+  ],
+  "history": [
+    {
+      "round": 20,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 4
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 4,
+          "accepted": 3,
+          "rejected": 1,
+          "reasons": {
+            "pool:low_assembly_value": 1
+          }
+        }
+      }
+    },
+    {
+      "round": 21,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "relative",
+          "difficulty": "hard",
+          "count": 3
+        },
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 1
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "format: effective chunks count must be 4-8 (got 9)": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "pool:low_assembly_value": 2
+          }
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "pool:low_assembly_value": 1
+          }
+        }
+      }
+    },
+    {
+      "round": 22,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "interrogative",
+          "difficulty": "hard",
+          "count": 4
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 4,
+          "accepted": 0,
+          "rejected": 4,
+          "reasons": {
+            "format: effective chunks count must be 4-8 (got 9)": 1,
+            "pool:low_assembly_value": 3
+          }
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 23,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "1st-embedded",
+          "difficulty": "hard",
+          "count": 4
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 3,
+          "accepted": 0,
+          "rejected": 3,
+          "reasons": {
+            "pool:low_assembly_value": 3
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "pool:low_assembly_value": 1
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 24,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "1st-embedded",
+          "difficulty": "hard",
+          "count": 4
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "pool:low_assembly_value": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "pool:low_assembly_value": 1
+          }
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "pool:low_assembly_value": 2
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 25,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "relative",
+          "difficulty": "hard",
+          "count": 4
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "pool:low_assembly_value": 1
+          }
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "relative": {
+          "generated": 3,
+          "accepted": 0,
+          "rejected": 3,
+          "reasons": {
+            "pool:low_assembly_value": 3
+          }
+        }
+      }
+    }
+  ]
+}
