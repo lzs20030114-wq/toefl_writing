@@ -1,25 +1,41 @@
-﻿"use client";
+"use client";
 import { useEffect, useState } from "react";
 import { verifyCode } from "../lib/authCode";
-import { clearCode, getSavedCode, saveCode } from "../lib/AuthContext";
+import { sendEmailOTP, verifyEmailOTP, signOut } from "../lib/emailAuth";
+import { clearAuth, getSavedCode, saveAuth } from "../lib/AuthContext";
 import { clearLocalSessions, getLocalSessionCount, importLocalSessionsToCloud } from "../lib/sessionStore";
 import { isSupabaseConfigured } from "../lib/supabase";
 import { C, FONT } from "./shared/ui";
 
 const UI_LANG_KEY = "toefl-ui-lang";
+const IMPORT_DISMISSED_KEY = "toefl-import-dismissed";
 
 const I18N = {
   zh: {
     checking: "验证登录状态...",
     title: "TOEFL iBT 写作训练",
-    subtitle: "内测访问",
-    onlyIssuedCode: "请输入已发放的登录码",
+    subtitle: "2026 新题型 · AI 智能批改",
+    emailTab: "邮箱登录",
+    codeTab: "登录码",
+    emailPlaceholder: "输入邮箱地址",
+    sendOtp: "发送验证码",
+    sendingOtp: "发送中...",
+    emailHelper: "首次使用将自动注册，每日赠送 3 次免费练习",
     codePlaceholder: "输入 6 位登录码",
     login: "登录",
     loggingIn: "登录中...",
-    helper: "登录码由管理员发放。请联系管理员获取可用登录码。",
-    invalidLength: "请输入 6 位登录码",
-    invalidCode: "登录码无效或未激活。",
+    codeHelper: "在小红书购买的登录码请在此输入",
+    otpTitle: "验证邮箱",
+    otpSentTo: "验证码已发送至",
+    otpPlaceholder: "输入 6 位验证码",
+    otpVerify: "确认",
+    otpVerifying: "验证中...",
+    otpBack: "返回",
+    otpHelper: "没收到？请检查垃圾邮件，或等待 1 分钟后重试",
+    invalidEmail: "请输入邮箱",
+    invalidEmailFormat: "邮箱格式不正确",
+    invalidCode: "请输入 6 位登录码",
+    invalidOtp: "请输入 6 位验证码",
     importPrefix: "检测到本设备有",
     importSuffix: "条旧练习记录，是否导入到当前云端账户？",
     import: "导入",
@@ -36,14 +52,28 @@ const I18N = {
   en: {
     checking: "Checking login status...",
     title: "TOEFL iBT Writing Trainer",
-    subtitle: "Private Beta Access",
-    onlyIssuedCode: "Enter an issued access code",
+    subtitle: "2026 New Format · AI Scoring",
+    emailTab: "Email",
+    codeTab: "Access Code",
+    emailPlaceholder: "Enter email address",
+    sendOtp: "Send Code",
+    sendingOtp: "Sending...",
+    emailHelper: "First-time users get 3 free daily sessions",
     codePlaceholder: "Enter 6-character code",
     login: "Sign In",
     loggingIn: "Signing in...",
-    helper: "Access codes are issued by admin only. Contact admin to receive an active code.",
-    invalidLength: "Please enter a 6-character code.",
-    invalidCode: "Code is invalid or not active.",
+    codeHelper: "Enter the code purchased from Xiaohongshu",
+    otpTitle: "Verify Email",
+    otpSentTo: "Verification code sent to",
+    otpPlaceholder: "Enter 6-digit code",
+    otpVerify: "Verify",
+    otpVerifying: "Verifying...",
+    otpBack: "Back",
+    otpHelper: "Didn't receive it? Check spam, or wait 1 minute to retry",
+    invalidEmail: "Please enter an email",
+    invalidEmailFormat: "Invalid email format",
+    invalidCode: "Please enter a 6-character code",
+    invalidOtp: "Please enter a 6-digit code",
     importPrefix: "Found",
     importSuffix: "local practice records on this device. Import to this cloud account?",
     import: "Import",
@@ -59,8 +89,6 @@ const I18N = {
   },
 };
 
-const IMPORT_DISMISSED_KEY = "toefl-import-dismissed";
-
 function normalizeInputCode(v) {
   return String(v || "").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6);
 }
@@ -68,38 +96,25 @@ function normalizeInputCode(v) {
 function LangToggle({ lang, onChange }) {
   return (
     <div style={{ display: "inline-flex", gap: 4, background: "#f1f5f9", borderRadius: 999, padding: 2 }}>
-      <button
-        onClick={() => onChange("zh")}
-        style={{
-          border: "none",
-          background: lang === "zh" ? "#fff" : "transparent",
-          color: lang === "zh" ? C.nav : C.t2,
-          borderRadius: 999,
-          padding: "2px 10px",
-          fontSize: 11,
-          fontWeight: 700,
-          cursor: "pointer",
-          fontFamily: FONT,
-        }}
-      >
-        {I18N.zh.langZh}
-      </button>
-      <button
-        onClick={() => onChange("en")}
-        style={{
-          border: "none",
-          background: lang === "en" ? "#fff" : "transparent",
-          color: lang === "en" ? C.nav : C.t2,
-          borderRadius: 999,
-          padding: "2px 10px",
-          fontSize: 11,
-          fontWeight: 700,
-          cursor: "pointer",
-          fontFamily: FONT,
-        }}
-      >
-        {I18N.en.langEn}
-      </button>
+      {["zh", "en"].map((l) => (
+        <button
+          key={l}
+          onClick={() => onChange(l)}
+          style={{
+            border: "none",
+            background: lang === l ? "#fff" : "transparent",
+            color: lang === l ? C.nav : C.t2,
+            borderRadius: 999,
+            padding: "2px 10px",
+            fontSize: 11,
+            fontWeight: 700,
+            cursor: "pointer",
+            fontFamily: FONT,
+          }}
+        >
+          {l === "zh" ? I18N.zh.langZh : I18N.en.langEn}
+        </button>
+      ))}
     </div>
   );
 }
@@ -108,65 +123,6 @@ function LoadingScreen({ text }) {
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT, display: "flex", alignItems: "center", justifyContent: "center" }}>
       <div style={{ color: C.t2, fontSize: 14 }}>{text}</div>
-    </div>
-  );
-}
-
-function LoginScreen({ t, lang, setLang, inputCode, setInputCode, error, loading, onLogin }) {
-  return (
-    <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
-      <div style={{ width: "100%", maxWidth: 560, background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 24 }}>
-        <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 8 }}>
-          <LangToggle lang={lang} onChange={setLang} />
-        </div>
-        <div style={{ textAlign: "center", marginBottom: 18 }}>
-          <div style={{ fontSize: 24, fontWeight: 800, color: C.nav, marginBottom: 6 }}>{t.title}</div>
-          <div style={{ fontSize: 13, color: C.t2 }}>{t.subtitle}</div>
-        </div>
-
-        <div style={{ border: "1px solid " + C.bdr, borderRadius: 8, padding: 14 }}>
-          <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 8 }}>{t.onlyIssuedCode}</div>
-          <input
-            data-testid="login-code-input"
-            value={inputCode}
-            onChange={(e) => setInputCode(normalizeInputCode(e.target.value))}
-            placeholder={t.codePlaceholder}
-            style={{
-              width: "100%",
-              border: "1px solid #cbd5e1",
-              borderRadius: 6,
-              padding: "10px 12px",
-              fontFamily: "monospace",
-              fontSize: 28,
-              letterSpacing: 8,
-              textAlign: "center",
-              textTransform: "uppercase",
-              marginBottom: 10,
-              boxSizing: "border-box",
-            }}
-          />
-          <button
-            onClick={onLogin}
-            disabled={loading}
-            style={{
-              width: "100%",
-              border: "1px solid " + C.blue,
-              background: loading ? "#9ca3af" : C.blue,
-              color: "#fff",
-              borderRadius: 6,
-              padding: "8px 14px",
-              cursor: loading ? "not-allowed" : "pointer",
-              fontFamily: FONT,
-              fontWeight: 700,
-            }}
-          >
-            {loading ? t.loggingIn : t.login}
-          </button>
-        </div>
-
-        {error ? <div style={{ marginTop: 12, color: C.red, fontSize: 13 }}>{error}</div> : null}
-        <div style={{ marginTop: 14, fontSize: 12, color: C.t2, lineHeight: 1.6 }}>{t.helper}</div>
-      </div>
     </div>
   );
 }
@@ -202,16 +158,16 @@ function ImportPrompt({ t, count, onImport, onSkip, onDismiss, loading }) {
             style={{ background: "#fff", borderRadius: 12, padding: "24px 24px 20px", width: 320, boxShadow: "0 10px 40px rgba(0,0,0,0.12)", display: "flex", flexDirection: "column", gap: 14, fontFamily: FONT }}
           >
             <div>
-              <div style={{ fontSize: 15, fontWeight: 800, color: "#1a2420", marginBottom: 6 }}>{t.dismissConfirmTitle}</div>
-              <div style={{ fontSize: 13, color: "#5a6b62", lineHeight: 1.6 }}>{t.dismissConfirmBody}</div>
+              <div style={{ fontSize: 15, fontWeight: 800, color: C.t1, marginBottom: 6 }}>{t.dismissConfirmTitle}</div>
+              <div style={{ fontSize: 13, color: C.t2, lineHeight: 1.6 }}>{t.dismissConfirmBody}</div>
             </div>
             <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
-              <button onClick={() => setConfirmOpen(false)} style={{ padding: "7px 16px", borderRadius: 8, border: "1px solid #dde5df", background: "#fff", color: "#5a6b62", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: FONT }}>
+              <button onClick={() => setConfirmOpen(false)} style={{ padding: "7px 16px", borderRadius: 8, border: "1px solid " + C.bdr, background: "#fff", color: C.t2, fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: FONT }}>
                 {t.dismissConfirmCancel}
               </button>
               <button
                 onClick={() => { setConfirmOpen(false); onDismiss(); }}
-                style={{ padding: "7px 16px", borderRadius: 8, border: "none", background: "#dc2626", color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: FONT }}
+                style={{ padding: "7px 16px", borderRadius: 8, border: "none", background: C.red, color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: FONT }}
               >
                 {t.dismissConfirmOk}
               </button>
@@ -232,24 +188,43 @@ export default function LoginGate({ children }) {
 
   const [lang, setLangRaw] = useState(initialLang);
   const t = I18N[lang];
-  const [state, setState] = useState("checking");
+  const [state, setState] = useState("checking"); // checking | login | email_otp | authenticated
   const [userCode, setUserCode] = useState(null);
-  const [inputCode, setInputCode] = useState("");
+  const [userTier, setUserTier] = useState("free");
+  const [userEmail, setUserEmail] = useState(null);
+  const [authMethod, setAuthMethod] = useState("code");
+
+  // Form state
+  const [activeTab, setActiveTab] = useState("email");
+  const [emailInput, setEmailInput] = useState("");
+  const [otpInput, setOtpInput] = useState("");
+  const [otpEmail, setOtpEmail] = useState("");
+  const [codeInput, setCodeInput] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Import prompt
   const [showImportPrompt, setShowImportPrompt] = useState(false);
   const [importing, setImporting] = useState(false);
 
   const setLang = (next) => {
     const n = next === "en" ? "en" : "zh";
     setLangRaw(n);
-    try {
-      localStorage.setItem(UI_LANG_KEY, n);
-    } catch {
-      // no-op
-    }
+    try { localStorage.setItem(UI_LANG_KEY, n); } catch { /* no-op */ }
   };
 
+  // ── Fetch user info from server ──
+  async function fetchUserInfo(code) {
+    try {
+      const res = await fetch(`/api/auth/user-info?code=${encodeURIComponent(code)}`);
+      if (!res.ok) return null;
+      return await res.json();
+    } catch {
+      return null;
+    }
+  }
+
+  // ── Initialization ──
   useEffect(() => {
     if (!isSupabaseConfigured) {
       setState("authenticated");
@@ -259,14 +234,21 @@ export default function LoginGate({ children }) {
 
     const saved = getSavedCode();
     if (saved) {
-      verifyCode(saved).then(({ valid }) => {
+      verifyCode(saved).then(async ({ valid, tier, email, auth_method }) => {
         if (valid) {
           const normalized = normalizeInputCode(saved);
           setUserCode(normalized);
-          setShowImportPrompt((() => { try { return localStorage.getItem(IMPORT_DISMISSED_KEY) !== "1"; } catch { return true; } })() && getLocalSessionCount() > 0);
+          setUserTier(tier || "free");
+          setUserEmail(email || null);
+          setAuthMethod(auth_method || "code");
+          saveAuth(normalized, { authMethod: auth_method, tier, email });
+          setShowImportPrompt(
+            (() => { try { return localStorage.getItem(IMPORT_DISMISSED_KEY) !== "1"; } catch { return true; } })()
+            && getLocalSessionCount() > 0
+          );
           setState("authenticated");
         } else {
-          clearCode();
+          clearAuth();
           setState("login");
         }
       });
@@ -275,34 +257,82 @@ export default function LoginGate({ children }) {
     }
   }, []);
 
-  const handleLogin = async () => {
-    const normalized = normalizeInputCode(inputCode);
-    if (normalized.length < 6) {
-      setError(t.invalidLength);
-      return;
-    }
+  // ── Email: Send OTP ──
+  const handleSendOTP = async () => {
+    const email = emailInput.trim();
+    if (!email) { setError(t.invalidEmail); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setError(t.invalidEmailFormat); return; }
+
     setLoading(true);
     setError("");
-    const { valid, error: verifyError } = await verifyCode(normalized);
+    const { error: sendError } = await sendEmailOTP(email);
     setLoading(false);
-    if (!valid) {
-      setError(verifyError || t.invalidCode);
-      return;
-    }
-    saveCode(normalized);
-    setUserCode(normalized);
-    setShowImportPrompt((() => { try { return localStorage.getItem(IMPORT_DISMISSED_KEY) !== "1"; } catch { return true; } })() && getLocalSessionCount() > 0);
+    if (sendError) { setError(sendError); return; }
+
+    setOtpEmail(email);
+    setState("email_otp");
+  };
+
+  // ── Email: Verify OTP ──
+  const handleVerifyOTP = async () => {
+    if (otpInput.length < 6) { setError(t.invalidOtp); return; }
+
+    setLoading(true);
+    setError("");
+    const { userCode: code, tier, email, auth_method, error: verifyError } = await verifyEmailOTP(otpEmail, otpInput);
+    setLoading(false);
+
+    if (verifyError) { setError(verifyError); return; }
+
+    saveAuth(code, { authMethod: auth_method || "email", tier: tier || "free", email: email || otpEmail });
+    setUserCode(code);
+    setUserTier(tier || "free");
+    setUserEmail(email || otpEmail);
+    setAuthMethod(auth_method || "email");
+    setShowImportPrompt(
+      (() => { try { return localStorage.getItem(IMPORT_DISMISSED_KEY) !== "1"; } catch { return true; } })()
+      && getLocalSessionCount() > 0
+    );
     setState("authenticated");
   };
 
-  const handleLogout = () => {
-    clearCode();
+  // ── Code Login ──
+  const handleCodeLogin = async () => {
+    const normalized = normalizeInputCode(codeInput);
+    if (normalized.length < 6) { setError(t.invalidCode); return; }
+
+    setLoading(true);
+    setError("");
+    const { valid, error: verifyError, tier, email, auth_method } = await verifyCode(normalized);
+    setLoading(false);
+
+    if (!valid) { setError(verifyError || t.invalidCode); return; }
+
+    saveAuth(normalized, { authMethod: auth_method || "code", tier: tier || "free", email });
+    setUserCode(normalized);
+    setUserTier(tier || "free");
+    setUserEmail(email || null);
+    setAuthMethod(auth_method || "code");
+    setShowImportPrompt(
+      (() => { try { return localStorage.getItem(IMPORT_DISMISSED_KEY) !== "1"; } catch { return true; } })()
+      && getLocalSessionCount() > 0
+    );
+    setState("authenticated");
+  };
+
+  // ── Logout ──
+  const handleLogout = async () => {
+    clearAuth();
+    await signOut();
     setUserCode(null);
+    setUserTier("free");
+    setUserEmail(null);
     setInputCode("");
     setShowImportPrompt(false);
     setState(isSupabaseConfigured ? "login" : "authenticated");
   };
 
+  // ── Import ──
   const handleDismiss = () => {
     clearLocalSessions();
     try { localStorage.setItem(IMPORT_DISMISSED_KEY, "1"); } catch { /* no-op */ }
@@ -313,29 +343,186 @@ export default function LoginGate({ children }) {
     setImporting(true);
     const { error: importError } = await importLocalSessionsToCloud();
     setImporting(false);
-    if (importError) {
-      setError(importError);
-      return;
-    }
+    if (importError) { setError(importError); return; }
     setShowImportPrompt(false);
   };
 
+  // ── Render: Loading ──
   if (state === "checking") return <LoadingScreen text={t.checking} />;
-  if (state === "login") {
+
+  // ── Render: OTP Verification ──
+  if (state === "email_otp") {
     return (
-      <LoginScreen
-        t={t}
-        lang={lang}
-        setLang={setLang}
-        inputCode={inputCode}
-        setInputCode={setInputCode}
-        error={error}
-        loading={loading}
-        onLogin={handleLogin}
-      />
+      <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
+        <div style={{ width: "100%", maxWidth: 400, textAlign: "center" }}>
+          <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 8, color: C.t1 }}>{t.otpTitle}</h2>
+          <p style={{ fontSize: 14, color: C.t2, marginBottom: 24 }}>
+            {t.otpSentTo} <strong>{otpEmail}</strong>
+          </p>
+
+          <input
+            type="text"
+            placeholder={t.otpPlaceholder}
+            value={otpInput}
+            onChange={(e) => setOtpInput(e.target.value.replace(/\D/g, "").slice(0, 6))}
+            onKeyDown={(e) => e.key === "Enter" && handleVerifyOTP()}
+            maxLength={6}
+            autoFocus
+            style={{
+              width: "100%", padding: 14, fontSize: 28, borderRadius: 10,
+              border: "1.5px solid " + C.bdr, outline: "none", boxSizing: "border-box",
+              fontFamily: "monospace", letterSpacing: 12, textAlign: "center",
+            }}
+          />
+
+          <button
+            onClick={handleVerifyOTP}
+            disabled={loading}
+            style={{
+              width: "100%", marginTop: 16, padding: "12px 0", borderRadius: 10,
+              border: "none", background: loading ? "#9ca3af" : C.blue, color: "#fff",
+              fontSize: 15, fontWeight: 600, cursor: loading ? "not-allowed" : "pointer",
+              fontFamily: FONT,
+            }}
+          >
+            {loading ? t.otpVerifying : t.otpVerify}
+          </button>
+
+          <button
+            onClick={() => { setState("login"); setError(""); setOtpInput(""); }}
+            style={{ marginTop: 12, border: "none", background: "none", color: C.t2, fontSize: 13, cursor: "pointer", textDecoration: "underline", fontFamily: FONT }}
+          >
+            {t.otpBack}
+          </button>
+
+          <p style={{ fontSize: 12, color: C.t3, marginTop: 16 }}>{t.otpHelper}</p>
+
+          {error && (
+            <div style={{ marginTop: 12, color: C.red, fontSize: 13, padding: "8px 12px", background: "#fff5f5", borderRadius: 8 }}>
+              {error}
+            </div>
+          )}
+        </div>
+      </div>
     );
   }
 
+  // ── Render: Login Screen ──
+  if (state === "login") {
+    return (
+      <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
+        <div style={{ width: "100%", maxWidth: 560, background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 24 }}>
+          <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 8 }}>
+            <LangToggle lang={lang} onChange={setLang} />
+          </div>
+          <div style={{ textAlign: "center", marginBottom: 18 }}>
+            <div style={{ fontSize: 24, fontWeight: 800, color: C.nav, marginBottom: 6 }}>{t.title}</div>
+            <div style={{ fontSize: 13, color: C.t2 }}>{t.subtitle}</div>
+          </div>
+
+          {/* Tab switcher */}
+          <div style={{ display: "flex", borderBottom: "2px solid " + C.bdrSubtle, marginBottom: 20 }}>
+            {[
+              { key: "email", label: t.emailTab },
+              { key: "code", label: t.codeTab },
+            ].map(({ key, label }) => (
+              <button
+                key={key}
+                onClick={() => { setActiveTab(key); setError(""); }}
+                style={{
+                  flex: 1, padding: "10px 0", border: "none", background: "none", cursor: "pointer",
+                  fontSize: 14, fontWeight: 600, fontFamily: FONT,
+                  color: activeTab === key ? C.blue : C.t3,
+                  borderBottom: activeTab === key ? "2px solid " + C.blue : "2px solid transparent",
+                  marginBottom: -2, transition: "all 0.2s",
+                }}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+
+          {/* Email Tab */}
+          {activeTab === "email" && (
+            <div>
+              <input
+                type="email"
+                placeholder={t.emailPlaceholder}
+                value={emailInput}
+                onChange={(e) => setEmailInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleSendOTP()}
+                style={{
+                  width: "100%", padding: "12px 14px", fontSize: 15, borderRadius: 10,
+                  border: "1.5px solid " + C.bdr, outline: "none", boxSizing: "border-box",
+                  fontFamily: FONT,
+                }}
+              />
+              <button
+                onClick={handleSendOTP}
+                disabled={loading}
+                style={{
+                  width: "100%", marginTop: 14, padding: "12px 0", borderRadius: 10,
+                  border: "none", background: loading ? "#9ca3af" : C.blue, color: "#fff",
+                  fontSize: 15, fontWeight: 600, cursor: loading ? "not-allowed" : "pointer",
+                  fontFamily: FONT,
+                }}
+              >
+                {loading ? t.sendingOtp : t.sendOtp}
+              </button>
+              <p style={{ fontSize: 12, color: C.t3, textAlign: "center", marginTop: 12 }}>
+                {t.emailHelper}
+              </p>
+            </div>
+          )}
+
+          {/* Code Tab */}
+          {activeTab === "code" && (
+            <div>
+              <input
+                data-testid="login-code-input"
+                type="text"
+                placeholder={t.codePlaceholder}
+                value={codeInput}
+                onChange={(e) => setCodeInput(normalizeInputCode(e.target.value))}
+                onKeyDown={(e) => e.key === "Enter" && handleCodeLogin()}
+                maxLength={6}
+                style={{
+                  width: "100%", padding: "12px 14px", fontSize: 28, borderRadius: 10,
+                  border: "1.5px solid " + C.bdr, outline: "none", boxSizing: "border-box",
+                  fontFamily: "monospace", letterSpacing: 8, textAlign: "center",
+                  textTransform: "uppercase",
+                }}
+              />
+              <button
+                onClick={handleCodeLogin}
+                disabled={loading}
+                style={{
+                  width: "100%", marginTop: 14, padding: "12px 0", borderRadius: 10,
+                  border: "none", background: loading ? "#9ca3af" : C.blue, color: "#fff",
+                  fontSize: 15, fontWeight: 600, cursor: loading ? "not-allowed" : "pointer",
+                  fontFamily: FONT,
+                }}
+              >
+                {loading ? t.loggingIn : t.login}
+              </button>
+              <p style={{ fontSize: 12, color: C.t3, textAlign: "center", marginTop: 12 }}>
+                {t.codeHelper}
+              </p>
+            </div>
+          )}
+
+          {/* Error */}
+          {error && (
+            <div style={{ marginTop: 12, color: C.red, fontSize: 13, padding: "8px 12px", background: "#fff5f5", borderRadius: 8 }}>
+              {error}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // ── Render: Authenticated ──
   if (typeof children === "function") {
     return (
       <>
@@ -344,7 +531,7 @@ export default function LoginGate({ children }) {
             <ImportPrompt t={t} count={getLocalSessionCount()} onImport={handleImport} onSkip={() => setShowImportPrompt(false)} onDismiss={handleDismiss} loading={importing} />
           </div>
         ) : null}
-        {children({ userCode, onLogout: handleLogout })}
+        {children({ userCode, userTier, userEmail, authMethod, onLogout: handleLogout })}
       </>
     );
   }

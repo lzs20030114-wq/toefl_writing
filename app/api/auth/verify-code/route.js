@@ -35,7 +35,7 @@ export async function POST(request) {
     if (!effectiveAccess) {
       const { data: legacyUser, error: legacyError } = await supabaseAdmin
         .from("users")
-        .select("code")
+        .select("code,status")
         .eq("code", code)
         .maybeSingle();
       if (legacyError) return jsonError(400, legacyError.message || "Legacy user query failed");
@@ -58,14 +58,62 @@ export async function POST(request) {
     if (isExpired(effectiveAccess.expires_at)) return jsonError(401, "Code expired");
 
     const now = new Date().toISOString();
-    const { error: userUpsertError } = await supabaseAdmin
+
+    // Fetch user record for tier/status info
+    const { data: userRow } = await supabaseAdmin
       .from("users")
-      .upsert({ code, last_login: now }, { onConflict: "code" });
-    if (userUpsertError) return jsonError(400, userUpsertError.message || "User sync failed");
+      .select("code,email,tier,tier_expires_at,auth_method,status")
+      .eq("code", code)
+      .maybeSingle();
 
-    await supabaseAdmin.from("users").update({ last_login: now }).eq("code", code);
+    // Handle pending code activation (pre-generated codes for sale)
+    if (userRow?.status === "pending") {
+      const expiresAt = new Date();
+      expiresAt.setDate(expiresAt.getDate() + 30);
 
-    return Response.json({ valid: true, error: null, code });
+      await supabaseAdmin
+        .from("users")
+        .update({
+          status: "active",
+          last_login: now,
+          tier_expires_at: expiresAt.toISOString(),
+        })
+        .eq("code", code);
+
+      return Response.json({
+        valid: true,
+        error: null,
+        code,
+        tier: userRow.tier || "pro",
+        email: userRow.email || null,
+        auth_method: userRow.auth_method || "code",
+      });
+    }
+
+    // Check if pro tier has expired
+    let tier = userRow?.tier || "free";
+    if (tier === "pro" && userRow?.tier_expires_at && isExpired(userRow.tier_expires_at)) {
+      tier = "free";
+      await supabaseAdmin
+        .from("users")
+        .update({ tier: "free", tier_expires_at: null, last_login: now })
+        .eq("code", code);
+    } else {
+      // Normal active code: upsert user + update last_login
+      const { error: userUpsertError } = await supabaseAdmin
+        .from("users")
+        .upsert({ code, last_login: now }, { onConflict: "code" });
+      if (userUpsertError) return jsonError(400, userUpsertError.message || "User sync failed");
+    }
+
+    return Response.json({
+      valid: true,
+      error: null,
+      code,
+      tier,
+      email: userRow?.email || null,
+      auth_method: userRow?.auth_method || "code",
+    });
   } catch (e) {
     return jsonError(500, e.message || "Unexpected server error");
   }

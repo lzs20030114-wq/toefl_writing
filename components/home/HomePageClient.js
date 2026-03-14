@@ -28,7 +28,7 @@ function parseJsonSafe(res) {
   return res.json().catch(() => ({}));
 }
 
-export default function HomePageClient({ userCode, onLogout }) {
+export default function HomePageClient({ userCode, userTier, userEmail, authMethod, onLogout }) {
   const [hoverKey, setHoverKey] = useState("");
   const [sessions, setSessions] = useState([]);
   const [mode, setMode] = useState(PRACTICE_MODE.STANDARD);
@@ -207,7 +207,7 @@ export default function HomePageClient({ userCode, onLogout }) {
 
         <div className="home-shell" style={{ maxWidth: 1120, margin: "0 auto", padding: "28px 36px 60px", display: "flex", gap: 28, alignItems: "flex-start" }}>
           <div className="home-layout" style={{ display: "flex", gap: 28, alignItems: "flex-start", width: "100%" }}>
-            <HomeSidebar userCode={userCode} onLogout={onLogout} totalCount={totalCount} weekCount={weekCount} bestMock={bestMock} isChallenge={isChallenge} copied={copied} copyCode={copyCode} logoutHover={logoutHover} setLogoutHover={setLogoutHover} fbOpen={fbOpen} setFbOpen={setFbOpen} fbText={fbText} setFbText={setFbText} fbBusy={fbBusy} fbSent={fbSent} feedbackMsg={feedbackMsg} submitFeedback={submitFeedback} fbHistory={fbHistory} fbHistLoading={fbHistLoading} sideCard={sideCard} fadeIn={fadeIn} />
+            <HomeSidebar userCode={userCode} userTier={userTier} userEmail={userEmail} authMethod={authMethod} onLogout={onLogout} totalCount={totalCount} weekCount={weekCount} bestMock={bestMock} isChallenge={isChallenge} copied={copied} copyCode={copyCode} logoutHover={logoutHover} setLogoutHover={setLogoutHover} fbOpen={fbOpen} setFbOpen={setFbOpen} fbText={fbText} setFbText={setFbText} fbBusy={fbBusy} fbSent={fbSent} feedbackMsg={feedbackMsg} submitFeedback={submitFeedback} fbHistory={fbHistory} fbHistLoading={fbHistLoading} sideCard={sideCard} fadeIn={fadeIn} />
 
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ marginBottom: 16, ...fadeIn(50) }}>

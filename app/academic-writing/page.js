@@ -2,6 +2,7 @@
 import { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { WritingTask } from "../../components/writing/WritingTask";
+import UsageGateWrapper from "../../components/shared/UsageGateWrapper";
 import { getTaskTimeSeconds, normalizePracticeMode } from "../../lib/practiceMode";
 import { normalizeReportLanguage } from "../../lib/reportLanguage";
 
@@ -13,17 +14,20 @@ function AcademicWritingPageClient() {
   const retryPromptId = String(searchParams.get("retryPromptId") || "").trim();
   const initialPracticeRootId = String(searchParams.get("practiceRootId") || "").trim();
   const retryFromAttempt = Number(searchParams.get("retryFromAttempt") || 0);
+  const onExit = () => router.push("/");
   return (
-    <WritingTask
-      onExit={() => router.push("/")}
-      type="discussion"
-      timeLimitSeconds={getTaskTimeSeconds("discussion", mode)}
-      practiceMode={mode}
-      reportLanguage={reportLanguage}
-      initialPromptId={retryPromptId}
-      initialPracticeRootId={initialPracticeRootId}
-      initialPracticeAttempt={Number.isFinite(retryFromAttempt) && retryFromAttempt > 0 ? retryFromAttempt + 1 : 1}
-    />
+    <UsageGateWrapper onExit={onExit}>
+      <WritingTask
+        onExit={onExit}
+        type="discussion"
+        timeLimitSeconds={getTaskTimeSeconds("discussion", mode)}
+        practiceMode={mode}
+        reportLanguage={reportLanguage}
+        initialPromptId={retryPromptId}
+        initialPracticeRootId={initialPracticeRootId}
+        initialPracticeAttempt={Number.isFinite(retryFromAttempt) && retryFromAttempt > 0 ? retryFromAttempt + 1 : 1}
+      />
+    </UsageGateWrapper>
   );
 }
 
