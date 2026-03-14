@@ -11,6 +11,17 @@ function todayDate() {
   return new Date().toISOString().split("T")[0];
 }
 
+function isProTier(user) {
+  if (user.tier !== "pro" && user.tier !== "legacy") return false;
+  if (user.tier === "legacy") return true;
+  // Check expiration for pro
+  if (user.tier_expires_at) {
+    const t = new Date(user.tier_expires_at).getTime();
+    if (Number.isFinite(t) && t <= Date.now()) return false;
+  }
+  return true;
+}
+
 /**
  * GET /api/usage?code=XXXXXX — check remaining daily usage
  */
@@ -24,16 +35,20 @@ export async function GET(request) {
     const code = String(searchParams.get("code") || "").toUpperCase().trim();
     if (!code) return jsonError(400, "Code is required");
 
-    // Check user tier
     const { data: user } = await supabaseAdmin
       .from("users")
-      .select("tier")
+      .select("tier, tier_expires_at")
       .eq("code", code)
       .maybeSingle();
 
     if (!user) return jsonError(404, "User not found");
 
-    const isPro = user.tier === "pro" || user.tier === "legacy";
+    const isPro = isProTier(user);
+
+    // Auto-downgrade expired pro in DB
+    if (!isPro && user.tier === "pro") {
+      await supabaseAdmin.from("users").update({ tier: "free", tier_expires_at: null }).eq("code", code);
+    }
 
     const today = todayDate();
     const { data: usage } = await supabaseAdmin
@@ -46,7 +61,6 @@ export async function GET(request) {
     const used = usage?.usage_count || 0;
 
     if (isPro) {
-      // Pro users see "unlimited" but server silently tracks usage
       return Response.json({ remaining: -1, limit: -1 });
     }
 
@@ -72,16 +86,21 @@ export async function POST(request) {
     const code = String(body?.code || "").toUpperCase().trim();
     if (!code) return jsonError(400, "Code is required");
 
-    // Check user tier
     const { data: user } = await supabaseAdmin
       .from("users")
-      .select("tier")
+      .select("tier, tier_expires_at")
       .eq("code", code)
       .maybeSingle();
 
     if (!user) return jsonError(404, "User not found");
 
-    const isPro = user.tier === "pro" || user.tier === "legacy";
+    const isPro = isProTier(user);
+
+    // Auto-downgrade expired pro in DB
+    if (!isPro && user.tier === "pro") {
+      await supabaseAdmin.from("users").update({ tier: "free", tier_expires_at: null }).eq("code", code);
+    }
+
     const limit = isPro ? PRO_DAILY_LIMIT : FREE_DAILY_LIMIT;
 
     const today = todayDate();
