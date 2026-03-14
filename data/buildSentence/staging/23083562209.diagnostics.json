@@ -1,0 +1,427 @@
+{
+  "generated_at": "2026-03-14T07:43:44.266Z",
+  "targetSets": 6,
+  "outputPath": "/home/runner/work/toefl_writing/toefl_writing/data/buildSentence/staging/23083562209.json",
+  "rounds": [
+    {
+      "round": 1,
+      "phase": "broad",
+      "mode": "broad",
+      "gap": {
+        "total": 186,
+        "diffGap": 90,
+        "typeGap": 6,
+        "distractorGap": 42,
+        "assemblyBlockingGap": 48
+      },
+      "assemblyState": {
+        "total": 0,
+        "diffCounts": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0
+        },
+        "embedded": 0,
+        "negation": 0,
+        "distractor": 0,
+        "qmark": 0,
+        "nonEmbedded": 0,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 24,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 36,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "medium": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "hard": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "negation": 0,
+          "negationCap": 0,
+          "distractor": 0,
+          "nonEmbedded": 0
+        },
+        "assemblableSets": 0,
+        "remainingSets": 6,
+        "remainingRecipe": {
+          "sets": 6,
+          "diff": {
+            "easy": 6,
+            "medium": 42,
+            "hard": 12
+          },
+          "style": {
+            "embeddedMin": 30,
+            "negationMin": 12,
+            "distractorMin": 42,
+            "nonEmbeddedMin": 6,
+            "embeddedCapacity": 54,
+            "negationCapacity": 24,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embedded": 30,
+          "negation": 12,
+          "distractor": 42,
+          "nonEmbedded": 6,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 0,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 42,
+            "priority": 252
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 30,
+            "priority": 210
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 42,
+            "priority": 126
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 12,
+            "priority": 96
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 12,
+            "priority": 60
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 6,
+            "priority": 42
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 6,
+            "priority": 12
+          }
+        ],
+        "progressRatios": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "nonEmbedded": 0,
+          "distractor": 0,
+          "negation": 0
+        },
+        "assemblyProgressScore": 0
+      },
+      "spec": [
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "easy",
+          "count": 2
+        },
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 1
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "specSelection": null,
+      "result": {
+        "generated": 10,
+        "accepted": 1,
+        "rejected": 9,
+        "rejectReasons": {
+          "review:ets<72": 6,
+          "review:blocker:tmp_r1_q1: distractor 'hike' directly replaces 'hiked' in the contact clause position — 'The trail I hike last weekend had some stunning views' is ungrammatical due to tense mismatch with 'last weekend', so this is borderline safe, but the base-form distractor 'hike' vs. past 'hiked' is too close and the sentence without 'last weekend' ('The trail I hike had some stunning views') is grammatical — ambiguity risk is moderate; however the stronger blocker is that the answer omits the distractor test on the main verb 'had', leaving the contact-clause slot as the only decision point with a near-valid alternative": 1,
+          "review:blocker:tmp_r1_q4: prompt/answer mismatch — prompt asks about 'the park closing time' but the answer introduces 'the botanical garden', which is a different, unmentioned entity; the answer does not respond to the prompt|tmp_r1_q4: indirect question uses inverted word order — answer should be 'I am not sure when the botanical garden closes on Sundays' but chunk ordering ambiguity: 'am not' and 'sure' are separate from each other, allowing 'I sure am not when...' or other mis-assemblies; more critically, prompt asks about 'park closing time' but answer introduces 'botanical garden' with no context — mismatch creates solvability failure": 1,
+          "review:blocker:tmp_r1_q9: distractor DIRECTLY replaces one word to form a valid sentence — substituting 'carried' for 'carries' yields 'The store next to the post office carried a wide range of jackets', which is fully grammatical|tmp_r1_q9: chunk fragmentation of 'next to the post office' into five single tokens (next / to / the / post / office) creates clearly ambiguous order — multiple valid prepositional arrangements are constructible, and the five-token run is not a natural collocation justifying splitting; this is a critical ambiguity blocker": 1
+        },
+        "typeStats": {
+          "negation": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:ets<72": 2
+            }
+          },
+          "3rd-reporting": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "review:ets<72": 1
+            }
+          },
+          "1st-embedded": {
+            "generated": 3,
+            "accepted": 1,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r1_q4: prompt/answer mismatch — prompt asks about 'the park closing time' but the answer introduces 'the botanical garden', which is a different, unmentioned entity; the answer does not respond to the prompt|tmp_r1_q4: indirect question uses inverted word order — answer should be 'I am not sure when the botanical garden closes on Sundays' but chunk ordering ambiguity: 'am not' and 'sure' are separate from each other, allowing 'I sure am not when...' or other mis-assemblies; more critically, prompt asks about 'park closing time' but answer introduces 'botanical garden' with no context — mismatch creates solvability failure": 1,
+              "review:ets<72": 1
+            }
+          },
+          "interrogative": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          },
+          "direct": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:ets<72": 1,
+              "review:blocker:tmp_r1_q9: distractor DIRECTLY replaces one word to form a valid sentence — substituting 'carried' for 'carries' yields 'The store next to the post office carried a wide range of jackets', which is fully grammatical|tmp_r1_q9: chunk fragmentation of 'next to the post office' into five single tokens (next / to / the / post / office) creates clearly ambiguous order — multiple valid prepositional arrangements are constructible, and the five-token run is not a natural collocation justifying splitting; this is a critical ambiguity blocker": 1
+            }
+          },
+          "relative": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:blocker:tmp_r1_q1: distractor 'hike' directly replaces 'hiked' in the contact clause position — 'The trail I hike last weekend had some stunning views' is ungrammatical due to tense mismatch with 'last weekend', so this is borderline safe, but the base-form distractor 'hike' vs. past 'hiked' is too close and the sentence without 'last weekend' ('The trail I hike had some stunning views') is grammatical — ambiguity risk is moderate; however the stronger blocker is that the answer omits the distractor test on the main verb 'had', leaving the contact-clause slot as the only decision point with a near-valid alternative": 1,
+              "review:ets<72": 1
+            }
+          }
+        },
+        "deltaAssemblable": 0,
+        "deltaProgress": 0.02,
+        "acceptedGainRate": 0.05
+      },
+      "nextGap": {
+        "total": 183,
+        "diffGap": 89,
+        "typeGap": 5,
+        "distractorGap": 41,
+        "assemblyBlockingGap": 48
+      },
+      "nextAssemblyState": {
+        "total": 1,
+        "diffCounts": {
+          "easy": 0,
+          "medium": 1,
+          "hard": 0
+        },
+        "embedded": 1,
+        "negation": 0,
+        "distractor": 1,
+        "qmark": 0,
+        "nonEmbedded": 0,
+        "need": {
+          "easy": 6,
+          "medium": 42,
+          "hard": 12,
+          "embeddedMin": 30,
+          "embeddedMax": 54,
+          "negationMin": 12,
+          "negationMax": 24,
+          "distractorMin": 42,
+          "nonEmbeddedMin": 6,
+          "nonNegationMin": 36,
+          "qmarkMax": 12
+        },
+        "slotInventory": {
+          "easy": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "medium": {
+            "total": 1,
+            "embedded": 1,
+            "nonEmbedded": 0,
+            "negation": 0
+          },
+          "hard": {
+            "total": 0,
+            "embedded": 0,
+            "nonEmbedded": 0,
+            "negation": 0
+          }
+        },
+        "assemblableBy": {
+          "easy": 0,
+          "medium": 0,
+          "hard": 0,
+          "embedded": 0,
+          "negation": 0,
+          "negationCap": 0,
+          "distractor": 0,
+          "nonEmbedded": 0
+        },
+        "assemblableSets": 0,
+        "remainingSets": 6,
+        "remainingRecipe": {
+          "sets": 6,
+          "diff": {
+            "easy": 6,
+            "medium": 41,
+            "hard": 12
+          },
+          "style": {
+            "embeddedMin": 29,
+            "negationMin": 12,
+            "distractorMin": 41,
+            "nonEmbeddedMin": 6,
+            "embeddedCapacity": 53,
+            "negationCapacity": 24,
+            "qmarkCapacity": 12
+          }
+        },
+        "deficits": {
+          "easy": 6,
+          "medium": 41,
+          "hard": 12,
+          "embedded": 29,
+          "negation": 12,
+          "distractor": 41,
+          "nonEmbedded": 6,
+          "assemblableSets": 6
+        },
+        "embeddedOverflow": 1,
+        "negationOverflow": 0,
+        "qmarkOverflow": 0,
+        "limitingFactors": [
+          {
+            "key": "medium_shortage",
+            "gap": 41,
+            "priority": 246
+          },
+          {
+            "key": "embedded_shortage",
+            "gap": 29,
+            "priority": 203
+          },
+          {
+            "key": "distractor_shortage",
+            "gap": 41,
+            "priority": 123
+          },
+          {
+            "key": "hard_shortage",
+            "gap": 12,
+            "priority": 96
+          },
+          {
+            "key": "negation_shortage",
+            "gap": 12,
+            "priority": 60
+          },
+          {
+            "key": "non_embedded_shortage",
+            "gap": 6,
+            "priority": 42
+          },
+          {
+            "key": "easy_shortage",
+            "gap": 6,
+            "priority": 12
+          },
+          {
+            "key": "embedded_overflow",
+            "gap": 1,
+            "priority": 7
+          }
+        ],
+        "progressRatios": {
+          "easy": 0,
+          "medium": 0.023809523809523808,
+          "hard": 0,
+          "embedded": 0.03333333333333333,
+          "nonEmbedded": 0,
+          "distractor": 0.023809523809523808,
+          "negation": 0
+        },
+        "assemblyProgressScore": 0.02
+      },
+      "phaseSignals": {
+        "strongTargeting": false,
+        "repairMode": false,
+        "strongGateReady": false,
+        "repairGateReady": false,
+        "strongReasons": [],
+        "repairReasons": [],
+        "momentum": {
+          "windowCount": 0,
+          "accepted": 0,
+          "generated": 0,
+          "poolGrowth": 0,
+          "deltaAssemblable": 0,
+          "deltaProgress": 0,
+          "zeroGainRounds": 0,
+          "zeroProgressRounds": 0,
+          "acceptedGainRate": 0
+        }
+      },
+      "typeReliability": {
+        "negation": 0.8,
+        "3rd-reporting": 0.8,
+        "1st-embedded": 0.8,
+        "interrogative": 0.8,
+        "direct": 0.8,
+        "relative": 0.8
+      }
+    }
+  ],
+  "final": null
+}
