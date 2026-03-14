@@ -2566,6 +2566,7 @@ async function callModelCreative(userPrompt) {
   if (!process.env.DEEPSEEK_API_KEY) {
     throw new Error("DEEPSEEK_API_KEY required for generator (callModelCreative)");
   }
+  console.log("  [creative] using DeepSeek V3.2 (deepseek-chat)");
   return callDeepSeekViaCurl({
     apiKey: process.env.DEEPSEEK_API_KEY,
     proxyUrl: resolveProxyUrl(),
