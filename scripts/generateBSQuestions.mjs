@@ -1272,7 +1272,7 @@ RULE: Object noun phrases ("the library", "the report") belong in CHUNKS, NOT pr
 RULE: prefilled is ≤3 words maximum. Prefer 2-word. A 4-word+ prefilled will be automatically rejected.
 
 ## CHUNK GRANULARITY — CRITICAL:
-Real TOEFL data: ~77% single-word chunks, ~23% multi-word. Target 6-7 effective chunks per item.
+Real TOEFL data: ~77% single-word chunks, ~23% multi-word. Target 5-6 effective chunks per item (TPO average: 5.8).
 
 MANDATORY multi-word chunks — NEVER atomize these:
 - Negation clusters:  "did not", "does not", "do not", "has not", "have not", "had not",
@@ -1282,18 +1282,18 @@ MANDATORY multi-word chunks — NEVER atomize these:
 - Phrasal verbs:      "find out", "pick up", "carry out", "sign up"
 - Aux + participle:   "had gone", "had been", "has been", "will be", "been extended", "is scheduled"
 - Fixed collocations: "no idea", "what time", "on time", "in stock", "on Friday", "due to"
-Target: 1-2 multi-word chunks per question from the list above.
+Target: 1 multi-word chunk per question from the list above. Allow 2 only for negation items that require "did not" etc.
 
 SINGLE-WORD: subject pronouns (i/he/she/they), question words (where/when/if/whether),
 standalone auxiliaries (did/was/were used alone — only when NOT followed by "not" in the answer).
 
 THE KEY MATH: R = answer word count − prefilled word count.
-- Target R = 6-7 (yields ~6-7 effective chunks). This is the goal.
+- Target R = 7-8 (yields ~5-6 effective chunks after multi-word grouping). This is the goal.
 - HARD RULE: Choose the SUBJECT as prefilled (pronoun or subject NP), not the object.
   For 1st-person sentences: prefilled=["i"] is almost always correct.
   For 3rd-person sentences: use a DESCRIPTIVE 2-3 word subject NP. NEVER bare pronouns ["he"]/["she"]/["they"]. 2-word: ["the professor"], ["the manager"], ["the student"], ["the librarian"]. 3-word when natural: ["some colleagues"], ["her study partner"], ["the shop owner"].
 - HARD RULE: prefilled must be ≤3 words. Prefer 2-word (e.g. "the professor", "could you", "the manager"). 3-word is allowed only when the subject NP has no natural 2-word form. Phrases with 4+ words will be REJECTED — always shorten to the core noun.
-- If R > 8 (too many draggable words): shorten the sentence.
+- If R > 9 (too many draggable words): shorten the sentence.
 - If R ≤5 (sentence too short): prefilled=[] is acceptable.
 
 GOOD example (1st-person):
@@ -1952,6 +1952,7 @@ Rules:
 - Valid types: negation, 3rd-reporting, 1st-embedded, interrogative, direct, relative
 - Valid difficulties: easy, medium, hard
 - Avoid over-producing any single type just to satisfy diversity.
+- TPO type targets: negation ~20%, interrogative ~8%. Do NOT over-produce negation (max 2 per batch). Include at least 1 interrogative per batch when not circuit-breaker blocked.
 - In boost mode, prioritize precision over breadth: target the single most blocking gap first.
 - If all difficulty/style gaps are small, return a practical batch that still helps assemble the next set.
 
