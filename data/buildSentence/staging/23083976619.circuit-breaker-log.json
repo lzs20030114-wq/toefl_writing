@@ -1,0 +1,561 @@
+{
+  "generated_at": "2026-03-14T08:26:56.839Z",
+  "active": {
+    "relative": {
+      "sinceRound": 4,
+      "untilRound": 7,
+      "lastEvent": {
+        "triggeredAt": "2026-03-14T08:23:08.801Z",
+        "round": 4,
+        "mode": "normal",
+        "type": "relative",
+        "generated": 5,
+        "accepted": 1,
+        "rejected": 4,
+        "acceptRate": 0.2,
+        "reasons": [
+          [
+            "fatal: distractor must not appear in answer",
+            1
+          ],
+          [
+            "fatal: chunks[4]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+            1
+          ],
+          [
+            "review:blocker:tmp_r4_q2: distractor 'try' directly replaces 'tried this morning' chunk — but more critically, chunk 'tried this morning' bundles the pronoun-less contact clause verb with the time adverbial, while 'i' is a separate chunk; students must place 'i' before 'tried this morning' to form the contact clause, creating genuine ambiguity about whether the intended assembly is 'the croissant i tried this morning' or some other order. Additionally, 'try' as distractor: substituting 'try' for 'tried this morning' yields 'The croissant I try was incredibly flaky and buttery' — ungrammatical (tense mismatch), so distractor is safe. However, the chunk split placing 'i' and 'tried this morning' as separate movable pieces creates ordering ambiguity since a student could plausibly attempt 'The croissant tried this morning I was...' — flag for chunk design ambiguity only, not distractor.",
+            1
+          ],
+          [
+            "review:blocker:tmp_r4_q3: ambiguous chunk ordering — 'she' and 'joined' are separate chunks, allowing students to place 'she' in multiple positions (e.g., 'The study group she joined meets there...' vs. 'The study group joined she meets there...' is ungrammatical, so that is safe). However, 'study' and 'group' are split into separate single-word chunks, meaning students could produce 'The group study she joined meets there every Thursday afternoon' — a plausible but wrong order. This creates non-trivial ordering ambiguity for the compound noun 'study group'.",
+            1
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 4,
+            "spec": [
+              {
+                "type": "direct",
+                "difficulty": "medium",
+                "count": 1
+              },
+              {
+                "type": "relative",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "interrogative",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "direct",
+                "difficulty": "hard",
+                "count": 2
+              },
+              {
+                "type": "relative",
+                "difficulty": "easy",
+                "count": 2
+              },
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 1
+              }
+            ],
+            "stats": {
+              "generated": 5,
+              "accepted": 1,
+              "rejected": 4,
+              "reasons": {
+                "fatal: distractor must not appear in answer": 1,
+                "fatal: chunks[4]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+                "review:blocker:tmp_r4_q2: distractor 'try' directly replaces 'tried this morning' chunk — but more critically, chunk 'tried this morning' bundles the pronoun-less contact clause verb with the time adverbial, while 'i' is a separate chunk; students must place 'i' before 'tried this morning' to form the contact clause, creating genuine ambiguity about whether the intended assembly is 'the croissant i tried this morning' or some other order. Additionally, 'try' as distractor: substituting 'try' for 'tried this morning' yields 'The croissant I try was incredibly flaky and buttery' — ungrammatical (tense mismatch), so distractor is safe. However, the chunk split placing 'i' and 'tried this morning' as separate movable pieces creates ordering ambiguity since a student could plausibly attempt 'The croissant tried this morning I was...' — flag for chunk design ambiguity only, not distractor.": 1,
+                "review:blocker:tmp_r4_q3: ambiguous chunk ordering — 'she' and 'joined' are separate chunks, allowing students to place 'she' in multiple positions (e.g., 'The study group she joined meets there...' vs. 'The study group joined she meets there...' is ungrammatical, so that is safe). However, 'study' and 'group' are split into separate single-word chunks, meaning students could produce 'The group study she joined meets there every Thursday afternoon' — a plausible but wrong order. This creates non-trivial ordering ambiguity for the compound noun 'study group'.": 1
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 7
+      }
+    },
+    "direct": {
+      "sinceRound": 5,
+      "untilRound": 8,
+      "lastEvent": {
+        "triggeredAt": "2026-03-14T08:26:56.839Z",
+        "round": 5,
+        "mode": "normal",
+        "type": "direct",
+        "generated": 5,
+        "accepted": 0,
+        "rejected": 5,
+        "acceptRate": 0,
+        "reasons": [
+          [
+            "review:score<78",
+            3
+          ],
+          [
+            "review:ets<72",
+            2
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 4,
+            "spec": [
+              {
+                "type": "direct",
+                "difficulty": "medium",
+                "count": 1
+              },
+              {
+                "type": "relative",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "interrogative",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "direct",
+                "difficulty": "hard",
+                "count": 2
+              },
+              {
+                "type": "relative",
+                "difficulty": "easy",
+                "count": 2
+              },
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 1
+              }
+            ],
+            "stats": {
+              "generated": 2,
+              "accepted": 0,
+              "rejected": 2,
+              "reasons": {
+                "review:score<78": 2
+              }
+            }
+          },
+          {
+            "round": 5,
+            "spec": [
+              {
+                "type": "direct",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "3rd-reporting",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "interrogative",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "direct",
+                "difficulty": "hard",
+                "count": 2
+              },
+              {
+                "type": "1st-embedded",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "negation",
+                "difficulty": "easy",
+                "count": 1
+              }
+            ],
+            "stats": {
+              "generated": 3,
+              "accepted": 0,
+              "rejected": 3,
+              "reasons": {
+                "review:ets<72": 2,
+                "review:score<78": 1
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 8
+      }
+    }
+  },
+  "events": [
+    {
+      "triggeredAt": "2026-03-14T08:23:08.801Z",
+      "round": 4,
+      "mode": "normal",
+      "type": "relative",
+      "generated": 5,
+      "accepted": 1,
+      "rejected": 4,
+      "acceptRate": 0.2,
+      "reasons": [
+        [
+          "fatal: distractor must not appear in answer",
+          1
+        ],
+        [
+          "fatal: chunks[4]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")",
+          1
+        ],
+        [
+          "review:blocker:tmp_r4_q2: distractor 'try' directly replaces 'tried this morning' chunk — but more critically, chunk 'tried this morning' bundles the pronoun-less contact clause verb with the time adverbial, while 'i' is a separate chunk; students must place 'i' before 'tried this morning' to form the contact clause, creating genuine ambiguity about whether the intended assembly is 'the croissant i tried this morning' or some other order. Additionally, 'try' as distractor: substituting 'try' for 'tried this morning' yields 'The croissant I try was incredibly flaky and buttery' — ungrammatical (tense mismatch), so distractor is safe. However, the chunk split placing 'i' and 'tried this morning' as separate movable pieces creates ordering ambiguity since a student could plausibly attempt 'The croissant tried this morning I was...' — flag for chunk design ambiguity only, not distractor.",
+          1
+        ],
+        [
+          "review:blocker:tmp_r4_q3: ambiguous chunk ordering — 'she' and 'joined' are separate chunks, allowing students to place 'she' in multiple positions (e.g., 'The study group she joined meets there...' vs. 'The study group joined she meets there...' is ungrammatical, so that is safe). However, 'study' and 'group' are split into separate single-word chunks, meaning students could produce 'The group study she joined meets there every Thursday afternoon' — a plausible but wrong order. This creates non-trivial ordering ambiguity for the compound noun 'study group'.",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "easy",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 5,
+            "accepted": 1,
+            "rejected": 4,
+            "reasons": {
+              "fatal: distractor must not appear in answer": 1,
+              "fatal: chunks[4]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+              "review:blocker:tmp_r4_q2: distractor 'try' directly replaces 'tried this morning' chunk — but more critically, chunk 'tried this morning' bundles the pronoun-less contact clause verb with the time adverbial, while 'i' is a separate chunk; students must place 'i' before 'tried this morning' to form the contact clause, creating genuine ambiguity about whether the intended assembly is 'the croissant i tried this morning' or some other order. Additionally, 'try' as distractor: substituting 'try' for 'tried this morning' yields 'The croissant I try was incredibly flaky and buttery' — ungrammatical (tense mismatch), so distractor is safe. However, the chunk split placing 'i' and 'tried this morning' as separate movable pieces creates ordering ambiguity since a student could plausibly attempt 'The croissant tried this morning I was...' — flag for chunk design ambiguity only, not distractor.": 1,
+              "review:blocker:tmp_r4_q3: ambiguous chunk ordering — 'she' and 'joined' are separate chunks, allowing students to place 'she' in multiple positions (e.g., 'The study group she joined meets there...' vs. 'The study group joined she meets there...' is ungrammatical, so that is safe). However, 'study' and 'group' are split into separate single-word chunks, meaning students could produce 'The group study she joined meets there every Thursday afternoon' — a plausible but wrong order. This creates non-trivial ordering ambiguity for the compound noun 'study group'.": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 7
+    },
+    {
+      "triggeredAt": "2026-03-14T08:26:56.839Z",
+      "round": 5,
+      "mode": "normal",
+      "type": "direct",
+      "generated": 5,
+      "accepted": 0,
+      "rejected": 5,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:score<78",
+          3
+        ],
+        [
+          "review:ets<72",
+          2
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "easy",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "review:score<78": 2
+            }
+          }
+        },
+        {
+          "round": 5,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "negation",
+              "difficulty": "easy",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "review:ets<72": 2,
+              "review:score<78": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 8
+    }
+  ],
+  "history": [
+    {
+      "round": 4,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 1
+        },
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "interrogative",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "direct",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "relative",
+          "difficulty": "easy",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 1
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r4_q10: distractor 'realized' — substituting for the correct 'did not realize' sequence: 'I realized how large the new science building actually was' is FULLY GRAMMATICAL. This is a direct 1-word substitution (swap 'did not' + 'realize' for 'realized') that yields a valid sentence. This IS a blocker.": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 2,
+          "accepted": 1,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r4_q5: distractor DIRECTLY replaces one word to form a valid sentence — 'Do you know if the pharmacy downstairs accepted my insurance plan?' is fully grammatical (simple past in embedded clause is acceptable), making 'accepted' a direct one-word substitution blocker": 1
+          }
+        },
+        "direct": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "review:score<78": 2
+          }
+        },
+        "relative": {
+          "generated": 5,
+          "accepted": 1,
+          "rejected": 4,
+          "reasons": {
+            "fatal: distractor must not appear in answer": 1,
+            "fatal: chunks[4]: isolated floating adverb \"yesterday\" creates multi-solution ambiguity — bind it to the verb (e.g. \"discussed yesterday\")": 1,
+            "review:blocker:tmp_r4_q2: distractor 'try' directly replaces 'tried this morning' chunk — but more critically, chunk 'tried this morning' bundles the pronoun-less contact clause verb with the time adverbial, while 'i' is a separate chunk; students must place 'i' before 'tried this morning' to form the contact clause, creating genuine ambiguity about whether the intended assembly is 'the croissant i tried this morning' or some other order. Additionally, 'try' as distractor: substituting 'try' for 'tried this morning' yields 'The croissant I try was incredibly flaky and buttery' — ungrammatical (tense mismatch), so distractor is safe. However, the chunk split placing 'i' and 'tried this morning' as separate movable pieces creates ordering ambiguity since a student could plausibly attempt 'The croissant tried this morning I was...' — flag for chunk design ambiguity only, not distractor.": 1,
+            "review:blocker:tmp_r4_q3: ambiguous chunk ordering — 'she' and 'joined' are separate chunks, allowing students to place 'she' in multiple positions (e.g., 'The study group she joined meets there...' vs. 'The study group joined she meets there...' is ungrammatical, so that is safe). However, 'study' and 'group' are split into separate single-word chunks, meaning students could produce 'The group study she joined meets there every Thursday afternoon' — a plausible but wrong order. This creates non-trivial ordering ambiguity for the compound noun 'study group'.": 1
+          }
+        }
+      }
+    },
+    {
+      "round": 5,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "interrogative",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "direct",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "hard",
+          "count": 1
+        },
+        {
+          "type": "negation",
+          "difficulty": "easy",
+          "count": 1
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:score<78": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 2,
+          "accepted": 2,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:score<78": 1
+          }
+        },
+        "interrogative": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "review:score<78": 2
+          }
+        },
+        "direct": {
+          "generated": 3,
+          "accepted": 0,
+          "rejected": 3,
+          "reasons": {
+            "review:ets<72": 2,
+            "review:score<78": 1
+          }
+        },
+        "relative": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:blocker:tmp_r5_q8: distractor 'choose' substitutes for 'you chose' chunk — but 'you chose' is one chunk so substitution requires chunk-level swap yielding 'the seat you choose is not available' which IS grammatical — blocker: tmp_r5_q8: distractor 'choose' replaces chunk 'you chose' to form a fully grammatical sentence ('the seat you choose is not available')": 1
+          }
+        }
+      }
+    }
+  ]
+}
