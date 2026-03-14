@@ -172,6 +172,7 @@ export function HomeSidebar({
   const [boundEmail, setBoundEmail] = useState(userEmail);
   const [freeRemaining, setFreeRemaining] = useState(null);
   const [upgradeOpen, setUpgradeOpen] = useState(false);
+  const [codeHidden, setCodeHidden] = useState(true);
 
   const tier = userTier || "free";
 
@@ -328,10 +329,13 @@ export function HomeSidebar({
         {showCode && (
           <div style={{ marginBottom: 8 }}>
             <div style={sectionTitle(isChallenge)}>登录码</div>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-              <span style={{ fontSize: 18, fontWeight: 800, color: isChallenge ? CH.t1 : T.t1, fontVariantNumeric: "tabular-nums", letterSpacing: "0.05em", fontFamily: "monospace" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
+              <span style={{ fontSize: 18, fontWeight: 800, color: isChallenge ? CH.t1 : T.t1, fontVariantNumeric: "tabular-nums", letterSpacing: "0.05em", fontFamily: "monospace", filter: codeHidden ? "blur(5px)" : "none", transition: "filter .2s", userSelect: codeHidden ? "none" : "auto" }}>
                 {userCode || "-"}
               </span>
+              <button onClick={() => setCodeHidden((v) => !v)} style={{ border: "none", background: "none", color: isChallenge ? CH.t2 : T.t3, fontSize: 13, cursor: "pointer", padding: "2px 4px", lineHeight: 1, fontFamily: HOME_FONT }} title={codeHidden ? "显示" : "隐藏"}>
+                {codeHidden ? "\u{1F441}" : "\u{1F648}"}
+              </button>
               {userCode ? <button onClick={copyCode} style={{ border: `1px solid ${copied ? T.primary : (isChallenge ? CH.cardBorder : T.bdr)}`, background: copied ? T.primarySoft : (isChallenge ? "rgba(255,255,255,0.05)" : T.bg), color: copied ? T.primary : (isChallenge ? CH.t2 : T.t2), borderRadius: 6, padding: "2px 7px", fontSize: 11, fontWeight: 600, cursor: "pointer", transition: "all .15s", fontFamily: HOME_FONT }}>{copied ? "已复制" : "复制"}</button> : null}
             </div>
           </div>
