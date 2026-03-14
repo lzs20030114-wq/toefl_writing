@@ -19,7 +19,8 @@ const I18N = {
     emailPlaceholder: "输入邮箱地址",
     sendOtp: "发送验证码",
     sendingOtp: "发送中...",
-    emailHelper: "首次使用将自动注册，每日赠送 3 次免费练习",
+    emailHelper: "免费用户每日 3 次练习机会",
+    emailAutoRegister: "未注册的邮箱将自动创建账户",
     codePlaceholder: "输入 6 位登录码",
     login: "登录",
     loggingIn: "登录中...",
@@ -55,7 +56,8 @@ const I18N = {
     emailPlaceholder: "Enter email address",
     sendOtp: "Send Code",
     sendingOtp: "Sending...",
-    emailHelper: "First-time users get 3 free daily sessions",
+    emailHelper: "Free users get 3 daily sessions",
+    emailAutoRegister: "Unregistered emails will be auto-enrolled",
     codePlaceholder: "Enter 6-character code",
     login: "Sign In",
     loggingIn: "Signing in...",
@@ -172,10 +174,10 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
     if (otpInput.length < 6) { setError(t.invalidOtp); return; }
     setLoading(true);
     setError("");
-    const { userCode: code, tier, email, auth_method, error: verifyError } = await verifyEmailOTP(otpEmail, otpInput);
+    const { userCode: code, tier, email, auth_method, isNewUser, error: verifyError } = await verifyEmailOTP(otpEmail, otpInput);
     setLoading(false);
     if (verifyError) { setError(verifyError); return; }
-    onLoginSuccess({ code, tier, email: email || otpEmail, auth_method: auth_method || "email" });
+    onLoginSuccess({ code, tier, email: email || otpEmail, auth_method: auth_method || "email", isNewUser });
   };
 
   const handleCodeLogin = async () => {
@@ -280,6 +282,7 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
                   {loading ? t.sendingOtp : t.sendOtp}
                 </button>
                 <p style={{ fontSize: 11, color: C.t3, textAlign: "center", marginTop: 10 }}>{t.emailHelper}</p>
+                <p style={{ fontSize: 11, color: C.t3, textAlign: "center", marginTop: 4 }}>{t.emailAutoRegister}</p>
               </div>
             )}
 
@@ -379,8 +382,11 @@ export default function LoginGate({ children }) {
     }
   }, []);
 
+  // ── Welcome toast ──
+  const [welcomeMsg, setWelcomeMsg] = useState(null);
+
   // ── Login success callback ──
-  function handleLoginSuccess({ code, tier, email, auth_method }) {
+  function handleLoginSuccess({ code, tier, email, auth_method, isNewUser }) {
     saveAuth(code, { authMethod: auth_method, tier, email });
     setUserCode(code);
     setUserTier(tier || "free");
@@ -391,6 +397,10 @@ export default function LoginGate({ children }) {
       (() => { try { return localStorage.getItem(IMPORT_DISMISSED_KEY) !== "1"; } catch { return true; } })()
       && getLocalSessionCount() > 0
     );
+    if (isNewUser) {
+      setWelcomeMsg("欢迎！已为你自动创建账户");
+      setTimeout(() => setWelcomeMsg(null), 4000);
+    }
   }
 
   // ── Logout ──
@@ -439,6 +449,11 @@ export default function LoginGate({ children }) {
             onClose={() => setLoginModalOpen(false)}
             onLoginSuccess={handleLoginSuccess}
           />
+        )}
+        {welcomeMsg && (
+          <div style={{ position: "fixed", top: 64, left: "50%", transform: "translateX(-50%)", background: C.blue, color: "#fff", padding: "10px 24px", borderRadius: 10, fontSize: 14, fontWeight: 600, zIndex: 10001, boxShadow: "0 8px 24px rgba(0,0,0,0.15)", fontFamily: FONT }}>
+            {welcomeMsg}
+          </div>
         )}
         {children({
           userCode,
