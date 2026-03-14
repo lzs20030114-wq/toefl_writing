@@ -7,7 +7,7 @@ import { setCurrentUser } from "../lib/sessionStore";
 export default function Page() {
   return (
     <LoginGate>
-      {({ userCode, userTier, userEmail, authMethod, onLogout }) => {
+      {({ userCode, userTier, userEmail, authMethod, isLoggedIn, showLoginModal, onLogout }) => {
         setCurrentUser(userCode);
         return (
           <HomePageClient
@@ -15,6 +15,8 @@ export default function Page() {
             userTier={userTier}
             userEmail={userEmail}
             authMethod={authMethod}
+            isLoggedIn={isLoggedIn}
+            showLoginModal={showLoginModal}
             onLogout={onLogout}
           />
         );

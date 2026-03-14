@@ -141,6 +141,8 @@ export function HomeSidebar({
   userTier,
   userEmail,
   authMethod,
+  isLoggedIn,
+  showLoginModal,
   onLogout,
   totalCount,
   weekCount,
@@ -172,6 +174,52 @@ export function HomeSidebar({
   const isCodeUser = authMethod === "code" || authMethod === "both";
   const isEmailUser = authMethod === "email" || authMethod === "both";
   const showCode = isCodeUser && userCode;
+
+  // ── Not logged in: show compact card ──
+  if (!isLoggedIn) {
+    return (
+      <div className="home-sidebar" style={{ width: 240, minWidth: 240, flexShrink: 0, display: "flex", flexDirection: "column", gap: 10, position: "sticky", top: 80, alignSelf: "flex-start" }}>
+        <div style={{ ...sideCard({ padding: "20px 18px" }), ...fadeIn(100) }}>
+          <div style={{ width: 44, height: 44, borderRadius: 12, background: "linear-gradient(135deg,#087355,#0891B2)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14, flexShrink: 0 }}>
+            <span style={{ color: "#fff", fontSize: 20, fontWeight: 800 }}>T</span>
+          </div>
+          <div style={{ fontSize: 14, fontWeight: 700, color: isChallenge ? CH.t1 : T.t1, marginBottom: 6 }}>未登录</div>
+          <div style={{ fontSize: 12, color: isChallenge ? CH.t2 : T.t3, lineHeight: 1.5, marginBottom: 14 }}>
+            登录后可保存练习记录、同步进度。免费用户每天 3 次练习机会。
+          </div>
+          <button
+            onClick={showLoginModal}
+            style={{
+              width: "100%", padding: "10px 0", fontSize: 13, fontWeight: 700,
+              border: "none", background: T.primary, color: "#fff",
+              borderRadius: 8, cursor: "pointer", fontFamily: HOME_FONT,
+              transition: "opacity .15s",
+            }}
+          >
+            登录 / 注册
+          </button>
+        </div>
+
+        {/* Stats card (still show for guests) */}
+        <div style={{ ...sideCard({ padding: "16px 18px" }), ...fadeIn(180) }}>
+          <div style={sectionTitle(isChallenge)}>概览</div>
+          {[
+            { label: "总练习数", value: totalCount > 0 ? String(totalCount) : "-", color: T.primary },
+            { label: "近 7 天", value: String(weekCount), color: T.cyan },
+            { label: "最高模考", value: bestMock !== null ? `${bestMock.toFixed(1)}` : "-", color: T.amber },
+          ].map(({ label, value, color }, index) => (
+            <div key={label}>
+              {index > 0 ? <div style={{ height: 1, background: isChallenge ? CH.cardBorder : T.bdrSubtle, margin: "9px 0" }} /> : null}
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <span style={{ fontSize: 12, color: isChallenge ? CH.t2 : T.t2 }}>{label}</span>
+                <span style={{ fontSize: 13, fontWeight: 700, color: isChallenge ? CH.t1 : color, fontVariantNumeric: "tabular-nums" }}>{value}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="home-sidebar" style={{ width: 240, minWidth: 240, flexShrink: 0, display: "flex", flexDirection: "column", gap: 10, position: "sticky", top: 80, alignSelf: "flex-start" }}>
