@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { sendEmailOTP } from "../../lib/emailAuth";
 import { verifyBindEmail } from "../../lib/emailAuth";
 import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
@@ -71,7 +72,7 @@ function BindEmailModal({ userCode, onSuccess, onClose }) {
   return (
     <div
       onClick={onClose}
-      style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.35)", backdropFilter: "blur(4px)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center" }}
+      style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.35)", backdropFilter: "blur(4px)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center" }}
     >
       <div
         onClick={(e) => e.stopPropagation()}
@@ -174,10 +175,10 @@ export function HomeSidebar({
 
   return (
     <div className="home-sidebar" style={{ width: 240, minWidth: 240, flexShrink: 0, display: "flex", flexDirection: "column", gap: 10, position: "sticky", top: 80, alignSelf: "flex-start" }}>
-      {logoutConfirm && (
+      {logoutConfirm && createPortal(
         <div
           onClick={() => setLogoutConfirm(false)}
-          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.35)", backdropFilter: "blur(4px)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center" }}
+          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.35)", backdropFilter: "blur(4px)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center" }}
         >
           <div
             onClick={(e) => e.stopPropagation()}
@@ -198,10 +199,11 @@ export function HomeSidebar({
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
-      {bindEmailOpen && (
+      {bindEmailOpen && createPortal(
         <BindEmailModal
           userCode={userCode}
           onSuccess={(newEmail) => {
@@ -209,7 +211,8 @@ export function HomeSidebar({
             setBindEmailOpen(false);
           }}
           onClose={() => setBindEmailOpen(false)}
-        />
+        />,
+        document.body
       )}
 
       {/* User Info Card */}
