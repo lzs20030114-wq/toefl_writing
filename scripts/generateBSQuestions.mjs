@@ -61,6 +61,8 @@ const CIRCUIT_BREAKER_WINDOW = 3;
 const CIRCUIT_BREAKER_MIN_GENERATED = 4;
 const CIRCUIT_BREAKER_MIN_ACCEPT_RATE = 0.2;
 const CIRCUIT_BREAKER_COOLDOWN_ROUNDS = 3;
+// Types that must never be circuit-breaker blocked (rare but required for TPO distribution)
+const CIRCUIT_BREAKER_EXEMPT_TYPES = new Set(["interrogative"]);
 
 function loadEnv() {
   const paths = [
@@ -906,7 +908,7 @@ Examples:
 Prompt: prompt_task_kind="respond", prompt_task_text="How do you respond?" or "What do you say?"
 Distractor: "did" or "do" or morphological variant.
 SCORER FENCE (easy): Only "did not" / "do not" / "cannot" / "could not" / "am not" / "is not". NO "have not been" (passive). NO "had not" (past perfect). NO comparative. NO relative clause. NO embedded wh-clause.
-PREFILLED (easy): Use prefilled=["i"] at position 0. NEVER ["not"].`,
+PREFILLED (easy): Prefer 2-word subject NP: ["my friend"], ["the intern"]. Use ["i"] for at most 1 item. NEVER ["not"].`,
 
     medium: `ALL answers in this group: negative statement, 9-12 words, may include a short embedded element.
 Examples WITH correct prefilled (study these carefully):
@@ -919,7 +921,7 @@ Examples WITH correct prefilled (study these carefully):
   CORRECT: answer="The intern did not know why the package was rerouted."  prefilled=["the intern"] pos=0 ✔ RIGHT
 Prompt: prompt_task_kind="respond", prompt_task_text="How do you respond?" or "What do you say?" Distractor: "did"/"do" or morphological variant.
 SCORER FENCE (medium): Prefer simple past ("did not") or present perfect ("have not"). AVOID past perfect negation ("had not done" -> HARD). AVOID passive negation ("was not approved", "has not been sent" -> HARD). At most ONE advanced grammar feature.
-PREFILLED (medium/easy): ALL negation answers use the SUBJECT as prefilled. 1st-person ("I did not..."): prefilled=["i"] at position 0. 3rd-person: use a DESCRIPTIVE 2-word subject NP, e.g. prefilled=["the manager"], ["the professor"], ["the student"]. NEVER use bare ["he"]/["she"]/["they"] — always a descriptive NP. NEVER use ["not"] as prefilled — "not" belongs in chunks, not in prefilled.`,
+PREFILLED (medium/easy): ALL negation answers use the SUBJECT as prefilled. Prefer 3rd-person with 2-word NP: "The intern did not..." → prefilled=["the intern"]. Use "i" sparingly (max 1 per batch). NEVER use bare ["he"]/["she"]/["they"]. NEVER use ["not"] as prefilled.`,
 
     hard: `ALL answers in this group: negation + advanced grammar complexity, 10-13 words.
 Examples:
@@ -927,7 +929,7 @@ Examples:
 - "I did not understand why the meeting had been postponed again."
 Hard MUST come from structure: past perfect negation, passive/passive-progressive inside clause, or negation + embedded grammar trap.
 Distractor: morphological variant (e.g. "realized/realize", "approaching/approach").
-PREFILLED REMINDER: Hard sentences are 10-13 words — chunks MUST still be ≤ 8. Give the SUBJECT as prefilled: "i" for 1st-person, or 2-word descriptive NP for 3rd-person ("the professor", "the manager"). NEVER bare "he"/"she"/"they". Example: answer=11 words, prefilled=["the professor"] (2 words) -> R=9 -> shorten sentence to 10 words -> R=8. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
+PREFILLED REMINDER: Hard sentences are 10-13 words — chunks MUST still be ≤ 8. Prefer 2-word descriptive NP as prefilled ("the professor", "my advisor"). Use "i" sparingly. NEVER bare "he"/"she"/"they". Example: answer=11 words, prefilled=["the professor"] (2 words) -> R=9 -> shorten sentence to 10 words -> R=8. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
   },
 
   "3rd-reporting": {
@@ -980,7 +982,7 @@ Examples:
 - "I am not sure when the package is going to arrive."
 Distractor: "did"/"does" or function-word variant.
 SCORER FENCE (medium): Embedded clause uses simple past or simple present only. AVOID past perfect ("had done" -> HARD). AVOID passive voice in embedded clause ("has been approved", "is being processed" -> HARD). AVOID "whom". AVOID combining two advanced grammar features.
-PREFILLED (medium/easy): 1st-embedded answers are always 1st-person. Use prefilled=["i"] at position 0. Simplest and most authentic.`,
+PREFILLED (medium/easy): Prefer reframing as 3rd-person: "My colleague found out..." → prefilled=["my colleague"]. Use prefilled=["i"] for at most 1 item per batch.`,
 
     hard: `ALL answers in this group: complex first-person embedded, 10-13 words.
 Examples:
@@ -989,7 +991,7 @@ Examples:
 - "We just found out where the new library equipment is being stored." (passive progressive)
 Include passive voice OR superlative/comparative OR perfect aspect in the embedded clause. Hard MUST be signaled by grammar structure rather than answer length.
 Distractor: morphological variant (e.g. "enjoyed/enjoy", "stored/store").
-PREFILLED REMINDER: Hard sentences are 10-13 words — chunks MUST still be ≤ 8. Give the SUBJECT as prefilled: "i" for 1st-person, or 2-word descriptive NP for 3rd-person ("the professor", "the manager"). NEVER bare "he"/"she"/"they". Example: answer=11 words, prefilled=["the professor"] (2 words) -> R=9 -> shorten sentence to 10 words -> R=8. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
+PREFILLED REMINDER: Hard sentences are 10-13 words — chunks MUST still be ≤ 8. Prefer 2-word descriptive NP as prefilled ("the professor", "my advisor"). Use "i" sparingly. NEVER bare "he"/"she"/"they". Example: answer=11 words, prefilled=["the professor"] (2 words) -> R=9 -> shorten sentence to 10 words -> R=8. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
   },
 
   "interrogative": {
@@ -1024,7 +1026,7 @@ Examples:
 - "Do you know why the final report had not been submitted yet?"
 Hard MUST come from embedded grammar: tense/aspect mismatch, passive/perfect inside clause, layered embedding.
 Distractor: morphological variant (e.g. "decided/decide", "managed/manage").
-PREFILLED REMINDER: Hard sentences are 10-13 words — chunks MUST still be ≤ 8. Give the SUBJECT as prefilled: "i" for 1st-person, or 2-word descriptive NP for 3rd-person ("the professor", "the manager"). NEVER bare "he"/"she"/"they". Example: answer=11 words, prefilled=["the professor"] (2 words) -> R=9 -> shorten sentence to 10 words -> R=8. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
+PREFILLED REMINDER: Hard sentences are 10-13 words — chunks MUST still be ≤ 8. Prefer 2-word descriptive NP as prefilled ("the professor", "my advisor"). Use "i" sparingly. NEVER bare "he"/"she"/"they". Example: answer=11 words, prefilled=["the professor"] (2 words) -> R=9 -> shorten sentence to 10 words -> R=8. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
   },
 
   "direct": {
@@ -1043,7 +1045,7 @@ Examples:
 - "I found it in the back of the furniture section at the local superstore."
 Prefer comparative/superlative structures, dense modifiers, or other learner-unfamiliar grammar. Do not inflate difficulty by length alone.
 Distractor: morphological variant or comparative swap ("better/good", "only/once").
-PREFILLED REMINDER: Hard sentences are 10-13 words — chunks MUST still be ≤ 8. Give the SUBJECT as prefilled: "i" for 1st-person, or 2-word descriptive NP for 3rd-person ("the professor", "the manager"). NEVER bare "he"/"she"/"they". Example: answer=11 words, prefilled=["the professor"] (2 words) -> R=9 -> shorten sentence to 10 words -> R=8. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
+PREFILLED REMINDER: Hard sentences are 10-13 words — chunks MUST still be ≤ 8. Prefer 2-word descriptive NP as prefilled ("the professor", "my advisor"). Use "i" sparingly. NEVER bare "he"/"she"/"they". Example: answer=11 words, prefilled=["the professor"] (2 words) -> R=9 -> shorten sentence to 10 words -> R=8. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
   },
 
   "relative": {
@@ -1061,7 +1063,7 @@ Combine relative clause with passive or perfect:
 - "The desk you ordered is scheduled to arrive on Friday."
 - "The book she recommended had already been checked out."
 Distractor: morphological variant (e.g. "ordered/order", "recommended/recommend").
-PREFILLED REMINDER: Hard sentences are 10-13 words — chunks MUST still be ≤ 8. Give the SUBJECT as prefilled: "i" for 1st-person, or 2-word descriptive NP for 3rd-person ("the professor", "the manager"). NEVER bare "he"/"she"/"they". Example: answer=11 words, prefilled=["the professor"] (2 words) -> R=9 -> shorten sentence to 10 words -> R=8. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
+PREFILLED REMINDER: Hard sentences are 10-13 words — chunks MUST still be ≤ 8. Prefer 2-word descriptive NP as prefilled ("the professor", "my advisor"). Use "i" sparingly. NEVER bare "he"/"she"/"they". Example: answer=11 words, prefilled=["the professor"] (2 words) -> R=9 -> shorten sentence to 10 words -> R=8. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
   },
 };
 
@@ -1238,8 +1240,9 @@ ${groupSections}
 ## WARNING — PREFILLED STRATEGY HAS CHANGED:
 You may see older questions in context where prefilled=["not"] or prefilled=["the report"] (object noun phrase).
 That is the OLD incorrect style. Do NOT imitate it.
-CORRECT strategy: use the SUBJECT as prefilled.
-  • 1st-person sentences (I did/asked/found...): prefilled=["i"]
+CORRECT strategy: use the SUBJECT as prefilled. Prefer 2-word NPs (TPO: 56% are 2-word).
+  • 1st-person: prefer reframing as 3rd-person with descriptive NP. Use prefilled=["i"] sparingly (~10% of items).
+    Instead of "I asked...", consider "My advisor asked..." or "The intern asked..." with prefilled=["my advisor"] or ["the intern"].
   • 3rd-person sentences: ALWAYS a 2-word descriptive NP like ["the professor"], ["the manager"], ["the student"]
   • Interrogative (Could you.../Do you...): prefilled=["could you"] or ["do you"]
   • Negation "not" belongs in CHUNKS, NOT prefilled.
@@ -1257,8 +1260,8 @@ In the real TOEFL exercise, 8-9 out of every 10 questions give the student one w
   no missing words, no extra words, no duplicate coverage
 
 WHAT TO USE AS PREFILLED (TPO authentic — give the SUBJECT, not the object):
-- 1st-person pronoun:    "i" for 1st-person sentences (I wondered/asked/noticed/told...)
-  → prefilled=["i"], always at position 0. Simplest and most authentic.
+- 1st-person pronoun:    "i" ONLY when subject is literally "I" and no 2-word NP fits. Max ~10% of batch.
+  → prefilled=["i"], at position 0. Use sparingly — TPO has only 10% single-word prefilled.
 - 3rd-person subject NP: 2-3 word descriptive subject noun phrase at sentence start
   → 2-word: "the professor", "the student", "the manager", "my advisor", "the ranger"
   → 3-word: "some colleagues", "her study partner", "the shop owner", "the front desk"
@@ -1267,7 +1270,8 @@ WHAT TO USE AS PREFILLED (TPO authentic — give the SUBJECT, not the object):
   → "could you", "did she", "do you"
 - Short sentences (≤8 words): prefilled=[] is acceptable when no subject anchor is natural.
 RULE: prefilled must appear EXACTLY ONCE in the answer.
-RULE: Prefer 1-word pronouns ("i") — shortest, most natural, unambiguous.
+RULE: Prefer 2-word subject NPs ("the professor", "my advisor") — matches TPO 56% two-word rate. Use "i" only when the sentence naturally starts with "I" and no descriptive NP fits.
+RULE: TARGET prefilled length distribution: ~10% 1-word, ~55% 2-word, ~35% 3-word+. Do NOT over-use "i".
 RULE: Object noun phrases ("the library", "the report") belong in CHUNKS, NOT prefilled.
 RULE: prefilled is ≤3 words maximum. Prefer 2-word. A 4-word+ prefilled will be automatically rejected.
 
@@ -1419,9 +1423,9 @@ ${rejectFeedback}
 ## FINAL CHECKLIST 锟?VERIFY BEFORE OUTPUT:
 1. WORD BAG: chunks (minus distractor) + prefilled words must equal EXACTLY the words in answer 锟?no extras, no missing. Verify every item.
 2. DISTRACTOR: The distractor word must NOT appear anywhere in the answer string.
-3. PREFILLED COUNT: Count your non-empty prefilled items. You MUST have 8-9 items with prefilled in this batch. If you have fewer than 8, go back and add prefilled (subject pronoun or subject NP) to more items before outputting.
+3. PREFILLED COUNT: Count your non-empty prefilled items. You MUST have 8-9 items with prefilled in this batch. If you have fewer than 8, go back and add prefilled (subject NP) to more items. PREFILLED LENGTH: aim for ~1 item with 1-word "i", ~5-6 items with 2-word NPs ("the professor"), ~2-3 items with 3-word NPs ("some colleagues"). Do NOT output a batch where >2 items use prefilled=["i"].
 4. PREFILLED CORRECTNESS: The prefilled word/phrase must appear EXACTLY in the answer string, at the stated index. Remove it from chunks 鈥?never include it in both prefilled and chunks. chunks + prefilled reconstruct the answer exactly once.
-5. CHUNK GRANULARITY & R-VALUE: R = answer_words − prefilled_words. Target R=6-7. prefilled is ≤3 words max (4-word+ = REJECTED). Object noun phrases belong in CHUNKS, not prefilled. 1-2 multi-word chunks per question: infinitives ("to know"), phrasal verbs ("find out"), aux+participle ("had been"). Never 9+ effective chunks.
+5. CHUNK GRANULARITY & R-VALUE: R = answer_words − prefilled_words. Target R=7-8 (yields 5-6 effective chunks). prefilled is ≤3 words max (4-word+ = REJECTED). Object noun phrases belong in CHUNKS, not prefilled. 1 multi-word chunk per question (2 only for negation): infinitives ("to know"), phrasal verbs ("find out"), aux+participle ("had been"). Never 9+ effective chunks.
    NEGATION RULE: aux+not is ALWAYS one chunk. ["did not"] ✓  ["did","not"] ✗. Scan every negation item before output.
 6. VERB DIVERSITY: No single reporting verb may appear more than twice in this batch.
 7. HARD DIFFICULTY: Hard items must be justified by advanced grammar signals, not by extra words. Valid hard signals include passive/passive-progressive, past perfect, relative/contact clause, whom, comparative/superlative, or multi-layer embedding.
@@ -2410,7 +2414,8 @@ function updateCircuitBreakers(state, round, mode, spec, result) {
     if (
       aggregate.generated >= CIRCUIT_BREAKER_MIN_GENERATED &&
       acceptRate <= CIRCUIT_BREAKER_MIN_ACCEPT_RATE &&
-      !currentlyActive
+      !currentlyActive &&
+      !CIRCUIT_BREAKER_EXEMPT_TYPES.has(type)
     ) {
       const reasons = Object.entries(aggregate.reasons)
         .sort((a, b) => b[1] - a[1])
