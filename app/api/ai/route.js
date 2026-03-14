@@ -160,6 +160,37 @@ export async function POST(request) {
     if (bodyError) {
       return fail({ ...requestMeta, stage: "input", errorType: "validation" }, 400, { error: bodyError });
     }
+
+    // Server-side usage check: require valid user code and enforce daily limits
+    if (isSupabaseAdminConfigured) {
+      const userCode = String(payload.userCode || "").toUpperCase().trim();
+      if (!userCode || userCode.length !== 6) {
+        return fail({ ...requestMeta, stage: "auth", errorType: "missing_user" }, 403, { error: "Authentication required." });
+      }
+      const { data: user } = await supabaseAdmin
+        .from("users")
+        .select("tier, tier_expires_at")
+        .eq("code", userCode)
+        .maybeSingle();
+      if (!user) {
+        return fail({ ...requestMeta, stage: "auth", errorType: "invalid_user" }, 403, { error: "Invalid user." });
+      }
+      // Check tier + expiry
+      let isPro = user.tier === "legacy" || (user.tier === "pro" && !(user.tier_expires_at && new Date(user.tier_expires_at).getTime() <= Date.now()));
+      const dailyLimit = isPro ? 100 : 3;
+      const today = new Date().toISOString().split("T")[0];
+      const { data: usage } = await supabaseAdmin
+        .from("daily_usage")
+        .select("usage_count")
+        .eq("user_code", userCode)
+        .eq("date", today)
+        .maybeSingle();
+      if ((usage?.usage_count || 0) >= dailyLimit) {
+        const errMsg = isPro ? "服务繁忙，请稍后再试" : "Daily limit reached.";
+        return fail({ ...requestMeta, stage: "usage", errorType: "daily_limit" }, 429, { error: errMsg });
+      }
+    }
+
     const { system, message } = payload;
     const { maxTokens, temperature } = normalizeGenerationParams(payload);
     const proxyUrl = resolveProxyUrl();

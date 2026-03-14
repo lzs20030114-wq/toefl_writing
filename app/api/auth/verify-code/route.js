@@ -1,5 +1,27 @@
 import { isSupabaseAdminConfigured, supabaseAdmin } from "../../../../lib/supabaseAdmin";
 
+// Rate limit: max 10 attempts per IP per 60s
+const AUTH_RL_WINDOW = 60_000;
+const AUTH_RL_MAX = 10;
+const authBuckets = globalThis.__toeflAuthRLBuckets || new Map();
+if (!globalThis.__toeflAuthRLBuckets) globalThis.__toeflAuthRLBuckets = authBuckets;
+
+function getIp(req) {
+  return req.headers.get("cf-connecting-ip")
+    || (req.headers.get("x-forwarded-for") || "").split(",")[0].trim()
+    || req.headers.get("x-real-ip")
+    || "unknown";
+}
+
+function isAuthRateLimited(ip) {
+  const now = Date.now();
+  for (const [k, v] of authBuckets) { if (now - v.t > AUTH_RL_WINDOW) authBuckets.delete(k); }
+  const b = authBuckets.get(ip);
+  if (!b || now - b.t > AUTH_RL_WINDOW) { authBuckets.set(ip, { t: now, c: 1 }); return false; }
+  b.c++;
+  return b.c > AUTH_RL_MAX;
+}
+
 function jsonError(status, error) {
   return Response.json({ valid: false, error }, { status });
 }
@@ -17,6 +39,9 @@ function isExpired(expiresAt) {
 
 export async function POST(request) {
   try {
+    if (isAuthRateLimited(getIp(request))) {
+      return jsonError(429, "Too many attempts. Please try again later.");
+    }
     if (!isSupabaseAdminConfigured) return jsonError(503, "Supabase admin is not configured");
 
     const body = await request.json();

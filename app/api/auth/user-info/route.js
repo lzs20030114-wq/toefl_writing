@@ -1,11 +1,36 @@
 import { isSupabaseAdminConfigured, supabaseAdmin } from "../../../../lib/supabaseAdmin";
 
+// Rate limit: max 20 requests per IP per 60s
+const INFO_RL_WINDOW = 60_000;
+const INFO_RL_MAX = 20;
+const infoBuckets = globalThis.__toeflInfoRLBuckets || new Map();
+if (!globalThis.__toeflInfoRLBuckets) globalThis.__toeflInfoRLBuckets = infoBuckets;
+
+function getIp(req) {
+  return req.headers.get("cf-connecting-ip")
+    || (req.headers.get("x-forwarded-for") || "").split(",")[0].trim()
+    || req.headers.get("x-real-ip")
+    || "unknown";
+}
+
+function isInfoRateLimited(ip) {
+  const now = Date.now();
+  for (const [k, v] of infoBuckets) { if (now - v.t > INFO_RL_WINDOW) infoBuckets.delete(k); }
+  const b = infoBuckets.get(ip);
+  if (!b || now - b.t > INFO_RL_WINDOW) { infoBuckets.set(ip, { t: now, c: 1 }); return false; }
+  b.c++;
+  return b.c > INFO_RL_MAX;
+}
+
 function jsonError(status, error) {
   return Response.json({ error }, { status });
 }
 
 export async function GET(request) {
   try {
+    if (isInfoRateLimited(getIp(request))) {
+      return jsonError(429, "Too many requests. Please try again later.");
+    }
     if (!isSupabaseAdminConfigured) return jsonError(503, "Supabase admin is not configured");
 
     const { searchParams } = new URL(request.url);
