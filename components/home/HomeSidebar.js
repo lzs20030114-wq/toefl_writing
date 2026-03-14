@@ -279,6 +279,7 @@ export function HomeSidebar({
       {upgradeOpen && (
         <UpgradeModal
           userCode={userCode}
+          currentTier={tier}
           onClose={() => setUpgradeOpen(false)}
           onUpgraded={() => window.location.reload()}
         />
@@ -300,8 +301,8 @@ export function HomeSidebar({
           )}
         </div>
 
-        {/* Upgrade button for free-tier users */}
-        {tier === "free" && (
+        {/* Upgrade / Renew button */}
+        {tier === "free" ? (
           <button
             onClick={() => setUpgradeOpen(true)}
             style={{
@@ -313,7 +314,21 @@ export function HomeSidebar({
           >
             升级 Pro · 无限练习
           </button>
-        )}
+        ) : tier === "pro" ? (
+          <button
+            onClick={() => setUpgradeOpen(true)}
+            style={{
+              width: "100%", padding: "8px 0", fontSize: 12, fontWeight: 600,
+              border: "1px solid " + (isChallenge ? CH.cardBorder : T.bdr),
+              background: isChallenge ? "rgba(255,255,255,0.05)" : T.bg,
+              color: isChallenge ? CH.t2 : T.t2,
+              borderRadius: 8, cursor: "pointer", fontFamily: HOME_FONT,
+              marginBottom: 10, transition: "opacity .15s",
+            }}
+          >
+            续费 / 延长有效期
+          </button>
+        ) : null}
 
         {/* Email display */}
         {email && (

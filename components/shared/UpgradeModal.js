@@ -13,7 +13,8 @@ const POLL_INTERVAL = 5000; // 5s
  * 3. Polls /api/auth/user-info to detect tier upgrade
  * 4. Shows success state when pro is activated
  */
-export default function UpgradeModal({ userCode, onClose, onUpgraded }) {
+export default function UpgradeModal({ userCode, currentTier, onClose, onUpgraded }) {
+  const isRenew = currentTier === "pro";
   const [copied, setCopied] = useState(false);
   const [afdianOpened, setAfdianOpened] = useState(false);
   const [upgraded, setUpgraded] = useState(false);
@@ -33,16 +34,29 @@ export default function UpgradeModal({ userCode, onClose, onUpgraded }) {
     setAfdianOpened(true);
   };
 
-  // Poll for tier change after user opens Afdian
+  // Snapshot tier_expires_at before opening Afdian, so we can detect renewals too
+  const initialExpiresRef = useRef(null);
+
+  // Poll for tier/expiry change after user opens Afdian
   useEffect(() => {
     if (!afdianOpened || !userCode || upgraded) return;
+
+    // Capture initial state on first poll start
+    if (initialExpiresRef.current === null) {
+      fetch(`/api/auth/user-info?code=${encodeURIComponent(userCode)}`)
+        .then((r) => r.json())
+        .then((d) => { initialExpiresRef.current = d.tier_expires_at || ""; })
+        .catch(() => { initialExpiresRef.current = ""; });
+    }
 
     pollRef.current = setInterval(async () => {
       try {
         const res = await fetch(`/api/auth/user-info?code=${encodeURIComponent(userCode)}`);
         if (!res.ok) return;
         const data = await res.json();
-        if (data.tier === "pro" || data.tier === "legacy") {
+        const nowPro = data.tier === "pro" || data.tier === "legacy";
+        const expiryChanged = data.tier_expires_at !== initialExpiresRef.current;
+        if (nowPro && (!isRenew || expiryChanged)) {
           setUpgraded(true);
           clearInterval(pollRef.current);
         }
@@ -50,7 +64,7 @@ export default function UpgradeModal({ userCode, onClose, onUpgraded }) {
     }, POLL_INTERVAL);
 
     return () => clearInterval(pollRef.current);
-  }, [afdianOpened, userCode, upgraded]);
+  }, [afdianOpened, userCode, upgraded, isRenew]);
 
   const handleClose = () => {
     clearInterval(pollRef.current);
@@ -80,10 +94,10 @@ export default function UpgradeModal({ userCode, onClose, onUpgraded }) {
           <>
             <div style={{ fontSize: 48, marginBottom: 12 }}>&#127881;</div>
             <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 8, color: C.t1 }}>
-              Pro 已开通！
+              {isRenew ? "续费成功！" : "Pro 已开通！"}
             </h3>
             <p style={{ fontSize: 14, color: C.t2, marginBottom: 20, lineHeight: 1.6 }}>
-              无限练习已解锁，尽情使用吧。
+              {isRenew ? "有效期已延长，继续尽情练习吧。" : "无限练习已解锁，尽情使用吧。"}
             </p>
             <button
               onClick={handleClose}
@@ -108,10 +122,10 @@ export default function UpgradeModal({ userCode, onClose, onUpgraded }) {
               <span style={{ color: "#fff", fontSize: 22, fontWeight: 800 }}>P</span>
             </div>
             <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 8, color: C.t1 }}>
-              升级 Pro
+              {isRenew ? "续费 Pro" : "升级 Pro"}
             </h3>
             <p style={{ fontSize: 14, color: C.t2, marginBottom: 16, lineHeight: 1.6 }}>
-              解锁无限练习次数，不受每日额度限制。
+              {isRenew ? "续费后有效期将自动延长，在当前到期日基础上叠加。" : "解锁无限练习次数，不受每日额度限制。"}
             </p>
 
             {/* Instructions */}
