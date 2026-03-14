@@ -29,7 +29,18 @@ export default function UpgradeModal({ userCode, currentTier, onClose, onUpgrade
     } catch { /* no-op */ }
   };
 
+  const [codeCopied, setCodeCopied] = useState(false);
+
   const handleGoAfdian = () => {
+    if (!codeCopied && !copied) {
+      // Force copy first, then open
+      handleCopy().then(() => {
+        setCodeCopied(true);
+        window.open(AFDIAN_URL, "_blank");
+        setAfdianOpened(true);
+      });
+      return;
+    }
     window.open(AFDIAN_URL, "_blank");
     setAfdianOpened(true);
   };
@@ -128,60 +139,67 @@ export default function UpgradeModal({ userCode, currentTier, onClose, onUpgrade
               {isRenew ? "续费后有效期将自动延长，在当前到期日基础上叠加。" : "解锁无限练习次数，不受每日额度限制。"}
             </p>
 
-            {/* Instructions */}
+            {/* User code — big and unmissable */}
             <div style={{
-              background: "#f8fafc", border: "1px solid " + C.bdr, borderRadius: 10,
-              padding: "14px 16px", marginBottom: 16, textAlign: "left",
+              background: "#fef3c7", border: "2px solid #f59e0b", borderRadius: 12,
+              padding: "16px", marginBottom: 12,
             }}>
-              <div style={{ fontSize: 13, fontWeight: 600, color: C.t1, marginBottom: 10 }}>
-                操作步骤：
+              <div style={{
+                fontSize: 13, fontWeight: 700, color: "#92400e", marginBottom: 8,
+                textAlign: "center",
+              }}>
+                &#9888;&#65039; 付款时必须在「留言」栏粘贴此码，否则无法自动开通
               </div>
-              <div style={{ fontSize: 12, color: C.t2, lineHeight: 1.8 }}>
-                1. 复制下方登录码<br />
-                2. 点击「前往爱发电」选择方案并赞助<br />
-                3. 赞助时将登录码粘贴到「留言」栏<br />
-                4. 付款完成后回到此页面，系统自动开通
+              <div style={{
+                display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
+                background: "#fff", borderRadius: 8, padding: "12px 16px",
+                border: "1px solid #fde68a",
+              }}>
+                <span style={{
+                  fontSize: 26, fontWeight: 900, fontFamily: "monospace",
+                  letterSpacing: 6, color: C.t1,
+                }}>
+                  {userCode}
+                </span>
+                <button
+                  onClick={() => { handleCopy(); setCodeCopied(true); }}
+                  style={{
+                    padding: "8px 16px", borderRadius: 8, fontSize: 13, fontWeight: 700,
+                    border: "none",
+                    background: copied ? "#059669" : "#f59e0b",
+                    color: "#fff",
+                    cursor: "pointer", fontFamily: FONT, whiteSpace: "nowrap",
+                    transition: "background 0.2s",
+                  }}
+                >
+                  {copied ? "&#10003; 已复制" : "复制登录码"}
+                </button>
               </div>
             </div>
 
-            {/* User code */}
+            {/* Steps — compact */}
             <div style={{
-              display: "flex", alignItems: "center", gap: 8,
-              background: "#ecfdf5", border: "1px solid #bbf7d0", borderRadius: 10,
-              padding: "12px 16px", marginBottom: 16,
+              fontSize: 12, color: C.t2, lineHeight: 1.8, marginBottom: 14,
+              textAlign: "left", padding: "0 4px",
             }}>
-              <span style={{ fontSize: 11, color: C.t2, whiteSpace: "nowrap" }}>你的登录码</span>
-              <span style={{
-                flex: 1, fontSize: 20, fontWeight: 800, fontFamily: "monospace",
-                letterSpacing: 4, color: C.t1, textAlign: "center",
-              }}>
-                {userCode}
-              </span>
-              <button
-                onClick={handleCopy}
-                style={{
-                  padding: "5px 12px", borderRadius: 6, fontSize: 12, fontWeight: 600,
-                  border: `1px solid ${copied ? C.blue : C.bdr}`,
-                  background: copied ? "#eff6ff" : "#fff",
-                  color: copied ? C.blue : C.t2,
-                  cursor: "pointer", fontFamily: FONT, whiteSpace: "nowrap",
-                }}
-              >
-                {copied ? "已复制" : "复制"}
-              </button>
+              <span style={{ fontWeight: 600, color: C.t1 }}>步骤：</span>
+              复制登录码 &#8594; 前往爱发电赞助 &#8594; <span style={{ color: "#dc2626", fontWeight: 700 }}>留言栏粘贴登录码</span> &#8594; 付款后回此页自动开通
             </div>
 
             {/* CTA */}
             <button
               onClick={handleGoAfdian}
               style={{
-                width: "100%", padding: "12px 0", borderRadius: 10,
-                border: "none", background: C.blue, color: "#fff",
+                width: "100%", padding: "13px 0", borderRadius: 10,
+                border: "none",
+                background: (codeCopied || copied) ? C.blue : "#9ca3af",
+                color: "#fff",
                 fontSize: 15, fontWeight: 600, cursor: "pointer",
                 fontFamily: FONT, marginBottom: 8,
+                transition: "background 0.2s",
               }}
             >
-              前往爱发电
+              {(codeCopied || copied) ? "前往爱发电" : "请先复制登录码 &#8593;"}
             </button>
 
             {afdianOpened && (
