@@ -320,19 +320,40 @@ function autoFixFloatingAdverbs(answer, chunks, distractor) {
     if (adverbAnswerIdx < 0) continue;
 
     // Try to merge with the word before or after in the answer
+    let merged = false;
     for (const neighborAnswerIdx of [adverbAnswerIdx - 1, adverbAnswerIdx + 1]) {
       if (neighborAnswerIdx < 0 || neighborAnswerIdx >= answerWords.length) continue;
       const neighbor = answerWords[neighborAnswerIdx];
-      const neighborChunkIdx = chunkLower.findIndex((ch, j) =>
+
+      // Strategy 1: find neighbor as a single-word chunk
+      let neighborChunkIdx = chunkLower.findIndex((ch, j) =>
         j !== i && !mergeMap.has(j) && chunks[j] !== distractor &&
         ch.split(/\s+/).length === 1 && ch === neighbor
       );
+
+      // Strategy 2: find neighbor as the start/end word of a multi-word chunk
+      if (neighborChunkIdx < 0) {
+        neighborChunkIdx = chunkLower.findIndex((ch, j) => {
+          if (j === i || mergeMap.has(j) || chunks[j] === distractor) return false;
+          const chWords = ch.split(/\s+/);
+          if (chWords.length < 2) return false;
+          // Adverb comes after → neighbor is last word of preceding chunk
+          if (neighborAnswerIdx < adverbAnswerIdx) return chWords[chWords.length - 1] === neighbor;
+          // Adverb comes before → neighbor is first word of following chunk
+          return chWords[0] === neighbor;
+        });
+      }
+
       if (neighborChunkIdx < 0) continue;
 
-      // Merge in answer order
+      // Build merged chunk: append/prepend adverb to the neighbor chunk
+      const neighborChunk = chunkLower[neighborChunkIdx];
       const mergedChunk = neighborAnswerIdx < adverbAnswerIdx
-        ? `${neighbor} ${adverb}`
-        : `${adverb} ${neighbor}`;
+        ? `${neighborChunk} ${adverb}`
+        : `${adverb} ${neighborChunk}`;
+
+      // Guard: merged chunk must not exceed 3 words
+      if (mergedChunk.split(/\s+/).length > 3) continue;
 
       // Verify contiguous in answer
       const mergedWords = mergedChunk.split(/\s+/);
@@ -343,8 +364,12 @@ function autoFixFloatingAdverbs(answer, chunks, distractor) {
       if (!found) continue;
 
       mergeMap.set(i, { neighborIdx: neighborChunkIdx, mergedChunk });
+      merged = true;
       break;
     }
+    // Strategy 3 fallback: if no neighbor chunk found, try absorbing into ANY adjacent
+    // chunk in the answer that exists in chunks (even if not the immediate neighbor)
+    // — skip for now, strategies 1+2 should cover most cases
   }
 
   // Pass 2: build result, skipping consumed neighbors and replacing adverbs with merged chunks
@@ -1045,13 +1070,15 @@ These 5 errors cause >60% of all rejections. Check EVERY item against them:
    ✗ distractor="do" when answer has "did"  ✗ distractor="does" when answer has "did"
    ✗ distractor="will" when answer has "would"  ✗ distractor="can" when answer has "could"
    ✗ distractor="have" when answer has "had"  ✗ distractor="has" when answer has "have"
-   Regular verb morphological variants ARE encouraged as distractors:
-   ✓ answer has "canceled" → distractor="cancel" (participle vs base form)
-   ✓ answer has "submitted" → distractor="submit" (past vs base)
-   ✓ answer has "opened" → distractor="open" (past participle vs base)
-   ✓ answer has "chosen" → distractor="chose" (participle vs past)
-   ✓ answer has "finished" → distractor="finish" (past vs base)
-   The KEY rule: aux/be/modal swaps (is↔was, can↔could, do↔did) are BANNED. Main verb form variants (submit↔submitted, open↔opened) are GOOD — they test morphology knowledge.
+   Regular verb morphological variants ARE encouraged as distractors, BUT ONLY when the substitution produces an UNGRAMMATICAL sentence:
+   ✓ answer="did not cancel the meeting" → distractor="canceled" → "did not canceled" = UNGRAMMATICAL → SAFE
+   ✓ answer="the cafe that opened last week" → distractor="open" → "the cafe that open last week" = UNGRAMMATICAL → SAFE
+   ✓ answer="The garden opens every morning" → distractor="open" → "The garden open" = UNGRAMMATICAL (3sg agreement) → SAFE
+   ✗ answer="The store sells fresh produce" → distractor="sold" → "The store sold fresh produce" = GRAMMATICAL → REJECTED!
+   ✗ answer="I found it behind the center" → distractor="find" → "I find it behind the center" = GRAMMATICAL → REJECTED!
+   ✗ answer="She walks through the park" → distractor="walked" → "She walked through the park" = GRAMMATICAL → REJECTED!
+   RULE: In simple declarative sentences (no auxiliary, no negation, no relative clause), swapping present↔past tense almost always produces a GRAMMATICAL alternative. Use a DIFFERENT word class or unrelated form instead.
+   SAFE distractor patterns: base form after auxiliary ("did not finished"), wrong agreement ("The shop offer"), different part of speech.
 
 ## CORE MISSION:
 Generate high-quality conversational sentences. Focus on natural language flow.
