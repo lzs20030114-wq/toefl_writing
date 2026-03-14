@@ -327,7 +327,7 @@ export default function LoginGate({ children }) {
     setUserCode(null);
     setUserTier("free");
     setUserEmail(null);
-    setInputCode("");
+    setCodeInput("");
     setShowImportPrompt(false);
     setState(isSupabaseConfigured ? "login" : "authenticated");
   };
