@@ -290,7 +290,7 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
                   onKeyDown={(e) => e.key === "Enter" && handleVerifyOTP()}
                   maxLength={6}
                   autoFocus
-                  style={{ width: "100%", padding: 10, fontSize: 22, borderRadius: 10, border: "1.5px solid " + C.bdr, outline: "none", boxSizing: "border-box", fontFamily: "monospace", letterSpacing: 8, textAlign: "center" }}
+                  style={{ width: "100%", padding: "11px 12px", fontSize: 16, borderRadius: 10, border: "1.5px solid " + C.bdr, outline: "none", boxSizing: "border-box", fontFamily: "monospace", letterSpacing: 6, textAlign: "center" }}
                 />
                 <button
                   onClick={handleVerifyOTP}
@@ -302,8 +302,8 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
               </div>
             )}
 
-            <p style={{ fontSize: 11, color: C.t3, textAlign: "center", marginTop: 10 }}>{t.emailHelper}</p>
-            <p style={{ fontSize: 11, color: C.t3, textAlign: "center", marginTop: 4 }}>{t.emailAutoRegister}</p>
+            <p style={{ fontSize: 12, color: C.t3, textAlign: "center", marginTop: 10, marginBottom: 0 }}>{t.emailHelper}</p>
+            <p style={{ fontSize: 12, color: C.t3, textAlign: "center", marginTop: 4, marginBottom: 0 }}>{t.emailAutoRegister}</p>
           </div>
         )}
 
@@ -319,7 +319,7 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
               onKeyDown={(e) => e.key === "Enter" && handleCodeLogin()}
               maxLength={6}
               autoFocus
-              style={{ width: "100%", padding: "11px 12px", fontSize: 24, borderRadius: 10, border: "1.5px solid " + C.bdr, outline: "none", boxSizing: "border-box", fontFamily: "monospace", letterSpacing: 8, textAlign: "center", textTransform: "uppercase" }}
+              style={{ width: "100%", padding: "11px 12px", fontSize: 16, borderRadius: 10, border: "1.5px solid " + C.bdr, outline: "none", boxSizing: "border-box", fontFamily: "monospace", letterSpacing: 6, textAlign: "center", textTransform: "uppercase" }}
             />
             <button
               onClick={handleCodeLogin}
@@ -328,7 +328,7 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
             >
               {loading ? t.loggingIn : t.login}
             </button>
-            <p style={{ fontSize: 11, color: C.t3, textAlign: "center", marginTop: 10 }}>{t.codeHelper}</p>
+            <p style={{ fontSize: 12, color: C.t3, textAlign: "center", marginTop: 10, marginBottom: 0 }}>{t.codeHelper}</p>
           </div>
         )}
 
