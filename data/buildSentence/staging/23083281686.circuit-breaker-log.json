@@ -1,0 +1,353 @@
+{
+  "generated_at": "2026-03-14T07:39:52.682Z",
+  "active": {
+    "direct": {
+      "sinceRound": 4,
+      "untilRound": 7,
+      "lastEvent": {
+        "triggeredAt": "2026-03-14T07:39:52.682Z",
+        "round": 4,
+        "mode": "normal",
+        "type": "direct",
+        "generated": 4,
+        "accepted": 0,
+        "rejected": 4,
+        "acceptRate": 0,
+        "reasons": [
+          [
+            "review:ets<72",
+            3
+          ],
+          [
+            "review:blocker:tmp_r4_q9: distractor 'predicted' directly replaces 'predicts' (one word, same position) to form 'The forecast predicted heavy rain throughout the weekend' — a grammatical, well-formed sentence with no rearrangement required",
+            1
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 4,
+            "spec": [
+              {
+                "type": "direct",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "relative",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "direct",
+                "difficulty": "hard",
+                "count": 2
+              },
+              {
+                "type": "direct",
+                "difficulty": "easy",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 4,
+              "accepted": 0,
+              "rejected": 4,
+              "reasons": {
+                "review:ets<72": 3,
+                "review:blocker:tmp_r4_q9: distractor 'predicted' directly replaces 'predicts' (one word, same position) to form 'The forecast predicted heavy rain throughout the weekend' — a grammatical, well-formed sentence with no rearrangement required": 1
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 7
+      }
+    },
+    "relative": {
+      "sinceRound": 4,
+      "untilRound": 7,
+      "lastEvent": {
+        "triggeredAt": "2026-03-14T07:39:52.682Z",
+        "round": 4,
+        "mode": "normal",
+        "type": "relative",
+        "generated": 5,
+        "accepted": 0,
+        "rejected": 5,
+        "acceptRate": 0,
+        "reasons": [
+          [
+            "review:ets<72",
+            3
+          ],
+          [
+            "review:blocker:tmp_r4_q4: distractor 'returned' directly replaces 'did not return' is not a simple 1:1 word substitution — however, 'returned' also appears as a chunk alongside 'did not' and 'return' as separate chunks, creating genuine ambiguity: a student could plausibly assemble 'The local librarian returned the book I requested' as a grammatical and contextually valid sentence using the chunk 'returned' instead of 'did not return', making the correct negative answer non-uniquely determinable without the distractor rule saving it — but since 'returned' replaces the entire VP 'did not return' (multi-word), this is ambiguous order rather than a 1:1 substitution blocker; flagging as: tmp_r4_q4: clearly ambiguous order — chunks 'did not', 'return', and 'returned' allow assembly of both 'The local librarian did not return the book I requested' and 'The local librarian returned the book I requested', both grammatical",
+            1
+          ],
+          [
+            "review:blocker:tmp_r4_q6: multiple valid chunk orders — with chunks 'i', 'attended', 'last month', 'was', 'very informative', the contact clause requires 'i attended last month' to precede 'was very informative', but 'i attended' could plausibly be read as a standalone subject+verb before 'last month was very informative', creating ambiguity in assembly; additionally, 'i' as a standalone chunk separated from 'attended' introduces a genuine ordering ambiguity (is the student supposed to place 'i' then 'attended' then 'last month', or could 'i' attach differently?). This is a legitimate multiple-valid-orders risk for test-takers.",
+            1
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 4,
+            "spec": [
+              {
+                "type": "direct",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "negation",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "relative",
+                "difficulty": "medium",
+                "count": 2
+              },
+              {
+                "type": "direct",
+                "difficulty": "hard",
+                "count": 2
+              },
+              {
+                "type": "direct",
+                "difficulty": "easy",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 5,
+              "accepted": 0,
+              "rejected": 5,
+              "reasons": {
+                "review:blocker:tmp_r4_q4: distractor 'returned' directly replaces 'did not return' is not a simple 1:1 word substitution — however, 'returned' also appears as a chunk alongside 'did not' and 'return' as separate chunks, creating genuine ambiguity: a student could plausibly assemble 'The local librarian returned the book I requested' as a grammatical and contextually valid sentence using the chunk 'returned' instead of 'did not return', making the correct negative answer non-uniquely determinable without the distractor rule saving it — but since 'returned' replaces the entire VP 'did not return' (multi-word), this is ambiguous order rather than a 1:1 substitution blocker; flagging as: tmp_r4_q4: clearly ambiguous order — chunks 'did not', 'return', and 'returned' allow assembly of both 'The local librarian did not return the book I requested' and 'The local librarian returned the book I requested', both grammatical": 1,
+                "review:ets<72": 3,
+                "review:blocker:tmp_r4_q6: multiple valid chunk orders — with chunks 'i', 'attended', 'last month', 'was', 'very informative', the contact clause requires 'i attended last month' to precede 'was very informative', but 'i attended' could plausibly be read as a standalone subject+verb before 'last month was very informative', creating ambiguity in assembly; additionally, 'i' as a standalone chunk separated from 'attended' introduces a genuine ordering ambiguity (is the student supposed to place 'i' then 'attended' then 'last month', or could 'i' attach differently?). This is a legitimate multiple-valid-orders risk for test-takers.": 1
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 7
+      }
+    }
+  },
+  "events": [
+    {
+      "triggeredAt": "2026-03-14T07:39:52.682Z",
+      "round": 4,
+      "mode": "normal",
+      "type": "direct",
+      "generated": 4,
+      "accepted": 0,
+      "rejected": 4,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:ets<72",
+          3
+        ],
+        [
+          "review:blocker:tmp_r4_q9: distractor 'predicted' directly replaces 'predicts' (one word, same position) to form 'The forecast predicted heavy rain throughout the weekend' — a grammatical, well-formed sentence with no rearrangement required",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 4,
+            "accepted": 0,
+            "rejected": 4,
+            "reasons": {
+              "review:ets<72": 3,
+              "review:blocker:tmp_r4_q9: distractor 'predicted' directly replaces 'predicts' (one word, same position) to form 'The forecast predicted heavy rain throughout the weekend' — a grammatical, well-formed sentence with no rearrangement required": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 7
+    },
+    {
+      "triggeredAt": "2026-03-14T07:39:52.682Z",
+      "round": 4,
+      "mode": "normal",
+      "type": "relative",
+      "generated": 5,
+      "accepted": 0,
+      "rejected": 5,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "review:ets<72",
+          3
+        ],
+        [
+          "review:blocker:tmp_r4_q4: distractor 'returned' directly replaces 'did not return' is not a simple 1:1 word substitution — however, 'returned' also appears as a chunk alongside 'did not' and 'return' as separate chunks, creating genuine ambiguity: a student could plausibly assemble 'The local librarian returned the book I requested' as a grammatical and contextually valid sentence using the chunk 'returned' instead of 'did not return', making the correct negative answer non-uniquely determinable without the distractor rule saving it — but since 'returned' replaces the entire VP 'did not return' (multi-word), this is ambiguous order rather than a 1:1 substitution blocker; flagging as: tmp_r4_q4: clearly ambiguous order — chunks 'did not', 'return', and 'returned' allow assembly of both 'The local librarian did not return the book I requested' and 'The local librarian returned the book I requested', both grammatical",
+          1
+        ],
+        [
+          "review:blocker:tmp_r4_q6: multiple valid chunk orders — with chunks 'i', 'attended', 'last month', 'was', 'very informative', the contact clause requires 'i attended last month' to precede 'was very informative', but 'i attended' could plausibly be read as a standalone subject+verb before 'last month was very informative', creating ambiguity in assembly; additionally, 'i' as a standalone chunk separated from 'attended' introduces a genuine ordering ambiguity (is the student supposed to place 'i' then 'attended' then 'last month', or could 'i' attach differently?). This is a legitimate multiple-valid-orders risk for test-takers.",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 4,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "negation",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "relative",
+              "difficulty": "medium",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "direct",
+              "difficulty": "easy",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 5,
+            "accepted": 0,
+            "rejected": 5,
+            "reasons": {
+              "review:blocker:tmp_r4_q4: distractor 'returned' directly replaces 'did not return' is not a simple 1:1 word substitution — however, 'returned' also appears as a chunk alongside 'did not' and 'return' as separate chunks, creating genuine ambiguity: a student could plausibly assemble 'The local librarian returned the book I requested' as a grammatical and contextually valid sentence using the chunk 'returned' instead of 'did not return', making the correct negative answer non-uniquely determinable without the distractor rule saving it — but since 'returned' replaces the entire VP 'did not return' (multi-word), this is ambiguous order rather than a 1:1 substitution blocker; flagging as: tmp_r4_q4: clearly ambiguous order — chunks 'did not', 'return', and 'returned' allow assembly of both 'The local librarian did not return the book I requested' and 'The local librarian returned the book I requested', both grammatical": 1,
+              "review:ets<72": 3,
+              "review:blocker:tmp_r4_q6: multiple valid chunk orders — with chunks 'i', 'attended', 'last month', 'was', 'very informative', the contact clause requires 'i attended last month' to precede 'was very informative', but 'i attended' could plausibly be read as a standalone subject+verb before 'last month was very informative', creating ambiguity in assembly; additionally, 'i' as a standalone chunk separated from 'attended' introduces a genuine ordering ambiguity (is the student supposed to place 'i' then 'attended' then 'last month', or could 'i' attach differently?). This is a legitimate multiple-valid-orders risk for test-takers.": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 7
+    }
+  ],
+  "history": [
+    {
+      "round": 4,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "direct",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "negation",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "relative",
+          "difficulty": "medium",
+          "count": 2
+        },
+        {
+          "type": "direct",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "direct",
+          "difficulty": "easy",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "review:ets<72": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 4,
+          "accepted": 0,
+          "rejected": 4,
+          "reasons": {
+            "review:ets<72": 3,
+            "review:blocker:tmp_r4_q9: distractor 'predicted' directly replaces 'predicts' (one word, same position) to form 'The forecast predicted heavy rain throughout the weekend' — a grammatical, well-formed sentence with no rearrangement required": 1
+          }
+        },
+        "relative": {
+          "generated": 5,
+          "accepted": 0,
+          "rejected": 5,
+          "reasons": {
+            "review:blocker:tmp_r4_q4: distractor 'returned' directly replaces 'did not return' is not a simple 1:1 word substitution — however, 'returned' also appears as a chunk alongside 'did not' and 'return' as separate chunks, creating genuine ambiguity: a student could plausibly assemble 'The local librarian returned the book I requested' as a grammatical and contextually valid sentence using the chunk 'returned' instead of 'did not return', making the correct negative answer non-uniquely determinable without the distractor rule saving it — but since 'returned' replaces the entire VP 'did not return' (multi-word), this is ambiguous order rather than a 1:1 substitution blocker; flagging as: tmp_r4_q4: clearly ambiguous order — chunks 'did not', 'return', and 'returned' allow assembly of both 'The local librarian did not return the book I requested' and 'The local librarian returned the book I requested', both grammatical": 1,
+            "review:ets<72": 3,
+            "review:blocker:tmp_r4_q6: multiple valid chunk orders — with chunks 'i', 'attended', 'last month', 'was', 'very informative', the contact clause requires 'i attended last month' to precede 'was very informative', but 'i attended' could plausibly be read as a standalone subject+verb before 'last month was very informative', creating ambiguity in assembly; additionally, 'i' as a standalone chunk separated from 'attended' introduces a genuine ordering ambiguity (is the student supposed to place 'i' then 'attended' then 'last month', or could 'i' attach differently?). This is a legitimate multiple-valid-orders risk for test-takers.": 1
+          }
+        }
+      }
+    }
+  ]
+}
