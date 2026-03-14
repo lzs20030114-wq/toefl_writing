@@ -1,7 +1,6 @@
 ﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { isIapEnabledClient } from "../../lib/featureFlags";
 import { loadHist, SESSION_STORE_EVENTS } from "../../lib/sessionStore";
 import { formatMinutesLabel, getTaskTimeSeconds, normalizePracticeMode, PRACTICE_MODE, STANDARD_TIME_SECONDS } from "../../lib/practiceMode";
 import { extractPostWritingPracticeItems, groupPostWritingPracticeItems } from "../../lib/postWritingPractice";
@@ -45,7 +44,6 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
   const [logoutHover, setLogoutHover] = useState(false);
 
   const isChallenge = mode === PRACTICE_MODE.CHALLENGE;
-  const iapEnabled = isIapEnabledClient();
 
   useEffect(() => {
     const refresh = () => setSessions(loadHist().sessions || []);
@@ -248,9 +246,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
                 ))}
               </div>
 
-              {iapEnabled ? <div style={{ marginBottom: 12, ...fadeIn(440) }}><HomeLinkCard href="/iap" cardKey="iap" hoverKey={hoverKey} setHoverKey={setHoverKey} isChallenge={isChallenge} icon="IAP" eyebrow="内部" title="内购工作台" description="用于支付流程联调的内部预览页面。" tone="warning" /></div> : null}
-
-              <div style={{ marginBottom: 12, ...fadeIn(iapEnabled ? 480 : 440) }}>
+              <div style={{ marginBottom: 12, ...fadeIn(440) }}>
                 <HomeLinkCard
                   href="/post-writing-practice"
                   cardKey="post-writing-practice"
@@ -269,11 +265,11 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
                 />
               </div>
 
-              <div style={{ marginBottom: 28, ...fadeIn(iapEnabled ? 520 : 480) }}>
+              <div style={{ marginBottom: 28, ...fadeIn(480) }}>
                 <HomeLinkCard href="/progress" cardKey="progress" hoverKey={hoverKey} setHoverKey={setHoverKey} isChallenge={isChallenge} icon="P" eyebrow="记录" title="练习记录" description={sessions.length > 0 ? `已记录 ${sessions.length} 次练习，可查看趋势和薄弱点。` : "查看练习趋势并定位薄弱点。"} badge={sessions.length > 0 ? `${sessions.length} 条记录` : "暂无记录"} />
               </div>
 
-              <div style={{ fontSize: 10, color: isChallenge ? CH.t2 : T.t3, opacity: 0.65, lineHeight: 1.6, textAlign: "center", ...fadeIn(iapEnabled ? 560 : 520) }}>
+              <div style={{ fontSize: 10, color: isChallenge ? CH.t2 : T.t3, opacity: 0.65, lineHeight: 1.6, textAlign: "center", ...fadeIn(520) }}>
                 该工具为独立练习资源，与 ETS 或 TOEFL 项目无关联。TOEFL 为 ETS 注册商标。AI 评分仅供自学参考。
               </div>
             </div>
