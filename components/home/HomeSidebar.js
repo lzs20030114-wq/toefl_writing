@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import { sendEmailOTP } from "../../lib/emailAuth";
 import { verifyBindEmail } from "../../lib/emailAuth";
 import { checkCanPractice, FREE_DAILY_LIMIT } from "../../lib/dailyUsage";
+import UpgradeModal from "../shared/UpgradeModal";
 import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
 
 function sectionTitle(isChallenge) {
@@ -170,6 +171,7 @@ export function HomeSidebar({
   const [bindEmailOpen, setBindEmailOpen] = useState(false);
   const [boundEmail, setBoundEmail] = useState(userEmail);
   const [freeRemaining, setFreeRemaining] = useState(null);
+  const [upgradeOpen, setUpgradeOpen] = useState(false);
 
   const tier = userTier || "free";
 
@@ -273,6 +275,14 @@ export function HomeSidebar({
         document.body
       )}
 
+      {upgradeOpen && (
+        <UpgradeModal
+          userCode={userCode}
+          onClose={() => setUpgradeOpen(false)}
+          onUpgraded={() => window.location.reload()}
+        />
+      )}
+
       {/* User Info Card */}
       <div style={{ ...sideCard({ padding: "20px 18px" }), ...fadeIn(100) }}>
         <div style={{ width: 44, height: 44, borderRadius: 12, background: "linear-gradient(135deg,#087355,#0891B2)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14, flexShrink: 0 }}>
@@ -288,6 +298,21 @@ export function HomeSidebar({
             </span>
           )}
         </div>
+
+        {/* Upgrade button for free-tier users */}
+        {tier === "free" && (
+          <button
+            onClick={() => setUpgradeOpen(true)}
+            style={{
+              width: "100%", padding: "8px 0", fontSize: 12, fontWeight: 700,
+              border: "none", background: "linear-gradient(135deg,#087355,#0891B2)",
+              color: "#fff", borderRadius: 8, cursor: "pointer", fontFamily: HOME_FONT,
+              marginBottom: 10, transition: "opacity .15s",
+            }}
+          >
+            升级 Pro · 无限练习
+          </button>
+        )}
 
         {/* Email display */}
         {email && (
