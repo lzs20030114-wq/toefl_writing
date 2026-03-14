@@ -171,17 +171,26 @@ export function HomeSidebar({
   const [bindEmailOpen, setBindEmailOpen] = useState(false);
   const [boundEmail, setBoundEmail] = useState(userEmail);
   const [freeRemaining, setFreeRemaining] = useState(null);
+  const [tierExpiresAt, setTierExpiresAt] = useState(null);
   const [upgradeOpen, setUpgradeOpen] = useState(false);
   const [codeHidden, setCodeHidden] = useState(true);
 
   const tier = userTier || "free";
 
-  // Fetch daily remaining for free-tier users
+  // Fetch daily remaining for free-tier users, or expiry for pro users
   useEffect(() => {
-    if (!isLoggedIn || tier !== "free" || !userCode) return;
-    checkCanPractice(userCode, tier).then(({ remaining }) => {
-      setFreeRemaining(remaining);
-    });
+    if (!isLoggedIn || !userCode) return;
+    if (tier === "free") {
+      checkCanPractice(userCode, tier).then(({ remaining }) => {
+        setFreeRemaining(remaining);
+      });
+    }
+    if (tier === "pro") {
+      fetch(`/api/auth/user-info?code=${encodeURIComponent(userCode)}`)
+        .then((r) => r.json())
+        .then((d) => { if (d.tier_expires_at) setTierExpiresAt(d.tier_expires_at); })
+        .catch(() => {});
+    }
   }, [isLoggedIn, tier, userCode]);
   const email = boundEmail || userEmail;
   const isCodeUser = authMethod === "code" || authMethod === "both";
@@ -293,7 +302,7 @@ export function HomeSidebar({
 
         {/* Tier badge + free usage remaining */}
         <div style={{ marginBottom: 10, display: "flex", alignItems: "center", gap: 6 }}>
-          <TierBadge tier={tier} isChallenge={isChallenge} />
+          <TierBadge tier={tier} tierExpiresAt={tierExpiresAt} isChallenge={isChallenge} />
           {tier === "free" && freeRemaining !== null && (
             <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 999, background: freeRemaining > 0 ? "#f0fdf4" : "#fff5f5", color: freeRemaining > 0 ? "#15803d" : "#dc2626" }}>
               今日 {freeRemaining}/{FREE_DAILY_LIMIT}
