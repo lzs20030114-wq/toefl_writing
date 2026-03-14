@@ -1,0 +1,619 @@
+{
+  "version": "1.2",
+  "generated_at": "2026-03-14T09:09:13.918Z",
+  "_meta": {
+    "target_sets": 6,
+    "total_rounds": 16,
+    "total_generated": 100,
+    "total_accepted": 32,
+    "acceptance_rate": 0.32
+  },
+  "question_sets": [
+    {
+      "set_id": 1,
+      "questions": [
+        {
+          "id": "ets_s1_q1",
+          "prompt": "What did the dental receptionist want to know about your appointment?",
+          "prompt_context": "",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did the dental receptionist want to know about your appointment?",
+          "answer": "The dental receptionist asked whether I needed to reschedule my appointment.",
+          "chunks": [
+            "asked",
+            "whether",
+            "i",
+            "needed",
+            "to reschedule",
+            "my appointment",
+            "need"
+          ],
+          "prefilled": [
+            "the dental receptionist"
+          ],
+          "prefilled_positions": {
+            "the dental receptionist": 0
+          },
+          "distractor": "need",
+          "has_question_mark": false,
+          "grammar_points": [
+            "3rd-reporting",
+            "embedded question"
+          ],
+          "_assemblyValue": 14.28
+        },
+        {
+          "id": "ets_s1_q2",
+          "prompt": "What do you tell the frustrated customer?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do you tell the frustrated customer?",
+          "answer": "The item you returned is being processed for a refund.",
+          "chunks": [
+            "you",
+            "returned",
+            "is being processed",
+            "for",
+            "a",
+            "refund",
+            "return"
+          ],
+          "prefilled": [
+            "the item"
+          ],
+          "prefilled_positions": {
+            "the item": 0
+          },
+          "distractor": "return",
+          "has_question_mark": false,
+          "grammar_points": [
+            "relative",
+            "present progressive passive"
+          ],
+          "_assemblyValue": 5.56
+        },
+        {
+          "id": "ets_s1_q3",
+          "prompt": "What did you find out from the botanical garden guide?",
+          "prompt_context": "",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did you find out from the botanical garden guide?",
+          "answer": "I found out when the new orchid exhibit is opening.",
+          "chunks": [
+            "found",
+            "out",
+            "when",
+            "the new",
+            "orchid exhibit",
+            "is",
+            "opening",
+            "open"
+          ],
+          "prefilled": [
+            "i"
+          ],
+          "prefilled_positions": {
+            "i": 0
+          },
+          "distractor": "open",
+          "has_question_mark": false,
+          "grammar_points": [
+            "1st-embedded",
+            "wh-clause"
+          ],
+          "_assemblyValue": 25.56
+        },
+        {
+          "id": "ets_s1_q4",
+          "prompt": "How do you respond to the museum curator's question?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "How do you respond to the museum curator's question?",
+          "answer": "I am not sure when the special exhibit will close.",
+          "chunks": [
+            "am not sure",
+            "when",
+            "the special exhibit",
+            "will",
+            "close",
+            "does"
+          ],
+          "prefilled": [
+            "i"
+          ],
+          "prefilled_positions": {
+            "i": 0
+          },
+          "distractor": "does",
+          "has_question_mark": false,
+          "grammar_points": [
+            "1st-embedded"
+          ],
+          "_assemblyValue": 18.6
+        },
+        {
+          "id": "ets_s1_q5",
+          "prompt": "What do you say about the new hiking trail?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do you say about the new hiking trail?",
+          "answer": "The trail that opened last month offers stunning valley views.",
+          "chunks": [
+            "that",
+            "opened last month",
+            "offers",
+            "stunning valley views",
+            "open"
+          ],
+          "prefilled": [
+            "the trail"
+          ],
+          "prefilled_positions": {
+            "the trail": 0
+          },
+          "distractor": "open",
+          "has_question_mark": false,
+          "grammar_points": [
+            "relative"
+          ],
+          "_assemblyValue": 11.4
+        },
+        {
+          "id": "ets_s1_q6",
+          "prompt": "What do you tell the delivery driver about the package?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do you tell the delivery driver about the package?",
+          "answer": "I did not order any package that arrived this morning.",
+          "chunks": [
+            "did not",
+            "order",
+            "any",
+            "package",
+            "that",
+            "arrived",
+            "this morning",
+            "arrive"
+          ],
+          "prefilled": [
+            "i"
+          ],
+          "prefilled_positions": {
+            "i": 0
+          },
+          "distractor": "arrive",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation",
+            "relative clause"
+          ],
+          "_assemblyValue": 5.08
+        },
+        {
+          "id": "ets_s1_q7",
+          "prompt": "What does the enthusiastic intern ask the sports class instructor?",
+          "prompt_context": "",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What does the enthusiastic intern ask the sports class instructor?",
+          "answer": "Can you remind me what time the advanced tennis class starts?",
+          "chunks": [
+            "remind",
+            "me",
+            "what time",
+            "the",
+            "advanced",
+            "tennis class",
+            "starts",
+            "start"
+          ],
+          "prefilled": [
+            "can you"
+          ],
+          "prefilled_positions": {
+            "can you": 0
+          },
+          "distractor": "start",
+          "has_question_mark": true,
+          "grammar_points": [
+            "interrogative",
+            "embedded clause",
+            "subject-verb agreement"
+          ],
+          "_assemblyValue": 12.6
+        },
+        {
+          "id": "ets_s1_q8",
+          "prompt": "What do you tell your friend about the yoga class?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do you tell your friend about the yoga class?",
+          "answer": "I found the early morning yoga class incredibly energizing.",
+          "chunks": [
+            "i",
+            "found",
+            "the early morning",
+            "yoga class",
+            "incredibly",
+            "energizing",
+            "energize"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "energize",
+          "has_question_mark": false,
+          "grammar_points": [
+            "simple past",
+            "adjective complement"
+          ],
+          "_assemblyValue": 9
+        },
+        {
+          "id": "ets_s1_q9",
+          "prompt": "What did the local librarian ask the student about the book he returned?",
+          "prompt_context": "",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did the local librarian ask the student about the book he returned?",
+          "answer": "The local librarian asked whether the student had finished the book.",
+          "chunks": [
+            "asked",
+            "whether",
+            "the",
+            "student",
+            "had finished",
+            "the book"
+          ],
+          "prefilled": [
+            "the local librarian"
+          ],
+          "prefilled_positions": {
+            "the local librarian": 0
+          },
+          "distractor": null,
+          "has_question_mark": false,
+          "grammar_points": [
+            "reporting",
+            "embedded question",
+            "past perfect"
+          ],
+          "_assemblyValue": 8.88
+        },
+        {
+          "id": "ets_s1_q10",
+          "prompt": "How do you respond to the flight attendant's question?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "How do you respond to the flight attendant's question?",
+          "answer": "I did not receive any notification about the gate change.",
+          "chunks": [
+            "i",
+            "did not",
+            "receive",
+            "any",
+            "notification",
+            "about",
+            "the",
+            "gate change",
+            "received"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "received",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation",
+            "simple past"
+          ],
+          "_assemblyValue": 33.4
+        }
+      ]
+    },
+    {
+      "set_id": 2,
+      "questions": [
+        {
+          "id": "ets_s2_q1",
+          "prompt": "How do you respond to your elderly neighbor about the noisy construction?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "How do you respond to your elderly neighbor about the noisy construction?",
+          "answer": "I have no idea when the construction noise will finally stop.",
+          "chunks": [
+            "have",
+            "no idea",
+            "when",
+            "the",
+            "construction",
+            "noise",
+            "will",
+            "finally stop"
+          ],
+          "prefilled": [
+            "i"
+          ],
+          "prefilled_positions": {
+            "i": 0
+          },
+          "distractor": null,
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded_question",
+            "future_tense"
+          ],
+          "_assemblyValue": 25.44
+        },
+        {
+          "id": "ets_s2_q2",
+          "prompt": "What do you say to the art gallery assistant about the painting?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do you say to the art gallery assistant about the painting?",
+          "answer": "I am not sure who painted that landscape in the corner.",
+          "chunks": [
+            "sure",
+            "who",
+            "painted",
+            "that landscape",
+            "in",
+            "the",
+            "corner",
+            "am not",
+            "paint"
+          ],
+          "prefilled": [
+            "i"
+          ],
+          "prefilled_positions": {
+            "i": 0
+          },
+          "distractor": "paint",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded_question",
+            "simple_past"
+          ],
+          "_assemblyValue": 30.76
+        },
+        {
+          "id": "ets_s2_q3",
+          "prompt": "What did you find out from the park ranger about the trail closure?",
+          "prompt_context": "",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did you find out from the park ranger about the trail closure?",
+          "answer": "I found out why the main hiking trail was closed yesterday.",
+          "chunks": [
+            "found",
+            "out",
+            "why",
+            "the",
+            "main",
+            "hiking trail",
+            "was",
+            "closed yesterday",
+            "close"
+          ],
+          "prefilled": [
+            "i"
+          ],
+          "prefilled_positions": {
+            "i": 0
+          },
+          "distractor": "close",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded_question",
+            "past_passive"
+          ],
+          "_assemblyValue": 28.44
+        },
+        {
+          "id": "ets_s2_q4",
+          "prompt": "What did you find out from the weather forecast?",
+          "prompt_context": "",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did you find out from the weather forecast?",
+          "answer": "I found out why the hiking trail was closed this morning.",
+          "chunks": [
+            "found",
+            "out",
+            "why",
+            "the hiking trail",
+            "was",
+            "closed",
+            "this morning",
+            "close"
+          ],
+          "prefilled": [
+            "i"
+          ],
+          "prefilled_positions": {
+            "i": 0
+          },
+          "distractor": "close",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question",
+            "phrasal verb"
+          ],
+          "_assemblyValue": 28.2
+        },
+        {
+          "id": "ets_s2_q5",
+          "prompt": "What do you tell the shop owner about the delivery?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do you tell the shop owner about the delivery?",
+          "answer": "The delivery driver did not know where to leave the package.",
+          "chunks": [
+            "know",
+            "where",
+            "to leave",
+            "the package",
+            "did not"
+          ],
+          "prefilled": [
+            "the delivery driver"
+          ],
+          "prefilled_positions": {
+            "the delivery driver": 0
+          },
+          "distractor": null,
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation",
+            "embedded"
+          ],
+          "_assemblyValue": 15.6
+        },
+        {
+          "id": "ets_s2_q6",
+          "prompt": "What do you say to the restaurant waiter about the order?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do you say to the restaurant waiter about the order?",
+          "answer": "I did not receive the side dish that I requested.",
+          "chunks": [
+            "did not",
+            "receive",
+            "the side dish",
+            "that",
+            "requested",
+            "i",
+            "request"
+          ],
+          "prefilled": [
+            "i"
+          ],
+          "prefilled_positions": {
+            "i": 0
+          },
+          "distractor": "request",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation",
+            "relative clause"
+          ],
+          "_assemblyValue": 161
+        },
+        {
+          "id": "ets_s2_q7",
+          "prompt": "What do you say about the pharmacy?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do you say about the pharmacy?",
+          "answer": "The pharmacy that delivers medication is located behind the community center.",
+          "chunks": [
+            "the",
+            "pharmacy",
+            "that",
+            "delivers",
+            "medication",
+            "is located",
+            "behind",
+            "the community center",
+            "deliver"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "deliver",
+          "has_question_mark": false,
+          "grammar_points": [
+            "relative clause",
+            "present simple"
+          ],
+          "_assemblyValue": 9
+        },
+        {
+          "id": "ets_s2_q8",
+          "prompt": "What do you tell the dental receptionist about your appointment?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do you tell the dental receptionist about your appointment?",
+          "answer": "I could not remember what time the cleaning was scheduled.",
+          "chunks": [
+            "could not",
+            "remember",
+            "what time",
+            "the",
+            "cleaning",
+            "was scheduled",
+            "remembered"
+          ],
+          "prefilled": [
+            "i"
+          ],
+          "prefilled_positions": {
+            "i": 0
+          },
+          "distractor": "remembered",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation",
+            "embedded_question",
+            "past_passive"
+          ],
+          "_assemblyValue": 197.72
+        },
+        {
+          "id": "ets_s2_q9",
+          "prompt": "What do you tell your study partner about the notes?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "What do you tell your study partner about the notes?",
+          "answer": "The notes you borrowed contain all the key formulas for the exam.",
+          "chunks": [
+            "the",
+            "notes",
+            "you",
+            "borrowed",
+            "contain",
+            "all the key",
+            "formulas",
+            "for the exam",
+            "borrow"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "borrow",
+          "has_question_mark": false,
+          "grammar_points": [
+            "contact clause",
+            "simple present"
+          ],
+          "_assemblyValue": 9
+        },
+        {
+          "id": "ets_s2_q10",
+          "prompt": "What did the supervisor ask about the project?",
+          "prompt_context": "",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did the supervisor ask about the project?",
+          "answer": "The supervisor asked whether the final report had been submitted on time.",
+          "chunks": [
+            "asked",
+            "whether",
+            "the",
+            "final",
+            "report",
+            "had been submitted",
+            "on time",
+            "submit"
+          ],
+          "prefilled": [
+            "the supervisor"
+          ],
+          "prefilled_positions": {
+            "the supervisor": 0
+          },
+          "distractor": "submit",
+          "has_question_mark": false,
+          "grammar_points": [
+            "reporting verb",
+            "past perfect passive",
+            "embedded question"
+          ],
+          "_assemblyValue": 9
+        }
+      ]
+    }
+  ]
+}
