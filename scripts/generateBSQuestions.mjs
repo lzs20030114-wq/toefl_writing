@@ -2560,34 +2560,28 @@ async function callRelayChain({ userPrompt, temperature, maxTokens, timeoutMs, p
 }
 
 async function callModelCreative(userPrompt) {
-  if (getActiveRelayCount() > 0) {
-    try {
-      return await callRelayChain({
-        userPrompt,
-        temperature: 0.7,
-        maxTokens: 8000,
-        timeoutMs: 180000,
-        purpose: "creative",
-      });
-    } catch (e) {
-      if (!process.env.DEEPSEEK_API_KEY) throw e;
-      console.warn(`  [creative] all relays failed (${errMsg(e)}), falling back to DeepSeek…`);
-    }
+  // Generator: always DeepSeek V3.2 — empirically better at structured BS question
+  // generation (fewer prompt/answer mismatches, better chunk design).
+  // Claude relay is reserved for the reviewer role (callModelDeterministic).
+  if (!process.env.DEEPSEEK_API_KEY) {
+    throw new Error("DEEPSEEK_API_KEY required for generator (callModelCreative)");
   }
   return callDeepSeekViaCurl({
     apiKey: process.env.DEEPSEEK_API_KEY,
     proxyUrl: resolveProxyUrl(),
-    timeoutMs: 120000,
+    timeoutMs: 180000,
     payload: {
       model: "deepseek-chat",
       temperature: 0.7,
-      max_tokens: 5000,
+      max_tokens: 8000,
       messages: [{ role: "user", content: userPrompt }],
     },
   });
 }
 
 async function callModelDeterministic(userPrompt) {
+  // Reviewer: Claude Sonnet via relay (best English grammar judgment for cross-model review).
+  // Fallback: DeepSeek V3.2 if all relays are down.
   if (getActiveRelayCount() > 0) {
     try {
       return await callRelayChain({
@@ -2601,6 +2595,9 @@ async function callModelDeterministic(userPrompt) {
       if (!process.env.DEEPSEEK_API_KEY) throw e;
       console.warn(`  [deterministic] all relays failed (${errMsg(e)}), falling back to DeepSeek…`);
     }
+  }
+  if (!process.env.DEEPSEEK_API_KEY) {
+    throw new Error("No model available for reviewer: all relays down and no DEEPSEEK_API_KEY");
   }
   return callDeepSeekViaCurl({
     apiKey: process.env.DEEPSEEK_API_KEY,
@@ -3449,17 +3446,18 @@ async function main() {
   loadEnv();
   const hasRelay = getRelayConfigs().length > 0;
   const hasDeepSeek = Boolean(process.env.DEEPSEEK_API_KEY);
-  if (!hasRelay && !hasDeepSeek) {
-    console.error("ERROR: no model provider configured");
-    _lastFailureReason = "未配置可用模型提供方（Claude relay / DeepSeek）";
+  if (!hasDeepSeek) {
+    console.error("ERROR: DEEPSEEK_API_KEY required (generator uses DeepSeek)");
+    _lastFailureReason = "未配置 DEEPSEEK_API_KEY（generator 需要 DeepSeek）";
     process.exit(1);
   }
 
   console.log("Build Sentence Robust Generator");
   console.log("==============================");
   console.log(`Target sets: ${TARGET_SET_COUNT}`);
-  console.log(`Generator: ${hasRelay ? `Claude relay → ${process.env.CLAUDE_GENERATOR_MODEL || "claude-sonnet-4-6"} (${getRelayConfigs().map((x) => x.baseUrl).join(", ")})` : "DeepSeek (deepseek-chat)"}`);
-  console.log(`Fallback: ${hasDeepSeek ? "DeepSeek enabled" : "none"}`);
+  console.log(`Generator: DeepSeek V3.2 (deepseek-chat)`);
+  console.log(`Reviewer: ${hasRelay ? `Claude relay → ${process.env.CLAUDE_GENERATOR_MODEL || "claude-sonnet-4-6"} (${getRelayConfigs().map((x) => x.baseUrl).join(", ")})` : "DeepSeek (no relay configured)"}`);
+  console.log(`Reviewer fallback: ${hasRelay && hasDeepSeek ? "DeepSeek enabled" : "none"}`);
   console.log(`Proxy: ${resolveProxyUrl() || "(direct)"}`);
 
   // Seed pool from questions.json (active bank) + reserve_pool.json (leftovers)
