@@ -541,6 +541,27 @@ function normalizeQuestion(raw, tempId) {
   // Auto-fix: Limit non-mandatory multi-word chunks to ~2 per question (TPO: ~23% multi-word)
   chunks = limitMultiWordChunks(chunks, distractor, 2);
 
+  // Auto-fix: Merge standalone "not" with preceding aux into a single chunk ("did not")
+  // Must happen before hardValidateQuestion, which rejects split negation clusters.
+  {
+    const effChunks = chunks.filter((c) => c !== distractor);
+    const hasNot = effChunks.some((c) => c.trim().toLowerCase() === "not");
+    const hasAux = effChunks.some((c) => _NEG_AUX.has(c.trim().toLowerCase()));
+    if (hasNot && hasAux && effChunks.length - 1 >= 4) {
+      const aw = answer.toLowerCase().replace(/[.,!?;:]/g, "").split(/\s+/).filter(Boolean);
+      const notIdx = aw.indexOf("not");
+      if (notIdx > 0 && _NEG_AUX.has(aw[notIdx - 1])) {
+        const auxWord = aw[notIdx - 1];
+        const merged = `${auxWord} not`;
+        chunks = [
+          ...chunks.filter((c) => c !== distractor && c.trim().toLowerCase() !== "not" && c.trim().toLowerCase() !== auxWord),
+          merged,
+          ...(distractor ? [distractor] : []),
+        ];
+      }
+    }
+  }
+
   // Auto-fix: Correct prefilled_positions based on actual answer text.
   // Fix 2: fallback lookup is case-insensitive so AI key-case mismatches don't lose positions.
   const rawPositionsLower = Object.fromEntries(
@@ -2916,7 +2937,7 @@ function composeOneSet(pool, setId, maxRetries = 500, capture = null) {
       !hasDuplicatePrompts &&
       p.qmark >= 0 && p.qmark <= 2 &&
       p.distractor >= 7 && p.distractor <= 10 &&
-      p.embedded >= 5 && p.embedded <= 8 &&
+      p.embedded >= 5 && p.embedded <= 9 &&
       p.avgWords >= 9.0 && p.avgWords <= 13.0 &&
       p.avgChunks >= 4.5 && p.avgChunks <= 7.5 &&
       maxTypeCount <= 6
@@ -3301,6 +3322,7 @@ function postGenerationRuleCheck(sets) {
 
       // Fix 2: prepFragments — split "of the" / "in the" etc. into individual words
       // Guard: skip if splitting would push effective chunk count above 8
+      // Guard: skip if splitting would introduce duplicate chunks in the bank
       {
         const effectiveBefore = (q.chunks || []).filter((c) => c !== q.distractor).length;
         const newChunks = [];
@@ -3309,12 +3331,18 @@ function postGenerationRuleCheck(sets) {
         for (const chunk of q.chunks || []) {
           if (chunk !== q.distractor && _PREP_FRAGMENT.test(chunk.trim())) {
             const parts = chunk.trim().split(/\s+/);
-            if (effectiveAfter + (parts.length - 1) <= 8) {
+            // Check if any split part already exists in the current bank
+            const existingSet = new Set(newChunks.map((c) => c.toLowerCase()));
+            for (const c of (q.chunks || [])) {
+              if (c !== chunk) existingSet.add(c.toLowerCase());
+            }
+            const wouldDuplicate = parts.some((p) => existingSet.has(p.toLowerCase()));
+            if (!wouldDuplicate && effectiveAfter + (parts.length - 1) <= 8) {
               newChunks.push(...parts);
               effectiveAfter += parts.length - 1;
               changed = true;
             } else {
-              newChunks.push(chunk); // skip: would overflow max effective chunks
+              newChunks.push(chunk); // skip: would overflow or duplicate
             }
           } else {
             newChunks.push(chunk);
