@@ -32,6 +32,7 @@ const I18N = {
     otpVerifying: "验证中...",
     otpBack: "返回",
     otpHelper: "没收到？请检查垃圾邮件，或等待 1 分钟后重试",
+    resendOtp: "重新发送",
     invalidEmail: "请输入邮箱",
     invalidEmailFormat: "邮箱格式不正确",
     invalidCode: "请输入 6 位登录码",
@@ -69,6 +70,7 @@ const I18N = {
     otpVerifying: "Verifying...",
     otpBack: "Back",
     otpHelper: "Didn't receive it? Check spam, or wait 1 minute to retry",
+    resendOtp: "Resend",
     invalidEmail: "Please enter an email",
     invalidEmailFormat: "Invalid email format",
     invalidCode: "Please enter a 6-character code",
@@ -148,14 +150,21 @@ function ImportPrompt({ t, count, onImport, onSkip, onDismiss, loading }) {
 // Login Modal — renders as a portal overlay
 // ═══════════════════════════════════════════
 function LoginModal({ t, onClose, onLoginSuccess }) {
-  const [modalState, setModalState] = useState("form"); // form | otp
   const [activeTab, setActiveTab] = useState("email");
   const [emailInput, setEmailInput] = useState("");
   const [otpInput, setOtpInput] = useState("");
-  const [otpEmail, setOtpEmail] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
   const [codeInput, setCodeInput] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [resendCooldown, setResendCooldown] = useState(0);
+
+  // Resend cooldown timer
+  useEffect(() => {
+    if (resendCooldown <= 0) return;
+    const timer = setTimeout(() => setResendCooldown((c) => c - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [resendCooldown]);
 
   const handleSendOTP = async () => {
     const email = emailInput.trim();
@@ -166,18 +175,30 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
     const { error: sendError } = await sendEmailOTP(email);
     setLoading(false);
     if (sendError) { setError(sendError); return; }
-    setOtpEmail(email);
-    setModalState("otp");
+    setOtpSent(true);
+    setResendCooldown(60);
+  };
+
+  const handleResendOTP = async () => {
+    if (resendCooldown > 0) return;
+    const email = emailInput.trim();
+    if (!email) return;
+    setLoading(true);
+    setError("");
+    const { error: sendError } = await sendEmailOTP(email);
+    setLoading(false);
+    if (sendError) { setError(sendError); return; }
+    setResendCooldown(60);
   };
 
   const handleVerifyOTP = async () => {
     if (otpInput.length < 6) { setError(t.invalidOtp); return; }
     setLoading(true);
     setError("");
-    const { userCode: code, tier, email, auth_method, isNewUser, error: verifyError } = await verifyEmailOTP(otpEmail, otpInput);
+    const { userCode: code, tier, email, auth_method, isNewUser, error: verifyError } = await verifyEmailOTP(emailInput.trim(), otpInput);
     setLoading(false);
     if (verifyError) { setError(verifyError); return; }
-    onLoginSuccess({ code, tier, email: email || otpEmail, auth_method: auth_method || "email", isNewUser });
+    onLoginSuccess({ code, tier, email: email || emailInput.trim(), auth_method: auth_method || "email", isNewUser });
   };
 
   const handleCodeLogin = async () => {
@@ -200,117 +221,115 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
         onClick={(e) => e.stopPropagation()}
         style={{ width: "100%", maxWidth: 440, background: "#fff", border: "1px solid " + C.bdr, borderRadius: 14, padding: "28px 24px 24px", boxShadow: "0 20px 60px rgba(0,0,0,0.15)" }}
       >
-        {modalState === "otp" ? (
-          /* ── OTP Verification ── */
-          <div style={{ textAlign: "center" }}>
-            <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 6, color: C.t1 }}>{t.otpTitle}</h2>
-            <p style={{ fontSize: 13, color: C.t2, marginBottom: 20 }}>
-              {t.otpSentTo} <strong>{otpEmail}</strong>
-            </p>
-            <input
-              type="text"
-              placeholder={t.otpPlaceholder}
-              value={otpInput}
-              onChange={(e) => setOtpInput(e.target.value.replace(/\D/g, "").slice(0, 6))}
-              onKeyDown={(e) => e.key === "Enter" && handleVerifyOTP()}
-              maxLength={6}
-              autoFocus
-              style={{ width: "100%", padding: 12, fontSize: 26, borderRadius: 10, border: "1.5px solid " + C.bdr, outline: "none", boxSizing: "border-box", fontFamily: "monospace", letterSpacing: 10, textAlign: "center" }}
-            />
+        {/* ── Header ── */}
+        <div style={{ textAlign: "center", marginBottom: 16 }}>
+          <div style={{ fontSize: 18, fontWeight: 700, color: C.t1, marginBottom: 4 }}>{t.modalTitle}</div>
+          <div style={{ fontSize: 12, color: C.t2 }}>{t.modalSubtitle}</div>
+        </div>
+
+        {/* Tabs */}
+        <div style={{ display: "flex", borderBottom: "2px solid " + C.bdrSubtle, marginBottom: 18 }}>
+          {[
+            { key: "email", label: t.emailTab },
+            { key: "code", label: t.codeTab },
+          ].map(({ key, label }) => (
             <button
-              onClick={handleVerifyOTP}
-              disabled={loading}
-              style={{ width: "100%", marginTop: 14, padding: "11px 0", borderRadius: 10, border: "none", background: loading ? "#9ca3af" : C.blue, color: "#fff", fontSize: 14, fontWeight: 600, cursor: loading ? "not-allowed" : "pointer", fontFamily: FONT }}
+              key={key}
+              onClick={() => { setActiveTab(key); setError(""); }}
+              style={{
+                flex: 1, padding: "9px 0", border: "none", background: "none", cursor: "pointer",
+                fontSize: 13, fontWeight: 600, fontFamily: FONT,
+                color: activeTab === key ? C.blue : C.t3,
+                borderBottom: activeTab === key ? "2px solid " + C.blue : "2px solid transparent",
+                marginBottom: -2, transition: "all 0.2s",
+              }}
             >
-              {loading ? t.otpVerifying : t.otpVerify}
+              {label}
             </button>
-            <button
-              onClick={() => { setModalState("form"); setError(""); setOtpInput(""); }}
-              style={{ marginTop: 10, border: "none", background: "none", color: C.t2, fontSize: 12, cursor: "pointer", textDecoration: "underline", fontFamily: FONT }}
-            >
-              {t.otpBack}
-            </button>
-            <p style={{ fontSize: 11, color: C.t3, marginTop: 12 }}>{t.otpHelper}</p>
-          </div>
-        ) : (
-          /* ── Login Form ── */
-          <>
-            <div style={{ textAlign: "center", marginBottom: 16 }}>
-              <div style={{ fontSize: 18, fontWeight: 700, color: C.t1, marginBottom: 4 }}>{t.modalTitle}</div>
-              <div style={{ fontSize: 12, color: C.t2 }}>{t.modalSubtitle}</div>
+          ))}
+        </div>
+
+        {/* Email Tab — single view: email + OTP + resend */}
+        {activeTab === "email" && (
+          <div>
+            {/* Email input + send button */}
+            <div style={{ display: "flex", gap: 8 }}>
+              <input
+                type="email"
+                placeholder={t.emailPlaceholder}
+                value={emailInput}
+                onChange={(e) => { setEmailInput(e.target.value); if (otpSent) { setOtpSent(false); setOtpInput(""); } }}
+                onKeyDown={(e) => e.key === "Enter" && (!otpSent ? handleSendOTP() : handleVerifyOTP())}
+                autoFocus
+                style={{ flex: 1, padding: "11px 12px", fontSize: 14, borderRadius: 10, border: "1.5px solid " + C.bdr, outline: "none", boxSizing: "border-box", fontFamily: FONT }}
+              />
+              <button
+                onClick={otpSent ? handleResendOTP : handleSendOTP}
+                disabled={loading || resendCooldown > 0}
+                style={{
+                  flexShrink: 0, padding: "0 14px", borderRadius: 10, border: "none", fontSize: 13, fontWeight: 600, fontFamily: FONT,
+                  background: (loading || resendCooldown > 0) ? "#e5e7eb" : C.blue,
+                  color: (loading || resendCooldown > 0) ? C.t3 : "#fff",
+                  cursor: (loading || resendCooldown > 0) ? "default" : "pointer",
+                  whiteSpace: "nowrap", minWidth: 90,
+                }}
+              >
+                {loading && !otpSent ? t.sendingOtp : resendCooldown > 0 ? `${resendCooldown}s` : otpSent ? t.resendOtp : t.sendOtp}
+              </button>
             </div>
 
-            {/* Tabs */}
-            <div style={{ display: "flex", borderBottom: "2px solid " + C.bdrSubtle, marginBottom: 18 }}>
-              {[
-                { key: "email", label: t.emailTab },
-                { key: "code", label: t.codeTab },
-              ].map(({ key, label }) => (
-                <button
-                  key={key}
-                  onClick={() => { setActiveTab(key); setError(""); }}
-                  style={{
-                    flex: 1, padding: "9px 0", border: "none", background: "none", cursor: "pointer",
-                    fontSize: 13, fontWeight: 600, fontFamily: FONT,
-                    color: activeTab === key ? C.blue : C.t3,
-                    borderBottom: activeTab === key ? "2px solid " + C.blue : "2px solid transparent",
-                    marginBottom: -2, transition: "all 0.2s",
-                  }}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-
-            {/* Email Tab */}
-            {activeTab === "email" && (
-              <div>
+            {/* OTP input — appears after sending */}
+            {otpSent && (
+              <div style={{ marginTop: 12 }}>
+                <div style={{ fontSize: 12, color: C.t2, marginBottom: 6 }}>{t.otpSentTo} <strong>{emailInput.trim()}</strong></div>
                 <input
-                  type="email"
-                  placeholder={t.emailPlaceholder}
-                  value={emailInput}
-                  onChange={(e) => setEmailInput(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && handleSendOTP()}
-                  autoFocus
-                  style={{ width: "100%", padding: "11px 12px", fontSize: 14, borderRadius: 10, border: "1.5px solid " + C.bdr, outline: "none", boxSizing: "border-box", fontFamily: FONT }}
-                />
-                <button
-                  onClick={handleSendOTP}
-                  disabled={loading}
-                  style={{ width: "100%", marginTop: 12, padding: "11px 0", borderRadius: 10, border: "none", background: loading ? "#9ca3af" : C.blue, color: "#fff", fontSize: 14, fontWeight: 600, cursor: loading ? "not-allowed" : "pointer", fontFamily: FONT }}
-                >
-                  {loading ? t.sendingOtp : t.sendOtp}
-                </button>
-                <p style={{ fontSize: 11, color: C.t3, textAlign: "center", marginTop: 10 }}>{t.emailHelper}</p>
-                <p style={{ fontSize: 11, color: C.t3, textAlign: "center", marginTop: 4 }}>{t.emailAutoRegister}</p>
-              </div>
-            )}
-
-            {/* Code Tab */}
-            {activeTab === "code" && (
-              <div>
-                <input
-                  data-testid="login-code-input"
                   type="text"
-                  placeholder={t.codePlaceholder}
-                  value={codeInput}
-                  onChange={(e) => setCodeInput(normalizeInputCode(e.target.value))}
-                  onKeyDown={(e) => e.key === "Enter" && handleCodeLogin()}
+                  placeholder={t.otpPlaceholder}
+                  value={otpInput}
+                  onChange={(e) => setOtpInput(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                  onKeyDown={(e) => e.key === "Enter" && handleVerifyOTP()}
                   maxLength={6}
                   autoFocus
-                  style={{ width: "100%", padding: "11px 12px", fontSize: 24, borderRadius: 10, border: "1.5px solid " + C.bdr, outline: "none", boxSizing: "border-box", fontFamily: "monospace", letterSpacing: 8, textAlign: "center", textTransform: "uppercase" }}
+                  style={{ width: "100%", padding: 10, fontSize: 22, borderRadius: 10, border: "1.5px solid " + C.bdr, outline: "none", boxSizing: "border-box", fontFamily: "monospace", letterSpacing: 8, textAlign: "center" }}
                 />
                 <button
-                  onClick={handleCodeLogin}
+                  onClick={handleVerifyOTP}
                   disabled={loading}
-                  style={{ width: "100%", marginTop: 12, padding: "11px 0", borderRadius: 10, border: "none", background: loading ? "#9ca3af" : C.blue, color: "#fff", fontSize: 14, fontWeight: 600, cursor: loading ? "not-allowed" : "pointer", fontFamily: FONT }}
+                  style={{ width: "100%", marginTop: 10, padding: "11px 0", borderRadius: 10, border: "none", background: loading ? "#9ca3af" : C.blue, color: "#fff", fontSize: 14, fontWeight: 600, cursor: loading ? "not-allowed" : "pointer", fontFamily: FONT }}
                 >
-                  {loading ? t.loggingIn : t.login}
+                  {loading ? t.otpVerifying : t.login}
                 </button>
-                <p style={{ fontSize: 11, color: C.t3, textAlign: "center", marginTop: 10 }}>{t.codeHelper}</p>
               </div>
             )}
-          </>
+
+            <p style={{ fontSize: 11, color: C.t3, textAlign: "center", marginTop: 10 }}>{t.emailHelper}</p>
+            <p style={{ fontSize: 11, color: C.t3, textAlign: "center", marginTop: 4 }}>{t.emailAutoRegister}</p>
+          </div>
+        )}
+
+        {/* Code Tab */}
+        {activeTab === "code" && (
+          <div>
+            <input
+              data-testid="login-code-input"
+              type="text"
+              placeholder={t.codePlaceholder}
+              value={codeInput}
+              onChange={(e) => setCodeInput(normalizeInputCode(e.target.value))}
+              onKeyDown={(e) => e.key === "Enter" && handleCodeLogin()}
+              maxLength={6}
+              autoFocus
+              style={{ width: "100%", padding: "11px 12px", fontSize: 24, borderRadius: 10, border: "1.5px solid " + C.bdr, outline: "none", boxSizing: "border-box", fontFamily: "monospace", letterSpacing: 8, textAlign: "center", textTransform: "uppercase" }}
+            />
+            <button
+              onClick={handleCodeLogin}
+              disabled={loading}
+              style={{ width: "100%", marginTop: 12, padding: "11px 0", borderRadius: 10, border: "none", background: loading ? "#9ca3af" : C.blue, color: "#fff", fontSize: 14, fontWeight: 600, cursor: loading ? "not-allowed" : "pointer", fontFamily: FONT }}
+            >
+              {loading ? t.loggingIn : t.login}
+            </button>
+            <p style={{ fontSize: 11, color: C.t3, textAlign: "center", marginTop: 10 }}>{t.codeHelper}</p>
+          </div>
         )}
 
         {/* Error */}
