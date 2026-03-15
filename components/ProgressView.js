@@ -363,6 +363,18 @@ function SessionRow({ entry, expanded, onToggle, onDelete, typeAvgs, isActive, o
           <div style={{ fontSize: 11, color: P.textDim, marginTop: 1 }}>{formatLocalDateTime(s.date)}</div>
         </div>
         <span style={{ fontVariantNumeric: "tabular-nums", fontSize: 14, fontWeight: 720, color: scoreColor }}>{scoreStr}</span>
+        <span
+          role="button"
+          tabIndex={0}
+          title="删除"
+          onClick={(e) => { e.stopPropagation(); if (onDelete) onDelete(entry.sourceIndex); }}
+          onKeyDown={(e) => { if (e.key === "Enter") { e.stopPropagation(); if (onDelete) onDelete(entry.sourceIndex); } }}
+          style={{ fontSize: 14, color: P.textDim, cursor: "pointer", padding: "2px 4px", borderRadius: 4, transition: "color 0.15s" }}
+          onMouseEnter={(e) => { e.currentTarget.style.color = "#dc2626"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.color = P.textDim; }}
+        >
+          &#x2715;
+        </span>
         {isWriting
           ? <span style={{ fontSize: 18, fontWeight: 400, color: isActive ? m.color : P.border, transition: "color 0.2s, transform 0.2s", display: "inline-block", transform: isActive ? "rotate(45deg)" : "none" }}>+</span>
           : <ChevronIcon open={expanded} color={P.textDim} />}
