@@ -1,8 +1,5 @@
 import { isSupabaseAdminConfigured, supabaseAdmin } from "../../../../lib/supabaseAdmin";
-
-function jsonError(status, error) {
-  return Response.json({ error }, { status });
-}
+import { jsonError } from "../../../../lib/apiResponse";
 
 export async function POST(request) {
   try {

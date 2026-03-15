@@ -1,25 +1,8 @@
 import { isSupabaseAdminConfigured, supabaseAdmin } from "../../../lib/supabaseAdmin";
+import { createRateLimiter, getIp } from "../../../lib/rateLimit";
+import { jsonError } from "../../../lib/apiResponse";
 
-const FB_RL_WINDOW = 60_000;
-const FB_RL_MAX = 10;
-const fbBuckets = globalThis.__toeflFeedbackRLBuckets || new Map();
-if (!globalThis.__toeflFeedbackRLBuckets) globalThis.__toeflFeedbackRLBuckets = fbBuckets;
-
-function getIp(req) {
-  return req.headers.get("cf-connecting-ip")
-    || (req.headers.get("x-forwarded-for") || "").split(",")[0].trim()
-    || req.headers.get("x-real-ip")
-    || "unknown";
-}
-
-function isFbRateLimited(ip) {
-  const now = Date.now();
-  for (const [k, v] of fbBuckets) { if (now - v.t > FB_RL_WINDOW) fbBuckets.delete(k); }
-  const b = fbBuckets.get(ip);
-  if (!b || now - b.t > FB_RL_WINDOW) { fbBuckets.set(ip, { t: now, c: 1 }); return false; }
-  b.c++;
-  return b.c > FB_RL_MAX;
-}
+const limiter = createRateLimiter("feedback", { max: 10 });
 
 export async function GET(request) {
   try {
@@ -40,10 +23,6 @@ export async function GET(request) {
   }
 }
 
-function jsonError(status, error) {
-  return Response.json({ error }, { status });
-}
-
 function parseIp(request) {
   const forwarded = String(request.headers.get("x-forwarded-for") || "").trim();
   if (forwarded) return forwarded.split(",")[0].trim();
@@ -52,7 +31,7 @@ function parseIp(request) {
 }
 
 export async function POST(request) {
-  if (isFbRateLimited(getIp(request))) {
+  if (limiter.isLimited(getIp(request))) {
     return jsonError(429, "Too many requests");
   }
   try {

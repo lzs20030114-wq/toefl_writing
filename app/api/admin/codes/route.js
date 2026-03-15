@@ -1,12 +1,9 @@
 import { isAdminAuthorized } from "../../../../lib/adminAuth";
 import { isSupabaseAdminConfigured, supabaseAdmin } from "../../../../lib/supabaseAdmin";
+import { jsonError } from "../../../../lib/apiResponse";
 
 const CODE_CHARS = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
 const CODE_LEN = 6;
-
-function jsonError(status, error) {
-  return Response.json({ error }, { status });
-}
 
 function safeNum(v, fallback = 0) {
   const n = Number(v);

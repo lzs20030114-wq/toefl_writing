@@ -1,33 +1,11 @@
 import { isSupabaseAdminConfigured, supabaseAdmin } from "../../../lib/supabaseAdmin";
+import { createRateLimiter, getIp } from "../../../lib/rateLimit";
+import { jsonError } from "../../../lib/apiResponse";
 
 const FREE_DAILY_LIMIT = 3;
 const PRO_DAILY_LIMIT = 100; // hidden abuse cap for pro/legacy
 
-// Rate limit POST: max 10 req/IP/60s
-const USAGE_RL_WINDOW = 60_000;
-const USAGE_RL_MAX = 10;
-const usageBuckets = globalThis.__toeflUsageRLBuckets || new Map();
-if (!globalThis.__toeflUsageRLBuckets) globalThis.__toeflUsageRLBuckets = usageBuckets;
-
-function getIp(req) {
-  return req.headers.get("cf-connecting-ip")
-    || (req.headers.get("x-forwarded-for") || "").split(",")[0].trim()
-    || req.headers.get("x-real-ip")
-    || "unknown";
-}
-
-function isUsageRateLimited(ip) {
-  const now = Date.now();
-  for (const [k, v] of usageBuckets) { if (now - v.t > USAGE_RL_WINDOW) usageBuckets.delete(k); }
-  const b = usageBuckets.get(ip);
-  if (!b || now - b.t > USAGE_RL_WINDOW) { usageBuckets.set(ip, { t: now, c: 1 }); return false; }
-  b.c++;
-  return b.c > USAGE_RL_MAX;
-}
-
-function jsonError(status, error) {
-  return Response.json({ error }, { status });
-}
+const limiter = createRateLimiter("usage", { max: 10 });
 
 function todayDate() {
   return new Date().toISOString().split("T")[0];
@@ -100,7 +78,7 @@ export async function GET(request) {
  */
 export async function POST(request) {
   try {
-    if (isUsageRateLimited(getIp(request))) {
+    if (limiter.isLimited(getIp(request))) {
       return jsonError(429, "Too many requests");
     }
     if (!isSupabaseAdminConfigured) {

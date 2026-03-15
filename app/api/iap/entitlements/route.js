@@ -1,18 +1,5 @@
-import { IapError, toIapError } from "../../../../lib/iap/errors";
+import { iapJsonError } from "../../../../lib/iap/errors";
 import { getUserEntitlements } from "../../../../lib/iap/service";
-
-function jsonError(error) {
-  const e = error instanceof IapError ? error : toIapError(error);
-  return Response.json(
-    {
-      ok: false,
-      error: e.code,
-      message: e.message,
-      details: e.details || null,
-    },
-    { status: e.status || 500 }
-  );
-}
 
 function resolveUserCode(request, url) {
   const fromQuery = String(url.searchParams.get("userCode") || "").trim();
@@ -28,7 +15,7 @@ export async function GET(request) {
     const entitlements = await getUserEntitlements(userCode);
     return Response.json({ ok: true, entitlements });
   } catch (e) {
-    return jsonError(e);
+    return iapJsonError(e);
   }
 }
 

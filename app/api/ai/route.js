@@ -1,33 +1,19 @@
 import { createRequire } from "module";
 import { createHash } from "crypto";
 import { isSupabaseAdminConfigured, supabaseAdmin } from "../../../lib/supabaseAdmin";
+import { createRateLimiter, getIp } from "../../../lib/rateLimit";
 
 const require = createRequire(import.meta.url);
 const { callDeepSeekViaCurl, resolveProxyUrl } = require("../../../lib/ai/deepseekHttp");
-const RATE_LIMIT_WINDOW_MS = 60 * 1000;
-const RATE_LIMIT_MAX_REQUESTS = 45;
 const MAX_BODY_BYTES = 120000;
 const MAX_SYSTEM_CHARS = 12000;
 const MAX_MESSAGE_CHARS = 40000;
 const MAX_TOKENS = 3000;
 
-const rateLimitBuckets = globalThis.__toeflRateLimitBuckets || new Map();
-if (!globalThis.__toeflRateLimitBuckets) {
-  globalThis.__toeflRateLimitBuckets = rateLimitBuckets;
-}
-
-function getClientIp(request) {
-  const cf = request.headers.get("cf-connecting-ip");
-  if (cf) return cf.trim();
-  const xff = request.headers.get("x-forwarded-for");
-  if (xff) return xff.split(",")[0].trim();
-  const xri = request.headers.get("x-real-ip");
-  if (xri) return xri.trim();
-  return "unknown";
-}
+const limiter = createRateLimiter("ai", { max: 45 });
 
 function getRateLimitKey(request) {
-  const ip = getClientIp(request);
+  const ip = getIp(request);
   if (ip && ip !== "unknown") return `ip:${ip}`;
   const ua = request.headers.get("user-agent") || "";
   const lang = request.headers.get("accept-language") || "";
@@ -37,21 +23,6 @@ function getRateLimitKey(request) {
   const raw = `${ua}|${lang}|${secUa}|${host}|${origin}`;
   const digest = createHash("sha1").update(raw).digest("hex");
   return `fp:${digest}`;
-}
-
-function isRateLimited(ip, now = Date.now()) {
-  for (const [key, meta] of rateLimitBuckets.entries()) {
-    if (now - meta.windowStart > RATE_LIMIT_WINDOW_MS) {
-      rateLimitBuckets.delete(key);
-    }
-  }
-  const bucket = rateLimitBuckets.get(ip);
-  if (!bucket || now - bucket.windowStart > RATE_LIMIT_WINDOW_MS) {
-    rateLimitBuckets.set(ip, { windowStart: now, count: 1 });
-    return false;
-  }
-  bucket.count += 1;
-  return bucket.count > RATE_LIMIT_MAX_REQUESTS;
 }
 
 function normalizeHost(raw) {
@@ -139,7 +110,7 @@ async function fail(meta, status, payload) {
 export async function POST(request) {
   const requestMeta = {
     clientId: request.headers.get("x-client-id") || "",
-    clientIp: getClientIp(request),
+    clientIp: getIp(request),
     origin: request.headers.get("origin") || "",
     userAgent: request.headers.get("user-agent") || "",
   };
@@ -152,7 +123,7 @@ export async function POST(request) {
       return fail({ ...requestMeta, stage: "origin" }, 403, { error: "Forbidden origin." });
     }
     const rateKey = getRateLimitKey(request);
-    if (rateKey && isRateLimited(rateKey)) {
+    if (rateKey && limiter.isLimited(rateKey)) {
       return fail({ ...requestMeta, stage: "rate_limit", errorType: "rate_limit" }, 429, { error: "Rate limit exceeded. Please retry shortly." });
     }
     const payload = await request.json();

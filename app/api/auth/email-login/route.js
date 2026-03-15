@@ -1,30 +1,8 @@
 import { isSupabaseAdminConfigured, supabaseAdmin } from "../../../../lib/supabaseAdmin";
+import { createRateLimiter, getIp } from "../../../../lib/rateLimit";
+import { jsonError } from "../../../../lib/apiResponse";
 
-// Rate limit: max 10 req/IP/60s
-const EMAIL_RL_WINDOW = 60_000;
-const EMAIL_RL_MAX = 10;
-const emailBuckets = globalThis.__toeflEmailRLBuckets || new Map();
-if (!globalThis.__toeflEmailRLBuckets) globalThis.__toeflEmailRLBuckets = emailBuckets;
-
-function getIp(req) {
-  return req.headers.get("cf-connecting-ip")
-    || (req.headers.get("x-forwarded-for") || "").split(",")[0].trim()
-    || req.headers.get("x-real-ip")
-    || "unknown";
-}
-
-function isEmailRateLimited(ip) {
-  const now = Date.now();
-  for (const [k, v] of emailBuckets) { if (now - v.t > EMAIL_RL_WINDOW) emailBuckets.delete(k); }
-  const b = emailBuckets.get(ip);
-  if (!b || now - b.t > EMAIL_RL_WINDOW) { emailBuckets.set(ip, { t: now, c: 1 }); return false; }
-  b.c++;
-  return b.c > EMAIL_RL_MAX;
-}
-
-function jsonError(status, error) {
-  return Response.json({ error }, { status });
-}
+const limiter = createRateLimiter("email-login", { max: 10 });
 
 const CHARS = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
 function generateCode() {
@@ -37,7 +15,7 @@ function generateCode() {
 
 export async function POST(request) {
   try {
-    if (isEmailRateLimited(getIp(request))) {
+    if (limiter.isLimited(getIp(request))) {
       return jsonError(429, "Too many requests. Please try again later.");
     }
     if (!isSupabaseAdminConfigured) return jsonError(503, "Supabase admin is not configured");
