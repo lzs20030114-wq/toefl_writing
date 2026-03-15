@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { FONT } from "../shared/ui";
 import { formatLocalDateTime, translateGrammarPoint } from "../../lib/utils";
 import { WritingFeedbackPanel } from "../writing/WritingFeedbackPanel";
@@ -151,7 +151,7 @@ function MockDetailView({ entry, onBack }) {
         })}
       </div>
       {/* Content */}
-      <div style={{ flex: 1, overflowY: "auto", WebkitOverflowScrolling: "touch" }}>
+      <div style={{ flex: 1, overflowY: "auto", WebkitOverflowScrolling: "touch", overscrollBehavior: "contain" }}>
         {tab === MOCK_IDS.BUILD ? renderBsTab() : tab === MOCK_IDS.EMAIL ? renderWritingTab(emailTask) : renderWritingTab(discTask)}
       </div>
     </div>
@@ -177,7 +177,7 @@ function WritingDetailView({ entry, onBack }) {
         <span style={{ fontSize: 14, fontWeight: 700, color: P.text }}>{tc.label}反馈</span>
         <span style={{ fontSize: 15, fontWeight: 800, color: getScoreColor(s), minWidth: 44, textAlign: "right" }}>{getScoreLabel(s)}</span>
       </div>
-      <div style={{ flex: 1, overflow: "hidden" }}>
+      <div style={{ flex: 1, overflowY: "auto", WebkitOverflowScrolling: "touch", overscrollBehavior: "contain" }}>
         <WritingFeedbackPanel fb={fb} type={type} pd={pd} userText={userText} containerHeight="100%" onExit={null} onRetry={null} onNext={null} />
       </div>
     </div>
@@ -204,6 +204,14 @@ export default function MobileProgressView({ vm }) {
   const activeMockEntry = useMemo(() => mockEntries.find((e) => e.sourceIndex === activeMockSrcIdx) || null, [mockEntries, activeMockSrcIdx]);
   const activePracticeEntry = useMemo(() => practiceEntries.find((e) => e.sourceIndex === activePracticeSrcIdx) || null, [practiceEntries, activePracticeSrcIdx]);
 
+  const hasOverlay = !!(activeMockEntry || (activePracticeEntry && (activePracticeEntry.session.type === "email" || activePracticeEntry.session.type === "discussion")));
+  useEffect(() => {
+    if (!hasOverlay) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
+  }, [hasOverlay]);
+
   // Full-screen overlays
   if (activeMockEntry) {
     return <MockDetailView entry={activeMockEntry} onBack={() => setActiveMockSrcIdx(null)} />;
@@ -213,7 +221,7 @@ export default function MobileProgressView({ vm }) {
   }
 
   return (
-    <div style={{ fontFamily: FONT, background: P.bg, minHeight: "100dvh", display: "flex", flexDirection: "column" }}>
+    <div style={{ fontFamily: FONT, background: P.bg, height: "100dvh", display: "flex", flexDirection: "column", overflow: "hidden" }}>
       <style>{`
         @keyframes mSlideUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
       `}</style>
@@ -225,7 +233,7 @@ export default function MobileProgressView({ vm }) {
         <span style={{ width: 44 }} />
       </div>
 
-      <div style={{ flex: 1, overflowY: "auto", WebkitOverflowScrolling: "touch", padding: "10px 0 24px" }}>
+      <div style={{ flex: 1, overflowY: "auto", WebkitOverflowScrolling: "touch", overscrollBehavior: "contain", padding: "10px 0 24px" }}>
 
         {/* Stat filter chips */}
         <div style={{ display: "flex", gap: 8, overflowX: "auto", padding: "0 12px 10px", WebkitOverflowScrolling: "touch" }}>
