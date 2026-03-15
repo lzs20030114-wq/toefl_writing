@@ -1,11 +1,48 @@
 ﻿"use client";
-import React from "react";
+import React, { useState, useCallback, useRef } from "react";
 import { C, FONT, Btn, InfoStrip, PageShell, SurfaceCard, Toast, TopBar } from "../shared/ui";
 import { useBuildSentenceSession } from "./useBuildSentenceSession";
 import { formatLongDuration, PRACTICE_MODE } from "../../lib/practiceMode";
 import { translateGrammarPoint } from "../../lib/utils";
 import { BANK_EXHAUSTED_ERRORS } from "../../lib/questionSelector";
 import { useIsMobile } from "../../hooks/useIsMobile";
+
+/* ── 触觉反馈 ── */
+function vibrate(ms = 12) {
+  try { navigator?.vibrate?.(ms); } catch {}
+}
+
+/* ── 造句交互动画 CSS ── */
+const BS_INTERACTION_CSS = `
+@keyframes bsPopIn {
+  0%   { transform: scale(0.6); opacity: 0.4; }
+  60%  { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); }
+}
+@keyframes bsPulseSlot {
+  0%   { box-shadow: 0 0 0 0 rgba(13,150,104,0.4); }
+  70%  { box-shadow: 0 0 0 8px rgba(13,150,104,0); }
+  100% { box-shadow: 0 0 0 0 rgba(13,150,104,0); }
+}
+@keyframes bsReturnPop {
+  0%   { transform: scale(0.5); opacity: 0; }
+  60%  { transform: scale(1.08); }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes bsPress {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(0.92); }
+  100% { transform: scale(1); }
+}
+.bs-chunk:active {
+  transform: scale(0.9) !important;
+  transition: transform 0.05s !important;
+}
+.bs-slot-filled:active {
+  transform: scale(0.92) !important;
+  transition: transform 0.05s !important;
+}
+`;
 
 function formatChunkDisplay(text) {
   return String(text || "")
@@ -80,6 +117,34 @@ export function BuildSentenceTask({
   } = useBuildSentenceSession(questions, { persistSession, onComplete, onTimerChange, timeLimitSeconds, practiceMode });
   const isMobile = useIsMobile();
   const exhausted = String(selectionError || "").includes(BANK_EXHAUSTED_ERRORS.BUILD_SENTENCE);
+
+  /* ── 交互动画状态 ── */
+  const [animSlot, setAnimSlot] = useState(null);      // 刚填入的槽位 index
+  const [animChunkId, setAnimChunkId] = useState(null); // 刚退回的词块 id
+  const animTimer = useRef(null);
+
+  const handlePickChunk = useCallback((chunk) => {
+    vibrate(12);
+    // 找到即将填入的槽位
+    const targetSlot = slots.findIndex((s) => s === null);
+    pickChunk(chunk);
+    if (targetSlot !== -1) {
+      setAnimSlot(targetSlot);
+      clearTimeout(animTimer.current);
+      animTimer.current = setTimeout(() => setAnimSlot(null), 450);
+    }
+  }, [slots, pickChunk]);
+
+  const handleRemoveChunk = useCallback((i) => {
+    vibrate(8);
+    const chunk = slots[i];
+    removeChunk(i);
+    if (chunk) {
+      setAnimChunkId(chunk.id);
+      clearTimeout(animTimer.current);
+      animTimer.current = setTimeout(() => setAnimChunkId(null), 450);
+    }
+  }, [slots, removeChunk]);
 
   function handleSubmitClick() {
     if (!isPracticeMode) {
@@ -221,36 +286,40 @@ export function BuildSentenceTask({
   const slotStyle = (i) => {
     const filled = slots[i] !== null;
     const isHover = hoverSlot === i && dragItem;
+    const justPlaced = animSlot === i && filled;
     return {
       minWidth: isMobile ? 60 : 80,
       minHeight: isMobile ? 48 : 40,
       padding: isMobile ? "8px 12px" : "6px 14px",
-      borderRadius: isMobile ? 8 : 4,
+      borderRadius: isMobile ? 10 : 4,
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
       fontSize: isMobile ? 16 : 14,
-      fontWeight: filled ? 500 : 400,
+      fontWeight: filled ? 600 : 400,
       cursor: filled ? "pointer" : "default",
       userSelect: "none",
-      transition: "border-color 0.15s, background 0.15s, transform 0.1s",
+      transition: "border-color 0.15s, background 0.15s",
+      animation: justPlaced ? "bsPopIn 0.35s cubic-bezier(0.34,1.56,0.64,1), bsPulseSlot 0.5s ease-out" : "none",
       ...(filled
         ? {
             background: C.blue,
             color: "#fff",
             border: "2px solid " + C.blue,
+            boxShadow: justPlaced ? "0 0 0 4px rgba(13,150,104,0.2)" : "0 2px 4px rgba(13,150,104,0.15)",
             opacity: dragItem && dragItem.from === "slot" && dragItem.slotIndex === i ? 0.4 : 1,
           }
         : {
-            background: isHover ? "#e0ecff" : "#fafafa",
+            background: isHover ? "#e0ecff" : (isMobile ? "#f0f4f2" : "#fafafa"),
             color: "#aaa",
-            border: "2px dashed " + (isHover ? C.blue : "#ccc"),
+            border: "2px dashed " + (isHover ? C.blue : (isMobile ? "#b8c9bf" : "#ccc")),
           }),
     };
   };
 
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
+      <style>{BS_INTERACTION_CSS}</style>
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
       {!embedded && <TopBar title="Build a Sentence" section="Writing Practice | Task 1" timeLeft={isPracticeMode ? undefined : tl} isRunning={run} qInfo={idx + 1 + " / " + qs.length} onExit={onExit} />}
       <PageShell narrow>
@@ -270,14 +339,14 @@ export function BuildSentenceTask({
                     key={`given-${i}-${gi}`}
                     data-testid={`given-token-${i}`}
                     style={{
-                      fontSize: 14,
-                      color: "#666",
-                      background: "#e8e8e8",
-                      border: "1px solid #ccc",
-                      borderRadius: 4,
-                      padding: "4px 10px",
+                      fontSize: isMobile ? 16 : 14,
+                      color: "#555",
+                      background: "#e8ede9",
+                      border: "1px solid #c5d0c8",
+                      borderRadius: isMobile ? 10 : 4,
+                      padding: isMobile ? "8px 12px" : "4px 10px",
                       fontWeight: 600,
-                      opacity: 0.8,
+                      opacity: 0.85,
                     }}
                   >
                     {formatChunkDisplay(gs.chunk)}
@@ -287,6 +356,7 @@ export function BuildSentenceTask({
                   <div
                     key={`slot-${i}`}
                     data-testid={`slot-${i}`}
+                    className={slots[i] ? "bs-slot-filled" : undefined}
                     style={slotStyle(i)}
                     draggable={!isMobile && !!slots[i]}
                     onDragStart={!isMobile && slots[i] ? (e) => onDragStartSlot(e, slots[i], i) : undefined}
@@ -294,7 +364,7 @@ export function BuildSentenceTask({
                     onDragOver={!isMobile ? (e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; setHoverSlot(i); } : undefined}
                     onDragLeave={!isMobile ? () => setHoverSlot(null) : undefined}
                     onDrop={!isMobile ? (e) => onDropSlot(e, i) : undefined}
-                    onClick={() => slots[i] && removeChunk(i)}
+                    onClick={() => slots[i] && handleRemoveChunk(i)}
                   >
                     {slots[i] ? formatChunkDisplay(slots[i].text) : i + 1}
                   </div>
@@ -312,42 +382,49 @@ export function BuildSentenceTask({
           style={{
             background: hoverBank && dragItem && dragItem.from === "slot" ? "#fff3f3" : "#fff",
             border: "1px solid " + C.bdr,
-            borderRadius: 4,
-            padding: 16,
+            borderRadius: isMobile ? 14 : 4,
+            padding: isMobile ? "14px 12px" : 16,
             display: "flex",
             flexWrap: "wrap",
-            gap: 8,
+            gap: isMobile ? 10 : 8,
             marginBottom: 20,
-            minHeight: 48,
+            minHeight: isMobile ? 60 : 48,
           }}
         >
           <div style={{ fontSize: 11, color: C.t2, width: "100%", marginBottom: 4, letterSpacing: 1 }}>词块区</div>
           {bank.length === 0 && <span style={{ fontSize: 13, color: "#aaa", fontStyle: "italic" }}>所有词块都已放入句子，可点击已填槽位退回词块。</span>}
-          {bank.map((chunk) => (
-            <button
-              data-testid={`bank-chunk-${chunk.id}`}
-              key={chunk.id}
-              draggable={!isMobile}
-              onDragStart={!isMobile ? (e) => onDragStartBank(e, chunk) : undefined}
-              onDragEnd={!isMobile ? onDragEnd : undefined}
-              onClick={() => pickChunk(chunk)}
-              style={{
-                background: "#f8f9fa",
-                color: C.t1,
-                border: "1px solid " + C.bdr,
-                borderRadius: isMobile ? 8 : 4,
-                padding: isMobile ? "10px 16px" : "6px 14px",
-                fontSize: isMobile ? 16 : 14,
-                cursor: "pointer",
-                fontFamily: FONT,
-                userSelect: "none",
-                opacity: dragItem && dragItem.from === "bank" && dragItem.chunk.id === chunk.id ? 0.4 : 1,
-                transition: "transform 0.1s",
-              }}
-            >
-              {formatChunkDisplay(chunk.text)}
-            </button>
-          ))}
+          {bank.map((chunk) => {
+            const justReturned = animChunkId === chunk.id;
+            return (
+              <button
+                data-testid={`bank-chunk-${chunk.id}`}
+                key={chunk.id}
+                className="bs-chunk"
+                draggable={!isMobile}
+                onDragStart={!isMobile ? (e) => onDragStartBank(e, chunk) : undefined}
+                onDragEnd={!isMobile ? onDragEnd : undefined}
+                onClick={() => handlePickChunk(chunk)}
+                style={{
+                  background: isMobile ? "#fff" : "#f8f9fa",
+                  color: C.t1,
+                  border: isMobile ? "1.5px solid " + C.bdr : "1px solid " + C.bdr,
+                  borderRadius: isMobile ? 10 : 4,
+                  padding: isMobile ? "10px 16px" : "6px 14px",
+                  fontSize: isMobile ? 16 : 14,
+                  fontWeight: isMobile ? 500 : 400,
+                  cursor: "pointer",
+                  fontFamily: FONT,
+                  userSelect: "none",
+                  opacity: dragItem && dragItem.from === "bank" && dragItem.chunk.id === chunk.id ? 0.4 : 1,
+                  transition: "transform 0.12s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.15s",
+                  animation: justReturned ? "bsReturnPop 0.35s cubic-bezier(0.34,1.56,0.64,1)" : "none",
+                  boxShadow: isMobile ? "0 1px 3px rgba(0,0,0,0.06)" : "none",
+                }}
+              >
+                {formatChunkDisplay(chunk.text)}
+              </button>
+            );
+          })}
         </div>
 
         <div style={{ display: "flex", gap: 12, flexDirection: isMobile ? "column" : "row" }}>
