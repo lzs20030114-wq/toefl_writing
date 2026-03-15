@@ -80,6 +80,7 @@ export function WritingResponsePanel({
   onRetry,
   onExit,
   embedded,
+  isMobile,
 }) {
   const taRef = useRef(null);
   const historyRef = useRef([]);
@@ -102,7 +103,7 @@ export function WritingResponsePanel({
   }, [text]);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: isMobile ? 8 : 12, ...(isMobile ? { flex: 1, minHeight: 0 } : {}) }}>
       {phase === "ready" ? (
         <SurfaceCard style={{ padding: 40, textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
           <div style={{ fontSize: 14, color: C.t2 }}>Read the prompt carefully, then click below to begin writing.</div>
@@ -181,7 +182,7 @@ export function WritingResponsePanel({
               autoCorrect="off"
               autoCapitalize="off"
               placeholder={type === "email" ? "Dear " + pd.to + ",\n\n" : ""}
-              style={{ flex: 1, minHeight: type === "email" ? 280 : 320, border: "none", padding: 16, fontSize: 14, fontFamily: FONT, lineHeight: 1.7, color: C.t1, resize: "none", outline: "none", background: phase === "done" ? "#fafafa" : "#fff" }}
+              style={{ flex: 1, minHeight: isMobile ? 80 : (type === "email" ? 280 : 320), border: "none", padding: isMobile ? "10px 12px" : 16, fontSize: 14, fontFamily: FONT, lineHeight: 1.7, color: C.t1, resize: "none", outline: "none", background: phase === "done" ? "#fafafa" : "#fff" }}
             />
           </SurfaceCard>
 

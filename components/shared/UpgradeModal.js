@@ -18,6 +18,7 @@ export default function UpgradeModal({ userCode, currentTier, onClose, onUpgrade
   const [copied, setCopied] = useState(false);
   const [afdianOpened, setAfdianOpened] = useState(false);
   const [upgraded, setUpgraded] = useState(false);
+  const [checking, setChecking] = useState(false);
   const pollRef = useRef(null);
 
   const handleCopy = async () => {
@@ -76,6 +77,46 @@ export default function UpgradeModal({ userCode, currentTier, onClose, onUpgrade
 
     return () => clearInterval(pollRef.current);
   }, [afdianOpened, userCode, upgraded, isRenew]);
+
+  // Re-check immediately when user returns to tab (mobile tab-switch fix)
+  useEffect(() => {
+    if (!afdianOpened || !userCode || upgraded) return;
+    function handleVisibility() {
+      if (document.visibilityState !== "visible") return;
+      fetch(`/api/auth/user-info?code=${encodeURIComponent(userCode)}`)
+        .then((r) => r.ok ? r.json() : null)
+        .then((data) => {
+          if (!data) return;
+          const nowPro = data.tier === "pro" || data.tier === "legacy";
+          const expiryChanged = data.tier_expires_at !== initialExpiresRef.current;
+          if (nowPro && (!isRenew || expiryChanged)) {
+            setUpgraded(true);
+            clearInterval(pollRef.current);
+          }
+        })
+        .catch(() => {});
+    }
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => document.removeEventListener("visibilitychange", handleVisibility);
+  }, [afdianOpened, userCode, upgraded, isRenew]);
+
+  async function handleManualCheck() {
+    if (!userCode || checking) return;
+    setChecking(true);
+    try {
+      const res = await fetch(`/api/auth/user-info?code=${encodeURIComponent(userCode)}`);
+      if (res.ok) {
+        const data = await res.json();
+        const nowPro = data.tier === "pro" || data.tier === "legacy";
+        const expiryChanged = data.tier_expires_at !== initialExpiresRef.current;
+        if (nowPro && (!isRenew || expiryChanged)) {
+          setUpgraded(true);
+          clearInterval(pollRef.current);
+        }
+      }
+    } catch { /* ignore */ }
+    setChecking(false);
+  }
 
   const handleClose = () => {
     clearInterval(pollRef.current);
@@ -203,16 +244,33 @@ export default function UpgradeModal({ userCode, currentTier, onClose, onUpgrade
             </button>
 
             {afdianOpened && (
-              <div style={{
-                fontSize: 12, color: C.blue, marginBottom: 8,
-                display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
-              }}>
-                <span style={{
-                  display: "inline-block", width: 8, height: 8, borderRadius: "50%",
-                  border: "2px solid " + C.blue, borderTopColor: "transparent",
-                  animation: "spin 1s linear infinite",
-                }} />
-                等待付款确认中...
+              <div style={{ marginBottom: 8, display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
+                <div style={{
+                  fontSize: 12, color: C.blue,
+                  display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+                }}>
+                  <span style={{
+                    display: "inline-block", width: 8, height: 8, borderRadius: "50%",
+                    border: "2px solid " + C.blue, borderTopColor: "transparent",
+                    animation: "spin 1s linear infinite",
+                  }} />
+                  等待付款确认中...
+                </div>
+                <button
+                  onClick={handleManualCheck}
+                  disabled={checking}
+                  style={{
+                    padding: "8px 18px", borderRadius: 8,
+                    border: "1px solid " + C.bdr, background: "#fff",
+                    color: C.t2, fontSize: 12, fontWeight: 600,
+                    cursor: checking ? "not-allowed" : "pointer", fontFamily: FONT,
+                  }}
+                >
+                  {checking ? "检查中..." : "已完成付款？点击检查"}
+                </button>
+                <div style={{ fontSize: 11, color: C.t3, lineHeight: 1.5, textAlign: "center" }}>
+                  付款后请返回此页面，状态会自动更新。
+                </div>
               </div>
             )}
 

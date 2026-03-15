@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { BottomSheet } from "../shared/BottomSheet";
 import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
@@ -21,6 +21,19 @@ export function MobileHomePage({
 }) {
   const [sheetOpen, setSheetOpen] = useState(false);
   const tier = userTier || "free";
+  const [showDesktopTip, setShowDesktopTip] = useState(false);
+  const desktopTipRef = useRef(false);
+
+  useEffect(() => {
+    try {
+      if (localStorage.getItem("toefl-desktop-tip-dismissed") !== "1") setShowDesktopTip(true);
+    } catch {}
+  }, []);
+
+  function dismissDesktopTip() {
+    setShowDesktopTip(false);
+    try { localStorage.setItem("toefl-desktop-tip-dismissed", "1"); } catch {}
+  }
 
   const bg = isChallenge ? CH.bg : T.bg;
   const t1 = isChallenge ? CH.t1 : T.t1;
@@ -28,6 +41,26 @@ export function MobileHomePage({
 
   return (
     <div style={{ padding: "16px 14px 80px", maxWidth: 520, margin: "0 auto" }}>
+
+      {/* ── 电脑端推荐提示 ── */}
+      {showDesktopTip && (
+        <div style={{
+          display: "flex", alignItems: "center", gap: 8,
+          padding: "10px 14px", marginBottom: 12,
+          background: isChallenge ? "rgba(59,130,246,0.1)" : "#eff6ff",
+          border: `1px solid ${isChallenge ? "rgba(59,130,246,0.25)" : "#bfdbfe"}`,
+          borderRadius: 10, fontSize: 12, color: isChallenge ? "#93c5fd" : "#1e40af", lineHeight: 1.5,
+        }}>
+          <span style={{ flexShrink: 0, fontSize: 15 }}>💻</span>
+          <div style={{ flex: 1 }}>推荐使用电脑访问本工具，体验更好</div>
+          <button
+            onClick={dismissDesktopTip}
+            style={{ flexShrink: 0, background: "none", border: "none", color: "inherit", cursor: "pointer", fontSize: 14, fontWeight: 700, padding: "0 4px", lineHeight: 1, touchAction: "manipulation" }}
+          >
+            ✕
+          </button>
+        </div>
+      )}
 
       {/* ── 用户状态条 ── */}
       <div

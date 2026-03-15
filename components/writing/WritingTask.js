@@ -373,9 +373,18 @@ export function WritingTask({
     : "You will have 10 minutes to complete your response.";
 
   const topBarHeight = embedded ? 0 : 56;
+  const directionsText = type === "email"
+    ? `Write an email addressing all 3 goals.${isPracticeMode ? "" : ` ${formatMinutesLabel(limit)}.`} Aim for 80–120 words.`
+    : `Read the discussion and write your response.${isPracticeMode ? "" : ` ${formatMinutesLabel(limit)}.`} Aim for 100+ words.`;
+  const mobileActiveWriting = isMobile && !initialError && pd && !(intro && phase === "ready");
 
   return (
-    <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
+    <div style={{
+      background: C.bg, fontFamily: FONT,
+      ...(mobileActiveWriting
+        ? { height: "100dvh", display: "flex", flexDirection: "column", overflow: "hidden" }
+        : { minHeight: "100vh" }),
+    }}>
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
       {!embedded && <TopBar title={type === "email" ? "Email Writing" : "Academic Discussion Writing"} section={type === "email" ? "Writing Practice | Task 2" : "Writing Practice | Task 3"} timeLeft={isPracticeMode ? undefined : (phase !== "ready" ? tl : undefined)} isRunning={run} onExit={onExit} />}
 
@@ -390,6 +399,40 @@ export function WritingTask({
           onRetry={retryCurrentPrompt}
           onExit={onExit}
         />
+      ) : mobileActiveWriting ? (
+        /* 移动端答题：全屏 flex 布局，无 PageShell */
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden", padding: "6px 10px 0" }}>
+          <div style={{ flexShrink: 0, background: "#ecfdf5", borderRadius: 8, padding: "6px 10px", marginBottom: 6, fontSize: 11, color: C.t2, lineHeight: 1.5 }}>
+            <b>Directions: </b>{directionsText}
+            {practiceMode === PRACTICE_MODE.CHALLENGE && <span> Challenge mode active.</span>}
+            {isPracticeMode && <span> Practice mode — no time limit.</span>}
+          </div>
+          <div style={{ flexShrink: 0 }}>
+            <DisclosureSection
+              title={type === "email" ? "Email Prompt" : "Discussion Prompt"}
+              preview={promptCollapsed ? (pd.title || pd.topic || "").slice(0, 40) + "…" : ""}
+              open={!promptCollapsed}
+              onToggle={() => setPromptCollapsed((v) => !v)}
+              icon="📝"
+            >
+              <div style={{ padding: "10px 12px", maxHeight: "30vh", overflowY: "auto", WebkitOverflowScrolling: "touch", overscrollBehavior: "contain" }}>
+                <WritingPromptPanel type={type} pd={pd} />
+              </div>
+            </DisclosureSection>
+          </div>
+          <div style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0, marginTop: 6 }}>
+            <WritingResponsePanel
+              type={type} pd={pd} phase={phase}
+              text={text} onTextChange={setText}
+              w={w} minW={minW} fb={fb}
+              deferScoring={deferScoring}
+              requestState={requestState} scoreError={scoreError}
+              onStart={start} onSubmit={submitScore}
+              onRetry={retryScore} onExit={onExit}
+              embedded={embedded} isMobile={true}
+            />
+          </div>
+        </div>
       ) : (
         <PageShell narrow>
           {initialError && (
@@ -430,51 +473,24 @@ export function WritingTask({
               ) : (
                 <>
                   <InfoStrip style={{ marginBottom: 20 }}>
-                    <b>Directions: </b>{type === "email" ? `Write an email addressing all 3 goals.${isPracticeMode ? "" : ` ${formatMinutesLabel(limit)}.`} Aim for 80–120 words.` : `Read the discussion and write your response.${isPracticeMode ? "" : ` ${formatMinutesLabel(limit)}.`} Aim for 100+ words.`}
+                    <b>Directions: </b>{directionsText}
                     {practiceMode === PRACTICE_MODE.CHALLENGE && <span> Challenge mode active — time limit is reduced.</span>}
                     {isPracticeMode && <span> Practice mode — no time limit.</span>}
                   </InfoStrip>
-                  {isMobile ? (
-                    /* 移动端：题目可折叠，编辑器全宽 */
-                    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                      <DisclosureSection
-                        title={type === "email" ? "Email Prompt" : "Discussion Prompt"}
-                        preview={promptCollapsed ? (pd.title || pd.topic || "").slice(0, 40) + "…" : ""}
-                        open={!promptCollapsed}
-                        onToggle={() => setPromptCollapsed((v) => !v)}
-                        icon="📝"
-                      >
-                        <div style={{ padding: 14 }}>
-                          <WritingPromptPanel type={type} pd={pd} />
-                        </div>
-                      </DisclosureSection>
-                      <WritingResponsePanel
-                        type={type} pd={pd} phase={phase}
-                        text={text} onTextChange={setText}
-                        w={w} minW={minW} fb={fb}
-                        deferScoring={deferScoring}
-                        requestState={requestState} scoreError={scoreError}
-                        onStart={start} onSubmit={submitScore}
-                        onRetry={retryScore} onExit={onExit}
-                        embedded={embedded}
-                      />
-                    </div>
-                  ) : (
-                    /* 桌面端：左右双栏 */
-                    <div className="tp-writing-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
-                      <WritingPromptPanel type={type} pd={pd} />
-                      <WritingResponsePanel
-                        type={type} pd={pd} phase={phase}
-                        text={text} onTextChange={setText}
-                        w={w} minW={minW} fb={fb}
-                        deferScoring={deferScoring}
-                        requestState={requestState} scoreError={scoreError}
-                        onStart={start} onSubmit={submitScore}
-                        onRetry={retryScore} onExit={onExit}
-                        embedded={embedded}
-                      />
-                    </div>
-                  )}
+                  {/* 桌面端：左右双栏 */}
+                  <div className="tp-writing-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+                    <WritingPromptPanel type={type} pd={pd} />
+                    <WritingResponsePanel
+                      type={type} pd={pd} phase={phase}
+                      text={text} onTextChange={setText}
+                      w={w} minW={minW} fb={fb}
+                      deferScoring={deferScoring}
+                      requestState={requestState} scoreError={scoreError}
+                      onStart={start} onSubmit={submitScore}
+                      onRetry={retryScore} onExit={onExit}
+                      embedded={embedded}
+                    />
+                  </div>
                 </>
               )}
             </>

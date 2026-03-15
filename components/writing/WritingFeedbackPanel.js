@@ -409,7 +409,7 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
           @keyframes wfpSlideIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
         `}</style>
         {showUpgrade && <UpgradeModal userCode={(() => { try { return getSavedCode(); } catch { return null; } })()} currentTier="free" onClose={() => setShowUpgrade(false)} onUpgraded={() => window.location.reload()} />}
-        <div style={{ display: "flex", flexDirection: "column", height: "100vh", background: P.bg, fontFamily: FONT }}>
+        <div style={{ display: "flex", flexDirection: "column", height: "100dvh", background: P.bg, fontFamily: FONT }}>
           {/* 头部：分数 + 操作 */}
           <div style={{ flexShrink: 0, padding: "10px 14px", borderBottom: `1px solid ${P.borderSubtle}`, background: P.surface, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <div>
@@ -443,7 +443,7 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
           </div>
 
           {/* Tab 内容 */}
-          <div style={{ flex: 1, overflowY: "auto", WebkitOverflowScrolling: "touch" }}>
+          <div style={{ flex: 1, overflowY: "auto", WebkitOverflowScrolling: "touch", overscrollBehavior: "contain" }}>
             {mobileTab === "text" && (
               <div style={{ padding: "16px 14px" }}>
                 <div style={{ background: P.surface, borderRadius: 12, padding: "16px 14px", border: `1px solid ${P.border}`, boxShadow: P.shadow }}>
