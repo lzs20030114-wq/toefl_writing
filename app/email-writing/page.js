@@ -13,12 +13,18 @@ import EM_DATA from "../../data/emailWriting/prompts.json";
 function buildEmailTopics() {
   return (Array.isArray(EM_DATA) ? EM_DATA : [])
     .filter((p) => p && p.id && p.scenario)
-    .map((p) => ({
-      id: p.id,
-      tag: p.to || "",
-      title: String(p.scenario || "").split(/[.!?]/).filter(Boolean)[0]?.trim() || p.scenario,
-      subtitle: p.scenario,
-    }));
+    .map((p) => {
+      const sentences = String(p.scenario || "").split(/(?<=[.!?])\s+/).filter(Boolean);
+      const firstSentence = sentences[0]?.trim() || p.scenario;
+      const title = firstSentence.length > 70 ? firstSentence.slice(0, 67) + "..." : firstSentence;
+      const rest = sentences.slice(1).join(" ").trim();
+      return {
+        id: p.id,
+        tag: `To: ${p.to || ""}`,
+        title,
+        subtitle: rest || p.scenario,
+      };
+    });
 }
 
 function EmailWritingPageClient() {
@@ -42,6 +48,7 @@ function EmailWritingPageClient() {
           section="Writing Practice | Task 2"
           items={buildEmailTopics()}
           doneIds={doneIds}
+          accent={{ color: "#0891B2", soft: "#ECFEFF" }}
           onSelect={(id) => setPickedPromptId(id)}
           onExit={onExit}
         />

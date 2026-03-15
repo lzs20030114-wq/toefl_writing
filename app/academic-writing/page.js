@@ -55,6 +55,7 @@ function AcademicWritingPageClient() {
           section="Writing Practice | Task 3"
           items={buildAcademicTopics()}
           doneIds={doneIds}
+          accent={{ color: "#6366F1", soft: "#EEF2FF" }}
           onSelect={(id) => setPickedPromptId(id)}
           onExit={onExit}
         />

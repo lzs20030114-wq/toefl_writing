@@ -47,6 +47,7 @@ function BuildSentencePageClient() {
           section="Writing Practice | Task 1"
           items={buildBSTopics()}
           doneIds={doneStrings}
+          accent={{ color: "#D97706", soft: "#FFFBEB" }}
           onSelect={(id) => setPickedSetId(id)}
           onExit={onExit}
         />
