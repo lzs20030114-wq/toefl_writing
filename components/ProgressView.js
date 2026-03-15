@@ -7,6 +7,8 @@ import { formatLocalDateTime, translateGrammarPoint } from "../lib/utils";
 import { ChevronIcon, FONT } from "./shared/ui";
 import { HistoryRow } from "./history/HistoryRow";
 import { WritingFeedbackPanel } from "./writing/WritingFeedbackPanel";
+import { useIsMobile } from "../hooks/useIsMobile";
+import MobileProgressView from "./history/MobileProgressView";
 
 // — Extended color palette —
 const P = {
@@ -832,6 +834,7 @@ function FullMockReport({ entry, onClose }) {
 // — Main component —
 
 export function ProgressView({ onBack }) {
+  const isMobile = useIsMobile();
   const [hist, setHist] = useState(null);
   const [activeMockSrcIdx, setActiveMockSrcIdx] = useState(null);
   const [activePracticeSrcIdx, setActivePracticeSrcIdx] = useState(null);
@@ -931,6 +934,21 @@ export function ProgressView({ onBack }) {
     { key: "email", ...TYPE.email, count: email.length, avg: emailAvg !== null ? `平均 ${emailAvg.toFixed(1)}/5` : "暂无数据" },
     { key: "discussion", ...TYPE.discussion, count: discussion.length, avg: discussionAvg !== null ? `平均 ${discussionAvg.toFixed(1)}/5` : "暂无数据" },
   ];
+
+  if (isMobile) {
+    return (
+      <MobileProgressView vm={{
+        entries, mockEntries, practiceEntries, filteredPractice,
+        filter, setFilter, selectedWeak, setSelectedWeak,
+        activeMockSrcIdx, setActiveMockSrcIdx,
+        activePracticeSrcIdx, setActivePracticeSrcIdx,
+        expandedSrcIdx, setExpandedSrcIdx,
+        statItems, typeAvgs, topWeaknesses,
+        handleDelete, onBack,
+        showClearConfirm, setShowClearConfirm, confirmClearAll,
+      }} />
+    );
+  }
 
   return (
     <div style={{ minHeight: "100vh", background: P.bg, fontFamily: FONT }}>
