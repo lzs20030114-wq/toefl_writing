@@ -94,7 +94,7 @@ export function TopBar({ title, section, timeLeft, isRunning, qInfo, onExit }) {
         <div style={{ width: 28, height: 28, borderRadius: 8, background: "linear-gradient(135deg,#087355,#0891B2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
           <span style={{ color: "#fff", fontSize: 13, fontWeight: 800 }}>T</span>
         </div>
-        <span style={{ fontWeight: 700, fontSize: 15 }}>TOEFL Writing</span>
+        <span style={{ fontWeight: 700, fontSize: 15 }}>TreePractice</span>
         <span style={{ opacity: 0.35 }}>|</span>
         <span style={{ fontSize: 13, color: C.t2 }}>{section}</span>
       </div>

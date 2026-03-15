@@ -965,7 +965,7 @@ export function ProgressView({ onBack }) {
           <div style={{ width: 26, height: 26, borderRadius: 7, background: "linear-gradient(135deg,#087355,#0891B2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <span style={{ color: "#fff", fontSize: 12, fontWeight: 800 }}>T</span>
           </div>
-          <span style={{ fontWeight: 700, fontSize: 14, color: P.text }}>TOEFL Writing</span>
+          <span style={{ fontWeight: 700, fontSize: 14, color: P.text }}>TreePractice</span>
           <span style={{ opacity: 0.3 }}>|</span>
           <span style={{ fontSize: 12, color: P.textSec }}>练习记录</span>
         </div>

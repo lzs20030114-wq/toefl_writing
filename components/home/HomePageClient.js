@@ -178,9 +178,9 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
       <div style={{ minHeight: "100vh", background: isChallenge ? CH.bg : T.bg, fontFamily: HOME_FONT, position: "relative", zIndex: 3, animation: shaking ? "ch-screenShake .35s ease-out" : "none", transition: "background .3s ease" }}>
         {isChallenge ? (
           <div style={{ position: "sticky", top: 0, zIndex: 10, background: CH.nav, color: "#fff", padding: "0 36px", height: 52, display: "flex", alignItems: "center", borderBottom: `3px solid ${CH.navBorder}`, overflow: "hidden" }}>
-            <span style={{ fontWeight: 700, fontSize: 15, position: "relative", zIndex: 1 }}>TOEFL iBT</span>
+            <span style={{ fontWeight: 700, fontSize: 15, position: "relative", zIndex: 1 }}>TreePractice</span>
             <span style={{ opacity: 0.5, margin: "0 12px", position: "relative", zIndex: 1 }}>|</span>
-            <span style={{ fontSize: 13, position: "relative", zIndex: 1 }}>写作部分 2026</span>
+            <span style={{ fontSize: 13, position: "relative", zIndex: 1 }}>写作备考</span>
             <div style={{ marginLeft: "auto", fontSize: 11, fontWeight: 700, color: CH.accent, letterSpacing: 1, textTransform: "uppercase", position: "relative", zIndex: 1 }}>Challenge</div>
             <div style={{ position: "absolute", inset: 0, pointerEvents: "none", background: "repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,0.03) 2px,rgba(255,255,255,0.03) 4px)", zIndex: 0 }} />
             <div style={{ position: "absolute", top: 0, bottom: 0, width: "30%", background: "linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent)", animation: "ch-sweep 4s ease-in-out infinite", pointerEvents: "none", zIndex: 0 }} />
@@ -191,8 +191,8 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
               <div style={{ width: 28, height: 28, borderRadius: 8, background: "linear-gradient(135deg,#087355,#0891B2)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                 <span style={{ color: "#fff", fontSize: 13, fontWeight: 800 }}>T</span>
               </div>
-              <span style={{ fontWeight: 700, fontSize: 15, color: T.t1 }}>TOEFL 写作</span>
-              <span style={{ fontSize: 10, fontWeight: 700, color: T.primary, background: T.primarySoft, border: `1px solid ${T.primaryMist}`, borderRadius: 5, padding: "1px 6px", letterSpacing: 0.3 }}>2026</span>
+              <span style={{ fontWeight: 700, fontSize: 15, color: T.t1 }}>TreePractice</span>
+              <span style={{ fontSize: 10, fontWeight: 700, color: T.primary, background: T.primarySoft, border: `1px solid ${T.primaryMist}`, borderRadius: 5, padding: "1px 6px", letterSpacing: 0.3 }}>写作备考</span>
             </div>
             <div style={{ marginLeft: "auto", fontSize: 12, color: T.t3 }}>由 DeepSeek AI 提供支持</div>
           </div>
@@ -213,11 +213,11 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ marginBottom: 16, ...fadeIn(50) }}>
                 <h1 style={{ margin: "0 0 10px", fontSize: 30, fontWeight: 800, color: isChallenge ? CH.t1 : T.t1, letterSpacing: -0.5, lineHeight: 1.2 }}>
-                  {isChallenge ? <>TOEFL iBT 写作 <span style={{ color: CH.accent }}>Challenge Mode</span></> : isPractice ? <>TOEFL iBT 写作 <span style={{ color: "#6366f1" }}>Practice</span></> : "TOEFL iBT 写作练习"}
+                  {isChallenge ? <>英语写作练习 <span style={{ color: CH.accent }}>Challenge Mode</span></> : isPractice ? <>英语写作练习 <span style={{ color: "#6366f1" }}>Practice</span></> : "英语写作练习"}
                 </h1>
                 <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
                   <p style={{ margin: 0, fontSize: 13, color: isChallenge ? CH.accent : T.t2, fontWeight: isChallenge ? 600 : 400 }}>
-                    {isChallenge ? "在压力下证明你的水平。时间更短，要求更高。" : isPractice ? "自选题目，不限时间，自由练习。" : "提供 ETS 风格计时、AI 评分与三类写作任务练习。"}
+                    {isChallenge ? "在压力下证明你的水平。时间更短，要求更高。" : isPractice ? "自选题目，不限时间，自由练习。" : "模拟考试计时、AI 评分与三类写作任务练习，适用于 TOEFL® 备考。"}
                   </p>
                   <div style={{ display: "inline-flex", gap: 4, flexShrink: 0, background: isChallenge ? "rgba(255,255,255,0.05)" : T.card, border: `1px solid ${isChallenge ? "rgba(255,30,30,0.3)" : T.bdr}`, borderRadius: 999, padding: 4, boxShadow: T.shadow }}>
                     {[
@@ -236,10 +236,10 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
 
               <div style={{ background: isChallenge ? "rgba(17,17,24,0.7)" : T.card, border: `1px solid ${isChallenge ? CH.cardBorder : T.bdr}`, borderRadius: 10, padding: "10px 16px", marginBottom: 16, boxShadow: isChallenge ? "none" : T.shadow, ...fadeIn(120) }}>
                 <div style={{ display: "flex", gap: 20, flexWrap: "wrap", fontSize: 12, color: isChallenge ? CH.t2 : T.t2 }}>
-                  <span>- 覆盖 2026 TOEFL iBT 全部写作任务类型</span>
-                  <span>- ETS 风格限时练习</span>
+                  <span>- 覆盖三类写作任务（排序 · 邮件 · 学术讨论）</span>
+                  <span>- 模拟考试限时练习</span>
                   <span>- AI 评分与反馈</span>
-                  <span>- 仅供练习使用，不代表官方 ETS 评分</span>
+                  <span>- 仅供练习使用，不代表官方考试评分</span>
                 </div>
               </div>
 
@@ -275,7 +275,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
               </div>
 
               <div style={{ fontSize: 10, color: isChallenge ? CH.t2 : T.t3, opacity: 0.65, lineHeight: 1.6, textAlign: "center", ...fadeIn(520) }}>
-                该工具为独立练习资源，与 ETS 或 TOEFL 项目无关联。TOEFL 为 ETS 注册商标。AI 评分仅供自学参考。
+                TreePractice 为独立练习工具，与 ETS 无关联，也未获得其认可。TOEFL® 和 TOEFL iBT® 为 ETS 的注册商标。AI 评分仅供自学参考，不代表官方考试成绩。
                 <br />
                 <a href="/terms" style={{ color: "inherit", textDecoration: "underline" }}>使用条款与隐私政策</a>
               </div>

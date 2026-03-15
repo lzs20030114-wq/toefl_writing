@@ -1,6 +1,6 @@
 export const metadata = {
-  title: "TOEFL iBT Writing Practice - 2026 Format",
-  description: "AI-powered TOEFL iBT 2026 Writing section practice tool with DeepSeek scoring",
+  title: "TreePractice — AI 写作备考工具 | 适用于 TOEFL® 考试",
+  description: "TreePractice 提供 AI 驱动的英语写作练习与评分，涵盖三类写作任务，适用于 TOEFL® 写作备考。",
 };
 
 export default function RootLayout({ children }) {
