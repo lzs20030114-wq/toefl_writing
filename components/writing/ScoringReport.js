@@ -96,7 +96,16 @@ export function ScoringReport({ result, type }) {
         )}
       </DisclosureSection>
 
-      <DisclosureSection title="逐句批注" preview={`${counts.red} 个语法错误 · ${counts.orange} 个表达建议 · ${counts.blue} 个拔高建议`} contentStyle={{ padding: 14 }}>
+      <DisclosureSection title="逐句批注" preview={(() => {
+        const spelling = marks.filter((m) => m.type === "mark" && m.level === "red" && String(m.errorType || "").toLowerCase() === "spelling").length;
+        const grammar = counts.red - spelling;
+        const parts = [];
+        if (grammar > 0) parts.push(`${grammar} 个语法错误`);
+        if (spelling > 0) parts.push(`${spelling} 个拼写错误`);
+        if (counts.orange > 0) parts.push(`${counts.orange} 个表达建议`);
+        if (counts.blue > 0) parts.push(`${counts.blue} 个拔高建议`);
+        return parts.length > 0 ? parts.join(" · ") : "无批注";
+      })()} contentStyle={{ padding: 14 }}>
         {sectionStates.ANNOTATION && !sectionStates.ANNOTATION.ok ? (
           <div style={{ color: C.red }}>此部分暂时无法加载</div>
         ) : marks.length === 0 ? (

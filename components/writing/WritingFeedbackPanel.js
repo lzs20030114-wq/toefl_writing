@@ -9,12 +9,16 @@ const P = {
   teal: "#0891B2", tealSoft: "#ecfeff",
   amber: "#d97706", amberSoft: "#fffbeb",
   rose: "#E11D48", roseSoft: "#fff1f2",
+  purple: "#7c3aed", purpleSoft: "#f5f3ff",
   shadow: "0 1px 3px rgba(10,40,25,0.04), 0 1px 2px rgba(10,40,25,0.02)",
   shadowMd: "0 4px 14px rgba(10,40,25,0.06), 0 1px 3px rgba(10,40,25,0.03)",
 };
 
-function levelToCategory(level) {
-  if (level === "red") return "语法错误";
+function levelToCategory(level, errorType) {
+  if (level === "red") {
+    if (String(errorType || "").toLowerCase() === "spelling") return "拼写错误";
+    return "语法错误";
+  }
   if (level === "orange") return "表达建议";
   return "拔高建议";
 }
@@ -22,7 +26,7 @@ function levelToCategory(level) {
 function segmentsToTokens(segments) {
   return segments.map((seg, idx) => {
     if (seg.type !== "mark") return { id: `t${idx}`, type: "normal", text: seg.text };
-    return { id: `err${idx}`, type: "error", level: seg.level, category: levelToCategory(seg.level), text: seg.text, suggestion: seg.fix || "", note: seg.note || "" };
+    return { id: `err${idx}`, type: "error", level: seg.level, errorType: seg.errorType || "", category: levelToCategory(seg.level, seg.errorType), text: seg.text, suggestion: seg.fix || "", note: seg.note || "" };
   });
 }
 
@@ -212,7 +216,8 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {errorTokens.map((err) => {
             const isActive = activeErrorId === err.id;
-            const catColor = err.level === "red" ? P.rose : err.level === "orange" ? P.amber : P.teal;
+            const errIsSpelling = err.level === "red" && String(err.errorType || "").toLowerCase() === "spelling";
+            const catColor = err.level === "red" ? (errIsSpelling ? P.purple : P.rose) : err.level === "orange" ? P.amber : P.teal;
             return (
               <button
                 key={err.id}
@@ -281,8 +286,9 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
         {tokens.map((token) => {
           if (token.type === "normal") return <React.Fragment key={token.id}>{token.text}</React.Fragment>;
           const isActive = activeErrorId === token.id;
-          const catColor = token.level === "red" ? P.rose : token.level === "orange" ? P.amber : P.teal;
-          const catBg = token.level === "red" ? P.roseSoft : token.level === "orange" ? P.amberSoft : P.tealSoft;
+          const isSpelling = token.level === "red" && String(token.errorType || "").toLowerCase() === "spelling";
+            const catColor = token.level === "red" ? (isSpelling ? P.purple : P.rose) : token.level === "orange" ? P.amber : P.teal;
+          const catBg = token.level === "red" ? (isSpelling ? P.purpleSoft : P.roseSoft) : token.level === "orange" ? P.amberSoft : P.tealSoft;
           return (
             <span key={token.id} style={{ position: "relative", display: "inline-block" }} data-error-token="true">
               <button
