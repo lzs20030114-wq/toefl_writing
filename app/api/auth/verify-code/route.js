@@ -50,7 +50,7 @@ export async function POST(request) {
 
     const { data: accessRow, error: accessError } = await supabaseAdmin
       .from("access_codes")
-      .select("code,status,expires_at")
+      .select("code,status,expires_at,issued_to")
       .eq("code", code)
       .maybeSingle();
 
@@ -73,7 +73,7 @@ export async function POST(request) {
           { code, status: "issued", issued_to: "legacy-user", issued_at: issuedAt, expires_at: null },
           { onConflict: "code" }
         )
-        .select("code,status,expires_at")
+        .select("code,status,expires_at,issued_to")
         .single();
       if (migrateError) return jsonError(400, migrateError.message || "Legacy code activation failed");
       effectiveAccess = migratedAccess;
@@ -117,6 +117,13 @@ export async function POST(request) {
 
     // Check if pro tier has expired
     let tier = userRow?.tier || "free";
+
+    // Legacy users (existed before payment system) get legacy tier with pro-level access
+    if (tier !== "pro" && tier !== "legacy" && effectiveAccess?.issued_to === "legacy-user") {
+      tier = "legacy";
+      await supabaseAdmin.from("users").update({ tier: "legacy" }).eq("code", code);
+    }
+
     if (tier === "pro" && userRow?.tier_expires_at && isExpired(userRow.tier_expires_at)) {
       tier = "free";
       await supabaseAdmin
