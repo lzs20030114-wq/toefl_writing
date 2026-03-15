@@ -168,7 +168,7 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
   }, [resendCooldown]);
 
   const handleSendOTP = async () => {
-    if (!agreedTerms) { setError(lang === "zh" ? "请先同意使用条款" : "Please agree to the terms first"); return; }
+    if (!agreedTerms) { setError(t === I18N.zh ? "请先同意使用条款" : "Please agree to the terms first"); return; }
     const email = emailInput.trim();
     if (!email) { setError(t.invalidEmail); return; }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setError(t.invalidEmailFormat); return; }
@@ -204,7 +204,7 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
   };
 
   const handleCodeLogin = async () => {
-    if (!agreedTerms) { setError(lang === "zh" ? "请先同意使用条款" : "Please agree to the terms first"); return; }
+    if (!agreedTerms) { setError(t === I18N.zh ? "请先同意使用条款" : "Please agree to the terms first"); return; }
     const normalized = normalizeInputCode(codeInput);
     if (normalized.length < 6) { setError(t.invalidCode); return; }
     setLoading(true);

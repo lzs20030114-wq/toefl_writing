@@ -205,6 +205,7 @@ export function ScoringReport({ result, type }) {
                 <div style={{ alignSelf: "start", fontSize: 12, color: C.t2 }}>出现 {Number(p.count || 0)} 次</div>
               </div>
             ))}
+            {!isPro && <UpgradeBannerCompact onClick={() => setShowUpgrade(true)} />}
           </div>
         )}
       </DisclosureSection>

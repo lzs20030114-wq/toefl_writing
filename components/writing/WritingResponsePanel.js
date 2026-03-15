@@ -148,7 +148,7 @@ export function WritingResponsePanel({
               onCompositionEnd={(e) => {
                 const cleaned = e.target.value.replace(CJK_RE, "");
                 if (cleaned !== text) onTextChange(cleaned);
-                if (!imeTipDismissedRef.current && CJK_RE.test(e.data || "")) setImeTipVisible(true);
+                if (!imeTipDismissedRef.current && /[\u2E80-\u9FFF\uF900-\uFAFF\uFE30-\uFE4F\uFF00-\uFFEF\u3000-\u303F\u3040-\u30FF]/.test(e.data || "")) setImeTipVisible(true);
               }}
               onKeyDown={(e) => {
                 if (e.ctrlKey || e.metaKey) {
@@ -209,8 +209,8 @@ export function WritingResponsePanel({
           <SurfaceCard style={{ padding: 32, textAlign: "center" }}>
             <div style={{ fontSize: 40, marginBottom: 12 }}>!</div>
             <div style={{ fontSize: 16, fontWeight: 700, color: C.red, marginBottom: 8 }}>评分失败</div>
-            <div style={{ fontSize: 14, color: C.t2, marginBottom: 20 }}>{scoreError || "当前暂时无法完成评分，请稍后重试。"}</div>
-            {requestState === "error" && !!scoreError ? <div data-testid="score-error-reason" style={{ fontSize: 12, color: C.red, marginBottom: 12 }}>{scoreError}</div> : null}
+            <div style={{ fontSize: 14, color: C.t2, marginBottom: 20 }}>当前暂时无法完成评分，请稍后重试。</div>
+            {!!scoreError ? <div data-testid="score-error-reason" style={{ fontSize: 12, color: C.red, marginBottom: 12 }}>{scoreError}</div> : null}
             <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
               <Btn onClick={onRetry}>重新评分</Btn>
               <Btn onClick={onExit} variant="secondary">{embedded ? "返回" : "返回菜单"}</Btn>
