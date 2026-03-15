@@ -21,6 +21,8 @@ const { callDeepSeekViaCurl, formatDeepSeekError } = require("../lib/ai/deepseek
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROMPTS_PATH = path.join(__dirname, "..", "data", "academicWriting", "prompts.json");
 const REFERENCE_PATH = path.join(__dirname, "..", "data", "academicWriting", "real_tpo_reference.json");
+const OUTPUT_PATH = process.env.DISC_OUTPUT_PATH ? path.resolve(process.env.DISC_OUTPUT_PATH) : null;
+const STATE_PATH = process.env.DISC_JOB_STATE_PATH ? path.resolve(process.env.DISC_JOB_STATE_PATH) : null;
 
 // Import generation prompt builders
 const {
@@ -32,7 +34,7 @@ const {
 } = await import("../lib/ai/prompts/academicWriting.js");
 
 // ── Config ──────────────────────────────────────────────────────────
-const TARGET_COUNT = parseInt(process.argv[2], 10) || 10;
+const TARGET_COUNT = parseInt(process.env.DISC_TARGET_COUNT || process.argv[2], 10) || 10;
 const MAX_RETRIES = 3;
 const QUESTION_TYPES = ["binary", "open", "which", "statement"];
 const FEW_SHOT_COUNT = 4; // number of real examples to inject per generation
@@ -281,23 +283,40 @@ async function main() {
   }
 
   // Save
-  if (generated.length > 0) {
+  if (generated.length === 0) {
+    console.error("\n❌ No questions generated successfully");
+    if (STATE_PATH) fs.writeFileSync(STATE_PATH, JSON.stringify({ error: "No questions generated", timestamp: new Date().toISOString() }));
+    process.exit(1);
+  }
+
+  const meta = { total_generated: TARGET_COUNT, total_accepted: generated.length, failures, generated_at: new Date().toISOString() };
+
+  if (OUTPUT_PATH) {
+    // Staging mode: write to staging file
+    fs.mkdirSync(path.dirname(OUTPUT_PATH), { recursive: true });
+    fs.writeFileSync(OUTPUT_PATH, JSON.stringify({ questions: generated, _meta: meta }, null, 2));
+    console.log(`\n✅ Wrote ${generated.length} questions to staging: ${OUTPUT_PATH}`);
+  } else {
+    // Direct mode: append to bank
     const merged = [...existing, ...generated];
     saveData(merged);
     console.log(`\n✅ Added ${generated.length} questions (${failures} failed)`);
     console.log(`   Total in bank: ${merged.length}`);
+  }
 
-    // Print course distribution
-    const counts = {};
-    for (const q of merged) {
-      counts[q.course || "?"] = (counts[q.course || "?"] || 0) + 1;
-    }
-    console.log("\n📊 Course distribution:");
-    for (const [c, n] of Object.entries(counts).sort((a, b) => b[1] - a[1])) {
-      console.log(`   ${c}: ${n}`);
-    }
-  } else {
-    console.error("\n❌ No questions generated successfully");
+  if (STATE_PATH) {
+    fs.writeFileSync(STATE_PATH, JSON.stringify({ status: "completed", ...meta }, null, 2));
+  }
+
+  // Print course distribution
+  const all = [...existing, ...generated];
+  const counts = {};
+  for (const q of all) {
+    counts[q.course || "?"] = (counts[q.course || "?"] || 0) + 1;
+  }
+  console.log("\n📊 Course distribution:");
+  for (const [c, n] of Object.entries(counts).sort((a, b) => b[1] - a[1])) {
+    console.log(`   ${c}: ${n}`);
   }
 }
 

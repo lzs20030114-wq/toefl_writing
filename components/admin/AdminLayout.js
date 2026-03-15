@@ -14,7 +14,7 @@ const NAV = [
   { label: "用户反馈", href: "/admin-feedback", icon: "msg" },
   { label: "题库管理", href: "/admin-questions", icon: "book" },
   { label: "题池管理", href: "/admin-question-pool", icon: "book" },
-  { label: "自动生题", href: "/admin-generate-bs", icon: "zap" },
+  { label: "自动生题", href: "/admin-generate", icon: "zap" },
 ];
 
 const ICONS = {
