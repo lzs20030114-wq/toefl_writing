@@ -9,8 +9,8 @@ const TASK_META = {
     description: "Arrange the given word chunks to form a grammatically correct sentence. There may be one distractor chunk that does not belong.",
   },
   "email-writing": {
-    title: "Task 2: Integrated Writing — Email",
-    description: "Read the prompt and write an email response that addresses all required points.",
+    title: "Write an Email",
+    description: "You will read some information and use the information to write an email. You will have 7 minutes to write the email.",
   },
   "academic-writing": {
     title: "Task 3: Writing for an Academic Discussion",

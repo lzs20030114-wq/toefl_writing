@@ -352,12 +352,12 @@ export function WritingTask({
   useEffect(() => () => clearInterval(tr.current), []);
 
   const w = wc(text);
-  const introTitle = type === "email" ? "Task 2: Integrated Writing — Email" : "Task 3: Writing for an Academic Discussion";
+  const introTitle = type === "email" ? "Write an Email" : "Task 3: Writing for an Academic Discussion";
   const introDescLine1 = type === "email"
-    ? "Read the prompt carefully, then write an email addressing all three goals."
+    ? "You will read some information and use the information to write an email."
     : "Read the professor's prompt and two student responses, then write your own contribution.";
   const introDescLine2 = type === "email"
-    ? "You will have 7 minutes to complete your response."
+    ? "You will have 7 minutes to write the email."
     : "You will have 10 minutes to complete your response.";
 
   const topBarHeight = embedded ? 0 : 56;
