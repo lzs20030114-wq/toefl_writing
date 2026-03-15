@@ -120,6 +120,8 @@ export function BuildSentenceTask({
     submit,
     pickChunk,
     removeChunk,
+    placeChunkAt,
+    moveSlotTo,
     onDragStartBank,
     onDragStartSlot,
     onDragEnd,
@@ -158,13 +160,33 @@ export function BuildSentenceTask({
     }
   }, [slots, removeChunk]);
 
+  const handlePlaceAt = useCallback((chunk, targetIdx) => {
+    vibrate(12);
+    placeChunkAt(chunk, targetIdx);
+    setAnimSlot(targetIdx);
+    clearTimeout(animTimer.current);
+    animTimer.current = setTimeout(() => setAnimSlot(null), 450);
+  }, [placeChunkAt]);
+
+  const handleMoveSlot = useCallback((fromIdx, targetIdx) => {
+    vibrate(12);
+    moveSlotTo(fromIdx, targetIdx);
+    setAnimSlot(targetIdx);
+    clearTimeout(animTimer.current);
+    animTimer.current = setTimeout(() => setAnimSlot(null), 450);
+  }, [moveSlotTo]);
+
   /* ── Touch Drag (mobile) ── */
   const touchDrag = useRef({ active: false, source: null, sourceEl: null, startX: 0, startY: 0, ghost: null, moved: false, lastHL: null });
   const suppressClick = useRef(false);
   const pickRef = useRef(handlePickChunk);
   const removeRef = useRef(handleRemoveChunk);
+  const placeRef = useRef(handlePlaceAt);
+  const moveRef = useRef(handleMoveSlot);
   pickRef.current = handlePickChunk;
   removeRef.current = handleRemoveChunk;
+  placeRef.current = handlePlaceAt;
+  moveRef.current = handleMoveSlot;
 
   const startTouch = useCallback((e, source) => {
     const t = e.touches[0];
@@ -221,7 +243,7 @@ export function BuildSentenceTask({
       if (el) {
         const tgt = td.source.from === "bank"
           ? (el.closest("[data-slot-index]") || el.closest("[data-answer-area]"))
-          : el.closest("[data-bank-area]");
+          : (el.closest("[data-slot-index]") || el.closest("[data-bank-area]"));
         if (tgt) { tgt.classList.add("bs-drag-target"); td.lastHL = tgt; }
       }
     }
@@ -237,13 +259,24 @@ export function BuildSentenceTask({
       const touch = e.changedTouches[0];
       const el = document.elementFromPoint(touch.clientX, touch.clientY);
       let dropped = false;
-      if (el && td.source.from === "bank") {
-        if (el.closest("[data-slot-index]") || el.closest("[data-answer-area]")) {
-          pickRef.current(td.source.chunk); dropped = true;
-        }
-      } else if (el && td.source.from === "slot") {
-        if (el.closest("[data-bank-area]")) {
-          removeRef.current(td.source.slotIndex); dropped = true;
+      if (el) {
+        const slotEl = el.closest("[data-slot-index]");
+        const bankEl = el.closest("[data-bank-area]");
+        const answerEl = el.closest("[data-answer-area]");
+        if (td.source.from === "bank") {
+          if (slotEl) {
+            const ti = parseInt(slotEl.getAttribute("data-slot-index"), 10);
+            placeRef.current(td.source.chunk, ti); dropped = true;
+          } else if (answerEl) {
+            pickRef.current(td.source.chunk); dropped = true;
+          }
+        } else if (td.source.from === "slot") {
+          if (slotEl) {
+            const ti = parseInt(slotEl.getAttribute("data-slot-index"), 10);
+            moveRef.current(td.source.slotIndex, ti); dropped = true;
+          } else if (bankEl) {
+            removeRef.current(td.source.slotIndex); dropped = true;
+          }
         }
       }
       if (dropped) vibrate(10);
@@ -407,14 +440,14 @@ export function BuildSentenceTask({
     const isHover = hoverSlot === i && dragItem;
     const justPlaced = animSlot === i && filled;
     return {
-      minWidth: isMobile ? 60 : 80,
-      minHeight: isMobile ? 48 : 40,
-      padding: isMobile ? "8px 12px" : "6px 14px",
-      borderRadius: isMobile ? 10 : 4,
+      minWidth: isMobile ? 44 : 80,
+      minHeight: isMobile ? 34 : 40,
+      padding: isMobile ? "5px 10px" : "6px 14px",
+      borderRadius: isMobile ? 8 : 4,
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      fontSize: isMobile ? 16 : 14,
+      fontSize: isMobile ? 14 : 14,
       fontWeight: filled ? 600 : 400,
       cursor: filled ? "pointer" : "default",
       userSelect: "none",
@@ -436,128 +469,158 @@ export function BuildSentenceTask({
     };
   };
 
+  /* ── shared sub-elements ── */
+  const slotsJSX = (
+    <div data-answer-area="true" style={{ display: "flex", flexWrap: "wrap", gap: isMobile ? 6 : 8, minHeight: isMobile ? 36 : 48, alignItems: "center", lineHeight: 1.5 }}>
+      {Array.from({ length: slots.length + 1 }, (_, i) => i).map((i) => (
+        <React.Fragment key={`resp-${i}`}>
+          {givenSlots.filter((gs) => gs.givenIndex === i).map((gs, gi) => (
+            <span
+              key={`given-${i}-${gi}`}
+              data-testid={`given-token-${i}`}
+              style={{
+                fontSize: isMobile ? 14 : 14,
+                color: "#555",
+                background: "#e8ede9",
+                border: "1px solid #c5d0c8",
+                borderRadius: isMobile ? 8 : 4,
+                padding: isMobile ? "5px 10px" : "4px 10px",
+                fontWeight: 600,
+                opacity: 0.85,
+              }}
+            >
+              {formatChunkDisplay(gs.chunk)}
+            </span>
+          ))}
+          {i < slots.length && (
+            <div
+              key={`slot-${i}`}
+              data-testid={`slot-${i}`}
+              data-slot-index={i}
+              className={slots[i] ? "bs-slot-filled" : undefined}
+              style={{ ...slotStyle(i), touchAction: isMobile && slots[i] ? "none" : undefined }}
+              draggable={!isMobile && !!slots[i]}
+              onDragStart={!isMobile && slots[i] ? (e) => onDragStartSlot(e, slots[i], i) : undefined}
+              onDragEnd={!isMobile && slots[i] ? onDragEnd : undefined}
+              onDragOver={!isMobile ? (e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; setHoverSlot(i); } : undefined}
+              onDragLeave={!isMobile ? () => setHoverSlot(null) : undefined}
+              onDrop={!isMobile ? (e) => onDropSlot(e, i) : undefined}
+              onTouchStart={isMobile && slots[i] ? (e) => startTouch(e, { from: "slot", chunk: slots[i], slotIndex: i }) : undefined}
+              onClick={() => { if (suppressClick.current) return; slots[i] && handleRemoveChunk(i); }}
+            >
+              {slots[i] ? formatChunkDisplay(slots[i].text) : i + 1}
+            </div>
+          )}
+        </React.Fragment>
+      ))}
+      <span style={{ fontSize: isMobile ? 16 : 18, color: C.t1, fontWeight: 700 }}>{punct}</span>
+    </div>
+  );
+
+  const bankJSX = (compact) => (
+    <div
+      data-bank-area="true"
+      onDragOver={!isMobile ? (e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; setHoverBank(true); } : undefined}
+      onDragLeave={!isMobile ? () => setHoverBank(false) : undefined}
+      onDrop={!isMobile ? onDropBank : undefined}
+      style={{
+        background: hoverBank && dragItem && dragItem.from === "slot" ? "#fff3f3" : "#fff",
+        border: "1px solid " + C.bdr,
+        borderRadius: compact ? 10 : 4,
+        padding: compact ? "8px 10px" : 16,
+        display: "flex",
+        flexWrap: "wrap",
+        gap: compact ? 8 : 8,
+        ...(compact ? { flex: 1, alignContent: "flex-start", overflow: "auto", minHeight: 0 } : { marginBottom: 20, minHeight: 48 }),
+      }}
+    >
+      {!compact && <div style={{ fontSize: 11, color: C.t2, width: "100%", marginBottom: 4, letterSpacing: 1 }}>词块区</div>}
+      {bank.length === 0 && <span style={{ fontSize: 12, color: "#aaa", fontStyle: "italic" }}>{compact ? "已全部放入" : "所有词块都已放入句子，可点击已填槽位退回词块。"}</span>}
+      {bank.map((chunk) => {
+        const justReturned = animChunkId === chunk.id;
+        return (
+          <button
+            data-testid={`bank-chunk-${chunk.id}`}
+            key={chunk.id}
+            className="bs-chunk"
+            draggable={!isMobile}
+            onDragStart={!isMobile ? (e) => onDragStartBank(e, chunk) : undefined}
+            onDragEnd={!isMobile ? onDragEnd : undefined}
+            onTouchStart={isMobile ? (e) => startTouch(e, { from: "bank", chunk }) : undefined}
+            onClick={() => { if (suppressClick.current) return; handlePickChunk(chunk); }}
+            style={{
+              background: compact ? "#fff" : "#f8f9fa",
+              color: C.t1,
+              border: (compact ? "1.5px" : "1px") + " solid " + C.bdr,
+              borderRadius: compact ? 8 : 4,
+              padding: compact ? "7px 12px" : "6px 14px",
+              fontSize: compact ? 14 : 14,
+              fontWeight: compact ? 500 : 400,
+              cursor: "pointer",
+              fontFamily: FONT,
+              userSelect: "none",
+              touchAction: isMobile ? "none" : undefined,
+              opacity: dragItem && dragItem.from === "bank" && dragItem.chunk.id === chunk.id ? 0.4 : 1,
+              transition: "transform 0.12s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.15s",
+              animation: justReturned ? "bsReturnPop 0.35s cubic-bezier(0.34,1.56,0.64,1)" : "none",
+              boxShadow: compact ? "0 1px 3px rgba(0,0,0,0.06)" : "none",
+            }}
+          >
+            {formatChunkDisplay(chunk.text)}
+          </button>
+        );
+      })}
+    </div>
+  );
+
+  const topBarH = embedded ? 0 : 56;
+
   return (
-    <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
+    <div style={{ minHeight: isMobile ? undefined : "100vh", height: isMobile ? "100dvh" : undefined, background: C.bg, fontFamily: FONT, display: isMobile ? "flex" : undefined, flexDirection: isMobile ? "column" : undefined, overflow: isMobile ? "hidden" : undefined }}>
       <style>{BS_INTERACTION_CSS}</style>
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
       {!embedded && <TopBar title="Build a Sentence" section="Writing Practice | Task 1" timeLeft={isPracticeMode ? undefined : tl} isRunning={run} qInfo={idx + 1 + " / " + qs.length} onExit={onExit} />}
-      <PageShell narrow>
-        <InfoStrip style={{ marginBottom: 20 }}>
-          <b>Directions: </b>{isMobile ? "点击或拖动词块放入句子，拖回词块区可退回。可能含干扰项。" : "Use the word chunks below to form a grammatically correct sentence. There may be one distractor chunk that does not belong."}
-        </InfoStrip>
 
-        <SurfaceCard style={{ padding: 20, marginBottom: 20 }}>
-          <div style={{ fontSize: 11, color: C.t2, letterSpacing: 1, marginBottom: 8 }}>题目</div>
-          <div style={{ fontSize: 15, color: C.t1, marginBottom: 14, lineHeight: 1.5 }}>{q.prompt}</div>
-          <div style={{ fontSize: 11, color: C.t2, letterSpacing: 1, marginBottom: 8 }}>作答区</div>
-          <div data-answer-area="true" style={{ display: "flex", flexWrap: "wrap", gap: 8, minHeight: 48, alignItems: "center", lineHeight: 1.6 }}>
-            {Array.from({ length: slots.length + 1 }, (_, i) => i).map((i) => (
-              <React.Fragment key={`resp-${i}`}>
-                {givenSlots.filter((gs) => gs.givenIndex === i).map((gs, gi) => (
-                  <span
-                    key={`given-${i}-${gi}`}
-                    data-testid={`given-token-${i}`}
-                    style={{
-                      fontSize: isMobile ? 16 : 14,
-                      color: "#555",
-                      background: "#e8ede9",
-                      border: "1px solid #c5d0c8",
-                      borderRadius: isMobile ? 10 : 4,
-                      padding: isMobile ? "8px 12px" : "4px 10px",
-                      fontWeight: 600,
-                      opacity: 0.85,
-                    }}
-                  >
-                    {formatChunkDisplay(gs.chunk)}
-                  </span>
-                ))}
-                {i < slots.length && (
-                  <div
-                    key={`slot-${i}`}
-                    data-testid={`slot-${i}`}
-                    data-slot-index={i}
-                    className={slots[i] ? "bs-slot-filled" : undefined}
-                    style={{ ...slotStyle(i), touchAction: isMobile && slots[i] ? "none" : undefined }}
-                    draggable={!isMobile && !!slots[i]}
-                    onDragStart={!isMobile && slots[i] ? (e) => onDragStartSlot(e, slots[i], i) : undefined}
-                    onDragEnd={!isMobile && slots[i] ? onDragEnd : undefined}
-                    onDragOver={!isMobile ? (e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; setHoverSlot(i); } : undefined}
-                    onDragLeave={!isMobile ? () => setHoverSlot(null) : undefined}
-                    onDrop={!isMobile ? (e) => onDropSlot(e, i) : undefined}
-                    onTouchStart={isMobile && slots[i] ? (e) => startTouch(e, { from: "slot", chunk: slots[i], slotIndex: i }) : undefined}
-                    onClick={() => { if (suppressClick.current) return; slots[i] && handleRemoveChunk(i); }}
-                  >
-                    {slots[i] ? formatChunkDisplay(slots[i].text) : i + 1}
-                  </div>
-                )}
-              </React.Fragment>
-            ))}
-            <span style={{ fontSize: 18, color: C.t1, fontWeight: 700 }}>{punct}</span>
+      {isMobile ? (
+        /* ── 手机端：一屏布局 ── */
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", padding: "8px 12px 12px", gap: 6, overflow: "hidden", minHeight: 0 }}>
+          {/* 紧凑题目 + 作答区 */}
+          <div style={{ background: C.card, border: "1px solid " + C.bdr, borderRadius: 10, padding: "10px 12px", flexShrink: 0, boxShadow: C.shadow }}>
+            <div style={{ fontSize: 13, color: C.t1, lineHeight: 1.4, marginBottom: 6 }}>{q.prompt}</div>
+            <div style={{ fontSize: 10, color: C.t3, marginBottom: 4 }}>拖动或点击词块 · 可能含干扰项</div>
+            {slotsJSX}
           </div>
-        </SurfaceCard>
-
-        <div
-          data-bank-area="true"
-          onDragOver={!isMobile ? (e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; setHoverBank(true); } : undefined}
-          onDragLeave={!isMobile ? () => setHoverBank(false) : undefined}
-          onDrop={!isMobile ? onDropBank : undefined}
-          style={{
-            background: hoverBank && dragItem && dragItem.from === "slot" ? "#fff3f3" : "#fff",
-            border: "1px solid " + C.bdr,
-            borderRadius: isMobile ? 14 : 4,
-            padding: isMobile ? "14px 12px" : 16,
-            display: "flex",
-            flexWrap: "wrap",
-            gap: isMobile ? 10 : 8,
-            marginBottom: 20,
-            minHeight: isMobile ? 60 : 48,
-          }}
-        >
-          <div style={{ fontSize: 11, color: C.t2, width: "100%", marginBottom: 4, letterSpacing: 1 }}>词块区</div>
-          {bank.length === 0 && <span style={{ fontSize: 13, color: "#aaa", fontStyle: "italic" }}>所有词块都已放入句子，可点击已填槽位退回词块。</span>}
-          {bank.map((chunk) => {
-            const justReturned = animChunkId === chunk.id;
-            return (
-              <button
-                data-testid={`bank-chunk-${chunk.id}`}
-                key={chunk.id}
-                className="bs-chunk"
-                draggable={!isMobile}
-                onDragStart={!isMobile ? (e) => onDragStartBank(e, chunk) : undefined}
-                onDragEnd={!isMobile ? onDragEnd : undefined}
-                onTouchStart={isMobile ? (e) => startTouch(e, { from: "bank", chunk }) : undefined}
-                onClick={() => { if (suppressClick.current) return; handlePickChunk(chunk); }}
-                style={{
-                  background: isMobile ? "#fff" : "#f8f9fa",
-                  color: C.t1,
-                  border: isMobile ? "1.5px solid " + C.bdr : "1px solid " + C.bdr,
-                  borderRadius: isMobile ? 10 : 4,
-                  padding: isMobile ? "10px 16px" : "6px 14px",
-                  fontSize: isMobile ? 16 : 14,
-                  fontWeight: isMobile ? 500 : 400,
-                  cursor: "pointer",
-                  fontFamily: FONT,
-                  userSelect: "none",
-                  touchAction: isMobile ? "none" : undefined,
-                  opacity: dragItem && dragItem.from === "bank" && dragItem.chunk.id === chunk.id ? 0.4 : 1,
-                  transition: "transform 0.12s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.15s",
-                  animation: justReturned ? "bsReturnPop 0.35s cubic-bezier(0.34,1.56,0.64,1)" : "none",
-                  boxShadow: isMobile ? "0 1px 3px rgba(0,0,0,0.06)" : "none",
-                }}
-              >
-                {formatChunkDisplay(chunk.text)}
-              </button>
-            );
-          })}
+          {/* 词块区 — 填充剩余空间 */}
+          {bankJSX(true)}
+          {/* 按钮 */}
+          <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
+            <Btn data-testid="build-submit" onClick={handleSubmitClick} disabled={!allFilled} style={{ flex: 1, padding: "10px 0", fontSize: 14 }}>
+              {idx < qs.length - 1 ? "下一题" : "完成"}
+            </Btn>
+            <Btn onClick={resetQ} variant="secondary" style={{ padding: "10px 16px", fontSize: 13 }}>重置</Btn>
+          </div>
         </div>
-
-        <div style={{ display: "flex", gap: 12, flexDirection: isMobile ? "column" : "row" }}>
-          <Btn data-testid="build-submit" onClick={handleSubmitClick} disabled={!allFilled} style={isMobile ? { width: "100%", padding: "14px 0", fontSize: 16 } : undefined}>
-            {idx < qs.length - 1 ? "下一题" : "完成并查看结果"}
-          </Btn>
-          <Btn onClick={resetQ} variant="secondary" style={isMobile ? { width: "100%", padding: "12px 0" } : undefined}>重置</Btn>
-        </div>
-      </PageShell>
+      ) : (
+        /* ── 桌面端：原有布局 ── */
+        <PageShell narrow>
+          <InfoStrip style={{ marginBottom: 20 }}>
+            <b>Directions: </b>Use the word chunks below to form a grammatically correct sentence. There may be one distractor chunk that does not belong.
+          </InfoStrip>
+          <SurfaceCard style={{ padding: 20, marginBottom: 20 }}>
+            <div style={{ fontSize: 11, color: C.t2, letterSpacing: 1, marginBottom: 8 }}>题目</div>
+            <div style={{ fontSize: 15, color: C.t1, marginBottom: 14, lineHeight: 1.5 }}>{q.prompt}</div>
+            <div style={{ fontSize: 11, color: C.t2, letterSpacing: 1, marginBottom: 8 }}>作答区</div>
+            {slotsJSX}
+          </SurfaceCard>
+          {bankJSX(false)}
+          <div style={{ display: "flex", gap: 12 }}>
+            <Btn data-testid="build-submit" onClick={handleSubmitClick} disabled={!allFilled}>
+              {idx < qs.length - 1 ? "下一题" : "完成并查看结果"}
+            </Btn>
+            <Btn onClick={resetQ} variant="secondary">重置</Btn>
+          </div>
+        </PageShell>
+      )}
     </div>
   );
 }

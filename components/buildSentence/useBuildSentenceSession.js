@@ -193,6 +193,28 @@ export function useBuildSentenceSession(questions, options = {}) {
     setBank((p) => [...p, chunk]);
   }
 
+  function placeChunkAt(chunk, targetIdx) {
+    if (targetIdx < 0 || targetIdx >= slots.length) return;
+    const targetChunk = slots[targetIdx];
+    if (targetChunk) {
+      setBank((p) => [...p.filter((x) => x.id !== chunk.id), targetChunk]);
+    } else {
+      setBank((p) => p.filter((x) => x.id !== chunk.id));
+    }
+    setSlots((p) => { const n = [...p]; n[targetIdx] = chunk; return n; });
+  }
+
+  function moveSlotTo(fromIdx, targetIdx) {
+    if (fromIdx === targetIdx) return;
+    if (fromIdx < 0 || fromIdx >= slots.length || targetIdx < 0 || targetIdx >= slots.length) return;
+    setSlots((p) => {
+      const n = [...p];
+      n[targetIdx] = p[fromIdx];
+      n[fromIdx] = p[targetIdx];
+      return n;
+    });
+  }
+
   function onDragStartBank(e, chunk) {
     setDragItem({ from: "bank", chunk });
     e.dataTransfer.effectAllowed = "move";
@@ -317,6 +339,8 @@ export function useBuildSentenceSession(questions, options = {}) {
     submit,
     pickChunk,
     removeChunk,
+    placeChunkAt,
+    moveSlotTo,
     onDragStartBank,
     onDragStartSlot,
     onDragEnd,
