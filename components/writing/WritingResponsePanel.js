@@ -1,8 +1,9 @@
 ﻿"use client";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { C, Btn, FONT, SurfaceCard } from "../shared/ui";
 
 const CJK_RE = /[\u2E80-\u9FFF\uF900-\uFAFF\uFE30-\uFE4F\uFF00-\uFFEF\u3000-\u303F\u3040-\u30FF]/g;
+const IME_TIP_DISMISSED_KEY = "toefl-ime-tip-dismissed";
 
 function ExamToolbar({ taRef, onTextChange, disabled, historyRef, prevTextRef }) {
   function handleCopy() {
@@ -84,6 +85,12 @@ export function WritingResponsePanel({
   const historyRef = useRef([]);
   const prevTextRef = useRef(text);
   const isEditable = phase === "writing";
+  const [imeTipVisible, setImeTipVisible] = useState(false);
+  const imeTipDismissedRef = useRef(false);
+
+  useEffect(() => {
+    try { imeTipDismissedRef.current = localStorage.getItem(IME_TIP_DISMISSED_KEY) === "1"; } catch {}
+  }, []);
 
   useEffect(() => {
     if (text !== prevTextRef.current) {
@@ -110,6 +117,25 @@ export function WritingResponsePanel({
 
             <ExamToolbar taRef={taRef} onTextChange={onTextChange} disabled={!isEditable} historyRef={historyRef} prevTextRef={prevTextRef} />
 
+            {imeTipVisible && (
+              <div style={{ display: "flex", alignItems: "flex-start", gap: 8, padding: "8px 12px", background: "#fffbeb", borderBottom: "1px solid #fde68a", fontSize: 12, color: "#92400e", lineHeight: 1.5 }}>
+                <span style={{ flexShrink: 0, marginTop: 1 }}>&#9888;&#65039;</span>
+                <div style={{ flex: 1 }}>
+                  <b>检测到中文输入法</b> — 本练习仅支持英文。Mac 用户请前往「系统设置 &gt; 键盘 &gt; 输入法」开启「自动切换到文稿的输入法」，即可在答题时自动切换为英文。
+                </div>
+                <button
+                  onClick={() => {
+                    setImeTipVisible(false);
+                    imeTipDismissedRef.current = true;
+                    try { localStorage.setItem(IME_TIP_DISMISSED_KEY, "1"); } catch {}
+                  }}
+                  style={{ flexShrink: 0, background: "none", border: "none", color: "#92400e", cursor: "pointer", fontSize: 14, fontWeight: 700, padding: "0 2px", lineHeight: 1 }}
+                >
+                  &#10005;
+                </button>
+              </div>
+            )}
+
             <textarea
               ref={taRef}
               data-testid="writing-textarea"
@@ -122,6 +148,7 @@ export function WritingResponsePanel({
               onCompositionEnd={(e) => {
                 const cleaned = e.target.value.replace(CJK_RE, "");
                 if (cleaned !== text) onTextChange(cleaned);
+                if (!imeTipDismissedRef.current && CJK_RE.test(e.data || "")) setImeTipVisible(true);
               }}
               onKeyDown={(e) => {
                 if (e.ctrlKey || e.metaKey) {
