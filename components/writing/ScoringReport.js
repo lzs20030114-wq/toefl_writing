@@ -1,6 +1,8 @@
-﻿"use client";
+"use client";
 import React, { useMemo, useState } from "react";
-import { C, DisclosureSection } from "../shared/ui";
+import { C, DisclosureSection, FONT } from "../shared/ui";
+import { getSavedCode, getSavedTier } from "../../lib/AuthContext";
+import UpgradeModal from "../shared/UpgradeModal";
 
 function GoalBadge({ status }) {
   const map = {
@@ -30,9 +32,39 @@ function PatternTag({ tag }) {
   );
 }
 
+function ProBlur({ isPro, children }) {
+  if (isPro) return <>{children}</>;
+  return <span style={{ filter: "blur(5px)", userSelect: "none", WebkitUserSelect: "none" }}>{children}</span>;
+}
+
+function UpgradeBannerCompact({ onClick }) {
+  return (
+    <div
+      onClick={onClick}
+      style={{
+        display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+        padding: "8px 14px", marginTop: 10,
+        background: "linear-gradient(135deg, #ecfdf5, #ecfeff)",
+        border: "1px solid rgba(13,150,104,0.19)", borderRadius: 8,
+        cursor: "pointer", fontSize: 11, fontWeight: 700, color: "#087355",
+      }}
+    >
+      <span>{"\uD83D\uDD12"}</span>
+      <span>升级 Pro 解锁完整报告</span>
+      <span style={{ padding: "3px 10px", borderRadius: 6, background: "linear-gradient(135deg, #087355, #0891B2)", color: "#fff", fontSize: 10, fontWeight: 700 }}>升级</span>
+    </div>
+  );
+}
+
 export function ScoringReport({ result, type }) {
   const [activeMark, setActiveMark] = useState(null);
+  const [showUpgrade, setShowUpgrade] = useState(false);
   if (!result) return null;
+
+  const isPro = (() => {
+    try { const t = getSavedTier(); return t === "pro" || t === "legacy"; }
+    catch { return false; }
+  })();
 
   const score = Number.isFinite(Number(result.score)) ? Number(result.score) : 0;
   const band = Number.isFinite(Number(result.band)) ? Number(result.band) : null;
@@ -88,10 +120,11 @@ export function ScoringReport({ result, type }) {
             {actions.map((a, idx) => (
               <div key={idx} style={{ border: "1px solid #e5e7eb", borderLeft: `4px solid ${idx === 0 ? "#dc2626" : "#f97316"}`, borderRadius: 6, padding: 12 }}>
                 <div style={{ fontSize: 14, fontWeight: 700, color: C.t1, marginBottom: 6 }}>{a.title || `短板${idx + 1}`}</div>
-                <div style={{ fontSize: 13, color: C.t2, lineHeight: 1.7, marginBottom: 8 }}><b>为什么重要：</b>{a.importance || "未提供"}</div>
-                <div style={{ fontSize: 13, color: C.t1, lineHeight: 1.7, background: "#f8fafc", borderRadius: 6, padding: "8px 10px" }}><b>现在可做的：</b>{a.action || "未提供"}</div>
+                <div style={{ fontSize: 13, color: C.t2, lineHeight: 1.7, marginBottom: 8 }}><b>为什么重要：</b><ProBlur isPro={isPro}>{a.importance || "未提供"}</ProBlur></div>
+                <div style={{ fontSize: 13, color: C.t1, lineHeight: 1.7, background: "#f8fafc", borderRadius: 6, padding: "8px 10px" }}><b>现在可做的：</b><ProBlur isPro={isPro}>{a.action || "未提供"}</ProBlur></div>
               </div>
             ))}
+            {!isPro && <UpgradeBannerCompact onClick={() => setShowUpgrade(true)} />}
           </div>
         )}
       </DisclosureSection>
@@ -142,9 +175,14 @@ export function ScoringReport({ result, type }) {
             {Number.isInteger(activeMark) && marks[activeMark]?.type === "mark" ? (
               <div style={{ marginTop: 12, border: "1px solid #cbd5e1", borderRadius: 8, background: "#fff", padding: "10px 12px" }}>
                 <div style={{ fontSize: 12, color: C.nav, fontWeight: 700, marginBottom: 4 }}>修改建议（中文）</div>
-                <div style={{ fontSize: 13, marginBottom: 8 }}>{marks[activeMark].fix || "暂无"}</div>
+                <div style={{ fontSize: 13, marginBottom: 8 }}><ProBlur isPro={isPro}>{marks[activeMark].fix || "暂无"}</ProBlur></div>
                 <div style={{ fontSize: 12, color: C.nav, fontWeight: 700, marginBottom: 4 }}>问题说明</div>
-                <div style={{ fontSize: 13, color: C.t2 }}>{marks[activeMark].note || "暂无"}</div>
+                <div style={{ fontSize: 13, color: C.t2 }}><ProBlur isPro={isPro}>{marks[activeMark].note || "暂无"}</ProBlur></div>
+                {!isPro && (
+                  <div onClick={() => setShowUpgrade(true)} style={{ marginTop: 8, fontSize: 11, color: "#087355", cursor: "pointer", fontWeight: 700 }}>
+                    {"\uD83D\uDD12"} 升级 Pro 查看详情
+                  </div>
+                )}
               </div>
             ) : null}
           </div>
@@ -162,7 +200,7 @@ export function ScoringReport({ result, type }) {
               <div key={idx} style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 8, border: "1px solid #e5e7eb", borderRadius: 6, padding: 10 }}>
                 <div>
                   <PatternTag tag={p.tag} />
-                  <div style={{ marginTop: 6, fontSize: 13, color: C.t2 }}>{p.summary || ""}</div>
+                  <div style={{ marginTop: 6, fontSize: 13, color: C.t2 }}><ProBlur isPro={isPro}>{p.summary || ""}</ProBlur></div>
                 </div>
                 <div style={{ alignSelf: "start", fontSize: 12, color: C.t2 }}>出现 {Number(p.count || 0)} 次</div>
               </div>
@@ -179,7 +217,11 @@ export function ScoringReport({ result, type }) {
             <details>
               <summary style={{ cursor: "pointer", fontWeight: 700, color: C.nav }}>查看完整范文</summary>
               <pre style={{ whiteSpace: "pre-wrap", marginTop: 8, background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 6, padding: 10, fontFamily: "inherit", fontSize: 13, lineHeight: 1.8 }}>
-                {comparison.modelEssay || "暂无范文"}
+                {isPro ? (comparison.modelEssay || "暂无范文") : (() => {
+                  const text = comparison.modelEssay || "暂无范文";
+                  if (text.length <= 80) return text;
+                  return <>{text.slice(0, 80)}<span style={{ filter: "blur(5px)", userSelect: "none", WebkitUserSelect: "none" }}>{text.slice(80)}</span></>;
+                })()}
               </pre>
             </details>
 
@@ -188,18 +230,27 @@ export function ScoringReport({ result, type }) {
                 <div key={p.index} style={{ border: "1px solid #e5e7eb", borderRadius: 6, padding: 10 }}>
                   <div style={{ fontWeight: 700, marginBottom: 8 }}>{p.index}. {p.title}</div>
                   <div style={{ display: "grid", gap: 8 }}>
-                    <div style={{ background: "#f8fafc", borderRadius: 6, padding: "8px 10px", fontSize: 13 }}><b>你的：</b>{p.yours || ""}</div>
-                    <div style={{ background: "#ecfeff", borderRadius: 6, padding: "8px 10px", fontSize: 13 }}><b>范文：</b>{p.model || ""}</div>
-                    <div style={{ fontSize: 13, color: C.t2, lineHeight: 1.7 }}><b>差异：</b>{p.difference || ""}</div>
+                    <div style={{ background: "#f8fafc", borderRadius: 6, padding: "8px 10px", fontSize: 13 }}><b>你的：</b><ProBlur isPro={isPro}>{p.yours || ""}</ProBlur></div>
+                    <div style={{ background: "#ecfeff", borderRadius: 6, padding: "8px 10px", fontSize: 13 }}><b>范文：</b><ProBlur isPro={isPro}>{p.model || ""}</ProBlur></div>
+                    <div style={{ fontSize: 13, color: C.t2, lineHeight: 1.7 }}><b>差异：</b><ProBlur isPro={isPro}>{p.difference || ""}</ProBlur></div>
                   </div>
                 </div>
               ))
             ) : (
               <div style={{ color: C.t2 }}>暂无可展示的对比点</div>
             )}
+            {!isPro && <UpgradeBannerCompact onClick={() => setShowUpgrade(true)} />}
           </div>
         )}
       </DisclosureSection>
+      {showUpgrade && (
+        <UpgradeModal
+          userCode={getSavedCode()}
+          currentTier={getSavedTier()}
+          onClose={() => setShowUpgrade(false)}
+          onUpgraded={() => window.location.reload()}
+        />
+      )}
     </div>
   );
 }
