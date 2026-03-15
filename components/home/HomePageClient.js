@@ -212,18 +212,15 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
 
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ marginBottom: 16, ...fadeIn(50) }}>
-                <h1 style={{ margin: "0 0 10px", fontSize: 30, fontWeight: 800, color: isChallenge ? CH.t1 : T.t1, letterSpacing: -0.5, lineHeight: 1.2 }}>
-                  {isChallenge ? <>英语写作练习 <span style={{ color: CH.accent }}>Challenge Mode</span></> : isPractice ? <>英语写作练习 <span style={{ color: "#6366f1" }}>Practice</span></> : "英语写作练习"}
-                </h1>
-                <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
-                  <p style={{ margin: 0, fontSize: 13, color: isChallenge ? CH.accent : T.t2, fontWeight: isChallenge ? 600 : 400 }}>
-                    {isChallenge ? "在压力下证明你的水平。时间更短，要求更高。" : isPractice ? "自选题目，不限时间，自由练习。" : "模拟考试计时、AI 评分与三类写作任务练习，适用于 TOEFL® 备考。"}
-                  </p>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, marginBottom: 10 }}>
+                  <h1 style={{ margin: 0, fontSize: 30, fontWeight: 800, color: isChallenge ? CH.t1 : T.t1, letterSpacing: -0.5, lineHeight: 1.2 }}>
+                    {isChallenge ? <>英语写作练习 <span style={{ color: CH.accent }}>Challenge Mode</span></> : isPractice ? <>英语写作练习 <span style={{ color: "#6366f1" }}>Practice</span></> : "英语写作练习"}
+                  </h1>
                   <div style={{ display: "inline-flex", gap: 4, flexShrink: 0, background: isChallenge ? "rgba(255,255,255,0.05)" : T.card, border: `1px solid ${isChallenge ? "rgba(255,30,30,0.3)" : T.bdr}`, borderRadius: 999, padding: 4, boxShadow: T.shadow }}>
                     {[
                       { value: PRACTICE_MODE.STANDARD, label: "Standard" },
-                      { value: PRACTICE_MODE.CHALLENGE, label: "Challenge" },
                       { value: PRACTICE_MODE.PRACTICE, label: "Practice" },
+                      { value: PRACTICE_MODE.CHALLENGE, label: "Challenge" },
                     ].map((option) => {
                       const selected = mode === option.value;
                       const challengeOption = option.value === PRACTICE_MODE.CHALLENGE;
@@ -232,6 +229,9 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
                     })}
                   </div>
                 </div>
+                <p style={{ margin: 0, fontSize: 13, color: isChallenge ? CH.accent : T.t2, fontWeight: isChallenge ? 600 : 400 }}>
+                  {isChallenge ? "在压力下证明你的水平。时间更短，要求更高。" : isPractice ? "自选题目，不限时间，自由练习。" : "模拟考试计时、AI 评分与三类写作任务练习，适用于 TOEFL® 备考。"}
+                </p>
               </div>
 
               <div style={{ background: isChallenge ? "rgba(17,17,24,0.7)" : T.card, border: `1px solid ${isChallenge ? CH.cardBorder : T.bdr}`, borderRadius: 10, padding: "10px 16px", marginBottom: 16, boxShadow: isChallenge ? "none" : T.shadow, ...fadeIn(120) }}>
