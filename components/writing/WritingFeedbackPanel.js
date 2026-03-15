@@ -399,7 +399,7 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
       <div style={{ display: "flex", flexDirection: "column", height: containerHeight || `calc(100vh - ${topBarHeight}px)`, background: P.bg, animation: "wfpSlideIn 0.35s cubic-bezier(0.16,1,0.3,1)", fontFamily: FONT }}>
 
         {/* Header */}
-        <div style={{ flexShrink: 0, padding: "13px 28px", borderBottom: `1px solid ${P.borderSubtle}`, background: P.surface, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div className="tp-fb-header" style={{ flexShrink: 0, padding: "13px 28px", borderBottom: `1px solid ${P.borderSubtle}`, background: P.surface, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div>
             <span style={{ fontSize: 15, fontWeight: 800, color: P.text }}>{taskLabel} · 批改报告</span>
             {score != null && (
@@ -414,10 +414,10 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
         </div>
 
         {/* 45/55 split body */}
-        <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
+        <div className="tp-fb-split" style={{ display: "flex", flex: 1, overflow: "hidden" }}>
 
           {/* Left (45%): annotated text */}
-          <div ref={leftPanelRef} style={{ width: "45%", flexShrink: 0, height: "100%", overflowY: "auto", padding: "24px 22px 24px 28px", borderRight: `1px solid ${P.borderSubtle}` }}>
+          <div ref={leftPanelRef} className="tp-fb-left" style={{ width: "45%", flexShrink: 0, height: "100%", overflowY: "auto", padding: "24px 22px 24px 28px", borderRight: `1px solid ${P.borderSubtle}` }}>
             <div style={{ fontSize: 10.5, fontWeight: 700, color: P.textDim, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 10, display: "flex", alignItems: "center", gap: 6 }}>
               <span style={{ width: 6, height: 6, borderRadius: 999, background: "#34d399", flexShrink: 0 }} />
               Your Response
@@ -430,7 +430,7 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
           </div>
 
           {/* Right (55%): tabbed feedback */}
-          <div style={{ flex: 1, minWidth: 0, height: "100%", display: "flex", flexDirection: "column", background: P.surface }}>
+          <div className="tp-fb-right" style={{ flex: 1, minWidth: 0, height: "100%", display: "flex", flexDirection: "column", background: P.surface }}>
             <div style={{ flexShrink: 0, padding: "12px 24px", borderBottom: `1px solid ${P.borderSubtle}`, display: "flex", gap: 6 }}>
               {WRITING_TABS.map((t) => {
                 const isA = secondaryTab === t.id;

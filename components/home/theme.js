@@ -57,4 +57,12 @@ export const HOME_PAGE_CSS = `
   .home-sidebar { width: 100%; min-width: 0; position: static; }
   .home-grid { grid-template-columns: 1fr; }
 }
+@media (max-width: 480px) {
+  .home-shell { padding: 12px 8px 32px; gap: 16px; }
+  .home-layout { gap: 16px; }
+  .home-grid { gap: 8px; }
+  .tp-home-header { flex-direction: column !important; align-items: flex-start !important; gap: 8px !important; }
+  .tp-mode-switcher { gap: 2px !important; padding: 2px !important; }
+  .tp-mode-switcher button { padding: 4px 10px !important; font-size: 11px !important; }
+}
 `;

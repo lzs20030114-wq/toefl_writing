@@ -503,7 +503,7 @@ function FullMockReport({ entry, onClose }) {
     const userText = response?.userText || null;
 
     const score = Number.isFinite(Number(feedback?.score)) ? Number(feedback.score) : null;
-    const band = Number.isFinite(Number(feedback?.band)) ? Number(feedback.band) : null;
+    const band = feedback?.band != null ? String(feedback.band) : null;
     const summary = String(feedback?.summary || "").trim();
     const goals = Array.isArray(feedback?.goals) ? feedback.goals : [];
     const actions = Array.isArray(feedback?.actions) ? feedback.actions : [];
@@ -531,7 +531,7 @@ function FullMockReport({ entry, onClose }) {
                 <span style={{ fontSize: 48, fontWeight: 800, color: "#fff", lineHeight: 1 }}>{score ?? "--"}</span>
                 <span style={{ fontSize: 14, color: "rgba(255,255,255,0.45)", fontWeight: 700, marginBottom: 8 }}>/ 5</span>
               </div>
-              {band != null ? <span style={{ padding: "3px 10px", background: "rgba(52,211,153,0.15)", color: "#34d399", borderRadius: 999, fontSize: 11, fontWeight: 700 }}>Band {band}</span> : null}
+              {band != null ? <span style={{ padding: "3px 10px", background: "rgba(52,211,153,0.15)", color: "#34d399", borderRadius: 999, fontSize: 11, fontWeight: 700 }}>{band}</span> : null}
             </div>
             {summary ? <p style={{ fontSize: 13, color: "rgba(255,255,255,0.7)", lineHeight: 1.75, margin: 0, marginBottom: goals.length ? 18 : 0 }}>{summary}</p> : null}
             {reportType === "email" && goals.length > 0 ? (
@@ -986,10 +986,10 @@ export function ProgressView({ onBack }) {
           </div>
         </div>
       ) : (
-        <div style={{ maxWidth: 1520, margin: "0 auto", padding: "24px 24px 60px", display: "flex", gap: 24, alignItems: "flex-start" }}>
+        <div className="tp-progress-layout" style={{ maxWidth: 1520, margin: "0 auto", padding: "24px 24px 60px", display: "flex", gap: 24, alignItems: "flex-start" }}>
 
           {/* Left sidebar */}
-          <div style={{ width: 320, flexShrink: 0, position: "sticky", top: 68, animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 60ms both" }}>
+          <div className="tp-progress-sidebar" style={{ width: 320, flexShrink: 0, position: "sticky", top: 68, animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 60ms both" }}>
             <div style={{ marginBottom: 16 }}>
               <h1 style={{ fontSize: 22, fontWeight: 800, color: P.text, marginBottom: 4 }}>练习记录</h1>
               <p style={{ fontSize: 11, color: P.textDim }}>点击模考条目，在右侧展开详情报告</p>
@@ -1036,9 +1036,9 @@ export function ProgressView({ onBack }) {
                     <ChevronIcon open={showStats} color={P.textDim} />
                   </button>
                   <div style={{ maxHeight: showStats ? "500px" : "0px", overflow: "hidden", transition: "max-height 0.45s cubic-bezier(0.16,1,0.3,1)" }}>
-                    <div style={{ display: "flex", borderTop: `1px solid ${P.borderSubtle}` }}>
+                    <div className="tp-stats-overview" style={{ display: "flex", borderTop: `1px solid ${P.borderSubtle}` }}>
                       {/* Left: latest mock score ring */}
-                      <div style={{ width: "32%", flexShrink: 0, padding: "24px 20px", background: "#fafbfa", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", position: "relative", borderRight: `1px solid ${P.borderSubtle}` }}>
+                      <div className="tp-stats-left" style={{ width: "32%", flexShrink: 0, padding: "24px 20px", background: "#fafbfa", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", position: "relative", borderRight: `1px solid ${P.borderSubtle}` }}>
                         <div style={{ position: "absolute", top: 12, left: 16, fontSize: 10, fontWeight: 700, color: P.textDim, textTransform: "uppercase", letterSpacing: "0.08em" }}>最新模考</div>
                         {mockEntries.length > 0 ? (() => {
                           const lm = mockEntries[0].session;
@@ -1071,7 +1071,7 @@ export function ProgressView({ onBack }) {
                 </div>
 
                 {/* Stat cards — always visible, filter both chart and session list */}
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 10, marginBottom: 16, animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 200ms both" }}>
+                <div className="tp-stat-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 10, marginBottom: 16, animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 200ms both" }}>
                   {statItems.map((item) => (
                     <StatCard
                       key={item.key}

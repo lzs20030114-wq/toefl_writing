@@ -217,11 +217,11 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
 
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ marginBottom: 16, ...fadeIn(50) }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, marginBottom: 10 }}>
+                <div className="tp-home-header" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, marginBottom: 10 }}>
                   <h1 style={{ margin: 0, fontSize: 30, fontWeight: 800, color: isChallenge ? CH.t1 : T.t1, letterSpacing: -0.5, lineHeight: 1.2 }}>
                     {isChallenge ? <>英语写作练习 <span style={{ color: CH.accent }}>Challenge Mode</span></> : isPractice ? <>英语写作练习 <span style={{ color: "#6366f1" }}>Practice</span></> : "英语写作练习"}
                   </h1>
-                  <div style={{ display: "inline-flex", gap: 4, flexShrink: 0, background: isChallenge ? "rgba(255,255,255,0.05)" : T.card, border: `1px solid ${isChallenge ? "rgba(255,30,30,0.3)" : T.bdr}`, borderRadius: 999, padding: 4, boxShadow: T.shadow }}>
+                  <div className="tp-mode-switcher" style={{ display: "inline-flex", gap: 4, flexShrink: 0, background: isChallenge ? "rgba(255,255,255,0.05)" : T.card, border: `1px solid ${isChallenge ? "rgba(255,30,30,0.3)" : T.bdr}`, borderRadius: 999, padding: 4, boxShadow: T.shadow }}>
                     {[
                       { value: PRACTICE_MODE.STANDARD, label: "Standard" },
                       { value: PRACTICE_MODE.PRACTICE, label: "Practice" },

@@ -23,6 +23,36 @@ export const C = {
 };
 export const FONT = "'Plus Jakarta Sans','Noto Sans SC','Segoe UI',sans-serif";
 
+/* ── 全局响应式 CSS（由 PageShell 注入 <style>，所有页面生效） ── */
+const RESPONSIVE_CSS = `
+@media (max-width: 768px) {
+  .tp-topbar { padding: 0 12px !important; }
+  .tp-topbar-mid { display: none !important; }
+  .tp-shell-inner { padding: 16px 12px 32px !important; max-width: 100% !important; }
+  .tp-writing-grid { grid-template-columns: 1fr !important; }
+  .tp-fb-split { flex-direction: column !important; }
+  .tp-fb-left { width: 100% !important; height: auto !important; max-height: 50vh !important;
+    border-right: none !important; border-bottom: 1px solid #ebf0ed !important; }
+  .tp-fb-right { height: auto !important; min-height: 50vh !important; }
+  .tp-fb-header { padding: 10px 14px !important; flex-wrap: wrap !important; gap: 8px !important; }
+  .tp-exam-grid { grid-template-columns: 1fr !important; }
+  .tp-progress-layout { flex-direction: column !important; }
+  .tp-progress-sidebar { width: 100% !important; position: static !important; }
+  .tp-stat-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .tp-stats-overview { flex-direction: column !important; }
+  .tp-stats-left { width: 100% !important; border-right: none !important;
+    border-bottom: 1px solid #ebf0ed !important; }
+}
+@media (max-width: 480px) {
+  .tp-topbar { height: 48px !important; }
+  .tp-topbar .tp-brand-name { display: none !important; }
+  .tp-topbar .tp-brand-sep { display: none !important; }
+  .tp-shell-inner { padding: 10px 8px 20px !important; }
+  .tp-stat-grid { grid-template-columns: 1fr !important; }
+  .tp-fb-left { max-height: 40vh !important; padding: 12px !important; }
+}
+`;
+
 export function Btn({ children, onClick, disabled, variant, ...props }) {
   const colors = {
     primary: { bg: C.blue, c: "#fff", b: C.blue },
@@ -89,16 +119,16 @@ export function ChevronIcon({ open = false, size = 12, color = C.t3 }) {
 
 export function TopBar({ title, section, timeLeft, isRunning, qInfo, onExit }) {
   return (
-    <div style={{ background: "rgba(255,255,255,0.92)", color: C.t1, padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between", height: 56, fontFamily: FONT, fontSize: 14, borderBottom: "1px solid " + C.bdrSubtle, backdropFilter: "blur(12px)", position: "sticky", top: 0, zIndex: 100 }}>
+    <div className="tp-topbar" style={{ background: "rgba(255,255,255,0.92)", color: C.t1, padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between", height: 56, fontFamily: FONT, fontSize: 14, borderBottom: "1px solid " + C.bdrSubtle, backdropFilter: "blur(12px)", position: "sticky", top: 0, zIndex: 100 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
         <div style={{ width: 28, height: 28, borderRadius: 8, background: "linear-gradient(135deg,#087355,#0891B2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
           <span style={{ color: "#fff", fontSize: 13, fontWeight: 800 }}>T</span>
         </div>
-        <span style={{ fontWeight: 700, fontSize: 15 }}>TreePractice</span>
-        <span style={{ opacity: 0.35 }}>|</span>
+        <span className="tp-brand-name" style={{ fontWeight: 700, fontSize: 15 }}>TreePractice</span>
+        <span className="tp-brand-sep" style={{ opacity: 0.35 }}>|</span>
         <span style={{ fontSize: 13, color: C.t2 }}>{section}</span>
       </div>
-      <div style={{ fontSize: 13, color: C.t2 }}>{title}</div>
+      <div className="tp-topbar-mid" style={{ fontSize: 13, color: C.t2 }}>{title}</div>
       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
         {qInfo && <span style={{ fontSize: 12, color: C.t2 }}>{qInfo}</span>}
         {timeLeft !== undefined && <div style={{ background: timeLeft <= 60 ? "#fee2e2" : C.ltB, color: timeLeft <= 60 ? C.red : C.blue, padding: "6px 12px", borderRadius: 999, fontFamily: "Consolas,monospace", fontSize: 15, fontWeight: 700, border: "1px solid " + (timeLeft <= 60 ? "#fecaca" : "#d1fae5") }}>{fmt(timeLeft)}</div>}
@@ -111,7 +141,8 @@ export function TopBar({ title, section, timeLeft, isRunning, qInfo, onExit }) {
 export function PageShell({ children, narrow = false }) {
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
-      <div style={{ maxWidth: narrow ? 920 : 1100, margin: "0 auto", padding: "24px 20px 48px" }}>
+      <style dangerouslySetInnerHTML={{ __html: RESPONSIVE_CSS }} />
+      <div className="tp-shell-inner" style={{ maxWidth: narrow ? 920 : 1100, margin: "0 auto", padding: "24px 20px 48px" }}>
         {children}
       </div>
     </div>

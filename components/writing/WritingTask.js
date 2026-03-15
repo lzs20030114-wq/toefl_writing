@@ -431,7 +431,7 @@ export function WritingTask({
                     {practiceMode === PRACTICE_MODE.CHALLENGE && <span> Challenge mode active — time limit is reduced.</span>}
                     {isPracticeMode && <span> Practice mode — no time limit.</span>}
                   </InfoStrip>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+                  <div className="tp-writing-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
                     <WritingPromptPanel type={type} pd={pd} />
                     <WritingResponsePanel
                       type={type}

@@ -155,7 +155,7 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
         )}
 
         {!!session && (
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 280px", gap: 16, alignItems: "start" }}>
+          <div className="tp-exam-grid" style={{ display: "grid", gridTemplateColumns: "1fr 280px", gap: 16, alignItems: "start" }}>
             <MockExamMainPanel
               session={session}
               currentTask={currentTask}
