@@ -39,7 +39,7 @@ const {
   evaluateSetDifficultyAgainstTarget,
   ETS_2026_TARGET_COUNTS_10,
 } = require("../lib/questionBank/difficultyControl.js");
-const { isEmbeddedQuestion, ETS_STYLE_TARGETS } = require("../lib/questionBank/etsProfile.js");
+const { isEmbeddedQuestion, isNegation, ETS_STYLE_TARGETS } = require("../lib/questionBank/etsProfile.js");
 const { validateAllSets } = require("./validate-bank.js");
 
 const OUTPUT_PATH = process.env.BS_OUTPUT_PATH ? resolve(String(process.env.BS_OUTPUT_PATH)) : resolve(__dirname, "..", "data", "buildSentence", "questions.json");
@@ -200,34 +200,131 @@ function isMandatoryMultiWord(chunk) {
 }
 
 /**
- * Split non-mandatory multi-word chunks until the total multi-word count
- * across effective chunks is ≤ maxMultiWord (~2 matches the TPO 23% target).
- * Mandatory chunks (negation, infinitives, phrasal verbs, etc.) are never split.
- * Never splits a chunk if doing so would push effective chunk count above maxTotalChunks (8).
+ * Optimize chunk granularity by MERGING adjacent single-word chunks into semantic
+ * units (det+noun, prep+noun) to bring effective chunk count down to target.
+ *
+ * Target EC = max(4, min(7, ceil(R × 0.63))) where R = answer_words − prefilled_words.
+ * This matches TPO average EC of 5.8.
+ *
+ * Phase 0: merge any split mandatory pairs (aux+"not", infinitives, etc.)
+ * Phase 1: merge adjacent single-word chunks in priority order (det+noun > prep+noun > other)
+ * Phase 2: if MW ratio > 35%, split non-mandatory MW chunks (safety valve)
  */
-function limitMultiWordChunks(chunks, distractor, maxMultiWord = 2, maxTotalChunks = 8) {
-  const effective = chunks.filter((c) => c !== distractor);
-  const multiCount = effective.filter((c) => c.split(/\s+/).length > 1).length;
-  if (multiCount <= maxMultiWord) return chunks;
+function optimizeChunkGranularity(chunks, distractor, answer, prefilled) {
+  const answerWords = String(answer || "")
+    .replace(/[.,!?;:]/g, " ").trim().split(/\s+/).filter(Boolean);
+  const prefilledWords = (prefilled || []).join(" ").split(/\s+/).filter(Boolean);
+  const R = answerWords.length - prefilledWords.length;
+  const targetEC = Math.max(4, Math.min(7, Math.ceil(R * 0.63)));
 
-  let excess = multiCount - maxMultiWord;
-  let effectiveCount = effective.length;
-  const result = [];
-  for (const chunk of chunks) {
-    if (excess > 0 && chunk !== distractor) {
-      const words = chunk.split(/\s+/);
-      if (words.length > 1 && !isMandatoryMultiWord(chunk)) {
-        // Only split if the resulting effective count stays within the schema limit
-        if (effectiveCount + (words.length - 1) <= maxTotalChunks) {
-          result.push(...words);
-          effectiveCount += words.length - 1;
-          excess--;
-          continue;
-        }
+  let result = [...chunks];
+  const getEffective = (arr) => arr.filter((c) => c !== distractor);
+  const getEC = (arr) => getEffective(arr).length;
+  const getMWCount = (arr) =>
+    getEffective(arr).filter((c) => c.split(/\s+/).length > 1).length;
+
+  const answerLower = answerWords.map((w) => w.toLowerCase());
+
+  const DETERMINERS = new Set([
+    "the","a","an","this","that","these","those",
+    "my","his","her","their","our","its","your",
+  ]);
+  const PREPOSITIONS = new Set([
+    "in","on","at","to","for","from","with","by","about","into",
+    "through","during","before","after","between","under","over",
+    "above","below","against","among","toward","towards","upon",
+    "within","without","until","since","along","across","behind",
+    "beside","beyond","outside","inside","around","near",
+  ]);
+
+  // --- Phase 0: pre-merge split mandatory pairs (aux+not, infinitives, etc.) ---
+  for (let i = 0; i < answerLower.length - 1; i++) {
+    const pairStr = `${answerLower[i]} ${answerLower[i + 1]}`;
+    if (!isMandatoryMultiWord(pairStr)) continue;
+
+    let idx1 = -1, idx2 = -1;
+    for (let j = 0; j < result.length; j++) {
+      if (result[j] === distractor) continue;
+      if (result[j].split(/\s+/).length > 1) continue;
+      if (result[j].toLowerCase() === answerLower[i] && idx1 === -1) {
+        idx1 = j;
+      } else if (result[j].toLowerCase() === answerLower[i + 1] && idx2 === -1 && idx1 !== -1) {
+        idx2 = j;
       }
     }
-    result.push(chunk);
+    if (idx1 >= 0 && idx2 >= 0) {
+      const merged = `${result[idx1]} ${result[idx2]}`;
+      if (idx1 < idx2) { result.splice(idx2, 1); result[idx1] = merged; }
+      else { result.splice(idx1, 1); result[idx2] = merged; }
+    }
   }
+
+  // --- Phase 1: merge single-word chunks to reach target EC ---
+  if (getEC(result) > targetEC) {
+    const candidates = [];
+    for (let i = 0; i < answerLower.length - 1; i++) {
+      const w1 = answerLower[i];
+      const w2 = answerLower[i + 1];
+      // Skip prep+det pairs — produces incomplete phrases like "on the"
+      if (PREPOSITIONS.has(w1) && DETERMINERS.has(w2)) continue;
+
+      let priority;
+      if (DETERMINERS.has(w1)) priority = 1;       // det + noun
+      else if (PREPOSITIONS.has(w1)) priority = 2;  // prep + content word
+      else priority = 4;                            // any other pair
+
+      candidates.push({ answerIdx: i, w1, w2, priority });
+    }
+    candidates.sort((a, b) => a.priority - b.priority);
+
+    const usedPositions = new Set();
+    for (const cand of candidates) {
+      if (getEC(result) <= targetEC) break;
+      // Skip overlapping positions in the answer
+      if (usedPositions.has(cand.answerIdx) || usedPositions.has(cand.answerIdx - 1)) continue;
+
+      const { w1, w2 } = cand;
+      let idx1 = -1, idx2 = -1;
+      for (let j = 0; j < result.length; j++) {
+        if (result[j] === distractor || result[j].split(/\s+/).length > 1) continue;
+        if (result[j].toLowerCase() === w1) { idx1 = j; break; }
+      }
+      for (let j = 0; j < result.length; j++) {
+        if (j === idx1 || result[j] === distractor || result[j].split(/\s+/).length > 1) continue;
+        if (result[j].toLowerCase() === w2) { idx2 = j; break; }
+      }
+      if (idx1 === -1 || idx2 === -1) continue;
+
+      const merged = `${result[idx1]} ${result[idx2]}`;
+      if (idx1 < idx2) { result.splice(idx2, 1); result[idx1] = merged; }
+      else { result.splice(idx1, 1); result[idx2] = merged; }
+      usedPositions.add(cand.answerIdx);
+    }
+  }
+
+  // --- Phase 2: if MW ratio extremely high, split non-mandatory MW chunks ---
+  // Only split if ratio > 60% AND resulting EC stays within targetEC + 1
+  let splitIter = 2;
+  const maxSplitEC = Math.min(targetEC + 1, 8);
+  while (splitIter-- > 0) {
+    const eff = getEffective(result);
+    if (eff.length === 0) break;
+    if (getMWCount(result) / eff.length <= 0.60) break;
+    if (getEC(result) >= maxSplitEC) break;
+
+    let didSplit = false;
+    for (let j = 0; j < result.length; j++) {
+      if (result[j] === distractor) continue;
+      const words = result[j].split(/\s+/);
+      if (words.length > 1 && !isMandatoryMultiWord(result[j])) {
+        result.splice(j, 1, ...words);
+        didSplit = true;
+        break;
+      }
+    }
+    if (!didSplit) break;
+  }
+
   return result;
 }
 
@@ -439,7 +536,8 @@ function autoFixFloatingAdverbs(answer, chunks, distractor) {
  * Auto-fix: replace bare pronoun prefilled (he/she/they) with the full subject NP from the answer.
  * e.g. answer="The professor wanted to know..." prefilled=["she"] → prefilled=["the professor"]
  */
-const _BANNED_BARE_PREFILLED = new Set(["he", "she", "they", "him", "her", "them"]);
+// Only ban object pronouns — TPO uses bare subject pronouns (she/he/they) freely
+const _BANNED_BARE_PREFILLED = new Set(["him", "her", "them"]);
 
 function autoFixBarePrefilledPronoun(answer, prefilled, chunks, distractor) {
   if (!Array.isArray(prefilled) || prefilled.length === 0) return { prefilled, chunks };
@@ -683,29 +781,10 @@ function normalizeQuestion(raw, tempId) {
   // Auto-fix: Ensure at least 4 effective chunks
   chunks = ensureMinChunkCount(chunks, distractor, 4);
 
-  // Auto-fix: Limit non-mandatory multi-word chunks to ~2 per question (TPO: ~23% multi-word)
-  chunks = limitMultiWordChunks(chunks, distractor, 2);
-
-  // Auto-fix: Merge standalone "not" with preceding aux into a single chunk ("did not")
-  // Must happen before hardValidateQuestion, which rejects split negation clusters.
-  {
-    const effChunks = chunks.filter((c) => c !== distractor);
-    const hasNot = effChunks.some((c) => c.trim().toLowerCase() === "not");
-    const hasAux = effChunks.some((c) => _NEG_AUX.has(c.trim().toLowerCase()));
-    if (hasNot && hasAux && effChunks.length - 1 >= 4) {
-      const aw = answer.toLowerCase().replace(/[.,!?;:]/g, "").split(/\s+/).filter(Boolean);
-      const notIdx = aw.indexOf("not");
-      if (notIdx > 0 && _NEG_AUX.has(aw[notIdx - 1])) {
-        const auxWord = aw[notIdx - 1];
-        const merged = `${auxWord} not`;
-        chunks = [
-          ...chunks.filter((c) => c !== distractor && c.trim().toLowerCase() !== "not" && c.trim().toLowerCase() !== auxWord),
-          merged,
-          ...(distractor ? [distractor] : []),
-        ];
-      }
-    }
-  }
+  // Auto-fix: Optimize chunk granularity — merge single-word chunks into semantic
+  // units (det+noun, prep+noun) to reach TPO-calibrated target EC (~5.8 avg).
+  // Also pre-merges split mandatory pairs (aux+not) and splits excess MW if ratio > 35%.
+  chunks = optimizeChunkGranularity(chunks, distractor, answer, prefilled);
 
   // Auto-fix: deduplicate chunks by merging duplicate entries with answer neighbors
   chunks = deduplicateChunks(answer, chunks, distractor);
@@ -764,6 +843,95 @@ function normalizeQuestion(raw, tempId) {
     grammar_points: Array.isArray(q.grammar_points)
       ? q.grammar_points.map((g) => normalizeText(g)).filter(Boolean)
       : [],
+  };
+}
+
+/**
+ * Post-normalization: redistribute prefilled positions to match TPO distribution.
+ * TPO: 53% start (pos 0), 31% mid, 16% end.
+ * Currently all AI-generated questions have prefilled at position 0.
+ * This function deterministically moves some prefilled items to mid/end positions
+ * by swapping the current prefilled with a suitable chunk from the answer.
+ */
+function maybeReassignPrefilledPosition(q) {
+  // Only process questions with single prefilled at position 0
+  if (!q.prefilled || q.prefilled.length === 0) return q;
+  if (!q.prefilled_positions || Object.keys(q.prefilled_positions).length === 0) return q;
+  const currentPos = Object.values(q.prefilled_positions)[0];
+  if (currentPos !== 0) return q; // already non-start
+
+  // Decide target: 53% keep start, 31% mid, 16% end
+  const r = Math.random();
+  if (r < 0.53) return q; // keep at start
+
+  const targetRegion = r < 0.84 ? "mid" : "end"; // 0.53-0.84 = mid (31%), 0.84-1.0 = end (16%)
+
+  const answerWords = q.answer.toLowerCase().replace(/[.,!?;:]/g, "").split(/\s+/).filter(Boolean);
+  const oldPrefilled = q.prefilled[0];
+  const BANNED = new Set(["not", "him", "her", "them"]);
+
+  // Map each effective chunk to its position in the answer
+  const chunkInfos = [];
+  const usedPositions = new Set();
+  const effectiveChunks = (q.chunks || []).filter(
+    (c) => c.toLowerCase().trim() !== (q.distractor || "").toLowerCase().trim()
+  );
+
+  for (const chunk of effectiveChunks) {
+    const cWords = chunk.toLowerCase().replace(/[.,!?;:]/g, "").split(/\s+/).filter(Boolean);
+    for (let i = 0; i <= answerWords.length - cWords.length; i++) {
+      if (usedPositions.has(i)) continue;
+      if (cWords.every((w, j) => w === answerWords[i + j])) {
+        chunkInfos.push({ chunk, pos: i, len: cWords.length });
+        for (let j = i; j < i + cWords.length; j++) usedPositions.add(j);
+        break;
+      }
+    }
+  }
+
+  // Find candidates for new prefilled based on target region
+  let candidates;
+  if (targetRegion === "mid") {
+    candidates = chunkInfos.filter((c) => c.pos > 0 && c.pos + c.len < answerWords.length);
+  } else {
+    candidates = chunkInfos.filter((c) => c.pos + c.len >= answerWords.length);
+  }
+
+  // Filter: must be 1-3 words, not banned, not a standalone function word
+  const FUNCTION_WORDS = new Set(["a", "an", "the", "is", "was", "are", "were", "be", "to", "of", "in", "on", "at", "for", "and", "or", "but"]);
+  candidates = candidates.filter((c) => {
+    if (c.len >= 4) return false;
+    const norm = c.chunk.toLowerCase().trim();
+    if (BANNED.has(norm)) return false;
+    if (c.len === 1 && FUNCTION_WORDS.has(norm)) return false;
+    return true;
+  });
+
+  if (candidates.length === 0) return q; // can't reassign
+
+  // Prefer 2-word chunks for mid, 1-2 word for end
+  candidates.sort((a, b) => {
+    if (targetRegion === "mid") {
+      // Prefer 2-word phrases (like "found out", "wanted to")
+      const aPref = a.len === 2 ? 0 : a.len === 1 ? 1 : 2;
+      const bPref = b.len === 2 ? 0 : b.len === 1 ? 1 : 2;
+      if (aPref !== bPref) return aPref - bPref;
+    }
+    return a.len - b.len;
+  });
+
+  const chosen = candidates[0];
+
+  // Swap: chosen chunk → prefilled, old prefilled → chunk
+  const newChunks = q.chunks.filter((c) => c !== chosen.chunk);
+  // Add old prefilled as a single chunk (lowercase)
+  newChunks.push(oldPrefilled.toLowerCase());
+
+  return {
+    ...q,
+    prefilled: [chosen.chunk],
+    prefilled_positions: { [chosen.chunk]: chosen.pos },
+    chunks: newChunks,
   };
 }
 
@@ -900,28 +1068,26 @@ function buildRejectFeedbackHints(rejectReasons) {
 const TYPE_DIFFICULTY_HINTS = {
   "negation": {
     easy: `ALL answers in this group: simple negative statement, 7-10 words.
-Structure: "I did not [verb]." / "I could not [verb]." / "I am not [adj]." / "I cannot [verb]."
-Examples:
-- "I did not have time to finish the report."
-- "I could not find the reservation confirmation."
-- "I am not going to sign for the package."
+Structure: "[Subject] did not [verb]." / "[Subject] could not [verb]." / "[Subject] is not [adj]."
+Examples (mix 1st and 3rd person — prefer 3rd person):
+- "The student did not have time to finish the report."  prefilled=["the student"]
+- "The manager could not find the reservation confirmation."  prefilled=["the manager"]
+- "I am not going to sign for the package."  prefilled=["i"]
 Prompt: prompt_task_kind="respond", prompt_task_text="How do you respond?" or "What do you say?"
 Distractor: "did" or "do" or morphological variant.
 SCORER FENCE (easy): Only "did not" / "do not" / "cannot" / "could not" / "am not" / "is not". NO "have not been" (passive). NO "had not" (past perfect). NO comparative. NO relative clause. NO embedded wh-clause.
-PREFILLED (easy): Use prefilled=["i"] at position 0. NEVER ["not"].`,
+PREFILLED (easy): Bare pronoun "she"/"he"/"they" or 2-word NP "the student" for 3rd-person. "i" for ~20%.`,
 
     medium: `ALL answers in this group: negative statement, 9-12 words, may include a short embedded element.
+IMPORTANT: Prefer 3rd-person subjects (~80%). Only ~20% should use "I".
 Examples WITH correct prefilled (study these carefully):
-  answer: "I did not understand what the manager explained."  prefilled=["i"] pos=0 ✔
-  answer: "I have not received any confirmation about the schedule."  prefilled=["i"] pos=0 ✔
-  answer: "The intern did not know why the meeting was postponed."  prefilled=["the intern"] pos=0 ✔
-  BAD: answer="I did not attend the interview last week."  prefilled=["not"] ✘ WRONG
-  CORRECT: answer="I did not attend the interview last week."  prefilled=["i"] pos=0 ✔ RIGHT
-  BAD: answer="The intern did not know why the package was rerouted."  prefilled=["he"] ✘ WRONG (bare pronoun)
-  CORRECT: answer="The intern did not know why the package was rerouted."  prefilled=["the intern"] pos=0 ✔ RIGHT
+  answer: "She did not know why the meeting was postponed."  prefilled=["she"] pos=0 ✔ (bare pronoun — TPO standard)
+  answer: "The advisor did not understand what the manager explained."  prefilled=["the advisor"] pos=0 ✔ (2-word NP)
+  answer: "I have not received any confirmation about the schedule."  prefilled=["i"] pos=0 ✔ (1st-person, rare)
+  BAD: answer="I did not attend the interview last week."  prefilled=["not"] ✘ WRONG — "not" cannot be prefilled
 Prompt: prompt_task_kind="respond", prompt_task_text="How do you respond?" or "What do you say?" Distractor: "did"/"do" or morphological variant.
 SCORER FENCE (medium): Prefer simple past ("did not") or present perfect ("have not"). AVOID past perfect negation ("had not done" -> HARD). AVOID passive negation ("was not approved", "has not been sent" -> HARD). At most ONE advanced grammar feature.
-PREFILLED (medium/easy): ALL negation answers use the SUBJECT as prefilled. 1st-person ("I did not..."): prefilled=["i"] at position 0. 3rd-person: use a DESCRIPTIVE 2-word subject NP, e.g. prefilled=["the manager"], ["the professor"], ["the student"]. NEVER use bare ["he"]/["she"]/["they"] — always a descriptive NP. NEVER use ["not"] as prefilled — "not" belongs in chunks, not in prefilled.`,
+PREFILLED: Bare pronoun "she"/"he"/"they" (TPO standard) or 2-word NP. "i" for ~20%. NEVER ["not"] as prefilled.`,
 
     hard: `ALL answers in this group: negation + advanced grammar complexity, 10-13 words.
 Examples:
@@ -929,28 +1095,29 @@ Examples:
 - "I did not understand why the meeting had been postponed again."
 Hard MUST come from structure: past perfect negation, passive/passive-progressive inside clause, or negation + embedded grammar trap.
 Distractor: morphological variant (e.g. "realized/realize", "approaching/approach").
-PREFILLED REMINDER: Hard sentences are 10-13 words — chunks MUST still be ≤ 8. Give the SUBJECT as prefilled: "i" for 1st-person, or 2-word descriptive NP for 3rd-person ("the professor", "the manager"). NEVER bare "he"/"she"/"they". Example: answer=11 words, prefilled=["the professor"] (2 words) -> R=9 -> shorten sentence to 10 words -> R=8. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
+PREFILLED REMINDER: Hard sentences are 10-13 words — effective chunks MUST still be ≤ 8. Give the SUBJECT as prefilled: bare pronoun "she"/"he"/"they" (most common in TPO) or 2-word NP "the professor" — both are valid. "i" for 1st-person only. Target R=7-9. If R>9, add a multi-word chunk or shorten the sentence. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
   },
 
   "3rd-reporting": {
     easy: `ALL answers in this group: short third-person reporting, 8-10 words.
-Structure: "[Descriptive NP] wanted to know if [short clause]." / "[Descriptive NP] asked what time..."
-Subject MUST be 3rd-person descriptive NP — NEVER "I/my/me". NEVER bare "he/she/they".
+Structure: "[Subject] wanted to know if [short clause]." / "[Subject] asked what time..."
+Subject MUST be 3rd-person — NEVER "I/my/me".
 Examples:
-- "The manager wants to know if you need a ride."
-- "My advisor asked me what time the meeting starts."
-- "Some colleagues wanted to know if the library was open."
+- "She wants to know if you need a ride."  prefilled=["she"] ✔ (bare pronoun)
+- "The manager asked me what time the meeting starts."  prefilled=["the manager"] ✔ (2-word NP)
+- "They wanted to know if the library was open."  prefilled=["they"] ✔ (bare pronoun)
+MID-SENTENCE prefilled example: "She wanted to know if the files were ready."  prefilled=["wanted to know"] pos=mid ✔
 Prompt: prompt_task_kind="report", prompt_task_text="What did the manager ask?" or "What does the professor want to know?" Distractor: "did" or "do".
 SCORER FENCE (easy): Embedded clause uses simple present or simple past only. NO passive ("was approved"). NO past perfect ("had gone"). NO "whom". NO comparative.`,
 
     medium: `ALL answers in this group: third-person reporting, 10-13 words.
-Structure: "[Descriptive NP] [wanted to know / asked / was curious / needed to know] [wh/if clause]"
-Subject MUST be 3rd-person descriptive NP — NEVER "I/my/me" (not 1st-person). NEVER bare "he/she/they".
-Use: the manager / the professor / some colleagues / the supervisor / the librarian / the advisor / her study partner
+Structure: "[Subject] [wanted to know / asked / was curious / needed to know] [wh/if clause]"
+Subject MUST be 3rd-person — NEVER "I/my/me" (not 1st-person).
+Vary subjects: bare "she"/"he"/"they" (most common), or NPs "the manager", "some colleagues", "the professor"
 Vary wh-words across the batch: if(3), what(2), where(2), why(2), when(1)
 Declarative word order in clause (NO inversion). Distractor: "did"/"do" for most.
 SCORER FENCE (medium): Embedded clause uses simple past or simple present ONLY. STRICTLY AVOID past perfect in embedded clause ("had been done", "had gone" -> HARD). STRICTLY AVOID passive voice in embedded clause ("whether it had been approved", "when it would be submitted" -> HARD). AVOID "whom". Maximum ONE advanced grammar feature.
-PREFILLED (medium/easy): 3rd-person answers — use a DESCRIPTIVE SUBJECT NP as prefilled. NEVER use bare pronouns ["he"], ["she"], ["they"] — expand to the full subject noun phrase. 2-word NP: ["the manager"], ["the professor"], ["the student"], ["the librarian"], ["the ranger"]. 3-word NP: ["some colleagues"], ["her study partner"], ["the front desk"], ["the shop owner"]. Choose 2-word or 3-word based on what sounds most natural for the subject.`,
+PREFILLED: Bare pronoun "she"/"he"/"they" is the TPO DEFAULT — use it for most items. 2-3 word NP ("the manager", "some colleagues") for variety. Mid-sentence prefilled like ["wanted to know"] or ["found out"] is encouraged (~30% of items).`,
 
     hard: `ALL answers in this group: third-person reporting with structurally complex embedded clause, 10-13 words.
 Complexity options (MUST include at least one):
@@ -960,7 +1127,7 @@ Complexity options (MUST include at least one):
 - Two-layer: "The manager wanted to know how we had been able to finish on time."
 Hard MUST come from grammar complexity, not from padding the sentence.
 Distractor: morphological variant or "whom/who", "where/when" function-word swap.
-PREFILLED REMINDER: Hard sentences are 10-13 words — chunks MUST still be ≤ 8. Give the SUBJECT as prefilled: ALWAYS a descriptive 2-word subject NP ("the professor", "the manager", "the supervisor"). NEVER "i" (not 1st-person), NEVER bare "she"/"he". Example: answer=11 words, prefilled=["the professor"] (2 words) -> R=9 -> shorten sentence to 10 words -> R=8. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
+PREFILLED REMINDER: Hard sentences are 10-13 words — effective chunks MUST still be ≤ 8. Give the SUBJECT as prefilled: bare pronoun "she"/"he"/"they" (most common in TPO) or 2-word NP "the professor" — both are valid. NEVER "i" for 3rd-reporting. Target R=7-9. If R>9, add a multi-word chunk or shorten the sentence. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
   },
 
   "1st-embedded": {
@@ -982,7 +1149,7 @@ Examples:
 - "I am not sure when the package is going to arrive."
 Distractor: "did"/"does" or function-word variant.
 SCORER FENCE (medium): Embedded clause uses simple past or simple present only. AVOID past perfect ("had done" -> HARD). AVOID passive voice in embedded clause ("has been approved", "is being processed" -> HARD). AVOID "whom". AVOID combining two advanced grammar features.
-PREFILLED (medium/easy): 1st-embedded answers are always 1st-person. Use prefilled=["i"] at position 0. Simplest and most authentic.`,
+PREFILLED (medium/easy): "i" for ~40% of 1st-embedded items. For the rest, use 3rd-person bare pronoun "she"/"he" or 2-word NP "the student". Mid-sentence prefilled is encouraged: ["found out"], ["wanted to know"] at mid position.`,
 
     hard: `ALL answers in this group: complex first-person embedded, 10-13 words.
 Examples:
@@ -991,7 +1158,7 @@ Examples:
 - "We just found out where the new library equipment is being stored." (passive progressive)
 Include passive voice OR superlative/comparative OR perfect aspect in the embedded clause. Hard MUST be signaled by grammar structure rather than answer length.
 Distractor: morphological variant (e.g. "enjoyed/enjoy", "stored/store").
-PREFILLED REMINDER: Hard sentences are 10-13 words — chunks MUST still be ≤ 8. Give the SUBJECT as prefilled: "i" for 1st-person, or 2-word descriptive NP for 3rd-person ("the professor", "the manager"). NEVER bare "he"/"she"/"they". Example: answer=11 words, prefilled=["the professor"] (2 words) -> R=9 -> shorten sentence to 10 words -> R=8. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
+PREFILLED REMINDER: Hard sentences are 10-13 words — effective chunks MUST still be ≤ 8. Give the SUBJECT as prefilled: bare pronoun "she"/"he"/"they" (most common in TPO) or 2-word NP "the professor" — both are valid. "i" for 1st-person only. Target R=7-9. If R>9, add a multi-word chunk or shorten the sentence. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
   },
 
   "interrogative": {
@@ -1026,7 +1193,7 @@ Examples:
 - "Do you know why the final report had not been submitted yet?"
 Hard MUST come from embedded grammar: tense/aspect mismatch, passive/perfect inside clause, layered embedding.
 Distractor: morphological variant (e.g. "decided/decide", "managed/manage").
-PREFILLED REMINDER: Hard sentences are 10-13 words — chunks MUST still be ≤ 8. Give the SUBJECT as prefilled: "i" for 1st-person, or 2-word descriptive NP for 3rd-person ("the professor", "the manager"). NEVER bare "he"/"she"/"they". Example: answer=11 words, prefilled=["the professor"] (2 words) -> R=9 -> shorten sentence to 10 words -> R=8. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
+PREFILLED REMINDER: Hard sentences are 10-13 words — effective chunks MUST still be ≤ 8. Give the SUBJECT as prefilled: bare pronoun "she"/"he"/"they" (most common in TPO) or 2-word NP "the professor" — both are valid. "i" for 1st-person only. Target R=7-9. If R>9, add a multi-word chunk or shorten the sentence. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
   },
 
   "direct": {
@@ -1037,7 +1204,7 @@ Examples:
 - "The store next to the post office sells all types of winter apparel."
 Prompt: prompt_task_kind="respond", prompt_task_text="What do you say?" or "What do you say about it?"
 Distractor: morphological variant (e.g. "relaxed/relax", "sells/sold").
-PREFILLED (medium): use the SUBJECT as prefilled. 1st-person answers: ["i"]. 3rd-person: 2-word subject NP like ["the store"], ["the professor"]. NOT the object.`,
+PREFILLED (medium): use the SUBJECT as prefilled. 1st-person: ["i"]. 3rd-person: bare pronoun "she"/"he" or 2-word NP ["the store"]. Mid-sentence also valid: ["in town"], ["the post office"]. NOT the object.`,
 
     hard: `ALL answers in this group: complex direct statement, 10-13 words, with comparative or structurally dense modification.
 Examples:
@@ -1045,7 +1212,7 @@ Examples:
 - "I found it in the back of the furniture section at the local superstore."
 Prefer comparative/superlative structures, dense modifiers, or other learner-unfamiliar grammar. Do not inflate difficulty by length alone.
 Distractor: morphological variant or comparative swap ("better/good", "only/once").
-PREFILLED REMINDER: Hard sentences are 10-13 words — chunks MUST still be ≤ 8. Give the SUBJECT as prefilled: "i" for 1st-person, or 2-word descriptive NP for 3rd-person ("the professor", "the manager"). NEVER bare "he"/"she"/"they". Example: answer=11 words, prefilled=["the professor"] (2 words) -> R=9 -> shorten sentence to 10 words -> R=8. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
+PREFILLED REMINDER: Hard sentences are 10-13 words — effective chunks MUST still be ≤ 8. Give the SUBJECT as prefilled: bare pronoun "she"/"he"/"they" (most common in TPO) or 2-word NP "the professor" — both are valid. "i" for 1st-person only. Target R=7-9. If R>9, add a multi-word chunk or shorten the sentence. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
   },
 
   "relative": {
@@ -1056,14 +1223,14 @@ Examples:
 - "The diner that opened last week serves many delicious entrees."
 Prompt: prompt_task_kind="respond", prompt_task_text="What do you tell your friend?" or "What do you say about it?"
 Distractor: morphological variant (e.g. "stopped/stop", "opened/open").
-PREFILLED (medium): use the SUBJECT as prefilled. Contact clause: subject NP like ["the bookstore"], ["the diner"]. 1st-person: ["i"]. NOT the object inside the relative clause.`,
+PREFILLED (medium): use the SUBJECT as prefilled. Contact clause: 2-word subject NP like ["the bookstore"], ["the diner"], or mid-sentence anchor ["that opened"], ["in town"]. NOT the object inside the relative clause.`,
 
     hard: `ALL answers in this group: relative/contact clause with additional complexity, 10-13 words.
 Combine relative clause with passive or perfect:
 - "The desk you ordered is scheduled to arrive on Friday."
 - "The book she recommended had already been checked out."
 Distractor: morphological variant (e.g. "ordered/order", "recommended/recommend").
-PREFILLED REMINDER: Hard sentences are 10-13 words — chunks MUST still be ≤ 8. Give the SUBJECT as prefilled: "i" for 1st-person, or 2-word descriptive NP for 3rd-person ("the professor", "the manager"). NEVER bare "he"/"she"/"they". Example: answer=11 words, prefilled=["the professor"] (2 words) -> R=9 -> shorten sentence to 10 words -> R=8. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
+PREFILLED REMINDER: Hard sentences are 10-13 words — effective chunks MUST still be ≤ 8. Give the SUBJECT as prefilled: bare pronoun "she"/"he"/"they" (most common in TPO) or 2-word NP "the professor" — both are valid. "i" for 1st-person only. Target R=7-9. If R>9, add a multi-word chunk or shorten the sentence. Difficulty comes from GRAMMAR STRUCTURE, not from chunk count.`,
   },
 };
 
@@ -1258,20 +1425,25 @@ In the real TOEFL exercise, 8-9 out of every 10 questions give the student one w
   answer words = (chunks minus distractor) + prefilled words
   no missing words, no extra words, no duplicate coverage
 
-WHAT TO USE AS PREFILLED (TPO authentic — give the SUBJECT, not the object):
-- 1st-person pronoun:    "i" for 1st-person sentences (I wondered/asked/noticed/told...)
-  → prefilled=["i"], always at position 0. Simplest and most authentic.
-- 3rd-person subject NP: 2-3 word descriptive subject noun phrase at sentence start
-  → 2-word: "the professor", "the student", "the manager", "my advisor", "the ranger"
-  → 3-word: "some colleagues", "her study partner", "the shop owner", "the front desk"
-  → NEVER use bare pronouns "he"/"she"/"they" alone — always a descriptive NP
-- Interrogative opener:  2-word opening frame (pronoun + aux)
-  → "could you", "did she", "do you"
-- Short sentences (≤8 words): prefilled=[] is acceptable when no subject anchor is natural.
+WHAT TO USE AS PREFILLED (TPO authentic):
 RULE: prefilled must appear EXACTLY ONCE in the answer.
-RULE: Prefer 1-word pronouns ("i") — shortest, most natural, unambiguous.
 RULE: Object noun phrases ("the library", "the report") belong in CHUNKS, NOT prefilled.
-RULE: prefilled is ≤3 words maximum. Prefer 2-word. A 4-word+ prefilled will be automatically rejected.
+RULE: prefilled is ≤3 words maximum. A 4-word+ prefilled will be automatically rejected.
+
+CRITICAL TPO DISTRIBUTION for prefilled WORD COUNT (must follow):
+  - 1-word (55%): bare subject pronoun "i", "she", "he", "they" — this is the MOST COMMON in real TPO.
+    Bare pronouns are ALLOWED and AUTHENTIC. Do NOT inflate to "the professor" when "she" is natural.
+  - 2-word (25%): subject NP "the desk", "some colleagues", "this coffee", or verb phrase "found out", "he wants"
+  - 3-word (12%): "wanted to know", "the post office", "you tell me", "the managers wanted"
+  - No prefilled (8%): short or complex sentences where no anchor is natural — use prefilled=[]
+
+CRITICAL TPO DISTRIBUTION for prefilled POSITION (must follow):
+  - Position 0 / sentence start (55%): "i", "she", "the desk", "some colleagues" — subject at the beginning
+  - Mid-sentence (30%): "wanted to know", "found out", "the post office", "in town", "when", "what" — embedded verb/phrase/wh-word
+  - End of sentence (15%): "yet", "to me", "like that" — anchoring the sentence ending
+
+In a batch of 10 with ~9 prefilled items: roughly 5 use 1-word bare pronouns, 2-3 use 2-word NPs, 1 uses 3-word phrase.
+Position mix: ~5 at position 0, ~3 mid-sentence, ~1 at end.
 
 ## CHUNK GRANULARITY — CRITICAL:
 Real TOEFL data: ~77% single-word chunks, ~23% multi-word. Target 5-6 effective chunks per item (TPO average: 5.8).
@@ -1290,13 +1462,13 @@ SINGLE-WORD: subject pronouns (i/he/she/they), question words (where/when/if/whe
 standalone auxiliaries (did/was/were used alone — only when NOT followed by "not" in the answer).
 
 THE KEY MATH: R = answer word count − prefilled word count.
-- Target R = 7-8 (yields ~6 effective chunks with 1-2 multi-word groups; TPO average: 5.8). This is the goal.
-- HARD RULE: Choose the SUBJECT as prefilled (pronoun or subject NP), not the object.
-  For 1st-person sentences: prefilled=["i"] is almost always correct.
-  For 3rd-person sentences: use a DESCRIPTIVE 2-3 word subject NP. NEVER bare pronouns ["he"]/["she"]/["they"]. 2-word: ["the professor"], ["the manager"], ["the student"], ["the librarian"]. 3-word when natural: ["some colleagues"], ["her study partner"], ["the shop owner"].
-- HARD RULE: prefilled must be ≤3 words. Prefer 2-word (e.g. "the professor", "could you", "the manager"). 3-word is allowed only when the subject NP has no natural 2-word form. Phrases with 4+ words will be REJECTED — always shorten to the core noun.
-- If R > 9 (too many draggable words): shorten the sentence.
-- If R ≤5 (sentence too short): prefilled=[] is acceptable.
+- With 1-word prefilled (55% of items): R = answer_words - 1. For 10-word sentence, R=9.
+- With 2-word prefilled (25%): R = answer_words - 2. For 10-word sentence, R=8.
+- Target: 5-7 effective chunks (TPO avg 5.8). Easy/medium: ≤7 EC. Hard (10+ words): ≤8 EC.
+- HARD RULE: R > 9 for easy/medium is too many — shorten or use longer prefilled.
+- HARD RULE: prefilled must be ≤3 words. A 4-word+ prefilled will be REJECTED.
+- HARD RULE: If R ≤5 (sentence too short): prefilled=[] is acceptable.
+- Bare subject pronouns ("she", "he", "they") are ALLOWED and preferred over descriptive NPs for simplicity.
 
 GOOD example (1st-person):
   answer: "I asked whether the library would close early." (8 words)
@@ -1423,7 +1595,7 @@ ${rejectFeedback}
 2. DISTRACTOR: The distractor word must NOT appear anywhere in the answer string.
 3. PREFILLED COUNT: Count your non-empty prefilled items. You MUST have 8-9 items with prefilled in this batch. If you have fewer than 8, go back and add prefilled (subject pronoun or subject NP) to more items before outputting.
 4. PREFILLED CORRECTNESS: The prefilled word/phrase must appear EXACTLY in the answer string, at the stated index. Remove it from chunks 鈥?never include it in both prefilled and chunks. chunks + prefilled reconstruct the answer exactly once.
-5. CHUNK GRANULARITY & R-VALUE: R = answer_words − prefilled_words. Target R=7-8 (yields 5-6 effective chunks). prefilled is ≤3 words max (4-word+ = REJECTED). Object noun phrases belong in CHUNKS, not prefilled. 1 multi-word chunk per question (2 only for negation): infinitives ("to know"), phrasal verbs ("find out"), aux+participle ("had been"). Never 9+ effective chunks.
+5. CHUNK GRANULARITY & R-VALUE: R = answer_words − prefilled_words. Target R=7-8 (yields 5-6 effective chunks). prefilled is ≤3 words max (4-word+ = REJECTED). Object noun phrases belong in CHUNKS, not prefilled. 1-2 multi-word chunks per question (up to 3 for hard 10+ word sentences): infinitives ("to know"), phrasal verbs ("find out"), aux+participle ("had been"). Easy/medium: max 7 effective chunks. Hard: max 8.
    NEGATION RULE: aux+not is ALWAYS one chunk. ["did not"] ✓  ["did","not"] ✗. Scan every negation item before output.
 6. VERB DIVERSITY: No single reporting verb may appear more than twice in this batch.
 7. HARD DIFFICULTY: Hard items must be justified by advanced grammar signals, not by extra words. Valid hard signals include passive/passive-progressive, past perfect, relative/contact clause, whom, comparative/superlative, or multi-layer embedding.
@@ -1573,7 +1745,7 @@ function computePoolState(pool) {
     if (type in state.typeTotals) state.typeTotals[type] += 1;
     state.style.total += 1;
     if (meta.isEmbedded) state.style.embedded += 1;
-    if (type === "negation") state.style.negation += 1;
+    if (isNegation(q.grammar_points)) state.style.negation += 1;
     if (meta.hasDistractor) state.style.distractor += 1;
     if (meta.hasQuestionMark) state.style.qmark += 1;
   }
@@ -1603,7 +1775,7 @@ function incrementPoolStateWithQuestion(poolState, q) {
   if (next.style) {
     next.style.total += 1;
     if (meta.isEmbedded) next.style.embedded += 1;
-    if (type === "negation") next.style.negation += 1;
+    if (isNegation(q.grammar_points)) next.style.negation += 1;
     if (meta.hasDistractor) next.style.distractor += 1;
     if (meta.hasQuestionMark) next.style.qmark += 1;
   }
@@ -1617,7 +1789,7 @@ function incrementPoolStateWithCell(poolState, type, diff) {
   if (next.style) {
     next.style.total += 1;
     if (EMBEDDED_HEAVY_TYPES.has(type)) next.style.embedded += 1;
-    if (type === "negation") next.style.negation += 1;
+    if (type === "negation") next.style.negation += 1; // cell-level: no grammar_points, use type
     next.style.distractor += 1;
     if (type === "interrogative") next.style.qmark += 1;
   }
@@ -1954,7 +2126,7 @@ Rules:
 - Valid types: negation, 3rd-reporting, 1st-embedded, interrogative, direct, relative
 - Valid difficulties: easy, medium, hard
 - Avoid over-producing any single type just to satisfy diversity.
-- TPO type targets: negation ~20%, interrogative ~8%. Do NOT over-produce negation (max 2 per batch). Include at least 1 interrogative per batch when not circuit-breaker blocked.
+- TPO type targets: negation ~20%, interrogative ~8%. HARD LIMIT: max 1 negation per batch (to prevent over-production). MUST include at least 1 interrogative per batch — this is a HARD requirement, not optional.
 - In boost mode, prioritize precision over breadth: target the single most blocking gap first.
 - If all difficulty/style gaps are small, return a practical batch that still helps assemble the next set.
 
@@ -2045,6 +2217,14 @@ function enforcePlannerStyleGaps(spec, poolState, styleTargets, globalTypeTarget
     }
   };
 
+  // Always ensure at least 1 interrogative per batch (TPO 8% target)
+  const interrogativePlanned = out
+    .filter((x) => x.type === "interrogative")
+    .reduce((sum, x) => sum + x.count, 0);
+  if (interrogativePlanned === 0) {
+    replaceOne("interrogative", "medium");
+  }
+
   if (!bootstrapPhase && embeddedGap > 0) {
     const embeddedPlanned = out
       .filter((x) => x.type === "3rd-reporting" || x.type === "1st-embedded" || x.type === "interrogative")
@@ -2055,14 +2235,46 @@ function enforcePlannerStyleGaps(spec, poolState, styleTargets, globalTypeTarget
     }
   }
 
-  if (negationGap > 0) {
-    const negPlanned = out
-      .filter((x) => x.type === "negation")
-      .reduce((sum, x) => sum + x.count, 0);
-    const negationTarget = bootstrapPhase ? 1 : Math.min(2, negationGap);
-    if (negPlanned < negationTarget) {
-      replaceOne("negation", "medium");
+  // Cap negation to max 1 per batch, and skip entirely if pool already at 22%+ (target 20%)
+  const negPoolRatio = totalPool > 0 ? style.negation / totalPool : 0;
+  const negPlanned = out
+    .filter((x) => x.type === "negation")
+    .reduce((sum, x) => sum + x.count, 0);
+  if (negPoolRatio >= 0.22 && negPlanned > 0) {
+    // Pool already has enough negation — remove all and redistribute
+    let excess = negPlanned;
+    for (const item of out) {
+      if (item.type === "negation" && excess > 0) {
+        const trim = Math.min(item.count, excess);
+        item.count -= trim;
+        excess -= trim;
+      }
     }
+    const redistributed = negPlanned - excess;
+    if (redistributed > 0) {
+      const existing3rd = out.find((x) => x.type === "3rd-reporting" && x.difficulty === "medium");
+      if (existing3rd) existing3rd.count += redistributed;
+      else out.push({ type: "3rd-reporting", difficulty: "medium", count: redistributed });
+    }
+  } else if (negPlanned > 1) {
+    // Trim excess negation, redistribute to other types
+    let excess = negPlanned - 1;
+    for (const item of out) {
+      if (item.type === "negation" && item.count > 1 && excess > 0) {
+        const trim = Math.min(item.count - 1, excess);
+        item.count -= trim;
+        excess -= trim;
+      }
+    }
+    // Add trimmed count as 3rd-reporting (most common type)
+    const redistributed = negPlanned - 1 - excess;
+    if (redistributed > 0) {
+      const existing3rd = out.find((x) => x.type === "3rd-reporting" && x.difficulty === "medium");
+      if (existing3rd) existing3rd.count += redistributed;
+      else out.push({ type: "3rd-reporting", difficulty: "medium", count: redistributed });
+    }
+  } else if (negationGap > 0 && negPlanned === 0) {
+    replaceOne("negation", "medium");
   }
 
   const scarceTypes = (bootstrapPhase ? ["direct", "relative", "3rd-reporting"] : TYPE_LIST)
@@ -2547,6 +2759,15 @@ function hardValidateQuestion(q) {
     return { ok: false, reason: 'chunks: negation must be a single chunk — use "did not" not ["did","not"]' };
   }
 
+  // Hard gate: effective chunks ≤ 7 for easy/medium, ≤ 8 for hard (TPO avg 5.8)
+  const ecCount = effectiveChunks.length;
+  const answerLen = String(q.answer || "").replace(/[.,!?;:]/g, " ").trim().split(/\s+/).filter(Boolean).length;
+  const isHardCandidate = answerLen >= 10; // hard questions are 10-13 words
+  const ecLimit = isHardCandidate ? 8 : 7;
+  if (ecCount > ecLimit) {
+    return { ok: false, reason: `chunks:too_many_effective (${ecCount} > ${ecLimit})` };
+  }
+
   const v = validateQuestion(q);
   if (v.fatal.length > 0) return { ok: false, reason: `fatal: ${v.fatal.join("; ")}` };
   // format and content issues are soft warnings, not hard fails
@@ -2807,15 +3028,19 @@ async function generateCandidateRound(round, spec, rejectFeedback = "", recentPo
   }
 
   const normalized = arr.map((q, i) => normalizeQuestion(q, `tmp_r${round}_q${i + 1}`));
-  out.generated = normalized.length;
-  normalized.forEach((q) => {
+
+  // Post-normalization: redistribute prefilled positions (TPO: 53% start, 31% mid, 16% end)
+  const positionAdjusted = normalized.map((q) => maybeReassignPrefilledPosition(q));
+
+  out.generated = positionAdjusted.length;
+  positionAdjusted.forEach((q) => {
     const type = resolvedAnswerType(q);
     out.typeStats[type].generated += 1;
   });
 
   // Prompt Reformatter: convert two-part prompts to single-question TPO style
-  const reformatted = await reformatPrompts(normalized);
-  const reformatCount = reformatted.filter((q, i) => !(q.prompt_context || "") !== !(normalized[i].prompt_context || "")).length;
+  const reformatted = await reformatPrompts(positionAdjusted);
+  const reformatCount = reformatted.filter((q, i) => !(q.prompt_context || "") !== !(positionAdjusted[i].prompt_context || "")).length;
   if (reformatCount > 0) console.log(`  reformatter: converted ${reformatCount} two-part prompts to single-question style`);
 
   // hard filter first
@@ -2852,11 +3077,72 @@ async function generateCandidateRound(round, spec, rejectFeedback = "", recentPo
 
   if (topicPassed.length === 0) return out;
 
+  // Pool-level prefilled diversity gate:
+  // 1. No-prefilled quota: reject prefilled=[] when pool exceeds 10% (TPO: ~8%)
+  // 2. "i" quota: reject prefilled=["i"] when pool exceeds 15% (TPO: ~10% of all prefilled)
+  // 3. 1-word quota: reject any 1-word prefilled when pool exceeds 65% (TPO: ~55%)
+  const noPfCount = recentPool.filter((q) => !Array.isArray(q.prefilled) || q.prefilled.length === 0).length;
+  const noPfRatio = recentPool.length > 0 ? noPfCount / recentPool.length : 0;
+  const noPfQuotaExceeded = noPfRatio >= 0.15;
+
+  const prefilledPoolItems = recentPool.filter((q) => Array.isArray(q.prefilled) && q.prefilled.length > 0);
+  const oneWordICount = prefilledPoolItems.filter((q) => {
+    const pf = q.prefilled[0].trim().toLowerCase();
+    return pf === "i" || pf === "i'm" || pf === "i've" || pf === "i'll" || pf === "i'd";
+  }).length;
+  const oneWordAllCount = prefilledPoolItems.filter((q) => {
+    return q.prefilled[0].trim().split(/\s+/).length === 1;
+  }).length;
+  const poolIRatio = prefilledPoolItems.length > 0 ? oneWordICount / prefilledPoolItems.length : 0;
+  const pool1wRatio = prefilledPoolItems.length > 0 ? oneWordAllCount / prefilledPoolItems.length : 0;
+  const iQuotaExceeded = poolIRatio >= 0.15;
+  const oneWordQuotaExceeded = pool1wRatio >= 0.65;
+
+  const prefilledPassed = [];
+  for (const q of topicPassed) {
+    // Gate: no-prefilled quota (TPO 8%, cap at 10%)
+    if (noPfQuotaExceeded && (!Array.isArray(q.prefilled) || q.prefilled.length === 0)) {
+      const type = resolvedAnswerType(q);
+      const reason = "pool:no_prefilled_quota";
+      out.rejected += 1;
+      out.rejectReasons[reason] = (out.rejectReasons[reason] || 0) + 1;
+      out.typeStats[type].rejected += 1;
+      out.typeStats[type].reasons[reason] = (out.typeStats[type].reasons[reason] || 0) + 1;
+      continue;
+    }
+    if (Array.isArray(q.prefilled) && q.prefilled.length > 0) {
+      const pf = q.prefilled[0].trim().toLowerCase();
+      const pfWordCount = pf.split(/\s+/).length;
+      const isI = pf === "i" || pf === "i'm" || pf === "i've" || pf === "i'll" || pf === "i'd";
+      if (iQuotaExceeded && isI) {
+        const type = resolvedAnswerType(q);
+        const reason = "pool:i_quota_exceeded";
+        out.rejected += 1;
+        out.rejectReasons[reason] = (out.rejectReasons[reason] || 0) + 1;
+        out.typeStats[type].rejected += 1;
+        out.typeStats[type].reasons[reason] = (out.typeStats[type].reasons[reason] || 0) + 1;
+        continue;
+      }
+      if (oneWordQuotaExceeded && pfWordCount === 1 && !isI) {
+        const type = resolvedAnswerType(q);
+        const reason = "pool:1word_quota_exceeded";
+        out.rejected += 1;
+        out.rejectReasons[reason] = (out.rejectReasons[reason] || 0) + 1;
+        out.typeStats[type].rejected += 1;
+        out.typeStats[type].reasons[reason] = (out.typeStats[type].reasons[reason] || 0) + 1;
+        continue;
+      }
+    }
+    prefilledPassed.push(q);
+  }
+
+  if (prefilledPassed.length === 0) return out;
+
   // Pool-balance gate BEFORE reviewer — prevents late-stage overproduction that blocks assembly.
   const balancePassed = [];
   let workingPoolState = options?.poolState ? clonePoolState(options.poolState) : null;
   let workingAssemblyState = options?.assemblyState || null;
-  for (const q of topicPassed) {
+  for (const q of prefilledPassed) {
     const gate = evaluatePoolBalance(
       q,
       workingPoolState,
@@ -2877,7 +3163,9 @@ async function generateCandidateRound(round, spec, rejectFeedback = "", recentPo
       strongTargeting: options?.strongTargeting,
       typeReliability: options?.typeReliability,
     });
-    if (options?.strongTargeting && assemblyValue <= 0) {
+    const qDiff = (estimateQuestionDifficulty(q) || {}).bucket || "medium";
+    const fillsDiffGap = (workingAssemblyState?.deficits?.[qDiff] || 0) > 0;
+    if (options?.strongTargeting && assemblyValue <= 0 && !fillsDiffGap) {
       const type = resolvedAnswerType(q);
       const reason = "pool:low_assembly_value";
       out.rejected += 1;
@@ -3411,12 +3699,17 @@ function normalizeSetStyleRates(questions) {
         const bPfLen = (b.q.prefilled || []).join(" ").split(/\s+/).length;
         return (aPfLen - bPfLen) || (aWords - bWords); // prefer 1-word prefilled, then shorter
       });
-    if (candidates.length > 0) {
-      const { i, q } = candidates[0];
+    // Find a candidate where stripping prefilled won't push EC over limit
+    for (const { i, q } of candidates) {
+      const dist = (q.distractor || "").toLowerCase().trim();
+      const currentEC = q.chunks.filter((c) => c.toLowerCase().trim() !== dist).length;
+      const pfWordCount = (q.prefilled || []).join(" ").split(/\s+/).length;
+      if (currentEC + pfWordCount > 8) continue; // would exceed EC limit
       const addBackChunks = [...(q.prefilled || [])];
       const newChunks = [...q.chunks, ...addBackChunks];
       qs[i] = { ...q, prefilled: [], prefilled_positions: {}, chunks: newChunks };
       console.log(`  [normalize] stripped prefilled [${addBackChunks.join(", ")}] from ${q.id} to align rate`);
+      break;
     }
   }
 
