@@ -77,13 +77,18 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
   function switchMode(nextMode) {
     const normalized = normalizePracticeMode(nextMode);
     if (normalized === mode) return;
-    setCrtFlash(true);
-    setTimeout(() => {
+    const toOrFromChallenge = normalized === PRACTICE_MODE.CHALLENGE || mode === PRACTICE_MODE.CHALLENGE;
+    if (toOrFromChallenge) {
+      setCrtFlash(true);
+      setTimeout(() => {
+        setMode(normalized);
+        setShaking(true);
+      }, 150);
+      setTimeout(() => setCrtFlash(false), 400);
+      setTimeout(() => setShaking(false), 600);
+    } else {
       setMode(normalized);
-      setShaking(true);
-    }, 150);
-    setTimeout(() => setCrtFlash(false), 400);
-    setTimeout(() => setShaking(false), 600);
+    }
   }
 
   function copyCode() {
