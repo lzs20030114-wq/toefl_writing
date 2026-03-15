@@ -134,6 +134,9 @@ export function WritingResponsePanel({
                 }
               }}
               disabled={!isEditable}
+              spellCheck={false}
+              autoCorrect="off"
+              autoCapitalize="off"
               placeholder={type === "email" ? "Dear " + pd.to + ",\n\n" : ""}
               style={{ flex: 1, minHeight: type === "email" ? 280 : 320, border: "none", padding: 16, fontSize: 14, fontFamily: FONT, lineHeight: 1.7, color: C.t1, resize: "none", outline: "none", background: phase === "done" ? "#fafafa" : "#fff" }}
             />
