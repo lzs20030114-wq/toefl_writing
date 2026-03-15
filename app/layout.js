@@ -30,6 +30,9 @@ export const metadata = {
     index: true,
     follow: true,
   },
+  verification: {
+    google: "c0UlJ1BYULLR_fQmC3I05BKTc1KuWstn79_9Tmfb4IE",
+  },
   alternates: {
     canonical: SITE_URL,
   },
