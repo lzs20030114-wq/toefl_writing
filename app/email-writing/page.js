@@ -20,7 +20,7 @@ function buildEmailTopics() {
       const rest = sentences.slice(1).join(" ").trim();
       return {
         id: p.id,
-        tag: `To: ${p.to || ""}`,
+        tag: p.topic || "",
         title,
         subtitle: rest || p.scenario,
       };
