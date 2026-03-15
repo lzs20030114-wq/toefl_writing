@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { verifyCode } from "../lib/authCode";
 import { sendEmailOTP, verifyEmailOTP, signOut } from "../lib/emailAuth";
-import { clearAuth, getSavedCode, saveAuth } from "../lib/AuthContext";
+import { clearAuth, getSavedCode, getSavedTier, getSavedEmail, getSavedAuthMethod, saveAuth } from "../lib/AuthContext";
 import { clearLocalSessions, getLocalSessionCount, importLocalSessionsToCloud } from "../lib/sessionStore";
 import { isSupabaseConfigured } from "../lib/supabase";
 import { C, FONT } from "./shared/ui";
@@ -387,7 +387,7 @@ export default function LoginGate({ children }) {
 
   const isLoggedIn = !!userCode;
 
-  // ── Initialization: try to restore session silently ──
+  // ── Initialization: restore from cache instantly, verify in background ──
   useEffect(() => {
     if (!isSupabaseConfigured) {
       setReady(true);
@@ -396,22 +396,35 @@ export default function LoginGate({ children }) {
 
     const saved = getSavedCode();
     if (saved) {
+      // Instantly restore from localStorage cache — no loading flash
+      const normalized = normalizeInputCode(saved);
+      const cachedTier = getSavedTier() || "free";
+      const cachedEmail = getSavedEmail() || null;
+      const cachedAuth = getSavedAuthMethod() || "code";
+      setUserCode(normalized);
+      setUserTier(cachedTier);
+      setUserEmail(cachedEmail);
+      setAuthMethod(cachedAuth);
+      setShowImportPrompt(
+        (() => { try { return localStorage.getItem(IMPORT_DISMISSED_KEY) !== "1"; } catch { return true; } })()
+        && getLocalSessionCount() > 0
+      );
+      setReady(true);
+
+      // Background verify — silently update or logout if invalid
       verifyCode(saved).then(({ valid, tier, email, auth_method }) => {
         if (valid) {
-          const normalized = normalizeInputCode(saved);
-          setUserCode(normalized);
           setUserTier(tier || "free");
           setUserEmail(email || null);
           setAuthMethod(auth_method || "code");
           saveAuth(normalized, { authMethod: auth_method, tier, email });
-          setShowImportPrompt(
-            (() => { try { return localStorage.getItem(IMPORT_DISMISSED_KEY) !== "1"; } catch { return true; } })()
-            && getLocalSessionCount() > 0
-          );
         } else {
           clearAuth();
+          setUserCode(null);
+          setUserTier("free");
+          setUserEmail(null);
+          setAuthMethod("code");
         }
-        setReady(true);
       });
     } else {
       setReady(true);
