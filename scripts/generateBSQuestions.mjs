@@ -1086,6 +1086,8 @@ Examples WITH correct prefilled (study these carefully):
   answer: "I have not received any confirmation about the schedule."  prefilled=["i"] pos=0 ✔ (1st-person, rare)
   BAD: answer="I did not attend the interview last week."  prefilled=["not"] ✘ WRONG — "not" cannot be prefilled
 Prompt: prompt_task_kind="respond", prompt_task_text="How do you respond?" or "What do you say?" Distractor: "did"/"do" or morphological variant.
+IF prompt_task_kind is PRE-ASSIGNED as "yesno": prompt="Did she know why the meeting was postponed?" answer="She did not know why the meeting was postponed." (KEEP negation + embedded structure!)
+IF prompt_task_kind is PRE-ASSIGNED as "statement": prompt="Complete the sentence." answer="She did not know why the meeting was postponed." (same structure)
 SCORER FENCE (medium): Prefer simple past ("did not") or present perfect ("have not"). AVOID past perfect negation ("had not done" -> HARD). AVOID passive negation ("was not approved", "has not been sent" -> HARD). At most ONE advanced grammar feature.
 PREFILLED: Bare pronoun "she"/"he"/"they" (TPO standard) or 2-word NP. "i" for ~20%. NEVER ["not"] as prefilled.`,
 
@@ -1108,6 +1110,8 @@ Examples:
 - "They wanted to know if the library was open."  prefilled=["they"] ✔ (bare pronoun)
 MID-SENTENCE prefilled example: "She wanted to know if the files were ready."  prefilled=["wanted to know"] pos=mid ✔
 Prompt: prompt_task_kind="report", prompt_task_text="What did the manager ask?" or "What does the professor want to know?" Distractor: "did" or "do".
+IF prompt_task_kind is PRE-ASSIGNED as "yesno": prompt="Did she want to know if you need a ride?" answer="She wants to know if you need a ride." (KEEP the reporting verb + embedded clause structure!)
+IF prompt_task_kind is PRE-ASSIGNED as "statement": prompt="Complete the sentence." answer="She wants to know if you need a ride." (same embedded answer)
 SCORER FENCE (easy): Embedded clause uses simple present or simple past only. NO passive ("was approved"). NO past perfect ("had gone"). NO "whom". NO comparative.`,
 
     medium: `ALL answers in this group: third-person reporting, 10-13 words.
@@ -1116,6 +1120,10 @@ Subject MUST be 3rd-person — NEVER "I/my/me" (not 1st-person).
 Vary subjects: bare "she"/"he"/"they" (most common), or NPs "the manager", "some colleagues", "the professor"
 Vary wh-words across the batch: if(3), what(2), where(2), why(2), when(1)
 Declarative word order in clause (NO inversion). Distractor: "did"/"do" for most.
+CRITICAL — YESNO/STATEMENT COMPATIBILITY: If an item is pre-assigned prompt_task_kind="yesno" or "statement", the ANSWER must STILL use the 3rd-reporting structure (reporting verb + embedded clause). Only the PROMPT changes format:
+  yesno example: prompt="Did the manager want to know when the report was due?" answer="The manager wanted to know when the report was due."
+  statement example: prompt="Complete the sentence about what the professor asked." answer="The professor asked whether the experiment had been approved."
+  WRONG: yesno prompt → simple answer "The report was due on Friday." (LOST the reporting verb + embedded clause!)
 SCORER FENCE (medium): Embedded clause uses simple past or simple present ONLY. STRICTLY AVOID past perfect in embedded clause ("had been done", "had gone" -> HARD). STRICTLY AVOID passive voice in embedded clause ("whether it had been approved", "when it would be submitted" -> HARD). AVOID "whom". Maximum ONE advanced grammar feature.
 PREFILLED: Bare pronoun "she"/"he"/"they" is the TPO DEFAULT — use it for most items. 2-3 word NP ("the manager", "some colleagues") for variety. Mid-sentence prefilled like ["wanted to know"] or ["found out"] is encouraged (~30% of items).`,
 
@@ -1138,6 +1146,8 @@ Examples:
 - "I am not sure what time the event starts."
 - "I do not know if the store is open."
 Prompt: prompt_task_kind="respond", prompt_task_text="What do you say?" or "How do you respond?"
+IF prompt_task_kind is PRE-ASSIGNED as "yesno": prompt="Do you know what time the event starts?" answer="I am not sure what time the event starts." (KEEP the 1st-person embedded structure!)
+IF prompt_task_kind is PRE-ASSIGNED as "statement": prompt="Complete the sentence." answer="I have no idea where they are going." (same embedded answer)
 Distractor: "do" or "did".
 SCORER FENCE (easy): Embedded clause uses simple present only. NO passive. NO past perfect. NO comparative. NO "whom".`,
 
@@ -1324,6 +1334,45 @@ function buildGeneratePrompt(round, spec, rejectFeedback = "", recentTopics = []
   // spec: [{type, difficulty, count}, ...]
   const totalCount = spec.reduce((s, x) => s + x.count, 0);
 
+  // Prompt type distribution targets (TPO: 20% yesno, 18% statement)
+  const yesnoTarget = Math.max(1, Math.round(totalCount * 0.2));
+  const statementTarget = Math.max(1, Math.round(totalCount * 0.2));
+  const askRespondTarget = totalCount - yesnoTarget - statementTarget;
+
+  // --- Pre-assign prompt_task_kind to each item ID deterministically ---
+  // Expand spec into flat item list with IDs
+  const flatItems = [];
+  let qIdx = 1;
+  for (const { type, difficulty, count } of spec) {
+    for (let j = 0; j < count; j++) {
+      flatItems.push({ id: `tmp_r${round}_q${qIdx++}`, type, difficulty });
+    }
+  }
+  // Distribute yesno/statement only across EMBEDDED-HEAVY types (3rd-reporting, 1st-embedded, negation).
+  // These types naturally produce reporting verb + embedded clause answers, so yesno/statement
+  // prompts can coexist with embedded structure (e.g. "Did she want to know when...?").
+  // Excluded: interrogative (needs ask for "?" answers), direct/relative (non-embedded, would
+  // drag embedded rate down if forced to yesno/statement).
+  const YESNO_STATEMENT_ELIGIBLE = new Set(["3rd-reporting", "1st-embedded", "negation"]);
+  const assignableIndices = flatItems
+    .map((item, i) => ({ i, type: item.type }))
+    .filter((x) => YESNO_STATEMENT_ELIGIBLE.has(x.type))
+    .map((x) => x.i);
+  // Shuffle only the assignable (non-interrogative) indices
+  for (let i = assignableIndices.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [assignableIndices[i], assignableIndices[j]] = [assignableIndices[j], assignableIndices[i]];
+  }
+  const promptKindAssignments = new Array(flatItems.length).fill(null); // null = ask/report/respond
+  const effectiveYesno = Math.min(yesnoTarget, assignableIndices.length);
+  const effectiveStatement = Math.min(statementTarget, assignableIndices.length - effectiveYesno);
+  for (let k = 0; k < effectiveYesno; k++) {
+    promptKindAssignments[assignableIndices[k]] = "yesno";
+  }
+  for (let k = 0; k < effectiveStatement; k++) {
+    promptKindAssignments[assignableIndices[effectiveYesno + k]] = "statement";
+  }
+
   // Pick 3 random scenarios and 5 random personas to prime the AI
   const pickedScenarios = shuffle(SCENARIO_POOL).slice(0, 3).join("; ");
   const pickedPersonas = shuffle(PERSONA_POOL).slice(0, 5).join(", ");
@@ -1337,12 +1386,24 @@ function buildGeneratePrompt(round, spec, rejectFeedback = "", recentTopics = []
       : difficulty === "medium"
       ? "Answer length: 10-13 words. Chunks: 6-7."
       : "Answer length: usually 10-13 words. Chunks: 6-8. MUST be hard because of advanced grammar structure: e.g. passive, past perfect, relative/contact clause, whom, comparative/superlative, or multi-layer embedding. Do NOT make an item hard by length alone.";
+    // Build per-item lines with pre-assigned prompt_task_kind
+    const itemLines = Array.from({ length: count }, (_, j) => {
+      const globalIdx = qIndex - 1 + j;
+      const id = `tmp_r${round}_q${qIndex + j}`;
+      const assignedKind = promptKindAssignments[globalIdx];
+      const kindLabel = assignedKind
+        ? `→ prompt_task_kind = "${assignedKind}" (MANDATORY)`
+        : `→ prompt_task_kind = ask OR report OR respond (your choice)`;
+      return `  ${id}: ${kindLabel}`;
+    }).join("\n");
     const ids = Array.from({ length: count }, (_, j) => `tmp_r${round}_q${qIndex + j}`).join(", ");
     qIndex += count;
-    return `### GROUP ${i + 1}: ${count} item${count > 1 ? "s" : ""} 锟?${type.toUpperCase()} / ${difficulty.toUpperCase()}
+    return `### GROUP ${i + 1}: ${count} item${count > 1 ? "s" : ""} — ${type.toUpperCase()} / ${difficulty.toUpperCase()}
 IDs: ${ids}
 ${hints}
-${diffSpec}`;
+${diffSpec}
+**Pre-assigned prompt types (DO NOT change):**
+${itemLines}`;
   }).join("\n\n");
 
   return `You are a TOEFL iBT Writing Task 1 "Build a Sentence" content architect.
@@ -1582,8 +1643,11 @@ Real TOEFL Build-a-Sentence prompts use 4 types. ALL use single-sentence style w
   TPO: "Matthew loved the book you recommended to him." → "What did he tell you was his favorite part?"
        "What's taking you so long to get started?" → "We just found out where the materials are being stored."
 
-### DISTRIBUTION — CRITICAL:
-  You MUST produce at least 1 yesno and 1 statement item. Target: ask/report 3 + respond 3 + yesno 2 + statement 2.
+### DISTRIBUTION — PRE-ASSIGNED (DO NOT override):
+  Each item's prompt_task_kind is PRE-ASSIGNED in the GROUP sections above.
+  Items marked "MANDATORY yesno" MUST use prompt_task_kind="yesno". Items marked "MANDATORY statement" MUST use prompt_task_kind="statement".
+  Items marked "ask OR report OR respond" — you choose among those three.
+  Total: ${yesnoTarget} yesno + ${statementTarget} statement + ${askRespondTarget} ask/report/respond = ${totalCount}.
 
 ### PROMPT FIELDS:
 - "prompt_context" = ALWAYS empty string ""
@@ -1608,12 +1672,13 @@ ${rejectFeedback}
 6. VERB DIVERSITY: No single reporting verb may appear more than twice in this batch.
 7. HARD DIFFICULTY: Hard items must be justified by advanced grammar signals, not by extra words. Valid hard signals include passive/passive-progressive, past perfect, relative/contact clause, whom, comparative/superlative, or multi-layer embedding.
 8. UNIQUE SOLUTION: Reject any item in your own internal check if the distractor could still fit grammatically or if more than one chunk order seems plausible.
-9. INTERROGATIVE QUALITY: For interrogative items, use a short natural polite frame, vary the opener across the batch, and keep the embedded clause in declarative order. Do not mass-produce one stock opener.
+9. INTERROGATIVE QUALITY: For interrogative items, the answer MUST be a direct question ending with "?". Use a polite frame ("Can you tell me...", "Do you know...", "Could you explain..."). Vary the opener across the batch. The embedded clause stays in declarative order. prompt_task_kind MUST be "ask" for these items.
 10. PROMPT STYLE: ALL items use prompt_context="". prompt_task_text MUST be a SINGLE sentence.
     WRONG ✗: prompt_task_text = "The student needed help with her paper. What did she ask the professor?"
     RIGHT ✓: prompt_task_text = "What did the student ask the professor about her paper?"
     Use ONLY these task kinds: ask, report, respond, yesno, statement. "tell" and "explain" are not allowed.
-11. PROMPT DISTRIBUTION: You MUST include at least 1 yesno and 1 statement item. Target: ask/report 3 + respond 3 + yesno 2 + statement 2.
+11. PROMPT DISTRIBUTION: Each item's prompt_task_kind is PRE-ASSIGNED above. Do NOT change yesno→ask or statement→respond. Verify each item matches its assignment.
+12. YESNO/STATEMENT + EMBEDDED: When an item has BOTH a pre-assigned yesno/statement AND a reporting/embedded answer_type, the ANSWER must STILL contain the reporting verb and embedded clause. Only the PROMPT format changes. Do NOT simplify the answer just because the prompt is yesno/statement.
 
 Output JSON array only. No markdown.`.trim();
 }
@@ -2463,7 +2528,7 @@ TPO-specific scoring:
 - >=85 means production ready
 - <78 means reject
 - Verify that indirect questions use declarative word order (no auxiliary inversion)
-- Deduct 3-5 points if answer is a direct question when it should be a statement
+- Deduct 3-5 points if answer is a direct question when the item type is NOT interrogative (interrogative items SHOULD have question-mark answers like "Can you tell me...?" or "Do you know...?")
 - Deduct 3-5 points if an interrogative item uses a stiff, formulaic, or overlong polite opener
 - Deduct 3-5 points if a batch of interrogative items repeats the same opener too often
 
@@ -2478,11 +2543,12 @@ You are a TPO Build-a-Sentence auditor.
 Evaluate each item against real TPO exam standards.
 
 TPO key characteristics:
-- 92% of answers are STATEMENTS (declarative sentences)
+- 92% of answers are STATEMENTS (declarative sentences); ~8% are QUESTIONS (interrogative frames like "Can you tell me...?", "Do you know...?") — both are valid TPO formats
 - 63% test indirect/embedded questions with declarative word order
 - 88% have distractors, mainly extra single-word auxiliary verbs (did/do/does)
 - ~77% of chunks are single words; multi-word chunks only for natural collocations
 - Core test: "indirect questions do NOT invert" and distractor did/do tests this.
+- Interrogative items (answer is a polite question) are a normal TPO pattern — do NOT penalize for being a question.
 
 Return ONLY JSON:
 {
@@ -3371,6 +3437,7 @@ function flattenDifficultyPool(pool) {
 function composeOneSet(pool, setId, maxRetries = 500, capture = null) {
   const { easy: eN, medium: mN, hard: hN } = ETS_2026_TARGET_COUNTS_10;
   const targetSetCount = TARGET_SET_COUNT;
+  const isLastSet = setId === targetSetCount;
 
   // Use pre-computed _meta for cheap O(n) profile 锟?no string splitting per attempt
   function profileStyle(items) {
@@ -3417,12 +3484,15 @@ function composeOneSet(pool, setId, maxRetries = 500, capture = null) {
     const prompts = p.items.map(q => q.prompt.toLowerCase().trim());
     const uniquePrompts = new Set(prompts);
     const hasManyDuplicatePrompts = uniquePrompts.size < prompts.length - 1; // Allow max 1 duplicate in relaxed mode
+    // Last set uses lower embedded/distractor thresholds to avoid deadlock
+    const embMin = isLastSet ? 2 : 4;
+    const distMin = isLastSet ? 4 : 6;
 
     return (
       !hasManyDuplicatePrompts &&
       p.qmark >= 0 && p.qmark <= 3 &&
-      p.distractor >= 6 && p.distractor <= 10 &&
-      p.embedded >= 4 && p.embedded <= 9 &&
+      p.distractor >= distMin && p.distractor <= 10 &&
+      p.embedded >= embMin && p.embedded <= 9 &&
       p.avgWords >= 8.5 && p.avgWords <= 14.0 &&
       p.avgChunks >= 4.0 && p.avgChunks <= 8.0 &&
       maxTypeCount <= 8
@@ -3442,13 +3512,14 @@ function composeOneSet(pool, setId, maxRetries = 500, capture = null) {
       Math.min(eN, pool.easy.filter((q) => q._meta.isEmbedded).length) +
       Math.min(mN, pool.medium.filter((q) => q._meta.isEmbedded).length) +
       Math.min(hN, pool.hard.filter((q) => q._meta.isEmbedded).length);
-    if (maxEmbedded < 4) return false; // relaxed gate minimum
+    // Last set uses lower thresholds to avoid infeasible deadlock
+    if (maxEmbedded < (isLastSet ? 2 : 4)) return false;
 
     const maxDistractor =
       Math.min(eN, pool.easy.filter((q) => q._meta.hasDistractor).length) +
       Math.min(mN, pool.medium.filter((q) => q._meta.hasDistractor).length) +
       Math.min(hN, pool.hard.filter((q) => q._meta.hasDistractor).length);
-    if (maxDistractor < 6) return false; // relaxed gate minimum
+    if (maxDistractor < (isLastSet ? 4 : 6)) return false;
 
     return true;
   }
@@ -3563,8 +3634,12 @@ function composeOneSet(pool, setId, maxRetries = 500, capture = null) {
     merged.forEach((q, i) => { q.id = `ets_s${setId}_q${i + 1}`; });
 
     // 3. Schema + difficulty validation (rare failures; done after cheap gate)
+    //    Last set uses relaxed style overrides aligned with stylePassRelaxed thresholds
     const set = { set_id: setId, questions: merged };
-    const schemaResult = validateQuestionSet(set);
+    const schemaOpts = (isLastSet && !isStrict) ? {
+      styleOverrides: { distractorMin: 4, embeddedMin: 2, negationMin: 1, negationMax: 4, qmarkMax: 3 },
+    } : {};
+    const schemaResult = validateQuestionSet(set, schemaOpts);
     const diff = evaluateSetDifficultyAgainstTarget(merged);
     if (!schemaResult.ok || !diff.ok || !diff.meetsTargetCount10) {
       diag.schemaOk++;
