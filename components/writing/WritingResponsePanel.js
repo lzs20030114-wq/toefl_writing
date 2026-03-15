@@ -113,10 +113,15 @@ export function WritingResponsePanel({
             <textarea
               ref={taRef}
               data-testid="writing-textarea"
+              lang="en"
               value={text}
               onChange={(e) => {
                 const cleaned = e.target.value.replace(CJK_RE, "");
                 onTextChange(cleaned);
+              }}
+              onCompositionEnd={(e) => {
+                const cleaned = e.target.value.replace(CJK_RE, "");
+                if (cleaned !== text) onTextChange(cleaned);
               }}
               onKeyDown={(e) => {
                 if (e.ctrlKey || e.metaKey) {
