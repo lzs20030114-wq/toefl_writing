@@ -30,6 +30,7 @@ export default function AdminCodesPage() {
   const [selectedByCode, setSelectedByCode] = useState({});
   const [editingNote, setEditingNote] = useState(null);
   const [editingNoteText, setEditingNoteText] = useState("");
+  const [showTrash, setShowTrash] = useState(false);
 
   useEffect(() => {
     try {
@@ -252,6 +253,41 @@ export default function AdminCodesPage() {
     }
   }
 
+  async function restoreCode(code) {
+    setBusy(true);
+    setMsg("");
+    try {
+      await callAdminApi("/api/admin/codes", {
+        method: "POST",
+        body: JSON.stringify({ action: "restore", code }),
+      });
+      setMsg(`已恢复：${code}`);
+      await refresh();
+    } catch (e) {
+      setMsg(String(e.message || e));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function deleteCode(code) {
+    if (!confirm(`确定要彻底删除 ${code} 吗？此操作不可恢复。`)) return;
+    setBusy(true);
+    setMsg("");
+    try {
+      await callAdminApi("/api/admin/codes", {
+        method: "POST",
+        body: JSON.stringify({ action: "delete", code }),
+      });
+      setMsg(`已彻底删除：${code}`);
+      await refresh();
+    } catch (e) {
+      setMsg(String(e.message || e));
+    } finally {
+      setBusy(false);
+    }
+  }
+
   function startEditNote(code, currentNote) {
     setEditingNote(code);
     setEditingNoteText(currentNote || "");
@@ -285,7 +321,8 @@ export default function AdminCodesPage() {
     if (ready && hasToken) refresh();
   }, [ready, statusFilter, token]);
 
-  const rowsView = useMemo(() => rows.slice(0, 200), [rows]);
+  const rowsView = useMemo(() => rows.filter((r) => r.status !== "revoked").slice(0, 200), [rows]);
+  const revokedRows = useMemo(() => rows.filter((r) => r.status === "revoked"), [rows]);
   const selectedCount = useMemo(() => rowsView.filter((r) => selectedByCode[r.code]).length, [rowsView, selectedByCode]);
   const allVisibleSelected = rowsView.length > 0 && rowsView.every((r) => selectedByCode[r.code]);
 
@@ -503,6 +540,70 @@ export default function AdminCodesPage() {
             </table>
           </div>
         </div>
+
+        {/* Trash / Revoked codes */}
+        {revokedRows.length > 0 && (
+          <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, overflow: "hidden" }}>
+            <button
+              onClick={() => setShowTrash(!showTrash)}
+              style={{
+                width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between",
+                padding: "12px 14px", background: "none", border: "none", cursor: "pointer",
+              }}
+            >
+              <span style={{ fontSize: 13, fontWeight: 700, color: C.t2 }}>
+                回收站（{revokedRows.length} 个已吊销）
+              </span>
+              <span style={{ fontSize: 12, color: C.t3, transform: showTrash ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>▼</span>
+            </button>
+            {showTrash && (
+              <div style={{ borderTop: "1px solid " + C.bdr, padding: 14 }}>
+                <div style={{ overflowX: "auto" }}>
+                  <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
+                    <thead>
+                      <tr style={{ background: "#fef2f2", color: C.t2 }}>
+                        <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #fecaca" }}>登录码</th>
+                        <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #fecaca" }}>发放对象</th>
+                        <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #fecaca" }}>备注</th>
+                        <th style={{ textAlign: "center", padding: "8px 6px", borderBottom: "1px solid #fecaca" }}>答题量</th>
+                        <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #fecaca", minWidth: 180 }}>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {revokedRows.map((r) => {
+                        const u = usageByCode[r.code];
+                        return (
+                          <tr key={r.code}>
+                            <td style={{ padding: "8px 6px", borderBottom: "1px solid #fef2f2", fontFamily: "monospace", fontWeight: 700, color: C.t2 }}>{r.code}</td>
+                            <td style={{ padding: "8px 6px", borderBottom: "1px solid #fef2f2", color: C.t2 }}>{r.issued_to || "-"}</td>
+                            <td style={{ padding: "8px 6px", borderBottom: "1px solid #fef2f2", color: C.t2 }}>{r.note || "-"}</td>
+                            <td style={{ padding: "8px 6px", borderBottom: "1px solid #fef2f2", textAlign: "center" }}>
+                              {u && u.answered.total > 0 ? (
+                                <div style={{ display: "flex", gap: 4, justifyContent: "center" }}>
+                                  {u.answered.build > 0 && <span style={{ background: "#eff6ff", color: "#1d4ed8", borderRadius: 4, padding: "1px 5px", fontSize: 11, fontWeight: 600 }}>句{u.answered.build}</span>}
+                                  {u.answered.email > 0 && <span style={{ background: "#fef3c7", color: "#92400e", borderRadius: 4, padding: "1px 5px", fontSize: 11, fontWeight: 600 }}>邮{u.answered.email}</span>}
+                                  {u.answered.discussion > 0 && <span style={{ background: "#ecfdf5", color: "#065f46", borderRadius: 4, padding: "1px 5px", fontSize: 11, fontWeight: 600 }}>讨{u.answered.discussion}</span>}
+                                </div>
+                              ) : <span style={{ color: C.t2 }}>-</span>}
+                            </td>
+                            <td style={{ padding: "8px 6px", borderBottom: "1px solid #fef2f2", display: "flex", gap: 6 }}>
+                              <button onClick={() => restoreCode(r.code)} disabled={busy} style={{ border: "1px solid " + C.blue, background: C.blue, color: "#fff", borderRadius: 6, padding: "3px 10px", cursor: busy ? "not-allowed" : "pointer", opacity: busy ? 0.6 : 1, fontSize: 12 }}>
+                                恢复
+                              </button>
+                              <button onClick={() => deleteCode(r.code)} disabled={busy} style={{ border: "1px solid #dc2626", background: "#fff", color: "#dc2626", borderRadius: 6, padding: "3px 10px", cursor: busy ? "not-allowed" : "pointer", opacity: busy ? 0.6 : 1, fontSize: 12 }}>
+                                彻底删除
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         {msg ? (
           <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 8, padding: 10, fontSize: 12, color: "#9a3412" }}>

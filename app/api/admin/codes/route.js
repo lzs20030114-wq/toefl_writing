@@ -225,6 +225,32 @@ export async function POST(request) {
       return Response.json({ ok: true, revoked: data });
     }
 
+    if (action === "restore") {
+      const code = String(body?.code || "").toUpperCase().trim();
+      if (!code || code.length !== CODE_LEN) return jsonError(400, "Invalid code");
+      const { data, error } = await supabaseAdmin
+        .from("access_codes")
+        .update({ status: "available" })
+        .eq("code", code)
+        .eq("status", "revoked")
+        .select("code,status")
+        .single();
+      if (error) return jsonError(400, error.message || "Restore failed");
+      return Response.json({ ok: true, restored: data });
+    }
+
+    if (action === "delete") {
+      const code = String(body?.code || "").toUpperCase().trim();
+      if (!code || code.length !== CODE_LEN) return jsonError(400, "Invalid code");
+      const { error } = await supabaseAdmin
+        .from("access_codes")
+        .delete()
+        .eq("code", code)
+        .eq("status", "revoked");
+      if (error) return jsonError(400, error.message || "Delete failed");
+      return Response.json({ ok: true, deleted: code });
+    }
+
     if (action === "update-note") {
       const code = String(body?.code || "").toUpperCase().trim();
       if (!code) return jsonError(400, "Missing code");
