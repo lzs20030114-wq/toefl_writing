@@ -84,6 +84,7 @@ export function WritingResponsePanel({
   const taRef = useRef(null);
   const historyRef = useRef([]);
   const prevTextRef = useRef(text);
+  const isComposingRef = useRef(false);
   const isEditable = phase === "writing";
   const [imeTipVisible, setImeTipVisible] = useState(false);
   const imeTipDismissedRef = useRef(false);
@@ -148,14 +149,17 @@ export function WritingResponsePanel({
               data-testid="writing-textarea"
               lang="en"
               value={text}
-              onChange={(e) => {
-                const cleaned = e.target.value.replace(CJK_RE, "");
-                onTextChange(cleaned);
-              }}
+              onCompositionStart={() => { isComposingRef.current = true; }}
               onCompositionEnd={(e) => {
+                isComposingRef.current = false;
                 const cleaned = e.target.value.replace(CJK_RE, "");
                 if (cleaned !== text) onTextChange(cleaned);
                 if (!imeTipDismissedRef.current && /[\u2E80-\u9FFF\uF900-\uFAFF\uFE30-\uFE4F\uFF00-\uFFEF\u3000-\u303F\u3040-\u30FF]/.test(e.data || "")) setImeTipVisible(true);
+              }}
+              onChange={(e) => {
+                if (isComposingRef.current) return;
+                const cleaned = e.target.value.replace(CJK_RE, "");
+                onTextChange(cleaned);
               }}
               onKeyDown={(e) => {
                 if (e.ctrlKey || e.metaKey) {
