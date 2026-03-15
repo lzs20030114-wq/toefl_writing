@@ -40,7 +40,7 @@ export function ScoringReport({ result, type }) {
   const goals = Array.isArray(result.goals) ? result.goals : [];
   const actions = (Array.isArray(result.actions) ? result.actions : []).slice(0, 2);
   const patterns = Array.isArray(result.patterns) ? result.patterns : [];
-  const counts = result.annotationCounts || { red: 0, orange: 0, blue: 0 };
+  const counts = result.annotationCounts || { red: 0, orange: 0, blue: 0, spelling: 0 };
   const marks = Array.isArray(result.annotationSegments) ? result.annotationSegments : [];
   const comparison = result.comparison || { modelEssay: "", points: [], raw: "" };
   const sectionStates = result.sectionStates || {};

@@ -287,7 +287,7 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
           if (token.type === "normal") return <React.Fragment key={token.id}>{token.text}</React.Fragment>;
           const isActive = activeErrorId === token.id;
           const isSpelling = token.level === "red" && String(token.errorType || "").toLowerCase() === "spelling";
-            const catColor = token.level === "red" ? (isSpelling ? P.purple : P.rose) : token.level === "orange" ? P.amber : P.teal;
+          const catColor = token.level === "red" ? (isSpelling ? P.purple : P.rose) : token.level === "orange" ? P.amber : P.teal;
           const catBg = token.level === "red" ? (isSpelling ? P.purpleSoft : P.roseSoft) : token.level === "orange" ? P.amberSoft : P.tealSoft;
           return (
             <span key={token.id} style={{ position: "relative", display: "inline-block" }} data-error-token="true">
