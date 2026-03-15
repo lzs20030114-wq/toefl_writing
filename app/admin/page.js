@@ -4,6 +4,11 @@ import { C, FONT } from "../../components/shared/ui";
 
 const CARDS = [
   {
+    title: "用户管理",
+    desc: "查看注册用户数据、增长趋势、活跃度、等级分布和登录方式统计。",
+    href: "/admin-users",
+  },
+  {
     title: "登录码管理",
     desc: "生成、分发、回收登录码，查看登录码状态和库存。",
     href: "/admin-codes",
