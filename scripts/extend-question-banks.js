@@ -173,39 +173,43 @@ function generateBuildSet(setId) {
 }
 
 function generateEmailPrompts(startIdNum, count) {
+  // Topics across 6 categories matching TPO distribution:
+  // ~30% academic, ~20% workplace, ~15% community, ~15% peer, ~10% consumer, ~10% housing
   const topics = [
-    ["computer lab reservation", "Technology Services Office", "weekend project access"],
-    ["internship recommendation letter", "Career Center Advisor", "application deadline"],
-    ["late tuition fee appeal", "Student Accounts Office", "payment plan options"],
-    ["research assistant schedule", "Lab Coordinator", "exam-week conflict"],
-    ["club funding request", "Student Activities Office", "community event budget"],
-    ["language center appointment", "Language Center Director", "speaking assessment"],
-    ["library noise complaint", "Library Operations Manager", "quiet-floor policy"],
-    ["study-abroad housing", "Global Programs Staff", "arrival logistics"],
-    ["missed quiz makeup", "Course Instructor", "documented illness"],
-    ["volunteer hour verification", "Program Supervisor", "scholarship requirement"],
-    ["campus shuttle route", "Transportation Office", "evening safety"],
-    ["lab equipment access", "Department Technician", "time-sensitive experiment"],
-    ["group project mediation", "Teaching Assistant", "workload imbalance"],
-    ["transcript processing", "Registrar Office", "graduate application"],
-    ["work-study schedule", "Campus Employer", "class-time overlap"],
+    // Academic (student→professor/staff)
+    { scenario: "Your professor moved the final exam date forward by a week, and you already have two other exams that day. You need to discuss options.", to: "Professor Lane", subject: "Final exam date conflict", goals: ["Explain the scheduling conflict you are facing", "Ask whether an alternative exam time is available", "Propose a specific solution that would work for you"] },
+    { scenario: "You completed an online certification relevant to your major and would like to receive course credit for it. Your department has a petition process for transfer credit.", to: "Dr. Navarro", subject: "Request for transfer credit", goals: ["Describe the certification you completed and its relevance", "Ask about the petition process and required documentation", "Explain why receiving credit would benefit your academic plan"] },
+    { scenario: "You are interested in becoming a teaching assistant for an introductory biology course next semester. The application requires a faculty recommendation.", to: "Professor Grant", subject: "Teaching assistant application", goals: ["Express your interest in the TA position and explain your qualifications", "Ask about the recommendation process and timeline", "Mention specific experiences that make you a good candidate"] },
+    { scenario: "Your study-abroad program requires pre-approval of courses to count toward your degree. You need your academic advisor to review your proposed course list before the enrollment deadline.", to: "Academic Advisor", subject: "Study-abroad course approval", goals: ["List the courses you plan to take abroad and their equivalents", "Ask which courses will count toward your major requirements", "Request a meeting to finalize your plan before the deadline"] },
+    // Workplace/Professional
+    { scenario: "Your team recently switched to a new scheduling software, and you are having trouble accessing the shared calendar. Several of your shifts next week may be incorrect.", to: "Manager, Rachel", subject: "Scheduling software access issue", goals: ["Describe the technical problem you are experiencing", "Explain which shifts may be affected", "Ask for help resolving the issue before next week"] },
+    { scenario: "You completed a summer internship at a design firm and want to stay in touch with your supervisor. You also noticed a junior designer opening posted on their website.", to: "Ms. Thornton", subject: "Thank you and follow-up from internship", goals: ["Thank her for the mentorship during your internship", "Mention specific skills or projects that were valuable to you", "Ask about the junior designer position and the application process"] },
+    { scenario: "Your coworker, Ryan, covered your shifts while you were sick last week. You want to thank him and offer to return the favor during his upcoming vacation.", to: "Ryan", subject: "Thanks for covering my shifts", goals: ["Thank him for covering your shifts and acknowledge the inconvenience", "Describe how you are feeling now and that you are back to full capacity", "Offer to cover his shifts during his vacation next month"] },
+    // Community/Civic
+    { scenario: "The city council is considering removing a popular bike lane near your neighborhood to add more parking. You want to voice your opinion at the next meeting but cannot attend in person.", to: "City Council Office", subject: "Comment on proposed bike lane removal", goals: ["State your position on the bike lane proposal", "Explain how the bike lane benefits the community with specific examples", "Ask how to submit a written comment for the public record"] },
+    { scenario: "You recently volunteered at a community food bank and noticed that the sorting process was inefficient, causing long wait times for families. You have an idea for improvement.", to: "Mr. Ortiz", subject: "Suggestion for food bank operations", goals: ["Thank the organization for the opportunity to volunteer", "Describe the issue you observed with the sorting process", "Propose a specific improvement and explain how it could help"] },
+    { scenario: "Your apartment building's recycling program has been inconsistent, with bins often overflowing or not collected on time. You want to bring this to the building management's attention.", to: "Building Management", subject: "Recycling collection issues", goals: ["Describe the recycling problems you have observed", "Explain how the situation affects residents in the building", "Suggest a solution such as a revised collection schedule"] },
+    // Personal/Peer
+    { scenario: "Your classmate, Mia, lent you her notes while you were absent for a week. You passed the midterm thanks to her help, and you want to do something to thank her.", to: "Mia", subject: "Thank you for the notes", goals: ["Thank her for lending you her notes and explain how they helped", "Share your midterm result and give her credit for your success", "Offer to help her with something in return"] },
+    { scenario: "You and your friend, Lucas, planned a weekend hiking trip, but the weather forecast shows heavy rain. You need to discuss whether to reschedule or find an indoor alternative.", to: "Lucas", subject: "Weekend hiking trip — weather update", goals: ["Explain the weather situation and why the original plan may not work", "Suggest an alternative activity or a new date for the hike", "Ask for his preference and availability"] },
+    // Consumer/Service
+    { scenario: "You booked a hotel room online for a family visit, but the confirmation email shows the wrong dates. The hotel's phone line has been busy, and you need to fix this before the cancellation policy deadline.", to: "Hotel Reservations", subject: "Booking date correction needed", goals: ["Describe the booking error and provide your reservation number", "Explain the urgency due to the cancellation policy deadline", "Request the correct dates and ask for a confirmation update"] },
+    // Housing
+    { scenario: "You share an apartment with a roommate, and the landlord has informed you that rent will increase next month. You want to discuss how to handle the change with your roommate, Alex.", to: "Alex", subject: "Rent increase next month", goals: ["Inform your roommate about the rent increase and the new amount", "Discuss how to split the additional cost fairly", "Suggest scheduling a time to talk about it in person"] },
+    { scenario: "The elevator in your apartment building has been out of service for over a week, and you live on the eighth floor. You have a medical condition that makes climbing stairs difficult.", to: "Property Management Office", subject: "Elevator out of service — urgent repair needed", goals: ["Describe how long the elevator has been broken", "Explain how the situation is affecting you personally", "Request a repair timeline and ask about interim accommodations"] },
   ];
 
   const items = [];
   for (let i = 0; i < count; i += 1) {
-    const [subject, to, urgency] = topics[i % topics.length];
+    const t = topics[i % topics.length];
     const n = startIdNum + i;
     items.push({
       id: `em${n}`,
-      scenario: `You are a university student dealing with ${subject}. A recent change has created an issue that may affect your academic plans, and you need clarification quickly regarding ${urgency}.`,
-      direction: `Write an email to ${to}:`,
-      goals: [
-        `Clearly explain your current situation related to ${subject}`,
-        "Ask two specific questions about policy, timeline, or next steps",
-        "Propose a practical solution and explain why it would help",
-      ],
-      to,
-      from: "You (student)",
+      scenario: t.scenario,
+      direction: `Write an email to ${t.to}. In your email, do the following:`,
+      goals: t.goals,
+      to: t.to,
+      subject: t.subject,
     });
   }
   return items;

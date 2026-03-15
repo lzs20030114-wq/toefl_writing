@@ -25,70 +25,10 @@
   },
   {
     "id": "em3",
-    "scenario": "You subscribe to a poetry magazine and submitted a poem through its website, but an error appeared after clicking Submit and you received no confirmation.",
-    "direction": "Write an email to the editor. In your email, do the following:",
-    "goals": [
-      "Mention your interest in the magazine",
-      "Describe the technical submission issue",
-      "Ask whether your poem was received"
-    ],
-    "to": "Editor, Verse & Voice",
-    "subject": "Poem submission confirmation"
-  },
-  {
-    "id": "em4",
-    "scenario": "Your campus library moved one quiet-study floor to group-study use during exam month, and now late-evening quiet seats are rarely available.",
-    "direction": "Write an email to the library operations manager. In your email, do the following:",
-    "goals": [
-      "Describe the study problem you face",
-      "Ask what temporary quiet-space options exist",
-      "Suggest one realistic scheduling or zoning adjustment"
-    ],
-    "to": "Library Operations Manager",
-    "subject": "Quiet study space availability"
-  },
-  {
-    "id": "em5",
-    "scenario": "You accepted a volunteer role at a local clinic through the university portal, but your logged hours are missing and your scholarship requires verified service records.",
-    "direction": "Write an email to the program supervisor. In your email, do the following:",
-    "goals": [
-      "Explain the missing-hours issue clearly",
-      "Request clarification on verification steps and timeline",
-      "Suggest how to document your completed shifts"
-    ],
-    "to": "Program Supervisor",
-    "subject": "Missing volunteer hours in the system"
-  },
-  {
-    "id": "em6",
-    "scenario": "You were invited to interview for a part-time campus job, but the proposed interview time overlaps with a required speaking exam.",
-    "direction": "Write an email to the hiring coordinator. In your email, do the following:",
-    "goals": [
-      "State the scheduling conflict politely",
-      "Ask if an alternative interview slot is possible",
-      "Reconfirm your interest in the position"
-    ],
-    "to": "Hiring Coordinator",
-    "subject": "Interview scheduling conflict"
-  },
-  {
-    "id": "em7",
-    "scenario": "Your dorm Wi-Fi has frequent outages, and you have a timed online test next week that cannot be paused once started.",
-    "direction": "Write an email to the IT Help Desk. In your email, do the following:",
-    "goals": [
-      "Report the connectivity pattern and urgency",
-      "Ask what fix is planned before your test date",
-      "Request a temporary backup access option"
-    ],
-    "to": "IT Help Desk",
-    "subject": "Urgent Wi-Fi connectivity issue in dorm"
-  },
-  {
-    "id": "em8",
     "scenario": "After a guest lecture by a marine biologist, you want to shift your senior thesis topic and need quick guidance before proposal deadlines.",
     "direction": "Write an email to Dr. Thompson. In your email, do the following:",
     "goals": [
-      "Thank the speaker and reference one concrete idea",
+      "Thank the speaker and reference one concrete idea from the lecture",
       "Connect that idea to your thesis direction",
       "Ask for one or two recommended readings"
     ],
@@ -96,19 +36,7 @@
     "subject": "Thesis direction after your guest lecture"
   },
   {
-    "id": "em9",
-    "scenario": "You were approved for study-abroad housing, but the assignment was changed to a location that adds a long daily commute to your internship site.",
-    "direction": "Write an email to the global programs staff. In your email, do the following:",
-    "goals": [
-      "Explain the housing mismatch and constraints",
-      "Ask what reassignment options are available",
-      "Propose a practical alternative arrangement"
-    ],
-    "to": "Global Programs Staff",
-    "subject": "Study-abroad housing reassignment request"
-  },
-  {
-    "id": "em10",
+    "id": "em4",
     "scenario": "You missed a quiz because of a same-day clinic visit, and your course policy allows makeups only with timely documentation.",
     "direction": "Write an email to your course instructor. In your email, do the following:",
     "goals": [
@@ -120,31 +48,139 @@
     "subject": "Missed quiz due to medical appointment"
   },
   {
-    "id": "em11",
-    "scenario": "Your student club's approved event budget was reduced after vendor prices increased, putting a community workshop at risk of cancellation.",
-    "direction": "Write an email to the student activities office. In your email, do the following:",
+    "id": "em5",
+    "scenario": "You are a student starting a new semester, and you would like some additional information about an elective course you are considering. You want to make sure it fits your schedule and academic goals.",
+    "direction": "Write an email to the course instructor, Dr. Adams. In your email, do the following:",
     "goals": [
-      "Summarize the budget gap and its impact",
-      "Ask whether emergency funding channels exist",
-      "Suggest a scaled plan that still meets event goals"
+      "Explain why you are interested in the course",
+      "Ask specific questions about the course content and requirements",
+      "Thank Dr. Adams for taking the time to respond"
     ],
-    "to": "Student Activities Office",
-    "subject": "Budget shortfall for upcoming community workshop"
+    "to": "Dr. Adams",
+    "subject": "Request for additional course information"
+  },
+  {
+    "id": "em6",
+    "scenario": "Your colleague, Daniel, suggested a new café for the team's weekly lunch. You went last Friday, but the wait was over 40 minutes and several orders came out wrong. The team wants to try somewhere else next week.",
+    "direction": "Write an email to Daniel. In your email, do the following:",
+    "goals": [
+      "Explain what went wrong at the café",
+      "Describe how the team reacted to the experience",
+      "Suggest trying a different place next week"
+    ],
+    "to": "Daniel",
+    "subject": "Last Friday's team lunch"
+  },
+  {
+    "id": "em7",
+    "scenario": "You will be attending a three-day industry conference in another city next month. Your colleague, Sarah, attended the same conference last year and has offered to share tips on which sessions are worth attending.",
+    "direction": "Write an email to Sarah. In your email, do the following:",
+    "goals": [
+      "Explain your professional goals for the conference",
+      "Ask for her recommendations on sessions and evening activities",
+      "Mention any scheduling constraints or personal preferences you have"
+    ],
+    "to": "Sarah",
+    "subject": "Advice for the upcoming conference"
+  },
+  {
+    "id": "em8",
+    "scenario": "You recently attended a career fair at your university and had a brief conversation with a recruiter from a technology company. She encouraged you to apply for their summer internship program and gave you her business card.",
+    "direction": "Write an email to Ms. Rivera. In your email, do the following:",
+    "goals": [
+      "Remind her of your conversation at the career fair",
+      "Express your interest in the summer internship program",
+      "Ask about the application process and any deadlines you should be aware of"
+    ],
+    "to": "Ms. Rivera",
+    "subject": "Follow-up on summer internship opportunity"
+  },
+  {
+    "id": "em9",
+    "scenario": "You recently started a new part-time job at a local marketing firm. After your first week, you have some questions about the project management software the team uses and the process for submitting work for client review.",
+    "direction": "Write an email to your team lead, Lisa. In your email, do the following:",
+    "goals": [
+      "Share your positive impressions of the first week",
+      "Ask specific questions about the project management tools",
+      "Request guidance on the client review submission process"
+    ],
+    "to": "Lisa",
+    "subject": "First week questions"
+  },
+  {
+    "id": "em10",
+    "scenario": "You are a member of your neighborhood community association. You have noticed that the community garden behind the recreation center has become overgrown and some of the raised beds are damaged. The summer planting season is approaching.",
+    "direction": "Write an email to Mr. Wallace, the association president. In your email, do the following:",
+    "goals": [
+      "Describe the current condition of the community garden",
+      "Explain why it is important to address the issue before summer",
+      "Suggest a plan for organizing a volunteer cleanup day"
+    ],
+    "to": "Mr. Wallace",
+    "subject": "Community garden needs attention"
+  },
+  {
+    "id": "em11",
+    "scenario": "You participated in a charity 5K run organized by a local nonprofit last weekend. While you enjoyed the event overall, you noticed some issues with the route signage and water station placement that caused confusion for runners.",
+    "direction": "Write an email to the event coordinator, Ms. Chen. In your email, do the following:",
+    "goals": [
+      "Thank her for organizing the event and mention what you enjoyed",
+      "Describe the specific issues you noticed during the run",
+      "Offer suggestions for improving future events"
+    ],
+    "to": "Ms. Chen",
+    "subject": "Feedback on the charity 5K run"
   },
   {
     "id": "em12",
-    "scenario": "Your official transcript request has not been processed, and your graduate application portal shows a final deadline in four days.",
-    "direction": "Write an email to the registrar office. In your email, do the following:",
+    "scenario": "Final exams are three weeks away, and you want to organize a study group with your classmates for your statistics course. You have reserved a study room at the library and have ideas about how to make the sessions productive.",
+    "direction": "Write an email to your classmates. In your email, do the following:",
     "goals": [
-      "State the processing issue and deadline pressure",
-      "Ask for status and fastest available option",
-      "Request temporary proof that a transcript request is in progress"
+      "Explain why you think a study group would be helpful for the final",
+      "Describe your plan for the study sessions and topics to cover",
+      "Propose a schedule and location for the first meeting"
     ],
-    "to": "Registrar Office",
-    "subject": "Urgent transcript request for graduate application"
+    "to": "Classmates",
+    "subject": "Study group for statistics final"
   },
   {
     "id": "em13",
+    "scenario": "You attended a weekend workshop on public speaking skills at the community center. The instructor gave practical exercises that helped you feel more confident. You want to continue improving and are wondering if there are follow-up courses.",
+    "direction": "Write an email to the instructor, Mr. Brooks. In your email, do the following:",
+    "goals": [
+      "Thank him for the workshop and explain what you found most helpful",
+      "Describe how you plan to apply what you learned",
+      "Ask about follow-up courses or additional resources for further practice"
+    ],
+    "to": "Mr. Brooks",
+    "subject": "Thank you for the public speaking workshop"
+  },
+  {
+    "id": "em14",
+    "scenario": "You are working on a group project for one of your classes. One of your group members, Jake, has not been contributing and has missed several meetings. The deadline is approaching, and the group needs his part of the work.",
+    "direction": "Write an email to Jake. In your email, do the following:",
+    "goals": [
+      "Describe the current status of the project and the upcoming deadline",
+      "Explain how his absence has affected the group's progress",
+      "Suggest specific ways he can contribute going forward"
+    ],
+    "to": "Jake",
+    "subject": "Need your contribution to the group project"
+  },
+  {
+    "id": "em15",
+    "scenario": "Your friend Emma has recently moved to a new city and is feeling a bit overwhelmed. She has asked you for advice on how to adjust and make new friends. You have moved several times before and have useful experience.",
+    "direction": "Write an email to Emma. In your email, do the following:",
+    "goals": [
+      "Describe how you adjusted when you moved to a new city",
+      "Give Emma suggestions on how she can meet new people",
+      "Offer to help her in specific ways if she needs more support"
+    ],
+    "to": "Emma",
+    "subject": "Tips for settling into a new city"
+  },
+  {
+    "id": "em16",
     "scenario": "Your neighbor, Tom, has been playing loud music late at night for the past week, and it has been difficult for you to sleep. You have an important job interview early next Monday morning and need to rest well this weekend.",
     "direction": "Write an email to Tom. In your email, do the following:",
     "goals": [
@@ -156,75 +192,39 @@
     "subject": "Noise concern from next door"
   },
   {
-    "id": "em14",
-    "scenario": "You ordered a laptop online two weeks ago for your coursework, but when it arrived, the screen had a visible crack. You contacted customer service by phone but were told to submit a written request for a replacement.",
+    "id": "em17",
+    "scenario": "You ordered a laptop online two weeks ago for your coursework, but when it arrived, the screen had a visible crack. You contacted customer service by phone but were told to submit a written request.",
     "direction": "Write an email to customer service. In your email, do the following:",
     "goals": [
       "Describe the issue with the product you received",
-      "Explain how the situation is affecting your ability to complete your coursework",
+      "Explain how the situation is affecting your ability to complete your work",
       "Request a replacement or refund and ask about the expected timeline"
     ],
     "to": "Customer Service",
     "subject": "Replacement request for damaged laptop"
   },
   {
-    "id": "em15",
-    "scenario": "You recently attended a career fair at your university and had a conversation with a recruiter from a technology company. The recruiter encouraged you to apply for their summer internship program and gave you her business card.",
-    "direction": "Write an email to Ms. Rivera. In your email, do the following:",
+    "id": "em18",
+    "scenario": "You subscribe to a poetry magazine and submitted a poem through its website, but an error appeared after clicking Submit and you received no confirmation email.",
+    "direction": "Write an email to the editor. In your email, do the following:",
     "goals": [
-      "Remind her of your conversation at the career fair",
-      "Express your interest in the summer internship program",
-      "Ask about the application process and any deadlines you should be aware of"
+      "Mention your interest in the magazine and why you decided to submit",
+      "Describe the technical issue you experienced during submission",
+      "Ask whether your poem was received and what to do if it was not"
     ],
-    "to": "Ms. Rivera",
-    "subject": "Follow-up on summer internship opportunity"
+    "to": "Editor, Verse & Voice",
+    "subject": "Poem submission confirmation"
   },
   {
-    "id": "em16",
-    "scenario": "You have recently moved into a new apartment and are experiencing issues with the heating system. You need to contact the property manager, Ms. Green, to report the problem and request a repair.",
-    "direction": "Write an email to Ms. Green. In your email, do the following:",
+    "id": "em19",
+    "scenario": "You have recently moved into a new apartment and are experiencing issues with the heating system. The temperature in your unit drops significantly at night, making it uncomfortable to sleep.",
+    "direction": "Write an email to the property manager, Ms. Green. In your email, do the following:",
     "goals": [
       "Describe the issues you are experiencing with the heating system",
-      "Explain how these issues are affecting your daily life",
+      "Explain how the problem is affecting your daily life",
       "Request a repair and ask for a timeline for when it will be fixed"
     ],
     "to": "Ms. Green",
     "subject": "Heating system repair request"
-  },
-  {
-    "id": "em17",
-    "scenario": "You are a student starting a new semester, and you would like some additional information about a course you are interested in that is taught by Dr. Adams. You want to ensure that the course is suitable for you.",
-    "direction": "Write an email to Dr. Adams. In your email, do the following:",
-    "goals": [
-      "Explain why you are interested in the course",
-      "Ask for the additional information you would like to have about the course",
-      "Thank Dr. Adams for taking the time to respond"
-    ],
-    "to": "Dr. Adams",
-    "subject": "Request for additional course information"
-  },
-  {
-    "id": "em18",
-    "scenario": "You are a university student working on a group project for one of your classes. One of your group members, Jake, has not been contributing to the project and has missed several meetings. This is affecting the progress of the project, and you need to address the issue with him.",
-    "direction": "Write an email to Jake. In your email, do the following:",
-    "goals": [
-      "Describe the importance of the project",
-      "Explain how his absence has affected the group's progress",
-      "Suggest ways he can help the group"
-    ],
-    "to": "Jake",
-    "subject": "Need your contribution to the group project"
-  },
-  {
-    "id": "em19",
-    "scenario": "Your friend Emma has recently moved to a new city and is feeling a bit overwhelmed. She has reached out to you for advice on how to adjust to her new environment and make new friends. You have lived in several cities before, and you have experience with finding ways to settle into new places.",
-    "direction": "Write an email to Emma. In your email, do the following:",
-    "goals": [
-      "Describe how you adjusted to a new city",
-      "Give Emma suggestions on how she can make new friends",
-      "Offer different ways to help her if she needs more advice"
-    ],
-    "to": "Emma",
-    "subject": "Tips for settling into a new city"
   }
 ]
