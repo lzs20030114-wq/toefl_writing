@@ -1,5 +1,5 @@
 ﻿"use client";
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import { C, FONT, Btn, InfoStrip, PageShell, SurfaceCard, Toast, TopBar } from "../shared/ui";
 import { useBuildSentenceSession } from "./useBuildSentenceSession";
 import { formatLongDuration, PRACTICE_MODE } from "../../lib/practiceMode";
@@ -41,6 +41,18 @@ const BS_INTERACTION_CSS = `
 .bs-slot-filled:active {
   transform: scale(0.92) !important;
   transition: transform 0.05s !important;
+}
+.bs-dragging {
+  opacity: 0.3 !important;
+  transform: scale(0.92) !important;
+  transition: all 0.15s !important;
+}
+.bs-drag-target {
+  border-color: #0d9668 !important;
+  background: rgba(13,150,104,0.08) !important;
+  transform: scale(1.06);
+  transition: all 0.12s !important;
+  box-shadow: 0 0 0 3px rgba(13,150,104,0.15) !important;
 }
 `;
 
@@ -145,6 +157,113 @@ export function BuildSentenceTask({
       animTimer.current = setTimeout(() => setAnimChunkId(null), 450);
     }
   }, [slots, removeChunk]);
+
+  /* ── Touch Drag (mobile) ── */
+  const touchDrag = useRef({ active: false, source: null, sourceEl: null, startX: 0, startY: 0, ghost: null, moved: false, lastHL: null });
+  const suppressClick = useRef(false);
+  const pickRef = useRef(handlePickChunk);
+  const removeRef = useRef(handleRemoveChunk);
+  pickRef.current = handlePickChunk;
+  removeRef.current = handleRemoveChunk;
+
+  const startTouch = useCallback((e, source) => {
+    const t = e.touches[0];
+    const td = touchDrag.current;
+    td.active = true;
+    td.source = source;
+    td.sourceEl = e.currentTarget;
+    td.startX = t.clientX;
+    td.startY = t.clientY;
+    td.moved = false;
+  }, []);
+
+  useEffect(() => {
+    if (!isMobile) return;
+    const THRESH = 8;
+
+    function onMove(e) {
+      const td = touchDrag.current;
+      if (!td.active) return;
+      const touch = e.touches[0];
+      const dx = touch.clientX - td.startX;
+      const dy = touch.clientY - td.startY;
+      if (!td.moved && Math.hypot(dx, dy) < THRESH) return;
+      e.preventDefault();
+
+      if (!td.moved) {
+        td.moved = true;
+        vibrate(15);
+        suppressClick.current = true;
+        const g = document.createElement("div");
+        g.textContent = formatChunkDisplay(td.source.chunk.text);
+        Object.assign(g.style, {
+          position: "fixed", zIndex: "10000", pointerEvents: "none",
+          background: C.blue, color: "#fff", padding: "10px 18px",
+          borderRadius: "12px", fontSize: "16px", fontWeight: "600",
+          fontFamily: FONT, boxShadow: "0 8px 24px rgba(0,0,0,0.2)",
+          transform: "scale(1.08)", whiteSpace: "nowrap",
+        });
+        document.body.appendChild(g);
+        td.ghost = g;
+        if (td.sourceEl) td.sourceEl.classList.add("bs-dragging");
+      }
+
+      if (td.ghost) {
+        td.ghost.style.left = (touch.clientX - (td.ghost.offsetWidth || 80) / 2) + "px";
+        td.ghost.style.top = (touch.clientY - (td.ghost.offsetHeight || 40) - 20) + "px";
+      }
+
+      // highlight drop target — hide ghost to get element underneath
+      if (td.ghost) td.ghost.style.display = "none";
+      const el = document.elementFromPoint(touch.clientX, touch.clientY);
+      if (td.ghost) td.ghost.style.display = "";
+      if (td.lastHL) { td.lastHL.classList.remove("bs-drag-target"); td.lastHL = null; }
+      if (el) {
+        const tgt = td.source.from === "bank"
+          ? (el.closest("[data-slot-index]") || el.closest("[data-answer-area]"))
+          : el.closest("[data-bank-area]");
+        if (tgt) { tgt.classList.add("bs-drag-target"); td.lastHL = tgt; }
+      }
+    }
+
+    function onEnd(e) {
+      const td = touchDrag.current;
+      if (!td.active) return;
+      if (td.lastHL) { td.lastHL.classList.remove("bs-drag-target"); td.lastHL = null; }
+      if (td.sourceEl) { td.sourceEl.classList.remove("bs-dragging"); td.sourceEl = null; }
+      if (td.ghost) { td.ghost.remove(); td.ghost = null; }
+      if (!td.moved) { td.active = false; suppressClick.current = false; return; }
+
+      const touch = e.changedTouches[0];
+      const el = document.elementFromPoint(touch.clientX, touch.clientY);
+      let dropped = false;
+      if (el && td.source.from === "bank") {
+        if (el.closest("[data-slot-index]") || el.closest("[data-answer-area]")) {
+          pickRef.current(td.source.chunk); dropped = true;
+        }
+      } else if (el && td.source.from === "slot") {
+        if (el.closest("[data-bank-area]")) {
+          removeRef.current(td.source.slotIndex); dropped = true;
+        }
+      }
+      if (dropped) vibrate(10);
+      td.active = false; td.source = null; td.moved = false;
+      setTimeout(() => { suppressClick.current = false; }, 100);
+    }
+
+    document.addEventListener("touchmove", onMove, { passive: false });
+    document.addEventListener("touchend", onEnd);
+    document.addEventListener("touchcancel", onEnd);
+    return () => {
+      document.removeEventListener("touchmove", onMove);
+      document.removeEventListener("touchend", onEnd);
+      document.removeEventListener("touchcancel", onEnd);
+      const td = touchDrag.current;
+      if (td.ghost) { td.ghost.remove(); td.ghost = null; }
+      if (td.sourceEl) { td.sourceEl.classList.remove("bs-dragging"); }
+      if (td.lastHL) { td.lastHL.classList.remove("bs-drag-target"); }
+    };
+  }, [isMobile]);
 
   function handleSubmitClick() {
     if (!isPracticeMode) {
@@ -324,14 +443,14 @@ export function BuildSentenceTask({
       {!embedded && <TopBar title="Build a Sentence" section="Writing Practice | Task 1" timeLeft={isPracticeMode ? undefined : tl} isRunning={run} qInfo={idx + 1 + " / " + qs.length} onExit={onExit} />}
       <PageShell narrow>
         <InfoStrip style={{ marginBottom: 20 }}>
-          <b>Directions: </b>{isMobile ? "点击词块放入句子。可能含干扰项。" : "Use the word chunks below to form a grammatically correct sentence. There may be one distractor chunk that does not belong."}
+          <b>Directions: </b>{isMobile ? "点击或拖动词块放入句子，拖回词块区可退回。可能含干扰项。" : "Use the word chunks below to form a grammatically correct sentence. There may be one distractor chunk that does not belong."}
         </InfoStrip>
 
         <SurfaceCard style={{ padding: 20, marginBottom: 20 }}>
           <div style={{ fontSize: 11, color: C.t2, letterSpacing: 1, marginBottom: 8 }}>题目</div>
           <div style={{ fontSize: 15, color: C.t1, marginBottom: 14, lineHeight: 1.5 }}>{q.prompt}</div>
           <div style={{ fontSize: 11, color: C.t2, letterSpacing: 1, marginBottom: 8 }}>作答区</div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, minHeight: 48, alignItems: "center", lineHeight: 1.6 }}>
+          <div data-answer-area="true" style={{ display: "flex", flexWrap: "wrap", gap: 8, minHeight: 48, alignItems: "center", lineHeight: 1.6 }}>
             {Array.from({ length: slots.length + 1 }, (_, i) => i).map((i) => (
               <React.Fragment key={`resp-${i}`}>
                 {givenSlots.filter((gs) => gs.givenIndex === i).map((gs, gi) => (
@@ -356,15 +475,17 @@ export function BuildSentenceTask({
                   <div
                     key={`slot-${i}`}
                     data-testid={`slot-${i}`}
+                    data-slot-index={i}
                     className={slots[i] ? "bs-slot-filled" : undefined}
-                    style={slotStyle(i)}
+                    style={{ ...slotStyle(i), touchAction: isMobile && slots[i] ? "none" : undefined }}
                     draggable={!isMobile && !!slots[i]}
                     onDragStart={!isMobile && slots[i] ? (e) => onDragStartSlot(e, slots[i], i) : undefined}
                     onDragEnd={!isMobile && slots[i] ? onDragEnd : undefined}
                     onDragOver={!isMobile ? (e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; setHoverSlot(i); } : undefined}
                     onDragLeave={!isMobile ? () => setHoverSlot(null) : undefined}
                     onDrop={!isMobile ? (e) => onDropSlot(e, i) : undefined}
-                    onClick={() => slots[i] && handleRemoveChunk(i)}
+                    onTouchStart={isMobile && slots[i] ? (e) => startTouch(e, { from: "slot", chunk: slots[i], slotIndex: i }) : undefined}
+                    onClick={() => { if (suppressClick.current) return; slots[i] && handleRemoveChunk(i); }}
                   >
                     {slots[i] ? formatChunkDisplay(slots[i].text) : i + 1}
                   </div>
@@ -376,6 +497,7 @@ export function BuildSentenceTask({
         </SurfaceCard>
 
         <div
+          data-bank-area="true"
           onDragOver={!isMobile ? (e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; setHoverBank(true); } : undefined}
           onDragLeave={!isMobile ? () => setHoverBank(false) : undefined}
           onDrop={!isMobile ? onDropBank : undefined}
@@ -403,7 +525,8 @@ export function BuildSentenceTask({
                 draggable={!isMobile}
                 onDragStart={!isMobile ? (e) => onDragStartBank(e, chunk) : undefined}
                 onDragEnd={!isMobile ? onDragEnd : undefined}
-                onClick={() => handlePickChunk(chunk)}
+                onTouchStart={isMobile ? (e) => startTouch(e, { from: "bank", chunk }) : undefined}
+                onClick={() => { if (suppressClick.current) return; handlePickChunk(chunk); }}
                 style={{
                   background: isMobile ? "#fff" : "#f8f9fa",
                   color: C.t1,
@@ -415,6 +538,7 @@ export function BuildSentenceTask({
                   cursor: "pointer",
                   fontFamily: FONT,
                   userSelect: "none",
+                  touchAction: isMobile ? "none" : undefined,
                   opacity: dragItem && dragItem.from === "bank" && dragItem.chunk.id === chunk.id ? 0.4 : 1,
                   transition: "transform 0.12s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.15s",
                   animation: justReturned ? "bsReturnPop 0.35s cubic-bezier(0.34,1.56,0.64,1)" : "none",
