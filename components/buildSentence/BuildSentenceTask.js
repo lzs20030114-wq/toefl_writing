@@ -75,15 +75,18 @@ export function BuildSentenceTask({
     onDragEnd,
     onDropSlot,
     onDropBank,
+    isPracticeMode,
   } = useBuildSentenceSession(questions, { persistSession, onComplete, onTimerChange, timeLimitSeconds, practiceMode });
   const exhausted = String(selectionError || "").includes(BANK_EXHAUSTED_ERRORS.BUILD_SENTENCE);
 
   function handleSubmitClick() {
-    const isFinalQuestion = idx >= qs.length - 1;
-    const hasRemainingTime = Number.isFinite(tl) && tl > 0;
-    if (isFinalQuestion && hasRemainingTime) {
-      const ok = confirmEarlySubmit();
-      if (!ok) return;
+    if (!isPracticeMode) {
+      const isFinalQuestion = idx >= qs.length - 1;
+      const hasRemainingTime = Number.isFinite(tl) && tl > 0;
+      if (isFinalQuestion && hasRemainingTime) {
+        const ok = confirmEarlySubmit();
+        if (!ok) return;
+      }
     }
     submit();
   }
@@ -199,9 +202,12 @@ export function BuildSentenceTask({
             <h2 style={{ margin: "0 0 16px", fontSize: 20, color: C.nav }}>Task 1: Build a Sentence</h2>
             <div style={{ fontSize: 14, color: C.t1, lineHeight: 1.8 }}>
               <p>You will be given a set of word chunks. Arrange them to form a grammatically correct sentence.</p>
-              <p>You will have {formatLongDuration(timeLimitSeconds)} to complete 10 questions.</p>
+              {isPracticeMode
+                ? <p>No time limit in Practice mode. Complete {qs.length} questions at your own pace.</p>
+                : <p>You will have {formatLongDuration(timeLimitSeconds)} to complete {qs.length} questions.</p>}
               {practiceMode === PRACTICE_MODE.CHALLENGE && <p>Mode: <b>Challenge</b> (reduced time limit)</p>}
-              <p>The timer starts when you click <b>Start</b>. Your answers will be submitted automatically when time runs out.</p>
+              {isPracticeMode && <p>Mode: <b>Practice</b> (no time limit)</p>}
+              {!isPracticeMode && <p>The timer starts when you click <b>Start</b>. Your answers will be submitted automatically when time runs out.</p>}
             </div>
             <div style={{ marginTop: 24, textAlign: "center" }}><Btn data-testid="build-start" onClick={startTimer}>Start</Btn></div>
           </SurfaceCard>
@@ -244,7 +250,7 @@ export function BuildSentenceTask({
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
-      {!embedded && <TopBar title="Build a Sentence" section="Writing Practice | Task 1" timeLeft={tl} isRunning={run} qInfo={idx + 1 + " / " + qs.length} onExit={onExit} />}
+      {!embedded && <TopBar title="Build a Sentence" section="Writing Practice | Task 1" timeLeft={isPracticeMode ? undefined : tl} isRunning={run} qInfo={idx + 1 + " / " + qs.length} onExit={onExit} />}
       <PageShell narrow>
         <InfoStrip style={{ marginBottom: 20 }}>
           <b>Directions: </b>Use the word chunks below to form a grammatically correct sentence. There may be one distractor chunk that does not belong.

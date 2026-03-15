@@ -44,6 +44,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
   const [logoutHover, setLogoutHover] = useState(false);
 
   const isChallenge = mode === PRACTICE_MODE.CHALLENGE;
+  const isPractice = mode === PRACTICE_MODE.PRACTICE;
 
   useEffect(() => {
     const refresh = () => setSessions(loadHist().sessions || []);
@@ -105,7 +106,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
     }
   }
 
-  useEffect(() => { if (fbOpen) loadFbHistory(); }, [fbOpen]);
+  useEffect(() => { if (fbOpen) loadFbHistory(); }, [fbOpen, userCode]);
 
   async function submitFeedback() {
     const content = String(fbText || "").trim();
@@ -132,7 +133,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
     }
   }
 
-  const querySuffix = isChallenge ? "?mode=challenge" : "";
+  const querySuffix = isChallenge ? "?mode=challenge" : isPractice ? "?mode=practice" : "";
   const mockTotalSeconds = getTaskTimeSeconds("build", mode) + getTaskTimeSeconds("email", mode) + getTaskTimeSeconds("discussion", mode);
   const mockStandardSeconds = STANDARD_TIME_SECONDS.build + STANDARD_TIME_SECONDS.email + STANDARD_TIME_SECONDS.discussion;
   const fadeIn = (ms) => ({ animation: `fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) ${ms}ms both` });
@@ -145,14 +146,14 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
       acc: TASK_ACCENTS[index],
       n: task.n,
       t: task.t,
-      d: task.d,
+      d: isPractice ? "选择任意题目，无时间限制。" : task.d,
       it: task.it,
-      timeLabel: formatMinutesLabel(getTaskTimeSeconds(task.modeKey, mode)),
+      timeLabel: isPractice ? "自选" : formatMinutesLabel(getTaskTimeSeconds(task.modeKey, mode)),
       standardLabel: formatMinutesLabel(STANDARD_TIME_SECONDS[task.modeKey] || 0),
       isMock: false,
       delay: 190 + index * 70,
     })),
-    {
+    ...(!isPractice ? [{
       k: MOCK_TASK.k,
       href: `/${MOCK_TASK.k}${querySuffix}`,
       acc: { color: T.primary, soft: T.primarySoft },
@@ -164,7 +165,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
       standardLabel: formatMinutesLabel(mockStandardSeconds),
       isMock: true,
       delay: 400,
-    },
+    }] : []),
   ];
 
   return (
@@ -210,20 +211,22 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ marginBottom: 16, ...fadeIn(50) }}>
                 <h1 style={{ margin: "0 0 10px", fontSize: 30, fontWeight: 800, color: isChallenge ? CH.t1 : T.t1, letterSpacing: -0.5, lineHeight: 1.2 }}>
-                  {isChallenge ? <>TOEFL iBT 写作 <span style={{ color: CH.accent }}>Challenge Mode</span></> : "TOEFL iBT 写作练习"}
+                  {isChallenge ? <>TOEFL iBT 写作 <span style={{ color: CH.accent }}>Challenge Mode</span></> : isPractice ? <>TOEFL iBT 写作 <span style={{ color: "#6366f1" }}>Practice</span></> : "TOEFL iBT 写作练习"}
                 </h1>
                 <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
                   <p style={{ margin: 0, fontSize: 13, color: isChallenge ? CH.accent : T.t2, fontWeight: isChallenge ? 600 : 400 }}>
-                    {isChallenge ? "在压力下证明你的水平。时间更短，要求更高。" : "提供 ETS 风格计时、AI 评分与三类写作任务练习。"}
+                    {isChallenge ? "在压力下证明你的水平。时间更短，要求更高。" : isPractice ? "自选题目，不限时间，自由练习。" : "提供 ETS 风格计时、AI 评分与三类写作任务练习。"}
                   </p>
                   <div style={{ display: "inline-flex", gap: 4, flexShrink: 0, background: isChallenge ? "rgba(255,255,255,0.05)" : T.card, border: `1px solid ${isChallenge ? "rgba(255,30,30,0.3)" : T.bdr}`, borderRadius: 999, padding: 4, boxShadow: T.shadow }}>
                     {[
                       { value: PRACTICE_MODE.STANDARD, label: "Standard" },
                       { value: PRACTICE_MODE.CHALLENGE, label: "Challenge" },
+                      { value: PRACTICE_MODE.PRACTICE, label: "Practice" },
                     ].map((option) => {
                       const selected = mode === option.value;
                       const challengeOption = option.value === PRACTICE_MODE.CHALLENGE;
-                      return <button key={option.value} onClick={() => switchMode(option.value)} style={{ border: "none", background: selected ? (challengeOption ? "rgba(255,30,30,0.18)" : "#fff") : "transparent", color: selected ? (challengeOption ? CH.accent : T.t1) : (isChallenge ? CH.t2 : T.t2), borderRadius: 999, padding: "5px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer", transition: "all .15s", boxShadow: selected && !challengeOption ? "0 1px 4px rgba(0,0,0,0.1)" : "none", fontFamily: HOME_FONT }}>{option.label}</button>;
+                      const practiceOption = option.value === PRACTICE_MODE.PRACTICE;
+                      return <button key={option.value} onClick={() => switchMode(option.value)} style={{ border: "none", background: selected ? (challengeOption ? "rgba(255,30,30,0.18)" : practiceOption ? "rgba(99,102,241,0.12)" : "#fff") : "transparent", color: selected ? (challengeOption ? CH.accent : practiceOption ? "#6366f1" : T.t1) : (isChallenge ? CH.t2 : T.t2), borderRadius: 999, padding: "5px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer", transition: "all .15s", boxShadow: selected && !challengeOption && !practiceOption ? "0 1px 4px rgba(0,0,0,0.1)" : "none", fontFamily: HOME_FONT }}>{option.label}</button>;
                     })}
                   </div>
                 </div>

@@ -46,8 +46,10 @@ function normalizeDiscussionPrompt(input, fallbackId = "gen-discussion") {
       .slice(0, 2)
     : [];
   if (!professorName || !professorText || students.length < 2) return null;
+  const course = String(input?.course || "").trim() || undefined;
   return {
     id: String(input.id || fallbackId),
+    ...(course && { course }),
     professor: { name: professorName, text: professorText },
     students,
   };
@@ -109,6 +111,7 @@ export function WritingTask({
   initialPracticeRootId = "",
   initialPracticeAttempt = 1,
 }) {
+  const isPracticeMode = practiceMode === PRACTICE_MODE.PRACTICE;
   const uiReportLanguage = normalizeReportLanguage(reportLanguage || readReportLanguage());
   const dataRaw = type === "email" ? EM_DATA : AD_DATA;
   const data = useMemo(
@@ -121,7 +124,7 @@ export function WritingTask({
     [dataRaw, type]
   );
   const defaultLimit = type === "email" ? 420 : 600;
-  const limit = Number.isFinite(timeLimitSeconds) && timeLimitSeconds > 0 ? timeLimitSeconds : defaultLimit;
+  const limit = isPracticeMode ? 0 : (Number.isFinite(timeLimitSeconds) && timeLimitSeconds > 0 ? timeLimitSeconds : defaultLimit);
   const minW = type === "email" ? 80 : 100;
   const storageKey = type === "email" ? DONE_STORAGE_KEYS.EMAIL : DONE_STORAGE_KEYS.DISCUSSION;
 
@@ -201,10 +204,12 @@ export function WritingTask({
     setScoreError("");
     setPhase("writing");
     setRun(true);
-    tr.current = setInterval(() => setTl(p => {
-      if (p <= 1) { clearInterval(tr.current); setRun(false); return 0; }
-      return p - 1;
-    }), 1000);
+    if (!isPracticeMode) {
+      tr.current = setInterval(() => setTl(p => {
+        if (p <= 1) { clearInterval(tr.current); setRun(false); return 0; }
+        return p - 1;
+      }), 1000);
+    }
   }
 
   async function runScoringAttempt() {
@@ -266,6 +271,7 @@ export function WritingTask({
   }, [intro, autoStartOnMount, phase]);
 
   function shouldConfirmEarlySubmit() {
+    if (isPracticeMode) return false;
     return phaseRef.current === "writing" && Number.isFinite(tl) && tl > 0;
   }
 
@@ -311,7 +317,7 @@ export function WritingTask({
 
   async function retryScore() { await runScoringAttempt(); }
 
-  useEffect(() => { if (tl === 0 && phaseRef.current === "writing") { submitRef.current({ skipConfirm: true }); } }, [tl]);
+  useEffect(() => { if (!isPracticeMode && tl === 0 && phaseRef.current === "writing") { submitRef.current({ skipConfirm: true }); } }, [tl]);
 
   useEffect(() => {
     function handleKey(e) { if (e.ctrlKey && e.key === "Enter" && phaseRef.current === "writing") { e.preventDefault(); submitRef.current(); } }
@@ -356,7 +362,9 @@ export function WritingTask({
   const introDescLine1 = type === "email"
     ? "You will read some information and use the information to write an email."
     : "Read the professor's prompt and two student responses, then write your own contribution.";
-  const introDescLine2 = type === "email"
+  const introDescLine2 = isPracticeMode
+    ? "No time limit in Practice mode."
+    : type === "email"
     ? "You will have 7 minutes to write the email."
     : "You will have 10 minutes to complete your response.";
 
@@ -365,7 +373,7 @@ export function WritingTask({
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
-      {!embedded && <TopBar title={type === "email" ? "Email Writing" : "Academic Discussion Writing"} section={type === "email" ? "Writing Practice | Task 2" : "Writing Practice | Task 3"} timeLeft={phase !== "ready" ? tl : undefined} isRunning={run} onExit={onExit} />}
+      {!embedded && <TopBar title={type === "email" ? "Email Writing" : "Academic Discussion Writing"} section={type === "email" ? "Writing Practice | Task 2" : "Writing Practice | Task 3"} timeLeft={isPracticeMode ? undefined : (phase !== "ready" ? tl : undefined)} isRunning={run} onExit={onExit} />}
 
       {phase === "done" && fb ? (
         <WritingFeedbackPanel
@@ -404,6 +412,7 @@ export function WritingTask({
                   </div>
                   <div style={{ fontSize: 13, color: C.t2, lineHeight: 1.7 }}>
                     {practiceMode === PRACTICE_MODE.CHALLENGE && <div>Mode: <b>Challenge</b> (reduced time limit)</div>}
+                    {isPracticeMode && <div>Mode: <b>Practice</b> (no time limit)</div>}
                   </div>
                   <div style={{ marginTop: 18 }}>
                     <Btn
@@ -417,8 +426,9 @@ export function WritingTask({
               ) : (
                 <>
                   <InfoStrip style={{ marginBottom: 20 }}>
-                    <b>Directions: </b>{type === "email" ? `Write an email addressing all 3 goals. ${formatMinutesLabel(limit)}. Aim for 80–120 words.` : `Read the discussion and write your response. ${formatMinutesLabel(limit)}. Aim for 100+ words.`}
+                    <b>Directions: </b>{type === "email" ? `Write an email addressing all 3 goals.${isPracticeMode ? "" : ` ${formatMinutesLabel(limit)}.`} Aim for 80–120 words.` : `Read the discussion and write your response.${isPracticeMode ? "" : ` ${formatMinutesLabel(limit)}.`} Aim for 100+ words.`}
                     {practiceMode === PRACTICE_MODE.CHALLENGE && <span> Challenge mode active — time limit is reduced.</span>}
+                    {isPracticeMode && <span> Practice mode — no time limit.</span>}
                   </InfoStrip>
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
                     <WritingPromptPanel type={type} pd={pd} />

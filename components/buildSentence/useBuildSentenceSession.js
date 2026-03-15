@@ -14,7 +14,8 @@ export function useBuildSentenceSession(questions, options = {}) {
   const persistSession = options.persistSession !== false;
   const onComplete = typeof options.onComplete === "function" ? options.onComplete : null;
   const onTimerChange = typeof options.onTimerChange === "function" ? options.onTimerChange : null;
-  const timeLimitSeconds = Number.isFinite(options.timeLimitSeconds) && options.timeLimitSeconds > 0 ? options.timeLimitSeconds : 410;
+  const isPracticeMode = options.practiceMode === "practice";
+  const timeLimitSeconds = isPracticeMode ? 0 : (Number.isFinite(options.timeLimitSeconds) && options.timeLimitSeconds > 0 ? options.timeLimitSeconds : 410);
   const practiceMode = options.practiceMode || "standard";
   const initialBuildState = (() => {
     try {
@@ -84,15 +85,17 @@ export function useBuildSentenceSession(questions, options = {}) {
     }
     setPhase("active");
     setRun(true);
-    tr.current = setInterval(() => setTl((p) => {
-      if (p <= 1) {
-        clearInterval(tr.current);
-        setRun(false);
-        autoSubmitRef.current = true;
-        return 0;
-      }
-      return p - 1;
-    }), 1000);
+    if (!isPracticeMode) {
+      tr.current = setInterval(() => setTl((p) => {
+        if (p <= 1) {
+          clearInterval(tr.current);
+          setRun(false);
+          autoSubmitRef.current = true;
+          return 0;
+        }
+        return p - 1;
+      }), 1000);
+    }
   }
 
   useEffect(() => { resultsRef.current = results; }, [results]);
@@ -142,6 +145,7 @@ export function useBuildSentenceSession(questions, options = {}) {
   }
 
   useEffect(() => {
+    if (isPracticeMode) return;
     if (tl === 0 && autoSubmitRef.current && phase === "active") {
       autoSubmitRef.current = false;
       const curSlots = slotsRef.current;
@@ -299,6 +303,7 @@ export function useBuildSentenceSession(questions, options = {}) {
     run,
     toast,
     setToast,
+    isPracticeMode,
     dragItem,
     hoverSlot,
     hoverBank,
