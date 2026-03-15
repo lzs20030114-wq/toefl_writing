@@ -1,4 +1,4 @@
-import { iapJsonError } from "../../../../lib/iap/errors";
+import { IapError, iapJsonError } from "../../../../lib/iap/errors";
 import { handleWebhook } from "../../../../lib/iap/service";
 import { buildMockWebhookPayload, signMockWebhookPayload } from "../../../../lib/iap/providers/mockProvider";
 
