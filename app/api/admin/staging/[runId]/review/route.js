@@ -23,7 +23,7 @@ function runReview(data) {
   // ── Check 1: ask/report/respond 带非空 prompt_context ────────────────────
   const contextViolations = allQ
     .filter((q) =>
-      ["ask", "report", "respond"].includes(q.prompt_task_kind) &&
+      ["ask", "report", "respond", "yesno", "statement"].includes(q.prompt_task_kind) &&
       String(q.prompt_context || "").trim() !== ""
     )
     .map((q) => ({

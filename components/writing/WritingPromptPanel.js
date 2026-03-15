@@ -8,6 +8,7 @@ export function WritingPromptPanel({ type, pd }) {
   const professorText = String(pd?.professor?.text || "");
   const students = Array.isArray(pd?.students) ? pd.students : [];
   const professorInitial = professorName.trim() ? professorName.trim().slice(0, 1).toUpperCase() : "P";
+  const course = pd?.course ? String(pd.course) : "";
 
   return (
     <SurfaceCard style={{ overflow: "hidden" }}>
@@ -31,6 +32,16 @@ export function WritingPromptPanel({ type, pd }) {
         </div>
       ) : (
         <div>
+          {/* TOEFL instruction block */}
+          <div style={{ padding: "14px 20px", borderBottom: "1px solid " + C.bdr, fontSize: 12.5, color: C.t2, lineHeight: 1.7 }}>
+            <p style={{ margin: "0 0 6px" }}>Your professor is teaching a class on <b style={{ color: C.t1 }}>{course || "social studies"}</b>. Write a post responding to the professor's question.</p>
+            <p style={{ margin: "0 0 4px" }}>In your response, you should</p>
+            <ul style={{ margin: "0 0 4px", paddingLeft: 20 }}>
+              <li>express and support your personal opinion</li>
+              <li>make a contribution to the discussion in your own words</li>
+            </ul>
+            <p style={{ margin: 0 }}>An effective response will contain at least 100 words.</p>
+          </div>
           <div style={{ padding: "16px 20px", borderBottom: "1px solid " + C.bdr }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
               <div style={{ width: 32, height: 32, borderRadius: "50%", background: C.nav, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700 }}>

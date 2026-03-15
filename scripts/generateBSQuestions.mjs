@@ -1540,8 +1540,8 @@ Pattern D (short sentence ≤8 words, prefilled=[]):
   "has_distractor": boolean,
   "answer_type": "negation" | "3rd-reporting" | "1st-embedded" | "interrogative" | "direct" | "relative",
   "prompt_context": "" (MUST be empty string for every item)",
-  "prompt_task_kind": "ask" | "report" | "respond",
-  "prompt_task_text": "ONE sentence only — a self-contained question with scene embedded, ending with ?",
+  "prompt_task_kind": "ask" | "report" | "respond" | "yesno" | "statement",
+  "prompt_task_text": "ONE sentence only — ending with ? for ask/report/respond/yesno, or . for statement",
   "prompt": "optional; if provided, it must exactly match prompt_context + prompt_task_text rendered by the app",
   "answer": "full correct sentence (7-13 words)",
   "chunks": ["draggable1", "draggable2", "...and distractor if has_distractor=true"],
@@ -1554,40 +1554,48 @@ Pattern D (short sentence ≤8 words, prefilled=[]):
 
 ## PROMPT CONTRACT - CRITICAL:
 
-### TPO AUTHENTIC STYLE — READ THIS FIRST:
-Real TOEFL Build-a-Sentence prompts are almost always a SINGLE DIRECT QUESTION.
-The scene/context is embedded naturally inside the question itself — there is NO separate context sentence.
+### TPO AUTHENTIC STYLE — 4 PROMPT TYPES:
+Real TOEFL Build-a-Sentence prompts use 4 types. ALL use single-sentence style with prompt_context = "".
 
-≥70% of your items MUST use the TPO single-question style:
-  prompt_context = ""   (empty string — no separate background sentence)
-  prompt_task_text = a self-contained question that tells the student everything they need
+#### TYPE 1: ask/report (target: 3 out of 10)
+  "What did X ask/say/mention/want to know/wonder/discover/find out?"
+  The answer is indirect/embedded speech.
+  TPO: "What did the job recruiter ask you?" → "She wanted to know what I do in my current position."
+       "What did Julian ask about your trip to the mountains?" → "He wanted to know what I liked best about it."
 
-TPO EXAMPLES (single-question style, authentic):
-  ✓ "What did the yoga instructor ask about the schedule change?"
-  ✓ "What did your friend want to know about the camping trip?"
-  ✓ "What did the librarian ask about the overdue book?"
-  ✓ "What does the professor ask the student about the assignment?"
-  ✓ "Did you enjoy the pottery class you attended last week?"
-  ✓ "What did the travel agent ask about your vacation plans?"
+#### TYPE 2: respond (target: 3 out of 10)
+  "How do you respond?" / "What do you say?" / "What does X tell Y?"
+  The answer is your reply to a situation.
+  TPO: "How do you respond to the shop owner?" → "I have not received the package that was supposed to arrive."
+       "Where did you find your phone?" → "I retraced all of the steps that I took last night."
 
-For "ask", "report", and "respond" types: always embed the context INTO the question.
-WRONG ✗ (two-part format — NOT TPO style):
-  prompt_context = "The yoga instructor has a question about the schedule."
-  prompt_task_text = "What does she ask?"
-RIGHT ✓ (single-question style — TPO authentic):
-  prompt_context = ""
-  prompt_task_text = "What did the yoga instructor ask about the schedule change?"
+#### TYPE 3: yesno (target: 2 out of 10)
+  Starts with auxiliary verb: Did/Do/Does/Are/Is/Can/Could/Would/Will/Have/Has/Were/Was
+  The answer is a response to the yes/no question (usually a statement).
+  TPO: "Did you enjoy the workshop yesterday?" → "The content was not interesting to me."
+       "Are you going to the gym today?" → "I do not go to the gym on weekends."
+       "Can you recommend a good book to read?" → "My sister can suggest one that might interest you."
+       "Did you finish reading the book I lent you?" → "I have not had time to read it yet."
+
+#### TYPE 4: statement (target: 2 out of 10)
+  A declarative sentence ending with a period. The answer is a follow-up question or comment.
+  TPO: "Matthew loved the book you recommended to him." → "What did he tell you was his favorite part?"
+       "What's taking you so long to get started?" → "We just found out where the materials are being stored."
+
+### DISTRIBUTION — CRITICAL:
+  You MUST produce at least 1 yesno and 1 statement item. Target: ask/report 3 + respond 3 + yesno 2 + statement 2.
 
 ### PROMPT FIELDS:
 - "prompt_context" = ALWAYS empty string ""
-- "prompt_task_kind" = ask | report | respond
-- "prompt_task_text" = the EXPLICIT task/question shown to the user (required, never empty)
-- The visible prompt is: prompt_context + " " + prompt_task_text (or just prompt_task_text if context is "")
+- "prompt_task_kind" = ask | report | respond | yesno | statement
+- "prompt_task_text" = the EXPLICIT prompt shown to the user (required, never empty)
+- The visible prompt is just prompt_task_text (prompt_context is always "")
 
-prompt_task_text MUST match one of these validated patterns (auto-rejected otherwise):
-  - ask/report: "What did [person] ask/want/say/mention/find out/discover/learn/wonder/need to know?"
-               OR "What does [person] ask about [topic]?" — context embedded in the question ✓
-  - respond:    "How do you respond?" / "What do you say?" / "What does [person] tell [person]?"
+prompt_task_text validation rules (auto-rejected otherwise):
+  - ask/report: starts with "What did/does [person] ask/want/say/mention/find out/discover/learn/wonder?"
+  - respond:    starts with "How do you respond?" / "What do you say?" / "Where/Why/When did you...?"
+  - yesno:      starts with auxiliary verb (Did/Do/Does/Are/Is/Can/Could/Would/Will/Have/Has/Were/Was)
+  - statement:  a declarative sentence ending with a period — any natural subject-verb-object sentence
 
 ${rejectFeedback}
 ## FINAL CHECKLIST 锟?VERIFY BEFORE OUTPUT:
@@ -1601,12 +1609,11 @@ ${rejectFeedback}
 7. HARD DIFFICULTY: Hard items must be justified by advanced grammar signals, not by extra words. Valid hard signals include passive/passive-progressive, past perfect, relative/contact clause, whom, comparative/superlative, or multi-layer embedding.
 8. UNIQUE SOLUTION: Reject any item in your own internal check if the distractor could still fit grammatically or if more than one chunk order seems plausible.
 9. INTERROGATIVE QUALITY: For interrogative items, use a short natural polite frame, vary the opener across the batch, and keep the embedded clause in declarative order. Do not mass-produce one stock opener.
-10. PROMPT STYLE: ≥70% of items must use single-question style (prompt_context=""). For "ask"/"report"/"respond" types, embed the scene context inside the question text itself. Two-part prompts (separate context sentence + short question) will be flagged.
-    prompt_task_text MUST be a SINGLE sentence — no period or question mark in the middle.
+10. PROMPT STYLE: ALL items use prompt_context="". prompt_task_text MUST be a SINGLE sentence.
     WRONG ✗: prompt_task_text = "The student needed help with her paper. What did she ask the professor?"
     RIGHT ✓: prompt_task_text = "What did the student ask the professor about her paper?"
-    prompt_task_text MUST start with a validated cue pattern — see PROMPT CONTRACT above.
-    Use ONLY these task kinds: ask, report, respond. "tell" and "explain" are not allowed.
+    Use ONLY these task kinds: ask, report, respond, yesno, statement. "tell" and "explain" are not allowed.
+11. PROMPT DISTRIBUTION: You MUST include at least 1 yesno and 1 statement item. Target: ask/report 3 + respond 3 + yesno 2 + statement 2.
 
 Output JSON array only. No markdown.`.trim();
 }
@@ -2302,9 +2309,9 @@ function buildPromptReformatterPrompt(questions) {
     prompt_task_kind: q.prompt_task_kind || "",
     prompt_task_text: q.prompt_task_text || "",
   }));
-  return `You are a TOEFL prompt style editor. Your ONLY job: rewrite prompts so that every "ask"/"report"/"respond" item has a SINGLE self-contained question sentence.
+  return `You are a TOEFL prompt style editor. Your ONLY job: rewrite prompts so that every item has a SINGLE self-contained sentence (question for ask/report/respond/yesno, declarative for statement).
 
-## TWO CASES TO FIX (ask/report/respond only):
+## TWO CASES TO FIX:
 
 ### CASE 1: Separate context + short question
 prompt_context is non-empty AND prompt_task_text is a short question → merge them.
@@ -2369,7 +2376,7 @@ Return ONLY a JSON array. No markdown.`.trim();
 async function reformatPrompts(questions) {
   const toReformat = questions.filter(q => {
     const kind = (q.prompt_task_kind || "").toLowerCase();
-    if (!["ask", "report", "respond"].includes(kind)) return false;
+    if (!["ask", "report", "respond", "yesno", "statement"].includes(kind)) return false;
     const ctx = (q.prompt_context || "").trim();
     if (ctx) return true; // Case 1: has separate context sentence
     // Case 2: context is empty but prompt_task_text contains multiple sentences
@@ -2742,7 +2749,7 @@ function hardValidateQuestion(q) {
   // prompt_task_text must be a single sentence for ask/report/respond types.
   // Background context must be embedded inside the question, not prepended as a separate sentence.
   const taskKind = normalizeText(q.prompt_task_kind).toLowerCase();
-  if (["ask", "report", "respond"].includes(taskKind)) {
+  if (["ask", "report", "respond", "yesno", "statement"].includes(taskKind)) {
     const taskText = normalizeText(q.prompt_task_text);
     const sentences = taskText.split(/(?<=[.!?])\s+/).filter(Boolean);
     if (sentences.length >= 2) {
@@ -3777,7 +3784,7 @@ function postGenerationRuleCheck(sets) {
     for (const q of set.questions || []) {
       // Fix 1: contextViolations — ask/report/respond with non-empty prompt_context
       if (
-        ["ask", "report", "respond"].includes(q.prompt_task_kind) &&
+        ["ask", "report", "respond", "yesno", "statement"].includes(q.prompt_task_kind) &&
         String(q.prompt_context || "").trim() !== ""
       ) {
         q.prompt_context = "";
@@ -3910,7 +3917,7 @@ async function main() {
   // Filter out legacy questions with multi-sentence prompts so they are regenerated fresh.
   function hasLegacyMultiSentencePrompt(q) {
     const kind = (q.prompt_task_kind || "").toLowerCase();
-    if (!["ask", "report", "respond"].includes(kind)) return false;
+    if (!["ask", "report", "respond", "yesno", "statement"].includes(kind)) return false;
     const ctx = (q.prompt_context || "").trim();
     if (ctx) return true; // separate context sentence — old two-part format
     const task = (q.prompt_task_text || "").trim();

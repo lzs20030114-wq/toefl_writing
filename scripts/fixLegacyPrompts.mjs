@@ -36,7 +36,7 @@ function loadEnv() {
 
 function hasLegacyPrompt(q) {
   const kind = (q.prompt_task_kind || "").toLowerCase();
-  if (!["ask", "report", "respond"].includes(kind)) return false;
+  if (!["ask", "report", "respond", "yesno", "statement"].includes(kind)) return false;
   if ((q.prompt_context || "").trim()) return true;
   const sentences = (q.prompt_task_text || "").trim().split(/(?<=[.!?])\s+/).filter(Boolean);
   return sentences.length >= 2;

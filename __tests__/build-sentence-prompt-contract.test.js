@@ -77,7 +77,8 @@ describe("build sentence prompt contract", () => {
     expect(hasExplicitTaskInLegacyPrompt("A visitor is asking the museum curator a question.")).toBe(false);
     expect(hasExplicitTaskInLegacyPrompt("A visitor is speaking with the museum curator. What do they ask?")).toBe(true);
     expect(hasExplicitTaskInLegacyPrompt("You found a great bookstore. Tell your friend about it.")).toBe(true);
-    expect(hasExplicitTaskInLegacyPrompt("Where did Emma go?")).toBe(false);
+    expect(hasExplicitTaskInLegacyPrompt("Where did Emma go?")).toBe(true); // now matches respond Wh-pattern
+    expect(hasExplicitTaskInLegacyPrompt("Emma's book was on the table.")).toBe(false);
   });
 
   test("prompt surface classifier spots statement-only prompts", () => {
@@ -106,7 +107,7 @@ describe("build sentence prompt contract", () => {
       {
         prompt_context: "A student is asking the librarian something.",
         prompt_task_kind: "ask",
-        prompt_task_text: "Where did Emma go?",
+        prompt_task_text: "The library closes at nine.",
       },
       { requireStructured: true }
     );
