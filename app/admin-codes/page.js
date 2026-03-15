@@ -18,6 +18,7 @@ export default function AdminCodesPage() {
   const [ready, setReady] = useState(false);
   const [stats, setStats] = useState({ available: 0, issued: 0, revoked: 0, total: 0 });
   const [rows, setRows] = useState([]);
+  const [usageByCode, setUsageByCode] = useState({});
   const [statusFilter, setStatusFilter] = useState("");
   const [count, setCount] = useState(10);
   const [issueCode, setIssueCode] = useState("");
@@ -79,10 +80,11 @@ export default function AdminCodesPage() {
     setBusy(true);
     setMsg("");
     try {
-      const q = statusFilter ? `?status=${encodeURIComponent(statusFilter)}&limit=200` : "?limit=200";
+      const q = statusFilter ? `?status=${encodeURIComponent(statusFilter)}&limit=200&includeUsage=1` : "?limit=200&includeUsage=1";
       const body = await callAdminApi(`/api/admin/codes${q}`, { method: "GET" });
       setRows(Array.isArray(body.codes) ? body.codes : []);
       setStats(body.stats || { available: 0, issued: 0, revoked: 0, total: 0 });
+      setUsageByCode(body.usageByCode || {});
       setSelectedByCode({});
     } catch (e) {
       setMsg(String(e.message || e));
@@ -397,8 +399,8 @@ export default function AdminCodesPage() {
                   <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>状态</th>
                   <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>发放对象</th>
                   <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>发放时间</th>
-                  <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>到期时间</th>
-                  <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>创建时间</th>
+                  <th style={{ textAlign: "center", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>答题量</th>
+                  <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>最近活跃</th>
                   <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0", minWidth: 160 }}>备注</th>
                   <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0", minWidth: 220 }}>操作</th>
                 </tr>
@@ -418,8 +420,33 @@ export default function AdminCodesPage() {
                     <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{r.status || "-"}</td>
                     <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{r.issued_to || "-"}</td>
                     <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{fmtDate(r.issued_at)}</td>
-                    <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{fmtDate(r.expires_at)}</td>
-                    <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{fmtDate(r.created_at)}</td>
+                    <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", textAlign: "center" }}>
+                      {(() => {
+                        const u = usageByCode[r.code];
+                        if (!u || u.answered.total === 0) return <span style={{ color: C.t2 }}>-</span>;
+                        return (
+                          <div style={{ display: "flex", gap: 4, justifyContent: "center", flexWrap: "wrap" }}>
+                            {u.answered.build > 0 && <span style={{ background: "#eff6ff", color: "#1d4ed8", borderRadius: 4, padding: "1px 5px", fontSize: 11, fontWeight: 600 }} title="连词成句">句{u.answered.build}</span>}
+                            {u.answered.email > 0 && <span style={{ background: "#fef3c7", color: "#92400e", borderRadius: 4, padding: "1px 5px", fontSize: 11, fontWeight: 600 }} title="邮件写作">邮{u.answered.email}</span>}
+                            {u.answered.discussion > 0 && <span style={{ background: "#ecfdf5", color: "#065f46", borderRadius: 4, padding: "1px 5px", fontSize: 11, fontWeight: 600 }} title="学术讨论">讨{u.answered.discussion}</span>}
+                          </div>
+                        );
+                      })()}
+                    </td>
+                    <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>
+                      {(() => {
+                        const u = usageByCode[r.code];
+                        if (!u?.lastActiveAt) return <span style={{ color: C.t2 }}>-</span>;
+                        const d = new Date(u.lastActiveAt);
+                        const diff = Date.now() - d.getTime();
+                        const mins = Math.floor(diff / 60000);
+                        if (mins < 60) return <span style={{ color: C.blue, fontWeight: 600 }}>{mins < 1 ? "刚刚" : `${mins}分钟前`}</span>;
+                        const hours = Math.floor(mins / 60);
+                        if (hours < 24) return <span style={{ color: C.blue }}>{hours}小时前</span>;
+                        const days = Math.floor(hours / 24);
+                        return <span style={{ color: days < 7 ? C.t1 : C.t2 }}>{days}天前</span>;
+                      })()}
+                    </td>
                     <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>
                       {editingNote === r.code ? (
                         <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
