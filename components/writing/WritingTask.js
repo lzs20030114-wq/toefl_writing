@@ -22,13 +22,14 @@ function normalizeEmailPrompt(input, fallbackId = "gen-email") {
     ? input.goals.map((g) => String(g || "").trim()).filter(Boolean).slice(0, 3)
     : [];
   if (!scenario || !direction || goals.length < 3) return null;
+  const subject = String(input.subject || "").trim();
   return {
     id: String(input.id || fallbackId),
     to: String(input.to || "Professor").trim() || "Professor",
-    from: String(input.from || "You").trim() || "You",
     scenario,
     direction,
     goals,
+    ...(subject && { subject }),
   };
 }
 

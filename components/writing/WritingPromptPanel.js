@@ -17,17 +17,15 @@ export function WritingPromptPanel({ type, pd }) {
       </div>
       {type === "email" ? (
         <div style={{ padding: 20 }}>
-          <div style={{ fontSize: 12, color: C.t2, marginBottom: 6 }}>
-            <b>To:</b> {pd?.to || "Professor"} &nbsp;|&nbsp; <b>From:</b> {pd?.from || "Student"}
-          </div>
-          <p style={{ fontSize: 14, color: C.t1, lineHeight: 1.7, margin: "12px 0" }}>{pd?.scenario || ""}</p>
+          <p style={{ fontSize: 14, color: C.t1, lineHeight: 1.7, margin: "0 0 12px" }}>{pd?.scenario || ""}</p>
           <div style={{ borderTop: "1px solid " + C.bdr, paddingTop: 12, marginTop: 12 }}>
             <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8 }}>{pd?.direction || "Complete the email writing task."}</div>
-            {emailGoals.map((g, i) => (
-              <div key={i} style={{ fontSize: 13, paddingLeft: 16, marginBottom: 4 }}>
-                {i + 1}. {g}
-              </div>
-            ))}
+            <ul style={{ margin: "0 0 12px", paddingLeft: 22 }}>
+              {emailGoals.map((g, i) => (
+                <li key={i} style={{ fontSize: 13, marginBottom: 4, lineHeight: 1.5 }}>{g}</li>
+              ))}
+            </ul>
+            <div style={{ fontSize: 13, color: C.t2, fontStyle: "italic" }}>Write as much as you can and in complete sentences.</div>
           </div>
         </div>
       ) : (

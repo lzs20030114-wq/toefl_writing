@@ -195,9 +195,9 @@ function EmailCard({ item }) {
             <span style={{ fontSize: 12, color: C.t3 }}>
               To: <strong style={{ color: C.t2 }}>{item.to}</strong>
             </span>
-            <span style={{ fontSize: 12, color: C.t3 }}>
-              From: <strong style={{ color: C.t2 }}>{item.from}</strong>
-            </span>
+            {item.subject && <span style={{ fontSize: 12, color: C.t3 }}>
+              Subject: <strong style={{ color: C.t2 }}>{item.subject}</strong>
+            </span>}
           </div>
           <div style={{ fontSize: 14, color: C.t2, lineHeight: 1.55 }}>
             {open
@@ -1355,7 +1355,7 @@ function BulkImportModal({ defaultType, token, onClose, onSuccess }) {
                     {formType === "email" && (
                       <>
                         <div style={{ fontSize: 13, color: C.t2 }}>
-                          To: <strong>{q.to}</strong>  ·  From: <strong>{q.from}</strong>
+                          To: <strong>{q.to}</strong>{q.subject ? <>  ·  Subject: <strong>{q.subject}</strong></> : null}
                         </div>
                         <div style={{ fontSize: 12, color: C.t3 }}>
                           {q.scenario?.slice(0, 80)}{q.scenario?.length > 80 ? "…" : ""}

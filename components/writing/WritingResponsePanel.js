@@ -115,6 +115,13 @@ export function WritingResponsePanel({
               <span style={{ color: w < minW ? C.orange : C.green }}>{w} words{w < minW ? ` (${minW - w} more needed)` : ""}</span>
             </div>
 
+            {type === "email" && (
+              <div style={{ padding: "10px 16px", borderBottom: "1px solid " + C.bdrSubtle, fontSize: 13, color: C.t1, lineHeight: 1.8 }}>
+                <div><b>To:</b> {pd?.to || ""}</div>
+                {pd?.subject && <div><b>Subject:</b> {pd.subject}</div>}
+              </div>
+            )}
+
             <ExamToolbar taRef={taRef} onTextChange={onTextChange} disabled={!isEditable} historyRef={historyRef} prevTextRef={prevTextRef} />
 
             {imeTipVisible && (
