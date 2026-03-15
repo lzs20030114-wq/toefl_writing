@@ -332,14 +332,16 @@ function SessionRow({ entry, expanded, onToggle, onDelete, typeAvgs, isActive, o
   const s = entry.session;
   const m = TYPE[s.type] || TYPE.email;
   const isWriting = s.type === "email" || s.type === "discussion";
-  let scoreStr, pct;
+  let scoreStr, pct, bandStr;
   if (s.type === "bs") {
     const t = Number(s.total || 0), c = Number(s.correct || 0);
     scoreStr = t > 0 ? `${c}/${t}` : "--";
     pct = t > 0 ? c / t : 0;
+    bandStr = Number.isFinite(s.band) ? s.band.toFixed(1) : null;
   } else {
     scoreStr = Number.isFinite(s.score) ? `${s.score}/5` : "--";
     pct = Number.isFinite(s.score) ? s.score / 5 : 0;
+    bandStr = null;
   }
   const scoreColor = pct >= 0.8 ? P.primary : pct >= 0.6 ? P.amber : P.rose;
   const weaknesses = getWeaknesses(s);
@@ -363,6 +365,7 @@ function SessionRow({ entry, expanded, onToggle, onDelete, typeAvgs, isActive, o
           <div style={{ fontSize: 11, color: P.textDim, marginTop: 1 }}>{formatLocalDateTime(s.date)}</div>
         </div>
         <span style={{ fontVariantNumeric: "tabular-nums", fontSize: 14, fontWeight: 720, color: scoreColor }}>{scoreStr}</span>
+        {bandStr && <span style={{ fontSize: 11, fontWeight: 700, padding: "2px 7px", borderRadius: 999, background: `${scoreColor}18`, color: scoreColor }}>Band {bandStr}</span>}
         <span
           role="button"
           tabIndex={0}

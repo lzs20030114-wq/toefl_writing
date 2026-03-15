@@ -114,11 +114,15 @@ export function useBuildSentenceSession(questions, options = {}) {
       addDoneIds(DONE_STORAGE_KEYS.BUILD_SENTENCE, [...doneSetIds]);
     }
 
+    const correctCount = nr.filter((r) => r.isCorrect).length;
+    const pct = nr.length > 0 ? correctCount / nr.length : 0;
+    const band = pct >= 1 ? 6 : pct >= 0.9 ? 5.5 : pct >= 0.8 ? 5 : pct >= 0.7 ? 4.5 : pct >= 0.6 ? 4 : pct >= 0.5 ? 3.5 : pct >= 0.4 ? 3 : pct >= 0.3 ? 2.5 : pct >= 0.2 ? 2 : pct >= 0.1 ? 1.5 : 1;
     const payload = {
       type: "bs",
       mode: practiceMode,
-      correct: nr.filter((r) => r.isCorrect).length,
+      correct: correctCount,
       total: nr.length,
+      band,
       errors: nr.filter((r) => !r.isCorrect).flatMap((r) => r.q.grammar_points || []),
       details: nr.map((r) => ({
         prompt: r.q.prompt,

@@ -100,14 +100,40 @@ export function BuildSentenceTask({
       });
     const te = Object.entries(ge).sort((a, b) => b[1] - a[1]);
 
+    // Band score based on TOEFL iBT 2026 writing section 1-6 scale
+    const bsBand = (() => {
+      const total = results.length || 1;
+      const pct = ok / total;
+      if (pct >= 1.0) return 6;
+      if (pct >= 0.9) return 5.5;
+      if (pct >= 0.8) return 5;
+      if (pct >= 0.7) return 4.5;
+      if (pct >= 0.6) return 4;
+      if (pct >= 0.5) return 3.5;
+      if (pct >= 0.4) return 3;
+      if (pct >= 0.3) return 2.5;
+      if (pct >= 0.2) return 2;
+      if (pct >= 0.1) return 1.5;
+      return 1;
+    })();
+    const bandColor = bsBand >= 5 ? "#34d399" : bsBand >= 4 ? "#fbbf24" : "#f87171";
+
     return (
       <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
         {toast && <Toast message={toast} onClose={() => setToast(null)} />}
         {!embedded && <TopBar title="Build a Sentence — Results" section="Writing Practice" onExit={onExit} />}
         <PageShell narrow>
           <SurfaceCard style={{ background: C.nav, color: "#fff", padding: 24, textAlign: "center", marginBottom: 20 }}>
-            <div style={{ fontSize: 48, fontWeight: 800 }}>{ok}/{results.length}</div>
-            <div style={{ fontSize: 14, opacity: 0.7 }}>答对题数</div>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-end", gap: 16 }}>
+              <div>
+                <div style={{ fontSize: 48, fontWeight: 800 }}>{ok}/{results.length}</div>
+                <div style={{ fontSize: 14, opacity: 0.7 }}>答对题数</div>
+              </div>
+              <div style={{ borderLeft: "1px solid rgba(255,255,255,0.2)", paddingLeft: 16 }}>
+                <div style={{ fontSize: 36, fontWeight: 800, color: bandColor }}>{bsBand.toFixed(1)}</div>
+                <div style={{ fontSize: 12, opacity: 0.7 }}>Band</div>
+              </div>
+            </div>
           </SurfaceCard>
           {te.length > 0 && (
             <SurfaceCard style={{ padding: 20, marginBottom: 16 }}>
