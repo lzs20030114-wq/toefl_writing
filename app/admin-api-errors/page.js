@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { C, FONT } from "../../components/shared/ui";
+import AdminLayout from "../../components/admin/AdminLayout";
 
 const TOKEN_KEY = "toefl-admin-token";
 
@@ -104,13 +105,12 @@ export default function AdminApiErrorsPage() {
   );
 
   return (
-    <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT, padding: 20 }}>
+    <AdminLayout title="API 日志">
       <div style={{ maxWidth: 1180, margin: "0 auto", display: "grid", gap: 12 }}>
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 16 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 20, fontWeight: 800, color: C.nav }}>API 失效反馈后台</div>
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <Link href="/admin" style={{ color: C.t2, textDecoration: "none", fontSize: 13 }}>返回总后台</Link>
               <Link href="/admin-codes" style={{ color: C.blue, textDecoration: "none", fontSize: 13 }}>去登录码后台</Link>
             </div>
           </div>
@@ -194,6 +194,6 @@ export default function AdminApiErrorsPage() {
 
         {msg ? <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 8, padding: 10, fontSize: 12, color: "#9a3412" }}>{msg}</div> : null}
       </div>
-    </div>
+    </AdminLayout>
   );
 }

@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useEffect, useState, useCallback } from "react";
 import { C, FONT } from "../../components/shared/ui";
+import AdminLayout from "../../components/admin/AdminLayout";
 
 const TOKEN_KEY = "toefl-admin-token";
 
@@ -1560,7 +1561,7 @@ export default function AdminQuestionsPage() {
 
   // ── render ──
   return (
-    <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT, padding: "20px 16px" }}>
+    <AdminLayout title="题库管理">
       {toast && <SuccessToast message={toast} onClose={() => setToast(null)} />}
       {showAddModal && (
         <AddQuestionModal
@@ -1637,9 +1638,6 @@ export default function AdminQuestionsPage() {
                 </button>
               </>
             )}
-            <Link href="/admin" style={{ fontSize: 13, color: C.blue, fontWeight: 600, textDecoration: "none" }}>
-              ← 返回后台首页
-            </Link>
           </div>
         </div>
 
@@ -1816,6 +1814,6 @@ export default function AdminQuestionsPage() {
           </div>
         )}
       </div>
-    </div>
+    </AdminLayout>
   );
 }

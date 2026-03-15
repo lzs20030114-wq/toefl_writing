@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { C, FONT } from "../../components/shared/ui";
+import AdminLayout from "../../components/admin/AdminLayout";
 
 const TOKEN_KEY = "toefl-admin-token";
 
@@ -115,13 +116,12 @@ export default function AdminFeedbackPage() {
   }, [ready, token]);
 
   return (
-    <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT, padding: 20 }}>
+    <AdminLayout title="用户反馈">
       <div style={{ maxWidth: 1200, margin: "0 auto", display: "grid", gap: 12 }}>
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 16 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 20, fontWeight: 800, color: C.nav }}>用户反馈后台</div>
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <Link href="/admin" style={{ color: C.t2, textDecoration: "none", fontSize: 13 }}>返回总后台</Link>
               <Link href="/admin-activity" style={{ color: C.blue, textDecoration: "none", fontSize: 13 }}>去答题情况</Link>
             </div>
           </div>
@@ -221,6 +221,6 @@ export default function AdminFeedbackPage() {
         </div>
         {msg ? <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 8, padding: 10, fontSize: 12, color: "#9a3412" }}>{msg}</div> : null}
       </div>
-    </div>
+    </AdminLayout>
   );
 }

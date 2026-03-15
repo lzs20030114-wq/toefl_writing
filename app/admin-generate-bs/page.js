@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { C, FONT } from "../../components/shared/ui";
+import AdminLayout from "../../components/admin/AdminLayout";
 
 const TOKEN_KEY = "toefl-admin-token";
 const POLL_INTERVAL = 5000;
@@ -682,12 +683,8 @@ export default function AdminGenerateBSPage() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT, padding: 20 }}>
+    <AdminLayout title="自动生题">
       <div style={{ maxWidth: 820, margin: "0 auto" }}>
-
-        <div style={{ marginBottom: 14 }}>
-          <Link href="/admin" style={{ color: C.blue, fontSize: 13, textDecoration: "none", fontWeight: 700 }}>← 返回管理后台</Link>
-        </div>
 
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 16, marginBottom: 14 }}>
           <div style={{ fontSize: 22, fontWeight: 800, color: C.nav, marginBottom: 4 }}>自动生成题目</div>
@@ -745,6 +742,6 @@ export default function AdminGenerateBSPage() {
           <RunCard key={run.id} run={run} token={token} onDelete={(id) => setRuns(prev => prev.filter(r => r.id !== id))} />
         ))}
       </div>
-    </div>
+    </AdminLayout>
   );
 }

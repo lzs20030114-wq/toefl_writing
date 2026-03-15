@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { C, FONT } from "../../components/shared/ui";
+import AdminLayout from "../../components/admin/AdminLayout";
 
 const TOKEN_KEY = "toefl-admin-token";
 
@@ -168,13 +169,12 @@ export default function AdminActivityPage() {
   const rowsView = useMemo(() => rows.slice(0, 200), [rows]);
 
   return (
-    <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT, padding: 20 }}>
+    <AdminLayout title="答题情况">
       <div style={{ maxWidth: 1240, margin: "0 auto", display: "grid", gap: 14 }}>
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 16 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 20, fontWeight: 800, color: C.nav }}>用户答题情况</div>
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <Link href="/admin" style={{ color: C.t2, textDecoration: "none", fontSize: 13 }}>返回总后台</Link>
               <Link href="/admin-codes" style={{ color: C.blue, textDecoration: "none", fontSize: 13 }}>去登录码管理</Link>
             </div>
           </div>
@@ -339,6 +339,6 @@ export default function AdminActivityPage() {
           </div>
         ) : null}
       </div>
-    </div>
+    </AdminLayout>
   );
 }

@@ -400,7 +400,17 @@ export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, type
               <span>{isExpanded ? "收起详情" : "查看详情"}</span>
               <ChevronIcon open={isExpanded} size={10} />
             </button>
-            <button onClick={() => onDelete?.(sourceIndex)} title="删除记录" style={{ background: "none", border: "none", color: C.red, cursor: "pointer", fontSize: 15, padding: "2px 6px", lineHeight: 1, fontWeight: 700, opacity: 0.75 }}>×</button>
+            <button
+              onClick={() => onDelete?.(sourceIndex)}
+              title="删除记录"
+              style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 24, height: 24, borderRadius: 6, background: "none", border: "none", color: C.t3, cursor: "pointer", transition: "all 0.15s" }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = "#dc2626"; e.currentTarget.style.background = "#dc262612"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = C.t3; e.currentTarget.style.background = "transparent"; }}
+            >
+              <svg viewBox="0 0 16 16" width={12} height={12} fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M2.5 4.5h11M5.5 4.5V3a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v1.5M6.5 7v4.5M9.5 7v4.5M3.5 4.5l.5 8.5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1l.5-8.5" />
+              </svg>
+            </button>
           </div>
         </div>
       ) : null}

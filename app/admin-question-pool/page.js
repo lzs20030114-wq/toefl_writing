@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { C, FONT } from "../../components/shared/ui";
+import AdminLayout from "../../components/admin/AdminLayout";
 
 const TOKEN_KEY = "toefl-admin-token";
 
@@ -220,13 +221,8 @@ export default function AdminQuestionPoolPage() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT, padding: 20 }}>
+    <AdminLayout title="题池管理">
       <div style={{ maxWidth: 900, margin: "0 auto" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
-          <Link href="/admin" style={{ color: C.blue, fontSize: 13, textDecoration: "none", fontWeight: 700 }}>
-            ← 返回管理后台
-          </Link>
-        </div>
 
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 16, marginBottom: 16 }}>
           <div style={{ fontSize: 22, fontWeight: 800, color: C.nav, marginBottom: 4 }}>题目池</div>
@@ -262,6 +258,6 @@ export default function AdminQuestionPoolPage() {
           <PoolEntryCard key={entry.id} entry={entry} token={token} onRemoved={handleRemoved} />
         ))}
       </div>
-    </div>
+    </AdminLayout>
   );
 }

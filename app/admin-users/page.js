@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { C, FONT } from "../../components/shared/ui";
+import AdminLayout from "../../components/admin/AdminLayout";
 
 const TOKEN_KEY = "toefl-admin-token";
 
@@ -200,22 +201,11 @@ export default function AdminUsersPage() {
 
   if (!ready) return null;
 
-  if (!token) {
-    return (
-      <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT, padding: 40, textAlign: "center" }}>
-        <div style={{ fontSize: 16, color: C.t2 }}>请先在管理后台首页输入 Admin Token</div>
-        <Link href="/admin" style={{ color: C.blue, fontSize: 14 }}>← 返回后台</Link>
-      </div>
-    );
-  }
-
   return (
-    <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT, padding: 20 }}>
+    <AdminLayout title="用户管理">
       <div style={{ maxWidth: 1100, margin: "0 auto" }}>
         {/* Header */}
         <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
-          <Link href="/admin" style={{ color: C.blue, fontSize: 13, textDecoration: "none" }}>← 后台</Link>
-          <div style={{ fontSize: 22, fontWeight: 800, color: C.nav }}>用户管理</div>
           <button
             onClick={fetchData}
             disabled={busy}
@@ -400,6 +390,6 @@ export default function AdminUsersPage() {
           </>
         )}
       </div>
-    </div>
+    </AdminLayout>
   );
 }

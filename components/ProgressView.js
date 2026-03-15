@@ -366,21 +366,21 @@ function SessionRow({ entry, expanded, onToggle, onDelete, typeAvgs, isActive, o
         </div>
         <span style={{ fontVariantNumeric: "tabular-nums", fontSize: 14, fontWeight: 720, color: scoreColor }}>{scoreStr}</span>
         {bandStr && <span style={{ fontSize: 11, fontWeight: 700, padding: "2px 7px", borderRadius: 999, background: `${scoreColor}18`, color: scoreColor }}>Band {bandStr}</span>}
+        <ChevronIcon open={isWriting ? isActive : expanded} color={P.textDim} />
         <span
           role="button"
           tabIndex={0}
-          title="删除"
+          title="删除记录"
           onClick={(e) => { e.stopPropagation(); if (onDelete) onDelete(entry.sourceIndex); }}
           onKeyDown={(e) => { if (e.key === "Enter") { e.stopPropagation(); if (onDelete) onDelete(entry.sourceIndex); } }}
-          style={{ fontSize: 14, color: P.textDim, cursor: "pointer", padding: "2px 4px", borderRadius: 4, transition: "color 0.15s" }}
-          onMouseEnter={(e) => { e.currentTarget.style.color = "#dc2626"; }}
-          onMouseLeave={(e) => { e.currentTarget.style.color = P.textDim; }}
+          style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 26, height: 26, borderRadius: 6, color: P.textDim, cursor: "pointer", transition: "all 0.15s", marginLeft: 2, flexShrink: 0 }}
+          onMouseEnter={(e) => { e.currentTarget.style.color = "#dc2626"; e.currentTarget.style.background = "#dc262612"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.color = P.textDim; e.currentTarget.style.background = "transparent"; }}
         >
-          &#x2715;
+          <svg viewBox="0 0 16 16" width={13} height={13} fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M2.5 4.5h11M5.5 4.5V3a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v1.5M6.5 7v4.5M9.5 7v4.5M3.5 4.5l.5 8.5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1l.5-8.5" />
+          </svg>
         </span>
-        {isWriting
-          ? <span style={{ fontSize: 18, fontWeight: 400, color: isActive ? m.color : P.border, transition: "color 0.2s, transform 0.2s", display: "inline-block", transform: isActive ? "rotate(45deg)" : "none" }}>+</span>
-          : <ChevronIcon open={expanded} color={P.textDim} />}
       </button>
       {!isWriting && expanded && (
         <div style={{ padding: "0 10px 12px", animation: "expandDown 0.35s cubic-bezier(0.16,1,0.3,1)" }}>
