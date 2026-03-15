@@ -20,6 +20,7 @@ const { callDeepSeekViaCurl, formatDeepSeekError } = require("../lib/ai/deepseek
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROMPTS_PATH = path.join(__dirname, "..", "data", "academicWriting", "prompts.json");
+const REFERENCE_PATH = path.join(__dirname, "..", "data", "academicWriting", "real_tpo_reference.json");
 
 // Import generation prompt builders
 const {
@@ -34,6 +35,7 @@ const {
 const TARGET_COUNT = parseInt(process.argv[2], 10) || 10;
 const MAX_RETRIES = 3;
 const QUESTION_TYPES = ["binary", "open", "which", "statement"];
+const FEW_SHOT_COUNT = 4; // number of real examples to inject per generation
 
 // ── Load existing data ──────────────────────────────────────────────
 function loadExisting() {
@@ -60,9 +62,22 @@ function pickStudentNames(rng) {
   return [shuffled[0], shuffled[1]];
 }
 
-// ── Course distribution (match real TOEFL proportions) ─────────────
+// ── Course distribution (broad coverage, weighted by tier) ──────────
+const COURSE_WEIGHTS = {
+  // Tier 1 — core social sciences
+  sociology: 8, "political science": 7, business: 7, education: 7, psychology: 7,
+  // Tier 2 — frequently tested
+  "history and culture": 5, "environmental science": 5, "social studies": 5, "public policy": 5,
+  // Tier 3 — regularly appear
+  economics: 4, philosophy: 4, communication: 4, "urban planning": 3,
+  "art and aesthetics": 3, "public health": 3, "law and justice": 3,
+  // Tier 4 — less frequent but valid
+  "technology and media": 2, "computer science": 2, "international relations": 2,
+  linguistics: 2, "agriculture and food": 2, "science and innovation": 2,
+  "sports and recreation": 2, ethics: 2,
+};
+
 function pickCourseForBatch(existing, batchIdx, batchSize) {
-  // Count existing per course
   const counts = {};
   for (const c of DISC_COURSE_LIST) counts[c] = 0;
   for (const q of existing) {
@@ -70,20 +85,11 @@ function pickCourseForBatch(existing, batchIdx, batchSize) {
     if (counts[c] !== undefined) counts[c]++;
   }
 
-  // Weighted distribution matching real TOEFL proportions
-  const weights = {
-    sociology: 11, "political science": 9, business: 8,
-    "history and culture": 6, "social studies": 5, education: 5,
-    "environmental science": 5, psychology: 5, "public policy": 3,
-    "public health": 1, "computer science": 1, "technology and media": 1,
-  };
-
-  // Pick courses that are underrepresented relative to target proportion
-  const totalWeight = Object.values(weights).reduce((a, b) => a + b, 0);
+  const totalWeight = Object.values(COURSE_WEIGHTS).reduce((a, b) => a + b, 0);
   const totalExisting = existing.length;
 
   const candidates = DISC_COURSE_LIST.map(c => {
-    const targetProp = (weights[c] || 1) / totalWeight;
+    const targetProp = (COURSE_WEIGHTS[c] || 2) / totalWeight;
     const currentProp = totalExisting > 0 ? (counts[c] || 0) / totalExisting : 0;
     const deficit = targetProp - currentProp;
     return { course: c, deficit };
@@ -91,9 +97,35 @@ function pickCourseForBatch(existing, batchIdx, batchSize) {
 
   candidates.sort((a, b) => b.deficit - a.deficit);
 
-  // Pick from top 4 candidates with some randomness
-  const topN = candidates.slice(0, 4);
+  // Pick from top 6 candidates with some randomness (wider pool for diversity)
+  const topN = candidates.slice(0, 6);
   return topN[batchIdx % topN.length].course;
+}
+
+// ── Few-shot example sampling ────────────────────────────────────────
+function sampleFewShot(allQuestions, course, count = FEW_SHOT_COUNT) {
+  // Prefer examples from the same course (1-2) + different courses (rest)
+  const sameCourse = allQuestions.filter(q => q.course === course);
+  const diffCourse = allQuestions.filter(q => q.course !== course);
+
+  const picked = [];
+  // 1-2 from same course if available
+  const sameShuffled = sameCourse.sort(() => Math.random() - 0.5);
+  const sameCount = Math.min(Math.floor(count / 2), sameShuffled.length);
+  for (let i = 0; i < sameCount; i++) picked.push(sameShuffled[i]);
+
+  // Fill rest from different courses
+  const diffShuffled = diffCourse.sort(() => Math.random() - 0.5);
+  for (let i = 0; picked.length < count && i < diffShuffled.length; i++) {
+    picked.push(diffShuffled[i]);
+  }
+
+  // If not enough, fill from same course
+  for (let i = sameCount; picked.length < count && i < sameShuffled.length; i++) {
+    picked.push(sameShuffled[i]);
+  }
+
+  return picked.sort(() => Math.random() - 0.5);
 }
 
 // ── Existing topic extraction (for dedup) ───────────────────────────
@@ -116,7 +148,7 @@ function validateQuestion(q) {
 
   const pt = q.professor?.text || "";
   if (pt.length < 150) errors.push(`professor text too short (${pt.length})`);
-  if (pt.length > 800) errors.push(`professor text too long (${pt.length})`);
+  if (pt.length > 580) errors.push(`professor text too long (${pt.length})`);
   if (!pt.includes("?")) errors.push("professor text has no question");
 
   if (!Array.isArray(q.students) || q.students.length !== 2) {
@@ -127,8 +159,8 @@ function validateQuestion(q) {
       if (!s?.name) errors.push(`student ${i + 1} missing name`);
       if (!s?.text) errors.push(`student ${i + 1} missing text`);
       const sl = (s?.text || "").length;
-      if (sl < 150) errors.push(`student ${i + 1} text too short (${sl})`);
-      if (sl > 800) errors.push(`student ${i + 1} text too long (${sl})`);
+      if (sl < 200) errors.push(`student ${i + 1} text too short (${sl})`);
+      if (sl > 560) errors.push(`student ${i + 1} text too long (${sl})`);
     }
   }
 
@@ -136,8 +168,8 @@ function validateQuestion(q) {
 }
 
 // ── Call DeepSeek ───────────────────────────────────────────────────
-async function generateOne({ course, studentNames, questionType, existingTopics, openingStyle, s2ReferencesS1 }) {
-  const systemPrompt = buildDiscGenSystemPrompt();
+async function generateOne({ course, studentNames, questionType, existingTopics, openingStyle, s2ReferencesS1, fewShotExamples }) {
+  const systemPrompt = buildDiscGenSystemPrompt(fewShotExamples || []);
   const userPrompt = buildDiscGenUserPrompt({ course, existingTopics, studentNames, questionType, openingStyle, s2ReferencesS1 });
 
   const result = await callDeepSeekViaCurl({
@@ -149,8 +181,8 @@ async function generateOne({ course, studentNames, questionType, existingTopics,
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt },
       ],
-      temperature: 0.9,
-      max_tokens: 2000,
+      temperature: 0.85,
+      max_tokens: 2500,
       response_format: { type: "json_object" },
     },
   });
@@ -186,6 +218,15 @@ async function main() {
   console.log(`\n🎯 Generating ${TARGET_COUNT} Academic Discussion questions...\n`);
 
   let existing = loadExisting();
+
+  // Load real TPO questions for few-shot examples (separate file)
+  let realQuestions = [];
+  try {
+    const raw = fs.readFileSync(REFERENCE_PATH, "utf-8").replace(/^\uFEFF/, "");
+    realQuestions = JSON.parse(raw);
+  } catch { /* no reference file — few-shot disabled */ }
+  console.log(`  📚 ${realQuestions.length} real TOEFL questions available for few-shot examples`);
+
   const existingIds = new Set(existing.map(q => q.id));
   let nextIdNum = 1;
   for (const q of existing) {
@@ -208,7 +249,9 @@ async function main() {
     let question = null;
     for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
       try {
-        const raw = await generateOne({ course, studentNames, questionType, existingTopics, openingStyle, s2ReferencesS1 });
+        // Sample few-shot examples from real questions (different each generation)
+        const fewShotExamples = sampleFewShot(realQuestions, course);
+        const raw = await generateOne({ course, studentNames, questionType, existingTopics, openingStyle, s2ReferencesS1, fewShotExamples });
 
         // Ensure course field, normalized to lowercase
         raw.course = (raw.course || course).toLowerCase();
