@@ -32,7 +32,7 @@ function SectionCard({ title, href, children }) {
         <span style={{ fontSize: 13, fontWeight: 700, color: C.nav }}>{title}</span>
         {href && (
           <Link href={href} style={{ fontSize: 12, color: C.blue, textDecoration: "none", fontWeight: 600 }}>
-            Details &rarr;
+            详情 &rarr;
           </Link>
         )}
       </div>
@@ -102,9 +102,9 @@ export default function AdminHomePage() {
         {/* Header */}
         <div style={{ marginBottom: 24, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div>
-            <div style={{ fontSize: 22, fontWeight: 800, color: C.nav }}>Dashboard</div>
+            <div style={{ fontSize: 22, fontWeight: 800, color: C.nav }}>数据总览</div>
             <div style={{ fontSize: 12, color: C.t3, marginTop: 2 }}>
-              {loading ? "Loading..." : error ? error : `Last updated ${new Date().toLocaleTimeString()}`}
+              {loading ? "加载中..." : error ? error : `最后更新 ${new Date().toLocaleTimeString()}`}
             </div>
           </div>
           <button
@@ -116,7 +116,7 @@ export default function AdminHomePage() {
               cursor: loading ? "wait" : "pointer",
             }}
           >
-            {loading ? "..." : "Refresh"}
+            {loading ? "..." : "刷新"}
           </button>
         </div>
 
@@ -131,11 +131,11 @@ export default function AdminHomePage() {
             </>
           ) : (
             <>
-              <StatCard value={u?.total} label="Total Users" color={C.nav} sub={u?.growth ? `+${u.growth.lastDay} today` : undefined} />
-              <StatCard value={u?.active?.lastDay} label="Active (24h)" color={C.blue} />
-              <StatCard value={u?.tiers?.pro} label="Pro Users" color="#16a34a" sub={u?.tiers ? `${u.tiers.free} free` : undefined} />
-              <StatCard value={codeStats?.available} label="Codes Available" color={codeStats?.available > 5 ? C.blue : C.orange} sub={codeStats ? `${codeStats.issued} issued` : undefined} />
-              <StatCard value={u?.growth?.lastWeek} label="New (7d)" color={C.blue} />
+              <StatCard value={u?.total} label="总用户" color={C.nav} sub={u?.growth ? `今日 +${u.growth.lastDay}` : undefined} />
+              <StatCard value={u?.active?.lastDay} label="24h 活跃" color={C.blue} />
+              <StatCard value={u?.tiers?.pro} label="Pro 用户" color="#16a34a" sub={u?.tiers ? `${u.tiers.free} 免费` : undefined} />
+              <StatCard value={codeStats?.available} label="可用登录码" color={codeStats?.available > 5 ? C.blue : C.orange} sub={codeStats ? `已发放 ${codeStats.issued}` : undefined} />
+              <StatCard value={u?.growth?.lastWeek} label="7天新增" color={C.blue} />
             </>
           )}
         </div>
@@ -143,55 +143,55 @@ export default function AdminHomePage() {
         {/* Detail sections */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 14 }}>
           {/* User growth */}
-          <SectionCard title="User Growth" href="/admin-users">
+          <SectionCard title="用户增长" href="/admin-users">
             {loading ? <Skeleton height={100} /> : u ? (
               <div>
-                <MetricRow label="Last hour" value={`+${u.growth?.lastHour ?? 0}`} />
-                <MetricRow label="Last 24h" value={`+${u.growth?.lastDay ?? 0}`} />
-                <MetricRow label="Last 7d" value={`+${u.growth?.lastWeek ?? 0}`} />
-                <MetricRow label="Last 30d" value={`+${u.growth?.lastMonth ?? 0}`} />
+                <MetricRow label="最近1小时" value={`+${u.growth?.lastHour ?? 0}`} />
+                <MetricRow label="最近24小时" value={`+${u.growth?.lastDay ?? 0}`} />
+                <MetricRow label="最近7天" value={`+${u.growth?.lastWeek ?? 0}`} />
+                <MetricRow label="最近30天" value={`+${u.growth?.lastMonth ?? 0}`} />
               </div>
-            ) : <div style={{ color: C.t3, fontSize: 13 }}>No data</div>}
+            ) : <div style={{ color: C.t3, fontSize: 13 }}>暂无数据</div>}
           </SectionCard>
 
           {/* Auth & Activity */}
-          <SectionCard title="Active Users" href="/admin-activity">
+          <SectionCard title="活跃用户" href="/admin-activity">
             {loading ? <Skeleton height={100} /> : u ? (
               <div>
-                <MetricRow label="Active 24h" value={u.active?.lastDay} color={C.blue} />
-                <MetricRow label="Active 7d" value={u.active?.lastWeek} />
-                <MetricRow label="Active 30d" value={u.active?.lastMonth} />
+                <MetricRow label="24h 活跃" value={u.active?.lastDay} color={C.blue} />
+                <MetricRow label="7天活跃" value={u.active?.lastWeek} />
+                <MetricRow label="30天活跃" value={u.active?.lastMonth} />
                 <div style={{ borderTop: "1px solid " + C.bdr, marginTop: 8, paddingTop: 8 }}>
-                  <MetricRow label="Auth: code" value={u.authMethods?.code} />
-                  <MetricRow label="Auth: email" value={u.authMethods?.email} />
+                  <MetricRow label="登录码注册" value={u.authMethods?.code} />
+                  <MetricRow label="邮箱注册" value={u.authMethods?.email} />
                 </div>
               </div>
-            ) : <div style={{ color: C.t3, fontSize: 13 }}>No data</div>}
+            ) : <div style={{ color: C.t3, fontSize: 13 }}>暂无数据</div>}
           </SectionCard>
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
           {/* Code management */}
-          <SectionCard title="Access Codes" href="/admin-codes">
+          <SectionCard title="登录码" href="/admin-codes">
             {loading ? <Skeleton height={80} /> : codeStats ? (
               <div>
-                <MetricRow label="Total generated" value={codeStats.total} />
-                <MetricRow label="Available" value={codeStats.available} color={codeStats.available > 5 ? C.blue : C.orange} />
-                <MetricRow label="Issued" value={codeStats.issued} />
-                <MetricRow label="Revoked" value={codeStats.revoked} color={codeStats.revoked > 0 ? C.red : C.t1} />
+                <MetricRow label="总生成" value={codeStats.total} />
+                <MetricRow label="可发放" value={codeStats.available} color={codeStats.available > 5 ? C.blue : C.orange} />
+                <MetricRow label="已发放" value={codeStats.issued} />
+                <MetricRow label="已回收" value={codeStats.revoked} color={codeStats.revoked > 0 ? C.red : C.t1} />
               </div>
-            ) : <div style={{ color: C.t3, fontSize: 13 }}>No data</div>}
+            ) : <div style={{ color: C.t3, fontSize: 13 }}>暂无数据</div>}
           </SectionCard>
 
           {/* Question bank */}
-          <SectionCard title="Question Bank" href="/admin-questions">
+          <SectionCard title="题库" href="/admin-questions">
             {loading ? <Skeleton height={80} /> : q ? (
               <div>
-                <MetricRow label="Academic Discussion" value={`${Array.isArray(q.academic) ? q.academic.length : 0} questions`} />
-                <MetricRow label="Email Writing" value={`${Array.isArray(q.email) ? q.email.length : 0} questions`} />
-                <MetricRow label="Build Sentence" value={bsSets != null ? `${bsSets} sets / ${bsTotal} questions` : "--"} />
+                <MetricRow label="学术讨论" value={`${Array.isArray(q.academic) ? q.academic.length : 0} 题`} />
+                <MetricRow label="邮件写作" value={`${Array.isArray(q.email) ? q.email.length : 0} 题`} />
+                <MetricRow label="连词成句" value={bsSets != null ? `${bsSets} 套 / ${bsTotal} 题` : "--"} />
               </div>
-            ) : <div style={{ color: C.t3, fontSize: 13 }}>No data</div>}
+            ) : <div style={{ color: C.t3, fontSize: 13 }}>暂无数据</div>}
           </SectionCard>
         </div>
       </div>

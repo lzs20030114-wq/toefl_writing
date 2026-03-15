@@ -48,7 +48,7 @@ function Sidebar() {
       {/* Branding */}
       <div style={{ padding: "20px 18px 16px", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
         <div style={{ fontSize: 15, fontWeight: 800, color: "#fff", letterSpacing: -0.3 }}>TreePractice</div>
-        <div style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", marginTop: 2 }}>Admin Dashboard</div>
+        <div style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", marginTop: 2 }}>管理后台</div>
       </div>
 
       {/* Nav items */}
@@ -97,8 +97,8 @@ function TokenGate({ token, setToken }) {
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
           </svg>
         </div>
-        <div style={{ fontSize: 16, fontWeight: 700, color: C.t1, marginBottom: 6 }}>Admin Authentication</div>
-        <div style={{ fontSize: 13, color: C.t2, marginBottom: 20 }}>Please enter admin token to continue</div>
+        <div style={{ fontSize: 16, fontWeight: 700, color: C.t1, marginBottom: 6 }}>管理员认证</div>
+        <div style={{ fontSize: 13, color: C.t2, marginBottom: 20 }}>请输入管理员口令以继续</div>
         <div style={{ display: "flex", gap: 8 }}>
           <input
             type="password"
@@ -119,7 +119,7 @@ function TokenGate({ token, setToken }) {
               background: C.nav, color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer",
             }}
           >
-            Enter
+            确认
           </button>
         </div>
       </div>
