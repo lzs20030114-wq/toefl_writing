@@ -23,35 +23,6 @@ export const C = {
 };
 export const FONT = "'Plus Jakarta Sans','Noto Sans SC','Segoe UI',sans-serif";
 
-/* ── 全局响应式 CSS（由 PageShell 注入 <style>，所有页面生效） ── */
-const RESPONSIVE_CSS = `
-@media (max-width: 768px) {
-  .tp-topbar { padding: 0 12px !important; }
-  .tp-topbar-mid { display: none !important; }
-  .tp-shell-inner { padding: 16px 12px 32px !important; max-width: 100% !important; }
-  .tp-writing-grid { grid-template-columns: 1fr !important; }
-  .tp-fb-split { flex-direction: column !important; }
-  .tp-fb-left { width: 100% !important; height: auto !important; max-height: 50vh !important;
-    border-right: none !important; border-bottom: 1px solid #ebf0ed !important; }
-  .tp-fb-right { height: auto !important; min-height: 50vh !important; }
-  .tp-fb-header { padding: 10px 14px !important; flex-wrap: wrap !important; gap: 8px !important; }
-  .tp-exam-grid { grid-template-columns: 1fr !important; }
-  .tp-progress-layout { flex-direction: column !important; }
-  .tp-progress-sidebar { width: 100% !important; position: static !important; }
-  .tp-stat-grid { grid-template-columns: repeat(2, 1fr) !important; }
-  .tp-stats-overview { flex-direction: column !important; }
-  .tp-stats-left { width: 100% !important; border-right: none !important;
-    border-bottom: 1px solid #ebf0ed !important; }
-}
-@media (max-width: 480px) {
-  .tp-topbar { height: 48px !important; }
-  .tp-topbar .tp-brand-name { display: none !important; }
-  .tp-topbar .tp-brand-sep { display: none !important; }
-  .tp-shell-inner { padding: 10px 8px 20px !important; }
-  .tp-stat-grid { grid-template-columns: 1fr !important; }
-  .tp-fb-left { max-height: 40vh !important; padding: 12px !important; }
-}
-`;
 
 export function Btn({ children, onClick, disabled, variant, ...props }) {
   const colors = {
@@ -141,7 +112,6 @@ export function TopBar({ title, section, timeLeft, isRunning, qInfo, onExit }) {
 export function PageShell({ children, narrow = false }) {
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
-      <style dangerouslySetInnerHTML={{ __html: RESPONSIVE_CSS }} />
       <div className="tp-shell-inner" style={{ maxWidth: narrow ? 920 : 1100, margin: "0 auto", padding: "24px 20px 48px" }}>
         {children}
       </div>
@@ -149,14 +119,14 @@ export function PageShell({ children, narrow = false }) {
   );
 }
 
-export function SurfaceCard({ children, style, tone = "default" }) {
+export function SurfaceCard({ children, style, tone = "default", className }) {
   const toneStyle = tone === "soft"
     ? { background: C.ltB, borderColor: "#d1fae5" }
     : tone === "warn"
       ? { background: C.softAmber, borderColor: "#fde68a" }
       : { background: C.card, borderColor: C.bdr };
   return (
-    <div style={{ background: toneStyle.background, border: "1px solid " + toneStyle.borderColor, borderRadius: 14, boxShadow: C.shadow, ...style }}>
+    <div className={className} style={{ background: toneStyle.background, border: "1px solid " + toneStyle.borderColor, borderRadius: 14, boxShadow: C.shadow, ...style }}>
       {children}
     </div>
   );

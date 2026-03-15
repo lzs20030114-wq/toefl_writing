@@ -222,6 +222,7 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
+        className="tp-modal-body"
         style={{ width: "100%", maxWidth: 440, background: "#fff", border: "1px solid " + C.bdr, borderRadius: 14, padding: "28px 24px 24px", boxShadow: "0 20px 60px rgba(0,0,0,0.15)" }}
       >
         {/* ── Header ── */}

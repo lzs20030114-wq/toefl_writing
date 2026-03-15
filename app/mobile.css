@@ -1,0 +1,184 @@
+/* ═══════════════════════════════════════════════════════════
+   TreePractice — 全局移动端响应式样式
+   所有规则使用 !important 覆盖 inline style
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Tablet (≤ 768px) ────────────────────────────────────── */
+@media (max-width: 768px) {
+
+  /* ── TopBar（练习页顶栏）── */
+  .tp-topbar {
+    padding: 0 12px !important;
+  }
+  .tp-topbar-mid {
+    display: none !important;
+  }
+
+  /* ── PageShell（练习页外壳）── */
+  .tp-shell-inner {
+    padding: 16px 12px 32px !important;
+    max-width: 100% !important;
+  }
+
+  /* ── 首页导航栏 ── */
+  .home-nav {
+    padding: 0 14px !important;
+  }
+  .home-nav-ai {
+    display: none !important;
+  }
+
+  /* ── 首页布局 ── */
+  .home-shell {
+    padding: 16px 12px 48px !important;
+  }
+  .home-layout {
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+  .home-sidebar {
+    width: 100% !important;
+    min-width: 0 !important;
+    position: static !important;
+    top: auto !important;
+    align-self: stretch !important;
+  }
+  .home-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ── 写作任务：双栏 → 单栏 ── */
+  .tp-writing-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ── 写作反馈：水平分屏 → 垂直堆叠 ── */
+  .tp-fb-split {
+    flex-direction: column !important;
+  }
+  .tp-fb-left {
+    width: 100% !important;
+    height: auto !important;
+    max-height: 50vh !important;
+    border-right: none !important;
+    border-bottom: 1px solid #ebf0ed !important;
+  }
+  .tp-fb-right {
+    height: auto !important;
+    min-height: 50vh !important;
+  }
+  .tp-fb-header {
+    padding: 10px 14px !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  /* ── 模考：双栏 → 单栏 ── */
+  .tp-exam-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ── 进度页：侧边栏 → 堆叠 ── */
+  .tp-progress-layout {
+    flex-direction: column !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+  .tp-progress-sidebar {
+    width: 100% !important;
+    position: static !important;
+  }
+  .tp-stat-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .tp-stats-overview {
+    flex-direction: column !important;
+  }
+  .tp-stats-left {
+    width: 100% !important;
+    border-right: none !important;
+    border-bottom: 1px solid #ebf0ed !important;
+  }
+}
+
+/* ── Phone (≤ 480px) ─────────────────────────────────────── */
+@media (max-width: 480px) {
+
+  /* ── TopBar 更紧凑 ── */
+  .tp-topbar {
+    height: 48px !important;
+  }
+  .tp-topbar .tp-brand-name {
+    display: none !important;
+  }
+  .tp-topbar .tp-brand-sep {
+    display: none !important;
+  }
+
+  /* ── PageShell 最小内边距 ── */
+  .tp-shell-inner {
+    padding: 10px 8px 20px !important;
+  }
+
+  /* ── 首页导航 ── */
+  .home-nav {
+    padding: 0 10px !important;
+    height: 46px !important;
+  }
+
+  /* ── 首页布局 ── */
+  .home-shell {
+    padding: 12px 8px 32px !important;
+  }
+  .home-layout {
+    gap: 12px !important;
+  }
+  .home-sidebar {
+    gap: 8px !important;
+  }
+  .home-grid {
+    gap: 8px !important;
+  }
+
+  /* ── 首页标题区域 ── */
+  .tp-home-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+  }
+  .tp-home-header h1 {
+    font-size: 22px !important;
+  }
+
+  /* ── 模式切换器 ── */
+  .tp-mode-switcher {
+    gap: 2px !important;
+    padding: 2px !important;
+  }
+  .tp-mode-switcher button {
+    padding: 4px 10px !important;
+    font-size: 11px !important;
+  }
+
+  /* ── 进度页统计卡片单列 ── */
+  .tp-stat-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ── 反馈面板左侧 ── */
+  .tp-fb-left {
+    max-height: 40vh !important;
+    padding: 12px !important;
+  }
+
+  /* ── 造句任务说明卡片 ── */
+  .tp-instruction-card {
+    padding: 20px 16px !important;
+  }
+
+  /* ── 通用模态框 ── */
+  .tp-modal-body {
+    width: calc(100vw - 32px) !important;
+    max-width: 100% !important;
+  }
+}

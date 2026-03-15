@@ -51,18 +51,5 @@ export const HOME_PAGE_CSS = `
 @keyframes ch-sweep{0%{left:-30%}100%{left:130%}}
 @keyframes ch-gradRot{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 @keyframes ch-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
-@media (max-width: 960px) {
-  .home-shell { padding: 20px 16px 48px; }
-  .home-layout { flex-direction: column; }
-  .home-sidebar { width: 100%; min-width: 0; position: static; }
-  .home-grid { grid-template-columns: 1fr; }
-}
-@media (max-width: 480px) {
-  .home-shell { padding: 12px 8px 32px; gap: 16px; }
-  .home-layout { gap: 16px; }
-  .home-grid { gap: 8px; }
-  .tp-home-header { flex-direction: column !important; align-items: flex-start !important; gap: 8px !important; }
-  .tp-mode-switcher { gap: 2px !important; padding: 2px !important; }
-  .tp-mode-switcher button { padding: 4px 10px !important; font-size: 11px !important; }
-}
+/* 响应式规则已移至 app/mobile.css（全局生效） */
 `;

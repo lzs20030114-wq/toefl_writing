@@ -1,3 +1,5 @@
+import "./mobile.css";
+
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://treepractice.com";
 
 export const metadata = {

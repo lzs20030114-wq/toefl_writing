@@ -182,7 +182,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
 
       <div style={{ minHeight: "100vh", background: isChallenge ? CH.bg : T.bg, fontFamily: HOME_FONT, position: "relative", zIndex: 3, animation: shaking ? "ch-screenShake .35s ease-out" : "none", transition: "background .3s ease" }}>
         {isChallenge ? (
-          <div style={{ position: "sticky", top: 0, zIndex: 10, background: CH.nav, color: "#fff", padding: "0 36px", height: 52, display: "flex", alignItems: "center", borderBottom: `3px solid ${CH.navBorder}`, overflow: "hidden" }}>
+          <div className="home-nav" style={{ position: "sticky", top: 0, zIndex: 10, background: CH.nav, color: "#fff", padding: "0 36px", height: 52, display: "flex", alignItems: "center", borderBottom: `3px solid ${CH.navBorder}`, overflow: "hidden" }}>
             <span style={{ fontWeight: 700, fontSize: 15, position: "relative", zIndex: 1 }}>TreePractice</span>
             <span style={{ opacity: 0.5, margin: "0 12px", position: "relative", zIndex: 1 }}>|</span>
             <span style={{ fontSize: 13, position: "relative", zIndex: 1 }}>写作备考</span>
@@ -191,7 +191,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
             <div style={{ position: "absolute", top: 0, bottom: 0, width: "30%", background: "linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent)", animation: "ch-sweep 4s ease-in-out infinite", pointerEvents: "none", zIndex: 0 }} />
           </div>
         ) : (
-          <div style={{ position: "sticky", top: 0, zIndex: 10, height: 52, display: "flex", alignItems: "center", padding: "0 36px", background: "rgba(255,255,255,0.92)", backdropFilter: "blur(12px)", borderBottom: `1px solid ${T.bdrSubtle}` }}>
+          <div className="home-nav" style={{ position: "sticky", top: 0, zIndex: 10, height: 52, display: "flex", alignItems: "center", padding: "0 36px", background: "rgba(255,255,255,0.92)", backdropFilter: "blur(12px)", borderBottom: `1px solid ${T.bdrSubtle}` }}>
             <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
               <div style={{ width: 28, height: 28, borderRadius: 8, background: "linear-gradient(135deg,#087355,#0891B2)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                 <span style={{ color: "#fff", fontSize: 13, fontWeight: 800 }}>T</span>
@@ -199,7 +199,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
               <span style={{ fontWeight: 700, fontSize: 15, color: T.t1 }}>TreePractice</span>
               <span style={{ fontSize: 10, fontWeight: 700, color: T.primary, background: T.primarySoft, border: `1px solid ${T.primaryMist}`, borderRadius: 5, padding: "1px 6px", letterSpacing: 0.3 }}>写作备考</span>
             </div>
-            <div style={{ marginLeft: "auto", fontSize: 12, color: T.t3 }}>由 DeepSeek AI 提供支持</div>
+            <div className="home-nav-ai" style={{ marginLeft: "auto", fontSize: 12, color: T.t3 }}>由 DeepSeek AI 提供支持</div>
           </div>
         )}
 

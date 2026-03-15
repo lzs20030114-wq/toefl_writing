@@ -198,7 +198,7 @@ export function BuildSentenceTask({
       <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
         {!embedded && <TopBar title="Build a Sentence" section="Writing Practice | Task 1" onExit={onExit} />}
         <PageShell narrow>
-          <SurfaceCard style={{ padding: "32px 40px" }}>
+          <SurfaceCard className="tp-instruction-card" style={{ padding: "32px 40px" }}>
             <h2 style={{ margin: "0 0 16px", fontSize: 20, color: C.nav }}>Task 1: Build a Sentence</h2>
             <div style={{ fontSize: 14, color: C.t1, lineHeight: 1.8 }}>
               <p>You will be given a set of word chunks. Arrange them to form a grammatically correct sentence.</p>
