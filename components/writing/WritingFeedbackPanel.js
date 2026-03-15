@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { FONT } from "../shared/ui";
 import { getSavedCode, getSavedTier } from "../../lib/AuthContext";
 import UpgradeModal from "../shared/UpgradeModal";
+import { useIsMobile } from "../../hooks/useIsMobile";
 
 const P = {
   bg: "#f4f7f5", surface: "#ffffff", border: "#dde5df", borderSubtle: "#ebf0ed",
@@ -130,6 +131,8 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
   const [tooltipFlip, setTooltipFlip] = useState(false);
   const leftPanelRef = useRef(null);
   const [showUpgrade, setShowUpgrade] = useState(false);
+  const isMobile = useIsMobile();
+  const [mobileTab, setMobileTab] = useState("text"); // text | macro | linebyline | sample
 
   const isPro = (() => {
     try { const t = getSavedTier(); return t === "pro" || t === "legacy"; }
@@ -390,6 +393,74 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
 
   const tabContent = { macro: renderMacro, linebyline: renderLineByLine, sample: renderSample };
 
+  const MOBILE_TABS = [
+    { id: "text", label: "作文批注" },
+    { id: "macro", label: "宏观评价" },
+    { id: "linebyline", label: "逐句批注" },
+    { id: "sample", label: "范文对比" },
+  ];
+
+  /* ── 移动端：全屏 tab 切换 ── */
+  if (isMobile) {
+    return (
+      <>
+        <style>{`
+          @keyframes wfpTabFade { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+          @keyframes wfpSlideIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        `}</style>
+        {showUpgrade && <UpgradeModal userCode={(() => { try { return getSavedCode(); } catch { return null; } })()} currentTier="free" onClose={() => setShowUpgrade(false)} onUpgraded={() => window.location.reload()} />}
+        <div style={{ display: "flex", flexDirection: "column", height: "100vh", background: P.bg, fontFamily: FONT }}>
+          {/* 头部：分数 + 操作 */}
+          <div style={{ flexShrink: 0, padding: "10px 14px", borderBottom: `1px solid ${P.borderSubtle}`, background: P.surface, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div>
+              <span style={{ fontSize: 14, fontWeight: 800, color: P.text }}>{taskLabel} · 批改</span>
+              {score != null && <span style={{ marginLeft: 8, fontSize: 13, fontWeight: 700, color: score >= 4 ? P.primary : score >= 3 ? P.amber : P.rose }}>{score}/5</span>}
+            </div>
+            <div style={{ display: "flex", gap: 6 }}>
+              {onRetry && <ActionBtn onClick={onRetry}>再练</ActionBtn>}
+              {onNext && <ActionBtn onClick={onNext}>下一题</ActionBtn>}
+              <ActionBtn onClick={onExit} danger>返回</ActionBtn>
+            </div>
+          </div>
+
+          {/* Tab 栏 */}
+          <div style={{ flexShrink: 0, display: "flex", borderBottom: `1px solid ${P.borderSubtle}`, background: P.surface, overflowX: "auto", WebkitOverflowScrolling: "touch" }}>
+            {MOBILE_TABS.map((t) => (
+              <button
+                key={t.id}
+                onClick={() => setMobileTab(t.id)}
+                style={{
+                  flex: "0 0 auto", padding: "10px 14px", border: "none", background: "none",
+                  fontSize: 13, fontWeight: mobileTab === t.id ? 700 : 500,
+                  color: mobileTab === t.id ? P.primary : P.textDim,
+                  borderBottom: mobileTab === t.id ? `2px solid ${P.primary}` : "2px solid transparent",
+                  cursor: "pointer", fontFamily: FONT, whiteSpace: "nowrap",
+                }}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Tab 内容 */}
+          <div style={{ flex: 1, overflowY: "auto", WebkitOverflowScrolling: "touch" }}>
+            {mobileTab === "text" && (
+              <div style={{ padding: "16px 14px" }}>
+                <div style={{ background: P.surface, borderRadius: 12, padding: "16px 14px", border: `1px solid ${P.border}`, boxShadow: P.shadow }}>
+                  {renderTokenizedText()}
+                </div>
+              </div>
+            )}
+            {mobileTab === "macro" && <div style={{ padding: "16px 14px", animation: "wfpTabFade 0.25s ease" }}>{renderMacro()}</div>}
+            {mobileTab === "linebyline" && <div style={{ padding: "16px 14px", animation: "wfpTabFade 0.25s ease" }}>{renderLineByLine()}</div>}
+            {mobileTab === "sample" && <div style={{ padding: "16px 14px", animation: "wfpTabFade 0.25s ease" }}>{renderSample()}</div>}
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  /* ── 桌面端：原有 45/55 分屏布局 ── */
   return (
     <>
       <style>{`

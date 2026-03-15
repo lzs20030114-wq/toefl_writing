@@ -5,6 +5,7 @@ import { useBuildSentenceSession } from "./useBuildSentenceSession";
 import { formatLongDuration, PRACTICE_MODE } from "../../lib/practiceMode";
 import { translateGrammarPoint } from "../../lib/utils";
 import { BANK_EXHAUSTED_ERRORS } from "../../lib/questionSelector";
+import { useIsMobile } from "../../hooks/useIsMobile";
 
 function formatChunkDisplay(text) {
   return String(text || "")
@@ -77,6 +78,7 @@ export function BuildSentenceTask({
     onDropBank,
     isPracticeMode,
   } = useBuildSentenceSession(questions, { persistSession, onComplete, onTimerChange, timeLimitSeconds, practiceMode });
+  const isMobile = useIsMobile();
   const exhausted = String(selectionError || "").includes(BANK_EXHAUSTED_ERRORS.BUILD_SENTENCE);
 
   function handleSubmitClick() {
@@ -220,18 +222,18 @@ export function BuildSentenceTask({
     const filled = slots[i] !== null;
     const isHover = hoverSlot === i && dragItem;
     return {
-      minWidth: 80,
-      minHeight: 40,
-      padding: "6px 14px",
-      borderRadius: 4,
+      minWidth: isMobile ? 60 : 80,
+      minHeight: isMobile ? 48 : 40,
+      padding: isMobile ? "8px 12px" : "6px 14px",
+      borderRadius: isMobile ? 8 : 4,
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      fontSize: 14,
+      fontSize: isMobile ? 16 : 14,
       fontWeight: filled ? 500 : 400,
-      cursor: filled ? "grab" : "default",
+      cursor: filled ? "pointer" : "default",
       userSelect: "none",
-      transition: "border-color 0.15s, background 0.15s",
+      transition: "border-color 0.15s, background 0.15s, transform 0.1s",
       ...(filled
         ? {
             background: C.blue,
@@ -253,7 +255,7 @@ export function BuildSentenceTask({
       {!embedded && <TopBar title="Build a Sentence" section="Writing Practice | Task 1" timeLeft={isPracticeMode ? undefined : tl} isRunning={run} qInfo={idx + 1 + " / " + qs.length} onExit={onExit} />}
       <PageShell narrow>
         <InfoStrip style={{ marginBottom: 20 }}>
-          <b>Directions: </b>Use the word chunks below to form a grammatically correct sentence. There may be one distractor chunk that does not belong.
+          <b>Directions: </b>{isMobile ? "点击词块放入句子。可能含干扰项。" : "Use the word chunks below to form a grammatically correct sentence. There may be one distractor chunk that does not belong."}
         </InfoStrip>
 
         <SurfaceCard style={{ padding: 20, marginBottom: 20 }}>
@@ -286,12 +288,12 @@ export function BuildSentenceTask({
                     key={`slot-${i}`}
                     data-testid={`slot-${i}`}
                     style={slotStyle(i)}
-                    draggable={!!slots[i]}
-                    onDragStart={slots[i] ? (e) => onDragStartSlot(e, slots[i], i) : undefined}
-                    onDragEnd={slots[i] ? onDragEnd : undefined}
-                    onDragOver={(e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; setHoverSlot(i); }}
-                    onDragLeave={() => setHoverSlot(null)}
-                    onDrop={(e) => onDropSlot(e, i)}
+                    draggable={!isMobile && !!slots[i]}
+                    onDragStart={!isMobile && slots[i] ? (e) => onDragStartSlot(e, slots[i], i) : undefined}
+                    onDragEnd={!isMobile && slots[i] ? onDragEnd : undefined}
+                    onDragOver={!isMobile ? (e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; setHoverSlot(i); } : undefined}
+                    onDragLeave={!isMobile ? () => setHoverSlot(null) : undefined}
+                    onDrop={!isMobile ? (e) => onDropSlot(e, i) : undefined}
                     onClick={() => slots[i] && removeChunk(i)}
                   >
                     {slots[i] ? formatChunkDisplay(slots[i].text) : i + 1}
@@ -304,9 +306,9 @@ export function BuildSentenceTask({
         </SurfaceCard>
 
         <div
-          onDragOver={(e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; setHoverBank(true); }}
-          onDragLeave={() => setHoverBank(false)}
-          onDrop={onDropBank}
+          onDragOver={!isMobile ? (e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; setHoverBank(true); } : undefined}
+          onDragLeave={!isMobile ? () => setHoverBank(false) : undefined}
+          onDrop={!isMobile ? onDropBank : undefined}
           style={{
             background: hoverBank && dragItem && dragItem.from === "slot" ? "#fff3f3" : "#fff",
             border: "1px solid " + C.bdr,
@@ -325,21 +327,22 @@ export function BuildSentenceTask({
             <button
               data-testid={`bank-chunk-${chunk.id}`}
               key={chunk.id}
-              draggable
-              onDragStart={(e) => onDragStartBank(e, chunk)}
-              onDragEnd={onDragEnd}
+              draggable={!isMobile}
+              onDragStart={!isMobile ? (e) => onDragStartBank(e, chunk) : undefined}
+              onDragEnd={!isMobile ? onDragEnd : undefined}
               onClick={() => pickChunk(chunk)}
               style={{
                 background: "#f8f9fa",
                 color: C.t1,
                 border: "1px solid " + C.bdr,
-                borderRadius: 4,
-                padding: "6px 14px",
-                fontSize: 14,
-                cursor: "grab",
+                borderRadius: isMobile ? 8 : 4,
+                padding: isMobile ? "10px 16px" : "6px 14px",
+                fontSize: isMobile ? 16 : 14,
+                cursor: "pointer",
                 fontFamily: FONT,
                 userSelect: "none",
                 opacity: dragItem && dragItem.from === "bank" && dragItem.chunk.id === chunk.id ? 0.4 : 1,
+                transition: "transform 0.1s",
               }}
             >
               {formatChunkDisplay(chunk.text)}
@@ -347,11 +350,11 @@ export function BuildSentenceTask({
           ))}
         </div>
 
-        <div style={{ display: "flex", gap: 12 }}>
-          <Btn onClick={resetQ} variant="secondary">重置</Btn>
-          <Btn data-testid="build-submit" onClick={handleSubmitClick} disabled={!allFilled}>
+        <div style={{ display: "flex", gap: 12, flexDirection: isMobile ? "column" : "row" }}>
+          <Btn data-testid="build-submit" onClick={handleSubmitClick} disabled={!allFilled} style={isMobile ? { width: "100%", padding: "14px 0", fontSize: 16 } : undefined}>
             {idx < qs.length - 1 ? "下一题" : "完成并查看结果"}
           </Btn>
+          <Btn onClick={resetQ} variant="secondary" style={isMobile ? { width: "100%", padding: "12px 0" } : undefined}>重置</Btn>
         </div>
       </PageShell>
     </div>

@@ -24,7 +24,7 @@ export const C = {
 export const FONT = "'Plus Jakarta Sans','Noto Sans SC','Segoe UI',sans-serif";
 
 
-export function Btn({ children, onClick, disabled, variant, ...props }) {
+export function Btn({ children, onClick, disabled, variant, style: extraStyle, ...props }) {
   const colors = {
     primary: { bg: C.blue, c: "#fff", b: C.blue },
     secondary: { bg: "#fff", c: C.t2, b: C.bdr },
@@ -48,6 +48,7 @@ export function Btn({ children, onClick, disabled, variant, ...props }) {
         fontFamily: FONT,
         boxShadow: disabled ? "none" : C.shadow,
         transition: "background 120ms ease, border-color 120ms ease, transform 120ms ease",
+        ...extraStyle,
       }}
       {...props}
     >

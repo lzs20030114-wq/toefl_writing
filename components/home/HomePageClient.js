@@ -8,7 +8,9 @@ import { extractPostWritingPracticeItems, groupPostWritingPracticeItems } from "
 import { ChallengeEffects } from "./ChallengeEffects";
 import { HomeLinkCard, HomeTaskCard } from "./HomeTaskCard";
 import { HomeSidebar } from "./HomeSidebar";
+import { MobileHomePage } from "./MobileHomePage";
 import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_PAGE_CSS, HOME_TOKENS as T, TASK_ACCENTS } from "./theme";
+import { useIsMobile } from "../../hooks/useIsMobile";
 
 const PRACTICE_TASKS = [
   { k: "build-sentence", modeKey: "build", n: "Task 1", t: "Build a Sentence", d: "Reorder words to form a grammatically correct response.", it: "10 questions" },
@@ -47,6 +49,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
 
   const isChallenge = mode === PRACTICE_MODE.CHALLENGE;
   const isPractice = mode === PRACTICE_MODE.PRACTICE;
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const refresh = () => setSessions(loadHist().sessions || []);
@@ -175,6 +178,46 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
     }] : []),
   ];
 
+  /* ── 移动端：完全不同的布局和交互 ── */
+  if (isMobile) {
+    return (
+      <>
+        <style>{HOME_PAGE_CSS}</style>
+        <ChallengeEffects isChallenge={isChallenge} crtFlash={crtFlash} />
+        <div style={{ minHeight: "100vh", background: isChallenge ? CH.bg : T.bg, fontFamily: HOME_FONT, position: "relative", zIndex: 3 }}>
+          {/* 移动端导航栏 */}
+          <div style={{
+            position: "sticky", top: 0, zIndex: 10, height: 48,
+            display: "flex", alignItems: "center", padding: "0 14px",
+            background: isChallenge ? CH.nav : "rgba(255,255,255,0.95)",
+            backdropFilter: "blur(12px)",
+            borderBottom: isChallenge ? `2px solid ${CH.navBorder}` : `1px solid ${T.bdrSubtle}`,
+          }}>
+            <div style={{ width: 24, height: 24, borderRadius: 6, background: "linear-gradient(135deg,#087355,#0891B2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <span style={{ color: "#fff", fontSize: 11, fontWeight: 800 }}>T</span>
+            </div>
+            <span style={{ marginLeft: 8, fontWeight: 700, fontSize: 14, color: isChallenge ? "#fff" : T.t1 }}>TreePractice</span>
+          </div>
+
+          <MobileHomePage
+            isChallenge={isChallenge} isPractice={isPractice}
+            mode={mode} switchMode={switchMode}
+            gridItems={gridItems} postWritingCounts={postWritingCounts}
+            userCode={userCode} userTier={userTier} userEmail={userEmail}
+            isLoggedIn={isLoggedIn} showLoginModal={showLoginModal} onLogout={onLogout}
+            totalCount={totalCount} weekCount={weekCount} bestMock={bestMock}
+            fbOpen={fbOpen} setFbOpen={setFbOpen}
+            fbText={fbText} setFbText={setFbText}
+            fbBusy={fbBusy} fbSent={fbSent}
+            feedbackMsg={feedbackMsg} submitFeedback={submitFeedback}
+            fadeIn={fadeIn} sideCard={sideCard} querySuffix={querySuffix}
+          />
+        </div>
+      </>
+    );
+  }
+
+  /* ── 桌面端：原有布局不变 ── */
   return (
     <>
       <style>{HOME_PAGE_CSS}</style>

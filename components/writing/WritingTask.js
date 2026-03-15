@@ -7,12 +7,13 @@ import { saveSess, addDoneIds } from "../../lib/sessionStore";
 import { mapScoringError } from "../../lib/ai/client";
 import { evaluateWritingResponse } from "../../lib/ai/writingEval";
 import { BANK_EXHAUSTED_ERRORS, DONE_STORAGE_KEYS, pickRandomPrompt } from "../../lib/questionSelector";
-import { C, FONT, Btn, InfoStrip, PageShell, SurfaceCard, Toast, TopBar } from "../shared/ui";
+import { C, FONT, Btn, InfoStrip, PageShell, SurfaceCard, DisclosureSection, Toast, TopBar } from "../shared/ui";
 import { WritingFeedbackPanel } from "./WritingFeedbackPanel";
 import { WritingPromptPanel } from "./WritingPromptPanel";
 import { WritingResponsePanel } from "./WritingResponsePanel";
 import { formatMinutesLabel, PRACTICE_MODE } from "../../lib/practiceMode";
 import { normalizeReportLanguage, readReportLanguage } from "../../lib/reportLanguage";
+import { useIsMobile } from "../../hooks/useIsMobile";
 
 function normalizeEmailPrompt(input, fallbackId = "gen-email") {
   if (!input || typeof input !== "object") return null;
@@ -113,6 +114,8 @@ export function WritingTask({
   initialPracticeAttempt = 1,
 }) {
   const isPracticeMode = practiceMode === PRACTICE_MODE.PRACTICE;
+  const isMobile = useIsMobile();
+  const [promptCollapsed, setPromptCollapsed] = useState(false);
   const uiReportLanguage = normalizeReportLanguage(reportLanguage || readReportLanguage());
   const dataRaw = type === "email" ? EM_DATA : AD_DATA;
   const data = useMemo(
@@ -431,27 +434,47 @@ export function WritingTask({
                     {practiceMode === PRACTICE_MODE.CHALLENGE && <span> Challenge mode active — time limit is reduced.</span>}
                     {isPracticeMode && <span> Practice mode — no time limit.</span>}
                   </InfoStrip>
-                  <div className="tp-writing-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
-                    <WritingPromptPanel type={type} pd={pd} />
-                    <WritingResponsePanel
-                      type={type}
-                      pd={pd}
-                      phase={phase}
-                      text={text}
-                      onTextChange={setText}
-                      w={w}
-                      minW={minW}
-                      fb={fb}
-                      deferScoring={deferScoring}
-                      requestState={requestState}
-                      scoreError={scoreError}
-                      onStart={start}
-                      onSubmit={submitScore}
-                      onRetry={retryScore}
-                      onExit={onExit}
-                      embedded={embedded}
-                    />
-                  </div>
+                  {isMobile ? (
+                    /* 移动端：题目可折叠，编辑器全宽 */
+                    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                      <DisclosureSection
+                        title={type === "email" ? "Email Prompt" : "Discussion Prompt"}
+                        preview={promptCollapsed ? (pd.title || pd.topic || "").slice(0, 40) + "…" : ""}
+                        open={!promptCollapsed}
+                        onToggle={() => setPromptCollapsed((v) => !v)}
+                        icon="📝"
+                      >
+                        <div style={{ padding: 14 }}>
+                          <WritingPromptPanel type={type} pd={pd} />
+                        </div>
+                      </DisclosureSection>
+                      <WritingResponsePanel
+                        type={type} pd={pd} phase={phase}
+                        text={text} onTextChange={setText}
+                        w={w} minW={minW} fb={fb}
+                        deferScoring={deferScoring}
+                        requestState={requestState} scoreError={scoreError}
+                        onStart={start} onSubmit={submitScore}
+                        onRetry={retryScore} onExit={onExit}
+                        embedded={embedded}
+                      />
+                    </div>
+                  ) : (
+                    /* 桌面端：左右双栏 */
+                    <div className="tp-writing-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+                      <WritingPromptPanel type={type} pd={pd} />
+                      <WritingResponsePanel
+                        type={type} pd={pd} phase={phase}
+                        text={text} onTextChange={setText}
+                        w={w} minW={minW} fb={fb}
+                        deferScoring={deferScoring}
+                        requestState={requestState} scoreError={scoreError}
+                        onStart={start} onSubmit={submitScore}
+                        onRetry={retryScore} onExit={onExit}
+                        embedded={embedded}
+                      />
+                    </div>
+                  )}
                 </>
               )}
             </>
