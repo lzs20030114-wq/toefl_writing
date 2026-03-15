@@ -37,7 +37,7 @@ function EmailWritingPageClient() {
   const initialPracticeRootId = String(searchParams.get("practiceRootId") || "").trim();
   const retryFromAttempt = Number(searchParams.get("retryFromAttempt") || 0);
   const [pickedPromptId, setPickedPromptId] = useState(null);
-  const onExit = () => router.push("/");
+  const onExit = () => router.push(isPractice ? "/?mode=practice" : "/");
 
   if (isPractice && !pickedPromptId) {
     const doneIds = loadDoneIds(DONE_STORAGE_KEYS.EMAIL);

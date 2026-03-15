@@ -35,7 +35,7 @@ function BuildSentencePageClient() {
   const isPractice = mode === PRACTICE_MODE.PRACTICE;
   const reportLanguage = normalizeReportLanguage(searchParams.get("lang"));
   const [pickedSetId, setPickedSetId] = useState(null);
-  const onExit = () => router.push("/");
+  const onExit = () => router.push(isPractice ? "/?mode=practice" : "/");
 
   if (isPractice && !pickedSetId) {
     const doneIds = loadDoneIds(DONE_STORAGE_KEYS.BUILD_SENTENCE);

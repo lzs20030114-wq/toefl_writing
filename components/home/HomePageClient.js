@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { loadHist, SESSION_STORE_EVENTS } from "../../lib/sessionStore";
 import { formatMinutesLabel, getTaskTimeSeconds, normalizePracticeMode, PRACTICE_MODE, STANDARD_TIME_SECONDS } from "../../lib/practiceMode";
 import { extractPostWritingPracticeItems, groupPostWritingPracticeItems } from "../../lib/postWritingPractice";
@@ -30,7 +31,8 @@ function parseJsonSafe(res) {
 export default function HomePageClient({ userCode, userTier, userEmail, authMethod, isLoggedIn, showLoginModal, onLogout }) {
   const [hoverKey, setHoverKey] = useState("");
   const [sessions, setSessions] = useState([]);
-  const [mode, setMode] = useState(PRACTICE_MODE.STANDARD);
+  const searchParams = useSearchParams();
+  const [mode, setMode] = useState(() => normalizePracticeMode(searchParams.get("mode")));
   const [crtFlash, setCrtFlash] = useState(false);
   const [shaking, setShaking] = useState(false);
   const [fbOpen, setFbOpen] = useState(false);

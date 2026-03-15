@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import LoginGate from "../components/LoginGate";
 import HomePageClient from "../components/home/HomePageClient";
 import { setCurrentUser } from "../lib/sessionStore";
@@ -22,8 +22,10 @@ function PageInner({ userCode, userTier, userEmail, authMethod, isLoggedIn, show
 
 export default function Page() {
   return (
-    <LoginGate>
-      {(props) => <PageInner {...props} />}
-    </LoginGate>
+    <Suspense fallback={null}>
+      <LoginGate>
+        {(props) => <PageInner {...props} />}
+      </LoginGate>
+    </Suspense>
   );
 }
