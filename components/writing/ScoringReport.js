@@ -67,7 +67,7 @@ export function ScoringReport({ result, type }) {
   })();
 
   const score = Number.isFinite(Number(result.score)) ? Number(result.score) : 0;
-  const band = Number.isFinite(Number(result.band)) ? Number(result.band) : null;
+  const band = result.band != null ? String(result.band) : null;
   const summary = String(result.summary || "").trim();
   const goals = Array.isArray(result.goals) ? result.goals : [];
   const actions = (Array.isArray(result.actions) ? result.actions : []).slice(0, 2);

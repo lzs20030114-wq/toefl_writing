@@ -145,7 +145,7 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
   }, []);
 
   const score = Number.isFinite(Number(fb?.score)) ? Number(fb.score) : null;
-  const band = Number.isFinite(Number(fb?.band)) ? Number(fb.band) : null;
+  const band = fb?.band != null ? String(fb.band) : null;
   const summary = String(fb?.summary || "").trim();
   const goals = Array.isArray(fb?.goals) ? fb.goals : [];
   const actions = Array.isArray(fb?.actions) ? fb.actions : [];
@@ -174,7 +174,7 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
               <span style={{ fontSize: 48, fontWeight: 800, color: "#fff", lineHeight: 1 }}>{score ?? "--"}</span>
               <span style={{ fontSize: 14, color: "rgba(255,255,255,0.45)", fontWeight: 700, marginBottom: 8 }}>/ 5</span>
             </div>
-            {band != null ? <span style={{ padding: "3px 10px", background: "rgba(52,211,153,0.15)", color: "#34d399", borderRadius: 999, fontSize: 11, fontWeight: 700 }}>Band {band}</span> : null}
+            {band ? <span style={{ padding: "3px 10px", background: "rgba(52,211,153,0.15)", color: "#34d399", borderRadius: 999, fontSize: 11, fontWeight: 700 }}>{band}</span> : null}
           </div>
           {summary ? <p style={{ fontSize: 13, color: "rgba(255,255,255,0.7)", lineHeight: 1.75, margin: 0, marginBottom: goals.length ? 18 : 0 }}>{summary}</p> : null}
           {type === "email" && goals.length > 0 ? (
