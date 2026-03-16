@@ -30,7 +30,7 @@ Rules:
 Return ONLY a valid JSON array (no markdown, no explanation) where each element has this exact shape:
 {
   "to": "string",
-  "from": "string",
+  "subject": "string",
   "scenario": "string",
   "direction": "string",
   "goals": ["string", "string"]

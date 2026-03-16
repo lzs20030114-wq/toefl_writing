@@ -77,7 +77,7 @@ Rules:
 Return ONLY a valid JSON array (no markdown, no explanation) where each element has this exact shape:
 {
   "to": "string",
-  "from": "string",
+  "subject": "string",
   "scenario": "string",
   "direction": "string",
   "goals": ["string", "string"]
@@ -147,7 +147,7 @@ function validateAcademic(q) {
   return null;
 }
 function validateEmail(q) {
-  if (!q.to || !q.from) return "missing to/from";
+  if (!q.to) return "missing to";
   if (!q.scenario) return "missing scenario";
   if (!q.direction) return "missing direction";
   if (!Array.isArray(q.goals) || q.goals.length === 0) return "goals must be non-empty array";

@@ -191,6 +191,7 @@ function EmailCard({ item }) {
       >
         <Badge color="#7c3aed">{item.id}</Badge>
         {item.source === "official" && <Badge color="#d97706" bg="#fef3c7">真题</Badge>}
+        {item.topic && <Badge color="#0d9668" bg="#d1fae5">{item.topic}</Badge>}
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 4 }}>
             <span style={{ fontSize: 12, color: C.t3 }}>
@@ -679,7 +680,7 @@ function AddQuestionModal({ type: initialType, token, onClose, onSuccess }) {
 
   // Email form state
   const [emTo, setEmTo] = useState("");
-  const [emFrom, setEmFrom] = useState("");
+  const [emSubject, setEmSubject] = useState("");
   const [emScenario, setEmScenario] = useState("");
   const [emDirection, setEmDirection] = useState("");
   const [emGoals, setEmGoals] = useState([""]);
@@ -719,13 +720,13 @@ function AddQuestionModal({ type: initialType, token, onClose, onSuccess }) {
       };
     } else if (formType === "email") {
       const goals = emGoals.map((g) => g.trim()).filter(Boolean);
-      if (!emTo.trim() || !emFrom.trim() || !emScenario.trim() || !emDirection.trim() || goals.length === 0) {
+      if (!emTo.trim() || !emScenario.trim() || !emDirection.trim() || goals.length === 0) {
         setErr("请填写所有必填字段（至少一条 Goal）");
         return;
       }
       data = {
         to: emTo.trim(),
-        from: emFrom.trim(),
+        subject: emSubject.trim() || undefined,
         scenario: emScenario.trim(),
         direction: emDirection.trim(),
         goals,
@@ -898,8 +899,8 @@ function AddQuestionModal({ type: initialType, token, onClose, onSuccess }) {
                   <FieldInput value={emTo} onChange={setEmTo} placeholder="e.g. Professor Lee" />
                 </div>
                 <div>
-                  <FieldLabel>From</FieldLabel>
-                  <FieldInput value={emFrom} onChange={setEmFrom} placeholder="e.g. A student" />
+                  <FieldLabel>Subject</FieldLabel>
+                  <FieldInput value={emSubject} onChange={setEmSubject} placeholder="e.g. Midterm paper submission error" />
                 </div>
               </div>
               <div>
@@ -1540,7 +1541,8 @@ export default function AdminQuestionsPage() {
           item.scenario.toLowerCase().includes(q) ||
           item.direction.toLowerCase().includes(q) ||
           (item.goals ?? []).some((g) => g.toLowerCase().includes(q)) ||
-          item.id.toLowerCase().includes(q)
+          item.id.toLowerCase().includes(q) ||
+          (item.topic || "").toLowerCase().includes(q)
       )
     : (data?.email ?? []);
 
