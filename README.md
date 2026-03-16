@@ -1,283 +1,146 @@
-# TOEFL iBT Writing Practice (Next.js)
+# TreePractice — TOEFL iBT Writing 2026 Practice Platform
 
-This project is a TOEFL Writing practice tool with 3 tasks:
+Full-stack TOEFL iBT 2026 Writing Section practice tool with AI scoring, covering all three tasks of the new format. Built with Next.js, deployed on Vercel, backed by Supabase.
 
-- Task 1: Build a Sentence
-- Task 2: Write an Email
-- Task 3: Academic Discussion
+**Live:** [treepractice.com](https://treepractice.com)
 
-It includes timed practice, AI scoring, structured feedback reports, progress history, and question bank quality gates.
+## Three Tasks
 
-## Features
+| Task | Type | Description |
+|------|------|-------------|
+| **Task 1** | Build a Sentence | Drag-and-drop word chunks to form grammatically correct sentences. 10 questions per set, timed. Supports prefilled words, distractors, and back-navigation. |
+| **Task 2** | Write an Email | Read a scenario, write an email addressing 3 goals. AI scores on task completion, organization, and language (0–5 scale). |
+| **Task 3** | Academic Discussion | Read a professor's prompt and two student responses, then contribute your own position. AI scores on argument quality and language (0–5 scale). |
 
-### Task 1 (Build a Sentence, ETS-aligned v2)
+## Core Features
 
-- Set-based delivery: one set = **10 questions**
-- Difficulty profile control for each 10-question set (ETS-like target mix)
-- Chunk-based sentence building (multi-word chunks, not single-word tokens)
-- Supports prefilled locked chunks (`prefilled`, `prefilled_positions`)
-- Supports optional distractor chunk (`distractor`)
-- Answer checking by normalized text match against `answer`
-- Grammar point tagging (`grammar_points[]`) for weak-point summary
-- Set rotation tracking with `localStorage` key: `toefl-bs-done-sets`
+- **AI Scoring & Feedback** — DeepSeek-powered evaluation with structured reports: score + band, line-by-line annotations (grammar/spelling/expression), pattern analysis, model essay comparison, and actionable improvement suggestions.
+- **Mock Exam** — Full 3-task timed simulation (Task 1 → 2 → 3) with unified scoring and CEFR band mapping.
+- **Practice Mode** — Untimed, topic-selectable practice for Pro users. Grammar-point categories for Task 1, free topic choice for Task 2/3.
+- **Progress Tracking** — Cloud-synced session history (Supabase) with score trends, grammar weakness analysis, and per-task breakdowns. Falls back to localStorage when offline.
+- **Mobile-First** — Full `100dvh` flex layouts, touch drag-and-drop for Task 1, optimized overlays with scroll containment.
+- **Monetization** — Free tier (3 sessions/day) and Pro tier (unlimited, full reports, practice mode). Afdian payment integration with tab-switch polling.
 
-### Task 2/3 (Email / Discussion)
+## AI Scoring Report Sections
 
-- Timed writing UI
-- AI scoring with ETS-aligned prompts
-- Structured report pipeline:
-  - `===SCORE===`
-  - `===GOALS===` (Email only)
-  - `===ANNOTATION===`
-  - `===PATTERNS===`
-  - `===COMPARISON===`
-  - `===ACTION===`
-- Section-level fallback parsing (one section fails, others still render)
+Task 2/3 reports are parsed from structured AI output into independent sections, each with fallback rendering:
 
-### Progress and Storage
+| Section | Content |
+|---------|---------|
+| `SCORE` | 0–5 score, band label, summary |
+| `GOALS` | Per-goal completion status (Email only) |
+| `ANNOTATION` | Line-by-line markup — red (grammar/spelling), orange (expression), blue (advanced) |
+| `PATTERNS` | Recurring error patterns with frequency |
+| `COMPARISON` | Model essay with side-by-side comparison points |
+| `ACTION` | Top 2 weakness cards with importance + concrete action |
 
-- Session history persisted in browser `localStorage`
-- Stores score details and grammar weakness traces
-- Supports delete/clear history operations
-- SSR-safe storage guards in `lib/sessionStore.js`
+Free users see full annotations and macro feedback. Model essay comparison is Pro-only (blurred).
 
-## Architecture
+## Tech Stack
 
-### Mock Exam Scaffold (new, minimal interference)
+- **Frontend:** Next.js 14 (App Router), React, inline styles
+- **Backend:** Next.js API routes, Supabase (PostgreSQL + Auth)
+- **AI:** DeepSeek V3.2 for scoring and question generation
+- **Hosting:** Vercel
+- **Payment:** Afdian (Chinese sponsor platform)
+- **CI/CD:** GitHub Actions for automated question generation (all 3 tasks)
 
-- Route: `app/mock-exam/page.js`
-- UI shell: `components/mockExam/MockExamShell.js`
-- Isolated domain layer: `lib/mockExam/*`
-  - `contracts.js`: status/task constants and max-score contract
-  - `planner.js`: default 3-task blueprint (Task1->Task2->Task3)
-  - `stateMachine.js`: pure state transitions (create/start/submit/next/abort/complete)
-  - `runner.js`: orchestration facade for UI usage
-  - `storage.js`: separate localStorage history (`toefl-mock-exam-history`)
+## Question Generation Pipelines
 
-Current scope includes runnable orchestration:
-- Mock mode can execute Task1 -> Task2 -> Task3 sequentially.
-- In mock mode, per-task history persistence is disabled and results are stored as one unified mock-exam record.
-- Existing single-task pages and scoring flows remain unchanged.
+Automated via GitHub Actions (`workflow_dispatch`):
 
-## App routes
+| Workflow | Script | Model | Notes |
+|----------|--------|-------|-------|
+| `generate-bs.yml` | `generateBSQuestions.mjs` | DeepSeek (gen) + Claude Sonnet (review) | Multi-AI pipeline: planner → generator → 2x reviewer. ETS-aligned difficulty control. |
+| `generate-email.yml` | `generateEmailQuestions.mjs` | DeepSeek | Category-forced distribution (6 categories), name diversity pool, validation gates. |
+| `generate-disc.yml` | `generateDiscQuestions.mjs` | DeepSeek | Few-shot from real TPO examples, course-weighted distribution, 4 question types. |
 
-- `app/page.js`: home menu
-- `app/build-sentence/page.js`: Task 1
-- `app/email-writing/page.js`: Task 2
-- `app/academic-writing/page.js`: Task 3
-- `app/mock-exam/page.js`: mock exam shell (framework stage)
-- `app/progress/page.js`: progress page
-- `app/api/ai/route.js`: AI proxy endpoint
+## Project Structure
 
-## Core modules
+```
+app/
+  build-sentence/       Task 1 page
+  email-writing/        Task 2 page
+  academic-writing/     Task 3 page
+  mock-exam/            Mock exam shell
+  progress/             History & progress
+  admin*/               Admin dashboard pages
+  api/
+    ai/                 AI proxy endpoint
+    usage/              Daily usage tracking
+    auth/               Login code verification
+    admin/              Admin APIs (codes, feedback, errors, users)
 
-- `components/buildSentence/BuildSentenceTask.js`
-  - Task 1 UI rendering (instruction / active / review)
-- `components/buildSentence/useBuildSentenceSession.js`
-  - Task 1 runtime state machine (init, timer, drag/drop, submit, auto-submit)
-- `lib/questionSelector.js`
-  - Selects valid BS question set and rotates by set id
-- `lib/questionBank/buildSentenceSchema.js`
-  - BS schema validation (`validateQuestion`, `validateQuestionSet`)
-- `lib/questionBank/qualityGateBuildSentence.js`
-  - Quality gate wrapper for hard-fail + warning checks
-- `lib/questionBank/sentenceEngine.js`
-  - Shared sentence assembly engine used by render + scoring
-- `lib/questionBank/renderResponseSentence.js`
-  - Renders correct/user sentence from `answer + prefilled + user chunks`
-- `lib/utils.js`
-  - `evaluateBuildSentenceOrder` normalized answer matching
-- `lib/ai/parse.js`
-  - Parses structured AI report sections with fallbacks
+components/
+  buildSentence/        Task 1 UI + session hook
+  writing/              Task 2/3 shared: WritingTask, FeedbackPanel, ScoringReport
+  mockExam/             Mock exam orchestration
+  home/                 Homepage (desktop + mobile)
+  history/              Progress views
+  shared/               UI primitives, modals, gates
 
-## Build a Sentence v2 Data Schema
+lib/
+  ai/                   AI client, prompts, response parsing
+  annotations/          Annotation parser (markup → segments)
+  questionBank/         BS schema, runtime model, difficulty control
+  mockExam/             Mock state machine, planner, storage
+  history/              View model transforms
 
-Question file: `data/buildSentence/questions.json`
+scripts/
+  generateBSQuestions.mjs       Task 1 generation
+  generateEmailQuestions.mjs    Task 2 generation
+  generateDiscQuestions.mjs     Task 3 generation
+  validate-bank.js              BS question bank validation
 
-Top-level:
-
-```json
-{
-  "question_sets": [
-    {
-      "set_id": 1,
-      "questions": []
-    }
-  ]
-}
+data/
+  buildSentence/        Question sets + reserve pool
+  emailWriting/         Email prompts
+  academicWriting/      Discussion prompts
 ```
 
-## Build Sentence Runtime Invariants
-
-- Runtime question model is normalized to:
-  - `answerOrder` (movable chunks)
-  - `bank` (same members as `answerOrder`, shuffled for display)
-  - optional fixed segments (`givenSlots`) from `prefilled_positions`
-- Slot count is always initialized as:
-  - `slotCount = q.answerOrder.length`
-- Runtime guards (in `useBuildSentenceSession`) enforce:
-  - `q.bank.length === q.answerOrder.length`
-  - `0 <= givenSlots[i].givenIndex <= q.answerOrder.length` (if given slots exist)
-  - `answerOrder` is a permutation of `bank` (no duplicates / no missing)
-- If a question violates invariants:
-  - development: throw immediately with `id`
-  - production: block invalid item and show data-error message instead of broken UI
-
-This prevents the historical bug where all chunks could be placed while empty slots still remained.
-
-## Build Sentence Difficulty Control (ETS 2026-aligned)
-
-- Target ratio per 10-question set:
-  - `easy`: 20%
-  - `medium`: 50%
-  - `hard`: 30%
-- A heuristic estimator (`lib/questionBank/difficultyControl.js`) computes per-question difficulty from:
-  - answer length
-  - effective chunk count
-  - distractor presence
-  - embedded-question signal
-  - prefilled-token reduction
-- Strict validation fails on large ratio drift:
-  - `npm run validate:bank -- --strict`
-- Extended repeated check (50 rounds):
-  - `node scripts/validate-bank-50.js`
-- Generation pipeline (`scripts/generateBSQuestions.mjs`) retries when a generated set drifts too far from target ratio.
-- Generator enforces exact 10-question mix before accepting a set:
-  - `easy=2, medium=5, hard=3`
-- You can rebuild balanced sets from an existing pooled bank:
-  - `npm run rebuild:balanced:bank`
-
-Each question:
-
-```json
-{
-  "id": "ets_s1_q1",
-  "prompt": "context shown to user",
-  "answer": "Do you know ...?",
-  "chunks": ["do", "you know", "what time", "..."],
-  "prefilled": [],
-  "prefilled_positions": {},
-  "distractor": null,
-  "has_question_mark": true,
-  "grammar_points": ["indirect question", "passive voice"]
-}
-```
-
-## Validation and generation
-
-- Validate question bank:
-  - `npm run validate:bank`
-  - `npm run validate:bank -- --strict`
-- Generate BS sets via API script:
-  - `node scripts/generateBSQuestions.mjs`
-  - optional envs:
-    - `BS_TARGET_SETS` (default `6`)
-    - `BS_CANDIDATE_ROUNDS` (default `40`)
-    - `BS_EASY_BOOST_ROUNDS` (default `16`)
-    - `BS_MIN_REVIEW_SCORE` (default `78`)
-    - `BS_MIN_REVIEW_OVERALL` (default `84`)
-  - generation pipeline:
-    - online candidate generation
-    - hard schema/runtime gate
-    - AI quality scoring
-    - difficulty-balanced assembly (`2 easy + 5 medium + 3 hard`)
-
-## AI scoring calibration
-
-- Calibration script:
-  - `npm run calibration:test`
-- Requires:
-  - `DEEPSEEK_API_KEY` in environment
-- Optional proxy for restricted networks:
-  - `DEEPSEEK_PROXY_URL` (preferred), e.g. `http://127.0.0.1:10809`
-  - fallback envs: `HTTPS_PROXY` / `HTTP_PROXY`
-  - Note: current Node transport expects an `http://` or `https://` proxy URL.
-    If you only have SOCKS (`socks5://`), enable an HTTP proxy port in your proxy client first.
-- Purpose:
-  - Re-run anchor samples and check score stability against expected ranges
-
-## Local development
-
-1. Install
+## Local Development
 
 ```bash
 npm install
+cp .env.example .env.local   # fill in API keys
+npm run dev                   # http://localhost:3000
 ```
 
-2. Create `.env.local`
+Required env vars — see `.env.example` for full list:
 
-```bash
-DEEPSEEK_API_KEY=your_key_here
-NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
-SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
-ADMIN_DASHBOARD_TOKEN=your_admin_token
+```
+DEEPSEEK_API_KEY=...
+NEXT_PUBLIC_SUPABASE_URL=...
+NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+SUPABASE_SERVICE_ROLE_KEY=...
+ADMIN_DASHBOARD_TOKEN=...
 ```
 
-3. Start dev server
+## Commands
 
-```bash
-npm run dev
-```
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start dev server |
+| `npm run build` | Production build |
+| `npm run test:unit` | Unit tests |
+| `npm run test:e2e` | E2E tests |
+| `npm run validate:bank` | Validate BS question bank |
+| `npm run validate:bank -- --strict` | Strict validation with difficulty check |
+| `npm run calibration:test` | AI scoring calibration |
 
-4. Build
+## Admin
 
-```bash
-npm run build
-```
+- `/admin` — Hub (requires `ADMIN_DASHBOARD_TOKEN`)
+- `/admin-codes` — Login code management
+- `/admin-users` — User growth & activity stats
+- `/admin-feedback` — User feedback review
+- `/admin-api-errors` — API failure logs
+- `/admin-questions` — Question bank browser
+- `/admin-generate` / `/admin-generate-bs` — Manual question generation triggers
 
-## Test commands
-
-- Unit tests: `npm run test:unit`
-- E2E tests: `npm run test:e2e`
-- Bank validation: `npm run validate:bank`
-- Strict bank + difficulty profile validation: `npm run validate:bank -- --strict`
-- Rebuild balanced 10-question sets: `npm run rebuild:balanced:bank`
-- Calibration: `npm run calibration:test`
+Database setup: run `scripts/sql/login-code-management.sql` in Supabase SQL Editor.
 
 ## Notes
 
-- This is a practice tool, not an official ETS system.
+- This is a practice tool, not an official ETS product.
 - AI scoring is for learning guidance, not an official TOEFL score.
-
-## Admin Code Issuance
-
-- Admin hub: `/admin`
-- Admin page: `/admin-codes`
-- API failure dashboard: `/admin-api-errors`
-- API: `app/api/admin/codes/route.js`
-- API failure query API: `app/api/admin/api-errors/route.js`
-- Verification API: `app/api/auth/verify-code/route.js`
-- Required env:
-  - `SUPABASE_SERVICE_ROLE_KEY`
-  - `ADMIN_DASHBOARD_TOKEN`
-- SQL setup:
-  - Run `scripts/sql/login-code-management.sql` in Supabase SQL Editor
-  - `access_codes` is managed server-side only; self-service code creation is disabled.
-  - `api_error_feedback` stores `/api/ai` failure logs for admin troubleshooting.
-
-## Backend Ops Guide
-
-1. Environment check (Vercel `Settings -> Environment Variables`)
-   - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-   - `SUPABASE_SERVICE_ROLE_KEY` (Supabase Secret key / service role)
-   - `ADMIN_DASHBOARD_TOKEN`
-2. Database setup (Supabase SQL Editor)
-   - Run `scripts/sql/login-code-management.sql`
-3. Access admin hub
-   - Open `/admin`
-   - Enter `ADMIN_DASHBOARD_TOKEN` in admin pages when prompted
-4. Private beta code operations
-   - Use `/admin-codes` to generate and issue login codes
-   - For legacy user recovery, re-issue legacy code or let auto-activation handle first login
-5. API failure diagnosis
-   - Open `/admin-api-errors`
-   - Check recent `http_status`, `error_type`, and message details
-6. Common failures and quick fixes
-   - `Supabase admin is not configured`
-     - missing `SUPABASE_SERVICE_ROLE_KEY` or URL in runtime env
-   - `Could not find table 'public.access_codes'`
-     - SQL schema not applied yet
-   - `Missing admin token`
-     - wrong or empty `ADMIN_DASHBOARD_TOKEN` input in admin page
