@@ -137,16 +137,17 @@ function CircularProgress({ value, max = 5, color = P.amber }) {
 
 // — Trend chart —
 
-const TIME_RANGES = [
-  { key: "7d", label: "7天", days: 7 },
-  { key: "30d", label: "30天", days: 30 },
-  { key: "90d", label: "90天", days: 90 },
-  { key: "all", label: "全部", days: 0 },
-];
+function formatRangeLabel(days) {
+  if (days <= 0) return "全部";
+  if (days < 30) return `近 ${days} 天`;
+  if (days < 365) return `近 ${Math.round(days / 30)} 个月`;
+  return `近 ${(days / 365).toFixed(1)} 年`;
+}
 
 function TrendChart({ bs, email, discussion, filter }) {
   const [hidden, setHidden] = useState({ bs: false, email: false, discussion: false });
-  const [range, setRange] = useState("all");
+  // sliderVal: 0 = show all, 100 = show only last day
+  const [sliderVal, setSliderVal] = useState(0);
 
   useEffect(() => {
     if (!filter || filter === "all" || filter === "mock") {
@@ -157,7 +158,7 @@ function TrendChart({ bs, email, discussion, filter }) {
   }, [filter]);
   const [tooltip, setTooltip] = useState(null);
   const svgRef = useRef(null);
-  const W = 440, H = 172, ML = 30, MT = 12, MR = 10, MB = 28;
+  const W = 440, H = 156, ML = 30, MT = 10, MR = 10, MB = 24;
   const cW = W - ML - MR, cH = H - MT - MB;
   const emailVal = (s) => Number.isFinite(s.score) ? s.score : null;
   const bsVal = (s) => { const t = Number(s.total || 0), c = Number(s.correct || 0); return t > 0 ? (c / t) * 5 : null; };
@@ -168,9 +169,15 @@ function TrendChart({ bs, email, discussion, filter }) {
     { key: "bs", label: "拼句练习", color: P.amber, pts: aggregateByDay(bs, bsVal) },
   ];
 
-  // Apply time range filter
-  const rangeCfg = TIME_RANGES.find((r) => r.key === range) || TIME_RANGES[3];
-  const cutoff = rangeCfg.days > 0 ? Date.now() - rangeCfg.days * 864e5 : 0;
+  // Compute the full time span, then derive cutoff from slider
+  const allRawPts = rawLines.flatMap((l) => l.pts);
+  const globalMin = allRawPts.length ? Math.min(...allRawPts.map((p) => p.ts)) : Date.now();
+  const globalMax = allRawPts.length ? Math.max(...allRawPts.map((p) => p.ts)) : Date.now();
+  const totalSpan = globalMax - globalMin || 864e5;
+  // slider 0 → cutoff = globalMin (show all), slider 100 → cutoff = globalMax (show ~1 day)
+  const cutoff = sliderVal > 0 ? globalMin + (sliderVal / 100) * totalSpan : 0;
+  const cutoffDays = cutoff > 0 ? Math.round((Date.now() - cutoff) / 864e5) : 0;
+
   const lines = rawLines.map((l) => ({
     ...l,
     pts: cutoff > 0 ? l.pts.filter((p) => p.ts >= cutoff) : l.pts,
@@ -178,11 +185,11 @@ function TrendChart({ bs, email, discussion, filter }) {
 
   const allPts = lines.flatMap((l) => l.pts);
   if (!allPts.length) return (
-    <div style={{ padding: "24px 18px", textAlign: "center" }}>
-      <div style={{ fontSize: 12, color: P.textDim, marginBottom: 10 }}>暂无趋势数据</div>
-      {cutoff > 0 && rawLines.some((l) => l.pts.length > 0) && (
-        <button onClick={() => setRange("all")} style={{ fontSize: 11, color: P.primary, background: P.primarySoft, border: `1px solid ${P.primary}30`, borderRadius: 999, padding: "4px 12px", cursor: "pointer", fontWeight: 600 }}>
-          查看全部时间
+    <div style={{ padding: "18px", textAlign: "center" }}>
+      <div style={{ fontSize: 12, color: P.textDim, marginBottom: 8 }}>该范围内暂无数据</div>
+      {sliderVal > 0 && (
+        <button onClick={() => setSliderVal(0)} style={{ fontSize: 11, color: P.primary, background: "none", border: "none", cursor: "pointer", fontWeight: 600, textDecoration: "underline" }}>
+          重置为全部
         </button>
       )}
     </div>
@@ -195,13 +202,7 @@ function TrendChart({ bs, email, discussion, filter }) {
   const toY = (v) => MT + (1 - v / 5) * cH;
   const yGrid = [0, 1, 2, 3, 4, 5];
   const allDates = [...new Set(allPts.map((p) => p.date))].sort();
-  const shownDates = allDates.length <= 6 ? allDates : (() => {
-    const step = Math.max(1, Math.floor((allDates.length - 1) / 4));
-    const picked = [allDates[0]];
-    for (let i = step; i < allDates.length - 1; i += step) picked.push(allDates[i]);
-    picked.push(allDates[allDates.length - 1]);
-    return [...new Set(picked)];
-  })();
+  const shownDates = allDates.length <= 5 ? allDates : [allDates[0], allDates[Math.floor(allDates.length / 2)], allDates[allDates.length - 1]];
 
   function handleMouseMove(e) {
     const el = svgRef.current;
@@ -216,151 +217,83 @@ function TrendChart({ bs, email, discussion, filter }) {
     });
     if (bestTs === null) { setTooltip(null); return; }
     const near = lines.filter((l) => !hidden[l.key]).flatMap((l) => l.pts.filter((p) => p.ts === bestTs).map((p) => ({ key: l.key, label: l.label, color: l.color, avg: p.avg, date: p.date })));
-    setTooltip({ left: px > rect.width * 0.6 ? px - 148 : px + 16, top: 8, svgX: toX(bestTs), near });
+    setTooltip({ left: px > rect.width * 0.6 ? px - 140 : px + 16, top: 8, svgX: toX(bestTs), near });
   }
-
-  // Count visible data points for the range indicator
-  const visibleCount = allPts.length;
-  const totalCount = rawLines.flatMap((l) => l.pts).length;
 
   return (
     <div>
-      {/* Time range selector + legend row */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10, flexWrap: "wrap", gap: 6 }}>
-        {/* Time range pills */}
-        <div style={{ display: "inline-flex", background: "#f0f4f2", borderRadius: 8, padding: 2, gap: 1 }}>
-          {TIME_RANGES.map((r) => {
-            const isActive = range === r.key;
-            return (
-              <button
-                key={r.key}
-                onClick={() => setRange(r.key)}
-                style={{
-                  padding: "4px 10px", borderRadius: 6, border: "none", cursor: "pointer",
-                  fontSize: 10.5, fontWeight: isActive ? 700 : 500, letterSpacing: 0.2,
-                  background: isActive ? P.surface : "transparent",
-                  color: isActive ? P.primary : P.textDim,
-                  boxShadow: isActive ? "0 1px 4px rgba(0,0,0,0.08)" : "none",
-                  transition: "all 0.2s cubic-bezier(0.16,1,0.3,1)",
-                }}
-              >{r.label}</button>
-            );
-          })}
-        </div>
-        {/* Legend toggles */}
-        <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
-          {lines.map((l) => (
-            <button key={l.key} onClick={() => setHidden((prev) => ({ ...prev, [l.key]: !prev[l.key] }))}
-              style={{
-                display: "inline-flex", alignItems: "center", gap: 5,
-                border: `1px solid ${hidden[l.key] ? P.borderSubtle : `${l.color}40`}`,
-                background: hidden[l.key] ? "transparent" : `${l.color}08`,
-                color: hidden[l.key] ? P.textDim : l.color,
-                borderRadius: 999, padding: "3px 8px", fontSize: 10, fontWeight: 600, cursor: "pointer",
-                opacity: hidden[l.key] ? 0.5 : 1,
-                transition: "all 0.2s",
-              }}>
-              <span style={{ width: 6, height: 6, borderRadius: 999, background: hidden[l.key] ? P.border : l.color, transition: "background 0.2s" }} />
-              {l.label}
-              {!hidden[l.key] && l.pts.length > 0 && (
-                <span style={{ fontSize: 9, opacity: 0.7 }}>({l.pts.length})</span>
-              )}
-            </button>
-          ))}
-        </div>
+      {/* Legend */}
+      <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 8 }}>
+        {lines.map((l) => (
+          <button key={l.key} onClick={() => setHidden((prev) => ({ ...prev, [l.key]: !prev[l.key] }))}
+            style={{ display: "inline-flex", alignItems: "center", gap: 6, border: "1px solid " + (hidden[l.key] ? P.border : l.color), background: hidden[l.key] ? P.surface : `${l.color}12`, color: hidden[l.key] ? P.textDim : l.color, borderRadius: 999, padding: "3px 8px", fontSize: 10.5, fontWeight: 700, cursor: "pointer" }}>
+            <span style={{ width: 8, height: 8, borderRadius: 999, background: hidden[l.key] ? P.border : l.color }} />{l.label}
+          </button>
+        ))}
       </div>
 
       {/* Chart */}
-      <div style={{ position: "relative", background: "linear-gradient(180deg, #fafcfb 0%, #f4f7f5 100%)", borderRadius: 10, border: `1px solid ${P.borderSubtle}`, padding: "2px 0" }}>
+      <div style={{ position: "relative" }}>
         <svg ref={svgRef} viewBox={`0 0 ${W} ${H}`} width="100%" style={{ display: "block", overflow: "visible" }} onMouseMove={handleMouseMove} onMouseLeave={() => setTooltip(null)}>
-          <defs>
-            {lines.map((l) => (
-              <linearGradient key={`grad-${l.key}`} id={`areaGrad-${l.key}`} x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor={l.color} stopOpacity="0.18" />
-                <stop offset="100%" stopColor={l.color} stopOpacity="0.02" />
-              </linearGradient>
-            ))}
-            <filter id="glow">
-              <feGaussianBlur stdDeviation="2" result="blur" />
-              <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
-            </filter>
-          </defs>
-
-          {/* Grid lines */}
           {yGrid.map((y) => (
             <g key={y}>
-              <line x1={ML} y1={toY(y)} x2={ML + cW} y2={toY(y)} stroke={y === 0 ? `${P.border}` : "#edf2ef"} strokeWidth={y === 0 ? 1 : 0.5} strokeDasharray={y === 0 ? "none" : "4,4"} />
-              <text x={ML - 6} y={toY(y) + 3.5} fontSize={8.5} fill={P.textDim} textAnchor="end" fontWeight="500">{y}</text>
+              <line x1={ML} y1={toY(y)} x2={ML + cW} y2={toY(y)} stroke={y === 0 ? P.border : "#edf2ef"} strokeWidth={1} strokeDasharray={y === 0 ? "none" : "3,3"} />
+              <text x={ML - 5} y={toY(y) + 3.5} fontSize={9} fill={P.textDim} textAnchor="end">{y}</text>
             </g>
           ))}
-
-          {/* Date labels */}
+          <line x1={ML} y1={MT} x2={ML} y2={MT + cH} stroke={P.border} strokeWidth={1} />
           {shownDates.map((date) => {
             const p = allPts.find((item) => item.date === date);
             if (!p) return null;
             const [, month, day] = date.split("-");
-            return <text key={date} x={toX(p.ts)} y={H - 6} fontSize={8.5} fill={P.textDim} textAnchor="middle" fontWeight="500">{month}/{day}</text>;
+            return <text key={date} x={toX(p.ts)} y={H - 4} fontSize={9} fill={P.textDim} textAnchor="middle">{month}/{day}</text>;
           })}
-
-          {/* Hover highlight column */}
-          {tooltip && <rect x={tooltip.svgX - 14} y={MT} width={28} height={cH} fill={`${P.primary}08`} rx={4} />}
-
-          {/* Area fills + lines */}
+          {tooltip ? <rect x={tooltip.svgX - 16} y={MT} width={32} height={cH} fill={P.primarySoft} opacity={0.65} rx={4} /> : null}
           {lines.map((l) => {
             if (hidden[l.key] || !l.pts.length) return null;
             const coords = l.pts.map((p) => ({ x: toX(p.ts), y: toY(p.avg) }));
-            const linePath = l.pts.length > 1 ? smoothPath(coords) : null;
-            // Build area path: line path + close to bottom
-            const areaPath = linePath
-              ? `${linePath} L ${coords[coords.length - 1].x.toFixed(1)} ${toY(0).toFixed(1)} L ${coords[0].x.toFixed(1)} ${toY(0).toFixed(1)} Z`
-              : null;
             return (
               <g key={l.key}>
-                {areaPath && <path d={areaPath} fill={`url(#areaGrad-${l.key})`} />}
-                {linePath && <path d={linePath} fill="none" stroke={l.color} strokeWidth={2} strokeLinecap="round" filter="url(#glow)" />}
-                {coords.map((p, i) => (
-                  <g key={i}>
-                    <circle cx={p.x.toFixed(1)} cy={p.y.toFixed(1)} r={l.pts.length === 1 ? 6 : 4} fill={l.color} opacity={0.15} />
-                    <circle cx={p.x.toFixed(1)} cy={p.y.toFixed(1)} r={l.pts.length === 1 ? 4 : 3} fill="#fff" stroke={l.color} strokeWidth={1.8} />
-                  </g>
-                ))}
+                {l.pts.length > 1 ? <path d={smoothPath(coords)} fill="none" stroke={l.color} strokeWidth={2} strokeLinecap="round" /> : null}
+                {coords.map((p, i) => <circle key={i} cx={p.x.toFixed(1)} cy={p.y.toFixed(1)} r={l.pts.length === 1 ? 5 : 3.5} fill="#fff" stroke={l.color} strokeWidth={1.5} />)}
               </g>
             );
           })}
-
-          {/* Hover vertical line */}
-          {tooltip && <line x1={tooltip.svgX} y1={MT} x2={tooltip.svgX} y2={MT + cH} stroke={P.primary} strokeWidth={1} strokeDasharray="3,3" opacity={0.35} />}
+          {tooltip ? <line x1={tooltip.svgX} y1={MT} x2={tooltip.svgX} y2={MT + cH} stroke={P.primary} strokeWidth={1} strokeDasharray="2,2" opacity={0.45} /> : null}
         </svg>
-
-        {/* Tooltip */}
-        {tooltip && tooltip.near.length > 0 && (
-          <div style={{
-            position: "absolute", left: tooltip.left, top: tooltip.top,
-            background: "rgba(255,255,255,0.96)", backdropFilter: "blur(12px)",
-            border: `1px solid ${P.borderSubtle}`, borderRadius: 10,
-            padding: "8px 11px", fontSize: 10.5, pointerEvents: "none", zIndex: 10,
-            boxShadow: "0 8px 24px rgba(10,40,25,0.1), 0 2px 6px rgba(10,40,25,0.05)",
-            minWidth: 120,
-          }}>
-            <div style={{ fontSize: 9.5, color: P.textDim, marginBottom: 6, fontWeight: 700, letterSpacing: 0.3 }}>{tooltip.near[0].date}</div>
+        {tooltip && tooltip.near.length ? (
+          <div style={{ position: "absolute", left: tooltip.left, top: tooltip.top, background: "#fff", border: "1px solid " + P.border, borderRadius: 12, padding: "6px 9px", fontSize: 10.5, pointerEvents: "none", zIndex: 10, boxShadow: "0 10px 30px rgba(0,0,0,0.08)", minWidth: 108 }}>
+            <div style={{ fontSize: 10, color: P.textDim, marginBottom: 6, fontWeight: 700 }}>{tooltip.near[0].date}</div>
             {tooltip.near.map((item) => (
-              <div key={item.key} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 3 }}>
-                <span style={{ width: 6, height: 6, borderRadius: 999, background: item.color, boxShadow: `0 0 4px ${item.color}60` }} />
-                <span style={{ color: item.color, fontWeight: 700, fontSize: 10.5 }}>{item.label}</span>
-                <span style={{ color: P.text, fontWeight: 800, marginLeft: "auto", fontVariantNumeric: "tabular-nums" }}>{item.avg.toFixed(1)}</span>
-                <span style={{ color: P.textDim, fontSize: 9.5 }}>/5</span>
+              <div key={item.key} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
+                <span style={{ width: 7, height: 7, borderRadius: 999, background: item.color }} />
+                <span style={{ color: item.color, fontWeight: 700 }}>{item.label}</span>
+                <span style={{ color: P.text }}>{item.avg.toFixed(1)}/5</span>
               </div>
             ))}
           </div>
-        )}
-
-        {/* Data range indicator */}
-        {range !== "all" && visibleCount < totalCount && (
-          <div style={{ position: "absolute", bottom: -18, right: 0, fontSize: 9.5, color: P.textDim }}>
-            显示 {visibleCount}/{totalCount} 个数据点
-          </div>
-        )}
+        ) : null}
       </div>
+
+      {/* Time range slider */}
+      {allRawPts.length > 1 && (
+        <div style={{ marginTop: 8, display: "flex", alignItems: "center", gap: 10 }}>
+          <span style={{ fontSize: 10, color: P.textDim, whiteSpace: "nowrap", minWidth: 52 }}>
+            {sliderVal === 0 ? "全部" : formatRangeLabel(cutoffDays)}
+          </span>
+          <input
+            type="range"
+            min={0}
+            max={100}
+            value={sliderVal}
+            onChange={(e) => setSliderVal(Number(e.target.value))}
+            style={{ flex: 1, height: 3, accentColor: P.primary, cursor: "pointer" }}
+          />
+          <span style={{ fontSize: 10, color: P.textDim, whiteSpace: "nowrap", minWidth: 30, textAlign: "right" }}>
+            {allPts.length} 条
+          </span>
+        </div>
+      )}
     </div>
   );
 }
