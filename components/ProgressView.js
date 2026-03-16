@@ -458,8 +458,11 @@ function SessionRow({ entry, expanded, onToggle, onDelete, typeAvgs, isActive, o
 
 // — Full mock report panel —
 
-function levelToCategory(level) {
-  if (level === "red") return "语法错误";
+function levelToCategory(level, errorType) {
+  if (level === "red") {
+    if (String(errorType || "").toLowerCase() === "spelling") return "拼写错误";
+    return "语法错误";
+  }
   if (level === "orange") return "表达建议";
   return "拔高建议";
 }
@@ -467,7 +470,7 @@ function levelToCategory(level) {
 function segmentsToTokens(segments) {
   return segments.map((seg, idx) => {
     if (seg.type !== "mark") return { id: `t${idx}`, type: "normal", text: seg.text };
-    return { id: `err${idx}`, type: "error", level: seg.level, category: levelToCategory(seg.level), text: seg.text, suggestion: seg.fix || "", note: seg.note || "" };
+    return { id: `err${idx}`, type: "error", level: seg.level, errorType: seg.errorType || "", category: levelToCategory(seg.level, seg.errorType), text: seg.text, suggestion: seg.fix || "", note: seg.note || "" };
   });
 }
 

@@ -65,9 +65,38 @@ describe("parseAnnotations", () => {
 
     expect(out.annotations).toHaveLength(1);
     expect(out.annotations[0].level).toBe("red");
+    expect(out.annotations[0].errorType).toBe("spelling");
     expect(out.annotations[0].message).toContain("拼写错误");
     expect(out.annotations[0].fix).toContain("received");
     expect(counts.red).toBe(1);
+    expect(counts.spelling).toBe(1);
+  });
+
+  test("recognizes spelling error when fix is Chinese instruction", () => {
+    const raw =
+      '<r>recieve</r><n level="red" fix="将 recieve 改为 receive">拼写错误</n>';
+    const out = parseAnnotations(raw);
+
+    expect(out.annotations).toHaveLength(1);
+    expect(out.annotations[0].errorType).toBe("spelling");
+  });
+
+  test("recognizes spelling error via edit-distance heuristic (no keyword)", () => {
+    const raw =
+      '<r>accomodate</r><n level="red" fix="accommodate">常见拼错词。</n>';
+    const out = parseAnnotations(raw);
+
+    expect(out.annotations).toHaveLength(1);
+    expect(out.annotations[0].errorType).toBe("spelling");
+  });
+
+  test("does not flag grammar error as spelling", () => {
+    const raw =
+      '<r>He go to school yesterday.</r><n level="red" fix="He went to school yesterday.">语法错误：一般过去时使用错误。</n>';
+    const out = parseAnnotations(raw);
+
+    expect(out.annotations).toHaveLength(1);
+    expect(out.annotations[0].errorType).not.toBe("spelling");
   });
 
   test("keeps original layout when model emits detached marker lines", () => {
