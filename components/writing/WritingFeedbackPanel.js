@@ -208,10 +208,10 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
                 <div key={i} style={{ background: P.surface, borderRadius: 12, border: `1px solid ${P.borderSubtle}`, borderLeft: `4px solid ${i === 0 ? P.rose : P.amber}`, padding: "14px 16px" }}>
                   <div style={{ fontSize: 13, fontWeight: 800, color: P.text, marginBottom: 10 }}>{a.title || `短板 ${i + 1}`}</div>
                   <div style={{ fontSize: 13, color: P.textSec, lineHeight: 1.7, marginBottom: 8 }}>
-                    <b style={{ color: P.text, background: P.roseSoft, padding: "0 3px", borderRadius: 3 }}>为什么重要：</b> <ProBlur isPro={isPro}>{a.importance || "未提供"}</ProBlur>
+                    <b style={{ color: P.text, background: P.roseSoft, padding: "0 3px", borderRadius: 3 }}>为什么重要：</b> {a.importance || "未提供"}
                   </div>
                   <div style={{ fontSize: 13, color: P.textSec, lineHeight: 1.7 }}>
-                    <b style={{ color: P.primaryDeep, background: P.primarySoft, padding: "0 3px", borderRadius: 3 }}>现在可做的：</b> <ProBlur isPro={isPro}>{a.action || "未提供"}</ProBlur>
+                    <b style={{ color: P.primaryDeep, background: P.primarySoft, padding: "0 3px", borderRadius: 3 }}>现在可做的：</b> {a.action || "未提供"}
                   </div>
                 </div>
               ))}
@@ -229,13 +229,12 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
                     <span style={{ fontSize: 12, fontWeight: 700, color: P.text }}>{p.tag || "未分类"}</span>
                     <span style={{ fontSize: 11, color: P.textDim }}>出现 {Number(p.count || 0)} 次</span>
                   </div>
-                  <div style={{ fontSize: 12, color: P.textSec, lineHeight: 1.6 }}><ProBlur isPro={isPro}>{p.summary || ""}</ProBlur></div>
+                  <div style={{ fontSize: 12, color: P.textSec, lineHeight: 1.6 }}>{p.summary || ""}</div>
                 </div>
               ))}
             </div>
           </div>
         ) : null}
-        {!isPro && <UpgradeBanner onClick={() => setShowUpgrade(true)} />}
       </div>
     );
   }
@@ -247,7 +246,7 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
     return (
       <div>
         <p style={{ fontSize: 13, color: P.textSec, marginBottom: 16 }}>
-          共发现 <b style={{ color: P.text }}>{errorTokens.length}</b> 处表达问题。{!isPro && <span style={{ color: P.amber, fontWeight: 700 }}>升级 Pro 查看修改建议与详细解析。</span>}
+          共发现 <b style={{ color: P.text }}>{errorTokens.length}</b> 处表达问题。
         </p>
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {errorTokens.map((err) => {
@@ -272,13 +271,12 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
                   {isActive ? <span style={{ fontSize: 11, fontWeight: 700, color: P.amber }}>正在左侧查看</span> : null}
                 </div>
                 <div style={{ fontSize: 13, color: P.textDim, textDecoration: "line-through", textDecorationColor: P.rose, marginBottom: 6 }}>{err.text}</div>
-                <div style={{ fontSize: 13, fontWeight: 700, color: P.primary }}><ProBlur isPro={isPro}>{err.suggestion || "（暂无建议）"}</ProBlur></div>
-                {err.note ? <div style={{ fontSize: 12, color: P.textSec, lineHeight: 1.6, marginTop: 4 }}><ProBlur isPro={isPro}>{err.note}</ProBlur></div> : null}
+                <div style={{ fontSize: 13, fontWeight: 700, color: P.primary }}>{err.suggestion || "（暂无建议）"}</div>
+                {err.note ? <div style={{ fontSize: 12, color: P.textSec, lineHeight: 1.6, marginTop: 4 }}>{err.note}</div> : null}
               </button>
             );
           })}
         </div>
-        {!isPro && <UpgradeBanner onClick={() => setShowUpgrade(true)} />}
       </div>
     );
   }
@@ -369,18 +367,10 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
                   </div>
                   <div style={{ padding: "12px 14px" }}>
                     <div style={{ fontSize: 12, color: P.textDim, textDecoration: "line-through", textDecorationColor: P.rose, marginBottom: 6 }}>{token.text}</div>
-                    <div style={{ fontSize: 13, fontWeight: 700, color: P.primary, marginBottom: 10 }}><ProBlur isPro={isPro}>{token.suggestion || "（暂无建议）"}</ProBlur></div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: P.primary, marginBottom: 10 }}>{token.suggestion || "（暂无建议）"}</div>
                     <div style={{ fontSize: 12, color: P.textSec, lineHeight: 1.65, background: P.bg, padding: "8px 10px", borderRadius: 8, border: `1px solid ${P.borderSubtle}` }}>
-                      <b style={{ color: P.text }}>解析：</b><ProBlur isPro={isPro}>{token.note || "暂无说明"}</ProBlur>
+                      <b style={{ color: P.text }}>解析：</b>{token.note || "暂无说明"}
                     </div>
-                    {!isPro && (
-                      <div
-                        onClick={(e) => { e.stopPropagation(); setShowUpgrade(true); }}
-                        style={{ marginTop: 8, fontSize: 11, color: P.primary, cursor: "pointer", textAlign: "center", fontWeight: 700 }}
-                      >
-                        {"\uD83D\uDD12"} 升级 Pro 查看修改建议
-                      </div>
-                    )}
                   </div>
                 </span>
               ) : null}

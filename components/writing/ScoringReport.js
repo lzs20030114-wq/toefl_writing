@@ -120,11 +120,10 @@ export function ScoringReport({ result, type }) {
             {actions.map((a, idx) => (
               <div key={idx} style={{ border: "1px solid #e5e7eb", borderLeft: `4px solid ${idx === 0 ? "#dc2626" : "#f97316"}`, borderRadius: 6, padding: 12 }}>
                 <div style={{ fontSize: 14, fontWeight: 700, color: C.t1, marginBottom: 6 }}>{a.title || `短板${idx + 1}`}</div>
-                <div style={{ fontSize: 13, color: C.t2, lineHeight: 1.7, marginBottom: 8 }}><b>为什么重要：</b><ProBlur isPro={isPro}>{a.importance || "未提供"}</ProBlur></div>
-                <div style={{ fontSize: 13, color: C.t1, lineHeight: 1.7, background: "#f8fafc", borderRadius: 6, padding: "8px 10px" }}><b>现在可做的：</b><ProBlur isPro={isPro}>{a.action || "未提供"}</ProBlur></div>
+                <div style={{ fontSize: 13, color: C.t2, lineHeight: 1.7, marginBottom: 8 }}><b>为什么重要：</b>{a.importance || "未提供"}</div>
+                <div style={{ fontSize: 13, color: C.t1, lineHeight: 1.7, background: "#f8fafc", borderRadius: 6, padding: "8px 10px" }}><b>现在可做的：</b>{a.action || "未提供"}</div>
               </div>
             ))}
-            {!isPro && <UpgradeBannerCompact onClick={() => setShowUpgrade(true)} />}
           </div>
         )}
       </DisclosureSection>
@@ -175,14 +174,9 @@ export function ScoringReport({ result, type }) {
             {Number.isInteger(activeMark) && marks[activeMark]?.type === "mark" ? (
               <div style={{ marginTop: 12, border: "1px solid #cbd5e1", borderRadius: 8, background: "#fff", padding: "10px 12px" }}>
                 <div style={{ fontSize: 12, color: C.nav, fontWeight: 700, marginBottom: 4 }}>修改建议（中文）</div>
-                <div style={{ fontSize: 13, marginBottom: 8 }}><ProBlur isPro={isPro}>{marks[activeMark].fix || "暂无"}</ProBlur></div>
+                <div style={{ fontSize: 13, marginBottom: 8 }}>{marks[activeMark].fix || "暂无"}</div>
                 <div style={{ fontSize: 12, color: C.nav, fontWeight: 700, marginBottom: 4 }}>问题说明</div>
-                <div style={{ fontSize: 13, color: C.t2 }}><ProBlur isPro={isPro}>{marks[activeMark].note || "暂无"}</ProBlur></div>
-                {!isPro && (
-                  <div onClick={() => setShowUpgrade(true)} style={{ marginTop: 8, fontSize: 11, color: "#087355", cursor: "pointer", fontWeight: 700 }}>
-                    {"\uD83D\uDD12"} 升级 Pro 查看详情
-                  </div>
-                )}
+                <div style={{ fontSize: 13, color: C.t2 }}>{marks[activeMark].note || "暂无"}</div>
               </div>
             ) : null}
           </div>
@@ -200,12 +194,11 @@ export function ScoringReport({ result, type }) {
               <div key={idx} style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 8, border: "1px solid #e5e7eb", borderRadius: 6, padding: 10 }}>
                 <div>
                   <PatternTag tag={p.tag} />
-                  <div style={{ marginTop: 6, fontSize: 13, color: C.t2 }}><ProBlur isPro={isPro}>{p.summary || ""}</ProBlur></div>
+                  <div style={{ marginTop: 6, fontSize: 13, color: C.t2 }}>{p.summary || ""}</div>
                 </div>
                 <div style={{ alignSelf: "start", fontSize: 12, color: C.t2 }}>出现 {Number(p.count || 0)} 次</div>
               </div>
             ))}
-            {!isPro && <UpgradeBannerCompact onClick={() => setShowUpgrade(true)} />}
           </div>
         )}
       </DisclosureSection>
