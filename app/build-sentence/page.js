@@ -41,7 +41,7 @@ function BuildSentencePageClient() {
     const doneIds = loadDoneIds(DONE_STORAGE_KEYS.BUILD_SENTENCE);
     const doneStrings = new Set([...doneIds].map(String));
     return (
-      <UsageGateWrapper onExit={onExit}>
+      <UsageGateWrapper onExit={onExit} practiceMode={mode}>
         <TopicPicker
           title="Build a Sentence"
           section="Writing Practice | Task 1"
@@ -66,7 +66,7 @@ function BuildSentencePageClient() {
   }
 
   return (
-    <UsageGateWrapper onExit={onExit}>
+    <UsageGateWrapper onExit={onExit} practiceMode={mode}>
       <BuildSentenceTask
         onExit={isPractice ? () => setPickedSetId(null) : onExit}
         questions={isPractice ? practiceQuestions : undefined}

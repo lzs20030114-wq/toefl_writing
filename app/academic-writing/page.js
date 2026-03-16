@@ -49,7 +49,7 @@ function AcademicWritingPageClient() {
   if (isPractice && !pickedPromptId) {
     const doneIds = loadDoneIds(DONE_STORAGE_KEYS.DISCUSSION);
     return (
-      <UsageGateWrapper onExit={onExit}>
+      <UsageGateWrapper onExit={onExit} practiceMode={mode}>
         <TopicPicker
           title="Academic Discussion"
           section="Writing Practice | Task 3"
@@ -64,7 +64,7 @@ function AcademicWritingPageClient() {
   }
 
   return (
-    <UsageGateWrapper onExit={onExit}>
+    <UsageGateWrapper onExit={onExit} practiceMode={mode}>
       <WritingTask
         onExit={isPractice ? () => setPickedPromptId(null) : onExit}
         type="discussion"

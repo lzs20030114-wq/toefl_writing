@@ -2,9 +2,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
-import { getSavedCode } from "../../lib/AuthContext";
+import { getSavedCode, getSavedTier } from "../../lib/AuthContext";
 import { useUsageGate } from "../../lib/useUsageGate";
 import UsageLimitModal from "./UsageLimitModal";
+import UpgradeModal from "./UpgradeModal";
 import { C, FONT } from "./ui";
 
 /**
@@ -55,13 +56,97 @@ function LoginRequiredModal({ onGoLogin }) {
 }
 
 /**
+ * Blurred overlay for free users trying to access practice mode.
+ */
+function PracticeLockedGate({ children, onExit, userCode }) {
+  const [showUpgrade, setShowUpgrade] = useState(false);
+  return (
+    <>
+      {/* Blurred, non-interactive preview */}
+      <div style={{ filter: "blur(6px) saturate(0.5)", pointerEvents: "none", userSelect: "none", WebkitUserSelect: "none", opacity: 0.6 }}>
+        {typeof children === "function" ? children({}) : children}
+      </div>
+
+      {/* Overlay card */}
+      {createPortal(
+        <div
+          onClick={onExit}
+          style={{
+            position: "fixed", inset: 0, background: "rgba(0,0,0,0.35)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            zIndex: 10000, fontFamily: FONT, padding: 20,
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: "#fff", borderRadius: 16, padding: "32px 28px",
+              maxWidth: 400, width: "90%", textAlign: "center",
+              boxShadow: "0 20px 60px rgba(0,0,0,0.15)",
+            }}
+          >
+            <div style={{
+              width: 48, height: 48, borderRadius: 12,
+              background: "linear-gradient(135deg,#087355,#0891B2)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              margin: "0 auto 16px",
+            }}>
+              <span style={{ color: "#fff", fontSize: 22, fontWeight: 800 }}>P</span>
+            </div>
+            <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 8, color: C.t1 }}>
+              专项练习 · Pro 专属
+            </h3>
+            <p style={{ fontSize: 14, color: C.t2, marginBottom: 20, lineHeight: 1.6 }}>
+              升级 Pro 解锁专项练习模式：自选题目、不限时间、反复练习薄弱项。
+            </p>
+            <button
+              onClick={() => setShowUpgrade(true)}
+              style={{
+                width: "100%", padding: "12px 0", borderRadius: 10,
+                border: "none", background: C.blue, color: "#fff",
+                fontSize: 15, fontWeight: 600, cursor: "pointer",
+                fontFamily: FONT, marginBottom: 8,
+              }}
+            >
+              升级 Pro
+            </button>
+            <button
+              onClick={onExit}
+              style={{
+                width: "100%", padding: "10px 0", borderRadius: 10,
+                border: "1px solid " + C.bdr, background: "#fff",
+                color: C.t2, fontSize: 14, cursor: "pointer", fontFamily: FONT,
+              }}
+            >
+              返回
+            </button>
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {showUpgrade && (
+        <UpgradeModal
+          userCode={userCode}
+          currentTier="free"
+          onClose={() => setShowUpgrade(false)}
+          onUpgraded={() => window.location.reload()}
+        />
+      )}
+    </>
+  );
+}
+
+/**
  * Wraps a practice task component with login + daily usage checking.
  * - Not logged in → show login prompt, redirect to home
+ * - Practice mode + free tier → show blurred gate with upgrade prompt
  * - Logged in but no remaining usage → show limit modal
  * - Otherwise → render children
  */
-export default function UsageGateWrapper({ children, onExit }) {
+export default function UsageGateWrapper({ children, onExit, practiceMode }) {
   const code = getSavedCode();
+  const tier = getSavedTier();
   const router = useRouter();
   const [showLoginPrompt, setShowLoginPrompt] = useState(!code);
   const { canPractice, limit, loading } = useUsageGate();
@@ -75,6 +160,15 @@ export default function UsageGateWrapper({ children, onExit }) {
           router.push("/?login=1");
         }}
       />
+    );
+  }
+
+  // Practice mode requires pro or legacy
+  if (practiceMode === "practice" && tier !== "pro" && tier !== "legacy") {
+    return (
+      <PracticeLockedGate onExit={onExit} userCode={code}>
+        {children}
+      </PracticeLockedGate>
     );
   }
 

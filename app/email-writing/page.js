@@ -42,7 +42,7 @@ function EmailWritingPageClient() {
   if (isPractice && !pickedPromptId) {
     const doneIds = loadDoneIds(DONE_STORAGE_KEYS.EMAIL);
     return (
-      <UsageGateWrapper onExit={onExit}>
+      <UsageGateWrapper onExit={onExit} practiceMode={mode}>
         <TopicPicker
           title="Write an Email"
           section="Writing Practice | Task 2"
@@ -57,7 +57,7 @@ function EmailWritingPageClient() {
   }
 
   return (
-    <UsageGateWrapper onExit={onExit}>
+    <UsageGateWrapper onExit={onExit} practiceMode={mode}>
       <WritingTask
         onExit={isPractice ? () => setPickedPromptId(null) : onExit}
         type="email"
