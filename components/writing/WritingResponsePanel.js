@@ -158,7 +158,14 @@ export function WritingResponsePanel({
                 if (!imeTipDismissedRef.current && /[\u2E80-\u9FFF\uF900-\uFAFF\uFE30-\uFE4F\uFF00-\uFFEF\u3000-\u303F\u3040-\u30FF]/.test(e.data || "")) setImeTipVisible(true);
               }}
               onChange={(e) => {
-                if (isComposingRef.current) return;
+                if (isComposingRef.current) {
+                  // Mac IME switch may skip compositionEnd — trust native flag
+                  if (e.nativeEvent?.isComposing === false) {
+                    isComposingRef.current = false;
+                  } else {
+                    return;
+                  }
+                }
                 const cleaned = e.target.value.replace(CJK_RE, "");
                 onTextChange(cleaned);
               }}
