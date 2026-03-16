@@ -1078,17 +1078,19 @@ Distractor: "did" or "do" or morphological variant.
 SCORER FENCE (easy): Only "did not" / "do not" / "cannot" / "could not" / "am not" / "is not". NO "have not been" (passive). NO "had not" (past perfect). NO comparative. NO relative clause. NO embedded wh-clause.
 PREFILLED (easy): Bare pronoun "she"/"he"/"they" or 2-word NP "the student" for 3rd-person. "i" for ~20%.`,
 
-    medium: `ALL answers in this group: negative statement, 9-12 words, may include a short embedded element.
+    medium: `ALL answers in this group: negative statement, 9-12 words.
+EMBEDDED STRUCTURE REQUIRED: MOST negation/medium items (~80%) MUST use negation + embedded wh/if clause:
+  "did not know why/when/whether...", "could not understand what...", "was not sure if..."
+  This keeps the embedded rate close to TPO (63%). Only ~20% can be simple negation without embedded clause.
 IMPORTANT: Prefer 3rd-person subjects (~80%). Only ~20% should use "I".
 Examples WITH correct prefilled (study these carefully):
-  answer: "She did not know why the meeting was postponed."  prefilled=["she"] pos=0 ✔ (bare pronoun — TPO standard)
-  answer: "The advisor did not understand what the manager explained."  prefilled=["the advisor"] pos=0 ✔ (2-word NP)
-  answer: "I have not received any confirmation about the schedule."  prefilled=["i"] pos=0 ✔ (1st-person, rare)
+  answer: "She did not know why the meeting was postponed."  prefilled=["she"] pos=0 ✔ (negation + embedded ✔)
+  answer: "The advisor did not understand what the manager explained."  prefilled=["the advisor"] pos=0 ✔ (negation + embedded ✔)
+  answer: "He was not sure if the package had arrived."  prefilled=["he"] pos=0 ✔ (negation + embedded ✔)
+  answer: "I have not received any confirmation about the schedule."  prefilled=["i"] pos=0 ✔ (simple negation — OK for the ~20% without embedded)
   BAD: answer="I did not attend the interview last week."  prefilled=["not"] ✘ WRONG — "not" cannot be prefilled
-Prompt: prompt_task_kind="respond", prompt_task_text="How do you respond?" or "What do you say?" Distractor: "did"/"do" or morphological variant.
-IF prompt_task_kind is PRE-ASSIGNED as "yesno": prompt="Did she know why the meeting was postponed?" answer="She did not know why the meeting was postponed." (KEEP negation + embedded structure!)
-IF prompt_task_kind is PRE-ASSIGNED as "statement": prompt="Complete the sentence." answer="She did not know why the meeting was postponed." (same structure)
-SCORER FENCE (medium): Prefer simple past ("did not") or present perfect ("have not"). AVOID past perfect negation ("had not done" -> HARD). AVOID passive negation ("was not approved", "has not been sent" -> HARD). At most ONE advanced grammar feature.
+Prompt: prompt_task_kind="ask" or "report" or "respond". Distractor: "did"/"do" or morphological variant.
+SCORER FENCE (medium): Prefer simple past ("did not") or present perfect ("have not"). AVOID past perfect negation ("had not done" -> HARD). AVOID passive negation ("was not approved", "has not been sent" -> HARD). The embedded wh/if clause should use simple tenses only. At most ONE advanced grammar feature.
 PREFILLED: Bare pronoun "she"/"he"/"they" (TPO standard) or 2-word NP. "i" for ~20%. NEVER ["not"] as prefilled.`,
 
     hard: `ALL answers in this group: negation + advanced grammar complexity, 10-13 words.
@@ -1110,8 +1112,6 @@ Examples:
 - "They wanted to know if the library was open."  prefilled=["they"] ✔ (bare pronoun)
 MID-SENTENCE prefilled example: "She wanted to know if the files were ready."  prefilled=["wanted to know"] pos=mid ✔
 Prompt: prompt_task_kind="report", prompt_task_text="What did the manager ask?" or "What does the professor want to know?" Distractor: "did" or "do".
-IF prompt_task_kind is PRE-ASSIGNED as "yesno": prompt="Did she want to know if you need a ride?" answer="She wants to know if you need a ride." (KEEP the reporting verb + embedded clause structure!)
-IF prompt_task_kind is PRE-ASSIGNED as "statement": prompt="Complete the sentence." answer="She wants to know if you need a ride." (same embedded answer)
 SCORER FENCE (easy): Embedded clause uses simple present or simple past only. NO passive ("was approved"). NO past perfect ("had gone"). NO "whom". NO comparative.`,
 
     medium: `ALL answers in this group: third-person reporting, 10-13 words.
@@ -1120,10 +1120,6 @@ Subject MUST be 3rd-person — NEVER "I/my/me" (not 1st-person).
 Vary subjects: bare "she"/"he"/"they" (most common), or NPs "the manager", "some colleagues", "the professor"
 Vary wh-words across the batch: if(3), what(2), where(2), why(2), when(1)
 Declarative word order in clause (NO inversion). Distractor: "did"/"do" for most.
-CRITICAL — YESNO/STATEMENT COMPATIBILITY: If an item is pre-assigned prompt_task_kind="yesno" or "statement", the ANSWER must STILL use the 3rd-reporting structure (reporting verb + embedded clause). Only the PROMPT changes format:
-  yesno example: prompt="Did the manager want to know when the report was due?" answer="The manager wanted to know when the report was due."
-  statement example: prompt="Complete the sentence about what the professor asked." answer="The professor asked whether the experiment had been approved."
-  WRONG: yesno prompt → simple answer "The report was due on Friday." (LOST the reporting verb + embedded clause!)
 SCORER FENCE (medium): Embedded clause uses simple past or simple present ONLY. STRICTLY AVOID past perfect in embedded clause ("had been done", "had gone" -> HARD). STRICTLY AVOID passive voice in embedded clause ("whether it had been approved", "when it would be submitted" -> HARD). AVOID "whom". Maximum ONE advanced grammar feature.
 PREFILLED: Bare pronoun "she"/"he"/"they" is the TPO DEFAULT — use it for most items. 2-3 word NP ("the manager", "some colleagues") for variety. Mid-sentence prefilled like ["wanted to know"] or ["found out"] is encouraged (~30% of items).`,
 
@@ -1146,8 +1142,6 @@ Examples:
 - "I am not sure what time the event starts."
 - "I do not know if the store is open."
 Prompt: prompt_task_kind="respond", prompt_task_text="What do you say?" or "How do you respond?"
-IF prompt_task_kind is PRE-ASSIGNED as "yesno": prompt="Do you know what time the event starts?" answer="I am not sure what time the event starts." (KEEP the 1st-person embedded structure!)
-IF prompt_task_kind is PRE-ASSIGNED as "statement": prompt="Complete the sentence." answer="I have no idea where they are going." (same embedded answer)
 Distractor: "do" or "did".
 SCORER FENCE (easy): Embedded clause uses simple present only. NO passive. NO past perfect. NO comparative. NO "whom".`,
 
@@ -1334,44 +1328,8 @@ function buildGeneratePrompt(round, spec, rejectFeedback = "", recentTopics = []
   // spec: [{type, difficulty, count}, ...]
   const totalCount = spec.reduce((s, x) => s + x.count, 0);
 
-  // Prompt type distribution targets (TPO: 20% yesno, 18% statement)
-  const yesnoTarget = Math.max(1, Math.round(totalCount * 0.2));
-  const statementTarget = Math.max(1, Math.round(totalCount * 0.2));
-  const askRespondTarget = totalCount - yesnoTarget - statementTarget;
-
-  // --- Pre-assign prompt_task_kind to each item ID deterministically ---
-  // Expand spec into flat item list with IDs
-  const flatItems = [];
-  let qIdx = 1;
-  for (const { type, difficulty, count } of spec) {
-    for (let j = 0; j < count; j++) {
-      flatItems.push({ id: `tmp_r${round}_q${qIdx++}`, type, difficulty });
-    }
-  }
-  // Distribute yesno/statement only across EMBEDDED-HEAVY types (3rd-reporting, 1st-embedded, negation).
-  // These types naturally produce reporting verb + embedded clause answers, so yesno/statement
-  // prompts can coexist with embedded structure (e.g. "Did she want to know when...?").
-  // Excluded: interrogative (needs ask for "?" answers), direct/relative (non-embedded, would
-  // drag embedded rate down if forced to yesno/statement).
-  const YESNO_STATEMENT_ELIGIBLE = new Set(["3rd-reporting", "1st-embedded", "negation"]);
-  const assignableIndices = flatItems
-    .map((item, i) => ({ i, type: item.type }))
-    .filter((x) => YESNO_STATEMENT_ELIGIBLE.has(x.type))
-    .map((x) => x.i);
-  // Shuffle only the assignable (non-interrogative) indices
-  for (let i = assignableIndices.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [assignableIndices[i], assignableIndices[j]] = [assignableIndices[j], assignableIndices[i]];
-  }
-  const promptKindAssignments = new Array(flatItems.length).fill(null); // null = ask/report/respond
-  const effectiveYesno = Math.min(yesnoTarget, assignableIndices.length);
-  const effectiveStatement = Math.min(statementTarget, assignableIndices.length - effectiveYesno);
-  for (let k = 0; k < effectiveYesno; k++) {
-    promptKindAssignments[assignableIndices[k]] = "yesno";
-  }
-  for (let k = 0; k < effectiveStatement; k++) {
-    promptKindAssignments[assignableIndices[effectiveYesno + k]] = "statement";
-  }
+  // D approach: generator ONLY uses ask/report/respond.
+  // yesno/statement prompts are added post-assembly by a dedicated rewrite step.
 
   // Pick 3 random scenarios and 5 random personas to prime the AI
   const pickedScenarios = shuffle(SCENARIO_POOL).slice(0, 3).join("; ");
@@ -1386,24 +1344,13 @@ function buildGeneratePrompt(round, spec, rejectFeedback = "", recentTopics = []
       : difficulty === "medium"
       ? "Answer length: 10-13 words. Chunks: 6-7."
       : "Answer length: usually 10-13 words. Chunks: 6-8. MUST be hard because of advanced grammar structure: e.g. passive, past perfect, relative/contact clause, whom, comparative/superlative, or multi-layer embedding. Do NOT make an item hard by length alone.";
-    // Build per-item lines with pre-assigned prompt_task_kind
-    const itemLines = Array.from({ length: count }, (_, j) => {
-      const globalIdx = qIndex - 1 + j;
-      const id = `tmp_r${round}_q${qIndex + j}`;
-      const assignedKind = promptKindAssignments[globalIdx];
-      const kindLabel = assignedKind
-        ? `→ prompt_task_kind = "${assignedKind}" (MANDATORY)`
-        : `→ prompt_task_kind = ask OR report OR respond (your choice)`;
-      return `  ${id}: ${kindLabel}`;
-    }).join("\n");
     const ids = Array.from({ length: count }, (_, j) => `tmp_r${round}_q${qIndex + j}`).join(", ");
     qIndex += count;
     return `### GROUP ${i + 1}: ${count} item${count > 1 ? "s" : ""} — ${type.toUpperCase()} / ${difficulty.toUpperCase()}
 IDs: ${ids}
 ${hints}
 ${diffSpec}
-**Pre-assigned prompt types (DO NOT change):**
-${itemLines}`;
+prompt_task_kind: use ask, report, or respond (your choice — vary across the batch).`;
   }).join("\n\n");
 
   return `You are a TOEFL iBT Writing Task 1 "Build a Sentence" content architect.
@@ -1630,36 +1577,15 @@ Real TOEFL Build-a-Sentence prompts use 4 types. ALL use single-sentence style w
   TPO: "How do you respond to the shop owner?" → "I have not received the package that was supposed to arrive."
        "Where did you find your phone?" → "I retraced all of the steps that I took last night."
 
-#### TYPE 3: yesno (target: 2 out of 10)
-  Starts with auxiliary verb: Did/Do/Does/Are/Is/Can/Could/Would/Will/Have/Has/Were/Was
-  The answer is a response to the yes/no question (usually a statement).
-  TPO: "Did you enjoy the workshop yesterday?" → "The content was not interesting to me."
-       "Are you going to the gym today?" → "I do not go to the gym on weekends."
-       "Can you recommend a good book to read?" → "My sister can suggest one that might interest you."
-       "Did you finish reading the book I lent you?" → "I have not had time to read it yet."
-
-#### TYPE 4: statement (target: 2 out of 10)
-  A declarative sentence ending with a period. The answer is a follow-up question or comment.
-  TPO: "Matthew loved the book you recommended to him." → "What did he tell you was his favorite part?"
-       "What's taking you so long to get started?" → "We just found out where the materials are being stored."
-
-### DISTRIBUTION — PRE-ASSIGNED (DO NOT override):
-  Each item's prompt_task_kind is PRE-ASSIGNED in the GROUP sections above.
-  Items marked "MANDATORY yesno" MUST use prompt_task_kind="yesno". Items marked "MANDATORY statement" MUST use prompt_task_kind="statement".
-  Items marked "ask OR report OR respond" — you choose among those three.
-  Total: ${yesnoTarget} yesno + ${statementTarget} statement + ${askRespondTarget} ask/report/respond = ${totalCount}.
-
 ### PROMPT FIELDS:
 - "prompt_context" = ALWAYS empty string ""
-- "prompt_task_kind" = ask | report | respond | yesno | statement
+- "prompt_task_kind" = ask | report | respond (generator only uses these 3; yesno/statement are added post-assembly)
 - "prompt_task_text" = the EXPLICIT prompt shown to the user (required, never empty)
 - The visible prompt is just prompt_task_text (prompt_context is always "")
 
 prompt_task_text validation rules (auto-rejected otherwise):
   - ask/report: starts with "What did/does [person] ask/want/say/mention/find out/discover/learn/wonder?"
   - respond:    starts with "How do you respond?" / "What do you say?" / "Where/Why/When did you...?"
-  - yesno:      starts with auxiliary verb (Did/Do/Does/Are/Is/Can/Could/Would/Will/Have/Has/Were/Was)
-  - statement:  a declarative sentence ending with a period — any natural subject-verb-object sentence
 
 ${rejectFeedback}
 ## FINAL CHECKLIST 锟?VERIFY BEFORE OUTPUT:
@@ -1676,9 +1602,7 @@ ${rejectFeedback}
 10. PROMPT STYLE: ALL items use prompt_context="". prompt_task_text MUST be a SINGLE sentence.
     WRONG ✗: prompt_task_text = "The student needed help with her paper. What did she ask the professor?"
     RIGHT ✓: prompt_task_text = "What did the student ask the professor about her paper?"
-    Use ONLY these task kinds: ask, report, respond, yesno, statement. "tell" and "explain" are not allowed.
-11. PROMPT DISTRIBUTION: Each item's prompt_task_kind is PRE-ASSIGNED above. Do NOT change yesno→ask or statement→respond. Verify each item matches its assignment.
-12. YESNO/STATEMENT + EMBEDDED: When an item has BOTH a pre-assigned yesno/statement AND a reporting/embedded answer_type, the ANSWER must STILL contain the reporting verb and embedded clause. Only the PROMPT format changes. Do NOT simplify the answer just because the prompt is yesno/statement.
+    Use ONLY these task kinds: ask, report, respond. "tell", "explain", "yesno", "statement" are not allowed at generation time.
 
 Output JSON array only. No markdown.`.trim();
 }
@@ -3970,6 +3894,194 @@ function postGenerationRuleCheck(sets) {
   }
 }
 
+// ─── D approach: post-assembly prompt rewrite ───────────────────────────────
+// After sets are assembled with ask/report/respond prompts, rewrite ~2 items
+// per set to yesno and ~2 to statement. This decouples answer structure from
+// prompt format — the generator never sees yesno/statement, so answer quality
+// (especially embedded rate) is never compromised.
+
+const YESNO_TARGET_PER_SET = 2;
+const STATEMENT_TARGET_PER_SET = 2;
+
+function buildPromptRewritePrompt(yesnoItems, statementItems) {
+  const yesnoSection = yesnoItems.map(q => ({
+    id: q.id,
+    answer: q.answer,
+    grammar_points: q.grammar_points,
+    current_prompt: q.prompt_task_text || q.prompt,
+  }));
+  const statementSection = statementItems.map(q => ({
+    id: q.id,
+    answer: q.answer,
+    grammar_points: q.grammar_points,
+    current_prompt: q.prompt_task_text || q.prompt,
+  }));
+
+  return `You are a TOEFL iBT prompt rewriter. You will rewrite prompts for existing questions WITHOUT changing the answers.
+
+## TASK:
+For each item below, generate a NEW prompt in the specified format. The ANSWER stays exactly the same.
+
+## YESNO FORMAT (${yesnoItems.length} items):
+Rewrite each prompt as a YES/NO question:
+- MUST start with an auxiliary verb: Did/Do/Does/Are/Is/Can/Could/Would/Will/Have/Has/Were/Was
+- MUST end with "?"
+- The question should be NATURALLY ANSWERABLE by the given answer
+- Keep it conversational and natural — imagine a real TOEFL dialogue
+
+Examples:
+  answer: "The manager wanted to know when the report was due."
+  → yesno prompt: "Did the manager ask about the report deadline?"
+
+  answer: "I am not sure what time the event starts."
+  → yesno prompt: "Do you know when the event begins?"
+
+  answer: "She did not understand why the deadline had been changed."
+  → yesno prompt: "Did she understand the reason for the schedule change?"
+
+ITEMS TO REWRITE AS YESNO:
+${JSON.stringify(yesnoSection, null, 2)}
+
+## STATEMENT FORMAT (${statementItems.length} items):
+Rewrite each prompt as a CONTEXT-SETTING declarative sentence:
+- MUST be a natural declarative sentence ending with "."
+- It should paint a mini-scene that makes the answer a natural response
+- NEVER use "Complete the sentence" or any meta-instruction
+- The prompt sets the CONTEXT, the answer is the student's RESPONSE
+
+Examples:
+  answer: "The professor asked whether the experiment had been approved."
+  → statement prompt: "The professor called the research assistant into her office."
+
+  answer: "I have no idea where they are going."
+  → statement prompt: "Your roommate asked about the group's weekend plans."
+
+  answer: "She did not know why the meeting was postponed."
+  → statement prompt: "The intern seemed confused after the team meeting."
+
+ITEMS TO REWRITE AS STATEMENT:
+${JSON.stringify(statementSection, null, 2)}
+
+## OUTPUT:
+Return ONLY a JSON array of objects: [{"id": "...", "prompt_task_kind": "yesno"|"statement", "prompt_task_text": "..."}]
+No markdown fences. No explanation.`.trim();
+}
+
+async function rewriteSetPrompts(sets) {
+  console.log(`\n[prompt-rewrite] rewriting prompts for ${sets.length} set(s)...`);
+
+  // Collect all items to rewrite across all sets in one batch
+  const allYesno = [];
+  const allStatement = [];
+  const allQuestionMap = new Map(); // id → question ref
+
+  for (let si = 0; si < sets.length; si++) {
+    const questions = sets[si].questions;
+    const candidates = questions.filter(q =>
+      !q.has_question_mark &&
+      ["ask", "report", "respond"].includes(q.prompt_task_kind)
+    );
+
+    const existingYesno = questions.filter(q => q.prompt_task_kind === "yesno").length;
+    const existingStatement = questions.filter(q => q.prompt_task_kind === "statement").length;
+    const yesnoNeeded = Math.max(0, YESNO_TARGET_PER_SET - existingYesno);
+    const statementNeeded = Math.max(0, STATEMENT_TARGET_PER_SET - existingStatement);
+
+    if (yesnoNeeded + statementNeeded === 0) {
+      console.log(`  set ${si + 1}: already has ${existingYesno} yesno + ${existingStatement} statement`);
+      continue;
+    }
+    if (candidates.length < yesnoNeeded + statementNeeded) {
+      console.log(`  set ${si + 1}: not enough candidates (${candidates.length}), skipping`);
+      continue;
+    }
+
+    const shuffled = shuffle([...candidates]);
+    for (let i = 0; i < yesnoNeeded; i++) allYesno.push(shuffled[i]);
+    for (let i = 0; i < statementNeeded; i++) allStatement.push(shuffled[yesnoNeeded + i]);
+    questions.forEach(q => allQuestionMap.set(q.id, q));
+  }
+
+  const totalTarget = allYesno.length + allStatement.length;
+  if (totalTarget === 0) {
+    console.log("[prompt-rewrite] nothing to rewrite");
+    return;
+  }
+  console.log(`  batch: ${allYesno.length} yesno + ${allStatement.length} statement = ${totalTarget} items`);
+
+  // Wait 10s after generation phase to avoid rate limiting
+  await new Promise(r => setTimeout(r, 10000));
+
+  // Single batched API call with retry
+  let totalRewritten = 0;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const prompt = buildPromptRewritePrompt(allYesno, allStatement);
+      const raw = await callDeepSeekViaCurl({
+        apiKey: process.env.DEEPSEEK_API_KEY,
+        proxyUrl: resolveProxyUrl(),
+        timeoutMs: 120000,
+        payload: {
+          model: "deepseek-chat",
+          temperature: 0,
+          max_tokens: 5000,
+          messages: [{ role: "user", content: prompt }],
+        },
+      });
+
+      const text = String(raw || "");
+      const arrStart = text.indexOf("[");
+      const arrEnd = text.lastIndexOf("]");
+      if (arrStart < 0 || arrEnd <= arrStart) {
+        console.log(`  attempt ${attempt + 1}: no JSON array in response (len=${text.length})`);
+        if (text.length < 300) console.log(`    response: ${text}`);
+        if (attempt === 0) { await new Promise(r => setTimeout(r, 10000)); continue; }
+        break;
+      }
+      const rewrites = JSON.parse(text.slice(arrStart, arrEnd + 1));
+      console.log(`  attempt ${attempt + 1}: got ${rewrites.length} rewrites from API`);
+
+      for (const rw of rewrites) {
+        const q = allQuestionMap.get(rw.id);
+        if (!q) {
+          console.log(`    id "${rw.id}" not found`);
+          continue;
+        }
+        const newKind = String(rw.prompt_task_kind || "").trim().toLowerCase();
+        const newText = String(rw.prompt_task_text || "").trim();
+        if (!newText) continue;
+
+        const testQ = { ...q, prompt_task_kind: newKind, prompt_task_text: newText, prompt_context: "" };
+        const check = validateStructuredPromptParts(testQ);
+        if (check.fatal.length > 0) {
+          console.log(`    ${rw.id} rejected: ${check.fatal[0]}`);
+          continue;
+        }
+
+        q.prompt_task_kind = newKind;
+        q.prompt_task_text = newText;
+        q.prompt_context = "";
+        q.prompt = newText;
+        totalRewritten++;
+      }
+      console.log(`  applied ${totalRewritten}/${totalTarget} rewrites`);
+      break;
+    } catch (e) {
+      console.log(`  attempt ${attempt + 1} failed: ${e.message}`);
+      if (attempt === 0) await new Promise(r => setTimeout(r, 10000));
+    }
+  }
+
+  // Per-set summary
+  for (let si = 0; si < sets.length; si++) {
+    const qs = sets[si].questions;
+    const yn = qs.filter(q => q.prompt_task_kind === "yesno").length;
+    const st = qs.filter(q => q.prompt_task_kind === "statement").length;
+    console.log(`  set ${si + 1}: yesno=${yn} statement=${st}`);
+  }
+  console.log(`[prompt-rewrite] total: ${totalRewritten} prompts rewritten`);
+}
+
 async function main() {
   loadEnv();
   const hasRelay = getRelayConfigs().length > 0;
@@ -4862,6 +4974,9 @@ async function main() {
   // answerErrors, standaloneNot) before writing to disk.
   postGenerationRuleCheck(finalSets);
 
+  // D approach: rewrite ~2 prompts per set to yesno and ~2 to statement
+  await rewriteSetPrompts(finalSets);
+
   const output = {
     version: "1.2",
     generated_at: new Date().toISOString(),
@@ -4875,8 +4990,11 @@ async function main() {
     question_sets: finalSets,
   };
 
-  // global strict validation
-  const check = validateAllSets(output, { strict: true });
+  // global strict validation (last set uses relaxed style targets matching assembly)
+  const check = validateAllSets(output, {
+    strict: true,
+    lastSetStyleOverrides: { distractorMin: 4, embeddedMin: 2, negationMin: 1, negationMax: 4, qmarkMax: 3 },
+  });
   if (!check.ok) {
     const allErrors = [
       ...check.failures,

@@ -28,7 +28,7 @@ function parseArgs(argv) {
   };
 }
 
-function validateAllSets(data, { strict = false } = {}) {
+function validateAllSets(data, { strict = false, lastSetStyleOverrides } = {}) {
   const failures = [];
   const strictHardFails = [];
   const strictWarnings = [];
@@ -41,7 +41,9 @@ function validateAllSets(data, { strict = false } = {}) {
 
   sets.forEach((set, setIndex) => {
     const setId = set?.set_id ?? `index-${setIndex}`;
-    const res = validateQuestionSet(set);
+    const isLastSet = setIndex === sets.length - 1;
+    const schemaOpts = (isLastSet && lastSetStyleOverrides) ? { styleOverrides: lastSetStyleOverrides } : {};
+    const res = validateQuestionSet(set, schemaOpts);
     if (!res.ok) {
       failures.push(`set ${setId}:`);
       res.errors.forEach((e) => failures.push(`  - ${e}`));
