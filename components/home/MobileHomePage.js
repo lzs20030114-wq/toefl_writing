@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { BottomSheet } from "../shared/BottomSheet";
+import UpgradeModal from "../shared/UpgradeModal";
 import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
 import { PRACTICE_MODE } from "../../lib/practiceMode";
 import { FREE_DAILY_LIMIT } from "../../lib/dailyUsage";
@@ -20,6 +21,7 @@ export function MobileHomePage({
   fadeIn, sideCard, querySuffix, isChallengeProp,
 }) {
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [upgradeOpen, setUpgradeOpen] = useState(false);
   const tier = userTier || "free";
   const [showDesktopTip, setShowDesktopTip] = useState(false);
   const desktopTipRef = useRef(false);
@@ -215,8 +217,18 @@ export function MobileHomePage({
           submitFeedback={submitFeedback}
           showLoginModal={showLoginModal}
           isChallenge={isChallenge}
+          onUpgrade={() => { setSheetOpen(false); setUpgradeOpen(true); }}
         />
       </BottomSheet>
+
+      {upgradeOpen && (
+        <UpgradeModal
+          userCode={userCode}
+          currentTier={tier}
+          onClose={() => setUpgradeOpen(false)}
+          onUpgraded={() => window.location.reload()}
+        />
+      )}
     </div>
   );
 }
@@ -281,7 +293,7 @@ function MobileUserSheetContent({
   userCode, userTier, userEmail, isLoggedIn, onLogout,
   totalCount, weekCount, bestMock,
   fbText, setFbText, fbBusy, fbSent, feedbackMsg, submitFeedback,
-  showLoginModal, isChallenge,
+  showLoginModal, isChallenge, onUpgrade,
 }) {
   const [showCode, setShowCode] = useState(false);
 
@@ -327,15 +339,15 @@ function MobileUserSheetContent({
             {userTier === "pro" ? "Pro 会员" : userTier === "legacy" ? "Legacy · 不限次" : "免费版"}
           </div>
         </div>
-        {userTier === "free" && (
-          <Link href="/upgrade" style={{
+        {(userTier === "free" || userTier === "pro") && (
+          <button onClick={onUpgrade} style={{
             fontSize: 12, fontWeight: 700, color: T.primary,
             padding: "6px 12px", borderRadius: 8,
             background: T.primarySoft, border: `1px solid ${T.primaryMist}`,
-            textDecoration: "none",
+            cursor: "pointer", fontFamily: HOME_FONT,
           }}>
-            升级 Pro
-          </Link>
+            {userTier === "pro" ? "续费" : "升级 Pro"}
+          </button>
         )}
       </div>
 

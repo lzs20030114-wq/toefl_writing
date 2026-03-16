@@ -136,9 +136,10 @@ export default function UpgradeModal({ userCode, currentTier, onClose, onUpgrade
       <div
         onClick={(e) => e.stopPropagation()}
         style={{
-          background: "#fff", borderRadius: 16, padding: "32px 28px",
+          background: "#fff", borderRadius: 16, padding: "28px 24px",
           maxWidth: 400, width: "90%", textAlign: "center",
           boxShadow: "0 20px 60px rgba(0,0,0,0.15)",
+          maxHeight: "90vh", overflowY: "auto", WebkitOverflowScrolling: "touch",
         }}
       >
         {upgraded ? (
@@ -169,16 +170,63 @@ export default function UpgradeModal({ userCode, currentTier, onClose, onUpgrade
               width: 48, height: 48, borderRadius: 12,
               background: "linear-gradient(135deg,#087355,#0891B2)",
               display: "flex", alignItems: "center", justifyContent: "center",
-              margin: "0 auto 16px",
+              margin: "0 auto 14px",
             }}>
               <span style={{ color: "#fff", fontSize: 22, fontWeight: 800 }}>P</span>
             </div>
-            <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 8, color: C.t1 }}>
+            <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 6, color: C.t1 }}>
               {isRenew ? "续费 Pro" : "升级 Pro"}
             </h3>
-            <p style={{ fontSize: 14, color: C.t2, marginBottom: 16, lineHeight: 1.6 }}>
-              {isRenew ? "续费后有效期将自动延长，在当前到期日基础上叠加。" : "解锁无限练习次数，不受每日额度限制。"}
-            </p>
+
+            {!isRenew && (
+              <>
+                {/* Feature highlights */}
+                <div style={{
+                  display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4px 12px",
+                  textAlign: "left", fontSize: 12, color: "#065f46", lineHeight: 1.6,
+                  background: "#ecfdf5", borderRadius: 10, padding: "10px 14px", marginBottom: 12,
+                }}>
+                  <span>&#10003; 每日练习不限次</span>
+                  <span>&#10003; 完整 AI 批改报告</span>
+                  <span>&#10003; 修改建议与范文</span>
+                  <span>&#10003; 专项练习模式</span>
+                </div>
+
+                {/* Pricing tiers */}
+                <div style={{ display: "flex", flexDirection: "column", gap: 0, border: "1px solid " + C.bdr, borderRadius: 10, overflow: "hidden", marginBottom: 12 }}>
+                  {[
+                    { name: "体验卡", price: "¥9.99", duration: "7 天", tag: null },
+                    { name: "月卡", price: "¥29.99", duration: "30 天", tag: "热门" },
+                    { name: "季卡", price: "¥69.97", duration: "90 天", tag: "推荐" },
+                    { name: "年卡", price: "¥259.88", duration: "365 天", tag: "最划算" },
+                  ].map((p, i) => (
+                    <div key={p.name} style={{
+                      display: "flex", alignItems: "center", justifyContent: "space-between",
+                      padding: "9px 14px", borderTop: i > 0 ? "1px solid " + C.bdrSubtle : "none",
+                      background: p.tag === "推荐" ? "#f0fdf4" : "#fff",
+                    }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                        <span style={{ fontSize: 13, fontWeight: 600, color: C.t1 }}>{p.name}</span>
+                        {p.tag && <span style={{ fontSize: 10, fontWeight: 700, padding: "1px 6px", borderRadius: 4, background: p.tag === "推荐" ? "#059669" : p.tag === "最划算" ? "#0891B2" : "#f59e0b", color: "#fff" }}>{p.tag}</span>}
+                      </div>
+                      <div style={{ textAlign: "right" }}>
+                        <span style={{ fontSize: 14, fontWeight: 700, color: C.t1 }}>{p.price}</span>
+                        <span style={{ fontSize: 11, color: C.t3, marginLeft: 4 }}>/ {p.duration}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ fontSize: 11, color: C.t3, marginBottom: 10, textAlign: "center" }}>
+                  在爱发电选择对应金额的赞助方案即可
+                </div>
+              </>
+            )}
+
+            {isRenew && (
+              <p style={{ fontSize: 14, color: C.t2, marginBottom: 16, lineHeight: 1.6 }}>
+                续费后有效期将自动延长，在当前到期日基础上叠加。
+              </p>
+            )}
 
             {/* User code — big and unmissable */}
             <div style={{
