@@ -3,7 +3,7 @@
  * Email prompt generator — produces TPO-aligned email writing questions.
  *
  * Usage:
- *   node scripts/generateEmailQuestions.mjs [count]
+ *   DEEPSEEK_API_KEY=... node scripts/generateEmailQuestions.mjs [count]
  *   node scripts/generateEmailQuestions.mjs 12 --dry-run
  *
  * Default: 6 (one per category). Distribution follows TPO weights:
@@ -17,27 +17,36 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { createRequire } from "module";
 import { EMAIL_CATEGORIES, buildEmailGenPrompt } from "../lib/ai/prompts/emailWriting.js";
+
+const require = createRequire(import.meta.url);
+const { callDeepSeekViaCurl, formatDeepSeekError } = require("../lib/ai/deepseekHttp.js");
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const PROMPTS_PATH = path.join(ROOT, "data", "emailWriting", "prompts.json");
+const OUTPUT_PATH = process.env.EMAIL_OUTPUT_PATH ? path.resolve(process.env.EMAIL_OUTPUT_PATH) : null;
+const STATE_PATH = process.env.EMAIL_JOB_STATE_PATH ? path.resolve(process.env.EMAIL_JOB_STATE_PATH) : null;
 
-// ── Load env ────────────────────────────────────────────────────────────────
-const envPath = path.join(ROOT, ".env.local");
-const envRaw = fs.readFileSync(envPath, "utf8");
-const env = {};
-for (const line of envRaw.split("\n")) {
-  const m = line.match(/^([A-Z_][A-Z0-9_]*)=(.*)$/);
-  if (m) env[m[1]] = m[2].trim();
+// ── Load env — prefer process.env (CI), fall back to .env.local (local dev) ─
+function loadApiKey() {
+  if (process.env.DEEPSEEK_API_KEY) return process.env.DEEPSEEK_API_KEY;
+  try {
+    const envPath = path.join(ROOT, ".env.local");
+    const envRaw = fs.readFileSync(envPath, "utf8");
+    for (const line of envRaw.split("\n")) {
+      const m = line.match(/^DEEPSEEK_API_KEY=(.+)$/);
+      if (m) return m[1].trim();
+    }
+  } catch { /* no .env.local */ }
+  return null;
 }
-const API_KEY = env.DEEPSEEK_API_KEY;
-if (!API_KEY) throw new Error("DEEPSEEK_API_KEY not found in .env.local");
 
 // ── Config ──────────────────────────────────────────────────────────────────
 const MAX_RETRIES = 5;
 const DRY_RUN = process.argv.includes("--dry-run");
-const count = Number(process.argv.find((a) => /^\d+$/.test(a))) || 6;
+const count = parseInt(process.env.EMAIL_TARGET_COUNT || process.argv.find((a) => /^\d+$/.test(a)), 10) || 6;
 
 // ── Name pool — bypasses DeepSeek's narrow naming vocabulary ────────────────
 const NAME_POOL = {
@@ -104,24 +113,21 @@ function distributeCounts(total, categories) {
 }
 
 // ── AI call ─────────────────────────────────────────────────────────────────
-async function callDeepSeek(prompt) {
-  const res = await fetch("https://api.deepseek.com/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + API_KEY,
-    },
-    body: JSON.stringify({
+async function callDeepSeek(apiKey, prompt) {
+  const content = await callDeepSeekViaCurl({
+    apiKey,
+    proxyUrl: process.env.DEEPSEEK_PROXY_URL || process.env.HTTPS_PROXY || "",
+    payload: {
       model: "deepseek-chat",
       messages: [{ role: "user", content: prompt }],
       temperature: 1.0,
       max_tokens: 600,
-    }),
+    },
   });
-  const data = await res.json();
-  const text = (data.choices?.[0]?.message?.content || "")
-    .replace(/\`\`\`json/gi, "")
-    .replace(/\`\`\`/g, "")
+
+  const text = (typeof content === "string" ? content : "")
+    .replace(/```json/gi, "")
+    .replace(/```/g, "")
     .trim();
   return JSON.parse(text);
 }
@@ -156,6 +162,12 @@ function validate(p) {
 
 // ── Main ────────────────────────────────────────────────────────────────────
 async function main() {
+  const apiKey = loadApiKey();
+  if (!apiKey) {
+    console.error("ERROR: DEEPSEEK_API_KEY required (set env var or .env.local)");
+    process.exit(1);
+  }
+
   const existing = JSON.parse(fs.readFileSync(PROMPTS_PATH, "utf8"));
   const maxId = Math.max(0, ...existing.map((p) => Number(p.id.replace("em", "")) || 0));
   const existingSubjects = new Set(existing.map((p) => (p.subject || "").toLowerCase()));
@@ -167,6 +179,7 @@ async function main() {
 
   const generated = [];
   let nextId = maxId + 1;
+  let failures = 0;
 
   // Normalize names: strip title prefixes so "Professor Aris Thorne" and "Aris Thorne" are the same
   function normalizeName(to) {
@@ -190,9 +203,10 @@ async function main() {
       };
       const prompt = buildEmailGenPrompt(cat, avoid);
       let retries = MAX_RETRIES;
+      let succeeded = false;
       while (retries > 0) {
         try {
-          const p = await callDeepSeek(prompt);
+          const p = await callDeepSeek(apiKey, prompt);
           const errs = validate(p);
           if (errs.length > 0) {
             console.log("  x " + cat.name + " validation: " + errs.join(", "));
@@ -239,27 +253,47 @@ async function main() {
 
           const words = p.scenario.split(/\s+/).length;
           const verbs = p.goals.map((g) => g.split(" ")[0]).join("/");
-          console.log("  + " + cat.name + " (" + words + "w, " + verbs + "): " + p.to + " — " + p.subject);
+          console.log("  + " + cat.name + " (" + words + "w, " + verbs + "): " + finalTo + " — " + p.subject);
+          succeeded = true;
           break;
         } catch (e) {
-          console.log("  x " + cat.name + " error: " + e.message);
+          console.log("  x " + cat.name + " error: " + formatDeepSeekError(e));
           retries--;
         }
       }
+      if (!succeeded) failures++;
     }
   }
 
-  console.log("\nGenerated " + generated.length + "/" + count);
+  console.log("\nGenerated " + generated.length + "/" + count + " (" + failures + " failed)");
 
-  if (generated.length > 0 && !DRY_RUN) {
+  if (generated.length === 0) {
+    console.error("\nNo questions generated successfully");
+    if (STATE_PATH) fs.writeFileSync(STATE_PATH, JSON.stringify({ error: "No questions generated", timestamp: new Date().toISOString() }));
+    process.exit(1);
+  }
+
+  const meta = { total_target: count, total_accepted: generated.length, failures, generated_at: new Date().toISOString() };
+
+  if (OUTPUT_PATH && !DRY_RUN) {
+    // Staging mode (CI): write to staging file only
+    fs.mkdirSync(path.dirname(OUTPUT_PATH), { recursive: true });
+    fs.writeFileSync(OUTPUT_PATH, JSON.stringify({ questions: generated, _meta: meta }, null, 2));
+    console.log("Wrote " + generated.length + " questions to staging: " + OUTPUT_PATH);
+  } else if (!DRY_RUN) {
+    // Direct mode (local dev): append to prompts.json
     const merged = [...existing, ...generated];
     fs.writeFileSync(PROMPTS_PATH, JSON.stringify(merged, null, 2) + "\n", "utf8");
     console.log("Saved to prompts.json (total: " + merged.length + ")");
-  } else if (DRY_RUN) {
+  } else {
     console.log("\nDry run — not saved. Generated:");
     for (const g of generated) {
       console.log("  " + g.id + " [" + g.topic + "] " + g.to + ": " + g.subject);
     }
+  }
+
+  if (STATE_PATH) {
+    fs.writeFileSync(STATE_PATH, JSON.stringify({ status: "completed", ...meta }, null, 2));
   }
 
   // Topic distribution summary
@@ -270,6 +304,6 @@ async function main() {
 }
 
 main().catch((e) => {
-  console.error(e);
+  console.error("Fatal:", e);
   process.exit(1);
 });
