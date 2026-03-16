@@ -11,7 +11,7 @@
  *   node scripts/batch-produce.mjs --validate-only
  */
 
-import { readFileSync, writeFileSync, existsSync } from "fs";
+import { readFileSync, writeFileSync, existsSync, unlinkSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
@@ -21,6 +21,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
 
 const OUTPUT_PATH = resolve(__dirname, "..", "data", "buildSentence", "questions.json");
+const TEMP_OUTPUT_PATH = resolve(__dirname, "..", "data", "buildSentence", "questions.gen_tmp.json");
 const VALIDATE_SCRIPT = resolve(__dirname, "validate-bank.js");
 
 function parseArgs(argv) {
@@ -141,16 +142,20 @@ function validateExisting() {
   return data;
 }
 
-async function generate(targetSets) {
+async function generate(targetSets, useAppendMode) {
   const rounds = Number(process.env.BS_CANDIDATE_ROUNDS) || Math.max(8, targetSets * 5);
 
   console.log(`\nGenerating ${targetSets} new set(s)...`);
   console.log(`Candidate rounds: ${rounds}`);
 
+  // P2.1: In append mode, write to temp file to protect existing questions.json
+  const outputTarget = useAppendMode ? TEMP_OUTPUT_PATH : OUTPUT_PATH;
+
   const env = {
     ...process.env,
     BS_TARGET_SETS: String(targetSets),
     BS_CANDIDATE_ROUNDS: String(rounds),
+    BS_OUTPUT_PATH: outputTarget,
   };
 
   const genScript = resolve(__dirname, "generateBSQuestions.mjs");
@@ -163,10 +168,14 @@ async function generate(targetSets) {
       cwd: resolve(__dirname, ".."),
     });
   } catch (e) {
+    // Clean up temp file on failure
+    try { if (useAppendMode && existsSync(TEMP_OUTPUT_PATH)) unlinkSync(TEMP_OUTPUT_PATH); } catch (_) {}
     throw new Error("Generation failed. See output above.");
   }
 
-  const newData = JSON.parse(readFileSync(OUTPUT_PATH, "utf8"));
+  const newData = JSON.parse(readFileSync(outputTarget, "utf8"));
+  // Clean up temp file after reading
+  try { if (useAppendMode && existsSync(TEMP_OUTPUT_PATH)) unlinkSync(TEMP_OUTPUT_PATH); } catch (_) {}
   return newData.question_sets || [];
 }
 
@@ -218,7 +227,7 @@ async function main() {
 
   let newSets;
   try {
-    newSets = await generate(args.sets);
+    newSets = await generate(args.sets, args.append && existingSets.length > 0);
   } catch (e) {
     console.error(`Generation failed: ${e.message}`);
     process.exit(1);

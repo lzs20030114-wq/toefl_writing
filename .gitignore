@@ -1,6 +1,7 @@
 node_modules/
 .next/
-.claude/
+.claude/*
+!.claude/skills/
 .env
 .env.*
 !.env.example
@@ -11,3 +12,13 @@ portable.ini
 # TPO real question references (not for distribution)
 data/*/tpo_reference*.json
 data/*/real_questions_raw*
+
+# Generation artifacts (local only)
+data/buildSentence/archive/
+data/buildSentence/run_history.json
+data/buildSentence/circuit_breaker_log.json
+data/buildSentence/generation_checkpoint.json
+data/buildSentence/answer_hashes.json
+data/buildSentence/*.diagnostics.json
+data/buildSentence/*.bak
+data/buildSentence/*.gen_tmp.json

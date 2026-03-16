@@ -15,8 +15,8 @@
  *   BS_MAX_ROUNDS=32                              (optional)
  */
 
-import { readFileSync, writeFileSync, existsSync, unlinkSync } from "fs";
-import { resolve, dirname } from "path";
+import { readFileSync, writeFileSync, existsSync, unlinkSync, mkdirSync, readdirSync } from "fs";
+import { resolve, dirname, basename } from "path";
 import { fileURLToPath, pathToFileURL } from "url";
 import { createRequire } from "module";
 import { createHash } from "crypto";
@@ -55,6 +55,9 @@ const DIAGNOSTICS_PATH = process.env.BS_DIAGNOSTICS_PATH
   : OUTPUT_PATH.replace(/\.json$/i, ".diagnostics.json");
 const ANSWER_HASHES_PATH = resolve(__dirname, "..", "data", "buildSentence", "answer_hashes.json");
 const CHECKPOINT_PATH = resolve(__dirname, "..", "data", "buildSentence", "generation_checkpoint.json");
+const RUN_HISTORY_PATH = resolve(__dirname, "..", "data", "buildSentence", "run_history.json");
+const RESERVE_ARCHIVE_DIR = resolve(__dirname, "..", "data", "buildSentence", "archive");
+const RESERVE_POOL_CAP = 500;
 const TARGET_SET_COUNT = Number(process.env.BS_TARGET_SETS || 6);
 const MIN_REVIEW_SCORE = Number(process.env.BS_MIN_REVIEW_SCORE || 78);
 const MIN_REVIEW_OVERALL = Number(process.env.BS_MIN_REVIEW_OVERALL || 84);
@@ -966,6 +969,37 @@ function loadCheckpoint() {
 function deleteCheckpoint() {
   try { if (existsSync(CHECKPOINT_PATH)) unlinkSync(CHECKPOINT_PATH); }
   catch (_) { /* non-fatal */ }
+}
+
+// P1.3: Cross-run metrics log — append-only run history
+function appendRunHistory(entry) {
+  let history = [];
+  try { history = JSON.parse(readFileSync(RUN_HISTORY_PATH, "utf8")); } catch (_) {}
+  if (!Array.isArray(history)) history = [];
+  history.push(entry);
+  writeFileSync(RUN_HISTORY_PATH, `${JSON.stringify(history, null, 2)}\n`, "utf8");
+}
+
+function checkAcceptanceTrend() {
+  let history = [];
+  try { history = JSON.parse(readFileSync(RUN_HISTORY_PATH, "utf8")); } catch (_) {}
+  if (!Array.isArray(history) || history.length < 3) return;
+  const recent = history.slice(-5);
+  const rates = recent.map(r => r.acceptance_rate).filter(r => typeof r === "number");
+  if (rates.length < 3) return;
+  // Warn if last 3 runs all have acceptance rate below 15%
+  const last3 = rates.slice(-3);
+  if (last3.every(r => r < 0.15)) {
+    console.warn(`[trend-warning] Last ${last3.length} runs had low acceptance rates: ${last3.map(r => (r * 100).toFixed(1) + "%").join(", ")}`);
+    console.warn(`  Consider: diversify topics, adjust quality thresholds, or review reject reasons.`);
+  }
+  // Warn if acceptance rate is declining over last 3+
+  if (rates.length >= 3) {
+    const declining = rates.every((r, i) => i === 0 || r <= rates[i - 1]);
+    if (declining && rates[rates.length - 1] < rates[0] * 0.5) {
+      console.warn(`[trend-warning] Acceptance rate declining: ${rates.map(r => (r * 100).toFixed(1) + "%").join(" → ")}`);
+    }
+  }
 }
 
 /**
@@ -2707,11 +2741,22 @@ function updateCircuitBreakers(state, round, mode, spec, result) {
 
 function flushCircuitBreakerLog(state) {
   if (!state) return;
+  // Append new events to persistent log instead of overwriting
+  let priorEvents = [];
+  try {
+    const existing = JSON.parse(readFileSync(CIRCUIT_BREAKER_LOG_PATH, "utf8"));
+    priorEvents = Array.isArray(existing.all_events) ? existing.all_events : (Array.isArray(existing.events) ? existing.events : []);
+  } catch (_) { /* first run or corrupt file */ }
+  // Deduplicate by triggeredAt+type to avoid double-writes within a run
+  const seen = new Set(priorEvents.map(e => `${e.triggeredAt}|${e.type}`));
+  const newEvents = (state.events || []).filter(e => !seen.has(`${e.triggeredAt}|${e.type}`));
+  const allEvents = [...priorEvents, ...newEvents];
   const payload = {
     generated_at: new Date().toISOString(),
     active: state.active,
     events: state.events,
     history: state.history,
+    all_events: allEvents,
   };
   writeFileSync(CIRCUIT_BREAKER_LOG_PATH, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
 }
@@ -4075,9 +4120,11 @@ async function rewriteSetPrompts(sets) {
 
   // Single batched API call with retry
   let totalRewritten = 0;
+  let _rewriteRetryPrompt = null;
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
-      const prompt = buildPromptRewritePrompt(allYesno, allStatement);
+      const prompt = _rewriteRetryPrompt || buildPromptRewritePrompt(allYesno, allStatement);
+      _rewriteRetryPrompt = null;
       const raw = await callDeepSeekViaCurl({
         apiKey: process.env.DEEPSEEK_API_KEY,
         proxyUrl: resolveProxyUrl(),
@@ -4102,6 +4149,7 @@ async function rewriteSetPrompts(sets) {
       const rewrites = JSON.parse(text.slice(arrStart, arrEnd + 1));
       console.log(`  attempt ${attempt + 1}: got ${rewrites.length} rewrites from API`);
 
+      const rejectFeedback = [];
       for (const rw of rewrites) {
         const q = allQuestionMap.get(rw.id);
         if (!q) {
@@ -4112,13 +4160,15 @@ async function rewriteSetPrompts(sets) {
         const newText = String(rw.prompt_task_text || rw.prompt_text || rw.promptTaskText || rw.task_text || rw.text || "").trim();
         if (!newText) {
           console.log(`    ${rw.id} skipped: empty prompt_task_text (keys: ${Object.keys(rw).join(",")})`);
+          rejectFeedback.push({ id: rw.id, reason: "empty prompt_task_text" });
           continue;
         }
 
         const testQ = { ...q, prompt_task_kind: newKind, prompt_task_text: newText, prompt_context: "" };
         const check = validateStructuredPromptParts(testQ);
         if (check.fatal.length > 0) {
-          console.log(`    ${rw.id} rejected: ${check.fatal[0]}`);
+          console.log(`    ${rw.id} rejected: ${check.fatal.join("; ")}`);
+          rejectFeedback.push({ id: rw.id, reason: check.fatal.join("; "), attempted: newText.slice(0, 80) });
           continue;
         }
 
@@ -4129,6 +4179,22 @@ async function rewriteSetPrompts(sets) {
         totalRewritten++;
       }
       console.log(`  applied ${totalRewritten}/${totalTarget} rewrites`);
+
+      // P2.2: If all rewrites rejected on first attempt, retry with rejection feedback
+      if (totalRewritten === 0 && attempt === 0 && rejectFeedback.length > 0) {
+        console.log(`  all rejected, retrying with feedback...`);
+        const feedbackLines = rejectFeedback.slice(0, 6).map(
+          f => `  - ${f.id}: "${f.attempted || "(empty)"}" → rejected: ${f.reason}`
+        ).join("\n");
+        const retryNote = `\n\nIMPORTANT: Your previous rewrite attempt was FULLY REJECTED. Common mistakes:\n${feedbackLines}\n\nRules:\n- yesno prompt MUST be a yes/no question ending with "?"\n- statement prompt MUST be a declarative sentence ending with "."\n- prompt must NOT contain meta-instructions like "Complete the sentence"\n- prompt must relate to the answer content\n- Return field name exactly as "prompt_task_text"`;
+        // Inject feedback into next attempt's prompt
+        const origPrompt = buildPromptRewritePrompt(allYesno, allStatement);
+        const feedbackPrompt = origPrompt + retryNote;
+        // Store for next iteration
+        _rewriteRetryPrompt = feedbackPrompt;
+        await new Promise(r => setTimeout(r, 10000));
+        continue;
+      }
       break;
     } catch (e) {
       console.log(`  attempt ${attempt + 1} failed: ${e.message}`);
@@ -4217,12 +4283,35 @@ async function main() {
         // file missing or invalid — skip
       }
     }
+    // P2.4: Archive recycling — if reserve_pool was empty/small, backfill from newest archive
+    try {
+      const reserveCount = acceptedPool.length;
+      if (reserveCount < 20 && existsSync(RESERVE_ARCHIVE_DIR)) {
+        const archives = readdirSync(RESERVE_ARCHIVE_DIR)
+          .filter(f => f.startsWith("reserve_") && f.endsWith(".json"))
+          .sort()
+          .reverse(); // newest first
+        for (const archiveFile of archives.slice(0, 3)) {
+          try {
+            const archivePath = resolve(RESERVE_ARCHIVE_DIR, archiveFile);
+            const archiveData = JSON.parse(readFileSync(archivePath, "utf8"));
+            if (Array.isArray(archiveData) && archiveData.length > 0) {
+              const clean = archiveData.filter(q => !hasLegacyMultiSentencePrompt(q));
+              acceptedPool.push(...clean);
+              console.log(`Recycled ${clean.length} questions from archive/${archiveFile}`);
+            }
+          } catch (_) { /* skip corrupt archive */ }
+        }
+      }
+    } catch (_) { /* archive dir missing — fine */ }
   }
 
   // Register all seeded/restored answers into global hash set
   acceptedPool.forEach(q => globalAnswerHashes.add(hashAnswer(q)));
   console.log(`Global answer hashes: ${globalAnswerHashes.size} loaded`);
+  checkAcceptanceTrend();
 
+  const runStartTime = Date.now();
   const rejectReasons = checkpoint?.rejectReasons || {};
   let rollingRejectFeedback = checkpoint?.rollingRejectFeedback || "";
   let statTotalRounds = checkpoint?.statTotalRounds || 0;
@@ -5129,8 +5218,22 @@ async function main() {
       .map((q) => { const c = cloneQuestion(q); delete c._meta; return c; }),
     stableAnswerKey
   );
-  writeFileSync(RESERVE_PATH, `${JSON.stringify(reserve, null, 2)}\n`, "utf8");
-  console.log(`Reserve pool: ${reserve.length} questions saved to reserve_pool.json`);
+
+  // P1.2: Reserve pool cap — archive excess beyond RESERVE_POOL_CAP
+  if (reserve.length > RESERVE_POOL_CAP) {
+    const kept = reserve.slice(0, RESERVE_POOL_CAP);
+    const archived = reserve.slice(RESERVE_POOL_CAP);
+    try { mkdirSync(RESERVE_ARCHIVE_DIR, { recursive: true }); } catch (_) {}
+    const ts = new Date().toISOString().replace(/[:.]/g, "-").replace("T", "_").replace("Z", "");
+    const archivePath = resolve(RESERVE_ARCHIVE_DIR, `reserve_${ts}.json`);
+    writeFileSync(archivePath, `${JSON.stringify(archived, null, 2)}\n`, "utf8");
+    console.log(`Reserve pool overflow: archived ${archived.length} questions to ${basename(archivePath)}`);
+    writeFileSync(RESERVE_PATH, `${JSON.stringify(kept, null, 2)}\n`, "utf8");
+    console.log(`Reserve pool: ${kept.length} questions saved (capped at ${RESERVE_POOL_CAP})`);
+  } else {
+    writeFileSync(RESERVE_PATH, `${JSON.stringify(reserve, null, 2)}\n`, "utf8");
+    console.log(`Reserve pool: ${reserve.length} questions saved to reserve_pool.json`);
+  }
 
   // Persist global answer hashes and clean up checkpoint
   saveAnswerHashes(globalAnswerHashes);
@@ -5138,8 +5241,27 @@ async function main() {
   deleteCheckpoint();
 
   console.log("Top reject reasons:");
-  summarizeRejectReasons(rejectReasons).forEach(([k, v]) => console.log(`- ${k}: ${v}`));
+  const topRejects = summarizeRejectReasons(rejectReasons);
+  topRejects.forEach(([k, v]) => console.log(`- ${k}: ${v}`));
   flushCircuitBreakerLog(circuitBreakerState);
+
+  // P1.3: Append run metrics to persistent history
+  const runDuration = Math.round((Date.now() - runStartTime) / 1000);
+  appendRunHistory({
+    timestamp: new Date().toISOString(),
+    target_sets: TARGET_SET_COUNT,
+    assembled_sets: finalSets.length,
+    total_rounds: statTotalRounds,
+    total_generated: statTotalGenerated,
+    total_accepted: statTotalAccepted,
+    acceptance_rate: statTotalGenerated > 0 ? Number((statTotalAccepted / statTotalGenerated).toFixed(3)) : 0,
+    reserve_pool_size: reserve.length,
+    global_hashes: globalAnswerHashes.size,
+    duration_seconds: runDuration,
+    top_reject_reasons: Object.fromEntries(topRejects.slice(0, 5)),
+    circuit_breaker_events: (circuitBreakerState?.events || []).length,
+  });
+  console.log(`Run history: appended to run_history.json (${runDuration}s)`);
 }
 
 const isDirectRun = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
