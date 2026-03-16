@@ -1833,7 +1833,7 @@ function computeAssemblyState(poolState, targetSetCount = TARGET_SET_COUNT) {
     distractorMin: (ETS_STYLE_TARGETS.distractorMin || 0) * targetSetCount,
     nonEmbeddedMin: Math.max(0, (10 - (ETS_STYLE_TARGETS.embeddedMax || 8)) * targetSetCount),
     nonNegationMin: Math.max(0, (10 - (ETS_STYLE_TARGETS.negationMax || 4)) * targetSetCount),
-    qmarkMax: (ETS_STYLE_TARGETS.qmarkMax || 2) * targetSetCount,
+    qmarkMax: Math.ceil((ETS_STYLE_TARGETS.qmarkMax || 2) * targetSetCount * 0.7),
   };
   const slotInventory = getSlotInventory(poolState);
 
@@ -2042,7 +2042,7 @@ function computeQuestionAssemblyValue(q, poolState, assemblyState, options = {})
   if (strongTargeting && diff === "easy" && assemblyState.deficits.easy === 0) score -= 24;
   if (meta.isEmbedded && assemblyState.embeddedOverflow > 0) score -= 36;
   if (type === "negation" && assemblyState.negationOverflow > 0) score -= 34;
-  if (meta.hasQuestionMark && assemblyState.qmarkOverflow > 0) score -= 20;
+  if (meta.hasQuestionMark && assemblyState.qmarkOverflow > 0) score -= 40;
 
   return Math.round(score * 100) / 100;
 }
@@ -2122,7 +2122,7 @@ Rules:
 - Valid types: negation, 3rd-reporting, 1st-embedded, interrogative, direct, relative
 - Valid difficulties: easy, medium, hard
 - Avoid over-producing any single type just to satisfy diversity.
-- TPO type targets: negation ~20%, interrogative ~8%. HARD LIMIT: max 1 negation per batch (to prevent over-production). MUST include at least 1 interrogative per batch — this is a HARD requirement, not optional.
+- TPO type targets: negation ~20%, interrogative ~8%. HARD LIMIT: max 1 negation per batch (to prevent over-production). Include interrogative only when pool qmark ratio is below 8% — do NOT force interrogative in every batch.
 - In boost mode, prioritize precision over breadth: target the single most blocking gap first.
 - If all difficulty/style gaps are small, return a practical batch that still helps assemble the next set.
 
@@ -2213,12 +2213,41 @@ function enforcePlannerStyleGaps(spec, poolState, styleTargets, globalTypeTarget
     }
   };
 
-  // Always ensure at least 1 interrogative per batch (TPO 8% target)
-  const interrogativePlanned = out
+  // Qmark (interrogative) control: TPO target is 8%, need ~5 out of 60
+  const qmarkPoolRatio = totalPool > 0 ? style.qmark / totalPool : 0;
+  const qmarkAbsolute = style.qmark || 0;
+  const qmarkTarget = Math.ceil(TARGET_SET_COUNT * 10 * 0.08); // ~5 for 6 sets
+  let interrogativePlanned = out
     .filter((x) => x.type === "interrogative")
     .reduce((sum, x) => sum + x.count, 0);
-  if (interrogativePlanned === 0) {
+
+  if (qmarkAbsolute >= qmarkTarget) {
+    // Already have enough — strip ALL interrogative from plan
+    let replaced = 0;
+    for (const item of out) {
+      if (item.type === "interrogative") {
+        item.type = "1st-embedded";
+        replaced++;
+      }
+    }
+    if (replaced > 0) {
+      console.log(`  [planner-fix] stripped ${replaced} interrogative (have ${qmarkAbsolute}/${qmarkTarget} qmark)`);
+    }
+    interrogativePlanned = 0;
+  } else if (interrogativePlanned > 1) {
+    // Cap to max 1 interrogative per batch to prevent bursts
+    let kept = 0;
+    for (const item of out) {
+      if (item.type === "interrogative") {
+        if (kept >= 1) { item.type = "1st-embedded"; }
+        else { kept++; }
+      }
+    }
+    console.log(`  [planner-fix] capped interrogative to 1 per batch (had ${interrogativePlanned}, qmark=${qmarkAbsolute}/${qmarkTarget})`);
+    interrogativePlanned = 1;
+  } else if (interrogativePlanned === 0 && qmarkAbsolute < qmarkTarget) {
     replaceOne("interrogative", "medium");
+    interrogativePlanned = 1;
   }
 
   if (!bootstrapPhase && embeddedGap > 0) {
@@ -2227,7 +2256,9 @@ function enforcePlannerStyleGaps(spec, poolState, styleTargets, globalTypeTarget
       .reduce((sum, x) => sum + x.count, 0);
     if (embeddedPlanned < Math.min(6, embeddedGap)) {
       replaceOne("1st-embedded", "medium");
-      replaceOne("interrogative", "medium");
+      // Only add interrogative for embedded boost if qmark is still below target
+      if (qmarkAbsolute < qmarkTarget && interrogativePlanned === 0) replaceOne("interrogative", "medium");
+      else replaceOne("1st-embedded", "medium");
     }
   }
 
@@ -3996,9 +4027,12 @@ async function rewriteSetPrompts(sets) {
       continue;
     }
 
-    const shuffled = shuffle([...candidates]);
-    for (let i = 0; i < yesnoNeeded; i++) allYesno.push(shuffled[i]);
-    for (let i = 0; i < statementNeeded; i++) allStatement.push(shuffled[yesnoNeeded + i]);
+    // Prefer non-embedded candidates for rewrite to preserve embedded rate
+    const nonEmbedded = candidates.filter(q => !isEmbeddedQuestion(q.grammar_points));
+    const embeddedCands = candidates.filter(q => isEmbeddedQuestion(q.grammar_points));
+    const ordered = [...shuffle(nonEmbedded), ...shuffle(embeddedCands)];
+    for (let i = 0; i < yesnoNeeded; i++) allYesno.push(ordered[i]);
+    for (let i = 0; i < statementNeeded; i++) allStatement.push(ordered[yesnoNeeded + i]);
     questions.forEach(q => allQuestionMap.set(q.id, q));
   }
 
@@ -4048,8 +4082,11 @@ async function rewriteSetPrompts(sets) {
           continue;
         }
         const newKind = String(rw.prompt_task_kind || "").trim().toLowerCase();
-        const newText = String(rw.prompt_task_text || "").trim();
-        if (!newText) continue;
+        const newText = String(rw.prompt_task_text || rw.prompt_text || rw.promptTaskText || rw.task_text || rw.text || "").trim();
+        if (!newText) {
+          console.log(`    ${rw.id} skipped: empty prompt_task_text (keys: ${Object.keys(rw).join(",")})`);
+          continue;
+        }
 
         const testQ = { ...q, prompt_task_kind: newKind, prompt_task_text: newText, prompt_context: "" };
         const check = validateStructuredPromptParts(testQ);
@@ -4458,7 +4495,8 @@ async function main() {
     if (strongTargeting && currentAssemblyState.deficits.nonEmbedded > 0 && EMBEDDED_HEAVY_TYPES.has(type)) score -= 40;
     if (currentAssemblyState.embeddedOverflow > 0 && EMBEDDED_HEAVY_TYPES.has(type)) score -= 36;
     if (currentAssemblyState.negationOverflow > 0 && type === "negation") score -= 40;
-    if (type === "interrogative" && currentAssemblyState.qmark >= styleTargets.qmarkMax) score -= 20;
+    if (type === "interrogative" && currentAssemblyState.qmark >= styleTargets.qmarkMax) score -= 60;
+    if (type === "interrogative" && currentAssemblyState.qmark >= Math.max(1, styleTargets.qmarkMax - 1)) score -= 30;
     if (type === "direct" && currentAssemblyState.deficits.nonEmbedded <= 0 && !strongTargeting) score -= 3;
     if (bootstrapPhase && diff === "hard") score -= 35;
     if (bootstrapPhase && type === "negation" && diff !== "medium") score -= 25;
