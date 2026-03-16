@@ -6,6 +6,7 @@ import { sendEmailOTP, verifyEmailOTP, signOut } from "../lib/emailAuth";
 import { clearAuth, getSavedCode, getSavedTier, getSavedEmail, getSavedAuthMethod, saveAuth } from "../lib/AuthContext";
 import { clearLocalSessions, getLocalSessionCount, importLocalSessionsToCloud } from "../lib/sessionStore";
 import { isSupabaseConfigured } from "../lib/supabase";
+import { usePageView } from "../lib/usePageView";
 import { C, FONT } from "./shared/ui";
 
 const UI_LANG_KEY = "toefl-ui-lang";
@@ -387,6 +388,9 @@ export default function LoginGate({ children }) {
   const [importing, setImporting] = useState(false);
 
   const isLoggedIn = !!userCode;
+
+  // ── Analytics: track page views ──
+  usePageView(userCode);
 
   // ── Initialization: restore from cache instantly, verify in background ──
   useEffect(() => {

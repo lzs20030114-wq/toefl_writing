@@ -12,6 +12,7 @@ const NAV = [
   { label: "答题情况", href: "/admin-activity", icon: "activity" },
   { label: "API 日志", href: "/admin-api-errors", icon: "alert" },
   { label: "用户反馈", href: "/admin-feedback", icon: "msg" },
+  { label: "数据分析", href: "/admin-analytics", icon: "chart" },
   { label: "题库管理", href: "/admin-questions", icon: "book" },
   { label: "自动生题", href: "/admin-generate", icon: "zap" },
 ];
@@ -23,6 +24,7 @@ const ICONS = {
   activity: "M22 12h-4l-3 9L9 3l-3 9H2",
   alert: "M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0zM12 9v4m0 4h.01",
   msg: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z",
+  chart: "M18 20V10M12 20V4M6 20v-6",
   book: "M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 19.5A2.5 2.5 0 0 0 6.5 22H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15z",
   zap: "M13 2L3 14h9l-1 10 10-12h-9l1-10z",
 };
