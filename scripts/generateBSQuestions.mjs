@@ -2213,16 +2213,16 @@ function enforcePlannerStyleGaps(spec, poolState, styleTargets, globalTypeTarget
     }
   };
 
-  // Qmark (interrogative) control: TPO target is 8%, need ~5 out of 60
+  // Qmark (interrogative) control — ratio-based (proven in R18/R20)
   const qmarkPoolRatio = totalPool > 0 ? style.qmark / totalPool : 0;
-  const qmarkAbsolute = style.qmark || 0;
-  const qmarkTarget = Math.ceil(TARGET_SET_COUNT * 10 * 0.08); // ~5 for 6 sets
-  let interrogativePlanned = out
+  const interrogativePlanned = out
     .filter((x) => x.type === "interrogative")
     .reduce((sum, x) => sum + x.count, 0);
-
-  if (qmarkAbsolute >= qmarkTarget) {
-    // Already have enough — strip ALL interrogative from plan
+  if (interrogativePlanned === 0 && qmarkPoolRatio < 0.08) {
+    replaceOne("interrogative", "medium");
+  }
+  // Strip ALL interrogative if pool already has enough qmark items (>= 10%)
+  if (qmarkPoolRatio >= 0.10) {
     let replaced = 0;
     for (const item of out) {
       if (item.type === "interrogative") {
@@ -2231,23 +2231,8 @@ function enforcePlannerStyleGaps(spec, poolState, styleTargets, globalTypeTarget
       }
     }
     if (replaced > 0) {
-      console.log(`  [planner-fix] stripped ${replaced} interrogative (have ${qmarkAbsolute}/${qmarkTarget} qmark)`);
+      console.log(`  [planner-fix] replaced ${replaced} interrogative → 1st-embedded (qmark pool ratio ${(qmarkPoolRatio * 100).toFixed(0)}%)`);
     }
-    interrogativePlanned = 0;
-  } else if (interrogativePlanned > 1) {
-    // Cap to max 1 interrogative per batch to prevent bursts
-    let kept = 0;
-    for (const item of out) {
-      if (item.type === "interrogative") {
-        if (kept >= 1) { item.type = "1st-embedded"; }
-        else { kept++; }
-      }
-    }
-    console.log(`  [planner-fix] capped interrogative to 1 per batch (had ${interrogativePlanned}, qmark=${qmarkAbsolute}/${qmarkTarget})`);
-    interrogativePlanned = 1;
-  } else if (interrogativePlanned === 0 && qmarkAbsolute < qmarkTarget) {
-    replaceOne("interrogative", "medium");
-    interrogativePlanned = 1;
   }
 
   if (!bootstrapPhase && embeddedGap > 0) {
@@ -2256,8 +2241,7 @@ function enforcePlannerStyleGaps(spec, poolState, styleTargets, globalTypeTarget
       .reduce((sum, x) => sum + x.count, 0);
     if (embeddedPlanned < Math.min(6, embeddedGap)) {
       replaceOne("1st-embedded", "medium");
-      // Only add interrogative for embedded boost if qmark is still below target
-      if (qmarkAbsolute < qmarkTarget && interrogativePlanned === 0) replaceOne("interrogative", "medium");
+      if (qmarkPoolRatio < 0.08) replaceOne("interrogative", "medium");
       else replaceOne("1st-embedded", "medium");
     }
   }
