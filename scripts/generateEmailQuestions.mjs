@@ -39,6 +39,53 @@ const MAX_RETRIES = 5;
 const DRY_RUN = process.argv.includes("--dry-run");
 const count = Number(process.argv.find((a) => /^\d+$/.test(a))) || 6;
 
+// ── Name pool — bypasses DeepSeek's narrow naming vocabulary ────────────────
+const NAME_POOL = {
+  professor: [
+    "Professor Lane", "Professor Nakamura", "Professor Delgado", "Professor Whitfield",
+    "Professor Okonkwo", "Professor Lindqvist", "Professor Castillo", "Professor Huang",
+    "Dr. Patel", "Dr. Moreau", "Dr. Fitzgerald", "Dr. Yamamoto", "Dr. Sorensen",
+    "Dr. Alvarez", "Dr. Kimura", "Dr. Novak", "Dr. Reeves", "Dr. Bianchi",
+    "Professor Cho", "Professor Bergström", "Professor Hassan", "Professor Kowalski",
+  ],
+  formal: [
+    "Mr. Wallace", "Mr. Reyes", "Mr. Owens", "Mr. Torres", "Mr. Kapoor",
+    "Ms. Park", "Ms. Chen", "Ms. Vega", "Ms. Okafor", "Ms. Johansson",
+    "Mr. Brennan", "Mr. Tanaka", "Ms. Herrera", "Ms. Dubois", "Mr. Petrov",
+    "Ms. Lindgren", "Mr. Achebe", "Ms. Kwan", "Mr. Rossi", "Ms. Andersen",
+  ],
+  peer: [
+    "Daniel", "Sarah", "Marcus", "Emma", "Kevin", "Mia", "Lucas", "Priya",
+    "Jasper", "Nora", "Ethan", "Chloe", "Omar", "Lily", "Aiden", "Zoe",
+    "Ravi", "Hana", "Felix", "Ingrid", "Carlos", "Yuki", "Theo", "Amara",
+  ],
+  org: [
+    "Customer Service", "Customer Support", "Hotel Reservations", "IT Help Desk",
+    "Building Management", "Property Management Office", "City Council Office",
+    "Student Housing Office", "Library Services", "Campus Dining Services",
+  ],
+};
+
+// Pick a random unused name matching the category's recipient type
+function pickName(category, usedNormalizedNames, normalizeFn) {
+  const key = category.key;
+  let pool;
+  if (key === "A") pool = NAME_POOL.professor;
+  else if (key === "B") pool = [...NAME_POOL.peer, ...NAME_POOL.formal];
+  else if (key === "C") pool = NAME_POOL.formal;
+  else if (key === "D") pool = NAME_POOL.peer;
+  else if (key === "E") pool = NAME_POOL.org;
+  else if (key === "F") pool = [...NAME_POOL.formal, ...NAME_POOL.org];
+  else pool = NAME_POOL.formal;
+
+  // Shuffle and pick first unused
+  const shuffled = pool.slice().sort(() => Math.random() - 0.5);
+  for (const name of shuffled) {
+    if (!usedNormalizedNames.has(normalizeFn(name))) return name;
+  }
+  return null; // all exhausted
+}
+
 // ── Category distribution ───────────────────────────────────────────────────
 function distributeCounts(total, categories) {
   const raw = categories.map((c) => ({ cat: c, n: Math.max(1, Math.round(total * c.weight)) }));
@@ -157,21 +204,31 @@ async function main() {
             retries--;
             continue;
           }
-          // Reject if same recipient name (normalized) reused
-          const norm = normalizeName(p.to);
-          if (usedNames.has(norm)) {
-            console.log("  x " + cat.name + " dup name: " + p.to + " (" + norm + ")");
+          // Replace AI name with a diverse name from the pool
+          const poolName = pickName(cat, usedNames, normalizeName);
+          if (!poolName) {
+            console.log("  x " + cat.name + " name pool exhausted");
             retries--;
             continue;
           }
+          const originalTo = p.to;
+          const finalTo = poolName;
+          // Update direction to use the new name
+          const direction = "Write an email to " + finalTo + ". In your email, do the following:";
+          // Replace name in scenario if it appears
+          let scenario = p.scenario;
+          if (originalTo && scenario.includes(originalTo)) {
+            scenario = scenario.replace(originalTo, finalTo);
+          }
 
+          const norm = normalizeName(finalTo);
           const item = {
             id: "em" + nextId++,
             topic: cat.topic,
-            scenario: p.scenario,
-            direction: p.direction || ("Write an email to " + p.to + ". In your email, do the following:"),
+            scenario: scenario,
+            direction: direction,
             goals: p.goals,
-            to: p.to,
+            to: finalTo,
             subject: p.subject,
           };
           generated.push(item);
