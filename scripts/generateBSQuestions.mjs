@@ -15,10 +15,11 @@
  *   BS_MAX_ROUNDS=32                              (optional)
  */
 
-import { readFileSync, writeFileSync } from "fs";
+import { readFileSync, writeFileSync, existsSync, unlinkSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath, pathToFileURL } from "url";
 import { createRequire } from "module";
+import { createHash } from "crypto";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
@@ -52,6 +53,8 @@ const CIRCUIT_BREAKER_LOG_PATH = process.env.BS_CIRCUIT_BREAKER_LOG_PATH
 const DIAGNOSTICS_PATH = process.env.BS_DIAGNOSTICS_PATH
   ? resolve(String(process.env.BS_DIAGNOSTICS_PATH))
   : OUTPUT_PATH.replace(/\.json$/i, ".diagnostics.json");
+const ANSWER_HASHES_PATH = resolve(__dirname, "..", "data", "buildSentence", "answer_hashes.json");
+const CHECKPOINT_PATH = resolve(__dirname, "..", "data", "buildSentence", "generation_checkpoint.json");
 const TARGET_SET_COUNT = Number(process.env.BS_TARGET_SETS || 6);
 const MIN_REVIEW_SCORE = Number(process.env.BS_MIN_REVIEW_SCORE || 78);
 const MIN_REVIEW_OVERALL = Number(process.env.BS_MIN_REVIEW_OVERALL || 84);
@@ -937,6 +940,32 @@ function maybeReassignPrefilledPosition(q) {
 
 function stableAnswerKey(q) {
   return normalizeText(q.answer).toLowerCase();
+}
+
+// ── Global answer deduplication ──
+function hashAnswer(q) {
+  return createHash("sha256").update(stableAnswerKey(q)).digest("hex");
+}
+function loadAnswerHashes() {
+  try { return new Set(JSON.parse(readFileSync(ANSWER_HASHES_PATH, "utf8"))); }
+  catch (_) { return new Set(); }
+}
+function saveAnswerHashes(hashSet) {
+  writeFileSync(ANSWER_HASHES_PATH, JSON.stringify([...hashSet]) + "\n", "utf8");
+}
+
+// ── Generation checkpointing ──
+function saveCheckpoint(data) {
+  try { writeFileSync(CHECKPOINT_PATH, JSON.stringify(data) + "\n", "utf8"); }
+  catch (_) { /* non-fatal */ }
+}
+function loadCheckpoint() {
+  try { return JSON.parse(readFileSync(CHECKPOINT_PATH, "utf8")); }
+  catch (_) { return null; }
+}
+function deleteCheckpoint() {
+  try { if (existsSync(CHECKPOINT_PATH)) unlinkSync(CHECKPOINT_PATH); }
+  catch (_) { /* non-fatal */ }
 }
 
 /**
@@ -3089,6 +3118,20 @@ async function generateCandidateRound(round, spec, rejectFeedback = "", recentPo
 
   if (topicPassed.length === 0) return out;
 
+  // Global answer dedup: reject exact duplicates from prior runs
+  const dedupPassed = [];
+  const answerHashSet = options?.globalAnswerHashes;
+  for (const q of topicPassed) {
+    if (answerHashSet && answerHashSet.has(hashAnswer(q))) {
+      const reason = "dedup:global_hash";
+      out.rejected += 1;
+      out.rejectReasons[reason] = (out.rejectReasons[reason] || 0) + 1;
+      continue;
+    }
+    dedupPassed.push(q);
+  }
+  if (dedupPassed.length === 0) return out;
+
   // Pool-level prefilled diversity gate:
   // 1. No-prefilled quota: reject prefilled=[] when pool exceeds 10% (TPO: ~8%)
   // 2. "i" quota: reject prefilled=["i"] when pool exceeds 15% (TPO: ~10% of all prefilled)
@@ -3111,7 +3154,7 @@ async function generateCandidateRound(round, spec, rejectFeedback = "", recentPo
   const oneWordQuotaExceeded = pool1wRatio >= 0.65;
 
   const prefilledPassed = [];
-  for (const q of topicPassed) {
+  for (const q of dedupPassed) {
     // Gate: no-prefilled quota (TPO 8%, cap at 10%)
     if (noPfQuotaExceeded && (!Array.isArray(q.prefilled) || q.prefilled.length === 0)) {
       const type = resolvedAnswerType(q);
@@ -4133,31 +4176,59 @@ async function main() {
     return sentences.length >= 2; // background embedded in task_text as multiple sentences
   }
 
-  const acceptedPool = [];
-  for (const [label, filePath] of [["questions.json", OUTPUT_PATH], ["reserve_pool.json", RESERVE_PATH]]) {
-    try {
-      const data = JSON.parse(readFileSync(filePath, "utf8"));
-      // questions.json stores sets; reserve_pool.json stores a flat array
-      const seeded = Array.isArray(data)
-        ? data
-        : (data.question_sets || []).flatMap((s) => s.questions || []);
-      const clean = seeded.filter(q => !hasLegacyMultiSentencePrompt(q));
-      const dropped = seeded.length - clean.length;
-      if (clean.length > 0) {
-        acceptedPool.push(...clean);
-        console.log(`Seeded ${clean.length} questions from ${label}${dropped > 0 ? ` (dropped ${dropped} with legacy multi-sentence prompts)` : ""}`);
-      }
-    } catch (_) {
-      // file missing or invalid — skip
+  // ── CLI flags ──
+  const cliArgs = process.argv.slice(2);
+  const resumeFlag = cliArgs.includes("--resume");
+
+  // ── Global answer dedup ──
+  const globalAnswerHashes = loadAnswerHashes();
+
+  // ── Checkpoint resume ──
+  let checkpoint = null;
+  if (resumeFlag) {
+    checkpoint = loadCheckpoint();
+    if (checkpoint?.version === 1 && checkpoint.targetSetCount === TARGET_SET_COUNT) {
+      console.log(`Resuming from checkpoint: round ${checkpoint.totalRound}, pool ${checkpoint.acceptedPool?.length || 0} questions`);
+      // Merge checkpoint hashes into global set
+      if (checkpoint.globalAnswerHashes) checkpoint.globalAnswerHashes.forEach(h => globalAnswerHashes.add(h));
+    } else {
+      if (checkpoint) console.log("Checkpoint incompatible (different target), starting fresh.");
+      checkpoint = null;
     }
   }
 
-  const rejectReasons = {};
-  let rollingRejectFeedback = "";
-  let statTotalRounds = 0;
-  let statTotalGenerated = 0;
-  let statTotalAccepted = 0;
-  const circuitBreakerState = createCircuitBreakerState();
+  const acceptedPool = [];
+  if (checkpoint) {
+    acceptedPool.push(...(checkpoint.acceptedPool || []));
+  } else {
+    for (const [label, filePath] of [["questions.json", OUTPUT_PATH], ["reserve_pool.json", RESERVE_PATH]]) {
+      try {
+        const data = JSON.parse(readFileSync(filePath, "utf8"));
+        const seeded = Array.isArray(data)
+          ? data
+          : (data.question_sets || []).flatMap((s) => s.questions || []);
+        const clean = seeded.filter(q => !hasLegacyMultiSentencePrompt(q));
+        const dropped = seeded.length - clean.length;
+        if (clean.length > 0) {
+          acceptedPool.push(...clean);
+          console.log(`Seeded ${clean.length} questions from ${label}${dropped > 0 ? ` (dropped ${dropped} with legacy multi-sentence prompts)` : ""}`);
+        }
+      } catch (_) {
+        // file missing or invalid — skip
+      }
+    }
+  }
+
+  // Register all seeded/restored answers into global hash set
+  acceptedPool.forEach(q => globalAnswerHashes.add(hashAnswer(q)));
+  console.log(`Global answer hashes: ${globalAnswerHashes.size} loaded`);
+
+  const rejectReasons = checkpoint?.rejectReasons || {};
+  let rollingRejectFeedback = checkpoint?.rollingRejectFeedback || "";
+  let statTotalRounds = checkpoint?.statTotalRounds || 0;
+  let statTotalGenerated = checkpoint?.statTotalGenerated || 0;
+  let statTotalAccepted = checkpoint?.statTotalAccepted || 0;
+  const circuitBreakerState = checkpoint?.circuitBreakerState || createCircuitBreakerState();
   const easyTarget = ETS_2026_TARGET_COUNTS_10.easy * TARGET_SET_COUNT;
   const mediumTarget = ETS_2026_TARGET_COUNTS_10.medium * TARGET_SET_COUNT;
   const hardTarget = ETS_2026_TARGET_COUNTS_10.hard * TARGET_SET_COUNT;
@@ -4734,9 +4805,9 @@ async function main() {
     };
   }
 
-  let totalRound = 0;
-  let minGapSeen = Infinity;
-  let roundsSinceNewMin = 0;
+  let totalRound = checkpoint?.totalRound || 0;
+  let minGapSeen = checkpoint?.minGapSeen ?? Infinity;
+  let roundsSinceNewMin = checkpoint?.roundsSinceNewMin || 0;
 
   while (true) {
     const pool = splitPoolByDifficulty(acceptedPool);
@@ -4855,8 +4926,10 @@ async function main() {
         primaryRepairTarget: schedule.primaryRepairTarget,
         typeReliability,
         generationHints: schedule.phase === "assembly" ? buildAssemblyGenerationHints(assemblyState, spec, schedule.primaryRepairTarget) : "",
+        globalAnswerHashes,
       });
       acceptedPool.push(...res.questions);
+      res.questions.forEach(q => globalAnswerHashes.add(hashAnswer(q)));
       statTotalRounds += 1;
       statTotalGenerated += res.generated;
       statTotalAccepted += res.accepted;
@@ -4918,6 +4991,13 @@ async function main() {
       flushCircuitBreakerLog(circuitBreakerState);
       flushPoolCheckpoint(acceptedPool);
       flushDiagnostics();
+      saveCheckpoint({
+        version: 1, targetSetCount: TARGET_SET_COUNT, totalRound, minGapSeen, roundsSinceNewMin,
+        acceptedPool: acceptedPool.map(q => { const c = cloneQuestion(q); delete c._meta; return c; }),
+        circuitBreakerState, rejectReasons, rollingRejectFeedback,
+        statTotalRounds, statTotalGenerated, statTotalAccepted,
+        globalAnswerHashes: [...globalAnswerHashes],
+      });
     } catch (e) {
       console.log(`round ${roundNum}: failed → ${errMsg(e)}`);
       specCooldowns[signature] = roundNum + 2;
@@ -5051,6 +5131,11 @@ async function main() {
   );
   writeFileSync(RESERVE_PATH, `${JSON.stringify(reserve, null, 2)}\n`, "utf8");
   console.log(`Reserve pool: ${reserve.length} questions saved to reserve_pool.json`);
+
+  // Persist global answer hashes and clean up checkpoint
+  saveAnswerHashes(globalAnswerHashes);
+  console.log(`Global answer hashes: ${globalAnswerHashes.size} saved`);
+  deleteCheckpoint();
 
   console.log("Top reject reasons:");
   summarizeRejectReasons(rejectReasons).forEach(([k, v]) => console.log(`- ${k}: ${v}`));
