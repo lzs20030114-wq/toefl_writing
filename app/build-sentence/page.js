@@ -11,21 +11,64 @@ import { loadDoneIds } from "../../lib/sessionStore";
 import { translateGrammarPoint } from "../../lib/utils";
 import BS_DATA from "../../data/buildSentence/questions.json";
 
-function buildBSTopics() {
-  const sets = BS_DATA.question_sets || [];
-  return sets
-    .filter((s) => Array.isArray(s.questions) && s.questions.length > 0)
-    .map((s) => {
-      const grammarSet = new Set();
-      s.questions.forEach((q) => (q.grammar_points || []).forEach((g) => grammarSet.add(g)));
-      const grammarTags = [...grammarSet].slice(0, 5).map(translateGrammarPoint).join("、");
+/* ── Grammar-point canonical category mapping ─────────────────────── */
+function grammarCategory(rawTag) {
+  const t = (rawTag || "").trim().toLowerCase().replace(/[_-]/g, " ");
+  if (t.includes("embedded") || t === "indirect question" || t.startsWith("1st ")) return "间接疑问句";
+  if (t.includes("negation") || t === "negative") return "否定结构";
+  if (t.includes("passive")) return "被动语态";
+  if (t.includes("relative") || t.includes("contact") || t === "whom") return "从句";
+  if (t === "interrogative") return "疑问句";
+  if (t.includes("report") || t === "indirect speech") return "引语转述";
+  if (/past|present|future|tense/.test(t)) return "时态";
+  if (t.includes("clause")) return "从句";
+  return "其他";
+}
+
+const CATEGORY_ORDER = ["间接疑问句", "否定结构", "时态", "从句", "被动语态", "疑问句", "引语转述", "其他"];
+
+/* ── Build grammar-point-based topics for practice mode ───────────── */
+function buildGrammarTopics() {
+  const allQuestions = (BS_DATA.question_sets || []).flatMap((s) => s.questions || []);
+  const groups = {};
+
+  for (const q of allQuestions) {
+    const cats = new Set((q.grammar_points || []).map(grammarCategory));
+    if (cats.size === 0) cats.add("其他");
+    for (const cat of cats) {
+      if (!groups[cat]) groups[cat] = { questions: [], subPoints: new Set() };
+      groups[cat].questions.push(q);
+      (q.grammar_points || []).forEach((gp) => {
+        if (grammarCategory(gp) === cat) groups[cat].subPoints.add(translateGrammarPoint(gp));
+      });
+    }
+  }
+
+  return CATEGORY_ORDER
+    .filter((cat) => groups[cat] && groups[cat].questions.length > 0)
+    .map((cat) => {
+      const g = groups[cat];
+      const subList = [...g.subPoints].slice(0, 4).join("、");
       return {
-        id: String(s.set_id),
-        tag: `${s.questions.length} 题`,
-        title: `Set ${s.set_id}`,
-        subtitle: grammarTags ? `语法点：${grammarTags}` : `包含 ${s.questions.length} 道拼句题`,
+        id: `gp-${cat}`,
+        tag: `${g.questions.length} 题`,
+        title: cat,
+        subtitle: subList && subList !== cat ? subList : "",
       };
     });
+}
+
+/* ── Collect questions for a grammar category ─────────────────────── */
+function questionsForCategory(categoryId) {
+  const cat = categoryId.replace(/^gp-/, "");
+  const allQuestions = (BS_DATA.question_sets || []).flatMap((s) => s.questions || []);
+  return allQuestions
+    .filter((q) => {
+      const cats = new Set((q.grammar_points || []).map(grammarCategory));
+      if (cats.size === 0) cats.add("其他");
+      return cats.has(cat);
+    })
+    .map((q) => ({ ...q, __sourceGroupId: categoryId }));
 }
 
 function BuildSentencePageClient() {
@@ -38,14 +81,14 @@ function BuildSentencePageClient() {
   const onExit = () => router.push(isPractice ? "/?mode=practice" : "/");
 
   if (isPractice && !pickedSetId) {
-    const doneIds = loadDoneIds(DONE_STORAGE_KEYS.BUILD_SENTENCE);
+    const doneIds = loadDoneIds(DONE_STORAGE_KEYS.BUILD_SENTENCE_GP);
     const doneStrings = new Set([...doneIds].map(String));
     return (
       <UsageGateWrapper onExit={onExit} practiceMode={mode}>
         <TopicPicker
           title="Build a Sentence"
           section="Writing Practice | Task 1"
-          items={buildBSTopics()}
+          items={buildGrammarTopics()}
           doneIds={doneStrings}
           accent={{ color: "#D97706", soft: "#FFFBEB" }}
           onSelect={(id) => setPickedSetId(id)}
@@ -55,14 +98,10 @@ function BuildSentencePageClient() {
     );
   }
 
-  // In practice mode, pass the specific set's questions
+  // In practice mode, pass questions for the picked grammar category
   let practiceQuestions = null;
   if (isPractice && pickedSetId) {
-    const sets = BS_DATA.question_sets || [];
-    const chosen = sets.find((s) => String(s.set_id) === pickedSetId);
-    if (chosen) {
-      practiceQuestions = chosen.questions.map((q) => ({ ...q, __sourceSetId: chosen.set_id }));
-    }
+    practiceQuestions = questionsForCategory(pickedSetId);
   }
 
   return (

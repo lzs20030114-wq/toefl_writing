@@ -117,19 +117,19 @@ function Tag({ children, color, bg, style }) {
 // — Circular progress ring —
 
 function CircularProgress({ value, max = 5, color = P.amber }) {
-  const radius = 34;
+  const radius = 26;
   const circumference = 2 * Math.PI * radius;
   const clampedVal = Math.min(Math.max(Number(value) || 0, 0), max);
   const strokeDashoffset = circumference - (clampedVal / max) * circumference;
   return (
-    <div style={{ position: "relative", width: 84, height: 84, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-      <svg width="84" height="84" style={{ transform: "rotate(-90deg)", display: "block" }}>
-        <circle cx="42" cy="42" r={radius} stroke={P.borderSubtle} strokeWidth="7" fill="transparent" />
-        <circle cx="42" cy="42" r={radius} stroke={color} strokeWidth="7" fill="transparent"
+    <div style={{ position: "relative", width: 64, height: 64, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+      <svg width="64" height="64" style={{ transform: "rotate(-90deg)", display: "block" }}>
+        <circle cx="32" cy="32" r={radius} stroke={P.borderSubtle} strokeWidth="6" fill="transparent" />
+        <circle cx="32" cy="32" r={radius} stroke={color} strokeWidth="6" fill="transparent"
           strokeDasharray={circumference} strokeDashoffset={strokeDashoffset} strokeLinecap="round" />
       </svg>
       <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <span style={{ fontSize: 22, fontWeight: 900, color: P.text, lineHeight: 1 }}>{clampedVal.toFixed(1)}</span>
+        <span style={{ fontSize: 17, fontWeight: 900, color: P.text, lineHeight: 1 }}>{clampedVal.toFixed(1)}</span>
       </div>
     </div>
   );
@@ -377,11 +377,11 @@ function StatCard({ icon, short, count, avg, color, active, onClick }) {
       onClick={onClick}
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
-      style={{ padding: "14px 12px", borderRadius: 12, textAlign: "left", cursor: "pointer", border: `1.5px solid ${active ? `${color}55` : P.borderSubtle}`, background: active ? `${color}06` : P.surface, transform: (active || hov) ? "translateY(-2px)" : "none", boxShadow: (active || hov) ? P.shadowMd : "none", transition: "all 0.25s cubic-bezier(0.16,1,0.3,1)" }}
+      style={{ padding: "10px 10px", borderRadius: 10, textAlign: "left", cursor: "pointer", border: `1.5px solid ${active ? `${color}55` : P.borderSubtle}`, background: active ? `${color}06` : P.surface, transform: (active || hov) ? "translateY(-1px)" : "none", boxShadow: (active || hov) ? P.shadow : "none", transition: "all 0.25s cubic-bezier(0.16,1,0.3,1)" }}
     >
-      <div style={{ fontSize: 11, fontWeight: 700, color, marginBottom: 6 }}>{icon} {short}</div>
-      <div style={{ fontSize: 22, fontWeight: 800, color: P.text, lineHeight: 1.1 }}>{count}</div>
-      {avg ? <div style={{ fontSize: 10.5, color: P.textDim, marginTop: 3 }}>{avg}</div> : null}
+      <div style={{ fontSize: 10.5, fontWeight: 700, color, marginBottom: 4 }}>{icon} {short}</div>
+      <div style={{ fontSize: 18, fontWeight: 800, color: P.text, lineHeight: 1.1 }}>{count}</div>
+      {avg ? <div style={{ fontSize: 10, color: P.textDim, marginTop: 2 }}>{avg}</div> : null}
     </button>
   );
 }
@@ -1103,43 +1103,43 @@ export function ProgressView({ onBack }) {
               <div key="overview" style={{ animation: "slideInLeft 0.4s cubic-bezier(0.16,1,0.3,1)" }}>
 
                 {/* Collapsible stats section */}
-                <div style={{ background: P.surface, borderRadius: 16, border: `1px solid ${P.border}`, overflow: "hidden", marginBottom: 16, boxShadow: P.shadow }}>
+                <div style={{ background: P.surface, borderRadius: 12, border: `1px solid ${P.border}`, overflow: "hidden", marginBottom: 12, boxShadow: P.shadow }}>
                   <button
                     onClick={() => setShowStats(v => !v)}
-                    style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 18px", background: "none", border: "none", cursor: "pointer", borderBottom: showStats ? `1px solid ${P.borderSubtle}` : "none", transition: "border-color 0.2s" }}
+                    style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "9px 14px", background: "none", border: "none", cursor: "pointer", borderBottom: showStats ? `1px solid ${P.borderSubtle}` : "none", transition: "border-color 0.2s" }}
                   >
-                    <span style={{ fontSize: 13, fontWeight: 700, color: P.text }}>📊 数据概览</span>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: P.text }}>📊 数据概览</span>
                     <ChevronIcon open={showStats} color={P.textDim} />
                   </button>
-                  <div style={{ maxHeight: showStats ? "500px" : "0px", overflow: "hidden", transition: "max-height 0.45s cubic-bezier(0.16,1,0.3,1)" }}>
+                  <div style={{ maxHeight: showStats ? "400px" : "0px", overflow: "hidden", transition: "max-height 0.45s cubic-bezier(0.16,1,0.3,1)" }}>
                     <div className="tp-stats-overview" style={{ display: "flex", borderTop: `1px solid ${P.borderSubtle}` }}>
                       {/* Left: latest mock score ring */}
-                      <div className="tp-stats-left" style={{ width: "32%", flexShrink: 0, padding: "24px 20px", background: "#fafbfa", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", position: "relative", borderRight: `1px solid ${P.borderSubtle}` }}>
-                        <div style={{ position: "absolute", top: 12, left: 16, fontSize: 10, fontWeight: 700, color: P.textDim, textTransform: "uppercase", letterSpacing: "0.08em" }}>最新模考</div>
+                      <div className="tp-stats-left" style={{ width: "28%", flexShrink: 0, padding: "14px 14px", background: "#fafbfa", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", position: "relative", borderRight: `1px solid ${P.borderSubtle}` }}>
+                        <div style={{ fontSize: 9.5, fontWeight: 700, color: P.textDim, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 8 }}>最新模考</div>
                         {mockEntries.length > 0 ? (() => {
                           const lm = mockEntries[0].session;
                           const bc = Number.isFinite(lm.band) ? getBandColor(lm.band) : P.textDim;
                           return (
-                            <div style={{ display: "flex", alignItems: "center", gap: 18, marginTop: 10 }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                               <CircularProgress value={Number.isFinite(lm.band) ? lm.band : 0} max={5} color={bc} />
-                              <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
-                                {lm.cefr && <Tag color={P.textSec} style={{ fontSize: 11, fontWeight: 700, border: `1px solid ${P.border}`, background: P.bg }}>CEFR {lm.cefr}</Tag>}
-                                <Tag color={P.primary} bg={P.primarySoft} style={{ border: `1px solid ${P.primary}22`, fontSize: 11, fontWeight: 700 }}>换算 {lm.scaledScore ?? "--"}/30</Tag>
-                                <Tag color={P.textDim} style={{ fontSize: 10.5, background: "transparent" }}>{new Date(lm.date).toLocaleDateString("zh-CN")}</Tag>
+                              <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+                                {lm.cefr && <Tag color={P.textSec} style={{ fontSize: 10, fontWeight: 700, border: `1px solid ${P.border}`, background: P.bg }}>CEFR {lm.cefr}</Tag>}
+                                <Tag color={P.primary} bg={P.primarySoft} style={{ border: `1px solid ${P.primary}22`, fontSize: 10, fontWeight: 700 }}>{lm.scaledScore ?? "--"}/30</Tag>
+                                <span style={{ fontSize: 10, color: P.textDim }}>{new Date(lm.date).toLocaleDateString("zh-CN")}</span>
                               </div>
                             </div>
                           );
                         })() : (
-                          <div style={{ fontSize: 12, color: P.textDim, marginTop: 10 }}>暂无模考数据</div>
+                          <div style={{ fontSize: 11, color: P.textDim }}>暂无模考</div>
                         )}
                       </div>
                       {/* Right: trend chart */}
-                      <div style={{ flex: 1, minWidth: 0, padding: "16px 20px 18px" }}>
-                        <div style={{ fontSize: 12, fontWeight: 700, color: P.text, marginBottom: 10 }}>📈 进步趋势</div>
+                      <div style={{ flex: 1, minWidth: 0, padding: "10px 14px 12px" }}>
+                        <div style={{ fontSize: 11, fontWeight: 700, color: P.text, marginBottom: 6 }}>📈 进步趋势</div>
                         {(bs.length > 0 || email.length > 0 || discussion.length > 0) ? (
                           <TrendChart bs={bs} email={email} discussion={discussion} filter={filter} />
                         ) : (
-                          <div style={{ padding: "28px 0", textAlign: "center", fontSize: 12, color: P.textDim }}>完成练习后，这里会显示你的进步曲线。</div>
+                          <div style={{ padding: "20px 0", textAlign: "center", fontSize: 11, color: P.textDim }}>完成练习后显示进步曲线</div>
                         )}
                       </div>
                     </div>
@@ -1147,7 +1147,7 @@ export function ProgressView({ onBack }) {
                 </div>
 
                 {/* Stat cards — always visible, filter both chart and session list */}
-                <div className="tp-stat-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 10, marginBottom: 16, animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 200ms both" }}>
+                <div className="tp-stat-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 8, marginBottom: 12, animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 200ms both" }}>
                   {statItems.map((item) => (
                     <StatCard
                       key={item.key}

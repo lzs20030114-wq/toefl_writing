@@ -116,6 +116,15 @@ export function useBuildSentenceSession(questions, options = {}) {
     if (doneSetIds.size > 0) {
       addDoneIds(DONE_STORAGE_KEYS.BUILD_SENTENCE, [...doneSetIds]);
     }
+    // Grammar-point group done tracking (practice mode)
+    const doneGroupIds = new Set(
+      nr
+        .map((r) => r?.q?.__sourceGroupId)
+        .filter((id) => typeof id === "string" && id)
+    );
+    if (doneGroupIds.size > 0) {
+      addDoneIds(DONE_STORAGE_KEYS.BUILD_SENTENCE_GP, [...doneGroupIds]);
+    }
 
     const correctCount = nr.filter((r) => r.isCorrect).length;
     const pct = nr.length > 0 ? correctCount / nr.length : 0;

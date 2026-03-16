@@ -149,8 +149,8 @@ function validateQuestion(q) {
   if (!q.professor?.text) errors.push("missing professor text");
 
   const pt = q.professor?.text || "";
-  if (pt.length < 150) errors.push(`professor text too short (${pt.length})`);
-  if (pt.length > 580) errors.push(`professor text too long (${pt.length})`);
+  if (pt.length < 80) errors.push(`professor text too short (${pt.length})`);
+  if (pt.length > 480) errors.push(`professor text too long (${pt.length})`);
   if (!pt.includes("?")) errors.push("professor text has no question");
 
   if (!Array.isArray(q.students) || q.students.length !== 2) {
@@ -162,7 +162,7 @@ function validateQuestion(q) {
       if (!s?.text) errors.push(`student ${i + 1} missing text`);
       const sl = (s?.text || "").length;
       if (sl < 200) errors.push(`student ${i + 1} text too short (${sl})`);
-      if (sl > 560) errors.push(`student ${i + 1} text too long (${sl})`);
+      if (sl > 480) errors.push(`student ${i + 1} text too long (${sl})`);
     }
   }
 
