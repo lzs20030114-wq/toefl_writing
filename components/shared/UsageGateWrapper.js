@@ -62,64 +62,59 @@ function PracticeLockedGate({ children, onExit, userCode }) {
   const [showUpgrade, setShowUpgrade] = useState(false);
   return (
     <>
-      {/* Blurred, non-interactive preview */}
-      <div style={{ filter: "blur(6px) saturate(0.5)", pointerEvents: "none", userSelect: "none", WebkitUserSelect: "none", opacity: 0.6 }}>
+      {/* Lightly blurred, non-interactive preview — let users see the topic list */}
+      <div style={{ filter: "blur(3px)", pointerEvents: "none", userSelect: "none", WebkitUserSelect: "none" }}>
         {typeof children === "function" ? children({}) : children}
       </div>
 
-      {/* Overlay card */}
+      {/* Compact floating banner at bottom */}
       {createPortal(
         <div
-          onClick={onExit}
           style={{
-            position: "fixed", inset: 0, background: "rgba(0,0,0,0.35)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            zIndex: 10000, fontFamily: FONT, padding: 20,
+            position: "fixed", bottom: 0, left: 0, right: 0,
+            zIndex: 10000, fontFamily: FONT,
+            padding: "0 12px 16px",
+            display: "flex", justifyContent: "center",
+            pointerEvents: "none",
           }}
         >
           <div
             onClick={(e) => e.stopPropagation()}
             style={{
-              background: "#fff", borderRadius: 16, padding: "32px 28px",
-              maxWidth: 400, width: "90%", textAlign: "center",
-              boxShadow: "0 20px 60px rgba(0,0,0,0.15)",
+              background: "#fff", borderRadius: 14, padding: "16px 20px",
+              maxWidth: 400, width: "100%", textAlign: "center",
+              boxShadow: "0 -4px 24px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08)",
+              pointerEvents: "auto",
             }}
           >
-            <div style={{
-              width: 48, height: 48, borderRadius: 12,
-              background: "linear-gradient(135deg,#087355,#0891B2)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              margin: "0 auto 16px",
-            }}>
-              <span style={{ color: "#fff", fontSize: 22, fontWeight: 800 }}>P</span>
-            </div>
-            <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 8, color: C.t1 }}>
+            <div style={{ fontSize: 14, fontWeight: 700, color: C.t1, marginBottom: 6 }}>
               专项练习 · Pro 专属
-            </h3>
-            <p style={{ fontSize: 14, color: C.t2, marginBottom: 20, lineHeight: 1.6 }}>
-              升级 Pro 解锁专项练习模式：自选题目、不限时间、反复练习薄弱项。
-            </p>
-            <button
-              onClick={() => setShowUpgrade(true)}
-              style={{
-                width: "100%", padding: "12px 0", borderRadius: 10,
-                border: "none", background: C.blue, color: "#fff",
-                fontSize: 15, fontWeight: 600, cursor: "pointer",
-                fontFamily: FONT, marginBottom: 8,
-              }}
-            >
-              升级 Pro
-            </button>
-            <button
-              onClick={onExit}
-              style={{
-                width: "100%", padding: "10px 0", borderRadius: 10,
-                border: "1px solid " + C.bdr, background: "#fff",
-                color: C.t2, fontSize: 14, cursor: "pointer", fontFamily: FONT,
-              }}
-            >
-              返回
-            </button>
+            </div>
+            <div style={{ fontSize: 12, color: C.t2, marginBottom: 12, lineHeight: 1.5 }}>
+              自选题目、不限时间、反复练习薄弱项
+            </div>
+            <div style={{ display: "flex", gap: 8 }}>
+              <button
+                onClick={onExit}
+                style={{
+                  flex: 1, padding: "10px 0", borderRadius: 10,
+                  border: "1px solid " + C.bdr, background: "#fff",
+                  color: C.t2, fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: FONT,
+                }}
+              >
+                返回
+              </button>
+              <button
+                onClick={() => setShowUpgrade(true)}
+                style={{
+                  flex: 2, padding: "10px 0", borderRadius: 10,
+                  border: "none", background: "linear-gradient(135deg,#087355,#0891B2)", color: "#fff",
+                  fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: FONT,
+                }}
+              >
+                升级 Pro 解锁
+              </button>
+            </div>
           </div>
         </div>,
         document.body
