@@ -128,6 +128,8 @@ export function BuildSentenceTask({
     onDropSlot,
     onDropBank,
     isPracticeMode,
+    canGoBack,
+    goBack,
   } = useBuildSentenceSession(questions, { persistSession, onComplete, onTimerChange, timeLimitSeconds, practiceMode });
   const isMobile = useIsMobile();
   const exhausted = String(selectionError || "").includes(BANK_EXHAUSTED_ERRORS.BUILD_SENTENCE);
@@ -311,7 +313,7 @@ export function BuildSentenceTask({
   }
 
   if (phase === "review") {
-    const ok = results.filter((r) => r.isCorrect).length;
+    const ok = results.filter((r) => r && r.isCorrect).length;
     const ge = {};
     results
       .filter((r) => !r.isCorrect)
@@ -594,6 +596,7 @@ export function BuildSentenceTask({
           {bankJSX(true)}
           {/* 按钮 */}
           <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
+            {canGoBack && <Btn onClick={goBack} variant="secondary" style={{ padding: "10px 14px", fontSize: 13 }}>上一题</Btn>}
             <Btn data-testid="build-submit" onClick={handleSubmitClick} disabled={!allFilled} style={{ flex: 1, padding: "10px 0", fontSize: 14 }}>
               {idx < qs.length - 1 ? "下一题" : "完成"}
             </Btn>
@@ -614,6 +617,7 @@ export function BuildSentenceTask({
           </SurfaceCard>
           {bankJSX(false)}
           <div style={{ display: "flex", gap: 12 }}>
+            {canGoBack && <Btn onClick={goBack} variant="secondary">上一题</Btn>}
             <Btn data-testid="build-submit" onClick={handleSubmitClick} disabled={!allFilled}>
               {idx < qs.length - 1 ? "下一题" : "完成并查看结果"}
             </Btn>

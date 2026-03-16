@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { renderResponseSentence } from "../../lib/questionBank/renderResponseSentence";
 import { shuffle, evaluateBuildSentenceOrder } from "../../lib/utils";
@@ -35,7 +35,7 @@ export function useBuildSentenceSession(questions, options = {}) {
   const [idx, setIdx] = useState(0);
   const [slots, setSlots] = useState([]);
   const [bank, setBank] = useState([]);
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState(() => Array(initialBuildState.qs.length).fill(null));
   const [phase, setPhase] = useState("instruction");
   const [tl, setTl] = useState(timeLimitSeconds);
   const [run, setRun] = useState(false);
@@ -47,20 +47,20 @@ export function useBuildSentenceSession(questions, options = {}) {
 
   const tr = useRef(null);
   const autoSubmitRef = useRef(false);
-  const resultsRef = useRef([]);
+  const resultsRef = useRef(results);
   const idxRef = useRef(0);
   const slotsRef = useRef([]);
   const submitLockRef = useRef(false);
   const completionSentRef = useRef(false);
+  const savedStatesRef = useRef([]);
 
-  function initQ(i, list) {
+  function freshInitQ(i, list) {
     const q = list[i];
     runtimeModel.validateRuntimeQuestion(q);
     const shuffled = shuffle(q.bank.map((c, j) => ({ text: c, id: i + "-" + j })));
     const slotCount = q.answerOrder.length;
     const nextSlots = Array(slotCount).fill(null);
 
-    // bank may be answerOrder.length (no distractor) or answerOrder.length + 1 (with distractor)
     const hasDistractor = q.distractor != null;
     const expectedBankLen = hasDistractor ? slotCount + 1 : slotCount;
     if (shuffled.length !== expectedBankLen) {
@@ -73,11 +73,25 @@ export function useBuildSentenceSession(questions, options = {}) {
     setSlots(nextSlots);
   }
 
+  function restoreOrInitQ(i, list) {
+    const saved = savedStatesRef.current[i];
+    if (saved) {
+      setBank(saved.bank);
+      setSlots(saved.slots);
+    } else {
+      freshInitQ(i, list);
+    }
+  }
+
+  function saveCurrentState() {
+    savedStatesRef.current[idx] = { slots: [...slots], bank: [...bank] };
+  }
+
   function startTimer() {
     if (phase !== "instruction") return;
     if (tr.current) clearInterval(tr.current);
     try {
-      initQ(0, qs);
+      freshInitQ(0, qs);
     } catch {
       setPhase("instruction");
       setRun(false);
@@ -116,7 +130,6 @@ export function useBuildSentenceSession(questions, options = {}) {
     if (doneSetIds.size > 0) {
       addDoneIds(DONE_STORAGE_KEYS.BUILD_SENTENCE, [...doneSetIds]);
     }
-    // Grammar-point group done tracking (practice mode)
     const doneGroupIds = new Set(
       nr
         .map((r) => r?.q?.__sourceGroupId)
@@ -153,24 +166,38 @@ export function useBuildSentenceSession(questions, options = {}) {
     }
   }
 
-  useEffect(() => {
-    if (isPracticeMode) return;
-    if (tl === 0 && autoSubmitRef.current && phase === "active") {
-      autoSubmitRef.current = false;
-      const curSlots = slotsRef.current;
-      const curQ = qs[idxRef.current];
-      const curChunks = getUserChunks(curSlots);
-      const curRender = renderResponseSentence(curQ, curChunks);
-      const curEval = evaluateBuildSentenceOrder(curQ, curChunks);
+  function evaluateQ(i, slotsArr) {
+    const q = qs[i];
+    const chunks = getUserChunks(slotsArr);
+    if (chunks.length === 0 || slotsArr.some((s) => s === null)) {
+      return {
+        q,
+        userAnswer: "(no answer)",
+        correctAnswer: renderResponseSentence(q).correctSentenceFull,
+        isCorrect: false,
+      };
+    }
+    const rendered = renderResponseSentence(q, chunks);
+    const score = evaluateBuildSentenceOrder(q, chunks);
+    return {
+      q,
+      userAnswer: rendered.userSentenceFull || "(no answer)",
+      correctAnswer: rendered.correctSentenceFull,
+      isCorrect: score.isCorrect,
+    };
+  }
 
-      const nr = [...resultsRef.current, {
-        q: curQ,
-        userAnswer: curRender.userSentenceFull || "(no answer)",
-        correctAnswer: curRender.correctSentenceFull,
-        isCorrect: curEval.isCorrect,
-      }];
-
-      for (let i = idxRef.current + 1; i < qs.length; i++) {
+  function buildFinalResults() {
+    // Collect results for all questions, evaluating saved states for unanswered ones
+    const nr = [];
+    for (let i = 0; i < qs.length; i++) {
+      if (i === idxRef.current) {
+        nr.push(evaluateQ(i, slotsRef.current));
+      } else if (resultsRef.current[i]) {
+        nr.push(resultsRef.current[i]);
+      } else if (savedStatesRef.current[i]) {
+        nr.push(evaluateQ(i, savedStatesRef.current[i].slots));
+      } else {
         nr.push({
           q: qs[i],
           userAnswer: "(no answer)",
@@ -178,7 +205,15 @@ export function useBuildSentenceSession(questions, options = {}) {
           isCorrect: false,
         });
       }
+    }
+    return nr;
+  }
 
+  useEffect(() => {
+    if (isPracticeMode) return;
+    if (tl === 0 && autoSubmitRef.current && phase === "active") {
+      autoSubmitRef.current = false;
+      const nr = buildFinalResults();
       setResults(nr);
       setPhase("review");
       saveSession(nr);
@@ -283,7 +318,16 @@ export function useBuildSentenceSession(questions, options = {}) {
   }
 
   function resetQ() {
-    initQ(idx, qs);
+    savedStatesRef.current[idx] = null;
+    freshInitQ(idx, qs);
+  }
+
+  function goBack() {
+    if (idx <= 0 || phase !== "active") return;
+    saveCurrentState();
+    const prevIdx = idx - 1;
+    setIdx(prevIdx);
+    restoreOrInitQ(prevIdx, qs);
   }
 
   function submit() {
@@ -295,21 +339,36 @@ export function useBuildSentenceSession(questions, options = {}) {
     const userChunks = getUserChunks(slots);
     const rendered = renderResponseSentence(q, userChunks);
     const score = evaluateBuildSentenceOrder(q, userChunks);
-    const nr = [...results, {
+
+    saveCurrentState();
+    const nr = [...results];
+    nr[idx] = {
       q,
       userAnswer: rendered.userSentenceFull || "(no answer)",
       correctAnswer: rendered.correctSentenceFull,
       isCorrect: score.isCorrect,
-    }];
+    };
 
-    setResults(nr);
     if (idx < qs.length - 1) {
+      setResults(nr);
       setIdx(idx + 1);
-      initQ(idx + 1, qs);
+      restoreOrInitQ(idx + 1, qs);
       submitLockRef.current = false;
     } else {
+      // Finalize: evaluate any unanswered questions from saved states
+      for (let i = 0; i < qs.length; i++) {
+        if (nr[i]) continue;
+        const saved = savedStatesRef.current[i];
+        nr[i] = saved ? evaluateQ(i, saved.slots) : {
+          q: qs[i],
+          userAnswer: "(no answer)",
+          correctAnswer: renderResponseSentence(qs[i]).correctSentenceFull,
+          isCorrect: false,
+        };
+      }
       clearInterval(tr.current);
       setRun(false);
+      setResults(nr);
       setPhase("review");
       saveSession(nr);
       submitLockRef.current = false;
@@ -320,6 +379,7 @@ export function useBuildSentenceSession(questions, options = {}) {
   const givenSlots = useMemo(() => (Array.isArray(q?.givenSlots) ? q.givenSlots : []), [q]);
   const allFilled = slots.length > 0 && slots.every((s) => s !== null);
   const punct = q?.responseSuffix || (q?.has_question_mark ? "?" : ".");
+  const canGoBack = idx > 0 && phase === "active";
 
   return {
     qs,
@@ -343,9 +403,11 @@ export function useBuildSentenceSession(questions, options = {}) {
     givenSlots,
     allFilled,
     punct,
+    canGoBack,
     startTimer,
     resetQ,
     submit,
+    goBack,
     pickChunk,
     removeChunk,
     placeChunkAt,
