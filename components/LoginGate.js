@@ -390,11 +390,6 @@ export default function LoginGate({ children }) {
 
   // ── Initialization: restore from cache instantly, verify in background ──
   useEffect(() => {
-    if (!isSupabaseConfigured) {
-      setReady(true);
-      return;
-    }
-
     const saved = getSavedCode();
     if (saved) {
       // Instantly restore from localStorage cache — no loading flash
@@ -412,20 +407,22 @@ export default function LoginGate({ children }) {
       );
       setReady(true);
 
-      // Background verify — silently update or logout if invalid
-      verifyCode(saved).then(({ valid, tier, email, auth_method }) => {
+      // Background verify — update tier/email, or logout ONLY on explicit server rejection
+      verifyCode(saved).then(({ valid, tier, email, auth_method, networkError }) => {
         if (valid) {
           setUserTier(tier || "free");
           setUserEmail(email || null);
           setAuthMethod(auth_method || "code");
           saveAuth(normalized, { authMethod: auth_method, tier, email });
-        } else {
+        } else if (!networkError) {
+          // Server explicitly said code is invalid/expired — logout
           clearAuth();
           setUserCode(null);
           setUserTier("free");
           setUserEmail(null);
           setAuthMethod("code");
         }
+        // On network/server error: trust cached localStorage state, don't logout
       });
     } else {
       setReady(true);

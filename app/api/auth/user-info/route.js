@@ -37,9 +37,17 @@ export async function GET(request) {
       }
     }
 
+    // Mask email to prevent information disclosure (e.g., "john@gmail.com" → "j***n@gmail.com")
+    let maskedEmail = null;
+    if (user.email) {
+      const [local, domain] = user.email.split("@");
+      if (local.length <= 2) maskedEmail = local[0] + "***@" + domain;
+      else maskedEmail = local[0] + "***" + local[local.length - 1] + "@" + domain;
+    }
+
     return Response.json({
       code: user.code,
-      email: user.email || null,
+      email: maskedEmail,
       tier,
       tier_expires_at: tier === "pro" ? user.tier_expires_at : null,
       auth_method: user.auth_method || "code",
