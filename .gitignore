@@ -20,5 +20,21 @@ data/buildSentence/circuit_breaker_log.json
 data/buildSentence/generation_checkpoint.json
 data/buildSentence/answer_hashes.json
 data/buildSentence/*.diagnostics.json
-data/buildSentence/*.bak
+data/buildSentence/*.bak*
 data/buildSentence/*.gen_tmp.json
+data/buildSentence/questions.backup.*.json
+data/buildSentence/questions.saved.*.json
+data/buildSentence/questions.pre-*.json
+data/buildSentence/questions.run*.json
+data/buildSentence/questions.temp*.json
+data/buildSentence/questions-test-*.json
+data/buildSentence/reserve_pool.backup.*.json
+data/buildSentence/reserve_pool.saved.*.json
+data/buildSentence/reserve_pool.pre-*.json
+data/buildSentence/reserve_pool.temp*.json
+data/buildSentence/*_d_test*.json
+
+# Legacy one-off patch scripts (applied, no longer needed)
+scripts/patch*.js
+scripts/backfill-prefilled.js
+scripts/backfill-prefilled.ps1
