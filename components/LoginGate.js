@@ -33,6 +33,7 @@ const I18N = {
     otpVerifying: "验证中...",
     otpBack: "返回",
     otpHelper: "没收到？请检查垃圾邮件，或等待 1 分钟后重试",
+    otpContactFallback: "实在收不到请联系 3582786720@qq.com",
     resendOtp: "重新发送",
     invalidEmail: "请输入邮箱",
     invalidEmailFormat: "邮箱格式不正确",
@@ -71,6 +72,7 @@ const I18N = {
     otpVerifying: "Verifying...",
     otpBack: "Back",
     otpHelper: "Didn't receive it? Check spam, or wait 1 minute to retry",
+    otpContactFallback: "Still can't receive? Contact 3582786720@qq.com",
     resendOtp: "Resend",
     invalidEmail: "Please enter an email",
     invalidEmailFormat: "Invalid email format",
@@ -304,7 +306,10 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
                 >
                   {loading ? t.otpVerifying : t.login}
                 </button>
-                <p style={{ fontSize: 11, color: "#b45309", textAlign: "center", marginTop: 10, marginBottom: 0, lineHeight: 1.5, background: "#fffbeb", border: "1px solid #fde68a", borderRadius: 6, padding: "6px 10px" }}>{t.otpHelper}</p>
+                <div style={{ marginTop: 10, background: "#fffbeb", border: "1px solid #fde68a", borderRadius: 6, padding: "8px 10px" }}>
+                  <p style={{ fontSize: 11, color: "#b45309", textAlign: "center", margin: 0, lineHeight: 1.5 }}>{t.otpHelper}</p>
+                  <p style={{ fontSize: 11, color: "#92400e", textAlign: "center", margin: "4px 0 0", lineHeight: 1.5 }}>{t.otpContactFallback}</p>
+                </div>
               </div>
             )}
 
