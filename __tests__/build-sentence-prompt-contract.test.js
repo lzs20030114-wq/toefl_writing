@@ -58,7 +58,7 @@ describe("build sentence prompt contract", () => {
       },
       { requireStructured: true }
     );
-    expect(out.fatal.some((e) => e.includes("question mark"))).toBe(true);
+    expect(out.fatal.some((e) => e.includes("punctuation"))).toBe(true);
   });
 
   test("strict structured validation rejects deprecated tell/explain task kinds", () => {

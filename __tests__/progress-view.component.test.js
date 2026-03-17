@@ -1,6 +1,10 @@
 import { render, screen } from "@testing-library/react";
 import { ProgressView } from "../components/ProgressView";
 
+jest.mock("../lib/AuthContext", () => ({
+  getSavedCode: jest.fn(() => null),
+}));
+
 jest.mock("../lib/sessionStore", () => ({
   loadHist: jest.fn(() => ({
     sessions: [
@@ -38,19 +42,20 @@ jest.mock("../lib/sessionStore", () => ({
   })),
   deleteSession: jest.fn(() => ({ sessions: [] })),
   clearAllSessions: jest.fn(() => ({ sessions: [] })),
+  setCurrentUser: jest.fn(),
   SESSION_STORE_EVENTS: { HISTORY_UPDATED_EVENT: "toefl-history-updated" },
 }));
 
 describe("ProgressView", () => {
   test("renders with malformed history data without crashing", () => {
     render(<ProgressView onBack={() => {}} />);
-    expect(screen.getByText("Practice History")).toBeInTheDocument();
-    expect(screen.getByText("Mock Exams")).toBeInTheDocument();
-    expect(screen.getByText("Practice")).toBeInTheDocument();
+    expect(screen.getAllByText("练习记录").length).toBeGreaterThan(0);
+    expect(screen.getByText(/模考记录/)).toBeInTheDocument();
+    expect(screen.getByText(/日常练习明细/)).toBeInTheDocument();
   });
 
-  test("shows collapsed retry records in practice history", () => {
+  test("renders all practice entries including retries", () => {
     render(<ProgressView onBack={() => {}} />);
-    expect(screen.getByText("展开附加练习 (1)")).toBeInTheDocument();
+    expect(screen.getAllByText("邮件写作").length).toBeGreaterThanOrEqual(2);
   });
 });

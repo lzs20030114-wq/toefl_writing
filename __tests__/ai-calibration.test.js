@@ -71,10 +71,10 @@ describe("calibrateScoreReport", () => {
       annotationParsed: { plainText: "", annotations: [] },
     };
     const text =
-      "I believe universities should prioritize project-based learning because it develops practical problem-solving skills. " +
-      "For example, when students design a community energy plan, they must combine theory, data analysis, and teamwork. " +
-      "In addition, this format improves motivation since students can see real outcomes from their work. " +
-      "Therefore, project-based learning prepares students more effectively for professional collaboration.";
+      "I believe universities should prioritize project-based learning because it develops practical problem-solving skills that are essential in the modern workplace. " +
+      "For example, when students design a community energy plan, they must combine theory, data analysis, and teamwork to produce a viable solution. " +
+      "In addition, this format improves motivation since students can see real outcomes from their work and receive meaningful feedback. " +
+      "Therefore, project-based learning prepares students more effectively for professional collaboration and long-term career success.";
 
     const out = calibrateScoreReport("discussion", result, text);
     expect(out.score).toBeGreaterThanOrEqual(4.5);

@@ -34,8 +34,8 @@ describe("ScoringReport redesigned layout", () => {
     render(<ScoringReport result={result} type="email" />);
     expect(screen.getByTestId("score-panel")).toBeInTheDocument();
     expect(screen.getByText("/ 5")).toBeInTheDocument();
-    expect(screen.getByText(/Band 4.5/)).toBeInTheDocument();
-    expect(screen.getByText(/Goal1:/)).toBeInTheDocument();
+    expect(screen.getByText("4.5")).toBeInTheDocument();
+    expect(screen.getByText(/目标1：/)).toBeInTheDocument();
     expect(screen.getByText(/薄弱点修改建议/)).toBeInTheDocument();
     expect(screen.getByText(/现在可做的/)).toBeInTheDocument();
   });
@@ -85,7 +85,10 @@ describe("ScoringReport redesigned layout", () => {
 
     render(<ScoringReport result={result} type="email" />);
     expect(screen.getByText("此部分暂时无法加载")).toBeInTheDocument();
+    // Expand collapsed disclosure sections to access their content
+    fireEvent.click(screen.getByText("逐句批注").closest("button"));
     expect(screen.getByRole("button", { name: "I am a subscriber of" })).toBeInTheDocument();
+    fireEvent.click(screen.getByText("模式总结").closest("button"));
     expect(screen.getByText("介词搭配")).toBeInTheDocument();
   });
 
@@ -111,6 +114,7 @@ describe("ScoringReport redesigned layout", () => {
     };
 
     render(<ScoringReport result={result} type="email" />);
+    fireEvent.click(screen.getByText("逐句批注").closest("button"));
     fireEvent.click(screen.getByRole("button", { name: "I am a subscriber of" }));
     expect(screen.getByText("修改建议（中文）")).toBeInTheDocument();
     expect(screen.getByText("I am a subscriber to")).toBeInTheDocument();

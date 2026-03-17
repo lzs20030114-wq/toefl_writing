@@ -17,10 +17,10 @@ describe("HistoryRow", () => {
     };
 
     render(<HistoryRow entry={entry} isExpanded={false} isLast={false} onToggle={onToggle} onDelete={onDelete} />);
-    fireEvent.click(screen.getByText("Mock Exam"));
+    fireEvent.click(screen.getByText("整套模考"));
     expect(onToggle).toHaveBeenCalledTimes(1);
 
-    fireEvent.click(screen.getByTitle("Delete this entry"));
+    fireEvent.click(screen.getByTitle("删除记录"));
     expect(onDelete).toHaveBeenCalledWith(3);
   });
 
@@ -38,8 +38,8 @@ describe("HistoryRow", () => {
     };
 
     render(<HistoryRow entry={entry} isExpanded={true} isLast={true} onToggle={() => {}} onDelete={() => {}} />);
-    expect(screen.getByText("Mock Exam")).toBeInTheDocument();
-    expect(screen.getByText(/Email 3\/5/)).toBeInTheDocument();
+    expect(screen.getByText("整套模考")).toBeInTheDocument();
+    expect(screen.getByText(/邮件 3\/5/)).toBeInTheDocument();
   });
 
   test("handles invalid date and empty bs totals gracefully", () => {

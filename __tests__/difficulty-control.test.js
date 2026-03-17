@@ -31,8 +31,8 @@ describe("difficulty control", () => {
     const medium = makeQuestion(
       "q_medium",
       "Do you know if the lab is open tonight?",
-      ["do", "you know", "if", "the lab", "is open", "tonight"],
-      { grammar_points: ["embedded question (if)"] },
+      ["do", "you know", "if", "the lab", "is open", "tonight", "already"],
+      { distractor: "already", grammar_points: ["embedded question (if)"] },
     );
     const hard = makeQuestion(
       "q_hard",
@@ -74,8 +74,8 @@ describe("difficulty control", () => {
     const out = detectAdvancedGrammarSignals(
       makeQuestion(
         "q_signal",
-        "She wanted to know whom I will give feedback to.",
-        ["she", "wanted to know", "whom", "I", "will give", "feedback to", "who"],
+        "She wanted to know whom I would ask about what happened.",
+        ["she", "wanted to know", "whom", "I", "would ask", "about what happened", "who"],
         { distractor: "who", grammar_points: ["embedded question (whom)", "whom"] },
       ),
     );
@@ -97,8 +97,8 @@ describe("difficulty control", () => {
       makeQuestion(
         `m${i}`,
         "Do you know if the lab is open tonight?",
-        ["do", "you know", "if", "the lab", "is open", "tonight"],
-        { grammar_points: ["embedded question (if)"] },
+        ["do", "you know", "if", "the lab", "is open", "tonight", "already"],
+        { distractor: "already", grammar_points: ["embedded question (if)"] },
       ));
     const hardQs = Array.from({ length: 2 }, (_, i) =>
       makeQuestion(

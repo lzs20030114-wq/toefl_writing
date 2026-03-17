@@ -50,7 +50,7 @@ describe("ToeflApp navigation", () => {
   test("can open email task from menu", () => {
     render(<ToeflApp />);
     fireEvent.click(screen.getByTestId("task-email"));
-    expect(screen.getByText("Task 2: Write an Email")).toBeInTheDocument();
+    expect(screen.getByText("Write an Email")).toBeInTheDocument();
     expect(screen.getByTestId("writing-intro-start")).toBeInTheDocument();
     expect(screen.queryByText("SCENARIO")).not.toBeInTheDocument();
   });
@@ -101,7 +101,7 @@ describe("ToeflApp navigation", () => {
 
     expect(screen.getByTestId("build-result-0")).toHaveAttribute("data-correct", "true");
     expect(screen.getByTestId("build-correct-answer-0")).toHaveTextContent(
-      "Correct answer: Could you send the slides after class today please?"
+      "正确答案：Could you send the slides after class today please?"
     );
   });
 
@@ -146,10 +146,10 @@ describe("ToeflApp navigation", () => {
 
     expect(screen.getByTestId("build-result-0")).toHaveAttribute("data-correct", "false");
     expect(screen.getByTestId("build-your-sentence-0")).toHaveTextContent(
-      "Your answer: Please you today class after slides the send could?"
+      "你的答案：Please you today class after slides the send could?"
     );
     expect(screen.getByTestId("build-correct-answer-0")).toHaveTextContent(
-      "Correct answer: Could you send the slides after class today please?"
+      "正确答案：Could you send the slides after class today please?"
     );
   });
 
@@ -164,7 +164,7 @@ describe("ToeflApp navigation", () => {
 
     expect(screen.getByTestId("build-result-0")).toHaveAttribute("data-correct", "false");
     expect(screen.getByTestId("build-correct-answer-0")).toHaveTextContent(
-      "Correct answer: Could you upload the file tonight please now."
+      "正确答案：Could you upload the file tonight please now."
     );
   });
 

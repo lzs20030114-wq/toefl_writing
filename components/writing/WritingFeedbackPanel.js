@@ -457,7 +457,7 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
         @keyframes wfpTabFade { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes wfpSlideIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
       `}</style>
-      <div style={{ display: "flex", flexDirection: "column", height: containerHeight || `calc(100vh - ${topBarHeight}px)`, background: P.bg, animation: "wfpSlideIn 0.35s cubic-bezier(0.16,1,0.3,1)", fontFamily: FONT }}>
+      <div data-testid="score-panel" style={{ display: "flex", flexDirection: "column", height: containerHeight || `calc(100vh - ${topBarHeight}px)`, background: P.bg, animation: "wfpSlideIn 0.35s cubic-bezier(0.16,1,0.3,1)", fontFamily: FONT }}>
 
         {/* Header */}
         <div className="tp-fb-header" style={{ flexShrink: 0, padding: "13px 28px", borderBottom: `1px solid ${P.borderSubtle}`, background: P.surface, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
