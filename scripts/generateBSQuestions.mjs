@@ -1302,19 +1302,31 @@ PREFILLED REMINDER: Hard sentences are 10-13 words — effective chunks MUST sti
 };
 
 const SCENARIO_POOL = [
-  "Home/Family: grocery shopping, home repair, neighbor interaction, cooking",
-  "Leisure/Hobbies: local library, community center, sports class, art gallery, bookstore",
-  "Service/Retail: restaurant waiter, clothing store, post office, hair salon",
-  "Education/Academic: student study group, campus cafe, registrar office, internship interview",
+  // Academic / Campus (TOEFL core — weighted heavier)
+  "Academic/Lecture: professor's office hours, lecture hall discussion, reading assignment, research findings",
+  "Academic/Campus: student study group, campus café, registrar office, internship interview, thesis advisor meeting",
+  "Academic/Library: library reserve desk, study room booking, overdue materials, database search, interlibrary loan",
+  "Academic/Lab: lab safety orientation, experiment results, data collection, equipment booking, research ethics",
+  // Daily life
+  "Home/Family: grocery shopping, home repair, neighbor interaction, cooking, apartment maintenance",
+  "Leisure/Hobbies: community center, sports class, art gallery, bookstore, weekend plans",
+  "Service/Retail: restaurant, clothing store, post office, hair salon, repair shop",
   "Health/Wellness: dental appointment, pharmacy, yoga class, medical clinic",
-  "Nature/Environment: local park, botanical garden, weather forecast, hiking trail"
+  "Nature/Environment: local park, botanical garden, weather forecast, hiking trail, campus garden",
+  "Travel/Transit: airport check-in, train schedule, hotel reservation, bus route, travel itinerary",
 ];
 
 const PERSONA_POOL = [
-  "The flight attendant", "A young architect", "The local librarian", "A frustrated customer",
-  "The software developer", "An exchange student", "The elderly neighbor", "The yoga instructor",
-  "A travel blogger", "The store clerk", "A delivery driver", "The project supervisor",
-  "A volunteer", "The museum curator", "An enthusiastic intern", "The shop owner"
+  // Academic personas (TOEFL core)
+  "The professor", "The teaching assistant", "A graduate student", "The department chair",
+  "The academic advisor", "A research assistant", "The lab supervisor", "A classmate",
+  "The guest lecturer", "A doctoral candidate",
+  // Campus / Service
+  "The librarian", "The registrar", "An exchange student", "The campus tour guide",
+  "A resident advisor", "The career counselor",
+  // General
+  "The store manager", "A new colleague", "The building superintendent", "A volunteer coordinator",
+  "The flight attendant", "A museum docent", "The clinic receptionist", "A travel agent",
 ];
 
 // Common words that carry no topic signal — filtered out before similarity comparison
@@ -1423,6 +1435,7 @@ Return ONLY a JSON array with exactly ${totalCount} objects.
 These 5 errors cause >60% of all rejections. Check EVERY item against them:
 1. DISTRACTOR = ONE WORD ONLY. "did" ✓ "did submit" ✗ "was not" ✗. Multi-word distractors are auto-rejected.
 2. NO STANDALONE ADVERBS as chunks. "yesterday"/"today"/"tomorrow"/"recently"/"already"/"finally"/"usually" MUST be bound to verb: "discussed yesterday" ✓ "yesterday" alone ✗.
+   NO STANDALONE ARTICLES as chunks. "the"/"a"/"an" MUST be bound to their noun: "the market" ✓ "the" alone ✗.
 3. PREFILLED = subject NP or "i". NEVER bare "he"/"she"/"they". Use "the professor"/"the manager"/"the student". Max 3 words.
 4. NEGATION = ONE CHUNK. "did not" ✓ ["did","not"] ✗. Always merge aux+not.
 5. DISTRACTOR MUST NOT create valid alternative. If inserting the distractor still produces a grammatical sentence, choose a different distractor.
@@ -1441,6 +1454,23 @@ These 5 errors cause >60% of all rejections. Check EVERY item against them:
    RULE: In simple declarative sentences (no auxiliary, no negation, no relative clause), swapping present↔past tense almost always produces a GRAMMATICAL alternative. Use a DIFFERENT word class or unrelated form instead.
    SAFE distractor patterns: base form after auxiliary ("did not finished"), wrong agreement ("The shop offer"), different part of speech.
 
+## DISTRACTOR VARIETY (CRITICAL — too many tense-swap distractors feel repetitive):
+At least HALF of distractors in each batch should use NON-morphological strategies:
+- Wrong preposition: "depend of" (correct: "depend on"), "interested at" (correct: "interested in")
+- Wrong word form / part of speech: "suggestion" instead of "suggest", "careful" instead of "carefully"
+- Confusable pair: "affect" vs "effect", "accept" vs "except", "principal" vs "principle"
+- Wrong collocation: "make a decision" → distractor "do" (wrong verb+noun pair)
+- Semantic near-miss: a word that fits the topic but not the grammar slot
+Morphological variants (tense/agreement swaps) are still fine for the OTHER half, but ONLY when the swap creates an ungrammatical sentence (see rules above).
+
+## CONTRACTIONS:
+Mix contracted and uncontracted forms NATURALLY — just like real spoken English:
+- Conversational/informal scenarios: prefer "didn't", "wasn't", "couldn't", "wouldn't", "haven't"
+- Academic/formal scenarios: prefer "did not", "was not", "could not"
+- Roughly 30-50% of negation sentences should use contractions
+- When contracted, the contraction is ONE chunk: "didn't" ✓ (not split into "did" + "n't")
+- IMPORTANT: "didn't" counts as 1 word in answer word count. Ensure total stays within 7-15 range.
+
 ## CORE MISSION:
 Generate high-quality conversational sentences. Focus on natural language flow.
 
@@ -1453,9 +1483,10 @@ For each item, set "has_distractor" to true/false based on these TPO rules:
 2. Set "has_distractor": true for ALL other cases (~80-90% of batch).
 3. A distractor is INVALID if inserting it can still produce a grammatical or semantically plausible answer. Distractors must break the tested grammar point, not act like another acceptable chunk.
 
-## VERB DIVERSITY:
-DO NOT use the same reporting verb (e.g., "wanted to know") more than twice in this batch.
-Vary with: inquired, wondered, asked, was curious, needed to find out, was not sure.
+## VERB DIVERSITY (CRITICAL — top user complaint is repetition):
+DO NOT use the same reporting verb/frame more than ONCE in this batch.
+Banned overused frames: "wanted to know", "was not sure", "have no idea", "did not understand" — use at most 1 of these per batch.
+Use instead: inquired, wondered, mentioned, explained, pointed out, commented, noted, indicated, expressed concern, remarked, suggested, confirmed, admitted, recalled, observed, reported, acknowledged, clarified, emphasized, complained.
 
 ## INTERROGATIVE FRAME DIVERSITY:
 - If this batch includes interrogative items, vary the polite opener naturally.
@@ -3977,6 +4008,44 @@ function postGenerationRuleCheck(sets) {
         }
       }
 
+      // Fix 5: standaloneArticle — merge standalone "the"/"a"/"an" into next chunk
+      // Guard: skip if merge would drop effective chunk count below 4
+      {
+        const ARTICLES = new Set(["the", "a", "an"]);
+        const effectiveChunks = (q.chunks || []).filter((c) => c !== q.distractor);
+        const hasStandaloneArticle = effectiveChunks.some((c) => ARTICLES.has(c.trim().toLowerCase()));
+        if (hasStandaloneArticle && effectiveChunks.length - 1 >= 4) {
+          const answerLower = q.answer.toLowerCase().replace(/[.,!?;:]/g, "");
+          const answerWords = answerLower.split(/\s+/).filter(Boolean);
+          const newChunks = [];
+          const chunksCopy = [...(q.chunks || [])];
+          for (let ci = 0; ci < chunksCopy.length; ci++) {
+            const c = chunksCopy[ci];
+            if (c === q.distractor || !ARTICLES.has(c.trim().toLowerCase())) {
+              newChunks.push(c);
+              continue;
+            }
+            // Find the next non-distractor chunk to merge with
+            let merged = false;
+            for (let nj = ci + 1; nj < chunksCopy.length; nj++) {
+              if (chunksCopy[nj] === q.distractor) continue;
+              const mergedText = `${c.trim()} ${chunksCopy[nj].trim()}`;
+              // Verify merged text appears in answer
+              if (answerLower.includes(mergedText.toLowerCase())) {
+                newChunks.push(mergedText);
+                chunksCopy.splice(nj, 1); // remove the merged chunk
+                merged = true;
+                fixCount++;
+                console.log(`  [post-fix] merged standalone article "${c}" → "${mergedText}" on ${q.id}`);
+                break;
+              }
+            }
+            if (!merged) newChunks.push(c); // can't merge safely, keep as-is
+          }
+          q.chunks = newChunks;
+        }
+      }
+
       // Log (no auto-fix): standaloneAdverbs — standalone time/frequency adverbs
       {
         const effectiveChunks = (q.chunks || []).filter((c) => c !== q.distractor);
@@ -3995,6 +4064,61 @@ function postGenerationRuleCheck(sets) {
   } else {
     console.log(`[post-generation-fix] no issues found in ${sets.length} set(s)`);
   }
+}
+
+// ─── Grammar point label normalization ────────────────────────────────────────
+// DeepSeek generates inconsistent labels (embedded_wh, embedded-wh-clause, etc.)
+// Normalize to canonical names for consistent tracking.
+const GRAMMAR_POINT_NORMALIZE_MAP = {
+  "embedded_wh": "embedded question",
+  "embedded_wh_clause": "embedded question",
+  "embedded-wh-clause": "embedded question",
+  "embedded-question": "embedded question",
+  "embedded_question": "embedded question",
+  "embedded_if": "embedded question",
+  "embedded_if_clause": "embedded question",
+  "embedded_clause": "embedded question",
+  "embedded clause": "embedded question",
+  "embedded": "embedded question",
+  "1st-embedded": "embedded question",
+  "1st_person": "1st person",
+  "indirect-speech": "indirect speech",
+  "indirect_speech": "indirect speech",
+  "past-simple": "past tense",
+  "past_tense": "past tense",
+  "simple past": "past tense",
+  "simple_past": "past tense",
+  "past tense": "past tense",
+  "present-simple": "present tense",
+  "present_tense": "present tense",
+  "present simple": "present tense",
+  "past_perfect": "past perfect",
+  "past perfect passive": "past perfect passive",
+  "passive voice": "passive voice",
+  "passive": "passive voice",
+  "relative clause omission": "contact clause",
+  "contact_clause": "contact clause",
+  "3rd-reporting": "3rd person reporting",
+  "3rd reporting": "3rd person reporting",
+  "3rd person singular": "3rd person reporting",
+};
+
+function normalizeGrammarPoints(sets) {
+  let changed = 0;
+  for (const set of sets) {
+    for (const q of (set.questions || [])) {
+      if (!Array.isArray(q.grammar_points)) continue;
+      q.grammar_points = q.grammar_points.map(gp => {
+        const key = String(gp || "").toLowerCase().trim();
+        const mapped = GRAMMAR_POINT_NORMALIZE_MAP[key];
+        if (mapped && mapped !== gp) { changed++; return mapped; }
+        return gp;
+      });
+      // Deduplicate after normalization
+      q.grammar_points = [...new Set(q.grammar_points)];
+    }
+  }
+  if (changed > 0) console.log(`[grammar-normalize] unified ${changed} grammar point label(s)`);
 }
 
 // ─── D approach: post-assembly prompt rewrite ───────────────────────────────
@@ -5164,6 +5288,9 @@ async function main() {
   // Apply deterministic rule fixes to final sets (contextViolations, prepFragments,
   // answerErrors, standaloneNot) before writing to disk.
   postGenerationRuleCheck(finalSets);
+
+  // Normalize inconsistent grammar point labels
+  normalizeGrammarPoints(finalSets);
 
   // D approach: rewrite ~2 prompts per set to yesno and ~2 to statement
   await rewriteSetPrompts(finalSets);
