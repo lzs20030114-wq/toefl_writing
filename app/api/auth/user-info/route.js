@@ -17,7 +17,7 @@ export async function GET(request) {
 
     const { data: user, error } = await supabaseAdmin
       .from("users")
-      .select("code,email,tier,tier_expires_at,auth_method,status")
+      .select("code,email,tier,tier_expires_at,auth_method,status,has_password")
       .eq("code", code)
       .maybeSingle();
 
@@ -51,6 +51,7 @@ export async function GET(request) {
       tier,
       tier_expires_at: tier === "pro" ? user.tier_expires_at : null,
       auth_method: user.auth_method || "code",
+      has_password: user.has_password || false,
     });
   } catch (e) {
     return jsonError(500, e.message || "Unexpected server error");

@@ -2,8 +2,8 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { verifyCode } from "../lib/authCode";
-import { sendEmailOTP, verifyEmailOTP, signOut } from "../lib/emailAuth";
-import { clearAuth, getSavedCode, getSavedTier, getSavedEmail, getSavedAuthMethod, saveAuth } from "../lib/AuthContext";
+import { sendEmailOTP, verifyEmailOTP, signInWithPassword, setPassword, signOut } from "../lib/emailAuth";
+import { clearAuth, getSavedCode, getSavedTier, getSavedEmail, getSavedAuthMethod, getSavedHasPassword, saveAuth } from "../lib/AuthContext";
 import { clearLocalSessions, getLocalSessionCount, importLocalSessionsToCloud } from "../lib/sessionStore";
 import { isSupabaseConfigured } from "../lib/supabase";
 import { usePageView } from "../lib/usePageView";
@@ -51,6 +51,20 @@ const I18N = {
     dismissConfirmBody: "将清除本设备上的旧练习记录，并不再显示此提示。此操作不可恢复。",
     dismissConfirmOk: "确认删除",
     dismissConfirmCancel: "取消",
+    // Password-related
+    passwordPlaceholder: "输入密码",
+    forgotPassword: "忘记密码？",
+    otpFallback: "用验证码登录",
+    backToPassword: "用密码登录",
+    setPasswordTitle: "设置密码",
+    setPasswordSubtitle: "设置密码后，下次可以直接用密码登录，无需验证码",
+    newPasswordPlaceholder: "设置密码（至少 8 位）",
+    confirmPasswordPlaceholder: "确认密码",
+    setPasswordBtn: "设置密码",
+    settingPassword: "设置中...",
+    passwordTooShort: "密码至少 8 位",
+    passwordMismatch: "两次输入的密码不一致",
+    passwordLoginFailed: "邮箱或密码不正确",
   },
   en: {
     checking: "Checking login status...",
@@ -90,6 +104,20 @@ const I18N = {
     dismissConfirmBody: "This will permanently delete the old practice records on this device and hide this prompt forever.",
     dismissConfirmOk: "Delete & Dismiss",
     dismissConfirmCancel: "Cancel",
+    // Password-related
+    passwordPlaceholder: "Enter password",
+    forgotPassword: "Forgot password?",
+    otpFallback: "Sign in with code",
+    backToPassword: "Sign in with password",
+    setPasswordTitle: "Set Password",
+    setPasswordSubtitle: "Set a password so you can sign in directly next time without email verification",
+    newPasswordPlaceholder: "New password (min 8 chars)",
+    confirmPasswordPlaceholder: "Confirm password",
+    setPasswordBtn: "Set Password",
+    settingPassword: "Setting...",
+    passwordTooShort: "Password must be at least 8 characters",
+    passwordMismatch: "Passwords do not match",
+    passwordLoginFailed: "Incorrect email or password",
   },
 };
 
@@ -149,12 +177,41 @@ function ImportPrompt({ t, count, onImport, onSkip, onDismiss, loading }) {
   );
 }
 
+// ── Password visibility toggle icon ──
+function EyeIcon({ visible, onClick }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      tabIndex={-1}
+      style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", padding: 4, color: C.t3, display: "flex", alignItems: "center" }}
+    >
+      {visible ? (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+      ) : (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+          <line x1="1" y1="1" x2="23" y2="23" />
+        </svg>
+      )}
+    </button>
+  );
+}
+
 // ═══════════════════════════════════════════
 // Login Modal — renders as a portal overlay
 // ═══════════════════════════════════════════
 function LoginModal({ t, onClose, onLoginSuccess }) {
+  // view: "password" | "otp" | "forgot" | "setPassword"
+  const [view, setView] = useState("password");
   const [activeTab, setActiveTab] = useState("email");
   const [emailInput, setEmailInput] = useState("");
+  const [passwordInput, setPasswordInput] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [otpInput, setOtpInput] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const [codeInput, setCodeInput] = useState("");
@@ -162,6 +219,10 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
   const [loading, setLoading] = useState(false);
   const [resendCooldown, setResendCooldown] = useState(0);
   const [agreedTerms, setAgreedTerms] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  // Pending login data — held while user sets password
+  const [pendingLogin, setPendingLogin] = useState(null);
 
   // Resend cooldown timer
   useEffect(() => {
@@ -170,8 +231,30 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
     return () => clearTimeout(timer);
   }, [resendCooldown]);
 
-  const handleSendOTP = async () => {
+  // ── Password login ──
+  const handlePasswordLogin = async () => {
     if (!agreedTerms) { setError(t === I18N.zh ? "请先同意使用条款" : "Please agree to the terms first"); return; }
+    const email = emailInput.trim();
+    if (!email) { setError(t.invalidEmail); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setError(t.invalidEmailFormat); return; }
+    if (!passwordInput) { setError(t.passwordTooShort); return; }
+    setLoading(true);
+    setError("");
+    const result = await signInWithPassword(email, passwordInput);
+    setLoading(false);
+    if (result.error) { setError(t.passwordLoginFailed); return; }
+    if (!result.has_password) {
+      // Need to set password (shouldn't happen for password login, but handle edge case)
+      setPendingLogin(result);
+      setView("setPassword");
+      return;
+    }
+    onLoginSuccess({ code: result.userCode, tier: result.tier, email: result.email, auth_method: result.auth_method, has_password: true });
+  };
+
+  // ── OTP flow (used in "otp" and "forgot" views) ──
+  const handleSendOTP = async () => {
+    if (view !== "forgot" && !agreedTerms) { setError(t === I18N.zh ? "请先同意使用条款" : "Please agree to the terms first"); return; }
     const email = emailInput.trim();
     if (!email) { setError(t.invalidEmail); return; }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setError(t.invalidEmailFormat); return; }
@@ -200,12 +283,42 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
     if (otpInput.length < 6) { setError(t.invalidOtp); return; }
     setLoading(true);
     setError("");
-    const { userCode: code, tier, email, auth_method, isNewUser, error: verifyError } = await verifyEmailOTP(emailInput.trim(), otpInput);
+    const { userCode: code, tier, email, auth_method, has_password, isNewUser, error: verifyError } = await verifyEmailOTP(emailInput.trim(), otpInput);
     setLoading(false);
     if (verifyError) { setError(verifyError); return; }
-    onLoginSuccess({ code, tier, email: email || emailInput.trim(), auth_method: auth_method || "email", isNewUser });
+
+    if (view === "forgot") {
+      // After verifying OTP in forgot flow, go to set password
+      setPendingLogin({ userCode: code, tier, email: email || emailInput.trim(), auth_method: auth_method || "email" });
+      setView("setPassword");
+      return;
+    }
+
+    if (!has_password) {
+      // Force password setup
+      setPendingLogin({ userCode: code, tier, email: email || emailInput.trim(), auth_method: auth_method || "email", isNewUser });
+      setView("setPassword");
+      return;
+    }
+    onLoginSuccess({ code, tier, email: email || emailInput.trim(), auth_method: auth_method || "email", has_password: true, isNewUser });
   };
 
+  // ── Set password ──
+  const handleSetPassword = async () => {
+    if (newPassword.length < 8) { setError(t.passwordTooShort); return; }
+    if (newPassword !== confirmPassword) { setError(t.passwordMismatch); return; }
+    setLoading(true);
+    setError("");
+    const { error: pwError } = await setPassword(newPassword);
+    setLoading(false);
+    if (pwError) { setError(pwError); return; }
+    // Complete login
+    if (pendingLogin) {
+      onLoginSuccess({ code: pendingLogin.userCode, tier: pendingLogin.tier, email: pendingLogin.email, auth_method: pendingLogin.auth_method, has_password: true, isNewUser: pendingLogin.isNewUser });
+    }
+  };
+
+  // ── Code login (unchanged) ──
   const handleCodeLogin = async () => {
     if (!agreedTerms) { setError(t === I18N.zh ? "请先同意使用条款" : "Please agree to the terms first"); return; }
     const normalized = normalizeInputCode(codeInput);
@@ -217,6 +330,16 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
     if (!valid) { setError(verifyError || t.invalidCode); return; }
     onLoginSuccess({ code: normalized, tier, email, auth_method: auth_method || "code" });
   };
+
+  // ── Switch view helpers ──
+  const goToOtp = () => { setView("otp"); setError(""); setOtpSent(false); setOtpInput(""); };
+  const goToPassword = () => { setView("password"); setError(""); setPasswordInput(""); };
+  const goToForgot = () => { setView("forgot"); setError(""); setOtpSent(false); setOtpInput(""); };
+
+  // ── Shared input style ──
+  const inputStyle = { width: "100%", padding: "11px 12px", fontSize: 14, borderRadius: 10, border: "1.5px solid " + C.bdr, outline: "none", boxSizing: "border-box", fontFamily: FONT };
+  const passwordInputStyle = { ...inputStyle, paddingRight: 40 };
+  const btnStyle = (disabled) => ({ width: "100%", marginTop: 10, padding: "11px 0", borderRadius: 10, border: "none", background: disabled ? "#9ca3af" : C.blue, color: "#fff", fontSize: 14, fontWeight: 600, cursor: disabled ? "not-allowed" : "pointer", fontFamily: FONT });
 
   return createPortal(
     <div
@@ -230,34 +353,155 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
       >
         {/* ── Header ── */}
         <div style={{ textAlign: "center", marginBottom: 16 }}>
-          <div style={{ fontSize: 18, fontWeight: 700, color: C.t1, marginBottom: 4 }}>{t.modalTitle}</div>
-          <div style={{ fontSize: 12, color: C.t2 }}>{t.modalSubtitle}</div>
+          <div style={{ fontSize: 18, fontWeight: 700, color: C.t1, marginBottom: 4 }}>
+            {view === "setPassword" ? t.setPasswordTitle : t.modalTitle}
+          </div>
+          <div style={{ fontSize: 12, color: C.t2 }}>
+            {view === "setPassword" ? t.setPasswordSubtitle : t.modalSubtitle}
+          </div>
         </div>
 
-        {/* Tabs */}
-        <div style={{ display: "flex", borderBottom: "2px solid " + C.bdrSubtle, marginBottom: 18 }}>
-          {[
-            { key: "email", label: t.emailTab },
-            { key: "code", label: t.codeTab },
-          ].map(({ key, label }) => (
-            <button
-              key={key}
-              onClick={() => { setActiveTab(key); setError(""); }}
-              style={{
-                flex: 1, padding: "9px 0", border: "none", background: "none", cursor: "pointer",
-                fontSize: 13, fontWeight: 600, fontFamily: FONT,
-                color: activeTab === key ? C.blue : C.t3,
-                borderBottom: activeTab === key ? "2px solid " + C.blue : "2px solid transparent",
-                marginBottom: -2, transition: "all 0.2s",
-              }}
-            >
-              {label}
+        {/* ═══ Set Password View ═══ */}
+        {view === "setPassword" && (
+          <div>
+            <div style={{ position: "relative", marginBottom: 10 }}>
+              <input
+                type={showNewPassword ? "text" : "password"}
+                placeholder={t.newPasswordPlaceholder}
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && document.getElementById("confirm-pw")?.focus()}
+                autoFocus
+                style={passwordInputStyle}
+              />
+              <EyeIcon visible={showNewPassword} onClick={() => setShowNewPassword(!showNewPassword)} />
+            </div>
+            <div style={{ position: "relative" }}>
+              <input
+                id="confirm-pw"
+                type={showNewPassword ? "text" : "password"}
+                placeholder={t.confirmPasswordPlaceholder}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleSetPassword()}
+                style={passwordInputStyle}
+              />
+            </div>
+            <button onClick={handleSetPassword} disabled={loading} style={btnStyle(loading)}>
+              {loading ? t.settingPassword : t.setPasswordBtn}
             </button>
-          ))}
-        </div>
+          </div>
+        )}
 
-        {/* Email Tab — single view: email + OTP + resend */}
-        {activeTab === "email" && (
+        {/* ═══ Password View (default) ═══ */}
+        {view === "password" && activeTab === "email" && (
+          <div>
+            {/* Tabs */}
+            <div style={{ display: "flex", borderBottom: "2px solid " + C.bdrSubtle, marginBottom: 18 }}>
+              {[
+                { key: "email", label: t.emailTab },
+                { key: "code", label: t.codeTab },
+              ].map(({ key, label }) => (
+                <button
+                  key={key}
+                  onClick={() => { setActiveTab(key); setError(""); }}
+                  style={{
+                    flex: 1, padding: "9px 0", border: "none", background: "none", cursor: "pointer",
+                    fontSize: 13, fontWeight: 600, fontFamily: FONT,
+                    color: activeTab === key ? C.blue : C.t3,
+                    borderBottom: activeTab === key ? "2px solid " + C.blue : "2px solid transparent",
+                    marginBottom: -2, transition: "all 0.2s",
+                  }}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+
+            <input
+              type="email"
+              placeholder={t.emailPlaceholder}
+              value={emailInput}
+              onChange={(e) => setEmailInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && document.getElementById("pw-input")?.focus()}
+              autoFocus
+              style={{ ...inputStyle, marginBottom: 10 }}
+            />
+            <div style={{ position: "relative" }}>
+              <input
+                id="pw-input"
+                type={showPassword ? "text" : "password"}
+                placeholder={t.passwordPlaceholder}
+                value={passwordInput}
+                onChange={(e) => setPasswordInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handlePasswordLogin()}
+                style={passwordInputStyle}
+              />
+              <EyeIcon visible={showPassword} onClick={() => setShowPassword(!showPassword)} />
+            </div>
+            <button onClick={handlePasswordLogin} disabled={loading} style={btnStyle(loading)}>
+              {loading ? t.loggingIn : t.login}
+            </button>
+
+            {/* Links row */}
+            <div style={{ display: "flex", justifyContent: "space-between", marginTop: 12 }}>
+              <button onClick={goToForgot} style={{ background: "none", border: "none", color: C.t3, fontSize: 12, cursor: "pointer", padding: 0, fontFamily: FONT }}>
+                {t.forgotPassword}
+              </button>
+              <button onClick={goToOtp} style={{ background: "none", border: "none", color: C.blue, fontSize: 12, cursor: "pointer", padding: 0, fontFamily: FONT }}>
+                {t.otpFallback}
+              </button>
+            </div>
+
+            <p style={{ fontSize: 12, color: C.t3, textAlign: "center", marginTop: 10, marginBottom: 0 }}>{t.emailHelper}</p>
+          </div>
+        )}
+
+        {/* ═══ Code Tab (inside password view) ═══ */}
+        {view === "password" && activeTab === "code" && (
+          <div>
+            {/* Tabs */}
+            <div style={{ display: "flex", borderBottom: "2px solid " + C.bdrSubtle, marginBottom: 18 }}>
+              {[
+                { key: "email", label: t.emailTab },
+                { key: "code", label: t.codeTab },
+              ].map(({ key, label }) => (
+                <button
+                  key={key}
+                  onClick={() => { setActiveTab(key); setError(""); }}
+                  style={{
+                    flex: 1, padding: "9px 0", border: "none", background: "none", cursor: "pointer",
+                    fontSize: 13, fontWeight: 600, fontFamily: FONT,
+                    color: activeTab === key ? C.blue : C.t3,
+                    borderBottom: activeTab === key ? "2px solid " + C.blue : "2px solid transparent",
+                    marginBottom: -2, transition: "all 0.2s",
+                  }}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+
+            <input
+              data-testid="login-code-input"
+              type="text"
+              placeholder={t.codePlaceholder}
+              value={codeInput}
+              onChange={(e) => setCodeInput(normalizeInputCode(e.target.value))}
+              onKeyDown={(e) => e.key === "Enter" && handleCodeLogin()}
+              maxLength={6}
+              autoFocus
+              style={{ width: "100%", padding: "11px 12px", fontSize: 16, borderRadius: 10, border: "1.5px solid " + C.bdr, outline: "none", boxSizing: "border-box", fontFamily: "monospace", letterSpacing: 6, textAlign: "center", textTransform: "uppercase" }}
+            />
+            <button onClick={handleCodeLogin} disabled={loading} style={btnStyle(loading)}>
+              {loading ? t.loggingIn : t.login}
+            </button>
+            <p style={{ fontSize: 12, color: C.t3, textAlign: "center", marginTop: 10, marginBottom: 0 }}>{t.codeHelper}</p>
+          </div>
+        )}
+
+        {/* ═══ OTP View ═══ */}
+        {view === "otp" && (
           <div>
             {/* Email input + send button */}
             <div style={{ display: "flex", gap: 8 }}>
@@ -268,7 +512,7 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
                 onChange={(e) => { setEmailInput(e.target.value); if (otpSent) { setOtpSent(false); setOtpInput(""); } }}
                 onKeyDown={(e) => e.key === "Enter" && (!otpSent ? handleSendOTP() : handleVerifyOTP())}
                 autoFocus
-                style={{ flex: 1, padding: "11px 12px", fontSize: 14, borderRadius: 10, border: "1.5px solid " + C.bdr, outline: "none", boxSizing: "border-box", fontFamily: FONT }}
+                style={{ flex: 1, ...inputStyle }}
               />
               <button
                 onClick={otpSent ? handleResendOTP : handleSendOTP}
@@ -299,11 +543,7 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
                   autoFocus
                   style={{ width: "100%", padding: "11px 12px", fontSize: 16, borderRadius: 10, border: "1.5px solid " + C.bdr, outline: "none", boxSizing: "border-box", fontFamily: "monospace", letterSpacing: 6, textAlign: "center" }}
                 />
-                <button
-                  onClick={handleVerifyOTP}
-                  disabled={loading}
-                  style={{ width: "100%", marginTop: 10, padding: "11px 0", borderRadius: 10, border: "none", background: loading ? "#9ca3af" : C.blue, color: "#fff", fontSize: 14, fontWeight: 600, cursor: loading ? "not-allowed" : "pointer", fontFamily: FONT }}
-                >
+                <button onClick={handleVerifyOTP} disabled={loading} style={btnStyle(loading)}>
                   {loading ? t.otpVerifying : t.login}
                 </button>
                 <div style={{ marginTop: 10, background: "#fffbeb", border: "1px solid #fde68a", borderRadius: 6, padding: "8px 10px" }}>
@@ -314,52 +554,94 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
             )}
 
             {!otpSent && (
-              <>
-                <p style={{ fontSize: 12, color: C.t3, textAlign: "center", marginTop: 10, marginBottom: 0 }}>{t.emailHelper}</p>
-                <p style={{ fontSize: 12, color: C.t3, textAlign: "center", marginTop: 4, marginBottom: 0 }}>{t.emailAutoRegister}</p>
-              </>
+              <p style={{ fontSize: 12, color: C.t3, textAlign: "center", marginTop: 10, marginBottom: 0 }}>{t.emailAutoRegister}</p>
             )}
+
+            {/* Back to password link */}
+            <div style={{ textAlign: "center", marginTop: 12 }}>
+              <button onClick={goToPassword} style={{ background: "none", border: "none", color: C.blue, fontSize: 12, cursor: "pointer", padding: 0, fontFamily: FONT }}>
+                {t.backToPassword}
+              </button>
+            </div>
           </div>
         )}
 
-        {/* Code Tab */}
-        {activeTab === "code" && (
+        {/* ═══ Forgot Password View ═══ */}
+        {view === "forgot" && (
           <div>
-            <input
-              data-testid="login-code-input"
-              type="text"
-              placeholder={t.codePlaceholder}
-              value={codeInput}
-              onChange={(e) => setCodeInput(normalizeInputCode(e.target.value))}
-              onKeyDown={(e) => e.key === "Enter" && handleCodeLogin()}
-              maxLength={6}
-              autoFocus
-              style={{ width: "100%", padding: "11px 12px", fontSize: 16, borderRadius: 10, border: "1.5px solid " + C.bdr, outline: "none", boxSizing: "border-box", fontFamily: "monospace", letterSpacing: 6, textAlign: "center", textTransform: "uppercase" }}
-            />
-            <button
-              onClick={handleCodeLogin}
-              disabled={loading}
-              style={{ width: "100%", marginTop: 12, padding: "11px 0", borderRadius: 10, border: "none", background: loading ? "#9ca3af" : C.blue, color: "#fff", fontSize: 14, fontWeight: 600, cursor: loading ? "not-allowed" : "pointer", fontFamily: FONT }}
-            >
-              {loading ? t.loggingIn : t.login}
-            </button>
-            <p style={{ fontSize: 12, color: C.t3, textAlign: "center", marginTop: 10, marginBottom: 0 }}>{t.codeHelper}</p>
+            {/* Email input + send button */}
+            <div style={{ display: "flex", gap: 8 }}>
+              <input
+                type="email"
+                placeholder={t.emailPlaceholder}
+                value={emailInput}
+                onChange={(e) => { setEmailInput(e.target.value); if (otpSent) { setOtpSent(false); setOtpInput(""); } }}
+                onKeyDown={(e) => e.key === "Enter" && (!otpSent ? handleSendOTP() : handleVerifyOTP())}
+                autoFocus
+                style={{ flex: 1, ...inputStyle }}
+              />
+              <button
+                onClick={otpSent ? handleResendOTP : handleSendOTP}
+                disabled={loading || resendCooldown > 0}
+                style={{
+                  flexShrink: 0, padding: "0 14px", borderRadius: 10, border: "none", fontSize: 13, fontWeight: 600, fontFamily: FONT,
+                  background: (loading || resendCooldown > 0) ? "#e5e7eb" : C.blue,
+                  color: (loading || resendCooldown > 0) ? C.t3 : "#fff",
+                  cursor: (loading || resendCooldown > 0) ? "default" : "pointer",
+                  whiteSpace: "nowrap", minWidth: 90,
+                }}
+              >
+                {loading && !otpSent ? t.sendingOtp : resendCooldown > 0 ? `${resendCooldown}s` : otpSent ? t.resendOtp : t.sendOtp}
+              </button>
+            </div>
+
+            {otpSent && (
+              <div style={{ marginTop: 12 }}>
+                <div style={{ fontSize: 12, color: C.t2, marginBottom: 6 }}>{t.otpSentTo} <strong>{emailInput.trim()}</strong></div>
+                <input
+                  type="text"
+                  placeholder={t.otpPlaceholder}
+                  value={otpInput}
+                  onChange={(e) => setOtpInput(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                  onKeyDown={(e) => e.key === "Enter" && handleVerifyOTP()}
+                  maxLength={6}
+                  autoFocus
+                  style={{ width: "100%", padding: "11px 12px", fontSize: 16, borderRadius: 10, border: "1.5px solid " + C.bdr, outline: "none", boxSizing: "border-box", fontFamily: "monospace", letterSpacing: 6, textAlign: "center" }}
+                />
+                <button onClick={handleVerifyOTP} disabled={loading} style={btnStyle(loading)}>
+                  {loading ? t.otpVerifying : t.otpVerify}
+                </button>
+                <div style={{ marginTop: 10, background: "#fffbeb", border: "1px solid #fde68a", borderRadius: 6, padding: "8px 10px" }}>
+                  <p style={{ fontSize: 11, color: "#b45309", textAlign: "center", margin: 0, lineHeight: 1.5 }}>{t.otpHelper}</p>
+                  <p style={{ fontSize: 11, color: "#92400e", textAlign: "center", margin: "4px 0 0", lineHeight: 1.5 }}>{t.otpContactFallback}</p>
+                </div>
+              </div>
+            )}
+
+            {/* Back to password link */}
+            <div style={{ textAlign: "center", marginTop: 12 }}>
+              <button onClick={goToPassword} style={{ background: "none", border: "none", color: C.blue, fontSize: 12, cursor: "pointer", padding: 0, fontFamily: FONT }}>
+                {t.backToPassword}
+              </button>
+            </div>
           </div>
         )}
 
-        {/* Terms agreement */}
-        <label style={{ display: "flex", alignItems: "flex-start", gap: 8, marginTop: 14, cursor: "pointer", fontSize: 12, color: C.t2, lineHeight: 1.5 }}>
-          <input
-            type="checkbox"
-            checked={agreedTerms}
-            onChange={(e) => setAgreedTerms(e.target.checked)}
-            style={{ marginTop: 2, flexShrink: 0, cursor: "pointer" }}
-          />
-          <span>
-            我已阅读并同意
-            <a href="/terms" target="_blank" rel="noopener" style={{ color: C.blue, textDecoration: "underline" }}>《使用条款与隐私政策》</a>
-          </span>
-        </label>
+        {/* Terms agreement — show on password, otp, code views (not setPassword/forgot) */}
+        {(view === "password" || (view === "otp" && !otpSent)) && (
+          <label style={{ display: "flex", alignItems: "flex-start", gap: 8, marginTop: 14, cursor: "pointer", fontSize: 12, color: C.t2, lineHeight: 1.5 }}>
+            <input
+              type="checkbox"
+              checked={agreedTerms}
+              onChange={(e) => setAgreedTerms(e.target.checked)}
+              style={{ marginTop: 2, flexShrink: 0, cursor: "pointer" }}
+            />
+            <span>
+              我已阅读并同意
+              <a href="/terms" target="_blank" rel="noopener" style={{ color: C.blue, textDecoration: "underline" }}>《使用条款与隐私政策》</a>
+            </span>
+          </label>
+        )}
 
         {/* Error */}
         {error && (
@@ -391,6 +673,7 @@ export default function LoginGate({ children }) {
   const [userTier, setUserTier] = useState("free");
   const [userEmail, setUserEmail] = useState(null);
   const [authMethod, setAuthMethod] = useState("code");
+  const [hasPassword, setHasPassword] = useState(false);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
 
   // Import prompt
@@ -411,10 +694,12 @@ export default function LoginGate({ children }) {
       const cachedTier = getSavedTier() || "free";
       const cachedEmail = getSavedEmail() || null;
       const cachedAuth = getSavedAuthMethod() || "code";
+      const cachedHasPassword = getSavedHasPassword();
       setUserCode(normalized);
       setUserTier(cachedTier);
       setUserEmail(cachedEmail);
       setAuthMethod(cachedAuth);
+      setHasPassword(cachedHasPassword);
       setShowImportPrompt(
         (() => { try { return localStorage.getItem(IMPORT_DISMISSED_KEY) !== "1"; } catch { return true; } })()
         && getLocalSessionCount() > 0
@@ -422,12 +707,13 @@ export default function LoginGate({ children }) {
       setReady(true);
 
       // Background verify — update tier/email, or logout ONLY on explicit server rejection
-      verifyCode(saved).then(({ valid, tier, email, auth_method, networkError }) => {
+      verifyCode(saved).then(({ valid, tier, email, auth_method, has_password, networkError }) => {
         if (valid) {
           setUserTier(tier || "free");
           setUserEmail(email || null);
           setAuthMethod(auth_method || "code");
-          saveAuth(normalized, { authMethod: auth_method, tier, email });
+          setHasPassword(has_password || false);
+          saveAuth(normalized, { authMethod: auth_method, tier, email, hasPassword: has_password });
         } else if (!networkError) {
           // Server explicitly said code is invalid/expired — logout
           clearAuth();
@@ -435,6 +721,7 @@ export default function LoginGate({ children }) {
           setUserTier("free");
           setUserEmail(null);
           setAuthMethod("code");
+          setHasPassword(false);
         }
         // On network/server error: trust cached localStorage state, don't logout
       });
@@ -462,12 +749,13 @@ export default function LoginGate({ children }) {
   const [welcomeMsg, setWelcomeMsg] = useState(null);
 
   // ── Login success callback ──
-  function handleLoginSuccess({ code, tier, email, auth_method, isNewUser }) {
-    saveAuth(code, { authMethod: auth_method, tier, email });
+  function handleLoginSuccess({ code, tier, email, auth_method, has_password: hp, isNewUser }) {
+    saveAuth(code, { authMethod: auth_method, tier, email, hasPassword: hp });
     setUserCode(code);
     setUserTier(tier || "free");
     setUserEmail(email || null);
     setAuthMethod(auth_method || "code");
+    setHasPassword(hp || false);
     setLoginModalOpen(false);
     setShowImportPrompt(
       (() => { try { return localStorage.getItem(IMPORT_DISMISSED_KEY) !== "1"; } catch { return true; } })()
@@ -487,6 +775,7 @@ export default function LoginGate({ children }) {
     setUserTier("free");
     setUserEmail(null);
     setAuthMethod("code");
+    setHasPassword(false);
     setShowImportPrompt(false);
   };
 
@@ -536,6 +825,7 @@ export default function LoginGate({ children }) {
           userTier,
           userEmail,
           authMethod,
+          hasPassword,
           isLoggedIn,
           showLoginModal,
           onLogout: handleLogout,

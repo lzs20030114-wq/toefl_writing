@@ -30,7 +30,7 @@ export async function POST(request) {
     // Check if user already exists with this email
     const { data: existingUser } = await supabaseAdmin
       .from("users")
-      .select("code,email,tier,tier_expires_at,auth_method")
+      .select("code,email,tier,tier_expires_at,auth_method,has_password")
       .eq("email", email)
       .maybeSingle();
 
@@ -60,6 +60,7 @@ export async function POST(request) {
         email,
         tier,
         auth_method: existingUser.auth_method || "email",
+        has_password: existingUser.has_password || false,
         isNewUser: false,
       });
     }
@@ -67,7 +68,7 @@ export async function POST(request) {
     // Also check by auth_uid (in case email was changed)
     const { data: uidUser } = await supabaseAdmin
       .from("users")
-      .select("code,email,tier,auth_method")
+      .select("code,email,tier,auth_method,has_password")
       .eq("auth_uid", authUid)
       .maybeSingle();
 
@@ -83,6 +84,7 @@ export async function POST(request) {
         email,
         tier: uidUser.tier || "free",
         auth_method: uidUser.auth_method || "email",
+        has_password: uidUser.has_password || false,
         isNewUser: false,
       });
     }
@@ -129,6 +131,7 @@ export async function POST(request) {
       email,
       tier: "free",
       auth_method: "email",
+      has_password: false,
       isNewUser: true,
     });
   } catch (e) {

@@ -68,7 +68,7 @@ export async function POST(request) {
     // Fetch user record for tier/status info
     const { data: userRow } = await supabaseAdmin
       .from("users")
-      .select("code,email,tier,tier_expires_at,auth_method,status")
+      .select("code,email,tier,tier_expires_at,auth_method,status,has_password")
       .eq("code", code)
       .maybeSingle();
 
@@ -93,6 +93,7 @@ export async function POST(request) {
         tier: userRow.tier || "pro",
         email: userRow.email || null,
         auth_method: userRow.auth_method || "code",
+        has_password: userRow.has_password || false,
       });
     }
 
@@ -126,6 +127,7 @@ export async function POST(request) {
       tier,
       email: userRow?.email || null,
       auth_method: userRow?.auth_method || "code",
+      has_password: userRow?.has_password || false,
     });
   } catch (e) {
     return jsonError(500, e.message || "Unexpected server error");
