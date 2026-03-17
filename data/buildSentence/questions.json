@@ -105,10 +105,10 @@
         },
         {
           "id": "ets_s1_q4",
-          "prompt": "Were the colleagues wondering if the security bug was fixed?",
+          "prompt": "What did your teammates want to know about the latest update?",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Were the colleagues wondering if the security bug was fixed?",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did your teammates want to know about the latest update?",
           "answer": "They were curious whether the new version fixed the security bug.",
           "chunks": [
             "were",
@@ -259,10 +259,10 @@
         },
         {
           "id": "ets_s1_q9",
-          "prompt": "Did the customer know if the prescription was ready?",
+          "prompt": "Describe the customer's interaction at the pharmacy counter.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Did the customer know if the prescription was ready?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Describe the customer's interaction at the pharmacy counter.",
           "answer": "The customer didn't know whether the prescription was ready for pickup.",
           "chunks": [
             "the",
@@ -323,10 +323,10 @@
       "questions": [
         {
           "id": "ets_s2_q1",
-          "prompt": "Did she ask when the professor typically returns graded work?",
+          "prompt": "Tell your classmate what the student wanted to know from the professor.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Did she ask when the professor typically returns graded work?",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Tell your classmate what the student wanted to know from the professor.",
           "answer": "She inquired when the professor usually returned graded papers.",
           "chunks": [
             "inquired",
@@ -563,10 +563,10 @@
         },
         {
           "id": "ets_s2_q9",
-          "prompt": "Could you recall when the prescription was first written?",
+          "prompt": "Report the difficulty you had at the pharmacy.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Could you recall when the prescription was first written?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Report the difficulty you had at the pharmacy.",
           "answer": "I couldn't remember when the doctor originally wrote the prescription.",
           "chunks": [
             "couldn't",
@@ -663,10 +663,10 @@
         },
         {
           "id": "ets_s3_q2",
-          "prompt": "Did the developer know the release date for the new version?",
+          "prompt": "Explain the developer's situation regarding the upcoming product launch.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Did the developer know the release date for the new version?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Explain the developer's situation regarding the upcoming product launch.",
           "answer": "The software developer did not know when the new version would be released.",
           "chunks": [
             "the software developer",
@@ -724,10 +724,10 @@
         },
         {
           "id": "ets_s3_q4",
-          "prompt": "Did the gallery you visited have a great photography exhibit?",
+          "prompt": "Tell your friend about your recent visit to an art gallery.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Did the gallery you visited have a great photography exhibit?",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Tell your friend about your recent visit to an art gallery.",
           "answer": "The gallery I visited last weekend had an amazing photography exhibit.",
           "chunks": [
             "i",
@@ -1156,10 +1156,10 @@
         },
         {
           "id": "ets_s4_q8",
-          "prompt": "Have you found out where the new tropical plants are?",
+          "prompt": "Tell the team what you learned about the recent delivery.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Have you found out where the new tropical plants are?",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Tell the team what you learned about the recent delivery.",
           "answer": "We just discovered where the new tropical plants are being kept.",
           "chunks": [
             "just",
@@ -1220,10 +1220,10 @@
         },
         {
           "id": "ets_s4_q10",
-          "prompt": "Could the intern understand the supervisor's explanation?",
+          "prompt": "Summarize the difficulty the new team member had during the briefing.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Could the intern understand the supervisor's explanation?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Summarize the difficulty the new team member had during the briefing.",
           "answer": "The enthusiastic intern could not understand what the project supervisor explained.",
           "chunks": [
             "could not",
@@ -1256,10 +1256,10 @@
       "questions": [
         {
           "id": "ets_s5_q1",
-          "prompt": "Could the architect locate the original blueprints?",
+          "prompt": "Tell your client about the problem the architect encountered.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Could the architect locate the original blueprints?",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Tell your client about the problem the architect encountered.",
           "answer": "The young architect couldn't find the original blueprints.",
           "chunks": [
             "couldn't",
@@ -1411,10 +1411,10 @@
         },
         {
           "id": "ets_s5_q6",
-          "prompt": "Did you like the haircut from the stylist I recommended?",
+          "prompt": "Describe your recent experience with a service provider.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Did you like the haircut from the stylist I recommended?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Describe your recent experience with a service provider.",
           "answer": "The stylist you recommended gave me exactly the haircut I wanted.",
           "chunks": [
             "you",
@@ -1628,10 +1628,10 @@
         },
         {
           "id": "ets_s6_q3",
-          "prompt": "Did she admire the design of the plaza?",
+          "prompt": "Describe her opinion of the public space's recent renovation.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Did she admire the design of the plaza?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Describe her opinion of the public space's recent renovation.",
           "answer": "She admired the design that the famous firm created for the plaza.",
           "chunks": [
             "admired",
@@ -1690,10 +1690,10 @@
         },
         {
           "id": "ets_s6_q5",
-          "prompt": "Did the grocery store you visited yesterday have fresh produce on sale?",
+          "prompt": "Tell your roommate about your shopping trip yesterday.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Did the grocery store you visited yesterday have fresh produce on sale?",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Tell your roommate about your shopping trip yesterday.",
           "answer": "The grocery store I visited yesterday had fresh produce on sale.",
           "chunks": [
             "i",
@@ -1872,10 +1872,10 @@
       "questions": [
         {
           "id": "ets_s7_q1",
-          "prompt": "Did he mention that the prescription was ready?",
+          "prompt": "What did the pharmacist tell you?",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Did he mention that the prescription was ready?",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did the pharmacist tell you?",
           "answer": "He mentioned that the prescription was ready for pickup.",
           "chunks": [
             "mentioned",
@@ -1900,10 +1900,10 @@
         },
         {
           "id": "ets_s7_q2",
-          "prompt": "Do you prefer the coffee shop that stays open late on weeknights?",
+          "prompt": "Explain your criteria for choosing a place to study or work in the evening.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Do you prefer the coffee shop that stays open late on weeknights?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Explain your criteria for choosing a place to study or work in the evening.",
           "answer": "I prefer the coffee shop that stays open late on weeknights.",
           "chunks": [
             "prefer",
@@ -2209,10 +2209,10 @@
         },
         {
           "id": "ets_s8_q2",
-          "prompt": "Does the restaurant near the train station serve authentic Italian food?",
+          "prompt": "Describe the dining spot your coworker recommended.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Does the restaurant near the train station serve authentic Italian food?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Describe the dining spot your coworker recommended.",
           "answer": "The restaurant near the train station serves authentic Italian food.",
           "chunks": [
             "near",
@@ -2419,10 +2419,10 @@
         },
         {
           "id": "ets_s8_q9",
-          "prompt": "Does the bakery you visited this morning have the best croissants in town?",
+          "prompt": "Mention your impression of a local business you visited today.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Does the bakery you visited this morning have the best croissants in town?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Mention your impression of a local business you visited today.",
           "answer": "The bakery I visited this morning has the best croissants in town.",
           "chunks": [
             "i",
@@ -2690,10 +2690,10 @@
         },
         {
           "id": "ets_s9_q8",
-          "prompt": "Does the data I collected support our initial hypothesis?",
+          "prompt": "What did the research advisor say about your findings?",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Does the data I collected support our initial hypothesis?",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did the research advisor say about your findings?",
           "answer": "The data you collected supports our initial hypothesis.",
           "chunks": [
             "you",
@@ -2750,10 +2750,10 @@
         },
         {
           "id": "ets_s9_q10",
-          "prompt": "Did the elderly neighbor ask who fixed the leak?",
+          "prompt": "Tell the building manager what the resident wanted to know.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Did the elderly neighbor ask who fixed the leak?",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Tell the building manager what the resident wanted to know.",
           "answer": "The elderly neighbor asked who fixed the leak that was causing the damage.",
           "chunks": [
             "asked",
@@ -3005,10 +3005,10 @@
         },
         {
           "id": "ets_s10_q8",
-          "prompt": "Have you received any confirmation about the schedule yet?",
+          "prompt": "Answer your manager's question about the project timeline.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Have you received any confirmation about the schedule yet?",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Answer your manager's question about the project timeline.",
           "answer": "I have not received any confirmation about the schedule yet.",
           "chunks": [
             "i",
@@ -3033,10 +3033,10 @@
         },
         {
           "id": "ets_s10_q9",
-          "prompt": "Does she say the winter coat shipment arrives next Monday?",
+          "prompt": "State what the logistics coordinator said about the upcoming delivery.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Does she say the winter coat shipment arrives next Monday?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "State what the logistics coordinator said about the upcoming delivery.",
           "answer": "She says the winter coat shipment arrives at the warehouse next Monday.",
           "chunks": [
             "says",
@@ -3291,10 +3291,10 @@
         },
         {
           "id": "ets_s11_q7",
-          "prompt": "Does the cafe that opened last week have excellent coffee?",
+          "prompt": "Tell your coworker about a new business you tried recently.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Does the cafe that opened last week have excellent coffee?",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Tell your coworker about a new business you tried recently.",
           "answer": "The cafe that opened last week has excellent coffee.",
           "chunks": [
             "that",
@@ -3382,10 +3382,10 @@
         },
         {
           "id": "ets_s11_q10",
-          "prompt": "Have you received a confirmation email about your appointment yet?",
+          "prompt": "Have you gotten any updates about your upcoming commitment?",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Have you received a confirmation email about your appointment yet?",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "Have you gotten any updates about your upcoming commitment?",
           "answer": "I have not received a confirmation email about my appointment yet.",
           "chunks": [
             "i",
@@ -3478,10 +3478,10 @@
         },
         {
           "id": "ets_s12_q3",
-          "prompt": "Did you find some nice flowers in the community garden?",
+          "prompt": "What did you discover during your walk in the public park?",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Did you find some nice flowers in the community garden?",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did you discover during your walk in the public park?",
           "answer": "I found the most beautiful flowers in the garden that is behind the community center.",
           "chunks": [
             "found",
@@ -3602,10 +3602,10 @@
         },
         {
           "id": "ets_s12_q7",
-          "prompt": "Does the restaurant we talked about have good vegetarian dishes?",
+          "prompt": "Give your opinion on the dining establishment we considered yesterday.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Does the restaurant we talked about have good vegetarian dishes?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Give your opinion on the dining establishment we considered yesterday.",
           "answer": "The restaurant we discussed yesterday has excellent vegetarian options.",
           "chunks": [
             "the restaurant",
@@ -3755,10 +3755,10 @@
         },
         {
           "id": "ets_s13_q2",
-          "prompt": "Did the construction next door start early this morning?",
+          "prompt": "What did your neighbor say about the noise this morning?",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Did the construction next door start early this morning?",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did your neighbor say about the noise this morning?",
           "answer": "The construction next door started very early this morning.",
           "chunks": [
             "next",
@@ -3814,10 +3814,10 @@
         },
         {
           "id": "ets_s13_q4",
-          "prompt": "Did the recipe you tried work out well?",
+          "prompt": "Tell your family about the meal you prepared.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Did the recipe you tried work out well?",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Tell your family about the meal you prepared.",
           "answer": "The recipe I followed last night turned out perfectly.",
           "chunks": [
             "the recipe",
@@ -4030,10 +4030,10 @@
       "questions": [
         {
           "id": "ets_s14_q1",
-          "prompt": "Does the bookstore near the community center have a lot of science fiction?",
+          "prompt": "Describe the selection at the local shop near the public building.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Does the bookstore near the community center have a lot of science fiction?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Describe the selection at the local shop near the public building.",
           "answer": "The bookstore near the community center sells a wide variety of science fiction novels.",
           "chunks": [
             "near",
@@ -4116,10 +4116,10 @@
         },
         {
           "id": "ets_s14_q4",
-          "prompt": "Was the customer confused about the delay with her prescription?",
+          "prompt": "Explain the patient's concern when she called the clinic.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Was the customer confused about the delay with her prescription?",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Explain the patient's concern when she called the clinic.",
           "answer": "She didn't understand why the prescription had not been filled on time.",
           "chunks": [
             "didn't",
@@ -4344,10 +4344,10 @@
       "questions": [
         {
           "id": "ets_s15_q1",
-          "prompt": "Is the forecast calling for rain all weekend?",
+          "prompt": "What does the latest update say about our outdoor plans?",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Is the forecast calling for rain all weekend?",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What does the latest update say about our outdoor plans?",
           "answer": "The weather forecast predicts heavy rain for the entire weekend starting tomorrow.",
           "chunks": [
             "predicts",
@@ -4467,10 +4467,10 @@
         },
         {
           "id": "ets_s15_q5",
-          "prompt": "Does the hiking trail I suggested end at a waterfall?",
+          "prompt": "Describe the main feature of the outdoor path I told you about.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Does the hiking trail I suggested end at a waterfall?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Describe the main feature of the outdoor path I told you about.",
           "answer": "The trail I recommended has a beautiful waterfall at the end.",
           "chunks": [
             "i",
@@ -4867,10 +4867,10 @@
         },
         {
           "id": "ets_s16_q8",
-          "prompt": "Are the morning pastries at the bakery always fresh?",
+          "prompt": "Tell a visitor what is good about the local bakery's early offerings.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Are the morning pastries at the bakery always fresh?",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Tell a visitor what is good about the local bakery's early offerings.",
           "answer": "The pastries they sell in the morning are always fresh.",
           "chunks": [
             "sell",
@@ -4897,10 +4897,10 @@
         },
         {
           "id": "ets_s16_q9",
-          "prompt": "Does the new hardware store have a good tool selection?",
+          "prompt": "Tell your friend about your recent visit to a new retail establishment.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Does the new hardware store have a good tool selection?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Tell your friend about your recent visit to a new retail establishment.",
           "answer": "The store that opened last week has a great selection of tools.",
           "chunks": [
             "that",
@@ -5113,10 +5113,10 @@
         },
         {
           "id": "ets_s17_q7",
-          "prompt": "Is the new yoga studio more welcoming than the old one?",
+          "prompt": "Give your opinion on the two fitness facilities you've attended.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Is the new yoga studio more welcoming than the old one?",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Give your opinion on the two fitness facilities you've attended.",
           "answer": "I found the new yoga studio to be much more welcoming than the old one.",
           "chunks": [
             "found",
@@ -5145,10 +5145,10 @@
         },
         {
           "id": "ets_s17_q8",
-          "prompt": "Would you like to order the soup of the day?",
+          "prompt": "Tell the waiter what you want for lunch.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Would you like to order the soup of the day?",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Tell the waiter what you want for lunch.",
           "answer": "I would like to order the soup of the day.",
           "chunks": [
             "would",
@@ -5391,10 +5391,10 @@
         },
         {
           "id": "ets_s18_q6",
-          "prompt": "Did the plumber you called fix the leak?",
+          "prompt": "Describe the outcome of the service call you arranged.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Did the plumber you called fix the leak?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Describe the outcome of the service call you arranged.",
           "answer": "The plumber I called yesterday fixed the leak under the sink.",
           "chunks": [
             "i",
@@ -5513,10 +5513,10 @@
         },
         {
           "id": "ets_s18_q10",
-          "prompt": "Was the trail you hiked yesterday challenging?",
+          "prompt": "Describe your outdoor activity from yesterday.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Was the trail you hiked yesterday challenging?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Describe your outdoor activity from yesterday.",
           "answer": "The trail we hiked yesterday was surprisingly challenging.",
           "chunks": [
             "the trail",
@@ -5631,10 +5631,10 @@
         },
         {
           "id": "ets_s19_q4",
-          "prompt": "Does the cafe that opened last week serve good coffee?",
+          "prompt": "Share your thoughts on a recent dining experience with a colleague.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Does the cafe that opened last week serve good coffee?",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Share your thoughts on a recent dining experience with a colleague.",
           "answer": "The cafe that opened last week serves excellent coffee.",
           "chunks": [
             "that",
@@ -5726,10 +5726,10 @@
         },
         {
           "id": "ets_s19_q7",
-          "prompt": "Did the supplier you contacted have the tiles in stock?",
+          "prompt": "Report what you found out when you called about the materials.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Did the supplier you contacted have the tiles in stock?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Report what you found out when you called about the materials.",
           "answer": "The supplier I contacted yesterday had the tiles in stock.",
           "chunks": [
             "i",
@@ -5884,10 +5884,10 @@
         },
         {
           "id": "ets_s20_q2",
-          "prompt": "Did the chef who runs the kitchen train in Italy?",
+          "prompt": "What did you learn about the head cook's background?",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Did the chef who runs the kitchen train in Italy?",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did you learn about the head cook's background?",
           "answer": "The chef who runs the kitchen trained in Italy.",
           "chunks": [
             "who",
@@ -6067,10 +6067,10 @@
         },
         {
           "id": "ets_s20_q8",
-          "prompt": "Does the bookstore near the station host a weekly poetry reading?",
+          "prompt": "Inform a classmate about a recurring event at a local shop.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Does the bookstore near the station host a weekly poetry reading?",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Inform a classmate about a recurring event at a local shop.",
           "answer": "The bookstore near the train station hosts a weekly poetry reading.",
           "chunks": [
             "near",
@@ -6306,10 +6306,10 @@
         },
         {
           "id": "ets_s21_q6",
-          "prompt": "Does the restaurant that opened last month have good vegetarian options?",
+          "prompt": "Tell your friend about a new eatery you discovered.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Does the restaurant that opened last month have good vegetarian options?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Tell your friend about a new eatery you discovered.",
           "answer": "The restaurant that opened last month has amazing vegetarian options.",
           "chunks": [
             "that",
@@ -6700,10 +6700,10 @@
         },
         {
           "id": "ets_s22_q9",
-          "prompt": "Is the instructor you recommended knowledgeable?",
+          "prompt": "Express your opinion about the new teacher.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Is the instructor you recommended knowledgeable?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Express your opinion about the new teacher.",
           "answer": "The instructor you recommended is very knowledgeable.",
           "chunks": [
             "recommended",
@@ -6727,10 +6727,10 @@
         },
         {
           "id": "ets_s22_q10",
-          "prompt": "Does the trail that opened last month offer good views?",
+          "prompt": "Describe the scenery on your recent outdoor excursion.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Does the trail that opened last month offer good views?",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Describe the scenery on your recent outdoor excursion.",
           "answer": "The trail that opened last month offers spectacular views of the valley.",
           "chunks": [
             "the trail",
@@ -6821,10 +6821,10 @@
         },
         {
           "id": "ets_s23_q3",
-          "prompt": "Did you find the item near the gardening center?",
+          "prompt": "Explain where you located the missing object.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Did you find the item near the gardening center?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Explain where you located the missing object.",
           "answer": "I found it behind the gardening center earlier.",
           "chunks": [
             "i",
@@ -6877,10 +6877,10 @@
         },
         {
           "id": "ets_s23_q5",
-          "prompt": "Did the volunteer mention the condition of the trail we hiked?",
+          "prompt": "What did the guide say about our recent hike?",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Did the volunteer mention the condition of the trail we hiked?",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did the guide say about our recent hike?",
           "answer": "The volunteer explained that the trail we hiked last weekend was quite muddy.",
           "chunks": [
             "explained that",
@@ -7072,10 +7072,10 @@
       "questions": [
         {
           "id": "ets_s24_q1",
-          "prompt": "Does the new restaurant serve Italian food?",
+          "prompt": "Share your thoughts on a new establishment in the neighborhood.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Does the new restaurant serve Italian food?",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Share your thoughts on a new establishment in the neighborhood.",
           "answer": "The restaurant that opened last month serves authentic Italian cuisine.",
           "chunks": [
             "that",
@@ -7130,10 +7130,10 @@
         },
         {
           "id": "ets_s24_q3",
-          "prompt": "Was the yoga class you took yesterday difficult?",
+          "prompt": "Summarize your experience from the fitness session you attended.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Was the yoga class you took yesterday difficult?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Summarize your experience from the fitness session you attended.",
           "answer": "The yoga class I attended yesterday was surprisingly challenging.",
           "chunks": [
             "the yoga",
@@ -7599,10 +7599,10 @@
         },
         {
           "id": "ets_s25_q8",
-          "prompt": "Was the manager aware of why the shipment went to the wrong place?",
+          "prompt": "Explain the supervisor's reaction to the logistics error.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Was the manager aware of why the shipment went to the wrong place?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Explain the supervisor's reaction to the logistics error.",
           "answer": "The manager did not understand why the shipment was sent to the wrong warehouse.",
           "chunks": [
             "did not",
@@ -7634,10 +7634,10 @@
         },
         {
           "id": "ets_s25_q9",
-          "prompt": "Was the project timeline more flexible than the intern thought?",
+          "prompt": "What did the new team member say about the work schedule?",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Was the project timeline more flexible than the intern thought?",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did the new team member say about the work schedule?",
           "answer": "The intern found the project timeline much more flexible than expected.",
           "chunks": [
             "found",
@@ -7697,10 +7697,10 @@
       "questions": [
         {
           "id": "ets_s26_q1",
-          "prompt": "Does the new safety equipment need to be checked?",
+          "prompt": "State the priority for handling the recent delivery.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Does the new safety equipment need to be checked?",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "State the priority for handling the recent delivery.",
           "answer": "The safety equipment that arrived yesterday must be inspected first.",
           "chunks": [
             "arrived yesterday",
@@ -7939,10 +7939,10 @@
         },
         {
           "id": "ets_s26_q9",
-          "prompt": "Does the new restaurant have good vegetarian dishes?",
+          "prompt": "What did you discover about the menu at the new place?",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Does the new restaurant have good vegetarian dishes?",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did you discover about the menu at the new place?",
           "answer": "The restaurant that opened last week has amazing vegetarian options.",
           "chunks": [
             "opened",
@@ -8102,10 +8102,10 @@
         },
         {
           "id": "ets_s27_q4",
-          "prompt": "Does your neighbor have impressive roses?",
+          "prompt": "Tell me about something impressive in your neighbor's garden.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Does your neighbor have impressive roses?",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Tell me about something impressive in your neighbor's garden.",
           "answer": "My elderly neighbor grows the most beautiful roses I have ever seen.",
           "chunks": [
             "my",
@@ -8453,10 +8453,10 @@
         },
         {
           "id": "ets_s28_q7",
-          "prompt": "Was the hotel from the blog available during the festival?",
+          "prompt": "Explain the issue you encountered when trying to book accommodation based on an online suggestion.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Was the hotel from the blog available during the festival?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Explain the issue you encountered when trying to book accommodation based on an online suggestion.",
           "answer": "The hotel she recommended in her blog was fully booked for the festival.",
           "chunks": [
             "she",
@@ -8519,10 +8519,10 @@
         },
         {
           "id": "ets_s28_q9",
-          "prompt": "Are the pastries at the new cafe excellent?",
+          "prompt": "Give your review of a recently opened local business.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Are the pastries at the new cafe excellent?",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Give your review of a recently opened local business.",
           "answer": "The cafe that opened last week has excellent pastries.",
           "chunks": [
             "that",
@@ -8645,10 +8645,10 @@
         },
         {
           "id": "ets_s29_q3",
-          "prompt": "Did the store clerk confirm the delivery date for the desk?",
+          "prompt": "What did the sales associate tell you about your purchase?",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Did the store clerk confirm the delivery date for the desk?",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did the sales associate tell you about your purchase?",
           "answer": "The desk you ordered is scheduled to arrive on Friday.",
           "chunks": [
             "you",
@@ -8863,10 +8863,10 @@
         },
         {
           "id": "ets_s29_q10",
-          "prompt": "Was the trunk of the rental car spacious?",
+          "prompt": "Describe a practical feature of the vehicle you used for your vacation.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Was the trunk of the rental car spacious?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Describe a practical feature of the vehicle you used for your vacation.",
           "answer": "The car that we rented for the trip had a very spacious trunk.",
           "chunks": [
             "that we",
@@ -8930,10 +8930,10 @@
         },
         {
           "id": "ets_s30_q2",
-          "prompt": "Was the kitchen in the apartment more spacious than you expected?",
+          "prompt": "Summarize your thoughts after viewing the rental property.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Was the kitchen in the apartment more spacious than you expected?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Summarize your thoughts after viewing the rental property.",
           "answer": "I thought the kitchen in that apartment was much more spacious than expected.",
           "chunks": [
             "the kitchen",
@@ -9172,10 +9172,10 @@
         },
         {
           "id": "ets_s30_q10",
-          "prompt": "Does the trail around the lake have good mountain views?",
+          "prompt": "Tell the hiking group about the visual highlights of the route.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Does the trail around the lake have good mountain views?",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Tell the hiking group about the visual highlights of the route.",
           "answer": "The trail that loops around the lake offers stunning views of the mountains.",
           "chunks": [
             "that",
@@ -9302,10 +9302,10 @@
         },
         {
           "id": "ets_s31_q4",
-          "prompt": "Is your reservation under the name Johnson?",
+          "prompt": "Answer the host's question about your booking.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Is your reservation under the name Johnson?",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Answer the host's question about your booking.",
           "answer": "My reservation is under the name Johnson.",
           "chunks": [
             "my reservation",
@@ -9572,10 +9572,10 @@
         },
         {
           "id": "ets_s32_q4",
-          "prompt": "Have you received confirmation about the internship offer yet?",
+          "prompt": "Tell your advisor about the status of your application.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Have you received confirmation about the internship offer yet?",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Tell your advisor about the status of your application.",
           "answer": "I have not received any confirmation about the internship offer yet.",
           "chunks": [
             "i",
@@ -9661,10 +9661,10 @@
         },
         {
           "id": "ets_s32_q7",
-          "prompt": "Was the trail behind the community center steep?",
+          "prompt": "Describe the path you explored earlier.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Was the trail behind the community center steep?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Describe the path you explored earlier.",
           "answer": "I found the trail behind the community center to be surprisingly steep.",
           "chunks": [
             "found",
@@ -9817,10 +9817,10 @@
         },
         {
           "id": "ets_s33_q2",
-          "prompt": "Is the trail to the waterfall steep in some places?",
+          "prompt": "What did the guide say about the route to the natural feature?",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Is the trail to the waterfall steep in some places?",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did the guide say about the route to the natural feature?",
           "answer": "The trail that leads to the waterfall is quite steep in some sections.",
           "chunks": [
             "that",
@@ -10070,10 +10070,10 @@
       "questions": [
         {
           "id": "ets_s34_q1",
-          "prompt": "Does the trail behind the visitor center have good views of the valley?",
+          "prompt": "Describe the hiking route a park ranger suggested.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Does the trail behind the visitor center have good views of the valley?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Describe the hiking route a park ranger suggested.",
           "answer": "The trail behind the visitor center offers stunning views of the valley.",
           "chunks": [
             "behind",
@@ -10100,10 +10100,10 @@
         },
         {
           "id": "ets_s34_q2",
-          "prompt": "Did you find the new fitness instructor's approach encouraging?",
+          "prompt": "Share your feedback on the teaching style in your new class.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Did you find the new fitness instructor's approach encouraging?",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Share your feedback on the teaching style in your new class.",
           "answer": "I found the instructor's approach to be much more encouraging.",
           "chunks": [
             "found",
@@ -10457,10 +10457,10 @@
         },
         {
           "id": "ets_s35_q4",
-          "prompt": "Has the car you rented been returned yet?",
+          "prompt": "Report the current status of the item you borrowed.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Has the car you rented been returned yet?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Report the current status of the item you borrowed.",
           "answer": "The vehicle I rented yesterday has not been returned yet.",
           "chunks": [
             "i rented yesterday",
@@ -10544,10 +10544,10 @@
         },
         {
           "id": "ets_s35_q7",
-          "prompt": "Did the security guard report that the side door was left open?",
+          "prompt": "What did the staff member say about the building's access point?",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Did the security guard report that the side door was left open?",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did the staff member say about the building's access point?",
           "answer": "The security guard mentioned that someone had propped open the side door again.",
           "chunks": [
             "mentioned",
@@ -10702,10 +10702,10 @@
         },
         {
           "id": "ets_s36_q2",
-          "prompt": "Does the store next to the bank sell travel guides?",
+          "prompt": "Tell your friend where to find a specific type of book.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Does the store next to the bank sell travel guides?",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Tell your friend where to find a specific type of book.",
           "answer": "The store next to the bank sells a great selection of travel guides.",
           "chunks": [
             "next",
@@ -10760,10 +10760,10 @@
         },
         {
           "id": "ets_s36_q4",
-          "prompt": "Did the instructor you met offer a workshop for beginners?",
+          "prompt": "What did the person you just met tell you about?",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Did the instructor you met offer a workshop for beginners?",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did the person you just met tell you about?",
           "answer": "The instructor I met yesterday offered a special workshop for beginners.",
           "chunks": [
             "i",
@@ -11073,10 +11073,10 @@
         },
         {
           "id": "ets_s37_q4",
-          "prompt": "Does the path you found lead to a hidden waterfall?",
+          "prompt": "What did you learn about the route you explored on your day off?",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Does the path you found lead to a hidden waterfall?",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did you learn about the route you explored on your day off?",
           "answer": "The path we discovered last weekend leads to a beautiful hidden waterfall.",
           "chunks": [
             "we",
@@ -11103,10 +11103,10 @@
         },
         {
           "id": "ets_s37_q5",
-          "prompt": "Does the campsite near the lake have the best mountain view?",
+          "prompt": "What did your friend say about where to stay on the trip?",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Does the campsite near the lake have the best mountain view?",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did your friend say about where to stay on the trip?",
           "answer": "The campsite near the lake offers the best view of the mountains.",
           "chunks": [
             "near",
@@ -11346,10 +11346,10 @@
         },
         {
           "id": "ets_s38_q3",
-          "prompt": "Does the new restaurant serve Thai food?",
+          "prompt": "What did your friend say about the recently opened business?",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Does the new restaurant serve Thai food?",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did your friend say about the recently opened business?",
           "answer": "The restaurant that opened last week serves authentic Thai cuisine.",
           "chunks": [
             "the restaurant",
@@ -11405,10 +11405,10 @@
         },
         {
           "id": "ets_s38_q5",
-          "prompt": "Was the trail behind the community center challenging?",
+          "prompt": "Describe your experience on the path you discovered.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Was the trail behind the community center challenging?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Describe your experience on the path you discovered.",
           "answer": "I found the trail behind the community center to be quite challenging.",
           "chunks": [
             "found",
@@ -11595,10 +11595,10 @@
       "questions": [
         {
           "id": "ets_s39_q1",
-          "prompt": "Have you received any feedback on the proposal draft?",
+          "prompt": "State the current status of your submitted document.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Have you received any feedback on the proposal draft?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "State the current status of your submitted document.",
           "answer": "I haven't received any feedback on the draft proposal yet.",
           "chunks": [
             "haven't",
@@ -11687,10 +11687,10 @@
         },
         {
           "id": "ets_s39_q4",
-          "prompt": "Did the travel blogger ask who designed the historic building?",
+          "prompt": "What did the visitor inquire about regarding the old structure?",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Did the travel blogger ask who designed the historic building?",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did the visitor inquire about regarding the old structure?",
           "answer": "The travel blogger wanted to know whom the historic building had been designed by.",
           "chunks": [
             "wanted",
@@ -11963,10 +11963,10 @@
         },
         {
           "id": "ets_s40_q3",
-          "prompt": "Does the stylist who works on Saturdays specialize in curly hair?",
+          "prompt": "Explain what a particular service provider is known for.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Does the stylist who works on Saturdays specialize in curly hair?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Explain what a particular service provider is known for.",
           "answer": "The stylist who works on Saturdays specializes in curly hair treatments.",
           "chunks": [
             "who",
@@ -12174,10 +12174,10 @@
         },
         {
           "id": "ets_s40_q10",
-          "prompt": "Did you get the confirmation email?",
+          "prompt": "Tell the organizer if you got their electronic message.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Did you get the confirmation email?",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Tell the organizer if you got their electronic message.",
           "answer": "I didn't receive the confirmation email yet.",
           "chunks": [
             "i",
@@ -12204,10 +12204,10 @@
       "questions": [
         {
           "id": "ets_s41_q1",
-          "prompt": "Did you see the trail closure sign yesterday?",
+          "prompt": "Explain what you missed noticing during your outing.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Did you see the trail closure sign yesterday?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Explain what you missed noticing during your outing.",
           "answer": "I didn't see the trail closure sign yesterday.",
           "chunks": [
             "i",
@@ -12417,10 +12417,10 @@
         },
         {
           "id": "ets_s41_q8",
-          "prompt": "Have you received the package that was supposed to arrive?",
+          "prompt": "Answer your friend's question about a delivery.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Have you received the package that was supposed to arrive?",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Answer your friend's question about a delivery.",
           "answer": "I have not received the package that was supposed to arrive.",
           "chunks": [
             "received",
@@ -12668,10 +12668,10 @@
         },
         {
           "id": "ets_s42_q6",
-          "prompt": "Did you enjoy the restaurant I recommended?",
+          "prompt": "Tell your friend about the meal you had recently.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Did you enjoy the restaurant I recommended?",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Tell your friend about the meal you had recently.",
           "answer": "The restaurant you recommended serves amazing homemade pasta.",
           "chunks": [
             "serves",
@@ -12696,10 +12696,10 @@
         },
         {
           "id": "ets_s42_q7",
-          "prompt": "Is the café near the science building known for its coffee?",
+          "prompt": "Describe a popular spot for students to get a drink.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Is the café near the science building known for its coffee?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Describe a popular spot for students to get a drink.",
           "answer": "The café near the science building serves the best coffee on campus.",
           "chunks": [
             "near",
@@ -12911,10 +12911,10 @@
         },
         {
           "id": "ets_s43_q4",
-          "prompt": "Does the park we visited yesterday have a good playground?",
+          "prompt": "Tell your family about a feature of the place you went to.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Does the park we visited yesterday have a good playground?",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Tell your family about a feature of the place you went to.",
           "answer": "The park we visited yesterday has a fantastic new playground.",
           "chunks": [
             "we",
@@ -13097,10 +13097,10 @@
         },
         {
           "id": "ets_s43_q10",
-          "prompt": "Does the main article discuss the economic effects of the new policy?",
+          "prompt": "What did the professor mention about the reading assignment?",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Does the main article discuss the economic effects of the new policy?",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did the professor mention about the reading assignment?",
           "answer": "The main article discusses the economic effects of the new policy.",
           "chunks": [
             "the economic effects",
@@ -13248,10 +13248,10 @@
         },
         {
           "id": "ets_s44_q5",
-          "prompt": "Is the research team analyzing the data I requested?",
+          "prompt": "Report what the lab coordinator said about your results.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Is the research team analyzing the data I requested?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Report what the lab coordinator said about your results.",
           "answer": "The data you requested is being analyzed by the research team right now.",
           "chunks": [
             "you",
@@ -13308,10 +13308,10 @@
         },
         {
           "id": "ets_s44_q7",
-          "prompt": "Did the market she explored sell unique items?",
+          "prompt": "What did your friend discover at the shopping area in the historic district?",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Did the market she explored sell unique items?",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did your friend discover at the shopping area in the historic district?",
           "answer": "The market she explored in the old town sells unique handmade jewelry.",
           "chunks": [
             "she",
@@ -13436,10 +13436,10 @@
       "questions": [
         {
           "id": "ets_s45_q1",
-          "prompt": "Did you find the data in the third chapter convincing?",
+          "prompt": "Share your assessment of the evidence presented in a specific section.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Did you find the data in the third chapter convincing?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Share your assessment of the evidence presented in a specific section.",
           "answer": "I found the data in the third chapter to be the most convincing.",
           "chunks": [
             "found",
@@ -13554,10 +13554,10 @@
         },
         {
           "id": "ets_s45_q5",
-          "prompt": "Is the software you downloaded easy to use?",
+          "prompt": "Tell your colleague about the tool you recently tried.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Is the software you downloaded easy to use?",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Tell your colleague about the tool you recently tried.",
           "answer": "The software I downloaded last week is surprisingly easy to use.",
           "chunks": [
             "i",
@@ -13981,10 +13981,10 @@
         },
         {
           "id": "ets_s46_q9",
-          "prompt": "Was she aware that the scholarship deadline was so close?",
+          "prompt": "Explain why the student was unprepared for an important date.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Was she aware that the scholarship deadline was so close?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Explain why the student was unprepared for an important date.",
           "answer": "She hadn't been informed that the scholarship application deadline was approaching so soon.",
           "chunks": [
             "hadn't",
@@ -14174,10 +14174,10 @@
         },
         {
           "id": "ets_s47_q6",
-          "prompt": "Is this program the most efficient one you've tested?",
+          "prompt": "Give your opinion on the performance of this new tool compared to others.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Is this program the most efficient one you've tested?",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Give your opinion on the performance of this new tool compared to others.",
           "answer": "This program runs more efficiently than any of the other applications we have tested.",
           "chunks": [
             "this program",
@@ -14267,10 +14267,10 @@
         },
         {
           "id": "ets_s47_q9",
-          "prompt": "Is the textbook she recommended at the campus bookstore?",
+          "prompt": "Where did your classmate say the required book could be found?",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Is the textbook she recommended at the campus bookstore?",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "Where did your classmate say the required book could be found?",
           "answer": "The textbook she recommended is available at the campus bookstore.",
           "chunks": [
             "she",
@@ -14389,10 +14389,10 @@
         },
         {
           "id": "ets_s48_q3",
-          "prompt": "Is the bakery across from the park known for its sourdough bread?",
+          "prompt": "What does your roommate say about the shop across the street?",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Is the bakery across from the park known for its sourdough bread?",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What does your roommate say about the shop across the street?",
           "answer": "The bakery across from the park makes the best sourdough bread in town.",
           "chunks": [
             "the bakery",
@@ -14446,10 +14446,10 @@
         },
         {
           "id": "ets_s48_q5",
-          "prompt": "Does the new community center offer free yoga classes?",
+          "prompt": "Tell a neighbor about an activity offered at the new facility.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Does the new community center offer free yoga classes?",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Tell a neighbor about an activity offered at the new facility.",
           "answer": "The center that opened recently offers free yoga classes.",
           "chunks": [
             "that",
@@ -14672,10 +14672,10 @@
         },
         {
           "id": "ets_s49_q2",
-          "prompt": "Did the restaurant you tried last night have good seafood?",
+          "prompt": "Tell your friend about the place you visited for dinner.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Did the restaurant you tried last night have good seafood?",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Tell your friend about the place you visited for dinner.",
           "answer": "The restaurant I tried last night had amazing seafood.",
           "chunks": [
             "i",
@@ -14796,10 +14796,10 @@
         },
         {
           "id": "ets_s49_q6",
-          "prompt": "Have you received a notification about your prescription refill?",
+          "prompt": "What did the patient say about the status of their medication?",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Have you received a notification about your prescription refill?",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did the patient say about the status of their medication?",
           "answer": "I have not received any notification about my prescription refill.",
           "chunks": [
             "have not",
@@ -14955,10 +14955,10 @@
       "questions": [
         {
           "id": "ets_s50_q1",
-          "prompt": "Is the gallery you visited on Saturday currently showing a photography exhibit?",
+          "prompt": "What did your friend mention about the cultural venue you both saw?",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Is the gallery you visited on Saturday currently showing a photography exhibit?",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did your friend mention about the cultural venue you both saw?",
           "answer": "The gallery we visited on Saturday is showing a fascinating photography exhibit.",
           "chunks": [
             "we",
@@ -15193,10 +15193,10 @@
         },
         {
           "id": "ets_s50_q9",
-          "prompt": "Was the trail you hiked yesterday steeper than you thought?",
+          "prompt": "Describe the difficulty level of the route you took.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Was the trail you hiked yesterday steeper than you thought?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "Describe the difficulty level of the route you took.",
           "answer": "The trail we hiked yesterday was much steeper than expected.",
           "chunks": [
             "we",
@@ -15443,10 +15443,10 @@
         },
         {
           "id": "ets_s51_q7",
-          "prompt": "Have you received the maintenance schedule for next month?",
+          "prompt": "What did the resident say about the upcoming building information?",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Have you received the maintenance schedule for next month?",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did the resident say about the upcoming building information?",
           "answer": "I have not received the maintenance schedule for next month.",
           "chunks": [
             "have not",
@@ -15501,10 +15501,10 @@
         },
         {
           "id": "ets_s51_q9",
-          "prompt": "Does this hiking trail have good views of the valley?",
+          "prompt": "Tell a fellow hiker what makes this path worth taking.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Does this hiking trail have good views of the valley?",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Tell a fellow hiker what makes this path worth taking.",
           "answer": "This particular hiking trail offers stunning views of the valley below.",
           "chunks": [
             "this",
@@ -15805,10 +15805,10 @@
         },
         {
           "id": "ets_s52_q9",
-          "prompt": "Has the scholarship I applied for been awarded yet?",
+          "prompt": "What did the financial aid office tell you?",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Has the scholarship I applied for been awarded yet?",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did the financial aid office tell you?",
           "answer": "The scholarship you applied for has already been awarded.",
           "chunks": [
             "you applied",
@@ -15832,10 +15832,10 @@
         },
         {
           "id": "ets_s52_q10",
-          "prompt": "Can you work the evening shift this week?",
+          "prompt": "State your availability for work this week.",
           "prompt_context": "",
-          "prompt_task_kind": "yesno",
-          "prompt_task_text": "Can you work the evening shift this week?",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "State your availability for work this week.",
           "answer": "I can work the morning shift but not the evening one.",
           "chunks": [
             "can work",
