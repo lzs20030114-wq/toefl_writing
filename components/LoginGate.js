@@ -304,11 +304,16 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
                 >
                   {loading ? t.otpVerifying : t.login}
                 </button>
+                <p style={{ fontSize: 11, color: "#b45309", textAlign: "center", marginTop: 10, marginBottom: 0, lineHeight: 1.5, background: "#fffbeb", border: "1px solid #fde68a", borderRadius: 6, padding: "6px 10px" }}>{t.otpHelper}</p>
               </div>
             )}
 
-            <p style={{ fontSize: 12, color: C.t3, textAlign: "center", marginTop: 10, marginBottom: 0 }}>{t.emailHelper}</p>
-            <p style={{ fontSize: 12, color: C.t3, textAlign: "center", marginTop: 4, marginBottom: 0 }}>{t.emailAutoRegister}</p>
+            {!otpSent && (
+              <>
+                <p style={{ fontSize: 12, color: C.t3, textAlign: "center", marginTop: 10, marginBottom: 0 }}>{t.emailHelper}</p>
+                <p style={{ fontSize: 12, color: C.t3, textAlign: "center", marginTop: 4, marginBottom: 0 }}>{t.emailAutoRegister}</p>
+              </>
+            )}
           </div>
         )}
 
