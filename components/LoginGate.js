@@ -224,6 +224,20 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
   // Pending login data — held while user sets password
   const [pendingLogin, setPendingLogin] = useState(null);
 
+  // Mobile compact mode — reduce spacing to fit one screen
+  const [compact, setCompact] = useState(false);
+  useEffect(() => {
+    const check = () => setCompact(window.innerHeight < 700 || window.innerWidth < 500);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  // Spacing values — compact for mobile
+  const s = compact
+    ? { overlay: 10, box: "16px 14px 14px", hd: 8, hdFont: 15, tab: 10, tabPad: "7px 0", inp: "9px 10px", inpFont: 13, btnMt: 6, btnPad: "9px 0", link: 6, help: 6, terms: 6, gap: 6 }
+    : { overlay: 20, box: "28px 24px 24px", hd: 16, hdFont: 18, tab: 18, tabPad: "9px 0", inp: "11px 12px", inpFont: 14, btnMt: 10, btnPad: "11px 0", link: 12, help: 10, terms: 14, gap: 10 };
+
   // Resend cooldown timer
   useEffect(() => {
     if (resendCooldown <= 0) return;
@@ -337,17 +351,17 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
   const goToForgot = () => { setView("forgot"); setError(""); setOtpSent(false); setOtpInput(""); };
 
   // ── Shared input style ──
-  const inputStyle = { width: "100%", padding: "11px 12px", fontSize: 14, borderRadius: 10, border: "1.5px solid " + C.bdr, outline: "none", boxSizing: "border-box", fontFamily: FONT };
+  const inputStyle = { width: "100%", padding: s.inp, fontSize: s.inpFont, borderRadius: 10, border: "1.5px solid " + C.bdr, outline: "none", boxSizing: "border-box", fontFamily: FONT };
   const passwordInputStyle = { ...inputStyle, paddingRight: 40 };
-  const btnStyle = (disabled) => ({ width: "100%", marginTop: 10, padding: "11px 0", borderRadius: 10, border: "none", background: disabled ? "#9ca3af" : C.blue, color: "#fff", fontSize: 14, fontWeight: 600, cursor: disabled ? "not-allowed" : "pointer", fontFamily: FONT });
+  const btnStyle = (disabled) => ({ width: "100%", marginTop: s.btnMt, padding: s.btnPad, borderRadius: 10, border: "none", background: disabled ? "#9ca3af" : C.blue, color: "#fff", fontSize: s.inpFont, fontWeight: 600, cursor: disabled ? "not-allowed" : "pointer", fontFamily: FONT });
 
   return createPortal(
     <div
-      style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center", padding: 20, fontFamily: FONT }}
+      style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center", padding: s.overlay, fontFamily: FONT }}
     >
       <div
         className="tp-modal-body"
-        style={{ position: "relative", width: "100%", maxWidth: 440, background: "#fff", border: "1px solid " + C.bdr, borderRadius: 14, padding: "28px 24px 24px", boxShadow: "0 20px 60px rgba(0,0,0,0.15)" }}
+        style={{ position: "relative", width: "100%", maxWidth: 440, background: "#fff", border: "1px solid " + C.bdr, borderRadius: 14, padding: s.box, boxShadow: "0 20px 60px rgba(0,0,0,0.15)" }}
       >
         {/* Close button */}
         <button
@@ -359,19 +373,21 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
           </svg>
         </button>
         {/* ── Header ── */}
-        <div style={{ textAlign: "center", marginBottom: 16 }}>
-          <div style={{ fontSize: 18, fontWeight: 700, color: C.t1, marginBottom: 4 }}>
+        <div style={{ textAlign: "center", marginBottom: s.hd }}>
+          <div style={{ fontSize: s.hdFont, fontWeight: 700, color: C.t1, marginBottom: compact ? 2 : 4 }}>
             {view === "setPassword" ? t.setPasswordTitle : t.modalTitle}
           </div>
-          <div style={{ fontSize: 12, color: C.t2 }}>
-            {view === "setPassword" ? t.setPasswordSubtitle : t.modalSubtitle}
-          </div>
+          {!compact && (
+            <div style={{ fontSize: 12, color: C.t2 }}>
+              {view === "setPassword" ? t.setPasswordSubtitle : t.modalSubtitle}
+            </div>
+          )}
         </div>
 
         {/* ═══ Set Password View ═══ */}
         {view === "setPassword" && (
           <div>
-            <div style={{ position: "relative", marginBottom: 10 }}>
+            <div style={{ position: "relative", marginBottom: s.gap }}>
               <input
                 type={showNewPassword ? "text" : "password"}
                 placeholder={t.newPasswordPlaceholder}
@@ -404,7 +420,7 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
         {view === "password" && activeTab === "email" && (
           <div>
             {/* Tabs */}
-            <div style={{ display: "flex", borderBottom: "2px solid " + C.bdrSubtle, marginBottom: 18 }}>
+            <div style={{ display: "flex", borderBottom: "2px solid " + C.bdrSubtle, marginBottom: s.tab }}>
               {[
                 { key: "email", label: t.emailTab },
                 { key: "code", label: t.codeTab },
@@ -413,7 +429,7 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
                   key={key}
                   onClick={() => { setActiveTab(key); setError(""); }}
                   style={{
-                    flex: 1, padding: "9px 0", border: "none", background: "none", cursor: "pointer",
+                    flex: 1, padding: s.tabPad, border: "none", background: "none", cursor: "pointer",
                     fontSize: 13, fontWeight: 600, fontFamily: FONT,
                     color: activeTab === key ? C.blue : C.t3,
                     borderBottom: activeTab === key ? "2px solid " + C.blue : "2px solid transparent",
@@ -432,7 +448,7 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
               onChange={(e) => setEmailInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && document.getElementById("pw-input")?.focus()}
               autoFocus
-              style={{ ...inputStyle, marginBottom: 10 }}
+              style={{ ...inputStyle, marginBottom: s.gap }}
             />
             <div style={{ position: "relative" }}>
               <input
@@ -451,7 +467,7 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
             </button>
 
             {/* Links row */}
-            <div style={{ display: "flex", justifyContent: "space-between", marginTop: 12 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginTop: s.link }}>
               <button onClick={goToForgot} style={{ background: "none", border: "none", color: C.t3, fontSize: 12, cursor: "pointer", padding: 0, fontFamily: FONT }}>
                 {t.forgotPassword}
               </button>
@@ -460,7 +476,7 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
               </button>
             </div>
 
-            <p style={{ fontSize: 12, color: C.t3, textAlign: "center", marginTop: 10, marginBottom: 0 }}>{t.emailHelper}</p>
+            {!compact && <p style={{ fontSize: 12, color: C.t3, textAlign: "center", marginTop: s.help, marginBottom: 0 }}>{t.emailHelper}</p>}
           </div>
         )}
 
@@ -468,7 +484,7 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
         {view === "password" && activeTab === "code" && (
           <div>
             {/* Tabs */}
-            <div style={{ display: "flex", borderBottom: "2px solid " + C.bdrSubtle, marginBottom: 18 }}>
+            <div style={{ display: "flex", borderBottom: "2px solid " + C.bdrSubtle, marginBottom: s.tab }}>
               {[
                 { key: "email", label: t.emailTab },
                 { key: "code", label: t.codeTab },
@@ -477,7 +493,7 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
                   key={key}
                   onClick={() => { setActiveTab(key); setError(""); }}
                   style={{
-                    flex: 1, padding: "9px 0", border: "none", background: "none", cursor: "pointer",
+                    flex: 1, padding: s.tabPad, border: "none", background: "none", cursor: "pointer",
                     fontSize: 13, fontWeight: 600, fontFamily: FONT,
                     color: activeTab === key ? C.blue : C.t3,
                     borderBottom: activeTab === key ? "2px solid " + C.blue : "2px solid transparent",
@@ -498,12 +514,12 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
               onKeyDown={(e) => e.key === "Enter" && handleCodeLogin()}
               maxLength={6}
               autoFocus
-              style={{ width: "100%", padding: "11px 12px", fontSize: 16, borderRadius: 10, border: "1.5px solid " + C.bdr, outline: "none", boxSizing: "border-box", fontFamily: "monospace", letterSpacing: 6, textAlign: "center", textTransform: "uppercase" }}
+              style={{ width: "100%", padding: s.inp, fontSize: 16, borderRadius: 10, border: "1.5px solid " + C.bdr, outline: "none", boxSizing: "border-box", fontFamily: "monospace", letterSpacing: 6, textAlign: "center", textTransform: "uppercase" }}
             />
             <button onClick={handleCodeLogin} disabled={loading} style={btnStyle(loading)}>
               {loading ? t.loggingIn : t.login}
             </button>
-            <p style={{ fontSize: 12, color: C.t3, textAlign: "center", marginTop: 10, marginBottom: 0 }}>{t.codeHelper}</p>
+            {!compact && <p style={{ fontSize: 12, color: C.t3, textAlign: "center", marginTop: s.help, marginBottom: 0 }}>{t.codeHelper}</p>}
           </div>
         )}
 
@@ -529,7 +545,7 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
                   background: (loading || resendCooldown > 0) ? "#e5e7eb" : C.blue,
                   color: (loading || resendCooldown > 0) ? C.t3 : "#fff",
                   cursor: (loading || resendCooldown > 0) ? "default" : "pointer",
-                  whiteSpace: "nowrap", minWidth: 90,
+                  whiteSpace: "nowrap", minWidth: compact ? 76 : 90,
                 }}
               >
                 {loading && !otpSent ? t.sendingOtp : resendCooldown > 0 ? `${resendCooldown}s` : otpSent ? t.resendOtp : t.sendOtp}
@@ -538,8 +554,8 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
 
             {/* OTP input — appears after sending */}
             {otpSent && (
-              <div style={{ marginTop: 12 }}>
-                <div style={{ fontSize: 12, color: C.t2, marginBottom: 6 }}>{t.otpSentTo} <strong>{emailInput.trim()}</strong></div>
+              <div style={{ marginTop: s.gap }}>
+                <div style={{ fontSize: 12, color: C.t2, marginBottom: 4 }}>{t.otpSentTo} <strong>{emailInput.trim()}</strong></div>
                 <input
                   type="text"
                   placeholder={t.otpPlaceholder}
@@ -548,24 +564,24 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
                   onKeyDown={(e) => e.key === "Enter" && handleVerifyOTP()}
                   maxLength={6}
                   autoFocus
-                  style={{ width: "100%", padding: "11px 12px", fontSize: 16, borderRadius: 10, border: "1.5px solid " + C.bdr, outline: "none", boxSizing: "border-box", fontFamily: "monospace", letterSpacing: 6, textAlign: "center" }}
+                  style={{ width: "100%", padding: s.inp, fontSize: 16, borderRadius: 10, border: "1.5px solid " + C.bdr, outline: "none", boxSizing: "border-box", fontFamily: "monospace", letterSpacing: 6, textAlign: "center" }}
                 />
                 <button onClick={handleVerifyOTP} disabled={loading} style={btnStyle(loading)}>
                   {loading ? t.otpVerifying : t.login}
                 </button>
-                <div style={{ marginTop: 10, background: "#fffbeb", border: "1px solid #fde68a", borderRadius: 6, padding: "8px 10px" }}>
-                  <p style={{ fontSize: 11, color: "#b45309", textAlign: "center", margin: 0, lineHeight: 1.5 }}>{t.otpHelper}</p>
-                  <p style={{ fontSize: 11, color: "#92400e", textAlign: "center", margin: "4px 0 0", lineHeight: 1.5 }}>{t.otpContactFallback}</p>
+                <div style={{ marginTop: s.help, background: "#fffbeb", border: "1px solid #fde68a", borderRadius: 6, padding: compact ? "5px 8px" : "8px 10px" }}>
+                  <p style={{ fontSize: 11, color: "#b45309", textAlign: "center", margin: 0, lineHeight: 1.4 }}>{t.otpHelper}</p>
+                  <p style={{ fontSize: 11, color: "#92400e", textAlign: "center", margin: "2px 0 0", lineHeight: 1.4 }}>{t.otpContactFallback}</p>
                 </div>
               </div>
             )}
 
-            {!otpSent && (
-              <p style={{ fontSize: 12, color: C.t3, textAlign: "center", marginTop: 10, marginBottom: 0 }}>{t.emailAutoRegister}</p>
+            {!otpSent && !compact && (
+              <p style={{ fontSize: 12, color: C.t3, textAlign: "center", marginTop: s.help, marginBottom: 0 }}>{t.emailAutoRegister}</p>
             )}
 
             {/* Back to password link */}
-            <div style={{ textAlign: "center", marginTop: 12 }}>
+            <div style={{ textAlign: "center", marginTop: s.link }}>
               <button onClick={goToPassword} style={{ background: "none", border: "none", color: C.blue, fontSize: 12, cursor: "pointer", padding: 0, fontFamily: FONT }}>
                 {t.backToPassword}
               </button>
@@ -595,7 +611,7 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
                   background: (loading || resendCooldown > 0) ? "#e5e7eb" : C.blue,
                   color: (loading || resendCooldown > 0) ? C.t3 : "#fff",
                   cursor: (loading || resendCooldown > 0) ? "default" : "pointer",
-                  whiteSpace: "nowrap", minWidth: 90,
+                  whiteSpace: "nowrap", minWidth: compact ? 76 : 90,
                 }}
               >
                 {loading && !otpSent ? t.sendingOtp : resendCooldown > 0 ? `${resendCooldown}s` : otpSent ? t.resendOtp : t.sendOtp}
@@ -603,8 +619,8 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
             </div>
 
             {otpSent && (
-              <div style={{ marginTop: 12 }}>
-                <div style={{ fontSize: 12, color: C.t2, marginBottom: 6 }}>{t.otpSentTo} <strong>{emailInput.trim()}</strong></div>
+              <div style={{ marginTop: s.gap }}>
+                <div style={{ fontSize: 12, color: C.t2, marginBottom: 4 }}>{t.otpSentTo} <strong>{emailInput.trim()}</strong></div>
                 <input
                   type="text"
                   placeholder={t.otpPlaceholder}
@@ -613,20 +629,20 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
                   onKeyDown={(e) => e.key === "Enter" && handleVerifyOTP()}
                   maxLength={6}
                   autoFocus
-                  style={{ width: "100%", padding: "11px 12px", fontSize: 16, borderRadius: 10, border: "1.5px solid " + C.bdr, outline: "none", boxSizing: "border-box", fontFamily: "monospace", letterSpacing: 6, textAlign: "center" }}
+                  style={{ width: "100%", padding: s.inp, fontSize: 16, borderRadius: 10, border: "1.5px solid " + C.bdr, outline: "none", boxSizing: "border-box", fontFamily: "monospace", letterSpacing: 6, textAlign: "center" }}
                 />
                 <button onClick={handleVerifyOTP} disabled={loading} style={btnStyle(loading)}>
                   {loading ? t.otpVerifying : t.otpVerify}
                 </button>
-                <div style={{ marginTop: 10, background: "#fffbeb", border: "1px solid #fde68a", borderRadius: 6, padding: "8px 10px" }}>
-                  <p style={{ fontSize: 11, color: "#b45309", textAlign: "center", margin: 0, lineHeight: 1.5 }}>{t.otpHelper}</p>
-                  <p style={{ fontSize: 11, color: "#92400e", textAlign: "center", margin: "4px 0 0", lineHeight: 1.5 }}>{t.otpContactFallback}</p>
+                <div style={{ marginTop: s.help, background: "#fffbeb", border: "1px solid #fde68a", borderRadius: 6, padding: compact ? "5px 8px" : "8px 10px" }}>
+                  <p style={{ fontSize: 11, color: "#b45309", textAlign: "center", margin: 0, lineHeight: 1.4 }}>{t.otpHelper}</p>
+                  <p style={{ fontSize: 11, color: "#92400e", textAlign: "center", margin: "2px 0 0", lineHeight: 1.4 }}>{t.otpContactFallback}</p>
                 </div>
               </div>
             )}
 
             {/* Back to password link */}
-            <div style={{ textAlign: "center", marginTop: 12 }}>
+            <div style={{ textAlign: "center", marginTop: s.link }}>
               <button onClick={goToPassword} style={{ background: "none", border: "none", color: C.blue, fontSize: 12, cursor: "pointer", padding: 0, fontFamily: FONT }}>
                 {t.backToPassword}
               </button>
@@ -636,7 +652,7 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
 
         {/* Terms agreement — show on password, otp, code views (not setPassword/forgot) */}
         {(view === "password" || (view === "otp" && !otpSent)) && (
-          <label style={{ display: "flex", alignItems: "flex-start", gap: 8, marginTop: 14, cursor: "pointer", fontSize: 12, color: C.t2, lineHeight: 1.5 }}>
+          <label style={{ display: "flex", alignItems: "flex-start", gap: compact ? 6 : 8, marginTop: s.terms, cursor: "pointer", fontSize: compact ? 11 : 12, color: C.t2, lineHeight: 1.5 }}>
             <input
               type="checkbox"
               checked={agreedTerms}
@@ -652,7 +668,7 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
 
         {/* Error */}
         {error && (
-          <div style={{ marginTop: 10, color: C.red, fontSize: 12, padding: "7px 10px", background: "#fff5f5", borderRadius: 8, textAlign: "center" }}>
+          <div style={{ marginTop: s.gap, color: C.red, fontSize: 12, padding: compact ? "5px 8px" : "7px 10px", background: "#fff5f5", borderRadius: 8, textAlign: "center" }}>
             {error}
           </div>
         )}

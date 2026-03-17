@@ -27,6 +27,13 @@ export async function POST(request) {
     if (!email) return jsonError(400, "Email is required");
     if (!authUid) return jsonError(400, "Auth UID is required");
 
+    // Verify authUid is real and email matches the authenticated user
+    const { data: authUser, error: authError } = await supabaseAdmin.auth.admin.getUserById(authUid);
+    if (authError || !authUser?.user) return jsonError(401, "Invalid auth session");
+    if ((authUser.user.email || "").toLowerCase() !== email) {
+      return jsonError(403, "Email does not match verified session");
+    }
+
     // Check if user already exists with this email
     const { data: existingUser } = await supabaseAdmin
       .from("users")

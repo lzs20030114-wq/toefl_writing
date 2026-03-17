@@ -11,19 +11,19 @@ export async function POST(request) {
     }
     if (!isSupabaseAdminConfigured) return jsonError(503, "Supabase admin is not configured");
 
-    const body = await request.json();
-    const authUid = String(body?.authUid || "").trim();
-    if (!authUid) return jsonError(400, "Auth UID is required");
+    // Extract and verify Supabase access token from Authorization header
+    const authHeader = request.headers.get("authorization") || "";
+    const token = authHeader.replace(/^Bearer\s+/i, "").trim();
+    if (!token) return jsonError(401, "Missing authorization token");
 
-    // Verify the auth user exists
-    const { data: authUser, error: authError } = await supabaseAdmin.auth.admin.getUserById(authUid);
-    if (authError || !authUser?.user) return jsonError(401, "Invalid auth user");
+    const { data: { user }, error: tokenError } = await supabaseAdmin.auth.getUser(token);
+    if (tokenError || !user?.id) return jsonError(401, "Invalid or expired token");
 
     // Set has_password = true on the matching users row
     const { error: updateError } = await supabaseAdmin
       .from("users")
       .update({ has_password: true })
-      .eq("auth_uid", authUid);
+      .eq("auth_uid", user.id);
 
     if (updateError) return jsonError(400, updateError.message || "Failed to update password flag");
 
