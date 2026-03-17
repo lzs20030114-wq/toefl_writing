@@ -434,6 +434,7 @@ export default function AdminCodesPage() {
                   <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0", width: 40 }}>选</th>
                   <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>登录码</th>
                   <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>状态</th>
+                  <th style={{ textAlign: "center", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>等级</th>
                   <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>发放对象</th>
                   <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>发放时间</th>
                   <th style={{ textAlign: "center", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>答题量</th>
@@ -455,6 +456,18 @@ export default function AdminCodesPage() {
                     </td>
                     <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", fontFamily: "monospace", fontWeight: 700 }}>{r.code}</td>
                     <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{r.status || "-"}</td>
+                    <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", textAlign: "center" }}>
+                      {(() => {
+                        const u = usageByCode[r.code];
+                        if (!u?.tier) return <span style={{ color: C.t2 }}>-</span>;
+                        const isLegacy = u.tier === "legacy";
+                        const isPro = u.tier === "pro" && u.tierExpiresAt && new Date(u.tierExpiresAt) > new Date();
+                        const label = isLegacy ? "Legacy" : isPro ? "Pro" : "Free";
+                        const bg = isLegacy ? "#ede9fe" : isPro ? "#e8f5e9" : "#f5f5f5";
+                        const color = isLegacy ? "#6d28d9" : isPro ? "#2e7d32" : C.t2;
+                        return <span style={{ display: "inline-block", padding: "1px 6px", borderRadius: 4, fontSize: 11, fontWeight: 700, background: bg, color }}>{label}</span>;
+                      })()}
+                    </td>
                     <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{r.issued_to || "-"}</td>
                     <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{fmtDate(r.issued_at)}</td>
                     <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", textAlign: "center" }}>
@@ -531,7 +544,7 @@ export default function AdminCodesPage() {
                 ))}
                 {rowsView.length === 0 && (
                   <tr>
-                    <td colSpan={9} style={{ padding: 12, color: C.t2 }}>
+                    <td colSpan={10} style={{ padding: 12, color: C.t2 }}>
                       暂无数据。
                     </td>
                   </tr>

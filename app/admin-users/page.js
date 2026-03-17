@@ -63,7 +63,11 @@ const TD = {
 
 function TierBadge({ tier, expiresAt }) {
   const now = new Date();
+  const isLegacy = tier === "legacy";
   const isPro = tier === "pro" && expiresAt && new Date(expiresAt) > now;
+  const label = isLegacy ? "Legacy" : isPro ? "Pro" : "Free";
+  const bg = isLegacy ? "#ede9fe" : isPro ? "#e8f5e9" : "#f5f5f5";
+  const color = isLegacy ? "#6d28d9" : isPro ? "#2e7d32" : C.t2;
   return (
     <span
       style={{
@@ -72,11 +76,11 @@ function TierBadge({ tier, expiresAt }) {
         borderRadius: 4,
         fontSize: 11,
         fontWeight: 700,
-        background: isPro ? "#e8f5e9" : "#f5f5f5",
-        color: isPro ? "#2e7d32" : C.t2,
+        background: bg,
+        color,
       }}
     >
-      {isPro ? "Pro" : "Free"}
+      {label}
     </span>
   );
 }
@@ -161,8 +165,10 @@ export default function AdminUsersPage() {
     if (tierFilter !== "all") {
       const now = new Date();
       list = list.filter((u) => {
+        if (tierFilter === "legacy") return u.tier === "legacy";
         const isPro = u.tier === "pro" && u.tier_expires_at && new Date(u.tier_expires_at) > now;
-        return tierFilter === "pro" ? isPro : !isPro;
+        if (tierFilter === "pro") return isPro;
+        return !isPro && u.tier !== "legacy"; // free
       });
     }
 
@@ -266,6 +272,12 @@ export default function AdminUsersPage() {
                     <div style={{ fontSize: 22, fontWeight: 800, color: "#2e7d32" }}>{data.tiers.pro}</div>
                     <div style={{ fontSize: 12, color: C.t2 }}>Pro</div>
                   </div>
+                  {data.tiers.legacy > 0 && (
+                    <div>
+                      <div style={{ fontSize: 22, fontWeight: 800, color: "#6d28d9" }}>{data.tiers.legacy}</div>
+                      <div style={{ fontSize: 12, color: C.t2 }}>Legacy</div>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -328,6 +340,7 @@ export default function AdminUsersPage() {
                   <option value="all">全部等级</option>
                   <option value="free">Free</option>
                   <option value="pro">Pro</option>
+                  <option value="legacy">Legacy</option>
                 </select>
                 <select
                   value={authFilter}

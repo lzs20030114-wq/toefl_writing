@@ -27,7 +27,7 @@ export async function GET(request) {
     // Count new users by time range
     let lastHour = 0, lastDay = 0, lastWeek = 0, lastMonth = 0;
     // Count by tier
-    const tierCounts = { free: 0, pro: 0, unknown: 0 };
+    const tierCounts = { free: 0, pro: 0, legacy: 0, unknown: 0 };
     // Count by auth method
     const authMethodCounts = { code: 0, email: 0, unknown: 0 };
     // Count by status

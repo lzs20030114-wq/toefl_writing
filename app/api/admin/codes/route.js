@@ -152,8 +152,25 @@ export async function GET(request) {
         sessions: 0,
         answered: { build: 0, email: 0, discussion: 0, total: 0 },
         lastActiveAt: null,
+        tier: null,
+        tierExpiresAt: null,
       };
     });
+
+    // Fetch user tier info
+    if (codeList.length > 0) {
+      const { data: userRows } = await supabaseAdmin
+        .from("users")
+        .select("code,tier,tier_expires_at")
+        .in("code", codeList);
+      for (const row of userRows || []) {
+        const code = String(row.code || "");
+        if (code && usageByCode[code]) {
+          usageByCode[code].tier = row.tier || null;
+          usageByCode[code].tierExpiresAt = row.tier_expires_at || null;
+        }
+      }
+    }
 
     if (codeList.length > 0) {
       const { data: sessionRows, error: sessionError } = await supabaseAdmin
