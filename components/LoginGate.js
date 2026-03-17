@@ -32,8 +32,8 @@ const I18N = {
     otpVerify: "确认",
     otpVerifying: "验证中...",
     otpBack: "返回",
-    otpHelper: "没收到？请检查垃圾邮件，或等待 1 分钟后重试",
-    otpContactFallback: "实在收不到请联系 3582786720@qq.com",
+    otpHelper: "没收到？请检查垃圾箱/广告邮件，或等 1 分钟后重新发送",
+    otpContactFallback: "仍然收不到？请联系 3582786720@qq.com 获取帮助",
     resendOtp: "重新发送",
     invalidEmail: "请输入邮箱",
     invalidEmailFormat: "邮箱格式不正确",
@@ -85,8 +85,8 @@ const I18N = {
     otpVerify: "Verify",
     otpVerifying: "Verifying...",
     otpBack: "Back",
-    otpHelper: "Didn't receive it? Check spam, or wait 1 minute to retry",
-    otpContactFallback: "Still can't receive? Contact 3582786720@qq.com",
+    otpHelper: "Didn't receive it? Check spam/junk folder, or wait 1 min to resend",
+    otpContactFallback: "Still not arriving? Contact 3582786720@qq.com for help",
     resendOtp: "Resend",
     invalidEmail: "Please enter an email",
     invalidEmailFormat: "Invalid email format",
@@ -343,14 +343,21 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
 
   return createPortal(
     <div
-      onClick={onClose}
       style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center", padding: 20, fontFamily: FONT }}
     >
       <div
-        onClick={(e) => e.stopPropagation()}
         className="tp-modal-body"
-        style={{ width: "100%", maxWidth: 440, background: "#fff", border: "1px solid " + C.bdr, borderRadius: 14, padding: "28px 24px 24px", boxShadow: "0 20px 60px rgba(0,0,0,0.15)" }}
+        style={{ position: "relative", width: "100%", maxWidth: 440, background: "#fff", border: "1px solid " + C.bdr, borderRadius: 14, padding: "28px 24px 24px", boxShadow: "0 20px 60px rgba(0,0,0,0.15)" }}
       >
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          style={{ position: "absolute", top: 12, right: 12, background: "none", border: "none", cursor: "pointer", padding: 4, color: C.t3, display: "flex", alignItems: "center", justifyContent: "center" }}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
         {/* ── Header ── */}
         <div style={{ textAlign: "center", marginBottom: 16 }}>
           <div style={{ fontSize: 18, fontWeight: 700, color: C.t1, marginBottom: 4 }}>
