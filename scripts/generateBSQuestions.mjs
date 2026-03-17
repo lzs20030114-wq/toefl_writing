@@ -4118,7 +4118,7 @@ function postGenerationRuleCheck(sets) {
     }
   }
 
-  // Fix 7: contraction conversion — randomly convert ~35% of "aux not" to contractions
+  // Fix 7: contraction conversion — per-set selection, ~35% overall, ≥1 per set with negation
   {
     const CONTRACTION_MAP = new Map([
       ["did not", "didn't"], ["do not", "don't"], ["does not", "doesn't"],
@@ -4129,30 +4129,42 @@ function postGenerationRuleCheck(sets) {
       ["could not", "couldn't"], ["should not", "shouldn't"],
     ]);
 
-    // Collect all negation candidates across all sets
-    const candidates = [];
-    for (const set of sets) {
-      for (const q of set.questions || []) {
+    // Collect candidates per set
+    const perSet = [];
+    let totalCandidates = 0;
+    for (let si = 0; si < sets.length; si++) {
+      const setCandidates = [];
+      for (const q of sets[si].questions || []) {
         const ansLower = q.answer.toLowerCase();
         for (const [full, contr] of CONTRACTION_MAP) {
           if (ansLower.includes(full)) {
-            candidates.push({ q, full, contr });
-            break; // one match per question
+            setCandidates.push({ q, full, contr, setIdx: si });
+            break;
           }
         }
       }
+      perSet.push(setCandidates);
+      totalCandidates += setCandidates.length;
     }
 
-    // Shuffle and pick 30–50%
-    const rate = 0.30 + Math.random() * 0.20;
-    const target = Math.round(candidates.length * rate);
-    for (let i = candidates.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [candidates[i], candidates[j]] = [candidates[j], candidates[i]];
+    // Per-set selection: shuffle, try all until target succeed (at least 1)
+    const selected = [];
+    const setTargets = {};
+    for (let si = 0; si < perSet.length; si++) {
+      const sc = perSet[si];
+      if (sc.length === 0) continue;
+      for (let i = sc.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [sc[i], sc[j]] = [sc[j], sc[i]];
+      }
+      setTargets[si] = Math.max(1, Math.round(sc.length * 0.35));
+      selected.push(...sc);
     }
 
     let contrCount = 0;
-    for (const { q, full, contr } of candidates.slice(0, target)) {
+    const setSuccesses = {};
+    for (const { q, full, contr, setIdx } of selected) {
+      if ((setSuccesses[setIdx] || 0) >= setTargets[setIdx]) continue;
       const auxWord = full.split(" ")[0]; // e.g. "did"
       const answerWords = q.answer.split(/\s+/);
 
@@ -4247,10 +4259,11 @@ function postGenerationRuleCheck(sets) {
 
       contrCount++;
       fixCount++;
+      setSuccesses[setIdx] = (setSuccesses[setIdx] || 0) + 1;
       console.log(`  [post-fix] contraction "${full}" → "${contr}" on ${q.id}`);
     }
-    if (candidates.length > 0) {
-      console.log(`  [contraction] converted ${contrCount}/${candidates.length} negation items (${(contrCount / candidates.length * 100).toFixed(0)}%)`);
+    if (totalCandidates > 0) {
+      console.log(`  [contraction] converted ${contrCount}/${totalCandidates} negation items (${(contrCount / totalCandidates * 100).toFixed(0)}%)`);
     }
   }
 
