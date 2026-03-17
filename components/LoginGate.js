@@ -65,6 +65,7 @@ const I18N = {
     passwordTooShort: "密码至少 8 位",
     passwordMismatch: "两次输入的密码不一致",
     passwordLoginFailed: "邮箱或密码不正确",
+    firstTimeHint: "首次登录请用验证码登录，登录后自动注册",
   },
   en: {
     checking: "Checking login status...",
@@ -118,6 +119,7 @@ const I18N = {
     passwordTooShort: "Password must be at least 8 characters",
     passwordMismatch: "Passwords do not match",
     passwordLoginFailed: "Incorrect email or password",
+    firstTimeHint: "First time? Use email verification to sign up automatically",
   },
 };
 
@@ -380,6 +382,11 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
           {!compact && (
             <div style={{ fontSize: 12, color: C.t2 }}>
               {view === "setPassword" ? t.setPasswordSubtitle : t.modalSubtitle}
+            </div>
+          )}
+          {view !== "setPassword" && (
+            <div style={{ fontSize: 11, color: C.t3, marginTop: compact ? 2 : 6 }}>
+              {t.firstTimeHint}
             </div>
           )}
         </div>
