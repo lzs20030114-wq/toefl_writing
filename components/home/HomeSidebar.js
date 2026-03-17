@@ -138,6 +138,38 @@ function BindEmailModal({ userCode, onSuccess, onClose }) {
   );
 }
 
+function ContactCard({ isChallenge, contactOpen, setContactOpen, sideCard, fadeIn, delay }) {
+  const [emailCopied, setEmailCopied] = useState(false);
+  const authorEmail = "3582786720@qq.com";
+
+  function copyEmail() {
+    if (!navigator?.clipboard?.writeText) return;
+    navigator.clipboard.writeText(authorEmail).then(() => {
+      setEmailCopied(true);
+      setTimeout(() => setEmailCopied(false), 2000);
+    });
+  }
+
+  return (
+    <div style={{ ...sideCard({}), ...fadeIn(delay) }}>
+      <button onClick={() => setContactOpen((v) => !v)} style={{ width: "100%", display: "flex", alignItems: "center", gap: 8, padding: "14px 18px", background: "transparent", border: "none", cursor: "pointer", fontFamily: HOME_FONT, textAlign: "left" }}>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={isChallenge ? CH.t2 : T.t3} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+          <rect x="2" y="4" width="20" height="16" rx="2" />
+          <path d="M22 4L12 13 2 4" />
+        </svg>
+        <span style={{ fontSize: 13, fontWeight: 700, color: isChallenge ? CH.t1 : T.t1, flex: 1 }}>联系作者</span>
+        <span style={{ fontSize: 11, color: isChallenge ? CH.t2 : T.t3, display: "inline-block", transform: contactOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.25s ease" }}>v</span>
+      </button>
+      <div style={{ maxHeight: contactOpen ? 80 : 0, overflow: "hidden", transition: "max-height 0.35s cubic-bezier(0.25,1,0.5,1)" }}>
+        <div style={{ padding: "0 18px 14px", display: "flex", alignItems: "center", gap: 6 }}>
+          <span style={{ fontSize: 12, color: isChallenge ? CH.t1 : T.t2, wordBreak: "break-all", flex: 1 }}>{authorEmail}</span>
+          <button onClick={copyEmail} style={{ border: `1px solid ${emailCopied ? T.primary : (isChallenge ? CH.cardBorder : T.bdr)}`, background: emailCopied ? T.primarySoft : (isChallenge ? "rgba(255,255,255,0.05)" : T.bg), color: emailCopied ? T.primary : (isChallenge ? CH.t2 : T.t2), borderRadius: 6, padding: "2px 7px", fontSize: 11, fontWeight: 600, cursor: "pointer", transition: "all .15s", fontFamily: HOME_FONT, flexShrink: 0 }}>{emailCopied ? "已复制" : "复制"}</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function HomeSidebar({
   userCode,
   userTier,
@@ -174,6 +206,7 @@ export function HomeSidebar({
   const [tierExpiresAt, setTierExpiresAt] = useState(null);
   const [upgradeOpen, setUpgradeOpen] = useState(false);
   const [codeHidden, setCodeHidden] = useState(true);
+  const [contactOpen, setContactOpen] = useState(false);
 
   const tier = userTier || "free";
 
@@ -239,6 +272,8 @@ export function HomeSidebar({
             </div>
           ))}
         </div>
+
+        <ContactCard isChallenge={isChallenge} contactOpen={contactOpen} setContactOpen={setContactOpen} sideCard={sideCard} fadeIn={fadeIn} delay={260} />
       </div>
     );
   }
@@ -465,6 +500,8 @@ export function HomeSidebar({
           </div>
         ))}
       </div>
+
+      <ContactCard isChallenge={isChallenge} contactOpen={contactOpen} setContactOpen={setContactOpen} sideCard={sideCard} fadeIn={fadeIn} delay={340} />
     </div>
   );
 }

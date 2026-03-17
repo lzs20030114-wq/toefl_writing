@@ -242,7 +242,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
               <span style={{ fontWeight: 700, fontSize: 15, color: T.t1 }}>TreePractice</span>
               <span style={{ fontSize: 10, fontWeight: 700, color: T.primary, background: T.primarySoft, border: `1px solid ${T.primaryMist}`, borderRadius: 5, padding: "1px 6px", letterSpacing: 0.3 }}>写作备考</span>
             </div>
-            <div className="home-nav-ai" style={{ marginLeft: "auto", fontSize: 12, color: T.t3 }}>由 DeepSeek AI 提供支持</div>
+            <div className="home-nav-ai" style={{ marginLeft: "auto", fontSize: 12, color: T.t3 }}>部分内容由 AI 辅助生成</div>
           </div>
         )}
 
@@ -323,7 +323,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
               </div>
 
               <div style={{ fontSize: 10, color: isChallenge ? CH.t2 : T.t3, opacity: 0.65, lineHeight: 1.6, textAlign: "center", ...fadeIn(520) }}>
-                TreePractice 为独立练习工具，与 ETS 无关联，也未获得其认可。TOEFL® 和 TOEFL iBT® 为 ETS 的注册商标。AI 评分仅供自学参考，不代表官方考试成绩。
+                TreePractice 为独立练习工具，与 ETS 无关联，也未获得其认可。TOEFL® 和 TOEFL iBT® 为 ETS 的注册商标。部分练习内容及评分反馈由 AI 辅助生成，仅供自学参考，不代表官方考试成绩。
                 <br />
                 <a href="/terms" style={{ color: "inherit", textDecoration: "underline" }}>使用条款与隐私政策</a>
               </div>

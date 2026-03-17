@@ -423,6 +423,12 @@ function MobileUserSheetContent({
         )}
       </div>
 
+      {/* 联系作者 */}
+      <div style={{ padding: "12px 14px", background: "#f8faf9", borderRadius: 10, display: "flex", alignItems: "center", gap: 8 }}>
+        <span style={{ fontSize: 13, fontWeight: 700, color: "#1a2420" }}>联系作者</span>
+        <span style={{ fontSize: 12, color: "#5a6b62", flex: 1 }}>3582786720@qq.com</span>
+      </div>
+
       {/* 退出按钮 */}
       <button
         onClick={onLogout}

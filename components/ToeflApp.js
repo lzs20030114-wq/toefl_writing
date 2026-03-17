@@ -41,7 +41,7 @@ export default function ToeflApp() {
           <div style={{ padding: "16px 20px", flex: 1 }}><div style={{ fontSize: 16, fontWeight: 700, marginBottom: 4 }}>练习记录</div><div style={{ fontSize: 13, color: C.t2 }}>查看最近练习记录和成绩趋势。</div></div>
           <div style={{ padding: "16px 20px", display: "flex", alignItems: "center", color: C.blue, fontSize: 20 }}>&gt;</div>
         </button>
-        <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: "14px 20px", fontSize: 12, color: C.t2 }}><b style={{ color: C.t1 }}>由 DeepSeek AI 提供支持</b>｜ETS 风格评分｜语法诊断｜薄弱点追踪｜AI 题目生成</div>
+        <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: "14px 20px", fontSize: 12, color: C.t2 }}>ETS 风格评分｜语法诊断｜薄弱点追踪｜<b style={{ color: C.t1 }}>部分内容由 AI 辅助生成</b></div>
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: "14px 20px", marginTop: 12, fontSize: 11, color: C.t2, lineHeight: 1.6 }}>
           <b style={{ color: C.t1 }}>说明：</b>该工具为独立练习资源，与 ETS 或 TOEFL 项目无关联，也未获得其认可。TOEFL 和 TOEFL iBT 为 ETS 注册商标。AI 评分基于公开评分标准，仅供自学参考，不代表真实考试成绩。
         </div>
