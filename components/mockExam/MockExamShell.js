@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { C, FONT, TopBar } from "../shared/ui";
 import { mockExamRunner } from "../../lib/mockExam/runner";
 import { MOCK_EXAM_STATUS, TASK_IDS } from "../../lib/mockExam/contracts";
@@ -13,6 +14,117 @@ import { MockExamMainPanel } from "./MockExamMainPanel";
 import { formatMinutesLabel, PRACTICE_MODE } from "../../lib/practiceMode";
 import { getDefaultMockExamBlueprint } from "../../lib/mockExam/planner";
 import { normalizeReportLanguage, readReportLanguage } from "../../lib/reportLanguage";
+import { getSavedCode, getSavedTier } from "../../lib/AuthContext";
+import { checkCanPractice } from "../../lib/dailyUsage";
+import UpgradeModal from "../shared/UpgradeModal";
+
+const MOCK_EXAM_COST = 3;
+
+/**
+ * Modal confirming mock exam will consume 3 free credits.
+ */
+function MockExamCostConfirmModal({ remaining, onConfirm, onCancel, userCode }) {
+  const [showUpgrade, setShowUpgrade] = useState(false);
+  const insufficient = remaining < MOCK_EXAM_COST;
+
+  if (showUpgrade) {
+    return (
+      <UpgradeModal
+        userCode={userCode}
+        onClose={onCancel}
+        onUpgraded={() => window.location.reload()}
+      />
+    );
+  }
+
+  return createPortal(
+    <div
+      onClick={onCancel}
+      style={{
+        position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)",
+        backdropFilter: "blur(4px)", display: "flex", justifyContent: "center",
+        alignItems: "center", zIndex: 9999, fontFamily: FONT,
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          background: "#fff", borderRadius: 16, padding: "32px 28px",
+          maxWidth: 380, width: "90%", textAlign: "center",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.15)",
+        }}
+      >
+        {insufficient ? (
+          <>
+            <div style={{ fontSize: 40, marginBottom: 12 }}>&#9888;&#65039;</div>
+            <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 8, color: C.t1 }}>
+              免费次数不足
+            </h3>
+            <p style={{ fontSize: 14, color: C.t2, marginBottom: 20, lineHeight: 1.6 }}>
+              模考需要消耗 <strong>{MOCK_EXAM_COST} 次</strong>免费练习次数，
+              你今日仅剩 <strong>{remaining} 次</strong>。
+              升级 Pro 版可无限模考。
+            </p>
+            <button
+              onClick={() => setShowUpgrade(true)}
+              style={{
+                width: "100%", padding: "12px 0", borderRadius: 10,
+                border: "none", background: C.blue, color: "#fff",
+                fontSize: 15, fontWeight: 600, cursor: "pointer",
+                marginBottom: 10, fontFamily: FONT,
+              }}
+            >
+              升级 Pro
+            </button>
+            <button
+              onClick={onCancel}
+              style={{
+                width: "100%", padding: "10px 0", borderRadius: 10,
+                border: "1px solid " + C.bdr, background: "#fff",
+                color: C.t2, fontSize: 14, cursor: "pointer", fontFamily: FONT,
+              }}
+            >
+              返回
+            </button>
+          </>
+        ) : (
+          <>
+            <div style={{ fontSize: 40, marginBottom: 12 }}>&#128221;</div>
+            <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 8, color: C.t1 }}>
+              模考将消耗免费次数
+            </h3>
+            <p style={{ fontSize: 14, color: C.t2, marginBottom: 20, lineHeight: 1.6 }}>
+              一次模考将消耗 <strong>{MOCK_EXAM_COST} 次</strong>免费练习次数，
+              你今日还剩 <strong>{remaining} 次</strong>。确定开始吗？
+            </p>
+            <button
+              onClick={onConfirm}
+              style={{
+                width: "100%", padding: "12px 0", borderRadius: 10,
+                border: "none", background: C.blue, color: "#fff",
+                fontSize: 15, fontWeight: 600, cursor: "pointer",
+                marginBottom: 10, fontFamily: FONT,
+              }}
+            >
+              确定开始
+            </button>
+            <button
+              onClick={onCancel}
+              style={{
+                width: "100%", padding: "10px 0", borderRadius: 10,
+                border: "1px solid " + C.bdr, background: "#fff",
+                color: C.t2, fontSize: 14, cursor: "pointer", fontFamily: FONT,
+              }}
+            >
+              取消
+            </button>
+          </>
+        )}
+      </div>
+    </div>,
+    document.body
+  );
+}
 
 export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLanguage }) {
   const uiReportLanguage = normalizeReportLanguage(reportLanguage || readReportLanguage());
@@ -22,6 +134,12 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
   const [scoringPhase, setScoringPhase] = useState("idle"); // idle | pending | done | error
   const [scoringError, setScoringError] = useState("");
   const finalizedSessionIdsRef = useRef(new Set());
+  const [showCostModal, setShowCostModal] = useState(false);
+  const [usageRemaining, setUsageRemaining] = useState(null);
+
+  const userCode = getSavedCode();
+  const tier = getSavedTier();
+  const isFreeUser = tier !== "pro" && tier !== "legacy";
 
   const progress = useMemo(() => mockExamRunner.getExamProgress(session), [session]);
   const currentTask = useMemo(() => mockExamRunner.getCurrentTask(session), [session]);
@@ -32,13 +150,34 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
     upsertMockSess(payload.historyPayload, payload.mockSessionId);
   }
 
-  function startExam() {
+  function doStartExam() {
     const blueprint = getDefaultMockExamBlueprint(mode);
     const next = mockExamRunner.startNewExam(blueprint);
     setSession({ ...next, mode });
     setSectionTimer(null);
     setScoringPhase("idle");
     setScoringError("");
+  }
+
+  async function startExam() {
+    if (!isFreeUser) {
+      doStartExam();
+      return;
+    }
+    // Free user — check remaining credits
+    try {
+      const result = await checkCanPractice(userCode, tier);
+      setUsageRemaining(result.remaining);
+      setShowCostModal(true);
+    } catch {
+      // Fail-open
+      doStartExam();
+    }
+  }
+
+  function handleCostConfirm() {
+    setShowCostModal(false);
+    doStartExam();
   }
 
   function submitTaskResult(payload) {
@@ -145,6 +284,15 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
       <TopBar title={mode === PRACTICE_MODE.CHALLENGE ? "整套模考（挑战模式）" : "整套模考"} section="写作练习｜模考模式" onExit={onExit} />
       <div style={{ maxWidth: 1200, margin: "24px auto", padding: "0 20px" }}>
+        {showCostModal && (
+          <MockExamCostConfirmModal
+            remaining={usageRemaining}
+            onConfirm={handleCostConfirm}
+            onCancel={() => setShowCostModal(false)}
+            userCode={userCode}
+          />
+        )}
+
         {!session && (
           <MockExamStartCard
             savedCount={(hist.sessions || []).length}

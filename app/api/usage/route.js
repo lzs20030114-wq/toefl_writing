@@ -74,7 +74,7 @@ export async function GET(request) {
 }
 
 /**
- * POST /api/usage — consume one usage
+ * POST /api/usage — consume usage (supports count parameter for bulk consumption)
  */
 export async function POST(request) {
   try {
@@ -88,6 +88,7 @@ export async function POST(request) {
     const body = await request.json();
     const code = String(body?.code || "").toUpperCase().trim();
     if (!code) return jsonError(400, "Code is required");
+    const count = Math.max(1, Math.min(10, Number(body?.count) || 1));
 
     const { data: user } = await supabaseAdmin
       .from("users")
@@ -124,19 +125,19 @@ export async function POST(request) {
       return Response.json({ remaining: 0 });
     }
 
+    const newUsed = Math.min(used + count, limit);
     if (existing) {
-      const newCount = used + 1;
       await supabaseAdmin
         .from("daily_usage")
-        .update({ usage_count: newCount })
+        .update({ usage_count: newUsed })
         .eq("user_code", code)
         .eq("date", today);
-      return Response.json({ remaining: isPro ? -1 : Math.max(0, limit - newCount) });
+      return Response.json({ remaining: isPro ? -1 : Math.max(0, limit - newUsed) });
     } else {
       await supabaseAdmin
         .from("daily_usage")
-        .insert({ user_code: code, date: today, usage_count: 1 });
-      return Response.json({ remaining: isPro ? -1 : limit - 1 });
+        .insert({ user_code: code, date: today, usage_count: count });
+      return Response.json({ remaining: isPro ? -1 : Math.max(0, limit - count) });
     }
   } catch (e) {
     return jsonError(500, e.message || "Unexpected server error");
