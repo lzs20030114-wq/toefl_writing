@@ -169,7 +169,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
       acc: { color: T.primary, soft: T.primarySoft },
       n: MOCK_TASK.n,
       t: MOCK_TASK.t,
-      d: MOCK_TASK.d,
+      d: (userTier !== "pro" && userTier !== "legacy") ? `${MOCK_TASK.d} 模考将花费三次额度` : MOCK_TASK.d,
       it: MOCK_TASK.it,
       timeLabel: formatMinutesLabel(mockTotalSeconds),
       standardLabel: formatMinutesLabel(mockStandardSeconds),
