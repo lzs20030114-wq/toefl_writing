@@ -4280,7 +4280,7 @@ function postGenerationRuleCheck(sets) {
 // prompt format — the generator never sees yesno/statement, so answer quality
 // (especially embedded rate) is never compromised.
 
-const YESNO_TARGET_PER_SET = 2;
+const YESNO_TARGET_PER_SET = 0;   // yesno removed: leaks answer content (60% word overlap)
 const STATEMENT_TARGET_PER_SET = 2;
 
 function buildPromptRewritePrompt(yesnoItems, statementItems) {
@@ -4487,6 +4487,179 @@ async function rewriteSetPrompts(sets) {
     console.log(`  set ${si + 1}: yesno=${yn} statement=${st}`);
   }
   console.log(`[prompt-rewrite] total: ${totalRewritten} prompts rewritten`);
+}
+
+// ─── Fix 8: post-assembly overlap detection and prompt rewrite ──────────────
+// Detects questions where prompt leaks >30% content words from the answer,
+// then rewrites their prompts using generic/abstract phrasing (TPO style).
+// No questions are rejected — originals are kept if rewrite fails.
+
+const OVERLAP_THRESHOLD = 0.30;
+const OVERLAP_STOPWORDS = new Set([
+  "the","a","an","is","are","was","were","do","does","did","have","has","had",
+  "i","you","she","he","it","we","they","my","your","her","his","that","this",
+  "in","on","at","to","of","for","and","or","not","if","whether","be","been",
+  "being","by","with","from","about","would","could","should","will","can","may",
+  "what","how","where","when","why","who","whom","which","yes","no","some","just",
+  "very","much","also","so","but","then","than","all","any","its",
+]);
+
+function overlapContentWords(text) {
+  return text.toLowerCase().replace(/[^a-z ]/g, " ").split(/\s+/)
+    .filter(w => w.length > 2 && !OVERLAP_STOPWORDS.has(w));
+}
+
+function computeOverlapRate(prompt, answer) {
+  const pWords = overlapContentWords(prompt || "");
+  const aWords = overlapContentWords(answer);
+  if (aWords.length === 0) return 0;
+  return aWords.filter(w => pWords.includes(w)).length / aWords.length;
+}
+
+function buildOverlapRewritePrompt(items) {
+  const data = items.map(q => ({
+    id: q.id,
+    answer: q.answer,
+    current_prompt: q.prompt_task_text || q.prompt,
+    prompt_task_kind: q.prompt_task_kind,
+    overlap_words: (() => {
+      const pW = overlapContentWords(q.prompt_task_text || q.prompt);
+      const aW = overlapContentWords(q.answer);
+      return aW.filter(w => pW.includes(w));
+    })(),
+  }));
+
+  return `You are a TOEFL iBT prompt rewriter. Rewrite each prompt to REMOVE content word overlap with the answer.
+
+## PRINCIPLE: Generic → Specific
+The prompt should use GENERIC/ABSTRACT words. The answer reveals the SPECIFIC details.
+The student should NOT be able to guess answer words from reading the prompt.
+
+## EXAMPLES:
+BAD:  prompt: "Your neighbor apologized for the early morning construction noise."
+      answer: "I didn't hear the construction noise this morning."
+      overlap: [construction, noise, morning] — 60%
+
+GOOD: prompt: "Your neighbor apologized for causing a disturbance."
+      answer: "I didn't hear the construction noise this morning."
+      overlap: [] — 0%
+
+BAD:  prompt: "Your roommate was looking for the package that arrived yesterday."
+      answer: "I found out where the package that arrived yesterday is kept."
+      overlap: [package, arrived, yesterday] — 50%
+
+GOOD: prompt: "Your roommate could not locate a delivery."
+      answer: "I found out where the package that arrived yesterday is kept."
+      overlap: [] — 0%
+
+## RULES:
+1. Replace specific nouns with generic terms (construction noise → disturbance, package → delivery, book club → event)
+2. Remove temporal details that appear in the answer (yesterday, next week, this morning)
+3. Keep the same prompt_task_kind — do NOT change it
+4. For "ask" kind: must start with What/How/Where/Why/When and end with "?"
+5. For "report" kind: must start with Report/Describe/Explain/Summarize/Mention/State/Say/Express and end with "."
+6. For "respond" kind: must start with Tell/Respond/Reply/Answer/Share/Say/Express/Inform and end with "."
+7. For "statement" kind: must be a declarative context sentence ending with "."
+8. The rewritten prompt must still make sense as a prompt for the given answer
+
+## ITEMS TO REWRITE (${items.length}):
+${JSON.stringify(data, null, 2)}
+
+## OUTPUT:
+Return ONLY a JSON array: [{"id": "...", "prompt_task_kind": "...", "prompt_task_text": "..."}]
+No markdown fences. No explanation.`.trim();
+}
+
+async function rewriteHighOverlapPrompts(sets) {
+  const allQuestions = sets.flatMap(s => s.questions);
+  const highOverlap = allQuestions.filter(q => computeOverlapRate(q.prompt, q.answer) > OVERLAP_THRESHOLD);
+
+  console.log(`\n[overlap-rewrite] checking ${allQuestions.length} questions for >${(OVERLAP_THRESHOLD * 100).toFixed(0)}% content overlap...`);
+  console.log(`  found ${highOverlap.length} questions above threshold`);
+
+  if (highOverlap.length === 0) return;
+
+  const qMap = new Map(highOverlap.map(q => [q.id, q]));
+
+  // Wait to avoid rate limiting
+  await new Promise(r => setTimeout(r, 5000));
+
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const prompt = buildOverlapRewritePrompt(highOverlap.filter(q => computeOverlapRate(q.prompt, q.answer) > OVERLAP_THRESHOLD));
+      const remaining = highOverlap.filter(q => computeOverlapRate(q.prompt, q.answer) > OVERLAP_THRESHOLD).length;
+      if (remaining === 0) break;
+
+      const raw = await callDeepSeekViaCurl({
+        apiKey: process.env.DEEPSEEK_API_KEY,
+        proxyUrl: resolveProxyUrl(),
+        timeoutMs: 120000,
+        payload: {
+          model: "deepseek-chat",
+          temperature: 0.3,
+          max_tokens: 8000,
+          messages: [{ role: "user", content: prompt }],
+        },
+      });
+
+      const text = String(raw || "");
+      const arrStart = text.indexOf("[");
+      const arrEnd = text.lastIndexOf("]");
+      if (arrStart < 0 || arrEnd <= arrStart) {
+        console.log(`  attempt ${attempt + 1}: no JSON array in response`);
+        if (attempt === 0) { await new Promise(r => setTimeout(r, 10000)); continue; }
+        break;
+      }
+
+      const rewrites = JSON.parse(text.slice(arrStart, arrEnd + 1));
+      console.log(`  attempt ${attempt + 1}: got ${rewrites.length} rewrites`);
+
+      let applied = 0, rejected = 0;
+      for (const rw of rewrites) {
+        const q = qMap.get(rw.id);
+        if (!q) continue;
+
+        const newKind = String(rw.prompt_task_kind || "").trim().toLowerCase();
+        const newText = String(rw.prompt_task_text || "").trim();
+        if (!newText) { rejected++; continue; }
+
+        // Validate
+        const testQ = { ...q, prompt_task_kind: newKind, prompt_task_text: newText, prompt_context: "" };
+        const check = validateStructuredPromptParts(testQ);
+        if (check.fatal.length > 0) {
+          console.log(`    ${rw.id}: rejected — ${check.fatal.join("; ")}`);
+          rejected++;
+          continue;
+        }
+
+        // Check if overlap actually improved
+        const oldRate = computeOverlapRate(q.prompt, q.answer);
+        const newRate = computeOverlapRate(newText, q.answer);
+        if (newRate >= oldRate) {
+          console.log(`    ${rw.id}: no improvement (${(oldRate * 100).toFixed(0)}% → ${(newRate * 100).toFixed(0)}%)`);
+          rejected++;
+          continue;
+        }
+
+        q.prompt_task_kind = newKind;
+        q.prompt_task_text = newText;
+        q.prompt_context = "";
+        q.prompt = newText;
+        applied++;
+        console.log(`    ${rw.id}: ${(oldRate * 100).toFixed(0)}% → ${(newRate * 100).toFixed(0)}%`);
+      }
+
+      console.log(`  applied: ${applied}, rejected: ${rejected}`);
+      if (applied > 0 || attempt > 0) break;
+      await new Promise(r => setTimeout(r, 10000));
+    } catch (e) {
+      console.log(`  attempt ${attempt + 1} failed: ${e.message}`);
+      if (attempt === 0) await new Promise(r => setTimeout(r, 10000));
+    }
+  }
+
+  const stillHigh = allQuestions.filter(q => computeOverlapRate(q.prompt, q.answer) > OVERLAP_THRESHOLD).length;
+  console.log(`[overlap-rewrite] done. Remaining >${(OVERLAP_THRESHOLD * 100).toFixed(0)}%: ${stillHigh}`);
 }
 
 async function main() {
@@ -5444,6 +5617,9 @@ async function main() {
 
   // D approach: rewrite ~2 prompts per set to yesno and ~2 to statement
   await rewriteSetPrompts(finalSets);
+
+  // Fix 8: detect and rewrite prompts with high content overlap
+  await rewriteHighOverlapPrompts(finalSets);
 
   const output = {
     version: "1.2",
