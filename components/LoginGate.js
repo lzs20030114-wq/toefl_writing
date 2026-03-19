@@ -11,6 +11,7 @@ import { C, FONT } from "./shared/ui";
 
 const UI_LANG_KEY = "toefl-ui-lang";
 const IMPORT_DISMISSED_KEY = "toefl-import-dismissed";
+const PRO_TRIAL_NOTIFIED_KEY = "toefl-pro-trial-notified";
 
 const I18N = {
   zh: {
@@ -66,6 +67,14 @@ const I18N = {
     passwordMismatch: "两次输入的密码不一致",
     passwordLoginFailed: "邮箱或密码不正确",
     firstTimeHint: "首次登录请用验证码登录，登录后自动注册",
+    // Pro trial gift modal
+    trialTitle: "恭喜获得 3 天 Pro 体验",
+    trialSubtitle: "新用户专享福利，畅享全部功能",
+    trialFeature1: "无限练习次数",
+    trialFeature2: "完整 AI 反馈报告",
+    trialFeature3: "解锁自选练习模式",
+    trialExpiry: "到期后将恢复免费版（每日 3 次）",
+    trialStart: "开始练习",
   },
   en: {
     checking: "Checking login status...",
@@ -120,6 +129,14 @@ const I18N = {
     passwordMismatch: "Passwords do not match",
     passwordLoginFailed: "Incorrect email or password",
     firstTimeHint: "First time? Use email verification to sign up automatically",
+    // Pro trial gift modal
+    trialTitle: "3-Day Pro Trial Unlocked!",
+    trialSubtitle: "A welcome gift for new users — enjoy full access",
+    trialFeature1: "Unlimited practice sessions",
+    trialFeature2: "Full AI feedback reports",
+    trialFeature3: "Practice mode unlocked",
+    trialExpiry: "Reverts to Free plan (3 daily) after trial ends",
+    trialStart: "Start Practicing",
   },
 };
 
@@ -204,6 +221,65 @@ function EyeIcon({ visible, onClick }) {
 }
 
 // ═══════════════════════════════════════════
+// Pro Trial Gift Modal
+// ═══════════════════════════════════════════
+function ProTrialGiftModal({ t, onClose }) {
+  return createPortal(
+    <div
+      style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center", padding: 20, fontFamily: FONT }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{ position: "relative", width: "100%", maxWidth: 380, background: "#fff", borderRadius: 16, overflow: "hidden", boxShadow: "0 20px 60px rgba(0,0,0,0.15)" }}
+      >
+        {/* Gradient header */}
+        <div style={{ background: "linear-gradient(135deg, #087355, #0891B2)", padding: "28px 24px 22px", textAlign: "center" }}>
+          <div style={{ width: 48, height: 48, margin: "0 auto 12px", borderRadius: 14, background: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
+          </div>
+          <div style={{ fontSize: 20, fontWeight: 800, color: "#fff", marginBottom: 4 }}>
+            {t.trialTitle}
+          </div>
+          <div style={{ fontSize: 13, color: "rgba(255,255,255,0.8)" }}>
+            {t.trialSubtitle}
+          </div>
+        </div>
+
+        {/* Feature list + CTA */}
+        <div style={{ padding: "22px 24px 24px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 20 }}>
+            {[t.trialFeature1, t.trialFeature2, t.trialFeature3].map((text) => (
+              <div key={text} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <div style={{ width: 22, height: 22, borderRadius: 6, background: "#ecfdf5", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#15803d" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                </div>
+                <span style={{ fontSize: 14, color: "#1a2420", fontWeight: 600 }}>{text}</span>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ fontSize: 12, color: "#5a6b62", textAlign: "center", marginBottom: 16 }}>
+            {t.trialExpiry}
+          </div>
+
+          <button
+            onClick={onClose}
+            style={{ width: "100%", padding: "12px 0", borderRadius: 10, border: "none", background: "linear-gradient(135deg, #087355, #0891B2)", color: "#fff", fontSize: 15, fontWeight: 700, cursor: "pointer", fontFamily: FONT }}
+          >
+            {t.trialStart}
+          </button>
+        </div>
+      </div>
+    </div>,
+    document.body
+  );
+}
+
+// ═══════════════════════════════════════════
 // Login Modal — renders as a portal overlay
 // ═══════════════════════════════════════════
 function LoginModal({ t, onClose, onLoginSuccess }) {
@@ -265,7 +341,7 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
       setView("setPassword");
       return;
     }
-    onLoginSuccess({ code: result.userCode, tier: result.tier, email: result.email, auth_method: result.auth_method, has_password: true });
+    onLoginSuccess({ code: result.userCode, tier: result.tier, email: result.email, auth_method: result.auth_method, has_password: true, proTrial: result.proTrial });
   };
 
   // ── OTP flow (used in "otp" and "forgot" views) ──
@@ -299,24 +375,24 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
     if (otpInput.length < 6) { setError(t.invalidOtp); return; }
     setLoading(true);
     setError("");
-    const { userCode: code, tier, email, auth_method, has_password, isNewUser, error: verifyError } = await verifyEmailOTP(emailInput.trim(), otpInput);
+    const { userCode: code, tier, email, auth_method, has_password, isNewUser, proTrial, error: verifyError } = await verifyEmailOTP(emailInput.trim(), otpInput);
     setLoading(false);
     if (verifyError) { setError(verifyError); return; }
 
     if (view === "forgot") {
       // After verifying OTP in forgot flow, go to set password
-      setPendingLogin({ userCode: code, tier, email: email || emailInput.trim(), auth_method: auth_method || "email" });
+      setPendingLogin({ userCode: code, tier, email: email || emailInput.trim(), auth_method: auth_method || "email", proTrial });
       setView("setPassword");
       return;
     }
 
     if (!has_password) {
       // Force password setup
-      setPendingLogin({ userCode: code, tier, email: email || emailInput.trim(), auth_method: auth_method || "email", isNewUser });
+      setPendingLogin({ userCode: code, tier, email: email || emailInput.trim(), auth_method: auth_method || "email", isNewUser, proTrial });
       setView("setPassword");
       return;
     }
-    onLoginSuccess({ code, tier, email: email || emailInput.trim(), auth_method: auth_method || "email", has_password: true, isNewUser });
+    onLoginSuccess({ code, tier, email: email || emailInput.trim(), auth_method: auth_method || "email", has_password: true, isNewUser, proTrial });
   };
 
   // ── Set password ──
@@ -330,7 +406,7 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
     if (pwError) { setError(pwError); return; }
     // Complete login
     if (pendingLogin) {
-      onLoginSuccess({ code: pendingLogin.userCode, tier: pendingLogin.tier, email: pendingLogin.email, auth_method: pendingLogin.auth_method, has_password: true, isNewUser: pendingLogin.isNewUser });
+      onLoginSuccess({ code: pendingLogin.userCode, tier: pendingLogin.tier, email: pendingLogin.email, auth_method: pendingLogin.auth_method, has_password: true, isNewUser: pendingLogin.isNewUser, proTrial: pendingLogin.proTrial });
     }
   };
 
@@ -341,10 +417,10 @@ function LoginModal({ t, onClose, onLoginSuccess }) {
     if (normalized.length < 6) { setError(t.invalidCode); return; }
     setLoading(true);
     setError("");
-    const { valid, error: verifyError, tier, email, auth_method } = await verifyCode(normalized);
+    const { valid, error: verifyError, tier, email, auth_method, proTrial } = await verifyCode(normalized);
     setLoading(false);
     if (!valid) { setError(verifyError || t.invalidCode); return; }
-    onLoginSuccess({ code: normalized, tier, email, auth_method: auth_method || "code" });
+    onLoginSuccess({ code: normalized, tier, email, auth_method: auth_method || "code", proTrial });
   };
 
   // ── Switch view helpers ──
@@ -737,13 +813,15 @@ export default function LoginGate({ children }) {
       setReady(true);
 
       // Background verify — update tier/email, or logout ONLY on explicit server rejection
-      verifyCode(saved).then(({ valid, tier, email, auth_method, has_password, networkError }) => {
+      verifyCode(saved).then(({ valid, tier, email, auth_method, has_password, proTrial, networkError }) => {
         if (valid) {
           setUserTier(tier || "free");
           setUserEmail(email || null);
           setAuthMethod(auth_method || "code");
           setHasPassword(has_password || false);
           saveAuth(normalized, { authMethod: auth_method, tier, email, hasPassword: has_password });
+          // Show trial gift modal for backfilled users on page load
+          maybeShowTrialModal(proTrial, tier);
         } else if (!networkError) {
           // Server explicitly said code is invalid/expired — logout
           clearAuth();
@@ -778,8 +856,26 @@ export default function LoginGate({ children }) {
   // ── Welcome toast ──
   const [welcomeMsg, setWelcomeMsg] = useState(null);
 
+  // ── Pro trial gift modal ──
+  const [proTrialModal, setProTrialModal] = useState(false);
+
+  function maybeShowTrialModal(proTrial, tier) {
+    if (proTrial && tier === "pro") {
+      try {
+        if (localStorage.getItem(PRO_TRIAL_NOTIFIED_KEY) !== "1") {
+          setProTrialModal(true);
+        }
+      } catch { /* no-op */ }
+    }
+  }
+
+  function dismissTrialModal() {
+    setProTrialModal(false);
+    try { localStorage.setItem(PRO_TRIAL_NOTIFIED_KEY, "1"); } catch { /* no-op */ }
+  }
+
   // ── Login success callback ──
-  function handleLoginSuccess({ code, tier, email, auth_method, has_password: hp, isNewUser }) {
+  function handleLoginSuccess({ code, tier, email, auth_method, has_password: hp, isNewUser, proTrial }) {
     saveAuth(code, { authMethod: auth_method, tier, email, hasPassword: hp });
     setUserCode(code);
     setUserTier(tier || "free");
@@ -791,7 +887,10 @@ export default function LoginGate({ children }) {
       (() => { try { return localStorage.getItem(IMPORT_DISMISSED_KEY) !== "1"; } catch { return true; } })()
       && getLocalSessionCount() > 0
     );
-    if (isNewUser) {
+    // Show pro trial gift modal (takes priority over welcome toast)
+    if (proTrial && tier === "pro") {
+      maybeShowTrialModal(proTrial, tier);
+    } else if (isNewUser) {
       setWelcomeMsg("欢迎！已为你自动创建账户");
       setTimeout(() => setWelcomeMsg(null), 4000);
     }
@@ -844,6 +943,9 @@ export default function LoginGate({ children }) {
             onClose={() => setLoginModalOpen(false)}
             onLoginSuccess={handleLoginSuccess}
           />
+        )}
+        {proTrialModal && (
+          <ProTrialGiftModal t={t} onClose={dismissTrialModal} />
         )}
         {welcomeMsg && (
           <div style={{ position: "fixed", top: 64, left: "50%", transform: "translateX(-50%)", background: C.blue, color: "#fff", padding: "10px 24px", borderRadius: 10, fontSize: 14, fontWeight: 600, zIndex: 10001, boxShadow: "0 8px 24px rgba(0,0,0,0.15)", fontFamily: FONT }}>

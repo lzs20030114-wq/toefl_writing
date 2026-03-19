@@ -13,6 +13,14 @@ function generateCode() {
   return code;
 }
 
+// Safely read pro_trial flag (column may not exist before migration)
+async function safeGetProTrial(userCode) {
+  try {
+    const { data } = await supabaseAdmin.from("users").select("pro_trial").eq("code", userCode).maybeSingle();
+    return data?.pro_trial || false;
+  } catch { return false; }
+}
+
 export async function POST(request) {
   try {
     if (limiter.isLimited(getIp(request))) {
@@ -68,6 +76,7 @@ export async function POST(request) {
         tier,
         auth_method: existingUser.auth_method || "email",
         has_password: existingUser.has_password || false,
+        pro_trial: await safeGetProTrial(existingUser.code),
         isNewUser: false,
       });
     }
@@ -92,12 +101,15 @@ export async function POST(request) {
         tier: uidUser.tier || "free",
         auth_method: uidUser.auth_method || "email",
         has_password: uidUser.has_password || false,
+        pro_trial: await safeGetProTrial(uidUser.code),
         isNewUser: false,
       });
     }
 
-    // New user: generate internal code
+    // New user: generate internal code + grant 3-day Pro trial
     const now = new Date().toISOString();
+    const trialExpiry = new Date();
+    trialExpiry.setDate(trialExpiry.getDate() + 3);
     let newCode = null;
 
     for (let attempt = 0; attempt < 10; attempt++) {
@@ -110,12 +122,15 @@ export async function POST(request) {
           auth_uid: authUid,
           status: "active",
           auth_method: "email",
-          tier: "free",
+          tier: "pro",
+          tier_expires_at: trialExpiry.toISOString(),
           last_login: now,
         });
 
       if (!insertError) {
         newCode = code;
+        // Best-effort: mark as pro trial (column may not exist yet)
+        try { await supabaseAdmin.from("users").update({ pro_trial: true }).eq("code", code); } catch {}
         break;
       }
       // Duplicate code, retry
@@ -136,9 +151,10 @@ export async function POST(request) {
     return Response.json({
       code: newCode,
       email,
-      tier: "free",
+      tier: "pro",
       auth_method: "email",
       has_password: false,
+      pro_trial: true,
       isNewUser: true,
     });
   } catch (e) {

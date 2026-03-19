@@ -18,6 +18,14 @@ function isExpired(expiresAt) {
   return t <= Date.now();
 }
 
+// Safely read pro_trial flag (column may not exist before migration)
+async function safeGetProTrial(userCode) {
+  try {
+    const { data } = await supabaseAdmin.from("users").select("pro_trial").eq("code", userCode).maybeSingle();
+    return data?.pro_trial || false;
+  } catch { return false; }
+}
+
 export async function POST(request) {
   try {
     if (limiter.isLimited(getIp(request))) {
@@ -94,6 +102,7 @@ export async function POST(request) {
         email: userRow.email || null,
         auth_method: userRow.auth_method || "code",
         has_password: userRow.has_password || false,
+        pro_trial: await safeGetProTrial(code),
       });
     }
 
@@ -128,6 +137,7 @@ export async function POST(request) {
       email: userRow?.email || null,
       auth_method: userRow?.auth_method || "code",
       has_password: userRow?.has_password || false,
+      pro_trial: await safeGetProTrial(code),
     });
   } catch (e) {
     return jsonError(500, e.message || "Unexpected server error");

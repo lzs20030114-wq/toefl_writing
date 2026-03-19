@@ -4,6 +4,14 @@ import { jsonError } from "../../../../lib/apiResponse";
 
 const limiter = createRateLimiter("user-info", { max: 20 });
 
+// Safely read pro_trial flag (column may not exist before migration)
+async function safeGetProTrial(userCode) {
+  try {
+    const { data } = await supabaseAdmin.from("users").select("pro_trial").eq("code", userCode).maybeSingle();
+    return data?.pro_trial || false;
+  } catch { return false; }
+}
+
 export async function GET(request) {
   try {
     if (limiter.isLimited(getIp(request))) {
@@ -52,6 +60,7 @@ export async function GET(request) {
       tier_expires_at: tier === "pro" ? user.tier_expires_at : null,
       auth_method: user.auth_method || "code",
       has_password: user.has_password || false,
+      pro_trial: await safeGetProTrial(user.code),
     });
   } catch (e) {
     return jsonError(500, e.message || "Unexpected server error");
