@@ -23,19 +23,27 @@ export async function POST(request) {
     const rawBody = await request.text();
     const result = await handleWebhook({ headers: request.headers, rawBody });
 
-    // Provider-specific response format (e.g. Afdian needs { ec: 200, em: "" })
+    // Provider-specific response format (e.g. Afdian needs { ec: 200, em: "" }, XorPay needs "success")
     if (provider?.formatWebhookResponse) {
-      return Response.json(provider.formatWebhookResponse(result, null), { status: 200 });
+      const resp = provider.formatWebhookResponse(result, null);
+      if (resp?.__raw) {
+        return new Response(resp.body, { status: resp.status || 200 });
+      }
+      return Response.json(resp, { status: 200 });
     }
     return Response.json(result, { status: 200 });
   } catch (e) {
     log.error("Error processing webhook", { error: e.message || String(e) });
 
     if (provider?.formatWebhookResponse) {
-      const body = provider.formatWebhookResponse(null, e);
+      const resp = provider.formatWebhookResponse(null, e);
+      if (resp?.__raw) {
+        const httpStatus = (e?.status === 502 || e?.status === 503) ? 503 : (resp.status || 200);
+        return new Response(resp.body, { status: httpStatus });
+      }
       // Return HTTP 503 for temporary failures so provider retries
       const httpStatus = (e?.status === 502 || e?.status === 503) ? 503 : 200;
-      return Response.json(body, { status: httpStatus });
+      return Response.json(resp, { status: httpStatus });
     }
     return iapJsonError(e);
   }
