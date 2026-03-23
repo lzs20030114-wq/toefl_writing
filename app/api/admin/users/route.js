@@ -21,8 +21,15 @@ export async function GET(request) {
 
     if (error) return jsonError(400, error.message || "Query failed");
 
-    // Exclude pre-generated pending codes (not yet activated)
-    const allUsers = (users || []).filter((u) => u.status !== "pending");
+    // Find pre-generated codes to exclude from user list
+    const { data: pregenCodes } = await supabaseAdmin
+      .from("access_codes")
+      .select("code")
+      .eq("issued_to", "pre-generated");
+    const pregenSet = new Set((pregenCodes || []).map((r) => r.code));
+
+    // Exclude only pre-generated pending users (not yet activated by login)
+    const allUsers = (users || []).filter((u) => !(pregenSet.has(u.code) && u.status === "pending"));
     const total = allUsers.length;
 
     // Count new users by time range
