@@ -39,7 +39,7 @@ export async function POST(request) {
 
     const { data: accessRow, error: accessError } = await supabaseAdmin
       .from("access_codes")
-      .select("code,status,expires_at,issued_to")
+      .select("code,status,expires_at,issued_to,pro_days")
       .eq("code", code)
       .maybeSingle();
 
@@ -82,8 +82,9 @@ export async function POST(request) {
 
     // Handle pending code activation (pre-generated codes for sale)
     if (userRow?.status === "pending") {
+      const proDays = effectiveAccess?.pro_days || 30;
       const expiresAt = new Date();
-      expiresAt.setDate(expiresAt.getDate() + 30);
+      expiresAt.setDate(expiresAt.getDate() + proDays);
 
       await supabaseAdmin
         .from("users")

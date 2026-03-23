@@ -12,6 +12,9 @@ CREATE TABLE IF NOT EXISTS access_codes (
   note TEXT NULL
 );
 
+-- Days of Pro access granted on first login (NULL = 30 default)
+ALTER TABLE access_codes ADD COLUMN IF NOT EXISTS pro_days INTEGER NULL;
+
 CREATE INDEX IF NOT EXISTS idx_access_codes_status ON access_codes(status);
 CREATE INDEX IF NOT EXISTS idx_access_codes_created_at ON access_codes(created_at DESC);
 
