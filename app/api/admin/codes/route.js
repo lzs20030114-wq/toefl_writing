@@ -132,7 +132,7 @@ export async function GET(request) {
 
     let query = supabaseAdmin
       .from("access_codes")
-      .select("code,status,issued_to,issued_at,expires_at,created_at,note")
+      .select("code,status,issued_to,issued_at,expires_at,created_at,note,pro_days")
       .order("created_at", { ascending: false })
       .limit(limit);
     if (status) query = query.eq("status", status);
@@ -173,13 +173,14 @@ export async function GET(request) {
     if (codeList.length > 0) {
       const { data: userRows } = await supabaseAdmin
         .from("users")
-        .select("code,tier,tier_expires_at")
+        .select("code,tier,tier_expires_at,status")
         .in("code", codeList);
       for (const row of userRows || []) {
         const code = String(row.code || "");
         if (code && usageByCode[code]) {
           usageByCode[code].tier = row.tier || null;
           usageByCode[code].tierExpiresAt = row.tier_expires_at || null;
+          usageByCode[code].userStatus = row.status || null;
         }
       }
     }

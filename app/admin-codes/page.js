@@ -321,7 +321,11 @@ export default function AdminCodesPage() {
     if (ready && hasToken) refresh();
   }, [ready, statusFilter, token]);
 
-  const rowsView = useMemo(() => rows.filter((r) => r.status !== "revoked").slice(0, 200), [rows]);
+  const [showPregen, setShowPregen] = useState(true);
+  // Pre-generated codes that haven't been activated yet
+  const pregenRows = useMemo(() => rows.filter((r) => r.issued_to === "pre-generated" && usageByCode[r.code]?.userStatus === "pending"), [rows, usageByCode]);
+  const pregenCodes = useMemo(() => new Set(pregenRows.map((r) => r.code)), [pregenRows]);
+  const rowsView = useMemo(() => rows.filter((r) => r.status !== "revoked" && !pregenCodes.has(r.code)).slice(0, 200), [rows, pregenCodes]);
   const revokedRows = useMemo(() => rows.filter((r) => r.status === "revoked"), [rows]);
   const selectedCount = useMemo(() => rowsView.filter((r) => selectedByCode[r.code]).length, [rowsView, selectedByCode]);
   const allVisibleSelected = rowsView.length > 0 && rowsView.every((r) => selectedByCode[r.code]);
@@ -416,6 +420,65 @@ export default function AdminCodesPage() {
             </button>
           </div>
         </div>
+
+        {/* Pre-generated codes vault */}
+        {pregenRows.length > 0 && (
+          <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, overflow: "hidden" }}>
+            <button
+              onClick={() => setShowPregen(!showPregen)}
+              style={{
+                width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between",
+                padding: "12px 14px", background: "none", border: "none", cursor: "pointer",
+              }}
+            >
+              <span style={{ fontSize: 13, fontWeight: 700, color: "#7c3aed" }}>
+                预生成码库（{pregenRows.length} 个待激活）
+              </span>
+              <span style={{ fontSize: 12, color: C.t3, transform: showPregen ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>▼</span>
+            </button>
+            {showPregen && (
+              <div style={{ borderTop: "1px solid " + C.bdr, padding: 14 }}>
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 10 }}>
+                  {[7, 30, 90, 365].map((d) => {
+                    const cnt = pregenRows.filter((r) => r.pro_days === d).length;
+                    if (cnt === 0) return null;
+                    return (
+                      <span key={d} style={{ background: "#f3f0ff", color: "#7c3aed", borderRadius: 6, padding: "4px 10px", fontSize: 12, fontWeight: 700 }}>
+                        {d}天 × {cnt}
+                      </span>
+                    );
+                  })}
+                </div>
+                <div style={{ overflowX: "auto" }}>
+                  <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
+                    <thead>
+                      <tr style={{ background: "#f5f3ff", color: C.t2 }}>
+                        <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e9e5ff" }}>登录码</th>
+                        <th style={{ textAlign: "center", padding: "8px 6px", borderBottom: "1px solid #e9e5ff" }}>时长</th>
+                        <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e9e5ff" }}>生成时间</th>
+                        <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e9e5ff" }}>备注</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {pregenRows.map((r) => (
+                        <tr key={r.code}>
+                          <td style={{ padding: "8px 6px", borderBottom: "1px solid #f5f3ff", fontFamily: "monospace", fontWeight: 700 }}>{r.code}</td>
+                          <td style={{ padding: "8px 6px", borderBottom: "1px solid #f5f3ff", textAlign: "center" }}>
+                            <span style={{ background: "#ede9fe", color: "#6d28d9", borderRadius: 4, padding: "1px 6px", fontSize: 11, fontWeight: 700 }}>
+                              {r.pro_days || 30}天
+                            </span>
+                          </td>
+                          <td style={{ padding: "8px 6px", borderBottom: "1px solid #f5f3ff", color: C.t2 }}>{fmtDate(r.created_at)}</td>
+                          <td style={{ padding: "8px 6px", borderBottom: "1px solid #f5f3ff", color: C.t2 }}>{r.note || "-"}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 14 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
