@@ -166,7 +166,8 @@ export default function AdminActivityPage() {
     if (ready && hasToken) refresh();
   }, [ready, token, statusFilter]);
 
-  const rowsView = useMemo(() => rows.slice(0, 200), [rows]);
+  // Hide pre-generated codes that haven't been activated
+  const rowsView = useMemo(() => rows.filter((r) => !(r.issued_to === "pre-generated" && usageByCode[r.code]?.userStatus === "pending")).slice(0, 200), [rows, usageByCode]);
 
   return (
     <AdminLayout title="答题情况">

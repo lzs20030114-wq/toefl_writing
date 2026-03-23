@@ -21,7 +21,8 @@ export async function GET(request) {
 
     if (error) return jsonError(400, error.message || "Query failed");
 
-    const allUsers = users || [];
+    // Exclude pre-generated pending codes (not yet activated)
+    const allUsers = (users || []).filter((u) => u.status !== "pending");
     const total = allUsers.length;
 
     // Count new users by time range
