@@ -61,6 +61,19 @@ const TD = {
   whiteSpace: "nowrap",
 };
 
+function proRemaining(expiresAt) {
+  if (!expiresAt) return null;
+  const exp = new Date(expiresAt);
+  if (Number.isNaN(exp.getTime())) return null;
+  const diff = exp.getTime() - Date.now();
+  if (diff <= 0) return { text: "已过期", urgent: true, expired: true };
+  const days = Math.floor(diff / 86400000);
+  const hours = Math.floor((diff % 86400000) / 3600000);
+  if (days >= 1) return { text: `${days}天${hours}小时`, urgent: days <= 3, expired: false };
+  const mins = Math.floor((diff % 3600000) / 60000);
+  return { text: `${hours}小时${mins}分钟`, urgent: true, expired: false };
+}
+
 function TierBadge({ tier, expiresAt }) {
   const now = new Date();
   const isLegacy = tier === "legacy";
@@ -81,6 +94,31 @@ function TierBadge({ tier, expiresAt }) {
       }}
     >
       {label}
+    </span>
+  );
+}
+
+function ProRemainingBadge({ tier, expiresAt }) {
+  if (tier === "legacy") return <span style={{ fontSize: 12, color: "#6d28d9" }}>永久</span>;
+  if (tier !== "pro") return <span style={{ fontSize: 12, color: C.t2 }}>-</span>;
+  const r = proRemaining(expiresAt);
+  if (!r) return <span style={{ fontSize: 12, color: C.t2 }}>-</span>;
+  const color = r.expired ? "#d32f2f" : r.urgent ? "#e65100" : "#2e7d32";
+  const bg = r.expired ? "#ffebee" : r.urgent ? "#fff3e0" : "#e8f5e9";
+  return (
+    <span
+      style={{
+        display: "inline-block",
+        padding: "2px 8px",
+        borderRadius: 4,
+        fontSize: 11,
+        fontWeight: 700,
+        background: bg,
+        color,
+      }}
+      title={expiresAt ? new Date(expiresAt).toLocaleString() : ""}
+    >
+      {r.text}
     </span>
   );
 }
@@ -367,6 +405,9 @@ export default function AdminUsersPage() {
                         邮箱{sortIcon("email")}
                       </th>
                       <th style={TH}>等级</th>
+                      <th style={{ ...TH, cursor: "pointer" }} onClick={() => handleSort("tier_expires_at")}>
+                        Pro剩余{sortIcon("tier_expires_at")}
+                      </th>
                       <th style={TH}>登录方式</th>
                       <th style={{ ...TH, cursor: "pointer" }} onClick={() => handleSort("created_at")}>
                         注册时间{sortIcon("created_at")}
@@ -384,6 +425,7 @@ export default function AdminUsersPage() {
                           {u.email || <span style={{ color: C.t2 }}>-</span>}
                         </td>
                         <td style={TD}><TierBadge tier={u.tier} expiresAt={u.tier_expires_at} /></td>
+                        <td style={TD}><ProRemainingBadge tier={u.tier} expiresAt={u.tier_expires_at} /></td>
                         <td style={TD}><AuthBadge method={u.auth_method} /></td>
                         <td style={TD} title={fmtDate(u.created_at)}>{relativeTime(u.created_at)}</td>
                         <td style={TD} title={fmtDate(u.last_login)}>{relativeTime(u.last_login)}</td>
@@ -391,7 +433,7 @@ export default function AdminUsersPage() {
                     ))}
                     {filteredUsers.length === 0 && (
                       <tr>
-                        <td colSpan={6} style={{ ...TD, textAlign: "center", color: C.t2, padding: 30 }}>
+                        <td colSpan={7} style={{ ...TD, textAlign: "center", color: C.t2, padding: 30 }}>
                           暂无数据
                         </td>
                       </tr>
