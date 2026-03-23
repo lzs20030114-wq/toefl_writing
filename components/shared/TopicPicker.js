@@ -188,11 +188,13 @@ export function TopicPicker({ title, section, description, items, onSelect, onEx
                     )}
                   </div>
 
-                  {/* Right: badge + arrow */}
-                  <div style={{ padding: "12px 12px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "flex-end", gap: 6, flexShrink: 0 }}>
-                    {isDone && (
-                      <div style={{ fontSize: 11, fontWeight: 600, whiteSpace: "nowrap", color: T.primary, background: T.primarySoft, borderRadius: 6, padding: "2px 7px", border: `1px solid ${T.primaryMist}` }}>已完成</div>
-                    )}
+                  {/* Top-right "已练" badge */}
+                  {isDone && (
+                    <div style={{ position: "absolute", top: 6, right: 8, fontSize: 10, fontWeight: 700, whiteSpace: "nowrap", color: T.primary, background: T.primarySoft, borderRadius: 4, padding: "1px 6px", border: `1px solid ${T.primaryMist}`, lineHeight: 1.6 }}>已练</div>
+                  )}
+
+                  {/* Right arrow */}
+                  <div style={{ padding: "12px 12px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "flex-end", flexShrink: 0 }}>
                     <Arrow color={ac.color} />
                   </div>
                 </div>
