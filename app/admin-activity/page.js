@@ -246,8 +246,8 @@ export default function AdminActivityPage() {
                         <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", color: r.note ? C.nav : C.t2 }}>{r.note || "-"}</td>
                         <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", fontWeight: 700 }}>{safeNum(usage?.answered?.total, 0)}</td>
                         <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{safeNum(usage?.answered?.build, 0)}</td>
-                        <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{safeNum(usage?.answered?.email, 0)}</td>
-                        <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{safeNum(usage?.answered?.discussion, 0)}</td>
+                        <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{safeNum(usage?.answered?.email, 0)}{safeNum(usage?.uniqueEmail, 0) > 0 ? <span style={{ color: C.t2 }}>{` (${usage.uniqueEmail})`}</span> : ""}</td>
+                        <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{safeNum(usage?.answered?.discussion, 0)}{safeNum(usage?.uniqueDiscussion, 0) > 0 ? <span style={{ color: C.t2 }}>{` (${usage.uniqueDiscussion})`}</span> : ""}</td>
                         <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{safeNum(usage?.sessions, 0)}</td>
                         <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{fmtDate(usage?.lastActiveAt)}</td>
                         <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>

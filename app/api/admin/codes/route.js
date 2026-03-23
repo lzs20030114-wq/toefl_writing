@@ -18,8 +18,7 @@ function countMockAnswered(score) {
   for (const t of tasks) {
     const taskId = String(t?.taskId || "");
     if (taskId === "build-sentence") {
-      const detailCount = safeNum(t?.meta?.detailCount, 0);
-      build += detailCount > 0 ? detailCount : 10;
+      build += 1;
       continue;
     }
     if (taskId === "email-writing") {
@@ -33,12 +32,25 @@ function countMockAnswered(score) {
   return { build, email, discussion, total: build + email + discussion };
 }
 
+function extractMockPromptIds(score) {
+  const tasks = Array.isArray(score?.tasks) ? score.tasks : [];
+  const ids = { email: [], discussion: [] };
+  for (const t of tasks) {
+    const taskId = String(t?.taskId || "");
+    const pid = t?.meta?.deferredPayload?.promptId || t?.meta?.response?.promptId
+      || t?.meta?.deferredPayload?.promptData?.id || t?.meta?.response?.promptData?.id || "";
+    if (!pid) continue;
+    if (taskId === "email-writing") ids.email.push(pid);
+    else if (taskId === "academic-writing") ids.discussion.push(pid);
+  }
+  return ids;
+}
+
 function countAnsweredBySession(row) {
   const type = String(row?.type || "");
   const score = row?.score || {};
   if (type === "bs") {
-    const total = safeNum(score?.total, 0);
-    return { build: total, email: 0, discussion: 0, total };
+    return { build: 1, email: 0, discussion: 0, total: 1 };
   }
   if (type === "email") return { build: 0, email: 1, discussion: 0, total: 1 };
   if (type === "discussion") return { build: 0, email: 0, discussion: 1, total: 1 };
@@ -173,13 +185,24 @@ export async function GET(request) {
     }
 
     if (codeList.length > 0) {
-      const { data: sessionRows, error: sessionError } = await supabaseAdmin
-        .from("sessions")
-        .select("user_code,type,date,score")
-        .in("user_code", codeList)
-        .order("date", { ascending: false })
-        .limit(20000);
+      const [{ data: sessionRows, error: sessionError }, { data: promptRows }] = await Promise.all([
+        supabaseAdmin
+          .from("sessions")
+          .select("user_code,type,date,score")
+          .in("user_code", codeList)
+          .order("date", { ascending: false })
+          .limit(20000),
+        supabaseAdmin
+          .from("sessions")
+          .select("user_code,type,pid:details->>promptId")
+          .in("user_code", codeList)
+          .in("type", ["email", "discussion"])
+          .limit(10000),
+      ]);
       if (sessionError) return jsonError(400, sessionError.message || "Usage query failed");
+
+      const uniqueSets = {};
+      codeList.forEach((c) => { uniqueSets[c] = { email: new Set(), discussion: new Set() }; });
 
       for (const row of sessionRows || []) {
         const code = String(row.user_code || "");
@@ -194,7 +217,26 @@ export async function GET(request) {
         usage.answered.email += c.email;
         usage.answered.discussion += c.discussion;
         usage.answered.total += c.total;
+        if (String(row?.type || "") === "mock" && uniqueSets[code]) {
+          const ids = extractMockPromptIds(row.score);
+          ids.email.forEach((pid) => uniqueSets[code].email.add(pid));
+          ids.discussion.forEach((pid) => uniqueSets[code].discussion.add(pid));
+        }
       }
+
+      for (const row of promptRows || []) {
+        const code = String(row.user_code || "");
+        const pid = row.pid;
+        if (!code || !uniqueSets[code] || !pid) continue;
+        uniqueSets[code][row.type === "email" ? "email" : "discussion"].add(pid);
+      }
+
+      codeList.forEach((code) => {
+        if (usageByCode[code]) {
+          usageByCode[code].uniqueEmail = uniqueSets[code]?.email?.size || 0;
+          usageByCode[code].uniqueDiscussion = uniqueSets[code]?.discussion?.size || 0;
+        }
+      });
     }
 
     return Response.json({ codes, stats, usageByCode });
