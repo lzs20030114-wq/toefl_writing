@@ -497,6 +497,21 @@ export default function UpgradeModal({ userCode, currentTier, onClose, onUpgrade
         复制登录码 &#8594; 前往爱发电赞助 &#8594; <span style={{ color: "#dc2626", fontWeight: 700 }}>留言栏粘贴登录码</span> &#8594; 付款后回此页自动开通
       </div>
 
+      {/* Afdian message hint image */}
+      <div style={{
+        background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10,
+        padding: "10px 12px", marginBottom: 14, textAlign: "center",
+      }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: "#dc2626", marginBottom: 8, lineHeight: 1.5 }}>
+          &#9757; 必须在下图「留言」处粘贴登录码，否则无法自动更新订阅！
+        </div>
+        <img
+          src="/afdian-message-hint.png"
+          alt="在爱发电留言栏粘贴登录码"
+          style={{ width: "100%", maxWidth: 320, borderRadius: 6, border: "1px solid #e5e7eb" }}
+        />
+      </div>
+
       {/* CTA */}
       <button onClick={handleGoAfdian} style={{
         ...btnStyle((codeCopied || copied) ? C.blue : "#9ca3af"),
