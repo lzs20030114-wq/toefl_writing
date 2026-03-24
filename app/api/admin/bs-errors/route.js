@@ -20,19 +20,19 @@ export async function GET(request) {
     const url = new URL(request.url);
     const sessionLimit = Math.min(5000, Math.max(100, Number(url.searchParams.get("limit") || 2000)));
 
-    // Build chunk lookup from question bank: correctSentence (lowercase) → { chunks, prefilled }
-    const chunkLookup = new Map();
+    // Build chunk lookups from question bank
+    const chunkByAnswer = new Map(); // correctAnswer (lowercase) → { chunks, prefilled }
+    const chunkByPrompt = new Map(); // prompt (lowercase) → { chunks, prefilled } (fallback)
     try {
       const bankPath = resolve(process.cwd(), "data", "buildSentence", "questions.json");
       const bankData = JSON.parse(readFileSync(bankPath, "utf8"));
       for (const set of bankData.question_sets || []) {
         for (const q of set.questions || []) {
-          const { correctSentenceFull } = renderResponseSentence(q);
-          const key = correctSentenceFull.trim().toLowerCase();
-          chunkLookup.set(key, {
-            chunks: q.chunks || [],
-            prefilled: q.prefilled || [],
-          });
+          const info = { chunks: q.chunks || [], prefilled: q.prefilled || [] };
+          const ansKey = (q.answer || "").trim().toLowerCase();
+          if (ansKey) chunkByAnswer.set(ansKey, info);
+          const promptKey = (q.prompt || "").trim().toLowerCase();
+          if (promptKey && !chunkByPrompt.has(promptKey)) chunkByPrompt.set(promptKey, info);
         }
       }
     } catch {}
@@ -156,7 +156,9 @@ export async function GET(request) {
     // Build sorted question error list (highest error rate first)
     const questions = [...questionMap.values()]
       .map((q) => {
-        const cl = chunkLookup.get(q.correctAnswer.toLowerCase()) || {};
+        const cl = chunkByAnswer.get(q.correctAnswer.toLowerCase())
+          || chunkByPrompt.get((q.prompt || "").toLowerCase())
+          || {};
         return {
           correctAnswer: q.correctAnswer,
           prompt: q.prompt,
