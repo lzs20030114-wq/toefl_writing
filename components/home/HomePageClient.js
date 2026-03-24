@@ -14,26 +14,45 @@ import { useIsMobile } from "../../hooks/useIsMobile";
 import { AnnouncementButton } from "./AnnouncementModal";
 
 export function PromoBanner({ isChallenge, fadeIn }) {
-  const [dismissed, setDismissed] = useState(false);
-  if (dismissed) return null;
+  const [open, setOpen] = useState(false);
   const bg = isChallenge
     ? "linear-gradient(135deg, #1a0a1e 0%, #1a1028 100%)"
     : "linear-gradient(135deg, #FEF3C7 0%, #FDE68A 50%, #FCD34D 100%)";
   const border = isChallenge ? "1px solid rgba(251,191,36,0.3)" : "1px solid #F59E0B";
   const textColor = isChallenge ? "#FDE68A" : "#78350F";
   const subColor = isChallenge ? "rgba(253,230,138,0.7)" : "#92400E";
+  const btnBg = isChallenge ? "rgba(251,191,36,0.15)" : "rgba(120,53,15,0.1)";
   return (
-    <div style={{ marginBottom: 14, borderRadius: 12, padding: "14px 18px", background: bg, border, position: "relative", ...fadeIn(140) }}>
-      <button onClick={() => setDismissed(true)} style={{ position: "absolute", top: 8, right: 10, background: "none", border: "none", cursor: "pointer", color: subColor, fontSize: 16, lineHeight: 1, padding: 4 }} aria-label="关闭">&times;</button>
-      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
-        <span style={{ fontSize: 20 }}>🎁</span>
-        <span style={{ fontSize: 14, fontWeight: 700, color: textColor }}>小红书好评活动</span>
+    <div style={{ marginBottom: 14, borderRadius: 12, background: bg, border, overflow: "hidden", ...fadeIn(140) }}>
+      <div
+        onClick={() => setOpen(!open)}
+        style={{ padding: "12px 18px", display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer" }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <span style={{ fontSize: 18 }}>🎁</span>
+          <span style={{ fontSize: 13, fontWeight: 700, color: textColor }}>小红书好评送 7 天 Pro</span>
+        </div>
+        <span style={{
+          fontSize: 11, fontWeight: 600, color: textColor, background: btnBg,
+          borderRadius: 6, padding: "4px 10px", whiteSpace: "nowrap",
+          transition: "transform 0.2s",
+        }}>
+          {open ? "收起" : "查看详情"}
+        </span>
       </div>
-      <p style={{ margin: 0, fontSize: 12, color: subColor, lineHeight: 1.7 }}>
-        在小红书发布 TreePractice 使用体验，经管理员确认后即可获得 <strong style={{ color: textColor }}>7 天 Pro 订阅</strong>。
-        <br />
-        发布后请通过首页「反馈」入口提交小红书笔记链接，我们会尽快审核。
-      </p>
+      <div style={{
+        maxHeight: open ? 120 : 0,
+        opacity: open ? 1 : 0,
+        overflow: "hidden",
+        transition: "max-height 0.25s ease, opacity 0.2s ease",
+        padding: open ? "0 18px 14px" : "0 18px",
+      }}>
+        <p style={{ margin: 0, fontSize: 12, color: subColor, lineHeight: 1.7 }}>
+          在小红书发布 TreePractice 使用体验，经管理员确认后即可获得 <strong style={{ color: textColor }}>7 天 Pro 订阅</strong>。
+          <br />
+          发布后请通过首页「反馈」入口提交小红书笔记链接，我们会尽快审核。
+        </p>
+      </div>
     </div>
   );
 }
