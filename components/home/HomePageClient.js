@@ -11,6 +11,7 @@ import { HomeSidebar } from "./HomeSidebar";
 import { MobileHomePage } from "./MobileHomePage";
 import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_PAGE_CSS, HOME_TOKENS as T, TASK_ACCENTS } from "./theme";
 import { useIsMobile } from "../../hooks/useIsMobile";
+import { AnnouncementButton } from "./AnnouncementModal";
 
 const PRACTICE_TASKS = [
   { k: "build-sentence", modeKey: "build", n: "Task 1", t: "Build a Sentence", d: "Reorder words to form a grammatically correct response.", it: "10 questions" },
@@ -197,6 +198,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
               <span style={{ color: "#fff", fontSize: 11, fontWeight: 800 }}>T</span>
             </div>
             <span style={{ marginLeft: 8, fontWeight: 700, fontSize: 14, color: isChallenge ? "#fff" : T.t1 }}>TreePractice</span>
+            <div style={{ marginLeft: "auto" }}><AnnouncementButton isChallenge={isChallenge} /></div>
           </div>
 
           <MobileHomePage
@@ -229,7 +231,10 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
             <span style={{ fontWeight: 700, fontSize: 15, position: "relative", zIndex: 1 }}>TreePractice</span>
             <span style={{ opacity: 0.5, margin: "0 12px", position: "relative", zIndex: 1 }}>|</span>
             <span style={{ fontSize: 13, position: "relative", zIndex: 1 }}>写作备考</span>
-            <div style={{ marginLeft: "auto", fontSize: 11, fontWeight: 700, color: CH.accent, letterSpacing: 1, textTransform: "uppercase", position: "relative", zIndex: 1 }}>Challenge</div>
+            <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 12, position: "relative", zIndex: 1 }}>
+              <AnnouncementButton isChallenge={true} />
+              <span style={{ fontSize: 11, fontWeight: 700, color: CH.accent, letterSpacing: 1, textTransform: "uppercase" }}>Challenge</span>
+            </div>
             <div style={{ position: "absolute", inset: 0, pointerEvents: "none", background: "repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,0.03) 2px,rgba(255,255,255,0.03) 4px)", zIndex: 0 }} />
             <div style={{ position: "absolute", top: 0, bottom: 0, width: "30%", background: "linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent)", animation: "ch-sweep 4s ease-in-out infinite", pointerEvents: "none", zIndex: 0 }} />
           </div>
@@ -242,7 +247,10 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
               <span style={{ fontWeight: 700, fontSize: 15, color: T.t1 }}>TreePractice</span>
               <span style={{ fontSize: 10, fontWeight: 700, color: T.primary, background: T.primarySoft, border: `1px solid ${T.primaryMist}`, borderRadius: 5, padding: "1px 6px", letterSpacing: 0.3 }}>写作备考</span>
             </div>
-            <div className="home-nav-ai" style={{ marginLeft: "auto", fontSize: 12, color: T.t3 }}>部分内容由 AI 辅助生成</div>
+            <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 12 }}>
+              <span className="home-nav-ai" style={{ fontSize: 12, color: T.t3 }}>部分内容由 AI 辅助生成</span>
+              <AnnouncementButton isChallenge={false} />
+            </div>
           </div>
         )}
 
