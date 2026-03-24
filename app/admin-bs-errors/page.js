@@ -224,8 +224,17 @@ export default function AdminBsErrorsPage() {
                                 <div style={{ fontSize: 11, fontWeight: 700, color: C.t2, marginBottom: 6 }}>
                                   错误作答记录（最多 20 条）
                                 </div>
-                                <div style={{ fontSize: 11, color: C.nav, fontWeight: 600, marginBottom: 6, padding: "4px 8px", background: "#e0f2fe", borderRadius: 4, display: "inline-block" }}>
-                                  正确: {q.correctAnswer}
+                                <div style={{ marginBottom: 8, padding: "8px 10px", background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6 }}>
+                                  {q.prompt && (
+                                    <div style={{ fontSize: 12, color: "#6d28d9", fontWeight: 700, marginBottom: 6 }}>
+                                      <span style={{ background: "#7c3aed", color: "#fff", borderRadius: 3, padding: "1px 6px", marginRight: 6, fontSize: 10 }}>Q</span>
+                                      {q.prompt}
+                                    </div>
+                                  )}
+                                  <div style={{ fontSize: 12, color: "#0369a1", fontWeight: 700 }}>
+                                    <span style={{ background: "#0284c7", color: "#fff", borderRadius: 3, padding: "1px 6px", marginRight: 6, fontSize: 10 }}>A</span>
+                                    {q.correctAnswer}
+                                  </div>
                                 </div>
                                 {(q.chunks?.length > 0 || q.prefilled?.length > 0) && (
                                   <div style={{ marginBottom: 6, display: "flex", flexWrap: "wrap", gap: 4, alignItems: "center" }}>
