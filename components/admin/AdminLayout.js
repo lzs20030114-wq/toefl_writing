@@ -15,6 +15,7 @@ const NAV = [
   { label: "数据分析", href: "/admin-analytics", icon: "chart" },
   { label: "题库管理", href: "/admin-questions", icon: "book" },
   { label: "自动生题", href: "/admin-generate", icon: "zap" },
+  { label: "错题统计", href: "/admin-bs-errors", icon: "target" },
 ];
 
 const ICONS = {
@@ -27,6 +28,7 @@ const ICONS = {
   chart: "M18 20V10M12 20V4M6 20v-6",
   book: "M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 19.5A2.5 2.5 0 0 0 6.5 22H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15z",
   zap: "M13 2L3 14h9l-1 10 10-12h-9l1-10z",
+  target: "M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zm0-6a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0-2a2 2 0 1 1 0-4 2 2 0 0 1 0 4z",
 };
 
 function NavIcon({ name }) {
