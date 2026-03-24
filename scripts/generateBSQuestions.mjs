@@ -4632,6 +4632,26 @@ async function main() {
   // Fix 8: detect and rewrite prompts with high content overlap
   await rewriteHighOverlapPrompts(finalSets);
 
+  // Detect and apply alternate answer orders (adverbial shifts etc.)
+  {
+    const { detectAlternateOrders } = require("../lib/questionBank/alternateOrders.js");
+    let altCount = 0;
+    finalSets.forEach((set) => {
+      set.questions.forEach((q) => {
+        const alts = detectAlternateOrders(q);
+        if (alts.length > 0) {
+          q.acceptedAnswerOrders = alts.map((a) => a.order);
+          q.acceptedReasons = alts.map((a) => a.reason);
+          altCount++;
+        } else {
+          delete q.acceptedAnswerOrders;
+          delete q.acceptedReasons;
+        }
+      });
+    });
+    if (altCount > 0) console.log(`Detected alternate orders for ${altCount} question(s).`);
+  }
+
   const output = {
     version: "1.2",
     generated_at: new Date().toISOString(),
