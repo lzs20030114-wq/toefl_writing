@@ -43,6 +43,7 @@ export function useBuildSentenceSession(questions, options = {}) {
   const [results, setResults] = useState(() => initialResults || Array(initialBuildState.qs.length).fill(null));
   const [phase, setPhase] = useState("instruction");
   const [tl, setTl] = useState(timeLimitSeconds);
+  const [elapsed, setElapsed] = useState(0);
   const [run, setRun] = useState(false);
   const [toast, setToast] = useState(initialBuildState.error || null);
 
@@ -51,6 +52,7 @@ export function useBuildSentenceSession(questions, options = {}) {
   const [hoverBank, setHoverBank] = useState(false);
 
   const tr = useRef(null);
+  const elapsedRef = useRef(null);
   const autoSubmitRef = useRef(false);
   const resultsRef = useRef(results);
   const idxRef = useRef(0);
@@ -105,6 +107,7 @@ export function useBuildSentenceSession(questions, options = {}) {
     setIdx(startIdx);
     setPhase("active");
     setRun(true);
+    elapsedRef.current = setInterval(() => setElapsed((e) => e + 1), 1000);
     if (!isPracticeMode) {
       tr.current = setInterval(() => setTl((p) => {
         if (p <= 1) {
@@ -222,12 +225,13 @@ export function useBuildSentenceSession(questions, options = {}) {
       const nr = buildFinalResults();
       setResults(nr);
       setPhase("review");
+      if (elapsedRef.current) clearInterval(elapsedRef.current);
       saveSession(nr);
       submitLockRef.current = false;
     }
   }, [tl, phase, qs]);
 
-  useEffect(() => () => clearInterval(tr.current), []);
+  useEffect(() => () => { clearInterval(tr.current); clearInterval(elapsedRef.current); }, []);
 
   function pickChunk(chunk) {
     const emptyIdx = slots.findIndex((s) => s === null);
@@ -376,6 +380,7 @@ export function useBuildSentenceSession(questions, options = {}) {
       setRun(false);
       setResults(nr);
       setPhase("review");
+      if (elapsedRef.current) clearInterval(elapsedRef.current);
       saveSession(nr);
       submitLockRef.current = false;
     }
@@ -428,6 +433,7 @@ export function useBuildSentenceSession(questions, options = {}) {
     onDropSlot,
     onDropBank,
     getProgress,
+    elapsed,
   };
 }
 

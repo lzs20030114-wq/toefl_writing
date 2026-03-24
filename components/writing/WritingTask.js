@@ -11,7 +11,7 @@ import { C, FONT, Btn, InfoStrip, PageShell, SurfaceCard, DisclosureSection, Toa
 import { WritingFeedbackPanel } from "./WritingFeedbackPanel";
 import { WritingPromptPanel } from "./WritingPromptPanel";
 import { WritingResponsePanel } from "./WritingResponsePanel";
-import { formatMinutesLabel, PRACTICE_MODE } from "../../lib/practiceMode";
+import { formatMinutesLabel, PRACTICE_MODE, STANDARD_TIME_SECONDS, formatLongDuration } from "../../lib/practiceMode";
 import { normalizeReportLanguage, readReportLanguage } from "../../lib/reportLanguage";
 import { useIsMobile } from "../../hooks/useIsMobile";
 
@@ -162,6 +162,7 @@ export function WritingTask({
   const [pd, setPd] = useState(() => (pi >= 0 ? data[pi] || null : null));
   const [text, setText] = useState("");
   const [tl, setTl] = useState(limit);
+  const [elapsed, setElapsed] = useState(0);
   const [run, setRun] = useState(false);
   const [phase, setPhase] = useState("ready");
   const [fb, setFb] = useState(null);
@@ -170,6 +171,7 @@ export function WritingTask({
   const [toast, setToast] = useState(null);
   const [intro, setIntro] = useState(showTaskIntro);
   const tr = useRef(null);
+  const elapsedRef = useRef(null);
   const submitLockRef = useRef(false);
   const practiceRootIdRef = useRef("");
   const practiceAttemptRef = useRef(1);
@@ -187,6 +189,7 @@ export function WritingTask({
     practiceAttemptRef.current = 1;
   }, [type, pd?.id, initialPracticeRootId, initialPracticeAttempt]);
 
+  useEffect(() => () => { clearInterval(tr.current); clearInterval(elapsedRef.current); }, []);
   useEffect(() => { setPd(pi >= 0 ? data[pi] || null : null); }, [pi, data]);
   useEffect(() => { setIntro(showTaskIntro); }, [showTaskIntro, type]);
 
@@ -208,6 +211,8 @@ export function WritingTask({
     setScoreError("");
     setPhase("writing");
     setRun(true);
+    setElapsed(0);
+    elapsedRef.current = setInterval(() => setElapsed(e => e + 1), 1000);
     if (!isPracticeMode) {
       tr.current = setInterval(() => setTl(p => {
         if (p <= 1) { clearInterval(tr.current); setRun(false); return 0; }
@@ -220,6 +225,7 @@ export function WritingTask({
     if (submitLockRef.current) return;
     submitLockRef.current = true;
     clearInterval(tr.current);
+    if (elapsedRef.current) clearInterval(elapsedRef.current);
     setRun(false);
     setPhase("scoring");
     setRequestState("pending");
@@ -341,12 +347,14 @@ export function WritingTask({
     usedRef.current.add(n);
     practiceRootIdRef.current = createPracticeRootId(type, data[n]?.id);
     practiceAttemptRef.current = 1;
-    setPi(n); setPd(data[n]); setText(""); setTl(limit); setRun(false); setPhase("ready"); setFb(null); setRequestState("idle"); setScoreError(""); submitLockRef.current = false; completionSentRef.current = false; setIntro(showTaskIntro);
+    if (elapsedRef.current) clearInterval(elapsedRef.current);
+    setPi(n); setPd(data[n]); setText(""); setTl(limit); setElapsed(0); setRun(false); setPhase("ready"); setFb(null); setRequestState("idle"); setScoreError(""); submitLockRef.current = false; completionSentRef.current = false; setIntro(showTaskIntro);
   }
 
   function retryCurrentPrompt() {
     if (!pd) return;
     clearInterval(tr.current);
+    if (elapsedRef.current) clearInterval(elapsedRef.current);
     practiceAttemptRef.current += 1;
     setText("");
     setTl(limit);
@@ -386,7 +394,7 @@ export function WritingTask({
         : { minHeight: "100vh" }),
     }}>
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
-      {!embedded && <TopBar title={type === "email" ? "Email Writing" : "Academic Discussion Writing"} section={type === "email" ? "Writing Practice | Task 2" : "Writing Practice | Task 3"} timeLeft={isPracticeMode ? undefined : (phase !== "ready" ? tl : undefined)} isRunning={run} onExit={onExit} />}
+      {!embedded && <TopBar title={type === "email" ? "Email Writing" : "Academic Discussion Writing"} section={type === "email" ? "Writing Practice | Task 2" : "Writing Practice | Task 3"} timeLeft={isPracticeMode ? undefined : (phase !== "ready" ? tl : undefined)} elapsedTime={isPracticeMode && phase === "writing" ? elapsed : undefined} examTimeNote={isPracticeMode ? "考试限时 " + formatLongDuration(type === "email" ? STANDARD_TIME_SECONDS.email : STANDARD_TIME_SECONDS.discussion) : undefined} isRunning={run} onExit={onExit} />}
 
       {phase === "done" && fb ? (
         <WritingFeedbackPanel

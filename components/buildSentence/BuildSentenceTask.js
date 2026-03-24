@@ -2,7 +2,7 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { C, FONT, Btn, InfoStrip, PageShell, SurfaceCard, Toast, TopBar } from "../shared/ui";
 import { useBuildSentenceSession } from "./useBuildSentenceSession";
-import { formatLongDuration, PRACTICE_MODE } from "../../lib/practiceMode";
+import { formatLongDuration, PRACTICE_MODE, STANDARD_TIME_SECONDS } from "../../lib/practiceMode";
 import { translateGrammarPoint } from "../../lib/utils";
 import { BANK_EXHAUSTED_ERRORS } from "../../lib/questionSelector";
 import { useIsMobile } from "../../hooks/useIsMobile";
@@ -133,6 +133,7 @@ export function BuildSentenceTask({
     canGoBack,
     goBack,
     getProgress,
+    elapsed,
   } = useBuildSentenceSession(questions, { persistSession, onComplete, onTimerChange, timeLimitSeconds, practiceMode, initialResults });
   const isMobile = useIsMobile();
   const exhausted = String(selectionError || "").includes(BANK_EXHAUSTED_ERRORS.BUILD_SENTENCE);
@@ -595,7 +596,7 @@ export function BuildSentenceTask({
     <div style={{ minHeight: isMobile ? undefined : "100vh", height: isMobile ? "100dvh" : undefined, background: C.bg, fontFamily: FONT, display: isMobile ? "flex" : undefined, flexDirection: isMobile ? "column" : undefined, overflow: isMobile ? "hidden" : undefined }}>
       <style>{BS_INTERACTION_CSS}</style>
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
-      {!embedded && <TopBar title="Build a Sentence" section="Writing Practice | Task 1" timeLeft={isPracticeMode ? undefined : tl} isRunning={run} qInfo={idx + 1 + " / " + qs.length} onExit={onSaveExit ? handleSaveExitClick : onExit} />}
+      {!embedded && <TopBar title="Build a Sentence" section="Writing Practice | Task 1" timeLeft={isPracticeMode ? undefined : tl} elapsedTime={isPracticeMode && phase === "active" ? elapsed : undefined} examTimeNote={isPracticeMode ? "考试限时 " + formatLongDuration(STANDARD_TIME_SECONDS.build) : undefined} isRunning={run} qInfo={idx + 1 + " / " + qs.length} onExit={onSaveExit ? handleSaveExitClick : onExit} />}
 
       {isMobile ? (
         /* ── 手机端：一屏布局 ── */

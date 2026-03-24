@@ -89,7 +89,7 @@ export function ChevronIcon({ open = false, size = 12, color = C.t3 }) {
   );
 }
 
-export function TopBar({ title, section, timeLeft, isRunning, qInfo, onExit }) {
+export function TopBar({ title, section, timeLeft, elapsedTime, examTimeNote, isRunning, qInfo, onExit }) {
   return (
     <div className="tp-topbar" style={{ background: "rgba(255,255,255,0.92)", color: C.t1, padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between", height: 56, fontFamily: FONT, fontSize: 14, borderBottom: "1px solid " + C.bdrSubtle, backdropFilter: "blur(12px)", position: "sticky", top: 0, zIndex: 100 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -104,6 +104,12 @@ export function TopBar({ title, section, timeLeft, isRunning, qInfo, onExit }) {
       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
         {qInfo && <span style={{ fontSize: 12, color: C.t2 }}>{qInfo}</span>}
         {timeLeft !== undefined && <div style={{ background: timeLeft <= 60 ? "#fee2e2" : C.ltB, color: timeLeft <= 60 ? C.red : C.blue, padding: "6px 12px", borderRadius: 999, fontFamily: "Consolas,monospace", fontSize: 15, fontWeight: 700, border: "1px solid " + (timeLeft <= 60 ? "#fecaca" : "#d1fae5") }}>{fmt(timeLeft)}</div>}
+        {elapsedTime !== undefined && (
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <div style={{ background: C.ltB, color: C.t2, padding: "6px 12px", borderRadius: 999, fontFamily: "Consolas,monospace", fontSize: 15, fontWeight: 700, border: "1px solid #d1fae5" }}>{fmt(elapsedTime)}</div>
+            {examTimeNote && <span className="tp-topbar-exam-note" style={{ fontSize: 11, color: C.t3, whiteSpace: "nowrap" }}>{examTimeNote}</span>}
+          </div>
+        )}
         <button onClick={onExit} style={{ background: "#fff", border: "1px solid " + C.bdr, color: C.t2, padding: "8px 12px", borderRadius: 10, cursor: "pointer", fontSize: 12, fontWeight: 700, fontFamily: FONT }}>返回</button>
       </div>
     </div>
