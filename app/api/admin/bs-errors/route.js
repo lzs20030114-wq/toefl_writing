@@ -173,7 +173,7 @@ export async function GET(request) {
           wrongAttempts: q.attempts,
         };
       })
-      .filter((q) => q.total >= 2) // Only show questions attempted at least twice
+      .filter((q) => q.total >= 2 && q.chunks.length > 0) // Only current bank questions attempted >= 2 times
       .sort((a, b) => b.errorRate - a.errorRate || b.wrong - a.wrong);
 
     // Build sorted grammar weakness list
