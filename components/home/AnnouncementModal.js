@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import announcements from "../../data/announcements.json";
 import { HOME_TOKENS as T, CHALLENGE_TOKENS as CH, HOME_FONT } from "./theme";
 
@@ -9,6 +9,7 @@ const DISMISS_KEY = "toefl-announcement-dismissed";
 export function AnnouncementButton({ isChallenge }) {
   const [open, setOpen] = useState(false);
   const [hasNew, setHasNew] = useState(false);
+  const wrapRef = useRef(null);
 
   useEffect(() => {
     try {
@@ -17,18 +18,31 @@ export function AnnouncementButton({ isChallenge }) {
     } catch {}
   }, []);
 
-  function handleOpen() {
-    setOpen(true);
-    setHasNew(false);
-    try { localStorage.setItem(DISMISS_KEY, announcements[0]?.id); } catch {}
+  /* 点击外部关闭 */
+  useEffect(() => {
+    if (!open) return;
+    function handleClick(e) {
+      if (wrapRef.current && !wrapRef.current.contains(e.target)) setOpen(false);
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [open]);
+
+  function handleToggle() {
+    const willOpen = !open;
+    setOpen(willOpen);
+    if (willOpen) {
+      setHasNew(false);
+      try { localStorage.setItem(DISMISS_KEY, announcements[0]?.id); } catch {}
+    }
   }
 
   const btnColor = isChallenge ? "#fff" : T.t2;
 
   return (
-    <>
+    <div ref={wrapRef} style={{ position: "relative" }}>
       <button
-        onClick={handleOpen}
+        onClick={handleToggle}
         title="更新公告"
         style={{
           position: "relative",
@@ -55,12 +69,12 @@ export function AnnouncementButton({ isChallenge }) {
         )}
       </button>
 
-      {open && <AnnouncementModal onClose={() => setOpen(false)} isChallenge={isChallenge} />}
-    </>
+      {open && <AnnouncementDropdown isChallenge={isChallenge} />}
+    </div>
   );
 }
 
-function AnnouncementModal({ onClose, isChallenge }) {
+function AnnouncementDropdown({ isChallenge }) {
   const bg = isChallenge ? CH.card : "#fff";
   const t1 = isChallenge ? CH.t1 : T.t1;
   const t2 = isChallenge ? CH.t2 : T.t2;
@@ -68,69 +82,61 @@ function AnnouncementModal({ onClose, isChallenge }) {
   const accent = isChallenge ? CH.accent : T.primary;
 
   return (
-    <div
-      onClick={onClose}
-      style={{
-        position: "fixed", inset: 0, zIndex: 9999,
-        display: "flex", alignItems: "center", justifyContent: "center",
-        background: "rgba(0,0,0,0.45)",
-        fontFamily: HOME_FONT,
-      }}
-    >
-      <div
-        onClick={e => e.stopPropagation()}
-        style={{
-          background: bg, borderRadius: 16,
-          maxWidth: 440, width: "92%", maxHeight: "80vh",
-          overflow: "hidden", display: "flex", flexDirection: "column",
-          boxShadow: "0 8px 32px rgba(0,0,0,0.18)",
-          border: `1px solid ${bdr}`,
-        }}
-      >
-        {/* header */}
-        <div style={{
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-          padding: "18px 22px 14px", borderBottom: `1px solid ${bdr}`,
-        }}>
-          <div style={{ fontSize: 17, fontWeight: 700, color: t1 }}>更新公告</div>
-          <button
-            onClick={onClose}
-            style={{
-              background: "none", border: "none", cursor: "pointer",
-              fontSize: 20, color: t2, padding: "2px 6px", lineHeight: 1,
-            }}
-          >&times;</button>
-        </div>
+    <div style={{
+      position: "absolute", top: "calc(100% + 8px)", right: 0,
+      width: 340, maxHeight: 420, overflowY: "auto",
+      background: bg, borderRadius: 12,
+      boxShadow: "0 6px 24px rgba(0,0,0,0.15)",
+      border: `1px solid ${bdr}`,
+      fontFamily: HOME_FONT, zIndex: 100,
+    }}>
+      {/* 小三角 */}
+      <div style={{
+        position: "absolute", top: -6, right: 16,
+        width: 12, height: 12, background: bg,
+        border: `1px solid ${bdr}`,
+        borderRight: "none", borderBottom: "none",
+        transform: "rotate(45deg)",
+      }} />
 
-        {/* body */}
-        <div style={{ padding: "16px 22px 22px", overflowY: "auto", flex: 1 }}>
-          {announcements.map((a, i) => (
-            <div key={a.id} style={{ marginBottom: i < announcements.length - 1 ? 22 : 0 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
-                <span style={{ fontSize: 14, fontWeight: 700, color: t1 }}>{a.title}</span>
-                <span style={{
-                  fontSize: 11, color: t2, background: isChallenge ? "rgba(255,255,255,0.06)" : "#F3F4F6",
-                  borderRadius: 4, padding: "1px 7px",
-                }}>{a.date}</span>
-              </div>
-              <ul style={{ margin: 0, paddingLeft: 18, listStyle: "none" }}>
-                {a.items.map((item, j) => (
-                  <li key={j} style={{
-                    fontSize: 13, color: t2, lineHeight: 1.7,
-                    position: "relative", paddingLeft: 4,
-                  }}>
-                    <span style={{
-                      position: "absolute", left: -14, top: "0.55em",
-                      width: 5, height: 5, borderRadius: "50%",
-                      background: accent, opacity: 0.7,
-                    }} />
-                    {item}
-                  </li>
-                ))}
-              </ul>
+      {/* header */}
+      <div style={{
+        padding: "14px 18px 10px",
+        borderBottom: `1px solid ${bdr}`,
+        fontSize: 15, fontWeight: 700, color: t1,
+        position: "relative", /* cover triangle seam */
+        background: bg, borderRadius: "12px 12px 0 0",
+      }}>更新公告</div>
+
+      {/* body */}
+      <div style={{ padding: "12px 18px 16px" }}>
+        {announcements.map((a, i) => (
+          <div key={a.id} style={{ marginBottom: i < announcements.length - 1 ? 18 : 0 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+              <span style={{ fontSize: 13, fontWeight: 700, color: t1 }}>{a.title}</span>
+              <span style={{
+                fontSize: 10, color: t2,
+                background: isChallenge ? "rgba(255,255,255,0.06)" : "#F3F4F6",
+                borderRadius: 4, padding: "1px 6px",
+              }}>{a.date}</span>
             </div>
-          ))}
-        </div>
+            <ul style={{ margin: 0, paddingLeft: 16, listStyle: "none" }}>
+              {a.items.map((item, j) => (
+                <li key={j} style={{
+                  fontSize: 12.5, color: t2, lineHeight: 1.75,
+                  position: "relative", paddingLeft: 4,
+                }}>
+                  <span style={{
+                    position: "absolute", left: -12, top: "0.6em",
+                    width: 4, height: 4, borderRadius: "50%",
+                    background: accent, opacity: 0.7,
+                  }} />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
     </div>
   );
