@@ -98,7 +98,7 @@ export default function AdminHomePage() {
 
   return (
     <AdminLayout>
-      <div style={{ maxWidth: 960, margin: "0 auto" }}>
+      <div className="adm-page" style={{ maxWidth: 960, margin: "0 auto" }}>
         {/* Header */}
         <div style={{ marginBottom: 24, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div>
@@ -124,7 +124,7 @@ export default function AdminHomePage() {
         <style>{`@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }`}</style>
 
         {/* Key metrics row */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 12, marginBottom: 16 }}>
+        <div className="adm-stats" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 12, marginBottom: 16 }}>
           {loading ? (
             <>
               {[1,2,3,4,5].map(i => <div key={i} style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 10, padding: 18 }}><Skeleton height={32} width={60} /><div style={{ marginTop: 8 }}><Skeleton height={14} width={80} /></div></div>)}
@@ -141,7 +141,7 @@ export default function AdminHomePage() {
         </div>
 
         {/* Detail sections */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 14 }}>
+        <div className="adm-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 14 }}>
           {/* User growth */}
           <SectionCard title="用户增长" href="/admin-users">
             {loading ? <Skeleton height={100} /> : u ? (
@@ -170,7 +170,7 @@ export default function AdminHomePage() {
           </SectionCard>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+        <div className="adm-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
           {/* Code management */}
           <SectionCard title="登录码" href="/admin-codes">
             {loading ? <Skeleton height={80} /> : codeStats ? (

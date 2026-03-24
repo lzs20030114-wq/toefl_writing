@@ -114,7 +114,7 @@ export default function AdminAnalyticsPage() {
 
   return (
     <AdminLayout title="数据分析">
-      <div style={{ maxWidth: 960, margin: "0 auto" }}>
+      <div className="adm-page" style={{ maxWidth: 960, margin: "0 auto" }}>
         {/* Header */}
         <div style={{ marginBottom: 20, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
           <div>
@@ -153,7 +153,7 @@ export default function AdminAnalyticsPage() {
         </div>
 
         {/* Key metrics */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 12, marginBottom: 20 }}>
+        <div className="adm-stats" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 12, marginBottom: 20 }}>
           <StatCard value={data?.todayPV} label="今日 PV" color={C.blue} />
           <StatCard value={data?.total} label={`${days}天总 PV`} color={C.nav} />
           <StatCard value={data?.uniqueUsers} label="登录用户" color="#16a34a" />
@@ -174,7 +174,7 @@ export default function AdminAnalyticsPage() {
         </div>
 
         {/* Tables */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+        <div className="adm-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
           <RankTable title="热门页面" rows={data?.topPages} labelKey="path" valueKey="count" />
           <RankTable title="来源网站" rows={data?.topReferrers} labelKey="host" valueKey="count" />
         </div>

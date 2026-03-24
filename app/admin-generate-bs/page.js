@@ -684,7 +684,7 @@ export default function AdminGenerateBSPage() {
 
   return (
     <AdminLayout title="自动生题">
-      <div style={{ maxWidth: 820, margin: "0 auto" }}>
+      <div className="adm-page" style={{ maxWidth: 820, margin: "0 auto" }}>
 
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 16, marginBottom: 14 }}>
           <div style={{ fontSize: 22, fontWeight: 800, color: C.nav, marginBottom: 4 }}>自动生成题目</div>

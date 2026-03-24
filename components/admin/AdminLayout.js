@@ -1,9 +1,41 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { C, FONT } from "../shared/ui";
 import { useAdminToken } from "../../lib/adminHelpers";
+
+function useIsMobile(breakpoint = 768) {
+  const [mobile, setMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${breakpoint}px)`);
+    setMobile(mq.matches);
+    const handler = (e) => setMobile(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, [breakpoint]);
+  return mobile;
+}
+
+const ADMIN_RESPONSIVE_CSS = `
+@media (max-width: 768px) {
+  .adm-content { padding: 12px !important; }
+  .adm-topbar { padding: 12px 16px !important; }
+  .adm-topbar > div:first-child { font-size: 15px !important; }
+  .adm-page { max-width: 100% !important; padding: 0 !important; }
+  .adm-grid-2 { grid-template-columns: 1fr !important; }
+  .adm-ctrl-row { grid-template-columns: 1fr !important; gap: 8px !important; }
+  .adm-table-wrap { margin: 0 -12px; }
+  .adm-table-wrap > table { font-size: 11px !important; }
+  .adm-table-wrap th, .adm-table-wrap td { padding: 6px 8px !important; }
+  .adm-stats { gap: 8px !important; }
+  .adm-stats > div { min-width: 0 !important; }
+  .adm-input-full { width: 100% !important; }
+  .adm-hide-mobile { display: none !important; }
+  .adm-tabs { flex-wrap: wrap !important; }
+  .adm-tabs > button { flex: 1; min-width: 0; font-size: 11px !important; padding: 7px 8px !important; }
+}
+`;
 
 const NAV = [
   { label: "总览", href: "/admin", icon: "grid" },
@@ -41,13 +73,10 @@ function NavIcon({ name }) {
   );
 }
 
-function Sidebar() {
+function SidebarContent({ onNavigate }) {
   const pathname = usePathname();
   return (
-    <aside style={{
-      width: 210, minHeight: "100vh", background: "#0f172a", display: "flex", flexDirection: "column",
-      flexShrink: 0, position: "sticky", top: 0, height: "100vh", overflowY: "auto",
-    }}>
+    <>
       {/* Branding */}
       <div style={{ padding: "20px 18px 16px", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
         <div style={{ fontSize: 15, fontWeight: 800, color: "#fff", letterSpacing: -0.3 }}>TreePractice</div>
@@ -64,6 +93,7 @@ function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
+              onClick={onNavigate}
               style={{
                 display: "flex", alignItems: "center", gap: 10,
                 padding: "9px 12px", borderRadius: 7, textDecoration: "none",
@@ -86,7 +116,43 @@ function Sidebar() {
       <div style={{ padding: "12px 18px", borderTop: "1px solid rgba(255,255,255,0.08)", fontSize: 10, color: "rgba(255,255,255,0.25)" }}>
         v1.0
       </div>
+    </>
+  );
+}
+
+function Sidebar() {
+  return (
+    <aside style={{
+      width: 210, minHeight: "100vh", background: "#0f172a", display: "flex", flexDirection: "column",
+      flexShrink: 0, position: "sticky", top: 0, height: "100vh", overflowY: "auto",
+    }}>
+      <SidebarContent />
     </aside>
+  );
+}
+
+function MobileDrawer({ open, onClose }) {
+  return (
+    <>
+      {/* Backdrop */}
+      <div
+        onClick={onClose}
+        style={{
+          position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 999,
+          opacity: open ? 1 : 0, pointerEvents: open ? "auto" : "none",
+          transition: "opacity 0.2s",
+        }}
+      />
+      {/* Drawer */}
+      <aside style={{
+        position: "fixed", top: 0, left: 0, bottom: 0, width: 240, background: "#0f172a",
+        zIndex: 1000, display: "flex", flexDirection: "column", overflowY: "auto",
+        transform: open ? "translateX(0)" : "translateX(-100%)",
+        transition: "transform 0.25s ease",
+      }}>
+        <SidebarContent onNavigate={onClose} />
+      </aside>
+    </>
   );
 }
 
@@ -132,24 +198,43 @@ function TokenGate({ token, setToken }) {
 
 export default function AdminLayout({ children, title }) {
   const { token, setToken, ready } = useAdminToken();
+  const isMobile = useIsMobile();
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   if (!ready) return null;
 
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
-      <Sidebar />
+      <style dangerouslySetInnerHTML={{ __html: ADMIN_RESPONSIVE_CSS }} />
+      {isMobile ? (
+        <MobileDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+      ) : (
+        <Sidebar />
+      )}
       <main style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
         {/* Top bar */}
-        {title && (
-          <div style={{
-            padding: "16px 28px", borderBottom: "1px solid " + C.bdr,
-            background: "#fff", display: "flex", alignItems: "center", gap: 12,
-          }}>
-            <div style={{ fontSize: 18, fontWeight: 800, color: C.nav }}>{title}</div>
-          </div>
-        )}
+        <div className="adm-topbar" style={{
+          padding: "16px 28px", borderBottom: "1px solid " + C.bdr,
+          background: "#fff", display: "flex", alignItems: "center", gap: 12,
+        }}>
+          {isMobile && (
+            <button
+              onClick={() => setDrawerOpen(true)}
+              style={{
+                background: "none", border: "none", cursor: "pointer", padding: 4,
+                display: "flex", alignItems: "center",
+              }}
+              aria-label="菜单"
+            >
+              <svg viewBox="0 0 24 24" width={22} height={22} fill="none" stroke={C.nav} strokeWidth="2" strokeLinecap="round">
+                <path d="M3 12h18M3 6h18M3 18h18" />
+              </svg>
+            </button>
+          )}
+          {title && <div style={{ fontSize: 18, fontWeight: 800, color: C.nav }}>{title}</div>}
+        </div>
         {/* Content */}
-        <div style={{ flex: 1, padding: 24, overflowY: "auto" }}>
+        <div className="adm-content" style={{ flex: 1, padding: 24, overflowY: "auto" }}>
           {!token ? <TokenGate token={token} setToken={setToken} /> : children}
         </div>
       </main>

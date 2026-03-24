@@ -171,7 +171,7 @@ export default function AdminActivityPage() {
 
   return (
     <AdminLayout title="答题情况">
-      <div style={{ maxWidth: 1240, margin: "0 auto", display: "grid", gap: 14 }}>
+      <div className="adm-page" style={{ maxWidth: 1240, margin: "0 auto", display: "grid", gap: 14 }}>
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 16 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 20, fontWeight: 800, color: C.nav }}>用户答题情况</div>
@@ -179,11 +179,12 @@ export default function AdminActivityPage() {
               <Link href="/admin-codes" style={{ color: C.blue, textDecoration: "none", fontSize: 13 }}>去登录码管理</Link>
             </div>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: 8, alignItems: "center" }}>
+          <div className="adm-ctrl-row" style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: 8, alignItems: "center" }}>
             <input
               value={token}
               onChange={(e) => persistToken(e.target.value)}
               placeholder="ADMIN_DASHBOARD_TOKEN"
+              className="adm-input-full"
               style={{ border: "1px solid #cbd5e1", borderRadius: 6, padding: "8px 10px", fontFamily: "monospace", fontSize: 12 }}
             />
             <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} style={{ border: "1px solid #cbd5e1", borderRadius: 6, padding: "8px 10px" }}>
@@ -200,7 +201,7 @@ export default function AdminActivityPage() {
 
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 14 }}>
           <div style={{ fontWeight: 700, marginBottom: 10 }}>按登录码查看作答（默认折叠）</div>
-          <div style={{ overflowX: "auto" }}>
+          <div className="adm-table-wrap" style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
               <thead>
                 <tr style={{ background: "#f8fafc", color: C.t2 }}>

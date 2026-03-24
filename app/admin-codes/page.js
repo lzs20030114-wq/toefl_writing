@@ -332,7 +332,7 @@ export default function AdminCodesPage() {
 
   return (
     <AdminLayout title="登录码管理">
-      <div style={{ maxWidth: 1160, margin: "0 auto", display: "flex", flexDirection: "column", gap: 14 }}>
+      <div className="adm-page" style={{ maxWidth: 1160, margin: "0 auto", display: "flex", flexDirection: "column", gap: 14 }}>
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 16 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 20, fontWeight: 800, color: C.nav }}>登录码管理后台</div>
@@ -340,7 +340,7 @@ export default function AdminCodesPage() {
               <Link href="/admin-activity" style={{ color: C.blue, textDecoration: "none", fontSize: 13 }}>去答题情况</Link>
             </div>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: 8, alignItems: "center" }}>
+          <div className="adm-ctrl-row" style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: 8, alignItems: "center" }}>
             <input
               value={token}
               onChange={(e) => persistToken(e.target.value)}
@@ -356,7 +356,7 @@ export default function AdminCodesPage() {
           </div>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10 }}>
+        <div className="adm-stats" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10 }}>
           {[
             ["总量", stats.total],
             ["可发放", stats.available],
@@ -373,7 +373,7 @@ export default function AdminCodesPage() {
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 14, display: "grid", gap: 12 }}>
           <div style={{ fontWeight: 700 }}>批量生成登录码</div>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-            <input type="number" min={1} max={500} value={count} onChange={(e) => setCount(Number(e.target.value || 10))} style={{ width: 120, border: "1px solid #cbd5e1", borderRadius: 6, padding: "8px 10px" }} />
+            <input className="adm-input-full" type="number" min={1} max={500} value={count} onChange={(e) => setCount(Number(e.target.value || 10))} style={{ width: 120, border: "1px solid #cbd5e1", borderRadius: 6, padding: "8px 10px" }} />
             <button onClick={onGenerate} disabled={busy} style={{ border: "1px solid " + C.blue, background: C.blue, color: "#fff", borderRadius: 6, padding: "8px 10px", cursor: busy ? "not-allowed" : "pointer", opacity: busy ? 0.6 : 1 }}>
               生成
             </button>
@@ -382,7 +382,7 @@ export default function AdminCodesPage() {
 
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 14, display: "grid", gap: 12 }}>
           <div style={{ fontWeight: 700 }}>发放登录码</div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(160px, 1fr)) auto", gap: 8 }}>
+          <div className="adm-ctrl-row" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(160px, 1fr)) auto", gap: 8 }}>
             <input value={issueCode} onChange={(e) => setIssueCode(e.target.value.toUpperCase())} placeholder="指定登录码（可选）" style={{ border: "1px solid #cbd5e1", borderRadius: 6, padding: "8px 10px", fontFamily: "monospace" }} />
             <input value={issueTo} onChange={(e) => setIssueTo(e.target.value)} placeholder="发放对象（邮箱/显示名）" style={{ border: "1px solid #cbd5e1", borderRadius: 6, padding: "8px 10px" }} />
             <input value={expiresAt} onChange={(e) => setExpiresAt(e.target.value)} placeholder="到期时间（ISO，可选）" style={{ border: "1px solid #cbd5e1", borderRadius: 6, padding: "8px 10px" }} />
@@ -396,7 +396,7 @@ export default function AdminCodesPage() {
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 14, display: "grid", gap: 12 }}>
           <div style={{ fontWeight: 700 }}>吊销登录码</div>
           <div style={{ display: "flex", gap: 8 }}>
-            <input value={revokeCode} onChange={(e) => setRevokeCode(e.target.value.toUpperCase())} placeholder="输入要吊销的登录码" style={{ border: "1px solid #cbd5e1", borderRadius: 6, padding: "8px 10px", fontFamily: "monospace", minWidth: 220 }} />
+            <input className="adm-input-full" value={revokeCode} onChange={(e) => setRevokeCode(e.target.value.toUpperCase())} placeholder="输入要吊销的登录码" style={{ border: "1px solid #cbd5e1", borderRadius: 6, padding: "8px 10px", fontFamily: "monospace", minWidth: 220 }} />
             <button onClick={onRevoke} disabled={busy} style={{ border: "1px solid " + C.red, background: C.red, color: "#fff", borderRadius: 6, padding: "8px 10px", cursor: busy ? "not-allowed" : "pointer", opacity: busy ? 0.6 : 1 }}>
               吊销
             </button>
@@ -449,7 +449,7 @@ export default function AdminCodesPage() {
                     );
                   })}
                 </div>
-                <div style={{ overflowX: "auto" }}>
+                <div className="adm-table-wrap" style={{ overflowX: "auto" }}>
                   <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
                     <thead>
                       <tr style={{ background: "#f5f3ff", color: C.t2 }}>
@@ -490,7 +490,7 @@ export default function AdminCodesPage() {
               <option value="revoked">已吊销</option>
             </select>
           </div>
-          <div style={{ overflowX: "auto" }}>
+          <div className="adm-table-wrap" style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
               <thead>
                 <tr style={{ background: "#f8fafc", color: C.t2 }}>
@@ -634,7 +634,7 @@ export default function AdminCodesPage() {
             </button>
             {showTrash && (
               <div style={{ borderTop: "1px solid " + C.bdr, padding: 14 }}>
-                <div style={{ overflowX: "auto" }}>
+                <div className="adm-table-wrap" style={{ overflowX: "auto" }}>
                   <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
                     <thead>
                       <tr style={{ background: "#fef2f2", color: C.t2 }}>

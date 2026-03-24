@@ -893,7 +893,7 @@ function AddQuestionModal({ type: initialType, token, onClose, onSuccess }) {
           {/* ── Email form ── */}
           {formType === "email" && (
             <>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+              <div className="adm-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
                 <div>
                   <FieldLabel>To</FieldLabel>
                   <FieldInput value={emTo} onChange={setEmTo} placeholder="e.g. Professor Lee" />
@@ -1582,7 +1582,7 @@ export default function AdminQuestionsPage() {
         />
       )}
 
-      <div style={{ maxWidth: 860, margin: "0 auto", display: "grid", gap: 16 }}>
+      <div className="adm-page" style={{ maxWidth: 860, margin: "0 auto", display: "grid", gap: 16 }}>
 
         {/* header */}
         <div
@@ -1698,7 +1698,7 @@ export default function AdminQuestionsPage() {
 
         {/* stats row */}
         {data && (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+          <div className="adm-stats" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
             <StatCard
               label="学术写作 Academic"
               count={academicCount}
@@ -1723,7 +1723,7 @@ export default function AdminQuestionsPage() {
         {/* tabs + search */}
         {data && (
           <div style={{ display: "grid", gap: 10 }}>
-            <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+            <div className="adm-tabs" style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
               {TABS.map((t) => (
                 <button
                   key={t.key}

@@ -247,7 +247,7 @@ export default function AdminUsersPage() {
 
   return (
     <AdminLayout title="用户管理">
-      <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+      <div className="adm-page" style={{ maxWidth: 1100, margin: "0 auto" }}>
         {/* Header */}
         <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
           <button
@@ -273,7 +273,7 @@ export default function AdminUsersPage() {
         {data && (
           <>
             {/* Stats overview */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: 10 }}>
+            <div className="adm-stats" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: 10 }}>
               <div style={STAT_CARD}>
                 <div style={STAT_NUM}>{data.total}</div>
                 <div style={STAT_LABEL}>总用户</div>
@@ -297,7 +297,7 @@ export default function AdminUsersPage() {
             </div>
 
             {/* Secondary stats */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 10, marginTop: 10 }}>
+            <div className="adm-stats" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 10, marginTop: 10 }}>
               {/* Tier breakdown */}
               <div style={SECTION}>
                 <div style={{ fontSize: 14, fontWeight: 700, color: C.nav, marginBottom: 10 }}>用户等级</div>
@@ -356,7 +356,7 @@ export default function AdminUsersPage() {
 
             {/* Filters and user table */}
             <div style={SECTION}>
-              <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center", marginBottom: 12 }}>
+              <div className="adm-ctrl-row" style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center", marginBottom: 12 }}>
                 <input
                   type="text"
                   placeholder="搜索用户码或邮箱..."
@@ -369,6 +369,7 @@ export default function AdminUsersPage() {
                     fontSize: 13,
                     width: 220,
                   }}
+                  className="adm-input-full"
                 />
                 <select
                   value={tierFilter}
@@ -394,7 +395,7 @@ export default function AdminUsersPage() {
                 </div>
               </div>
 
-              <div style={{ overflowX: "auto" }}>
+              <div className="adm-table-wrap" style={{ overflowX: "auto" }}>
                 <table style={{ width: "100%", borderCollapse: "collapse" }}>
                   <thead>
                     <tr>

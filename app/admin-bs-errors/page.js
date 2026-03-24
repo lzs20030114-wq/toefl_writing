@@ -87,10 +87,10 @@ export default function AdminBsErrorsPage() {
 
   return (
     <AdminLayout title="错题统计">
-      <div style={{ maxWidth: 1200, margin: "0 auto", display: "grid", gap: 16 }}>
+      <div className="adm-page" style={{ maxWidth: 1200, margin: "0 auto", display: "grid", gap: 16 }}>
         {/* Summary cards */}
         {data && (
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+          <div className="adm-stats" style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
             <StatCard label="总答题次数" value={s.totalAttempts} sub={`${s.bsSessions + s.mockSessions} 个会话`} />
             <StatCard label="总错误数" value={s.totalWrong} sub={`错误率 ${s.overallErrorRate}%`} />
             <StatCard label="活跃用户" value={s.uniqueUsers} />
@@ -104,7 +104,7 @@ export default function AdminBsErrorsPage() {
           background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 12,
           display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap",
         }}>
-          <div style={{ display: "flex", gap: 4 }}>
+          <div className="adm-tabs" style={{ display: "flex", gap: 4 }}>
             <button style={tabStyle(tab === "questions")} onClick={() => setTab("questions")}>
               易错题目 ({questions.length})
             </button>
@@ -151,7 +151,7 @@ export default function AdminBsErrorsPage() {
                 共 {questions.length} 题
               </div>
             </div>
-            <div style={{ overflowX: "auto" }}>
+            <div className="adm-table-wrap" style={{ overflowX: "auto" }}>
               <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
                 <thead>
                   <tr style={{ background: "#f8fafc", color: C.t2 }}>
@@ -299,7 +299,7 @@ export default function AdminBsErrorsPage() {
                 语法点错误率（至少出现 3 次）
               </div>
             </div>
-            <div style={{ overflowX: "auto" }}>
+            <div className="adm-table-wrap" style={{ overflowX: "auto" }}>
               <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
                 <thead>
                   <tr style={{ background: "#f8fafc", color: C.t2 }}>
@@ -344,7 +344,7 @@ export default function AdminBsErrorsPage() {
                 用户 Build Sentence 错误率
               </div>
             </div>
-            <div style={{ overflowX: "auto" }}>
+            <div className="adm-table-wrap" style={{ overflowX: "auto" }}>
               <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
                 <thead>
                   <tr style={{ background: "#f8fafc", color: C.t2 }}>

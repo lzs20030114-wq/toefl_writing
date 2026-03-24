@@ -117,7 +117,7 @@ export default function AdminFeedbackPage() {
 
   return (
     <AdminLayout title="用户反馈">
-      <div style={{ maxWidth: 1200, margin: "0 auto", display: "grid", gap: 12 }}>
+      <div className="adm-page" style={{ maxWidth: 1200, margin: "0 auto", display: "grid", gap: 12 }}>
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 16 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 20, fontWeight: 800, color: C.nav }}>用户反馈后台</div>
@@ -125,7 +125,7 @@ export default function AdminFeedbackPage() {
               <Link href="/admin-activity" style={{ color: C.blue, textDecoration: "none", fontSize: 13 }}>去答题情况</Link>
             </div>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: 8, alignItems: "center" }}>
+          <div className="adm-ctrl-row" style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: 8, alignItems: "center" }}>
             <input
               value={token}
               onChange={(e) => persistToken(e.target.value)}
@@ -144,6 +144,7 @@ export default function AdminFeedbackPage() {
               value={userCode}
               onChange={(e) => setUserCode(e.target.value)}
               placeholder="按用户码过滤（如 ABC123）"
+              className="adm-input-full"
               style={{ width: 240, border: "1px solid #cbd5e1", borderRadius: 6, padding: "6px 8px" }}
             />
             <button onClick={refresh} style={{ border: "1px solid #cbd5e1", background: "#fff", color: C.t2, borderRadius: 6, padding: "6px 10px", cursor: "pointer" }}>
@@ -154,7 +155,7 @@ export default function AdminFeedbackPage() {
         </div>
 
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 14 }}>
-          <div style={{ overflowX: "auto" }}>
+          <div className="adm-table-wrap" style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
               <thead>
                 <tr style={{ background: "#f8fafc", color: C.t2 }}>

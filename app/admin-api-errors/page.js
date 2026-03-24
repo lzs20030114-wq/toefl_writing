@@ -106,7 +106,7 @@ export default function AdminApiErrorsPage() {
 
   return (
     <AdminLayout title="API 日志">
-      <div style={{ maxWidth: 1180, margin: "0 auto", display: "grid", gap: 12 }}>
+      <div className="adm-page" style={{ maxWidth: 1180, margin: "0 auto", display: "grid", gap: 12 }}>
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 16 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 20, fontWeight: 800, color: C.nav }}>API 失效反馈后台</div>
@@ -114,7 +114,7 @@ export default function AdminApiErrorsPage() {
               <Link href="/admin-codes" style={{ color: C.blue, textDecoration: "none", fontSize: 13 }}>去登录码后台</Link>
             </div>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: 8, alignItems: "center" }}>
+          <div className="adm-ctrl-row" style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: 8, alignItems: "center" }}>
             <input
               value={token}
               onChange={(e) => persistToken(e.target.value)}
@@ -131,7 +131,7 @@ export default function AdminApiErrorsPage() {
           <div style={{ marginTop: 8, fontSize: 12, color: C.t2 }}>用于查看 `/api/ai` 失败原因与趋势，便于快速定位失效问题。</div>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
+        <div className="adm-stats" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
           <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 12 }}>
             <div style={{ fontSize: 12, color: C.t2 }}>窗口期总失败数</div>
             <div style={{ fontSize: 24, fontWeight: 800, color: C.nav }}>{stats.total}</div>
@@ -155,11 +155,11 @@ export default function AdminApiErrorsPage() {
               <option value={1440}>最近 24 小时</option>
               <option value={10080}>最近 7 天</option>
             </select>
-            <input value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} placeholder="状态码过滤（如 401）" style={{ width: 170, border: "1px solid #cbd5e1", borderRadius: 6, padding: "6px 8px" }} />
-            <input value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} placeholder="错误类型过滤（如 upstream）" style={{ width: 220, border: "1px solid #cbd5e1", borderRadius: 6, padding: "6px 8px" }} />
+            <input value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} placeholder="状态码过滤（如 401）" className="adm-input-full" style={{ width: 170, border: "1px solid #cbd5e1", borderRadius: 6, padding: "6px 8px" }} />
+            <input value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} placeholder="错误类型过滤（如 upstream）" className="adm-input-full" style={{ width: 220, border: "1px solid #cbd5e1", borderRadius: 6, padding: "6px 8px" }} />
           </div>
 
-          <div style={{ overflowX: "auto" }}>
+          <div className="adm-table-wrap" style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
               <thead>
                 <tr style={{ background: "#f8fafc", color: C.t2 }}>

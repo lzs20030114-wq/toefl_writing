@@ -812,9 +812,9 @@ export default function AdminGeneratePage() {
     <AdminLayout title="自动生题">
       <style>{`@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }`}</style>
 
-      <div style={{ maxWidth: 860, margin: "0 auto" }}>
+      <div className="adm-page" style={{ maxWidth: 860, margin: "0 auto" }}>
         {/* Tab bar */}
-        <div style={{ display: "flex", gap: 4, marginBottom: 20, background: C.bg, padding: 4, borderRadius: 10 }}>
+        <div className="adm-tabs" style={{ display: "flex", gap: 4, marginBottom: 20, background: C.bg, padding: 4, borderRadius: 10 }}>
           {TABS.map((tab) => {
             const active = activeTab === tab.key;
             return (
