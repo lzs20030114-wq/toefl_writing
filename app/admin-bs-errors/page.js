@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { C, FONT } from "../../components/shared/ui";
 import AdminLayout from "../../components/admin/AdminLayout";
 
@@ -42,6 +42,7 @@ export default function AdminBsErrorsPage() {
   const [msg, setMsg] = useState("");
   const [tab, setTab] = useState("questions"); // questions | grammar | users
   const [questionLimit, setQuestionLimit] = useState(50);
+  const [expandedQ, setExpandedQ] = useState({});
 
   useEffect(() => {
     try { setToken(localStorage.getItem(TOKEN_KEY) || ""); } catch {}
@@ -165,48 +166,83 @@ export default function AdminBsErrorsPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {questions.slice(0, questionLimit).map((q, i) => (
-                    <tr key={i} style={{ background: q.errorRate >= 60 ? "#fef2f2" : q.errorRate >= 40 ? "#fffbeb" : "transparent" }}>
-                      <td style={{ padding: "8px 10px", borderBottom: "1px solid #f1f5f9", color: C.t2 }}>{i + 1}</td>
-                      <td style={{
-                        padding: "8px 10px", borderBottom: "1px solid #f1f5f9",
-                        fontWeight: 600, maxWidth: 260, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-                      }}>
-                        {q.correctAnswer}
-                      </td>
-                      <td style={{
-                        padding: "8px 10px", borderBottom: "1px solid #f1f5f9",
-                        color: C.t2, maxWidth: 220, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-                      }}>
-                        {q.prompt || "-"}
-                      </td>
-                      <td style={{ padding: "8px 10px", borderBottom: "1px solid #f1f5f9" }}>
-                        {(q.grammar_points || []).length > 0 ? (
-                          <div style={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
-                            {q.grammar_points.slice(0, 3).map((gp, gi) => (
-                              <span key={gi} style={{
-                                background: "#f1f5f9", borderRadius: 4, padding: "2px 6px",
-                                fontSize: 10, color: C.t2,
-                              }}>{gp}</span>
-                            ))}
-                          </div>
-                        ) : "-"}
-                      </td>
-                      <td style={{ padding: "8px 10px", borderBottom: "1px solid #f1f5f9", textAlign: "center" }}>{q.total}</td>
-                      <td style={{ padding: "8px 10px", borderBottom: "1px solid #f1f5f9", textAlign: "center", fontWeight: 700, color: rateColor(q.errorRate) }}>{q.wrong}</td>
-                      <td style={{ padding: "8px 10px", borderBottom: "1px solid #f1f5f9" }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                          <div style={{ flex: 1, height: 6, background: "#f1f5f9", borderRadius: 3, overflow: "hidden" }}>
-                            <div style={{ width: barWidth(q.errorRate), height: "100%", background: rateColor(q.errorRate), borderRadius: 3 }} />
-                          </div>
-                          <span style={{ fontWeight: 700, color: rateColor(q.errorRate), minWidth: 40, textAlign: "right" }}>{q.errorRate}%</span>
-                        </div>
-                      </td>
-                      <td style={{ padding: "8px 10px", borderBottom: "1px solid #f1f5f9", textAlign: "center" }}>
-                        <span style={{ color: C.t2 }}>{q.uniqueWrongUsers}/{q.uniqueUsers}</span>
-                      </td>
-                    </tr>
-                  ))}
+                  {questions.slice(0, questionLimit).map((q, i) => {
+                    const isOpen = !!expandedQ[i];
+                    const attempts = q.wrongAttempts || [];
+                    return (
+                      <Fragment key={i}>
+                        <tr
+                          style={{ background: q.errorRate >= 60 ? "#fef2f2" : q.errorRate >= 40 ? "#fffbeb" : "transparent", cursor: attempts.length > 0 ? "pointer" : "default" }}
+                          onClick={() => attempts.length > 0 && setExpandedQ((p) => ({ ...p, [i]: !p[i] }))}
+                        >
+                          <td style={{ padding: "8px 10px", borderBottom: "1px solid #f1f5f9", color: C.t2 }}>
+                            {attempts.length > 0 && <span style={{ marginRight: 4 }}>{isOpen ? "\u25BC" : "\u25B6"}</span>}
+                            {i + 1}
+                          </td>
+                          <td style={{
+                            padding: "8px 10px", borderBottom: "1px solid #f1f5f9",
+                            fontWeight: 600, maxWidth: 260, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                          }}>
+                            {q.correctAnswer}
+                          </td>
+                          <td style={{
+                            padding: "8px 10px", borderBottom: "1px solid #f1f5f9",
+                            color: C.t2, maxWidth: 220, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                          }}>
+                            {q.prompt || "-"}
+                          </td>
+                          <td style={{ padding: "8px 10px", borderBottom: "1px solid #f1f5f9" }}>
+                            {(q.grammar_points || []).length > 0 ? (
+                              <div style={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
+                                {q.grammar_points.slice(0, 3).map((gp, gi) => (
+                                  <span key={gi} style={{
+                                    background: "#f1f5f9", borderRadius: 4, padding: "2px 6px",
+                                    fontSize: 10, color: C.t2,
+                                  }}>{gp}</span>
+                                ))}
+                              </div>
+                            ) : "-"}
+                          </td>
+                          <td style={{ padding: "8px 10px", borderBottom: "1px solid #f1f5f9", textAlign: "center" }}>{q.total}</td>
+                          <td style={{ padding: "8px 10px", borderBottom: "1px solid #f1f5f9", textAlign: "center", fontWeight: 700, color: rateColor(q.errorRate) }}>{q.wrong}</td>
+                          <td style={{ padding: "8px 10px", borderBottom: "1px solid #f1f5f9" }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                              <div style={{ flex: 1, height: 6, background: "#f1f5f9", borderRadius: 3, overflow: "hidden" }}>
+                                <div style={{ width: barWidth(q.errorRate), height: "100%", background: rateColor(q.errorRate), borderRadius: 3 }} />
+                              </div>
+                              <span style={{ fontWeight: 700, color: rateColor(q.errorRate), minWidth: 40, textAlign: "right" }}>{q.errorRate}%</span>
+                            </div>
+                          </td>
+                          <td style={{ padding: "8px 10px", borderBottom: "1px solid #f1f5f9", textAlign: "center" }}>
+                            <span style={{ color: C.t2 }}>{q.uniqueWrongUsers}/{q.uniqueUsers}</span>
+                          </td>
+                        </tr>
+                        {isOpen && attempts.length > 0 && (
+                          <tr>
+                            <td colSpan={8} style={{ padding: 0, borderBottom: "1px solid #e2e8f0", background: "#f8fafc" }}>
+                              <div style={{ padding: "8px 12px" }}>
+                                <div style={{ fontSize: 11, fontWeight: 700, color: C.t2, marginBottom: 6 }}>
+                                  错误作答记录（最多 20 条）
+                                </div>
+                                <div style={{ fontSize: 11, color: C.nav, fontWeight: 600, marginBottom: 6, padding: "4px 8px", background: "#e0f2fe", borderRadius: 4, display: "inline-block" }}>
+                                  正确: {q.correctAnswer}
+                                </div>
+                                {attempts.map((a, ai) => (
+                                  <div key={ai} style={{
+                                    padding: "4px 8px", borderBottom: ai < attempts.length - 1 ? "1px solid #e2e8f0" : "none",
+                                    display: "flex", gap: 8, alignItems: "baseline",
+                                  }}>
+                                    <span style={{ fontSize: 10, color: C.t2, fontFamily: "monospace", minWidth: 52 }}>{a.userCode}</span>
+                                    <span style={{ fontSize: 11, color: "#dc2626" }}>{a.userAnswer}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </td>
+                          </tr>
+                        )}
+                      </Fragment>
+                    );
+                  })}
                   {questions.length === 0 && (
                     <tr><td colSpan={8} style={{ padding: 20, textAlign: "center", color: C.t2 }}>暂无数据</td></tr>
                   )}

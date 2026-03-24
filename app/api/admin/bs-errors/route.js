@@ -71,14 +71,19 @@ export async function GET(request) {
           wrong: 0,
           users: new Set(),
           wrongUsers: new Set(),
+          attempts: [],
         });
       }
       const q = questionMap.get(key);
       q.total += 1;
       q.users.add(userCode);
+      // Keep up to 20 wrong attempts for inspection
       if (!isCorrect) {
         q.wrong += 1;
         q.wrongUsers.add(userCode);
+        if (q.attempts.length < 20) {
+          q.attempts.push({ userCode, userAnswer });
+        }
       }
 
       // Per-grammar-point aggregation
@@ -138,6 +143,7 @@ export async function GET(request) {
         errorRate: q.total > 0 ? Math.round((q.wrong / q.total) * 1000) / 10 : 0,
         uniqueUsers: q.users.size,
         uniqueWrongUsers: q.wrongUsers.size,
+        wrongAttempts: q.attempts,
       }))
       .filter((q) => q.total >= 2) // Only show questions attempted at least twice
       .sort((a, b) => b.errorRate - a.errorRate || b.wrong - a.wrong);
