@@ -178,7 +178,7 @@ export function useBuildSentenceSession(questions, options = {}) {
   function evaluateQ(i, slotsArr) {
     const q = qs[i];
     const chunks = getUserChunks(slotsArr);
-    if (chunks.length === 0 || slotsArr.some((s) => s === null)) {
+    if (chunks.length === 0) {
       return {
         q,
         userAnswer: "(no answer)",
@@ -187,7 +187,8 @@ export function useBuildSentenceSession(questions, options = {}) {
       };
     }
     const rendered = renderResponseSentence(q, chunks);
-    const score = evaluateBuildSentenceOrder(q, chunks);
+    const hasEmpty = slotsArr.some((s) => s === null);
+    const score = hasEmpty ? { isCorrect: false } : evaluateBuildSentenceOrder(q, chunks);
     return {
       q,
       userAnswer: rendered.userSentenceFull || "(no answer)",
