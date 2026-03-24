@@ -1,6 +1,10 @@
 import { isAdminAuthorized } from "../../../../lib/adminAuth";
 import { isSupabaseAdminConfigured, supabaseAdmin } from "../../../../lib/supabaseAdmin";
 import { jsonError } from "../../../../lib/apiResponse";
+import { readFileSync } from "fs";
+import { resolve } from "path";
+
+const { renderResponseSentence } = require("../../../../lib/questionBank/renderResponseSentence.js");
 
 /**
  * GET /api/admin/bs-errors
@@ -15,6 +19,23 @@ export async function GET(request) {
 
     const url = new URL(request.url);
     const sessionLimit = Math.min(5000, Math.max(100, Number(url.searchParams.get("limit") || 2000)));
+
+    // Build chunk lookup from question bank: correctSentence (lowercase) → { chunks, prefilled }
+    const chunkLookup = new Map();
+    try {
+      const bankPath = resolve(process.cwd(), "data", "buildSentence", "questions.json");
+      const bankData = JSON.parse(readFileSync(bankPath, "utf8"));
+      for (const set of bankData.question_sets || []) {
+        for (const q of set.questions || []) {
+          const { correctSentenceFull } = renderResponseSentence(q);
+          const key = correctSentenceFull.trim().toLowerCase();
+          chunkLookup.set(key, {
+            chunks: q.chunks || [],
+            prefilled: q.prefilled || [],
+          });
+        }
+      }
+    } catch {}
 
     // Fetch BS sessions
     const { data: bsRows, error: bsErr } = await supabaseAdmin
@@ -134,17 +155,22 @@ export async function GET(request) {
 
     // Build sorted question error list (highest error rate first)
     const questions = [...questionMap.values()]
-      .map((q) => ({
-        correctAnswer: q.correctAnswer,
-        prompt: q.prompt,
-        grammar_points: q.grammar_points,
-        total: q.total,
-        wrong: q.wrong,
-        errorRate: q.total > 0 ? Math.round((q.wrong / q.total) * 1000) / 10 : 0,
-        uniqueUsers: q.users.size,
-        uniqueWrongUsers: q.wrongUsers.size,
-        wrongAttempts: q.attempts,
-      }))
+      .map((q) => {
+        const cl = chunkLookup.get(q.correctAnswer.toLowerCase()) || {};
+        return {
+          correctAnswer: q.correctAnswer,
+          prompt: q.prompt,
+          grammar_points: q.grammar_points,
+          chunks: cl.chunks || [],
+          prefilled: cl.prefilled || [],
+          total: q.total,
+          wrong: q.wrong,
+          errorRate: q.total > 0 ? Math.round((q.wrong / q.total) * 1000) / 10 : 0,
+          uniqueUsers: q.users.size,
+          uniqueWrongUsers: q.wrongUsers.size,
+          wrongAttempts: q.attempts,
+        };
+      })
       .filter((q) => q.total >= 2) // Only show questions attempted at least twice
       .sort((a, b) => b.errorRate - a.errorRate || b.wrong - a.wrong);
 

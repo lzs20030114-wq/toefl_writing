@@ -227,6 +227,23 @@ export default function AdminBsErrorsPage() {
                                 <div style={{ fontSize: 11, color: C.nav, fontWeight: 600, marginBottom: 6, padding: "4px 8px", background: "#e0f2fe", borderRadius: 4, display: "inline-block" }}>
                                   正确: {q.correctAnswer}
                                 </div>
+                                {(q.chunks?.length > 0 || q.prefilled?.length > 0) && (
+                                  <div style={{ marginBottom: 6, display: "flex", flexWrap: "wrap", gap: 4, alignItems: "center" }}>
+                                    <span style={{ fontSize: 10, color: C.t2, marginRight: 2 }}>词库:</span>
+                                    {(q.chunks || []).map((c, ci) => (
+                                      <span key={"c" + ci} style={{
+                                        background: "#fff", border: "1px solid #cbd5e1", borderRadius: 4,
+                                        padding: "2px 7px", fontSize: 11, color: C.nav,
+                                      }}>{c}</span>
+                                    ))}
+                                    {(q.prefilled || []).map((p, pi) => (
+                                      <span key={"p" + pi} style={{
+                                        background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 4,
+                                        padding: "2px 7px", fontSize: 11, color: "#166534", fontStyle: "italic",
+                                      }}>{p} (预填)</span>
+                                    ))}
+                                  </div>
+                                )}
                                 {attempts.map((a, ai) => (
                                   <div key={ai} style={{
                                     padding: "4px 8px", borderBottom: ai < attempts.length - 1 ? "1px solid #e2e8f0" : "none",
