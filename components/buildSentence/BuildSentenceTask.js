@@ -86,7 +86,9 @@ function confirmEarlySubmit() {
 
 export function BuildSentenceTask({
   onExit,
+  onSaveExit,
   questions,
+  initialResults,
   embedded = false,
   persistSession = true,
   onComplete = null,
@@ -130,7 +132,8 @@ export function BuildSentenceTask({
     isPracticeMode,
     canGoBack,
     goBack,
-  } = useBuildSentenceSession(questions, { persistSession, onComplete, onTimerChange, timeLimitSeconds, practiceMode });
+    getProgress,
+  } = useBuildSentenceSession(questions, { persistSession, onComplete, onTimerChange, timeLimitSeconds, practiceMode, initialResults });
   const isMobile = useIsMobile();
   const exhausted = String(selectionError || "").includes(BANK_EXHAUSTED_ERRORS.BUILD_SENTENCE);
 
@@ -312,6 +315,13 @@ export function BuildSentenceTask({
     submit();
   }
 
+  function handleSaveExitClick() {
+    if (onSaveExit) {
+      const progress = getProgress();
+      onSaveExit(progress);
+    }
+  }
+
   if (phase === "review") {
     const ok = results.filter((r) => r && r.isCorrect).length;
     const ge = {};
@@ -387,7 +397,7 @@ export function BuildSentenceTask({
             </div>
           ))}
           <div style={{ display: "flex", gap: 12, marginTop: 20 }}>
-            <Btn onClick={onExit} variant="secondary">{embedded ? "返回" : "返回练习"}</Btn>
+            <Btn onClick={() => onExit({ completed: true, results })} variant="secondary">{embedded ? "返回" : "返回练习"}</Btn>
           </div>
         </PageShell>
       </div>
@@ -417,7 +427,7 @@ export function BuildSentenceTask({
   if (phase === "instruction") {
     return (
       <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
-        {!embedded && <TopBar title="Build a Sentence" section="Writing Practice | Task 1" onExit={onExit} />}
+        {!embedded && <TopBar title="Build a Sentence" section="Writing Practice | Task 1" onExit={onSaveExit ? handleSaveExitClick : onExit} />}
         <PageShell narrow>
           <SurfaceCard className="tp-instruction-card" style={{ padding: "32px 40px" }}>
             <h2 style={{ margin: "0 0 16px", fontSize: 20, color: C.nav }}>Task 1: Build a Sentence</h2>
@@ -429,8 +439,12 @@ export function BuildSentenceTask({
               {practiceMode === PRACTICE_MODE.CHALLENGE && <p>Mode: <b>Challenge</b> (reduced time limit)</p>}
               {isPracticeMode && <p>Mode: <b>Practice</b> (no time limit)</p>}
               {!isPracticeMode && <p>The timer starts when you click <b>Start</b>. Your answers will be submitted automatically when time runs out.</p>}
+              {isPracticeMode && initialResults && (() => {
+                const answered = initialResults.filter((r) => r !== null).length;
+                return answered > 0 ? <p style={{ color: C.blue }}>上次进度：已完成 {answered}/{qs.length} 题，将从第 {answered + 1} 题继续。</p> : null;
+              })()}
             </div>
-            <div style={{ marginTop: 24, textAlign: "center" }}><Btn data-testid="build-start" onClick={startTimer}>Start</Btn></div>
+            <div style={{ marginTop: 24, textAlign: "center" }}><Btn data-testid="build-start" onClick={startTimer}>{initialResults ? "继续练习" : "Start"}</Btn></div>
           </SurfaceCard>
         </PageShell>
       </div>
@@ -581,7 +595,7 @@ export function BuildSentenceTask({
     <div style={{ minHeight: isMobile ? undefined : "100vh", height: isMobile ? "100dvh" : undefined, background: C.bg, fontFamily: FONT, display: isMobile ? "flex" : undefined, flexDirection: isMobile ? "column" : undefined, overflow: isMobile ? "hidden" : undefined }}>
       <style>{BS_INTERACTION_CSS}</style>
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
-      {!embedded && <TopBar title="Build a Sentence" section="Writing Practice | Task 1" timeLeft={isPracticeMode ? undefined : tl} isRunning={run} qInfo={idx + 1 + " / " + qs.length} onExit={onExit} />}
+      {!embedded && <TopBar title="Build a Sentence" section="Writing Practice | Task 1" timeLeft={isPracticeMode ? undefined : tl} isRunning={run} qInfo={idx + 1 + " / " + qs.length} onExit={onSaveExit ? handleSaveExitClick : onExit} />}
 
       {isMobile ? (
         /* ── 手机端：一屏布局 ── */
@@ -595,12 +609,13 @@ export function BuildSentenceTask({
           {/* 词块区 — 填充剩余空间 */}
           {bankJSX(true)}
           {/* 按钮 */}
-          <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
+          <div style={{ display: "flex", gap: 8, flexShrink: 0, flexWrap: "wrap" }}>
             {canGoBack && <Btn onClick={goBack} variant="secondary" style={{ padding: "10px 14px", fontSize: 13 }}>上一题</Btn>}
             <Btn data-testid="build-submit" onClick={handleSubmitClick} disabled={!allFilled} style={{ flex: 1, padding: "10px 0", fontSize: 14 }}>
               {idx < qs.length - 1 ? "下一题" : "完成"}
             </Btn>
             <Btn onClick={resetQ} variant="secondary" style={{ padding: "10px 16px", fontSize: 13 }}>重置</Btn>
+            {onSaveExit && <Btn onClick={handleSaveExitClick} variant="secondary" style={{ width: "100%", padding: "8px 0", fontSize: 12, color: C.t3 }}>保存进度并退出</Btn>}
           </div>
         </div>
       ) : (
@@ -622,6 +637,7 @@ export function BuildSentenceTask({
               {idx < qs.length - 1 ? "下一题" : "完成并查看结果"}
             </Btn>
             <Btn onClick={resetQ} variant="secondary">重置</Btn>
+            {onSaveExit && <Btn onClick={handleSaveExitClick} variant="secondary">保存进度并退出</Btn>}
           </div>
         </PageShell>
       )}

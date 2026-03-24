@@ -30,12 +30,17 @@ export function useBuildSentenceSession(questions, options = {}) {
     }
   })();
 
+  const initialResults = Array.isArray(options.initialResults) && options.initialResults.length === initialBuildState.qs.length
+    ? options.initialResults.map((r, i) => r ? { ...r, q: initialBuildState.qs[i] } : null)
+    : null;
+  const startIdx = initialResults ? Math.max(0, initialResults.findIndex((r) => r === null)) : 0;
+
   const [qs] = useState(() => initialBuildState.qs);
   const [selectionError] = useState(() => initialBuildState.error);
-  const [idx, setIdx] = useState(0);
+  const [idx, setIdx] = useState(startIdx);
   const [slots, setSlots] = useState([]);
   const [bank, setBank] = useState([]);
-  const [results, setResults] = useState(() => Array(initialBuildState.qs.length).fill(null));
+  const [results, setResults] = useState(() => initialResults || Array(initialBuildState.qs.length).fill(null));
   const [phase, setPhase] = useState("instruction");
   const [tl, setTl] = useState(timeLimitSeconds);
   const [run, setRun] = useState(false);
@@ -91,12 +96,13 @@ export function useBuildSentenceSession(questions, options = {}) {
     if (phase !== "instruction") return;
     if (tr.current) clearInterval(tr.current);
     try {
-      freshInitQ(0, qs);
+      freshInitQ(startIdx, qs);
     } catch {
       setPhase("instruction");
       setRun(false);
       return;
     }
+    setIdx(startIdx);
     setPhase("active");
     setRun(true);
     if (!isPracticeMode) {
@@ -375,6 +381,10 @@ export function useBuildSentenceSession(questions, options = {}) {
     }
   }
 
+  function getProgress() {
+    return { results: [...resultsRef.current] };
+  }
+
   const q = qs[idx];
   const givenSlots = useMemo(() => (Array.isArray(q?.givenSlots) ? q.givenSlots : []), [q]);
   const allFilled = slots.length > 0 && slots.every((s) => s !== null);
@@ -417,6 +427,7 @@ export function useBuildSentenceSession(questions, options = {}) {
     onDragEnd,
     onDropSlot,
     onDropBank,
+    getProgress,
   };
 }
 
