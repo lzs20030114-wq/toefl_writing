@@ -120,22 +120,9 @@ function PracticeSetList({ categoryId, onSelect, onBack }) {
           const total = batch.length;
           let statusText, statusColor, statusBg;
 
-          if (!progress) {
-            statusText = "未开始";
-            statusColor = C.t3;
-            statusBg = "#F3F4F6";
-          } else if (progress.completed) {
-            statusText = `已完成 ${progress.correct}/${progress.total}`;
-            statusColor = "#059669";
-            statusBg = "#ECFDF5";
-          } else {
-            const answered = (progress.results || []).filter((r) => r !== null).length;
-            statusText = `${answered}/${total} 已答`;
-            statusColor = C.blue;
-            statusBg = C.ltB;
-          }
-
-          const actionText = !progress ? "开始练习" : progress.completed ? "重新练习" : "继续练习";
+          const answered = progress ? (progress.results || []).filter((r) => r !== null).length : 0;
+          const isComplete = progress?.completed;
+          const actionText = !progress ? "开始练习" : isComplete ? "重新练习" : "继续练习";
 
           return (
             <SurfaceCard
@@ -147,15 +134,23 @@ function PracticeSetList({ categoryId, onSelect, onBack }) {
               }}
               onClick={() => onSelect(i)}
             >
-              <div>
-                <div style={{ fontSize: 15, fontWeight: 600, color: C.t1, marginBottom: 4 }}>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 15, fontWeight: 600, color: C.t1, marginBottom: 6 }}>
                   第 {i + 1} 套
                   <span style={{ fontSize: 12, color: C.t3, fontWeight: 400, marginLeft: 8 }}>{total} 题</span>
+                  {isComplete && <span style={{ fontSize: 11, color: "#059669", marginLeft: 8, fontWeight: 500 }}>({progress.correct}/{progress.total} 正确)</span>}
                 </div>
-                <span style={{
-                  fontSize: 11, color: statusColor, background: statusBg,
-                  padding: "2px 8px", borderRadius: 4, fontWeight: 500,
-                }}>{statusText}</span>
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <div style={{ flex: 1, height: 6, borderRadius: 3, background: "#E5E7EB", overflow: "hidden" }}>
+                    <div style={{
+                      height: "100%", borderRadius: 3,
+                      width: `${total > 0 ? (answered / total) * 100 : 0}%`,
+                      background: isComplete ? "#059669" : C.blue,
+                      transition: "width 0.3s ease",
+                    }} />
+                  </div>
+                  <span style={{ fontSize: 11, color: C.t3, whiteSpace: "nowrap", minWidth: 36, textAlign: "right" }}>{answered}/{total}</span>
+                </div>
               </div>
               <span style={{ fontSize: 13, color: C.blue, fontWeight: 500 }}>{actionText} →</span>
             </SurfaceCard>
