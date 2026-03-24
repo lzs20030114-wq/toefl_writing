@@ -6,6 +6,7 @@ import { buildHistoryEntries, buildHistoryStats } from "../lib/history/viewModel
 import { formatLocalDateTime, translateGrammarPoint } from "../lib/utils";
 import { ChevronIcon, FONT } from "./shared/ui";
 import { HistoryRow } from "./history/HistoryRow";
+import { useBsAiExplain, BsAiExplainBlock } from "./buildSentence/useBsAiExplain";
 import { WritingFeedbackPanel } from "./writing/WritingFeedbackPanel";
 import { useIsMobile } from "../hooks/useIsMobile";
 import MobileProgressView from "./history/MobileProgressView";
@@ -480,6 +481,7 @@ function FullMockReport({ entry, onClose }) {
   const [secondaryTab, setSecondaryTab] = useState("macro");
   const [activeErrorId, setActiveErrorId] = useState(null);
   const leftPanelRef = useRef(null);
+  const progressBsAi = useBsAiExplain();
 
   // Close tooltip on outside click
   useEffect(() => {
@@ -543,6 +545,7 @@ function FullMockReport({ entry, onClose }) {
                     <Tag key={gi} color={P.teal} bg={P.tealSoft}>{translateGrammarPoint(g)}</Tag>
                   ))}
                 </div>
+                <BsAiExplainBlock explainKey={`pv-${i}`} detail={d} aiExplains={progressBsAi.aiExplains} isLegacy={progressBsAi.isLegacy} handleAiExplain={progressBsAi.handleAiExplain} />
               </div>
             </div>
           ))}

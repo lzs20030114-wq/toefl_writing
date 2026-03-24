@@ -5,8 +5,7 @@ import { useBuildSentenceSession } from "./useBuildSentenceSession";
 import { formatLongDuration, PRACTICE_MODE, STANDARD_TIME_SECONDS } from "../../lib/practiceMode";
 import { translateGrammarPoint } from "../../lib/utils";
 import { BANK_EXHAUSTED_ERRORS } from "../../lib/questionSelector";
-import { getSavedTier } from "../../lib/AuthContext";
-import { callAI } from "../../lib/ai/client";
+import { useBsAiExplain, BsAiExplainBlock } from "./useBsAiExplain";
 import { useIsMobile } from "../../hooks/useIsMobile";
 
 /* ── 触觉反馈 ── */
@@ -326,20 +325,7 @@ export function BuildSentenceTask({
   }
 
   /* ── AI 错题解释 (仅 legacy 用户) ── */
-  const [aiExplains, setAiExplains] = useState({});   // { [index]: { loading, text, error } }
-  const isLegacy = typeof window !== "undefined" && getSavedTier() === "legacy";
-
-  const handleAiExplain = useCallback(async (i, r) => {
-    setAiExplains((prev) => ({ ...prev, [i]: { loading: true, text: null, error: null } }));
-    try {
-      const system = "你是一位专业的英语语法老师。学生在拖拽造句练习中答错了一道题，请用中文简短解释（3-5句话）：1）学生的答案哪里有问题；2）正确答案为什么是对的。重点讲语法，不要重复题目内容。";
-      const message = `题目：${r.q.prompt}\n学生答案：${r.userAnswer}\n正确答案：${r.correctAnswer}${r.q.grammar_points?.length ? `\n涉及语法点：${r.q.grammar_points.join(", ")}` : ""}`;
-      const text = await callAI(system, message, 300, 30000, 0.3);
-      setAiExplains((prev) => ({ ...prev, [i]: { loading: false, text, error: null } }));
-    } catch (e) {
-      setAiExplains((prev) => ({ ...prev, [i]: { loading: false, text: null, error: e.message || "请求失败" } }));
-    }
-  }, []);
+  const { aiExplains, isLegacy, handleAiExplain } = useBsAiExplain();
 
   if (phase === "review") {
     const ok = results.filter((r) => r && r.isCorrect).length;
@@ -413,27 +399,7 @@ export function BuildSentenceTask({
                   <b>语法点：</b>{r.q.grammar_points.map(translateGrammarPoint).join("、")}
                 </div>
               )}
-              {/* AI 解释按钮 — 仅 legacy 用户 + 错题 */}
-              {isLegacy && !r.isCorrect && (() => {
-                const ex = aiExplains[i];
-                if (ex?.text) return (
-                  <div style={{ marginTop: 8, padding: "10px 12px", background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: 6, fontSize: 13, color: C.t1, lineHeight: 1.6, whiteSpace: "pre-wrap" }}>
-                    {ex.text}
-                  </div>
-                );
-                return (
-                  <div style={{ marginTop: 8 }}>
-                    <button
-                      onClick={() => handleAiExplain(i, r)}
-                      disabled={ex?.loading}
-                      style={{ fontSize: 12, fontWeight: 600, color: "#fff", background: ex?.loading ? "#9ca3af" : "#7c3aed", border: "none", borderRadius: 4, padding: "5px 14px", cursor: ex?.loading ? "default" : "pointer" }}
-                    >
-                      {ex?.loading ? "分析中..." : "AI 解释"}
-                    </button>
-                    {ex?.error && <span style={{ fontSize: 12, color: C.red, marginLeft: 8 }}>{ex.error}</span>}
-                  </div>
-                );
-              })()}
+              <BsAiExplainBlock explainKey={i} detail={{ ...r.q, userAnswer: r.userAnswer, correctAnswer: r.correctAnswer, isCorrect: r.isCorrect }} aiExplains={aiExplains} isLegacy={isLegacy} handleAiExplain={handleAiExplain} />
             </div>
           ))}
           <div style={{ display: "flex", gap: 12, marginTop: 20 }}>

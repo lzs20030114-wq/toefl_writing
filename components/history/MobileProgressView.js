@@ -3,6 +3,7 @@ import React, { useState, useMemo, useEffect } from "react";
 import { FONT } from "../shared/ui";
 import { formatLocalDateTime, translateGrammarPoint } from "../../lib/utils";
 import { WritingFeedbackPanel } from "../writing/WritingFeedbackPanel";
+import { useBsAiExplain, BsAiExplainBlock } from "../buildSentence/useBsAiExplain";
 import { HistoryRow } from "./HistoryRow";
 
 const P = {
@@ -82,6 +83,7 @@ function MockDetailView({ entry, onBack }) {
   const bsDetails = Array.isArray(bsTask?.meta?.details) ? bsTask.meta.details : [];
 
   const [tab, setTab] = useState(MOCK_IDS.EMAIL);
+  const mobileBsAi = useBsAiExplain();
   const bc = Number.isFinite(s.band) ? getBandColor(s.band) : P.textDim;
 
   const tabs = [
@@ -123,6 +125,9 @@ function MockDetailView({ entry, onBack }) {
                 {(Array.isArray(d.grammar_points) ? d.grammar_points : []).map((g, gi) => (
                   <Tag key={gi} color={P.teal} bg={P.tealSoft}>{translateGrammarPoint(g)}</Tag>
                 ))}
+              </div>
+              <div style={{ paddingLeft: 20 }}>
+                <BsAiExplainBlock explainKey={`mob-${i}`} detail={d} aiExplains={mobileBsAi.aiExplains} isLegacy={mobileBsAi.isLegacy} handleAiExplain={mobileBsAi.handleAiExplain} />
               </div>
             </div>
           ))}
