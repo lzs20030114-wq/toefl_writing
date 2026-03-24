@@ -120,14 +120,14 @@ export function PageShell({ children, narrow = false }) {
   );
 }
 
-export function SurfaceCard({ children, style, tone = "default", className }) {
+export function SurfaceCard({ children, style, tone = "default", className, onClick }) {
   const toneStyle = tone === "soft"
     ? { background: C.ltB, borderColor: "#d1fae5" }
     : tone === "warn"
       ? { background: C.softAmber, borderColor: "#fde68a" }
       : { background: C.card, borderColor: C.bdr };
   return (
-    <div className={className} style={{ background: toneStyle.background, border: "1px solid " + toneStyle.borderColor, borderRadius: 14, boxShadow: C.shadow, ...style }}>
+    <div className={className} onClick={onClick} style={{ background: toneStyle.background, border: "1px solid " + toneStyle.borderColor, borderRadius: 14, boxShadow: C.shadow, ...style }}>
       {children}
     </div>
   );
