@@ -12,6 +12,7 @@
  */
 
 import { readFileSync, writeFileSync, existsSync, unlinkSync } from "fs";
+import { createHash } from "crypto";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
@@ -255,6 +256,15 @@ async function main() {
   };
   writeFileSync(OUTPUT_PATH, JSON.stringify(output, null, 2) + "\n", "utf8");
   console.log(`Saved ${finalSets.length} set(s) to ${OUTPUT_PATH}`);
+
+  // Regenerate answer_hashes.json to cover ALL bank answers
+  const allHashes = new Set();
+  finalSets.forEach(s => s.questions.forEach(q => {
+    allHashes.add(createHash("sha256").update(String(q.answer || "").trim().toLowerCase()).digest("hex"));
+  }));
+  const hashPath = resolve(__dirname, "..", "data", "buildSentence", "answer_hashes.json");
+  writeFileSync(hashPath, JSON.stringify([...allHashes]) + "\n", "utf8");
+  console.log(`Updated answer_hashes.json: ${allHashes.size} hashes`);
 
   const valid = finalValidate();
   if (!valid) {

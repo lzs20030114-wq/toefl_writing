@@ -56,6 +56,7 @@ const CIRCUIT_BREAKER_LOG_PATH = process.env.BS_CIRCUIT_BREAKER_LOG_PATH
 const DIAGNOSTICS_PATH = process.env.BS_DIAGNOSTICS_PATH
   ? resolve(String(process.env.BS_DIAGNOSTICS_PATH))
   : OUTPUT_PATH.replace(/\.json$/i, ".diagnostics.json");
+const BANK_PATH = resolve(__dirname, "..", "data", "buildSentence", "questions.json");
 const ANSWER_HASHES_PATH = resolve(__dirname, "..", "data", "buildSentence", "answer_hashes.json");
 const CHECKPOINT_PATH = resolve(__dirname, "..", "data", "buildSentence", "generation_checkpoint.json");
 const RUN_HISTORY_PATH = resolve(__dirname, "..", "data", "buildSentence", "run_history.json");
@@ -3702,24 +3703,40 @@ async function main() {
   }
 
   const acceptedPool = [];
+  const bankAnswerKeys = new Set();
   if (checkpoint) {
     acceptedPool.push(...(checkpoint.acceptedPool || []));
   } else {
-    for (const [label, filePath] of [["questions.json", OUTPUT_PATH], ["reserve_pool.json", RESERVE_PATH]]) {
-      try {
-        const data = JSON.parse(readFileSync(filePath, "utf8"));
-        const seeded = Array.isArray(data)
-          ? data
-          : (data.question_sets || []).flatMap((s) => s.questions || []);
-        const clean = seeded.filter(q => !hasLegacyMultiSentencePrompt(q));
-        const dropped = seeded.length - clean.length;
-        if (clean.length > 0) {
-          acceptedPool.push(...clean);
-          console.log(`Seeded ${clean.length} questions from ${label}${dropped > 0 ? ` (dropped ${dropped} with legacy multi-sentence prompts)` : ""}`);
-        }
-      } catch (_) {
-        // file missing or invalid — skip
+    const isAppendMode = OUTPUT_PATH !== BANK_PATH;
+    // Step 1: Load bank answer keys for dedup; seed into pool only in overwrite mode
+    try {
+      const data = JSON.parse(readFileSync(BANK_PATH, "utf8"));
+      const seeded = (data.question_sets || []).flatMap((s) => s.questions || []);
+      const clean = seeded.filter(q => !hasLegacyMultiSentencePrompt(q));
+      const dropped = seeded.length - clean.length;
+      clean.forEach(q => bankAnswerKeys.add(stableAnswerKey(q)));
+      if (!isAppendMode && clean.length > 0) {
+        acceptedPool.push(...clean);
+        console.log(`Seeded ${clean.length} questions from questions.json${dropped > 0 ? ` (dropped ${dropped} with legacy multi-sentence prompts)` : ""}`);
+      } else if (isAppendMode) {
+        console.log(`Loaded ${bankAnswerKeys.size} bank answer keys for dedup (append mode)`);
       }
+    } catch (_) {
+      // file missing or invalid — skip
+    }
+    // Step 2: Load reserve pool, filtering out answers already in bank
+    try {
+      const data = JSON.parse(readFileSync(RESERVE_PATH, "utf8"));
+      const seeded = Array.isArray(data) ? data : [];
+      const clean = seeded.filter(q => !hasLegacyMultiSentencePrompt(q));
+      const deduped = clean.filter(q => !bankAnswerKeys.has(stableAnswerKey(q)));
+      const dupCount = clean.length - deduped.length;
+      if (deduped.length > 0) {
+        acceptedPool.push(...deduped);
+      }
+      console.log(`Seeded ${deduped.length} questions from reserve_pool.json${dupCount > 0 ? ` (filtered ${dupCount} bank duplicates)` : ""}`);
+    } catch (_) {
+      // file missing or invalid — skip
     }
     // P2.4: Archive recycling — if reserve_pool was empty/small, backfill from newest archive
     try {
@@ -3735,8 +3752,12 @@ async function main() {
             const archiveData = JSON.parse(readFileSync(archivePath, "utf8"));
             if (Array.isArray(archiveData) && archiveData.length > 0) {
               const clean = archiveData.filter(q => !hasLegacyMultiSentencePrompt(q));
-              acceptedPool.push(...clean);
-              console.log(`Recycled ${clean.length} questions from archive/${archiveFile}`);
+              const deduped = clean.filter(q => !bankAnswerKeys.has(stableAnswerKey(q)));
+              const dupCount = clean.length - deduped.length;
+              if (deduped.length > 0) {
+                acceptedPool.push(...deduped);
+              }
+              console.log(`Recycled ${deduped.length} questions from archive/${archiveFile}${dupCount > 0 ? ` (filtered ${dupCount} bank duplicates)` : ""}`);
             }
           } catch (_) { /* skip corrupt archive */ }
         }
@@ -3746,6 +3767,8 @@ async function main() {
 
   // Register all seeded/restored answers into global hash set
   acceptedPool.forEach(q => globalAnswerHashes.add(hashAnswer(q)));
+  // Also register bank answers so new candidates don't duplicate them (critical for append mode)
+  bankAnswerKeys.forEach(key => globalAnswerHashes.add(createHash("sha256").update(key).digest("hex")));
   console.log(`Global answer hashes: ${globalAnswerHashes.size} loaded`);
   checkAcceptanceTrend();
 
@@ -4656,6 +4679,7 @@ async function main() {
   const reserve = uniqBy(
     [...poolByDiff.easy, ...poolByDiff.medium, ...poolByDiff.hard]
       .filter((q) => !usedAnswers.has(stableAnswerKey(q)))
+      .filter((q) => !bankAnswerKeys.has(stableAnswerKey(q)))
       .map((q) => { const c = cloneQuestion(q); delete c._meta; return c; }),
     stableAnswerKey
   );
