@@ -50,6 +50,11 @@ export async function GET(request) {
       const correctAnswer = String(d.correctAnswer || "").trim();
       if (!correctAnswer) return;
 
+      // Skip unanswered questions — they are stored as "(no answer)" when
+      // the user didn't complete the full set or ran out of time.
+      const userAnswer = String(d.userAnswer || "").trim();
+      if (!userAnswer || userAnswer === "(no answer)") return;
+
       const isCorrect = d.isCorrect === true;
       totalAttempts += 1;
       if (!isCorrect) totalWrong += 1;
