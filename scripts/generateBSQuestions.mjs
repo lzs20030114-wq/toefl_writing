@@ -96,6 +96,17 @@ function loadEnv() {
 
 // normalizeText, endsWithQuestionMark, uniqBy, shuffle, parseJsonArray → lib/bsGen/utils.js
 
+const PROPER_NOUN_MAP = Object.fromEntries([
+  "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday",
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
+].map((w) => [w.toLowerCase(), w]));
+
+/** Lowercase a string but preserve proper nouns (day/month names). */
+function smartLowercase(s) {
+  return s.split(/\s+/).map((w) => PROPER_NOUN_MAP[w.toLowerCase()] || w.toLowerCase()).join(" ");
+}
+
 /**
  * Split a chunk that has more than maxWords into sub-chunks.
  * Strategy: split into ceil and floor halves to keep collocations natural.
@@ -671,8 +682,9 @@ function normalizeQuestion(raw, tempId) {
 
   // Fix 1: lowercase chunks and distractor BEFORE intermediate processing
   // so ensureMinChunkCount's `c !== distractor` comparison is always case-consistent.
+  // smartLowercase preserves proper nouns (day/month names).
   let chunks = Array.isArray(q.chunks)
-    ? q.chunks.map((c) => normalizeText(c).toLowerCase()).filter(Boolean)
+    ? q.chunks.map((c) => smartLowercase(normalizeText(c))).filter(Boolean)
     : [];
   let prefilled = Array.isArray(q.prefilled)
     ? q.prefilled.map((c) => normalizeText(c)).filter(Boolean)
@@ -681,7 +693,7 @@ function normalizeQuestion(raw, tempId) {
     ? q.prefilled_positions
     : {};
 
-  let distractor = normalizeText(q.distractor)?.toLowerCase() || null;
+  let distractor = normalizeText(q.distractor) ? smartLowercase(normalizeText(q.distractor)) : null;
   const answer = normalizeText(q.answer);
   const answerWords = answer.toLowerCase().replace(/[.,!?;:]/g, "").split(/\s+/).filter(Boolean);
 
@@ -712,7 +724,7 @@ function normalizeQuestion(raw, tempId) {
       const kept = pfWords.slice(0, 2).join(" ");
       const overflow = pfWords.slice(2);
       prefilled = [kept];
-      chunks = [...overflow.map(w => w.toLowerCase()), ...chunks];
+      chunks = [...overflow.map(w => smartLowercase(w)), ...chunks];
     }
   }
 
@@ -897,8 +909,8 @@ function maybeReassignPrefilledPosition(q) {
 
   // Swap: chosen chunk → prefilled, old prefilled → chunk
   const newChunks = q.chunks.filter((c) => c !== chosen.chunk);
-  // Add old prefilled as a single chunk (lowercase)
-  newChunks.push(oldPrefilled.toLowerCase());
+  // Add old prefilled as a single chunk (lowercase, preserving proper nouns)
+  newChunks.push(smartLowercase(oldPrefilled));
 
   return {
     ...q,

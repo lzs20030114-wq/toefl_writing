@@ -49,6 +49,13 @@ function loadEnv() {
 // ── utilities ────────────────────────────────────────────────
 const norm = (s) => String(s || "").trim();
 const answerKey = (q) => norm(q.answer).toLowerCase();
+
+const PROPER_NOUN_MAP = Object.fromEntries([
+  "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday",
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
+].map((w) => [w.toLowerCase(), w]));
+const smartLower = (s) => s.split(/\s+/).map((w) => PROPER_NOUN_MAP[w.toLowerCase()] || w.toLowerCase()).join(" ");
 const endsQ = (s) => norm(s).endsWith("?");
 
 function shuffle(arr) {
@@ -99,8 +106,8 @@ function ensureMinChunks(chunks, distractor, min = 4) {
 
 function normalizeQ(raw, tid) {
   const q = raw && typeof raw === "object" ? raw : {};
-  let chunks = (Array.isArray(q.chunks) ? q.chunks : []).map(c => norm(c).toLowerCase()).filter(Boolean);
-  const distractor = norm(q.distractor)?.toLowerCase() || null;
+  let chunks = (Array.isArray(q.chunks) ? q.chunks : []).map(c => smartLower(norm(c))).filter(Boolean);
+  const distractor = norm(q.distractor) ? smartLower(norm(q.distractor)) : null;
   chunks = chunks.flatMap(c => autoSplitChunk(c, 3));
   chunks = ensureMinChunks(chunks, distractor, 4);
   const answer = norm(q.answer);
