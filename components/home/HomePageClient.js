@@ -52,6 +52,9 @@ export function PromoBanner({ isChallenge, fadeIn }) {
           <br />
           发布后请通过首页「反馈」入口提交小红书笔记链接，我们会尽快审核。
         </p>
+        <p style={{ margin: "8px 0 0", fontSize: 11, color: subColor, lineHeight: 1.6, opacity: 0.8 }}>
+          🌱 产品初创阶段维护不易！希望用户大人们好心帮助推广！用户群体壮大了，我们也更有动力做得更好！求求你们辣！🥺🙏✨
+        </p>
       </div>
     </div>
   );
