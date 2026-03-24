@@ -13,6 +13,31 @@ import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_PAGE_CSS, HOME_TOKENS as T, TAS
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { AnnouncementButton } from "./AnnouncementModal";
 
+export function PromoBanner({ isChallenge, fadeIn }) {
+  const [dismissed, setDismissed] = useState(false);
+  if (dismissed) return null;
+  const bg = isChallenge
+    ? "linear-gradient(135deg, #1a0a1e 0%, #1a1028 100%)"
+    : "linear-gradient(135deg, #FEF3C7 0%, #FDE68A 50%, #FCD34D 100%)";
+  const border = isChallenge ? "1px solid rgba(251,191,36,0.3)" : "1px solid #F59E0B";
+  const textColor = isChallenge ? "#FDE68A" : "#78350F";
+  const subColor = isChallenge ? "rgba(253,230,138,0.7)" : "#92400E";
+  return (
+    <div style={{ marginBottom: 14, borderRadius: 12, padding: "14px 18px", background: bg, border, position: "relative", ...fadeIn(140) }}>
+      <button onClick={() => setDismissed(true)} style={{ position: "absolute", top: 8, right: 10, background: "none", border: "none", cursor: "pointer", color: subColor, fontSize: 16, lineHeight: 1, padding: 4 }} aria-label="关闭">&times;</button>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+        <span style={{ fontSize: 20 }}>🎁</span>
+        <span style={{ fontSize: 14, fontWeight: 700, color: textColor }}>小红书好评活动</span>
+      </div>
+      <p style={{ margin: 0, fontSize: 12, color: subColor, lineHeight: 1.7 }}>
+        在小红书发布 TreePractice 使用体验，经管理员确认后即可获得 <strong style={{ color: textColor }}>7 天 Pro 订阅</strong>。
+        <br />
+        发布后请通过首页「反馈」入口提交小红书笔记链接，我们会尽快审核。
+      </p>
+    </div>
+  );
+}
+
 const PRACTICE_TASKS = [
   { k: "build-sentence", modeKey: "build", n: "Task 1", t: "Build a Sentence", d: "Reorder words to form a grammatically correct response.", it: "10 questions" },
   { k: "email-writing", modeKey: "email", n: "Task 2", t: "Write an Email", d: "Respond appropriately to a workplace situation.", it: "80-120 words" },
@@ -298,6 +323,8 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
                   <span>- 仅供练习使用，不代表官方考试评分</span>
                 </div>
               </div>
+
+              <PromoBanner isChallenge={isChallenge} fadeIn={fadeIn} />
 
               <div className="home-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
                 {gridItems.map((item) => (

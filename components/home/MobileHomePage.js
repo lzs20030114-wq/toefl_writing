@@ -5,6 +5,7 @@ import Link from "next/link";
 import { BottomSheet } from "../shared/BottomSheet";
 import UpgradeModal from "../shared/UpgradeModal";
 import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
+import { PromoBanner } from "./HomePageClient";
 import { PRACTICE_MODE } from "../../lib/practiceMode";
 import { FREE_DAILY_LIMIT } from "../../lib/dailyUsage";
 
@@ -153,6 +154,8 @@ export function MobileHomePage({
           })}
         </div>
       </div>
+
+      <PromoBanner isChallenge={isChallenge} fadeIn={() => ({})} />
 
       {/* ── 任务卡片列表 ── */}
       <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 14 }}>
