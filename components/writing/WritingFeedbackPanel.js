@@ -4,6 +4,7 @@ import { FONT } from "../shared/ui";
 import { getSavedCode, getSavedTier } from "../../lib/AuthContext";
 import UpgradeModal from "../shared/UpgradeModal";
 import { useIsMobile } from "../../hooks/useIsMobile";
+import VocabCEFRPanel from "./VocabCEFRPanel";
 
 const P = {
   bg: "#f4f7f5", surface: "#ffffff", border: "#dde5df", borderSubtle: "#ebf0ed",
@@ -162,6 +163,7 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
   const WRITING_TABS = [
     { id: "macro", label: "宏观评价与建议" },
     { id: "linebyline", label: "逐句批注大纲" },
+    { id: "vocab", label: "词汇分析" },
     { id: "sample", label: "范文对比分析" },
   ];
 
@@ -381,12 +383,17 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
     );
   }
 
-  const tabContent = { macro: renderMacro, linebyline: renderLineByLine, sample: renderSample };
+  function renderVocab() {
+    return <VocabCEFRPanel text={userText} isPro={isPro} onUpgrade={() => setShowUpgrade(true)} />;
+  }
+
+  const tabContent = { macro: renderMacro, linebyline: renderLineByLine, vocab: renderVocab, sample: renderSample };
 
   const MOBILE_TABS = [
     { id: "text", label: "作文批注" },
     { id: "macro", label: "宏观评价" },
     { id: "linebyline", label: "逐句批注" },
+    { id: "vocab", label: "词汇" },
     { id: "sample", label: "范文对比" },
   ];
 
@@ -443,6 +450,7 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
             )}
             {mobileTab === "macro" && <div style={{ padding: "16px 14px", animation: "wfpTabFade 0.25s ease" }}>{renderMacro()}</div>}
             {mobileTab === "linebyline" && <div style={{ padding: "16px 14px", animation: "wfpTabFade 0.25s ease" }}>{renderLineByLine()}</div>}
+            {mobileTab === "vocab" && <div style={{ padding: "16px 14px", animation: "wfpTabFade 0.25s ease" }}>{renderVocab()}</div>}
             {mobileTab === "sample" && <div style={{ padding: "16px 14px", animation: "wfpTabFade 0.25s ease" }}>{renderSample()}</div>}
           </div>
         </div>

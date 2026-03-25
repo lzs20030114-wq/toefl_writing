@@ -3,6 +3,7 @@ import React, { useMemo, useState } from "react";
 import { C, DisclosureSection, FONT } from "../shared/ui";
 import { getSavedCode, getSavedTier } from "../../lib/AuthContext";
 import UpgradeModal from "../shared/UpgradeModal";
+import VocabCEFRPanel, { getVocabPreview } from "./VocabCEFRPanel";
 
 function GoalBadge({ status }) {
   const map = {
@@ -75,6 +76,11 @@ export function ScoringReport({ result, type }) {
   const counts = result.annotationCounts || { red: 0, orange: 0, blue: 0, spelling: 0 };
   const marks = Array.isArray(result.annotationSegments) ? result.annotationSegments : [];
   const comparison = result.comparison || { modelEssay: "", points: [], raw: "" };
+  const essayPlainText = useMemo(() => {
+    if (result.userText) return result.userText;
+    if (marks.length > 0) return marks.map((s) => s.text || "").join("");
+    return result.annotationRaw || "";
+  }, [result.userText, marks, result.annotationRaw]);
   const sectionStates = result.sectionStates || {};
 
   const patternRows = useMemo(
@@ -201,6 +207,10 @@ export function ScoringReport({ result, type }) {
             ))}
           </div>
         )}
+      </DisclosureSection>
+
+      <DisclosureSection title="词汇等级分析" preview={getVocabPreview(essayPlainText)} contentStyle={{ padding: 14 }}>
+        <VocabCEFRPanel text={essayPlainText} isPro={isPro} onUpgrade={() => setShowUpgrade(true)} />
       </DisclosureSection>
 
       <DisclosureSection title="范文对比" preview={Array.isArray(comparison.points) ? `${comparison.points.length} 个对比点` : "暂无"} contentStyle={{ padding: 14 }}>
