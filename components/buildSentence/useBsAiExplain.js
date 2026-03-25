@@ -35,7 +35,8 @@ function getFromCache(detail) {
 
 export function useBsAiExplain() {
   const [aiExplains, setAiExplains] = useState({});
-  const isLegacy = typeof window !== "undefined" && getSavedTier() === "legacy";
+  const tier = typeof window !== "undefined" ? getSavedTier() : null;
+  const isLegacy = tier === "legacy" || tier === "pro";
 
   const handleAiExplain = useCallback(async (key, detail) => {
     // Check cache first
