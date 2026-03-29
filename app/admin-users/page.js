@@ -319,6 +319,23 @@ export default function AdminUsersPage() {
                 </div>
               </div>
 
+              {/* Paid users */}
+              {data.paid && (
+                <div style={SECTION}>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: C.nav, marginBottom: 10 }}>付费统计</div>
+                  <div style={{ display: "flex", gap: 20 }}>
+                    <div>
+                      <div style={{ fontSize: 22, fontWeight: 800, color: "#d97706" }}>{data.paid.uniqueUsers}</div>
+                      <div style={{ fontSize: 12, color: C.t2 }}>付费用户数</div>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: 22, fontWeight: 800, color: "#d97706" }}>{data.paid.totalOrders}</div>
+                      <div style={{ fontSize: 12, color: C.t2 }}>总订单数</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Auth method breakdown */}
               <div style={SECTION}>
                 <div style={{ fontSize: 14, fontWeight: 700, color: C.nav, marginBottom: 10 }}>登录方式</div>

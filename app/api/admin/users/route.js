@@ -82,6 +82,17 @@ export async function GET(request) {
       if (lastLogin >= oneMonthAgo) activeLastMonth++;
     }
 
+    // Paid user stats from iap_entitlements
+    const { data: entitlements } = await supabaseAdmin
+      .from("iap_entitlements")
+      .select("user_code,product_id,provider,created_at");
+    const ents = entitlements || [];
+    const paidUsers = new Set(ents.map((e) => e.user_code));
+    const paidStats = {
+      totalOrders: ents.length,
+      uniqueUsers: paidUsers.size,
+    };
+
     return Response.json({
       total,
       growth: { lastHour, lastDay, lastWeek, lastMonth },
@@ -89,6 +100,7 @@ export async function GET(request) {
       authMethods: authMethodCounts,
       statuses: statusCounts,
       active: { lastDay: activeLastDay, lastWeek: activeLastWeek, lastMonth: activeLastMonth },
+      paid: paidStats,
       users: allUsers,
     });
   } catch (e) {
