@@ -15,7 +15,7 @@ const mC = (isChallenge, light, dark) => (isChallenge ? dark : light);
 /* ── 移动端首页（替代桌面的 sidebar+grid 布局） ── */
 export function MobileHomePage({
   isChallenge, isPractice, mode, switchMode,
-  gridItems, postWritingCounts,
+  gridItems, postWritingCounts, bsMistakeCount = 0,
   userCode, userTier, userEmail, isLoggedIn, showLoginModal, onLogout,
   totalCount, weekCount, bestMock,
   fbOpen, setFbOpen, fbText, setFbText, fbBusy, fbSent, feedbackMsg, submitFeedback,
@@ -186,6 +186,32 @@ export function MobileHomePage({
           <span style={{ color: t2 }}>›</span>
         </Link>
       )}
+
+      {/* ── 错题本入口 ── */}
+      <Link
+        href={`/mistake-notebook${querySuffix}`}
+        style={{
+          display: "flex", alignItems: "center", gap: 12,
+          padding: "14px 16px", marginBottom: 14,
+          background: isChallenge ? CH.card : T.card,
+          border: `1px solid ${isChallenge ? CH.cardBorder : T.bdr}`,
+          borderRadius: 12, textDecoration: "none", color: "inherit",
+        }}
+      >
+        <span style={{ fontSize: 20 }}>✗</span>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontSize: 14, fontWeight: 700, color: t1 }}>拼句错题本</div>
+          <div style={{ fontSize: 12, color: t2 }}>
+            {bsMistakeCount > 0 ? `已收录 ${bsMistakeCount} 道错题` : "做完练习后错题自动收录"}
+          </div>
+        </div>
+        {bsMistakeCount > 0 && (
+          <span style={{ fontSize: 11, fontWeight: 700, color: "#dc2626", background: "#fef2f2", borderRadius: 999, padding: "2px 8px" }}>
+            {bsMistakeCount}
+          </span>
+        )}
+        <span style={{ color: t2 }}>›</span>
+      </Link>
 
       {/* ── 底部快捷入口 ── */}
       <div style={{ display: "flex", gap: 8 }}>

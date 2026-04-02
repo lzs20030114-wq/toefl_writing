@@ -12,6 +12,7 @@ import { MobileHomePage } from "./MobileHomePage";
 import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_PAGE_CSS, HOME_TOKENS as T, TASK_ACCENTS } from "./theme";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { AnnouncementButton } from "./AnnouncementModal";
+import { countBsMistakes } from "../MistakeNotebook";
 
 export function PromoBanner({ isChallenge, fadeIn }) {
   const [open, setOpen] = useState(false);
@@ -115,6 +116,8 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
       bestMock: mockBands.length > 0 ? Math.max(...mockBands) : null,
     };
   }, [sessions]);
+
+  const bsMistakeCount = useMemo(() => countBsMistakes(sessions), [sessions]);
 
   const postWritingCounts = useMemo(() => {
     const grouped = groupPostWritingPracticeItems(extractPostWritingPracticeItems(sessions));
@@ -251,7 +254,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
           <MobileHomePage
             isChallenge={isChallenge} isPractice={isPractice}
             mode={mode} switchMode={switchMode}
-            gridItems={gridItems} postWritingCounts={postWritingCounts}
+            gridItems={gridItems} postWritingCounts={postWritingCounts} bsMistakeCount={bsMistakeCount}
             userCode={userCode} userTier={userTier} userEmail={userEmail}
             isLoggedIn={isLoggedIn} showLoginModal={showLoginModal} onLogout={onLogout}
             totalCount={totalCount} weekCount={weekCount} bestMock={bestMock}
@@ -375,7 +378,22 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
                 />
               </div>
 
-              <div style={{ marginBottom: 28, ...fadeIn(480) }}>
+              <div style={{ marginBottom: 12, ...fadeIn(460) }}>
+                <HomeLinkCard
+                  href="/mistake-notebook"
+                  cardKey="mistake-notebook"
+                  hoverKey={hoverKey}
+                  setHoverKey={setHoverKey}
+                  isChallenge={isChallenge}
+                  icon="✗"
+                  eyebrow="复习"
+                  title="拼句错题本"
+                  description={bsMistakeCount > 0 ? `已收录 ${bsMistakeCount} 道错题，点击查看详情和 AI 解析。` : "做完拼句练习后，错题会自动收录在这里。"}
+                  badge={bsMistakeCount > 0 ? `${bsMistakeCount} 题` : "暂无错题"}
+                />
+              </div>
+
+              <div style={{ marginBottom: 28, ...fadeIn(500) }}>
                 <HomeLinkCard href="/progress" cardKey="progress" hoverKey={hoverKey} setHoverKey={setHoverKey} isChallenge={isChallenge} icon="P" eyebrow="记录" title="练习记录" description={sessions.length > 0 ? `已记录 ${sessions.length} 次练习，可查看趋势和薄弱点。` : "查看练习趋势并定位薄弱点。"} badge={sessions.length > 0 ? `${sessions.length} 条记录` : "暂无记录"} />
               </div>
 
