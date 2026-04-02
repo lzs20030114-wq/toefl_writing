@@ -928,6 +928,31 @@ function stableAnswerKey(q) {
 function hashAnswer(q) {
   return createHash("sha256").update(stableAnswerKey(q)).digest("hex");
 }
+
+// ── Fuzzy answer similarity (prevents near-duplicate generation) ──
+const ANSWER_SIMILARITY_THRESHOLD = 0.75;
+function answerWordJaccard(a, b) {
+  const wa = new Set(a.toLowerCase().replace(/[^a-z0-9\s]/g, "").split(/\s+/).filter(Boolean));
+  const wb = new Set(b.toLowerCase().replace(/[^a-z0-9\s]/g, "").split(/\s+/).filter(Boolean));
+  if (wa.size === 0 || wb.size === 0) return 0;
+  let inter = 0;
+  wa.forEach(w => { if (wb.has(w)) inter++; });
+  return inter / (wa.size + wb.size - inter);
+}
+function isSimilarToExisting(q, bankAnswerStrings, recentPool) {
+  const candidate = q.answer;
+  // Check against production bank answers
+  if (bankAnswerStrings) {
+    for (const existing of bankAnswerStrings) {
+      if (answerWordJaccard(candidate, existing) >= ANSWER_SIMILARITY_THRESHOLD) return true;
+    }
+  }
+  // Check against recently accepted pool answers
+  for (const existing of recentPool) {
+    if (answerWordJaccard(candidate, existing.answer) >= ANSWER_SIMILARITY_THRESHOLD) return true;
+  }
+  return false;
+}
 function loadAnswerHashes() {
   try { return new Set(JSON.parse(readFileSync(ANSWER_HASHES_PATH, "utf8"))); }
   catch (_) { return new Set(); }
@@ -2197,6 +2222,23 @@ async function generateCandidateRound(round, spec, rejectFeedback = "", recentPo
   }
   if (dedupPassed.length === 0) return out;
 
+  // Fuzzy similarity dedup: reject answers too similar to bank or recent pool
+  const similarityPassed = [];
+  const bankStrs = options?.bankAnswerStrings;
+  for (const q of dedupPassed) {
+    if (isSimilarToExisting(q, bankStrs, recentPool)) {
+      const type = resolvedAnswerType(q);
+      const reason = "dedup:similar_answer";
+      out.rejected += 1;
+      out.rejectReasons[reason] = (out.rejectReasons[reason] || 0) + 1;
+      out.typeStats[type].rejected += 1;
+      out.typeStats[type].reasons[reason] = (out.typeStats[type].reasons[reason] || 0) + 1;
+      continue;
+    }
+    similarityPassed.push(q);
+  }
+  if (similarityPassed.length === 0) return out;
+
   // Pool-level prefilled diversity gate:
   // 1. No-prefilled quota: reject prefilled=[] when pool exceeds 10% (TPO: ~8%)
   // 2. "i" quota: reject prefilled=["i"] when pool exceeds 15% (TPO: ~10% of all prefilled)
@@ -2219,7 +2261,7 @@ async function generateCandidateRound(round, spec, rejectFeedback = "", recentPo
   const oneWordQuotaExceeded = pool1wRatio >= 0.65;
 
   const prefilledPassed = [];
-  for (const q of dedupPassed) {
+  for (const q of similarityPassed) {
     // Gate: no-prefilled quota (TPO 8%, cap at 10%)
     if (noPfQuotaExceeded && (!Array.isArray(q.prefilled) || q.prefilled.length === 0)) {
       const type = resolvedAnswerType(q);
@@ -3716,6 +3758,7 @@ async function main() {
 
   const acceptedPool = [];
   const bankAnswerKeys = new Set();
+  const bankAnswerStrings = []; // for fuzzy similarity dedup
   if (checkpoint) {
     acceptedPool.push(...(checkpoint.acceptedPool || []));
   } else {
@@ -3726,7 +3769,10 @@ async function main() {
       const seeded = (data.question_sets || []).flatMap((s) => s.questions || []);
       const clean = seeded.filter(q => !hasLegacyMultiSentencePrompt(q));
       const dropped = seeded.length - clean.length;
-      clean.forEach(q => bankAnswerKeys.add(stableAnswerKey(q)));
+      clean.forEach(q => {
+        bankAnswerKeys.add(stableAnswerKey(q));
+        bankAnswerStrings.push(q.answer);
+      });
       if (!isAppendMode && clean.length > 0) {
         acceptedPool.push(...clean);
         console.log(`Seeded ${clean.length} questions from questions.json${dropped > 0 ? ` (dropped ${dropped} with legacy multi-sentence prompts)` : ""}`);
@@ -3782,6 +3828,7 @@ async function main() {
   // Also register bank answers so new candidates don't duplicate them (critical for append mode)
   bankAnswerKeys.forEach(key => globalAnswerHashes.add(createHash("sha256").update(key).digest("hex")));
   console.log(`Global answer hashes: ${globalAnswerHashes.size} loaded`);
+  console.log(`Bank answer strings for similarity dedup: ${bankAnswerStrings.length} loaded (threshold=${ANSWER_SIMILARITY_THRESHOLD})`);
   checkAcceptanceTrend();
 
   const runStartTime = Date.now();
@@ -4489,9 +4536,13 @@ async function main() {
         typeReliability,
         generationHints: schedule.phase === "assembly" ? buildAssemblyGenerationHints(assemblyState, spec, schedule.primaryRepairTarget) : "",
         globalAnswerHashes,
+        bankAnswerStrings,
       });
       acceptedPool.push(...res.questions);
-      res.questions.forEach(q => globalAnswerHashes.add(hashAnswer(q)));
+      res.questions.forEach(q => {
+        globalAnswerHashes.add(hashAnswer(q));
+        bankAnswerStrings.push(q.answer); // also prevent similarity within same run
+      });
       statTotalRounds += 1;
       statTotalGenerated += res.generated;
       statTotalAccepted += res.accepted;
