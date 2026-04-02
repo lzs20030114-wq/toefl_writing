@@ -1,9 +1,10 @@
 "use client";
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { loadHist, SESSION_STORE_EVENTS } from "../lib/sessionStore";
 import { formatLocalDateTime, translateGrammarPoint } from "../lib/utils";
 import { C, FONT, PageShell, SurfaceCard, DisclosureSection } from "./shared/ui";
 import { useBsAiExplain, BsAiExplainBlock } from "./buildSentence/useBsAiExplain";
+import { callAI } from "../lib/ai/client";
 
 /* ── helpers ── */
 
@@ -27,7 +28,7 @@ function extractMistakes(sessions) {
     .sort((a, b) => new Date(b.date) - new Date(a.date)); // newest first
 }
 
-function topGrammarPoints(groups, limit = 3) {
+function allGrammarFreq(groups) {
   const freq = {};
   for (const g of groups) {
     for (const d of g.details) {
@@ -38,9 +39,58 @@ function topGrammarPoints(groups, limit = 3) {
   }
   return Object.entries(freq)
     .sort((a, b) => b[1] - a[1])
-    .slice(0, limit)
     .map(([tag, count]) => ({ tag, label: translateGrammarPoint(tag), count }));
 }
+
+function topGrammarPoints(groups, limit = 3) {
+  return allGrammarFreq(groups).slice(0, limit);
+}
+
+function buildAnalysisPrompt(groups, totalWrong, gpFreq) {
+  const totalSessions = groups.length;
+  const totalQuestions = groups.reduce((n, g) => n + g.total, 0);
+  const errorRate = totalQuestions > 0 ? ((totalWrong / totalQuestions) * 100).toFixed(1) : 0;
+
+  // Top 8 grammar weaknesses
+  const top8 = gpFreq.slice(0, 8).map((gp) => `${gp.label}(${gp.tag}): ${gp.count}次`).join("、");
+
+  // Recent trend: compare first half vs second half of sessions
+  const mid = Math.ceil(totalSessions / 2);
+  const olderHalf = groups.slice(mid); // older (groups are newest-first)
+  const newerHalf = groups.slice(0, mid);
+  const olderRate = olderHalf.reduce((n, g) => n + g.wrongCount, 0) / Math.max(olderHalf.reduce((n, g) => n + g.total, 0), 1);
+  const newerRate = newerHalf.reduce((n, g) => n + g.wrongCount, 0) / Math.max(newerHalf.reduce((n, g) => n + g.total, 0), 1);
+  const trend = newerRate < olderRate - 0.05 ? "进步明显" : newerRate > olderRate + 0.05 ? "有退步趋势" : "基本持平";
+
+  // Sample 3 representative wrong answers for context
+  const samples = [];
+  for (const g of groups) {
+    for (const d of g.details) {
+      if (samples.length < 3) {
+        samples.push(`错答:"${d.userAnswer}" → 正确:"${d.correctAnswer}" [${(d.grammar_points || []).join(",")}]`);
+      }
+    }
+  }
+
+  return `学生在 TOEFL Build a Sentence 拖拽造句练习中的错题数据如下：
+
+总练习次数：${totalSessions} 套（共 ${totalQuestions} 题）
+总错题数：${totalWrong} 题（错误率 ${errorRate}%）
+近期趋势：${trend}（前半段错误率 ${(olderRate * 100).toFixed(1)}% → 后半段 ${(newerRate * 100).toFixed(1)}%）
+
+语法薄弱点分布（按出错频率排序）：
+${top8}
+
+典型错误示例：
+${samples.join("\n")}
+
+请用中文给出简洁的分析报告（200字以内），包含：
+1. 最需要优先攻克的 2-3 个语法薄弱点及具体建议
+2. 近期学习趋势评价
+3. 一句鼓励的话`;
+}
+
+const ANALYSIS_SYSTEM = "你是一位专业的 TOEFL 写作辅导老师。根据学生的错题数据，给出简洁精准的薄弱点分析和学习建议。语气友善专业，不要废话。";
 
 /* ── word diff ── */
 
@@ -133,8 +183,25 @@ function MistakeCard({ detail, explainKey, aiExplains, isLegacy, handleAiExplain
 
 function StatsBar({ groups, totalWrong }) {
   const topGP = topGrammarPoints(groups);
+  const gpFreq = useMemo(() => allGrammarFreq(groups), [groups]);
+  const [analysis, setAnalysis] = useState({ loading: false, text: null, error: null });
+  const [showDetail, setShowDetail] = useState(false);
+
+  const handleAnalyze = useCallback(async () => {
+    if (analysis.loading) return;
+    setAnalysis({ loading: true, text: null, error: null });
+    try {
+      const prompt = buildAnalysisPrompt(groups, totalWrong, gpFreq);
+      const text = await callAI(ANALYSIS_SYSTEM, prompt, 500, 30000, 0.4);
+      setAnalysis({ loading: false, text, error: null });
+    } catch (e) {
+      setAnalysis({ loading: false, text: null, error: e.message || "分析失败" });
+    }
+  }, [groups, totalWrong, gpFreq, analysis.loading]);
+
   return (
     <SurfaceCard style={{ padding: "16px 18px", marginBottom: 16 }}>
+      {/* top row: numbers + analyze button */}
       <div style={{ display: "flex", alignItems: "center", gap: 20, flexWrap: "wrap" }}>
         <div>
           <div style={{ fontSize: 26, fontWeight: 800, color: C.red }}>{totalWrong}</div>
@@ -144,29 +211,100 @@ function StatsBar({ groups, totalWrong }) {
           <div style={{ fontSize: 26, fontWeight: 800, color: C.t1 }}>{groups.length}</div>
           <div style={{ fontSize: 12, color: C.t3 }}>套练习</div>
         </div>
-        {topGP.length > 0 && (
-          <div style={{ flex: 1, minWidth: 120 }}>
-            <div style={{ fontSize: 12, color: C.t3, marginBottom: 6 }}>高频薄弱点</div>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
-              {topGP.map((gp) => (
-                <span
-                  key={gp.tag}
-                  style={{
-                    fontSize: 11.5,
-                    fontWeight: 600,
-                    color: "#b45309",
-                    background: C.softAmber,
-                    borderRadius: 999,
-                    padding: "3px 10px",
-                  }}
-                >
-                  {gp.label} ({gp.count})
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
+        <div>
+          <div style={{ fontSize: 26, fontWeight: 800, color: C.blue }}>{gpFreq.length}</div>
+          <div style={{ fontSize: 12, color: C.t3 }}>个语法点</div>
+        </div>
+        <div style={{ marginLeft: "auto" }}>
+          <button
+            onClick={handleAnalyze}
+            disabled={analysis.loading}
+            style={{
+              fontSize: 13,
+              fontWeight: 700,
+              color: "#fff",
+              background: analysis.loading ? "#9ca3af" : "linear-gradient(135deg, #7c3aed, #6d28d9)",
+              border: "none",
+              borderRadius: 8,
+              padding: "9px 18px",
+              cursor: analysis.loading ? "default" : "pointer",
+              boxShadow: analysis.loading ? "none" : "0 2px 8px rgba(124,58,237,0.25)",
+              transition: "all 0.2s",
+            }}
+          >
+            {analysis.loading ? "⏳ 分析中..." : analysis.text ? "🔄 重新分析" : "🔍 AI 问题分析"}
+          </button>
+        </div>
       </div>
+
+      {/* grammar point frequency bar */}
+      {gpFreq.length > 0 && (
+        <div style={{ marginTop: 14 }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
+            <span style={{ fontSize: 12, fontWeight: 700, color: C.t2 }}>语法薄弱点分布</span>
+            {gpFreq.length > 5 && (
+              <button
+                onClick={() => setShowDetail(!showDetail)}
+                style={{ fontSize: 11, color: C.blue, background: "none", border: "none", cursor: "pointer", fontWeight: 600 }}
+              >
+                {showDetail ? "收起" : `查看全部 ${gpFreq.length} 个`}
+              </button>
+            )}
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            {(showDetail ? gpFreq : gpFreq.slice(0, 5)).map((gp) => {
+              const maxCount = gpFreq[0].count;
+              const pct = (gp.count / maxCount) * 100;
+              return (
+                <div key={gp.tag} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <div style={{ width: 100, fontSize: 12, fontWeight: 600, color: C.t2, flexShrink: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    {gp.label}
+                  </div>
+                  <div style={{ flex: 1, height: 18, background: C.bg, borderRadius: 4, overflow: "hidden", position: "relative" }}>
+                    <div
+                      style={{
+                        width: `${pct}%`,
+                        height: "100%",
+                        background: pct > 60 ? "linear-gradient(90deg, #fbbf24, #f59e0b)" : pct > 30 ? "linear-gradient(90deg, #86efac, #22c55e)" : `linear-gradient(90deg, ${C.ltB}, ${C.blue})`,
+                        borderRadius: 4,
+                        transition: "width 0.4s ease",
+                      }}
+                    />
+                  </div>
+                  <span style={{ fontSize: 12, fontWeight: 700, color: C.t1, width: 28, textAlign: "right", flexShrink: 0 }}>
+                    {gp.count}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* AI analysis result */}
+      {analysis.text && (
+        <div
+          style={{
+            marginTop: 14,
+            padding: "14px 16px",
+            background: "linear-gradient(135deg, #faf5ff, #f3e8ff)",
+            border: "1px solid #e9d5ff",
+            borderRadius: 10,
+            fontSize: 13.5,
+            color: "#1e1b4b",
+            lineHeight: 1.7,
+            whiteSpace: "pre-wrap",
+          }}
+        >
+          <div style={{ fontSize: 12, fontWeight: 700, color: "#7c3aed", marginBottom: 8 }}>🔍 AI 分析报告</div>
+          {analysis.text}
+        </div>
+      )}
+      {analysis.error && (
+        <div style={{ marginTop: 10, fontSize: 12, color: C.red }}>
+          分析失败：{analysis.error}
+        </div>
+      )}
     </SurfaceCard>
   );
 }
