@@ -383,29 +383,56 @@ function WeaknessCard({ weakness, count, selected, onClick }) {
 
 function StatCard({ icon, short, count, avg, color, active, onClick }) {
   const [hov, setHov] = useState(false);
+  // Parse avg percentage for micro-progress bar
+  const avgMatch = typeof avg === "string" ? avg.match(/(\d+(?:\.\d+)?)/) : null;
+  const avgNum = avgMatch ? parseFloat(avgMatch[1]) : null;
+  // Normalize: if "/5" format, scale to 100; if "%" format, use directly
+  const progressPct = avg && avg.includes("/5") && avgNum != null ? (avgNum / 5) * 100
+    : avg && avg.includes("%") && avgNum != null ? avgNum : null;
+
   return (
     <button
       onClick={onClick}
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       style={{
-        padding: "14px 14px 12px", borderRadius: 14, textAlign: "left", cursor: "pointer",
-        border: `1.5px solid ${active ? color : "transparent"}`,
-        background: active ? `${color}0A` : hov ? "#f8faf9" : P.surface,
+        padding: "16px 16px 14px", borderRadius: 16, textAlign: "left", cursor: "pointer",
+        border: active ? `1.5px solid ${color}40` : `1px solid ${hov ? P.border : P.borderSubtle}`,
+        background: active
+          ? `linear-gradient(135deg, ${color}08 0%, ${color}03 100%)`
+          : hov ? "#fafbfa" : P.surface,
         transform: (active || hov) ? "translateY(-2px)" : "none",
-        boxShadow: active ? `0 4px 16px ${color}18` : hov ? P.shadow : "0 1px 2px rgba(0,0,0,0.03)",
-        transition: "all 0.25s cubic-bezier(0.16,1,0.3,1)",
+        boxShadow: active
+          ? `0 8px 24px ${color}14, inset 0 1px 0 ${color}10`
+          : hov ? "0 4px 12px rgba(10,40,25,0.06)" : "none",
+        transition: "all 0.3s cubic-bezier(0.16,1,0.3,1)",
         position: "relative", overflow: "hidden",
       }}
     >
-      {/* Top color accent line */}
-      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: active ? color : "transparent", borderRadius: "14px 14px 0 0", transition: "background 0.2s" }} />
-      <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
-        <span style={{ width: 24, height: 24, borderRadius: 8, background: `${color}14`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12 }}>{icon}</span>
-        <span style={{ fontSize: 11, fontWeight: 600, color: active ? color : P.textSec, letterSpacing: "0.02em" }}>{short}</span>
+      {/* Decorative corner glow */}
+      {active && <div style={{ position: "absolute", top: -20, right: -20, width: 60, height: 60, borderRadius: "50%", background: `${color}12`, filter: "blur(16px)", pointerEvents: "none" }} />}
+
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10, position: "relative" }}>
+        <span style={{ fontSize: 11.5, fontWeight: 650, color: active ? color : P.textSec, letterSpacing: "0.01em" }}>{short}</span>
+        <span style={{
+          width: 26, height: 26, borderRadius: 9,
+          background: active ? `${color}18` : `${color}0C`,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontSize: 12.5, transition: "background 0.2s",
+        }}>{icon}</span>
       </div>
-      <div style={{ fontSize: 24, fontWeight: 800, color: active ? color : P.text, lineHeight: 1, letterSpacing: "-0.02em" }}>{count}</div>
-      {avg ? <div style={{ fontSize: 10.5, color: P.textDim, marginTop: 5, fontWeight: 500 }}>{avg}</div> : null}
+      <div style={{ fontSize: 28, fontWeight: 800, color: active ? color : P.text, lineHeight: 1, letterSpacing: "-0.03em", marginBottom: progressPct != null ? 10 : 4, position: "relative" }}>{count}</div>
+
+      {/* Micro progress bar */}
+      {progressPct != null && (
+        <div style={{ position: "relative" }}>
+          <div style={{ height: 4, borderRadius: 2, background: `${color}12`, overflow: "hidden" }}>
+            <div style={{ height: "100%", borderRadius: 2, width: `${Math.min(progressPct, 100)}%`, background: active ? color : `${color}60`, transition: "width 0.6s cubic-bezier(0.16,1,0.3,1)" }} />
+          </div>
+          <div style={{ fontSize: 10, color: active ? color : P.textDim, marginTop: 5, fontWeight: 550 }}>{avg}</div>
+        </div>
+      )}
+      {progressPct == null && avg ? <div style={{ fontSize: 10, color: P.textDim, fontWeight: 500, position: "relative" }}>{avg}</div> : null}
     </button>
   );
 }
@@ -436,37 +463,41 @@ function SessionRow({ entry, expanded, onToggle, onDelete, typeAvgs, isActive, o
   }
 
   return (
-    <div style={{ borderBottom: `1px solid ${P.borderSubtle}`, transition: "all 0.2s" }}>
+    <div style={{ transition: "all 0.2s" }}>
       <button
         onClick={handleClick}
         style={{
-          width: "100%", display: "flex", alignItems: "center", gap: 12,
-          padding: "13px 14px", background: isActive ? `${m.color}06` : "none",
-          border: "none", cursor: "pointer", transition: "background 0.15s",
-          borderLeft: `3px solid ${isActive ? m.color : "transparent"}`,
+          width: "100%", display: "flex", alignItems: "center", gap: 14,
+          padding: "14px 18px",
+          background: isActive ? `${m.color}06` : "none",
+          border: "none", cursor: "pointer", transition: "all 0.2s ease",
+          borderRadius: 12, margin: "2px 0",
         }}
-        onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.background = "#f8faf9"; }}
-        onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.background = "transparent"; }}
+        onMouseEnter={(e) => { if (!isActive) { e.currentTarget.style.background = "#f6f8f7"; e.currentTarget.style.transform = "translateX(2px)"; } }}
+        onMouseLeave={(e) => { if (!isActive) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.transform = "none"; } }}
       >
-        {/* Icon badge */}
-        <div style={{
-          width: 34, height: 34, borderRadius: 10, flexShrink: 0,
-          background: `${m.color}10`, border: `1px solid ${m.color}20`,
-          display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14,
-        }}>{m.icon}</div>
+        {/* Icon with color strip */}
+        <div style={{ position: "relative", flexShrink: 0 }}>
+          <div style={{
+            width: 36, height: 36, borderRadius: 11,
+            background: `linear-gradient(135deg, ${m.color}14 0%, ${m.color}08 100%)`,
+            display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15,
+          }}>{m.icon}</div>
+          {isActive && <div style={{ position: "absolute", left: -8, top: 8, bottom: 8, width: 3, borderRadius: 2, background: m.color }} />}
+        </div>
         {/* Label + date */}
         <div style={{ flex: 1, textAlign: "left", minWidth: 0 }}>
-          <div style={{ fontSize: 13, fontWeight: isActive ? 700 : 600, color: P.text, lineHeight: 1.3 }}>{m.label}</div>
-          <div style={{ fontSize: 11, color: P.textDim, marginTop: 2, fontVariantNumeric: "tabular-nums" }}>{formatLocalDateTime(s.date)}</div>
+          <div style={{ fontSize: 13.5, fontWeight: isActive ? 700 : 580, color: P.text, lineHeight: 1.3 }}>{m.label}</div>
+          <div style={{ fontSize: 11, color: P.textDim, marginTop: 3, fontVariantNumeric: "tabular-nums", letterSpacing: "0.01em" }}>{formatLocalDateTime(s.date)}</div>
         </div>
-        {/* Score */}
+        {/* Score pill */}
         <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
           <span style={{
-            fontVariantNumeric: "tabular-nums", fontSize: 15, fontWeight: 750, color: scoreColor,
-            background: `${scoreColor}0A`, padding: "3px 10px", borderRadius: 8,
-            border: `1px solid ${scoreColor}18`,
+            fontVariantNumeric: "tabular-nums", fontSize: 14, fontWeight: 750, color: scoreColor,
+            background: `${scoreColor}0C`, padding: "4px 12px", borderRadius: 10,
+            letterSpacing: "-0.01em",
           }}>{scoreStr}</span>
-          {bandStr && <span style={{ fontSize: 10.5, fontWeight: 700, padding: "3px 8px", borderRadius: 999, background: `${scoreColor}12`, color: scoreColor }}>Band {bandStr}</span>}
+          {bandStr && <span style={{ fontSize: 10, fontWeight: 700, padding: "3px 9px", borderRadius: 999, background: `${scoreColor}0C`, color: scoreColor, letterSpacing: "0.02em" }}>Band {bandStr}</span>}
         </div>
         <ChevronIcon open={isWriting ? isActive : expanded} color={P.textDim} />
         <span
@@ -1084,7 +1115,7 @@ export function ProgressView({ onBack }) {
       `}</style>
 
       {/* Top bar */}
-      <div style={{ background: "rgba(255,255,255,0.92)", padding: "0 32px", display: "flex", alignItems: "center", justifyContent: "space-between", height: 52, borderBottom: `1px solid ${P.borderSubtle}`, backdropFilter: "blur(12px)", position: "sticky", top: 0, zIndex: 100, animation: "fadeUp 0.4s cubic-bezier(0.25,1,0.5,1) 0ms both" }}>
+      <div style={{ background: "rgba(255,255,255,0.85)", padding: "0 32px", display: "flex", alignItems: "center", justifyContent: "space-between", height: 54, borderBottom: `1px solid ${P.borderSubtle}`, backdropFilter: "blur(16px) saturate(1.4)", WebkitBackdropFilter: "blur(16px) saturate(1.4)", position: "sticky", top: 0, zIndex: 100, animation: "fadeUp 0.4s cubic-bezier(0.25,1,0.3,1) 0ms both" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <div style={{ width: 26, height: 26, borderRadius: 7, background: "linear-gradient(135deg,#087355,#0891B2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <span style={{ color: "#fff", fontSize: 12, fontWeight: 800 }}>T</span>
@@ -1114,9 +1145,9 @@ export function ProgressView({ onBack }) {
 
           {/* Left sidebar */}
           <div className="tp-progress-sidebar" style={{ width: 320, flexShrink: 0, position: "sticky", top: 68, animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 60ms both" }}>
-            <div style={{ marginBottom: 20 }}>
-              <h1 style={{ fontSize: 24, fontWeight: 800, color: P.text, marginBottom: 5, letterSpacing: "-0.02em" }}>练习记录</h1>
-              <p style={{ fontSize: 12, color: P.textDim, lineHeight: 1.5 }}>点击模考条目，在右侧展开详情报告</p>
+            <div style={{ marginBottom: 24 }}>
+              <h1 style={{ fontSize: 22, fontWeight: 800, color: P.text, marginBottom: 6, letterSpacing: "-0.03em", lineHeight: 1.2 }}>练习记录</h1>
+              <p style={{ fontSize: 12, color: P.textDim, lineHeight: 1.6 }}>点击模考条目查看详情报告</p>
             </div>
             <CompactMockList
               mockEntries={mockEntries}
@@ -1161,10 +1192,10 @@ export function ProgressView({ onBack }) {
                     <ChevronIcon open={showStats} color={P.textDim} />
                   </button>
                   <div style={{ maxHeight: showStats ? "400px" : "0px", overflow: "hidden", transition: "max-height 0.45s cubic-bezier(0.16,1,0.3,1)" }}>
-                    <div className="tp-stats-overview" style={{ display: "flex", borderTop: `1px solid ${P.borderSubtle}` }}>
+                    <div className="tp-stats-overview" style={{ display: "flex" }}>
                       {/* Left: latest mock score ring */}
-                      <div className="tp-stats-left" style={{ width: "28%", flexShrink: 0, padding: "14px 14px", background: "#fafbfa", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", position: "relative", borderRight: `1px solid ${P.borderSubtle}` }}>
-                        <div style={{ fontSize: 9.5, fontWeight: 700, color: P.textDim, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 8 }}>最新模考</div>
+                      <div className="tp-stats-left" style={{ width: "28%", flexShrink: 0, padding: "18px 16px", background: "linear-gradient(180deg, #fafbfa 0%, #f4f7f5 100%)", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", position: "relative", borderRight: `1px solid ${P.borderSubtle}` }}>
+                        <div style={{ fontSize: 10, fontWeight: 700, color: P.textDim, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 10 }}>最新模考</div>
                         {mockEntries.length > 0 ? (() => {
                           const lm = mockEntries[0].session;
                           const bc = Number.isFinite(lm.band) ? getBandColor(lm.band) : P.textDim;
@@ -1196,7 +1227,7 @@ export function ProgressView({ onBack }) {
                 </div>
 
                 {/* Stat cards — always visible, filter both chart and session list */}
-                <div className="tp-stat-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 10, marginBottom: 14, animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 200ms both" }}>
+                <div className="tp-stat-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 12, marginBottom: 18, animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 200ms both" }}>
                   {statItems.map((item) => (
                     <StatCard
                       key={item.key}
@@ -1212,10 +1243,10 @@ export function ProgressView({ onBack }) {
                 </div>
 
                 {/* Session list */}
-                <div style={{ background: P.surface, borderRadius: 16, border: `1px solid ${P.border}`, overflow: "hidden", boxShadow: "0 2px 10px rgba(10,40,25,0.04)", animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 280ms both" }}>
-                  <div style={{ padding: "14px 18px", borderBottom: `1px solid ${P.borderSubtle}`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                    <span style={{ fontSize: 13, fontWeight: 700, color: P.text, letterSpacing: "-0.01em" }}>练习明细</span>
-                    <span style={{ fontSize: 11, color: P.textDim, fontWeight: 500, background: P.bg, padding: "2px 8px", borderRadius: 999 }}>{filteredPractice.length} 条</span>
+                <div style={{ background: P.surface, borderRadius: 18, border: `1px solid ${P.borderSubtle}`, overflow: "hidden", boxShadow: "0 1px 4px rgba(10,40,25,0.03)", animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 280ms both" }}>
+                  <div style={{ padding: "16px 20px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                    <span style={{ fontSize: 14, fontWeight: 750, color: P.text, letterSpacing: "-0.02em" }}>练习明细</span>
+                    <span style={{ fontSize: 11, color: P.textDim, fontWeight: 550, background: `${P.primary}08`, color: P.primary, padding: "3px 10px", borderRadius: 999 }}>{filteredPractice.length} 条记录</span>
                   </div>
                   <div style={{ padding: "8px 14px 14px" }}>
                     {filteredPractice.length === 0 ? (
