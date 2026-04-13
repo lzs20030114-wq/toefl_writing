@@ -4,7 +4,7 @@ import { createPortal } from "react-dom";
 import { C, FONT, TopBar } from "../shared/ui";
 import { mockExamRunner } from "../../lib/mockExam/runner";
 import { MOCK_EXAM_STATUS, TASK_IDS } from "../../lib/mockExam/contracts";
-import { loadMockExamHistory, saveMockExamSession } from "../../lib/mockExam/storage";
+import { loadMockExamHistory, saveMockExamSession, saveMockCheckpoint, loadMockCheckpoint, clearMockCheckpoint } from "../../lib/mockExam/storage";
 import { upsertMockSess } from "../../lib/sessionStore";
 import { buildPersistPayload, finalizeDeferredScoringSession, isTimeoutError, retryTimeoutScoringSession } from "../../lib/mockExam/service";
 import { evaluateWritingResponse } from "../../lib/ai/writingEval";
@@ -128,14 +128,27 @@ function MockExamCostConfirmModal({ remaining, onConfirm, onCancel, userCode }) 
 
 export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLanguage }) {
   const uiReportLanguage = normalizeReportLanguage(reportLanguage || readReportLanguage());
-  const [session, setSession] = useState(null);
+  const [session, setSession] = useState(() => {
+    const cp = loadMockCheckpoint();
+    return cp?.session || null;
+  });
   const [hist] = useState(() => loadMockExamHistory());
   const [sectionTimer, setSectionTimer] = useState(null);
-  const [scoringPhase, setScoringPhase] = useState("idle"); // idle | pending | done | error
+  const [scoringPhase, setScoringPhase] = useState(() => {
+    const cp = loadMockCheckpoint();
+    return cp?.scoringPhase || "idle";
+  });
   const [scoringError, setScoringError] = useState("");
   const finalizedSessionIdsRef = useRef(new Set());
   const [showCostModal, setShowCostModal] = useState(false);
   const [usageRemaining, setUsageRemaining] = useState(null);
+
+  // Auto-checkpoint session to localStorage on every state change
+  useEffect(() => {
+    if (session) {
+      saveMockCheckpoint(session, scoringPhase);
+    }
+  }, [session, scoringPhase]);
 
   const userCode = getSavedCode();
   const tier = getSavedTier();
@@ -148,9 +161,11 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
     const payload = buildPersistPayload(finalSession, { phase, error: err });
     saveMockExamSession(payload.sessionSnapshot);
     upsertMockSess(payload.historyPayload, payload.mockSessionId);
+    clearMockCheckpoint(); // session persisted, checkpoint no longer needed
   }
 
   function doStartExam() {
+    clearMockCheckpoint(); // clear any stale checkpoint before starting fresh
     const blueprint = getDefaultMockExamBlueprint(mode);
     const next = mockExamRunner.startNewExam(blueprint);
     setSession({ ...next, mode });
