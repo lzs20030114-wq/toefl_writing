@@ -1,9 +1,11 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { SECTION_ACCENTS } from "./sections";
 import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
 import { PRACTICE_MODE } from "../../lib/practiceMode";
-import { HomeTaskCard } from "./HomeTaskCard";
+import { HomeTaskCard, HomeLinkCard } from "./HomeTaskCard";
+import { loadHist } from "../../lib/sessionStore";
 
 const READING_ACCENT = SECTION_ACCENTS.reading;
 
@@ -178,10 +180,50 @@ export function ReadingSectionContent({
         ))}
       </div>
 
+      {/* Practice history link */}
+      {isPro && <ReadingHistoryLink isChallenge={isChallenge} hoverKey={hoverKey} setHoverKey={setHoverKey} fadeIn={fadeIn} />}
+
       {/* Footer */}
       <div style={{ fontSize: 10, color: isChallenge ? CH.t2 : T.t3, opacity: 0.65, lineHeight: 1.6, textAlign: "center", ...fadeIn(520) }}>
         TreePractice 为独立练习工具，与 ETS 无关联。TOEFL® 为 ETS 注册商标。练习内容由 AI 辅助生成，仅供自学参考。
       </div>
+    </div>
+  );
+}
+
+function ReadingHistoryLink({ isChallenge, hoverKey, setHoverKey, fadeIn }) {
+  const [readingCount, setReadingCount] = useState(0);
+
+  useEffect(() => {
+    try {
+      const hist = loadHist();
+      const count = (hist.sessions || []).filter(s => s.type === "reading").length;
+      setReadingCount(count);
+    } catch {}
+    function onUpdate() {
+      try {
+        const hist = loadHist();
+        setReadingCount((hist.sessions || []).filter(s => s.type === "reading").length);
+      } catch {}
+    }
+    window.addEventListener("toefl-history-updated", onUpdate);
+    return () => window.removeEventListener("toefl-history-updated", onUpdate);
+  }, []);
+
+  return (
+    <div style={{ marginBottom: 20, ...fadeIn(380) }}>
+      <HomeLinkCard
+        href="/progress"
+        cardKey="reading-progress"
+        hoverKey={hoverKey}
+        setHoverKey={setHoverKey}
+        isChallenge={isChallenge}
+        icon="📈"
+        eyebrow="记录"
+        title="阅读练习记录"
+        description={readingCount > 0 ? `已记录 ${readingCount} 次阅读练习，可在练习记录中查看。` : "完成阅读练习后，记录会自动保存在这里。"}
+        badge={readingCount > 0 ? `${readingCount} 条记录` : "暂无记录"}
+      />
     </div>
   );
 }

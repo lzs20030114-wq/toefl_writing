@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { CTWTask } from "../../components/reading/CTWTask";
 import { RDLTask } from "../../components/reading/RDLTask";
 import { useAuth } from "../../lib/AuthContext";
+import { saveSess } from "../../lib/sessionStore";
 import CTW_DATA from "../../data/reading/bank/ctw.json";
 import RDL_DATA from "../../data/reading/bank/rdl.json";
 
@@ -66,14 +67,30 @@ function ReadingPageClient() {
     );
   }
 
+  function saveReadingSession(subtype, itemData, result) {
+    const pct = result.total > 0 ? result.correct / result.total : 0;
+    const band = pct >= 1 ? 6 : pct >= 0.9 ? 5.5 : pct >= 0.8 ? 5 : pct >= 0.7 ? 4.5 : pct >= 0.6 ? 4 : pct >= 0.5 ? 3.5 : pct >= 0.4 ? 3 : pct >= 0.3 ? 2.5 : 2;
+    saveSess({
+      type: "reading",
+      mode: "standard",
+      correct: result.correct,
+      total: result.total,
+      band,
+      details: {
+        subtype,
+        itemId: itemData.id,
+        topic: itemData.topic || itemData.genre || "",
+        results: result.results,
+      },
+    });
+  }
+
   if (type === "rdl") {
     return (
       <RDLTask
         item={item}
         onExit={onExit}
-        onComplete={(result) => {
-          // Could save session here in the future
-        }}
+        onComplete={(result) => saveReadingSession("rdl", item, result)}
       />
     );
   }
@@ -82,9 +99,7 @@ function ReadingPageClient() {
     <CTWTask
       item={item}
       onExit={onExit}
-      onComplete={(result) => {
-        // Could save session here in the future
-      }}
+      onComplete={(result) => saveReadingSession("ctw", item, result)}
     />
   );
 }
