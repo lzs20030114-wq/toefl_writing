@@ -31,7 +31,9 @@ const READING_TASKS = [
 export function ReadingSectionContent({
   isChallenge, isPractice, mode, switchMode,
   hoverKey, setHoverKey, fadeIn,
+  userTier, isLoggedIn, showLoginModal,
 }) {
+  const isPro = userTier === "pro" || userTier === "legacy";
   const gridItems = READING_TASKS.map((task, index) => ({
     k: task.k,
     href: `/reading?type=${task.k === "reading-ctw" ? "ctw" : "rdl"}`,
@@ -53,6 +55,7 @@ export function ReadingSectionContent({
         <div className="tp-home-header" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, marginBottom: 10 }}>
           <h1 style={{ margin: 0, fontSize: 28, fontWeight: 800, color: isChallenge ? CH.t1 : T.t1, letterSpacing: -0.5, lineHeight: 1.2 }}>
             Reading
+            <span style={{ fontSize: 14, fontWeight: 600, color: T.t3, marginLeft: 6 }}>（测试）</span>
             {isPractice && <span style={{ color: "#6366f1" }}> Practice</span>}
             {isChallenge && <span style={{ color: CH.accent }}> Challenge</span>}
           </h1>
@@ -118,8 +121,56 @@ export function ReadingSectionContent({
         </div>
       </div>
 
+      {/* Pro gate */}
+      {!isPro && (
+        <div style={{
+          background: isChallenge ? "rgba(255,255,255,0.04)" : "#FFFBEB",
+          border: `1px solid ${isChallenge ? CH.cardBorder : "#FDE68A"}`,
+          borderRadius: 10, padding: "16px 20px", marginBottom: 16,
+          display: "flex", alignItems: "center", gap: 12,
+          ...fadeIn(160),
+        }}>
+          <span style={{ fontSize: 22 }}>🔒</span>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 14, fontWeight: 700, color: isChallenge ? CH.t1 : T.t1 }}>Pro 专属功能</div>
+            <div style={{ fontSize: 12, color: isChallenge ? CH.t2 : T.t2, marginTop: 2 }}>
+              阅读理解模块目前处于测试阶段，仅对 Pro 用户开放
+            </div>
+          </div>
+          {!isLoggedIn ? (
+            <button
+              onClick={showLoginModal}
+              style={{
+                padding: "8px 16px", borderRadius: 8, border: "none",
+                background: READING_ACCENT.color, color: "#fff",
+                fontSize: 13, fontWeight: 600, cursor: "pointer",
+              }}
+            >
+              登录
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                try { window.dispatchEvent(new CustomEvent("open-upgrade-modal")); } catch {}
+              }}
+              style={{
+                padding: "8px 16px", borderRadius: 8, border: "none",
+                background: READING_ACCENT.color, color: "#fff",
+                fontSize: 13, fontWeight: 600, cursor: "pointer",
+              }}
+            >
+              升级 Pro
+            </button>
+          )}
+        </div>
+      )}
+
       {/* Task grid */}
-      <div className="home-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 28 }}>
+      <div className="home-grid" style={{
+        display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 28,
+        opacity: isPro ? 1 : 0.45, pointerEvents: isPro ? "auto" : "none",
+        filter: isPro ? "none" : "grayscale(0.5)",
+      }}>
         {gridItems.map((item) => (
           <div key={item.k} style={{ display: "flex", ...fadeIn(item.delay) }}>
             <HomeTaskCard item={item} hoverKey={hoverKey} setHoverKey={setHoverKey} isChallenge={isChallenge} />

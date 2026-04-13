@@ -14,6 +14,7 @@ export function SectionContent({
   gridItems, hoverKey, setHoverKey,
   postWritingCounts, bsMistakeCount, sessions,
   fadeIn,
+  userTier, isLoggedIn, showLoginModal,
 }) {
   const section = SECTIONS.find((s) => s.id === activeSection);
   if (!section) return null;
@@ -27,6 +28,7 @@ export function SectionContent({
       <ReadingSectionContent
         isChallenge={isChallenge} isPractice={isPractice} mode={mode} switchMode={switchMode}
         hoverKey={hoverKey} setHoverKey={setHoverKey} fadeIn={fadeIn}
+        userTier={userTier} isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
       />
     );
   }

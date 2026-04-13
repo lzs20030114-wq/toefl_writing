@@ -26,7 +26,7 @@ export const SECTIONS = [
     icon: "📖",
     status: SECTION_STATUS.ACTIVE,
     description: "Complete the Words · Read in Daily Life",
-    descriptionZh: "单词补全、日常阅读理解，TOEFL 2026 新题型",
+    descriptionZh: "单词补全、日常阅读理解，TOEFL 2026 新题型（测试中）",
   },
   {
     id: "listening",

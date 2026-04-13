@@ -335,6 +335,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
             gridItems={gridItems} hoverKey={hoverKey} setHoverKey={setHoverKey}
             postWritingCounts={postWritingCounts} bsMistakeCount={bsMistakeCount} sessions={sessions}
             fadeIn={fadeIn}
+            userTier={userTier} isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
           />
         </div>
       </div>
