@@ -1,0 +1,83 @@
+{
+  "generated_at": "2026-04-09",
+  "description": "Deep rhetorical structure analysis of 13 TOEFL 2026 academic passages",
+
+  "rhetoricalPatterns": {
+    "general_to_specific": { "count": 4, "pct": 30.8, "passages": ["ap_tp_001", "ap_tp_002", "ap_tp_006", "ap_tp_013"] },
+    "definition_elaboration": { "count": 3, "pct": 23.1, "passages": ["ap_tp_005", "ap_tp_009", "ap_tp_010"] },
+    "chronological": { "count": 3, "pct": 23.1, "passages": ["ap_tp_004", "ap_tp_007", "ap_tp_011"] },
+    "problem_solution": { "count": 2, "pct": 15.4, "passages": ["ap_tp_003", "ap_tp_012"] },
+    "compare_contrast": { "count": 0, "pct": 0, "note": "Used within passages but never as primary pattern" },
+    "classification": { "count": 0, "pct": 0 }
+  },
+
+  "paragraphRoles": {
+    "introduction_context": { "count": 13, "pct": 28.3 },
+    "elaboration_detail": { "count": 13, "pct": 28.3 },
+    "definition_explanation": { "count": 8, "pct": 17.4 },
+    "consequence_implication": { "count": 5, "pct": 10.9 },
+    "contrast_counterargument": { "count": 4, "pct": 8.7 },
+    "evidence_example": { "count": 3, "pct": 6.5 },
+    "conclusion_summary": { "count": 0, "pct": 0, "note": "ETS passages NEVER have a dedicated conclusion paragraph" }
+  },
+
+  "topicSentenceRules": {
+    "hasTopicSentence": "100% (46/46 paragraphs)",
+    "referencePreviousParagraph": "90.9% (30/33 non-opening paragraphs)",
+    "transitionTypes": {
+      "temporal": 8,
+      "concessive": 5,
+      "additive_extending": 4,
+      "contrastive": 4,
+      "causal_purpose": 4,
+      "exemplification": 1,
+      "no_explicit_transition": 7
+    }
+  },
+
+  "openingStrategies": {
+    "received_wisdom_then_revision": {
+      "count": 6,
+      "pct": 46.2,
+      "note": "Most common opening: state prior assumption, then signal change",
+      "signals": ["Historically", "While early theories", "For thousands of years", "traditionally"]
+    },
+    "direct_definition": { "count": 4, "pct": 30.8 },
+    "contextual_framing": { "count": 3, "pct": 23.1, "signals": ["As urban areas expand", "During the Golden Age", "In the early twentieth century"] }
+  },
+
+  "closingStrategies": {
+    "consequence_implication": { "count": 7, "pct": 53.8, "note": "Extends the argument, pushes topic forward" },
+    "limitation_concession": { "count": 4, "pct": 30.8, "note": "Opens with 'Despite', acknowledges limitations + ongoing research" },
+    "chronological_endpoint": { "count": 2, "pct": 15.4 }
+  },
+
+  "templates": {
+    "benefits_then_limitations": {
+      "description": "Define technology → Explain mechanism → List benefits → Acknowledge limitations + research",
+      "passages": ["ap_tp_003", "ap_tp_009", "ap_tp_010"],
+      "pct": 23.1
+    },
+    "chronological_three_stages": {
+      "description": "Primitive era → Intermediate/flawed → Breakthrough with lasting impact",
+      "passages": ["ap_tp_004", "ap_tp_007", "ap_tp_011"],
+      "pct": 23.1
+    },
+    "discovery_zooming_in": {
+      "description": "Big discovery → Physical mechanism → Biological mechanism → Complex ecology",
+      "passages": ["ap_tp_006", "ap_tp_013"],
+      "pct": 15.4
+    }
+  },
+
+  "keyConventions": [
+    "Every paragraph starts with a functioning topic sentence (100%)",
+    "90%+ of non-opening paragraphs reference the previous paragraph in their topic sentence",
+    "ETS passages NEVER have a dedicated conclusion/summary paragraph",
+    "'Beyond' is the signature additive transition for paragraph openings",
+    "'Despite' is the signature concessive marker for limitation paragraphs",
+    "Evidence/example paragraphs always appear in middle position, never first or last",
+    "Compare-contrast is used within paragraphs, never as the primary passage structure",
+    "Passage length correlates with difficulty: easy ~185 words, medium ~285, hard ~315"
+  ]
+}

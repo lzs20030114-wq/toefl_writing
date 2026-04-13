@@ -1,0 +1,135 @@
+{
+  "generated_at": "2026-04-09T15:41:29.769Z",
+  "optionSpecificity": {
+    "correctMoreSpecific": 23,
+    "distractorMoreSpecific": 40,
+    "sameSpecificity": 89
+  },
+  "guessability": {
+    "guessableCount": 28,
+    "total": 152,
+    "rate": 0.184
+  },
+  "qPositionPatterns": {
+    "Q1": {
+      "inference": 3,
+      "detail": 31,
+      "main_idea": 16,
+      "vocabulary_in_context": 2
+    },
+    "Q2": {
+      "detail": 30,
+      "inference": 18,
+      "vocabulary_in_context": 4
+    },
+    "Q3": {
+      "inference": 21,
+      "detail": 23,
+      "main_idea": 2,
+      "vocabulary_in_context": 2
+    }
+  },
+  "topTypeSequences": [
+    {
+      "sequence": "main_idea→detail→detail",
+      "count": 12
+    },
+    {
+      "sequence": "detail→inference→inference",
+      "count": 9
+    },
+    {
+      "sequence": "detail→detail→inference",
+      "count": 5
+    },
+    {
+      "sequence": "detail→inference→detail",
+      "count": 5
+    },
+    {
+      "sequence": "detail→detail→detail",
+      "count": 4
+    },
+    {
+      "sequence": "main_idea→detail→inference",
+      "count": 2
+    },
+    {
+      "sequence": "detail→vocabulary_in_context→inference",
+      "count": 2
+    },
+    {
+      "sequence": "inference→detail",
+      "count": 1
+    }
+  ],
+  "passageDetail": {
+    "avgNames": 6.2,
+    "avgNumbers": 6.5
+  },
+  "actionability": {
+    "instructional": 50,
+    "informational": 1,
+    "mixed": 1
+  },
+  "optionCategoryMatch": {
+    "allSame": 112,
+    "mostlySame": 37,
+    "mixed": 3
+  },
+  "stemAnchoring": {
+    "avgOverlap": 0.453,
+    "quotesPassage": 28
+  },
+  "absoluteVsHedged": {
+    "correct": {
+      "absolute": 4,
+      "hedged": 11,
+      "neutral": 137
+    },
+    "distractor": {
+      "absolute": 23,
+      "hedged": 6,
+      "neutral": 427
+    }
+  },
+  "crossItemOverlap": 0.047,
+  "sentenceComplexityCV": 0.52,
+  "pitfalls": [
+    {
+      "check": "Correct answer is consistently the most specific option",
+      "risk": "LOW",
+      "value": "15% correct more specific"
+    },
+    {
+      "check": "Questions guessable without reading passage",
+      "risk": "MEDIUM",
+      "value": "18% guessable"
+    },
+    {
+      "check": "Distractors use absolute language (tells)",
+      "risk": "HIGH",
+      "value": "correct 3% vs distractor 5% absolute"
+    },
+    {
+      "check": "Q-type sequence is too predictable",
+      "risk": "LOW",
+      "value": "most common: \"main_idea→detail→detail\" at 12 times"
+    },
+    {
+      "check": "Options don't match same semantic category",
+      "risk": "LOW",
+      "value": "2% mixed categories"
+    },
+    {
+      "check": "Stems don't anchor to passage vocabulary",
+      "risk": "LOW",
+      "value": "45% stem-passage overlap"
+    },
+    {
+      "check": "Passage sentence complexity is monotonous",
+      "risk": "LOW",
+      "value": "avg CV=0.520"
+    }
+  ]
+}

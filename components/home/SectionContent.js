@@ -1,11 +1,12 @@
 "use client";
 
-import { SECTIONS, SECTION_STATUS } from "./sections";
+import { SECTIONS, SECTION_STATUS, SECTION_ACCENTS } from "./sections";
 import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
 import { PRACTICE_MODE } from "../../lib/practiceMode";
 import { HomeLinkCard, HomeTaskCard } from "./HomeTaskCard";
 import { PromoBanner } from "./HomePageClient";
 import { ComingSoonSection } from "./ComingSoonSection";
+import { ReadingSectionContent } from "./ReadingSectionContent";
 
 export function SectionContent({
   activeSection,
@@ -19,6 +20,15 @@ export function SectionContent({
 
   if (section.status === SECTION_STATUS.COMING_SOON) {
     return <ComingSoonSection section={section} isChallenge={isChallenge} fadeIn={fadeIn} />;
+  }
+
+  if (activeSection === "reading") {
+    return (
+      <ReadingSectionContent
+        isChallenge={isChallenge} isPractice={isPractice} mode={mode} switchMode={switchMode}
+        hoverKey={hoverKey} setHoverKey={setHoverKey} fadeIn={fadeIn}
+      />
+    );
   }
 
   // Active section: Writing

@@ -1,0 +1,599 @@
+{
+  "generated_at": "2026-04-09T09:11:59.099Z",
+  "sample_counts": {
+    "completeTheWords": 6,
+    "readInDailyLife": 52,
+    "academicPassage": 13,
+    "totalQuestions": 217
+  },
+  "lexicalProfile": {
+    "awlCoverageAvg": 2.7,
+    "lexicalDensityAvg": 63.7,
+    "avgWordLength": 5.7,
+    "longWordRatio": 37.7,
+    "awlWordsFound": [
+      "achieve",
+      "aspect",
+      "available",
+      "complex",
+      "concept",
+      "consist",
+      "contract",
+      "contribute",
+      "coordinate",
+      "create",
+      "culture",
+      "design",
+      "distinct",
+      "distribution",
+      "economic",
+      "enhance",
+      "environment",
+      "environmental",
+      "evolve",
+      "feature",
+      "final",
+      "financial",
+      "focus",
+      "fundamental",
+      "generate",
+      "identify",
+      "impact",
+      "issue",
+      "labor",
+      "legal",
+      "major",
+      "mechanism",
+      "modify",
+      "network",
+      "percent",
+      "period",
+      "phenomenon",
+      "primary",
+      "process",
+      "purchase",
+      "regulate",
+      "require",
+      "research",
+      "respond",
+      "response",
+      "restrict",
+      "role",
+      "sector",
+      "significant",
+      "similar",
+      "simulate",
+      "specific",
+      "strategy",
+      "structure",
+      "technique",
+      "technology",
+      "theory",
+      "utilize",
+      "vary"
+    ]
+  },
+  "syntacticProfile": {
+    "passivePerSentAvg": 0.23,
+    "relativeClausesPerPassage": 5.2,
+    "conditionalsPerPassage": 0.3,
+    "comparisonsPerPassage": 2.5,
+    "punctComplexityPerSent": 1.48,
+    "sentLengthVariation": 0.344
+  },
+  "discourseProfile": {
+    "hedgeRatio": 0.93,
+    "evidenceMarkersPerPassage": 0.2,
+    "transitionsPerPassage": 8.5,
+    "definitionsPerPassage": 1.4,
+    "transitionBreakdown": {
+      "addition": 9,
+      "contrast": 47,
+      "cause_effect": 21,
+      "example": 16,
+      "sequence": 11,
+      "emphasis": 5,
+      "conclusion": 1
+    }
+  },
+  "questionStems": {
+    "academicPassage": {
+      "totalQuestions": 65,
+      "patterns": {
+        "mainly_about": 1,
+        "main_purpose": 1,
+        "best_states": 0,
+        "according_to": 19,
+        "mentioned_in": 0,
+        "states_that": 0,
+        "not_mentioned": 0,
+        "except": 6,
+        "can_be_inferred": 11,
+        "most_likely": 0,
+        "suggests_that": 0,
+        "closest_in_meaning": 13,
+        "word_phrase": 13,
+        "why_does_author": 9,
+        "purpose_of": 1,
+        "author_mentions": 9,
+        "how_does_paragraph": 0,
+        "relationship_between": 0
+      },
+      "avgStemWordCount": 16.1,
+      "stemStarts": {
+        "according": 19,
+        "the": 13,
+        "what": 12,
+        "why": 9,
+        "where": 6,
+        "look": 5,
+        "which": 1
+      }
+    },
+    "readInDailyLife": {
+      "totalQuestions": 152,
+      "patterns": {
+        "mainly_about": 0,
+        "main_purpose": 15,
+        "best_states": 0,
+        "according_to": 25,
+        "mentioned_in": 0,
+        "states_that": 0,
+        "not_mentioned": 4,
+        "except": 0,
+        "can_be_inferred": 20,
+        "most_likely": 1,
+        "suggests_that": 3,
+        "closest_in_meaning": 7,
+        "word_phrase": 8,
+        "why_does_author": 6,
+        "purpose_of": 14,
+        "author_mentions": 5,
+        "how_does_paragraph": 0,
+        "relationship_between": 2
+      },
+      "avgStemWordCount": 11.7,
+      "stemStarts": {
+        "what": 73,
+        "according": 25,
+        "why": 20,
+        "which": 13,
+        "in": 8,
+        "how": 6,
+        "where": 2,
+        "when": 2,
+        "if": 1,
+        "under": 1
+      }
+    }
+  },
+  "optionConstruction": {
+    "academicPassage": {
+      "totalQuestions": 65,
+      "correctIsLongestPct": 33.8,
+      "correctIsShortestPct": 6.2,
+      "allSameLengthPct": 20,
+      "grammaticalParallelismPct": 96.9,
+      "avgOptionLengthByPosition": {
+        "A": 8.1,
+        "B": 7.9,
+        "C": 8.2,
+        "D": 7.5
+      },
+      "correctAnswerDist": {
+        "A": 28,
+        "B": 21,
+        "C": 13,
+        "D": 3
+      },
+      "topOptionStarts": {
+        "they": 55,
+        "to": 48,
+        "after": 37,
+        "it": 12,
+        "the": 7,
+        "at": 7,
+        "a": 5,
+        "by": 4,
+        "audiences": 4,
+        "worker": 2,
+        "stages": 1,
+        "research": 1,
+        "differences": 1,
+        "recent": 1,
+        "cleaner": 1
+      }
+    },
+    "readInDailyLife": {
+      "totalQuestions": 152,
+      "correctIsLongestPct": 22.4,
+      "correctIsShortestPct": 12.5,
+      "allSameLengthPct": 9.9,
+      "grammaticalParallelismPct": 98,
+      "avgOptionLengthByPosition": {
+        "A": 7.1,
+        "B": 7.4,
+        "C": 7.5,
+        "D": 7.4
+      },
+      "correctAnswerDist": {
+        "A": 26,
+        "B": 70,
+        "C": 48,
+        "D": 8
+      },
+      "topOptionStarts": {
+        "to": 140,
+        "it": 63,
+        "they": 50,
+        "a": 35,
+        "the": 28,
+        "by": 24,
+        "she": 8,
+        "purchase": 6,
+        "in": 6,
+        "register": 6,
+        "their": 5,
+        "complete": 4,
+        "pay": 4,
+        "at": 4,
+        "participants": 4
+      }
+    }
+  },
+  "distractorStrategies": {
+    "byType": {
+      "main_idea": {
+        "too_narrow": 3,
+        "opposite": 1,
+        "too_broad": 1,
+        "not_mentioned": 1
+      },
+      "vocabulary_in_context": {
+        "wrong_detail": 12,
+        "not_mentioned": 9,
+        "plausible_but_unsupported": 6,
+        "opposite": 12
+      },
+      "factual_detail": {
+        "not_mentioned": 18,
+        "wrong_detail": 11,
+        "opposite": 6,
+        "plausible_but_unsupported": 2,
+        "too_broad": 1,
+        "too_narrow": 1
+      },
+      "inference": {
+        "opposite": 15,
+        "not_mentioned": 10,
+        "too_broad": 1,
+        "plausible_but_unsupported": 4,
+        "wrong_detail": 3
+      },
+      "rhetorical_purpose": {
+        "too_broad": 2,
+        "not_mentioned": 18,
+        "too_narrow": 1,
+        "plausible_but_unsupported": 1,
+        "opposite": 3,
+        "wrong_detail": 2
+      },
+      "paragraph_relationship": {
+        "wrong_detail": 33
+      },
+      "negative_factual": {
+        "misquoted": 18
+      }
+    },
+    "byCorrectLen": {
+      "longer": 34,
+      "shorter": 98,
+      "equal": 63
+    },
+    "distractorExamples": {
+      "too_narrow": [
+        {
+          "stem": "What is the passage mainly about?...",
+          "distractor": "Stages of early childhood development",
+          "correct": "Research on animal self-recognition and cognition"
+        },
+        {
+          "stem": "What is the passage mainly about?...",
+          "distractor": "Differences between apes, elephants, and dolphins",
+          "correct": "Research on animal self-recognition and cognition"
+        },
+        {
+          "stem": "What is the passage mainly about?...",
+          "distractor": "Recent experiments on fish behavior",
+          "correct": "Research on animal self-recognition and cognition"
+        }
+      ],
+      "wrong_detail": [
+        {
+          "stem": "The word \"milestone\" in the passage is closest in meaning to...",
+          "distractor": "A unit of distance measurement",
+          "correct": "A significant accomplishment or achievement"
+        },
+        {
+          "stem": "According to the passage, how did scientists use the mirror ...",
+          "distractor": "They tested whether apes could distinguish colors in their r",
+          "correct": "They observed whether the ape tried to remove a colored mark"
+        },
+        {
+          "stem": "The word \"contentment\" in the passage is closest in meaning ...",
+          "distractor": "Excitement",
+          "correct": "Satisfaction"
+        }
+      ],
+      "not_mentioned": [
+        {
+          "stem": "The word \"milestone\" in the passage is closest in meaning to...",
+          "distractor": "A heavy weight or burden",
+          "correct": "A significant accomplishment or achievement"
+        },
+        {
+          "stem": "According to the passage, how did scientists use the mirror ...",
+          "distractor": "They tracked the ape's movements around the mirror",
+          "correct": "They observed whether the ape tried to remove a colored mark"
+        },
+        {
+          "stem": "According to the passage, how did scientists use the mirror ...",
+          "distractor": "They measured how long the ape spent looking at the mirror",
+          "correct": "They observed whether the ape tried to remove a colored mark"
+        }
+      ],
+      "plausible_but_unsupported": [
+        {
+          "stem": "The word \"milestone\" in the passage is closest in meaning to...",
+          "distractor": "A scientific discovery",
+          "correct": "A significant accomplishment or achievement"
+        },
+        {
+          "stem": "According to the passage, what adverse effect does decision ...",
+          "distractor": "Reduced interest in consumer goods entirely",
+          "correct": "Anxiety about making the wrong choice"
+        },
+        {
+          "stem": "What can be inferred from paragraph 3 about older buildings?...",
+          "distractor": "They were constructed with heavier materials than modern bui",
+          "correct": "They generally require modifications to safely support a gre"
+        }
+      ],
+      "opposite": [
+        {
+          "stem": "What can be inferred from the passage about the cleaner fish...",
+          "distractor": "Cleaner fish are more intelligent than dolphins",
+          "correct": "The mirror test may need to be reconsidered as a measure of "
+        },
+        {
+          "stem": "What can be inferred from the passage about the cleaner fish...",
+          "distractor": "Fish cannot truly recognize themselves but merely react to v",
+          "correct": "The mirror test may need to be reconsidered as a measure of "
+        },
+        {
+          "stem": "What can be inferred from the passage about the cleaner fish...",
+          "distractor": "Scientists expected the cleaner fish to pass the mirror test",
+          "correct": "The mirror test may need to be reconsidered as a measure of "
+        }
+      ],
+      "too_broad": [
+        {
+          "stem": "Why does the author mention elephants and dolphins in the se...",
+          "distractor": "To argue that only mammals can pass the mirror test",
+          "correct": "To provide examples of other highly intelligent animals that"
+        },
+        {
+          "stem": "Which statement best captures the primary argument of the pa...",
+          "distractor": "Collectivist cultures are superior to individualistic ones",
+          "correct": "Limiting consumer choices can lead to higher satisfaction"
+        },
+        {
+          "stem": "Why does the author include Iyengar's jam experiment in the ...",
+          "distractor": "To argue that grocery stores should reduce their inventory",
+          "correct": "To provide empirical evidence supporting the paradox of choi"
+        }
+      ],
+      "misquoted": [
+        {
+          "stem": "According to the passage, all of the following are benefits ...",
+          "distractor": "They lower rooftop temperatures",
+          "correct": "They eliminate the need for municipal sewer systems"
+        },
+        {
+          "stem": "According to the passage, all of the following are benefits ...",
+          "distractor": "They provide habitats for wildlife",
+          "correct": "They eliminate the need for municipal sewer systems"
+        },
+        {
+          "stem": "According to the passage, all of the following are benefits ...",
+          "distractor": "They reduce the risk of local flooding",
+          "correct": "They eliminate the need for municipal sewer systems"
+        }
+      ]
+    }
+  },
+  "ctwBlankProfile": {
+    "totalBlanks": 60,
+    "functionWordBlanks": 21,
+    "functionWordPct": 35,
+    "contentWordBlanks": 39,
+    "awlBlanks": 0,
+    "awlBlankPct": 0,
+    "endings": {
+      "other": 51,
+      "ly": 2,
+      "er/or": 1,
+      "ing": 1,
+      "ed": 4,
+      "adj_suffix": 1
+    },
+    "hardBlankCount": 8,
+    "easyBlankCount": 30,
+    "hardBlankExamples": [
+      "a... → and",
+      "s... → sky",
+      "h... → has",
+      "o... → own",
+      "it... → itself"
+    ],
+    "allBlankWords": [
+      "might",
+      "that",
+      "people",
+      "only",
+      "basic",
+      "however",
+      "is",
+      "from",
+      "record",
+      "dancing",
+      "they",
+      "sunlight",
+      "through",
+      "and",
+      "bright",
+      "across",
+      "sky",
+      "has",
+      "own",
+      "creates",
+      "majority",
+      "their",
+      "spent",
+      "on",
+      "from",
+      "trees",
+      "height",
+      "reach",
+      "that",
+      "animals",
+      "brain",
+      "memories",
+      "body",
+      "itself",
+      "helps",
+      "focused",
+      "day",
+      "deal",
+      "stress",
+      "effectively",
+      "is",
+      "into",
+      "regions",
+      "with",
+      "roles",
+      "its",
+      "part",
+      "involved",
+      "cognitive",
+      "such",
+      "calendars",
+      "used",
+      "observations",
+      "moon",
+      "its",
+      "repeat",
+      "regular",
+      "cycle",
+      "civilizations",
+      "developed"
+    ]
+  },
+  "rdlRegister": {
+    "informal": {
+      "contractions": 47,
+      "exclamations": 50,
+      "questions": 15,
+      "imperatives": 0,
+      "emojis": 0,
+      "slang": 0,
+      "abbreviations": 87
+    },
+    "formal": {
+      "passiveVoice": 43,
+      "longSentences": 141,
+      "nominalizations": 275
+    },
+    "genreFormality": {
+      "notice": [
+        0,
+        -2,
+        2,
+        -1,
+        -1,
+        0,
+        -1,
+        0,
+        0,
+        -1,
+        0,
+        0,
+        -1,
+        0,
+        -1,
+        2,
+        -1,
+        -1,
+        5,
+        -11,
+        3
+      ],
+      "email": [
+        -1,
+        1,
+        -3,
+        1,
+        -3,
+        -4,
+        -1,
+        1,
+        -1,
+        0,
+        -1,
+        2,
+        -4,
+        0,
+        -2,
+        0,
+        -1,
+        -1,
+        1,
+        -2,
+        -3
+      ],
+      "social_media": [
+        -4,
+        -5,
+        -6,
+        -4
+      ],
+      "syllabus": [
+        3
+      ],
+      "schedule": [
+        0,
+        2
+      ],
+      "flyer": [
+        -1
+      ],
+      "menu": [
+        0
+      ],
+      "text_message": [
+        -9
+      ]
+    }
+  },
+  "apParagraphStructure": {
+    "avgParaCount": 3.6,
+    "avgParaLength": 88,
+    "avgTopicSentenceLen": 22,
+    "paragraphIntroTypes": {
+      "statement": 34,
+      "example": 7,
+      "contrast": 3,
+      "cause_effect": 3
+    }
+  }
+}

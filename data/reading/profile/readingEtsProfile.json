@@ -1,0 +1,423 @@
+{
+  "generated_at": "2026-04-09T09:11:51.821Z",
+  "completeTheWords": {
+    "sample_count": 6,
+    "total_blanks": 60,
+    "passage_word_count": {
+      "min": 47,
+      "max": 74,
+      "mean": 66,
+      "median": 69,
+      "stdev": 9.56
+    },
+    "sentence_count": {
+      "min": 3,
+      "max": 5,
+      "mean": 4.3,
+      "median": 4.5,
+      "stdev": 0.75
+    },
+    "avg_sentence_length": {
+      "min": 14.6,
+      "max": 16.25,
+      "mean": 15.3,
+      "median": 15.2,
+      "stdev": 0.61
+    },
+    "flesch_kincaid_grade": {
+      "min": 8.2,
+      "max": 12.7,
+      "mean": 10.2,
+      "median": 9.7,
+      "stdev": 1.54
+    },
+    "type_token_ratio": {
+      "min": 0.757,
+      "max": 0.891,
+      "mean": 0.8,
+      "median": 0.8,
+      "stdev": 0.04
+    },
+    "blank_word_length": {
+      "min": 2,
+      "max": 13,
+      "mean": 5.5,
+      "median": 5,
+      "stdev": 2.33
+    },
+    "fragment_ratio": {
+      "min": 0.3333333333333333,
+      "max": 0.5714285714285714,
+      "mean": 0.4,
+      "median": 0.4,
+      "stdev": 0.06
+    },
+    "blank_pos_distribution": {
+      "other": {
+        "count": 21,
+        "pct": 35
+      },
+      "verb_or_noun": {
+        "count": 16,
+        "pct": 26.7
+      },
+      "preposition": {
+        "count": 7,
+        "pct": 11.7
+      },
+      "pronoun": {
+        "count": 4,
+        "pct": 6.7
+      },
+      "aux_verb": {
+        "count": 3,
+        "pct": 5
+      },
+      "determiner": {
+        "count": 2,
+        "pct": 3.3
+      },
+      "adverb": {
+        "count": 2,
+        "pct": 3.3
+      },
+      "conjunction": {
+        "count": 2,
+        "pct": 3.3
+      },
+      "adjective": {
+        "count": 2,
+        "pct": 3.3
+      },
+      "noun": {
+        "count": 1,
+        "pct": 1.7
+      }
+    },
+    "topic_distribution": {
+      "biology": {
+        "count": 3,
+        "pct": 50
+      },
+      "anthropology": {
+        "count": 1,
+        "pct": 16.7
+      },
+      "physics": {
+        "count": 1,
+        "pct": 16.7
+      },
+      "history": {
+        "count": 1,
+        "pct": 16.7
+      }
+    },
+    "difficulty_distribution": {
+      "medium": {
+        "count": 3,
+        "pct": 50
+      },
+      "easy": {
+        "count": 2,
+        "pct": 33.3
+      },
+      "hard": {
+        "count": 1,
+        "pct": 16.7
+      }
+    }
+  },
+  "readInDailyLife": {
+    "sample_count": 52,
+    "total_questions": 152,
+    "text_word_count": {
+      "min": 45,
+      "max": 253,
+      "mean": 159,
+      "median": 165.5,
+      "stdev": 48.33
+    },
+    "questions_per_text": {
+      "min": 2,
+      "max": 3,
+      "mean": 2.9,
+      "median": 3,
+      "stdev": 0.27
+    },
+    "short_texts": 2,
+    "long_texts": 50,
+    "genre_distribution": {
+      "notice": {
+        "count": 21,
+        "pct": 40.4
+      },
+      "email": {
+        "count": 21,
+        "pct": 40.4
+      },
+      "social_media": {
+        "count": 4,
+        "pct": 7.7
+      },
+      "schedule": {
+        "count": 2,
+        "pct": 3.8
+      },
+      "syllabus": {
+        "count": 1,
+        "pct": 1.9
+      },
+      "flyer": {
+        "count": 1,
+        "pct": 1.9
+      },
+      "menu": {
+        "count": 1,
+        "pct": 1.9
+      },
+      "text_message": {
+        "count": 1,
+        "pct": 1.9
+      }
+    },
+    "question_type_distribution": {
+      "detail": {
+        "count": 84,
+        "pct": 55.3
+      },
+      "inference": {
+        "count": 42,
+        "pct": 27.6
+      },
+      "main_idea": {
+        "count": 18,
+        "pct": 11.8
+      },
+      "vocabulary_in_context": {
+        "count": 8,
+        "pct": 5.3
+      }
+    },
+    "difficulty_distribution": {
+      "easy": {
+        "count": 27,
+        "pct": 51.9
+      },
+      "medium": {
+        "count": 25,
+        "pct": 48.1
+      }
+    },
+    "correct_answer_position": {
+      "B": {
+        "count": 70,
+        "pct": 46.1
+      },
+      "C": {
+        "count": 48,
+        "pct": 31.6
+      },
+      "A": {
+        "count": 26,
+        "pct": 17.1
+      },
+      "D": {
+        "count": 8,
+        "pct": 5.3
+      }
+    },
+    "option_word_count": {
+      "min": 1,
+      "max": 15,
+      "mean": 7.4,
+      "median": 8,
+      "stdev": 3.32
+    }
+  },
+  "academicPassage": {
+    "sample_count": 13,
+    "total_questions": 65,
+    "passage_word_count": {
+      "min": 183,
+      "max": 443,
+      "mean": 317.5,
+      "median": 323,
+      "stdev": 68.45
+    },
+    "paragraph_count": {
+      "min": 2,
+      "max": 5,
+      "mean": 3.6,
+      "median": 4,
+      "stdev": 0.74
+    },
+    "sentence_count": {
+      "min": 9,
+      "max": 20,
+      "mean": 15.2,
+      "median": 16,
+      "stdev": 3.21
+    },
+    "flesch_kincaid_grade": {
+      "min": 11.3,
+      "max": 17.7,
+      "mean": 15.5,
+      "median": 16,
+      "stdev": 1.55
+    },
+    "type_token_ratio": {
+      "min": 0.577,
+      "max": 0.729,
+      "mean": 0.6,
+      "median": 0.6,
+      "stdev": 0.04
+    },
+    "question_type_distribution": {
+      "vocabulary_in_context": {
+        "count": 13,
+        "pct": 20
+      },
+      "factual_detail": {
+        "count": 13,
+        "pct": 20
+      },
+      "inference": {
+        "count": 11,
+        "pct": 16.9
+      },
+      "paragraph_relationship": {
+        "count": 11,
+        "pct": 16.9
+      },
+      "rhetorical_purpose": {
+        "count": 9,
+        "pct": 13.8
+      },
+      "negative_factual": {
+        "count": 6,
+        "pct": 9.2
+      },
+      "main_idea": {
+        "count": 2,
+        "pct": 3.1
+      }
+    },
+    "topic_distribution": {
+      "history": {
+        "count": 3,
+        "pct": 23.1
+      },
+      "biology": {
+        "count": 2,
+        "pct": 15.4
+      },
+      "psychology": {
+        "count": 2,
+        "pct": 15.4
+      },
+      "materials_science": {
+        "count": 2,
+        "pct": 15.4
+      },
+      "environmental_science": {
+        "count": 1,
+        "pct": 7.7
+      },
+      "arts_and_media": {
+        "count": 1,
+        "pct": 7.7
+      },
+      "business": {
+        "count": 1,
+        "pct": 7.7
+      },
+      "ecology": {
+        "count": 1,
+        "pct": 7.7
+      }
+    },
+    "difficulty_distribution": {
+      "medium": {
+        "count": 6,
+        "pct": 46.2
+      },
+      "hard": {
+        "count": 5,
+        "pct": 38.5
+      },
+      "easy": {
+        "count": 2,
+        "pct": 15.4
+      }
+    },
+    "distractor_pattern_distribution": {
+      "wrong_detail": {
+        "count": 61,
+        "pct": 31.3
+      },
+      "not_mentioned": {
+        "count": 56,
+        "pct": 28.7
+      },
+      "opposite": {
+        "count": 37,
+        "pct": 19
+      },
+      "misquoted": {
+        "count": 18,
+        "pct": 9.2
+      },
+      "plausible_but_unsupported": {
+        "count": 13,
+        "pct": 6.7
+      },
+      "too_narrow": {
+        "count": 5,
+        "pct": 2.6
+      },
+      "too_broad": {
+        "count": 5,
+        "pct": 2.6
+      }
+    },
+    "correct_answer_position": {
+      "A": {
+        "count": 28,
+        "pct": 43.1
+      },
+      "B": {
+        "count": 21,
+        "pct": 32.3
+      },
+      "C": {
+        "count": 13,
+        "pct": 20
+      },
+      "D": {
+        "count": 3,
+        "pct": 4.6
+      }
+    },
+    "option_word_count": {
+      "min": 1,
+      "max": 23,
+      "mean": 7.9,
+      "median": 9,
+      "stdev": 4.45
+    },
+    "correct_option_word_count": {
+      "min": 1,
+      "max": 23,
+      "mean": 9,
+      "median": 10,
+      "stdev": 5
+    },
+    "distractor_option_word_count": {
+      "min": 1,
+      "max": 18,
+      "mean": 7.6,
+      "median": 8,
+      "stdev": 4.19
+    }
+  }
+}

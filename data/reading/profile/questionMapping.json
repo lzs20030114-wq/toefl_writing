@@ -1,0 +1,90 @@
+{
+  "generated_at": "2026-04-09",
+  "description": "How TOEFL questions map to passage content — paraphrase strategies, distractor engineering, vocabulary patterns",
+
+  "correctAnswerMapping": {
+    "paraphraseTypes": {
+      "synonym_paraphrase": { "pct": 43, "note": "Most common — replaces key words with synonyms" },
+      "exact_synonym_substitution": { "pct": 20, "note": "All vocabulary_in_context questions" },
+      "inference_synthesis": { "pct": 23, "note": "Combines info from 1-2 sentences, draws unstated conclusion" },
+      "near_verbatim_restatement": { "pct": 18, "note": "Close to passage wording, minor syntax changes" }
+    },
+    "lexicalOverlap": {
+      "factual_detail": { "mean": 0.58, "range": [0.38, 0.75], "note": "About 4 in 7 content words shared with passage" },
+      "inference": { "mean": 0.32, "range": [0.20, 0.45], "note": "Much lower — answer says what passage implies" },
+      "rhetorical_purpose": { "mean": 0.15, "note": "Uses meta-language ('to illustrate', 'to provide evidence') not in passage" }
+    },
+    "paraphraseStrategies": [
+      { "passage": "counteract", "answer": "offset" },
+      { "passage": "barren", "answer": "lifeless" },
+      { "passage": "unprecedented", "answer": "unparalleled" },
+      { "passage": "bypasses", "answer": "avoids" },
+      { "passage": "harnessed", "answer": "utilized" },
+      { "passage": "autonomy", "answer": "independence" },
+      { "passage": "marooned", "answer": "stranded" },
+      { "passage": "meticulously", "answer": "carefully" },
+      { "passage": "ubiquitous", "answer": "widespread" },
+      { "passage": "perplexing", "answer": "puzzling" },
+      { "passage": "contentment", "answer": "satisfaction" },
+      { "passage": "crystallize", "answer": "solidify" },
+      { "passage": "collides with near-freezing", "answer": "meets cold" },
+      { "passage": "halts the growth, hardens", "answer": "stop, solidify" }
+    ],
+    "keyRule": "Correct answers NEVER use a phrase longer than 3 consecutive passage words. Always restructured syntactically."
+  },
+
+  "distractorEngineering": {
+    "overallDistribution": {
+      "not_mentioned": { "pct": 36.9, "count": 72, "note": "Introduces topically-related but fabricated content. Borrows ZERO passage vocabulary." },
+      "wrong_detail": { "pct": 26.7, "count": 52, "note": "MOST DANGEROUS. Reuses passage vocabulary but changes relationships. Avg 2-3 passage content words." },
+      "opposite": { "pct": 15.4, "count": 30, "note": "Reverses passage logic. E.g., 'less intelligent' → 'more intelligent'" },
+      "misquoted": { "pct": 7.7, "count": 15, "note": "Used exclusively in negative_factual (EXCEPT) questions" },
+      "plausible_but_unsupported": { "pct": 6.7, "count": 13, "note": "Sounds reasonable from world knowledge but has no textual basis" },
+      "too_narrow": { "pct": 3.1, "count": 6 },
+      "too_broad": { "pct": 2.6, "count": 5 }
+    },
+    "byQuestionType": {
+      "factual_detail": { "primary": "not_mentioned (46%)", "secondary": "wrong_detail (28%)", "note": "27% distractors borrow passage terms" },
+      "inference": { "primary": "opposite (45%)", "secondary": "not_mentioned (30%)", "note": "Opposite is dominant — tests logical direction" },
+      "main_idea": { "primary": "too_narrow (50%)", "note": "Distractors capture only one detail, not the whole scope" },
+      "negative_factual": { "primary": "misquoted (100%)", "note": "3 options ARE true (paraphrased from passage), 1 is NOT" },
+      "paragraph_relationship": { "primary": "wrong_detail (100%)", "note": "Always about misidentifying the function/connection" },
+      "rhetorical_purpose": { "primary": "not_mentioned (67%)", "note": "Wrong purpose for why author mentions something" },
+      "vocabulary_in_context": { "primary": "wrong_detail (31%) + opposite (31%)", "note": "Options are plausible meanings but wrong for THIS context" }
+    },
+    "vocabularyBorrowing": {
+      "distractorsWithPassageWords": "40% of all distractors contain ≥1 passage content word",
+      "distractorsWith2PlusPassageWords": "27% contain ≥2 passage content words",
+      "note": "wrong_detail type borrows most heavily; not_mentioned type borrows least"
+    },
+    "lengthRelationship": {
+      "distractorLongerThanCorrect": 34,
+      "distractorShorterThanCorrect": 98,
+      "distractorEqualToCorrect": 63,
+      "note": "Distractors tend to be SHORTER than correct answers (50% vs 17% vs 32%)"
+    }
+  },
+
+  "vocabularyQuestionProfile": {
+    "totalAnalyzed": 13,
+    "primaryDefinitionTested": { "pct": 85, "count": 11 },
+    "secondaryFigurativeDefinition": { "pct": 15, "count": 2, "words": ["milestone", "harnessed"] },
+    "optionsWithRealDefinitions": { "typically": 1, "occasionally": 2, "note": "Usually only 1 option is a real definition; others are same-POS words" },
+    "contextCluePattern": "Passage almost always has an appositive or explanatory clause adjacent to the tested word",
+    "testedPartsOfSpeech": {
+      "noun": 4,
+      "verb": 3,
+      "adjective": 4,
+      "adverb": 1,
+      "verb_past_participle": 1
+    },
+    "distractorConstruction": "Options are real English words of same POS that could superficially fit the sentence but not the semantic context"
+  },
+
+  "questionOrdering": {
+    "strictlyOrdered": { "pct": 31, "count": 4 },
+    "mostlyOrdered": { "pct": 46, "count": 6 },
+    "nonMonotonic": { "pct": 23, "count": 3 },
+    "rule": "Questions generally follow passage order but with exceptions for span-questions (negative_factual, main_idea, paragraph_relationship)"
+  }
+}

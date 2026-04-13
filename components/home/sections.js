@@ -24,9 +24,9 @@ export const SECTIONS = [
     label: "Reading",
     labelZh: "阅读",
     icon: "📖",
-    status: SECTION_STATUS.COMING_SOON,
-    description: "Reading comprehension practice",
-    descriptionZh: "阅读理解练习，即将推出",
+    status: SECTION_STATUS.ACTIVE,
+    description: "Complete the Words · Read in Daily Life",
+    descriptionZh: "单词补全、日常阅读理解，TOEFL 2026 新题型",
   },
   {
     id: "listening",
