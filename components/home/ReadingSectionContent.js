@@ -213,7 +213,7 @@ function ReadingHistoryLink({ isChallenge, hoverKey, setHoverKey, fadeIn }) {
   return (
     <div style={{ marginBottom: 20, ...fadeIn(380) }}>
       <HomeLinkCard
-        href="/progress"
+        href="/reading/progress"
         cardKey="reading-progress"
         hoverKey={hoverKey}
         setHoverKey={setHoverKey}
