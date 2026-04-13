@@ -4,5 +4,5 @@ import { ReadingProgressView } from "../../../components/reading/ReadingProgress
 
 export default function ReadingProgressPage() {
   const router = useRouter();
-  return <ReadingProgressView onBack={() => router.push("/")} />;
+  return <ReadingProgressView onBack={() => router.push("/?section=reading")} />;
 }

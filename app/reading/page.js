@@ -27,7 +27,7 @@ function ReadingPageClient() {
     setItem(type === "rdl" ? pickRandom(RDL_DATA.items) : pickRandom(CTW_DATA.items));
   }, [type]);
 
-  const onExit = () => router.push("/");
+  const onExit = () => router.push("/?section=reading");
 
   // Gate: Pro only
   if (!isPro) {

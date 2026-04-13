@@ -4,5 +4,5 @@ import { ProgressView } from "../../components/ProgressView";
 
 export default function ProgressPage() {
   const router = useRouter();
-  return <ProgressView onBack={() => router.push("/")} />;
+  return <ProgressView onBack={() => router.push("/?section=writing")} />;
 }

@@ -86,7 +86,10 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
   const [sessions, setSessions] = useState([]);
   const searchParams = useSearchParams();
   const [mode, setMode] = useState(() => normalizePracticeMode(searchParams.get("mode")));
-  const [activeSection, setActiveSection] = useState("writing");
+  const [activeSection, setActiveSection] = useState(() => {
+    const s = searchParams.get("section");
+    return s && ["writing", "reading", "listening", "speaking"].includes(s) ? s : "writing";
+  });
   const [crtFlash, setCrtFlash] = useState(false);
   const [shaking, setShaking] = useState(false);
   const [fbOpen, setFbOpen] = useState(false);
