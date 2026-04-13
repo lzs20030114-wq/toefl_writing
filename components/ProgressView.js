@@ -1201,29 +1201,33 @@ export function ProgressView({ onBack }) {
             ) : (
               <div key="overview" style={{ animation: "slideInLeft 0.4s cubic-bezier(0.16,1,0.3,1)" }}>
 
-                {/* 1. Stat cards — PRIMARY navigation, top position */}
-                <div className="tp-stat-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 12, marginBottom: 20, animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 80ms both" }}>
-                  {statItems.map((item) => (
-                    <StatCard
-                      key={item.key}
-                      icon={item.icon}
-                      short={item.short}
-                      count={item.count}
-                      avg={item.avg}
-                      color={item.color}
-                      active={filter === item.key}
-                      onClick={() => { setFilter(item.key); setSelectedWeak(null); }}
-                    />
-                  ))}
-                </div>
-
-                {/* 2. Trend chart — full width, no box wrapper, breathes */}
-                {(bs.length > 0 || email.length > 0 || discussion.length > 0) && (
-                  <div style={{ marginBottom: 20, padding: "16px 20px 12px", background: P.surface, borderRadius: 16, border: `1px solid ${P.borderSubtle}`, animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 160ms both" }}>
-                    <div style={{ fontSize: 13, fontWeight: 700, color: P.text, marginBottom: 10, letterSpacing: "-0.01em" }}>进步趋势</div>
-                    <TrendChart bs={bs} email={email} discussion={discussion} filter={filter} />
+                {/* 1. Stats row: stat cards (left) + mini trend chart (right) */}
+                <div className="tp-stats-row" style={{ display: "flex", gap: 14, marginBottom: 16, animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 80ms both", alignItems: "stretch" }}>
+                  {/* Stat cards — 2x2 grid */}
+                  <div className="tp-stat-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, flex: "0 0 52%" }}>
+                    {statItems.map((item) => (
+                      <StatCard
+                        key={item.key}
+                        icon={item.icon}
+                        short={item.short}
+                        count={item.count}
+                        avg={item.avg}
+                        color={item.color}
+                        active={filter === item.key}
+                        onClick={() => { setFilter(item.key); setSelectedWeak(null); }}
+                      />
+                    ))}
                   </div>
-                )}
+                  {/* Mini trend chart — compact companion */}
+                  {(bs.length > 0 || email.length > 0 || discussion.length > 0) && (
+                    <div style={{ flex: 1, minWidth: 0, padding: "14px 16px 10px", background: P.surface, borderRadius: 16, border: `1px solid ${P.borderSubtle}`, display: "flex", flexDirection: "column" }}>
+                      <div style={{ fontSize: 12, fontWeight: 700, color: P.textSec, marginBottom: 6, letterSpacing: "-0.01em" }}>进步趋势</div>
+                      <div style={{ flex: 1, minHeight: 0 }}>
+                        <TrendChart bs={bs} email={email} discussion={discussion} filter={filter} />
+                      </div>
+                    </div>
+                  )}
+                </div>
 
                 {/* 3. Session list — with date grouping */}
                 <div style={{ background: P.surface, borderRadius: 18, border: `1px solid ${P.borderSubtle}`, overflow: "hidden", boxShadow: "0 1px 4px rgba(10,40,25,0.03)", animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 280ms both" }}>
