@@ -360,12 +360,22 @@ function WeaknessCard({ weakness, count, selected, onClick }) {
       onClick={onClick}
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
-      style={{ width: "100%", display: "flex", alignItems: "center", gap: 8, padding: "9px 12px", borderRadius: 10, cursor: "pointer", textAlign: "left", background: selected ? P.primarySoft : P.surface, border: `1.5px solid ${selected ? `${P.primary}40` : P.borderSubtle}`, transform: hov && !selected ? "translateY(-1px)" : "none", boxShadow: hov && !selected ? P.shadowMd : "none", transition: "all 0.25s cubic-bezier(0.16,1,0.3,1)" }}
+      style={{
+        width: "100%", display: "flex", alignItems: "center", gap: 10,
+        padding: "10px 14px", borderRadius: 10, cursor: "pointer", textAlign: "left",
+        background: selected ? P.primarySoft : hov ? "#f8faf9" : P.surface,
+        border: `1.5px solid ${selected ? `${P.primary}40` : hov ? P.border : P.borderSubtle}`,
+        transform: hov && !selected ? "translateY(-1px)" : "none",
+        boxShadow: hov && !selected ? "0 2px 8px rgba(0,0,0,0.04)" : "none",
+        transition: "all 0.2s ease",
+      }}
     >
+      {/* Left accent dot */}
+      <div style={{ width: 6, height: 6, borderRadius: "50%", background: selected ? P.primary : P.amber, flexShrink: 0, opacity: selected ? 1 : 0.5 }} />
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontSize: 12, fontWeight: selected ? 700 : 600, color: selected ? P.primaryDeep : P.text }}>{weakness}</div>
-        <div style={{ fontSize: 10, color: selected ? P.primary : P.textDim, marginTop: 1 }}>出现 {count} 次</div>
+        <div style={{ fontSize: 12.5, fontWeight: selected ? 700 : 550, color: selected ? P.primaryDeep : P.text, lineHeight: 1.3 }}>{weakness}</div>
       </div>
+      <span style={{ fontSize: 11, fontWeight: 600, color: selected ? P.primary : P.textDim, background: selected ? `${P.primary}12` : `${P.textDim}10`, padding: "2px 8px", borderRadius: 999, flexShrink: 0 }}>{count}次</span>
     </button>
   );
 }
@@ -379,11 +389,24 @@ function StatCard({ icon, short, count, avg, color, active, onClick }) {
       onClick={onClick}
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
-      style={{ padding: "10px 10px", borderRadius: 10, textAlign: "left", cursor: "pointer", border: `1.5px solid ${active ? `${color}55` : P.borderSubtle}`, background: active ? `${color}06` : P.surface, transform: (active || hov) ? "translateY(-1px)" : "none", boxShadow: (active || hov) ? P.shadow : "none", transition: "all 0.25s cubic-bezier(0.16,1,0.3,1)" }}
+      style={{
+        padding: "14px 14px 12px", borderRadius: 14, textAlign: "left", cursor: "pointer",
+        border: `1.5px solid ${active ? color : "transparent"}`,
+        background: active ? `${color}0A` : hov ? "#f8faf9" : P.surface,
+        transform: (active || hov) ? "translateY(-2px)" : "none",
+        boxShadow: active ? `0 4px 16px ${color}18` : hov ? P.shadow : "0 1px 2px rgba(0,0,0,0.03)",
+        transition: "all 0.25s cubic-bezier(0.16,1,0.3,1)",
+        position: "relative", overflow: "hidden",
+      }}
     >
-      <div style={{ fontSize: 10.5, fontWeight: 700, color, marginBottom: 4 }}>{icon} {short}</div>
-      <div style={{ fontSize: 18, fontWeight: 800, color: P.text, lineHeight: 1.1 }}>{count}</div>
-      {avg ? <div style={{ fontSize: 10, color: P.textDim, marginTop: 2 }}>{avg}</div> : null}
+      {/* Top color accent line */}
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: active ? color : "transparent", borderRadius: "14px 14px 0 0", transition: "background 0.2s" }} />
+      <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
+        <span style={{ width: 24, height: 24, borderRadius: 8, background: `${color}14`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12 }}>{icon}</span>
+        <span style={{ fontSize: 11, fontWeight: 600, color: active ? color : P.textSec, letterSpacing: "0.02em" }}>{short}</span>
+      </div>
+      <div style={{ fontSize: 24, fontWeight: 800, color: active ? color : P.text, lineHeight: 1, letterSpacing: "-0.02em" }}>{count}</div>
+      {avg ? <div style={{ fontSize: 10.5, color: P.textDim, marginTop: 5, fontWeight: 500 }}>{avg}</div> : null}
     </button>
   );
 }
@@ -414,20 +437,38 @@ function SessionRow({ entry, expanded, onToggle, onDelete, typeAvgs, isActive, o
   }
 
   return (
-    <div style={{ borderBottom: `1px solid ${P.borderSubtle}`, borderLeft: isActive ? `3px solid ${m.color}` : "3px solid transparent", transition: "border-color 0.2s" }}>
+    <div style={{ borderBottom: `1px solid ${P.borderSubtle}`, transition: "all 0.2s" }}>
       <button
         onClick={handleClick}
-        style={{ width: "100%", display: "flex", alignItems: "center", gap: 10, padding: "11px 10px", background: isActive ? `${m.color}06` : "none", border: "none", cursor: "pointer", transition: "background 0.15s" }}
-        onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.background = P.bg; }}
+        style={{
+          width: "100%", display: "flex", alignItems: "center", gap: 12,
+          padding: "13px 14px", background: isActive ? `${m.color}06` : "none",
+          border: "none", cursor: "pointer", transition: "background 0.15s",
+          borderLeft: `3px solid ${isActive ? m.color : "transparent"}`,
+        }}
+        onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.background = "#f8faf9"; }}
         onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.background = "transparent"; }}
       >
-        <div style={{ width: 30, height: 30, borderRadius: 8, background: m.soft, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, flexShrink: 0 }}>{m.icon}</div>
-        <div style={{ flex: 1, textAlign: "left" }}>
-          <div style={{ fontSize: 13, fontWeight: isActive ? 700 : 640, color: P.text }}>{m.label}</div>
-          <div style={{ fontSize: 11, color: P.textDim, marginTop: 1 }}>{formatLocalDateTime(s.date)}</div>
+        {/* Icon badge */}
+        <div style={{
+          width: 34, height: 34, borderRadius: 10, flexShrink: 0,
+          background: `${m.color}10`, border: `1px solid ${m.color}20`,
+          display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14,
+        }}>{m.icon}</div>
+        {/* Label + date */}
+        <div style={{ flex: 1, textAlign: "left", minWidth: 0 }}>
+          <div style={{ fontSize: 13, fontWeight: isActive ? 700 : 600, color: P.text, lineHeight: 1.3 }}>{m.label}</div>
+          <div style={{ fontSize: 11, color: P.textDim, marginTop: 2, fontVariantNumeric: "tabular-nums" }}>{formatLocalDateTime(s.date)}</div>
         </div>
-        <span style={{ fontVariantNumeric: "tabular-nums", fontSize: 14, fontWeight: 720, color: scoreColor }}>{scoreStr}</span>
-        {bandStr && <span style={{ fontSize: 11, fontWeight: 700, padding: "2px 7px", borderRadius: 999, background: `${scoreColor}18`, color: scoreColor }}>Band {bandStr}</span>}
+        {/* Score */}
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+          <span style={{
+            fontVariantNumeric: "tabular-nums", fontSize: 15, fontWeight: 750, color: scoreColor,
+            background: `${scoreColor}0A`, padding: "3px 10px", borderRadius: 8,
+            border: `1px solid ${scoreColor}18`,
+          }}>{scoreStr}</span>
+          {bandStr && <span style={{ fontSize: 10.5, fontWeight: 700, padding: "3px 8px", borderRadius: 999, background: `${scoreColor}12`, color: scoreColor }}>Band {bandStr}</span>}
+        </div>
         <ChevronIcon open={isWriting ? isActive : expanded} color={P.textDim} />
         <span
           role="button"
@@ -1078,9 +1119,9 @@ export function ProgressView({ onBack }) {
 
           {/* Left sidebar */}
           <div className="tp-progress-sidebar" style={{ width: 320, flexShrink: 0, position: "sticky", top: 68, animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 60ms both" }}>
-            <div style={{ marginBottom: 16 }}>
-              <h1 style={{ fontSize: 22, fontWeight: 800, color: P.text, marginBottom: 4 }}>练习记录</h1>
-              <p style={{ fontSize: 11, color: P.textDim }}>点击模考条目，在右侧展开详情报告</p>
+            <div style={{ marginBottom: 20 }}>
+              <h1 style={{ fontSize: 24, fontWeight: 800, color: P.text, marginBottom: 5, letterSpacing: "-0.02em" }}>练习记录</h1>
+              <p style={{ fontSize: 12, color: P.textDim, lineHeight: 1.5 }}>点击模考条目，在右侧展开详情报告</p>
             </div>
             <CompactMockList
               mockEntries={mockEntries}
@@ -1089,8 +1130,9 @@ export function ProgressView({ onBack }) {
             />
             {topWeaknesses.length > 0 && (
               <div>
-                <div style={{ fontSize: 11, fontWeight: 700, color: P.textSec, marginBottom: 8, display: "flex", alignItems: "center", gap: 5 }}>
-                  <span>🔍</span> 薄弱点分析
+                <div style={{ fontSize: 12, fontWeight: 700, color: P.textSec, marginBottom: 10, display: "flex", alignItems: "center", gap: 6, marginTop: 4 }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={P.textSec} strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                  薄弱点分析
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
                   {topWeaknesses.map(([w, count]) => (
@@ -1115,12 +1157,12 @@ export function ProgressView({ onBack }) {
               <div key="overview" style={{ animation: "slideInLeft 0.4s cubic-bezier(0.16,1,0.3,1)" }}>
 
                 {/* Collapsible stats section */}
-                <div style={{ background: P.surface, borderRadius: 12, border: `1px solid ${P.border}`, overflow: "hidden", marginBottom: 12, boxShadow: P.shadow }}>
+                <div style={{ background: P.surface, borderRadius: 16, border: `1px solid ${P.border}`, overflow: "hidden", marginBottom: 14, boxShadow: "0 2px 10px rgba(10,40,25,0.04)" }}>
                   <button
                     onClick={() => setShowStats(v => !v)}
-                    style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "9px 14px", background: "none", border: "none", cursor: "pointer", borderBottom: showStats ? `1px solid ${P.borderSubtle}` : "none", transition: "border-color 0.2s" }}
+                    style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 18px", background: "none", border: "none", cursor: "pointer", borderBottom: showStats ? `1px solid ${P.borderSubtle}` : "none", transition: "border-color 0.2s" }}
                   >
-                    <span style={{ fontSize: 12, fontWeight: 700, color: P.text }}>📊 数据概览</span>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: P.text, letterSpacing: "-0.01em" }}>数据概览</span>
                     <ChevronIcon open={showStats} color={P.textDim} />
                   </button>
                   <div style={{ maxHeight: showStats ? "400px" : "0px", overflow: "hidden", transition: "max-height 0.45s cubic-bezier(0.16,1,0.3,1)" }}>
@@ -1147,7 +1189,7 @@ export function ProgressView({ onBack }) {
                       </div>
                       {/* Right: trend chart */}
                       <div style={{ flex: 1, minWidth: 0, padding: "10px 14px 12px" }}>
-                        <div style={{ fontSize: 11, fontWeight: 700, color: P.text, marginBottom: 6 }}>📈 进步趋势</div>
+                        <div style={{ fontSize: 12, fontWeight: 700, color: P.text, marginBottom: 8, letterSpacing: "-0.01em" }}>进步趋势</div>
                         {(bs.length > 0 || email.length > 0 || discussion.length > 0) ? (
                           <TrendChart bs={bs} email={email} discussion={discussion} filter={filter} />
                         ) : (
@@ -1175,9 +1217,10 @@ export function ProgressView({ onBack }) {
                 </div>
 
                 {/* Session list */}
-                <div style={{ background: P.surface, borderRadius: 14, border: `1px solid ${P.border}`, overflow: "hidden", boxShadow: P.shadow, animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 280ms both" }}>
-                  <div style={{ padding: "12px 16px", background: P.bg, borderBottom: `1px solid ${P.borderSubtle}`, fontSize: 13, fontWeight: 700, color: P.text }}>
-                    日常练习明细 ({filteredPractice.length})
+                <div style={{ background: P.surface, borderRadius: 16, border: `1px solid ${P.border}`, overflow: "hidden", boxShadow: "0 2px 10px rgba(10,40,25,0.04)", animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 280ms both" }}>
+                  <div style={{ padding: "14px 18px", borderBottom: `1px solid ${P.borderSubtle}`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: P.text, letterSpacing: "-0.01em" }}>练习明细</span>
+                    <span style={{ fontSize: 11, color: P.textDim, fontWeight: 500, background: P.bg, padding: "2px 8px", borderRadius: 999 }}>{filteredPractice.length} 条</span>
                   </div>
                   <div style={{ padding: "8px 14px 14px" }}>
                     {filteredPractice.length === 0 ? (
