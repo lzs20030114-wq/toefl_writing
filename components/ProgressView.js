@@ -31,7 +31,6 @@ const TYPE = {
   email: { label: "邮件写作", short: "邮件", color: P.teal, soft: P.tealSoft, icon: "📧" },
   discussion: { label: "学术讨论", short: "讨论", color: P.indigo, soft: P.indigoSoft, icon: "💬" },
   mock: { label: "模考", short: "模考", color: P.purple, soft: P.purpleSoft, icon: "🎯" },
-  reading: { label: "阅读理解", short: "阅读", color: "#3B82F6", soft: "#EFF6FF", icon: "📖" },
 };
 
 const MOCK_IDS = { BUILD: "build-sentence", EMAIL: "email-writing", DISC: "academic-writing" };
@@ -418,7 +417,7 @@ function SessionRow({ entry, expanded, onToggle, onDelete, typeAvgs, isActive, o
   const m = TYPE[s.type] || TYPE.email;
   const isWriting = s.type === "email" || s.type === "discussion";
   let scoreStr, pct, bandStr;
-  if (s.type === "bs" || s.type === "reading") {
+  if (s.type === "bs") {
     const t = Number(s.total || 0), c = Number(s.correct || 0);
     scoreStr = t > 0 ? `${c}/${t}` : "--";
     pct = t > 0 ? c / t : 0;
@@ -976,14 +975,14 @@ export function ProgressView({ onBack }) {
     [entries]
   );
   const practiceEntries = useMemo(() =>
-    entries.filter((e) => e.session.type !== "mock").sort((a, b) => new Date(b.session.date) - new Date(a.session.date)),
+    entries.filter((e) => e.session.type !== "mock" && e.session.type !== "reading").sort((a, b) => new Date(b.session.date) - new Date(a.session.date)),
     [entries]
   );
 
   const bs = stats.byType.bs;
   const email = stats.byType.email;
   const discussion = stats.byType.discussion;
-  const reading = stats.byType.reading || [];
+  // reading has its own dedicated page at /reading/progress — not shown here
 
   const weaknessMap = useMemo(() => {
     const map = {};
@@ -994,14 +993,11 @@ export function ProgressView({ onBack }) {
   }, [email, discussion]);
   const topWeaknesses = Object.entries(weaknessMap).sort((a, b) => b[1] - a[1]).slice(0, 5);
 
-  const readingAvg = getBuildAvgPercent(reading); // reading uses same correct/total format as BS
-
   const typeAvgs = useMemo(() => ({
     bs: getBuildAvgPercent(bs),
     email: getWritingAvg(email),
     discussion: getWritingAvg(discussion),
-    reading: readingAvg,
-  }), [bs, email, discussion, readingAvg]);
+  }), [bs, email, discussion]);
 
   const activeMockEntry = mockEntries.find((e) => e.sourceIndex === activeMockSrcIdx) || null;
 
@@ -1043,7 +1039,6 @@ export function ProgressView({ onBack }) {
     { key: "bs", ...TYPE.bs, count: bs.length, avg: buildAvg !== null ? `平均 ${Math.round(buildAvg)}%` : "暂无数据" },
     { key: "email", ...TYPE.email, count: email.length, avg: emailAvg !== null ? `平均 ${emailAvg.toFixed(1)}/5` : "暂无数据" },
     { key: "discussion", ...TYPE.discussion, count: discussion.length, avg: discussionAvg !== null ? `平均 ${discussionAvg.toFixed(1)}/5` : "暂无数据" },
-    { key: "reading", ...TYPE.reading, count: reading.length, avg: readingAvg !== null ? `平均 ${Math.round(readingAvg)}%` : "暂无数据" },
   ];
 
   if (isMobile) {
@@ -1201,7 +1196,7 @@ export function ProgressView({ onBack }) {
                 </div>
 
                 {/* Stat cards — always visible, filter both chart and session list */}
-                <div className="tp-stat-grid" style={{ display: "grid", gridTemplateColumns: "repeat(5,1fr)", gap: 8, marginBottom: 12, animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 200ms both" }}>
+                <div className="tp-stat-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 10, marginBottom: 14, animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 200ms both" }}>
                   {statItems.map((item) => (
                     <StatCard
                       key={item.key}
