@@ -8,7 +8,7 @@ import { checkCanPractice, FREE_DAILY_LIMIT } from "../../lib/dailyUsage";
 import UpgradeModal from "../shared/UpgradeModal";
 import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
 
-function sectionTitle(isChallenge) {
+export function sectionTitle(isChallenge) {
   return {
     fontSize: 11,
     fontWeight: 700,
@@ -19,13 +19,13 @@ function sectionTitle(isChallenge) {
   };
 }
 
-function FbStatusBadge({ status, hasReply }) {
+export function FbStatusBadge({ status, hasReply }) {
   if (hasReply) return <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 7px", borderRadius: 999, background: "#eff6ff", color: "#1d4ed8" }}>已回复</span>;
   if (status === "resolved") return <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 7px", borderRadius: 999, background: "#f0fdf4", color: "#15803d" }}>已修改</span>;
   return <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 7px", borderRadius: 999, background: "#f8fafc", color: "#64748b" }}>处理中</span>;
 }
 
-function TierBadge({ tier, tierExpiresAt, isChallenge }) {
+export function TierBadge({ tier, tierExpiresAt, isChallenge }) {
   if (tier === "legacy") {
     return <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 999, background: "#f0fdf4", color: "#15803d" }}>Legacy · 不限次</span>;
   }
@@ -40,7 +40,7 @@ function TierBadge({ tier, tierExpiresAt, isChallenge }) {
   return <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 999, background: isChallenge ? "rgba(255,255,255,0.06)" : "#f8fafc", color: isChallenge ? CH.t2 : "#64748b" }}>免费版</span>;
 }
 
-function BindEmailModal({ userCode, onSuccess, onClose }) {
+export function BindEmailModal({ userCode, onSuccess, onClose }) {
   const [step, setStep] = useState("input"); // input | otp
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
@@ -138,7 +138,7 @@ function BindEmailModal({ userCode, onSuccess, onClose }) {
   );
 }
 
-function ContactCard({ isChallenge, contactOpen, setContactOpen, sideCard, fadeIn, delay }) {
+export function ContactCard({ isChallenge, contactOpen, setContactOpen, sideCard, fadeIn, delay }) {
   const [emailCopied, setEmailCopied] = useState(false);
   const authorEmail = "3582786720@qq.com";
 

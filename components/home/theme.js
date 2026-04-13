@@ -19,6 +19,11 @@ export const HOME_TOKENS = {
   rose: "#E11D48",
   roseSoft: "#FFF1F2",
   shadow: "0 1px 3px rgba(10,40,25,0.04), 0 1px 2px rgba(10,40,25,0.02)",
+  // NavSidebar tokens
+  navBg: "#F8FAFB",
+  navBdr: "#E2E8F0",
+  navItemActive: "#ECFDF5",
+  navItemHover: "#F1F5F9",
 };
 
 export const CHALLENGE_TOKENS = {
@@ -31,6 +36,11 @@ export const CHALLENGE_TOKENS = {
   nav: "#0D0D14",
   navBorder: "#FF2222",
   timeBg: "#1A0A10",
+  // NavSidebar tokens
+  navBg: "#0A0A10",
+  navBdr: "#1E1525",
+  navItemActive: "rgba(255,30,30,0.08)",
+  navItemHover: "rgba(255,255,255,0.04)",
 };
 
 export const HOME_FONT = "'Plus Jakarta Sans','Noto Sans SC','Segoe UI',sans-serif";

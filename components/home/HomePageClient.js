@@ -13,6 +13,8 @@ import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_PAGE_CSS, HOME_TOKENS as T, TAS
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { AnnouncementButton } from "./AnnouncementModal";
 import { countBsMistakes } from "../MistakeNotebook";
+import { NavSidebar } from "./NavSidebar";
+import { SectionContent } from "./SectionContent";
 
 export function PromoBanner({ isChallenge, fadeIn }) {
   const [open, setOpen] = useState(false);
@@ -84,6 +86,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
   const [sessions, setSessions] = useState([]);
   const searchParams = useSearchParams();
   const [mode, setMode] = useState(() => normalizePracticeMode(searchParams.get("mode")));
+  const [activeSection, setActiveSection] = useState("writing");
   const [crtFlash, setCrtFlash] = useState(false);
   const [shaking, setShaking] = useState(false);
   const [fbOpen, setFbOpen] = useState(false);
@@ -295,7 +298,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
                 <span style={{ color: "#fff", fontSize: 13, fontWeight: 800 }}>T</span>
               </div>
               <span style={{ fontWeight: 700, fontSize: 15, color: T.t1 }}>TreePractice</span>
-              <span style={{ fontSize: 10, fontWeight: 700, color: T.primary, background: T.primarySoft, border: `1px solid ${T.primaryMist}`, borderRadius: 5, padding: "1px 6px", letterSpacing: 0.3 }}>写作备考</span>
+              <span style={{ fontSize: 10, fontWeight: 700, color: T.primary, background: T.primarySoft, border: `1px solid ${T.primaryMist}`, borderRadius: 5, padding: "1px 6px", letterSpacing: 0.3 }}>TOEFL 备考</span>
             </div>
             <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 12 }}>
               <span className="home-nav-ai" style={{ fontSize: 12, color: T.t3 }}>部分内容由 AI 辅助生成</span>
@@ -312,98 +315,27 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
           </div>
         ) : null}
 
-        <div className="home-shell" style={{ maxWidth: 1120, margin: "0 auto", padding: "28px 36px 60px", display: "flex", gap: 28, alignItems: "flex-start" }}>
-          <div className="home-layout" style={{ display: "flex", gap: 28, alignItems: "flex-start", width: "100%" }}>
-            <HomeSidebar userCode={userCode} userTier={userTier} userEmail={userEmail} authMethod={authMethod} isLoggedIn={isLoggedIn} showLoginModal={showLoginModal} onLogout={onLogout} totalCount={totalCount} weekCount={weekCount} bestMock={bestMock} isChallenge={isChallenge} copied={copied} copyCode={copyCode} logoutHover={logoutHover} setLogoutHover={setLogoutHover} fbOpen={fbOpen} setFbOpen={setFbOpen} fbText={fbText} setFbText={setFbText} fbBusy={fbBusy} fbSent={fbSent} feedbackMsg={feedbackMsg} submitFeedback={submitFeedback} fbHistory={fbHistory} fbHistLoading={fbHistLoading} sideCard={sideCard} fadeIn={fadeIn} />
-
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ marginBottom: 16, ...fadeIn(50) }}>
-                <div className="tp-home-header" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, marginBottom: 10 }}>
-                  <h1 style={{ margin: 0, fontSize: 30, fontWeight: 800, color: isChallenge ? CH.t1 : T.t1, letterSpacing: -0.5, lineHeight: 1.2 }}>
-                    {isChallenge ? <>英语写作练习 <span style={{ color: CH.accent }}>Challenge Mode</span></> : isPractice ? <>英语写作练习 <span style={{ color: "#6366f1" }}>Practice</span></> : "英语写作练习"}
-                  </h1>
-                  <div className="tp-mode-switcher" style={{ display: "inline-flex", gap: 4, flexShrink: 0, background: isChallenge ? "rgba(255,255,255,0.05)" : T.card, border: `1px solid ${isChallenge ? "rgba(255,30,30,0.3)" : T.bdr}`, borderRadius: 999, padding: 4, boxShadow: T.shadow }}>
-                    {[
-                      { value: PRACTICE_MODE.STANDARD, label: "Standard" },
-                      { value: PRACTICE_MODE.PRACTICE, label: "Practice" },
-                      { value: PRACTICE_MODE.CHALLENGE, label: "Challenge" },
-                    ].map((option) => {
-                      const selected = mode === option.value;
-                      const challengeOption = option.value === PRACTICE_MODE.CHALLENGE;
-                      const practiceOption = option.value === PRACTICE_MODE.PRACTICE;
-                      return <button key={option.value} onClick={() => switchMode(option.value)} style={{ border: "none", background: selected ? (challengeOption ? "rgba(255,30,30,0.18)" : practiceOption ? "rgba(99,102,241,0.12)" : "#fff") : "transparent", color: selected ? (challengeOption ? CH.accent : practiceOption ? "#6366f1" : T.t1) : (isChallenge ? CH.t2 : T.t2), borderRadius: 999, padding: "5px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer", transition: "all .15s", boxShadow: selected && !challengeOption && !practiceOption ? "0 1px 4px rgba(0,0,0,0.1)" : "none", fontFamily: HOME_FONT }}>{option.label}</button>;
-                    })}
-                  </div>
-                </div>
-                <p style={{ margin: 0, fontSize: 13, color: isChallenge ? CH.accent : T.t2, fontWeight: isChallenge ? 600 : 400 }}>
-                  {isChallenge ? "在压力下证明你的水平。时间更短，要求更高。" : isPractice ? "自选题目，不限时间，自由练习。" : "模拟考试计时、AI 评分与三类写作任务练习，适用于 TOEFL® 备考。"}
-                </p>
-              </div>
-
-              <div style={{ background: isChallenge ? "rgba(17,17,24,0.7)" : T.card, border: `1px solid ${isChallenge ? CH.cardBorder : T.bdr}`, borderRadius: 10, padding: "10px 16px", marginBottom: 16, boxShadow: isChallenge ? "none" : T.shadow, ...fadeIn(120) }}>
-                <div style={{ display: "flex", gap: 20, flexWrap: "wrap", fontSize: 12, color: isChallenge ? CH.t2 : T.t2 }}>
-                  <span>- 覆盖三类写作任务（排序 · 邮件 · 学术讨论）</span>
-                  <span>- 模拟考试限时练习</span>
-                  <span>- AI 评分与反馈</span>
-                  <span>- 仅供练习使用，不代表官方考试评分</span>
-                </div>
-              </div>
-
-              <PromoBanner isChallenge={isChallenge} fadeIn={fadeIn} />
-
-              <div className="home-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
-                {gridItems.map((item) => (
-                  <div key={item.k} style={{ display: "flex", ...fadeIn(item.delay) }}>
-                    <HomeTaskCard item={item} hoverKey={hoverKey} setHoverKey={setHoverKey} isChallenge={isChallenge} />
-                  </div>
-                ))}
-              </div>
-
-              <div style={{ marginBottom: 12, ...fadeIn(440) }}>
-                <HomeLinkCard
-                  href="/post-writing-practice"
-                  cardKey="post-writing-practice"
-                  hoverKey={hoverKey}
-                  setHoverKey={setHoverKey}
-                  isChallenge={isChallenge}
-                  icon="Aa"
-                  eyebrow="写后练习"
-                  title="拼写填空练习"
-                  description={
-                    postWritingCounts.total > 0
-                      ? `今日 ${postWritingCounts.today} 题，错题本 ${postWritingCounts.notebook} 题。`
-                      : "从 Task 2/3 历史反馈中提取拼写错误，做填空复习。"
-                  }
-                  badge={postWritingCounts.total > 0 ? `${postWritingCounts.total} 题` : "暂无题目"}
-                />
-              </div>
-
-              <div style={{ marginBottom: 12, ...fadeIn(460) }}>
-                <HomeLinkCard
-                  href="/mistake-notebook"
-                  cardKey="mistake-notebook"
-                  hoverKey={hoverKey}
-                  setHoverKey={setHoverKey}
-                  isChallenge={isChallenge}
-                  icon="✗"
-                  eyebrow="复习"
-                  title="拼句错题本"
-                  description={bsMistakeCount > 0 ? `已收录 ${bsMistakeCount} 道错题，点击查看详情和 AI 解析。` : "做完拼句练习后，错题会自动收录在这里。"}
-                  badge={bsMistakeCount > 0 ? `${bsMistakeCount} 题` : "暂无错题"}
-                />
-              </div>
-
-              <div style={{ marginBottom: 28, ...fadeIn(500) }}>
-                <HomeLinkCard href="/progress" cardKey="progress" hoverKey={hoverKey} setHoverKey={setHoverKey} isChallenge={isChallenge} icon="P" eyebrow="记录" title="练习记录" description={sessions.length > 0 ? `已记录 ${sessions.length} 次练习，可查看趋势和薄弱点。` : "查看练习趋势并定位薄弱点。"} badge={sessions.length > 0 ? `${sessions.length} 条记录` : "暂无记录"} />
-              </div>
-
-              <div style={{ fontSize: 10, color: isChallenge ? CH.t2 : T.t3, opacity: 0.65, lineHeight: 1.6, textAlign: "center", ...fadeIn(520) }}>
-                TreePractice 为独立练习工具，与 ETS 无关联，也未获得其认可。TOEFL® 和 TOEFL iBT® 为 ETS 的注册商标。部分练习内容及评分反馈由 AI 辅助生成，仅供自学参考，不代表官方考试成绩。
-                <br />
-                <a href="/terms" style={{ color: "inherit", textDecoration: "underline" }}>使用条款与隐私政策</a>
-              </div>
-            </div>
-          </div>
+        <div className="home-shell" style={{ maxWidth: 1120, margin: "0 auto", padding: "28px 36px 60px", display: "flex", gap: 24, alignItems: "flex-start" }}>
+          <NavSidebar
+            activeSection={activeSection} onSectionChange={setActiveSection}
+            isChallenge={isChallenge}
+            userCode={userCode} userTier={userTier} userEmail={userEmail} authMethod={authMethod}
+            isLoggedIn={isLoggedIn} showLoginModal={showLoginModal} onLogout={onLogout}
+            totalCount={totalCount} weekCount={weekCount} bestMock={bestMock}
+            fbOpen={fbOpen} setFbOpen={setFbOpen} fbText={fbText} setFbText={setFbText}
+            fbBusy={fbBusy} fbSent={fbSent} feedbackMsg={feedbackMsg} submitFeedback={submitFeedback}
+            fbHistory={fbHistory} fbHistLoading={fbHistLoading}
+            copied={copied} copyCode={copyCode} logoutHover={logoutHover} setLogoutHover={setLogoutHover}
+            bsMistakeCount={bsMistakeCount} postWritingCounts={postWritingCounts}
+            sideCard={sideCard} fadeIn={fadeIn}
+          />
+          <SectionContent
+            activeSection={activeSection}
+            isChallenge={isChallenge} isPractice={isPractice} mode={mode} switchMode={switchMode}
+            gridItems={gridItems} hoverKey={hoverKey} setHoverKey={setHoverKey}
+            postWritingCounts={postWritingCounts} bsMistakeCount={bsMistakeCount} sessions={sessions}
+            fadeIn={fadeIn}
+          />
         </div>
       </div>
     </>

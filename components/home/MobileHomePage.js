@@ -8,6 +8,7 @@ import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
 import { PromoBanner } from "./HomePageClient";
 import { PRACTICE_MODE } from "../../lib/practiceMode";
 import { FREE_DAILY_LIMIT } from "../../lib/dailyUsage";
+import { SECTIONS, SECTION_ACCENTS, SECTION_STATUS } from "./sections";
 
 /* ── 颜色工具 ── */
 const mC = (isChallenge, light, dark) => (isChallenge ? dark : light);
@@ -23,6 +24,7 @@ export function MobileHomePage({
 }) {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [upgradeOpen, setUpgradeOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("writing");
   const tier = userTier || "free";
   const [showDesktopTip, setShowDesktopTip] = useState(false);
   const desktopTipRef = useRef(false);
@@ -110,14 +112,56 @@ export function MobileHomePage({
         <span style={{ color: t2, fontSize: 18 }}>›</span>
       </div>
 
+      {/* ── Section tabs ── */}
+      <div style={{ display: "flex", gap: 0, marginBottom: 14, overflowX: "auto", WebkitOverflowScrolling: "touch", borderBottom: `1px solid ${isChallenge ? CH.cardBorder : T.bdr}` }}>
+        {SECTIONS.map((sec) => {
+          const isActive = sec.id === activeSection;
+          const isSoon = sec.status === SECTION_STATUS.COMING_SOON;
+          const accent = SECTION_ACCENTS[sec.id];
+          return (
+            <button
+              key={sec.id}
+              onClick={() => setActiveSection(sec.id)}
+              style={{
+                flex: "0 0 auto", border: "none", background: "transparent",
+                padding: "10px 16px", fontSize: 13,
+                fontWeight: isActive ? 700 : 500,
+                color: isActive ? (isChallenge ? CH.t1 : accent.color) : (isSoon ? (isChallenge ? "rgba(255,255,255,0.25)" : "#b0b8c0") : t2),
+                cursor: "pointer", fontFamily: HOME_FONT,
+                borderBottom: isActive ? `2px solid ${isChallenge ? CH.accent : accent.color}` : "2px solid transparent",
+                transition: "all 150ms",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {sec.icon} {sec.label}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* ── Coming soon overlay for non-writing sections ── */}
+      {activeSection !== "writing" ? (
+        <div style={{ textAlign: "center", padding: "48px 20px" }}>
+          {(() => { const sec = SECTIONS.find(s => s.id === activeSection); const accent = SECTION_ACCENTS[activeSection]; return sec ? (
+            <>
+              <div style={{ fontSize: 48, marginBottom: 16 }}>{sec.icon}</div>
+              <div style={{ fontSize: 20, fontWeight: 800, color: t1, marginBottom: 6 }}>{sec.label}</div>
+              <div style={{ fontSize: 13, color: t2, marginBottom: 16 }}>{sec.labelZh}</div>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 18px", borderRadius: 999, background: isChallenge ? "rgba(255,255,255,0.04)" : accent.soft, border: `1px solid ${isChallenge ? CH.cardBorder : accent.color + "30"}`, fontSize: 13, fontWeight: 600, color: isChallenge ? CH.t2 : accent.color }}>🚧 即将推出</span>
+              <div style={{ fontSize: 12, color: t2, marginTop: 14, lineHeight: 1.5 }}>{sec.descriptionZh}</div>
+            </>
+          ) : null; })()}
+        </div>
+      ) : (
+      <>
       {/* ── 标题 + 模式切换 ── */}
       <div style={{ marginBottom: 14 }}>
         <h1 style={{ margin: "0 0 10px", fontSize: 22, fontWeight: 800, color: t1, lineHeight: 1.2 }}>
           {isChallenge
-            ? <>写作练习 <span style={{ color: CH.accent }}>Challenge</span></>
+            ? <>Writing <span style={{ color: CH.accent }}>Challenge</span></>
             : isPractice
-              ? <>写作练习 <span style={{ color: "#6366f1" }}>Practice</span></>
-              : "英语写作练习"}
+              ? <>Writing <span style={{ color: "#6366f1" }}>Practice</span></>
+              : "Writing"}
         </h1>
         <div style={{
           display: "flex", gap: 0,
@@ -212,6 +256,9 @@ export function MobileHomePage({
         )}
         <span style={{ color: t2 }}>›</span>
       </Link>
+
+      </>
+      )}
 
       {/* ── 底部快捷入口 ── */}
       <div style={{ display: "flex", gap: 8 }}>
