@@ -1149,6 +1149,25 @@ export function ProgressView({ onBack }) {
               <h1 style={{ fontSize: 22, fontWeight: 800, color: P.text, marginBottom: 6, letterSpacing: "-0.03em", lineHeight: 1.2 }}>练习记录</h1>
               <p style={{ fontSize: 12, color: P.textDim, lineHeight: 1.6 }}>点击模考条目查看详情报告</p>
             </div>
+            {/* Latest mock score — integrated into sidebar */}
+            {mockEntries.length > 0 && (() => {
+              const lm = mockEntries[0].session;
+              const bc = Number.isFinite(lm.band) ? getBandColor(lm.band) : P.textDim;
+              return (
+                <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "14px 16px", background: `linear-gradient(135deg, ${P.primarySoft} 0%, #f0fdf8 100%)`, borderRadius: 14, border: `1px solid ${P.primary}15`, marginBottom: 16 }}>
+                  <CircularProgress value={Number.isFinite(lm.band) ? lm.band : 0} max={5} color={bc} />
+                  <div>
+                    <div style={{ fontSize: 10, fontWeight: 700, color: P.textDim, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 4 }}>最新模考</div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+                      {lm.cefr && <Tag color={P.textSec} style={{ fontSize: 10, fontWeight: 700, border: `1px solid ${P.border}`, background: P.bg }}>CEFR {lm.cefr}</Tag>}
+                      <Tag color={P.primary} bg={P.primarySoft} style={{ border: `1px solid ${P.primary}22`, fontSize: 10, fontWeight: 700 }}>{lm.scaledScore ?? "--"}/30</Tag>
+                      <span style={{ fontSize: 10, color: P.textDim }}>{new Date(lm.date).toLocaleDateString("zh-CN")}</span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+
             <CompactMockList
               mockEntries={mockEntries}
               activeSrcIdx={activeMockSrcIdx}
@@ -1182,52 +1201,8 @@ export function ProgressView({ onBack }) {
             ) : (
               <div key="overview" style={{ animation: "slideInLeft 0.4s cubic-bezier(0.16,1,0.3,1)" }}>
 
-                {/* Collapsible stats section */}
-                <div style={{ background: P.surface, borderRadius: 16, border: `1px solid ${P.border}`, overflow: "hidden", marginBottom: 14, boxShadow: "0 2px 10px rgba(10,40,25,0.04)" }}>
-                  <button
-                    onClick={() => setShowStats(v => !v)}
-                    style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 18px", background: "none", border: "none", cursor: "pointer", borderBottom: showStats ? `1px solid ${P.borderSubtle}` : "none", transition: "border-color 0.2s" }}
-                  >
-                    <span style={{ fontSize: 13, fontWeight: 700, color: P.text, letterSpacing: "-0.01em" }}>数据概览</span>
-                    <ChevronIcon open={showStats} color={P.textDim} />
-                  </button>
-                  <div style={{ maxHeight: showStats ? "400px" : "0px", overflow: "hidden", transition: "max-height 0.45s cubic-bezier(0.16,1,0.3,1)" }}>
-                    <div className="tp-stats-overview" style={{ display: "flex" }}>
-                      {/* Left: latest mock score ring */}
-                      <div className="tp-stats-left" style={{ width: "28%", flexShrink: 0, padding: "18px 16px", background: "linear-gradient(180deg, #fafbfa 0%, #f4f7f5 100%)", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", position: "relative", borderRight: `1px solid ${P.borderSubtle}` }}>
-                        <div style={{ fontSize: 10, fontWeight: 700, color: P.textDim, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 10 }}>最新模考</div>
-                        {mockEntries.length > 0 ? (() => {
-                          const lm = mockEntries[0].session;
-                          const bc = Number.isFinite(lm.band) ? getBandColor(lm.band) : P.textDim;
-                          return (
-                            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                              <CircularProgress value={Number.isFinite(lm.band) ? lm.band : 0} max={5} color={bc} />
-                              <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-                                {lm.cefr && <Tag color={P.textSec} style={{ fontSize: 10, fontWeight: 700, border: `1px solid ${P.border}`, background: P.bg }}>CEFR {lm.cefr}</Tag>}
-                                <Tag color={P.primary} bg={P.primarySoft} style={{ border: `1px solid ${P.primary}22`, fontSize: 10, fontWeight: 700 }}>{lm.scaledScore ?? "--"}/30</Tag>
-                                <span style={{ fontSize: 10, color: P.textDim }}>{new Date(lm.date).toLocaleDateString("zh-CN")}</span>
-                              </div>
-                            </div>
-                          );
-                        })() : (
-                          <div style={{ fontSize: 11, color: P.textDim }}>暂无模考</div>
-                        )}
-                      </div>
-                      {/* Right: trend chart */}
-                      <div style={{ flex: 1, minWidth: 0, padding: "10px 14px 12px" }}>
-                        <div style={{ fontSize: 12, fontWeight: 700, color: P.text, marginBottom: 8, letterSpacing: "-0.01em" }}>进步趋势</div>
-                        {(bs.length > 0 || email.length > 0 || discussion.length > 0) ? (
-                          <TrendChart bs={bs} email={email} discussion={discussion} filter={filter} />
-                        ) : (
-                          <div style={{ padding: "20px 0", textAlign: "center", fontSize: 11, color: P.textDim }}>完成练习后显示进步曲线</div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Stat cards — always visible, filter both chart and session list */}
-                <div className="tp-stat-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 12, marginBottom: 18, animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 200ms both" }}>
+                {/* 1. Stat cards — PRIMARY navigation, top position */}
+                <div className="tp-stat-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 12, marginBottom: 20, animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 80ms both" }}>
                   {statItems.map((item) => (
                     <StatCard
                       key={item.key}
@@ -1242,56 +1217,81 @@ export function ProgressView({ onBack }) {
                   ))}
                 </div>
 
-                {/* Session list */}
+                {/* 2. Trend chart — full width, no box wrapper, breathes */}
+                {(bs.length > 0 || email.length > 0 || discussion.length > 0) && (
+                  <div style={{ marginBottom: 20, padding: "16px 20px 12px", background: P.surface, borderRadius: 16, border: `1px solid ${P.borderSubtle}`, animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 160ms both" }}>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: P.text, marginBottom: 10, letterSpacing: "-0.01em" }}>进步趋势</div>
+                    <TrendChart bs={bs} email={email} discussion={discussion} filter={filter} />
+                  </div>
+                )}
+
+                {/* 3. Session list — with date grouping */}
                 <div style={{ background: P.surface, borderRadius: 18, border: `1px solid ${P.borderSubtle}`, overflow: "hidden", boxShadow: "0 1px 4px rgba(10,40,25,0.03)", animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 280ms both" }}>
                   <div style={{ padding: "16px 20px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                     <span style={{ fontSize: 14, fontWeight: 750, color: P.text, letterSpacing: "-0.02em" }}>练习明细</span>
                     <span style={{ fontSize: 11, color: P.textDim, fontWeight: 550, background: `${P.primary}08`, color: P.primary, padding: "3px 10px", borderRadius: 999 }}>{filteredPractice.length} 条记录</span>
                   </div>
-                  <div style={{ padding: "8px 14px 14px" }}>
+                  <div style={{ padding: "4px 14px 14px" }}>
                     {filteredPractice.length === 0 ? (
                       <div style={{ padding: "24px 0", textAlign: "center", fontSize: 12, color: P.textDim }}>
                         {selectedWeak ? `没有包含「${selectedWeak}」薄弱点的记录。` : "当前筛选下暂无练习记录。"}
                       </div>
-                    ) : filteredPractice.map((entry) => {
-                      const isExpanded = activePracticeSrcIdx === entry.sourceIndex;
-                      const s = entry.session;
-                      const isWritingEntry = s.type === "email" || s.type === "discussion";
-                      const fb = s.details?.feedback || null;
-                      const pd = s.details?.promptData || null;
-                      const userText = s.details?.userText || "";
-                      const promptId = String(s.details?.promptId || pd?.id || "").trim();
-                      const retryHref = promptId ? `/${s.type === "email" ? "email-writing" : "academic-writing"}?retryPromptId=${promptId}` : null;
-                      const mc = TYPE[s.type]?.color || P.border;
-                      return (
-                        <React.Fragment key={entry.sourceIndex}>
-                          <SessionRow
-                            entry={entry}
-                            expanded={expandedSrcIdx === entry.sourceIndex}
-                            isActive={isExpanded}
-                            onToggle={() => setExpandedSrcIdx(expandedSrcIdx === entry.sourceIndex ? null : entry.sourceIndex)}
-                            onSelect={(idx) => { setActivePracticeSrcIdx(idx); setActiveMockSrcIdx(null); setSelectedWeak(null); }}
-                            onDelete={handleDelete}
-                            typeAvgs={typeAvgs}
-                          />
-                          {isWritingEntry && (
-                            <div style={{ maxHeight: isExpanded ? "760px" : "0px", overflow: "hidden", transition: "max-height 0.45s cubic-bezier(0.16,1,0.3,1)", borderLeft: isExpanded ? `3px solid ${mc}` : "none" }}>
-                              <WritingFeedbackPanel
-                                key={entry.sourceIndex}
-                                fb={fb}
-                                type={s.type}
-                                pd={pd}
-                                userText={userText}
-                                containerHeight="720px"
-                                onRetry={retryHref ? () => { window.location.href = retryHref; } : null}
-                                onNext={null}
-                                onExit={() => setActivePracticeSrcIdx(null)}
-                              />
-                            </div>
-                          )}
-                        </React.Fragment>
-                      );
-                    })}
+                    ) : (() => {
+                      let lastDateLabel = "";
+                      return filteredPractice.map((entry) => {
+                        const s = entry.session;
+                        const d = new Date(s.date);
+                        const today = new Date();
+                        const yesterday = new Date(today); yesterday.setDate(today.getDate() - 1);
+                        const isToday = d.toDateString() === today.toDateString();
+                        const isYesterday = d.toDateString() === yesterday.toDateString();
+                        const dateLabel = isToday ? "今天" : isYesterday ? "昨天" : `${d.getMonth() + 1}月${d.getDate()}日`;
+                        const showDateHeader = dateLabel !== lastDateLabel;
+                        lastDateLabel = dateLabel;
+
+                        const isExpanded = activePracticeSrcIdx === entry.sourceIndex;
+                        const isWritingEntry = s.type === "email" || s.type === "discussion";
+                        const fb = s.details?.feedback || null;
+                        const pd = s.details?.promptData || null;
+                        const userText = s.details?.userText || "";
+                        const promptId = String(s.details?.promptId || pd?.id || "").trim();
+                        const retryHref = promptId ? `/${s.type === "email" ? "email-writing" : "academic-writing"}?retryPromptId=${promptId}` : null;
+                        const mc = TYPE[s.type]?.color || P.border;
+                        return (
+                          <React.Fragment key={entry.sourceIndex}>
+                            {showDateHeader && (
+                              <div style={{ padding: "12px 6px 5px", fontSize: 11, fontWeight: 650, color: P.textDim, letterSpacing: "0.02em", borderTop: entry === filteredPractice[0] ? "none" : `1px solid ${P.borderSubtle}`, marginTop: entry === filteredPractice[0] ? 0 : 6 }}>
+                                {dateLabel}
+                              </div>
+                            )}
+                            <SessionRow
+                              entry={entry}
+                              expanded={expandedSrcIdx === entry.sourceIndex}
+                              isActive={isExpanded}
+                              onToggle={() => setExpandedSrcIdx(expandedSrcIdx === entry.sourceIndex ? null : entry.sourceIndex)}
+                              onSelect={(idx) => { setActivePracticeSrcIdx(idx); setActiveMockSrcIdx(null); setSelectedWeak(null); }}
+                              onDelete={handleDelete}
+                              typeAvgs={typeAvgs}
+                            />
+                            {isWritingEntry && (
+                              <div style={{ maxHeight: isExpanded ? "760px" : "0px", overflow: "hidden", transition: "max-height 0.45s cubic-bezier(0.16,1,0.3,1)", borderLeft: isExpanded ? `3px solid ${mc}` : "none" }}>
+                                <WritingFeedbackPanel
+                                  key={entry.sourceIndex}
+                                  fb={fb}
+                                  type={s.type}
+                                  pd={pd}
+                                  userText={userText}
+                                  containerHeight="720px"
+                                  onRetry={retryHref ? () => { window.location.href = retryHref; } : null}
+                                  onNext={null}
+                                  onExit={() => setActivePracticeSrcIdx(null)}
+                                />
+                              </div>
+                            )}
+                          </React.Fragment>
+                        );
+                      });
+                    })()}
                   </div>
                 </div>
               </div>
