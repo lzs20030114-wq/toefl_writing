@@ -4,7 +4,7 @@ import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CTWTask } from "../../components/reading/CTWTask";
 import { RDLTask } from "../../components/reading/RDLTask";
-import { useAuth } from "../../lib/AuthContext";
+import { getSavedTier } from "../../lib/AuthContext";
 import { saveSess } from "../../lib/sessionStore";
 import CTW_DATA from "../../data/reading/bank/ctw.json";
 import RDL_DATA from "../../data/reading/bank/rdl.json";
@@ -18,8 +18,11 @@ function ReadingPageClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const type = searchParams.get("type") || "ctw";
-  const { tier } = useAuth();
-  const isPro = tier === "pro" || tier === "legacy";
+  const [isPro, setIsPro] = useState(false);
+  useEffect(() => {
+    const t = getSavedTier();
+    setIsPro(t === "pro" || t === "legacy");
+  }, []);
 
   // Pick random item on client side only to avoid SSR hydration mismatch
   const [item, setItem] = useState(null);
