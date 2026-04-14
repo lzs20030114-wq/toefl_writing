@@ -13,12 +13,13 @@ const P = {
   text: "#1a2420", textSec: "#5a6b62", textDim: "#94a39a",
   primary: "#3B82F6", primarySoft: "#EFF6FF",
   ctw: { color: "#D97706", soft: "#FFFBEB", icon: "Aa", label: "单词补全", short: "补全" },
-  rdl: { color: "#059669", soft: "#ECFDF5", icon: "📄", label: "日常阅读", short: "阅读" },
+  rdl: { color: "#059669", soft: "#ECFDF5", icon: "📄", label: "日常阅读", short: "日常" },
+  ap: { color: "#6366F1", soft: "#EEF2FF", icon: "📚", label: "学术文章", short: "学术" },
   shadow: "0 1px 3px rgba(10,40,25,0.04), 0 1px 2px rgba(10,40,25,0.02)",
 };
 
 function getSubtypeInfo(subtype) {
-  return subtype === "ctw" ? P.ctw : P.rdl;
+  return P[subtype] || P.rdl;
 }
 
 // ── Trend Chart (SVG) ──
@@ -344,6 +345,7 @@ export function ReadingProgressView({ onBack }) {
 
   const ctwSessions = sessions.filter(s => s.details?.subtype === "ctw");
   const rdlSessions = sessions.filter(s => s.details?.subtype === "rdl");
+  const apSessions = sessions.filter(s => s.details?.subtype === "ap");
 
   function avgPct(arr) {
     if (arr.length === 0) return null;
@@ -358,12 +360,14 @@ export function ReadingProgressView({ onBack }) {
 
   const ctwAvg = avgPct(ctwSessions);
   const rdlAvg = avgPct(rdlSessions);
+  const apAvg = avgPct(apSessions);
   const totalAvg = avgPct(sessions);
 
   const statItems = [
     { key: "all", icon: "📊", short: "全部", count: sessions.length, color: P.primary, avg: totalAvg !== null ? `平均 ${totalAvg}%` : "" },
     { key: "ctw", icon: P.ctw.icon, short: P.ctw.short, count: ctwSessions.length, color: P.ctw.color, avg: ctwAvg !== null ? `平均 ${ctwAvg}%` : "暂无" },
     { key: "rdl", icon: P.rdl.icon, short: P.rdl.short, count: rdlSessions.length, color: P.rdl.color, avg: rdlAvg !== null ? `平均 ${rdlAvg}%` : "暂无" },
+    { key: "ap", icon: P.ap.icon, short: P.ap.short, count: apSessions.length, color: P.ap.color, avg: apAvg !== null ? `平均 ${apAvg}%` : "暂无" },
   ];
 
   function handleDelete(sourceIndex) {
@@ -410,7 +414,7 @@ export function ReadingProgressView({ onBack }) {
           <>
             {/* Stats row: cards + trend chart */}
             <div style={{ display: "flex", gap: 14, marginBottom: 18, alignItems: "stretch", animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 80ms both" }}>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, flex: "0 0 52%" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, flex: "0 0 52%" }}>
                 {statItems.map(item => (
                   <StatCard key={item.key} {...item} active={filter === item.key} onClick={() => setFilter(item.key)} />
                 ))}

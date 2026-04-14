@@ -9,8 +9,8 @@ import { getSavedTier } from "../../lib/AuthContext";
 import { saveSess, loadDoneIds, addDoneIds } from "../../lib/sessionStore";
 import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
 import CTW_DATA from "../../data/reading/bank/ctw.json";
-import RDL_LONG_DATA from "../../data/reading/bank/rdl-long.json";
-import RDL_SHORT_DATA from "../../data/reading/bank/rdl-short.json";
+import RDL_DATA from "../../data/reading/bank/rdl.json";
+import AP_DATA from "../../data/reading/bank/ap.json";
 
 function pickRandom(items) {
   if (!items || items.length === 0) return null;
@@ -62,13 +62,21 @@ function buildCTWTopics() {
   }));
 }
 
-function buildRDLTopics(variant) {
-  const pool = variant === "short" ? RDL_SHORT_DATA : RDL_LONG_DATA;
-  return (pool.items || []).map((i) => ({
+function buildRDLTopics() {
+  return (RDL_DATA.items || []).map((i) => ({
     id: i.id,
     tag: GENRE_LABELS[i.genre] || i.genre,
     title: i.format_metadata?.title || i.format_metadata?.subject || firstLine(i.text),
     subtitle: GENRE_LABELS[i.genre] || i.genre,
+  }));
+}
+
+function buildAPTopics() {
+  return (AP_DATA.items || []).map((i) => ({
+    id: i.id,
+    tag: TOPIC_LABELS[i.topic] || i.topic,
+    title: firstLine(i.passage),
+    subtitle: i.subtopic || i.topic,
   }));
 }
 
@@ -86,12 +94,11 @@ function ReadingPageClient() {
 
   // Time limits in seconds (0 = no limit for practice mode)
   const READING_TIME_LIMITS = {
-    ctw: { standard: 300, challenge: 240 },       // 5 min / 4 min
-    "rdl-long": { standard: 240, challenge: 180 }, // 4 min / 3 min
-    "rdl-short": { standard: 120, challenge: 90 }, // 2 min / 1.5 min
+    ctw: { standard: 300, challenge: 240 },        // 5 min / 4 min
+    rdl: { standard: 240, challenge: 180 },         // 4 min / 3 min
+    ap: { standard: 480, challenge: 390 },          // 8 min / 6.5 min
   };
-  const timeLimitKey = type === "rdl" ? `rdl-${variant}` : type;
-  const timeLimit = isPractice ? 0 : (READING_TIME_LIMITS[timeLimitKey]?.[mode] || READING_TIME_LIMITS[timeLimitKey]?.standard || 0);
+  const timeLimit = isPractice ? 0 : (READING_TIME_LIMITS[type]?.[mode] || 300);
 
   const [isPro, setIsPro] = useState(false);
   useEffect(() => {
@@ -105,14 +112,11 @@ function ReadingPageClient() {
   // Pick random item for non-practice modes (client side only)
   const [randomItem, setRandomItem] = useState(null);
   useEffect(() => {
-    if (isPractice) return; // practice mode uses picker, not random
-    if (type === "rdl") {
-      const pool = variant === "short" ? RDL_SHORT_DATA.items : RDL_LONG_DATA.items;
-      setRandomItem(pickRandom(pool));
-    } else {
-      setRandomItem(pickRandom(CTW_DATA.items));
-    }
-  }, [type, variant, isPractice]);
+    if (isPractice) return;
+    if (type === "ap") setRandomItem(pickRandom(AP_DATA.items));
+    else if (type === "rdl") setRandomItem(pickRandom(RDL_DATA.items));
+    else setRandomItem(pickRandom(CTW_DATA.items));
+  }, [type, isPractice]);
 
   const onExit = () => router.push("/?section=reading");
 
@@ -136,11 +140,11 @@ function ReadingPageClient() {
 
   // ── Practice mode: show TopicPicker when no item selected ──
   if (isPractice && !pickedItemId) {
-    const doneKey = type === "ctw" ? DONE_STORAGE_KEYS.READING_CTW : DONE_STORAGE_KEYS.READING_RDL;
+    const doneKey = type === "ctw" ? DONE_STORAGE_KEYS.READING_CTW : type === "ap" ? (DONE_STORAGE_KEYS.READING_AP || "toefl-reading-ap-done") : DONE_STORAGE_KEYS.READING_RDL;
     const doneIds = loadDoneIds(doneKey);
-    const items = type === "ctw" ? buildCTWTopics() : buildRDLTopics(variant);
-    const title = type === "ctw" ? "Complete the Words" : "Read in Daily Life";
-    const section = type === "ctw" ? "Reading Practice | Task 1" : `Reading Practice | Task 2 · ${variant === "short" ? "短版" : "长版"}`;
+    const items = type === "ctw" ? buildCTWTopics() : type === "ap" ? buildAPTopics() : buildRDLTopics();
+    const title = type === "ctw" ? "Complete the Words" : type === "ap" ? "Academic Passage" : "Read in Daily Life";
+    const section = type === "ctw" ? "Reading Practice | Task 1" : type === "ap" ? "Reading Practice | Task 3" : "Reading Practice | Task 2";
 
     return (
       <TopicPicker
@@ -161,9 +165,10 @@ function ReadingPageClient() {
     // Find item by ID from the bank
     if (type === "ctw") {
       item = CTW_DATA.items.find((i) => i.id === pickedItemId);
+    } else if (type === "ap") {
+      item = AP_DATA.items.find((i) => i.id === pickedItemId);
     } else {
-      const pool = variant === "short" ? RDL_SHORT_DATA.items : RDL_LONG_DATA.items;
-      item = pool.find((i) => i.id === pickedItemId);
+      item = RDL_DATA.items.find((i) => i.id === pickedItemId);
     }
   } else {
     item = randomItem;
@@ -213,18 +218,34 @@ function ReadingPageClient() {
         topic: itemData.topic || itemData.genre || "",
         genre: itemData.genre || "",
         results: result.results,
-        passage: subtype === "ctw" ? itemData.passage : itemData.text,
+        passage: subtype === "ctw" ? itemData.passage : (itemData.text || itemData.passage),
         blanks: subtype === "ctw" ? itemData.blanks : undefined,
-        questions: subtype === "rdl" ? itemData.questions : undefined,
+        questions: (subtype === "rdl" || subtype === "ap") ? itemData.questions : undefined,
       },
     });
 
     // Mark item as done for TopicPicker tracking
-    const doneKey = subtype === "ctw" ? DONE_STORAGE_KEYS.READING_CTW : DONE_STORAGE_KEYS.READING_RDL;
+    const doneKey = subtype === "ctw" ? DONE_STORAGE_KEYS.READING_CTW : subtype === "ap" ? (DONE_STORAGE_KEYS.READING_AP || "toefl-reading-ap-done") : DONE_STORAGE_KEYS.READING_RDL;
     addDoneIds(doneKey, [itemData.id]);
   }
 
   const taskOnExit = isPractice ? () => setPickedItemId(null) : onExit;
+
+  if (type === "ap") {
+    // AP uses the same MC question interface as RDL but with passage field instead of text
+    const apAsRdl = { ...item, text: item.passage, genre: item.topic };
+    return (
+      <RDLTask
+        item={apAsRdl}
+        onExit={taskOnExit}
+        onComplete={(result) => saveReadingSession("ap", item, result)}
+        timeLimit={timeLimit}
+        isPractice={isPractice}
+        title="Academic Passage"
+        section="Reading | Task 3"
+      />
+    );
+  }
 
   if (type === "rdl") {
     return (

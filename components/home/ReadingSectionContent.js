@@ -28,6 +28,15 @@ const READING_TASKS = [
     timeLabel: null, // dynamic based on variant
     standardLabel: null,
   },
+  {
+    k: "reading-ap",
+    n: "Task 3",
+    t: "Academic Passage",
+    d: "Read a ~200-word academic text and answer 5 comprehension questions.",
+    it: "5 questions",
+    timeLabel: "8 min",
+    standardLabel: "8 min",
+  },
 ];
 
 export function ReadingSectionContent({
@@ -38,20 +47,27 @@ export function ReadingSectionContent({
   const isPro = userTier === "pro" || userTier === "legacy";
   const [rdlVariant, setRdlVariant] = useState("long"); // "short" | "long"
 
+  const modeStr = isPractice ? "practice" : mode === PRACTICE_MODE.CHALLENGE ? "challenge" : "standard";
+
   const gridItems = READING_TASKS.map((task, index) => {
     const isRdl = task.k === "reading-rdl";
+    const isAp = task.k === "reading-ap";
     const isShort = rdlVariant === "short";
+
+    let href;
+    if (isRdl) href = `/reading?type=rdl&variant=${rdlVariant}&mode=${modeStr}`;
+    else if (isAp) href = `/reading?type=ap&mode=${modeStr}`;
+    else href = `/reading?type=ctw&mode=${modeStr}`;
+
     return {
       k: task.k,
-      href: isRdl
-        ? `/reading?type=rdl&variant=${rdlVariant}&mode=${isPractice ? "practice" : mode === PRACTICE_MODE.CHALLENGE ? "challenge" : "standard"}`
-        : `/reading?type=ctw&mode=${isPractice ? "practice" : mode === PRACTICE_MODE.CHALLENGE ? "challenge" : "standard"}`,
+      href,
       acc: READING_ACCENT,
       n: task.n,
       t: task.t,
-      d: isPractice ? "Select any passage to practice at your own pace." : task.d,
+      d: isPractice ? "自选题目，不限时间。" : task.d,
       it: isRdl ? (isShort ? "2 questions" : "3 questions") : task.it,
-      timeLabel: isPractice ? "No limit" : (isRdl ? (isShort ? "2 min" : "4 min") : task.timeLabel),
+      timeLabel: isPractice ? "不限时" : (isRdl ? (isShort ? "2 min" : "4 min") : task.timeLabel),
       standardLabel: isRdl ? (isShort ? "2 min" : "4 min") : task.standardLabel,
       isMock: false,
       delay: 190 + index * 70,

@@ -9,7 +9,7 @@ import { C, FONT, Btn, PageShell, SurfaceCard, TopBar } from "../shared/ui";
  * - Select answer → Next (no immediate feedback)
  * - After all questions → Submit → See all results at once
  */
-export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = false }) {
+export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = false, title = "Read in Daily Life", section = "Reading | Task 2" }) {
   const [selections, setSelections] = useState(() => (item.questions || []).map(() => null));
   const [currentQ, setCurrentQ] = useState(0);
   const [submitted, setSubmitted] = useState(false);
@@ -108,8 +108,8 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
       <TopBar
-        title="Read in Daily Life"
-        section={`Reading | Task 2`}
+        title={title}
+        section={section}
         timeLeft={!isPractice && timeLimit > 0 && !submitted ? timeLeft : undefined}
         elapsedTime={isPractice && !submitted ? elapsed : undefined}
         examTimeNote={isPractice && timeLimit > 0 ? `考试限时 ${Math.floor(timeLimit / 60)} min` : undefined}
