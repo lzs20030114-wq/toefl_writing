@@ -3,7 +3,7 @@
 /**
  * Generate Read in Daily Life questions using DeepSeek.
  *
- * Usage: node scripts/generate-rdl.mjs [--count 5] [--genre email] [--dry-run]
+ * Usage: node scripts/generate-rdl.mjs [--count 5] [--genre email] [--variant short] [--dry-run]
  *
  * Pipeline:
  *   1. Build prompt with genre specs + ETS flavor constraints
@@ -18,7 +18,7 @@ import { fileURLToPath } from "url";
 import { createRequire } from "module";
 
 const require = createRequire(import.meta.url);
-const { buildRDLPrompt } = require("../lib/readingGen/rdlPromptBuilder.js");
+const { buildRDLPrompt, buildShortRDLPrompt } = require("../lib/readingGen/rdlPromptBuilder.js");
 const { validateRDLItem, validateRDLBatch } = require("../lib/readingGen/rdlValidator.js");
 const { auditRDLItem } = require("../lib/readingGen/answerAuditor.js");
 
@@ -34,6 +34,7 @@ function getArg(name, def) {
 const MAX_BATCH = 10; // DeepSeek truncates JSON for large batches
 const COUNT = Math.min(parseInt(getArg("count", "5"), 10), MAX_BATCH);
 const GENRE = getArg("genre", "");
+const VARIANT = getArg("variant", "long"); // "short" (40-50w, 2Q) or "long" (100-150w, 3Q)
 const DRY_RUN = args.includes("--dry-run");
 
 // ── Load env + DeepSeek ──
@@ -121,12 +122,14 @@ async function main() {
   console.log("╔══════════════════════════════════════════════════╗");
   console.log("║   Read in Daily Life — Generation Pipeline      ║");
   console.log("╚══════════════════════════════════════════════════╝\n");
-  console.log(`Count: ${COUNT}  Genre: ${GENRE || "(mixed)"}  Dry-run: ${DRY_RUN}\n`);
+  console.log(`Count: ${COUNT}  Genre: ${GENRE || "(mixed)"}  Variant: ${VARIANT}  Dry-run: ${DRY_RUN}\n`);
 
   // Step 1: Build prompt
   console.log("1. Building prompt...");
   const genres = GENRE ? [GENRE] : [];
-  const prompt = buildRDLPrompt(COUNT, { genres });
+  const prompt = VARIANT === "short"
+    ? buildShortRDLPrompt(COUNT, { genres })
+    : buildRDLPrompt(COUNT, { genres });
 
   if (DRY_RUN) {
     console.log("\n── PROMPT ──\n");
