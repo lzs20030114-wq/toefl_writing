@@ -35,11 +35,19 @@ export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
 
   const accent = { color: "#3B82F6", soft: "#EFF6FF" };
 
-  function handleChange(index, value) {
+  function handleChange(index, value, missingLen) {
     if (submitted) return;
     const next = [...answers];
     next[index] = value;
     setAnswers(next);
+
+    // Auto-advance: when this blank is full, jump to the next one
+    if (value.length >= missingLen) {
+      const nextIdx = index + 1;
+      if (nextIdx < item.blanks.length && inputRefs.current[nextIdx]) {
+        inputRefs.current[nextIdx].focus();
+      }
+    }
   }
 
   function handleKeyDown(index, e) {
@@ -105,7 +113,7 @@ export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
               {/* Underscore guides underneath */}
               <span style={{
                 position: "absolute", bottom: 0, left: 0, right: 0,
-                fontSize: 16, fontFamily: "'Courier New', monospace", letterSpacing: "1px",
+                fontSize: 16, fontFamily: "'Courier New', monospace", letterSpacing: "3.5px",
                 color: submitted ? (isCorrect ? "#059669" : "#DC2626") : "#94A3B8",
                 pointerEvents: "none", userSelect: "none",
               }}>
@@ -117,20 +125,20 @@ export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
                 value={answers[bi]}
                 onChange={e => {
                   const val = e.target.value.slice(0, missingLen);
-                  handleChange(bi, val);
+                  handleChange(bi, val, missingLen);
                 }}
                 onKeyDown={e => handleKeyDown(bi, e)}
                 disabled={submitted}
                 maxLength={missingLen}
                 style={{
-                  width: missingLen * 11.5,
+                  width: missingLen * 13.5,
                   border: "none",
                   background: "transparent",
                   outline: "none",
                   fontSize: 16,
                   fontFamily: "'Courier New', monospace",
                   fontWeight: 600,
-                  letterSpacing: "1px",
+                  letterSpacing: "3.5px",
                   color: submitted ? (isCorrect ? "#059669" : "#DC2626") : accent.color,
                   padding: 0,
                   margin: 0,
