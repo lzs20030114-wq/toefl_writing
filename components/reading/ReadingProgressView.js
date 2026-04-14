@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { C, FONT, Btn, PageShell, SurfaceCard, TopBar, ChevronIcon } from "../shared/ui";
 import { loadHist, deleteSession, clearAllSessions, SESSION_STORE_EVENTS, setCurrentUser } from "../../lib/sessionStore";
+import { getSavedCode } from "../../lib/AuthContext";
 import { formatLocalDateTime } from "../../lib/utils";
 
 const ACCENT = { color: "#3B82F6", soft: "#EFF6FF" };
@@ -201,7 +202,7 @@ export function ReadingProgressView({ onBack }) {
   const [showClearConfirm, setShowClearConfirm] = useState(false);
 
   useEffect(() => {
-    try { setCurrentUser(localStorage.getItem("toefl-auth-code") || ""); } catch {}
+    try { setCurrentUser(getSavedCode() || ""); } catch {}
     const refresh = () => setHist(loadHist());
     refresh();
     window.addEventListener(SESSION_STORE_EVENTS.HISTORY_UPDATED_EVENT, refresh);
