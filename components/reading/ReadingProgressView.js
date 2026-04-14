@@ -156,39 +156,106 @@ function SessionRow({ session, expanded, onToggle, onDelete }) {
       </button>
       {expanded && s.details?.results && (
         <div style={{ padding: "0 16px 14px 62px", animation: "fadeUp 0.2s ease" }}>
-          {subtype === "ctw" ? <CTWDetail results={s.details.results} /> : <RDLDetail results={s.details.results} />}
+          {subtype === "ctw" ? <CTWDetail session={s} /> : <RDLDetail session={s} />}
         </div>
       )}
     </div>
   );
 }
 
-function CTWDetail({ results }) {
-  if (!Array.isArray(results)) return null;
+function CTWDetail({ session }) {
+  const results = session.details?.results;
+  const passage = session.details?.passage;
+  const blanks = session.details?.blanks;
+
   return (
-    <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
-      {results.map((r, i) => {
-        const blank = r.blank || {};
-        return (
-          <span key={i} style={{ fontSize: 12, padding: "3px 8px", borderRadius: 6, background: r.isCorrect ? "#D1FAE5" : "#FEE2E2", color: r.isCorrect ? "#065F46" : "#991B1B", fontFamily: "'Courier New', monospace", fontWeight: 600 }}>
-            {blank.displayed_fragment || ""}{r.isCorrect ? (blank.original_word || "").slice((blank.displayed_fragment || "").length) : `→${blank.original_word || "?"}`}
-          </span>
-        );
-      })}
+    <div>
+      {/* Original passage */}
+      {passage && (
+        <div style={{ fontSize: 13, color: P.text, lineHeight: 1.8, padding: "10px 14px", background: "#f8faf9", borderRadius: 10, marginBottom: 10, fontFamily: "'Georgia', serif" }}>
+          {passage}
+        </div>
+      )}
+      {/* Blank results */}
+      {Array.isArray(results) && (
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
+          {results.map((r, i) => {
+            const blank = r.blank || (blanks && blanks[i]) || {};
+            return (
+              <span key={i} style={{ fontSize: 12, padding: "3px 8px", borderRadius: 6, background: r.isCorrect ? "#D1FAE5" : "#FEE2E2", color: r.isCorrect ? "#065F46" : "#991B1B", fontFamily: "'Courier New', monospace", fontWeight: 600 }}>
+                {blank.displayed_fragment || ""}{r.isCorrect ? (blank.original_word || "").slice((blank.displayed_fragment || "").length) : `→${blank.original_word || "?"}`}
+              </span>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
 
-function RDLDetail({ results }) {
-  if (!Array.isArray(results)) return null;
+function RDLDetail({ session }) {
+  const results = session.details?.results;
+  const passage = session.details?.passage;
+  const questions = session.details?.questions;
+
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-      {results.map((r, i) => (
-        <div key={i} style={{ fontSize: 12, padding: "6px 10px", borderRadius: 8, background: r.isCorrect ? "#F0FDF4" : "#FEF2F2", border: `1px solid ${r.isCorrect ? "#BBF7D0" : "#FECACA"}`, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ fontWeight: 700, color: r.isCorrect ? "#059669" : "#DC2626" }}>{r.isCorrect ? "✓" : "✗"}</span>
-          <span style={{ color: P.textSec }}>Q{i + 1}: 选 {r.selected}{!r.isCorrect && <span style={{ color: "#DC2626" }}> (正确: {r.correct})</span>}</span>
+    <div>
+      {/* Original passage */}
+      {passage && (
+        <div style={{ fontSize: 13, color: P.text, lineHeight: 1.7, padding: "10px 14px", background: "#f8faf9", borderRadius: 10, marginBottom: 10, whiteSpace: "pre-wrap", maxHeight: 150, overflow: "auto" }}>
+          {passage}
         </div>
-      ))}
+      )}
+      {/* Per-question detail with full stem + options */}
+      {Array.isArray(results) && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {results.map((r, i) => {
+            const q = questions && questions[i];
+            return (
+              <div key={i} style={{ padding: "10px 12px", borderRadius: 10, background: r.isCorrect ? "#F0FDF4" : "#FEF2F2", border: `1px solid ${r.isCorrect ? "#BBF7D0" : "#FECACA"}` }}>
+                {/* Question stem */}
+                <div style={{ fontSize: 13, fontWeight: 600, color: P.text, marginBottom: 6, display: "flex", alignItems: "flex-start", gap: 6 }}>
+                  <span style={{ fontWeight: 700, color: r.isCorrect ? "#059669" : "#DC2626", flexShrink: 0 }}>{r.isCorrect ? "✓" : "✗"}</span>
+                  <span>{q ? q.stem : `第 ${i + 1} 题`}</span>
+                </div>
+                {/* Options (if available) */}
+                {q && q.options && (
+                  <div style={{ marginLeft: 20, display: "flex", flexDirection: "column", gap: 3 }}>
+                    {["A", "B", "C", "D"].map(key => {
+                      if (!q.options[key]) return null;
+                      const isUserChoice = r.selected === key;
+                      const isCorrectOpt = r.correct === key;
+                      let color = P.textDim;
+                      let fontW = 400;
+                      if (isCorrectOpt) { color = "#059669"; fontW = 600; }
+                      if (isUserChoice && !r.isCorrect) { color = "#DC2626"; fontW = 600; }
+                      return (
+                        <div key={key} style={{ fontSize: 12, color, fontWeight: fontW }}>
+                          {key}. {q.options[key]}
+                          {isCorrectOpt && " ✓"}
+                          {isUserChoice && !isCorrectOpt && " ← 你的选择"}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+                {/* Explanation */}
+                {q && q.explanation && (
+                  <div style={{ marginTop: 6, marginLeft: 20, fontSize: 11, color: P.textSec, lineHeight: 1.5, fontStyle: "italic" }}>
+                    {q.explanation}
+                  </div>
+                )}
+                {/* Fallback if no question data saved */}
+                {!q && (
+                  <div style={{ marginLeft: 20, fontSize: 12, color: P.textSec }}>
+                    选择: {r.selected}{!r.isCorrect && <span style={{ color: "#DC2626" }}> (正确: {r.correct})</span>}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

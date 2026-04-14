@@ -142,7 +142,7 @@ export function CTWTask({ item, onExit, onComplete }) {
       <PageShell narrow>
         {/* Instructions */}
         <div style={{ fontSize: 13, color: C.t2, marginBottom: 16, lineHeight: 1.6 }}>
-          Read the passage and fill in the missing letters for each blank. The beginning of each word is provided.
+          阅读文章，根据上下文补全每个空缺单词的缺失字母。每个单词的开头字母已给出。
         </div>
 
         {/* Topic badge */}
@@ -161,7 +161,7 @@ export function CTWTask({ item, onExit, onComplete }) {
         {!submitted ? (
           <div style={{ textAlign: "center" }}>
             <Btn onClick={handleSubmit} style={{ minWidth: 200, fontSize: 15, padding: "12px 32px" }}>
-              Check Answers
+              提交答案
             </Btn>
           </div>
         ) : (
@@ -170,11 +170,11 @@ export function CTWTask({ item, onExit, onComplete }) {
               {correct} / {item.blanks.length}
             </div>
             <div style={{ fontSize: 14, color: C.t2, marginBottom: 16 }}>
-              {correct === item.blanks.length ? "Perfect! All correct." : correct >= 7 ? "Good job! Review the incorrect answers above." : "Keep practicing! Review the answers above."}
+              {correct === item.blanks.length ? "全部正确！" : correct >= 7 ? "不错！请回顾上方的错误答案。" : "继续加油！请回顾上方标红的正确答案。"}
             </div>
             <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
-              <Btn onClick={onExit} variant="secondary">Exit</Btn>
-              <Btn onClick={() => { setAnswers(item.blanks.map(() => "")); setSubmitted(false); }}>Try Again</Btn>
+              <Btn onClick={onExit} variant="secondary">返回</Btn>
+              <Btn onClick={() => { setAnswers(item.blanks.map(() => "")); setSubmitted(false); }}>重新作答</Btn>
             </div>
           </SurfaceCard>
         )}

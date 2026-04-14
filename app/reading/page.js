@@ -83,7 +83,12 @@ function ReadingPageClient() {
         subtype,
         itemId: itemData.id,
         topic: itemData.topic || itemData.genre || "",
+        genre: itemData.genre || "",
         results: result.results,
+        // Save full item data for review in practice history
+        passage: subtype === "ctw" ? itemData.passage : itemData.text,
+        blanks: subtype === "ctw" ? itemData.blanks : undefined,
+        questions: subtype === "rdl" ? itemData.questions : undefined,
       },
     });
   }

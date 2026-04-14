@@ -81,10 +81,10 @@ export function RDLTask({ item, onExit, onComplete }) {
               {correctCount} / {questions.length}
             </div>
             <div style={{ fontSize: 13, color: C.t2, marginTop: 4 }}>
-              {correctCount === questions.length ? "Perfect!" : "Review each question below using the navigation."}
+              {correctCount === questions.length ? "全部正确！" : "使用下方导航回顾每道题的详解。"}
             </div>
             <div style={{ marginTop: 10 }}>
-              <Btn onClick={onExit} variant="secondary" style={{ fontSize: 13 }}>Exit</Btn>
+              <Btn onClick={onExit} variant="secondary" style={{ fontSize: 13 }}>返回</Btn>
             </div>
           </SurfaceCard>
         )}
@@ -150,7 +150,7 @@ export function RDLTask({ item, onExit, onComplete }) {
           border: submitted ? `2px solid ${results[currentQ].isCorrect ? "#BBF7D0" : "#FECACA"}` : `1px solid ${C.bdr}`,
         }}>
           <div style={{ fontSize: 13, color: C.t3, marginBottom: 8 }}>
-            Question {currentQ + 1} of {questions.length}
+            第 {currentQ + 1} 题 / 共 {questions.length} 题
             <span style={{ marginLeft: 8, color: accent.color }}>({question.question_type})</span>
           </div>
           <div style={{ fontSize: 15, fontWeight: 600, color: C.t1, marginBottom: 16, lineHeight: 1.5 }}>
@@ -216,7 +216,7 @@ export function RDLTask({ item, onExit, onComplete }) {
               border: `1px solid ${results[currentQ].isCorrect ? "#BBF7D0" : "#FECACA"}`,
             }}>
               <div style={{ fontSize: 12, fontWeight: 700, color: results[currentQ].isCorrect ? "#065F46" : "#991B1B", marginBottom: 3 }}>
-                {results[currentQ].isCorrect ? "Correct" : `Incorrect — Answer: ${question.correct_answer}`}
+                {results[currentQ].isCorrect ? "回答正确" : `回答错误 — 正确答案: ${question.correct_answer}`}
               </div>
               <div style={{ fontSize: 12, color: C.t2, lineHeight: 1.5 }}>{question.explanation}</div>
             </div>
@@ -231,18 +231,18 @@ export function RDLTask({ item, onExit, onComplete }) {
             disabled={currentQ === 0}
             style={{ opacity: currentQ === 0 ? 0.4 : 1, fontSize: 13, minWidth: 80 }}
           >
-            ← Prev
+            ← 上一题
           </Btn>
 
           {!submitted && (
             <div style={{ textAlign: "center", fontSize: 12, color: C.t3 }}>
-              {allAnswered ? "Ready to submit" : `${answeredCount}/${questions.length} answered`}
+              {allAnswered ? "可以提交" : `已作答 ${answeredCount}/${questions.length}`}
             </div>
           )}
 
           {!submitted && currentQ === questions.length - 1 && allAnswered ? (
             <Btn onClick={handleSubmit} style={{ fontSize: 13, minWidth: 120 }}>
-              Submit All
+              提交全部
             </Btn>
           ) : (
             <Btn
@@ -251,7 +251,7 @@ export function RDLTask({ item, onExit, onComplete }) {
               disabled={currentQ === questions.length - 1 && submitted}
               style={{ opacity: currentQ === questions.length - 1 && submitted ? 0.4 : 1, fontSize: 13, minWidth: 80 }}
             >
-              Next →
+              下一题 →
             </Btn>
           )}
         </div>
