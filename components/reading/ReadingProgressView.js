@@ -117,7 +117,10 @@ function SessionRow({ session, expanded, onToggle, onDelete }) {
   const s = session;
   const subtype = s.details?.subtype || "rdl";
   const m = getSubtypeInfo(subtype);
-  const t = Number(s.total || 0), c = Number(s.correct || 0);
+  // Fallback: if total/correct are 0 but results exist, recalculate from results
+  const resultsArr = s.details?.results || [];
+  const t = Number(s.total || 0) || resultsArr.length;
+  const c = Number(s.correct || 0) || resultsArr.filter(r => r.isCorrect).length;
   const pct = t > 0 ? c / t : 0;
   const scoreColor = pct >= 0.8 ? "#059669" : pct >= 0.6 ? "#D97706" : "#E11D48";
   const topic = s.details?.topic || "";
@@ -344,7 +347,12 @@ export function ReadingProgressView({ onBack }) {
 
   function avgPct(arr) {
     if (arr.length === 0) return null;
-    const sum = arr.reduce((s, sess) => { const t = Number(sess.total || 0), c = Number(sess.correct || 0); return t > 0 ? s + (c / t) * 100 : s; }, 0);
+    const sum = arr.reduce((s, sess) => {
+      const ra = sess.details?.results || [];
+      const t = Number(sess.total || 0) || ra.length;
+      const c = Number(sess.correct || 0) || ra.filter(r => r.isCorrect).length;
+      return t > 0 ? s + (c / t) * 100 : s;
+    }, 0);
     return Math.round(sum / arr.length);
   }
 
