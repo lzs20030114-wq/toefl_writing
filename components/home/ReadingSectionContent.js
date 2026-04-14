@@ -175,68 +175,45 @@ export function ReadingSectionContent({
         </div>
       )}
 
-      {/* RDL variant toggle */}
-      <div style={{
-        display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 10,
-        marginBottom: 12, padding: "0 2px",
-        opacity: isPro ? 1 : 0.45,
-        ...fadeIn(180),
-      }}>
-        <span style={{ fontSize: 12, color: isChallenge ? CH.t2 : T.t2, fontWeight: 500 }}>
-          Read in Daily Life 版本
-        </span>
-        <div
-          onClick={() => setRdlVariant(v => v === "short" ? "long" : "short")}
-          style={{
-            display: "flex", alignItems: "center",
-            background: isChallenge ? "rgba(255,255,255,0.06)" : T.card,
-            border: `1px solid ${isChallenge ? CH.cardBorder : T.bdr}`,
-            borderRadius: 999, padding: 3,
-            cursor: isPro ? "pointer" : "default",
-            pointerEvents: isPro ? "auto" : "none",
-            boxShadow: isChallenge ? "none" : T.shadow,
-            transition: "all 150ms",
-          }}
-        >
-          {["short", "long"].map(v => {
-            const active = rdlVariant === v;
-            return (
-              <div
-                key={v}
-                style={{
-                  padding: "5px 14px",
-                  borderRadius: 999,
-                  fontSize: 12,
-                  fontWeight: active ? 700 : 500,
-                  color: active
-                    ? (isChallenge ? "#fff" : READING_ACCENT.color)
-                    : (isChallenge ? CH.t2 : T.t3),
-                  background: active
-                    ? (isChallenge ? "rgba(59,130,246,0.2)" : READING_ACCENT.soft)
-                    : "transparent",
-                  transition: "all 150ms",
-                  cursor: "pointer",
-                  userSelect: "none",
-                }}
-              >
-                {v === "short" ? "短版 · 2题" : "长版 · 3题"}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
       {/* Task grid */}
       <div className="home-grid" style={{
         display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 28,
         opacity: isPro ? 1 : 0.45, pointerEvents: isPro ? "auto" : "none",
         filter: isPro ? "none" : "grayscale(0.5)",
       }}>
-        {gridItems.map((item) => (
-          <div key={item.k} style={{ display: "flex", ...fadeIn(item.delay) }}>
-            <HomeTaskCard item={item} hoverKey={hoverKey} setHoverKey={setHoverKey} isChallenge={isChallenge} />
-          </div>
-        ))}
+        {gridItems.map((item) => {
+          const isRdl = item.k === "reading-rdl";
+          const rdlFooter = isRdl ? (
+            <div
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+              style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 2, padding: "6px 10px" }}
+            >
+              {["short", "long"].map(v => {
+                const active = rdlVariant === v;
+                return (
+                  <button
+                    key={v}
+                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); setRdlVariant(v); }}
+                    style={{
+                      padding: "4px 12px", borderRadius: 999, fontSize: 11, fontWeight: active ? 700 : 500,
+                      border: "none",
+                      color: active ? (isChallenge ? "#fff" : READING_ACCENT.color) : (isChallenge ? CH.t2 : T.t3),
+                      background: active ? (isChallenge ? "rgba(59,130,246,0.2)" : READING_ACCENT.soft) : "transparent",
+                      cursor: "pointer", transition: "all 150ms", fontFamily: HOME_FONT,
+                    }}
+                  >
+                    {v === "short" ? "短版 · 2题" : "长版 · 3题"}
+                  </button>
+                );
+              })}
+            </div>
+          ) : null;
+          return (
+            <div key={item.k} style={{ display: "flex", ...fadeIn(item.delay) }}>
+              <HomeTaskCard item={item} hoverKey={hoverKey} setHoverKey={setHoverKey} isChallenge={isChallenge} footer={rdlFooter} />
+            </div>
+          );
+        })}
       </div>
 
       {/* Practice history link */}

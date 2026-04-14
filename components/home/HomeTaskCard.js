@@ -7,9 +7,10 @@ function Arrow({ color }) {
   return <div style={{ color, fontSize: 15, lineHeight: 1 }}>&gt;</div>;
 }
 
-export function HomeTaskCard({ item, hoverKey, setHoverKey, isChallenge }) {
+export function HomeTaskCard({ item, hoverKey, setHoverKey, isChallenge, footer }) {
   const { k, href, acc, n, t, d, it, timeLabel, standardLabel, isMock = false } = item;
   const isHover = hoverKey === k;
+  const hasFooter = !!footer;
 
   const inner = (
     <Link
@@ -24,12 +25,12 @@ export function HomeTaskCard({ item, hoverKey, setHoverKey, isChallenge }) {
         textDecoration: "none",
         color: "inherit",
         background: isChallenge ? (isMock ? "linear-gradient(180deg,#14101c 0%,#1a0e16 100%)" : CH.card) : (isMock ? T.primarySoft : T.card),
-        border: isChallenge ? "none" : `1px solid ${isHover ? `${acc.color}90` : (isMock ? `${T.primary}50` : T.bdr)}`,
-        borderRadius: isChallenge && isMock ? 10 : 12,
+        border: hasFooter ? "none" : (isChallenge ? "none" : `1px solid ${isHover ? `${acc.color}90` : (isMock ? `${T.primary}50` : T.bdr)}`),
+        borderRadius: hasFooter ? 0 : (isChallenge && isMock ? 10 : 12),
         overflow: "hidden",
         cursor: "pointer",
-        transform: isHover ? "translateY(-2px)" : "translateY(0)",
-        boxShadow: isHover ? (isChallenge ? "0 6px 20px rgba(255,30,30,0.2)" : `0 6px 18px ${acc.color}28`) : T.shadow,
+        transform: hasFooter ? "none" : (isHover ? "translateY(-2px)" : "translateY(0)"),
+        boxShadow: hasFooter ? "none" : (isHover ? (isChallenge ? "0 6px 20px rgba(255,30,30,0.2)" : `0 6px 18px ${acc.color}28`) : T.shadow),
         transition: "transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease",
       }}
     >
@@ -58,11 +59,28 @@ export function HomeTaskCard({ item, hoverKey, setHoverKey, isChallenge }) {
     </Link>
   );
 
-  if (!isChallenge || !isMock) return inner;
+  if (!footer) {
+    if (!isChallenge || !isMock) return inner;
+    return (
+      <div style={{ flex: 1, display: "flex", borderRadius: 12, padding: 2, background: "linear-gradient(90deg,#ff2222,#ff6600,#ff2222,#cc0000)", backgroundSize: "300% 100%", animation: "ch-gradRot 3s ease infinite" }}>
+        {inner}
+      </div>
+    );
+  }
 
+  // Card with footer slot (e.g. variant toggle)
   return (
-    <div style={{ flex: 1, display: "flex", borderRadius: 12, padding: 2, background: "linear-gradient(90deg,#ff2222,#ff6600,#ff2222,#cc0000)", backgroundSize: "300% 100%", animation: "ch-gradRot 3s ease infinite" }}>
-      {inner}
+    <div style={{
+      flex: 1, display: "flex", flexDirection: "column",
+      background: isChallenge ? CH.card : T.card,
+      border: `1px solid ${isChallenge ? CH.cardBorder : T.bdr}`,
+      borderRadius: 12, overflow: "hidden",
+      boxShadow: T.shadow,
+    }}>
+      <div style={{ flex: 1, display: "flex" }}>{inner}</div>
+      <div style={{ borderTop: `1px solid ${isChallenge ? CH.cardBorder : T.bdrSubtle}` }}>
+        {footer}
+      </div>
     </div>
   );
 }
