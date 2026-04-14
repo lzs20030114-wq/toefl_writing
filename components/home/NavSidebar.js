@@ -165,49 +165,6 @@ export function NavSidebar({
       {/* ── Divider ── */}
       <div style={{ height: 1, background: navBdr, margin: "4px 16px" }} />
 
-      {/* ── Tools ── */}
-      <div style={{ padding: "8px 12px" }}>
-        <div style={{ fontSize: 10, fontWeight: 700, color: t3, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 8, paddingLeft: 4 }}>
-          Tools
-        </div>
-        {TOOLS.map((tool) => {
-          const badge = tool.id === "mistake-notebook" && bsMistakeCount > 0
-            ? bsMistakeCount
-            : tool.id === "post-writing-practice" && postWritingCounts?.total > 0
-              ? postWritingCounts.total
-              : null;
-          return (
-            <Link
-              key={tool.id}
-              href={tool.href}
-              style={{
-                display: "flex", alignItems: "center", gap: 10,
-                padding: "9px 12px",
-                borderRadius: 8,
-                textDecoration: "none",
-                color: t2,
-                fontSize: 13, fontWeight: 500,
-                transition: "background 150ms ease",
-                marginBottom: 2,
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = navItemHover; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
-            >
-              <span style={{ fontSize: 14, width: 24, textAlign: "center", flexShrink: 0 }}>{tool.icon}</span>
-              <span style={{ flex: 1 }}>{tool.label}</span>
-              {badge != null && (
-                <span style={{ fontSize: 10, fontWeight: 700, color: T.primary, background: T.primarySoft, borderRadius: 999, padding: "2px 7px", flexShrink: 0 }}>
-                  {badge}
-                </span>
-              )}
-            </Link>
-          );
-        })}
-      </div>
-
-      {/* ── Divider ── */}
-      <div style={{ height: 1, background: navBdr, margin: "4px 16px" }} />
-
       {/* ── User section ── */}
       <div style={{ padding: "12px 14px", flex: 1 }}>
         {!isLoggedIn ? (
