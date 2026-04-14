@@ -164,40 +164,39 @@ function SessionRow({ session, expanded, onToggle, onDelete }) {
 }
 
 function CTWDetail({ session }) {
-  const results = session.details?.results;
+  const results = session.details?.results || [];
   const passage = session.details?.passage;
   const blanks = session.details?.blanks || [];
 
-  // Build a set of blank words for highlighting in the passage
-  const blankWords = new Set(blanks.map(b => b.original_word?.toLowerCase()));
+  // Map blank positions for quick lookup
+  const blankByPos = {};
+  blanks.forEach((b, i) => { blankByPos[b.position] = { blank: b, result: results[i], index: i }; });
 
-  // Render passage with blank positions highlighted inline
   function renderMarkedPassage() {
     if (!passage) return null;
     const words = passage.split(/\s+/);
-    const blankPositions = new Set(blanks.map(b => b.position));
 
     return words.map((word, wi) => {
-      const isBlank = blankPositions.has(wi);
-      if (!isBlank) return <span key={wi}>{word} </span>;
+      const entry = blankByPos[wi];
+      if (!entry) return <span key={wi}>{word} </span>;
 
-      // Find the matching blank + result
-      const blankIdx = blanks.findIndex(b => b.position === wi);
-      const blank = blanks[blankIdx];
-      const result = results && results[blankIdx];
+      const { blank, result } = entry;
       const isCorrect = result?.isCorrect;
-      const cleanWord = word.replace(/[.,;:!?]+$/, "");
-      const punct = word.match(/[.,;:!?]+$/)?.[0] || "";
+      const color = isCorrect ? "#059669" : "#DC2626";
+      const bg = isCorrect ? "#D1FAE5" : "#FEE2E2";
 
       return (
-        <span key={wi} style={{
-          background: isCorrect ? "#D1FAE520" : "#FEE2E240",
-          borderBottom: `2px solid ${isCorrect ? "#059669" : "#DC2626"}`,
-          fontWeight: 600,
-          borderRadius: 2,
-          padding: "0 1px",
-        }}>
-          {cleanWord}{punct}
+        <span key={wi}>
+          <span style={{
+            background: bg, color, fontWeight: 700,
+            borderRadius: 4, padding: "1px 4px",
+            borderBottom: `2px solid ${color}`,
+            fontFamily: "'Courier New', monospace", fontSize: 13,
+          }}>
+            {blank.original_word}
+          </span>
+          {/* Preserve trailing punctuation + space */}
+          {word.match(/[.,;:!?]+$/)?.[0] || ""}{" "}
         </span>
       );
     });
@@ -205,21 +204,36 @@ function CTWDetail({ session }) {
 
   return (
     <div>
-      {/* Passage with blanks highlighted */}
+      {/* Passage with blanks highlighted as colored inline tags */}
       {passage && (
-        <div style={{ fontSize: 13, color: P.text, lineHeight: 2.0, padding: "12px 16px", background: "#f8faf9", borderRadius: 10, marginBottom: 10, fontFamily: "'Georgia', 'Noto Serif SC', serif" }}>
+        <div style={{ fontSize: 13, color: P.text, lineHeight: 2.2, padding: "14px 18px", background: "#fafbfa", borderRadius: 12, marginBottom: 12, border: `1px solid ${P.borderSubtle}` }}>
           {renderMarkedPassage()}
         </div>
       )}
-      {/* Blank word results as pills */}
-      {Array.isArray(results) && (
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
+      {/* Summary: correct vs total */}
+      <div style={{ fontSize: 12, color: P.textSec, marginBottom: 8 }}>
+        填空结果（<span style={{ color: "#059669", fontWeight: 600 }}>绿色</span> = 正确，<span style={{ color: "#DC2626", fontWeight: 600 }}>红色</span> = 错误）
+      </div>
+      {/* Compact blank pills in a table-like layout */}
+      {results.length > 0 && (
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(130px, 1fr))", gap: 6 }}>
           {results.map((r, i) => {
             const blank = r.blank || blanks[i] || {};
+            const frag = blank.displayed_fragment || "";
+            const full = blank.original_word || "";
+            const missing = full.slice(frag.length);
             return (
-              <span key={i} style={{ fontSize: 12, padding: "3px 8px", borderRadius: 6, background: r.isCorrect ? "#D1FAE5" : "#FEE2E2", color: r.isCorrect ? "#065F46" : "#991B1B", fontFamily: "'Courier New', monospace", fontWeight: 600 }}>
-                {blank.displayed_fragment || ""}{r.isCorrect ? (blank.original_word || "").slice((blank.displayed_fragment || "").length) : `→${blank.original_word || "?"}`}
-              </span>
+              <div key={i} style={{
+                fontSize: 12, padding: "5px 10px", borderRadius: 8,
+                background: r.isCorrect ? "#F0FDF4" : "#FEF2F2",
+                border: `1px solid ${r.isCorrect ? "#BBF7D0" : "#FECACA"}`,
+                fontFamily: "'Courier New', monospace", fontWeight: 600,
+                display: "flex", alignItems: "center", gap: 4,
+              }}>
+                <span style={{ color: r.isCorrect ? "#059669" : "#DC2626", fontSize: 11 }}>{r.isCorrect ? "✓" : "✗"}</span>
+                <span style={{ color: P.textDim }}>{frag}</span>
+                <span style={{ color: r.isCorrect ? "#059669" : "#DC2626" }}>{missing}</span>
+              </div>
             );
           })}
         </div>
