@@ -189,6 +189,7 @@ async function main() {
     // Add computed fields
     const item = {
       id,
+      variant: VARIANT, // always use CLI variant, don't trust AI output
       text: raw.text || "",
       word_count: raw.text ? countWords(raw.text) : 0,
       genre: raw.genre || "other",
