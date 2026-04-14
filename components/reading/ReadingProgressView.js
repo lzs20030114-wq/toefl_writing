@@ -166,21 +166,56 @@ function SessionRow({ session, expanded, onToggle, onDelete }) {
 function CTWDetail({ session }) {
   const results = session.details?.results;
   const passage = session.details?.passage;
-  const blanks = session.details?.blanks;
+  const blanks = session.details?.blanks || [];
+
+  // Build a set of blank words for highlighting in the passage
+  const blankWords = new Set(blanks.map(b => b.original_word?.toLowerCase()));
+
+  // Render passage with blank positions highlighted inline
+  function renderMarkedPassage() {
+    if (!passage) return null;
+    const words = passage.split(/\s+/);
+    const blankPositions = new Set(blanks.map(b => b.position));
+
+    return words.map((word, wi) => {
+      const isBlank = blankPositions.has(wi);
+      if (!isBlank) return <span key={wi}>{word} </span>;
+
+      // Find the matching blank + result
+      const blankIdx = blanks.findIndex(b => b.position === wi);
+      const blank = blanks[blankIdx];
+      const result = results && results[blankIdx];
+      const isCorrect = result?.isCorrect;
+      const cleanWord = word.replace(/[.,;:!?]+$/, "");
+      const punct = word.match(/[.,;:!?]+$/)?.[0] || "";
+
+      return (
+        <span key={wi} style={{
+          background: isCorrect ? "#D1FAE520" : "#FEE2E240",
+          borderBottom: `2px solid ${isCorrect ? "#059669" : "#DC2626"}`,
+          fontWeight: 600,
+          borderRadius: 2,
+          padding: "0 1px",
+        }}>
+          {cleanWord}{punct}
+        </span>
+      );
+    });
+  }
 
   return (
     <div>
-      {/* Original passage */}
+      {/* Passage with blanks highlighted */}
       {passage && (
-        <div style={{ fontSize: 13, color: P.text, lineHeight: 1.8, padding: "10px 14px", background: "#f8faf9", borderRadius: 10, marginBottom: 10, fontFamily: "'Georgia', serif" }}>
-          {passage}
+        <div style={{ fontSize: 13, color: P.text, lineHeight: 2.0, padding: "12px 16px", background: "#f8faf9", borderRadius: 10, marginBottom: 10, fontFamily: "'Georgia', 'Noto Serif SC', serif" }}>
+          {renderMarkedPassage()}
         </div>
       )}
-      {/* Blank results */}
+      {/* Blank word results as pills */}
       {Array.isArray(results) && (
         <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
           {results.map((r, i) => {
-            const blank = r.blank || (blanks && blanks[i]) || {};
+            const blank = r.blank || blanks[i] || {};
             return (
               <span key={i} style={{ fontSize: 12, padding: "3px 8px", borderRadius: 6, background: r.isCorrect ? "#D1FAE5" : "#FEE2E2", color: r.isCorrect ? "#065F46" : "#991B1B", fontFamily: "'Courier New', monospace", fontWeight: 600 }}>
                 {blank.displayed_fragment || ""}{r.isCorrect ? (blank.original_word || "").slice((blank.displayed_fragment || "").length) : `→${blank.original_word || "?"}`}
