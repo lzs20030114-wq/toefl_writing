@@ -7,7 +7,8 @@ import { RDLTask } from "../../components/reading/RDLTask";
 import { getSavedTier } from "../../lib/AuthContext";
 import { saveSess } from "../../lib/sessionStore";
 import CTW_DATA from "../../data/reading/bank/ctw.json";
-import RDL_DATA from "../../data/reading/bank/rdl.json";
+import RDL_LONG_DATA from "../../data/reading/bank/rdl-long.json";
+import RDL_SHORT_DATA from "../../data/reading/bank/rdl-short.json";
 
 function pickRandom(items) {
   if (!items || items.length === 0) return null;
@@ -18,6 +19,7 @@ function ReadingPageClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const type = searchParams.get("type") || "ctw";
+  const variant = searchParams.get("variant") || "long";
   const [isPro, setIsPro] = useState(false);
   useEffect(() => {
     const t = getSavedTier();
@@ -27,8 +29,13 @@ function ReadingPageClient() {
   // Pick random item on client side only to avoid SSR hydration mismatch
   const [item, setItem] = useState(null);
   useEffect(() => {
-    setItem(type === "rdl" ? pickRandom(RDL_DATA.items) : pickRandom(CTW_DATA.items));
-  }, [type]);
+    if (type === "rdl") {
+      const pool = variant === "short" ? RDL_SHORT_DATA.items : RDL_LONG_DATA.items;
+      setItem(pickRandom(pool));
+    } else {
+      setItem(pickRandom(CTW_DATA.items));
+    }
+  }, [type, variant]);
 
   const onExit = () => router.push("/?section=reading");
 
@@ -51,8 +58,12 @@ function ReadingPageClient() {
   }
 
   function handleNewItem() {
-    if (type === "rdl") setItem(pickRandom(RDL_DATA.items));
-    else setItem(pickRandom(CTW_DATA.items));
+    if (type === "rdl") {
+      const pool = variant === "short" ? RDL_SHORT_DATA.items : RDL_LONG_DATA.items;
+      setItem(pickRandom(pool));
+    } else {
+      setItem(pickRandom(CTW_DATA.items));
+    }
   }
 
   if (!item) {

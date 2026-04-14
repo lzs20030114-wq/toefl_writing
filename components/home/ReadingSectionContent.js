@@ -24,9 +24,9 @@ const READING_TASKS = [
     n: "Task 2",
     t: "Read in Daily Life",
     d: "Read a campus notice, email, or post and answer comprehension questions.",
-    it: "3 questions",
-    timeLabel: "4 min",
-    standardLabel: "4 min",
+    it: null, // dynamic based on variant
+    timeLabel: null, // dynamic based on variant
+    standardLabel: null,
   },
 ];
 
@@ -36,19 +36,27 @@ export function ReadingSectionContent({
   userTier, isLoggedIn, showLoginModal,
 }) {
   const isPro = userTier === "pro" || userTier === "legacy";
-  const gridItems = READING_TASKS.map((task, index) => ({
-    k: task.k,
-    href: `/reading?type=${task.k === "reading-ctw" ? "ctw" : "rdl"}`,
-    acc: READING_ACCENT,
-    n: task.n,
-    t: task.t,
-    d: isPractice ? "Select any passage to practice at your own pace." : task.d,
-    it: task.it,
-    timeLabel: isPractice ? "No limit" : task.timeLabel,
-    standardLabel: task.standardLabel,
-    isMock: false,
-    delay: 190 + index * 70,
-  }));
+  const [rdlVariant, setRdlVariant] = useState("long"); // "short" | "long"
+
+  const gridItems = READING_TASKS.map((task, index) => {
+    const isRdl = task.k === "reading-rdl";
+    const isShort = rdlVariant === "short";
+    return {
+      k: task.k,
+      href: isRdl
+        ? `/reading?type=rdl&variant=${rdlVariant}`
+        : `/reading?type=ctw`,
+      acc: READING_ACCENT,
+      n: task.n,
+      t: task.t,
+      d: isPractice ? "Select any passage to practice at your own pace." : task.d,
+      it: isRdl ? (isShort ? "2 questions" : "3 questions") : task.it,
+      timeLabel: isPractice ? "No limit" : (isRdl ? (isShort ? "2 min" : "4 min") : task.timeLabel),
+      standardLabel: isRdl ? (isShort ? "2 min" : "4 min") : task.standardLabel,
+      isMock: false,
+      delay: 190 + index * 70,
+    };
+  });
 
   return (
     <div style={{ flex: 1, minWidth: 0 }}>
@@ -166,6 +174,57 @@ export function ReadingSectionContent({
           )}
         </div>
       )}
+
+      {/* RDL variant toggle */}
+      <div style={{
+        display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 10,
+        marginBottom: 12, padding: "0 2px",
+        opacity: isPro ? 1 : 0.45,
+        ...fadeIn(180),
+      }}>
+        <span style={{ fontSize: 12, color: isChallenge ? CH.t2 : T.t2, fontWeight: 500 }}>
+          Read in Daily Life 版本
+        </span>
+        <div
+          onClick={() => setRdlVariant(v => v === "short" ? "long" : "short")}
+          style={{
+            display: "flex", alignItems: "center",
+            background: isChallenge ? "rgba(255,255,255,0.06)" : T.card,
+            border: `1px solid ${isChallenge ? CH.cardBorder : T.bdr}`,
+            borderRadius: 999, padding: 3,
+            cursor: isPro ? "pointer" : "default",
+            pointerEvents: isPro ? "auto" : "none",
+            boxShadow: isChallenge ? "none" : T.shadow,
+            transition: "all 150ms",
+          }}
+        >
+          {["short", "long"].map(v => {
+            const active = rdlVariant === v;
+            return (
+              <div
+                key={v}
+                style={{
+                  padding: "5px 14px",
+                  borderRadius: 999,
+                  fontSize: 12,
+                  fontWeight: active ? 700 : 500,
+                  color: active
+                    ? (isChallenge ? "#fff" : READING_ACCENT.color)
+                    : (isChallenge ? CH.t2 : T.t3),
+                  background: active
+                    ? (isChallenge ? "rgba(59,130,246,0.2)" : READING_ACCENT.soft)
+                    : "transparent",
+                  transition: "all 150ms",
+                  cursor: "pointer",
+                  userSelect: "none",
+                }}
+              >
+                {v === "short" ? "短版 · 2题" : "长版 · 3题"}
+              </div>
+            );
+          })}
+        </div>
+      </div>
 
       {/* Task grid */}
       <div className="home-grid" style={{

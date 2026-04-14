@@ -139,8 +139,8 @@ export function MobileHomePage({
         })}
       </div>
 
-      {/* ── Coming soon overlay for non-writing sections ── */}
-      {activeSection !== "writing" ? (
+      {/* ── Coming soon overlay for inactive sections ── */}
+      {(() => { const sec = SECTIONS.find(s => s.id === activeSection); return sec?.status === SECTION_STATUS.COMING_SOON; })() ? (
         <div style={{ textAlign: "center", padding: "48px 20px" }}>
           {(() => { const sec = SECTIONS.find(s => s.id === activeSection); const accent = SECTION_ACCENTS[activeSection]; return sec ? (
             <>
@@ -152,6 +152,8 @@ export function MobileHomePage({
             </>
           ) : null; })()}
         </div>
+      ) : activeSection === "reading" ? (
+        <MobileReadingSection isChallenge={isChallenge} isPractice={isPractice} mode={mode} switchMode={switchMode} querySuffix={querySuffix} t1={t1} t2={t2} />
       ) : (
       <>
       {/* ── 标题 + 模式切换 ── */}
@@ -517,5 +519,103 @@ function MobileUserSheetContent({
         退出登录
       </button>
     </div>
+  );
+}
+
+/* ── Mobile Reading Section ── */
+
+function MobileReadingSection({ isChallenge, isPractice, mode, switchMode, querySuffix, t1, t2 }) {
+  const [rdlVariant, setRdlVariant] = useState("long");
+  const accent = SECTION_ACCENTS.reading;
+
+  return (
+    <>
+      <div style={{ marginBottom: 14 }}>
+        <h1 style={{ margin: "0 0 10px", fontSize: 22, fontWeight: 800, color: t1, lineHeight: 1.2 }}>
+          Reading
+          <span style={{ fontSize: 12, fontWeight: 600, color: isChallenge ? CH.t2 : T.t3, marginLeft: 6 }}>（测试）</span>
+        </h1>
+        <div style={{
+          display: "flex", gap: 0,
+          background: isChallenge ? "rgba(255,255,255,0.05)" : T.card,
+          border: `1px solid ${isChallenge ? "rgba(255,30,30,0.3)" : T.bdr}`,
+          borderRadius: 10, overflow: "hidden",
+        }}>
+          {[
+            { value: PRACTICE_MODE.STANDARD, label: "Standard" },
+            { value: PRACTICE_MODE.PRACTICE, label: "Practice" },
+            { value: PRACTICE_MODE.CHALLENGE, label: "Challenge" },
+          ].map((opt) => {
+            const sel = mode === opt.value;
+            const chOpt = opt.value === PRACTICE_MODE.CHALLENGE;
+            const prOpt = opt.value === PRACTICE_MODE.PRACTICE;
+            return (
+              <button key={opt.value} onClick={() => switchMode(opt.value)} style={{
+                flex: 1, border: "none", padding: "10px 0", fontSize: 13, fontWeight: 700,
+                cursor: "pointer", fontFamily: HOME_FONT, transition: "all .15s",
+                background: sel ? (chOpt ? "rgba(255,30,30,0.15)" : prOpt ? "rgba(99,102,241,0.1)" : accent.color + "18") : "transparent",
+                color: sel ? (chOpt ? CH.accent : prOpt ? "#6366f1" : accent.color) : t2,
+              }}>
+                {opt.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* RDL variant toggle */}
+      <div style={{
+        display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginBottom: 14,
+        background: isChallenge ? "rgba(255,255,255,0.04)" : T.card,
+        border: `1px solid ${isChallenge ? CH.cardBorder : T.bdr}`,
+        borderRadius: 10, padding: "8px 12px",
+      }}>
+        <span style={{ fontSize: 12, color: t2 }}>RDL 版本</span>
+        {["short", "long"].map(v => {
+          const active = rdlVariant === v;
+          return (
+            <button key={v} onClick={() => setRdlVariant(v)} style={{
+              padding: "5px 14px", borderRadius: 999, fontSize: 12, fontWeight: active ? 700 : 500, border: "none",
+              color: active ? accent.color : t2,
+              background: active ? accent.soft : "transparent",
+              cursor: "pointer", fontFamily: HOME_FONT, transition: "all 150ms",
+            }}>
+              {v === "short" ? "短版 · 2题" : "长版 · 3题"}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Task cards */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 14 }}>
+        <Link href={`/reading?type=ctw${querySuffix.replace('?', '&')}`} style={{
+          display: "flex", alignItems: "center", gap: 12, padding: "14px 16px",
+          background: isChallenge ? CH.card : T.card, border: `1px solid ${isChallenge ? CH.cardBorder : T.bdr}`,
+          borderRadius: 12, textDecoration: "none", color: "inherit", minHeight: 72,
+        }}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: accent.color, minWidth: 48, textAlign: "center" }}>5 min</div>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 11, fontWeight: 600, color: accent.color }}>Task 1</div>
+            <div style={{ fontSize: 14, fontWeight: 700, color: t1 }}>Complete the Words</div>
+            <div style={{ fontSize: 12, color: t2 }}>Fill in missing letters from context</div>
+          </div>
+          <span style={{ color: t2 }}>›</span>
+        </Link>
+
+        <Link href={`/reading?type=rdl&variant=${rdlVariant}${querySuffix.replace('?', '&')}`} style={{
+          display: "flex", alignItems: "center", gap: 12, padding: "14px 16px",
+          background: isChallenge ? CH.card : T.card, border: `1px solid ${isChallenge ? CH.cardBorder : T.bdr}`,
+          borderRadius: 12, textDecoration: "none", color: "inherit", minHeight: 72,
+        }}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: accent.color, minWidth: 48, textAlign: "center" }}>{rdlVariant === "short" ? "2 min" : "4 min"}</div>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 11, fontWeight: 600, color: accent.color }}>Task 2</div>
+            <div style={{ fontSize: 14, fontWeight: 700, color: t1 }}>Read in Daily Life</div>
+            <div style={{ fontSize: 12, color: t2 }}>{rdlVariant === "short" ? "短版 · 2 questions" : "长版 · 3 questions"}</div>
+          </div>
+          <span style={{ color: t2 }}>›</span>
+        </Link>
+      </div>
+    </>
   );
 }
