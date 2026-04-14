@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { C, FONT, Btn, PageShell, SurfaceCard, TopBar } from "../shared/ui";
 
 /**
@@ -9,16 +9,60 @@ import { C, FONT, Btn, PageShell, SurfaceCard, TopBar } from "../shared/ui";
  * - Select answer → Next (no immediate feedback)
  * - After all questions → Submit → See all results at once
  */
-export function RDLTask({ item, onExit, onComplete }) {
+export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = false }) {
   const [selections, setSelections] = useState(() => (item.questions || []).map(() => null));
   const [currentQ, setCurrentQ] = useState(0);
   const [submitted, setSubmitted] = useState(false);
+
+  // Timer state
+  const [timeLeft, setTimeLeft] = useState(timeLimit > 0 ? timeLimit : 0);
+  const [elapsed, setElapsed] = useState(0);
+  const timerRef = useRef(null);
+  const autoSubmittedRef = useRef(false);
 
   const accent = { color: "#3B82F6", soft: "#EFF6FF" };
   const questions = item.questions || [];
   const question = questions[currentQ];
   const answeredCount = selections.filter(s => s !== null).length;
   const allAnswered = answeredCount === questions.length;
+
+  // Timer: countdown or elapsed
+  useEffect(() => {
+    if (submitted) {
+      if (timerRef.current) clearInterval(timerRef.current);
+      return;
+    }
+    timerRef.current = setInterval(() => {
+      setElapsed(prev => prev + 1);
+      if (timeLimit > 0) {
+        setTimeLeft(prev => {
+          if (prev <= 1) {
+            clearInterval(timerRef.current);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }
+    }, 1000);
+    return () => { if (timerRef.current) clearInterval(timerRef.current); };
+  }, [submitted, timeLimit]);
+
+  // Auto-submit when time runs out
+  useEffect(() => {
+    if (timeLimit > 0 && timeLeft === 0 && !submitted && !autoSubmittedRef.current) {
+      autoSubmittedRef.current = true;
+      // Force submit with whatever is answered
+      setSubmitted(true);
+      setCurrentQ(0);
+      const results = questions.map((q, i) => ({
+        selected: selections[i],
+        correct: q.correct_answer,
+        isCorrect: selections[i] === q.correct_answer,
+      }));
+      const correct = results.filter(r => r.isCorrect).length;
+      if (onComplete) onComplete({ results, correct, total: questions.length });
+    }
+  }, [timeLeft, timeLimit, submitted, selections, questions, onComplete]);
 
   function handleSelect(key) {
     if (submitted) return;
@@ -66,8 +110,11 @@ export function RDLTask({ item, onExit, onComplete }) {
       <TopBar
         title="Read in Daily Life"
         section={`Reading | Task 2`}
+        timeLeft={!isPractice && timeLimit > 0 && !submitted ? timeLeft : undefined}
+        elapsedTime={isPractice && !submitted ? elapsed : undefined}
+        examTimeNote={isPractice && timeLimit > 0 ? `考试限时 ${Math.floor(timeLimit / 60)} min` : undefined}
+        qInfo={`${currentQ + 1} / ${questions.length}`}
         onExit={onExit}
-        accentColor={accent.color}
       />
       <PageShell narrow>
         {/* Score banner (after submit) */}

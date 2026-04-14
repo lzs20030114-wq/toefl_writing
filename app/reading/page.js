@@ -20,6 +20,18 @@ function ReadingPageClient() {
   const searchParams = useSearchParams();
   const type = searchParams.get("type") || "ctw";
   const variant = searchParams.get("variant") || "long";
+  const mode = searchParams.get("mode") || "standard";
+  const isPractice = mode === "practice";
+
+  // Time limits in seconds (0 = no limit for practice mode)
+  const READING_TIME_LIMITS = {
+    ctw: { standard: 300, challenge: 240 },       // 5 min / 4 min
+    "rdl-long": { standard: 240, challenge: 180 }, // 4 min / 3 min
+    "rdl-short": { standard: 120, challenge: 90 }, // 2 min / 1.5 min
+  };
+  const timeLimitKey = type === "rdl" ? `rdl-${variant}` : type;
+  const timeLimit = isPractice ? 0 : (READING_TIME_LIMITS[timeLimitKey]?.[mode] || READING_TIME_LIMITS[timeLimitKey]?.standard || 0);
+
   const [isPro, setIsPro] = useState(false);
   useEffect(() => {
     const t = getSavedTier();
@@ -110,6 +122,8 @@ function ReadingPageClient() {
         item={item}
         onExit={onExit}
         onComplete={(result) => saveReadingSession("rdl", item, result)}
+        timeLimit={timeLimit}
+        isPractice={isPractice}
       />
     );
   }
@@ -119,6 +133,8 @@ function ReadingPageClient() {
       item={item}
       onExit={onExit}
       onComplete={(result) => saveReadingSession("ctw", item, result)}
+      timeLimit={timeLimit}
+      isPractice={isPractice}
     />
   );
 }

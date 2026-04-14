@@ -44,8 +44,8 @@ export function ReadingSectionContent({
     return {
       k: task.k,
       href: isRdl
-        ? `/reading?type=rdl&variant=${rdlVariant}`
-        : `/reading?type=ctw`,
+        ? `/reading?type=rdl&variant=${rdlVariant}&mode=${isPractice ? "practice" : mode === PRACTICE_MODE.CHALLENGE ? "challenge" : "standard"}`
+        : `/reading?type=ctw&mode=${isPractice ? "practice" : mode === PRACTICE_MODE.CHALLENGE ? "challenge" : "standard"}`,
       acc: READING_ACCENT,
       n: task.n,
       t: task.t,

@@ -588,7 +588,7 @@ function MobileReadingSection({ isChallenge, isPractice, mode, switchMode, query
 
       {/* Task cards */}
       <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 14 }}>
-        <Link href={`/reading?type=ctw${querySuffix.replace('?', '&')}`} style={{
+        <Link href={`/reading?type=ctw&mode=${isPractice ? "practice" : mode === PRACTICE_MODE.CHALLENGE ? "challenge" : "standard"}${querySuffix.replace('?', '&')}`} style={{
           display: "flex", alignItems: "center", gap: 12, padding: "14px 16px",
           background: isChallenge ? CH.card : T.card, border: `1px solid ${isChallenge ? CH.cardBorder : T.bdr}`,
           borderRadius: 12, textDecoration: "none", color: "inherit", minHeight: 72,
@@ -602,7 +602,7 @@ function MobileReadingSection({ isChallenge, isPractice, mode, switchMode, query
           <span style={{ color: t2 }}>›</span>
         </Link>
 
-        <Link href={`/reading?type=rdl&variant=${rdlVariant}${querySuffix.replace('?', '&')}`} style={{
+        <Link href={`/reading?type=rdl&variant=${rdlVariant}&mode=${isPractice ? "practice" : mode === PRACTICE_MODE.CHALLENGE ? "challenge" : "standard"}${querySuffix.replace('?', '&')}`} style={{
           display: "flex", alignItems: "center", gap: 12, padding: "14px 16px",
           background: isChallenge ? CH.card : T.card, border: `1px solid ${isChallenge ? CH.cardBorder : T.bdr}`,
           borderRadius: 12, textDecoration: "none", color: "inherit", minHeight: 72,

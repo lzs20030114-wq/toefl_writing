@@ -3,10 +3,35 @@
 import { useState, useRef, useEffect } from "react";
 import { C, FONT, Btn, PageShell, SurfaceCard, TopBar } from "../shared/ui";
 
-export function CTWTask({ item, onExit, onComplete }) {
+export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = false }) {
   const [answers, setAnswers] = useState(() => item.blanks.map(() => ""));
   const [submitted, setSubmitted] = useState(false);
   const inputRefs = useRef([]);
+
+  // Timer state
+  const [timeLeft, setTimeLeft] = useState(timeLimit > 0 ? timeLimit : 0);
+  const [elapsed, setElapsed] = useState(0);
+  const timerRef = useRef(null);
+  const autoSubmittedRef = useRef(false);
+
+  useEffect(() => {
+    if (submitted) { if (timerRef.current) clearInterval(timerRef.current); return; }
+    timerRef.current = setInterval(() => {
+      setElapsed(prev => prev + 1);
+      if (timeLimit > 0) {
+        setTimeLeft(prev => { if (prev <= 1) { clearInterval(timerRef.current); return 0; } return prev - 1; });
+      }
+    }, 1000);
+    return () => { if (timerRef.current) clearInterval(timerRef.current); };
+  }, [submitted, timeLimit]);
+
+  // Auto-submit on timeout
+  useEffect(() => {
+    if (timeLimit > 0 && timeLeft === 0 && !submitted && !autoSubmittedRef.current) {
+      autoSubmittedRef.current = true;
+      handleSubmit();
+    }
+  }, [timeLeft, timeLimit, submitted]);
 
   const accent = { color: "#3B82F6", soft: "#EFF6FF" };
 
@@ -136,8 +161,10 @@ export function CTWTask({ item, onExit, onComplete }) {
       <TopBar
         title="Complete the Words"
         section="Reading | Task 1"
+        timeLeft={!isPractice && timeLimit > 0 && !submitted ? timeLeft : undefined}
+        elapsedTime={isPractice && !submitted ? elapsed : undefined}
+        examTimeNote={isPractice && timeLimit > 0 ? `考试限时 ${Math.floor(timeLimit / 60)} min` : undefined}
         onExit={onExit}
-        accentColor={accent.color}
       />
       <PageShell narrow>
         {/* Instructions */}
