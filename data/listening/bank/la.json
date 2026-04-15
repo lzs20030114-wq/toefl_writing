@@ -1,0 +1,395 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "context": "campus",
+      "situation": "dormitory quiet hours reminder",
+      "speaker_role": "Resident Advisor",
+      "announcement": "Hello everyone, this is your RA. A quick reminder that quiet hours in all campus dormitories are from 10 PM to 8 AM, Sunday through Thursday. During these hours, please keep noise to a minimum in hallways and common areas. This policy is especially important with midterm exams starting next week. If you need to study in a group, please use the 24-hour study lounge in the student union. Repeated violations may result in a meeting with housing staff. Thank you for your cooperation.",
+      "questions": [
+        {
+          "question_type": "detail",
+          "question": "When do quiet hours begin on weeknights?",
+          "options": {
+            "A": "At 8 PM",
+            "B": "At 9 PM",
+            "C": "At 10 PM",
+            "D": "At 11 PM"
+          },
+          "answer": "C",
+          "explanation": "The announcement directly states that quiet hours are from 10 PM to 8 AM."
+        },
+        {
+          "question_type": "inference",
+          "question": "What can be inferred about the reason for this reminder?",
+          "options": {
+            "A": "There have been many recent noise complaints.",
+            "B": "Students are preparing for upcoming exams.",
+            "C": "New residents are moving into the dormitory.",
+            "D": "The quiet hours policy has just been changed."
+          },
+          "answer": "B",
+          "explanation": "The announcement mentions that the reminder is especially important with midterm exams starting next week, implying students need quiet to study."
+        }
+      ],
+      "id": "la_gen_1776236579185_001"
+    },
+    {
+      "context": "classroom",
+      "situation": "reading assignment for next week",
+      "speaker_role": "Professor Chen",
+      "announcement": "Before our next lecture, please read chapters four and five in your biology textbook. Focus on the sections about cellular respiration. We will begin class with a short quiz on this material. Also, the article I mentioned on mitochondrial DNA is now available as a PDF on the course website under 'Resources.' I recommend you read it as well, as it provides useful context for our lab on Wednesday. Bring your questions to class.",
+      "questions": [
+        {
+          "question_type": "detail",
+          "question": "What are the students required to read before the next class?",
+          "options": {
+            "A": "Chapters three and four",
+            "B": "A single article on the course website",
+            "C": "Chapters four and five",
+            "D": "Only the sections on mitochondrial DNA"
+          },
+          "answer": "C",
+          "explanation": "The professor directly states, 'please read chapters four and five in your biology textbook.'"
+        },
+        {
+          "question_type": "inference",
+          "question": "What will most likely happen at the start of the next class?",
+          "options": {
+            "A": "The professor will return previous exams.",
+            "B": "Students will begin a new lab experiment.",
+            "C": "There will be a quiz on the reading.",
+            "D": "The class will discuss the PDF article."
+          },
+          "answer": "C",
+          "explanation": "The professor states, 'We will begin class with a short quiz on this material,' implying this is the first activity."
+        },
+        {
+          "question_type": "main_idea",
+          "question": "What is the main purpose of the announcement?",
+          "options": {
+            "A": "To cancel an upcoming lab session",
+            "B": "To outline preparation for the next class",
+            "C": "To change the required textbook for the course",
+            "D": "To remind students about office hours"
+          },
+          "answer": "B",
+          "explanation": "The overall message is to inform students of the reading assignment, a quiz, and an additional article to prepare for the next class and lab."
+        }
+      ],
+      "id": "la_gen_1776236579185_002"
+    },
+    {
+      "context": "campus",
+      "situation": "building closure for maintenance",
+      "speaker_role": "Facilities Manager",
+      "announcement": "Attention. The Science Hall will be closed all day this coming Saturday, November 12th, for mandatory fire alarm system testing and maintenance. No one will be permitted to enter. This includes all labs, classrooms, and faculty offices. If you have lab work scheduled, please consult your professor for an alternative arrangement. The building will reopen Sunday morning at its usual time. We appreciate your understanding as we ensure campus safety.",
+      "questions": [
+        {
+          "question_type": "detail",
+          "question": "Why is the Science Hall being closed?",
+          "options": {
+            "A": "For a deep cleaning of all laboratories",
+            "B": "For fire alarm system testing",
+            "C": "Because of a scheduled power outage",
+            "D": "To host a private campus event"
+          },
+          "answer": "B",
+          "explanation": "The announcement explicitly states the closure is 'for mandatory fire alarm system testing and maintenance.'"
+        },
+        {
+          "question_type": "inference",
+          "question": "What should a student with a Saturday lab session do?",
+          "options": {
+            "A": "Come to the building on Sunday instead.",
+            "B": "Contact their professor for instructions.",
+            "C": "Wait in the hallway until testing is complete.",
+            "D": "Use a lab in a different building without asking."
+          },
+          "answer": "B",
+          "explanation": "The announcement says to 'consult your professor for an alternative arrangement,' implying the student should seek guidance."
+        }
+      ],
+      "id": "la_gen_1776236579185_003"
+    },
+    {
+      "context": "classroom",
+      "situation": "textbook edition update",
+      "speaker_role": "Dr. Miller",
+      "announcement": "A quick note about the textbook. I've been informed that the new, fifth edition of 'Introduction to Sociology' has been released. For this course, you may use either the fourth or the fifth edition. The chapter topics are the same, though some examples are updated. However, please note that the page numbers and some minor section headings differ. I will always refer to chapter numbers in my lectures. If you are buying the book new, I suggest getting the fifth edition, but don't feel you need to replace an older copy.",
+      "questions": [
+        {
+          "question_type": "detail",
+          "question": "Which editions of the textbook are acceptable for the course?",
+          "options": {
+            "A": "Only the new fifth edition",
+            "B": "The third or the fourth edition",
+            "C": "Either the fourth or the fifth edition",
+            "D": "Any edition from the past five years"
+          },
+          "answer": "C",
+          "explanation": "The professor directly states, 'you may use either the fourth or the fifth edition.'"
+        },
+        {
+          "question_type": "inference",
+          "question": "What is a potential problem if a student uses the older edition?",
+          "options": {
+            "A": "The core theories will be completely different.",
+            "B": "The page numbers may not match the professor's references.",
+            "C": "The older edition will be missing several key chapters.",
+            "D": "The professor will not allow it in the classroom."
+          },
+          "answer": "B",
+          "explanation": "The professor mentions that page numbers differ between editions, implying a student using the old book might have trouble finding assigned readings if page numbers are given."
+        },
+        {
+          "question_type": "main_idea",
+          "question": "What is the professor's primary message?",
+          "options": {
+            "A": "Announcing a change to the required textbook.",
+            "B": "Providing flexibility regarding the textbook edition.",
+            "C": "Warning students about incorrect information in the old book.",
+            "D": "Informing students that the textbook is optional."
+          },
+          "answer": "B",
+          "explanation": "The main point is to inform students that both editions are acceptable and to offer guidance, emphasizing flexibility."
+        }
+      ],
+      "id": "la_gen_1776236579185_004"
+    },
+    {
+      "context": "campus",
+      "situation": "campus bookstore sale announcement",
+      "speaker_role": "Bookstore Manager",
+      "announcement": "The campus bookstore's end-of-semester sale starts this Monday. All general merchandise, like clothing, gifts, and supplies, will be 30% off. This discount does not apply to textbooks, course packets, or technology items. The sale runs from Monday through Friday during regular store hours. It's a great chance to stock up on university spirit wear before the holidays. Remember, you can use your student ID for an additional 5% off sale items. We hope to see you there!",
+      "questions": [
+        {
+          "question_type": "detail",
+          "question": "What is the discount on general merchandise during the sale?",
+          "options": {
+            "A": "5% off",
+            "B": "20% off",
+            "C": "30% off",
+            "D": "50% off"
+          },
+          "answer": "C",
+          "explanation": "The announcement clearly states, 'All general merchandise... will be 30% off.'"
+        },
+        {
+          "question_type": "inference",
+          "question": "What would be the best reason for a student to visit the bookstore during the sale?",
+          "options": {
+            "A": "To buy a required textbook at a lower price.",
+            "B": "To purchase a new laptop for next semester.",
+            "C": "To get a discount on a university sweatshirt.",
+            "D": "To sell back their old course packets."
+          },
+          "answer": "C",
+          "explanation": "The sale applies to general merchandise like clothing (spirit wear), not textbooks or technology. Buying a sweatshirt fits this category."
+        }
+      ],
+      "id": "la_gen_1776236579185_005"
+    },
+    {
+      "context": "classroom",
+      "situation": "reading assignment for next week",
+      "speaker_role": "Professor Williams",
+      "announcement": "For Wednesday, I want you to read the first three short stories in our anthology, 'Modern American Voices.' Pay particular attention to the use of symbolism in the story 'Clay.' We'll be comparing the authors' narrative techniques. Also, please note that your first short analysis paper will now be due next Friday, not this Friday as originally scheduled. The paper should focus on one of the stories we discuss this week. Any questions, see me after class.",
+      "questions": [
+        {
+          "question_type": "detail",
+          "question": "What specific element should students focus on in the story 'Clay'?",
+          "options": {
+            "A": "The historical context",
+            "B": "The author's biography",
+            "C": "The use of symbolism",
+            "D": "The comparative narrative techniques"
+          },
+          "answer": "C",
+          "explanation": "The professor directly instructs students to 'Pay particular attention to the use of symbolism in the story 'Clay.''"
+        },
+        {
+          "question_type": "inference",
+          "question": "What does the change in the due date imply about the assignment?",
+          "options": {
+            "A": "It has been canceled entirely.",
+            "B": "Students will have more time to write it.",
+            "C": "It must now be about a different topic.",
+            "D": "It will be completed during class time."
+          },
+          "answer": "B",
+          "explanation": "Moving the due date from this Friday to next Friday gives students an additional week, implying more time."
+        },
+        {
+          "question_type": "main_idea",
+          "question": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To introduce a new textbook for the course",
+            "B": "To assign reading and clarify an assignment deadline",
+            "C": "To cancel the upcoming Wednesday class session",
+            "D": "To discuss the grades for the previous paper"
+          },
+          "answer": "B",
+          "explanation": "The professor assigns specific reading and announces a change to the due date for the first paper."
+        }
+      ],
+      "id": "la_gen_1776236579185_006"
+    },
+    {
+      "context": "campus",
+      "situation": "parking notice about lot closure",
+      "speaker_role": "Campus Security",
+      "announcement": "This is a parking notice. Lot B, behind the gymnasium, will be closed for repaving from 6 AM Monday until 6 PM next Wednesday. All vehicles must be removed by Sunday night. Alternative parking is available in Lot D near the library, but spaces there fill quickly. We strongly encourage using the campus shuttle from the remote Lot F during this period. Parking permits will be temporarily valid in Lot D. Tow trucks will be on site Monday morning. Thank you.",
+      "questions": [
+        {
+          "question_type": "detail",
+          "question": "How long will Lot B be closed?",
+          "options": {
+            "A": "From Monday morning to Wednesday evening",
+            "B": "For the entire weekend",
+            "C": "From Sunday night to Friday morning",
+            "D": "For one full week"
+          },
+          "answer": "A",
+          "explanation": "The announcement states the closure is 'from 6 AM Monday until 6 PM next Wednesday.'"
+        },
+        {
+          "question_type": "inference",
+          "question": "What is the implied best option for a commuter student during the closure?",
+          "options": {
+            "A": "Park in Lot D very early in the morning.",
+            "B": "Park in Lot B after Monday morning.",
+            "C": "Use the shuttle from the remote Lot F.",
+            "D": "Request a special permit for faculty lots."
+          },
+          "answer": "C",
+          "explanation": "The announcement 'strongly encourage[s] using the campus shuttle from the remote Lot F,' implying it is the most reliable alternative as Lot D fills quickly."
+        }
+      ],
+      "id": "la_gen_1776236579185_007"
+    },
+    {
+      "context": "classroom",
+      "situation": "project group assignments posted",
+      "speaker_role": "Professor Gibson",
+      "announcement": "Good morning. Your group assignments for the final research project are now posted on the course website. I've formed the groups based on your topic preferences from the survey. Each group has four or five students. Your first task is to find your group members and schedule a meeting outside of class this week to choose a specific research question. I've also reserved conference rooms in the library for group work; you can book them online. The project proposal is due in two weeks.",
+      "questions": [
+        {
+          "question_type": "detail",
+          "question": "Where can students find their group assignments?",
+          "options": {
+            "A": "On a paper list outside the classroom",
+            "B": "By asking the professor after class",
+            "C": "On the course website",
+            "D": "In an email sent to each student"
+          },
+          "answer": "C",
+          "explanation": "The professor directly states the assignments 'are now posted on the course website.'"
+        },
+        {
+          "question_type": "inference",
+          "question": "How did the professor most likely decide the group compositions?",
+          "options": {
+            "A": "By random selection of student names",
+            "B": "Based on students' grades on the midterm",
+            "C": "According to students' topic preferences",
+            "D": "By allowing students to choose their own groups"
+          },
+          "answer": "C",
+          "explanation": "The professor says the groups were formed 'based on your topic preferences from the survey.'"
+        },
+        {
+          "question_type": "main_idea",
+          "question": "What is the professor primarily doing in this announcement?",
+          "options": {
+            "A": "Explaining the grading criteria for the final exam",
+            "B": "Initiating the first steps of the group project",
+            "C": "Canceling the previously assigned individual project",
+            "D": "Returning graded assignments from last week"
+          },
+          "answer": "B",
+          "explanation": "The announcement informs students that groups are posted and instructs them on their first tasks, launching the project."
+        }
+      ],
+      "id": "la_gen_1776236579185_008"
+    },
+    {
+      "context": "campus",
+      "situation": "schedule change for shuttle bus",
+      "speaker_role": "Transportation Office",
+      "announcement": "Attention shuttle riders. Due to construction on University Avenue, the Blue Line shuttle route will be altered starting tomorrow. The shuttle will not stop at the Science Hall or the Student Union. Instead, temporary stops are set up at the north entrance of the Library and behind the Dining Hall. The new route map is available on our website. We expect this detour to last for approximately three weeks. Regular service will resume once the construction is complete. Thank you for your patience.",
+      "questions": [
+        {
+          "question_type": "detail",
+          "question": "What is the reason for the shuttle route change?",
+          "options": {
+            "A": "A special campus event",
+            "B": "Construction on University Avenue",
+            "C": "A shortage of shuttle bus drivers",
+            "D": "Regular seasonal schedule adjustment"
+          },
+          "answer": "B",
+          "explanation": "The announcement begins, 'Due to construction on University Avenue, the Blue Line shuttle route will be altered.'"
+        },
+        {
+          "question_type": "inference",
+          "question": "Where should a student who needs to go to the Science Hall get off the shuttle?",
+          "options": {
+            "A": "At the regular Science Hall stop.",
+            "B": "At the temporary stop behind the Dining Hall.",
+            "C": "At the Student Union stop as usual.",
+            "D": "The shuttle no longer serves that area directly."
+          },
+          "answer": "D",
+          "explanation": "The announcement states the shuttle 'will not stop at the Science Hall,' implying a student would need to get off at a temporary stop and walk."
+        }
+      ],
+      "id": "la_gen_1776236579185_009"
+    },
+    {
+      "context": "classroom",
+      "situation": "exam format change from essay to multiple choice",
+      "speaker_role": "Dr. Williams",
+      "announcement": "I have an update about the final exam. After reviewing the syllabus, I've decided to change the format. Instead of one long essay, the exam will now consist of fifty multiple-choice questions covering all the major concepts from the lectures and the textbook. This will allow me to test a broader range of material. The exam date and time remain the same. I will post a study guide on the course portal by Friday. This change is final, so please prepare accordingly.",
+      "questions": [
+        {
+          "question_type": "detail",
+          "question": "What is the new format for the final exam?",
+          "options": {
+            "A": "Two short essay questions",
+            "B": "An oral presentation",
+            "C": "Fifty multiple-choice questions",
+            "D": "A combination of essays and short answers"
+          },
+          "answer": "C",
+          "explanation": "The professor directly states, 'the exam will now consist of fifty multiple-choice questions.'"
+        },
+        {
+          "question_type": "inference",
+          "question": "Why did the professor most likely make this change?",
+          "options": {
+            "A": "To reduce the amount of grading required.",
+            "B": "To test a wider variety of course content.",
+            "C": "Because students requested an easier format.",
+            "D": "To align with the format of the midterm exam."
+          },
+          "answer": "B",
+          "explanation": "The professor says the new format 'will allow me to test a broader range of material,' implying a wider variety of content will be covered."
+        },
+        {
+          "question_type": "main_idea",
+          "question": "What is the main point of the professor's announcement?",
+          "options": {
+            "A": "To postpone the final exam to a later date",
+            "B": "To announce a significant change in exam structure",
+            "C": "To remind students about the required textbook",
+            "D": "To cancel the final exam entirely"
+          },
+          "answer": "B",
+          "explanation": "The core message is informing students of the change from an essay exam to a multiple-choice exam."
+        }
+      ],
+      "id": "la_gen_1776236579185_010"
+    }
+  ]
+}

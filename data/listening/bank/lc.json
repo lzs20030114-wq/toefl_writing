@@ -1,0 +1,566 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "context": "campus",
+      "situation": "student talking to dorm RA about noise complaint",
+      "speakers": [
+        {
+          "name": "Casey",
+          "role": "student"
+        },
+        {
+          "name": "Sarah",
+          "role": "resident_advisor"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Casey",
+          "text": "Hey Sarah, got a sec? I really need to talk about my neighbor."
+        },
+        {
+          "speaker": "Sarah",
+          "text": "Sure, Casey. What's going on?"
+        },
+        {
+          "speaker": "Casey",
+          "text": "It's the music. Every night after midnight, it's so loud I can't sleep."
+        },
+        {
+          "speaker": "Sarah",
+          "text": "Oh, that's not good. Have you tried talking to them directly?"
+        },
+        {
+          "speaker": "Casey",
+          "text": "Yeah, I knocked last night. They turned it down, but it was back up in an hour."
+        },
+        {
+          "speaker": "Sarah",
+          "text": "Hmm, okay. For a formal complaint, I need the room number and specific times."
+        },
+        {
+          "speaker": "Casey",
+          "text": "It's 305. And it's always like 12:30 to 2 AM."
+        },
+        {
+          "speaker": "Sarah",
+          "text": "Got it. I'll speak to them today. If it continues, we can escalate."
+        },
+        {
+          "speaker": "Casey",
+          "text": "Thanks, I appreciate it. I just need some quiet to study."
+        }
+      ],
+      "questions": [
+        {
+          "question_type": "detail",
+          "question": "What specific action has Casey already taken regarding the noise?",
+          "options": {
+            "A": "She filed a formal written complaint with the housing office.",
+            "B": "She asked the RA to immediately confront the neighbor.",
+            "C": "She spoke to the neighbor about the problem herself.",
+            "D": "She recorded the noise to use as evidence."
+          },
+          "answer": "C",
+          "explanation": "Casey states, 'I knocked last night. They turned it down...' indicating she already spoke to the neighbor directly."
+        },
+        {
+          "question_type": "inference",
+          "question": "What will Sarah most likely do immediately after this conversation?",
+          "options": {
+            "A": "Escalate the complaint to the campus police.",
+            "B": "Visit room 305 to address the issue.",
+            "C": "Ask Casey to gather more evidence over the weekend.",
+            "D": "Schedule a meeting between Casey and the neighbor."
+          },
+          "answer": "B",
+          "explanation": "Sarah says, 'I'll speak to them today,' implying her next step is to directly address the neighbor in room 305."
+        }
+      ],
+      "id": "lc_gen_1776236749905_001"
+    },
+    {
+      "context": "daily_life",
+      "situation": "student checking in at campus health center",
+      "speakers": [
+        {
+          "name": "Avery",
+          "role": "student"
+        },
+        {
+          "name": "Jordan",
+          "role": "receptionist"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Avery",
+          "text": "Hi, I have an appointment? It's at 10:30."
+        },
+        {
+          "speaker": "Jordan",
+          "text": "Name, please?"
+        },
+        {
+          "speaker": "Avery",
+          "text": "Avery Jones."
+        },
+        {
+          "speaker": "Jordan",
+          "text": "Okay, I see you. For Dr. Lee. You're a few minutes early, that's fine."
+        },
+        {
+          "speaker": "Avery",
+          "text": "Great. Um, do I need to fill anything out? I've never been here before."
+        },
+        {
+          "speaker": "Jordan",
+          "text": "Yes, just this new patient form. Here's a clipboard and pen."
+        },
+        {
+          "speaker": "Avery",
+          "text": "Thanks. Also, will this be covered by the student insurance?"
+        },
+        {
+          "speaker": "Jordan",
+          "text": "For a routine visit, yes. If you need labs or meds, there might be a small copay."
+        },
+        {
+          "speaker": "Avery",
+          "text": "Okay, that's a relief. I'll just fill this out then."
+        },
+        {
+          "speaker": "Jordan",
+          "text": "Perfect. Have a seat, and we'll call you when the doctor's ready."
+        }
+      ],
+      "questions": [
+        {
+          "question_type": "detail",
+          "question": "Why does Jordan give Avery a clipboard?",
+          "options": {
+            "A": "To sign a consent form for a specific procedure.",
+            "B": "To complete a new patient information form.",
+            "C": "To write down a list of current symptoms.",
+            "D": "To provide proof of student insurance coverage."
+          },
+          "answer": "B",
+          "explanation": "Jordan explicitly states, 'Yes, just this new patient form. Here's a clipboard and pen.'"
+        },
+        {
+          "question_type": "inference",
+          "question": "What can be inferred about Avery's visit?",
+          "options": {
+            "A": "Avery is running late for a very important appointment.",
+            "B": "Avery is concerned about the potential cost of the visit.",
+            "C": "Avery is seeing a specialist for a serious condition.",
+            "D": "Avery has visited this health center many times before."
+          },
+          "answer": "B",
+          "explanation": "Avery asks if the visit is covered by insurance and expresses relief when told it is, implying cost was a concern."
+        }
+      ],
+      "id": "lc_gen_1776236749905_002"
+    },
+    {
+      "context": "campus",
+      "situation": "student asking admin staff about registration",
+      "speakers": [
+        {
+          "name": "Rachel",
+          "role": "student"
+        },
+        {
+          "name": "Casey",
+          "role": "admin_staff"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Rachel",
+          "text": "Excuse me, I'm trying to register for Chemistry 101, but the portal says it's closed."
+        },
+        {
+          "speaker": "Casey",
+          "text": "Let me check... Hmm, it looks full. There's a waitlist, though."
+        },
+        {
+          "speaker": "Rachel",
+          "text": "A waitlist? How does that work?"
+        },
+        {
+          "speaker": "Casey",
+          "text": "You add yourself online. If a spot opens, you get an email and have 24 hours to register."
+        },
+        {
+          "speaker": "Rachel",
+          "text": "Oh, okay. What are my chances? I really need this class for my major."
+        },
+        {
+          "speaker": "Casey",
+          "text": "Pretty good, actually. A lot of students drop in the first week. Just check your email constantly."
+        },
+        {
+          "speaker": "Rachel",
+          "text": "I will. And if I don't get in...?"
+        },
+        {
+          "speaker": "Casey",
+          "text": "Then come see me. We can look at alternative courses or a permission number from the professor."
+        },
+        {
+          "speaker": "Rachel",
+          "text": "Alright, thanks for your help. I'll go get on that list now."
+        }
+      ],
+      "questions": [
+        {
+          "question_type": "detail",
+          "question": "According to Casey, what must Rachel do if a spot in the class opens?",
+          "options": {
+            "A": "Call the admin office within one business day.",
+            "B": "Register for the class within 24 hours of notification.",
+            "C": "Meet with the professor to get a permission number.",
+            "D": "Immediately pay the tuition for the course."
+          },
+          "answer": "B",
+          "explanation": "Casey says, 'If a spot opens, you get an email and have 24 hours to register.'"
+        },
+        {
+          "question_type": "inference",
+          "question": "What does Casey imply about the first week of the chemistry class?",
+          "options": {
+            "A": "It is when the most difficult material is covered.",
+            "B": "It is when many students decide to drop the course.",
+            "C": "It is the only time to join the class waitlist.",
+            "D": "It is when the professor distributes permission numbers."
+          },
+          "answer": "B",
+          "explanation": "Casey states, 'A lot of students drop in the first week,' implying that's why Rachel's chances on the waitlist are good."
+        }
+      ],
+      "id": "lc_gen_1776236749905_003"
+    },
+    {
+      "context": "daily_life",
+      "situation": "student discussing lease renewal with landlord",
+      "speakers": [
+        {
+          "name": "Taylor",
+          "role": "student"
+        },
+        {
+          "name": "James",
+          "role": "landlord"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Taylor",
+          "text": "Hi James, I got your email about renewing the lease. I'd like to stay another year."
+        },
+        {
+          "speaker": "James",
+          "text": "Great, Taylor. You've been a good tenant. The new lease is ready, but there's a small rent increase."
+        },
+        {
+          "speaker": "Taylor",
+          "text": "An increase? How much are we talking?"
+        },
+        {
+          "speaker": "James",
+          "text": "Just fifty dollars a month. It's standard, covers rising property taxes."
+        },
+        {
+          "speaker": "Taylor",
+          "text": "Fifty... Okay, I guess that's manageable. Does it include anything new, like parking?"
+        },
+        {
+          "speaker": "James",
+          "text": "Parking's still extra, I'm afraid. But I did have the HVAC serviced, so you shouldn't have AC issues again."
+        },
+        {
+          "speaker": "Taylor",
+          "text": "That's a plus. Last summer was rough. Can I sign the new lease tomorrow?"
+        },
+        {
+          "speaker": "James",
+          "text": "Sure thing. Stop by the office after noon. I'll have it printed."
+        },
+        {
+          "speaker": "Taylor",
+          "text": "Perfect. See you then."
+        }
+      ],
+      "questions": [
+        {
+          "question_type": "detail",
+          "question": "What reason does James give for the rent increase?",
+          "options": {
+            "A": "To pay for a new parking area for tenants.",
+            "B": "To cover increased property tax costs.",
+            "C": "To fund major renovations to the building.",
+            "D": "To compensate for Taylor's past late payments."
+          },
+          "answer": "B",
+          "explanation": "James explicitly states the increase is 'standard, covers rising property taxes.'"
+        },
+        {
+          "question_type": "inference",
+          "question": "What problem did Taylor likely experience in the previous year?",
+          "options": {
+            "A": "Difficulty finding parking near the apartment.",
+            "B": "Issues with the air conditioning system.",
+            "C": "Frequent disagreements with the landlord.",
+            "D": "Problems paying the rent on time."
+          },
+          "answer": "B",
+          "explanation": "Taylor mentions 'Last summer was rough,' and James connects this by saying he serviced the HVAC so Taylor 'shouldn't have AC issues again.'"
+        }
+      ],
+      "id": "lc_gen_1776236749905_004"
+    },
+    {
+      "context": "daily_life",
+      "situation": "friends planning a weekend trip",
+      "speakers": [
+        {
+          "name": "Alex",
+          "role": "student"
+        },
+        {
+          "name": "Morgan",
+          "role": "student"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Alex",
+          "text": "So, for the trip this weekend... I was thinking we could camp at Lake Serene."
+        },
+        {
+          "speaker": "Morgan",
+          "text": "Camping? I don't know. The forecast says it might rain."
+        },
+        {
+          "speaker": "Alex",
+          "text": "Oh, I didn't check. Rain would be a bummer. We could get a cabin instead?"
+        },
+        {
+          "speaker": "Morgan",
+          "text": "Cabins are pricey, though. What about just a day hike? We drive up, hike, and come back."
+        },
+        {
+          "speaker": "Alex",
+          "text": "That's less fun. I wanted to get away from campus overnight."
+        },
+        {
+          "speaker": "Morgan",
+          "text": "Okay, how about this: we camp, but we also book a cheap motel as a backup? If it pours, we bail."
+        },
+        {
+          "speaker": "Alex",
+          "text": "That's smart! I can look for a refundable motel room near the lake."
+        },
+        {
+          "speaker": "Morgan",
+          "text": "Perfect. And I'll double-check the gear to make sure our tent is waterproof."
+        },
+        {
+          "speaker": "Alex",
+          "text": "Deal. Let's hope for clear skies, but have a plan B."
+        }
+      ],
+      "questions": [
+        {
+          "question_type": "detail",
+          "question": "What is Morgan's initial concern about Alex's camping idea?",
+          "options": {
+            "A": "Camping gear is too expensive to rent.",
+            "B": "The weather might be bad.",
+            "C": "The lake is too far to drive to.",
+            "D": "Camping permits are difficult to obtain."
+          },
+          "answer": "B",
+          "explanation": "Morgan responds to the camping idea by saying, 'The forecast says it might rain.'"
+        },
+        {
+          "question_type": "inference",
+          "question": "What do the friends finally decide to do?",
+          "options": {
+            "A": "Cancel the trip entirely due to the weather risk.",
+            "B": "Go camping but have a motel reservation as a backup.",
+            "C": "Stay in a cabin regardless of the cost.",
+            "D": "Take a day hike instead of an overnight trip."
+          },
+          "answer": "B",
+          "explanation": "They agree on Morgan's plan: 'we camp, but we also book a cheap motel as a backup.' Alex agrees to look for a refundable room."
+        }
+      ],
+      "id": "lc_gen_1776236749905_005"
+    },
+    {
+      "context": "campus",
+      "situation": "student calling IT help desk about login issue",
+      "speakers": [
+        {
+          "name": "Taylor",
+          "role": "student"
+        },
+        {
+          "name": "Maria",
+          "role": "it_staff"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Maria",
+          "text": "IT help desk, this is Maria."
+        },
+        {
+          "speaker": "Taylor",
+          "text": "Hi, I can't log into the student portal. It says my password's invalid."
+        },
+        {
+          "speaker": "Maria",
+          "text": "Okay, let's start with the basics. Are you sure you're using your full student email?"
+        },
+        {
+          "speaker": "Taylor",
+          "text": "Yeah, taylor.jones@university.edu. I just changed the password yesterday, actually."
+        },
+        {
+          "speaker": "Maria",
+          "text": "Ah, that might be it. Sometimes the system takes a few hours to update. Did you get a confirmation email?"
+        },
+        {
+          "speaker": "Taylor",
+          "text": "I think so... Wait, no, I don't see one."
+        },
+        {
+          "speaker": "Maria",
+          "text": "Then the change probably didn't go through. I can reset it for you right now. You'll get a temporary password."
+        },
+        {
+          "speaker": "Taylor",
+          "text": "That would be great. I need to register for classes today."
+        },
+        {
+          "speaker": "Maria",
+          "text": "No problem. Check your email in two minutes. Use the temp password, then create a new one immediately."
+        },
+        {
+          "speaker": "Taylor",
+          "text": "Will do. Thanks for your help, Maria."
+        }
+      ],
+      "questions": [
+        {
+          "question_type": "detail",
+          "question": "Why does Maria think Taylor's password change might not have worked?",
+          "options": {
+            "A": "Taylor did not use a complex enough password.",
+            "B": "The system update can sometimes be delayed.",
+            "C": "Taylor likely entered the wrong student email address.",
+            "D": "Password changes are not allowed right before registration."
+          },
+          "answer": "B",
+          "explanation": "Maria says, 'Sometimes the system takes a few hours to update.'"
+        },
+        {
+          "question_type": "inference",
+          "question": "What will Taylor need to do immediately after using the temporary password?",
+          "options": {
+            "A": "Call the help desk again to confirm the login worked.",
+            "B": "Wait 24 hours before attempting to log in again.",
+            "C": "Create a new permanent password.",
+            "D": "Check for a confirmation email from the day before."
+          },
+          "answer": "C",
+          "explanation": "Maria's instructions are: 'Use the temp password, then create a new one immediately.'"
+        }
+      ],
+      "id": "lc_gen_1776236749905_006"
+    },
+    {
+      "context": "daily_life",
+      "situation": "roommates discussing apartment chores",
+      "speakers": [
+        {
+          "name": "David",
+          "role": "roommate"
+        },
+        {
+          "name": "Lisa",
+          "role": "roommate"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "David",
+          "text": "Hey Lisa, we need to talk about the kitchen. The sink's been full of dishes for two days."
+        },
+        {
+          "speaker": "Lisa",
+          "text": "I know, I'm sorry. I had that huge biology midterm. I'll do them tonight, I promise."
+        },
+        {
+          "speaker": "David",
+          "text": "It's just... we agreed. Whoever cooks, the other cleans. I cooked last night."
+        },
+        {
+          "speaker": "Lisa",
+          "text": "You're right, you're right. I dropped the ball. Tonight, I'll clean everything, even the pans."
+        },
+        {
+          "speaker": "David",
+          "text": "Thanks. And look, maybe our system isn't working during exam weeks. What if we just alternate days?"
+        },
+        {
+          "speaker": "Lisa",
+          "text": "That could be simpler. Like, I'm responsible for Mondays, Wednesdays, Fridays?"
+        },
+        {
+          "speaker": "David",
+          "text": "Yeah, and I'll take the other days. That way it's clear, even when we're busy."
+        },
+        {
+          "speaker": "Lisa",
+          "text": "Deal. And again, sorry about the mess. I'll get it handled right after class."
+        },
+        {
+          "speaker": "David",
+          "text": "Okay, cool. Good luck on your midterm, by the way."
+        }
+      ],
+      "questions": [
+        {
+          "question_type": "detail",
+          "question": "What was the roommates' original agreement about kitchen chores?",
+          "options": {
+            "A": "They would hire a cleaning service every other week.",
+            "B": "The person who did not cook would clean the dishes.",
+            "C": "They would each clean their own dishes immediately.",
+            "D": "They would alternate full cleaning days each week."
+          },
+          "answer": "B",
+          "explanation": "David states, 'we agreed. Whoever cooks, the other cleans.'"
+        },
+        {
+          "question_type": "inference",
+          "question": "Why does David suggest changing the chore system?",
+          "options": {
+            "A": "He believes Lisa is intentionally avoiding her chores.",
+            "B": "He thinks the current system fails during busy academic periods.",
+            "C": "He wants to take on more chores to help Lisa study.",
+            "D": "He is planning to cook less often in the future."
+          },
+          "answer": "B",
+          "explanation": "David says, 'maybe our system isn't working during exam weeks,' implying it breaks down when they are busy with academics."
+        }
+      ],
+      "id": "lc_gen_1776236749905_007"
+    }
+  ]
+}

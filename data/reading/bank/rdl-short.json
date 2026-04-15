@@ -1183,6 +1183,2174 @@
         "status": "passed",
         "accuracy": "2/2"
       }
+    },
+    {
+      "id": "rdl_gen_1776154976892_001",
+      "variant": "short",
+      "text": "GIVE BLOOD, GET A SHIRT! Campus Blood Drive. May 15-16, 10 AM-4 PM. Anderson Hall Lobby. All donors receive a free T-shirt and a $5 campus dining voucher. Walk-ins welcome. Bring ID. Sponsored by the Student Health Office.",
+      "word_count": 38,
+      "genre": "flyer",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776154976892_001_q1",
+          "question_type": "detail",
+          "stem": "According to the flyer, what do donors receive?",
+          "options": {
+            "A": "A free meal at a campus restaurant",
+            "B": "A parking pass for Anderson Hall",
+            "C": "A health screening from the Student Health Office",
+            "D": "A dining voucher and a complimentary shirt"
+          },
+          "correct_answer": "D",
+          "explanation": "The flyer states donors receive 'a free T-shirt and a $5 campus dining voucher.'"
+        },
+        {
+          "qid": "rdl_gen_1776154976892_001_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the blood drive?",
+          "options": {
+            "A": "Appointments are not strictly required.",
+            "B": "It is only for students with valid health insurance.",
+            "C": "It takes place over a single afternoon.",
+            "D": "The dining voucher must be used on May 15."
+          },
+          "correct_answer": "A",
+          "explanation": "The flyer says 'Walk-ins welcome,' which implies people can participate without a prior appointment."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy"
+    },
+    {
+      "id": "rdl_gen_1776154976892_002",
+      "variant": "short",
+      "text": "STUDENT THEATER PRESENTS: 'Midnight Library'! Shows: March 3-7 at 7:30 PM. University Theater, Room 204. Tickets: $5 for students, $10 general. Purchase at the door or online. Seating is limited. Directed by Leo Chen.",
+      "word_count": 34,
+      "genre": "flyer",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776154976892_002_q1",
+          "question_type": "detail",
+          "stem": "Where will the theater performances be held?",
+          "options": {
+            "A": "In the main campus library",
+            "B": "At an off-campus venue",
+            "C": "In Anderson Hall Lobby",
+            "D": "In Room 204 of University Theater"
+          },
+          "correct_answer": "D",
+          "explanation": "The flyer specifies the location as 'University Theater, Room 204.'"
+        },
+        {
+          "qid": "rdl_gen_1776154976892_002_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about ticket availability?",
+          "options": {
+            "A": "It might be wise to buy tickets in advance.",
+            "B": "Online tickets are more expensive than door tickets.",
+            "C": "Only students are permitted to attend.",
+            "D": "Tickets are free for university staff."
+          },
+          "correct_answer": "A",
+          "explanation": "The notice that 'Seating is limited' suggests tickets could sell out, making advance purchase a good idea."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy"
+    },
+    {
+      "id": "rdl_gen_1776154976892_003",
+      "variant": "short",
+      "text": "Dear Biology 101 Students, This is a reminder for the mandatory lab safety training. It will be held this Friday at 2:00 PM in Science Building, Room 105. Please bring your student ID. Attendance will be recorded. Regards, Dr. Park",
+      "word_count": 40,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776154976892_003_q1",
+          "question_type": "detail",
+          "stem": "What are students instructed to bring to the training?",
+          "options": {
+            "A": "A completed safety waiver form",
+            "B": "Their student identification card",
+            "C": "Personal protective equipment",
+            "D": "A textbook for Biology 101"
+          },
+          "correct_answer": "B",
+          "explanation": "The email explicitly states, 'Please bring your student ID.'"
+        },
+        {
+          "qid": "rdl_gen_1776154976892_003_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the training session?",
+          "options": {
+            "A": "It is optional for most students.",
+            "B": "It will be led by a teaching assistant.",
+            "C": "Student presence will be officially noted.",
+            "D": "It will last for several hours."
+          },
+          "correct_answer": "C",
+          "explanation": "The email says 'Attendance will be recorded,' which means their presence will be officially noted."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy"
+    },
+    {
+      "id": "rdl_gen_1776154976892_004",
+      "variant": "short",
+      "text": "Hi Sam, Thank you for volunteering as a campus tour guide. Your shift is confirmed for Saturday, April 10, from 9:00 AM to 12:00 PM. Meet at the Welcome Center. You'll receive a $10 lunch stipend. Please confirm. Best, Ms. Chen",
+      "word_count": 41,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776154976892_004_q1",
+          "question_type": "detail",
+          "stem": "What time does Sam's volunteer shift begin?",
+          "options": {
+            "A": "At 8:00 in the morning",
+            "B": "At 9:00 in the morning",
+            "C": "At 10:00 in the morning",
+            "D": "At 12:00 in the afternoon"
+          },
+          "correct_answer": "B",
+          "explanation": "The email states the shift is 'from 9:00 AM to 12:00 PM.'"
+        },
+        {
+          "qid": "rdl_gen_1776154976892_004_q2",
+          "question_type": "inference",
+          "stem": "What is Sam most likely expected to do after reading this email?",
+          "options": {
+            "A": "Purchase a uniform for the tour.",
+            "B": "Reply to confirm the shift details.",
+            "C": "Go directly to the Welcome Center on Saturday.",
+            "D": "Collect the lunch stipend in advance."
+          },
+          "correct_answer": "B",
+          "explanation": "The email ends with the instruction 'Please confirm,' implying Sam should reply."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy"
+    },
+    {
+      "id": "rdl_gen_1776155072846_002",
+      "variant": "short",
+      "text": "NOTICE: The South Lot B parking area will be closed for repaving from May 15 to May 17. Alternative parking is available in the North Garage. All vehicles must be removed by 7:00 PM on May 14.",
+      "word_count": 37,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776155072846_002_q1",
+          "question_type": "detail",
+          "stem": "Where should drivers park during the closure?",
+          "options": {
+            "A": "In the adjacent South Lot A",
+            "B": "At the Anderson Hall visitor lot",
+            "C": "In the North Garage",
+            "D": "On any campus street"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice directly states 'Alternative parking is available in the North Garage.'"
+        },
+        {
+          "qid": "rdl_gen_1776155072846_002_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the notice?",
+          "options": {
+            "A": "The work will be completed early.",
+            "B": "The lot will be inaccessible for multiple days.",
+            "C": "Only faculty cars need to be moved.",
+            "D": "The repaving was scheduled by students."
+          },
+          "correct_answer": "B",
+          "explanation": "The closure dates 'from May 15 to May 17' indicate a multi-day period where the lot cannot be used."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_1776155072846_003",
+      "variant": "short",
+      "text": "LIBRARY HOURS ADJUSTMENT: During Spring Break, March 11-15, the main library will operate from 10:00 AM to 4:00 PM daily. Regular hours resume on Monday, March 18. The 24-hour study room in Anderson Hall will remain accessible.",
+      "word_count": 37,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776155072846_003_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, when do regular library hours resume?",
+          "options": {
+            "A": "On Sunday, March 17",
+            "B": "At the end of Spring Break",
+            "C": "After the 24-hour room closes",
+            "D": "On Monday, March 18"
+          },
+          "correct_answer": "D",
+          "explanation": "The notice clearly states 'Regular hours resume on Monday, March 18.'"
+        },
+        {
+          "qid": "rdl_gen_1776155072846_003_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the library's Spring Break schedule?",
+          "options": {
+            "A": "It is more convenient for most students.",
+            "B": "The building is open for fewer hours.",
+            "C": "All study spaces will be closed.",
+            "D": "No librarians will be present."
+          },
+          "correct_answer": "B",
+          "explanation": "The notice specifies reduced hours ('10:00 AM to 4:00 PM daily') compared to typical, longer library hours."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_1776155072846_006",
+      "variant": "short",
+      "text": "NETWORK MAINTENANCE: Campus Wi-Fi will be unavailable in all academic buildings from 11:00 PM on Saturday, May 4, until 5:00 AM on Sunday, May 5, for essential system upgrades. Please plan your work accordingly. We apologize for the inconvenience.",
+      "word_count": 39,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776155072846_006_q1",
+          "question_type": "detail",
+          "stem": "When will the Wi-Fi service interruption begin?",
+          "options": {
+            "A": "At 11:00 PM on Saturday",
+            "B": "Early on Sunday morning",
+            "C": "Throughout the weekend",
+            "D": "During daytime hours on May 5"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice specifies the Wi-Fi will be unavailable 'from 11:00 PM on Saturday, May 4.'"
+        },
+        {
+          "qid": "rdl_gen_1776155072846_006_q2",
+          "question_type": "vocabulary_in_context",
+          "stem": "The word 'essential' in the notice is closest in meaning to",
+          "options": {
+            "A": "necessary",
+            "B": "complicated",
+            "C": "optional",
+            "D": "experimental"
+          },
+          "correct_answer": "A",
+          "explanation": "In this context, 'essential' describes upgrades that are crucial or required, making 'necessary' the best synonym."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_1776155185801_001",
+      "variant": "short",
+      "text": "Due to road construction, the Green Line campus shuttle will be rerouted from May 15-19. Stops at Anderson Hall and South Lot B are temporarily suspended. A temporary stop will be established at the Union Building. A $5 late fee applies for parking pass adjustments not made by Friday.",
+      "word_count": 49,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776155185801_001_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, what is a consequence of the shuttle detour?",
+          "options": {
+            "A": "To receive a refund for the shuttle pass",
+            "B": "To use a temporary stop at the Union Building",
+            "C": "To avoid a parking ticket at Anderson Hall",
+            "D": "To pay a higher fare for the Green Line"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice states a temporary stop will be established at the Union Building due to the rerouting."
+        },
+        {
+          "qid": "rdl_gen_1776155185801_001_q2",
+          "question_type": "detail",
+          "stem": "What specific action must be taken by Friday to avoid a penalty?",
+          "options": {
+            "A": "To adjust parking passes for a fee waiver",
+            "B": "To register for an alternative shuttle route",
+            "C": "To submit a construction complaint form",
+            "D": "To confirm attendance at a facilities meeting"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice indicates a $5 late fee applies for parking pass adjustments not made by Friday."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy"
+    },
+    {
+      "id": "rdl_gen_1776155185801_002",
+      "variant": "short",
+      "text": "Dear Student, Your meal plan has a remaining balance of $42.75 for this semester. To receive a refund, please complete the online form by March 10. Refunds will be processed within 10 business days. Sincerely, Ms. Chen, Dining Services",
+      "word_count": 39,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776155185801_002_q1",
+          "question_type": "detail",
+          "stem": "What is the stated purpose of the online form?",
+          "options": {
+            "A": "To request a refund for a meal plan balance",
+            "B": "To renew the meal plan for the next semester",
+            "C": "To report an issue with dining service quality",
+            "D": "To check the current balance on the card"
+          },
+          "correct_answer": "A",
+          "explanation": "The email says to complete the online form to receive a refund for the remaining balance."
+        },
+        {
+          "qid": "rdl_gen_1776155185801_002_q2",
+          "question_type": "detail",
+          "stem": "According to the email, by when must the form be submitted?",
+          "options": {
+            "A": "Within 10 business days of receipt",
+            "B": "Before the end of the current semester",
+            "C": "By the specified date of March 10",
+            "D": "After the balance is confirmed by staff"
+          },
+          "correct_answer": "C",
+          "explanation": "The email specifies the form must be completed by March 10."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy"
+    },
+    {
+      "id": "rdl_gen_1776155185801_003",
+      "variant": "short",
+      "text": "Just tried the new iced matcha latte at Campus Grounds! It's only $4.50 and so refreshing for studying. Perfect for this warm weather. They have it all week until 8 PM. You've got to try it!",
+      "word_count": 36,
+      "genre": "social_media",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776155185801_003_q1",
+          "question_type": "detail",
+          "stem": "What specific detail is given about the new drink?",
+          "options": {
+            "A": "Its price is four dollars and fifty cents.",
+            "B": "It is a hot beverage for cold days.",
+            "C": "It is available exclusively on weekends.",
+            "D": "Its main ingredient is coffee."
+          },
+          "correct_answer": "A",
+          "explanation": "The post states the iced matcha latte is 'only $4.50'."
+        },
+        {
+          "qid": "rdl_gen_1776155185801_003_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the person who wrote the post?",
+          "options": {
+            "A": "They work at the Campus Grounds café.",
+            "B": "They are dissatisfied with the drink's quality.",
+            "C": "They enjoyed the drink they purchased.",
+            "D": "They prefer to study in the library."
+          },
+          "correct_answer": "C",
+          "explanation": "The post uses positive language like 'so refreshing' and 'You've got to try it!', implying the writer enjoyed it."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy"
+    },
+    {
+      "id": "rdl_gen_1776155185801_004",
+      "variant": "short",
+      "text": "Hi Alex, This confirms your tutoring appointment with Dr. Park for Thursday at 3:00 PM. Please meet in Room 204 of the Science Building. Remember to bring your textbook and notes. There's a $10 fee for cancellations with less than 24 hours' notice. Best, Tutoring Center",
+      "word_count": 46,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776155185801_004_q1",
+          "question_type": "detail",
+          "stem": "Where should Alex go for the confirmed appointment?",
+          "options": {
+            "A": "To the main library study room",
+            "B": "To the front desk of the Tutoring Center",
+            "C": "To Dr. Park's office in Anderson Hall",
+            "D": "To Room 204 of the Science Building"
+          },
+          "correct_answer": "D",
+          "explanation": "The email instructs Alex to meet in Room 204 of the Science Building."
+        },
+        {
+          "qid": "rdl_gen_1776155185801_004_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the cancellation policy?",
+          "options": {
+            "A": "All cancellations require a doctor's note.",
+            "B": "A fee is charged for last-minute cancellations.",
+            "C": "Appointments can be rescheduled for free anytime.",
+            "D": "The fee is refundable if you rebook later."
+          },
+          "correct_answer": "B",
+          "explanation": "The email mentions a $10 fee for cancellations with less than 24 hours' notice, implying a charge for last-minute changes."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy"
+    },
+    {
+      "id": "rdl_gen_1776155185801_005",
+      "variant": "short",
+      "text": "Notice: HVAC maintenance in Dalton Hall is scheduled for April 5-7. During this period, room temperatures may fluctuate. Occupants are advised to dress in layers. For urgent issues, contact the Facilities Office at ext. 5555. We apologize for the inconvenience.",
+      "word_count": 40,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776155185801_005_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, what should occupants do during the maintenance period?",
+          "options": {
+            "A": "To vacate the building entirely for three days",
+            "B": "To report all temperature changes immediately",
+            "C": "To schedule their own repair appointments",
+            "D": "To wear adaptable clothing like layers"
+          },
+          "correct_answer": "D",
+          "explanation": "The notice advises occupants to dress in layers due to potential temperature fluctuations."
+        },
+        {
+          "qid": "rdl_gen_1776155185801_005_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the nature of the upcoming work?",
+          "options": {
+            "A": "It will completely replace the building's heating system.",
+            "B": "It might cause temporary discomfort for building users.",
+            "C": "It is expected to lower everyone's utility bills.",
+            "D": "It requires all classes in Dalton Hall to be canceled."
+          },
+          "correct_answer": "B",
+          "explanation": "The notice warns of temperature fluctuations and apologizes for inconvenience, implying possible temporary discomfort."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy"
+    },
+    {
+      "id": "rdl_gen_1776164528187_001",
+      "variant": "short",
+      "text": "Spring Campus Cleanup! Join us this Saturday, April 20, from 10 AM to 1 PM. Meet at the Student Union. A $5 deposit is required for gloves and supplies, refundable upon return. Help keep our campus beautiful!",
+      "word_count": 37,
+      "genre": "flyer",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776164528187_001_q1",
+          "question_type": "detail",
+          "stem": "According to the flyer, what is the purpose of the $5?",
+          "options": {
+            "A": "To purchase a commemorative T-shirt",
+            "B": "To cover the cost of lunch for volunteers",
+            "C": "To pay for parking near the Student Union",
+            "D": "To secure equipment that will be returned"
+          },
+          "correct_answer": "D",
+          "explanation": "The flyer states the deposit is for gloves and supplies and is refundable upon their return."
+        },
+        {
+          "qid": "rdl_gen_1776164528187_001_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the cleanup event?",
+          "options": {
+            "A": "It is intended primarily for new students.",
+            "B": "Volunteers must provide their own tools.",
+            "C": "The organizers expect a very large turnout.",
+            "D": "Participants are not paying a permanent fee."
+          },
+          "correct_answer": "D",
+          "explanation": "Since the $5 is a refundable deposit, participants will get their money back, meaning it is not a permanent cost."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_1776164528187_003",
+      "variant": "short",
+      "text": "Give Blood, Save Lives! Campus Blood Drive: Tuesday, October 30, 9 AM–4 PM. Location: Anderson Hall Gym. All donors receive a free T-shirt and snacks. Appointments recommended; walk-ins welcome. Bring photo ID.",
+      "word_count": 32,
+      "genre": "flyer",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776164528187_003_q1",
+          "question_type": "detail",
+          "stem": "Where will the blood drive take place?",
+          "options": {
+            "A": "In the Student Health Center",
+            "B": "At the University Hospital",
+            "C": "Near the main library entrance",
+            "D": "In the Anderson Hall Gym"
+          },
+          "correct_answer": "D",
+          "explanation": "The flyer clearly states the location is the Anderson Hall Gym."
+        },
+        {
+          "qid": "rdl_gen_1776164528187_003_q2",
+          "question_type": "vocabulary_in_context",
+          "stem": "The word 'walk-ins' in the flyer is closest in meaning to",
+          "options": {
+            "A": "people who are exercising",
+            "B": "volunteers assisting donors",
+            "C": "donors without appointments",
+            "D": "staff managing the event"
+          },
+          "correct_answer": "C",
+          "explanation": "In this context, 'walk-ins' refers to potential donors who arrive without a prior scheduled appointment."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_1776164528187_004",
+      "variant": "short",
+      "text": "Hi Jordan, Thank you for participating in our sleep study last Friday. Your $15 compensation is ready for pickup at the Psychology Department office, Room 312, any weekday from 9 AM to 5 PM. Bring your student ID. Best, Ms. Chen",
+      "word_count": 41,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776164528187_004_q1",
+          "question_type": "detail",
+          "stem": "What does Jordan need to bring to collect the compensation?",
+          "options": {
+            "A": "The original study consent form",
+            "B": "A printed copy of this email",
+            "C": "A valid student identification card",
+            "D": "A receipt from the sleep study"
+          },
+          "correct_answer": "C",
+          "explanation": "The email instructs Jordan to 'Bring your student ID.'"
+        },
+        {
+          "qid": "rdl_gen_1776164528187_004_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the pickup?",
+          "options": {
+            "A": "It must be scheduled in advance.",
+            "B": "It is available during standard office hours.",
+            "C": "The money will be sent via direct deposit.",
+            "D": "Only the researcher can distribute it."
+          },
+          "correct_answer": "B",
+          "explanation": "The email states pickup is available 'any weekday from 9 AM to 5 PM,' which are typical business hours."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_1776164528187_005",
+      "variant": "short",
+      "text": "Dear Students, My regular office hours are canceled this Wednesday, November 8. I will hold extended hours instead on Thursday, November 9, from 1:00 to 5:00 PM in my usual office, Humanities 407. Please plan accordingly. Sincerely, Prof. Miller",
+      "word_count": 39,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776164528187_005_q1",
+          "question_type": "detail",
+          "stem": "When are Professor Miller's extended office hours?",
+          "options": {
+            "A": "On Thursday afternoon",
+            "B": "On Wednesday morning",
+            "C": "On Friday from 1 to 5 PM",
+            "D": "On Tuesday and Thursday"
+          },
+          "correct_answer": "A",
+          "explanation": "The email specifies extended hours on Thursday, November 9, from 1:00 to 5:00 PM."
+        },
+        {
+          "qid": "rdl_gen_1776164528187_005_q2",
+          "question_type": "vocabulary_in_context",
+          "stem": "The word 'accordingly' in the email is closest in meaning to",
+          "options": {
+            "A": "quickly",
+            "B": "separately",
+            "C": "appropriately",
+            "D": "frequently"
+          },
+          "correct_answer": "C",
+          "explanation": "Here, 'accordingly' means students should adjust their plans in an appropriate way based on this new schedule."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_1776164528187_006",
+      "variant": "short",
+      "text": "Notice: Unclaimed items from the Lost and Found in the University Center will be disposed of after Friday, May 3. Items may be claimed at the Information Desk until 6:00 PM on that date. Please present identification for verification.",
+      "word_count": 39,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776164528187_006_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, by when must items be claimed?",
+          "options": {
+            "A": "Before the end of the day on May 2",
+            "B": "By 6 PM on May 3",
+            "C": "During the first week of May",
+            "D": "Anytime before the disposal process"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice states items may be claimed 'until 6:00 PM on that date,' with 'that date' being Friday, May 3."
+        },
+        {
+          "qid": "rdl_gen_1776164528187_006_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about claiming a lost item?",
+          "options": {
+            "A": "A small fee is required for retrieval.",
+            "B": "Only electronic items are held until May 3.",
+            "C": "The Information Desk is open 24 hours.",
+            "D": "The owner must prove their identity."
+          },
+          "correct_answer": "D",
+          "explanation": "The notice instructs claimants to 'present identification for verification,' implying proof of identity is needed."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_1776164528187_007",
+      "variant": "short",
+      "text": "Heads up! The Computer Lab in the library is offering FREE printing until this Friday! It's a great chance to print those final papers without spending $3.50 at the usual spot. Just bring your own paper. #CampusPerk",
+      "word_count": 37,
+      "genre": "social_media",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776164528187_007_q1",
+          "question_type": "detail",
+          "stem": "What is the usual cost for printing mentioned in the post?",
+          "options": {
+            "A": "$3.50 per page",
+            "B": "$5.00 per document",
+            "C": "A $10.00 semester fee",
+            "D": "Fifteen cents per side"
+          },
+          "correct_answer": "A",
+          "explanation": "The post states the free printing saves you from 'spending $3.50 at the usual spot.'"
+        },
+        {
+          "qid": "rdl_gen_1776164528187_007_q2",
+          "question_type": "vocabulary_in_context",
+          "stem": "The phrase 'Heads up' in the post is closest in meaning to",
+          "options": {
+            "A": "Look down",
+            "B": "An advance warning",
+            "C": "Pay attention now",
+            "D": "Remember carefully"
+          },
+          "correct_answer": "B",
+          "explanation": "In informal communication, 'Heads up' is used to give an early alert or warning about something."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_1776164528187_008",
+      "variant": "short",
+      "text": "Shuttle Detour Notice: Due to construction, the Green Route shuttle will be detoured from Monday, September 11, through Friday, September 15. During this period, temporary stops will be located at the North Parking Garage and outside Wilson Hall.",
+      "word_count": 38,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776164528187_008_q1",
+          "question_type": "detail",
+          "stem": "Why is the shuttle route being changed?",
+          "options": {
+            "A": "Because of a special campus event",
+            "B": "Because of ongoing construction work",
+            "C": "Due to driver shortages this week",
+            "D": "For scheduled vehicle maintenance"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice begins, 'Due to construction,' which is the reason for the detour."
+        },
+        {
+          "qid": "rdl_gen_1776164528187_008_q2",
+          "question_type": "detail",
+          "stem": "Where is one temporary stop during the detour?",
+          "options": {
+            "A": "At the Student Union entrance",
+            "B": "Next to the Science Library",
+            "C": "Outside Wilson Hall",
+            "D": "Behind Anderson Hall"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice lists 'outside Wilson Hall' as one of the temporary stops."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_1776164825721_001",
+      "variant": "short",
+      "text": "Vending machine refunds are limited to $2.00 per transaction. Submit a claim form to the Facilities Office in Anderson Hall by 5:00 PM on Friday, May 15. Include your student ID and a description of the issue.",
+      "word_count": 37,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776164825721_001_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, what is the maximum refund amount for a vending machine issue?",
+          "options": {
+            "A": "$1.50 per claim",
+            "B": "$3.00 per transaction",
+            "C": "$2.00 per transaction",
+            "D": "$5.00 per form"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice states refunds are limited to $2.00 per transaction."
+        },
+        {
+          "qid": "rdl_gen_1776164825721_001_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the refund process?",
+          "options": {
+            "A": "It requires an online application.",
+            "B": "It involves submitting documentation.",
+            "C": "It is available at any campus office.",
+            "D": "It provides immediate cash payment."
+          },
+          "correct_answer": "B",
+          "explanation": "The requirement to submit a form with a description implies documentation is needed."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_1776164825721_002",
+      "variant": "short",
+      "text": "Hi Residents, A package for you is at the central mailroom. Please pick it up by 6 PM this Friday, March 7. You'll need your campus ID. Contact me with questions. Best, RA Jordan",
+      "word_count": 34,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776164825721_002_q1",
+          "question_type": "detail",
+          "stem": "According to the email, where should the package be collected?",
+          "options": {
+            "A": "At the dormitory front desk",
+            "B": "In the resident advisor's office",
+            "C": "At the central mailroom",
+            "D": "In the student union building"
+          },
+          "correct_answer": "C",
+          "explanation": "The email states the package is at the central mailroom."
+        },
+        {
+          "qid": "rdl_gen_1776164825721_002_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the pickup deadline?",
+          "options": {
+            "A": "It is flexible if you contact the RA.",
+            "B": "It is only for large packages.",
+            "C": "It applies to weekend hours.",
+            "D": "It is the last day for collection."
+          },
+          "correct_answer": "D",
+          "explanation": "The instruction to pick it up 'by' Friday implies it is the final day."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_1776164825721_003",
+      "variant": "short",
+      "text": "Dear Biology 101 Students, This is a reminder: Mandatory lab safety training is on Wednesday at 2:00 PM in Room 204. Attendance will be recorded. You can't participate in labs without it. Sincerely, Dr. Park",
+      "word_count": 35,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776164825721_003_q1",
+          "question_type": "detail",
+          "stem": "According to the email, when is the lab safety training?",
+          "options": {
+            "A": "On Monday morning",
+            "B": "On Tuesday at 3:00 PM",
+            "C": "On Wednesday at 2:00 PM",
+            "D": "On Thursday afternoon"
+          },
+          "correct_answer": "C",
+          "explanation": "The email states the training is on Wednesday at 2:00 PM."
+        },
+        {
+          "qid": "rdl_gen_1776164825721_003_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the training?",
+          "options": {
+            "A": "It is optional for new students.",
+            "B": "It replaces the first lab session.",
+            "C": "It is a requirement for lab work.",
+            "D": "It will be offered multiple times."
+          },
+          "correct_answer": "C",
+          "explanation": "The email states students cannot participate in labs without it, implying it is a requirement."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_1776164825721_004",
+      "variant": "short",
+      "text": "Unclaimed items from the Lost & Found will be donated on Friday, May 10. Claim items at the Student Services desk in Union Building by 4:00 PM. A $5.00 retrieval fee applies to electronics and wallets.",
+      "word_count": 36,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776164825721_004_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, what is the deadline to claim lost items?",
+          "options": {
+            "A": "Monday, May 6",
+            "B": "Friday, May 10, by 4:00 PM",
+            "C": "The following Monday",
+            "D": "Any day before donation"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice states items must be claimed by 4:00 PM on Friday, May 10."
+        },
+        {
+          "qid": "rdl_gen_1776164825721_004_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about retrieving a lost wallet?",
+          "options": {
+            "A": "It is free of charge.",
+            "B": "It requires an appointment.",
+            "C": "It can be done after May 10.",
+            "D": "It involves paying a fee."
+          },
+          "correct_answer": "D",
+          "explanation": "The notice states a $5.00 fee applies to wallets, implying a cost."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_1776164825721_005",
+      "variant": "short",
+      "text": "The elevator in Dalton Hall will be out of service from March 3-7 for maintenance. Please use the stairs or the elevator in the adjacent Science Building. We apologize for the inconvenience.",
+      "word_count": 32,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776164825721_005_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, how long will the elevator be unavailable?",
+          "options": {
+            "A": "For one day only",
+            "B": "From March 3 to March 7",
+            "C": "Throughout the month",
+            "D": "Until further notice"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice states the elevator will be out of service from March 3-7."
+        },
+        {
+          "qid": "rdl_gen_1776164825721_005_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the Science Building elevator?",
+          "options": {
+            "A": "It is also scheduled for maintenance.",
+            "B": "It is available as an alternative.",
+            "C": "It is for faculty use only.",
+            "D": "It is located far from Dalton Hall."
+          },
+          "correct_answer": "B",
+          "explanation": "The notice suggests using the elevator in the adjacent Science Building, implying it is an available alternative."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_1776164825721_006",
+      "variant": "short",
+      "text": "Dear Student, You have a package at the Campus Mail Center. Please collect it by Thursday. The center is open 9 AM-5 PM. Bring your student ID for verification. Regards, Mail Services",
+      "word_count": 32,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776164825721_006_q1",
+          "question_type": "detail",
+          "stem": "According to the email, what must be brought to collect the package?",
+          "options": {
+            "A": "A government-issued photo ID",
+            "B": "The package notification email",
+            "C": "A receipt for postage",
+            "D": "Your student ID"
+          },
+          "correct_answer": "D",
+          "explanation": "The email states to bring your student ID for verification."
+        },
+        {
+          "qid": "rdl_gen_1776164825721_006_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the mail center's hours?",
+          "options": {
+            "A": "They are standard business hours.",
+            "B": "They include evening availability.",
+            "C": "They change on weekends.",
+            "D": "They are only for package pickup."
+          },
+          "correct_answer": "A",
+          "explanation": "The hours of 9 AM-5 PM are typical standard business hours."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_1776164825721_007",
+      "variant": "short",
+      "text": "South Lot B will be closed for repaving from April 10-12. Permit holders may park in North Lot A at no extra charge. Vehicles remaining in South Lot B after 7:00 AM on April 10 will be towed at the owner's expense.",
+      "word_count": 42,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776164825721_007_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, where can permit holders park during the closure?",
+          "options": {
+            "A": "In North Lot A",
+            "B": "In any campus lot",
+            "C": "In visitor parking",
+            "D": "On adjacent streets"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice states permit holders may park in North Lot A."
+        },
+        {
+          "qid": "rdl_gen_1776164825721_007_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about parking in North Lot A during this period?",
+          "options": {
+            "A": "It does not require an additional fee.",
+            "B": "It is only for one day.",
+            "C": "It requires a special permit.",
+            "D": "It is less secure."
+          },
+          "correct_answer": "A",
+          "explanation": "The notice states parking is 'at no extra charge,' implying no additional fee."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_1776164825721_008",
+      "variant": "short",
+      "text": "The blue recycling bins near the library entrance have been relocated to the west side of the building, next to the bike racks, effective immediately. This change is to improve pedestrian access. Please use the new location.",
+      "word_count": 37,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776164825721_008_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, where are the recycling bins now located?",
+          "options": {
+            "A": "Inside the library lobby",
+            "B": "In the parking garage",
+            "C": "At the main entrance",
+            "D": "On the west side of the building"
+          },
+          "correct_answer": "D",
+          "explanation": "The notice states the bins are now on the west side of the building."
+        },
+        {
+          "qid": "rdl_gen_1776164825721_008_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the previous bin location?",
+          "options": {
+            "A": "It may have blocked walkways.",
+            "B": "It was more convenient.",
+            "C": "It was poorly marked.",
+            "D": "It was temporary."
+          },
+          "correct_answer": "A",
+          "explanation": "The stated reason for the move is to improve pedestrian access, implying the old location may have been obstructive."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_1776164825721_009",
+      "variant": "short",
+      "text": "Hi Class, My office hours this week (Oct 15-19) are changed to 10:00 AM-12:00 PM, Tuesday and Thursday only, in my office, Room 312. I won't be available on Wednesday. Email for appointments. Prof. Chen",
+      "word_count": 35,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776164825721_009_q1",
+          "question_type": "detail",
+          "stem": "According to the email, what are the professor's office hours on Tuesday?",
+          "options": {
+            "A": "10:00 AM to 12:00 PM",
+            "B": "1:00 PM to 3:00 PM",
+            "C": "By appointment only",
+            "D": "The usual Wednesday schedule"
+          },
+          "correct_answer": "A",
+          "explanation": "The email states office hours are 10:00 AM-12:00 PM on Tuesday and Thursday."
+        },
+        {
+          "qid": "rdl_gen_1776164825721_009_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about Wednesday this week?",
+          "options": {
+            "A": "It is a university holiday.",
+            "B": "The professor is not holding office hours.",
+            "C": "Office hours are in a different room.",
+            "D": "Students must schedule an appointment."
+          },
+          "correct_answer": "B",
+          "explanation": "The email states the professor won't be available on Wednesday, implying no office hours."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_1776164825721_010",
+      "variant": "short",
+      "text": "Bike racks on the Walker Hall sidewalk will be removed for repair from June 5-7. A temporary rack is available outside the gym. Bikes left on the Walker Hall racks after 8:00 AM on June 5 will be impounded; a $10.00 release fee applies.",
+      "word_count": 44,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776164825721_010_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, where is temporary bike parking available?",
+          "options": {
+            "A": "Inside Walker Hall",
+            "B": "At the library entrance",
+            "C": "In the student union",
+            "D": "Outside the gym"
+          },
+          "correct_answer": "D",
+          "explanation": "The notice states a temporary rack is available outside the gym."
+        },
+        {
+          "qid": "rdl_gen_1776164825721_010_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about retrieving an impounded bike?",
+          "options": {
+            "A": "It is a free service.",
+            "B": "It requires proof of ownership.",
+            "C": "It involves a financial penalty.",
+            "D": "It can be done any time."
+          },
+          "correct_answer": "C",
+          "explanation": "The notice mentions a $10.00 release fee, implying a financial cost or penalty."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_1776232784152_001",
+      "variant": "short",
+      "text": "Just tried the new iced matcha latte at the Student Union Café! It's only $4.50 and so refreshing. Perfect for studying. You should definitely grab one before your next class!",
+      "word_count": 30,
+      "genre": "social_media",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776232784152_001_q1",
+          "question_type": "detail",
+          "stem": "According to the post, what is the price of the new drink?",
+          "options": {
+            "A": "To pay a $3.50 fee",
+            "B": "To spend $4.50",
+            "C": "To purchase a $5.00 beverage",
+            "D": "To cover a $10.00 deposit"
+          },
+          "correct_answer": "B",
+          "explanation": "The post states the iced matcha latte costs $4.50."
+        },
+        {
+          "qid": "rdl_gen_1776232784152_001_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the writer's opinion of the drink?",
+          "options": {
+            "A": "The writer finds it overpriced.",
+            "B": "The writer recommends it to others.",
+            "C": "The writer prefers hot coffee.",
+            "D": "The writer thinks it is unhealthy."
+          },
+          "correct_answer": "B",
+          "explanation": "The writer says 'You should definitely grab one,' which implies a recommendation."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "error": "AI call failed: DeepSeek proxied request timeout"
+      }
+    },
+    {
+      "id": "rdl_gen_1776232784152_002",
+      "variant": "short",
+      "text": "Notice: HVAC maintenance in Anderson Hall is scheduled for March 3-7. Building temperatures may fluctuate. Occupants are advised to dress in layers. For questions, contact the Facilities Office at ext. 5550.",
+      "word_count": 31,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776232784152_002_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, when is the maintenance scheduled?",
+          "options": {
+            "A": "A period in early February",
+            "B": "A single day in April",
+            "C": "The final week of May",
+            "D": "The dates March 3 through 7"
+          },
+          "correct_answer": "D",
+          "explanation": "The notice explicitly states the maintenance is for March 3-7."
+        },
+        {
+          "qid": "rdl_gen_1776232784152_002_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about conditions during the maintenance?",
+          "options": {
+            "A": "The heating may not work consistently.",
+            "B": "The building will be closed entirely.",
+            "C": "All classes will be canceled.",
+            "D": "No one should contact Facilities."
+          },
+          "correct_answer": "A",
+          "explanation": "The warning about temperature fluctuations and dressing in layers implies inconsistent heating/cooling."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "error": "AI call failed: DeepSeek proxied request timeout"
+      }
+    },
+    {
+      "id": "rdl_gen_1776232784152_003",
+      "variant": "short",
+      "text": "Free yoga in the quad this Saturday at 10 AM! It's a great way to de-stress. Bring your own mat and water. The instructor, Jamie, is fantastic! See you there!",
+      "word_count": 30,
+      "genre": "social_media",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776232784152_003_q1",
+          "question_type": "detail",
+          "stem": "Where will the yoga class be held?",
+          "options": {
+            "A": "At the campus recreation center",
+            "B": "In a designated studio",
+            "C": "In the outdoor quad area",
+            "D": "At the student health clinic"
+          },
+          "correct_answer": "C",
+          "explanation": "The post states the event is 'in the quad.'"
+        },
+        {
+          "qid": "rdl_gen_1776232784152_003_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the event's requirements?",
+          "options": {
+            "A": "Participants must provide their own equipment.",
+            "B": "Registration is required in advance.",
+            "C": "There is a small participation fee.",
+            "D": "Only experienced students can attend."
+          },
+          "correct_answer": "A",
+          "explanation": "The instruction to 'Bring your own mat' implies participants supply their own equipment."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "error": "AI call failed: DeepSeek proxied request timeout"
+      }
+    },
+    {
+      "id": "rdl_gen_1776232784152_004",
+      "variant": "short",
+      "text": "Dear Biology 101 Students, This is a reminder that mandatory lab safety training is on Friday, May 15, at 2:00 PM in Room 204. There is a $5 fee for the training manual. Please arrive on time. Regards, Dr. Park",
+      "word_count": 40,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776232784152_004_q1",
+          "question_type": "detail",
+          "stem": "What is the purpose of the $5 payment mentioned?",
+          "options": {
+            "A": "To cover the cost of a required manual",
+            "B": "To register for the biology course",
+            "C": "To pay a late attendance penalty",
+            "D": "To purchase safety goggles"
+          },
+          "correct_answer": "A",
+          "explanation": "The email states the fee is 'for the training manual.'"
+        },
+        {
+          "qid": "rdl_gen_1776232784152_004_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the training session?",
+          "options": {
+            "A": "It is optional for most students.",
+            "B": "It will be held in the library.",
+            "C": "Attendance is compulsory for the students.",
+            "D": "Dr. Park will not be present."
+          },
+          "correct_answer": "C",
+          "explanation": "The email describes the training as 'mandatory,' implying compulsory attendance."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "error": "AI call failed: DeepSeek proxied request timeout"
+      }
+    },
+    {
+      "id": "rdl_gen_1776232784152_005",
+      "variant": "short",
+      "text": "Hi Maria, My office hours for this week (Nov 10-14) are changed. I'll be available from 1:00 to 3:00 PM in my usual office, Emerson 302. I apologize for any inconvenience. Sincerely, Ms. Chen",
+      "word_count": 34,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776232784152_005_q1",
+          "question_type": "detail",
+          "stem": "According to the email, where are the office hours held?",
+          "options": {
+            "A": "In the main student advising center",
+            "B": "In the online meeting platform",
+            "C": "In the campus library study room",
+            "D": "In office number 302 in Emerson"
+          },
+          "correct_answer": "D",
+          "explanation": "The email specifies the location as 'Emerson 302.'"
+        },
+        {
+          "qid": "rdl_gen_1776232784152_005_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the original office hours?",
+          "options": {
+            "A": "They were scheduled for a different time.",
+            "B": "They were canceled for the semester.",
+            "C": "They were held in a different building.",
+            "D": "They required an appointment."
+          },
+          "correct_answer": "A",
+          "explanation": "The email states the hours are 'changed,' implying the original time was different."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_1776232784152_006",
+      "variant": "short",
+      "text": "Dear Alex, This confirms your volunteer shift as a campus tour guide for Friday, April 5. Please meet at the Welcome Center at 9:00 AM. Wear your blue volunteer shirt. We appreciate your help! Best, Campus Tours Office",
+      "word_count": 38,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776232784152_006_q1",
+          "question_type": "detail",
+          "stem": "What should Alex do at the start of the shift?",
+          "options": {
+            "A": "Report to the Welcome Center",
+            "B": "Call the tours office first",
+            "C": "Go directly to the quad",
+            "D": "Pick up a shirt at the library"
+          },
+          "correct_answer": "A",
+          "explanation": "The email instructs Alex to 'meet at the Welcome Center.'"
+        },
+        {
+          "qid": "rdl_gen_1776232784152_006_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about Alex's role?",
+          "options": {
+            "A": "Alex is a paid university employee.",
+            "B": "Alex is leading a new program.",
+            "C": "Alex is providing a service without pay.",
+            "D": "Alex is training other guides."
+          },
+          "correct_answer": "C",
+          "explanation": "The email refers to Alex as a 'volunteer,' implying unpaid service."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_1776232784152_007",
+      "variant": "short",
+      "text": "Hello Film Club Members, Our meeting is rescheduled to this Thursday at 7:30 PM in Room 114. The $3 membership dues are due. We'll be planning the fall festival. See you then! - Ben, President",
+      "word_count": 35,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776232784152_007_q1",
+          "question_type": "detail",
+          "stem": "What is the new day for the club meeting?",
+          "options": {
+            "A": "The following Monday evening",
+            "B": "The upcoming Wednesday",
+            "C": "A weekend afternoon",
+            "D": "This coming Thursday"
+          },
+          "correct_answer": "D",
+          "explanation": "The email states the meeting is 'this Thursday.'"
+        },
+        {
+          "qid": "rdl_gen_1776232784152_007_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the $3 payment?",
+          "options": {
+            "A": "It is a fee for attending the festival.",
+            "B": "It is a penalty for late registration.",
+            "C": "It covers snacks for the meeting.",
+            "D": "It is a required club fee."
+          },
+          "correct_answer": "D",
+          "explanation": "The email refers to them as 'membership dues,' implying a required club fee."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_1776232784152_008",
+      "variant": "short",
+      "text": "Notice: The elevator in Science Hall West will be out of service for repairs from October 22 to October 24. Please use the stairs or the elevator in Science Hall East. We apologize for the inconvenience.",
+      "word_count": 36,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776232784152_008_q1",
+          "question_type": "detail",
+          "stem": "How long will the elevator be unavailable?",
+          "options": {
+            "A": "For a single morning",
+            "B": "For one full week",
+            "C": "For the entire month",
+            "D": "For a three-day period"
+          },
+          "correct_answer": "D",
+          "explanation": "The notice specifies the dates October 22 to 24, a period of three days."
+        },
+        {
+          "qid": "rdl_gen_1776232784152_008_q2",
+          "question_type": "detail",
+          "stem": "What are people advised to use instead?",
+          "options": {
+            "A": "A different building entirely",
+            "B": "The stairs or another elevator",
+            "C": "A temporary service elevator",
+            "D": "An online access request"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice advises using 'the stairs or the elevator in Science Hall East.'"
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_1776232784152_009",
+      "variant": "short",
+      "text": "GIVE BLOOD, SAVE A LIFE! Campus Blood Drive. Tuesday, Nov 12. 10 AM - 4 PM. Student Union Ballroom. All donors receive a free T-shirt and snacks. Walk-ins welcome! Appointments recommended.",
+      "word_count": 31,
+      "genre": "flyer",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776232784152_009_q1",
+          "question_type": "detail",
+          "stem": "Where is the blood drive taking place?",
+          "options": {
+            "A": "At the university hospital",
+            "B": "In the main gymnasium",
+            "C": "In the Student Union Ballroom",
+            "D": "At the outdoor stadium"
+          },
+          "correct_answer": "C",
+          "explanation": "The flyer lists the location as 'Student Union Ballroom.'"
+        },
+        {
+          "qid": "rdl_gen_1776232784152_009_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about participation?",
+          "options": {
+            "A": "Only faculty and staff can donate.",
+            "B": "People can donate without a prior appointment.",
+            "C": "Donors must pay a small fee.",
+            "D": "The event lasts for multiple days."
+          },
+          "correct_answer": "B",
+          "explanation": "The phrase 'Walk-ins welcome!' implies people can participate without a prior appointment."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_1776232784152_010",
+      "variant": "short",
+      "text": "To Chemistry Lab Students, A reminder: Your final lab practical is scheduled for Friday, December 6, at 9:00 AM in Lab B. A $10 deposit is required for your lab coat, refundable upon return. Dr. Rivera",
+      "word_count": 36,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776232784152_010_q1",
+          "question_type": "detail",
+          "stem": "What is the $10 deposit for?",
+          "options": {
+            "A": "To secure a spot in the lab course",
+            "B": "To borrow a required lab coat",
+            "C": "To pay for the practical exam",
+            "D": "To purchase safety goggles"
+          },
+          "correct_answer": "B",
+          "explanation": "The email states the deposit is 'for your lab coat.'"
+        },
+        {
+          "qid": "rdl_gen_1776232784152_010_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the deposit?",
+          "options": {
+            "A": "It is a non-refundable fee.",
+            "B": "It must be paid after the exam.",
+            "C": "Students can get the money back.",
+            "D": "It is optional for all students."
+          },
+          "correct_answer": "C",
+          "explanation": "The email describes the deposit as 'refundable upon return,' meaning students can get it back."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_1776233125130_001",
+      "variant": "short",
+      "text": "Recycling bins will be relocated from the Student Union to Lot C on May 15. A $5 fee will be charged for improper disposal. Please use the new bins after 9:00 AM. Contact the Facilities Office for questions.",
+      "word_count": 38,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776233125130_001_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, what is the penalty for improper disposal?",
+          "options": {
+            "A": "A warning from campus security",
+            "B": "A five-dollar charge",
+            "C": "A temporary loss of access",
+            "D": "A mandatory training session"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice states that a $5 fee will be charged for improper disposal."
+        },
+        {
+          "qid": "rdl_gen_1776233125130_001_q2",
+          "question_type": "detail",
+          "stem": "Where will the recycling bins be moved?",
+          "options": {
+            "A": "To the parking area designated Lot C",
+            "B": "To the main library entrance",
+            "C": "To the basement of Anderson Hall",
+            "D": "To the dining services building"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice specifies the bins will be relocated to Lot C."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy"
+    },
+    {
+      "id": "rdl_gen_1776233125130_002",
+      "variant": "short",
+      "text": "Dear Biology 101 Students, This is a reminder that your mandatory lab safety training is this Friday at 2:00 PM in Room 204. Dr. Park will conduct the session. Please bring your student ID. Sincerely, Ms. Chen",
+      "word_count": 37,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776233125130_002_q1",
+          "question_type": "detail",
+          "stem": "According to the email, who will lead the training session?",
+          "options": {
+            "A": "The department head",
+            "B": "A graduate teaching assistant",
+            "C": "The campus safety officer",
+            "D": "Professor Park"
+          },
+          "correct_answer": "D",
+          "explanation": "The email states Dr. Park will conduct the session."
+        },
+        {
+          "qid": "rdl_gen_1776233125130_002_q2",
+          "question_type": "detail",
+          "stem": "What must students bring to the training?",
+          "options": {
+            "A": "Their university identification card",
+            "B": "A completed safety waiver form",
+            "C": "Their own lab coat and goggles",
+            "D": "A notebook and pen"
+          },
+          "correct_answer": "A",
+          "explanation": "The email instructs students to bring their student ID."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy"
+    },
+    {
+      "id": "rdl_gen_1776233125130_003",
+      "variant": "short",
+      "text": "HVAC maintenance in Anderson Hall is scheduled for March 3-7. Room temperatures may fluctuate. The work will occur from 8:00 AM to 5:00 PM daily. Please plan accordingly and contact the Facilities Office with concerns.",
+      "word_count": 35,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776233125130_003_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, when will the maintenance work take place each day?",
+          "options": {
+            "A": "From early morning until the afternoon",
+            "B": "Between eight in the morning and five in the evening",
+            "C": "During overnight hours to minimize disruption",
+            "D": "At various times based on technician availability"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice states the work will occur from 8:00 AM to 5:00 PM daily."
+        },
+        {
+          "qid": "rdl_gen_1776233125130_003_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about conditions in Anderson Hall during the maintenance?",
+          "options": {
+            "A": "The building will be completely closed to all occupants.",
+            "B": "All classes in the building will be automatically canceled.",
+            "C": "The indoor climate might be temporarily uncomfortable.",
+            "D": "The maintenance will not affect any student activities."
+          },
+          "correct_answer": "C",
+          "explanation": "Since the notice warns that room temperatures may fluctuate, it can be inferred the climate might be uncomfortable."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy"
+    },
+    {
+      "id": "rdl_gen_1776233125130_004",
+      "variant": "short",
+      "text": "Fire alarm testing in Maple Residence Hall will occur on October 12 from 10:00 AM to noon. A $10 fine may be issued for failure to evacuate. Please proceed to the South Lot B assembly point. Testing is mandatory.",
+      "word_count": 39,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776233125130_004_q1",
+          "question_type": "detail",
+          "stem": "What is the potential consequence for not leaving the building during the test?",
+          "options": {
+            "A": "A written warning from housing staff",
+            "B": "A temporary suspension of dorm access",
+            "C": "A monetary penalty of ten dollars",
+            "D": "A mandatory meeting with the fire marshal"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice states a $10 fine may be issued for failure to evacuate."
+        },
+        {
+          "qid": "rdl_gen_1776233125130_004_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the testing on October 12?",
+          "options": {
+            "A": "It is a voluntary drill for interested residents only.",
+            "B": "It will cause a complete power outage in the hall.",
+            "C": "Residents should avoid scheduling classes at that time.",
+            "D": "All residents are required to participate in the drill."
+          },
+          "correct_answer": "D",
+          "explanation": "Since the notice says testing is mandatory and specifies an assembly point, it can be inferred all residents must participate."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy"
+    },
+    {
+      "id": "rdl_gen_1776233125130_005",
+      "variant": "short",
+      "text": "Campus Photography Contest! Submit your best shot of university life. Deadline: November 30. Win a $100 gift card! Entries must be digital. Email submissions to arts@university.edu. Sponsored by the Student Activities Board.",
+      "word_count": 32,
+      "genre": "flyer",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776233125130_005_q1",
+          "question_type": "detail",
+          "stem": "What is the final date to enter the photography contest?",
+          "options": {
+            "A": "The last day of November",
+            "B": "The final Friday of the fall semester",
+            "C": "The middle of the following month",
+            "D": "The start of the winter break"
+          },
+          "correct_answer": "A",
+          "explanation": "The flyer states the deadline is November 30."
+        },
+        {
+          "qid": "rdl_gen_1776233125130_005_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about acceptable contest entries?",
+          "options": {
+            "A": "They must be developed as physical prints.",
+            "B": "They should feature landscapes from outside campus.",
+            "C": "They need to be approved by a faculty advisor first.",
+            "D": "They should be sent electronically via email."
+          },
+          "correct_answer": "D",
+          "explanation": "Since entries must be digital and sent to an email address, it can be inferred they should be submitted electronically."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy"
+    },
+    {
+      "id": "rdl_gen_1776233125130_006",
+      "variant": "short",
+      "text": "Hi Maria, This confirms your tutoring appointment with Jake for Chemistry 201. It's scheduled for Thursday at 4:00 PM in the Learning Commons, Study Room 3B. Please bring your textbook. Best, Academic Support Center",
+      "word_count": 34,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776233125130_006_q1",
+          "question_type": "detail",
+          "stem": "Where is the confirmed tutoring session supposed to take place?",
+          "options": {
+            "A": "In the main library's reference section",
+            "B": "In the professor's office in Anderson Hall",
+            "C": "In a specific room in the Learning Commons",
+            "D": "In the student union's lounge area"
+          },
+          "correct_answer": "C",
+          "explanation": "The email states the appointment is in the Learning Commons, Study Room 3B."
+        },
+        {
+          "qid": "rdl_gen_1776233125130_006_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the subject of the tutoring session?",
+          "options": {
+            "A": "It is for a mathematics course.",
+            "B": "The student must prepare a presentation.",
+            "C": "The tutor specializes in writing skills.",
+            "D": "It will likely involve a chemistry textbook."
+          },
+          "correct_answer": "D",
+          "explanation": "Since the appointment is for Chemistry 201 and Maria is told to bring her textbook, it can be inferred the session will involve chemistry."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy"
+    },
+    {
+      "id": "rdl_gen_1776233125130_007",
+      "variant": "short",
+      "text": "The elevator in Science Hall West will be out of service for repairs from April 10-12. Use the stairs in the east wing. A refund of up to $3.50 for alternative transport is available from the main office. We apologize for the inconvenience.",
+      "word_count": 43,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776233125130_007_q1",
+          "question_type": "detail",
+          "stem": "What is the maximum reimbursement available due to the elevator outage?",
+          "options": {
+            "A": "A full reimbursement for any taxi fare",
+            "B": "A discount on the next semester's fees",
+            "C": "A payment of three dollars and fifty cents",
+            "D": "A free pass for the campus shuttle service"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice states a refund of up to $3.50 is available."
+        },
+        {
+          "qid": "rdl_gen_1776233125130_007_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about accessing floors in Science Hall West during the repair period?",
+          "options": {
+            "A": "The building will be completely closed to all students.",
+            "B": "All classes in the building will be relocated.",
+            "C": "A temporary elevator will be installed for use.",
+            "D": "People will need to use a different staircase."
+          },
+          "correct_answer": "D",
+          "explanation": "Since the notice says to use the stairs in the east wing, it can be inferred people must use a different staircase than they might normally use."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy"
+    },
+    {
+      "id": "rdl_gen_1776233125130_008",
+      "variant": "short",
+      "text": "Campus Wi-Fi will be unavailable during a maintenance window on Friday, September 8, from 2:00 AM to 6:00 AM. This affects all academic buildings. Service will be restored by 6:30 AM. Plan your work accordingly.",
+      "word_count": 35,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776233125130_008_q1",
+          "question_type": "detail",
+          "stem": "When is the Wi-Fi service scheduled to be fully restored?",
+          "options": {
+            "A": "By the start of the business day at 8:00 AM",
+            "B": "By six-thirty in the morning on September 8",
+            "C": "Immediately after the maintenance is completed",
+            "D": "Later in the afternoon on the same day"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice states service will be restored by 6:30 AM."
+        },
+        {
+          "qid": "rdl_gen_1776233125130_008_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the Wi-Fi outage?",
+          "options": {
+            "A": "It will only impact student residence halls.",
+            "B": "It is planned for a time of low network usage.",
+            "C": "It will cause a delay in all morning classes.",
+            "D": "It is due to a sudden and unexpected failure."
+          },
+          "correct_answer": "B",
+          "explanation": "Since the maintenance is scheduled for very early morning (2:00 AM to 6:00 AM), it can be inferred this is a time of low usage."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy"
+    },
+    {
+      "id": "rdl_gen_1776233125130_009",
+      "variant": "short",
+      "text": "Dear Student, Your meal plan has a remaining balance of $45.75. To receive a refund, complete the online form by May 1. Refunds under $50 will be issued as a credit to your student account. Sincerely, Dining Services",
+      "word_count": 38,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776233125130_009_q1",
+          "question_type": "detail",
+          "stem": "By what date must the student act to obtain a refund?",
+          "options": {
+            "A": "By the final day of the academic year",
+            "B": "By the first day of the month of May",
+            "C": "Within one week of receiving this email",
+            "D": "Before the end of the current semester"
+          },
+          "correct_answer": "B",
+          "explanation": "The email states the form must be completed by May 1."
+        },
+        {
+          "qid": "rdl_gen_1776233125130_009_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the refund for this student's balance?",
+          "options": {
+            "A": "It will be sent as a paper check by mail.",
+            "B": "The student must visit the office in person to claim it.",
+            "C": "The money will be applied to their university account.",
+            "D": "It is only available for balances over fifty dollars."
+          },
+          "correct_answer": "C",
+          "explanation": "Since the balance is $45.75 (under $50) and the email says refunds under $50 are issued as a credit to the student account, it can be inferred the money will be applied there."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy"
+    },
+    {
+      "id": "rdl_gen_1776233125130_010",
+      "variant": "short",
+      "text": "For vending machine refunds, contact the Business Office in Room 110. The maximum refund is $2.00 per incident. Provide the machine location and the item code. Refunds are processed weekdays from 9:00 AM to 4:00 PM.",
+      "word_count": 36,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776233125130_010_q1",
+          "question_type": "detail",
+          "stem": "What is the highest amount one can receive back for a single vending machine issue?",
+          "options": {
+            "A": "Two dollars",
+            "B": "Five dollars",
+            "C": "The full price of the purchased item",
+            "D": "A replacement item of equal value"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice states the maximum refund is $2.00 per incident."
+        },
+        {
+          "qid": "rdl_gen_1776233125130_010_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about obtaining a refund?",
+          "options": {
+            "A": "One cannot get a refund on weekends.",
+            "B": "A receipt from the machine is not necessary.",
+            "C": "Refunds are handled by the Facilities Office.",
+            "D": "The process can be completed entirely online."
+          },
+          "correct_answer": "A",
+          "explanation": "Since refunds are processed weekdays from 9:00 AM to 4:00 PM, it can be inferred they are not available on weekends."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy"
+    },
+    {
+      "id": "rdl_gen_1776233506925_001",
+      "variant": "short",
+      "text": "Campus Photo Contest! Submit your best shot by May 15. $5 entry fee. Win a $100 gift card! Digital entries only to photoclub@university.edu. Include your name and student ID. Get creative and show your school spirit!",
+      "word_count": 36,
+      "genre": "flyer",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776233506925_001_q1",
+          "question_type": "detail",
+          "stem": "According to the flyer, what is required for contest entry?",
+          "options": {
+            "A": "A physical print of the photograph",
+            "B": "A payment of five dollars",
+            "C": "A recommendation from a professor",
+            "D": "Attendance at a workshop"
+          },
+          "correct_answer": "B",
+          "explanation": "The flyer states there is a '$5 entry fee,' which is a required payment."
+        },
+        {
+          "qid": "rdl_gen_1776233506925_001_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the contest's theme?",
+          "options": {
+            "A": "It likely involves university pride.",
+            "B": "It is focused on portrait photography.",
+            "C": "It requires images of campus buildings.",
+            "D": "It is only for advanced photographers."
+          },
+          "correct_answer": "A",
+          "explanation": "The flyer encourages participants to 'show your school spirit,' implying the theme relates to university pride."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy"
+    },
+    {
+      "id": "rdl_gen_1776233506925_002",
+      "variant": "short",
+      "text": "Dear Biology Club Members, Our meeting this Friday is rescheduled to 4:00 PM. It will now be in Room 204 of Science Hall. Dr. Park will still present. Please update your calendars. We'll see you there. Best, Club President Alex",
+      "word_count": 40,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776233506925_002_q1",
+          "question_type": "detail",
+          "stem": "According to the email, what is the new meeting time?",
+          "options": {
+            "A": "At four o'clock in the afternoon",
+            "B": "At two o'clock in the afternoon",
+            "C": "At nine o'clock in the morning",
+            "D": "At seven o'clock in the evening"
+          },
+          "correct_answer": "A",
+          "explanation": "The email specifies the meeting is 'rescheduled to 4:00 PM,' which is four o'clock in the afternoon."
+        },
+        {
+          "qid": "rdl_gen_1776233506925_002_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the original meeting plan?",
+          "options": {
+            "A": "It was canceled permanently.",
+            "B": "It was scheduled for a different time or place.",
+            "C": "It featured a different speaker.",
+            "D": "It required members to bring materials."
+          },
+          "correct_answer": "B",
+          "explanation": "Since the meeting is 'rescheduled' with a new time and room, the original plan must have been different."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy"
+    },
+    {
+      "id": "rdl_gen_1776233506925_003",
+      "variant": "short",
+      "text": "Found the perfect quiet study spot! The basement of the main library, near the archives, is super peaceful. Hardly anyone goes there. Great for focusing before finals. Open until 10 PM on weekdays. Check it out!",
+      "word_count": 36,
+      "genre": "social_media",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776233506925_003_q1",
+          "question_type": "detail",
+          "stem": "According to the post, where is the recommended study area?",
+          "options": {
+            "A": "On the library's top floor",
+            "B": "In the campus coffee shop",
+            "C": "In the library basement",
+            "D": "At a student union table"
+          },
+          "correct_answer": "C",
+          "explanation": "The post explicitly recommends 'The basement of the main library.'"
+        },
+        {
+          "qid": "rdl_gen_1776233506925_003_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the spot's popularity?",
+          "options": {
+            "A": "It is frequently crowded.",
+            "B": "It is not widely used.",
+            "C": "It requires a reservation.",
+            "D": "It is mainly for group work."
+          },
+          "correct_answer": "B",
+          "explanation": "The post states 'Hardly anyone goes there,' implying it is not widely used or popular."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy"
+    },
+    {
+      "id": "rdl_gen_1776233506925_004",
+      "variant": "short",
+      "text": "Hi Maria, This confirms your math tutoring appointment with Mr. Lee for Thursday at 3:00 PM. Please meet in the Learning Center, Room 12. Don't forget your textbook and calculator. The first session is free, but later ones are $15 per hour. See you then!",
+      "word_count": 45,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776233506925_004_q1",
+          "question_type": "detail",
+          "stem": "According to the email, what is the cost of the confirmed session?",
+          "options": {
+            "A": "Fifteen dollars per hour",
+            "B": "A ten-dollar deposit",
+            "C": "Five dollars for materials",
+            "D": "No charge at all"
+          },
+          "correct_answer": "D",
+          "explanation": "The email states 'The first session is free,' meaning there is no charge for this confirmed appointment."
+        },
+        {
+          "qid": "rdl_gen_1776233506925_004_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about future tutoring sessions?",
+          "options": {
+            "A": "They will be held in a different building.",
+            "B": "They will focus on a different subject.",
+            "C": "They will be at a different time of day.",
+            "D": "They will require a payment."
+          },
+          "correct_answer": "D",
+          "explanation": "The email notes that 'later ones are $15 per hour,' implying future sessions are not free and require payment."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy"
+    },
+    {
+      "id": "rdl_gen_1776233506925_005",
+      "variant": "short",
+      "text": "Free yoga on the main quad this Saturday at 10 AM! It's a great way to de-stress. Bring your own mat and water. The class is for all levels. Sponsored by the Wellness Center. Hope to see you there!",
+      "word_count": 39,
+      "genre": "social_media",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_1776233506925_005_q1",
+          "question_type": "detail",
+          "stem": "According to the post, when is the yoga class?",
+          "options": {
+            "A": "On Saturday morning",
+            "B": "On Friday afternoon",
+            "C": "On Sunday evening",
+            "D": "On Monday at noon"
+          },
+          "correct_answer": "A",
+          "explanation": "The post specifies the class is 'this Saturday at 10 AM,' which is Saturday morning."
+        },
+        {
+          "qid": "rdl_gen_1776233506925_005_q2",
+          "question_type": "detail",
+          "stem": "What should participants bring to the class?",
+          "options": {
+            "A": "A registration form",
+            "B": "A student ID card",
+            "C": "A personal yoga mat",
+            "D": "A healthy snack"
+          },
+          "correct_answer": "C",
+          "explanation": "The instruction 'Bring your own mat' indicates participants need a personal yoga mat."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy"
     }
   ]
 }

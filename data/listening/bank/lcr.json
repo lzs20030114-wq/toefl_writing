@@ -1,0 +1,658 @@
+{
+  "meta": {
+    "type": "lcr",
+    "label": "Listen and Choose a Response",
+    "version": 1,
+    "updated": "2026-04-15"
+  },
+  "items": [
+    {
+      "id": "lcr_gen_001",
+      "context": "campus_life",
+      "situation": "A student approaches a librarian at the help desk.",
+      "speaker": "I'm not sure if the printer's working, but I really need this by class.",
+      "pragmatic_function": "indirect_request",
+      "options": {
+        "A": "The class starts at ten o'clock.",
+        "B": "Let me check — I can print it for you at the front desk if it's down.",
+        "C": "I don't think printers are very expensive.",
+        "D": "You should have printed it yesterday."
+      },
+      "answer": "B",
+      "explanation": "The speaker is indirectly asking for help with printing. Option B addresses the underlying request by offering to check and provide an alternative solution.",
+      "audio_url": null
+    },
+    {
+      "id": "lcr_gen_002",
+      "context": "campus_life",
+      "situation": "Two students are discussing a group project deadline.",
+      "speaker": "I thought we had until Friday, but the syllabus says Wednesday.",
+      "pragmatic_function": "expressing_concern",
+      "options": {
+        "A": "Yeah, I like Wednesdays better too.",
+        "B": "The syllabus is on the course website.",
+        "C": "Oh no — we'd better finish the analysis section tonight then.",
+        "D": "Friday is a good day for deadlines."
+      },
+      "answer": "C",
+      "explanation": "The speaker is expressing concern about a sooner-than-expected deadline. Option C acknowledges the urgency and proposes immediate action.",
+      "audio_url": null
+    },
+    {
+      "id": "lcr_gen_003",
+      "context": "academic",
+      "situation": "A student speaks to a professor after class.",
+      "speaker": "Professor, I was wondering if there's any way to get an extension on the essay.",
+      "pragmatic_function": "polite_request",
+      "options": {
+        "A": "The essay topic is about climate change.",
+        "B": "I finished my essay last week.",
+        "C": "What's the situation? If you have a valid reason, we can work something out.",
+        "D": "Extensions are usually two pages long."
+      },
+      "answer": "C",
+      "explanation": "The student is politely requesting an extension. Option C is the most appropriate response as it acknowledges the request and opens a discussion about whether it can be granted.",
+      "audio_url": null
+    },
+    {
+      "context": "campus_life",
+      "situation": "asking about printing at the computer lab",
+      "speaker": "I'm not sure if the printer's working, but I really need this by class.",
+      "pragmatic_function": "expressing_concern",
+      "options": {
+        "A": "The class starts in ten minutes.",
+        "B": "Let me check the status for you, or you could try the library printer.",
+        "C": "I need to print something too.",
+        "D": "Yes, the computer lab is open."
+      },
+      "answer": "B",
+      "explanation": "B correctly addresses the speaker's concern by offering help and a practical alternative. A responds only to the literal mention of 'class' but ignores the concern. C ignores the speaker's specific problem by shifting focus. D is a word trap, responding literally to 'computer lab' but not to the concern about the printer.",
+      "distractor_types": {
+        "A": "literal_meaning",
+        "C": "off_topic",
+        "D": "word_trap"
+      },
+      "id": "lcr_gen_1776233716023_001"
+    },
+    {
+      "context": "classroom",
+      "situation": "asking about the grading rubric for an essay",
+      "speaker": "So the professor wants more analysis and less summary, right?",
+      "pragmatic_function": "expressing_agreement",
+      "options": {
+        "A": "The essay is due on Friday.",
+        "B": "Exactly, that's what I understood from the feedback.",
+        "C": "I prefer writing summaries.",
+        "D": "The professor is in her office."
+      },
+      "answer": "B",
+      "explanation": "B directly agrees with and confirms the speaker's understanding. A ignores the point about the rubric's content. C is an off-topic personal opinion. D is a word trap, responding to 'professor' but not to the question about the rubric.",
+      "distractor_types": {
+        "A": "off_topic",
+        "C": "off_topic",
+        "D": "word_trap"
+      },
+      "id": "lcr_gen_1776233716023_002"
+    },
+    {
+      "context": "daily_life",
+      "situation": "arranging a ride with a friend",
+      "speaker": "If you're heading to the mall anyway, I could really use a lift.",
+      "pragmatic_function": "expressing_agreement",
+      "options": {
+        "A": "The mall has great stores.",
+        "B": "Sure, I'm leaving in about five minutes.",
+        "C": "I don't have a driver's license.",
+        "D": "Lifting weights is good exercise."
+      },
+      "answer": "B",
+      "explanation": "B agrees to the implied request for a ride. A responds to the literal topic of the mall but ignores the request. C is an off-topic statement that doesn't engage with the speaker's point. D is a word trap, misinterpreting 'lift' as physical exercise.",
+      "distractor_types": {
+        "A": "literal_meaning",
+        "C": "off_topic",
+        "D": "word_trap"
+      },
+      "id": "lcr_gen_1776233716023_003"
+    },
+    {
+      "context": "campus_life",
+      "situation": "discussing a cafeteria meal with a friend",
+      "speaker": "Wow, they actually put real mushrooms in the pasta today.",
+      "pragmatic_function": "expressing_surprise",
+      "options": {
+        "A": "I don't like mushrooms.",
+        "B": "I know, it's a nice change from the usual canned ones.",
+        "C": "The pasta is served at noon.",
+        "D": "Real food is better than fake food."
+      },
+      "answer": "B",
+      "explanation": "B acknowledges and shares the speaker's surprised observation. A shifts the topic to a personal preference. C responds only to the literal word 'pasta' with irrelevant information. D is a word trap on 'real' but states an obvious, generic fact that doesn't engage with the specific surprise.",
+      "distractor_types": {
+        "A": "off_topic",
+        "C": "literal_meaning",
+        "D": "word_trap"
+      },
+      "id": "lcr_gen_1776233716023_004"
+    },
+    {
+      "context": "classroom",
+      "situation": "clarifying instructions for a lab report",
+      "speaker": "We just need to turn in the data charts, not the full analysis, correct?",
+      "pragmatic_function": "seeking_confirmation",
+      "options": {
+        "A": "The lab report is very important.",
+        "B": "No, the full analysis is required as well.",
+        "C": "Charts are usually in color.",
+        "D": "Yes, that's right—just the charts by Friday."
+      },
+      "answer": "D",
+      "explanation": "D directly confirms the speaker's understanding. A is an off-topic, generic statement. B contradicts the speaker instead of confirming. C responds literally to 'charts' but ignores the request for confirmation about the instructions.",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "off_topic",
+        "C": "literal_meaning"
+      },
+      "id": "lcr_gen_1776233716023_005"
+    },
+    {
+      "context": "daily_life",
+      "situation": "ordering coffee at a campus café",
+      "speaker": "It's kind of chilly in here—I think I'll get a large hot chocolate instead.",
+      "pragmatic_function": "suggestion",
+      "options": {
+        "A": "The temperature outside is fifty degrees.",
+        "B": "Good idea, a warm drink sounds perfect.",
+        "C": "I don't like chocolate.",
+        "D": "Large is the biggest size they have."
+      },
+      "answer": "B",
+      "explanation": "B agrees with the speaker's implied suggestion that a warm drink is suitable. A responds literally to 'chilly' with an irrelevant fact. C shifts focus to a personal preference. D is a word trap on 'large' but gives obvious, unhelpful information.",
+      "distractor_types": {
+        "A": "literal_meaning",
+        "C": "off_topic",
+        "D": "word_trap"
+      },
+      "id": "lcr_gen_1776233716023_006"
+    },
+    {
+      "context": "campus_life",
+      "situation": "asking about a campus event at the student center",
+      "speaker": "The flyer says the guest lecture is free for students, which is pretty great.",
+      "pragmatic_function": "expressing_agreement",
+      "options": {
+        "A": "The student center closes at ten.",
+        "B": "It really is—I was worried there'd be a fee.",
+        "C": "I never read flyers.",
+        "D": "Lectures are usually educational."
+      },
+      "answer": "B",
+      "explanation": "B agrees with and expands on the speaker's positive comment. A responds literally to 'student center' but ignores the comment. C is an off-topic personal remark. D is a word trap on 'lecture' but states a generic, irrelevant fact.",
+      "distractor_types": {
+        "A": "literal_meaning",
+        "C": "off_topic",
+        "D": "word_trap"
+      },
+      "id": "lcr_gen_1776233716023_007"
+    },
+    {
+      "context": "classroom",
+      "situation": "asking about an assignment deadline extension",
+      "speaker": "I heard some people got extra time on the research paper—is that true?",
+      "pragmatic_function": "indirect_request",
+      "options": {
+        "A": "Research papers are difficult.",
+        "B": "Yes, but you have to ask the professor directly before Friday.",
+        "C": "I don't have time to talk.",
+        "D": "The paper is about climate change."
+      },
+      "answer": "B",
+      "explanation": "B correctly interprets the query as an indirect request for information on how to get an extension. A is an off-topic, generic statement. C dismisses the conversation entirely. D is a word trap on 'research paper' but provides irrelevant content details.",
+      "distractor_types": {
+        "A": "off_topic",
+        "C": "off_topic",
+        "D": "word_trap"
+      },
+      "id": "lcr_gen_1776233716023_008"
+    },
+    {
+      "context": "daily_life",
+      "situation": "ordering coffee at a campus café",
+      "speaker": "Speaking of exams, I should probably get a coffee with an extra shot.",
+      "pragmatic_function": "changing_topic",
+      "options": {
+        "A": "Exams are next week.",
+        "B": "Yeah, me too—a large black coffee, please.",
+        "C": "I don't take shots.",
+        "D": "Coffee is made from beans."
+      },
+      "answer": "B",
+      "explanation": "B appropriately follows the topic shift to ordering coffee. A sticks to the previous topic of exams (literal meaning). C is a word trap, misinterpreting 'shot' as an alcoholic drink. D states an obvious, irrelevant fact about coffee.",
+      "distractor_types": {
+        "A": "literal_meaning",
+        "C": "word_trap",
+        "D": "off_topic"
+      },
+      "id": "lcr_gen_1776233716023_009"
+    },
+    {
+      "context": "campus_life",
+      "situation": "talking to a classmate about a group project",
+      "speaker": "So we're all meeting at the library tomorrow at two to finish the slides?",
+      "pragmatic_function": "seeking_confirmation",
+      "options": {
+        "A": "The library has many books.",
+        "B": "Two o'clock is a good time for me.",
+        "C": "That's the plan—I'll send a reminder.",
+        "D": "Slides are usually made on a computer."
+      },
+      "answer": "C",
+      "explanation": "C directly confirms the meeting details. A is a word trap on 'library' but gives irrelevant information. B responds only to the time but doesn't confirm the overall plan. D responds literally to 'slides' with an obvious fact.",
+      "distractor_types": {
+        "A": "word_trap",
+        "B": "literal_meaning",
+        "D": "literal_meaning"
+      },
+      "id": "lcr_gen_1776233716023_010"
+    },
+    {
+      "context": "campus_life",
+      "situation": "asking about intramural sports sign-up",
+      "speaker": "I was thinking about joining the soccer league, but I'm not sure I can commit to every game.",
+      "pragmatic_function": "making_an_excuse",
+      "options": {
+        "A": "Soccer is a great sport to play.",
+        "B": "The sign-up deadline is actually tomorrow.",
+        "C": "Yeah, the schedule is pretty demanding. Maybe try the casual drop-in sessions instead?",
+        "D": "I'm not committed to any league either."
+      },
+      "answer": "C",
+      "explanation": "C is correct because it addresses the speaker's implied excuse/hesitation by offering a helpful, less-committal alternative. A responds only to the literal mention of soccer. B ignores the speaker's point about commitment and states a fact. D uses the word 'committed' from the speaker's sentence but is an irrelevant statement about the responder.",
+      "distractor_types": {
+        "A": "literal_meaning",
+        "B": "off_topic",
+        "D": "word_trap"
+      },
+      "id": "lcr_gen_1776233816519_001"
+    },
+    {
+      "context": "classroom",
+      "situation": "asking about the grading rubric for an essay",
+      "speaker": "I'm a bit confused about what the professor is looking for in our final paper.",
+      "pragmatic_function": "offering_help",
+      "options": {
+        "A": "The final paper is due next Friday.",
+        "B": "Confusion is a normal part of the writing process.",
+        "C": "I saved the rubric she posted online. Want me to go over it with you?",
+        "D": "I'm looking for a new professor too."
+      },
+      "answer": "C",
+      "explanation": "C is correct because it directly offers help in response to the speaker's expressed confusion. A is an off-topic statement of fact. B responds to the literal word 'confused' but doesn't address the need for clarification. D is a word trap on 'looking for'.",
+      "distractor_types": {
+        "B": "literal_meaning",
+        "A": "off_topic",
+        "D": "word_trap"
+      },
+      "id": "lcr_gen_1776233816519_002"
+    },
+    {
+      "context": "daily_life",
+      "situation": "discussing weekend plans with a roommate",
+      "speaker": "You didn't have to clean the whole kitchen, but wow, it looks amazing.",
+      "pragmatic_function": "expressing_gratitude",
+      "options": {
+        "A": "The kitchen was very dirty.",
+        "B": "I'm planning to clean it again next week.",
+        "C": "Thanks! I had some free time and thought I'd surprise you.",
+        "D": "I don't usually like cleaning."
+      },
+      "answer": "C",
+      "explanation": "C is correct because it accepts the thanks/praise implied in the speaker's statement. A and B are off-topic, factual responses that ignore the expression of gratitude. D is a literal but irrelevant response to the action mentioned.",
+      "distractor_types": {
+        "D": "literal_meaning",
+        "A": "off_topic",
+        "B": "off_topic"
+      },
+      "id": "lcr_gen_1776233816519_003"
+    },
+    {
+      "context": "campus_life",
+      "situation": "talking to a classmate about a group project",
+      "speaker": "Any chance you could take the lead on the presentation slides?",
+      "pragmatic_function": "polite_refusal",
+      "options": {
+        "A": "I don't know how to make slides.",
+        "B": "Presentations are due next Monday.",
+        "C": "I'm swamped with my other class right now. Could someone else do it?",
+        "D": "The lead singer of that band is great."
+      },
+      "answer": "C",
+      "explanation": "C is correct as it politely declines the request by giving a reason and suggesting an alternative. A is a literal, direct refusal without politeness. B is an off-topic factual statement. D is a word trap on 'lead'.",
+      "distractor_types": {
+        "A": "literal_meaning",
+        "B": "off_topic",
+        "D": "word_trap"
+      },
+      "id": "lcr_gen_1776233816519_004"
+    },
+    {
+      "context": "classroom",
+      "situation": "asking a question about the lecture material",
+      "speaker": "So, we're basically saying that the economic model failed because of external factors?",
+      "pragmatic_function": "expressing_agreement",
+      "options": {
+        "A": "The lecture was about economic models.",
+        "B": "Failed models are a common topic.",
+        "C": "Exactly, that's the key point the professor was making.",
+        "D": "I think external factors are very important."
+      },
+      "answer": "C",
+      "explanation": "C is correct because it confirms and agrees with the speaker's understanding. A and B are off-topic, generic statements about the lecture. D responds to the literal phrase 'external factors' but doesn't directly confirm the speaker's summary.",
+      "distractor_types": {
+        "D": "literal_meaning",
+        "A": "off_topic",
+        "B": "off_topic"
+      },
+      "id": "lcr_gen_1776233816519_005"
+    },
+    {
+      "context": "daily_life",
+      "situation": "talking to a landlord about a lease renewal",
+      "speaker": "I got the renewal notice. The rent increase is a bit more than I was expecting.",
+      "pragmatic_function": "expressing_concern",
+      "options": {
+        "A": "I expect you to pay rent on time.",
+        "B": "Notices are usually sent by mail.",
+        "C": "I understand. The market rates have gone up, but we can discuss the timing.",
+        "D": "I never get notices I expect."
+      },
+      "answer": "C",
+      "explanation": "C is correct because it acknowledges the tenant's concern and opens a dialogue. A is an off-topic, authoritative statement. B responds literally to 'notice' but ignores the concern. D is a word trap on 'expecting'.",
+      "distractor_types": {
+        "B": "literal_meaning",
+        "A": "off_topic",
+        "D": "word_trap"
+      },
+      "id": "lcr_gen_1776233816519_006"
+    },
+    {
+      "context": "campus_life",
+      "situation": "asking the registrar about course enrollment",
+      "speaker": "I know the add-drop period ended, but my advisor just approved this change yesterday.",
+      "pragmatic_function": "making_an_excuse",
+      "options": {
+        "A": "The add-drop period is always very short.",
+        "B": "Advisors need to approve all changes.",
+        "C": "I see. Let me check if we can make an exception given the timing.",
+        "D": "I don't approve of changes either."
+      },
+      "answer": "C",
+      "explanation": "C is correct because it addresses the speaker's implied excuse/reason for a late request by offering to help. A and B are off-topic factual statements. D is a word trap on 'approved'.",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "off_topic",
+        "D": "word_trap"
+      },
+      "id": "lcr_gen_1776233816519_007"
+    },
+    {
+      "context": "classroom",
+      "situation": "clarifying instructions for a lab report",
+      "speaker": "Just to be clear, we're supposed to submit the data charts separately, right?",
+      "pragmatic_function": "expressing_agreement",
+      "options": {
+        "A": "The lab report instructions are very clear.",
+        "B": "Data charts can be difficult to make.",
+        "C": "Right, as an appendix at the end of the main document.",
+        "D": "I submitted my report separately."
+      },
+      "answer": "C",
+      "explanation": "C is correct because it confirms and agrees with the speaker's understanding, adding helpful detail. A and B are off-topic comments. D is a literal response to 'submit' and 'separately' but doesn't confirm the speaker's question.",
+      "distractor_types": {
+        "D": "literal_meaning",
+        "A": "off_topic",
+        "B": "off_topic"
+      },
+      "id": "lcr_gen_1776233816519_008"
+    },
+    {
+      "context": "daily_life",
+      "situation": "talking to a store clerk about a return",
+      "speaker": "I'm really glad you could exchange this without the original receipt.",
+      "pragmatic_function": "expressing_gratitude",
+      "options": {
+        "A": "The original receipt is usually required.",
+        "B": "Our return policy is posted on the wall.",
+        "C": "You're welcome. I could see it was a recent purchase.",
+        "D": "I don't have the receipt either."
+      },
+      "answer": "C",
+      "explanation": "C is correct because it accepts the thanks implied in the speaker's statement. A and B are off-topic, policy-focused responses that ignore the gratitude. D is a literal, self-focused response to part of the statement.",
+      "distractor_types": {
+        "D": "literal_meaning",
+        "A": "off_topic",
+        "B": "off_topic"
+      },
+      "id": "lcr_gen_1776233816519_009"
+    },
+    {
+      "context": "campus_life",
+      "situation": "talking to a lab partner about an experiment",
+      "speaker": "We should probably run the calibration test one more time before we record the final data.",
+      "pragmatic_function": "seeking_confirmation",
+      "options": {
+        "A": "The calibration test is the first step.",
+        "B": "Final data is recorded in the blue notebook.",
+        "C": "Good idea. Better to be sure everything's accurate.",
+        "D": "I don't have time to run right now."
+      },
+      "answer": "C",
+      "explanation": "C is correct because it confirms and agrees with the speaker's suggestion. A and B are off-topic, literal facts about the procedure. D is a word trap on 'run'.",
+      "distractor_types": {
+        "A": "literal_meaning",
+        "B": "off_topic",
+        "D": "word_trap"
+      },
+      "id": "lcr_gen_1776233816519_010"
+    },
+    {
+      "context": "campus_life",
+      "situation": "checking in at the campus health center",
+      "speaker": "I filled out the form, but I'm not sure what to do next.",
+      "pragmatic_function": "changing_topic",
+      "options": {
+        "A": "The form is on the clipboard over there.",
+        "B": "I'm not feeling very well either.",
+        "C": "You should probably just take a seat and wait for your name to be called.",
+        "D": "I'm not sure what time they close."
+      },
+      "answer": "C",
+      "explanation": "The speaker is implicitly asking for guidance on the next step. C directly addresses this by giving appropriate advice. A responds literally to the mention of the form. B ignores the speaker's point about procedure and focuses on feeling unwell. D is off-topic, introducing an unrelated question about hours.",
+      "distractor_types": {
+        "A": "literal_meaning",
+        "B": "off_topic",
+        "D": "word_trap"
+      },
+      "id": "lcr_gen_1776234280553_001"
+    },
+    {
+      "context": "classroom",
+      "situation": "asking about an assignment deadline extension",
+      "speaker": "I was wondering if there's any chance I could turn in the paper a day late.",
+      "pragmatic_function": "polite_refusal",
+      "options": {
+        "A": "I turned mine in yesterday, actually.",
+        "B": "I'm afraid the deadline is firm for everyone.",
+        "C": "A day has twenty-four hours.",
+        "D": "Yes, the paper is about chance and probability."
+      },
+      "answer": "B",
+      "explanation": "The speaker is making a polite request for an extension. B appropriately and politely refuses this request. A ignores the speaker's point by talking about their own submission. C responds literally to the words 'a day'. D is a word trap on 'chance'.",
+      "distractor_types": {
+        "A": "off_topic",
+        "C": "literal_meaning",
+        "D": "word_trap"
+      },
+      "id": "lcr_gen_1776234280553_002"
+    },
+    {
+      "context": "daily_life",
+      "situation": "discussing weekend plans with a roommate",
+      "speaker": "So, are you still thinking of going to that concert on Saturday?",
+      "pragmatic_function": "changing_topic",
+      "options": {
+        "A": "I think concerts are usually on weekends.",
+        "B": "Actually, I was going to ask if you wanted to see a movie instead.",
+        "C": "Yes, I bought the tickets a month ago.",
+        "D": "Saturday is the day after Friday."
+      },
+      "answer": "B",
+      "explanation": "The speaker is asking about a specific plan. B appropriately changes the topic by suggesting a different activity. C directly answers the literal question but does not change the topic. A gives a general, off-topic comment about concerts. D is a literal, irrelevant statement about days.",
+      "distractor_types": {
+        "A": "off_topic",
+        "C": "literal_meaning",
+        "D": "word_trap"
+      },
+      "id": "lcr_gen_1776234280553_003"
+    },
+    {
+      "context": "campus_life",
+      "situation": "asking a residence advisor about a maintenance issue",
+      "speaker": "My desk lamp flickers every time I turn it on.",
+      "pragmatic_function": "giving_advice",
+      "options": {
+        "A": "I prefer lamps that don't flicker.",
+        "B": "You should put in a maintenance request online.",
+        "C": "Turn it on and off a few times.",
+        "D": "My desk is made of wood."
+      },
+      "answer": "B",
+      "explanation": "The speaker is implicitly reporting a problem and seeking a solution. B gives appropriate, actionable advice on how to get it fixed. A is an off-topic personal opinion. C gives simplistic, unhelpful advice that ignores the proper procedure. D is a word trap on 'desk'.",
+      "distractor_types": {
+        "A": "off_topic",
+        "C": "literal_meaning",
+        "D": "word_trap"
+      },
+      "id": "lcr_gen_1776234280553_004"
+    },
+    {
+      "context": "classroom",
+      "situation": "discussing a reading with a classmate before class",
+      "speaker": "The author's argument about climate policy seems pretty convincing, right?",
+      "pragmatic_function": "expressing_agreement",
+      "options": {
+        "A": "I haven't finished the reading yet.",
+        "B": "Absolutely, the evidence she uses is really strong.",
+        "C": "Climate policy is an important topic.",
+        "D": "The author wrote several other books."
+      },
+      "answer": "B",
+      "explanation": "The speaker is seeking agreement on an evaluation. B directly agrees and provides supporting reasoning. A ignores the speaker's point by stating they are unprepared. C gives a generic, off-topic agreement with the subject, not the speaker's point about the argument. D is an irrelevant fact about the author.",
+      "distractor_types": {
+        "A": "off_topic",
+        "C": "literal_meaning",
+        "D": "word_trap"
+      },
+      "id": "lcr_gen_1776234280553_005"
+    },
+    {
+      "context": "daily_life",
+      "situation": "talking to a store clerk about a return",
+      "speaker": "I bought this here last week, but it doesn't fit.",
+      "pragmatic_function": "suggestion",
+      "options": {
+        "A": "This store was built last year.",
+        "B": "Did you try it on before you bought it?",
+        "C": "We can exchange it for a different size if you have the receipt.",
+        "D": "It fits me perfectly."
+      },
+      "answer": "C",
+      "explanation": "The speaker is implicitly initiating a return or exchange. C appropriately suggests a solution. B ignores the implicit request and asks an unhelpful, possibly critical question. A is an off-topic statement about the store. D is a word trap on 'fit' and is irrelevant.",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "literal_meaning",
+        "D": "word_trap"
+      },
+      "id": "lcr_gen_1776234280553_006"
+    },
+    {
+      "context": "campus_life",
+      "situation": "discussing a study group meeting time",
+      "speaker": "I've got a lab that ends at four, so I can't make the three-thirty meeting.",
+      "pragmatic_function": "offering_help",
+      "options": {
+        "A": "Labs are usually in the science building.",
+        "B": "We could take notes for you and send them after.",
+        "C": "I have a meeting at three-thirty too.",
+        "D": "Four is later than three-thirty."
+      },
+      "answer": "B",
+      "explanation": "The speaker is stating a scheduling conflict. B offers a helpful solution to include the speaker. C shares a similar problem but does not offer help, ignoring the speaker's point. A gives an off-topic fact about labs. D states the literal, obvious time difference.",
+      "distractor_types": {
+        "A": "off_topic",
+        "C": "literal_meaning",
+        "D": "word_trap"
+      },
+      "id": "lcr_gen_1776234280553_007"
+    },
+    {
+      "context": "classroom",
+      "situation": "asking about an assignment deadline extension",
+      "speaker": "Would it be possible to get an extra day for the project?",
+      "pragmatic_function": "polite_refusal",
+      "options": {
+        "A": "It's possible the deadline is tomorrow.",
+        "B": "Projects usually take a long time.",
+        "C": "I'm sorry, but extensions aren't allowed this time.",
+        "D": "An extra day would be twenty-four hours."
+      },
+      "answer": "C",
+      "explanation": "The speaker is making a direct, polite request. C politely and directly refuses. A is a word trap on 'possible' and gives an unhelpful literal response. B gives an off-topic general comment. D responds literally to 'extra day'.",
+      "distractor_types": {
+        "A": "word_trap",
+        "B": "off_topic",
+        "D": "literal_meaning"
+      },
+      "id": "lcr_gen_1776234280553_008"
+    },
+    {
+      "context": "daily_life",
+      "situation": "calling to check business hours",
+      "speaker": "I'm just calling to see if you're open past six tonight.",
+      "pragmatic_function": "expressing_gratitude",
+      "options": {
+        "A": "We close at eight, so yes, thank you for calling.",
+        "B": "I'm open to new ideas.",
+        "C": "Tonight, I'm going to a movie.",
+        "D": "Six is a number between five and seven."
+      },
+      "answer": "A",
+      "explanation": "The speaker is asking for information. A provides the information and appropriately thanks the caller for their inquiry. B is a word trap on 'open' with an irrelevant meaning. C is an off-topic personal statement. D gives a literal, pointless fact about the number six.",
+      "distractor_types": {
+        "B": "word_trap",
+        "C": "off_topic",
+        "D": "literal_meaning"
+      },
+      "id": "lcr_gen_1776234280553_009"
+    },
+    {
+      "context": "campus_life",
+      "situation": "talking to a tutor about writing help",
+      "speaker": "I'm really struggling to make my thesis statement clearer.",
+      "pragmatic_function": "expressing_agreement",
+      "options": {
+        "A": "Let's look at it together and see if we can sharpen it.",
+        "B": "You should struggle less with your writing.",
+        "C": "Clear statements are important in writing.",
+        "D": "My thesis is about ancient history."
+      },
+      "answer": "A",
+      "explanation": "The speaker is expressing a problem and implicitly asking for help. A agrees with the need to work on it and offers collaborative help. B gives unhelpful, literal advice that ignores the request. C states an off-topic, generic truth about writing. D is a word trap on 'thesis' and is irrelevant.",
+      "distractor_types": {
+        "B": "literal_meaning",
+        "C": "off_topic",
+        "D": "word_trap"
+      },
+      "id": "lcr_gen_1776234280553_010"
+    }
+  ]
+}

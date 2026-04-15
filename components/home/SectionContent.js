@@ -7,6 +7,8 @@ import { HomeLinkCard, HomeTaskCard } from "./HomeTaskCard";
 import { PromoBanner } from "./HomePageClient";
 import { ComingSoonSection } from "./ComingSoonSection";
 import { ReadingSectionContent } from "./ReadingSectionContent";
+import { ListeningSectionContent } from "./ListeningSectionContent";
+import { SpeakingSectionContent } from "./SpeakingSectionContent";
 
 export function SectionContent({
   activeSection,
@@ -26,6 +28,26 @@ export function SectionContent({
   if (activeSection === "reading") {
     return (
       <ReadingSectionContent
+        isChallenge={isChallenge} isPractice={isPractice} mode={mode} switchMode={switchMode}
+        hoverKey={hoverKey} setHoverKey={setHoverKey} fadeIn={fadeIn}
+        userTier={userTier} isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
+      />
+    );
+  }
+
+  if (activeSection === "listening") {
+    return (
+      <ListeningSectionContent
+        isChallenge={isChallenge} isPractice={isPractice} mode={mode} switchMode={switchMode}
+        hoverKey={hoverKey} setHoverKey={setHoverKey} fadeIn={fadeIn}
+        userTier={userTier} isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
+      />
+    );
+  }
+
+  if (activeSection === "speaking") {
+    return (
+      <SpeakingSectionContent
         isChallenge={isChallenge} isPractice={isPractice} mode={mode} switchMode={switchMode}
         hoverKey={hoverKey} setHoverKey={setHoverKey} fadeIn={fadeIn}
         userTier={userTier} isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
