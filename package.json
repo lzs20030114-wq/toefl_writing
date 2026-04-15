@@ -23,6 +23,7 @@
     "ops:telegram:send": "node scripts/ops/send-telegram.mjs"
   },
   "dependencies": {
+    "@andresaya/edge-tts": "^1.8.0",
     "@supabase/supabase-js": "^2.97.0",
     "next": "^14.2.0",
     "qrcode.react": "^4.2.0",

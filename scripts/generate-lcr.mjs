@@ -132,30 +132,41 @@ function collectExistingSpeakers() {
 }
 
 // ── TTS generation with smart voice selection ──
+// Default: Edge TTS (free, high quality)
+// Optional: OpenAI TTS (paid, highest quality) via --tts-provider openai
+
+const TTS_PROVIDER = getArg("tts-provider", "edge"); // "edge" or "openai"
+
 function pickVoicePreset(item) {
   const ctx = (item.context || "").toLowerCase();
-  const speaker = (item.speaker || "").toLowerCase();
-  // Heuristic: pick a voice preset based on context and speaker content
-  const isFemaleContext = /she|her|librarian|advisor|staff/i.test(speaker) || Math.random() < 0.5;
+  // Alternate male/female for variety
+  const isFemale = Math.random() < 0.5;
   if (ctx.includes("academic") || ctx.includes("classroom")) {
-    return isFemaleContext ? "lcr_staff_female" : "lcr_campus_male";
+    return isFemale ? "lcr_staff_female" : "lcr_campus_male";
   }
   if (ctx.includes("daily") || ctx.includes("social")) {
-    return isFemaleContext ? "lcr_campus_female" : "lcr_campus_male";
+    return isFemale ? "lcr_campus_female" : "lcr_campus_male";
   }
-  return isFemaleContext ? "lcr_campus_female" : "lcr_campus_male";
+  return isFemale ? "lcr_campus_female" : "lcr_campus_male";
 }
 
 async function generateTTS(item, id) {
   if (!WITH_TTS) return null;
   try {
-    const { generateSpeech } = require("../lib/tts/openaiTts.js");
-    const { uploadAudio } = require("../lib/tts/storage.js");
-
     const preset = pickVoicePreset(item);
-    console.log(`   🔊 TTS [${preset}]: "${item.speaker.slice(0, 40)}..."`);
+    let buffer;
 
-    const buffer = await generateSpeech(item.speaker, { preset, format: "mp3" });
+    if (TTS_PROVIDER === "openai") {
+      const { generateSpeech } = require("../lib/tts/openaiTts.js");
+      buffer = await generateSpeech(item.speaker, { preset, format: "mp3" });
+    } else {
+      const { generateSpeech } = require("../lib/tts/edgeTts.js");
+      buffer = await generateSpeech(item.speaker, { preset, format: "mp3" });
+    }
+
+    console.log(`   🔊 [${TTS_PROVIDER}/${preset}] ${buffer.length} bytes`);
+
+    const { uploadAudio } = require("../lib/tts/storage.js");
     const result = await uploadAudio(`choose-response/${id}.mp3`, buffer);
     return result.url;
   } catch (err) {
