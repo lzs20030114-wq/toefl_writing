@@ -274,7 +274,7 @@ function buildPrompt(count, opts = {}) {
 ## Phase 3: 校验体系（0.5天）
 
 ### 目标
-建立三级校验，自动拦截不合格的生成结果。
+建立三级校验 + ETS 味道评分，自动拦截不合格的生成结果。
 
 ### 三级校验架构
 
@@ -288,73 +288,205 @@ Level 2: Profile 校验（软性警告 → 通过但标记）
   - ETS 风味指标（hedging、passive、contrast）
   - FK 可读性等级
   - 选项长度分布
+  - 歧义风险检测（见下方 3.1）
 
-Level 3: 质量门控（条件性错误 → 可升级为拒绝）
-  - 正确答案是否总是最长的
-  - 选项间词汇重叠度
-  - 干扰项是否使用绝对词（all/always/never）
-  - 同一 item 内答案位置是否全相同
+Level 3: ETS Flavor 评分（0-1 分，加权量化）
+  - 基于 Phase 1 研究的味道公式
+  - 每道题算分，低于阈值标记警告
+  - 批次平均分用于整体质量判断
 ```
+
+### 3.1 歧义风险检测（关键！）
+
+**这是从 LCR 题库质审中学到的最重要教训。** 103 道 AI 生成的题中有 7 道（6.8%）存在"干扰项其实也是合理回应"的问题。全部被人工发现后删除。
+
+歧义检测的机械规则：
+
+```javascript
+// 检测 1: "off_topic" 干扰项与 speaker 共享 ≥3 个内容词
+const shared = sharedContentWords(speaker, distractor);
+if (shared.length >= 3) warn("ambiguity_risk: shares keywords");
+
+// 检测 2: "Do you know...?" 类问句 + 干扰项以 "Yes" 开头 + 包含话题词
+if (/^do you know/i.test(speaker) && /^yes/i.test(distractor) && shared.length >= 1)
+  warn("ambiguity_risk: Yes + topic word");
+
+// 检测 3: Where/When 问句 + 干扰项给了相关方位/时间信息
+if (/^where/i.test(speaker) && /^it('s| is) (on|at|near)/i.test(distractor))
+  warn("ambiguity_risk: gives location for where-question");
+```
+
+**常见歧义模式**（从真实审核中总结）：
+
+| Speaker 模式 | 坏干扰项 | 为什么有歧义 |
+|-------------|---------|------------|
+| "Do you know which chapters...?" | "I haven't read the chapters yet either." | 表达同理心，是自然回应 |
+| "Do you know if this journal is online?" | "I read it online yesterday." | 间接确认了"有线上版" |
+| "Where's the best place to park?" | "It's on the north side." | 给了有用方位信息 |
+| "Do you know when the shuttle leaves?" | "Yes, I know the schedule." | 自然的对话开头 |
+| "Is the gym still open?" | "Yes, I was there yesterday." | 暗示gym是开放的 |
+
+**防御原则**：每个干扰项在写完后必须过一次"现实对话测试"——如果有人在现实中这么回答，对方会不会觉得很自然？如果会，就不能用作干扰项。
 
 ### 批次校验
 - 整批答案位置分布是否接近均匀（25% each）
 - 话题多样性（批次内是否有重复主题）
 - 体裁覆盖度（RDL 是否 email/notice 都有）
+- ETS Flavor 平均分（目标 ≥0.70）
+- 缩写率 / 话语标记率 / 答案范式分布
 
-### 代码模式
+### ETS Flavor 评分模式
+
+对每道题计算加权味道分，用于量化"真题感"：
 
 ```javascript
-function validateItem(item) {
-  const errors = [];   // 硬性错误 → 拒绝
-  const warnings = []; // 软性警告 → 通过
+function scoreFlavor(item) {
+  const scores = {};
+  scores.indirect_answer = isIndirect ? 1 : 0;          // 权重 0.25
+  scores.word_trap = hasWordTrapDistractor ? 1 : 0;      // 权重 0.20
+  scores.distractor_diversity = uniqueTypes >= 2 ? 1 : 0; // 权重 0.15
+  scores.natural_register = hasContraction ? 0.6 : 0;    // 权重 0.15
+  scores.constructive_tone = isConstructive ? 1 : 0;     // 权重 0.10
+  scores.plausible_distractors = allPlausible ? 1 : 0;   // 权重 0.10
+  scores.length_neutrality = correctNotLongest ? 1 : 0;  // 权重 0.05
   
-  // Level 1: Schema
-  if (wc(item.passage) < MIN_WORDS) errors.push(`word_count: ${wc} < ${MIN_WORDS}`);
-  
-  // Level 2: Profile
-  if (!hasHedging(item.passage)) warnings.push("no_hedging");
-  
-  // Level 3: Quality
-  if (correctIsLongest(item) > 0.4) warnings.push("correct_too_long");
-  
-  return { pass: errors.length === 0, errors, warnings };
+  return weightedSum(scores); // 0-1, target ≥ 0.70
 }
 ```
 
 ### 关键产出
-- `lib/readingGen/{taskType}Validator.js`
+- `lib/{examType}Gen/{taskType}Validator.js`
 
 ---
 
-## Phase 4: AI 审核（0.5天）
+## Phase 4: AI 审核 + 歧义防御（1天）
 
 ### 目标
-用 AI 作为"第二审核官"，独立验证答案正确性。
+用 AI 作为"第二审核官"，从两个角度验证题目质量：
+1. **答案正确性**：AI 是否同意标注的正确答案
+2. **歧义性**：是否存在多个合理答案（最重要！）
 
-### 审核模式
+### 三层防御架构
 
-**Pass 1: 带原文作答（验证正确性）**
-- 把原文+题目+选项发给 AI（不告诉正确答案）
-- AI 独立选答案
-- 如果 AI 答案 ≠ 标注答案 → CRITICAL flag
+题目质量问题不能只靠一层防御。经 LCR 实战验证，需要三层：
 
-**Pass 2: 不带原文猜题（验证可猜性）**
-- 只发题目+选项（不给原文）
+```
+Layer 1: Prompt 防御（预防）
+  ↓ 从源头减少问题生成
+Layer 2: Validator 检测（预警）  
+  ↓ 机械规则标记可疑项
+Layer 3: AI Audit（判定）
+  ↓ AI 独立作答，最终裁决
+  → 通过 / 拒绝
+```
+
+### Layer 1: Prompt 层防御
+
+在 prompt 中加入**真实失败案例**，让 AI 知道哪些模式会导致题目被删除：
+
+```
+### AMBIGUITY PREVENTION (READ CAREFULLY):
+The most common fatal flaw: a distractor that ALSO works as a valid response.
+Before writing each distractor, ask: "If someone said this in real life,
+would it be a reasonable reply?" If YES → rewrite it.
+
+REAL FAILURES FROM OUR QUALITY AUDIT:
+- Speaker: "Do you know which chapters we're supposed to read?"
+  BAD distractor: "I haven't read the chapters yet either."
+  ← THIS IS A NATURAL RESPONSE, not a distractor!
+
+- Speaker: "Do you know if the gym is still open?"  
+  BAD distractor: "Yes, I was there yesterday."
+  ← IMPLIES THE GYM EXISTS AND OPENS!
+```
+
+**关键原则**：用**真实被删除的坏题**做反面教材，比抽象规则有效 10 倍。每次人工审核发现新的歧义模式，都要回填到 prompt 中。
+
+### Layer 2: Validator 层检测
+
+参见 Phase 3 的 3.1 歧义风险检测。机械检测不能替代 AI 审核，但能提前标记可疑项，在日志中醒目显示。
+
+### Layer 3: AI Audit 层
+
+**这是最关键的一层**——AI 独立做题，检测答案是否唯一正确。
+
+#### 审核模式
+
+**模式 A: 阅读/听力 MCQ（RDL/AP/LCR 等）**
+
+**Pass 1: 独立作答 + 逐项评级**
+- 把题目+选项发给 AI（不告诉正确答案）
+- AI 对每个选项评级：valid / partially_valid / invalid
+- AI 选出 best answer
+- 判定逻辑：
+  - AI best ≠ 我们的 answer → **MISMATCH**（直接删除）
+  - 多个选项被评为 valid → **AMBIGUOUS**（直接删除）
+  - AI best = 我们的 answer 且只有 1 个 valid → **CLEAN**（通过）
+
+```javascript
+async function auditItem(item, callAI) {
+  const prompt = `Rate each option as valid/partially_valid/invalid,
+    then pick the SINGLE BEST response.
+    Speaker: "${item.speaker}"
+    A. ${item.options.A}  B. ${item.options.B}
+    C. ${item.options.C}  D. ${item.options.D}
+    Return JSON: { ratings: {A:..., B:..., C:..., D:...}, best: "X", reasoning: "..." }`;
+  
+  const result = await callAI(prompt);
+  const parsed = JSON.parse(result);
+  
+  const match = parsed.best === item.answer;
+  const validCount = Object.values(parsed.ratings).filter(r => r === "valid").length;
+  const ambiguous = validCount > 1;
+  
+  return { match, ambiguous, ratings: parsed.ratings };
+}
+```
+
+**Pass 2: 不看原文猜题（仅阅读题型，验证可猜性）**
+- 只发题目+选项（不给原文/音频文本）
 - AI 靠常识猜
 - 如果猜对 → GUESSABLE warning（干扰项太弱）
 
-### 关键参数
+#### 审核参数
 - temperature: 0.1（低温确保确定性）
-- 对 AP 的 5 道题全部独立审核
-- 任何一题 mismatch → 整个 item 被标记
+- model: 和生成用同一个（DeepSeek）
+- timeout: 30s/题
+- 每批所有 accepted 的题全部审核（不抽样）
 
-### 审核效果实测
-- RDL: 每批约 5-10% 的题被审核发现答案错误
-- AP: 约 3-5% 被发现
-- CTW: 机械挖空无需审核（正确性由算法保证）
+#### 审核效果实测
+
+| 题型 | 批量大小 | Audit 拦截率 | 典型问题 |
+|------|---------|-------------|---------|
+| RDL | 10 | 5-10% | AI 答案与标注不一致 |
+| AP | 5 | 3-5% | 答案与原文不匹配 |
+| **LCR** | **10** | **10-20%** | **干扰项也是合理回应（歧义）** |
+| CTW | 10 | 0% | 机械挖空无需审核 |
+
+**LCR 的歧义问题是所有题型中最严重的**（20%），因为对话回应天然有多种合理方式。这就是为什么 LCR 需要三层防御而不是仅靠 AI audit。
+
+#### 反馈闭环
+
+审核发现的问题要回流到前面的层：
+
+```
+AI Audit 发现新的歧义模式
+  → 加入 Prompt 的反面案例（Layer 1）
+  → 加入 Validator 的检测规则（Layer 2）
+  → 更新 flavor model 的 anti-pattern（Phase 1 数据）
+```
+
+每次批量生成后，检查被 audit 拦截的题目，分析失败模式，更新管线。这个循环持续运转，管线质量会越来越好。
 
 ### 关键产出
-- `lib/readingGen/answerAuditor.js`（可跨题型复用）
+- `lib/{examType}Gen/{taskType}Auditor.js` — 题型专用审核模块
+- `lib/readingGen/answerAuditor.js` — 阅读题通用审核（可跨题型复用）
+
+### 常见坑
+- **只靠 AI audit 不够**：AI audit 能抓住大部分歧义，但偶尔 AI 自己也会误判。三层防御互相补位。
+- **不要跳过 audit 节省 API 调用**：LCR 的 20% 歧义拦截率意味着不跑 audit 会有 1/5 的坏题进库。
+- **审核 prompt 要用低温**：temperature 0.1，确保 AI 判断一致。高温会导致同一道题每次审核结果不同。
+- **审核发现的坏题是宝贵数据**：每个被拦截的题都是一个反面教材，要收集并回填到 prompt 中。
 
 ---
 
