@@ -12,7 +12,7 @@ const SPEAKING_TASKS = [
     k: "speaking-repeat",
     n: "Task 1",
     t: "Listen & Repeat",
-    d: "Listen to 7 sentences and repeat each one. Tests pronunciation accuracy.",
+    d: "听 7 个句子并逐句复述。",
     it: "7 sentences",
     timeLabel: "3 min",
   },
@@ -20,7 +20,7 @@ const SPEAKING_TASKS = [
     k: "speaking-interview",
     n: "Task 2",
     t: "Take an Interview",
-    d: "Answer 4 interview questions, 45 seconds each. Difficulty increases.",
+    d: "回答 4 道面试题，每题 45 秒。",
     it: "4 questions",
     timeLabel: "4 min",
   },
@@ -47,7 +47,7 @@ export function SpeakingSectionContent({
       t: task.t,
       d: isPractice ? "自选题目，不限时间。" : task.d,
       it: task.it,
-      timeLabel: isPractice ? "自选" : task.timeLabel,
+      timeLabel: isPractice ? "不限时" : task.timeLabel,
       isMock: false,
       delay: 190 + index * 70,
     };
@@ -57,14 +57,14 @@ export function SpeakingSectionContent({
     <div style={{ flex: 1, minWidth: 0 }}>
       {/* Section header + mode switcher */}
       <div style={{ marginBottom: 16, ...fadeIn(50) }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, marginBottom: 10 }}>
+        <div className="tp-home-header" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, marginBottom: 10 }}>
           <h1 style={{ margin: 0, fontSize: 28, fontWeight: 800, color: isChallenge ? CH.t1 : T.t1, letterSpacing: -0.5, lineHeight: 1.2 }}>
             Speaking
             <span style={{ fontSize: 14, fontWeight: 600, color: T.t3, marginLeft: 6 }}>（测试）</span>
-            {isChallenge && <span style={{ color: CH.accent }}> Challenge</span>}
             {isPractice && <span style={{ color: SPEAKING_ACCENT.color }}> Practice</span>}
+            {isChallenge && <span style={{ color: CH.accent }}> Challenge</span>}
           </h1>
-          <div style={{ display: "inline-flex", gap: 4, flexShrink: 0, background: isChallenge ? "rgba(255,255,255,0.05)" : T.card, border: `1px solid ${isChallenge ? CH.cardBorder : T.bdr}`, borderRadius: 999, padding: 4, boxShadow: T.shadow }}>
+          <div className="tp-mode-switcher" style={{ display: "inline-flex", gap: 4, flexShrink: 0, background: isChallenge ? "rgba(255,255,255,0.05)" : T.card, border: `1px solid ${isChallenge ? "rgba(255,30,30,0.3)" : T.bdr}`, borderRadius: 999, padding: 4, boxShadow: T.shadow }}>
             {[
               { value: PRACTICE_MODE.STANDARD, label: "Standard" },
               { value: PRACTICE_MODE.PRACTICE, label: "Practice" },
@@ -93,7 +93,7 @@ export function SpeakingSectionContent({
         </div>
         <p style={{ margin: 0, fontSize: 13, color: isChallenge ? CH.accent : T.t2, fontWeight: isChallenge ? 600 : 400 }}>
           {isPractice
-            ? "自选题目，不限时间，自由练习口语。"
+            ? "自选题目，不限时间，自由练习。"
             : "TOEFL 2026 新口语题型：听后复述、模拟面试。需要麦克风权限。"}
         </p>
       </div>
@@ -101,14 +101,14 @@ export function SpeakingSectionContent({
       {/* Feature strip */}
       <div style={{ background: isChallenge ? "rgba(17,17,24,0.7)" : T.card, border: `1px solid ${isChallenge ? CH.cardBorder : T.bdr}`, borderRadius: 10, padding: "10px 16px", marginBottom: 16, boxShadow: isChallenge ? "none" : T.shadow, ...fadeIn(120) }}>
         <div style={{ display: "flex", gap: 20, flexWrap: "wrap", fontSize: 12, color: isChallenge ? CH.t2 : T.t2 }}>
-          <span>🎙️ 录音自查模式（无 AI 评分）</span>
-          <span>🗣 两种口语题型（2026 新托福）</span>
-          <span>⏱ 模拟考试计时</span>
-          <span>🔊 TTS 语音播放</span>
+          <span>- 两种口语题型（复述 · 面试）</span>
+          <span>- 录音自查模式（暂无 AI 评分）</span>
+          <span>- 模拟考试计时</span>
+          <span>- 仅供练习使用，不代表官方考试评分</span>
         </div>
       </div>
 
-      {/* 🆕 New feature badge */}
+      {/* New badge */}
       <div style={{
         background: `linear-gradient(135deg, ${SPEAKING_ACCENT.soft}, #FEF3C7)`,
         border: `1px solid ${SPEAKING_ACCENT.color}30`,
@@ -126,11 +126,11 @@ export function SpeakingSectionContent({
       {/* Microphone notice */}
       <div style={{ background: "#FFFBEB", border: "1px solid #FCD34D", borderRadius: 10, padding: "10px 16px", marginBottom: 16, ...fadeIn(150) }}>
         <p style={{ margin: 0, fontSize: 12, color: "#92400E" }}>
-          🎙️ 口语练习需要麦克风权限。首次使用时浏览器会弹出授权提示，请点击"允许"。目前为<strong>自查模式</strong>：录完后自己回听，暂无 AI 评分。
+          🎙️ 口语练习需要麦克风权限。首次使用时浏览器会弹出授权提示，请点击「允许」。
         </p>
       </div>
 
-      {/* Pro gate banner */}
+      {/* Pro gate */}
       {!isPro && (
         <div style={{
           background: isChallenge ? "rgba(255,255,255,0.04)" : "#FFFBEB",
@@ -148,26 +148,30 @@ export function SpeakingSectionContent({
           </div>
           {!isLoggedIn ? (
             <button onClick={showLoginModal} style={{
-              padding: "8px 18px", borderRadius: 8, border: "none", cursor: "pointer",
-              background: SPEAKING_ACCENT.color, color: "#fff", fontSize: 13, fontWeight: 700,
+              padding: "8px 16px", borderRadius: 8, border: "none",
+              background: SPEAKING_ACCENT.color, color: "#fff",
+              fontSize: 13, fontWeight: 600, cursor: "pointer",
             }}>登录</button>
           ) : (
             <button onClick={() => { try { window.dispatchEvent(new CustomEvent("open-upgrade-modal")); } catch {} }} style={{
-              padding: "8px 18px", borderRadius: 8, border: "none", cursor: "pointer",
-              background: SPEAKING_ACCENT.color, color: "#fff", fontSize: 13, fontWeight: 700,
+              padding: "8px 16px", borderRadius: 8, border: "none",
+              background: SPEAKING_ACCENT.color, color: "#fff",
+              fontSize: 13, fontWeight: 600, cursor: "pointer",
             }}>升级 Pro</button>
           )}
         </div>
       )}
 
-      {/* Task grid */}
-      <div className="home-grid" style={{
-        display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 28,
-        opacity: isPro ? 1 : 0.45, pointerEvents: isPro ? "auto" : "none",
-        filter: isPro ? "none" : "grayscale(0.5)",
-      }}>
+      {/* Task grid — identical to Writing/Reading pattern */}
+      <div className="home-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 28 }}>
         {gridItems.map((item) => (
-          <div key={item.k} style={{ display: "flex", ...fadeIn(item.delay) }}>
+          <div key={item.k} style={{
+            display: "flex",
+            opacity: isPro ? 1 : 0.45,
+            pointerEvents: isPro ? "auto" : "none",
+            filter: isPro ? "none" : "grayscale(0.5)",
+            ...fadeIn(item.delay),
+          }}>
             <HomeTaskCard item={item} hoverKey={hoverKey} setHoverKey={setHoverKey} isChallenge={isChallenge} />
           </div>
         ))}

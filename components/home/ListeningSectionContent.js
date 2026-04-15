@@ -12,23 +12,23 @@ const LISTENING_TASKS = [
     k: "listening-lcr",
     n: "Task 1",
     t: "Choose a Response",
-    d: "Listen to a sentence and choose the most appropriate response.",
+    d: "听一句话，选最合适的回应。",
     it: "10 questions",
     timeLabel: "5 min",
   },
   {
     k: "listening-la",
     n: "Task 2",
-    t: "Listen to an Announcement",
-    d: "Listen to a campus announcement and answer comprehension questions.",
+    t: "Announcement",
+    d: "听校园公告并回答理解题。",
     it: "2-3 questions",
     timeLabel: "3 min",
   },
   {
     k: "listening-lc",
     n: "Task 3",
-    t: "Listen to a Conversation",
-    d: "Listen to a short campus conversation and answer questions.",
+    t: "Conversation",
+    d: "听一段校园对话并回答问题。",
     it: "2 questions",
     timeLabel: "5 min",
   },
@@ -36,7 +36,7 @@ const LISTENING_TASKS = [
     k: "listening-lat",
     n: "Task 4",
     t: "Academic Talk",
-    d: "Listen to a short academic lecture and answer comprehension questions.",
+    d: "听学术讲座并回答理解题。",
     it: "3-5 questions",
     timeLabel: "8 min",
   },
@@ -65,7 +65,7 @@ export function ListeningSectionContent({
       t: task.t,
       d: isPractice ? "自选题目，不限时间。" : task.d,
       it: task.it,
-      timeLabel: isPractice ? "自选" : task.timeLabel,
+      timeLabel: isPractice ? "不限时" : task.timeLabel,
       isMock: false,
       delay: 190 + index * 70,
     };
@@ -75,14 +75,14 @@ export function ListeningSectionContent({
     <div style={{ flex: 1, minWidth: 0 }}>
       {/* Section header + mode switcher */}
       <div style={{ marginBottom: 16, ...fadeIn(50) }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, marginBottom: 10 }}>
+        <div className="tp-home-header" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, marginBottom: 10 }}>
           <h1 style={{ margin: 0, fontSize: 28, fontWeight: 800, color: isChallenge ? CH.t1 : T.t1, letterSpacing: -0.5, lineHeight: 1.2 }}>
             Listening
             <span style={{ fontSize: 14, fontWeight: 600, color: T.t3, marginLeft: 6 }}>（测试）</span>
-            {isChallenge && <span style={{ color: CH.accent }}> Challenge</span>}
             {isPractice && <span style={{ color: LISTENING_ACCENT.color }}> Practice</span>}
+            {isChallenge && <span style={{ color: CH.accent }}> Challenge</span>}
           </h1>
-          <div style={{ display: "inline-flex", gap: 4, flexShrink: 0, background: isChallenge ? "rgba(255,255,255,0.05)" : T.card, border: `1px solid ${isChallenge ? CH.cardBorder : T.bdr}`, borderRadius: 999, padding: 4, boxShadow: T.shadow }}>
+          <div className="tp-mode-switcher" style={{ display: "inline-flex", gap: 4, flexShrink: 0, background: isChallenge ? "rgba(255,255,255,0.05)" : T.card, border: `1px solid ${isChallenge ? "rgba(255,30,30,0.3)" : T.bdr}`, borderRadius: 999, padding: 4, boxShadow: T.shadow }}>
             {[
               { value: PRACTICE_MODE.STANDARD, label: "Standard" },
               { value: PRACTICE_MODE.PRACTICE, label: "Practice" },
@@ -111,7 +111,7 @@ export function ListeningSectionContent({
         </div>
         <p style={{ margin: 0, fontSize: 13, color: isChallenge ? CH.accent : T.t2, fontWeight: isChallenge ? 600 : 400 }}>
           {isPractice
-            ? "自选题目，不限时间，自由练习听力。"
+            ? "自选题目，不限时间，自由练习。"
             : "TOEFL 2026 新听力题型：选择回应、公告、对话、学术讲座。"}
         </p>
       </div>
@@ -119,14 +119,14 @@ export function ListeningSectionContent({
       {/* Feature strip */}
       <div style={{ background: isChallenge ? "rgba(17,17,24,0.7)" : T.card, border: `1px solid ${isChallenge ? CH.cardBorder : T.bdr}`, borderRadius: 10, padding: "10px 16px", marginBottom: 16, boxShadow: isChallenge ? "none" : T.shadow, ...fadeIn(120) }}>
         <div style={{ display: "flex", gap: 20, flexWrap: "wrap", fontSize: 12, color: isChallenge ? CH.t2 : T.t2 }}>
-          <span>🎧 四种听力题型（2026 新托福）</span>
-          <span>📝 模拟考试限时练习</span>
-          <span>🔊 支持 TTS 语音播放</span>
-          <span>⚠️ 仅供练习使用</span>
+          <span>- 四种听力题型（选择回应 · 公告 · 对话 · 讲座）</span>
+          <span>- 模拟考试限时练习</span>
+          <span>- TTS 语音播放</span>
+          <span>- 仅供练习使用，不代表官方考试评分</span>
         </div>
       </div>
 
-      {/* 🆕 New feature badge */}
+      {/* New badge */}
       <div style={{
         background: `linear-gradient(135deg, ${LISTENING_ACCENT.soft}, #EDE9FE)`,
         border: `1px solid ${LISTENING_ACCENT.color}30`,
@@ -141,7 +141,7 @@ export function ListeningSectionContent({
         </div>
       </div>
 
-      {/* Pro gate banner */}
+      {/* Pro gate */}
       {!isPro && (
         <div style={{
           background: isChallenge ? "rgba(255,255,255,0.04)" : "#FFFBEB",
@@ -159,26 +159,30 @@ export function ListeningSectionContent({
           </div>
           {!isLoggedIn ? (
             <button onClick={showLoginModal} style={{
-              padding: "8px 18px", borderRadius: 8, border: "none", cursor: "pointer",
-              background: LISTENING_ACCENT.color, color: "#fff", fontSize: 13, fontWeight: 700,
+              padding: "8px 16px", borderRadius: 8, border: "none",
+              background: LISTENING_ACCENT.color, color: "#fff",
+              fontSize: 13, fontWeight: 600, cursor: "pointer",
             }}>登录</button>
           ) : (
             <button onClick={() => { try { window.dispatchEvent(new CustomEvent("open-upgrade-modal")); } catch {} }} style={{
-              padding: "8px 18px", borderRadius: 8, border: "none", cursor: "pointer",
-              background: LISTENING_ACCENT.color, color: "#fff", fontSize: 13, fontWeight: 700,
+              padding: "8px 16px", borderRadius: 8, border: "none",
+              background: LISTENING_ACCENT.color, color: "#fff",
+              fontSize: 13, fontWeight: 600, cursor: "pointer",
             }}>升级 Pro</button>
           )}
         </div>
       )}
 
-      {/* Task grid */}
-      <div className="home-grid" style={{
-        display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 28,
-        opacity: isPro ? 1 : 0.45, pointerEvents: isPro ? "auto" : "none",
-        filter: isPro ? "none" : "grayscale(0.5)",
-      }}>
+      {/* Task grid — identical to Writing/Reading pattern */}
+      <div className="home-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 28 }}>
         {gridItems.map((item) => (
-          <div key={item.k} style={{ display: "flex", ...fadeIn(item.delay) }}>
+          <div key={item.k} style={{
+            display: "flex",
+            opacity: isPro ? 1 : 0.45,
+            pointerEvents: isPro ? "auto" : "none",
+            filter: isPro ? "none" : "grayscale(0.5)",
+            ...fadeIn(item.delay),
+          }}>
             <HomeTaskCard item={item} hoverKey={hoverKey} setHoverKey={setHoverKey} isChallenge={isChallenge} />
           </div>
         ))}
