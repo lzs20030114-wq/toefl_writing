@@ -131,13 +131,31 @@ function collectExistingSpeakers() {
   return speakers;
 }
 
-// ── TTS generation (optional) ──
+// ── TTS generation with smart voice selection ──
+function pickVoicePreset(item) {
+  const ctx = (item.context || "").toLowerCase();
+  const speaker = (item.speaker || "").toLowerCase();
+  // Heuristic: pick a voice preset based on context and speaker content
+  const isFemaleContext = /she|her|librarian|advisor|staff/i.test(speaker) || Math.random() < 0.5;
+  if (ctx.includes("academic") || ctx.includes("classroom")) {
+    return isFemaleContext ? "lcr_staff_female" : "lcr_campus_male";
+  }
+  if (ctx.includes("daily") || ctx.includes("social")) {
+    return isFemaleContext ? "lcr_campus_female" : "lcr_campus_male";
+  }
+  return isFemaleContext ? "lcr_campus_female" : "lcr_campus_male";
+}
+
 async function generateTTS(item, id) {
   if (!WITH_TTS) return null;
   try {
     const { generateSpeech } = require("../lib/tts/openaiTts.js");
     const { uploadAudio } = require("../lib/tts/storage.js");
-    const buffer = await generateSpeech(item.speaker, { voice: "nova", model: "tts-1-hd", format: "mp3" });
+
+    const preset = pickVoicePreset(item);
+    console.log(`   🔊 TTS [${preset}]: "${item.speaker.slice(0, 40)}..."`);
+
+    const buffer = await generateSpeech(item.speaker, { preset, format: "mp3" });
     const result = await uploadAudio(`choose-response/${id}.mp3`, buffer);
     return result.url;
   } catch (err) {
