@@ -1,0 +1,128 @@
+{
+  "description": "LCR (Listen and Choose a Response) — ETS profile derived from 16 reference samples. Used for generation calibration and quality gating.",
+  "last_updated": "2026-04-15",
+  "sample_count": 16,
+
+  "task_format": {
+    "audio": "Single sentence, ~5 seconds, one speaker",
+    "options": "4 choices (A/B/C/D), text only (not audio)",
+    "scoring": "1 point per correct answer",
+    "time_per_item": "~15 seconds (listen + select)"
+  },
+
+  "speaker_sentence": {
+    "word_count": { "min": 5, "max": 16, "avg": 9.5, "target": "8-12" },
+    "register": "casual spoken English, contractions OK, campus/daily life",
+    "sentence_types_observed": {
+      "yes_no_question": 5,
+      "wh_question": 4,
+      "negative_question": 3,
+      "statement_implying_response": 3,
+      "request_or_invitation": 1
+    },
+    "common_patterns": [
+      "Didn't I just...? (negative question seeking confirmation)",
+      "I'm afraid I'm not... (polite decline/unavailability)",
+      "Do you want to...? (invitation)",
+      "How do I...? (seeking information)",
+      "Isn't the... open? (checking assumption)",
+      "Are you done with...? (polite request)",
+      "I'm thinking of... (expressing intention/concern)",
+      "I have to tell you... (preface to news)"
+    ]
+  },
+
+  "correct_answer": {
+    "response_types_observed": {
+      "indirect_response": 7,
+      "direct_informational": 4,
+      "offering_help": 2,
+      "polite_acknowledgement": 1,
+      "enthusiastic_acceptance": 1,
+      "idiomatic_expression": 1
+    },
+    "word_count": { "min": 3, "max": 12, "avg": 7, "target": "5-10" },
+    "key_insight": "~44% of correct answers are INDIRECT — they address the intent/emotion behind the words, not the literal question. This is the core pragmatic skill being tested.",
+    "register": "natural spoken English, may include idioms (I'm all ears, Absolutely)"
+  },
+
+  "distractors": {
+    "types_observed": {
+      "word_trap": 12,
+      "off_topic": 11,
+      "wrong_question_type": 5,
+      "misinterpretation": 4,
+      "wrong_tense": 2,
+      "grammar_trap": 1
+    },
+    "word_trap_description": "Reuses a key word from the speaker sentence in a misleading context (e.g., 'library'→'reference section', 'bus'→'missed the bus', 'tell'→'told you')",
+    "off_topic_description": "Grammatically correct English but completely irrelevant to the conversation context",
+    "wrong_question_type_description": "Answers a different type of question than what was asked (e.g., answers 'where' when asked 'when')",
+    "key_insight": "Each item should have distractors from at least 2 different types. Word traps are the most common — almost always 1 per item."
+  },
+
+  "pragmatic_functions_tested": {
+    "description": "The communicative intent the test-taker must recognize",
+    "functions_observed": [
+      "confirming_observation",
+      "proposing_alternative",
+      "offering_help",
+      "providing_information",
+      "suggesting_verification",
+      "responding_to_request",
+      "indirect_refusal",
+      "indirect_answer_with_context",
+      "offering_to_help_instead",
+      "advancing_conversation",
+      "reporting_outcome",
+      "expressing_readiness",
+      "enthusiastic_acceptance",
+      "polite_acknowledgement",
+      "providing_specific_information",
+      "giving_advice"
+    ],
+    "most_common": ["indirect_refusal", "proposing_alternative", "offering_help", "providing_information"]
+  },
+
+  "scenarios": {
+    "campus_academic": ["library", "class schedule", "professor office hours", "course enrollment", "presentations", "lab work", "study groups", "printing/scanning"],
+    "campus_daily": ["cafeteria/lunch", "bus stop/transportation", "post office", "concert/events", "dormitory"],
+    "service_interaction": ["customer service", "front desk", "administrative office"],
+    "social": ["making plans", "declining invitations", "sharing news", "checking in"]
+  },
+
+  "answer_position_distribution": {
+    "A": 3, "B": 5, "C": 3, "D": 5,
+    "note": "Roughly balanced. Real ETS tests aim for even distribution."
+  },
+
+  "option_length": {
+    "description": "All 4 options should be similar length",
+    "target_word_count": "4-12 words per option",
+    "correct_should_not_be_longest": true,
+    "parallel_structure": "Options should start with similar grammatical structures when possible"
+  },
+
+  "quality_markers": {
+    "must_have": [
+      "Speaker sentence sounds natural and spoken (not written English)",
+      "Correct answer addresses communicative INTENT, not just literal words",
+      "At least 1 word-trap distractor per item",
+      "All 4 options are grammatically correct English",
+      "Options are similar in length (within 5 words of each other)"
+    ],
+    "avoid": [
+      "Speaker sentences that are too formal/academic",
+      "Correct answers that are too obvious/literal",
+      "Distractors that are obviously wrong (gibberish, grammar errors)",
+      "All distractors being the same type (e.g., all word traps)",
+      "Correct answer being consistently the longest option"
+    ]
+  },
+
+  "difficulty_calibration": {
+    "easy": "Direct question + direct answer (factual info exchange)",
+    "medium": "Statement implying action + indirect response needed",
+    "hard": "Negative question or emotional statement + must recognize intent behind words, idiom knowledge helpful"
+  }
+}

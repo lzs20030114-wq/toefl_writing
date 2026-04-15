@@ -1,0 +1,336 @@
+{
+  "description": "Listen and Choose a Response (LCR) — collected reference samples from ETS official, third-party prep sites, and Chinese test prep analysis. Used as ground truth for AI question generation calibration.",
+  "sources": [
+    "ETS Official Sample Test (Jan 2026)",
+    "TestSucceed.com TOEFL 2026 samples",
+    "TOEFLResources.com practice questions",
+    "Writing30.com TOEFL 2026 guide",
+    "TOEFLPreps.com listening practice",
+    "TestDaily (厚朴优学) LCR analysis",
+    "Magoosh TOEFL listening practice 2026"
+  ],
+  "last_updated": "2026-04-15",
+  "total_samples": 16,
+  "samples": [
+    {
+      "id": "lcr_ref_001",
+      "source": "ETS Official / TestSucceed",
+      "category": "recognizing_past_action",
+      "speaker": "Didn't I just see you in the library an hour ago?",
+      "options": {
+        "A": "Yes, you can find it in the reference section.",
+        "B": "I don't think I'll have enough time to do that.",
+        "C": "Actually, I think I can get there a little earlier.",
+        "D": "As a matter of fact, I was returning a book."
+      },
+      "answer": "D",
+      "explanation": "The speaker confirms a previous observation. D explains what the listener was doing at the library, naturally continuing the conversation. A is a word trap ('library'→'reference section'). B/C are off-topic.",
+      "pragmatic_function": "confirming_observation",
+      "distractor_analysis": {
+        "A": "word_trap — 'library' triggers 'reference section'",
+        "B": "off_topic — unrelated to the question",
+        "C": "off_topic — about future timing, not past"
+      }
+    },
+    {
+      "id": "lcr_ref_002",
+      "source": "ETS Official / TestSucceed",
+      "category": "schedule_problem",
+      "speaker": "I'm afraid I'm not available this evening.",
+      "options": {
+        "A": "Oh, that's too early.",
+        "B": "How about tomorrow night then?",
+        "C": "She arrived this afternoon.",
+        "D": "No, that's not necessary."
+      },
+      "answer": "B",
+      "explanation": "When someone declines a time, proposing an alternative is the natural continuation. B advances the conversation. A misinterprets 'evening'. C/D are unrelated.",
+      "pragmatic_function": "proposing_alternative",
+      "distractor_analysis": {
+        "A": "misinterpretation — 'evening' is not 'early'",
+        "C": "off_topic — unrelated person/time",
+        "D": "off_topic — dismissive, doesn't address scheduling"
+      }
+    },
+    {
+      "id": "lcr_ref_003",
+      "source": "TestSucceed",
+      "category": "asking_for_directions",
+      "speaker": "Where is the nearest bus stop?",
+      "options": {
+        "A": "I nearly missed the bus.",
+        "B": "Every 30 minutes.",
+        "C": "I can help you find it.",
+        "D": "I'll take the subway instead."
+      },
+      "answer": "C",
+      "explanation": "A location question requires either directions or helpful action. C offers assistance. A is a word trap ('bus'). B answers a different question (frequency). D is about the responder, not the asker.",
+      "pragmatic_function": "offering_help",
+      "distractor_analysis": {
+        "A": "word_trap — 'bus' triggers 'missed the bus'",
+        "B": "wrong_question — answers 'how often' not 'where'",
+        "D": "off_topic — about responder's preference"
+      }
+    },
+    {
+      "id": "lcr_ref_004",
+      "source": "TestSucceed",
+      "category": "asking_for_information",
+      "speaker": "How do I contact customer service?",
+      "options": {
+        "A": "Yes, you're allowed to do that.",
+        "B": "Use the convenient chat feature.",
+        "C": "No, I don't mind.",
+        "D": "They provide good service."
+      },
+      "answer": "B",
+      "explanation": "A 'how' question needs a method/process answer. B provides a practical method. A/C answer yes/no questions that weren't asked. D is a word trap ('service').",
+      "pragmatic_function": "providing_information",
+      "distractor_analysis": {
+        "A": "wrong_question_type — answers yes/no, not how",
+        "C": "wrong_question_type — answers yes/no, not how",
+        "D": "word_trap — 'service' triggers 'good service'"
+      }
+    },
+    {
+      "id": "lcr_ref_005",
+      "source": "TestSucceed",
+      "category": "checking_information",
+      "speaker": "Isn't the post office open today?",
+      "options": {
+        "A": "No, it's my package.",
+        "B": "It's just around the corner!",
+        "C": "I think he's come home already.",
+        "D": "Let's check the schedule online."
+      },
+      "answer": "D",
+      "explanation": "A negative question about operating hours. D proposes verification — a practical, helpful response. A is a word trap ('post office'→'package'). B answers 'where' not 'is it open'. C is completely unrelated.",
+      "pragmatic_function": "suggesting_verification",
+      "distractor_analysis": {
+        "A": "word_trap — 'post office' triggers 'package'",
+        "B": "wrong_question — answers 'where' not 'when/if open'",
+        "C": "off_topic — completely unrelated"
+      }
+    },
+    {
+      "id": "lcr_ref_006",
+      "source": "ETS Official (Chinese prep sources)",
+      "category": "requesting_action",
+      "speaker": "Are you done with the printer? I need to scan something urgent.",
+      "options": {
+        "A": "Thank you for asking, I appreciate it.",
+        "B": "Just one more minute, I'm printing the last page.",
+        "C": "I'll buy more ink tomorrow.",
+        "D": "The printer is new and very fast."
+      },
+      "answer": "B",
+      "explanation": "The speaker is making a polite but urgent request for the printer. B acknowledges the request and provides a timeline. A is a social nicety that doesn't address the situation. C is about a future unrelated action. D describes the printer but doesn't address the request.",
+      "pragmatic_function": "responding_to_request",
+      "distractor_analysis": {
+        "A": "wrong_register — thanking is inappropriate when being asked to hurry",
+        "C": "off_topic — future action unrelated to current need",
+        "D": "word_trap — 'printer' triggers description instead of action"
+      }
+    },
+    {
+      "id": "lcr_ref_007",
+      "source": "TOEFLResources.com",
+      "category": "casual_invitation",
+      "speaker": "Do you want to get lunch?",
+      "options": {
+        "A": "I'm not hungry.",
+        "B": "It's over there.",
+        "C": "I'll get you a sandwich.",
+        "D": "No, I didn't realize that."
+      },
+      "answer": "A",
+      "explanation": "An indirect decline — doesn't say 'no' directly but explains why not. This is the natural English way to decline. B is off-topic. C misunderstands (offering to get food FOR them). D uses 'no' but in wrong context.",
+      "pragmatic_function": "indirect_refusal",
+      "distractor_analysis": {
+        "B": "off_topic — location answer to non-location question",
+        "C": "misinterpretation — 'get' triggers getting food for someone",
+        "D": "wrong_context — 'no' used for different purpose"
+      }
+    },
+    {
+      "id": "lcr_ref_008",
+      "source": "TOEFLResources.com",
+      "category": "yes_no_question",
+      "speaker": "Are you going to school today?",
+      "options": {
+        "A": "I didn't finish my homework.",
+        "B": "Actually, today is a holiday.",
+        "C": "I did it yesterday.",
+        "D": "School starts at 8:00."
+      },
+      "answer": "B",
+      "explanation": "An indirect answer explaining why NOT going — provides context. A is related but doesn't answer the yes/no question. C is ambiguous ('it'). D answers a different question (when).",
+      "pragmatic_function": "indirect_answer_with_context",
+      "distractor_analysis": {
+        "A": "incomplete — related but doesn't actually answer",
+        "C": "vague — 'it' is unclear",
+        "D": "wrong_question — answers 'when' not 'are you going'"
+      }
+    },
+    {
+      "id": "lcr_ref_009",
+      "source": "TOEFLResources.com",
+      "category": "logistics_question",
+      "speaker": "What time do I need to pick up Michael from the airport?",
+      "options": {
+        "A": "Don't worry about it. I'll get him.",
+        "B": "He said he prefers the window seat.",
+        "C": "The airport has a new snack shop.",
+        "D": "The flight could be delayed due to weather."
+      },
+      "answer": "A",
+      "explanation": "A 'very indirect response' — instead of answering the time question, offers to solve the underlying problem entirely. This is a natural, helpful response in English. B/C are word traps. D is related but doesn't help.",
+      "pragmatic_function": "offering_to_help_instead",
+      "distractor_analysis": {
+        "B": "word_trap — 'airport' triggers airplane details",
+        "C": "word_trap — 'airport' triggers airport details",
+        "D": "partially_related — mentions flight but doesn't answer"
+      }
+    },
+    {
+      "id": "lcr_ref_010",
+      "source": "TOEFLResources.com",
+      "category": "unavailability",
+      "speaker": "I'm not available tomorrow.",
+      "options": {
+        "A": "I'll try to get there early.",
+        "B": "What's a better day for you?",
+        "C": "It's not on my schedule either.",
+        "D": "Were you there yesterday?"
+      },
+      "answer": "B",
+      "explanation": "An 'advancing response' — moves the interaction forward by seeking an alternative. B is constructive and collaborative. A/C/D don't address the scheduling need.",
+      "pragmatic_function": "advancing_conversation",
+      "distractor_analysis": {
+        "A": "off_topic — about getting somewhere early",
+        "C": "misinterpretation — agrees but doesn't advance",
+        "D": "off_topic — asks about past, not future"
+      }
+    },
+    {
+      "id": "lcr_ref_011",
+      "source": "TOEFLResources.com",
+      "category": "open_ended_question",
+      "speaker": "How did the presentation go?",
+      "options": {
+        "A": "It ran longer than expected.",
+        "B": "Despite the rain, I got a quick walk in after lunch.",
+        "C": "Thanks for asking, but I'm not interested.",
+        "D": "I think I should start working on it."
+      },
+      "answer": "A",
+      "explanation": "A direct, relevant answer to an open-ended question. A provides information about the presentation. B is completely unrelated. C misinterprets 'asking'. D implies it hasn't happened yet.",
+      "pragmatic_function": "reporting_outcome",
+      "distractor_analysis": {
+        "B": "off_topic — unrelated topic",
+        "C": "misinterpretation — 'asking' used differently",
+        "D": "wrong_tense — implies future, question is about past"
+      }
+    },
+    {
+      "id": "lcr_ref_012",
+      "source": "TOEFLResources.com",
+      "category": "idiomatic_expression",
+      "speaker": "I have to tell you something.",
+      "options": {
+        "A": "I'm all ears.",
+        "B": "I already told you.",
+        "C": "I can't tell the difference.",
+        "D": "I can see them now."
+      },
+      "answer": "A",
+      "explanation": "'I'm all ears' is an idiom meaning 'I'm listening/ready to hear'. B/C are word traps using 'tell'. D is completely unrelated.",
+      "pragmatic_function": "expressing_readiness",
+      "distractor_analysis": {
+        "B": "word_trap — 'told' echoes 'tell'",
+        "C": "word_trap — 'tell' used in different meaning",
+        "D": "off_topic — unrelated"
+      }
+    },
+    {
+      "id": "lcr_ref_013",
+      "source": "TOEFLResources.com",
+      "category": "enthusiastic_acceptance",
+      "speaker": "Do you want to go to the concert with us?",
+      "options": {
+        "A": "I didn't make it.",
+        "B": "It starts tomorrow.",
+        "C": "I bought a ticket yesterday.",
+        "D": "Absolutely."
+      },
+      "answer": "D",
+      "explanation": "'Absolutely' is an enthusiastic yes — more natural than simple 'yes'. A implies past event. B doesn't answer the invitation. C could work but doesn't directly accept the invitation to go WITH them.",
+      "pragmatic_function": "enthusiastic_acceptance",
+      "distractor_analysis": {
+        "A": "wrong_tense — implies it already happened",
+        "B": "off_topic — provides information but doesn't accept/decline",
+        "C": "ambiguous — bought ticket but doesn't say going with them"
+      }
+    },
+    {
+      "id": "lcr_ref_014",
+      "source": "TOEFLResources.com",
+      "category": "polite_acknowledgement",
+      "speaker": "I'm not available this afternoon.",
+      "options": {
+        "A": "So am I.",
+        "B": "It takes a while.",
+        "C": "I didn't mean it.",
+        "D": "Well, I understand."
+      },
+      "answer": "D",
+      "explanation": "A polite acknowledgement that accepts the situation. A is grammatically wrong ('So am I' would mean 'I'm also not available' but the form is incorrect for negative). B/C are unrelated.",
+      "pragmatic_function": "polite_acknowledgement",
+      "distractor_analysis": {
+        "A": "grammar_trap — 'So am I' doesn't work with negative statements",
+        "B": "off_topic — unrelated",
+        "C": "off_topic — implies wrongdoing"
+      }
+    },
+    {
+      "id": "lcr_ref_015",
+      "source": "Writing30.com",
+      "category": "asking_for_information",
+      "speaker": "Excuse me, do you know if the library is open on Saturdays?",
+      "options": {
+        "A": "I don't like going to the library.",
+        "B": "Yes, it opens at 10 AM on weekends.",
+        "C": "The book is on the third floor.",
+        "D": "No, I haven't been there yet."
+      },
+      "answer": "B",
+      "explanation": "A direct informational question gets a direct informational answer. B provides the specific information requested. A expresses personal opinion (irrelevant). C is a word trap ('library'→'book'). D answers a different question.",
+      "pragmatic_function": "providing_specific_information",
+      "distractor_analysis": {
+        "A": "off_topic — personal opinion, not information",
+        "C": "word_trap — 'library' triggers 'book/floor'",
+        "D": "wrong_question — answers 'have you been' not 'is it open'"
+      }
+    },
+    {
+      "id": "lcr_ref_016",
+      "source": "Writing30.com / TestDaily",
+      "category": "expressing_difficulty",
+      "speaker": "I'm thinking of dropping Chemistry. It's just too hard.",
+      "options": {
+        "A": "What time is your class?",
+        "B": "Maybe you should talk to the professor first?",
+        "C": "I already finished my homework.",
+        "D": "Chemistry is a required subject for everyone."
+      },
+      "answer": "B",
+      "explanation": "The speaker expresses frustration/concern. B shows empathy and offers constructive advice. A ignores the emotional content. C is about the responder, not the speaker. D provides factual info that doesn't help.",
+      "pragmatic_function": "giving_advice",
+      "distractor_analysis": {
+        "A": "off_topic — asks unrelated question",
+        "C": "off_topic — about responder's homework",
+        "D": "unhelpful — factual but doesn't address concern"
+      }
+    }
+  ]
+}
