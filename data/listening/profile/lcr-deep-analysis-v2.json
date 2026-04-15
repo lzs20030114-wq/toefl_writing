@@ -1,0 +1,782 @@
+{
+  "generated_at": "2026-04-15T08:14:23.932Z",
+  "sample_count": 16,
+  "distractor_deep_dive": {
+    "total_distractors": 48,
+    "type_distribution": {
+      "word_trap": 10,
+      "off_topic": 18,
+      "misinterpretation": 4,
+      "wrong_question": 4,
+      "wrong_question_type": 2,
+      "wrong_register": 1,
+      "wrong_context": 1,
+      "incomplete": 1,
+      "vague": 1,
+      "partially_related": 1,
+      "wrong_tense": 2,
+      "ambiguous": 1,
+      "grammar_trap": 1,
+      "unhelpful": 1
+    },
+    "lexical_overlap": {
+      "distractors_with_shared_words": 9,
+      "rate": 19,
+      "word_trap_instances": 9
+    },
+    "speech_act_distribution": {
+      "responding": 8,
+      "other": 29,
+      "offering_help": 6,
+      "informing": 3,
+      "questioning": 2
+    },
+    "word_count_stats": {
+      "min": 3,
+      "max": 11,
+      "avg": 5.5
+    },
+    "word_trap_taxonomy": {
+      "mechanisms": {
+        "semantic_association_trap": 8,
+        "polysemy_trap": 1
+      },
+      "detailed_examples": [
+        {
+          "item_id": "lcr_ref_003",
+          "speaker_snippet": "Where is the nearest bus stop?",
+          "distractor_key": "A",
+          "distractor_text": "I nearly missed the bus.",
+          "shared_words": [
+            "bus"
+          ],
+          "trap_mechanism": "single_word_echo",
+          "mechanism": "semantic_association_trap"
+        },
+        {
+          "item_id": "lcr_ref_004",
+          "speaker_snippet": "How do I contact customer service?",
+          "distractor_key": "D",
+          "distractor_text": "They provide good service.",
+          "shared_words": [
+            "service"
+          ],
+          "trap_mechanism": "single_word_echo",
+          "mechanism": "semantic_association_trap"
+        },
+        {
+          "item_id": "lcr_ref_006",
+          "speaker_snippet": "Are you done with the printer? I need to scan some",
+          "distractor_key": "D",
+          "distractor_text": "The printer is new and very fast.",
+          "shared_words": [
+            "printer"
+          ],
+          "trap_mechanism": "single_word_echo",
+          "mechanism": "semantic_association_trap"
+        },
+        {
+          "item_id": "lcr_ref_007",
+          "speaker_snippet": "Do you want to get lunch?",
+          "distractor_key": "C",
+          "distractor_text": "I'll get you a sandwich.",
+          "shared_words": [
+            "get"
+          ],
+          "trap_mechanism": "single_word_echo",
+          "mechanism": "semantic_association_trap"
+        },
+        {
+          "item_id": "lcr_ref_008",
+          "speaker_snippet": "Are you going to school today?",
+          "distractor_key": "D",
+          "distractor_text": "School starts at 8:00.",
+          "shared_words": [
+            "school"
+          ],
+          "trap_mechanism": "single_word_echo",
+          "mechanism": "semantic_association_trap"
+        },
+        {
+          "item_id": "lcr_ref_009",
+          "speaker_snippet": "What time do I need to pick up Michael from the ai",
+          "distractor_key": "C",
+          "distractor_text": "The airport has a new snack shop.",
+          "shared_words": [
+            "airport"
+          ],
+          "trap_mechanism": "single_word_echo",
+          "mechanism": "semantic_association_trap"
+        },
+        {
+          "item_id": "lcr_ref_012",
+          "speaker_snippet": "I have to tell you something.",
+          "distractor_key": "C",
+          "distractor_text": "I can't tell the difference.",
+          "shared_words": [
+            "tell"
+          ],
+          "trap_mechanism": "single_word_echo",
+          "mechanism": "polysemy_trap"
+        },
+        {
+          "item_id": "lcr_ref_015",
+          "speaker_snippet": "Excuse me, do you know if the library is open on S",
+          "distractor_key": "A",
+          "distractor_text": "I don't like going to the library.",
+          "shared_words": [
+            "library"
+          ],
+          "trap_mechanism": "single_word_echo",
+          "mechanism": "semantic_association_trap"
+        },
+        {
+          "item_id": "lcr_ref_016",
+          "speaker_snippet": "I'm thinking of dropping Chemistry. It's just too ",
+          "distractor_key": "D",
+          "distractor_text": "Chemistry is a required subject for everyone.",
+          "shared_words": [
+            "chemistry"
+          ],
+          "trap_mechanism": "single_word_echo",
+          "mechanism": "semantic_association_trap"
+        }
+      ]
+    }
+  },
+  "correct_answer_paradigms": {
+    "strategy_distribution": {
+      "idiomatic": 4,
+      "counter_question": 3,
+      "context_shift": 5,
+      "marker_led_indirect": 3,
+      "direct_topical": 1
+    },
+    "speaker_intent_to_strategy": {
+      "seeking_confirmation → idiomatic": 1,
+      "declining_or_unavailable → counter_question": 2,
+      "seeking_information → context_shift": 2,
+      "seeking_confirmation → marker_led_indirect": 1,
+      "requesting → marker_led_indirect": 1,
+      "inviting → context_shift": 1,
+      "checking → direct_topical": 1,
+      "seeking_information → idiomatic": 1,
+      "sharing_or_prompting → context_shift": 1,
+      "sharing_or_prompting → idiomatic": 1,
+      "inviting → idiomatic": 1,
+      "declining_or_unavailable → marker_led_indirect": 1,
+      "polite_inquiry → context_shift": 1,
+      "sharing_or_prompting → counter_question": 1
+    },
+    "first_word_distribution": {
+      "As": 1,
+      "How": 1,
+      "I": 1,
+      "Use": 1,
+      "Lets": 1,
+      "Just": 1,
+      "Im": 2,
+      "Actually": 1,
+      "Dont": 1,
+      "Whats": 1,
+      "It": 1,
+      "Absolutely": 1,
+      "Well": 1,
+      "Yes": 1,
+      "Maybe": 1
+    },
+    "counter_question_rate": 19,
+    "counter_questions": [
+      {
+        "id": "lcr_ref_002",
+        "text": "How about tomorrow night then?"
+      },
+      {
+        "id": "lcr_ref_010",
+        "text": "What's a better day for you?"
+      },
+      {
+        "id": "lcr_ref_016",
+        "text": "Maybe you should talk to the professor first?"
+      }
+    ],
+    "full_paradigms": [
+      {
+        "item_id": "lcr_ref_001",
+        "speaker_intent": "seeking_confirmation",
+        "speaker_sentence_type": "question",
+        "correct_text": "As a matter of fact, I was returning a book.",
+        "correct_speech_act": "responding",
+        "correct_word_count": 10,
+        "response_strategy": "idiomatic",
+        "discourse_marker": "as a matter of fact",
+        "is_question": false,
+        "shares_content_words": false,
+        "shared_words": [],
+        "has_idiom": true,
+        "has_contraction": false,
+        "first_word": "As",
+        "pragmatic_function": "confirming_observation"
+      },
+      {
+        "item_id": "lcr_ref_002",
+        "speaker_intent": "declining_or_unavailable",
+        "speaker_sentence_type": "statement",
+        "correct_text": "How about tomorrow night then?",
+        "correct_speech_act": "suggesting",
+        "correct_word_count": 5,
+        "response_strategy": "counter_question",
+        "discourse_marker": "how about",
+        "is_question": true,
+        "shares_content_words": false,
+        "shared_words": [],
+        "has_idiom": true,
+        "has_contraction": false,
+        "first_word": "How",
+        "pragmatic_function": "proposing_alternative"
+      },
+      {
+        "item_id": "lcr_ref_003",
+        "speaker_intent": "seeking_information",
+        "speaker_sentence_type": "question",
+        "correct_text": "I can help you find it.",
+        "correct_speech_act": "offering_help",
+        "correct_word_count": 6,
+        "response_strategy": "context_shift",
+        "discourse_marker": null,
+        "is_question": false,
+        "shares_content_words": false,
+        "shared_words": [],
+        "has_idiom": false,
+        "has_contraction": false,
+        "first_word": "I",
+        "pragmatic_function": "offering_help"
+      },
+      {
+        "item_id": "lcr_ref_004",
+        "speaker_intent": "seeking_information",
+        "speaker_sentence_type": "question",
+        "correct_text": "Use the convenient chat feature.",
+        "correct_speech_act": "instructing",
+        "correct_word_count": 5,
+        "response_strategy": "context_shift",
+        "discourse_marker": null,
+        "is_question": false,
+        "shares_content_words": false,
+        "shared_words": [],
+        "has_idiom": false,
+        "has_contraction": false,
+        "first_word": "Use",
+        "pragmatic_function": "providing_information"
+      },
+      {
+        "item_id": "lcr_ref_005",
+        "speaker_intent": "seeking_confirmation",
+        "speaker_sentence_type": "question",
+        "correct_text": "Let's check the schedule online.",
+        "correct_speech_act": "suggesting",
+        "correct_word_count": 5,
+        "response_strategy": "marker_led_indirect",
+        "discourse_marker": "let's",
+        "is_question": false,
+        "shares_content_words": false,
+        "shared_words": [],
+        "has_idiom": false,
+        "has_contraction": true,
+        "first_word": "Lets",
+        "pragmatic_function": "suggesting_verification"
+      },
+      {
+        "item_id": "lcr_ref_006",
+        "speaker_intent": "requesting",
+        "speaker_sentence_type": "statement",
+        "correct_text": "Just one more minute, I'm printing the last page.",
+        "correct_speech_act": "other",
+        "correct_word_count": 9,
+        "response_strategy": "marker_led_indirect",
+        "discourse_marker": "just",
+        "is_question": false,
+        "shares_content_words": false,
+        "shared_words": [],
+        "has_idiom": false,
+        "has_contraction": true,
+        "first_word": "Just",
+        "pragmatic_function": "responding_to_request"
+      },
+      {
+        "item_id": "lcr_ref_007",
+        "speaker_intent": "inviting",
+        "speaker_sentence_type": "question",
+        "correct_text": "I'm not hungry.",
+        "correct_speech_act": "informing",
+        "correct_word_count": 3,
+        "response_strategy": "context_shift",
+        "discourse_marker": null,
+        "is_question": false,
+        "shares_content_words": false,
+        "shared_words": [],
+        "has_idiom": false,
+        "has_contraction": true,
+        "first_word": "Im",
+        "pragmatic_function": "indirect_refusal"
+      },
+      {
+        "item_id": "lcr_ref_008",
+        "speaker_intent": "checking",
+        "speaker_sentence_type": "question",
+        "correct_text": "Actually, today is a holiday.",
+        "correct_speech_act": "responding",
+        "correct_word_count": 5,
+        "response_strategy": "direct_topical",
+        "discourse_marker": "actually",
+        "is_question": false,
+        "shares_content_words": true,
+        "shared_words": [
+          "today"
+        ],
+        "has_idiom": false,
+        "has_contraction": false,
+        "first_word": "Actually",
+        "pragmatic_function": "indirect_answer_with_context"
+      },
+      {
+        "item_id": "lcr_ref_009",
+        "speaker_intent": "seeking_information",
+        "speaker_sentence_type": "question",
+        "correct_text": "Don't worry about it. I'll get him.",
+        "correct_speech_act": "offering_help",
+        "correct_word_count": 7,
+        "response_strategy": "idiomatic",
+        "discourse_marker": "don't worry",
+        "is_question": false,
+        "shares_content_words": false,
+        "shared_words": [],
+        "has_idiom": true,
+        "has_contraction": true,
+        "first_word": "Dont",
+        "pragmatic_function": "offering_to_help_instead"
+      },
+      {
+        "item_id": "lcr_ref_010",
+        "speaker_intent": "declining_or_unavailable",
+        "speaker_sentence_type": "statement",
+        "correct_text": "What's a better day for you?",
+        "correct_speech_act": "questioning",
+        "correct_word_count": 6,
+        "response_strategy": "counter_question",
+        "discourse_marker": null,
+        "is_question": true,
+        "shares_content_words": false,
+        "shared_words": [],
+        "has_idiom": false,
+        "has_contraction": true,
+        "first_word": "Whats",
+        "pragmatic_function": "advancing_conversation"
+      },
+      {
+        "item_id": "lcr_ref_011",
+        "speaker_intent": "sharing_or_prompting",
+        "speaker_sentence_type": "question",
+        "correct_text": "It ran longer than expected.",
+        "correct_speech_act": "informing",
+        "correct_word_count": 5,
+        "response_strategy": "context_shift",
+        "discourse_marker": null,
+        "is_question": false,
+        "shares_content_words": false,
+        "shared_words": [],
+        "has_idiom": false,
+        "has_contraction": false,
+        "first_word": "It",
+        "pragmatic_function": "reporting_outcome"
+      },
+      {
+        "item_id": "lcr_ref_012",
+        "speaker_intent": "sharing_or_prompting",
+        "speaker_sentence_type": "statement",
+        "correct_text": "I'm all ears.",
+        "correct_speech_act": "informing",
+        "correct_word_count": 3,
+        "response_strategy": "idiomatic",
+        "discourse_marker": null,
+        "is_question": false,
+        "shares_content_words": false,
+        "shared_words": [],
+        "has_idiom": true,
+        "has_contraction": true,
+        "first_word": "Im",
+        "pragmatic_function": "expressing_readiness"
+      },
+      {
+        "item_id": "lcr_ref_013",
+        "speaker_intent": "inviting",
+        "speaker_sentence_type": "question",
+        "correct_text": "Absolutely.",
+        "correct_speech_act": "affirming",
+        "correct_word_count": 1,
+        "response_strategy": "idiomatic",
+        "discourse_marker": "absolutely",
+        "is_question": false,
+        "shares_content_words": false,
+        "shared_words": [],
+        "has_idiom": true,
+        "has_contraction": false,
+        "first_word": "Absolutely",
+        "pragmatic_function": "enthusiastic_acceptance"
+      },
+      {
+        "item_id": "lcr_ref_014",
+        "speaker_intent": "declining_or_unavailable",
+        "speaker_sentence_type": "statement",
+        "correct_text": "Well, I understand.",
+        "correct_speech_act": "responding",
+        "correct_word_count": 3,
+        "response_strategy": "marker_led_indirect",
+        "discourse_marker": "well",
+        "is_question": false,
+        "shares_content_words": false,
+        "shared_words": [],
+        "has_idiom": false,
+        "has_contraction": false,
+        "first_word": "Well",
+        "pragmatic_function": "polite_acknowledgement"
+      },
+      {
+        "item_id": "lcr_ref_015",
+        "speaker_intent": "polite_inquiry",
+        "speaker_sentence_type": "question",
+        "correct_text": "Yes, it opens at 10 AM on weekends.",
+        "correct_speech_act": "responding",
+        "correct_word_count": 8,
+        "response_strategy": "context_shift",
+        "discourse_marker": null,
+        "is_question": false,
+        "shares_content_words": false,
+        "shared_words": [],
+        "has_idiom": false,
+        "has_contraction": false,
+        "first_word": "Yes",
+        "pragmatic_function": "providing_specific_information"
+      },
+      {
+        "item_id": "lcr_ref_016",
+        "speaker_intent": "sharing_or_prompting",
+        "speaker_sentence_type": "statement",
+        "correct_text": "Maybe you should talk to the professor first?",
+        "correct_speech_act": "suggesting",
+        "correct_word_count": 8,
+        "response_strategy": "counter_question",
+        "discourse_marker": "maybe",
+        "is_question": true,
+        "shares_content_words": false,
+        "shared_words": [],
+        "has_idiom": false,
+        "has_contraction": false,
+        "first_word": "Maybe",
+        "pragmatic_function": "giving_advice"
+      }
+    ]
+  },
+  "option_interplay": {
+    "avg_options_sharing_speaker_words": 0.6,
+    "avg_unique_speech_acts_per_item": 2.5,
+    "avg_word_count_range": 2.3,
+    "correct_length_rank_distribution": {
+      "1": 6,
+      "2": 3,
+      "3": 2,
+      "4": 5
+    },
+    "full_data": [
+      {
+        "item_id": "lcr_ref_001",
+        "options_sharing_speaker_words": 0,
+        "unique_speech_acts": 2,
+        "word_count_range": 1,
+        "correct_wc_rank": 2,
+        "all_start_with_I": false,
+        "discourse_marker_count": 2
+      },
+      {
+        "item_id": "lcr_ref_002",
+        "options_sharing_speaker_words": 0,
+        "unique_speech_acts": 3,
+        "word_count_range": 1,
+        "correct_wc_rank": 4,
+        "all_start_with_I": false,
+        "discourse_marker_count": 2
+      },
+      {
+        "item_id": "lcr_ref_003",
+        "options_sharing_speaker_words": 1,
+        "unique_speech_acts": 2,
+        "word_count_range": 3,
+        "correct_wc_rank": 4,
+        "all_start_with_I": false,
+        "discourse_marker_count": 0
+      },
+      {
+        "item_id": "lcr_ref_004",
+        "options_sharing_speaker_words": 1,
+        "unique_speech_acts": 3,
+        "word_count_range": 2,
+        "correct_wc_rank": 3,
+        "all_start_with_I": false,
+        "discourse_marker_count": 0
+      },
+      {
+        "item_id": "lcr_ref_005",
+        "options_sharing_speaker_words": 0,
+        "unique_speech_acts": 4,
+        "word_count_range": 2,
+        "correct_wc_rank": 2,
+        "all_start_with_I": false,
+        "discourse_marker_count": 1
+      },
+      {
+        "item_id": "lcr_ref_006",
+        "options_sharing_speaker_words": 1,
+        "unique_speech_acts": 2,
+        "word_count_range": 4,
+        "correct_wc_rank": 4,
+        "all_start_with_I": false,
+        "discourse_marker_count": 1
+      },
+      {
+        "item_id": "lcr_ref_007",
+        "options_sharing_speaker_words": 1,
+        "unique_speech_acts": 3,
+        "word_count_range": 2,
+        "correct_wc_rank": 1,
+        "all_start_with_I": false,
+        "discourse_marker_count": 0
+      },
+      {
+        "item_id": "lcr_ref_008",
+        "options_sharing_speaker_words": 2,
+        "unique_speech_acts": 2,
+        "word_count_range": 1,
+        "correct_wc_rank": 3,
+        "all_start_with_I": false,
+        "discourse_marker_count": 1
+      },
+      {
+        "item_id": "lcr_ref_009",
+        "options_sharing_speaker_words": 1,
+        "unique_speech_acts": 2,
+        "word_count_range": 1,
+        "correct_wc_rank": 1,
+        "all_start_with_I": false,
+        "discourse_marker_count": 1
+      },
+      {
+        "item_id": "lcr_ref_010",
+        "options_sharing_speaker_words": 0,
+        "unique_speech_acts": 3,
+        "word_count_range": 2,
+        "correct_wc_rank": 2,
+        "all_start_with_I": false,
+        "discourse_marker_count": 0
+      },
+      {
+        "item_id": "lcr_ref_011",
+        "options_sharing_speaker_words": 0,
+        "unique_speech_acts": 2,
+        "word_count_range": 6,
+        "correct_wc_rank": 1,
+        "all_start_with_I": false,
+        "discourse_marker_count": 0
+      },
+      {
+        "item_id": "lcr_ref_012",
+        "options_sharing_speaker_words": 1,
+        "unique_speech_acts": 3,
+        "word_count_range": 2,
+        "correct_wc_rank": 1,
+        "all_start_with_I": true,
+        "discourse_marker_count": 0
+      },
+      {
+        "item_id": "lcr_ref_013",
+        "options_sharing_speaker_words": 0,
+        "unique_speech_acts": 2,
+        "word_count_range": 4,
+        "correct_wc_rank": 1,
+        "all_start_with_I": false,
+        "discourse_marker_count": 1
+      },
+      {
+        "item_id": "lcr_ref_014",
+        "options_sharing_speaker_words": 0,
+        "unique_speech_acts": 2,
+        "word_count_range": 1,
+        "correct_wc_rank": 1,
+        "all_start_with_I": false,
+        "discourse_marker_count": 2
+      },
+      {
+        "item_id": "lcr_ref_015",
+        "options_sharing_speaker_words": 1,
+        "unique_speech_acts": 2,
+        "word_count_range": 2,
+        "correct_wc_rank": 4,
+        "all_start_with_I": false,
+        "discourse_marker_count": 0
+      },
+      {
+        "item_id": "lcr_ref_016",
+        "options_sharing_speaker_words": 1,
+        "unique_speech_acts": 3,
+        "word_count_range": 3,
+        "correct_wc_rank": 4,
+        "all_start_with_I": false,
+        "discourse_marker_count": 1
+      }
+    ]
+  },
+  "conversation_logic": {
+    "move_type_distribution": {
+      "acknowledge_and_redirect": 6,
+      "advance_by_questioning": 3,
+      "advance_by_offering": 2,
+      "respond_then_elaborate": 4,
+      "provide_factual_info": 1
+    },
+    "enables_next_turn_rate": 31,
+    "politeness_distribution": {
+      "neutral": 11,
+      "casual_warm": 3,
+      "enthusiastic": 2
+    },
+    "full_data": [
+      {
+        "item_id": "lcr_ref_001",
+        "speaker": "Didn't I just see you in the library an ...",
+        "correct": "As a matter of fact, I was returning a book.",
+        "move_type": "acknowledge_and_redirect",
+        "enables_next_turn": false,
+        "politeness_level": "neutral"
+      },
+      {
+        "item_id": "lcr_ref_002",
+        "speaker": "I'm afraid I'm not available this evenin...",
+        "correct": "How about tomorrow night then?",
+        "move_type": "advance_by_questioning",
+        "enables_next_turn": true,
+        "politeness_level": "neutral"
+      },
+      {
+        "item_id": "lcr_ref_003",
+        "speaker": "Where is the nearest bus stop?...",
+        "correct": "I can help you find it.",
+        "move_type": "advance_by_offering",
+        "enables_next_turn": true,
+        "politeness_level": "neutral"
+      },
+      {
+        "item_id": "lcr_ref_004",
+        "speaker": "How do I contact customer service?...",
+        "correct": "Use the convenient chat feature.",
+        "move_type": "acknowledge_and_redirect",
+        "enables_next_turn": false,
+        "politeness_level": "neutral"
+      },
+      {
+        "item_id": "lcr_ref_005",
+        "speaker": "Isn't the post office open today?...",
+        "correct": "Let's check the schedule online.",
+        "move_type": "acknowledge_and_redirect",
+        "enables_next_turn": false,
+        "politeness_level": "neutral"
+      },
+      {
+        "item_id": "lcr_ref_006",
+        "speaker": "Are you done with the printer? I need to...",
+        "correct": "Just one more minute, I'm printing the last page.",
+        "move_type": "acknowledge_and_redirect",
+        "enables_next_turn": false,
+        "politeness_level": "neutral"
+      },
+      {
+        "item_id": "lcr_ref_007",
+        "speaker": "Do you want to get lunch?...",
+        "correct": "I'm not hungry.",
+        "move_type": "acknowledge_and_redirect",
+        "enables_next_turn": false,
+        "politeness_level": "neutral"
+      },
+      {
+        "item_id": "lcr_ref_008",
+        "speaker": "Are you going to school today?...",
+        "correct": "Actually, today is a holiday.",
+        "move_type": "respond_then_elaborate",
+        "enables_next_turn": false,
+        "politeness_level": "neutral"
+      },
+      {
+        "item_id": "lcr_ref_009",
+        "speaker": "What time do I need to pick up Michael f...",
+        "correct": "Don't worry about it. I'll get him.",
+        "move_type": "advance_by_offering",
+        "enables_next_turn": true,
+        "politeness_level": "casual_warm"
+      },
+      {
+        "item_id": "lcr_ref_010",
+        "speaker": "I'm not available tomorrow....",
+        "correct": "What's a better day for you?",
+        "move_type": "advance_by_questioning",
+        "enables_next_turn": true,
+        "politeness_level": "neutral"
+      },
+      {
+        "item_id": "lcr_ref_011",
+        "speaker": "How did the presentation go?...",
+        "correct": "It ran longer than expected.",
+        "move_type": "provide_factual_info",
+        "enables_next_turn": false,
+        "politeness_level": "neutral"
+      },
+      {
+        "item_id": "lcr_ref_012",
+        "speaker": "I have to tell you something....",
+        "correct": "I'm all ears.",
+        "move_type": "acknowledge_and_redirect",
+        "enables_next_turn": false,
+        "politeness_level": "enthusiastic"
+      },
+      {
+        "item_id": "lcr_ref_013",
+        "speaker": "Do you want to go to the concert with us...",
+        "correct": "Absolutely.",
+        "move_type": "respond_then_elaborate",
+        "enables_next_turn": false,
+        "politeness_level": "enthusiastic"
+      },
+      {
+        "item_id": "lcr_ref_014",
+        "speaker": "I'm not available this afternoon....",
+        "correct": "Well, I understand.",
+        "move_type": "respond_then_elaborate",
+        "enables_next_turn": false,
+        "politeness_level": "casual_warm"
+      },
+      {
+        "item_id": "lcr_ref_015",
+        "speaker": "Excuse me, do you know if the library is...",
+        "correct": "Yes, it opens at 10 AM on weekends.",
+        "move_type": "respond_then_elaborate",
+        "enables_next_turn": false,
+        "politeness_level": "neutral"
+      },
+      {
+        "item_id": "lcr_ref_016",
+        "speaker": "I'm thinking of dropping Chemistry. It's...",
+        "correct": "Maybe you should talk to the professor first?",
+        "move_type": "advance_by_questioning",
+        "enables_next_turn": true,
+        "politeness_level": "casual_warm"
+      }
+    ]
+  }
+}

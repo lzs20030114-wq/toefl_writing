@@ -1,0 +1,308 @@
+{
+  "generated_at": "2026-04-15",
+  "title": "LCR ETS Flavor Model — What Makes a Question Feel Like a Real ETS Question",
+  "description": "Distilled from 16 reference samples + quantitative analysis. This is the definitive guide for prompt builder calibration.",
+
+  "model_1_speaker_sentence_design": {
+    "title": "How to write the speaker sentence",
+    "rules": [
+      {
+        "rule": "Keep it short and spoken",
+        "target": "8-12 words, never >16",
+        "why": "This is HEARD not read. Real people speak in short bursts. 56% of samples are 4-6 words.",
+        "good": ["Do you want to get lunch?", "I'm not available tomorrow.", "I have to tell you something."],
+        "bad": ["I was wondering whether you might perhaps be available to join me for a meal this afternoon."]
+      },
+      {
+        "rule": "Use contractions naturally",
+        "target": "60%+ of items",
+        "why": "62.5% of samples use contractions. No contraction = sounds like a textbook.",
+        "good": ["Didn't I just see you...", "I'm afraid I'm not...", "Isn't the post office..."],
+        "bad": ["Did I not just see you...", "I am afraid I am not..."]
+      },
+      {
+        "rule": "Balance sentence types strategically",
+        "target": "~30% statements, ~25% yes/no Q, ~25% wh-Q, ~20% negative Q",
+        "why": "Statements are hardest (require inferring what response is expected). Mix types to vary difficulty.",
+        "statements_are_harder": "When the speaker makes a statement, the test-taker must infer the appropriate conversational move WITHOUT a question to guide them."
+      },
+      {
+        "rule": "Each sentence must have a clear communicative purpose",
+        "purpose_types": {
+          "seeking_information": "Where is...? How do I...? What time...?",
+          "inviting": "Do you want to...? Would you like to...?",
+          "requesting": "Are you done with...? Can you...?",
+          "seeking_confirmation": "Didn't I just...? Isn't the...?",
+          "declining_or_stating_unavailability": "I'm afraid I'm not... I'm not available...",
+          "sharing_feelings_or_intentions": "I'm thinking of... I have to tell you..."
+        }
+      },
+      {
+        "rule": "Embed at least one 'trappable' content word",
+        "why": "81% of real items have a word that gets reused in a wrong distractor. The speaker sentence must contain at least 1 content word that can be plausibly misused.",
+        "examples": [
+          {"word": "library", "trap_potential": "book, reference section, floor"},
+          {"word": "bus", "trap_potential": "missed the bus, bus route, bus driver"},
+          {"word": "printer", "trap_potential": "ink, paper, new printer"},
+          {"word": "airport", "trap_potential": "flight, window seat, terminal"}
+        ]
+      }
+    ]
+  },
+
+  "model_2_correct_answer_paradigms": {
+    "title": "The 5 correct answer paradigms — how ETS designs right answers",
+    "paradigms": [
+      {
+        "name": "context_shift",
+        "frequency": "31%",
+        "description": "The answer shifts context to address the UNDERLYING need, not the surface question.",
+        "mechanism": "Speaker asks X, answer addresses Y (the real need behind X).",
+        "examples": [
+          {"speaker": "What time do I need to pick up Michael?", "answer": "Don't worry about it. I'll get him.", "why": "Instead of answering the time, solves the whole problem."},
+          {"speaker": "Are you going to school today?", "answer": "Actually, today is a holiday.", "why": "Instead of yes/no, provides the reason that makes the question moot."}
+        ],
+        "difficulty": "hard",
+        "prompt_instruction": "The correct answer should NOT answer the literal question. Instead, it should address the underlying situation in a way that makes the original question unnecessary."
+      },
+      {
+        "name": "idiomatic",
+        "frequency": "25%",
+        "description": "The answer uses an English idiom or conversational formula.",
+        "mechanism": "Natural speakers use formulaic expressions that non-native speakers may not recognize.",
+        "examples": [
+          {"speaker": "I have to tell you something.", "answer": "I'm all ears.", "why": "Idiom meaning 'I'm ready to listen'."},
+          {"speaker": "Do you want to go to the concert?", "answer": "Absolutely.", "why": "Enthusiastic single-word acceptance (vs. plain 'yes')."},
+          {"speaker": "Didn't I just see you in the library?", "answer": "As a matter of fact, I was returning a book.", "why": "Discourse marker 'as a matter of fact' signals confirmation with elaboration."}
+        ],
+        "difficulty": "medium-hard",
+        "prompt_instruction": "The correct answer should use a natural English idiom, conversational formula, or discourse marker that native speakers would use but learners might not recognize."
+      },
+      {
+        "name": "counter_question",
+        "frequency": "19%",
+        "description": "The answer is itself a question that advances the conversation.",
+        "mechanism": "Instead of answering directly, asks a follow-up that moves things forward.",
+        "examples": [
+          {"speaker": "I'm afraid I'm not available this evening.", "answer": "How about tomorrow night then?", "why": "Proposes alternative rather than just accepting."},
+          {"speaker": "I'm not available tomorrow.", "answer": "What's a better day for you?", "why": "Advances the scheduling conversation."},
+          {"speaker": "I'm thinking of dropping Chemistry.", "answer": "Maybe you should talk to the professor first?", "why": "Offers advice in question form."}
+        ],
+        "difficulty": "medium",
+        "prompt_instruction": "The correct answer should be a question that naturally follows from the speaker's statement, advancing the conversation rather than just responding."
+      },
+      {
+        "name": "marker_led_indirect",
+        "frequency": "19%",
+        "description": "Opens with a discourse marker, then provides an indirect but relevant response.",
+        "mechanism": "Discourse marker signals the speaker is about to reframe or add nuance.",
+        "examples": [
+          {"speaker": "Are you done with the printer?", "answer": "Just one more minute, I'm printing the last page.", "why": "'Just' signals brief delay, then explains."},
+          {"speaker": "I'm not available this afternoon.", "answer": "Well, I understand.", "why": "'Well' signals acceptance with mild disappointment."}
+        ],
+        "difficulty": "medium",
+        "prompt_instruction": "The correct answer should open with a discourse marker (Actually, Well, Just, Maybe, As a matter of fact) followed by a relevant but not entirely direct response."
+      },
+      {
+        "name": "direct_topical",
+        "frequency": "6%",
+        "description": "Straightforward, factual answer to a factual question.",
+        "mechanism": "The easiest type — speaker asks for information, answer provides it.",
+        "examples": [
+          {"speaker": "Do you know if the library is open on Saturdays?", "answer": "Yes, it opens at 10 AM on weekends.", "why": "Direct factual response."}
+        ],
+        "difficulty": "easy",
+        "prompt_instruction": "Use sparingly (≤30% of items). The correct answer directly and factually answers the question.",
+        "warning": "If ALL correct answers are this type, the item set will feel like a vocabulary test, not a pragmatics test."
+      }
+    ],
+    "target_distribution": {
+      "context_shift": "25-35%",
+      "idiomatic": "20-30%",
+      "counter_question": "15-25%",
+      "marker_led_indirect": "15-20%",
+      "direct_topical": "5-15%"
+    },
+    "critical_insight": "Only 6% of real ETS correct answers are 'direct_topical'. If AI generates mostly direct answers, the items will NOT feel like ETS. The challenge is in the INDIRECT paradigms."
+  },
+
+  "model_3_distractor_engineering": {
+    "title": "How to engineer wrong answers that feel ETS-real",
+    "principles": [
+      {
+        "principle": "Every distractor must be a VALID English sentence in SOME context",
+        "why": "ETS never uses grammar errors or nonsense as distractors. Each wrong answer would be correct in a different conversation.",
+        "measured": "100% of 48 distractors are grammatically correct standalone sentences."
+      },
+      {
+        "principle": "Each item needs exactly 3 distractor types, ideally all different",
+        "why": "62.5% of items use 3 different distractor types. Diversity prevents test-taking strategies.",
+        "target_combo": "1 word_trap + 1 off_topic + 1 of (wrong_question/misinterpretation/wrong_tense)"
+      }
+    ],
+    "distractor_types_ranked_by_importance": [
+      {
+        "type": "semantic_association_trap",
+        "frequency": "per-item: 56% of items have at least one",
+        "mechanism": "Takes a content word from the speaker and builds a response around a RELATED concept, not the actual topic.",
+        "formula": "speaker word → associated concept → plausible sentence about that concept",
+        "examples": [
+          {"speaker_word": "library", "association": "books, reference section, floors", "trap": "The book is on the third floor."},
+          {"speaker_word": "airport", "association": "flights, seats, terminals, shops", "trap": "The airport has a new snack shop."},
+          {"speaker_word": "printer", "association": "ink, paper, speed, brand", "trap": "The printer is new and very fast."},
+          {"speaker_word": "bus", "association": "missing bus, bus route, schedule", "trap": "I nearly missed the bus."},
+          {"speaker_word": "school", "association": "homework, start time, teacher", "trap": "School starts at 8:00."},
+          {"speaker_word": "chemistry", "association": "required, difficult, lab", "trap": "Chemistry is a required subject for everyone."}
+        ],
+        "quality_test": "If a test-taker ONLY heard the keyword (not the full sentence), would this distractor seem right? If yes, it's a good word trap."
+      },
+      {
+        "type": "off_topic_but_grammatical",
+        "frequency": "38% of all distractors",
+        "mechanism": "A perfectly normal English sentence that has ZERO relevance to the conversation.",
+        "formula": "Write a sentence about a completely different topic that a person might say in daily life.",
+        "examples": [
+          {"speaker": "I'm not available this evening.", "trap": "She arrived this afternoon.", "why": "About a different person, different time, different situation."},
+          {"speaker": "How did the presentation go?", "trap": "Despite the rain, I got a quick walk in after lunch.", "why": "Completely different topic."},
+          {"speaker": "Isn't the post office open today?", "trap": "I think he's come home already.", "why": "Different person, different place, different question."}
+        ],
+        "quality_test": "If you showed ONLY the distractor without the speaker sentence, would it sound like a normal English sentence? It must pass this test."
+      },
+      {
+        "type": "wrong_question_type",
+        "frequency": "12.5% of all distractors",
+        "mechanism": "Answers a DIFFERENT type of question than what was asked.",
+        "formula": "Speaker asks 'where' → distractor answers 'when'. Speaker asks 'how' → distractor answers 'yes/no'.",
+        "examples": [
+          {"speaker_asks": "where (location)", "distractor_answers": "when (time/frequency)", "example": "Every 30 minutes."},
+          {"speaker_asks": "how (method)", "distractor_answers": "yes/no (permission)", "example": "Yes, you're allowed to do that."},
+          {"speaker_asks": "is it open (yes/no)", "distractor_answers": "where (location)", "example": "It's just around the corner!"}
+        ],
+        "quality_test": "Is the distractor a perfect answer to a DIFFERENT but plausible question someone might ask in the same setting?"
+      },
+      {
+        "type": "polysemy_or_homophone_trap",
+        "frequency": "rare but powerful",
+        "mechanism": "Uses the same word as the speaker but with a DIFFERENT meaning.",
+        "examples": [
+          {"speaker_word": "tell (inform)", "trap_meaning": "tell (distinguish)", "trap": "I can't tell the difference."},
+          {"speaker_word": "get (obtain/have)", "trap_meaning": "get (fetch for someone)", "trap": "I'll get you a sandwich."}
+        ],
+        "quality_test": "Can the trap word be interpreted in two genuinely different ways? The speaker uses meaning A; the distractor uses meaning B."
+      }
+    ],
+
+    "distractor_anti_patterns": [
+      "Distractor contains grammar errors → NEVER. ETS distractors are always grammatically perfect.",
+      "Distractor is obviously absurd → NEVER. Every distractor must sound like something a real person could say.",
+      "All 3 distractors are off-topic → NEVER. At least 1 must be a word trap or misinterpretation (it should ALMOST seem right).",
+      "Distractor repeats the speaker sentence → NEVER. Word traps use ASSOCIATED words, not exact repetition.",
+      "Distractor is the correct answer to a different item → Avoid. Each distractor should be unique to its item."
+    ]
+  },
+
+  "model_4_conversation_naturalness": {
+    "title": "What makes a correct answer feel 'natural' in conversation",
+    "factors": [
+      {
+        "factor": "Conversational momentum",
+        "description": "The correct answer keeps the conversation MOVING. It doesn't dead-end.",
+        "measured": "31% of correct answers enable a clear next turn. 38% acknowledge and redirect. Only 6% are bare facts.",
+        "good": "How about tomorrow then? (invites next turn)",
+        "bad": "I am unable to attend. (dead-end)"
+      },
+      {
+        "factor": "Register match",
+        "description": "Casual speaker → casual answer. Formal speaker → slightly formal answer.",
+        "measured": "69% neutral, 19% casual-warm, 12% enthusiastic. ZERO formal or cold.",
+        "good": "I'm not hungry. (matches casual 'Do you want to get lunch?')",
+        "bad": "I regret to inform you that I am not presently experiencing hunger."
+      },
+      {
+        "factor": "Emotional acknowledgement",
+        "description": "When the speaker expresses frustration/concern, the correct answer acknowledges the emotion before addressing content.",
+        "examples": [
+          {"speaker": "I'm thinking of dropping Chemistry. It's just too hard.", "answer": "Maybe you should talk to the professor first?", "why": "'Maybe' softens the advice, acknowledging the difficulty."},
+          {"speaker": "I'm not available this afternoon.", "answer": "Well, I understand.", "why": "'Well' signals empathy before acceptance."}
+        ]
+      },
+      {
+        "factor": "Information economy",
+        "description": "Correct answers give JUST ENOUGH information — never too much, never too little.",
+        "measured": "Average 5.7 words. Maximum 10 words. 37.5% are ≤4 words.",
+        "good": "Don't worry about it. I'll get him.",
+        "bad": "Well actually I was planning to drive to the airport myself anyway since I need to pick up a package from the cargo terminal so I might as well get Michael too."
+      },
+      {
+        "factor": "Discourse marker signals",
+        "description": "Opening discourse markers signal HOW the answer relates to the question.",
+        "marker_meanings": {
+          "Actually": "I'm about to correct an assumption or add unexpected info",
+          "Well": "I'm about to give a nuanced or reluctant response",
+          "As a matter of fact": "I'm confirming with additional detail",
+          "Just": "This will be brief / minor",
+          "Maybe": "I'm softening advice or suggestion",
+          "How about": "I'm proposing an alternative",
+          "Don't worry": "I'm going to solve this for you"
+        },
+        "measured": "37.5% of correct answers use these markers"
+      }
+    ]
+  },
+
+  "model_5_difficulty_levers": {
+    "title": "How to control difficulty — the 4 levers",
+    "levers": [
+      {
+        "lever": "Directness of correct answer",
+        "easy": "Direct factual answer ('Yes, it opens at 10 AM')",
+        "medium": "Indirect but clearly related ('Actually, today is a holiday')",
+        "hard": "Very indirect — addresses underlying need, not surface question ('Don't worry, I'll get him')"
+      },
+      {
+        "lever": "Strength of word traps",
+        "easy": "Word trap uses obviously wrong context",
+        "medium": "Word trap uses plausible but wrong context",
+        "hard": "Word trap uses polysemy (same word, different meaning: 'tell' → 'tell the difference')"
+      },
+      {
+        "lever": "Speaker sentence clarity",
+        "easy": "Clear wh-question with explicit topic",
+        "medium": "Yes/no question or negative question",
+        "hard": "Declarative statement requiring intent inference ('I have to tell you something')"
+      },
+      {
+        "lever": "Idiom/formula requirement",
+        "easy": "No idiom knowledge needed",
+        "medium": "Common discourse markers (Actually, Well, How about)",
+        "hard": "Idiom in correct answer (I'm all ears, Absolutely, As a matter of fact)"
+      }
+    ],
+    "target_distribution": {
+      "easy": {"pct": "30%", "levers": "direct answer + clear question + weak traps"},
+      "medium": {"pct": "45%", "levers": "indirect answer + negative Q or statement + moderate traps + discourse markers"},
+      "hard": {"pct": "25%", "levers": "very indirect answer + statement speaker + polysemy traps + idioms"}
+    }
+  },
+
+  "model_6_item_design_checklist": {
+    "title": "Checklist for each generated LCR item",
+    "pre_flight": [
+      "Speaker sentence is 5-14 words?",
+      "Speaker sentence uses natural spoken English (contractions OK)?",
+      "Speaker sentence has at least 1 'trappable' content word?",
+      "Speaker sentence has a clear communicative purpose?",
+      "Correct answer addresses the INTENT, not just literal words?",
+      "Correct answer is 3-10 words (avg ~6)?",
+      "Correct answer would feel natural if spoken aloud?",
+      "At least 1 distractor is a word trap (reuses speaker keyword in wrong context)?",
+      "At least 1 distractor is off-topic but grammatically perfect?",
+      "3 distractors use at least 2 different distractor types?",
+      "No distractor has grammar errors?",
+      "All 4 options are similar length (within 5 words of each other)?",
+      "Correct answer is NOT consistently the longest option?",
+      "Correct answer is NOT a bare 'yes' or 'no'?",
+      "The item tests pragmatic understanding, not vocabulary?"
+    ]
+  }
+}
