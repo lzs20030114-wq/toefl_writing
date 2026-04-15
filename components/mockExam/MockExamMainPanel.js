@@ -23,8 +23,8 @@ export function MockExamMainPanel({
   onStartNew,
   onExit,
   mode,
-  canRetryTimeoutScoring,
-  onRetryTimeoutScoring,
+  canRetryScoring,
+  onRetryScoring,
   reportLanguage,
 }) {
   const [transitionTaskId, setTransitionTaskId] = useState("");
@@ -162,8 +162,8 @@ export function MockExamMainPanel({
           examResultRows={examResultRows}
           onStartNew={onStartNew}
           onExit={onExit}
-          canRetryTimeoutScoring={canRetryTimeoutScoring}
-          onRetryTimeoutScoring={onRetryTimeoutScoring}
+          canRetryScoring={canRetryScoring}
+          onRetryScoring={onRetryScoring}
           reportLanguage={reportLanguage}
         />
       )}

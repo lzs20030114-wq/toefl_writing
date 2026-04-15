@@ -265,16 +265,16 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
     });
   }, [session]);
 
-  const canRetryTimeoutScoring = useMemo(() => {
+  const canRetryScoring = useMemo(() => {
     if (!session || session.status !== MOCK_EXAM_STATUS.COMPLETED) return false;
     return [TASK_IDS.EMAIL_WRITING, TASK_IDS.ACADEMIC_WRITING].some((taskId) => {
-      const err = session?.attempts?.[taskId]?.meta?.error;
-      return isTimeoutError(err);
+      const a = session?.attempts?.[taskId];
+      return a?.meta?.error && a?.meta?.retryPayload;
     });
   }, [session]);
 
-  async function retryTimedOutScoring() {
-    if (!session || !canRetryTimeoutScoring) return;
+  async function retryFailedScoring() {
+    if (!session || !canRetryScoring) return;
     setScoringPhase("pending");
     setScoringError("");
     try {
@@ -331,8 +331,8 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
               onStartNew={startExam}
               onExit={onExit}
               mode={mode}
-              canRetryTimeoutScoring={canRetryTimeoutScoring}
-              onRetryTimeoutScoring={retryTimedOutScoring}
+              canRetryScoring={canRetryScoring}
+              onRetryScoring={retryFailedScoring}
               reportLanguage={uiReportLanguage}
             />
             <SectionTimerPanel

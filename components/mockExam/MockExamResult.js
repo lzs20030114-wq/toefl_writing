@@ -34,8 +34,8 @@ export function MockExamResult({
   examResultRows,
   onStartNew,
   onExit,
-  canRetryTimeoutScoring = false,
-  onRetryTimeoutScoring = null,
+  canRetryScoring = false,
+  onRetryScoring = null,
   reportLanguage = "zh",
 }) {
   const [expandedTask, setExpandedTask] = useState(null);
@@ -182,8 +182,8 @@ export function MockExamResult({
 
       {/* Actions */}
       <div style={{ display: "flex", gap: 10 }}>
-        {scoringPhase !== "pending" && canRetryTimeoutScoring && typeof onRetryTimeoutScoring === "function" && (
-          <Btn onClick={onRetryTimeoutScoring} variant="secondary">重试超时评分</Btn>
+        {scoringPhase !== "pending" && canRetryScoring && typeof onRetryScoring === "function" && (
+          <Btn onClick={onRetryScoring} variant="secondary">重试 AI 评分</Btn>
         )}
         <Btn onClick={onStartNew}>开始新模考</Btn>
         <Btn onClick={onExit} variant="secondary">返回</Btn>
