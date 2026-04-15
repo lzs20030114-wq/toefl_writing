@@ -923,29 +923,6 @@
     },
     {
       "context": "campus_academic",
-      "situation": "student asking a librarian about a book or resource",
-      "difficulty": "medium",
-      "answer_paradigm": "counter_question",
-      "speaker": "Do you know if this journal is available online?",
-      "options": {
-        "A": "The journal was published last month.",
-        "B": "I read it online yesterday.",
-        "C": "Would you like me to check the database?",
-        "D": "No, I'm not available right now."
-      },
-      "answer": "C",
-      "explanation": "C is correct because it responds with a helpful counter-question that advances the conversation by offering to find the specific information requested. A is a semantic association trap, providing a fact about the journal's publication instead of its availability. B is off-topic, stating a personal past action that is not a helpful response to the inquiry. D is a polysemy/misinterpretation trap, misinterpreting 'available' as referring to the librarian's time rather than the journal's accessibility.",
-      "distractor_types": {
-        "A": "semantic_association_trap",
-        "B": "off_topic",
-        "D": "polysemy_misinterpretation"
-      },
-      "id": "lcr_v2_1776242706990_003",
-      "audio_url": "/api/audio/choose-response/lcr_v2_1776242706990_003.mp3",
-      "flavor_score": 0.83
-    },
-    {
-      "context": "campus_academic",
       "situation": "student asking a professor about office hours or assignment",
       "difficulty": "hard",
       "answer_paradigm": "context_shift",
@@ -1083,29 +1060,6 @@
       "flavor_score": 0.97
     },
     {
-      "context": "campus_daily",
-      "situation": "student asking about campus shuttle or parking",
-      "difficulty": "hard",
-      "answer_paradigm": "context_shift",
-      "speaker": "Where's the best place to park for the science building?",
-      "options": {
-        "A": "The science building has a new planetarium.",
-        "B": "Parking is always a problem here.",
-        "C": "You can park in my spot today, I'm not using it.",
-        "D": "It's on the north side of campus."
-      },
-      "answer": "C",
-      "explanation": "C is correct because it shifts context to solve the underlying problem (finding parking) by offering a direct solution, rather than describing a location. A is a semantic association trap ('science building' → facility). B is off-topic (general complaint about parking). D is a wrong question type (describes the building's location, not a parking place).",
-      "distractor_types": {
-        "A": "semantic_association_trap",
-        "B": "off_topic",
-        "D": "wrong_question_type"
-      },
-      "id": "lcr_v2_1776242994790_007",
-      "audio_url": "/api/audio/choose-response/lcr_v2_1776242994790_007.mp3",
-      "flavor_score": 0.83
-    },
-    {
       "context": "general_daily",
       "situation": "arranging a ride or carpool with a friend",
       "difficulty": "medium",
@@ -1149,29 +1103,6 @@
       },
       "id": "lcr_v2_1776242994790_009",
       "audio_url": "/api/audio/choose-response/lcr_v2_1776242994790_009.mp3",
-      "flavor_score": 0.86
-    },
-    {
-      "context": "campus_daily",
-      "situation": "student checking bus or shuttle schedule",
-      "difficulty": "medium",
-      "answer_paradigm": "marker_led_indirect",
-      "speaker": "Do you know when the next shuttle to the library leaves?",
-      "options": {
-        "A": "I usually walk to the library.",
-        "B": "Actually, I think one just left a minute ago.",
-        "C": "The library has extended hours during finals.",
-        "D": "Yes, I know the schedule."
-      },
-      "answer": "B",
-      "explanation": "B is correct because it uses the marker 'Actually' to provide indirect but helpful information about the shuttle's recent departure, implying the next one will be after a wait. A is off-topic (personal habit). C is a semantic association trap ('library' → hours). D is a wrong question type (answers the literal 'do you know' question without providing the requested information).",
-      "distractor_types": {
-        "A": "off_topic",
-        "C": "semantic_association_trap",
-        "D": "wrong_question_type"
-      },
-      "id": "lcr_v2_1776242994790_010",
-      "audio_url": "/api/audio/choose-response/lcr_v2_1776242994790_010.mp3",
       "flavor_score": 0.86
     },
     {
@@ -1494,29 +1425,6 @@
       },
       "id": "lcr_v2_1776243125536_004",
       "audio_url": "/api/audio/choose-response/lcr_v2_1776243125536_004.mp3",
-      "flavor_score": 0.86
-    },
-    {
-      "context": "campus_daily",
-      "situation": "student asking about printing or scanning at computer lab",
-      "difficulty": "medium",
-      "answer_paradigm": "counter_question",
-      "speaker": "Do you know if this scanner is working?",
-      "options": {
-        "A": "How about trying the one by the window?",
-        "B": "I scanned my notes yesterday.",
-        "C": "The computer lab closes at midnight.",
-        "D": "Yes, I know how to use it."
-      },
-      "answer": "A",
-      "explanation": "A is correct because it answers with a counter-question that proposes a practical alternative solution. B is a semantic association trap, reusing 'scanned' for a past personal action. C is off-topic, discussing lab hours instead of scanner functionality. D is a polysemy/misinterpretation trap, interpreting 'know if' as 'know how to'.",
-      "distractor_types": {
-        "B": "semantic_association_trap",
-        "C": "off_topic",
-        "D": "polysemy_misinterpretation"
-      },
-      "id": "lcr_v2_1776243125536_005",
-      "audio_url": "/api/audio/choose-response/lcr_v2_1776243125536_005.mp3",
       "flavor_score": 0.86
     },
     {
@@ -2093,29 +2001,6 @@
       "id": "lcr_v2_1776243252255_010",
       "audio_url": "/api/audio/choose-response/lcr_v2_1776243252255_010.mp3",
       "flavor_score": 0.61
-    },
-    {
-      "context": "campus_daily",
-      "situation": "student asking about gym or sports facility hours",
-      "difficulty": "hard",
-      "answer_paradigm": "idiomatic",
-      "speaker": "Do you know if the gym is still open this late?",
-      "options": {
-        "A": "I'm not sure, but I can check for you.",
-        "B": "The gym has new treadmills.",
-        "C": "I'm going to be late for my class.",
-        "D": "Yes, I was there yesterday."
-      },
-      "answer": "A",
-      "explanation": "A is correct because 'I'm not sure, but I can check for you' is an idiomatic, helpful response that offers to find the information, which is appropriate for a 'hard' item. B is a semantic association trap, linking 'gym' to 'treadmills' but not addressing the hours. C is off-topic, discussing a personal schedule. D is a wrong question type, answering 'were you there' instead of 'is it open now'.",
-      "distractor_types": {
-        "B": "semantic_association_trap",
-        "C": "off_topic",
-        "D": "wrong_question_type"
-      },
-      "id": "lcr_v2_1776243380875_001",
-      "audio_url": "/api/audio/choose-response/lcr_v2_1776243380875_001.mp3",
-      "flavor_score": 0.83
     },
     {
       "context": "general_daily",
