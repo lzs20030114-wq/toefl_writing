@@ -150,6 +150,8 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
 
   const score = Number.isFinite(Number(fb?.score)) ? Number(fb.score) : null;
   const band = fb?.band != null ? String(fb.band) : null;
+  // 2026 TOEFL 6-band conversion: 5→6, 4.5→5.5, 4→5, 3.5→4.5, 3→4, 2.5→3, 2→2, 1.5→1.5, 1→1
+  const band6 = score != null ? Math.round(Math.min(6, Math.max(1, score + 1)) * 2) / 2 : null;
   const summary = String(fb?.summary || "").trim();
   const goals = Array.isArray(fb?.goals) ? fb.goals : [];
   const actions = Array.isArray(fb?.actions) ? fb.actions : [];
@@ -179,7 +181,12 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
               <span style={{ fontSize: 48, fontWeight: 800, color: "#fff", lineHeight: 1 }}>{score ?? "--"}</span>
               <span style={{ fontSize: 14, color: "rgba(255,255,255,0.45)", fontWeight: 700, marginBottom: 8 }}>/ 5</span>
             </div>
-            {band ? <span style={{ padding: "3px 10px", background: "rgba(52,211,153,0.15)", color: "#34d399", borderRadius: 999, fontSize: 11, fontWeight: 700 }}>{band}</span> : null}
+            {score != null ? (
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 4 }}>
+                {band6 != null && <span style={{ padding: "3px 10px", background: "rgba(52,211,153,0.15)", color: "#34d399", borderRadius: 999, fontSize: 11, fontWeight: 700 }}>换算 {band6}/6</span>}
+                {band ? <span style={{ padding: "2px 8px", background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.5)", borderRadius: 999, fontSize: 10, fontWeight: 600 }}>{band}</span> : null}
+              </div>
+            ) : null}
           </div>
           {summary ? <p style={{ fontSize: 13, color: "rgba(255,255,255,0.7)", lineHeight: 1.75, margin: 0, marginBottom: goals.length ? 18 : 0 }}>{summary}</p> : null}
           {type === "email" && goals.length > 0 ? (
