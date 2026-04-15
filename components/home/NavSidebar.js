@@ -193,7 +193,7 @@ export function NavSidebar({
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontSize: 12, fontWeight: 700, color: t1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                  {email || userCode || "用户"}
+                  {email || (userCode ? userCode.slice(0, 2) + "****" : "用户")}
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 4, marginTop: 2 }}>
                   <TierBadge tier={tier} tierExpiresAt={tierExpiresAt} isChallenge={isChallenge} />
