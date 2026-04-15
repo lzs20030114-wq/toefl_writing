@@ -25,6 +25,7 @@ import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 const { buildLCRPrompt } = require("../lib/listeningGen/lcrPromptBuilder.js");
 const { validateLCR, validateBatch, scoreFlavor } = require("../lib/listeningGen/lcrValidator.js");
+const { auditLCRBatch } = require("../lib/listeningGen/lcrAuditor.js");
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const STAGING_DIR = join(__dirname, "..", "data", "listening", "staging");
@@ -39,6 +40,7 @@ function getArg(name, def) {
 const COUNT = Math.min(parseInt(getArg("count", "10"), 10), 12);
 const DRY_RUN = args.includes("--dry-run");
 const WITH_TTS = args.includes("--with-tts");
+const SKIP_AUDIT = args.includes("--skip-audit");
 const DIFFICULTY = getArg("difficulty", null); // null = mixed (30/45/25)
 
 // ── Load .env.local ──
@@ -268,16 +270,65 @@ async function main() {
     console.log(`  Difficulty: ${JSON.stringify(batch.difficultyDist)}`);
   }
 
-  // Step 6: Optional TTS
+  // Step 6: AI Audit — independent answer verification
+  if (!SKIP_AUDIT && accepted.length > 0) {
+    console.log("\n4. AI Audit (independent answer verification)...\n");
+
+    async function auditCallAI(prompt) {
+      const { callDeepSeekViaCurl } = require("../lib/ai/deepseekHttp.js");
+      const apiKey = process.env.DEEPSEEK_API_KEY;
+      const payload = {
+        model: "deepseek-chat",
+        messages: [
+          { role: "system", content: "You are an expert English conversation analyst. Return only valid JSON." },
+          { role: "user", content: prompt },
+        ],
+        temperature: 0.1,
+        max_tokens: 1000,
+      };
+      const result = await callDeepSeekViaCurl({ apiKey, payload, timeoutMs: 30000 });
+      return typeof result === "string" ? result : (result?.choices?.[0]?.message?.content || JSON.stringify(result));
+    }
+
+    const auditResult = await auditLCRBatch(accepted, auditCallAI);
+
+    for (const f of auditResult.flagged) {
+      const ar = f.audit_result;
+      if (ar.ambiguous) {
+        console.log(`  🔴 ${f.id}: AMBIGUOUS — AI found multiple valid options`);
+        console.log(`      Our: ${ar.ourAnswer}, AI: ${ar.aiAnswer} | Ratings: ${JSON.stringify(ar.ratings)}`);
+      } else {
+        console.log(`  🔴 ${f.id}: MISMATCH — AI chose ${ar.aiAnswer}, we chose ${ar.ourAnswer}`);
+        console.log(`      Reasoning: ${ar.reasoning?.slice(0, 80)}`);
+      }
+    }
+    if (auditResult.errors > 0) {
+      console.log(`  ⚠ ${auditResult.errors} audit calls failed (items kept)`);
+    }
+
+    const beforeAudit = accepted.length;
+    // Replace accepted with only clean items
+    accepted.length = 0;
+    accepted.push(...auditResult.clean);
+    const removed = beforeAudit - accepted.length;
+
+    console.log(`\n  Audit: ${accepted.length} clean, ${auditResult.flagged.length} flagged/removed, ${auditResult.errors} errors`);
+    // Add flagged to rejected
+    rejected.push(...auditResult.flagged);
+  } else if (SKIP_AUDIT) {
+    console.log("\n4. AI Audit: SKIPPED (--skip-audit)");
+  }
+
+  // Step 7: Optional TTS
   if (WITH_TTS && accepted.length > 0) {
-    console.log("\n4. Generating TTS audio...\n");
+    console.log("\n5. Generating TTS audio...\n");
     for (const item of accepted) {
       const audioUrl = await generateTTS(item, item.id);
       if (audioUrl) item.audio_url = audioUrl;
     }
   }
 
-  // Step 7: Save staging
+  // Step 8: Save staging
   console.log(`\n── Results ──`);
   console.log(`  Accepted: ${accepted.length}/${parsed.length}`);
   console.log(`  Rejected: ${rejected.length}/${parsed.length}`);
