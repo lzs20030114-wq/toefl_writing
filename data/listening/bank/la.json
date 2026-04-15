@@ -390,6 +390,926 @@
         }
       ],
       "id": "la_gen_1776236579185_010"
+    },
+    {
+      "context": "academic_event",
+      "situation": "senior capstone presentation schedule",
+      "speaker_role": "department_staff",
+      "difficulty": "hard",
+      "announcement": "Attention all senior psychology majors. The schedule for your mandatory capstone presentations has been finalized and posted. Presentations will take place next Monday and Tuesday, April 14th and 15th, in the Behavioral Sciences Building, Room 205. Each student is required to present for exactly fifteen minutes, followed by a five-minute faculty question period. Please note that attendance for the entire two-day session is compulsory for all majors, as it is a core program requirement. We strongly advise you to review the posted schedule carefully to confirm your assigned time slot.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To inform seniors of the finalized capstone presentation schedule and requirements.",
+            "B": "To describe the grading criteria for the capstone project.",
+            "C": "To recruit faculty volunteers to judge the presentations.",
+            "D": "To encourage students from other majors to attend the presentations."
+          },
+          "answer": "A",
+          "explanation": "A is correct as it captures the overall purpose of announcing the schedule, location, and mandatory nature of the event. B is a wrong_purpose; grading is not mentioned. C is a related_but_not_stated action not requested in the announcement. D is a reversed_intent; the announcement states attendance is compulsory for majors, not an open invitation to others.",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "related_but_not_stated",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the capstone presentations?",
+          "options": {
+            "A": "They are optional but recommended for psychology majors.",
+            "B": "Students will be graded solely on their presentation slides.",
+            "C": "The event is considered a significant part of the psychology program.",
+            "D": "The schedule is subject to frequent last-minute changes."
+          },
+          "answer": "C",
+          "explanation": "C is a valid inference supported by the announcement describing it as 'mandatory,' a 'core program requirement,' and requiring attendance for the entire session. A is a reversed_intent, directly contradicting 'mandatory' and 'compulsory.' B is an over_inference; no grading details are provided. D is an unrelated_inference; the announcement states the schedule is 'finalized,' implying stability, not frequent change.",
+          "distractor_types": {
+            "A": "reversed_intent",
+            "B": "over_inference",
+            "D": "unrelated_inference"
+          }
+        }
+      ],
+      "id": "la_v2_1776246227434_001",
+      "audio_url": "/api/audio/announcement/la_v2_1776246227434_001.mp3",
+      "flavor_score": 0.8
+    },
+    {
+      "context": "facility_change",
+      "situation": "computer lab relocating to a different floor",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "Good afternoon. This is an announcement from Information Technology Services. The main computer lab in Dunham Library is relocating from the basement to the third floor, starting this Friday. The new lab will open next Monday morning at eight a.m. Please be aware that the basement lab will be closed all day Friday for equipment moving and setup. All printing stations and specialized software will be available in the new location. We apologize for any temporary inconvenience and appreciate your patience during this upgrade.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement mainly about?",
+          "options": {
+            "A": "New hours for the Dunham Library.",
+            "B": "A relocation of the main computer lab.",
+            "C": "A temporary closure of the entire library.",
+            "D": "An increase in printing fees for students."
+          },
+          "answer": "B",
+          "explanation": "B is correct; the central news is the lab's move from the basement to the third floor. A is a wrong_detail; hours are not discussed, only the opening time of the new lab. C is an over_inference; only the lab is closing Friday, not the whole library. D is a related_but_not_stated topic not mentioned in the announcement.",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "over_inference",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are students advised about the basement computer lab this Friday?",
+          "options": {
+            "A": "It will have reduced hours.",
+            "B": "It will offer limited software access.",
+            "C": "It will be open for emergency use only.",
+            "D": "It will be closed all day."
+          },
+          "answer": "D",
+          "explanation": "D is correct, as directly stated: 'the basement lab will be closed all day Friday.' A is a wrong_detail; it is closed, not just with reduced hours. B is a misattributed_detail; limited access might be plausible but the announcement states it is closed. C is a related_but_not_stated possibility not mentioned.",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "misattributed_detail",
+            "C": "related_but_not_stated"
+          }
+        }
+      ],
+      "id": "la_v2_1776246227434_002",
+      "audio_url": "/api/audio/announcement/la_v2_1776246227434_002.mp3",
+      "flavor_score": 0.69
+    },
+    {
+      "context": "career_services",
+      "situation": "career fair preparation workshop with resume review",
+      "speaker_role": "program_coordinator",
+      "difficulty": "easy",
+      "announcement": "Attention students. The Career Development Center is hosting a preparation workshop for next month's university-wide career fair. The session will be held this Wednesday at 4 p.m. in the Student Union, Conference Room B. We will cover strategies for engaging with recruiters and conducting effective follow-up. Most importantly, we are offering a personalized resume review for all attendees. Please bring a printed copy of your current resume. Space is limited, so we encourage you to register on our website by Tuesday evening to secure your spot.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the primary purpose of the announcement?",
+          "options": {
+            "A": "To announce the dates for the university career fair.",
+            "B": "To describe the companies attending the career fair.",
+            "C": "To promote a workshop that prepares students for the career fair.",
+            "D": "To remind students to update their online career profiles."
+          },
+          "answer": "C",
+          "explanation": "C is correct; the announcement's core is promoting a preparatory workshop. A is too_narrow; the career fair is mentioned as the context, but its dates are not the focus. B is a wrong_purpose; specific companies are not listed. D is a related_but_not_stated action not requested.",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "wrong_purpose",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are students asked to bring to the workshop?",
+          "options": {
+            "A": "A printed copy of their resume.",
+            "B": "A list of target companies.",
+            "C": "Their student identification card.",
+            "D": "A notebook and pen."
+          },
+          "answer": "A",
+          "explanation": "A is correct, as directly stated: 'Please bring a printed copy of your current resume.' B is a related_but_not_stated item that might be useful but is not requested. C is a misattributed_detail; student IDs are common for campus events but not specified here. D is a wrong_detail; while plausible, the announcement does not mention these items.",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "misattributed_detail",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "id": "la_v2_1776246227434_003",
+      "audio_url": "/api/audio/announcement/la_v2_1776246227434_003.mp3",
+      "flavor_score": 0.8
+    },
+    {
+      "context": "academic_event",
+      "situation": "honors thesis oral defense schedule announcement",
+      "speaker_role": "department_staff",
+      "difficulty": "medium",
+      "announcement": "This is a reminder for history department honors candidates. Your oral thesis defenses are scheduled for the week of May 5th. Each defense will be held in Professor Clayborne's seminar room, Ferguson Hall 312, and will last approximately one hour. It is mandatory for the defending student to provide a digital copy of their full thesis to the committee at least one week prior. The defenses are open to the university community, and we encourage fellow students to attend. Please confirm your specific date and time with the department secretary by this Friday.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What must honors candidates do at least one week before their defense?",
+          "options": {
+            "A": "Schedule a practice session with Professor Clayborne.",
+            "B": "Post a summary of their thesis on the department website.",
+            "C": "Attend another student's defense for practice.",
+            "D": "Provide a digital thesis copy to the committee."
+          },
+          "answer": "D",
+          "explanation": "D is correct, as directly stated: 'provide a digital copy of their full thesis to the committee at least one week prior.' A is a related_but_not_stated action not mentioned. B is a wrong_detail; posting a summary is not required. C is a misattributed_detail; attending other defenses is encouraged for the community but not mandated for candidates.",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "C": "misattributed_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the thesis defenses?",
+          "options": {
+            "A": "They are private meetings only for faculty and the student.",
+            "B": "They are considered a formal part of the honors program.",
+            "C": "They will be recorded and posted online for later viewing.",
+            "D": "They focus primarily on the student's written grammar."
+          },
+          "answer": "B",
+          "explanation": "B is a valid inference supported by the formal scheduling, mandatory requirements, and open invitation to the university community, indicating it's an official program component. A is a reversed_intent, as they are 'open to the university community.' C is an over_inference; recording is not mentioned. D is an unrelated_inference; the focus of the defense is not specified.",
+          "distractor_types": {
+            "A": "reversed_intent",
+            "C": "over_inference",
+            "D": "unrelated_inference"
+          }
+        }
+      ],
+      "id": "la_v2_1776246227434_004",
+      "audio_url": "/api/audio/announcement/la_v2_1776246227434_004.mp3",
+      "flavor_score": 0.79
+    },
+    {
+      "context": "info_session",
+      "situation": "study abroad information session with returned students",
+      "speaker_role": "program_coordinator",
+      "difficulty": "hard",
+      "announcement": "Attention students interested in studying abroad next year. The Office of International Programs is hosting an information session this Thursday at 4 p.m. in the Global Commons, Room 205. We are thrilled to announce that several students who recently returned from programs in Spain, Japan, and South Africa will be sharing their firsthand experiences. Please note that this session is specifically for students who have already completed the preliminary application on our portal. We want to emphasize that attending this session is a mandatory step before your application interview can be scheduled. Don't miss this valuable opportunity to get your questions answered.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What must students do to have their application interview scheduled?",
+          "options": {
+            "A": "Attend the Thursday information session",
+            "B": "Submit letters of recommendation",
+            "C": "Contact a returned student directly",
+            "D": "Complete a language proficiency test"
+          },
+          "answer": "A",
+          "explanation": "The announcement states that attending the session is a mandatory step before the interview can be scheduled, making A correct. B, C, and D are related to study abroad but are not mentioned as requirements in this announcement.",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "misattributed_detail",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the students speaking at the session?",
+          "options": {
+            "A": "They are faculty members from the host countries.",
+            "B": "They have already graduated from the university.",
+            "C": "They have personal experience with the programs.",
+            "D": "They will help students complete applications."
+          },
+          "answer": "C",
+          "explanation": "The announcement says the students will share their 'firsthand experiences,' which directly supports the inference that they have personal experience. A is wrong as they are students, not faculty. B is an over-inference; they are recently returned, not necessarily graduated. D is a related but not stated action; their role is described as sharing experiences.",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "over_inference",
+            "D": "related_but_not_stated"
+          }
+        }
+      ],
+      "id": "la_v2_1776246456772_001",
+      "audio_url": "/api/audio/announcement/la_v2_1776246456772_001.mp3",
+      "flavor_score": 0.85
+    },
+    {
+      "context": "campus_activity",
+      "situation": "student art market in the quad",
+      "speaker_role": "activity_coordinator",
+      "difficulty": "medium",
+      "announcement": "Good afternoon. The Campus Arts Council is excited to announce our annual Spring Student Art Market, taking place this Friday and Saturday from 10 a.m. to 4 p.m. in the Main Quad. This event showcases and sells original artwork, jewelry, and ceramics created exclusively by our undergraduate students. All proceeds go directly to the student artists. Please be aware that we are accepting cash and major credit cards, but we cannot process mobile payments. We encourage everyone to come out, support your fellow students, and find unique gifts. Rain location will be the Student Union Ballroom.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To recruit volunteers for an arts festival",
+            "B": "To advertise a student art sale event",
+            "C": "To announce a change in the quad's hours",
+            "D": "To explain new payment systems on campus"
+          },
+          "answer": "B",
+          "explanation": "The announcement's primary purpose is to advertise the dates, location, and details of the student art market. A is wrong because it mentions recruiting volunteers, which is not stated. C is too narrow, focusing on a minor detail (hours/location). D is wrong as it focuses on a secondary detail about payment methods.",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "C": "too_narrow",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the artwork at the market?",
+          "options": {
+            "A": "It is donated by professional artists.",
+            "B": "It will be available at a discounted price.",
+            "C": "It has been judged in a competition.",
+            "D": "It is made by current students."
+          },
+          "answer": "D",
+          "explanation": "The announcement states the artwork is 'created exclusively by our undergraduate students,' so D is a direct inference. A is wrong because it is by students, not professionals. B is an over-inference; no mention of discounts is made. C is a related but not stated detail; the event is a market, not necessarily a judged competition.",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "over_inference",
+            "C": "related_but_not_stated"
+          }
+        }
+      ],
+      "id": "la_v2_1776246456772_002",
+      "audio_url": "/api/audio/announcement/la_v2_1776246456772_002.mp3",
+      "flavor_score": 0.8
+    },
+    {
+      "context": "guest_speaker",
+      "situation": "renowned scientist giving a guest lecture on campus",
+      "speaker_role": "professor",
+      "difficulty": "medium",
+      "announcement": "Attention all science majors and interested students. We are thrilled to host Dr. Elena Vance, a renowned astrophysicist, for a guest lecture next Tuesday, April 12th, at 7:30 p.m. in Waldman Auditorium. Dr. Vance will be discussing her recent research on exoplanet atmospheres and the search for habitable worlds. This is a rare opportunity to hear from a leader in the field. Please note that while the event is free, you must reserve a ticket in advance through the university's events website due to limited seating. We strongly recommend registering early, as we expect this to be a popular event.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To promote a new astrophysics course",
+            "B": "To announce a change in the auditorium location",
+            "C": "To publicize a free lecture requiring tickets",
+            "D": "To recruit students for a research project"
+          },
+          "answer": "C",
+          "explanation": "The announcement's core is informing about a free guest lecture that requires ticket reservations. A and D are wrong purposes not mentioned. B is a misattributed detail; the location is given but not changed.",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "misattributed_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "Why does the speaker recommend registering early?",
+          "options": {
+            "A": "Seating capacity is limited.",
+            "B": "Ticket prices may increase.",
+            "C": "Registration confirms major eligibility.",
+            "D": "The website often crashes."
+          },
+          "answer": "A",
+          "explanation": "The announcement states tickets are required 'due to limited seating,' which directly supports the inference that early registration is advised because space is limited. B is wrong because the event is free. C is a wrong detail; the event is for 'interested students,' not just specific majors. D is an unrelated inference with no evidence.",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "misattributed_detail",
+            "D": "unrelated_inference"
+          }
+        }
+      ],
+      "id": "la_v2_1776246456772_003",
+      "audio_url": "/api/audio/announcement/la_v2_1776246456772_003.mp3",
+      "flavor_score": 0.95
+    },
+    {
+      "context": "info_session",
+      "situation": "financial aid office workshop on scholarship applications",
+      "speaker_role": "advisor",
+      "difficulty": "easy",
+      "announcement": "This is a reminder from the Financial Aid Office. We are holding a workshop this Wednesday at 3 p.m. in Student Services, Room 108, to help students navigate the process for applying for internal university scholarships. Our advisors will walk you through the application forms and provide tips for writing strong personal statements. Please bring your student ID and a laptop or notebook if possible. While walk-ins are welcome, we strongly encourage you to sign up on our office's webpage to guarantee we have enough materials. The deadline for the major scholarship applications is next Friday.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce new scholarship funding",
+            "B": "To remind students of a financial aid deadline",
+            "C": "To describe changes in tuition fees",
+            "D": "To inform students about a helpful workshop"
+          },
+          "answer": "D",
+          "explanation": "The announcement's primary purpose is to inform students about the workshop offering help with scholarship applications. A and C are wrong purposes not mentioned. B is too narrow; a deadline is mentioned, but it's not the main focus of the announcement.",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "too_narrow",
+            "C": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are students advised to bring to the workshop?",
+          "options": {
+            "A": "A completed application form",
+            "B": "A student ID",
+            "C": "Proof of income",
+            "D": "Letters of recommendation"
+          },
+          "answer": "B",
+          "explanation": "The announcement explicitly says 'Please bring your student ID.' A is wrong because the workshop is to help with the forms, not review completed ones. C and D are related to financial aid but are not stated as items to bring to this workshop.",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ],
+      "id": "la_v2_1776246456772_004",
+      "audio_url": "/api/audio/announcement/la_v2_1776246456772_004.mp3",
+      "flavor_score": 0.84
+    },
+    {
+      "context": "facility_change",
+      "situation": "campus bookstore moving to a new building",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "Attention. Please be aware that the campus bookstore will be temporarily closed from May 15th through May 22nd as we relocate to the new University Center building. During this week, online orders will still be processed, but in-person purchases and textbook buybacks will be unavailable. We apologize for any inconvenience. The grand reopening in our new, larger space will be on Monday, May 23rd, at 9 a.m. To celebrate, we're offering a 20% discount on all spirit wear and school supplies for the first three days. We appreciate your patience during this exciting transition.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement mainly about?",
+          "options": {
+            "A": "A temporary bookstore closure for a move",
+            "B": "The grand opening of a new University Center",
+            "C": "Changes to the textbook buyback policy",
+            "D": "An apology for recent poor service"
+          },
+          "answer": "A",
+          "explanation": "The announcement's core is informing about the temporary closure due to relocation. B is too narrow, focusing only on the reopening part. C is a misattributed detail; buybacks are mentioned as unavailable during the move, but the policy isn't changing. D is a wrong purpose; an apology is given but is not the main point.",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "misattributed_detail",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the new bookstore location?",
+          "options": {
+            "A": "It will have shorter operating hours.",
+            "B": "It will sell a wider variety of food.",
+            "C": "It will be larger than the old one.",
+            "D": "It will be farther from most classrooms."
+          },
+          "answer": "C",
+          "explanation": "The announcement describes the new space as 'larger,' so C is a valid inference. A is a reversed intent; hours are not discussed, but a grand reopening suggests full operation. B is an unrelated inference about product variety. D is an over-inference; no information about proximity is given.",
+          "distractor_types": {
+            "A": "reversed_intent",
+            "B": "unrelated_inference",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "id": "la_v2_1776246456772_005",
+      "audio_url": "/api/audio/announcement/la_v2_1776246456772_005.mp3",
+      "flavor_score": 0.69
+    },
+    {
+      "context": "guest_speaker",
+      "situation": "industry professional speaking about career paths",
+      "speaker_role": "department_head",
+      "difficulty": "hard",
+      "announcement": "Good morning, computer science majors. The Department is hosting a special talk next Thursday at 5 p.m. in the Tech Hub, Room 101. Our speaker is Maria Chen, a senior product manager at a leading tech firm, who will discuss non-traditional career paths for CS graduates, including roles in product management, UX design, and tech consulting. Please note that this session is designed for juniors and seniors actively considering their post-graduation options. While attendance is not mandatory, we strongly believe it will be invaluable for your career planning. You are required to RSVP by Monday using the link in the department newsletter to secure your spot.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the primary purpose of this announcement?",
+          "options": {
+            "A": "To announce a mandatory department meeting",
+            "B": "To promote an optional career-focused talk",
+            "C": "To recruit students for a new UX design course",
+            "D": "To introduce a new faculty member"
+          },
+          "answer": "B",
+          "explanation": "The announcement promotes a talk about career paths, specifies it's not mandatory but valuable, and requires an RSVP. A is wrong because it states attendance is not mandatory. C is a related but not stated purpose. D is a wrong purpose; the speaker is an industry professional, not a new faculty member.",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the intended audience for this talk?",
+          "options": {
+            "A": "They are all seeking internships.",
+            "B": "They are primarily first-year students.",
+            "C": "They have already secured job offers.",
+            "D": "They are nearing graduation."
+          },
+          "answer": "D",
+          "explanation": "The announcement says the session is 'for juniors and seniors actively considering their post-graduation options,' which supports the inference they are nearing graduation. A is an over-inference; they are considering options, not necessarily only internships. B is the opposite of the stated audience. C is an unrelated inference with no evidence.",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "wrong_detail",
+            "C": "unrelated_inference"
+          }
+        }
+      ],
+      "id": "la_v2_1776246456772_006",
+      "audio_url": "/api/audio/announcement/la_v2_1776246456772_006.mp3",
+      "flavor_score": 0.84
+    },
+    {
+      "context": "facility_change",
+      "situation": "building wing closure for asbestos removal",
+      "speaker_role": "recreation_staff",
+      "difficulty": "medium",
+      "announcement": "Attention all campus recreation users. Please be advised that the east wing of the Anderson Athletic Center, which houses the racquetball courts and two dance studios, will be closed for asbestos abatement starting Monday, October 3rd. This necessary safety project is expected to last approximately two weeks. During this time, all scheduled activities in those spaces are canceled or relocated. We have arranged for racquetball players to use courts at the downtown community center by presenting their student ID. The main gym, weight room, and pool will remain open on their regular schedules. We apologize for the disruption.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What must racquetball players do to use an alternative facility?",
+          "options": {
+            "A": "Pay a fee at the downtown center",
+            "B": "Register online with Campus Recreation",
+            "C": "Show their student identification",
+            "D": "Use the facility only on weekends"
+          },
+          "answer": "C",
+          "explanation": "The announcement states access is granted 'by presenting their student ID.' A is wrong because no fee is mentioned. B is a related but not stated action. D is a misattributed detail; no restriction to weekends is mentioned.",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the closure?",
+          "options": {
+            "A": "It is for urgent safety reasons.",
+            "B": "It will reduce membership fees.",
+            "C": "It affects the entire athletic center.",
+            "D": "It was requested by student athletes."
+          },
+          "answer": "A",
+          "explanation": "The closure is for 'asbestos abatement,' described as a 'necessary safety project,' which supports the inference of urgent safety reasons. B is an unrelated inference with no evidence. C is wrong because the main gym, weight room, and pool remain open. D is an over-inference; no evidence of who requested it is given.",
+          "distractor_types": {
+            "B": "unrelated_inference",
+            "C": "wrong_detail",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "id": "la_v2_1776246456772_007",
+      "audio_url": "/api/audio/announcement/la_v2_1776246456772_007.mp3",
+      "flavor_score": 0.89
+    },
+    {
+      "context": "logistics",
+      "situation": "parking lot closure for alumni weekend with shuttle alternative",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "Attention students and staff. This is a parking notice for Homecoming Weekend. Lot G, located behind the Alumni Hall, will be closed to all university parking from 5 p.m. this Friday until Sunday evening. The lot is being reserved for visiting alumni event parking. Any vehicles left in Lot G after 5 p.m. on Friday will be towed. To accommodate displaced parkers, we will run a complimentary shuttle bus from the remote Lot Z on the south edge of campus. The shuttle will run every fifteen minutes from 7 a.m. to 10 p.m. on Saturday and Sunday. Please plan accordingly.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement mainly about?",
+          "options": {
+            "A": "Announcing new shuttle bus routes",
+            "B": "Describing Homecoming Weekend events",
+            "C": "Warning about increased traffic delays",
+            "D": "Informing about a parking lot closure"
+          },
+          "answer": "D",
+          "explanation": "The announcement's core is the closure of Lot G for Homecoming, the consequences, and the shuttle alternative. A is too narrow, focusing only on the shuttle detail. B is wrong; it mentions the weekend but doesn't describe events. C is a related but not stated consequence; traffic is not mentioned.",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "wrong_purpose",
+            "C": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What will happen to cars left in Lot G after 5 p.m. Friday?",
+          "options": {
+            "A": "They will be relocated to Lot Z.",
+            "B": "They will be towed away.",
+            "C": "They will receive a parking ticket.",
+            "D": "They will be allowed to stay until Sunday."
+          },
+          "answer": "B",
+          "explanation": "The announcement explicitly states vehicles 'will be towed.' A is a misattributed detail; the shuttle goes from Lot Z, but cars are not moved there. C is a plausible but wrong detail; the specific consequence stated is towing. D is the opposite of what is stated.",
+          "distractor_types": {
+            "A": "misattributed_detail",
+            "C": "wrong_detail",
+            "D": "reversed_intent"
+          }
+        }
+      ],
+      "id": "la_v2_1776246456772_008",
+      "audio_url": "/api/audio/announcement/la_v2_1776246456772_008.mp3",
+      "flavor_score": 0.69
+    },
+    {
+      "context": "academic_event",
+      "situation": "honors thesis oral defense schedule announcement",
+      "speaker_role": "department_staff",
+      "difficulty": "easy",
+      "announcement": "Attention all honors students and faculty. The Philosophy Department is pleased to announce the schedule for this semester's honors thesis oral defenses. The presentations will take place next Monday and Tuesday, April 14th and 15th, in the third-floor seminar room of the Humanities Building. Each student will have twenty minutes to present, followed by a ten-minute question period. We strongly encourage all students, especially those considering an honors thesis in the future, to attend these sessions. Please note that the room has limited seating, so we advise arriving a few minutes early to secure a spot.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce the schedule for thesis presentations",
+            "B": "To recruit faculty for thesis committees",
+            "C": "To explain the grading criteria for theses",
+            "D": "To remind students of a thesis submission deadline"
+          },
+          "answer": "A",
+          "explanation": "A is correct because the announcement's primary purpose is to inform about the schedule and location of the oral defenses. B is a wrong_purpose, as recruiting faculty is not mentioned. C is a wrong_purpose, as grading criteria are not discussed. D is a reversed_intent; the announcement is about attending presentations, not submitting work.",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are students advised to do to secure a seat at the presentations?",
+          "options": {
+            "A": "Register online in advance",
+            "B": "Bring their own chair",
+            "C": "Arrive a few minutes early",
+            "D": "Contact the department secretary"
+          },
+          "answer": "C",
+          "explanation": "C is correct as directly stated in the announcement. A is a related_but_not_stated action, as online registration is not mentioned. B is a misattributed_detail, taking the concept of limited seating to an extreme not suggested. D is a wrong_detail; contacting a secretary is not advised for securing a seat.",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "misattributed_detail",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "id": "la_v2_1776246457449_001",
+      "audio_url": "/api/audio/announcement/la_v2_1776246457449_001.mp3",
+      "flavor_score": 0.85
+    },
+    {
+      "context": "facility_change",
+      "situation": "student lounge or study area closing for pipe/ceiling repair",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "Attention students. Please be aware that the main student lounge in the University Center will be closed for emergency ceiling repairs starting this Wednesday, October 8th. A burst pipe over the weekend has caused water damage, making the space unsafe for use. The closure is expected to last through Friday, October 10th. During this time, we are opening the multipurpose room in the adjacent Student Activities Building as an alternative study space. We apologize for the inconvenience and ask for your patience while we complete these necessary repairs to restore the lounge.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the primary purpose of this announcement?",
+          "options": {
+            "A": "To describe the cause of water damage in a building",
+            "B": "To inform about a temporary lounge closure and alternative space",
+            "C": "To apologize for ongoing construction noise",
+            "D": "To announce a permanent relocation of the student lounge"
+          },
+          "answer": "B",
+          "explanation": "B is correct as it captures the main news (closure) and key detail (alternative space). A is too_narrow, focusing only on the cause, not the purpose. C is a wrong_purpose; noise is not mentioned. D is a reversed_intent; the closure is temporary, not permanent.",
+          "distractor_types": {
+            "A": "too_narrow",
+            "C": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "Where are students directed to go while the lounge is closed?",
+          "options": {
+            "A": "The library's 24-hour study zone",
+            "B": "The cafeteria on the first floor",
+            "C": "Any open classroom in the University Center",
+            "D": "The multipurpose room in the Student Activities Building"
+          },
+          "answer": "D",
+          "explanation": "D is correct as directly stated. A is a related_but_not_stated common alternative. B is a wrong_detail; the cafeteria is not mentioned as the alternative. C is a misattributed_detail; while the University Center is mentioned, specific classrooms are not offered as the solution.",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "C": "misattributed_detail"
+          }
+        }
+      ],
+      "id": "la_v2_1776246457449_002",
+      "audio_url": "/api/audio/announcement/la_v2_1776246457449_002.mp3",
+      "flavor_score": 0.9
+    },
+    {
+      "context": "career_services",
+      "situation": "LinkedIn profile photo day at career center",
+      "speaker_role": "program_coordinator",
+      "difficulty": "medium",
+      "announcement": "Good afternoon. The Career Development Center is excited to offer a professional LinkedIn headshot day next Thursday, November 6th, from 10 a.m. to 4 p.m. in our main lobby. A professional photographer will be on-site to take high-quality photos suitable for your online profiles and resumes. This service is free for all currently enrolled students. We do require that you sign up for a 10-minute time slot in advance through the events page on our website. Please dress in business casual attire for your session, and don't miss this great opportunity to enhance your professional image.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement mainly about?",
+          "options": {
+            "A": "A new career counseling workshop series",
+            "B": "A job fair requiring professional attire",
+            "C": "A free opportunity to get a professional headshot",
+            "D": "A photography contest with a cash prize"
+          },
+          "answer": "C",
+          "explanation": "C is correct, summarizing the event's core offering. A is a wrong_purpose; a workshop series is not mentioned. B is a misattributed_detail; it takes the detail about attire and applies it to a different event (job fair). D is a reversed_intent; it's a service, not a contest.",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "misattributed_detail",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What must students do to participate in the headshot event?",
+          "options": {
+            "A": "Sign up for a time slot online in advance",
+            "B": "Bring their own digital camera",
+            "C": "Pay a small fee at the door",
+            "D": "Submit a resume for review"
+          },
+          "answer": "A",
+          "explanation": "A is correct as directly stated ('sign up... in advance'). B is a wrong_detail; a photographer is provided. C is a reversed_intent; the service is explicitly free. D is a related_but_not_stated common career center activity.",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "reversed_intent",
+            "D": "related_but_not_stated"
+          }
+        }
+      ],
+      "id": "la_v2_1776246457449_003",
+      "audio_url": "/api/audio/announcement/la_v2_1776246457449_003.mp3",
+      "flavor_score": 0.48
+    },
+    {
+      "context": "campus_activity",
+      "situation": "cultural food festival organized by international club",
+      "speaker_role": "activity_coordinator",
+      "difficulty": "hard",
+      "announcement": "Attention. The International Students Association is thrilled to host our annual Global Bites Festival this Saturday on the Main Quad from noon until 6 p.m. This event features food stalls from over fifteen different student cultural organizations, offering small tasting portions for just two dollars each. The festival is open to the entire campus community. Proceeds from food sales will support the ISA's scholarship fund for study abroad programs. We want to emphasize that this is a cash-only event, so please plan accordingly. Come enjoy delicious food while supporting a great cause.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "How much does each food tasting portion cost at the festival?",
+          "options": {
+            "A": "One dollar",
+            "B": "They are free of charge",
+            "C": "Five dollars",
+            "D": "Two dollars"
+          },
+          "answer": "D",
+          "explanation": "D is correct as directly stated. A is a wrong_detail (one vs. two dollars). B is a reversed_intent (it's not free). C is a wrong_detail (five vs. two dollars).",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "reversed_intent",
+            "C": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the International Students Association?",
+          "options": {
+            "A": "It organizes weekly cooking classes for members.",
+            "B": "It uses some event funds to support student scholarships.",
+            "C": "It requires membership for festival attendance.",
+            "D": "It is funded primarily by the university administration."
+          },
+          "answer": "B",
+          "explanation": "B is a valid inference because the announcement states proceeds support the ISA's scholarship fund. A is an over_inference; weekly classes are not mentioned or implied. C is a reversed_intent; the event is open to the entire campus. D is an unrelated_inference; the funding source is not discussed.",
+          "distractor_types": {
+            "A": "over_inference",
+            "C": "reversed_intent",
+            "D": "unrelated_inference"
+          }
+        }
+      ],
+      "id": "la_v2_1776246457449_004",
+      "audio_url": "/api/audio/announcement/la_v2_1776246457449_004.mp3",
+      "flavor_score": 0.66
+    },
+    {
+      "context": "facility_change",
+      "situation": "grand reopening of renovated gallery or performance hall",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "This is a reminder that the grand reopening of the fully renovated campus art gallery is this Friday, September 12th. We are thrilled to invite all students, faculty, and staff to the celebration, which begins at 5:00 p.m. with remarks from the university president. The gallery, located on the first floor of the Fine Arts Building, will then be open for self-guided tours until 8:00 p.m. Light refreshments will be served. Please note that backpacks and large bags must be checked at the entrance. We look forward to showcasing the new space and the inaugural exhibition, 'Contemporary Perspectives.'",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce the reopening event for the art gallery",
+            "B": "To describe the new art exhibition in detail",
+            "C": "To remind students about a bag policy for all buildings",
+            "D": "To advertise a speech by the university president"
+          },
+          "answer": "A",
+          "explanation": "A is correct, covering the event's purpose. B is too_narrow, focusing on one detail of the event. C is too_narrow, focusing on a single rule. D is too_narrow, focusing on one part of the schedule.",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "too_narrow",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are attendees required to do with large bags?",
+          "options": {
+            "A": "Leave them in their vehicles",
+            "B": "Carry them at all times",
+            "C": "Check them at the entrance",
+            "D": "Place them under their seats"
+          },
+          "answer": "C",
+          "explanation": "C is correct as directly stated. A is a related_but_not_stated common rule. B is a reversed_intent; they must be checked, not carried. D is a misattributed_detail, applying a rule from a different venue like a theater.",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "reversed_intent",
+            "D": "misattributed_detail"
+          }
+        }
+      ],
+      "id": "la_v2_1776246457449_005",
+      "audio_url": "/api/audio/announcement/la_v2_1776246457449_005.mp3",
+      "flavor_score": 0.95
+    },
+    {
+      "context": "campus_activity",
+      "situation": "annual outdoor movie night with blanket seating",
+      "speaker_role": "program_coordinator",
+      "difficulty": "hard",
+      "announcement": "Attention students. The Campus Programming Board presents our annual Fall Film Night this coming Saturday on the South Lawn. We'll be showing a classic comedy starting at dusk, around 7:30 p.m. We encourage you to bring blankets or lawn chairs for seating, as no permanent chairs will be provided. Complimentary popcorn and hot chocolate will be available while supplies last. In case of rain, the event will be moved to the auditorium in the Student Union. Please be aware that pets, with the exception of service animals, are not permitted at this event. We hope to see you there!",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What are students encouraged to bring for seating at the film night?",
+          "options": {
+            "A": "Folding tables for snacks",
+            "B": "Blankets or lawn chairs",
+            "C": "Cushions from their dorm rooms",
+            "D": "Reserved seat tickets"
+          },
+          "answer": "B",
+          "explanation": "B is correct as directly stated. A is a related_but_not_stated item (tables for snacks). C is a wrong_detail; cushions are not mentioned, blankets are. D is a misattributed_detail; it's a free, open event, not ticketed.",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "C": "wrong_detail",
+            "D": "misattributed_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the South Lawn as a venue?",
+          "options": {
+            "A": "It is primarily used for athletic events.",
+            "B": "It has permanent seating for large audiences.",
+            "C": "It is located far from student housing.",
+            "D": "It is an open space without built-in seating."
+          },
+          "answer": "D",
+          "explanation": "D is a valid inference because the announcement states no permanent chairs will be provided, implying a lack of built-in seating. A is an unrelated_inference; its primary use is not discussed. B is a reversed_intent; the lack of permanent chairs contradicts this. C is an over_inference; distance from housing is not mentioned or implied.",
+          "distractor_types": {
+            "A": "unrelated_inference",
+            "B": "reversed_intent",
+            "C": "over_inference"
+          }
+        }
+      ],
+      "id": "la_v2_1776246457449_006",
+      "audio_url": "/api/audio/announcement/la_v2_1776246457449_006.mp3",
+      "flavor_score": 0.65
+    },
+    {
+      "context": "logistics",
+      "situation": "temporary road closure and detour instructions",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "Good morning. This is an important traffic advisory. A portion of Campus Loop Road, between the library and the engineering complex, will be closed for repaving from 6 a.m. to 6 p.m. this Wednesday, March 5th. All vehicular traffic, including campus shuttles, must use the marked detour via Service Drive behind the athletic fields. Pedestrian and bicycle access will remain open on the sidewalks. We apologize for the inconvenience and ask drivers to please plan for extra travel time. The road will reopen fully by Wednesday evening. Thank you for your cooperation.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What must drivers do during the road closure on Wednesday?",
+          "options": {
+            "A": "Park their vehicles and use the shuttle",
+            "B": "Avoid the campus entirely that day",
+            "C": "Use the detour via Service Drive",
+            "D": "Obtain a special parking permit"
+          },
+          "answer": "C",
+          "explanation": "C is correct as directly stated. A is a wrong_detail; shuttles must also use the detour, and parking is not advised. B is an over_inference; avoidance is not required. D is a related_but_not_stated common campus logistics item.",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "over_inference",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "Why does the speaker mention that sidewalks will remain open?",
+          "options": {
+            "A": "To assure pedestrians and cyclists they can still pass through",
+            "B": "To warn that sidewalks may be crowded with vehicles",
+            "C": "To remind people to walk instead of drive",
+            "D": "To indicate that the repaving includes sidewalk repairs"
+          },
+          "answer": "A",
+          "explanation": "A is a valid inference; stating sidewalks are open directly addresses the concern of non-vehicular access. B is a reversed_intent; vehicles are not allowed on sidewalks. C is an over_inference; while walking is an option, the statement doesn't actively encourage it. D is a wrong_detail; the announcement is about road repaving, not sidewalk repairs.",
+          "distractor_types": {
+            "B": "reversed_intent",
+            "C": "over_inference",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "id": "la_v2_1776246457449_007",
+      "audio_url": "/api/audio/announcement/la_v2_1776246457449_007.mp3",
+      "flavor_score": 0.83
+    },
+    {
+      "context": "academic_event",
+      "situation": "end-of-semester academic showcase with awards",
+      "speaker_role": "society_president",
+      "difficulty": "medium",
+      "announcement": "Attention all members of the Biology Society. This is a final reminder about our End-of-Semester Research Showcase this Friday at 4 p.m. in the Life Sciences Auditorium. Undergraduate researchers from all biology sub-disciplines will present their semester projects. Following the presentations, we will announce the winners of the annual Excellence in Undergraduate Research awards. Attendance is mandatory for society members, as noted in our constitution. We also welcome any students interested in biology to attend. Please arrive by 3:45 p.m. to check in and find seating.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "For whom is attendance at the showcase mandatory?",
+          "options": {
+            "A": "All undergraduate biology majors",
+            "B": "Faculty judges of the awards",
+            "C": "Students presenting their research",
+            "D": "Members of the Biology Society"
+          },
+          "answer": "D",
+          "explanation": "D is correct as directly stated ('mandatory for society members'). A is a wrong_detail; it's for society members, not all majors. B is a related_but_not_stated plausible group. C is a wrong_detail; presenters are likely required, but the mandatory rule is explicitly for society members.",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "C": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the Biology Society?",
+          "options": {
+            "A": "It organizes social events every weekend.",
+            "B": "It recognizes outstanding student research with awards.",
+            "C": "Its membership is limited to graduate students.",
+            "D": "It requires members to present research each semester."
+          },
+          "answer": "B",
+          "explanation": "B is a valid inference because the society is hosting an event where it announces research awards. A is an over_inference; weekly social events are not mentioned. C is a reversed_intent; the event features undergraduate researchers, implying undergraduate membership. D is an over_inference; while some members may present, it is not stated as a requirement for all.",
+          "distractor_types": {
+            "A": "over_inference",
+            "C": "reversed_intent",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "id": "la_v2_1776246457449_008",
+      "audio_url": "/api/audio/announcement/la_v2_1776246457449_008.mp3",
+      "flavor_score": 0.89
     }
   ]
 }
