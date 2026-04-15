@@ -1,20 +1,20 @@
 #!/usr/bin/env node
 
 /**
- * Generate Listen and Choose a Response (LCR) questions using DeepSeek.
+ * Generate Listen and Choose a Response (LCR) questions — v2
  *
- * Usage: node scripts/generate-lcr.mjs [--count 10] [--with-tts] [--dry-run]
+ * Rebuilt based on deep ETS flavor analysis (16 reference samples).
+ *
+ * Usage: node scripts/generate-lcr.mjs [--count 10] [--with-tts] [--dry-run] [--difficulty easy|medium|hard]
  *
  * Pipeline:
- *   1. Build prompt for pragmatic listening questions
- *   2. Call DeepSeek to generate items
- *   3. Validate structure and quality
- *   4. (Optional) Generate TTS audio for speaker sentences
- *   5. Save accepted items to staging
- *
- * 2026 TOEFL Listening Task 1:
- *   - Hear ONE sentence → choose best response from 4 options
- *   - Tests pragmatic understanding (implied meaning)
+ *   1. Collect existing speaker sentences for deduplication
+ *   2. Build prompt with pre-assigned answer positions, difficulty tiers, paradigms
+ *   3. Call DeepSeek to generate items
+ *   4. Three-level validation (schema → profile → flavor scoring)
+ *   5. Batch-level quality checks (answer dist, contraction rate, paradigm dist)
+ *   6. (Optional) Generate TTS audio for speaker sentences
+ *   7. Save accepted items to staging with full quality metrics
  */
 
 import { writeFileSync, readFileSync, mkdirSync, existsSync, readdirSync } from "fs";
@@ -24,7 +24,7 @@ import { createRequire } from "module";
 
 const require = createRequire(import.meta.url);
 const { buildLCRPrompt } = require("../lib/listeningGen/lcrPromptBuilder.js");
-const { validateLCR, validateBatchDistribution } = require("../lib/listeningGen/lcrValidator.js");
+const { validateLCR, validateBatch, scoreFlavor } = require("../lib/listeningGen/lcrValidator.js");
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const STAGING_DIR = join(__dirname, "..", "data", "listening", "staging");
@@ -36,9 +36,10 @@ function getArg(name, def) {
   const i = args.indexOf(`--${name}`);
   return i >= 0 && args[i + 1] ? args[i + 1] : def;
 }
-const COUNT = Math.min(parseInt(getArg("count", "10"), 10), 15);
+const COUNT = Math.min(parseInt(getArg("count", "10"), 10), 12);
 const DRY_RUN = args.includes("--dry-run");
 const WITH_TTS = args.includes("--with-tts");
+const DIFFICULTY = getArg("difficulty", null); // null = mixed (30/45/25)
 
 // ── Load .env.local ──
 function loadEnv() {
@@ -61,21 +62,19 @@ async function callDeepSeek(prompt) {
   const { callDeepSeekViaCurl } = require("../lib/ai/deepseekHttp.js");
 
   const apiKey = process.env.DEEPSEEK_API_KEY;
-  if (!apiKey) {
-    throw new Error("DEEPSEEK_API_KEY not set. Add it to .env.local or export it.");
-  }
+  if (!apiKey) throw new Error("DEEPSEEK_API_KEY not set.");
 
   const payload = {
     model: "deepseek-chat",
     messages: [
-      { role: "system", content: "You are a TOEFL listening question writer. Return only valid JSON, no markdown fencing." },
+      { role: "system", content: "You are an ETS-caliber TOEFL question writer. Return only valid JSON, no markdown fencing." },
       { role: "user", content: prompt },
     ],
-    temperature: 0.8,
-    max_tokens: 6000,
+    temperature: 0.75,
+    max_tokens: 8192,
   };
 
-  const result = await callDeepSeekViaCurl({ apiKey, payload, timeoutMs: 90000 });
+  const result = await callDeepSeekViaCurl({ apiKey, payload, timeoutMs: 120000 });
   const content = typeof result === "string" ? result : (result?.choices?.[0]?.message?.content || JSON.stringify(result));
   return { content };
 }
@@ -107,23 +106,38 @@ function salvagePartialJson(text) {
   return items;
 }
 
+// ── Collect existing speakers for deduplication ──
+function collectExistingSpeakers() {
+  const speakers = [];
+  try {
+    // From bank
+    const bankFile = join(BANK_DIR, "lcr.json");
+    if (existsSync(bankFile)) {
+      const bank = JSON.parse(readFileSync(bankFile, "utf-8"));
+      (bank.items || []).forEach(item => {
+        if (item.speaker) speakers.push(item.speaker);
+      });
+    }
+    // From staging
+    if (existsSync(STAGING_DIR)) {
+      for (const f of readdirSync(STAGING_DIR).filter(f => f.startsWith("lcr-") && f.endsWith(".json"))) {
+        const d = JSON.parse(readFileSync(join(STAGING_DIR, f), "utf-8"));
+        (d.items || []).forEach(item => {
+          if (item.speaker) speakers.push(item.speaker);
+        });
+      }
+    }
+  } catch {}
+  return speakers;
+}
+
 // ── TTS generation (optional) ──
 async function generateTTS(item, id) {
   if (!WITH_TTS) return null;
-
   try {
-    const { generateSpeech, estimateCost } = require("../lib/tts/openaiTts.js");
+    const { generateSpeech } = require("../lib/tts/openaiTts.js");
     const { uploadAudio } = require("../lib/tts/storage.js");
-
-    const est = estimateCost(item.speaker);
-    console.log(`   🔊 TTS for ${id}: ${est.chars} chars, ~$${est.cost.toFixed(4)}`);
-
-    const buffer = await generateSpeech(item.speaker, {
-      voice: "nova",
-      model: "tts-1-hd",
-      format: "mp3",
-    });
-
+    const buffer = await generateSpeech(item.speaker, { voice: "nova", model: "tts-1-hd", format: "mp3" });
     const result = await uploadAudio(`choose-response/${id}.mp3`, buffer);
     return result.url;
   } catch (err) {
@@ -135,34 +149,24 @@ async function generateTTS(item, id) {
 // ── Main pipeline ──
 async function main() {
   console.log("╔═══════════════════════════════════════════════════════════╗");
-  console.log("║   Listen and Choose a Response — Generation Pipeline    ║");
+  console.log("║   LCR v2 — ETS-Calibrated Generation Pipeline          ║");
   console.log("╚═══════════════════════════════════════════════════════════╝\n");
-  console.log(`Count: ${COUNT}  TTS: ${WITH_TTS}  Dry-run: ${DRY_RUN}\n`);
+  console.log(`Count: ${COUNT}  Difficulty: ${DIFFICULTY || "mixed (30/45/25)"}  TTS: ${WITH_TTS}  Dry-run: ${DRY_RUN}\n`);
 
   loadEnv();
 
-  // Collect existing IDs to avoid duplication
-  const existingIds = new Set();
-  try {
-    const bankFile = join(BANK_DIR, "lcr.json");
-    if (existsSync(bankFile)) {
-      const bank = JSON.parse(readFileSync(bankFile, "utf-8"));
-      (bank.items || bank || []).forEach(item => existingIds.add(item.id));
-    }
-    if (existsSync(STAGING_DIR)) {
-      for (const f of readdirSync(STAGING_DIR).filter(f => f.startsWith("lcr-") && f.endsWith(".json"))) {
-        const d = JSON.parse(readFileSync(join(STAGING_DIR, f), "utf-8"));
-        (d.items || []).forEach(item => existingIds.add(item.id));
-      }
-    }
-  } catch {}
-  if (existingIds.size > 0) {
-    console.log(`   Excluding ${existingIds.size} existing items`);
+  // Step 1: Collect existing data for dedup
+  const existingSpeakers = collectExistingSpeakers();
+  if (existingSpeakers.length > 0) {
+    console.log(`   Excluding ${existingSpeakers.length} existing speaker sentences\n`);
   }
 
-  // Step 1: Build prompt
+  // Step 2: Build prompt
   console.log("1. Building prompt...");
-  const prompt = buildLCRPrompt(COUNT, { excludeIds: [...existingIds] });
+  const prompt = buildLCRPrompt(COUNT, {
+    excludeSpeakers: existingSpeakers,
+    difficultyOverride: DIFFICULTY,
+  });
 
   if (DRY_RUN) {
     console.log("\n── PROMPT (dry-run) ──\n");
@@ -171,7 +175,7 @@ async function main() {
     return;
   }
 
-  // Step 2: Call DeepSeek
+  // Step 3: Call DeepSeek
   console.log("2. Calling DeepSeek...");
   let rawResponse;
   try {
@@ -190,15 +194,15 @@ async function main() {
   }
   console.log(`   Received ${parsed.length} items\n`);
 
-  // Step 3: Validate
-  console.log("3. Validating...\n");
+  // Step 4: Three-level validation
+  console.log("3. Validating (schema → profile → flavor)...\n");
   const accepted = [];
   const rejected = [];
   const timestamp = Date.now();
 
   for (let i = 0; i < parsed.length; i++) {
     const item = parsed[i];
-    const id = `lcr_gen_${timestamp}_${String(i + 1).padStart(3, "0")}`;
+    const id = `lcr_v2_${timestamp}_${String(i + 1).padStart(3, "0")}`;
     item.id = id;
 
     const result = validateLCR(item);
@@ -207,20 +211,35 @@ async function main() {
       const reasons = result.errors.join("; ");
       console.log(`  ✗ ${id}: ${reasons}`);
       rejected.push({ ...item, rejection_reasons: result.errors });
-    } else if (result.warnings.length > 0) {
-      console.log(`  ⚠ ${id} (${item.context}): OK (${result.warnings.length} warnings: ${result.warnings.join(", ")})`);
-      accepted.push(item);
     } else {
-      console.log(`  ✓ ${id} (${item.context}): OK`);
+      const flavorStr = result.flavor ? `flavor=${result.flavor.total}` : "";
+      const paradigm = item.answer_paradigm || "?";
+      const diff = item.difficulty || "?";
+
+      if (result.warnings.length > 0) {
+        console.log(`  ⚠ ${id} [${diff}/${paradigm}] ${flavorStr}: ${result.warnings.length} warnings`);
+        for (const w of result.warnings) console.log(`      ${w}`);
+      } else {
+        console.log(`  ✓ ${id} [${diff}/${paradigm}] ${flavorStr}`);
+      }
+      item._flavor = result.flavor;
       accepted.push(item);
     }
   }
 
-  // Check answer distribution
-  const dist = validateBatchDistribution(accepted);
-  console.log(`  Answer distribution: A=${dist.distribution.A} B=${dist.distribution.B} C=${dist.distribution.C} D=${dist.distribution.D}`);
+  // Step 5: Batch-level quality checks
+  if (accepted.length > 0) {
+    const batch = validateBatch(accepted);
+    console.log(`\n── Batch Quality ──`);
+    console.log(`  Answer distribution: A=${batch.distribution.A} B=${batch.distribution.B} C=${batch.distribution.C} D=${batch.distribution.D} ${batch.balanced ? "✓" : "⚠ UNBALANCED"}`);
+    console.log(`  Avg flavor score: ${batch.avgFlavor} ${batch.avgFlavor >= 0.70 ? "✓" : batch.avgFlavor >= 0.50 ? "⚠" : "✗"} (target ≥0.70)`);
+    console.log(`  Contraction rate: ${batch.contractionRate}% (ETS target: 62%)`);
+    console.log(`  Discourse marker rate: ${batch.dmRate}% (ETS target: 37%)`);
+    console.log(`  Paradigms: ${JSON.stringify(batch.paradigmDist)}`);
+    console.log(`  Difficulty: ${JSON.stringify(batch.difficultyDist)}`);
+  }
 
-  // Step 4: Optional TTS
+  // Step 6: Optional TTS
   if (WITH_TTS && accepted.length > 0) {
     console.log("\n4. Generating TTS audio...\n");
     for (const item of accepted) {
@@ -229,23 +248,39 @@ async function main() {
     }
   }
 
-  // Step 5: Save staging
+  // Step 7: Save staging
   console.log(`\n── Results ──`);
   console.log(`  Accepted: ${accepted.length}/${parsed.length}`);
   console.log(`  Rejected: ${rejected.length}/${parsed.length}`);
   console.log(`  Acceptance rate: ${parsed.length > 0 ? Math.round(accepted.length / parsed.length * 100) : 0}%`);
 
   if (accepted.length > 0) {
+    // Compute batch stats for staging metadata
+    const batchStats = validateBatch(accepted);
+
     mkdirSync(STAGING_DIR, { recursive: true });
     const stagingFile = join(STAGING_DIR, `lcr-${timestamp}.json`);
     const output = {
       type: "listenChooseResponse",
+      version: 2,
       generated_at: new Date().toISOString(),
       total_generated: parsed.length,
       total_accepted: accepted.length,
       acceptance_rate: Math.round(accepted.length / parsed.length * 100) / 100,
       tts_generated: WITH_TTS,
-      items: accepted,
+      batch_quality: {
+        avg_flavor: batchStats.avgFlavor,
+        answer_distribution: batchStats.distribution,
+        balanced: batchStats.balanced,
+        contraction_rate: batchStats.contractionRate,
+        dm_rate: batchStats.dmRate,
+        paradigm_distribution: batchStats.paradigmDist,
+        difficulty_distribution: batchStats.difficultyDist,
+      },
+      items: accepted.map(item => {
+        const { _flavor, ...rest } = item;
+        return { ...rest, flavor_score: _flavor?.total };
+      }),
       rejected,
     };
     writeFileSync(stagingFile, JSON.stringify(output, null, 2));
@@ -254,13 +289,14 @@ async function main() {
     // Show sample
     const sample = accepted[0];
     console.log(`\n── Sample ──`);
-    console.log(`Context: ${sample.context} | Pragmatic: ${sample.pragmatic_function}`);
+    console.log(`Context: ${sample.context} | Difficulty: ${sample.difficulty} | Paradigm: ${sample.answer_paradigm}`);
     console.log(`Speaker: "${sample.speaker}"`);
     for (const key of ["A", "B", "C", "D"]) {
       const marker = key === sample.answer ? "→" : " ";
-      console.log(`  ${marker} ${key}. ${sample.options[key]}`);
+      const dtype = sample.distractor_types?.[key] || "";
+      console.log(`  ${marker} ${key}. ${sample.options[key]}${dtype ? `  [${dtype}]` : ""}`);
     }
-    console.log(`Answer: ${sample.answer} — ${sample.explanation?.slice(0, 80)}...`);
+    console.log(`Flavor: ${sample._flavor?.total} | Explanation: ${sample.explanation?.slice(0, 80)}...`);
   }
 }
 

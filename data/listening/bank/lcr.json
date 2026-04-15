@@ -1,658 +1,885 @@
 {
-  "meta": {
-    "type": "lcr",
-    "label": "Listen and Choose a Response",
-    "version": 1,
-    "updated": "2026-04-15"
-  },
+  "version": 2,
   "items": [
     {
-      "id": "lcr_gen_001",
-      "context": "campus_life",
-      "situation": "A student approaches a librarian at the help desk.",
-      "speaker": "I'm not sure if the printer's working, but I really need this by class.",
-      "pragmatic_function": "indirect_request",
+      "context": "campus_academic",
+      "situation": "student asking a librarian about a book or resource",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "I'm trying to find that article you recommended last week.",
       "options": {
-        "A": "The class starts at ten o'clock.",
-        "B": "Let me check — I can print it for you at the front desk if it's down.",
-        "C": "I don't think printers are very expensive.",
-        "D": "You should have printed it yesterday."
+        "A": "Let me pull it up for you right now.",
+        "B": "I read that article just last week.",
+        "C": "The library closes at nine tonight.",
+        "D": "Yes, I can recommend a good one."
       },
-      "answer": "B",
-      "explanation": "The speaker is indirectly asking for help with printing. Option B addresses the underlying request by offering to check and provide an alternative solution.",
-      "audio_url": null
-    },
-    {
-      "id": "lcr_gen_002",
-      "context": "campus_life",
-      "situation": "Two students are discussing a group project deadline.",
-      "speaker": "I thought we had until Friday, but the syllabus says Wednesday.",
-      "pragmatic_function": "expressing_concern",
-      "options": {
-        "A": "Yeah, I like Wednesdays better too.",
-        "B": "The syllabus is on the course website.",
-        "C": "Oh no — we'd better finish the analysis section tonight then.",
-        "D": "Friday is a good day for deadlines."
-      },
-      "answer": "C",
-      "explanation": "The speaker is expressing concern about a sooner-than-expected deadline. Option C acknowledges the urgency and proposes immediate action.",
-      "audio_url": null
-    },
-    {
-      "id": "lcr_gen_003",
-      "context": "academic",
-      "situation": "A student speaks to a professor after class.",
-      "speaker": "Professor, I was wondering if there's any way to get an extension on the essay.",
-      "pragmatic_function": "polite_request",
-      "options": {
-        "A": "The essay topic is about climate change.",
-        "B": "I finished my essay last week.",
-        "C": "What's the situation? If you have a valid reason, we can work something out.",
-        "D": "Extensions are usually two pages long."
-      },
-      "answer": "C",
-      "explanation": "The student is politely requesting an extension. Option C is the most appropriate response as it acknowledges the request and opens a discussion about whether it can be granted.",
-      "audio_url": null
-    },
-    {
-      "context": "campus_life",
-      "situation": "asking about printing at the computer lab",
-      "speaker": "I'm not sure if the printer's working, but I really need this by class.",
-      "pragmatic_function": "expressing_concern",
-      "options": {
-        "A": "The class starts in ten minutes.",
-        "B": "Let me check the status for you, or you could try the library printer.",
-        "C": "I need to print something too.",
-        "D": "Yes, the computer lab is open."
-      },
-      "answer": "B",
-      "explanation": "B correctly addresses the speaker's concern by offering help and a practical alternative. A responds only to the literal mention of 'class' but ignores the concern. C ignores the speaker's specific problem by shifting focus. D is a word trap, responding literally to 'computer lab' but not to the concern about the printer.",
+      "answer": "A",
+      "explanation": "A is correct because 'Let me pull it up for you right now' is an idiomatic, helpful response meaning the librarian will immediately retrieve the requested article. B is a semantic association trap, reusing 'article' and 'last week' to state a personal fact. C is off-topic, shifting to library hours. D is a wrong question type, answering as if the speaker asked for a recommendation, not help finding a specific one.",
       "distractor_types": {
-        "A": "literal_meaning",
+        "B": "semantic_association_trap",
         "C": "off_topic",
-        "D": "word_trap"
+        "D": "wrong_question_type"
       },
-      "id": "lcr_gen_1776233716023_001"
+      "id": "lcr_v2_1776241674801_001",
+      "flavor_score": 0.92
     },
     {
-      "context": "classroom",
-      "situation": "asking about the grading rubric for an essay",
-      "speaker": "So the professor wants more analysis and less summary, right?",
-      "pragmatic_function": "expressing_agreement",
+      "context": "campus_daily",
+      "situation": "student asking about a campus event or concert",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Do you know when the tickets for the jazz concert go on sale?",
       "options": {
-        "A": "The essay is due on Friday.",
-        "B": "Exactly, that's what I understood from the feedback.",
-        "C": "I prefer writing summaries.",
-        "D": "The professor is in her office."
+        "A": "I already bought mine online this morning.",
+        "B": "I can grab one for you if you'd like.",
+        "C": "The concert is in the student union ballroom.",
+        "D": "Jazz music is my favorite genre."
       },
       "answer": "B",
-      "explanation": "B directly agrees with and confirms the speaker's understanding. A ignores the point about the rubric's content. C is an off-topic personal opinion. D is a word trap, responding to 'professor' but not to the question about the rubric.",
+      "explanation": "B is correct because it shifts context from answering the 'when' question to solving the underlying problem of getting a ticket. A is a semantic association trap, reusing 'bought' and 'tickets' to share a personal, unhelpful fact. C is off-topic, answering 'where' instead of 'when'. D is off-topic, giving a personal opinion about jazz.",
       "distractor_types": {
-        "A": "off_topic",
+        "A": "semantic_association_trap",
         "C": "off_topic",
-        "D": "word_trap"
-      },
-      "id": "lcr_gen_1776233716023_002"
-    },
-    {
-      "context": "daily_life",
-      "situation": "arranging a ride with a friend",
-      "speaker": "If you're heading to the mall anyway, I could really use a lift.",
-      "pragmatic_function": "expressing_agreement",
-      "options": {
-        "A": "The mall has great stores.",
-        "B": "Sure, I'm leaving in about five minutes.",
-        "C": "I don't have a driver's license.",
-        "D": "Lifting weights is good exercise."
-      },
-      "answer": "B",
-      "explanation": "B agrees to the implied request for a ride. A responds to the literal topic of the mall but ignores the request. C is an off-topic statement that doesn't engage with the speaker's point. D is a word trap, misinterpreting 'lift' as physical exercise.",
-      "distractor_types": {
-        "A": "literal_meaning",
-        "C": "off_topic",
-        "D": "word_trap"
-      },
-      "id": "lcr_gen_1776233716023_003"
-    },
-    {
-      "context": "campus_life",
-      "situation": "discussing a cafeteria meal with a friend",
-      "speaker": "Wow, they actually put real mushrooms in the pasta today.",
-      "pragmatic_function": "expressing_surprise",
-      "options": {
-        "A": "I don't like mushrooms.",
-        "B": "I know, it's a nice change from the usual canned ones.",
-        "C": "The pasta is served at noon.",
-        "D": "Real food is better than fake food."
-      },
-      "answer": "B",
-      "explanation": "B acknowledges and shares the speaker's surprised observation. A shifts the topic to a personal preference. C responds only to the literal word 'pasta' with irrelevant information. D is a word trap on 'real' but states an obvious, generic fact that doesn't engage with the specific surprise.",
-      "distractor_types": {
-        "A": "off_topic",
-        "C": "literal_meaning",
-        "D": "word_trap"
-      },
-      "id": "lcr_gen_1776233716023_004"
-    },
-    {
-      "context": "classroom",
-      "situation": "clarifying instructions for a lab report",
-      "speaker": "We just need to turn in the data charts, not the full analysis, correct?",
-      "pragmatic_function": "seeking_confirmation",
-      "options": {
-        "A": "The lab report is very important.",
-        "B": "No, the full analysis is required as well.",
-        "C": "Charts are usually in color.",
-        "D": "Yes, that's right—just the charts by Friday."
-      },
-      "answer": "D",
-      "explanation": "D directly confirms the speaker's understanding. A is an off-topic, generic statement. B contradicts the speaker instead of confirming. C responds literally to 'charts' but ignores the request for confirmation about the instructions.",
-      "distractor_types": {
-        "A": "off_topic",
-        "B": "off_topic",
-        "C": "literal_meaning"
-      },
-      "id": "lcr_gen_1776233716023_005"
-    },
-    {
-      "context": "daily_life",
-      "situation": "ordering coffee at a campus café",
-      "speaker": "It's kind of chilly in here—I think I'll get a large hot chocolate instead.",
-      "pragmatic_function": "suggestion",
-      "options": {
-        "A": "The temperature outside is fifty degrees.",
-        "B": "Good idea, a warm drink sounds perfect.",
-        "C": "I don't like chocolate.",
-        "D": "Large is the biggest size they have."
-      },
-      "answer": "B",
-      "explanation": "B agrees with the speaker's implied suggestion that a warm drink is suitable. A responds literally to 'chilly' with an irrelevant fact. C shifts focus to a personal preference. D is a word trap on 'large' but gives obvious, unhelpful information.",
-      "distractor_types": {
-        "A": "literal_meaning",
-        "C": "off_topic",
-        "D": "word_trap"
-      },
-      "id": "lcr_gen_1776233716023_006"
-    },
-    {
-      "context": "campus_life",
-      "situation": "asking about a campus event at the student center",
-      "speaker": "The flyer says the guest lecture is free for students, which is pretty great.",
-      "pragmatic_function": "expressing_agreement",
-      "options": {
-        "A": "The student center closes at ten.",
-        "B": "It really is—I was worried there'd be a fee.",
-        "C": "I never read flyers.",
-        "D": "Lectures are usually educational."
-      },
-      "answer": "B",
-      "explanation": "B agrees with and expands on the speaker's positive comment. A responds literally to 'student center' but ignores the comment. C is an off-topic personal remark. D is a word trap on 'lecture' but states a generic, irrelevant fact.",
-      "distractor_types": {
-        "A": "literal_meaning",
-        "C": "off_topic",
-        "D": "word_trap"
-      },
-      "id": "lcr_gen_1776233716023_007"
-    },
-    {
-      "context": "classroom",
-      "situation": "asking about an assignment deadline extension",
-      "speaker": "I heard some people got extra time on the research paper—is that true?",
-      "pragmatic_function": "indirect_request",
-      "options": {
-        "A": "Research papers are difficult.",
-        "B": "Yes, but you have to ask the professor directly before Friday.",
-        "C": "I don't have time to talk.",
-        "D": "The paper is about climate change."
-      },
-      "answer": "B",
-      "explanation": "B correctly interprets the query as an indirect request for information on how to get an extension. A is an off-topic, generic statement. C dismisses the conversation entirely. D is a word trap on 'research paper' but provides irrelevant content details.",
-      "distractor_types": {
-        "A": "off_topic",
-        "C": "off_topic",
-        "D": "word_trap"
-      },
-      "id": "lcr_gen_1776233716023_008"
-    },
-    {
-      "context": "daily_life",
-      "situation": "ordering coffee at a campus café",
-      "speaker": "Speaking of exams, I should probably get a coffee with an extra shot.",
-      "pragmatic_function": "changing_topic",
-      "options": {
-        "A": "Exams are next week.",
-        "B": "Yeah, me too—a large black coffee, please.",
-        "C": "I don't take shots.",
-        "D": "Coffee is made from beans."
-      },
-      "answer": "B",
-      "explanation": "B appropriately follows the topic shift to ordering coffee. A sticks to the previous topic of exams (literal meaning). C is a word trap, misinterpreting 'shot' as an alcoholic drink. D states an obvious, irrelevant fact about coffee.",
-      "distractor_types": {
-        "A": "literal_meaning",
-        "C": "word_trap",
         "D": "off_topic"
       },
-      "id": "lcr_gen_1776233716023_009"
+      "id": "lcr_v2_1776241674801_002",
+      "flavor_score": 0.83
     },
     {
-      "context": "campus_life",
-      "situation": "talking to a classmate about a group project",
-      "speaker": "So we're all meeting at the library tomorrow at two to finish the slides?",
-      "pragmatic_function": "seeking_confirmation",
+      "context": "campus_daily",
+      "situation": "friend inviting another to a study group or social event",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "A few of us are getting together to review for the bio final tonight.",
       "options": {
-        "A": "The library has many books.",
-        "B": "Two o'clock is a good time for me.",
-        "C": "That's the plan—I'll send a reminder.",
-        "D": "Slides are usually made on a computer."
+        "A": "Biology was my hardest subject last semester.",
+        "B": "I have to review my notes first.",
+        "C": "What time were you thinking?",
+        "D": "The final exam is next week."
       },
       "answer": "C",
-      "explanation": "C directly confirms the meeting details. A is a word trap on 'library' but gives irrelevant information. B responds only to the time but doesn't confirm the overall plan. D responds literally to 'slides' with an obvious fact.",
+      "explanation": "C is correct because it responds with a counter-question ('What time?') that advances the conversation toward accepting the invitation. A is off-topic, giving a personal opinion about biology. B is a marker-led indirect response that is a potential decline, not an advancement. D is a semantic association trap, reusing 'final' to state a related fact.",
       "distractor_types": {
-        "A": "word_trap",
-        "B": "literal_meaning",
-        "D": "literal_meaning"
-      },
-      "id": "lcr_gen_1776233716023_010"
-    },
-    {
-      "context": "campus_life",
-      "situation": "asking about intramural sports sign-up",
-      "speaker": "I was thinking about joining the soccer league, but I'm not sure I can commit to every game.",
-      "pragmatic_function": "making_an_excuse",
-      "options": {
-        "A": "Soccer is a great sport to play.",
-        "B": "The sign-up deadline is actually tomorrow.",
-        "C": "Yeah, the schedule is pretty demanding. Maybe try the casual drop-in sessions instead?",
-        "D": "I'm not committed to any league either."
-      },
-      "answer": "C",
-      "explanation": "C is correct because it addresses the speaker's implied excuse/hesitation by offering a helpful, less-committal alternative. A responds only to the literal mention of soccer. B ignores the speaker's point about commitment and states a fact. D uses the word 'committed' from the speaker's sentence but is an irrelevant statement about the responder.",
-      "distractor_types": {
-        "A": "literal_meaning",
-        "B": "off_topic",
-        "D": "word_trap"
-      },
-      "id": "lcr_gen_1776233816519_001"
-    },
-    {
-      "context": "classroom",
-      "situation": "asking about the grading rubric for an essay",
-      "speaker": "I'm a bit confused about what the professor is looking for in our final paper.",
-      "pragmatic_function": "offering_help",
-      "options": {
-        "A": "The final paper is due next Friday.",
-        "B": "Confusion is a normal part of the writing process.",
-        "C": "I saved the rubric she posted online. Want me to go over it with you?",
-        "D": "I'm looking for a new professor too."
-      },
-      "answer": "C",
-      "explanation": "C is correct because it directly offers help in response to the speaker's expressed confusion. A is an off-topic statement of fact. B responds to the literal word 'confused' but doesn't address the need for clarification. D is a word trap on 'looking for'.",
-      "distractor_types": {
-        "B": "literal_meaning",
         "A": "off_topic",
-        "D": "word_trap"
+        "B": "marker_led_indirect",
+        "D": "semantic_association_trap"
       },
-      "id": "lcr_gen_1776233816519_002"
+      "id": "lcr_v2_1776241674801_003",
+      "flavor_score": 0.88
     },
     {
-      "context": "daily_life",
-      "situation": "discussing weekend plans with a roommate",
-      "speaker": "You didn't have to clean the whole kitchen, but wow, it looks amazing.",
-      "pragmatic_function": "expressing_gratitude",
+      "context": "general_daily",
+      "situation": "asking a neighbor about noise or shared space",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Would it be okay if I practiced my guitar for an hour?",
       "options": {
-        "A": "The kitchen was very dirty.",
-        "B": "I'm planning to clean it again next week.",
-        "C": "Thanks! I had some free time and thought I'd surprise you.",
-        "D": "I don't usually like cleaning."
+        "A": "I don't own a guitar.",
+        "B": "My neighbor plays the piano very loudly.",
+        "C": "An hour is a long time to practice.",
+        "D": "Actually, would later this evening work better?"
       },
-      "answer": "C",
-      "explanation": "C is correct because it accepts the thanks/praise implied in the speaker's statement. A and B are off-topic, factual responses that ignore the expression of gratitude. D is a literal but irrelevant response to the action mentioned.",
-      "distractor_types": {
-        "D": "literal_meaning",
-        "A": "off_topic",
-        "B": "off_topic"
-      },
-      "id": "lcr_gen_1776233816519_003"
-    },
-    {
-      "context": "campus_life",
-      "situation": "talking to a classmate about a group project",
-      "speaker": "Any chance you could take the lead on the presentation slides?",
-      "pragmatic_function": "polite_refusal",
-      "options": {
-        "A": "I don't know how to make slides.",
-        "B": "Presentations are due next Monday.",
-        "C": "I'm swamped with my other class right now. Could someone else do it?",
-        "D": "The lead singer of that band is great."
-      },
-      "answer": "C",
-      "explanation": "C is correct as it politely declines the request by giving a reason and suggesting an alternative. A is a literal, direct refusal without politeness. B is an off-topic factual statement. D is a word trap on 'lead'.",
-      "distractor_types": {
-        "A": "literal_meaning",
-        "B": "off_topic",
-        "D": "word_trap"
-      },
-      "id": "lcr_gen_1776233816519_004"
-    },
-    {
-      "context": "classroom",
-      "situation": "asking a question about the lecture material",
-      "speaker": "So, we're basically saying that the economic model failed because of external factors?",
-      "pragmatic_function": "expressing_agreement",
-      "options": {
-        "A": "The lecture was about economic models.",
-        "B": "Failed models are a common topic.",
-        "C": "Exactly, that's the key point the professor was making.",
-        "D": "I think external factors are very important."
-      },
-      "answer": "C",
-      "explanation": "C is correct because it confirms and agrees with the speaker's understanding. A and B are off-topic, generic statements about the lecture. D responds to the literal phrase 'external factors' but doesn't directly confirm the speaker's summary.",
-      "distractor_types": {
-        "D": "literal_meaning",
-        "A": "off_topic",
-        "B": "off_topic"
-      },
-      "id": "lcr_gen_1776233816519_005"
-    },
-    {
-      "context": "daily_life",
-      "situation": "talking to a landlord about a lease renewal",
-      "speaker": "I got the renewal notice. The rent increase is a bit more than I was expecting.",
-      "pragmatic_function": "expressing_concern",
-      "options": {
-        "A": "I expect you to pay rent on time.",
-        "B": "Notices are usually sent by mail.",
-        "C": "I understand. The market rates have gone up, but we can discuss the timing.",
-        "D": "I never get notices I expect."
-      },
-      "answer": "C",
-      "explanation": "C is correct because it acknowledges the tenant's concern and opens a dialogue. A is an off-topic, authoritative statement. B responds literally to 'notice' but ignores the concern. D is a word trap on 'expecting'.",
-      "distractor_types": {
-        "B": "literal_meaning",
-        "A": "off_topic",
-        "D": "word_trap"
-      },
-      "id": "lcr_gen_1776233816519_006"
-    },
-    {
-      "context": "campus_life",
-      "situation": "asking the registrar about course enrollment",
-      "speaker": "I know the add-drop period ended, but my advisor just approved this change yesterday.",
-      "pragmatic_function": "making_an_excuse",
-      "options": {
-        "A": "The add-drop period is always very short.",
-        "B": "Advisors need to approve all changes.",
-        "C": "I see. Let me check if we can make an exception given the timing.",
-        "D": "I don't approve of changes either."
-      },
-      "answer": "C",
-      "explanation": "C is correct because it addresses the speaker's implied excuse/reason for a late request by offering to help. A and B are off-topic factual statements. D is a word trap on 'approved'.",
+      "answer": "D",
+      "explanation": "D is correct because it opens with the discourse marker 'Actually' and indirectly addresses the request by proposing a specific alternative time. A is off-topic and a personal fact. B is off-topic, shifting to a different neighbor and instrument. C is a wrong question type, commenting on the duration rather than responding to the permission request.",
       "distractor_types": {
         "A": "off_topic",
         "B": "off_topic",
-        "D": "word_trap"
+        "C": "wrong_question_type"
       },
-      "id": "lcr_gen_1776233816519_007"
+      "id": "lcr_v2_1776241674801_004",
+      "flavor_score": 0.91
     },
     {
-      "context": "classroom",
-      "situation": "clarifying instructions for a lab report",
-      "speaker": "Just to be clear, we're supposed to submit the data charts separately, right?",
-      "pragmatic_function": "expressing_agreement",
+      "context": "social",
+      "situation": "responding to an invitation or suggestion",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "We're all going to try that new pizza place downtown.",
       "options": {
-        "A": "The lab report instructions are very clear.",
-        "B": "Data charts can be difficult to make.",
-        "C": "Right, as an appendix at the end of the main document.",
-        "D": "I submitted my report separately."
-      },
-      "answer": "C",
-      "explanation": "C is correct because it confirms and agrees with the speaker's understanding, adding helpful detail. A and B are off-topic comments. D is a literal response to 'submit' and 'separately' but doesn't confirm the speaker's question.",
-      "distractor_types": {
-        "D": "literal_meaning",
-        "A": "off_topic",
-        "B": "off_topic"
-      },
-      "id": "lcr_gen_1776233816519_008"
-    },
-    {
-      "context": "daily_life",
-      "situation": "talking to a store clerk about a return",
-      "speaker": "I'm really glad you could exchange this without the original receipt.",
-      "pragmatic_function": "expressing_gratitude",
-      "options": {
-        "A": "The original receipt is usually required.",
-        "B": "Our return policy is posted on the wall.",
-        "C": "You're welcome. I could see it was a recent purchase.",
-        "D": "I don't have the receipt either."
-      },
-      "answer": "C",
-      "explanation": "C is correct because it accepts the thanks implied in the speaker's statement. A and B are off-topic, policy-focused responses that ignore the gratitude. D is a literal, self-focused response to part of the statement.",
-      "distractor_types": {
-        "D": "literal_meaning",
-        "A": "off_topic",
-        "B": "off_topic"
-      },
-      "id": "lcr_gen_1776233816519_009"
-    },
-    {
-      "context": "campus_life",
-      "situation": "talking to a lab partner about an experiment",
-      "speaker": "We should probably run the calibration test one more time before we record the final data.",
-      "pragmatic_function": "seeking_confirmation",
-      "options": {
-        "A": "The calibration test is the first step.",
-        "B": "Final data is recorded in the blue notebook.",
-        "C": "Good idea. Better to be sure everything's accurate.",
-        "D": "I don't have time to run right now."
-      },
-      "answer": "C",
-      "explanation": "C is correct because it confirms and agrees with the speaker's suggestion. A and B are off-topic, literal facts about the procedure. D is a word trap on 'run'.",
-      "distractor_types": {
-        "A": "literal_meaning",
-        "B": "off_topic",
-        "D": "word_trap"
-      },
-      "id": "lcr_gen_1776233816519_010"
-    },
-    {
-      "context": "campus_life",
-      "situation": "checking in at the campus health center",
-      "speaker": "I filled out the form, but I'm not sure what to do next.",
-      "pragmatic_function": "changing_topic",
-      "options": {
-        "A": "The form is on the clipboard over there.",
-        "B": "I'm not feeling very well either.",
-        "C": "You should probably just take a seat and wait for your name to be called.",
-        "D": "I'm not sure what time they close."
-      },
-      "answer": "C",
-      "explanation": "The speaker is implicitly asking for guidance on the next step. C directly addresses this by giving appropriate advice. A responds literally to the mention of the form. B ignores the speaker's point about procedure and focuses on feeling unwell. D is off-topic, introducing an unrelated question about hours.",
-      "distractor_types": {
-        "A": "literal_meaning",
-        "B": "off_topic",
-        "D": "word_trap"
-      },
-      "id": "lcr_gen_1776234280553_001"
-    },
-    {
-      "context": "classroom",
-      "situation": "asking about an assignment deadline extension",
-      "speaker": "I was wondering if there's any chance I could turn in the paper a day late.",
-      "pragmatic_function": "polite_refusal",
-      "options": {
-        "A": "I turned mine in yesterday, actually.",
-        "B": "I'm afraid the deadline is firm for everyone.",
-        "C": "A day has twenty-four hours.",
-        "D": "Yes, the paper is about chance and probability."
-      },
-      "answer": "B",
-      "explanation": "The speaker is making a polite request for an extension. B appropriately and politely refuses this request. A ignores the speaker's point by talking about their own submission. C responds literally to the words 'a day'. D is a word trap on 'chance'.",
-      "distractor_types": {
-        "A": "off_topic",
-        "C": "literal_meaning",
-        "D": "word_trap"
-      },
-      "id": "lcr_gen_1776234280553_002"
-    },
-    {
-      "context": "daily_life",
-      "situation": "discussing weekend plans with a roommate",
-      "speaker": "So, are you still thinking of going to that concert on Saturday?",
-      "pragmatic_function": "changing_topic",
-      "options": {
-        "A": "I think concerts are usually on weekends.",
-        "B": "Actually, I was going to ask if you wanted to see a movie instead.",
-        "C": "Yes, I bought the tickets a month ago.",
-        "D": "Saturday is the day after Friday."
-      },
-      "answer": "B",
-      "explanation": "The speaker is asking about a specific plan. B appropriately changes the topic by suggesting a different activity. C directly answers the literal question but does not change the topic. A gives a general, off-topic comment about concerts. D is a literal, irrelevant statement about days.",
-      "distractor_types": {
-        "A": "off_topic",
-        "C": "literal_meaning",
-        "D": "word_trap"
-      },
-      "id": "lcr_gen_1776234280553_003"
-    },
-    {
-      "context": "campus_life",
-      "situation": "asking a residence advisor about a maintenance issue",
-      "speaker": "My desk lamp flickers every time I turn it on.",
-      "pragmatic_function": "giving_advice",
-      "options": {
-        "A": "I prefer lamps that don't flicker.",
-        "B": "You should put in a maintenance request online.",
-        "C": "Turn it on and off a few times.",
-        "D": "My desk is made of wood."
-      },
-      "answer": "B",
-      "explanation": "The speaker is implicitly reporting a problem and seeking a solution. B gives appropriate, actionable advice on how to get it fixed. A is an off-topic personal opinion. C gives simplistic, unhelpful advice that ignores the proper procedure. D is a word trap on 'desk'.",
-      "distractor_types": {
-        "A": "off_topic",
-        "C": "literal_meaning",
-        "D": "word_trap"
-      },
-      "id": "lcr_gen_1776234280553_004"
-    },
-    {
-      "context": "classroom",
-      "situation": "discussing a reading with a classmate before class",
-      "speaker": "The author's argument about climate policy seems pretty convincing, right?",
-      "pragmatic_function": "expressing_agreement",
-      "options": {
-        "A": "I haven't finished the reading yet.",
-        "B": "Absolutely, the evidence she uses is really strong.",
-        "C": "Climate policy is an important topic.",
-        "D": "The author wrote several other books."
-      },
-      "answer": "B",
-      "explanation": "The speaker is seeking agreement on an evaluation. B directly agrees and provides supporting reasoning. A ignores the speaker's point by stating they are unprepared. C gives a generic, off-topic agreement with the subject, not the speaker's point about the argument. D is an irrelevant fact about the author.",
-      "distractor_types": {
-        "A": "off_topic",
-        "C": "literal_meaning",
-        "D": "word_trap"
-      },
-      "id": "lcr_gen_1776234280553_005"
-    },
-    {
-      "context": "daily_life",
-      "situation": "talking to a store clerk about a return",
-      "speaker": "I bought this here last week, but it doesn't fit.",
-      "pragmatic_function": "suggestion",
-      "options": {
-        "A": "This store was built last year.",
-        "B": "Did you try it on before you bought it?",
-        "C": "We can exchange it for a different size if you have the receipt.",
-        "D": "It fits me perfectly."
-      },
-      "answer": "C",
-      "explanation": "The speaker is implicitly initiating a return or exchange. C appropriately suggests a solution. B ignores the implicit request and asks an unhelpful, possibly critical question. A is an off-topic statement about the store. D is a word trap on 'fit' and is irrelevant.",
-      "distractor_types": {
-        "A": "off_topic",
-        "B": "literal_meaning",
-        "D": "word_trap"
-      },
-      "id": "lcr_gen_1776234280553_006"
-    },
-    {
-      "context": "campus_life",
-      "situation": "discussing a study group meeting time",
-      "speaker": "I've got a lab that ends at four, so I can't make the three-thirty meeting.",
-      "pragmatic_function": "offering_help",
-      "options": {
-        "A": "Labs are usually in the science building.",
-        "B": "We could take notes for you and send them after.",
-        "C": "I have a meeting at three-thirty too.",
-        "D": "Four is later than three-thirty."
-      },
-      "answer": "B",
-      "explanation": "The speaker is stating a scheduling conflict. B offers a helpful solution to include the speaker. C shares a similar problem but does not offer help, ignoring the speaker's point. A gives an off-topic fact about labs. D states the literal, obvious time difference.",
-      "distractor_types": {
-        "A": "off_topic",
-        "C": "literal_meaning",
-        "D": "word_trap"
-      },
-      "id": "lcr_gen_1776234280553_007"
-    },
-    {
-      "context": "classroom",
-      "situation": "asking about an assignment deadline extension",
-      "speaker": "Would it be possible to get an extra day for the project?",
-      "pragmatic_function": "polite_refusal",
-      "options": {
-        "A": "It's possible the deadline is tomorrow.",
-        "B": "Projects usually take a long time.",
-        "C": "I'm sorry, but extensions aren't allowed this time.",
-        "D": "An extra day would be twenty-four hours."
-      },
-      "answer": "C",
-      "explanation": "The speaker is making a direct, polite request. C politely and directly refuses. A is a word trap on 'possible' and gives an unhelpful literal response. B gives an off-topic general comment. D responds literally to 'extra day'.",
-      "distractor_types": {
-        "A": "word_trap",
-        "B": "off_topic",
-        "D": "literal_meaning"
-      },
-      "id": "lcr_gen_1776234280553_008"
-    },
-    {
-      "context": "daily_life",
-      "situation": "calling to check business hours",
-      "speaker": "I'm just calling to see if you're open past six tonight.",
-      "pragmatic_function": "expressing_gratitude",
-      "options": {
-        "A": "We close at eight, so yes, thank you for calling.",
-        "B": "I'm open to new ideas.",
-        "C": "Tonight, I'm going to a movie.",
-        "D": "Six is a number between five and seven."
+        "A": "Sure, I'd love to join you.",
+        "B": "Pizza is my favorite food.",
+        "C": "Downtown parking can be difficult.",
+        "D": "I haven't been there yet."
       },
       "answer": "A",
-      "explanation": "The speaker is asking for information. A provides the information and appropriately thanks the caller for their inquiry. B is a word trap on 'open' with an irrelevant meaning. C is an off-topic personal statement. D gives a literal, pointless fact about the number six.",
+      "explanation": "A is correct because it's a direct, positive, and natural acceptance of the implied invitation. B is a semantic association trap, stating a fact about pizza. C is off-topic, shifting to a logistical problem. D is off-topic, stating a personal fact that doesn't accept or decline.",
       "distractor_types": {
-        "B": "word_trap",
+        "B": "semantic_association_trap",
         "C": "off_topic",
-        "D": "literal_meaning"
+        "D": "off_topic"
       },
-      "id": "lcr_gen_1776234280553_009"
+      "id": "lcr_v2_1776241674801_005",
+      "flavor_score": 0.95
     },
     {
-      "context": "campus_life",
-      "situation": "talking to a tutor about writing help",
-      "speaker": "I'm really struggling to make my thesis statement clearer.",
-      "pragmatic_function": "expressing_agreement",
+      "context": "campus_academic",
+      "situation": "student asking a professor about office hours or assignment",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Professor, I'm still unclear about the formatting for the lab report.",
       "options": {
-        "A": "Let's look at it together and see if we can sharpen it.",
-        "B": "You should struggle less with your writing.",
-        "C": "Clear statements are important in writing.",
-        "D": "My thesis is about ancient history."
+        "A": "The lab report is due on Friday.",
+        "B": "Well, the guidelines are posted on the course website.",
+        "C": "I formatted my report very carefully.",
+        "D": "Yes, the lab equipment is new."
+      },
+      "answer": "B",
+      "explanation": "B is correct because it opens with the discourse marker 'Well' and indirectly answers by directing the student to the resource containing the answer. A is a semantic association trap, reusing 'lab report' to state the due date. C is off-topic, a personal statement. D is a polysemy/misinterpretation trap, mishearing 'formatting' as possibly related to the lab itself.",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "polysemy_misinterpretation"
+      },
+      "id": "lcr_v2_1776241674801_006",
+      "flavor_score": 0.95
+    },
+    {
+      "context": "campus_academic",
+      "situation": "classmate asking to borrow lecture notes",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I missed class yesterday. Any chance I could take a look at your notes?",
+      "options": {
+        "A": "Yesterday's lecture was really interesting.",
+        "B": "I missed the bus yesterday morning.",
+        "C": "Just let me find them in my bag.",
+        "D": "Yes, you should take better notes."
+      },
+      "answer": "C",
+      "explanation": "C is correct because it opens with the discourse marker 'Just' and signals a brief delay before complying with the request. A is a semantic association trap, reusing 'yesterday' and 'lecture' to give an opinion. B is off-topic, giving a reason for being late unrelated to the request. D is a wrong question type, giving advice instead of responding to the request to see notes.",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_1776241674801_007",
+      "flavor_score": 0.86
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about gym or sports facility hours",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Isn't the swimming pool usually open later on weekends?",
+      "options": {
+        "A": "I swim every weekend for exercise.",
+        "B": "The schedule changed last month.",
+        "C": "The pool is closed for cleaning today.",
+        "D": "You're in luck—it's open until ten."
+      },
+      "answer": "D",
+      "explanation": "D is correct because 'You're in luck' is an idiomatic expression used to give positive, relevant information that addresses the speaker's implied question about current hours. A is off-topic, a personal habit. B is a semantic association trap, reusing 'schedule' to give a vague, unhelpful fact. C is off-topic, answering about 'today' instead of the general weekend schedule.",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "semantic_association_trap",
+        "C": "off_topic"
+      },
+      "id": "lcr_v2_1776241674801_008",
+      "flavor_score": 0.97
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about printing or scanning at computer lab",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Do you have any change for the printer? I only have bills.",
+      "options": {
+        "A": "It's on me—I'll swipe my card for you.",
+        "B": "The printer is out of paper sometimes.",
+        "C": "I need to print my essay as well.",
+        "D": "No, I don't have any bills either."
       },
       "answer": "A",
-      "explanation": "The speaker is expressing a problem and implicitly asking for help. A agrees with the need to work on it and offers collaborative help. B gives unhelpful, literal advice that ignores the request. C states an off-topic, generic truth about writing. D is a word trap on 'thesis' and is irrelevant.",
+      "explanation": "A is correct because it shifts context from answering the literal 'do you have change' question to solving the underlying problem of paying for the print job. B is a semantic association trap, reusing 'printer' to state a potential problem. C is off-topic, stating a similar need. D is a wrong question type, literally answering 'no' but misinterpreting 'bills' as the thing the responder lacks.",
       "distractor_types": {
-        "B": "literal_meaning",
+        "B": "semantic_association_trap",
         "C": "off_topic",
-        "D": "word_trap"
+        "D": "wrong_question_type"
       },
-      "id": "lcr_gen_1776234280553_010"
+      "id": "lcr_v2_1776241674801_009",
+      "flavor_score": 0.83
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about dorm maintenance issue",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "My desk lamp in the dorm room just stopped working.",
+      "options": {
+        "A": "The dorm rooms are quite spacious.",
+        "B": "Maybe you should put in a maintenance request.",
+        "C": "I stopped by your room earlier.",
+        "D": "Yes, the lamp uses a special bulb."
+      },
+      "answer": "B",
+      "explanation": "B is correct because it opens with the discourse marker 'Maybe' and gives helpful, indirect advice on how to solve the problem. A is off-topic, commenting on the room. C is off-topic, a personal statement. D is a semantic association trap, reusing 'lamp' to give a specific but unhelpful detail.",
+      "distractor_types": {
+        "A": "off_topic",
+        "C": "off_topic",
+        "D": "semantic_association_trap"
+      },
+      "id": "lcr_v2_1776241674801_010",
+      "flavor_score": 0.86
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a librarian about a book or resource",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Excuse me, do you have the book 'Introduction to Psychology'?",
+      "options": {
+        "A": "Yes, it's on the shelf in the social sciences section.",
+        "B": "I'm reading a psychology book right now.",
+        "C": "The library closes at nine tonight.",
+        "D": "No, I haven't taken that class yet."
+      },
+      "answer": "A",
+      "explanation": "A directly answers the yes/no question and provides helpful, specific location information. B is a semantic association trap ('psychology book'). C is off-topic (library hours). D answers a different question type (personal experience, not library holdings).",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_1776241780423_001",
+      "flavor_score": 0.58
+    },
+    {
+      "context": "social",
+      "situation": "expressing concern about a friend's situation",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "I'm really worried about my job interview tomorrow.",
+      "options": {
+        "A": "I have an interview next week.",
+        "B": "You'll do great. Just be yourself.",
+        "C": "The job market is very competitive.",
+        "D": "What time does it start?"
+      },
+      "answer": "B",
+      "explanation": "B uses the idiomatic encouragement 'Just be yourself' to address the underlying worry, offering reassurance. A is a semantic association trap ('interview'). C is off-topic (general fact). D asks for a detail, which is a wrong question type for an expression of concern.",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_1776241780423_002",
+      "flavor_score": 0.92
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student discussing a presentation topic with partner",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "I'm drawing a blank on what to say for the conclusion.",
+      "options": {
+        "A": "The conclusion is the last part of a presentation.",
+        "B": "We should start with the introduction.",
+        "C": "Don't sweat it. We can brainstorm some ideas.",
+        "D": "I said we should meet at three o'clock."
+      },
+      "answer": "C",
+      "explanation": "C uses the idiom 'Don't sweat it' to offer reassurance and proposes a collaborative solution ('brainstorm'), directly addressing the speaker's problem. A is a semantic association trap ('conclusion'). B is off-topic (introduction). D is a polysemy/misinterpretation trap ('say' interpreted as a past statement about time).",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "polysemy_misinterpretation"
+      },
+      "id": "lcr_v2_1776241780423_003",
+      "flavor_score": 0.97
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student checking lost-and-found at front desk",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Hi, I think I left my water bottle in the lecture hall.",
+      "options": {
+        "A": "The lecture hall is on the second floor.",
+        "B": "I need to buy a new water bottle.",
+        "C": "You should drink more water.",
+        "D": "You're in luck. Someone just turned one in."
+      },
+      "answer": "D",
+      "explanation": "D uses the idiom 'You're in luck' to give a positive, relevant response that solves the speaker's implied problem. A is a semantic association trap ('lecture hall'). B is off-topic (personal need). C gives unsolicited advice, a wrong response type for a report of a lost item.",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      },
+      "id": "lcr_v2_1776241780423_004",
+      "flavor_score": 0.83
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about campus shuttle or parking",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Do you know where I can park my car?",
+      "options": {
+        "A": "Are you a student or a visitor?",
+        "B": "I parked my car over there.",
+        "C": "Cars need regular maintenance.",
+        "D": "No, I don't have a car."
+      },
+      "answer": "A",
+      "explanation": "A is a counter-question that advances the conversation by seeking necessary information to give a helpful answer about parking rules. B is a semantic association trap ('parked'). C is off-topic (general fact). D answers a different yes/no question ('Do you have a car?').",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_1776241780423_005",
+      "flavor_score": 0.83
+    },
+    {
+      "context": "social",
+      "situation": "acknowledging someone's unavailability or schedule conflict",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Sorry, I can't make it to the movie tonight.",
+      "options": {
+        "A": "The movie starts at seven.",
+        "B": "That's okay. Maybe next time.",
+        "C": "I didn't like the movie either.",
+        "D": "We should get popcorn."
+      },
+      "answer": "B",
+      "explanation": "B directly and appropriately acknowledges the apology and suggests a future alternative, maintaining a positive social tone. A provides a detail, ignoring the apology. C is a misinterpretation ('can't make it' ≠ didn't like). D is off-topic (snack planning).",
+      "distractor_types": {
+        "A": "wrong_question_type",
+        "C": "polysemy_misinterpretation",
+        "D": "off_topic"
+      },
+      "id": "lcr_v2_1776241780423_006",
+      "flavor_score": 0.72
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about gym or sports facility hours",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Is the swimming pool open on Sundays?",
+      "options": {
+        "A": "I love swimming on the weekend.",
+        "B": "The pool is twenty-five meters long.",
+        "C": "Actually, it's only open until noon.",
+        "D": "No, I went there yesterday."
+      },
+      "answer": "C",
+      "explanation": "C starts with the discourse marker 'Actually' and provides specific, relevant information about Sunday hours, which indirectly answers the yes/no question. A is off-topic (personal preference). B is a semantic association trap ('pool' description). D answers a different question ('Did you go?').",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "semantic_association_trap",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_1776241780423_007",
+      "flavor_score": 0.86
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking for directions to a nearby location",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Could you tell me how to get to the post office?",
+      "options": {
+        "A": "I need to mail a package.",
+        "B": "The post office sells stamps.",
+        "C": "I'm not from around here.",
+        "D": "Sure, it's just two blocks down this street."
+      },
+      "answer": "D",
+      "explanation": "D starts with 'Sure' (agreement marker) and gives clear, simple directions, directly fulfilling the request. A states a personal need, not giving directions. B is a semantic association trap ('post office' function). C declines to help, which is a wrong response type for a direct request.",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "semantic_association_trap",
+        "C": "wrong_question_type"
+      },
+      "id": "lcr_v2_1776241780423_008",
+      "flavor_score": 0.86
+    },
+    {
+      "context": "campus_daily",
+      "situation": "roommate discussing weekend plans",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "What are you doing this Saturday afternoon?",
+      "options": {
+        "A": "I'm free if you need help with anything.",
+        "B": "Saturday is my favorite day of the week.",
+        "C": "The afternoon is usually warmer.",
+        "D": "I did my laundry last Saturday."
+      },
+      "answer": "A",
+      "explanation": "A shifts context by not listing activities but instead offering assistance, addressing a potential underlying reason for the question. B is off-topic (opinion about Saturday). C is a semantic association trap ('afternoon' description). D answers a different question about the past.",
+      "distractor_types": {
+        "B": "off_topic",
+        "C": "semantic_association_trap",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_1776241780423_009",
+      "flavor_score": 0.83
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student checking with TA about lab report requirements",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Do we need to include the raw data in the appendix?",
+      "options": {
+        "A": "The appendix comes after the references.",
+        "B": "Well, the instructions say it's optional.",
+        "C": "I haven't collected the data yet.",
+        "D": "Data analysis is very important."
+      },
+      "answer": "B",
+      "explanation": "B starts with the discourse marker 'Well' and indirectly answers by referring to the instructions, which clarifies the requirement. A is a semantic association trap ('appendix' location). C is off-topic (personal status). D states a general fact, a wrong response type for a specific procedural question.",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_1776241780423_010",
+      "flavor_score": 0.86
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a librarian about a book or resource",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Do you know where I can find the textbook for Professor Lee's class?",
+      "options": {
+        "A": "Actually, I have a copy you can borrow for the semester.",
+        "B": "Professor Lee's class is on the third floor of this building.",
+        "C": "I'm not sure what I'm having for lunch today.",
+        "D": "Yes, it's a very popular textbook."
+      },
+      "answer": "A",
+      "explanation": "A is correct because it solves the underlying problem (needing the book) by offering a copy, rather than just answering the literal 'where' question. B is a semantic association trap ('Professor Lee's class' → location of the class, not the book). C is off-topic and grammatical. D is a wrong question type, answering a yes/no question about the book's popularity instead of the 'where' question.",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_1776241880845_001",
+      "flavor_score": 0.86
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking about exam format or study materials",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Will the final exam have multiple-choice questions?",
+      "options": {
+        "A": "I prefer multiple-choice questions to essays.",
+        "B": "Actually, it'll be all short-answer and essay.",
+        "C": "The exam is scheduled for next Friday morning.",
+        "D": "No, you can't use a calculator."
+      },
+      "answer": "B",
+      "explanation": "B is correct because it uses the discourse marker 'Actually' to politely correct the assumption and directly answer the question about format. A is a semantic association trap ('multiple-choice questions' → personal preference). C is off-topic, answering 'when' instead of 'what format'. D is a wrong question type, answering a different yes/no question (about calculators).",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_1776241880845_002",
+      "flavor_score": 0.91
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking for directions to a nearby location",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Excuse me, how do I get to the train station from here?",
+      "options": {
+        "A": "I take the train to work every day.",
+        "B": "It's a very efficient way to travel.",
+        "C": "Go straight for two blocks, then turn left.",
+        "D": "No, I haven't been there before."
+      },
+      "answer": "C",
+      "explanation": "C is correct because it directly and helpfully answers the 'how' question with clear directions. A is a semantic association trap ('train' → personal habit). B is off-topic, giving an opinion about trains. D is a wrong question type, answering a 'have you been' question.",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_1776241880845_003",
+      "flavor_score": 0.58
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a neighbor about noise or shared space",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Would you mind keeping the music down a bit after ten?",
+      "options": {
+        "A": "I have a very large music collection.",
+        "B": "My mind is made up about the schedule.",
+        "C": "I finished my homework at ten o'clock.",
+        "D": "No problem, I'll use headphones."
+      },
+      "answer": "D",
+      "explanation": "D is correct because 'No problem' is a common, idiomatic way to agree to a polite request, followed by a specific action. A is a semantic association trap ('music' → music collection). B is a polysemy/misinterpretation trap ('mind' from 'would you mind' misinterpreted). C is off-topic, mentioning a time but unrelated to the request.",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "polysemy_misinterpretation",
+        "C": "off_topic"
+      },
+      "id": "lcr_v2_1776241880845_004",
+      "flavor_score": 0.88
+    },
+    {
+      "context": "social",
+      "situation": "expressing concern about a friend's situation",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I'm really stressed about this presentation tomorrow.",
+      "options": {
+        "A": "Well, you've given great presentations before.",
+        "B": "The presentation software is very user-friendly.",
+        "C": "Tomorrow's weather is supposed to be sunny.",
+        "D": "Yes, you should be stressed about it."
+      },
+      "answer": "A",
+      "explanation": "A is correct because it opens with the discourse marker 'Well' to offer reassuring, indirect encouragement that addresses the feeling, not the presentation itself. B is a semantic association trap ('presentation' → presentation tools). C is off-topic. D is wrong in context; while grammatical, it's an unhelpful and unnatural response to someone expressing stress.",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "off_topic"
+      },
+      "id": "lcr_v2_1776241880845_005",
+      "flavor_score": 1
+    },
+    {
+      "context": "campus_daily",
+      "situation": "roommate discussing weekend plans",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Do you have any big plans for the long weekend?",
+      "options": {
+        "A": "My plans are written in my calendar.",
+        "B": "Nothing set in stone yet.",
+        "C": "The weekend is three days long.",
+        "D": "Yes, I made them a while ago."
+      },
+      "answer": "B",
+      "explanation": "B is correct because 'Nothing set in stone yet' is a common idiom meaning no definite plans, which is a natural, indirect answer to the question. A is a semantic association trap ('plans' → where plans are recorded). C is off-topic, stating a fact about the weekend. D is a wrong question type, answering the yes/no question literally but uninformatively, failing to share any actual plans.",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_1776241880845_006",
+      "flavor_score": 0.88
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student checking lost-and-found at front desk",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Hi, I was wondering if anyone turned in a black laptop bag.",
+      "options": {
+        "A": "A black bag would match my coat.",
+        "B": "I turned in my assignment this morning.",
+        "C": "Let me check the bin for you.",
+        "D": "No, your laptop isn't here."
+      },
+      "answer": "C",
+      "explanation": "C is correct because it opens with 'Let me' to signal a helpful action (checking) that addresses the underlying need, rather than a simple yes/no. A is a semantic association trap ('black bag' → color matching). B is a polysemy/misinterpretation trap ('turned in' meaning submitted work). D is a wrong question type; the speaker asked about a bag, not the laptop itself.",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "polysemy_misinterpretation",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_1776241880845_007",
+      "flavor_score": 0.83
+    },
+    {
+      "context": "social",
+      "situation": "friend sharing news or personal update",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "I just heard back from the internship I applied for.",
+      "options": {
+        "A": "I applied for several internships last year.",
+        "B": "Hearing back from people is important.",
+        "C": "The internship is located downtown.",
+        "D": "Oh yeah? What did they say?"
+      },
+      "answer": "D",
+      "explanation": "D is correct because it uses the conversational phrase 'Oh yeah?' to express interest and follows with a counter-question ('What did they say?') that naturally advances the conversation. A is a semantic association trap ('applied for' → past application). B is off-topic, making a general statement. C is off-topic, providing a potential fact about the internship.",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "off_topic"
+      },
+      "id": "lcr_v2_1776241880845_008",
+      "flavor_score": 0.91
+    },
+    {
+      "context": "campus_daily",
+      "situation": "friend inviting another to a study group or social event",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Are you coming to the study session at the library tonight?",
+      "options": {
+        "A": "I've already finished reviewing the material, but I can quiz you.",
+        "B": "The library closes at midnight during exams.",
+        "C": "Yes, I am coming from my dormitory.",
+        "D": "No, I don't like studying at night."
+      },
+      "answer": "A",
+      "explanation": "A is correct because it shifts context; instead of a simple yes/no, it states a different status (already finished) and offers to help, solving the underlying goal of studying together. B is a semantic association trap ('library' → library hours). C is a direct but unhelpful yes/no answer that doesn't advance the interaction. D is a direct refusal that doesn't offer an alternative.",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "off_topic"
+      },
+      "id": "lcr_v2_1776241880845_009",
+      "flavor_score": 0.83
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about campus shuttle or parking",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Does the campus shuttle run on Sundays?",
+      "options": {
+        "A": "I usually run in the park on Sundays.",
+        "B": "Yes, but it's on a reduced schedule.",
+        "C": "The shuttle is painted blue and white.",
+        "D": "No, I didn't take it."
+      },
+      "answer": "B",
+      "explanation": "B is correct because it directly answers the yes/no question and provides additional helpful, factual information. A is a polysemy/misinterpretation trap ('run' meaning jog). C is a semantic association trap ('shuttle' → description of shuttle). D is a wrong question type, answering 'did you take it' instead of 'does it run'.",
+      "distractor_types": {
+        "A": "polysemy_misinterpretation",
+        "C": "semantic_association_trap",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_1776241880845_010",
+      "flavor_score": 0.63
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a store clerk about a return or exchange",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "I'm not sure if I still have the receipt for this shirt.",
+      "options": {
+        "A": "Don't worry, I can look up the purchase with your card.",
+        "B": "The shirt is made from a cotton blend.",
+        "C": "I usually keep my receipts in a folder.",
+        "D": "Yes, the shirt is available in other colors."
+      },
+      "answer": "A",
+      "explanation": "Correct (A) solves the underlying problem (processing the return without a receipt) instead of answering the literal uncertainty about the receipt's location. (B) is a semantic association trap ('shirt' → description of the shirt). (C) is off-topic (personal habit unrelated to the store context). (D) is a wrong question type (answers a 'yes/no' question about availability, not the implied concern about the return).",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_1776241881275_001",
+      "flavor_score": 0.95
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking about a reading list for a course",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Do you know which chapters we're supposed to read for next week?",
+      "options": {
+        "A": "I haven't read the chapters yet either.",
+        "B": "Have you checked the syllabus online?",
+        "C": "The library has a copy of the textbook.",
+        "D": "Next week's lecture is on Tuesday."
+      },
+      "answer": "B",
+      "explanation": "Correct (B) advances the conversation by suggesting a practical solution (checking the syllabus) rather than directly answering. (A) is off-topic (shares a lack of action but doesn't help). (C) is a semantic association trap ('read'/'chapters' → 'textbook'/'library'). (D) is a semantic association trap ('next week' → lecture day, ignoring the reading question).",
+      "distractor_types": {
+        "A": "off_topic",
+        "C": "semantic_association_trap",
+        "D": "semantic_association_trap"
+      },
+      "id": "lcr_v2_1776241881275_002",
+      "flavor_score": 0.97
+    },
+    {
+      "context": "campus_academic",
+      "situation": "two classmates discussing a group project deadline",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Isn't the project due on Friday?",
+      "options": {
+        "A": "Friday is my favorite day of the week.",
+        "B": "The project is about climate change.",
+        "C": "Actually, it was moved to next Monday.",
+        "D": "Yes, I will do the project."
+      },
+      "answer": "C",
+      "explanation": "Correct (C) uses the discourse marker 'Actually' to politely correct and provide updated information. (A) is off-topic (personal feeling about Friday). (B) is a semantic association trap ('project' → topic of the project). (D) is a wrong question type (answers a commitment to do it, not the question about the due date).",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "semantic_association_trap",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_1776241881275_003",
+      "flavor_score": 1
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking about exam format or study materials",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Will the final exam have multiple-choice questions?",
+      "options": {
+        "A": "I don't like multiple-choice tests.",
+        "B": "The exam is in the main lecture hall.",
+        "C": "We need to study for the final.",
+        "D": "Why don't we ask the professor after class?"
+      },
+      "answer": "D",
+      "explanation": "Correct (D) proposes a collaborative action to get a definitive answer, advancing the conversation. (A) is off-topic (personal opinion). (B) is a semantic association trap ('exam' → location of the exam). (C) is off-topic (vague statement about need to study).",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "semantic_association_trap",
+        "C": "off_topic"
+      },
+      "id": "lcr_v2_1776241881275_004",
+      "flavor_score": 0.83
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking for directions to a nearby location",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Excuse me, how do I get to the city museum from here?",
+      "options": {
+        "A": "I'm headed there myself, I can show you the way.",
+        "B": "The museum has a great dinosaur exhibit.",
+        "C": "From here, you can go many places.",
+        "D": "Yes, it's a very popular museum."
+      },
+      "answer": "A",
+      "explanation": "Correct (A) solves the underlying need (getting to the museum) by offering to guide, not just giving verbal directions. (B) is a semantic association trap ('museum' → description of an exhibit). (C) is off-topic (vague and unhelpful). (D) is a wrong question type (answers a yes/no question about popularity, not 'how to get there').",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_1776241881275_005",
+      "flavor_score": 0.83
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student checking with TA about lab report requirements",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Do we need to include graphs in the lab report?",
+      "options": {
+        "A": "I can create graphs on the computer.",
+        "B": "Just the data tables are required this time.",
+        "C": "The lab report is due next Friday.",
+        "D": "Yes, I have included them."
+      },
+      "answer": "B",
+      "explanation": "Correct (B) uses the discourse marker 'Just' to specify the requirement, indirectly answering 'no' to graphs. (A) is off-topic (ability to make graphs, not requirement). (C) is a semantic association trap ('lab report' → due date). (D) is a wrong question type (answers as if the speaker is the one submitting, not about the general requirement).",
+      "distractor_types": {
+        "A": "off_topic",
+        "C": "semantic_association_trap",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_1776241881275_006",
+      "flavor_score": 0.86
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student discussing a presentation topic with partner",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "I'm stuck on how to start our presentation.",
+      "options": {
+        "A": "Let's sleep on it and decide tomorrow.",
+        "B": "The presentation is in room 205.",
+        "C": "I'm drawing a blank too.",
+        "D": "We started the project last week."
+      },
+      "answer": "C",
+      "explanation": "Correct (C) uses the idiom 'drawing a blank' (unable to think of something) to express shared difficulty, a natural conversational response. (A) is off-topic (suggests delaying, not addressing the immediate expression of being stuck). (B) is a semantic association trap ('presentation' → location). (D) is off-topic (references past action, not the current problem).",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "semantic_association_trap",
+        "D": "off_topic"
+      },
+      "id": "lcr_v2_1776241881275_007",
+      "flavor_score": 0.97
+    },
+    {
+      "context": "general_daily",
+      "situation": "checking if a service (post office, bank) is open",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "You don't happen to know if the bank's open late today, do you?",
+      "options": {
+        "A": "I need to deposit a check at the bank.",
+        "B": "The bank manager is very helpful.",
+        "C": "It closes at the usual time, 5 PM.",
+        "D": "Your guess is as good as mine."
+      },
+      "answer": "D",
+      "explanation": "Correct (D) uses the idiom 'Your guess is as good as mine' to naturally indicate a lack of knowledge. (A) is off-topic (states speaker's own need). (B) is a semantic association trap ('bank' → description of staff). (C) is a polysemy/misinterpretation trap (interprets 'open late' as a request for closing time, but gives a definitive answer that contradicts the possibility of late hours).",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "semantic_association_trap",
+        "C": "polysemy_misinterpretation"
+      },
+      "id": "lcr_v2_1776241881275_008",
+      "flavor_score": 0.97
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student checking bus or shuttle schedule",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "When does the last campus shuttle run on weekends?",
+      "options": {
+        "A": "Have you tried checking the transit app?",
+        "B": "I take the shuttle every day.",
+        "C": "The shuttle stop is near the library.",
+        "D": "No, it doesn't run very often."
+      },
+      "answer": "A",
+      "explanation": "Correct (A) advances the conversation by suggesting a reliable method to find the answer. (B) is off-topic (personal habit, doesn't provide schedule). (C) is a semantic association trap ('shuttle' → location of stop). (D) is a wrong question type (answers a yes/no question about frequency, not a 'when' question).",
+      "distractor_types": {
+        "B": "off_topic",
+        "C": "semantic_association_trap",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_1776241881275_009",
+      "flavor_score": 0.83
+    },
+    {
+      "context": "general_daily",
+      "situation": "arranging a ride or carpool with a friend",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Can you give me a ride to the train station tomorrow?",
+      "options": {
+        "A": "The train station is quite far from here.",
+        "B": "Sure, what time do you need to be there?",
+        "C": "I usually take the bus to work.",
+        "D": "No, I didn't take the train."
+      },
+      "answer": "B",
+      "explanation": "Correct (B) directly and helpfully agrees and asks for necessary follow-up information. (A) is off-topic (comments on distance, doesn't address the request). (C) is off-topic (personal routine). (D) is a polysemy/misinterpretation trap (misinterprets 'give a ride' as 'take the train').",
+      "distractor_types": {
+        "A": "off_topic",
+        "C": "off_topic",
+        "D": "polysemy_misinterpretation"
+      },
+      "id": "lcr_v2_1776241881275_010",
+      "flavor_score": 0.61
     }
   ]
 }
