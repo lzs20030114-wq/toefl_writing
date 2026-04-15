@@ -1,0 +1,462 @@
+{
+  "description": "Listen to an Announcement (LA) — collected reference samples for AI generation calibration.",
+  "sources": [
+    "goarno.io (40 practice sets)",
+    "TestSucceed.com TOEFL 2026",
+    "TOEFLResources.com 2026 listening",
+    "TOEFLPreps.com listening practice",
+    "Writing30.com TOEFL 2026 guide"
+  ],
+  "last_updated": "2026-04-15",
+  "total_samples": 14,
+  "samples": [
+    {
+      "id": "la_ref_001",
+      "source": "goarno.io",
+      "context": "campus_logistics",
+      "speaker_role": "campus_admin",
+      "announcement": "Attention students, faculty, and staff. Due to the upcoming Spring Alumni Weekend, several parking areas on the east side of campus will be temporarily closed starting this Friday at 6:00 p.m. Specifically, Lots C and D will be reserved exclusively for alumni event parking. Any unauthorized vehicles remaining in these lots after 6:00 p.m. on Friday will be towed at the owner's expense. To help accommodate the displaced parking, the university will be offering expanded shuttle service from the overflow lot near the football stadium, with buses running every ten minutes. Additionally, the main campus loop road will operate as a one-way street on Saturday to help manage the increased traffic flow.",
+      "word_count": 107,
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What must students do to avoid having their vehicles towed?",
+          "options": {
+            "A": "Move vehicles from Lots C and D before Friday at 6:00 p.m.",
+            "B": "Register vehicles on campus transportation website",
+            "C": "Park on main campus loop road",
+            "D": "Pay special event parking fee"
+          },
+          "answer": "A"
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the overflow lot near the football stadium?",
+          "options": {
+            "A": "Reserved exclusively for visiting alumni",
+            "B": "Serves as alternative parking for displaced drivers",
+            "C": "Closed for maintenance starting Friday",
+            "D": "Located adjacent to Lots C and D"
+          },
+          "answer": "B"
+        }
+      ]
+    },
+    {
+      "id": "la_ref_002",
+      "source": "goarno.io",
+      "context": "campus_program",
+      "speaker_role": "program_coordinator",
+      "announcement": "Good morning, campus community. The Sustainability Office is thrilled to announce that applications for the Spring Community Garden are now open. Whether you are an experienced botanist or a complete beginner, we invite you to apply for one of our fifty raised planting beds located behind the science building. We supply the soil, water access, and a fully stocked tool-share shed. We also have a seed library available at no cost. Plots are assigned via a lottery system, so there is no rush to be the first to apply, but all applications must be submitted by March 15th.",
+      "word_count": 93,
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "How are the planting beds distributed to applicants?",
+          "options": {
+            "A": "Given to first fifty people who apply",
+            "B": "Randomly assigned through lottery system",
+            "C": "Reserved exclusively for botany students",
+            "D": "Rented out for small fee each semester"
+          },
+          "answer": "B"
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the garden gate code?",
+          "options": {
+            "A": "Changes weekly for security",
+            "B": "Given only to seed purchasers",
+            "C": "Not issued until workshop completion",
+            "D": "Sent immediately upon application"
+          },
+          "answer": "C"
+        }
+      ]
+    },
+    {
+      "id": "la_ref_003",
+      "source": "goarno.io",
+      "context": "campus_activity",
+      "speaker_role": "activity_coordinator",
+      "announcement": "Attention students! With the first snow expected next week, the Outdoor Adventure Center is thrilled to announce our first annual Winter Gear Swap. Do you have snow pants, insulated jackets, or gloves you no longer need? Bring them down to the adventure center lounge by this Friday to exchange them for vouchers. You can use these vouchers during the actual swap event on Saturday to pick up winter clothing that fits your current needs. In addition to the gear swap, we are officially opening our snowshoe and cross-country ski rental desk for the season starting Monday. Please note, before you can check out any winter equipment, you are required to complete a brief, fifteen-minute safety orientation.",
+      "word_count": 119,
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What is the primary purpose of the vouchers?",
+          "options": {
+            "A": "Pay for mandatory safety orientation",
+            "B": "Exchange for winter clothing at event",
+            "C": "Cover snowshoe and ski rental costs",
+            "D": "Receive discount on new items"
+          },
+          "answer": "B"
+        },
+        {
+          "type": "detail",
+          "stem": "What must students do before renting snowshoes or skis?",
+          "options": {
+            "A": "Participate in brief safety training",
+            "B": "Donate winter clothing to gear swap",
+            "C": "Purchase seasonal equipment rental pass",
+            "D": "Register for guided winter excursion"
+          },
+          "answer": "A"
+        }
+      ]
+    },
+    {
+      "id": "la_ref_004",
+      "source": "goarno.io",
+      "context": "campus_volunteer",
+      "speaker_role": "club_leader",
+      "announcement": "Attention students. The Campus Sustainability Club is looking for volunteers to assist with our annual spring cleanup of the community garden this Saturday. We will be clearing winter debris and planting new vegetable beds starting at 9 a.m. behind the Science Center. While we provide all necessary tools and gloves, we ask that you wear sturdy shoes and clothes that can get dirty. No prior gardening experience is required to participate. If you are interested, please sign up on the club's website by Thursday so we can order enough pizza for lunch.",
+      "word_count": 88,
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "Announce change in Science Center hours",
+            "B": "Recruit volunteers for gardening event",
+            "C": "Advertise new sustainability course",
+            "D": "Remind students to register for club membership"
+          },
+          "answer": "B"
+        },
+        {
+          "type": "detail",
+          "stem": "What are participants asked to wear?",
+          "options": {
+            "A": "Protective gloves",
+            "B": "Club t-shirt",
+            "C": "Formal attire",
+            "D": "Sturdy shoes"
+          },
+          "answer": "D"
+        }
+      ]
+    },
+    {
+      "id": "la_ref_005",
+      "source": "goarno.io",
+      "context": "academic_deadline",
+      "speaker_role": "department_staff",
+      "announcement": "This is a reminder that the deadline to submit abstracts for the Annual Undergraduate Research Symposium is approaching this Friday at 5 p.m. We want to emphasize that this event is open to students from all disciplines, including the humanities and social sciences, not just the hard sciences. You do not need to have a completed manuscript to apply; a 250-word summary of your work-in-progress is sufficient. Participating in the poster session is a great way to gain public speaking experience and strengthen your resume for future academic pursuits. Submissions should be uploaded directly to the portal on the university research website.",
+      "word_count": 97,
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "Explain judging criteria for competition",
+            "B": "Remind of submission deadline and clarify eligibility",
+            "C": "Announce symposium winners",
+            "D": "Recruit faculty supervisors"
+          },
+          "answer": "B"
+        },
+        {
+          "type": "detail",
+          "stem": "What is true about submission requirements?",
+          "options": {
+            "A": "Students must submit completed research paper",
+            "B": "Only hard science majors may participate",
+            "C": "Summary of ongoing research acceptable",
+            "D": "Abstracts submitted in person at office"
+          },
+          "answer": "C"
+        }
+      ]
+    },
+    {
+      "id": "la_ref_006",
+      "source": "goarno.io",
+      "context": "campus_facility",
+      "speaker_role": "department_head",
+      "announcement": "Attention students, the Fine Arts Department is thrilled to announce the grand reopening of the Lumina Gallery in the basement of the Humanities Building next month. After extensive lighting upgrades, we are finally ready to showcase student talent once again. We are currently accepting submissions for our inaugural exhibition, which is titled 'Urban Perspectives.' You do not need to be an enrolled art major to submit your work; we welcome photography, painting, and mixed media from all students across campus. The deadline to drop off your pieces at the department office is Friday the twelfth. Please ensure your artwork is framed and ready to hang upon submission.",
+      "word_count": 105,
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What is a specific requirement for submitted artwork?",
+          "options": {
+            "A": "Must be framed and prepared for display",
+            "B": "Must be created by enrolled art major",
+            "C": "Must be submitted digitally to office",
+            "D": "Must focus on historical landscapes"
+          },
+          "answer": "A"
+        },
+        {
+          "type": "main_idea",
+          "stem": "What is the primary purpose of this announcement?",
+          "options": {
+            "A": "Inform about facility reopening and solicit artwork",
+            "B": "Apologize for delayed renovation",
+            "C": "Advertise new photography class",
+            "D": "Invite students to art auction"
+          },
+          "answer": "A"
+        }
+      ]
+    },
+    {
+      "id": "la_ref_007",
+      "source": "goarno.io",
+      "context": "academic_deadline",
+      "speaker_role": "department_staff",
+      "announcement": "Attention all undergraduate students. The Office of Undergraduate Research is now accepting abstracts for the annual Spring Research Symposium. This is a great opportunity to present your independent projects to the campus community, whether your focus is in the humanities, arts, or sciences. All abstract submissions must be uploaded to the university portal by Friday, March 15th. If you need help formatting your abstract or refining your central thesis, the Writing Center is offering specialized drop-in clinics every Tuesday afternoon this month. Don't miss this chance to showcase your hard work, practice your presentation skills, and build your academic resume.",
+      "word_count": 99,
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "Inform about research abstract deadline",
+            "B": "Announce competition winners",
+            "C": "Encourage summer research funding applications",
+            "D": "Advertise new science course"
+          },
+          "answer": "A"
+        },
+        {
+          "type": "detail",
+          "stem": "How can students get submission assistance?",
+          "options": {
+            "A": "Email the Office of Undergraduate Research",
+            "B": "Schedule meeting with academic advisor",
+            "C": "Attend Writing Center drop-in clinics Tuesday afternoons",
+            "D": "Participate in weekly humanities workshop"
+          },
+          "answer": "C"
+        }
+      ]
+    },
+    {
+      "id": "la_ref_008",
+      "source": "goarno.io",
+      "context": "campus_facility",
+      "speaker_role": "recreation_staff",
+      "announcement": "Attention students. As final exams approach, the Campus Recreation Center is extending its operating hours to help you manage your stress and stay active. Starting next Monday, we will be rolling out our 'Night Owl Fitness' schedule. The main gym floor, indoor track, and weight rooms will remain open until 2:00 AM every night through the end of finals week. Additionally, we are offering free, thirty-minute stretch-and-breathe yoga sessions at midnight in Studio B to help you unwind. Please be aware that for safety and staffing reasons, the aquatic center and the rock climbing wall will close at their normal time of 9:00 PM and will not be available during these extended late-night hours. Also, please do not forget to bring your student ID, as it will be required for entry at the front desk after 10:00 PM.",
+      "word_count": 147,
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Which facilities will be closed during extended late-night hours?",
+          "options": {
+            "A": "Rock climbing wall and aquatic center",
+            "B": "Indoor track and weight rooms",
+            "C": "Studio B and main gym floor",
+            "D": "Lobby and student study lounges"
+          },
+          "answer": "A"
+        },
+        {
+          "type": "detail",
+          "stem": "What is required to enter after 10:00 PM?",
+          "options": {
+            "A": "Valid student identification card",
+            "B": "Sign special safety waiver",
+            "C": "Register for midnight fitness class",
+            "D": "Be accompanied by staff member"
+          },
+          "answer": "A"
+        }
+      ]
+    },
+    {
+      "id": "la_ref_009",
+      "source": "goarno.io",
+      "context": "campus_event",
+      "speaker_role": "department_head",
+      "announcement": "Attention students and faculty. The Department of Theater and Dance is thrilled to invite you to the grand reopening of the historic Miller Playhouse this Friday evening. After two years of extensive renovations, the venue now features state-of-the-art acoustics and an expanded seating area. To celebrate, our senior acting showcase will perform an original play titled 'Shadows of the City.' We highly recommend purchasing your tickets online in advance, as seating for the opening weekend is expected to fill up rapidly. Don't miss this chance to support your peers and experience our beautiful new facility.",
+      "word_count": 96,
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the primary purpose of this announcement?",
+          "options": {
+            "A": "Announce reopening and invite to performance",
+            "B": "Recruit students for stage crew",
+            "C": "Explain renovation delays",
+            "D": "Advertise theater auditions"
+          },
+          "answer": "A"
+        },
+        {
+          "type": "inference",
+          "stem": "Why does the speaker recommend purchasing tickets in advance?",
+          "options": {
+            "A": "Receive special student discount for opening weekend",
+            "B": "Ensure seat because event likely to sell out",
+            "C": "Avoid waiting in lines at box office",
+            "D": "Help fund acoustic upgrades"
+          },
+          "answer": "B"
+        }
+      ]
+    },
+    {
+      "id": "la_ref_010",
+      "source": "goarno.io",
+      "context": "career_services",
+      "speaker_role": "career_advisor",
+      "announcement": "Attention students. The Career Services Office is excited to announce our upcoming Professional Wardrobe Pop-Up and Free Headshot Clinic, taking place next Tuesday and Wednesday in the Alumni Hall atrium. Whether you are preparing for upcoming interviews, career fairs, or graduate school applications, this event is designed to help you put your best foot forward. Students can select up to three free items of professional clothing, which have been generously donated by university alumni. Additionally, a professional photographer will be available from 10 a.m. to 2 p.m. both days to take headshots. Please bring your student ID to check in. While no advance registration is required for the clothing pop-up, we do strongly recommend booking a specific time slot for the headshot clinic through the Career Services portal to avoid long lines.",
+      "word_count": 135,
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What are students advised regarding professional photographs?",
+          "options": {
+            "A": "Bring three clothing items to donate",
+            "B": "Reserve time slot online in advance",
+            "C": "Pay small photography fee at atrium",
+            "D": "Register for university career fair"
+          },
+          "answer": "B"
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the available professional clothing?",
+          "options": {
+            "A": "Previously owned by former students or alumni",
+            "B": "Must be returned after interview",
+            "C": "Exclusively for graduate applicants",
+            "D": "Funded by student ID card fee"
+          },
+          "answer": "A"
+        }
+      ]
+    },
+    {
+      "id": "la_ref_011",
+      "source": "TestSucceed",
+      "context": "guest_lecture",
+      "speaker_role": "professor",
+      "announcement": "Good afternoon, everyone. I am excited to inform you that Dr. Cynthia Palmer, a renowned expert in environmental science, will be giving a guest lecture next Monday at 2 PM in Waldman Auditorium. Dr. Palmer will discuss the latest advancements in sustainable energy solutions and their impact on global climate change.",
+      "word_count": 47,
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement about?",
+          "options": {
+            "A": "A guest lecture",
+            "B": "A different location for a class",
+            "C": "Requirements for a class",
+            "D": "A new university science course"
+          },
+          "answer": "A"
+        },
+        {
+          "type": "inference",
+          "stem": "Why does the professor mention Dr. Palmer's popularity?",
+          "options": {
+            "A": "To encourage students to read her work",
+            "B": "To indicate why she was invited to the university",
+            "C": "To compare her to other invited experts",
+            "D": "To explain why students should arrive early"
+          },
+          "answer": "D"
+        }
+      ]
+    },
+    {
+      "id": "la_ref_012",
+      "source": "TestSucceed",
+      "context": "facility_closure",
+      "speaker_role": "campus_admin",
+      "announcement": "The student lounge will be closed tomorrow from one P.M. to three P.M. for maintenance. We will be repairing a broken pipe in the ceiling.",
+      "word_count": 24,
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of the announcement?",
+          "options": {
+            "A": "To inform students about a schedule change",
+            "B": "To announce new lounge amenities",
+            "C": "To notify students of a new facility",
+            "D": "To encourage students to use the lounge more"
+          },
+          "answer": "A"
+        },
+        {
+          "type": "inference",
+          "stem": "What should students do during the closure?",
+          "options": {
+            "A": "Wait in the lounge",
+            "B": "Assist with the maintenance",
+            "C": "Use alternate spaces",
+            "D": "Visit the library website"
+          },
+          "answer": "C"
+        }
+      ]
+    },
+    {
+      "id": "la_ref_013",
+      "source": "TOEFLResources",
+      "context": "info_session",
+      "speaker_role": "advisor",
+      "announcement": "Good afternoon. The university will host a study abroad information session next Monday at 4 p.m. in Room 210 of the International Center. Advisors and students who have previously studied abroad will answer questions about programs, scholarships, and application timelines. All majors are welcome.",
+      "word_count": 42,
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To invite students to a study abroad information session",
+            "B": "To announce new scholarship application rules",
+            "C": "To promote the opening of a new campus center",
+            "D": "To advertise a cultural festival"
+          },
+          "answer": "A"
+        },
+        {
+          "type": "detail",
+          "stem": "Who will be answering questions at the session?",
+          "options": {
+            "A": "Travel agents",
+            "B": "Scholarship winners",
+            "C": "Past participants and advisors",
+            "D": "Faculty members only"
+          },
+          "answer": "C"
+        }
+      ]
+    },
+    {
+      "id": "la_ref_014",
+      "source": "TOEFLPreps",
+      "context": "academic_event",
+      "speaker_role": "society_president",
+      "announcement": "Attention members of the International Studies Society. This announcement concerns registration for the spring academic symposium scheduled for April 12. Participation is limited to 60 students, and as of this morning, 42 spots have already been filled. To secure a seat, students must complete online registration by 11:59 p.m. on March 28 and submit an abstract of no more than 250 words. Please note that attendance at at least one of the three preparatory sessions held on March 5, March 12, and March 19 is required. Students who fail to meet these requirements will be placed on a waiting list, regardless of submission time.",
+      "word_count": 100,
+      "questions": [
+        {
+          "type": "inference",
+          "stem": "Why does the speaker mention that over half of the spots have been filled?",
+          "options": {
+            "A": "To explain why the symposium date was changed",
+            "B": "To indicate how many students are currently on the waiting list",
+            "C": "To show how many abstracts have already been approved",
+            "D": "To emphasize that space is becoming limited"
+          },
+          "answer": "D"
+        },
+        {
+          "type": "detail",
+          "stem": "What is required in order to secure a seat at the symposium?",
+          "options": {
+            "A": "Registering online by the stated deadline",
+            "B": "Attending all preparatory sessions",
+            "C": "Submitting an abstract of over 250 words",
+            "D": "Receiving approval before March 28"
+          },
+          "answer": "A"
+        }
+      ]
+    }
+  ]
+}

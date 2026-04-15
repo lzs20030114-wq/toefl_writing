@@ -1,0 +1,108 @@
+{
+  "generated_at": "2026-04-15T09:31:55.449Z",
+  "sample_count": 14,
+  "announcement_text": {
+    "word_count": {
+      "min": 24,
+      "max": 147,
+      "avg": 92.8,
+      "median": 99
+    },
+    "sentence_count": {
+      "min": 4,
+      "max": 9,
+      "avg": 6.1
+    },
+    "opening_patterns": {
+      "Attention...": 9,
+      "Good morning/afternoon...": 3,
+      "This is a reminder...": 1,
+      "Other: The student lounge will be clo": 1
+    },
+    "context_distribution": {
+      "campus_logistics": 1,
+      "campus_program": 1,
+      "campus_activity": 1,
+      "campus_volunteer": 1,
+      "academic_deadline": 2,
+      "campus_facility": 2,
+      "campus_event": 1,
+      "career_services": 1,
+      "guest_lecture": 1,
+      "facility_closure": 1,
+      "info_session": 1,
+      "academic_event": 1
+    },
+    "speaker_roles": {
+      "campus_admin": 2,
+      "program_coordinator": 1,
+      "activity_coordinator": 1,
+      "club_leader": 1,
+      "department_staff": 2,
+      "department_head": 2,
+      "recreation_staff": 1,
+      "career_advisor": 1,
+      "professor": 1,
+      "advisor": 1,
+      "society_president": 1
+    },
+    "info_types": {
+      "date": 13,
+      "time": 8,
+      "location": 11,
+      "deadline": 6,
+      "requirement": 8,
+      "action_channel": 4
+    },
+    "info_type_rates": {
+      "date": 93,
+      "time": 57,
+      "location": 79,
+      "deadline": 43,
+      "requirement": 57,
+      "action_channel": 29
+    }
+  },
+  "questions": {
+    "total": 28,
+    "per_announcement": 2,
+    "type_distribution": {
+      "detail": 13,
+      "inference": 7,
+      "main_idea": 8
+    },
+    "stem_patterns": {
+      "What must/should students do...": 3,
+      "What can be inferred...": 3,
+      "How [method/process]...": 2,
+      "What is the main/primary purpose...": 8,
+      "What are [detail]...": 2,
+      "What is [specific detail]...": 5,
+      "Which [specific item]...": 1,
+      "Why [reason]...": 3,
+      "Who [person]...": 1
+    },
+    "answer_distribution": {
+      "A": 13,
+      "B": 7,
+      "C": 5,
+      "D": 3
+    },
+    "option_word_count": {
+      "all_avg": 5.4,
+      "correct_avg": 6,
+      "distractor_avg": 5.3
+    },
+    "correct_is_longest_rate": 61,
+    "q1_types": {
+      "detail": 6,
+      "main_idea": 7,
+      "inference": 1
+    },
+    "q2_types": {
+      "inference": 6,
+      "detail": 7,
+      "main_idea": 1
+    }
+  }
+}

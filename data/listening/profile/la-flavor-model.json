@@ -1,0 +1,122 @@
+{
+  "generated_at": "2026-04-15",
+  "title": "LA ETS Flavor Model — Listen to an Announcement",
+  "sample_count": 14,
+
+  "announcement_design": {
+    "word_count": {"min": 40, "max": 150, "target": "80-120", "avg_observed": 92.8},
+    "sentence_count": {"min": 4, "max": 9, "target": "5-7"},
+    "opening_pattern": {
+      "Attention_students": {"rate": 64, "example": "Attention students, faculty, and staff."},
+      "Good_greeting": {"rate": 21, "example": "Good morning, campus community."},
+      "This_is_reminder": {"rate": 7, "example": "This is a reminder that..."},
+      "Direct_statement": {"rate": 7, "example": "The student lounge will be closed..."},
+      "rule": "64% start with 'Attention...' — this is the signature announcement opening."
+    },
+    "must_contain_info": {
+      "specific_date_or_day": {"rate": 93, "critical": true, "examples": ["this Friday at 6:00 p.m.", "next Monday", "by March 15th"]},
+      "location": {"rate": 79, "critical": true, "examples": ["behind the Science Center", "in Waldman Auditorium", "Alumni Hall atrium"]},
+      "time": {"rate": 57, "examples": ["at 2 PM", "from 10 a.m. to 2 p.m.", "until 2:00 AM"]},
+      "requirement_or_rule": {"rate": 57, "examples": ["you are required to complete", "Please ensure your artwork is framed", "please bring your student ID"]},
+      "deadline": {"rate": 43, "examples": ["must be submitted by March 15th", "deadline is this Friday at 5 p.m."]},
+      "action_channel": {"rate": 29, "examples": ["sign up on the club's website", "uploaded to the portal"]}
+    },
+    "context_types": {
+      "facility_change": "opening/closing/renovating a campus facility (21%)",
+      "academic_event": "symposium, deadline, submission (21%)",
+      "campus_activity": "garden, gear swap, volunteer event (14%)",
+      "logistics": "parking, shuttle, traffic (7%)",
+      "career_services": "wardrobe pop-up, headshots (7%)",
+      "guest_speaker": "lecture announcement (7%)"
+    },
+    "speaker_roles": ["campus admin", "department staff", "department head", "club leader", "program coordinator", "recreation staff", "professor", "advisor"],
+    "register": "Semi-formal. Not casual conversation — this is an ANNOUNCEMENT. Uses: 'We are thrilled to announce', 'Please note', 'Please be aware', 'We want to emphasize'. But NOT stiff bureaucratic — uses contractions occasionally (don't miss, we're offering).",
+    "structure_pattern": "1) Greeting/attention-getter → 2) Main news (what) → 3) Details (when/where/how) → 4) Requirements/rules → 5) Call to action or deadline"
+  },
+
+  "question_design": {
+    "questions_per_item": 2,
+    "type_distribution": {
+      "detail": {"rate": 46, "description": "Ask about specific facts stated in the announcement"},
+      "main_idea": {"rate": 29, "description": "Ask about the overall purpose/topic"},
+      "inference": {"rate": 25, "description": "Ask what can be inferred or why something was mentioned"}
+    },
+    "q1_vs_q2_pattern": {
+      "Q1": "Usually main_idea (50%) or detail (43%) — 'What is the purpose?' type",
+      "Q2": "Usually detail (50%) or inference (43%) — specific info or inference",
+      "rule": "Q1 asks about the BIG PICTURE, Q2 asks about a SPECIFIC DETAIL or INFERENCE. Never both about the same thing."
+    },
+    "stem_patterns": {
+      "main_idea": ["What is the main purpose of this announcement?", "What is the primary purpose?", "What is the announcement about?"],
+      "detail": ["What must students do to...?", "What is required in order to...?", "What are students advised to...?", "How are [X] distributed?", "Which facilities will...?"],
+      "inference": ["What can be inferred about...?", "Why does the speaker mention...?", "Why does the speaker recommend...?"]
+    }
+  },
+
+  "option_design": {
+    "word_count": {"avg": 5.4, "target": "4-8"},
+    "correct_avg": 6.0,
+    "distractor_avg": 5.3,
+    "correct_is_longest_rate": 61,
+    "WARNING": "61% of correct answers are the longest option — this is a FLAW in the sample data, not an ETS target. Our generator must avoid this pattern. Target: ≤30%.",
+    "answer_distribution_observed": {"A": 13, "B": 7, "C": 5, "D": 3},
+    "WARNING_2": "A is heavily overrepresented (46%). This is likely a bias in the practice material, NOT a real ETS pattern. Our generator must enforce even distribution."
+  },
+
+  "distractor_patterns": {
+    "for_detail_questions": [
+      {"type": "wrong_detail", "description": "Uses real words/concepts from announcement but changes a key fact", "example": "Given to first fifty people who apply (wrong: it's a lottery, not first-come)"},
+      {"type": "related_but_not_stated", "description": "Plausible campus action but NOT in this announcement", "example": "Register for university career fair (not mentioned)"},
+      {"type": "misattributed_detail", "description": "Takes a detail from one part of announcement and applies it to wrong context", "example": "Closed for maintenance starting Friday (wrong entity/time)"}
+    ],
+    "for_main_idea_questions": [
+      {"type": "too_narrow", "description": "Correct about one detail but misses the overall purpose", "example": "Advertise new photography class (too specific)"},
+      {"type": "wrong_purpose", "description": "Plausible announcement purpose but not THIS one", "example": "Apologize for delayed renovation (not the purpose)"},
+      {"type": "reversed_intent", "description": "Opposite of what's being announced", "example": "Encourage students to use the lounge more (it's being CLOSED)"}
+    ],
+    "for_inference_questions": [
+      {"type": "over_inference", "description": "Goes too far beyond what's stated", "example": "Changes weekly for security (not inferable)"},
+      {"type": "literal_restatement", "description": "Just repeats what's stated, not an inference", "example": "Located adjacent to Lots C and D (this is NOT stated or inferable)"},
+      {"type": "unrelated_inference", "description": "Valid inference but about wrong topic", "example": "Funded by student ID card fee (no evidence for this)"}
+    ]
+  },
+
+  "difficulty_levers": {
+    "easy": {
+      "announcement": "Short (40-70 words), single topic, clear structure",
+      "Q1": "main_idea — purpose is obvious from first sentence",
+      "Q2": "detail — answer is directly stated with keywords matching"
+    },
+    "medium": {
+      "announcement": "Medium (80-120 words), 2-3 pieces of info, one rule/requirement",
+      "Q1": "main_idea or detail with slight paraphrase",
+      "Q2": "detail requiring attention to specific conditions/exceptions"
+    },
+    "hard": {
+      "announcement": "Long (100-150 words), multiple details/rules/exceptions, embedded inference",
+      "Q1": "detail about an exception or condition (NOT the main info)",
+      "Q2": "inference — 'What can be inferred' or 'Why does the speaker mention'"
+    }
+  },
+
+  "flavor_markers": [
+    {"marker": "specific_date_and_location", "weight": 0.20, "target": "90%+ items have date AND location"},
+    {"marker": "requirement_or_action", "weight": 0.20, "target": "60%+ items have a 'must do' or 'please' instruction"},
+    {"marker": "q1_q2_type_diversity", "weight": 0.15, "target": "Q1 and Q2 test different skills (main_idea vs detail, or detail vs inference)"},
+    {"marker": "semi_formal_register", "weight": 0.15, "target": "Uses 'Attention', 'Please note', 'We are pleased' — NOT casual conversation"},
+    {"marker": "distractor_plausibility", "weight": 0.15, "target": "All distractors are plausible campus announcements/details"},
+    {"marker": "correct_not_always_longest", "weight": 0.10, "target": "Correct is longest ≤30% of time"},
+    {"marker": "answer_position_balance", "weight": 0.05, "target": "Even A/B/C/D distribution"}
+  ],
+
+  "anti_patterns": [
+    "Announcement is too short (<40 words) — not enough info for 2 meaningful questions",
+    "Announcement is just a single sentence — real announcements have structure",
+    "No specific date/time/location — feels generic, not like a real campus announcement",
+    "Both questions ask about the same piece of information",
+    "Correct answer for BOTH questions is the same letter",
+    "Distractor repeats a phrase from the announcement verbatim",
+    "Announcement uses casual conversational tone (Hey guys!, What's up)",
+    "Questions can be answered without listening to the announcement (too obvious)"
+  ]
+}
