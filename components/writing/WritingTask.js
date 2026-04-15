@@ -196,7 +196,38 @@ export function WritingTask({
   const submitRef = useRef(null);
   const phaseRef = useRef(phase);
   const completionSentRef = useRef(false);
+  const sessionSavedRef = useRef(false);
   useEffect(() => { phaseRef.current = phase; }, [phase]);
+
+  // Safety net: if user leaves during scoring (phase=scoring) or after error (phase=done + no fb),
+  // save a partial record so the writing is not lost.
+  useEffect(() => {
+    if (!persistSession) return;
+    function savePartialOnExit() {
+      if (sessionSavedRef.current) return; // already saved by success or catch
+      const curPhase = phaseRef.current;
+      const hasText = text && text.trim().length > 10;
+      const needsSave = hasText && (curPhase === "scoring" || (curPhase === "done" && !fb));
+      if (!needsSave || !pd) return;
+      sessionSavedRef.current = true;
+      saveSess({
+        type, score: null, band: null, wordCount: wc(text), mode: practiceMode,
+        scoringFailed: true, scoringError: "用户在评分完成前离开了页面",
+        details: {
+          promptSummary: summarizePrompt(type, pd),
+          promptId: String(pd?.id || ""),
+          promptData: pd,
+          userText: text,
+          feedback: null,
+        },
+      });
+    }
+    window.addEventListener("beforeunload", savePartialOnExit);
+    return () => {
+      savePartialOnExit(); // also fires on component unmount (route change)
+      window.removeEventListener("beforeunload", savePartialOnExit);
+    };
+  }, [persistSession, text, pd, fb, type, practiceMode]);
   useEffect(() => {
     if (typeof onTimerChange === "function") {
       onTimerChange({ timeLeft: tl, isRunning: run, phase });
@@ -254,6 +285,7 @@ export function WritingTask({
         if (persistSession) {
           saveSess(payload);
           addDoneIds(storageKey, [pd.id]);
+          sessionSavedRef.current = true;
         }
         if (typeof onComplete === "function" && !completionSentRef.current) {
           completionSentRef.current = true;
@@ -267,7 +299,26 @@ export function WritingTask({
     } catch (e) {
       setPhase("done");
       setRequestState("error");
-      setScoreError(mapScoringError(e));
+      const errMsg = mapScoringError(e);
+      setScoreError(errMsg);
+      // Save session even on failure so user's writing is not lost
+      if (persistSession && pd) {
+        saveSess({
+          type, score: null, band: null, wordCount: wc(text), mode: practiceMode,
+          scoringFailed: true,
+          scoringError: errMsg,
+          details: {
+            promptSummary: summarizePrompt(type, pd),
+            promptId: String(pd?.id || ""),
+            promptData: pd,
+            userText: text,
+            feedback: null,
+            practiceRootId: practiceRootIdRef.current || createPracticeRootId(type, pd?.id),
+            practiceAttempt: practiceAttemptRef.current,
+          },
+        });
+        sessionSavedRef.current = true;
+      }
     } finally {
       submitLockRef.current = false;
     }
@@ -348,7 +399,7 @@ export function WritingTask({
     practiceRootIdRef.current = createPracticeRootId(type, data[n]?.id);
     practiceAttemptRef.current = 1;
     if (elapsedRef.current) clearInterval(elapsedRef.current);
-    setPi(n); setPd(data[n]); setText(""); setTl(limit); setElapsed(0); setRun(false); setPhase("ready"); setFb(null); setRequestState("idle"); setScoreError(""); submitLockRef.current = false; completionSentRef.current = false; setIntro(showTaskIntro);
+    setPi(n); setPd(data[n]); setText(""); setTl(limit); setElapsed(0); setRun(false); setPhase("ready"); setFb(null); setRequestState("idle"); setScoreError(""); submitLockRef.current = false; completionSentRef.current = false; sessionSavedRef.current = false; setIntro(showTaskIntro);
   }
 
   function retryCurrentPrompt() {
@@ -365,6 +416,7 @@ export function WritingTask({
     setScoreError("");
     submitLockRef.current = false;
     completionSentRef.current = false;
+    sessionSavedRef.current = false;
     setIntro(showTaskIntro);
   }
   useEffect(() => () => clearInterval(tr.current), []);
