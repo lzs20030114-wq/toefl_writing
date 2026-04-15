@@ -66,6 +66,8 @@ export function ListeningSectionContent({
       d: isPractice ? "自选题目，不限时间。" : task.d,
       it: task.it,
       timeLabel: isPractice ? "自选" : task.timeLabel,
+      isMock: false,
+      delay: 190 + index * 70,
     };
   });
 
@@ -170,22 +172,21 @@ export function ListeningSectionContent({
       )}
 
       {/* Task grid */}
-      <div style={{
-        display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 14,
+      <div className="home-grid" style={{
+        display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 28,
         opacity: isPro ? 1 : 0.45, pointerEvents: isPro ? "auto" : "none",
         filter: isPro ? "none" : "grayscale(0.5)",
-        ...fadeIn(180),
       }}>
         {gridItems.map((item) => (
-          <HomeTaskCard
-            key={item.k}
-            item={item}
-            isChallenge={isChallenge}
-            isHovered={hoverKey === item.k}
-            onHover={() => setHoverKey(item.k)}
-            onLeave={() => setHoverKey("")}
-          />
+          <div key={item.k} style={{ display: "flex", ...fadeIn(item.delay) }}>
+            <HomeTaskCard item={item} hoverKey={hoverKey} setHoverKey={setHoverKey} isChallenge={isChallenge} />
+          </div>
         ))}
+      </div>
+
+      {/* Footer */}
+      <div style={{ fontSize: 10, color: isChallenge ? CH.t2 : T.t3, opacity: 0.65, lineHeight: 1.6, textAlign: "center", ...fadeIn(520) }}>
+        TreePractice 为独立练习工具，与 ETS 无关联。TOEFL® 为 ETS 注册商标。练习内容由 AI 辅助生成，仅供自学参考。
       </div>
     </div>
   );
