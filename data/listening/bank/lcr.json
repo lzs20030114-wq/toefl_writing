@@ -716,29 +716,6 @@
     },
     {
       "context": "campus_academic",
-      "situation": "student asking about a reading list for a course",
-      "difficulty": "medium",
-      "answer_paradigm": "counter_question",
-      "speaker": "Do you know which chapters we're supposed to read for next week?",
-      "options": {
-        "A": "I haven't read the chapters yet either.",
-        "B": "Have you checked the syllabus online?",
-        "C": "The library has a copy of the textbook.",
-        "D": "Next week's lecture is on Tuesday."
-      },
-      "answer": "B",
-      "explanation": "Correct (B) advances the conversation by suggesting a practical solution (checking the syllabus) rather than directly answering. (A) is off-topic (shares a lack of action but doesn't help). (C) is a semantic association trap ('read'/'chapters' → 'textbook'/'library'). (D) is a semantic association trap ('next week' → lecture day, ignoring the reading question).",
-      "distractor_types": {
-        "A": "off_topic",
-        "C": "semantic_association_trap",
-        "D": "semantic_association_trap"
-      },
-      "id": "lcr_v2_1776241881275_002",
-      "flavor_score": 0.97,
-      "audio_url": "/api/audio/choose-response/lcr_v2_1776241881275_002.mp3"
-    },
-    {
-      "context": "campus_academic",
       "situation": "two classmates discussing a group project deadline",
       "difficulty": "easy",
       "answer_paradigm": "marker_led_indirect",
@@ -897,29 +874,6 @@
       "id": "lcr_v2_1776241881275_009",
       "flavor_score": 0.83,
       "audio_url": "/api/audio/choose-response/lcr_v2_1776241881275_009.mp3"
-    },
-    {
-      "context": "general_daily",
-      "situation": "arranging a ride or carpool with a friend",
-      "difficulty": "easy",
-      "answer_paradigm": "direct_topical",
-      "speaker": "Can you give me a ride to the train station tomorrow?",
-      "options": {
-        "A": "The train station is quite far from here.",
-        "B": "Sure, what time do you need to be there?",
-        "C": "I usually take the bus to work.",
-        "D": "No, I didn't take the train."
-      },
-      "answer": "B",
-      "explanation": "Correct (B) directly and helpfully agrees and asks for necessary follow-up information. (A) is off-topic (comments on distance, doesn't address the request). (C) is off-topic (personal routine). (D) is a polysemy/misinterpretation trap (misinterprets 'give a ride' as 'take the train').",
-      "distractor_types": {
-        "A": "off_topic",
-        "C": "off_topic",
-        "D": "polysemy_misinterpretation"
-      },
-      "id": "lcr_v2_1776241881275_010",
-      "flavor_score": 0.61,
-      "audio_url": "/api/audio/choose-response/lcr_v2_1776241881275_010.mp3"
     },
     {
       "context": "social",
