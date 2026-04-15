@@ -1,0 +1,526 @@
+{
+  "title": "LC Reference Samples — Listen to a Conversation",
+  "collected_at": "2026-04-15",
+  "sources": ["TOEFLResources", "Magoosh/TOEFLResources", "goarno.io"],
+  "sample_count": 11,
+  "items": [
+    {
+      "id": "lc_ref_01",
+      "source": "TOEFLResources",
+      "title": "Laptop Repair",
+      "setting": "daily_life",
+      "speaker_relationship": "student_student",
+      "speakers": [
+        { "name": "Man", "role": "friend" },
+        { "name": "Woman", "role": "friend" }
+      ],
+      "conversation": [
+        { "speaker": "Man", "text": "Did the repair shop call you back about your laptop?" },
+        { "speaker": "Woman", "text": "Not yet. They said the replacement keyboard would arrive this afternoon." },
+        { "speaker": "Man", "text": "How are you managing without a laptop?" },
+        { "speaker": "Woman", "text": "The shop lent me one of theirs, so I can keep working. They'll text me when mine's ready." },
+        { "speaker": "Man", "text": "That sounds really convenient." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What will the woman use while waiting?",
+          "options": {
+            "A": "A laptop from the shop",
+            "B": "Her friend's tablet",
+            "C": "The campus computer lab",
+            "D": "Her phone for basic tasks"
+          },
+          "answer": "A",
+          "explanation": "The woman says 'The shop lent me one of theirs' — she is using a loaner laptop from the repair shop."
+        },
+        {
+          "type": "detail",
+          "stem": "How will the woman know her laptop is ready?",
+          "options": {
+            "A": "She will call the shop",
+            "B": "She'll receive a text message",
+            "C": "The shop will send an email",
+            "D": "She needs to check in person"
+          },
+          "answer": "B",
+          "explanation": "The woman says 'They'll text me when mine's ready' — she will be notified by text message."
+        }
+      ]
+    },
+    {
+      "id": "lc_ref_02",
+      "source": "Magoosh/TOEFLResources",
+      "title": "Supermarket / Play Mix-up",
+      "setting": "daily_life",
+      "speaker_relationship": "student_student",
+      "speakers": [
+        { "name": "Woman", "role": "partner" },
+        { "name": "Man", "role": "partner" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Need anything from the supermarket?" },
+        { "speaker": "Man", "text": "Huh? Aren't we getting ready to go see that play in a few minutes?" },
+        { "speaker": "Woman", "text": "That's tomorrow." },
+        { "speaker": "Man", "text": "Oh. Wow, I'd forget my head if it wasn't screwed on... Guess I don't need to change my clothes after all." },
+        { "speaker": "Woman", "text": "So, you weren't planning to prepare dinner?" },
+        { "speaker": "Man", "text": "No, but I can. What do you want?" },
+        { "speaker": "Woman", "text": "Just something light and healthy. So, can you go shopping instead?" },
+        { "speaker": "Man", "text": "Yeah, sure. How about salmon and salad? Want anything else?" },
+        { "speaker": "Woman", "text": "No, that's good. Thanks!" }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man now need to do?",
+          "options": {
+            "A": "Get ready for the play",
+            "B": "Change his clothes",
+            "C": "Go shopping",
+            "D": "Call the restaurant"
+          },
+          "answer": "C",
+          "explanation": "After realizing the play is tomorrow, the man agrees to go shopping at the supermarket to get ingredients for dinner."
+        },
+        {
+          "type": "inference",
+          "stem": "What did the man initially forget?",
+          "options": {
+            "A": "He forgot to buy groceries",
+            "B": "He forgot about the timing of their plans",
+            "C": "He forgot to make dinner reservations",
+            "D": "He forgot where the supermarket is"
+          },
+          "answer": "B",
+          "explanation": "The man thought the play was tonight, but it's actually tomorrow. He confused the timing of their plans."
+        }
+      ]
+    },
+    {
+      "id": "lc_ref_03",
+      "source": "goarno.io",
+      "title": "Library Study Pods",
+      "setting": "library",
+      "speaker_relationship": "student_staff",
+      "speakers": [
+        { "name": "Woman", "role": "student" },
+        { "name": "Man", "role": "library_staff" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Hi, I was hoping to reserve one of the small study rooms on the second floor for tomorrow afternoon. I have a virtual interview for my linguistics thesis, and I need a quiet place." },
+        { "speaker": "Man", "text": "Well, the standard study rooms on the second floor aren't actually soundproof. If you're doing an interview, you'll probably want to use one of the new acoustic pods on the ground floor instead." },
+        { "speaker": "Woman", "text": "Acoustic pods? I didn't even know we had those." },
+        { "speaker": "Man", "text": "We just installed them over the weekend. They're entirely enclosed and specifically designed to block out background noise for video calls and language testing." },
+        { "speaker": "Woman", "text": "That sounds perfect! How do I book one? Do I just write my name on the clipboard outside the door like with the regular rooms?" },
+        { "speaker": "Man", "text": "Not for the pods. They're managed through the university's main facility app. You just log in with your student credentials, select 'Ground Floor Pods', and pick an available time slot." },
+        { "speaker": "Woman", "text": "Okay, I'll download the app right now. Is there a time limit? My interview will probably run for about an hour and a half." },
+        { "speaker": "Man", "text": "The maximum booking is two hours per day, so you'll be completely fine. Just be sure to bring your phone with you; the app generates a digital key to unlock the pod door." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "Why does the woman approach the man?",
+          "options": {
+            "A": "To complain about noise in the library",
+            "B": "To ask for help finding a quiet space",
+            "C": "To report a broken study room door",
+            "D": "To return an overdue library book"
+          },
+          "answer": "B",
+          "explanation": "The woman needs a quiet place for a virtual interview and approaches the staff member for help booking a study room."
+        },
+        {
+          "type": "detail",
+          "stem": "What will the woman need to enter the pod?",
+          "options": {
+            "A": "A physical key from the front desk",
+            "B": "Her student ID card",
+            "C": "A digital key from a mobile application",
+            "D": "A reservation confirmation email"
+          },
+          "answer": "C",
+          "explanation": "The man says 'the app generates a digital key to unlock the pod door' — she needs her phone with the app."
+        }
+      ]
+    },
+    {
+      "id": "lc_ref_04",
+      "source": "goarno.io",
+      "title": "Printer Malfunction",
+      "setting": "computer_lab",
+      "speaker_relationship": "student_student",
+      "speakers": [
+        { "name": "Man", "role": "student" },
+        { "name": "Woman", "role": "student" }
+      ],
+      "conversation": [
+        { "speaker": "Man", "text": "Excuse me, do you know if this printer is working? I hit print on my sociology paper a few minutes ago, but nothing has happened yet." },
+        { "speaker": "Woman", "text": "Oh, that one is really temperamental. Is there an error message on the small screen?" },
+        { "speaker": "Man", "text": "It says \"Tray 2 Empty,\" but I opened the drawer and there is plenty of paper inside. I tried closing it again, but the light is still flashing red." },
+        { "speaker": "Woman", "text": "That usually means the sensor is jammed or broken. I wouldn't try to fix it yourself. Last semester, I tried to pull a jammed page out of there and ended up getting toner all over my sweater." },
+        { "speaker": "Man", "text": "Yikes, I definitely don't want that. I have class in twenty minutes." },
+        { "speaker": "Woman", "text": "You could try the printer in the student union building next door, or just ask the lab assistant at the front desk to take a look." },
+        { "speaker": "Man", "text": "I think I'll just ask the assistant. I don't want to run all the way to the student union and find out that printer is busy too. Thanks for the warning!" }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What is the man's problem?",
+          "options": {
+            "A": "He cannot find the computer lab",
+            "B": "He is unable to print his paper",
+            "C": "He lost his sociology assignment",
+            "D": "He does not have enough paper"
+          },
+          "answer": "B",
+          "explanation": "The man sent a print job but the printer is malfunctioning — it shows 'Tray 2 Empty' despite having paper, and the light flashes red."
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do next?",
+          "options": {
+            "A": "Try to fix the printer himself",
+            "B": "Go to the student union building",
+            "C": "Ask the lab assistant for help",
+            "D": "Print the paper at home instead"
+          },
+          "answer": "C",
+          "explanation": "The man says 'I think I'll just ask the assistant' — he decides to ask the lab assistant rather than going to the student union."
+        }
+      ]
+    },
+    {
+      "id": "lc_ref_05",
+      "source": "goarno.io",
+      "title": "Motion-Sensor Lights",
+      "setting": "library",
+      "speaker_relationship": "student_student",
+      "speakers": [
+        { "name": "Man", "role": "student" },
+        { "name": "Woman", "role": "student" }
+      ],
+      "conversation": [
+        { "speaker": "Man", "text": "Not again!" },
+        { "speaker": "Woman", "text": "Did the lights shut off on you in the study carrel again?" },
+        { "speaker": "Man", "text": "Yeah, it's the third time in an hour. I'm just trying to read for my history seminar, but every twenty minutes it goes pitch black. I have to stand up and wave my arms around like I'm directing traffic just to get them back on." },
+        { "speaker": "Woman", "text": "I know, it's frustrating. The university installed those new motion-sensor lights in the library stacks over the weekend. It's part of the new campus energy conservation plan." },
+        { "speaker": "Man", "text": "Look, I'm all for saving electricity, but the sensors in this section must be set to a really short timer. If you're sitting quietly reading, it just assumes the aisle is empty." },
+        { "speaker": "Woman", "text": "Actually, the facility manager mentioned they can adjust the timer on the sensors. Since it's a new system, they're still working out the kinks. If you fill out a quick feedback card at the circulation desk, they'll increase the delay before the lights shut off." },
+        { "speaker": "Man", "text": "Oh, that's great to know. I'll definitely do that on my way out. I can't keep doing jumping jacks just to finish my reading." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the conversation mainly about?",
+          "options": {
+            "A": "A complaint about noisy students in the library",
+            "B": "An issue with the new energy-saving lighting system",
+            "C": "A request to extend library operating hours",
+            "D": "A discussion about an upcoming history exam"
+          },
+          "answer": "B",
+          "explanation": "The conversation centers on the newly installed motion-sensor lights that shut off too quickly, which is part of the campus energy conservation plan."
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do?",
+          "options": {
+            "A": "Move to a different section of the library",
+            "B": "Complain to the university president",
+            "C": "Submit a feedback card at the circulation desk",
+            "D": "Install a desk lamp in his study carrel"
+          },
+          "answer": "C",
+          "explanation": "The man says 'I'll definitely do that on my way out' referring to filling out a feedback card at the circulation desk."
+        }
+      ]
+    },
+    {
+      "id": "lc_ref_06",
+      "source": "goarno.io",
+      "title": "Bicycle Registration",
+      "setting": "office",
+      "speaker_relationship": "student_staff",
+      "speakers": [
+        { "name": "Man", "role": "student" },
+        { "name": "Woman", "role": "transportation_staff" }
+      ],
+      "conversation": [
+        { "speaker": "Man", "text": "Hi, I'm hoping you can help me. I found this warning sticker on my bicycle this morning. It says my bike is going to be impounded by the end of the week." },
+        { "speaker": "Woman", "text": "Oh, I see. Yes, campus security has been tagging unregistered bikes this week. Did you register your bike with the transportation office when you moved into the dorms?" },
+        { "speaker": "Man", "text": "No, I didn't know I had to. I just brought it from home a few days ago because walking to the engineering building was taking too long." },
+        { "speaker": "Woman", "text": "That explains it. The university implemented a mandatory bike registration policy at the start of the semester to help prevent theft and manage rack space. It's actually free to register." },
+        { "speaker": "Man", "text": "Oh, well that's a relief. How do I go about doing that?" },
+        { "speaker": "Woman", "text": "You can fill out this form right here. I'll need the make, model, and serial number of your bike. And since you're in the engineering program, you might be interested in renting a spot in the new secure bike lockers near that building." },
+        { "speaker": "Man", "text": "Secure lockers? That sounds great. My roommate had his bike stolen last year, so I've been a little worried about leaving it outside all day." },
+        { "speaker": "Woman", "text": "Exactly. The lockers are twenty dollars a semester, and they protect your bike from the weather, too." },
+        { "speaker": "Man", "text": "I'll definitely do that. Let me just run outside and check my serial number so we can get this sorted out." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "Why does the man visit the office?",
+          "options": {
+            "A": "To report a stolen bicycle",
+            "B": "To address a warning sticker on his bicycle",
+            "C": "To ask about campus shuttle routes",
+            "D": "To complain about parking fees"
+          },
+          "answer": "B",
+          "explanation": "The man found a warning sticker saying his bike would be impounded and came to the transportation office to resolve it."
+        },
+        {
+          "type": "inference",
+          "stem": "Why is the man interested in the bike lockers?",
+          "options": {
+            "A": "To protect his bicycle from theft",
+            "B": "To store his helmet and gear",
+            "C": "To avoid the registration requirement",
+            "D": "To save money on bus fare"
+          },
+          "answer": "A",
+          "explanation": "The man mentions his roommate's bike was stolen last year and he's worried about leaving his bike outside, implying theft prevention is his main motivation."
+        }
+      ]
+    },
+    {
+      "id": "lc_ref_07",
+      "source": "goarno.io",
+      "title": "Study Room Mix-up",
+      "setting": "library",
+      "speaker_relationship": "student_staff",
+      "speakers": [
+        { "name": "Woman", "role": "student" },
+        { "name": "Man", "role": "library_staff" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Hi, excuse me. I reserved a group study room for three o'clock, but there are people in there right now." },
+        { "speaker": "Man", "text": "Let me look into that for you. Which room did you reserve?" },
+        { "speaker": "Woman", "text": "Room 412. I have my confirmation email right here on my phone." },
+        { "speaker": "Man", "text": "Okay, let's see. You're Sarah, right? Hmm, I don't see your name on the schedule for room 412 today." },
+        { "speaker": "Woman", "text": "Really? But the email definitely says three to five o'clock." },
+        { "speaker": "Man", "text": "Ah, I see the issue. Looking at your screen, you booked room 412, but it's for the Engineering Building, not the Central Library. They use the exact same booking software, so it's a really common mistake." },
+        { "speaker": "Woman", "text": "Oh no! My project partners are already on their way here. Is there any space available in this building?" },
+        { "speaker": "Man", "text": "We are completely booked up for the afternoon. But the Engineering Building is just a five-minute walk across the quad." },
+        { "speaker": "Woman", "text": "I guess I'd better text them to change course. Thanks for catching that!" }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "Why does the woman approach the staff member?",
+          "options": {
+            "A": "To extend her study room reservation",
+            "B": "To resolve an issue with an occupied study room",
+            "C": "To report a problem with the booking software",
+            "D": "To ask for directions to the Engineering Building"
+          },
+          "answer": "B",
+          "explanation": "The woman reserved a room but found people already using it, so she approaches the staff to resolve the conflict."
+        },
+        {
+          "type": "inference",
+          "stem": "Why does the man mention the booking software?",
+          "options": {
+            "A": "To explain why the woman booked the wrong building",
+            "B": "To suggest the software needs to be replaced",
+            "C": "To help her cancel the existing reservation",
+            "D": "To warn her about a system outage"
+          },
+          "answer": "A",
+          "explanation": "The man mentions the shared booking software to explain how the woman accidentally booked a room in the Engineering Building instead of the Library."
+        }
+      ]
+    },
+    {
+      "id": "lc_ref_08",
+      "source": "goarno.io",
+      "title": "Interactive Media Lounge",
+      "setting": "campus",
+      "speaker_relationship": "student_student",
+      "speakers": [
+        { "name": "Man", "role": "student" },
+        { "name": "Woman", "role": "student" }
+      ],
+      "conversation": [
+        { "speaker": "Man", "text": "Hey Sarah, did you manage to reserve a room in the library for our study group tonight?" },
+        { "speaker": "Woman", "text": "I did, but we might want to rethink our plan to spread out all our notes and textbooks." },
+        { "speaker": "Man", "text": "Why? Did they put us in one of those tiny interview booths again?" },
+        { "speaker": "Woman", "text": "No, the opposite. The reservation system assigned us the new interactive media lounge on the fourth floor." },
+        { "speaker": "Man", "text": "The media lounge? I thought that was just for screening films or practicing presentations." },
+        { "speaker": "Woman", "text": "Apparently, if the regular rooms are fully booked, the system rolls you over to whatever is available. The thing is, there aren't any actual desks in there. It's just a giant projector screen and a dozen bean bag chairs." },
+        { "speaker": "Man", "text": "Wow. Trying to solve calculus equations while sinking into a bean bag sounds... challenging." },
+        { "speaker": "Woman", "text": "Exactly. I mean, we could project our graphing software onto the big screen to look at the functions together. But writing out the problem sets is going to be tough." },
+        { "speaker": "Man", "text": "Let's just meet at the student union cafe instead. I'd rather deal with the noise than try to balance a notebook on my knees for two hours." },
+        { "speaker": "Woman", "text": "Good call. I'll cancel the room so someone who actually wants to watch a movie can use it." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why is the assigned room problematic for the study group?",
+          "options": {
+            "A": "It is too small for the group",
+            "B": "It lacks suitable furniture for written work",
+            "C": "The projector is broken",
+            "D": "It is located in a noisy area"
+          },
+          "answer": "B",
+          "explanation": "The room has only bean bag chairs and no desks, making it unsuitable for writing out calculus problem sets."
+        },
+        {
+          "type": "inference",
+          "stem": "Why does the woman mention the graphing software?",
+          "options": {
+            "A": "To suggest a potential advantage of the room",
+            "B": "To convince the man to keep the reservation",
+            "C": "To recommend a new study technique",
+            "D": "To explain why they need a computer lab instead"
+          },
+          "answer": "A",
+          "explanation": "The woman acknowledges one positive aspect — they could use the projector for graphing software — but concludes the room is still impractical overall."
+        }
+      ]
+    },
+    {
+      "id": "lc_ref_09",
+      "source": "goarno.io",
+      "title": "Campus Bike-Share",
+      "setting": "campus",
+      "speaker_relationship": "student_student",
+      "speakers": [
+        { "name": "Woman", "role": "student" },
+        { "name": "Man", "role": "student" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Hey Mark, you look out of breath. Did you run all the way to the science building?" },
+        { "speaker": "Man", "text": "Almost! I actually took one of those new green e-bikes from the dorms. The ride itself was fantastic, really fast. But returning it was a nightmare." },
+        { "speaker": "Woman", "text": "Really? I thought the whole point of the bike-share program was convenience." },
+        { "speaker": "Man", "text": "It is, until you get to your destination and the docking station is completely full. I couldn't lock the bike anywhere near the science building." },
+        { "speaker": "Woman", "text": "Oh, right. Everyone heads to the science quad at this time of day. What did you do?" },
+        { "speaker": "Man", "text": "I had to pedal all the way to the library to find an empty dock, and then sprint back here. I barely made it to my lab on time." },
+        { "speaker": "Woman", "text": "You know the campus mobility app has a live map, right? It shows exactly how many bikes and empty docks are at each station in real time." },
+        { "speaker": "Man", "text": "Wait, seriously? I only used the app to unlock the bike. I didn't even look at the other features." },
+        { "speaker": "Woman", "text": "Yeah! Next time, check the map before you leave. It'll save you a lot of running around." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What was the man's problem with the bike-share program?",
+          "options": {
+            "A": "The e-bike ran out of battery",
+            "B": "He could not unlock the bike",
+            "C": "There were no available spots to return the bike",
+            "D": "The docking station was too far from the dorms"
+          },
+          "answer": "C",
+          "explanation": "The man's problem was that the docking station near the science building was completely full, so he couldn't return the bike there."
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man likely do differently next time?",
+          "options": {
+            "A": "Walk to the science building instead",
+            "B": "Check the app for dock availability before departing",
+            "C": "Ask a friend for a ride",
+            "D": "Leave earlier to find parking"
+          },
+          "answer": "B",
+          "explanation": "The woman suggests using the app's live map feature, and the man seems interested — he will likely check dock availability in advance next time."
+        }
+      ]
+    },
+    {
+      "id": "lc_ref_10",
+      "source": "goarno.io",
+      "title": "Umbrella Share Program",
+      "setting": "campus",
+      "speaker_relationship": "student_student",
+      "speakers": [
+        { "name": "Woman", "role": "student" },
+        { "name": "Man", "role": "student" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Have you noticed those new green racks outside the student union?" },
+        { "speaker": "Man", "text": "Yeah, the umbrella share program. It's a brilliant idea, especially since the rainy season is starting." },
+        { "speaker": "Woman", "text": "I thought so too! Have you actually used one yet?" },
+        { "speaker": "Man", "text": "I tried to yesterday when it was pouring, but the rack was completely empty." },
+        { "speaker": "Woman", "text": "Really? I read in the campus paper that they stocked them with over two hundred umbrellas. People are supposed to return them to any rack within twenty-four hours." },
+        { "speaker": "Man", "text": "Well, I think the honor system is the issue. There's no penalty if you just forget to bring it back." },
+        { "speaker": "Woman", "text": "Oh, I see. Since there's no ID swipe required, people might just be treating them as freebies." },
+        { "speaker": "Man", "text": "Exactly. They really need to integrate the racks with our student cards. Otherwise, the whole program is basically just a one-time giveaway." },
+        { "speaker": "Woman", "text": "That's a good point. The student council sponsored the initiative, so maybe I'll suggest that at their next open meeting." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the conversation mainly about?",
+          "options": {
+            "A": "A flaw in a new campus initiative",
+            "B": "Plans to start a recycling program",
+            "C": "A complaint about campus facilities",
+            "D": "A disagreement about student fees"
+          },
+          "answer": "A",
+          "explanation": "The conversation revolves around the umbrella share program and its fundamental flaw — the honor system allows people to take umbrellas without returning them."
+        },
+        {
+          "type": "detail",
+          "stem": "What does the man think should change about the program?",
+          "options": {
+            "A": "Require student ID card scanning",
+            "B": "Charge a rental fee for each umbrella",
+            "C": "Reduce the number of umbrella racks",
+            "D": "Limit usage to rainy days only"
+          },
+          "answer": "A",
+          "explanation": "The man says 'They really need to integrate the racks with our student cards' — he wants an ID-based tracking system."
+        }
+      ]
+    },
+    {
+      "id": "lc_ref_11",
+      "source": "goarno.io",
+      "title": "Reusable Container Return",
+      "setting": "dining_facility",
+      "speaker_relationship": "student_staff",
+      "speakers": [
+        { "name": "Man", "role": "student" },
+        { "name": "Woman", "role": "dining_staff" }
+      ],
+      "conversation": [
+        { "speaker": "Man", "text": "Hi, excuse me. I'm trying to return this reusable takeout container, but the return station by the door doesn't seem to be working. It won't open." },
+        { "speaker": "Woman", "text": "Oh, right. We actually disabled the automated return stations this morning. We're upgrading to a completely app-based system next week." },
+        { "speaker": "Man", "text": "Oh, I didn't realize. I was just trying to get my deposit token back so I can grab lunch." },
+        { "speaker": "Woman", "text": "We're skipping the tokens during the transition. If you just hand the container to me, I can manually credit your account. You won't need a physical token anymore." },
+        { "speaker": "Man", "text": "That's actually a relief. I lost my token twice last semester and had to pay a fee to replace it." },
+        { "speaker": "Woman", "text": "You aren't the only one. That's the main reason we're switching. Once the app launches on Monday, you'll just scan a code on the box with your phone." },
+        { "speaker": "Man", "text": "Sounds much simpler. I'll keep an eye out for that." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "Why does the man approach the staff member?",
+          "options": {
+            "A": "To purchase a new reusable container",
+            "B": "To get assistance returning a container",
+            "C": "To complain about the food quality",
+            "D": "To ask about the lunch menu"
+          },
+          "answer": "B",
+          "explanation": "The man is trying to return his reusable container but the return station is not working, so he approaches the staff member for help."
+        },
+        {
+          "type": "inference",
+          "stem": "What is an advantage of the new app-based system?",
+          "options": {
+            "A": "It offers a larger food selection",
+            "B": "It prevents the problem of losing physical tokens",
+            "C": "It allows students to order food online",
+            "D": "It reduces the cost of containers"
+          },
+          "answer": "B",
+          "explanation": "The man mentions losing tokens twice and paying fees, and the staff says that's 'the main reason we're switching' — the app eliminates the physical token problem."
+        }
+      ]
+    }
+  ]
+}

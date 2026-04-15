@@ -1,0 +1,183 @@
+{
+  "generated_at": "2026-04-15",
+  "title": "LC ETS Flavor Model -- Listen to a Conversation",
+  "sample_count": 11,
+
+  "conversation_design": {
+    "word_count": {"min": 80, "max": 200, "target": "100-180", "avg_observed": 164},
+    "turn_count": {"min": 6, "max": 14, "target": "8-12", "avg_observed": 8},
+    "words_per_turn": {"avg": 20, "note": "Varies: short turns (1-5 words) for reactions, long turns (30-50 words) for explanations"},
+    "speaker_count": 2,
+    "structure_pattern": "1) Opening/problem presentation -> 2) Information exchange/discussion -> 3) Resolution or action plan",
+    "structure_note": "73% of samples follow problem-discussion-resolution. The first 1-2 turns establish the situation, middle turns exchange information, final turns resolve with an action plan."
+  },
+
+  "speaker_design": {
+    "relationship_types": {
+      "student_student": {"rate": 50, "description": "Two students discussing a campus situation (friends, classmates, roommates)"},
+      "student_staff": {"rate": 50, "description": "Student interacting with campus staff (librarian, office worker, dining staff, IT)"}
+    },
+    "role_pool": {
+      "student_roles": ["student", "friend", "classmate", "roommate"],
+      "staff_roles": ["library_staff", "transportation_staff", "dining_staff", "lab_assistant", "advisor", "IT_staff", "receptionist", "admin_staff"],
+      "note": "Staff roles should be campus service workers, NOT professors (professors are for lecture-type questions)"
+    },
+    "name_assignment": "Each speaker gets a first name. Use common English names. Avoid ambiguous gender-neutral names when TTS voice assignment matters.",
+    "voice_assignment": {
+      "student_student": "student_female + student_male (or two same-gender voices)",
+      "student_staff": "student voice + authority voice (librarian, advisor presets)"
+    }
+  },
+
+  "setting_types": {
+    "library": {"rate": 27, "examples": ["study room booking", "acoustic pods", "lights issue", "book reservation"]},
+    "campus_outdoor": {"rate": 27, "examples": ["bike-share", "umbrella program", "shuttle", "event notice"]},
+    "office": {"rate": 18, "examples": ["transportation office", "registrar", "career center", "financial aid"]},
+    "lab_classroom": {"rate": 9, "examples": ["printer malfunction", "lab equipment", "computer issue"]},
+    "dining": {"rate": 9, "examples": ["container return", "meal plan", "cafeteria"]},
+    "daily_life": {"rate": 9, "examples": ["laptop repair", "grocery shopping", "apartment issue"]}
+  },
+
+  "dialogue_register": {
+    "formality": "casual-informal",
+    "contractions": {"rate": 91, "note": "91% of conversations use contractions. Mandatory for natural sound."},
+    "discourse_markers": {"rate": 73, "examples": ["Actually", "Well", "Oh", "Okay", "Right", "Exactly", "Hmm"]},
+    "fillers": {"rate": 55, "examples": ["Huh?", "Yikes", "Wow", "Oh no!", "Wait, seriously?"]},
+    "exclamations": {"note": "Short emotional reactions add naturalness: 'Not again!', 'That sounds perfect!', 'Good call.'"},
+    "questions_between_speakers": "Speakers naturally ask each other questions. Average 2-3 questions per conversation.",
+    "register_rules": [
+      "Use contractions freely (don't, I'm, it's, they'll, won't)",
+      "Include 1-2 discourse markers per conversation (Actually, Well, Oh, Hmm)",
+      "Allow incomplete sentences and interruptions",
+      "Use casual vocabulary (sounds great, good call, yikes, no worries)",
+      "Avoid formal/academic vocabulary in student-student conversations",
+      "Staff speech can be slightly more formal but still conversational"
+    ]
+  },
+
+  "question_design": {
+    "questions_per_item": 2,
+    "type_distribution": {
+      "detail": {"total_rate": 36, "description": "What/who/how specific fact from conversation"},
+      "main_idea": {"total_rate": 27, "description": "Why did speaker approach/what is conversation mainly about"},
+      "inference": {"total_rate": 36, "description": "What will speaker likely do next / what can be inferred"}
+    },
+    "q1_vs_q2_pattern": {
+      "Q1": "Usually detail (45%) or main_idea (55%) -- establishes the situation/problem",
+      "Q2": "Usually inference (73%) or detail (27%) -- tests what happens next or deeper understanding",
+      "rule": "Q1 tests WHAT is happening. Q2 tests WHAT COMES NEXT or WHY."
+    },
+    "stem_patterns": {
+      "main_idea": [
+        "What is the conversation mainly about?",
+        "Why does the {speaker} approach the {other}?",
+        "Why does the {speaker} visit the {location}?",
+        "What is the {speaker}'s problem?"
+      ],
+      "detail": [
+        "What will the {speaker} use/need to...?",
+        "What is the {speaker}'s problem with...?",
+        "How will the {speaker} know when...?",
+        "What does the {speaker} think should change?",
+        "Why is the {thing} problematic for...?",
+        "What was the {speaker}'s problem?"
+      ],
+      "inference": [
+        "What will the {speaker} most likely do next?",
+        "What will the {speaker} likely do differently next time?",
+        "What is an advantage of the new system?",
+        "Why does the {speaker} mention...?",
+        "What can be inferred about...?"
+      ]
+    }
+  },
+
+  "option_design": {
+    "word_count": {"avg": 6.5, "target": "4-10"},
+    "correct_avg": 7.0,
+    "distractor_avg": 6.2,
+    "correct_is_longest_rate_observed": 50,
+    "WARNING": "50% correct-is-longest in reference data is a bias to avoid. Target: <=30%.",
+    "answer_distribution_observed": {"A": 6, "B": 11, "C": 5, "D": 0},
+    "WARNING_2": "Severe B-clustering and D-absence. Generator MUST enforce even A/B/C/D distribution."
+  },
+
+  "distractor_patterns": {
+    "for_detail_questions": [
+      {"type": "wrong_detail", "description": "Uses words/concepts from conversation but changes a key fact", "example": "The shop will call her (wrong: they'll text)"},
+      {"type": "related_but_not_stated", "description": "Plausible action but NOT mentioned in conversation", "example": "Print the paper at home instead (never mentioned)"},
+      {"type": "misattributed", "description": "Takes a detail and attributes it to wrong speaker/context", "example": "The woman will fix the printer (wrong: she warned against it)"}
+    ],
+    "for_main_idea_questions": [
+      {"type": "wrong_topic", "description": "Plausible campus topic but not THIS conversation", "example": "To report a stolen bicycle (he came about a warning sticker)"},
+      {"type": "too_narrow", "description": "Addresses one detail but misses the overall purpose", "example": "To ask about campus shuttle routes (too specific)"},
+      {"type": "reversed_situation", "description": "Opposite of actual situation", "example": "To extend her reservation (she's resolving a conflict)"}
+    ],
+    "for_inference_questions": [
+      {"type": "over_inference", "description": "Goes too far beyond what's stated", "example": "Complain to the university president (too extreme)"},
+      {"type": "rejected_option", "description": "Something the speaker considered but decided against", "example": "Go to the student union building (he chose NOT to do this)"},
+      {"type": "unrelated_next_step", "description": "Plausible action but not connected to conversation", "example": "Ask a friend for a ride (not relevant to the discussion)"}
+    ]
+  },
+
+  "difficulty_levers": {
+    "easy": {
+      "conversation": "Short (80-120 words), 6-8 turns, clear problem and resolution",
+      "Q1": "detail -- answer is directly stated in conversation",
+      "Q2": "detail -- another directly stated fact",
+      "distractors": "Clearly wrong, different topic entirely"
+    },
+    "medium": {
+      "conversation": "Medium (120-160 words), 8-10 turns, information exchange with some back-and-forth",
+      "Q1": "main_idea or detail -- requires understanding the overall situation",
+      "Q2": "inference -- what will happen next based on what was discussed",
+      "distractors": "Plausible but use wrong details from conversation"
+    },
+    "hard": {
+      "conversation": "Long (160-200 words), 10-14 turns, multiple topics or a twist/complication",
+      "Q1": "main_idea -- purpose is not obvious from first turn",
+      "Q2": "inference -- requires connecting multiple pieces of information",
+      "distractors": "Very plausible, use conversation vocabulary, rejected alternatives as traps"
+    }
+  },
+
+  "flavor_markers": [
+    {"marker": "natural_dialogue", "weight": 0.25, "target": "Contractions, fillers, discourse markers present. Sounds like real speech."},
+    {"marker": "both_speakers_active", "weight": 0.15, "target": "Each speaker has 3+ turns and contributes meaningfully to the conversation."},
+    {"marker": "problem_resolution_structure", "weight": 0.15, "target": "Clear problem -> discussion -> resolution flow."},
+    {"marker": "q1_q2_type_diversity", "weight": 0.15, "target": "Q1 and Q2 test different skills (detail vs inference, main_idea vs detail)."},
+    {"marker": "distractor_plausibility", "weight": 0.15, "target": "All distractors are plausible campus scenarios. No absurd or obviously wrong options."},
+    {"marker": "correct_not_always_longest", "weight": 0.10, "target": "Correct answer is longest <=30% of time."},
+    {"marker": "answer_position_balance", "weight": 0.05, "target": "Even A/B/C/D distribution across batch."}
+  ],
+
+  "anti_patterns": [
+    "Conversation is too short (<80 words) -- not enough material for 2 questions",
+    "Only one speaker talks -- both must participate meaningfully",
+    "Conversation sounds scripted/formal -- must use casual spoken register",
+    "No contractions used -- every LC conversation should have contractions",
+    "Both questions test the exact same piece of information",
+    "Correct answer for both Q1 and Q2 is the same letter",
+    "A distractor repeats conversation text verbatim",
+    "Questions can be answered using common sense alone (no listening needed)",
+    "Speaker names are inconsistent between speakers array and conversation turns",
+    "Conversation lacks a clear topic or purpose -- feels like random exchanges",
+    "All turns are the same length -- real conversations have short reactions and longer explanations"
+  ],
+
+  "tts_voice_mapping": {
+    "student_student": {
+      "speaker_1": "student_female",
+      "speaker_2": "student_male",
+      "note": "Use different gendered voices for clarity"
+    },
+    "student_staff": {
+      "student": "student_female or student_male",
+      "library_staff": "librarian",
+      "office_staff": "advisor",
+      "dining_staff": "advisor",
+      "lab_staff": "advisor",
+      "note": "Staff voices should sound slightly more authoritative"
+    }
+  }
+}

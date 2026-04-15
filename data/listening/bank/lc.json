@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "items": [
     {
       "context": "campus",
@@ -561,6 +561,1423 @@
         }
       ],
       "id": "lc_gen_1776236749905_007"
+    },
+    {
+      "context": "campus_services",
+      "situation": "student checking with mail room about a missing package",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Laura",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Kevin",
+          "role": "mail_staff",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Laura",
+          "text": "Hi, I'm hoping you can help me. I got a notification that a package was delivered to the mail room yesterday, but I can't find it in my locker."
+        },
+        {
+          "speaker": "Kevin",
+          "text": "Oh no! That's not good. Did you get a text with the locker combination?"
+        },
+        {
+          "speaker": "Laura",
+          "text": "Yeah, I did. But when I went to locker 42, it was completely empty."
+        },
+        {
+          "speaker": "Kevin",
+          "text": "Hmm, okay. Actually, we've had a few issues with the new automated system. Sometimes it assigns a locker but the notification gets delayed."
+        },
+        {
+          "speaker": "Laura",
+          "text": "Really? So my package might still be here?"
+        },
+        {
+          "speaker": "Kevin",
+          "text": "It's possible. Let me check the back room. We hold oversized items there if they don't fit in the lockers. What's the tracking number?"
+        },
+        {
+          "speaker": "Laura",
+          "text": "It's on my phone... here, it's 9Z-781-445."
+        },
+        {
+          "speaker": "Kevin",
+          "text": "Got it. I'll be right back."
+        },
+        {
+          "speaker": "Kevin",
+          "text": "Good news! It's right here. It's a large box, so it didn't go to a locker. Sorry about the confusion."
+        },
+        {
+          "speaker": "Laura",
+          "text": "Whew, that's a relief! Thanks so much. I'll definitely double-check the back room next time."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "Why does Laura approach Kevin?",
+          "options": {
+            "A": "To report that she cannot locate a package she was notified about",
+            "B": "To complain about a broken locker in the mail room",
+            "C": "To ask how to sign up for delivery notifications",
+            "D": "To return an incorrectly delivered package"
+          },
+          "answer": "A",
+          "explanation": "Laura states her problem directly: she received a delivery notification but found the assigned locker empty. B is a wrong_topic; a broken locker is not mentioned. C is a related_but_not_stated action; signing up for notifications is not discussed. D is a reversed_situation; she is there to receive, not return, a package.",
+          "distractor_types": {
+            "A": "correct_answer",
+            "B": "wrong_topic",
+            "C": "related_but_not_stated",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the mail room's procedure?",
+          "options": {
+            "A": "Students must show ID to collect any package.",
+            "B": "The staff prefers students to use an online contact form.",
+            "C": "Oversized packages are handled differently than standard ones.",
+            "D": "The automated locker system is completely reliable."
+          },
+          "answer": "C",
+          "explanation": "Kevin explains that oversized items are held in the back room instead of the lockers, indicating a different procedure. A is a related_but_not_stated detail; showing ID is not mentioned. B is an unrelated_next_step; an online form is not discussed. D is a reversed_situation; the conversation mentions issues with the system, implying it is not completely reliable.",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "unrelated_next_step",
+            "C": "correct_answer",
+            "D": "reversed_situation"
+          }
+        }
+      ],
+      "id": "lc_v2_1776248279616_001",
+      "flavor_score": 0.95
+    },
+    {
+      "context": "campus_life",
+      "situation": "two students talking about a new vending machine or campus facility",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Jessica",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Eric",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Jessica",
+          "text": "Hey Eric, have you tried the new hydration station next to the gym? I just filled my bottle there."
+        },
+        {
+          "speaker": "Eric",
+          "text": "The what? You mean a water fountain?"
+        },
+        {
+          "speaker": "Jessica",
+          "text": "Well, it's way more than that. It's this high-tech machine that dispenses chilled, filtered water, but you can also add electrolytes or vitamins with a tap. It's free for students."
+        },
+        {
+          "speaker": "Eric",
+          "text": "Wait, seriously? That sounds great. I'm always buying sports drinks after my workouts."
+        },
+        {
+          "speaker": "Jessica",
+          "text": "Exactly! You can customize it. I had the lemon-electrolyte mix today. It was perfect."
+        },
+        {
+          "speaker": "Eric",
+          "text": "Huh. I've been going to the vending machine in the lobby for a Gatorade. That's like three dollars a pop."
+        },
+        {
+          "speaker": "Jessica",
+          "text": "I know, right? The station's been there for a week, but there's no sign or anything. I only found it because someone in my yoga class mentioned it."
+        },
+        {
+          "speaker": "Eric",
+          "text": "Good call telling me. I'll definitely check it out after my session today. Does it get crowded?"
+        },
+        {
+          "speaker": "Jessica",
+          "text": "Not yet, but I bet it will once word gets out. You should bring your own bottle, though. It doesn't provide cups."
+        },
+        {
+          "speaker": "Eric",
+          "text": "Got it. Thanks for the tip! I'm gonna save so much money."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main topic of the conversation?",
+          "options": {
+            "A": "A problem with the gym's vending machine prices",
+            "B": "A new campus resource that one student is informing the other about",
+            "C": "Planning a joint workout session at the campus gym",
+            "D": "Comparing the benefits of different types of sports drinks"
+          },
+          "answer": "B",
+          "explanation": "Jessica introduces and describes the new hydration station to Eric, who was unaware of it. A is a wrong_topic; while vending machine prices are mentioned, they are not the central problem. C is a wrong_topic; planning a workout is not discussed. D is a too_narrow detail; comparing drinks is part of the discussion but not the main focus, which is the new facility itself.",
+          "distractor_types": {
+            "A": "wrong_topic",
+            "B": "correct_answer",
+            "C": "wrong_topic",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What does Eric imply about his past habit?",
+          "options": {
+            "A": "He often forgot to bring a water bottle to the gym.",
+            "B": "He was unaware of healthier drink alternatives.",
+            "C": "He preferred the taste of brand-name sports drinks.",
+            "D": "He spent more money than necessary on post-workout drinks."
+          },
+          "answer": "D",
+          "explanation": "Eric states he has been buying three-dollar sports drinks and concludes he will 'save so much money' by using the free station, implying his past habit was unnecessarily expensive. A is a related_but_not_stated detail; forgetting a bottle is not discussed. B is an over_inference; the conversation does not address health awareness. C is a related_but_not_stated detail; taste preference is not mentioned.",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "over_inference",
+            "C": "related_but_not_stated",
+            "D": "correct_answer"
+          }
+        }
+      ],
+      "id": "lc_v2_1776248279616_002",
+      "flavor_score": 0.95
+    },
+    {
+      "context": "library",
+      "situation": "student reporting an issue with self-checkout machine",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Ashley",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "James",
+          "role": "library_staff",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Ashley",
+          "text": "Excuse me, the self-checkout machine isn't working for me. It won't scan my book."
+        },
+        {
+          "speaker": "James",
+          "text": "Okay, let's see. Did it show an error message?"
+        },
+        {
+          "speaker": "Ashley",
+          "text": "Yeah, it says 'Item not recognized.' But it's definitely a library book. Look, here's the barcode."
+        },
+        {
+          "speaker": "James",
+          "text": "Hmm. Actually, sometimes the barcode gets worn out. I can check it out for you manually at the main desk."
+        },
+        {
+          "speaker": "Ashley",
+          "text": "Oh, that'd be great. I'm in a bit of a rush."
+        },
+        {
+          "speaker": "James",
+          "text": "No worries. Just bring it over here. I'll need your student ID."
+        },
+        {
+          "speaker": "Ashley",
+          "text": "Sure, here it is. So, does this happen a lot?"
+        },
+        {
+          "speaker": "James",
+          "text": "With older books, yeah. The sun from the windows fades the barcodes. We're replacing them gradually."
+        },
+        {
+          "speaker": "Ashley",
+          "text": "I see. Well, thanks for your help!"
+        },
+        {
+          "speaker": "James",
+          "text": "You're welcome. You're all set. The book's due in three weeks."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What problem does Ashley report?",
+          "options": {
+            "A": "The library book she wants is not on the shelf.",
+            "B": "Her student ID card is not scanning properly.",
+            "C": "The self-checkout machine cannot read her book's barcode.",
+            "D": "The main desk is closed and she cannot check out her book."
+          },
+          "answer": "C",
+          "explanation": "Ashley states the machine 'won't scan my book' and shows the error 'Item not recognized.' A is a wrong_detail; she has the book in hand. B is a misattributed detail; her student ID is requested later but is not the initial problem. D is a reversed_situation; the main desk is open and James offers help there.",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "misattributed",
+            "C": "correct_answer",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will Ashley most likely do the next time she has a similar problem?",
+          "options": {
+            "A": "Go directly to the main desk for assistance.",
+            "B": "Try using a different self-checkout machine.",
+            "C": "Report the faded barcode to the library director.",
+            "D": "Avoid checking out older books from the library."
+          },
+          "answer": "A",
+          "explanation": "James resolves her current problem by checking the book out manually at the main desk, providing a successful solution she is likely to repeat. B is a rejected_option; she tried one machine, but the implied cause (faded barcode) would likely persist on any machine. C is an over_inference; reporting to a director is too extreme and not suggested. D is an unrelated_next_step; avoiding older books is not discussed or implied.",
+          "distractor_types": {
+            "A": "correct_answer",
+            "B": "rejected_option",
+            "C": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_v2_1776248279616_003",
+      "flavor_score": 0.76
+    },
+    {
+      "context": "library",
+      "situation": "A student inquires about new quiet study pods but learns they are not yet available for general booking.",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Sarah",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "David",
+          "role": "library_staff",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Sarah",
+          "text": "Hi, I heard you installed those new, super-quiet study pods. I'd love to book one for my online exam next week."
+        },
+        {
+          "speaker": "David",
+          "text": "Oh, I'm afraid they're not quite ready for student reservations yet."
+        },
+        {
+          "speaker": "Sarah",
+          "text": "Really? But the campus newsletter said they were launching this week."
+        },
+        {
+          "speaker": "David",
+          "text": "Right, the hardware is installed, but the booking software's still being tested. We're hoping to have it live by Friday."
+        },
+        {
+          "speaker": "Sarah",
+          "text": "Hmm, my exam is on Monday. Is there any way to get on a waitlist or something?"
+        },
+        {
+          "speaker": "David",
+          "text": "Actually, there is a pilot program. You can sign up at the front desk to be a beta tester. If you're selected, you'd get early access and provide feedback."
+        },
+        {
+          "speaker": "Sarah",
+          "text": "A beta tester? That sounds interesting. What does the feedback involve?"
+        },
+        {
+          "speaker": "David",
+          "text": "Just a short online survey about your experience with the pod and the app. It'd help us work out any bugs before the full launch."
+        },
+        {
+          "speaker": "Sarah",
+          "text": "Okay, I'll definitely sign up for that. Where's the form?"
+        },
+        {
+          "speaker": "David",
+          "text": "Just ask Julie at the circulation desk. She's managing the sign-up list. Good luck with your exam!"
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "Why does Sarah approach David?",
+          "options": {
+            "A": "To inquire about booking a new type of study space",
+            "B": "To report a problem with the library's newsletter",
+            "C": "To ask for help finding a book for her exam",
+            "D": "To volunteer for a library event next week"
+          },
+          "answer": "A",
+          "explanation": "Sarah's opening line is about booking a new study pod for her exam, which is the central topic. B is a wrong_topic; the newsletter is mentioned but reporting a problem with it is not her purpose. C is a wrong_topic; finding a book is not discussed. D is a wrong_topic; volunteering for an event is not mentioned.",
+          "distractor_types": {
+            "B": "wrong_topic",
+            "C": "wrong_topic",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will Sarah most likely do next?",
+          "options": {
+            "A": "Wait until Friday to book a pod online",
+            "B": "Complain to the university about the delay",
+            "C": "Go to the circulation desk to sign up",
+            "D": "Look for a different library to take her exam"
+          },
+          "answer": "C",
+          "explanation": "David tells Sarah to ask Julie at the circulation desk to sign up for the beta tester program, and Sarah agrees ('I'll definitely sign up for that'). A is a rejected_option; she is not going to wait, as she needs a pod for Monday and is pursuing the beta tester option. B is an over_inference; there is no suggestion she will complain. D is an unrelated_next_step; finding a different library is not discussed.",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_v2_1776248779812_001",
+      "audio_url": "/api/audio/conversation/lc_v2_1776248779812_001.mp3",
+      "flavor_score": 0.84
+    },
+    {
+      "context": "campus_life",
+      "situation": "Two friends discuss a new policy that limits guest parking passes on weekends.",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Emily",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Brian",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Emily",
+          "text": "Hey Brian, did you see the email about weekend parking? My parents are visiting tomorrow."
+        },
+        {
+          "speaker": "Brian",
+          "text": "Oh no, the one from campus security? Yeah, it's a new rule."
+        },
+        {
+          "speaker": "Emily",
+          "text": "Right! It says each student can only get one free guest pass per month now. Last semester it was unlimited."
+        },
+        {
+          "speaker": "Brian",
+          "text": "I know, it's because of all the construction. They've closed like half the lots."
+        },
+        {
+          "speaker": "Emily",
+          "text": "Wow, that's a huge change. My brother was going to visit next weekend too. What am I supposed to tell him?"
+        },
+        {
+          "speaker": "Brian",
+          "text": "Well, you could have him park at the shopping center down the road and walk. It's only a ten-minute walk from here."
+        },
+        {
+          "speaker": "Emily",
+          "text": "Hmm, that's not ideal with all his luggage. Is there any way to get a second pass?"
+        },
+        {
+          "speaker": "Brian",
+          "text": "Actually, the email said you can buy extra daily passes for ten dollars online. It's not free, but it's an option."
+        },
+        {
+          "speaker": "Emily",
+          "text": "Okay, ten dollars isn't too bad. I'll check the website. Thanks for the tip!"
+        },
+        {
+          "speaker": "Brian",
+          "text": "No worries. Good luck with your parents!"
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What is the new parking policy?",
+          "options": {
+            "A": "All weekend parking is now free for guests",
+            "B": "Students get one free guest pass per month",
+            "C": "Guest parking is banned on weekends due to construction",
+            "D": "Students must pay twenty dollars for a weekend pass"
+          },
+          "answer": "B",
+          "explanation": "Emily explicitly states the new rule: 'each student can only get one free guest pass per month now.' A is a reversed_situation; it's more restrictive, not more free. C is a wrong_detail; parking is not banned, it's limited. D is a wrong_detail; the cost mentioned for an extra pass is ten dollars, not twenty.",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "C": "wrong_detail",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will Emily most likely do about her brother's visit?",
+          "options": {
+            "A": "Tell him he cannot visit at all",
+            "B": "Ask Brian to use his free pass for her",
+            "C": "Have him park at the shopping center",
+            "D": "Buy an extra parking pass online"
+          },
+          "answer": "D",
+          "explanation": "Emily needs a pass for her brother next weekend after using her one free pass for her parents. Brian mentions buying extra passes online for ten dollars, and Emily says she'll 'check the website,' implying this is her likely plan. A is an over_inference; she is looking for solutions, not canceling. B is an unrelated_next_step; sharing passes is not discussed. C is a rejected_option; Brian suggested it, but Emily indicated it was 'not ideal' due to luggage, making it less likely.",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_next_step",
+            "C": "rejected_option"
+          }
+        }
+      ],
+      "id": "lc_v2_1776248779812_002",
+      "audio_url": "/api/audio/conversation/lc_v2_1776248779812_002.mp3",
+      "flavor_score": 1
+    },
+    {
+      "context": "daily_errands",
+      "situation": "A student tries to return a malfunctioning desk lamp at the campus store.",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Karen",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Chris",
+          "role": "store_clerk",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Karen",
+          "text": "Hi, I'd like to return this lamp. I bought it last week, but the dimmer switch doesn't work at all."
+        },
+        {
+          "speaker": "Chris",
+          "text": "Okay, do you have your receipt with you?"
+        },
+        {
+          "speaker": "Karen",
+          "text": "I don't, actually. I think I threw it away. But it's got the store's price tag right here."
+        },
+        {
+          "speaker": "Chris",
+          "text": "Hmm, without a receipt, I can't process a refund. Store policy."
+        },
+        {
+          "speaker": "Karen",
+          "text": "Seriously? Even if it's defective? I just want one that works."
+        },
+        {
+          "speaker": "Chris",
+          "text": "I can offer you an even exchange for the same model. We'll just swap it out right now."
+        },
+        {
+          "speaker": "Karen",
+          "text": "Oh, that would be perfect! Are you sure the new one will work okay?"
+        },
+        {
+          "speaker": "Chris",
+          "text": "We can test it at the counter before you leave. If there's a problem, bring it right back."
+        },
+        {
+          "speaker": "Karen",
+          "text": "Sounds great. Thanks for being so helpful!"
+        },
+        {
+          "speaker": "Chris",
+          "text": "No problem at all. I'll go grab a new one from the stockroom."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why is Karen unable to get a refund for the lamp?",
+          "options": {
+            "A": "The lamp is more than a week old",
+            "B": "The price tag is missing from the lamp",
+            "C": "She does not have the sales receipt",
+            "D": "The store does not sell that model anymore"
+          },
+          "answer": "C",
+          "explanation": "Chris states, 'without a receipt, I can't process a refund.' A is a wrong_detail; she bought it 'last week,' which is within a typical return window, and the reason given is the receipt, not the time. B is a reversed_situation; she points out the price tag is present. D is a related_but_not_stated; it is not mentioned that the model is discontinued.",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "reversed_situation",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will Karen most likely do before leaving the store?",
+          "options": {
+            "A": "Test the replacement lamp at the counter",
+            "B": "Look for her original receipt at home",
+            "C": "Decide to keep the broken lamp",
+            "D": "File a complaint with the store manager"
+          },
+          "answer": "A",
+          "explanation": "Chris offers to test the new lamp at the counter, and Karen agrees to the exchange, making it the logical next step. B is a rejected_option; she already said she threw the receipt away, and the issue is resolved with an exchange. C is a reversed_situation; she is getting a replacement, not keeping the broken one. D is an over_inference; she is satisfied with the solution and thanks Chris, so complaining is unlikely.",
+          "distractor_types": {
+            "B": "rejected_option",
+            "C": "reversed_situation",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "id": "lc_v2_1776248779812_003",
+      "audio_url": "/api/audio/conversation/lc_v2_1776248779812_003.mp3",
+      "flavor_score": 0.88
+    },
+    {
+      "context": "campus_life",
+      "situation": "two students discussing an issue with a campus sustainability program",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Ashley",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Mark",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Ashley",
+          "text": "Hey Mark, have you tried using the new campus compost bins? I just got a warning sticker on my dorm room door."
+        },
+        {
+          "speaker": "Mark",
+          "text": "Oh no! Seriously? I haven't, but I've seen them around. What's the problem?"
+        },
+        {
+          "speaker": "Ashley",
+          "text": "Well, I put my coffee grounds and a banana peel in one yesterday, but apparently you can't use the regular plastic bags. It has to be a certified compostable bag."
+        },
+        {
+          "speaker": "Mark",
+          "text": "Huh, I didn't know that. Where do you even get those special bags?"
+        },
+        {
+          "speaker": "Ashley",
+          "text": "That's the thing! The sustainability office gives out a free roll at the start of the semester, but I must've missed it. Now I have to go to the campus store to buy some."
+        },
+        {
+          "speaker": "Mark",
+          "text": "That's annoying. But wait, couldn't you just dump the food scraps directly into the bin without a bag?"
+        },
+        {
+          "speaker": "Ashley",
+          "text": "Actually, you're right. The sticker says that's totally fine. I guess I was just on autopilot, grabbing a bag."
+        },
+        {
+          "speaker": "Mark",
+          "text": "Good call. I'll remember that too. No bag, no problem."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "Why does Ashley talk to Mark?",
+          "options": {
+            "A": "To discuss a problem she encountered with a campus program",
+            "B": "To invite him to a sustainability office event",
+            "C": "To ask where to buy plastic bags for her dorm",
+            "D": "To complain about the location of the compost bins"
+          },
+          "answer": "A",
+          "explanation": "Ashley initiates the conversation by mentioning she got a warning sticker related to the compost bins, and they discuss the specific issue (using the wrong bag). B is wrong_topic (no event is mentioned). C is wrong_detail (she needs compostable, not plastic, bags). D is related_but_not_stated (bin location is not discussed).",
+          "distractor_types": {
+            "B": "wrong_topic",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will Ashley most likely do the next time she uses the compost bin?",
+          "options": {
+            "A": "Go to the campus store to buy the correct bags",
+            "B": "Ignore the compost program entirely",
+            "C": "Put her food scraps in without using a bag",
+            "D": "Apply for a new roll of bags from the sustainability office"
+          },
+          "answer": "C",
+          "explanation": "Ashley agrees with Mark's suggestion that dumping scraps directly is fine, and Mark concludes 'No bag, no problem,' implying this is the accepted solution. A is a rejected_option (she learns she doesn't need to buy bags). B is an over_inference (no evidence she'll quit the program). D is an unrelated_next_step (getting a new roll isn't discussed as a next step after this realization).",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_v2_1776249027035_001",
+      "audio_url": "/api/audio/conversation/lc_v2_1776249027035_001.mp3",
+      "flavor_score": 0.95
+    },
+    {
+      "context": "daily_errands",
+      "situation": "student checking with a receptionist about an appointment",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Megan",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Tom",
+          "role": "receptionist",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Megan",
+          "text": "Hi, I'm here for my 3:30 appointment with Dr. Evans? I'm a few minutes early."
+        },
+        {
+          "speaker": "Tom",
+          "text": "Okay, let me check... Hmm, I don't see a Megan on the schedule for today with Dr. Evans."
+        },
+        {
+          "speaker": "Megan",
+          "text": "What? That can't be right. I booked it online last week for career counseling."
+        },
+        {
+          "speaker": "Tom",
+          "text": "Oh, wait. Dr. Evans is out of the office this afternoon. All his appointments were automatically rescheduled. Didn't you get a text message?"
+        },
+        {
+          "speaker": "Megan",
+          "text": "A text? I don't think so. I always check my email for confirmations."
+        },
+        {
+          "speaker": "Tom",
+          "text": "Ah, that's it. Our system sends reschedule alerts via text only. Your new time is tomorrow at 11 AM. I can print you a confirmation slip right now."
+        },
+        {
+          "speaker": "Megan",
+          "text": "Tomorrow at 11? Actually, I have a class then. Is there anything later in the week?"
+        },
+        {
+          "speaker": "Tom",
+          "text": "Let's see... How about Friday at 2 PM? He has an opening."
+        },
+        {
+          "speaker": "Megan",
+          "text": "That works perfectly. Thanks for sorting that out!"
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why was Megan's original appointment not on the schedule?",
+          "options": {
+            "A": "She accidentally booked it for the wrong month.",
+            "B": "The doctor was out, and it had been rescheduled.",
+            "C": "She did not confirm the appointment by email.",
+            "D": "The receptionist could not find her name in the system."
+          },
+          "answer": "B",
+          "explanation": "Tom states, 'Dr. Evans is out of the office this afternoon. All his appointments were automatically rescheduled.' A is wrong_detail (wrong month not mentioned). C is related_but_not_stated (email is for confirmations, not the cause of the reschedule). D is a misattribution (he couldn't find it *because* it was rescheduled, not the core reason).",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will Megan probably do to avoid this problem in the future?",
+          "options": {
+            "A": "Call the office instead of booking online",
+            "B": "Arrive much earlier for all appointments",
+            "C": "Double-check the doctor's schedule before booking",
+            "D": "Pay more attention to text messages from the office"
+          },
+          "answer": "D",
+          "explanation": "The problem occurred because the system sends reschedule alerts only by text, and Megan doesn't check those. It's reasonable to infer she'll start monitoring texts. A is an over_inference (she successfully booked online; the issue was notification). B is an unrelated_next_step (arrival time wasn't the issue). C is a rejected_option (the schedule change was unexpected, not something she could check).",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_next_step",
+            "C": "rejected_option"
+          }
+        }
+      ],
+      "id": "lc_v2_1776249027035_002",
+      "audio_url": "/api/audio/conversation/lc_v2_1776249027035_002.mp3",
+      "flavor_score": 0.95
+    },
+    {
+      "context": "daily_errands",
+      "situation": "student returning a defective item at the campus store",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Maria",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Brian",
+          "role": "store_clerk",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Maria",
+          "text": "Hi, I'd like to return this desk lamp. I just bought it two days ago, and it flickers constantly."
+        },
+        {
+          "speaker": "Brian",
+          "text": "Sure, do you have the receipt with you?"
+        },
+        {
+          "speaker": "Maria",
+          "text": "I don't, actually. I paid cash and must've tossed it. But it's your store brand, and I can show you the charge on my bank app."
+        },
+        {
+          "speaker": "Brian",
+          "text": "Hmm, without a receipt, our policy is store credit only. But for defective electronics, we usually make an exception if it's within a week."
+        },
+        {
+          "speaker": "Maria",
+          "text": "So I could get a refund back to my card?"
+        },
+        {
+          "speaker": "Brian",
+          "text": "Well, since you paid cash, we'd have to issue the refund in cash. But I'll need a manager's approval for that. She's on her break for another fifteen minutes."
+        },
+        {
+          "speaker": "Maria",
+          "text": "I can wait, that's fine. I'd really prefer not to have store credit."
+        },
+        {
+          "speaker": "Brian",
+          "text": "Okay, I'll put a note here. If you want to look around, I'll call you over when she's back."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is Maria's main purpose for speaking with Brian?",
+          "options": {
+            "A": "To exchange a lamp for a different model",
+            "B": "To find out the store's hours for returns",
+            "C": "To get a refund for a malfunctioning product",
+            "D": "To complain about the store's payment policy"
+          },
+          "answer": "C",
+          "explanation": "Maria states she wants to return a defective lamp and seeks a refund, which is the central issue. A is too_narrow (exchange is not discussed; she wants a return/refund). B is wrong_topic (hours are not mentioned). D is reversed_situation (she discusses policy but isn't there primarily to complain about it).",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "wrong_topic",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the store's return policy?",
+          "options": {
+            "A": "It is more flexible for defective items than for other returns.",
+            "B": "It requires all returns to be approved by a manager.",
+            "C": "It does not allow returns without the original packaging.",
+            "D": "It only offers exchanges, not refunds, for cash purchases."
+          },
+          "answer": "A",
+          "explanation": "Brian says without a receipt, policy is store credit, 'But for defective electronics, we usually make an exception,' implying more flexibility. B is an over_inference (manager approval is needed for this specific cash/exception case, not 'all returns'). C is related_but_not_stated (packaging isn't mentioned). D is wrong_detail (a cash refund is possible with approval).",
+          "distractor_types": {
+            "B": "over_inference",
+            "C": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "id": "lc_v2_1776249027035_003",
+      "audio_url": "/api/audio/conversation/lc_v2_1776249027035_003.mp3",
+      "flavor_score": 0.79
+    },
+    {
+      "context": "campus_life",
+      "situation": "friends discussing an unexpected campus policy change",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Amy",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Nathan",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Amy",
+          "text": "Nathan, did you see the email about the laundry rooms? They're changing how we pay."
+        },
+        {
+          "speaker": "Nathan",
+          "text": "No, what's happening? I still have a bunch of those old tokens."
+        },
+        {
+          "speaker": "Amy",
+          "text": "Exactly! That's the problem. Starting next Monday, they won't take tokens anymore. It's all through an app on your phone."
+        },
+        {
+          "speaker": "Nathan",
+          "text": "You're kidding. I just bought ten tokens last week! What do we do with the old ones?"
+        },
+        {
+          "speaker": "Amy",
+          "text": "The email says you can exchange them for app credit at the housing office, but only until the end of the month."
+        },
+        {
+          "speaker": "Nathan",
+          "text": "Whew, okay. I'll have to do that this week then. I hope the app is easy to use."
+        },
+        {
+          "speaker": "Amy",
+          "text": "Me too. At least we won't have to hunt for quarters anymore!"
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What is the new policy for using the laundry rooms?",
+          "options": {
+            "A": "Payment must be made through a mobile application.",
+            "B": "The cost per load is being reduced.",
+            "C": "Tokens can only be used on certain days.",
+            "D": "Students must pay with quarters instead of tokens."
+          },
+          "answer": "A",
+          "explanation": "Amy states, 'Starting next Monday, they won't take tokens anymore. It's all through an app on your phone.' B is related_but_not_stated (cost change not mentioned). C is wrong_detail (tokens won't be accepted at all). D is reversed_situation (they are moving away from physical currency like quarters).",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "wrong_detail",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will Nathan probably do before the end of the month?",
+          "options": {
+            "A": "Use all his remaining tokens quickly",
+            "B": "Complain to the housing office about the change",
+            "C": "Exchange his tokens for credit at the housing office",
+            "D": "Download the app and test it with one load"
+          },
+          "answer": "C",
+          "explanation": "Nathan says he just bought tokens and, upon learning he can exchange them, states, 'I'll have to do that this week.' This directly implies he will go to the housing office. A is a rejected_option (tokens won't work after Monday, so he can't just use them). B is an over_inference (he expresses surprise but not an intent to complain). D is an unrelated_next_step (testing the app isn't connected to his immediate concern about the tokens).",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_v2_1776249027035_004",
+      "audio_url": "/api/audio/conversation/lc_v2_1776249027035_004.mp3",
+      "flavor_score": 0.75
+    },
+    {
+      "context": "library",
+      "situation": "student reporting an issue with a self-checkout machine",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Katie",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Alex",
+          "role": "library_staff",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Katie",
+          "text": "Hi, I'm having a weird problem with the self-checkout machine over there."
+        },
+        {
+          "speaker": "Alex",
+          "text": "Oh no! What's going on?"
+        },
+        {
+          "speaker": "Katie",
+          "text": "Well, I scanned my student ID and it accepted it, but when I put my books on the pad, it charged me for five books instead of the two I'm actually checking out."
+        },
+        {
+          "speaker": "Alex",
+          "text": "Hmm, that's odd. Did you have any other items in your bag on the scale?"
+        },
+        {
+          "speaker": "Katie",
+          "text": "Actually, yeah, I did. My heavy water bottle was still in there. Wait, seriously? Does the scale weigh everything?"
+        },
+        {
+          "speaker": "Alex",
+          "text": "Exactly. The system uses the weight to verify the number of items. It must've thought your bottle was three extra books."
+        },
+        {
+          "speaker": "Katie",
+          "text": "Wow, I had no idea. So what should I do now? The receipt says I owe for five."
+        },
+        {
+          "speaker": "Alex",
+          "text": "No worries. I can void that transaction at the main desk. Just bring your books and ID over, and we'll do a manual check-out. And next time, make sure the scale is clear."
+        },
+        {
+          "speaker": "Katie",
+          "text": "Okay, that's a huge relief. I'll definitely do that. Thanks!"
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "Why does Katie approach Alex?",
+          "options": {
+            "A": "To report an incorrect charge from a self-checkout machine",
+            "B": "To ask how to use the library's new self-checkout system",
+            "C": "To complain that a library book is missing from the shelves",
+            "D": "To request help finding a specific book for her class"
+          },
+          "answer": "A",
+          "explanation": "Katie's problem is that the self-checkout machine charged her for five books instead of two, which she reports to Alex. B is wrong_topic (she knows how to use it, but encountered an error). C is wrong_topic (the issue is with checkout, not finding a book). D is wrong_topic (she is checking out books, not searching for one).",
+          "distractor_types": {
+            "B": "wrong_topic",
+            "C": "wrong_topic",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will Katie most likely do the next time she uses the self-checkout machine?",
+          "options": {
+            "A": "Avoid using it and always go to the main desk",
+            "B": "Make sure her student ID is properly scanned first",
+            "C": "Remove all other items from the scale before weighing her books",
+            "D": "Count her books aloud to confirm the number with the machine"
+          },
+          "answer": "C",
+          "explanation": "Alex explains the problem was caused by her water bottle being on the scale, and advises, 'next time, make sure the scale is clear.' This strongly implies she will follow that advice. A is over_inference (she is relieved by the solution and shows no intention of avoiding the machines). B is related_but_not_stated (she already scanned her ID successfully; the new insight is about the scale). D is unrelated_next_step (counting aloud is not mentioned or implied).",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "related_but_not_stated",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_v2_1776249034313_001",
+      "audio_url": "/api/audio/conversation/lc_v2_1776249034313_001.mp3",
+      "flavor_score": 0.95
+    },
+    {
+      "context": "campus_life",
+      "situation": "two students discussing an issue with a campus sustainability program",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Jessica",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Jason",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Jessica",
+          "text": "Hey Jason, you're in the Eco-Club, right? I wanted to ask about the reusable container program at the dining hall."
+        },
+        {
+          "speaker": "Jason",
+          "text": "Yeah, definitely. What's up?"
+        },
+        {
+          "speaker": "Jessica",
+          "text": "Well, I borrowed one of the green containers for my salad yesterday, but I can't figure out where to return it. The sign at the dish drop-off is really confusing."
+        },
+        {
+          "speaker": "Jason",
+          "text": "Oh, I know the one you mean. Actually, they moved the return bin last week. It's not by the regular dishes anymore."
+        },
+        {
+          "speaker": "Jessica",
+          "text": "Really? So where is it now?"
+        },
+        {
+          "speaker": "Jason",
+          "text": "It's right next to the beverage station, by the wall. There's a new blue bin with a big logo on it."
+        },
+        {
+          "speaker": "Jessica",
+          "text": "Huh, I must've walked right past it. I've been carrying this container around all day."
+        },
+        {
+          "speaker": "Jason",
+          "text": "No worries. Just drop it there. And if the bin's full, you can also give it to any cashier—they'll scan it as returned so you don't get charged."
+        },
+        {
+          "speaker": "Jessica",
+          "text": "Okay, good call. I'll head over there now. Thanks!"
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What is Jessica's problem?",
+          "options": {
+            "A": "She was charged for a reusable container she already returned.",
+            "B": "She does not know where to return a borrowed reusable container.",
+            "C": "The reusable container she borrowed is broken.",
+            "D": "She cannot find the dining hall's beverage station."
+          },
+          "answer": "B",
+          "explanation": "Jessica states, 'I can't figure out where to return it.' A is wrong_detail (she hasn't returned it yet, and being charged is only a potential future issue). C is wrong_detail (the container's condition is not mentioned). D is misattributed (she couldn't find the return bin, not the beverage station itself).",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "wrong_detail",
+            "D": "misattributed"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will Jessica most likely do if the blue return bin is full?",
+          "options": {
+            "A": "Take the container back to her dorm and try again tomorrow",
+            "B": "Leave the container on top of the bin",
+            "C": "Complain to the dining hall manager about the poor signage",
+            "D": "Give the container to a cashier to scan as returned"
+          },
+          "answer": "D",
+          "explanation": "Jason explicitly states the alternative: 'if the bin's full, you can also give it to any cashier—they'll scan it as returned.' This is the direct plan mentioned. A is rejected_option (she is heading there now and wants to return it). B is unrelated_next_step (not mentioned or implied). C is over_inference (she got the information she needed and shows no intent to complain).",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "unrelated_next_step",
+            "C": "over_inference"
+          }
+        }
+      ],
+      "id": "lc_v2_1776249034313_002",
+      "audio_url": "/api/audio/conversation/lc_v2_1776249034313_002.mp3",
+      "flavor_score": 0.95
+    },
+    {
+      "context": "daily_errands",
+      "situation": "two students discussing a problem with the campus shuttle",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Amy",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Michael",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Amy",
+          "text": "Michael, you take the campus shuttle to the north dorms, right? Is it running on time today?"
+        },
+        {
+          "speaker": "Michael",
+          "text": "Actually, no. I just got the alert. The 3:15 shuttle is canceled."
+        },
+        {
+          "speaker": "Amy",
+          "text": "Oh no! I have a study group at 3:30. How did you find out?"
+        },
+        {
+          "speaker": "Michael",
+          "text": "There's a text alert system. You can sign up on the transportation website. But don't worry, the next one is at 3:45."
+        },
+        {
+          "speaker": "Amy",
+          "text": "3:45? I'll be so late. Is walking faster?"
+        },
+        {
+          "speaker": "Michael",
+          "text": "It's about a twenty-minute walk from here. The shuttle, even at 3:45, would get you there by 3:55."
+        },
+        {
+          "speaker": "Amy",
+          "text": "Hmm. So if I walk now, I'll only be about five minutes late. That's better than twenty-five."
+        },
+        {
+          "speaker": "Michael",
+          "text": "Yeah, good call. I'd walk if I were you. And you should really sign up for those alerts."
+        },
+        {
+          "speaker": "Amy",
+          "text": "I'll definitely do that. Thanks!"
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why is Amy concerned about the shuttle?",
+          "options": {
+            "A": "She missed the shuttle and is waiting for the next one.",
+            "B": "She thinks the shuttle route has changed.",
+            "C": "Her shuttle has been canceled, and she has an appointment soon.",
+            "D": "She does not know how to sign up for shuttle alerts."
+          },
+          "answer": "C",
+          "explanation": "Michael tells her the 3:15 shuttle is canceled, and she responds that she has a study group at 3:30. A is wrong_detail (she didn't miss it; it was canceled). B is wrong_topic (the route is not discussed). D is related_but_not_stated (she learns about alerts later, but this is not her initial concern).",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "wrong_topic",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will Amy most likely do next?",
+          "options": {
+            "A": "Walk to her study group",
+            "B": "Wait for the 3:45 shuttle",
+            "C": "Cancel her study group meeting",
+            "D": "Go to the transportation website immediately"
+          },
+          "answer": "A",
+          "explanation": "Amy calculates that walking will make her only five minutes late versus twenty-five if she waits for the shuttle, and Michael agrees, 'I'd walk if I were you.' This indicates her decision. B is rejected_option (she decides walking is better). C is over_inference (she is finding a way to get there, not canceling). D is misattributed (she says she'll sign up for alerts, but the immediate next step is to get to her study group).",
+          "distractor_types": {
+            "B": "rejected_option",
+            "C": "over_inference",
+            "D": "misattributed"
+          }
+        }
+      ],
+      "id": "lc_v2_1776249034313_003",
+      "audio_url": "/api/audio/conversation/lc_v2_1776249034313_003.mp3",
+      "flavor_score": 0.95
+    },
+    {
+      "context": "campus_life",
+      "situation": "two students talking about a new vending machine or campus facility",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Karen",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Kevin",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Karen",
+          "text": "Kevin, have you tried the new snack vending machine in the student center? The one that takes campus cash?"
+        },
+        {
+          "speaker": "Kevin",
+          "text": "I have, but I ran into a glitch. I selected a granola bar, paid with my phone, and then it got stuck in the spiral."
+        },
+        {
+          "speaker": "Karen",
+          "text": "Wait, seriously? That's so frustrating. What did you do?"
+        },
+        {
+          "speaker": "Kevin",
+          "text": "Well, there's a small touchscreen on the front. I tapped 'Help' and it connected me via video call to a support person. They remotely released the spiral and it dropped right down."
+        },
+        {
+          "speaker": "Karen",
+          "text": "Wow, that's actually pretty high-tech. Did you get a refund or anything?"
+        },
+        {
+          "speaker": "Kevin",
+          "text": "Not a refund, but they gave me a digital coupon for a free item next time. The whole thing took less than two minutes."
+        },
+        {
+          "speaker": "Karen",
+          "text": "Hmm, so it's annoying but they fix it fast. I guess I'll still use it—the prices are better than the cafe."
+        },
+        {
+          "speaker": "Kevin",
+          "text": "Exactly. Just be ready to tap that help screen if your snack gets hung up."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the students mainly discussing?",
+          "options": {
+            "A": "A problem with the student center's payment system",
+            "B": "The high prices at the campus cafe",
+            "C": "How to get a refund from a vending machine",
+            "D": "A student's experience with a malfunctioning vending machine and its resolution"
+          },
+          "answer": "D",
+          "explanation": "The conversation centers on Kevin's experience where his snack got stuck, how he used the help feature to resolve it, and the outcome (coupon). A is too_narrow (the payment worked; the problem was mechanical). B is wrong_topic (mentioned only briefly as a comparison). C is too_narrow (he got a coupon, not a refund).",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "wrong_topic",
+            "C": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What does Kevin imply about using the new vending machine in the future?",
+          "options": {
+            "A": "He will probably avoid it due to the risk of items getting stuck.",
+            "B": "He will use it but knows how to quickly resolve any issues.",
+            "C": "He will only use it if he has a digital coupon.",
+            "D": "He will recommend the campus cafe instead."
+          },
+          "answer": "B",
+          "explanation": "Kevin describes the efficient resolution process and concludes by advising Karen to be ready to use the help screen, implying he understands how to handle problems and will likely use it again. A is reversed_situation (he describes a fast fix and doesn't advise against using it). C is over_inference (the coupon was a one-time compensation, not a condition for future use). D is reversed_situation (he doesn't recommend the cafe; Karen notes the vending machine has better prices).",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "C": "over_inference",
+            "D": "reversed_situation"
+          }
+        }
+      ],
+      "id": "lc_v2_1776249034313_004",
+      "audio_url": "/api/audio/conversation/lc_v2_1776249034313_004.mp3",
+      "flavor_score": 0.84
+    },
+    {
+      "context": "campus_services",
+      "situation": "student checking with mail room about a missing package",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Lisa",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Brian",
+          "role": "mail_staff",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Lisa",
+          "text": "Hi, I got a notification that a package was delivered to the mail room yesterday, but I don't see it in my pickup box."
+        },
+        {
+          "speaker": "Brian",
+          "text": "Okay, let me check. What's your last name and box number?"
+        },
+        {
+          "speaker": "Lisa",
+          "text": "It's Lopez, box 312."
+        },
+        {
+          "speaker": "Brian",
+          "text": "Hmm. Lopez, 312... I see it here. Actually, this one's too big for the box. It's on the oversized shelf in the back."
+        },
+        {
+          "speaker": "Lisa",
+          "text": "Oh, really? I didn't know you had a separate shelf for big items."
+        },
+        {
+          "speaker": "Brian",
+          "text": "Yeah, we put a yellow slip in your box when that happens. You might've missed it."
+        },
+        {
+          "speaker": "Lisa",
+          "text": "Ah, I probably just grabbed my letters and didn't look. Can I get it now?"
+        },
+        {
+          "speaker": "Brian",
+          "text": "Of course. I'll need to see your student ID, and I'll go grab it from the back. It'll just be a minute."
+        },
+        {
+          "speaker": "Lisa",
+          "text": "Great, I've got my ID right here. Thanks!"
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why was Lisa's package not in her pickup box?",
+          "options": {
+            "A": "It was too large and placed on a separate shelf.",
+            "B": "It was delivered to the wrong mail room.",
+            "C": "Someone else had already picked it up by mistake.",
+            "D": "The delivery notification was sent in error."
+          },
+          "answer": "A",
+          "explanation": "Brian explains, 'this one's too big for the box. It's on the oversized shelf in the back.' B is wrong_detail (it was delivered to the correct mail room). C is related_but_not_stated (not mentioned or implied). D is wrong_detail (the notification was correct; the package is there).",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will Lisa most likely do in the future when she gets a mail notification?",
+          "options": {
+            "A": "Call the mail room first to check the package size.",
+            "B": "Wait an extra day before coming to pick up packages.",
+            "C": "Look more carefully in her pickup box for any slips.",
+            "D": "Ask a friend to pick up her packages for her."
+          },
+          "answer": "C",
+          "explanation": "Brian mentions they put a yellow slip in the box for oversized items, and Lisa says, 'I probably just grabbed my letters and didn't look.' This implies she will be more attentive to slips in the future. A is over_inference (calling is not mentioned or implied). B is unrelated_next_step (waiting is not suggested). D is unrelated_next_step (not mentioned).",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_next_step",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_v2_1776249034313_005",
+      "audio_url": "/api/audio/conversation/lc_v2_1776249034313_005.mp3",
+      "flavor_score": 0.79
     }
   ]
 }

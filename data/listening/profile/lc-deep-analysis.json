@@ -1,0 +1,192 @@
+{
+  "generated_at": "2026-04-15T10:07:05.193Z",
+  "sample_count": 11,
+  "sources": [
+    "TOEFLResources",
+    "Magoosh/TOEFLResources",
+    "goarno.io"
+  ],
+  "conversation_metrics": {
+    "word_count": {
+      "min": 50,
+      "max": 235,
+      "avg": 164.4,
+      "median": 176
+    },
+    "turn_count": {
+      "min": 5,
+      "max": 10,
+      "avg": 8.1,
+      "median": 9
+    },
+    "words_per_turn": {
+      "min": 9.1,
+      "max": 26.7,
+      "avg": 20.2,
+      "median": 21
+    },
+    "per_sample": [
+      {
+        "id": "lc_ref_01",
+        "words": 50,
+        "turns": 5,
+        "wpt": 10
+      },
+      {
+        "id": "lc_ref_02",
+        "words": 82,
+        "turns": 9,
+        "wpt": 9.1
+      },
+      {
+        "id": "lc_ref_03",
+        "words": 212,
+        "turns": 8,
+        "wpt": 26.5
+      },
+      {
+        "id": "lc_ref_04",
+        "words": 176,
+        "turns": 7,
+        "wpt": 25.1
+      },
+      {
+        "id": "lc_ref_05",
+        "words": 187,
+        "turns": 7,
+        "wpt": 26.7
+      },
+      {
+        "id": "lc_ref_06",
+        "words": 235,
+        "turns": 9,
+        "wpt": 26.1
+      },
+      {
+        "id": "lc_ref_07",
+        "words": 161,
+        "turns": 9,
+        "wpt": 17.9
+      },
+      {
+        "id": "lc_ref_08",
+        "words": 207,
+        "turns": 10,
+        "wpt": 20.7
+      },
+      {
+        "id": "lc_ref_09",
+        "words": 189,
+        "turns": 9,
+        "wpt": 21
+      },
+      {
+        "id": "lc_ref_10",
+        "words": 158,
+        "turns": 9,
+        "wpt": 17.6
+      },
+      {
+        "id": "lc_ref_11",
+        "words": 151,
+        "turns": 7,
+        "wpt": 21.6
+      }
+    ]
+  },
+  "speaker_analysis": {
+    "relationship_distribution": {
+      "student_student": 7,
+      "student_staff": 4
+    },
+    "relationship_rates": {
+      "student_student": 64,
+      "student_staff": 36
+    },
+    "role_distribution": {
+      "friend": 2,
+      "partner": 2,
+      "student": 14,
+      "library_staff": 2,
+      "transportation_staff": 1,
+      "dining_staff": 1
+    },
+    "setting_distribution": {
+      "daily_life": 2,
+      "library": 3,
+      "computer_lab": 1,
+      "office": 1,
+      "campus": 3,
+      "dining_facility": 1
+    },
+    "setting_rates": {
+      "daily_life": 18,
+      "library": 27,
+      "computer_lab": 9,
+      "office": 9,
+      "campus": 27,
+      "dining_facility": 9
+    }
+  },
+  "question_analysis": {
+    "total_questions": 22,
+    "per_conversation": 2,
+    "type_distribution": {
+      "Q1": {
+        "detail": 5,
+        "main_idea": 6
+      },
+      "Q2": {
+        "detail": 3,
+        "inference": 8
+      },
+      "combined": {
+        "detail": 8,
+        "main_idea": 6,
+        "inference": 8
+      }
+    },
+    "answer_distribution": {
+      "A": 6,
+      "B": 11,
+      "C": 5,
+      "D": 0
+    },
+    "stem_patterns": {
+      "What will the": 5,
+      "How will the": 1,
+      "What does the": 2,
+      "What did the": 1,
+      "Why does the": 6,
+      "What is the": 3,
+      "Why is the": 2,
+      "What was the": 1,
+      "What is an": 1
+    },
+    "option_word_count": {
+      "all_avg": 6.3,
+      "correct_avg": 7,
+      "distractor_avg": 6
+    },
+    "correct_is_longest_rate": 82
+  },
+  "dialogue_register": {
+    "conversations_with_contractions": "10/11 (91%)",
+    "conversations_with_fillers": "10/11 (91%)",
+    "turn_level": {
+      "total_turns": 89,
+      "turns_with_contractions": "44 (49%)",
+      "turns_with_fillers": "30 (34%)",
+      "turns_with_discourse_markers": "43 (48%)"
+    }
+  },
+  "conversation_structure": {
+    "patterns": {
+      "problem_discussion_resolution": 8,
+      "observation_led": 2,
+      "problem_discussion_open": 1
+    },
+    "dominant": "problem_discussion_resolution",
+    "note": "Most conversations follow: speaker presents problem/need -> discussion with information exchange -> resolution/action plan"
+  }
+}
