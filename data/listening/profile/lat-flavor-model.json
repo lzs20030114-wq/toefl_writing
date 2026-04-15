@@ -1,0 +1,151 @@
+{
+  "generated_at": "2026-04-15",
+  "title": "LAT ETS Flavor Model -- Listen to an Academic Talk",
+  "sample_count": 11,
+
+  "transcript_design": {
+    "word_count": {"min": 150, "max": 250, "target": "180-220", "avg_observed": 193.5},
+    "sentence_count": {"min": 10, "max": 16, "target": "11-14"},
+    "opening_pattern": {
+      "So_hook": {"rate": 36, "example": "So, you've probably noticed that many animals in nature are incredibly colorful, right?"},
+      "Okay_alright": {"rate": 27, "example": "Okay, so today let's talk about a concept in ecology that really changed how we think..."},
+      "Have_you_ever": {"rate": 27, "example": "Have you ever walked into a room and completely forgotten why you went there?"},
+      "Let_me_introduce": {"rate": 9, "example": "Let me introduce you to a concept from anthropology that you probably experience every day..."},
+      "rule": "Most lectures open with a conversational hook -- either 'So...' (36%), 'Okay/Alright...' (27%), or a rhetorical question (27%). Never start with a dry academic statement."
+    },
+    "structure_pattern": {
+      "description": "Hook/intro -> Key concept defined -> Example/experiment -> Broader significance/implication",
+      "elements": {
+        "hook_intro": {"rate": 100, "note": "ALL lectures start with an engaging hook -- question, 'so', relatable scenario"},
+        "concept_defined": {"rate": 91, "note": "Almost all lectures explicitly name and define the key concept"},
+        "example_experiment": {"rate": 82, "note": "Most include a specific experiment, study, or real-world example"},
+        "broader_significance": {"rate": 45, "note": "About half connect the concept to broader implications"},
+        "next_topic_preview": {"rate": 27, "note": "Some end with a preview of the next class session"}
+      }
+    },
+    "discourse_markers": {
+      "total_per_talk": 7.6,
+      "required_min": 4,
+      "top_markers": {
+        "so": {"avg_per_talk": 3.6, "note": "Most common -- used as opener and transition"},
+        "actually": {"avg_per_talk": 1.3, "note": "Used to introduce surprising info"},
+        "now": {"avg_per_talk": 1.2, "note": "Used to transition to new point"},
+        "well": {"note": "Used for hedging or elaboration"},
+        "let me": {"note": "Used to introduce examples"},
+        "right": {"note": "Tag question seeking student engagement"},
+        "basically": {"note": "Used for simplification"}
+      }
+    },
+    "register": {
+      "description": "Conversational academic -- professor speaking to a class. NOT a written article read aloud. Uses contractions, addresses students directly, asks rhetorical questions.",
+      "must_have": {
+        "contractions": {"rate": 100, "examples": ["don't", "isn't", "it's", "that's", "here's", "what's", "you're", "can't", "won't"]},
+        "uses_you": {"rate": 91, "examples": ["you've probably", "you might think", "you're not alone", "if you've ever"]},
+        "real_world_examples": {"rate": 91, "examples": ["imagine a car paint", "think about a classroom", "like a soap bubble"]},
+        "rhetorical_questions": {"rate": 64, "examples": ["right?", "does that change how you perform?", "what did I come here for?"]}
+      },
+      "should_avoid": ["furthermore", "nevertheless", "subsequently", "in accordance with", "hereby", "whereas", "it should be noted that"]
+    },
+    "subject_pool": {
+      "psychology_heavy": "Psychology topics (social, cognitive, neuroscience) = 55% of samples",
+      "ecology": "18%",
+      "biology_physics": "9%",
+      "anthropology": "9%",
+      "history": "9%",
+      "full_pool": ["biology", "ecology", "psychology", "social_psychology", "cognitive_psychology", "neuroscience", "history", "anthropology", "chemistry", "physics", "art_history", "sociology", "geology", "astronomy", "technology", "economics", "linguistics", "environmental_science"]
+    }
+  },
+
+  "question_design": {
+    "questions_per_item": 4,
+    "type_distribution": {
+      "main_idea": {"rate": 24, "description": "Overall topic/purpose of the lecture"},
+      "detail": {"rate": 40, "description": "Specific facts stated in the lecture"},
+      "inference": {"rate": 18, "description": "What can be inferred or implied"},
+      "function": {"rate": 13, "description": "Why the professor mentions something specific"},
+      "predict_next": {"rate": 4, "description": "What the class will discuss next (only when transcript previews it)"},
+      "attitude": {"rate": 1, "description": "Professor's attitude toward a topic"}
+    },
+    "position_rules": {
+      "Q1": "ALWAYS main_idea (100% in samples). 'What is the lecture mainly about?'",
+      "Q2": "Usually detail (91%) or function (9%)",
+      "Q3": "Usually detail (64%) or function (36%)",
+      "Q4": "Usually inference (73%), sometimes detail/function/predict_next",
+      "rule": "Q1=main_idea, Q2-Q3=detail or function, Q4=inference or predict_next. Never put main_idea after Q1."
+    },
+    "stem_patterns": {
+      "main_idea": [
+        "What is the lecture mainly about?"
+      ],
+      "detail": [
+        "According to the professor, what is/are [X]?",
+        "What does the professor say about [X]?",
+        "What did the [experiment/study] show/demonstrate/find?",
+        "What happened when [event]?",
+        "What does the professor say about [topic]?"
+      ],
+      "function": [
+        "Why does the professor mention [specific detail]?",
+        "Why does the professor describe [scenario]?"
+      ],
+      "inference": [
+        "What does the professor imply about [topic]?",
+        "What attitude does the professor express toward [topic]?",
+        "What can be inferred about [topic]?"
+      ],
+      "predict_next": [
+        "What will the class most likely discuss in the next session?"
+      ]
+    }
+  },
+
+  "option_design": {
+    "word_count": {"avg": 8.3, "target": "6-10", "min": 4, "max": 13},
+    "correct_avg": 9.2,
+    "distractor_avg": 8.0,
+    "correct_is_longest_rate_observed": 67,
+    "WARNING": "67% of correct answers are the longest option in reference data -- this is a FLAW. Our generator MUST enforce <= 30% correct-is-longest rate.",
+    "answer_distribution_observed": {"A": 2, "B": 33, "C": 10, "D": 0},
+    "WARNING_2": "B is massively overrepresented (73%) in reference data. This is a practice material bias. Our generator MUST enforce even A/B/C/D distribution via pre-assignment."
+  },
+
+  "distractor_patterns": {
+    "for_detail_questions": [
+      {"type": "wrong_detail", "description": "Uses words from lecture but changes a key fact", "example": "A blue pigment found only in tropical species (wrong: no pigment at all)"},
+      {"type": "topic_adjacent", "description": "Plausible for the academic field but not stated in lecture", "example": "Chemical reactions caused by UV light exposure (plausible but not what was said)"},
+      {"type": "reversed_logic", "description": "Inverts the relationship described", "example": "They break down more quickly than pigment-based colors (opposite of what was said)"}
+    ],
+    "for_main_idea_questions": [
+      {"type": "too_narrow", "description": "Focuses on one detail instead of the overall topic", "example": "How factory lighting affects worker productivity (too specific)"},
+      {"type": "wrong_topic", "description": "Related academic topic but not THIS lecture", "example": "The chemical composition of mycorrhizal fungi (not the focus)"},
+      {"type": "surface_word_trap", "description": "Uses keywords from the lecture in wrong context", "example": "Why car designers make vehicles look like they have faces (uses 'face' keyword misleadingly)"}
+    ],
+    "for_inference_questions": [
+      {"type": "over_generalization", "description": "Takes a specific point too far", "example": "It was disproved entirely by recent research (too strong -- only partially revised)"},
+      {"type": "reversed_logic", "description": "Inverts what can be inferred", "example": "It is always proportional to the species' population size (opposite of the lecture's point)"},
+      {"type": "topic_adjacent", "description": "Valid inference but about wrong aspect", "example": "It is more common in children than in adults (no evidence for this in lecture)"}
+    ],
+    "for_function_questions": [
+      {"type": "wrong_purpose", "description": "Misidentifies why the professor mentioned something", "example": "To explain how elevator manufacturers use proxemics research (wrong reason)"},
+      {"type": "over_inference", "description": "Assigns an argument the professor didn't make", "example": "To argue that people should avoid using elevators (not the professor's intent)"},
+      {"type": "literal_restatement", "description": "Restates what was said rather than explaining why", "example": "To describe what happened in the experiment (restates, doesn't explain purpose)"}
+    ]
+  },
+
+  "tts_design": {
+    "preset": "lecture_male or lecture_female (rotate)",
+    "single_speaker": true,
+    "note": "Academic talks are single-speaker (professor lecturing). Use lecture voice presets for slower pace, academic cadence."
+  },
+
+  "generation_constraints": {
+    "max_tokens": 8192,
+    "batch_size": 3,
+    "note": "Lectures with 4 questions are very token-heavy. Keep batch size <= 3.",
+    "difficulty_distribution": {
+      "easy": 30,
+      "medium": 45,
+      "hard": 25
+    }
+  }
+}
