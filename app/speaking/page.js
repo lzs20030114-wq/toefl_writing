@@ -85,12 +85,12 @@ function SpeakingPageClient() {
       <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "system-ui", background: "#F4F7F5" }}>
         <div style={{ textAlign: "center", maxWidth: 360, padding: "0 20px" }}>
           <div style={{ fontSize: 48, marginBottom: 16 }}>🔒</div>
-          <div style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>Pro Feature</div>
+          <div style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>Pro 专属功能</div>
           <div style={{ fontSize: 14, color: "#666", marginBottom: 20, lineHeight: 1.6 }}>
-            The Speaking section is in beta and available to Pro users only. Upgrade to unlock.
+            口语模块目前处于测试阶段，仅对 Pro 用户开放。升级 Pro 即可解锁。
           </div>
           <button onClick={onExit} style={{ padding: "10px 24px", borderRadius: 8, border: "1px solid #ddd", background: "#fff", cursor: "pointer", fontSize: 14 }}>
-            Back to Home
+            返回首页
           </button>
         </div>
       </div>

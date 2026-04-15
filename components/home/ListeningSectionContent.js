@@ -47,6 +47,7 @@ export function ListeningSectionContent({
   hoverKey, setHoverKey, fadeIn,
   userTier, isLoggedIn, showLoginModal,
 }) {
+  const isPro = userTier === "pro" || userTier === "legacy";
   const modeStr = isPractice ? "practice" : mode === PRACTICE_MODE.CHALLENGE ? "challenge" : "standard";
 
   const gridItems = LISTENING_TASKS.map((task, index) => {
@@ -74,11 +75,10 @@ export function ListeningSectionContent({
       <div style={{ marginBottom: 16, ...fadeIn(50) }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, marginBottom: 10 }}>
           <h1 style={{ margin: 0, fontSize: 28, fontWeight: 800, color: isChallenge ? CH.t1 : T.t1, letterSpacing: -0.5, lineHeight: 1.2 }}>
-            {isChallenge
-              ? <>Listening <span style={{ color: CH.accent }}>Challenge</span></>
-              : isPractice
-                ? <>Listening <span style={{ color: LISTENING_ACCENT.color }}>Practice</span></>
-                : "Listening"}
+            Listening
+            <span style={{ fontSize: 14, fontWeight: 600, color: T.t3, marginLeft: 6 }}>（测试）</span>
+            {isChallenge && <span style={{ color: CH.accent }}> Challenge</span>}
+            {isPractice && <span style={{ color: LISTENING_ACCENT.color }}> Practice</span>}
           </h1>
           <div style={{ display: "inline-flex", gap: 4, flexShrink: 0, background: isChallenge ? "rgba(255,255,255,0.05)" : T.card, border: `1px solid ${isChallenge ? CH.cardBorder : T.bdr}`, borderRadius: 999, padding: 4, boxShadow: T.shadow }}>
             {[
@@ -124,8 +124,58 @@ export function ListeningSectionContent({
         </div>
       </div>
 
+      {/* 🆕 New feature badge */}
+      <div style={{
+        background: `linear-gradient(135deg, ${LISTENING_ACCENT.soft}, #EDE9FE)`,
+        border: `1px solid ${LISTENING_ACCENT.color}30`,
+        borderRadius: 10, padding: "12px 16px", marginBottom: 16,
+        display: "flex", alignItems: "center", gap: 10,
+        ...fadeIn(150),
+      }}>
+        <span style={{ fontSize: 18 }}>🆕</span>
+        <div>
+          <div style={{ fontSize: 13, fontWeight: 700, color: LISTENING_ACCENT.color }}>2026 新题型</div>
+          <div style={{ fontSize: 12, color: T.t2 }}>基于 ETS 官方公布的 TOEFL 2026 改革题型，AI 辅助生成练习内容</div>
+        </div>
+      </div>
+
+      {/* Pro gate banner */}
+      {!isPro && (
+        <div style={{
+          background: isChallenge ? "rgba(255,255,255,0.04)" : "#FFFBEB",
+          border: `1px solid ${isChallenge ? CH.cardBorder : "#FDE68A"}`,
+          borderRadius: 10, padding: "16px 20px", marginBottom: 16,
+          display: "flex", alignItems: "center", gap: 12,
+          ...fadeIn(160),
+        }}>
+          <span style={{ fontSize: 22 }}>🔒</span>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 14, fontWeight: 700, color: isChallenge ? CH.t1 : T.t1 }}>Pro 专属功能</div>
+            <div style={{ fontSize: 12, color: isChallenge ? CH.t2 : T.t2, marginTop: 2 }}>
+              听力模块目前处于测试阶段，仅对 Pro 用户开放
+            </div>
+          </div>
+          {!isLoggedIn ? (
+            <button onClick={showLoginModal} style={{
+              padding: "8px 18px", borderRadius: 8, border: "none", cursor: "pointer",
+              background: LISTENING_ACCENT.color, color: "#fff", fontSize: 13, fontWeight: 700,
+            }}>登录</button>
+          ) : (
+            <button onClick={() => { try { window.dispatchEvent(new CustomEvent("open-upgrade-modal")); } catch {} }} style={{
+              padding: "8px 18px", borderRadius: 8, border: "none", cursor: "pointer",
+              background: LISTENING_ACCENT.color, color: "#fff", fontSize: 13, fontWeight: 700,
+            }}>升级 Pro</button>
+          )}
+        </div>
+      )}
+
       {/* Task grid */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 14, ...fadeIn(180) }}>
+      <div style={{
+        display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 14,
+        opacity: isPro ? 1 : 0.45, pointerEvents: isPro ? "auto" : "none",
+        filter: isPro ? "none" : "grayscale(0.5)",
+        ...fadeIn(180),
+      }}>
         {gridItems.map((item) => (
           <HomeTaskCard
             key={item.k}
