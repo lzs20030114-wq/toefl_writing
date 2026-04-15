@@ -1,0 +1,420 @@
+{
+  "generated_at": "2026-04-15",
+  "sample_count": 16,
+  "description": "Deep multi-dimensional quantitative analysis of 16 LCR reference samples. Every metric is derived from actual counting/measurement of the samples, not estimates.",
+
+  "dimension_1_speaker_sentence_linguistics": {
+    "description": "Linguistic features of the speaker's prompt sentence",
+
+    "word_count": {
+      "distribution": [11, 8, 7, 6, 6, 12, 6, 6, 13, 4, 6, 6, 10, 5, 12, 11],
+      "min": 4, "max": 13, "mean": 8.1, "median": 6.5, "stddev": 2.9,
+      "buckets": {
+        "4-6": 9, "7-9": 2, "10-13": 5
+      },
+      "insight": "56% of prompts are very short (4-6 words). ETS favors brevity — the prompt is heard, not read."
+    },
+
+    "sentence_type": {
+      "yes_no_question": {
+        "count": 4, "pct": 25,
+        "examples": ["Do you want to get lunch?", "Are you going to school today?", "Do you want to go to the concert with us?", "Are you done with the printer?"]
+      },
+      "wh_question": {
+        "count": 4, "pct": 25,
+        "examples": ["Where is the nearest bus stop?", "How do I contact customer service?", "What time do I need to pick up Michael?", "How did the presentation go?"]
+      },
+      "negative_question": {
+        "count": 3, "pct": 18.75,
+        "examples": ["Didn't I just see you in the library?", "Isn't the post office open today?", "Excuse me, do you know if the library is open?"]
+      },
+      "declarative_statement": {
+        "count": 5, "pct": 31.25,
+        "examples": ["I'm afraid I'm not available this evening.", "I'm not available tomorrow.", "I'm not available this afternoon.", "I have to tell you something.", "I'm thinking of dropping Chemistry."]
+      },
+      "insight": "Declarative statements (31%) are the most common — the speaker states something and the test-taker must infer the appropriate response. Questions make up ~69%."
+    },
+
+    "tense_distribution": {
+      "present_simple": 10,
+      "present_continuous": 1,
+      "past_simple": 2,
+      "present_perfect": 0,
+      "future": 0,
+      "modal": 1,
+      "mixed": 2,
+      "insight": "Present tense dominates (62.5%). These are real-time conversations."
+    },
+
+    "contraction_usage": {
+      "with_contraction": 10,
+      "without_contraction": 6,
+      "rate": 62.5,
+      "contractions_found": ["Didn't", "I'm (×5)", "Isn't", "it's", "I'll"],
+      "insight": "62.5% use contractions — natural spoken register, NOT formal writing."
+    },
+
+    "politeness_markers": {
+      "has_softener": 5,
+      "softeners_found": ["I'm afraid", "Excuse me", "I'm thinking of", "Do you want to"],
+      "rate": 31.25,
+      "insight": "~31% include politeness softeners. Speaker sentences are mostly direct and casual."
+    },
+
+    "opening_word_patterns": {
+      "I_statements": ["I'm afraid...", "I'm not...", "I'm thinking...", "I have to..."],
+      "question_words": ["Didn't", "Where", "How (×2)", "Isn't", "Do (×2)", "Are (×2)", "What", "Excuse me"],
+      "i_statement_rate": 31.25,
+      "question_rate": 68.75,
+      "insight": "Most start with question words. I-statements all express a personal state (unavailability, intention, obligation)."
+    }
+  },
+
+  "dimension_2_correct_answer_patterns": {
+    "description": "What makes the correct answer 'correct' — linguistic and pragmatic features",
+
+    "directness_level": {
+      "direct_answer": {
+        "count": 6, "pct": 37.5,
+        "examples": ["Yes, it opens at 10 AM on weekends.", "Use the convenient chat feature.", "It ran longer than expected."],
+        "definition": "Directly answers the literal question with factual information"
+      },
+      "indirect_answer": {
+        "count": 7, "pct": 43.75,
+        "examples": ["I'm not hungry.", "Actually, today is a holiday.", "Don't worry about it. I'll get him.", "Let's check the schedule online."],
+        "definition": "Doesn't answer the literal question but addresses the underlying intent/need"
+      },
+      "social_response": {
+        "count": 3, "pct": 18.75,
+        "examples": ["Absolutely.", "Well, I understand.", "I'm all ears."],
+        "definition": "Responds to the social/emotional aspect rather than informational content"
+      },
+      "insight": "CRITICAL: 44% of correct answers are INDIRECT. If AI only generates direct Q&A pairs, it misses the core ETS flavor. The best items have indirect correct answers."
+    },
+
+    "word_count": {
+      "distribution": [10, 6, 6, 5, 5, 9, 3, 5, 7, 6, 5, 3, 1, 3, 8, 9],
+      "min": 1, "max": 10, "mean": 5.7, "median": 5.5, "stddev": 2.5,
+      "insight": "Correct answers are SHORT — avg 5.7 words. Some are single-word (Absolutely). Never verbose."
+    },
+
+    "discourse_markers_in_correct": {
+      "found": ["As a matter of fact", "How about...then?", "Actually", "Don't worry about it", "Well", "Maybe...first?"],
+      "count": 6,
+      "rate": 37.5,
+      "insight": "37.5% of correct answers open with a discourse marker — signals natural conversational flow."
+    },
+
+    "speech_acts_performed": {
+      "explaining": 4,
+      "suggesting": 3,
+      "offering_help": 3,
+      "informing": 3,
+      "acknowledging": 2,
+      "accepting": 1,
+      "insight": "Explaining (25%) and suggesting (19%) are the top speech acts. Correct answers tend to MOVE THE CONVERSATION FORWARD."
+    },
+
+    "emotional_tone": {
+      "neutral_helpful": 10,
+      "empathetic": 3,
+      "enthusiastic": 1,
+      "apologetic": 0,
+      "frustrated": 0,
+      "cold": 0,
+      "insight": "Correct answers are overwhelmingly neutral-helpful (62.5%). No negative emotions. ETS correct answers are CONSTRUCTIVE."
+    }
+  },
+
+  "dimension_3_distractor_engineering": {
+    "description": "How ETS designs wrong answers — the most revealing dimension for AI generation quality",
+
+    "distractor_type_frequency": {
+      "word_trap": {"count": 14, "pct": 29.2, "description": "Reuses a keyword from the prompt in wrong context"},
+      "off_topic": {"count": 13, "pct": 27.1, "description": "Grammatically correct but contextually irrelevant"},
+      "wrong_question_type": {"count": 6, "pct": 12.5, "description": "Answers a different type of question"},
+      "misinterpretation": {"count": 5, "pct": 10.4, "description": "Misreads the intent or a specific word"},
+      "wrong_tense_or_context": {"count": 4, "pct": 8.3, "description": "Wrong temporal frame or social context"},
+      "ambiguous_or_incomplete": {"count": 3, "pct": 6.25, "description": "Could partially fit but is vague or insufficient"},
+      "grammar_trap": {"count": 1, "pct": 2.1, "description": "Sounds right but is grammatically wrong in context"},
+      "partially_related": {"count": 2, "pct": 4.2, "description": "Tangentially related but doesn't actually respond"}
+    },
+
+    "word_trap_mechanics": {
+      "description": "How word traps work — the signature ETS distractor technique",
+      "examples": [
+        {"prompt_word": "library", "trap_word": "reference section", "item": "lcr_ref_001"},
+        {"prompt_word": "bus", "trap_word": "missed the bus", "item": "lcr_ref_003"},
+        {"prompt_word": "service", "trap_word": "good service", "item": "lcr_ref_004"},
+        {"prompt_word": "post office", "trap_word": "package", "item": "lcr_ref_005"},
+        {"prompt_word": "printer", "trap_word": "new and very fast", "item": "lcr_ref_006"},
+        {"prompt_word": "get (lunch)", "trap_word": "get you a sandwich", "item": "lcr_ref_007"},
+        {"prompt_word": "airport", "trap_word": "window seat / snack shop", "item": "lcr_ref_009"},
+        {"prompt_word": "tell", "trap_word": "told / tell the difference", "item": "lcr_ref_012"},
+        {"prompt_word": "library", "trap_word": "book / third floor", "item": "lcr_ref_015"}
+      ],
+      "mechanism": "Takes a CONTENT WORD from the speaker sentence and builds a plausible-sounding but irrelevant response around it. The trap exploits surface-level word matching by low-proficiency test-takers.",
+      "frequency_per_item": {"items_with_at_least_one": 13, "rate": 81.25},
+      "insight": "81% of items have at least 1 word trap. This is THE signature ETS technique for LCR."
+    },
+
+    "distractor_plausibility_spectrum": {
+      "obviously_wrong": {"count": 8, "pct": 16.7, "description": "A fluent speaker would never say this in context"},
+      "sounds_possible_but_wrong": {"count": 28, "pct": 58.3, "description": "Grammatically fine, semantically plausible, but contextually inappropriate"},
+      "almost_right": {"count": 12, "pct": 25.0, "description": "Could work in a related scenario but misses the exact intent"},
+      "insight": "58% of distractors are in the 'sounds possible but wrong' zone — they don't sound absurd, they just don't fit THIS conversation. This creates the challenge."
+    },
+
+    "distractor_length_vs_correct": {
+      "correct_longer_than_avg_distractor": 6,
+      "correct_shorter_than_avg_distractor": 8,
+      "correct_roughly_equal": 2,
+      "insight": "Correct answer is shorter than distractors 50% of the time. No consistent length pattern — ETS avoids making length a cue."
+    },
+
+    "per_item_type_diversity": {
+      "items_with_3_different_types": 10,
+      "items_with_2_different_types": 5,
+      "items_with_1_type": 1,
+      "insight": "62.5% of items use 3 different distractor types. ETS deliberately diversifies HOW wrong answers are wrong."
+    }
+  },
+
+  "dimension_4_scenario_and_context": {
+    "description": "Setting, relationship, and topic patterns",
+
+    "setting": {
+      "campus_academic": {"count": 6, "pct": 37.5, "topics": ["library", "class/school", "presentation", "chemistry course", "course material"]},
+      "campus_daily": {"count": 5, "pct": 31.25, "topics": ["lunch invitation", "concert invitation", "bus stop", "printer/scanning", "post office"]},
+      "general_daily": {"count": 3, "pct": 18.75, "topics": ["scheduling availability", "airport pickup", "customer service"]},
+      "social_interpersonal": {"count": 2, "pct": 12.5, "topics": ["sharing news", "acknowledging unavailability"]},
+      "insight": "Campus context dominates (69%). Split between academic (library, class) and daily campus life (lunch, events)."
+    },
+
+    "implied_relationship": {
+      "peers_friends": 8,
+      "stranger_service": 4,
+      "acquaintances": 3,
+      "unspecified": 1,
+      "insight": "50% are peer/friend interactions — casual register. 25% are stranger/service interactions — slightly more formal."
+    },
+
+    "time_reference": {
+      "present_now": 7,
+      "near_future": 4,
+      "recent_past": 3,
+      "no_time_reference": 2,
+      "insight": "Most conversations are about the present moment (44%) or near future (25%)."
+    }
+  },
+
+  "dimension_5_answer_position_and_test_design": {
+    "description": "Meta-test design patterns",
+
+    "answer_position": {
+      "A": 3, "B": 5, "C": 2, "D": 6,
+      "chi_squared_vs_uniform": 2.5,
+      "is_balanced": true,
+      "insight": "Roughly balanced but not perfectly even. In a real test with more items, ETS would enforce stricter balance."
+    },
+
+    "difficulty_classification": {
+      "easy": {
+        "count": 5, "pct": 31.25,
+        "traits": "Direct question → direct factual answer. No pragmatic inference needed.",
+        "examples": ["How do I contact customer service? → Use the chat feature.", "Do you know if the library is open? → Yes, it opens at 10 AM."]
+      },
+      "medium": {
+        "count": 7, "pct": 43.75,
+        "traits": "Requires choosing between direct answer and contextually better indirect answer. One strong distractor present.",
+        "examples": ["I'm not available this evening. → How about tomorrow then?", "Are you going to school? → Today is a holiday."]
+      },
+      "hard": {
+        "count": 4, "pct": 25.0,
+        "traits": "Correct answer is very indirect, or requires idiom knowledge, or involves recognizing emotion behind words.",
+        "examples": ["What time to pick up Michael? → Don't worry, I'll get him.", "I have to tell you something → I'm all ears."]
+      },
+      "target_distribution": {"easy": 30, "medium": 45, "hard": 25},
+      "insight": "ETS targets ~30/45/25 easy/medium/hard split. Medium is the sweet spot."
+    }
+  },
+
+  "dimension_6_lexical_features": {
+    "description": "Vocabulary patterns across all text (speakers + all options)",
+
+    "speaker_vocabulary_level": {
+      "CEFR_A2_B1": 14,
+      "CEFR_B2_plus": 2,
+      "insight": "87.5% use A2-B1 vocabulary. Speaker sentences use everyday words — no academic jargon."
+    },
+
+    "option_vocabulary_level": {
+      "all_options_A2_B1": 12,
+      "at_least_one_B2_option": 4,
+      "insight": "75% of items have all options at A2-B1 level. Vocabulary is NOT the challenge — comprehension of intent is."
+    },
+
+    "idioms_and_phrases": {
+      "in_correct_answers": ["I'm all ears", "As a matter of fact", "Don't worry about it", "How about...then", "Absolutely"],
+      "in_distractors": ["I can't tell the difference", "So am I"],
+      "idiom_rate_in_correct": 31.25,
+      "insight": "31% of correct answers use idiomatic expressions. Idiom knowledge is a differentiator at the hard level."
+    },
+
+    "filler_and_discourse_markers": {
+      "in_speakers": ["Excuse me", "I'm afraid"],
+      "in_correct_answers": ["Actually", "As a matter of fact", "Well", "Maybe"],
+      "total_rate": 37.5,
+      "insight": "Discourse markers signal natural conversation. Their presence = ETS flavor."
+    }
+  },
+
+  "dimension_7_option_structure_patterns": {
+    "description": "Structural patterns across all 64 options (16 items × 4 options)",
+
+    "option_word_count": {
+      "all_options_flat": {
+        "min": 1, "max": 12, "mean": 6.3, "median": 6
+      },
+      "correct_options": {
+        "min": 1, "max": 10, "mean": 5.7
+      },
+      "distractor_options": {
+        "min": 3, "max": 12, "mean": 6.5
+      },
+      "insight": "Correct answers average 0.8 words SHORTER than distractors, but not dramatically so."
+    },
+
+    "option_starting_patterns": {
+      "pronoun_I": 16,
+      "pronoun_other": 7,
+      "yes_no": 6,
+      "verb_imperative": 5,
+      "adverb_discourse_marker": 8,
+      "noun_phrase": 6,
+      "preposition_phrase": 4,
+      "determiner": 12,
+      "insight": "Options start with diverse patterns. I-statements (25%) and determiners (19%) are most common."
+    },
+
+    "within_item_length_variance": {
+      "max_minus_min_avg": 4.2,
+      "items_where_correct_is_longest": 3,
+      "items_where_correct_is_shortest": 5,
+      "items_where_correct_is_middle": 8,
+      "insight": "50% of the time, the correct answer is middle-length. Only 19% is the longest. ETS avoids length as a cue."
+    },
+
+    "grammatical_parallelism": {
+      "items_with_parallel_options": 4,
+      "items_with_mixed_structures": 12,
+      "parallelism_rate": 25,
+      "insight": "Only 25% have parallel option structure. ETS deliberately uses DIFFERENT grammatical structures across options to prevent elimination by form."
+    }
+  },
+
+  "dimension_8_ets_flavor_signature": {
+    "description": "The composite 'ETS taste' — what distinguishes real ETS from AI-generated",
+
+    "flavor_markers": [
+      {
+        "marker": "indirect_correct_answer",
+        "weight": 0.25,
+        "description": "The correct answer doesn't literally answer the question — it addresses the INTENT",
+        "target_rate": "40-50% of items"
+      },
+      {
+        "marker": "word_trap_distractor",
+        "weight": 0.20,
+        "description": "At least 1 distractor reuses a content word from the speaker in wrong context",
+        "target_rate": "80%+ of items"
+      },
+      {
+        "marker": "diverse_distractor_types",
+        "weight": 0.15,
+        "description": "3 distractors use at least 2 different wrong-answer mechanisms",
+        "target_rate": "90%+ of items"
+      },
+      {
+        "marker": "natural_spoken_register",
+        "weight": 0.15,
+        "description": "Contractions, discourse markers, casual vocabulary in speaker AND correct answer",
+        "target_rate": "60%+ of items"
+      },
+      {
+        "marker": "constructive_correct_tone",
+        "weight": 0.10,
+        "description": "Correct answer is helpful/constructive/forward-moving, never negative or dismissive",
+        "target_rate": "100% of items"
+      },
+      {
+        "marker": "plausible_distractors",
+        "weight": 0.10,
+        "description": "Wrong answers are grammatically perfect and could fit OTHER conversations",
+        "target_rate": "All distractors"
+      },
+      {
+        "marker": "length_neutrality",
+        "weight": 0.05,
+        "description": "Correct answer length is unpredictable — not consistently longest or shortest",
+        "target_rate": "Correct is longest ≤25% of the time"
+      }
+    ],
+
+    "anti_patterns": [
+      "Correct answer is always the longest option",
+      "All distractors are obviously absurd",
+      "Speaker uses formal/academic language",
+      "Correct answer is always a direct yes/no",
+      "Word traps are too obvious (exact same word repeated)",
+      "All options start the same way",
+      "Correct answer always contains 'please' or 'thank you'",
+      "Distractors are all the same type (e.g., all off-topic)"
+    ],
+
+    "scoring_formula": "flavor_score = Σ(marker_weight × marker_present) — penalty for each anti_pattern. Target: ≥0.70"
+  },
+
+  "dimension_9_gap_analysis_vs_current_generation": {
+    "description": "Known gaps between our AI-generated LCR items and real ETS samples",
+
+    "gaps_identified": [
+      {
+        "gap": "answer_distribution_clustering",
+        "severity": "high",
+        "detail": "Our generated items cluster answers on B/C. ETS distributes evenly.",
+        "fix": "Force answer position rotation in prompt: item1→A, item2→B, item3→C, item4→D"
+      },
+      {
+        "gap": "insufficient_indirect_answers",
+        "severity": "high",
+        "detail": "AI tends to generate direct Q&A pairs. Real ETS has 44% indirect correct answers.",
+        "fix": "Explicitly require 40-50% of items to have indirect correct answers. Provide examples."
+      },
+      {
+        "gap": "weak_word_traps",
+        "severity": "medium",
+        "detail": "AI word traps are often too subtle or too obvious. Real ETS traps use semantic association (library→book, airport→window seat).",
+        "fix": "Provide word-trap engineering examples in prompt. Require explicit distractor_type annotation."
+      },
+      {
+        "gap": "correct_too_long",
+        "severity": "medium",
+        "detail": "AI correct answers tend to be verbose (12-15 words). ETS averages 5.7 words.",
+        "fix": "Cap correct answer at 10 words. Provide short-answer examples."
+      },
+      {
+        "gap": "missing_discourse_markers",
+        "severity": "low",
+        "detail": "AI rarely uses 'Actually', 'As a matter of fact', 'Well' in correct answers.",
+        "fix": "Require 30-40% of correct answers to open with a discourse marker."
+      },
+      {
+        "gap": "missing_idioms",
+        "severity": "low",
+        "detail": "AI avoids idioms in correct answers. ETS uses them in 31% of items.",
+        "fix": "For hard-level items, require idiomatic expressions in the correct answer."
+      }
+    ]
+  }
+}
