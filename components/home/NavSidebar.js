@@ -192,8 +192,20 @@ export function NavSidebar({
                 <span style={{ color: "#fff", fontSize: 14, fontWeight: 800 }}>T</span>
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 12, fontWeight: 700, color: t1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                  {email || (userCode ? userCode.slice(0, 2) + "****" : "用户")}
+                <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                  {email ? (
+                    <span style={{ fontSize: 12, fontWeight: 700, color: t1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{email}</span>
+                  ) : userCode ? (
+                    <>
+                      <span style={{ fontSize: 12, fontWeight: 700, color: t1, fontFamily: "monospace", letterSpacing: "0.04em" }}>
+                        {codeHidden ? userCode.slice(0, 2) + "****" : userCode}
+                      </span>
+                      <button onClick={() => setCodeHidden((v) => !v)} style={{ border: "none", background: "none", color: t3, fontSize: 11, cursor: "pointer", padding: "1px 2px", lineHeight: 1, fontFamily: HOME_FONT }} title={codeHidden ? "显示" : "隐藏"}>{codeHidden ? "\u{1F441}" : "\u{1F648}"}</button>
+                      <button onClick={copyCode} style={{ border: `1px solid ${copied ? T.primary : navBdr}`, background: copied ? T.primarySoft : "transparent", color: copied ? T.primary : t3, borderRadius: 4, padding: "1px 6px", fontSize: 10, fontWeight: 600, cursor: "pointer", fontFamily: HOME_FONT }}>{copied ? "已复制" : "复制"}</button>
+                    </>
+                  ) : (
+                    <span style={{ fontSize: 12, fontWeight: 700, color: t1 }}>用户</span>
+                  )}
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 4, marginTop: 2 }}>
                   <TierBadge tier={tier} tierExpiresAt={tierExpiresAt} isChallenge={isChallenge} />
@@ -205,17 +217,6 @@ export function NavSidebar({
                 </div>
               </div>
             </div>
-
-            {/* Code display (compact) */}
-            {showCode && (
-              <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 6 }}>
-                <span style={{ fontSize: 12, fontWeight: 700, color: t1, fontFamily: "monospace", letterSpacing: "0.04em", filter: codeHidden ? "blur(4px)" : "none", transition: "filter .2s", userSelect: codeHidden ? "none" : "auto" }}>
-                  {userCode}
-                </span>
-                <button onClick={() => setCodeHidden((v) => !v)} style={{ border: "none", background: "none", color: t3, fontSize: 11, cursor: "pointer", padding: "1px 3px", fontFamily: HOME_FONT }}>{codeHidden ? "\u{1F441}" : "\u{1F648}"}</button>
-                <button onClick={copyCode} style={{ border: `1px solid ${copied ? T.primary : navBdr}`, background: copied ? T.primarySoft : "transparent", color: copied ? T.primary : t3, borderRadius: 4, padding: "1px 6px", fontSize: 10, fontWeight: 600, cursor: "pointer", fontFamily: HOME_FONT }}>{copied ? "已复制" : "复制"}</button>
-              </div>
-            )}
 
             {/* Bind email prompt */}
             {isCodeUser && !email && (
