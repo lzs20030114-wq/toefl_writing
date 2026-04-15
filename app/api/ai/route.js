@@ -169,7 +169,7 @@ export async function POST(request) {
       const content = await callDeepSeekViaCurl({
         apiKey: process.env.DEEPSEEK_API_KEY,
         proxyUrl,
-        timeoutMs: 70000,
+        timeoutMs: 90000,
         payload: {
           model: "deepseek-chat",
           max_tokens: maxTokens,
