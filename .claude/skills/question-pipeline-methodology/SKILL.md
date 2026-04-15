@@ -603,6 +603,116 @@ saveSess({
 });
 ```
 
+### 7.1 Session 防丢失（关键！涉及 AI 评分的任务必须做）
+
+**这是从写作模块真实线上事故中学到的教训。** 用户花 7 分钟写完一篇邮件，提交评分后 AI 超时，退出页面后发现整条记录消失——作文内容彻底丢失，无法重新评分。
+
+#### 丢失场景分析
+
+任何涉及异步 AI 评分（写作、口语）的任务都有以下丢失风险：
+
+| 场景 | 触发条件 | 后果 |
+|------|---------|------|
+| **AI 评分超时** | DeepSeek 响应 >90s | catch 执行，但如果只在 success 分支调 saveSess()，记录丢失 |
+| **AI 评分解析失败** | 返回内容格式异常 | 同上，catch 路径没有保存 |
+| **评分进行中关闭页面** | 用户关闭浏览器标签 | fetch 被 abort，catch 可能不执行 |
+| **评分进行中路由切换** | 用户点"返回"或浏览器后退 | 组件卸载，async 函数被中断 |
+| **网络断开** | fetch 失败 | catch 执行但用户可能已离开 |
+
+#### 三层防丢失架构
+
+```
+Layer 1: catch 分支保存（评分失败时）
+  ↓ 异常被捕获时立刻 saveSess({scoringFailed: true, userText, promptData})
+Layer 2: beforeunload 保存（关闭标签页时）
+  ↓ window.addEventListener("beforeunload", savePartialOnExit)
+Layer 3: useEffect cleanup 保存（路由切换/组件卸载时）
+  ↓ return () => { savePartialOnExit(); }
+```
+
+#### 实现代码模式
+
+```javascript
+// 1. 追踪是否已保存（防重复保存）
+const sessionSavedRef = useRef(false);
+
+// 2. useEffect 同时挂 beforeunload + cleanup
+useEffect(() => {
+  if (!persistSession) return;
+  function savePartialOnExit() {
+    if (sessionSavedRef.current) return; // 已保存则跳过
+    const hasText = text && text.trim().length > 10;
+    const needsSave = hasText && (phase === "scoring" || (phase === "done" && !fb));
+    if (!needsSave || !promptData) return;
+    sessionSavedRef.current = true;
+    saveSess({
+      type, score: null, band: null, wordCount: wc(text),
+      scoringFailed: true,
+      scoringError: "用户在评分完成前离开了页面",
+      details: { promptData, userText: text, feedback: null },
+    });
+  }
+  window.addEventListener("beforeunload", savePartialOnExit);
+  return () => {
+    savePartialOnExit(); // 组件卸载时也触发
+    window.removeEventListener("beforeunload", savePartialOnExit);
+  };
+}, [persistSession, text, promptData, fb, type]);
+
+// 3. 评分成功时标记已保存
+if (persistSession) {
+  saveSess(successPayload);
+  sessionSavedRef.current = true;
+}
+
+// 4. catch 分支也保存 + 标记
+catch (e) {
+  if (persistSession && promptData) {
+    saveSess({ ...partialPayload, scoringFailed: true, scoringError: errMsg });
+    sessionSavedRef.current = true;
+  }
+}
+
+// 5. 切换新题目时重置
+sessionSavedRef.current = false;
+```
+
+#### 保存的失败记录格式
+
+失败记录必须包含足够的数据来支持后续**重新评分**：
+
+```javascript
+{
+  type: "email",
+  score: null,           // 未评分
+  band: null,
+  wordCount: 95,
+  scoringFailed: true,   // 标记为失败
+  scoringError: "网络超时（90秒），请重试",
+  details: {
+    promptData: { ... },  // 完整题目（用于重新评分）
+    userText: "Dear ...", // 完整作文（用于重新评分）
+    feedback: null,       // 无 AI 反馈
+  }
+}
+```
+
+#### 防丢失检查清单
+
+- [ ] `saveSess()` 在 success 分支和 catch 分支都有调用
+- [ ] `beforeunload` 事件监听器已注册
+- [ ] `useEffect` cleanup 函数中调用了保底保存
+- [ ] `sessionSavedRef` 防止重复保存
+- [ ] 失败记录包含 `promptData` 和 `userText`（可重新评分）
+- [ ] 切换新题目时 `sessionSavedRef.current = false`
+- [ ] 模考模式下 `persistSession=false` 时跳过所有保存（模考有自己的保存机制）
+
+#### 常见坑
+- **只在 success 分支保存**：最常见的 bug。async 函数的 catch 分支必须也保存。
+- **beforeunload 不触发**：在 SPA 中路由切换不触发 beforeunload，必须同时用 useEffect cleanup。
+- **重复保存**：三层保护可能导致同一条记录被保存多次。用 ref 追踪状态。
+- **模考模式冲突**：嵌入式写作任务（模考中的 Task 2/3）设 `persistSession=false`，它们有自己的 deferred scoring 流程，不应触发独立保存。
+
 ---
 
 ## 清单：搭建新题型需要创建的文件
