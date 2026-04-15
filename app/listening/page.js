@@ -3,11 +3,15 @@
 import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { LCRTask } from "../../components/listening/LCRTask";
+import { ListeningMCQTask } from "../../components/listening/ListeningMCQTask";
 import { TopicPicker } from "../../components/shared/TopicPicker";
 import { getSavedTier } from "../../lib/AuthContext";
 import { saveSess, loadDoneIds, addDoneIds } from "../../lib/sessionStore";
 import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
 import LCR_DATA from "../../data/listening/bank/lcr.json";
+import LA_DATA from "../../data/listening/bank/la.json";
+import LC_DATA from "../../data/listening/bank/lc.json";
+import LAT_DATA from "../../data/listening/bank/lat.json";
 
 const LISTENING_ACCENT = { color: "#8B5CF6", soft: "#F3E8FF" };
 
@@ -82,8 +86,13 @@ function ListeningPageClient() {
   useEffect(() => {
     if (isPractice) return;
     if (type === "lcr") {
-      const batch = pickRandomBatch(LCR_DATA.items, 10);
-      setRandomItems(batch);
+      setRandomItems(pickRandomBatch(LCR_DATA.items, 10));
+    } else if (type === "la") {
+      setRandomItems(pickRandom(LA_DATA.items) ? [pickRandom(LA_DATA.items)] : []);
+    } else if (type === "lc") {
+      setRandomItems(pickRandom(LC_DATA.items) ? [pickRandom(LC_DATA.items)] : []);
+    } else if (type === "lat") {
+      setRandomItems(pickRandom(LAT_DATA.items) ? [pickRandom(LAT_DATA.items)] : []);
     }
   }, [type, isPractice, sessionKey]);
 
@@ -129,16 +138,18 @@ function ListeningPageClient() {
     );
   }
 
-  // ── Resolve active items ──
+  // ── Resolve data source for current type ──
+  const bankMap = { lcr: LCR_DATA, la: LA_DATA, lc: LC_DATA, lat: LAT_DATA };
+  const bankData = bankMap[type];
+
+  // Resolve active items
   let taskItems = null;
   let singleItem = null;
 
-  if (type === "lcr") {
-    if (isPractice && pickedItemId) {
-      singleItem = LCR_DATA.items.find((i) => i.id === pickedItemId) || null;
-    } else {
-      taskItems = randomItems;
-    }
+  if (isPractice && pickedItemId && bankData) {
+    singleItem = bankData.items.find((i) => i.id === pickedItemId) || null;
+  } else {
+    taskItems = randomItems;
   }
 
   // Loading state
@@ -159,10 +170,10 @@ function ListeningPageClient() {
       <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "system-ui", background: "#F4F7F5" }}>
         <div style={{ textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 16 }}>🎧</div>
-          <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>No questions available</div>
-          <div style={{ fontSize: 14, color: "#666", marginBottom: 20 }}>Add LCR items to the question bank first.</div>
-          <button onClick={onExit} style={{ padding: "10px 24px", borderRadius: 8, border: "1px solid #ddd", background: "#fff", cursor: "pointer" }}>
-            Back to Home
+          <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>题目加载中或暂无题目</div>
+          <div style={{ fontSize: 14, color: "#666", marginBottom: 20 }}>该题型题库正在扩充，请稍后再试。</div>
+          <button onClick={onExit} style={{ padding: "10px 24px", borderRadius: 8, border: "1px solid #ddd", background: "#fff", cursor: "pointer", fontSize: 14 }}>
+            返回首页
           </button>
         </div>
       </div>
@@ -184,57 +195,61 @@ function ListeningPageClient() {
         results: result.results,
       },
     });
-
-    // Mark items as done
-    const doneKey = DONE_STORAGE_KEYS.LISTENING_LCR;
-    const doneItemIds = Array.isArray(itemsUsed) ? itemsUsed.map((i) => i.id) : [itemsUsed.id];
-    addDoneIds(doneKey, doneItemIds);
+    addDoneIds(DONE_STORAGE_KEYS.LISTENING_LCR, Array.isArray(itemsUsed) ? itemsUsed.map((i) => i.id) : [itemsUsed.id]);
   }
 
-  const handleComplete = (result) => {
-    const itemsUsed = isPractice ? singleItem : taskItems;
-    saveListeningSession("lcr", itemsUsed, result);
-  };
-
   const taskOnExit = isPractice ? () => setPickedItemId(null) : onExit;
+  const handleNewSet = () => setSessionKey((k) => k + 1);
 
-  const handleNewSet = () => {
-    setSessionKey((k) => k + 1);
+  const TYPE_LABELS = {
+    lcr: { title: "Choose a Response", section: "Listening | LCR" },
+    la: { title: "Listen to an Announcement", section: "Listening | Announcement" },
+    lc: { title: "Listen to a Conversation", section: "Listening | Conversation" },
+    lat: { title: "Listen to an Academic Talk", section: "Listening | Academic Talk" },
   };
+  const labels = TYPE_LABELS[type] || TYPE_LABELS.lcr;
 
+  // ── LCR: uses specialized LCRTask component ──
   if (type === "lcr") {
-    if (isPractice && singleItem) {
-      return (
-        <LCRTask
-          item={singleItem}
-          onComplete={handleComplete}
-          onExit={taskOnExit}
-          isPractice
-        />
-      );
-    }
+    const handleLCRComplete = (result) => {
+      saveListeningSession("lcr", isPractice ? singleItem : taskItems, result);
+    };
 
+    if (isPractice && singleItem) {
+      return <LCRTask item={singleItem} onComplete={handleLCRComplete} onExit={taskOnExit} isPractice />;
+    }
+    return <LCRTask batchItems={taskItems} onComplete={handleLCRComplete} onExit={onExit} isPractice={isPractice} />;
+  }
+
+  // ── LA / LC / LAT: use generic ListeningMCQTask ──
+  const activeItem = isPractice ? singleItem : (taskItems && taskItems[0]);
+  if (!activeItem) {
     return (
-      <LCRTask
-        batchItems={taskItems}
-        onComplete={handleComplete}
-        onExit={onExit}
-        isPractice={isPractice}
-      />
+      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "system-ui", background: "#F4F7F5" }}>
+        <div style={{ textAlign: "center" }}>
+          <div style={{ fontSize: 48, marginBottom: 16 }}>🎧</div>
+          <div style={{ fontSize: 18, fontWeight: 700 }}>暂无题目</div>
+          <button onClick={onExit} style={{ padding: "10px 24px", marginTop: 16, borderRadius: 8, border: "1px solid #ddd", background: "#fff", cursor: "pointer", fontSize: 14 }}>返回</button>
+        </div>
+      </div>
     );
   }
 
-  // Fallback for unknown type
+  const handleMCQComplete = (result) => {
+    saveListeningSession(type, activeItem, result);
+    handleNewSet();
+  };
+
   return (
-    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "system-ui", background: "#F4F7F5" }}>
-      <div style={{ textAlign: "center" }}>
-        <div style={{ fontSize: 48, marginBottom: 16 }}>🎧</div>
-        <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>Unknown task type: {type}</div>
-        <button onClick={onExit} style={{ padding: "10px 24px", borderRadius: 8, border: "1px solid #ddd", background: "#fff", cursor: "pointer" }}>
-          Back to Home
-        </button>
-      </div>
-    </div>
+    <ListeningMCQTask
+      key={activeItem.id}
+      item={activeItem}
+      onComplete={handleMCQComplete}
+      onExit={isPractice ? taskOnExit : onExit}
+      isPractice={isPractice}
+      title={labels.title}
+      section={labels.section}
+    />
   );
 }
 
