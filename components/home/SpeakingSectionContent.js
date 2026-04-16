@@ -1,9 +1,11 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { SECTION_ACCENTS } from "./sections";
 import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
 import { PRACTICE_MODE } from "../../lib/practiceMode";
-import { HomeTaskCard } from "./HomeTaskCard";
+import { HomeTaskCard, HomeLinkCard } from "./HomeTaskCard";
+import { loadHist } from "../../lib/sessionStore";
 
 const SPEAKING_ACCENT = SECTION_ACCENTS.speaking;
 
@@ -177,10 +179,50 @@ export function SpeakingSectionContent({
         ))}
       </div>
 
+      {/* Practice history link */}
+      {isPro && <SpeakingHistoryLink isChallenge={isChallenge} hoverKey={hoverKey} setHoverKey={setHoverKey} fadeIn={fadeIn} />}
+
       {/* Footer */}
       <div style={{ fontSize: 10, color: isChallenge ? CH.t2 : T.t3, opacity: 0.65, lineHeight: 1.6, textAlign: "center", ...fadeIn(520) }}>
         TreePractice 为独立练习工具，与 ETS 无关联。TOEFL® 为 ETS 注册商标。练习内容由 AI 辅助生成，仅供自学参考。
       </div>
+    </div>
+  );
+}
+
+function SpeakingHistoryLink({ isChallenge, hoverKey, setHoverKey, fadeIn }) {
+  const [speakingCount, setSpeakingCount] = useState(0);
+
+  useEffect(() => {
+    try {
+      const hist = loadHist();
+      const count = (hist.sessions || []).filter(s => s.type === "speaking").length;
+      setSpeakingCount(count);
+    } catch {}
+    function onUpdate() {
+      try {
+        const hist = loadHist();
+        setSpeakingCount((hist.sessions || []).filter(s => s.type === "speaking").length);
+      } catch {}
+    }
+    window.addEventListener("toefl-history-updated", onUpdate);
+    return () => window.removeEventListener("toefl-history-updated", onUpdate);
+  }, []);
+
+  return (
+    <div style={{ marginBottom: 20, ...fadeIn(380) }}>
+      <HomeLinkCard
+        href="/speaking/progress"
+        cardKey="speaking-progress"
+        hoverKey={hoverKey}
+        setHoverKey={setHoverKey}
+        isChallenge={isChallenge}
+        icon="🗣"
+        eyebrow="记录"
+        title="口语练习记录"
+        description={speakingCount > 0 ? `已记录 ${speakingCount} 次口语练习，可在练习记录中查看。` : "完成口语练习后，记录会自动保存在这里。"}
+        badge={speakingCount > 0 ? `${speakingCount} 条记录` : "暂无记录"}
+      />
     </div>
   );
 }
