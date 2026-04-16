@@ -177,6 +177,34 @@ export function SpeakingSectionContent({
             <HomeTaskCard item={item} hoverKey={hoverKey} setHoverKey={setHoverKey} isChallenge={isChallenge} />
           </div>
         ))}
+        {/* Speaking mock exam card */}
+        {!isPractice && (
+          <div key="speaking-exam" style={{
+            display: "flex",
+            opacity: isPro ? 1 : 0.45,
+            pointerEvents: isPro ? "auto" : "none",
+            filter: isPro ? "none" : "grayscale(0.5)",
+            ...fadeIn(330),
+          }}>
+            <HomeTaskCard
+              item={{
+                k: "speaking-exam",
+                href: "/speaking-exam",
+                acc: SPEAKING_ACCENT,
+                n: "\u6A21\u8003",
+                t: "\u53E3\u8BED\u6A21\u8003",
+                d: "\u590D\u8FF0 + \u9762\u8BD5\uFF0C\u5B8C\u6574\u53E3\u8BED\u6D4B\u8BD5",
+                it: "11 \u9898",
+                timeLabel: "8 min",
+                isMock: true,
+                delay: 0,
+              }}
+              hoverKey={hoverKey}
+              setHoverKey={setHoverKey}
+              isChallenge={isChallenge}
+            />
+          </div>
+        )}
       </div>
 
       {/* Practice history link */}
