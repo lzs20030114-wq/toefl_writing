@@ -13,11 +13,12 @@ const SPK = { color: "#F59E0B", soft: "#FFFBEB" };
  *
  * Props:
  *   onRecordingComplete(blobUrl)  — called with blob URL when recording stops
+ *   onRecordingStart()            — called when recording actually starts (after mic permission)
  *   maxDuration                   — auto-stop after N seconds (0 = no limit)
  *   autoStart                     — start recording on mount
  *   disabled                      — prevent interaction
  */
-export function VoiceRecorder({ onRecordingComplete, maxDuration = 0, autoStart = false, disabled = false }) {
+export function VoiceRecorder({ onRecordingComplete, onRecordingStart, maxDuration = 0, autoStart = false, disabled = false }) {
   const [state, setState] = useState("idle"); // idle | recording | playback
   const [blobUrl, setBlobUrl] = useState(null);
   const [elapsed, setElapsed] = useState(0);
@@ -95,6 +96,7 @@ export function VoiceRecorder({ onRecordingComplete, maxDuration = 0, autoStart 
       mediaRecorderRef.current = recorder;
       recorder.start(250); // collect in 250ms chunks
       setState("recording");
+      if (onRecordingStart) onRecordingStart();
 
       // Elapsed timer
       const startTime = Date.now();
@@ -117,7 +119,7 @@ export function VoiceRecorder({ onRecordingComplete, maxDuration = 0, autoStart 
       }
       setState("idle");
     }
-  }, [disabled, maxDuration, onRecordingComplete]);
+  }, [disabled, maxDuration, onRecordingComplete, onRecordingStart]);
 
   const stopRecording = useCallback(() => {
     if (timerRef.current) {
