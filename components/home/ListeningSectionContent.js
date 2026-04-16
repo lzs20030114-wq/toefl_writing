@@ -1,9 +1,11 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { SECTION_ACCENTS } from "./sections";
 import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
 import { PRACTICE_MODE } from "../../lib/practiceMode";
-import { HomeTaskCard } from "./HomeTaskCard";
+import { HomeTaskCard, HomeLinkCard } from "./HomeTaskCard";
+import { loadHist } from "../../lib/sessionStore";
 
 const LISTENING_ACCENT = SECTION_ACCENTS.listening;
 
@@ -188,10 +190,50 @@ export function ListeningSectionContent({
         ))}
       </div>
 
+      {/* Practice history link */}
+      {isPro && <ListeningHistoryLink isChallenge={isChallenge} hoverKey={hoverKey} setHoverKey={setHoverKey} fadeIn={fadeIn} />}
+
       {/* Footer */}
       <div style={{ fontSize: 10, color: isChallenge ? CH.t2 : T.t3, opacity: 0.65, lineHeight: 1.6, textAlign: "center", ...fadeIn(520) }}>
         TreePractice 为独立练习工具，与 ETS 无关联。TOEFL® 为 ETS 注册商标。练习内容由 AI 辅助生成，仅供自学参考。
       </div>
+    </div>
+  );
+}
+
+function ListeningHistoryLink({ isChallenge, hoverKey, setHoverKey, fadeIn }) {
+  const [listeningCount, setListeningCount] = useState(0);
+
+  useEffect(() => {
+    try {
+      const hist = loadHist();
+      const count = (hist.sessions || []).filter(s => s.type === "listening").length;
+      setListeningCount(count);
+    } catch {}
+    function onUpdate() {
+      try {
+        const hist = loadHist();
+        setListeningCount((hist.sessions || []).filter(s => s.type === "listening").length);
+      } catch {}
+    }
+    window.addEventListener("toefl-history-updated", onUpdate);
+    return () => window.removeEventListener("toefl-history-updated", onUpdate);
+  }, []);
+
+  return (
+    <div style={{ marginBottom: 20, ...fadeIn(380) }}>
+      <HomeLinkCard
+        href="/listening/progress"
+        cardKey="listening-progress"
+        hoverKey={hoverKey}
+        setHoverKey={setHoverKey}
+        isChallenge={isChallenge}
+        icon="📈"
+        eyebrow="记录"
+        title="听力练习记录"
+        description={listeningCount > 0 ? `已记录 ${listeningCount} 次听力练习，可在练习记录中查看。` : "完成听力练习后，记录会自动保存在这里。"}
+        badge={listeningCount > 0 ? `${listeningCount} 条记录` : "暂无记录"}
+      />
     </div>
   );
 }

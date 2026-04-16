@@ -183,6 +183,29 @@ function ListeningPageClient() {
   function saveListeningSession(subtype, itemsUsed, result) {
     const pct = result.total > 0 ? result.correct / result.total : 0;
     const band = pct >= 1 ? 6 : pct >= 0.9 ? 5.5 : pct >= 0.8 ? 5 : pct >= 0.7 ? 4.5 : pct >= 0.6 ? 4 : pct >= 0.5 ? 3.5 : pct >= 0.4 ? 3 : pct >= 0.3 ? 2.5 : 2;
+
+    // Collect item data for review (first item for single-item types, all for batch)
+    const firstItem = Array.isArray(itemsUsed) ? itemsUsed[0] : itemsUsed;
+    const reviewData = {};
+    if (subtype === "lcr" && Array.isArray(itemsUsed)) {
+      // LCR batch: store each item's speaker + options for review
+      reviewData.items = itemsUsed.map(i => ({
+        id: i.id, speaker: i.speaker, options: i.options, answer: i.answer,
+        explanation: i.explanation, pragmatic_function: i.pragmatic_function,
+      }));
+    } else if (subtype === "lcr" && firstItem) {
+      reviewData.items = [{
+        id: firstItem.id, speaker: firstItem.speaker, options: firstItem.options,
+        answer: firstItem.answer, explanation: firstItem.explanation,
+      }];
+    } else if (firstItem) {
+      // LA/LC/LAT: store transcript + questions for review
+      reviewData.transcript = firstItem.transcript || firstItem.announcement || firstItem.lecture || "";
+      reviewData.conversation = firstItem.conversation || null;
+      reviewData.questions = firstItem.questions || [];
+      reviewData.topic = firstItem.topic || firstItem.context || "";
+    }
+
     saveSess({
       type: "listening",
       mode: isPractice ? "practice" : "standard",
@@ -193,6 +216,7 @@ function ListeningPageClient() {
         subtype,
         itemIds: Array.isArray(itemsUsed) ? itemsUsed.map((i) => i.id) : [itemsUsed.id],
         results: result.results,
+        ...reviewData,
       },
     });
     addDoneIds(DONE_STORAGE_KEYS.LISTENING_LCR, Array.isArray(itemsUsed) ? itemsUsed.map((i) => i.id) : [itemsUsed.id]);
