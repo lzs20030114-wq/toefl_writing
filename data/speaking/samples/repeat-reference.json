@@ -1,0 +1,87 @@
+{
+  "source": "goarno.io ETS reference sets",
+  "type": "listenAndRepeat",
+  "description": "5 reference sets of Listen & Repeat sentences, each with 7 sentences in progressive difficulty (2 easy + 3 medium + 2 hard). All sentences spoken by a staff/authority figure in a specific campus/community location.",
+  "patterns": {
+    "sentences_per_set": 7,
+    "difficulty_distribution": "2 easy + 3 medium + 2 hard",
+    "easy": { "words": "4-7", "structure": "simple imperative or declarative" },
+    "medium": { "words": "8-12", "structure": "one clause, compound subject or object" },
+    "hard": { "words": "13-20", "structure": "complex clause, conditional, or multiple parts" },
+    "speaker_role": "staff or authority figure (tech, librarian, guide, agent, director)",
+    "setting": "specific campus or community location",
+    "timing": { "easy": "8s", "medium": "10s", "hard": "12s" }
+  },
+  "sets": [
+    {
+      "id": "ref_repeat_001",
+      "scenario": "IT Help Desk",
+      "speaker_role": "IT support technician",
+      "sentences": [
+        { "sentence": "Welcome to the IT help desk.", "difficulty": "easy", "word_count": 6 },
+        { "sentence": "Do you have your student ID?", "difficulty": "easy", "word_count": 7 },
+        { "sentence": "We can replace your laptop charger at the front counter.", "difficulty": "medium", "word_count": 10 },
+        { "sentence": "Software updates are installed automatically every Friday evening.", "difficulty": "medium", "word_count": 8 },
+        { "sentence": "You'll need to restart your device after the update is complete.", "difficulty": "medium", "word_count": 12 },
+        { "sentence": "If you experience any issues with the campus Wi-Fi, please submit a support ticket online.", "difficulty": "hard", "word_count": 16 },
+        { "sentence": "Late equipment returns will result in a temporary suspension of your borrowing privileges.", "difficulty": "hard", "word_count": 14 }
+      ]
+    },
+    {
+      "id": "ref_repeat_002",
+      "scenario": "Library Orientation",
+      "speaker_role": "librarian",
+      "sentences": [
+        { "sentence": "The library is open daily.", "difficulty": "easy", "word_count": 5 },
+        { "sentence": "Quiet study rooms are upstairs.", "difficulty": "easy", "word_count": 5 },
+        { "sentence": "You can reserve a group study room through the website.", "difficulty": "medium", "word_count": 10 },
+        { "sentence": "All printed materials must be returned within two weeks.", "difficulty": "medium", "word_count": 9 },
+        { "sentence": "The digital catalog can be accessed from any campus computer.", "difficulty": "medium", "word_count": 10 },
+        { "sentence": "If you need help locating a specific journal article, ask at the reference desk.", "difficulty": "hard", "word_count": 14 },
+        { "sentence": "Students are responsible for returning all borrowed materials by the due date.", "difficulty": "hard", "word_count": 11 }
+      ]
+    },
+    {
+      "id": "ref_repeat_003",
+      "scenario": "Planetarium",
+      "speaker_role": "planetarium guide",
+      "sentences": [
+        { "sentence": "Please step inside the dome.", "difficulty": "easy", "word_count": 5 },
+        { "sentence": "The show begins in five minutes.", "difficulty": "easy", "word_count": 6 },
+        { "sentence": "Tonight we will explore the constellations of the winter sky.", "difficulty": "medium", "word_count": 10 },
+        { "sentence": "The projector will simulate a journey through the solar system.", "difficulty": "medium", "word_count": 10 },
+        { "sentence": "Please silence your phones before the presentation starts.", "difficulty": "medium", "word_count": 8 },
+        { "sentence": "You may notice the ceiling lights dimming slowly as the stars begin to appear.", "difficulty": "hard", "word_count": 14 },
+        { "sentence": "Afterward, a guest astronomer will be available to answer all your questions.", "difficulty": "hard", "word_count": 12 }
+      ]
+    },
+    {
+      "id": "ref_repeat_004",
+      "scenario": "Car Rental Agency",
+      "speaker_role": "rental agent",
+      "sentences": [
+        { "sentence": "Please sign the rental contract.", "difficulty": "easy", "word_count": 5 },
+        { "sentence": "Your vehicle is in lot B.", "difficulty": "easy", "word_count": 6 },
+        { "sentence": "Insurance coverage is included in the base price.", "difficulty": "medium", "word_count": 8 },
+        { "sentence": "The fuel tank should be full when you return the car.", "difficulty": "medium", "word_count": 12 },
+        { "sentence": "Please report any damage to the vehicle before driving off.", "difficulty": "medium", "word_count": 10 },
+        { "sentence": "If you plan to drive across state lines, you must notify us in advance.", "difficulty": "hard", "word_count": 14 },
+        { "sentence": "Late returns will result in an extra daily charge added to your credit card.", "difficulty": "hard", "word_count": 14 }
+      ]
+    },
+    {
+      "id": "ref_repeat_005",
+      "scenario": "Theater Rehearsal",
+      "speaker_role": "theater director",
+      "sentences": [
+        { "sentence": "Welcome to our first rehearsal.", "difficulty": "easy", "word_count": 5 },
+        { "sentence": "Scripts are on the front table.", "difficulty": "easy", "word_count": 6 },
+        { "sentence": "We will run through the first act without stopping.", "difficulty": "medium", "word_count": 10 },
+        { "sentence": "Please pay attention to your blocking during the opening scene.", "difficulty": "medium", "word_count": 10 },
+        { "sentence": "The costume fitting is scheduled for next Wednesday afternoon.", "difficulty": "medium", "word_count": 8 },
+        { "sentence": "If you have a conflict with any rehearsal dates, let the stage manager know immediately.", "difficulty": "hard", "word_count": 15 },
+        { "sentence": "Make sure to bring a water bottle and wear comfortable clothing for our stage exercises.", "difficulty": "hard", "word_count": 15 }
+      ]
+    }
+  ]
+}

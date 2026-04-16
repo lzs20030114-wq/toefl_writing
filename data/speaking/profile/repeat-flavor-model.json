@@ -1,0 +1,138 @@
+{
+  "type": "listenAndRepeat",
+  "version": 2,
+  "source": "Analysis of 5 ETS reference sets (35 sentences) from goarno.io",
+  "description": "Flavor model for Listen & Repeat sentence generation. Defines the statistical profile of authentic ETS-style repeat sets.",
+
+  "structure": {
+    "sentences_per_set": 7,
+    "difficulty_distribution": {
+      "easy": { "count": 2, "positions": [1, 2] },
+      "medium": { "count": 3, "positions": [3, 4, 5] },
+      "hard": { "count": 2, "positions": [6, 7] }
+    },
+    "timing_seconds": {
+      "easy": 8,
+      "medium": 10,
+      "hard": 12
+    }
+  },
+
+  "word_count_distribution": {
+    "easy": {
+      "min": 4,
+      "max": 7,
+      "mean": 5.6,
+      "median": 6,
+      "examples": ["Welcome to our first rehearsal.", "Scripts are on the front table.", "The library is open daily."]
+    },
+    "medium": {
+      "min": 8,
+      "max": 12,
+      "mean": 9.5,
+      "median": 10,
+      "examples": ["Insurance coverage is included in the base price.", "We will run through the first act without stopping.", "The digital catalog can be accessed from any campus computer."]
+    },
+    "hard": {
+      "min": 11,
+      "max": 16,
+      "mean": 13.5,
+      "median": 14,
+      "examples": ["If you experience any issues with the campus Wi-Fi, please submit a support ticket online.", "Late returns will result in an extra daily charge added to your credit card."]
+    }
+  },
+
+  "sentence_structure_patterns": {
+    "easy": {
+      "imperative": 0.3,
+      "simple_declarative": 0.5,
+      "short_question": 0.2,
+      "notes": "Single clause, no subordination, familiar vocabulary"
+    },
+    "medium": {
+      "declarative_with_prepositional_phrase": 0.35,
+      "imperative_with_adverbial": 0.25,
+      "passive_voice": 0.2,
+      "compound_subject_or_object": 0.2,
+      "notes": "One main clause, may have prepositional or participial extension"
+    },
+    "hard": {
+      "conditional_if_clause": 0.35,
+      "compound_sentence_with_and_or": 0.25,
+      "relative_clause": 0.2,
+      "result_clause_will_result_in": 0.2,
+      "notes": "Two clauses, conditional logic, consequence structures, multiple parts"
+    }
+  },
+
+  "phonetic_challenge_types": {
+    "easy": {
+      "focus": "clear articulation of common words",
+      "challenges": ["word-final consonants", "basic vowel distinctions"],
+      "density": "low (0-1 challenge per sentence)"
+    },
+    "medium": {
+      "focus": "consonant clusters and multi-syllable words",
+      "challenges": [
+        "consonant clusters (str-, -nts, -lts, -cts)",
+        "reduced syllables in longer words (comfortable, automatically)",
+        "stress placement in compound nouns (study room, front counter)",
+        "linking between words (is_included, can_be_accessed)"
+      ],
+      "density": "medium (1-2 challenges per sentence)"
+    },
+    "hard": {
+      "focus": "connected speech, rhythm, and complex phonotactics",
+      "challenges": [
+        "linked speech across clause boundaries",
+        "stress-timing across long sentences",
+        "final consonant clusters at phrase boundaries (-nts in, -lts will)",
+        "reduced function words in rapid sequences (for our, to your)",
+        "conditional intonation pattern (if X, then Y)"
+      ],
+      "density": "high (2-3 challenges per sentence)"
+    }
+  },
+
+  "scenario_requirements": {
+    "setting_type": "specific location (not abstract topic)",
+    "speaker_role": "staff or authority figure giving instructions/orientation",
+    "register": "professional but approachable, clear enunciation expected",
+    "scenario_examples": [
+      "IT help desk", "library", "planetarium", "car rental agency",
+      "theater rehearsal", "campus gym", "student health center",
+      "science lab", "dining hall", "campus bookstore",
+      "residence hall", "tutoring center", "admissions office",
+      "career services", "student activities center"
+    ],
+    "diversity": "no two consecutive sets should use the same scenario type"
+  },
+
+  "flavor_markers": {
+    "natural_spoken": {
+      "description": "Sentences sound like spoken instructions, not written text",
+      "indicators": ["contractions permitted (you'll, we'll, it's)", "direct address (you, your)", "imperative mood common"]
+    },
+    "progressive_difficulty": {
+      "description": "Clear escalation from simple to complex within each set",
+      "indicators": ["word count increases", "clause count increases", "phonetic density increases"]
+    },
+    "scenario_coherence": {
+      "description": "All 7 sentences plausibly belong to the same orientation/briefing",
+      "indicators": ["consistent setting vocabulary", "logical information flow", "same speaker role throughout"]
+    },
+    "timing_appropriate": {
+      "description": "Each sentence can be comfortably spoken within its time allocation",
+      "indicators": ["easy: 8s budget for 4-7 words", "medium: 10s budget for 8-12 words", "hard: 12s budget for 13-20 words"]
+    }
+  },
+
+  "scoring_weights": {
+    "word_count_accuracy": 0.25,
+    "difficulty_progression": 0.20,
+    "scenario_coherence": 0.20,
+    "sentence_structure_match": 0.15,
+    "phonetic_challenge_density": 0.10,
+    "natural_spoken_register": 0.10
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "type": "takeAnInterview",
+  "version": 2,
+  "source": "Analysis of 5 ETS reference sets (20 questions) from goarno.io",
+  "description": "Flavor model for Take an Interview question generation. Defines the statistical profile of authentic ETS-style interview sets.",
+
+  "structure": {
+    "questions_per_set": 4,
+    "response_time_seconds": 45,
+    "prep_time_seconds": 0,
+    "intro_required": true,
+    "intro_template": "You have agreed to participate in a [study/survey/research project] about [topic]."
+  },
+
+  "question_length_by_position": {
+    "Q1": {
+      "min_words": 25,
+      "max_words": 40,
+      "mean_words": 33,
+      "notes": "Includes 'Thank you for participating' opener + personal experience question"
+    },
+    "Q2": {
+      "min_words": 25,
+      "max_words": 45,
+      "mean_words": 35,
+      "notes": "Comparative or challenge-focused, asks for examples"
+    },
+    "Q3": {
+      "min_words": 25,
+      "max_words": 45,
+      "mean_words": 37,
+      "notes": "Presents a debatable claim + asks for opinion, often 'Some people/experts argue that...'"
+    },
+    "Q4": {
+      "min_words": 30,
+      "max_words": 50,
+      "mean_words": 40,
+      "notes": "Future-oriented or policy recommendation, longest question"
+    }
+  },
+
+  "progression_pattern": {
+    "Q1_personal_factual": {
+      "type": "personal experience",
+      "opener": "Thank you for participating",
+      "asks_about": "current habits, recent experiences, personal situation",
+      "question_forms": ["What do you...", "Can you describe...", "How do you usually...", "Have you recently..."],
+      "complexity": "low — answerable from personal life, no debate required"
+    },
+    "Q2_descriptive_comparative": {
+      "type": "comparison or challenge analysis",
+      "asks_about": "advantages vs disadvantages, challenges, differences between approaches",
+      "question_forms": ["How does X compare to Y...", "What are some advantages and disadvantages...", "What challenges do people face when...", "How do you decide whether..."],
+      "complexity": "medium — requires structured comparison, examples expected"
+    },
+    "Q3_analytical_opinion": {
+      "type": "opinion on debatable claim",
+      "claim_pattern": "Some [people/experts/educators/nutritionists] [argue/believe/claim] that [debatable assertion].",
+      "asks_about": "agree or disagree with claim, perspective, extent of agreement",
+      "question_forms": ["Do you agree or disagree...", "What is your perspective...", "To what extent do you agree...", "Do you think this approach is effective..."],
+      "complexity": "high — must take a position and defend it with reasoning"
+    },
+    "Q4_evaluative_predictive": {
+      "type": "future prediction or policy recommendation",
+      "asks_about": "future trends, policy suggestions, how things will change",
+      "question_forms": ["How do you think X will change in the next...", "If a government/company wanted to...", "Looking ahead, how will...", "What policies or programs would you suggest..."],
+      "complexity": "highest — requires forward thinking, recommendation, or prediction"
+    }
+  },
+
+  "topic_categories": {
+    "technology": ["digital subscriptions", "social media", "online learning", "smartphone usage", "AI in daily life"],
+    "education": ["adult learning", "public speaking", "study habits", "classroom methods", "student assessment"],
+    "food_health": ["meal planning", "grocery shopping", "nutrition", "eating habits", "food waste"],
+    "work_career": ["workplace flexibility", "remote work", "career changes", "work-life balance", "job interviews"],
+    "environment": ["recycling", "public transportation", "energy conservation", "urban green spaces", "climate awareness"],
+    "social_life": ["community involvement", "volunteering", "neighborhood relationships", "cultural events", "travel"],
+    "media_entertainment": ["reading habits", "streaming services", "news consumption", "gaming", "podcasts"],
+    "personal_growth": ["time management", "financial literacy", "goal setting", "stress management", "sleep habits"]
+  },
+
+  "flavor_markers": {
+    "clear_topic_framing": {
+      "description": "Each set has an explicit topic and scenario intro",
+      "indicators": ["intro sentence present", "all 4 questions relate to same topic", "no topic drift"]
+    },
+    "difficulty_progression": {
+      "description": "Smooth escalation from personal to evaluative",
+      "indicators": ["Q1 is personal/factual", "Q2 adds comparison", "Q3 adds debate", "Q4 adds prediction/policy"]
+    },
+    "open_ended": {
+      "description": "All questions invite extended 45-second responses, never yes/no",
+      "indicators": ["no questions answerable in one word", "multi-part questions", "ask for examples or reasoning"]
+    },
+    "debatable_Q3": {
+      "description": "Q3 presents a claim that reasonable people could disagree on",
+      "indicators": ["uses 'Some people/experts argue/believe/claim'", "not a settled fact", "invites position-taking"]
+    },
+    "future_oriented_Q4": {
+      "description": "Q4 asks about what will or should happen next",
+      "indicators": ["future tense or conditional", "asks for prediction or recommendation", "references time horizon"]
+    }
+  },
+
+  "anti_patterns": {
+    "yes_no_questions": "Never ask a question answerable with just yes or no",
+    "leading_questions": "Never embed the expected answer in the question framing",
+    "culturally_biased": "Avoid topics requiring specific cultural knowledge (holidays, specific sports, religion)",
+    "too_academic": "Questions should be about everyday experiences, not specialized knowledge",
+    "topic_drift": "All 4 questions must stay on the same topic — no mid-set topic changes",
+    "identical_openers": "Avoid starting Q2/Q3/Q4 with the same word"
+  },
+
+  "scoring_weights": {
+    "question_count": 0.15,
+    "length_accuracy": 0.15,
+    "progression_match": 0.25,
+    "open_ended_check": 0.15,
+    "topic_coherence": 0.15,
+    "anti_pattern_free": 0.15
+  }
+}

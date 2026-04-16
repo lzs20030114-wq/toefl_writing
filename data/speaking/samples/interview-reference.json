@@ -1,0 +1,151 @@
+{
+  "source": "goarno.io ETS reference sets",
+  "type": "takeAnInterview",
+  "description": "5 reference sets of Take an Interview questions, each with 4 questions in progressive difficulty. All on a single topic with scenario intro framing. 45 seconds response time per question, no prep time.",
+  "patterns": {
+    "questions_per_set": 4,
+    "response_time": "45 seconds each",
+    "prep_time": "none",
+    "progression": "Q1 personal/factual -> Q2 descriptive/comparative -> Q3 analytical/opinion -> Q4 evaluative/predictive",
+    "intro_template": "You have agreed to participate in a [study/survey/research project] about [topic].",
+    "q1_opener": "Thank you for participating",
+    "avg_word_count": { "Q1": 35, "Q2": 40, "Q3": 40, "Q4": 45 }
+  },
+  "sets": [
+    {
+      "id": "ref_intv_001",
+      "topic": "Digital Subscription Services",
+      "intro": "You have agreed to participate in a survey about digital subscription services.",
+      "questions": [
+        {
+          "position": "Q1",
+          "difficulty": "personal",
+          "question": "Thank you for participating in our survey. What types of digital subscription services do you currently use, and how did you first start using them?"
+        },
+        {
+          "position": "Q2",
+          "difficulty": "descriptive",
+          "question": "How do you decide whether to continue paying for a subscription service or cancel it? What factors matter most to you?"
+        },
+        {
+          "position": "Q3",
+          "difficulty": "analytical",
+          "question": "Some people argue that subscription services save money in the long run, while others feel they lead to overspending. What is your perspective on this?"
+        },
+        {
+          "position": "Q4",
+          "difficulty": "evaluative",
+          "question": "Looking ahead, how do you think the growth of digital subscriptions will change the way people consume entertainment and information in the next decade?"
+        }
+      ]
+    },
+    {
+      "id": "ref_intv_002",
+      "topic": "Adult Learning and Hobbies",
+      "intro": "You have agreed to participate in a research project about adult learning and hobbies.",
+      "questions": [
+        {
+          "position": "Q1",
+          "difficulty": "personal",
+          "question": "Thank you for participating in this study. Have you recently taken up any new hobbies or learned a new skill as an adult? Please describe your experience."
+        },
+        {
+          "position": "Q2",
+          "difficulty": "descriptive",
+          "question": "What challenges do adults typically face when trying to learn something new compared to when they were younger? Can you give some examples?"
+        },
+        {
+          "position": "Q3",
+          "difficulty": "analytical",
+          "question": "Some experts believe that adults who regularly pursue new hobbies are more creative and adaptable at work. Do you agree or disagree with this claim?"
+        },
+        {
+          "position": "Q4",
+          "difficulty": "evaluative",
+          "question": "If a company wanted to encourage employees to develop new skills outside of work, what kinds of programs or incentives would you recommend they offer?"
+        }
+      ]
+    },
+    {
+      "id": "ref_intv_003",
+      "topic": "Public Speaking Experiences",
+      "intro": "You have agreed to participate in a survey about public speaking experiences.",
+      "questions": [
+        {
+          "position": "Q1",
+          "difficulty": "personal",
+          "question": "Thank you for participating in our survey. Can you describe a recent situation where you had to speak in front of a group? How did it go?"
+        },
+        {
+          "position": "Q2",
+          "difficulty": "descriptive",
+          "question": "What do you think are the biggest differences between people who feel comfortable speaking publicly and those who find it very stressful?"
+        },
+        {
+          "position": "Q3",
+          "difficulty": "analytical",
+          "question": "Some educators argue that public speaking skills should be a required part of every student's education. What is your opinion on this proposal?"
+        },
+        {
+          "position": "Q4",
+          "difficulty": "evaluative",
+          "question": "With the increasing use of virtual meetings and online presentations, how do you think public speaking skills and expectations will change in the future?"
+        }
+      ]
+    },
+    {
+      "id": "ref_intv_004",
+      "topic": "Meal Planning and Grocery Shopping",
+      "intro": "You have agreed to participate in a study about meal planning and grocery shopping.",
+      "questions": [
+        {
+          "position": "Q1",
+          "difficulty": "personal",
+          "question": "Thank you for participating in this study. How do you usually decide what to eat each week? Do you plan your meals in advance or decide day by day?"
+        },
+        {
+          "position": "Q2",
+          "difficulty": "descriptive",
+          "question": "What are some advantages and disadvantages of planning meals for the entire week compared to shopping for groceries on a daily basis?"
+        },
+        {
+          "position": "Q3",
+          "difficulty": "analytical",
+          "question": "Some nutritionists claim that people who plan their meals in advance tend to eat healthier and waste less food. To what extent do you agree with this claim?"
+        },
+        {
+          "position": "Q4",
+          "difficulty": "evaluative",
+          "question": "If the government wanted to help families eat healthier while spending less on groceries, what policies or programs would you suggest they implement?"
+        }
+      ]
+    },
+    {
+      "id": "ref_intv_005",
+      "topic": "Workplace Schedules and Flexibility",
+      "intro": "You have agreed to participate in a research project about workplace schedules and flexibility.",
+      "questions": [
+        {
+          "position": "Q1",
+          "difficulty": "personal",
+          "question": "Thank you for participating in our research. What does your current work or study schedule look like, and how much flexibility do you have in setting your own hours?"
+        },
+        {
+          "position": "Q2",
+          "difficulty": "descriptive",
+          "question": "How does having a flexible schedule compare to having a fixed schedule in terms of productivity and personal well-being? What are the trade-offs?"
+        },
+        {
+          "position": "Q3",
+          "difficulty": "analytical",
+          "question": "Some companies have adopted a four-day workweek to improve employee satisfaction without reducing output. Do you think this approach is effective? Why or why not?"
+        },
+        {
+          "position": "Q4",
+          "difficulty": "evaluative",
+          "question": "As remote work becomes more common, how do you think workplace scheduling norms will evolve over the next five to ten years, and what impact will this have on workers?"
+        }
+      ]
+    }
+  ]
+}
