@@ -230,6 +230,26 @@ export function ReadingSectionContent({
             </div>
           );
         })}
+        {/* Adaptive mock exam card */}
+        <div key="reading-exam" style={{ display: "flex", ...fadeIn(400) }}>
+          <HomeTaskCard
+            item={{
+              k: "reading-exam",
+              href: "/reading-exam",
+              acc: READING_ACCENT,
+              n: "\u6A21\u8003",
+              t: "\u9605\u8BFB\u81EA\u9002\u5E94\u6A21\u8003",
+              d: "Module 1 + Module 2 \u81EA\u9002\u5E94\u96BE\u5EA6",
+              it: "35 \u9898",
+              timeLabel: "27 min",
+              isMock: true,
+              delay: 0,
+            }}
+            hoverKey={hoverKey}
+            setHoverKey={setHoverKey}
+            isChallenge={isChallenge}
+          />
+        </div>
       </div>
 
       {/* Practice history link */}

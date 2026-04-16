@@ -188,6 +188,32 @@ export function ListeningSectionContent({
             <HomeTaskCard item={item} hoverKey={hoverKey} setHoverKey={setHoverKey} isChallenge={isChallenge} />
           </div>
         ))}
+        {/* Adaptive mock exam card */}
+        <div key="listening-exam" style={{
+          display: "flex",
+          opacity: isPro ? 1 : 0.45,
+          pointerEvents: isPro ? "auto" : "none",
+          filter: isPro ? "none" : "grayscale(0.5)",
+          ...fadeIn(470),
+        }}>
+          <HomeTaskCard
+            item={{
+              k: "listening-exam",
+              href: "/listening-exam",
+              acc: LISTENING_ACCENT,
+              n: "\u6A21\u8003",
+              t: "\u542C\u529B\u81EA\u9002\u5E94\u6A21\u8003",
+              d: "Module 1 + Module 2 \u81EA\u9002\u5E94\u96BE\u5EA6",
+              it: "30 \u9898",
+              timeLabel: "22 min",
+              isMock: true,
+              delay: 0,
+            }}
+            hoverKey={hoverKey}
+            setHoverKey={setHoverKey}
+            isChallenge={isChallenge}
+          />
+        </div>
       </div>
 
       {/* Practice history link */}
