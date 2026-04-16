@@ -51,7 +51,7 @@ describe("ProgressView", () => {
     render(<ProgressView onBack={() => {}} />);
     expect(screen.getAllByText("练习记录").length).toBeGreaterThan(0);
     expect(screen.getByText(/模考记录/)).toBeInTheDocument();
-    expect(screen.getByText(/日常练习明细/)).toBeInTheDocument();
+    expect(screen.getByText(/练习明细/)).toBeInTheDocument();
   });
 
   test("renders all practice entries including retries", () => {

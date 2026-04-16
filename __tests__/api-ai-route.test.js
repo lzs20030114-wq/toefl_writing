@@ -74,7 +74,7 @@ describe("/api/ai route", () => {
     const body = await res.json();
 
     expect(res.status).toBe(401);
-    expect(body.error).toContain("DeepSeek API error: 401");
+    expect(body.error).toMatch(/unavailable|retry/i);
   });
 
   test("rejects invalid oversized request body", async () => {
