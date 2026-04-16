@@ -38,7 +38,14 @@ function normalizeHost(raw) {
 
 function isOriginAllowed(request) {
   const origin = request.headers.get("origin");
-  if (!origin) return true;
+  if (!origin) {
+    // Browser requests always include Origin on POST.
+    // If sec-fetch-site is present (modern browser) but origin is missing, reject.
+    const secFetchSite = request.headers.get("sec-fetch-site");
+    if (secFetchSite && secFetchSite !== "none") return false;
+    // No origin + no sec-fetch-site = likely server-to-server (cURL, etc.) — allow.
+    return true;
+  }
   const originHost = normalizeHost(origin);
   if (!originHost) return false;
   const host = normalizeHost(request.headers.get("host"));
@@ -204,10 +211,11 @@ export async function POST(request) {
 
     if (!res.ok) {
       const errText = await res.text();
+      // Log full upstream error for debugging, but don't expose details to client
       return fail(
-        { ...requestMeta, stage: "deepseek", errorType: "upstream" },
-        res.status,
-        { error: "DeepSeek API error: " + res.status, detail: errText },
+        { ...requestMeta, stage: "deepseek", errorType: "upstream", errorDetail: errText },
+        res.status >= 500 ? 502 : res.status,
+        { error: "AI service temporarily unavailable. Please retry." },
       );
     }
 
