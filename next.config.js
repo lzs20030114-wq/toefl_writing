@@ -11,6 +11,33 @@ const nextConfig = {
     outputFileTracingIncludes: {
       "/api/admin/questions": ["./data/**/*"],
       "/api/admin/generate-bs": ["./data/**/*", "./scripts/**/*"],
+      // Admin content endpoints need access to bank + staging JSON (but NOT audio).
+      "/api/admin/content": [
+        "./data/academicWriting/**/*.json",
+        "./data/emailWriting/**/*.json",
+        "./data/buildSentence/**/*.json",
+        "./data/listening/bank/**/*.json",
+        "./data/listening/staging/**/*.json",
+        "./data/reading/bank/**/*.json",
+        "./data/reading/staging/**/*.json",
+        "./data/speaking/bank/**/*.json",
+        "./data/speaking/staging/**/*.json",
+      ],
+      "/api/admin/content/staging": [
+        "./data/academicWriting/staging/**/*.json",
+        "./data/emailWriting/staging/**/*.json",
+        "./data/buildSentence/staging/**/*.json",
+        "./data/listening/staging/**/*.json",
+        "./data/reading/staging/**/*.json",
+        "./data/speaking/staging/**/*.json",
+      ],
+    },
+    // Audio files are served via /api/audio/[...path]; they should never ship
+    // with admin serverless functions (43 MB of mp3 blows past the 250 MB limit).
+    outputFileTracingExcludes: {
+      "/api/admin/content": ["./data/listening/audio/**/*", "./data/**/*.mp3", "./data/**/*.wav", "./data/**/*.m4a"],
+      "/api/admin/content/staging": ["./data/listening/audio/**/*", "./data/**/*.mp3", "./data/**/*.wav", "./data/**/*.m4a"],
+      "/api/admin/questions": ["./data/listening/audio/**/*", "./data/**/*.mp3", "./data/**/*.wav", "./data/**/*.m4a"],
     },
   },
 };
