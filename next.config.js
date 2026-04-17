@@ -32,12 +32,34 @@ const nextConfig = {
         "./data/speaking/staging/**/*.json",
       ],
     },
-    // Audio files are served via /api/audio/[...path]; they should never ship
-    // with admin serverless functions (43 MB of mp3 blows past the 250 MB limit).
+    // Next.js tracer is over-aggressive for functions that use fs.readdirSync:
+    // it pulls in .next/cache/webpack (451 MB), .git, and audio blobs. Exclude
+    // these explicitly so admin content functions stay under Vercel's 250 MB.
     outputFileTracingExcludes: {
-      "/api/admin/content": ["./data/listening/audio/**/*", "./data/**/*.mp3", "./data/**/*.wav", "./data/**/*.m4a"],
-      "/api/admin/content/staging": ["./data/listening/audio/**/*", "./data/**/*.mp3", "./data/**/*.wav", "./data/**/*.m4a"],
-      "/api/admin/questions": ["./data/listening/audio/**/*", "./data/**/*.mp3", "./data/**/*.wav", "./data/**/*.m4a"],
+      "/api/admin/content": [
+        "./data/listening/audio/**/*",
+        "./data/**/*.mp3",
+        "./data/**/*.wav",
+        "./data/**/*.m4a",
+        "./.next/cache/**/*",
+        "./.git/**/*",
+      ],
+      "/api/admin/content/staging": [
+        "./data/listening/audio/**/*",
+        "./data/**/*.mp3",
+        "./data/**/*.wav",
+        "./data/**/*.m4a",
+        "./.next/cache/**/*",
+        "./.git/**/*",
+      ],
+      "/api/admin/questions": [
+        "./data/listening/audio/**/*",
+        "./data/**/*.mp3",
+        "./data/**/*.wav",
+        "./data/**/*.m4a",
+        "./.next/cache/**/*",
+        "./.git/**/*",
+      ],
     },
   },
 };
