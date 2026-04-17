@@ -37,17 +37,39 @@ const ADMIN_RESPONSIVE_CSS = `
 }
 `;
 
-const NAV = [
-  { label: "总览", href: "/admin", icon: "grid" },
-  { label: "用户管理", href: "/admin-users", icon: "users" },
-  { label: "登录码", href: "/admin-codes", icon: "key" },
-  { label: "答题情况", href: "/admin-activity", icon: "activity" },
-  { label: "API 日志", href: "/admin-api-errors", icon: "alert" },
-  { label: "用户反馈", href: "/admin-feedback", icon: "msg" },
-  { label: "数据分析", href: "/admin-analytics", icon: "chart" },
-  { label: "题库管理", href: "/admin-questions", icon: "book" },
-  { label: "自动生题", href: "/admin-generate", icon: "zap" },
-  { label: "错题统计", href: "/admin-bs-errors", icon: "target" },
+const NAV_GROUPS = [
+  {
+    label: "总览",
+    items: [
+      { label: "仪表盘", href: "/admin", icon: "grid" },
+    ],
+  },
+  {
+    label: "内容",
+    items: [
+      { label: "题库总览", href: "/admin-content", icon: "library" },
+      { label: "写作题库编辑", href: "/admin-questions", icon: "book" },
+      { label: "AI 自动生成", href: "/admin-generate", icon: "zap" },
+      { label: "暂存审核", href: "/admin-staging", icon: "inbox" },
+    ],
+  },
+  {
+    label: "用户",
+    items: [
+      { label: "用户管理", href: "/admin-users", icon: "users" },
+      { label: "登录码", href: "/admin-codes", icon: "key" },
+      { label: "答题情况", href: "/admin-activity", icon: "activity" },
+    ],
+  },
+  {
+    label: "运营",
+    items: [
+      { label: "数据分析", href: "/admin-analytics", icon: "chart" },
+      { label: "用户反馈", href: "/admin-feedback", icon: "msg" },
+      { label: "API 日志", href: "/admin-api-errors", icon: "alert" },
+      { label: "BS 错题统计", href: "/admin-bs-errors", icon: "target" },
+    ],
+  },
 ];
 
 const ICONS = {
@@ -61,6 +83,8 @@ const ICONS = {
   book: "M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 19.5A2.5 2.5 0 0 0 6.5 22H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15z",
   zap: "M13 2L3 14h9l-1 10 10-12h-9l1-10z",
   target: "M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zm0-6a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0-2a2 2 0 1 1 0-4 2 2 0 0 1 0 4z",
+  library: "M3 3h6v18H3zm8 0h6v18h-6zm8 3l3 1-5 15-3-1z",
+  inbox: "M22 12h-6l-2 3h-4l-2-3H2M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z",
 };
 
 function NavIcon({ name }) {
@@ -83,33 +107,45 @@ function SidebarContent({ onNavigate }) {
         <div style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", marginTop: 2 }}>管理后台</div>
       </div>
 
-      {/* Nav items */}
-      <nav style={{ padding: "8px 8px", flex: 1, display: "flex", flexDirection: "column", gap: 2 }}>
-        {NAV.map((item) => {
-          const active = item.href === "/admin"
-            ? pathname === "/admin"
-            : pathname.startsWith(item.href);
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={onNavigate}
-              style={{
-                display: "flex", alignItems: "center", gap: 10,
-                padding: "9px 12px", borderRadius: 7, textDecoration: "none",
-                fontSize: 13, fontWeight: active ? 700 : 500,
-                color: active ? "#fff" : "rgba(255,255,255,0.55)",
-                background: active ? "rgba(255,255,255,0.1)" : "transparent",
-                transition: "all 0.15s",
-              }}
-              onMouseEnter={(e) => { if (!active) e.currentTarget.style.background = "rgba(255,255,255,0.06)"; }}
-              onMouseLeave={(e) => { if (!active) e.currentTarget.style.background = "transparent"; }}
-            >
-              <span style={{ display: "inline-flex", opacity: active ? 1 : 0.6 }}><NavIcon name={item.icon} /></span>
-              {item.label}
-            </Link>
-          );
-        })}
+      {/* Nav items grouped by section */}
+      <nav style={{ padding: "6px 8px", flex: 1, display: "flex", flexDirection: "column", gap: 2, overflowY: "auto" }}>
+        {NAV_GROUPS.map((group, gi) => (
+          <div key={group.label} style={{ marginTop: gi === 0 ? 0 : 10 }}>
+            <div style={{
+              fontSize: 10,
+              fontWeight: 700,
+              color: "rgba(255,255,255,0.35)",
+              textTransform: "uppercase",
+              letterSpacing: 0.8,
+              padding: "4px 12px 4px",
+            }}>{group.label}</div>
+            {group.items.map((item) => {
+              const active = item.href === "/admin"
+                ? pathname === "/admin"
+                : pathname.startsWith(item.href);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={onNavigate}
+                  style={{
+                    display: "flex", alignItems: "center", gap: 10,
+                    padding: "8px 12px", borderRadius: 7, textDecoration: "none",
+                    fontSize: 13, fontWeight: active ? 700 : 500,
+                    color: active ? "#fff" : "rgba(255,255,255,0.6)",
+                    background: active ? "rgba(255,255,255,0.1)" : "transparent",
+                    transition: "all 0.15s",
+                  }}
+                  onMouseEnter={(e) => { if (!active) e.currentTarget.style.background = "rgba(255,255,255,0.06)"; }}
+                  onMouseLeave={(e) => { if (!active) e.currentTarget.style.background = "transparent"; }}
+                >
+                  <span style={{ display: "inline-flex", opacity: active ? 1 : 0.55 }}><NavIcon name={item.icon} /></span>
+                  {item.label}
+                </Link>
+              );
+            })}
+          </div>
+        ))}
       </nav>
 
       {/* Footer */}
