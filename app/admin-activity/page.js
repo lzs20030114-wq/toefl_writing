@@ -13,6 +13,13 @@ const SUBJECTS = [
   { key: "speaking", label: "口语" },
 ];
 
+const SUBTYPE_ORDER = {
+  writing: ["build", "email", "discussion"],
+  reading: ["ctw", "rdl", "ap"],
+  listening: ["lcr", "la", "lc", "lat"],
+  speaking: ["interview", "repeat"],
+};
+
 const SUBTYPE_LABEL = {
   writing: {
     build: { short: "BS", long: "Build Sentence" },
@@ -120,6 +127,17 @@ function groupAttemptsBySubject(attempts) {
   for (const a of list) {
     const subject = a?.subject;
     if (subject && out[subject]) out[subject].push(a);
+  }
+  return out;
+}
+
+function groupBySubtype(items, subjectKey) {
+  const order = SUBTYPE_ORDER[subjectKey] || [];
+  const out = {};
+  for (const st of order) out[st] = [];
+  for (const a of items || []) {
+    const st = a?.subtype;
+    if (st && out[st]) out[st].push(a);
   }
   return out;
 }
@@ -247,6 +265,7 @@ export default function AdminActivityPage() {
   const [activityLoadingByCode, setActivityLoadingByCode] = useState({});
   const [activityErrorByCode, setActivityErrorByCode] = useState({});
   const [sectionOpenByCode, setSectionOpenByCode] = useState({});
+  const [subtypeOpenByCode, setSubtypeOpenByCode] = useState({});
 
   useEffect(() => {
     try {
@@ -308,6 +327,7 @@ export default function AdminActivityPage() {
       setActivityLoadingByCode({});
       setActivityErrorByCode({});
       setSectionOpenByCode({});
+      setSubtypeOpenByCode({});
     } catch (e) {
       setMsg(String(e.message || e));
     } finally {
@@ -346,6 +366,14 @@ export default function AdminActivityPage() {
     setSectionOpenByCode((prev) => {
       const cur = prev[code] || { writing: false, reading: false, listening: false, speaking: false };
       return { ...prev, [code]: { ...cur, [section]: !cur[section] } };
+    });
+  }
+
+  function toggleSubtype(code, subjectKey, subtype) {
+    const key = `${subjectKey}.${subtype}`;
+    setSubtypeOpenByCode((prev) => {
+      const cur = prev[code] || {};
+      return { ...prev, [code]: { ...cur, [key]: !cur[key] } };
     });
   }
 
@@ -423,6 +451,7 @@ export default function AdminActivityPage() {
                   const loading = !!activityLoadingByCode[code];
                   const error = activityErrorByCode[code];
                   const sectionMap = sectionOpenByCode[code] || { writing: false, reading: false, listening: false, speaking: false };
+                  const subtypeMap = subtypeOpenByCode[code] || {};
                   const grouped = groupAttemptsBySubject(activity?.attempts || []);
 
                   return (
@@ -463,6 +492,7 @@ export default function AdminActivityPage() {
                               <div style={{ display: "grid", gap: 8 }}>
                                 {SUBJECTS.map((sub) => {
                                   const items = grouped[sub.key] || [];
+                                  const itemsBySubtype = groupBySubtype(items, sub.key);
                                   const subjectN = subjectTotal(usage, sub.key);
                                   const open = !!sectionMap[sub.key];
                                   const isSpeakingPlaceholder = sub.key === "speaking" && subjectN === 0;
@@ -482,13 +512,16 @@ export default function AdminActivityPage() {
                                           alignItems: "center",
                                           justifyContent: "space-between",
                                           padding: "8px 10px",
-                                          borderBottom: open ? "1px solid #f1f5f9" : "none",
+                                          borderBottom: open ? "1px solid #e2e8f0" : "none",
+                                          background: "#f8fafc",
+                                          borderTopLeftRadius: 6,
+                                          borderTopRightRadius: 6,
                                         }}
                                       >
                                         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                                           <div style={{ fontWeight: 700, color: C.nav }}>{sub.label}</div>
                                           <div style={{ fontSize: 11, color: C.t2 }}>
-                                            {isSpeakingPlaceholder ? "待上线" : `${subjectN} 题 / ${items.length} 条记录`}
+                                            {isSpeakingPlaceholder ? "待上线" : `${items.length} 条记录`}
                                           </div>
                                         </div>
                                         {!isSpeakingPlaceholder && items.length > 0 ? (
@@ -509,16 +542,63 @@ export default function AdminActivityPage() {
                                         ) : null}
                                       </div>
                                       {open && !isSpeakingPlaceholder && (
-                                        <div style={{ maxHeight: 360, overflow: "auto" }}>
-                                          {items.length === 0 ? (
-                                            <div style={{ padding: 12, color: C.t2, fontSize: 12 }}>暂无记录。</div>
-                                          ) : sub.key === "writing" ? (
-                                            items.map((a) => <WritingAttemptCard key={a.id} a={a} />)
-                                          ) : sub.key === "speaking" ? (
-                                            items.map((a) => <SpeakingRow key={a.id} a={a} />)
-                                          ) : (
-                                            items.map((a) => <ReadingListeningRow key={a.id} a={a} />)
-                                          )}
+                                        <div style={{ display: "grid", gap: 0 }}>
+                                          {(SUBTYPE_ORDER[sub.key] || []).map((st) => {
+                                            const stItems = itemsBySubtype[st] || [];
+                                            const stKey = `${sub.key}.${st}`;
+                                            const stOpen = !!subtypeMap[stKey];
+                                            const stMeta = subtypeChip(sub.key, st);
+                                            const stEmpty = stItems.length === 0;
+                                            return (
+                                              <div
+                                                key={st}
+                                                style={{
+                                                  borderTop: "1px solid #f1f5f9",
+                                                  opacity: stEmpty ? 0.55 : 1,
+                                                }}
+                                              >
+                                                <div
+                                                  style={{
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    justifyContent: "space-between",
+                                                    padding: "6px 12px 6px 18px",
+                                                    background: stOpen ? "#f8fafc" : "#fff",
+                                                    cursor: stEmpty ? "default" : "pointer",
+                                                  }}
+                                                  onClick={() => { if (!stEmpty) toggleSubtype(code, sub.key, st); }}
+                                                >
+                                                  <div style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 12 }}>
+                                                    <ChipBadge subject={sub.key} subtype={st} />
+                                                    <span style={{ color: C.t1 }}>{stMeta.long}</span>
+                                                    <span style={{ color: C.t2, fontSize: 11 }}>{stItems.length} 条</span>
+                                                  </div>
+                                                  {!stEmpty ? (
+                                                    <span
+                                                      aria-hidden
+                                                      style={{
+                                                        color: C.blue,
+                                                        fontSize: 11,
+                                                        fontWeight: 600,
+                                                        userSelect: "none",
+                                                      }}
+                                                    >
+                                                      {stOpen ? "收起 ▲" : "展开 ▼"}
+                                                    </span>
+                                                  ) : null}
+                                                </div>
+                                                {stOpen && !stEmpty && (
+                                                  <div style={{ maxHeight: 320, overflow: "auto", borderTop: "1px solid #f1f5f9" }}>
+                                                    {sub.key === "writing"
+                                                      ? stItems.map((a) => <WritingAttemptCard key={a.id} a={a} />)
+                                                      : sub.key === "speaking"
+                                                        ? stItems.map((a) => <SpeakingRow key={a.id} a={a} />)
+                                                        : stItems.map((a) => <ReadingListeningRow key={a.id} a={a} />)}
+                                                  </div>
+                                                )}
+                                              </div>
+                                            );
+                                          })}
                                         </div>
                                       )}
                                     </div>
