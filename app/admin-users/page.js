@@ -6,6 +6,31 @@ import AdminLayout from "../../components/admin/AdminLayout";
 
 const TOKEN_KEY = "toefl-admin-token";
 
+const PRODUCT_LABEL = {
+  pro_weekly: "Pro 体验卡 (7天)",
+  pro_monthly: "Pro 月卡 (30天)",
+  pro_quarterly: "Pro 季卡 (90天)",
+  pro_yearly: "Pro 年卡 (365天)",
+};
+const PROVIDER_LABEL = {
+  afdian: "爱发电",
+  xorpay: "XorPay",
+  mock: "Mock",
+  admin: "手动赠送",
+};
+const CURRENCY_SYMBOL = { CNY: "¥", USD: "$" };
+
+function formatRevenue(byCurrency) {
+  if (!byCurrency) return "—";
+  const parts = [];
+  for (const [cur, cents] of Object.entries(byCurrency)) {
+    if (!cents) continue;
+    const sym = CURRENCY_SYMBOL[cur] || "";
+    parts.push(`${sym}${(cents / 100).toFixed(2)}`);
+  }
+  return parts.length ? parts.join(" + ") : "—";
+}
+
 function fmtDate(v) {
   if (!v) return "-";
   const d = new Date(v);
@@ -319,23 +344,6 @@ export default function AdminUsersPage() {
                 </div>
               </div>
 
-              {/* Paid users */}
-              {data.paid && (
-                <div style={SECTION}>
-                  <div style={{ fontSize: 14, fontWeight: 700, color: C.nav, marginBottom: 10 }}>付费统计</div>
-                  <div style={{ display: "flex", gap: 20 }}>
-                    <div>
-                      <div style={{ fontSize: 22, fontWeight: 800, color: "#d97706" }}>{data.paid.uniqueUsers}</div>
-                      <div style={{ fontSize: 12, color: C.t2 }}>付费用户数</div>
-                    </div>
-                    <div>
-                      <div style={{ fontSize: 22, fontWeight: 800, color: "#d97706" }}>{data.paid.totalOrders}</div>
-                      <div style={{ fontSize: 12, color: C.t2 }}>总订单数</div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
               {/* Auth method breakdown */}
               <div style={SECTION}>
                 <div style={{ fontSize: 14, fontWeight: 700, color: C.nav, marginBottom: 10 }}>登录方式</div>
@@ -370,6 +378,77 @@ export default function AdminUsersPage() {
                 </div>
               </div>
             </div>
+
+            {/* Paid stats — full width, broken down by provider/product */}
+            {data.paid?.real && (
+              <div style={SECTION}>
+                <div style={{ fontSize: 14, fontWeight: 700, color: C.nav, marginBottom: 12 }}>付费统计</div>
+
+                {/* Headline numbers */}
+                <div style={{ display: "flex", gap: 32, marginBottom: 16, flexWrap: "wrap" }}>
+                  <div>
+                    <div style={{ fontSize: 24, fontWeight: 800, color: "#d97706" }}>{data.paid.real.uniqueUsers}</div>
+                    <div style={{ fontSize: 12, color: C.t2 }}>真实付费用户</div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 24, fontWeight: 800, color: "#d97706" }}>{data.paid.real.totalOrders}</div>
+                    <div style={{ fontSize: 12, color: C.t2 }}>真实付费订单</div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 24, fontWeight: 800, color: "#d97706" }}>{formatRevenue(data.paid.real.revenue)}</div>
+                    <div style={{ fontSize: 12, color: C.t2 }}>估算收入</div>
+                  </div>
+                </div>
+
+                {/* By provider + by product */}
+                <div className="adm-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+                  <div>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: C.t3, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 8 }}>按渠道</div>
+                    {Object.keys(data.paid.real.byProvider || {}).length === 0 ? (
+                      <div style={{ fontSize: 12, color: C.t3 }}>暂无</div>
+                    ) : (
+                      Object.entries(data.paid.real.byProvider).map(([prov, v]) => (
+                        <div key={prov} style={{ display: "flex", justifyContent: "space-between", padding: "5px 0", fontSize: 13, borderBottom: "1px dashed " + C.bdr }}>
+                          <span style={{ color: C.t1 }}>{PROVIDER_LABEL[prov] || prov}</span>
+                          <span style={{ color: C.t2 }}>{v.users} 用户 · {v.orders} 单 · {formatRevenue(v.revenue)}</span>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: C.t3, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 8 }}>按产品</div>
+                    {Object.keys(data.paid.real.byProduct || {}).length === 0 ? (
+                      <div style={{ fontSize: 12, color: C.t3 }}>暂无</div>
+                    ) : (
+                      Object.entries(data.paid.real.byProduct).map(([pid, v]) => (
+                        <div key={pid} style={{ display: "flex", justifyContent: "space-between", padding: "5px 0", fontSize: 13, borderBottom: "1px dashed " + C.bdr }}>
+                          <span style={{ color: C.t1 }}>{PRODUCT_LABEL[pid] || pid}</span>
+                          <span style={{ color: C.t2 }}>{v.users} 用户 · {v.orders} 单 · {formatRevenue(v.revenue)}</span>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+
+                {/* Manual grants — separated, deemphasized */}
+                {data.paid.manual?.totalOrders > 0 && (
+                  <div style={{ borderTop: "1px solid " + C.bdr, marginTop: 14, paddingTop: 12, fontSize: 12, color: C.t3, lineHeight: 1.6 }}>
+                    <span style={{ fontWeight: 700, marginRight: 10 }}>手动赠送</span>
+                    <span>{data.paid.manual.pureUsers} 名纯赠送用户</span>
+                    <span style={{ margin: "0 6px" }}>·</span>
+                    <span>共 {data.paid.manual.totalOrders} 次赠送</span>
+                    {Object.keys(data.paid.manual.byProduct || {}).length > 0 && (
+                      <span style={{ marginLeft: 10 }}>
+                        ({Object.entries(data.paid.manual.byProduct).map(([p, n]) => `${PRODUCT_LABEL[p] || p}: ${n}`).join(" · ")})
+                      </span>
+                    )}
+                    <div style={{ marginTop: 4, color: C.t3, fontSize: 11 }}>
+                      不计入付费收入。"纯赠送用户" 仅指从未付过费的用户。
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Filters and user table */}
             <div style={SECTION}>

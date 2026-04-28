@@ -2,6 +2,97 @@ import { isAdminAuthorized } from "../../../../lib/adminAuth";
 import { isSupabaseAdminConfigured, supabaseAdmin } from "../../../../lib/supabaseAdmin";
 import { jsonError } from "../../../../lib/apiResponse";
 
+const MANUAL_PROVIDERS = new Set(["admin", "mock"]);
+
+const PRICE_CNY_CENTS = {
+  pro_weekly: 999,
+  pro_monthly: 2999,
+  pro_quarterly: 6997,
+  pro_yearly: 25988,
+};
+const PRICE_USD_CENTS = {
+  pro_monthly: 990,
+  pro_yearly: 7990,
+};
+
+function entitlementRevenue(provider, productId) {
+  if (MANUAL_PROVIDERS.has(provider)) return null;
+  if (provider === "xorpay" || provider === "afdian") {
+    const cents = PRICE_CNY_CENTS[productId];
+    return cents ? { currency: "CNY", cents } : null;
+  }
+  const cents = PRICE_USD_CENTS[productId];
+  return cents ? { currency: "USD", cents } : null;
+}
+
+function addRevenue(target, rev) {
+  if (!rev) return;
+  target[rev.currency] = (target[rev.currency] || 0) + rev.cents;
+}
+
+function computePaidStats(ents) {
+  const realEnts = ents.filter((e) => !MANUAL_PROVIDERS.has(e.provider));
+  const manualEnts = ents.filter((e) => MANUAL_PROVIDERS.has(e.provider));
+
+  const realUsers = new Set(realEnts.map((e) => e.user_code));
+  const manualUsersAll = new Set(manualEnts.map((e) => e.user_code));
+  const pureManualUsers = [...manualUsersAll].filter((u) => !realUsers.has(u));
+
+  const realRevenue = {};
+  const byProvider = {};
+  const byProduct = {};
+  for (const e of realEnts) {
+    const rev = entitlementRevenue(e.provider, e.product_id);
+    addRevenue(realRevenue, rev);
+
+    const p = e.provider || "unknown";
+    if (!byProvider[p]) byProvider[p] = { orders: 0, _users: new Set(), revenue: {} };
+    byProvider[p].orders += 1;
+    byProvider[p]._users.add(e.user_code);
+    addRevenue(byProvider[p].revenue, rev);
+
+    const pid = e.product_id || "unknown";
+    if (!byProduct[pid]) byProduct[pid] = { orders: 0, _users: new Set(), revenue: {} };
+    byProduct[pid].orders += 1;
+    byProduct[pid]._users.add(e.user_code);
+    addRevenue(byProduct[pid].revenue, rev);
+  }
+  const byProviderOut = {};
+  for (const [k, v] of Object.entries(byProvider)) {
+    byProviderOut[k] = { orders: v.orders, users: v._users.size, revenue: v.revenue };
+  }
+  const byProductOut = {};
+  for (const [k, v] of Object.entries(byProduct)) {
+    byProductOut[k] = { orders: v.orders, users: v._users.size, revenue: v.revenue };
+  }
+
+  const manualByProduct = {};
+  for (const e of manualEnts) {
+    const pid = e.product_id || "unknown";
+    manualByProduct[pid] = (manualByProduct[pid] || 0) + 1;
+  }
+
+  return {
+    // Backward compat
+    totalOrders: ents.length,
+    uniqueUsers: new Set(ents.map((e) => e.user_code)).size,
+
+    // New structured breakdown
+    real: {
+      uniqueUsers: realUsers.size,
+      totalOrders: realEnts.length,
+      revenue: realRevenue,
+      byProvider: byProviderOut,
+      byProduct: byProductOut,
+    },
+    manual: {
+      pureUsers: pureManualUsers.length,
+      totalOrders: manualEnts.length,
+      byProduct: manualByProduct,
+    },
+  };
+}
+
 export async function GET(request) {
   try {
     if (!isAdminAuthorized(request)) return jsonError(401, "Unauthorized");
@@ -87,11 +178,7 @@ export async function GET(request) {
       .from("iap_entitlements")
       .select("user_code,product_id,provider,created_at");
     const ents = entitlements || [];
-    const paidUsers = new Set(ents.map((e) => e.user_code));
-    const paidStats = {
-      totalOrders: ents.length,
-      uniqueUsers: paidUsers.size,
-    };
+    const paidStats = computePaidStats(ents);
 
     return Response.json({
       total,
