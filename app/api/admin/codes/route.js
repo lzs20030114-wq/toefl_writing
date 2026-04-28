@@ -10,26 +10,38 @@ function safeNum(v, fallback = 0) {
   return Number.isFinite(n) ? n : fallback;
 }
 
-function countMockAnswered(score) {
-  const tasks = Array.isArray(score?.tasks) ? score.tasks : [];
-  let build = 0;
-  let email = 0;
-  let discussion = 0;
-  for (const t of tasks) {
-    const taskId = String(t?.taskId || "");
-    if (taskId === "build-sentence") {
-      build += 1;
-      continue;
-    }
-    if (taskId === "email-writing") {
-      email += 1;
-      continue;
-    }
-    if (taskId === "academic-writing") {
-      discussion += 1;
-    }
+// Mock task-id → subject/subtype routing. Extend here when reading/listening tasks
+// land in mock-exam (e.g. "reading-ctw": { subject: "reading", subtype: "ctw" }).
+const TASKID_TO_SUBJECT_SUBTYPE = {
+  "build-sentence": { subject: "writing", subtype: "build" },
+  "email-writing": { subject: "writing", subtype: "email" },
+  "academic-writing": { subject: "writing", subtype: "discussion" },
+};
+
+function emptyAnswered() {
+  return {
+    writing: { build: 0, email: 0, discussion: 0, total: 0 },
+    reading: { ctw: 0, rdl: 0, ap: 0, total: 0 },
+    listening: { lcr: 0, la: 0, lc: 0, lat: 0, total: 0 },
+    speaking: { interview: 0, repeat: 0, total: 0 },
+    // Legacy flat aliases (mirror writing.*) — kept for admin-codes UI
+    build: 0,
+    email: 0,
+    discussion: 0,
+    total: 0,
+  };
+}
+
+function applyDelta(target, subject, subtype, n = 1) {
+  if (!target[subject]) return;
+  if (subtype && target[subject][subtype] !== undefined) {
+    target[subject][subtype] += n;
   }
-  return { build, email, discussion, total: build + email + discussion };
+  target[subject].total += n;
+  if (subject === "writing") {
+    if (subtype && target[subtype] !== undefined) target[subtype] += n;
+    target.total += n;
+  }
 }
 
 function extractMockPromptIds(score) {
@@ -46,16 +58,27 @@ function extractMockPromptIds(score) {
   return ids;
 }
 
-function countAnsweredBySession(row) {
+function accumulateRow(row, target) {
   const type = String(row?.type || "");
-  const score = row?.score || {};
-  if (type === "bs") {
-    return { build: 1, email: 0, discussion: 0, total: 1 };
+  if (type === "bs") return applyDelta(target, "writing", "build");
+  if (type === "email") return applyDelta(target, "writing", "email");
+  if (type === "discussion") return applyDelta(target, "writing", "discussion");
+  if (type === "reading") {
+    return applyDelta(target, "reading", String(row?.subtype || "").toLowerCase());
   }
-  if (type === "email") return { build: 0, email: 1, discussion: 0, total: 1 };
-  if (type === "discussion") return { build: 0, email: 0, discussion: 1, total: 1 };
-  if (type === "mock") return countMockAnswered(score);
-  return { build: 0, email: 0, discussion: 0, total: 0 };
+  if (type === "listening") {
+    return applyDelta(target, "listening", String(row?.subtype || "").toLowerCase());
+  }
+  if (type === "speaking") {
+    return applyDelta(target, "speaking", String(row?.subtype || "").toLowerCase());
+  }
+  if (type === "mock") {
+    const tasks = Array.isArray(row?.score?.tasks) ? row.score.tasks : [];
+    for (const t of tasks) {
+      const map = TASKID_TO_SUBJECT_SUBTYPE[String(t?.taskId || "")];
+      if (map) applyDelta(target, map.subject, map.subtype);
+    }
+  }
 }
 
 function randomCode() {
@@ -162,7 +185,7 @@ export async function GET(request) {
     codeList.forEach((code) => {
       usageByCode[code] = {
         sessions: 0,
-        answered: { build: 0, email: 0, discussion: 0, total: 0 },
+        answered: emptyAnswered(),
         lastActiveAt: null,
         tier: null,
         tierExpiresAt: null,
@@ -189,7 +212,7 @@ export async function GET(request) {
       const [{ data: sessionRows, error: sessionError }, { data: promptRows }] = await Promise.all([
         supabaseAdmin
           .from("sessions")
-          .select("user_code,type,date,score")
+          .select("user_code,type,date,score,subtype:details->>subtype")
           .in("user_code", codeList)
           .order("date", { ascending: false })
           .limit(20000),
@@ -213,11 +236,7 @@ export async function GET(request) {
         if (!usage.lastActiveAt || String(row.date || "") > String(usage.lastActiveAt || "")) {
           usage.lastActiveAt = row.date || null;
         }
-        const c = countAnsweredBySession(row);
-        usage.answered.build += c.build;
-        usage.answered.email += c.email;
-        usage.answered.discussion += c.discussion;
-        usage.answered.total += c.total;
+        accumulateRow(row, usage.answered);
         if (String(row?.type || "") === "mock" && uniqueSets[code]) {
           const ids = extractMockPromptIds(row.score);
           ids.email.forEach((pid) => uniqueSets[code].email.add(pid));
