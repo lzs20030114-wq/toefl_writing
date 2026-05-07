@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback } from "react";
 import { C, FONT, Btn, TopBar, SurfaceCard, PageShell } from "../shared/ui";
 import { AudioPlayer } from "./AudioPlayer";
+import { buildDraftKey, loadDraft, clearDraft, useDraftPersist } from "../../lib/draftPersist";
 
 const ACCENT = { color: "#8B5CF6", soft: "#F3E8FF" };
 const KEYS = ["A", "B", "C", "D"];
@@ -28,13 +29,31 @@ export function ListeningMCQTask({ item, onComplete, onExit, isPractice = false,
     ? item.conversation.map(t => `${t.speaker}: ${t.text}`).join(". ")
     : transcript;
 
-  const [phase, setPhase] = useState("listen"); // listen | answer | results
-  const [currentQ, setCurrentQ] = useState(0);
-  const [selections, setSelections] = useState(() => Array(totalQ).fill(null));
+  // Restore in-progress selections from localStorage when re-opening the same item.
+  const draftKey = buildDraftKey("listening-mcq", item?.id || "");
+  const draftRestored = loadDraft(draftKey);
+  const initialSelections = (() => {
+    if (Array.isArray(draftRestored?.selections) && draftRestored.selections.length === totalQ) {
+      return draftRestored.selections;
+    }
+    return Array(totalQ).fill(null);
+  })();
+  // If user already started answering, skip the listen phase on resume.
+  const hasAnyAnswer = initialSelections.some((s) => s !== null);
+
+  const [phase, setPhase] = useState(hasAnyAnswer ? "answer" : "listen"); // listen | answer | results
+  const [currentQ, setCurrentQ] = useState(() => {
+    const idx = Number(draftRestored?.currentQ);
+    if (Number.isInteger(idx) && idx >= 0 && idx < totalQ) return idx;
+    return 0;
+  });
+  const [selections, setSelections] = useState(initialSelections);
   const [submitted, setSubmitted] = useState(false);
   const [hover, setHover] = useState(null);
 
   const resultsRef = useRef(null);
+
+  useDraftPersist(draftKey, { selections, currentQ }, { enabled: !submitted });
 
   const handleAudioEnded = useCallback(() => {
     // Auto-advance to answer phase after audio ends
@@ -50,6 +69,7 @@ export function ListeningMCQTask({ item, onComplete, onExit, isPractice = false,
 
   const handleSubmit = () => {
     setSubmitted(true);
+    clearDraft(draftKey);
     // Compute results
     const results = questions.map((q, i) => ({
       qIndex: i,

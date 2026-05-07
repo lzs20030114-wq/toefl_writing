@@ -8,6 +8,7 @@ import { TopicPicker } from "../../components/shared/TopicPicker";
 import { getSavedTier } from "../../lib/AuthContext";
 import { saveSess, loadDoneIds, addDoneIds } from "../../lib/sessionStore";
 import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
+import { listActiveDrafts } from "../../lib/draftPersist";
 import LCR_DATA from "../../data/listening/bank/lcr.json";
 import LA_DATA from "../../data/listening/bank/la.json";
 import LC_DATA from "../../data/listening/bank/lc.json";
@@ -85,15 +86,33 @@ function ListeningPageClient() {
 
   useEffect(() => {
     if (isPractice) return;
+    // Resume in-progress drafts so a refresh doesn't wipe partial answers.
+    // sessionKey forces a fresh batch when the user clicks "下一题" — drafts
+    // for previous batches will have been cleared on submit.
     if (type === "lcr") {
+      const drafts = listActiveDrafts("lcr");
+      if (drafts.length > 0) {
+        // Draft scopeId is the joined batch ids — try to resolve them back to items.
+        const ids = String(drafts[0].scopeId).split("|");
+        const matched = ids.map((id) => LCR_DATA.items.find((it) => it.id === id)).filter(Boolean);
+        if (matched.length === ids.length && matched.length > 0) {
+          setRandomItems(matched);
+          return;
+        }
+      }
       setRandomItems(pickRandomBatch(LCR_DATA.items, 10));
-    } else if (type === "la") {
-      setRandomItems(pickRandom(LA_DATA.items) ? [pickRandom(LA_DATA.items)] : []);
-    } else if (type === "lc") {
-      setRandomItems(pickRandom(LC_DATA.items) ? [pickRandom(LC_DATA.items)] : []);
-    } else if (type === "lat") {
-      setRandomItems(pickRandom(LAT_DATA.items) ? [pickRandom(LAT_DATA.items)] : []);
+      return;
     }
+    // Single-item subtypes (la / lc / lat) — try to resume by item id first.
+    const drafts = listActiveDrafts("listening-mcq");
+    const pool = type === "la" ? LA_DATA.items : type === "lc" ? LC_DATA.items : LAT_DATA.items;
+    const resume = drafts.map((d) => pool.find((it) => it.id === d.scopeId)).find(Boolean);
+    if (resume) {
+      setRandomItems([resume]);
+      return;
+    }
+    const item = pickRandom(pool);
+    setRandomItems(item ? [item] : []);
   }, [type, isPractice, sessionKey]);
 
   const onExit = () => router.push("/?section=listening");

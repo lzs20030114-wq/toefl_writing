@@ -8,9 +8,13 @@ import { TopicPicker } from "../../components/shared/TopicPicker";
 import { getSavedTier } from "../../lib/AuthContext";
 import { saveSess, loadDoneIds, addDoneIds } from "../../lib/sessionStore";
 import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
+import { listActiveDrafts } from "../../lib/draftPersist";
 import CTW_DATA from "../../data/reading/bank/ctw.json";
 import RDL_DATA from "../../data/reading/bank/rdl.json";
 import AP_DATA from "../../data/reading/bank/ap.json";
+
+// Map subtype → draft task name (matches CTWTask / RDLTask buildDraftKey)
+const DRAFT_TASK_BY_TYPE = { ctw: "ctw", rdl: "rdl", ap: "rdl" };
 
 function pickRandom(items) {
   if (!items || items.length === 0) return null;
@@ -109,13 +113,20 @@ function ReadingPageClient() {
   // Practice mode: topic picker state
   const [pickedItemId, setPickedItemId] = useState(null);
 
-  // Pick random item for non-practice modes (client side only)
+  // Pick random item for non-practice modes (client side only).
+  // If there's an in-progress draft for this subtype, resume that item
+  // instead of picking a fresh one — otherwise refresh wipes the user's work.
   const [randomItem, setRandomItem] = useState(null);
   useEffect(() => {
     if (isPractice) return;
-    if (type === "ap") setRandomItem(pickRandom(AP_DATA.items));
-    else if (type === "rdl") setRandomItem(pickRandom(RDL_DATA.items));
-    else setRandomItem(pickRandom(CTW_DATA.items));
+    const pool = type === "ap" ? AP_DATA.items : type === "rdl" ? RDL_DATA.items : CTW_DATA.items;
+    const draftTask = DRAFT_TASK_BY_TYPE[type] || "ctw";
+    const drafts = listActiveDrafts(draftTask);
+    // Match draft scopeId against pool item ids (rdl draft can hold both rdl-* and ap-* ids; only the matching ones survive this filter)
+    const resume = drafts
+      .map((d) => pool.find((it) => String(it?.id) === String(d.scopeId)))
+      .find(Boolean);
+    setRandomItem(resume || pickRandom(pool));
   }, [type, isPractice]);
 
   const onExit = () => router.push("/?section=reading");

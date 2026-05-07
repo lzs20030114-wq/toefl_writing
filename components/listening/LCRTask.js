@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef } from "react";
 import { C, FONT, Btn, TopBar, SurfaceCard, PageShell } from "../shared/ui";
 import { AudioPlayer } from "./AudioPlayer";
+import { buildDraftKey, loadDraft, clearDraft, useDraftPersist } from "../../lib/draftPersist";
 
 const ACCENT = { color: "#8B5CF6", soft: "#F3E8FF" };
 const OPTION_KEYS = ["A", "B", "C", "D"];
@@ -17,16 +18,31 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
   const items = batchItems || (item ? [item] : []);
   const isBatch = items.length > 1;
 
-  const [qIndex, setQIndex] = useState(currentIndex);
+  // Scope drafts by the joined ids of the batch — same set of items reopened
+  // resumes; a different randomized batch starts fresh.
+  const batchScope = items.map((it) => it?.id || "?").join("|");
+  const draftKey = buildDraftKey("lcr", batchScope);
+  const draftRestored = loadDraft(draftKey);
+
+  const [qIndex, setQIndex] = useState(() => {
+    const idx = Number(draftRestored?.qIndex);
+    if (Number.isInteger(idx) && idx >= 0 && idx < items.length) return idx;
+    return currentIndex;
+  });
   const [phase, setPhase] = useState("listen"); // "listen" | "choose"
   const [selected, setSelected] = useState(null);
-  const [answers, setAnswers] = useState([]); // collected answers: { itemId, selected }
+  const [answers, setAnswers] = useState(() => {
+    return Array.isArray(draftRestored?.answers) ? draftRestored.answers : [];
+  }); // collected answers: { itemId, selected }
   const [finished, setFinished] = useState(false);
   const [hoverOption, setHoverOption] = useState(null);
   const [hoverBtn, setHoverBtn] = useState(null);
   const [reviewIndex, setReviewIndex] = useState(null); // for reviewing individual questions in results
 
   const audioPlayedRef = useRef(false);
+
+  // Autosave answers + qIndex for in-progress batches.
+  useDraftPersist(draftKey, { answers, qIndex }, { enabled: !finished });
 
   const currentItem = items[qIndex] || items[0];
   if (!currentItem) {
@@ -73,6 +89,7 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
     } else {
       // All done — compute results and show summary
       setFinished(true);
+      clearDraft(draftKey);
       const results = updatedAnswers.map((a, i) => ({
         itemId: a.itemId,
         selected: a.selected,
@@ -84,7 +101,7 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
         onComplete({ correct: correctCount, total: results.length, results });
       }
     }
-  }, [selected, phase, currentItem, answers, qIndex, items, onComplete]);
+  }, [selected, phase, currentItem, answers, qIndex, items, onComplete, draftKey]);
 
   // ── Results page ──
   if (finished) {

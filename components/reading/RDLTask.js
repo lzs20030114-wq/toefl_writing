@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { C, FONT, Btn, PageShell, SurfaceCard, TopBar } from "../shared/ui";
+import { buildDraftKey, loadDraft, clearDraft, useDraftPersist } from "../../lib/draftPersist";
 
 /**
  * RDL Task — matches real TOEFL interface:
@@ -10,9 +11,25 @@ import { C, FONT, Btn, PageShell, SurfaceCard, TopBar } from "../shared/ui";
  * - After all questions → Submit → See all results at once
  */
 export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = false, title = "Read in Daily Life", section = "Reading | Task 2" }) {
-  const [selections, setSelections] = useState(() => (item.questions || []).map(() => null));
-  const [currentQ, setCurrentQ] = useState(0);
+  // Scope drafts by item id; reading tasks use the same RDLTask shell for AP too,
+  // so prefix the id with the perceived subtype to avoid collisions.
+  const draftKey = buildDraftKey("rdl", item?.id || "");
+  const draftRestored = loadDraft(draftKey);
+  const [selections, setSelections] = useState(() => {
+    const qLen = (item?.questions || []).length;
+    if (Array.isArray(draftRestored?.selections) && draftRestored.selections.length === qLen) {
+      return draftRestored.selections;
+    }
+    return (item?.questions || []).map(() => null);
+  });
+  const [currentQ, setCurrentQ] = useState(() => {
+    const idx = Number(draftRestored?.currentQ);
+    if (Number.isInteger(idx) && idx >= 0 && idx < (item?.questions || []).length) return idx;
+    return 0;
+  });
   const [submitted, setSubmitted] = useState(false);
+
+  useDraftPersist(draftKey, { selections, currentQ }, { enabled: !submitted });
 
   // Timer state
   const [timeLeft, setTimeLeft] = useState(timeLimit > 0 ? timeLimit : 0);
@@ -53,6 +70,7 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
       autoSubmittedRef.current = true;
       // Force submit with whatever is answered
       setSubmitted(true);
+      clearDraft(draftKey);
       setCurrentQ(0);
       const results = questions.map((q, i) => ({
         selected: selections[i],
@@ -62,7 +80,7 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
       const correct = results.filter(r => r.isCorrect).length;
       if (onComplete) onComplete({ results, correct, total: questions.length });
     }
-  }, [timeLeft, timeLimit, submitted, selections, questions, onComplete]);
+  }, [timeLeft, timeLimit, submitted, selections, questions, onComplete, draftKey]);
 
   function handleSelect(key) {
     if (submitted) return;
@@ -88,6 +106,7 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
   function handleSubmit() {
     if (!allAnswered) return;
     setSubmitted(true);
+    clearDraft(draftKey);
     setCurrentQ(0); // Go back to Q1 to review
     const results = questions.map((q, i) => ({
       selected: selections[i],

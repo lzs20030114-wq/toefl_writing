@@ -2,11 +2,21 @@
 
 import { useState, useRef, useEffect } from "react";
 import { C, FONT, Btn, PageShell, SurfaceCard, TopBar } from "../shared/ui";
+import { buildDraftKey, loadDraft, clearDraft, useDraftPersist } from "../../lib/draftPersist";
 
 export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = false }) {
-  const [answers, setAnswers] = useState(() => item.blanks.map(() => ""));
+  const draftKey = buildDraftKey("ctw", item?.id || "");
+  const [answers, setAnswers] = useState(() => {
+    const restored = loadDraft(draftKey);
+    if (Array.isArray(restored) && item?.blanks && restored.length === item.blanks.length) {
+      return restored.map((v) => (typeof v === "string" ? v : ""));
+    }
+    return (item?.blanks || []).map(() => "");
+  });
   const [submitted, setSubmitted] = useState(false);
   const inputRefs = useRef([]);
+
+  useDraftPersist(draftKey, answers, { enabled: !submitted });
 
   // Timer state
   const [timeLeft, setTimeLeft] = useState(timeLimit > 0 ? timeLimit : 0);
@@ -63,6 +73,7 @@ export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
 
   function handleSubmit() {
     setSubmitted(true);
+    clearDraft(draftKey);
     const results = item.blanks.map((blank, i) => {
       const expected = blank.original_word.toLowerCase().replace(/[^a-z]/g, "");
       const fragment = blank.displayed_fragment.toLowerCase();
