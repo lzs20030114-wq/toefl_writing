@@ -112,6 +112,9 @@ export function WritingTask({
   initialPromptId = "",
   initialPracticeRootId = "",
   initialPracticeAttempt = 1,
+  // When set (e.g. inside a mock-exam shell), the typed text is autosaved to
+  // localStorage under this key and restored on remount. Cleared on submit.
+  draftKey = "",
 }) {
   const isPracticeMode = practiceMode === PRACTICE_MODE.PRACTICE;
   const isMobile = useIsMobile();
@@ -160,7 +163,24 @@ export function WritingTask({
     return Number.isInteger(first) ? first : 0;
   });
   const [pd, setPd] = useState(() => (pi >= 0 ? data[pi] || null : null));
-  const [text, setText] = useState("");
+  const [text, setText] = useState(() => {
+    if (!draftKey || typeof window === "undefined") return "";
+    try { return localStorage.getItem(draftKey) || ""; } catch { return ""; }
+  });
+
+  // Autosave the typed essay to localStorage so reload/back/restart keeps the work.
+  useEffect(() => {
+    if (!draftKey) return;
+    const t = setTimeout(() => {
+      try {
+        if (text) localStorage.setItem(draftKey, text);
+        else localStorage.removeItem(draftKey);
+      } catch {
+        // quota — ignore, draft autosave is best-effort
+      }
+    }, 500);
+    return () => clearTimeout(t);
+  }, [text, draftKey]);
   const [tl, setTl] = useState(limit);
   const [elapsed, setElapsed] = useState(0);
   const [run, setRun] = useState(false);
@@ -291,6 +311,10 @@ export function WritingTask({
           completionSentRef.current = true;
           onComplete(payload);
         }
+        // Submit succeeded — drop the autosaved draft.
+        if (draftKey) {
+          try { localStorage.removeItem(draftKey); } catch {}
+        }
         setRequestState("success");
       } else {
         setRequestState("error");
@@ -355,6 +379,10 @@ export function WritingTask({
       }
       setRequestState("success");
       setScoreError("");
+      // Mock-mode handoff — clear the draft now that the response is captured.
+      if (draftKey) {
+        try { localStorage.removeItem(draftKey); } catch {}
+      }
       if (typeof onComplete === "function" && !completionSentRef.current) {
         completionSentRef.current = true;
         onComplete({

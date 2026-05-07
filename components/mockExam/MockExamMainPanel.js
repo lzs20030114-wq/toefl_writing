@@ -6,6 +6,7 @@ import { BuildSentenceTask } from "../buildSentence/BuildSentenceTask";
 import { WritingTask } from "../writing/WritingTask";
 import { addDoneIds } from "../../lib/sessionStore";
 import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
+import { buildMockDraftKey } from "../../lib/mockExam/storage";
 import { MockExamResult } from "./MockExamResult";
 import { TaskTransitionCard } from "./TaskTransitionCard";
 
@@ -101,6 +102,7 @@ export function MockExamMainPanel({
           showTaskIntro={false}
           autoStartOnMount
           reportLanguage={reportLanguage}
+          draftKey={buildMockDraftKey(session.id, currentTask.taskId)}
           onComplete={(payload) => {
             const promptId = payload?.details?.promptData?.id;
             if (promptId) {
@@ -134,6 +136,7 @@ export function MockExamMainPanel({
           showTaskIntro={false}
           autoStartOnMount
           reportLanguage={reportLanguage}
+          draftKey={buildMockDraftKey(session.id, currentTask.taskId)}
           onComplete={(payload) => {
             const promptId = payload?.details?.promptData?.id;
             if (promptId) {
