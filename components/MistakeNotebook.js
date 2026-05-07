@@ -4,19 +4,25 @@ import { loadHist, SESSION_STORE_EVENTS } from "../lib/sessionStore";
 import { formatLocalDateTime, translateGrammarPoint } from "../lib/utils";
 import { C, FONT, PageShell, SurfaceCard, DisclosureSection } from "./shared/ui";
 import { useBsAiExplain, BsAiExplainBlock } from "./buildSentence/useBsAiExplain";
+import { useMistakeFavorites } from "./buildSentence/useMistakeFavorites";
 import { callAI } from "../lib/ai/client";
 
 /* ── helpers ── */
 
 function extractMistakes(sessions) {
-  // Filter BS sessions that have details with wrong answers
+  // Filter BS sessions that have details with wrong answers.
+  // We preserve the original detail index (_index) so each mistake has a
+  // stable (session_id, detail_index) pointer for the favorites feature.
   return sessions
     .filter((s) => s.type === "bs" && Array.isArray(s.details))
     .map((s, idx) => {
-      const wrongs = s.details.filter((d) => !d.isCorrect);
+      const wrongs = s.details
+        .map((d, i) => ({ ...d, _index: i }))
+        .filter((d) => !d.isCorrect);
       if (wrongs.length === 0) return null;
       return {
         key: s.date || `session-${idx}`,
+        sessionId: s.id ?? null,
         date: s.date,
         correct: s.correct ?? 0,
         total: s.total ?? s.details.length,
@@ -26,6 +32,33 @@ function extractMistakes(sessions) {
     })
     .filter(Boolean)
     .sort((a, b) => new Date(b.date) - new Date(a.date)); // newest first
+}
+
+/** Build the snapshot we persist when a mistake is starred. Self-contained so
+ *  the card still renders if the source session is later deleted. */
+function buildSnapshot(detail, sessionDate) {
+  return {
+    prompt: detail?.prompt || "",
+    userAnswer: detail?.userAnswer || "",
+    correctAnswer: detail?.correctAnswer || "",
+    grammar_points: Array.isArray(detail?.grammar_points) ? detail.grammar_points : [],
+    sessionDate: sessionDate || null,
+  };
+}
+
+/** Render a favorite row as a synthetic "detail" the existing MistakeCard
+ *  understands. This lets the favorites tab reuse the same card. */
+function favoriteToDetail(fav) {
+  const s = fav?.snapshot || {};
+  return {
+    prompt: s.prompt || "",
+    userAnswer: s.userAnswer || "",
+    correctAnswer: s.correctAnswer || "",
+    grammar_points: Array.isArray(s.grammar_points) ? s.grammar_points : [],
+    isCorrect: false,
+    _index: fav?.detail_index ?? null,
+    _favoriteSessionDate: s.sessionDate || null,
+  };
 }
 
 function allGrammarFreq(groups) {
@@ -115,11 +148,53 @@ function wordDiff(user, correct) {
 
 /* ── sub-components ── */
 
-function MistakeCard({ detail, explainKey, aiExplains, isLegacy, handleAiExplain }) {
+function StarButton({ starred, onClick, disabled }) {
+  const [hover, setHover] = useState(false);
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      disabled={disabled}
+      aria-label={starred ? "取消收藏" : "收藏此错题"}
+      title={starred ? "取消收藏" : "收藏此错题"}
+      style={{
+        flexShrink: 0,
+        background: hover ? "#fef3c7" : "transparent",
+        border: "none",
+        borderRadius: 999,
+        width: 32,
+        height: 32,
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        cursor: disabled ? "not-allowed" : "pointer",
+        opacity: disabled ? 0.5 : 1,
+        fontSize: 20,
+        lineHeight: 1,
+        color: starred ? "#f59e0b" : "#94a3b8",
+        transition: "color 0.15s, background 0.15s",
+        padding: 0,
+      }}
+    >
+      {starred ? "★" : "☆"}
+    </button>
+  );
+}
+
+function MistakeCard({ detail, explainKey, aiExplains, isLegacy, handleAiExplain, sessionId, detailIndex, sessionDate, isStarred, onToggleStar }) {
   const diff = useMemo(
     () => wordDiff(detail.userAnswer || "", detail.correctAnswer || ""),
     [detail.userAnswer, detail.correctAnswer],
   );
+  const showStar = sessionId != null && detailIndex != null && typeof onToggleStar === "function";
+  const starred = showStar ? !!isStarred : false;
+
+  const handleStarClick = useCallback(() => {
+    if (!showStar) return;
+    onToggleStar(sessionId, detailIndex, buildSnapshot(detail, sessionDate));
+  }, [showStar, sessionId, detailIndex, detail, sessionDate, onToggleStar]);
 
   return (
     <div
@@ -131,9 +206,14 @@ function MistakeCard({ detail, explainKey, aiExplains, isLegacy, handleAiExplain
         marginBottom: 10,
       }}
     >
-      {/* prompt */}
-      <div style={{ fontSize: 13, color: C.t2, marginBottom: 8, lineHeight: 1.5 }}>
-        {detail.prompt}
+      {/* prompt + star */}
+      <div style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 8 }}>
+        <div style={{ flex: 1, fontSize: 13, color: C.t2, lineHeight: 1.5 }}>
+          {detail.prompt}
+        </div>
+        {showStar ? (
+          <StarButton starred={starred} onClick={handleStarClick} />
+        ) : null}
       </div>
 
       {/* user answer */}
@@ -311,9 +391,57 @@ function StatsBar({ groups, totalWrong }) {
 
 /* ── main component ── */
 
+function TabBar({ tab, setTab, totalWrong, favoritesCount }) {
+  const tabs = [
+    { key: "all", label: "全部错题", count: totalWrong },
+    { key: "favorites", label: "★ 收藏", count: favoritesCount },
+  ];
+  return (
+    <div
+      style={{
+        display: "inline-flex",
+        gap: 4,
+        padding: 4,
+        background: "#f1f5f9",
+        borderRadius: 10,
+        marginBottom: 14,
+      }}
+    >
+      {tabs.map((t) => {
+        const active = t.key === tab;
+        return (
+          <button
+            key={t.key}
+            onClick={() => setTab(t.key)}
+            style={{
+              border: "none",
+              background: active ? "#fff" : "transparent",
+              color: active ? C.t1 : C.t2,
+              borderRadius: 7,
+              padding: "7px 14px",
+              fontSize: 13,
+              fontWeight: active ? 700 : 500,
+              cursor: "pointer",
+              boxShadow: active ? "0 1px 2px rgba(15,23,42,0.08)" : "none",
+              transition: "all 0.15s",
+            }}
+          >
+            {t.label}
+            <span style={{ marginLeft: 6, color: active ? C.t2 : C.t3, fontSize: 12, fontWeight: 600 }}>
+              {t.count}
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function MistakeNotebook({ onBack }) {
   const [hist, setHist] = useState(() => loadHist());
+  const [tab, setTab] = useState("all");
   const { aiExplains, isLegacy, handleAiExplain } = useBsAiExplain();
+  const { favorites, isStarred, toggleStar, error: favError } = useMistakeFavorites();
 
   // Listen for session store updates
   useEffect(() => {
@@ -339,6 +467,8 @@ export default function MistakeNotebook({ onBack }) {
     () => groups.reduce((n, g) => n + g.wrongCount, 0),
     [groups],
   );
+
+  const favoritesCount = favorites?.length || 0;
 
   return (
     <PageShell>
@@ -369,8 +499,8 @@ export default function MistakeNotebook({ onBack }) {
         </div>
       </div>
 
-      {/* empty state */}
-      {groups.length === 0 ? (
+      {/* empty state — only when both tabs would be empty */}
+      {groups.length === 0 && favoritesCount === 0 ? (
         <SurfaceCard style={{ padding: "48px 24px", textAlign: "center" }}>
           <div style={{ fontSize: 40, marginBottom: 12 }}>🎉</div>
           <div style={{ fontSize: 16, fontWeight: 700, color: C.t1, marginBottom: 6 }}>
@@ -382,34 +512,91 @@ export default function MistakeNotebook({ onBack }) {
         </SurfaceCard>
       ) : (
         <>
-          {/* stats */}
-          <StatsBar groups={groups} totalWrong={totalWrong} />
+          <TabBar tab={tab} setTab={setTab} totalWrong={totalWrong} favoritesCount={favoritesCount} />
+          {favError ? (
+            <div style={{ marginBottom: 12, padding: "8px 12px", borderRadius: 6, background: "#fef2f2", color: "#b91c1c", fontSize: 12 }}>
+              收藏夹同步出错：{favError}
+            </div>
+          ) : null}
 
-          {/* session groups */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            {groups.map((g, gi) => (
-              <DisclosureSection
-                key={g.key}
-                title={`第 ${groups.length - gi} 套 · ${g.wrongCount}/${g.total} 错题`}
-                preview={formatLocalDateTime(g.date)}
-                badge={`${g.wrongCount} 题`}
-                icon="✗"
-                defaultOpen={gi === 0}
-                contentStyle={{ padding: "12px 14px", background: C.bg }}
-              >
-                {g.details.map((d, di) => (
-                  <MistakeCard
-                    key={`${g.key}-${di}`}
-                    detail={d}
-                    explainKey={`mn-${gi}-${di}`}
-                    aiExplains={aiExplains}
-                    isLegacy={isLegacy}
-                    handleAiExplain={handleAiExplain}
-                  />
-                ))}
-              </DisclosureSection>
-            ))}
-          </div>
+          {tab === "all" ? (
+            <>
+              {groups.length > 0 ? (
+                <>
+                  <StatsBar groups={groups} totalWrong={totalWrong} />
+                  <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                    {groups.map((g, gi) => (
+                      <DisclosureSection
+                        key={g.key}
+                        title={`第 ${groups.length - gi} 套 · ${g.wrongCount}/${g.total} 错题`}
+                        preview={formatLocalDateTime(g.date)}
+                        badge={`${g.wrongCount} 题`}
+                        icon="✗"
+                        defaultOpen={gi === 0}
+                        contentStyle={{ padding: "12px 14px", background: C.bg }}
+                      >
+                        {g.details.map((d, di) => (
+                          <MistakeCard
+                            key={`${g.key}-${di}`}
+                            detail={d}
+                            explainKey={`mn-${gi}-${di}`}
+                            aiExplains={aiExplains}
+                            isLegacy={isLegacy}
+                            handleAiExplain={handleAiExplain}
+                            sessionId={g.sessionId}
+                            detailIndex={d._index}
+                            sessionDate={g.date}
+                            isStarred={isStarred(g.sessionId, d._index)}
+                            onToggleStar={toggleStar}
+                          />
+                        ))}
+                      </DisclosureSection>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <SurfaceCard style={{ padding: "32px 24px", textAlign: "center" }}>
+                  <div style={{ fontSize: 14, color: C.t2 }}>暂无错题记录。</div>
+                </SurfaceCard>
+              )}
+            </>
+          ) : (
+            // Favorites tab
+            <>
+              {favoritesCount === 0 ? (
+                <SurfaceCard style={{ padding: "40px 24px", textAlign: "center" }}>
+                  <div style={{ fontSize: 32, marginBottom: 10, color: "#f59e0b" }}>★</div>
+                  <div style={{ fontSize: 15, fontWeight: 700, color: C.t1, marginBottom: 6 }}>
+                    暂无收藏的错题
+                  </div>
+                  <div style={{ fontSize: 13, color: C.t3, lineHeight: 1.6 }}>
+                    在错题卡片右上角点击 ☆ 来收藏。
+                  </div>
+                </SurfaceCard>
+              ) : (
+                <SurfaceCard style={{ padding: "12px 14px", background: C.bg }}>
+                  {favorites.map((f, fi) => {
+                    const synthDetail = favoriteToDetail(f);
+                    return (
+                      <MistakeCard
+                        key={f.id}
+                        detail={synthDetail}
+                        explainKey={`fav-${f.id}`}
+                        aiExplains={aiExplains}
+                        isLegacy={isLegacy}
+                        handleAiExplain={handleAiExplain}
+                        sessionId={f.session_id}
+                        detailIndex={f.detail_index}
+                        sessionDate={f.snapshot?.sessionDate || f.created_at}
+                        isStarred={true}
+                        onToggleStar={toggleStar}
+                      />
+                    );
+                  })}
+                </SurfaceCard>
+              )}
+            </>
+          )}
         </>
       )}
     </PageShell>
