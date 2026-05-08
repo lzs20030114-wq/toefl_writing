@@ -5,9 +5,39 @@ import { shuffle, evaluateBuildSentenceOrder } from "../../lib/utils";
 import { addDoneIds, saveSess } from "../../lib/sessionStore";
 import { DONE_STORAGE_KEYS, selectBSQuestions } from "../../lib/questionSelector";
 import runtimeModel from "../../lib/questionBank/runtimeModel";
+import { buildDraftKey, loadDraft, saveDraft, clearDraft } from "../../lib/draftPersist";
+
+// Resume draft for standalone BS sessions. We only persist a tiny
+// pointer ({setId, idx, results, savedAt}) — selectBSQuestions() picks the
+// first undone question set deterministically, so refreshing returns the
+// same 10 questions and resuming-by-index recovers naturally. The 24h TTL
+// guards against stale drafts.
+const BS_RESUME_KEY = buildDraftKey("bs", "resume");
+const BS_RESUME_TTL_MS = 24 * 60 * 60 * 1000;
 
 function getUserChunks(slotsArr) {
   return slotsArr.filter((s) => s !== null).map((s) => s.text);
+}
+
+function readBsResumeDraft(currentQs) {
+  const draft = loadDraft(BS_RESUME_KEY);
+  if (!draft || typeof draft !== "object") return null;
+  if (!Number.isInteger(draft.idx) || draft.idx <= 0) return null;
+  if (!Number.isFinite(draft.savedAt) || Date.now() - draft.savedAt > BS_RESUME_TTL_MS) {
+    clearDraft(BS_RESUME_KEY);
+    return null;
+  }
+  const currentSetId = currentQs?.[0]?.__sourceSetId;
+  if (!currentSetId || currentSetId !== draft.setId) {
+    // Set rotated (e.g. user marked some sets done elsewhere) — discard stale draft.
+    clearDraft(BS_RESUME_KEY);
+    return null;
+  }
+  if (draft.idx >= currentQs.length) {
+    clearDraft(BS_RESUME_KEY);
+    return null;
+  }
+  return draft;
 }
 
 export function useBuildSentenceSession(questions, options = {}) {
@@ -30,10 +60,30 @@ export function useBuildSentenceSession(questions, options = {}) {
     }
   })();
 
-  const initialResults = Array.isArray(options.initialResults) && options.initialResults.length === initialBuildState.qs.length
+  // Standalone (non-mock, non-practice) BS sessions can resume from a saved
+  // index draft if one is fresh. Practice mode (questions passed in) and the
+  // mock-exam embedded use (persistSession=false) skip this path.
+  const canResume = persistSession && !questions && initialBuildState.qs.length > 0;
+  const resumeDraft = canResume ? readBsResumeDraft(initialBuildState.qs) : null;
+
+  let initialResults = Array.isArray(options.initialResults) && options.initialResults.length === initialBuildState.qs.length
     ? options.initialResults.map((r, i) => r ? { ...r, q: initialBuildState.qs[i] } : null)
     : null;
-  const startIdx = initialResults ? Math.max(0, initialResults.findIndex((r) => r === null)) : 0;
+
+  if (!initialResults && resumeDraft && Array.isArray(resumeDraft.results)) {
+    // Re-attach the q reference from the freshly-prepared question list
+    // (we don't serialize entire question objects in the draft).
+    const padded = Array(initialBuildState.qs.length).fill(null);
+    for (let i = 0; i < Math.min(resumeDraft.results.length, padded.length); i += 1) {
+      const r = resumeDraft.results[i];
+      if (r && typeof r === "object") padded[i] = { ...r, q: initialBuildState.qs[i] };
+    }
+    initialResults = padded;
+  }
+
+  const startIdx = initialResults
+    ? Math.max(0, initialResults.findIndex((r) => r === null))
+    : 0;
 
   const [qs] = useState(() => initialBuildState.qs);
   const [selectionError] = useState(() => initialBuildState.error);
@@ -130,6 +180,31 @@ export function useBuildSentenceSession(questions, options = {}) {
     }
   }, [tl, run, phase, onTimerChange]);
 
+  // Autosave the resume pointer (setId + idx + lightweight results) for
+  // standalone BS while the session is running. Debounced to avoid spam.
+  useEffect(() => {
+    if (!canResume) return undefined;
+    if (phase !== "active") return undefined;
+    if (idx <= 0 && (!Array.isArray(results) || results.every((r) => r == null))) {
+      // Nothing to resume yet — don't write a stub draft.
+      return undefined;
+    }
+    const setId = qs?.[0]?.__sourceSetId;
+    if (!setId) return undefined;
+    const t = setTimeout(() => {
+      saveDraft(BS_RESUME_KEY, {
+        setId,
+        idx,
+        // Strip the (heavy) q reference; it's reconstructed on resume.
+        results: (results || []).map((r) =>
+          r ? { userAnswer: r.userAnswer, correctAnswer: r.correctAnswer, isCorrect: r.isCorrect } : null
+        ),
+        savedAt: Date.now(),
+      });
+    }, 500);
+    return () => clearTimeout(t);
+  }, [canResume, phase, qs, idx, results]);
+
   function saveSession(nr) {
     const doneSetIds = new Set(
       nr
@@ -168,6 +243,10 @@ export function useBuildSentenceSession(questions, options = {}) {
     };
     if (persistSession) {
       saveSess(payload);
+    }
+    // Final submit — drop the resume pointer; on next visit the user gets a fresh set.
+    if (canResume) {
+      clearDraft(BS_RESUME_KEY);
     }
     if (onComplete && !completionSentRef.current) {
       completionSentRef.current = true;
