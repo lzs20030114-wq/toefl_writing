@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import AdminLayout from "../../components/admin/AdminLayout";
 import {
   StatCard,
@@ -76,6 +77,7 @@ function CardLink({ href, label, hint }) {
 }
 
 export default function AdminHomePage() {
+  const router = useRouter();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -85,14 +87,15 @@ export default function AdminHomePage() {
     setLoading(true);
     setError("");
     try {
-      const [users, codes, content, staging, apiErrors] = await Promise.all([
+      const [users, codes, content, staging, apiErrors, feedback] = await Promise.all([
         callAdminApi("/api/admin/users").catch(() => null),
         callAdminApi("/api/admin/codes").catch(() => null),
         callAdminApi("/api/admin/content").catch(() => null),
         callAdminApi("/api/admin/content/staging").catch(() => null),
         callAdminApi("/api/admin/api-errors?limit=5").catch(() => null),
+        callAdminApi("/api/admin/feedback?limit=200").catch(() => null),
       ]);
-      setData({ users, codes, content, staging, apiErrors });
+      setData({ users, codes, content, staging, apiErrors, feedback });
       setUpdatedAt(new Date());
     } catch (e) {
       setError(e.message);
@@ -111,6 +114,16 @@ export default function AdminHomePage() {
   const content = data?.content;
   const staging = data?.staging;
   const apiErrors = data?.apiErrors;
+  const feedback = data?.feedback;
+
+  // Unread = not yet marked "resolved" by an admin. We sort newest first
+  // on the server already; the first item is the latest unread submission.
+  const feedbackRows = Array.isArray(feedback?.rows) ? feedback.rows : [];
+  const unreadFeedback = feedbackRows.filter((r) => r?.status !== "resolved");
+  const unreadFeedbackCount = unreadFeedback.length;
+  // limit=200 cap — if we hit it, surface "200+" instead of an underestimate.
+  const unreadFeedbackOverflow = feedbackRows.length >= 200 && unreadFeedbackCount === feedbackRows.length;
+  const latestUnreadFeedback = unreadFeedback[0] || null;
 
   const contentTotals = useMemo(() => {
     if (!content?.groups) return null;
@@ -154,7 +167,7 @@ export default function AdminHomePage() {
         {/* Top row: key business metrics */}
         <div className="adm-stats" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 12, marginBottom: 16 }}>
           {loading ? (
-            Array.from({ length: 6 }, (_, i) => (
+            Array.from({ length: 7 }, (_, i) => (
               <div key={i} style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 10, padding: 18 }}>
                 <Skeleton height={32} width={60} />
                 <div style={{ marginTop: 8 }}><Skeleton height={14} width={80} /></div>
@@ -168,9 +181,70 @@ export default function AdminHomePage() {
               <StatCard value={codeStats?.available} label="可用登录码" color={codeStats?.available > 5 ? C.blue : "#d97706"} sub={codeStats ? `已发放 ${codeStats.issued}` : undefined} />
               <StatCard value={contentTotals?.questions ?? "--"} label="题库总题数" color={C.nav} sub={contentTotals ? `${contentTotals.banks} 个题库` : undefined} />
               <StatCard value={stagingCount} label="暂存待审核" color={stagingCount > 0 ? "#d97706" : C.t2} />
+              <StatCard
+                value={unreadFeedbackOverflow ? "200+" : unreadFeedbackCount}
+                label="未处理反馈"
+                color={unreadFeedbackCount > 0 ? "#dc2626" : C.t2}
+                sub={latestUnreadFeedback ? `最新 ${relativeTime(latestUnreadFeedback.created_at)}` : (feedback ? "暂无新反馈" : undefined)}
+                onClick={() => router.push("/admin-feedback")}
+              />
             </>
           )}
         </div>
+
+        {/* Unread feedback — highlighted up top so it's the first thing seen */}
+        {!loading && unreadFeedbackCount > 0 && (
+          <div style={{ marginBottom: 14 }}>
+            <SectionCard
+              title={`未处理反馈 (${unreadFeedbackOverflow ? "200+" : unreadFeedbackCount})`}
+              href="/admin-feedback"
+            >
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {unreadFeedback.slice(0, 4).map((r) => (
+                  <Link
+                    key={r.id}
+                    href="/admin-feedback"
+                    style={{
+                      display: "block",
+                      padding: "8px 10px",
+                      borderRadius: 6,
+                      border: "1px solid " + C.bdr,
+                      textDecoration: "none",
+                      color: "inherit",
+                      background: "#fff",
+                      transition: "border-color 0.12s, background 0.12s",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.borderColor = "#dc2626";
+                      e.currentTarget.style.background = "#fef2f2";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.borderColor = C.bdr;
+                      e.currentTarget.style.background = "#fff";
+                    }}
+                  >
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, marginBottom: 3 }}>
+                      <div style={{ display: "flex", gap: 6, alignItems: "center", minWidth: 0 }}>
+                        <Badge color="#dc2626">新</Badge>
+                        <span style={{ fontFamily: "monospace", fontSize: 11, fontWeight: 700, color: C.nav }}>{r.user_code || "—"}</span>
+                        {r.page && <span style={{ fontSize: 11, color: C.t3 }}>· {r.page}</span>}
+                      </div>
+                      <span style={{ fontSize: 11, color: C.t3, flexShrink: 0 }}>{relativeTime(r.created_at)}</span>
+                    </div>
+                    <div style={{ fontSize: 12, color: C.t1, lineHeight: 1.5, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
+                      {String(r.content || "").trim() || "(空)"}
+                    </div>
+                  </Link>
+                ))}
+                {unreadFeedbackCount > 4 && (
+                  <Link href="/admin-feedback" style={{ fontSize: 12, color: C.blue, textDecoration: "none", textAlign: "center", padding: "4px 0", fontWeight: 600 }}>
+                    查看其余 {unreadFeedbackOverflow ? "200+" : unreadFeedbackCount - 4} 条 &rarr;
+                  </Link>
+                )}
+              </div>
+            </SectionCard>
+          </div>
+        )}
 
         {/* Content overview */}
         <div style={{ marginBottom: 14 }}>
