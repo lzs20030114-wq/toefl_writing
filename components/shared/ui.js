@@ -91,7 +91,7 @@ export function ChevronIcon({ open = false, size = 12, color = C.t3 }) {
 
 export function TopBar({ title, section, timeLeft, elapsedTime, examTimeNote, isRunning, qInfo, onExit }) {
   return (
-    <div className="tp-topbar" style={{ background: "rgba(255,255,255,0.92)", color: C.t1, padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between", height: 56, fontFamily: FONT, fontSize: 14, borderBottom: "1px solid " + C.bdrSubtle, backdropFilter: "blur(12px)", position: "sticky", top: 0, zIndex: 100 }}>
+    <div className="tp-topbar" style={{ background: "rgba(255,255,255,0.92)", color: C.t1, padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between", height: 56, fontFamily: FONT, fontSize: 14, borderBottom: "1px solid " + C.bdrSubtle, WebkitBackdropFilter: "blur(12px)", backdropFilter: "blur(12px)", position: "sticky", top: 0, zIndex: 100 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
         <div style={{ width: 28, height: 28, borderRadius: 8, background: "linear-gradient(135deg,#087355,#0891B2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
           <span style={{ color: "#fff", fontSize: 13, fontWeight: 800 }}>T</span>
@@ -103,10 +103,10 @@ export function TopBar({ title, section, timeLeft, elapsedTime, examTimeNote, is
       <div className="tp-topbar-mid" style={{ fontSize: 13, color: C.t2 }}>{title}</div>
       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
         {qInfo && <span style={{ fontSize: 12, color: C.t2 }}>{qInfo}</span>}
-        {timeLeft !== undefined && <div style={{ background: timeLeft <= 60 ? "#fee2e2" : C.ltB, color: timeLeft <= 60 ? C.red : C.blue, padding: "6px 12px", borderRadius: 999, fontFamily: "Consolas,monospace", fontSize: 15, fontWeight: 700, border: "1px solid " + (timeLeft <= 60 ? "#fecaca" : "#d1fae5") }}>{fmt(timeLeft)}</div>}
+        {timeLeft !== undefined && <div style={{ background: timeLeft <= 60 ? "#fee2e2" : C.ltB, color: timeLeft <= 60 ? C.red : C.blue, padding: "6px 12px", borderRadius: 999, fontFamily: "Consolas, Menlo, 'Courier New', monospace", fontSize: 15, fontWeight: 700, border: "1px solid " + (timeLeft <= 60 ? "#fecaca" : "#d1fae5") }}>{fmt(timeLeft)}</div>}
         {elapsedTime !== undefined && (
           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            <div style={{ background: C.ltB, color: C.t2, padding: "6px 12px", borderRadius: 999, fontFamily: "Consolas,monospace", fontSize: 15, fontWeight: 700, border: "1px solid #d1fae5" }}>{fmt(elapsedTime)}</div>
+            <div style={{ background: C.ltB, color: C.t2, padding: "6px 12px", borderRadius: 999, fontFamily: "Consolas, Menlo, 'Courier New', monospace", fontSize: 15, fontWeight: 700, border: "1px solid #d1fae5" }}>{fmt(elapsedTime)}</div>
             {examTimeNote && <span className="tp-topbar-exam-note" style={{ fontSize: 11, color: C.t3, whiteSpace: "nowrap" }}>{examTimeNote}</span>}
           </div>
         )}

@@ -452,7 +452,7 @@ function MobileUserSheetContent({
           <div style={{ fontSize: 11, fontWeight: 700, color: "#94a39a", textTransform: "uppercase", marginBottom: 6 }}>登录码</div>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <span style={{
-              fontSize: 18, fontWeight: 800, fontFamily: "monospace", letterSpacing: 2,
+              fontSize: 18, fontWeight: 800, fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Courier New', monospace", letterSpacing: 2,
               filter: showCode ? "none" : "blur(5px)", transition: "filter .2s",
             }}>
               {userCode}

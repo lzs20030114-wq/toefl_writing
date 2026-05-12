@@ -247,7 +247,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
             position: "sticky", top: 0, zIndex: 10, height: 48,
             display: "flex", alignItems: "center", padding: "0 14px",
             background: isChallenge ? CH.nav : "rgba(255,255,255,0.95)",
-            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)", backdropFilter: "blur(12px)",
             borderBottom: isChallenge ? `2px solid ${CH.navBorder}` : `1px solid ${T.bdrSubtle}`,
           }}>
             <div style={{ width: 24, height: 24, borderRadius: 6, background: "linear-gradient(135deg,#087355,#0891B2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -295,7 +295,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
             <div style={{ position: "absolute", top: 0, bottom: 0, width: "30%", background: "linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent)", animation: "ch-sweep 4s ease-in-out infinite", pointerEvents: "none", zIndex: 0 }} />
           </div>
         ) : (
-          <div className="home-nav" style={{ position: "sticky", top: 0, zIndex: 10, height: 52, display: "flex", alignItems: "center", padding: "0 36px", background: "rgba(255,255,255,0.92)", backdropFilter: "blur(12px)", borderBottom: `1px solid ${T.bdrSubtle}` }}>
+          <div className="home-nav" style={{ position: "sticky", top: 0, zIndex: 10, height: 52, display: "flex", alignItems: "center", padding: "0 36px", background: "rgba(255,255,255,0.92)", WebkitBackdropFilter: "blur(12px)", backdropFilter: "blur(12px)", borderBottom: `1px solid ${T.bdrSubtle}` }}>
             <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
               <div style={{ width: 28, height: 28, borderRadius: 8, background: "linear-gradient(135deg,#087355,#0891B2)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                 <span style={{ color: "#fff", fontSize: 13, fontWeight: 800 }}>T</span>
@@ -312,7 +312,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
 
         {isChallenge ? (
           <div style={{ overflow: "hidden", background: "rgba(255,20,20,0.06)", borderBottom: "1px solid rgba(255,30,30,0.25)", padding: "5px 0" }}>
-            <div style={{ display: "flex", whiteSpace: "nowrap", animation: "ch-ticker 25s linear infinite", fontSize: 11, fontWeight: 700, color: CH.accent, letterSpacing: 2, textTransform: "uppercase", fontFamily: "Consolas,monospace" }}>
+            <div style={{ display: "flex", whiteSpace: "nowrap", animation: "ch-ticker 25s linear infinite", fontSize: 11, fontWeight: 700, color: CH.accent, letterSpacing: 2, textTransform: "uppercase", fontFamily: "Consolas, Menlo, 'Courier New', monospace" }}>
               <span>Challenge mode active / Reduced time limits / Prove your skills under pressure / No mercy / Challenge mode active / Reduced time limits / Prove your skills under pressure / No mercy / </span>
             </div>
           </div>

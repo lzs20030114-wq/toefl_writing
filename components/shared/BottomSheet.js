@@ -24,7 +24,7 @@ export function BottomSheet({ open, onClose, title, children }) {
       style={{
         position: "fixed", inset: 0, zIndex: 10000,
         background: "rgba(0,0,0,0.4)",
-        backdropFilter: "blur(4px)",
+        WebkitBackdropFilter: "blur(4px)", backdropFilter: "blur(4px)",
         display: "flex", flexDirection: "column", justifyContent: "flex-end",
         fontFamily: FONT,
       }}

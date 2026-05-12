@@ -367,7 +367,7 @@ export default function MobileProgressView({ vm }) {
 
       {/* Clear confirm modal */}
       {showClearConfirm && (
-        <div onClick={() => setShowClearConfirm(false)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.4)", backdropFilter: "blur(4px)", zIndex: 200, display: "flex", alignItems: "flex-end", justifyContent: "center", padding: 16 }}>
+        <div onClick={() => setShowClearConfirm(false)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.4)", WebkitBackdropFilter: "blur(4px)", backdropFilter: "blur(4px)", zIndex: 200, display: "flex", alignItems: "flex-end", justifyContent: "center", padding: 16 }}>
           <div onClick={(e) => e.stopPropagation()} style={{ background: P.surface, borderRadius: 16, padding: "24px 20px 20px", width: "100%", maxWidth: 360, boxShadow: "0 -4px 24px rgba(0,0,0,0.12)", animation: "mSlideUp 0.25s ease both" }}>
             <div style={{ fontSize: 16, fontWeight: 800, color: P.text, marginBottom: 6 }}>清除全部记录？</div>
             <div style={{ fontSize: 13, color: P.textSec, lineHeight: 1.6, marginBottom: 18 }}>所有练习记录和模考数据将被永久删除，无法恢复。</div>

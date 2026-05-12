@@ -85,7 +85,7 @@ export function NavSidebar({
     >
       {/* ── Portals ── */}
       {logoutConfirm && createPortal(
-        <div onClick={() => setLogoutConfirm(false)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.35)", backdropFilter: "blur(4px)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div onClick={() => setLogoutConfirm(false)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.35)", WebkitBackdropFilter: "blur(4px)", backdropFilter: "blur(4px)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center" }}>
           <div onClick={(e) => e.stopPropagation()} style={{ background: "#fff", borderRadius: 12, padding: "24px 24px 20px", width: 300, boxShadow: "0 10px 40px rgba(0,0,0,0.12)", display: "flex", flexDirection: "column", gap: 14, fontFamily: HOME_FONT }}>
             <div>
               <div style={{ fontSize: 15, fontWeight: 800, color: "#1a2420", marginBottom: 6 }}>确认退出登录？</div>
@@ -197,7 +197,7 @@ export function NavSidebar({
                     <span style={{ fontSize: 12, fontWeight: 700, color: t1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{email}</span>
                   ) : userCode ? (
                     <>
-                      <span style={{ fontSize: 12, fontWeight: 700, color: t1, fontFamily: "monospace", letterSpacing: "0.04em" }}>
+                      <span style={{ fontSize: 12, fontWeight: 700, color: t1, fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Courier New', monospace", letterSpacing: "0.04em" }}>
                         {codeHidden ? "******" : userCode}
                       </span>
                       <button onClick={() => setCodeHidden((v) => !v)} style={{ border: "none", background: "none", color: t3, fontSize: 11, cursor: "pointer", padding: "1px 2px", lineHeight: 1, fontFamily: HOME_FONT }} title={codeHidden ? "显示" : "隐藏"}>{codeHidden ? "\u{1F441}" : "\u{1F648}"}</button>

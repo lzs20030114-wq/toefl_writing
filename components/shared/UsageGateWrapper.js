@@ -17,7 +17,7 @@ function LoginRequiredModal({ onGoLogin }) {
       onClick={onGoLogin}
       style={{
         position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)",
-        backdropFilter: "blur(4px)", display: "flex", justifyContent: "center",
+        WebkitBackdropFilter: "blur(4px)", backdropFilter: "blur(4px)", display: "flex", justifyContent: "center",
         alignItems: "center", zIndex: 10000, fontFamily: FONT,
       }}
     >

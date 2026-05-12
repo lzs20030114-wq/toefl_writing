@@ -363,7 +363,7 @@ export function VoiceRecorder({ onRecordingComplete, onRecordingStart, maxDurati
               width: 8, height: 8, borderRadius: "50%", background: C.red,
               animation: "spk-pulse 1s ease-in-out infinite",
             }} />
-            <span style={{ fontSize: 14, fontWeight: 700, color: C.red, fontFamily: "Consolas, monospace" }}>
+            <span style={{ fontSize: 14, fontWeight: 700, color: C.red, fontFamily: "Consolas, Menlo, 'Courier New', monospace" }}>
               {formatTime(elapsed)}
             </span>
             {maxDuration > 0 && (

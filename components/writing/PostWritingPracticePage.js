@@ -84,7 +84,7 @@ export function PostWritingPracticePage() {
 
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
-      <div style={{ position: "sticky", top: 0, zIndex: 20, height: 56, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 24px", background: "rgba(255,255,255,0.92)", backdropFilter: "blur(12px)", borderBottom: "1px solid " + C.bdrSubtle }}>
+      <div style={{ position: "sticky", top: 0, zIndex: 20, height: 56, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 24px", background: "rgba(255,255,255,0.92)", WebkitBackdropFilter: "blur(12px)", backdropFilter: "blur(12px)", borderBottom: "1px solid " + C.bdrSubtle }}>
         <div style={{ fontSize: 15, fontWeight: 800, color: C.t1 }}>写后拼写练习</div>
         <Btn variant="secondary" onClick={() => router.push("/")}>返回首页</Btn>
       </div>

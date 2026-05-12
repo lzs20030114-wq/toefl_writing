@@ -1115,7 +1115,7 @@ export function ProgressView({ onBack }) {
       `}</style>
 
       {/* Top bar */}
-      <div style={{ background: "rgba(255,255,255,0.85)", padding: "0 32px", display: "flex", alignItems: "center", justifyContent: "space-between", height: 54, borderBottom: `1px solid ${P.borderSubtle}`, backdropFilter: "blur(16px) saturate(1.4)", WebkitBackdropFilter: "blur(16px) saturate(1.4)", position: "sticky", top: 0, zIndex: 100, animation: "fadeUp 0.4s cubic-bezier(0.25,1,0.3,1) 0ms both" }}>
+      <div style={{ background: "rgba(255,255,255,0.85)", padding: "0 32px", display: "flex", alignItems: "center", justifyContent: "space-between", height: 54, borderBottom: `1px solid ${P.borderSubtle}`, WebkitBackdropFilter: "blur(16px) saturate(1.4)", backdropFilter: "blur(16px) saturate(1.4)", position: "sticky", top: 0, zIndex: 100, animation: "fadeUp 0.4s cubic-bezier(0.25,1,0.3,1) 0ms both" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <div style={{ width: 26, height: 26, borderRadius: 7, background: "linear-gradient(135deg,#087355,#0891B2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <span style={{ color: "#fff", fontSize: 12, fontWeight: 800 }}>T</span>
@@ -1323,7 +1323,7 @@ export function ProgressView({ onBack }) {
       {showClearConfirm && (
         <div
           onClick={() => setShowClearConfirm(false)}
-          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.35)", backdropFilter: "blur(4px)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", animation: "fadeUp 0.2s cubic-bezier(0.25,1,0.5,1) both" }}
+          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.35)", WebkitBackdropFilter: "blur(4px)", backdropFilter: "blur(4px)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", animation: "fadeUp 0.2s cubic-bezier(0.25,1,0.5,1) both" }}
         >
           <div
             onClick={(e) => e.stopPropagation()}

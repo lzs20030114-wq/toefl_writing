@@ -154,11 +154,12 @@ export default function UpgradeModal({ userCode, currentTier, onClose, onUpgrade
   // ── Afdian helpers ──
   const handleCopy = async () => {
     if (!userCode) return;
-    try {
-      await navigator.clipboard.writeText(userCode);
+    const { copyToClipboard } = await import("../../lib/clipboard");
+    const ok = await copyToClipboard(userCode);
+    if (ok) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch { /* no-op */ }
+    }
   };
 
   const handleGoAfdian = () => {
@@ -467,7 +468,7 @@ export default function UpgradeModal({ userCode, currentTier, onClose, onUpgrade
           border: "1px solid #fde68a",
         }}>
           <span style={{
-            fontSize: 26, fontWeight: 900, fontFamily: "monospace",
+            fontSize: 26, fontWeight: 900, fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Courier New', monospace",
             letterSpacing: 6, color: C.t1,
           }}>
             {userCode}
@@ -555,7 +556,7 @@ export default function UpgradeModal({ userCode, currentTier, onClose, onUpgrade
       onClick={handleClose}
       style={{
         position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)",
-        backdropFilter: "blur(4px)", display: "flex", justifyContent: "center",
+        WebkitBackdropFilter: "blur(4px)", backdropFilter: "blur(4px)", display: "flex", justifyContent: "center",
         alignItems: "center", zIndex: 10000, fontFamily: FONT, padding: 20,
       }}
     >

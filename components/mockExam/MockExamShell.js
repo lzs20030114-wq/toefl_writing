@@ -42,7 +42,7 @@ function MockExamCostConfirmModal({ remaining, onConfirm, onCancel, userCode }) 
       onClick={onCancel}
       style={{
         position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)",
-        backdropFilter: "blur(4px)", display: "flex", justifyContent: "center",
+        WebkitBackdropFilter: "blur(4px)", backdropFilter: "blur(4px)", display: "flex", justifyContent: "center",
         alignItems: "center", zIndex: 9999, fontFamily: FONT,
       }}
     >

@@ -177,7 +177,7 @@ function OTPView({ t, styles, compact, emailInput, setEmailInput, loading, setLo
             maxLength={6}
             autoComplete="one-time-code"
             autoFocus
-            style={{ width: "100%", padding: s.inp, fontSize: 16, borderRadius: 10, border: "1.5px solid " + C.bdr, outline: "none", boxSizing: "border-box", fontFamily: "monospace", letterSpacing: 6, textAlign: "center" }}
+            style={{ width: "100%", padding: s.inp, fontSize: 16, borderRadius: 10, border: "1.5px solid " + C.bdr, outline: "none", boxSizing: "border-box", fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Courier New', monospace", letterSpacing: 6, textAlign: "center" }}
           />
           <button onClick={handleVerify} disabled={loading} style={btnStyle(loading)}>
             {loading ? t.otpVerifying : t.login}
@@ -285,7 +285,7 @@ export function LoginModal({ t, onClose, onLoginSuccess }) {
   };
 
   return createPortal(
-    <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center", padding: s.overlay, fontFamily: FONT }}>
+    <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", WebkitBackdropFilter: "blur(4px)", backdropFilter: "blur(4px)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center", padding: s.overlay, fontFamily: FONT }}>
       <div className="tp-modal-body" style={{ position: "relative", width: "100%", maxWidth: 440, background: "#fff", border: "1px solid " + C.bdr, borderRadius: 14, padding: s.box, boxShadow: "0 20px 60px rgba(0,0,0,0.15)" }}>
         {/* Close */}
         <button onClick={onClose} aria-label="Close" style={{ position: "absolute", top: 12, right: 12, background: "none", border: "none", cursor: "pointer", padding: 4, color: C.t3, display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -328,7 +328,7 @@ export function LoginModal({ t, onClose, onLoginSuccess }) {
         {view === "password" && activeTab === "code" && (
           <div>
             <TabBar activeTab={activeTab} setActiveTab={setActiveTab} t={t} s={s} onError={setError} />
-            <input data-testid="login-code-input" type="text" placeholder={t.codePlaceholder} value={codeInput} onChange={(e) => setCodeInput(normalizeInputCode(e.target.value))} onKeyDown={(e) => e.key === "Enter" && handleCodeLogin()} maxLength={6} autoFocus style={{ width: "100%", padding: s.inp, fontSize: 16, borderRadius: 10, border: "1.5px solid " + C.bdr, outline: "none", boxSizing: "border-box", fontFamily: "monospace", letterSpacing: 6, textAlign: "center", textTransform: "uppercase" }} />
+            <input data-testid="login-code-input" type="text" placeholder={t.codePlaceholder} value={codeInput} onChange={(e) => setCodeInput(normalizeInputCode(e.target.value))} onKeyDown={(e) => e.key === "Enter" && handleCodeLogin()} maxLength={6} autoFocus style={{ width: "100%", padding: s.inp, fontSize: 16, borderRadius: 10, border: "1.5px solid " + C.bdr, outline: "none", boxSizing: "border-box", fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Courier New', monospace", letterSpacing: 6, textAlign: "center", textTransform: "uppercase" }} />
             <button onClick={handleCodeLogin} disabled={loading} style={btnStyle(loading)}>{loading ? t.loggingIn : t.login}</button>
             {!compact && <p style={{ fontSize: 12, color: C.t3, textAlign: "center", marginTop: s.help, marginBottom: 0 }}>{t.codeHelper}</p>}
           </div>

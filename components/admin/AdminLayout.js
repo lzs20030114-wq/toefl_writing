@@ -215,7 +215,7 @@ function TokenGate({ token, setToken }) {
             placeholder="ADMIN_DASHBOARD_TOKEN"
             style={{
               flex: 1, padding: "10px 14px", borderRadius: 8,
-              border: "1px solid " + C.bdr, fontSize: 13, fontFamily: "monospace",
+              border: "1px solid " + C.bdr, fontSize: 13, fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Courier New', monospace",
               outline: "none",
             }}
           />

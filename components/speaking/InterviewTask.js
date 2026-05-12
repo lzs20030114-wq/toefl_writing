@@ -92,24 +92,51 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
 
   const playQuestion = useCallback(() => {
     if (!ttsSupported || !question) return;
-    window.speechSynthesis.cancel();
-    const utt = new SpeechSynthesisUtterance(question.question);
-    utt.lang = "en-US";
-    utt.rate = 0.85;
-    const voices = window.speechSynthesis.getVoices();
-    const enVoice = voices.find(v => v.lang.startsWith("en-"));
-    if (enVoice) utt.voice = enVoice;
+    // Safari's getVoices() returns [] until voiceschanged fires — speaking
+    // synchronously can fall back to the system default voice (Chinese on a
+    // macOS-CN setup), so wait for the voice list with a 600ms hard timeout.
+    function speakWithVoices(voices) {
+      window.speechSynthesis.cancel();
+      const utt = new SpeechSynthesisUtterance(question.question);
+      utt.lang = "en-US";
+      utt.rate = 0.85;
+      const PREFERRED = ["Samantha", "Aria", "Google US English", "Alex", "Karen"];
+      let enVoice = null;
+      for (const name of PREFERRED) {
+        enVoice = voices.find((v) => v.lang.startsWith("en-") && v.name.includes(name));
+        if (enVoice) break;
+      }
+      if (!enVoice) enVoice = voices.find((v) => v.lang.startsWith("en-"));
+      if (enVoice) utt.voice = enVoice;
 
-    utt.onend = () => {
-      // After TTS finishes, go to answer phase
-      setAutoRecordReady(true);
-      setPhase("answer");
+      utt.onend = () => {
+        setAutoRecordReady(true);
+        setPhase("answer");
+      };
+      utt.onerror = () => {
+        setAutoRecordReady(true);
+        setPhase("answer");
+      };
+      window.speechSynthesis.speak(utt);
+    }
+
+    const synth = window.speechSynthesis;
+    const initial = synth.getVoices();
+    if (initial && initial.length > 0) { speakWithVoices(initial); return; }
+    let fired = false;
+    const onVoicesChanged = () => {
+      if (fired) return;
+      fired = true;
+      synth.removeEventListener("voiceschanged", onVoicesChanged);
+      speakWithVoices(synth.getVoices());
     };
-    utt.onerror = () => {
-      setAutoRecordReady(true);
-      setPhase("answer");
-    };
-    window.speechSynthesis.speak(utt);
+    synth.addEventListener("voiceschanged", onVoicesChanged);
+    setTimeout(() => {
+      if (fired) return;
+      fired = true;
+      synth.removeEventListener("voiceschanged", onVoicesChanged);
+      speakWithVoices(synth.getVoices());
+    }, 600);
   }, [ttsSupported, question]);
 
   // Auto-play question on prep phase
@@ -457,7 +484,7 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
                 padding: "8px 16px", borderRadius: 999,
                 background: timeLeft <= 10 ? "#FEE2E2" : SPK.soft,
                 border: "1px solid " + (timeLeft <= 10 ? "#FECACA" : "#FDE68A"),
-                fontFamily: "Consolas, monospace", fontSize: 20, fontWeight: 800,
+                fontFamily: "Consolas, Menlo, 'Courier New', monospace", fontSize: 20, fontWeight: 800,
                 color: timeLeft <= 10 ? C.red : "#92400E",
                 animation: timeLeft <= 10 ? "spk-timer-pulse 1s ease-in-out infinite" : "none",
                 minWidth: 70, textAlign: "center",

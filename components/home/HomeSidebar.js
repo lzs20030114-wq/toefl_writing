@@ -74,7 +74,7 @@ export function BindEmailModal({ userCode, onSuccess, onClose }) {
   return (
     <div
       onClick={onClose}
-      style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.35)", backdropFilter: "blur(4px)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center" }}
+      style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.35)", WebkitBackdropFilter: "blur(4px)", backdropFilter: "blur(4px)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center" }}
     >
       <div
         onClick={(e) => e.stopPropagation()}
@@ -113,7 +113,7 @@ export function BindEmailModal({ userCode, onSuccess, onClose }) {
               onKeyDown={(e) => e.key === "Enter" && handleVerify()}
               maxLength={6}
               autoFocus
-              style={{ width: "100%", padding: "10px 12px", borderRadius: 8, border: "1px solid #dde5df", fontSize: 20, fontFamily: "monospace", letterSpacing: 8, textAlign: "center", boxSizing: "border-box", outline: "none" }}
+              style={{ width: "100%", padding: "10px 12px", borderRadius: 8, border: "1px solid #dde5df", fontSize: 20, fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Courier New', monospace", letterSpacing: 8, textAlign: "center", boxSizing: "border-box", outline: "none" }}
             />
             <button
               onClick={handleVerify}
@@ -142,12 +142,13 @@ export function ContactCard({ isChallenge, contactOpen, setContactOpen, sideCard
   const [emailCopied, setEmailCopied] = useState(false);
   const authorEmail = "3582786720@qq.com";
 
-  function copyEmail() {
-    if (!navigator?.clipboard?.writeText) return;
-    navigator.clipboard.writeText(authorEmail).then(() => {
+  async function copyEmail() {
+    const { copyToClipboard } = await import("../../lib/clipboard");
+    const ok = await copyToClipboard(authorEmail);
+    if (ok) {
       setEmailCopied(true);
       setTimeout(() => setEmailCopied(false), 2000);
-    });
+    }
   }
 
   return (
@@ -283,7 +284,7 @@ export function HomeSidebar({
       {logoutConfirm && createPortal(
         <div
           onClick={() => setLogoutConfirm(false)}
-          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.35)", backdropFilter: "blur(4px)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center" }}
+          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.35)", WebkitBackdropFilter: "blur(4px)", backdropFilter: "blur(4px)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center" }}
         >
           <div
             onClick={(e) => e.stopPropagation()}
@@ -389,7 +390,7 @@ export function HomeSidebar({
           <div style={{ marginBottom: 8 }}>
             <div style={sectionTitle(isChallenge)}>登录码</div>
             <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
-              <span style={{ fontSize: 18, fontWeight: 800, color: isChallenge ? CH.t1 : T.t1, fontVariantNumeric: "tabular-nums", letterSpacing: "0.05em", fontFamily: "monospace", filter: codeHidden ? "blur(5px)" : "none", transition: "filter .2s", userSelect: codeHidden ? "none" : "auto" }}>
+              <span style={{ fontSize: 18, fontWeight: 800, color: isChallenge ? CH.t1 : T.t1, fontVariantNumeric: "tabular-nums", letterSpacing: "0.05em", fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Courier New', monospace", filter: codeHidden ? "blur(5px)" : "none", transition: "filter .2s", userSelect: codeHidden ? "none" : "auto" }}>
                 {userCode || "-"}
               </span>
               <button onClick={() => setCodeHidden((v) => !v)} style={{ border: "none", background: "none", color: isChallenge ? CH.t2 : T.t3, fontSize: 13, cursor: "pointer", padding: "2px 4px", lineHeight: 1, fontFamily: HOME_FONT }} title={codeHidden ? "显示" : "隐藏"}>

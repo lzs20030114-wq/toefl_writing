@@ -6,11 +6,14 @@ const CJK_RE = /[\u2E80-\u9FFF\uF900-\uFAFF\uFE30-\uFE4F\uFF00-\uFFEF\u3000-\u30
 const IME_TIP_DISMISSED_KEY = "toefl-ime-tip-dismissed";
 
 function ExamToolbar({ taRef, onTextChange, disabled, historyRef, prevTextRef }) {
-  function handleCopy() {
+  async function handleCopy() {
     const ta = taRef.current;
     if (!ta) return;
     const selected = ta.value.slice(ta.selectionStart, ta.selectionEnd);
-    if (selected) navigator.clipboard.writeText(selected).catch(() => {});
+    if (!selected) return;
+    // Try the modern API + textarea fallback so HTTP / older Safari still works.
+    const { copyToClipboard } = await import("../../lib/clipboard");
+    copyToClipboard(selected);
   }
 
   async function handlePaste() {

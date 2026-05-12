@@ -23,7 +23,7 @@ export default function UsageLimitModal({ limit, onClose, userCode }) {
         position: "fixed",
         inset: 0,
         background: "rgba(0,0,0,0.5)",
-        backdropFilter: "blur(4px)",
+        WebkitBackdropFilter: "blur(4px)", backdropFilter: "blur(4px)",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",

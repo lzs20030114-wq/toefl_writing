@@ -254,7 +254,7 @@ export function KV({ label, children, mono }) {
         flex: 1,
         fontSize: 13,
         color: C.t1,
-        fontFamily: mono ? "ui-monospace, SFMono-Regular, Menlo, monospace" : "inherit",
+        fontFamily: mono ? "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Courier New', monospace" : "inherit",
         wordBreak: "break-word",
       }}>
         {children}

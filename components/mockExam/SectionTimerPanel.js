@@ -11,7 +11,7 @@ export function SectionTimerPanel({ currentTask, progress, sectionTimer, status,
         <div style={{ fontSize: 14, fontWeight: 700, color: C.t1, marginBottom: 8 }}>
           {currentTask ? currentTask.title : "尚未开始"}
         </div>
-        <div style={{ fontSize: 24, fontWeight: 800, color: C.nav, fontFamily: "Consolas,monospace", marginBottom: 6 }}>
+        <div style={{ fontSize: 24, fontWeight: 800, color: C.nav, fontFamily: "Consolas, Menlo, 'Courier New', monospace", marginBottom: 6 }}>
           {sectionTimer == null ? "--:--" : fmt(sectionTimer)}
         </div>
         <div style={{ fontSize: 12, color: C.t2 }}>
