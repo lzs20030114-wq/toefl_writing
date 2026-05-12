@@ -1,6 +1,28 @@
 import { countAnnotations, parseAnnotations } from "../lib/annotations/parseAnnotations";
 
 describe("parseAnnotations", () => {
+  test("parses attributes wrapped in Chinese curly quotes (DeepSeek mojibake)", () => {
+    // Real-world failure mode: DeepSeek occasionally emits attribute values
+    // wrapped in U+201C / U+201D (Chinese curly double quotes) instead of
+    // ASCII straight quotes when the surrounding context is Chinese. Until
+    // we taught parseAttrs to accept curly quotes, every annotation in such
+    // a response was silently dropped (level=undefined → push skipped) and
+    // the user saw only the calibration fallback on the first sentence.
+    const raw =
+      "I firmly agree with Emily's idea. " +
+      "<r>more independence than live</r><n level=“red” fix=“change to 'more independent than living'”>语法错误：be more independence 应为 be more independent</n> " +
+      "Besides, living alone is great. " +
+      "<r>young person, they need</r><n level=“red” fix=“use 'young people need'”>person 应该复数</n>";
+    const out = parseAnnotations(raw);
+
+    expect(out.parseError).toBe(false);
+    expect(out.annotations).toHaveLength(2);
+    expect(out.annotations[0].level).toBe("red");
+    expect(out.annotations[0].fix).toBe("change to 'more independent than living'");
+    expect(out.annotations[1].level).toBe("red");
+    expect(out.annotations[1].fix).toBe("use 'young people need'");
+  });
+
   test("parses inline annotation tags and computes ranges on plain text", () => {
     const raw =
       'Hello <n level="orange" fix="Use a comma.">world</n> and <n level="red" fix="Use present perfect.">I go</n>.';
