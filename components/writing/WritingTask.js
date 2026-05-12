@@ -232,13 +232,15 @@ export function WritingTask({
       sessionSavedRef.current = true;
       saveSess({
         type, score: null, band: null, wordCount: wc(text), mode: practiceMode,
-        scoringFailed: true, scoringError: "用户在评分完成前离开了页面",
         details: {
           promptSummary: summarizePrompt(type, pd),
           promptId: String(pd?.id || ""),
           promptData: pd,
           userText: text,
           feedback: null,
+          // Persist the failure context inside details — top-level flags are dropped by saveSessionCloud.
+          scoringFailed: true,
+          scoringError: "用户在评分完成前离开了页面",
         },
       });
     }
@@ -329,8 +331,6 @@ export function WritingTask({
       if (persistSession && pd) {
         saveSess({
           type, score: null, band: null, wordCount: wc(text), mode: practiceMode,
-          scoringFailed: true,
-          scoringError: errMsg,
           details: {
             promptSummary: summarizePrompt(type, pd),
             promptId: String(pd?.id || ""),
@@ -339,6 +339,9 @@ export function WritingTask({
             feedback: null,
             practiceRootId: practiceRootIdRef.current || createPracticeRootId(type, pd?.id),
             practiceAttempt: practiceAttemptRef.current,
+            // Persist failure context inside details — top-level flags are dropped by saveSessionCloud.
+            scoringFailed: true,
+            scoringError: errMsg,
           },
         });
         sessionSavedRef.current = true;

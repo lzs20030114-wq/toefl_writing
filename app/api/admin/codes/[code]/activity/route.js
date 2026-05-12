@@ -78,14 +78,22 @@ function collectFromWriting(row, acc, summary, attemptLimit, subtype) {
   applyDelta(summary.answered, "writing", subtype);
   if (acc.length >= attemptLimit) return;
   const score = safeNum(row?.score?.score, NaN);
+  // AI-scoring failures leave score=null. Detect either the explicit flag
+  // (rows saved after the fix) or the legacy "null score + no feedback" shape.
+  const explicitFail = row?.details?.scoringFailed === true;
+  const looksFailed = !Number.isFinite(score) && !row?.details?.feedback;
+  const scoringFailed = explicitFail || looksFailed;
+  const scoringError = row?.details?.scoringError || (scoringFailed ? "评分失败" : "");
   acc.push({
     ...buildAttemptBase(row, subtype, 0),
     subject: "writing",
     subtype,
     prompt: String(row?.details?.promptSummary || ""),
     answer: String(row?.details?.userText || ""),
-    scoreText: Number.isFinite(score) ? `${score}/5` : "-",
+    scoreText: scoringFailed ? "评分失败" : (Number.isFinite(score) ? `${score}/5` : "-"),
     band: row?.details?.feedback?.band ?? null,
+    scoringFailed,
+    scoringError,
   });
 }
 

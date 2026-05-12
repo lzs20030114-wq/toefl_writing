@@ -19,6 +19,17 @@ function getTypeLabel(type) {
   return "未知类型";
 }
 
+function isScoringFailed(session) {
+  // Writing sessions where the AI failed mid-scoring are saved with score=null
+  // and a marker inside details. Distinguishing them lets us render "评分失败"
+  // instead of misleading "--" / "0".
+  if (!session || typeof session !== "object") return false;
+  if (session.type !== "email" && session.type !== "discussion") return false;
+  if (session?.details?.scoringFailed === true) return true;
+  // Legacy rows (pre-fix) lost the flag — fall back to the empty-score + no-feedback shape.
+  return !Number.isFinite(session?.score) && !session?.details?.feedback;
+}
+
 function getScoreLabel(session) {
   if (!session || typeof session !== "object") return "--";
   if (session.type === "bs") {
@@ -31,6 +42,7 @@ function getScoreLabel(session) {
     if (Number.isFinite(session.band)) return `${session.band.toFixed(1)} / 6`;
     return `${session.score || 0}%`;
   }
+  if (isScoringFailed(session)) return "评分失败";
   return Number.isFinite(session.score) ? `${session.score}/5` : "--";
 }
 
@@ -56,6 +68,7 @@ function getScoreColor(session) {
     if (p >= 60) return C.orange;
     return C.red;
   }
+  if (isScoringFailed(session)) return C.t2; // muted — not a "bad" score, just unscored
   if (session.score >= 4) return C.green;
   if (session.score >= 3) return C.orange;
   return C.red;

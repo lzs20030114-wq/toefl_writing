@@ -114,9 +114,11 @@ function pctColor(pct) {
 }
 
 function writingScoreColor(scoreText) {
-  const s = String(scoreText || "").toLowerCase();
-  if (s.includes("correct") && !s.includes("incorrect")) return "#15803d";
-  if (s.includes("incorrect")) return "#b91c1c";
+  const s = String(scoreText || "");
+  if (s.includes("评分失败")) return "#b45309";
+  const lower = s.toLowerCase();
+  if (lower.includes("correct") && !lower.includes("incorrect")) return "#15803d";
+  if (lower.includes("incorrect")) return "#b91c1c";
   if (s.includes("pending")) return "#b45309";
   return C.nav;
 }
