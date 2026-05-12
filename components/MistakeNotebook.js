@@ -272,7 +272,7 @@ function StatsBar({ groups, totalWrong }) {
     setAnalysis({ loading: true, text: null, error: null });
     try {
       const prompt = buildAnalysisPrompt(groups, totalWrong, gpFreq);
-      const text = await callAI(ANALYSIS_SYSTEM, prompt, 500, 30000, 0.4);
+      const text = await callAI(ANALYSIS_SYSTEM, prompt, 500, 60000, 0.4);
       setAnalysis({ loading: false, text, error: null });
     } catch (e) {
       setAnalysis({ loading: false, text: null, error: e.message || "分析失败" });

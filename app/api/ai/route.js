@@ -3,6 +3,12 @@ import { createHash } from "crypto";
 import { isSupabaseAdminConfigured, supabaseAdmin } from "../../../lib/supabaseAdmin";
 import { createRateLimiter, getIp } from "../../../lib/rateLimit";
 
+// Give the serverless function room to wait for slow DeepSeek responses.
+// Without this, Vercel's hobby default (10s) would kill the request long
+// before the inner 120s network timeout has a chance. Pro plan honors up
+// to 300s; hobby caps to 60s — either way 180 is the ceiling we want.
+export const maxDuration = 180;
+
 const require = createRequire(import.meta.url);
 const { callDeepSeekViaCurl, resolveProxyUrl } = require("../../../lib/ai/deepseekHttp");
 const MAX_BODY_BYTES = 120000;
@@ -176,7 +182,10 @@ export async function POST(request) {
       const content = await callDeepSeekViaCurl({
         apiKey: process.env.DEEPSEEK_API_KEY,
         proxyUrl,
-        timeoutMs: 90000,
+        // 120s server-side network timeout — matches deepseekHttp default.
+        // The client wraps this with a 150s outer race, so the user-visible
+        // wait never exceeds 150s but legitimate long evaluations get through.
+        timeoutMs: 120000,
         payload: {
           model: "deepseek-chat",
           max_tokens: maxTokens,
