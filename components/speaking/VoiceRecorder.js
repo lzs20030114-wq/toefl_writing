@@ -5,6 +5,78 @@ import { C, FONT } from "../shared/ui";
 
 const SPK = { color: "#F59E0B", soft: "#FFFBEB" };
 
+// Safari prefers audio/mp4 (AAC); Chrome/Firefox use webm/opus. We try the
+// modern formats first and fall back to whatever the platform supports so
+// the playback <audio> element actually plays the resulting blob.
+const MIME_CANDIDATES = [
+  "audio/webm;codecs=opus",
+  "audio/webm",
+  "audio/mp4;codecs=mp4a.40.2",
+  "audio/mp4",
+  "audio/aac",
+  "audio/ogg;codecs=opus",
+];
+
+function pickMimeType() {
+  if (typeof MediaRecorder === "undefined") return "";
+  for (const c of MIME_CANDIDATES) {
+    try {
+      if (MediaRecorder.isTypeSupported(c)) return c;
+    } catch {
+      // some browsers throw on unsupported types; skip
+    }
+  }
+  return ""; // let MediaRecorder pick its own default
+}
+
+function isMacOS() {
+  if (typeof navigator === "undefined") return false;
+  const ua = navigator.userAgent || "";
+  const platform = navigator.platform || "";
+  // Modern Safari reports "MacIntel" platform; iOS Safari includes "iPad"/"iPhone".
+  return /Mac(?!.*iPad|.*iPhone)/i.test(platform) || /Macintosh/i.test(ua);
+}
+
+function isSafari() {
+  if (typeof navigator === "undefined") return false;
+  const ua = navigator.userAgent || "";
+  return /Safari/i.test(ua) && !/Chrome|Chromium|Edg\//i.test(ua);
+}
+
+function describePermissionError(err) {
+  const name = err?.name || "";
+  const msg = String(err?.message || "");
+  const mac = isMacOS();
+
+  if (name === "NotAllowedError" || name === "PermissionDeniedError") {
+    if (mac) {
+      return [
+        "麦克风权限被拒绝。",
+        "macOS 用户请检查：",
+        "1) 浏览器地址栏右侧的麦克风图标，点击「允许」",
+        "2) 系统设置 → 隐私与安全性 → 麦克风，确认勾选了当前浏览器（Chrome / Safari / Edge）",
+        "3) 重新刷新本页面",
+      ].join("\n");
+    }
+    return "麦克风权限被拒绝，请在浏览器地址栏左侧/右侧点击麦克风图标并允许。";
+  }
+  if (name === "NotFoundError" || name === "DevicesNotFoundError") {
+    return "未检测到麦克风设备，请连接麦克风后重试。";
+  }
+  if (name === "NotReadableError" || name === "TrackStartError") {
+    return mac
+      ? "麦克风被其他程序占用（例如 Zoom / 腾讯会议 / 飞书）。关闭它们后再试。"
+      : "麦克风正被其他程序使用，请关闭后重试。";
+  }
+  if (name === "SecurityError" || name === "NotSupportedError") {
+    return "当前页面不支持麦克风访问（需要 HTTPS 或 localhost）。";
+  }
+  if (/insecure/i.test(msg)) {
+    return "当前页面不支持麦克风访问（需要 HTTPS）。";
+  }
+  return "无法访问麦克风：" + (msg || "未知错误");
+}
+
 /**
  * Reusable voice recorder component.
  *
@@ -15,7 +87,7 @@ const SPK = { color: "#F59E0B", soft: "#FFFBEB" };
  *   onRecordingComplete(blobUrl)  — called with blob URL when recording stops
  *   onRecordingStart()            — called when recording actually starts (after mic permission)
  *   maxDuration                   — auto-stop after N seconds (0 = no limit)
- *   autoStart                     — start recording on mount
+ *   autoStart                     — start recording on mount (best-effort; Safari may require a manual tap)
  *   disabled                      — prevent interaction
  */
 export function VoiceRecorder({ onRecordingComplete, onRecordingStart, maxDuration = 0, autoStart = false, disabled = false }) {
@@ -24,6 +96,7 @@ export function VoiceRecorder({ onRecordingComplete, onRecordingStart, maxDurati
   const [elapsed, setElapsed] = useState(0);
   const [permError, setPermError] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [autoStartBlocked, setAutoStartBlocked] = useState(false);
 
   const mediaRecorderRef = useRef(null);
   const chunksRef = useRef([]);
@@ -31,6 +104,7 @@ export function VoiceRecorder({ onRecordingComplete, onRecordingStart, maxDurati
   const timerRef = useRef(null);
   const audioRef = useRef(null);
   const mountedRef = useRef(true);
+  const actualMimeRef = useRef("");
 
   useEffect(() => {
     mountedRef.current = true;
@@ -60,20 +134,31 @@ export function VoiceRecorder({ onRecordingComplete, onRecordingStart, maxDurati
     setElapsed(0);
     chunksRef.current = [];
 
+    // Pre-flight: confirm the API exists at all. On http:// (non-localhost)
+    // Safari blocks getUserMedia even before showing the prompt.
+    if (typeof navigator === "undefined" || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      setPermError("当前浏览器不支持麦克风访问，请使用最新版 Chrome / Safari / Edge，并通过 HTTPS 打开本站。");
+      setState("idle");
+      return;
+    }
+    if (typeof MediaRecorder === "undefined") {
+      setPermError("当前浏览器不支持录音（MediaRecorder API 缺失）。建议使用 Chrome 或最新版 Safari。");
+      setState("idle");
+      return;
+    }
+
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       if (!mountedRef.current) { stream.getTracks().forEach(t => t.stop()); return; }
       streamRef.current = stream;
 
-      const mimeType = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
-        ? "audio/webm;codecs=opus"
-        : MediaRecorder.isTypeSupported("audio/webm")
-          ? "audio/webm"
-          : "";
-
+      const mimeType = pickMimeType();
       const recorder = mimeType
         ? new MediaRecorder(stream, { mimeType })
         : new MediaRecorder(stream);
+      // The recorder may have negotiated a different mime — use the actual
+      // one for the Blob so Safari can play it back via the <audio> element.
+      actualMimeRef.current = recorder.mimeType || mimeType || "audio/webm";
 
       recorder.ondataavailable = (e) => {
         if (e.data && e.data.size > 0) chunksRef.current.push(e.data);
@@ -81,7 +166,7 @@ export function VoiceRecorder({ onRecordingComplete, onRecordingStart, maxDurati
 
       recorder.onstop = () => {
         if (!mountedRef.current) return;
-        const blob = new Blob(chunksRef.current, { type: mimeType || "audio/webm" });
+        const blob = new Blob(chunksRef.current, { type: actualMimeRef.current });
         const url = URL.createObjectURL(blob);
         setBlobUrl(url);
         setState("playback");
@@ -96,6 +181,7 @@ export function VoiceRecorder({ onRecordingComplete, onRecordingStart, maxDurati
       mediaRecorderRef.current = recorder;
       recorder.start(250); // collect in 250ms chunks
       setState("recording");
+      setAutoStartBlocked(false);
       if (onRecordingStart) onRecordingStart();
 
       // Elapsed timer
@@ -110,13 +196,7 @@ export function VoiceRecorder({ onRecordingComplete, onRecordingStart, maxDurati
       }, 250);
     } catch (err) {
       if (!mountedRef.current) return;
-      if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
-        setPermError("Microphone access denied. Please allow microphone permission in your browser settings.");
-      } else if (err.name === "NotFoundError") {
-        setPermError("No microphone found. Please connect a microphone and try again.");
-      } else {
-        setPermError("Could not access microphone: " + (err.message || "Unknown error"));
-      }
+      setPermError(describePermissionError(err));
       setState("idle");
     }
   }, [disabled, maxDuration, onRecordingComplete, onRecordingStart]);
@@ -131,13 +211,39 @@ export function VoiceRecorder({ onRecordingComplete, onRecordingStart, maxDurati
     }
   }, []);
 
-  // Auto-start
+  // Auto-start (best effort). Safari is stricter about user-gesture timing —
+  // if we don't have a real gesture context, the start may fail. We probe
+  // the Permissions API (when available) to skip the call entirely on
+  // already-denied state, and surface a clearer "tap to start" prompt when
+  // the browser blocks the auto path.
   useEffect(() => {
-    if (autoStart && state === "idle" && !disabled) {
-      const delay = setTimeout(() => startRecording(), 300);
-      return () => clearTimeout(delay);
-    }
-  }, [autoStart]); // intentionally minimal deps — only fire once on mount
+    if (!autoStart) return;
+    if (state !== "idle" || disabled) return;
+    let cancelled = false;
+
+    (async () => {
+      // If the Permissions API reports a definitive "denied", don't bother
+      // trying — show the manual button so the user can re-grant.
+      try {
+        if (navigator.permissions && navigator.permissions.query) {
+          const status = await navigator.permissions.query({ name: "microphone" });
+          if (!cancelled && status.state === "denied") {
+            setAutoStartBlocked(true);
+            setPermError(describePermissionError({ name: "NotAllowedError" }));
+            return;
+          }
+        }
+      } catch {
+        // Permissions API not supported or threw — fall through and just try.
+      }
+      if (cancelled) return;
+      // Kick the start immediately (no 300ms delay) to stay inside the
+      // user-gesture window on Safari where possible.
+      startRecording();
+    })();
+
+    return () => { cancelled = true; };
+  }, [autoStart, disabled]); // intentionally minimal deps — only fire once on mount
 
   const togglePlayback = useCallback(() => {
     if (!audioRef.current || !blobUrl) return;
@@ -191,7 +297,8 @@ export function VoiceRecorder({ onRecordingComplete, onRecordingStart, maxDurati
       {permError && (
         <div style={{
           background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 10,
-          padding: "12px 16px", fontSize: 13, color: "#991B1B", marginBottom: 16, lineHeight: 1.5,
+          padding: "12px 16px", fontSize: 13, color: "#991B1B", marginBottom: 16, lineHeight: 1.6,
+          whiteSpace: "pre-line",
         }}>
           {permError}
         </div>
@@ -217,7 +324,7 @@ export function VoiceRecorder({ onRecordingComplete, onRecordingStart, maxDurati
             <span style={{ fontSize: 28 }} role="img" aria-label="microphone">🎙️</span>
           </button>
           <span style={{ fontSize: 13, color: C.t3, fontWeight: 600 }}>
-            {disabled ? "Waiting..." : "Tap to Record"}
+            {disabled ? "Waiting..." : (autoStartBlocked ? "点击开始录音" : "点击录音")}
           </span>
         </div>
       )}
@@ -264,7 +371,7 @@ export function VoiceRecorder({ onRecordingComplete, onRecordingStart, maxDurati
             )}
           </div>
 
-          <span style={{ fontSize: 12, color: C.t3 }}>Recording... tap to stop</span>
+          <span style={{ fontSize: 12, color: C.t3 }}>录音中…点击停止</span>
         </div>
       )}
 
@@ -275,6 +382,8 @@ export function VoiceRecorder({ onRecordingComplete, onRecordingStart, maxDurati
             ref={audioRef}
             src={blobUrl}
             onEnded={() => setIsPlaying(false)}
+            preload="auto"
+            playsInline
             style={{ display: "none" }}
           />
 
@@ -315,14 +424,14 @@ export function VoiceRecorder({ onRecordingComplete, onRecordingStart, maxDurati
                 display: "flex", alignItems: "center", justifyContent: "center",
                 fontSize: 16,
               }}
-              title="Re-record"
+              title="重新录音"
             >
               🔄
             </button>
           </div>
 
           <span style={{ fontSize: 12, color: C.t3 }}>
-            Recorded {formatTime(elapsed)} {isPlaying ? " — Playing..." : ""}
+            已录制 {formatTime(elapsed)} {isPlaying ? " · 播放中…" : ""}
           </span>
         </div>
       )}

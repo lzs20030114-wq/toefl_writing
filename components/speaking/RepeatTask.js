@@ -36,6 +36,7 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
   const [scores, setScores] = useState([]); // scoreRepeat result per index
   const [liveTranscript, setLiveTranscript] = useState(""); // current interim transcript
   const [sttSupported, setSttSupported] = useState(true);
+  const [sttError, setSttError] = useState("");
 
   const elapsedRef = useRef(null);
   const utteranceRef = useRef(null);
@@ -67,24 +68,62 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
 
   const playSentence = useCallback(() => {
     if (!ttsSupported || !sentence) return;
-    window.speechSynthesis.cancel();
-    const utt = new SpeechSynthesisUtterance(sentence.sentence);
-    utt.lang = "en-US";
-    utt.rate = 0.9;
-    utt.pitch = 1;
 
-    // Try to pick an English voice
-    const voices = window.speechSynthesis.getVoices();
-    const enVoice = voices.find(v => v.lang.startsWith("en-") && v.name.includes("Female"))
-      || voices.find(v => v.lang.startsWith("en-"));
-    if (enVoice) utt.voice = enVoice;
+    // Safari's getVoices() returns [] on first synchronous call and populates
+    // after a `voiceschanged` event. If we don't wait, voice selection falls
+    // back to the system default (often Chinese on macOS-CN) and English
+    // sentences come out garbled. Wait up to ~600ms for voices, then proceed
+    // with whatever we have (system will use a default voice if none picked).
+    function speakWithVoices(voices) {
+      window.speechSynthesis.cancel();
+      const utt = new SpeechSynthesisUtterance(sentence.sentence);
+      utt.lang = "en-US";
+      utt.rate = 0.9;
+      utt.pitch = 1;
 
-    utt.onstart = () => setTtsPlaying(true);
-    utt.onend = () => { setTtsPlaying(false); setPhase("record"); };
-    utt.onerror = () => { setTtsPlaying(false); setPhase("record"); };
+      // Prefer high-quality English voices: Samantha (macOS), Microsoft Aria
+      // (Windows), Google US English (Chrome). Otherwise any en-* voice.
+      const PREFERRED = ["Samantha", "Aria", "Google US English", "Alex", "Karen"];
+      let enVoice = null;
+      for (const name of PREFERRED) {
+        enVoice = voices.find((v) => v.lang.startsWith("en-") && v.name.includes(name));
+        if (enVoice) break;
+      }
+      if (!enVoice) {
+        enVoice = voices.find((v) => v.lang.startsWith("en-") && /female/i.test(v.name))
+          || voices.find((v) => v.lang.startsWith("en-"));
+      }
+      if (enVoice) utt.voice = enVoice;
 
-    utteranceRef.current = utt;
-    window.speechSynthesis.speak(utt);
+      utt.onstart = () => setTtsPlaying(true);
+      utt.onend = () => { setTtsPlaying(false); setPhase("record"); };
+      utt.onerror = () => { setTtsPlaying(false); setPhase("record"); };
+
+      utteranceRef.current = utt;
+      window.speechSynthesis.speak(utt);
+    }
+
+    const synth = window.speechSynthesis;
+    const initial = synth.getVoices();
+    if (initial && initial.length > 0) {
+      speakWithVoices(initial);
+      return;
+    }
+    // Safari: subscribe to voiceschanged, with a hard 600ms timeout fallback.
+    let fired = false;
+    const onVoicesChanged = () => {
+      if (fired) return;
+      fired = true;
+      synth.removeEventListener("voiceschanged", onVoicesChanged);
+      speakWithVoices(synth.getVoices());
+    };
+    synth.addEventListener("voiceschanged", onVoicesChanged);
+    setTimeout(() => {
+      if (fired) return;
+      fired = true;
+      synth.removeEventListener("voiceschanged", onVoicesChanged);
+      speakWithVoices(synth.getVoices());
+    }, 600);
   }, [ttsSupported, sentence]);
 
   // Auto-play on new sentence
@@ -126,8 +165,9 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
           });
         }
       },
-      onError: () => {
-        // Non-fatal — silently ignore STT errors
+      onError: (err) => {
+        // Surface macOS permission / network hints; ignore truly transient errors.
+        if (err?.message) setSttError(err.message);
       },
     });
     recognizerRef.current.start();
@@ -455,6 +495,15 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
                   background: "#FEF3C7", borderRadius: 8,
                 }}>
                   浏览器不支持语音识别，无法自动评分
+                </div>
+              )}
+              {sttError && (
+                <div style={{
+                  marginTop: 12, fontSize: 12, color: "#991B1B", padding: "8px 12px",
+                  background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 8,
+                  lineHeight: 1.6, whiteSpace: "pre-line",
+                }}>
+                  {sttError}
                 </div>
               )}
               <div style={{ marginTop: 20 }}>

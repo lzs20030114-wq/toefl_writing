@@ -89,34 +89,62 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
     // Web Speech API fallback
     if (typeof speechSynthesis === "undefined" || !text) return;
 
-    speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "en-US";
-    utterance.rate = 0.9;
+    // Build the utterance once; we may delay speaking until Safari finishes
+    // populating its voice list (getVoices() returns [] on first call).
+    function speak(voices) {
+      speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "en-US";
+      utterance.rate = 0.9;
+      // Pick a known-good English voice when available. Safari without an
+      // explicit voice will fall back to the system default — which on
+      // macOS-CN is often a Chinese voice that mispronounces English.
+      const enVoice = voices.find((v) => v.lang.startsWith("en-") && /Samantha|Aria|Google US English|Alex|Karen/i.test(v.name))
+        || voices.find((v) => v.lang.startsWith("en-"));
+      if (enVoice) utterance.voice = enVoice;
 
-    // Estimate duration: ~130 words/min at 0.9 rate
-    const wordCount = text.split(/\s+/).length;
-    const estimatedMs = (wordCount / (130 * 0.9)) * 60 * 1000;
-    ttsDurationRef.current = estimatedMs;
-    ttsStartRef.current = Date.now();
+      // Estimate duration: ~130 words/min at 0.9 rate
+      const wordCount = text.split(/\s+/).length;
+      const estimatedMs = (wordCount / (130 * 0.9)) * 60 * 1000;
+      ttsDurationRef.current = estimatedMs;
+      ttsStartRef.current = Date.now();
 
-    utterance.onstart = () => {
-      setPlaying(true);
-      setHasPlayed(true);
-      animFrameRef.current = requestAnimationFrame(animateTTSProgress);
-    };
-    utterance.onend = () => {
-      setPlaying(false);
-      setProgress(1);
-      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
-      if (onEnded) onEnded();
-    };
-    utterance.onerror = () => {
-      setPlaying(false);
-      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
-    };
+      utterance.onstart = () => {
+        setPlaying(true);
+        setHasPlayed(true);
+        animFrameRef.current = requestAnimationFrame(animateTTSProgress);
+      };
+      utterance.onend = () => {
+        setPlaying(false);
+        setProgress(1);
+        if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+        if (onEnded) onEnded();
+      };
+      utterance.onerror = () => {
+        setPlaying(false);
+        if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+      };
 
-    speechSynthesis.speak(utterance);
+      speechSynthesis.speak(utterance);
+    }
+
+    const initial = speechSynthesis.getVoices();
+    if (initial && initial.length > 0) { speak(initial); return; }
+    // Safari: wait for voiceschanged (with 600ms hard timeout) before speaking.
+    let fired = false;
+    const onVoicesChanged = () => {
+      if (fired) return;
+      fired = true;
+      speechSynthesis.removeEventListener("voiceschanged", onVoicesChanged);
+      speak(speechSynthesis.getVoices());
+    };
+    speechSynthesis.addEventListener("voiceschanged", onVoicesChanged);
+    setTimeout(() => {
+      if (fired) return;
+      fired = true;
+      speechSynthesis.removeEventListener("voiceschanged", onVoicesChanged);
+      speak(speechSynthesis.getVoices());
+    }, 600);
   }, [src, text, onEnded, animateTTSProgress]);
 
   const handlePlay = useCallback(() => {

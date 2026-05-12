@@ -37,6 +37,7 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
   const [transcripts, setTranscripts] = useState([]); // STT transcript per index
   const [liveTranscript, setLiveTranscript] = useState("");
   const [sttSupported, setSttSupported] = useState(true);
+  const [sttError, setSttError] = useState("");
   const [aiScores, setAiScores] = useState([]); // AI score result per index
   const [scoring, setScoring] = useState(false); // scoring in progress
   const [scoringError, setScoringError] = useState(null);
@@ -147,7 +148,7 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
           });
         }
       },
-      onError: () => {},
+      onError: (err) => { if (err?.message) setSttError(err.message); },
     });
     recognizerRef.current.start();
   }, [sttSupported, current]);
@@ -517,6 +518,17 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
                   textAlign: "left", maxHeight: 80, overflowY: "auto",
                 }}>
                   {liveTranscript}
+                </div>
+              )}
+
+              {sttError && (
+                <div style={{
+                  marginTop: 14, padding: "10px 14px", background: "#FEF2F2",
+                  border: "1px solid #FECACA", borderRadius: 10,
+                  fontSize: 12, color: "#991B1B", lineHeight: 1.6,
+                  textAlign: "left", whiteSpace: "pre-line",
+                }}>
+                  {sttError}
                 </div>
               )}
 
