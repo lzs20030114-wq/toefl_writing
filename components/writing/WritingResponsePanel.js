@@ -88,10 +88,18 @@ export function WritingResponsePanel({
   const taRef = useRef(null);
   const historyRef = useRef([]);
   const prevTextRef = useRef(text);
-  const isComposingRef = useRef(false);
   const isEditable = phase === "writing";
   const [imeTipVisible, setImeTipVisible] = useState(false);
   const imeTipDismissedRef = useRef(false);
+  // IME-agnostic CJK filter: rather than tracking composition state (which
+  // misbehaves across macOS native IME / Sogou / Microsoft Pinyin / fcitx),
+  // we update the textarea immediately with raw input and run the CJK strip
+  // 200ms after the user stops typing. If they're still composing, the next
+  // keystroke resets the timer and the filter never touches in-progress
+  // composition text. Once they pause, we filter and (if CJK was actually
+  // removed) raise the IME hint.
+  const filterTimerRef = useRef(null);
+  useEffect(() => () => { if (filterTimerRef.current) clearTimeout(filterTimerRef.current); }, []);
 
   useEffect(() => {
     try { imeTipDismissedRef.current = localStorage.getItem(IME_TIP_DISMISSED_KEY) === "1"; } catch {}
@@ -153,24 +161,40 @@ export function WritingResponsePanel({
               data-testid="writing-textarea"
               lang="en"
               value={text}
-              onCompositionStart={() => { isComposingRef.current = true; }}
-              onCompositionEnd={(e) => {
-                isComposingRef.current = false;
-                const cleaned = e.target.value.replace(CJK_RE, "");
-                if (cleaned !== text) onTextChange(cleaned);
-                if (!imeTipDismissedRef.current && /[\u2E80-\u9FFF\uF900-\uFAFF\uFE30-\uFE4F\uFF00-\uFFEF\u3000-\u303F\u3040-\u30FF]/.test(e.data || "")) setImeTipVisible(true);
-              }}
               onChange={(e) => {
-                if (isComposingRef.current) {
-                  // Mac IME switch may skip compositionEnd — trust native flag
-                  if (e.nativeEvent?.isComposing === false) {
-                    isComposingRef.current = false;
-                  } else {
-                    return;
-                  }
+                const raw = e.target.value;
+                // Hold off filtering while the browser reports active IME
+                // composition — stripping would clobber the in-progress text.
+                if (e.nativeEvent?.isComposing === true) {
+                  onTextChange(raw);
+                  return;
                 }
-                const cleaned = e.target.value.replace(CJK_RE, "");
-                onTextChange(cleaned);
+                // English fast path: nothing to strip, push through synchronously.
+                if (!CJK_RE.test(raw)) {
+                  onTextChange(raw);
+                  if (filterTimerRef.current) {
+                    clearTimeout(filterTimerRef.current);
+                    filterTimerRef.current = null;
+                  }
+                  return;
+                }
+                // CJK present (possibly an in-progress IME on Windows where
+                // the isComposing flag isn't reliable). Accept the raw text
+                // now so the cursor stays put, then strip after 200ms of
+                // inactivity. If the user is still composing, the next
+                // keystroke clears this timer and the filter never touches
+                // their text.
+                onTextChange(raw);
+                if (filterTimerRef.current) clearTimeout(filterTimerRef.current);
+                filterTimerRef.current = setTimeout(() => {
+                  filterTimerRef.current = null;
+                  const current = taRef.current?.value ?? raw;
+                  const cleaned = current.replace(CJK_RE, "");
+                  if (cleaned !== current) {
+                    onTextChange(cleaned);
+                    if (!imeTipDismissedRef.current) setImeTipVisible(true);
+                  }
+                }, 200);
               }}
               onKeyDown={(e) => {
                 if (e.ctrlKey || e.metaKey) {

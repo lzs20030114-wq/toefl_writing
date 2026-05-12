@@ -12,6 +12,9 @@
       "全站 macOS / Safari 适配：所有毛玻璃弹窗（升级、登录、确认对话框、顶部导航等 19 处）补上 -webkit-backdrop-filter，Safari 下不再是纯白底没模糊；口语 Interview 任务同步用真人英文声线（之前只有 Repeat 任务做了）",
       "Windows 字体兜底完善：定时器、登录码、邮箱输入框等等宽字体显示统一加上 Consolas / Courier New 兜底，老版本 Windows / 无开发者字体的机器不再字符不对齐",
       "剪贴板复制双备份：升级码复制、邮箱复制、写作区复制选中文 ——HTTPS 环境用 navigator.clipboard，HTTP 或老 Safari 自动 fallback 到隐藏 textarea + execCommand，不会再静默失败",
+      "登录身份多通道持久化：用户登录码同时写入 cookie（90 天有效），iOS Safari 偶尔清掉 localStorage 时，下次打开自动从 cookie 恢复，不必重新登录",
+      "中文输入法（IME）跨平台兼容重构：从依赖 compositionStart/End 事件改为 200ms 静默防抖，原理是「停笔超过 200ms 才过滤 CJK」—— 微软拼音 / 搜狗 / fcitx / macOS 原生 / Mac 切换输入法等各种 IME 实现差异都一并解决",
+      "页面平滑滚动 polyfill：Safari < 15.3 的少数用户也能享受 scrollIntoView 的平滑过渡，不再瞬移",
       "评分稳定性提升：AI 评分超时阈值整体拉宽（写作评分 90 秒 → 150 秒，AI 解释 30 秒 → 60 秒）",
       "服务端 Vercel 函数执行上限同步上调到 180 秒，长文章不再因网络波动半途被强制中断",
       "评分失败的练习记录现在会显示「评分失败」字样而不是误导性的 0 分，方便区分「真的没答好」和「AI 没评上」"
