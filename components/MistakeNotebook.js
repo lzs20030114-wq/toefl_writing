@@ -451,12 +451,16 @@ function TabBar({ tab, setTab, totalWrong, favoritesCount }) {
 }
 
 export default function MistakeNotebook({ onBack }) {
-  // Track whether we've completed the initial cloud-history fetch. For logged-in
-  // users loadHist() returns an empty cache synchronously then fills in async —
-  // we need to wait one tick before showing "no mistakes" or the user sees a
-  // false-empty state.
-  const [hist, setHist] = useState(() => loadHist());
-  const [initialized, setInitialized] = useState(() => !getSavedCode());
+  // SSR-safe initial state: all browser-derived values start empty/false so the
+  // server-rendered HTML matches the first client paint. We populate from
+  // localStorage / cloudHistCache inside useEffect (runs only on the client,
+  // after hydration). Without this, /mistake-notebook is statically generated
+  // with no data, then the client hydrates with localStorage data, and React
+  // throws "Expected server HTML to contain a matching <button>" warnings.
+  const [hist, setHist] = useState({ sessions: [] });
+  const [initialized, setInitialized] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loginHint, setLoginHint] = useState(null);
   const [tab, setTab] = useState("all");
   const { aiExplains, isLegacy, handleAiExplain } = useBsAiExplain();
   const { favorites, isStarred, toggleStar, error: favError } = useMistakeFavorites();
@@ -467,9 +471,10 @@ export default function MistakeNotebook({ onBack }) {
   useEffect(() => {
     const refresh = () => {
       setHist(loadHist());
+      setIsLoggedIn(!!getSavedCode());
       setInitialized(true);
     };
-    refresh(); // ensure first paint reflects whatever the cache has
+    refresh(); // populate from localStorage after hydration
 
     const histEvent = SESSION_STORE_EVENTS?.HISTORY_UPDATED_EVENT;
     if (typeof window !== "undefined" && histEvent) {
@@ -506,8 +511,6 @@ export default function MistakeNotebook({ onBack }) {
   );
 
   const favoritesCount = favorites?.length || 0;
-  const isLoggedIn = !!getSavedCode();
-  const [loginHint, setLoginHint] = useState(null);
 
   const handleRequireLogin = useCallback((opts) => {
     if (opts?.syncing) {
