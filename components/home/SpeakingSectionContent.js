@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { SECTION_ACCENTS } from "./sections";
 import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
 import { PRACTICE_MODE } from "../../lib/practiceMode";
 import { HomeTaskCard, HomeLinkCard } from "./HomeTaskCard";
-import { loadHist } from "../../lib/sessionStore";
+import { PromoBanner } from "./HomePageClient";
+import { ReferralBanner } from "./ReferralBanner";
 
 const SPEAKING_ACCENT = SECTION_ACCENTS.speaking;
 
@@ -32,6 +32,8 @@ export function SpeakingSectionContent({
   isChallenge, isPractice, mode, switchMode,
   hoverKey, setHoverKey, fadeIn,
   userTier, isLoggedIn, showLoginModal,
+  sessions = [],
+  onOpenReferral,
 }) {
   const isPro = userTier === "pro" || userTier === "legacy";
   const modeStr = isPractice ? "practice" : mode === PRACTICE_MODE.CHALLENGE ? "challenge" : "standard";
@@ -101,29 +103,20 @@ export function SpeakingSectionContent({
       </div>
 
       {/* Feature strip */}
-      <div style={{ background: isChallenge ? "rgba(17,17,24,0.7)" : T.card, border: `1px solid ${isChallenge ? CH.cardBorder : T.bdr}`, borderRadius: 10, padding: "10px 16px", marginBottom: 16, boxShadow: isChallenge ? "none" : T.shadow, ...fadeIn(120) }}>
+      <div style={{ background: isChallenge ? "rgba(17,17,24,0.7)" : T.card, border: `1px solid ${isChallenge ? CH.cardBorder : T.bdr}`, padding: "10px 16px", marginBottom: 16, borderRadius: 10, boxShadow: isChallenge ? "none" : T.shadow, ...fadeIn(120) }}>
         <div style={{ display: "flex", gap: 20, flexWrap: "wrap", fontSize: 12, color: isChallenge ? CH.t2 : T.t2 }}>
-          <span>- 两种口语题型（复述 · 面试）</span>
-          <span>- 录音自查模式（暂无 AI 评分）</span>
-          <span>- 模拟考试计时</span>
+          <span>- 覆盖两类口语任务（听后复述 · 模拟面试）</span>
+          <span>- 模拟考试限时练习</span>
+          <span>- AI 评分与反馈</span>
           <span>- 仅供练习使用，不代表官方考试评分</span>
         </div>
       </div>
 
-      {/* New badge */}
-      <div style={{
-        background: `linear-gradient(135deg, ${SPEAKING_ACCENT.soft}, #FEF3C7)`,
-        border: `1px solid ${SPEAKING_ACCENT.color}30`,
-        borderRadius: 10, padding: "12px 16px", marginBottom: 16,
-        display: "flex", alignItems: "center", gap: 10,
-        ...fadeIn(140),
-      }}>
-        <span style={{ fontSize: 18 }}>🆕</span>
-        <div>
-          <div style={{ fontSize: 13, fontWeight: 700, color: SPEAKING_ACCENT.color }}>2026 新题型</div>
-          <div style={{ fontSize: 12, color: T.t2 }}>基于 ETS 官方公布的 TOEFL 2026 改革题型，AI 辅助生成练习内容</div>
-        </div>
-      </div>
+      {/* Promo banner — share to social → 7 days Pro */}
+      <PromoBanner isChallenge={isChallenge} fadeIn={fadeIn} />
+
+      {/* Referral banner — invite friends, get +3 days Pro */}
+      <ReferralBanner isLoggedIn={isLoggedIn} onOpen={onOpenReferral} fadeIn={fadeIn} />
 
       {/* Microphone notice */}
       <div style={{ background: "#FFFBEB", border: "1px solid #FCD34D", borderRadius: 10, padding: "10px 16px", marginBottom: 16, ...fadeIn(150) }}>
@@ -207,8 +200,17 @@ export function SpeakingSectionContent({
         )}
       </div>
 
-      {/* Practice history link */}
-      {isPro && <SpeakingHistoryLink isChallenge={isChallenge} hoverKey={hoverKey} setHoverKey={setHoverKey} fadeIn={fadeIn} />}
+      {/* Companion link cards (progress) — speaking has no MCQ mistakes,
+          so we only surface the progress entry here. */}
+      {isPro && (
+        <SpeakingCompanionLinks
+          isChallenge={isChallenge}
+          hoverKey={hoverKey}
+          setHoverKey={setHoverKey}
+          fadeIn={fadeIn}
+          sessions={sessions}
+        />
+      )}
 
       {/* Footer */}
       <div style={{ fontSize: 10, color: isChallenge ? CH.t2 : T.t3, opacity: 0.65, lineHeight: 1.6, textAlign: "center", ...fadeIn(520) }}>
@@ -218,24 +220,8 @@ export function SpeakingSectionContent({
   );
 }
 
-function SpeakingHistoryLink({ isChallenge, hoverKey, setHoverKey, fadeIn }) {
-  const [speakingCount, setSpeakingCount] = useState(0);
-
-  useEffect(() => {
-    try {
-      const hist = loadHist();
-      const count = (hist.sessions || []).filter(s => s.type === "speaking").length;
-      setSpeakingCount(count);
-    } catch {}
-    function onUpdate() {
-      try {
-        const hist = loadHist();
-        setSpeakingCount((hist.sessions || []).filter(s => s.type === "speaking").length);
-      } catch {}
-    }
-    window.addEventListener("toefl-history-updated", onUpdate);
-    return () => window.removeEventListener("toefl-history-updated", onUpdate);
-  }, []);
+function SpeakingCompanionLinks({ isChallenge, hoverKey, setHoverKey, fadeIn, sessions = [] }) {
+  const speakingCount = sessions.filter((s) => s?.type === "speaking").length;
 
   return (
     <div style={{ marginBottom: 20, ...fadeIn(380) }}>
@@ -248,7 +234,7 @@ function SpeakingHistoryLink({ isChallenge, hoverKey, setHoverKey, fadeIn }) {
         icon="🗣"
         eyebrow="记录"
         title="口语练习记录"
-        description={speakingCount > 0 ? `已记录 ${speakingCount} 次口语练习，可在练习记录中查看。` : "完成口语练习后，记录会自动保存在这里。"}
+        description={speakingCount > 0 ? `已记录 ${speakingCount} 次口语练习，可查看趋势和薄弱点。` : "完成口语练习后，记录会自动保存在这里。"}
         badge={speakingCount > 0 ? `${speakingCount} 条记录` : "暂无记录"}
       />
     </div>

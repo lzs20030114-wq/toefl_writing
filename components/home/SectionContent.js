@@ -15,7 +15,7 @@ export function SectionContent({
   activeSection,
   isChallenge, isPractice, mode, switchMode,
   gridItems, hoverKey, setHoverKey,
-  postWritingCounts, bsMistakeCount, sessions,
+  postWritingCounts, bsMistakeCount, readingMistakeCount, listeningMistakeCount, sessions,
   fadeIn,
   userTier, isLoggedIn, showLoginModal,
   onOpenReferral,
@@ -33,6 +33,8 @@ export function SectionContent({
         isChallenge={isChallenge} isPractice={isPractice} mode={mode} switchMode={switchMode}
         hoverKey={hoverKey} setHoverKey={setHoverKey} fadeIn={fadeIn}
         userTier={userTier} isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
+        sessions={sessions} mistakeCount={readingMistakeCount}
+        onOpenReferral={onOpenReferral}
       />
     );
   }
@@ -43,6 +45,8 @@ export function SectionContent({
         isChallenge={isChallenge} isPractice={isPractice} mode={mode} switchMode={switchMode}
         hoverKey={hoverKey} setHoverKey={setHoverKey} fadeIn={fadeIn}
         userTier={userTier} isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
+        sessions={sessions} mistakeCount={listeningMistakeCount}
+        onOpenReferral={onOpenReferral}
       />
     );
   }
@@ -53,6 +57,8 @@ export function SectionContent({
         isChallenge={isChallenge} isPractice={isPractice} mode={mode} switchMode={switchMode}
         hoverKey={hoverKey} setHoverKey={setHoverKey} fadeIn={fadeIn}
         userTier={userTier} isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
+        sessions={sessions}
+        onOpenReferral={onOpenReferral}
       />
     );
   }

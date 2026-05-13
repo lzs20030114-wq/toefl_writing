@@ -13,6 +13,8 @@ import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_PAGE_CSS, HOME_TOKENS as T, TAS
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { AnnouncementButton } from "./AnnouncementModal";
 import { countBsMistakes } from "../MistakeNotebook";
+import { countReadingMistakes } from "../../lib/readingMistakes";
+import { countListeningMistakes } from "../../lib/listeningMistakes";
 import { NavSidebar } from "./NavSidebar";
 import { SectionContent } from "./SectionContent";
 import { MyReferralModal } from "./MyReferralModal";
@@ -135,6 +137,8 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
   }, [sessions]);
 
   const bsMistakeCount = useMemo(() => countBsMistakes(sessions), [sessions]);
+  const readingMistakeCount = useMemo(() => countReadingMistakes(sessions), [sessions]);
+  const listeningMistakeCount = useMemo(() => countListeningMistakes(sessions), [sessions]);
 
   const postWritingCounts = useMemo(() => {
     const grouped = groupPostWritingPracticeItems(extractPostWritingPracticeItems(sessions));
@@ -354,7 +358,9 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
             activeSection={activeSection}
             isChallenge={isChallenge} isPractice={isPractice} mode={mode} switchMode={switchMode}
             gridItems={gridItems} hoverKey={hoverKey} setHoverKey={setHoverKey}
-            postWritingCounts={postWritingCounts} bsMistakeCount={bsMistakeCount} sessions={sessions}
+            postWritingCounts={postWritingCounts} bsMistakeCount={bsMistakeCount}
+            readingMistakeCount={readingMistakeCount} listeningMistakeCount={listeningMistakeCount}
+            sessions={sessions}
             fadeIn={fadeIn}
             userTier={userTier} isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
             onOpenReferral={handleOpenReferral}

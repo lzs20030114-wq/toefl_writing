@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { SECTION_ACCENTS } from "./sections";
 import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
 import { PRACTICE_MODE } from "../../lib/practiceMode";
 import { HomeTaskCard, HomeLinkCard } from "./HomeTaskCard";
-import { loadHist } from "../../lib/sessionStore";
+import { PromoBanner } from "./HomePageClient";
+import { ReferralBanner } from "./ReferralBanner";
 
 const READING_ACCENT = SECTION_ACCENTS.reading;
 
@@ -43,6 +44,8 @@ export function ReadingSectionContent({
   isChallenge, isPractice, mode, switchMode,
   hoverKey, setHoverKey, fadeIn,
   userTier, isLoggedIn, showLoginModal,
+  sessions = [], mistakeCount = 0,
+  onOpenReferral,
 }) {
   const isPro = userTier === "pro" || userTier === "legacy";
   const [rdlVariant, setRdlVariant] = useState("long"); // "short" | "long"
@@ -126,26 +129,18 @@ export function ReadingSectionContent({
       {/* Feature strip */}
       <div style={{ background: isChallenge ? "rgba(17,17,24,0.7)" : T.card, border: `1px solid ${isChallenge ? CH.cardBorder : T.bdr}`, borderRadius: 10, padding: "10px 16px", marginBottom: 16, boxShadow: isChallenge ? "none" : T.shadow, ...fadeIn(120) }}>
         <div style={{ display: "flex", gap: 20, flexWrap: "wrap", fontSize: 12, color: isChallenge ? CH.t2 : T.t2 }}>
-          <span>- TOEFL 2026 新题型（Complete the Words · Read in Daily Life）</span>
-          <span>- AI 生成练习题</span>
-          <span>- 即时判分与解析</span>
+          <span>- 覆盖三类阅读任务（单词补全 · 日常阅读 · 学术段落）</span>
+          <span>- 模拟考试限时练习</span>
+          <span>- AI 生成练习题 + 错题 AI 解释</span>
+          <span>- 仅供练习使用，不代表官方考试评分</span>
         </div>
       </div>
 
-      {/* New badge */}
-      <div style={{
-        background: `linear-gradient(135deg, ${READING_ACCENT.soft}, #DBEAFE)`,
-        border: `1px solid ${READING_ACCENT.color}30`,
-        borderRadius: 10, padding: "12px 16px", marginBottom: 16,
-        display: "flex", alignItems: "center", gap: 10,
-        ...fadeIn(150),
-      }}>
-        <span style={{ fontSize: 18 }}>🆕</span>
-        <div>
-          <div style={{ fontSize: 13, fontWeight: 700, color: READING_ACCENT.color }}>2026 新题型</div>
-          <div style={{ fontSize: 12, color: T.t2 }}>基于 ETS 官方公布的 TOEFL 2026 改革题型，AI 辅助生成练习内容</div>
-        </div>
-      </div>
+      {/* Promo banner — share to social → 7 days Pro */}
+      <PromoBanner isChallenge={isChallenge} fadeIn={fadeIn} />
+
+      {/* Referral banner — invite friends, get +3 days Pro */}
+      <ReferralBanner isLoggedIn={isLoggedIn} onOpen={onOpenReferral} fadeIn={fadeIn} />
 
       {/* Pro gate */}
       {!isPro && (
@@ -252,8 +247,17 @@ export function ReadingSectionContent({
         </div>
       </div>
 
-      {/* Practice history link */}
-      {isPro && <ReadingHistoryLink isChallenge={isChallenge} hoverKey={hoverKey} setHoverKey={setHoverKey} fadeIn={fadeIn} />}
+      {/* Companion link cards (mistake notebook + progress) */}
+      {isPro && (
+        <ReadingCompanionLinks
+          isChallenge={isChallenge}
+          hoverKey={hoverKey}
+          setHoverKey={setHoverKey}
+          fadeIn={fadeIn}
+          sessions={sessions}
+          mistakeCount={mistakeCount}
+        />
+      )}
 
       {/* Footer */}
       <div style={{ fontSize: 10, color: isChallenge ? CH.t2 : T.t3, opacity: 0.65, lineHeight: 1.6, textAlign: "center", ...fadeIn(520) }}>
@@ -263,39 +267,42 @@ export function ReadingSectionContent({
   );
 }
 
-function ReadingHistoryLink({ isChallenge, hoverKey, setHoverKey, fadeIn }) {
-  const [readingCount, setReadingCount] = useState(0);
-
-  useEffect(() => {
-    try {
-      const hist = loadHist();
-      const count = (hist.sessions || []).filter(s => s.type === "reading").length;
-      setReadingCount(count);
-    } catch {}
-    function onUpdate() {
-      try {
-        const hist = loadHist();
-        setReadingCount((hist.sessions || []).filter(s => s.type === "reading").length);
-      } catch {}
-    }
-    window.addEventListener("toefl-history-updated", onUpdate);
-    return () => window.removeEventListener("toefl-history-updated", onUpdate);
-  }, []);
+function ReadingCompanionLinks({ isChallenge, hoverKey, setHoverKey, fadeIn, sessions = [], mistakeCount = 0 }) {
+  const readingCount = sessions.filter((s) => s?.type === "reading").length;
 
   return (
-    <div style={{ marginBottom: 20, ...fadeIn(380) }}>
-      <HomeLinkCard
-        href="/reading/progress"
-        cardKey="reading-progress"
-        hoverKey={hoverKey}
-        setHoverKey={setHoverKey}
-        isChallenge={isChallenge}
-        icon="📈"
-        eyebrow="记录"
-        title="阅读练习记录"
-        description={readingCount > 0 ? `已记录 ${readingCount} 次阅读练习，可在练习记录中查看。` : "完成阅读练习后，记录会自动保存在这里。"}
-        badge={readingCount > 0 ? `${readingCount} 条记录` : "暂无记录"}
-      />
-    </div>
+    <>
+      {/* Mistake notebook entry — only show when there are mistakes */}
+      <div style={{ marginBottom: 12, ...fadeIn(360) }}>
+        <HomeLinkCard
+          href="/mistake-notebook?section=reading"
+          cardKey="reading-mistakes"
+          hoverKey={hoverKey}
+          setHoverKey={setHoverKey}
+          isChallenge={isChallenge}
+          icon="✗"
+          eyebrow="复习"
+          title="阅读错题本"
+          description={mistakeCount > 0 ? `已收录 ${mistakeCount} 道阅读错题，含 AI 解释。` : "做完阅读练习后，答错的题会自动收录在这里。"}
+          badge={mistakeCount > 0 ? `${mistakeCount} 题` : "暂无错题"}
+        />
+      </div>
+
+      {/* Progress link */}
+      <div style={{ marginBottom: 20, ...fadeIn(400) }}>
+        <HomeLinkCard
+          href="/reading/progress"
+          cardKey="reading-progress"
+          hoverKey={hoverKey}
+          setHoverKey={setHoverKey}
+          isChallenge={isChallenge}
+          icon="📈"
+          eyebrow="记录"
+          title="阅读练习记录"
+          description={readingCount > 0 ? `已记录 ${readingCount} 次阅读练习，可查看趋势和薄弱点。` : "完成阅读练习后，记录会自动保存在这里。"}
+          badge={readingCount > 0 ? `${readingCount} 条记录` : "暂无记录"}
+        />
+      </div>
+    </>
   );
 }
