@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-05-13
+
+- Fixed a batch of known issues surfaced by lint + test gates:
+  - E2E suite was unrunnable due to a `**/` sequence inside a block comment in `e2e/smoke.spec.js` closing the comment early. Fixed the example so Playwright can load the file again.
+  - Resolved 22 `react-hooks/rules-of-hooks` violations across `useBsAiExplain.js`, `LCRTask.js`, `ScoringReport.js`, and `AdaptiveExamShell.js` — Hooks are no longer called after early returns.
+  - Removed `eslint.ignoreDuringBuilds` from `next.config.js` so Hook errors and other lint failures now block production builds.
+  - Rebalanced 13 failing Build Sentence sets (28, 29, 31, 35, 36, 37, 41, 43, 45, 47, 51, 53, 55) so `npm run validate:bank` passes.
+  - Excluded `.claude/` and `.agents/` from `jest.config.js` ignore patterns to stop duplicate test runs from worktree copies.
+  - Corrected Task 1 / Task 3 ordering in the JSON-LD `featureList` (`app/layout.js`) so structured data matches the README and homepage (Task 1 = Build a Sentence, Task 3 = Academic Discussion).
+
 ## 2026-02-19
 
 - Added unified admin hub page:
