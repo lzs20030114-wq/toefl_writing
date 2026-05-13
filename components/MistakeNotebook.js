@@ -7,6 +7,15 @@ import { C, PageShell, SurfaceCard, DisclosureSection } from "./shared/ui";
 import { useBsAiExplain, BsAiExplainBlock } from "./buildSentence/useBsAiExplain";
 import { useMistakeFavorites } from "./buildSentence/useMistakeFavorites";
 import { callAI } from "../lib/ai/client";
+import { extractReadingMistakes, countReadingMistakes } from "../lib/readingMistakes";
+import { extractListeningMistakes, countListeningMistakes } from "../lib/listeningMistakes";
+import { McqMistakesView } from "./mistakes/McqMistakesView";
+
+const SECTION_META = {
+  bs: { key: "bs", label: "拼句", subtitle: "Build a Sentence 练习中的错题", color: "#087355", soft: "#ecfdf5" },
+  reading: { key: "reading", label: "阅读", subtitle: "Reading 练习中的错题", color: "#3B82F6", soft: "#EFF6FF" },
+  listening: { key: "listening", label: "听力", subtitle: "Listening 练习中的错题", color: "#8B5CF6", soft: "#F3E8FF" },
+};
 
 /* ── helpers ── */
 
@@ -448,7 +457,55 @@ function TabBar({ tab, setTab, totalWrong, favoritesCount }) {
   );
 }
 
-export default function MistakeNotebook({ onBack }) {
+function SectionPill({ section, setSection, counts }) {
+  const tabs = ["bs", "reading", "listening"].map((k) => ({
+    key: k,
+    label: SECTION_META[k].label,
+    count: counts[k] || 0,
+    color: SECTION_META[k].color,
+    soft: SECTION_META[k].soft,
+  }));
+  return (
+    <div style={{ display: "inline-flex", gap: 4, padding: 4, background: "#f1f5f9", borderRadius: 10, marginBottom: 16 }}>
+      {tabs.map((t) => {
+        const active = t.key === section;
+        return (
+          <button
+            key={t.key}
+            onClick={() => setSection(t.key)}
+            style={{
+              border: "none",
+              background: active ? "#fff" : "transparent",
+              color: active ? t.color : C.t2,
+              borderRadius: 7,
+              padding: "7px 14px",
+              fontSize: 13,
+              fontWeight: active ? 700 : 500,
+              cursor: "pointer",
+              boxShadow: active ? "0 1px 2px rgba(15,23,42,0.08)" : "none",
+              transition: "all 0.15s",
+            }}
+          >
+            {t.label}
+            <span style={{
+              marginLeft: 6,
+              padding: "1px 7px",
+              borderRadius: 999,
+              fontSize: 11,
+              fontWeight: 700,
+              background: active ? t.soft : "transparent",
+              color: active ? t.color : C.t3,
+            }}>
+              {t.count}
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+export default function MistakeNotebook({ onBack, initialSection = "bs" }) {
   // SSR-safe initial state: all browser-derived values start empty/false so the
   // server-rendered HTML matches the first client paint. We populate from
   // localStorage / cloudHistCache inside useEffect (runs only on the client,
@@ -460,6 +517,7 @@ export default function MistakeNotebook({ onBack }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loginHint, setLoginHint] = useState(null);
   const [tab, setTab] = useState("all");
+  const [section, setSection] = useState(SECTION_META[initialSection] ? initialSection : "bs");
   const { aiExplains, isLegacy, handleAiExplain } = useBsAiExplain();
   const { favorites, isStarred, toggleStar, error: favError } = useMistakeFavorites();
 
@@ -498,15 +556,32 @@ export default function MistakeNotebook({ onBack }) {
     };
   }, []);
 
-  const groups = useMemo(
+  const bsGroups = useMemo(
     () => extractMistakes(hist?.sessions || []),
     [hist],
   );
+  const readingGroups = useMemo(
+    () => extractReadingMistakes(hist?.sessions || []),
+    [hist],
+  );
+  const listeningGroups = useMemo(
+    () => extractListeningMistakes(hist?.sessions || []),
+    [hist],
+  );
 
+  // Alias used by the BS branch below — keep the variable name `groups` and
+  // `totalWrong` so the existing BS render code stays untouched.
+  const groups = bsGroups;
   const totalWrong = useMemo(
     () => groups.reduce((n, g) => n + g.wrongCount, 0),
     [groups],
   );
+
+  const sectionCounts = useMemo(() => ({
+    bs: bsGroups.reduce((n, g) => n + g.wrongCount, 0),
+    reading: readingGroups.reduce((n, g) => n + g.wrongCount, 0),
+    listening: listeningGroups.reduce((n, g) => n + g.wrongCount, 0),
+  }), [bsGroups, readingGroups, listeningGroups]);
 
   const favoritesCount = favorites?.length || 0;
 
@@ -518,6 +593,9 @@ export default function MistakeNotebook({ onBack }) {
     }
     setTimeout(() => setLoginHint((cur) => (cur ? null : cur)), 2500);
   }, []);
+
+  const sectionMeta = SECTION_META[section] || SECTION_META.bs;
+  const bsHasContent = bsGroups.length > 0 || favoritesCount > 0;
 
   return (
     <PageShell>
@@ -543,7 +621,7 @@ export default function MistakeNotebook({ onBack }) {
             错题本
           </h1>
           <div style={{ fontSize: 12, color: C.t3, marginTop: 2 }}>
-            Build a Sentence 练习中的错题
+            {sectionMeta.subtitle}
           </div>
         </div>
       </div>
@@ -553,31 +631,47 @@ export default function MistakeNotebook({ onBack }) {
         <SurfaceCard style={{ padding: "48px 24px", textAlign: "center" }}>
           <div style={{ fontSize: 13, color: C.t3 }}>正在加载错题记录...</div>
         </SurfaceCard>
-      ) : groups.length === 0 && favoritesCount === 0 ? (
-        <SurfaceCard style={{ padding: "48px 24px", textAlign: "center" }}>
-          <div style={{ fontSize: 40, marginBottom: 12 }}>🎉</div>
-          <div style={{ fontSize: 16, fontWeight: 700, color: C.t1, marginBottom: 6 }}>
-            暂无错题
-          </div>
-          <div style={{ fontSize: 13, color: C.t3, lineHeight: 1.6 }}>
-            完成几套 Build a Sentence 练习后，答错的题会自动收录在这里。
-          </div>
-        </SurfaceCard>
       ) : (
         <>
-          <TabBar tab={tab} setTab={setTab} totalWrong={totalWrong} favoritesCount={favoritesCount} />
-          {favError ? (
-            <div style={{ marginBottom: 12, padding: "8px 12px", borderRadius: 6, background: "#fef2f2", color: "#b91c1c", fontSize: 12 }}>
-              收藏夹同步出错：{favError}
-            </div>
-          ) : null}
-          {loginHint ? (
-            <div style={{ marginBottom: 12, padding: "8px 12px", borderRadius: 6, background: "#fffbeb", color: "#92400e", fontSize: 12, border: "1px solid #fde68a" }}>
-              {loginHint}
-            </div>
-          ) : null}
+          <SectionPill section={section} setSection={setSection} counts={sectionCounts} />
 
-          {tab === "all" ? (
+          {section === "reading" ? (
+            <McqMistakesView
+              groups={readingGroups}
+              section="reading"
+              emptyHint="完成几次 Reading 练习后，答错的题会自动收录在这里。"
+            />
+          ) : section === "listening" ? (
+            <McqMistakesView
+              groups={listeningGroups}
+              section="listening"
+              emptyHint="完成几次 Listening 练习后，答错的题会自动收录在这里。"
+            />
+          ) : !bsHasContent ? (
+            <SurfaceCard style={{ padding: "48px 24px", textAlign: "center" }}>
+              <div style={{ fontSize: 40, marginBottom: 12 }}>🎉</div>
+              <div style={{ fontSize: 16, fontWeight: 700, color: C.t1, marginBottom: 6 }}>
+                暂无错题
+              </div>
+              <div style={{ fontSize: 13, color: C.t3, lineHeight: 1.6 }}>
+                完成几套 Build a Sentence 练习后，答错的题会自动收录在这里。
+              </div>
+            </SurfaceCard>
+          ) : (
+            <>
+              <TabBar tab={tab} setTab={setTab} totalWrong={totalWrong} favoritesCount={favoritesCount} />
+              {favError ? (
+                <div style={{ marginBottom: 12, padding: "8px 12px", borderRadius: 6, background: "#fef2f2", color: "#b91c1c", fontSize: 12 }}>
+                  收藏夹同步出错：{favError}
+                </div>
+              ) : null}
+              {loginHint ? (
+                <div style={{ marginBottom: 12, padding: "8px 12px", borderRadius: 6, background: "#fffbeb", color: "#92400e", fontSize: 12, border: "1px solid #fde68a" }}>
+                  {loginHint}
+                </div>
+              ) : null}
+
+              {tab === "all" ? (
             <>
               {groups.length > 0 ? (
                 <>
@@ -657,6 +751,8 @@ export default function MistakeNotebook({ onBack }) {
                   })}
                 </SurfaceCard>
               )}
+            </>
+          )}
             </>
           )}
         </>
