@@ -86,13 +86,29 @@ export default function LoginGate({ children }) {
     try {
       const params = new URLSearchParams(window.location.search);
       if (params.get("login") === "1") {
-        setLoginModalOpen(true);
+        openLoginModal("url_param");
         const url = new URL(window.location.href);
         url.searchParams.delete("login");
         window.history.replaceState({}, "", url.pathname + url.search);
       }
     } catch { /* no-op */ }
   }, [ready, isLoggedIn]);
+
+  // Open the login modal AND fire a `modal_open` analytics event so the
+  // admin funnel can compute the link-visit → modal-open conversion step.
+  function openLoginModal(trigger = "user_click") {
+    setLoginModalOpen(true);
+    try {
+      const stored = getStoredRef();
+      if (stored?.code) {
+        trackReferralEvent("modal_open", {
+          inviterCode: stored.code,
+          source: stored.source || "link",
+          metadata: { trigger },
+        });
+      }
+    } catch { /* no-op */ }
+  }
 
   function maybeShowTrialModal(proTrial, tier) {
     if (proTrial && tier === "pro") {
@@ -193,7 +209,7 @@ export default function LoginGate({ children }) {
             {welcomeMsg}
           </div>
         )}
-        {children({ userCode, userTier, userEmail, authMethod, hasPassword, isLoggedIn, showLoginModal: () => setLoginModalOpen(true), onLogout: handleLogout })}
+        {children({ userCode, userTier, userEmail, authMethod, hasPassword, isLoggedIn, showLoginModal: () => openLoginModal("user_click"), onLogout: handleLogout })}
       </>
     );
   }

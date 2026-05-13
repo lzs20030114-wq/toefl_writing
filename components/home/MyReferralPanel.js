@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { HOME_FONT, HOME_TOKENS as T } from "./theme";
+import { trackReferralEvent } from "../../lib/analytics/referral";
 
 const REWARD_DAYS = 3;
 const MAX_REWARDS = 30;
@@ -81,6 +82,7 @@ export function MyReferralPanel({ userCode, compact = false }) {
     if (ok) {
       setCopiedLink(true);
       setTimeout(() => setCopiedLink(false), 2000);
+      trackReferralEvent("share_link_copied", { inviterCode: userCode });
     }
   }
 
@@ -89,6 +91,7 @@ export function MyReferralPanel({ userCode, compact = false }) {
     if (ok) {
       setCopiedText(true);
       setTimeout(() => setCopiedText(false), 2000);
+      trackReferralEvent("share_text_copied", { inviterCode: userCode });
     }
   }
 
