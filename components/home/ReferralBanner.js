@@ -31,7 +31,7 @@ function markDismissed() {
  * carries a separate CTA that opens MyReferralModal.
  *
  * Single-sided reward: invitee keeps existing 3-day auto-trial; inviter gets
- * +3 days after invitee completes ≥1 practice. Max 30 days lifetime.
+ * +3 days after invitee completes ≥1 practice. No upper cap on accumulation.
  *
  * Props:
  *  - isLoggedIn: boolean
@@ -167,7 +167,7 @@ export function ReferralBanner({ isLoggedIn, onOpen, fadeIn }) {
           }}
         >
           <p style={{ margin: 0, fontSize: 12, color: "#0e7c66", lineHeight: 1.75 }}>
-            把邀请码或链接发给朋友。TA 注册并完成 1 次练习后，<strong style={{ color: T.primary }}>你的 Pro 自动 +3 天</strong>。新人本来就有 3 天免费试用——TA 不亏，你白拿。最多累计 30 天。
+            把邀请码或链接发给朋友。TA 注册并完成 1 次练习后，<strong style={{ color: T.primary }}>你的 Pro 自动 +3 天</strong>。
           </p>
           <button
             onClick={handleCta}

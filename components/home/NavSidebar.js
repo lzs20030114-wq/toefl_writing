@@ -276,7 +276,7 @@ export function NavSidebar({
                 <span style={{ fontSize: 14, flexShrink: 0 }}>🎁</span>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", lineHeight: 1.3 }}>邀请备考搭子</div>
-                  <div style={{ fontSize: 10, color: "#0e7c66", marginTop: 1 }}>每人 +3 天 Pro · 最多 30 天</div>
+                  <div style={{ fontSize: 10, color: "#0e7c66", marginTop: 1 }}>每人 +3 天 Pro · 无上限</div>
                 </div>
                 <span style={{ fontSize: 11, color: "#0e7c66", flexShrink: 0 }}>›</span>
               </button>

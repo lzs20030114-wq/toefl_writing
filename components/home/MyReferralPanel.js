@@ -5,7 +5,6 @@ import { HOME_FONT, HOME_TOKENS as T } from "./theme";
 import { trackReferralEvent } from "../../lib/analytics/referral";
 
 const REWARD_DAYS = 3;
-const MAX_REWARDS = 30;
 
 function buildShareText(link, code) {
   // Strip protocol for a cleaner inline link in WeChat/朋友圈 shares
@@ -73,7 +72,6 @@ export function MyReferralPanel({ userCode, compact = false }) {
   const grantedCount = stats?.grantedCount ?? 0;
   const pendingCount = stats?.pendingCount ?? 0;
   const daysEarned = stats?.daysEarned ?? 0;
-  const daysRemaining = stats?.daysRemaining ?? MAX_REWARDS;
 
   const pad = compact ? "12px 14px" : "16px 18px";
 
@@ -112,7 +110,7 @@ export function MyReferralPanel({ userCode, compact = false }) {
           1. 把你的邀请链接 / 邀请码分享给好友<br />
           2. 好友用邀请码注册（注册即送 3 天 Pro 试用）<br />
           3. 好友完成一次练习后，<strong style={{ color: T.primary }}>你获得 +{REWARD_DAYS} 天 Pro</strong><br />
-          4. 最多可累计获得 {MAX_REWARDS} 天
+          4. 邀请人数不限，奖励无上限
         </div>
       </div>
 
@@ -139,18 +137,6 @@ export function MyReferralPanel({ userCode, compact = false }) {
           </div>
         ))}
       </div>
-
-      {/* Remaining cap hint */}
-      {!loading && grantedCount > 0 && daysRemaining > 0 && (
-        <div style={{ fontSize: 11, color: T.t3, textAlign: "center" }}>
-          还可累计获得 {daysRemaining} 天
-        </div>
-      )}
-      {!loading && daysRemaining === 0 && (
-        <div style={{ fontSize: 11, color: T.amber, textAlign: "center", fontWeight: 600 }}>
-          🎉 已达 {MAX_REWARDS} 天上限
-        </div>
-      )}
 
       {/* Referral link */}
       <div>
@@ -242,7 +228,7 @@ export function MyReferralPanel({ userCode, compact = false }) {
 
       {/* Footnote */}
       <div style={{ fontSize: 10, color: T.t3, lineHeight: 1.6, paddingTop: 4 }}>
-        奖励将在好友完成首次练习后自动到账。同 IP 24 小时内只能绑定一次邀请关系，超过上限将不再发放。
+        奖励将在好友完成首次练习后自动到账。同 IP 24 小时内只能绑定一次邀请关系。
       </div>
     </div>
   );
