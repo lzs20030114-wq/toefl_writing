@@ -41,7 +41,7 @@
  *     page.locator("css选择器")                CSS 选择器
  *     expect(locator).toBeVisible()           断言可见
  *     expect(page).toHaveURL(/pattern/)       断言 URL
- *     page.route("**/api/xx", handler)        拦截 API 请求（mock）
+ *     page.route("[glob]/api/xx", handler)    拦截 API 请求（mock）
  *
  * ── 什么时候跑 ───────────────────────────────────────────
  *

@@ -536,14 +536,8 @@ function sumTotalFromResults(results) {
 // ------ Main Shell ------
 
 export function AdaptiveExamShell({ section = "reading", onExit }) {
-  const config = SECTION_CONFIG[section];
-  if (!config) {
-    return (
-      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: FONT }}>
-        <div>Unknown section: {section}</div>
-      </div>
-    );
-  }
+  const invalidSection = !SECTION_CONFIG[section];
+  const config = SECTION_CONFIG[section] || SECTION_CONFIG.reading;
 
   const [phase, setPhase] = useState("intro");
   const [m1Items, setM1Items] = useState(null);
@@ -711,6 +705,14 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
   }
 
   // ------ Render ------
+
+  if (invalidSection) {
+    return (
+      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: FONT }}>
+        <div>Unknown section: {section}</div>
+      </div>
+    );
+  }
 
   const accent = config.accent;
   const accentSoft = config.accentSoft;

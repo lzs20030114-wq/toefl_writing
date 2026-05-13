@@ -61,17 +61,18 @@ export function useBsAiExplain() {
 
 /** Inline UI for the AI explain button + result. Pass a unique key, the detail object, and the hook returns. */
 export function BsAiExplainBlock({ explainKey, detail, aiExplains, isLegacy, handleAiExplain }) {
-  if (!isLegacy || detail.isCorrect) return null;
-
   // Auto-load from cache on mount
   const ex = aiExplains[explainKey];
   useEffect(() => {
+    if (!isLegacy || detail.isCorrect) return;
     if (ex) return; // already loaded or loading
     const cached = getFromCache(detail);
     if (cached) {
       handleAiExplain(explainKey, detail); // will hit cache, no API call
     }
-  }, [explainKey]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [ex, explainKey, detail, isLegacy, handleAiExplain]);
+
+  if (!isLegacy || detail.isCorrect) return null;
 
   if (ex?.text) {
     return (

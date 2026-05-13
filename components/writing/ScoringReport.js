@@ -60,34 +60,36 @@ function UpgradeBannerCompact({ onClick }) {
 export function ScoringReport({ result, type }) {
   const [activeMark, setActiveMark] = useState(null);
   const [showUpgrade, setShowUpgrade] = useState(false);
-  if (!result) return null;
+  const report = result || {};
 
   const isPro = (() => {
     try { const t = getSavedTier(); return t === "pro" || t === "legacy"; }
     catch { return false; }
   })();
 
-  const score = Number.isFinite(Number(result.score)) ? Number(result.score) : 0;
-  const band = result.band != null ? String(result.band) : null;
-  const summary = String(result.summary || "").trim();
-  const goals = Array.isArray(result.goals) ? result.goals : [];
-  const actions = (Array.isArray(result.actions) ? result.actions : []).slice(0, 2);
-  const patterns = Array.isArray(result.patterns) ? result.patterns : [];
-  const counts = result.annotationCounts || { red: 0, orange: 0, blue: 0, spelling: 0 };
-  const marks = Array.isArray(result.annotationSegments) ? result.annotationSegments : [];
-  const comparison = result.comparison || { modelEssay: "", points: [], raw: "" };
+  const score = Number.isFinite(Number(report.score)) ? Number(report.score) : 0;
+  const band = report.band != null ? String(report.band) : null;
+  const summary = String(report.summary || "").trim();
+  const goals = Array.isArray(report.goals) ? report.goals : [];
+  const actions = (Array.isArray(report.actions) ? report.actions : []).slice(0, 2);
+  const patterns = Array.isArray(report.patterns) ? report.patterns : [];
+  const counts = report.annotationCounts || { red: 0, orange: 0, blue: 0, spelling: 0 };
+  const marks = Array.isArray(report.annotationSegments) ? report.annotationSegments : [];
+  const comparison = report.comparison || { modelEssay: "", points: [], raw: "" };
   const essayPlainText = useMemo(() => {
-    if (result.userText) return result.userText;
+    if (report.userText) return report.userText;
     if (marks.length > 0) return marks.map((s) => s.text || "").join("");
-    return result.annotationRaw || "";
-  }, [result.userText, marks, result.annotationRaw]);
-  const sectionStates = result.sectionStates || {};
+    return report.annotationRaw || "";
+  }, [report.userText, marks, report.annotationRaw]);
+  const sectionStates = report.sectionStates || {};
 
   const patternRows = useMemo(
     () =>
       [...patterns].sort((a, b) => Number(b?.count || 0) - Number(a?.count || 0)).slice(0, 3),
     [patterns]
   );
+
+  if (!result) return null;
 
   return (
     <div data-testid="score-panel" style={{ display: "flex", flexDirection: "column", gap: 12 }}>

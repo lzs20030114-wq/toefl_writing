@@ -62,9 +62,9 @@ const jsonLd = {
     description: "免费用户每日 3 次练习",
   },
   featureList: [
-    "学术讨论写作 (Task 1)",
+    "造句排列 (Task 1)",
     "邮件写作 (Task 2)",
-    "造句排列 (Task 3)",
+    "学术讨论写作 (Task 3)",
     "AI 即时评分与反馈",
     "模拟考试模式",
   ],

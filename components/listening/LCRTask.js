@@ -45,17 +45,6 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
   useDraftPersist(draftKey, { answers, qIndex }, { enabled: !finished });
 
   const currentItem = items[qIndex] || items[0];
-  if (!currentItem) {
-    return (
-      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: FONT, background: C.bg }}>
-        <div style={{ textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 16 }}>🎧</div>
-          <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>No questions available</div>
-          <Btn onClick={onExit} variant="secondary">Back to Home</Btn>
-        </div>
-      </div>
-    );
-  }
 
   const handleAudioEnded = useCallback(() => {
     audioPlayedRef.current = true;
@@ -102,6 +91,18 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
       }
     }
   }, [selected, phase, currentItem, answers, qIndex, items, onComplete, draftKey]);
+
+  if (!currentItem) {
+    return (
+      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: FONT, background: C.bg }}>
+        <div style={{ textAlign: "center" }}>
+          <div style={{ fontSize: 48, marginBottom: 16 }}>🎧</div>
+          <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>No questions available</div>
+          <Btn onClick={onExit} variant="secondary">Back to Home</Btn>
+        </div>
+      </div>
+    );
+  }
 
   // ── Results page ──
   if (finished) {
