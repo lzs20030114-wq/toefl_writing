@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { loadHist, SESSION_STORE_EVENTS } from "../lib/sessionStore";
 import { AUTH_CHANGED_EVENT, getSavedCode } from "../lib/AuthContext";
 import { formatLocalDateTime, translateGrammarPoint } from "../lib/utils";
-import { C, FONT, PageShell, SurfaceCard, DisclosureSection } from "./shared/ui";
+import { C, PageShell, SurfaceCard, DisclosureSection } from "./shared/ui";
 import { useBsAiExplain, BsAiExplainBlock } from "./buildSentence/useBsAiExplain";
 import { useMistakeFavorites } from "./buildSentence/useMistakeFavorites";
 import { callAI } from "../lib/ai/client";
@@ -126,27 +126,6 @@ ${samples.join("\n")}
 
 const ANALYSIS_SYSTEM = "你是一位专业的 TOEFL 写作辅导老师。根据学生的错题数据，给出简洁精准的薄弱点分析和学习建议。语气友善专业，不要废话。";
 
-/* ── word diff ── */
-
-function wordDiff(user, correct) {
-  const uw = user.split(/\s+/);
-  const cw = correct.split(/\s+/);
-  // Simple token-level diff: walk through correct words, highlight mismatches
-  const result = [];
-  const maxLen = Math.max(uw.length, cw.length);
-  for (let i = 0; i < maxLen; i++) {
-    const u = uw[i] || "";
-    const c = cw[i] || "";
-    if (u.toLowerCase() === c.toLowerCase()) {
-      result.push({ word: c, match: true });
-    } else {
-      if (u) result.push({ word: u, match: false, type: "wrong" });
-      if (c) result.push({ word: c, match: false, type: "correct" });
-    }
-  }
-  return result;
-}
-
 /* ── sub-components ── */
 
 function StarButton({ starred, onClick, isLoggedIn = true }) {
@@ -185,10 +164,6 @@ function StarButton({ starred, onClick, isLoggedIn = true }) {
 }
 
 function MistakeCard({ detail, explainKey, aiExplains, isLegacy, handleAiExplain, sessionId, detailIndex, sessionDate, isStarred, onToggleStar, isLoggedIn, onRequireLogin }) {
-  const diff = useMemo(
-    () => wordDiff(detail.userAnswer || "", detail.correctAnswer || ""),
-    [detail.userAnswer, detail.correctAnswer],
-  );
   // Star always shows when we have a detail index. For guests we still render
   // it (disabled-looking) so the feature is discoverable; click flows to a
   // login hint via onRequireLogin instead of the API call.
@@ -274,13 +249,20 @@ function MistakeCard({ detail, explainKey, aiExplains, isLegacy, handleAiExplain
   );
 }
 
-function StatsBar({ groups, totalWrong }) {
+function StatsBar({ groups, totalWrong, isLegacy }) {
   const topGP = topGrammarPoints(groups);
   const gpFreq = useMemo(() => allGrammarFreq(groups), [groups]);
   const [analysis, setAnalysis] = useState({ loading: false, text: null, error: null });
   const [showDetail, setShowDetail] = useState(false);
+  const [proHint, setProHint] = useState(false);
 
   const handleAnalyze = useCallback(async () => {
+    // AI 问题分析 calls DeepSeek and incurs token cost — Pro-only.
+    if (!isLegacy) {
+      setProHint(true);
+      setTimeout(() => setProHint(false), 3500);
+      return;
+    }
     if (analysis.loading) return;
     setAnalysis({ loading: true, text: null, error: null });
     try {
@@ -290,7 +272,7 @@ function StatsBar({ groups, totalWrong }) {
     } catch (e) {
       setAnalysis({ loading: false, text: null, error: e.message || "分析失败" });
     }
-  }, [groups, totalWrong, gpFreq, analysis.loading]);
+  }, [groups, totalWrong, gpFreq, analysis.loading, isLegacy]);
 
   return (
     <SurfaceCard style={{ padding: "16px 18px", marginBottom: 16 }}>
@@ -312,11 +294,16 @@ function StatsBar({ groups, totalWrong }) {
           <button
             onClick={handleAnalyze}
             disabled={analysis.loading}
+            title={!isLegacy ? "AI 问题分析是 Pro 功能" : undefined}
             style={{
               fontSize: 13,
               fontWeight: 700,
               color: "#fff",
-              background: analysis.loading ? "#9ca3af" : "linear-gradient(135deg, #7c3aed, #6d28d9)",
+              background: analysis.loading
+                ? "#9ca3af"
+                : !isLegacy
+                  ? "linear-gradient(135deg, #94a3b8, #64748b)"
+                  : "linear-gradient(135deg, #7c3aed, #6d28d9)",
               border: "none",
               borderRadius: 8,
               padding: "9px 18px",
@@ -325,10 +312,21 @@ function StatsBar({ groups, totalWrong }) {
               transition: "all 0.2s",
             }}
           >
-            {analysis.loading ? "⏳ 分析中..." : analysis.text ? "🔄 重新分析" : "🔍 AI 问题分析"}
+            {analysis.loading
+              ? "⏳ 分析中..."
+              : !isLegacy
+                ? "🔒 AI 问题分析 · Pro"
+                : analysis.text
+                  ? "🔄 重新分析"
+                  : "🔍 AI 问题分析"}
           </button>
         </div>
       </div>
+      {proHint && (
+        <div style={{ marginTop: 10, fontSize: 12, color: "#92400e", background: "#fffbeb", border: "1px solid #fde68a", padding: "8px 12px", borderRadius: 6 }}>
+          🔒 AI 问题分析是 Pro 功能，升级后即可使用。
+        </div>
+      )}
 
       {/* grammar point frequency bar */}
       {gpFreq.length > 0 && (
@@ -583,7 +581,7 @@ export default function MistakeNotebook({ onBack }) {
             <>
               {groups.length > 0 ? (
                 <>
-                  <StatsBar groups={groups} totalWrong={totalWrong} />
+                  <StatsBar groups={groups} totalWrong={totalWrong} isLegacy={isLegacy} />
                   <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                     {groups.map((g, gi) => (
                       <DisclosureSection
