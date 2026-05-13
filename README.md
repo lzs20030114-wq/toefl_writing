@@ -140,6 +140,8 @@ ADMIN_DASHBOARD_TOKEN=...
 
 Database setup: run `scripts/sql/login-code-management.sql` in Supabase SQL Editor.
 
+For the referral program, also run `scripts/sql/referrals.sql` (creates the `referrals` table + `referral_stats` view). The activity is single-sided: invitees keep their existing auto-3-day Pro trial, inviters get +3 days Pro per successful referral (max 30 days lifetime). Rewards are granted only after the invitee completes ≥1 practice session. Same-IP 24h throttle and self-referral guards are enforced server-side.
+
 ## Notes
 
 - This is a practice tool, not an official ETS product.

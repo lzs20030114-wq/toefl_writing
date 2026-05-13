@@ -6,6 +6,7 @@ import { BottomSheet } from "../shared/BottomSheet";
 import UpgradeModal from "../shared/UpgradeModal";
 import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
 import { PromoBanner } from "./HomePageClient";
+import { ReferralBanner } from "./ReferralBanner";
 import { PRACTICE_MODE } from "../../lib/practiceMode";
 import { FREE_DAILY_LIMIT } from "../../lib/dailyUsage";
 import { SECTIONS, SECTION_ACCENTS, SECTION_STATUS } from "./sections";
@@ -21,6 +22,7 @@ export function MobileHomePage({
   totalCount, weekCount, bestMock,
   fbOpen, setFbOpen, fbText, setFbText, fbBusy, fbSent, feedbackMsg, submitFeedback,
   fadeIn, sideCard, querySuffix, isChallengeProp,
+  onOpenReferral,
 }) {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [upgradeOpen, setUpgradeOpen] = useState(false);
@@ -202,6 +204,9 @@ export function MobileHomePage({
       </div>
 
       <PromoBanner isChallenge={isChallenge} fadeIn={() => ({})} />
+
+      {/* Referral banner — invite friends, get +3 days Pro */}
+      <ReferralBanner isLoggedIn={isLoggedIn} onOpen={onOpenReferral} fadeIn={() => ({})} />
 
       {/* ── 任务卡片列表 ── */}
       <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 14 }}>

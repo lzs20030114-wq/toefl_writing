@@ -5,6 +5,7 @@ import { signOut } from "../lib/emailAuth";
 import { clearAuth, getSavedCode, getSavedTier, getSavedEmail, getSavedAuthMethod, getSavedHasPassword, saveAuth } from "../lib/AuthContext";
 import { clearLocalSessions, getLocalSessionCount, importLocalSessionsToCloud } from "../lib/sessionStore";
 import { usePageView } from "../lib/usePageView";
+import { getStoredRef, clearStoredRef } from "../lib/referralCapture";
 import { C, FONT } from "./shared/ui";
 import { I18N, UI_LANG_KEY, IMPORT_DISMISSED_KEY, PRO_TRIAL_NOTIFIED_KEY } from "./login/i18n";
 import { LoginModal } from "./login/LoginModal";
@@ -108,6 +109,25 @@ export default function LoginGate({ children }) {
       (() => { try { return localStorage.getItem(IMPORT_DISMISSED_KEY) !== "1"; } catch { return true; } })()
       && getLocalSessionCount() > 0
     );
+
+    // Bind referral if this is a new user and we have a stored ?ref= or manually entered code.
+    if (isNewUser) {
+      const stored = getStoredRef();
+      if (stored?.code && stored.code !== code) {
+        fetch("/api/referral/bind", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ inviterCode: stored.code, inviteeCode: code, source: stored.source || "link" }),
+        }).then((r) => r.json()).then((result) => {
+          // Clear the stored ref once the server has seen it (success or rejection).
+          // Don't retry — bind is one-shot at signup.
+          if (result?.ok || result?.reason === "already_bound" || result?.reason === "cap_exceeded" || result?.reason === "self_ref") {
+            clearStoredRef();
+          }
+        }).catch(() => { /* keep stored ref for next attempt */ });
+      }
+    }
+
     if (proTrial && tier === "pro") {
       maybeShowTrialModal(proTrial, tier);
     } else if (isNewUser) {

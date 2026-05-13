@@ -15,6 +15,7 @@ import { AnnouncementButton } from "./AnnouncementModal";
 import { countBsMistakes } from "../MistakeNotebook";
 import { NavSidebar } from "./NavSidebar";
 import { SectionContent } from "./SectionContent";
+import { MyReferralModal } from "./MyReferralModal";
 
 export function PromoBanner({ isChallenge, fadeIn }) {
   const [open, setOpen] = useState(false);
@@ -101,6 +102,15 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
   const [fbHistLoading, setFbHistLoading] = useState(false);
   const [copied, setCopied] = useState(false);
   const [logoutHover, setLogoutHover] = useState(false);
+  const [referralModalOpen, setReferralModalOpen] = useState(false);
+
+  function handleOpenReferral() {
+    if (!isLoggedIn) {
+      showLoginModal();
+    } else {
+      setReferralModalOpen(true);
+    }
+  }
 
   const isChallenge = mode === PRACTICE_MODE.CHALLENGE;
   const isPractice = mode === PRACTICE_MODE.PRACTICE;
@@ -269,8 +279,12 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
             fbBusy={fbBusy} fbSent={fbSent}
             feedbackMsg={feedbackMsg} submitFeedback={submitFeedback}
             fadeIn={fadeIn} sideCard={sideCard} querySuffix={querySuffix}
+            onOpenReferral={handleOpenReferral}
           />
         </div>
+        {referralModalOpen && (
+          <MyReferralModal userCode={userCode} onClose={() => setReferralModalOpen(false)} />
+        )}
       </>
     );
   }
@@ -331,6 +345,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
             copied={copied} copyCode={copyCode} logoutHover={logoutHover} setLogoutHover={setLogoutHover}
             bsMistakeCount={bsMistakeCount} postWritingCounts={postWritingCounts}
             sideCard={sideCard} fadeIn={fadeIn}
+            onOpenReferral={handleOpenReferral}
           />
           <SectionContent
             activeSection={activeSection}
@@ -339,9 +354,13 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
             postWritingCounts={postWritingCounts} bsMistakeCount={bsMistakeCount} sessions={sessions}
             fadeIn={fadeIn}
             userTier={userTier} isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
+            onOpenReferral={handleOpenReferral}
           />
         </div>
       </div>
+      {referralModalOpen && (
+        <MyReferralModal userCode={userCode} onClose={() => setReferralModalOpen(false)} />
+      )}
     </>
   );
 }

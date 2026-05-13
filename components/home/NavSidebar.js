@@ -29,6 +29,8 @@ export function NavSidebar({
   logoutHover, setLogoutHover,
   // tools badges
   bsMistakeCount, postWritingCounts,
+  // referral
+  onOpenReferral,
   // style helpers
   sideCard, fadeIn,
 }) {
@@ -250,6 +252,35 @@ export function NavSidebar({
                 </div>
               ))}
             </div>
+
+            {/* Referral entry */}
+            {onOpenReferral && (
+              <button
+                onClick={onOpenReferral}
+                style={{
+                  width: "100%",
+                  display: "flex", alignItems: "center", gap: 8,
+                  padding: "8px 10px",
+                  marginBottom: 8,
+                  background: "linear-gradient(135deg, #ecfdf5 0%, #ecfeff 100%)",
+                  border: `1px solid rgba(13,150,104,0.22)`,
+                  borderRadius: 8,
+                  cursor: "pointer",
+                  fontFamily: HOME_FONT,
+                  textAlign: "left",
+                  transition: "box-shadow 0.15s ease",
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.boxShadow = "0 2px 8px rgba(8,115,85,0.12)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.boxShadow = "none"; }}
+              >
+                <span style={{ fontSize: 14, flexShrink: 0 }}>🎁</span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", lineHeight: 1.3 }}>邀请备考搭子</div>
+                  <div style={{ fontSize: 10, color: "#0e7c66", marginTop: 1 }}>每人 +3 天 Pro · 最多 30 天</div>
+                </div>
+                <span style={{ fontSize: 11, color: "#0e7c66", flexShrink: 0 }}>›</span>
+              </button>
+            )}
 
             {/* Feedback toggle */}
             <button onClick={() => setFbOpen((v) => !v)} style={{ width: "100%", display: "flex", alignItems: "center", gap: 6, padding: "6px 4px", background: "transparent", border: "none", cursor: "pointer", fontFamily: HOME_FONT }}>

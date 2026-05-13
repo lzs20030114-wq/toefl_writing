@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { sendEmailOTP, verifyEmailOTP, signInWithPassword, setPassword } from "../../lib/emailAuth";
 import { verifyCode } from "../../lib/authCode";
+import { getStoredRef, setStoredRef } from "../../lib/referralCapture";
 import { C, FONT } from "../shared/ui";
 import { EyeIcon } from "./EyeIcon";
 import { I18N } from "./i18n";
@@ -211,6 +212,7 @@ export function LoginModal({ t, onClose, onLoginSuccess }) {
   const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
   const [codeInput, setCodeInput] = useState("");
+  const [referralInput, setReferralInput] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [agreedTerms, setAgreedTerms] = useState(false);
@@ -224,6 +226,20 @@ export function LoginModal({ t, onClose, onLoginSuccess }) {
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
   }, []);
+
+  // Auto-fill referral code if a ?ref= was captured on a previous page load.
+  useEffect(() => {
+    const stored = getStoredRef();
+    if (stored?.code) setReferralInput(stored.code);
+  }, []);
+
+  // Persist typed referral code to storage so LoginGate.handleLoginSuccess can
+  // pick it up after successful signup. Only persist valid 6-char codes.
+  function handleReferralChange(raw) {
+    const next = normalizeInputCode(raw);
+    setReferralInput(next);
+    if (next.length === 6) setStoredRef(next, "manual");
+  }
 
   const styles = buildStyles(compact);
   const { s, inputStyle, passwordInputStyle, btnStyle } = styles;
@@ -342,6 +358,24 @@ export function LoginModal({ t, onClose, onLoginSuccess }) {
             onVerified={handleOTPVerified} goToPassword={goToPassword}
             showTerms={view === "otp"}
           />
+        )}
+
+        {/* Optional referral code — only visible on OTP signup path */}
+        {view === "otp" && (
+          <div style={{ marginTop: s.gap }}>
+            <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: C.t3, marginBottom: 4, fontFamily: FONT }}>
+              邀请码（可选 · 填了能给邀请你的人送 3 天 Pro）
+            </label>
+            <input
+              type="text"
+              placeholder="朋友给你的 6 位邀请码"
+              value={referralInput}
+              onChange={(e) => handleReferralChange(e.target.value)}
+              maxLength={6}
+              autoComplete="off"
+              style={{ ...inputStyle, fontSize: 14, letterSpacing: 3, textAlign: "center", textTransform: "uppercase", fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Courier New', monospace" }}
+            />
+          </div>
         )}
 
         {/* Terms checkbox */}

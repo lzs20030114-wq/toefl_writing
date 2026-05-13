@@ -5,6 +5,7 @@ import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
 import { PRACTICE_MODE } from "../../lib/practiceMode";
 import { HomeLinkCard, HomeTaskCard } from "./HomeTaskCard";
 import { PromoBanner } from "./HomePageClient";
+import { ReferralBanner } from "./ReferralBanner";
 import { ComingSoonSection } from "./ComingSoonSection";
 import { ReadingSectionContent } from "./ReadingSectionContent";
 import { ListeningSectionContent } from "./ListeningSectionContent";
@@ -17,6 +18,7 @@ export function SectionContent({
   postWritingCounts, bsMistakeCount, sessions,
   fadeIn,
   userTier, isLoggedIn, showLoginModal,
+  onOpenReferral,
 }) {
   const section = SECTIONS.find((s) => s.id === activeSection);
   if (!section) return null;
@@ -118,6 +120,9 @@ export function SectionContent({
 
       {/* Promo */}
       <PromoBanner isChallenge={isChallenge} fadeIn={fadeIn} />
+
+      {/* Referral banner — invite friends, get +3 days Pro */}
+      <ReferralBanner isLoggedIn={isLoggedIn} onOpen={onOpenReferral} fadeIn={fadeIn} />
 
       {/* Task grid */}
       <div className="home-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
