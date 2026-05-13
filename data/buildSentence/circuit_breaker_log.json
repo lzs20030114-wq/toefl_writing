@@ -1,37 +1,144 @@
 {
-  "generated_at": "2026-03-24T05:39:37.889Z",
+  "generated_at": "2026-05-13T18:15:07.596Z",
   "active": {
-    "3rd-reporting": {
-      "sinceRound": 28,
-      "untilRound": 31,
+    "direct": {
+      "sinceRound": 9,
+      "untilRound": 12,
       "lastEvent": {
-        "triggeredAt": "2026-03-24T05:37:35.837Z",
-        "round": 28,
+        "triggeredAt": "2026-05-13T18:14:15.104Z",
+        "round": 9,
         "mode": "normal",
-        "type": "3rd-reporting",
-        "generated": 4,
+        "type": "direct",
+        "generated": 6,
         "accepted": 0,
-        "rejected": 4,
+        "rejected": 6,
         "acceptRate": 0,
         "reasons": [
           [
             "pool:low_assembly_value",
-            4
+            3
+          ],
+          [
+            "pool:no_prefilled_quota",
+            2
+          ],
+          [
+            "pool:i_quota_exceeded",
+            1
           ]
         ],
         "recentRounds": [
           {
-            "round": 26,
+            "round": 7,
             "spec": [
               {
-                "type": "1st-embedded",
+                "type": "direct",
                 "difficulty": "medium",
                 "count": 3
               },
               {
                 "type": "1st-embedded",
-                "difficulty": "easy",
+                "difficulty": "medium",
                 "count": 1
+              }
+            ],
+            "stats": {
+              "generated": 3,
+              "accepted": 0,
+              "rejected": 3,
+              "reasons": {
+                "pool:no_prefilled_quota": 1,
+                "pool:low_assembly_value": 2
+              }
+            }
+          },
+          {
+            "round": 8,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "1st-embedded",
+                "difficulty": "hard",
+                "count": 2
+              },
+              {
+                "type": "interrogative",
+                "difficulty": "hard",
+                "count": 1
+              }
+            ],
+            "stats": {
+              "generated": 2,
+              "accepted": 0,
+              "rejected": 2,
+              "reasons": {
+                "pool:i_quota_exceeded": 1,
+                "pool:low_assembly_value": 1
+              }
+            }
+          },
+          {
+            "round": 9,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "relative",
+                "difficulty": "hard",
+                "count": 3
+              }
+            ],
+            "stats": {
+              "generated": 1,
+              "accepted": 0,
+              "rejected": 1,
+              "reasons": {
+                "pool:no_prefilled_quota": 1
+              }
+            }
+          }
+        ],
+        "blockedUntilRound": 12
+      }
+    },
+    "3rd-reporting": {
+      "sinceRound": 11,
+      "untilRound": 14,
+      "lastEvent": {
+        "triggeredAt": "2026-05-13T18:14:33.584Z",
+        "round": 11,
+        "mode": "normal",
+        "type": "3rd-reporting",
+        "generated": 5,
+        "accepted": 0,
+        "rejected": 5,
+        "acceptRate": 0,
+        "reasons": [
+          [
+            "pool:low_assembly_value",
+            5
+          ]
+        ],
+        "recentRounds": [
+          {
+            "round": 9,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "hard",
+                "count": 1
+              },
+              {
+                "type": "relative",
+                "difficulty": "hard",
+                "count": 3
               }
             ],
             "stats": {
@@ -42,11 +149,34 @@
             }
           },
           {
-            "round": 27,
+            "round": 10,
             "spec": [
               {
+                "type": "negation",
+                "difficulty": "hard",
+                "count": 2
+              },
+              {
                 "type": "3rd-reporting",
-                "difficulty": "easy",
+                "difficulty": "hard",
+                "count": 2
+              }
+            ],
+            "stats": {
+              "generated": 2,
+              "accepted": 0,
+              "rejected": 2,
+              "reasons": {
+                "pool:low_assembly_value": 2
+              }
+            }
+          },
+          {
+            "round": 11,
+            "spec": [
+              {
+                "type": "negation",
+                "difficulty": "hard",
                 "count": 1
               },
               {
@@ -63,265 +193,33 @@
                 "pool:low_assembly_value": 3
               }
             }
-          },
-          {
-            "round": 28,
-            "spec": [
-              {
-                "type": "direct",
-                "difficulty": "easy",
-                "count": 1
-              },
-              {
-                "type": "direct",
-                "difficulty": "hard",
-                "count": 3
-              }
-            ],
-            "stats": {
-              "generated": 1,
-              "accepted": 0,
-              "rejected": 1,
-              "reasons": {
-                "pool:low_assembly_value": 1
-              }
-            }
           }
         ],
-        "blockedUntilRound": 31
-      }
-    },
-    "direct": {
-      "sinceRound": 29,
-      "untilRound": 32,
-      "lastEvent": {
-        "triggeredAt": "2026-03-24T05:38:00.425Z",
-        "round": 29,
-        "mode": "normal",
-        "type": "direct",
-        "generated": 4,
-        "accepted": 0,
-        "rejected": 4,
-        "acceptRate": 0,
-        "reasons": [
-          [
-            "pool:low_assembly_value",
-            2
-          ],
-          [
-            "pool:no_prefilled_quota",
-            1
-          ],
-          [
-            "chunks:too_many_effective (9 > 8)",
-            1
-          ]
-        ],
-        "recentRounds": [
-          {
-            "round": 27,
-            "spec": [
-              {
-                "type": "3rd-reporting",
-                "difficulty": "easy",
-                "count": 1
-              },
-              {
-                "type": "3rd-reporting",
-                "difficulty": "hard",
-                "count": 3
-              }
-            ],
-            "stats": {
-              "generated": 0,
-              "accepted": 0,
-              "rejected": 0,
-              "reasons": {}
-            }
-          },
-          {
-            "round": 28,
-            "spec": [
-              {
-                "type": "direct",
-                "difficulty": "easy",
-                "count": 1
-              },
-              {
-                "type": "direct",
-                "difficulty": "hard",
-                "count": 3
-              }
-            ],
-            "stats": {
-              "generated": 2,
-              "accepted": 0,
-              "rejected": 2,
-              "reasons": {
-                "pool:no_prefilled_quota": 1,
-                "pool:low_assembly_value": 1
-              }
-            }
-          },
-          {
-            "round": 29,
-            "spec": [
-              {
-                "type": "direct",
-                "difficulty": "easy",
-                "count": 1
-              },
-              {
-                "type": "direct",
-                "difficulty": "hard",
-                "count": 3
-              }
-            ],
-            "stats": {
-              "generated": 2,
-              "accepted": 0,
-              "rejected": 2,
-              "reasons": {
-                "chunks:too_many_effective (9 > 8)": 1,
-                "pool:low_assembly_value": 1
-              }
-            }
-          }
-        ],
-        "blockedUntilRound": 32
-      }
-    },
-    "1st-embedded": {
-      "sinceRound": 31,
-      "untilRound": 34,
-      "lastEvent": {
-        "triggeredAt": "2026-03-24T05:38:50.096Z",
-        "round": 31,
-        "mode": "normal",
-        "type": "1st-embedded",
-        "generated": 4,
-        "accepted": 0,
-        "rejected": 4,
-        "acceptRate": 0,
-        "reasons": [
-          [
-            "pool:low_assembly_value",
-            2
-          ],
-          [
-            "fatal: chunks (minus distractor) + prefilled words must equal answer words",
-            1
-          ],
-          [
-            "pool:no_prefilled_quota",
-            1
-          ]
-        ],
-        "recentRounds": [
-          {
-            "round": 29,
-            "spec": [
-              {
-                "type": "direct",
-                "difficulty": "easy",
-                "count": 1
-              },
-              {
-                "type": "direct",
-                "difficulty": "hard",
-                "count": 3
-              }
-            ],
-            "stats": {
-              "generated": 0,
-              "accepted": 0,
-              "rejected": 0,
-              "reasons": {}
-            }
-          },
-          {
-            "round": 30,
-            "spec": [
-              {
-                "type": "interrogative",
-                "difficulty": "easy",
-                "count": 1
-              },
-              {
-                "type": "interrogative",
-                "difficulty": "hard",
-                "count": 1
-              },
-              {
-                "type": "1st-embedded",
-                "difficulty": "hard",
-                "count": 2
-              }
-            ],
-            "stats": {
-              "generated": 2,
-              "accepted": 0,
-              "rejected": 2,
-              "reasons": {
-                "pool:low_assembly_value": 2
-              }
-            }
-          },
-          {
-            "round": 31,
-            "spec": [
-              {
-                "type": "interrogative",
-                "difficulty": "easy",
-                "count": 1
-              },
-              {
-                "type": "interrogative",
-                "difficulty": "hard",
-                "count": 1
-              },
-              {
-                "type": "1st-embedded",
-                "difficulty": "hard",
-                "count": 2
-              }
-            ],
-            "stats": {
-              "generated": 2,
-              "accepted": 0,
-              "rejected": 2,
-              "reasons": {
-                "fatal: chunks (minus distractor) + prefilled words must equal answer words": 1,
-                "pool:no_prefilled_quota": 1
-              }
-            }
-          }
-        ],
-        "blockedUntilRound": 34
+        "blockedUntilRound": 14
       }
     }
   },
   "events": [
     {
-      "triggeredAt": "2026-03-24T05:20:34.203Z",
+      "triggeredAt": "2026-05-13T18:14:15.104Z",
       "round": 9,
       "mode": "normal",
-      "type": "3rd-reporting",
-      "generated": 5,
-      "accepted": 1,
-      "rejected": 4,
-      "acceptRate": 0.2,
+      "type": "direct",
+      "generated": 6,
+      "accepted": 0,
+      "rejected": 6,
+      "acceptRate": 0,
       "reasons": [
         [
-          "review:score<78",
+          "pool:low_assembly_value",
+          3
+        ],
+        [
+          "pool:no_prefilled_quota",
           2
         ],
         [
-          "topic:repeat",
-          1
-        ],
-        [
-          "prompt: prompt_task_text: must contain an explicit task/instruction, not only background context",
+          "pool:i_quota_exceeded",
           1
         ]
       ],
@@ -330,28 +228,23 @@
           "round": 7,
           "spec": [
             {
-              "type": "negation",
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "1st-embedded",
               "difficulty": "medium",
               "count": 1
-            },
-            {
-              "type": "interrogative",
-              "difficulty": "medium",
-              "count": 2
-            },
-            {
-              "type": "3rd-reporting",
-              "difficulty": "medium",
-              "count": 2
             }
           ],
           "stats": {
-            "generated": 2,
+            "generated": 3,
             "accepted": 0,
-            "rejected": 2,
+            "rejected": 3,
             "reasons": {
-              "topic:repeat": 1,
-              "review:score<78": 1
+              "pool:no_prefilled_quota": 1,
+              "pool:low_assembly_value": 2
             }
           }
         },
@@ -359,22 +252,28 @@
           "round": 8,
           "spec": [
             {
-              "type": "3rd-reporting",
-              "difficulty": "medium",
-              "count": 3
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "hard",
+              "count": 2
             },
             {
               "type": "interrogative",
-              "difficulty": "medium",
-              "count": 2
+              "difficulty": "hard",
+              "count": 1
             }
           ],
           "stats": {
             "generated": 2,
-            "accepted": 1,
-            "rejected": 1,
+            "accepted": 0,
+            "rejected": 2,
             "reasons": {
-              "prompt: prompt_task_text: must contain an explicit task/instruction, not only background context": 1
+              "pool:i_quota_exceeded": 1,
+              "pool:low_assembly_value": 1
             }
           }
         },
@@ -382,109 +281,14 @@
           "round": 9,
           "spec": [
             {
-              "type": "3rd-reporting",
-              "difficulty": "medium",
-              "count": 2
-            },
-            {
-              "type": "interrogative",
-              "difficulty": "medium",
-              "count": 3
-            }
-          ],
-          "stats": {
-            "generated": 1,
-            "accepted": 0,
-            "rejected": 1,
-            "reasons": {
-              "review:score<78": 1
-            }
-          }
-        }
-      ],
-      "blockedUntilRound": 12
-    },
-    {
-      "triggeredAt": "2026-03-24T05:29:43.864Z",
-      "round": 17,
-      "mode": "normal",
-      "type": "direct",
-      "generated": 5,
-      "accepted": 1,
-      "rejected": 4,
-      "acceptRate": 0.2,
-      "reasons": [
-        [
-          "review:ets<72",
-          2
-        ],
-        [
-          "review:score<78",
-          1
-        ],
-        [
-          "pool:no_prefilled_quota",
-          1
-        ]
-      ],
-      "recentRounds": [
-        {
-          "round": 15,
-          "spec": [
-            {
-              "type": "direct",
-              "difficulty": "medium",
-              "count": 5
-            }
-          ],
-          "stats": {
-            "generated": 4,
-            "accepted": 1,
-            "rejected": 3,
-            "reasons": {
-              "review:ets<72": 2,
-              "review:score<78": 1
-            }
-          }
-        },
-        {
-          "round": 16,
-          "spec": [
-            {
-              "type": "relative",
-              "difficulty": "medium",
-              "count": 5
-            }
-          ],
-          "stats": {
-            "generated": 0,
-            "accepted": 0,
-            "rejected": 0,
-            "reasons": {}
-          }
-        },
-        {
-          "round": 17,
-          "spec": [
-            {
-              "type": "relative",
-              "difficulty": "medium",
-              "count": 2
-            },
-            {
-              "type": "direct",
-              "difficulty": "medium",
-              "count": 1
-            },
-            {
-              "type": "1st-embedded",
-              "difficulty": "medium",
-              "count": 1
-            },
-            {
               "type": "negation",
-              "difficulty": "medium",
+              "difficulty": "hard",
               "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 3
             }
           ],
           "stats": {
@@ -497,198 +301,36 @@
           }
         }
       ],
-      "blockedUntilRound": 20
+      "blockedUntilRound": 12
     },
     {
-      "triggeredAt": "2026-03-24T05:33:48.147Z",
-      "round": 21,
-      "mode": "normal",
-      "type": "direct",
-      "generated": 5,
-      "accepted": 1,
-      "rejected": 4,
-      "acceptRate": 0.2,
-      "reasons": [
-        [
-          "review:score<78",
-          3
-        ],
-        [
-          "pool:low_assembly_value",
-          1
-        ]
-      ],
-      "recentRounds": [
-        {
-          "round": 19,
-          "spec": [
-            {
-              "type": "3rd-reporting",
-              "difficulty": "medium",
-              "count": 4
-            },
-            {
-              "type": "relative",
-              "difficulty": "medium",
-              "count": 1
-            }
-          ],
-          "stats": {
-            "generated": 1,
-            "accepted": 0,
-            "rejected": 1,
-            "reasons": {
-              "review:score<78": 1
-            }
-          }
-        },
-        {
-          "round": 20,
-          "spec": [
-            {
-              "type": "3rd-reporting",
-              "difficulty": "medium",
-              "count": 5
-            }
-          ],
-          "stats": {
-            "generated": 3,
-            "accepted": 1,
-            "rejected": 2,
-            "reasons": {
-              "pool:low_assembly_value": 1,
-              "review:score<78": 1
-            }
-          }
-        },
-        {
-          "round": 21,
-          "spec": [
-            {
-              "type": "3rd-reporting",
-              "difficulty": "medium",
-              "count": 4
-            },
-            {
-              "type": "negation",
-              "difficulty": "medium",
-              "count": 1
-            }
-          ],
-          "stats": {
-            "generated": 1,
-            "accepted": 0,
-            "rejected": 1,
-            "reasons": {
-              "review:score<78": 1
-            }
-          }
-        }
-      ],
-      "blockedUntilRound": 24
-    },
-    {
-      "triggeredAt": "2026-03-24T05:34:37.023Z",
-      "round": 23,
-      "mode": "normal",
-      "type": "relative",
-      "generated": 4,
-      "accepted": 0,
-      "rejected": 3,
-      "acceptRate": 0,
-      "reasons": [
-        [
-          "pool:no_prefilled_quota",
-          3
-        ]
-      ],
-      "recentRounds": [
-        {
-          "round": 21,
-          "spec": [
-            {
-              "type": "3rd-reporting",
-              "difficulty": "medium",
-              "count": 4
-            },
-            {
-              "type": "negation",
-              "difficulty": "medium",
-              "count": 1
-            }
-          ],
-          "stats": {
-            "generated": 0,
-            "accepted": 0,
-            "rejected": 0,
-            "reasons": {}
-          }
-        },
-        {
-          "round": 22,
-          "spec": [
-            {
-              "type": "3rd-reporting",
-              "difficulty": "medium",
-              "count": 4
-            }
-          ],
-          "stats": {
-            "generated": 0,
-            "accepted": 0,
-            "rejected": 0,
-            "reasons": {}
-          }
-        },
-        {
-          "round": 23,
-          "spec": [
-            {
-              "type": "relative",
-              "difficulty": "medium",
-              "count": 4
-            }
-          ],
-          "stats": {
-            "generated": 4,
-            "accepted": 0,
-            "rejected": 3,
-            "reasons": {
-              "pool:no_prefilled_quota": 3
-            }
-          }
-        }
-      ],
-      "blockedUntilRound": 26
-    },
-    {
-      "triggeredAt": "2026-03-24T05:37:35.837Z",
-      "round": 28,
+      "triggeredAt": "2026-05-13T18:14:33.584Z",
+      "round": 11,
       "mode": "normal",
       "type": "3rd-reporting",
-      "generated": 4,
+      "generated": 5,
       "accepted": 0,
-      "rejected": 4,
+      "rejected": 5,
       "acceptRate": 0,
       "reasons": [
         [
           "pool:low_assembly_value",
-          4
+          5
         ]
       ],
       "recentRounds": [
         {
-          "round": 26,
+          "round": 9,
           "spec": [
             {
-              "type": "1st-embedded",
-              "difficulty": "medium",
-              "count": 3
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
             },
             {
-              "type": "1st-embedded",
-              "difficulty": "easy",
-              "count": 1
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 3
             }
           ],
           "stats": {
@@ -699,11 +341,34 @@
           }
         },
         {
-          "round": 27,
+          "round": 10,
           "spec": [
             {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
               "type": "3rd-reporting",
-              "difficulty": "easy",
+              "difficulty": "hard",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "pool:low_assembly_value": 2
+            }
+          }
+        },
+        {
+          "round": 11,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
               "count": 1
             },
             {
@@ -720,249 +385,148 @@
               "pool:low_assembly_value": 3
             }
           }
-        },
-        {
-          "round": 28,
-          "spec": [
-            {
-              "type": "direct",
-              "difficulty": "easy",
-              "count": 1
-            },
-            {
-              "type": "direct",
-              "difficulty": "hard",
-              "count": 3
-            }
-          ],
-          "stats": {
-            "generated": 1,
-            "accepted": 0,
-            "rejected": 1,
-            "reasons": {
-              "pool:low_assembly_value": 1
-            }
-          }
         }
       ],
-      "blockedUntilRound": 31
-    },
-    {
-      "triggeredAt": "2026-03-24T05:38:00.425Z",
-      "round": 29,
-      "mode": "normal",
-      "type": "direct",
-      "generated": 4,
-      "accepted": 0,
-      "rejected": 4,
-      "acceptRate": 0,
-      "reasons": [
-        [
-          "pool:low_assembly_value",
-          2
-        ],
-        [
-          "pool:no_prefilled_quota",
-          1
-        ],
-        [
-          "chunks:too_many_effective (9 > 8)",
-          1
-        ]
-      ],
-      "recentRounds": [
-        {
-          "round": 27,
-          "spec": [
-            {
-              "type": "3rd-reporting",
-              "difficulty": "easy",
-              "count": 1
-            },
-            {
-              "type": "3rd-reporting",
-              "difficulty": "hard",
-              "count": 3
-            }
-          ],
-          "stats": {
-            "generated": 0,
-            "accepted": 0,
-            "rejected": 0,
-            "reasons": {}
-          }
-        },
-        {
-          "round": 28,
-          "spec": [
-            {
-              "type": "direct",
-              "difficulty": "easy",
-              "count": 1
-            },
-            {
-              "type": "direct",
-              "difficulty": "hard",
-              "count": 3
-            }
-          ],
-          "stats": {
-            "generated": 2,
-            "accepted": 0,
-            "rejected": 2,
-            "reasons": {
-              "pool:no_prefilled_quota": 1,
-              "pool:low_assembly_value": 1
-            }
-          }
-        },
-        {
-          "round": 29,
-          "spec": [
-            {
-              "type": "direct",
-              "difficulty": "easy",
-              "count": 1
-            },
-            {
-              "type": "direct",
-              "difficulty": "hard",
-              "count": 3
-            }
-          ],
-          "stats": {
-            "generated": 2,
-            "accepted": 0,
-            "rejected": 2,
-            "reasons": {
-              "chunks:too_many_effective (9 > 8)": 1,
-              "pool:low_assembly_value": 1
-            }
-          }
-        }
-      ],
-      "blockedUntilRound": 32
-    },
-    {
-      "triggeredAt": "2026-03-24T05:38:50.096Z",
-      "round": 31,
-      "mode": "normal",
-      "type": "1st-embedded",
-      "generated": 4,
-      "accepted": 0,
-      "rejected": 4,
-      "acceptRate": 0,
-      "reasons": [
-        [
-          "pool:low_assembly_value",
-          2
-        ],
-        [
-          "fatal: chunks (minus distractor) + prefilled words must equal answer words",
-          1
-        ],
-        [
-          "pool:no_prefilled_quota",
-          1
-        ]
-      ],
-      "recentRounds": [
-        {
-          "round": 29,
-          "spec": [
-            {
-              "type": "direct",
-              "difficulty": "easy",
-              "count": 1
-            },
-            {
-              "type": "direct",
-              "difficulty": "hard",
-              "count": 3
-            }
-          ],
-          "stats": {
-            "generated": 0,
-            "accepted": 0,
-            "rejected": 0,
-            "reasons": {}
-          }
-        },
-        {
-          "round": 30,
-          "spec": [
-            {
-              "type": "interrogative",
-              "difficulty": "easy",
-              "count": 1
-            },
-            {
-              "type": "interrogative",
-              "difficulty": "hard",
-              "count": 1
-            },
-            {
-              "type": "1st-embedded",
-              "difficulty": "hard",
-              "count": 2
-            }
-          ],
-          "stats": {
-            "generated": 2,
-            "accepted": 0,
-            "rejected": 2,
-            "reasons": {
-              "pool:low_assembly_value": 2
-            }
-          }
-        },
-        {
-          "round": 31,
-          "spec": [
-            {
-              "type": "interrogative",
-              "difficulty": "easy",
-              "count": 1
-            },
-            {
-              "type": "interrogative",
-              "difficulty": "hard",
-              "count": 1
-            },
-            {
-              "type": "1st-embedded",
-              "difficulty": "hard",
-              "count": 2
-            }
-          ],
-          "stats": {
-            "generated": 2,
-            "accepted": 0,
-            "rejected": 2,
-            "reasons": {
-              "fatal: chunks (minus distractor) + prefilled words must equal answer words": 1,
-              "pool:no_prefilled_quota": 1
-            }
-          }
-        }
-      ],
-      "blockedUntilRound": 34
+      "blockedUntilRound": 14
     }
   ],
   "history": [
     {
-      "round": 26,
+      "round": 7,
       "mode": "normal",
       "spec": [
         {
-          "type": "1st-embedded",
+          "type": "direct",
           "difficulty": "medium",
           "count": 3
         },
         {
           "type": "1st-embedded",
-          "difficulty": "easy",
+          "difficulty": "medium",
           "count": 1
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 1,
+          "accepted": 1,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
+          "generated": 3,
+          "accepted": 0,
+          "rejected": 3,
+          "reasons": {
+            "pool:no_prefilled_quota": 1,
+            "pool:low_assembly_value": 2
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 8,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 1
+        },
+        {
+          "type": "1st-embedded",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "interrogative",
+          "difficulty": "hard",
+          "count": 1
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "pool:low_assembly_value": 1
+          }
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "pool:low_assembly_value": 1
+          }
+        },
+        "direct": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "pool:i_quota_exceeded": 1,
+            "pool:low_assembly_value": 1
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        }
+      }
+    },
+    {
+      "round": 9,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 1
+        },
+        {
+          "type": "relative",
+          "difficulty": "hard",
+          "count": 3
         }
       ],
       "typeStats": {
@@ -979,12 +543,10 @@
           "reasons": {}
         },
         "1st-embedded": {
-          "generated": 2,
+          "generated": 0,
           "accepted": 0,
-          "rejected": 2,
-          "reasons": {
-            "pool:low_assembly_value": 2
-          }
+          "rejected": 0,
+          "reasons": {}
         },
         "interrogative": {
           "generated": 0,
@@ -994,25 +556,89 @@
         },
         "direct": {
           "generated": 1,
-          "accepted": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "pool:no_prefilled_quota": 1
+          }
+        },
+        "relative": {
+          "generated": 3,
+          "accepted": 0,
+          "rejected": 3,
+          "reasons": {
+            "pool:no_prefilled_quota": 3
+          }
+        }
+      }
+    },
+    {
+      "round": 10,
+      "mode": "normal",
+      "spec": [
+        {
+          "type": "negation",
+          "difficulty": "hard",
+          "count": 2
+        },
+        {
+          "type": "3rd-reporting",
+          "difficulty": "hard",
+          "count": 2
+        }
+      ],
+      "typeStats": {
+        "negation": {
+          "generated": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "prompt: prompt_task_text: must contain an explicit task/instruction, not only background context": 1
+          }
+        },
+        "3rd-reporting": {
+          "generated": 2,
+          "accepted": 0,
+          "rejected": 2,
+          "reasons": {
+            "pool:low_assembly_value": 2
+          }
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
           "rejected": 0,
           "reasons": {}
         },
-        "relative": {
+        "interrogative": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "direct": {
           "generated": 1,
-          "accepted": 1,
+          "accepted": 0,
+          "rejected": 1,
+          "reasons": {
+            "fatal: chunks (minus distractor) + prefilled words must equal answer words; distractor must not appear in answer": 1
+          }
+        },
+        "relative": {
+          "generated": 0,
+          "accepted": 0,
           "rejected": 0,
           "reasons": {}
         }
       }
     },
     {
-      "round": 27,
+      "round": 11,
       "mode": "normal",
       "spec": [
         {
-          "type": "3rd-reporting",
-          "difficulty": "easy",
+          "type": "negation",
+          "difficulty": "hard",
           "count": 1
         },
         {
@@ -1023,12 +649,10 @@
       ],
       "typeStats": {
         "negation": {
-          "generated": 1,
+          "generated": 0,
           "accepted": 0,
-          "rejected": 1,
-          "reasons": {
-            "pool:low_assembly_value": 1
-          }
+          "rejected": 0,
+          "reasons": {}
         },
         "3rd-reporting": {
           "generated": 3,
@@ -1039,10 +663,12 @@
           }
         },
         "1st-embedded": {
-          "generated": 0,
+          "generated": 1,
           "accepted": 0,
-          "rejected": 0,
-          "reasons": {}
+          "rejected": 1,
+          "reasons": {
+            "pool:low_assembly_value": 1
+          }
         },
         "interrogative": {
           "generated": 0,
@@ -1065,245 +691,54 @@
       }
     },
     {
-      "round": 28,
+      "round": 12,
       "mode": "normal",
       "spec": [
         {
-          "type": "direct",
-          "difficulty": "easy",
+          "type": "negation",
+          "difficulty": "hard",
           "count": 1
         },
         {
-          "type": "direct",
+          "type": "interrogative",
           "difficulty": "hard",
           "count": 3
         }
       ],
       "typeStats": {
         "negation": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "3rd-reporting": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "1st-embedded": {
+          "generated": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "reasons": {}
+        },
+        "interrogative": {
+          "generated": 3,
+          "accepted": 0,
+          "rejected": 3,
+          "reasons": {
+            "pool:low_assembly_value": 3
+          }
+        },
+        "direct": {
           "generated": 1,
           "accepted": 0,
           "rejected": 1,
           "reasons": {
             "pool:no_prefilled_quota": 1
           }
-        },
-        "3rd-reporting": {
-          "generated": 1,
-          "accepted": 0,
-          "rejected": 1,
-          "reasons": {
-            "pool:low_assembly_value": 1
-          }
-        },
-        "1st-embedded": {
-          "generated": 0,
-          "accepted": 0,
-          "rejected": 0,
-          "reasons": {}
-        },
-        "interrogative": {
-          "generated": 0,
-          "accepted": 0,
-          "rejected": 0,
-          "reasons": {}
-        },
-        "direct": {
-          "generated": 2,
-          "accepted": 0,
-          "rejected": 2,
-          "reasons": {
-            "pool:no_prefilled_quota": 1,
-            "pool:low_assembly_value": 1
-          }
-        },
-        "relative": {
-          "generated": 0,
-          "accepted": 0,
-          "rejected": 0,
-          "reasons": {}
-        }
-      }
-    },
-    {
-      "round": 29,
-      "mode": "normal",
-      "spec": [
-        {
-          "type": "direct",
-          "difficulty": "easy",
-          "count": 1
-        },
-        {
-          "type": "direct",
-          "difficulty": "hard",
-          "count": 3
-        }
-      ],
-      "typeStats": {
-        "negation": {
-          "generated": 1,
-          "accepted": 0,
-          "rejected": 1,
-          "reasons": {
-            "pool:no_prefilled_quota": 1
-          }
-        },
-        "3rd-reporting": {
-          "generated": 1,
-          "accepted": 0,
-          "rejected": 1,
-          "reasons": {
-            "pool:low_assembly_value": 1
-          }
-        },
-        "1st-embedded": {
-          "generated": 0,
-          "accepted": 0,
-          "rejected": 0,
-          "reasons": {}
-        },
-        "interrogative": {
-          "generated": 0,
-          "accepted": 0,
-          "rejected": 0,
-          "reasons": {}
-        },
-        "direct": {
-          "generated": 2,
-          "accepted": 0,
-          "rejected": 2,
-          "reasons": {
-            "chunks:too_many_effective (9 > 8)": 1,
-            "pool:low_assembly_value": 1
-          }
-        },
-        "relative": {
-          "generated": 0,
-          "accepted": 0,
-          "rejected": 0,
-          "reasons": {}
-        }
-      }
-    },
-    {
-      "round": 30,
-      "mode": "normal",
-      "spec": [
-        {
-          "type": "interrogative",
-          "difficulty": "easy",
-          "count": 1
-        },
-        {
-          "type": "interrogative",
-          "difficulty": "hard",
-          "count": 1
-        },
-        {
-          "type": "1st-embedded",
-          "difficulty": "hard",
-          "count": 2
-        }
-      ],
-      "typeStats": {
-        "negation": {
-          "generated": 0,
-          "accepted": 0,
-          "rejected": 0,
-          "reasons": {}
-        },
-        "3rd-reporting": {
-          "generated": 0,
-          "accepted": 0,
-          "rejected": 0,
-          "reasons": {}
-        },
-        "1st-embedded": {
-          "generated": 2,
-          "accepted": 0,
-          "rejected": 2,
-          "reasons": {
-            "pool:low_assembly_value": 2
-          }
-        },
-        "interrogative": {
-          "generated": 2,
-          "accepted": 0,
-          "rejected": 2,
-          "reasons": {
-            "pool:qmark_overflow": 2
-          }
-        },
-        "direct": {
-          "generated": 0,
-          "accepted": 0,
-          "rejected": 0,
-          "reasons": {}
-        },
-        "relative": {
-          "generated": 0,
-          "accepted": 0,
-          "rejected": 0,
-          "reasons": {}
-        }
-      }
-    },
-    {
-      "round": 31,
-      "mode": "normal",
-      "spec": [
-        {
-          "type": "interrogative",
-          "difficulty": "easy",
-          "count": 1
-        },
-        {
-          "type": "interrogative",
-          "difficulty": "hard",
-          "count": 1
-        },
-        {
-          "type": "1st-embedded",
-          "difficulty": "hard",
-          "count": 2
-        }
-      ],
-      "typeStats": {
-        "negation": {
-          "generated": 0,
-          "accepted": 0,
-          "rejected": 0,
-          "reasons": {}
-        },
-        "3rd-reporting": {
-          "generated": 0,
-          "accepted": 0,
-          "rejected": 0,
-          "reasons": {}
-        },
-        "1st-embedded": {
-          "generated": 2,
-          "accepted": 0,
-          "rejected": 2,
-          "reasons": {
-            "fatal: chunks (minus distractor) + prefilled words must equal answer words": 1,
-            "pool:no_prefilled_quota": 1
-          }
-        },
-        "interrogative": {
-          "generated": 2,
-          "accepted": 0,
-          "rejected": 2,
-          "reasons": {
-            "pool:qmark_overflow": 2
-          }
-        },
-        "direct": {
-          "generated": 0,
-          "accepted": 0,
-          "rejected": 0,
-          "reasons": {}
         },
         "relative": {
           "generated": 0,
@@ -2721,6 +2156,195 @@
         }
       ],
       "blockedUntilRound": 34
+    },
+    {
+      "triggeredAt": "2026-05-13T18:14:15.104Z",
+      "round": 9,
+      "mode": "normal",
+      "type": "direct",
+      "generated": 6,
+      "accepted": 0,
+      "rejected": 6,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "pool:low_assembly_value",
+          3
+        ],
+        [
+          "pool:no_prefilled_quota",
+          2
+        ],
+        [
+          "pool:i_quota_exceeded",
+          1
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 7,
+          "spec": [
+            {
+              "type": "direct",
+              "difficulty": "medium",
+              "count": 3
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "medium",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "pool:no_prefilled_quota": 1,
+              "pool:low_assembly_value": 2
+            }
+          }
+        },
+        {
+          "round": 8,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "1st-embedded",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "interrogative",
+              "difficulty": "hard",
+              "count": 1
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "pool:i_quota_exceeded": 1,
+              "pool:low_assembly_value": 1
+            }
+          }
+        },
+        {
+          "round": 9,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 1,
+            "accepted": 0,
+            "rejected": 1,
+            "reasons": {
+              "pool:no_prefilled_quota": 1
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 12
+    },
+    {
+      "triggeredAt": "2026-05-13T18:14:33.584Z",
+      "round": 11,
+      "mode": "normal",
+      "type": "3rd-reporting",
+      "generated": 5,
+      "accepted": 0,
+      "rejected": 5,
+      "acceptRate": 0,
+      "reasons": [
+        [
+          "pool:low_assembly_value",
+          5
+        ]
+      ],
+      "recentRounds": [
+        {
+          "round": 9,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "relative",
+              "difficulty": "hard",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 0,
+            "accepted": 0,
+            "rejected": 0,
+            "reasons": {}
+          }
+        },
+        {
+          "round": 10,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 2
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 2
+            }
+          ],
+          "stats": {
+            "generated": 2,
+            "accepted": 0,
+            "rejected": 2,
+            "reasons": {
+              "pool:low_assembly_value": 2
+            }
+          }
+        },
+        {
+          "round": 11,
+          "spec": [
+            {
+              "type": "negation",
+              "difficulty": "hard",
+              "count": 1
+            },
+            {
+              "type": "3rd-reporting",
+              "difficulty": "hard",
+              "count": 3
+            }
+          ],
+          "stats": {
+            "generated": 3,
+            "accepted": 0,
+            "rejected": 3,
+            "reasons": {
+              "pool:low_assembly_value": 3
+            }
+          }
+        }
+      ],
+      "blockedUntilRound": 14
     }
   ]
 }
