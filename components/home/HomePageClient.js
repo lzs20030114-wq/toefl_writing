@@ -16,6 +16,7 @@ import { countBsMistakes } from "../MistakeNotebook";
 import { NavSidebar } from "./NavSidebar";
 import { SectionContent } from "./SectionContent";
 import { MyReferralModal } from "./MyReferralModal";
+import { InvitationCapturedToast, ActivatedToast } from "../referral/ReferralToasts";
 
 export function PromoBanner({ isChallenge, fadeIn }) {
   const [open, setOpen] = useState(false);
@@ -285,6 +286,8 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
         {referralModalOpen && (
           <MyReferralModal userCode={userCode} onClose={() => setReferralModalOpen(false)} />
         )}
+        <InvitationCapturedToast isLoggedIn={isLoggedIn} onSignupClick={showLoginModal} />
+        <ActivatedToast />
       </>
     );
   }
@@ -361,6 +364,8 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
       {referralModalOpen && (
         <MyReferralModal userCode={userCode} onClose={() => setReferralModalOpen(false)} />
       )}
+      <InvitationCapturedToast isLoggedIn={isLoggedIn} onSignupClick={showLoginModal} />
+      <ActivatedToast />
     </>
   );
 }

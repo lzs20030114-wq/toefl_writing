@@ -1,7 +1,20 @@
 import { createPortal } from "react-dom";
 import { FONT } from "../shared/ui";
 
-export function ProTrialGiftModal({ t, onClose }) {
+/**
+ * The Pro-trial congratulations modal shown to new users right after signup.
+ *
+ * When the user arrived via an invitation link, we also surface an inviter
+ * banner inside the modal so they understand the social context — "you got
+ * 3 days, and completing a practice will also give your inviter 3 days".
+ *
+ * @param {object} props
+ * @param {object} props.t            — i18n strings
+ * @param {Function} props.onClose
+ * @param {string} [props.inviterCode] — 6-char code, if user just bound a referral
+ */
+export function ProTrialGiftModal({ t, onClose, inviterCode }) {
+  const hasInviter = !!inviterCode;
   return createPortal(
     <div
       style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", WebkitBackdropFilter: "blur(4px)", backdropFilter: "blur(4px)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center", padding: 20, fontFamily: FONT }}
@@ -25,6 +38,30 @@ export function ProTrialGiftModal({ t, onClose }) {
         </div>
 
         <div style={{ padding: "22px 24px 24px" }}>
+          {hasInviter && (
+            <div
+              style={{
+                marginBottom: 18,
+                padding: "12px 14px",
+                borderRadius: 12,
+                background: "linear-gradient(135deg, #ecfdf5 0%, #ecfeff 100%)",
+                border: "1px solid rgba(13,150,104,0.28)",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+                <span style={{ fontSize: 20, lineHeight: 1, flexShrink: 0 }}>🎁</span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: "#065f46", lineHeight: 1.4 }}>
+                    你响应了 <span style={{ fontFamily: "ui-monospace, monospace", letterSpacing: 1 }}>{inviterCode}</span> 的邀请
+                  </div>
+                  <div style={{ fontSize: 12, color: "#0e7c66", marginTop: 4, lineHeight: 1.6 }}>
+                    完成 1 次练习后，将自动帮 TA 解锁 3 天 Pro
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 20 }}>
             {[t.trialFeature1, t.trialFeature2, t.trialFeature3].map((text) => (
               <div key={text} style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -46,7 +83,7 @@ export function ProTrialGiftModal({ t, onClose }) {
             onClick={onClose}
             style={{ width: "100%", padding: "12px 0", borderRadius: 10, border: "none", background: "linear-gradient(135deg, #087355, #0891B2)", color: "#fff", fontSize: 15, fontWeight: 700, cursor: "pointer", fontFamily: FONT }}
           >
-            {t.trialStart}
+            {hasInviter ? "去做第一题，帮 TA 领奖" : t.trialStart}
           </button>
         </div>
       </div>

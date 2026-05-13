@@ -207,12 +207,26 @@ function OTPView({ t, styles, compact, emailInput, setEmailInput, loading, setLo
 // LoginModal — coordinator
 // ═══════════════════════════════════════════
 export function LoginModal({ t, onClose, onLoginSuccess }) {
-  const [view, setView] = useState("password"); // "password" | "otp" | "forgot" | "setPassword"
+  // Default to password tab. But if the user arrived via a referral link
+  // (getStoredRef returns a captured code), jump straight to OTP signup —
+  // that's the natural path for new users responding to an invitation.
+  const initialView = (() => {
+    if (typeof window === "undefined") return "password";
+    try {
+      const stored = getStoredRef();
+      return stored?.code ? "otp" : "password";
+    } catch {
+      return "password";
+    }
+  })();
+
+  const [view, setView] = useState(initialView);
   const [activeTab, setActiveTab] = useState("email");
   const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
   const [codeInput, setCodeInput] = useState("");
   const [referralInput, setReferralInput] = useState("");
+  const [hasInvitation, setHasInvitation] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [agreedTerms, setAgreedTerms] = useState(false);
@@ -227,10 +241,15 @@ export function LoginModal({ t, onClose, onLoginSuccess }) {
     return () => window.removeEventListener("resize", check);
   }, []);
 
-  // Auto-fill referral code if a ?ref= was captured on a previous page load.
+  // Auto-fill referral code if a ?ref= was captured on a previous page load,
+  // and remember that fact so we can render the green inviter badge on the
+  // OTP signup view.
   useEffect(() => {
     const stored = getStoredRef();
-    if (stored?.code) setReferralInput(stored.code);
+    if (stored?.code) {
+      setReferralInput(stored.code);
+      setHasInvitation(true);
+    }
   }, []);
 
   // Persist typed referral code to storage so LoginGate.handleLoginSuccess can
@@ -360,8 +379,39 @@ export function LoginModal({ t, onClose, onLoginSuccess }) {
           />
         )}
 
-        {/* Optional referral code — only visible on OTP signup path */}
-        {view === "otp" && (
+        {/* Inviter badge — visible when arriving via a /?ref=ABC123 link.
+            Confirms to the user that the invitation was recognized. */}
+        {view === "otp" && hasInvitation && (
+          <div
+            role="status"
+            style={{
+              marginTop: s.gap,
+              padding: "10px 12px",
+              borderRadius: 10,
+              background: "linear-gradient(135deg, #ecfdf5 0%, #ecfeff 100%)",
+              border: "1px solid rgba(13,150,104,0.28)",
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+            }}
+          >
+            <span style={{ fontSize: 18, lineHeight: 1 }}>🎁</span>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: "#065f46" }}>
+                响应邀请人 <span style={{ fontFamily: "ui-monospace, monospace", letterSpacing: 1 }}>{referralInput}</span> 的邀请
+              </div>
+              <div style={{ fontSize: 11, color: "#0e7c66", marginTop: 2, lineHeight: 1.5 }}>
+                注册即送 3 天 Pro · 完成 1 次练习后帮 TA 解锁 3 天 Pro
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Optional referral code — visible on OTP signup path.
+            Hidden when the inviter badge already shows (i.e., we have a
+            captured ref); only relevant when the user wants to TYPE one in
+            manually. */}
+        {view === "otp" && !hasInvitation && (
           <div style={{ marginTop: s.gap }}>
             <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: C.t3, marginBottom: 4, fontFamily: FONT }}>
               邀请码（可选 · 填了能给邀请你的人送 3 天 Pro）

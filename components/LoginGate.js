@@ -6,6 +6,8 @@ import { clearAuth, getSavedCode, getSavedTier, getSavedEmail, getSavedAuthMetho
 import { clearLocalSessions, getLocalSessionCount, importLocalSessionsToCloud } from "../lib/sessionStore";
 import { usePageView } from "../lib/usePageView";
 import { getStoredRef, clearStoredRef } from "../lib/referralCapture";
+import { markBindStarted, markBindSucceeded, markBindRejected } from "../lib/referral/state";
+import { trackReferralEvent } from "../lib/analytics/referral";
 import { C, FONT } from "./shared/ui";
 import { I18N, UI_LANG_KEY, IMPORT_DISMISSED_KEY, PRO_TRIAL_NOTIFIED_KEY } from "./login/i18n";
 import { LoginModal } from "./login/LoginModal";
@@ -36,6 +38,9 @@ export default function LoginGate({ children }) {
   const [importing, setImporting] = useState(false);
   const [welcomeMsg, setWelcomeMsg] = useState(null);
   const [proTrialModal, setProTrialModal] = useState(false);
+  // When a new user just bound a referral, remember the inviter so the
+  // pro-trial modal can call them out by code.
+  const [proTrialInviter, setProTrialInviter] = useState(null);
 
   const isLoggedIn = !!userCode;
 
@@ -111,22 +116,37 @@ export default function LoginGate({ children }) {
     );
 
     // Bind referral if this is a new user and we have a stored ?ref= or manually entered code.
+    let inviterForTrialModal = null;
     if (isNewUser) {
       const stored = getStoredRef();
       if (stored?.code && stored.code !== code) {
+        inviterForTrialModal = stored.code;
+        markBindStarted();
+        trackReferralEvent("bind_attempt", {
+          inviterCode: stored.code,
+          inviteeCode: code,
+          source: stored.source || "link",
+        });
         fetch("/api/referral/bind", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ inviterCode: stored.code, inviteeCode: code, source: stored.source || "link" }),
         }).then((r) => r.json()).then((result) => {
-          // Clear the stored ref once the server has seen it (success or rejection).
-          // Don't retry — bind is one-shot at signup.
-          if (result?.ok || result?.reason === "already_bound" || result?.reason === "cap_exceeded" || result?.reason === "self_ref") {
+          if (result?.ok && (result?.status === "pending" || result?.status === "activated" || result?.status === "granted")) {
+            markBindSucceeded();
+            trackReferralEvent("bind_success", { inviterCode: stored.code, inviteeCode: code });
+          } else if (result?.reason) {
+            // Terminal failure (self_ref, ip_flood, cap_exceeded, etc.) — record and clear.
+            markBindRejected(result.reason);
+            trackReferralEvent("bind_rejected", { inviterCode: stored.code, inviteeCode: code, reason: result.reason });
+          }
+          if (result?.ok || ["already_bound", "cap_exceeded", "self_ref", "ip_flood"].includes(result?.reason)) {
             clearStoredRef();
           }
         }).catch(() => { /* keep stored ref for next attempt */ });
       }
     }
+    setProTrialInviter(inviterForTrialModal);
 
     if (proTrial && tier === "pro") {
       maybeShowTrialModal(proTrial, tier);
@@ -167,7 +187,7 @@ export default function LoginGate({ children }) {
           </div>
         )}
         {loginModalOpen && <LoginModal t={t} onClose={() => setLoginModalOpen(false)} onLoginSuccess={handleLoginSuccess} />}
-        {proTrialModal && <ProTrialGiftModal t={t} onClose={dismissTrialModal} />}
+        {proTrialModal && <ProTrialGiftModal t={t} onClose={dismissTrialModal} inviterCode={proTrialInviter} />}
         {welcomeMsg && (
           <div style={{ position: "fixed", top: 64, left: "50%", transform: "translateX(-50%)", background: C.blue, color: "#fff", padding: "10px 24px", borderRadius: 10, fontSize: 14, fontWeight: 600, zIndex: 10001, boxShadow: "0 8px 24px rgba(0,0,0,0.15)", fontFamily: FONT }}>
             {welcomeMsg}
