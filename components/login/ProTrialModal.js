@@ -25,9 +25,16 @@ export function ProTrialGiftModal({ t, onClose, inviterCode }) {
       >
         <div style={{ background: "linear-gradient(135deg, #087355, #0891B2)", padding: "28px 24px 22px", textAlign: "center" }}>
           <div style={{ width: 48, height: 48, margin: "0 auto 12px", borderRadius: 14, background: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-            </svg>
+            {hasInviter ? (
+              // Referred user: use the gift glyph to match the inviter callout
+              // card below — single visual metaphor across the modal.
+              <span style={{ fontSize: 26, lineHeight: 1 }}>🎁</span>
+            ) : (
+              // Organic signup: keep the original star to mark a Pro perk.
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+            )}
           </div>
           <div style={{ fontSize: 20, fontWeight: 800, color: "#fff", marginBottom: 4 }}>
             {t.trialTitle}

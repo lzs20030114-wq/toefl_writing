@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { HOME_FONT, HOME_TOKENS as T } from "./theme";
+import { useReferralFlow } from "../../lib/referral/useReferralFlow";
 
 const DISMISS_KEY = "toefl-referral-banner-dismissed-at";
 const COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
@@ -40,12 +41,18 @@ function markDismissed() {
 export function ReferralBanner({ isLoggedIn, onOpen, fadeIn }) {
   const [visible, setVisible] = useState(false);
   const [open, setOpen] = useState(false);
+  // Hide this "share with friends" banner when the user is themselves
+  // arriving via an invitation — they're not the inviter, and the
+  // InvitationCapturedToast already pitches them. Showing both is
+  // visually redundant and confuses the social context.
+  const { hasCapturedRef } = useReferralFlow();
 
   useEffect(() => {
     if (!isDismissedRecently()) setVisible(true);
   }, []);
 
   if (!visible) return null;
+  if (hasCapturedRef && !isLoggedIn) return null;
 
   const handleDismiss = (e) => {
     e.stopPropagation();

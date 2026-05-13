@@ -159,8 +159,16 @@ export function InvitationCapturedToast({ isLoggedIn, onSignupClick }) {
 
 // ─────────────────────────────────────────────────────────
 // ActivatedToast — slides in when the invitee's first practice grants
-// the inviter 3 days. Auto-hides after ~6 seconds.
+// the inviter 3 days.
+//
+// Persistence: the user just finished a practice and is reading their
+// ScoringReport — their attention is on the result, not the toast.
+// 6 seconds is too short to register. We now keep the toast visible for
+// 30 seconds and expose an × button so the user can dismiss whenever
+// they choose to acknowledge it.
 // ─────────────────────────────────────────────────────────
+const ACTIVATED_AUTO_HIDE_MS = 30_000;
+
 export function ActivatedToast() {
   const { isGranted, grantedDays, inviterCode } = useReferralFlow();
   const [visible, setVisible] = useState(false);
@@ -174,15 +182,22 @@ export function ActivatedToast() {
     const key = `${inviterCode}-${grantedDays}`;
     if (shownFor === key) return;
     setShownFor(key);
+    setClosing(false);
     setVisible(true);
     const t = setTimeout(() => {
       setClosing(true);
       setTimeout(() => setVisible(false), 250);
-    }, 6000);
+    }, ACTIVATED_AUTO_HIDE_MS);
     return () => clearTimeout(t);
   }, [isGranted, inviterCode, grantedDays, shownFor]);
 
   if (!visible) return null;
+
+  const handleClose = (e) => {
+    e?.stopPropagation();
+    setClosing(true);
+    setTimeout(() => setVisible(false), 250);
+  };
 
   return (
     <>
@@ -210,8 +225,8 @@ export function ActivatedToast() {
           bottom: 20,
           right: 20,
           zIndex: 9500,
-          maxWidth: 320,
-          padding: "12px 16px",
+          maxWidth: 340,
+          padding: "12px 14px 12px 16px",
           background: "#fff",
           border: "1px solid rgba(13,150,104,0.28)",
           borderRadius: 12,
@@ -221,11 +236,26 @@ export function ActivatedToast() {
           gap: 10,
         }}
       >
-        <span style={{ fontSize: 22, lineHeight: 1 }}>✓</span>
-        <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+        <span style={{ fontSize: 22, lineHeight: 1, color: "#10b981", flexShrink: 0 }}>✓</span>
+        <div style={{ flex: 1, fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
           已帮邀请人 <span style={{ fontFamily: "ui-monospace, monospace", fontWeight: 700, letterSpacing: 1 }}>{inviterCode}</span> 解锁
           <strong style={{ color: "#087355", margin: "0 4px" }}>{grantedDays || 3} 天 Pro</strong>
         </div>
+        <button
+          aria-label="关闭"
+          onClick={handleClose}
+          style={{
+            flexShrink: 0,
+            width: 24, height: 24, padding: 0,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            background: "transparent", border: "none", cursor: "pointer",
+            color: "#94a39a", fontSize: 16, lineHeight: 1, borderRadius: 4,
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.color = "#5a6b62"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.color = "#94a39a"; }}
+        >
+          ✕
+        </button>
       </div>
     </>
   );
