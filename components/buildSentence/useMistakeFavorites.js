@@ -1,6 +1,6 @@
 "use client";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { getSavedCode } from "../../lib/AuthContext";
+import { AUTH_CHANGED_EVENT, getSavedCode } from "../../lib/AuthContext";
 import {
   addFavoriteCloud,
   loadFavoritesCloud,
@@ -10,6 +10,11 @@ import {
 function pointerKey(sessionId, detailIndex) {
   if (sessionId == null || detailIndex == null) return null;
   return `${sessionId}|${detailIndex}`;
+}
+
+function currentSavedCode() {
+  const raw = (typeof window !== "undefined" ? getSavedCode() : null) || "";
+  return raw.toUpperCase().trim() || null;
 }
 
 /**
@@ -55,12 +60,28 @@ export function useMistakeFavorites() {
     setLoading(false);
   }, []);
 
-  // Mount: read saved code and fetch
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    userCodeRef.current = (getSavedCode() || "").toUpperCase().trim() || null;
+  // Resync userCodeRef to current saved code, then reload. Used on mount and
+  // whenever AUTH_CHANGED_EVENT fires (login / logout / account switch in
+  // this tab).
+  const syncAndReload = useCallback(() => {
+    const next = currentSavedCode();
+    userCodeRef.current = next;
+    if (!next) {
+      // Logged out — clear favorites + any stale error state
+      setFavorites([]);
+      setError(null);
+      return;
+    }
     reload();
   }, [reload]);
+
+  // Mount: read saved code and fetch; subscribe to auth changes
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    syncAndReload();
+    window.addEventListener(AUTH_CHANGED_EVENT, syncAndReload);
+    return () => window.removeEventListener(AUTH_CHANGED_EVENT, syncAndReload);
+  }, [syncAndReload]);
 
   const isStarred = useCallback(
     (sessionId, detailIndex) => {

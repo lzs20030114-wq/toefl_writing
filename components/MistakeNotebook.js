@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { loadHist, SESSION_STORE_EVENTS } from "../lib/sessionStore";
+import { AUTH_CHANGED_EVENT, getSavedCode } from "../lib/AuthContext";
 import { formatLocalDateTime, translateGrammarPoint } from "../lib/utils";
 import { C, FONT, PageShell, SurfaceCard, DisclosureSection } from "./shared/ui";
 import { useBsAiExplain, BsAiExplainBlock } from "./buildSentence/useBsAiExplain";
@@ -148,17 +149,17 @@ function wordDiff(user, correct) {
 
 /* ── sub-components ── */
 
-function StarButton({ starred, onClick, disabled }) {
+function StarButton({ starred, onClick, isLoggedIn = true }) {
   const [hover, setHover] = useState(false);
+  const label = !isLoggedIn ? "登录后可收藏此错题" : starred ? "取消收藏" : "收藏此错题";
   return (
     <button
       type="button"
       onClick={onClick}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      disabled={disabled}
-      aria-label={starred ? "取消收藏" : "收藏此错题"}
-      title={starred ? "取消收藏" : "收藏此错题"}
+      aria-label={label}
+      title={label}
       style={{
         flexShrink: 0,
         background: hover ? "#fef3c7" : "transparent",
@@ -169,12 +170,12 @@ function StarButton({ starred, onClick, disabled }) {
         display: "inline-flex",
         alignItems: "center",
         justifyContent: "center",
-        cursor: disabled ? "not-allowed" : "pointer",
-        opacity: disabled ? 0.5 : 1,
+        cursor: "pointer",
+        opacity: !isLoggedIn ? 0.45 : 1,
         fontSize: 20,
         lineHeight: 1,
         color: starred ? "#f59e0b" : "#94a3b8",
-        transition: "color 0.15s, background 0.15s",
+        transition: "color 0.15s, background 0.15s, opacity 0.15s",
         padding: 0,
       }}
     >
@@ -183,18 +184,30 @@ function StarButton({ starred, onClick, disabled }) {
   );
 }
 
-function MistakeCard({ detail, explainKey, aiExplains, isLegacy, handleAiExplain, sessionId, detailIndex, sessionDate, isStarred, onToggleStar }) {
+function MistakeCard({ detail, explainKey, aiExplains, isLegacy, handleAiExplain, sessionId, detailIndex, sessionDate, isStarred, onToggleStar, isLoggedIn, onRequireLogin }) {
   const diff = useMemo(
     () => wordDiff(detail.userAnswer || "", detail.correctAnswer || ""),
     [detail.userAnswer, detail.correctAnswer],
   );
-  const showStar = sessionId != null && detailIndex != null && typeof onToggleStar === "function";
-  const starred = showStar ? !!isStarred : false;
+  // Star always shows when we have a detail index. For guests we still render
+  // it (disabled-looking) so the feature is discoverable; click flows to a
+  // login hint via onRequireLogin instead of the API call.
+  const showStar = detailIndex != null && typeof onToggleStar === "function";
+  const canFavorite = isLoggedIn && sessionId != null;
+  const starred = canFavorite ? !!isStarred : false;
 
   const handleStarClick = useCallback(() => {
-    if (!showStar) return;
+    if (!isLoggedIn) {
+      onRequireLogin?.();
+      return;
+    }
+    if (sessionId == null) {
+      // Logged in but session not yet synced to cloud — surface a soft hint
+      onRequireLogin?.({ syncing: true });
+      return;
+    }
     onToggleStar(sessionId, detailIndex, buildSnapshot(detail, sessionDate));
-  }, [showStar, sessionId, detailIndex, detail, sessionDate, onToggleStar]);
+  }, [isLoggedIn, sessionId, detailIndex, detail, sessionDate, onToggleStar, onRequireLogin]);
 
   return (
     <div
@@ -212,7 +225,7 @@ function MistakeCard({ detail, explainKey, aiExplains, isLegacy, handleAiExplain
           {detail.prompt}
         </div>
         {showStar ? (
-          <StarButton starred={starred} onClick={handleStarClick} />
+          <StarButton starred={starred} onClick={handleStarClick} isLoggedIn={isLoggedIn} />
         ) : null}
       </div>
 
@@ -438,22 +451,46 @@ function TabBar({ tab, setTab, totalWrong, favoritesCount }) {
 }
 
 export default function MistakeNotebook({ onBack }) {
+  // Track whether we've completed the initial cloud-history fetch. For logged-in
+  // users loadHist() returns an empty cache synchronously then fills in async —
+  // we need to wait one tick before showing "no mistakes" or the user sees a
+  // false-empty state.
   const [hist, setHist] = useState(() => loadHist());
+  const [initialized, setInitialized] = useState(() => !getSavedCode());
   const [tab, setTab] = useState("all");
   const { aiExplains, isLegacy, handleAiExplain } = useBsAiExplain();
   const { favorites, isStarred, toggleStar, error: favError } = useMistakeFavorites();
 
-  // Listen for session store updates
+  // Subscribe to real history-updated events (the prior code used the wrong
+  // constant name and was dead). Also listen to auth changes so the page
+  // reloads when the user logs in mid-session in this tab. No polling.
   useEffect(() => {
-    const refresh = () => setHist(loadHist());
-    const timer = setInterval(refresh, 3000);
-    if (typeof window !== "undefined" && SESSION_STORE_EVENTS?.UPDATED) {
-      window.addEventListener(SESSION_STORE_EVENTS.UPDATED, refresh);
+    const refresh = () => {
+      setHist(loadHist());
+      setInitialized(true);
+    };
+    refresh(); // ensure first paint reflects whatever the cache has
+
+    const histEvent = SESSION_STORE_EVENTS?.HISTORY_UPDATED_EVENT;
+    if (typeof window !== "undefined" && histEvent) {
+      window.addEventListener(histEvent, refresh);
     }
+    if (typeof window !== "undefined") {
+      window.addEventListener(AUTH_CHANGED_EVENT, refresh);
+    }
+
+    // Safety net: in case the cloud sync hasn't fired its event by the time
+    // we render, flip "initialized" after 1.5s so we don't show empty-state
+    // forever on a slow network.
+    const safety = setTimeout(() => setInitialized(true), 1500);
+
     return () => {
-      clearInterval(timer);
-      if (typeof window !== "undefined" && SESSION_STORE_EVENTS?.UPDATED) {
-        window.removeEventListener(SESSION_STORE_EVENTS.UPDATED, refresh);
+      clearTimeout(safety);
+      if (typeof window !== "undefined" && histEvent) {
+        window.removeEventListener(histEvent, refresh);
+      }
+      if (typeof window !== "undefined") {
+        window.removeEventListener(AUTH_CHANGED_EVENT, refresh);
       }
     };
   }, []);
@@ -469,6 +506,17 @@ export default function MistakeNotebook({ onBack }) {
   );
 
   const favoritesCount = favorites?.length || 0;
+  const isLoggedIn = !!getSavedCode();
+  const [loginHint, setLoginHint] = useState(null);
+
+  const handleRequireLogin = useCallback((opts) => {
+    if (opts?.syncing) {
+      setLoginHint("正在同步会话，请稍后再试");
+    } else {
+      setLoginHint("登录后可以收藏错题");
+    }
+    setTimeout(() => setLoginHint((cur) => (cur ? null : cur)), 2500);
+  }, []);
 
   return (
     <PageShell>
@@ -499,8 +547,12 @@ export default function MistakeNotebook({ onBack }) {
         </div>
       </div>
 
-      {/* empty state — only when both tabs would be empty */}
-      {groups.length === 0 && favoritesCount === 0 ? (
+      {/* loading state — wait for first sync before showing "no mistakes" */}
+      {!initialized ? (
+        <SurfaceCard style={{ padding: "48px 24px", textAlign: "center" }}>
+          <div style={{ fontSize: 13, color: C.t3 }}>正在加载错题记录...</div>
+        </SurfaceCard>
+      ) : groups.length === 0 && favoritesCount === 0 ? (
         <SurfaceCard style={{ padding: "48px 24px", textAlign: "center" }}>
           <div style={{ fontSize: 40, marginBottom: 12 }}>🎉</div>
           <div style={{ fontSize: 16, fontWeight: 700, color: C.t1, marginBottom: 6 }}>
@@ -516,6 +568,11 @@ export default function MistakeNotebook({ onBack }) {
           {favError ? (
             <div style={{ marginBottom: 12, padding: "8px 12px", borderRadius: 6, background: "#fef2f2", color: "#b91c1c", fontSize: 12 }}>
               收藏夹同步出错：{favError}
+            </div>
+          ) : null}
+          {loginHint ? (
+            <div style={{ marginBottom: 12, padding: "8px 12px", borderRadius: 6, background: "#fffbeb", color: "#92400e", fontSize: 12, border: "1px solid #fde68a" }}>
+              {loginHint}
             </div>
           ) : null}
 
@@ -548,6 +605,8 @@ export default function MistakeNotebook({ onBack }) {
                             sessionDate={g.date}
                             isStarred={isStarred(g.sessionId, d._index)}
                             onToggleStar={toggleStar}
+                            isLoggedIn={isLoggedIn}
+                            onRequireLogin={handleRequireLogin}
                           />
                         ))}
                       </DisclosureSection>
@@ -590,6 +649,8 @@ export default function MistakeNotebook({ onBack }) {
                         sessionDate={f.snapshot?.sessionDate || f.created_at}
                         isStarred={true}
                         onToggleStar={toggleStar}
+                        isLoggedIn={isLoggedIn}
+                        onRequireLogin={handleRequireLogin}
                       />
                     );
                   })}

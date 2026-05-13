@@ -5,7 +5,9 @@ import { jsonError } from "../../../../lib/apiResponse";
 const VALID_SUBJECTS = new Set(["bs", "reading", "listening"]);
 const SNAPSHOT_MAX_BYTES = 5 * 1024;
 
-const limiter = createRateLimiter("mistake-fav", { window: 60_000, max: 30 });
+// Bumped from 30/min — users routinely star several mistakes in a row, and
+// the previous limit caused optimistic UI rollbacks (429 → star unsets).
+const limiter = createRateLimiter("mistake-fav", { window: 60_000, max: 90 });
 
 function normalizeCode(raw) {
   return String(raw || "").toUpperCase().trim();
@@ -13,7 +15,18 @@ function normalizeCode(raw) {
 
 function validateSnapshot(s) {
   if (!s || typeof s !== "object") return "snapshot must be an object";
-  if (!s.prompt && !s.correctAnswer) return "snapshot needs at least prompt or correctAnswer";
+  // A favorited mistake must carry enough to render a usable card downstream.
+  // Earlier code accepted "prompt OR correctAnswer" which let half-blank
+  // snapshots into the DB; tighten to require all three text fields.
+  if (typeof s.prompt !== "string" || !s.prompt.trim()) {
+    return "snapshot.prompt is required";
+  }
+  if (typeof s.correctAnswer !== "string" || !s.correctAnswer.trim()) {
+    return "snapshot.correctAnswer is required";
+  }
+  if (typeof s.userAnswer !== "string") {
+    return "snapshot.userAnswer must be a string";
+  }
   let bytes;
   try { bytes = JSON.stringify(s).length; } catch { return "snapshot is not JSON-serializable"; }
   if (bytes > SNAPSHOT_MAX_BYTES) return `snapshot too large (${bytes} > ${SNAPSHOT_MAX_BYTES} bytes)`;
