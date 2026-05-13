@@ -4963,6 +4963,124 @@
         "status": "passed",
         "accuracy": "3/3"
       }
+    },
+    {
+      "id": "rdl_gen_1778696170200_001",
+      "variant": "long",
+      "text": "Campus Cruiser Food Truck\nWeekly Specials (May 15 - May 19)\n\nLocated at the North Quad near Anderson Hall, open 11:00 AM to 2:00 PM daily.\n\nMenu Items:\n- Classic Burger with fries: $7.50\n- Chicken Wrap with side salad: $6.00\n- Veggie Bowl with quinoa: $5.50\n- BBQ Pulled Pork Sandwich: $8.00\n\nDaily Special:\nTuesday and Thursday only — Buy any sandwich and get a small drink free (a $1.50 value).\n\nPayment: We accept cash, credit cards, and campus meal plan swipes. A $0.50 fee applies to credit card transactions under $5.00. No personal checks accepted.\n\nStudents who show a valid student ID receive a 10% discount on any single item. Limit one discount per visit. Discount cannot be combined with other offers.\n\nContact: campuscruiser@univ.edu or stop by the truck.",
+      "word_count": 131,
+      "genre": "menu",
+      "format_metadata": {
+        "from": "Campus Cruiser Food Truck",
+        "to": "All Students",
+        "subject": "Weekly Specials"
+      },
+      "questions": [
+        {
+          "qid": "rdl_gen_1778696170200_001_q1",
+          "question_type": "detail",
+          "stem": "According to the menu, what must a student do to receive a discount?",
+          "options": {
+            "A": "Show a valid student ID at the time of purchase",
+            "B": "Purchase a sandwich on Tuesday or Thursday",
+            "C": "Spend more than five dollars on a single item",
+            "D": "Use a campus meal plan swipe for payment"
+          },
+          "correct_answer": "A",
+          "explanation": "The menu states: 'Students who show a valid student ID receive a 10% discount on any single item.'"
+        },
+        {
+          "qid": "rdl_gen_1778696170200_001_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the food truck's payment policy?",
+          "options": {
+            "A": "It charges a fee for all credit card transactions",
+            "B": "It encourages customers to avoid small credit card payments",
+            "C": "It prefers cash because there are no processing fees",
+            "D": "It accepts personal checks for orders over ten dollars"
+          },
+          "correct_answer": "B",
+          "explanation": "The menu mentions a $0.50 fee for credit card transactions under $5.00, implying that small credit card payments incur an extra charge, which might discourage their use."
+        },
+        {
+          "qid": "rdl_gen_1778696170200_001_q3",
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this menu?",
+          "options": {
+            "A": "To inform students about food truck offerings and pricing",
+            "B": "To advertise a special discount for meal plan users",
+            "C": "To announce a new location for the food truck",
+            "D": "To promote the purchase of a BBQ Pulled Pork Sandwich"
+          },
+          "correct_answer": "A",
+          "explanation": "The menu provides a list of items, prices, daily specials, and payment policies, all aimed at informing students about the food truck's offerings."
+        }
+      ],
+      "question_count": 3,
+      "difficulty": "medium",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "3/3"
+      }
+    },
+    {
+      "id": "rdl_gen_1778696170200_002",
+      "variant": "long",
+      "text": "Notice: Changes to Campus Printing Quota and Kiosk Locations\nEffective Date: September 12, 2024\n\nTo all students and faculty:\n\nThe university is updating its printing services to improve efficiency and reduce waste. Please review the following changes:\n\n- New Print Quota: Each student will receive a free semester quota of $10.00 for black-and-white prints. Color prints cost $0.15 per page and will be deducted from this quota.\n- Kiosk Relocation: The printing kiosk in Anderson Hall (Room 204) will be moved to the ground floor lobby on September 10. The kiosk in the Library (second floor) remains in place.\n- Additional Charges: A $5.00 penalty will be applied to any print job left unclaimed for more than 24 hours. Unclaimed jobs will be deleted after 48 hours.\n- Online Portal: Students must use the campus portal to add funds to their printing account. Adding funds requires a minimum deposit of $5.00.\n\nFor questions or assistance, contact the IT Help Desk at (555) 123-4567 or visit Room 101 in the Student Center.\n\nThank you for your cooperation.",
+      "word_count": 176,
+      "genre": "notice",
+      "format_metadata": {
+        "from": "University IT Services",
+        "to": "All Students and Faculty",
+        "subject": "Changes to Campus Printing Quota and Kiosk Locations"
+      },
+      "questions": [
+        {
+          "qid": "rdl_gen_1778696170200_002_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, what happens if a print job is not collected within 24 hours?",
+          "options": {
+            "A": "It is automatically sent to the Library kiosk for pickup",
+            "B": "It is deleted immediately to save paper and toner",
+            "C": "It is added to the student's account as an unclaimed job",
+            "D": "It incurs a five-dollar penalty for being left unclaimed"
+          },
+          "correct_answer": "D",
+          "explanation": "The notice states: 'A $5.00 penalty will be applied to any print job left unclaimed for more than 24 hours.'"
+        },
+        {
+          "qid": "rdl_gen_1778696170200_002_q2",
+          "question_type": "detail",
+          "stem": "What must students do to add money to their printing account?",
+          "options": {
+            "A": "Visit the IT Help Desk in Room 101 of the Student Center",
+            "B": "Use the campus portal and make a minimum five-dollar deposit",
+            "C": "Submit a request at the printing kiosk in the Library",
+            "D": "Contact the university's financial office for authorization"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice says: 'Students must use the campus portal to add funds to their printing account. Adding funds requires a minimum deposit of $5.00.'"
+        },
+        {
+          "qid": "rdl_gen_1778696170200_002_q3",
+          "question_type": "inference",
+          "stem": "What can be inferred about the printing kiosk in Anderson Hall?",
+          "options": {
+            "A": "It will be closed permanently after September 10",
+            "B": "It will be relocated to a different area of the same building",
+            "C": "It will remain in Room 204 until the end of the semester",
+            "D": "It will be replaced by a new kiosk in the Student Center"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice states that the kiosk in Anderson Hall (Room 204) will be moved to the ground floor lobby on September 10, implying a relocation within the same building."
+        }
+      ],
+      "question_count": 3,
+      "difficulty": "medium",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "3/3"
+      }
     }
   ]
 }

@@ -2481,6 +2481,168 @@
       },
       "flavor_score": 0.58,
       "audio_url": "/api/audio/choose-response/lcr_v2_1776244696654_004.mp3"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a professor about office hours or assignment",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Professor, did you say the essay is due this Friday?",
+      "options": {
+        "A": "The essay topic is very interesting.",
+        "B": "Actually, it's due next Monday.",
+        "C": "I haven't started my essay yet.",
+        "D": "Friday is a good day for deadlines."
+      },
+      "answer": "B",
+      "explanation": "正确答案B用'Actually'作为话语标记，礼貌地纠正学生的错误理解，直接回答截止日期问题，自然且符合教授身份。A评论论文主题有趣，完全离题。C说自己还没开始写，与学生的问题无关。D评价周五是截止的好日子，属于无关的个人意见。",
+      "distractor_types": {
+        "A": "off_topic",
+        "C": "semantic_association_trap",
+        "D": "off_topic"
+      },
+      "id": "lcr_v2_1778696217552_002",
+      "_audit": {
+        "match": true,
+        "ambiguous": false,
+        "validCount": 1
+      },
+      "flavor_score": 0.91
+    },
+    {
+      "context": "general_daily",
+      "situation": "checking if a service (post office, bank) is open",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Is the post office still open this late?",
+      "options": {
+        "A": "The post office is near the library.",
+        "B": "I think it closes at six on weekdays.",
+        "C": "I need to mail a package tomorrow.",
+        "D": "Late hours are only during holidays."
+      },
+      "answer": "B",
+      "explanation": "正确答案B用'I think'缓和语气，间接提供营业时间信息，帮助判断是否还开门。A说邮局在图书馆附近，回答了位置而非时间。C说自己要寄包裹，离题。D说只有节假日有延长营业时间，虽然相关但过于具体，且未直接回应现在是否开门。",
+      "distractor_types": {
+        "A": "wrong_question_type",
+        "C": "off_topic",
+        "D": "semantic_association_trap"
+      },
+      "id": "lcr_v2_1778696217552_006",
+      "_audit": {
+        "match": true,
+        "ambiguous": false,
+        "validCount": 1
+      },
+      "flavor_score": 0.83
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about campus shuttle or parking",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Does the campus shuttle run on weekends?",
+      "options": {
+        "A": "The shuttle is usually very crowded.",
+        "B": "I always walk to campus on weekends.",
+        "C": "Yeah, but it only comes every hour.",
+        "D": "Weekend classes are optional."
+      },
+      "answer": "C",
+      "explanation": "正确答案C用'Yeah'确认运行，然后用'but'补充频率信息，直接且有用。A说班车通常很挤，离题。B说自己周末步行，是个人习惯。D说周末课程可选，完全离题。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "off_topic"
+      },
+      "id": "lcr_v2_1778696217552_007",
+      "_audit": {
+        "match": true,
+        "ambiguous": false,
+        "validCount": 1
+      },
+      "flavor_score": 0.83
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a librarian about a book or resource",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Excuse me, do you know where I can find the journal Nature?",
+      "options": {
+        "A": "Nature is a very reputable journal.",
+        "B": "The library has a quiet study area.",
+        "C": "You can access it online through the library portal.",
+        "D": "I read an article in Nature last week."
+      },
+      "answer": "C",
+      "explanation": "正确答案C超越了字面问题（在哪找实体刊），直接解决潜在需求——提供更便捷的在线访问方式，体现了对学术环境的理解。A评价期刊声誉，离题。B说图书馆有安静学习区，与问题无关。D说上周读过文章，是个人经历，未帮助解决问题。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "semantic_association_trap"
+      },
+      "id": "lcr_v2_1778696217552_008",
+      "_audit": {
+        "match": true,
+        "ambiguous": false,
+        "validCount": 1
+      },
+      "flavor_score": 0.83
+    },
+    {
+      "context": "campus_daily",
+      "situation": "roommate discussing weekend plans",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Are you free to help me move some furniture this weekend?",
+      "options": {
+        "A": "I might have some time on Saturday afternoon.",
+        "B": "The furniture store is having a sale.",
+        "C": "I moved last year and it was exhausting.",
+        "D": "Weekend plans are always uncertain."
+      },
+      "answer": "A",
+      "explanation": "正确答案A用'I might'表示不确定但愿意帮忙，提供了具体时间窗口，既回应了请求又留有余地。B说家具店打折，离题。C分享个人搬家经历，未回应请求。D泛泛评论周末计划不确定，回避了问题。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_1778696217552_009",
+      "_audit": {
+        "match": true,
+        "ambiguous": false,
+        "validCount": 1
+      },
+      "flavor_score": 0.83
+    },
+    {
+      "context": "campus_daily",
+      "situation": "friend inviting another to a study group or social event",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Hey, we're all going to the library to study for the history exam. Wanna join?",
+      "options": {
+        "A": "The history exam covers the 19th century.",
+        "B": "Sure, I'll grab my notes and meet you there.",
+        "C": "I prefer studying alone for exams.",
+        "D": "The library closes early on Fridays."
+      },
+      "answer": "B",
+      "explanation": "正确答案B直接接受邀请，并说明会带笔记去会合，自然且合作。A说考试涵盖19世纪，是信息分享但未回应邀请。C表达个人偏好，是间接拒绝，但未给出理由。D说图书馆周五早关，离题。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "off_topic"
+      },
+      "id": "lcr_v2_1778696217552_010",
+      "_audit": {
+        "match": true,
+        "ambiguous": false,
+        "validCount": 1
+      },
+      "flavor_score": 0.7
     }
   ]
 }

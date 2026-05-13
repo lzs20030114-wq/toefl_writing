@@ -1330,6 +1330,52 @@
       "id": "la_v2_1776246457449_008",
       "audio_url": "/api/audio/announcement/la_v2_1776246457449_008.mp3",
       "flavor_score": 0.89
+    },
+    {
+      "context": "logistics",
+      "situation": "new bike-share station locations",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "Attention students and faculty. We are thrilled to announce the expansion of our campus bike-share program with three new stations. These stations will be located near the library, the student union, and the science complex. They will be operational starting next Monday. To use the bikes, you are required to download the campus mobility app and register with your student ID. Please note that the first thirty minutes of each ride are free. We encourage everyone to take advantage of this eco-friendly transportation option to help reduce traffic on campus.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To inform about new bike-share stations",
+            "B": "To announce a reduction in campus traffic",
+            "C": "To promote an eco-friendly transportation option",
+            "D": "To require registration for a campus program"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。公告的核心是宣布新增三个共享单车站点及其位置、启用时间等具体信息。B选项（减少校园交通）是使用共享单车的预期效果，但不是公告的主要目的。C选项（推广环保交通方式）是公告中提到的鼓励性内容，但属于次要信息，不是整体目的。D选项（要求注册项目）虽然公告中提到了注册要求，但这只是使用新站点的具体步骤，而不是公告的主旨。",
+          "distractor_types": {
+            "A": "correct",
+            "B": "too_narrow",
+            "C": "wrong_purpose",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What must students do to use the new bike-share stations?",
+          "options": {
+            "A": "Pay a registration fee",
+            "B": "Visit the campus transportation office",
+            "C": "Download an app and register their ID",
+            "D": "Sign up for a free trial membership"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。公告明确说明'you are required to download the campus mobility app and register with your student ID'。A选项（支付注册费）公告中未提及。B选项（访问校园交通办公室）公告中没有提到需要亲自前往办公室。D选项（注册免费试用会员）公告中虽然提到前30分钟免费，但并未要求注册试用会员，注册要求是使用学生ID。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "D": "misattributed_detail"
+          }
+        }
+      ],
+      "id": "la_v2_1778696246453_001",
+      "flavor_score": 0.95
     }
   ]
 }

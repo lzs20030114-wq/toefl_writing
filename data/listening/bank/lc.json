@@ -1995,6 +1995,97 @@
       "id": "lc_v2_1776249034313_005",
       "audio_url": "/api/audio/conversation/lc_v2_1776249034313_005.mp3",
       "flavor_score": 0.79
+    },
+    {
+      "context": "campus_life",
+      "situation": "two students debating whether to use a new campus app feature for finding study spots",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Sarah",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Kevin",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Sarah",
+          "text": "Hey Kevin, have you tried that new 'Spot Finder' feature in the campus app? It supposedly shows real-time availability for every study space on campus."
+        },
+        {
+          "speaker": "Kevin",
+          "text": "I've seen the icon, but I didn't bother. Sounds like a gimmick. I usually just go to the library and hope for the best."
+        },
+        {
+          "speaker": "Sarah",
+          "text": "Actually, I tested it this morning. It said the third-floor quiet zone had three open desks, and when I got there, it was spot on. No wasted time wandering around."
+        },
+        {
+          "speaker": "Kevin",
+          "text": "Hmm, that's pretty impressive. But does it cover all the buildings? I often work in the student union or the science building basement."
+        },
+        {
+          "speaker": "Sarah",
+          "text": "Yeah, it includes like twenty locations. Even the little nooks in the art building. You just filter by type—quiet zone, group study, or even café seating—and it shows a map."
+        },
+        {
+          "speaker": "Kevin",
+          "text": "Okay, that might actually save me a ton of time. I wasted fifteen minutes yesterday walking between floors at the library because every room was full."
+        },
+        {
+          "speaker": "Sarah",
+          "text": "Exactly! And it updates every minute. So if someone leaves, the spot frees up almost instantly."
+        },
+        {
+          "speaker": "Kevin",
+          "text": "Alright, you've convinced me. I'll give it a shot tomorrow. Thanks for the tip!"
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main topic of the conversation?",
+          "options": {
+            "A": "Sarah is encouraging Kevin to try a new app feature that helps find available study spaces.",
+            "B": "Kevin is complaining about how crowded the library has become recently.",
+            "C": "Sarah and Kevin are comparing different study locations on campus.",
+            "D": "Kevin is asking Sarah for directions to a specific study room in the art building."
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。对话的核心是Sarah向Kevin推荐并说服他使用新的校园App功能'Spot Finder'来寻找空余的学习位置。B选项错误，因为Kevin并没有抱怨图书馆拥挤，而是提到了他浪费时间的经历，但这只是讨论的背景。C选项错误，因为两人没有比较不同的学习地点，而是聚焦于一个工具。D选项错误，因为Kevin没有询问任何具体房间的方向。",
+          "distractor_types": {
+            "A": "correct",
+            "B": "too_narrow",
+            "C": "wrong_topic",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about Kevin's previous approach to finding a study spot?",
+          "options": {
+            "A": "He always used a different app to check availability.",
+            "B": "He relied on asking friends for recommendations.",
+            "C": "He would physically check multiple locations until he found a spot.",
+            "D": "He never had trouble finding an empty desk before."
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。Kevin提到'I usually just go to the library and hope for the best'以及'I wasted fifteen minutes yesterday walking between floors at the library because every room was full'，这表明他之前的方法是亲自去各个地方查看，直到找到空位。A选项错误，因为Kevin明确表示没有使用过这个功能。B选项错误，对话中没有提到他向朋友询问建议。D选项错误，他提到昨天浪费了15分钟，说明他确实遇到了困难。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "B": "over_inference",
+            "C": "correct",
+            "D": "reversed_situation"
+          }
+        }
+      ],
+      "id": "lc_v2_1778696259983_001",
+      "flavor_score": 0.86
     }
   ]
 }
