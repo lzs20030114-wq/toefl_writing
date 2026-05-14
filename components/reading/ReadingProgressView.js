@@ -12,14 +12,43 @@ const P = {
   bg: "#f4f7f5", surface: "#ffffff", border: "#dde5df", borderSubtle: "#ebf0ed",
   text: "#1a2420", textSec: "#5a6b62", textDim: "#94a39a",
   primary: "#3B82F6", primarySoft: "#EFF6FF",
-  ctw: { color: "#D97706", soft: "#FFFBEB", icon: "Aa", label: "单词补全", short: "补全" },
-  rdl: { color: "#059669", soft: "#ECFDF5", icon: "📄", label: "日常阅读", short: "日常" },
-  ap: { color: "#6366F1", soft: "#EEF2FF", icon: "📚", label: "学术文章", short: "学术" },
+  ctw:  { color: "#D97706", soft: "#FFFBEB", icon: "Aa", label: "单词补全", short: "补全" },
+  rdl:  { color: "#059669", soft: "#ECFDF5", icon: "📄", label: "日常阅读", short: "日常" },
+  ap:   { color: "#6366F1", soft: "#EEF2FF", icon: "📚", label: "学术文章", short: "学术" },
+  mock: { color: "#DC2626", soft: "#FEF2F2", icon: "🎯", label: "阅读模考", short: "模考" },
   shadow: "0 1px 3px rgba(10,40,25,0.04), 0 1px 2px rgba(10,40,25,0.02)",
 };
 
 function getSubtypeInfo(subtype) {
   return P[subtype] || P.rdl;
+}
+
+// Older mock-exam sessions were saved with type "adaptive-reading" and a
+// flat shape. Re-shape them inline so legacy history records still surface
+// alongside new mock-exam records (which now save with the unified shape).
+function normalizeReadingSession(s) {
+  if (s?.type === "adaptive-reading") {
+    const m1c = s.m1?.correct || 0, m1t = s.m1?.total || 0;
+    const m2c = s.m2?.correct || 0, m2t = s.m2?.total || 0;
+    return {
+      ...s,
+      type: "reading",
+      mode: "mock",
+      correct: m1c + m2c,
+      total: m1t + m2t,
+      band: s.band,
+      details: {
+        subtype: "mock",
+        path: s.path,
+        band: s.band,
+        cefr: s.cefr,
+        m1: s.m1,
+        m2: s.m2,
+        rawScore: s.rawScore,
+      },
+    };
+  }
+  return s;
 }
 
 // ── Trend Chart (SVG) ──
@@ -158,9 +187,45 @@ function SessionRow({ session, expanded, onToggle, onDelete }) {
           </svg>
         </span>
       </button>
-      {expanded && s.details?.results && (
+      {expanded && (s.details?.results || subtype === "mock") && (
         <div style={{ padding: "0 16px 14px 62px", animation: "fadeUp 0.2s ease" }}>
-          {subtype === "ctw" ? <CTWDetail session={s} /> : <RDLDetail session={s} />}
+          {subtype === "mock" ? <MockDetail session={s} />
+            : subtype === "ctw" ? <CTWDetail session={s} />
+            : <RDLDetail session={s} />}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function MockDetail({ session }) {
+  const d = session.details || {};
+  const m1 = d.m1 || { correct: 0, total: 0 };
+  const m2 = d.m2 || { correct: 0, total: 0 };
+  const band = d.band || session.band || "—";
+  const cefr = d.cefr || "";
+  const path = d.path || "";
+  const m1Pct = m1.total > 0 ? Math.round((m1.correct / m1.total) * 100) : null;
+  const m2Pct = m2.total > 0 ? Math.round((m2.correct / m2.total) * 100) : null;
+
+  const cell = (label, value, hint) => (
+    <div style={{ flex: 1, padding: "10px 12px", background: "#f8faf9", border: `1px solid ${P.borderSubtle}`, borderRadius: 8, textAlign: "center" }}>
+      <div style={{ fontSize: 10, color: P.textDim, marginBottom: 2 }}>{label}</div>
+      <div style={{ fontSize: 16, fontWeight: 700, color: P.text, fontVariantNumeric: "tabular-nums" }}>{value}</div>
+      {hint && <div style={{ fontSize: 10, color: P.textDim, marginTop: 1 }}>{hint}</div>}
+    </div>
+  );
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      <div style={{ display: "flex", gap: 8 }}>
+        {cell("Band", String(band), cefr ? `CEFR ${cefr}` : null)}
+        {cell("Module 1", `${m1.correct}/${m1.total}`, m1Pct != null ? `${m1Pct}%` : null)}
+        {cell("Module 2", `${m2.correct}/${m2.total}`, m2Pct != null ? `${m2Pct}%` : null)}
+      </div>
+      {path && (
+        <div style={{ fontSize: 11, color: P.textSec, padding: "8px 12px", background: `${P.mock.color}08`, borderRadius: 8, borderLeft: `3px solid ${P.mock.color}` }}>
+          <span style={{ fontWeight: 700, color: P.mock.color, marginRight: 6 }}>路径</span>{path}
         </div>
       )}
     </div>
@@ -335,7 +400,10 @@ export function ReadingProgressView({ onBack }) {
 
   const sessions = useMemo(() => {
     if (!hist?.sessions) return [];
-    return hist.sessions.filter(s => s.type === "reading").sort((a, b) => new Date(b.date) - new Date(a.date));
+    return hist.sessions
+      .filter(s => s.type === "reading" || s.type === "adaptive-reading")
+      .map(normalizeReadingSession)
+      .sort((a, b) => new Date(b.date) - new Date(a.date));
   }, [hist]);
 
   const filtered = useMemo(() => {
@@ -346,6 +414,7 @@ export function ReadingProgressView({ onBack }) {
   const ctwSessions = sessions.filter(s => s.details?.subtype === "ctw");
   const rdlSessions = sessions.filter(s => s.details?.subtype === "rdl");
   const apSessions = sessions.filter(s => s.details?.subtype === "ap");
+  const mockSessions = sessions.filter(s => s.details?.subtype === "mock");
 
   function avgPct(arr) {
     if (arr.length === 0) return null;
@@ -361,13 +430,15 @@ export function ReadingProgressView({ onBack }) {
   const ctwAvg = avgPct(ctwSessions);
   const rdlAvg = avgPct(rdlSessions);
   const apAvg = avgPct(apSessions);
+  const mockAvg = avgPct(mockSessions);
   const totalAvg = avgPct(sessions);
 
   const statItems = [
-    { key: "all", icon: "📊", short: "全部", count: sessions.length, color: P.primary, avg: totalAvg !== null ? `平均 ${totalAvg}%` : "" },
-    { key: "ctw", icon: P.ctw.icon, short: P.ctw.short, count: ctwSessions.length, color: P.ctw.color, avg: ctwAvg !== null ? `平均 ${ctwAvg}%` : "暂无" },
-    { key: "rdl", icon: P.rdl.icon, short: P.rdl.short, count: rdlSessions.length, color: P.rdl.color, avg: rdlAvg !== null ? `平均 ${rdlAvg}%` : "暂无" },
-    { key: "ap", icon: P.ap.icon, short: P.ap.short, count: apSessions.length, color: P.ap.color, avg: apAvg !== null ? `平均 ${apAvg}%` : "暂无" },
+    { key: "all",  icon: "📊", short: "全部", count: sessions.length, color: P.primary, avg: totalAvg !== null ? `平均 ${totalAvg}%` : "" },
+    { key: "ctw",  icon: P.ctw.icon,  short: P.ctw.short,  count: ctwSessions.length,  color: P.ctw.color,  avg: ctwAvg !== null ? `平均 ${ctwAvg}%` : "暂无" },
+    { key: "rdl",  icon: P.rdl.icon,  short: P.rdl.short,  count: rdlSessions.length,  color: P.rdl.color,  avg: rdlAvg !== null ? `平均 ${rdlAvg}%` : "暂无" },
+    { key: "ap",   icon: P.ap.icon,   short: P.ap.short,   count: apSessions.length,   color: P.ap.color,   avg: apAvg !== null ? `平均 ${apAvg}%` : "暂无" },
+    { key: "mock", icon: P.mock.icon, short: P.mock.short, count: mockSessions.length, color: P.mock.color, avg: mockAvg !== null ? `平均 ${mockAvg}%` : "暂无" },
   ];
 
   function handleDelete(sourceIndex) {

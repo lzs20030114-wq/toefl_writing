@@ -230,7 +230,8 @@ export function ListeningSectionContent({
 }
 
 function ListeningCompanionLinks({ isChallenge, hoverKey, setHoverKey, fadeIn, sessions = [], mistakeCount = 0 }) {
-  const listeningCount = sessions.filter((s) => s?.type === "listening").length;
+  // Include legacy adaptive-listening records so mock-exam history surfaces.
+  const listeningCount = sessions.filter((s) => s?.type === "listening" || s?.type === "adaptive-listening").length;
 
   return (
     <>

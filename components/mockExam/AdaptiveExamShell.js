@@ -673,17 +673,28 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
     const score = calculateAdaptiveScore(m1Correct, m1Total, m2Correct, m2Total, routePath);
     setFinalScore(score);
 
-    // Save to history
+    // Save to history. We use the section's canonical type (`listening` or
+    // `reading`) with `details.subtype = "mock"` so the per-section
+    // ProgressView + section-page link cards (which filter on type) pick
+    // these sessions up alongside practice records. The old
+    // `adaptive-{section}` type wrote to history but no view consumed it.
     try {
       saveSess({
-        type: config.sessionType,
+        type: section,
+        mode: "mock",
         date: new Date().toISOString(),
-        path: routePath,
+        correct: m1Correct + m2Correct,
+        total: m1Total + m2Total,
         band: score.band,
-        cefr: score.cefr,
-        m1: { correct: m1Correct, total: m1Total, accuracy: score.m1Accuracy },
-        m2: { correct: m2Correct, total: m2Total, accuracy: score.m2Accuracy },
-        rawScore: score.rawScore,
+        details: {
+          subtype: "mock",
+          path: routePath,
+          band: score.band,
+          cefr: score.cefr,
+          m1: { correct: m1Correct, total: m1Total, accuracy: score.m1Accuracy },
+          m2: { correct: m2Correct, total: m2Total, accuracy: score.m2Accuracy },
+          rawScore: score.rawScore,
+        },
       });
     } catch {}
 
