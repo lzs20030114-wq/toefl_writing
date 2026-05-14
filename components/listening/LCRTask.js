@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { C, FONT, Btn, TopBar, SurfaceCard, PageShell } from "../shared/ui";
 import { AudioPlayer } from "./AudioPlayer";
 import { buildDraftKey, loadDraft, clearDraft, useDraftPersist } from "../../lib/draftPersist";
+import { LISTENING_SECONDS_PER_ITEM, formatAnswerTime } from "../../lib/listeningTiming";
 
 const ACCENT = { color: "#8B5CF6", soft: "#F3E8FF" };
 const OPTION_KEYS = ["A", "B", "C", "D"];
@@ -38,8 +39,10 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
   const [hoverOption, setHoverOption] = useState(null);
   const [hoverBtn, setHoverBtn] = useState(null);
   const [reviewIndex, setReviewIndex] = useState(null); // for reviewing individual questions in results
+  const [answerTimeLeft, setAnswerTimeLeft] = useState(LISTENING_SECONDS_PER_ITEM);
 
   const audioPlayedRef = useRef(false);
+  const isTimed = !isPractice;
 
   // Autosave answers + qIndex for in-progress batches.
   useDraftPersist(draftKey, { answers, qIndex }, { enabled: !finished });
@@ -60,10 +63,10 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
     setSelected(key);
   }, [phase]);
 
-  const handleSubmit = useCallback(() => {
-    if (!selected || phase !== "choose") return;
+  const completeCurrentAnswer = useCallback((answerValue) => {
+    if (phase !== "choose") return;
 
-    const newAnswer = { itemId: currentItem.id, selected };
+    const newAnswer = { itemId: currentItem.id, selected: answerValue || null };
     const updatedAnswers = [...answers, newAnswer];
     setAnswers(updatedAnswers);
 
@@ -74,6 +77,7 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
       setPhase("listen");
       setSelected(null);
       setHoverOption(null);
+      setAnswerTimeLeft(LISTENING_SECONDS_PER_ITEM);
       audioPlayedRef.current = false;
     } else {
       // All done — compute results and show summary
@@ -90,7 +94,26 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
         onComplete({ correct: correctCount, total: results.length, results });
       }
     }
-  }, [selected, phase, currentItem, answers, qIndex, items, onComplete, draftKey]);
+  }, [phase, currentItem, answers, qIndex, items, onComplete, draftKey]);
+
+  const handleSubmit = useCallback(() => {
+    if (!selected || phase !== "choose") return;
+    completeCurrentAnswer(selected);
+  }, [selected, phase, completeCurrentAnswer]);
+
+  useEffect(() => {
+    if (!isTimed || phase !== "choose" || finished) return;
+    setAnswerTimeLeft(LISTENING_SECONDS_PER_ITEM);
+    const timer = setInterval(() => {
+      setAnswerTimeLeft((prev) => Math.max(0, prev - 1));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [isTimed, phase, qIndex, finished]);
+
+  useEffect(() => {
+    if (!isTimed || phase !== "choose" || finished || answerTimeLeft !== 0) return;
+    completeCurrentAnswer(selected);
+  }, [answerTimeLeft, completeCurrentAnswer, finished, isTimed, phase, selected]);
 
   if (!currentItem) {
     return (
@@ -333,11 +356,11 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
                 src={currentItem.audio_url || null}
                 text={currentItem.speaker}
                 onEnded={handleAudioEnded}
-                maxReplays={2}
+                maxReplays={isPractice ? 99 : 0}
                 isPractice={isPractice}
               />
 
-              <div style={{ marginTop: 24 }}>
+              {isPractice && <div style={{ marginTop: 24 }}>
                 <button
                   onClick={handleReady}
                   onMouseEnter={() => setHoverBtn("ready")}
@@ -353,7 +376,7 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
                 >
                   I'm ready — show options
                 </button>
-              </div>
+              </div>}
             </div>
           )}
 
@@ -361,6 +384,17 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
           {phase === "choose" && (
             <div>
               <div style={{ textAlign: "center", marginBottom: 24 }}>
+                <div style={{
+                  display: "inline-flex", alignItems: "center", gap: 8,
+                  padding: "6px 12px", borderRadius: 999, marginBottom: 12,
+                  background: answerTimeLeft <= 10 ? "#FEE2E2" : ACCENT.soft,
+                  border: `1px solid ${answerTimeLeft <= 10 ? "#FECACA" : "#E9D5FF"}`,
+                  color: answerTimeLeft <= 10 ? "#DC2626" : "#5B21B6",
+                  fontSize: 12, fontWeight: 800,
+                  fontFamily: "Consolas, Menlo, 'Courier New', monospace",
+                }}>
+                  {isTimed ? `Time left ${formatAnswerTime(answerTimeLeft)}` : "Practice mode"}
+                </div>
                 <div style={{ fontSize: 14, fontWeight: 700, color: ACCENT.color, marginBottom: 4, letterSpacing: 0.3 }}>
                   STEP 2
                 </div>
