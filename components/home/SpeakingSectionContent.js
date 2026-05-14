@@ -221,7 +221,8 @@ export function SpeakingSectionContent({
 }
 
 function SpeakingCompanionLinks({ isChallenge, hoverKey, setHoverKey, fadeIn, sessions = [] }) {
-  const speakingCount = sessions.filter((s) => s?.type === "speaking").length;
+  // Include legacy speaking-exam records so mock-exam history surfaces.
+  const speakingCount = sessions.filter((s) => s?.type === "speaking" || s?.type === "speaking-exam").length;
 
   return (
     <div style={{ marginBottom: 20, ...fadeIn(380) }}>
