@@ -10,7 +10,7 @@ import { NextResponse } from "next/server";
  *   X-Frame-Options: DENY              禁止被嵌入 iframe（防点击劫持）
  *   Referrer-Policy                     控制跳转时发送的来源信息
  *   X-DNS-Prefetch-Control: on         允许 DNS 预解析，加速外部资源加载
- *   Permissions-Policy                  禁用不需要的浏览器功能（摄像头、麦克风等）
+ *   Permissions-Policy                  禁用不需要的浏览器功能（摄像头等），允许本站口语练习使用麦克风
  *   Strict-Transport-Security           强制 HTTPS（includeSubDomains, 1年）
  *   Cross-Origin-Opener-Policy          防止跨源弹窗获取 window.opener
  */
@@ -48,7 +48,7 @@ export function middleware(request) {
   response.headers.set("X-Frame-Options", "DENY");
   response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
   response.headers.set("X-DNS-Prefetch-Control", "on");
-  response.headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+  response.headers.set("Permissions-Policy", "camera=(), microphone=(self), geolocation=()");
   response.headers.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
   response.headers.set("Cross-Origin-Opener-Policy", "same-origin");
   return response;

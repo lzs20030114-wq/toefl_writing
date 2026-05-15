@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-05-15
+
+- Fixed a speaking-module microphone permission mismatch seen in real use:
+  - Allowed same-origin microphone access in `Permissions-Policy` so the speaking pages can use `getUserMedia` after the browser grants permission.
+  - Updated Repeat and Interview tasks so SpeechRecognition failures are shown as transcription/scoring availability issues instead of misleading users into reopening microphone permissions after recording has already started.
+  - Verified the production build with `npm.cmd run build`.
+
 ## 2026-05-13
 
 - Fixed a batch of known issues surfaced by lint + test gates:

@@ -139,6 +139,7 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
   const startSTT = useCallback(() => {
     if (!sttSupported) return;
     setLiveTranscript("");
+    setSttError("");
     // Stop any existing recognizer
     if (recognizerRef.current) {
       try { recognizerRef.current.stop(); } catch {}
@@ -166,8 +167,15 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
         }
       },
       onError: (err) => {
-        // Surface macOS permission / network hints; ignore truly transient errors.
-        if (err?.message) setSttError(err.message);
+        // MediaRecorder has already started, so a SpeechRecognition permission
+        // error here means transcription is unavailable, not that recording
+        // itself lacks microphone access.
+        const speechPermissionErrors = ["not-allowed", "service-not-allowed", "audio-capture"];
+        if (speechPermissionErrors.includes(err?.error)) {
+          setSttError("录音已开始，但浏览器语音识别暂时不可用；这不会影响保存录音，只是本题可能无法自动生成转写和发音评分。");
+        } else if (err?.message) {
+          setSttError(err.message);
+        }
       },
     });
     recognizerRef.current.start();
