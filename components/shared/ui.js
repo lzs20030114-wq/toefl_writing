@@ -139,6 +139,30 @@ export function SurfaceCard({ children, style, tone = "default", className, onCl
   );
 }
 
+// Small inline chip labeling which practice mode a saved session came from.
+// "standard" is the default — we render nothing for it to avoid noise; chips
+// only appear for "practice" (free practice, no timer) and "challenge"
+// (tightened time limits). Unknown values render the raw string so we surface
+// unexpected modes rather than silently swallowing them.
+const MODE_CHIP_META = {
+  practice: { label: "练习模式", color: "#4338ca", bg: "#EEF2FF" },
+  challenge: { label: "挑战模式", color: "#b91c1c", bg: "#FEE2E2" },
+};
+export function ModeChip({ mode, style }) {
+  const key = String(mode || "").toLowerCase();
+  if (!key || key === "standard") return null;
+  const meta = MODE_CHIP_META[key] || { label: key, color: C.t2, bg: C.bdrSubtle };
+  return (
+    <span style={{
+      display: "inline-flex", alignItems: "center",
+      padding: "1px 7px", borderRadius: 999,
+      fontSize: 10, fontWeight: 700, lineHeight: 1.5,
+      color: meta.color, background: meta.bg,
+      whiteSpace: "nowrap", ...style,
+    }}>{meta.label}</span>
+  );
+}
+
 export function InfoStrip({ children, tone = "soft", style }) {
   const toneStyle = tone === "warn"
     ? { background: C.softAmber, borderColor: "#fde68a", color: "#92400e" }

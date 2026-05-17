@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useMemo, useEffect } from "react";
-import { FONT } from "../shared/ui";
+import { FONT, ModeChip } from "../shared/ui";
 import { formatLocalDateTime, translateGrammarPoint } from "../../lib/utils";
 import { WritingFeedbackPanel } from "../writing/WritingFeedbackPanel";
 import { useBsAiExplain, BsAiExplainBlock } from "../buildSentence/useBsAiExplain";
@@ -332,7 +332,10 @@ export default function MobileProgressView({ vm }) {
                     >
                       <span style={{ fontSize: 18, flexShrink: 0 }}>{tc.icon}</span>
                       <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontSize: 13, fontWeight: 700, color: P.text }}>{tc.label}</div>
+                        <div style={{ fontSize: 13, fontWeight: 700, color: P.text, display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+                          <span>{tc.label}</span>
+                          <ModeChip mode={s.mode} />
+                        </div>
                         <div style={{ fontSize: 11, color: P.textDim, marginTop: 1 }}>{formatLocalDateTime(s.date)}</div>
                       </div>
                       <span style={{ fontSize: 14, fontWeight: 800, color: getScoreColor(s), flexShrink: 0 }}>{getScoreLabel(s)}</span>

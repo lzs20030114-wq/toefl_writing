@@ -219,7 +219,7 @@ function ReadingPageClient() {
     const band = pct >= 1 ? 6 : pct >= 0.9 ? 5.5 : pct >= 0.8 ? 5 : pct >= 0.7 ? 4.5 : pct >= 0.6 ? 4 : pct >= 0.5 ? 3.5 : pct >= 0.4 ? 3 : pct >= 0.3 ? 2.5 : 2;
     saveSess({
       type: "reading",
-      mode: "standard",
+      mode,
       correct: result.correct,
       total: result.total,
       band,

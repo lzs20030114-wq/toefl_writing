@@ -138,7 +138,7 @@ function SpeakingPageClient() {
   function saveSpeakingSession(result) {
     saveSess({
       type: "speaking",
-      mode: isPractice ? "practice" : "standard",
+      mode,
       details: {
         subtype: type,
         setId: activeSet.id,
