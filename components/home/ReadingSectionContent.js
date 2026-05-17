@@ -236,7 +236,7 @@ export function ReadingSectionContent({
               t: "\u9605\u8BFB\u81EA\u9002\u5E94\u6A21\u8003",
               d: "Module 1 + Module 2 \u81EA\u9002\u5E94\u96BE\u5EA6",
               it: "35 \u9898",
-              timeLabel: "27 min",
+              timeLabel: "12 + 10 min",
               isMock: true,
               delay: 0,
             }}
