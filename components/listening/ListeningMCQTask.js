@@ -179,6 +179,7 @@ export function ListeningMCQTask({ item, onComplete, onExit, isPractice = false,
             onEnded={handleAudioEnded}
             maxReplays={isPractice ? 99 : 0}
             isPractice={isPractice}
+            autoPlay
           />
           {isPractice && <div style={{ marginTop: 24 }}>
             <Btn onClick={() => setPhase("answer")} variant="secondary">

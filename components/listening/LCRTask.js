@@ -358,6 +358,7 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
                 onEnded={handleAudioEnded}
                 maxReplays={isPractice ? 99 : 0}
                 isPractice={isPractice}
+                autoPlay
               />
 
               {isPractice && <div style={{ marginTop: 24 }}>

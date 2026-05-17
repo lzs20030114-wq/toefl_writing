@@ -7,7 +7,7 @@ import UsageGateWrapper from "../../components/shared/UsageGateWrapper";
 
 function ReadingExamClient() {
   const router = useRouter();
-  const searchParams = useSearchParams(); // force dynamic rendering
+  useSearchParams(); // keep this page client-rendered; the mock no longer reads variants
   const onExit = () => router.push("/");
   return (
     <UsageGateWrapper onExit={onExit}>

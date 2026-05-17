@@ -14,8 +14,9 @@ const ACCENT = { color: "#8B5CF6", soft: "#F3E8FF" };
  *  - onEnded: callback when playback finishes
  *  - maxReplays: max replay count (0 = unlimited)
  *  - isPractice: if true, unlimited replays
+ *  - autoPlay: if true, starts playback when mounted or when content changes
  */
-export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = false }) {
+export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = false, autoPlay = false }) {
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [replays, setReplays] = useState(0);
@@ -27,20 +28,35 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
   const ttsStartRef = useRef(0);
   const ttsDurationRef = useRef(0);
   const animFrameRef = useRef(null);
+  const autoPlayKeyRef = useRef("");
 
   const replayLimit = isPractice ? Infinity : maxReplays;
   const canReplay = replays < replayLimit;
 
+  const stopPlayback = useCallback(() => {
+    if (ttsTimerRef.current) clearTimeout(ttsTimerRef.current);
+    if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+    if (typeof speechSynthesis !== "undefined") {
+      speechSynthesis.cancel();
+    }
+  }, []);
+
   // Clean up on unmount
   useEffect(() => {
-    return () => {
-      if (ttsTimerRef.current) clearTimeout(ttsTimerRef.current);
-      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
-      if (typeof speechSynthesis !== "undefined") {
-        speechSynthesis.cancel();
-      }
-    };
-  }, []);
+    return () => stopPlayback();
+  }, [stopPlayback]);
+
+  useEffect(() => {
+    setPlaying(false);
+    setProgress(0);
+    setReplays(0);
+    setHasPlayed(false);
+    stopPlayback();
+  }, [src, text, stopPlayback]);
 
   // HTML5 audio progress tracking
   useEffect(() => {
@@ -80,9 +96,18 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
   const playAudio = useCallback(() => {
     if (src && audioRef.current) {
       audioRef.current.currentTime = 0;
-      audioRef.current.play().catch(() => {});
       setPlaying(true);
-      setHasPlayed(true);
+      const playPromise = audioRef.current.play();
+      if (playPromise && typeof playPromise.then === "function") {
+        playPromise
+          .then(() => setHasPlayed(true))
+          .catch(() => {
+            setPlaying(false);
+            setHasPlayed(false);
+          });
+      } else {
+        setHasPlayed(true);
+      }
       return;
     }
 
@@ -122,6 +147,7 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
       };
       utterance.onerror = () => {
         setPlaying(false);
+        setHasPlayed(false);
         if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
       };
 
@@ -146,6 +172,18 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
       speak(speechSynthesis.getVoices());
     }, 600);
   }, [src, text, onEnded, animateTTSProgress]);
+
+  useEffect(() => {
+    if (!autoPlay) return;
+    const key = `${src || ""}::${text || ""}`;
+    if (autoPlayKeyRef.current === key) return;
+    autoPlayKeyRef.current = key;
+    const timer = setTimeout(() => {
+      setProgress(0);
+      playAudio();
+    }, 120);
+    return () => clearTimeout(timer);
+  }, [autoPlay, src, text, playAudio]);
 
   const handlePlay = useCallback(() => {
     if (playing) return;

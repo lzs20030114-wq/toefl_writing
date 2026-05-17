@@ -299,6 +299,7 @@ function MCQInlineTask({ item, taskType, onComplete }) {
               (item.conversation ? item.conversation.map((t) => `${t.speaker}: ${t.text}`).join(". ") : "")
             }
             maxReplays={0}
+            autoPlay
           />
         </div>
       )}
@@ -469,6 +470,7 @@ function LCRInlineTask({ item, onComplete }) {
           text={item.speaker || ""}
           onEnded={handleAudioEnded}
           maxReplays={0}
+          autoPlay
         />
       </div>
 
@@ -872,9 +874,9 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
 
 function IntroCard({ config, accent, accentSoft, onStart, onExit }) {
   const isReading = config.label === "Reading";
-  const m1Count = isReading ? "16 项 (10 CTW + 5 RDL + 1 AP)" : "12 项 (10 LCR + 1 LA + 1 LC)";
-  const m2UpperCount = isReading ? "8 项 (5 CTW + 2 RDL + 1 AP)" : "8 项 (5 LCR + 1 LA + 1 LC + 1 LAT)";
-  const m2LowerCount = isReading ? "9 项 (5 CTW + 3 RDL + 1 AP)" : "8 项 (5 LCR + 2 LA + 1 LC)";
+  const m1Count = isReading ? "20 scored items (CTW 10 + RDL 5 + AP 5)" : "14-15 scored items (10 LCR + LA + LC)";
+  const m2UpperCount = isReading ? "30 scored items (CTW 20 + RDL 5 + AP 5)" : "12-15 scored items (5 LCR + LA + LC + LAT)";
+  const m2LowerCount = isReading ? "30 scored items (CTW 20 + RDL 5 + AP 5)" : "11-13 scored items (5 LCR + 2 LA + LC)";
   const totalTime = Math.floor(config.totalTimeSeconds / 60);
 
   return (

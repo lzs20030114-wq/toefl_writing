@@ -234,9 +234,9 @@ export function ReadingSectionContent({
               acc: READING_ACCENT,
               n: "\u6A21\u8003",
               t: "\u9605\u8BFB\u81EA\u9002\u5E94\u6A21\u8003",
-              d: "Module 1 + Module 2 \u81EA\u9002\u5E94\u96BE\u5EA6",
-              it: "35 \u9898",
-              timeLabel: "27 min",
+              d: "50 items: CTW 30 + RDL 10 + AP 10",
+              it: "ETS-style",
+              timeLabel: "30 min",
               isMock: true,
               delay: 0,
             }}
@@ -268,8 +268,7 @@ export function ReadingSectionContent({
 }
 
 function ReadingCompanionLinks({ isChallenge, hoverKey, setHoverKey, fadeIn, sessions = [], mistakeCount = 0 }) {
-  // Include legacy adaptive-reading records so mock-exam history surfaces.
-  const readingCount = sessions.filter((s) => s?.type === "reading" || s?.type === "adaptive-reading").length;
+  const readingCount = sessions.filter((s) => s?.type === "reading").length;
 
   return (
     <>
