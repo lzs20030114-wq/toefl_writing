@@ -178,14 +178,20 @@ export function SpeakingExamShell({ onExit }) {
 
     setFinalScore(score);
 
-    // Save session
+    // Save session under the unified "speaking" type so SpeakingProgressView
+    // + the section-page link card surface it like a practice record. The
+    // previous "speaking-exam" type was a write-only orphan (mirrors the
+    // listening/reading adaptive bug fixed in f531a90).
     try {
       saveSess({
-        type: "speaking-exam",
+        type: "speaking",
+        mode: "mock",
         date: new Date().toISOString(),
         band,
-        cefr,
         details: {
+          subtype: "mock",
+          band,
+          cefr,
           repeatScore,
           interviewScore,
           avgRepeatAccuracy: Math.round(avgRepeatAccuracy),

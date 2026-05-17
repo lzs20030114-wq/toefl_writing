@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { C, FONT, Btn, TopBar, SurfaceCard, PageShell } from "../shared/ui";
 import { AudioPlayer } from "./AudioPlayer";
 import { buildDraftKey, loadDraft, clearDraft, useDraftPersist } from "../../lib/draftPersist";
+import { LISTENING_SECONDS_PER_ITEM, formatAnswerTime } from "../../lib/listeningTiming";
 
 const ACCENT = { color: "#8B5CF6", soft: "#F3E8FF" };
 const KEYS = ["A", "B", "C", "D"];
@@ -48,12 +49,20 @@ export function ListeningMCQTask({ item, onComplete, onExit, isPractice = false,
     return 0;
   });
   const [selections, setSelections] = useState(initialSelections);
+  const [lockedQuestions, setLockedQuestions] = useState(() => {
+    if (Array.isArray(draftRestored?.lockedQuestions) && draftRestored.lockedQuestions.length === totalQ) {
+      return draftRestored.lockedQuestions.map(Boolean);
+    }
+    return Array(totalQ).fill(false);
+  });
   const [submitted, setSubmitted] = useState(false);
   const [hover, setHover] = useState(null);
+  const [answerTimeLeft, setAnswerTimeLeft] = useState(LISTENING_SECONDS_PER_ITEM);
 
   const resultsRef = useRef(null);
+  const isTimed = !isPractice;
 
-  useDraftPersist(draftKey, { selections, currentQ }, { enabled: !submitted });
+  useDraftPersist(draftKey, { selections, currentQ, lockedQuestions }, { enabled: !submitted });
 
   const handleAudioEnded = useCallback(() => {
     // Auto-advance to answer phase after audio ends
@@ -61,27 +70,39 @@ export function ListeningMCQTask({ item, onComplete, onExit, isPractice = false,
   }, [phase]);
 
   const handleSelect = (key) => {
-    if (submitted) return;
+    if (submitted || (isTimed && lockedQuestions[currentQ])) return;
     const next = [...selections];
     next[currentQ] = key;
     setSelections(next);
   };
 
-  const handleSubmit = () => {
+  const buildResults = useCallback((overrideSelections = selections) => {
+    return questions.map((q, i) => ({
+      qIndex: i,
+      selected: overrideSelections[i],
+      correct: q.answer,
+      isCorrect: overrideSelections[i] === q.answer,
+    }));
+  }, [questions, selections]);
+
+  const handleSubmit = useCallback((overrideSelections = selections) => {
     setSubmitted(true);
     clearDraft(draftKey);
-    // Compute results
-    const results = questions.map((q, i) => ({
-      qIndex: i,
-      selected: selections[i],
-      correct: q.answer,
-      isCorrect: selections[i] === q.answer,
-    }));
-    resultsRef.current = results;
-  };
+    resultsRef.current = buildResults(overrideSelections);
+  }, [buildResults, draftKey, selections]);
+
+  const lockCurrentQuestion = useCallback(() => {
+    setLockedQuestions((prev) => {
+      if (prev[currentQ]) return prev;
+      const next = [...prev];
+      next[currentQ] = true;
+      return next;
+    });
+  }, [currentQ]);
 
   const handleNext = () => {
     if (currentQ < totalQ - 1) {
+      if (isTimed) lockCurrentQuestion();
       setCurrentQ(currentQ + 1);
     }
   };
@@ -100,6 +121,31 @@ export function ListeningMCQTask({ item, onComplete, onExit, isPractice = false,
     }
   };
 
+  useEffect(() => {
+    if (!isTimed || phase !== "answer" || submitted) return;
+    if (lockedQuestions[currentQ]) return;
+    setAnswerTimeLeft(LISTENING_SECONDS_PER_ITEM);
+    const timer = setInterval(() => {
+      setAnswerTimeLeft((prev) => Math.max(0, prev - 1));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [currentQ, isTimed, lockedQuestions, phase, submitted]);
+
+  const handleQuestionTimeout = useCallback(() => {
+    lockCurrentQuestion();
+    if (currentQ < totalQ - 1) {
+      setCurrentQ((idx) => Math.min(totalQ - 1, idx + 1));
+      return;
+    }
+    handleSubmit(selections);
+    setPhase("results");
+  }, [currentQ, handleSubmit, lockCurrentQuestion, selections, totalQ]);
+
+  useEffect(() => {
+    if (!isTimed || phase !== "answer" || submitted || answerTimeLeft !== 0) return;
+    handleQuestionTimeout();
+  }, [answerTimeLeft, handleQuestionTimeout, isTimed, phase, submitted]);
+
   if (!item || totalQ === 0) {
     return (
       <PageShell>
@@ -116,6 +162,7 @@ export function ListeningMCQTask({ item, onComplete, onExit, isPractice = false,
 
   const q = questions[currentQ];
   const allAnswered = selections.every(s => s !== null);
+  const canSubmitCurrent = selections[currentQ] !== null || (isTimed && lockedQuestions[currentQ]);
 
   // ── LISTEN PHASE ──
   if (phase === "listen") {
@@ -130,14 +177,14 @@ export function ListeningMCQTask({ item, onComplete, onExit, isPractice = false,
             src={item.audio_url || null}
             text={ttsText}
             onEnded={handleAudioEnded}
-            maxReplays={isPractice ? 99 : 2}
+            maxReplays={isPractice ? 99 : 0}
             isPractice={isPractice}
           />
-          <div style={{ marginTop: 24 }}>
+          {isPractice && <div style={{ marginTop: 24 }}>
             <Btn onClick={() => setPhase("answer")} variant="secondary">
               I'm ready to answer
             </Btn>
-          </div>
+          </div>}
         </SurfaceCard>
       </PageShell>
     );
@@ -211,13 +258,26 @@ export function ListeningMCQTask({ item, onComplete, onExit, isPractice = false,
       />
 
       {/* Replay audio button */}
-      <div style={{ display: "flex", justifyContent: "center", marginTop: 16, marginBottom: 8 }}>
+      <div style={{ display: isPractice ? "flex" : "none", justifyContent: "center", marginTop: 16, marginBottom: 8 }}>
         <Btn onClick={() => setPhase("listen")} variant="secondary" style={{ fontSize: 12, padding: "6px 14px" }}>
           🔊 Replay audio
         </Btn>
       </div>
 
       <SurfaceCard style={{ padding: "24px", marginTop: 8 }}>
+        <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 12 }}>
+          <div style={{
+            display: "inline-flex", alignItems: "center", gap: 8,
+            padding: "6px 12px", borderRadius: 999,
+            background: answerTimeLeft <= 10 ? "#FEE2E2" : ACCENT.soft,
+            border: `1px solid ${answerTimeLeft <= 10 ? "#FECACA" : "#E9D5FF"}`,
+            color: answerTimeLeft <= 10 ? "#DC2626" : "#5B21B6",
+            fontSize: 12, fontWeight: 800,
+            fontFamily: "Consolas, Menlo, 'Courier New', monospace",
+          }}>
+            {isTimed ? `Time left ${formatAnswerTime(answerTimeLeft)}` : "Practice mode"}
+          </div>
+        </div>
         {/* Question */}
         <div style={{ fontSize: 15, fontWeight: 700, color: C.t1, marginBottom: 16, lineHeight: 1.5 }}>
           Q{currentQ + 1}. {q.stem}
@@ -243,10 +303,11 @@ export function ListeningMCQTask({ item, onComplete, onExit, isPractice = false,
               onClick={() => handleSelect(k)}
               onMouseEnter={() => setHover(k)}
               onMouseLeave={() => setHover(null)}
+              disabled={submitted || (isTimed && lockedQuestions[currentQ])}
               style={{
                 display: "flex", alignItems: "center", gap: 10, width: "100%",
                 padding: "12px 14px", marginBottom: 8, background: bg,
-                border: `1.5px solid ${border}`, borderRadius: 10, cursor: "pointer",
+                border: `1.5px solid ${border}`, borderRadius: 10, cursor: isTimed && lockedQuestions[currentQ] ? "not-allowed" : "pointer",
                 color, fontSize: 14, fontFamily: FONT, textAlign: "left",
                 transition: "all 0.12s",
                 transform: hover === k ? "translateY(-1px)" : "none",
@@ -269,11 +330,11 @@ export function ListeningMCQTask({ item, onComplete, onExit, isPractice = false,
 
         {/* Navigation */}
         <div style={{ display: "flex", justifyContent: "space-between", marginTop: 20 }}>
-          <Btn onClick={handlePrev} variant="secondary" disabled={currentQ === 0}>上一题</Btn>
+          {isPractice && <Btn onClick={handlePrev} variant="secondary" disabled={currentQ === 0}>上一题</Btn>}
           {currentQ < totalQ - 1 ? (
             <Btn onClick={handleNext} disabled={selections[currentQ] === null}>下一题</Btn>
           ) : (
-            <Btn onClick={() => { handleSubmit(); setPhase("results"); }} disabled={!allAnswered}>提交</Btn>
+            <Btn onClick={() => { lockCurrentQuestion(); handleSubmit(); setPhase("results"); }} disabled={isTimed ? !canSubmitCurrent : !allAnswered}>提交</Btn>
           )}
         </div>
 
@@ -289,10 +350,11 @@ export function ListeningMCQTask({ item, onComplete, onExit, isPractice = false,
             return (
               <button
                 key={i}
-                onClick={() => setCurrentQ(i)}
+                onClick={() => { if (isPractice) setCurrentQ(i); }}
+                disabled={!isPractice}
                 style={{
                   width: 28, height: 28, borderRadius: "50%", border: "none",
-                  background: bg, fontSize: 12, fontWeight: 700, cursor: "pointer",
+                  background: bg, fontSize: 12, fontWeight: 700, cursor: isPractice ? "pointer" : "default",
                   color: isActive ? "#fff" : isAnswered ? ACCENT.color : C.t3,
                   transition: "all 0.15s",
                 }}

@@ -8,6 +8,7 @@ import { buildReadingModule1, routeModule2 as routeReadingM2, buildReadingModule
 import { buildListeningModule1, routeModule2 as routeListeningM2, buildListeningModule2 } from "../../lib/mockExam/listeningPlanner";
 import { saveSess } from "../../lib/sessionStore";
 import { fmt } from "../../lib/utils";
+import { LISTENING_SECONDS_PER_ITEM, TOEFL_LISTENING_SECTION_SECONDS, formatAnswerTime } from "../../lib/listeningTiming";
 
 // ------ Constants ------
 
@@ -28,7 +29,7 @@ const SECTION_CONFIG = {
     labelZh: "听力",
     accent: "#8B5CF6",
     accentSoft: "#F5F3FF",
-    totalTimeSeconds: 22 * 60,
+    totalTimeSeconds: TOEFL_LISTENING_SECTION_SECONDS,
     buildM1: buildListeningModule1,
     routeM2: routeListeningM2,
     buildM2: buildListeningModule2,
@@ -184,9 +185,10 @@ function MCQInlineTask({ item, taskType, onComplete }) {
   const [currentQ, setCurrentQ] = useState(0);
   const [selections, setSelections] = useState(() => questions.map(() => null));
   const [submitted, setSubmitted] = useState(false);
+  const [answerTimeLeft, setAnswerTimeLeft] = useState(LISTENING_SECONDS_PER_ITEM);
+  const isListeningType = taskType === "la" || taskType === "lc" || taskType === "lat";
 
   const question = questions[currentQ];
-  if (!question) return null;
 
   // Get the text content to display
   function getPassageContent() {
@@ -219,19 +221,39 @@ function MCQInlineTask({ item, taskType, onComplete }) {
     }
   }
 
-  function handleSubmit() {
+  const handleSubmit = useCallback((overrideSelections = selections) => {
     setSubmitted(true);
     const correctAnswer = (q) => q.correct_answer || q.answer;
     const results = questions.map((q, i) => ({
-      selected: selections[i],
+      selected: overrideSelections[i],
       correct: correctAnswer(q),
-      isCorrect: selections[i] === correctAnswer(q),
+      isCorrect: overrideSelections[i] === correctAnswer(q),
     }));
     const correct = results.filter((r) => r.isCorrect).length;
     setTimeout(() => {
       onComplete({ correct, total: questions.length, results });
     }, 1200);
-  }
+  }, [onComplete, questions, selections]);
+
+  useEffect(() => {
+    if (!isListeningType || submitted) return;
+    setAnswerTimeLeft(LISTENING_SECONDS_PER_ITEM);
+    const timer = setInterval(() => {
+      setAnswerTimeLeft((prev) => Math.max(0, prev - 1));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [currentQ, isListeningType, submitted]);
+
+  useEffect(() => {
+    if (!isListeningType || submitted || answerTimeLeft !== 0) return;
+    if (currentQ < questions.length - 1) {
+      setCurrentQ((idx) => Math.min(questions.length - 1, idx + 1));
+      return;
+    }
+    handleSubmit(selections);
+  }, [answerTimeLeft, currentQ, handleSubmit, isListeningType, questions.length, selections, submitted]);
+
+  if (!question) return null;
 
   const passage = getPassageContent();
   const answeredAll = selections.every((s) => s !== null);
@@ -276,13 +298,26 @@ function MCQInlineTask({ item, taskType, onComplete }) {
               item.lecture ||
               (item.conversation ? item.conversation.map((t) => `${t.speaker}: ${t.text}`).join(". ") : "")
             }
-            maxReplays={2}
+            maxReplays={0}
           />
         </div>
       )}
 
       {/* Question */}
       <div style={{ marginBottom: 12 }}>
+        {isListeningType && (
+          <div style={{
+            display: "inline-flex", alignItems: "center", gap: 8,
+            padding: "4px 10px", borderRadius: 999, marginBottom: 10,
+            background: answerTimeLeft <= 10 ? "#fee2e2" : "#f5f3ff",
+            border: `1px solid ${answerTimeLeft <= 10 ? "#fecaca" : "#ddd6fe"}`,
+            color: answerTimeLeft <= 10 ? "#b91c1c" : "#6d28d9",
+            fontSize: 12, fontWeight: 800,
+            fontFamily: "Consolas, Menlo, 'Courier New', monospace",
+          }}>
+            Time left {formatAnswerTime(answerTimeLeft)}
+          </div>
+        )}
         <div style={{ fontSize: 12, color: C.t3, marginBottom: 6 }}>
           Question {currentQ + 1} of {questions.length}
         </div>
@@ -349,7 +384,7 @@ function MCQInlineTask({ item, taskType, onComplete }) {
       {/* Navigation */}
       {!submitted && (
         <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
-          {currentQ > 0 && (
+          {currentQ > 0 && !isListeningType && (
             <Btn onClick={handlePrev} variant="secondary" style={{ fontSize: 13 }}>
               上一题
             </Btn>
@@ -360,7 +395,7 @@ function MCQInlineTask({ item, taskType, onComplete }) {
             </Btn>
           )}
           {answeredAll && (
-            <Btn onClick={handleSubmit} style={{ fontSize: 13 }}>
+            <Btn onClick={() => handleSubmit()} style={{ fontSize: 13 }}>
               提交
             </Btn>
           )}
@@ -382,6 +417,7 @@ function LCRInlineTask({ item, onComplete }) {
   const [phase, setPhase] = useState("listen");
   const [selected, setSelected] = useState(null);
   const [submitted, setSubmitted] = useState(false);
+  const [answerTimeLeft, setAnswerTimeLeft] = useState(LISTENING_SECONDS_PER_ITEM);
 
   function handleAudioEnded() {
     setPhase("choose");
@@ -392,14 +428,33 @@ function LCRInlineTask({ item, onComplete }) {
     setSelected(key);
   }
 
+  const completeAnswer = useCallback((answerValue) => {
+    if (submitted) return;
+    setSubmitted(true);
+    const isCorrect = answerValue === item.answer;
+    setTimeout(() => {
+      onComplete({ correct: isCorrect ? 1 : 0, total: 1, results: [{ selected: answerValue || null, correct: item.answer, isCorrect }] });
+    }, 800);
+  }, [item.answer, onComplete, submitted]);
+
   function handleSubmit() {
     if (!selected || submitted) return;
-    setSubmitted(true);
-    const isCorrect = selected === item.answer;
-    setTimeout(() => {
-      onComplete({ correct: isCorrect ? 1 : 0, total: 1, results: [{ selected, correct: item.answer, isCorrect }] });
-    }, 800);
+    completeAnswer(selected);
   }
+
+  useEffect(() => {
+    if (phase !== "choose" || submitted) return;
+    setAnswerTimeLeft(LISTENING_SECONDS_PER_ITEM);
+    const timer = setInterval(() => {
+      setAnswerTimeLeft((prev) => Math.max(0, prev - 1));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [phase, submitted]);
+
+  useEffect(() => {
+    if (phase !== "choose" || submitted || answerTimeLeft !== 0) return;
+    completeAnswer(selected);
+  }, [answerTimeLeft, completeAnswer, phase, selected, submitted]);
 
   return (
     <div>
@@ -413,7 +468,7 @@ function LCRInlineTask({ item, onComplete }) {
           src={item.audio_url || null}
           text={item.speaker || ""}
           onEnded={handleAudioEnded}
-          maxReplays={2}
+          maxReplays={0}
         />
       </div>
 
@@ -425,6 +480,17 @@ function LCRInlineTask({ item, onComplete }) {
 
       {phase === "choose" && (
         <>
+          <div style={{
+            display: "inline-flex", alignItems: "center", gap: 8,
+            padding: "4px 10px", borderRadius: 999, marginBottom: 10,
+            background: answerTimeLeft <= 10 ? "#fee2e2" : "#f5f3ff",
+            border: `1px solid ${answerTimeLeft <= 10 ? "#fecaca" : "#ddd6fe"}`,
+            color: answerTimeLeft <= 10 ? "#b91c1c" : "#6d28d9",
+            fontSize: 12, fontWeight: 800,
+            fontFamily: "Consolas, Menlo, 'Courier New', monospace",
+          }}>
+            Time left {formatAnswerTime(answerTimeLeft)}
+          </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 12 }}>
             {["A", "B", "C", "D"].map((key) => {
               if (!item.options[key]) return null;

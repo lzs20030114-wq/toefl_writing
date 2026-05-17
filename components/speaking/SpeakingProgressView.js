@@ -18,10 +18,37 @@ const P = {
 const SUBTYPE_META = {
   repeat:    { label: "听后复述", short: "复述", color: "#F59E0B", soft: "#FFFBEB", icon: "🔁" },
   interview: { label: "模拟面试", short: "面试", color: "#EF4444", soft: "#FEF2F2", icon: "🎤" },
+  mock:      { label: "口语模考", short: "模考", color: "#DC2626", soft: "#FEF2F2", icon: "🎯" },
 };
 
 function getSubtypeInfo(subtype) {
   return SUBTYPE_META[subtype] || SUBTYPE_META.repeat;
+}
+
+// Older mock-exam sessions were stored with type "speaking-exam" and a flat
+// shape. Re-shape them on read so legacy history records surface alongside
+// the new unified "speaking" + subtype "mock" records.
+function normalizeSpeakingSession(s) {
+  if (s?.type === "speaking-exam") {
+    return {
+      ...s,
+      type: "speaking",
+      mode: "mock",
+      band: s.band,
+      details: {
+        subtype: "mock",
+        band: s.band,
+        cefr: s.cefr,
+        repeatScore: s.details?.repeatScore,
+        interviewScore: s.details?.interviewScore,
+        avgRepeatAccuracy: s.details?.avgRepeatAccuracy,
+        repeatSetId: s.details?.repeatSetId,
+        interviewSetId: s.details?.interviewSetId,
+        elapsed: s.details?.elapsed,
+      },
+    };
+  }
+  return s;
 }
 
 // -- Trend Chart (SVG) --
@@ -129,10 +156,17 @@ function SessionRow({ session, expanded, onToggle, onDelete }) {
   const attempted = s.details?.attempted || 0;
   const total = s.details?.total || 0;
 
-  const scoreDisplay = avgScore != null ? `${avgScore}/5` : `${attempted}/${total}`;
-  const scoreColor = avgScore != null
-    ? (avgScore >= 4 ? "#059669" : avgScore >= 3 ? "#D97706" : "#E11D48")
-    : P.textSec;
+  // Mock sessions show a band score; practice sessions show 0-5 average or
+  // "attempted/total" as a fallback.
+  const isMock = subtype === "mock";
+  const scoreDisplay = isMock && Number.isFinite(s.band)
+    ? `Band ${s.band}`
+    : avgScore != null ? `${avgScore}/5` : `${attempted}/${total}`;
+  const scoreColor = isMock && Number.isFinite(s.band)
+    ? (s.band >= 4 ? "#059669" : s.band >= 3 ? "#D97706" : "#E11D48")
+    : avgScore != null
+      ? (avgScore >= 4 ? "#059669" : avgScore >= 3 ? "#D97706" : "#E11D48")
+      : P.textSec;
 
   return (
     <div style={{ transition: "all 0.2s" }}>
@@ -172,7 +206,44 @@ function SessionRow({ session, expanded, onToggle, onDelete }) {
       </button>
       {expanded && (
         <div style={{ padding: "0 16px 14px 62px", animation: "fadeUp 0.2s ease" }}>
-          {subtype === "repeat" ? <RepeatDetail session={s} /> : <InterviewDetail session={s} />}
+          {subtype === "mock" ? <MockDetail session={s} />
+            : subtype === "repeat" ? <RepeatDetail session={s} />
+            : <InterviewDetail session={s} />}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// -- Mock Detail (Repeat + Interview combined score) --
+
+function MockDetail({ session }) {
+  const d = session.details || {};
+  const band = d.band || session.band || "—";
+  const cefr = d.cefr || "";
+  const repeatScore = d.repeatScore;
+  const interviewScore = d.interviewScore;
+  const acc = d.avgRepeatAccuracy;
+  const elapsed = d.elapsed;
+
+  const cell = (label, value, hint) => (
+    <div style={{ flex: 1, padding: "10px 12px", background: "#f8faf9", border: `1px solid ${P.borderSubtle}`, borderRadius: 8, textAlign: "center" }}>
+      <div style={{ fontSize: 10, color: P.textDim, marginBottom: 2 }}>{label}</div>
+      <div style={{ fontSize: 16, fontWeight: 700, color: P.text, fontVariantNumeric: "tabular-nums" }}>{value}</div>
+      {hint && <div style={{ fontSize: 10, color: P.textDim, marginTop: 1 }}>{hint}</div>}
+    </div>
+  );
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      <div style={{ display: "flex", gap: 8 }}>
+        {cell("Band", String(band), cefr ? `CEFR ${cefr}` : null)}
+        {cell("听后复述", acc != null ? `${acc}%` : "—", repeatScore != null ? `Score ${repeatScore}/5` : null)}
+        {cell("模拟面试", interviewScore != null ? `${interviewScore}/5` : "—", null)}
+      </div>
+      {elapsed != null && (
+        <div style={{ fontSize: 11, color: P.textSec, padding: "6px 12px", background: `${SUBTYPE_META.mock.color}08`, borderRadius: 8, borderLeft: `3px solid ${SUBTYPE_META.mock.color}` }}>
+          <span style={{ fontWeight: 700, color: SUBTYPE_META.mock.color, marginRight: 6 }}>用时</span>{Math.floor(elapsed / 60)} 分 {elapsed % 60} 秒
         </div>
       )}
     </div>
@@ -478,7 +549,10 @@ export function SpeakingProgressView({ onBack }) {
 
   const sessions = useMemo(() => {
     if (!hist?.sessions) return [];
-    return hist.sessions.filter(s => s.type === "speaking").sort((a, b) => new Date(b.date) - new Date(a.date));
+    return hist.sessions
+      .filter(s => s.type === "speaking" || s.type === "speaking-exam")
+      .map(normalizeSpeakingSession)
+      .sort((a, b) => new Date(b.date) - new Date(a.date));
   }, [hist]);
 
   const filtered = useMemo(() => {
@@ -488,6 +562,7 @@ export function SpeakingProgressView({ onBack }) {
 
   const repeatSessions = sessions.filter(s => s.details?.subtype === "repeat");
   const interviewSessions = sessions.filter(s => s.details?.subtype === "interview");
+  const mockSessions = sessions.filter(s => s.details?.subtype === "mock");
 
   function avgScore(arr) {
     if (arr.length === 0) return null;
@@ -501,10 +576,20 @@ export function SpeakingProgressView({ onBack }) {
   const interviewAvg = avgScore(interviewSessions);
   const totalAvg = avgScore(sessions);
 
+  // For mock sessions, "average" is the mean band, not the 0-5 dimension
+  // average — different scale. Compute separately.
+  function mockAvgBand(arr) {
+    const valid = arr.filter(s => Number.isFinite(s.band));
+    if (valid.length === 0) return null;
+    return Math.round((valid.reduce((sum, s) => sum + s.band, 0) / valid.length) * 10) / 10;
+  }
+  const mockAvg = mockAvgBand(mockSessions);
+
   const statItems = [
-    { key: "all", icon: "📊", short: "全部", count: sessions.length, color: P.primary, avg: totalAvg !== null ? `平均 ${totalAvg}/5` : "" },
-    { key: "repeat", icon: SUBTYPE_META.repeat.icon, short: SUBTYPE_META.repeat.short, count: repeatSessions.length, color: SUBTYPE_META.repeat.color, avg: repeatAvg !== null ? `平均 ${repeatAvg}/5` : "暂无" },
+    { key: "all",       icon: "📊", short: "全部", count: sessions.length, color: P.primary, avg: totalAvg !== null ? `平均 ${totalAvg}/5` : "" },
+    { key: "repeat",    icon: SUBTYPE_META.repeat.icon,    short: SUBTYPE_META.repeat.short,    count: repeatSessions.length,    color: SUBTYPE_META.repeat.color,    avg: repeatAvg !== null ? `平均 ${repeatAvg}/5` : "暂无" },
     { key: "interview", icon: SUBTYPE_META.interview.icon, short: SUBTYPE_META.interview.short, count: interviewSessions.length, color: SUBTYPE_META.interview.color, avg: interviewAvg !== null ? `平均 ${interviewAvg}/5` : "暂无" },
+    { key: "mock",      icon: SUBTYPE_META.mock.icon,      short: SUBTYPE_META.mock.short,      count: mockSessions.length,      color: SUBTYPE_META.mock.color,      avg: mockAvg !== null ? `Band ${mockAvg}` : "暂无" },
   ];
 
   function handleDelete(sourceIndex) {
@@ -550,13 +635,9 @@ export function SpeakingProgressView({ onBack }) {
             {/* Stats row: cards + trend chart */}
             <div style={{ display: "flex", gap: 14, marginBottom: 18, alignItems: "stretch", animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 80ms both" }}>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, flex: "0 0 48%" }}>
-                {statItems.slice(0, 2).map(item => (
+                {statItems.map(item => (
                   <StatCard key={item.key} {...item} active={filter === item.key} onClick={() => setFilter(item.key)} />
                 ))}
-                {/* Third stat card spans full width below */}
-                <div style={{ gridColumn: "1 / -1" }}>
-                  <StatCard {...statItems[2]} active={filter === statItems[2].key} onClick={() => setFilter(statItems[2].key)} />
-                </div>
               </div>
               <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
                 {/* Trend chart */}

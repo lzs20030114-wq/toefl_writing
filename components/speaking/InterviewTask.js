@@ -151,6 +151,7 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
   const startSTT = useCallback(() => {
     if (!sttSupported) return;
     setLiveTranscript("");
+    setSttError("");
     if (recognizerRef.current) {
       try { recognizerRef.current.stop(); } catch {}
     }
@@ -175,7 +176,17 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
           });
         }
       },
-      onError: (err) => { if (err?.message) setSttError(err.message); },
+      onError: (err) => {
+        // MediaRecorder has already confirmed microphone access. If the
+        // browser's SpeechRecognition service fails, keep recording and avoid
+        // showing a misleading microphone-permission warning.
+        const speechPermissionErrors = ["not-allowed", "service-not-allowed", "audio-capture"];
+        if (speechPermissionErrors.includes(err?.error)) {
+          setSttError("录音已开始，但浏览器语音识别暂时不可用；这不会影响保存录音，只是本题可能无法自动生成转写和 AI 评分。");
+        } else if (err?.message) {
+          setSttError(err.message);
+        }
+      },
     });
     recognizerRef.current.start();
   }, [sttSupported, current]);
