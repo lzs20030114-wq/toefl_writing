@@ -43,6 +43,10 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
   const [scoring, setScoring] = useState(false); // AI scoring (DeepSeek) in progress
   const [scoringError, setScoringError] = useState(null);
   const [expandedQ, setExpandedQ] = useState(null); // expanded question in summary
+  // Hold the onComplete call when the user finishes while transcribes or AI
+  // scoring are still in flight — otherwise the parent (mock exam shell)
+  // gets a result set with null aiScores for trailing questions.
+  const [submitting, setSubmitting] = useState(false);
 
   const timerRef = useRef(null);
   const totalTimerRef = useRef(null);
@@ -242,39 +246,60 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
     })();
   }, [current, items, notPro, runScoring]);
 
+  // Bundle the result and call onComplete. Extracted so the pending-work
+  // wait effect can call it too.
+  const finishSession = useCallback(() => {
+    setFinished(true);
+    if (!onComplete) return;
+    const scoredItems = items.map((item, i) => ({
+      id: item.id,
+      question: item.question,
+      category: item.category,
+      difficulty: item.difficulty,
+      recorded: !!recordings[i],
+      transcript: transcripts[i] || null,
+      aiScore: aiScores[i] || null,
+    }));
+    const validScores = scoredItems.filter(s => s.aiScore && !s.aiScore.error);
+    const avgScore = validScores.length
+      ? Math.round((validScores.reduce((sum, s) => sum + s.aiScore.score, 0) / validScores.length) * 2) / 2
+      : null;
+    onComplete({
+      type: "speaking-interview",
+      total,
+      attempted: recordings.filter(Boolean).length + (recordings[current] ? 0 : 1),
+      totalElapsed,
+      averageScore: avgScore,
+      items: scoredItems,
+    });
+  }, [current, total, recordings, totalElapsed, items, onComplete, transcripts, aiScores]);
+
   const handleNext = useCallback(() => {
     setScoringError(null);
     if (current < total - 1) {
       setCurrent(current + 1);
       setPhase("prep");
       setAutoRecordReady(false);
-    } else {
-      setFinished(true);
-      if (onComplete) {
-        const scoredItems = items.map((item, i) => ({
-          id: item.id,
-          question: item.question,
-          category: item.category,
-          difficulty: item.difficulty,
-          recorded: !!recordings[i],
-          transcript: transcripts[i] || null,
-          aiScore: aiScores[i] || null,
-        }));
-        const validScores = scoredItems.filter(s => s.aiScore && !s.aiScore.error);
-        const avgScore = validScores.length
-          ? Math.round((validScores.reduce((sum, s) => sum + s.aiScore.score, 0) / validScores.length) * 2) / 2
-          : null;
-        onComplete({
-          type: "speaking-interview",
-          total,
-          attempted: recordings.filter(Boolean).length + (recordings[current] ? 0 : 1),
-          totalElapsed,
-          averageScore: avgScore,
-          items: scoredItems,
-        });
-      }
+      return;
     }
-  }, [current, total, recordings, totalElapsed, items, onComplete, transcripts, aiScores]);
+    // Last question — hold the finish call if anything's still in flight
+    // (server STT transcript OR DeepSeek AI scoring).
+    const pending = transcriptStatus.some(s => s === "processing") || scoring;
+    if (pending) {
+      setSubmitting(true);
+      return;
+    }
+    finishSession();
+  }, [current, total, transcriptStatus, scoring, finishSession]);
+
+  // Settle the deferred finish once all background work has landed.
+  useEffect(() => {
+    if (!submitting) return;
+    if (transcriptStatus.some(s => s === "processing")) return;
+    if (scoring) return;
+    setSubmitting(false);
+    finishSession();
+  }, [submitting, transcriptStatus, scoring, finishSession]);
 
   const formatTime = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 
@@ -665,8 +690,14 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
                       <SummaryReplayButton blobUrl={recordings[current]} />
                     </div>
                   )}
-                  <Btn onClick={handleNext} style={{ background: SPK.color, borderColor: SPK.color }}>
-                    {current < total - 1 ? "Next Question" : "Finish Interview"}
+                  <Btn
+                    onClick={handleNext}
+                    disabled={submitting}
+                    style={{ background: SPK.color, borderColor: SPK.color }}
+                  >
+                    {submitting
+                      ? "正在完成识别与评分…"
+                      : current < total - 1 ? "Next Question" : "Finish Interview"}
                   </Btn>
                 </div>
               )}

@@ -42,6 +42,11 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
   // Sticky flag: once the API returns NOT_PRO we stop attempting more uploads
   // this session and switch the UI to the Pro upsell.
   const [notPro, setNotPro] = useState(false);
+  // When the user hits Finish on the last sentence while earlier ones are
+  // still being transcribed, we hold the onComplete call in a "submitting"
+  // state and fire it once everything has settled. Otherwise the parent
+  // (mock exam shell) gets a score summary missing the trailing items.
+  const [submitting, setSubmitting] = useState(false);
 
   const elapsedRef = useRef(null);
   const utteranceRef = useRef(null);
@@ -215,37 +220,56 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
     })();
   }, [current, sentence, notPro]);
 
+  // Fire onComplete with the latest scored items. Pulled out so the
+  // pending-transcribe wait effect can call it too.
+  const finishSession = useCallback(() => {
+    setFinished(true);
+    if (!onComplete) return;
+    const scoredItems = items.map((item, i) => ({
+      id: item.id,
+      sentence: item.sentence,
+      difficulty: item.difficulty,
+      recorded: !!recordings[i],
+      transcript: transcripts[i] || null,
+      score: scores[i] || null,
+    }));
+    const validScores = scoredItems.filter(s => s.score);
+    const avgScore = validScores.length
+      ? Math.round((validScores.reduce((sum, s) => sum + s.score.score, 0) / validScores.length) * 2) / 2
+      : null;
+    onComplete({
+      type: "speaking-repeat",
+      total,
+      attempted: recordings.filter(Boolean).length + (recordings[current] ? 0 : 1),
+      elapsed,
+      averageScore: avgScore,
+      items: scoredItems,
+    });
+  }, [current, total, recordings, elapsed, items, onComplete, transcripts, scores]);
+
   const handleNext = useCallback(() => {
     if (current < total - 1) {
       setCurrent(current + 1);
       setPhase("listen");
-    } else {
-      // Finished all sentences
-      setFinished(true);
-      if (onComplete) {
-        const scoredItems = items.map((item, i) => ({
-          id: item.id,
-          sentence: item.sentence,
-          difficulty: item.difficulty,
-          recorded: !!recordings[i],
-          transcript: transcripts[i] || null,
-          score: scores[i] || null,
-        }));
-        const validScores = scoredItems.filter(s => s.score);
-        const avgScore = validScores.length
-          ? Math.round((validScores.reduce((sum, s) => sum + s.score.score, 0) / validScores.length) * 2) / 2
-          : null;
-        onComplete({
-          type: "speaking-repeat",
-          total,
-          attempted: recordings.filter(Boolean).length + (recordings[current] ? 0 : 1),
-          elapsed,
-          averageScore: avgScore,
-          items: scoredItems,
-        });
-      }
+      return;
     }
-  }, [current, total, recordings, elapsed, items, onComplete, transcripts, scores]);
+    // Last sentence — if anything is still transcribing, hold the finish call
+    // until those settle (otherwise the summary screen / mock-exam parent
+    // would see null scores for in-flight items).
+    if (transcriptStatus.some(s => s === "processing")) {
+      setSubmitting(true);
+      return;
+    }
+    finishSession();
+  }, [current, total, transcriptStatus, finishSession]);
+
+  // Settle the deferred finish once all transcribes have landed.
+  useEffect(() => {
+    if (!submitting) return;
+    if (transcriptStatus.some(s => s === "processing")) return;
+    setSubmitting(false);
+    finishSession();
+  }, [submitting, transcriptStatus, finishSession]);
 
   const handleSkip = useCallback(() => {
     handleNext();
@@ -570,11 +594,15 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
               )}
 
               <div style={{ display: "flex", justifyContent: "center", gap: 10 }}>
-                <Btn variant="secondary" onClick={() => setPhase("record")}>
+                <Btn variant="secondary" onClick={() => setPhase("record")} disabled={submitting}>
                   Re-record
                 </Btn>
-                <Btn onClick={handleNext} style={{ background: SPK.color, borderColor: SPK.color }}>
-                  {current < total - 1 ? "Next Sentence" : "Finish"}
+                <Btn
+                  onClick={handleNext}
+                  disabled={submitting}
+                  style={{ background: SPK.color, borderColor: SPK.color }}
+                >
+                  {submitting ? "正在完成识别…" : current < total - 1 ? "Next Sentence" : "Finish"}
                 </Btn>
               </div>
             </div>
