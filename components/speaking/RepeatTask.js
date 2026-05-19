@@ -3,7 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { C, FONT, Btn, TopBar, PageShell, SurfaceCard } from "../shared/ui";
 import { VoiceRecorder } from "./VoiceRecorder";
-import { createSpeechRecognizer, isSpeechRecognitionSupported } from "../../lib/speakingEval/speechRecognition";
+import { transcribeWithServer } from "../../lib/speakingEval/serverStt";
 import { scoreRepeat } from "../../lib/speakingEval/repeatScorer";
 
 const SPK = { color: "#F59E0B", soft: "#FFFBEB" };
@@ -34,16 +34,17 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
   const [ttsSupported, setTtsSupported] = useState(true);
   const [transcripts, setTranscripts] = useState([]); // STT transcript per index
   const [scores, setScores] = useState([]); // scoreRepeat result per index
-  const [liveTranscript, setLiveTranscript] = useState(""); // current interim transcript
-  const [sttSupported, setSttSupported] = useState(true);
-  const [sttError, setSttError] = useState("");
-  // Soft errors ("recording is fine, just no auto-scoring") are shown in an
-  // amber info style; hard errors stay in the red error style.
-  const [sttErrorSoft, setSttErrorSoft] = useState(false);
+  // Per-question STT lifecycle: null (not yet) | "processing" | "done" | "failed"
+  // The transcribe upload is fire-and-forget so the user can advance to the
+  // next sentence while earlier ones are still being recognized server-side.
+  const [transcriptStatus, setTranscriptStatus] = useState([]);
+  const [transcriptError, setTranscriptError] = useState([]); // error message per index, only when status="failed"
+  // Sticky flag: once the API returns NOT_PRO we stop attempting more uploads
+  // this session and switch the UI to the Pro upsell.
+  const [notPro, setNotPro] = useState(false);
 
   const elapsedRef = useRef(null);
   const utteranceRef = useRef(null);
-  const recognizerRef = useRef(null);
 
   const total = items.length;
   const sentence = items[current];
@@ -64,10 +65,7 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
     setTtsSupported("speechSynthesis" in window);
   }, []);
 
-  // Check STT support
-  useEffect(() => {
-    setSttSupported(isSpeechRecognitionSupported());
-  }, []);
+  // (STT runs server-side now; no browser capability check needed.)
 
   const playSentence = useCallback(() => {
     if (!ttsSupported || !sentence) return;
@@ -138,103 +136,86 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
     }
   }, [current, phase, finished]);
 
-  // Start STT when recording begins
-  const startSTT = useCallback(() => {
-    if (!sttSupported) return;
-    setLiveTranscript("");
-    setSttError("");
-    setSttErrorSoft(false);
-    // Stop any existing recognizer
-    if (recognizerRef.current) {
-      try { recognizerRef.current.stop(); } catch {}
-    }
-    recognizerRef.current = createSpeechRecognizer({
-      lang: "en-US",
-      onResult: (transcript, isFinal) => {
-        setLiveTranscript(transcript);
-        if (isFinal) {
-          setTranscripts(prev => {
-            const next = [...prev];
-            next[current] = transcript;
-            return next;
-          });
-        }
-      },
-      onEnd: (finalTranscript) => {
-        // Store whatever we got
-        if (finalTranscript) {
-          setTranscripts(prev => {
-            const next = [...prev];
-            next[current] = finalTranscript;
-            return next;
-          });
-        }
-      },
-      onError: (err) => {
-        // MediaRecorder has already started, so a SpeechRecognition error
-        // here means transcription is unavailable, not that recording itself
-        // failed. "network" is the common case in mainland China — Chrome's
-        // built-in STT uploads audio to speech.googleapis.com, which is
-        // unreachable behind the GFW. Treat all of these as soft notices.
-        const softErrors = ["not-allowed", "service-not-allowed", "audio-capture", "network"];
-        if (softErrors.includes(err?.error)) {
-          // Permission errors get a more actionable message; the recognizer
-          // already crafted a localized hint for "network", so reuse it.
-          const permissionMsg = "录音已开始，但浏览器语音识别暂时不可用；这不会影响保存录音，只是本题可能无法自动生成转写和发音评分。";
-          const isNetwork = err.error === "network";
-          setSttError(isNetwork && err?.message ? err.message : permissionMsg);
-          setSttErrorSoft(true);
-        } else if (err?.message) {
-          setSttError(err.message);
-          setSttErrorSoft(false);
-        }
-      },
-    });
-    recognizerRef.current.start();
-  }, [sttSupported, current]);
+  // Capture the recording and kick off server-side transcription. We don't
+  // block the UI on the upload — the user is free to replay/re-record/advance
+  // while the transcript backfills asynchronously into the right slot.
+  const handleRecordingComplete = useCallback((blobUrl, blob) => {
+    const idx = current;
+    const sentenceText = sentence?.sentence || "";
+    const questionId = sentence?.id || "";
 
-  // Stop STT
-  const stopSTT = useCallback(() => {
-    if (recognizerRef.current) {
-      try { recognizerRef.current.stop(); } catch {}
-    }
-  }, []);
-
-  const handleRecordingComplete = useCallback((blobUrl) => {
-    // Stop STT recognition
-    stopSTT();
     setRecordings(prev => {
       const next = [...prev];
-      next[current] = blobUrl;
+      next[idx] = blobUrl;
       return next;
     });
-    // Score using whatever transcript we have (from liveTranscript or transcripts state)
-    // We use a small delay to let the final STT result arrive
-    setTimeout(() => {
-      setTranscripts(prev => {
-        const transcript = prev[current] || liveTranscript || "";
-        if (transcript && sentence) {
-          const result = scoreRepeat(sentence.sentence, transcript);
-          setScores(s => {
-            const next = [...s];
-            next[current] = result;
+    setPhase("review");
+
+    // Skip the upload if we've already seen NOT_PRO once this session.
+    if (notPro || !blob) {
+      setTranscriptStatus(prev => {
+        const next = [...prev];
+        next[idx] = "failed";
+        return next;
+      });
+      setTranscriptError(prev => {
+        const next = [...prev];
+        next[idx] = notPro ? "PRO_GATE" : "EMPTY_AUDIO";
+        return next;
+      });
+      return;
+    }
+
+    setTranscriptStatus(prev => {
+      const next = [...prev];
+      next[idx] = "processing";
+      return next;
+    });
+
+    // Fire-and-forget; result lands by index so reordering doesn't matter.
+    (async () => {
+      const result = await transcribeWithServer(blob, {
+        taskType: "repeat",
+        questionId,
+        durationMs: typeof blob.size === "number" ? null : null, // duration not tracked here
+      });
+      if (result.ok) {
+        const transcript = result.transcript || "";
+        setTranscripts(prev => {
+          const next = [...prev];
+          next[idx] = transcript;
+          return next;
+        });
+        if (transcript && sentenceText) {
+          const scored = scoreRepeat(sentenceText, transcript);
+          setScores(prev => {
+            const next = [...prev];
+            next[idx] = scored;
             return next;
           });
         }
-        // Ensure transcript is stored
-        if (!prev[current] && liveTranscript) {
+        setTranscriptStatus(prev => {
           const next = [...prev];
-          next[current] = liveTranscript;
+          next[idx] = "done";
           return next;
-        }
-        return prev;
-      });
-    }, 300);
-    setPhase("review");
-  }, [current, stopSTT, liveTranscript, sentence]);
+        });
+      } else {
+        if (result.code === "NOT_PRO") setNotPro(true);
+        setTranscriptStatus(prev => {
+          const next = [...prev];
+          next[idx] = "failed";
+          return next;
+        });
+        setTranscriptError(prev => {
+          const next = [...prev];
+          next[idx] = result.code || "ERROR";
+          return next;
+        });
+      }
+    })();
+  }, [current, sentence, notPro]);
 
   const handleNext = useCallback(() => {
-    setLiveTranscript("");
     if (current < total - 1) {
       setCurrent(current + 1);
       setPhase("listen");
@@ -496,38 +477,8 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
               </div>
               <VoiceRecorder
                 onRecordingComplete={handleRecordingComplete}
-                onRecordingStart={startSTT}
                 maxDuration={30}
               />
-              {/* Live transcript preview */}
-              {sttSupported && liveTranscript && (
-                <div style={{
-                  marginTop: 16, padding: "10px 14px", background: "#F9FAFB",
-                  border: "1px solid " + C.bdr, borderRadius: 10,
-                  fontSize: 13, color: C.t2, lineHeight: 1.6, fontStyle: "italic",
-                }}>
-                  {liveTranscript}
-                </div>
-              )}
-              {!sttSupported && (
-                <div style={{
-                  marginTop: 12, fontSize: 11, color: C.t3, padding: "6px 10px",
-                  background: "#FEF3C7", borderRadius: 8,
-                }}>
-                  浏览器不支持语音识别，无法自动评分
-                </div>
-              )}
-              {sttError && (
-                <div style={{
-                  marginTop: 12, fontSize: 12, padding: "8px 12px",
-                  color: sttErrorSoft ? "#92400E" : "#991B1B",
-                  background: sttErrorSoft ? "#FFFBEB" : "#FEF2F2",
-                  border: `1px solid ${sttErrorSoft ? "#FDE68A" : "#FECACA"}`,
-                  borderRadius: 8, lineHeight: 1.6, whiteSpace: "pre-line",
-                }}>
-                  {sttError}
-                </div>
-              )}
               <div style={{ marginTop: 20 }}>
                 <button
                   onClick={() => playSentence()}
@@ -568,13 +519,48 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
                 )}
               </div>
 
-              {/* Accuracy score display */}
+              {/* Accuracy score display (when transcript came back) */}
               {scores[current] && (
                 <AccuracyCard score={scores[current]} originalSentence={sentence.sentence} />
               )}
 
-              {/* Show sentence text for self-check (when no STT score) */}
-              {!scores[current] && isPractice && (
+              {/* Server STT is still working on this recording */}
+              {!scores[current] && transcriptStatus[current] === "processing" && (
+                <div style={{
+                  marginBottom: 20, padding: "10px 14px",
+                  background: "#F9FAFB", border: "1px solid " + C.bdr, borderRadius: 10,
+                  fontSize: 13, color: C.t2, textAlign: "center",
+                }}>
+                  <span style={{ display: "inline-block", marginRight: 8 }}>⏳</span>
+                  正在识别你的录音…（你可以继续下一题，识别完会自动填上分数）
+                </div>
+              )}
+
+              {/* Pro upsell — server returned NOT_PRO */}
+              {!scores[current] && transcriptStatus[current] === "failed" && transcriptError[current] === "NOT_PRO" && (
+                <div style={{
+                  marginBottom: 20, padding: "12px 16px",
+                  background: "#FFFBEB", border: "1px solid #FDE68A", borderRadius: 10,
+                  fontSize: 13, color: "#92400E", lineHeight: 1.6,
+                }}>
+                  <div style={{ fontWeight: 700, marginBottom: 4 }}>🔒 语音识别为 Pro 专属</div>
+                  录音已保存，可对照原句自查。升级 Pro 后可解锁自动识别和发音评分。
+                </div>
+              )}
+
+              {/* Other failure — let the user know it's a transient problem */}
+              {!scores[current] && transcriptStatus[current] === "failed" && transcriptError[current] !== "NOT_PRO" && (
+                <div style={{
+                  marginBottom: 20, padding: "10px 14px",
+                  background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 10,
+                  fontSize: 12, color: "#991B1B", lineHeight: 1.6,
+                }}>
+                  识别失败：{transcriptError[current] || "未知错误"}。录音已保存，可重录或继续下一题。
+                </div>
+              )}
+
+              {/* Practice mode: always show the reference sentence so users can self-check */}
+              {isPractice && (
                 <div style={{
                   background: "#F9FAFB", border: "1px solid " + C.bdr, borderRadius: 10,
                   padding: "12px 16px", marginBottom: 20, fontSize: 14, color: C.t1, lineHeight: 1.6,
@@ -584,7 +570,7 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
               )}
 
               <div style={{ display: "flex", justifyContent: "center", gap: 10 }}>
-                <Btn variant="secondary" onClick={() => { setLiveTranscript(""); setPhase("record"); }}>
+                <Btn variant="secondary" onClick={() => setPhase("record")}>
                   Re-record
                 </Btn>
                 <Btn onClick={handleNext} style={{ background: SPK.color, borderColor: SPK.color }}>

@@ -3,7 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { C, FONT, Btn, TopBar, PageShell, SurfaceCard } from "../shared/ui";
 import { VoiceRecorder } from "./VoiceRecorder";
-import { createSpeechRecognizer, isSpeechRecognitionSupported } from "../../lib/speakingEval/speechRecognition";
+import { transcribeWithServer } from "../../lib/speakingEval/serverStt";
 import { scoreInterview } from "../../lib/speakingEval/interviewScorer";
 
 const SPK = { color: "#F59E0B", soft: "#FFFBEB" };
@@ -35,21 +35,18 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
   const [ttsSupported, setTtsSupported] = useState(true);
   const [autoRecordReady, setAutoRecordReady] = useState(false);
   const [transcripts, setTranscripts] = useState([]); // STT transcript per index
-  const [liveTranscript, setLiveTranscript] = useState("");
-  const [sttSupported, setSttSupported] = useState(true);
-  const [sttError, setSttError] = useState("");
-  // Soft errors ("recording is fine, just no auto-scoring") render in amber;
-  // hard errors keep the red error styling.
-  const [sttErrorSoft, setSttErrorSoft] = useState(false);
+  // Per-question STT lifecycle: null | "processing" | "done" | "failed"
+  const [transcriptStatus, setTranscriptStatus] = useState([]);
+  const [transcriptError, setTranscriptError] = useState([]); // server error code per index when "failed"
+  const [notPro, setNotPro] = useState(false); // sticky: once NOT_PRO, skip further uploads
   const [aiScores, setAiScores] = useState([]); // AI score result per index
-  const [scoring, setScoring] = useState(false); // scoring in progress
+  const [scoring, setScoring] = useState(false); // AI scoring (DeepSeek) in progress
   const [scoringError, setScoringError] = useState(null);
   const [expandedQ, setExpandedQ] = useState(null); // expanded question in summary
 
   const timerRef = useRef(null);
   const totalTimerRef = useRef(null);
   const recorderStopRef = useRef(null);
-  const recognizerRef = useRef(null);
 
   const total = items.length;
   const question = items[current];
@@ -67,10 +64,7 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
     setTtsSupported("speechSynthesis" in window);
   }, []);
 
-  // Check STT support
-  useEffect(() => {
-    setSttSupported(isSpeechRecognitionSupported());
-  }, []);
+  // (STT runs server-side now; no browser capability check needed.)
 
   // Countdown timer for answer phase
   useEffect(() => {
@@ -151,85 +145,18 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
   }, [current, phase, finished]);
 
   // Start STT when recording begins
-  const startSTT = useCallback(() => {
-    if (!sttSupported) return;
-    setLiveTranscript("");
-    setSttError("");
-    setSttErrorSoft(false);
-    if (recognizerRef.current) {
-      try { recognizerRef.current.stop(); } catch {}
-    }
-    recognizerRef.current = createSpeechRecognizer({
-      lang: "en-US",
-      onResult: (transcript, isFinal) => {
-        setLiveTranscript(transcript);
-        if (isFinal) {
-          setTranscripts(prev => {
-            const next = [...prev];
-            next[current] = transcript;
-            return next;
-          });
-        }
-      },
-      onEnd: (finalTranscript) => {
-        if (finalTranscript) {
-          setTranscripts(prev => {
-            const next = [...prev];
-            next[current] = finalTranscript;
-            return next;
-          });
-        }
-      },
-      onError: (err) => {
-        // MediaRecorder has already confirmed microphone access. If the
-        // browser's SpeechRecognition service fails, keep recording. The
-        // "network" error is the common case in mainland China (Chrome's
-        // built-in STT relies on Google services), so we group it with the
-        // permission errors as a soft notice rather than a red alert.
-        const softErrors = ["not-allowed", "service-not-allowed", "audio-capture", "network"];
-        if (softErrors.includes(err?.error)) {
-          const permissionMsg = "录音已开始，但浏览器语音识别暂时不可用；这不会影响保存录音，只是本题可能无法自动生成转写和 AI 评分。";
-          const isNetwork = err.error === "network";
-          setSttError(isNetwork && err?.message ? err.message : permissionMsg);
-          setSttErrorSoft(true);
-        } else if (err?.message) {
-          setSttError(err.message);
-          setSttErrorSoft(false);
-        }
-      },
-    });
-    recognizerRef.current.start();
-  }, [sttSupported, current]);
-
-  const stopSTT = useCallback(() => {
-    if (recognizerRef.current) {
-      try { recognizerRef.current.stop(); } catch {}
-    }
-  }, []);
-
-  // Run AI scoring asynchronously
-  const runScoring = useCallback(async (questionIdx) => {
+  // Run AI scoring once we have a transcript. Takes transcript as a parameter
+  // so we don't race against state updates from the transcribe step.
+  const runScoring = useCallback(async (questionIdx, transcript) => {
     setScoring(true);
     setScoringError(null);
     try {
-      // Wait a beat for final STT to arrive
-      await new Promise(r => setTimeout(r, 500));
-      const transcript = transcripts[questionIdx] || liveTranscript || "";
       const q = items[questionIdx];
       if (!transcript) {
         setScoringError("未检测到语音内容，跳过评分");
         setScoring(false);
         return;
       }
-      // Store transcript if not yet saved
-      setTranscripts(prev => {
-        if (!prev[questionIdx]) {
-          const next = [...prev];
-          next[questionIdx] = transcript;
-          return next;
-        }
-        return prev;
-      });
       const result = await scoreInterview({
         question: q.question,
         transcript,
@@ -243,24 +170,79 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
       setScoringError("评分失败: " + (err.message || "未知错误"));
     }
     setScoring(false);
-  }, [transcripts, liveTranscript, items]);
+  }, [items]);
 
-  const handleRecordingComplete = useCallback((blobUrl) => {
+  const handleRecordingComplete = useCallback((blobUrl, blob) => {
     if (timerRef.current) clearInterval(timerRef.current);
-    stopSTT();
+    const idx = current;
+    const q = items[idx];
+
     setRecordings(prev => {
       const next = [...prev];
-      next[current] = blobUrl;
+      next[idx] = blobUrl;
       return next;
     });
     setPhase("review");
     setAutoRecordReady(false);
-    // Trigger AI scoring async
-    runScoring(current);
-  }, [current, stopSTT, runScoring]);
+
+    // Skip if Pro gate already failed, or if we never got a blob.
+    if (notPro || !blob) {
+      setTranscriptStatus(prev => {
+        const next = [...prev];
+        next[idx] = "failed";
+        return next;
+      });
+      setTranscriptError(prev => {
+        const next = [...prev];
+        next[idx] = notPro ? "PRO_GATE" : "EMPTY_AUDIO";
+        return next;
+      });
+      return;
+    }
+
+    setTranscriptStatus(prev => {
+      const next = [...prev];
+      next[idx] = "processing";
+      return next;
+    });
+
+    // Fire-and-forget transcription → AI scoring chain.
+    (async () => {
+      const result = await transcribeWithServer(blob, {
+        taskType: "interview",
+        questionId: q?.id || "",
+      });
+      if (result.ok) {
+        const transcript = result.transcript || "";
+        setTranscripts(prev => {
+          const next = [...prev];
+          next[idx] = transcript;
+          return next;
+        });
+        setTranscriptStatus(prev => {
+          const next = [...prev];
+          next[idx] = "done";
+          return next;
+        });
+        // Chain into AI scoring once we have the text.
+        runScoring(idx, transcript);
+      } else {
+        if (result.code === "NOT_PRO") setNotPro(true);
+        setTranscriptStatus(prev => {
+          const next = [...prev];
+          next[idx] = "failed";
+          return next;
+        });
+        setTranscriptError(prev => {
+          const next = [...prev];
+          next[idx] = result.code || "ERROR";
+          return next;
+        });
+      }
+    })();
+  }, [current, items, notPro, runScoring]);
 
   const handleNext = useCallback(() => {
-    setLiveTranscript("");
     setScoringError(null);
     if (current < total - 1) {
       setCurrent(current + 1);
@@ -552,35 +534,9 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
             <div style={{ textAlign: "center" }}>
               <VoiceRecorder
                 onRecordingComplete={handleRecordingComplete}
-                onRecordingStart={startSTT}
                 maxDuration={ANSWER_DURATION}
                 autoStart={autoRecordReady}
               />
-
-              {/* Live transcript */}
-              {sttSupported && liveTranscript && (
-                <div style={{
-                  marginTop: 14, padding: "10px 14px", background: "#F9FAFB",
-                  border: "1px solid " + C.bdr, borderRadius: 10,
-                  fontSize: 13, color: C.t2, lineHeight: 1.6, fontStyle: "italic",
-                  textAlign: "left", maxHeight: 80, overflowY: "auto",
-                }}>
-                  {liveTranscript}
-                </div>
-              )}
-
-              {sttError && (
-                <div style={{
-                  marginTop: 14, padding: "10px 14px",
-                  background: sttErrorSoft ? "#FFFBEB" : "#FEF2F2",
-                  border: `1px solid ${sttErrorSoft ? "#FDE68A" : "#FECACA"}`,
-                  borderRadius: 10,
-                  fontSize: 12, color: sttErrorSoft ? "#92400E" : "#991B1B",
-                  lineHeight: 1.6, textAlign: "left", whiteSpace: "pre-line",
-                }}>
-                  {sttError}
-                </div>
-              )}
 
               {/* Timer bar */}
               <div style={{
@@ -602,8 +558,51 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
           {/* Phase: Review */}
           {phase === "review" && (
             <div>
-              {/* Scoring state */}
-              {scoring && (
+              {/* Step 1: server STT is still working — show before AI scoring starts */}
+              {transcriptStatus[current] === "processing" && (
+                <div style={{ textAlign: "center", padding: "20px 0" }}>
+                  <div style={{
+                    width: 56, height: 56, borderRadius: "50%", margin: "0 auto 16px",
+                    background: "#F0F9FF", border: "2px solid #BAE6FD",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                  }}>
+                    <span style={{ fontSize: 22, animation: "spk-timer-pulse 1s ease-in-out infinite" }}>🎙</span>
+                  </div>
+                  <div style={{ fontSize: 15, fontWeight: 700, color: C.t1, marginBottom: 4 }}>
+                    识别中...
+                  </div>
+                  <div style={{ fontSize: 12, color: C.t3 }}>
+                    正在转写录音，完成后会自动进入 AI 评分
+                  </div>
+                </div>
+              )}
+
+              {/* Step 1 (failure): Pro gate */}
+              {transcriptStatus[current] === "failed" && transcriptError[current] === "NOT_PRO" && (
+                <div style={{ textAlign: "center", padding: "20px 0" }}>
+                  <div style={{ fontSize: 32, marginBottom: 8 }}>🔒</div>
+                  <div style={{ fontSize: 15, fontWeight: 700, color: "#92400E", marginBottom: 6 }}>
+                    语音识别为 Pro 专属
+                  </div>
+                  <div style={{ fontSize: 12, color: C.t2, marginBottom: 12, padding: "0 10px" }}>
+                    录音已保存。升级 Pro 后可解锁自动识别和 AI 评分。
+                  </div>
+                </div>
+              )}
+
+              {/* Step 1 (failure): other errors */}
+              {transcriptStatus[current] === "failed" && transcriptError[current] !== "NOT_PRO" && (
+                <div style={{
+                  margin: "0 auto 16px", padding: "10px 14px",
+                  background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 10,
+                  fontSize: 12, color: "#991B1B", lineHeight: 1.6, maxWidth: 360,
+                }}>
+                  识别失败：{transcriptError[current] || "未知错误"}。录音已保存，可继续下一题。
+                </div>
+              )}
+
+              {/* Step 2: AI scoring in progress (after transcribe finished) */}
+              {transcriptStatus[current] !== "processing" && scoring && (
                 <div style={{ textAlign: "center", padding: "20px 0" }}>
                   <div style={{
                     width: 56, height: 56, borderRadius: "50%", margin: "0 auto 16px",
@@ -621,8 +620,8 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
                 </div>
               )}
 
-              {/* Score results (or just done-check if no score yet) */}
-              {!scoring && (
+              {/* Step 3: score / done-check (transcribe finished AND AI scoring done) */}
+              {transcriptStatus[current] !== "processing" && !scoring && (
                 <div style={{ textAlign: "center" }}>
                   {aiScores[current] && !aiScores[current].error ? (
                     <DimensionScoreCard score={aiScores[current]} />
@@ -649,7 +648,7 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
                   )}
 
                   {/* Transcript */}
-                  {(transcripts[current] || liveTranscript) && (
+                  {transcripts[current] && (
                     <div style={{
                       marginTop: 12, padding: "10px 14px", background: "#F9FAFB",
                       border: "1px solid " + C.bdr, borderRadius: 10,
@@ -657,7 +656,7 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
                       maxHeight: 100, overflowY: "auto",
                     }}>
                       <div style={{ fontSize: 10, fontWeight: 700, color: C.t3, textTransform: "uppercase", marginBottom: 4 }}>Transcript</div>
-                      {transcripts[current] || liveTranscript}
+                      {transcripts[current]}
                     </div>
                   )}
 

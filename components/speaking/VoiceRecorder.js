@@ -84,7 +84,13 @@ function describePermissionError(err) {
  * Uses MediaRecorder API with graceful permission handling.
  *
  * Props:
- *   onRecordingComplete(blobUrl)  — called with blob URL when recording stops
+ *   onRecordingComplete(blobUrl, blob)  — called with blob URL + raw Blob
+ *                                          when recording stops. The Blob is
+ *                                          new (added so callers can upload
+ *                                          the audio to a server STT API
+ *                                          without re-fetching from blobUrl).
+ *                                          Existing callers that only consume
+ *                                          the URL stay compatible.
  *   onRecordingStart()            — called when recording actually starts (after mic permission)
  *   maxDuration                   — auto-stop after N seconds (0 = no limit)
  *   autoStart                     — start recording on mount (best-effort; Safari may require a manual tap)
@@ -170,7 +176,7 @@ export function VoiceRecorder({ onRecordingComplete, onRecordingStart, maxDurati
         const url = URL.createObjectURL(blob);
         setBlobUrl(url);
         setState("playback");
-        if (onRecordingComplete) onRecordingComplete(url);
+        if (onRecordingComplete) onRecordingComplete(url, blob);
         // Stop mic
         if (streamRef.current) {
           streamRef.current.getTracks().forEach(t => t.stop());
