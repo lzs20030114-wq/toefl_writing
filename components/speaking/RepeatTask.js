@@ -46,10 +46,17 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
   // still being transcribed, we hold the onComplete call in a "submitting"
   // state and fire it once everything has settled. Otherwise the parent
   // (mock exam shell) gets a score summary missing the trailing items.
+  // submitWaitSeconds counts down a hard cap (45s) so the user never
+  // gets permanently stuck if OpenAI hangs.
   const [submitting, setSubmitting] = useState(false);
+  const [submitWaitSeconds, setSubmitWaitSeconds] = useState(0);
 
   const elapsedRef = useRef(null);
   const utteranceRef = useRef(null);
+  // AbortController per question index — used to cancel an in-flight
+  // transcribe when the user clicks Re-record (otherwise we pay for a
+  // transcript they're about to discard).
+  const transcribeAbortRef = useRef([]);
 
   const total = items.length;
   const sentence = items[current];
@@ -178,12 +185,22 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
     });
 
     // Fire-and-forget; result lands by index so reordering doesn't matter.
+    // The AbortController lets Re-record cancel a stale upload — savings of
+    // ~¥0.03 per cancelled question, plus avoids race where a stale
+    // transcript could overwrite the new one.
+    const controller = new AbortController();
+    transcribeAbortRef.current[idx] = controller;
     (async () => {
       const result = await transcribeWithServer(blob, {
         taskType: "repeat",
         questionId,
-        durationMs: typeof blob.size === "number" ? null : null, // duration not tracked here
+        signal: controller.signal,
       });
+      // If this controller is no longer the one we're tracking, a new take
+      // has started — drop the stale result on the floor.
+      if (transcribeAbortRef.current[idx] !== controller) return;
+      transcribeAbortRef.current[idx] = null;
+      if (result.code === "ABORTED") return; // user cancelled, status was already reset
       if (result.ok) {
         const transcript = result.transcript || "";
         setTranscripts(prev => {
@@ -220,6 +237,42 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
     })();
   }, [current, sentence, notPro]);
 
+  // Cancel an in-flight transcribe and reset the status for a question. Used
+  // when the user clicks Re-record so we don't waste API spend on a transcript
+  // they're about to discard.
+  const cancelTranscribeFor = useCallback((idx) => {
+    const ctrl = transcribeAbortRef.current[idx];
+    if (ctrl) {
+      try { ctrl.abort(); } catch {}
+      transcribeAbortRef.current[idx] = null;
+    }
+    setTranscriptStatus(prev => {
+      if (prev[idx] == null) return prev;
+      const next = [...prev];
+      next[idx] = null;
+      return next;
+    });
+    setTranscriptError(prev => {
+      if (prev[idx] == null) return prev;
+      const next = [...prev];
+      next[idx] = null;
+      return next;
+    });
+    // Also clear any stale transcript/score from a previous take.
+    setTranscripts(prev => {
+      if (prev[idx] == null) return prev;
+      const next = [...prev];
+      next[idx] = null;
+      return next;
+    });
+    setScores(prev => {
+      if (prev[idx] == null) return prev;
+      const next = [...prev];
+      next[idx] = null;
+      return next;
+    });
+  }, []);
+
   // Fire onComplete with the latest scored items. Pulled out so the
   // pending-transcribe wait effect can call it too.
   const finishSession = useCallback(() => {
@@ -247,6 +300,8 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
     });
   }, [current, total, recordings, elapsed, items, onComplete, transcripts, scores]);
 
+  const SUBMIT_WAIT_CAP_SEC = 45; // hard cap so the user can never get stuck
+
   const handleNext = useCallback(() => {
     if (current < total - 1) {
       setCurrent(current + 1);
@@ -258,18 +313,43 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
     // would see null scores for in-flight items).
     if (transcriptStatus.some(s => s === "processing")) {
       setSubmitting(true);
+      setSubmitWaitSeconds(SUBMIT_WAIT_CAP_SEC);
       return;
     }
     finishSession();
   }, [current, total, transcriptStatus, finishSession]);
+
+  // Force-finish escape hatch: user-triggered or hard-cap expiry. Aborts any
+  // still-in-flight uploads to stop billing, then fires onComplete with the
+  // partial result set.
+  const forceFinish = useCallback(() => {
+    // Cancel everything still uploading.
+    transcribeAbortRef.current.forEach((c) => { try { c?.abort?.(); } catch {} });
+    transcribeAbortRef.current = [];
+    setSubmitting(false);
+    setSubmitWaitSeconds(0);
+    finishSession();
+  }, [finishSession]);
 
   // Settle the deferred finish once all transcribes have landed.
   useEffect(() => {
     if (!submitting) return;
     if (transcriptStatus.some(s => s === "processing")) return;
     setSubmitting(false);
+    setSubmitWaitSeconds(0);
     finishSession();
   }, [submitting, transcriptStatus, finishSession]);
+
+  // Countdown for the hard cap.
+  useEffect(() => {
+    if (!submitting) return;
+    if (submitWaitSeconds <= 0) {
+      forceFinish();
+      return;
+    }
+    const t = setTimeout(() => setSubmitWaitSeconds((s) => s - 1), 1000);
+    return () => clearTimeout(t);
+  }, [submitting, submitWaitSeconds, forceFinish]);
 
   const handleSkip = useCallback(() => {
     handleNext();
@@ -594,7 +674,11 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
               )}
 
               <div style={{ display: "flex", justifyContent: "center", gap: 10 }}>
-                <Btn variant="secondary" onClick={() => setPhase("record")} disabled={submitting}>
+                <Btn
+                  variant="secondary"
+                  onClick={() => { cancelTranscribeFor(current); setPhase("record"); }}
+                  disabled={submitting}
+                >
                   Re-record
                 </Btn>
                 <Btn
@@ -602,9 +686,24 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
                   disabled={submitting}
                   style={{ background: SPK.color, borderColor: SPK.color }}
                 >
-                  {submitting ? "正在完成识别…" : current < total - 1 ? "Next Sentence" : "Finish"}
+                  {submitting
+                    ? `正在完成识别… (${submitWaitSeconds}s)`
+                    : current < total - 1 ? "Next Sentence" : "Finish"}
                 </Btn>
               </div>
+              {submitting && (
+                <div style={{ marginTop: 10, textAlign: "center" }}>
+                  <button
+                    onClick={forceFinish}
+                    style={{
+                      background: "none", border: "none", cursor: "pointer",
+                      fontSize: 12, color: C.t3, textDecoration: "underline", fontFamily: FONT,
+                    }}
+                  >
+                    跳过等待，直接完成（未识别的题目不计分）
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </SurfaceCard>

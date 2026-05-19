@@ -45,12 +45,17 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
   const [expandedQ, setExpandedQ] = useState(null); // expanded question in summary
   // Hold the onComplete call when the user finishes while transcribes or AI
   // scoring are still in flight — otherwise the parent (mock exam shell)
-  // gets a result set with null aiScores for trailing questions.
+  // gets a result set with null aiScores for trailing questions. The wait
+  // is capped at 60s so the user can never get permanently stuck.
   const [submitting, setSubmitting] = useState(false);
+  const [submitWaitSeconds, setSubmitWaitSeconds] = useState(0);
 
   const timerRef = useRef(null);
   const totalTimerRef = useRef(null);
   const recorderStopRef = useRef(null);
+  // AbortController per question — used by forceFinish to cancel in-flight
+  // transcribe uploads when the user gives up on the deferred-finish wait.
+  const transcribeAbortRef = useRef([]);
 
   const total = items.length;
   const question = items[current];
@@ -210,12 +215,20 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
       return next;
     });
 
-    // Fire-and-forget transcription → AI scoring chain.
+    // Fire-and-forget transcription → AI scoring chain. AbortController lets
+    // forceFinish cancel a still-pending upload when the user gives up on the
+    // post-finish wait.
+    const controller = new AbortController();
+    transcribeAbortRef.current[idx] = controller;
     (async () => {
       const result = await transcribeWithServer(blob, {
         taskType: "interview",
         questionId: q?.id || "",
+        signal: controller.signal,
       });
+      if (transcribeAbortRef.current[idx] !== controller) return;
+      transcribeAbortRef.current[idx] = null;
+      if (result.code === "ABORTED") return;
       if (result.ok) {
         const transcript = result.transcript || "";
         setTranscripts(prev => {
@@ -274,6 +287,10 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
     });
   }, [current, total, recordings, totalElapsed, items, onComplete, transcripts, aiScores]);
 
+  // Interview's DeepSeek scoring is slower than Repeat's pure STT, so the cap
+  // is a touch more generous.
+  const SUBMIT_WAIT_CAP_SEC = 60;
+
   const handleNext = useCallback(() => {
     setScoringError(null);
     if (current < total - 1) {
@@ -287,10 +304,21 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
     const pending = transcriptStatus.some(s => s === "processing") || scoring;
     if (pending) {
       setSubmitting(true);
+      setSubmitWaitSeconds(SUBMIT_WAIT_CAP_SEC);
       return;
     }
     finishSession();
   }, [current, total, transcriptStatus, scoring, finishSession]);
+
+  // Escape hatch: aborts any in-flight uploads (no more billing) and fires
+  // onComplete with whatever scores we have so far.
+  const forceFinish = useCallback(() => {
+    transcribeAbortRef.current.forEach((c) => { try { c?.abort?.(); } catch {} });
+    transcribeAbortRef.current = [];
+    setSubmitting(false);
+    setSubmitWaitSeconds(0);
+    finishSession();
+  }, [finishSession]);
 
   // Settle the deferred finish once all background work has landed.
   useEffect(() => {
@@ -298,8 +326,20 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
     if (transcriptStatus.some(s => s === "processing")) return;
     if (scoring) return;
     setSubmitting(false);
+    setSubmitWaitSeconds(0);
     finishSession();
   }, [submitting, transcriptStatus, scoring, finishSession]);
+
+  // Countdown for the hard cap.
+  useEffect(() => {
+    if (!submitting) return;
+    if (submitWaitSeconds <= 0) {
+      forceFinish();
+      return;
+    }
+    const t = setTimeout(() => setSubmitWaitSeconds((s) => s - 1), 1000);
+    return () => clearTimeout(t);
+  }, [submitting, submitWaitSeconds, forceFinish]);
 
   const formatTime = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 
@@ -696,9 +736,22 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
                     style={{ background: SPK.color, borderColor: SPK.color }}
                   >
                     {submitting
-                      ? "正在完成识别与评分…"
+                      ? `正在完成识别与评分… (${submitWaitSeconds}s)`
                       : current < total - 1 ? "Next Question" : "Finish Interview"}
                   </Btn>
+                  {submitting && (
+                    <div style={{ marginTop: 8 }}>
+                      <button
+                        onClick={forceFinish}
+                        style={{
+                          background: "none", border: "none", cursor: "pointer",
+                          fontSize: 11, color: C.t3, textDecoration: "underline", fontFamily: FONT,
+                        }}
+                      >
+                        跳过等待，直接完成（未识别的题目不计分）
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
