@@ -198,7 +198,7 @@ export function ListeningSectionContent({
               t: "\u542C\u529B\u81EA\u9002\u5E94\u6A21\u8003",
               d: "Module 1 + Module 2 \u81EA\u9002\u5E94\u96BE\u5EA6",
               it: "30 \u9898",
-              timeLabel: "22 min",
+              timeLabel: "17 + 12 min",
               isMock: true,
               delay: 0,
             }}

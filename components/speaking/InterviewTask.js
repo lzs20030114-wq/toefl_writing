@@ -38,6 +38,9 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
   const [liveTranscript, setLiveTranscript] = useState("");
   const [sttSupported, setSttSupported] = useState(true);
   const [sttError, setSttError] = useState("");
+  // Soft errors ("recording is fine, just no auto-scoring") render in amber;
+  // hard errors keep the red error styling.
+  const [sttErrorSoft, setSttErrorSoft] = useState(false);
   const [aiScores, setAiScores] = useState([]); // AI score result per index
   const [scoring, setScoring] = useState(false); // scoring in progress
   const [scoringError, setScoringError] = useState(null);
@@ -152,6 +155,7 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
     if (!sttSupported) return;
     setLiveTranscript("");
     setSttError("");
+    setSttErrorSoft(false);
     if (recognizerRef.current) {
       try { recognizerRef.current.stop(); } catch {}
     }
@@ -178,13 +182,19 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
       },
       onError: (err) => {
         // MediaRecorder has already confirmed microphone access. If the
-        // browser's SpeechRecognition service fails, keep recording and avoid
-        // showing a misleading microphone-permission warning.
-        const speechPermissionErrors = ["not-allowed", "service-not-allowed", "audio-capture"];
-        if (speechPermissionErrors.includes(err?.error)) {
-          setSttError("录音已开始，但浏览器语音识别暂时不可用；这不会影响保存录音，只是本题可能无法自动生成转写和 AI 评分。");
+        // browser's SpeechRecognition service fails, keep recording. The
+        // "network" error is the common case in mainland China (Chrome's
+        // built-in STT relies on Google services), so we group it with the
+        // permission errors as a soft notice rather than a red alert.
+        const softErrors = ["not-allowed", "service-not-allowed", "audio-capture", "network"];
+        if (softErrors.includes(err?.error)) {
+          const permissionMsg = "录音已开始，但浏览器语音识别暂时不可用；这不会影响保存录音，只是本题可能无法自动生成转写和 AI 评分。";
+          const isNetwork = err.error === "network";
+          setSttError(isNetwork && err?.message ? err.message : permissionMsg);
+          setSttErrorSoft(true);
         } else if (err?.message) {
           setSttError(err.message);
+          setSttErrorSoft(false);
         }
       },
     });
@@ -561,10 +571,12 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
 
               {sttError && (
                 <div style={{
-                  marginTop: 14, padding: "10px 14px", background: "#FEF2F2",
-                  border: "1px solid #FECACA", borderRadius: 10,
-                  fontSize: 12, color: "#991B1B", lineHeight: 1.6,
-                  textAlign: "left", whiteSpace: "pre-line",
+                  marginTop: 14, padding: "10px 14px",
+                  background: sttErrorSoft ? "#FFFBEB" : "#FEF2F2",
+                  border: `1px solid ${sttErrorSoft ? "#FDE68A" : "#FECACA"}`,
+                  borderRadius: 10,
+                  fontSize: 12, color: sttErrorSoft ? "#92400E" : "#991B1B",
+                  lineHeight: 1.6, textAlign: "left", whiteSpace: "pre-line",
                 }}>
                   {sttError}
                 </div>

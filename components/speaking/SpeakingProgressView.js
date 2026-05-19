@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, useRef } from "react";
-import { C, FONT, Btn, PageShell, SurfaceCard, TopBar, ChevronIcon } from "../shared/ui";
+import { C, FONT, Btn, PageShell, SurfaceCard, TopBar, ChevronIcon, ModeChip } from "../shared/ui";
 import { loadHist, deleteSession, clearAllSessions, SESSION_STORE_EVENTS, setCurrentUser } from "../../lib/sessionStore";
 import { getSavedCode } from "../../lib/AuthContext";
 import { formatLocalDateTime } from "../../lib/utils";
@@ -184,7 +184,11 @@ function SessionRow({ session, expanded, onToggle, onDelete }) {
           {expanded && <div style={{ position: "absolute", left: -6, top: 8, bottom: 8, width: 3, borderRadius: 2, background: m.color }} />}
         </div>
         <div style={{ flex: 1, textAlign: "left", minWidth: 0 }}>
-          <div style={{ fontSize: 13, fontWeight: expanded ? 700 : 580, color: P.text }}>{m.label}{topic && <span style={{ fontSize: 11, color: P.textDim, fontWeight: 400, marginLeft: 6 }}>{topic}</span>}</div>
+          <div style={{ fontSize: 13, fontWeight: expanded ? 700 : 580, color: P.text, display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+            <span>{m.label}</span>
+            {topic && <span style={{ fontSize: 11, color: P.textDim, fontWeight: 400 }}>{topic}</span>}
+            <ModeChip mode={s.mode} />
+          </div>
           <div style={{ fontSize: 11, color: P.textDim, marginTop: 2, fontVariantNumeric: "tabular-nums" }}>{formatLocalDateTime(s.date)}</div>
         </div>
         <span style={{ fontVariantNumeric: "tabular-nums", fontSize: 14, fontWeight: 750, color: scoreColor, background: `${scoreColor}0C`, padding: "3px 10px", borderRadius: 8 }}>{scoreDisplay}</span>

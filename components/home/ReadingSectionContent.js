@@ -234,9 +234,9 @@ export function ReadingSectionContent({
               acc: READING_ACCENT,
               n: "\u6A21\u8003",
               t: "\u9605\u8BFB\u81EA\u9002\u5E94\u6A21\u8003",
-              d: "50 items: CTW 30 + RDL 10 + AP 10",
-              it: "ETS-style",
-              timeLabel: "30 min",
+              d: "Module 1 + Module 2 \u81EA\u9002\u5E94\u96BE\u5EA6",
+              it: "35 \u9898",
+              timeLabel: "12 + 10 min",
               isMock: true,
               delay: 0,
             }}

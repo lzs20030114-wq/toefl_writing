@@ -12,13 +12,20 @@ import { LISTENING_SECONDS_PER_ITEM, TOEFL_LISTENING_SECTION_SECONDS, formatAnsw
 
 // ------ Constants ------
 
+// Per-module timers. Real ETS 2026 uses an independent countdown for each
+// module (the on-screen clock shows time remaining in the *current* module
+// and resets when Module 2 starts), so we model the same shape here.
+//   - Reading Module 1 (routing): ~12 min · Module 2 (adaptive): ~10 min
+//   - Listening's section pace (29 min) is preserved but split roughly
+//     proportional to item counts; the same per-module reset rule applies.
 const SECTION_CONFIG = {
   reading: {
     label: "Reading",
     labelZh: "阅读",
     accent: "#3B82F6",
     accentSoft: "#EFF6FF",
-    totalTimeSeconds: 27 * 60,
+    module1TimeSeconds: 12 * 60,
+    module2TimeSeconds: 10 * 60,
     buildM1: buildReadingModule1,
     routeM2: routeReadingM2,
     buildM2: buildReadingModule2,
@@ -29,7 +36,12 @@ const SECTION_CONFIG = {
     labelZh: "听力",
     accent: "#8B5CF6",
     accentSoft: "#F5F3FF",
-    totalTimeSeconds: TOEFL_LISTENING_SECTION_SECONDS,
+    // Listening's per-module split isn't published precisely; we approximate
+    // it from the 29-min section total, weighted by item count (M1 has 12,
+    // M2 has 8). This keeps the section pace unchanged while still resetting
+    // the timer between modules to match the real test's on-screen clock.
+    module1TimeSeconds: Math.round((TOEFL_LISTENING_SECTION_SECONDS * 12) / 20),
+    module2TimeSeconds: Math.round((TOEFL_LISTENING_SECTION_SECONDS * 8) / 20),
     buildM1: buildListeningModule1,
     routeM2: routeListeningM2,
     buildM2: buildListeningModule2,
@@ -618,8 +630,10 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
   const [usedIds, setUsedIds] = useState(new Set());
   const [error, setError] = useState(null);
 
-  // Timer
-  const [timeLeft, setTimeLeft] = useState(config.totalTimeSeconds);
+  // Timer — each module has its own countdown. Real ETS resets the on-screen
+  // clock when you enter Module 2, so the autoFinished ref is also keyed on
+  // phase so a Module 1 timeout doesn't suppress the Module 2 timeout.
+  const [timeLeft, setTimeLeft] = useState(config.module1TimeSeconds);
   const timerRef = useRef(null);
   const autoFinishedRef = useRef(false);
 
@@ -672,7 +686,7 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
       setCurrentItemIndex(0);
       setM1Results([]);
       setM2Results([]);
-      setTimeLeft(config.totalTimeSeconds);
+      setTimeLeft(config.module1TimeSeconds);
       autoFinishedRef.current = false;
       setPhase("module1");
     } catch (e) {
@@ -724,6 +738,11 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
         setM2Items(m2.items);
         setUsedIds(m2.usedIds);
         setCurrentItemIndex(0);
+        // Reset the timer for Module 2 — real ETS gives a fresh countdown
+        // for each module, and we need to clear autoFinishedRef so the M2
+        // timeout effect re-arms after the M1 one fired.
+        setTimeLeft(config.module2TimeSeconds);
+        autoFinishedRef.current = false;
         setPhase("module2");
       } catch (e) {
         setError("构建 Module 2 失败: " + (e.message || "unknown error"));
@@ -874,10 +893,12 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
 
 function IntroCard({ config, accent, accentSoft, onStart, onExit }) {
   const isReading = config.label === "Reading";
-  const m1Count = isReading ? "20 scored items (CTW 10 + RDL 5 + AP 5)" : "14-15 scored items (10 LCR + LA + LC)";
-  const m2UpperCount = isReading ? "30 scored items (CTW 20 + RDL 5 + AP 5)" : "12-15 scored items (5 LCR + LA + LC + LAT)";
-  const m2LowerCount = isReading ? "30 scored items (CTW 20 + RDL 5 + AP 5)" : "11-13 scored items (5 LCR + 2 LA + LC)";
-  const totalTime = Math.floor(config.totalTimeSeconds / 60);
+  const m1Count = isReading ? "16 项 (10 CTW + 5 RDL + 1 AP)" : "12 项 (10 LCR + 1 LA + 1 LC)";
+  const m2UpperCount = isReading ? "8 项 (5 CTW + 2 RDL + 1 AP)" : "8 项 (5 LCR + 1 LA + 1 LC + 1 LAT)";
+  const m2LowerCount = isReading ? "9 项 (5 CTW + 3 RDL + 1 AP)" : "8 项 (5 LCR + 2 LA + 1 LC)";
+  const m1Time = Math.round(config.module1TimeSeconds / 60);
+  const m2Time = Math.round(config.module2TimeSeconds / 60);
+  const totalTime = m1Time + m2Time;
 
   return (
     <SurfaceCard style={{ padding: "32px 28px", textAlign: "center" }}>
@@ -895,20 +916,47 @@ function IntroCard({ config, accent, accentSoft, onStart, onExit }) {
         display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12,
         marginBottom: 24, maxWidth: 420, margin: "0 auto 24px",
       }}>
-        <InfoBox label="总时间" value={`${totalTime} 分钟`} accent={accent} accentSoft={accentSoft} />
-        <InfoBox label="Module 1" value={m1Count} accent={accent} accentSoft={accentSoft} />
+        <InfoBox
+          label="Module 1 时间"
+          value={`${m1Time} 分钟`}
+          accent={accent}
+          accentSoft={accentSoft}
+        />
+        <InfoBox
+          label="Module 2 时间"
+          value={`${m2Time} 分钟`}
+          accent={accent}
+          accentSoft={accentSoft}
+        />
+        <InfoBox label="Module 1 题量" value={m1Count} accent={accent} accentSoft={accentSoft} />
         <InfoBox label="M2 Upper" value={m2UpperCount} accent={accent} accentSoft={accentSoft} />
         <InfoBox label="M2 Lower" value={m2LowerCount} accent={accent} accentSoft={accentSoft} />
+        <InfoBox
+          label="总计"
+          value={`约 ${totalTime} 分钟`}
+          accent={accent}
+          accentSoft={accentSoft}
+        />
       </div>
 
       {/* Adaptive explanation */}
       <div style={{
         background: accentSoft, border: `1px solid ${accent}25`,
-        borderRadius: 10, padding: "12px 16px", marginBottom: 24,
+        borderRadius: 10, padding: "12px 16px", marginBottom: 12,
         fontSize: 12, color: C.t2, lineHeight: 1.6, textAlign: "left",
       }}>
         <strong style={{ color: accent }}>自适应机制:</strong> Module 1 正确率 &ge; 60% 进入 Upper 路径 (更难, 最高 6.0 Band),
         否则进入 Lower 路径 (较易, 最高 4.0 Band)。
+      </div>
+
+      {/* Timer rule — matches real ETS behavior */}
+      <div style={{
+        background: "#FFFBEB", border: "1px solid #FDE68A",
+        borderRadius: 10, padding: "10px 14px", marginBottom: 24,
+        fontSize: 12, color: "#92400e", lineHeight: 1.6, textAlign: "left",
+      }}>
+        <strong>计时规则:</strong> 两个 Module 各自独立计时，进入 Module 2 时倒计时会重置。
+        Module 1 时间用尽会自动进入 Module 2，无法回到上一个 Module 的题目。
       </div>
 
       <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>

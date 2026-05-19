@@ -1,7 +1,7 @@
 ﻿"use client";
 import React, { useMemo, useState } from "react";
 import { formatLocalDateTime, translateGrammarPoint } from "../../lib/utils";
-import { C, ChevronIcon, SurfaceCard } from "../shared/ui";
+import { C, ChevronIcon, SurfaceCard, ModeChip } from "../shared/ui";
 import { ScoringReport } from "../writing/ScoringReport";
 import { useBsAiExplain, BsAiExplainBlock } from "../buildSentence/useBsAiExplain";
 
@@ -394,6 +394,7 @@ export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, type
           <button onClick={() => onToggle?.()} style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0, flex: 1, border: "none", background: "transparent", padding: 0, cursor: "pointer", textAlign: "left" }}>
             <ChevronIcon open={isExpanded} size={10} />
             <span style={{ fontSize: 11, fontWeight: 700, whiteSpace: "nowrap" }}>{getTypeLabel(session.type)}</span>
+            <ModeChip mode={session.mode} />
             {(session.type === "email" || session.type === "discussion") && practiceAttempt > 1 ? <Chip color="#0f766e" bg="#ccfbf1">第 {practiceAttempt} 次练习</Chip> : null}
             {session.type === "mock" && Number.isFinite(session?.band) ? <Chip>{session.band.toFixed(1)}</Chip> : null}
             <span style={{ fontSize: 10.5, color: C.t2, whiteSpace: "nowrap" }}>{formatLocalDateTime(session.date)}</span>

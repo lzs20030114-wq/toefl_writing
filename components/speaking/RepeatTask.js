@@ -37,6 +37,9 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
   const [liveTranscript, setLiveTranscript] = useState(""); // current interim transcript
   const [sttSupported, setSttSupported] = useState(true);
   const [sttError, setSttError] = useState("");
+  // Soft errors ("recording is fine, just no auto-scoring") are shown in an
+  // amber info style; hard errors stay in the red error style.
+  const [sttErrorSoft, setSttErrorSoft] = useState(false);
 
   const elapsedRef = useRef(null);
   const utteranceRef = useRef(null);
@@ -140,6 +143,7 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
     if (!sttSupported) return;
     setLiveTranscript("");
     setSttError("");
+    setSttErrorSoft(false);
     // Stop any existing recognizer
     if (recognizerRef.current) {
       try { recognizerRef.current.stop(); } catch {}
@@ -167,14 +171,22 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
         }
       },
       onError: (err) => {
-        // MediaRecorder has already started, so a SpeechRecognition permission
-        // error here means transcription is unavailable, not that recording
-        // itself lacks microphone access.
-        const speechPermissionErrors = ["not-allowed", "service-not-allowed", "audio-capture"];
-        if (speechPermissionErrors.includes(err?.error)) {
-          setSttError("录音已开始，但浏览器语音识别暂时不可用；这不会影响保存录音，只是本题可能无法自动生成转写和发音评分。");
+        // MediaRecorder has already started, so a SpeechRecognition error
+        // here means transcription is unavailable, not that recording itself
+        // failed. "network" is the common case in mainland China — Chrome's
+        // built-in STT uploads audio to speech.googleapis.com, which is
+        // unreachable behind the GFW. Treat all of these as soft notices.
+        const softErrors = ["not-allowed", "service-not-allowed", "audio-capture", "network"];
+        if (softErrors.includes(err?.error)) {
+          // Permission errors get a more actionable message; the recognizer
+          // already crafted a localized hint for "network", so reuse it.
+          const permissionMsg = "录音已开始，但浏览器语音识别暂时不可用；这不会影响保存录音，只是本题可能无法自动生成转写和发音评分。";
+          const isNetwork = err.error === "network";
+          setSttError(isNetwork && err?.message ? err.message : permissionMsg);
+          setSttErrorSoft(true);
         } else if (err?.message) {
           setSttError(err.message);
+          setSttErrorSoft(false);
         }
       },
     });
@@ -507,9 +519,11 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
               )}
               {sttError && (
                 <div style={{
-                  marginTop: 12, fontSize: 12, color: "#991B1B", padding: "8px 12px",
-                  background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 8,
-                  lineHeight: 1.6, whiteSpace: "pre-line",
+                  marginTop: 12, fontSize: 12, padding: "8px 12px",
+                  color: sttErrorSoft ? "#92400E" : "#991B1B",
+                  background: sttErrorSoft ? "#FFFBEB" : "#FEF2F2",
+                  border: `1px solid ${sttErrorSoft ? "#FDE68A" : "#FECACA"}`,
+                  borderRadius: 8, lineHeight: 1.6, whiteSpace: "pre-line",
                 }}>
                   {sttError}
                 </div>

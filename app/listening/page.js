@@ -227,7 +227,7 @@ function ListeningPageClient() {
 
     saveSess({
       type: "listening",
-      mode: isPractice ? "practice" : "standard",
+      mode,
       correct: result.correct,
       total: result.total,
       band,
