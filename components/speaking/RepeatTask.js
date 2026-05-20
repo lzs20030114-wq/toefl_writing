@@ -3,7 +3,8 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { C, FONT, Btn, TopBar, PageShell, SurfaceCard } from "../shared/ui";
 import { VoiceRecorder } from "./VoiceRecorder";
-import { createSpeechRecognizer, isSpeechRecognitionSupported } from "../../lib/speakingEval/speechRecognition";
+import { SpeechConsentModal } from "./SpeechConsentModal";
+import { transcribeWithServer } from "../../lib/speakingEval/serverStt";
 import { scoreRepeat } from "../../lib/speakingEval/repeatScorer";
 
 const SPK = { color: "#F59E0B", soft: "#FFFBEB" };
@@ -34,16 +35,35 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
   const [ttsSupported, setTtsSupported] = useState(true);
   const [transcripts, setTranscripts] = useState([]); // STT transcript per index
   const [scores, setScores] = useState([]); // scoreRepeat result per index
-  const [liveTranscript, setLiveTranscript] = useState(""); // current interim transcript
-  const [sttSupported, setSttSupported] = useState(true);
-  const [sttError, setSttError] = useState("");
-  // Soft errors ("recording is fine, just no auto-scoring") are shown in an
-  // amber info style; hard errors stay in the red error style.
-  const [sttErrorSoft, setSttErrorSoft] = useState(false);
+  // Per-question STT lifecycle: null (not yet) | "processing" | "done" | "failed"
+  // The transcribe upload is fire-and-forget so the user can advance to the
+  // next sentence while earlier ones are still being recognized server-side.
+  const [transcriptStatus, setTranscriptStatus] = useState([]);
+  const [transcriptError, setTranscriptError] = useState([]); // error message per index, only when status="failed"
+  // Sticky flag: once the API returns NOT_PRO we stop attempting more uploads
+  // this session and switch the UI to the Pro upsell.
+  const [notPro, setNotPro] = useState(false);
+  // When the user hits Finish on the last sentence while earlier ones are
+  // still being transcribed, we hold the onComplete call in a "submitting"
+  // state and fire it once everything has settled. Otherwise the parent
+  // (mock exam shell) gets a score summary missing the trailing items.
+  // submitWaitSeconds counts down a hard cap (45s) so the user never
+  // gets permanently stuck if OpenAI hangs.
+  const [submitting, setSubmitting] = useState(false);
+  const [submitWaitSeconds, setSubmitWaitSeconds] = useState(0);
+
+  // PIPL: if the route returns NEEDS_CONSENT, queue the audio blob here so we
+  // can replay the upload once the user grants consent in the modal. Cleared
+  // when the modal is dismissed.
+  const [needsConsent, setNeedsConsent] = useState(false);
+  const pendingConsentJobsRef = useRef([]);
 
   const elapsedRef = useRef(null);
   const utteranceRef = useRef(null);
-  const recognizerRef = useRef(null);
+  // AbortController per question index — used to cancel an in-flight
+  // transcribe when the user clicks Re-record (otherwise we pay for a
+  // transcript they're about to discard).
+  const transcribeAbortRef = useRef([]);
 
   const total = items.length;
   const sentence = items[current];
@@ -64,10 +84,7 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
     setTtsSupported("speechSynthesis" in window);
   }, []);
 
-  // Check STT support
-  useEffect(() => {
-    setSttSupported(isSpeechRecognitionSupported());
-  }, []);
+  // (STT runs server-side now; no browser capability check needed.)
 
   const playSentence = useCallback(() => {
     if (!ttsSupported || !sentence) return;
@@ -138,133 +155,240 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
     }
   }, [current, phase, finished]);
 
-  // Start STT when recording begins
-  const startSTT = useCallback(() => {
-    if (!sttSupported) return;
-    setLiveTranscript("");
-    setSttError("");
-    setSttErrorSoft(false);
-    // Stop any existing recognizer
-    if (recognizerRef.current) {
-      try { recognizerRef.current.stop(); } catch {}
-    }
-    recognizerRef.current = createSpeechRecognizer({
-      lang: "en-US",
-      onResult: (transcript, isFinal) => {
-        setLiveTranscript(transcript);
-        if (isFinal) {
-          setTranscripts(prev => {
-            const next = [...prev];
-            next[current] = transcript;
-            return next;
-          });
-        }
-      },
-      onEnd: (finalTranscript) => {
-        // Store whatever we got
-        if (finalTranscript) {
-          setTranscripts(prev => {
-            const next = [...prev];
-            next[current] = finalTranscript;
-            return next;
-          });
-        }
-      },
-      onError: (err) => {
-        // MediaRecorder has already started, so a SpeechRecognition error
-        // here means transcription is unavailable, not that recording itself
-        // failed. "network" is the common case in mainland China — Chrome's
-        // built-in STT uploads audio to speech.googleapis.com, which is
-        // unreachable behind the GFW. Treat all of these as soft notices.
-        const softErrors = ["not-allowed", "service-not-allowed", "audio-capture", "network"];
-        if (softErrors.includes(err?.error)) {
-          // Permission errors get a more actionable message; the recognizer
-          // already crafted a localized hint for "network", so reuse it.
-          const permissionMsg = "录音已开始，但浏览器语音识别暂时不可用；这不会影响保存录音，只是本题可能无法自动生成转写和发音评分。";
-          const isNetwork = err.error === "network";
-          setSttError(isNetwork && err?.message ? err.message : permissionMsg);
-          setSttErrorSoft(true);
-        } else if (err?.message) {
-          setSttError(err.message);
-          setSttErrorSoft(false);
-        }
-      },
-    });
-    recognizerRef.current.start();
-  }, [sttSupported, current]);
-
-  // Stop STT
-  const stopSTT = useCallback(() => {
-    if (recognizerRef.current) {
-      try { recognizerRef.current.stop(); } catch {}
-    }
-  }, []);
-
-  const handleRecordingComplete = useCallback((blobUrl) => {
-    // Stop STT recognition
-    stopSTT();
-    setRecordings(prev => {
+  // Upload a single blob to the STT endpoint and reflect the result into the
+  // per-question state. Pulled out of handleRecordingComplete so we can also
+  // call it from the consent-modal retry path.
+  const runTranscribeJob = useCallback(({ idx, blob, sentenceText, questionId, durationMs }) => {
+    setTranscriptStatus(prev => {
       const next = [...prev];
-      next[current] = blobUrl;
+      next[idx] = "processing";
       return next;
     });
-    // Score using whatever transcript we have (from liveTranscript or transcripts state)
-    // We use a small delay to let the final STT result arrive
-    setTimeout(() => {
-      setTranscripts(prev => {
-        const transcript = prev[current] || liveTranscript || "";
-        if (transcript && sentence) {
-          const result = scoreRepeat(sentence.sentence, transcript);
-          setScores(s => {
-            const next = [...s];
-            next[current] = result;
+    setTranscriptError(prev => {
+      const next = [...prev];
+      next[idx] = null;
+      return next;
+    });
+
+    const controller = new AbortController();
+    transcribeAbortRef.current[idx] = controller;
+    (async () => {
+      const result = await transcribeWithServer(blob, {
+        taskType: "repeat",
+        questionId,
+        durationMs,
+        signal: controller.signal,
+      });
+      // Stale-response guard: if a newer take superseded this controller,
+      // drop the result.
+      if (transcribeAbortRef.current[idx] !== controller) return;
+      transcribeAbortRef.current[idx] = null;
+      if (result.code === "ABORTED") return;
+
+      if (result.ok) {
+        const transcript = result.transcript || "";
+        setTranscripts(prev => {
+          const next = [...prev];
+          next[idx] = transcript;
+          return next;
+        });
+        if (transcript && sentenceText) {
+          const scored = scoreRepeat(sentenceText, transcript);
+          setScores(prev => {
+            const next = [...prev];
+            next[idx] = scored;
             return next;
           });
         }
-        // Ensure transcript is stored
-        if (!prev[current] && liveTranscript) {
+        setTranscriptStatus(prev => {
           const next = [...prev];
-          next[current] = liveTranscript;
+          next[idx] = "done";
           return next;
-        }
-        return prev;
+        });
+        return;
+      }
+
+      // Failure paths with code-specific UI hints.
+      if (result.code === "NOT_PRO") setNotPro(true);
+      if (result.code === "NEEDS_CONSENT") {
+        // Stash the blob so we can retry after the user grants consent in the modal.
+        pendingConsentJobsRef.current.push({ idx, blob, sentenceText, questionId });
+        setNeedsConsent(true);
+      }
+      setTranscriptStatus(prev => {
+        const next = [...prev];
+        next[idx] = "failed";
+        return next;
       });
-    }, 300);
+      setTranscriptError(prev => {
+        const next = [...prev];
+        next[idx] = result.code || "ERROR";
+        return next;
+      });
+    })();
+  }, []);
+
+  // Capture the recording and kick off server-side transcription. We don't
+  // block the UI on the upload — the user is free to replay/re-record/advance
+  // while the transcript backfills asynchronously into the right slot.
+  const handleRecordingComplete = useCallback((blobUrl, blob, durationMs) => {
+    const idx = current;
+    const sentenceText = sentence?.sentence || "";
+    const questionId = sentence?.id || "";
+
+    setRecordings(prev => {
+      const next = [...prev];
+      next[idx] = blobUrl;
+      return next;
+    });
     setPhase("review");
-  }, [current, stopSTT, liveTranscript, sentence]);
+
+    // Skip the upload if we've already seen NOT_PRO once this session.
+    if (notPro || !blob) {
+      setTranscriptStatus(prev => {
+        const next = [...prev];
+        next[idx] = "failed";
+        return next;
+      });
+      setTranscriptError(prev => {
+        const next = [...prev];
+        next[idx] = notPro ? "PRO_GATE" : "EMPTY_AUDIO";
+        return next;
+      });
+      return;
+    }
+
+    runTranscribeJob({ idx, blob, sentenceText, questionId, durationMs });
+  }, [current, sentence, notPro, runTranscribeJob]);
+
+  // Replay queued uploads after the user grants consent in the modal.
+  const handleConsentGranted = useCallback(() => {
+    const jobs = pendingConsentJobsRef.current;
+    pendingConsentJobsRef.current = [];
+    setNeedsConsent(false);
+    for (const job of jobs) runTranscribeJob(job);
+  }, [runTranscribeJob]);
+
+  // User dismissed the modal without granting. Drop pending jobs — the
+  // recordings stay in place, just without transcripts.
+  const handleConsentClosed = useCallback(() => {
+    pendingConsentJobsRef.current = [];
+    setNeedsConsent(false);
+  }, []);
+
+  // Cancel an in-flight transcribe and reset the status for a question. Used
+  // when the user clicks Re-record so we don't waste API spend on a transcript
+  // they're about to discard.
+  const cancelTranscribeFor = useCallback((idx) => {
+    const ctrl = transcribeAbortRef.current[idx];
+    if (ctrl) {
+      try { ctrl.abort(); } catch {}
+      transcribeAbortRef.current[idx] = null;
+    }
+    setTranscriptStatus(prev => {
+      if (prev[idx] == null) return prev;
+      const next = [...prev];
+      next[idx] = null;
+      return next;
+    });
+    setTranscriptError(prev => {
+      if (prev[idx] == null) return prev;
+      const next = [...prev];
+      next[idx] = null;
+      return next;
+    });
+    // Also clear any stale transcript/score from a previous take.
+    setTranscripts(prev => {
+      if (prev[idx] == null) return prev;
+      const next = [...prev];
+      next[idx] = null;
+      return next;
+    });
+    setScores(prev => {
+      if (prev[idx] == null) return prev;
+      const next = [...prev];
+      next[idx] = null;
+      return next;
+    });
+  }, []);
+
+  // Fire onComplete with the latest scored items. Pulled out so the
+  // pending-transcribe wait effect can call it too.
+  const finishSession = useCallback(() => {
+    setFinished(true);
+    if (!onComplete) return;
+    const scoredItems = items.map((item, i) => ({
+      id: item.id,
+      sentence: item.sentence,
+      difficulty: item.difficulty,
+      recorded: !!recordings[i],
+      transcript: transcripts[i] || null,
+      score: scores[i] || null,
+    }));
+    const validScores = scoredItems.filter(s => s.score);
+    const avgScore = validScores.length
+      ? Math.round((validScores.reduce((sum, s) => sum + s.score.score, 0) / validScores.length) * 2) / 2
+      : null;
+    onComplete({
+      type: "speaking-repeat",
+      total,
+      attempted: recordings.filter(Boolean).length + (recordings[current] ? 0 : 1),
+      elapsed,
+      averageScore: avgScore,
+      items: scoredItems,
+    });
+  }, [current, total, recordings, elapsed, items, onComplete, transcripts, scores]);
+
+  const SUBMIT_WAIT_CAP_SEC = 45; // hard cap so the user can never get stuck
 
   const handleNext = useCallback(() => {
-    setLiveTranscript("");
     if (current < total - 1) {
       setCurrent(current + 1);
       setPhase("listen");
-    } else {
-      // Finished all sentences
-      setFinished(true);
-      if (onComplete) {
-        const scoredItems = items.map((item, i) => ({
-          id: item.id,
-          sentence: item.sentence,
-          difficulty: item.difficulty,
-          recorded: !!recordings[i],
-          transcript: transcripts[i] || null,
-          score: scores[i] || null,
-        }));
-        const validScores = scoredItems.filter(s => s.score);
-        const avgScore = validScores.length
-          ? Math.round((validScores.reduce((sum, s) => sum + s.score.score, 0) / validScores.length) * 2) / 2
-          : null;
-        onComplete({
-          type: "speaking-repeat",
-          total,
-          attempted: recordings.filter(Boolean).length + (recordings[current] ? 0 : 1),
-          elapsed,
-          averageScore: avgScore,
-          items: scoredItems,
-        });
-      }
+      return;
     }
-  }, [current, total, recordings, elapsed, items, onComplete, transcripts, scores]);
+    // Last sentence — if anything is still transcribing, hold the finish call
+    // until those settle (otherwise the summary screen / mock-exam parent
+    // would see null scores for in-flight items).
+    if (transcriptStatus.some(s => s === "processing")) {
+      setSubmitting(true);
+      setSubmitWaitSeconds(SUBMIT_WAIT_CAP_SEC);
+      return;
+    }
+    finishSession();
+  }, [current, total, transcriptStatus, finishSession]);
+
+  // Force-finish escape hatch: user-triggered or hard-cap expiry. Aborts any
+  // still-in-flight uploads to stop billing, then fires onComplete with the
+  // partial result set.
+  const forceFinish = useCallback(() => {
+    // Cancel everything still uploading.
+    transcribeAbortRef.current.forEach((c) => { try { c?.abort?.(); } catch {} });
+    transcribeAbortRef.current = [];
+    setSubmitting(false);
+    setSubmitWaitSeconds(0);
+    finishSession();
+  }, [finishSession]);
+
+  // Settle the deferred finish once all transcribes have landed.
+  useEffect(() => {
+    if (!submitting) return;
+    if (transcriptStatus.some(s => s === "processing")) return;
+    setSubmitting(false);
+    setSubmitWaitSeconds(0);
+    finishSession();
+  }, [submitting, transcriptStatus, finishSession]);
+
+  // Countdown for the hard cap.
+  useEffect(() => {
+    if (!submitting) return;
+    if (submitWaitSeconds <= 0) {
+      forceFinish();
+      return;
+    }
+    const t = setTimeout(() => setSubmitWaitSeconds((s) => s - 1), 1000);
+    return () => clearTimeout(t);
+  }, [submitting, submitWaitSeconds, forceFinish]);
 
   const handleSkip = useCallback(() => {
     handleNext();
@@ -496,38 +620,8 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
               </div>
               <VoiceRecorder
                 onRecordingComplete={handleRecordingComplete}
-                onRecordingStart={startSTT}
                 maxDuration={30}
               />
-              {/* Live transcript preview */}
-              {sttSupported && liveTranscript && (
-                <div style={{
-                  marginTop: 16, padding: "10px 14px", background: "#F9FAFB",
-                  border: "1px solid " + C.bdr, borderRadius: 10,
-                  fontSize: 13, color: C.t2, lineHeight: 1.6, fontStyle: "italic",
-                }}>
-                  {liveTranscript}
-                </div>
-              )}
-              {!sttSupported && (
-                <div style={{
-                  marginTop: 12, fontSize: 11, color: C.t3, padding: "6px 10px",
-                  background: "#FEF3C7", borderRadius: 8,
-                }}>
-                  浏览器不支持语音识别，无法自动评分
-                </div>
-              )}
-              {sttError && (
-                <div style={{
-                  marginTop: 12, fontSize: 12, padding: "8px 12px",
-                  color: sttErrorSoft ? "#92400E" : "#991B1B",
-                  background: sttErrorSoft ? "#FFFBEB" : "#FEF2F2",
-                  border: `1px solid ${sttErrorSoft ? "#FDE68A" : "#FECACA"}`,
-                  borderRadius: 8, lineHeight: 1.6, whiteSpace: "pre-line",
-                }}>
-                  {sttError}
-                </div>
-              )}
               <div style={{ marginTop: 20 }}>
                 <button
                   onClick={() => playSentence()}
@@ -568,13 +662,48 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
                 )}
               </div>
 
-              {/* Accuracy score display */}
+              {/* Accuracy score display (when transcript came back) */}
               {scores[current] && (
                 <AccuracyCard score={scores[current]} originalSentence={sentence.sentence} />
               )}
 
-              {/* Show sentence text for self-check (when no STT score) */}
-              {!scores[current] && isPractice && (
+              {/* Server STT is still working on this recording */}
+              {!scores[current] && transcriptStatus[current] === "processing" && (
+                <div style={{
+                  marginBottom: 20, padding: "10px 14px",
+                  background: "#F9FAFB", border: "1px solid " + C.bdr, borderRadius: 10,
+                  fontSize: 13, color: C.t2, textAlign: "center",
+                }}>
+                  <span style={{ display: "inline-block", marginRight: 8 }}>⏳</span>
+                  正在识别你的录音…（你可以继续下一题，识别完会自动填上分数）
+                </div>
+              )}
+
+              {/* Pro upsell — server returned NOT_PRO */}
+              {!scores[current] && transcriptStatus[current] === "failed" && transcriptError[current] === "NOT_PRO" && (
+                <div style={{
+                  marginBottom: 20, padding: "12px 16px",
+                  background: "#FFFBEB", border: "1px solid #FDE68A", borderRadius: 10,
+                  fontSize: 13, color: "#92400E", lineHeight: 1.6,
+                }}>
+                  <div style={{ fontWeight: 700, marginBottom: 4 }}>🔒 语音识别为 Pro 专属</div>
+                  录音已保存，可对照原句自查。升级 Pro 后可解锁自动识别和发音评分。
+                </div>
+              )}
+
+              {/* Other failure — let the user know it's a transient problem */}
+              {!scores[current] && transcriptStatus[current] === "failed" && transcriptError[current] !== "NOT_PRO" && (
+                <div style={{
+                  marginBottom: 20, padding: "10px 14px",
+                  background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 10,
+                  fontSize: 12, color: "#991B1B", lineHeight: 1.6,
+                }}>
+                  识别失败：{transcriptError[current] || "未知错误"}。录音已保存，可重录或继续下一题。
+                </div>
+              )}
+
+              {/* Practice mode: always show the reference sentence so users can self-check */}
+              {isPractice && (
                 <div style={{
                   background: "#F9FAFB", border: "1px solid " + C.bdr, borderRadius: 10,
                   padding: "12px 16px", marginBottom: 20, fontSize: 14, color: C.t1, lineHeight: 1.6,
@@ -584,13 +713,36 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
               )}
 
               <div style={{ display: "flex", justifyContent: "center", gap: 10 }}>
-                <Btn variant="secondary" onClick={() => { setLiveTranscript(""); setPhase("record"); }}>
+                <Btn
+                  variant="secondary"
+                  onClick={() => { cancelTranscribeFor(current); setPhase("record"); }}
+                  disabled={submitting}
+                >
                   Re-record
                 </Btn>
-                <Btn onClick={handleNext} style={{ background: SPK.color, borderColor: SPK.color }}>
-                  {current < total - 1 ? "Next Sentence" : "Finish"}
+                <Btn
+                  onClick={handleNext}
+                  disabled={submitting}
+                  style={{ background: SPK.color, borderColor: SPK.color }}
+                >
+                  {submitting
+                    ? `正在完成识别… (${submitWaitSeconds}s)`
+                    : current < total - 1 ? "Next Sentence" : "Finish"}
                 </Btn>
               </div>
+              {submitting && (
+                <div style={{ marginTop: 10, textAlign: "center" }}>
+                  <button
+                    onClick={forceFinish}
+                    style={{
+                      background: "none", border: "none", cursor: "pointer",
+                      fontSize: 12, color: C.t3, textDecoration: "underline", fontFamily: FONT,
+                    }}
+                  >
+                    跳过等待，直接完成（未识别的题目不计分）
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </SurfaceCard>
@@ -610,6 +762,12 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
           </div>
         )}
       </PageShell>
+
+      <SpeechConsentModal
+        open={needsConsent}
+        onClose={handleConsentClosed}
+        onGranted={handleConsentGranted}
+      />
     </div>
   );
 }

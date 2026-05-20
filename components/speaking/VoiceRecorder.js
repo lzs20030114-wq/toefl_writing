@@ -84,7 +84,15 @@ function describePermissionError(err) {
  * Uses MediaRecorder API with graceful permission handling.
  *
  * Props:
- *   onRecordingComplete(blobUrl)  — called with blob URL when recording stops
+ *   onRecordingComplete(blobUrl, blob, durationMs)
+ *                                        — called with blob URL + raw Blob +
+ *                                          recording duration in ms when
+ *                                          recording stops. The Blob is used
+ *                                          to upload to server STT; the
+ *                                          duration drives per-user quota
+ *                                          accounting on the server side.
+ *                                          Existing callers that only consume
+ *                                          earlier args stay compatible.
  *   onRecordingStart()            — called when recording actually starts (after mic permission)
  *   maxDuration                   — auto-stop after N seconds (0 = no limit)
  *   autoStart                     — start recording on mount (best-effort; Safari may require a manual tap)
@@ -105,6 +113,9 @@ export function VoiceRecorder({ onRecordingComplete, onRecordingStart, maxDurati
   const audioRef = useRef(null);
   const mountedRef = useRef(true);
   const actualMimeRef = useRef("");
+  // Captured at recorder.start() so the onstop callback can compute the exact
+  // recording duration (ms) for per-user quota tracking on the server.
+  const startTimeRef = useRef(0);
 
   useEffect(() => {
     mountedRef.current = true;
@@ -168,9 +179,12 @@ export function VoiceRecorder({ onRecordingComplete, onRecordingStart, maxDurati
         if (!mountedRef.current) return;
         const blob = new Blob(chunksRef.current, { type: actualMimeRef.current });
         const url = URL.createObjectURL(blob);
+        const durationMs = startTimeRef.current
+          ? Math.max(0, Date.now() - startTimeRef.current)
+          : 0;
         setBlobUrl(url);
         setState("playback");
-        if (onRecordingComplete) onRecordingComplete(url);
+        if (onRecordingComplete) onRecordingComplete(url, blob, durationMs);
         // Stop mic
         if (streamRef.current) {
           streamRef.current.getTracks().forEach(t => t.stop());
@@ -179,6 +193,7 @@ export function VoiceRecorder({ onRecordingComplete, onRecordingStart, maxDurati
       };
 
       mediaRecorderRef.current = recorder;
+      startTimeRef.current = Date.now();
       recorder.start(250); // collect in 250ms chunks
       setState("recording");
       setAutoStartBlocked(false);

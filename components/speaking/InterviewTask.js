@@ -3,7 +3,8 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { C, FONT, Btn, TopBar, PageShell, SurfaceCard } from "../shared/ui";
 import { VoiceRecorder } from "./VoiceRecorder";
-import { createSpeechRecognizer, isSpeechRecognitionSupported } from "../../lib/speakingEval/speechRecognition";
+import { SpeechConsentModal } from "./SpeechConsentModal";
+import { transcribeWithServer } from "../../lib/speakingEval/serverStt";
 import { scoreInterview } from "../../lib/speakingEval/interviewScorer";
 
 const SPK = { color: "#F59E0B", soft: "#FFFBEB" };
@@ -35,21 +36,32 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
   const [ttsSupported, setTtsSupported] = useState(true);
   const [autoRecordReady, setAutoRecordReady] = useState(false);
   const [transcripts, setTranscripts] = useState([]); // STT transcript per index
-  const [liveTranscript, setLiveTranscript] = useState("");
-  const [sttSupported, setSttSupported] = useState(true);
-  const [sttError, setSttError] = useState("");
-  // Soft errors ("recording is fine, just no auto-scoring") render in amber;
-  // hard errors keep the red error styling.
-  const [sttErrorSoft, setSttErrorSoft] = useState(false);
+  // Per-question STT lifecycle: null | "processing" | "done" | "failed"
+  const [transcriptStatus, setTranscriptStatus] = useState([]);
+  const [transcriptError, setTranscriptError] = useState([]); // server error code per index when "failed"
+  const [notPro, setNotPro] = useState(false); // sticky: once NOT_PRO, skip further uploads
   const [aiScores, setAiScores] = useState([]); // AI score result per index
-  const [scoring, setScoring] = useState(false); // scoring in progress
+  const [scoring, setScoring] = useState(false); // AI scoring (DeepSeek) in progress
   const [scoringError, setScoringError] = useState(null);
   const [expandedQ, setExpandedQ] = useState(null); // expanded question in summary
+  // Hold the onComplete call when the user finishes while transcribes or AI
+  // scoring are still in flight — otherwise the parent (mock exam shell)
+  // gets a result set with null aiScores for trailing questions. The wait
+  // is capped at 60s so the user can never get permanently stuck.
+  const [submitting, setSubmitting] = useState(false);
+  const [submitWaitSeconds, setSubmitWaitSeconds] = useState(0);
+
+  // PIPL: queue blobs that hit NEEDS_CONSENT so the modal can replay them
+  // after the user grants consent.
+  const [needsConsent, setNeedsConsent] = useState(false);
+  const pendingConsentJobsRef = useRef([]);
 
   const timerRef = useRef(null);
   const totalTimerRef = useRef(null);
   const recorderStopRef = useRef(null);
-  const recognizerRef = useRef(null);
+  // AbortController per question — used by forceFinish to cancel in-flight
+  // transcribe uploads when the user gives up on the deferred-finish wait.
+  const transcribeAbortRef = useRef([]);
 
   const total = items.length;
   const question = items[current];
@@ -67,10 +79,7 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
     setTtsSupported("speechSynthesis" in window);
   }, []);
 
-  // Check STT support
-  useEffect(() => {
-    setSttSupported(isSpeechRecognitionSupported());
-  }, []);
+  // (STT runs server-side now; no browser capability check needed.)
 
   // Countdown timer for answer phase
   useEffect(() => {
@@ -151,85 +160,18 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
   }, [current, phase, finished]);
 
   // Start STT when recording begins
-  const startSTT = useCallback(() => {
-    if (!sttSupported) return;
-    setLiveTranscript("");
-    setSttError("");
-    setSttErrorSoft(false);
-    if (recognizerRef.current) {
-      try { recognizerRef.current.stop(); } catch {}
-    }
-    recognizerRef.current = createSpeechRecognizer({
-      lang: "en-US",
-      onResult: (transcript, isFinal) => {
-        setLiveTranscript(transcript);
-        if (isFinal) {
-          setTranscripts(prev => {
-            const next = [...prev];
-            next[current] = transcript;
-            return next;
-          });
-        }
-      },
-      onEnd: (finalTranscript) => {
-        if (finalTranscript) {
-          setTranscripts(prev => {
-            const next = [...prev];
-            next[current] = finalTranscript;
-            return next;
-          });
-        }
-      },
-      onError: (err) => {
-        // MediaRecorder has already confirmed microphone access. If the
-        // browser's SpeechRecognition service fails, keep recording. The
-        // "network" error is the common case in mainland China (Chrome's
-        // built-in STT relies on Google services), so we group it with the
-        // permission errors as a soft notice rather than a red alert.
-        const softErrors = ["not-allowed", "service-not-allowed", "audio-capture", "network"];
-        if (softErrors.includes(err?.error)) {
-          const permissionMsg = "录音已开始，但浏览器语音识别暂时不可用；这不会影响保存录音，只是本题可能无法自动生成转写和 AI 评分。";
-          const isNetwork = err.error === "network";
-          setSttError(isNetwork && err?.message ? err.message : permissionMsg);
-          setSttErrorSoft(true);
-        } else if (err?.message) {
-          setSttError(err.message);
-          setSttErrorSoft(false);
-        }
-      },
-    });
-    recognizerRef.current.start();
-  }, [sttSupported, current]);
-
-  const stopSTT = useCallback(() => {
-    if (recognizerRef.current) {
-      try { recognizerRef.current.stop(); } catch {}
-    }
-  }, []);
-
-  // Run AI scoring asynchronously
-  const runScoring = useCallback(async (questionIdx) => {
+  // Run AI scoring once we have a transcript. Takes transcript as a parameter
+  // so we don't race against state updates from the transcribe step.
+  const runScoring = useCallback(async (questionIdx, transcript) => {
     setScoring(true);
     setScoringError(null);
     try {
-      // Wait a beat for final STT to arrive
-      await new Promise(r => setTimeout(r, 500));
-      const transcript = transcripts[questionIdx] || liveTranscript || "";
       const q = items[questionIdx];
       if (!transcript) {
         setScoringError("未检测到语音内容，跳过评分");
         setScoring(false);
         return;
       }
-      // Store transcript if not yet saved
-      setTranscripts(prev => {
-        if (!prev[questionIdx]) {
-          const next = [...prev];
-          next[questionIdx] = transcript;
-          return next;
-        }
-        return prev;
-      });
       const result = await scoreInterview({
         question: q.question,
         transcript,
@@ -243,56 +185,193 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
       setScoringError("评分失败: " + (err.message || "未知错误"));
     }
     setScoring(false);
-  }, [transcripts, liveTranscript, items]);
+  }, [items]);
 
-  const handleRecordingComplete = useCallback((blobUrl) => {
+  // Upload + handle a single blob. Pulled out of handleRecordingComplete so
+  // the consent-modal retry path can call it too.
+  const runTranscribeJob = useCallback(({ idx, blob, questionId, durationMs }) => {
+    setTranscriptStatus(prev => {
+      const next = [...prev];
+      next[idx] = "processing";
+      return next;
+    });
+    setTranscriptError(prev => {
+      const next = [...prev];
+      next[idx] = null;
+      return next;
+    });
+
+    const controller = new AbortController();
+    transcribeAbortRef.current[idx] = controller;
+    (async () => {
+      const result = await transcribeWithServer(blob, {
+        taskType: "interview",
+        questionId,
+        durationMs,
+        signal: controller.signal,
+      });
+      if (transcribeAbortRef.current[idx] !== controller) return;
+      transcribeAbortRef.current[idx] = null;
+      if (result.code === "ABORTED") return;
+
+      if (result.ok) {
+        const transcript = result.transcript || "";
+        setTranscripts(prev => {
+          const next = [...prev];
+          next[idx] = transcript;
+          return next;
+        });
+        setTranscriptStatus(prev => {
+          const next = [...prev];
+          next[idx] = "done";
+          return next;
+        });
+        runScoring(idx, transcript);
+        return;
+      }
+
+      if (result.code === "NOT_PRO") setNotPro(true);
+      if (result.code === "NEEDS_CONSENT") {
+        pendingConsentJobsRef.current.push({ idx, blob, questionId });
+        setNeedsConsent(true);
+      }
+      setTranscriptStatus(prev => {
+        const next = [...prev];
+        next[idx] = "failed";
+        return next;
+      });
+      setTranscriptError(prev => {
+        const next = [...prev];
+        next[idx] = result.code || "ERROR";
+        return next;
+      });
+    })();
+  }, [runScoring]);
+
+  const handleRecordingComplete = useCallback((blobUrl, blob, durationMs) => {
     if (timerRef.current) clearInterval(timerRef.current);
-    stopSTT();
+    const idx = current;
+    const q = items[idx];
+
     setRecordings(prev => {
       const next = [...prev];
-      next[current] = blobUrl;
+      next[idx] = blobUrl;
       return next;
     });
     setPhase("review");
     setAutoRecordReady(false);
-    // Trigger AI scoring async
-    runScoring(current);
-  }, [current, stopSTT, runScoring]);
+
+    // Skip if Pro gate already failed, or if we never got a blob.
+    if (notPro || !blob) {
+      setTranscriptStatus(prev => {
+        const next = [...prev];
+        next[idx] = "failed";
+        return next;
+      });
+      setTranscriptError(prev => {
+        const next = [...prev];
+        next[idx] = notPro ? "PRO_GATE" : "EMPTY_AUDIO";
+        return next;
+      });
+      return;
+    }
+
+    runTranscribeJob({ idx, blob, questionId: q?.id || "", durationMs });
+  }, [current, items, notPro, runTranscribeJob]);
+
+  const handleConsentGranted = useCallback(() => {
+    const jobs = pendingConsentJobsRef.current;
+    pendingConsentJobsRef.current = [];
+    setNeedsConsent(false);
+    for (const job of jobs) runTranscribeJob(job);
+  }, [runTranscribeJob]);
+
+  const handleConsentClosed = useCallback(() => {
+    pendingConsentJobsRef.current = [];
+    setNeedsConsent(false);
+  }, []);
+
+  // Bundle the result and call onComplete. Extracted so the pending-work
+  // wait effect can call it too.
+  const finishSession = useCallback(() => {
+    setFinished(true);
+    if (!onComplete) return;
+    const scoredItems = items.map((item, i) => ({
+      id: item.id,
+      question: item.question,
+      category: item.category,
+      difficulty: item.difficulty,
+      recorded: !!recordings[i],
+      transcript: transcripts[i] || null,
+      aiScore: aiScores[i] || null,
+    }));
+    const validScores = scoredItems.filter(s => s.aiScore && !s.aiScore.error);
+    const avgScore = validScores.length
+      ? Math.round((validScores.reduce((sum, s) => sum + s.aiScore.score, 0) / validScores.length) * 2) / 2
+      : null;
+    onComplete({
+      type: "speaking-interview",
+      total,
+      attempted: recordings.filter(Boolean).length + (recordings[current] ? 0 : 1),
+      totalElapsed,
+      averageScore: avgScore,
+      items: scoredItems,
+    });
+  }, [current, total, recordings, totalElapsed, items, onComplete, transcripts, aiScores]);
+
+  // Interview's DeepSeek scoring is slower than Repeat's pure STT, so the cap
+  // is a touch more generous.
+  const SUBMIT_WAIT_CAP_SEC = 60;
 
   const handleNext = useCallback(() => {
-    setLiveTranscript("");
     setScoringError(null);
     if (current < total - 1) {
       setCurrent(current + 1);
       setPhase("prep");
       setAutoRecordReady(false);
-    } else {
-      setFinished(true);
-      if (onComplete) {
-        const scoredItems = items.map((item, i) => ({
-          id: item.id,
-          question: item.question,
-          category: item.category,
-          difficulty: item.difficulty,
-          recorded: !!recordings[i],
-          transcript: transcripts[i] || null,
-          aiScore: aiScores[i] || null,
-        }));
-        const validScores = scoredItems.filter(s => s.aiScore && !s.aiScore.error);
-        const avgScore = validScores.length
-          ? Math.round((validScores.reduce((sum, s) => sum + s.aiScore.score, 0) / validScores.length) * 2) / 2
-          : null;
-        onComplete({
-          type: "speaking-interview",
-          total,
-          attempted: recordings.filter(Boolean).length + (recordings[current] ? 0 : 1),
-          totalElapsed,
-          averageScore: avgScore,
-          items: scoredItems,
-        });
-      }
+      return;
     }
-  }, [current, total, recordings, totalElapsed, items, onComplete, transcripts, aiScores]);
+    // Last question — hold the finish call if anything's still in flight
+    // (server STT transcript OR DeepSeek AI scoring).
+    const pending = transcriptStatus.some(s => s === "processing") || scoring;
+    if (pending) {
+      setSubmitting(true);
+      setSubmitWaitSeconds(SUBMIT_WAIT_CAP_SEC);
+      return;
+    }
+    finishSession();
+  }, [current, total, transcriptStatus, scoring, finishSession]);
+
+  // Escape hatch: aborts any in-flight uploads (no more billing) and fires
+  // onComplete with whatever scores we have so far.
+  const forceFinish = useCallback(() => {
+    transcribeAbortRef.current.forEach((c) => { try { c?.abort?.(); } catch {} });
+    transcribeAbortRef.current = [];
+    setSubmitting(false);
+    setSubmitWaitSeconds(0);
+    finishSession();
+  }, [finishSession]);
+
+  // Settle the deferred finish once all background work has landed.
+  useEffect(() => {
+    if (!submitting) return;
+    if (transcriptStatus.some(s => s === "processing")) return;
+    if (scoring) return;
+    setSubmitting(false);
+    setSubmitWaitSeconds(0);
+    finishSession();
+  }, [submitting, transcriptStatus, scoring, finishSession]);
+
+  // Countdown for the hard cap.
+  useEffect(() => {
+    if (!submitting) return;
+    if (submitWaitSeconds <= 0) {
+      forceFinish();
+      return;
+    }
+    const t = setTimeout(() => setSubmitWaitSeconds((s) => s - 1), 1000);
+    return () => clearTimeout(t);
+  }, [submitting, submitWaitSeconds, forceFinish]);
 
   const formatTime = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 
@@ -552,35 +631,9 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
             <div style={{ textAlign: "center" }}>
               <VoiceRecorder
                 onRecordingComplete={handleRecordingComplete}
-                onRecordingStart={startSTT}
                 maxDuration={ANSWER_DURATION}
                 autoStart={autoRecordReady}
               />
-
-              {/* Live transcript */}
-              {sttSupported && liveTranscript && (
-                <div style={{
-                  marginTop: 14, padding: "10px 14px", background: "#F9FAFB",
-                  border: "1px solid " + C.bdr, borderRadius: 10,
-                  fontSize: 13, color: C.t2, lineHeight: 1.6, fontStyle: "italic",
-                  textAlign: "left", maxHeight: 80, overflowY: "auto",
-                }}>
-                  {liveTranscript}
-                </div>
-              )}
-
-              {sttError && (
-                <div style={{
-                  marginTop: 14, padding: "10px 14px",
-                  background: sttErrorSoft ? "#FFFBEB" : "#FEF2F2",
-                  border: `1px solid ${sttErrorSoft ? "#FDE68A" : "#FECACA"}`,
-                  borderRadius: 10,
-                  fontSize: 12, color: sttErrorSoft ? "#92400E" : "#991B1B",
-                  lineHeight: 1.6, textAlign: "left", whiteSpace: "pre-line",
-                }}>
-                  {sttError}
-                </div>
-              )}
 
               {/* Timer bar */}
               <div style={{
@@ -602,8 +655,51 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
           {/* Phase: Review */}
           {phase === "review" && (
             <div>
-              {/* Scoring state */}
-              {scoring && (
+              {/* Step 1: server STT is still working — show before AI scoring starts */}
+              {transcriptStatus[current] === "processing" && (
+                <div style={{ textAlign: "center", padding: "20px 0" }}>
+                  <div style={{
+                    width: 56, height: 56, borderRadius: "50%", margin: "0 auto 16px",
+                    background: "#F0F9FF", border: "2px solid #BAE6FD",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                  }}>
+                    <span style={{ fontSize: 22, animation: "spk-timer-pulse 1s ease-in-out infinite" }}>🎙</span>
+                  </div>
+                  <div style={{ fontSize: 15, fontWeight: 700, color: C.t1, marginBottom: 4 }}>
+                    识别中...
+                  </div>
+                  <div style={{ fontSize: 12, color: C.t3 }}>
+                    正在转写录音，完成后会自动进入 AI 评分
+                  </div>
+                </div>
+              )}
+
+              {/* Step 1 (failure): Pro gate */}
+              {transcriptStatus[current] === "failed" && transcriptError[current] === "NOT_PRO" && (
+                <div style={{ textAlign: "center", padding: "20px 0" }}>
+                  <div style={{ fontSize: 32, marginBottom: 8 }}>🔒</div>
+                  <div style={{ fontSize: 15, fontWeight: 700, color: "#92400E", marginBottom: 6 }}>
+                    语音识别为 Pro 专属
+                  </div>
+                  <div style={{ fontSize: 12, color: C.t2, marginBottom: 12, padding: "0 10px" }}>
+                    录音已保存。升级 Pro 后可解锁自动识别和 AI 评分。
+                  </div>
+                </div>
+              )}
+
+              {/* Step 1 (failure): other errors */}
+              {transcriptStatus[current] === "failed" && transcriptError[current] !== "NOT_PRO" && (
+                <div style={{
+                  margin: "0 auto 16px", padding: "10px 14px",
+                  background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 10,
+                  fontSize: 12, color: "#991B1B", lineHeight: 1.6, maxWidth: 360,
+                }}>
+                  识别失败：{transcriptError[current] || "未知错误"}。录音已保存，可继续下一题。
+                </div>
+              )}
+
+              {/* Step 2: AI scoring in progress (after transcribe finished) */}
+              {transcriptStatus[current] !== "processing" && scoring && (
                 <div style={{ textAlign: "center", padding: "20px 0" }}>
                   <div style={{
                     width: 56, height: 56, borderRadius: "50%", margin: "0 auto 16px",
@@ -621,8 +717,8 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
                 </div>
               )}
 
-              {/* Score results (or just done-check if no score yet) */}
-              {!scoring && (
+              {/* Step 3: score / done-check (transcribe finished AND AI scoring done) */}
+              {transcriptStatus[current] !== "processing" && !scoring && (
                 <div style={{ textAlign: "center" }}>
                   {aiScores[current] && !aiScores[current].error ? (
                     <DimensionScoreCard score={aiScores[current]} />
@@ -649,7 +745,7 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
                   )}
 
                   {/* Transcript */}
-                  {(transcripts[current] || liveTranscript) && (
+                  {transcripts[current] && (
                     <div style={{
                       marginTop: 12, padding: "10px 14px", background: "#F9FAFB",
                       border: "1px solid " + C.bdr, borderRadius: 10,
@@ -657,7 +753,7 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
                       maxHeight: 100, overflowY: "auto",
                     }}>
                       <div style={{ fontSize: 10, fontWeight: 700, color: C.t3, textTransform: "uppercase", marginBottom: 4 }}>Transcript</div>
-                      {transcripts[current] || liveTranscript}
+                      {transcripts[current]}
                     </div>
                   )}
 
@@ -666,9 +762,28 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
                       <SummaryReplayButton blobUrl={recordings[current]} />
                     </div>
                   )}
-                  <Btn onClick={handleNext} style={{ background: SPK.color, borderColor: SPK.color }}>
-                    {current < total - 1 ? "Next Question" : "Finish Interview"}
+                  <Btn
+                    onClick={handleNext}
+                    disabled={submitting}
+                    style={{ background: SPK.color, borderColor: SPK.color }}
+                  >
+                    {submitting
+                      ? `正在完成识别与评分… (${submitWaitSeconds}s)`
+                      : current < total - 1 ? "Next Question" : "Finish Interview"}
                   </Btn>
+                  {submitting && (
+                    <div style={{ marginTop: 8 }}>
+                      <button
+                        onClick={forceFinish}
+                        style={{
+                          background: "none", border: "none", cursor: "pointer",
+                          fontSize: 11, color: C.t3, textDecoration: "underline", fontFamily: FONT,
+                        }}
+                      >
+                        跳过等待，直接完成（未识别的题目不计分）
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -690,6 +805,12 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
           </div>
         )}
       </PageShell>
+
+      <SpeechConsentModal
+        open={needsConsent}
+        onClose={handleConsentClosed}
+        onGranted={handleConsentGranted}
+      />
     </div>
   );
 }
