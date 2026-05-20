@@ -10,8 +10,19 @@ import { saveSess, loadDoneIds, addDoneIds } from "../../lib/sessionStore";
 import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
 import { listActiveDrafts } from "../../lib/draftPersist";
 import CTW_DATA from "../../data/reading/bank/ctw.json";
-import RDL_DATA from "../../data/reading/bank/rdl.json";
+// RDL bank is split into two pools by question count:
+//   rdl-short.json — 83 items, each with 2 questions  → ?variant=short
+//   rdl-long.json  — 89 items, each with 3 questions  → ?variant=long
+// The legacy data/reading/bank/rdl.json is no longer used by this page
+// (still referenced by lib/admin/contentRegistry for older tooling).
+import RDL_SHORT_DATA from "../../data/reading/bank/rdl-short.json";
+import RDL_LONG_DATA from "../../data/reading/bank/rdl-long.json";
 import AP_DATA from "../../data/reading/bank/ap.json";
+
+// Returns the active RDL pool's items[] for the given variant.
+function rdlPool(variant) {
+  return variant === "short" ? (RDL_SHORT_DATA.items || []) : (RDL_LONG_DATA.items || []);
+}
 
 // Map subtype → draft task name (matches CTWTask / RDLTask buildDraftKey)
 const DRAFT_TASK_BY_TYPE = { ctw: "ctw", rdl: "rdl", ap: "rdl" };
@@ -66,8 +77,8 @@ function buildCTWTopics() {
   }));
 }
 
-function buildRDLTopics() {
-  return (RDL_DATA.items || []).map((i) => ({
+function buildRDLTopics(variant) {
+  return rdlPool(variant).map((i) => ({
     id: i.id,
     tag: GENRE_LABELS[i.genre] || i.genre,
     title: i.format_metadata?.title || i.format_metadata?.subject || firstLine(i.text),
@@ -119,7 +130,11 @@ function ReadingPageClient() {
   const [randomItem, setRandomItem] = useState(null);
   useEffect(() => {
     if (isPractice) return;
-    const pool = type === "ap" ? AP_DATA.items : type === "rdl" ? RDL_DATA.items : CTW_DATA.items;
+    const pool = type === "ap"
+      ? (AP_DATA.items || [])
+      : type === "rdl"
+        ? rdlPool(variant)
+        : (CTW_DATA.items || []);
     const draftTask = DRAFT_TASK_BY_TYPE[type] || "ctw";
     const drafts = listActiveDrafts(draftTask);
     // Match draft scopeId against pool item ids (rdl draft can hold both rdl-* and ap-* ids; only the matching ones survive this filter)
@@ -127,7 +142,7 @@ function ReadingPageClient() {
       .map((d) => pool.find((it) => String(it?.id) === String(d.scopeId)))
       .find(Boolean);
     setRandomItem(resume || pickRandom(pool));
-  }, [type, isPractice]);
+  }, [type, variant, isPractice]);
 
   const onExit = () => router.push("/?section=reading");
 
@@ -153,7 +168,7 @@ function ReadingPageClient() {
   if (isPractice && !pickedItemId) {
     const doneKey = type === "ctw" ? DONE_STORAGE_KEYS.READING_CTW : type === "ap" ? (DONE_STORAGE_KEYS.READING_AP || "toefl-reading-ap-done") : DONE_STORAGE_KEYS.READING_RDL;
     const doneIds = loadDoneIds(doneKey);
-    const items = type === "ctw" ? buildCTWTopics() : type === "ap" ? buildAPTopics() : buildRDLTopics();
+    const items = type === "ctw" ? buildCTWTopics() : type === "ap" ? buildAPTopics() : buildRDLTopics(variant);
     const title = type === "ctw" ? "Complete the Words" : type === "ap" ? "Academic Passage" : "Read in Daily Life";
     const section = type === "ctw" ? "Reading Practice | Task 1" : type === "ap" ? "Reading Practice | Task 3" : "Reading Practice | Task 2";
 
@@ -173,13 +188,16 @@ function ReadingPageClient() {
   // ── Resolve the active item ──
   let item;
   if (isPractice && pickedItemId) {
-    // Find item by ID from the bank
+    // Find item by ID from the bank. For RDL, look in the variant-specific
+    // pool so a short-variant id doesn't accidentally hit a long-variant
+    // record (item ids are unique across pools, but using the right pool
+    // also keeps the item shape consistent with what the user picked).
     if (type === "ctw") {
       item = CTW_DATA.items.find((i) => i.id === pickedItemId);
     } else if (type === "ap") {
       item = AP_DATA.items.find((i) => i.id === pickedItemId);
     } else {
-      item = RDL_DATA.items.find((i) => i.id === pickedItemId);
+      item = rdlPool(variant).find((i) => i.id === pickedItemId);
     }
   } else {
     item = randomItem;
@@ -192,8 +210,9 @@ function ReadingPageClient() {
       return;
     }
     if (type === "rdl") {
-      const pool = variant === "short" ? RDL_SHORT_DATA.items : RDL_LONG_DATA.items;
-      setRandomItem(pickRandom(pool));
+      setRandomItem(pickRandom(rdlPool(variant)));
+    } else if (type === "ap") {
+      setRandomItem(pickRandom(AP_DATA.items));
     } else {
       setRandomItem(pickRandom(CTW_DATA.items));
     }
