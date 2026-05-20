@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { C, SurfaceCard, DisclosureSection } from "../shared/ui";
 import { formatLocalDateTime } from "../../lib/utils";
 import { useMcqAiExplain, McqAiExplainBlock } from "./useMcqAiExplain";
@@ -17,9 +17,11 @@ function buildSubtypeStats(groups) {
   return Object.values(map).sort((a, b) => b.count - a.count);
 }
 
-function StatBlock({ groups, totalWrong, section }) {
+function StatBlock({ groups, visibleGroupCount, totalWrong, section, activeSubtype, onSubtypeSelect }) {
   const subtypeStats = useMemo(() => buildSubtypeStats(groups), [groups]);
-  const groupCount = groups.length;
+  const groupCount = visibleGroupCount;
+  const accent = section === "reading" ? "#1d4ed8" : "#6d28d9";
+  const soft = section === "reading" ? "#EFF6FF" : "#F3E8FF";
 
   return (
     <SurfaceCard style={{ padding: "16px 18px", marginBottom: 16 }}>
@@ -34,18 +36,34 @@ function StatBlock({ groups, totalWrong, section }) {
         </div>
         {subtypeStats.length > 0 && (
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-            {subtypeStats.map((s) => (
-              <div key={s.subtype} style={{
-                padding: "6px 10px",
-                background: section === "reading" ? "#EFF6FF" : "#F3E8FF",
-                color: section === "reading" ? "#1d4ed8" : "#6d28d9",
-                borderRadius: 6,
-                fontSize: 12,
-                fontWeight: 600,
-              }}>
-                {s.label} · {s.count}
-              </div>
-            ))}
+            {subtypeStats.map((s) => {
+              const active = activeSubtype === s.subtype;
+              return (
+                <button
+                  key={s.subtype}
+                  type="button"
+                  onClick={() => onSubtypeSelect(active ? null : s.subtype)}
+                  aria-pressed={active}
+                  title={active ? "Show all mistake types" : `Filter by ${s.label}`}
+                  style={{
+                    padding: "6px 10px",
+                    background: active ? accent : soft,
+                    color: active ? "#fff" : accent,
+                    border: `1px solid ${active ? accent : "transparent"}`,
+                    borderRadius: 6,
+                    fontSize: 12,
+                    fontFamily: "inherit",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                    lineHeight: 1.2,
+                    boxShadow: active ? "0 1px 4px rgba(15,23,42,0.12)" : "none",
+                    transition: "background 0.15s, color 0.15s, box-shadow 0.15s",
+                  }}
+                >
+                  {s.label} · {s.count}
+                </button>
+              );
+            })}
           </div>
         )}
       </div>
@@ -177,11 +195,22 @@ function McqMistakeCard({ mistake, context, explainKey, aiExplains, isPro, handl
 }
 
 export function McqMistakesView({ groups, section, emptyHint }) {
+  const [activeSubtype, setActiveSubtype] = useState(null);
+  const filteredGroups = useMemo(
+    () => (activeSubtype ? groups.filter((g) => g.subtype === activeSubtype) : groups),
+    [groups, activeSubtype],
+  );
   const totalWrong = useMemo(
-    () => groups.reduce((n, g) => n + g.wrongCount, 0),
-    [groups],
+    () => filteredGroups.reduce((n, g) => n + g.wrongCount, 0),
+    [filteredGroups],
   );
   const { aiExplains, isPro, handleAiExplain } = useMcqAiExplain(section);
+
+  useEffect(() => {
+    if (activeSubtype && !groups.some((g) => g.subtype === activeSubtype)) {
+      setActiveSubtype(null);
+    }
+  }, [activeSubtype, groups]);
 
   if (groups.length === 0) {
     return (
@@ -199,12 +228,19 @@ export function McqMistakesView({ groups, section, emptyHint }) {
 
   return (
     <>
-      <StatBlock groups={groups} totalWrong={totalWrong} section={section} />
+      <StatBlock
+        groups={groups}
+        visibleGroupCount={filteredGroups.length}
+        totalWrong={totalWrong}
+        section={section}
+        activeSubtype={activeSubtype}
+        onSubtypeSelect={setActiveSubtype}
+      />
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-        {groups.map((g, gi) => (
+        {filteredGroups.map((g, gi) => (
           <DisclosureSection
-            key={g.key}
-            title={`第 ${groups.length - gi} 套 · ${g.wrongCount}/${g.total} 错题`}
+            key={`${activeSubtype || "all"}-${g.key}`}
+            title={`第 ${filteredGroups.length - gi} 套 · ${g.wrongCount}/${g.total} 错题`}
             preview={`${g.subtypeLabel || ""} · ${formatLocalDateTime(g.date)}`}
             badge={`${g.wrongCount} 题`}
             icon="✗"
