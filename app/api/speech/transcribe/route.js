@@ -40,6 +40,11 @@ const MAX_AUDIO_BYTES = 2 * 1024 * 1024;   // 2 MB — covers 45s mp3 + headroom
 const MAX_DURATION_SECONDS = 65;            // 5s headroom over our 60s policy
 const ALLOWED_TASK_TYPES = new Set(["repeat", "interview", "mock"]);
 const ALLOWED_MIME_PREFIXES = ["audio/"];
+// Per-user daily seconds cap. Pro/legacy gets 60 min/day (≈80 questions),
+// which covers any realistic study session and stops Pro-trial abuse from
+// running up a bill. Set higher per-user via Supabase users.daily_speech_cap
+// if needed (column not added yet — wire later).
+const DEFAULT_DAILY_CAP_SECONDS = 60 * 60;
 
 // 60 req/min per IP. Our worst-case user does ~10-20 questions per session,
 // so 60/min is plenty. Lower than /api/ai's 45 would be okay too but STT
@@ -106,26 +111,88 @@ async function logApiFailure(meta) {
   } catch { /* swallow */ }
 }
 
-/** Verify the user exists and currently has Pro (or legacy) tier. */
-async function checkProTier(userCode) {
+/**
+ * Verify user is allowed to call the STT endpoint:
+ *   1. Has a valid account
+ *   2. Currently Pro (or legacy)
+ *   3. Has granted speech consent and not since revoked it
+ *
+ * Returns specific codes so the client can render the right modal/upsell:
+ *   - INVALID_USER   → unknown account
+ *   - NOT_PRO        → free tier; show upgrade prompt
+ *   - NEEDS_CONSENT  → missing/revoked; show consent modal
+ */
+async function checkUserEligibility(userCode) {
   if (!isSupabaseAdminConfigured) {
-    // In configs without Supabase admin (eg dev without service role), let
-    // any 6-char code through. Production has Supabase configured.
+    // Dev fallback: no Supabase = trust client. Production always has it.
     return { ok: true, tier: "unknown" };
   }
   const { data: user, error } = await supabaseAdmin
     .from("users")
-    .select("tier, tier_expires_at")
+    .select("tier, tier_expires_at, speech_consent_at, speech_consent_revoked_at")
     .eq("code", userCode)
     .maybeSingle();
   if (error) return { ok: false, code: "DB_ERROR", message: "无法验证账号" };
   if (!user) return { ok: false, code: "INVALID_USER", message: "无效的用户码" };
+
   const expired = user.tier_expires_at && new Date(user.tier_expires_at).getTime() <= Date.now();
   const isPro = user.tier === "legacy" || (user.tier === "pro" && !expired);
   if (!isPro) {
     return { ok: false, code: "NOT_PRO", message: "语音识别为 Pro 专属功能" };
   }
+
+  // Consent: must have a grant time, and either no revoke time, or revoke < grant.
+  const grantedAt = user.speech_consent_at ? new Date(user.speech_consent_at).getTime() : 0;
+  const revokedAt = user.speech_consent_revoked_at ? new Date(user.speech_consent_revoked_at).getTime() : 0;
+  const consented = grantedAt > 0 && grantedAt > revokedAt;
+  if (!consented) {
+    return { ok: false, code: "NEEDS_CONSENT", message: "请先同意语音上传服务条款。" };
+  }
   return { ok: true, tier: user.tier };
+}
+
+/**
+ * Atomically increment today's audio second count and enforce the cap.
+ * Uses the increment_speech_usage RPC defined in scripts/sql/speech-stt-schema.sql.
+ * Returns { ok: false, code: "DAILY_QUOTA" } if the increment would exceed cap.
+ */
+async function incrementQuotaOrReject(userCode, seconds, cap) {
+  if (!isSupabaseAdminConfigured) {
+    return { ok: true, used: 0 }; // dev fallback
+  }
+  if (seconds <= 0) return { ok: true, used: 0 };
+  const { data, error } = await supabaseAdmin.rpc("increment_speech_usage", {
+    p_user_code: userCode,
+    p_seconds: seconds,
+    p_cap: cap,
+  });
+  if (error) {
+    // If the RPC isn't installed yet (pre-migration), allow the call rather
+    // than hard-failing — the operator can apply the migration without
+    // taking the endpoint offline.
+    console.warn("[/api/speech/transcribe] quota RPC error:", error.message);
+    return { ok: true, used: -1, rpc_error: error.message };
+  }
+  const used = Number(data);
+  if (used < 0) {
+    return { ok: false, code: "DAILY_QUOTA", message: "今日语音识别额度已用尽，请明天再试。" };
+  }
+  return { ok: true, used };
+}
+
+/**
+ * Best-effort audio duration estimate in whole seconds.
+ * Prefer the client-reported duration_ms (capped to MAX_DURATION_SECONDS) so
+ * quota tracking stays consistent even when Whisper's verbose_json `duration`
+ * field is slightly off. The client value is bounded by both the form
+ * validation and the recorder's hard maxDuration, so it can't be inflated to
+ * grief the user's own quota — and even if it were, the cap caps it.
+ */
+function estimateAudioSeconds(durationMs) {
+  const ms = Number(durationMs) || 0;
+  if (ms > 0) return Math.min(MAX_DURATION_SECONDS, Math.ceil(ms / 1000));
+  // Fall back to half of the max — conservative midpoint for our 30-45s tasks.
+  return 30;
 }
 
 async function callWhisper(file, openaiKey) {
@@ -225,11 +292,22 @@ export async function POST(request) {
       return fail(413, "TOO_LONG", `录音超出最大时长 (${MAX_DURATION_SECONDS}s)。`);
     }
 
-    // Pro tier check
-    const tierCheck = await checkProTier(userCode);
-    if (!tierCheck.ok) {
-      const status = tierCheck.code === "NOT_PRO" ? 402 : 403;
-      return fail(status, tierCheck.code, tierCheck.message);
+    // Pro tier + consent check (one DB hit)
+    const eligibility = await checkUserEligibility(userCode);
+    if (!eligibility.ok) {
+      const statusMap = { NOT_PRO: 402, NEEDS_CONSENT: 451, INVALID_USER: 403, DB_ERROR: 500 };
+      const status = statusMap[eligibility.code] || 403;
+      return fail(status, eligibility.code, eligibility.message);
+    }
+
+    // Atomic daily-quota increment. We charge the user before calling Whisper
+    // (vs after) so a 429 racing with another concurrent call can't sneak past
+    // the cap. If Whisper later errors, the seconds stay deducted — that's a
+    // tiny goodwill cost we accept to keep the abuse-prevention simple.
+    const audioSeconds = estimateAudioSeconds(durationMs);
+    const quotaResult = await incrementQuotaOrReject(userCode, audioSeconds, DEFAULT_DAILY_CAP_SECONDS);
+    if (!quotaResult.ok) {
+      return fail(429, quotaResult.code, quotaResult.message);
     }
 
     // Call Whisper-1

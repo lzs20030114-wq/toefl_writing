@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { C, FONT, Btn, TopBar, PageShell, SurfaceCard } from "../shared/ui";
 import { VoiceRecorder } from "./VoiceRecorder";
+import { SpeechConsentModal } from "./SpeechConsentModal";
 import { transcribeWithServer } from "../../lib/speakingEval/serverStt";
 import { scoreRepeat } from "../../lib/speakingEval/repeatScorer";
 
@@ -50,6 +51,12 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
   // gets permanently stuck if OpenAI hangs.
   const [submitting, setSubmitting] = useState(false);
   const [submitWaitSeconds, setSubmitWaitSeconds] = useState(0);
+
+  // PIPL: if the route returns NEEDS_CONSENT, queue the audio blob here so we
+  // can replay the upload once the user grants consent in the modal. Cleared
+  // when the modal is dismissed.
+  const [needsConsent, setNeedsConsent] = useState(false);
+  const pendingConsentJobsRef = useRef([]);
 
   const elapsedRef = useRef(null);
   const utteranceRef = useRef(null);
@@ -148,10 +155,83 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
     }
   }, [current, phase, finished]);
 
+  // Upload a single blob to the STT endpoint and reflect the result into the
+  // per-question state. Pulled out of handleRecordingComplete so we can also
+  // call it from the consent-modal retry path.
+  const runTranscribeJob = useCallback(({ idx, blob, sentenceText, questionId, durationMs }) => {
+    setTranscriptStatus(prev => {
+      const next = [...prev];
+      next[idx] = "processing";
+      return next;
+    });
+    setTranscriptError(prev => {
+      const next = [...prev];
+      next[idx] = null;
+      return next;
+    });
+
+    const controller = new AbortController();
+    transcribeAbortRef.current[idx] = controller;
+    (async () => {
+      const result = await transcribeWithServer(blob, {
+        taskType: "repeat",
+        questionId,
+        durationMs,
+        signal: controller.signal,
+      });
+      // Stale-response guard: if a newer take superseded this controller,
+      // drop the result.
+      if (transcribeAbortRef.current[idx] !== controller) return;
+      transcribeAbortRef.current[idx] = null;
+      if (result.code === "ABORTED") return;
+
+      if (result.ok) {
+        const transcript = result.transcript || "";
+        setTranscripts(prev => {
+          const next = [...prev];
+          next[idx] = transcript;
+          return next;
+        });
+        if (transcript && sentenceText) {
+          const scored = scoreRepeat(sentenceText, transcript);
+          setScores(prev => {
+            const next = [...prev];
+            next[idx] = scored;
+            return next;
+          });
+        }
+        setTranscriptStatus(prev => {
+          const next = [...prev];
+          next[idx] = "done";
+          return next;
+        });
+        return;
+      }
+
+      // Failure paths with code-specific UI hints.
+      if (result.code === "NOT_PRO") setNotPro(true);
+      if (result.code === "NEEDS_CONSENT") {
+        // Stash the blob so we can retry after the user grants consent in the modal.
+        pendingConsentJobsRef.current.push({ idx, blob, sentenceText, questionId });
+        setNeedsConsent(true);
+      }
+      setTranscriptStatus(prev => {
+        const next = [...prev];
+        next[idx] = "failed";
+        return next;
+      });
+      setTranscriptError(prev => {
+        const next = [...prev];
+        next[idx] = result.code || "ERROR";
+        return next;
+      });
+    })();
+  }, []);
+
   // Capture the recording and kick off server-side transcription. We don't
   // block the UI on the upload — the user is free to replay/re-record/advance
   // while the transcript backfills asynchronously into the right slot.
-  const handleRecordingComplete = useCallback((blobUrl, blob) => {
+  const handleRecordingComplete = useCallback((blobUrl, blob, durationMs) => {
     const idx = current;
     const sentenceText = sentence?.sentence || "";
     const questionId = sentence?.id || "";
@@ -178,64 +258,23 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
       return;
     }
 
-    setTranscriptStatus(prev => {
-      const next = [...prev];
-      next[idx] = "processing";
-      return next;
-    });
+    runTranscribeJob({ idx, blob, sentenceText, questionId, durationMs });
+  }, [current, sentence, notPro, runTranscribeJob]);
 
-    // Fire-and-forget; result lands by index so reordering doesn't matter.
-    // The AbortController lets Re-record cancel a stale upload — savings of
-    // ~¥0.03 per cancelled question, plus avoids race where a stale
-    // transcript could overwrite the new one.
-    const controller = new AbortController();
-    transcribeAbortRef.current[idx] = controller;
-    (async () => {
-      const result = await transcribeWithServer(blob, {
-        taskType: "repeat",
-        questionId,
-        signal: controller.signal,
-      });
-      // If this controller is no longer the one we're tracking, a new take
-      // has started — drop the stale result on the floor.
-      if (transcribeAbortRef.current[idx] !== controller) return;
-      transcribeAbortRef.current[idx] = null;
-      if (result.code === "ABORTED") return; // user cancelled, status was already reset
-      if (result.ok) {
-        const transcript = result.transcript || "";
-        setTranscripts(prev => {
-          const next = [...prev];
-          next[idx] = transcript;
-          return next;
-        });
-        if (transcript && sentenceText) {
-          const scored = scoreRepeat(sentenceText, transcript);
-          setScores(prev => {
-            const next = [...prev];
-            next[idx] = scored;
-            return next;
-          });
-        }
-        setTranscriptStatus(prev => {
-          const next = [...prev];
-          next[idx] = "done";
-          return next;
-        });
-      } else {
-        if (result.code === "NOT_PRO") setNotPro(true);
-        setTranscriptStatus(prev => {
-          const next = [...prev];
-          next[idx] = "failed";
-          return next;
-        });
-        setTranscriptError(prev => {
-          const next = [...prev];
-          next[idx] = result.code || "ERROR";
-          return next;
-        });
-      }
-    })();
-  }, [current, sentence, notPro]);
+  // Replay queued uploads after the user grants consent in the modal.
+  const handleConsentGranted = useCallback(() => {
+    const jobs = pendingConsentJobsRef.current;
+    pendingConsentJobsRef.current = [];
+    setNeedsConsent(false);
+    for (const job of jobs) runTranscribeJob(job);
+  }, [runTranscribeJob]);
+
+  // User dismissed the modal without granting. Drop pending jobs — the
+  // recordings stay in place, just without transcripts.
+  const handleConsentClosed = useCallback(() => {
+    pendingConsentJobsRef.current = [];
+    setNeedsConsent(false);
+  }, []);
 
   // Cancel an in-flight transcribe and reset the status for a question. Used
   // when the user clicks Re-record so we don't waste API spend on a transcript
@@ -723,6 +762,12 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
           </div>
         )}
       </PageShell>
+
+      <SpeechConsentModal
+        open={needsConsent}
+        onClose={handleConsentClosed}
+        onGranted={handleConsentGranted}
+      />
     </div>
   );
 }

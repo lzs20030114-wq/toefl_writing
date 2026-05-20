@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { C, FONT, Btn, TopBar, PageShell, SurfaceCard } from "../shared/ui";
 import { VoiceRecorder } from "./VoiceRecorder";
+import { SpeechConsentModal } from "./SpeechConsentModal";
 import { transcribeWithServer } from "../../lib/speakingEval/serverStt";
 import { scoreInterview } from "../../lib/speakingEval/interviewScorer";
 
@@ -49,6 +50,11 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
   // is capped at 60s so the user can never get permanently stuck.
   const [submitting, setSubmitting] = useState(false);
   const [submitWaitSeconds, setSubmitWaitSeconds] = useState(0);
+
+  // PIPL: queue blobs that hit NEEDS_CONSENT so the modal can replay them
+  // after the user grants consent.
+  const [needsConsent, setNeedsConsent] = useState(false);
+  const pendingConsentJobsRef = useRef([]);
 
   const timerRef = useRef(null);
   const totalTimerRef = useRef(null);
@@ -181,7 +187,68 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
     setScoring(false);
   }, [items]);
 
-  const handleRecordingComplete = useCallback((blobUrl, blob) => {
+  // Upload + handle a single blob. Pulled out of handleRecordingComplete so
+  // the consent-modal retry path can call it too.
+  const runTranscribeJob = useCallback(({ idx, blob, questionId, durationMs }) => {
+    setTranscriptStatus(prev => {
+      const next = [...prev];
+      next[idx] = "processing";
+      return next;
+    });
+    setTranscriptError(prev => {
+      const next = [...prev];
+      next[idx] = null;
+      return next;
+    });
+
+    const controller = new AbortController();
+    transcribeAbortRef.current[idx] = controller;
+    (async () => {
+      const result = await transcribeWithServer(blob, {
+        taskType: "interview",
+        questionId,
+        durationMs,
+        signal: controller.signal,
+      });
+      if (transcribeAbortRef.current[idx] !== controller) return;
+      transcribeAbortRef.current[idx] = null;
+      if (result.code === "ABORTED") return;
+
+      if (result.ok) {
+        const transcript = result.transcript || "";
+        setTranscripts(prev => {
+          const next = [...prev];
+          next[idx] = transcript;
+          return next;
+        });
+        setTranscriptStatus(prev => {
+          const next = [...prev];
+          next[idx] = "done";
+          return next;
+        });
+        runScoring(idx, transcript);
+        return;
+      }
+
+      if (result.code === "NOT_PRO") setNotPro(true);
+      if (result.code === "NEEDS_CONSENT") {
+        pendingConsentJobsRef.current.push({ idx, blob, questionId });
+        setNeedsConsent(true);
+      }
+      setTranscriptStatus(prev => {
+        const next = [...prev];
+        next[idx] = "failed";
+        return next;
+      });
+      setTranscriptError(prev => {
+        const next = [...prev];
+        next[idx] = result.code || "ERROR";
+        return next;
+      });
+    })();
+  }, [runScoring]);
+
+  const handleRecordingComplete = useCallback((blobUrl, blob, durationMs) => {
     if (timerRef.current) clearInterval(timerRef.current);
     const idx = current;
     const q = items[idx];
@@ -209,55 +276,20 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
       return;
     }
 
-    setTranscriptStatus(prev => {
-      const next = [...prev];
-      next[idx] = "processing";
-      return next;
-    });
+    runTranscribeJob({ idx, blob, questionId: q?.id || "", durationMs });
+  }, [current, items, notPro, runTranscribeJob]);
 
-    // Fire-and-forget transcription → AI scoring chain. AbortController lets
-    // forceFinish cancel a still-pending upload when the user gives up on the
-    // post-finish wait.
-    const controller = new AbortController();
-    transcribeAbortRef.current[idx] = controller;
-    (async () => {
-      const result = await transcribeWithServer(blob, {
-        taskType: "interview",
-        questionId: q?.id || "",
-        signal: controller.signal,
-      });
-      if (transcribeAbortRef.current[idx] !== controller) return;
-      transcribeAbortRef.current[idx] = null;
-      if (result.code === "ABORTED") return;
-      if (result.ok) {
-        const transcript = result.transcript || "";
-        setTranscripts(prev => {
-          const next = [...prev];
-          next[idx] = transcript;
-          return next;
-        });
-        setTranscriptStatus(prev => {
-          const next = [...prev];
-          next[idx] = "done";
-          return next;
-        });
-        // Chain into AI scoring once we have the text.
-        runScoring(idx, transcript);
-      } else {
-        if (result.code === "NOT_PRO") setNotPro(true);
-        setTranscriptStatus(prev => {
-          const next = [...prev];
-          next[idx] = "failed";
-          return next;
-        });
-        setTranscriptError(prev => {
-          const next = [...prev];
-          next[idx] = result.code || "ERROR";
-          return next;
-        });
-      }
-    })();
-  }, [current, items, notPro, runScoring]);
+  const handleConsentGranted = useCallback(() => {
+    const jobs = pendingConsentJobsRef.current;
+    pendingConsentJobsRef.current = [];
+    setNeedsConsent(false);
+    for (const job of jobs) runTranscribeJob(job);
+  }, [runTranscribeJob]);
+
+  const handleConsentClosed = useCallback(() => {
+    pendingConsentJobsRef.current = [];
+    setNeedsConsent(false);
+  }, []);
 
   // Bundle the result and call onComplete. Extracted so the pending-work
   // wait effect can call it too.
@@ -773,6 +805,12 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
           </div>
         )}
       </PageShell>
+
+      <SpeechConsentModal
+        open={needsConsent}
+        onClose={handleConsentClosed}
+        onGranted={handleConsentGranted}
+      />
     </div>
   );
 }
