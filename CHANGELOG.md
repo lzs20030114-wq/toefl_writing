@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-05-20
+
+- 修复阅读 RDL（Read in Daily Life）短版 / 长版切换无效的问题：之前不管选「短版 · 2 题」还是「长版 · 3 题」，进入练习后都拿到 3 道题。
+- 根因是过去一次合并把 `app/reading/page.js` 的题库 import 改回了旧的单文件 `rdl.json`（仅 8 题，全 3 题），但 `?variant=short|long` 的 URL 路由 + UI 切换 + `handleNewItem` 的引用都没跟着回退；其中 `RDL_SHORT_DATA` / `RDL_LONG_DATA` 在「新题」按钮上还会触发 ReferenceError。
+- 重新引入 `rdl-short.json`（83 题 ×2Q）和 `rdl-long.json`（89 题 ×3Q）双文件，提取 `rdlPool(variant)` helper，让随机抽题、id 查找、练习模式选题器、「新题」按钮 4 处都按 variant 走对应题库；useEffect 依赖加入 `variant`，切换时立刻重新随机。
+
 ## 2026-05-19
 
 - 修复阅读完形填空（CTW）错题本中"你的答案"显示错误，现在正确展示用户输入的字母。
