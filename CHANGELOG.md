@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-05-22
+
+- 修复阅读模考记录无法查看的问题：根因是 `842cd85` 合并冲突把 `f531a90` 的会话保存格式回退了。`AdaptiveExamShell` 用 `type: "adaptive-reading"`（无 `details` 字段）写入历史，而 `ReadingProgressView` 入口卡片只筛 `type: "reading"`，记录虽在但首页显示「暂无记录」。同时修了 `ReadingSectionContent` 的 `readingCount` 漏统计 legacy 类型。
+- 新增模考完整诊断视图，替换原 band/M1/M2 简版摘要：
+  - `AdaptiveExamShell` 现在保存每个 task 的快照（itemId、原文、题目、用户作答、正误），单次模考 ~30KB；CTW 还额外捕获用户输入的字符以支持错题对照。
+  - 新组件 `components/reading/MockSessionDetail.js`（~900 行）+ `useReadingAiExplain.js` 复用 `useBsAiExplain` 模式，提供 Pro-gated AI 题目解析（localStorage 缓存，键 = `qid|selected|correct`，相同错误跨用户共享解释）。
+  - `SessionRow` 0/0 兜底：mock 子类型走 `m1.correct + m2.correct` 汇总，top-level `correct/total` 缺失时也能正确显示。
+- 双栏布局重构（仿写作 ProgressView）：模考记录挪到左侧 320px sticky sidebar，点击在右侧主区切换到详情面板，不再就地展开撑爆列表。stats 卡片去掉 mock tab，趋势图改为只画 practice 避免段位/百分比混轴。`<960px` 自动切单列堆叠。`entries` 用 cloud-id-or-array-index 一次性构建，让 `normalizeReadingSession` 的对象引用变化不破坏删除/选中追踪。
+- 详情面板对齐写作 `FullMockReport` 设计：header 含返回按钮、`阅读详细诊断报告` 标题、日期、CEFR/换算分/路径 chip pill、右上角 34px `OVERALL BAND` 大字号（按段位上色）、小图标删除按钮；主 tab 按 task type 切换（概览·总体 / CTW / RDL / AP），动画用 `slideInRight 0.5s` + `tabFade 0.3s` 都走 `cubic-bezier(0.16,1,0.3,1)`。固定 viewport 高度 `100vh - 110px`，header + tab bar pin，内部 content 滚动。
+- 阅读做题页主按钮颜色对齐 section 蓝色 accent：shared `<Btn>` 默认背景是 `C.blue`（实际是绿色 `#0d9668`，命名遗留），CTWTask 的「提交答案」「重新作答」、RDLTask 的「提交全部」「下一题（未提交态）」都内联 override 成 `#3B82F6`。ReadingProgressView 侧栏 h1→p 的 margin 简写归一，避免 `margin: 0` 覆盖 `marginTop: 4`。
+
 ## 2026-05-20
 
 - 修复阅读 RDL（Read in Daily Life）短版 / 长版切换无效的问题：之前不管选「短版 · 2 题」还是「长版 · 3 题」，进入练习后都拿到 3 道题。
