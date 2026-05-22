@@ -737,10 +737,10 @@ export function ReadingProgressView({ onBack }) {
             }}
           >
             <div style={{ marginBottom: 16 }}>
-              <h1 style={{ fontSize: 22, fontWeight: 800, color: P.text, letterSpacing: "-0.03em", lineHeight: 1.2, margin: 0 }}>
+              <h1 style={{ fontSize: 22, fontWeight: 800, color: P.text, letterSpacing: "-0.03em", lineHeight: 1.2, margin: "0 0 6px" }}>
                 阅读练习记录
               </h1>
-              <p style={{ fontSize: 12, color: P.textDim, lineHeight: 1.6, marginTop: 4, margin: 0 }}>
+              <p style={{ fontSize: 12, color: P.textDim, lineHeight: 1.6, margin: 0 }}>
                 点击模考查看完整报告
               </p>
             </div>

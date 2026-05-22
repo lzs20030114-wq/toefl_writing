@@ -307,7 +307,15 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
           )}
 
           {!submitted && currentQ === questions.length - 1 && allAnswered ? (
-            <Btn onClick={handleSubmit} style={{ fontSize: 13, minWidth: 120 }}>
+            <Btn
+              onClick={handleSubmit}
+              style={{
+                fontSize: 13,
+                minWidth: 120,
+                background: accent.color,
+                borderColor: accent.color,
+              }}
+            >
               提交全部
             </Btn>
           ) : (
@@ -315,7 +323,12 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
               onClick={handleNext}
               variant={submitted ? "secondary" : undefined}
               disabled={currentQ === questions.length - 1 && submitted}
-              style={{ opacity: currentQ === questions.length - 1 && submitted ? 0.4 : 1, fontSize: 13, minWidth: 80 }}
+              style={{
+                opacity: currentQ === questions.length - 1 && submitted ? 0.4 : 1,
+                fontSize: 13,
+                minWidth: 80,
+                ...(submitted ? {} : { background: accent.color, borderColor: accent.color }),
+              }}
             >
               下一题 →
             </Btn>

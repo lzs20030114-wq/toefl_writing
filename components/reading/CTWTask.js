@@ -206,7 +206,16 @@ export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
         {/* Submit / Result */}
         {!submitted ? (
           <div style={{ textAlign: "center" }}>
-            <Btn onClick={handleSubmit} style={{ minWidth: 200, fontSize: 15, padding: "12px 32px" }}>
+            <Btn
+              onClick={handleSubmit}
+              style={{
+                minWidth: 200,
+                fontSize: 15,
+                padding: "12px 32px",
+                background: accent.color,
+                borderColor: accent.color,
+              }}
+            >
               提交答案
             </Btn>
           </div>
@@ -220,7 +229,12 @@ export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
             </div>
             <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
               <Btn onClick={onExit} variant="secondary">返回</Btn>
-              <Btn onClick={() => { setAnswers(item.blanks.map(() => "")); setSubmitted(false); }}>重新作答</Btn>
+              <Btn
+                onClick={() => { setAnswers(item.blanks.map(() => "")); setSubmitted(false); }}
+                style={{ background: accent.color, borderColor: accent.color }}
+              >
+                重新作答
+              </Btn>
             </div>
           </SurfaceCard>
         )}
