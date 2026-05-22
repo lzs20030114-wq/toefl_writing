@@ -268,7 +268,8 @@ export function ReadingSectionContent({
 }
 
 function ReadingCompanionLinks({ isChallenge, hoverKey, setHoverKey, fadeIn, sessions = [], mistakeCount = 0 }) {
-  const readingCount = sessions.filter((s) => s?.type === "reading").length;
+  // Include legacy "adaptive-reading" records — 842cd85 regression dropped this.
+  const readingCount = sessions.filter((s) => s?.type === "reading" || s?.type === "adaptive-reading").length;
 
   return (
     <>

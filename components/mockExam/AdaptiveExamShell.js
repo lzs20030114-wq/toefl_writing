@@ -760,17 +760,27 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
     const score = calculateAdaptiveScore(m1Correct, m1Total, m2Correct, m2Total, routePath);
     setFinalScore(score);
 
-    // Save to history
+    // Save to history. Use the canonical section type ("reading"/"listening")
+    // with details.subtype="mock" so ReadingProgressView / ListeningProgressView
+    // pick these up alongside practice records. The old "adaptive-{section}"
+    // type was never consumed by any view — regression introduced in 842cd85.
     try {
       saveSess({
-        type: config.sessionType,
+        type: section,
+        mode: "mock",
         date: new Date().toISOString(),
-        path: routePath,
+        correct: m1Correct + m2Correct,
+        total: m1Total + m2Total,
         band: score.band,
-        cefr: score.cefr,
-        m1: { correct: m1Correct, total: m1Total, accuracy: score.m1Accuracy },
-        m2: { correct: m2Correct, total: m2Total, accuracy: score.m2Accuracy },
-        rawScore: score.rawScore,
+        details: {
+          subtype: "mock",
+          path: routePath,
+          band: score.band,
+          cefr: score.cefr,
+          m1: { correct: m1Correct, total: m1Total, accuracy: score.m1Accuracy },
+          m2: { correct: m2Correct, total: m2Total, accuracy: score.m2Accuracy },
+          rawScore: score.rawScore,
+        },
       });
     } catch {}
 
