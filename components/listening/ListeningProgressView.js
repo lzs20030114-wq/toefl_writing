@@ -5,6 +5,7 @@ import { C, FONT, Btn, PageShell, SurfaceCard, TopBar, ChevronIcon, ModeChip } f
 import { loadHist, deleteSession, clearAllSessions, SESSION_STORE_EVENTS, setCurrentUser } from "../../lib/sessionStore";
 import { getSavedCode } from "../../lib/AuthContext";
 import { formatLocalDateTime } from "../../lib/utils";
+import { buildDailyAveragePoints, formatMonthDayFromDateKey, getAccuracyPercent } from "../../lib/history/scoreMetrics";
 
 const ACCENT = { color: "#8B5CF6", soft: "#F5F3FF" };
 
@@ -62,19 +63,7 @@ function ListeningTrendChart({ sessions, filter }) {
   const svgRef = useRef(null);
 
   const filtered = filter === "all" ? sessions : sessions.filter(s => s.details?.subtype === filter);
-  const byDay = {};
-  filtered.forEach(s => {
-    const d = new Date(s.date).toISOString().slice(0, 10);
-    if (!byDay[d]) byDay[d] = { scores: [], date: d };
-    const t = Number(s.total || 0), c = Number(s.correct || 0);
-    if (t > 0) byDay[d].scores.push(c / t * 100);
-  });
-
-  const pts = Object.values(byDay).map(g => ({
-    date: g.date,
-    ts: new Date(g.date).getTime(),
-    avg: g.scores.reduce((a, b) => a + b, 0) / g.scores.length,
-  })).sort((a, b) => a.ts - b.ts);
+  const pts = buildDailyAveragePoints(filtered, getAccuracyPercent);
 
   if (pts.length < 2) return <div style={{ padding: "16px 0", textAlign: "center", fontSize: 11, color: P.textDim }}>练习 2 天以上后显示趋势</div>;
 
@@ -100,8 +89,7 @@ function ListeningTrendChart({ sessions, filter }) {
       {pts.length > 0 && (() => {
         const dates = [pts[0], pts[pts.length - 1]];
         return dates.map((p, i) => {
-          const [, m, d] = p.date.split("-");
-          return <text key={i} x={toX(p.ts)} y={H - 4} fontSize={8} fill={P.textDim} textAnchor={i === 0 ? "start" : "end"}>{m}/{d}</text>;
+          return <text key={i} x={toX(p.ts)} y={H - 4} fontSize={8} fill={P.textDim} textAnchor={i === 0 ? "start" : "end"}>{formatMonthDayFromDateKey(p.date)}</text>;
         });
       })()}
     </svg>
@@ -152,8 +140,16 @@ function SessionRow({ session, expanded, onToggle, onDelete }) {
   const subtype = s.details?.subtype || "lcr";
   const m = getSubtypeInfo(subtype);
   const resultsArr = s.details?.results || [];
-  const t = Number(s.total || 0) || resultsArr.length;
-  const c = Number(s.correct || 0) || resultsArr.filter(r => r.isCorrect).length;
+  let t, c;
+  if (subtype === "mock") {
+    const m1 = s.details?.m1 || {};
+    const m2 = s.details?.m2 || {};
+    t = Number(s.total) || (Number(m1.total) || 0) + (Number(m2.total) || 0);
+    c = Number(s.correct) || (Number(m1.correct) || 0) + (Number(m2.correct) || 0);
+  } else {
+    t = Number(s.total || 0) || resultsArr.length;
+    c = Number(s.correct || 0) || resultsArr.filter(r => r.isCorrect).length;
+  }
   const pct = t > 0 ? c / t : 0;
   const scoreColor = pct >= 0.8 ? "#059669" : pct >= 0.6 ? "#D97706" : "#E11D48";
   const topic = s.details?.topic || "";
@@ -525,13 +521,10 @@ export function ListeningProgressView({ onBack }) {
 
   function avgPct(arr) {
     if (arr.length === 0) return null;
-    const sum = arr.reduce((s, sess) => {
-      const ra = sess.details?.results || [];
-      const t = Number(sess.total || 0) || ra.length;
-      const c = Number(sess.correct || 0) || ra.filter(r => r.isCorrect).length;
-      return t > 0 ? s + (c / t) * 100 : s;
-    }, 0);
-    return Math.round(sum / arr.length);
+    const scores = arr.map(getAccuracyPercent).filter(Number.isFinite);
+    if (scores.length === 0) return null;
+    const sum = scores.reduce((a, b) => a + b, 0);
+    return Math.round(sum / scores.length);
   }
 
   const lcrAvg = avgPct(lcrSessions);

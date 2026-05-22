@@ -5,6 +5,7 @@ import { C, FONT, Btn, PageShell, SurfaceCard, TopBar, ChevronIcon, ModeChip } f
 import { loadHist, deleteSession, clearAllSessions, SESSION_STORE_EVENTS, setCurrentUser } from "../../lib/sessionStore";
 import { getSavedCode } from "../../lib/AuthContext";
 import { formatLocalDateTime } from "../../lib/utils";
+import { buildDailyAveragePoints, formatMonthDayFromDateKey, getSpeakingAverageScore, getSpeakingBandScore } from "../../lib/history/scoreMetrics";
 
 const ACCENT = { color: "#F59E0B", soft: "#FFFBEB" };
 
@@ -56,27 +57,19 @@ function normalizeSpeakingSession(s) {
 function SpeakingTrendChart({ sessions, filter }) {
   const svgRef = useRef(null);
 
-  const filtered = filter === "all" ? sessions : sessions.filter(s => s.details?.subtype === filter);
-  const byDay = {};
-  filtered.forEach(s => {
-    const d = new Date(s.date).toISOString().slice(0, 10);
-    if (!byDay[d]) byDay[d] = { scores: [], date: d };
-    const avg = s.details?.averageScore;
-    if (avg != null && avg > 0) byDay[d].scores.push(avg);
-  });
-
-  const pts = Object.values(byDay)
-    .filter(g => g.scores.length > 0)
-    .map(g => ({
-      date: g.date,
-      ts: new Date(g.date).getTime(),
-      avg: g.scores.reduce((a, b) => a + b, 0) / g.scores.length,
-    }))
-    .sort((a, b) => a.ts - b.ts);
+  const isMockFilter = filter === "mock";
+  const filtered = filter === "all"
+    ? sessions.filter(s => s.details?.subtype !== "mock")
+    : sessions.filter(s => s.details?.subtype === filter);
+  const pts = buildDailyAveragePoints(
+    filtered,
+    isMockFilter ? getSpeakingBandScore : getSpeakingAverageScore,
+  );
 
   if (pts.length < 2) return <div style={{ padding: "16px 0", textAlign: "center", fontSize: 11, color: P.textDim }}>练习 2 天以上后显示趋势</div>;
 
-  const maxScore = 5;
+  const maxScore = isMockFilter ? 6 : 5;
+  const ticks = isMockFilter ? [0, 3, 6] : [0, 2.5, 5];
   const W = 400, H = 120, ML = 30, MR = 10, MT = 10, MB = 22;
   const cW = W - ML - MR, cH = H - MT - MB;
   const minTs = Math.min(...pts.map(p => p.ts)), maxTs = Math.max(...pts.map(p => p.ts));
@@ -88,7 +81,7 @@ function SpeakingTrendChart({ sessions, filter }) {
 
   return (
     <svg ref={svgRef} viewBox={`0 0 ${W} ${H}`} width="100%" style={{ display: "block" }}>
-      {[0, 2.5, 5].map(y => (
+      {ticks.map(y => (
         <g key={y}>
           <line x1={ML} y1={toY(y)} x2={ML + cW} y2={toY(y)} stroke="#edf2ef" strokeWidth={1} strokeDasharray="3,3" />
           <text x={ML - 4} y={toY(y) + 3} fontSize={8} fill={P.textDim} textAnchor="end">{y}</text>
@@ -99,8 +92,7 @@ function SpeakingTrendChart({ sessions, filter }) {
       {pts.length > 0 && (() => {
         const dates = [pts[0], pts[pts.length - 1]];
         return dates.map((p, i) => {
-          const [, m, d] = p.date.split("-");
-          return <text key={i} x={toX(p.ts)} y={H - 4} fontSize={8} fill={P.textDim} textAnchor={i === 0 ? "start" : "end"}>{m}/{d}</text>;
+          return <text key={i} x={toX(p.ts)} y={H - 4} fontSize={8} fill={P.textDim} textAnchor={i === 0 ? "start" : "end"}>{formatMonthDayFromDateKey(p.date)}</text>;
         });
       })()}
     </svg>
@@ -155,15 +147,16 @@ function SessionRow({ session, expanded, onToggle, onDelete }) {
   const topic = s.details?.topic || "";
   const attempted = s.details?.attempted || 0;
   const total = s.details?.total || 0;
+  const mockBand = getSpeakingBandScore(s);
 
   // Mock sessions show a band score; practice sessions show 0-5 average or
   // "attempted/total" as a fallback.
   const isMock = subtype === "mock";
-  const scoreDisplay = isMock && Number.isFinite(s.band)
-    ? `Band ${s.band}`
+  const scoreDisplay = isMock && mockBand != null
+    ? `Band ${mockBand}`
     : avgScore != null ? `${avgScore}/5` : `${attempted}/${total}`;
-  const scoreColor = isMock && Number.isFinite(s.band)
-    ? (s.band >= 4 ? "#059669" : s.band >= 3 ? "#D97706" : "#E11D48")
+  const scoreColor = isMock && mockBand != null
+    ? (mockBand >= 4 ? "#059669" : mockBand >= 3 ? "#D97706" : "#E11D48")
     : avgScore != null
       ? (avgScore >= 4 ? "#059669" : avgScore >= 3 ? "#D97706" : "#E11D48")
       : P.textSec;
@@ -566,10 +559,10 @@ export function SpeakingProgressView({ onBack }) {
 
   function avgScore(arr) {
     if (arr.length === 0) return null;
-    const valid = arr.filter(s => s.details?.averageScore != null && s.details.averageScore > 0);
-    if (valid.length === 0) return null;
-    const sum = valid.reduce((a, s) => a + s.details.averageScore, 0);
-    return Math.round((sum / valid.length) * 2) / 2;
+    const scores = arr.map(getSpeakingAverageScore).filter(Number.isFinite);
+    if (scores.length === 0) return null;
+    const sum = scores.reduce((a, b) => a + b, 0);
+    return Math.round((sum / scores.length) * 2) / 2;
   }
 
   const repeatAvg = avgScore(repeatSessions);
@@ -579,9 +572,9 @@ export function SpeakingProgressView({ onBack }) {
   // For mock sessions, "average" is the mean band, not the 0-5 dimension
   // average — different scale. Compute separately.
   function mockAvgBand(arr) {
-    const valid = arr.filter(s => Number.isFinite(s.band));
-    if (valid.length === 0) return null;
-    return Math.round((valid.reduce((sum, s) => sum + s.band, 0) / valid.length) * 10) / 10;
+    const scores = arr.map(getSpeakingBandScore).filter(Number.isFinite);
+    if (scores.length === 0) return null;
+    return Math.round((scores.reduce((sum, score) => sum + score, 0) / scores.length) * 10) / 10;
   }
   const mockAvg = mockAvgBand(mockSessions);
 
