@@ -204,11 +204,11 @@ function SessionRow({ session, expanded, onToggle, onDelete }) {
           </svg>
         </span>
       </button>
-      {expanded && (s.details?.results || subtype === "mock") && (
+      {/* Practice list only — mock entries are rendered via the sidebar →
+          right-pane MockSessionDetail flow, so no mock branch here anymore. */}
+      {expanded && s.details?.results && (
         <div style={{ padding: "0 16px 14px 62px", animation: "fadeUp 0.2s ease" }}>
-          {subtype === "mock" ? <MockSessionDetail session={s} accent={ACCENT.color} />
-            : subtype === "ctw" ? <CTWDetail session={s} />
-            : <RDLDetail session={s} />}
+          {subtype === "ctw" ? <CTWDetail session={s} /> : <RDLDetail session={s} />}
         </div>
       )}
     </div>
@@ -578,104 +578,9 @@ function MockListSidebar({ entries, activeIdx, onSelect }) {
 
 // ── Mock Report Panel (right column when a mock is selected) ──
 
-function MockReportPanel({ session, onClose, onDelete }) {
-  const date = new Date(session.date);
-  return (
-    <div
-      style={{
-        background: P.surface,
-        border: `1px solid ${P.borderSubtle}`,
-        borderRadius: 16,
-        overflow: "hidden",
-        animation: "slideInRight 0.35s cubic-bezier(0.16,1,0.3,1)",
-      }}
-    >
-      <div
-        style={{
-          padding: "14px 18px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          borderBottom: `1px solid ${P.borderSubtle}`,
-          background: `linear-gradient(180deg, ${P.bg} 0%, ${P.surface} 100%)`,
-        }}
-      >
-        <div>
-          <div style={{ fontSize: 11, fontWeight: 700, color: P.textDim, textTransform: "uppercase", letterSpacing: "0.06em" }}>
-            阅读模考详情
-          </div>
-          <div style={{ fontSize: 14, fontWeight: 700, color: P.text, marginTop: 2 }}>
-            {formatLocalDateTime(session.date)}
-          </div>
-        </div>
-        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-          <button
-            onClick={() => {
-              if (window.confirm("删除这条模考记录？")) onDelete();
-            }}
-            title="删除"
-            style={{
-              background: "none",
-              border: `1px solid ${P.borderSubtle}`,
-              color: P.textDim,
-              padding: "6px 10px",
-              borderRadius: 8,
-              cursor: "pointer",
-              fontSize: 12,
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 4,
-              transition: "all 0.15s",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = "#dc2626";
-              e.currentTarget.style.color = "#dc2626";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = P.borderSubtle;
-              e.currentTarget.style.color = P.textDim;
-            }}
-          >
-            <svg viewBox="0 0 16 16" width={11} height={11} fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
-              <path d="M2.5 4.5h11M5.5 4.5V3a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v1.5M6.5 7v4.5M9.5 7v4.5M3.5 4.5l.5 8.5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1l.5-8.5" />
-            </svg>
-            删除
-          </button>
-          <button
-            onClick={onClose}
-            title="关闭"
-            style={{
-              background: P.surface,
-              border: `1px solid ${P.border}`,
-              color: P.textSec,
-              width: 28,
-              height: 28,
-              borderRadius: 8,
-              cursor: "pointer",
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              transition: "all 0.15s",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = P.bg;
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = P.surface;
-            }}
-          >
-            <svg viewBox="0 0 16 16" width={11} height={11} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <path d="M3 3l10 10M13 3L3 13" />
-            </svg>
-          </button>
-        </div>
-      </div>
-      <div style={{ padding: "16px 18px" }}>
-        <MockSessionDetail session={session} accent={ACCENT.color} />
-      </div>
-    </div>
-  );
-}
+// MockReportPanel removed — MockSessionDetail now renders its own header
+// (back button + title + CEFR/path tags + Overall Band + delete) to match
+// the writing FullMockReport layout 1:1.
 
 // ── Main View ──
 
@@ -789,9 +694,10 @@ export function ReadingProgressView({ onBack }) {
       <style>{`
         @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
         @keyframes fadeUpReading { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
-        @keyframes slideInRight { from { opacity:0; transform:translateX(20px); } to { opacity:1; transform:translateX(0); } }
-        @keyframes slideInLeft { from { opacity:0; transform:translateX(-12px); } to { opacity:1; transform:translateX(0); } }
+        @keyframes slideInRight { from { opacity:0; transform:translateX(24px) scale(0.99); } to { opacity:1; transform:translateX(0) scale(1); } }
+        @keyframes slideInLeft { from { opacity:0; transform:translateX(-16px); } to { opacity:1; transform:translateX(0); } }
         @keyframes expandDown { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes tabFade { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
         @media (max-width: 960px) {
           .rp-layout { flex-direction: column !important; gap: 16px !important; }
           .rp-sidebar { width: 100% !important; position: static !important; }
@@ -849,9 +755,10 @@ export function ReadingProgressView({ onBack }) {
           {/* Right main: mock detail OR practice overview */}
           <main style={{ flex: 1, minWidth: 0, animation: "fadeUpReading 0.5s cubic-bezier(0.25,1,0.5,1) 120ms both" }}>
             {activeMockEntry ? (
-              <MockReportPanel
+              <MockSessionDetail
                 key={activeMockEntry.sourceIndex}
                 session={activeMockEntry.session}
+                accent={ACCENT.color}
                 onClose={() => setActiveMockSrcIdx(null)}
                 onDelete={() => handleDelete(activeMockEntry.sourceIndex)}
               />
