@@ -108,8 +108,14 @@ function CTWInlineTask({ item, onComplete }) {
     const results = item.blanks.map((blank, i) => {
       const expected = blank.original_word.toLowerCase().replace(/[^a-z]/g, "");
       const fragment = blank.displayed_fragment.toLowerCase();
-      const userFull = (fragment + answers[i]).toLowerCase().replace(/[^a-z]/g, "");
-      return { isCorrect: userFull === expected };
+      const userInput = answers[i] || "";
+      const userFull = (fragment + userInput).toLowerCase().replace(/[^a-z]/g, "");
+      return {
+        // Full user-typed word (fragment + their input). Captured so the
+        // post-exam review can show "you typed: X" alongside the correct word.
+        userAnswer: blank.displayed_fragment + userInput,
+        isCorrect: userFull === expected,
+      };
     });
     const correct = results.filter((r) => r.isCorrect).length;
     setTimeout(() => {
@@ -613,6 +619,47 @@ function sumTotalFromResults(results) {
   return total;
 }
 
+// Convert in-memory results into a serializable per-task snapshot that
+// preserves enough context for the post-exam review (passage, questions,
+// blanks, user answers). Strips anything large/transient (e.g. audio_url
+// stays — they're short URLs/text references, not blobs).
+function buildTaskSnapshots(results) {
+  return results.map((r) => {
+    const item = r?.item || {};
+    // Common fields per task type:
+    //   ctw: passage + blanks[]
+    //   rdl: text + questions[]
+    //   ap:  passage + paragraphs[] + questions[]
+    //   lcr: audio_url/speaker + options + answer (single question per item)
+    //   la/lc/lat: audio_url + text/announcement/lecture/conversation + questions[]
+    return {
+      taskType: item.taskType || null,
+      itemId: item.id || null,
+      topic: item.topic || item.subtopic || null,
+      difficulty: item.difficulty || null,
+      passage: item.passage || null,
+      text: item.text || null,
+      paragraphs: item.paragraphs || null,
+      blanks: item.blanks || null,
+      questions: item.questions || null,
+      // For LCR (single-question listen-and-choose)
+      options: item.options || null,
+      answer: item.answer || null,
+      // Audio refs (URLs / text fallback for TTS) — keep so listening review
+      // can re-play. Strings only, no blobs.
+      audio_url: item.audio_url || null,
+      speaker: item.speaker || null,
+      announcement: item.announcement || null,
+      lecture: item.lecture || null,
+      conversation: item.conversation || null,
+      // Performance
+      correct: r.correct ?? 0,
+      total: r.total ?? 0,
+      results: Array.isArray(r.results) ? r.results : [],
+    };
+  });
+}
+
 // ------ Main Shell ------
 
 export function AdaptiveExamShell({ section = "reading", onExit }) {
@@ -695,8 +742,12 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
   }
 
   function handleItemComplete(result) {
+    // Attach the item to the result so the post-exam review can render the
+    // original passage/questions alongside the user's answers. Without this,
+    // results are just aggregated correctness — no way to show the test back.
+    const enriched = { ...result, item: currentItem };
     if (phase === "module1") {
-      const next = [...m1Results, result];
+      const next = [...m1Results, enriched];
       setM1Results(next);
       const nextIndex = currentItemIndex + 1;
       if (nextIndex >= m1Items.length) {
@@ -706,7 +757,7 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
         setCurrentItemIndex(nextIndex);
       }
     } else if (phase === "module2") {
-      const next = [...m2Results, result];
+      const next = [...m2Results, enriched];
       setM2Results(next);
       const nextIndex = currentItemIndex + 1;
       if (nextIndex >= m2Items.length) {
@@ -764,6 +815,11 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
     // with details.subtype="mock" so ReadingProgressView / ListeningProgressView
     // pick these up alongside practice records. The old "adaptive-{section}"
     // type was never consumed by any view — regression introduced in 842cd85.
+    //
+    // Each module's `tasks` array is a per-item snapshot (taskType, item id,
+    // passage/questions/blanks, user results) so the post-exam review can
+    // render the original test back with right/wrong + AI explanations,
+    // without having to re-query the question bank by id (which could shift).
     try {
       saveSess({
         type: section,
@@ -777,8 +833,18 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
           path: routePath,
           band: score.band,
           cefr: score.cefr,
-          m1: { correct: m1Correct, total: m1Total, accuracy: score.m1Accuracy },
-          m2: { correct: m2Correct, total: m2Total, accuracy: score.m2Accuracy },
+          m1: {
+            correct: m1Correct,
+            total: m1Total,
+            accuracy: score.m1Accuracy,
+            tasks: buildTaskSnapshots(m1Res),
+          },
+          m2: {
+            correct: m2Correct,
+            total: m2Total,
+            accuracy: score.m2Accuracy,
+            tasks: buildTaskSnapshots(m2Res),
+          },
           rawScore: score.rawScore,
         },
       });

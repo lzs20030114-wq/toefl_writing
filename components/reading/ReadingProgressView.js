@@ -5,6 +5,7 @@ import { C, FONT, Btn, PageShell, SurfaceCard, TopBar, ChevronIcon, ModeChip } f
 import { loadHist, deleteSession, clearAllSessions, SESSION_STORE_EVENTS, setCurrentUser } from "../../lib/sessionStore";
 import { getSavedCode } from "../../lib/AuthContext";
 import { formatLocalDateTime } from "../../lib/utils";
+import { MockSessionDetail } from "./MockSessionDetail";
 
 const ACCENT = { color: "#3B82F6", soft: "#EFF6FF" };
 
@@ -147,10 +148,22 @@ function SessionRow({ session, expanded, onToggle, onDelete }) {
   const s = session;
   const subtype = s.details?.subtype || "rdl";
   const m = getSubtypeInfo(subtype);
-  // Fallback: if total/correct are 0 but results exist, recalculate from results
-  const resultsArr = s.details?.results || [];
-  const t = Number(s.total || 0) || resultsArr.length;
-  const c = Number(s.correct || 0) || resultsArr.filter(r => r.isCorrect).length;
+  // Score fallback hierarchy:
+  //   1. Top-level correct/total (set by normalizeReadingSession or fresh saves)
+  //   2. For mock: sum of m1/m2 from details (covers old type=reading saves
+  //      that pre-date the top-level correct/total fix)
+  //   3. For practice: count from details.results[] (CTW/RDL/AP shape)
+  let t, c;
+  if (subtype === "mock") {
+    const m1 = s.details?.m1 || {};
+    const m2 = s.details?.m2 || {};
+    t = Number(s.total) || (Number(m1.total) || 0) + (Number(m2.total) || 0);
+    c = Number(s.correct) || (Number(m1.correct) || 0) + (Number(m2.correct) || 0);
+  } else {
+    const resultsArr = s.details?.results || [];
+    t = Number(s.total || 0) || resultsArr.length;
+    c = Number(s.correct || 0) || resultsArr.filter(r => r.isCorrect).length;
+  }
   const pct = t > 0 ? c / t : 0;
   const scoreColor = pct >= 0.8 ? "#059669" : pct >= 0.6 ? "#D97706" : "#E11D48";
   const topic = s.details?.topic || "";
@@ -193,7 +206,7 @@ function SessionRow({ session, expanded, onToggle, onDelete }) {
       </button>
       {expanded && (s.details?.results || subtype === "mock") && (
         <div style={{ padding: "0 16px 14px 62px", animation: "fadeUp 0.2s ease" }}>
-          {subtype === "mock" ? <MockDetail session={s} />
+          {subtype === "mock" ? <MockSessionDetail session={s} accent={ACCENT.color} />
             : subtype === "ctw" ? <CTWDetail session={s} />
             : <RDLDetail session={s} />}
         </div>
@@ -202,39 +215,8 @@ function SessionRow({ session, expanded, onToggle, onDelete }) {
   );
 }
 
-function MockDetail({ session }) {
-  const d = session.details || {};
-  const m1 = d.m1 || { correct: 0, total: 0 };
-  const m2 = d.m2 || { correct: 0, total: 0 };
-  const band = d.band || session.band || "—";
-  const cefr = d.cefr || "";
-  const path = d.path || "";
-  const m1Pct = m1.total > 0 ? Math.round((m1.correct / m1.total) * 100) : null;
-  const m2Pct = m2.total > 0 ? Math.round((m2.correct / m2.total) * 100) : null;
-
-  const cell = (label, value, hint) => (
-    <div style={{ flex: 1, padding: "10px 12px", background: "#f8faf9", border: `1px solid ${P.borderSubtle}`, borderRadius: 8, textAlign: "center" }}>
-      <div style={{ fontSize: 10, color: P.textDim, marginBottom: 2 }}>{label}</div>
-      <div style={{ fontSize: 16, fontWeight: 700, color: P.text, fontVariantNumeric: "tabular-nums" }}>{value}</div>
-      {hint && <div style={{ fontSize: 10, color: P.textDim, marginTop: 1 }}>{hint}</div>}
-    </div>
-  );
-
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-      <div style={{ display: "flex", gap: 8 }}>
-        {cell("Band", String(band), cefr ? `CEFR ${cefr}` : null)}
-        {cell("Module 1", `${m1.correct}/${m1.total}`, m1Pct != null ? `${m1Pct}%` : null)}
-        {cell("Module 2", `${m2.correct}/${m2.total}`, m2Pct != null ? `${m2Pct}%` : null)}
-      </div>
-      {path && (
-        <div style={{ fontSize: 11, color: P.textSec, padding: "8px 12px", background: `${P.mock.color}08`, borderRadius: 8, borderLeft: `3px solid ${P.mock.color}` }}>
-          <span style={{ fontWeight: 700, color: P.mock.color, marginRight: 6 }}>路径</span>{path}
-        </div>
-      )}
-    </div>
-  );
-}
+// Old simplified MockDetail removed — see MockSessionDetail.js for the full
+// post-exam review (band cells + per-task drill-down with AI explanations).
 
 function CTWDetail({ session }) {
   const results = session.details?.results || [];
