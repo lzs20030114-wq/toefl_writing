@@ -364,6 +364,319 @@ function RDLDetail({ session }) {
   );
 }
 
+// ── Band → color (for sidebar latest-mock + list dot) ──
+
+function getBandColor(band) {
+  if (!Number.isFinite(band)) return P.textDim;
+  if (band >= 5.5) return "#16a34a";
+  if (band >= 4.5) return "#2563eb";
+  if (band >= 3.5) return "#d97706";
+  if (band >= 2.5) return "#ea580c";
+  return "#dc2626";
+}
+
+// ── Latest Mock Card (sidebar) ──
+
+function LatestMockCard({ session }) {
+  if (!session) return null;
+  const band = Number.isFinite(session.band) ? session.band : session.details?.band;
+  const cefr = session.details?.cefr || session.cefr || "";
+  const bc = getBandColor(band);
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 12,
+        padding: "14px 16px",
+        background: `linear-gradient(135deg, ${P.primarySoft} 0%, #f0f9ff 100%)`,
+        borderRadius: 14,
+        border: `1px solid ${P.primary}18`,
+        marginBottom: 14,
+      }}
+    >
+      <div
+        style={{
+          width: 50,
+          height: 50,
+          borderRadius: "50%",
+          background: "#fff",
+          border: `3px solid ${bc}`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexShrink: 0,
+        }}
+      >
+        <span style={{ fontSize: 16, fontWeight: 800, color: bc, fontVariantNumeric: "tabular-nums" }}>
+          {Number.isFinite(band) ? band.toFixed(1) : "—"}
+        </span>
+      </div>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div
+          style={{
+            fontSize: 10,
+            fontWeight: 700,
+            color: P.textDim,
+            textTransform: "uppercase",
+            letterSpacing: "0.08em",
+            marginBottom: 4,
+          }}
+        >
+          最新模考
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+          {cefr && (
+            <span
+              style={{
+                fontSize: 10,
+                fontWeight: 700,
+                padding: "2px 6px",
+                borderRadius: 4,
+                background: P.bg,
+                border: `1px solid ${P.borderSubtle}`,
+                color: P.textSec,
+              }}
+            >
+              CEFR {cefr}
+            </span>
+          )}
+          <span style={{ fontSize: 10, color: P.textDim }}>
+            {new Date(session.date).toLocaleDateString("zh-CN")}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Mock list (sidebar) ──
+
+function MockListSidebar({ entries, activeIdx, onSelect }) {
+  const [open, setOpen] = useState(true);
+  return (
+    <div
+      style={{
+        background: P.surface,
+        borderRadius: 12,
+        border: `1px solid ${P.border}`,
+        overflow: "hidden",
+        marginBottom: 16,
+      }}
+    >
+      <button
+        onClick={() => setOpen(!open)}
+        style={{
+          width: "100%",
+          padding: "12px 14px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          background: P.bg,
+          border: "none",
+          borderBottom: open ? `1px solid ${P.borderSubtle}` : "none",
+          cursor: "pointer",
+        }}
+      >
+        <span style={{ fontSize: 12, fontWeight: 700, color: P.text }}>
+          🎯 模考记录 ({entries.length})
+        </span>
+        <span style={{ fontSize: 11, color: P.textDim }}>{open ? "收起" : "展开"}</span>
+      </button>
+      {open && (
+        <div
+          style={{
+            maxHeight: 360,
+            overflowY: "auto",
+            display: "flex",
+            flexDirection: "column",
+            animation: "expandDown 0.3s cubic-bezier(0.16,1,0.3,1)",
+          }}
+        >
+          {entries.length === 0 ? (
+            <div style={{ padding: "20px 16px", textAlign: "center", fontSize: 12, color: P.textDim }}>
+              暂无模考记录。
+            </div>
+          ) : (
+            entries.map((entry, i) => {
+              const s = entry.session;
+              const band = Number.isFinite(s.band) ? s.band : s.details?.band;
+              const bc = getBandColor(band);
+              const path = s.details?.path || "";
+              const isActive = activeIdx === entry.sourceIndex;
+              const date = new Date(s.date);
+              const dateStr = `${date.getMonth() + 1}/${date.getDate()}`;
+              return (
+                <button
+                  key={entry.sourceIndex}
+                  onClick={() => onSelect(isActive ? null : entry.sourceIndex)}
+                  style={{
+                    padding: "10px 14px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 10,
+                    background: isActive ? `${bc}10` : "transparent",
+                    border: "none",
+                    borderLeft: `3px solid ${isActive ? bc : "transparent"}`,
+                    borderBottom: i < entries.length - 1 ? `1px solid ${P.borderSubtle}` : "none",
+                    cursor: "pointer",
+                    textAlign: "left",
+                    transition: "all 0.2s cubic-bezier(0.16,1,0.3,1)",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isActive) e.currentTarget.style.background = `${P.textDim}08`;
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive) e.currentTarget.style.background = "transparent";
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 30,
+                      height: 30,
+                      borderRadius: "50%",
+                      background: `${bc}15`,
+                      border: `1.5px solid ${bc}40`,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: 11,
+                        fontWeight: 800,
+                        color: bc,
+                        fontVariantNumeric: "tabular-nums",
+                      }}
+                    >
+                      {Number.isFinite(band) ? band.toFixed(1) : "—"}
+                    </span>
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: P.text, lineHeight: 1.3 }}>
+                      {dateStr}
+                      <span style={{ fontSize: 10, color: P.textDim, fontWeight: 500, marginLeft: 6 }}>
+                        {date.toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" })}
+                      </span>
+                    </div>
+                    <div style={{ fontSize: 10, color: P.textDim, marginTop: 2 }}>
+                      {path ? (path === "upper" ? "Upper 路径" : path === "lower" ? "Lower 路径" : path) : "—"}
+                    </div>
+                  </div>
+                  <span style={{ fontSize: 10, color: P.textDim, flexShrink: 0 }}>{isActive ? "◀" : "▸"}</span>
+                </button>
+              );
+            })
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Mock Report Panel (right column when a mock is selected) ──
+
+function MockReportPanel({ session, onClose, onDelete }) {
+  const date = new Date(session.date);
+  return (
+    <div
+      style={{
+        background: P.surface,
+        border: `1px solid ${P.borderSubtle}`,
+        borderRadius: 16,
+        overflow: "hidden",
+        animation: "slideInRight 0.35s cubic-bezier(0.16,1,0.3,1)",
+      }}
+    >
+      <div
+        style={{
+          padding: "14px 18px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          borderBottom: `1px solid ${P.borderSubtle}`,
+          background: `linear-gradient(180deg, ${P.bg} 0%, ${P.surface} 100%)`,
+        }}
+      >
+        <div>
+          <div style={{ fontSize: 11, fontWeight: 700, color: P.textDim, textTransform: "uppercase", letterSpacing: "0.06em" }}>
+            阅读模考详情
+          </div>
+          <div style={{ fontSize: 14, fontWeight: 700, color: P.text, marginTop: 2 }}>
+            {formatLocalDateTime(session.date)}
+          </div>
+        </div>
+        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          <button
+            onClick={() => {
+              if (window.confirm("删除这条模考记录？")) onDelete();
+            }}
+            title="删除"
+            style={{
+              background: "none",
+              border: `1px solid ${P.borderSubtle}`,
+              color: P.textDim,
+              padding: "6px 10px",
+              borderRadius: 8,
+              cursor: "pointer",
+              fontSize: 12,
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 4,
+              transition: "all 0.15s",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = "#dc2626";
+              e.currentTarget.style.color = "#dc2626";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = P.borderSubtle;
+              e.currentTarget.style.color = P.textDim;
+            }}
+          >
+            <svg viewBox="0 0 16 16" width={11} height={11} fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+              <path d="M2.5 4.5h11M5.5 4.5V3a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v1.5M6.5 7v4.5M9.5 7v4.5M3.5 4.5l.5 8.5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1l.5-8.5" />
+            </svg>
+            删除
+          </button>
+          <button
+            onClick={onClose}
+            title="关闭"
+            style={{
+              background: P.surface,
+              border: `1px solid ${P.border}`,
+              color: P.textSec,
+              width: 28,
+              height: 28,
+              borderRadius: 8,
+              cursor: "pointer",
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              transition: "all 0.15s",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = P.bg;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = P.surface;
+            }}
+          >
+            <svg viewBox="0 0 16 16" width={11} height={11} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <path d="M3 3l10 10M13 3L3 13" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div style={{ padding: "16px 18px" }}>
+        <MockSessionDetail session={session} accent={ACCENT.color} />
+      </div>
+    </div>
+  );
+}
+
 // ── Main View ──
 
 export function ReadingProgressView({ onBack }) {
@@ -371,6 +684,7 @@ export function ReadingProgressView({ onBack }) {
   const [filter, setFilter] = useState("all");
   const [expandedIdx, setExpandedIdx] = useState(null);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [activeMockSrcIdx, setActiveMockSrcIdx] = useState(null);
 
   useEffect(() => {
     try { setCurrentUser(getSavedCode() || ""); } catch {}
@@ -384,23 +698,40 @@ export function ReadingProgressView({ onBack }) {
     };
   }, []);
 
-  const sessions = useMemo(() => {
+  // Build entries up-front so sourceIndex survives normalization (legacy
+  // adaptive-reading records produce a new object ref, breaking indexOf
+  // lookups later). Prefer cloud row id when present.
+  const entries = useMemo(() => {
     if (!hist?.sessions) return [];
     return hist.sessions
-      .filter(s => s.type === "reading" || s.type === "adaptive-reading")
-      .map(normalizeReadingSession)
-      .sort((a, b) => new Date(b.date) - new Date(a.date));
+      .map((s, i) => ({
+        original: s,
+        sourceIndex: Number.isFinite(Number(s?.id)) ? Number(s.id) : i,
+      }))
+      .filter((e) => e.original.type === "reading" || e.original.type === "adaptive-reading")
+      .map((e) => ({ session: normalizeReadingSession(e.original), sourceIndex: e.sourceIndex }))
+      .sort((a, b) => new Date(b.session.date) - new Date(a.session.date));
   }, [hist]);
 
-  const filtered = useMemo(() => {
-    if (filter === "all") return sessions;
-    return sessions.filter(s => s.details?.subtype === filter);
-  }, [sessions, filter]);
+  const sessions = useMemo(() => entries.map((e) => e.session), [entries]);
+  const mockEntries = useMemo(
+    () => entries.filter((e) => e.session.details?.subtype === "mock"),
+    [entries],
+  );
+  const practiceEntries = useMemo(
+    () => entries.filter((e) => e.session.details?.subtype !== "mock"),
+    [entries],
+  );
 
-  const ctwSessions = sessions.filter(s => s.details?.subtype === "ctw");
-  const rdlSessions = sessions.filter(s => s.details?.subtype === "rdl");
-  const apSessions = sessions.filter(s => s.details?.subtype === "ap");
-  const mockSessions = sessions.filter(s => s.details?.subtype === "mock");
+  const filteredPractice = useMemo(() => {
+    if (filter === "all") return practiceEntries;
+    return practiceEntries.filter((e) => e.session.details?.subtype === filter);
+  }, [practiceEntries, filter]);
+
+  const ctwSessions = practiceEntries.filter((e) => e.session.details?.subtype === "ctw").map((e) => e.session);
+  const rdlSessions = practiceEntries.filter((e) => e.session.details?.subtype === "rdl").map((e) => e.session);
+  const apSessions = practiceEntries.filter((e) => e.session.details?.subtype === "ap").map((e) => e.session);
+  const practiceSessions = practiceEntries.map((e) => e.session);
 
   function avgPct(arr) {
     if (arr.length === 0) return null;
@@ -416,32 +747,32 @@ export function ReadingProgressView({ onBack }) {
   const ctwAvg = avgPct(ctwSessions);
   const rdlAvg = avgPct(rdlSessions);
   const apAvg = avgPct(apSessions);
-  const mockAvg = avgPct(mockSessions);
-  const totalAvg = avgPct(sessions);
+  const totalAvg = avgPct(practiceSessions);
 
+  // Stats: only practice subtypes (mock has its own sidebar treatment +
+  // mock band is on a different scale, doesn't share the % chart axis).
   const statItems = [
-    { key: "all",  icon: "📊", short: "全部", count: sessions.length, color: P.primary, avg: totalAvg !== null ? `平均 ${totalAvg}%` : "" },
-    { key: "ctw",  icon: P.ctw.icon,  short: P.ctw.short,  count: ctwSessions.length,  color: P.ctw.color,  avg: ctwAvg !== null ? `平均 ${ctwAvg}%` : "暂无" },
-    { key: "rdl",  icon: P.rdl.icon,  short: P.rdl.short,  count: rdlSessions.length,  color: P.rdl.color,  avg: rdlAvg !== null ? `平均 ${rdlAvg}%` : "暂无" },
-    { key: "ap",   icon: P.ap.icon,   short: P.ap.short,   count: apSessions.length,   color: P.ap.color,   avg: apAvg !== null ? `平均 ${apAvg}%` : "暂无" },
-    { key: "mock", icon: P.mock.icon, short: P.mock.short, count: mockSessions.length, color: P.mock.color, avg: mockAvg !== null ? `平均 ${mockAvg}%` : "暂无" },
+    { key: "all",  icon: "📊", short: "全部", count: practiceSessions.length, color: P.primary, avg: totalAvg !== null ? `平均 ${totalAvg}%` : "" },
+    { key: "ctw",  icon: P.ctw.icon, short: P.ctw.short, count: ctwSessions.length, color: P.ctw.color, avg: ctwAvg !== null ? `平均 ${ctwAvg}%` : "暂无" },
+    { key: "rdl",  icon: P.rdl.icon, short: P.rdl.short, count: rdlSessions.length, color: P.rdl.color, avg: rdlAvg !== null ? `平均 ${rdlAvg}%` : "暂无" },
+    { key: "ap",   icon: P.ap.icon,  short: P.ap.short,  count: apSessions.length,  color: P.ap.color,  avg: apAvg !== null ? `平均 ${apAvg}%` : "暂无" },
   ];
+
+  const activeMockEntry = mockEntries.find((e) => e.sourceIndex === activeMockSrcIdx) || null;
 
   function handleDelete(sourceIndex) {
     deleteSession(sourceIndex);
     setHist(loadHist());
     setExpandedIdx(null);
+    if (activeMockSrcIdx === sourceIndex) setActiveMockSrcIdx(null);
   }
 
   function confirmClearAll() {
     setShowClearConfirm(false);
-    // Only clears reading sessions — clearAllSessions clears everything,
-    // so we delete reading ones individually
-    sessions.forEach((_, i) => {
-      const idx = hist.sessions.findIndex(s => s === sessions[i]);
-      if (idx >= 0) deleteSession(idx);
-    });
+    // Delete reading entries one-by-one to avoid wiping non-reading history
+    entries.forEach((e) => deleteSession(e.sourceIndex));
     setHist(loadHist());
+    setActiveMockSrcIdx(null);
   }
 
   if (!hist) {
@@ -457,91 +788,265 @@ export function ReadingProgressView({ onBack }) {
     <div style={{ minHeight: "100vh", background: P.bg, fontFamily: FONT }}>
       <style>{`
         @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes fadeUpReading { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes slideInRight { from { opacity:0; transform:translateX(20px); } to { opacity:1; transform:translateX(0); } }
+        @keyframes slideInLeft { from { opacity:0; transform:translateX(-12px); } to { opacity:1; transform:translateX(0); } }
+        @keyframes expandDown { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
+        @media (max-width: 960px) {
+          .rp-layout { flex-direction: column !important; gap: 16px !important; }
+          .rp-sidebar { width: 100% !important; position: static !important; }
+        }
       `}</style>
 
       <TopBar title="阅读练习记录" section="Reading" onExit={onBack} accentColor={ACCENT.color} />
 
-      <div style={{ maxWidth: 860, margin: "0 auto", padding: "24px 20px 60px" }}>
-        {sessions.length === 0 ? (
+      {sessions.length === 0 ? (
+        <div style={{ maxWidth: 1280, margin: "0 auto", padding: "32px 24px" }}>
           <SurfaceCard style={{ padding: 40, textAlign: "center" }}>
             <div style={{ fontSize: 14, fontWeight: 700, color: P.text, marginBottom: 8 }}>还没有阅读练习记录</div>
             <div style={{ fontSize: 12, color: P.textDim }}>完成阅读练习后，记录会自动保存在这里。</div>
           </SurfaceCard>
-        ) : (
-          <>
-            {/* Stats row: cards + trend chart */}
-            <div style={{ display: "flex", gap: 14, marginBottom: 18, alignItems: "stretch", animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 80ms both" }}>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, flex: "0 0 52%" }}>
-                {statItems.map(item => (
-                  <StatCard key={item.key} {...item} active={filter === item.key} onClick={() => setFilter(item.key)} />
-                ))}
-              </div>
-              <div style={{ flex: 1, minWidth: 0, padding: "12px 14px 8px", background: P.surface, borderRadius: 14, border: `1px solid ${P.borderSubtle}`, display: "flex", flexDirection: "column" }}>
-                <div style={{ fontSize: 12, fontWeight: 700, color: P.textSec, marginBottom: 4 }}>正确率趋势</div>
-                <div style={{ flex: 1, minHeight: 0 }}>
-                  <ReadingTrendChart sessions={sessions} filter={filter} />
+        </div>
+      ) : (
+        <div
+          className="rp-layout"
+          style={{
+            maxWidth: 1280,
+            margin: "0 auto",
+            padding: "24px 24px 60px",
+            display: "flex",
+            gap: 24,
+            alignItems: "flex-start",
+          }}
+        >
+          {/* Left sidebar: title + latest mock + mock list */}
+          <aside
+            className="rp-sidebar"
+            style={{
+              width: 320,
+              flexShrink: 0,
+              position: "sticky",
+              top: 68,
+              animation: "fadeUpReading 0.5s cubic-bezier(0.25,1,0.5,1) 60ms both",
+            }}
+          >
+            <div style={{ marginBottom: 16 }}>
+              <h1 style={{ fontSize: 22, fontWeight: 800, color: P.text, letterSpacing: "-0.03em", lineHeight: 1.2, margin: 0 }}>
+                阅读练习记录
+              </h1>
+              <p style={{ fontSize: 12, color: P.textDim, lineHeight: 1.6, marginTop: 4, margin: 0 }}>
+                点击模考查看完整报告
+              </p>
+            </div>
+            {mockEntries.length > 0 && <LatestMockCard session={mockEntries[0].session} />}
+            <MockListSidebar
+              entries={mockEntries}
+              activeIdx={activeMockSrcIdx}
+              onSelect={(idx) => setActiveMockSrcIdx(idx)}
+            />
+          </aside>
+
+          {/* Right main: mock detail OR practice overview */}
+          <main style={{ flex: 1, minWidth: 0, animation: "fadeUpReading 0.5s cubic-bezier(0.25,1,0.5,1) 120ms both" }}>
+            {activeMockEntry ? (
+              <MockReportPanel
+                key={activeMockEntry.sourceIndex}
+                session={activeMockEntry.session}
+                onClose={() => setActiveMockSrcIdx(null)}
+                onDelete={() => handleDelete(activeMockEntry.sourceIndex)}
+              />
+            ) : (
+              <div key="overview" style={{ animation: "slideInLeft 0.35s cubic-bezier(0.16,1,0.3,1)" }}>
+                {/* Stats row: 4 cards + trend chart (practice only) */}
+                <div
+                  style={{
+                    display: "flex",
+                    gap: 14,
+                    marginBottom: 18,
+                    alignItems: "stretch",
+                    animation: "fadeUpReading 0.5s cubic-bezier(0.25,1,0.5,1) 80ms both",
+                  }}
+                >
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, flex: "0 0 52%" }}>
+                    {statItems.map((item) => (
+                      <StatCard key={item.key} {...item} active={filter === item.key} onClick={() => setFilter(item.key)} />
+                    ))}
+                  </div>
+                  <div
+                    style={{
+                      flex: 1,
+                      minWidth: 0,
+                      padding: "12px 14px 8px",
+                      background: P.surface,
+                      borderRadius: 14,
+                      border: `1px solid ${P.borderSubtle}`,
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <div style={{ fontSize: 12, fontWeight: 700, color: P.textSec, marginBottom: 4 }}>
+                      正确率趋势
+                    </div>
+                    <div style={{ flex: 1, minHeight: 0 }}>
+                      <ReadingTrendChart sessions={practiceSessions} filter={filter} />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Practice list (no mocks — those are in the sidebar) */}
+                <div
+                  style={{
+                    background: P.surface,
+                    borderRadius: 16,
+                    border: `1px solid ${P.borderSubtle}`,
+                    overflow: "hidden",
+                    animation: "fadeUpReading 0.5s cubic-bezier(0.25,1,0.5,1) 200ms both",
+                  }}
+                >
+                  <div
+                    style={{
+                      padding: "14px 18px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <span style={{ fontSize: 14, fontWeight: 750, color: P.text, letterSpacing: "-0.02em" }}>
+                      练习明细
+                    </span>
+                    <span
+                      style={{
+                        fontSize: 11,
+                        fontWeight: 550,
+                        color: ACCENT.color,
+                        background: `${ACCENT.color}08`,
+                        padding: "3px 10px",
+                        borderRadius: 999,
+                      }}
+                    >
+                      {filteredPractice.length} 条记录
+                    </span>
+                  </div>
+                  <div style={{ padding: "4px 14px 14px" }}>
+                    {filteredPractice.length === 0 ? (
+                      <div style={{ padding: "24px 0", textAlign: "center", fontSize: 12, color: P.textDim }}>
+                        该分类暂无记录
+                      </div>
+                    ) : (() => {
+                      let lastLabel = "";
+                      return filteredPractice.map((entry, i) => {
+                        const s = entry.session;
+                        const d = new Date(s.date);
+                        const today = new Date();
+                        const yesterday = new Date(today);
+                        yesterday.setDate(today.getDate() - 1);
+                        const label =
+                          d.toDateString() === today.toDateString()
+                            ? "今天"
+                            : d.toDateString() === yesterday.toDateString()
+                            ? "昨天"
+                            : `${d.getMonth() + 1}月${d.getDate()}日`;
+                        const showHeader = label !== lastLabel;
+                        lastLabel = label;
+                        return (
+                          <React.Fragment key={entry.sourceIndex}>
+                            {showHeader && (
+                              <div
+                                style={{
+                                  padding: "10px 6px 4px",
+                                  fontSize: 11,
+                                  fontWeight: 650,
+                                  color: P.textDim,
+                                  letterSpacing: "0.02em",
+                                  borderTop: i === 0 ? "none" : `1px solid ${P.borderSubtle}`,
+                                  marginTop: i === 0 ? 0 : 4,
+                                }}
+                              >
+                                {label}
+                              </div>
+                            )}
+                            <SessionRow
+                              session={s}
+                              expanded={expandedIdx === entry.sourceIndex}
+                              onToggle={() =>
+                                setExpandedIdx(expandedIdx === entry.sourceIndex ? null : entry.sourceIndex)
+                              }
+                              onDelete={() => handleDelete(entry.sourceIndex)}
+                            />
+                          </React.Fragment>
+                        );
+                      });
+                    })()}
+                  </div>
+                </div>
+
+                {/* Clear all */}
+                <div style={{ marginTop: 24, display: "flex", justifyContent: "center" }}>
+                  {!showClearConfirm ? (
+                    <button
+                      onClick={() => setShowClearConfirm(true)}
+                      style={{
+                        background: "none",
+                        border: `1px solid ${P.borderSubtle}`,
+                        color: P.textDim,
+                        padding: "8px 18px",
+                        borderRadius: 9,
+                        cursor: "pointer",
+                        fontSize: 12,
+                        fontWeight: 600,
+                        transition: "all 0.2s",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.borderColor = "#dc2626";
+                        e.currentTarget.style.color = "#dc2626";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.borderColor = P.borderSubtle;
+                        e.currentTarget.style.color = P.textDim;
+                      }}
+                    >
+                      清空全部阅读记录
+                    </button>
+                  ) : (
+                    <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                      <span style={{ fontSize: 12, color: "#dc2626", fontWeight: 600 }}>确认清空？</span>
+                      <button
+                        onClick={confirmClearAll}
+                        style={{
+                          background: "#dc2626",
+                          color: "#fff",
+                          border: "none",
+                          padding: "6px 14px",
+                          borderRadius: 8,
+                          cursor: "pointer",
+                          fontSize: 12,
+                          fontWeight: 700,
+                        }}
+                      >
+                        确认
+                      </button>
+                      <button
+                        onClick={() => setShowClearConfirm(false)}
+                        style={{
+                          background: P.surface,
+                          border: `1px solid ${P.border}`,
+                          color: P.textSec,
+                          padding: "6px 14px",
+                          borderRadius: 8,
+                          cursor: "pointer",
+                          fontSize: 12,
+                        }}
+                      >
+                        取消
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
-            </div>
-
-            {/* Session list with date grouping */}
-            <div style={{ background: P.surface, borderRadius: 16, border: `1px solid ${P.borderSubtle}`, overflow: "hidden", animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 200ms both" }}>
-              <div style={{ padding: "14px 18px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <span style={{ fontSize: 14, fontWeight: 750, color: P.text, letterSpacing: "-0.02em" }}>练习明细</span>
-                <span style={{ fontSize: 11, fontWeight: 550, color: ACCENT.color, background: `${ACCENT.color}08`, padding: "3px 10px", borderRadius: 999 }}>{filtered.length} 条记录</span>
-              </div>
-              <div style={{ padding: "4px 14px 14px" }}>
-                {filtered.length === 0 ? (
-                  <div style={{ padding: "24px 0", textAlign: "center", fontSize: 12, color: P.textDim }}>该分类暂无记录</div>
-                ) : (() => {
-                  let lastLabel = "";
-                  return filtered.map((s, i) => {
-                    const d = new Date(s.date);
-                    const today = new Date();
-                    const yesterday = new Date(today); yesterday.setDate(today.getDate() - 1);
-                    const label = d.toDateString() === today.toDateString() ? "今天" : d.toDateString() === yesterday.toDateString() ? "昨天" : `${d.getMonth() + 1}月${d.getDate()}日`;
-                    const showHeader = label !== lastLabel;
-                    lastLabel = label;
-                    const sourceIdx = hist.sessions.indexOf(s);
-                    return (
-                      <React.Fragment key={i}>
-                        {showHeader && (
-                          <div style={{ padding: "10px 6px 4px", fontSize: 11, fontWeight: 650, color: P.textDim, letterSpacing: "0.02em", borderTop: i === 0 ? "none" : `1px solid ${P.borderSubtle}`, marginTop: i === 0 ? 0 : 4 }}>
-                            {label}
-                          </div>
-                        )}
-                        <SessionRow
-                          session={s}
-                          expanded={expandedIdx === i}
-                          onToggle={() => setExpandedIdx(expandedIdx === i ? null : i)}
-                          onDelete={() => handleDelete(sourceIdx)}
-                        />
-                      </React.Fragment>
-                    );
-                  });
-                })()}
-              </div>
-            </div>
-
-            {/* Clear all */}
-            <div style={{ marginTop: 24, display: "flex", justifyContent: "center" }}>
-              {!showClearConfirm ? (
-                <button onClick={() => setShowClearConfirm(true)}
-                  style={{ background: "none", border: `1px solid ${P.borderSubtle}`, color: P.textDim, padding: "8px 18px", borderRadius: 9, cursor: "pointer", fontSize: 12, fontWeight: 600, transition: "all 0.2s" }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = "#dc2626"; e.currentTarget.style.color = "#dc2626"; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = P.borderSubtle; e.currentTarget.style.color = P.textDim; }}
-                >清空全部阅读记录</button>
-              ) : (
-                <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                  <span style={{ fontSize: 12, color: "#dc2626", fontWeight: 600 }}>确认清空？</span>
-                  <button onClick={confirmClearAll} style={{ background: "#dc2626", color: "#fff", border: "none", padding: "6px 14px", borderRadius: 8, cursor: "pointer", fontSize: 12, fontWeight: 700 }}>确认</button>
-                  <button onClick={() => setShowClearConfirm(false)} style={{ background: P.surface, border: `1px solid ${P.border}`, color: P.textSec, padding: "6px 14px", borderRadius: 8, cursor: "pointer", fontSize: 12 }}>取消</button>
-                </div>
-              )}
-            </div>
-          </>
-        )}
-      </div>
+            )}
+          </main>
+        </div>
+      )}
     </div>
   );
 }
