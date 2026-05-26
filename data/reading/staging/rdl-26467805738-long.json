@@ -1,0 +1,128 @@
+{
+  "type": "readInDailyLife",
+  "generated_at": "2026-05-26T18:39:45.631Z",
+  "total_generated": 2,
+  "total_accepted": 2,
+  "acceptance_rate": 1,
+  "items": [
+    {
+      "id": "rdl_gen_26467805738-long_001",
+      "variant": "long",
+      "text": "Campus Printing Quota and Kiosk Changes\n\nEffective May 15, the university will implement a new printing quota system. All students will receive a base quota of 200 pages per semester. Additional pages can be purchased at $0.05 per page via the online portal. The printing kiosks in Anderson Hall, Room 204, will be updated on May 10 from 9:00 AM to 4:00 PM. During this time, these kiosks will be unavailable. A $5.00 penalty will be applied for each failed print job that is not cleared within 24 hours. Please follow these guidelines:\n\n- Confirm your print job before sending.\n- Collect all prints promptly.\n- Report any kiosk issues to the IT Service Desk in Smith Library, Room 101.\n\nFor questions, contact printing@campus.edu.",
+      "word_count": 124,
+      "genre": "notice",
+      "format_metadata": {
+        "from": "IT Service Desk",
+        "to": "All Students",
+        "subject": "Campus Printing Quota and Kiosk Changes"
+      },
+      "questions": [
+        {
+          "qid": "rdl_gen_26467805738-long_001_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, what will happen on May 10?",
+          "options": {
+            "A": "A new printing quota system will be implemented.",
+            "B": "Printing kiosks in Anderson Hall will be updated.",
+            "C": "The base printing quota will be reset to 200 pages.",
+            "D": "A penalty for failed print jobs will be introduced."
+          },
+          "correct_answer": "B",
+          "explanation": "The notice states that printing kiosks in Anderson Hall, Room 204, will be updated on May 10 from 9:00 AM to 4:00 PM."
+        },
+        {
+          "qid": "rdl_gen_26467805738-long_001_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the new printing system?",
+          "options": {
+            "A": "Students will be charged for the first 200 pages.",
+            "B": "The IT Service Desk will handle all printing issues.",
+            "C": "Failed print jobs will be automatically cleared.",
+            "D": "Students may need to pay for extra pages beyond the quota."
+          },
+          "correct_answer": "D",
+          "explanation": "The notice says additional pages can be purchased at $0.05 per page, implying that students exceeding the 200-page quota must pay."
+        },
+        {
+          "qid": "rdl_gen_26467805738-long_001_q3",
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this notice?",
+          "options": {
+            "A": "To announce a temporary closure of printing kiosks.",
+            "B": "To explain how to report kiosk problems.",
+            "C": "To inform students about new printing rules and fees.",
+            "D": "To encourage students to print fewer pages."
+          },
+          "correct_answer": "C",
+          "explanation": "The notice covers the new quota, purchase options, update schedule, penalty, and guidelines, all about printing rules and fees."
+        }
+      ],
+      "question_count": 3,
+      "difficulty": "medium",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "3/3"
+      }
+    },
+    {
+      "id": "rdl_gen_26467805738-long_002",
+      "variant": "long",
+      "text": "Wi-Fi Security Certificate Update Notice\n\nTo enhance network safety, the Division of Information Technology will update the campus Wi-Fi security certificate on September 12. This update will affect all devices connected to the \"CampusNet\" network. Users must install the new certificate by September 15 to maintain access. The update is automatic for university-owned devices. Personal devices, however, require manual installation. Follow these steps:\n\n- Connect to CampusNet.\n- Visit the portal at it.campus.edu/cert.\n- Download and install the certificate.\n- Restart your device.\n\nFailure to install the certificate will result in temporary Wi-Fi access loss. A $10.00 late fee will be charged for assistance requests after September 20. For help, contact the IT Help Desk in Room 105, Baker Hall, or call 555-0100.",
+      "word_count": 123,
+      "genre": "notice",
+      "format_metadata": {
+        "from": "Division of Information Technology",
+        "to": "All Students and Staff",
+        "subject": "Wi-Fi Security Certificate Update Notice"
+      },
+      "questions": [
+        {
+          "qid": "rdl_gen_26467805738-long_002_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, what must users of personal devices do by September 15?",
+          "options": {
+            "A": "Manually install the new security certificate.",
+            "B": "Connect their devices to the CampusNet network.",
+            "C": "Visit the IT Help Desk for automatic updates.",
+            "D": "Pay a $10.00 late fee for certificate installation."
+          },
+          "correct_answer": "A",
+          "explanation": "The notice states that personal devices require manual installation of the certificate by September 15."
+        },
+        {
+          "qid": "rdl_gen_26467805738-long_002_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about university-owned devices?",
+          "options": {
+            "A": "They will lose Wi-Fi access after September 12.",
+            "B": "They will receive the certificate update automatically.",
+            "C": "They must be restarted before September 15.",
+            "D": "They require manual installation of the certificate."
+          },
+          "correct_answer": "B",
+          "explanation": "The notice says the update is automatic for university-owned devices, implying they do not need manual steps."
+        },
+        {
+          "qid": "rdl_gen_26467805738-long_002_q3",
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this notice?",
+          "options": {
+            "A": "To inform users of a required Wi-Fi certificate update and its instructions.",
+            "B": "To announce a temporary Wi-Fi outage for all campus networks.",
+            "C": "To explain the difference between personal and university devices.",
+            "D": "To encourage users to visit the IT Help Desk for assistance."
+          },
+          "correct_answer": "A",
+          "explanation": "The notice focuses on the certificate update, deadlines, steps for installation, and consequences, making information the main purpose."
+        }
+      ],
+      "question_count": 3,
+      "difficulty": "medium",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "3/3"
+      }
+    }
+  ],
+  "rejected": []
+}
