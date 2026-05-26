@@ -1,0 +1,128 @@
+{
+  "type": "readInDailyLife",
+  "generated_at": "2026-05-26T18:18:58.901Z",
+  "total_generated": 2,
+  "total_accepted": 2,
+  "acceptance_rate": 1,
+  "items": [
+    {
+      "id": "rdl_gen_26466745764-long_001",
+      "variant": "long",
+      "text": "Subject: Apartment Maintenance – Please Read\n\nHi Mike,\n\nI just heard from the building manager about the water pipe inspection scheduled for our apartment. The inspection will take place this Friday, March 15, between 9:00 AM and 12:00 PM. We both need to be present so the plumber can access all rooms. If neither of us can make it, we must reschedule by calling the office before Thursday at 5:00 PM.\n\nAlso, the manager reminded me about the $35 late fee for last month's rent. I already paid my half, but I noticed you haven't submitted yours yet. Could you please transfer your share by tomorrow? Let's avoid another penalty.\n\nBest regards,\nJordan",
+      "word_count": 113,
+      "genre": "email",
+      "format_metadata": {
+        "from": "Jordan",
+        "to": "Mike",
+        "subject": "Apartment Maintenance – Please Read"
+      },
+      "questions": [
+        {
+          "qid": "rdl_gen_26466745764-long_001_q1",
+          "question_type": "detail",
+          "stem": "According to the email, what must Jordan and Mike do for the water pipe inspection?",
+          "options": {
+            "A": "Call the building manager before Thursday",
+            "B": "Pay a $35 late fee before the inspection",
+            "C": "Be present in the apartment during the inspection",
+            "D": "Reschedule the inspection to next Friday"
+          },
+          "correct_answer": "C",
+          "explanation": "The email states 'We both need to be present so the plumber can access all rooms.'"
+        },
+        {
+          "qid": "rdl_gen_26466745764-long_001_q2",
+          "question_type": "detail",
+          "stem": "What does Jordan ask Mike to do by tomorrow?",
+          "options": {
+            "A": "Submit the inspection paperwork",
+            "B": "Transfer his share of the rent",
+            "C": "Contact the plumber directly",
+            "D": "Pay the $35 late fee entirely"
+          },
+          "correct_answer": "B",
+          "explanation": "The email says 'Could you please transfer your share by tomorrow?' referring to Mike's half of the rent."
+        },
+        {
+          "qid": "rdl_gen_26466745764-long_001_q3",
+          "question_type": "inference",
+          "stem": "What can be inferred about the $35 late fee mentioned in the email?",
+          "options": {
+            "A": "It was charged because the rent was not paid on time",
+            "B": "It is a fee for rescheduling the inspection",
+            "C": "It has already been paid by Jordan",
+            "D": "It must be split equally between both roommates"
+          },
+          "correct_answer": "A",
+          "explanation": "The email mentions a '$35 late fee for last month's rent,' implying it resulted from a late payment."
+        }
+      ],
+      "question_count": 3,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "3/3"
+      }
+    },
+    {
+      "id": "rdl_gen_26466745764-long_002",
+      "variant": "long",
+      "text": "Notice: Updated Allergen Policy for Campus Dining Halls\n\nEffective September 1, all on-campus dining halls will implement a revised allergen management policy to enhance student safety. This policy applies to Anderson Hall, Smith Commons, and the Student Center Cafeteria during regular operating hours (7:30 AM to 8:00 PM).\n\n- All menu items will display clear allergen labels for the top nine allergens, including peanuts, tree nuts, dairy, eggs, soy, wheat, fish, shellfish, and sesame.\n- Students with severe allergies must register with the Dining Services office by August 25 to receive a personalized meal plan. A $10 processing fee applies.\n- Cross-contact prevention measures include separate preparation areas and color-coded utensils.\n- Any student who experiences an allergic reaction should report it immediately to the nearest dining hall manager.\n\nFor questions, contact Dining Services at (555) 123-4567 or visit Room 204 in the Student Center.",
+      "word_count": 145,
+      "genre": "notice",
+      "format_metadata": {
+        "from": "Dining Services",
+        "to": "All Students",
+        "subject": "Updated Allergen Policy for Campus Dining Halls"
+      },
+      "questions": [
+        {
+          "qid": "rdl_gen_26466745764-long_002_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, what must students with severe allergies do by August 25?",
+          "options": {
+            "A": "Report any allergic reactions to a manager",
+            "B": "Review the updated allergen labels on menus",
+            "C": "Contact Dining Services at (555) 123-4567",
+            "D": "Register with the Dining Services office"
+          },
+          "correct_answer": "D",
+          "explanation": "The notice states 'Students with severe allergies must register with the Dining Services office by August 25 to receive a personalized meal plan.'"
+        },
+        {
+          "qid": "rdl_gen_26466745764-long_002_q2",
+          "question_type": "vocabulary_in_context",
+          "stem": "The word 'measures' in the notice is closest in meaning to",
+          "options": {
+            "A": "Quantities of ingredients",
+            "B": "Actions taken for safety",
+            "C": "Standards for cleanliness",
+            "D": "Devices used for cooking"
+          },
+          "correct_answer": "B",
+          "explanation": "In the context of 'Cross-contact prevention measures,' 'measures' refers to actions or steps taken to prevent allergen cross-contact."
+        },
+        {
+          "qid": "rdl_gen_26466745764-long_002_q3",
+          "question_type": "inference",
+          "stem": "What can be inferred about the dining halls before September 1?",
+          "options": {
+            "A": "They did not require allergen labels on all menu items",
+            "B": "They charged a higher processing fee for meal plans",
+            "C": "They only operated during breakfast and lunch hours",
+            "D": "They did not allow students with severe allergies to eat there"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice says the new policy is 'Effective September 1,' implying that before that date, the allergen labeling requirement was not in place."
+        }
+      ],
+      "question_count": 3,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "3/3"
+      }
+    }
+  ],
+  "rejected": []
+}
