@@ -9,6 +9,11 @@ name: Nightly — Bank Refresh (Master)
 
 on:
   workflow_dispatch: {}
+  # 19:00 UTC daily = 03:00 Beijing (UTC+8). GitHub Actions schedule triggers
+  # run on the default branch using the GITHUB_TOKEN — no external PAT needed.
+  # Note: heavy load on github.com can delay scheduled runs by a few minutes.
+  schedule:
+    - cron: "0 19 * * *"
 
 permissions:
   contents: write
