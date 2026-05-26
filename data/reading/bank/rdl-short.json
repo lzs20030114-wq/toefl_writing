@@ -3435,6 +3435,132 @@
         "status": "passed",
         "accuracy": "2/2"
       }
+    },
+    {
+      "id": "rdl_gen_26474365721-short_001",
+      "variant": "short",
+      "text": "Effective May 15, the recycling bins near the Student Union will be relocated to the east side of Anderson Hall. A $5 fee will be charged for any items left at the old location after 5:00 PM. Please direct questions to the Facilities Office.",
+      "word_count": 44,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_26474365721-short_001_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, what must be paid if items are left at the old recycling location after 5:00 PM?",
+          "options": {
+            "A": "A $5 fee",
+            "B": "A $10 deposit",
+            "C": "A $3.50 charge",
+            "D": "A $15 penalty"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice states that a $5 fee will be charged for any items left at the old location after 5:00 PM, so option A is correct."
+        },
+        {
+          "qid": "rdl_gen_26474365721-short_001_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the recycling bin relocation?",
+          "options": {
+            "A": "The bins will be removed permanently from the campus.",
+            "B": "The change will cost the university additional funds.",
+            "C": "Students are discouraged from using the old location after the deadline.",
+            "D": "The new location will offer more recycling services."
+          },
+          "correct_answer": "C",
+          "explanation": "The notice implies that leaving items at the old location after the deadline will incur a fee, so students are discouraged from doing so, making option C correct."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_26474365721-short_002",
+      "variant": "short",
+      "text": "The water fountain on the third floor of the library will be closed for maintenance from March 3 to March 7. During this period, please use the fountain on the second floor. For assistance, contact the building manager at extension 245.",
+      "word_count": 41,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_26474365721-short_002_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, which water fountain is available for use during the maintenance period?",
+          "options": {
+            "A": "The one on the third floor",
+            "B": "The one in the lobby",
+            "C": "The one on the second floor",
+            "D": "The one near the exit"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice states to use the fountain on the second floor while the third-floor fountain is closed, so option C is correct."
+        },
+        {
+          "qid": "rdl_gen_26474365721-short_002_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the maintenance work?",
+          "options": {
+            "A": "It will be completed before March 3.",
+            "B": "It will require the library to close temporarily.",
+            "C": "It will affect all water fountains in the building.",
+            "D": "It is scheduled to last for a limited time only."
+          },
+          "correct_answer": "D",
+          "explanation": "The notice specifies the maintenance from March 3 to March 7, indicating it is a temporary closure, so option D is correct."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_26474365721-short_003",
+      "variant": "short",
+      "text": "Hi Jamie, your interlibrary loan book, \"Ecology of the Amazon,\" has arrived. Please pick it up at the circulation desk by this Friday, March 10, or a $1 fee will apply. Best, Ms. Chen",
+      "word_count": 34,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_26474365721-short_003_q1",
+          "question_type": "detail",
+          "stem": "According to the email, what must Jamie do by this Friday?",
+          "options": {
+            "A": "Return a borrowed book",
+            "B": "Pay a $5 deposit",
+            "C": "Contact Ms. Chen",
+            "D": "Retrieve the book from the circulation desk"
+          },
+          "correct_answer": "D",
+          "explanation": "The email states Jamie should pick up the book at the circulation desk by Friday, so option D is correct."
+        },
+        {
+          "qid": "rdl_gen_26474365721-short_003_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the interlibrary loan process?",
+          "options": {
+            "A": "The book was ordered from a nearby library.",
+            "B": "A fee may be charged if the book is not collected on time.",
+            "C": "The book is available for an extended loan period.",
+            "D": "The pickup location is the main library entrance."
+          },
+          "correct_answer": "B",
+          "explanation": "The email mentions a $1 fee will apply if the book is not picked up by Friday, so a late collection incurs a charge, making option B correct."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
     }
   ]
 }
