@@ -1,5 +1,6 @@
 import "./mobile.css";
 import ClientBootstrap from "../components/ClientBootstrap";
+import FirstSetSurveyTrigger from "../components/FirstSetSurveyTrigger";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://treepractice.com";
 
@@ -85,6 +86,7 @@ export default function RootLayout({ children }) {
       <body style={{ margin: 0, padding: 0 }}>
         <ClientBootstrap />
         {children}
+        <FirstSetSurveyTrigger />
       </body>
     </html>
   );

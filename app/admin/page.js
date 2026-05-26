@@ -42,6 +42,7 @@ const QUICK_LINKS = [
     items: [
       { href: "/admin-analytics", label: "数据分析" },
       { href: "/admin-feedback", label: "用户反馈" },
+      { href: "/admin-surveys", label: "新手问卷", hint: "首套题完成后体验调研" },
       { href: "/admin-api-errors", label: "API 错误" },
       { href: "/admin-bs-errors", label: "BS 错题" },
     ],
