@@ -1,0 +1,52 @@
+{
+  "type": "readInDailyLife",
+  "generated_at": "2026-05-26T18:18:53.547Z",
+  "total_generated": 2,
+  "total_accepted": 1,
+  "acceptance_rate": 0.5,
+  "items": [
+    {
+      "id": "rdl_gen_26466745764-short_002",
+      "variant": "short",
+      "text": "Dear Student,\nMy office hours this week have changed. I will be available on Tuesday from 9:00 AM to 11:00 AM only. Please email me to confirm a time slot.\nBest,\nDr. Park",
+      "word_count": 33,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_26466745764-short_002_q1",
+          "question_type": "detail",
+          "stem": "According to the email, what is the change regarding Dr. Park's schedule?",
+          "options": {
+            "A": "Office hours are limited to Tuesday morning this week",
+            "B": "Office hours have been canceled for the entire week",
+            "C": "Office hours are extended to include Wednesday as well",
+            "D": "Office hours will now be held in a different building"
+          },
+          "correct_answer": "A",
+          "explanation": "The email states office hours are changed to Tuesday from 9:00 AM to 11:00 AM only."
+        },
+        {
+          "qid": "rdl_gen_26466745764-short_002_q2",
+          "question_type": "detail",
+          "stem": "What does the email ask the student to do?",
+          "options": {
+            "A": "To drop by the office without prior notice",
+            "B": "To submit a written request for an appointment",
+            "C": "To call the department for scheduling assistance",
+            "D": "To send an email to confirm a meeting time"
+          },
+          "correct_answer": "D",
+          "explanation": "The email explicitly says 'Please email me to confirm a time slot.'"
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    }
+  ],
+  "rejected": []
+}
