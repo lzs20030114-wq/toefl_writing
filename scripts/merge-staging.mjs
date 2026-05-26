@@ -26,9 +26,13 @@
  */
 
 import { readFileSync, writeFileSync, readdirSync, mkdirSync, existsSync } from 'fs';
-import { join, basename } from 'path';
+import { join, basename, dirname, resolve } from 'path';
+import { fileURLToPath } from 'url';
 
-const ROOT = 'D:/toefl_writing';
+// Portable repo-root resolution: this file lives at scripts/merge-staging.mjs,
+// so the parent of scripts/ is the repo root. Works on both local Windows
+// dev and the Linux GitHub Actions runner.
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
 // Section configurations
 const SECTIONS = [
@@ -135,8 +139,9 @@ for (const section of SECTIONS) {
       continue;
     }
 
-    // Extract prefix: "lcr-123.json" → "lcr", "rdl-123.json" → "rdl"
-    const prefix = file.replace(/-\d+\.json$/, '');
+    // Extract leading alpha prefix: "lcr-123.json" → "lcr",
+    // "rdl-123.json" → "rdl", "rdl-123-short.json" → "rdl"
+    const prefix = (file.match(/^([a-z]+)-/) || [])[1] || '';
 
     if (prefix === 'rdl') {
       // Special handling for RDL: classify into long/short
