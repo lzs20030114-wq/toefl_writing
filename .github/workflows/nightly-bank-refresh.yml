@@ -133,8 +133,10 @@ jobs:
           mv /tmp/summary.md ./summary.md
           echo "Summary written to ./summary.md"
 
-      - name: Send email (skipped if SMTP secrets unset)
-        if: vars.NIGHTLY_EMAIL_ENABLED == 'true'
+      - name: Send email
+        # Unconditionally attempts to send. If GMAIL_USER / GMAIL_APP_PASSWORD
+        # aren't configured, the action fails fast and the workflow conclusion
+        # turns red — better than silently skipping.
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
@@ -147,9 +149,3 @@ jobs:
           subject: ${{ steps.compose.outputs.subject }}
           body: file://summary.md
           convert_markdown: true
-
-      - name: Email skipped notice
-        if: vars.NIGHTLY_EMAIL_ENABLED != 'true'
-        shell: bash
-        run: |
-          echo "::notice::Email disabled. Set repo variable NIGHTLY_EMAIL_ENABLED=true and add secrets GMAIL_USER / GMAIL_APP_PASSWORD to enable."
