@@ -64,7 +64,7 @@ jobs:
           set -u
           for attempt in 1 2; do
             echo "── attempt $attempt ──"
-            if node scripts/generate-ap.mjs --count 4; then
+            if node scripts/generate-ap.mjs --count 8; then
               exit 0
             fi
             echo "Attempt $attempt failed."

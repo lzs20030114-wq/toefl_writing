@@ -67,7 +67,7 @@ jobs:
           set -u
           for attempt in 1 2; do
             echo "── attempt $attempt ──"
-            if node scripts/generate-rdl.mjs --count 2 --variant short; then
+            if node scripts/generate-rdl.mjs --count 4 --variant short; then
               exit 0
             fi
             echo "Attempt $attempt failed."
