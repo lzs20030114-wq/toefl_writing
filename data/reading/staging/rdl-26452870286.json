@@ -1,0 +1,94 @@
+{
+  "type": "readInDailyLife",
+  "generated_at": "2026-05-26T14:02:01.291Z",
+  "total_generated": 2,
+  "total_accepted": 2,
+  "acceptance_rate": 1,
+  "items": [
+    {
+      "id": "rdl_gen_26452870286_001",
+      "variant": "short",
+      "text": "Notice: The elevator in Anderson Hall will be out of service from March 3 to March 7 for maintenance. Please use the stairs located in the north stairwell. A $5 fee will be charged for using the freight elevator during this period. Contact Facilities Office for questions.",
+      "word_count": 47,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_26452870286_001_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, what is required for using the freight elevator during the maintenance period?",
+          "options": {
+            "A": "A signed permission form from the Facilities Office",
+            "B": "A reservation made at least one day in advance",
+            "C": "A valid student identification card for access",
+            "D": "A payment of a five-dollar usage fee"
+          },
+          "correct_answer": "D",
+          "explanation": "The notice states that a $5 fee will be charged for using the freight elevator during this period."
+        },
+        {
+          "qid": "rdl_gen_26452870286_001_q2",
+          "question_type": "detail",
+          "stem": "What alternative is provided for moving between floors while the elevator is unavailable?",
+          "options": {
+            "A": "The freight elevator in the south stairwell",
+            "B": "The stairs in the north stairwell",
+            "C": "The elevator in the adjacent building",
+            "D": "The escalator on the main floor"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice directs people to use the stairs located in the north stairwell."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_26452870286_002",
+      "variant": "short",
+      "text": "Hi Jamie, Thank you for confirming your participation in our research study on campus dining habits. Your session is scheduled for this Friday at 2:00 PM in Room 204. You will receive $15 in cash upon completion. Please arrive 10 minutes early. Best, Dr. Park",
+      "word_count": 45,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_26452870286_002_q1",
+          "question_type": "detail",
+          "stem": "What is the participant asked to do before the session begins?",
+          "options": {
+            "A": "Arrive ten minutes prior to the scheduled time",
+            "B": "Bring a valid university identification card",
+            "C": "Submit a signed consent form in advance",
+            "D": "Complete a short online survey beforehand"
+          },
+          "correct_answer": "A",
+          "explanation": "The email instructs the recipient to arrive 10 minutes early."
+        },
+        {
+          "qid": "rdl_gen_26452870286_002_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the compensation for the study?",
+          "options": {
+            "A": "It is provided only after a follow-up meeting",
+            "B": "It is paid through a direct bank transfer",
+            "C": "It is given in cash at the end of the session",
+            "D": "It is reduced if the participant arrives late"
+          },
+          "correct_answer": "C",
+          "explanation": "The email states that the participant will receive $15 in cash upon completion, implying payment is in cash at session end."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    }
+  ],
+  "rejected": []
+}
