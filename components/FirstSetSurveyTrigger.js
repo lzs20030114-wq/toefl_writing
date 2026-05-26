@@ -1,8 +1,16 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { FirstSetSurveyModal } from "./shared/FirstSetSurveyModal";
 import { AUTH_CHANGED_EVENT, getSavedCode } from "../lib/AuthContext";
 import { SESSION_STORE_EVENTS } from "../lib/sessionStore";
+
+// Admin surfaces are a different audience (the operator, not the end user),
+// so we never pop the consumer-facing survey there even if the operator's
+// own user_code happens to have completed a set.
+function isAdminPath(pathname) {
+  return typeof pathname === "string" && pathname.startsWith("/admin");
+}
 
 /**
  * Globally mounted (from app/layout.js). Watches for session-history updates
@@ -13,6 +21,7 @@ import { SESSION_STORE_EVENTS } from "../lib/sessionStore";
  * Dismissing records a "dismissed" row so the modal never reappears.
  */
 export default function FirstSetSurveyTrigger() {
+  const pathname = usePathname();
   const [state, setState] = useState({
     open: false,
     proDaysLeft: 0,
@@ -22,6 +31,13 @@ export default function FirstSetSurveyTrigger() {
   const inFlightRef = useRef(false);
 
   useEffect(() => {
+    // On admin pages, do nothing — don't fetch, don't subscribe, don't render.
+    if (isAdminPath(pathname)) {
+      // If we were showing a modal and the user navigated into /admin, close it.
+      setState((s) => (s.open ? { ...s, open: false } : s));
+      return;
+    }
+
     let cancelled = false;
 
     async function maybeShow() {
@@ -88,7 +104,7 @@ export default function FirstSetSurveyTrigger() {
       window.removeEventListener(SESSION_STORE_EVENTS.HISTORY_UPDATED_EVENT, onHistoryUpdate);
       window.removeEventListener(AUTH_CHANGED_EVENT, onAuthChange);
     };
-  }, []);
+  }, [pathname]);
 
   async function handleSubmit(responses) {
     const userCode = getSavedCode();
