@@ -42,6 +42,7 @@ export function NavSidebar({
   const [upgradeOpen, setUpgradeOpen] = useState(false);
   const [codeHidden, setCodeHidden] = useState(true);
   const [contactOpen, setContactOpen] = useState(false);
+  const [wechatOpen, setWechatOpen] = useState(false);
 
   const tier = userTier || "free";
   const email = boundEmail || userEmail;
@@ -327,6 +328,42 @@ export function NavSidebar({
             </button>
           </div>
         )}
+      </div>
+
+      {/* ── WeChat group (visible to all users) ── */}
+      <div style={{ borderTop: `1px solid ${navBdr}`, padding: "8px 14px 12px" }}>
+        <button
+          onClick={() => setWechatOpen((v) => !v)}
+          style={{ width: "100%", display: "flex", alignItems: "center", gap: 6, padding: "6px 4px", background: "transparent", border: "none", cursor: "pointer", fontFamily: HOME_FONT, textAlign: "left" }}
+        >
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={t3} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+          </svg>
+          <span style={{ fontSize: 12, fontWeight: 600, color: t2, flex: 1 }}>微信交流群</span>
+          <span style={{ fontSize: 10, color: t3, display: "inline-block", transform: wechatOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.25s ease" }}>v</span>
+        </button>
+        <div style={{ maxHeight: wechatOpen ? 260 : 0, overflow: "hidden", transition: "max-height 0.35s cubic-bezier(0.25,1,0.5,1)" }}>
+          <div style={{ paddingTop: 6 }}>
+            <div style={{ fontSize: 10, color: t3, lineHeight: 1.5, marginBottom: 6 }}>
+              扫码加群,反馈问题与接收更新
+            </div>
+            <div style={{
+              background: isChallenge ? "rgba(255,255,255,0.04)" : "#f8fafb",
+              border: `1px solid ${navBdr}`,
+              borderRadius: 8, padding: 6,
+              display: "flex", justifyContent: "center",
+            }}>
+              <img
+                src="/wechat-group-qr.jpg"
+                alt="微信群二维码"
+                width={170}
+                height={170}
+                style={{ display: "block", width: 170, height: 170, objectFit: "contain", borderRadius: 4 }}
+                onError={(e) => { e.currentTarget.style.display = "none"; }}
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

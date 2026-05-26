@@ -512,6 +512,9 @@ function MobileUserSheetContent({
         <span style={{ fontSize: 12, color: "#5a6b62", flex: 1 }}>3582786720@qq.com</span>
       </div>
 
+      {/* 微信交流群 */}
+      <MobileWechatGroupPanel />
+
       {/* 退出按钮 */}
       <button
         onClick={onLogout}
@@ -523,6 +526,42 @@ function MobileUserSheetContent({
       >
         退出登录
       </button>
+    </div>
+  );
+}
+
+function MobileWechatGroupPanel() {
+  const [open, setOpen] = useState(false);
+  return (
+    <div style={{ background: "#f8faf9", borderRadius: 10, overflow: "hidden" }}>
+      <button
+        onClick={() => setOpen((v) => !v)}
+        style={{
+          width: "100%", padding: "12px 14px", background: "transparent",
+          border: "none", display: "flex", alignItems: "center", gap: 8,
+          cursor: "pointer", fontFamily: HOME_FONT, textAlign: "left",
+        }}
+      >
+        <span style={{ fontSize: 13, fontWeight: 700, color: "#1a2420", flex: 1 }}>微信交流群</span>
+        <span style={{ fontSize: 12, color: "#5a6b62", transform: open ? "rotate(180deg)" : "none", transition: "transform .25s" }}>v</span>
+      </button>
+      <div style={{ maxHeight: open ? 320 : 0, overflow: "hidden", transition: "max-height .35s cubic-bezier(0.25,1,0.5,1)" }}>
+        <div style={{ padding: "0 14px 14px" }}>
+          <div style={{ fontSize: 11, color: "#5a6b62", marginBottom: 8, lineHeight: 1.5 }}>
+            扫码或长按保存,加入用户交流群
+          </div>
+          <div style={{ display: "flex", justifyContent: "center", padding: 6, background: "#fff", borderRadius: 8, border: "1px solid #ebf0ed" }}>
+            <img
+              src="/wechat-group-qr.jpg"
+              alt="微信群二维码"
+              width={220}
+              height={220}
+              style={{ display: "block", width: 220, height: 220, objectFit: "contain", borderRadius: 4 }}
+              onError={(e) => { e.currentTarget.style.display = "none"; }}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
