@@ -1,0 +1,155 @@
+name: Nightly — Bank Refresh (Master)
+
+# Fans out to all 7 nightly sub-workflows in parallel, then aggregates a
+# summary. Each sub-workflow commits + pushes its own changes; the master
+# only reports the totals.
+#
+# Triggered by Claude routine (Phase 5) at 03:00 Beijing time (19:00 UTC),
+# or manually via workflow_dispatch.
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  bs:
+    name: Build Sentence
+    uses: ./.github/workflows/nightly-generate-bs.yml
+    secrets: inherit
+
+  disc:
+    name: Academic Discussion
+    uses: ./.github/workflows/nightly-generate-disc.yml
+    secrets: inherit
+
+  email:
+    name: Email Writing
+    uses: ./.github/workflows/nightly-generate-email.yml
+    secrets: inherit
+
+  ctw:
+    name: Reading CTW
+    uses: ./.github/workflows/nightly-generate-ctw.yml
+    secrets: inherit
+
+  ap:
+    name: Reading AP
+    uses: ./.github/workflows/nightly-generate-ap.yml
+    secrets: inherit
+
+  rdl_short:
+    name: Reading RDL (short)
+    uses: ./.github/workflows/nightly-generate-rdl-short.yml
+    secrets: inherit
+
+  rdl_long:
+    name: Reading RDL (long)
+    uses: ./.github/workflows/nightly-generate-rdl-long.yml
+    secrets: inherit
+
+  summary:
+    name: Summary + Email
+    needs: [bs, disc, email, ctw, ap, rdl_short, rdl_long]
+    if: always() # report even if some sub-jobs failed
+    runs-on: ubuntu-latest
+    steps:
+      - name: Compose summary
+        id: compose
+        shell: bash
+        run: |
+          set -u
+          # Each sub-workflow exposed { added_count, status }. needs.*.result is
+          # the job result (success/failure/cancelled/skipped); needs.*.outputs
+          # holds the workflow_call outputs we declared.
+          BS_ADD="${{ needs.bs.outputs.added_sets || 0 }}"
+          BS_ST="${{ needs.bs.outputs.status || needs.bs.result }}"
+          DISC_ADD="${{ needs.disc.outputs.added_count || 0 }}"
+          DISC_ST="${{ needs.disc.outputs.status || needs.disc.result }}"
+          EM_ADD="${{ needs.email.outputs.added_count || 0 }}"
+          EM_ST="${{ needs.email.outputs.status || needs.email.result }}"
+          CTW_ADD="${{ needs.ctw.outputs.added_count || 0 }}"
+          CTW_ST="${{ needs.ctw.outputs.status || needs.ctw.result }}"
+          AP_ADD="${{ needs.ap.outputs.added_count || 0 }}"
+          AP_ST="${{ needs.ap.outputs.status || needs.ap.result }}"
+          RS_ADD="${{ needs.rdl_short.outputs.added_count || 0 }}"
+          RS_ST="${{ needs.rdl_short.outputs.status || needs.rdl_short.result }}"
+          RL_ADD="${{ needs.rdl_long.outputs.added_count || 0 }}"
+          RL_ST="${{ needs.rdl_long.outputs.status || needs.rdl_long.result }}"
+
+          # Each set in BS is 10 questions; everything else is 1 question per
+          # added item. Convert to a "total questions" headline number.
+          TOTAL_ITEMS=$((BS_ADD * 10 + DISC_ADD + EM_ADD + CTW_ADD + AP_ADD + RS_ADD + RL_ADD))
+
+          FAILED=0
+          for s in "$BS_ST" "$DISC_ST" "$EM_ST" "$CTW_ST" "$AP_ST" "$RS_ST" "$RL_ST"; do
+            if [ "$s" = "failure" ] || [ "$s" = "cancelled" ]; then
+              FAILED=$((FAILED + 1))
+            fi
+          done
+
+          ICON_BS=$([ "$BS_ST" = "success" ] && echo "✓" || ([ "$BS_ST" = "no-change" ] && echo "○" || echo "✗"))
+          ICON_DISC=$([ "$DISC_ST" = "success" ] && echo "✓" || ([ "$DISC_ST" = "no-change" ] && echo "○" || echo "✗"))
+          ICON_EM=$([ "$EM_ST" = "success" ] && echo "✓" || ([ "$EM_ST" = "no-change" ] && echo "○" || echo "✗"))
+          ICON_CTW=$([ "$CTW_ST" = "success" ] && echo "✓" || ([ "$CTW_ST" = "no-change" ] && echo "○" || echo "✗"))
+          ICON_AP=$([ "$AP_ST" = "success" ] && echo "✓" || ([ "$AP_ST" = "no-change" ] && echo "○" || echo "✗"))
+          ICON_RS=$([ "$RS_ST" = "success" ] && echo "✓" || ([ "$RS_ST" = "no-change" ] && echo "○" || echo "✗"))
+          ICON_RL=$([ "$RL_ST" = "success" ] && echo "✓" || ([ "$RL_ST" = "no-change" ] && echo "○" || echo "✗"))
+
+          {
+            echo "## Nightly Bank Refresh — $(date -u +%Y-%m-%d)"
+            echo ""
+            echo "**Total new questions: $TOTAL_ITEMS** ($FAILED sub-job(s) failed)"
+            echo ""
+            echo "| Section | Added | Status |"
+            echo "| --- | --- | --- |"
+            echo "| Build Sentence | ${BS_ADD} set(s) = $((BS_ADD * 10)) Q | ${ICON_BS} ${BS_ST} |"
+            echo "| Academic Discussion | ${DISC_ADD} Q | ${ICON_DISC} ${DISC_ST} |"
+            echo "| Email Writing | ${EM_ADD} Q | ${ICON_EM} ${EM_ST} |"
+            echo "| Reading CTW | ${CTW_ADD} | ${ICON_CTW} ${CTW_ST} |"
+            echo "| Reading AP | ${AP_ADD} | ${ICON_AP} ${AP_ST} |"
+            echo "| Reading RDL (short) | ${RS_ADD} | ${ICON_RS} ${RS_ST} |"
+            echo "| Reading RDL (long) | ${RL_ADD} | ${ICON_RL} ${RL_ST} |"
+            echo ""
+            echo "Workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          } > /tmp/summary.md
+
+          # Mirror to GitHub Actions step summary so it shows up in the UI.
+          cat /tmp/summary.md >> "$GITHUB_STEP_SUMMARY"
+
+          # Persist for the email step below
+          {
+            echo "total_items=$TOTAL_ITEMS"
+            echo "failed_count=$FAILED"
+          } >> "$GITHUB_OUTPUT"
+
+          # Build single-line plaintext for an email subject
+          SUBJECT="[Nightly] +${TOTAL_ITEMS} Q · ${BS_ADD}BS / ${DISC_ADD}AD / ${EM_ADD}EM / ${CTW_ADD}CTW / ${AP_ADD}AP / ${RS_ADD}RS / ${RL_ADD}RL"
+          [ "$FAILED" -gt 0 ] && SUBJECT="⚠ $SUBJECT (${FAILED} failed)"
+          echo "subject=$SUBJECT" >> "$GITHUB_OUTPUT"
+
+          # Save summary body to a file the email step can read
+          mv /tmp/summary.md ./summary.md
+          echo "Summary written to ./summary.md"
+
+      - name: Send email (skipped if SMTP secrets unset)
+        if: vars.NIGHTLY_EMAIL_ENABLED == 'true'
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.GMAIL_USER }}
+          password: ${{ secrets.GMAIL_APP_PASSWORD }}
+          from: ${{ secrets.GMAIL_USER }}
+          to: ${{ secrets.GMAIL_USER }}
+          subject: ${{ steps.compose.outputs.subject }}
+          body: file://summary.md
+          convert_markdown: true
+
+      - name: Email skipped notice
+        if: vars.NIGHTLY_EMAIL_ENABLED != 'true'
+        shell: bash
+        run: |
+          echo "::notice::Email disabled. Set repo variable NIGHTLY_EMAIL_ENABLED=true and add secrets GMAIL_USER / GMAIL_APP_PASSWORD to enable."
