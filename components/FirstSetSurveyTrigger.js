@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { FirstSetSurveyModal } from "./shared/FirstSetSurveyModal";
+import { WechatGroupModal } from "./shared/WechatGroupModal";
 import { AUTH_CHANGED_EVENT, getSavedCode } from "../lib/AuthContext";
 import { SESSION_STORE_EVENTS } from "../lib/sessionStore";
 
@@ -27,6 +28,8 @@ export default function FirstSetSurveyTrigger() {
     proDaysLeft: 0,
     rewardDays: 1,
   });
+  const [wechatOpen, setWechatOpen] = useState(false);
+  const [wechatRewardDays, setWechatRewardDays] = useState(1);
   const checkedForCodeRef = useRef(new Set());
   const inFlightRef = useRef(false);
 
@@ -118,7 +121,9 @@ export default function FirstSetSurveyTrigger() {
     if (!res.ok) {
       throw new Error(data?.error || "提交失败");
     }
+    setWechatRewardDays(state.rewardDays || 1);
     setState((s) => ({ ...s, open: false }));
+    setWechatOpen(true);
   }
 
   async function handleDismiss() {
@@ -137,12 +142,19 @@ export default function FirstSetSurveyTrigger() {
   }
 
   return (
-    <FirstSetSurveyModal
-      open={state.open}
-      proDaysLeft={state.proDaysLeft}
-      rewardDays={state.rewardDays}
-      onSubmit={handleSubmit}
-      onDismiss={handleDismiss}
-    />
+    <>
+      <FirstSetSurveyModal
+        open={state.open}
+        proDaysLeft={state.proDaysLeft}
+        rewardDays={state.rewardDays}
+        onSubmit={handleSubmit}
+        onDismiss={handleDismiss}
+      />
+      <WechatGroupModal
+        open={wechatOpen}
+        rewardDays={wechatRewardDays}
+        onClose={() => setWechatOpen(false)}
+      />
+    </>
   );
 }
