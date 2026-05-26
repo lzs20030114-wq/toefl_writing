@@ -6,7 +6,7 @@ import { wc } from "../../lib/utils";
 import { saveSess, addDoneIds } from "../../lib/sessionStore";
 import { mapScoringError } from "../../lib/ai/client";
 import { evaluateWritingResponse } from "../../lib/ai/writingEval";
-import { BANK_EXHAUSTED_ERRORS, DONE_STORAGE_KEYS, pickRandomPrompt } from "../../lib/questionSelector";
+import { BANK_EXHAUSTED_ERRORS, DONE_STORAGE_KEYS, normalizeEmailTopic, pickRandomPrompt } from "../../lib/questionSelector";
 import { C, FONT, Btn, InfoStrip, PageShell, SurfaceCard, DisclosureSection, Toast, TopBar } from "../shared/ui";
 import { WritingFeedbackPanel } from "./WritingFeedbackPanel";
 import { WritingPromptPanel } from "./WritingPromptPanel";
@@ -135,6 +135,13 @@ export function WritingTask({
   const minW = type === "email" ? 80 : 100;
   const storageKey = type === "email" ? DONE_STORAGE_KEYS.EMAIL : DONE_STORAGE_KEYS.DISCUSSION;
 
+  // Anti-consecutive-topic config — picker filters out items whose topic
+  // matches the last one shown (per user, per task) so two same-topic prompts
+  // can't appear back-to-back.
+  const pickerOpts = type === "email"
+    ? { scope: "writing::email", topicKeyFn: (it) => normalizeEmailTopic(it?.topic) }
+    : { scope: "writing::discussion", topicKeyFn: (it) => String(it?.course || "") };
+
   const usedRef = useRef(new Set());
   const [initialSelection] = useState(() => {
     if (data.length === 0) return { error: "题库为空或数据异常。", index: -1 };
@@ -148,7 +155,7 @@ export function WritingTask({
       return { error: "指定题目不存在或已下线。", index: -1 };
     }
     try {
-      const i = pickRandomPrompt(data, usedRef.current, storageKey);
+      const i = pickRandomPrompt(data, usedRef.current, storageKey, pickerOpts);
       usedRef.current.add(i);
       return { error: "", index: i };
     } catch (e) {
@@ -421,7 +428,7 @@ export function WritingTask({
     clearInterval(tr.current);
     let n = 0;
     try {
-      n = pickRandomPrompt(data, usedRef.current, storageKey);
+      n = pickRandomPrompt(data, usedRef.current, storageKey, pickerOpts);
     } catch (e) {
       setToast(isPromptExhaustedError(e) ? "题库中没有新题了，你已完成该题库全部题目。" : "题库不可用，请稍后重试。");
       return;

@@ -9,6 +9,7 @@ import { getSavedTier } from "../../lib/AuthContext";
 import { saveSess, loadDoneIds, addDoneIds } from "../../lib/sessionStore";
 import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
 import { listActiveDrafts } from "../../lib/draftPersist";
+import { pickWithTopicDiversity } from "../../lib/recentTopics";
 import CTW_DATA from "../../data/reading/bank/ctw.json";
 // RDL bank is split into two pools by question count:
 //   rdl-short.json — 83 items, each with 2 questions  → ?variant=short
@@ -27,9 +28,21 @@ function rdlPool(variant) {
 // Map subtype → draft task name (matches CTWTask / RDLTask buildDraftKey)
 const DRAFT_TASK_BY_TYPE = { ctw: "ctw", rdl: "rdl", ap: "rdl" };
 
-function pickRandom(items) {
+// Topic key extractors per subtype. RDL passages are tagged by `genre`
+// instead of `topic`; CTW and AP both use `topic`.
+const TOPIC_KEY_FN = {
+  ctw: (it) => String(it?.topic || ""),
+  ap: (it) => String(it?.topic || ""),
+  rdl: (it) => String(it?.genre || ""),
+};
+
+// Pick a reading item enforcing topic diversity: ≠ last topic, AND any 5
+// consecutive picks contain ≥ 3 distinct topics. Falls back to uniform random
+// if the bank is too narrow to honor the full constraint.
+function pickReadingItem(type, items) {
   if (!items || items.length === 0) return null;
-  return items[Math.floor(Math.random() * items.length)];
+  const keyFn = TOPIC_KEY_FN[type] || (() => "");
+  return pickWithTopicDiversity(items, `reading::${type}`, keyFn);
 }
 
 /* ── Label maps for TopicPicker ── */
@@ -141,7 +154,7 @@ function ReadingPageClient() {
     const resume = drafts
       .map((d) => pool.find((it) => String(it?.id) === String(d.scopeId)))
       .find(Boolean);
-    setRandomItem(resume || pickRandom(pool));
+    setRandomItem(resume || pickReadingItem(type, pool));
   }, [type, variant, isPractice]);
 
   const onExit = () => router.push("/?section=reading");
@@ -210,11 +223,11 @@ function ReadingPageClient() {
       return;
     }
     if (type === "rdl") {
-      setRandomItem(pickRandom(rdlPool(variant)));
+      setRandomItem(pickReadingItem("rdl", rdlPool(variant)));
     } else if (type === "ap") {
-      setRandomItem(pickRandom(AP_DATA.items));
+      setRandomItem(pickReadingItem("ap", AP_DATA.items));
     } else {
-      setRandomItem(pickRandom(CTW_DATA.items));
+      setRandomItem(pickReadingItem("ctw", CTW_DATA.items));
     }
   }
 
