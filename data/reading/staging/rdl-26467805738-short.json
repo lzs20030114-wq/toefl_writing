@@ -1,0 +1,52 @@
+{
+  "type": "readInDailyLife",
+  "generated_at": "2026-05-26T18:39:41.231Z",
+  "total_generated": 2,
+  "total_accepted": 1,
+  "acceptance_rate": 0.5,
+  "items": [
+    {
+      "id": "rdl_gen_26467805738-short_002",
+      "variant": "short",
+      "text": "Come see \"The Final Act\"! A student theater show at Black Box Theatre, May 8-10, 7:30 PM. Tickets only $5 at the door. Proceeds fund next year's drama club. Don't miss this dramatic performance!",
+      "word_count": 34,
+      "genre": "flyer",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_26467805738-short_002_q1",
+          "question_type": "detail",
+          "stem": "According to the flyer, where can tickets for the show be purchased?",
+          "options": {
+            "A": "At the drama club office",
+            "B": "At the Black Box Theatre box office",
+            "C": "At the student center ticket counter",
+            "D": "At the door of the theater"
+          },
+          "correct_answer": "D",
+          "explanation": "The flyer states 'Tickets only $5 at the door.' Option D directly matches this. A, B, and C introduce locations not mentioned in the passage."
+        },
+        {
+          "qid": "rdl_gen_26467805738-short_002_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the purpose of the ticket sales?",
+          "options": {
+            "A": "To cover the costs of the current show",
+            "B": "To support future drama club activities",
+            "C": "To pay for the theater rental",
+            "D": "To fund a student scholarship"
+          },
+          "correct_answer": "B",
+          "explanation": "The flyer says 'Proceeds fund next year's drama club,' implying the money supports future activities. Option B is the correct inference. A, C, and D are not suggested by the text."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    }
+  ],
+  "rejected": []
+}
