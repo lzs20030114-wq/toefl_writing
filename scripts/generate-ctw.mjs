@@ -183,7 +183,7 @@ async function main() {
   console.log("3. Processing & validating...\n");
   const accepted = [];
   const rejected = [];
-  const runId = Date.now();
+  const runId = process.env.RUN_ID || Date.now();
 
   for (let i = 0; i < passages.length; i++) {
     const raw = passages[i];

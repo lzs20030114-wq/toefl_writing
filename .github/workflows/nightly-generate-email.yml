@@ -1,0 +1,115 @@
+name: Nightly — Generate Email Writing Questions
+
+# Direct-to-production: generator appends straight to prompts.json when
+# EMAIL_OUTPUT_PATH is unset, with dedup checks built in.
+
+on:
+  workflow_dispatch: {}
+  workflow_call:
+    outputs:
+      added_count:
+        description: "Number of new email prompts appended"
+        value: ${{ jobs.generate.outputs.added_count }}
+      status:
+        description: "Result status: success | no-change | failure"
+        value: ${{ jobs.generate.outputs.status }}
+
+concurrency:
+  group: generate-email-main
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      added_count: ${{ steps.summarize.outputs.added_count }}
+      status: ${{ steps.summarize.outputs.status }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Snapshot current prompt count
+        id: before
+        shell: bash
+        run: |
+          BEFORE=$(node -e "const j=require('./data/emailWriting/prompts.json'); console.log(Array.isArray(j)?j.length:0);")
+          echo "before=$BEFORE" >> "$GITHUB_OUTPUT"
+          echo "Email prompts before: $BEFORE"
+
+      - name: Generate (direct mode, with one retry)
+        id: generate
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          DEEPSEEK_PROXY_URL: ${{ vars.DEEPSEEK_PROXY_URL }}
+          EMAIL_TARGET_COUNT: "2"
+        shell: bash
+        run: |
+          set -u
+          for attempt in 1 2; do
+            echo "── attempt $attempt ──"
+            if node scripts/generateEmailQuestions.mjs; then
+              exit 0
+            fi
+            echo "Attempt $attempt failed."
+            [ "$attempt" = "1" ] && sleep 30
+          done
+          exit 1
+
+      - name: Summarize delta
+        id: summarize
+        if: always()
+        shell: bash
+        run: |
+          set -u
+          AFTER=$(node -e "const j=require('./data/emailWriting/prompts.json'); console.log(Array.isArray(j)?j.length:0);")
+          BEFORE="${{ steps.before.outputs.before }}"
+          ADDED=$((AFTER - BEFORE))
+          echo "Email prompts after: $AFTER (added $ADDED)"
+          echo "added_count=$ADDED" >> "$GITHUB_OUTPUT"
+          if [ "${{ steps.generate.outcome }}" != "success" ]; then
+            echo "status=failure" >> "$GITHUB_OUTPUT"
+          elif [ "$ADDED" -gt 0 ]; then
+            echo "status=success" >> "$GITHUB_OUTPUT"
+          else
+            echo "status=no-change" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit + push updated production bank
+        if: steps.generate.outcome == 'success'
+        shell: bash
+        run: |
+          set -u
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -- data/emailWriting/prompts.json
+          if git diff --staged --quiet; then
+            echo "No production-bank changes to commit."
+            exit 0
+          fi
+          ADDED="${{ steps.summarize.outputs.added_count }}"
+          git commit -m "bot(nightly): +${ADDED} email prompt(s) [skip ci]"
+          for i in 1 2 3 4; do
+            if git fetch origin main && git rebase origin/main && git push origin HEAD:main; then
+              exit 0
+            fi
+            git rebase --abort >/dev/null 2>&1 || true
+            sleep 10
+          done
+          exit 1

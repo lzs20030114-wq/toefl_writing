@@ -104,13 +104,21 @@ function classifyRdlItem(item) {
 
 // ── process all sections ─────────────────────────────────────────────
 
+// MERGE_RUN_ID lets a nightly workflow merge only the staging file it just
+// generated (e.g. "ap-1776234654231.json"), leaving every other unreviewed
+// staging file untouched. Unset = merge everything in staging (legacy mode).
+const ONLY_RUN_ID = String(process.env.MERGE_RUN_ID || "").trim();
+
 const allSummary = [];
 let grandTotal = 0;
 
 for (const section of SECTIONS) {
   if (!existsSync(section.stagingDir)) continue;
 
-  const stagingFiles = readdirSync(section.stagingDir).filter(f => f.endsWith('.json'));
+  let stagingFiles = readdirSync(section.stagingDir).filter(f => f.endsWith('.json'));
+  if (ONLY_RUN_ID) {
+    stagingFiles = stagingFiles.filter(f => f.includes(ONLY_RUN_ID));
+  }
   if (stagingFiles.length === 0) continue;
 
   console.log(`\n═══ ${section.name} (${stagingFiles.length} staging files) ═══\n`);
