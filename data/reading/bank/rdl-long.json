@@ -5498,6 +5498,124 @@
         "status": "passed",
         "accuracy": "3/3"
       }
+    },
+    {
+      "id": "rdl_gen_26527192867-long_001",
+      "variant": "long",
+      "text": "Subject: Overdue Book – Please Return or Renew\n\nDear Student,\n\nThis is a reminder that the book \"Modern Art History\" (copy #4) was due back to the Main Library on May 15. It is now overdue by 10 days. Please return it as soon as possible to avoid further penalties.\n\nAccording to library policy, a late fee of $0.50 per day has been applied to your account. Your current total overdue fine is $5.00. If the book is not returned by May 20, the fine will increase to $1.00 per day, and your borrowing privileges may be suspended.\n\nTo check your account or renew the item online, please log in to the Library Portal using your student ID number. You can also visit the Circulation Desk on the first floor of Anderson Hall for assistance.\n\nThank you for your prompt attention to this matter.\n\nBest regards,\nMs. Chen\nLibrary Services Department",
+      "word_count": 151,
+      "genre": "email",
+      "format_metadata": {
+        "from": "Ms. Chen, Library Services Department",
+        "to": "Student",
+        "subject": "Overdue Book – Please Return or Renew"
+      },
+      "questions": [
+        {
+          "qid": "rdl_gen_26527192867-long_001_q1",
+          "question_type": "detail",
+          "stem": "According to the email, what must the student do before May 20?",
+          "options": {
+            "A": "Return the overdue book to the library",
+            "B": "Visit the Circulation Desk in Anderson Hall",
+            "C": "Pay the current fine of $5.00 in person",
+            "D": "Register for a new library account online"
+          },
+          "correct_answer": "A",
+          "explanation": "The email states the book is overdue and asks the student to return it as soon as possible, and notes that if it is not returned by May 20, the fine will increase."
+        },
+        {
+          "qid": "rdl_gen_26527192867-long_001_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the library's late fee policy?",
+          "options": {
+            "A": "It increases the daily charge after a certain period",
+            "B": "It charges a flat fee for all overdue items",
+            "C": "It only applies to books borrowed from the Main Library",
+            "D": "It waives penalties if the book is renewed online"
+          },
+          "correct_answer": "A",
+          "explanation": "The email states the fine is $0.50 per day now but will increase to $1.00 per day if not returned by May 20, implying the charge increases over time."
+        },
+        {
+          "qid": "rdl_gen_26527192867-long_001_q3",
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this email?",
+          "options": {
+            "A": "To inform students about a new library fine policy",
+            "B": "To remind a student to return an overdue book",
+            "C": "To explain how to renew library books online",
+            "D": "To announce the location of the Circulation Desk"
+          },
+          "correct_answer": "B",
+          "explanation": "The email is primarily a reminder about an overdue book, urging the student to return it to avoid increased fines."
+        }
+      ],
+      "question_count": 3,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "3/3"
+      }
+    },
+    {
+      "id": "rdl_gen_26527192867-long_004",
+      "variant": "long",
+      "text": "DevStudent01\n\nHey everyone! I just launched a new app called StudyBuddy that I built over winter break. It helps you find study partners for your classes based on your schedule and subject preferences. You can filter by course, campus location (like the Library or Student Union), and even by study style (quiet vs. group).\n\nBest part – it's completely free to use! No ads, no in-app purchases. I spent about $50 on server costs but that's it. I'm just trying to make studying a little easier for all of us.\n\nI'd love for you to try it out and give me feedback. What features would you add? Drop your thoughts in the comments or DM me. Also, if you find any bugs, let me know! I'll be updating it every weekend.\n\n#StudyBuddy #AppLaunch #StudentLife #FreeApp",
+      "word_count": 135,
+      "genre": "social_media",
+      "format_metadata": {
+        "from": "DevStudent01",
+        "to": "Followers",
+        "subject": "New StudyBuddy App Launch"
+      },
+      "questions": [
+        {
+          "qid": "rdl_gen_26527192867-long_004_q1",
+          "question_type": "detail",
+          "stem": "According to the post, what can users do with the StudyBuddy app?",
+          "options": {
+            "A": "Purchase study materials at a discount",
+            "B": "Create group projects with professors",
+            "C": "Track their study hours and earn rewards",
+            "D": "Find study partners by course and location"
+          },
+          "correct_answer": "D",
+          "explanation": "The post states the app 'helps you find study partners for your classes based on your schedule and subject preferences' and allows filtering by course and location."
+        },
+        {
+          "qid": "rdl_gen_26527192867-long_004_q2",
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this social media post?",
+          "options": {
+            "A": "To announce a paid premium version of the app",
+            "B": "To promote a new free app and request feedback",
+            "C": "To compare StudyBuddy with other study apps",
+            "D": "To share the developer's winter break experience"
+          },
+          "correct_answer": "B",
+          "explanation": "The post introduces the free app, asks users to try it, and requests feedback and bug reports, making promotion and feedback the main goals."
+        },
+        {
+          "qid": "rdl_gen_26527192867-long_004_q3",
+          "question_type": "inference",
+          "stem": "What can be inferred about the developer's approach to the app?",
+          "options": {
+            "A": "They plan to charge users after a trial period",
+            "B": "They are committed to updating the app regularly",
+            "C": "They designed the app for graduate students only",
+            "D": "They hired a team to help with server maintenance"
+          },
+          "correct_answer": "B",
+          "explanation": "The post says 'I'll be updating it every weekend,' indicating a commitment to regular updates."
+        }
+      ],
+      "question_count": 3,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "3/3"
+      }
     }
   ]
 }
