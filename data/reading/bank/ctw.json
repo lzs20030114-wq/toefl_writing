@@ -10397,6 +10397,510 @@
       "difficulty": "medium",
       "blanked_text": "Electrical grids are networks that deliver power from plants to homes and businesses. Power stat____ generate elect______ and se__ it thr____ high vol____ lines. Transf______ reduce t__ voltage s_ it i_ safe f__ everyday use. This system keeps lights on and machines running in cities.",
       "_diffScore": 3.5
+    },
+    {
+      "id": "ctw_gen_26538316681_001",
+      "passage": "Hibernation is a deep sleep that some animals use to survive cold winters. During this time, their body temperature drops and their heart rate slows down significantly. They rely on stored fat for energy until spring arrives. This process helps animals like bears and hedgehogs live through harsh conditions.",
+      "word_count": 49,
+      "topic": "biology",
+      "subtopic": "hibernation",
+      "blanks": [
+        {
+          "position": 14,
+          "original_word": "this",
+          "displayed_fragment": "th",
+          "word_index_in_sentence": 1,
+          "sentence_index": 1
+        },
+        {
+          "position": 16,
+          "original_word": "their",
+          "displayed_fragment": "th",
+          "word_index_in_sentence": 3,
+          "sentence_index": 1
+        },
+        {
+          "position": 18,
+          "original_word": "temperature",
+          "displayed_fragment": "tempe",
+          "word_index_in_sentence": 5,
+          "sentence_index": 1
+        },
+        {
+          "position": 20,
+          "original_word": "and",
+          "displayed_fragment": "a",
+          "word_index_in_sentence": 7,
+          "sentence_index": 1
+        },
+        {
+          "position": 22,
+          "original_word": "heart",
+          "displayed_fragment": "he",
+          "word_index_in_sentence": 9,
+          "sentence_index": 1
+        },
+        {
+          "position": 24,
+          "original_word": "slows",
+          "displayed_fragment": "sl",
+          "word_index_in_sentence": 11,
+          "sentence_index": 1
+        },
+        {
+          "position": 26,
+          "original_word": "significantly",
+          "displayed_fragment": "signif",
+          "word_index_in_sentence": 13,
+          "sentence_index": 1
+        },
+        {
+          "position": 28,
+          "original_word": "rely",
+          "displayed_fragment": "re",
+          "word_index_in_sentence": 1,
+          "sentence_index": 2
+        },
+        {
+          "position": 30,
+          "original_word": "stored",
+          "displayed_fragment": "sto",
+          "word_index_in_sentence": 3,
+          "sentence_index": 2
+        },
+        {
+          "position": 32,
+          "original_word": "for",
+          "displayed_fragment": "f",
+          "word_index_in_sentence": 5,
+          "sentence_index": 2
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Hibernation is a deep sleep that some animals use to survive cold winters.",
+      "difficulty": "medium",
+      "blanked_text": "Hibernation is a deep sleep that some animals use to survive cold winters. During th__ time, th___ body tempe______ drops a__ their he___ rate sl___ down signif_______. They re__ on sto___ fat f__ energy until spring arrives. This process helps animals like bears and hedgehogs live through harsh conditions.",
+      "_diffScore": 2.7
+    },
+    {
+      "id": "ctw_gen_26538316681_002",
+      "passage": "Green architecture focuses on building homes that are kind to the environment. Architects use materials like recycled wood and solar panels to reduce energy use. These buildings often have large windows to let in natural light. They also collect rainwater for gardening, which saves resources and helps the planet.",
+      "word_count": 49,
+      "topic": "environmental_science",
+      "subtopic": "green architecture",
+      "blanks": [
+        {
+          "position": 13,
+          "original_word": "use",
+          "displayed_fragment": "u",
+          "word_index_in_sentence": 1,
+          "sentence_index": 1
+        },
+        {
+          "position": 15,
+          "original_word": "like",
+          "displayed_fragment": "li",
+          "word_index_in_sentence": 3,
+          "sentence_index": 1
+        },
+        {
+          "position": 17,
+          "original_word": "wood",
+          "displayed_fragment": "wo",
+          "word_index_in_sentence": 5,
+          "sentence_index": 1
+        },
+        {
+          "position": 19,
+          "original_word": "solar",
+          "displayed_fragment": "so",
+          "word_index_in_sentence": 7,
+          "sentence_index": 1
+        },
+        {
+          "position": 21,
+          "original_word": "to",
+          "displayed_fragment": "t",
+          "word_index_in_sentence": 9,
+          "sentence_index": 1
+        },
+        {
+          "position": 23,
+          "original_word": "energy",
+          "displayed_fragment": "ene",
+          "word_index_in_sentence": 11,
+          "sentence_index": 1
+        },
+        {
+          "position": 25,
+          "original_word": "These",
+          "displayed_fragment": "Th",
+          "word_index_in_sentence": 0,
+          "sentence_index": 2
+        },
+        {
+          "position": 27,
+          "original_word": "often",
+          "displayed_fragment": "of",
+          "word_index_in_sentence": 2,
+          "sentence_index": 2
+        },
+        {
+          "position": 29,
+          "original_word": "large",
+          "displayed_fragment": "la",
+          "word_index_in_sentence": 4,
+          "sentence_index": 2
+        },
+        {
+          "position": 31,
+          "original_word": "to",
+          "displayed_fragment": "t",
+          "word_index_in_sentence": 6,
+          "sentence_index": 2
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Green architecture focuses on building homes that are kind to the environment.",
+      "difficulty": "easy",
+      "blanked_text": "Green architecture focuses on building homes that are kind to the environment. Architects u__ materials li__ recycled wo__ and so___ panels t_ reduce ene___ use. Th___ buildings of___ have la___ windows t_ let in natural light. They also collect rainwater for gardening, which saves resources and helps the planet.",
+      "_diffScore": 2
+    },
+    {
+      "id": "ctw_gen_26538316681_004",
+      "passage": "The agricultural revolution changed how humans lived and worked thousands of years ago. People started growing crops like wheat and barley instead of hunting for food. They also domesticated animals such as goats and cows for milk and meat. This shift allowed communities to settle in one place and build villages.",
+      "word_count": 51,
+      "topic": "history",
+      "subtopic": "agricultural revolution",
+      "blanks": [
+        {
+          "position": 14,
+          "original_word": "started",
+          "displayed_fragment": "sta",
+          "word_index_in_sentence": 1,
+          "sentence_index": 1
+        },
+        {
+          "position": 16,
+          "original_word": "crops",
+          "displayed_fragment": "cr",
+          "word_index_in_sentence": 3,
+          "sentence_index": 1
+        },
+        {
+          "position": 18,
+          "original_word": "wheat",
+          "displayed_fragment": "wh",
+          "word_index_in_sentence": 5,
+          "sentence_index": 1
+        },
+        {
+          "position": 20,
+          "original_word": "barley",
+          "displayed_fragment": "bar",
+          "word_index_in_sentence": 7,
+          "sentence_index": 1
+        },
+        {
+          "position": 22,
+          "original_word": "of",
+          "displayed_fragment": "o",
+          "word_index_in_sentence": 9,
+          "sentence_index": 1
+        },
+        {
+          "position": 24,
+          "original_word": "for",
+          "displayed_fragment": "f",
+          "word_index_in_sentence": 11,
+          "sentence_index": 1
+        },
+        {
+          "position": 26,
+          "original_word": "They",
+          "displayed_fragment": "Th",
+          "word_index_in_sentence": 0,
+          "sentence_index": 2
+        },
+        {
+          "position": 28,
+          "original_word": "domesticated",
+          "displayed_fragment": "domest",
+          "word_index_in_sentence": 2,
+          "sentence_index": 2
+        },
+        {
+          "position": 30,
+          "original_word": "such",
+          "displayed_fragment": "su",
+          "word_index_in_sentence": 4,
+          "sentence_index": 2
+        },
+        {
+          "position": 32,
+          "original_word": "goats",
+          "displayed_fragment": "go",
+          "word_index_in_sentence": 6,
+          "sentence_index": 2
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "The agricultural revolution changed how humans lived and worked thousands of years ago.",
+      "difficulty": "hard",
+      "blanked_text": "The agricultural revolution changed how humans lived and worked thousands of years ago. People sta____ growing cr___ like wh___ and bar___ instead o_ hunting f__ food. Th__ also domest______ animals su__ as go___ and cows for milk and meat. This shift allowed communities to settle in one place and build villages.",
+      "_diffScore": 3.7
+    },
+    {
+      "id": "ctw_gen_26538316681_006",
+      "passage": "Dwarf planets are small worlds that orbit the sun but are not full planets. Pluto is the most famous example, discovered in 1930 by an American astronomer. These objects have enough mass to be round but share their space with other debris. Scientists study them to learn more about the early solar system.",
+      "word_count": 53,
+      "topic": "astronomy",
+      "subtopic": "dwarf planets",
+      "blanks": [
+        {
+          "position": 15,
+          "original_word": "is",
+          "displayed_fragment": "i",
+          "word_index_in_sentence": 1,
+          "sentence_index": 1
+        },
+        {
+          "position": 17,
+          "original_word": "most",
+          "displayed_fragment": "mo",
+          "word_index_in_sentence": 3,
+          "sentence_index": 1
+        },
+        {
+          "position": 19,
+          "original_word": "example",
+          "displayed_fragment": "exa",
+          "word_index_in_sentence": 5,
+          "sentence_index": 1
+        },
+        {
+          "position": 21,
+          "original_word": "in",
+          "displayed_fragment": "i",
+          "word_index_in_sentence": 7,
+          "sentence_index": 1
+        },
+        {
+          "position": 24,
+          "original_word": "an",
+          "displayed_fragment": "a",
+          "word_index_in_sentence": 10,
+          "sentence_index": 1
+        },
+        {
+          "position": 26,
+          "original_word": "astronomer",
+          "displayed_fragment": "astro",
+          "word_index_in_sentence": 12,
+          "sentence_index": 1
+        },
+        {
+          "position": 28,
+          "original_word": "objects",
+          "displayed_fragment": "obj",
+          "word_index_in_sentence": 1,
+          "sentence_index": 2
+        },
+        {
+          "position": 30,
+          "original_word": "enough",
+          "displayed_fragment": "eno",
+          "word_index_in_sentence": 3,
+          "sentence_index": 2
+        },
+        {
+          "position": 32,
+          "original_word": "to",
+          "displayed_fragment": "t",
+          "word_index_in_sentence": 5,
+          "sentence_index": 2
+        },
+        {
+          "position": 34,
+          "original_word": "round",
+          "displayed_fragment": "ro",
+          "word_index_in_sentence": 7,
+          "sentence_index": 2
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Dwarf planets are small worlds that orbit the sun but are not full planets.",
+      "difficulty": "medium",
+      "blanked_text": "Dwarf planets are small worlds that orbit the sun but are not full planets. Pluto i_ the mo__ famous exa____, discovered i_ 1930 by a_ American astro_____. These obj____ have eno___ mass t_ be ro___ but share their space with other debris. Scientists study them to learn more about the early solar system.",
+      "_diffScore": 3.1
+    },
+    {
+      "id": "ctw_gen_26538316681_007",
+      "passage": "Migration patterns show how early humans moved across continents over many years. Groups of people traveled from Africa to Asia and Europe in search of food. They followed herds of animals and adapted to new climates along the way. These movements helped spread human populations around the world.",
+      "word_count": 48,
+      "topic": "anthropology",
+      "subtopic": "migration patterns",
+      "blanks": [
+        {
+          "position": 13,
+          "original_word": "of",
+          "displayed_fragment": "o",
+          "word_index_in_sentence": 1,
+          "sentence_index": 1
+        },
+        {
+          "position": 15,
+          "original_word": "traveled",
+          "displayed_fragment": "trav",
+          "word_index_in_sentence": 3,
+          "sentence_index": 1
+        },
+        {
+          "position": 17,
+          "original_word": "Africa",
+          "displayed_fragment": "Afr",
+          "word_index_in_sentence": 5,
+          "sentence_index": 1
+        },
+        {
+          "position": 19,
+          "original_word": "Asia",
+          "displayed_fragment": "As",
+          "word_index_in_sentence": 7,
+          "sentence_index": 1
+        },
+        {
+          "position": 21,
+          "original_word": "Europe",
+          "displayed_fragment": "Eur",
+          "word_index_in_sentence": 9,
+          "sentence_index": 1
+        },
+        {
+          "position": 23,
+          "original_word": "search",
+          "displayed_fragment": "sea",
+          "word_index_in_sentence": 11,
+          "sentence_index": 1
+        },
+        {
+          "position": 25,
+          "original_word": "food",
+          "displayed_fragment": "fo",
+          "word_index_in_sentence": 13,
+          "sentence_index": 1
+        },
+        {
+          "position": 27,
+          "original_word": "followed",
+          "displayed_fragment": "foll",
+          "word_index_in_sentence": 1,
+          "sentence_index": 2
+        },
+        {
+          "position": 29,
+          "original_word": "of",
+          "displayed_fragment": "o",
+          "word_index_in_sentence": 3,
+          "sentence_index": 2
+        },
+        {
+          "position": 31,
+          "original_word": "and",
+          "displayed_fragment": "a",
+          "word_index_in_sentence": 5,
+          "sentence_index": 2
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Migration patterns show how early humans moved across continents over many years.",
+      "difficulty": "medium",
+      "blanked_text": "Migration patterns show how early humans moved across continents over many years. Groups o_ people trav____ from Afr___ to As__ and Eur___ in sea___ of fo__. They foll____ herds o_ animals a__ adapted to new climates along the way. These movements helped spread human populations around the world.",
+      "_diffScore": 3.2
+    },
+    {
+      "id": "ctw_gen_26538316681_008",
+      "passage": "Engineering is the field where people design and build things to solve problems. Civil engineers create structures like bridges and roads that connect communities. They use math and science to make sure these constructions are safe and durable. This work improves everyday life by making travel and transport easier.",
+      "word_count": 49,
+      "topic": "technology",
+      "subtopic": "engineering",
+      "blanks": [
+        {
+          "position": 14,
+          "original_word": "engineers",
+          "displayed_fragment": "engi",
+          "word_index_in_sentence": 1,
+          "sentence_index": 1
+        },
+        {
+          "position": 16,
+          "original_word": "structures",
+          "displayed_fragment": "struc",
+          "word_index_in_sentence": 3,
+          "sentence_index": 1
+        },
+        {
+          "position": 18,
+          "original_word": "bridges",
+          "displayed_fragment": "bri",
+          "word_index_in_sentence": 5,
+          "sentence_index": 1
+        },
+        {
+          "position": 20,
+          "original_word": "roads",
+          "displayed_fragment": "ro",
+          "word_index_in_sentence": 7,
+          "sentence_index": 1
+        },
+        {
+          "position": 22,
+          "original_word": "connect",
+          "displayed_fragment": "con",
+          "word_index_in_sentence": 9,
+          "sentence_index": 1
+        },
+        {
+          "position": 24,
+          "original_word": "They",
+          "displayed_fragment": "Th",
+          "word_index_in_sentence": 0,
+          "sentence_index": 2
+        },
+        {
+          "position": 26,
+          "original_word": "math",
+          "displayed_fragment": "ma",
+          "word_index_in_sentence": 2,
+          "sentence_index": 2
+        },
+        {
+          "position": 28,
+          "original_word": "science",
+          "displayed_fragment": "sci",
+          "word_index_in_sentence": 4,
+          "sentence_index": 2
+        },
+        {
+          "position": 30,
+          "original_word": "make",
+          "displayed_fragment": "ma",
+          "word_index_in_sentence": 6,
+          "sentence_index": 2
+        },
+        {
+          "position": 32,
+          "original_word": "these",
+          "displayed_fragment": "th",
+          "word_index_in_sentence": 8,
+          "sentence_index": 2
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Engineering is the field where people design and build things to solve problems.",
+      "difficulty": "hard",
+      "blanked_text": "Engineering is the field where people design and build things to solve problems. Civil engi_____ create struc_____ like bri____ and ro___ that con____ communities. Th__ use ma__ and sci____ to ma__ sure th___ constructions are safe and durable. This work improves everyday life by making travel and transport easier.",
+      "_diffScore": 4.5
     }
   ]
 }
