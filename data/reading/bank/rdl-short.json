@@ -3561,6 +3561,174 @@
         "status": "passed",
         "accuracy": "2/2"
       }
+    },
+    {
+      "id": "rdl_gen_26527192867-short_001",
+      "variant": "short",
+      "text": "Campus Players Present: The Night Market! Friday, May 15, 7:00 PM at Anderson Hall. Tickets $5 at the door. Student ID required. Proceeds support next semester’s production. Come enjoy an evening of drama and mystery!",
+      "word_count": 35,
+      "genre": "flyer",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_26527192867-short_001_q1",
+          "question_type": "detail",
+          "stem": "According to the flyer, what is required to buy a ticket?",
+          "options": {
+            "A": "To bring a guest pass",
+            "B": "To show a receipt",
+            "C": "To present a voucher",
+            "D": "To show a student ID"
+          },
+          "correct_answer": "D",
+          "explanation": "The flyer states 'Student ID required' for ticket purchase."
+        },
+        {
+          "qid": "rdl_gen_26527192867-short_001_q2",
+          "question_type": "detail",
+          "stem": "According to the flyer, when does the performance take place?",
+          "options": {
+            "A": "On Saturday, May 14",
+            "B": "On Friday, May 15",
+            "C": "On Sunday, May 16",
+            "D": "On Thursday, May 14"
+          },
+          "correct_answer": "B",
+          "explanation": "The flyer states 'Friday, May 15' as the performance date."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_26527192867-short_002",
+      "variant": "short",
+      "text": "The campus garden is open for spring! Visit Monday-Friday, 9:00 AM to 4:00 PM near the Science Building. Bring your own gloves if you want to help plant herbs. I love the fresh smell there! 🌱",
+      "word_count": 36,
+      "genre": "social_media",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_26527192867-short_002_q1",
+          "question_type": "detail",
+          "stem": "According to the social media post, what should visitors bring if they want to help?",
+          "options": {
+            "A": "To borrow tools from the shed",
+            "B": "To purchase seeds from the office",
+            "C": "To bring their own gardening gloves",
+            "D": "To wear waterproof boots"
+          },
+          "correct_answer": "C",
+          "explanation": "The post says 'Bring your own gloves if you want to help plant herbs.'"
+        },
+        {
+          "qid": "rdl_gen_26527192867-short_002_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the campus garden?",
+          "options": {
+            "A": "It is likely popular among students who enjoy nature.",
+            "B": "It is open only on weekends during spring.",
+            "C": "It charges a fee for entering the garden area.",
+            "D": "It requires advance registration for volunteers."
+          },
+          "correct_answer": "A",
+          "explanation": "The author expresses enjoyment ('I love the fresh smell there!') and invites help, suggesting it is a pleasant place that attracts nature-loving students."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_26527192867-short_003",
+      "variant": "short",
+      "text": "Hi Jordan,\n\nThis email confirms your volunteer shift for the campus tour on this Friday, March 10, from 2:00-4:00 PM. Please meet at the Admissions Office in Anderson Hall. Wear comfortable shoes.\n\nBest,\nMs. Chen",
+      "word_count": 35,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_26527192867-short_003_q1",
+          "question_type": "detail",
+          "stem": "According to the email, where should Jordan meet for the shift?",
+          "options": {
+            "A": "At the Student Union building",
+            "B": "At the library's main entrance",
+            "C": "At the Admissions Office in Anderson Hall",
+            "D": "At the campus garden near Science Building"
+          },
+          "correct_answer": "C",
+          "explanation": "The email states 'Please meet at the Admissions Office in Anderson Hall.'"
+        },
+        {
+          "qid": "rdl_gen_26527192867-short_003_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about Jordan's role?",
+          "options": {
+            "A": "Jordan is expected to give a presentation.",
+            "B": "Jordan will be walking around campus giving tours.",
+            "C": "Jordan must bring a group of students to the office.",
+            "D": "Jordan needs to prepare a welcome speech."
+          },
+          "correct_answer": "B",
+          "explanation": "The advice to 'Wear comfortable shoes' and the tour context strongly suggest Jordan will be walking to show visitors around campus."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_26527192867-short_004",
+      "variant": "short",
+      "text": "Free Flu Shot Clinic! Tuesday, October 20, 10:00 AM-2:00 PM at the Student Health Center. No appointment needed. Free for all students with valid ID. Limited supply – first come, first served. Protect yourself this season!",
+      "word_count": 36,
+      "genre": "flyer",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_26527192867-short_004_q1",
+          "question_type": "detail",
+          "stem": "According to the flyer, what is the location of the flu shot clinic?",
+          "options": {
+            "A": "At the Anderson Hall auditorium",
+            "B": "At the campus gymnasium",
+            "C": "At the Science Building lobby",
+            "D": "At the Student Health Center"
+          },
+          "correct_answer": "D",
+          "explanation": "The flyer states 'at the Student Health Center' as the location."
+        },
+        {
+          "qid": "rdl_gen_26527192867-short_004_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the flu shot clinic?",
+          "options": {
+            "A": "Students should arrive early to ensure receiving a shot.",
+            "B": "Students must register online before attending the clinic.",
+            "C": "The clinic will charge a small fee for the vaccination.",
+            "D": "The clinic is only open to students with health insurance."
+          },
+          "correct_answer": "A",
+          "explanation": "The phrase 'first come, first served' and 'Limited supply' imply that arriving early is advisable to secure a flu shot."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
     }
   ]
 }
