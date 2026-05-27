@@ -1,0 +1,141 @@
+{
+  "type": "readInDailyLife",
+  "generated_at": "2026-05-27T20:58:02.069Z",
+  "total_generated": 4,
+  "total_accepted": 3,
+  "acceptance_rate": 0.75,
+  "items": [
+    {
+      "id": "rdl_gen_26538316681-short_001",
+      "variant": "short",
+      "text": "A scheduled Wi-Fi maintenance will occur on March 15 from 2:00 AM to 6:00 AM. Internet access will be unavailable in the Library and Anderson Hall during this period. A $5 late fee applies for any overdue equipment not returned by March 14. Users are advised to save work before the window.",
+      "word_count": 52,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_26538316681-short_001_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, what will happen during the maintenance window?",
+          "options": {
+            "A": "A $5 fee will be charged for all users",
+            "B": "Internet access will be unavailable in two buildings",
+            "C": "The Library will close for the entire day",
+            "D": "Equipment must be returned by March 15"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice states that Internet access will be unavailable in the Library and Anderson Hall during the period."
+        },
+        {
+          "qid": "rdl_gen_26538316681-short_001_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the notice?",
+          "options": {
+            "A": "The maintenance will affect all campus buildings",
+            "B": "Users must pay the fee before the maintenance",
+            "C": "The Wi-Fi will be restored by 2:00 AM",
+            "D": "Users should prepare for the loss of connectivity"
+          },
+          "correct_answer": "D",
+          "explanation": "The notice advises users to save work before the window, implying they should prepare for the loss of connectivity."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_26538316681-short_002",
+      "variant": "short",
+      "text": "Spring Theater Show! 'The Lost Garden' by Student Players. March 3-7 at 7:30 PM in Main Auditorium. Tickets $5 at the door or online. Don't miss this amazing performance! Limited seating available.",
+      "word_count": 32,
+      "genre": "flyer",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_26538316681-short_002_q1",
+          "question_type": "detail",
+          "stem": "According to the flyer, when will the theater show take place?",
+          "options": {
+            "A": "Only on March 3",
+            "B": "Every night at 7:30 PM in March",
+            "C": "From March 3 to March 7",
+            "D": "On March 7 at 7:30 PM"
+          },
+          "correct_answer": "C",
+          "explanation": "The flyer states the show runs from March 3 to March 7."
+        },
+        {
+          "qid": "rdl_gen_26538316681-short_002_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the tickets for this show?",
+          "options": {
+            "A": "They are available only at the door",
+            "B": "They cost more than $5 at the door",
+            "C": "They may sell out due to limited seating",
+            "D": "They are free for student players"
+          },
+          "correct_answer": "C",
+          "explanation": "The flyer mentions limited seating and tickets are available, implying they may sell out."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_26538316681-short_004",
+      "variant": "short",
+      "text": "Hi everyone, The Photography Club meeting has been rescheduled to this Friday at 3:00 PM in Room 204. Please bring $5 for the materials fee. See you there! Best, Ms. Chen",
+      "word_count": 31,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_26538316681-short_004_q1",
+          "question_type": "detail",
+          "stem": "According to the email, what is the new time for the Photography Club meeting?",
+          "options": {
+            "A": "This Friday at 2:00 PM",
+            "B": "This Friday at 3:00 PM",
+            "C": "Next Friday at 3:00 PM",
+            "D": "This Friday at 4:00 PM"
+          },
+          "correct_answer": "B",
+          "explanation": "The email states the meeting is rescheduled to this Friday at 3:00 PM in Room 204."
+        },
+        {
+          "qid": "rdl_gen_26538316681-short_004_q2",
+          "question_type": "vocabulary_in_context",
+          "stem": "In the email, the word 'rescheduled' most nearly means:",
+          "options": {
+            "A": "Moved to a different time",
+            "B": "Cancelled permanently",
+            "C": "Held as planned",
+            "D": "Postponed indefinitely"
+          },
+          "correct_answer": "A",
+          "explanation": "The email indicates the meeting was moved to a new time, so 'rescheduled' means moved to a different time."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    }
+  ],
+  "rejected": [
+    {
+      "id": "rdl_gen_26538316681-short_003",
+      "reason": "text_length: 29 words (short variant needs 30-70)"
+    }
+  ]
+}
