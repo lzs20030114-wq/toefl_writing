@@ -162,11 +162,15 @@ Required schema for each item:
 ## 92% of answers are STATEMENTS (has_question_mark=false)
 Indirect/embedded questions use DECLARATIVE word order (no inversion).
 
-## Sentence type distribution:
-- Indirect/embedded questions: 6-8 items (wanted to know, asked, was curious, was wondering, found out, needed to know)
-- Negation: 2-3 items (did not, have not, could not, no longer, have no idea)
-- Contact/relative clause: 1-2 items (omitted relative pronoun)
-- Other: 0-1 items
+## Sentence type distribution (calibrated to 50 real TPO items: 44/22/24/2/4/4):
+- Indirect/embedded questions: 4-5 items (wanted to know, asked if/whether/what, was curious, was wondering, found out, needed to know, was unable to figure out)
+- Negation: 2 items (did not, have not, could not, no longer, have no idea, never)
+- Other varied composition: 2-3 items — declarative structures combining specific time/place phrases, multi-clause constructions, complex prepositional phrases, conjoined predicates. NOT formulaic indirect questions.
+- Relative clause: 0-1 items (with or without omitted relative pronoun)
+- Comparative: 0-1 items ("more X than", "the same as", "as X as")
+- Passive voice answer: 0-1 items ("was scheduled", "is stored", "has been moved")
+
+The previous distribution (60-80% indirect-Q) was over-tuned. Real TPO has only ~44% indirect-Q. The remaining ~56% spans negation, varied structures, comparative, passive, and relative — DO NOT default to indirect-Q for "filler" items.
 
 ## Distractor rules:
 - 88% of items have a distractor (single word only, never a phrase)
@@ -178,12 +182,16 @@ Indirect/embedded questions use DECLARATIVE word order (no inversion).
 - Each chunk max 3 words, all lowercase
 - chunks (minus distractor) + prefilled = all answer words exactly
 
-## Prompt patterns:
-- "What did [Name] ask you?" — 3-4 items
-- "Did you enjoy/finish/attend...?" — 2 items
-- "Where/Why did you...?" — 1-2 items
-- Other — 1-2 items
-Use diverse names: Matthew, Mariana, Julian, Alison, Emma, Professor Cho, etc.
+## Prompt patterns (calibrated to real TPO: 30/32/18/18%):
+- "What did [Name] ask...?" — 3 items
+- Other wh-questions ("Where/Why/When/How/Who did/do/are/were/will...?") — 3 items
+- Yes/no questions ("Did/Are/Were/Can/Do/Have/Were you...?") — 2 items
+- Statement openers (declarative context, NO question mark) — 2 items
+  Examples: "Matthew loved the book you recommended.", "Your brother's explanation was confusing.", "I've got my interview tomorrow."
+
+The previous prompt under-weighted wh-questions (10-20% but real TPO has 32%). DO NOT cluster on "What did X ask" — that pattern caps at 3 items per set.
+
+Use diverse names: Matthew, Mariana, Julian, Alison, Emma, Professor Cho, Juan, Hector, Margot, Olivia, Angelina, Harold.
 
 ${excluded}
 
