@@ -1,28 +1,28 @@
 {
-  "session_id": "routine-20260528-170909",
-  "completed_at": "2026-05-28T17:35:00.000Z",
-  "duration_minutes": 26,
-  "highlight": "首次写出 chemistry/corrosion AP 课题,BS 集合 76 全部采用双段或中位 prefilled 收尾",
+  "session_id": "routine-20260528-170930",
+  "completed_at": "2026-05-28T17:32:31Z",
+  "duration_minutes": 23,
+  "highlight": "Discussion 覆盖 4 个低频课程,AP 首次出现化学/分子键与艺术/印象派",
   "commit_sha": "",
   "results": {
     "bs": {
       "generated": 20,
       "accepted": 10,
-      "topics": ["indirect-Q", "negation", "comparative", "relative-clause", "embedded-Q", "passive"],
+      "topics": ["indirect-Q with whether", "indirect-Q with if", "negation with not", "passive voice", "comparative", "reported speech"],
       "favorite": {
-        "prompt": "What did Tobias ask about the registration fee?",
-        "answer": "he asked whether the fee covered all sessions."
+        "prompt": "What did Karim mention after the chemistry lecture?",
+        "answer": "he was unsure when the next quiz would take place."
       },
       "retried_after_fail": false,
-      "failure_reason": ""
+      "failure_reason": "first set of 10 (q1-q10) failed set-level validation (likely type-distribution drift); second set (q11-q20) succeeded"
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["public health", "computer science", "environmental science", "public policy"],
+      "topics": ["computer science", "public health", "environmental science", "public policy"],
       "favorite": {
-        "subtopic": "public health",
-        "preview": "Many cities around the world have introduced or are considering a tax on sugary drinks like sodas and energy drinks."
+        "subtopic": "computer science",
+        "preview": "As we've explored this semester, the debate over whether AI research breakthroughs should be released as open-source code or kept proprietary has intensified."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -32,8 +32,8 @@
       "accepted": 4,
       "topics": ["校园学业", "职场工作", "社区生活", "消费售后"],
       "favorite": {
-        "subtopic": "校园学业",
-        "preview": "You are a junior undergraduate planning your senior thesis. You met with Professor Tanaka briefly last week."
+        "subtopic": "社区生活",
+        "preview": "You are a regular visitor at the Eastside community library, which currently closes at one o'clock on Sundays."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -41,10 +41,10 @@
     "reading-ap": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["chemistry/corrosion", "history/early medicine", "sociology/inequality", "psychology/perception", "biology/bioluminescence"],
+      "topics": ["art/impressionism", "astronomy/space exploration", "sociology/immigration patterns", "anthropology/early agriculture", "chemistry/molecular bonding"],
       "favorite": {
-        "subtopic": "chemistry/corrosion",
-        "preview": "Corrosion is widely defined as the gradual deterioration of metal through chemical or electrochemical reactions."
+        "subtopic": "chemistry/molecular bonding",
+        "preview": "Chemical compounds are held together by interactions between atoms known as chemical bonds. These bonds determine almost every property of matter."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -52,10 +52,10 @@
     "reading-ctw": {
       "generated": 6,
       "accepted": 6,
-      "topics": ["biology/coral reefs", "environmental_science/water purification", "psychology/habit formation", "history/Roman engineering", "geology/river deltas", "astronomy/star formation"],
+      "topics": ["biology/photosynthesis", "environmental_science/invasive species", "psychology/cognitive bias", "history/maritime navigation", "geology/erosion", "astronomy/asteroid belts"],
       "favorite": {
-        "subtopic": "biology/coral reefs",
-        "preview": "Coral reefs are colorful underwater structures built by tiny animals called coral polyps."
+        "subtopic": "history/maritime navigation",
+        "preview": "Long before modern instruments, sailors found their way across the open ocean by watching the stars."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -63,10 +63,10 @@
     "reading-rdl-short": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["email/campus-tour-guide", "notice/elevator-out-of-service", "email/meal-plan-refund", "email/lab-safety-training"],
+      "topics": ["notice/Wi-Fi maintenance", "social_media/campus garden", "notice/lost-and-found", "notice/water fountain maintenance"],
       "favorite": {
-        "subtopic": "email/campus-tour-guide",
-        "preview": "Hi Marco, Thanks for signing up to volunteer as a campus tour guide this spring."
+        "subtopic": "social_media/campus garden",
+        "preview": "Spring is finally here! The Eastside Campus Community Garden is now open Tuesdays and Thursdays from 4:00 PM to 7:00 PM."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -74,10 +74,10 @@
     "reading-rdl-long": {
       "generated": 2,
       "accepted": 2,
-      "topics": ["notice/course-evaluations", "notice/lost-and-found-policy"],
+      "topics": ["email/roommate shower repair", "menu/campus food truck"],
       "favorite": {
-        "subtopic": "notice/course-evaluations",
-        "preview": "All undergraduate students are required to complete course evaluations for each registered course before Friday."
+        "subtopic": "email/roommate shower repair",
+        "preview": "Hope your exam week is going OK. I wanted to flag a problem with our bathroom that has been getting worse, and figure out a plan before the weekend."
       },
       "retried_after_fail": false,
       "failure_reason": ""

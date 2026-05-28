@@ -6249,6 +6249,109 @@
           "explanation": "The notice's headline 'Updated Lost and Found Policy' and the bulleted list of revised guidelines indicate the purpose is to communicate policy updates."
         }
       ]
+    },
+    {
+      "id": "rdl_gen_routine-20260528-170930-long_001",
+      "genre": "email",
+      "variant": "long",
+      "text": "Subject: Need to swap the shower head this weekend?\n\nHi Devin,\n\nHope your exam week is going OK. I wanted to flag a problem with our bathroom that has been getting worse, and figure out a plan before the weekend.\n\nThe shower head in our unit has been leaking pretty badly for almost two weeks now. Last night I came home and there was a small puddle on the floor. I called the building maintenance line on Tuesday and they said someone would come Thursday, but nobody showed up.\n\nI checked Sycamore Hardware on Pine Street and a replacement shower head runs about $22. The store is open Saturday from 9:00 AM to 6:00 PM, and they have free installation videos posted online. I think we could probably swap it ourselves in maybe twenty minutes.\n\nIf you can split the cost with me, I can grab the part Saturday morning and we can install it that afternoon. Otherwise, I'll keep calling the maintenance office on Monday.\n\nLet me know what works for you.\n\nThanks,\nPriya",
+      "word_count": 170,
+      "format_metadata": {
+        "from": "Priya",
+        "to": "Devin",
+        "subject": "Need to swap the shower head this weekend?"
+      },
+      "difficulty": "easy",
+      "question_count": 3,
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what has Priya already done about the leak?",
+          "options": {
+            "A": "She has already replaced the shower head herself.",
+            "B": "She has called the building maintenance line about it.",
+            "C": "She has filed an official complaint with the building owner.",
+            "D": "She has scheduled a Sycamore Hardware technician to visit."
+          },
+          "correct_answer": "B",
+          "explanation": "Priya writes that she 'called the building maintenance line on Tuesday' about the leak."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred from the email about the maintenance office?",
+          "options": {
+            "A": "It did not follow through on its promised Thursday visit.",
+            "B": "It does not handle minor plumbing repairs in their building.",
+            "C": "It charges tenants a service fee for each maintenance call.",
+            "D": "It is closed every weekend until Monday afternoon at earliest."
+          },
+          "correct_answer": "A",
+          "explanation": "Priya notes that maintenance said someone would come Thursday but 'nobody showed up,' implying the office did not follow through."
+        },
+        {
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this email?",
+          "options": {
+            "A": "To complain about ongoing issues with the shower in their unit.",
+            "B": "To propose a plan for fixing the shower head this weekend.",
+            "C": "To ask for advice on choosing the right hardware store nearby.",
+            "D": "To remind Devin about the upcoming chemistry exam week schedule."
+          },
+          "correct_answer": "B",
+          "explanation": "Priya proposes that she pick up the replacement part Saturday morning and that they install it together that afternoon."
+        }
+      ]
+    },
+    {
+      "id": "rdl_gen_routine-20260528-170930-long_002",
+      "genre": "menu",
+      "variant": "long",
+      "text": "GREENLEAF MOBILE — WEEKLY SPECIALS\n\nPark location: South Quad, near Hartwell Hall\nHours: Tuesday through Friday, 11:00 AM to 2:30 PM\n\nMAIN BOWLS\n• Spring Veggie Grain Bowl — $9.50\n• Black Bean Tacos (3) — $8.00\n• Lemon Chicken Wrap — $10.50\n• Mushroom Quesadilla — $9.00\n\nSIDES & DRINKS\n• Sweet Potato Fries — $3.50\n• House Salad — $4.00\n• Bottled Lemonade — $2.50\n• Iced Tea (free refills) — $2.00\n\nTHIS WEEK'S SPECIAL\nPair any main bowl with a drink for $1.50 off the combined price.\n\nPAYMENT\nCards and campus meal plan only — no cash accepted. Student ID discount: $1.00 off all main bowls after 1:30 PM.",
+      "word_count": 115,
+      "format_metadata": {
+        "vendor": "Greenleaf Mobile",
+        "location": "South Quad, near Hartwell Hall"
+      },
+      "difficulty": "easy",
+      "question_count": 3,
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the menu, what is the price of the Lemon Chicken Wrap?",
+          "options": {
+            "A": "It costs eight dollars per order.",
+            "B": "It costs nine dollars per order.",
+            "C": "It costs nine dollars and fifty cents.",
+            "D": "It costs ten dollars and fifty cents."
+          },
+          "correct_answer": "D",
+          "explanation": "The menu lists the Lemon Chicken Wrap at $10.50, or ten dollars and fifty cents."
+        },
+        {
+          "question_type": "detail",
+          "stem": "According to the menu, when can students get a discount on main bowls?",
+          "options": {
+            "A": "When they pay with cash at the truck.",
+            "B": "When they order before 11:00 AM each day.",
+            "C": "When they show their student ID after 1:30 PM.",
+            "D": "When they order more than three items at once."
+          },
+          "correct_answer": "C",
+          "explanation": "The menu specifies a 'Student ID discount: $1.00 off all main bowls after 1:30 PM.'"
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred from the menu?",
+          "options": {
+            "A": "All items must be ordered at least one day in advance.",
+            "B": "The food truck is open seven days every week.",
+            "C": "Students cannot pay with cash at this food truck.",
+            "D": "All sides and drinks are included with every main bowl."
+          },
+          "correct_answer": "C",
+          "explanation": "The payment section states 'Cards and campus meal plan only — no cash accepted,' implying cash is not an option."
+        }
+      ]
     }
   ]
 }
