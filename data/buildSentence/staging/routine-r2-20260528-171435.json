@@ -1,0 +1,114 @@
+{
+  "items": [
+    {
+      "id": "tmp_r2_q1",
+      "prompt": "What did Naomi ask the registrar about?",
+      "answer": "Naomi asked whether the course substitution had been approved.",
+      "chunks": ["asked", "whether", "the course", "substitution", "had been", "approved", "did"],
+      "prefilled": ["Naomi"],
+      "prefilled_positions": {"naomi": 0},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question (whether-clause)", "past perfect passive"]
+    },
+    {
+      "id": "tmp_r2_q2",
+      "prompt": "What was Diane curious about today?",
+      "answer": "Diane was curious where the visiting scholar would deliver the keynote.",
+      "chunks": ["was curious", "where", "the visiting", "scholar", "would deliver", "the keynote", "did"],
+      "prefilled": ["Diane"],
+      "prefilled_positions": {"diane": 0},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question (where-clause)"]
+    },
+    {
+      "id": "tmp_r2_q3",
+      "prompt": "Did Matthew confirm the bookstore policy?",
+      "answer": "Matthew wanted to know whether the bookstore offered weekly rentals.",
+      "chunks": ["matthew", "to know", "whether", "the bookstore", "offered", "weekly", "rentals", "did"],
+      "prefilled": ["wanted"],
+      "prefilled_positions": {"wanted": 1},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question (whether-clause)", "mid-sentence prefilled verb"]
+    },
+    {
+      "id": "tmp_r2_q4",
+      "prompt": "What did Margot want to know about her application?",
+      "answer": "Margot needed to know whether the financial aid deadline had been extended.",
+      "chunks": ["needed to", "know whether", "the financial", "aid", "had been", "extended", "did"],
+      "prefilled": ["Margot", "deadline"],
+      "prefilled_positions": {"margot": 0, "deadline": 8},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question (whether-clause)", "past perfect passive", "two-segment prefilled"]
+    },
+    {
+      "id": "tmp_r2_q5",
+      "prompt": "Did Juan finish the proposal on time?",
+      "answer": "Juan has not submitted the revised proposal yet.",
+      "chunks": ["has not", "submitted", "the revised", "proposal", "yet", "did"],
+      "prefilled": ["Juan"],
+      "prefilled_positions": {"juan": 0},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["present perfect negation"]
+    },
+    {
+      "id": "tmp_r2_q6",
+      "prompt": "Does Alison still attend the morning seminar?",
+      "answer": "Alison no longer attends the morning seminar on Mondays.",
+      "chunks": ["no longer", "attends", "the morning", "seminar", "on", "does"],
+      "prefilled": ["Alison", "Mondays"],
+      "prefilled_positions": {"alison": 0, "mondays": 8},
+      "distractor": "does",
+      "has_question_mark": false,
+      "grammar_points": ["negative adverb 'no longer'", "two-segment prefilled"]
+    },
+    {
+      "id": "tmp_r2_q7",
+      "prompt": "Tell me how the new gym compares to the old one.",
+      "answer": "The new gym felt much more spacious than the old one.",
+      "chunks": ["the new", "gym felt", "much more", "spacious", "than", "the old", "one"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": null,
+      "has_question_mark": false,
+      "grammar_points": ["comparative 'more X than'"]
+    },
+    {
+      "id": "tmp_r2_q8",
+      "prompt": "Describe where the chemistry samples were kept overnight.",
+      "answer": "The chemistry samples were stored inside the back lab refrigerator.",
+      "chunks": ["the chemistry", "samples", "were stored", "inside the", "back lab", "refrigerator", "is"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "is",
+      "has_question_mark": false,
+      "grammar_points": ["passive voice"]
+    },
+    {
+      "id": "tmp_r2_q9",
+      "prompt": "What did Emma mention about her seminar?",
+      "answer": "Emma chose the seminar her thesis advisor had recommended last semester.",
+      "chunks": ["emma", "the seminar", "her thesis", "advisor", "had recommended", "last semester", "did"],
+      "prefilled": ["chose"],
+      "prefilled_positions": {"chose": 1},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause with omitted relative pronoun", "mid-sentence prefilled verb"]
+    },
+    {
+      "id": "tmp_r2_q10",
+      "prompt": "Where did Angelina submit her transfer paperwork?",
+      "answer": "Angelina dropped the transfer paperwork off at the registrar's office.",
+      "chunks": ["angelina", "dropped", "the transfer", "paperwork", "at the", "registrar's", "office", "did"],
+      "prefilled": ["off"],
+      "prefilled_positions": {"off": 5},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["phrasal verb 'drop off'", "mid-sentence prefilled particle"]
+    }
+  ]
+}
