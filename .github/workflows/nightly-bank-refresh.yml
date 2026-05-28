@@ -8,12 +8,11 @@ name: Nightly — Bank Refresh (Master)
 # or manually via workflow_dispatch.
 
 on:
+  # workflow_dispatch only — automatic scheduling moved to the Claude routine
+  # (trig_01SmJeXr8ySEZRo2dEoohzTP) which runs Opus 4.7 against the project's
+  # calibrated prompts. This workflow is retained as a manual fallback if the
+  # routine fails or is paused.
   workflow_dispatch: {}
-  # 19:00 UTC daily = 03:00 Beijing (UTC+8). GitHub Actions schedule triggers
-  # run on the default branch using the GITHUB_TOKEN — no external PAT needed.
-  # Note: heavy load on github.com can delay scheduled runs by a few minutes.
-  schedule:
-    - cron: "0 19 * * *"
 
 permissions:
   contents: write
