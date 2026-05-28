@@ -90,6 +90,7 @@ const bankOrder = ["bs", "discussion", "email", "reading-ap", "reading-ctw", "re
 
 function statusFor(r) {
   if (!r) return { icon: "⚪", note: "未执行" };
+  if (r.accepted > 0 && r.r2_supplemented) return { icon: "🟡", note: `R2 补 +${r.r2_items_added || 0}` };
   if (r.accepted > 0 && !r.retried_after_fail) return { icon: "🟢", note: "" };
   if (r.accepted > 0 && r.retried_after_fail) return { icon: "🟡", note: "第二轮救回" };
   return { icon: "🔴", note: r.failure_reason || "失败" };
@@ -103,19 +104,25 @@ const rows = bankOrder.map((bank) => {
     label: BANK_DISPLAY[bank],
     icon: st.icon,
     note: st.note,
+    // accepted = R1's count. r2_items_added is R2's supplement (if any).
+    // Total displayed = accepted + (r2_items_added || 0).
     accepted: r.accepted || 0,
+    r2_items_added: r.r2_items_added || 0,
     generated: r.generated || 0,
     topics: Array.isArray(r.topics) ? r.topics : [],
     favorite: r.favorite || null,
     failure_reason: r.failure_reason || null,
     retried_after_fail: !!r.retried_after_fail,
+    r2_supplemented: !!r.r2_supplemented,
   };
 });
 
 // ── Aggregate ─────────────────────────────────────────────────────────
-const totalAccepted = rows.reduce((s, r) => s + r.accepted, 0);
-const failedRows = rows.filter((r) => r.accepted === 0);
+// totalAccepted = R1's count + R2's supplements
+const totalAccepted = rows.reduce((s, r) => s + r.accepted + r.r2_items_added, 0);
+const failedRows = rows.filter((r) => (r.accepted + r.r2_items_added) === 0);
 const retriedRows = rows.filter((r) => r.retried_after_fail && r.accepted > 0);
+const r2SupplementedRows = rows.filter((r) => r.r2_supplemented);
 
 // ── Score this batch (diversity + quality) ────────────────────────────
 // Reads each bank's staging file and scores it against a "perfect batch"
@@ -130,8 +137,10 @@ const totalBefore = totalNow - totalAccepted;
 
 // Overall status header
 let header;
-if (failedRows.length === 0 && retriedRows.length === 0) {
+if (failedRows.length === 0 && retriedRows.length === 0 && r2SupplementedRows.length === 0) {
   header = `✅ 题库更新成功 — 今天加了 ${totalAccepted} 道`;
+} else if (failedRows.length === 0 && r2SupplementedRows.length > 0) {
+  header = `✅ 题库更新成功 — 今天加了 ${totalAccepted} 道(${r2SupplementedRows.length} 个品类 R2 补救)`;
 } else if (failedRows.length === 0 && retriedRows.length > 0) {
   header = `✅ 题库更新成功 — 今天加了 ${totalAccepted} 道(${retriedRows.length} 个品类第二轮才过)`;
 } else if (totalAccepted > 0) {
@@ -156,11 +165,14 @@ for (const r of rows) {
     : "";
   const noteSnippet = r.note ? `  — ${r.note}` : "";
   const s = scores.perBank[r.bank];
-  const scoreSnippet = (s && r.accepted > 0)
+  const totalForBank = r.accepted + r.r2_items_added;
+  const scoreSnippet = (s && totalForBank > 0)
     ? `  [多样性 ${s.diversity.score} / 质量 ${s.quality.score}]`
     : "";
-  if (r.accepted === 0) {
+  if (totalForBank === 0) {
     console.log(`${r.icon} **${r.label}** — 0 道${noteSnippet}`);
+  } else if (r.r2_items_added > 0) {
+    console.log(`${r.icon} **${r.label}** — ${r.accepted}+${r.r2_items_added} 道${topicSnippet}${scoreSnippet}${noteSnippet}`);
   } else {
     console.log(`${r.icon} **${r.label}** — ${r.accepted} 道${topicSnippet}${scoreSnippet}${noteSnippet}`);
   }
