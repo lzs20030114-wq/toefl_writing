@@ -1,0 +1,48 @@
+name: Send Nightly Email Summary
+
+# Triggered by the Claude routine (via GitHub REST API workflow_dispatch) after
+# it commits the nightly bank refresh. Reads data/.last-nightly-summary.md and
+# sends it as the email body, using Gmail SMTP via dawidd6/action-send-mail
+# (the same secrets the existing nightly-bank-refresh.yml uses).
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Confirm summary file exists
+        id: check
+        shell: bash
+        run: |
+          set -u
+          SUMMARY="data/.last-nightly-summary.md"
+          if [ ! -f "$SUMMARY" ]; then
+            echo "::error::Summary file $SUMMARY not found — did the routine commit it?"
+            exit 1
+          fi
+          # Extract subject line: first non-empty heading or fallback
+          SUBJECT=$(grep -E "^#+ " "$SUMMARY" | head -1 | sed -E 's/^#+\s*//')
+          [ -z "$SUBJECT" ] && SUBJECT="[Nightly] Bank refresh — $(date -u +%Y-%m-%d)"
+          echo "subject=$SUBJECT" >> "$GITHUB_OUTPUT"
+
+      - name: Send email
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.GMAIL_USER }}
+          password: ${{ secrets.GMAIL_APP_PASSWORD }}
+          from: ${{ secrets.GMAIL_USER }}
+          to: ${{ secrets.GMAIL_USER }}
+          subject: ${{ steps.check.outputs.subject }}
+          body: file://data/.last-nightly-summary.md
+          convert_markdown: true
