@@ -26,6 +26,7 @@
 import { readFileSync, existsSync, readdirSync } from "fs";
 import { resolve, dirname, join } from "path";
 import { fileURLToPath } from "url";
+import { scoreBatch } from "../lib/quality/scoreBatch.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
@@ -116,6 +117,12 @@ const totalAccepted = rows.reduce((s, r) => s + r.accepted, 0);
 const failedRows = rows.filter((r) => r.accepted === 0);
 const retriedRows = rows.filter((r) => r.retried_after_fail && r.accepted > 0);
 
+// ── Score this batch (diversity + quality) ────────────────────────────
+// Reads each bank's staging file and scores it against a "perfect batch"
+// (all axes distinct/balanced + every item inside TPO-calibrated ranges).
+// Overall = item-weighted average across banks.
+const scores = scoreBatch(ROOT, meta.session_id || "", results);
+
 // Total bank size before and after
 const totalNowByBank = Object.fromEntries(bankOrder.map((b) => [b, bankTotal(b)]));
 const totalNow = Object.values(totalNowByBank).reduce((s, v) => s + v, 0);
@@ -137,7 +144,8 @@ if (failedRows.length === 0 && retriedRows.length === 0) {
 const today = (meta.completed_at || new Date().toISOString()).slice(0, 10);
 
 console.log(`# ${header}\n`);
-console.log(`日期: **${today}** · 模型: Claude Opus 4.7 · 用时: ${meta.duration_minutes || "—"} 分钟\n`);
+console.log(`日期: **${today}** · 模型: Claude Opus 4.7 · 用时: ${meta.duration_minutes || "—"} 分钟`);
+console.log(`📊 **多样性 ${scores.overall.diversity}/100  ·  质量 ${scores.overall.quality}/100**\n`);
 
 // Per-bank line summary
 for (const r of rows) {
@@ -147,10 +155,14 @@ for (const r of rows) {
     ? `  (${r.topics.slice(0, 4).join(" · ")}${r.topics.length > 4 ? " ..." : ""})`
     : "";
   const noteSnippet = r.note ? `  — ${r.note}` : "";
+  const s = scores.perBank[r.bank];
+  const scoreSnippet = (s && r.accepted > 0)
+    ? `  [多样性 ${s.diversity.score} / 质量 ${s.quality.score}]`
+    : "";
   if (r.accepted === 0) {
     console.log(`${r.icon} **${r.label}** — 0 道${noteSnippet}`);
   } else {
-    console.log(`${r.icon} **${r.label}** — ${r.accepted} 道${topicSnippet}${noteSnippet}`);
+    console.log(`${r.icon} **${r.label}** — ${r.accepted} 道${topicSnippet}${scoreSnippet}${noteSnippet}`);
   }
 }
 
@@ -181,6 +193,24 @@ if (favs.length > 0) {
     if (f.preview) console.log(`> ${f.preview.slice(0, 200)}${f.preview.length > 200 ? "..." : ""}\n`);
   }
 }
+
+// Score breakdown — per-bank detail. Always rendered so you can see WHY a
+// score is what it is, not just the number.
+console.log("## 评分明细\n");
+console.log("| 品类 | 多样性 | 质量 |");
+console.log("| --- | --- | --- |");
+for (const r of rows) {
+  const s = scores.perBank[r.bank];
+  if (!s || r.accepted === 0) {
+    console.log(`| ${r.label} | — | — |`);
+    continue;
+  }
+  const divDetail = s.diversity.breakdown.join(" · ");
+  const qualDetail = s.quality.breakdown.join(" · ");
+  console.log(`| ${r.label} | **${s.diversity.score}** — ${divDetail} | **${s.quality.score}** — ${qualDetail} |`);
+}
+console.log("");
+console.log("> *多样性 100 = 所有维度 distinct / 均衡;质量 100 = 每道题都落在 TPO 校准的目标区间。整体分按本批 item 数加权平均。*\n");
 
 // Anomaly / retry log
 const anomalies = [];
