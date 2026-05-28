@@ -1,17 +1,17 @@
 {
-  "session_id": "routine-20260528-082414",
-  "completed_at": "2026-05-28T08:44:35Z",
-  "duration_minutes": 20,
-  "highlight": "七个题库一次过关,首次为 AP 阅读补充了物理光学与化学催化两个稀缺学科",
-  "commit_sha": "c54deb89bebb0870a2ca7c4f7d0cfebfc8ac2f7c",
+  "session_id": "routine-20260528-165154",
+  "completed_at": "2026-05-28T17:09:24Z",
+  "duration_minutes": 18,
+  "highlight": "本轮 7 个题库 PASS 1 全部成功，AP 新增 psychology/emotion、materials_science/ceramics、anthropology/early humans，CTW 首次出现 astronomy/gravitational waves。",
+  "commit_sha": "f47ef2d5fbe9792e2ed4c96c84eeb54b7373193e",
   "results": {
     "bs": {
       "generated": 20,
-      "accepted": 20,
+      "accepted": 10,
       "topics": [],
       "favorite": {
-        "prompt": "What did Harold want to know about the gym renovation?",
-        "answer": "he was curious if the new gym equipment had arrived."
+        "prompt": "Did Tomas confirm the gym membership renewal?",
+        "answer": "Tomas has not received any reminder email yet."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -19,10 +19,10 @@
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["computer science", "public health", "technology and media", "history and culture"],
+      "topics": ["environmental science", "public policy", "computer science", "history and culture"],
       "favorite": {
-        "subtopic": "history and culture",
-        "preview": "As we discussed last week, hundreds of indigenous languages around the world are predicted to disappear within this century."
+        "subtopic": "public policy",
+        "preview": "Today, we're going to talk about a small but growing trend in city government — paying residents small cash rewards"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -32,8 +32,8 @@
       "accepted": 4,
       "topics": ["校园学业", "职场工作", "社区生活", "日常生活"],
       "favorite": {
-        "subtopic": "日常生活",
-        "preview": "Your close friend Naomi has traveled to Iceland twice and you are planning your first international trip there this August."
+        "subtopic": "校园学业",
+        "preview": "You are a third-year sociology major who tried to register for a required research methods course this morning"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -41,10 +41,16 @@
     "reading-ap": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["technology/battery technology", "physics/optics", "chemistry/chemical reactions", "materials_science/concrete chemistry", "history/agricultural revolution"],
+      "topics": [
+        "psychology/emotion",
+        "business/labor economics",
+        "chemistry/fermentation",
+        "materials_science/ceramics",
+        "anthropology/early humans"
+      ],
       "favorite": {
-        "subtopic": "history/agricultural revolution",
-        "preview": "By the early eighteenth century, British agriculture was constrained by a persistent obstacle: the gradual exhaustion of soil"
+        "subtopic": "anthropology/early humans",
+        "preview": "Reconstructing the migration patterns of early human populations has proved exceptionally difficult. Skeletal remains"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -52,10 +58,17 @@
     "reading-ctw": {
       "generated": 6,
       "accepted": 6,
-      "topics": ["biology/deep sea organisms", "environmental_science/desertification", "psychology/social behavior", "history/early medicine", "geology/mountain formation", "astronomy/Mars exploration"],
+      "topics": [
+        "biology/plant biology",
+        "environmental_science/conservation",
+        "psychology/decision making",
+        "history/technological inventions",
+        "geology/geysers",
+        "astronomy/gravitational waves"
+      ],
       "favorite": {
-        "subtopic": "history/early medicine",
-        "preview": "Early medicine relied on simple herbs and beliefs about the body's balance. Doctors in ancient Egypt mixed honey, salt"
+        "subtopic": "astronomy/gravitational waves",
+        "preview": "Gravitational waves are ripples in space caused by very large moving objects. They were first predicted"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -63,10 +76,10 @@
     "reading-rdl-short": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["notice/lost-and-found", "email/package-pickup", "notice/water-fountain", "email/parking-permit"],
+      "topics": ["flyer", "notice", "email", "flyer"],
       "favorite": {
-        "subtopic": "notice/water-fountain",
-        "preview": "The water fountains on the third floor of Whitmore Library will be closed for pipe maintenance from Monday, June 8"
+        "subtopic": "email",
+        "preview": "Just confirming our calculus tutoring session this Thursday, March 12 at 3:00 PM. We'll meet in the Math Help Center"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -74,10 +87,10 @@
     "reading-rdl-long": {
       "generated": 2,
       "accepted": 2,
-      "topics": ["notice/package-procedure", "email/lab-coordination"],
+      "topics": ["email", "email"],
       "favorite": {
-        "subtopic": "email/lab-coordination",
-        "preview": "I wanted to check in before Friday's titration experiment in Bromley 224. Here is what we need to sort out ahead"
+        "subtopic": "email",
+        "preview": "The Campus Transportation Office and the Bike Co-op are running a free bicycle maintenance clinic on Saturday"
       },
       "retried_after_fail": false,
       "failure_reason": ""
