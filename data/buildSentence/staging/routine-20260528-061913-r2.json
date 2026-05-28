@@ -1,0 +1,120 @@
+{
+  "items": [
+    {
+      "id": "tmp_r2_q1",
+      "prompt": "Where did Julian go this afternoon?",
+      "answer": "julian went to the library to study for his midterm.",
+      "chunks": ["went", "to the", "library", "to study", "for his", "midterm"],
+      "prefilled": ["julian"],
+      "prefilled_positions": {"julian": 0},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["past tense", "infinitive of purpose"]
+    },
+    {
+      "id": "tmp_r2_q2",
+      "prompt": "When does the new café open near campus?",
+      "answer": "the new café opens at seven in the morning every weekday.",
+      "chunks": ["new", "café", "opens", "at seven", "in the", "morning", "every weekday"],
+      "prefilled": ["the"],
+      "prefilled_positions": {"the": 0},
+      "distractor": "does",
+      "has_question_mark": false,
+      "grammar_points": ["simple present declarative", "time expression"]
+    },
+    {
+      "id": "tmp_r2_q3",
+      "prompt": "What did Mariana ask about the new study group?",
+      "answer": "she wanted to know if the meetings would be on tuesdays.",
+      "chunks": ["wanted to", "know if", "the meetings", "would be", "on tuesdays"],
+      "prefilled": ["she"],
+      "prefilled_positions": {"she": 0},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question with if", "modal would"]
+    },
+    {
+      "id": "tmp_r2_q4",
+      "prompt": "Did you finish editing the article for the magazine?",
+      "answer": "i could not finalize the introduction section in time.",
+      "chunks": ["could", "not", "finalize", "the introduction", "section", "in time"],
+      "prefilled": ["i"],
+      "prefilled_positions": {"i": 0},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["negation with could not", "past tense"]
+    },
+    {
+      "id": "tmp_r2_q5",
+      "prompt": "Have you seen the announcement from the dean?",
+      "answer": "the dean has not released the official statement yet.",
+      "chunks": ["has", "not", "released", "the official", "statement", "yet"],
+      "prefilled": ["the dean"],
+      "prefilled_positions": {"the dean": 0},
+      "distractor": "does",
+      "has_question_mark": false,
+      "grammar_points": ["present perfect negation"]
+    },
+    {
+      "id": "tmp_r2_q6",
+      "prompt": "Matthew got the concert tickets refunded yesterday.",
+      "prompt_context": "",
+      "prompt_task_kind": "statement",
+      "prompt_task_text": "Matthew got the concert tickets refunded yesterday.",
+      "answer": "he confirmed that the tickets had been refunded already.",
+      "chunks": ["confirmed that", "the tickets", "had been", "refunded already"],
+      "prefilled": ["he"],
+      "prefilled_positions": {"he": 0},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["reported speech", "past perfect passive"]
+    },
+    {
+      "id": "tmp_r2_q7",
+      "prompt": "What did Angelina ask about the new internship?",
+      "answer": "she was curious whether the position was paid or unpaid.",
+      "chunks": ["was curious", "whether the", "position", "was paid", "or unpaid"],
+      "prefilled": ["she"],
+      "prefilled_positions": {"she": 0},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question with whether", "past tense"]
+    },
+    {
+      "id": "tmp_r2_q8",
+      "prompt": "Your laptop battery has been draining quickly this week.",
+      "prompt_context": "",
+      "prompt_task_kind": "statement",
+      "prompt_task_text": "Your laptop battery has been draining quickly this week.",
+      "answer": "the battery should be replaced before the end of the semester.",
+      "chunks": ["should", "be", "replaced", "before the", "end of", "the semester"],
+      "prefilled": ["the battery"],
+      "prefilled_positions": {"the battery": 0},
+      "distractor": "is",
+      "has_question_mark": false,
+      "grammar_points": ["passive voice with modal", "time clause"]
+    },
+    {
+      "id": "tmp_r2_q9",
+      "prompt": "What did Alison ask about the orientation session?",
+      "answer": "she wanted to know where the new students would gather.",
+      "chunks": ["wanted to", "know where", "the new", "students", "would gather"],
+      "prefilled": ["she"],
+      "prefilled_positions": {"she": 0},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question with where", "modal would"]
+    },
+    {
+      "id": "tmp_r2_q10",
+      "prompt": "What did Matthew tell you about the apartment search?",
+      "answer": "he said the search had taken longer than expected.",
+      "chunks": ["said", "the search", "had taken", "longer than", "expected"],
+      "prefilled": ["he"],
+      "prefilled_positions": {"he": 0},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["reported speech", "comparative"]
+    }
+  ]
+}

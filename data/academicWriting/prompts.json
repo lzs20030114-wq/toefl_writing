@@ -1798,5 +1798,77 @@
       }
     ],
     "id": "ad160"
+  },
+  {
+    "id": "ad161",
+    "course": "public health",
+    "professor": {
+      "name": "Professor",
+      "text": "Today, we're going to talk about vaccination policies in public schools. Many districts now require students to be fully immunized before enrolling, with exemptions only for medical reasons. Critics say this overrides parental choice and personal beliefs, while supporters argue it's the only reliable way to prevent outbreaks of diseases like measles. Before our next class, I'd like you to weigh in: should public schools strictly enforce vaccination requirements, or should families have broader rights to opt out?"
+    },
+    "students": [
+      {
+        "name": "Diane",
+        "text": "I think schools have to enforce strict vaccination rules. When my younger sister was in kindergarten, an unvaccinated kid brought measles into her class and three children ended up hospitalized. Honestly, it scared everyone in the neighborhood. Schools aren't private spaces, they're shared environments, and one family's choice can put hundreds of other kids at real risk. If we allow broad opt-outs, we're basically asking the most vulnerable students, like infants in the same household or kids on chemo, to absorb the danger. That doesn't feel fair to me."
+      },
+      {
+        "name": "Marco",
+        "text": "I see Diane's point about outbreaks, but I'm worried about how strict enforcement actually plays out. A family I babysat for moved here from another country and had paperwork in a different format, and the school basically locked their kid out of class for two months while they sorted it. There's a difference between requiring vaccines and creating a system where any administrative slip kicks a kid out of school. I'd rather see flexible enforcement, with clear appeal paths, instead of treating every missing form like a public health emergency."
+      }
+    ]
+  },
+  {
+    "id": "ad162",
+    "course": "computer science",
+    "professor": {
+      "name": "Professor",
+      "text": "As we've discussed in class, governments around the world are debating whether public agencies should rely mainly on open-source software or stick with proprietary tools from large vendors. Open-source supporters argue that public code is more transparent, easier to audit, and frees agencies from vendor lock-in. Proprietary defenders point to professional support, security guarantees, and faster updates. For public institutions handling tax records, health data, and elections, which approach do you think is the better default?"
+    },
+    "students": [
+      {
+        "name": "Yuki",
+        "text": "I'd push for open source as the default. My city's transit agency switched from a closed scheduling system to an open one two years ago, and within a semester, local computer science students were submitting fixes that the original vendor had ignored for years. When the code is public, you get accountability that no service contract can buy. Sure, proprietary software has glossy support lines, but when something breaks at 2 a.m., having engineers anywhere in the world able to read your stack is a real advantage."
+      },
+      {
+        "name": "Ross",
+        "text": "Open source sounds great in theory, but I worked at a hospital IT department over the summer, and reality is messier. The nurses didn't want philosophical debates about software freedom, they wanted a system that just worked when a patient came in bleeding. The proprietary vendor had a 24/7 hotline, certified training, and someone to legally blame when things went wrong. Most public agencies don't have in-house developers who can read source code anyway, so 'transparency' becomes a feature that nobody actually uses."
+      }
+    ]
+  },
+  {
+    "id": "ad163",
+    "course": "public policy",
+    "professor": {
+      "name": "Professor",
+      "text": "Several major cities have recently introduced congestion pricing, charging drivers a fee to enter the busiest downtown areas during peak hours. London has done this for two decades, and New York started a version last year. Supporters say it cuts traffic, lowers emissions, and funds public transit. Critics argue it disproportionately burdens working-class commuters and small business owners who depend on driving in. Do you think congestion pricing is a fair tool for managing urban traffic, or does the harm to lower-income drivers outweigh the benefits?"
+    },
+    "students": [
+      {
+        "name": "Claire",
+        "text": "I support congestion pricing, even though it isn't perfect. The bus I take to campus used to crawl through downtown for almost forty minutes during rush hour. After a pilot fee was introduced, my commute dropped to twenty-two minutes, and the fees were earmarked for a new bus lane on my route. People act like the only choice is 'fee or no fee,' but really it's 'fee, or everyone stuck in traffic burning gas.' Pair the pricing with discounts for low-income drivers and you address most fairness concerns."
+      },
+      {
+        "name": "Paul",
+        "text": "I'm with Claire on traffic, but not on framing this as fair. My uncle delivers produce to small restaurants downtown, and a daily fee plus inflation already pushes some of his clients out of business. Office workers can switch to the train, but plumbers, electricians, and food suppliers can't carry their tools on a subway. Before charging everyone the same fee, cities should exempt service vehicles and small commercial operators. Otherwise, congestion pricing just shifts costs onto the people who keep the city actually running."
+      }
+    ]
+  },
+  {
+    "id": "ad164",
+    "course": "technology and media",
+    "professor": {
+      "name": "Professor",
+      "text": "Most major news platforms now rely on algorithms to decide which stories each user sees on their homepage. This personalization keeps people engaged, but it has also been blamed for filter bubbles and a narrowing range of perspectives. Some argue that platforms should offer a 'chronological-only' option as a default, while others say algorithmic curation is the only way to handle the flood of daily news. For our discussion this week, should news platforms be required to offer an algorithm-free feed as a standard choice?"
+    },
+    "students": [
+      {
+        "name": "Aisha",
+        "text": "Yes, an algorithm-free option should be a standard, not a buried setting. Last semester I tried switching my main news app to a chronological feed for a research paper, and within a week I was seeing stories from local councils, smaller outlets, and writers the algorithm had quietly hidden for months. Most users won't dig through five menus to find that setting. Making it a clear default doesn't ban personalization, it just gives people a fair off-ramp when they realize their feed has been steering them somewhere specific."
+      },
+      {
+        "name": "Tim",
+        "text": "I'm skeptical that defaults can fix this. A friend of mine works at a news startup, and she said the few users who switched to chronological mode mostly stopped reading the app altogether because the volume felt overwhelming. The bigger problem isn't the algorithm itself, it's that most readers want curation and just don't trust who is doing it. I'd rather see rules forcing platforms to disclose how stories get ranked, with audits by independent researchers, instead of pretending a chronological feed is some neutral solution."
+      }
+    ]
   }
 ]

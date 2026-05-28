@@ -3855,6 +3855,158 @@
         "status": "passed",
         "accuracy": "2/2"
       }
+    },
+    {
+      "id": "rdl_gen_routine-20260528-061913-short_001",
+      "variant": "short",
+      "text": "Hi everyone, our Photography Club meeting has moved from 6:00 PM Thursday to 7:30 PM Friday, now in Room 218 instead of the library lounge. Please bring your $5 print fee for this week's group critique. See you then! — Sam",
+      "word_count": 42,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_routine-20260528-061913-short_001_q1",
+          "question_type": "detail",
+          "stem": "According to the email, when will the rescheduled meeting take place?",
+          "options": {
+            "A": "At 6:00 PM on Thursday in the library lounge",
+            "B": "At 7:30 PM on Friday in Room 218",
+            "C": "At 6:00 PM on Friday in the photography studio",
+            "D": "At 7:30 PM on Thursday in the meeting hall"
+          },
+          "correct_answer": "B",
+          "explanation": "The email states the meeting 'has moved from 6:00 PM Thursday to 7:30 PM Friday, now in Room 218.'"
+        },
+        {
+          "qid": "rdl_gen_routine-20260528-061913-short_001_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred from the email?",
+          "options": {
+            "A": "Members are expected to contribute a small fee at the meeting.",
+            "B": "The Photography Club has cancelled all printing services this week.",
+            "C": "The library lounge is permanently closed to all student groups.",
+            "D": "Sam will not be attending the rescheduled Friday meeting."
+          },
+          "correct_answer": "A",
+          "explanation": "The instruction to 'bring your $5 print fee' implies that each member is expected to contribute money at the meeting."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy"
+    },
+    {
+      "id": "rdl_gen_routine-20260528-061913-short_002",
+      "variant": "short",
+      "text": "NOTICE: The bike racks in front of Hayward Hall will be temporarily removed from April 8 to April 22 for scheduled sidewalk repair work. During this period, please park bicycles in the lot behind the gym. Bikes left at the old location may be relocated by Facilities. Questions? Email facilities@university.edu.",
+      "word_count": 50,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_routine-20260528-061913-short_002_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, where should students park bicycles during the repair period?",
+          "options": {
+            "A": "In the lot located behind the campus gym",
+            "B": "In front of the Hayward Hall main entrance",
+            "C": "In the bike racks near the central library",
+            "D": "In the parking garage across the street"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice instructs students to 'park bicycles in the lot behind the gym.'"
+        },
+        {
+          "qid": "rdl_gen_routine-20260528-061913-short_002_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about bikes left at the old rack location?",
+          "options": {
+            "A": "They will be donated to local students after April 22.",
+            "B": "They will receive a temporary cover during the repair work.",
+            "C": "They may be relocated to another spot by Facilities staff.",
+            "D": "They must be registered with the Hayward Hall office."
+          },
+          "correct_answer": "C",
+          "explanation": "The notice warns that 'bikes left at the old location may be relocated by Facilities.'"
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy"
+    },
+    {
+      "id": "rdl_gen_routine-20260528-061913-short_003",
+      "variant": "short",
+      "text": "Dear Resident, Your unused dining dollar balance of $42.50 will be refunded to your student account by May 30. The refund will appear as a credit on your monthly billing statement. No further action is required. Sincerely, Campus Dining Services",
+      "word_count": 40,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_routine-20260528-061913-short_003_q1",
+          "question_type": "detail",
+          "stem": "According to the email, what is the refunded amount?",
+          "options": {
+            "A": "Forty dollars in physical cash",
+            "B": "Two dollars and fifty cents",
+            "C": "Fifty dollars in dining credit",
+            "D": "Forty-two dollars and fifty cents"
+          },
+          "correct_answer": "D",
+          "explanation": "The email states the unused balance is '$42.50,' that is, forty-two dollars and fifty cents."
+        },
+        {
+          "qid": "rdl_gen_routine-20260528-061913-short_003_q2",
+          "question_type": "detail",
+          "stem": "Where will the refund appear?",
+          "options": {
+            "A": "As a code in the resident's campus mailbox",
+            "B": "As a credit on the monthly billing statement",
+            "C": "As a deposit at the campus bank office",
+            "D": "As a coupon for the next dining semester"
+          },
+          "correct_answer": "B",
+          "explanation": "The email says the refund 'will appear as a credit on your monthly billing statement.'"
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy"
+    },
+    {
+      "id": "rdl_gen_routine-20260528-061913-short_004",
+      "variant": "short",
+      "text": "VOLUNTEER FOR CAMPUS CLEANUP DAY! Saturday, April 13, from 9:00 AM to noon. Meet at Carson Plaza. Gloves and bags provided. First 50 volunteers receive a free reusable water bottle and a $5 dining voucher. Sign up at the Student Center desk by April 10.",
+      "word_count": 45,
+      "genre": "flyer",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_routine-20260528-061913-short_004_q1",
+          "question_type": "detail",
+          "stem": "According to the flyer, what do the first 50 volunteers receive?",
+          "options": {
+            "A": "A meal voucher for the dining hall and a hat",
+            "B": "A free shirt and a $10 bookstore gift card",
+            "C": "A reusable water bottle and a dining voucher",
+            "D": "A parking pass and a reusable cleanup kit"
+          },
+          "correct_answer": "C",
+          "explanation": "The flyer states the first 50 volunteers 'receive a free reusable water bottle and a $5 dining voucher.'"
+        },
+        {
+          "qid": "rdl_gen_routine-20260528-061913-short_004_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about signing up for the event?",
+          "options": {
+            "A": "Volunteers should bring their own gloves to the event.",
+            "B": "Volunteers can still receive a water bottle after the cap.",
+            "C": "Volunteers will continue past noon if extra help arrives.",
+            "D": "Volunteers should register before the April 10 deadline."
+          },
+          "correct_answer": "D",
+          "explanation": "The flyer says to 'sign up at the Student Center desk by April 10,' implying registration must happen before that date."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy"
     }
   ]
 }
