@@ -83,8 +83,34 @@ const summary = [];
 
 for (const bank of BANK_ORDER) {
   const bankResult = meta.results?.[bank];
+
+  // If R1 didn't generate at all (accepted=0), schedule a full retry — R2
+  // will produce a fresh batch from scratch. Different from "merged some but
+  // diversity is borderline" case below.
   if (!bankResult || (bankResult.accepted || 0) === 0) {
-    summary.push(`  ${bank}: skipped (not in this batch or fully failed)`);
+    if (!bankResult) {
+      summary.push(`  ${bank}: skipped (not in this batch)`);
+      continue;
+    }
+    // accepted=0 means R1 generated but all rejected — clear retry signal
+    retryBanks.push({
+      bank,
+      diversity_score: 0,
+      diversity_threshold: DIVERSITY_GATE[bank] ?? 75,
+      quality_score: 0,
+      quality_threshold: QUALITY_GATE[bank] ?? 80,
+      failures: ["R1 accepted=0 (full failure)"],
+      diversity_breakdown: ["R1 produced 0 valid items"],
+      quality_breakdown: [bankResult.failure_reason || "schema rejection"],
+      hints: [
+        `R1 generated ${bankResult.generated || 0} items but all were rejected. Failure reason: "${bankResult.failure_reason || "unknown"}". Generate fresh items strictly following the print-bank-prompt rules — pay extra attention to schema compliance.`,
+      ],
+      items_to_supplement: (() => {
+        const original = { bs: 20, discussion: 4, email: 4, "reading-ap": 5, "reading-ctw": 6, "reading-rdl-short": 4, "reading-rdl-long": 2 };
+        return original[bank] || 4;  // Full count, not half
+      })(),
+    });
+    summary.push(`  ✗ ${bank}: R1 fully failed (0 accepted) — R2 will regenerate from scratch`);
     continue;
   }
 
