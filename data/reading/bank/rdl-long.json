@@ -5901,6 +5901,106 @@
       ],
       "question_count": 3,
       "difficulty": "easy"
+    },
+    {
+      "id": "rdl_gen_routine-20260528-082414-long_001",
+      "genre": "notice",
+      "variant": "long",
+      "text": "Mailroom Notice: Updated Package Pickup Procedure — Effective March 1\n\nBeginning March 1, all student packages will be processed through the new automated locker system in the lobby of Wilson Hall. The previous walk-up counter service in Wilson Hall basement will be discontinued. Students will receive an email notification and a six-digit pickup code as soon as their package arrives at the mailroom.\n\nPlease review the following changes:\n- Lockers may be accessed 24 hours daily using your student ID and code\n- Packages must be picked up within 5 days, or a $3 daily late fee will apply\n- Oversized items (over 50 pounds) still require staff handling at the new Service Desk, Room 110\n- The Service Desk is open Monday through Friday, 10:00 AM to 5:00 PM\n\nFor questions about your delivery, please contact mailroom@campus.edu or visit the Service Desk during open hours. The new system is expected to reduce wait times during peak delivery periods such as the start of each semester.",
+      "word_count": 161,
+      "format_metadata": {},
+      "difficulty": "easy",
+      "question_count": 3,
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what is the penalty for late package pickup?",
+          "options": {
+            "A": "A return shipment back to the original sender immediately.",
+            "B": "A weekly storage fine of fifteen dollars total per week.",
+            "C": "A flat handling charge of five dollars per delivery.",
+            "D": "A daily fee of three dollars after five days."
+          },
+          "correct_answer": "D",
+          "explanation": "The notice states 'a $3 daily late fee will apply' if packages are not picked up within 5 days."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred from the notice about the basement counter service?",
+          "options": {
+            "A": "It will continue alongside the new locker system.",
+            "B": "It will no longer handle student package pickups.",
+            "C": "It will be moved to the Wilson Hall lobby.",
+            "D": "It will only operate during evening hours."
+          },
+          "correct_answer": "B",
+          "explanation": "The notice says the previous walk-up counter service 'will be discontinued,' implying it will no longer handle pickups."
+        },
+        {
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this notice?",
+          "options": {
+            "A": "To remind students about late-fee policies for delayed packages here.",
+            "B": "To advertise the new oversized-package handling service desk.",
+            "C": "To announce a change in how packages are picked up.",
+            "D": "To list contact details for the campus mailroom office."
+          },
+          "correct_answer": "C",
+          "explanation": "The notice introduces a new automated locker system and explains the procedure change, with details and fees in support of that announcement."
+        }
+      ]
+    },
+    {
+      "id": "rdl_gen_routine-20260528-082414-long_002",
+      "genre": "email",
+      "variant": "long",
+      "text": "Subject: Friday's titration lab — quick coordination\n\nHi Aaron,\n\nI wanted to check in before Friday's titration experiment in Bromley 224. Here is what we need to sort out ahead of time.\n\nFor supplies, I've already booked us a workstation for the 2:00 PM section. We will need to bring our own safety goggles since the department is out of loaners this week. Dr. Patel mentioned the stockroom should reopen by next Tuesday.\n\nFor the procedure itself, I can handle the burette setup and recording if you want to focus on the calculations and writing up the results. The lab report is due Sunday by 11:59 PM through the chemistry portal.\n\nOne thing — could you arrive by 1:45 PM? Last time we lost ten minutes finding the right reagent shelf, and the late penalty for incomplete reports is $5.\n\nLet me know if any of this doesn't work for you.\n\nThanks,\nMaya",
+      "word_count": 150,
+      "format_metadata": {
+        "from": "Maya",
+        "to": "Aaron",
+        "subject": "Friday's titration lab — quick coordination"
+      },
+      "difficulty": "easy",
+      "question_count": 3,
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what time has Maya booked the workstation for?",
+          "options": {
+            "A": "The 2:00 PM section of the lab.",
+            "B": "The 1:45 PM time slot before lunch.",
+            "C": "The 11:59 PM session on the portal.",
+            "D": "The Tuesday session of next week."
+          },
+          "correct_answer": "A",
+          "explanation": "Maya writes that she 'already booked us a workstation for the 2:00 PM section.'"
+        },
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what must Aaron and Maya bring to the lab themselves?",
+          "options": {
+            "A": "Their own copy of the lab report instructions.",
+            "B": "Their own safety goggles for the experiment.",
+            "C": "Their own burette and titration setup tools.",
+            "D": "Their own backup lab partner just in case."
+          },
+          "correct_answer": "B",
+          "explanation": "The email states 'we will need to bring our own safety goggles since the department is out of loaners.'"
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred from the email about Aaron's punctuality?",
+          "options": {
+            "A": "He has never been late to any chemistry lab session.",
+            "B": "He typically arrives early on every Friday morning.",
+            "C": "He has been late to a previous lab session.",
+            "D": "He always finishes lab reports before the deadline."
+          },
+          "correct_answer": "C",
+          "explanation": "Maya's request to arrive by 1:45 PM and her note that 'last time we lost ten minutes' implies Aaron had been late before."
+        }
+      ]
     }
   ]
 }
