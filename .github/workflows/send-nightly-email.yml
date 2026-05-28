@@ -1,11 +1,21 @@
 name: Send Nightly Email Summary
 
-# Triggered by the Claude routine (via GitHub REST API workflow_dispatch) after
-# it commits the nightly bank refresh. Reads data/.last-nightly-summary.md and
-# sends it as the email body, using Gmail SMTP via dawidd6/action-send-mail
-# (the same secrets the existing nightly-bank-refresh.yml uses).
+# Two trigger paths:
+#   1. push on data/.last-nightly-summary.md — fires automatically every time
+#      the routine commits a fresh summary. This is the primary path; it does
+#      NOT depend on the routine completing its own Phase 5 curl (which may be
+#      cut off if the agent exhausts its wall-clock budget).
+#   2. workflow_dispatch — manual fallback if the routine pushed but for some
+#      reason the push trigger didn't fire (or you want to re-send).
+#
+# Reads data/.last-nightly-summary.md and sends it as the email body, using
+# Gmail SMTP via dawidd6/action-send-mail (same secrets as nightly-bank-refresh).
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - data/.last-nightly-summary.md
   workflow_dispatch: {}
 
 jobs:
