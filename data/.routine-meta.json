@@ -1,33 +1,28 @@
 {
-  "session_id": "routine-20260528-165154",
-  "completed_at": "2026-05-28T17:09:24Z",
-  "duration_minutes": 18,
-  "highlight": "本轮 7 个题库 PASS 1 全部成功，AP 新增 psychology/emotion、materials_science/ceramics、anthropology/early humans，CTW 首次出现 astronomy/gravitational waves。",
-  "commit_sha": "f47ef2d5fbe9792e2ed4c96c84eeb54b7373193e",
-  "r2_completed_at": "2026-05-28T17:22:00Z",
-  "r2_session_id": "routine-r2-20260528-171435",
+  "session_id": "routine-20260528-170909",
+  "completed_at": "2026-05-28T17:35:00.000Z",
+  "duration_minutes": 26,
+  "highlight": "首次写出 chemistry/corrosion AP 课题,BS 集合 76 全部采用双段或中位 prefilled 收尾",
+  "commit_sha": "",
   "results": {
     "bs": {
       "generated": 20,
       "accepted": 10,
-      "topics": [],
+      "topics": ["indirect-Q", "negation", "comparative", "relative-clause", "embedded-Q", "passive"],
       "favorite": {
-        "prompt": "Did Tomas confirm the gym membership renewal?",
-        "answer": "Tomas has not received any reminder email yet."
+        "prompt": "What did Tobias ask about the registration fee?",
+        "answer": "he asked whether the fee covered all sessions."
       },
       "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_session_id": "routine-r2-20260528-171435",
-      "r2_items_added": 10
+      "failure_reason": ""
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["environmental science", "public policy", "computer science", "history and culture"],
+      "topics": ["public health", "computer science", "environmental science", "public policy"],
       "favorite": {
-        "subtopic": "public policy",
-        "preview": "Today, we're going to talk about a small but growing trend in city government — paying residents small cash rewards"
+        "subtopic": "public health",
+        "preview": "Many cities around the world have introduced or are considering a tax on sugary drinks like sodas and energy drinks."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -35,10 +30,10 @@
     "email": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["校园学业", "职场工作", "社区生活", "日常生活"],
+      "topics": ["校园学业", "职场工作", "社区生活", "消费售后"],
       "favorite": {
         "subtopic": "校园学业",
-        "preview": "You are a third-year sociology major who tried to register for a required research methods course this morning"
+        "preview": "You are a junior undergraduate planning your senior thesis. You met with Professor Tanaka briefly last week."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -46,16 +41,10 @@
     "reading-ap": {
       "generated": 5,
       "accepted": 5,
-      "topics": [
-        "psychology/emotion",
-        "business/labor economics",
-        "chemistry/fermentation",
-        "materials_science/ceramics",
-        "anthropology/early humans"
-      ],
+      "topics": ["chemistry/corrosion", "history/early medicine", "sociology/inequality", "psychology/perception", "biology/bioluminescence"],
       "favorite": {
-        "subtopic": "anthropology/early humans",
-        "preview": "Reconstructing the migration patterns of early human populations has proved exceptionally difficult. Skeletal remains"
+        "subtopic": "chemistry/corrosion",
+        "preview": "Corrosion is widely defined as the gradual deterioration of metal through chemical or electrochemical reactions."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -63,17 +52,10 @@
     "reading-ctw": {
       "generated": 6,
       "accepted": 6,
-      "topics": [
-        "biology/plant biology",
-        "environmental_science/conservation",
-        "psychology/decision making",
-        "history/technological inventions",
-        "geology/geysers",
-        "astronomy/gravitational waves"
-      ],
+      "topics": ["biology/coral reefs", "environmental_science/water purification", "psychology/habit formation", "history/Roman engineering", "geology/river deltas", "astronomy/star formation"],
       "favorite": {
-        "subtopic": "astronomy/gravitational waves",
-        "preview": "Gravitational waves are ripples in space caused by very large moving objects. They were first predicted"
+        "subtopic": "biology/coral reefs",
+        "preview": "Coral reefs are colorful underwater structures built by tiny animals called coral polyps."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -81,10 +63,10 @@
     "reading-rdl-short": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["flyer", "notice", "email", "flyer"],
+      "topics": ["email/campus-tour-guide", "notice/elevator-out-of-service", "email/meal-plan-refund", "email/lab-safety-training"],
       "favorite": {
-        "subtopic": "email",
-        "preview": "Just confirming our calculus tutoring session this Thursday, March 12 at 3:00 PM. We'll meet in the Math Help Center"
+        "subtopic": "email/campus-tour-guide",
+        "preview": "Hi Marco, Thanks for signing up to volunteer as a campus tour guide this spring."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -92,16 +74,13 @@
     "reading-rdl-long": {
       "generated": 2,
       "accepted": 2,
-      "topics": ["email", "email"],
+      "topics": ["notice/course-evaluations", "notice/lost-and-found-policy"],
       "favorite": {
-        "subtopic": "email",
-        "preview": "The Campus Transportation Office and the Bike Co-op are running a free bicycle maintenance clinic on Saturday"
+        "subtopic": "notice/course-evaluations",
+        "preview": "All undergraduate students are required to complete course evaluations for each registered course before Friday."
       },
       "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_session_id": "routine-r2-20260528-171435",
-      "r2_items_added": 1
+      "failure_reason": ""
     }
   }
 }

@@ -1,6 +1,6 @@
 {
   "version": "1.3",
-  "generated_at": "2026-05-28T17:21:54.277Z",
+  "generated_at": "2026-05-28T17:30:28.474Z",
   "question_sets": [
     {
       "set_id": 1,
@@ -22079,6 +22079,290 @@
           "grammar_points": [
             "phrasal verb 'drop off'",
             "mid-sentence prefilled particle"
+          ]
+        }
+      ]
+    },
+    {
+      "set_id": 76,
+      "questions": [
+        {
+          "id": "ets_s76_q1",
+          "prompt": "What did Tobias ask about the registration fee?",
+          "prompt_context": "",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did Tobias ask about the registration fee?",
+          "answer": "he asked whether the fee covered all sessions.",
+          "chunks": [
+            "asked",
+            "whether",
+            "the fee",
+            "covered",
+            "all sessions",
+            "did"
+          ],
+          "prefilled": [
+            "he"
+          ],
+          "prefilled_positions": {
+            "he": 0
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "indirect question with whether",
+            "simple past"
+          ]
+        },
+        {
+          "id": "ets_s76_q2",
+          "prompt": "What did Priya ask about the museum tour?",
+          "prompt_context": "",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did Priya ask about the museum tour?",
+          "answer": "Priya wondered how long the guided tour usually lasts.",
+          "chunks": [
+            "wondered",
+            "how long",
+            "the guided",
+            "tour",
+            "usually lasts",
+            "does"
+          ],
+          "prefilled": [
+            "Priya"
+          ],
+          "prefilled_positions": {
+            "priya": 0
+          },
+          "distractor": "does",
+          "has_question_mark": false,
+          "grammar_points": [
+            "indirect question with how",
+            "simple present"
+          ]
+        },
+        {
+          "id": "ets_s76_q3",
+          "prompt": "What did Yasmin want to know about the dorm rules?",
+          "prompt_context": "",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did Yasmin want to know about the dorm rules?",
+          "answer": "she was unsure whether guests could stay overnight.",
+          "chunks": [
+            "she",
+            "was unsure",
+            "guests",
+            "could stay",
+            "overnight",
+            "did"
+          ],
+          "prefilled": [
+            "whether"
+          ],
+          "prefilled_positions": {
+            "whether": 3
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "indirect question with whether",
+            "modal could"
+          ]
+        },
+        {
+          "id": "ets_s76_q4",
+          "prompt": "Where did Damian put the lab notebook?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Where did Damian put the lab notebook?",
+          "answer": "I have no idea where he placed the lab notebook.",
+          "chunks": [
+            "where he",
+            "placed",
+            "the lab",
+            "notebook",
+            "did"
+          ],
+          "prefilled": [
+            "I have no idea"
+          ],
+          "prefilled_positions": {
+            "i have no idea": 0
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question with where",
+            "negation with no",
+            "simple past"
+          ]
+        },
+        {
+          "id": "ets_s76_q5",
+          "prompt": "What did Camille ask about the deadline change?",
+          "prompt_context": "",
+          "prompt_task_kind": "ask",
+          "prompt_task_text": "What did Camille ask about the deadline change?",
+          "answer": "Camille asked whether the deadline had been formally announced.",
+          "chunks": [
+            "asked",
+            "whether",
+            "the deadline",
+            "had been",
+            "formally",
+            "announced",
+            "did"
+          ],
+          "prefilled": [
+            "Camille"
+          ],
+          "prefilled_positions": {
+            "camille": 0
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "indirect question with whether",
+            "past perfect passive"
+          ]
+        },
+        {
+          "id": "ets_s76_q6",
+          "prompt": "Did Felix submit his physics homework on time?",
+          "prompt_context": "",
+          "prompt_task_kind": "yesno",
+          "prompt_task_text": "Did Felix submit his physics homework on time?",
+          "answer": "Felix has not turned in the homework as of this morning.",
+          "chunks": [
+            "has not",
+            "turned in",
+            "the homework",
+            "as of",
+            "this morning",
+            "did"
+          ],
+          "prefilled": [
+            "Felix"
+          ],
+          "prefilled_positions": {
+            "felix": 0
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "present perfect negation",
+            "negation with not"
+          ]
+        },
+        {
+          "id": "ets_s76_q7",
+          "prompt": "Why did Naomi miss the deadline last week?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Why did Naomi miss the deadline last week?",
+          "answer": "she had not realized the form needed two signatures.",
+          "chunks": [
+            "she",
+            "had not",
+            "realized",
+            "the form",
+            "needed",
+            "two signatures",
+            "did"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "past perfect negation",
+            "negation with not"
+          ]
+        },
+        {
+          "id": "ets_s76_q8",
+          "prompt": "Your brother recommended a café near the library.",
+          "prompt_context": "",
+          "prompt_task_kind": "statement",
+          "prompt_task_text": "Your brother recommended a café near the library.",
+          "answer": "the café my brother recommended became my favorite study spot.",
+          "chunks": [
+            "my brother",
+            "recommended",
+            "became",
+            "my favorite",
+            "study spot",
+            "does"
+          ],
+          "prefilled": [
+            "the café"
+          ],
+          "prefilled_positions": {
+            "the café": 0
+          },
+          "distractor": "does",
+          "has_question_mark": false,
+          "grammar_points": [
+            "relative clause without pronoun",
+            "simple past"
+          ]
+        },
+        {
+          "id": "ets_s76_q9",
+          "prompt": "Imani said the new library wing feels quieter.",
+          "prompt_context": "",
+          "prompt_task_kind": "statement",
+          "prompt_task_text": "Imani said the new library wing feels quieter.",
+          "answer": "this study room feels much warmer than the old basement.",
+          "chunks": [
+            "feels",
+            "much warmer",
+            "than",
+            "the old",
+            "basement",
+            "does"
+          ],
+          "prefilled": [
+            "this study room"
+          ],
+          "prefilled_positions": {
+            "this study room": 0
+          },
+          "distractor": "does",
+          "has_question_mark": false,
+          "grammar_points": [
+            "comparative more X than",
+            "simple present"
+          ]
+        },
+        {
+          "id": "ets_s76_q10",
+          "prompt": "Matthew's bicycle has been making strange noises lately.",
+          "prompt_context": "",
+          "prompt_task_kind": "statement",
+          "prompt_task_text": "Matthew's bicycle has been making strange noises lately.",
+          "answer": "Matthew is taking the broken bicycle to the campus repair shop.",
+          "chunks": [
+            "is taking",
+            "the broken",
+            "bicycle",
+            "to the",
+            "campus",
+            "repair shop",
+            "does"
+          ],
+          "prefilled": [
+            "Matthew"
+          ],
+          "prefilled_positions": {
+            "matthew": 0
+          },
+          "distractor": "does",
+          "has_question_mark": false,
+          "grammar_points": [
+            "present continuous",
+            "prepositional phrase"
           ]
         }
       ]
