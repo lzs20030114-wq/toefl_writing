@@ -1,28 +1,28 @@
 {
-  "session_id": "routine-20260528-170930",
-  "completed_at": "2026-05-28T17:32:31Z",
-  "duration_minutes": 23,
-  "highlight": "Discussion 覆盖 4 个低频课程,AP 首次出现化学/分子键与艺术/印象派",
+  "session_id": "routine-20260528-190440",
+  "completed_at": "2026-05-28T19:20:12Z",
+  "duration_minutes": 16,
+  "highlight": "首次出现物理学术讨论题; BS 两套 (20 题) 全部成功合并",
   "commit_sha": "",
   "results": {
     "bs": {
-      "generated": 20,
-      "accepted": 10,
-      "topics": ["indirect-Q with whether", "indirect-Q with if", "negation with not", "passive voice", "comparative", "reported speech"],
+      "generated": 30,
+      "accepted": 20,
+      "topics": ["indirect-Q with whether", "indirect-Q with if", "negation with not", "negative adverb no longer", "passive voice", "comparative", "relative clause", "phrasal verb"],
       "favorite": {
-        "prompt": "What did Karim mention after the chemistry lecture?",
-        "answer": "he was unsure when the next quiz would take place."
+        "prompt": "Tell me how the new bike compares to the old one.",
+        "answer": "This bike feels noticeably lighter than the previous model."
       },
-      "retried_after_fail": false,
-      "failure_reason": "first set of 10 (q1-q10) failed set-level validation (likely type-distribution drift); second set (q11-q20) succeeded"
+      "retried_after_fail": true,
+      "failure_reason": "first staging batch had 7 per-item rejections (capital-letter chunks + missing explicit task in prompts); second batch failed set-level (embedded count below 3) before fix; both retried successfully, yielding 2 valid sets (sets 77 & 78)"
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["computer science", "public health", "environmental science", "public policy"],
+      "topics": ["linguistics", "urban planning", "ethics", "physics"],
       "favorite": {
-        "subtopic": "computer science",
-        "preview": "As we've explored this semester, the debate over whether AI research breakthroughs should be released as open-source code or kept proprietary has intensified."
+        "subtopic": "physics",
+        "preview": "As we discussed in class, governments and private companies are debating whether to build the next generation of particle colliders"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -30,10 +30,10 @@
     "email": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["校园学业", "职场工作", "社区生活", "消费售后"],
+      "topics": ["校园学业", "职场工作", "消费售后", "社区生活"],
       "favorite": {
-        "subtopic": "社区生活",
-        "preview": "You are a regular visitor at the Eastside community library, which currently closes at one o'clock on Sundays."
+        "subtopic": "校园学业",
+        "preview": "You are a second-year student in Professor Whitman's Introduction to Statistics course."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -41,10 +41,10 @@
     "reading-ap": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["art/impressionism", "astronomy/space exploration", "sociology/immigration patterns", "anthropology/early agriculture", "chemistry/molecular bonding"],
+      "topics": ["anthropology/cultural rituals", "geology/cave formation", "sociology/community development", "art/Renaissance", "astronomy/star formation"],
       "favorite": {
-        "subtopic": "chemistry/molecular bonding",
-        "preview": "Chemical compounds are held together by interactions between atoms known as chemical bonds. These bonds determine almost every property of matter."
+        "subtopic": "astronomy/star formation",
+        "preview": "Astronomers studying how stars are born long faced a difficult problem: the dense, cold clouds of g"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -52,10 +52,10 @@
     "reading-ctw": {
       "generated": 6,
       "accepted": 6,
-      "topics": ["biology/photosynthesis", "environmental_science/invasive species", "psychology/cognitive bias", "history/maritime navigation", "geology/erosion", "astronomy/asteroid belts"],
+      "topics": ["biology/camouflage", "environmental_science/urban heat islands", "psychology/language acquisition", "history/telegraph history", "geology/gemstone formation", "astronomy/exoplanets"],
       "favorite": {
-        "subtopic": "history/maritime navigation",
-        "preview": "Long before modern instruments, sailors found their way across the open ocean by watching the stars."
+        "subtopic": "astronomy/exoplanets",
+        "preview": "Scientists have found thousands of planets that travel around other stars. These distant worlds are"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -63,10 +63,10 @@
     "reading-rdl-short": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["notice/Wi-Fi maintenance", "social_media/campus garden", "notice/lost-and-found", "notice/water fountain maintenance"],
+      "topics": ["notice/HVAC service", "notice/Wi-Fi maintenance", "notice/parking lot closure", "notice/library hours"],
       "favorite": {
-        "subtopic": "social_media/campus garden",
-        "preview": "Spring is finally here! The Eastside Campus Community Garden is now open Tuesdays and Thursdays from 4:00 PM to 7:00 PM."
+        "subtopic": "notice/library hours",
+        "preview": "NOTICE: Anderson Library will follow spring break hours from March 9 through March 15, opening dail"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -74,10 +74,10 @@
     "reading-rdl-long": {
       "generated": 2,
       "accepted": 2,
-      "topics": ["email/roommate shower repair", "menu/campus food truck"],
+      "topics": ["notice/course evaluations", "schedule/library reservation"],
       "favorite": {
-        "subtopic": "email/roommate shower repair",
-        "preview": "Hope your exam week is going OK. I wanted to flag a problem with our bathroom that has been getting worse, and figure out a plan before the weekend."
+        "subtopic": "schedule/library reservation",
+        "preview": "GROVER LIBRARY — STUDY ROOM RESERVATION SCHEDULE\n\nLocation: Second Floor, Grover Library\nReservation portal"
       },
       "retried_after_fail": false,
       "failure_reason": ""

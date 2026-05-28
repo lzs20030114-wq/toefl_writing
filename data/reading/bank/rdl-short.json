@@ -4583,6 +4583,150 @@
           "explanation": "The notice explicitly says working fountains remain available on the first floor during the maintenance."
         }
       ]
+    },
+    {
+      "genre": "notice",
+      "variant": "short",
+      "text": "NOTICE: The HVAC system in Wexler Hall will be serviced from March 3 to March 5. Interior temperatures may drop to 60°F during this period. Bring an extra layer for morning classes. Hot drinks are available at the lobby kiosk for $3.50.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what is available for $3.50?",
+          "options": {
+            "A": "Replacement filters",
+            "B": "Extra blankets",
+            "C": "Maintenance reports",
+            "D": "Hot drinks"
+          },
+          "correct_answer": "D",
+          "explanation": "The notice states that hot drinks are available at the lobby kiosk for $3.50."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about classrooms in Wexler Hall during the service period?",
+          "options": {
+            "A": "They will be relocated to another building",
+            "B": "They will feel colder than usual",
+            "C": "They will be open only in the afternoon",
+            "D": "They will have new thermostats installed"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice warns interior temperatures may drop to 60°F and advises bringing an extra layer."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl_short_gen_routine-20260528-190440_001",
+      "word_count": 42,
+      "question_count": 2
+    },
+    {
+      "genre": "notice",
+      "variant": "short",
+      "text": "NOTICE: Campus Wi-Fi will be offline on Tuesday, April 14 from 1:00 AM to 4:00 AM for a security update. Users in residence halls will lose access during this window. No action is required from students. Wired connections in Room 204 of the library will remain active.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, when will Wi-Fi be unavailable?",
+          "options": {
+            "A": "From midnight to 1:00 AM on Tuesday",
+            "B": "From 1:00 AM to 4:00 AM on Tuesday",
+            "C": "From 4:00 AM to 8:00 AM on Tuesday",
+            "D": "From 8:00 AM to noon on Tuesday"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice states Wi-Fi will be offline from 1:00 AM to 4:00 AM."
+        },
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, where will wired access still work?",
+          "options": {
+            "A": "Inside Wexler Hall",
+            "B": "Inside the residence halls",
+            "C": "Inside Room 204 of the library",
+            "D": "Inside the campus dining center"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice states that wired connections in Room 204 of the library will remain active."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl_short_gen_routine-20260528-190440_002",
+      "word_count": 47,
+      "question_count": 2
+    },
+    {
+      "genre": "notice",
+      "variant": "short",
+      "text": "NOTICE: South Lot B will be closed for repaving from Monday, April 21 through Friday, April 25. Permit holders should park in North Lot C during this period. Vehicles left in South Lot B will be towed at the owner's expense. Questions may be directed to Facilities at extension 4400.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, where should permit holders park during the closure?",
+          "options": {
+            "A": "In North Lot C",
+            "B": "In East Lot A",
+            "C": "In West Lot D",
+            "D": "In South Lot B"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice states permit holders should park in North Lot C."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about a vehicle left in South Lot B during the repaving?",
+          "options": {
+            "A": "It will receive a parking warning slip",
+            "B": "It will be moved to North Lot C free of charge",
+            "C": "It will be removed and the owner will pay the cost",
+            "D": "It will be allowed to stay after 5:00 PM"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice states vehicles left in the lot will be towed at the owner's expense."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl_short_gen_routine-20260528-190440_003",
+      "word_count": 50,
+      "question_count": 2
+    },
+    {
+      "genre": "notice",
+      "variant": "short",
+      "text": "NOTICE: Anderson Library will follow spring break hours from March 9 through March 15, opening daily from 10:00 AM to 4:00 PM. Overdue books returned during this week will incur a flat $5.00 late fee. Regular hours resume Monday, March 16. Contact Ms. Chen at the front desk for assistance.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what are the spring break hours of the library?",
+          "options": {
+            "A": "From 10:00 AM to 4:00 PM each day",
+            "B": "From 8:00 AM to 6:00 PM each day",
+            "C": "From noon to 8:00 PM each day",
+            "D": "From 6:00 AM to 10:00 AM each day"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice states the library will open from 10:00 AM to 4:00 PM during spring break."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about a book returned three days late during the break?",
+          "options": {
+            "A": "The student will be banned from borrowing for one month",
+            "B": "The student will need to renew the book before returning it",
+            "C": "Ms. Chen will personally waive the late fee at her discretion",
+            "D": "The student will owe a single $5.00 late fee on return"
+          },
+          "correct_answer": "D",
+          "explanation": "The notice says a flat $5.00 fee is charged for overdue books returned that week."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl_short_gen_routine-20260528-190440_004",
+      "word_count": 50,
+      "question_count": 2
     }
   ]
 }

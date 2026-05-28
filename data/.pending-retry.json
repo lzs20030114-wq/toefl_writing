@@ -1,24 +1,74 @@
 {
-  "session_id": "routine-20260528-170930",
-  "generated_at": "2026-05-28T17:32:57.010Z",
+  "session_id": "routine-20260528-190440",
+  "generated_at": "2026-05-28T19:23:23.615Z",
   "needs_retry": true,
   "overall_scores": {
-    "diversity": 94,
-    "quality": 96
+    "diversity": 84,
+    "quality": 92
   },
   "retry_banks": [
     {
+      "bank": "bs",
+      "diversity_score": 76,
+      "diversity_threshold": 90,
+      "quality_score": 100,
+      "quality_threshold": 95,
+      "failures": [
+        "多样性 76 < 90"
+      ],
+      "diversity_breakdown": [
+        "角色名 10/20",
+        "场景 20/20",
+        "句型 4/5",
+        "开头 4/4",
+        "prefilled类型 3/4 (top:subject-np 14/20)"
+      ],
+      "quality_breakdown": [
+        "块数 20/20",
+        "干扰词 20/20",
+        "答案长度 20/20",
+        "重组正确 20/20"
+      ],
+      "hints": [
+        "角色名重复严重 (10/20 distinct) — use 15+ distinct character names from: Olivia, Harold, Mariana, Hector, Margot, Emma, Julian, Matthew, Alison, Juan, Angelina, Professor Cho, Naomi, Diane",
+        "prefilled 单一化 (subject-np 占 70%) — spread across 5+ TPO types: subject-pronoun, subject-np, adverb-opener, prep-phrase, verb-phrase, mid-noun-or-adj, conjunction-wh"
+      ],
+      "items_to_supplement": 10
+    },
+    {
+      "bank": "reading-ap",
+      "diversity_score": 100,
+      "diversity_threshold": 85,
+      "quality_score": 50,
+      "quality_threshold": 90,
+      "failures": [
+        "质量 50 < 90"
+      ],
+      "diversity_breakdown": [
+        "话题组合 5/5",
+        "学科 5/5"
+      ],
+      "quality_breakdown": [
+        "词数 0/5",
+        "段落数 5/5"
+      ],
+      "hints": [
+        "质量校验有偏差: 词数 0/5, 段落数 5/5 — recheck schema compliance"
+      ],
+      "items_to_supplement": 3
+    },
+    {
       "bank": "reading-rdl-short",
-      "diversity_score": 70,
+      "diversity_score": 60,
       "diversity_threshold": 80,
       "quality_score": 100,
       "quality_threshold": 85,
       "failures": [
-        "多样性 70 < 80"
+        "多样性 60 < 80"
       ],
       "diversity_breakdown": [
         "话题 4/4",
-        "notice 3 · email 0"
+        "notice 4 · email 0"
       ],
       "quality_breakdown": [
         "词数 4/4"
@@ -39,7 +89,7 @@
       ],
       "diversity_breakdown": [
         "话题 2/2",
-        "notice 0 · email 1"
+        "notice 1 · email 0"
       ],
       "quality_breakdown": [
         "词数 1/2"
