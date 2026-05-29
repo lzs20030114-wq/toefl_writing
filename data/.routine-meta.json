@@ -1,28 +1,28 @@
 {
-  "session_id": "routine-20260528-190440",
-  "completed_at": "2026-05-28T19:20:12Z",
-  "duration_minutes": 16,
-  "highlight": "首次出现物理学术讨论题; BS 两套 (20 题) 全部成功合并",
+  "session_id": "routine-20260529-065136",
+  "completed_at": "2026-05-29T07:08:47Z",
+  "duration_minutes": 17,
+  "highlight": "本期覆盖全部 7 题库，新增 22 题；含 schedule 罕见长阅读体裁",
   "commit_sha": "",
   "results": {
     "bs": {
-      "generated": 30,
-      "accepted": 20,
-      "topics": ["indirect-Q with whether", "indirect-Q with if", "negation with not", "negative adverb no longer", "passive voice", "comparative", "relative clause", "phrasal verb"],
+      "generated": 20,
+      "accepted": 10,
+      "topics": ["indirect questions", "negation", "comparative", "passive voice", "relative clauses", "phrasal verbs"],
       "favorite": {
-        "prompt": "Tell me how the new bike compares to the old one.",
-        "answer": "This bike feels noticeably lighter than the previous model."
+        "prompt": "Did Bianca finish her group presentation?",
+        "answer": "she asked whether the new workshop required prior experience for entry."
       },
-      "retried_after_fail": true,
-      "failure_reason": "first staging batch had 7 per-item rejections (capital-letter chunks + missing explicit task in prompts); second batch failed set-level (embedded count below 3) before fix; both retried successfully, yielding 2 valid sets (sets 77 & 78)"
+      "retried_after_fail": false,
+      "failure_reason": ""
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["linguistics", "urban planning", "ethics", "physics"],
+      "topics": ["social studies", "technology and media", "history and culture", "education"],
       "favorite": {
-        "subtopic": "physics",
-        "preview": "As we discussed in class, governments and private companies are debating whether to build the next generation of particle colliders"
+        "subtopic": "social studies",
+        "preview": "Across many districts, public school boards are debating whether to add heritage language classes"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -32,52 +32,52 @@
       "accepted": 4,
       "topics": ["校园学业", "职场工作", "消费售后", "社区生活"],
       "favorite": {
-        "subtopic": "校园学业",
-        "preview": "You are a second-year student in Professor Whitman's Introduction to Statistics course."
+        "subtopic": "职场工作",
+        "preview": "You are a junior editor at a small publishing house piloting a shared annotation tool for reviews."
       },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ap": {
       "generated": 5,
-      "accepted": 5,
-      "topics": ["anthropology/cultural rituals", "geology/cave formation", "sociology/community development", "art/Renaissance", "astronomy/star formation"],
+      "accepted": 1,
+      "topics": ["psychology/habit formation"],
       "favorite": {
-        "subtopic": "astronomy/star formation",
-        "preview": "Astronomers studying how stars are born long faced a difficult problem: the dense, cold clouds of g"
+        "subtopic": "psychology/habit formation",
+        "preview": "A habit is an automatic behavior, performed with little conscious thought, reinforced through repeat"
       },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ctw": {
       "generated": 6,
-      "accepted": 6,
-      "topics": ["biology/camouflage", "environmental_science/urban heat islands", "psychology/language acquisition", "history/telegraph history", "geology/gemstone formation", "astronomy/exoplanets"],
+      "accepted": 1,
+      "topics": ["biology/evolution"],
       "favorite": {
-        "subtopic": "astronomy/exoplanets",
-        "preview": "Scientists have found thousands of planets that travel around other stars. These distant worlds are"
+        "subtopic": "biology/evolution",
+        "preview": "Evolution is the slow process by which living things change over many generations. New traits often"
       },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-rdl-short": {
       "generated": 4,
-      "accepted": 4,
-      "topics": ["notice/HVAC service", "notice/Wi-Fi maintenance", "notice/parking lot closure", "notice/library hours"],
+      "accepted": 1,
+      "topics": ["social_media/"],
       "favorite": {
-        "subtopic": "notice/library hours",
-        "preview": "NOTICE: Anderson Library will follow spring break hours from March 9 through March 15, opening dail"
+        "subtopic": "social_media/",
+        "preview": "Just tried the new Honey Lavender Latte at Riverbend Café this morning! Honestly, totally worth $4.50"
       },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-rdl-long": {
       "generated": 2,
-      "accepted": 2,
-      "topics": ["notice/course evaluations", "schedule/library reservation"],
+      "accepted": 1,
+      "topics": ["schedule/"],
       "favorite": {
-        "subtopic": "schedule/library reservation",
-        "preview": "GROVER LIBRARY — STUDY ROOM RESERVATION SCHEDULE\n\nLocation: Second Floor, Grover Library\nReservation portal"
+        "subtopic": "schedule/",
+        "preview": "Maple Hall Library Study Room Reservation Schedule. Group Study Rooms open daily 8 AM to 11 PM"
       },
       "retried_after_fail": false,
       "failure_reason": ""
