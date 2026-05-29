@@ -1,90 +1,9 @@
 {
-  "generated_at": "2026-05-29T17:08:45.305Z",
+  "generated_at": "2026-05-29T18:28:43.908Z",
   "bs": {
-    "total_sets": 81,
-    "total_questions": 810,
+    "total_sets": 82,
+    "total_questions": 820,
     "recent_60_samples": [
-      {
-        "prompt": "What did Yasmin want to know about the dorm rules?",
-        "answer": "she was unsure whether guests could stay overnight.",
-        "grammar": [
-          "indirect question with whether",
-          "modal could"
-        ]
-      },
-      {
-        "prompt": "Where did Damian put the lab notebook?",
-        "answer": "I have no idea where he placed the lab notebook.",
-        "grammar": [
-          "embedded question with where",
-          "negation with no",
-          "simple past"
-        ]
-      },
-      {
-        "prompt": "What did Camille ask about the deadline change?",
-        "answer": "Camille asked whether the deadline had been formally announced.",
-        "grammar": [
-          "indirect question with whether",
-          "past perfect passive"
-        ]
-      },
-      {
-        "prompt": "Did Felix submit his physics homework on time?",
-        "answer": "Felix has not turned in the homework as of this morning.",
-        "grammar": [
-          "present perfect negation",
-          "negation with not"
-        ]
-      },
-      {
-        "prompt": "Why did Naomi miss the deadline last week?",
-        "answer": "she had not realized the form needed two signatures.",
-        "grammar": [
-          "past perfect negation",
-          "negation with not"
-        ]
-      },
-      {
-        "prompt": "Your brother recommended a café near the library.",
-        "answer": "the café my brother recommended became my favorite study spot.",
-        "grammar": [
-          "relative clause without pronoun",
-          "simple past"
-        ]
-      },
-      {
-        "prompt": "Imani said the new library wing feels quieter.",
-        "answer": "this study room feels much warmer than the old basement.",
-        "grammar": [
-          "comparative more X than",
-          "simple present"
-        ]
-      },
-      {
-        "prompt": "Matthew's bicycle has been making strange noises lately.",
-        "answer": "Matthew is taking the broken bicycle to the campus repair shop.",
-        "grammar": [
-          "present continuous",
-          "prepositional phrase"
-        ]
-      },
-      {
-        "prompt": "Did Conrad receive his exam results yet?",
-        "answer": "he has not received his exam results yet.",
-        "grammar": [
-          "present perfect negation",
-          "end adverb"
-        ]
-      },
-      {
-        "prompt": "Where did Aaliya store her old portfolio?",
-        "answer": "the old portfolio was tucked inside her grandmother's wooden trunk.",
-        "grammar": [
-          "passive voice past",
-          "prepositional phrase"
-        ]
-      },
       {
         "prompt": "What did Tobias ask about the campus shuttle?",
         "answer": "Tobias wanted to know whether the shuttle ran on holidays.",
@@ -483,24 +402,104 @@
           "past tense",
           "prepositional phrase"
         ]
+      },
+      {
+        "prompt": "What did Adrian ask about lunch?",
+        "answer": "Adrian wanted to know if the cafeteria served vegetarian options.",
+        "grammar": [
+          "indirect question",
+          "if-clause"
+        ]
+      },
+      {
+        "prompt": "What did Beatrice want to find out?",
+        "answer": "Beatrice was curious whether the lab assistants worked weekends.",
+        "grammar": [
+          "indirect question",
+          "whether-clause"
+        ]
+      },
+      {
+        "prompt": "Have you tried the new study lounge?",
+        "answer": "This study lounge feels noticeably warmer than the old common room.",
+        "grammar": [
+          "comparative",
+          "than-clause"
+        ]
+      },
+      {
+        "prompt": "What did Camila ask the technician?",
+        "answer": "Camila asked whether the printer in the lounge accepted color jobs.",
+        "grammar": [
+          "indirect question",
+          "prepositional phrase"
+        ]
+      },
+      {
+        "prompt": "Where did the materials end up?",
+        "answer": "Devon left the conference materials inside the small storage closet.",
+        "grammar": [
+          "prepositional phrase",
+          "declarative"
+        ]
+      },
+      {
+        "prompt": "What did Eloise want to know?",
+        "answer": "Eloise was wondering if the gallery extended its evening hours.",
+        "grammar": [
+          "indirect question",
+          "past continuous"
+        ]
+      },
+      {
+        "prompt": "What did Gianna ask the advisor?",
+        "answer": "Gianna wanted to know whether the orientation included a campus tour.",
+        "grammar": [
+          "indirect question",
+          "whether-clause"
+        ]
+      },
+      {
+        "prompt": "What did Hugo ask the clerk?",
+        "answer": "Hugo asked whether the bookstore restocked the chemistry workbooks.",
+        "grammar": [
+          "indirect question",
+          "whether-clause"
+        ]
+      },
+      {
+        "prompt": "What did Iris ask about the equipment?",
+        "answer": "Iris was unable to figure out how the projector connected wirelessly.",
+        "grammar": [
+          "indirect question",
+          "embedded wh-clause"
+        ]
+      },
+      {
+        "prompt": "Does Joaquín still volunteer?",
+        "answer": "Joaquín no longer volunteers at the community recycling center on weekends.",
+        "grammar": [
+          "negation",
+          "no longer"
+        ]
       }
     ],
     "opener_freq_recent60": {
-      "statement": 23,
-      "wh-Q": 16,
-      "what did X": 14,
-      "yes-no Q": 7
+      "what did X": 19,
+      "statement": 19,
+      "wh-Q": 14,
+      "yes-no Q": 8
     },
     "sentence_type_freq_recent60": {
-      "other": 26,
-      "negation": 14,
-      "indirect-Q": 12,
+      "other": 23,
+      "indirect-Q": 18,
+      "negation": 12,
       "comparative": 4,
-      "passive": 4
+      "passive": 3
     }
   },
   "discussion": {
-    "total": 132,
+    "total": 136,
     "course_dist": {
       "sociology": 7,
       "business": 6,
@@ -514,19 +513,19 @@
       "political science": 5,
       "public health": 5,
       "technology and media": 5,
+      "urban planning": 4,
+      "linguistics": 4,
       "philosophy": 3,
-      "urban planning": 3,
       "economics": 3,
-      "linguistics": 3,
+      "ethics": 3,
       "communication": 2,
-      "ethics": 2,
+      "marine biology": 2,
       "law and justice": 1,
       "international relations": 1,
       "agriculture and food": 1,
       "art and aesthetics": 1,
       "science and innovation": 1,
       "sports and recreation": 1,
-      "marine biology": 1,
       "criminology": 1,
       "music theory": 1,
       "architecture": 1,
@@ -569,38 +568,6 @@
       "physics": 1
     },
     "recent_40_samples": [
-      {
-        "course": "environmental science",
-        "prof_text_preview": "We've been studying different approaches to reducing plastic waste, and I came across an interesting",
-        "student_names": [
-          "Claire",
-          "Paul"
-        ]
-      },
-      {
-        "course": "business",
-        "prof_text_preview": "We've been discussing how companies can attract and retain top talent. Some argue that offering high",
-        "student_names": [
-          "Ronald",
-          "Olivia"
-        ]
-      },
-      {
-        "course": "sociology",
-        "prof_text_preview": "Today, we're going to talk about the impact of community-based programs on reducing crime. Some citi",
-        "student_names": [
-          "Claire",
-          "Paul"
-        ]
-      },
-      {
-        "course": "social studies",
-        "prof_text_preview": "A growing number of cities are implementing 'universal basic mobility' programs, providing residents",
-        "student_names": [
-          "Claire",
-          "Paul"
-        ]
-      },
       {
         "course": "psychology",
         "prof_text_preview": "We often assume that our memories are accurate records of past events. However, research in psycholo",
@@ -888,43 +855,51 @@
           "Wendy",
           "Andy"
         ]
+      },
+      {
+        "course": "urban planning",
+        "prof_text_preview": "Over the next few weeks, we are going to look at how cities use zoning to shape neighborhoods. One t",
+        "student_names": [
+          "Marco",
+          "Diane"
+        ]
+      },
+      {
+        "course": "marine biology",
+        "prof_text_preview": "Coral reefs around the world are bleaching at rates we didn't expect to see for another twenty years",
+        "student_names": [
+          "Aisha",
+          "Jonah"
+        ]
+      },
+      {
+        "course": "linguistics",
+        "prof_text_preview": "Today, we're going to talk about whether dictionaries should formally include internet slang. The Ox",
+        "student_names": [
+          "Yuki",
+          "Phil"
+        ]
+      },
+      {
+        "course": "ethics",
+        "prof_text_preview": "A growing number of hospitals are piloting AI systems that help triage emergency room patients, rank",
+        "student_names": [
+          "Wendy",
+          "Carlos"
+        ]
       }
     ]
   },
   "email": {
-    "total": 127,
+    "total": 131,
     "topic_dist": {
+      "校园学业": 28,
       "日常生活": 28,
-      "校园学业": 27,
-      "社区生活": 25,
-      "职场工作": 24,
-      "消费售后": 23
+      "社区生活": 26,
+      "职场工作": 25,
+      "消费售后": 24
     },
     "recent_30_samples": [
-      {
-        "topic": "社区生活",
-        "to": "Mr. Owens",
-        "subject": "Concerns about the new community center evening hours",
-        "scenario_preview": "Your local community center recently shortened its evening hours, closing at six"
-      },
-      {
-        "topic": "消费售后",
-        "to": "Customer Care, FreshMeals",
-        "subject": "Recurring double-charging issue with my meal subscription",
-        "scenario_preview": "You subscribed to a weekly meal kit service two months ago at a fixed monthly ra"
-      },
-      {
-        "topic": "校园学业",
-        "to": "Professor Bennett",
-        "subject": "Thesis chapter structure — feedback request",
-        "scenario_preview": "You are a graduate student writing your master's thesis under Professor Bennett."
-      },
-      {
-        "topic": "职场工作",
-        "to": "Mr. Carlsen",
-        "subject": "Feedback on the cross-training program after week one",
-        "scenario_preview": "You are a junior analyst at a marketing firm where the manager just launched a c"
-      },
       {
         "topic": "社区生活",
         "to": "Mr. Holloway",
@@ -1080,24 +1055,48 @@
         "to": "Ms. Okafor",
         "subject": "Feedback on the new wheel reservation system",
         "scenario_preview": "You are a regular weekend visitor at the Cedar Park community pottery studio, wh"
+      },
+      {
+        "topic": "校园学业",
+        "to": "Professor Hale",
+        "subject": "Final research topic preference for the seminar",
+        "scenario_preview": "You are a sophomore enrolled in a literature seminar this semester. Your profess"
+      },
+      {
+        "topic": "职场工作",
+        "to": "Ms. Brennan",
+        "subject": "Early thoughts ahead of our onboarding check-in",
+        "scenario_preview": "You recently started a summer internship at a small marketing firm. Your manager"
+      },
+      {
+        "topic": "社区生活",
+        "to": "Kevin",
+        "subject": "Ideas for the spring outdoor learning session",
+        "scenario_preview": "You volunteer at a neighborhood youth center that runs a free weekend tutoring p"
+      },
+      {
+        "topic": "消费售后",
+        "to": "Returns Team",
+        "subject": "Defective reading lamp purchased last week",
+        "scenario_preview": "You recently bought a wireless reading lamp from an online store. The lamp stopp"
       }
     ]
   },
   "reading_ap": {
-    "total": 138,
+    "total": 143,
     "topic_dist": {
-      "biology": 24,
+      "biology": 25,
       "environmental_science": 23,
       "history": 22,
       "geology": 20,
       "psychology": 19,
-      "sociology": 5,
-      "materials_science": 4,
+      "sociology": 6,
+      "materials_science": 5,
       "anthropology": 4,
+      "business": 4,
       "chemistry": 4,
-      "business": 3,
+      "art": 4,
       "astronomy": 3,
-      "art": 3,
       "physics": 2,
       "technology": 2
     },
@@ -1131,6 +1130,7 @@
       "geology/fossils": 2,
       "history/silk road": 2,
       "geology/river deltas": 2,
+      "biology/insect colonies": 2,
       "biology/animal behavior": 2,
       "geology/ocean floor": 2,
       "biology/immune system": 2,
@@ -1156,7 +1156,6 @@
       "psychology/sleep psychology": 1,
       "environmental_science/biodiversity": 1,
       "psychology/stress response": 1,
-      "biology/insect colonies": 1,
       "environmental_science/soil erosion": 1,
       "geology/plate tectonics": 1,
       "environmental_science/deforestation": 1,
@@ -1198,14 +1197,13 @@
       "psychology/habit formation": 1,
       "technology/clock mechanisms": 1,
       "art/photography history": 1,
-      "business/trade networks": 1
+      "business/trade networks": 1,
+      "art/architecture": 1,
+      "sociology/housing policy": 1,
+      "business/market dynamics": 1,
+      "materials_science/polymer composites": 1
     },
     "recent_subjects": [
-      "physics/optics",
-      "chemistry/chemical reactions",
-      "materials_science/concrete chemistry",
-      "history/agricultural revolution",
-      "psychology/emotion",
       "business/labor economics",
       "chemistry/fermentation",
       "materials_science/ceramics",
@@ -1230,18 +1228,23 @@
       "art/photography history",
       "psychology/learning",
       "geology/ocean floor",
-      "business/trade networks"
+      "business/trade networks",
+      "art/architecture",
+      "sociology/housing policy",
+      "business/market dynamics",
+      "materials_science/polymer composites",
+      "biology/insect colonies"
     ]
   },
   "reading_ctw": {
-    "total": 173,
+    "total": 179,
     "topic_dist": {
-      "environmental_science": 28,
-      "biology": 28,
-      "psychology": 22,
-      "geology": 22,
-      "astronomy": 19,
-      "history": 19,
+      "environmental_science": 29,
+      "biology": 29,
+      "psychology": 23,
+      "geology": 23,
+      "astronomy": 20,
+      "history": 20,
       "anthropology": 11,
       "technology": 10,
       "art": 7,
@@ -1250,7 +1253,7 @@
       "environmental science": 1
     },
     "subtopic_dist": {
-      "environmental_science/wetlands": 9,
+      "environmental_science/wetlands": 10,
       "geology/geysers": 5,
       "anthropology/ancient textiles": 5,
       "astronomy/star formation": 5,
@@ -1283,6 +1286,7 @@
       "history/agricultural revolution": 2,
       "geology/river deltas": 2,
       "astronomy/asteroid belts": 2,
+      "history/ancient civilizations": 2,
       "history/ancient Egypt": 2,
       "environmental_science/pollution": 1,
       "sociology/aging populations": 1,
@@ -1319,7 +1323,6 @@
       "environmental science/urban heat islands": 1,
       "psychology/language acquisition in children": 1,
       "biology/genetics and heredity": 1,
-      "history/ancient civilizations": 1,
       "geology/meteor impacts": 1,
       "astronomy/black holes": 1,
       "technology/engineering innovations": 1,
@@ -1358,15 +1361,13 @@
       "biology/evolution": 1,
       "environmental_science/renewable energy": 1,
       "psychology/memory": 1,
-      "astronomy/planetary atmospheres": 1
+      "astronomy/planetary atmospheres": 1,
+      "biology/forest food webs": 1,
+      "psychology/sleep psychology": 1,
+      "geology/cave formation": 1,
+      "astronomy/satellite technology": 1
     },
     "recent_subjects": [
-      "environmental_science/conservation",
-      "psychology/decision making",
-      "history/technological inventions",
-      "geology/geysers",
-      "astronomy/gravitational waves",
-      "biology/coral reefs",
       "environmental_science/water purification",
       "psychology/habit formation",
       "history/Roman engineering",
@@ -1390,28 +1391,30 @@
       "psychology/memory",
       "history/ancient Egypt",
       "geology/volcanism",
-      "astronomy/planetary atmospheres"
+      "astronomy/planetary atmospheres",
+      "biology/forest food webs",
+      "environmental_science/wetlands",
+      "psychology/sleep psychology",
+      "history/ancient civilizations",
+      "geology/cave formation",
+      "astronomy/satellite technology"
     ]
   },
   "reading_rdl_short": {
-    "total": 124,
+    "total": 128,
     "topic_dist": {
-      "notice": 51,
-      "email": 45,
+      "notice": 52,
+      "email": 47,
       "flyer": 18,
-      "social_media": 10
+      "social_media": 11
     },
     "subtopic_dist": {
-      "notice/": 51,
-      "email/": 45,
+      "notice/": 52,
+      "email/": 47,
       "flyer/": 18,
-      "social_media/": 10
+      "social_media/": 11
     },
     "recent_subjects": [
-      "email",
-      "email",
-      "notice",
-      "email",
       "flyer",
       "notice",
       "email",
@@ -1437,30 +1440,32 @@
       "notice",
       "email",
       "email",
-      "email"
+      "email",
+      "social_media",
+      "email",
+      "email",
+      "notice"
     ]
   },
   "reading_rdl_long": {
-    "total": 117,
+    "total": 119,
     "topic_dist": {
-      "notice": 44,
+      "notice": 45,
       "email": 41,
       "social_media": 18,
-      "menu": 7,
+      "menu": 8,
       "schedule": 4,
       "syllabus": 3
     },
     "subtopic_dist": {
-      "notice/": 44,
+      "notice/": 45,
       "email/": 41,
       "social_media/": 18,
-      "menu/": 7,
+      "menu/": 8,
       "schedule/": 4,
       "syllabus/": 3
     },
     "recent_subjects": [
-      "menu",
-      "notice",
       "email",
       "notice",
       "notice",
@@ -1488,6 +1493,8 @@
       "schedule",
       "notice",
       "notice",
+      "notice",
+      "menu",
       "notice"
     ]
   }
