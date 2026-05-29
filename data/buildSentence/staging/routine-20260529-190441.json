@@ -1,0 +1,224 @@
+{
+  "items": [
+    {
+      "id": "tmp_r1_q1",
+      "prompt": "Did you ask the librarian about the inter-library loan service?",
+      "answer": "she asked whether the printed catalog was still updated regularly.",
+      "chunks": ["she", "whether", "the printed", "catalog", "was", "still", "updated", "regularly"],
+      "prefilled": ["asked"],
+      "prefilled_positions": {"asked": 1},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question with whether", "past tense"]
+    },
+    {
+      "id": "tmp_r1_q2",
+      "prompt": "What did Brigitta say about her new commute?",
+      "answer": "Brigitta no longer rides the express train to the downtown campus.",
+      "chunks": ["brigitta", "no longer", "rides", "the express", "train", "to the", "downtown", "campus"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "is",
+      "has_question_mark": false,
+      "grammar_points": ["negation with no longer", "simple present"]
+    },
+    {
+      "id": "tmp_r1_q3",
+      "prompt": "Have you finished the application for the summer grant yet?",
+      "answer": "Unfortunately, I have not gathered all the required supporting documents.",
+      "chunks": ["I", "have not", "gathered", "all", "the required", "supporting", "documents"],
+      "prefilled": ["Unfortunately,"],
+      "prefilled_positions": {"unfortunately,": 0},
+      "distractor": "be",
+      "has_question_mark": false,
+      "grammar_points": ["present perfect negation", "sentence-opener adverb"]
+    },
+    {
+      "id": "tmp_r1_q4",
+      "prompt": "Tell me how your weekend at the conference went.",
+      "answer": "The speaker Quintin admired delivered a memorable keynote address.",
+      "chunks": ["the speaker", "admired", "delivered", "a memorable", "keynote", "address"],
+      "prefilled": ["Quintin"],
+      "prefilled_positions": {"quintin": 2},
+      "distractor": "had",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause without pronoun", "past tense"]
+    },
+    {
+      "id": "tmp_r1_q5",
+      "prompt": "What did your roommate want to discuss with you last night?",
+      "answer": "He could not decide whether to renew the lease for next semester.",
+      "chunks": ["he", "could not", "decide", "whether", "to renew", "the lease", "for next", "semester"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question with whether", "modal could negation"]
+    },
+    {
+      "id": "tmp_r1_q6",
+      "prompt": "Where did the dean place the new orientation pamphlets?",
+      "answer": "The pamphlets were displayed near the main entrance of the auditorium.",
+      "chunks": ["the pamphlets", "displayed", "near", "the main", "entrance", "of the", "auditorium"],
+      "prefilled": ["were"],
+      "prefilled_positions": {"were": 2},
+      "distractor": "are",
+      "has_question_mark": false,
+      "grammar_points": ["passive voice past", "prepositional phrase"]
+    },
+    {
+      "id": "tmp_r1_q7",
+      "prompt": "Have you noticed any difference in your study habits this semester?",
+      "answer": "This study lounge feels considerably calmer than the central reading hall.",
+      "chunks": ["feels", "considerably", "calmer", "than", "the central", "reading", "hall"],
+      "prefilled": ["This study lounge"],
+      "prefilled_positions": {"this study lounge": 0},
+      "distractor": "more",
+      "has_question_mark": false,
+      "grammar_points": ["comparative", "simple present"]
+    },
+    {
+      "id": "tmp_r1_q8",
+      "prompt": "Why did you leave the laboratory early on Tuesday evening?",
+      "answer": "I left early because the equipment had been reserved by another team.",
+      "chunks": ["I", "left", "early", "the equipment", "had been", "reserved", "by another", "team"],
+      "prefilled": ["because"],
+      "prefilled_positions": {"because": 3},
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["causal clause", "past perfect passive"]
+    },
+    {
+      "id": "tmp_r1_q9",
+      "prompt": "What did the academic advisor mention about your transcript?",
+      "answer": "She wondered when the registrar would correct the calculus grade.",
+      "chunks": ["she", "wondered", "the registrar", "would", "correct", "the calculus", "grade"],
+      "prefilled": ["when"],
+      "prefilled_positions": {"when": 2},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question with when", "modal would"]
+    },
+    {
+      "id": "tmp_r1_q10",
+      "prompt": "Tell me what you discovered at the careers fair on Thursday.",
+      "answer": "The recruiter explained how summer internships would be allocated this year.",
+      "chunks": ["the recruiter", "how", "summer", "internships", "would be", "allocated", "this year"],
+      "prefilled": ["explained"],
+      "prefilled_positions": {"explained": 2},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question with how", "passive modal"]
+    },
+    {
+      "id": "tmp_r1_q11",
+      "prompt": "What did Astrid mention about the bulletin board today?",
+      "answer": "The notice the dean posted explained the revised dormitory procedure.",
+      "chunks": ["the dean", "posted", "explained", "the revised", "dormitory", "procedure"],
+      "prefilled": ["The notice"],
+      "prefilled_positions": {"the notice": 0},
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause without pronoun", "past tense"]
+    },
+    {
+      "id": "tmp_r1_q12",
+      "prompt": "Did Theodora finish her senior project portfolio yesterday?",
+      "answer": "Theodora has not uploaded the final presentation file yet.",
+      "chunks": ["theodora", "not", "uploaded", "the final", "presentation", "file", "yet"],
+      "prefilled": ["has"],
+      "prefilled_positions": {"has": 1},
+      "distractor": "have",
+      "has_question_mark": false,
+      "grammar_points": ["present perfect negation", "yet at end"]
+    },
+    {
+      "id": "tmp_r1_q13",
+      "prompt": "Did you talk with Yusra about her thesis defense rehearsal?",
+      "answer": "Yusra wanted to know if her committee members had received the slides.",
+      "chunks": ["yusra", "if", "her", "committee", "members", "had", "received", "the slides"],
+      "prefilled": ["wanted to know"],
+      "prefilled_positions": {"wanted to know": 1},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question with if", "past perfect"]
+    },
+    {
+      "id": "tmp_r1_q14",
+      "prompt": "Where did you store the field samples after the lab?",
+      "answer": "I placed the soil samples inside the cabinet beside the centrifuge.",
+      "chunks": ["I", "placed", "the soil", "samples", "the cabinet", "beside", "the centrifuge"],
+      "prefilled": ["inside"],
+      "prefilled_positions": {"inside": 5},
+      "distractor": "in",
+      "has_question_mark": false,
+      "grammar_points": ["past tense", "prepositional phrase"]
+    },
+    {
+      "id": "tmp_r1_q15",
+      "prompt": "What did Magnus mention about the new biology elective?",
+      "answer": "Magnus was curious whether the laboratory hours fit his evening schedule.",
+      "chunks": ["magnus", "was curious", "whether", "the laboratory", "hours", "fit", "his evening", "schedule"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question with whether", "past tense"]
+    },
+    {
+      "id": "tmp_r1_q16",
+      "prompt": "Did you visit the new student wellness office this week?",
+      "answer": "Honestly, the appointment system has not been launched online yet.",
+      "chunks": ["the appointment", "system", "has", "not", "been launched", "online", "yet"],
+      "prefilled": ["Honestly,"],
+      "prefilled_positions": {"honestly,": 0},
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["present perfect passive negation", "sentence-opener adverb"]
+    },
+    {
+      "id": "tmp_r1_q17",
+      "prompt": "Have you noticed any changes in the writing center?",
+      "answer": "The writing center feels much warmer than the old basement office did.",
+      "chunks": ["feels", "much", "warmer", "than", "the old", "basement", "office", "did"],
+      "prefilled": ["The writing center"],
+      "prefilled_positions": {"the writing center": 0},
+      "distractor": "more",
+      "has_question_mark": false,
+      "grammar_points": ["comparative than", "simple present"]
+    },
+    {
+      "id": "tmp_r1_q18",
+      "prompt": "What did Hector tell you after the seminar yesterday?",
+      "answer": "Hector explained why the visiting scholar postponed his afternoon lecture.",
+      "chunks": ["hector", "why", "the visiting", "scholar", "postponed", "his afternoon", "lecture"],
+      "prefilled": ["explained"],
+      "prefilled_positions": {"explained": 1},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question with why", "past tense"]
+    },
+    {
+      "id": "tmp_r1_q19",
+      "prompt": "Tell me what happened with the shuttle service this morning.",
+      "answer": "The driver announced that the morning route would be detoured.",
+      "chunks": ["the driver", "announced", "that", "the morning", "route", "be", "detoured"],
+      "prefilled": ["would"],
+      "prefilled_positions": {"would": 7},
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["embedded clause", "passive modal"]
+    },
+    {
+      "id": "tmp_r1_q20",
+      "prompt": "Why did Sebastien skip the orchestra rehearsal last evening?",
+      "answer": "Sebastien overslept because his alarm clock failed to ring properly.",
+      "chunks": ["overslept", "because", "his alarm", "clock", "failed", "to ring", "properly"],
+      "prefilled": ["Sebastien"],
+      "prefilled_positions": {"sebastien": 0},
+      "distractor": "had",
+      "has_question_mark": false,
+      "grammar_points": ["causal clause", "infinitive complement"]
+    }
+  ]
+}
