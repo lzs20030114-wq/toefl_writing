@@ -180,6 +180,44 @@ describe("distractor variety — collapse gate (locks the distractor fix)", () =
   });
 });
 
+describe("chunk granularity — calibration lock (single-word default, ~6 chunks)", () => {
+  // We over-bundled (48% single-word, ~5 chunks) vs TPO (77% single, ~6.5).
+  // Fix is a prompt re-frame; scorer tracks the metric for the nightly monitor
+  // (visibility, no hard gate — chunk granularity has an ambiguity trade-off).
+  test("scoreBatch exposes singleWordChunkRatio + avgEffChunks in detail", () => {
+    const items = batch(3); // synthetic BS batch from the prefilled helpers
+    const d = scoreSynthetic(items).detail;
+    expect(typeof d.singleWordChunkRatio).toBe("number");
+    expect(typeof d.avgEffChunks).toBe("number");
+    expect(d.singleWordChunkRatio).toBeGreaterThanOrEqual(0);
+    expect(d.singleWordChunkRatio).toBeLessThanOrEqual(1);
+  });
+
+  test("scorer reflects chunk granularity: all-single-word vs all-bundled", () => {
+    // all-single-word chunks → ratio ~1.0
+    const single = Array.from({ length: 10 }, (_, i) => ({
+      id: `s${i}`, prompt: "What did X ask?", answer: "she did not see the bus",
+      chunks: ["she", "not", "see", "the", "bus", "do"], prefilled: [],
+      prefilled_positions: {}, distractor: "do", has_question_mark: false, grammar_points: ["x"],
+    }));
+    expect(scoreSynthetic(single).detail.singleWordChunkRatio).toBeGreaterThan(0.8);
+
+    // all-bundled (2-word) chunks → ratio ~0
+    const bundled = Array.from({ length: 10 }, (_, i) => ({
+      id: `b${i}`, prompt: "What did X ask?", answer: "she did not see the bus stop",
+      chunks: ["she did", "not see", "the bus", "stop now"], prefilled: [],
+      prefilled_positions: {}, distractor: null, has_question_mark: false, grammar_points: ["x"],
+    }));
+    expect(scoreSynthetic(bundled).detail.singleWordChunkRatio).toBeLessThan(0.2);
+  });
+
+  test("prompt teaches single-word-default, not the old 'must use MULTI-WORD' overshoot", () => {
+    const src = fs.readFileSync(path.join(ROOT, "lib/bsGen/prompts.mjs"), "utf8");
+    expect(src).not.toMatch(/CRITICAL — must use MULTI-WORD semantic chunks, not single words/);
+    expect(src).toMatch(/DEFAULT to single-word chunks|~77% are SINGLE words/);
+  });
+});
+
 describe("reading quality — word_count fallback (locks the staging-scoring fix)", () => {
   // Bug: reading staging has no word_count (added at merge time). scoreBatch
   // read word_count=0 → quality 0 → the gate falsely retried reading every

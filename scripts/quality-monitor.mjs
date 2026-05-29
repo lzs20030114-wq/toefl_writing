@@ -61,6 +61,7 @@ if (!meta) {
 // ── 2. Score current BS batch (person + diversity + quality) ─────────────
 let bsPersonFrac = null, bsDiv = null, bsQual = null, overallDiv = null, overallQual = null;
 let bsTopDistractorFrac = null, bsDistinctDistractors = null;
+let bsSingleWordChunkRatio = null, bsAvgEffChunks = null;
 if (meta && session) {
   try {
     const scores = scoreBatch(ROOT, session, meta.results || {});
@@ -74,6 +75,13 @@ if (meta && session) {
       bsQual = bs.quality.score;
       bsTopDistractorFrac = det.topDistractorFrac ?? null;
       bsDistinctDistractors = det.distinctDistractors ?? null;
+      bsSingleWordChunkRatio = det.singleWordChunkRatio ?? null;
+      bsAvgEffChunks = det.avgEffChunks ?? null;
+      // Chunk over-bundling drift (soft — visibility, not a hard fail). TPO is
+      // ~77% single-word, ~6 chunks. Flag if we drift well below (over-bundled).
+      if (typeof bsSingleWordChunkRatio === "number" && bsSingleWordChunkRatio < 0.35) {
+        reasons.push(`CHUNK_DRIFT: BS single-word-chunk ratio ${Math.round(bsSingleWordChunkRatio * 100)}% (TPO ~77%), avg ${(bsAvgEffChunks || 0).toFixed(1)} chunks/item (TPO ~6) — over-bundling into fewer/longer chunks. Soft signal; recalibrate the chunk-rule prompt block, don't auto-retry.`);
+      }
       if (bsPersonFrac > PERSON_PREFILLED_GATE) {
         reasons.push(`PERSON_DRIFT: BS person-as-prefilled is ${Math.round(bsPersonFrac * 100)}% (> ${Math.round(PERSON_PREFILLED_GATE * 100)}% gate) in the FINAL committed batch — R1 flagged it but R2 did not bring it down. Prompt may need strengthening.`);
       }
@@ -145,6 +153,8 @@ const row = {
   bs_person_frac: bsPersonFrac != null ? Number(bsPersonFrac.toFixed(3)) : null,
   bs_distractor_top_frac: bsTopDistractorFrac != null ? Number(bsTopDistractorFrac.toFixed(3)) : null,
   bs_distinct_distractors: bsDistinctDistractors,
+  bs_single_word_chunk_frac: bsSingleWordChunkRatio != null ? Number(bsSingleWordChunkRatio.toFixed(3)) : null,
+  bs_avg_eff_chunks: bsAvgEffChunks != null ? Number(bsAvgEffChunks.toFixed(2)) : null,
   bs_diversity: bsDiv,
   bs_quality: bsQual,
 };
