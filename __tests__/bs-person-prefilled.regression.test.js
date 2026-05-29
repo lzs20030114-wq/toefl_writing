@@ -180,6 +180,50 @@ describe("distractor variety — collapse gate (locks the distractor fix)", () =
   });
 });
 
+describe("reading quality — word_count fallback (locks the staging-scoring fix)", () => {
+  // Bug: reading staging has no word_count (added at merge time). scoreBatch
+  // read word_count=0 → quality 0 → the gate falsely retried reading every
+  // night. Fix: compute word count from passage/text/paragraphs when absent.
+  function writeReadingStaging(prefix, session, items, suffix = "") {
+    const file = path.join(ROOT, `data/reading/staging/${prefix}-${session}${suffix}.json`);
+    fs.writeFileSync(file, JSON.stringify({ items }));
+    return file;
+  }
+
+  test("AP staging WITHOUT word_count scores on real passage length (not 0)", () => {
+    const session = "_regtest_apwc";
+    // ~250-word passage in 3 paragraphs, no word_count field
+    const para = (n) => Array(n).fill("word").join(" ");
+    const items = Array.from({ length: 5 }, (_, i) => ({
+      id: `ap${i}`, topic: "biology", subtopic: "cells",
+      paragraphs: [para(85), para(85), para(85)], // 255 words, 3 paragraphs
+      questions: [],
+    }));
+    const file = writeReadingStaging("ap", session, items);
+    try {
+      const r = mod.scoreBatch(ROOT, session, { "reading-ap": { accepted: 5 } });
+      expect(r.perBank["reading-ap"].quality.score).toBeGreaterThan(0);
+    } finally {
+      fs.unlinkSync(file);
+    }
+  });
+
+  test("CTW staging WITHOUT word_count scores on real passage length", () => {
+    const session = "_regtest_ctwwc";
+    const items = Array.from({ length: 6 }, (_, i) => ({
+      id: `ctw${i}`, topic: "history", subtopic: "rome",
+      passage: Array(80).fill("word").join(" "), // 80 words, in 50-130 band
+    }));
+    const file = writeReadingStaging("ctw", session, items);
+    try {
+      const r = mod.scoreBatch(ROOT, session, { "reading-ctw": { accepted: 6 } });
+      expect(r.perBank["reading-ctw"].quality.score).toBeGreaterThan(0);
+    } finally {
+      fs.unlinkSync(file);
+    }
+  });
+});
+
 describe("TPO ground truth — calibration lock (locks the target itself)", () => {
   // Re-measure tpo_source.md and assert the person-as-prefilled ratio is in
   // the expected band. If someone corrupts the source or the measurement
