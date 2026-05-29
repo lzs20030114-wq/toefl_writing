@@ -4760,6 +4760,142 @@
           "explanation": "The notice states that a $5 fee will be charged for items not picked up by April 1."
         }
       ]
+    },
+    {
+      "id": "rdl_short_r1_1",
+      "genre": "notice",
+      "variant": "short",
+      "text": "Notice: Parking Lot D will be closed for repaving from April 8 through April 10. Vehicles must be moved by 7:00 AM on April 8 or a $25 removal fee will apply. Drivers may park in Lot G near Wilson Hall during the closure at no extra charge.",
+      "format_metadata": {},
+      "difficulty": "easy",
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what should drivers do during the repaving?",
+          "options": {
+            "A": "Park in Lot D and pay a daily fee.",
+            "B": "Park along the curb of Wilson Hall instead.",
+            "C": "Park in Lot G at no additional cost.",
+            "D": "Park off campus and walk in for the week."
+          },
+          "correct_answer": "C",
+          "explanation": "The notice states that drivers may park in Lot G near Wilson Hall at no extra charge during the closure."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about a car still parked in Lot D after 7:00 AM on April 8?",
+          "options": {
+            "A": "It is likely to receive a written warning.",
+            "B": "It is likely to be ticketed for a moving violation.",
+            "C": "It is likely to incur a $25 removal fee.",
+            "D": "It is likely to be returned by lot staff later."
+          },
+          "correct_answer": "C",
+          "explanation": "The notice states that a $25 removal fee will apply to vehicles not moved by 7:00 AM on April 8."
+        }
+      ]
+    },
+    {
+      "id": "rdl_short_r1_2",
+      "genre": "email",
+      "variant": "short",
+      "text": "Hi Daniel,\n\nYour replacement student ID is ready for pickup at the One-Card Office in Foster Hall, Room 105. Please bring a $10 fee in cash or card and a current photo ID. The office is open Monday through Friday until 4:00 PM.\n\nThanks,\nOne-Card Office",
+      "format_metadata": {},
+      "difficulty": "easy",
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, where should Daniel go to pick up his ID?",
+          "options": {
+            "A": "Room 102 of the One-Card Office on campus.",
+            "B": "Room 110 of the One-Card Office on campus.",
+            "C": "Room 205 of the One-Card Office on campus.",
+            "D": "Room 105 of the One-Card Office on campus."
+          },
+          "correct_answer": "D",
+          "explanation": "The email tells Daniel that the office is in Foster Hall, Room 105."
+        },
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what must Daniel bring to pick up the ID?",
+          "options": {
+            "A": "A $10 fee and a current photo ID.",
+            "B": "A $5 fee and his class schedule.",
+            "C": "A receipt from the housing office only.",
+            "D": "A check made out to the cashier office."
+          },
+          "correct_answer": "A",
+          "explanation": "The email says Daniel must bring a $10 fee and a current photo ID."
+        }
+      ]
+    },
+    {
+      "id": "rdl_short_r1_3",
+      "genre": "email",
+      "variant": "short",
+      "text": "Hi Maria,\n\nThis is just a quick note to confirm your statistics tutoring session on Thursday at 3:00 PM in Carlton Hall, Room 218. Please bring your most recent problem set so we can review it together.\n\nSee you then,\nJordan",
+      "format_metadata": {},
+      "difficulty": "easy",
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, where will the tutoring session take place?",
+          "options": {
+            "A": "In Carlton Hall, Room 118 on Thursday.",
+            "B": "In Carlton Hall, Room 218 on Thursday.",
+            "C": "In Foster Hall, Room 218 on Thursday.",
+            "D": "In Carlton Hall, Room 318 on Thursday."
+          },
+          "correct_answer": "B",
+          "explanation": "The email confirms the session in Carlton Hall, Room 218."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about the focus of the upcoming session?",
+          "options": {
+            "A": "It will center on Maria's most recent problem set.",
+            "B": "It will introduce a new statistics textbook chapter.",
+            "C": "It will be a recorded review of a missed lecture.",
+            "D": "It will replace Maria's regular class meeting that week."
+          },
+          "correct_answer": "A",
+          "explanation": "Jordan asks Maria to bring her most recent problem set so they can review it together."
+        }
+      ]
+    },
+    {
+      "id": "rdl_short_r1_4",
+      "genre": "email",
+      "variant": "short",
+      "text": "Hi advisees,\n\nMy office hours this week are moved to Wednesday from 1:00 PM to 3:00 PM in Beech Hall, Room 312. Bring the $15 fee for the spring transcript review if you have not paid yet. Email me if that time does not work.\n\nDr. Lee",
+      "format_metadata": {},
+      "difficulty": "easy",
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, when are this week's office hours?",
+          "options": {
+            "A": "On Tuesday from 1:00 PM to 3:00 PM.",
+            "B": "On Wednesday from 1:00 PM to 3:00 PM.",
+            "C": "On Thursday from 2:00 PM to 4:00 PM.",
+            "D": "On Wednesday from 9:00 AM to 11:00 AM."
+          },
+          "correct_answer": "B",
+          "explanation": "Dr. Lee states that office hours this week are on Wednesday from 1:00 PM to 3:00 PM."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about advisees who cannot attend at this time?",
+          "options": {
+            "A": "They should attend Dr. Lee's lecture instead this week.",
+            "B": "They are likely to lose their advising spot for the semester.",
+            "C": "They must reschedule through the registrar's office portal.",
+            "D": "They are encouraged to contact Dr. Lee by email."
+          },
+          "correct_answer": "D",
+          "explanation": "Dr. Lee asks students to email him if that time does not work."
+        }
+      ]
     }
   ]
 }

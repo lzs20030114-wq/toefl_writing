@@ -1,17 +1,17 @@
 {
-  "session_id": "routine-20260529-065136",
-  "completed_at": "2026-05-29T07:08:47Z",
-  "duration_minutes": 17,
-  "highlight": "本期覆盖全部 7 题库，新增 22 题；含 schedule 罕见长阅读体裁",
+  "session_id": "routine-20260529-145414",
+  "completed_at": "2026-05-29T15:07:00Z",
+  "duration_minutes": 13,
+  "highlight": "首次出现哲学、城市规划与经济学三门 Discussion 学科,BS 全 20 题全部通过校验。",
   "commit_sha": "",
   "results": {
     "bs": {
       "generated": 20,
-      "accepted": 10,
-      "topics": ["indirect questions", "negation", "comparative", "passive voice", "relative clauses", "phrasal verbs"],
+      "accepted": 20,
+      "topics": ["past tense", "indirect question (when/whether/how/why)", "present perfect negation", "passive voice", "comparative", "relative clause", "past perfect", "embedded clause", "negation could not", "causal clause"],
       "favorite": {
-        "prompt": "Did Bianca finish her group presentation?",
-        "answer": "she asked whether the new workshop required prior experience for entry."
+        "prompt": "Tell me what Akilah heard at the careers fair on Tuesday.",
+        "answer": "The recruiter explained how internship applications would be reviewed this summer."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -19,10 +19,10 @@
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["social studies", "technology and media", "history and culture", "education"],
+      "topics": ["philosophy", "linguistics", "urban planning", "economics"],
       "favorite": {
-        "subtopic": "social studies",
-        "preview": "Across many districts, public school boards are debating whether to add heritage language classes"
+        "subtopic": "linguistics",
+        "preview": "For this week's discussion, let's think about whether universities should record and archive endangered language interviews using AI-generated transcripts."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -32,52 +32,52 @@
       "accepted": 4,
       "topics": ["校园学业", "职场工作", "消费售后", "社区生活"],
       "favorite": {
-        "subtopic": "职场工作",
-        "preview": "You are a junior editor at a small publishing house piloting a shared annotation tool for reviews."
+        "subtopic": "校园学业",
+        "preview": "You are a senior linguistics major waiting on Professor Halverson's reply about an Indo-European phonology independent study with ten days until registration."
       },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ap": {
       "generated": 5,
-      "accepted": 1,
-      "topics": ["psychology/habit formation"],
+      "accepted": 5,
+      "topics": ["technology/clock mechanisms", "art/photography history", "psychology/learning", "geology/ocean floor", "business/trade networks"],
       "favorite": {
-        "subtopic": "psychology/habit formation",
-        "preview": "A habit is an automatic behavior, performed with little conscious thought, reinforced through repeat"
+        "subtopic": "geology/ocean floor",
+        "preview": "The deep ocean floor is shaped by a process known as abyssal sedimentation, the slow deposition of fine particles drifting downward through thousands of meters."
       },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ctw": {
       "generated": 6,
-      "accepted": 1,
-      "topics": ["biology/evolution"],
+      "accepted": 6,
+      "topics": ["biology/genetics", "environmental_science/renewable energy", "psychology/memory", "history/ancient Egypt", "geology/volcanism", "astronomy/planetary atmospheres"],
       "favorite": {
-        "subtopic": "biology/evolution",
-        "preview": "Evolution is the slow process by which living things change over many generations. New traits often"
+        "subtopic": "history/ancient Egypt",
+        "preview": "Ancient Egypt grew along the banks of the Nile, a river that flooded each summer and left rich soil behind for farmers."
       },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-rdl-short": {
       "generated": 4,
-      "accepted": 1,
-      "topics": ["social_media/"],
+      "accepted": 4,
+      "topics": ["notice/parking closure", "email/student ID replacement", "email/tutoring confirmation", "email/advisor office hours"],
       "favorite": {
-        "subtopic": "social_media/",
-        "preview": "Just tried the new Honey Lavender Latte at Riverbend Café this morning! Honestly, totally worth $4.50"
+        "subtopic": "notice/parking closure",
+        "preview": "Notice: Parking Lot D will be closed for repaving from April 8 through April 10. Vehicles must be moved by 7:00 AM."
       },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-rdl-long": {
       "generated": 2,
-      "accepted": 1,
-      "topics": ["schedule/"],
+      "accepted": 2,
+      "topics": ["notice/elevator maintenance", "notice/lost and found policy"],
       "favorite": {
-        "subtopic": "schedule/",
-        "preview": "Maple Hall Library Study Room Reservation Schedule. Group Study Rooms open daily 8 AM to 11 PM"
+        "subtopic": "notice/elevator maintenance",
+        "preview": "From Monday, June 3 through Friday, June 7, the two main elevators in Pine Ridge Residence Hall will be taken out of service."
       },
       "retried_after_fail": false,
       "failure_reason": ""
