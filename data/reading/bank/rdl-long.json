@@ -6589,6 +6589,105 @@
           "explanation": "The notice states that ordinary items unclaimed after thirty days will be donated to the Eastside community shelter."
         }
       ]
+    },
+    {
+      "genre": "menu",
+      "text": "Rolling Oats Food Truck — Weekly Specials (June 1 to June 7)\n\nFind us parked outside Whitman Library from 11:00 AM to 2:30 PM on weekdays, and at the Riverside Quad from 5:00 PM to 8:00 PM on Friday and Saturday. All items are made fresh each morning by Chef Daniela Ortiz, and we use local produce from the Greenfield Farmers Market.\n\nMonday — Smoky Black Bean Bowl: brown rice, roasted peppers, lime crema. $7.50\nTuesday — Grilled Halloumi Wrap: tomato jam, arugula, herbed flatbread. $8.25\nWednesday — Korean BBQ Sliders (three per order) with pickled cucumber. $9.00\nThursday — Spicy Pumpkin Soup served with rosemary focaccia. $6.75\nFriday — Lemon Herb Chicken Plate with quinoa salad and yogurt sauce. $9.50\nSaturday — Sweet Potato Tacos (two per order) topped with chipotle slaw. $8.00\n\nAdd a house-made hibiscus iced tea for $2.50, or any cookie from our bakery partner for $1.75. Students who present a valid campus ID before noon receive a $1.00 discount on any plated entree. Pre-order through our website by 9:00 AM to skip the line. Cash, card, and CampusBucks accepted.\n\nFollow @RollingOatsTruck for last-minute location changes due to weather.",
+      "format_metadata": {
+        "title": "Rolling Oats Food Truck — Weekly Specials",
+        "dates": "June 1 to June 7"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the menu, where is the truck parked on weekday afternoons?",
+          "options": {
+            "A": "At the Riverside Quad",
+            "B": "At the Greenfield Farmers Market",
+            "C": "Outside Whitman Library",
+            "D": "Outside the campus bakery"
+          },
+          "correct_answer": "C",
+          "explanation": "The menu states the truck parks outside Whitman Library from 11:00 AM to 2:30 PM on weekdays. Riverside Quad is the Friday/Saturday evening spot, and the farmers market is a supplier, not a location."
+        },
+        {
+          "question_type": "detail",
+          "stem": "What does the menu say students can do to receive a $1.00 discount?",
+          "options": {
+            "A": "Order through the website only",
+            "B": "Pay using CampusBucks at lunchtime",
+            "C": "Show campus ID before noon",
+            "D": "Buy two entrees on weekends"
+          },
+          "correct_answer": "C",
+          "explanation": "The menu specifies that students who present a valid campus ID before noon receive a $1.00 discount on any plated entree. The other options mix real menu terms (CampusBucks, website orders, weekends) with incorrect conditions."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about pre-orders placed at 10:00 AM on a weekday?",
+          "options": {
+            "A": "They earn an extra discount",
+            "B": "They will not skip the line",
+            "C": "They include a free drink",
+            "D": "They must be paid in cash"
+          },
+          "correct_answer": "B",
+          "explanation": "The menu says pre-orders must be placed by 9:00 AM to skip the line, so a 10:00 AM order misses the cutoff and will not skip the line. The other choices invent benefits or restrictions not supported by the text."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl_long_r1_routine-20260529-170842_1",
+      "variant": "long"
+    },
+    {
+      "genre": "notice",
+      "text": "NOTICE: Spring Term Course Evaluation Deadline\n\nPosted by the Office of Academic Assessment — Effective May 30\n\nAll undergraduate students are reminded that course evaluations for the spring term must be submitted online by 11:59 PM on Friday, June 12. Evaluations are reviewed by department chairs and are used to guide curriculum changes for the following academic year. Responses are kept anonymous; instructors will not see individual feedback until final grades have been posted.\n\nPlease follow the steps below:\n\n- Log in to the student portal at my.campus.edu using your university ID.\n- Select the \"Evaluations\" tab and complete one survey for each enrolled course.\n- Save your progress if needed; surveys may be resumed within 14 days.\n- Submit before midnight on June 12 to be entered in the bookstore gift card drawing.\n\nStudents who complete every assigned evaluation by June 5 will receive a $10.00 credit toward the campus printing account. Late submissions will not be accepted, and unfinished surveys will be discarded after the deadline passes.\n\nFor technical issues, contact the help desk at assess-help@campus.edu or visit Room 112 of Harlow Hall between 9:00 AM and 4:30 PM, Monday through Friday. Paper copies are available upon request for students with approved accommodations.",
+      "format_metadata": {
+        "title": "Spring Term Course Evaluation Deadline",
+        "posted_by": "Office of Academic Assessment",
+        "effective": "May 30"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what reward is offered for finishing every evaluation by June 5?",
+          "options": {
+            "A": "A bookstore gift card",
+            "B": "A printing account credit",
+            "C": "A waived course fee",
+            "D": "A free meal voucher"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice states that students who complete every assigned evaluation by June 5 will receive a $10.00 credit toward the campus printing account. The gift card drawing is a separate June 12 incentive."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about a student who submits a survey on June 13?",
+          "options": {
+            "A": "She will receive partial credit",
+            "B": "She must visit Harlow Hall",
+            "C": "She can resume it later",
+            "D": "Her response will be discarded"
+          },
+          "correct_answer": "D",
+          "explanation": "The notice says late submissions will not be accepted and that unfinished surveys will be discarded after the deadline. Since June 13 is past the June 12 deadline, the response will be discarded."
+        },
+        {
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of the notice?",
+          "options": {
+            "A": "To explain evaluation requirements",
+            "B": "To announce a new grading policy",
+            "C": "To advertise help desk services",
+            "D": "To describe curriculum changes"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice primarily informs students about the course evaluation deadline, steps, and incentives. The other choices touch on minor details (help desk, curriculum review) but are not the main purpose."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl_long_r1_routine-20260529-170842_2",
+      "variant": "long"
     }
   ]
 }

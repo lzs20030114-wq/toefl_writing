@@ -4896,6 +4896,142 @@
           "explanation": "Dr. Lee asks students to email him if that time does not work."
         }
       ]
+    },
+    {
+      "genre": "social_media",
+      "variant": "short",
+      "text": "Just found the best quiet spot on campus! Basement level of Hayden Library, study room B12. Open until midnight, and the vending coffee is only $1.50! Bring headphones, the wifi is super fast. Reserve online before 4:00 PM!",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the post, what does the writer recommend bringing?",
+          "options": {
+            "A": "A laptop charger",
+            "B": "A library card",
+            "C": "A snack pack",
+            "D": "A pair of headphones"
+          },
+          "correct_answer": "D",
+          "explanation": "The post directly states 'Bring headphones,' which paraphrases to a pair of headphones."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about study room B12?",
+          "options": {
+            "A": "It tends to fill up quickly",
+            "B": "It closes earlier on weekends",
+            "C": "It charges a monthly fee",
+            "D": "It allows group discussions"
+          },
+          "correct_answer": "A",
+          "explanation": "Because the writer urges readers to reserve online before 4:00 PM, this implies the room fills up quickly."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl_short_r1_routine-20260529-170842_1"
+    },
+    {
+      "genre": "email",
+      "variant": "short",
+      "text": "Hi Marcus, A package arrived for you at the Sterling Hall mailroom on May 20. Please stop by Room 110 before Friday at 5:00 PM to pick it up. Bring your student ID. Thanks, RA Jenna",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what should Marcus bring?",
+          "options": {
+            "A": "A tracking number",
+            "B": "A signed receipt",
+            "C": "A student ID",
+            "D": "A package slip"
+          },
+          "correct_answer": "C",
+          "explanation": "The email directly instructs Marcus to bring his student ID."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred if Marcus does not arrive before Friday at 5:00 PM?",
+          "options": {
+            "A": "He will pay a late fee",
+            "B": "He may lose access to the package",
+            "C": "He will need a new ID",
+            "D": "He must email Jenna again"
+          },
+          "correct_answer": "B",
+          "explanation": "The strict pickup window implies that missing it may result in losing access to the package."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl_short_r1_routine-20260529-170842_2"
+    },
+    {
+      "genre": "email",
+      "variant": "short",
+      "text": "Dear Priya, This confirms your campus tour guide shift on Saturday, June 6, from 10:00 AM to 12:30 PM. Please meet at the Visitor Center desk by 9:45 AM. Wear the navy guide polo. Best, Coordinator Liu",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, where should Priya report?",
+          "options": {
+            "A": "At the Admissions lobby",
+            "B": "At the Visitor Center desk",
+            "C": "At the Coordinator's office",
+            "D": "At the campus main gate"
+          },
+          "correct_answer": "B",
+          "explanation": "The email instructs Priya to meet at the Visitor Center desk."
+        },
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what should Priya wear?",
+          "options": {
+            "A": "A navy guide polo",
+            "B": "A staff name badge",
+            "C": "A formal black blazer",
+            "D": "A college branded cap"
+          },
+          "correct_answer": "A",
+          "explanation": "The email directly states Priya should wear the navy guide polo."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl_short_r1_routine-20260529-170842_3"
+    },
+    {
+      "genre": "notice",
+      "variant": "short",
+      "text": "NOTICE: Fire alarm testing will be conducted in Whitman Hall on Tuesday, June 9, from 8:00 AM to 10:00 AM. Residents are advised to remain indoors. Tampering with alarms results in a $75 fine. Questions may be directed to Facilities at extension 4402.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what should residents do during testing?",
+          "options": {
+            "A": "Evacuate the building",
+            "B": "Silence personal alarms",
+            "C": "Stay inside their rooms",
+            "D": "Report to Facilities"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice advises residents to remain indoors, paraphrased as stay inside their rooms."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about the $75 fine?",
+          "options": {
+            "A": "It applies only to repeat offenders",
+            "B": "It covers minor equipment damage",
+            "C": "It funds routine alarm checks",
+            "D": "It discourages interference with devices"
+          },
+          "correct_answer": "D",
+          "explanation": "Listing a fine for tampering implies the policy exists to discourage interference with the devices."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl_short_r1_routine-20260529-170842_4"
     }
   ]
 }

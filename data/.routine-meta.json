@@ -1,17 +1,26 @@
 {
-  "session_id": "routine-20260529-145414",
-  "completed_at": "2026-05-29T15:07:00Z",
-  "duration_minutes": 13,
-  "highlight": "首次出现哲学、城市规划与经济学三门 Discussion 学科,BS 全 20 题全部通过校验。",
+  "session_id": "routine-20260529-170842",
+  "completed_at": "2026-05-29T17:14:56.105Z",
+  "duration_minutes": 6,
+  "highlight": "物理与建筑题首次进入 AP 与造句多样化",
   "commit_sha": "",
   "results": {
     "bs": {
       "generated": 20,
-      "accepted": 20,
-      "topics": ["past tense", "indirect question (when/whether/how/why)", "present perfect negation", "passive voice", "comparative", "relative clause", "past perfect", "embedded clause", "negation could not", "causal clause"],
+      "accepted": 10,
+      "topics": [
+        "indirect question",
+        "if-clause",
+        "whether-clause",
+        "comparative",
+        "than-clause",
+        "negation",
+        "sentence-opener adverb",
+        "prepositional phrase"
+      ],
       "favorite": {
-        "prompt": "Tell me what Akilah heard at the careers fair on Tuesday.",
-        "answer": "The recruiter explained how internship applications would be reviewed this summer."
+        "prompt": "What did Adrian ask about lunch?",
+        "answer": "Adrian wanted to know if the cafeteria served vegetarian options."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -19,10 +28,15 @@
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["philosophy", "linguistics", "urban planning", "economics"],
+      "topics": [
+        "urban planning",
+        "marine biology",
+        "linguistics",
+        "ethics"
+      ],
       "favorite": {
-        "subtopic": "linguistics",
-        "preview": "For this week's discussion, let's think about whether universities should record and archive endangered language interviews using AI-generated transcripts."
+        "subtopic": "urban planning",
+        "preview": "Over the next few weeks, we are going to look at how cities use zoning to shape neighborhoods. One trend gaini"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -30,10 +44,15 @@
     "email": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["校园学业", "职场工作", "消费售后", "社区生活"],
+      "topics": [
+        "校园学业",
+        "职场工作",
+        "社区生活",
+        "消费售后"
+      ],
       "favorite": {
         "subtopic": "校园学业",
-        "preview": "You are a senior linguistics major waiting on Professor Halverson's reply about an Indo-European phonology independent study with ten days until registration."
+        "preview": "You are a sophomore enrolled in a literature seminar this semester. Your professor has just posted a list of t"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -41,10 +60,16 @@
     "reading-ap": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["technology/clock mechanisms", "art/photography history", "psychology/learning", "geology/ocean floor", "business/trade networks"],
+      "topics": [
+        "art/architecture",
+        "sociology/housing policy",
+        "business/market dynamics",
+        "materials_science/polymer composites",
+        "biology/insect colonies"
+      ],
       "favorite": {
-        "subtopic": "geology/ocean floor",
-        "preview": "The deep ocean floor is shaped by a process known as abyssal sedimentation, the slow deposition of fine particles drifting downward through thousands of meters."
+        "subtopic": "art/architecture",
+        "preview": "The flying buttress, an external support arch that transfers the weight of a roof or vault outward to a freest"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -52,10 +77,17 @@
     "reading-ctw": {
       "generated": 6,
       "accepted": 6,
-      "topics": ["biology/genetics", "environmental_science/renewable energy", "psychology/memory", "history/ancient Egypt", "geology/volcanism", "astronomy/planetary atmospheres"],
+      "topics": [
+        "biology/forest food webs",
+        "environmental_science/wetlands",
+        "psychology/sleep psychology",
+        "history/ancient civilizations",
+        "geology/cave formation",
+        "astronomy/satellite technology"
+      ],
       "favorite": {
-        "subtopic": "history/ancient Egypt",
-        "preview": "Ancient Egypt grew along the banks of the Nile, a river that flooded each summer and left rich soil behind for farmers."
+        "subtopic": "biology/forest food webs",
+        "preview": "In a forest, every plant and animal is part of a food web. Green leaves are eaten by deer and rabbits, which i"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -63,10 +95,14 @@
     "reading-rdl-short": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["notice/parking closure", "email/student ID replacement", "email/tutoring confirmation", "email/advisor office hours"],
+      "topics": [
+        "social_media",
+        "email",
+        "notice"
+      ],
       "favorite": {
-        "subtopic": "notice/parking closure",
-        "preview": "Notice: Parking Lot D will be closed for repaving from April 8 through April 10. Vehicles must be moved by 7:00 AM."
+        "subtopic": "social_media/short",
+        "preview": "Just found the best quiet spot on campus! Basement level of Hayden Library, study room B12. Open until midnigh"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -74,10 +110,13 @@
     "reading-rdl-long": {
       "generated": 2,
       "accepted": 2,
-      "topics": ["notice/elevator maintenance", "notice/lost and found policy"],
+      "topics": [
+        "menu",
+        "notice"
+      ],
       "favorite": {
-        "subtopic": "notice/elevator maintenance",
-        "preview": "From Monday, June 3 through Friday, June 7, the two main elevators in Pine Ridge Residence Hall will be taken out of service."
+        "subtopic": "menu/long",
+        "preview": "Rolling Oats Food Truck — Weekly Specials (June 1 to June 7)\n\nFind us parked outside Whitman Library from 11:0"
       },
       "retried_after_fail": false,
       "failure_reason": ""

@@ -1,98 +1,10 @@
 {
-  "session_id": "routine-20260529-145414",
-  "generated_at": "2026-05-29T15:07:39.107Z",
-  "needs_retry": true,
+  "session_id": "routine-20260529-170842",
+  "generated_at": "2026-05-29T17:14:59.368Z",
+  "needs_retry": false,
   "overall_scores": {
-    "diversity": 93,
-    "quality": 66
+    "diversity": 97,
+    "quality": 98
   },
-  "retry_banks": [
-    {
-      "bank": "reading-ap",
-      "diversity_score": 100,
-      "diversity_threshold": 85,
-      "quality_score": 50,
-      "quality_threshold": 90,
-      "failures": [
-        "质量 50 < 90"
-      ],
-      "diversity_breakdown": [
-        "话题组合 5/5",
-        "学科 5/5"
-      ],
-      "quality_breakdown": [
-        "词数 0/5",
-        "段落数 5/5"
-      ],
-      "hints": [
-        "质量校验有偏差: 词数 0/5, 段落数 5/5 — recheck schema compliance"
-      ],
-      "items_to_supplement": 3
-    },
-    {
-      "bank": "reading-ctw",
-      "diversity_score": 100,
-      "diversity_threshold": 85,
-      "quality_score": 0,
-      "quality_threshold": 90,
-      "failures": [
-        "质量 0 < 90"
-      ],
-      "diversity_breakdown": [
-        "话题组合 6/6",
-        "学科 6/6"
-      ],
-      "quality_breakdown": [
-        "词数 0/6"
-      ],
-      "hints": [
-        "质量校验有偏差: 词数 0/6 — recheck schema compliance"
-      ],
-      "items_to_supplement": 3
-    },
-    {
-      "bank": "reading-rdl-short",
-      "diversity_score": 80,
-      "diversity_threshold": 80,
-      "quality_score": 0,
-      "quality_threshold": 85,
-      "failures": [
-        "质量 0 < 85"
-      ],
-      "diversity_breakdown": [
-        "话题 4/4",
-        "notice 1 · email 3"
-      ],
-      "quality_breakdown": [
-        "词数 0/4"
-      ],
-      "hints": [
-        "质量校验有偏差: 词数 0/4 — recheck schema compliance"
-      ],
-      "items_to_supplement": 2
-    },
-    {
-      "bank": "reading-rdl-long",
-      "diversity_score": 60,
-      "diversity_threshold": 70,
-      "quality_score": 0,
-      "quality_threshold": 85,
-      "failures": [
-        "多样性 60 < 70",
-        "质量 0 < 85"
-      ],
-      "diversity_breakdown": [
-        "话题 2/2",
-        "notice 2 · email 0"
-      ],
-      "quality_breakdown": [
-        "词数 0/2"
-      ],
-      "hints": [
-        "多样性 < gate — choose distinct topic/subtopic combos; avoid same discipline twice",
-        "质量校验有偏差: 词数 0/2 — recheck schema compliance"
-      ],
-      "items_to_supplement": 1
-    }
-  ]
+  "retry_banks": []
 }
