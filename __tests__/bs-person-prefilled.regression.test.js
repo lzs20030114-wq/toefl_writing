@@ -180,6 +180,42 @@ describe("distractor variety — collapse gate (locks the distractor fix)", () =
   });
 });
 
+describe("prompt 2nd-person addressing — calibration lock (题面问法)", () => {
+  // Real TPO BS prompts address the test-taker ("you") ~72%; our batches
+  // dropped to ~5-10% (detached 3rd-person reports). Hard gate (no solvability
+  // trade-off). isSecondPersonPrompt is a plain regex — zero inference.
+  test("isSecondPersonPrompt detects you/your, not 3rd-person", () => {
+    for (const p of ["Did you enjoy the workshop?", "Where did you find your phone?", "What did the recruiter ask you?"]) {
+      expect(mod.isSecondPersonPrompt(p)).toBe(true);
+    }
+    for (const p of ["What did Adrian ask about lunch?", "Where did the materials end up?", "Farouk missed class."]) {
+      expect(mod.isSecondPersonPrompt(p)).toBe(false);
+    }
+  });
+
+  test("a low-you batch is flagged; a TPO-like ~70%-you batch passes", () => {
+    const lowYou = Array.from({ length: 10 }, (_, i) => bsItem(
+      `lo${i}`, "she did not see the bus", ["she"], "do"
+    )).map((q, i) => ({ ...q, prompt: `What did Person${i} ask about it?` }));
+    const dLow = scoreSynthetic(lowYou).detail;
+    expect(dLow.secondPersonFrac).toBeLessThan(0.2);
+    expect(mod.isPromptAddressingLow(dLow)).toBe(true);
+
+    const highYou = lowYou.map((q, i) => ({ ...q, prompt: i < 7 ? `Did you see item ${i}?` : `What did Person${i} ask about it?` }));
+    const dHigh = scoreSynthetic(highYou).detail;
+    expect(dHigh.secondPersonFrac).toBeGreaterThanOrEqual(0.6);
+    expect(mod.isPromptAddressingLow(dHigh)).toBe(false);
+  });
+
+  test("gate constant exported; check-quality-gates + prompt wired", () => {
+    expect(mod.PROMPT_SECOND_PERSON_GATE).toBe(0.45);
+    const gate = fs.readFileSync(path.join(ROOT, "scripts/check-quality-gates.mjs"), "utf8");
+    expect(gate).toMatch(/isPromptAddressingLow/);
+    const prompt = fs.readFileSync(path.join(ROOT, "lib/bsGen/prompts.mjs"), "utf8");
+    expect(prompt).toMatch(/SPEAKS TO the test-taker|72% of real TPO prompts address/);
+  });
+});
+
 describe("chunk granularity — calibration lock (single-word default, ~6 chunks)", () => {
   // We over-bundled (48% single-word, ~5 chunks) vs TPO (77% single, ~6.5).
   // Fix is a prompt re-frame; scorer tracks the metric for the nightly monitor

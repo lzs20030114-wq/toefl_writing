@@ -22,7 +22,7 @@
 import { readFileSync, writeFileSync, existsSync } from "fs";
 import { resolve, dirname, join } from "path";
 import { fileURLToPath } from "url";
-import { scoreBatch, isPersonOveruse, PERSON_PREFILLED_GATE, isDistractorCollapsed, DISTRACTOR_TOP_FRAC_GATE, DISTRACTOR_MIN_DISTINCT } from "../lib/quality/scoreBatch.mjs";
+import { scoreBatch, isPersonOveruse, PERSON_PREFILLED_GATE, isDistractorCollapsed, DISTRACTOR_TOP_FRAC_GATE, DISTRACTOR_MIN_DISTINCT, isPromptAddressingLow, PROMPT_SECOND_PERSON_GATE } from "../lib/quality/scoreBatch.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
@@ -131,13 +131,15 @@ for (const bank of BANK_ORDER) {
   // score so it can't be masked by strong scores on other axes.
   let personOveruse = false;
   let distractorCollapsed = false;
+  let promptAddressingLow = false;
   if (bank === "bs" && s.diversity.detail) {
     personOveruse = isPersonOveruse(s.diversity.detail.personFrac);
     distractorCollapsed = isDistractorCollapsed(s.diversity.detail);
+    promptAddressingLow = isPromptAddressingLow(s.diversity.detail);
   }
 
-  if (divPass && qualPass && !personOveruse && !distractorCollapsed) {
-    summary.push(`  ✓ ${bank}: 多样性 ${s.diversity.score}≥${divGate}, 质量 ${s.quality.score}≥${qualGate}${bank === "bs" ? `, 人物prefilled ${Math.round((s.diversity.detail.personFrac||0)*100)}%≤${Math.round(PERSON_PREFILLED_GATE*100)}%, 干扰词 ${s.diversity.detail.distinctDistractors}种` : ""}`);
+  if (divPass && qualPass && !personOveruse && !distractorCollapsed && !promptAddressingLow) {
+    summary.push(`  ✓ ${bank}: 多样性 ${s.diversity.score}≥${divGate}, 质量 ${s.quality.score}≥${qualGate}${bank === "bs" ? `, 人物prefilled ${Math.round((s.diversity.detail.personFrac||0)*100)}%, 干扰词 ${s.diversity.detail.distinctDistractors}种, 题面you ${Math.round((s.diversity.detail.secondPersonFrac||0)*100)}%` : ""}`);
     continue;
   }
 
@@ -156,6 +158,12 @@ for (const bank of BANK_ORDER) {
     const topPct = Math.round((d.topDistractorFrac || 0) * 100);
     failures.push(`干扰词塌缩 (${d.distinctDistractors}种, top "${d.topDistractor}" ${topPct}%)`);
     hints.push(`干扰词多样性塌缩: 只有 ${d.distinctDistractors} 种 distinct, "${d.topDistractor}" 占 ${topPct}% (上限: 单词≤${Math.round(DISTRACTOR_TOP_FRAC_GATE*100)}%, 至少 ${DISTRACTOR_MIN_DISTINCT} 种). 真 TPO 干扰词在助动词家族里铺开 (did/do/does/is/are/was/were/can/have/had/am) + 少量形态twin (took→taken, go→going) + 否定twin (not→no). 这批塌缩到单一词, 每 10 道一个干扰词最多用 3 次, 目标 6+ 种 distinct.`);
+  }
+
+  if (promptAddressingLow) {
+    const pct = Math.round((s.diversity.detail.secondPersonFrac || 0) * 100);
+    failures.push(`题面对话化不足 (${pct}% 含 you, < ${Math.round(PROMPT_SECOND_PERSON_GATE * 100)}%)`);
+    hints.push(`题面问法太"第三人称旁观": 只有 ${pct}% 的 prompt 含 "you/your" (真 TPO 72%). BS 题面是一段对话的一方, 应直接对考生说话. 把题面写成对考生提问: "Did you enjoy...?", "Where did you find...?", "What did the recruiter ask you?", "Are you going...?" — 目标 ~70% 的题面含 "you". 避免 "What did Adrian ask about lunch?" 这种没有 you 的第三人称报告.`);
   }
 
   if (!divPass) {

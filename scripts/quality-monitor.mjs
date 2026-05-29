@@ -25,7 +25,7 @@
 import { readFileSync, writeFileSync, existsSync, appendFileSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
-import { scoreBatch, PERSON_PREFILLED_GATE, isDistractorCollapsed } from "../lib/quality/scoreBatch.mjs";
+import { scoreBatch, PERSON_PREFILLED_GATE, isDistractorCollapsed, isPromptAddressingLow, PROMPT_SECOND_PERSON_GATE } from "../lib/quality/scoreBatch.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
@@ -61,7 +61,7 @@ if (!meta) {
 // ── 2. Score current BS batch (person + diversity + quality) ─────────────
 let bsPersonFrac = null, bsDiv = null, bsQual = null, overallDiv = null, overallQual = null;
 let bsTopDistractorFrac = null, bsDistinctDistractors = null;
-let bsSingleWordChunkRatio = null, bsAvgEffChunks = null;
+let bsSingleWordChunkRatio = null, bsAvgEffChunks = null, bsSecondPersonFrac = null;
 if (meta && session) {
   try {
     const scores = scoreBatch(ROOT, session, meta.results || {});
@@ -77,6 +77,10 @@ if (meta && session) {
       bsDistinctDistractors = det.distinctDistractors ?? null;
       bsSingleWordChunkRatio = det.singleWordChunkRatio ?? null;
       bsAvgEffChunks = det.avgEffChunks ?? null;
+      bsSecondPersonFrac = det.secondPersonFrac ?? null;
+      if (isPromptAddressingLow(det)) {
+        reasons.push(`PROMPT_FRAME_DRIFT: BS prompts addressing the test-taker dropped to ${Math.round((det.secondPersonFrac || 0) * 100)}% "you" (TPO ~72%, gate ${Math.round(PROMPT_SECOND_PERSON_GATE * 100)}%) — prompts went third-person/detached. R1 flagged it but R2 didn't fix. Recalibrate the prompt-frame block.`);
+      }
       // Chunk over-bundling drift (soft — visibility, not a hard fail). TPO is
       // ~77% single-word, ~6 chunks. Flag if we drift well below (over-bundled).
       if (typeof bsSingleWordChunkRatio === "number" && bsSingleWordChunkRatio < 0.35) {
@@ -155,6 +159,7 @@ const row = {
   bs_distinct_distractors: bsDistinctDistractors,
   bs_single_word_chunk_frac: bsSingleWordChunkRatio != null ? Number(bsSingleWordChunkRatio.toFixed(3)) : null,
   bs_avg_eff_chunks: bsAvgEffChunks != null ? Number(bsAvgEffChunks.toFixed(2)) : null,
+  bs_second_person_frac: bsSecondPersonFrac != null ? Number(bsSecondPersonFrac.toFixed(3)) : null,
   bs_diversity: bsDiv,
   bs_quality: bsQual,
 };
