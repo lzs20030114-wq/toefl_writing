@@ -1,0 +1,195 @@
+---
+name: calibration-fix
+description: Diagnose and fix a question-quality REGRESSION against real TPO ground truth, then lock it so it cannot silently regress again. Use when a generated dimension drifted from real exam style (e.g. "prefilled is all he/she/names", "distractors collapsed to did", "topics too repetitive", "sentence types off"), when output "doesn't feel like real TPO", or when a previously-fixed quality issue came back. Works for any bank (BS / Discussion / Email / Reading).
+user-invocable: true
+argument-hint: [dimension, e.g. "distractor variety" | "prefilled person-ratio" | "AP topic diversity"]
+---
+
+# Calibration Regression Fix — methodology
+
+A quality dimension drifted away from real exam style. This is the disciplined
+loop we use to fix it WITHOUT guessing and WITHOUT it silently coming back.
+It was hardened over two real fixes in this repo (prefilled person-ratio
+60%→15%; distractor "did" 71%→10%). Follow every phase — skipping the
+verification or the lock is exactly how these regressions kept returning.
+
+## IRON RULE (overrides convenience)
+
+**Never claim or act on a conclusion before truly verifying it.** Not from
+memory, not from the project's own historical bank, not from "it looks like".
+A proxy indicator (e.g. the existing bank, a prior calibration comment) does
+NOT count as verification. Measure the real thing first.
+
+Corollary proven twice in this repo: **the historical bank is NOT ground
+truth.** It has itself been miscalibrated — prefilled was over-tuned one way,
+distractors over-tuned the opposite way. Only `tpo_source.md` (and authentic
+crawled ETS items) is ground truth.
+
+---
+
+## Phase 1 — Frame the symptom precisely
+
+State, in one sentence, WHICH dimension drifted and IN WHICH DIRECTION, as a
+measurable quantity. Vague ("quality dropped") is not actionable.
+- Good: "BS distractor collapsed — 71% of distractors are the single word 'did'."
+- Good: "prefilled is 61% person-references (he/she/names) vs an unknown TPO rate."
+
+Pick the metric you will measure on BOTH the real exam and our output.
+
+## Phase 2 — Measure OUR output (fast, reveals the collapse)
+
+Our generated items have explicit fields — measure them first; it's the
+equivalent of "our batch = 61%". Read `data/<bank>/...` and the recent
+`data/<bank>/staging/<session>.json` files. Tabulate the metric:
+- distribution of the value, distinct count, top-value share, presence ratio.
+- Compare historical (old pipeline) vs recent (Claude routine) batches — they
+  often regressed in DIFFERENT directions; both can be wrong.
+
+Write a throwaway measurement script under `scripts/ops/measure-*.mjs`.
+
+## Phase 3 — Verify the REAL TPO ground truth (the crux)
+
+Measure the SAME metric on `data/buildSentence/tpo_source.md` (60 real BS items)
+or the bank's real-reference file (`data/academicWriting/real_tpo_reference.json`,
+`data/emailWriting/tpo_reference.json`, `lib/readingBank/readingEtsProfile.js`).
+
+- Use the **same classifier** on TPO and on our output — apples-to-apples, or
+  the comparison is meaningless. (Reuse the exact function, e.g. import from
+  `lib/quality/scoreBatch.mjs`.)
+- Pattern script: `scripts/ops/measure-tpo-*.mjs` (see measure-tpo-prefilled.mjs,
+  measure-tpo-distractor.mjs for the parsing template).
+
+**If the TPO sample is too small for this dimension** (e.g. the sub-pattern
+appears in only 3-4 of 60 items, or the bank's reference file has < ~30 items):
+the measurement is statistically weak — get more authentic data before
+calibrating:
+- Crawl real ETS/TPO items from third-party sources. Tools: `WebSearch` /
+  `WebFetch`; existing crawler patterns in `scripts/crawl-tpo-*.mjs`.
+- **FIDELITY IS MANDATORY**: only keep verbatim real ETS items. Reject
+  paraphrased, AI-generated, or "TPO-style" imitations — calibrating to fake
+  data is worse than a small real sample. Record the source URL per item.
+- Append to the real-reference file, re-measure.
+
+## Phase 4 — Quantify the deviation + locate the ROOT CAUSE in code
+
+Put the three numbers side by side: real TPO vs historical vs current. State
+the gap in percentage points.
+
+Then trace the ACTUAL code chain to find where the calibration is (or isn't)
+enforced — do not assume:
+```
+prompt builder (lib/bsGen/prompts.mjs, lib/ai/prompts/*, lib/readingGen/*)
+   → print-bank-prompt.mjs (what the routine literally receives)
+   → generator (Claude routine / DeepSeek)
+   → merge + per-item validator (lib/questionBank/*, lib/readingGen/*Validator)
+   → batch gate (scripts/check-quality-gates.mjs)
+```
+Run `node scripts/print-bank-prompt.mjs <bank>` and READ what the model is
+actually told. The root cause is usually one of:
+- the prompt states the wrong target (e.g. literally "Mainly: did, do, does"), or
+- the prompt never injects the calibration at all (soft signal absent), or
+- a validator/retry stage that used to enforce it was dropped in a pipeline migration.
+
+## Phase 5 — Prove the fix DIRECTION (falsification, not assertion)
+
+Before building anything, prove the direction is right with a test that COULD
+fail:
+- Form the hypothesis as something falsifiable (e.g. "TPO keeps the person as a
+  draggable chunk and anchors a non-subject word" → measurable: does TPO have
+  person-subjects but low person-as-prefilled?).
+- Write a one-off check (pattern: `scripts/ops/test-*-hypothesis.mjs`). If the
+  data contradicts the hypothesis, the direction is WRONG — stop and rethink.
+- Confirm the TARGET value is real and measured, not estimated.
+
+## Phase 6 — SELF-AUDIT the plan before executing (do not skip)
+
+Adversarially review your own plan. Concrete failure modes that bit us:
+- **Measurement bias**: is your TPO classifier accurate? Hand-verify ~6-10
+  items. If it has a systematic bias (our distractor detector over-counted
+  auxiliaries), you CANNOT hard-code precise TPO percentages — instead gate on
+  the robust **collapse signal** (one value dominating / too few distinct),
+  which survives measurement noise.
+- **Over-correction**: guard BOTH bounds. TPO person-ratio is 30%, not 0% —
+  reward a band (e.g. 10-40%), mild-penalize too-low, so the fix doesn't
+  overshoot into a new regression.
+- **Rule conflict**: will the new rule fight an existing one? (e.g. "use 15
+  distinct names" vs "don't anchor the person" — reconcile explicitly.)
+- **Gate masking**: a diluted scoring axis can let a collapse pass the overall
+  gate. Use a DEDICATED independent gate for the critical dimension.
+- **Retry that re-collapses**: will R2 reproduce the same failure? Make the
+  hint specific and over-corrective.
+State the audit verdict out loud. If you found a flaw, fix the plan, don't
+proceed on the flawed one.
+
+## Phase 7 — Implement as LAYERED defense (soft alone always regresses)
+
+The lesson from "I fixed this before and it kept regressing": a prompt-only
+fix is soft and silently rots. Build all four layers:
+
+1. **Prompt (soft, ~65-80% compliance)** — `lib/bsGen/prompts.mjs` etc.
+   State the calibration with examples; explicitly ban the failure mode; give a
+   hard per-batch target.
+2. **Scorer axis (measures every night)** — add an axis to
+   `lib/quality/scoreBatch.mjs`; expose the raw metric in `detail` for the gate.
+3. **Dedicated hard gate (auto-retry)** — `scripts/check-quality-gates.mjs`:
+   an INDEPENDENT threshold (not just the diluted overall score) that writes
+   `data/.pending-retry.json` with a specific actionable hint so R2 fixes it.
+   Export the threshold as a CONSTANT from scoreBatch (single source of truth;
+   no hardcoded magic numbers that can desync). Gate on robust signals when
+   measurement is noisy (Phase 6).
+4. **CI regression test (makes regression LOUD)** —
+   `__tests__/*.regression.test.js`, runs in CI on every push. Lock: the
+   classifier, the gate detecting a known-bad batch, a known-good batch passing,
+   the constant's value, the prompt no longer containing the root-cause line,
+   and a loose-band re-measure of the TPO ground truth (so the target can't
+   silently move). **Then prove the test has teeth** — temporarily sabotage the
+   measurement and confirm the test goes red.
+5. **Nightly monitor (catches what per-night gate can't)** — add the metric to
+   `scripts/quality-monitor.mjs` history + a DRIFT check (trend across days,
+   final-state collapse). It emails an alert on regression.
+
+## Phase 8 — Live-test the execution layer (don't assume the LLM obeys)
+
+The prompt is soft — you cannot conclude it worked until you measure a real
+batch. Trigger one generation run (RemoteTrigger `run` on the R1 routine, or
+`/bs-produce`), wait for the bot commit, pull it, and re-measure the metric on
+the fresh staging file. Report the real before→after number. If it didn't move
+enough, the gate+R2 backstops it, but tighten the prompt and re-test.
+
+## Phase 9 — Report with real numbers
+
+Give the before→after table with actual measured values (e.g. "did 71% → 10%,
+distinct 6 → 13, gate ✗→✓"). Distinguish what is VERIFIED (measured) vs what is
+still soft-dependent (LLM compliance, watched by the gate).
+
+---
+
+## Definition of done
+
+- [ ] Real TPO measured (sample large enough; crawled authentic items if not)
+- [ ] Our output measured the same way; deviation quantified
+- [ ] Root cause located in the actual code chain
+- [ ] Fix direction proven by a falsifiable check
+- [ ] Plan self-audited; gating on robust signals if measurement is noisy
+- [ ] Prompt + scorer axis + dedicated gate + CI test + monitor all in place
+- [ ] CI test verified to have teeth (sabotage → red)
+- [ ] Live batch generated and re-measured; before→after reported
+
+A fix is NOT done at "the prompt looks right." It is done when a regression
+would be caught loudly (CI red / nightly alert) and auto-retried (R2).
+
+## Key files in this repo
+
+- Ground truth: `data/buildSentence/tpo_source.md`,
+  `data/academicWriting/real_tpo_reference.json`,
+  `data/emailWriting/tpo_reference.json`, `lib/readingBank/readingEtsProfile.js`
+- Calibration constants: `lib/questionBank/etsProfile.js` (PREFILLED_PROFILE,
+  ETS_STYLE_TARGETS), `lib/quality/scoreBatch.mjs` (PERSON_PREFILLED_GATE,
+  DISTRACTOR_TOP_FRAC_GATE, …)
+- Prompts: `lib/bsGen/prompts.mjs`, `lib/ai/prompts/*`, `lib/readingGen/*PromptBuilder.js`
+- What the routine receives: `scripts/print-bank-prompt.mjs <bank>`
+- Scorer + gates: `lib/quality/scoreBatch.mjs`, `scripts/check-quality-gates.mjs`
+- Monitor: `scripts/quality-monitor.mjs`, `.github/workflows/nightly-quality-monitor.yml`
+- Measurement templates: `scripts/ops/measure-tpo-*.mjs`, `scripts/ops/test-*-hypothesis.mjs`
+- Regression test pattern: `__tests__/bs-person-prefilled.regression.test.js`
+- Routines: R1 generator + R2 retry (RemoteTrigger); per-night flow in `docs/quality-pipeline.md`
