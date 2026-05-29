@@ -88,6 +88,10 @@ if (meta && session) {
       }
       if (bsPersonFrac > PERSON_PREFILLED_GATE) {
         reasons.push(`PERSON_DRIFT: BS person-as-prefilled is ${Math.round(bsPersonFrac * 100)}% (> ${Math.round(PERSON_PREFILLED_GATE * 100)}% gate) in the FINAL committed batch — R1 flagged it but R2 did not bring it down. Prompt may need strengthening.`);
+      } else if (bsPersonFrac < 0.10) {
+        // Over-correction: too LOW is as wrong as too high (TPO is ~30%).
+        // Soft visibility note (not a hard fail) — see calibration-fix lesson B.
+        reasons.push(`INFO PERSON_LOW: BS person-as-prefilled is only ${Math.round(bsPersonFrac * 100)}% (TPO ~30%) — possible over-correction / soft-dimension wobble. Watch the trend; act only if persistent.`);
       }
       if (isDistractorCollapsed(det)) {
         reasons.push(`DISTRACTOR_DRIFT: BS distractors collapsed in the FINAL committed batch (${det.distinctDistractors} distinct, top "${det.topDistractor}" ${Math.round((det.topDistractorFrac || 0) * 100)}%) — R1 flagged it but R2 did not diversify. Real TPO spreads across the auxiliary family + morphological/negation twins.`);

@@ -101,6 +101,35 @@ fail:
   data contradicts the hypothesis, the direction is WRONG — stop and rethink.
 - Confirm the TARGET value is real and measured, not estimated.
 
+## ⚠️ Two hard-won lessons (read before every fix)
+
+**A. The historical bank AND the stored profile can BOTH be wrong — and stale
+profile numbers cause FALSE alarms.** Real case: an audit flagged "embedded-Q
+underuse (40-50% vs 63%)". The 63% came from `etsProfile.embeddedRatio`, a
+STALE figure the prompt had already been recalibrated away from. Direct
+re-measure of tpo_source = 45% → our output was on-target, the "regression" was
+fake, and "fixing" it would have RE-INTRODUCED the over-tuning we'd removed.
+ALWAYS re-measure ground truth from tpo_source before trusting a stored
+constant or a sub-agent's number. After confirming, FIX the stale constant so
+it can't mislead the next audit.
+
+**B. Prompt attention budget — soft dimensions oscillate.** Every calibrated
+rule you add to the prompt competes for the model's finite attention. When we
+added the 2nd-person rule, two SOFT (un-gated) dimensions drifted in the next
+batch (person-prefilled 30%→5%, chunk single-word 79%→48%) even though their
+prompt text was unchanged. The HARD-gated dimensions (distractor, 2nd-person)
+stayed put. Implications:
+- Only HARD-gated dimensions are stable. Prompt-only ("soft") dimensions will
+  oscillate batch-to-batch as the prompt grows. This is WHY regressions kept
+  coming back before gates existed.
+- Don't reactively re-gate on ONE low batch — it may be soft-dimension variance
+  (check the monitor's multi-day history first).
+- Gate the dimensions you truly can't let slip; accept managed variance on the
+  rest; let the nightly monitor's TREND (not a single batch) decide when a soft
+  dimension has genuinely regressed vs just wobbled.
+- Two-sided bands: an over-correction (too LOW) is as wrong as the original
+  (too HIGH). person-prefilled at 5% is as far from TPO's 30% as 60% was.
+
 ## Phase 6 — SELF-AUDIT the plan before executing (do not skip)
 
 Adversarially review your own plan. Concrete failure modes that bit us:
