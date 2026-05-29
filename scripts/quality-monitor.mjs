@@ -25,7 +25,7 @@
 import { readFileSync, writeFileSync, existsSync, appendFileSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
-import { scoreBatch, PERSON_PREFILLED_GATE } from "../lib/quality/scoreBatch.mjs";
+import { scoreBatch, PERSON_PREFILLED_GATE, isDistractorCollapsed } from "../lib/quality/scoreBatch.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
@@ -60,6 +60,7 @@ if (!meta) {
 
 // ── 2. Score current BS batch (person + diversity + quality) ─────────────
 let bsPersonFrac = null, bsDiv = null, bsQual = null, overallDiv = null, overallQual = null;
+let bsTopDistractorFrac = null, bsDistinctDistractors = null;
 if (meta && session) {
   try {
     const scores = scoreBatch(ROOT, session, meta.results || {});
@@ -67,11 +68,17 @@ if (meta && session) {
     overallQual = scores.overall.quality;
     const bs = scores.perBank.bs;
     if (bs && bs.diversity && bs.diversity.detail && typeof bs.diversity.detail.personFrac === "number") {
-      bsPersonFrac = bs.diversity.detail.personFrac;
+      const det = bs.diversity.detail;
+      bsPersonFrac = det.personFrac;
       bsDiv = bs.diversity.score;
       bsQual = bs.quality.score;
+      bsTopDistractorFrac = det.topDistractorFrac ?? null;
+      bsDistinctDistractors = det.distinctDistractors ?? null;
       if (bsPersonFrac > PERSON_PREFILLED_GATE) {
         reasons.push(`PERSON_DRIFT: BS person-as-prefilled is ${Math.round(bsPersonFrac * 100)}% (> ${Math.round(PERSON_PREFILLED_GATE * 100)}% gate) in the FINAL committed batch — R1 flagged it but R2 did not bring it down. Prompt may need strengthening.`);
+      }
+      if (isDistractorCollapsed(det)) {
+        reasons.push(`DISTRACTOR_DRIFT: BS distractors collapsed in the FINAL committed batch (${det.distinctDistractors} distinct, top "${det.topDistractor}" ${Math.round((det.topDistractorFrac || 0) * 100)}%) — R1 flagged it but R2 did not diversify. Real TPO spreads across the auxiliary family + morphological/negation twins.`);
       }
     } else {
       // staging for this session not present (cleaned) — not necessarily a problem
@@ -136,6 +143,8 @@ const row = {
   overall_diversity: scored ? overallDiv : null,
   overall_quality: scored ? overallQual : null,
   bs_person_frac: bsPersonFrac != null ? Number(bsPersonFrac.toFixed(3)) : null,
+  bs_distractor_top_frac: bsTopDistractorFrac != null ? Number(bsTopDistractorFrac.toFixed(3)) : null,
+  bs_distinct_distractors: bsDistinctDistractors,
   bs_diversity: bsDiv,
   bs_quality: bsQual,
 };

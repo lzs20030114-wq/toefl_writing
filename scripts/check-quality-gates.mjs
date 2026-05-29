@@ -22,7 +22,7 @@
 import { readFileSync, writeFileSync, existsSync } from "fs";
 import { resolve, dirname, join } from "path";
 import { fileURLToPath } from "url";
-import { scoreBatch, isPersonOveruse, PERSON_PREFILLED_GATE } from "../lib/quality/scoreBatch.mjs";
+import { scoreBatch, isPersonOveruse, PERSON_PREFILLED_GATE, isDistractorCollapsed, DISTRACTOR_TOP_FRAC_GATE, DISTRACTOR_MIN_DISTINCT } from "../lib/quality/scoreBatch.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
@@ -130,12 +130,14 @@ for (const bank of BANK_ORDER) {
   // is ~30%; we flag > 45% for retry. This is INDEPENDENT of the diversity
   // score so it can't be masked by strong scores on other axes.
   let personOveruse = false;
+  let distractorCollapsed = false;
   if (bank === "bs" && s.diversity.detail) {
     personOveruse = isPersonOveruse(s.diversity.detail.personFrac);
+    distractorCollapsed = isDistractorCollapsed(s.diversity.detail);
   }
 
-  if (divPass && qualPass && !personOveruse) {
-    summary.push(`  ✓ ${bank}: 多样性 ${s.diversity.score}≥${divGate}, 质量 ${s.quality.score}≥${qualGate}${bank === "bs" ? `, 人物prefilled ${Math.round((s.diversity.detail.personFrac||0)*100)}%≤${Math.round(PERSON_PREFILLED_GATE*100)}%` : ""}`);
+  if (divPass && qualPass && !personOveruse && !distractorCollapsed) {
+    summary.push(`  ✓ ${bank}: 多样性 ${s.diversity.score}≥${divGate}, 质量 ${s.quality.score}≥${qualGate}${bank === "bs" ? `, 人物prefilled ${Math.round((s.diversity.detail.personFrac||0)*100)}%≤${Math.round(PERSON_PREFILLED_GATE*100)}%, 干扰词 ${s.diversity.detail.distinctDistractors}种` : ""}`);
     continue;
   }
 
@@ -147,6 +149,13 @@ for (const bank of BANK_ORDER) {
     const pct = Math.round(s.diversity.detail.personFrac * 100);
     failures.push(`人物当prefilled ${pct}% > ${Math.round(PERSON_PREFILLED_GATE * 100)}%`);
     hints.push(`人物当 prefilled 过多 (${pct}%, TPO 只有 30%). 关键: 答案可以照样有人物主语 (TPO 82% 都有), 但把 'he/she/名字' 留成可拖的 chunk, prefilled 改锚在非主语词上 — 动词短语 ('wanted to know'/'found out'), 介词短语 ('to me'/'in the basement'), 物体 NP ('The desk'/'The shipment'), 或句首副词 ('Unfortunately,'). 这批 ${pct}% 用人物当 prefilled, 目标降到 30% 左右.`);
+  }
+
+  if (distractorCollapsed) {
+    const d = s.diversity.detail;
+    const topPct = Math.round((d.topDistractorFrac || 0) * 100);
+    failures.push(`干扰词塌缩 (${d.distinctDistractors}种, top "${d.topDistractor}" ${topPct}%)`);
+    hints.push(`干扰词多样性塌缩: 只有 ${d.distinctDistractors} 种 distinct, "${d.topDistractor}" 占 ${topPct}% (上限: 单词≤${Math.round(DISTRACTOR_TOP_FRAC_GATE*100)}%, 至少 ${DISTRACTOR_MIN_DISTINCT} 种). 真 TPO 干扰词在助动词家族里铺开 (did/do/does/is/are/was/were/can/have/had/am) + 少量形态twin (took→taken, go→going) + 否定twin (not→no). 这批塌缩到单一词, 每 10 道一个干扰词最多用 3 次, 目标 6+ 种 distinct.`);
   }
 
   if (!divPass) {

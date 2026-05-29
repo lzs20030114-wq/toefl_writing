@@ -133,6 +133,53 @@ describe("gate threshold — single source of truth (Hole 3 lock)", () => {
   });
 });
 
+describe("distractor variety — collapse gate (locks the distractor fix)", () => {
+  // The distractor regression: batches collapsed to 71% "did", ~3 distinct.
+  // We gate on the COLLAPSE signal (one word dominating / too few distinct),
+  // NOT a precise TPO match (TPO distractors can't be measured precisely).
+  function distractorBatch(words) {
+    // words: array of 10 distractor strings (one per item)
+    return words.map((d, i) => bsItem(`d${i}`, "she wanted to know whether the lab was open today", [["she"], ["wanted to know"], ["the registrar"], ["to me"]][i % 4], d));
+  }
+
+  test("a collapsed all-did batch is detected (isDistractorCollapsed=true)", () => {
+    const items = distractorBatch(Array(10).fill("did"));
+    const d = scoreSynthetic(items).detail;
+    expect(d.distinctDistractors).toBe(1);
+    expect(d.topDistractorFrac).toBeCloseTo(1.0, 2);
+    expect(mod.isDistractorCollapsed(d)).toBe(true);
+  });
+
+  test("today's pattern (7 did + 3 others) is detected as collapsed", () => {
+    const items = distractorBatch(["did","did","did","did","did","did","did","does","do","is"]);
+    const d = scoreSynthetic(items).detail;
+    expect(d.topDistractorFrac).toBeGreaterThan(0.5);
+    expect(mod.isDistractorCollapsed(d)).toBe(true);
+  });
+
+  test("a varied auxiliary-family batch passes the gate", () => {
+    const items = distractorBatch(["did","do","does","is","was","were","can","have","had","not"]);
+    const d = scoreSynthetic(items).detail;
+    expect(d.distinctDistractors).toBeGreaterThanOrEqual(6);
+    expect(d.topDistractorFrac).toBeLessThanOrEqual(0.5);
+    expect(mod.isDistractorCollapsed(d)).toBe(false);
+  });
+
+  test("gate constants exported + check-quality-gates uses them", () => {
+    expect(mod.DISTRACTOR_TOP_FRAC_GATE).toBe(0.5);
+    expect(mod.DISTRACTOR_MIN_DISTINCT).toBe(4);
+    const src = fs.readFileSync(path.join(ROOT, "scripts/check-quality-gates.mjs"), "utf8");
+    expect(src).toMatch(/isDistractorCollapsed/);
+  });
+
+  test("prompt no longer says 'Mainly: did, do, does' (the root cause line)", () => {
+    const src = fs.readFileSync(path.join(ROOT, "lib/bsGen/prompts.mjs"), "utf8");
+    expect(src).not.toMatch(/Mainly:\s*did,\s*do,\s*does/);
+    // and it must teach variety
+    expect(src).toMatch(/SPREAD across the whole family|HARD VARIETY RULE/);
+  });
+});
+
 describe("TPO ground truth — calibration lock (locks the target itself)", () => {
   // Re-measure tpo_source.md and assert the person-as-prefilled ratio is in
   // the expected band. If someone corrupts the source or the measurement
