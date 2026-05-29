@@ -125,14 +125,29 @@ for (const bank of BANK_ORDER) {
   const divPass = s.diversity.score >= divGate;
   const qualPass = s.quality.score >= qualGate;
 
-  if (divPass && qualPass) {
-    summary.push(`  ✓ ${bank}: 多样性 ${s.diversity.score}≥${divGate}, 质量 ${s.quality.score}≥${qualGate}`);
+  // Dedicated person-prefilled gate (BS only). A batch can clear the overall
+  // diversity gate yet still over-use a person as the prefilled hint. Real TPO
+  // is ~30%; we flag > 45% for retry. This is INDEPENDENT of the diversity
+  // score so it can't be masked by strong scores on other axes.
+  let personOveruse = false;
+  if (bank === "bs" && s.diversity.detail && typeof s.diversity.detail.personFrac === "number") {
+    personOveruse = s.diversity.detail.personFrac > 0.45;
+  }
+
+  if (divPass && qualPass && !personOveruse) {
+    summary.push(`  ✓ ${bank}: 多样性 ${s.diversity.score}≥${divGate}, 质量 ${s.quality.score}≥${qualGate}${bank === "bs" ? `, 人物prefilled ${Math.round((s.diversity.detail.personFrac||0)*100)}%≤45%` : ""}`);
     continue;
   }
 
   // Failed — generate hints
   const hints = [];
   const failures = [];
+
+  if (personOveruse) {
+    const pct = Math.round(s.diversity.detail.personFrac * 100);
+    failures.push(`人物当prefilled ${pct}% > 45%`);
+    hints.push(`人物当 prefilled 过多 (${pct}%, TPO 只有 30%). 关键: 答案可以照样有人物主语 (TPO 82% 都有), 但把 'he/she/名字' 留成可拖的 chunk, prefilled 改锚在非主语词上 — 动词短语 ('wanted to know'/'found out'), 介词短语 ('to me'/'in the basement'), 物体 NP ('The desk'/'The shipment'), 或句首副词 ('Unfortunately,'). 这批 ${pct}% 用人物当 prefilled, 目标降到 30% 左右.`);
+  }
 
   if (!divPass) {
     failures.push(`多样性 ${s.diversity.score} < ${divGate}`);
