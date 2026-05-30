@@ -49,3 +49,29 @@ dump("academicDiscussion.json", ad_all, "Academic Discussion prompts (recalled 2
 dump("email.json", email_all, "Email prompts (recalled 2026; OCR + DeepSeek structured)")
 print(f"AD: {len(ad_all)} (with students>=2: {sum(1 for x in ad_all if len(x['students'])>=2)}, with Q: {sum(1 for x in ad_all if x['professor_question'])})")
 print(f"Email: {len(email_all)} (with recipient: {sum(1 for x in email_all if x['recipient'])}, with bullets: {sum(1 for x in email_all if x['bullets'])})")
+
+# --- AP (reading comprehension) from .codex-tmp/struct_ap ---
+STRUCT_AP = os.path.join(ROOT, ".codex-tmp", "struct_ap")
+READ_OUT = os.path.join(ROOT, "data", "realExam2026", "reading")
+ap_all = []
+for f in sorted(glob.glob(os.path.join(STRUCT_AP, "*.json"))):
+    d = json.load(open(f, encoding="utf-8"))
+    s = d.get("set", os.path.basename(f)[:-5]); date = set_date(s)
+    for j, p in enumerate(d.get("passages") or [], 1):
+        text = (p.get("text") or "").strip()
+        if len(text) < 80:
+            continue
+        qs = [{"stem": (q.get("stem") or "").strip(),
+               "options": [o.strip() for o in (q.get("options") or []) if (o or "").strip()]}
+              for q in (p.get("questions") or []) if (q.get("stem") or "").strip()]
+        ap_all.append({
+            "id": f"{date}_ap{j}", "source": s, "date": date, "tier": "recalled",
+            "type": "academicPassage", "source_kind": "ocr+deepseek",
+            "topic": (p.get("topic") or "").strip(), "passage": text, "questions": qs,
+        })
+if ap_all:
+    json.dump({"title": "Academic reading passages + questions (recalled 2026; OCR + DeepSeek structured)",
+               "tier": "recalled", "source": "2026改后机经 (闲鱼); OCR+DeepSeek structured",
+               "count": len(ap_all), "items": ap_all},
+              open(os.path.join(READ_OUT, "academicPassage.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+    print(f"AP: {len(ap_all)} passages (with >=1 question: {sum(1 for x in ap_all if x['questions'])})")
