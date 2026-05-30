@@ -199,6 +199,18 @@ if (withPerson.length >= 6) {
     reasons.push(`TREND_DOWN: BS person-prefilled 3-day avg is ${Math.round(avgP * 100)}% — creeping toward the ${Math.round(PERSON_PREFILLED_GATE * 100)}% gate (TPO target 30%). Individual nights may pass but the trend is drifting up.`);
   }
 }
+// Chunk single-word-ratio trend (BS) — chunk granularity is intentionally NOT
+// hard-gated (over-tightening risks over-split ambiguity), so we watch the
+// TREND instead of any single batch. TPO is ~77%; flag when the 3-day average
+// over-bundles below 55%. A single low batch (e.g. 48%) is just wobble.
+const withChunk = trimmed.filter((r) => typeof r.bs_single_word_chunk_frac === "number");
+if (withChunk.length >= 3) {
+  const last3 = withChunk.slice(-3);
+  const avgC = last3.reduce((s, r) => s + r.bs_single_word_chunk_frac, 0) / last3.length;
+  if (avgC < 0.55) {
+    reasons.push(`TREND_DOWN: BS chunk single-word ratio 3-day avg is ${Math.round(avgC * 100)}% (TPO ~77%) — sustained over-bundling into fewer/longer chunks. Recalibrate the chunk-rule prompt block; this is the soft-dimension drift the gate doesn't catch.`);
+  }
+}
 
 // ── 5. Verdict + report ──────────────────────────────────────────────────
 const hardReasons = reasons.filter((r) => !r.startsWith("INFO"));
