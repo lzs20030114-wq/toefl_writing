@@ -38,10 +38,15 @@ SCHEMA_INSTR = (
     '{"ad": {"course": "", "professor": "", "professor_question": "", '
     '"students": [{"name": "", "text": ""}]}, '
     '"email": {"scenario": "", "recipient": "", "subject": "", "bullets": [""]}}\n'
-    "Rules: professor_question = ONLY the professor\'s discussion question (ends with "
-    "'?'). students = the 1-3 classmate posts with their names. email.scenario = the "
-    "situation paragraph; bullets = the 'do the following' task points (exclude 'Write "
-    "as much as you can'). Do NOT invent content; if a field is truly absent use \"\" "
+    "Rules: professor_question = ONLY the professor\'s discussion question; reconstruct "
+    "any word the OCR truncated (e.g. trailing 'ne' -> 'negative') so it reads as a "
+    "complete question ending with '?'. course = the explicit 'teaching a class on X' "
+    "subject if present, ELSE the clear academic subject of the professor\'s discussion "
+    "(e.g. a discussion of marketing strategy -> 'marketing'); use \"\" only if the "
+    "subject is genuinely unclear. students = the 1-3 classmate posts with their names. "
+    "email.scenario = the situation paragraph; bullets = the 'do the following' task "
+    "points (exclude 'Write as much as you can'). Do NOT invent student posts or facts "
+    "not in the text; if a field is truly absent use \"\" "
     "or []. Output JSON only, no prose."
 )
 

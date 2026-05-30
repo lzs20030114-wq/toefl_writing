@@ -12,11 +12,23 @@ PY = r"D:\python\python"
 NODE = "node"
 env = dict(os.environ, PYTHONIOENCODING="utf-8")
 
+def _s(name):
+    return os.path.join(ROOT, "scripts", "ops", name)
+
+# Order matters: parse_reading/parse_writing emit regex AD/Email/AP which
+# merge_struct then OVERWRITES with the DeepSeek-structured clean versions;
+# qc_fix runs last (unique ids + content safety-clean). The DeepSeek API steps
+# (structure_with_deepseek.py / structure_ap.py) are NOT here — run them only
+# when the OCR cache changes; merge_struct just reads their cached output.
 STEPS = [
-    (NODE, os.path.join(ROOT, "scripts", "ops", "extract-listening.mjs")),
-    (NODE, os.path.join(ROOT, "scripts", "ops", "extract-bs-speaking.mjs")),
-    (PY,   os.path.join(ROOT, "scripts", "ops", "parse_writing.py")),
-    (PY,   os.path.join(ROOT, "scripts", "ops", "parse_reading.py")),
+    (NODE, _s("extract-listening.mjs")),     # listening text base (14 combined sets)
+    (PY,   _s("parse_listening_audio.py")),  # + split-set audio listening
+    (NODE, _s("extract-bs-speaking.mjs")),   # BS target sentences + repeat
+    (PY,   _s("parse_speaking_audio.py")),   # interview + repeat-from-audio
+    (PY,   _s("parse_reading.py")),          # reading CTW (regex AP overwritten next)
+    (PY,   _s("parse_writing.py")),          # BS prompts (regex AD/Email overwritten next)
+    (PY,   _s("merge_struct.py")),           # DeepSeek AD/Email/AP -> clean schema
+    (NODE, _s("qc_fix.mjs")),                # unique ids + content safety-clean
 ]
 
 for exe, script in STEPS:

@@ -30,7 +30,7 @@ function validate(file, it) {
   const t = texts(it);
   if (t.some((s) => WM.test(s))) return "watermark";
   if (t.some((s) => CJK.test(s) && /[a-zA-Z]/.test(s))) return "CJK-in-English";
-  if (file.includes("conversations")) return (it.conversation?.[0]?.text || "").length > 40 ? null : "conv-too-short";
+  if (file.includes("conversations")) return (it.conversation || []).reduce((a, t) => a + (t.text || "").length, 0) > 60 ? null : "conv-too-short";
   if (file.includes("announcements") || file.includes("lectures")) return (it.transcript || "").length > 40 ? null : "transcript-too-short";
   if (file.includes("shortResponse")) return ((it.prompts?.length >= 3) || wc(it.text) >= 6) ? null : "short-empty";
   if (file.includes("completeTheWords")) return (it.paragraph?.length > 80 && /^[A-Z]/.test(it.paragraph) && !JUNKPHRASE.test(it.paragraph)) ? null : "ctw-bad";
@@ -39,7 +39,7 @@ function validate(file, it) {
   if (file.includes("buildSentence.json")) return (it.target && it.prompt_context) ? null : "bs-missing";
   if (file.includes("academicDiscussion")) {
     if (!it.course) return "ad-no-course";
-    if (!(it.professor_question || "").trim().endsWith("?")) return "ad-q-no?";
+    if (!(it.professor_question || "").includes("?")) return "ad-q-no?";
     if (!(it.students?.length >= 2 && it.students.every((s) => (s.text || "").length > 15))) return "ad-students<2";
     return null;
   }

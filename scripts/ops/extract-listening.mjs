@@ -17,8 +17,8 @@ const TYPE_MAP = { conversation: "lc", announcement: "la", lecture: "lat", discu
 const STEM = /^\s*(\d+)\s*[\.\)]\s*(.+)$/;
 
 function setDate(setName, firstLine) {
-  const m = String(firstLine).match(/20\d{2}[.\-/]\d{1,2}[.\-/]\d{1,2}/) || String(setName).match(/(\d{1,2})\.(\d{1,2})/);
-  if (m && m[0].startsWith("20")) return m[0].replace(/[.\-/]/g, "-");
+  // always derive from the set folder name, zero-padded, for a consistent
+  // "2026-MM-DD" id format across every extractor (text + audio + OCR).
   const mm = String(setName).match(/(\d{1,2})\.(\d{1,2})/);
   return mm ? `2026-${mm[1].padStart(2, "0")}-${mm[2].padStart(2, "0")}` : "2026";
 }
@@ -41,6 +41,16 @@ function parsePassage(lines) {
     for (let i = 0; i < marks.length; i++) {
       const seg = text.slice(marks[i].contentStart, i + 1 < marks.length ? marks[i + 1].start : text.length).trim();
       if (seg) turns.push({ speaker: marks[i].name, text: seg });
+    }
+  }
+  // audio framing ("Listen to a conversation.") sometimes lands as the first
+  // speaker turn — lift it into `setting` and drop/trim that turn.
+  if (turns.length && /^listen to .{0,70}?\.\s*/i.test(turns[0].text)) {
+    const fm = turns[0].text.match(/^(Listen to .{0,70}?\.)\s*([\s\S]*)$/i);
+    if (fm) {
+      if (!setting) setting = fm[1];
+      if (fm[2].trim()) turns[0].text = fm[2].trim();
+      else turns.shift();
     }
   }
   return { setting, fullText: text, turns };
