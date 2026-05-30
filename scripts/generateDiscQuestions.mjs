@@ -21,7 +21,12 @@ const { callDeepSeekViaCurl, formatDeepSeekError } = require("../lib/ai/deepseek
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROMPTS_PATH = path.join(__dirname, "..", "data", "academicWriting", "prompts.json");
 const REFERENCE_PATH = path.join(__dirname, "..", "data", "academicWriting", "real_tpo_reference.json");
-const OUTPUT_PATH = process.env.DISC_OUTPUT_PATH ? path.resolve(process.env.DISC_OUTPUT_PATH) : null;
+// DISC_TEST_GROUP: tag a calibration TEST batch — items get `test_group: <tag>`
+// and are written to staging/TESTGROUP-<tag>.json (NOT the live bank), so an
+// unqualified test batch can be purged later (scripts/ops/purge-test-groups.mjs).
+const TEST_GROUP = process.env.DISC_TEST_GROUP || null;
+const OUTPUT_PATH = process.env.DISC_OUTPUT_PATH ? path.resolve(process.env.DISC_OUTPUT_PATH)
+  : (TEST_GROUP ? path.join(__dirname, "..", "data", "academicWriting", "staging", `TESTGROUP-${TEST_GROUP}.json`) : null);
 const STATE_PATH = process.env.DISC_JOB_STATE_PATH ? path.resolve(process.env.DISC_JOB_STATE_PATH) : null;
 
 // Import generation prompt builders
@@ -245,8 +250,10 @@ async function main() {
     const questionType = QUESTION_TYPES[i % QUESTION_TYPES.length];
     const existingTopics = extractTopicSummaries([...existing, ...generated]).slice(-20);
     const openingStyle = pickOpeningStyle();
-    // 40% chance S2 references S1 by name (matching real TOEFL)
-    const s2ReferencesS1 = Math.random() < 0.4;
+    // 2026-05-31: real 2026改后 students NEVER name each other (0%, hand-verified on
+    // 50 items) — the old 40% was an artifact producing "While Sarah makes a good
+    // point…". Force independent stances.
+    const s2ReferencesS1 = false;
 
     let question = null;
     for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
@@ -291,11 +298,13 @@ async function main() {
 
   const meta = { total_generated: TARGET_COUNT, total_accepted: generated.length, failures, generated_at: new Date().toISOString() };
 
+  if (TEST_GROUP) generated.forEach((q) => { q.test_group = TEST_GROUP; });
+
   if (OUTPUT_PATH) {
     // Staging mode: write to staging file
     fs.mkdirSync(path.dirname(OUTPUT_PATH), { recursive: true });
-    fs.writeFileSync(OUTPUT_PATH, JSON.stringify({ questions: generated, _meta: meta }, null, 2));
-    console.log(`\n✅ Wrote ${generated.length} questions to staging: ${OUTPUT_PATH}`);
+    fs.writeFileSync(OUTPUT_PATH, JSON.stringify({ questions: generated, _meta: { ...meta, test_group: TEST_GROUP || undefined } }, null, 2));
+    console.log(`\n✅ Wrote ${generated.length} questions to ${TEST_GROUP ? "TEST staging" : "staging"}: ${OUTPUT_PATH}`);
   } else {
     // Direct mode: append to bank
     const merged = [...existing, ...generated];
