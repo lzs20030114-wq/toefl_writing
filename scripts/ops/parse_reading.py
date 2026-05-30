@@ -67,16 +67,21 @@ def parse(full, setname, date):
         lines = clean(seg)
         # the paragraph = the prose lines until the next marker/Question block
         para = " ".join(lines).strip()
-        # strip the marker residue ("...in the paragraph.") left at the segment head
-        para = re.sub(r"^\s*in the paragraph[.:]?\s*", "", para, flags=re.I)
+        # strip marker residue ("...in the/a paragraph.") at the segment head
+        para = re.sub(r"^\s*in (?:the|a) paragraph[.:]?\s*", "", para, flags=re.I)
         # stop the paragraph at a comprehension question if it bleeds in
         para = re.split(r"\b\d+\s*[\.\)]\s+[A-Z]", para)[0].strip()
-        if len(para) > 40:
-            ctw.append({
-                "id": f"{date}_ctw{i+1}", "source": setname, "date": date, "tier": "recalled",
-                "type": "completeTheWords", "source_kind": "ocr",
-                "paragraph": desplit(para),
-            })
+        para = desplit(para)
+        # JUNK filter: section-nav/instruction text, not an actual cloze paragraph
+        JUNK = re.compile(r"Read in Daily Life|Read an Academic|Answer questions about|Choose the best|in (?:the|a) paragraph|Module|Section", re.I)
+        n_sent = len(re.findall(r"[.?!]\s", para))
+        if not (len(para) > 80 and n_sent >= 1 and re.match(r"^[A-Z]", para) and not JUNK.search(para)):
+            continue
+        ctw.append({
+            "id": f"{date}_ctw{i+1}", "source": setname, "date": date, "tier": "recalled",
+            "type": "completeTheWords", "source_kind": "ocr",
+            "paragraph": para,
+        })
     # AP comprehension: text AFTER the last CTW block that contains MC (A/B/C/D)
     tail = full[bounds[len(fills)-1 if fills else 0]:] if fills else full
     tlines = clean(tail)
