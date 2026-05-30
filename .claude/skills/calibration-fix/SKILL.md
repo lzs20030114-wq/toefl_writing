@@ -20,12 +20,52 @@ memory, not from the project's own historical bank, not from "it looks like".
 A proxy indicator (e.g. the existing bank, a prior calibration comment) does
 NOT count as verification. Measure the real thing first.
 
-Corollary proven twice in this repo: **the historical bank is NOT ground
-truth.** It has itself been miscalibrated — prefilled was over-tuned one way,
-distractors over-tuned the opposite way. Only `tpo_source.md` (and authentic
-crawled ETS items) is ground truth.
+Corollary proven repeatedly: **the historical bank is NOT ground truth.** It has
+itself been miscalibrated — prefilled over-tuned one way, distractors the other.
+
+**Ground truth = real-exam items, in reliability tiers (2026-05 update):**
+1. `data/realExam2026/` — the **current 2026改后 format** (OCR/ASR of real 2026
+   administrations). This is the PRIMARY target — the app generates for THIS
+   format. Per-type dimensions + ratios + examples already distilled into
+   `docs/eval-spec/<type>.md` + `data/eval-profiles/<type>.json` (start there).
+2. `tpo_source.md` / `real_tpo_reference.json` — **older** TOEFL (different task
+   lineup). Use only as a secondary cross-check; do NOT calibrate the 2026 format
+   to it where the two diverge (BS answer-length, AD student-post length, etc. all
+   shifted between formats).
+- Reliability WITHIN realExam2026: clean text (answer keys, listening transcripts)
+  > vision-OCR of image PDFs > examword memory-reconstructions. Some structured
+  fields are lossy/contaminated (BS scrambled-pool OCR, AP under-extracted
+  questions, AD only stored the question) — for those, go to the **rendered image
+  / raw OCR / answer key** and read item-by-item (see Phase 0).
 
 ---
+
+## Phase 0 — Work from the per-type EVALUATION-DIMENSION SYSTEM (not a single symptom)
+
+Question quality is multi-dimensional and **every type has its OWN characteristic
+dimensions** (BS: length / sentence-type / prompt-style / prefilled / distractor /
+chunk / topic / difficulty; AD / Email / Reading / Listening / Speaking each
+different). Calibrating one symptom in isolation misses the rest and hides
+correlated gaps (e.g. BS "difficulty 1% easy" was invisible until measured).
+
+- The dimension map is `docs/type-eval-dimensions.md`. The precise, example-anchored
+  per-type spec is `docs/eval-spec/<type>.md` + `data/eval-profiles/<type>.json`
+  (dimension × target ratio (with n) × verbatim real examples × detector ×
+  current-bank gap × prompt/profile mapping). **Consult these first** — they ARE
+  the calibration targets.
+- If a type's spec is missing or stale, BUILD it bottom-up before calibrating:
+  deep-read the real items (stratified ~50 for large banks; near-all for small),
+  discover dimensions from the data (quantitative AND qualitative — tone, register,
+  distractor trap-logic, stem phrasing, topic realism), and for UI/mechanic
+  dimensions the structured JSON loses, **render the source PDF and read it**
+  (`scripts/ops/render-pdf.py` → Read the PNG) or read raw OCR / answer keys.
+- **Every detector must be hand-validated** against ~10 real items before its
+  number is trusted (IRON RULE at the detector level). A regex that disagrees with
+  your reading is wrong — fix it, don't report it.
+- Reusable measurers live in `scripts/research/<type>_measure.mjs` and
+  `scripts/ops/dev-<type>.mjs` (current-bank vs realExam2026, SAME detector).
+
+Then pick the dimension(s) with the largest, RELIABLE gap to fix this pass.
 
 ## Phase 1 — Frame the symptom precisely
 
@@ -130,6 +170,22 @@ stayed put. Implications:
 - Two-sided bands: an over-correction (too LOW) is as wrong as the original
   (too HIGH). person-prefilled at 5% is as far from TPO's 30% as 60% was.
 
+**C. Structured extraction can be UNRELIABLE for the very dimension you measure.**
+The realExam2026 JSON is lossy/contaminated for some fields: BS scrambled-pool OCR
+destroys tile boundaries; AP question-count is DeepSeek-UNDER-extracted (the "3.2
+questions/passage" is an artifact — real clusters are 5); AD stored only the
+question, not the full professor post. Calibrating to a lossy field calibrates to
+an artifact. When a number is surprising or contradicts the code/comments, go to
+the **rendered image / raw OCR / answer key** and read item-by-item before acting.
+(This is why BS distractor "0% in real" stayed DEFERRED — only n=14 renders; gating
+generation on a possibly-wrong figure would be a large mistake.)
+
+**D. A VALIDATOR / gate can be STRICTER than the real exam.** The current CTW
+validator, simulated on REAL exam passages, would reject ~19% of them — it actively
+suppresses authentic difficulty the exam has. So when calibrating, also run the
+existing gate/validator AGAINST the real items: if it rejects real-exam items, the
+GATE is the regression, not the generator. Loosen it to admit the real-exam range.
+
 ## Phase 6 — SELF-AUDIT the plan before executing (do not skip)
 
 Adversarially review your own plan. Concrete failure modes that bit us:
@@ -209,9 +265,13 @@ would be caught loudly (CI red / nightly alert) and auto-retried (R2).
 
 ## Key files in this repo
 
-- Ground truth: `data/buildSentence/tpo_source.md`,
-  `data/academicWriting/real_tpo_reference.json`,
-  `data/emailWriting/tpo_reference.json`, `lib/readingBank/readingEtsProfile.js`
+- Ground truth (PRIMARY, 2026改后): `data/realExam2026/` + the distilled
+  `docs/eval-spec/<type>.md` & `data/eval-profiles/<type>.json` + dimension map
+  `docs/type-eval-dimensions.md`. Secondary (older format): `tpo_source.md`,
+  `data/academicWriting/real_tpo_reference.json`, `lib/readingBank/readingEtsProfile.js`
+- Extraction tooling (image→text / audio→text, zero LLM tokens): `scripts/ops/
+  {render-pdf,ocr-pdf,batch-ocr-all,ocr_sets,audio_transcribe}.py`; structuring via
+  cheap DeepSeek `scripts/ops/structure_with_deepseek.py`; folder `data/realExam2026/`.
 - Calibration constants: `lib/questionBank/etsProfile.js` (PREFILLED_PROFILE,
   ETS_STYLE_TARGETS), `lib/quality/scoreBatch.mjs` (PERSON_PREFILLED_GATE,
   DISTRACTOR_TOP_FRAC_GATE, …)
