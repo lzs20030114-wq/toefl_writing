@@ -58,14 +58,21 @@ def set_date(setname):
     m = re.search(r"(\d{1,2})\.(\d{1,2})", setname)
     return f"2026-{int(m.group(1)):02d}-{int(m.group(2)):02d}" if m else "2026"
 
+HEADER = re.compile(r"Questions?\s*\d+\s*(?:[-–]\s*\d+)?\s*of\s*\d+", re.I)
+
 def parse(full, setname, date):
     ctw, ap = [], []
     # CTW: split on the "Fill in the missing letters" marker
     fills = list(FILL.finditer(full))
     bounds = [m.start() for m in fills] + [len(full)]
+    headers = [h.start() for h in HEADER.finditer(full)]
     # everything before the first fill (and after the last CTW block) may hold AP
     for i, m in enumerate(fills):
-        seg = full[m.end(): bounds[i + 1]]
+        # a cloze paragraph ENDS at the next section header ("Questions N of M" /
+        # comprehension / next module) — NOT the next Fill marker, else it swallows
+        # the whole comprehension section that sits between two cloze paragraphs.
+        nxt_hdr = next((h for h in headers if h > m.end()), len(full))
+        seg = full[m.end(): min(nxt_hdr, bounds[i + 1])]
         lines = clean(seg)
         # the paragraph = the prose lines until the next marker/Question block
         para = " ".join(lines).strip()
