@@ -89,4 +89,37 @@ Current bank = `data/emailWriting/prompts.json` (n=139). Target = realExam2026 E
 3 goals) already matches the 2026改后 format. No change made (IRON RULE — don't
 "fix" what's on-target).
 
+## Reading · AP — Academic Passage   `dev-reading.mjs`   ⚠️ data caveat
+
+Current = `data/reading/bank/ap.json` (n=156). Target = realExam2026 AP (n=64).
+
+| dimension | current bank | realExam2026 | note |
+|-----------|-------------:|-------------:|------|
+| passage words | 210.9 [125–322] | 181.1 [48–209] | current a bit long; max 322 vs 209 |
+| **questions / passage** | **5** | **3.2** | ⚠️ **UNRELIABLE** — DeepSeek under-extracted AP questions (the real reading section has ~20 MC; 3.2 is an extraction artifact). DO NOT calibrate to it. |
+| options / question | — | 4 | (4 confirmed) |
+
+**Decision:** AP NOT recalibrated — the realExam2026 AP question count is a DeepSeek
+under-extraction artifact, and the passage may be truncated, so the target is
+unreliable (IRON RULE). Only safe signal: max passage length looks high (322) vs
+real ~209; left for a later cautious cap. No change this pass.
+
+## Reading · CTW — Complete the Words   `dev-reading.mjs`
+
+Current = `data/reading/bank/ctw.json` (n=191). Target = realExam2026 CTW (n=75).
+
+| dimension | current bank | realExam2026 | prompt target | deviation |
+|-----------|-------------:|-------------:|--------------:|----------:|
+| passage words | 56.3 [45–80] | 69.3 [47–94] | 60–75 (mean 66) | **−13 (gen undershoots its OWN target)** |
+
+**Read:** the prompt target (mean ~66) is CORRECT — realExam2026 confirms 69. The
+GENERATOR undershoots it (produces 56). Compliance issue, not a target issue.
+(blank count M✗ — answer words live in the answer key, not the CTW json.)
+
+**Fix applied 2026-05-31:** `ctwPromptBuilder.js` length → target 65-78 words / hard
+min 62 / "write full 4-5 sentences, generator tends to undershoot". Calibration
+source updated to realExam2026 (75 passages, mean 69).
+- [x] tighten CTW length floor
+- [ ] re-measure next batch (expect 56→~68)
+
 <!-- next types appended below as they are calibrated -->
