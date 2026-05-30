@@ -23,12 +23,17 @@ NOISE = re.compile(r"Hide\s*Time|^Reading\b|^=+\s*PAGE|^\s*$", re.I)
 FILL = re.compile(r"Fill in the missing letters", re.I)
 QRANGE = re.compile(r"Questions?\s*\d+\s*[-–]?\s*\d*\s*of\s*\d+", re.I)
 
+def respace(s):
+    s = re.sub(r"([.,;:?!])([A-Za-z])", r"\1 \2", s)
+    s = re.sub(r"(\b[A-Za-z]+'(?:ve|re|ll|d|s|t|m|S))([a-z])", r"\1 \2", s)
+    return s
+
 def desplit(s):
     out = []
-    for tok in s.split():
+    for tok in respace(s).split():
         m = re.match(r"^(\W*)(.*?)(\W*)$", tok, re.S)
         pre, core, post = m.group(1), m.group(2), m.group(3)
-        if len(core) > 13 and core.isalpha():
+        if len(core) > 5 and core.isalpha():
             parts = wordninja.split(core)
             if len(parts) > 1:
                 if core[0].isupper():
@@ -62,12 +67,15 @@ def parse(full, setname, date):
         lines = clean(seg)
         # the paragraph = the prose lines until the next marker/Question block
         para = " ".join(lines).strip()
+        # strip the marker residue ("...in the paragraph.") left at the segment head
+        para = re.sub(r"^\s*in the paragraph[.:]?\s*", "", para, flags=re.I)
         # stop the paragraph at a comprehension question if it bleeds in
         para = re.split(r"\b\d+\s*[\.\)]\s+[A-Z]", para)[0].strip()
         if len(para) > 40:
             ctw.append({
                 "id": f"{date}_ctw{i+1}", "source": setname, "date": date, "tier": "recalled",
-                "type": "completeTheWords", "paragraph_ocr": desplit(para),
+                "type": "completeTheWords", "source_kind": "ocr",
+                "paragraph": desplit(para),
             })
     # AP comprehension: text AFTER the last CTW block that contains MC (A/B/C/D)
     tail = full[bounds[len(fills)-1 if fills else 0]:] if fills else full
@@ -76,7 +84,7 @@ def parse(full, setname, date):
     if re.search(r"\b[ABCD]\b\s+\w+.*\b[ABCD]\b", blob) or re.search(r"according to the (passage|paragraph)", blob, re.I):
         ap.append({
             "id": f"{date}_ap", "source": setname, "date": date, "tier": "recalled",
-            "type": "academicPassage", "raw_text": blob[:6000],
+            "type": "academicPassage", "source_kind": "ocr", "passage": blob[:6000],
         })
     return ctw, ap
 

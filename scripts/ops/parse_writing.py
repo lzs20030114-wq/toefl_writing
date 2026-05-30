@@ -24,7 +24,7 @@ NOISE = re.compile(r"Hide\s*Time|Cut\s*Paste|Word\s*Count|^Writing\b|Your Respon
 def desplit_tok(tok):
     m = re.match(r"^(\W*)(.*?)(\W*)$", tok, re.S)
     pre, core, post = m.group(1), m.group(2), m.group(3)
-    if len(core) > 11 and core.isalpha():
+    if len(core) > 5 and core.isalpha():
         parts = wordninja.split(core)
         if len(parts) > 1:
             if core[0].isupper():
@@ -32,8 +32,13 @@ def desplit_tok(tok):
             return pre + " ".join(parts) + post
     return tok
 
+def respace(s):
+    s = re.sub(r"([.,;:?!])([A-Za-z])", r"\1 \2", s)                       # space after punctuation
+    s = re.sub(r"(\b[A-Za-z]+'(?:ve|re|ll|d|s|t|m|S))([a-z])", r"\1 \2", s) # de-glue contractions
+    return s
+
 def desplit(s):
-    return " ".join(desplit_tok(t) for t in s.split())
+    return " ".join(desplit_tok(t) for t in respace(s).split())
 
 def clean_page(text):
     lines = []
@@ -88,42 +93,62 @@ def parse_email(pages, setname, date):
         d = desplit(" ".join(clean_page(pg)))
         if not re.search(r"Write an email", d, re.I):
             continue
-        recipient = subject = ""
-        rm = re.search(r"To:\s*([A-Z][A-Za-z. ]{1,40})", d)
-        sm = re.search(r"Subject:\s*([A-Z][^.]{2,80})", d)
-        if rm: recipient = rm.group(1).strip()
-        if sm: subject = re.split(r"\b(?:Cut|Paste|Describe|Ask|Inquire|Write)\b", sm.group(1))[0].strip()
-        # prompt = the scenario + instructions (drop To/Subject/UI tokens)
-        prompt = re.sub(r"To:\s*[A-Z][A-Za-z. ]{1,40}|Subject:\s*[^.]{2,80}|Cut Paste Undo Redo", "", d).strip()
+        # pull right-column UI fragments, then strip them so scenario stays clean
+        rm = re.search(r"To:\s*([A-Z][A-Za-z.]+(?:\s+[A-Z][A-Za-z.]+){0,2}?)(?=\s+(?:Subject|Cut|Write|$))", d)
+        sm = re.search(r"Subject:\s*([A-Z][^.]*?)(?=\s+(?:Cut|Paste|Describe|Ask|Inquire|Write an|To:)|$)", d)
+        recipient = rm.group(1).strip() if rm else ""
+        subject = re.sub(r"\s+", " ", sm.group(1)).strip() if sm else ""
+        clean = re.sub(r"Your Response:|To:\s*[A-Z][A-Za-z. ]{1,40}|Subject:\s*[A-Z][^.]*?(?=\s+(?:Cut|Describe|Ask|Inquire|Write an))|Cut Paste Undo Redo|Hide Word Count|\bO\b|auaniu", " ", d)
+        clean = re.sub(r"\s+", " ", clean).strip()
+        m = re.search(r"Write an email[^:]*:", clean, re.I)
+        scenario = clean[:m.start()].strip() if m else clean
+        after = clean[m.end():] if m else ""
+        after = re.split(r"Write as much as you can", after, flags=re.I)[0]
+        bullets = [re.sub(r"\s+", " ", s).strip() for s in re.split(r"(?<=[.])\s+", after) if len(s.split()) >= 3]
         return {
             "id": f"{date}_email", "source": setname, "date": date, "tier": "recalled",
-            "type": "email", "recipient": recipient, "subject": subject,
-            "prompt_text": re.sub(r"\s+", " ", prompt),
+            "type": "email", "source_kind": "ocr",
+            "scenario": scenario, "recipient": recipient, "subject": subject, "bullets": bullets,
         }
     return None
+
+AD_NAMES = r"Kelly|Andrew|Paul|Claire|Mark|Lisa|John|Sarah|Mike|Emma|David|Anna|James|Maria|Tom|Rachel|Ben|Sophia|Emily|Daniel|Laura|Kevin|Nina|Jack|Olivia|Sam|Grace|Leo|Hannah"
+OPENERS = r"I believe|In my opinion|I think|Personally|From my perspective|I agree|I disagree|I feel|Honestly|I'?d argue|While|Although"
 
 def parse_ad(pages, setname, date):
     for pg in pages:
         d = desplit(" ".join(clean_page(pg)))
         if not re.search(r"teaching a class on|responding to the professor", d, re.I):
             continue
-        course = ""
         cm = re.search(r"teaching a class on ([^.]+?)\.", d, re.I)
-        if cm: course = cm.group(1).strip()
+        course = re.sub(r"\s+", " ", cm.group(1)).strip() if cm else ""
         pm = re.search(r"\b(Dr\.?\s*[A-Z][a-z]+|Professor\s+[A-Z][a-z]+)", d)
         professor = re.sub(r"\s+", " ", pm.group(1)).strip() if pm else ""
-        # professor question = first long '?'-ending sentence (robust to glued
-        # short tokens that defeat phrase matching). desplit it for readability.
-        q = ""
         sents = re.split(r"(?<=[?.])\s+", d)
-        qcands = [s.strip() for s in sents if s.rstrip().endswith("?") and len(s) > 40]
-        if qcands:
-            q = re.sub(r"\s+", " ", desplit(qcands[0]))
-            q = re.sub(r"^(Dr\.?\s*[A-Z][a-z]+|Professor\s+[A-Z][a-z]+)\s+", "", q).strip()
+        # professor question = first long '?'-ending sentence; student text follows it
+        qi = next((i for i, s in enumerate(sents) if s.rstrip().endswith("?") and len(s) > 40), None)
+        q, student_text = "", ""
+        if qi is not None:
+            q = re.sub(r"^(Dr\.?\s*[A-Z][a-z]+|Professor\s+[A-Z][a-z]+)\s+", "",
+                       re.sub(r"\s+", " ", sents[qi]).strip()).strip()
+            student_text = " ".join(sents[qi + 1:])
+        # split student region into posts on opinion openers; peel a known name
+        students = []
+        chunks = re.split(rf"(?=(?:{OPENERS}))", student_text)
+        for c in chunks:
+            c = re.sub(r"\s+", " ", c).strip()
+            if len(c.split()) < 8:
+                continue
+            nm = re.search(rf"\b({AD_NAMES})\b", c)
+            name = nm.group(1) if nm else ""
+            text = re.sub(rf"\b({AD_NAMES})\b", "", c).strip(" .,") if name else c
+            students.append({"name": name, "text": text})
+        students = students[:3]
         return {
             "id": f"{date}_ad", "source": setname, "date": date, "tier": "recalled",
-            "type": "academicDiscussion", "course": course, "professor": professor,
-            "professor_question": q, "raw_text": re.sub(r"\s+", " ", d)[:2500],
+            "type": "academicDiscussion", "source_kind": "ocr",
+            "course": course, "professor": professor, "professor_question": q,
+            "students": students,
         }
     return None
 
