@@ -148,4 +148,38 @@ regeneration. Conversation length + type-mix noted (secondary; not changed this 
 - [x] bump lecture length target to realExam2026
 - [ ] re-measure next batch (expect lat→~250); consider lc trim + mix rebalance
 
-<!-- next types appended below as they are calibrated -->
+## Speaking · repeat — Listen & Repeat   `dev-speaking.mjs`   ✅ already on-target
+
+Current = `data/speaking/bank/repeat.json` (n=11). Target = realExam2026 repeat (n=51).
+
+| dimension | current | realExam2026 | deviation |
+|-----------|--------:|-------------:|----------:|
+| sentences / set | 7 | 6.9 | 0 |
+| sentence words | 9.2 | 9.6 | −0.4 |
+| difficulty easy (4-7w) % | 32% | 30% | +2 |
+| difficulty medium (8-12w) % | 48% | 54% | −6 |
+| difficulty hard (13+w) % | 19% | 16% | +3 |
+
+**Read:** no calibration needed — sentences/set, length, and the 2-easy/3-med/2-hard
+difficulty gradient all match within a few pp. No change (IRON RULE).
+
+## Speaking · interview   — insufficient data
+realExam2026 interview n=14 (< the n≥30 calibration bar). Not calibrated this pass;
+revisit when more speaking audio is transcribed.
+
+---
+
+## Summary (2026-05-31 pass)
+
+| type | verdict | main deviation found & fixed |
+|------|---------|------------------------------|
+| BS | **calibrated** | over-complexified: 1% easy→22%, answers long, embedded/negation high, no wh-Q |
+| AD | **calibrated** | student posts 72→43 words (old-TPO 430 chars → 2026 ~250) |
+| Email | on-target | scenario 42 vs 39, 3 bullets — already matched |
+| Reading AP | **held (data caveat)** | question-count target unreliable (DeepSeek under-extraction) |
+| Reading CTW | **calibrated** | gen undershoots length 56 vs 69 (target was correct) |
+| Listening | **calibrated** | lectures 124-141 → target 258; +broken stubs to regen |
+| Speaking repeat | on-target | difficulty gradient already matched |
+| Speaking interview | insufficient | n=14, below calibration bar |
+
+Re-run each `dev-<type>.mjs` after the next nightly batch to confirm convergence.
