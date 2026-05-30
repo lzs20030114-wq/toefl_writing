@@ -122,4 +122,30 @@ source updated to realExam2026 (75 passages, mean 69).
 - [x] tighten CTW length floor
 - [ ] re-measure next batch (expect 56→~68)
 
+## Listening (lc / la / lat)   `dev-listening.mjs`
+
+Current = `data/listening/bank/{lc,la,lat}.json`. Target = realExam2026 listening.
+
+| sub-type | current words | realExam2026 words | deviation |
+|----------|--------------:|-------------------:|----------:|
+| 对话 lc | 142 [100–188] | 90 [53–323] | +52 (current long-ish; real median lower) |
+| 通知 la | 90 [70–106] | 98 [46–300] | −8 (fine) |
+| **讲座 lat** | **124–141 (full items)** | **258 [192–505]** | **−120+ (lectures too short)** |
+
+| type mix | current | realExam2026 |
+|---|---|---|
+| 对话 / 通知 / 讲座 | 34% / 46% / 21% | 45% / 23% / 33% |
+
+**Read:** (1) lectures are the big gap — the prompt targeted 150-250 words but real
+2026改后 lectures are ~258 [192-505]; generated full lectures only hit 124-141, and
+9/14 lat items were broken stubs (<20 words). (2) conversations run a bit long
+(142 vs 90). (3) type mix over-weights announcements (46% vs 23%), under-weights
+conversations + lectures.
+
+**Fix applied 2026-05-31:** `latPromptBuilder.js` transcript tiers 150/180/200 →
+200/240/280 (max 330) toward real 258. Broken lat stubs will be replaced on
+regeneration. Conversation length + type-mix noted (secondary; not changed this pass).
+- [x] bump lecture length target to realExam2026
+- [ ] re-measure next batch (expect lat→~250); consider lc trim + mix rebalance
+
 <!-- next types appended below as they are calibrated -->
