@@ -64,4 +64,18 @@ question length 13.8 vs 15.4 is already close).
 - [x] calibrate prompt
 - [ ] re-measure next batch with `dev-ad.mjs` (expect student words 72→~43)
 
+## Email — Write an Email   `dev-email.mjs`   ✅ already on-target
+
+Current bank = `data/emailWriting/prompts.json` (n=139). Target = realExam2026 Email (n=51).
+
+| dimension | current bank | realExam2026 target | deviation |
+|-----------|-------------:|--------------------:|----------:|
+| scenario words | 42.4 | 39.5 | +2.9 (within 33–55 range) |
+| bullets / task points | 3 | 3 | 0 |
+| exactly-3-bullets % | 100% | 100% | 0 |
+
+**Read:** no calibration needed. The existing prompt target (33–55 words / mean 39,
+3 goals) already matches the 2026改后 format. No change made (IRON RULE — don't
+"fix" what's on-target).
+
 <!-- next types appended below as they are calibrated -->
