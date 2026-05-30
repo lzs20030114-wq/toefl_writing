@@ -1,0 +1,219 @@
+{
+  "type": "speaking_repeat",
+  "n": { "real_sets": 51, "real_sentences": 351, "audio_clean_sets": 13, "audio_clean_sentences": 91, "generated_sets": 11, "generated_sentences": 77 },
+  "generated_at": null,
+  "ground_truth": "data/realExam2026/speaking/repeat.json + repeat-from-audio.json",
+  "generated_bank": "data/speaking/bank/repeat.json",
+  "maps_to_builder": "lib/speakingGen/repeatPromptBuilder.js",
+  "maps_to_validator": "lib/speakingGen/speakingValidator.js",
+  "notes": "Real per-sentence `difficulty` labels are auto-derived from word count (easy<=7w / medium 8-12w / hard>=13w), NOT hand-tagged syntax. Control length distribution, not syntactic 'difficulty'.",
+  "dimensions": [
+    {
+      "name": "sentences_per_set",
+      "kind": "quant",
+      "unit": "count",
+      "target": 7,
+      "distribution": { "real": { "7": 47, "6": 1, "8": 1, "4": 2 } },
+      "detector": "len(set.sentences)",
+      "examples": [],
+      "current": "11/11 sets = 7",
+      "gap": "none",
+      "reliability": "solid"
+    },
+    {
+      "name": "sentence_length_overall_words",
+      "kind": "quant",
+      "unit": "words",
+      "target": { "mean": 9.6, "median": 9, "min": 4, "max": 18 },
+      "distribution": { "real": { "mean": 9.56, "median": 9, "min": 4, "max": 17 }, "audio_clean": { "mean": 9.86, "median": 9, "max": 18 } },
+      "detector": "whitespace word count per sentence",
+      "examples": [
+        "If you want to know what is being offered, just check the daily menu for special dishes",
+        "before you leave the classroom, be sure you got all your tools back into the toolbox"
+      ],
+      "current": { "mean": 9.21, "median": 9, "max": 15 },
+      "gap": "center matches; gen truncates the long tail (gen max 15 vs real 17-18)",
+      "reliability": "solid"
+    },
+    {
+      "name": "difficulty_tier_mix",
+      "kind": "quant",
+      "unit": "sentences per 7-set (easy/medium/hard) and tier share",
+      "target": { "tier_share": { "easy": 0.27, "medium": 0.52, "hard": 0.16 }, "preferred_set_signatures": ["2/4/1", "3/3/1", "1/4/2", "1/5/1"], "hard_per_set": "usually 1, sometimes 2" },
+      "distribution": { "real_set_signatures": { "2/4/1": 12, "3/3/1": 10, "1/4/2": 8, "1/5/1": 6, "2/3/2": 3, "0/5/2": 2, "1/6/0": 2, "4/3/0": 1, "3/4/0": 1, "3/2/2": 1, "5/2/0": 1 }, "real_tier_totals_47sets": { "easy": 91, "medium": 182, "hard": 56 } },
+      "detector": "per-7-set count of easy/medium/hard; signature histogram (hand-validated vs full arrays)",
+      "examples": [
+        "2026-01-21_repeat = 2/4/1 (e e m m m m h)",
+        "2026-03-18_repeat = 0/5/2",
+        "2026-04-29_repeat = 1/6/0 (all-medium-dominant)"
+      ],
+      "current": "11/11 sets = exactly 2/3/2 (100%); real 2/3/2 = only 3/47 (6.4%)",
+      "gap": "BIGGEST GAP. Gen is rigid 2/3/2; over-produces hard (2 every set), under-produces medium. Real is medium-dominant and varies.",
+      "reliability": "solid"
+    },
+    {
+      "name": "length_progression",
+      "kind": "quant",
+      "unit": "ratio",
+      "target": { "monotonic_non_decreasing": "~0.18 (do NOT enforce growth)", "last_sentence_is_longest": 0.92 },
+      "distribution": { "real": { "monotonic": "9/49 = 18.4%", "last_is_longest": "45/49 = 91.8%" } },
+      "detector": "monotonic non-decreasing check; last==max-length check",
+      "examples": ["2026-01-21 lengths 5,7,8,10,12,9,14 — S6 dips, S7 longest"],
+      "current": { "monotonic": "2/11 = 18%", "last_is_longest": "9/11 = 82%" },
+      "gap": "monotonic matches; gen slightly low on 'S7 longest'. Real signature = bumpy middle, long finish (not a staircase).",
+      "reliability": "solid"
+    },
+    {
+      "name": "s1_opener_type",
+      "kind": "qual",
+      "unit": "share of S1",
+      "target": { "bare_declarative_locating": 0.53, "bare_imperative": 0.27, "welcome_greeting": 0.16, "you_can": 0.04 },
+      "distribution": { "real_n51": { "welcome_or_lets": 8, "imperative": 14, "you_can": 2, "bare_declarative": 27 } },
+      "detector": "regex-classify first sentence; hand-verified by reading all 51 S1",
+      "examples": [
+        "Laptops are located in this aisle.",
+        "The library books are located here.",
+        "begin by mixing the butter and sugar",
+        "Welcome to our campus tour."
+      ],
+      "current": { "welcome_or_lets": 7, "imperative": 4, "you_can": 0, "bare_declarative": 0 },
+      "gap": "gen opens 'Welcome...' 64% (real 16%) and NEVER opens with a bare locating declarative (real 53%)",
+      "reliability": "solid"
+    },
+    {
+      "name": "sentence_mood_mix",
+      "kind": "qual",
+      "unit": "share of all sentences",
+      "target": { "imperative": 0.385, "declarative": 0.51, "you_statement": 0.105, "question": 0.0 },
+      "distribution": { "real": { "imperative": 0.385, "declarative": 0.51, "you_statement": 0.105, "question": 0.0 } },
+      "detector": "first-token + end-punctuation classifier",
+      "examples": ["Check the bulletin board for information about guided tours.", "The pond is a popular spot for sitting and relaxing."],
+      "current": { "imperative": 0.351, "declarative": 0.494, "you_statement": 0.104, "question": 0.052 },
+      "gap": "balance close; only defect is the 5.2% questions (see yes_no_questions)",
+      "reliability": "solid"
+    },
+    {
+      "name": "yes_no_questions",
+      "kind": "quant",
+      "unit": "share of sentences",
+      "target": 0.0,
+      "distribution": { "real": { "question_marks_in_351_sentences": 0 } },
+      "detector": "?-ending or aux-initial; validated 0 '?' anywhere in real",
+      "examples": [],
+      "current": "4/77 = 5.2%: 'Do you have your insurance card?', 'Are you here for math help?', 'Do you have a reservation?', 'Do you have your safety goggles?'",
+      "gap": "real has ZERO questions; gen invents yes/no Qs (seeded by prompt example 'Do you have your student ID?')",
+      "reliability": "solid"
+    },
+    {
+      "name": "contraction_rate",
+      "kind": "quant",
+      "unit": "share of sentences",
+      "target": 0.017,
+      "distribution": { "real": "6/351 = 1.7%", "audio_clean": "1/91 = 1.1%" },
+      "detector": "contraction-token regex",
+      "examples": ["When you're finished reading them, please place all your books in the return bin."],
+      "current": "1/77 = 1.3%",
+      "gap": "none in output; but validator's natural_spoken_register REWARDS contractions, mis-calibrated vs reality (low priority)",
+      "reliability": "solid"
+    },
+    {
+      "name": "direct_address_rate",
+      "kind": "quant",
+      "unit": "share of sentences with you/your",
+      "target": 0.373,
+      "distribution": { "real": 0.373 },
+      "detector": "\\byou(r)?\\b presence",
+      "examples": ["The pond is a popular spot for sitting and relaxing.", "Bread is freshly baked on site every day."],
+      "current": 0.532,
+      "gap": "gen over-addresses listener (53% vs 37%); many real sentences describe the place/objects, not 'you'",
+      "reliability": "solid"
+    },
+    {
+      "name": "hard_sentence_comma_rate",
+      "kind": "quant",
+      "unit": "share of >=13w sentences with comma/semicolon",
+      "target": 0.754,
+      "distribution": { "real": "43/57 = 75.4%" },
+      "detector": "comma/semicolon presence in hard-tier sentences",
+      "examples": ["If you need help getting around, check the map for specific areas and facilities", "When you are ready, simply select Print from your computer and retrieve your document."],
+      "current": "11/22 = 50%",
+      "gap": "gen's long sentences under-punctuated; real long sentences usually carry a fronted clause break",
+      "reliability": "partial"
+    },
+    {
+      "name": "conditional_fronted_clause_rate",
+      "kind": "quant",
+      "unit": "share of sentences",
+      "target": 0.10,
+      "distribution": { "real": "35/351 = 10% use 'if you' (plus heavy When/Before/Lastly fronting)" },
+      "detector": "^if / if you regex",
+      "examples": ["If you are unsure when the lab is open, you can check the weekly schedule here", "Lastly, please also remember to check the event schedule at the entrance"],
+      "current": "11/77 = 14.3%",
+      "gap": "gen slightly high and concentrates on 'if'; real spreads across if/when/before/lastly",
+      "reliability": "solid"
+    },
+    {
+      "name": "punitive_warning_trope",
+      "kind": "qual",
+      "unit": "share of sentences",
+      "target": 0.0,
+      "distribution": { "real": "0/351 (4 keyword hits all false positives: 'free of charge', 'fine details')" },
+      "detector": "/will result in|suspension|privileges|incur|penalt|violation/i; validated by broad punitive grep on raw text",
+      "examples": [],
+      "current": "8/77 = 10.4%: '...will result in a temporary suspension of your tutoring privileges.', 'If you return the car late, you will incur an extra daily charge.', 'Overdue books will result in fines...'",
+      "gap": "STRONGEST synthetic fingerprint. 0% real vs 10.4% gen. Seeded verbatim by prompt S7 example. Real 'rules' are gentle ('We hope everyone will ensure that books are returned on time.')",
+      "reliability": "solid"
+    },
+    {
+      "name": "closing_wayfinding_trope",
+      "kind": "qual",
+      "unit": "share of sets whose last sentence references map/schedule/guide",
+      "target": 0.33,
+      "distribution": { "real": "17/51 = 33% map/schedule/guide; +20% help/staff/questions" },
+      "detector": "keyword scan of final sentence per set",
+      "examples": ["If you need help getting around, check the map for specific areas and facilities", "you can check the weekly schedule here", "you can download the map for free"],
+      "current": "0/11 last sentences mention map/schedule/guide (gen closes on punitive rules instead)",
+      "gap": "positive real signature gen entirely lacks; ~1/3 of orientation sets should close on a 'check the map/schedule' pointer",
+      "reliability": "solid"
+    },
+    {
+      "name": "scenario_domain_mix",
+      "kind": "qual",
+      "unit": "domain frequency (overlapping keyword hits)",
+      "target": "include procedure/how-to family + everyday-retail/cooking/repair, not only campus offices",
+      "distribution": { "real_keyword_hits": { "gym_sports": 42, "library": 29, "store_retail": 27, "lab_it_computer": 21, "procedure_howto": 21, "tour_garden_museum": 17 }, "real_settings_from_asr": ["campus library printing", "grocery store", "student help desk", "university open house", "course registration", "wildlife sanctuary", "community center", "university sporting event", "weather report for university radio", "university tech store", "woodworking class", "botanical garden"] },
+      "detector": "keyword domain tagger (overlapping, content-based)",
+      "examples": ["first, select the right tool to remove the wheel (bike-repair procedure set)", "begin by mixing the butter and sugar (baking procedure set)", "Milk and yogurt are in the dairy section. (grocery store)"],
+      "current": "18-scenario pool, ALL campus/institutional (IT desk, library, planetarium, car rental, theater, gym, health center, chem lab, dining, bookstore, dorm, tutoring, career, gallery, recycling, radio, pool, darkroom). No procedure/how-to sets; no everyday-retail/cooking/repair.",
+      "gap": "gen is a campus-office monoculture; missing the procedure/how-to set family (~12% of real) and everyday-commerce settings",
+      "reliability": "partial"
+    },
+    {
+      "name": "speaker_role_and_setting_framing",
+      "kind": "qual",
+      "unit": "presence + template",
+      "target": { "fields": ["second_person setting sentence", "standard instruction 'Listen to the speaker and repeat what (he/she) says. Repeat only once.'"], "templates": ["You are working/volunteering/learning ... Your manager is training/teaching you to assist ...", "You are being trained to ..."] },
+      "distribution": { "speaker_pronoun_in_8_labeled_audio_sets": { "she": 5, "he": 3 } },
+      "detector": "field presence (setting); ASR pattern match on framing templates",
+      "examples": [
+        "You are being trained to assist customers at a university tech store.",
+        "You are learning how to give the weather report for the University radio station.",
+        "You have an internship at a wildlife sanctuary. Your manager is teaching you how to assist visitors there."
+      ],
+      "current": "bank stores only `scenario` + `speaker_role`; NO second-person setting sentence and NO 'Listen and repeat... Repeat only once.' instruction",
+      "gap": "generated item cannot be presented with authentic framing; add a second-person `setting` + standard instruction to the record",
+      "reliability": "partial"
+    }
+  ],
+  "correlations": [
+    "'Difficulty' ≈ word count: real per-sentence difficulty tracks length (easy<=7 / medium 8-12 / hard>=13), not syntax. A long SIMPLE sentence is the real 'hard'. Control length distribution; stop equating hard with conditional/consequence grammar.",
+    "The long finish carries the clause break: S7-is-longest (92%) + 75% of long sentences have a comma + closing uses if/when/lastly + map/schedule pointer = ONE authentic move (a single long, comma-split, wayfinding closer). Generating one long fronted-clause closer (and a shorter S6) fixes length_progression, hard_sentence_comma_rate, and closing_wayfinding_trope at once.",
+    "Synthetic register cluster = greeting + question + threat + over-'you': s1_opener (over-Welcome), yes_no_questions, direct_address (over-you), punitive_warning_trope co-occur and all trace to the prompt's two worked examples + STRUCTURE_RULES. Fixing the examples and the easy/hard structure lists removes all four together."
+  ],
+  "deferred": [
+    "Per-sentence response timing budget (seconds): gen stamps 8/10/12 by tier but real value is unverified. ASR gives only playback gaps between sentences (e.g. 2026-01-21: 4,2,9,6,3,10,6s), which are speak-then-pause intervals and partly batched — NOT the on-screen response window. Do not invent a target; needs video capture of the countdown.",
+    "Structural syntax taxonomy (passive/relative/conditional sub-percentages in repeat-flavor-model.json) came from 5 third-party goarno.io sets, not the 51 real sets, and real 'difficulty' is length-based — treat those sub-percentages as unvalidated.",
+    "Speaker gender (she x5 / he x3 across 8 labeled sets): suggestive mixed/slightly-female voice pool but n too small and irrelevant to text generation; recorded for completeness.",
+    "Exact scenario frequency weights: domain tagging is overlapping/keyword-based and ASR settings known for only 13/51 sets, so the gym>library>store ordering is indicative, not a precise target."
+  ]
+}

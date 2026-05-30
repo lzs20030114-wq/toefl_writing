@@ -1,0 +1,317 @@
+{
+  "type": "bs",
+  "n": {
+    "real_targets": 504,
+    "real_unique": 341,
+    "real_with_prompt": 363,
+    "real_prompt_classified": 298,
+    "real_rendered_for_distractor_prefilled": 14,
+    "generated": 860,
+    "real_tier": "recalled (2026改后机经, OCR+DeepSeek)",
+    "real_verified_against": ".codex-tmp/ocr/*写作*.txt + rendered writing-screen PNGs (.codex-tmp/bs_render*/, 6 PDFs @ zoom 3.5)"
+  },
+  "generated_at": null,
+  "ground_truth": "data/realExam2026/writing/buildSentence-targets.json (504) + buildSentence.json (363 w/ prompt_context+scrambled_ocr)",
+  "generated_bank": "data/buildSentence/questions.json",
+  "maps_to_builder": "lib/bsGen/prompts.mjs (genPrompt) + lib/questionBank/etsProfile.js (ETS_STYLE_TARGETS, ETS_DIFFICULTY_*, TPO_REFERENCE_PROFILE, PREFILLED_PROFILE)",
+  "measurer": "scripts/research/bs_measure.mjs (detectors hand-validated against recalled targets AND rendered screens; --dump <dim>)",
+  "notes": "The on-screen task is a 2-speaker chat: speaker-1 says one conversational line (usually a question to 'you' or a 1st-person setup), the test-taker's reply is a row of blank slots with 1-2 PREFILLED anchor words (start fragment / mid word / end tail w/ punctuation), and a pool of draggable word-tiles below. Instruction is the constant 'Make an appropriate sentence.' CRITICAL render-level finding: across 14 items rendered from 6 exams, the word-pool has NO distractor tile — every tile maps into the answer (the OCR 'did/op/Qing/oing/p!p' tokens are UI chrome / OCR noise). This contradicts the in-code note in etsProfile.js (82% tile-level distractor) and is the top reconcile item — see deferred[0]. Real BS is campus small-talk in the first person: 40% first-person answers, 23% contractions, 10% casual openers, 63% campus topic vs 0.3% office. The generator drifts formal/3rd-person/office and over-traps with distractors (89%, of which 'did' x160).",
+  "dimensions": [
+    {
+      "name": "answer_length_words",
+      "kind": "quant",
+      "unit": "words per answer sentence",
+      "target": { "mean": 9.16, "median": 9, "min": 4, "max": 15 },
+      "distribution": {
+        "real": { "4": 3, "5": 26, "6": 43, "7": 52, "8": 78, "9": 82, "10": 74, "11": 66, "12": 37, "13": 26, "14": 13, "15": 4 },
+        "generated": { "7": 7, "8": 55, "9": 117, "10": 239, "11": 200, "12": 138, "13": 65, "14": 31, "15": 8 }
+      },
+      "detector": "whitespace word count, punctuation stripped",
+      "examples": [
+        "it wasn't available online . (4w)",
+        "which brand are you considering ? (5w)",
+        "I do not usually go to those events . (9w)",
+        "my professor also asked me how I was able to complete it ahead of time (14w)"
+      ],
+      "current": { "mean": 10.68, "median": 11, "min": 7, "max": 15 },
+      "gap": "Gen runs ~1.5w long (mean 10.7 vs 9.16) and never produces a 4-6 word answer (real has 72 such = 14%). Gen floor is 7w.",
+      "reliability": "solid"
+    },
+    {
+      "name": "difficulty_mix_length_proxy",
+      "kind": "quant",
+      "unit": "share easy(<=7w) / medium(8-11w) / hard(>=12w)",
+      "target": { "easy": 0.246, "medium": 0.595, "hard": 0.159 },
+      "distribution": {
+        "real": { "easy_le7": 124, "med_8to11": 300, "hard_ge12": 80 },
+        "generated": { "easy_le7": 7, "med_8to11": 611, "hard_ge12": 242 }
+      },
+      "detector": "word-count bands <=7 / 8-11 / >=12 (proxy; true difficulty also = structure, see correlations)",
+      "examples": ["easy: 'I have a conflicting appointment.'", "hard: 'Can you tell me whether it will reopen by the end of the month?'"],
+      "current": { "easy": 0.008, "medium": 0.710, "hard": 0.281 },
+      "gap": "Gen ~1% easy vs 25% real, and 2x the hard band. Over-complexifies both ends. Targets in ETS_DIFFICULTY_RATIO (22/60/18) are correct; generator does not obey them.",
+      "reliability": "solid"
+    },
+    {
+      "name": "sentence_type_4way",
+      "kind": "qual",
+      "unit": "share of answers by (question-form x embedded-clause)",
+      "target": { "statement": 0.583, "q_embedded": 0.181, "q_plain_direct": 0.173, "decl_indirect": 0.063 },
+      "distribution": {
+        "real": { "statement": 294, "q-embedded": 91, "q-plain": 87, "decl-indirect": 32 },
+        "generated": { "statement": 608, "decl-indirect": 175, "q-embedded": 56, "q-plain": 21 }
+      },
+      "detector": "classifyType() = isQuestionForm (terminal ? or inverted main clause) x hasEmbedded (know/tell/ask/think/wonder/not-sure + if/whether/wh); --dump types. Validated vs full 2.8/2.23/2.25 sets.",
+      "examples": [
+        "q-embedded: do you know if the due dates have been updated?",
+        "q-plain: what time does the game start?",
+        "decl-indirect: He wanted to know how I did my research.",
+        "statement: I worked with a company that aimed to reduce carbon emissions."
+      ],
+      "current": { "statement": 0.707, "decl_indirect": 0.203, "q_embedded": 0.065, "q_plain_direct": 0.024 },
+      "gap": "Gen INVERTS the question structure: makes the embedded clause declarative ('She wanted to know if…' 20% vs real 6%) and almost never a question ('Do you know if…?' 6.5% vs real 18%); plain direct Qs 2.4% vs real 17%. Real's two question types (35% combined) are 9% in gen.",
+      "reliability": "solid"
+    },
+    {
+      "name": "qmark_reply_ends_question",
+      "kind": "quant",
+      "unit": "share of answers ending with ?",
+      "target": 0.145,
+      "distribution": { "real": { "yes": 73, "n": 504 }, "generated": { "yes": 77, "n": 860 } },
+      "detector": "/\\?\\s*$/ (undercounts true questions: many recalled targets dropped terminal ?; sentence_type question-FORM is the truer 35%)",
+      "examples": ["have you applied for it yet?", "which brand are you considering?"],
+      "current": 0.090,
+      "gap": "Gen slightly low (9% vs 14.5%); TPO_REFERENCE_PROFILE.qmarkRatio 0.14 is correct, generator under.",
+      "reliability": "solid"
+    },
+    {
+      "name": "signature_do_you_know_if",
+      "kind": "qual",
+      "unit": "share = 'Do you know if/whether…?' / 'Can you tell me whether…?'",
+      "target": 0.173,
+      "distribution": { "real": { "yes": 87, "n": 504 }, "generated": { "yes": 52, "n": 860 } },
+      "detector": "isSignature() = ^(do you know|can you tell me|could you tell me|do you think it/that) (if|whether|wh-)",
+      "examples": [
+        "do you know if she included the schedule?",
+        "Can you tell me whether he provided a reason?",
+        "do you know when they will announce the results?"
+      ],
+      "current": 0.060,
+      "gap": "The single most recognizable real-exam BS pattern, under-produced ~3x. Add explicit '~1 in 6 items is a polite Do-you-know-if / Can-you-tell-me-whether indirect request' to genPrompt.",
+      "reliability": "solid"
+    },
+    {
+      "name": "negation",
+      "kind": "quant",
+      "unit": "share of answers with negation",
+      "target": 0.240,
+      "distribution": { "real": { "yes": 121, "n": 504 }, "generated": { "yes": 219, "n": 860 } },
+      "detector": "isNegation() (not/n't/never/no-X/can't/no intention/prior engagement)",
+      "examples": ["I haven't received any emails today.", "I do not usually go to those events.", "Unfortunately, I did not have time for a visit."],
+      "current": 0.255,
+      "gap": "Rate matches (negligible). BUT prompt target 'negation ~9%' and negationRatio 0.2 BOTH undershoot real 24% — declining/excusing is a stock reply. Also gen's negations skew formal/3P (see register). Raise prompt target to ~20-24%.",
+      "reliability": "solid"
+    },
+    {
+      "name": "relative_clause",
+      "kind": "quant",
+      "unit": "share of answers with a relative clause",
+      "target": 0.185,
+      "distribution": { "real": { "yes": 93, "n": 504 }, "generated": { "yes": 23, "n": 860 } },
+      "detector": "isRelative() (that/which/who + verb, or 'the one that/where'); all 93 hand-confirmed genuine relatives",
+      "examples": [
+        "I'm enrolled in the one that covers advanced mathematics.",
+        "I worked with a company that aimed to reduce carbon emissions.",
+        "the park that has the best trails is my favourite.",
+        "it's the one that has the software that I need for my project."
+      ],
+      "current": 0.027,
+      "gap": "~7x under-produced. The 'the one that…/the place where…' reply (describing a choice among options) is a core real pattern almost absent from gen, and it supplies most of the hard band. Prompt says 'relative 0-1 per set' — too low; bump to ~2/10.",
+      "reliability": "solid"
+    },
+    {
+      "name": "passive_voice",
+      "kind": "quant",
+      "unit": "share of answers with passive",
+      "target": 0.083,
+      "distribution": { "real": { "yes": 42, "n": 504 }, "generated": { "yes": 161, "n": 860 } },
+      "detector": "isPassive() (be/been/being + past participle)",
+      "examples": ["real (light, inside embedded clause): 'do you know if the due dates have been updated?'", "gen (heavy, standalone): 'The customer did not understand why the new policy was implemented.'"],
+      "current": 0.187,
+      "gap": "Gen 2x the passive and clunkier/formal. Keep passive light and embedded; don't open with heavy agentless passive.",
+      "reliability": "solid"
+    },
+    {
+      "name": "register_contractions",
+      "kind": "quant",
+      "unit": "share of answers with a contraction",
+      "target": 0.230,
+      "distribution": { "real": { "yes": 116, "n": 504 }, "generated": { "yes": 67, "n": 860 } },
+      "detector": "hasContraction() (it's/I'm/haven't/wasn't/don't/etc.)",
+      "examples": ["it wasn't available online.", "I'm practicing the piece that my professor suggested.", "I don't think I can make it this time."],
+      "current": 0.078,
+      "gap": "Gen 3x less contracted -> reads written/formal not spoken. No current prompt line addresses register; add 'answers are casual spoken replies; use contractions freely'.",
+      "reliability": "solid"
+    },
+    {
+      "name": "register_casual_opener",
+      "kind": "quant",
+      "unit": "share opening Yes/No/Sorry/Unfortunately/That's right",
+      "target": 0.101,
+      "distribution": { "real": { "yes": 51, "n": 504 }, "generated": { "yes": 3, "n": 860 } },
+      "detector": "isCasualOpener() = ^(yes|no|sorry|unfortunately|that's right|oh|well|sure|actually)[ ,.]",
+      "examples": [
+        "Sorry, but I have not had time to look at it yet.",
+        "No, I haven't had a chance to buy it.",
+        "Unfortunately, I never had a chance to read the book.",
+        "That's right. I am not sure what I want to do in the future."
+      ],
+      "current": 0.003,
+      "gap": "Gen essentially never frames the reply as answering someone. Add: ~1 in 10 replies opens Yes/No/Sorry/Unfortunately (also becomes a START prefilled anchor).",
+      "reliability": "solid"
+    },
+    {
+      "name": "register_subject_person",
+      "kind": "quant",
+      "unit": "first-person answer share / formal 3rd-person-subject share",
+      "target": { "first_person": 0.403, "formal_3p_subject": 0.004 },
+      "distribution": {
+        "real": { "first_person": 203, "formal_3p": 2, "n": 504 },
+        "generated": { "first_person": 173, "formal_3p": 57, "n": 860 }
+      },
+      "detector": "isFirstPerson() (^I/I'm/My/No,I…) ; isFormalSubj() (^The manager/supervisor/customer/…)",
+      "examples": [
+        "real first-person: 'I had to finish my economics assignment.'",
+        "gen formal-3P (never in real): 'The project supervisor could not locate the budget file.'",
+        "gen formal-3P (never in real): 'The frustrated customer wanted to know why the delivery was so late.'"
+      ],
+      "current": { "first_person": 0.201, "formal_3p_subject": 0.066 },
+      "gap": "Gen halves first-person voice and invents bureaucratic 3P personas the real exam never uses. Reply should usually be the test-taker speaking ('I…'). Demote invented-persona answers.",
+      "reliability": "solid"
+    },
+    {
+      "name": "distractor_presence",
+      "kind": "quant",
+      "unit": "share of items with a distractor tile",
+      "target": 0.0,
+      "distribution": {
+        "real": { "distractor_tiles": 0, "items_rendered": 14, "exams": 6 },
+        "generated": { "present": 765, "n": 860, "distinct_words": 253, "top": [["did", 160], ["does", 37], ["open", 18], ["recommend", 17], ["offer", 13], ["locate", 12], ["start", 12], ["find", 11], ["do", 11], ["arrive", 11], ["visit", 10], ["was", 10]] }
+      },
+      "detector": "real: visual tile-vs-answer-word count on rendered screens (structured JSON has no reliable distractor field). current: item.distractor non-empty; --dump distractor",
+      "examples": [
+        "real 2.23 Q1: pool [take | the workshop | was | that was | supposed to | place] -> ALL used in 'the workshop that was supposed to take place was canceled' (prefilled 'canceled.'); no extra tile.",
+        "gen: distractor 'did' on 160 items, e.g. chunks [needed,to,find,out,where,usually waits,for packages,'did',he]"
+      ],
+      "current": 0.890,
+      "gap": "#1 GAP. Recalled exam supplies exact tile set (no trap); gen adds a trap to ~9/10 items, 19% of them the word 'did'. CAVEAT: contradicts etsProfile.js note (82% tile-level distractor on recalled) — must reconcile (deferred[0]) before changing the target. Until then, 'distractor on 89% / did x160' is a known over-trap regardless.",
+      "reliability": "solid-for-recalled-render-sample; target deferred pending official-vs-recalled reconcile"
+    },
+    {
+      "name": "chunk_tile_structure",
+      "kind": "quant",
+      "unit": "effective tiles per item / single-word-tile share / words per tile",
+      "target": { "effective_tiles": "5-7", "single_word_share": "unverifiable_vs_real" },
+      "distribution": {
+        "real": { "note": "renders show multi-word tiles exist (the workshop / that was / supposed to / an individual interview / will be online or / park that / is close); true single-word ratio NOT recoverable from OCR" },
+        "generated": { "eff_tiles_mean": 5.87, "eff_hist": { "3": 3, "4": 64, "5": 270, "6": 274, "7": 202, "8": 47 }, "single_word_share": 0.599, "mean_words_per_tile": 1.49 }
+      },
+      "detector": "current: chunks.length - (distractor?1:0); single-word ratio over all chunks. real: visual on renders (boundaries lost in OCR)",
+      "examples": ["real multi-word tiles: 'the workshop', 'that was', 'supposed to', 'an individual interview', 'will be online or'"],
+      "current": { "eff_tiles_mean": 5.87, "single_word_share": 0.599 },
+      "gap": "Effective tile COUNT in range (5.87 vs real ~5-7). Single-word ratio: prompt targets ~77% single-word but renders show plenty of 2-3-word tiles, so the 77% target may be too high — unverifiable against real (OCR can't recover boundaries).",
+      "reliability": "partial"
+    },
+    {
+      "name": "prefilled_presence_placement",
+      "kind": "quant",
+      "unit": "presence share / two-anchor share / mean segment words",
+      "target": { "presence": 0.85, "two_anchor": 0.21, "seg_word_mean": 1.46 },
+      "distribution": {
+        "real": { "presence_pct": 85, "two_anchor_pct": 21, "seg_word_mean": 1.46, "source": "40 clean OCR blocks + 14 renders" },
+        "generated": { "presence": 659, "n": 860, "multi_seg_pct": 1.1, "seg_word_mean": 1.64, "nonzero_pos_pct": 49.5 }
+      },
+      "detector": "real: OCR-block split (prompt=first line, pool=longest jumbled line, rest=prefilled), anchored to renders. current: prefilled[] length / positions",
+      "examples": [
+        "real START: 'She wanted' / 'Can you' / 'It has' / 'I just read'",
+        "real MID: 'know' / 'you' / 'which' / 'decided'",
+        "real END tail (w/ punctuation): 'canceled.' / 'favorite spot.' / 'seafood dishes.' / 'classmate?' / 'be?'",
+        "real TWO anchors: 'Can you' + '…?'; 'I'm sorry, but' + '.'"
+      ],
+      "current": { "presence": 0.766, "two_anchor": 0.011, "seg_word_mean": 1.64 },
+      "gap": "Gen almost never uses TWO anchors (1.1% vs real ~21%) and rarely a punctuation-bearing END TAIL ('canceled.'). Presence slightly low (76.6% vs ~85%). PREFILLED_PROFILE.multiSegmentRatio 0.30 ~ real 21%; add explicit END-tail guidance.",
+      "reliability": "partial"
+    },
+    {
+      "name": "prefilled_not_subject",
+      "kind": "quant",
+      "unit": "share where prefilled hint is a bare subject pronoun",
+      "target": "<=0.30",
+      "distribution": { "real": { "note": "renders: prefilled is usually verb-phrase/mid-word/end-tail, ~2/14 were a person subject; consistent with prompt's TPO 30%" }, "generated": { "person_hint_pct": 23.2 } },
+      "detector": "person-pronoun-only prefilled share",
+      "examples": ["TPO-style anchor a NON-subject: prefilled 'wanted to know' not 'she'"],
+      "current": 0.232,
+      "gap": "Holding within target (23.2% <= 30%). The earlier-fixed 'subject-as-hint' regression is not recurring. Keep the rule.",
+      "reliability": "partial"
+    },
+    {
+      "name": "prompt_addresses_you",
+      "kind": "quant",
+      "unit": "share of conversational prompts containing you/your",
+      "target": 0.758,
+      "distribution": { "real": { "yes": 226, "classified": 298, "garbled_excluded": 84 }, "generated": { "yes": 414, "n": 860 } },
+      "detector": "real: pickRealPrompt() (OCR-gluing-robust) + no-space you/your test. current: /you|your/ on prompt field.",
+      "examples": ["Why didn't you go to the class yesterday?", "What is your favorite place to relax?", "Did you submit the assignment on time?"],
+      "current": 0.481,
+      "gap": "Gen prompts are detached 3rd-person scene reports half the time ('What did the store manager report…') instead of speaking to the student. Prompt's '⚡ #1 RULE you/your ~6-7/10' target (76%) is correct; generator at 48% not obeying.",
+      "reliability": "solid"
+    },
+    {
+      "name": "prompt_opener_mix",
+      "kind": "qual",
+      "unit": "share of prompts by opener type",
+      "target": { "otherWh": 0.446, "yesno": 0.312, "whatX": 0.094, "statement": 0.084, "ends_q": 0.876 },
+      "distribution": {
+        "real": { "whatX": 28, "otherWh": 133, "yesno": 93, "statement": 25, "classified": 298, "ends_q_pct": 87.6 },
+        "generated": { "whatX": 464, "statement": 211, "otherWh": 117, "yesno": 68, "n": 860 }
+      },
+      "detector": "real: classifyRealOpener() (no-space opener regex + terminal-? check). current: popener() on prompt field.",
+      "examples": [
+        "otherWh (dominant): 'Why didn't you answer your phone?' / 'Where did you get that information?'",
+        "yes/no: 'Are you planning to attend the workshop on Saturday?'",
+        "whatX (rare in real): 'What did the instructor say about the exam format?'",
+        "statement setup: \"I'm preparing for my presentation on Friday.\""
+      ],
+      "current": { "whatX": 0.539, "statement": 0.245, "otherWh": 0.136, "yesno": 0.079 },
+      "gap": "Gen mix is nearly INVERTED: over-uses 'What did…?' (54% vs real 9%), under-uses other-wh (14% vs 45%) and yes/no (8% vs 31%). Prompt's 'TPO 36/24/18/18' target is wrong for 2026改后; recalibrate to otherWh~45 / yesno~31 / whatX~9 / statement~8 and cap 'What did…?' hard.",
+      "reliability": "solid"
+    },
+    {
+      "name": "topic_domain",
+      "kind": "qual",
+      "unit": "share campus/academic vs office/workplace",
+      "target": { "campus": 0.628, "office": 0.003 },
+      "distribution": {
+        "real": { "campus": 228, "office": 1, "n": 363 },
+        "generated": { "campus": 204, "office": 78, "n": 860 }
+      },
+      "detector": "keyword domains on full prompt+pool blob (real) / answer+prompt (current). Broader office lexicon -> ~28% current.",
+      "examples": ["real campus: class/lecture/professor/assignment/workshop/library/roommate", "gen office (rare in real): store manager/shipment/budget file/quarterly report"],
+      "current": { "campus": 0.237, "office": 0.091 },
+      "gap": "Real BS is overwhelmingly campus life (63% vs 0.3% office); gen dilutes with workplace scenarios that produce the formal personas (register_subject_person). Anchor scenarios to campus/student life; drop office/corporate.",
+      "reliability": "solid"
+    }
+  ],
+  "correlations": [
+    "Difficulty = length x structure, jointly. The easy band (<=7w, 25%) is mostly plain first-person statements & short yes/no questions; the hard band (>=12w, 16%) is mostly embedded-question ('Can you tell me whether…') and relative-clause sentences. The generator misses 'easy' precisely because it avoids short plain statements and over-uses multi-clause/formal constructions. To hit 25% easy, generate short PLAIN first-person statements; the 18% relative target naturally supplies the hard band.",
+    "Register, voice, and topic are ONE knob. First-person (40%) <-> contractions (23%) <-> casual openers (10%) <-> campus topic (63%) co-vary: a casual student reply about their own class life is contracted, first-person, and often opens 'Sorry,/No,'. The gen office personas are exactly the formal, un-contracted, third-person items. Fixing topic->campus and voice->first-person pulls contractions and casual openers up for free.",
+    "Anchor choice brackets the hard middle. Items opening 'Sorry, but…' / 'No, but you' give that opener as the START prefilled; items ending in a content noun ('…favorite spot.', '…classmate?') give that as the END tail. Generating the anchor from the sentence's natural opener/closer also yields the two-segment prefilled pattern (21% real) the generator lacks (1.1%)."
+  ],
+  "deferred": [
+    "DISTRACTOR DENSITY — official vs recalled (CRITICAL). This spec finds 0 distractor tiles in 14 rendered recalled items; etsProfile.js (lines 26-33) records a deliberate decision to keep ~88% density citing a tile-level recalled re-measure of 49/60=82% and ETS Full-Length Practice at 2/20=10% (data/buildSentence/tpo_official.json). 0% / 82% / 10% cannot all be right. Action: render ~20 more recalled BS screens across more dates, count tiles-vs-answer-words per item (scripts/ops/measure-bs-distractor-bysource.mjs), and settle whether real items ship a trap tile and how often. Strongest single lever on authenticity — target deferred until reconciled.",
+    "Chunk single-word ratio for the REAL bank — OCR destroys tile-boundary spacing; renders confirm 2-3-word tiles exist but n=14 is too small for a ratio. The 'so-77% single-word' prompt target is unverified against real. Harden by hand-transcribing tile boundaries from ~30 rendered pools.",
+    "Prefilled fine TYPE distribution — presence (~85%), two-anchor (~21%), END-tail prevalence are anchored to 14 renders + 40 clean OCR blocks; the 7-way word-TYPE split in PREFILLED_PROFILE is inherited from older TPO analysis and NOT re-measured against 2026 renders. More transcribed renders would replace it with measured 2026 numbers.",
+    "Official-tier ground truth — all 504 targets are recalled-tier (reconstructed by test-takers). UI structure is render-verified but exact wording, terminal punctuation, and the distractor question are recalled-quality. Treat type/length/register ratios as strong signal; distractor-absence as strong-for-recalled-but-unconfirmed-for-official.",
+    "Prompt opener mix precision — 84/363 prompts too OCR-garbled to classify; the 298 classified slightly favor well-OCR'd (often shorter) prompts. Direction (otherWh >> whatX) is robust; exact percentages +/-3-4pts."
+  ]
+}

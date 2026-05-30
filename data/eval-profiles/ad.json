@@ -1,0 +1,313 @@
+{
+  "type": "ad",
+  "n": { "real_items": 50, "real_items_with_2_students": 47, "real_student_posts": 96, "real_full_prof_posts_transcribed": 36, "generated_items": 144, "generated_student_posts": 288 },
+  "generated_at": null,
+  "ground_truth": "data/realExam2026/writing/academicDiscussion.json (50 items; professor_question only) + scripts/research/ad_eval/prof_posts_real.json (36 FULL professor posts hand-transcribed from .codex-tmp/ocr/*写作*.txt)",
+  "generated_bank": "data/academicWriting/prompts.json (144, ids ad61-ad204)",
+  "maps_to_builder": "lib/ai/prompts/academicWriting.js (buildDiscGenSystemPrompt / buildDiscGenUserPrompt / DISC_OPENING_STYLES / DISC_COURSE_LIST / DISC_STUDENT_NAMES)",
+  "measurer": "scripts/research/ad_eval/measure.mjs + measure2.mjs (detectors hand-validated in validate.mjs / validate2.mjs)",
+  "notes": "The structured academicDiscussion.json captured ONLY professor_question; the full professor POST (opener + two-sided framing + question) was recovered by OCR transcription (n=36) and is the source of the highest-value dimensions (opener, framing, contractions, name). The current generator was 'recalibrated 2026-05-31' on student LENGTH but NOT on opener/framing/name/stance — those three are now the dominant gaps.",
+  "dimensions": [
+    {
+      "name": "professor_name_format",
+      "kind": "qual",
+      "unit": "label string shown above the post",
+      "target": "Dr. <Surname> from a tiny closed pool {Dr. Gupta, Dr. Achebe, Dr. Diaz}",
+      "distribution": { "real_structured": { "Dr. X": 49, "empty(OCR)": 1 }, "real_dr_pool": { "Dr. Gupta": 32, "Dr. Diaz": 9, "Dr. Achebe": 8 } },
+      "detector": "regex /^Dr\\. /; tally distinct surnames",
+      "examples": ["Dr. Gupta", "Dr. Achebe", "Dr. Diaz"],
+      "current": "144/144 = literal string \"Professor\" (0% Dr.X)",
+      "gap": "TOTAL MISMATCH. 2026改后 never shows the bare word 'Professor' as the name — it shows Dr. <Surname>, and 64% of the time it is Dr. Gupta. The prompt still hard-codes name:\"Professor\" and says '94% of real TPO uses this exact string' — true for OLD TPO, FALSE for 2026改后.",
+      "reliability": "solid"
+    },
+    {
+      "name": "prof_opener_style",
+      "kind": "qual",
+      "unit": "opening-clause class share",
+      "target": { "We've been discussing/talking/exploring": 0.61, "This week we (have been)": 0.14, "Today we'll / Today's": 0.11, "We often discuss": 0.06, "These days": 0.03, "topic-first/definition": 0.06 },
+      "distribution": { "real_transcribed_n36": { "We've been discussing/talking/exploring": 22, "This week we": 5, "Today we/Today's": 4, "We often/We have been": 2, "These days": 1, "other(topic/def)": 2 } },
+      "detector": "regex on first clause (validate.mjs profOpener); hand-verified line-by-line against all 36",
+      "examples": [
+        "We've been discussing the impact of cultural globalization on local traditions.",
+        "This week, we have been exploring the effects of globalization on local economies.",
+        "We often discuss the impact of government intervention in the economy."
+      ],
+      "current": "gen: 'other (topic-first/factual)' 93/144 (65%), Today 26, As-we-discussed 15, Over-the-next-weeks 6; \"We've been discussing\" = 1/144 (0.7%)",
+      "gap": "BIGGEST STYLE GAP. The single signature opener of 2026改后 ('We've been discussing…', 61%) appears in <1% of the generated bank. The generator's 52%-weighted 'natural/other' bucket produces abstract factual leads ('Many countries have experienced…', 'In recent decades…') — the exact 'BAD' pattern the prompt itself warns against — while the real signature is a first-person-plural recap of what the class has been covering.",
+      "reliability": "solid"
+    },
+    {
+      "name": "prof_two_sided_framing",
+      "kind": "qual",
+      "unit": "share of posts that lay out BOTH sides before the question",
+      "target": { "any_contrast_device": 0.81, "canonical_Some_X_argue_Others_believe": 0.56 },
+      "distribution": { "real_transcribed_n36": { "broad_contrast(Some+Others / However-some / On-the-other-hand)": 29, "canonical Some...Others adjacency": 20, "no_explicit_contrast(tension_in_question)": 7 } },
+      "detector": "hasContrast(): 'Some <experts>' present AND ('Others'|'while others'|'On the other hand'|'However, some'|'But critics'); canonical = /Some[^.]*\\.\\s*Others/ or /Some.., while others/",
+      "examples": [
+        "Some economists argue that globalization leads to economic growth ... Others hold that it can harm local businesses and lead to job losses ...",
+        "Some experts believe that genetics play the most significant role ... while others argue that our environment and experiences are more important.",
+        "Some sociologists argue that social norms help maintain order ... while others believe they can restrict personal freedom and creativity."
+      ],
+      "current": "gen broad contrast 42/144 (29%); canonical Some...Others 35/144 (24%)",
+      "gap": "MAJOR. Real posts overwhelmingly stage a balanced two-sided debate ('Some X argue A; Others believe B') and THEN ask. Only ~29% of generated posts do; most generated posts give one-directional factual background then a question. This balanced staging is what makes the post readable as a real prompt.",
+      "reliability": "solid"
+    },
+    {
+      "name": "prof_contractions",
+      "kind": "qual",
+      "unit": "share of posts with >=1 true contraction (we've/it's/we'll/etc., possessives excluded)",
+      "target": 0.72,
+      "distribution": { "real_transcribed_n36": { "has>=1": 26, "mean_per_post": 0.7 }, "note": "almost always the opener 'We've'; otherwise contraction-light" },
+      "detector": "match /\\b(we've|it's|i'm|don't|we're|let's|that's|we'll|you're|can't|won't|doesn't|isn't|aren't)\\b/gi",
+      "examples": ["We've been discussing the role of literature ...", "Today we'll discuss how different factors affect educational outcomes.", "I'm curious to learn your thoughts."],
+      "current": "gen has>=1: 35/144 (24%), mean 0.3/post",
+      "gap": "Real reads as conversational (72% contain a contraction, driven by the 'We've been' opener). Gen is stiffer (24%). Mostly a side-effect of the opener gap — fixing D2 (opener) largely fixes this.",
+      "reliability": "solid"
+    },
+    {
+      "name": "prof_final_question_stem",
+      "kind": "qual",
+      "unit": "question-type share (final question of post)",
+      "target": { "binary_or (X or Y?)": 0.3, "open (What do you think/your view/perspective)": 0.3, "binary (Do you think X? Why/why not)": 0.2, "which-choice": 0.1, "how/other": 0.1 },
+      "distribution": { "real_structured_n50": { "other(varied)": 20, "binary-or": 13, "open": 14, "which-choice": 2, "binary": 1 }, "real_transcribed_n36": { "other": 15, "binary-or": 9, "open": 8, "which-choice": 3, "binary": 1 } },
+      "detector": "questionType() classifies last '?'-terminated clause; structured run uses professor_question",
+      "examples": [
+        "Do you think globalization has a positive or negative impact on local economies? Why?",
+        "What do you think is the most effective role of government in the economy?",
+        "Which do you think has a greater impact on human development: nature or nurture? Why?"
+      ],
+      "current": "gen reasonably spread (the generator already accepts binary/open/which/statement types via questionType param)",
+      "gap": "small — stem TYPE distribution is roughly OK. The phrasing wrapper is the issue (see prof_why_tag).",
+      "reliability": "partial"
+    },
+    {
+      "name": "prof_why_tag",
+      "kind": "qual",
+      "unit": "share of posts ending with 'Why?'/'Why or why not?'/'Why do you think so?'/'Explain your views'",
+      "target": 0.53,
+      "distribution": { "real_transcribed_n36": { "has_why_tag": 19 } },
+      "detector": "/Why(\\?| or why not\\?| do you think so\\?)|Explain your (views|reasoning)|Give reasons/i",
+      "examples": ["... on local traditions? Why?", "... in shaping societal values? Why or why not?", "... mostly negative? Explain your views."],
+      "current": "gen 26/144 (18%)",
+      "gap": "Real appends a 'Why?'/'Why or why not?'/'Explain' tag to the question ~53% of the time; gen does so only 18%. Cheap, high-authenticity fix.",
+      "reliability": "solid"
+    },
+    {
+      "name": "prof_defines_key_term",
+      "kind": "qual",
+      "unit": "share of posts that gloss/define the key term in a sentence",
+      "target": 0.3,
+      "distribution": { "real_transcribed_n36": { "with_definition": 11 } },
+      "detector": "/refers to|are unwritten rules|, which includes|includes novels|involves the ability/i",
+      "examples": [
+        "Globalization refers to businesses and economies becoming interconnected and interdependent worldwide.",
+        "Social norms are unwritten rules that dictate how individuals should act.",
+        "Emotional intelligence involves the ability to recognize, understand, and manage our own emotions ..."
+      ],
+      "current": "not separately measured / not instructed",
+      "gap": "~30% of real posts include a one-sentence gloss of the central term right after the opener. Generator has no such instruction; adding it (optional, ~1/3 of posts) increases mini-lecture realism.",
+      "reliability": "partial"
+    },
+    {
+      "name": "prof_post_length_words",
+      "kind": "quant",
+      "unit": "words",
+      "target": { "mean": 65, "median": 71, "min": 46, "max": 80, "p25": 53, "p75": 77 },
+      "distribution": { "real_transcribed_n36": { "mean": 65.5, "median": 71, "min": 46, "max": 80, "p25": 53, "p75": 77 }, "real_chars": { "mean": 450, "median": 472, "min": 322, "max": 650 } },
+      "detector": "whitespace word count of full professor post",
+      "examples": [],
+      "current": { "gen_words": { "mean": 73.4, "median": 73, "min": 36, "max": 108 }, "gen_chars": { "mean": 500, "median": 508, "max": 723 } },
+      "gap": "Gen runs ~8 words / 50 chars longer on average and has a long tail (up to 108w/723ch) the real bank never reaches (real hard cap ~80w/650ch). Tighten target to ~65 words (≈450 chars), max ~80w.",
+      "reliability": "solid"
+    },
+    {
+      "name": "prof_post_sentences",
+      "kind": "quant",
+      "unit": "sentences",
+      "target": { "mean": 4.7, "median": 4, "min": 3, "max": 7 },
+      "distribution": { "real_transcribed_n36": { "mean": 4.7, "median": 4, "min": 3, "max": 7, "p25": 4, "p75": 6 } },
+      "detector": "split on [.?!]; count clauses len>1",
+      "examples": [],
+      "current": { "mean": 4.1, "median": 4, "min": 2, "max": 6 },
+      "gap": "minor — real averages slightly more sentences (4.7 vs 4.1) because of opener + definition + two-sided framing + Why-tag. Comes for free once D2/D3/D6/D7 are fixed.",
+      "reliability": "solid"
+    },
+    {
+      "name": "students_per_item",
+      "kind": "quant",
+      "unit": "count",
+      "target": 2,
+      "distribution": { "real": { "2": 47, "1": 2, "0": 1 }, "note": "the 1/0 cases are OCR truncations, not a real format" },
+      "detector": "len(item.students)",
+      "examples": [],
+      "current": "144/144 = exactly 2",
+      "gap": "none",
+      "reliability": "solid"
+    },
+    {
+      "name": "student_post_length_words",
+      "kind": "quant",
+      "unit": "words",
+      "target": { "mean": 43, "median": 40, "min": 17, "max": 77, "p25": 35, "p75": 50 },
+      "distribution": { "real_n96": { "mean": 42.7, "median": 40, "min": 17, "max": 77, "p25": 35, "p75": 50 }, "real_chars": { "mean": 293, "median": 275, "min": 116, "max": 586 } },
+      "detector": "whitespace word count per student post",
+      "examples": [
+        "They provide a platform for dialogue and cooperation between countries and can help mediate conflicts before they escalate.",
+        "I think nurture has a greater impact on human development. Our environment and experiences shape our beliefs, behaviors, and personalities. While genetics provide a foundation, it is our interactions and experiences that truly define who we become."
+      ],
+      "current": { "gen_words": { "mean": 71.9, "median": 68, "min": 45, "max": 116 }, "gen_chars": { "mean": 463, "median": 455 } },
+      "gap": "STILL OFF despite the 2026-05-31 recalibration note in the prompt. Gen students average 72 words vs real 43 — gen is ~1.7x too long, and gen MIN (45w) is above real MEDIAN (40w). The prompt text says '~40-45 words' but the live bank was generated before that and was never regenerated. Either regenerate or the instruction isn't being honored.",
+      "reliability": "solid"
+    },
+    {
+      "name": "student_post_sentences",
+      "kind": "quant",
+      "unit": "sentences",
+      "target": { "mean": 3, "median": 3, "min": 1, "max": 6, "typical": "2-3" },
+      "distribution": { "real_n96": { "mean": 3, "median": 3, "min": 1, "max": 6, "p25": 3, "p75": 3 } },
+      "detector": "split on [.?!]",
+      "examples": [],
+      "current": { "mean": 4.2, "median": 4, "min": 3, "max": 6 },
+      "gap": "Gen 4.2 sentences vs real 3. Real student = stance + 1 reason (+ maybe 1 elaboration). Gen pads to 4-5. Same root cause as length.",
+      "reliability": "solid"
+    },
+    {
+      "name": "student_opener",
+      "kind": "qual",
+      "unit": "opener-class share",
+      "target": { "I believe/think": 0.56, "In my opinion": 0.21, "bare thesis (no I-frame)": 0.18, "While/Although": 0.03, "Yes/No or I-oppose": 0.02 },
+      "distribution": { "real_n96": { "I believe/think": 54, "In my opinion": 20, "bare-thesis(other)": 17, "While/Although": 3, "I oppose/support": 1, "Yes/No": 1 } },
+      "detector": "openerClass() — regex on first words; 'other' hand-verified to be bare thesis statements",
+      "examples": [
+        "I believe living alone is beneficial because it allows people to develop greater independence ...",
+        "In my opinion, certain information should be confidential to protect competitive advantages.",
+        "Customer feedback is essential for product development. It helps companies understand customer needs ..."
+      ],
+      "current": { "gen_n288": { "I believe/think": 93, "While/Although": 35, "other": 137, "I oppose/support": 19, "In my opinion": 2 } },
+      "gap": "Two issues: (1) gen barely uses 'In my opinion' (2/288 vs real 21%) — real S2 canonically opens 'In my opinion …'. (2) gen 'other' bucket (48%) is dominated by varied/creative openers ('In my view', 'Honestly', 'Actually', 'I strongly support', 'I hold a different view from <Name>') whereas real 'other' is the plain bare-thesis pattern. Real students are formulaic: ~77% are 'I believe/think' + 'In my opinion'.",
+      "reliability": "solid"
+    },
+    {
+      "name": "student_canonical_pairing",
+      "kind": "qual",
+      "unit": "share of items where S1 opens 'I believe/think' AND S2 opens 'In my opinion'",
+      "target": 0.38,
+      "distribution": { "real_n47": { "I-believe + In-my-opinion pairing": 18 } },
+      "detector": "S1 /^I (believe|think)/ AND S2 /^In my opinion/",
+      "examples": [
+        "S1 Claire: \"I think nurture has a greater impact ...\"  /  S2 Paul: \"In my opinion, nature has a more significant role.\"",
+        "S1 Claire: \"I think corporate transparency is essential ...\"  /  S2 Paul: \"In my opinion, certain information should be confidential ...\""
+      ],
+      "current": "~0% (gen S2 rarely opens 'In my opinion'; opens with named-concession instead)",
+      "gap": "38% of real items use this exact symmetrical opener pairing (S1='I believe/think', S2='In my opinion'). It is a strong authenticity tell and the generator never produces it.",
+      "reliability": "solid"
+    },
+    {
+      "name": "s2_references_s1_by_name",
+      "kind": "qual",
+      "unit": "share of items where Student 2 names Student 1",
+      "target": 0.0,
+      "distribution": { "real_n47": { "references": 0, "rate": "0%" } },
+      "detector": "S1 name as \\bword\\b in S2 text; cross-checked against ALL student names — zero hits",
+      "examples": ["(counter-example — what NOT to do, from the generated bank) \"I hold a different view from Claire. While interactive whiteboards are useful ...\""],
+      "current": "52/144 = 36% of gen items have S2 name S1 (\"I hold a different view from Claire\", \"While Sarah makes a good point\", \"different view from Mia\")",
+      "gap": "PURE ARTIFACT. 2026改后 students NEVER address each other by name (0/47) — both post independent stances as if they hadn't read each other. The generator does it 36% of the time because the user-prompt has an explicit s2ReferencesS1=true branch calibrated to OLD TPO ('37% of real TPO does this'). For 2026改后 this should be forced to 0%.",
+      "reliability": "solid"
+    },
+    {
+      "name": "student_stance_contrast_type",
+      "kind": "qual",
+      "unit": "clean opposing vs peer-directed-nuance",
+      "target": { "clean_opposing_stances": 0.74, "intra-argument concession only (While X, Y)": 0.26, "peer-directed concession (acknowledges other student)": 0.0 },
+      "distribution": { "real_n47": { "clean pro-vs-con": 35, "has 'While/Although' hedge": 12 }, "note": "all 12 'concessions' are intra-argument hedges vs the abstract counter-view ('While transparency is important, businesses need...'), NOT acknowledgment of the other student; only 1 uses 'Although I do see...'; 0 name the peer" },
+      "detector": "concessiveRe on either student; clause context hand-inspected to confirm intra-argument vs peer-directed",
+      "examples": [
+        "While transparency is important, businesses need to safeguard proprietary information and strategic plans to stay competitive.",
+        "While genetics provide a foundation, it is our interactions and experiences that truly define who we become."
+      ],
+      "current": "gen 72/144 (50%) nuanced/concessive — and gen's concessions are frequently PEER-DIRECTED ('I see the point about X but...', 'While Sarah makes a good point')",
+      "gap": "Real students hold CLEAN, fully-opposed stances (74%); the minority of hedges are 'While X, Y' aimed at the abstract topic, never at the peer. Gen is 50% nuanced and routes concession at the other student. Push generator toward clean opposing stances; allow only intra-argument 'While X, Y' hedges, never peer-named ones.",
+      "reliability": "solid"
+    },
+    {
+      "name": "student_concrete_personal_example",
+      "kind": "qual",
+      "unit": "share of student posts with a concrete/personal example",
+      "target": 0.1,
+      "distribution": { "real_n96": { "with_personal_or_concrete": 9, "rate": "9.4%" }, "first_person_pronoun_mean_per_post": 1.3 },
+      "detector": "/my (cousin|uncle|parents|family|friend|hometown|old school)|For example|for instance|I remember|when I|At my/i",
+      "examples": [
+        "My parents own a store and have difficulty competing with global delivery services.",
+        "I remember the time when I played volleyball in my first year of college, and it significantly helped me develop my social skills.",
+        "For example, if my friends on social media all seem to be saying the same thing, how can we be challenged to think more independently?"
+      ],
+      "current": "gen 86/288 = 30% with concrete/personal example; first-person mean 2.2/post",
+      "gap": "INVERTED vs the prompt's intent. The generator prompt pushes hard for personal anecdote ('At my old school...', 'My cousin works in retail...'), producing 30%. Real 2026改后 student posts are mostly ABSTRACT principle-level reasoning (only 9% have a concrete/personal example) and are less first-person (1.3 vs 2.2 pronouns). The model-answer voice here is general/expository, not anecdotal.",
+      "reliability": "solid"
+    },
+    {
+      "name": "student_echoes_prompt_terms",
+      "kind": "qual",
+      "unit": "share of student posts reusing >=2 of the professor's content words",
+      "target": 0.69,
+      "distribution": { "real_n96": { "echo": 66, "rate": "68.8%" } },
+      "detector": "share content words (len>5) shared between student post and professor_question >=2",
+      "examples": [
+        "(prompt: 'corporate transparency ... confidential') -> 'I think corporate transparency is essential ... certain information should be confidential ...'"
+      ],
+      "current": "gen 284/288 = 98.6%",
+      "gap": "Gen echoes the prompt's exact key terms almost always (99%); real does so 69% — real students more often restate in their own words. Minor, but gen over-couples the student wording to the stem.",
+      "reliability": "partial"
+    },
+    {
+      "name": "student_length_differential",
+      "kind": "quant",
+      "unit": "abs char diff between the two students",
+      "target": { "<=30": 0.55, "31-100": 0.28, "100+": 0.11, "mean_chars": 36 },
+      "distribution": { "real_n47": { "<=30": 29, "31-100": 13, "100+": 5, "mean": 35.6 } },
+      "detector": "abs(chars(s1)-chars(s2)) bucketed",
+      "examples": [],
+      "current": { "gen_n144": { "<=30": 74, "31-100": 70, "100+": 0, "mean": 32.9 } },
+      "gap": "Roughly OK on mean. Real allows an occasional clearly-longer student (11% have 100+ char gap); gen caps the gap (0 items >100). Low priority. The prompt's '35/43/22' differential note is OLD-TPO; 2026改后 leans more equal (55% within 30 chars).",
+      "reliability": "solid"
+    },
+    {
+      "name": "student_name_pool",
+      "kind": "qual",
+      "unit": "share of student names from the closed 2026改后 pool",
+      "target": { "pool": ["Claire", "Paul", "Andrew", "Kelly"], "share_from_pool": 1.0, "approx_freq": { "Claire": 0.33, "Andrew": 0.27, "Paul": 0.22, "Kelly": 0.18 } },
+      "distribution": { "real_n94": { "Claire": 31, "Andrew": 25, "Paul": 21, "Kelly": 17, "from_pool": "94/94 = 100%" } },
+      "detector": "tally student[].name; membership in {Claire,Paul,Andrew,Kelly}",
+      "examples": ["Claire", "Paul", "Andrew", "Kelly"],
+      "current": "gen uses a 50-name diverse pool (Emily, Olivia, Ryan, Cameron, Sarah, Joe, Steve, Mia, David, ...); Claire/Paul present but diluted",
+      "gap": "STRONG, CHEAP authenticity tell. 100% of real 2026改后 student names come from exactly four: Claire, Paul, Andrew, Kelly. The generator's DISC_STUDENT_NAMES is a 50-name list (calibrated to old TPO diversity). For 2026改后, restrict to these four. (Note one real OCR artifact 'I think' as a name — ignore.)",
+      "reliability": "solid"
+    },
+    {
+      "name": "course_topic_pool",
+      "kind": "qual",
+      "unit": "course-area distribution + topic recurrence",
+      "target": { "areas": ["economics", "psychology", "marketing", "education/educational psychology", "anthropology", "sociology", "business ethics", "literature/communications/history/art history"], "topic_recurrence": "real REUSES a small pool — same prompt recurs across dates" },
+      "distribution": { "real_courses_n50": { "economics": 6, "psychology": 5, "marketing": 5, "education": 5, "anthropology": 5, "business ethics": 4, "sociology": 4, "educational psychology": 3, "literature": 2, "single-instance": "international relations, ethics, business management, technology, advertising, social psychology, history, art history, communications, life skills" }, "topic_recurrence": { "cultural globalization->local traditions": 5, "globalization->local economies": 4, "nature vs nurture": 3, "role of government in economy": 3, "corporate transparency": 2, "project-based learning": 2, "EI vs technical skills": 2, "advertising impact": 2, "social media & public opinion": 2 }, "unique_topics": "33/50 distinct cores (66%); 35/50 distinct question strings" },
+      "detector": "course tally (lowercased); topic clustered by content-word signature of professor_question",
+      "examples": [
+        "Do you think globalization has a positive or negative impact on local economies? Why?  (recurs 4x: 3.21, 3.23, 4.1, 5.10)",
+        "What is your perspective on the impact of cultural globalization on local traditions?  (recurs 5x)"
+      ],
+      "current": "gen uses 66 distinct courses incl. many never seen in real (marine biology, robotics, paleontology, fashion design, veterinary science, game design, real estate, dance, forestry...) and forces topic UNIQUENESS via existingTopics avoidance",
+      "gap": "Two-way mismatch. (a) Course breadth: real 2026改后 stays in a narrow social-science/business/humanities band; gen sprawls into hard-science/vocational courses that never appear. (b) Recurrence: real RE-USES a small topic pool (only 66% unique, top topic appears 5x); gen maximizes novelty (existingTopics dedupe). For drilling realism, weighting toward the recurring real topics is MORE authentic than maximizing variety.",
+      "reliability": "solid"
+    }
+  ],
+  "correlations": [
+    "AUTHENTICITY BUNDLE: the single strongest 'feels like 2026改后' signal is the professor-post template — name 'Dr. Gupta' + opener 'We've been discussing <topic>.' + a 'Some <experts> argue A; Others believe B.' two-sided frame + a question ending in 'Why?'. These four co-occur in the majority of real items and co-fail in the generated bank (the generator nails none of the four by default). Fixing the opener (D-prof_opener) drags contractions (D-prof_contractions) up for free because the contraction is in 'We've'.",
+    "STUDENT FORMULAICITY: real student posts cluster tightly — short (≈43w / 3 sentences), opener 'I believe/think' (S1) paired with 'In my opinion' (S2) 38% of the time, abstract reasoning (only 9% personal example), clean opposing stances, no peer naming. The generator's 'sound like a real college student with personal anecdotes and varied openers' instruction pushes the OPPOSITE direction (longer, anecdotal, varied, peer-referencing). For 2026改后 the authentic voice is a short, formulaic, expository model-answer — NOT a lively forum poster.",
+    "DIFFICULTY != LENGTH: there is no length-difficulty signal here the way there is in BS/Repeat. Item difficulty in Discussion is carried by the QUESTION FRAMING (a 'Which of these two approaches…' or 'X or Y, Why?' that forces a genuine choice between two articulated positions) and by how cleanly the two student stances oppose — not by post length. Longer posts are not 'harder'."
+  ],
+  "deferred": [
+    "Per-item difficulty rating: real items carry no difficulty label and the task is human-scored on the test-taker's essay, so 'item difficulty' can't be derived from the prompt alone. Deferred — no ground-truth signal.",
+    "Exact opener frequency precision: the opener distribution (D-prof_opener) is from n=36 transcribed posts (the 36 with a recoverable full post), not all 50. The 14 earliest items (Jan/early-Feb full-test OCRs) had the post embedded in noisy full-exam dumps and were only partially recovered. Direction is unambiguous (We've-been dominates) but the exact 61%/14%/11% split is ±a few points.",
+    "Whether 'Professor' (bare) EVER appears in 2026改后: across 36 transcribed + 50 structured items it never did (always Dr. <Surname>). High confidence it should be banned, but can't prove 0% from a 50-item sample with certainty.",
+    "Student grammar-imperfection rate: the prompt allows '1 mild imperfection per student'. Real recalled posts are reconstructed/cleaned (OCR+DeepSeek), so their surface grammar is not a reliable witness to what the real on-screen posts contained. Deferred — source can't support it."
+  ]
+}

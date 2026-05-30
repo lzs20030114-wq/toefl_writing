@@ -1,0 +1,179 @@
+{
+  "type": "ctw",
+  "n": { "real_paragraphs_total": 75, "real_paragraphs_unique": 55, "real_clean_blank_lists": 48, "real_blanks": 481, "generated_items": 191, "generated_items_with_blanks": 166, "generated_blanks": 1660 },
+  "generated_at": null,
+  "ground_truth": "data/realExam2026/reading/completeTheWords.json (passages, OCR) + .codex-tmp/exam_txt/*答案*.txt (recovered blank words)",
+  "generated_bank": "data/reading/bank/ctw.json",
+  "maps_to_builder": "lib/readingGen/ctwPromptBuilder.js",
+  "maps_to_blanker": "lib/readingGen/cTestBlanker.js",
+  "maps_to_difficulty": "lib/readingGen/ctwDifficulty.js",
+  "maps_to_validator": "lib/readingGen/ctwValidator.js",
+  "maps_to_profile": "lib/readingBank/readingEtsProfile.js (CTW_PROFILE, ETS_FLAVOR.ctwBlankProfile)",
+  "notes": "Blanking is 100% mechanical (C-test: floor(len/2) shown, every-other-word from sentence 2, exactly 10 blanks) and is already CORRECT (validated 17/19 vs real OCR fragments). The AI generates ONLY the passage. Therefore the real lever for quality is the passage's length and lexical richness, not the blank algorithm. Real exam is RICHER and LONGER than the current prompt targets. Real word lists recovered from answer keys; 3 OCR-garbled lists dropped; real passage word-count UNDERCOUNTED by OCR glue (true mean ~72 vs OCR 69).",
+  "dimensions": [
+    {
+      "name": "blank_count",
+      "kind": "quant",
+      "unit": "count per passage",
+      "target": 10,
+      "distribution": { "real": { "10": 48 }, "generated": { "10": 166, "missing": 25 } },
+      "detector": "len(item.blanks); for real, numbered fill-tokens per answer-key passage segment",
+      "examples": [],
+      "current": "166/191 = 10; 25/191 missing blanks[] entirely",
+      "gap": "data-integrity: 13% of generated bank has no blanks array (unusable as cloze)",
+      "reliability": "solid"
+    },
+    {
+      "name": "passage_word_count",
+      "kind": "quant",
+      "unit": "words",
+      "target": { "mean": 71, "min": 62, "max": 94, "sentences": "4-5" },
+      "distribution": { "real_ocr": { "mean": 69.3, "median": 71, "min": 31, "max": 94, "sd": 12.7, "note": "OCR undercounts; glue-repaired estimate mean ~71.8; <50w items are truncated recalls" }, "generated": { "mean": 56.3, "median": 57, "min": 45, "max": 80, "sd": 7.9 } },
+      "detector": "passage.trim().split(/\\s+/).length; glue-repair estimate for real (split tokens >12ch / internal caps)",
+      "examples": [
+        "Glaciers are massive, slow-moving bodies of ice that form in areas where snow accumulates over time and compresses into ice. They can change landscapes through processes like erosion and deposition. As glaciers move, they cut out valleys and fjords, leaving behind distinct geological features. Scientists study glaciers to understand past climate conditions and predict future changes. Glaciers are of particular concern today because their melting contributes to rising sea levels, impacting coastal communities worldwide.",
+        "Crop rotation is a farming technique that involves growing a series of different types of crops in the same area across a sequence of seasons. Different crops use different nutrients from the soil, so rotating them prevents the soil from becoming depleted. This method helps to reduce pests and diseases; it also decreases the need for chemical fertilizers, promoting sustainable agriculture. Farmers use this practice to improve crop yields and maintain healthy soil."
+      ],
+      "current": { "mean": 56.3, "median": 57, "max": 80 },
+      "gap": "generated runs ~15 words too short and never reaches the real 85-94 top; prompt itself flags UNDERSHOOT. This shortfall destroys the intact-tail shape (D6).",
+      "reliability": "solid"
+    },
+    {
+      "name": "blank_pos_function_vs_content",
+      "kind": "quant",
+      "unit": "share of 10 blanks",
+      "target": { "function": 0.34, "content": 0.66, "function_per_passage_mode": 3 },
+      "distribution": { "real": { "function_pct": 33.9, "content_pct": 66.1, "function_per_passage": { "1": 1, "2": 9, "3": 19, "4": 12, "5": 3, "6": 4 }, "mean_function": 3.4 }, "generated": { "function_pct": 38.2, "content_pct": 61.8 } },
+      "detector": "lowercase blank word in closed-class FUNCTION set (det/prep/pron/conj/aux); hand-validated on 5 passages",
+      "examples": [
+        "Camels: in[F] desert[C] have[F] travel[C] long[C] without[F] any[F] or[F] so[F] camels[C] (6 function / 4 content)",
+        "Sanitation: sewage[C] and[F] water[C] developed[C] the[F] awareness[C] connection[C] poor[C] illness[C] spread[C] (2 function / 8 content — content-heavy boundary)"
+      ],
+      "current": "38.2% function / 61.8% content",
+      "gap": "small (+4pp function) but wrong direction; prompt's 'put common words in blank positions' biases blanks easy/function-ward",
+      "reliability": "solid"
+    },
+    {
+      "name": "blank_word_length",
+      "kind": "quant",
+      "unit": "characters",
+      "target": { "mean": 5.77, "median": 5, "pct_ge_8": 0.256, "long_blanks_per_passage": 2.56 },
+      "distribution": { "real": { "mean": 5.77, "median": 5, "min": 2, "max": 14, "buckets_pct": { "2-3": 23, "4-5": 28, "6-7": 23, "8-9": 14, "10+": 11 } }, "generated": { "mean": 5.13, "median": 5, "pct_ge_8": 0.152, "long_blanks_per_passage": 1.32 } },
+      "detector": "length of letters-only blank word; bucket histogram; count >=8",
+      "examples": [
+        "real >=8ch blanks: advantageous, characterized, conversely, systematically, redistribute, frequency, populations, eruptions, vegetation, encompass, geological, acquisition, perceive"
+      ],
+      "current": { "mean": 5.13, "pct_ge_8": 0.152 },
+      "gap": "generated blanks ~0.6 chars shorter; ~half the long-word density of real (1.32 vs 2.56 per passage). Downstream of simpler passages.",
+      "reliability": "solid"
+    },
+    {
+      "name": "fragment_ratio",
+      "kind": "quant",
+      "unit": "shown-letters / word-length",
+      "target": { "mean": 0.453, "rule": "floor(len/2) shown", "pct_single_char_shown": 0.229 },
+      "distribution": { "real": { "mean": 0.453, "min": 0.33, "max": 0.50, "pct_show_le_1_char": 22.9 }, "generated": { "pct_show_le_1_char": 27.7 } },
+      "detector": "floor(len/2)/len per blank; share with floor(len/2)<=1. VALIDATED: floor(len/2)-shown matches real OCR fragments 17/19 (89%) hand-paired",
+      "examples": [
+        "change->cha (6->3); through->thr (7->3); like->li (4->2); population->popul (10->5); increase->incr (8->4); powerful->powe (8->4); legs->le (4->2); allow->al (5->2)"
+      ],
+      "current": "same rule; 27.7% show <=1 char vs real 22.9%",
+      "gap": "generated has slightly more 1-letter (ambiguous) fragments because it blanks more short function words; blank DISPLAY mechanic itself is correct",
+      "reliability": "solid"
+    },
+    {
+      "name": "passage_shape_intact_bookends",
+      "kind": "qual",
+      "unit": "blank position structure",
+      "target": "S1 intact; 10 blanks packed into sentences 2-3 (~20-22 words); sentences 4-5 fully intact (intact tail)",
+      "distribution": { "real": "hand-traced on Grasshoppers/Glaciers/Art+Religion/Camels: always S1 intact + blanks in S2-3 + >=1 intact trailing sentence" },
+      "detector": "structural: (passage_words - sentence1_words)/2 >= 10 AND 10th blank's cumulative word index ends before final sentence boundary; equivalently ~70w/5-sentence passage yields it, 56w/3-4 does not",
+      "examples": [
+        "Grasshoppers 2026-03-16_ctw2: S1 intact -> S2 holds 4 blanks (have/ways/protect/against) -> S3 holds 6 (they/powerful/legs/allow/to/away) -> S4+S5 fully intact"
+      ],
+      "current": "mean 56w / 4.3 sentences / 12.9-word S1 -> blanks run into final sentence, no reliable intact tail",
+      "gap": "generated short passages structurally cannot reproduce the intact-bookend shape; this is the main 'feels synthetic' gap, downstream of passage_word_count",
+      "reliability": "solid"
+    },
+    {
+      "name": "first_sentence_richness",
+      "kind": "quant",
+      "unit": "words + avg char length + long-word share",
+      "target": { "words_mean": 16.7, "avg_word_len": 5.89, "long_word_pct": 0.389 },
+      "distribution": { "real": { "words_mean": 16.7, "words_min": 4, "words_max": 28, "avg_word_len": 5.89, "long_word_pct": 38.9, "abstract_noun_per_100": 4.0 }, "generated": { "words_mean": 12.9, "avg_word_len": 5.09, "long_word_pct": 25.5 } },
+      "detector": "sentence-1 word count; avg letters-only word length; share of words >=7 chars (sentence 1 is intact => reliable for both real & gen)",
+      "examples": [
+        "Human cognition refers to the mental processes involved in acquiring, processing, storing, and using knowledge.",
+        "Oceanography is the study of the physical, chemical, and biological aspects of the ocean.",
+        "The field of philosophy of mind delves into the nature of consciousness, thought processes, and the intricate relationship between the mind and body."
+      ],
+      "current": { "words_mean": 12.9, "avg_word_len": 5.09, "long_word_pct": 25.5 },
+      "gap": "generated topic sentences ~4 words shorter and a full register simpler; prompt's 'avg word length 4.5-5.5' is BELOW real 5.89 and directly causes this",
+      "reliability": "solid"
+    },
+    {
+      "name": "blank_difficulty_ceiling",
+      "kind": "quant",
+      "unit": "freq tier shares + rare-blanks-per-passage + mean score 0-10",
+      "target": { "note": "real is harder than current gen; raise the ceiling. Direction solid; absolute 'rare' inflated by incomplete word lists", "rare_blanks_per_passage": ">=4 acceptable", "pct_passages_with_gt3_rare": 0.73, "mean_score_min": 3.5 },
+      "distribution": { "real": { "easy_pct": 49.3, "medium_pct": 7.7, "rare_pct": 43.0, "mean_score": 3.65, "rare_per_passage": 4.31, "pct_passages_gt3_rare": 73, "caveat": "rare% inflated: EASY/MEDIUM lists omit like/blue/loss/desert/eggs/tiny/usually/any" }, "generated": { "easy_pct": 62.7, "medium_pct": 4.0, "rare_pct": 33.3, "mean_score": 2.85, "rare_per_passage": 2.90, "pct_passages_gt3_rare": 35 } },
+      "detector": "ctwDifficulty.scoreBlank + freq-class via wordInSet(EASY/MEDIUM); per-passage rare count. Length-based signal (blank_word_length) is list-independent and corroborates.",
+      "examples": [
+        "real hard blanks: advantageous, characterized, conversely, fundamental, geological, acquisition, systematically, redistribute, vegetation, eruptions, frequency, perceive, encompass, populations"
+      ],
+      "current": "easy 62.7% / rare 33.3% / mean 2.85 / 2.90 rare per passage (35% of passages have >3 rare)",
+      "gap": "generated a clear notch easier. CRITICAL SECONDARY FINDING: current validator (rareRatio>0.5 reject, >0.3 warn) would REJECT 9/48 and WARN 26/48 REAL passages -> validator is stricter than the exam and suppresses authentic difficulty. Prompt 'CEFR A2-B1, no fundamental/sophisticated' also undershoots.",
+      "reliability": "partial"
+    },
+    {
+      "name": "blank_morphology",
+      "kind": "quant",
+      "unit": "share of blanks by suffix",
+      "target": { "simple_form": 0.85, "ing": 0.04, "ed": 0.03, "ly": 0.02, "plural_s": 0.17 },
+      "distribution": { "real": { "ing_pct": 4, "ed_pct": 3, "ly_pct": 2, "plural_s_pct": 17 }, "generated": { "ing_pct": 2, "ed_pct": 3, "ly_pct": 2 } },
+      "detector": "suffix match on blank word",
+      "examples": [],
+      "current": "ing 2% / ed 3% / ly 2%",
+      "gap": "negligible; matches ETS_FLAVOR.ctwBlankProfile.simpleFormRatio=0.85",
+      "reliability": "solid"
+    },
+    {
+      "name": "topic_domain_distribution",
+      "kind": "quant",
+      "unit": "share of passages by domain",
+      "target": { "environmental_climate": 0.29, "history_anthropology": 0.15, "geology_earth": 0.13, "biology_animals": 0.13, "psychology_cognition": 0.09, "arts_culture": 0.05, "human_body_biochem": 0.05, "biology_plants": 0.05, "economics": 0.04, "astronomy_space": 0.02 },
+      "distribution": { "real_unique_55": { "environmental_climate": 16, "history_anthropology": 8, "geology_earth": 7, "biology_animals": 7, "psychology_cognition": 5, "arts_culture": 3, "human_body_biochem": 3, "biology_plants": 3, "economics": 2, "astronomy_space": 1 }, "generated_191": { "environmental_science": 31, "biology": 31, "psychology": 25, "geology": 25, "astronomy": 22, "history": 22, "anthropology": 11, "technology": 10, "art": 7, "sociology": 5, "physics": 1 } },
+      "detector": "keyword classifier over full passage; dedupe by first sentence",
+      "examples": [
+        "real subjects: glaciers, camels, tigers, photosynthesis, crop rotation, ocean currents, pottery, Middle Ages, cosmology, supply and demand"
+      ],
+      "current": "big buckets roughly align, but gen over-weights astronomy (12% vs real 2%) and under-weights the environmental/earth-life cluster (gen ~45% vs real ~55%)",
+      "gap": "topic realism fine; mix skewed by evenly-cycled 12-topic pool vs real environmental skew",
+      "reliability": "solid"
+    },
+    {
+      "name": "sentence_length_variation_cv",
+      "kind": "quant",
+      "unit": "coefficient of variation of sentence lengths",
+      "target": { "cv": 0.30 },
+      "distribution": { "real_ocr": { "cv": 0.299, "caveat": "OCR glue affects mid-passage sentence boundaries" }, "generated": { "cv": 0.134 } },
+      "detector": "sd(sentence word counts)/mean per passage, averaged",
+      "examples": [],
+      "current": { "cv": 0.134 },
+      "gap": "generated sentences too uniform in length; real varies ~2x more (matches ETS_FLAVOR.sentLengthVariation=0.344 target which generation misses)",
+      "reliability": "partial"
+    }
+  ],
+  "correlations": [
+    "Length -> difficulty is INDIRECT, mediated by lexical richness not word count: within generated bank corr(passage_words, mean_blank_len)=-0.16 and corr(passage_words, rare_blank_count)=+0.09 (both ~flat). Because blanking is mechanical, harder blanks come from a lexically richer passage (richer even-position words), not from a longer one. Lever = raise passage lexical level (first_sentence_richness / blank_difficulty), not just word count.",
+    "Passage length GATES the authentic shape: a passage must exceed ~65-70 words / 5 sentences for the 10 every-other-word blanks (~21 words) to end before the final sentence and leave an intact tail. The 56-word generated center of mass simultaneously explains the short-passage gap, the missing intact tail, and part of the easy-blank gap — one root cause: the passage is too small and too plain.",
+    "Function-word share, single-char fragments, and easiness co-vary: blanking more function words (D3) -> more <=1-letter fragments (D5) -> lower difficulty (D8). The prompt's explicit 'put common words in blank positions' instruction is the shared upstream cause; real exam's 34/66 function/content split with longer content blanks is the target."
+  ],
+  "deferred": [
+    "Per-blank context predictability / unique-solvability — not measurable from word lists; would need each blank rendered in-sentence + a solver. The <=1-letter-fragment rate (22.9% real) is the best proxy.",
+    "Exact per-passage 'which sentence is blanked' — measured structurally and hand-traced (intact head + S2-3 body + intact tail) but NOT machine-countable from OCR, because OCR glue produces false fragment tokens inside intact sentences.",
+    "True real passage word count — OCR undercounts (glued words); corrected via glue-repair estimate (~71.8 mean) not exact. The 31-word min and a handful of <50w 'passages' are truncated partial recalls, exclude from min-length target.",
+    "Absolute easy/medium/rare blank percentages — direction (real harder than gen) is solid and length-corroborated, but the 43%-rare absolute is inflated by gaps in ctwDifficulty EASY/MEDIUM lists. A clean tier needs an external frequency band (SUBTLEX/COCA).",
+    "First-sentence opening-strategy taxonomy (definition vs claim vs 'X is the study of') — definitions visibly dominate but not yet quantified into target ratios."
+  ]
+}

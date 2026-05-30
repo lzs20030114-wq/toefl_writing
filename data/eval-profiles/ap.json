@@ -1,0 +1,341 @@
+{
+  "type": "ap",
+  "n": {
+    "real_items_raw": 64,
+    "real_unique_passages": 42,
+    "real_clean_academic_passages": 39,
+    "real_questions_structured_json": 207,
+    "real_questions_handcoded": 70,
+    "real_handcoded_passages": 14,
+    "generated_passages": 156,
+    "generated_questions": 780
+  },
+  "generated_at": null,
+  "ground_truth": "data/realExam2026/reading/academicPassage.json (passage text reliable; questions UNDER-extracted ~3.2/passage) + hand-coded question clusters from .codex-tmp/ocr/*阅读*.txt (true structure)",
+  "generated_bank": "data/reading/bank/ap.json",
+  "maps_to_builder": "lib/readingGen/apPromptBuilder.js",
+  "maps_to_profile": "lib/readingBank/readingEtsProfile.js (AP_PROFILE + ETS_FLAVOR)",
+  "notes": "CRITICAL CONTEXT: the 2026改后 reading section is module-based (Module 1 = 35 Qs, Module 2 = 15 Qs) and INTERLEAVES three item types on one screen flow: Complete-the-Words (CTW, Q1-20), Read-In-Daily-Life (RIDL signs/notices/receipts/reviews, one Q each), and Academic Passage (AP). AP items appear as CLUSTERS of exactly 5 questions shown one-per-screen with the full passage on the left. The structured JSON under-extracted AP questions (mean 3.2/passage) and contains ~3 RIDL-leakage items; question-type distribution is therefore HAND-CODED from OCR (n=70 over 14 fully-read clusters). The passage-LENGTH numbers in lib/readingGen (mean 317.5, target 280-360) and the opening-strategy claim (received_wisdom 46%) are inherited from OLD classic-TOEFL samples and are WRONG for 2026改后 — real 2026 AP passages are ~180-200 words and open with a direct topic/definition statement.",
+  "dimensions": [
+    {
+      "name": "questions_per_passage",
+      "kind": "quant",
+      "unit": "count",
+      "target": 5,
+      "distribution": { "real_handcoded": { "5": 14 }, "real_structured_json_UNRELIABLE": { "1": 4, "2": 18, "3": 15, "4": 13, "5": 14 } },
+      "detector": "Count single-question screens sharing one passage title within a module block (OCR). JSON count is unreliable (DeepSeek under-extracted).",
+      "examples": [
+        "Value Theory: Q26-30 (5)",
+        "Synthetic Diamonds: Q31-35 (5)",
+        "Space Debris: Q11-15 (5, Module 2)"
+      ],
+      "current": "156/156 passages = exactly 5",
+      "gap": "none (count matches); the gap is in the TYPE mix, not the count",
+      "reliability": "solid"
+    },
+    {
+      "name": "passage_word_count",
+      "kind": "quant",
+      "unit": "words",
+      "target": { "mean": 183, "median": 189, "min": 150, "max": 210, "p10": 146, "p90": 204 },
+      "distribution": {
+        "real_clean_n39": { "mean": 182.5, "median": 189, "min": 71, "max": 209, "buckets": { "<150": 4, "150-180": 6, "180-200": 20, "200-220": 9, ">220": 0 } },
+        "gen_n156": { "mean": 210, "median": 195, "min": 125, "max": 322, "buckets": { "<150": 11, "150-200": 72, "200-250": 31, "250-300": 35, "300-360": 7 } }
+      },
+      "detector": "whitespace word count of passage; RIDL-leakage excluded by header/receipt/review regex",
+      "examples": [
+        "Thinking Outside the Box = 200w",
+        "Value Theory = 190w",
+        "Augmented Reality for Training = 175-203w"
+      ],
+      "current": { "mean": 210, "over_250w": "42/156 (27%)", "max": 322 },
+      "gap": "BIG GAP. Gen is ~15% longer on average and has a long tail to 322w that does NOT exist in real (real hard ceiling ~210w). 42/156 gen passages exceed the entire real range. apPromptBuilder targets 280-360 (acceptable 200-440) — this is the OLD classic-TOEFL number and is ~70-90% too long for 2026改后.",
+      "reliability": "solid"
+    },
+    {
+      "name": "paragraph_count",
+      "kind": "quant",
+      "unit": "count",
+      "target": { "mode": 3, "range": [2, 4] },
+      "distribution": { "real_OCR_handread": { "3": 11, "4": 3 }, "gen_n156": { "3": "majority", "4": "minority", "min": 3, "max": 4 } },
+      "detector": "OCR paragraph breaks (JSON lost them — JSON paragraphs field is mostly 1 and unreliable). Hand-read from 14 clusters.",
+      "examples": [
+        "Value Theory = 3 paragraphs",
+        "Approximation Theory = 4 paragraphs",
+        "Urban Resilience = 3 paragraphs"
+      ],
+      "current": "3-4 paragraphs (mode 3)",
+      "gap": "small/none — gen 3-4 paras matches real 2-4 (mode 3). The structured JSON cannot measure this (lost paragraph breaks); confirmed via OCR.",
+      "reliability": "partial"
+    },
+    {
+      "name": "avg_sentence_length",
+      "kind": "quant",
+      "unit": "words/sentence",
+      "target": { "mean": 16.6, "min": 8, "max": 22 },
+      "distribution": { "real_n64": { "mean": 16.6, "median": 16.9, "min": 7.9, "max": 22.2 }, "gen_n156": { "mean": 18.3, "median": 17.1, "max": 29.2 } },
+      "detector": "words / sentence-count per passage (sentence split on .!?)",
+      "examples": [],
+      "current": { "mean": 18.3, "max": 29.2 },
+      "gap": "moderate — gen sentences run ~1.7 words longer on average with a heavier long tail (max 29 vs real 22). Tracks the over-length passage problem.",
+      "reliability": "solid"
+    },
+    {
+      "name": "question_type_distribution",
+      "kind": "qual",
+      "unit": "share of questions",
+      "target": {
+        "factual_detail": 0.23,
+        "inference": 0.19,
+        "vocabulary": 0.17,
+        "insert_text": 0.12,
+        "negative_factual": 0.10,
+        "rhetorical_purpose": 0.10,
+        "reference": 0.05,
+        "paragraph_relationship": 0.03,
+        "main_idea": 0.015,
+        "sentence_select": 0.015
+      },
+      "distribution": {
+        "real_handcoded_n70": { "factual_detail": 16, "inference": 13, "vocabulary": 12, "insert_text": 8, "negative_factual": 7, "rhetorical_purpose": 7, "reference": 3, "paragraph_relationship": 2, "sentence_select": 1, "main_idea": 1 },
+        "gen_n780": { "factual_detail": 171, "vocabulary_in_context": 156, "inference": 143, "rhetorical_purpose": 110, "paragraph_relationship": 106, "negative_factual": 64, "main_idea": 30, "insert_text": 0, "reference": 0, "sentence_select": 0 }
+      },
+      "detector": "classify stem by regex (closest-in-meaning=vocab, four-locations=insert_text, refer-to=reference, EXCEPT/NOT=negative_factual, why-mention/purpose-of-para=rhetorical_purpose, relate-to/how-does-para=paragraph_relationship, can-be-inferred/suggests=inference, main-point=main_idea, identify-the-sentence=sentence_select, according-to/what-is=factual_detail). Hand-validated against 14 read clusters.",
+      "examples": [
+        "vocab: 'The word \"mitigate\" in the passage is closest in meaning to'",
+        "insert_text: 'There are four locations [■] in the passage that indicate where the following sentence could be added... Where would the sentence best fit?'",
+        "reference: 'What does \"its cautionary implications\" refer to in the passage?'",
+        "negative_factual: 'Which of the following is NOT mentioned as a threat to coral reefs in the passage?'"
+      ],
+      "current": "gen has 0% insert_text, 0% reference, 0% sentence_select; over-produces paragraph_relationship (13.6% vs 2.9%) and vocabulary (20% vs 17%).",
+      "gap": "BIGGEST GAP. (1) insert_text (real 11.4%, gen 0%) is entirely missing — it is the single most consistent slot in a real cluster. (2) reference (real 4.3%, gen 0%) and sentence_select (real 1.4%, gen 0%) missing. (3) paragraph_relationship is 4.7x over-produced. The current QUESTION_PLANS in apPromptBuilder.js have no insert_text/reference/sentence_select and use paragraph_relationship in 4 of 5 plans.",
+      "reliability": "solid"
+    },
+    {
+      "name": "insert_text_present_and_last",
+      "kind": "qual",
+      "unit": "presence + position",
+      "target": { "passages_with_insert_text": 0.57, "insert_text_is_Q5_when_present": 1.0 },
+      "distribution": { "real_handcoded_n14": { "has_insert_text": 8, "insert_text_is_last": 8, "no_insert_text": 6 } },
+      "detector": "stem matches /four locations|best fit|could be added/; check its index within the 5-question cluster",
+      "examples": [
+        "Synthetic Diamonds Q35 (last): 'And because of the controlled conditions in which they are produced, synthetic diamonds are actually preferred for industrial uses... Where would the sentence best fit?'",
+        "Smart Textiles Q30 (last): 'Imagine being able to change the appearance of your furnishings depending on your mood or the season.'",
+        "Urban Resilience Q35 (last): 'For example, Singapore's Intelligent Transport System incorporates artificial intelligence (AI) to predict real-time traffic conditions...'"
+      ],
+      "current": "0 insert_text questions in the entire generated bank; passages carry no [■] insertion markers",
+      "gap": "BIG GAP. ~57% of real AP clusters end with an insert_text Q (always the LAST question, requiring 4 [■] markers placed at paragraph/sentence boundaries in the passage). Generator produces neither the markers nor the question type. Requires passage to expose 4 insertion slots.",
+      "reliability": "solid"
+    },
+    {
+      "name": "vocabulary_per_passage",
+      "kind": "qual",
+      "unit": "count per cluster",
+      "target": { "exactly_one_vocab_per_passage": 0.86, "mean": 0.86 },
+      "distribution": { "real_handcoded_n14": { "exactly_1_vocab": 12, "0_or_2": 2 }, "real_vocab_total_n70": 12 },
+      "detector": "count stems matching /closest in meaning/ per cluster",
+      "examples": [
+        "'The word \"replicating\" in the passage is closest in meaning to' (recreating / analyzing / altering / enhancing)",
+        "'The word \"harness\" in the passage is closest in meaning to' (exploit / limit / distribute / release)",
+        "'The phrase \"in turn\" in the passage is closest in meaning to' (as a later consequence / in all cases / unfortunately / before that)"
+      ],
+      "current": "20% of all gen questions are vocab (= ~1 per 5-question passage), so count roughly matches",
+      "gap": "count roughly matches (~1/passage), but see vocab_option_length — gen vocab options are too long/wordy vs real (real vocab options are mostly single words).",
+      "reliability": "solid"
+    },
+    {
+      "name": "options_per_question",
+      "kind": "quant",
+      "unit": "count",
+      "target": 4,
+      "distribution": { "real_structured_json": { "4": 205, "2": 1, "0": 1 } },
+      "detector": "len(options); JSON stores options as array of 4",
+      "examples": [],
+      "current": "780/780 = 4 options",
+      "gap": "none",
+      "reliability": "solid"
+    },
+    {
+      "name": "option_word_length_overall",
+      "kind": "quant",
+      "unit": "words/option",
+      "target": { "mean": 8.0, "max": 25 },
+      "distribution": { "real_non_vocab_n666": { "mean": 8.0 }, "real_all_n822": { "mean": 6.8, "min": 1, "max": 25 }, "gen_non_vocab": { "mean": 7.8 }, "gen_all_n780": { "mean": 6.8 } },
+      "detector": "whitespace word count per option; split vocab (single-word) vs non-vocab",
+      "examples": [
+        "non-vocab option: 'producing synthetic diamonds is less harmful to the environment than mining natural diamonds is' (14w, a real long boundary case)"
+      ],
+      "current": { "non_vocab_mean": 7.8, "all_mean": 6.8 },
+      "gap": "none on means — gen matches real closely (non-vocab ~7.8-8.0).",
+      "reliability": "solid"
+    },
+    {
+      "name": "option_length_spread_within_question",
+      "kind": "quant",
+      "unit": "max-min words within a 4-option set",
+      "target": { "mean_spread": 2.6, "median_spread": 3, "balanced_rate_spread_le_3": 0.69 },
+      "distribution": { "real_n205": { "mean_spread": 2.6, "median_spread": 3, "balanced_rate": 0.69 }, "gen_n780": { "mean_spread": 1.6, "median_spread": 1, "balanced_rate": 0.94 } },
+      "detector": "per-question (max option words - min option words); rate where spread <= 3",
+      "examples": [],
+      "current": { "mean_spread": 1.6, "balanced_rate": 0.94 },
+      "gap": "moderate (reverse direction). Gen options are TOO uniform (spread 1.6, 94% within 3w) vs real (spread 2.6, only 69% within 3w). The OPTION LENGTH RULE in apPromptBuilder ('within 2 words of each other') over-corrected; real ETS tolerates a 3-4 word spread. Over-uniformity is itself a synthetic tell.",
+      "reliability": "solid"
+    },
+    {
+      "name": "vocab_option_length",
+      "kind": "quant",
+      "unit": "words/option",
+      "target": { "mean": 1.5, "median": 1, "max": 6 },
+      "distribution": { "real_vocab_n156": { "mean": 1.5, "median": 1, "max": 6 }, "gen_vocab": { "mean": 2.9 } },
+      "detector": "word count of options on stems matching /closest in meaning/",
+      "examples": [
+        "real vocab options: distributing / acquiring / increasing / tracking (1 word each)",
+        "real vocab options: strength / threat / knowledge / supervision (1 word each)"
+      ],
+      "current": { "mean": 2.9 },
+      "gap": "moderate. Real vocab answer choices are overwhelmingly SINGLE words (mean 1.5); gen vocab options run ~2.9 words (phrases). Generator should output single-word synonyms for most vocab items.",
+      "reliability": "solid"
+    },
+    {
+      "name": "correct_is_uniquely_longest",
+      "kind": "quant",
+      "unit": "rate",
+      "target": "<= 0.25",
+      "distribution": { "gen_n780": 0.181 },
+      "detector": "per-question: is correct option the unique max-length option",
+      "examples": [],
+      "current": 0.181,
+      "gap": "none — gen 18.1% is below the 25% ceiling. (Real not directly measurable: structured JSON has no answer key, so target is the ETS_FLAVOR guideline of <=25%.) Solved dimension.",
+      "reliability": "partial"
+    },
+    {
+      "name": "answer_position_balance",
+      "kind": "quant",
+      "unit": "share per position",
+      "target": { "A": 0.25, "B": 0.25, "C": 0.25, "D": 0.25 },
+      "distribution": { "gen_n780": { "A": 0.26, "B": 0.25, "C": 0.25, "D": 0.24 } },
+      "detector": "tally correct_answer letter across all questions",
+      "examples": [],
+      "current": { "A": 0.26, "B": 0.25, "C": 0.25, "D": 0.24 },
+      "gap": "none — gen is near-uniform. (Real answer key absent from structured JSON; cannot compute real position bias — deferred. Gen's pre-assigned balanced positions in apPromptBuilder work.)",
+      "reliability": "partial"
+    },
+    {
+      "name": "passage_opening_strategy",
+      "kind": "qual",
+      "unit": "share of passages",
+      "target": { "direct_topic_or_definition_statement": 0.9, "received_wisdom_then_revision": 0.05 },
+      "distribution": { "real_unique_n42": { "direct_definition_explicit": 9, "received_wisdom_or_question": 1, "direct_topic_statement_other": 32 } },
+      "detector": "classify first sentence: definition markers (refers to / is defined as / investigates / is a / has emerged as) vs received-wisdom openers (Traditionally / Historically / While early...)",
+      "examples": [
+        "'Value theory investigates the nature of values and the principles that determine what is worth pursuing...'",
+        "'Urban green spaces, such as parks, gardens, and green roofs, provide numerous benefits to cities.'",
+        "'Parallel algorithms, a computing method common in modern computers, solve problems faster by dividing a task into smaller parts...'"
+      ],
+      "current": "apPromptBuilder/ETS_FLAVOR prescribe openingStrategies received_wisdom_then_revision=0.46 ('Historically...', 'While early theories...')",
+      "gap": "BIG GAP (wrong target inherited). Real 2026 AP almost never opens with 'received wisdom then revision' (1/42). It opens with a DIRECT topic/definition statement, frequently naming+defining the subject in sentence 1. The 46% received-wisdom target should be cut to ~5% and direct-definition raised to ~90%.",
+      "reliability": "solid"
+    },
+    {
+      "name": "first_sentence_defines_subject",
+      "kind": "qual",
+      "unit": "share of passages",
+      "target": { "definition_or_appositive_in_p1": 0.6 },
+      "distribution": { "real_flavor_n64": { "defsPerPassage": 1.23 } },
+      "detector": "count definition patterns per passage (known as / called / refers to / defined as / , a X / , which); confirm at least one in paragraph 1",
+      "examples": [
+        "'Floating wind turbines are a special type of wind turbines because they are not fixed to the seabed but are anchored using advanced mooring systems...' + 'anchoring refers to securing the turbine in place...'",
+        "'coral bleaching, a phenomenon where corals lose their color and essential symbiotic algae'",
+        "'algorithms-step-by-step procedures that solve problems efficiently'"
+      ],
+      "current": { "defsPerPassage": 2.1 },
+      "gap": "gen over-produces definition markers (2.1/passage vs real 1.23). Real AP introduces ~1 defined term (often the topic itself); gen stuffs ~2. Mild over-cooking.",
+      "reliability": "solid"
+    },
+    {
+      "name": "hedging_density",
+      "kind": "quant",
+      "unit": "hedge words per passage",
+      "target": { "mean": 1.0, "range": [0, 3] },
+      "distribution": { "real_n64": 1.03, "gen_n156": 2.94 },
+      "detector": "count /may|might|could|appear|seem|suggest|tend|often|generally|likely|perhaps|possibly|potentially/ per passage",
+      "examples": [
+        "real: 'this could be attributed not to generational identity but to life-stage effects'",
+        "real: 'some assumptions merit scrutiny'"
+      ],
+      "current": 2.94,
+      "gap": "moderate-large. Gen hedges ~3x more than real (2.94 vs 1.03 per passage). Real AP is more declarative; hedging concentrates in the final 'limitation' move, not throughout. The prompt rule 'include 1-2 hedging words' is fine but generation over-applies it (and over a shorter passage, density is even higher).",
+      "reliability": "solid"
+    },
+    {
+      "name": "contrast_transition_density",
+      "kind": "quant",
+      "unit": "contrast transitions per passage",
+      "target": { "mean": 1.1, "range": [1, 2] },
+      "distribution": { "real_n64": 1.09, "gen_n156": 2.29 },
+      "detector": "count /however|although|though|while|yet|despite|nevertheless|nonetheless|whereas|conversely/ per passage",
+      "examples": [
+        "real: 'However, this theory faces objections.'",
+        "real: 'Despite these efforts, challenges remain.'"
+      ],
+      "current": 2.29,
+      "gap": "moderate. Gen uses ~2x the contrast transitions of real (2.29 vs 1.09). Real AP typically has ONE strong pivot ('However,' / 'Despite') near the limitation move; gen sprinkles them.",
+      "reliability": "solid"
+    },
+    {
+      "name": "passive_voice_density",
+      "kind": "quant",
+      "unit": "passives per sentence",
+      "target": { "mean": 0.1, "range": [0.05, 0.2] },
+      "distribution": { "real_n64": 0.1, "gen_n156": 0.19 },
+      "detector": "count /(is|are|was|were|be|been|being) + V-ed|V-en/ per sentence",
+      "examples": [],
+      "current": 0.19,
+      "gap": "small-moderate. Gen ~2x more passive (0.19 vs 0.10 per sentence). Prompt mandates 'passive voice in at least 1 sentence' which is fine; gen overshoots. (Note: ETS_FLAVOR.passivePerSentence=0.23 is the OLD classic-TOEFL number; real 2026 is 0.10.)",
+      "reliability": "solid"
+    },
+    {
+      "name": "lexical_register",
+      "kind": "quant",
+      "unit": "ratios",
+      "target": { "avg_word_length": 5.63, "long_word_ratio_ge7": 0.371, "lexical_density": 0.709 },
+      "distribution": { "real_n64": { "avgWordLen": 5.63, "longWordRatio": 0.371, "lexicalDensity": 0.709 }, "gen_n156": { "avgWordLen": 5.88, "longWordRatio": 0.404, "lexicalDensity": 0.704 } },
+      "detector": "char length per word; share of words >=7 chars; content-word / total",
+      "examples": [],
+      "current": { "avgWordLen": 5.88, "longWordRatio": 0.404, "lexicalDensity": 0.704 },
+      "gap": "small. Gen is slightly heavier lexically (long-word ratio 0.404 vs 0.371; word length 5.88 vs 5.63). Lexical density matches (0.704 vs 0.709). Gen leans a touch more 'academic/dense' than real.",
+      "reliability": "solid"
+    },
+    {
+      "name": "topic_diversity",
+      "kind": "qual",
+      "unit": "distinct topics",
+      "target": { "distinct_topics_per_10_passages": 9, "no_single_topic_over": 0.15 },
+      "distribution": {
+        "real_unique_n42": { "distinct_free_text_topics": 39 },
+        "gen_n156": { "biology": 26, "environmental_science": 24, "history": 22, "psychology": 21, "geology": 21, "sociology": 7, "anthropology": 6, "materials_science": 5, "business": 5, "astronomy": 5, "chemistry": 4, "art": 4, "physics": 3, "technology": 3 }
+      },
+      "detector": "count distinct topic labels; real uses free-text topic (near 1:1 with passages); gen uses a 14-category enum",
+      "examples": [
+        "real topics: Value Theory, Plant Communication, Augmented Reality for Training, Radio Astronomy, The Flynn Effect, Sociocybernetics, Floating Wind Turbines, Parallel Algorithms, Quantum Dots, Cybernetic Prosthetics, Generational Identity, Twin Stars",
+        "NOTE the real bias toward APPLIED tech / contemporary science (AR, cybernetics, quantum dots, parallel algorithms, smart textiles, urban resilience) — more 'modern applied' than the classic-TOEFL natural-history feel"
+      ],
+      "current": "top 5 categories (biology/env/history/psych/geology) = 114/156 = 73% of bank; applied-tech topics under-represented",
+      "gap": "moderate. Real 2026 AP skews toward CONTEMPORARY APPLIED topics (computing, materials, biotech, urban systems, social science) with near-unique topics each time. Gen over-concentrates on biology/environmental/history/psychology/geology (classic-TOEFL natural-history canon). TOPIC_POOL exists but the 5-topic concentration persists.",
+      "reliability": "partial"
+    }
+  ],
+  "correlations": [
+    "DIFFICULTY is driven by ABSTRACTION + density, not length. The hardest real passages (Value Theory, Space Debris, Generational Identity) are NOT longer (all ~180-200w) — they are denser/more abstract (philosophy, orbital mechanics, social theory) and pair with inference/reference/EXCEPT questions and longer option text. Easy passages (Plant Communication, Coral Reef) are concrete process descriptions with factual_detail questions. So: control difficulty via topic abstraction and question-type mix, NOT by lengthening the passage.",
+    "The insert_text question (Q5) CO-REQUIRES passage scaffolding: the passage must expose 4 candidate insertion points [■] at paragraph/clause boundaries, and the inserted sentence is always a concrete elaboration/example that extends an existing point ('And because...', 'For example, Singapore's...', 'Imagine being able to...'). Generating the question without redesigning the passage to carry markers is impossible — these two dimensions must be built together.",
+    "A real 5-cluster has a near-fixed COMPOSITION recipe, not a free type draw: ~1 vocabulary (single-word options) + ~1 insert_text (last, ~57% of clusters) + a mix of factual_detail / inference / rhetorical_purpose / negative_factual + occasionally one reference or paragraph_relationship. Vocabulary and insert_text are the two 'anchor' slots; the middle 3 questions vary. Over a 5-set, expect 3-4 distinct types (matches the existing minQuestionTypeDiversity=3 gate).",
+    "Option-length UNIFORMITY anti-correlates with authenticity: real options vary more (spread 2.6) than gen's over-polished 1.6. Combined with gen's slightly heavier lexis and 2-3x hedging/contrast/passive, the cumulative effect is that gen passages read 'too smooth / too academic-template' — the synthetic tell is over-regularity, not any single metric."
+  ],
+  "deferred": [
+    { "dimension": "real_answer_position_bias", "reason": "structured JSON has no answer key and OCR option-order is unreliable; cannot compute real A/B/C/D correct-answer distribution. Keep gen's near-uniform balance as the target." },
+    { "dimension": "real_correct_is_longest_rate", "reason": "no real answer key, so the <=25% target is the inherited ETS_FLAVOR guideline, not a measured 2026 number. Gen at 18.1% is presumed acceptable." },
+    { "dimension": "distractor_trap_logic_distribution (opposite / not_mentioned / wrong_detail / misquoted ...)", "reason": "requires the correct answer + per-distractor semantic labeling against the passage; not machine-extractable from current data and not hand-labeled at scale. apPromptBuilder's per-type distractor recipes look directionally right (e.g. inference->opposite/not_mentioned) but the SHARE targets in AP_PROFILE.distractorPatternTargets are unverified for 2026." },
+    { "dimension": "sentence_simplification question type", "reason": "classic TOEFL has 'which sentence best expresses essential info' (highlighted-sentence simplification); NOT observed in any of the 14 hand-read 2026 clusters. Either absent or very rare in 2026改后 AP — do not generate it as a staple. (Note: the related 'identify the sentence that...' SELECT-IN-PASSAGE type WAS seen once.)" },
+    { "dimension": "exact insert_text frequency per module", "reason": "hand-coded 8/14 clusters had insert_text=Q5, but the 6 without may reflect OCR truncation of the last screen rather than true absence. Real rate is plausibly higher than 57% (could be ~1/passage). Target set conservatively; revisit with more clean clusters." }
+  ]
+}

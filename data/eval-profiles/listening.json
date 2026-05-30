@@ -1,0 +1,398 @@
+{
+  "type": "listening",
+  "n": {
+    "conversations": 155,
+    "announcements": 78,
+    "lectures": 113,
+    "shortResponse_sets": 44,
+    "shortResponse_prompts": 178,
+    "answer_keys_listening_letters": 658,
+    "ocr_recovered_stems": { "conversation": 32, "announcement": 18, "lecture": 86 }
+  },
+  "ground_truth": "data/realExam2026/listening/{conversations,announcements,lectures,shortResponse}.json (tier=recalled, 2026改后); question stems/options recovered from .codex-tmp/exam_txt + .codex-tmp/ocr",
+  "data_caveat": "Most JSON items are single-blob ASR transcripts (conversations 94/155, all announcements, all lectures) with no speaker labels and no questions. A minority are OCR'd module items with multi-turn structure + 2 questions. ASR also concatenates adjacent audio clips into one item (lectures >330w, conversations >150w, announcements >150w are merge artifacts) — these are excluded from length targets via clean filters.",
+  "generated_at": null,
+  "dimensions": [
+    {
+      "name": "conversation_length_words",
+      "subtype": "lc/conversation",
+      "kind": "quant",
+      "unit": "words (sum of all turn texts)",
+      "target": "median 89, mean 90, typical band 68-102 (p10-p90)",
+      "distribution": { "n": 155, "min": 53, "p10": 68, "median": 89, "mean": 90, "p90": 102, "max_clean": 110, "max_raw": 323 },
+      "detector": "sum words across conversation[].text; OCR-module and audio-ASR subsets agree (89 vs 89 median). Exclude >150w as ASR merge artifacts.",
+      "examples": [
+        "2026-01-21_m1_conversation1 (71w): Man: Hi. I need to return this sweater. I bought it yesterday, but it's too small for me. Woman: Sure. Do you have the receipt? Man: Yes, I have it right here. Woman: Great. We can process the return. Do you want to exchange it for a larger size or get a refund? Man: I'd like to exchange it, please. Woman: No problem. I will get another in that color for you from our stock. Man: Thank you.",
+        "2026-02-10_m1_conversation2 (96w, peer): A: Did you end up seeing that movie yesterday with your friend? B: Yes... There were lots of unexpected twists, but it was too long. A: Should I see it? B: I'm not sure I'd pay money to see it in the theater. Just wait a few months and it will be out on streaming.",
+        "BOUNDARY/COUNTER (ASR merge, EXCLUDE): 2026-03-20_audio_conversation8 (323w) = a chess-club conversation concatenated with an unrelated archaeology podcast — not a real single item."
+      ],
+      "current": { "n": 23, "median": 138, "mean": 142, "min": 100, "max": 188 },
+      "gap": "Generated conversations are ~55% too long (median 138 vs 89). Generated MIN (100w) is above real MEDIAN. Root cause: lcPromptBuilder line 9 + lines 496 say '100-180 words' — real is 53-110, centered 89.",
+      "maps_to": "lcPromptBuilder.js:9 ('100-180 words'); :496 ('100-180 words total'); DIFFICULTY_TIERS:161-176 (80-200w bands)",
+      "reliability": "solid"
+    },
+    {
+      "name": "conversation_turn_count",
+      "subtype": "lc/conversation",
+      "kind": "quant",
+      "unit": "content turns (speaker exchanges, excluding 'Listen to a conversation' lead-in)",
+      "target": "median 6, mean 5.6, band 4-7 (p10-p90)",
+      "distribution": { "n": 59, "min": 3, "p10": 4, "median": 6, "mean": 5.6, "p90": 7, "max": 7, "histogram": { "3": 1, "4": 9, "5": 14, "6": 21, "7": 14 } },
+      "detector": "OCR exam_txt: count Man:/Woman: speaker tags per Conversation block, minus 1 lead-in tag. Cross-checked vs 5 JSON multi-turn items (turns 5,6,7,7,7).",
+      "examples": [
+        "2026-01-21_m1_conversation1: 6 content exchanges (Man/Woman alternating)",
+        "2026-01-21_m2_conversation2: 5 turns (shortest observed in JSON)",
+        "Real conversations are short: 2 speakers strictly alternate, no third speaker ever observed."
+      ],
+      "current": { "n": 23, "median": 9, "mean": 9.1, "min": 7, "max": 10, "histogram": { "7": 1, "8": 4, "9": 10, "10": 8 } },
+      "gap": "Generated has too many turns (median 9 vs 6); generated MIN (7) sits at real p90. Prompt says '8-12 turns' — real is 3-7.",
+      "maps_to": "lcPromptBuilder.js:9 ('8-12 turns'); :494 ('8-12 turns total (each speaker gets 4-6 turns minimum)')",
+      "reliability": "solid"
+    },
+    {
+      "name": "conversation_relationship",
+      "subtype": "lc/conversation",
+      "kind": "qual",
+      "unit": "% peer-social vs service-transaction vs advising",
+      "target": "peer/social 78-97% (overwhelming majority); service-transaction 3-12%; advising/office-hours ~5-10%",
+      "distribution": { "n": 155, "peer_social_loose": "78%", "service_transaction_loose": "12%", "advising": "10%", "peer_social_strict": "97%", "service_strict": "3%" },
+      "detector": "Heuristic on joined turn text: service signals (receipt/refund/return/front desk/booking/appointment/office hours) vs peer (recommendations, personal plans, opinions, shared experience). Two thresholds bracket the true value.",
+      "examples": [
+        "PEER: 2026-01-27_m1_conversation1-B couch recommendations for a dorm room ('I've been thinking about getting a new couch... Do you have any recommendations?')",
+        "PEER: 2026-04-13_audio_conversation10 restaurant/vacation chat ('Have you checked out the new restaurant downtown? The sushi is made by an award-winning chef...')",
+        "SERVICE (minority): 2026-01-21_m1_conversation1 sweater return at a store counter."
+      ],
+      "current": { "n": 23, "service_transaction": "52%", "peer_social": "48%" },
+      "gap": "Generated is 52% service-transaction (student-to-staff: library/IT/transportation/dining/mail/security desks). Real is the OPPOSITE: ~78-97% casual peer-to-peer chats about everyday topics (food, music, hobbies, plans, dorm life). Biggest LC authenticity gap.",
+      "maps_to": "lcPromptBuilder.js:20-71 SCENARIO_POOL (library 0.25 + campus_services 0.25 are mostly student_staff service desks; only campus_life 0.30 is peer)",
+      "reliability": "solid"
+    },
+    {
+      "name": "conversation_topic_domain",
+      "subtype": "lc/conversation",
+      "kind": "qual",
+      "unit": "topic realism",
+      "target": "everyday/social life topics dominate: shopping & returns, food/dining & cooking tips, music & arts, hobbies/clubs, travel/plans, transport schedules, roommate/dorm life, part-time jobs, errands. Mix of campus-set and general-life; NOT dominated by campus-service problems.",
+      "distribution": { "note": "qualitative — see verbatim deep-read set" },
+      "detector": "manual deep-read of 16 spread items + topic keyword scan",
+      "examples": [
+        "music recommendations: 2026-04-28_audio_conversation9 ('I'm getting bored listening to the same old pop singers. Any recommendations?')",
+        "cooking/dinner-party tips: 2026-03-23_audio_conversation9 ('I want to buy some cheese for the dinner party... Parmesan if you're serving pasta')",
+        "part-time job anecdote: 2026-05-06_audio_conversation1 (potato chip factory, machine 'went haywire')"
+      ],
+      "current": { "note": "generated topics are campus-service problems (noise complaint, parking permit, broken printer, missing package, WiFi)" },
+      "gap": "Real topics are lighter, more personal/social; generated topics center on campus logistics problems with a defined resolution. Register/topic mismatch reinforces relationship gap.",
+      "maps_to": "lcPromptBuilder.js:20-71 SCENARIO_POOL situations",
+      "reliability": "partial"
+    },
+    {
+      "name": "conversation_register_contractions",
+      "subtype": "lc/conversation",
+      "kind": "quant",
+      "unit": "contractions per 100 words",
+      "target": "~4.5 / 100w (99% of items contain at least one contraction)",
+      "distribution": { "n": 155, "mean_per_100w": 4.49, "pct_with_any": "99%" },
+      "detector": "regex over ~40 common English contractions / total words. Verified: physics lecture 5 contractions/249w computed correctly.",
+      "examples": [
+        "Natural spoken markers in real conv: 'I'd like to', 'I'm not sure', 'it's too small', 'they're very flexible', 'You're a lifesaver'."
+      ],
+      "current": { "n": 23, "mean_per_100w": 6.17 },
+      "gap": "Generated conversations are slightly over-casual (6.2 vs 4.5) — acceptable but trending high; real spoken conv is contraction-rich but not saturated.",
+      "maps_to": "lcPromptBuilder.js:500 ('Use contractions FREELY'); :502 fillers/reactions",
+      "reliability": "solid"
+    },
+    {
+      "name": "announcement_length_words",
+      "subtype": "la/announcement",
+      "kind": "quant",
+      "unit": "words",
+      "target": "median 83, mean 82, band 71-88 (p10-p90), range 46-150",
+      "distribution": { "n_clean": 68, "min": 46, "p10": 71, "median": 83, "mean": 82, "p90": 88, "max_clean": 150, "max_raw": 300 },
+      "detector": "word count of transcript; exclude >150w as ASR merges (audio_announcement4/5 high-index items).",
+      "examples": [
+        "2026-01-21_m1_announcement3-B (83w, campus radio): 'Due to yesterday's heavy rainstorms, a major leak has developed in the roof of the library... the library will be closed until noon on Wednesday...'",
+        "2026-01-21_m1_announcement2 (classroom): 'I'm pleased to announce that we'll have a guest speaker next week as part of our unit on environmental policy. Dr. Maya Tan will join us on Thursday...'",
+        "BOUNDARY (ASR merge, EXCLUDE): 2026-03-20_audio_announcement4 (249w) = two announcements glued."
+      ],
+      "current": { "n": 31, "median": 92, "mean": 90, "min": 70, "max": 106 },
+      "gap": "Generated slightly long (median 92 vs 83) but the closest-matching length dimension of all four subtypes. Prompt's '80-120 words' overshoots; real is ~80-90.",
+      "maps_to": "laPromptBuilder.js:8 + :505 + :533 ('80-120 words, 5-7 sentences')",
+      "reliability": "solid"
+    },
+    {
+      "name": "announcement_opener_pattern",
+      "subtype": "la/announcement",
+      "kind": "qual",
+      "unit": "% opening pattern",
+      "target": "Attention... 21%; Good morning/afternoon... 17%; Direct statement ~12%; first-person professor (I'm pleased/I have/I want) ~6%; Thank you... 6%; Due to/Since (cause) 6%; We... (institutional) 5%; Hello/Welcome + rhetorical-question hooks present. NO single opener exceeds ~21%.",
+      "distribution": { "n": 78, "Attention": "21%", "GoodMorning_Afternoon": "17%", "DirectStatement": "12%", "ThankYou": "6%", "FirstPersonProf": "6%", "DueTo_Since": "6%", "We_institutional": "5%", "Hello_Welcome": "4%", "RhetoricalHook": "3%" },
+      "detector": "strip 'Man:/Woman:' label AND embedded setting lead-in ('in a university classroom.'), then classify first 45 chars. (~10% residual double-prefix noise.)",
+      "examples": [
+        "Attention: 'Attention students, faculty, and staff. Due to the upcoming Spring Alumni Weekend...'",
+        "Good morning (classroom): 'Good morning, students. Before we get started today...'",
+        "Due to (radio): 'Due to yesterday's heavy rainstorms, a major leak has developed...'"
+      ],
+      "current": { "n": 31, "Attention": "48%", "GoodMorning_Afternoon": "19%", "reminder": "10%" },
+      "gap": "Generated over-uses 'Attention' (48% vs real 21%) — the prompt's claimed '64% Attention' is FALSE against real 2026 data. Real openers are far more varied; first-person professor openers and 'Due to...' cause-openers are entirely missing from the generated bank.",
+      "maps_to": "laPromptBuilder.js:111-148 OPENING_PATTERNS (rate:64 attention); :516-520 ('64% start with Attention')",
+      "reliability": "solid"
+    },
+    {
+      "name": "announcement_context_purpose",
+      "subtype": "la/announcement",
+      "kind": "qual",
+      "unit": "% context/setting type",
+      "target": "classroom/course 36% (professor: guest speaker, syllabus, assignment); campus_event/activity 29%; facility/logistics 12%; tour/exhibit 9% (art exhibit walkthrough); campus/university radio is a recurring SETTING (~9 of 35 specified). NOT dominated by facility-change.",
+      "distribution": { "n": 78, "classroom_course": "36%", "campus_event_activity": "29%", "facility_logistics": "12%", "tour_exhibit": "9%", "other": "14%", "specified_settings": { "classroom": 11, "campus_or_university_radio": 9, "school_event": 4, "art_exhibit": 3, "gym": 1, "club_meeting": 2 } },
+      "detector": "classify setting + transcript keywords. Settings are richly specified in real data (75/78 non-generic).",
+      "examples": [
+        "classroom/course: 'As you know, this is the final course required for your business degree. The course will operate as an independent study...'",
+        "tour/exhibit: 'Listen to an announcement at a school art exhibit. Thank you for touring this special collection of paintings...'",
+        "campus radio: 'Listen to an announcement on a campus radio station. Due to yesterday's heavy rainstorms...'"
+      ],
+      "current": { "n": 31, "note": "CONTEXT_POOL = facility_change 21% / academic_event 21% / campus_activity 14% / logistics/career/guest_speaker/info_session 7% each. No 'classroom/course' type, no 'art exhibit' type, no 'campus radio' setting." },
+      "gap": "Real's #1 context (classroom/course professor announcements, 36%) is ABSENT from the generated pool. Real also has art-exhibit walkthroughs and campus-radio news that the pool lacks. Generated over-indexes facility_change (21%) vs real 12%.",
+      "maps_to": "laPromptBuilder.js:21-109 CONTEXT_POOL",
+      "reliability": "solid"
+    },
+    {
+      "name": "announcement_register_contractions",
+      "subtype": "la/announcement",
+      "kind": "quant",
+      "unit": "contractions per 100 words",
+      "target": "~1.9 / 100w (71% of items contain at least one) — semi-formal, lightly contracted",
+      "distribution": { "n": 78, "mean_per_100w": 1.93, "pct_with_any": "71%" },
+      "detector": "contraction regex / words",
+      "examples": [
+        "'we'll have a guest speaker', 'we're proud of it', 'don't miss' — contractions present but sparse vs conversation."
+      ],
+      "current": { "n": 31, "mean_per_100w": 0.40 },
+      "gap": "Generated announcements are TOO STIFF (0.40 vs 1.93/100w; ~5x too few contractions). Real campus announcements — especially classroom ones — use contractions naturally. Prompt says 'uses contractions occasionally' but bank under-delivers.",
+      "maps_to": "laPromptBuilder.js:531 ('NOT stiff bureaucratic -- uses contractions occasionally')",
+      "reliability": "solid"
+    },
+    {
+      "name": "lecture_length_words",
+      "subtype": "lat/lecture",
+      "kind": "quant",
+      "unit": "words",
+      "target": "median 250, mean 246, band 220-258 (p10-p90), range 192-279. Very tight single-peak.",
+      "distribution": { "n_clean": 107, "min": 192, "p10": 220, "median": 250, "mean": 246, "p90": 258, "max_clean": 279, "max_raw": 505, "histogram_25w": { "175": 1, "200": 10, "225": 40, "250": 51, "275": 5 } },
+      "detector": "word count of transcript; exclude >330w as ASR merges (6 items, all high-index audio_talk6/7/10 — verified to be 2-3 lectures concatenated). Clean ceiling ~280.",
+      "examples": [
+        "2026-01-27_m1_lecture1-B (245w, art history): 'Expressionism is an influential modernist art movement that emerged in the early 20th century. This movement is characterized by its focus on representing emotional experience rather than physical reality...'",
+        "2026-01-21_m1_lecture1 (249w, physics): 'We've been talking about the law of inertia... So how does a cyclist avoid this? The key is to lean in...'",
+        "BOUNDARY (ASR merge, EXCLUDE): 2026-04-06_audio_talk7 (505w) = a history-podcast on Louis Latimer + an art-class lecture on Kandinsky + a glacier fragment."
+      ],
+      "current": { "n": 14, "median": 167, "mean": 159, "min": 123, "max": 189 },
+      "gap": "LARGEST GAP. Every generated lecture (max 189w) is BELOW the real minimum (192w). Generated median 167 vs real 250 — generated lectures are ~33% too short. (Note: prompt header was updated 2026-05-31 to say '200-330 mean 258' but the May-14 bank predates the fix and must be regenerated.)",
+      "maps_to": "latPromptBuilder.js:8 ('~200-330 word lecture (realExam2026: mean 258)') — header now correct; bank stale",
+      "reliability": "solid"
+    },
+    {
+      "name": "lecture_academic_domain",
+      "subtype": "lat/lecture",
+      "kind": "qual",
+      "unit": "% broad academic domain",
+      "target": "arts_humanities (art/art-history/music/architecture/literature/creative-writing) 30%; social_sci (psych/econ/business/marketing/sociology) 20%; phys_earth_sci (physics/geology/environmental/general science) 17%; life_sci (biology/marine/ecology/health) 16%; history_humanities (history/archaeology/anthropology) 10%. Arts+humanities combined ~40%. SINGLE most common specific field = ART HISTORY (12%, 13/113).",
+      "distribution": { "n": 113, "arts_humanities": "30%", "social_sci": "20%", "phys_earth_sci": "17%", "life_sci": "16%", "history_humanities": "10%", "no_label": "7%", "top_fields": { "art history": 13, "psychology": 9, "physics": 8, "biology": 8, "music": 7, "science": 6, "architecture": 6, "business": 5, "history": 5, "economics": 5, "marine biology": 5, "archaeology": 4, "environmental science": 4 } },
+      "detector": "extract explicit field label from setting + transcript lead-in ('in a/at a/on a X class/podcast'), map to broad domain. Verified: 13 art-history all explicitly labeled.",
+      "examples": [
+        "art history: 'Listen to a talk in an art history class. Last week we talked about realism, in which artists aim...'",
+        "music: 'Listen to a lecture at a music class. If you're familiar with ancient Greece, you know how...'",
+        "architecture: 'Listen to a talk in an architecture class. Have you ever thought about how ancient concrete structures...'"
+      ],
+      "current": { "n": 14, "fields": { "biology": 2, "psychology": 2, "social_psychology": 2, "cognitive_psychology": 1, "neuroscience": 1, "ecology": 1, "environmental_science": 1, "anthropology": 1, "history": 1, "geology": 1, "art_history": 1 }, "arts_humanities_approx": "14%", "sci_psych_approx": "64%" },
+      "gap": "Generated bank is dominated by science + psychology (bio/psych/cog-psych/social-psych/neuro/eco = ~64%); arts+humanities only ~14% with just 1 art_history, 0 music, 0 architecture, 0 literature. Real's largest bucket is arts/humanities (40%), with art history the single most frequent field. Major topic-domain gap.",
+      "maps_to": "latPromptBuilder.js:19+ TOPIC_POOL (biology .12, ecology .12, psychology .15, social_psych .10, cognitive_psych ... — sciences/psych heavily weighted; arts underweighted)",
+      "reliability": "solid"
+    },
+    {
+      "name": "lecture_register_contractions",
+      "subtype": "lat/lecture",
+      "kind": "quant",
+      "unit": "contractions per 100 words",
+      "target": "~1.2 / 100w — academic, lightly conversational (much lower than conversation's 4.5)",
+      "distribution": { "n": 113, "mean_per_100w": 1.22 },
+      "detector": "contraction regex / words; verified on physics lecture (5/249 = 2.0, one of the more conversational).",
+      "examples": [
+        "Real lecture register: 'We've been talking about...', 'we don't just ride in straight lines, do we?', 'this approach isn't perfect' — sparse contractions, formal-but-spoken."
+      ],
+      "current": { "n": 14, "mean_per_100w": 5.01 },
+      "gap": "Generated lectures are 4x too casual (5.0 vs 1.2/100w) — they read like conversations ('Okay, so today we're diving into... Now, you might think... And here's the thing... Actually...'). Real academic talks are measured and lecture-like.",
+      "maps_to": "latPromptBuilder.js:9 ('Conversational academic register (contractions, you, rhetorical questions)') — over-applied",
+      "reliability": "solid"
+    },
+    {
+      "name": "lecture_second_person_and_rhetorical_opener",
+      "subtype": "lat/lecture",
+      "kind": "quant",
+      "unit": "% of lectures using 'you/your' in opening 160 chars; % opening with a rhetorical question",
+      "target": "direct 'you' address in opener ~21%; rhetorical-question opener ~14% — used as occasional hooks, not the default",
+      "distribution": { "n": 113, "you_address_opener": "21%", "rhetorical_q_opener": "14%" },
+      "detector": "scan first 160 chars (after stripping label + setting lead-in) for you/your and for '?'",
+      "examples": [
+        "rhetorical hook: 'When you think of 19th century inventors, what comes to mind?'",
+        "most real lectures open declaratively: 'Expressionism is an influential modernist art movement...' / 'Migratory birds travel vast distances...'"
+      ],
+      "current": { "n": 14, "you_address_opener": "86%", "rhetorical_q_opener": "43%" },
+      "gap": "Generated lectures over-use direct address (86% vs 21%) and rhetorical-question openers (43% vs 14%). Combined with the contraction gap, generated lectures are systematically too chatty.",
+      "maps_to": "latPromptBuilder.js:9 + reference-examples/structure ('hook -> concept')",
+      "reliability": "solid"
+    },
+    {
+      "name": "shortResponse_prompt_length",
+      "subtype": "shortResponse/lcr-stimulus",
+      "kind": "quant",
+      "unit": "words in the spoken prompt",
+      "target": "median 8, mean 7.9, band 6-11 (p10-p90), range 3-14",
+      "distribution": { "n": 178, "min": 3, "p10": 6, "median": 8, "mean": 7.9, "p90": 11, "max": 14 },
+      "detector": "word count of each prompt (after stripping leaked 'Man:/Woman:' labels)",
+      "examples": [
+        "'Where can I find the class notes?' (6w)",
+        "'Can you turn down the volume?' (6w)",
+        "'I don't know how many people will join us tonight for study group.' (13w)"
+      ],
+      "current": { "n": 113, "median": 10, "mean": 10.2, "min": 5, "max": 15 },
+      "gap": "Generated prompts ~25% longer (median 10 vs 8). Real prompts are crisp one-liners.",
+      "maps_to": "lcrPromptBuilder.js speaker-sentence construction (no explicit length cap toward 8w)",
+      "reliability": "solid"
+    },
+    {
+      "name": "shortResponse_sentence_type",
+      "subtype": "shortResponse/lcr-stimulus",
+      "kind": "quant",
+      "unit": "% question vs statement; within questions, wh- vs yes/no",
+      "target": "questions 74% (wh-questions 49%, yes/no-questions 24%); statements 26%; imperatives ~1%",
+      "distribution": { "n": 178, "questions": "74%", "wh_questions": "49%", "yes_no_questions": "24%", "statements": "26%", "imperatives": "1%" },
+      "detector": "ends-with-'?' => question; first word who/what/where/when/why/how/which/whose => wh; else yes/no. Strip leaked speaker labels first (critical — pre-strip undercounted wh). Hand-verified first 12 (6 wh / 3 y-n / 3 stmt).",
+      "examples": [
+        "wh-Q: 'Who is the guest lecturer today?' / 'Why is the air conditioner in the dorm not working?'",
+        "yes/no-Q: 'Did you enjoy the gardening class?'",
+        "STATEMENT (responds-to): 'Peter said he would look for supplies.' / 'Maybe the power went out for this whole area.'"
+      ],
+      "current": { "n": 113, "questions": "68%", "wh_questions": "7%", "yes_no_questions": "61%", "statements": "32%" },
+      "gap": "Question/statement split is close (68/32 vs 74/26), BUT the wh- vs yes/no balance is badly off: generated wh-questions = 7% vs real 49%. The generated bank almost never opens with Who/Where/Why/How. Real short-response leans heavily on wh-questions whose distractors answer a DIFFERENT wh-dimension.",
+      "maps_to": "lcrPromptBuilder.js:12 ('statements 30%, questions 70%') — question/statement ratio is right; wh/yn balance is unspecified and drifted to yes/no.",
+      "reliability": "solid"
+    },
+    {
+      "name": "shortResponse_campus_vs_general",
+      "subtype": "shortResponse/lcr-stimulus",
+      "kind": "qual",
+      "unit": "% campus/academic-themed vs general-life",
+      "target": "~40% campus/academic, ~60% general everyday — more general-life than the generated LCR bank",
+      "distribution": { "n": 178, "campus_academic_theme": "40%" },
+      "detector": "campus keyword scan (class/notes/professor/dorm/tutor/study group/exam/library/...)",
+      "examples": [
+        "campus: 'Who is the tutor in the student success center today?'",
+        "general: 'Can you turn down the volume?' / 'Maybe the power went out for this whole area.'"
+      ],
+      "current": { "n": 113, "campus_context": "65%" },
+      "gap": "Generated LCR is 65% campus vs real short-response ~40%. Real prompts include more domestic/general-life situations (noise, power, volume, errands).",
+      "maps_to": "lcrPromptBuilder.js:17-70 SCENARIO_POOL (campus_academic .375 + campus_daily .3125 = ~69% campus)",
+      "reliability": "solid"
+    },
+    {
+      "name": "answer_position_distribution",
+      "subtype": "all-MCQ",
+      "kind": "quant",
+      "unit": "% of correct answers at A/B/C/D",
+      "target": "A 24% / B 28% / C 28% / D 20% — mild bias toward middle (B/C), away from D; NOT perfectly uniform",
+      "distribution": { "n": 658, "A": "23.7%", "B": "28.3%", "C": "28.0%", "D": "20.1%" },
+      "detector": "parse single-letter answers from listening sections of all answer-key files (.codex-tmp/exam_txt/*参考答案*).",
+      "examples": [
+        "Across 658 real listening answers, B and C are each ~28%, D is the rarest at ~20%."
+      ],
+      "current": { "LCR": { "A": "29%", "B": "31%", "C": "21%", "D": "19%" }, "LC": { "A": "24%", "B": "37%", "C": "28%", "D": "11%" }, "LA": { "A": "18%", "B": "33%", "C": "33%", "D": "16%" }, "LAT": { "A": "15%", "B": "44%", "C": "27%", "D": "15%" } },
+      "gap": "Generated banks over-cluster on B (LAT B=44%, LC B=37% vs real B=28%) and starve D (LC D=11% vs real 20%). The prompt's strict position pre-assignment is not fully obeyed by the model. Real ETS itself is mildly B/C-biased, so target B/C ~28% / A ~24% / D ~20% rather than forcing 25/25/25/25.",
+      "maps_to": "all builders: 'Answer position pre-assignment' (lc:331-338, la:364-371, lat header, lcr header)",
+      "reliability": "solid"
+    },
+    {
+      "name": "question_count_per_item",
+      "subtype": "all (deferred-passage-adjacent)",
+      "kind": "quant",
+      "unit": "questions per passage",
+      "target": "conversation 2; announcement 2; lecture 4; short-response is a standalone 1-prompt+4-option item",
+      "distribution": { "conversation": { "n": 17, "mode": 2 }, "announcement": { "n": 9, "all": 2 }, "lecture": { "n": 23, "mode": 4, "mean": 3.7 } },
+      "detector": "OCR exam_txt: count numbered '?' stems per section block. (mode is the truth; lower counts are OCR truncation, '7' values are ASR merges.)",
+      "examples": [
+        "Conversation1 -> Q13 'Why is the man returning the sweater?', Q14 'What will the woman most likely do next?'",
+        "Lecture1 (physics) -> 4 questions (purpose, suggest-about-turning, leaning-in-helps, professionals-try-to-do)."
+      ],
+      "current": { "LC": "2 per item", "LA": "2 per item", "LAT": "4 per item", "LCR": "1 prompt + 4 options" },
+      "gap": "Generated matches real (2/2/4). No gap.",
+      "maps_to": "lc:537-566 (2 Qs); la:568-594 (2 Qs); lat:11 ('4 questions'); lcr (single response item)",
+      "reliability": "solid"
+    },
+    {
+      "name": "question_stem_phrasing",
+      "subtype": "all (DEFERRED — stems live in image PDFs)",
+      "kind": "qual",
+      "unit": "verbatim stem templates",
+      "target": "Conversation: 'Why is the man/woman ...?', 'What will the man/woman most likely do next?', 'What are the man and the woman talking about?', 'What is the man's problem?', 'What does the man imply when he says, \"...\"?' (replay/quote), 'What is the man's attitude toward ...?'. Lecture: 'What is the purpose/main topic of the talk?', 'What does the speaker mainly discuss?', 'What does the speaker suggest/imply about X?', 'Why does the speaker mention X?'. Announcement: 'What is the purpose of the announcement?', 'What will the speaker probably do next?', 'What can be inferred about X?', 'What ... does the speaker emphasize/stress?'.",
+      "distribution": { "ocr_recovered": { "conversation": 32, "announcement": 18, "lecture": 86 }, "note": "type-distribution unreliable from OCR (short-response prompts leak into blocks; classifier noisy)" },
+      "detector": "OCR exam_txt stem recovery; stem TYPE classification is noisy and left partial.",
+      "examples": [
+        "'What does the man imply when he says, \"I'll bring a blanket too\"?' (replay/function Q — a type the LC prompt does not generate)",
+        "'At the end of the conversation, what is the man's attitude toward the woman's idea?' (attitude Q)",
+        "'Why does the speaker mention butter?' (function Q — hallmark of real lecture questions)"
+      ],
+      "current": { "note": "LC stems lack the quote-replay ('what does X imply when he says') and attitude types; LAT/LA stems otherwise overlap real phrasings well." },
+      "gap": "Add quote-replay ('What does the man/woman imply when he says, \"...\"?') and attitude stems to LC; emphasize 'Why does the speaker mention X?' function stems in LAT. Full audit deferred until question PDFs are OCR'd cleanly.",
+      "maps_to": "lc:182-204 STEM_PATTERNS; la:249-272 STEM_PATTERNS; lat STEM patterns",
+      "reliability": "deferred"
+    },
+    {
+      "name": "speaker_label_convention",
+      "subtype": "lc/conversation",
+      "kind": "qual",
+      "unit": "speaker label format",
+      "target": "Real transcripts use generic 'Man' / 'Woman' (exactly 2, strictly alternating). No first names, no roles in the transcript.",
+      "distribution": { "real_labels": ["Man", "Woman"] },
+      "detector": "distinct speaker values in JSON multi-turn items + OCR (Man:/Woman: universally).",
+      "examples": ["Man: / Woman: in every OCR conversation block and all 5 JSON multi-turn items."],
+      "current": { "labels": "first names (Casey, Sarah, Avery, Jordan, David, ...)" },
+      "gap": "Generated uses first names; real uses Man/Woman. Minor for TTS (two voices) but a transcript/format-convention mismatch; question stems also refer to 'the man'/'the woman', not names.",
+      "maps_to": "lcPromptBuilder.js:75-83 FEMALE_NAMES/MALE_NAMES; :493 ('2 speakers with first names and roles')",
+      "reliability": "solid"
+    }
+  ],
+  "correlations": [
+    {
+      "name": "register tracks subtype, and the generated bank collapses the register gradient",
+      "detail": "Real contraction density is a clean ladder: conversation 4.5 > announcement 1.9 > lecture 1.2 per 100w. The generated bank inverts/flattens it: LAT 5.0 (too high) and LA 0.40 (too low). 'Authenticity of register' = matching this gradient. A lecture that sounds like a chat, or an announcement that sounds bureaucratic, is the #1 register tell."
+    },
+    {
+      "name": "length, turns, and casualness co-define a real conversation",
+      "detail": "Real conversations are jointly short (89w), few-turn (6), peer/social (78-97%), and contraction-rich (4.5/100w). The generated bank is long (138w), many-turn (9), service-transactional (52%) — every conversation dimension drifts the same direction: toward a longer, more formal service-desk dialogue. Fixing topic/relationship (peer chat) will naturally shorten length and turns."
+    },
+    {
+      "name": "arts/humanities dominance is the lecture-domain authenticity signal",
+      "detail": "Real lectures are 40% arts+humanities (art history alone 12%, the single most common field), only ~33% sciences. The generated bank is ~64% sciences/psychology. A bank that 'feels like real TOEFL listening' must over-weight art history, music, architecture, history — not biology/psychology."
+    },
+    {
+      "name": "what makes short-response hard = wh-question with cross-dimension distractors",
+      "detail": "Real short-response is 49% wh-questions; the trap is distractors that answer a DIFFERENT wh-word (Where -> answered with When/How-long/Format). The generated bank is 61% yes/no with only 7% wh, losing the dominant real difficulty mechanism."
+    }
+  ],
+  "deferred": [
+    {
+      "item": "question stem TYPE distribution (main_idea / detail / inference / function / attitude / replay-quote ratios per subtype)",
+      "why": "Stems live in the 听力 image PDFs; structured JSON carries only ~15% of items' questions. OCR recovery of stems works (32 conv / 18 ann / 86 lec verbatim stems recovered) but type-classification is noisy (short-response prompts leak into section blocks; many stem variants). Verbatim phrasings ARE captured; reliable type ratios need a dedicated clean OCR pass on the question PDFs."
+    },
+    {
+      "item": "MCQ answer-option text & distractor trap-logic for LC/LA/LAT (the 4 options per question)",
+      "why": "Options are rendered in image PDFs, not in the audio-derived JSON. .codex-tmp/ocr/ DOES contain option text for short-response and could be mined, but parsing is messy (no A/B/C/D labels, OCR artifacts like 'I'mnotsure'). Distractor-type distribution therefore cannot be measured reliably from current structured data — only the short-response trap pattern (cross-wh-dimension) is established from one fully-read exemplar."
+    },
+    {
+      "item": "difficulty-tier distribution (easy/medium/hard) in real exams",
+      "why": "Real items carry no difficulty label. The prompts assume 30/45/25; real data offers no ground-truth split to validate this. Length is the only proxy and it is unimodal (no clear easy/medium/hard clusters), so the tier split is unverifiable — do NOT treat 30/45/25 as evidence-based."
+    },
+    {
+      "item": "conversation relationship exact ratio (peer vs service)",
+      "why": "Bracketed at 78-97% peer by two heuristics but no labeled ground truth; the true value is clearly 'large majority peer' but the precise number is partial."
+    }
+  ]
+}
