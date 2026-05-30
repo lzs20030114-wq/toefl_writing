@@ -12,6 +12,9 @@ portable.ini
 # Local scratch (vendor eval audio samples, etc.)
 tmp/
 
+# Reference-harvest working dir (downloaded ETS PDFs + scraped HTML — raw, not for distribution)
+.research/
+
 # TPO real question references (not for distribution)
 data/*/tpo_reference*.json
 data/*/real_questions_raw*
@@ -41,3 +44,7 @@ data/buildSentence/*_d_test*.json
 scripts/patch*.js
 scripts/backfill-prefilled.js
 scripts/backfill-prefilled.ps1
+
+# Python bytecode
+__pycache__/
+*.pyc
