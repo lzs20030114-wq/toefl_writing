@@ -20,12 +20,13 @@ SIZE = sys.argv[2] if len(sys.argv) > 2 else "small"
 PAT = {"speaking": ("speaking", "口语"), "listening": ("listening", "听力", "module")}
 
 audios = []
-for f in glob.glob(os.path.join(SRC, "*", "*.mp3")):
-    if "downloading" in f.lower():
-        continue
-    base = os.path.basename(f)
-    if KIND == "all" or any(k.lower() in base.lower() for k in PAT.get(KIND, ())):
-        audios.append(f)
+for ext in ("*.mp3", "*.m4a"):
+    for f in glob.glob(os.path.join(SRC, "*", ext)):
+        if "downloading" in f.lower():
+            continue
+        base = os.path.basename(f)
+        if KIND == "all" or any(k.lower() in base.lower() for k in PAT.get(KIND, ())):
+            audios.append(f)
 audios.sort()
 print(f"{KIND}: {len(audios)} complete audio files", flush=True)
 
