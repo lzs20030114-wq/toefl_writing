@@ -26,19 +26,30 @@ Target = realExam2026 BS target sentences (n=504).
 | wh-opener % | 0% | 7% | **−7pp** (none generated) |
 | embedded/indirect % | 34% | 21% | **+13pp** (over-used) |
 | negation % | 19% | 9% | **+10pp** (over-used) |
+| **difficulty easy %** | **1%** | **22%** | **−21pp** (almost no easy!) |
+| difficulty medium % | 71% | 60% | +11pp |
+| difficulty hard % | 28% | 18% | +10pp |
+| topic campus % | 14% | 19% | −5pp (minor) |
+| topic daily % | 9% | 6% | +3pp (minor) |
 
-**Read:** the generator over-indexes on "complex" structures (embedded, negation)
-and runs long, while under-producing direct/wh questions. Rebalance toward the
-real mix: shorter answers (~9 words), more direct + wh questions, fewer
-embedded/negation.
+**Read (full dimension set):** the generator **over-complexifies** — it produces
+almost no easy items (1% vs 22%), runs long, over-uses embedded + negation, and
+omits direct/wh questions. All five point the same way: rebalance toward the real,
+more-balanced 2026改后 mix (more easy/short/direct, fewer embedded/negation/hard).
+M~ dims (prefilled / distractor / chunk / prompt-style) stay on the cleaner
+hand-transcribed `tpo_source` calibration — realExam2026 OCR of the scrambled
+word-pool is too noisy to override them (cross-check deferred).
 
 **Fix applied 2026-05-31:** `lib/bsGen/prompts.mjs` sentence-type block rewritten
 to the 2026改后 mix (answer ~9 words / concentrated 8-10; ~14% direct questions
 incl ~1 wh-question; embedded ~21% / 2 items; negation ~9% / 1 item; was
-44%/20%). `etsProfile.js` qmarkRatio 0.08→0.14, avgAnswerWords 10.6→9.4.
-- [x] calibrate prompt + profile
-- [ ] re-measure next nightly batch with `dev-bs.mjs` (expect length↓, qmark↑,
-      wh↑, embedded↓, negation↓ toward target)
+44%/20%). **Difficulty** distribution → 2 easy / 6 medium / 2 hard with an explicit
+"you MUST include 2 genuinely simple short sentences" warning (gen produced ~1%
+easy). `etsProfile.js`: qmarkRatio 0.08→0.14, avgAnswerWords 10.6→9.4,
+ETS_DIFFICULTY 10/70/20 → 22/60/18.
+- [x] calibrate prompt + profile (length, sentence-type, embedded, negation, difficulty)
+- [ ] re-measure next nightly batch with `dev-bs.mjs` (expect easy↑ to ~22%,
+      length↓, qmark↑, wh↑, embedded↓, negation↓)
 
 ---
 ## AD — Academic Discussion   `dev-ad.mjs`

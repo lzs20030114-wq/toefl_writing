@@ -20,6 +20,13 @@ function measure(sentences) {
     wh: pct((s) => /^(what|why|how|where|when|who|which)\b/i.test(s)),
     embedded: pct((s) => /\b(if|whether|wonder|do you know|can you tell|find out|found out|tell me|curious|wants? to know|needed to know)\b/i.test(s)),
     negation: pct((s) => /\b(not|n't|never|no longer|nothing|none|cannot)\b/i.test(s)),
+    // difficulty proxy via answer length buckets
+    easy: pct((s) => wc(s) <= 7),
+    medium: pct((s) => wc(s) >= 8 && wc(s) <= 11),
+    hard: pct((s) => wc(s) >= 12),
+    // topic domain (keyword heuristic)
+    campus: pct((s) => /\b(class|professor|assignment|due|exam|course|lecture|campus|dorm|library|tuition|advisor|registrar|syllabus|deadline|semester|study|homework|grade|department|enroll)\b/i.test(s)),
+    daily: pct((s) => /\b(store|buy|ticket|coffee|bus|train|weekend|movie|friend|dinner|shop|restaurant|trip|gym|park|apartment|rent|neighbor)\b/i.test(s)),
   };
 }
 
@@ -31,7 +38,7 @@ for (const set of J("data/buildSentence/questions.json").question_sets || [])
   for (const q of set.questions || []) if (q.answer) bank.push(q.answer);
 const cur = measure(bank);
 
-const dims = [["answer词数", "words", ""], ["疑问句%", "qmark", "%"], ["wh开头%", "wh", "%"], ["间接embedded%", "embedded", "%"], ["否定%", "negation", "%"]];
+const dims = [["answer词数", "words", ""], ["疑问句%", "qmark", "%"], ["wh开头%", "wh", "%"], ["间接embedded%", "embedded", "%"], ["否定%", "negation", "%"], ["难度·easy%", "easy", "%"], ["难度·medium%", "medium", "%"], ["难度·hard%", "hard", "%"], ["话题·校园%", "campus", "%"], ["话题·日常%", "daily", "%"]];
 console.log("BS: 当前题库 vs realExam2026真题(同检测器)\n");
 console.log("维度".padEnd(16) + "当前库".padStart(10) + "真题目标".padStart(12) + "偏差".padStart(10));
 console.log("-".repeat(48));
