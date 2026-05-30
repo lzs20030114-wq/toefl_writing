@@ -55,7 +55,8 @@ def parse(path):
 
     # --- interview setting + questions ---
     iv_setting = ""
-    im = re.search(r"(You (?:receive|recently received|have (?:signed|scheduled))[^]]*?(?:interview|study|researcher)[^.]*\.(?:[^.]*\.)?)", interview_part, re.I)
+    # the scenario is the first "You ..." sentence(s) after the interview framing
+    im = re.search(r"(You\b[^?]{30,260}?\.)(?:\s|$)", interview_part)
     if im:
         iv_setting = re.sub(r"\s+", " ", im.group(1)).strip()
     # questions: sentences ending with '?' after the greeting

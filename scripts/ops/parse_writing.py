@@ -44,6 +44,8 @@ def clean_page(text):
     lines = []
     for ln in text.splitlines():
         ln = TIMER.sub("", ln).strip()
+        ln = re.sub(r"[一-鿿]+", " ", ln).strip()   # strip stray CJK (watermark bleed)
+        ln = re.sub(r"\s{2,}", " ", ln)
         if not ln or NOISE.search(ln):
             continue
         lines.append(ln)
@@ -75,7 +77,12 @@ def parse_bs(full, setname, date, targets):
     marks = list(re.finditer(r"Question\s*(\d+)\s*of\s*10", full, re.I))
     for i, mk in enumerate(marks):
         n = int(mk.group(1))
-        seg = full[mk.end(): marks[i + 1].start() if i + 1 < len(marks) else len(full)]
+        end = marks[i + 1].start() if i + 1 < len(marks) else len(full)
+        # cap at the next section (Email/AD) so the last BS doesn't swallow it
+        nx = re.search(r"Write an email|Question\s*1\s*of\s*2|Question\s*2\s*of\s*2|teaching a class on", full[mk.end():], re.I)
+        if nx:
+            end = min(end, mk.end() + nx.start())
+        seg = full[mk.end(): end]
         lines = [l for l in clean_page(seg) if not re.match(r"^Make an appropriate", l, re.I)
                  and not re.search(r"PAGE \d", l)]
         prompt = desplit(lines[0]) if lines else ""

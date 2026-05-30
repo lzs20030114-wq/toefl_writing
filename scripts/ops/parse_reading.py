@@ -47,6 +47,8 @@ def clean(text):
     for ln in text.splitlines():
         ln = TIMER.sub("", ln).strip()
         ln = QRANGE.sub("", ln).strip()
+        ln = re.sub(r"[一-鿿]+", " ", ln).strip()   # strip stray CJK (watermark bleed)
+        ln = re.sub(r"\s{2,}", " ", ln)
         if not ln or NOISE.search(ln):
             continue
         out.append(ln)
