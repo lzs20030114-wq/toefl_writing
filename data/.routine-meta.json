@@ -1,33 +1,17 @@
 {
-  "session_id": "routine-20260529-190441",
-  "completed_at": "2026-05-29T19:17:00Z",
-  "duration_minutes": 13,
-  "highlight": "全 7 题库 45/45 全数通过严格校验,BS 一次通过率回到 100%",
+  "session_id": "routine-20260530-190521",
+  "completed_at": "2026-05-30T19:21:09Z",
+  "duration_minutes": 15,
+  "highlight": "本轮 45/45 全部入库，AP 首次覆盖物理光学与人类学口传统",
   "commit_sha": "",
   "results": {
     "bs": {
       "generated": 20,
       "accepted": 20,
-      "topics": [
-        "indirect question with whether",
-        "indirect question with if",
-        "indirect question with when",
-        "indirect question with why",
-        "indirect question with how",
-        "present perfect negation",
-        "negation with no longer",
-        "comparative than",
-        "relative clause without pronoun",
-        "passive voice past",
-        "passive modal",
-        "causal clause",
-        "embedded clause",
-        "sentence-opener adverb",
-        "prepositional phrase"
-      ],
+      "topics": ["indirect-Q", "negation", "comparative", "relative", "passive", "embedded-clause"],
       "favorite": {
-        "prompt": "Did you ask the librarian about the inter-library loan service?",
-        "answer": "she asked whether the printed catalog was still updated regularly."
+        "prompt": "Tell me what Esme said about the dorm complaint.",
+        "answer": "She mentioned that the maintenance crew arrived after midnight unexpectedly."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -35,15 +19,10 @@
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": [
-        "public health",
-        "technology and media",
-        "education",
-        "public policy"
-      ],
+      "topics": ["philosophy", "marine biology", "art and aesthetics", "agriculture and food"],
       "favorite": {
-        "subtopic": "public health",
-        "preview": "A handful of universities — including several state schools in Michigan and a private college in N"
+        "subtopic": "marine biology",
+        "preview": "Today, we're going to talk about a question coming up more and more in coastal policy: should governments be allowed"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -51,15 +30,10 @@
     "email": {
       "generated": 4,
       "accepted": 4,
-      "topics": [
-        "校园学业",
-        "职场工作",
-        "消费售后",
-        "社区生活"
-      ],
+      "topics": ["校园学业", "职场工作", "消费售后", "日常生活"],
       "favorite": {
-        "subtopic": "社区生活",
-        "preview": "You volunteer most weekends at a small neighborhood arts center that runs a free children's painting workshop."
+        "subtopic": "校园学业",
+        "preview": "You are a junior majoring in environmental engineering whose hydrology professor replaced the take-home final with an in-person practical lab."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -67,37 +41,21 @@
     "reading-ap": {
       "generated": 5,
       "accepted": 5,
-      "topics": [
-        "biology/cell biology",
-        "environmental_science/wetlands",
-        "anthropology/tool development",
-        "psychology/decision making",
-        "technology/water treatment"
-      ],
+      "topics": ["anthropology/oral traditions", "technology/telecommunications", "history/silk road", "physics/optics", "environmental_science/water purification"],
       "favorite": {
-        "subtopic": "technology/water treatment",
-        "preview": "Among the technologies that have transformed urban infrastructure over the past century, few have ma"
+        "subtopic": "physics/optics",
+        "preview": "Light travels in straight lines through a uniform medium, but when it crosses a boundary into a medium of different density"
       },
       "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_session_id": "routine-r2-20260529-193133",
-      "r2_items_added": 3
+      "failure_reason": ""
     },
     "reading-ctw": {
       "generated": 6,
       "accepted": 6,
-      "topics": [
-        "biology/cell biology",
-        "environmental_science/conservation",
-        "psychology/motivation",
-        "history/cultural exchange",
-        "geology/fossils",
-        "astronomy/space exploration"
-      ],
+      "topics": ["biology/deep sea organisms", "environmental_science/desertification", "psychology/stress response", "history/ancient astronomy", "geology/minerals", "astronomy/asteroid belts"],
       "favorite": {
-        "subtopic": "history/cultural exchange",
-        "preview": "Long ago, traders carried silk, spices, and books between China and the cities of central Asia."
+        "subtopic": "biology/deep sea organisms",
+        "preview": "Some animals live in the deep sea where almost no sunlight ever reaches. They use other senses to find food and friends"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -105,15 +63,10 @@
     "reading-rdl-short": {
       "generated": 4,
       "accepted": 4,
-      "topics": [
-        "social_media/food truck",
-        "email/meal plan refund",
-        "email/parking permit",
-        "notice/lost-and-found"
-      ],
+      "topics": ["notice/elevator", "flyer/theater", "email/office hours", "notice/bike rack"],
       "favorite": {
-        "subtopic": "notice/lost-and-found",
-        "preview": "Unclaimed Lost-and-Found items held at the Anderson Hall front desk will be disposed of after June"
+        "subtopic": "notice/elevator",
+        "preview": "NOTICE: The Brisbane Hall elevator will be out of service from June 8 through June 12 for cable replacement."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -121,18 +74,13 @@
     "reading-rdl-long": {
       "generated": 2,
       "accepted": 2,
-      "topics": [
-        "email/career fair RSVP",
-        "notice/water shutoff"
-      ],
+      "topics": ["notice/water shutoff", "schedule/shuttle"],
       "favorite": {
-        "subtopic": "notice/water shutoff",
-        "preview": "WATER SHUTOFF AND MAINTENANCE NOTICE Date: Saturday, May 24 Time: 7:00 AM to 4:00 PM Location: West"
+        "subtopic": "schedule/shuttle",
+        "preview": "Campus Shuttle Service: Summer Timetable Changes (Effective June 1). Route A — North Quad ↔ Medical Campus runs"
       },
       "retried_after_fail": false,
       "failure_reason": ""
     }
-  },
-  "r2_completed_at": "2026-05-29T19:35:55.209Z",
-  "r2_session_id": "routine-r2-20260529-193133"
+  }
 }

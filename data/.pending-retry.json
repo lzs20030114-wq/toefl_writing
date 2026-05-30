@@ -1,35 +1,57 @@
 {
-  "session_id": "routine-20260529-190441",
-  "generated_at": "2026-05-29T19:17:41.271Z",
+  "session_id": "routine-20260530-190521",
+  "generated_at": "2026-05-30T19:21:53.501Z",
   "needs_retry": true,
   "overall_scores": {
-    "diversity": 95,
-    "quality": 98
+    "diversity": 94,
+    "quality": 96
   },
   "retry_banks": [
     {
-      "bank": "reading-ap",
-      "diversity_score": 100,
-      "diversity_threshold": 85,
-      "quality_score": 80,
+      "bank": "discussion",
+      "diversity_score": 95,
+      "diversity_threshold": 80,
+      "quality_score": 83,
       "quality_threshold": 90,
       "failures": [
-        "质量 80 < 90"
+        "质量 83 < 90"
       ],
       "diversity_breakdown": [
-        "话题组合 5/5",
-        "学科 5/5"
+        "课程 4/4",
+        "学生名 8/8",
+        "开头 3/4",
+        "主题 4/4"
       ],
       "quality_breakdown": [
-        "词数 3/5",
-        "段落数 5/5"
+        "教授段长 2/4",
+        "学生1长 4/4",
+        "学生2长 4/4"
       ],
       "hints": [
-        "质量校验有偏差: 词数 3/5, 段落数 5/5 — recheck schema compliance"
+        "质量校验有偏差: 教授段长 2/4, 学生1长 4/4, 学生2长 4/4 — recheck schema compliance"
       ],
-      "items_to_supplement": 3
+      "items_to_supplement": 2
+    },
+    {
+      "bank": "reading-rdl-long",
+      "diversity_score": 80,
+      "diversity_threshold": 70,
+      "quality_score": 50,
+      "quality_threshold": 85,
+      "failures": [
+        "质量 50 < 85"
+      ],
+      "diversity_breakdown": [
+        "话题 2/2",
+        "notice 1 · email 0"
+      ],
+      "quality_breakdown": [
+        "词数 1/2"
+      ],
+      "hints": [
+        "质量校验有偏差: 词数 1/2 — recheck schema compliance"
+      ],
+      "items_to_supplement": 1
     }
-  ],
-  "resolved_at": "2026-05-29T19:35:56.487Z",
-  "resolution_status": "supplemented"
+  ]
 }
