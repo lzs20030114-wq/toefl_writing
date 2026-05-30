@@ -41,4 +41,27 @@ incl ~1 wh-question; embedded ~21% / 2 items; negation ~9% / 1 item; was
       wh↑, embedded↓, negation↓ toward target)
 
 ---
+## AD — Academic Discussion   `dev-ad.mjs`
+
+Current bank = `data/academicWriting/prompts.json` (n=144). Target = realExam2026 AD (n=50).
+
+| dimension | current bank | realExam2026 target | deviation |
+|-----------|-------------:|--------------------:|----------:|
+| **student post words** | **71.9** | **42.7** | **+29 (≈70% too long)** |
+| professor question words | 13.8 | 15.4 | −1.6 (minor) |
+| course reuse (items/course) | 2.2 | 2.5 | −0.3 (fine) |
+| exactly-2-students % | 100% | 94% | +6 (fine) |
+
+**Read:** the one real gap is student-post LENGTH — the prompt targeted old-TPO
+~430 chars / 4-5 sentences, but 2026改后 student posts are ~43 words / ~250 chars /
+2-3 sentences. Everything else (course diversity, 2-student structure, prof
+question length) already matches.
+
+**Fix applied 2026-05-31:** `academicWriting.js` STUDENT RESPONSES block → ~40-45
+words / 2-3 sentences (was ~430 chars / 4-5 sentences). Professor-post length not
+recalibrated (realExam2026 stored only the question, not the full post; the
+question length 13.8 vs 15.4 is already close).
+- [x] calibrate prompt
+- [ ] re-measure next batch with `dev-ad.mjs` (expect student words 72→~43)
+
 <!-- next types appended below as they are calibrated -->
