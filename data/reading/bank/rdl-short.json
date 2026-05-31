@@ -5848,6 +5848,78 @@
         }
       ],
       "difficulty": "easy"
+    },
+    {
+      "id": "rdl_short_r2_routine-r2-20260531-193107_1",
+      "genre": "notice",
+      "variant": "short",
+      "text": "Recreation Center Locker Policy\n\nA $5 refundable deposit is required for any gym locker rental from October 1 to December 15. Lockers must be cleared and unlocked by 9:00 PM each evening. Students may contact Mr. Diaz in Room 110 for keys.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, when must lockers be emptied each day?",
+          "options": {
+            "A": "By six in the evening",
+            "B": "By seven in the evening",
+            "C": "By nine in the evening",
+            "D": "By ten in the evening"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice states that lockers must be cleared and unlocked by 9:00 PM each evening, which is nine o'clock."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about the locker rental deposit?",
+          "options": {
+            "A": "It will be returned to the student after the rental period.",
+            "B": "It will be added to a campus dining meal account.",
+            "C": "It will be donated to the recreation program fund.",
+            "D": "It will be charged again at every monthly renewal."
+          },
+          "correct_answer": "A",
+          "explanation": "The notice describes the deposit as refundable, which implies that the money will be returned to the student when the rental ends."
+        }
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "rdl_short_r2_routine-r2-20260531-193107_2",
+      "genre": "email",
+      "variant": "short",
+      "text": "Subject: Lab Safety Training Tomorrow\n\nHi Priya,\n\nThis is a reminder that your required lab safety training is tomorrow, March 8, from 1:30 to 3:00 PM in Wexler Hall, Room 220. Please bring a printed copy of the consent form to Dr. Patel.\n\nThanks,\nTeaching Lab Office",
+      "format_metadata": {
+        "from": "Teaching Lab Office",
+        "to": "Priya",
+        "subject": "Lab Safety Training Tomorrow"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, where will the training take place?",
+          "options": {
+            "A": "In Anderson Hall, Room 105",
+            "B": "In Wexler Hall, Room 220",
+            "C": "In Bingham Hall, Room 340",
+            "D": "In Sutton Hall, Room 115"
+          },
+          "correct_answer": "B",
+          "explanation": "The email specifies that the training will be held in Wexler Hall, Room 220."
+        },
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what must Priya bring to the training?",
+          "options": {
+            "A": "A digital copy of her lecture notes",
+            "B": "A printed copy of the consent form",
+            "C": "A signed letter from her academic advisor",
+            "D": "A spare pair of laboratory safety goggles"
+          },
+          "correct_answer": "B",
+          "explanation": "The email instructs Priya to bring a printed copy of the consent form to Dr. Patel."
+        }
+      ],
+      "difficulty": "easy"
     }
   ]
 }

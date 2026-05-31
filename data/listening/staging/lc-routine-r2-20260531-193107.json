@@ -1,0 +1,165 @@
+{
+  "items": [
+    {
+      "id": "lc_r2_routine-r2-20260531-193107_1",
+      "context": "plans_social",
+      "situation": "two friends debating whether to buy concert tickets early or wait for last-minute deals",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Did you see the concert at the Riverside Arena got announced? I'm thinking of grabbing tickets tonight." },
+        { "speaker": "Man", "text": "Already? The show isn't until June. Last-minute deals usually pop up the week before." },
+        { "speaker": "Woman", "text": "Yeah, but the good seats sell out fast. My cousin waited last time and ended up in the back row." },
+        { "speaker": "Man", "text": "Hmm, that's a good point. Maybe split the difference — buy now if presale opens, otherwise wait." },
+        { "speaker": "Woman", "text": "Smart. I'll set an alert and check Friday morning." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "When to purchase tickets for the concert",
+            "B": "Where to sit at the Riverside Arena",
+            "C": "Whether to attend the concert in June",
+            "D": "How to find discount tickets online"
+          },
+          "answer": "A",
+          "explanation": "对话主要围绕“现在买票还是等到临场再买”展开，因此他们讨论的核心是何时购票。B 只是顺带提到“好座位会被抢光”，并非主要话题；C 他们都没质疑要不要去；D 也没有讨论网上折扣。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "wrong_topic",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do on Friday morning?",
+          "options": {
+            "A": "Wait until late June to purchase her tickets",
+            "B": "Travel to Riverside Arena to buy paper tickets",
+            "C": "Check whether early presale tickets are available",
+            "D": "Ask her cousin which seats to buy first"
+          },
+          "answer": "C",
+          "explanation": "男生建议“presale 一开就买，否则再等”，女生回应“好主意，我周五早上看看”，所以她最可能在周五查看是否开了预售。A 是她原本想避免的“等等再买”；B 没有讨论亲自去现场；D 她只是提到表姐的经历，没说要请教她。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "related_but_not_stated",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_r2_routine-r2-20260531-193107_2",
+      "context": "recommendations_opinions",
+      "situation": "two students discussing a new restaurant downtown and which dish to try",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Have you tried that new place, Maple Spoon, downtown yet?" },
+        { "speaker": "Man", "text": "Not yet. I heard the noodle bowls are amazing but the line at lunch is brutal." },
+        { "speaker": "Woman", "text": "Skip the lunch rush. Go around three in the afternoon. I had the spicy peanut noodles and they were unreal — best meal I've had all month." },
+        { "speaker": "Man", "text": "Sold. Was anything overpriced or just kind of average?" },
+        { "speaker": "Woman", "text": "Honestly, the desserts. They look pretty but taste flat. Get the noodles, then grab coffee somewhere else." },
+        { "speaker": "Man", "text": "Good tip. I'll head over this Sunday." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Which dish does the woman recommend?",
+          "options": {
+            "A": "The mushroom dumplings on the appetizer menu",
+            "B": "The spicy peanut noodles she ordered there",
+            "C": "The seasonal dessert with a maple sauce",
+            "D": "The grilled fish bowl with brown rice"
+          },
+          "answer": "B",
+          "explanation": "女生明确说她点的“spicy peanut noodles”是这个月最好的一餐，所以推荐这道菜。A、D 完全没提及；C 与对话相反，她说甜点中看不中吃。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "C": "misattributed",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the woman's overall opinion of Maple Spoon?",
+          "options": {
+            "A": "She thinks the restaurant is overpriced and rarely worth visiting",
+            "B": "She believes the lunch hour is the best time to dine there",
+            "C": "She regrets recommending the place to her classmate",
+            "D": "She considers the main dishes better than the desserts"
+          },
+          "answer": "D",
+          "explanation": "她大力推荐面条但批评甜点“taste flat”，因此她认为主菜比甜点好。A 她只批评甜点，不是整家店；B 她建议避开午餐高峰；C 她主动推荐并未表现后悔。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "rejected_option",
+            "C": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_r2_routine-r2-20260531-193107_3",
+      "context": "errands_service",
+      "situation": "two students at the rec center talking about a free intro yoga class",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Man", "role": "student", "gender": "male" },
+        { "name": "Woman", "role": "student", "gender": "female" }
+      ],
+      "conversation": [
+        { "speaker": "Man", "text": "Hey, did you sign up for that free intro yoga class at the rec center yet?" },
+        { "speaker": "Woman", "text": "I tried this morning, but the website said the session was full." },
+        { "speaker": "Man", "text": "Really? They added a second slot on Thursday at 7:00 PM. Check again." },
+        { "speaker": "Woman", "text": "Oh, nice. Do I need to bring my own mat?" },
+        { "speaker": "Man", "text": "Yeah, no rentals this time. There's a sign-up form at the front desk too if the website acts up." },
+        { "speaker": "Woman", "text": "Perfect. I'll swing by after my chem lab." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man tell the woman about Thursday?",
+          "options": {
+            "A": "A new yoga instructor will lead the class",
+            "B": "A registration fee was added that morning",
+            "C": "A second class session was opened that day",
+            "D": "A mat rental program was launched recently"
+          },
+          "answer": "C",
+          "explanation": "男生说“他们周四晚上 7:00 加了第二场”，所以那天新开了一节课。A、B、D 在对话中均未出现。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "related_but_not_stated",
+            "D": "misattributed"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Visit the rec center after her chemistry lab",
+            "B": "Buy a yoga mat at the campus bookstore",
+            "C": "Email the front desk to request a refund",
+            "D": "Wait until the morning session reopens"
+          },
+          "answer": "A",
+          "explanation": "女生最后说“化学实验课后我顺路过去”，且男生提到前台也能报名，所以她最可能化学课后去 rec center 报名。B 她从未说要新买垫子；C 没有退款话题；D 上午的课她说不上。",
+          "distractor_types": {
+            "B": "unrelated_next_step",
+            "C": "unrelated_next_step",
+            "D": "rejected_option"
+          }
+        }
+      ]
+    }
+  ]
+}
