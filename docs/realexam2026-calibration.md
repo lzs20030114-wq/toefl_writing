@@ -144,6 +144,24 @@ source updated to realExam2026 (75 passages, mean 69).
 - [x] tighten CTW length floor
 - [ ] re-measure next batch (expect 56→~68)
 
+**Deeper pass (eval-spec docs/eval-spec/ctw.md) — LEXICAL DIFFICULTY (the user's
+mandated vocab knob) fixed 2026-05-31:**
+- **Blank-word difficulty** is the gap: real CTW blanks avg **5.77 chars / 25.6% ≥8
+  letters** (B2-C1: characterized, advantageous, conversely, vegetation); old gen
+  blanks **5.13 / 15.2%** — too easy. Root cause: the prompt forced **CEFR A2-B1,
+  avg word 4.5-5.5, "NO sophisticated/fundamental"** AND told the model to "put
+  interesting vocab in VISIBLE positions, common words in blanks" — actively easing
+  the blanks below the real exam.
+- **Fix A (prompt)**: register → popular-science/intro-textbook "not dumbed-down";
+  avg word length 4.5-5.5 → **~5.3-6.0 (real 5.7)**; vocab A2-B1/max-1-2-B2 → **B1-B2
+  base, several B2-C1 normal**, with the real blank-word list as exemplars.
+- **Fix B (validator, Lesson D)**: `ctwValidator.js` rare-blank gate rejected ~19% /
+  warned ~54% of REAL items — it was suppressing authentic difficulty. Loosened
+  error 0.5→0.7, warn 0.3→0.5.
+- **Test batch** `calib-ctw-20260531` (Claude, tagged, n=3): blank avg word length
+  **5.80** (real 5.77, was 5.13), blank **%≥8 = 30** (real 25.6, was 15.2), passage
+  **66.3 words** (real 69.3) — lexical difficulty + length both verified on-target.
+
 ## Listening (lc / la / lat)   `dev-listening.mjs`
 
 Current = `data/listening/bank/{lc,la,lat}.json`. Target = realExam2026 listening.
@@ -199,7 +217,7 @@ revisit when more speaking audio is transcribed.
 | AD | **calibrated** | student posts 72→43 words (old-TPO 430 chars → 2026 ~250) |
 | Email | on-target | scenario 42 vs 39, 3 bullets — already matched |
 | Reading AP | **held (data caveat)** | question-count target unreliable (DeepSeek under-extraction) |
-| Reading CTW | **calibrated** | gen undershoots length 56 vs 69 (target was correct) |
+| Reading CTW | **calibrated** | length 56→69 + LEXICAL: blanks too easy 5.13→5.80 chars (real 5.77), B2-C1 vocab allowed, validator loosened (Lesson D) |
 | Listening | **calibrated** | lectures 124-141 → target 258; +broken stubs to regen |
 | Speaking repeat | on-target | difficulty gradient already matched |
 | Speaking interview | insufficient | n=14, below calibration bar |

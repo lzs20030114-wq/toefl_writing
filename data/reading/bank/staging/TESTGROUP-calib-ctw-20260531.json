@@ -1,0 +1,21 @@
+{
+  "_meta": {
+    "test_group": "calib-ctw-20260531",
+    "generated_by": "claude (calibration test of recalibrated CTW prompt)",
+    "note": "TEST batch verifying CTW lexical-difficulty + length recalibration (real ~70w, avg word ~5.7 chars, B2-C1 vocab vs old A2-B1/4.5-5.5). Blanking is mechanical. Purge: scripts/ops/purge-test-groups.mjs --delete calib-ctw-20260531"
+  },
+  "items": [
+    {
+      "id": "TEST_ctw_1", "test_group": "calib-ctw-20260531", "topic": "earth science",
+      "passage": "Glaciers are enormous, slowly moving masses of ice that develop where snow accumulates faster than it melts. Over many centuries, the compressed layers gradually transform into dense ice that advances downhill under its own considerable weight. As glaciers move, they reshape the surrounding landscape, carving deep valleys and depositing rock far from its origin. Scientists monitor these formations closely, because their steady retreat provides striking evidence of a warming climate."
+    },
+    {
+      "id": "TEST_ctw_2", "test_group": "calib-ctw-20260531", "topic": "marine biology",
+      "passage": "Coral reefs are among the most diverse ecosystems on Earth, supporting thousands of marine species within a relatively small area. Although they cover only a tiny fraction of the ocean floor, they provide essential habitat, shelter, and breeding grounds for countless organisms. Reefs form gradually as tiny polyps secrete calcium carbonate, building elaborate structures over thousands of years. Rising sea temperatures, however, increasingly threaten their long-term survival."
+    },
+    {
+      "id": "TEST_ctw_3", "test_group": "calib-ctw-20260531", "topic": "anthropology",
+      "passage": "Early human societies developed remarkably sophisticated tools long before the invention of writing. Archaeologists have discovered carefully shaped stone implements that were used for hunting, preparing food, and constructing simple shelters. These innovations spread gradually across distant communities, demonstrating that knowledge was exchanged through trade and migration. Such discoveries fundamentally reshaped our understanding of how prehistoric populations adapted to their changing environments."
+    }
+  ]
+}
