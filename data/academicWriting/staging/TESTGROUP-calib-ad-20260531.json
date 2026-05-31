@@ -1,0 +1,88 @@
+{
+  "_meta": {
+    "test_group": "calib-ad-20260531",
+    "generated_by": "claude (calibration test of recalibrated AD prompt)",
+    "generated_at": null,
+    "note": "TEST batch to verify the 2026改后 AD recalibration (Dr.<surname>, 'We've been discussing' opener, two-sided frame, independent students ~43w, harder vocab, no s2-naming). Purge with scripts/ops/purge-test-groups.mjs --delete calib-ad-20260531 if unqualified."
+  },
+  "questions": [
+    {
+      "id": "TEST_ad_1",
+      "test_group": "calib-ad-20260531",
+      "course": "sociology",
+      "professor": {
+        "name": "Dr. Okafor",
+        "text": "We've been discussing how social media shapes the way young people form their sense of identity. Some researchers argue that constant online comparison undermines self-esteem and pushes students to present an idealized, inauthentic version of themselves. Others believe these platforms give people valuable new ways to explore their interests and find supportive communities. Do you think social media mostly distorts or mostly supports identity development? Why?"
+      },
+      "students": [
+        { "name": "Maya", "text": "I think the harm outweighs the benefits. When everyday life is curated for an audience, people begin measuring their worth against unattainable standards, and that relentless comparison makes genuine self-acceptance considerably harder to develop." },
+        { "name": "Daniel", "text": "I see it differently. For students who feel isolated in their immediate surroundings, these platforms are often the first place they discover communities that share their passions, and that belonging tends to strengthen their identity rather than weaken it." }
+      ]
+    },
+    {
+      "id": "TEST_ad_2",
+      "test_group": "calib-ad-20260531",
+      "course": "marketing",
+      "professor": {
+        "name": "Dr. Reyes",
+        "text": "We've been looking at how companies use personalized advertising built on people's browsing data. Some marketing experts argue that personalization genuinely improves the customer experience by surfacing relevant products, while others believe it manipulates consumers and quietly erodes their privacy. In your view, does data-driven personalization do more good or more harm for consumers? Why?"
+      },
+      "students": [
+        { "name": "Priya", "text": "I believe the advantages are real. Personalization spares people from sorting through countless irrelevant options, and when recommendations actually match someone's needs, the experience becomes more efficient and occasionally introduces them to products they genuinely value." },
+        { "name": "Marcus", "text": "I'm more skeptical. The same information that powers convenient suggestions also lets companies exploit our impulses, and most consumers have no meaningful way to understand or control how their personal data is being collected and used." }
+      ]
+    },
+    {
+      "id": "TEST_ad_3",
+      "test_group": "calib-ad-20260531",
+      "course": "economics",
+      "professor": {
+        "name": "Dr. Lin",
+        "text": "We've been examining the growth of the gig economy, where people work independently through apps instead of holding traditional jobs. Some economists argue this arrangement gives workers valuable flexibility and independence, while others believe it strips away the stability and protections that ordinary employment provides. Do you think the gig economy ultimately benefits or disadvantages workers? Why?"
+      },
+      "students": [
+        { "name": "Sofia", "text": "I think it disadvantages most workers. Flexibility sounds appealing, but without guaranteed income, insurance, or retirement contributions, people shoulder enormous financial uncertainty, and that instability usually outweighs the freedom to set their own schedules." },
+        { "name": "Ethan", "text": "I'd argue the opposite for many people. Workers who value autonomy can choose when and how much they work, combine several income sources, and escape rigid office structures, which traditional employment rarely accommodates so readily." }
+      ]
+    },
+    {
+      "id": "TEST_ad_4",
+      "test_group": "calib-ad-20260531",
+      "course": "education",
+      "professor": {
+        "name": "Dr. Hassan",
+        "text": "We've been discussing the role of standardized testing in university admissions. Some educators argue that these exams provide an objective, comparable measure of readiness across very different schools, while others believe they mainly reflect family wealth and narrow learning to what is tested. Should universities continue to rely on standardized tests? Why or why not?"
+      },
+      "students": [
+        { "name": "Aisha", "text": "I don't think they should. Test performance correlates strongly with access to expensive preparation, so the scores often measure privilege rather than potential, and that disadvantages capable students from under-resourced schools through no fault of their own." },
+        { "name": "Liam", "text": "I see real value in keeping them. Grading standards vary enormously between schools, and a common examination gives admissions officers at least one consistent reference point, which helps them compare applicants from unfamiliar or very different backgrounds." }
+      ]
+    },
+    {
+      "id": "TEST_ad_5",
+      "test_group": "calib-ad-20260531",
+      "course": "environmental policy",
+      "professor": {
+        "name": "Dr. Novak",
+        "text": "We've been considering who bears the main responsibility for addressing climate change. Some argue that meaningful progress depends on individuals changing their everyday habits, while others believe that only large corporations and governments control emissions at a scale that actually matters. Where do you think responsibility should mainly lie — with individuals or with institutions? Why?"
+      },
+      "students": [
+        { "name": "Nora", "text": "I think the emphasis belongs on institutions. Individual choices matter symbolically, but a relatively small number of corporations generate the overwhelming majority of emissions, so genuine progress requires regulation and systemic change rather than personal guilt." },
+        { "name": "Caleb", "text": "I'd place more weight on individuals. Collective habits shape the demand that corporations respond to, and when enough consumers change what they buy and how they vote, that pressure eventually forces institutions to change as well." }
+      ]
+    },
+    {
+      "id": "TEST_ad_6",
+      "test_group": "calib-ad-20260531",
+      "course": "psychology",
+      "professor": {
+        "name": "Dr. Diaz",
+        "text": "We've been studying how competition affects student learning. Some psychologists argue that competing against peers motivates students to work harder and achieve more, while others believe it generates anxiety and discourages those who fall behind. Do you think competition in the classroom mostly helps or mostly harms learning? Why?"
+      },
+      "students": [
+        { "name": "Hana", "text": "I think it mostly harms learning. Competition concentrates attention on outperforming others rather than on understanding the material, and for students who consistently rank lower it breeds discouragement that can permanently undermine their confidence and curiosity." },
+        { "name": "Theo", "text": "I believe it generally helps. A reasonable amount of competition pushes students to prepare thoroughly and take their work seriously, and the experience of striving against capable peers often reveals abilities they would not otherwise have discovered." }
+      ]
+    }
+  ]
+}
