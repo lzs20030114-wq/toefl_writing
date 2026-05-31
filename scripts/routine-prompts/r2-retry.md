@@ -5,7 +5,8 @@ after R1. It reads `data/.pending-retry.json` and supplements banks that R1
 flagged as below the diversity/quality gate.
 
 Architecture:
-- R1 (existing routine `trig_01SmJeXr8ySEZRo2dEoohzTP`) generates all 7 banks,
+- R1 (existing routine `trig_01SmJeXr8ySEZRo2dEoohzTP`) generates all 12 banks
+  (7 reading/writing + 5 listening/speaking: lat/lc/la/lcr/repeat),
   scores them via `scripts/check-quality-gates.mjs`, writes pending-retry.json.
 - R2 (this routine) polls. If pending-retry says no retry needed, exits clean
   (cheap no-op). If retry needed, generates supplementary items for the failed
@@ -53,8 +54,11 @@ For each entry in `retry_banks`:
 
   a) Fetch the calibrated base prompt:
        node scripts/print-bank-prompt.mjs <bank>
-     where <bank> is the bank field. For BS pass "bs", for discussion pass
-     "disc", for email pass "email", for reading pass "ap"/"ctw"/"rdl-short"/"rdl-long".
+     where <bank> is the bank field, MAPPED to the print-bank-prompt arg:
+       bs→bs, discussion→disc, email→email,
+       reading-ap→ap, reading-ctw→ctw, reading-rdl-short→rdl-short, reading-rdl-long→rdl-long,
+       listening-lat→lat, listening-lc→lc, listening-la→la, listening-lcr→lcr,
+       speaking-repeat→repeat.
 
   b) Build a SUPPLEMENTARY instruction by combining:
      - The base prompt from (a)
@@ -75,6 +79,11 @@ For each entry in `retry_banks`:
        reading-ctw        → data/reading/staging/ctw-$R2_SESSION_ID.json
        reading-rdl-short  → data/reading/staging/rdl-$R2_SESSION_ID-short.json
        reading-rdl-long   → data/reading/staging/rdl-$R2_SESSION_ID-long.json
+       listening-lat      → data/listening/staging/lat-$R2_SESSION_ID.json
+       listening-lc       → data/listening/staging/lc-$R2_SESSION_ID.json
+       listening-la       → data/listening/staging/la-$R2_SESSION_ID.json
+       listening-lcr      → data/listening/staging/lcr-$R2_SESSION_ID.json
+       speaking-repeat    → data/speaking/staging/repeat-$R2_SESSION_ID.json
 
   e) Merge with the appropriate command:
        bs/disc/email → node scripts/mergeClaude.mjs <bank> <staging-file>
@@ -83,6 +92,9 @@ For each entry in `retry_banks`:
        reading-ctw   → MERGE_RUN_ID=$R2_SESSION_ID node scripts/merge-staging.mjs
        reading-rdl-short → MERGE_RUN_ID=$R2_SESSION_ID-short node scripts/merge-staging.mjs
        reading-rdl-long  → MERGE_RUN_ID=$R2_SESSION_ID-long node scripts/merge-staging.mjs
+       listening-lat / listening-lc / listening-la / listening-lcr / speaking-repeat
+                         → MERGE_RUN_ID=$R2_SESSION_ID node scripts/merge-staging.mjs
+                           (merge-staging scans reading+listening+speaking staging dirs)
 
   f) Capture acceptance count from merge stdout for this bank.
   g) Log: "R2 <bank>: supplemented <accepted>/<items_to_supplement>"

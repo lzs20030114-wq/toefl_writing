@@ -14,7 +14,7 @@ End-to-end pipeline that generates fresh TOEFL practice items every night using 
    │ R1 ── Generator routine (trig_01SmJeXr8ySEZRo2dEoohzTP)         │
    │                                                                 │
    │ 1. git clone repo                                               │
-   │ 2. Phase 2: for each of 7 banks                                 │
+   │ 2. Phase 2: for each of 12 banks (see R1 bank list below)       │
    │      a. node scripts/print-bank-prompt.mjs <bank>               │
    │         → returns TPO-calibrated prompt (etsProfile +            │
    │           readingEtsProfile + bank-specific prompt builder)     │
@@ -62,9 +62,39 @@ End-to-end pipeline that generates fresh TOEFL practice items every night using 
    └─────────────────────────────────────────────────────────────────┘
 ```
 
+## R1 bank list (generation order) — 12 banks
+
+The R1 routine (Anthropic remote-agent trigger `trig_01SmJeXr8ySEZRo2dEoohzTP`, prompt
+held in the trigger config, NOT in this repo) loops over all 12 banks. For each, it
+runs `print-bank-prompt.mjs <arg>`, generates in-head, writes staging, then merges.
+Updated 2026-05-31 to add listening + speaking (were DeepSeek-only; DeepSeek undershoots
+long-form length, so they moved to the Claude routine).
+
+| bank key (gate/report) | print-bank-prompt arg | staging file | merge command |
+|---|---|---|---|
+| bs | `bs` | `data/buildSentence/staging/$SESSION.json` | `mergeClaude.mjs bs <file>` |
+| discussion | `disc` | `data/academicWriting/staging/$SESSION.json` | `mergeClaude.mjs disc <file>` |
+| email | `email` | `data/emailWriting/staging/$SESSION.json` | `mergeClaude.mjs email <file>` |
+| reading-ap | `ap` | `data/reading/staging/ap-$SESSION.json` | `MERGE_RUN_ID=$SESSION merge-staging.mjs` |
+| reading-ctw | `ctw` | `data/reading/staging/ctw-$SESSION.json` | `MERGE_RUN_ID=$SESSION merge-staging.mjs` |
+| reading-rdl-short | `rdl-short` | `data/reading/staging/rdl-$SESSION-short.json` | `MERGE_RUN_ID=$SESSION-short merge-staging.mjs` |
+| reading-rdl-long | `rdl-long` | `data/reading/staging/rdl-$SESSION-long.json` | `MERGE_RUN_ID=$SESSION-long merge-staging.mjs` |
+| **listening-lat** | `lat` | `data/listening/staging/lat-$SESSION.json` | `MERGE_RUN_ID=$SESSION merge-staging.mjs` |
+| **listening-lc** | `lc` | `data/listening/staging/lc-$SESSION.json` | `MERGE_RUN_ID=$SESSION merge-staging.mjs` |
+| **listening-la** | `la` | `data/listening/staging/la-$SESSION.json` | `MERGE_RUN_ID=$SESSION merge-staging.mjs` |
+| **listening-lcr** | `lcr` | `data/listening/staging/lcr-$SESSION.json` | `MERGE_RUN_ID=$SESSION merge-staging.mjs` |
+| **speaking-repeat** | `repeat` | `data/speaking/staging/repeat-$SESSION.json` | `MERGE_RUN_ID=$SESSION merge-staging.mjs` |
+
+(One `MERGE_RUN_ID=$SESSION merge-staging.mjs` run after all reading/listening/speaking
+staging is written merges them all — it scans all three section staging dirs.)
+
+**⚠ R1 trigger update required:** the R1 prompt lives in the remote-agent trigger config
+(not this repo). To finish wiring, add the 5 new rows above to the R1 loop. The repo side
+(print-bank-prompt handlers, merge-staging, gate, report, R2) is already done.
+
 ## Quality gate decision (`scripts/check-quality-gates.mjs`)
 
-Runs after R1 finishes generation. For each of 7 banks:
+Runs after R1 finishes generation. For each of 12 banks:
 - Loads the staging file
 - Runs `lib/quality/scoreBatch.mjs` → diversity + quality score (each 0-100)
 - Compares against per-bank thresholds:
@@ -78,6 +108,11 @@ Runs after R1 finishes generation. For each of 7 banks:
 | reading-ctw         | 85 | 90 |
 | reading-rdl-short   | 80 | 85 |
 | reading-rdl-long    | 70 | 85 |
+| listening-lat       | 70 | 80 |
+| listening-lc        | 72 | 80 |
+| listening-la        | 72 | 80 |
+| listening-lcr       | 75 | 80 |
+| speaking-repeat     | 70 | 80 |
 
 Lower per-bank thresholds for small-N banks reflect natural sampling variance.
 
