@@ -1,0 +1,133 @@
+{
+  "_meta": {
+    "test_group": "calib-ap-20260531",
+    "generated_by": "claude (calibration test of recalibrated AP prompt)",
+    "note": "TEST batch verifying AP recalibration vs realExam2026: length ~190 (was 210/max322), direct-definition opening (kill received-wisdom), insert_text Q5 with four [■] (was 0%), reference type (was 0%), single-word vocab options, varied option spread (real 2.6, not over-uniform), ~1 hedge + 1 contrast pivot. Purge: scripts/ops/purge-test-groups.mjs --delete calib-ap-20260531"
+  },
+  "items": [
+    {
+      "topic": "technology", "subtopic": "floating wind turbines", "difficulty": "medium",
+      "test_group": "calib-ap-20260531",
+      "passage": "Floating wind turbines are a special type of offshore wind generator anchored to the seabed by cables rather than mounted on a rigid foundation. This design allows them to operate in deep waters, far from the coast, where winds blow stronger and more steadily than near the shore. [■] Because the platform floats, it can be assembled in port and towed into position, which reduces the need for expensive specialized vessels and lowers the cost of installation. Once in place, the turbine must stay upright against strong waves and shifting currents. Engineers achieve this through ballast systems and tension in the mooring lines, which counteract the tilting forces. [■] Larger platforms can support taller towers and longer blades, which capture more energy from the wind. The electricity that is generated then travels back to land through cables laid along the ocean floor. [■] Despite these advantages, floating wind farms still face considerable obstacles. The mooring and cabling systems are expensive, and maintenance at remote, deep-water sites is difficult. [■] Researchers are therefore exploring cheaper materials and sturdier designs that might make the technology competitive with conventional power plants.",
+      "paragraphs": [
+        "Floating wind turbines are a special type of offshore wind generator anchored to the seabed by cables rather than mounted on a rigid foundation. This design allows them to operate in deep waters, far from the coast, where winds blow stronger and more steadily than near the shore. [■] Because the platform floats, it can be assembled in port and towed into position, which reduces the need for expensive specialized vessels and lowers the cost of installation.",
+        "Once in place, the turbine must stay upright against strong waves and shifting currents. Engineers achieve this through ballast systems and tension in the mooring lines, which counteract the tilting forces. [■] Larger platforms can support taller towers and longer blades, which capture more energy from the wind. The electricity that is generated then travels back to land through cables laid along the ocean floor. [■]",
+        "Despite these advantages, floating wind farms still face considerable obstacles. The mooring and cabling systems are expensive, and maintenance at remote, deep-water sites is difficult. [■] Researchers are therefore exploring cheaper materials and sturdier designs that might make the technology competitive with conventional power plants."
+      ],
+      "questions": [
+        {
+          "question_type": "vocabulary_in_context",
+          "stem": "The word \"considerable\" in paragraph 3 is closest in meaning to",
+          "options": { "A": "substantial", "B": "minor", "C": "unexpected", "D": "temporary" },
+          "correct_answer": "A",
+          "explanation": "The obstacles are described as expensive and difficult, so \"considerable\" means substantial."
+        },
+        {
+          "question_type": "factual_detail",
+          "stem": "According to paragraph 2, how do engineers keep a floating turbine upright?",
+          "options": {
+            "A": "By anchoring the tower directly to a rigid underwater foundation",
+            "B": "Through ballast systems and tension in the mooring lines",
+            "C": "By assembling it in port",
+            "D": "By laying electrical cables along the ocean floor"
+          },
+          "correct_answer": "B",
+          "explanation": "Paragraph 2 states engineers achieve stability through ballast systems and tension in the mooring lines."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about winds near the shore compared with winds in deep waters?",
+          "options": {
+            "A": "They are weaker and less steady than deep-water winds",
+            "B": "They make assembling a turbine in port impossible",
+            "C": "They are the main cause of mooring-line failure",
+            "D": "They are strong enough to replace conventional plants"
+          },
+          "correct_answer": "A",
+          "explanation": "The passage says deep-water winds blow stronger and more steadily than near the shore, implying shore winds are weaker."
+        },
+        {
+          "question_type": "rhetorical_purpose",
+          "stem": "Why does the author mention assembling the platform in port?",
+          "options": {
+            "A": "To illustrate a cost advantage of the floating design",
+            "B": "To explain why deep-water winds blow more steadily",
+            "C": "To describe a limitation of conventional turbines",
+            "D": "To introduce the problem of cable maintenance"
+          },
+          "correct_answer": "A",
+          "explanation": "Port assembly is mentioned as reducing the need for expensive vessels, i.e. a cost advantage."
+        },
+        {
+          "question_type": "insert_text",
+          "stem": "There are four locations [■] in the passage that indicate where the following sentence could be added. 'For example, the Hywind Scotland project, the world's first commercial floating wind farm, has supplied electricity to tens of thousands of homes since 2017.' Where would the sentence best fit? Select a location to add the sentence to the passage.",
+          "options": { "A": "Slot 1", "B": "Slot 2", "C": "Slot 3", "D": "Slot 4" },
+          "correct_answer": "A",
+          "explanation": "The example of a real deep-water floating farm best follows the claim that floating turbines operate in deep waters far from the coast (slot 1)."
+        }
+      ]
+    },
+    {
+      "topic": "materials_science", "subtopic": "quantum dots", "difficulty": "hard",
+      "test_group": "calib-ap-20260531",
+      "passage": "Quantum dots are tiny crystals of semiconductor material, only a few nanometers across, that glow with specific colors when struck by light. These crystals were first studied in the 1980s, but only recently have they become common in everyday devices. [■] Their color depends almost entirely on their size: smaller dots emit blue light, and larger ones emit red. Because their size can be controlled with great precision during manufacturing, engineers can tune them to produce almost any color in the spectrum. This precise control makes quantum dots valuable in display technology. In many modern televisions, a layer of quantum dots converts the light from an energy-efficient backlight into pure, vivid colors. [■] The same property is being explored in medicine, where dots attached to molecules can label specific cells and make them visible under a microscope. [■] However, the most effective quantum dots have traditionally been made from cadmium, a toxic heavy metal. This raises concerns about their safety and disposal, particularly in consumer products. [■] Researchers are now developing cadmium-free alternatives that may preserve the bright colors and reduce the environmental risks.",
+      "paragraphs": [
+        "Quantum dots are tiny crystals of semiconductor material, only a few nanometers across, that glow with specific colors when struck by light. These crystals were first studied in the 1980s, but only recently have they become common in everyday devices. [■] Their color depends almost entirely on their size: smaller dots emit blue light, and larger ones emit red. Because their size can be controlled with great precision during manufacturing, engineers can tune them to produce almost any color in the spectrum.",
+        "This precise control makes quantum dots valuable in display technology. In many modern televisions, a layer of quantum dots converts the light from an energy-efficient backlight into pure, vivid colors. [■] The same property is being explored in medicine, where dots attached to molecules can label specific cells and make them visible under a microscope. [■]",
+        "However, the most effective quantum dots have traditionally been made from cadmium, a toxic heavy metal. This raises concerns about their safety and disposal, particularly in consumer products. [■] Researchers are now developing cadmium-free alternatives that may preserve the bright colors and reduce the environmental risks."
+      ],
+      "questions": [
+        {
+          "question_type": "vocabulary_in_context",
+          "stem": "The word \"tune\" in paragraph 1 is closest in meaning to",
+          "options": { "A": "adjust", "B": "repair", "C": "divide", "D": "measure" },
+          "correct_answer": "A",
+          "explanation": "Engineers control the dots to produce a chosen color, so \"tune\" means adjust."
+        },
+        {
+          "question_type": "factual_detail",
+          "stem": "According to paragraph 1, what determines the color a quantum dot emits?",
+          "options": {
+            "A": "The intensity of the light that strikes it",
+            "B": "The size of the crystal",
+            "C": "The backlight",
+            "D": "The precision of the microscope used to observe it"
+          },
+          "correct_answer": "B",
+          "explanation": "Paragraph 1 states the color depends almost entirely on the dot's size."
+        },
+        {
+          "question_type": "reference",
+          "stem": "What does \"The same property\" refer to in paragraph 2?",
+          "options": {
+            "A": "The dots' tunable color",
+            "B": "The energy-efficient backlight",
+            "C": "The display technology",
+            "D": "The layer of quantum dots"
+          },
+          "correct_answer": "A",
+          "explanation": "\"The same property\" refers back to the size-controlled, tunable color that makes dots useful in displays."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about cadmium-free quantum dots?",
+          "options": {
+            "A": "They are expected to glow more brightly than older dots",
+            "B": "They are intended to be safer to use and discard",
+            "C": "They cannot yet be tuned to specific colors",
+            "D": "They are mainly used in medical imaging"
+          },
+          "correct_answer": "B",
+          "explanation": "They are developed to reduce environmental risks while preserving color, implying they are meant to be safer."
+        },
+        {
+          "question_type": "insert_text",
+          "stem": "There are four locations [■] in the passage that indicate where the following sentence could be added. 'For example, a single dot can be attached to a cancer cell so that doctors can track how a tumor spreads through the body.' Where would the sentence best fit? Select a location to add the sentence to the passage.",
+          "options": { "A": "Slot 1", "B": "Slot 2", "C": "Slot 3", "D": "Slot 4" },
+          "correct_answer": "C",
+          "explanation": "The cancer-cell example best follows the sentence about dots labeling specific cells under a microscope (slot 3)."
+        }
+      ]
+    }
+  ]
+}

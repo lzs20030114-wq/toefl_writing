@@ -121,10 +121,29 @@ Current = `data/reading/bank/ap.json` (n=156). Target = realExam2026 AP (n=64).
 | **questions / passage** | **5** | **3.2** | ⚠️ **UNRELIABLE** — DeepSeek under-extracted AP questions (the real reading section has ~20 MC; 3.2 is an extraction artifact). DO NOT calibrate to it. |
 | options / question | — | 4 | (4 confirmed) |
 
-**Decision:** AP NOT recalibrated — the realExam2026 AP question count is a DeepSeek
-under-extraction artifact, and the passage may be truncated, so the target is
-unreliable (IRON RULE). Only safe signal: max passage length looks high (322) vs
-real ~209; left for a later cautious cap. No change this pass.
+**First-pass decision:** the realExam2026 AP *question COUNT* is a DeepSeek
+under-extraction artifact (real ~5/cluster) — DO NOT calibrate to 3.2 (IRON RULE).
+
+**Deeper pass (eval-spec docs/eval-spec/ap.md — the count is the ONLY unreliable dim;
+everything else hand-validated from 14 OCR clusters / 39 clean passages) — fixed 2026-05-31:**
+The first pass under-sold AP: the eval-spec found the richest gap set of any type.
+- **Length (D2, user-mandated):** gen 210 [max 322] vs real **182.5 [max 209]** — the
+  "280-360 / mean 317.5" target was a STALE classic-TOEFL number. → `apPromptBuilder`
+  §1 + `AP_PROFILE.passageWordCount` → **150-210, center 190**; "hard ≠ longer" (C1).
+- **Opening (D13):** received-wisdom opener was weighted **0.46**; real is **1/42 (~2%)**.
+  → `openingStrategies` received-wisdom 0.46→0.05, direct_definition 0.31→**0.90**; prompt
+  rule "sentence 1 directly names+defines the subject; no Historically/While-early opener".
+- **Question-type mix (D5):** gen had **0% insert_text** (real 11.4%, the Q5 of ~60% of
+  clusters), **0% reference** (real 4.3%), and **13.6% paragraph_relationship** (real 2.9%).
+  → `QUESTION_PLANS` rewritten to the real mix; insert_text added as Q5 in 3/5 plans with
+  **[■]×4 passage scaffolding** (D6/C2); reference type added; paragraph_relationship cut to 1/5.
+- **vocab options (D7):** gen 2.9 words → rule "single words" (real 1.5).
+- **option over-uniformity (D10):** "within 2 words" → loosened to ~3-4 spread (real 2.6;
+  gen was 1.6 = synthetic tell). `optionLengthVarianceMax` 1.5→3.5.
+- **over-smoothing (D15/16/17):** hedging/contrast/passive ran 2-3× real → dialed to ~1 each.
+- **Test batch** `calib-ap-20260531` (Claude, n=2): passage **182w** (real 182.5), opening
+  direct-definition 2/2, insert_text + [■]×4 present, reference present, vocab options **1.0w**,
+  option spread **2.50** (real 2.6), hedges **1.0** (real 1.03), contrast **1.0** (real 1.09) — all verified.
 
 ## Reading · CTW — Complete the Words   `dev-reading.mjs`
 
@@ -216,7 +235,7 @@ revisit when more speaking audio is transcribed.
 | BS | **calibrated** | over-complexified: 1% easy→22%, answers long, embedded/negation high, no wh-Q |
 | AD | **calibrated** | student posts 72→43 words (old-TPO 430 chars → 2026 ~250) |
 | Email | on-target | scenario 42 vs 39, 3 bullets — already matched |
-| Reading AP | **held (data caveat)** | question-count target unreliable (DeepSeek under-extraction) |
+| Reading AP | **calibrated (deeper pass)** | length 210→190, opening received-wisdom 46%→5%, +insert_text/reference (were 0%), −paragraph_relationship 13.6%→3%, single-word vocab opts, loosened option spread, dialed back over-smoothing. Only question-COUNT held (extraction artifact). |
 | Reading CTW | **calibrated** | length 56→69 + LEXICAL: blanks too easy 5.13→5.80 chars (real 5.77), B2-C1 vocab allowed, validator loosened (Lesson D) |
 | Listening | **calibrated** | lectures 124-141 → target 258; +broken stubs to regen |
 | Speaking repeat | on-target | difficulty gradient already matched |
