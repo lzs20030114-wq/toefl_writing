@@ -282,3 +282,30 @@ revisit when more speaking audio is transcribed.
 | Speaking interview | insufficient | n=14, below calibration bar |
 
 Re-run each `dev-<type>.mjs` after the next nightly batch to confirm convergence.
+
+---
+
+## Production regen verification (DeepSeek, 2026-05-31)
+
+Ran the REAL production pipeline (`scripts/generate-<type>.mjs` → DeepSeek) with the
+recalibrated prompts and measured the staging output (not Claude test batches). This
+surfaced gaps the Claude tests hid (skill Lesson E).
+
+| type | production result | verdict |
+|------|-------------------|---------|
+| **CTW** | length 56→**70** (real 69), blank avg **5.90** (real 5.77), %≥8 **27** (real 26) | ✅ converged (needed an aim-high length fix to counter DeepSeek undershoot) |
+| **LCR** | wh-questions **0%→44%** (real 49) after FORCED per-item type assignment; len ~10 | ✅ converged (global % target was ignored by DeepSeek) |
+| **LC** | turns **6.4** (real 6), Man/Woman 5/5, peer (service 1/5), words 106 (real 89, top of range) | ✅ converged |
+| **LA** | words **80** (real 83), contr **1.53**/100w (real 1.9, was 0.40), 0 Attention-default, varied openers | ✅ converged |
+| **Speaking-repeat** | questions **0**, punitive **0**, Welcome **0**, varied signatures | ✅ converged |
+| **AP** | structure converged (insert_text+reference now generate + validator accepts, [■] markers); **passage length undershoots: ~133 vs 190** | ⚠ length only |
+| **LAT** | domain/register/declarative converged; **transcript undershoots: ~178-196 vs 246** | ⚠ length only |
+
+**Key production finding:** DeepSeek has a strong **~130-180-word length prior**. Aim-high
+counter-instructions fully fixed CTW (target 69, inside that prior) but only PARTIALLY
+move AP (190) and LAT (258), which sit far above what DeepSeek will write — even with
+explicit "you undershoot, AIM for 205/280" instructions and a hard validator floor.
+Fixing the long-form length needs a strategy decision: (a) accept shorter, (b) add an
+"expand to N words" second DeepSeek pass, or (c) generate the two long-form types with
+Claude (which complied perfectly in tests). Also fixed this pass: AP validator was still
+stricter than the prompt (rejected insert_text/reference; stale 120-450 length gate → 110-230).
