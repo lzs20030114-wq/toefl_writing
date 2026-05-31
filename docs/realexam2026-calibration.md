@@ -48,8 +48,18 @@ incl ~1 wh-question; embedded ~21% / 2 items; negation ~9% / 1 item; was
 easy). `etsProfile.js`: qmarkRatio 0.08→0.14, avgAnswerWords 10.6→9.4,
 ETS_DIFFICULTY 10/70/20 → 22/60/18.
 - [x] calibrate prompt + profile (length, sentence-type, embedded, negation, difficulty)
-- [ ] re-measure next nightly batch with `dev-bs.mjs` (expect easy↑ to ~22%,
-      length↓, qmark↑, wh↑, embedded↓, negation↓)
+
+**Deeper pass (eval-spec docs/eval-spec/bs.md) — register + relative-clause fixed 2026-05-31:**
+- **Register/topic** (the student first-impression knob): real is casual CAMPUS
+  first-person small-talk; the bank was formal third-person OFFICE personas ("The
+  store manager reported…"). Added a Register&Topic block: first-person ~40%,
+  contractions ~23%, ~63% campus, NO office personas.
+- **Relative clauses** real ~18% vs bank ~3% → added to the block.
+- distractor (real ~0 vs bank 89% "did") DEFERRED — only n=14 renders, contradicts
+  code note; not gutting generation until ~20 more screens confirm (Lesson C).
+- **Test batch** `calib-bs-20260531` (Claude, tagged): formal-office persona 0% (was
+  pervasive), first-person 60%, campus 70%, relative 20%, embedded 20%, negation 10%,
+  easy 20%, length 8.4 — verified the register flip + sentence-type mix.
 
 ---
 ## AD — Academic Discussion   `dev-ad.mjs`

@@ -1,0 +1,19 @@
+{
+  "_meta": {
+    "test_group": "calib-bs-20260531",
+    "generated_by": "claude (calibration test of recalibrated BS prompt)",
+    "note": "TEST batch verifying 2026改后 BS recalibration: casual campus first-person register (not formal office), ~9-word answers, sentence-type mix (~14% direct Q, ~21% embedded, ~9% negation, ~18% relative), ~22% easy, 'you' prompts. prefilled/distractor/chunk DEFERRED (M~, eval-spec). Purge: scripts/ops/purge-test-groups.mjs --delete calib-bs-20260531"
+  },
+  "questions": [
+    { "id": "TEST_bs_1", "test_group": "calib-bs-20260531", "difficulty": "easy", "prompt": "Are you coming to the study group tonight?", "answer": "I have a meeting at seven.", "has_question_mark": false },
+    { "id": "TEST_bs_2", "test_group": "calib-bs-20260531", "difficulty": "easy", "prompt": "Have you started the reading yet?", "answer": "I'll finish it this weekend.", "has_question_mark": false },
+    { "id": "TEST_bs_3", "test_group": "calib-bs-20260531", "difficulty": "medium", "prompt": "What did the advisor ask you about?", "answer": "She wanted to know if we had registered.", "has_question_mark": false },
+    { "id": "TEST_bs_4", "test_group": "calib-bs-20260531", "difficulty": "medium", "prompt": "Why did you choose that seminar?", "answer": "It's taught by a professor who studies marine biology.", "has_question_mark": false },
+    { "id": "TEST_bs_5", "test_group": "calib-bs-20260531", "difficulty": "medium", "prompt": "I'm planning my course schedule.", "answer": "Do you know if the lab section is still open?", "has_question_mark": true },
+    { "id": "TEST_bs_6", "test_group": "calib-bs-20260531", "difficulty": "medium", "prompt": "Which laptop are you getting?", "answer": "The model that has the longest battery life is my choice.", "has_question_mark": false },
+    { "id": "TEST_bs_7", "test_group": "calib-bs-20260531", "difficulty": "medium", "prompt": "How was the guest lecture today?", "answer": "The speaker focused on how technology is changing education.", "has_question_mark": false },
+    { "id": "TEST_bs_8", "test_group": "calib-bs-20260531", "difficulty": "medium", "prompt": "Are you joining the club trip?", "answer": "I still need to buy my ticket in advance.", "has_question_mark": false },
+    { "id": "TEST_bs_9", "test_group": "calib-bs-20260531", "difficulty": "hard", "prompt": "What did you hear about the paper?", "answer": "We were told the due date had been extended.", "has_question_mark": false },
+    { "id": "TEST_bs_10", "test_group": "calib-bs-20260531", "difficulty": "medium", "prompt": "Did you get the room-change email?", "answer": "No, I never received any notice about it.", "has_question_mark": false }
+  ]
+}
