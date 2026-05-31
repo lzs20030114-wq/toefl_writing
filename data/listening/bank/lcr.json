@@ -2825,6 +2825,174 @@
         "C": "off_topic"
       },
       "audio_url": "/api/audio/choose-response/lcr_r1_routine-20260531-134653_8.mp3"
+    },
+    {
+      "id": "lcr_routine-20260531-184112_1",
+      "context": "campus_daily",
+      "situation": "student checking bus or shuttle schedule",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I can't quite remember when the late shuttle stops running.",
+      "options": {
+        "A": "Actually, I think the last one leaves around eleven.",
+        "B": "The shuttle stops at the main library.",
+        "C": "Yes, the schedule is posted online.",
+        "D": "I prefer biking around campus anyway."
+      },
+      "answer": "A",
+      "explanation": "正确答案用 marker \"Actually\" 引导间接回应，给出晚班车的大致末班时间。B 借词 \"shuttle\" 但只回答地点，C 答非所问，D 完全偏题。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "off_topic"
+      }
+    },
+    {
+      "id": "lcr_routine-20260531-184112_2",
+      "context": "general_daily",
+      "situation": "arranging a ride or carpool with a friend",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I'm leaving for the airport at five tomorrow morning.",
+      "options": {
+        "A": "The airport has a new food court inside.",
+        "B": "Well, I can drive you if you'd like.",
+        "C": "Flights to Chicago are often delayed lately.",
+        "D": "Yes, I packed everything last night."
+      },
+      "answer": "B",
+      "explanation": "正确答案用 \"Well\" 引出实际帮助：提供接送，匹配 marker_led_indirect 范式。A 借 \"airport\" 偏向描述设施，C 与说话人飞行信息无关，D 答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "id": "lcr_routine-20260531-184112_3",
+      "context": "social",
+      "situation": "acknowledging someone's unavailability or schedule conflict",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "How can we meet if you're booked every evening?",
+      "options": {
+        "A": "I attended that meeting last week too.",
+        "B": "Yes, my calendar is very full lately.",
+        "C": "How about Saturday morning instead?",
+        "D": "The library has private study rooms available."
+      },
+      "answer": "C",
+      "explanation": "正确答案以反问推进对话，提议周六上午这一替代时间。A 完全偏题，B 答 yes/no 但不推进，D 提供场地但回避时间问题。",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "wrong_question_type",
+        "D": "semantic_association_trap"
+      }
+    },
+    {
+      "id": "lcr_routine-20260531-184112_4",
+      "context": "social",
+      "situation": "friend sharing news or personal update",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "What do you think? I finally got the scholarship.",
+      "options": {
+        "A": "I haven't finished the application yet.",
+        "B": "Scholarships usually require an essay.",
+        "C": "The university sends decisions by email.",
+        "D": "That's fantastic news — congratulations!"
+      },
+      "answer": "D",
+      "explanation": "正确答案用习惯性的祝贺表达回应好消息。A 偏向自己的情况，B 借 \"scholarship\" 但说事实，C 与朋友的好消息无关。",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "semantic_association_trap",
+        "C": "semantic_association_trap"
+      }
+    },
+    {
+      "id": "lcr_routine-20260531-184112_5",
+      "context": "campus_academic",
+      "situation": "student discussing a presentation topic with partner",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Are you okay if we narrow our presentation to just two examples?",
+      "options": {
+        "A": "Actually, that would make our timing much easier.",
+        "B": "Presentations should be at least ten minutes long.",
+        "C": "I missed the last group meeting unfortunately.",
+        "D": "Two students dropped the course last week."
+      },
+      "answer": "A",
+      "explanation": "正确答案以 \"Actually\" 引导间接同意并指出实际好处。B 与话题相关但答非所问，C 偏题，D 借 \"two\" 但完全不相关。",
+      "distractor_types": {
+        "B": "wrong_question_type",
+        "C": "off_topic",
+        "D": "semantic_association_trap"
+      }
+    },
+    {
+      "id": "lcr_routine-20260531-184112_6",
+      "context": "campus_academic",
+      "situation": "student asking a librarian about a book or resource",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Why is this journal not showing up in the catalog search?",
+      "options": {
+        "A": "Books on that floor were rearranged last week.",
+        "B": "It's currently being recataloged after a system upgrade.",
+        "C": "The library closes earlier on Saturdays.",
+        "D": "I think the printer is broken again."
+      },
+      "answer": "B",
+      "explanation": "正确答案直接解释 journal 在重新编目所以暂时搜不到。A 借 \"floor\" 偏题，C 谈关门时间不答问题，D 完全偏题。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "off_topic"
+      }
+    },
+    {
+      "id": "lcr_routine-20260531-184112_7",
+      "context": "campus_academic",
+      "situation": "student asking a professor about office hours or assignment",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Have you decided when your office hours will move?",
+      "options": {
+        "A": "Office hours are usually held on Wednesdays.",
+        "B": "Yes, the policy was approved last term.",
+        "C": "Just email me your questions; I'll respond by tonight.",
+        "D": "The office is on the third floor of Mason Hall."
+      },
+      "answer": "C",
+      "explanation": "正确答案不正面回答时间问题，而是解决学生真正的需求——通过邮件回应问题（context_shift）。A 描述常规情况，B 答非所问，D 谈地点。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "wrong_question_type",
+        "D": "semantic_association_trap"
+      }
+    },
+    {
+      "id": "lcr_routine-20260531-184112_8",
+      "context": "campus_daily",
+      "situation": "student checking lost-and-found at front desk",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Where can I track down a notebook I left in the lounge?",
+      "options": {
+        "A": "Notebooks are sold in the campus store.",
+        "B": "I haven't visited the lounge in weeks.",
+        "C": "The lounge has new study tables this semester.",
+        "D": "You've come to the right place — let's take a look."
+      },
+      "answer": "D",
+      "explanation": "正确答案是常见的习惯性礼貌回应 \"You've come to the right place\"，表示接下来会帮忙找。A、C 借词偏题，B 答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "semantic_association_trap"
+      }
     }
   ]
 }

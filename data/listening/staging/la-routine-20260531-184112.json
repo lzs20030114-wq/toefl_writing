@@ -1,0 +1,224 @@
+{
+  "items": [
+    {
+      "id": "la_routine-20260531-184112_1",
+      "context": "academic_event",
+      "situation": "interdisciplinary conference call for papers",
+      "speaker_role": "department_staff",
+      "difficulty": "medium",
+      "announcement": "Good afternoon, students. The Center for Interdisciplinary Studies is now accepting paper proposals for our spring symposium on Climate and Culture, scheduled for April 18 in Whitman Auditorium. We welcome submissions from any discipline, including arts, humanities, sciences, and policy. Abstracts should be 250 to 300 words and uploaded through the symposium portal by March 7 at 5:00 PM. Selected papers will receive a small travel stipend. Please note that proposals submitted by email will not be reviewed, so be sure to use the portal.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To remind students of an upcoming graduation rehearsal",
+            "B": "To call for paper proposals for an interdisciplinary symposium",
+            "C": "To explain a new requirement for graduate thesis submissions",
+            "D": "To recruit volunteers for an arts and culture festival"
+          },
+          "answer": "B",
+          "explanation": "公告核心是征集 symposium 论文提案，并说明提交方式和时限。其他选项与公告主题无关。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "C": "wrong_purpose",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about proposals sent by email?",
+          "options": {
+            "A": "They will receive a delayed response from the committee.",
+            "B": "They must be accompanied by an additional cover letter.",
+            "C": "They will be forwarded to the symposium chair manually.",
+            "D": "They will not be considered for the symposium."
+          },
+          "answer": "D",
+          "explanation": "公告明确说通过邮件提交的提案不会被审查，等于不会被考虑。其他选项与原文不符或无据。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "related_but_not_stated",
+            "C": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "la_routine-20260531-184112_2",
+      "context": "logistics",
+      "situation": "campus shuttle route change due to construction",
+      "speaker_role": "campus_admin",
+      "difficulty": "hard",
+      "announcement": "Attention students, faculty, and staff. Due to ongoing repairs on Madison Drive, the Blue Line shuttle will operate on a modified route starting Monday, March 3. The shuttle will skip the Engineering stop entirely and instead run from the Library directly to Foster Hall. Service frequency will increase to every twelve minutes during peak hours to compensate. Riders heading to Engineering should board the Red Line at Foster Hall and transfer near the South Lot. The standard schedule will resume once paving is complete, which is expected around April 14.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What change will Blue Line riders experience during the modification?",
+          "options": {
+            "A": "Service will be suspended entirely on weekends.",
+            "B": "Stops at Foster Hall will be temporarily eliminated.",
+            "C": "The route will skip the Engineering stop entirely.",
+            "D": "Riders must reserve seats through a mobile app."
+          },
+          "answer": "C",
+          "explanation": "公告明确说蓝线将跳过 Engineering 站。其他选项要么与事实相反，要么是无关行为。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "reversed_intent",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about Engineering-bound riders?",
+          "options": {
+            "A": "They will need to make a transfer to reach their destination.",
+            "B": "They will receive a free monthly transit pass during repairs.",
+            "C": "They will travel faster than they did under the standard schedule.",
+            "D": "They will not be able to reach Engineering until April 14."
+          },
+          "answer": "A",
+          "explanation": "公告说前往 Engineering 的乘客需在 Foster Hall 上红线并在 South Lot 换乘，即需要换乘。其他选项缺乏依据或与原文相反。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "over_inference",
+            "D": "reversed_logic"
+          }
+        }
+      ]
+    },
+    {
+      "id": "la_routine-20260531-184112_3",
+      "context": "facility_change",
+      "situation": "grand reopening of renovated gallery or performance hall",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "We're excited to announce that the renovated Brandt Performance Hall will officially reopen on Saturday, March 22. The opening evening features a free chamber concert at 7:00 PM, with seating available on a first-come, first-served basis from 6:15 PM. Tickets are not required, but a valid student or staff ID must be shown at the door. Please be aware that the lobby coat check has been replaced with a self-service locker system. Quarters are no longer accepted; you'll need a tap-enabled student ID or a mobile wallet to operate the lockers.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What is required to enter the reopening concert?",
+          "options": {
+            "A": "A ticket purchased through the campus portal",
+            "B": "A small donation to the renovation fund",
+            "C": "A printed program from the music department",
+            "D": "A valid student or staff ID at the door"
+          },
+          "answer": "D",
+          "explanation": "公告明确说门口需出示有效学生或教职工证。其他选项均未被提到为入场要求。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "C": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students who carry only cash to the concert?",
+          "options": {
+            "A": "They will receive a refund at the end of the evening.",
+            "B": "They will not be able to use the new locker system.",
+            "C": "They will be denied entry to the performance hall.",
+            "D": "They will be redirected to the basement coat check."
+          },
+          "answer": "B",
+          "explanation": "公告说储物柜不接受硬币，需 tap-enabled 学生证或手机钱包，因此只带现金的人无法使用储物柜。其他选项与公告事实矛盾。",
+          "distractor_types": {
+            "A": "over_inference",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        }
+      ]
+    },
+    {
+      "id": "la_routine-20260531-184112_4",
+      "context": "facility_change",
+      "situation": "campus dining hall switching to summer hours",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "Attention students. Starting Monday, May 19, the Hartwood Dining Hall will switch to its summer schedule. Breakfast will continue from 8:00 to 10:30 AM, but lunch service ends at 1:30 instead of 2:00, and dinner will run from 5:30 to 7:30 only. The grab-and-go bar at the south entrance will remain open until 9:00 PM for late evening snacks. Please bring your campus ID for the grab-and-go scanner. Summer meal-plan refunds for unused balances over fifteen dollars will be processed automatically at the end of the term.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To inform students of new summer dining hours",
+            "B": "To explain a recent change in meal-plan prices",
+            "C": "To recruit student workers for the dining hall",
+            "D": "To advertise a new grab-and-go menu of items"
+          },
+          "answer": "A",
+          "explanation": "公告核心是告知夏季就餐时间和相关安排。其他选项偏离主题。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "wrong_purpose",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "Until what time does the grab-and-go bar remain open?",
+          "options": {
+            "A": "Until 7:30 PM",
+            "B": "Until 8:00 PM",
+            "C": "Until 9:00 PM",
+            "D": "Until 10:30 PM"
+          },
+          "answer": "C",
+          "explanation": "公告说南门 grab-and-go bar 营业到晚上 9:00。其他时间与公告中其他细节相关或不符。",
+          "distractor_types": {
+            "A": "misattributed_detail",
+            "B": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "la_routine-20260531-184112_5",
+      "context": "campus_activity",
+      "situation": "student art market in the quad",
+      "speaker_role": "club_leader",
+      "difficulty": "easy",
+      "announcement": "Attention students. The Spring Art Market will return to Wexler Quad this Friday from 11:00 AM to 4:00 PM. Over forty student artists will be selling original prints, ceramics, jewelry, and zines, with most items priced between five and twenty-five dollars. Cash and mobile payments are accepted at every booth. Bring a reusable bag if you can; the club is reducing single-use plastic this year. Sign-ups for next semester's market booth slots will also be available at the volunteer table.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To promote a student-run art market on campus",
+            "B": "To advertise paid internships at a campus art club",
+            "C": "To announce a fundraiser for the ceramics program",
+            "D": "To remind students about a printmaking competition"
+          },
+          "answer": "A",
+          "explanation": "公告核心是宣传周五在 Wexler Quad 举办的学生艺术市集。其他选项均不是公告内容。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "wrong_purpose",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What does the speaker ask attendees to bring if possible?",
+          "options": {
+            "A": "An updated student ID card",
+            "B": "A printout of the artist directory",
+            "C": "A reusable shopping bag",
+            "D": "A signed plastic waste pledge"
+          },
+          "answer": "C",
+          "explanation": "公告明确说带可重复使用的购物袋以减少一次性塑料。其他选项与公告不符。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        }
+      ]
+    }
+  ]
+}
