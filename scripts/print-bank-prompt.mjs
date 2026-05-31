@@ -5,7 +5,7 @@
 //
 // Usage:
 //   node scripts/print-bank-prompt.mjs <bank>
-//   <bank> ∈ { bs, disc, email, ap, ctw, rdl-short, rdl-long }
+//   <bank> ∈ { bs, disc, email, ap, ctw, rdl-short, rdl-long, lat, lc, la, lcr, repeat }
 //
 // Each call returns a self-contained block of instructions for that bank.
 // All distribution rules, schema details, anti-duplication lists are baked in.
@@ -35,6 +35,13 @@ import { EMAIL_CATEGORIES, buildEmailGenPrompt } from "../lib/ai/prompts/emailWr
 const { buildAPPrompt } = require("../lib/readingGen/apPromptBuilder.js");
 const { buildCTWPrompt } = require("../lib/readingGen/ctwPromptBuilder.js");
 const { buildRDLPrompt, buildShortRDLPrompt } = require("../lib/readingGen/rdlPromptBuilder.js");
+// Listening + Speaking builders — wired into the Claude routine 2026-05-31 so all 7
+// types are Claude-generated (DeepSeek undershoots long-form length; see calibration log).
+const { buildLATPrompt } = require("../lib/listeningGen/latPromptBuilder.js");
+const { buildLCPrompt } = require("../lib/listeningGen/lcPromptBuilder.js");
+const { buildLAPrompt } = require("../lib/listeningGen/laPromptBuilder.js");
+const { buildLCRPrompt } = require("../lib/listeningGen/lcrPromptBuilder.js");
+const { buildRepeatPrompt } = require("../lib/speakingGen/repeatPromptBuilder.js");
 
 function readJSON(rel) {
   return JSON.parse(readFileSync(resolve(ROOT, rel), "utf8"));
@@ -191,6 +198,17 @@ function printRDLLong() {
   console.log(buildRDLPrompt(2, {}));
 }
 
+// Listening + Speaking — print the recalibrated builder so the Claude routine generates
+// these too (Claude hits the long-form lengths DeepSeek undershoots).
+function printLAT() { console.log(buildLATPrompt(4)); }
+function printLC() { console.log(buildLCPrompt(5)); }
+function printLA() { console.log(buildLAPrompt(5)); }
+function printLCR() { console.log(buildLCRPrompt(8)); }
+function printRepeat() {
+  const { prompt } = buildRepeatPrompt(3);
+  console.log(prompt);
+}
+
 const handlers = {
   bs: printBS,
   disc: printDisc,
@@ -199,6 +217,11 @@ const handlers = {
   ctw: printCTW,
   "rdl-short": printRDLShort,
   "rdl-long": printRDLLong,
+  lat: printLAT,
+  lc: printLC,
+  la: printLA,
+  lcr: printLCR,
+  repeat: printRepeat,
 };
 
 if (!bank || !handlers[bank]) {
