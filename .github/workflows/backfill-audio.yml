@@ -1,0 +1,62 @@
+name: Backfill listening/speaking audio
+
+# Whenever the listening/speaking BANKS change on main (e.g. after the R1/R2 routine
+# commits new items), regenerate TTS audio for any item still missing audio_url and
+# commit the .mp3 files. The Claude routine generates TEXT only; this is the audio half
+# of the production line, decoupled so it covers R1 (manual + scheduled) and R2 alike.
+#
+# Idempotent: items that already have audio_url are skipped, so the re-trigger from this
+# job's own commit finds nothing to do. The commit also carries [skip ci] as a belt-and-
+# braces guard against a trigger loop.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - data/listening/bank/**
+      - data/speaking/bank/**
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: backfill-audio
+  cancel-in-progress: false
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install deps
+        run: npm ci --no-audit --no-fund || npm install --no-audit --no-fund
+
+      - name: Backfill TTS audio (edge-tts, free)
+        run: node scripts/backfill-tts.mjs
+
+      - name: Commit + push any new audio
+        shell: bash
+        run: |
+          git config user.name "audio-backfill[bot]"
+          git config user.email "audio-backfill[bot]@users.noreply.github.com"
+          git add data/listening data/speaking/bank/repeat.json
+          if git diff --cached --quiet; then
+            echo "No audio changes — all items already have audio."
+            exit 0
+          fi
+          git commit -m "chore(audio): backfill TTS for new listening/speaking items [skip ci]"
+          for i in 1 2 3 4; do
+            if git pull --rebase origin main && git push origin main; then break; fi
+            sleep 8
+          done
