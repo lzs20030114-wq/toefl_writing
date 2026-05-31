@@ -200,12 +200,22 @@ function printRDLLong() {
 
 // Listening + Speaking — print the recalibrated builder so the Claude routine generates
 // these too (Claude hits the long-form lengths DeepSeek undershoots).
-function printLAT() { console.log(buildLATPrompt(4)); }
-function printLC() { console.log(buildLCPrompt(5)); }
-function printLA() { console.log(buildLAPrompt(5)); }
-function printLCR() { console.log(buildLCRPrompt(8)); }
+// Principle-4 cross-batch dedup: pull recent values of a field from the live bank so
+// the builder can avoid repeating topics/situations night to night (added 2026-05-31 —
+// the builders supported these opts; the handlers just weren't passing them).
+function loadBankField(file, key, limit = 20) {
+  try {
+    const j = readJSON(file);
+    const arr = j?.items || j?.lectures || j?.conversations || j?.sets || (Array.isArray(j) ? j : []);
+    return Array.from(new Set(arr.slice(-limit).map((it) => String(it?.[key] || "").trim()).filter(Boolean)));
+  } catch { return []; }
+}
+function printLAT() { console.log(buildLATPrompt(4, { excludeTopics: loadBankField("data/listening/bank/lat.json", "subtopic", 30) })); }
+function printLC() { console.log(buildLCPrompt(5, { excludeSituations: loadBankField("data/listening/bank/lc.json", "situation", 20) })); }
+function printLA() { console.log(buildLAPrompt(5, { excludeAnnouncements: loadBankField("data/listening/bank/la.json", "situation", 20) })); }
+function printLCR() { console.log(buildLCRPrompt(8, { excludeSpeakers: loadBankField("data/listening/bank/lcr.json", "speaker", 20) })); }
 function printRepeat() {
-  const { prompt } = buildRepeatPrompt(3);
+  const { prompt } = buildRepeatPrompt(3, { excludeScenarios: loadBankField("data/speaking/bank/repeat.json", "scenario", 20) });
   console.log(prompt);
 }
 
