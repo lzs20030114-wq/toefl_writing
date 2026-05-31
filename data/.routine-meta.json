@@ -1,19 +1,17 @@
 {
-  "session_id": "routine-20260530-190521",
-  "completed_at": "2026-05-30T19:21:09Z",
-  "duration_minutes": 15,
-  "r2_completed_at": "2026-05-30T19:33:00Z",
-  "r2_session_id": "routine-r2-20260530-193136",
-  "highlight": "本轮 45/45 全部入库，AP 首次覆盖物理光学与人类学口传统",
+  "session_id": "routine-20260531-134653",
+  "completed_at": "2026-05-31T14:13:43Z",
+  "duration_minutes": 27,
+  "highlight": "首次出现物理 AP (摩擦力史) 与音乐 LAT (录音技术改变作曲)；所有 12 个 bank 均有新增",
   "commit_sha": "",
   "results": {
     "bs": {
       "generated": 20,
-      "accepted": 20,
-      "topics": ["indirect-Q", "negation", "comparative", "relative", "passive", "embedded-clause"],
+      "accepted": 10,
+      "topics": ["campus life", "casual chat"],
       "favorite": {
-        "prompt": "Tell me what Esme said about the dorm complaint.",
-        "answer": "She mentioned that the maintenance crew arrived after midnight unexpectedly."
+        "prompt": "Tell me how your registration went this morning.",
+        "answer": "It's already closed for the seminar Lucia recommended."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -21,24 +19,21 @@
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["philosophy", "marine biology", "art and aesthetics", "agriculture and food"],
+      "topics": ["economics", "political science", "technology and media", "environmental science"],
       "favorite": {
-        "subtopic": "marine biology",
-        "preview": "Today, we're going to talk about a question coming up more and more in coastal policy: should governments be allowed"
+        "subtopic": "economics",
+        "preview": "We've been discussing how digital currencies are reshaping retail in major economies. In Sweden, for example, cash now"
       },
       "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_session_id": "routine-r2-20260530-193136",
-      "r2_items_added": 2
+      "failure_reason": ""
     },
     "email": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["校园学业", "职场工作", "消费售后", "日常生活"],
+      "topics": ["服务与活动", "日常社交", "住宿", "职场工作"],
       "favorite": {
-        "subtopic": "校园学业",
-        "preview": "You are a junior majoring in environmental engineering whose hydrology professor replaced the take-home final with an in-person practical lab."
+        "subtopic": "服务与活动",
+        "preview": "You are a senior who joined the Riverside Athletic Club two months ago. You will be off campus for winter break."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -46,10 +41,10 @@
     "reading-ap": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["anthropology/oral traditions", "technology/telecommunications", "history/silk road", "physics/optics", "environmental_science/water purification"],
+      "topics": ["physics/friction", "environmental_science/climate change", "history/trade routes", "astronomy/comets", "sociology/globalization"],
       "favorite": {
-        "subtopic": "physics/optics",
-        "preview": "Light travels in straight lines through a uniform medium, but when it crosses a boundary into a medium of different density"
+        "subtopic": "physics/friction",
+        "preview": "The earliest humans treated friction as an everyday nuisance. Hauling stone blocks across open ground required dozens"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -57,10 +52,10 @@
     "reading-ctw": {
       "generated": 6,
       "accepted": 6,
-      "topics": ["biology/deep sea organisms", "environmental_science/desertification", "psychology/stress response", "history/ancient astronomy", "geology/minerals", "astronomy/asteroid belts"],
+      "topics": ["biology/immune system", "environmental_science/pollution", "psychology/language acquisition", "history/telegraph history", "geology/rock formation", "astronomy/comets"],
       "favorite": {
-        "subtopic": "biology/deep sea organisms",
-        "preview": "Some animals live in the deep sea where almost no sunlight ever reaches. They use other senses to find food and friends"
+        "subtopic": "biology/immune system",
+        "preview": "The human immune system defends the body against a constant assault of viruses, bacteria, and other foreign particles."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -68,10 +63,10 @@
     "reading-rdl-short": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["notice/elevator", "flyer/theater", "email/office hours", "notice/bike rack"],
+      "topics": ["flyer", "notice", "email"],
       "favorite": {
-        "subtopic": "notice/elevator",
-        "preview": "NOTICE: The Brisbane Hall elevator will be out of service from June 8 through June 12 for cable replacement."
+        "subtopic": "notice/parking lot closure",
+        "preview": "Notice: The North Lot will be closed from May 12 through May 16 for repaving. During this period, permit holders"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -79,16 +74,68 @@
     "reading-rdl-long": {
       "generated": 2,
       "accepted": 2,
-      "topics": ["notice/water shutoff", "schedule/shuttle"],
+      "topics": ["notice", "email"],
       "favorite": {
-        "subtopic": "schedule/shuttle",
-        "preview": "Campus Shuttle Service: Summer Timetable Changes (Effective June 1). Route A — North Quad ↔ Medical Campus runs"
+        "subtopic": "notice/locker clean-out",
+        "preview": "NOTICE: Annual Locker Clean-Out and Renewal. The Recreation Office will conduct the annual locker clean-out from"
       },
       "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_session_id": "routine-r2-20260530-193136",
-      "r2_items_added": 1
+      "failure_reason": ""
+    },
+    "listening-lat": {
+      "generated": 4,
+      "accepted": 4,
+      "topics": ["music/recording technology", "geology/plate tectonics", "anthropology/food taboos", "physics/lever"],
+      "favorite": {
+        "subtopic": "music/recording technology",
+        "preview": "Today I want to talk about how recording technology gradually transformed the way composers actually wrote music."
+      },
+      "retried_after_fail": false,
+      "failure_reason": ""
+    },
+    "listening-lc": {
+      "generated": 5,
+      "accepted": 5,
+      "topics": ["music recommendations", "movie review", "train schedule", "watercolor class", "chore/quiet hours"],
+      "favorite": {
+        "subtopic": "campus_dorm_life/chore schedule",
+        "preview": "Can we finally settle the chores and quiet-hours thing? I think we've been winging it for three weeks."
+      },
+      "retried_after_fail": false,
+      "failure_reason": ""
+    },
+    "listening-la": {
+      "generated": 5,
+      "accepted": 5,
+      "topics": ["bike-share stations", "research symposium", "recreation hours", "outdoor movie night", "career guest lecture"],
+      "favorite": {
+        "subtopic": "logistics/bike-share stations",
+        "preview": "Good afternoon. The Office of Campus Mobility is pleased to announce three new bike-share stations opening Monday, June 3."
+      },
+      "retried_after_fail": false,
+      "failure_reason": ""
+    },
+    "listening-lcr": {
+      "generated": 8,
+      "accepted": 8,
+      "topics": ["campus_daily", "campus_academic", "general_daily", "social"],
+      "favorite": {
+        "subtopic": "campus_daily/social invitation (idiomatic)",
+        "preview": "How about we make a night of it after the chemistry midterm?"
+      },
+      "retried_after_fail": false,
+      "failure_reason": ""
+    },
+    "speaking-repeat": {
+      "generated": 3,
+      "accepted": 3,
+      "topics": ["Hardware Store Help", "Campus Bookstore", "Photography Darkroom"],
+      "favorite": {
+        "subtopic": "Photography Darkroom",
+        "preview": "Trays for the chemical baths line the long table."
+      },
+      "retried_after_fail": false,
+      "failure_reason": ""
     }
   }
 }

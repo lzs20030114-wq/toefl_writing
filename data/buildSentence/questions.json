@@ -1,6 +1,6 @@
 {
   "version": "1.3",
-  "generated_at": "2026-05-30T19:15:13.594Z",
+  "generated_at": "2026-05-31T13:58:23.780Z",
   "question_sets": [
     {
       "set_id": 1,
@@ -25401,6 +25401,285 @@
           "grammar_points": [
             "relative clause without pronoun",
             "comparative more"
+          ]
+        }
+      ]
+    },
+    {
+      "set_id": 89,
+      "questions": [
+        {
+          "id": "ets_s89_q1",
+          "prompt": "Tell me how your registration went this morning.",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Tell me how your registration went this morning.",
+          "answer": "It's already closed for the seminar Lucia recommended.",
+          "chunks": [
+            "it's already",
+            "closed",
+            "for",
+            "the seminar",
+            "lucia",
+            "recommended"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": null,
+          "has_question_mark": false,
+          "grammar_points": [
+            "relative clause without pronoun",
+            "contraction"
+          ]
+        },
+        {
+          "id": "ets_s89_q2",
+          "prompt": "What did Julian tell you about the deadline change?",
+          "prompt_context": "",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did Julian tell you about the deadline change?",
+          "answer": "The deadline has been pushed to next Friday afternoon.",
+          "chunks": [
+            "the",
+            "deadline",
+            "pushed",
+            "to",
+            "next Friday",
+            "afternoon"
+          ],
+          "prefilled": [
+            "has been"
+          ],
+          "prefilled_positions": {
+            "has been": 2
+          },
+          "distractor": "was",
+          "has_question_mark": false,
+          "grammar_points": [
+            "present perfect passive"
+          ]
+        },
+        {
+          "id": "ets_s89_q3",
+          "prompt": "What did the lecturer mention about tomorrow's chemistry quiz?",
+          "prompt_context": "",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did the lecturer mention about tomorrow's chemistry quiz?",
+          "answer": "The lecturer asked if you'd reviewed the practice problems.",
+          "chunks": [
+            "the",
+            "lecturer",
+            "asked",
+            "reviewed",
+            "the practice",
+            "problems"
+          ],
+          "prefilled": [
+            "if you'd"
+          ],
+          "prefilled_positions": {
+            "if you'd": 3
+          },
+          "distractor": "was",
+          "has_question_mark": false,
+          "grammar_points": [
+            "indirect question with if",
+            "contraction"
+          ]
+        },
+        {
+          "id": "ets_s89_q4",
+          "prompt": "Have you noticed anything strange about the dorm lounge?",
+          "prompt_context": "",
+          "prompt_task_kind": "yesno",
+          "prompt_task_text": "Have you noticed anything strange about the dorm lounge?",
+          "answer": "The vending machine no longer accepts our meal cards.",
+          "chunks": [
+            "the",
+            "vending machine",
+            "accepts",
+            "our",
+            "meal",
+            "cards"
+          ],
+          "prefilled": [
+            "no longer"
+          ],
+          "prefilled_positions": {
+            "no longer": 3
+          },
+          "distractor": "doesn't",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation with no longer",
+            "simple present"
+          ]
+        },
+        {
+          "id": "ets_s89_q5",
+          "prompt": "What did your friend say about joining the debate club?",
+          "prompt_context": "",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did your friend say about joining the debate club?",
+          "answer": "A friend told me when they're meeting this Thursday.",
+          "chunks": [
+            "a",
+            "friend",
+            "told",
+            "me",
+            "meeting",
+            "this Thursday"
+          ],
+          "prefilled": [
+            "when they're"
+          ],
+          "prefilled_positions": {
+            "when they're": 4
+          },
+          "distractor": "where",
+          "has_question_mark": false,
+          "grammar_points": [
+            "indirect question with when",
+            "contraction"
+          ]
+        },
+        {
+          "id": "ets_s89_q6",
+          "prompt": "Where does the shuttle stop after the engineering building?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Where does the shuttle stop after the engineering building?",
+          "answer": "Does it also stop near the music building?",
+          "chunks": [
+            "does",
+            "it",
+            "also",
+            "near",
+            "the music",
+            "building"
+          ],
+          "prefilled": [
+            "stop"
+          ],
+          "prefilled_positions": {
+            "stop": 3
+          },
+          "distractor": "do",
+          "has_question_mark": true,
+          "grammar_points": [
+            "direct yes/no question"
+          ]
+        },
+        {
+          "id": "ets_s89_q7",
+          "prompt": "Tell me about the book you ordered last week.",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Tell me about the book you ordered last week.",
+          "answer": "When did the package that the bookstore shipped finally arrive at your dorm?",
+          "chunks": [
+            "when",
+            "did",
+            "the package",
+            "that",
+            "the bookstore",
+            "shipped",
+            "finally arrive"
+          ],
+          "prefilled": [
+            "at your dorm"
+          ],
+          "prefilled_positions": {
+            "at your dorm": 10
+          },
+          "distractor": "was",
+          "has_question_mark": true,
+          "grammar_points": [
+            "direct wh-question",
+            "relative clause with that"
+          ]
+        },
+        {
+          "id": "ets_s89_q8",
+          "prompt": "Where did you hear about the new tutoring service?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Where did you hear about the new tutoring service?",
+          "answer": "The flyer that I saw was posted near the cafeteria entrance.",
+          "chunks": [
+            "the",
+            "flyer",
+            "that",
+            "I",
+            "saw",
+            "was posted",
+            "entrance"
+          ],
+          "prefilled": [
+            "near the cafeteria"
+          ],
+          "prefilled_positions": {
+            "near the cafeteria": 7
+          },
+          "distractor": "is",
+          "has_question_mark": false,
+          "grammar_points": [
+            "relative clause with that",
+            "passive past"
+          ]
+        },
+        {
+          "id": "ets_s89_q9",
+          "prompt": "What did the tech crew say about your laptop battery?",
+          "prompt_context": "",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did the tech crew say about your laptop battery?",
+          "answer": "The tech crew haven't billed me for the unexpected repair yet.",
+          "chunks": [
+            "the tech crew",
+            "haven't",
+            "billed",
+            "me",
+            "for",
+            "the unexpected repair",
+            "yet"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": null,
+          "has_question_mark": false,
+          "grammar_points": [
+            "present perfect negation",
+            "prepositional phrase"
+          ]
+        },
+        {
+          "id": "ets_s89_q10",
+          "prompt": "What did your dorm advisor tell you about quiet hours?",
+          "prompt_context": "",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did your dorm advisor tell you about quiet hours?",
+          "answer": "She explained why the quiet hours had been extended on weekdays.",
+          "chunks": [
+            "she",
+            "explained",
+            "hours",
+            "had been",
+            "extended",
+            "on",
+            "weekdays"
+          ],
+          "prefilled": [
+            "why the quiet"
+          ],
+          "prefilled_positions": {
+            "why the quiet": 2
+          },
+          "distractor": "when",
+          "has_question_mark": false,
+          "grammar_points": [
+            "indirect question with why",
+            "past perfect passive"
           ]
         }
       ]

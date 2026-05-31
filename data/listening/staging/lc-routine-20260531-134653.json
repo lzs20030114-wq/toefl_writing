@@ -1,0 +1,247 @@
+{
+  "items": [
+    {
+      "id": "lc_r1_routine-20260531-134653_1",
+      "context": "recommendations_opinions",
+      "situation": "two students swapping music recommendations because one is bored of the same pop singers",
+      "difficulty": "medium",
+      "speakers": [
+        {"name": "Woman", "role": "student", "gender": "female"},
+        {"name": "Man", "role": "student", "gender": "male"}
+      ],
+      "conversation": [
+        {"speaker": "Woman", "text": "I'm so tired of my playlist. Every song sounds like the same three pop singers."},
+        {"speaker": "Man", "text": "Yeah, I went through that last semester. What kinds of things have you actually liked recently?"},
+        {"speaker": "Woman", "text": "I guess songs with strong storytelling? Like a clear narrator and a few real-life details."},
+        {"speaker": "Man", "text": "Then you should try indie folk. There's a singer named Hana Bryant — she basically writes short stories. Her album from last fall, the one called 'Bus Stop Mornings,' is the place to start."},
+        {"speaker": "Woman", "text": "How does it compare to the regular pop stuff?"},
+        {"speaker": "Man", "text": "The arrangements are sparser — usually just guitar, sometimes piano. The whole point is that you focus on the lyrics."},
+        {"speaker": "Woman", "text": "That sounds like exactly what I need. I keep skipping tracks because they all blur together."},
+        {"speaker": "Man", "text": "Then I'd say start with the third track, 'Letters to Iowa.' If that one doesn't pull you in, you can give the rest a miss."},
+        {"speaker": "Woman", "text": "Okay, third track. I'll listen on the bus tonight."}
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "According to the man, what makes Hana Bryant's music different from the pop songs the woman is tired of?",
+          "options": {
+            "A": "The arrangements are sparser and meant to focus attention on the lyrics",
+            "B": "The songs are produced entirely with electronic instruments",
+            "C": "The albums are usually shorter than ten minutes",
+            "D": "The singer rarely writes her own material"
+          },
+          "answer": "A",
+          "explanation": "男生明说编曲简洁，多为吉他和钢琴，重点是让你专注歌词。A 正确。B 与原文相反，reversed_situation。C 没有依据，over_inference。D 与男生称她“写短篇小说”相反，wrong_detail。",
+          "distractor_types": {"B": "reversed_situation", "C": "over_inference", "D": "wrong_detail"}
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Buy the entire album on physical CD this evening",
+            "B": "Send Hana Bryant a personal email asking for new music",
+            "C": "Listen to the third track from 'Bus Stop Mornings' on the bus tonight",
+            "D": "Cancel her current pop music subscription completely"
+          },
+          "answer": "C",
+          "explanation": "女生最后明确说今晚在公车上从第三首听起。C 正确。A 没提到买实体专辑，over_inference。B 完全没有这一情节，unrelated_next_step。D 是过度推断，over_inference。",
+          "distractor_types": {"A": "over_inference", "B": "unrelated_next_step", "D": "over_inference"}
+        }
+      ]
+    },
+    {
+      "id": "lc_r1_routine-20260531-134653_2",
+      "context": "recommendations_opinions",
+      "situation": "two friends discussing a movie one just saw — good twists but too long",
+      "difficulty": "medium",
+      "speakers": [
+        {"name": "Woman", "role": "student", "gender": "female"},
+        {"name": "Man", "role": "student", "gender": "male"}
+      ],
+      "conversation": [
+        {"speaker": "Woman", "text": "You saw 'Lighthouse Echo' last night, right? What did you think?"},
+        {"speaker": "Man", "text": "Honestly, I'm torn. The plot twists were really clever — I didn't see the ending coming at all."},
+        {"speaker": "Woman", "text": "That's what everyone keeps saying online."},
+        {"speaker": "Man", "text": "But it was way too long. Almost three hours, and at least forty minutes in the middle could have been cut."},
+        {"speaker": "Woman", "text": "Like a slow stretch in the second act?"},
+        {"speaker": "Man", "text": "Exactly. There's this whole subplot about the brother that doesn't go anywhere. By the time the twist arrives, you've already lost some momentum."},
+        {"speaker": "Woman", "text": "Did the audience seem bored?"},
+        {"speaker": "Man", "text": "A few people behind me actually got up. Not walked out, but went to get popcorn around the ninety-minute mark."},
+        {"speaker": "Woman", "text": "Hmm. I was thinking of seeing it tomorrow. Worth it for the twists?"},
+        {"speaker": "Man", "text": "If you go in expecting a long ride, yes. Don't watch it tired."}
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What is the man's main complaint about the film?",
+          "options": {
+            "A": "The acting performances were uneven across the cast",
+            "B": "The film was nearly three hours long, with a slow middle act that should have been cut",
+            "C": "The opening twist was given away too early in the trailer",
+            "D": "The soundtrack distracted from the film's most important scenes"
+          },
+          "answer": "B",
+          "explanation": "男生明说时长接近三小时，中间部分本可以削减四十分钟。B 正确。A、C、D 男生都未提及，分别是 wrong_topic、over_inference、wrong_topic。",
+          "distractor_types": {"A": "wrong_topic", "C": "over_inference", "D": "wrong_topic"}
+        },
+        {
+          "type": "inference",
+          "stem": "What does the man imply when he says \"Don't watch it tired\"?",
+          "options": {
+            "A": "The film should only be watched in a movie theater, not at home",
+            "B": "The woman should plan to see the film with a large group of friends",
+            "C": "The film contains scenes that are unsuitable for evening viewing",
+            "D": "The film's length and slow middle will be harder to enjoy if she is already tired"
+          },
+          "answer": "D",
+          "explanation": "男生暗示电影偏长、中段慢，疲倦时更难坚持。D 正确。A 没提观影方式，over_inference。B 没提到一群朋友，unrelated_next_step。C 是过度联想，over_inference。",
+          "distractor_types": {"A": "over_inference", "B": "unrelated_next_step", "C": "over_inference"}
+        }
+      ]
+    },
+    {
+      "id": "lc_r1_routine-20260531-134653_3",
+      "context": "errands_service",
+      "situation": "two friends figuring out a bus or train schedule for a day trip",
+      "difficulty": "easy",
+      "speakers": [
+        {"name": "Woman", "role": "student", "gender": "female"},
+        {"name": "Man", "role": "student", "gender": "male"}
+      ],
+      "conversation": [
+        {"speaker": "Woman", "text": "I'm looking at the train schedule for Saturday — for our trip to Westport."},
+        {"speaker": "Man", "text": "Anything reasonable in the morning?"},
+        {"speaker": "Woman", "text": "There's a 7:15, an 8:40, and a 10:05. The 7:15 is express, only an hour. The others stop everywhere and take almost two."},
+        {"speaker": "Man", "text": "Seven-fifteen is brutal on a weekend. How's the price?"},
+        {"speaker": "Woman", "text": "Express is $24 one-way. Local trains are $14."},
+        {"speaker": "Man", "text": "Ten bucks each way isn't bad. What if we take the 8:40 out, spend the day, and grab a fast one back?"},
+        {"speaker": "Woman", "text": "The last express back is 7:30 p.m. Local at 8:15 if we miss it."},
+        {"speaker": "Man", "text": "Eight-forty out, seven-thirty back, makes about nine hours there. That feels right. Booking now?"},
+        {"speaker": "Woman", "text": "Yeah, let me just check that there are still two seats on the 8:40."}
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "How much does the express train cost for one direction?",
+          "options": {"A": "$10", "B": "$14", "C": "$24", "D": "$30"},
+          "answer": "C",
+          "explanation": "女生明确说快车单程 $24。C 正确。A、B、D 都是数字陷阱：$10 是两种车价差，$14 是慢车价，$30 没出现。",
+          "distractor_types": {"A": "wrong_detail", "B": "wrong_detail", "D": "wrong_detail"}
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Check whether two seats are still available on the 8:40 train",
+            "B": "Call Westport to confirm a hotel reservation for Saturday",
+            "C": "Look up the local bus schedule from the train station to downtown",
+            "D": "Cancel the trip and rebook for the following weekend"
+          },
+          "answer": "A",
+          "explanation": "女生在最后明说要先确认 8:40 还有两个座位。A 正确。B、C 都是未出现的下一步，unrelated_next_step。D 与达成共识相反，reversed_situation。",
+          "distractor_types": {"B": "unrelated_next_step", "C": "unrelated_next_step", "D": "reversed_situation"}
+        }
+      ]
+    },
+    {
+      "id": "lc_r1_routine-20260531-134653_4",
+      "context": "errands_service",
+      "situation": "two students chatting about a gardening or art class they took",
+      "difficulty": "easy",
+      "speakers": [
+        {"name": "Woman", "role": "student", "gender": "female"},
+        {"name": "Man", "role": "student", "gender": "male"}
+      ],
+      "conversation": [
+        {"speaker": "Woman", "text": "Did you finish the watercolor class at the community center?"},
+        {"speaker": "Man", "text": "Last week, actually. Six sessions, every Tuesday evening."},
+        {"speaker": "Woman", "text": "Was it worth signing up?"},
+        {"speaker": "Man", "text": "Honestly, more than I expected. The instructor focused on three basic skills: mixing colors, controlling water, and layering washes. By session four we were doing small landscapes."},
+        {"speaker": "Woman", "text": "Did you need to bring your own materials?"},
+        {"speaker": "Man", "text": "The first session everything was provided — paper, brushes, paints. From session two on, you had to bring your own paper. Brushes and paints stayed in the room."},
+        {"speaker": "Woman", "text": "I was worried about the cost of supplies. How much did the paper come to?"},
+        {"speaker": "Man", "text": "I spent about eighteen dollars at the art store on a pad that lasted the whole course."},
+        {"speaker": "Woman", "text": "That's manageable. I think I'll sign up for the next round."},
+        {"speaker": "Man", "text": "They open registration in two weeks. Don't wait — the evening section fills up fast."}
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What did students need to bring to the watercolor class starting from the second session?",
+          "options": {
+            "A": "A set of brushes and an apron",
+            "B": "A small framed canvas for landscape work",
+            "C": "Their own selection of dry paint pigments",
+            "D": "Their own paper for the class exercises"
+          },
+          "answer": "D",
+          "explanation": "男生说从第二节起需要自带纸张，画笔和颜料留在教室。D 正确。A、C 与原文相反，reversed_situation 或 wrong_detail。B 没有此环节，wrong_detail。",
+          "distractor_types": {"A": "wrong_detail", "B": "wrong_detail", "C": "reversed_situation"}
+        },
+        {
+          "type": "inference",
+          "stem": "What does the man suggest the woman do?",
+          "options": {
+            "A": "Avoid the watercolor class because it requires expensive materials",
+            "B": "Register early when the next round opens because evening sections fill quickly",
+            "C": "Choose a daytime art class because evenings are reserved for advanced students",
+            "D": "Take the class only after she completes a beginner sketching course"
+          },
+          "answer": "B",
+          "explanation": "男生提醒别等，两周后开放报名，晚间段很快报满。B 正确。A 与他对课程的正面态度相反，reversed_situation。C、D 没有这种内容，unrelated_next_step。",
+          "distractor_types": {"A": "reversed_situation", "C": "unrelated_next_step", "D": "unrelated_next_step"}
+        }
+      ]
+    },
+    {
+      "id": "lc_r1_routine-20260531-134653_5",
+      "context": "campus_dorm_life",
+      "situation": "two roommates working out a fair chore or quiet-hours schedule",
+      "difficulty": "hard",
+      "speakers": [
+        {"name": "Woman", "role": "student", "gender": "female"},
+        {"name": "Man", "role": "student", "gender": "male"}
+      ],
+      "conversation": [
+        {"speaker": "Woman", "text": "Can we finally settle the chores and quiet-hours thing? I think we've been winging it for three weeks."},
+        {"speaker": "Man", "text": "Yeah, agreed. The dishes have piled up twice already."},
+        {"speaker": "Woman", "text": "I was thinking we split it by day. You take dishes Monday and Wednesday, I take Tuesday and Thursday, and we trade Friday weekly."},
+        {"speaker": "Man", "text": "Friday I'm usually out, so weekly trade works if you start. What about the trash?"},
+        {"speaker": "Woman", "text": "Whoever's day it isn't, takes it down. That keeps it even."},
+        {"speaker": "Man", "text": "Fair. And quiet hours? I have an 8 a.m. class three days a week, so anything past 11 is hard."},
+        {"speaker": "Woman", "text": "Eleven works for me, but I sometimes have group projects that go late. Could I use headphones after eleven if I'm on a call?"},
+        {"speaker": "Man", "text": "Sure, as long as the conversation stays at a low volume. And the desk lamp instead of the overhead, if I'm sleeping."},
+        {"speaker": "Woman", "text": "Done. I'll write it up and stick it on the fridge."},
+        {"speaker": "Man", "text": "Make sure the trash rule is in there. That's the one we always forget."}
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the two roommates mainly trying to do?",
+          "options": {
+            "A": "Agree on a written schedule for chores and quiet hours",
+            "B": "Decide whether to move into a larger apartment next semester",
+            "C": "Complain to the resident advisor about a noisy neighbor",
+            "D": "Plan a weekend study session for their group project"
+          },
+          "answer": "A",
+          "explanation": "整段对话围绕家务分工和安静时段安排，最后女生还说要写下来贴冰箱上。A 正确。B、C、D 都没有出现，都是 wrong_topic。",
+          "distractor_types": {"B": "wrong_topic", "C": "wrong_topic", "D": "wrong_topic"}
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about how the roommates handle late-night noise?",
+          "options": {
+            "A": "They are unable to compromise and need a third party to mediate",
+            "B": "They will rely on the resident advisor to enforce a strict 11 p.m. cutoff",
+            "C": "They agree to flexibility past 11 p.m. as long as headphones and low-volume conversation are used",
+            "D": "They have decided to ban all late-night calls or group work entirely"
+          },
+          "answer": "C",
+          "explanation": "男生同意女生 11 点后可以用耳机低声通话，作为安静时段的灵活安排。C 正确。A、B、D 都与对话中达成的妥协相反，reversed_situation。",
+          "distractor_types": {"A": "reversed_situation", "B": "reversed_situation", "D": "reversed_situation"}
+        }
+      ]
+    }
+  ]
+}

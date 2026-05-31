@@ -1376,6 +1376,226 @@
       ],
       "id": "la_v2_1778696246453_001",
       "flavor_score": 0.95
+    },
+    {
+      "id": "la_r1_routine-20260531-134653_1",
+      "context": "logistics",
+      "situation": "new bike-share station locations",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "Good afternoon. The Office of Campus Mobility is pleased to announce three new bike-share stations opening Monday, June 3. The new stations will be located outside Halverson Library, beside the Vance Engineering Building, and at the South Plaza entrance. Each station holds twenty bicycles. Students can unlock a bike using the existing campus app — no new registration is required. Please note that helmets are not provided; we strongly recommend bringing your own. The first thirty minutes of each ride remain free for students. Detailed station maps will be posted on the mobility portal by Friday.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement mainly about?",
+          "options": {
+            "A": "The opening of three new bike-share stations on campus",
+            "B": "Changes to the registration process for the campus bike-share app",
+            "C": "Helmet safety guidelines for campus cyclists",
+            "D": "Construction work near Halverson Library this summer"
+          },
+          "answer": "A",
+          "explanation": "广播主线就是宣布三个新自行车共享站。A 正确。B 和广播相反：明确说不需要新注册，reversed_intent。C 只是顺带提及，too_narrow。D 完全没出现，wrong_topic。",
+          "distractor_types": {
+            "B": "reversed_intent",
+            "C": "too_narrow",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "How many bicycles can each new station hold?",
+          "options": {
+            "A": "Ten",
+            "B": "Fifteen",
+            "C": "Twenty",
+            "D": "Thirty"
+          },
+          "answer": "C",
+          "explanation": "广播明说每站可停放二十辆自行车。C 正确。A、B、D 是数字混淆。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "wrong_detail",
+            "D": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "la_r1_routine-20260531-134653_2",
+      "context": "academic_event",
+      "situation": "undergraduate research symposium abstract submission deadline",
+      "speaker_role": "department_head",
+      "difficulty": "medium",
+      "announcement": "Good morning, everyone. As department head, I want to remind all juniors and seniors about the Undergraduate Research Symposium this October. Abstracts of no more than 250 words are due to the symposium portal by 11:59 PM on Friday, September 13. Late submissions will not be reviewed. Please attach a one-page faculty endorsement letter; without it, your abstract will be returned. Travel funds are available for accepted presenters whose research involves off-campus fieldwork. If you are unsure whether your project qualifies, please email Dr. Kennedy in our office before the end of August.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What document must accompany each submitted abstract?",
+          "options": {
+            "A": "A signed travel-funds request form",
+            "B": "A one-page faculty endorsement letter",
+            "C": "A printed copy of the student's transcript",
+            "D": "A research timeline covering the full semester"
+          },
+          "answer": "B",
+          "explanation": "广播明确要求附一封一页的导师推荐信，否则摘要会被退回。B 正确。A 与广播将旅费视为后续福利相悖，topic_adjacent。C、D 没有提到，wrong_detail。",
+          "distractor_types": {
+            "A": "topic_adjacent",
+            "C": "wrong_detail",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students whose research takes them off campus?",
+          "options": {
+            "A": "They will be excluded from the symposium for safety reasons",
+            "B": "They must apply separately for travel insurance before submitting",
+            "C": "They can only present posters and not give oral talks",
+            "D": "They may be eligible for additional travel funding if their abstract is accepted"
+          },
+          "answer": "D",
+          "explanation": "广播说被接收的、涉及校外田野工作的项目有旅费支持。D 正是合理推断。A 与广播鼓励参赛相反，reversed_intent。B 没提到保险，over_inference。C 没有区分海报和口头，wrong_detail。",
+          "distractor_types": {
+            "A": "reversed_intent",
+            "B": "over_inference",
+            "C": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "la_r1_routine-20260531-134653_3",
+      "context": "facility_change",
+      "situation": "recreation center extending hours during finals week",
+      "speaker_role": "campus_admin",
+      "difficulty": "hard",
+      "announcement": "Attention, students. The University Recreation Center will operate on extended hours during finals week, December 9 through December 15. The fitness floor and indoor track will be available from 5:00 AM until 1:00 AM the following morning. Group fitness classes, however, will run on a reduced schedule, with only morning yoga and evening cardio on offer. The climbing wall will close at 9:00 PM each evening for routine maintenance. Lockers will be cleared every night at midnight, so please remove your belongings before leaving the building. Regular hours resume Monday, December 16.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "When will the climbing wall close during finals week?",
+          "options": {
+            "A": "At 5:00 AM each morning",
+            "B": "At 1:00 PM each afternoon",
+            "C": "At 9:00 PM each evening",
+            "D": "At 1:00 AM the following morning"
+          },
+          "answer": "C",
+          "explanation": "广播明说攀岩墙每晚 9 点关闭以做保养。C 正确。A、B、D 都是时间陷阱：5 AM 是健身楼层开放时间，1 AM 是健身楼层关闭时间，B 没出现。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "wrong_detail",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students who leave items in their lockers overnight?",
+          "options": {
+            "A": "Their belongings will be removed when the lockers are cleared at midnight",
+            "B": "Their items will be safely stored for the entire finals week",
+            "C": "Their lockers will be permanently reassigned to other members",
+            "D": "Their access cards will be suspended until they retrieve their belongings"
+          },
+          "answer": "A",
+          "explanation": "广播说储物柜每晚午夜清空，请离开前取走物品。A 是合理推断：留下的物品会被清空。B 与广播相反，reversed_intent。C 没有依据，over_inference。D 没出现，wrong_detail。",
+          "distractor_types": {
+            "B": "reversed_intent",
+            "C": "over_inference",
+            "D": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "la_r1_routine-20260531-134653_4",
+      "context": "campus_activity",
+      "situation": "annual outdoor movie night with blanket seating",
+      "speaker_role": "club_leader",
+      "difficulty": "easy",
+      "announcement": "Hi, everyone, this is Tara from the Student Activities Board. We're hosting our annual outdoor movie night next Friday, September 27, at Grover Field. The film will start at 8:30 PM, but please arrive by 8:00 to find a good spot. There is no chair seating; bring a blanket or a small ground mat. Free popcorn and lemonade will be served beside the projection booth. In case of rain, the event will move into Grover Hall, room 110, the following evening. We hope to see all of you under the stars.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of the announcement?",
+          "options": {
+            "A": "To remind students about safety rules for outdoor events on campus",
+            "B": "To explain the Student Activities Board's budget for the year",
+            "C": "To recruit volunteers for a new film studies club",
+            "D": "To invite students to an outdoor movie night and explain seating and weather plans"
+          },
+          "answer": "D",
+          "explanation": "广播主旨是邀请学生参加户外电影夜并说明座位和雨天安排。D 正确。A、B、C 都没出现，都是 wrong_topic 或 wrong_purpose。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "wrong_topic",
+            "C": "wrong_topic"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What should students bring with them to the event?",
+          "options": {
+            "A": "A folding chair and an umbrella",
+            "B": "A blanket or a small ground mat",
+            "C": "A bottle of lemonade for themselves",
+            "D": "A donation for the activities board"
+          },
+          "answer": "B",
+          "explanation": "广播明说现场没有椅子，请自带毯子或小垫子。B 正确。A 与广播相反，reversed_intent。C、D 没提到，wrong_detail。",
+          "distractor_types": {
+            "A": "reversed_intent",
+            "C": "wrong_detail",
+            "D": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "la_r1_routine-20260531-134653_5",
+      "context": "guest_speaker",
+      "situation": "industry professional speaking about career paths",
+      "speaker_role": "professor",
+      "difficulty": "medium",
+      "announcement": "Good morning, everyone. Next Tuesday at 4:00 PM in Tisch Hall room 220, our department will host a guest lecture by Mei Lin, a senior product manager at the engineering firm Halverson Dynamics. Ms. Lin will speak about realistic career paths for computer-science majors, including positions that do not require advanced degrees. The talk will be followed by a thirty-minute open question session. Please email Camila in our office by Friday if you plan to attend; we need a head count for refreshments. A short writing sample is not required, but recent graduates are encouraged to bring a copy of their resume.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement mainly about?",
+          "options": {
+            "A": "An upcoming guest lecture on realistic career paths for computer-science majors",
+            "B": "A required interview workshop for graduating seniors only",
+            "C": "Changes to the graduate admission requirements at Halverson Dynamics",
+            "D": "Funding opportunities for students who want to attend academic conferences"
+          },
+          "answer": "A",
+          "explanation": "广播主旨是宣布关于计算机专业现实职业路径的客座讲座。A 正确。B、C、D 都没出现，都是 wrong_topic。",
+          "distractor_types": {
+            "B": "wrong_topic",
+            "C": "wrong_topic",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students who plan to attend the talk?",
+          "options": {
+            "A": "They must wait outside the room until after Ms. Lin's introduction",
+            "B": "They are required to submit a writing sample before the talk",
+            "C": "They should email Camila by Friday so the office can plan refreshments",
+            "D": "They will receive course credit for attending and asking questions"
+          },
+          "answer": "C",
+          "explanation": "广播请有意参加的同学周五前发邮件给 Camila 以便统计茶点份数。C 正确。A 没提到，over_inference。B 与广播相反，reversed_intent。D 没出现，over_inference。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "reversed_intent",
+            "D": "over_inference"
+          }
+        }
+      ]
     }
   ]
 }

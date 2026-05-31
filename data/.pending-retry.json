@@ -1,59 +1,132 @@
 {
-  "session_id": "routine-20260530-190521",
-  "generated_at": "2026-05-30T19:21:53.501Z",
-  "resolved_at": "2026-05-30T19:33:00Z",
-  "resolution_status": "supplemented",
+  "session_id": "routine-20260531-134653",
+  "generated_at": "2026-05-31T14:14:45.002Z",
   "needs_retry": true,
   "overall_scores": {
-    "diversity": 94,
-    "quality": 96
+    "diversity": 93,
+    "quality": 81
   },
   "retry_banks": [
     {
-      "bank": "discussion",
-      "diversity_score": 95,
-      "diversity_threshold": 80,
-      "quality_score": 83,
+      "bank": "reading-ap",
+      "diversity_score": 100,
+      "diversity_threshold": 85,
+      "quality_score": 50,
       "quality_threshold": 90,
       "failures": [
-        "质量 83 < 90"
+        "质量 50 < 90"
       ],
       "diversity_breakdown": [
-        "课程 4/4",
-        "学生名 8/8",
-        "开头 3/4",
-        "主题 4/4"
+        "话题组合 5/5",
+        "学科 5/5"
       ],
       "quality_breakdown": [
-        "教授段长 2/4",
-        "学生1长 4/4",
-        "学生2长 4/4"
+        "词数 0/5",
+        "段落数 5/5"
       ],
       "hints": [
-        "质量校验有偏差: 教授段长 2/4, 学生1长 4/4, 学生2长 4/4 — recheck schema compliance"
+        "质量校验有偏差: 词数 0/5, 段落数 5/5 — recheck schema compliance"
       ],
-      "items_to_supplement": 2
+      "items_to_supplement": 3
     },
     {
       "bank": "reading-rdl-long",
-      "diversity_score": 80,
+      "diversity_score": 100,
       "diversity_threshold": 70,
-      "quality_score": 50,
+      "quality_score": 0,
       "quality_threshold": 85,
       "failures": [
-        "质量 50 < 85"
+        "质量 0 < 85"
       ],
       "diversity_breakdown": [
         "话题 2/2",
-        "notice 1 · email 0"
+        "notice 1 · email 1"
       ],
       "quality_breakdown": [
-        "词数 1/2"
+        "词数 0/2"
       ],
       "hints": [
-        "质量校验有偏差: 词数 1/2 — recheck schema compliance"
+        "质量校验有偏差: 词数 0/2 — recheck schema compliance"
       ],
       "items_to_supplement": 1
+    },
+    {
+      "bank": "listening-lat",
+      "diversity_score": 50,
+      "diversity_threshold": 70,
+      "quality_score": 100,
+      "quality_threshold": 80,
+      "failures": [
+        "多样性 50 < 70"
+      ],
+      "diversity_breakdown": [
+        "distinct openings 2/4"
+      ],
+      "quality_breakdown": [
+        "transcript 200-330: 4/4"
+      ],
+      "hints": [],
+      "items_to_supplement": 2
+    },
+    {
+      "bank": "listening-lc",
+      "diversity_score": 100,
+      "diversity_threshold": 72,
+      "quality_score": 0,
+      "quality_threshold": 80,
+      "failures": [
+        "质量 0 < 80"
+      ],
+      "diversity_breakdown": [
+        "distinct openings 5/5"
+      ],
+      "quality_breakdown": [
+        "conv words 75-110: 0/5"
+      ],
+      "hints": [
+        "质量校验有偏差: conv words 75-110: 0/5 — recheck schema compliance"
+      ],
+      "items_to_supplement": 3
+    },
+    {
+      "bank": "listening-lcr",
+      "diversity_score": 100,
+      "diversity_threshold": 75,
+      "quality_score": 75,
+      "quality_threshold": 80,
+      "failures": [
+        "质量 75 < 80"
+      ],
+      "diversity_breakdown": [
+        "distinct openings 8/8"
+      ],
+      "quality_breakdown": [
+        "prompt words 3-14: 6/8"
+      ],
+      "hints": [
+        "质量校验有偏差: prompt words 3-14: 6/8 — recheck schema compliance"
+      ],
+      "items_to_supplement": 4
+    },
+    {
+      "bank": "speaking-repeat",
+      "diversity_score": 100,
+      "diversity_threshold": 70,
+      "quality_score": 67,
+      "quality_threshold": 80,
+      "failures": [
+        "质量 67 < 80"
+      ],
+      "diversity_breakdown": [
+        "distinct openings 3/3"
+      ],
+      "quality_breakdown": [
+        "clean sets 2/3 (7 sents, no Q, no threat)"
+      ],
+      "hints": [
+        "质量校验有偏差: clean sets 2/3 (7 sents, no Q, no threat) — recheck schema compliance"
+      ],
+      "items_to_supplement": 2
     }
   ]
 }
