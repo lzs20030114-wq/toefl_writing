@@ -141,7 +141,7 @@ fail:
   data contradicts the hypothesis, the direction is WRONG — stop and rethink.
 - Confirm the TARGET value is real and measured, not estimated.
 
-## ⚠️ Two hard-won lessons (read before every fix)
+## ⚠️ Hard-won lessons (read before every fix)
 
 **A. The historical bank AND the stored profile can BOTH be wrong — and stale
 profile numbers cause FALSE alarms.** Real case: an audit flagged "embedded-Q
@@ -185,6 +185,24 @@ validator, simulated on REAL exam passages, would reject ~19% of them — it act
 suppresses authentic difficulty the exam has. So when calibrating, also run the
 existing gate/validator AGAINST the real items: if it rejects real-exam items, the
 GATE is the regression, not the generator. Loosen it to admit the real-exam range.
+
+**E. Aggregate STATS can read "on-target" while per-item STRUCTURE is a synthetic
+tell — always do the deep eval-spec, not just `dev-<type>.mjs`.** Real cases (2026-05-31):
+the first-pass stat comparison passed **Speaking-repeat** ("sentences/set + length +
+aggregate difficulty all match → no change") and held **AP** ("question-count
+unreliable → held"). Both were wrong. The deep eval-spec found the real gaps the
+aggregates hid: repeat had 10.4% punitive-threat sentences + 5.2% yes/no questions +
+a rigid 2/3/2 signature (real: 0% / 0% / 6%) — the per-set *shape* was synthetic while
+the *averages* matched. AP had 0% insert_text/reference + 13.6% paragraph_relationship +
+46% received-wisdom openers — all invisible to a length/count comparison. Lesson:
+a matching mean/median is necessary, not sufficient. Measure the **distribution
+SHAPE, the opener/closer forms, the question-TYPE mix, and the "tells" (questions,
+threats, greetings, rigid staircases)** against verbatim real examples — these are
+where synthetic generation actually diverges. Also: prompt arrays you *think* drive
+generation may be **dead code** (LAT `TOPIC_POOL.weight`, LA `OPENING_PATTERNS.rate`,
+LCR `SPEAKER_TYPES.pct` were all defined-but-unused — the random picker ignored them).
+Confirm the constant is actually consumed before tuning it; the prompt TEXT is often
+the only live lever.
 
 ## Phase 6 — SELF-AUDIT the plan before executing (do not skip)
 
