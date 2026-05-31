@@ -7136,6 +7136,104 @@
         }
       ],
       "difficulty": "easy"
+    },
+    {
+      "id": "rdl_long_routine-20260531-184112_1",
+      "genre": "menu",
+      "variant": "long",
+      "text": "MAPLE GROVE STUDENT CAFÉ — STUDY-HOUR SPECIALS\n\nServed daily from 2:00 PM to 5:00 PM in the Student Union, Lower Level.\n\n* Bottomless Drip Coffee: $2.00 (refills $0.50, free for honor-roll students with valid ID)\n* House Bagel with Cream Cheese: $3.50 — add avocado for $1.25\n* Toasted Veggie Wrap: $5.75 — gluten-free wrap available for $0.75 extra\n* Mediterranean Bowl: $7.25 — rotates daily, includes hummus and seasonal grain\n* Fresh-Squeezed Lemonade: $2.50\n* Energy Cookie (oats, dark chocolate, walnut): $1.75\n\nSTUDY-HOUR DEAL: Any drink + any baked item for a flat $4.00 between 2 and 5 PM only. Cannot combine with other discounts.\n\nPAYMENT: Meal swipes accepted Monday–Thursday. Dining dollars and credit cards accepted any time. Cash payments incur a $0.25 processing surcharge after 7 PM.\n\nGroup study tables require a minimum order of $15.00 per table. Reservations through the dining app are encouraged.",
+      "format_metadata": {
+        "title": "Maple Grove Student Café — Study-Hour Specials"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the menu, what does the Study-Hour Deal include?",
+          "options": {
+            "A": "A bowl plus a baked item for $4.00",
+            "B": "A drink plus a baked item for $4.00",
+            "C": "A wrap plus a drink for $4.00",
+            "D": "A coffee plus a sandwich for $4.00"
+          },
+          "correct_answer": "B",
+          "explanation": "The menu describes the Study-Hour Deal as any drink plus any baked item for a flat $4.00."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about students paying cash after 7 PM?",
+          "options": {
+            "A": "They will pay a small additional fee.",
+            "B": "They will receive a free drink refill.",
+            "C": "They will be denied service for that order.",
+            "D": "They will need to use the dining app first."
+          },
+          "correct_answer": "A",
+          "explanation": "The menu states cash payments incur a $0.25 processing surcharge after 7 PM, implying an extra fee."
+        },
+        {
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this menu page?",
+          "options": {
+            "A": "To advertise the café's expanded breakfast hours",
+            "B": "To explain the café's afternoon offerings and special deal",
+            "C": "To announce a new meal-swipe partnership",
+            "D": "To list dietary restrictions for student diners"
+          },
+          "correct_answer": "B",
+          "explanation": "The menu focuses on afternoon study-hour items, the Study-Hour Deal, and related payment details."
+        }
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "rdl_long_routine-20260531-184112_2",
+      "genre": "email",
+      "variant": "long",
+      "text": "Subject: Coordinating Friday's Acid-Base Titration Lab\n\nHi Priya,\n\nI wanted to confirm a few things before our chemistry lab on Friday afternoon, March 14. Dr. Holloway said our titration of the unknown sample is due by the end of class, so we'll need to be efficient.\n\nA few logistics: I've reserved Station 7 in Room 304 from 2:00 to 4:30 PM through the lab portal. I'll bring the printed procedure and the calibration check sheet. Could you grab the standardized sodium hydroxide solution from the prep room before class? Ms. Tran said students need to sign it out at the desk, and last time the supply ran low after 1:30.\n\nFor the analysis, I'll handle the burette readings and you can record the indicator color changes. We should both photograph the final titration curve for the report. Quick reminder that the lab notebook entry is graded — Dr. Holloway mentioned at the last session that incomplete entries cost the team three points.\n\nIf anything changes, text me by Thursday evening.\n\nThanks!\n\nMarcus",
+      "format_metadata": {
+        "from": "Marcus Chen",
+        "to": "Priya Ramaswamy",
+        "subject": "Coordinating Friday's Acid-Base Titration Lab"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what is Priya asked to bring to lab on Friday?",
+          "options": {
+            "A": "A printed procedure and indicator strips",
+            "B": "The calibration check sheet from Dr. Holloway",
+            "C": "The standardized sodium hydroxide solution from prep",
+            "D": "A new camera for documenting the experiment"
+          },
+          "correct_answer": "C",
+          "explanation": "The email asks Priya to grab the standardized sodium hydroxide solution from the prep room before class."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about earning a full grade on the lab notebook entry?",
+          "options": {
+            "A": "It depends on completing the entry fully before class ends.",
+            "B": "It depends on submitting the entry online by Friday night.",
+            "C": "It depends on photographing all calibration readings.",
+            "D": "It depends on the accuracy of the titration curve."
+          },
+          "correct_answer": "A",
+          "explanation": "Dr. Holloway said incomplete entries cost three points, implying full credit requires a complete entry, which their schedule forces them to finish during class."
+        },
+        {
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this email?",
+          "options": {
+            "A": "To request a deadline extension from Dr. Holloway",
+            "B": "To complain about the limited supply of lab reagents",
+            "C": "To explain how the lab notebook will be graded",
+            "D": "To coordinate roles and supplies for the upcoming lab session"
+          },
+          "correct_answer": "D",
+          "explanation": "The email's main thrust is dividing tasks (reagent pickup, burette readings, color recording) and confirming logistics for Friday's lab."
+        }
+      ],
+      "difficulty": "medium"
     }
   ]
 }

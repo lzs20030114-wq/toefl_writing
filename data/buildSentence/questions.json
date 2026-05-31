@@ -1,6 +1,6 @@
 {
   "version": "1.3",
-  "generated_at": "2026-05-31T13:58:23.780Z",
+  "generated_at": "2026-05-31T18:46:39.025Z",
   "question_sets": [
     {
       "set_id": 1,
@@ -25680,6 +25680,256 @@
           "grammar_points": [
             "indirect question with why",
             "past perfect passive"
+          ]
+        }
+      ]
+    },
+    {
+      "set_id": 90,
+      "questions": [
+        {
+          "id": "ets_s90_q1",
+          "prompt": "Are you going to the gym today?",
+          "answer": "I'm heading there after my afternoon class.",
+          "chunks": [
+            "heading",
+            "there",
+            "after",
+            "my afternoon",
+            "class",
+            "going"
+          ],
+          "prefilled": [
+            "I'm"
+          ],
+          "prefilled_positions": {
+            "i'm": 0
+          },
+          "distractor": "going",
+          "has_question_mark": false,
+          "grammar_points": [
+            "simple present continuous",
+            "prepositional phrase"
+          ]
+        },
+        {
+          "id": "ets_s90_q2",
+          "prompt": "Did you finish your psychology reading last night?",
+          "answer": "I haven't started the second chapter yet.",
+          "chunks": [
+            "i",
+            "haven't",
+            "started",
+            "the second",
+            "chapter",
+            "didn't"
+          ],
+          "prefilled": [
+            "yet"
+          ],
+          "prefilled_positions": {
+            "yet": 6
+          },
+          "distractor": "didn't",
+          "has_question_mark": false,
+          "grammar_points": [
+            "present perfect negation",
+            "yet at end"
+          ]
+        },
+        {
+          "id": "ets_s90_q3",
+          "prompt": "What did Professor Cho ask you after class?",
+          "answer": "She wanted to know if my draft was ready.",
+          "chunks": [
+            "she",
+            "wanted to",
+            "know",
+            "my draft",
+            "ready",
+            "did"
+          ],
+          "prefilled": [
+            "if",
+            "was"
+          ],
+          "prefilled_positions": {
+            "if": 4,
+            "was": 7
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "indirect question with if",
+            "past tense"
+          ]
+        },
+        {
+          "id": "ets_s90_q4",
+          "prompt": "Tell me what your roommate said about quiet hours.",
+          "answer": "She wondered whether residents must observe quiet hours nightly.",
+          "chunks": [
+            "she",
+            "wondered",
+            "residents",
+            "must",
+            "observe",
+            "quiet hours",
+            "nightly",
+            "is"
+          ],
+          "prefilled": [
+            "whether"
+          ],
+          "prefilled_positions": {
+            "whether": 2
+          },
+          "distractor": "is",
+          "has_question_mark": false,
+          "grammar_points": [
+            "indirect question with whether",
+            "simple present"
+          ]
+        },
+        {
+          "id": "ets_s90_q5",
+          "prompt": "Why did Felix skip the seminar this morning?",
+          "answer": "Felix couldn't attend because he had a job interview.",
+          "chunks": [
+            "felix",
+            "couldn't",
+            "attend",
+            "because",
+            "he had",
+            "a job interview",
+            "do"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "do",
+          "has_question_mark": false,
+          "grammar_points": [
+            "causal clause",
+            "modal could negation"
+          ]
+        },
+        {
+          "id": "ets_s90_q6",
+          "prompt": "Tell me what the librarian told you about reserves.",
+          "answer": "She mentioned that the textbook sat behind the front counter.",
+          "chunks": [
+            "she",
+            "that the",
+            "textbook",
+            "sat",
+            "behind the",
+            "front counter",
+            "playing"
+          ],
+          "prefilled": [
+            "mentioned"
+          ],
+          "prefilled_positions": {
+            "mentioned": 1
+          },
+          "distractor": "playing",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded that-clause",
+            "past tense"
+          ]
+        },
+        {
+          "id": "ets_s90_q7",
+          "prompt": "Have you heard from the financial aid office yet?",
+          "answer": "They have not responded to my appeal request.",
+          "chunks": [
+            "they",
+            "not",
+            "responded",
+            "to my",
+            "appeal",
+            "request",
+            "are"
+          ],
+          "prefilled": [
+            "have"
+          ],
+          "prefilled_positions": {
+            "have": 1
+          },
+          "distractor": "are",
+          "has_question_mark": false,
+          "grammar_points": [
+            "present perfect negation",
+            "prepositional phrase"
+          ]
+        },
+        {
+          "id": "ets_s90_q8",
+          "prompt": "Where do I sign up for the volunteer trip?",
+          "answer": "Where do I register for the spring service project?",
+          "chunks": [
+            "do",
+            "i",
+            "register",
+            "for the",
+            "spring",
+            "service project",
+            "did"
+          ],
+          "prefilled": [
+            "Where"
+          ],
+          "prefilled_positions": {
+            "where": 0
+          },
+          "distractor": "did",
+          "has_question_mark": true,
+          "grammar_points": [
+            "direct wh-question"
+          ]
+        },
+        {
+          "id": "ets_s90_q9",
+          "prompt": "Have you been to the new study lounge?",
+          "answer": "The new lounge feels much brighter than the old room.",
+          "chunks": [
+            "the new",
+            "lounge",
+            "feels",
+            "much brighter",
+            "than the",
+            "old room"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": null,
+          "has_question_mark": false,
+          "grammar_points": [
+            "comparative than",
+            "simple present"
+          ]
+        },
+        {
+          "id": "ets_s90_q10",
+          "prompt": "Tell me about your shuttle commute downtown.",
+          "answer": "Does the shuttle also stop near the train station?",
+          "chunks": [
+            "does",
+            "the shuttle",
+            "also",
+            "stop",
+            "near the",
+            "train station",
+            "did"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "did",
+          "has_question_mark": true,
+          "grammar_points": [
+            "direct yes/no question"
           ]
         }
       ]

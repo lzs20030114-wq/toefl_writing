@@ -2485,6 +2485,398 @@
         }
       ],
       "audio_url": "/api/audio/conversation/lc_r1_routine-20260531-134653_5.mp3"
+    },
+    {
+      "id": "lc_routine-20260531-184112_1",
+      "context": "errands_service",
+      "situation": "two students chatting about a gardening or art class they took",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "How's your urban-sketching elective going? I'm thinking of taking it next semester."
+        },
+        {
+          "speaker": "Man",
+          "text": "Honestly, it's been harder than I expected. The instructor pushes us to draw outside in twenty-minute bursts, and weather wrecks half the sessions."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh wow. Do you actually finish anything?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Sometimes. But what surprised me is that the time pressure helps. Once you stop trying to be perfect, you actually start seeing things."
+        },
+        {
+          "speaker": "Woman",
+          "text": "That sounds kind of inspiring, actually. Maybe I'll sign up after all."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "Why does the woman approach the man?",
+          "options": {
+            "A": "To ask about his experience in an urban-sketching class",
+            "B": "To borrow his sketching supplies for the weekend",
+            "C": "To complain about the weather on campus",
+            "D": "To recommend a different art elective to him"
+          },
+          "answer": "A",
+          "explanation": "女生开场就问 \"How's your urban-sketching elective going?\"，表示她在考虑下学期选这门课。其他选项与对话开头主题无关。",
+          "distractor_types": {
+            "B": "wrong_topic",
+            "C": "wrong_topic",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What does the man imply about working under time pressure?",
+          "options": {
+            "A": "It made him quit the elective early.",
+            "B": "It mainly causes him to make more mistakes.",
+            "C": "It has unexpectedly improved how he observes scenes.",
+            "D": "It only works when the weather is perfect."
+          },
+          "answer": "C",
+          "explanation": "男生说当你不再追求完美时，开始 \"start seeing things\"，暗示时间压力反而改善了他观察的方式。其他选项与他的语气或事实相反。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "reversed_logic",
+            "D": "rejected_option"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_routine-20260531-184112_2",
+      "context": "recommendations_opinions",
+      "situation": "two friends recommending a podcast or TV series to each other",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Have you tried that science podcast I mentioned, the one about everyday physics?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Not yet. I've been hooked on a history series about ancient libraries. Episodes are about thirty minutes each."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh, that sounds great! Where did you find it?"
+        },
+        {
+          "speaker": "Man",
+          "text": "It's actually on the campus library's free streaming portal. You just log in with your student ID."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Wait, seriously? I didn't even know we had that."
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, it's pretty hidden. I'll send you the link tonight."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Where can the man's history series be accessed?",
+          "options": {
+            "A": "Through a paid podcast subscription",
+            "B": "Through the campus library's free streaming portal",
+            "C": "Through a commercial radio app",
+            "D": "Through the science department's website"
+          },
+          "answer": "B",
+          "explanation": "男生明确说节目在校园图书馆的免费流媒体平台上，用学生 ID 登录即可。其他来源与他的描述不符。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Cancel her existing podcast subscriptions",
+            "B": "Recommend her physics podcast to the library",
+            "C": "Wait for the man to send her the link",
+            "D": "Look for the series through a paid streaming service"
+          },
+          "answer": "C",
+          "explanation": "男生说今晚会把链接发给她，她最自然的下一步就是等他发链接。其他选项要么是对话未提及的行为，要么与谈话方向相反。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_next_step",
+            "D": "rejected_option"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_routine-20260531-184112_3",
+      "context": "errands_service",
+      "situation": "two students talking about a pet or houseplant one is caring for",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "How's that giant fern you adopted last month?"
+        },
+        {
+          "speaker": "Man",
+          "text": "It's actually thriving, surprisingly. I moved it next to my desk lamp and the new leaves came in within two weeks."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Really? I thought ferns hated bright light."
+        },
+        {
+          "speaker": "Man",
+          "text": "I thought so too. But this one's tropical, so it likes the warmth more than the brightness, I guess."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Huh, interesting. Mine keeps dropping leaves. Maybe I'm overwatering it."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What did the man do that helped his fern grow?",
+          "options": {
+            "A": "He moved it outside to a sunny balcony.",
+            "B": "He repotted it in larger drainage soil.",
+            "C": "He placed it near his desk lamp.",
+            "D": "He started fertilizing it weekly."
+          },
+          "answer": "C",
+          "explanation": "男生说他把蕨类植物挪到 desk lamp 旁边，两周内长出新叶。其他选项是对话中未出现的具体动作。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the woman's fern?",
+          "options": {
+            "A": "It may be suffering from too much watering.",
+            "B": "It is the same tropical species as the man's.",
+            "C": "It has already died this semester.",
+            "D": "It was originally a gift from the man."
+          },
+          "answer": "A",
+          "explanation": "女生说自己的蕨类在掉叶子，并猜测可能是浇水过多，所以最可能的推断就是 overwatering 是问题来源。其他选项无依据。",
+          "distractor_types": {
+            "B": "over_inference",
+            "C": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_routine-20260531-184112_4",
+      "context": "recommendations_opinions",
+      "situation": "two friends discussing a movie one just saw that surprised them",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "I caught that documentary about urban farming last night. It honestly changed how I think about food."
+        },
+        {
+          "speaker": "Man",
+          "text": "Really? I'd assumed it was going to be more political."
+        },
+        {
+          "speaker": "Woman",
+          "text": "I expected that too! But it focused on individual rooftop farmers in three different cities. Each story was super personal."
+        },
+        {
+          "speaker": "Man",
+          "text": "That sounds way better than the trailer suggested."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Exactly. The trailer made it look preachy, but the actual film is mostly conversations."
+        },
+        {
+          "speaker": "Man",
+          "text": "I'll definitely give it a watch this weekend, then."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why did the woman find the documentary effective?",
+          "options": {
+            "A": "It featured well-known political activists in detail.",
+            "B": "It centered on personal stories of individual rooftop farmers.",
+            "C": "It compared rooftop farming to traditional rural farming directly.",
+            "D": "It included sweeping landscape footage of the countryside."
+          },
+          "answer": "B",
+          "explanation": "女生说纪录片聚焦三座城市的个别屋顶农夫的个人故事，所以这才是她觉得有效的原因。其他选项与她描述相反或无据。",
+          "distractor_types": {
+            "A": "reversed_logic",
+            "C": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the documentary's trailer?",
+          "options": {
+            "A": "It did not accurately represent the film's tone.",
+            "B": "It was banned by several streaming services.",
+            "C": "It was longer than the film itself.",
+            "D": "It featured the same farmers as the documentary."
+          },
+          "answer": "A",
+          "explanation": "女生说 trailer 让纪录片看上去 preachy，但实际内容主要是对话，暗示预告片误导了观众对影片基调的判断。其他选项无依据。",
+          "distractor_types": {
+            "B": "over_inference",
+            "C": "over_inference",
+            "D": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_routine-20260531-184112_5",
+      "context": "plans_social",
+      "situation": "two friends coordinating a weekend hiking or beach trip",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Are we still on for the Cedar Ridge hike Saturday morning?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, definitely. But weather says rain after one, so we should aim for an early start."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Smart. I can pick you up at six-thirty if that works."
+        },
+        {
+          "speaker": "Man",
+          "text": "Six-thirty's perfect. Could you also bring an extra water bottle? Mine cracked last week."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Sure, no problem. Anything else?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Just snacks, maybe. I'll bring the trail map."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What time will the woman pick up the man on Saturday?",
+          "options": {
+            "A": "6:30 AM",
+            "B": "7:00 AM",
+            "C": "1:00 PM",
+            "D": "6:30 PM"
+          },
+          "answer": "A",
+          "explanation": "女生提议六点半接他，男生说 perfect。其他时间或来自其他细节，或与对话事实不符。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "misattributed",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the man's preparation?",
+          "options": {
+            "A": "He will replace his cracked water bottle himself.",
+            "B": "He plans to navigate the hike using the trail map.",
+            "C": "He will not need any snacks during the hike.",
+            "D": "He intends to cancel the trip if it rains."
+          },
+          "answer": "B",
+          "explanation": "男生说自己会带 trail map，暗示他会用它在路上导航。其他选项与他的话相反或没有依据。",
+          "distractor_types": {
+            "A": "reversed_logic",
+            "C": "reversed_logic",
+            "D": "rejected_option"
+          }
+        }
+      ]
     }
   ]
 }
