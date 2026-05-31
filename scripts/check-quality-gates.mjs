@@ -41,6 +41,12 @@ const DIVERSITY_GATE = {
   "reading-ctw":     85,  // 6 items
   "reading-rdl-short": 80, // 4 items
   "reading-rdl-long":  70, // 2 items — too small to gate strictly
+  // Listening + Speaking (added 2026-05-31) — lenient, small N / new types.
+  "listening-lat":   70,
+  "listening-lc":    72,
+  "listening-la":    72,
+  "listening-lcr":   75,
+  "speaking-repeat": 70,
 };
 
 // Quality gate is more forgiving — these are basic adherence checks that
@@ -54,6 +60,11 @@ const QUALITY_GATE = {
   "reading-ctw":     90,
   "reading-rdl-short": 85,
   "reading-rdl-long":  85,
+  "listening-lat":   80,
+  "listening-lc":    80,
+  "listening-la":    80,
+  "listening-lcr":   80,
+  "speaking-repeat": 80,
 };
 
 function readJSON(p, fallback = null) {
@@ -78,7 +89,7 @@ const scores = scoreBatch(ROOT, meta.session_id || "", meta.results || {});
 
 // Decide per bank
 const retryBanks = [];
-const BANK_ORDER = ["bs", "discussion", "email", "reading-ap", "reading-ctw", "reading-rdl-short", "reading-rdl-long"];
+const BANK_ORDER = ["bs", "discussion", "email", "reading-ap", "reading-ctw", "reading-rdl-short", "reading-rdl-long", "listening-lat", "listening-lc", "listening-la", "listening-lcr", "speaking-repeat"];
 const summary = [];
 
 for (const bank of BANK_ORDER) {
@@ -106,7 +117,7 @@ for (const bank of BANK_ORDER) {
         `R1 generated ${bankResult.generated || 0} items but all were rejected. Failure reason: "${bankResult.failure_reason || "unknown"}". Generate fresh items strictly following the print-bank-prompt rules — pay extra attention to schema compliance.`,
       ],
       items_to_supplement: (() => {
-        const original = { bs: 20, discussion: 4, email: 4, "reading-ap": 5, "reading-ctw": 6, "reading-rdl-short": 4, "reading-rdl-long": 2 };
+        const original = { bs: 20, discussion: 4, email: 4, "reading-ap": 5, "reading-ctw": 6, "reading-rdl-short": 4, "reading-rdl-long": 2, "listening-lat": 4, "listening-lc": 5, "listening-la": 5, "listening-lcr": 8, "speaking-repeat": 3 };
         return original[bank] || 4;  // Full count, not half
       })(),
     });
@@ -208,7 +219,7 @@ for (const bank of BANK_ORDER) {
     items_to_supplement: (() => {
       // R2 should add fewer items than R1 originally generated
       // (R2 supplements, doesn't replace)
-      const original = { bs: 20, discussion: 4, email: 4, "reading-ap": 5, "reading-ctw": 6, "reading-rdl-short": 4, "reading-rdl-long": 2 };
+      const original = { bs: 20, discussion: 4, email: 4, "reading-ap": 5, "reading-ctw": 6, "reading-rdl-short": 4, "reading-rdl-long": 2, "listening-lat": 4, "listening-lc": 5, "listening-la": 5, "listening-lcr": 8, "speaking-repeat": 3 };
       return Math.ceil((original[bank] || 4) / 2);
     })(),
   });

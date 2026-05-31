@@ -56,6 +56,11 @@ const BANK_DISPLAY = {
   "reading-ctw": "阅读 CTW",
   "reading-rdl-short": "阅读 RDL-短",
   "reading-rdl-long": "阅读 RDL-长",
+  "listening-lat": "听力 讲座",
+  "listening-lc": "听力 对话",
+  "listening-la": "听力 通知",
+  "listening-lcr": "听力 短回应",
+  "speaking-repeat": "口语 跟读",
 };
 const BANK_FILES = {
   bs: "data/buildSentence/questions.json",
@@ -65,6 +70,11 @@ const BANK_FILES = {
   "reading-ctw": "data/reading/bank/ctw.json",
   "reading-rdl-short": "data/reading/bank/rdl-short.json",
   "reading-rdl-long": "data/reading/bank/rdl-long.json",
+  "listening-lat": "data/listening/bank/lat.json",
+  "listening-lc": "data/listening/bank/lc.json",
+  "listening-la": "data/listening/bank/la.json",
+  "listening-lcr": "data/listening/bank/lcr.json",
+  "speaking-repeat": "data/speaking/bank/repeat.json",
 };
 
 function bankTotal(bankKey) {
@@ -77,6 +87,7 @@ function bankTotal(bankKey) {
     }
     if (Array.isArray(j)) return j.length;
     if (Array.isArray(j?.items)) return j.items.length;
+    if (Array.isArray(j?.sets)) return j.sets.length; // speaking-repeat bank
     return 0;
   } catch { return 0; }
 }
@@ -86,7 +97,7 @@ function bankTotal(bankKey) {
 //   { generated, accepted, pass, retried_after_fail, topics, failure_reason }
 const results = meta.results || {};
 
-const bankOrder = ["bs", "discussion", "email", "reading-ap", "reading-ctw", "reading-rdl-short", "reading-rdl-long"];
+const bankOrder = ["bs", "discussion", "email", "reading-ap", "reading-ctw", "reading-rdl-short", "reading-rdl-long", "listening-lat", "listening-lc", "listening-la", "listening-lcr", "speaking-repeat"];
 
 function statusFor(r) {
   if (!r) return { icon: "⚪", note: "未执行" };
