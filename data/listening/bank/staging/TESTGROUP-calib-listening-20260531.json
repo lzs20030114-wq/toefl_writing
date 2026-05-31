@@ -1,0 +1,56 @@
+{
+  "_meta": {
+    "test_group": "calib-listening-20260531",
+    "generated_by": "claude (calibration test of recalibrated listening prompts)",
+    "note": "TEST batch verifying 2026改后 listening deeper-pass recalibration. LAT: 200-330w, declarative arts-domain opening, low contractions (~1.2/100w). LC: 68-102w, 4-7 turns, peer/social, Man/Woman labels. LA: opener variety (not 64% Attention), contractions ~1.9/100w. LCR: ~49% wh-questions, ~8w prompts. Purge: scripts/ops/purge-test-groups.mjs --delete calib-listening-20260531",
+    "targets": "lat len 200-330 / contr ~1.2; lc len 68-102 / turns 4-7 / peer; la contr ~1.9 / opener varied; lcr wh ~49% / len ~8"
+  },
+  "shortResponse": [
+    { "id": "TEST_lcr_1", "test_group": "calib-listening-20260531", "speaker": "Where can I find the class notes?" },
+    { "id": "TEST_lcr_2", "test_group": "calib-listening-20260531", "speaker": "Why is the air conditioner in the dorm not working?" },
+    { "id": "TEST_lcr_3", "test_group": "calib-listening-20260531", "speaker": "Who is the guest lecturer today?" },
+    { "id": "TEST_lcr_4", "test_group": "calib-listening-20260531", "speaker": "How do I sign up for the field trip?" },
+    { "id": "TEST_lcr_5", "test_group": "calib-listening-20260531", "speaker": "Did you enjoy the gardening class?" },
+    { "id": "TEST_lcr_6", "test_group": "calib-listening-20260531", "speaker": "Maybe the power went out for this whole area." }
+  ],
+  "conversations": [
+    {
+      "id": "TEST_lc_1", "test_group": "calib-listening-20260531", "relationship": "student_student",
+      "conversation": [
+        { "speaker": "Woman", "text": "I'm getting bored listening to the same old pop singers. Any recommendations?" },
+        { "speaker": "Man", "text": "Have you tried that new indie band everyone's talking about? Their last album is really good." },
+        { "speaker": "Woman", "text": "I haven't. Is it on the usual streaming apps?" },
+        { "speaker": "Man", "text": "Yeah, it's everywhere. Start with the second track, it's the catchiest one." },
+        { "speaker": "Woman", "text": "Perfect. I'll put it on during my run tomorrow." },
+        { "speaker": "Man", "text": "Let me know what you think. I'm curious whether you'll like the slower songs too." }
+      ]
+    },
+    {
+      "id": "TEST_lc_2", "test_group": "calib-listening-20260531", "relationship": "student_student",
+      "conversation": [
+        { "speaker": "Woman", "text": "I want to buy some cheese for the dinner party. What should I get?" },
+        { "speaker": "Man", "text": "It depends on what you're serving. Parmesan is great if there's pasta." },
+        { "speaker": "Woman", "text": "There is pasta, actually, and a big salad." },
+        { "speaker": "Man", "text": "Then grab a soft cheese for the salad too, maybe a goat cheese." },
+        { "speaker": "Woman", "text": "Good idea. Is the shop on Main Street still open this late?" },
+        { "speaker": "Man", "text": "It closes at nine, so you've got about an hour. Better hurry." }
+      ]
+    }
+  ],
+  "announcements": [
+    {
+      "id": "TEST_la_1", "test_group": "calib-listening-20260531", "opener_type": "professor_first_person",
+      "transcript": "I'm pleased to announce that we'll have a guest speaker next week as part of our unit on environmental policy. Dr. Maya Tan will join us on Thursday to talk about her fieldwork in coastal wetlands. She has agreed to take questions afterward, so come prepared with a few of your own. I would also remind you that your reading responses are due before class that day. If you have not finished the chapter yet, please start tonight."
+    },
+    {
+      "id": "TEST_la_2", "test_group": "calib-listening-20260531", "opener_type": "due_to_cause",
+      "transcript": "Due to yesterday's heavy rainstorms, a major leak has developed in the roof of the main library. Repair crews are on site, but the second and third floors will be closed until noon on Wednesday. The ground floor and the study commons remain open during regular hours. If you have books due during this period, don't worry, all due dates have been extended by three days. We'll post updates on the library website as the repairs progress."
+    }
+  ],
+  "lectures": [
+    {
+      "id": "TEST_lat_1", "test_group": "calib-listening-20260531", "subject": "art_history",
+      "transcript": "Expressionism is an influential modernist art movement that emerged in the early twentieth century, mainly in Germany. The movement is characterized by its focus on representing emotional experience rather than physical reality. Where earlier painters tried to reproduce the world as the eye sees it, Expressionist artists deliberately distorted color, shape, and perspective to convey an inner mood. Consider a typical Expressionist landscape. The sky might be painted a violent red, the trees twisted and angular, the brushstrokes thick and urgent. None of this is meant to be realistic. Instead, the distortion communicates anxiety, alienation, or intensity, the very feelings the artist wanted the viewer to share. Color, in particular, became a psychological tool rather than a descriptive one. This approach didn't appear in isolation. It grew partly out of the rapid industrialization of European cities, which left many artists feeling that modern life was overwhelming and impersonal. Painting became a way to externalize that unease. The movement also drew on the bold, non-naturalistic color of earlier painters such as Van Gogh, whose expressive brushwork the Expressionists admired. Expressionism influenced more than painting. Its principles spread to printmaking, theater, and early cinema, where dramatic lighting and exaggerated sets created a similar emotional charge. So when we look at an Expressionist work, the question to ask is not whether it looks lifelike, but what feeling it's trying to provoke. That shift, from describing the world to expressing a response to it, is the movement's lasting contribution."
+    }
+  ]
+}

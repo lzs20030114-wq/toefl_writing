@@ -201,11 +201,30 @@ Current = `data/listening/bank/{lc,la,lat}.json`. Target = realExam2026 listenin
 (142 vs 90). (3) type mix over-weights announcements (46% vs 23%), under-weights
 conversations + lectures.
 
-**Fix applied 2026-05-31:** `latPromptBuilder.js` transcript tiers 150/180/200 →
-200/240/280 (max 330) toward real 258. Broken lat stubs will be replaced on
-regeneration. Conversation length + type-mix noted (secondary; not changed this pass).
+**Fix applied 2026-05-31 (first pass):** `latPromptBuilder.js` transcript tiers
+150/180/200 → 200/240/280 (max 330) toward real 258.
 - [x] bump lecture length target to realExam2026
-- [ ] re-measure next batch (expect lat→~250); consider lc trim + mix rebalance
+
+**Deeper pass (eval-spec docs/eval-spec/listening.md — 18 solid dims across 4 subtypes;
+the #1 tell is the register ladder) — fixed 2026-05-31:**
+- **LAT lecture** — (1) the output-schema STILL said "150-250 words" (the header fix never
+  reached it → bank stayed ~167, below real min 192); fixed to **200-330 (~258)**.
+  (2) Register was forced CHATTY ("contractions FREELY", mandatory "you"+rhetorical-Q) →
+  bank 5.0 contractions/100w; real is **1.2** → rewrote to declarative opening + occasional
+  contractions; softened the reject rules. (3) Domain was ~64% science; real is **~40%
+  arts+humanities** (art history #1) → reweighted `TOPIC_POOL`, added music/architecture/
+  physics, and made the picker **weight-aware** (the old plain-random shuffle IGNORED weight).
+- **LC conversation** — length 100-180→**68-102** (real 89), turns 8-12→**4-7** (real 6),
+  speakers first-names→**Man/Woman**, and `SCENARIO_POOL` flipped from 50% student↔staff
+  SERVICE desks to **~90% peer/social** chats (music/food/movies/plans/dorm) — the biggest LC gap.
+- **LA announcement** — opener "64% Attention" (FALSE vs real 21%) → spread across
+  Attention 21 / Good-morning 17 / direct 13 / **professor-first-person 9** / Due-to 9 /…;
+  register contractions 0.40→**~1.9/100w** (was bureaucratic).
+- **LCR short-response** — **wh-questions 7%→~49%** (the dominant real form, biggest gap);
+  prompt length target 8-12→**~8** (real median 8).
+- **Test batch** `calib-listening-20260531` (Claude): LAT 245w/contr 1.2/art-history/declarative;
+  LC 71-73w/6-turn/peer/Man-Woman; LA contr 2.6/professor+due-to openers; LCR wh 67%/7.8w — all verified.
+- Deferred (Lesson C, image-PDF data): MCQ distractor trap-logic, stem-type ratios, difficulty split.
 
 ## Speaking · repeat — Listen & Repeat   `dev-speaking.mjs`   ✅ already on-target
 
@@ -237,7 +256,7 @@ revisit when more speaking audio is transcribed.
 | Email | on-target | scenario 42 vs 39, 3 bullets — already matched |
 | Reading AP | **calibrated (deeper pass)** | length 210→190, opening received-wisdom 46%→5%, +insert_text/reference (were 0%), −paragraph_relationship 13.6%→3%, single-word vocab opts, loosened option spread, dialed back over-smoothing. Only question-COUNT held (extraction artifact). |
 | Reading CTW | **calibrated** | length 56→69 + LEXICAL: blanks too easy 5.13→5.80 chars (real 5.77), B2-C1 vocab allowed, validator loosened (Lesson D) |
-| Listening | **calibrated** | lectures 124-141 → target 258; +broken stubs to regen |
+| Listening | **calibrated (deeper, 4 subtypes)** | register ladder (lecture 5.0→1.2 contr, announcement 0.40→1.9), lecture domain 64%-sci→40%-arts (art-history #1, +weight-aware picker), conversation 138w/9t/service→89w/6t/peer + Man/Woman, LA opener Attention-64→21 +professor/Due-to, LCR wh 7%→49% + len→8 |
 | Speaking repeat | on-target | difficulty gradient already matched |
 | Speaking interview | insufficient | n=14, below calibration bar |
 
