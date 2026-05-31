@@ -28,6 +28,50 @@
 import { readFileSync, writeFileSync, readdirSync, mkdirSync, existsSync } from 'fs';
 import { join, basename, dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
+import { createRequire } from 'module';
+
+// 2026-06-01 FIX: merge-staging previously merged reading/listening/speaking items
+// with NO per-item validation (only dedup-by-id). That shipped broken items — most
+// severely CTW passages with ZERO blanks (the mechanical C-test blanker was never run
+// on the routine path), plus over-length / guessable AP items. Now each item is
+// VETTED here: CTW passages are blanked + validated, every other type runs its
+// calibrated validator, and invalid items are dropped before they reach the bank.
+const require = createRequire(import.meta.url);
+const VALIDATORS = {
+  ap:     (it) => require('../lib/readingGen/apValidator.js').validateAPItem(it),
+  rdl:    (it) => require('../lib/readingGen/rdlValidator.js').validateRDLItem(it),
+  lat:    (it) => require('../lib/listeningGen/latValidator.js').validateLAT(it),
+  lc:     (it) => require('../lib/listeningGen/lcValidator.js').validateLC(it),
+  la:     (it) => require('../lib/listeningGen/laValidator.js').validateLA(it),
+  lcr:    (it) => require('../lib/listeningGen/lcrValidator.js').validateLCR(it),
+  repeat: (it) => require('../lib/speakingGen/speakingValidator.js').validateRepeatSet(it),
+  rpt:    (it) => require('../lib/speakingGen/speakingValidator.js').validateRepeatSet(it),
+};
+
+// Vet one staging item for a prefix → { ok, item, reason }.
+// CTW is special: it must be run through the mechanical blanker first (the staging
+// item is just a passage), then validated. A validator THROW (a bug) keeps the item
+// (with a warning) so one bad validator can't silently nuke a whole bank.
+function vet(prefix, item) {
+  try {
+    if (prefix === 'ctw') {
+      const { processPassage } = require('../lib/readingGen/cTestBlanker.js');
+      const { validateCTWItem } = require('../lib/readingGen/ctwValidator.js');
+      const id = item.id || ('ctw_' + Date.now() + '_' + Math.floor(Math.random() * 1e6));
+      const { item: blanked, error } = processPassage(item, id);
+      if (error) return { ok: false, reason: 'blank: ' + error };
+      const v = validateCTWItem(blanked);
+      return v.pass ? { ok: true, item: blanked } : { ok: false, reason: (v.errors || []).join('; ') };
+    }
+    const fn = VALIDATORS[prefix];
+    if (!fn) return { ok: true, item }; // no validator (e.g. interview) → pass through
+    const r = fn(item) || {};
+    const bad = r.pass === false || r.valid === false;
+    return bad ? { ok: false, reason: (r.errors || []).join('; ') } : { ok: true, item };
+  } catch (e) {
+    return { ok: true, item, warn: 'validator threw (kept): ' + e.message };
+  }
+}
 
 // Portable repo-root resolution: this file lives at scripts/merge-staging.mjs,
 // so the parent of scripts/ is the repo root. Works on both local Windows
@@ -132,9 +176,9 @@ for (const section of SECTIONS) {
   for (const file of stagingFiles) {
     const path = join(section.stagingDir, file);
     const staging = readJSON(path);
-    const items = staging.items || [];
+    const rawItems = staging.items || [];
 
-    if (items.length === 0) {
+    if (rawItems.length === 0) {
       console.log(`  ${file}: 0 items, skipping`);
       continue;
     }
@@ -142,6 +186,22 @@ for (const section of SECTIONS) {
     // Extract leading alpha prefix: "lcr-123.json" → "lcr",
     // "rdl-123.json" → "rdl", "rdl-123-short.json" → "rdl"
     const prefix = (file.match(/^([a-z]+)-/) || [])[1] || '';
+    if (prefix !== 'rdl' && !section.prefixMap[prefix]) {
+      console.log(`  ${file}: unknown prefix '${prefix}', skipping`);
+      continue;
+    }
+
+    // Vet every item (CTW gets blanked first); drop invalid before it reaches the bank.
+    const items = [];
+    let rejected = 0;
+    for (const raw of rawItems) {
+      const r = vet(prefix, raw);
+      if (!r.ok) { rejected++; console.log(`    ✗ ${raw.id || '?'}: ${r.reason}`); continue; }
+      if (r.warn) console.log(`    ⚠ ${raw.id || '?'}: ${r.warn}`);
+      items.push(r.item || raw);
+    }
+    if (rejected) console.log(`  ${file}: ${rejected}/${rawItems.length} rejected by validator`);
+    if (items.length === 0) { console.log(`  ${file}: 0 valid items after validation, skipping`); continue; }
 
     if (prefix === 'rdl') {
       // Special handling for RDL: classify into long/short
@@ -152,13 +212,11 @@ for (const section of SECTIONS) {
         counts[bankFile] = (counts[bankFile] || 0) + 1;
       }
       const parts = Object.entries(counts).map(([k, v]) => `${v}→${k}`).join(', ');
-      console.log(`  ${file}: ${items.length} items (${parts})`);
-    } else if (section.prefixMap[prefix]) {
+      console.log(`  ${file}: ${items.length} valid (${parts})`);
+    } else {
       const bankFile = section.prefixMap[prefix];
       pendingItems[bankFile] = (pendingItems[bankFile] || []).concat(items);
-      console.log(`  ${file}: ${items.length} items → ${bankFile}`);
-    } else {
-      console.log(`  ${file}: unknown prefix '${prefix}', skipping`);
+      console.log(`  ${file}: ${items.length} valid → ${bankFile}`);
     }
   }
 

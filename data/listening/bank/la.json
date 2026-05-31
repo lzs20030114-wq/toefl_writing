@@ -1378,50 +1378,6 @@
       "flavor_score": 0.95
     },
     {
-      "id": "la_r1_routine-20260531-134653_1",
-      "context": "logistics",
-      "situation": "new bike-share station locations",
-      "speaker_role": "campus_admin",
-      "difficulty": "easy",
-      "announcement": "Good afternoon. The Office of Campus Mobility is pleased to announce three new bike-share stations opening Monday, June 3. The new stations will be located outside Halverson Library, beside the Vance Engineering Building, and at the South Plaza entrance. Each station holds twenty bicycles. Students can unlock a bike using the existing campus app — no new registration is required. Please note that helmets are not provided; we strongly recommend bringing your own. The first thirty minutes of each ride remain free for students. Detailed station maps will be posted on the mobility portal by Friday.",
-      "questions": [
-        {
-          "type": "main_idea",
-          "stem": "What is the announcement mainly about?",
-          "options": {
-            "A": "The opening of three new bike-share stations on campus",
-            "B": "Changes to the registration process for the campus bike-share app",
-            "C": "Helmet safety guidelines for campus cyclists",
-            "D": "Construction work near Halverson Library this summer"
-          },
-          "answer": "A",
-          "explanation": "广播主线就是宣布三个新自行车共享站。A 正确。B 和广播相反：明确说不需要新注册，reversed_intent。C 只是顺带提及，too_narrow。D 完全没出现，wrong_topic。",
-          "distractor_types": {
-            "B": "reversed_intent",
-            "C": "too_narrow",
-            "D": "wrong_topic"
-          }
-        },
-        {
-          "type": "detail",
-          "stem": "How many bicycles can each new station hold?",
-          "options": {
-            "A": "Ten",
-            "B": "Fifteen",
-            "C": "Twenty",
-            "D": "Thirty"
-          },
-          "answer": "C",
-          "explanation": "广播明说每站可停放二十辆自行车。C 正确。A、B、D 是数字混淆。",
-          "distractor_types": {
-            "A": "wrong_detail",
-            "B": "wrong_detail",
-            "D": "wrong_detail"
-          }
-        }
-      ]
-    },
-    {
       "id": "la_r1_routine-20260531-134653_2",
       "context": "academic_event",
       "situation": "undergraduate research symposium abstract submission deadline",
