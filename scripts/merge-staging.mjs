@@ -69,7 +69,10 @@ function vet(prefix, item) {
     const bad = r.pass === false || r.valid === false;
     return bad ? { ok: false, reason: (r.errors || []).join('; ') } : { ok: true, item };
   } catch (e) {
-    return { ok: true, item, warn: 'validator threw (kept): ' + e.message };
+    // A validator throw means the item is malformed enough to crash validation — that is
+    // per-item (well-formed items don't throw: verified across 8 types × hundreds of
+    // adversarial inputs), so REJECT it rather than ship unvalidated garbage to the bank.
+    return { ok: false, reason: 'validator threw: ' + e.message };
   }
 }
 
