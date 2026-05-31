@@ -226,7 +226,7 @@ the #1 tell is the register ladder) — fixed 2026-05-31:**
   LC 71-73w/6-turn/peer/Man-Woman; LA contr 2.6/professor+due-to openers; LCR wh 67%/7.8w — all verified.
 - Deferred (Lesson C, image-PDF data): MCQ distractor trap-logic, stem-type ratios, difficulty split.
 
-## Speaking · repeat — Listen & Repeat   `dev-speaking.mjs`   ✅ already on-target
+## Speaking · repeat — Listen & Repeat   `dev-speaking.mjs`   ✅ calibrated (deeper pass)
 
 Current = `data/speaking/bank/repeat.json` (n=11). Target = realExam2026 repeat (n=51).
 
@@ -238,8 +238,29 @@ Current = `data/speaking/bank/repeat.json` (n=11). Target = realExam2026 repeat 
 | difficulty medium (8-12w) % | 48% | 54% | −6 |
 | difficulty hard (13+w) % | 19% | 16% | +3 |
 
-**Read:** no calibration needed — sentences/set, length, and the 2-easy/3-med/2-hard
-difficulty gradient all match within a few pp. No change (IRON RULE).
+**First-pass read (INCOMPLETE):** sentences/set + aggregate length/difficulty matched,
+so the first pass concluded "no change". **The deep eval-spec REVERSED this** — the
+stat-comparison missed the register/structure tells.
+
+**Deeper pass (eval-spec docs/eval-spec/speaking_repeat.md) — fixed 2026-05-31:**
+Per Correlation 3, the synthetic register = greeting + question + threat, all seeded by
+the prompt's two worked examples + the easy/hard structure lists. Fixed all at once:
+- **Punitive-threat trope (D12, strongest tell):** "late returns will result in suspension
+  of your privileges" — bank **10.4%**, real **0/351**. Seeded verbatim by example S7 →
+  removed from `STRUCTURE_RULES.hard` + examples; validator now flags `punitive_warning`.
+- **Yes/no questions (D7):** bank 5.2%, real **0/351** → removed from `easy` structures +
+  example S2; validator flags `question_mark`.
+- **Rigid 2/3/2 (D3, biggest gap):** bank 100%, real only **6%** (real is medium-dominant,
+  usually ONE hard) → per-set length signature now varies (2/4/1, 3/3/1, 1/4/2…); validator
+  `difficulty_progression` rewards medium-dominant + long-finish, not the 2/3/2 staircase.
+- **Over-"Welcome" openers (D5):** bank 64%, real **16%**; bank had 0 bare-declarative
+  openers (real 53%) → examples + rules switched to bare-declarative locating openers.
+- **Missing map/schedule closer (D13):** bank 0%, real **33%** → added as the hard closer.
+- **Missing procedure/how-to family (D14):** bank 0, real ~6/51 → added (cooking/repair/craft/booking) with step-sequence flow.
+- **Over-address (D9):** bank 53% you/your, real 37% → rule capped to ~1-in-3; validator targets 0.37.
+- **Test batch** `calib-repeat-20260531` (Claude, 1 orientation + 1 procedure): questions
+  **0**, punitive **0**, Welcome **0**, signatures 3/3/1 + 2/4/1, last-longest 2/2, map-closer
+  present, mean 9.0w (real 9.56), address 43% (real 37) — all tells fixed; validator scores 0.77 / 0.89.
 
 ## Speaking · interview   — insufficient data
 realExam2026 interview n=14 (< the n≥30 calibration bar). Not calibrated this pass;
@@ -257,7 +278,7 @@ revisit when more speaking audio is transcribed.
 | Reading AP | **calibrated (deeper pass)** | length 210→190, opening received-wisdom 46%→5%, +insert_text/reference (were 0%), −paragraph_relationship 13.6%→3%, single-word vocab opts, loosened option spread, dialed back over-smoothing. Only question-COUNT held (extraction artifact). |
 | Reading CTW | **calibrated** | length 56→69 + LEXICAL: blanks too easy 5.13→5.80 chars (real 5.77), B2-C1 vocab allowed, validator loosened (Lesson D) |
 | Listening | **calibrated (deeper, 4 subtypes)** | register ladder (lecture 5.0→1.2 contr, announcement 0.40→1.9), lecture domain 64%-sci→40%-arts (art-history #1, +weight-aware picker), conversation 138w/9t/service→89w/6t/peer + Man/Woman, LA opener Attention-64→21 +professor/Due-to, LCR wh 7%→49% + len→8 |
-| Speaking repeat | on-target | difficulty gradient already matched |
+| Speaking repeat | **calibrated (deeper pass)** | first-pass "on-target" was incomplete — deep read found synthetic register tells: punitive threats 10.4%→0, yes/no Qs 5.2%→0, rigid 2/3/2 100%→varied, Welcome 64%→bare-declarative, +map-closer +procedure family, address 53%→37% |
 | Speaking interview | insufficient | n=14, below calibration bar |
 
 Re-run each `dev-<type>.mjs` after the next nightly batch to confirm convergence.

@@ -1,0 +1,33 @@
+{
+  "_meta": {
+    "test_group": "calib-repeat-20260531",
+    "generated_by": "claude (calibration test of recalibrated repeat prompt)",
+    "note": "TEST batch verifying 2026改后 Listen-and-Repeat recalibration: 0 yes/no questions (was 5.2%), 0 punitive threats (was 10.4%), bare-declarative openers not 'Welcome' (was 64%), map/schedule wayfinding closer (was 0%), varied signature not rigid 2/3/2, +procedure/how-to family (was 0), address ~37% not 53%, last sentence longest. Purge: scripts/ops/purge-test-groups.mjs --delete calib-repeat-20260531"
+  },
+  "sets": [
+    {
+      "id": "TEST_rpt_1", "test_group": "calib-repeat-20260531", "scenario": "Grocery Store Help", "speaker_role": "store associate", "set_type": "orientation",
+      "sentences": [
+        { "sentence": "Fresh produce is on your left.", "difficulty": "easy", "word_count": 6 },
+        { "sentence": "Baskets are by the front door.", "difficulty": "easy", "word_count": 6 },
+        { "sentence": "Please check the dates on dairy items.", "difficulty": "easy", "word_count": 7 },
+        { "sentence": "We restock the bakery section every morning before opening.", "difficulty": "medium", "word_count": 9 },
+        { "sentence": "Sale items are marked with a bright yellow tag near the shelf price.", "difficulty": "medium", "word_count": 12 },
+        { "sentence": "The deli counter can slice meats and cheeses to order for you.", "difficulty": "medium", "word_count": 12 },
+        { "sentence": "If you cannot find something, check the directory posted at the end of each aisle.", "difficulty": "hard", "word_count": 15 }
+      ]
+    },
+    {
+      "id": "TEST_rpt_2", "test_group": "calib-repeat-20260531", "scenario": "Salad Making (how-to)", "speaker_role": "cooking demonstrator", "set_type": "procedure",
+      "sentences": [
+        { "sentence": "First, rinse the lettuce well.", "difficulty": "easy", "word_count": 5 },
+        { "sentence": "Next, tear it into pieces.", "difficulty": "easy", "word_count": 5 },
+        { "sentence": "Chop the tomatoes and cucumbers into small cubes.", "difficulty": "medium", "word_count": 9 },
+        { "sentence": "Add a handful of your favorite nuts for extra crunch.", "difficulty": "medium", "word_count": 10 },
+        { "sentence": "Drizzle your dressing evenly over the whole bowl.", "difficulty": "medium", "word_count": 8 },
+        { "sentence": "Toss everything gently so the leaves do not bruise.", "difficulty": "medium", "word_count": 9 },
+        { "sentence": "Before you serve it, taste a little and adjust the salt if needed.", "difficulty": "hard", "word_count": 13 }
+      ]
+    }
+  ]
+}
