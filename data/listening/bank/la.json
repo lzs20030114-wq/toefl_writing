@@ -1807,6 +1807,226 @@
         }
       ],
       "audio_url": "/api/audio/announcement/la_routine-20260531-184112_5.mp3"
+    },
+    {
+      "id": "la_r1_routine-20260531-190444_1",
+      "context": "academic_event",
+      "situation": "end-of-semester academic showcase with awards",
+      "speaker_role": "department_staff",
+      "difficulty": "medium",
+      "announcement": "Attention all undergraduates. The Department of Engineering will host its annual End-of-Semester Showcase next Saturday afternoon in Greenfield Auditorium. The event begins at one o'clock with poster presentations from senior capstone teams. Awards for outstanding design, sustainability, and community impact will be announced at four o'clock. All registered participants must arrive by twelve-thirty to set up their displays. Light refreshments will be provided, and family members are warmly welcome. If you have not yet confirmed your attendance, please email the department office before Thursday at five o'clock so that name tags and seating can be prepared in advance.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce details about the upcoming engineering showcase",
+            "B": "To recruit volunteers for the showcase day setup",
+            "C": "To explain the criteria for the sustainability design award",
+            "D": "To remind students about an unrelated department meeting"
+          },
+          "answer": "A",
+          "explanation": "通告主要宣布工程系学期末作品展的详细安排，A 正确。B 不是要点；C 把奖项细节当成主旨；D 与通告无关。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students who do not respond by Thursday at five?",
+          "options": {
+            "A": "They will be barred from entering the auditorium that Saturday",
+            "B": "They will receive a written reminder from the department office",
+            "C": "They may not have name tags or reserved seats prepared in advance",
+            "D": "They will need to pay an additional registration fee on site"
+          },
+          "answer": "C",
+          "explanation": "通告说请在周四前确认以便准备名牌和座位，因此推断未确认者可能没有这些，C 正确。A 过度推断；B 无依据；D 与通告无关。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "literal_restatement",
+            "D": "unrelated_inference"
+          }
+        }
+      ]
+    },
+    {
+      "id": "la_r1_routine-20260531-190444_2",
+      "context": "facility_change",
+      "situation": "new fitness equipment installation at recreation center",
+      "speaker_role": "department_head",
+      "difficulty": "hard",
+      "announcement": "Good afternoon, members of the campus community. The Recreation Center will install a new set of cardio and strength equipment between June second and June ninth. During this period, the second-floor fitness room will be entirely closed for safety reasons. The first-floor gym, swimming pool, and squash courts will remain open during normal hours. Members holding annual passes may use the partner gym at Hadley Recreation free of charge during the closure by showing their membership card at the front desk. Once the installation is complete, an orientation session for the new machines will be offered on June tenth at five o'clock in the lobby.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To recruit new members for the campus recreation center program",
+            "B": "To inform users about a temporary closure for new equipment installation",
+            "C": "To explain why the annual membership fee has recently increased",
+            "D": "To advertise a partnership with another recreation facility nearby"
+          },
+          "answer": "B",
+          "explanation": "通告主要告知成员设备更新带来的临时关闭，B 正确。A 偏离主旨；C 与通告无关；D 把附带福利当成主旨。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "C": "reversed_intent",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about annual pass holders during the closure period?",
+          "options": {
+            "A": "They will receive a partial refund automatically applied to their accounts",
+            "B": "They are encouraged to skip exercise for that week to avoid injuries",
+            "C": "They will have to attend the orientation session before June tenth",
+            "D": "They can continue exercising at no extra cost using Hadley Recreation"
+          },
+          "answer": "D",
+          "explanation": "通告说年卡持有人可免费使用 Hadley，故推断他们可以照常锻炼且不需额外付费，D 正确。A 无依据；B 与通告精神相反；C 把日期弄反。",
+          "distractor_types": {
+            "A": "unrelated_inference",
+            "B": "reversed_intent",
+            "C": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "la_r1_routine-20260531-190444_3",
+      "context": "logistics",
+      "situation": "new bike-share station locations",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "Attention students and staff. Campus Transportation is pleased to announce three additional bike-share stations that will be activated this Friday morning. The new stations are located outside Robertson Hall, behind the Westmoreland Library, and at the south entrance of the Athletic Complex. Each station holds twelve bikes and supports the same mobile application currently used for the existing stations. Riders are reminded to return bikes to any official station within sixty minutes to avoid an overtime fee of three dollars per hour. A printable map of all stations is available on the transportation office website, and questions may be directed to Ms. Bertram at the campus mobility desk.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To remind riders of the rules for returning bikes on time",
+            "B": "To explain why the bike-share fee structure was recently revised",
+            "C": "To announce three new bike-share stations activating this Friday",
+            "D": "To recruit volunteers for maintaining the mobile bike-share application"
+          },
+          "answer": "C",
+          "explanation": "通告主要宣布周五启用的三个新站点，C 正确。A 只是辅助提醒；B 与通告无关；D 与通告无关。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about a rider who keeps a bike for ninety minutes?",
+          "options": {
+            "A": "The rider would owe an overtime fee for keeping the bike too long",
+            "B": "The rider would receive a free bonus credit for extended usage",
+            "C": "The rider would be reported to the campus mobility office automatically",
+            "D": "The rider would be required to return the bike to its original station"
+          },
+          "answer": "A",
+          "explanation": "通告说超过 60 分钟会有 3 美元每小时的超时费，所以 90 分钟需要交费，A 正确。B 与通告相反；C 过度推断；D 把要求弄错（任何官方站点都可以）。",
+          "distractor_types": {
+            "B": "reversed_intent",
+            "C": "over_inference",
+            "D": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "la_r1_routine-20260531-190444_4",
+      "context": "logistics",
+      "situation": "campus shuttle route change due to construction",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "Good morning, riders. Beginning Monday, the campus shuttle's evening route will be temporarily modified because of construction on Maple Avenue. The shuttle will no longer stop at the Maple and Fifth crossing, and the South Quad stop will be moved one block east. Service to the medical center and the off-campus apartments will continue without change. Buses will run every twenty minutes between six o'clock in the evening and midnight. Riders are encouraged to check the transit app for live updates, and additional staff will be at the main stop on Monday evening to answer questions about the new route.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To explain a recent fare increase on the evening shuttle service",
+            "B": "To recruit student riders to help survey other commuters",
+            "C": "To announce that the shuttle will stop running entirely next week",
+            "D": "To inform riders of a temporary route change caused by construction"
+          },
+          "answer": "D",
+          "explanation": "通告主要说明因施工而临时调整路线，D 正确。A 与通告无关；B 与通告无关；C 把临时改道夸大为停运。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "unrelated_inference",
+            "C": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "According to the announcement, what is changing about the South Quad stop?",
+          "options": {
+            "A": "The stop will be eliminated entirely from the evening route",
+            "B": "The stop will be relocated one block east during construction",
+            "C": "The stop will be served only on weekdays for the next month",
+            "D": "The stop will be moved to a different building's lobby entrance"
+          },
+          "answer": "B",
+          "explanation": "通告明确说南广场站点东移一个街区，B 正确。A 把改动夸大为取消；C 与通告无关；D 与通告无关。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "la_r1_routine-20260531-190444_5",
+      "context": "guest_speaker",
+      "situation": "industry professional speaking about career paths",
+      "speaker_role": "professor",
+      "difficulty": "easy",
+      "announcement": "Hello, students. The Career Development Office is delighted to host Ms. Carla Brennan, senior product manager at a major technology firm, for an evening talk on career paths in the technology sector. The event will take place Wednesday at six-thirty in Holloway Auditorium. Ms. Brennan will discuss how she transitioned from a biology background into product management and will offer practical advice for students considering similar shifts. A brief question-and-answer period will follow the talk, and copies of her recent book will be available for purchase at the entrance. Light snacks will be provided, and seating is on a first-come basis.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce an evening talk by a guest speaker on technology careers",
+            "B": "To promote the sale of Ms. Brennan's recently published book",
+            "C": "To advertise the Career Development Office's spring internship program",
+            "D": "To request student volunteers to help organize the auditorium event"
+          },
+          "answer": "A",
+          "explanation": "通告主要宣布关于职业道路的讲座，A 正确。B 是附带细节；C 与通告无关；D 与通告无关。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "According to the announcement, what topic will Ms. Brennan focus on?",
+          "options": {
+            "A": "Advanced research methods used in modern biology laboratories",
+            "B": "Investment opportunities in early-stage technology startups",
+            "C": "Her shift from biology into product management work",
+            "D": "Strategies for negotiating starting salaries in technology firms"
+          },
+          "answer": "C",
+          "explanation": "通告说她会谈从生物学背景到产品经理的转型，C 正确。A 把背景错放为主题；B 与通告无关；D 与通告无关。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
     }
   ]
 }

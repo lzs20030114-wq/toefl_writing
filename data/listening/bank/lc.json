@@ -2882,6 +2882,486 @@
         }
       ],
       "audio_url": "/api/audio/conversation/lc_routine-20260531-184112_5.mp3"
+    },
+    {
+      "id": "lc_r1_routine-20260531-190444_1",
+      "context": "plans_social",
+      "situation": "two friends planning a birthday surprise for a classmate",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hey, are we still doing something for Daniela's birthday on Thursday?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, I was thinking we could do a surprise at the study lounge after her seminar."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh, that's a cute idea, but the lounge gets really loud around five. People are leaving the library. It'd ruin the moment."
+        },
+        {
+          "speaker": "Man",
+          "text": "Hmm, fair point. What if we did the kitchenette in our dorm instead? It's quieter and there's a fridge for the cake."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Better. But Daniela never goes to your dorm. She'd be suspicious if you randomly invited her."
+        },
+        {
+          "speaker": "Man",
+          "text": "Right. Okay, here's a thought — what if you ask her to come help you with the chemistry homework, and I just show up with the cake when she gets there?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "That's perfect, actually. She offered to help me last week, so it won't seem weird."
+        },
+        {
+          "speaker": "Man",
+          "text": "Great. I'll handle the cake and decorations. Can you message everyone else and tell them to be at your room by four-thirty?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Sure. And I'll text Daniela tonight about the homework so she's expecting it."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "How to organize a surprise birthday celebration for their friend",
+            "B": "How to finish their chemistry homework before Thursday evening",
+            "C": "How to find a quiet place to study during the busy week",
+            "D": "How to convince Daniela to move out of her current dorm"
+          },
+          "answer": "A",
+          "explanation": "对话主要讨论如何为 Daniela 安排惊喜生日派对，A 正确。B 把化学作业当成主题（其实只是借口）；C 把安静地点过度概括；D 与对话无关。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "wrong_topic",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "She will go pick up the birthday cake from the bakery",
+            "B": "She will go finish her chemistry homework before the seminar",
+            "C": "She will text Daniela about meeting to do homework together",
+            "D": "She will go decorate her dorm room before everyone arrives"
+          },
+          "answer": "C",
+          "explanation": "女生最后说她今晚会给 Daniela 发消息约一起做作业，C 正确。A 是男生负责；B 不是即将的行动；D 与对话中分工不符。",
+          "distractor_types": {
+            "A": "misattributed",
+            "B": "related_but_not_stated",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_r1_routine-20260531-190444_2",
+      "context": "campus_dorm_life",
+      "situation": "two students comparing how they get to campus — bike, bus, or walk",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "How's the new apartment? You moved off campus this semester, right?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, it's been great except for the commute. I'm trying to figure out the best way to get to my morning class."
+        },
+        {
+          "speaker": "Woman",
+          "text": "How are you getting there now?"
+        },
+        {
+          "speaker": "Man",
+          "text": "I've been taking the bus. It's reliable, but it takes thirty-five minutes because of all the stops."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Have you thought about biking? I bike every day. It's only twenty minutes if you take the riverside trail."
+        },
+        {
+          "speaker": "Man",
+          "text": "I don't have a bike, and honestly, on rainy days that sounds miserable."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Fair. The bus is probably your best bet for now, then. Walking would take forever from your place — at least forty-five minutes."
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, I tried walking once. Never again."
+        },
+        {
+          "speaker": "Woman",
+          "text": "You could rent one of those campus share bikes by the month. Then on nice days, you switch to biking, and you keep the bus pass for bad weather."
+        },
+        {
+          "speaker": "Man",
+          "text": "Oh, that's actually a smart compromise. I'll look into it."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "How long does it take the man to reach campus by bus?",
+          "options": {
+            "A": "About twenty minutes each morning",
+            "B": "About thirty-five minutes each morning",
+            "C": "About forty-five minutes each morning",
+            "D": "About one full hour each morning"
+          },
+          "answer": "B",
+          "explanation": "男生说坐巴士要 35 分钟，B 正确。A 是女生骑车的时间；C 是步行时间；D 与对话无关。",
+          "distractor_types": {
+            "A": "misattributed",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do next?",
+          "options": {
+            "A": "He will sell his new bus pass to a different student",
+            "B": "He will move back to his old on-campus dormitory soon",
+            "C": "He will buy a brand-new bike and a rain jacket today",
+            "D": "He will look into renting a monthly campus share bike"
+          },
+          "answer": "D",
+          "explanation": "男生最后说会去了解共享单车月租，D 正确。A 与对话无关；B 与对话相反；C 把买车与租车混淆，男生明确说不想买车。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "B": "reversed_situation",
+            "C": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_r1_routine-20260531-190444_3",
+      "context": "errands_service",
+      "situation": "two friends figuring out a bus or train schedule for a day trip",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Okay, so for the day trip to Riverton on Saturday, I'm looking at the transit schedule and it's confusing."
+        },
+        {
+          "speaker": "Man",
+          "text": "Why? What's the issue?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Well, the train leaves at seven-fifteen, which is great, but it only runs to the old Riverton station, which is forty-five minutes from the actual downtown."
+        },
+        {
+          "speaker": "Man",
+          "text": "Oh. And the bus?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "The bus goes straight to downtown but doesn't leave until nine-thirty. By the time we arrive, it'll be after eleven."
+        },
+        {
+          "speaker": "Man",
+          "text": "That cuts our day short. The galleries close at six."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Right. There's also a ride-share with another student club, but you have to commit by Wednesday and they're full."
+        },
+        {
+          "speaker": "Man",
+          "text": "Already? Okay. What if we just took the train and grabbed a taxi from the old station?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "I checked. Taxis from there are expensive — like forty dollars each. That's almost double the train ticket."
+        },
+        {
+          "speaker": "Man",
+          "text": "Hmm. You know what, the train is fine. Let's just split the taxi and treat ourselves. We'll still have most of the day for the galleries."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Yeah, okay. Splitting it makes it manageable."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "Which gallery in Riverton they should visit first on Saturday",
+            "B": "Whether to join a student club that runs a ride-share program",
+            "C": "How to choose a transportation option for their Saturday day trip",
+            "D": "Why the train schedule changed recently for the Riverton route"
+          },
+          "answer": "C",
+          "explanation": "他们主要讨论如何选择周六的交通方式，C 正确。A 是旁支细节；B 只是被排除的选项之一；D 与对话无关。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "wrong_topic",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the speakers most likely do for the trip?",
+          "options": {
+            "A": "They will take the early train and share a taxi together from the station",
+            "B": "They will leave on the nine-thirty bus and cut their gallery visit short",
+            "C": "They will wait for a spot to open up in the student club ride-share",
+            "D": "They will cancel the trip and reschedule for the following weekend"
+          },
+          "answer": "A",
+          "explanation": "男生提议坐火车再合租出租车，女生同意分摊费用，A 正确。B 与最终决定不符；C 已被排除（满了）；D 没有讨论取消。",
+          "distractor_types": {
+            "B": "rejected_option",
+            "C": "rejected_option",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_r1_routine-20260531-190444_4",
+      "context": "plans_social",
+      "situation": "two students planning what cheese and food to buy for a dinner party",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Okay, for Friday's dinner party, I'm doing a cheese board. What should I get?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Definitely something soft, like brie. And then a harder one — sharp cheddar or maybe gouda."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Good. I was thinking three cheeses total. What's the third one?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Something blue, if people are into it. But blue cheese is risky — not everyone likes it."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Yeah, maybe skip it. What about a goat cheese instead?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Oh, that's safer. People generally like goat cheese. Get the kind with herbs on the outside."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Done. What else? I need crackers, obviously."
+        },
+        {
+          "speaker": "Man",
+          "text": "Crackers, and grapes. Grapes are essential. And get some honey for the goat cheese — trust me."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Honey, really? Okay, I'll trust you on that. What about meat? Should I add prosciutto?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Yes, but only a small package. People go for the cheese first."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man specifically recommend buying for the goat cheese?",
+          "options": {
+            "A": "A small jar of honey to serve with it",
+            "B": "A wedge of imported gouda for the pairing",
+            "C": "A package of dried fruit and salted nuts",
+            "D": "A bottle of olive oil to brush on top"
+          },
+          "answer": "A",
+          "explanation": "男生明确建议买蜂蜜搭配山羊奶酪，A 正确。B 把另一种奶酪误置；C 与对话无关；D 与对话无关。",
+          "distractor_types": {
+            "B": "misattributed",
+            "C": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about why the speakers decided against blue cheese?",
+          "options": {
+            "A": "Blue cheese was unavailable at the local grocery store",
+            "B": "Blue cheese might not appeal to all of their guests",
+            "C": "Blue cheese was too expensive for the small party budget",
+            "D": "Blue cheese spoils more quickly than the other selections"
+          },
+          "answer": "B",
+          "explanation": "男生说蓝奶酪有风险，并非人人喜欢，所以推断它可能不合所有客人口味，B 正确。A 与对话无关；C 与对话无关；D 与对话无关。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "C": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_r1_routine-20260531-190444_5",
+      "context": "campus_dorm_life",
+      "situation": "two students chatting about a part-time job one just started at a factory",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "I haven't seen you all week. How's the new job going?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Honestly, it's been an adjustment. I started that part-time job at the bottling plant on Monday."
+        },
+        {
+          "speaker": "Woman",
+          "text": "The bottling plant? I didn't think you'd take something like that."
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, well, the pay is much better than the campus jobs. Sixteen an hour, plus a meal voucher each shift."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Wow, that's good. But what about the schedule? Doesn't it conflict with your classes?"
+        },
+        {
+          "speaker": "Man",
+          "text": "That's the part I'm still figuring out. They want me on the four-to-eight shift Monday through Thursday. My Tuesday lab usually runs until five."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oof. Can you switch labs?"
+        },
+        {
+          "speaker": "Man",
+          "text": "I emailed the professor about moving to the Wednesday section. She hasn't replied yet, but I'm hoping she will."
+        },
+        {
+          "speaker": "Woman",
+          "text": "If not, can you switch shifts at work? Like, do Friday instead of Tuesday?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Maybe. I haven't asked. I was waiting to hear back from the professor first."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "How the man is adjusting to his new part-time factory job",
+            "B": "How the man should choose between two competing internships",
+            "C": "Why the campus jobs typically pay less than off-campus jobs",
+            "D": "How the woman could find part-time work at the same plant"
+          },
+          "answer": "A",
+          "explanation": "对话主要讨论男生新工作的适应情况，特别是与课程的冲突，A 正确。B 偏离主题；C 把片段细节当主题；D 与对话无关。",
+          "distractor_types": {
+            "B": "wrong_topic",
+            "C": "too_narrow",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do next regarding the schedule conflict?",
+          "options": {
+            "A": "He will quit the new job and apply to campus positions",
+            "B": "He will wait for the professor's reply before contacting his manager",
+            "C": "He will immediately swap his Tuesday shift to a Friday slot",
+            "D": "He will drop the Tuesday lab and retake it next semester"
+          },
+          "answer": "B",
+          "explanation": "男生说在听到教授回复前不打算和工厂谈，B 正确。A 与对话无关；C 与他说的“先等教授”相反；D 与对话无关。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "C": "reversed_logic",
+            "D": "over_inference"
+          }
+        }
+      ]
     }
   ]
 }

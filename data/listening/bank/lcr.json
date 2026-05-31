@@ -3001,6 +3001,174 @@
         "C": "semantic_association_trap"
       },
       "audio_url": "/api/audio/choose-response/lcr_routine-20260531-184112_8.mp3"
+    },
+    {
+      "id": "lcr_r1_routine-20260531-190444_1",
+      "context": "campus_academic",
+      "situation": "student asking a librarian about a book or resource",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Why is this database missing from the search results?",
+      "options": {
+        "A": "Actually, that's only available through the new portal.",
+        "B": "Yes, I read several articles from it last week.",
+        "C": "The library opens at eight every morning.",
+        "D": "It contains thousands of recent journal articles."
+      },
+      "answer": "A",
+      "explanation": "正确答案 A 用 marker（Actually）引出间接信息，解释了搜索结果中找不到的原因。B 直接回答“是”并补充无关信息，对“why”是错位回答；C 是营业时间，与问题无关；D 描述数据库内容，未解释为何缺失。",
+      "distractor_types": {
+        "B": "wrong_question_type",
+        "C": "off_topic",
+        "D": "semantic_association_trap"
+      }
+    },
+    {
+      "id": "lcr_r1_routine-20260531-190444_2",
+      "context": "campus_academic",
+      "situation": "student discussing a presentation topic with partner",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Are you fine with cutting the second case study?",
+      "options": {
+        "A": "I'm fine with the cafeteria menu changes.",
+        "B": "What if we kept it but trimmed it a bit?",
+        "C": "Yes, I always finish my reading on time.",
+        "D": "The second one was hard to find online."
+      },
+      "answer": "B",
+      "explanation": "正确答案 B 用反问推进对话，提出折中方案。A 把 fine 误用为食堂相关内容；C 直接回答 yes 但接无关信息；D 谈案例的可获取性，未回应是否同意删除。",
+      "distractor_types": {
+        "A": "homophone_word_trap",
+        "C": "wrong_question_type",
+        "D": "semantic_association_trap"
+      }
+    },
+    {
+      "id": "lcr_r1_routine-20260531-190444_3",
+      "context": "general_daily",
+      "situation": "calling to check business hours",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "What hours are you open on the weekend?",
+      "options": {
+        "A": "I think the manager hires part-time staff.",
+        "B": "The store is on the corner of Elm.",
+        "C": "Sorry, we're closed for the long weekend.",
+        "D": "Yes, weekends are when I do my shopping."
+      },
+      "answer": "C",
+      "explanation": "正确答案 C 用习惯表达直接说明情况——周末关门，间接回答了营业时间问题。A 谈招聘，与时间无关；B 谈地址，与时间无关；D 直接回答 yes 但答非所问。",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "semantic_association_trap",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "id": "lcr_r1_routine-20260531-190444_4",
+      "context": "campus_daily",
+      "situation": "student asking about dorm maintenance issue",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "The radiator in my room has been knocking all week.",
+      "options": {
+        "A": "Yes, the dining hall closes at nine tonight.",
+        "B": "The radio in the lounge plays old jazz.",
+        "C": "Most rooms have new energy-efficient windows.",
+        "D": "Please file a maintenance request at the desk."
+      },
+      "answer": "D",
+      "explanation": "正确答案 D 没有直接讨论敲击声，而是转向解决问题的途径，符合 context_shift 模式。A 与暖气无关；B 把 radiator 与 radio 谐音混淆；C 谈窗户但未回应暖气问题。",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "homophone_word_trap",
+        "C": "semantic_association_trap"
+      }
+    },
+    {
+      "id": "lcr_r1_routine-20260531-190444_5",
+      "context": "general_daily",
+      "situation": "making or rescheduling an appointment",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "How long does the cleaning appointment usually take?",
+      "options": {
+        "A": "Actually, it depends on how busy we are.",
+        "B": "Yes, the appointment has been confirmed already.",
+        "C": "The waiting room is just past the front desk.",
+        "D": "We provide complimentary tea during your visit."
+      },
+      "answer": "A",
+      "explanation": "正确答案 A 用 Actually 引出间接回答，说明时长不固定。B 直接回答 yes 但答非所问；C 谈地点；D 谈附加服务。",
+      "distractor_types": {
+        "B": "wrong_question_type",
+        "C": "off_topic",
+        "D": "semantic_association_trap"
+      }
+    },
+    {
+      "id": "lcr_r1_routine-20260531-190444_6",
+      "context": "campus_daily",
+      "situation": "roommate discussing weekend plans",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Where did you end up going for brunch?",
+      "options": {
+        "A": "Yes, brunch ran longer than I expected.",
+        "B": "Just that little place near the bookstore.",
+        "C": "I made pancakes for everyone last weekend.",
+        "D": "Brunch is my favorite meal of the day."
+      },
+      "answer": "B",
+      "explanation": "正确答案 B 用 Just 引出间接但确切的地点回答。A 直接回答 yes 但答非所问；C 谈做饭，地点不对；D 谈喜好，未回答地点。",
+      "distractor_types": {
+        "A": "wrong_question_type",
+        "C": "semantic_association_trap",
+        "D": "off_topic"
+      }
+    },
+    {
+      "id": "lcr_r1_routine-20260531-190444_7",
+      "context": "general_daily",
+      "situation": "arranging a ride or carpool with a friend",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "I might leave for the airport around four.",
+      "options": {
+        "A": "Yes, airports are pretty busy these days.",
+        "B": "My flight last month was delayed two hours.",
+        "C": "Want me to drive you and split the gas?",
+        "D": "I always pack my suitcase the night before."
+      },
+      "answer": "C",
+      "explanation": "正确答案 C 用反问推进对话，提议拼车，回应了对方的计划。A 直接回答 yes 但答非所问；B 谈过往航班，与计划无关；D 谈打包习惯，与请求无关。",
+      "distractor_types": {
+        "A": "wrong_question_type",
+        "B": "semantic_association_trap",
+        "D": "off_topic"
+      }
+    },
+    {
+      "id": "lcr_r1_routine-20260531-190444_8",
+      "context": "social",
+      "situation": "acknowledging someone's unavailability or schedule conflict",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Are you sure you can't make it on Friday?",
+      "options": {
+        "A": "Yes, the project deadline is on Friday.",
+        "B": "Friday is when the new store opens.",
+        "C": "I usually go running on Friday evenings.",
+        "D": "Actually, I might be able to swing by briefly."
+      },
+      "answer": "D",
+      "explanation": "正确答案 D 用 Actually 引出间接回应，表明可能可以短暂赴约。A 直接回答 yes 但增加无关信息；B 谈新店开张，与是否赴约无关；C 谈跑步习惯，与是否赴约无关。",
+      "distractor_types": {
+        "A": "wrong_question_type",
+        "B": "semantic_association_trap",
+        "C": "off_topic"
+      }
     }
   ]
 }

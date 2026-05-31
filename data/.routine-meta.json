@@ -1,17 +1,17 @@
 {
-  "session_id": "routine-20260531-184112",
-  "completed_at": "2026-05-31T19:25:00.000Z",
-  "duration_minutes": 44,
-  "highlight": "首次出现 sociology/aging populations 学术阅读；BS 全部 20 条全新校园语境；Discussion 新增 marine biology 海洋季节性禁渔议题",
+  "session_id": "routine-20260531-190444",
+  "completed_at": "2026-05-31T19:24:00.000Z",
+  "duration_minutes": 19,
+  "highlight": "PASS 1 全 12 个题库 70/70 全数通过；BS 新增 2 套 20 题校园对话；首次出现 geology/plate tectonics 学术阅读与 astronomy/dark matter 学术听力",
   "commit_sha": "",
   "results": {
     "bs": {
       "generated": 20,
-      "accepted": 10,
-      "topics": ["campus_life", "indirect_questions", "negation", "comparatives"],
+      "accepted": 20,
+      "topics": ["campus_life", "indirect_questions", "negation", "comparatives", "passive", "wh_questions"],
       "favorite": {
-        "prompt": "Tell me what the librarian told you about reserves.",
-        "answer": "She mentioned that the textbook sat behind the front counter."
+        "prompt": "Tell me about the new study area in the union.",
+        "answer": "The lounge feels much quieter than the basement library."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -19,10 +19,10 @@
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["sociology", "business", "education", "marine biology"],
+      "topics": ["computer science", "sociology", "public health", "environmental science"],
       "favorite": {
-        "subtopic": "marine biology",
-        "preview": "We've been examining how coastal nations manage seafood demand under climate stress. Lately, several Pacific and Europ"
+        "subtopic": "public health",
+        "preview": "For this week's discussion, let's think about a question that keeps emerging in campus wellness committees: should u"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -32,30 +32,30 @@
       "accepted": 4,
       "topics": ["服务与活动", "校园学业", "消费售后", "日常社交"],
       "favorite": {
-        "subtopic": "服务与活动",
-        "preview": "You recently signed up for a weekend pottery workshop at the Cedarwood Community Studio."
+        "subtopic": "消费售后",
+        "preview": "You ordered a refurbished noise-canceling headset from Audiograph Electronics three weeks ago. The right earcup produces persistent crackling and the carrying case was missing from the shipment."
       },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ap": {
       "generated": 5,
-      "accepted": 3,
-      "topics": ["sociology/aging populations", "history/early agriculture", "anthropology/early tool use"],
+      "accepted": 5,
+      "topics": ["biology/animal behavior", "environmental_science/wind energy", "history/ancient civilizations", "geology/plate tectonics", "psychology/sleep psychology"],
       "favorite": {
-        "subtopic": "sociology/aging populations",
-        "preview": "Demographic dividend describes a temporary economic boost a country experiences when its working-age population grows"
+        "subtopic": "geology/plate tectonics",
+        "preview": "Subduction zones are regions where one tectonic plate slides beneath another and descends slowly into the mantle."
       },
       "retried_after_fail": false,
-      "failure_reason": "2 items rejected — one missing [■] markers (insert_text), one with correct-as-longest pattern (3/5)"
+      "failure_reason": ""
     },
     "reading-ctw": {
       "generated": 6,
       "accepted": 6,
-      "topics": ["biology/marine biology", "environmental_science/invasive species", "psychology/learning", "history/industrial revolution", "geology/ocean floor", "astronomy/exoplanets"],
+      "topics": ["biology/ecosystems", "environmental_science/carbon cycle", "psychology/habit formation", "history/ancient Egypt", "geology/river deltas", "astronomy/satellite technology"],
       "favorite": {
-        "subtopic": "biology/marine biology",
-        "preview": "Sea otters use stones as tools to break open shells and reach the soft meat inside. Most of them carry a favorite sto"
+        "subtopic": "biology/ecosystems",
+        "preview": "Mangrove forests form along sheltered tropical coastlines where saltwater meets shifting layers of soft mud."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -63,10 +63,10 @@
     "reading-rdl-short": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["notice/elevator-closure", "email/club-rescheduled", "email/tutoring-confirm", "email/meal-plan-refund"],
+      "topics": ["notice/library-hours", "email/resume-review", "email/office-hours", "notice/elevator-service"],
       "favorite": {
-        "subtopic": "notice/elevator-closure",
-        "preview": "ATTENTION RESIDENTS — Elevator B in Henley Hall will be out of service from March 8 to March 12 for cable replacement"
+        "subtopic": "notice/library-hours",
+        "preview": "Spring Break Library Hours — The Anderson Library will operate on reduced hours from March 14 to March 20."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -74,10 +74,10 @@
     "reading-rdl-long": {
       "generated": 2,
       "accepted": 2,
-      "topics": ["menu/cafe-specials", "email/lab-coordination"],
+      "topics": ["email/radio-recruitment", "email/flu-shot-confirmation"],
       "favorite": {
-        "subtopic": "menu/cafe-specials",
-        "preview": "MAPLE GROVE STUDENT CAFÉ — STUDY-HOUR SPECIALS Served daily from 2:00 PM to 5:00 PM in the Student Union, Lower Level"
+        "subtopic": "email/radio-recruitment",
+        "preview": "Hi Briar, I'm writing to invite you to volunteer at WCRX, the student-run campus radio station, for the spring semester."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -85,10 +85,10 @@
     "listening-lat": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["history/coffee houses", "biology/convergent evolution", "psychology/confirmation bias", "history/printing press"],
+      "topics": ["astronomy/dark matter", "geology/stalactite climate records", "environmental_science/carbon sequestration", "art_history/impressionist color theory"],
       "favorite": {
-        "subtopic": "history/coffee houses",
-        "preview": "Coffee houses played a remarkably important role in shaping European intellectual life during the seventeenth and eig"
+        "subtopic": "astronomy/dark matter",
+        "preview": "Okay, today I want to talk about something that's been puzzling astronomers for decades. The math just doesn't add up."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -96,10 +96,10 @@
     "listening-lc": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["errands_service/urban_sketching", "recommendations_opinions/history_podcast", "errands_service/houseplant_care", "recommendations_opinions/documentary", "plans_social/weekend_hike"],
+      "topics": ["plans_social/birthday-surprise", "campus_dorm_life/commute-options", "errands_service/day-trip-transit", "plans_social/cheese-board", "campus_dorm_life/factory-job"],
       "favorite": {
-        "subtopic": "errands_service/urban_sketching",
-        "preview": "How's your urban-sketching elective going? I'm thinking of taking it next semester."
+        "subtopic": "errands_service/day-trip-transit",
+        "preview": "Okay, so for the day trip to Riverton on Saturday, I'm looking at the transit schedule and it's confusing."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -107,10 +107,10 @@
     "listening-la": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["academic_event/symposium", "logistics/shuttle-reroute", "facility_change/hall-reopening", "facility_change/summer-dining", "campus_activity/art-market"],
+      "topics": ["academic_event/showcase", "facility_change/cardio-equipment", "logistics/bike-share-stations", "logistics/shuttle-construction", "guest_speaker/career-paths"],
       "favorite": {
-        "subtopic": "academic_event/symposium",
-        "preview": "Good afternoon, students. The Center for Interdisciplinary Studies is now accepting paper proposals for our spring sy"
+        "subtopic": "facility_change/cardio-equipment",
+        "preview": "Good afternoon, members of the campus community. The Recreation Center will install a new set of cardio and strength equipment between June second and June ninth."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -118,10 +118,10 @@
     "listening-lcr": {
       "generated": 8,
       "accepted": 8,
-      "topics": ["campus_daily/shuttle", "general_daily/ride", "social/schedule-conflict", "social/scholarship-news", "campus_academic/presentation", "campus_academic/librarian", "campus_academic/office-hours", "campus_daily/lost-notebook"],
+      "topics": ["campus_academic/database", "campus_academic/case-study", "general_daily/business-hours", "campus_daily/radiator", "general_daily/cleaning", "campus_daily/brunch", "general_daily/ride-share", "social/availability"],
       "favorite": {
-        "subtopic": "campus_academic/office-hours",
-        "preview": "Have you decided when your office hours will move?"
+        "subtopic": "campus_daily/radiator",
+        "preview": "The radiator in my room has been knocking all week."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -129,10 +129,10 @@
     "speaking-repeat": {
       "generated": 3,
       "accepted": 3,
-      "topics": ["Residence Hall Move-In", "Grocery Store Help", "Dining Hall Tour"],
+      "topics": ["Travel Booking", "Salad Making", "Watercolor Painting"],
       "favorite": {
-        "subtopic": "Residence Hall Move-In",
-        "preview": "Mailboxes are located by the front entrance."
+        "subtopic": "Watercolor Painting",
+        "preview": "First, prepare your watercolor palette."
       },
       "retried_after_fail": false,
       "failure_reason": ""

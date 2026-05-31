@@ -1,37 +1,15 @@
 {
-  "session_id": "routine-20260531-184112",
-  "generated_at": "2026-05-31T18:58:07.226Z",
+  "session_id": "routine-20260531-190444",
+  "generated_at": "2026-05-31T19:24:53.377Z",
   "needs_retry": true,
   "overall_scores": {
-    "diversity": 96,
-    "quality": 92
+    "diversity": 95,
+    "quality": 90
   },
   "retry_banks": [
     {
-      "bank": "reading-ap",
-      "diversity_score": 100,
-      "diversity_threshold": 85,
-      "quality_score": 70,
-      "quality_threshold": 90,
-      "failures": [
-        "质量 70 < 90"
-      ],
-      "diversity_breakdown": [
-        "话题组合 5/5",
-        "学科 5/5"
-      ],
-      "quality_breakdown": [
-        "词数 2/5",
-        "段落数 5/5"
-      ],
-      "hints": [
-        "质量校验有偏差: 词数 2/5, 段落数 5/5 — recheck schema compliance"
-      ],
-      "items_to_supplement": 3
-    },
-    {
       "bank": "reading-rdl-short",
-      "diversity_score": 80,
+      "diversity_score": 100,
       "diversity_threshold": 80,
       "quality_score": 75,
       "quality_threshold": 85,
@@ -40,7 +18,7 @@
       ],
       "diversity_breakdown": [
         "话题 4/4",
-        "notice 1 · email 3"
+        "notice 2 · email 2"
       ],
       "quality_breakdown": [
         "词数 3/4"
@@ -52,21 +30,23 @@
     },
     {
       "bank": "reading-rdl-long",
-      "diversity_score": 80,
+      "diversity_score": 60,
       "diversity_threshold": 70,
       "quality_score": 50,
       "quality_threshold": 85,
       "failures": [
+        "多样性 60 < 70",
         "质量 50 < 85"
       ],
       "diversity_breakdown": [
         "话题 2/2",
-        "notice 0 · email 1"
+        "notice 0 · email 2"
       ],
       "quality_breakdown": [
         "词数 1/2"
       ],
       "hints": [
+        "多样性 < gate — choose distinct topic/subtopic combos; avoid same discipline twice",
         "质量校验有偏差: 词数 1/2 — recheck schema compliance"
       ],
       "items_to_supplement": 1
@@ -75,19 +55,19 @@
       "bank": "listening-lc",
       "diversity_score": 100,
       "diversity_threshold": 72,
-      "quality_score": 60,
+      "quality_score": 0,
       "quality_threshold": 80,
       "failures": [
-        "质量 60 < 80"
+        "质量 0 < 80"
       ],
       "diversity_breakdown": [
         "distinct openings 5/5"
       ],
       "quality_breakdown": [
-        "conv words 68-105: 3/5"
+        "conv words 68-105: 0/5"
       ],
       "hints": [
-        "质量校验有偏差: conv words 68-105: 3/5 — recheck schema compliance"
+        "质量校验有偏差: conv words 68-105: 0/5 — recheck schema compliance"
       ],
       "items_to_supplement": 3
     }
