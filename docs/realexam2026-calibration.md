@@ -85,9 +85,21 @@ Current bank = `data/emailWriting/prompts.json` (n=139). Target = realExam2026 E
 | bullets / task points | 3 | 3 | 0 |
 | exactly-3-bullets % | 100% | 100% | 0 |
 
-**Read:** no calibration needed. The existing prompt target (33–55 words / mean 39,
-3 goals) already matches the 2026改后 format. No change made (IRON RULE — don't
-"fix" what's on-target).
+**Read (first pass):** scenario length + bullet count already on-target.
+
+**Deeper pass (eval-spec docs/eval-spec/email.md) — two real gaps fixed 2026-05-31:**
+- **Topic category**: real is ~65% Services&Events/leisure (gyms/hotels/restaurants/
+  concerts/trips/events), gen only ~6.5% (it over-produced Workplace 0.20 + Community
+  0.15 the real exam barely has). → `EMAIL_CATEGORIES` rebalanced: new "Services &
+  Events" 0.42, Academic 0.20, Workplace 0.20→0.04, Community 0.15→0.03.
+- **Recipient form**: 32% of gen used forms the real exam NEVER uses (full "First
+  Last", bare org "Customer Service"). → recipient rule → Title+surname ~82% /
+  friend-first-name ~18% ONLY, banned First-Last + org addressees.
+- length + vocab already on-target (scenario 42w/4.94 char vs real 39w/4.83) — no change.
+
+**Test batch** `calib-email-20260531` (Claude, tagged): Title+surname 5/6, banned-form
+0, 3-bullet 6/6, services topic 5/6, subject 4.2w — verified. (scenario 32w slightly
+short — nudge later.)
 
 ## Reading · AP — Academic Passage   `dev-reading.mjs`   ⚠️ data caveat
 

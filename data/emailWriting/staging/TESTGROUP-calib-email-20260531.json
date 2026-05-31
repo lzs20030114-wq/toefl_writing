@@ -1,0 +1,51 @@
+{
+  "_meta": {
+    "test_group": "calib-email-20260531",
+    "generated_by": "claude (calibration test of recalibrated Email prompt)",
+    "note": "TEST batch verifying the 2026改后 Email recalibration (Services&Events ~65%, Title+surname/friend-first-name recipients only, 3-bullet Describe→Explain→Suggest/Ask arc, scenario ~39w). Purge: scripts/ops/purge-test-groups.mjs --delete calib-email-20260531"
+  },
+  "items": [
+    {
+      "id": "TEST_em_1", "test_group": "calib-email-20260531", "topic": "服务与活动",
+      "scenario": "You recently joined the campus fitness center, but several of the machines you wanted to use have been out of order for weeks with no explanation. You want to raise this with the manager.",
+      "direction": "Write an email to the fitness center manager, Ms. Howard. In your email, do the following:",
+      "goals": ["Describe the equipment problems you have encountered.", "Explain how this has affected your workouts.", "Suggest how the center could keep members informed about repairs."],
+      "to": "Ms. Howard", "subject": "Out-of-order gym equipment"
+    },
+    {
+      "id": "TEST_em_2", "test_group": "calib-email-20260531", "topic": "服务与活动",
+      "scenario": "You stayed at a hotel during a campus visit and generally liked the room, but a few things went wrong during your stay. You want to send feedback to the hotel manager.",
+      "direction": "Write an email to the hotel manager, Mr. Davies. In your email, do the following:",
+      "goals": ["Describe what you enjoyed about your stay.", "Explain the problems you experienced with the room.", "Suggest how the hotel could make guests' stays more comfortable."],
+      "to": "Mr. Davies", "subject": "Feedback on my recent stay"
+    },
+    {
+      "id": "TEST_em_3", "test_group": "calib-email-20260531", "topic": "服务与活动",
+      "scenario": "You bought tickets online for a concert by the university orchestra, but the confirmation email never arrived and the event is this weekend. You want to contact the box office.",
+      "direction": "Write an email to the box office, Ms. Klein. In your email, do the following:",
+      "goals": ["Describe the problem with your ticket order.", "Ask whether your tickets can still be confirmed in time.", "Inquire about what to bring to collect them at the door."],
+      "to": "Ms. Klein", "subject": "Missing ticket confirmation"
+    },
+    {
+      "id": "TEST_em_4", "test_group": "calib-email-20260531", "topic": "日常社交",
+      "scenario": "You and a friend are joining a weekend trip organized by the campus travel club, and you need to settle the details before the sign-up deadline. You want to email your friend.",
+      "direction": "Write an email to your friend Daniel. In your email, do the following:",
+      "goals": ["Suggest which of the trip options you would prefer.", "Explain why that option fits your schedule better.", "Ask what your friend would like to do about transportation."],
+      "to": "Daniel", "subject": "Planning our weekend trip"
+    },
+    {
+      "id": "TEST_em_5", "test_group": "calib-email-20260531", "topic": "校园学业",
+      "scenario": "You recently submitted your term paper through the course website, but because of a technical error an earlier draft was uploaded instead of your final version. You want to email your professor.",
+      "direction": "Write an email to your professor, Professor Reed. In your email, do the following:",
+      "goals": ["Explain what happened with your submission.", "Describe the steps you have already taken to fix it.", "Ask whether you may resubmit the correct version."],
+      "to": "Professor Reed", "subject": "Issue with my submitted paper"
+    },
+    {
+      "id": "TEST_em_6", "test_group": "calib-email-20260531", "topic": "消费售后",
+      "scenario": "You ordered catering from a local restaurant for a student club event, but part of the order was missing and the rest arrived late. You want to write to the restaurant manager.",
+      "direction": "Write an email to the restaurant manager, Ms. Alvarez. In your email, do the following:",
+      "goals": ["Describe what went wrong with the order.", "Explain how it affected your event.", "Request a partial refund or a discount on a future order."],
+      "to": "Ms. Alvarez", "subject": "Problem with our catering order"
+    }
+  ]
+}
