@@ -137,6 +137,550 @@
       ],
       "difficulty": "easy",
       "id": "rdl-short_mpveuehk_3"
+    },
+    {
+      "genre": "email",
+      "variant": "short",
+      "text": "Hi Jordan,\n\nA package arrived for you and is being held at the Lincoln Hall mailroom. Please pick it up by Friday, May 9. Bring your student ID. A $5 storage fee applies after that date.\n\nBest,\nMaya, Resident Assistant",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what should Jordan bring to the mailroom?",
+          "options": {
+            "A": "A delivery slip",
+            "B": "A storage receipt",
+            "C": "A student ID",
+            "D": "A signed form"
+          },
+          "correct_answer": "C",
+          "explanation": "The email instructs Jordan to bring a student ID when picking up the package."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about picking up the package on May 10?",
+          "options": {
+            "A": "A discount would be offered",
+            "B": "A charge would be added",
+            "C": "A package would be returned",
+            "D": "A receipt would be required"
+          },
+          "correct_answer": "B",
+          "explanation": "Since a $5 storage fee applies after May 9, picking up on May 10 would mean a charge is added."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mpvfq0rk_0"
+    },
+    {
+      "genre": "notice",
+      "variant": "short",
+      "text": "NOTICE: Fire alarms in Bradley Residence Hall will be tested on Tuesday, October 14, from 10:00 AM to 11:00 AM. Residents are advised that alarms will sound intermittently. No evacuation is required during this scheduled testing. Direct questions to the Facilities Office.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, when will the testing take place?",
+          "options": {
+            "A": "On Tuesday morning",
+            "B": "On Tuesday evening",
+            "C": "On Thursday morning",
+            "D": "On Thursday evening"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice states testing occurs on Tuesday, October 14, from 10:00 AM to 11:00 AM, which is morning."
+        },
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what should residents do during the testing?",
+          "options": {
+            "A": "Contact the Facilities Office",
+            "B": "Silence the alarms manually",
+            "C": "Gather in the lobby",
+            "D": "Remain in the building"
+          },
+          "correct_answer": "D",
+          "explanation": "The notice specifies that no evacuation is required, meaning residents should remain in the building."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mpvfq0rk_1"
+    },
+    {
+      "genre": "social_media",
+      "variant": "short",
+      "text": "The Rolling Bites truck is parked by the Student Union today until 3 PM, and the tacos are amazing! They're running a special: any taco for just $3. Cash or card accepted. Don't miss it before they roll out!",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the post, what is being offered for $3?",
+          "options": {
+            "A": "Any drink",
+            "B": "Any taco",
+            "C": "Any combo",
+            "D": "Any side"
+          },
+          "correct_answer": "B",
+          "explanation": "The post states the special is any taco for just $3."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about visiting the truck at 4 PM today?",
+          "options": {
+            "A": "The line would be shorter",
+            "B": "The prices would increase",
+            "C": "The truck would be gone",
+            "D": "The menu would change"
+          },
+          "correct_answer": "C",
+          "explanation": "Since the truck is parked only until 3 PM, it would have left by 4 PM."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mpvfq0rk_2"
+    },
+    {
+      "genre": "social_media",
+      "variant": "short",
+      "text": "Heads up, everyone! The Tech Commons lab is offering free printing through Friday, May 16. After that, the usual $0.10 per page returns. Great chance to print those final project handouts. Just swipe your ID at the front desk to start!",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the post, what must students do to begin printing?",
+          "options": {
+            "A": "Swipe their ID",
+            "B": "Pay a deposit",
+            "C": "Reserve a slot",
+            "D": "Email the desk"
+          },
+          "correct_answer": "A",
+          "explanation": "The post says to swipe your ID at the front desk to start printing."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about printing on Saturday, May 17?",
+          "options": {
+            "A": "Printing would be unavailable",
+            "B": "Printing would require approval",
+            "C": "Printing would be limited",
+            "D": "Printing would cost money"
+          },
+          "correct_answer": "D",
+          "explanation": "Since free printing ends Friday, May 16, and the $0.10 per page rate returns, printing on May 17 would cost money."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mpvfq0rk_3"
+    },
+    {
+      "genre": "notice",
+      "variant": "short",
+      "text": "NOTICE: The Hartwell Library study rooms may now be reserved online. Reservations are limited to two hours per group and must be made at least one day in advance. Rooms not claimed within fifteen minutes will be released. Visit the circulation desk for assistance.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, how far in advance must reservations be made?",
+          "options": {
+            "A": "At least one hour",
+            "B": "At least one day",
+            "C": "At least two days",
+            "D": "At least one week"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice states reservations must be made at least one day in advance."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about a group arriving twenty minutes late?",
+          "options": {
+            "A": "Their room would be released",
+            "B": "Their time would be extended",
+            "C": "Their fee would be waived",
+            "D": "Their booking would be saved"
+          },
+          "correct_answer": "A",
+          "explanation": "Since rooms not claimed within fifteen minutes are released, a group arriving twenty minutes late would lose their room."
+        }
+      ],
+      "difficulty": "medium",
+      "id": "rdl-short_mpvfq0rk_4"
+    },
+    {
+      "genre": "email",
+      "variant": "short",
+      "text": "Dear Sam,\n\nThe writing tutor you requested is available this Wednesday, April 9, at 2:00 PM in Room 215. Sessions last fifty minutes. Please reply to confirm, and bring a draft of your essay. We look forward to seeing you.\n\nRegards,\nThe Writing Center",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what is Sam asked to bring?",
+          "options": {
+            "A": "A draft essay",
+            "B": "A reading list",
+            "C": "A signed form",
+            "D": "A lab report"
+          },
+          "correct_answer": "A",
+          "explanation": "The email asks Sam to bring a draft of the essay to the session."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about the session if Sam does not reply?",
+          "options": {
+            "A": "It might not be held",
+            "B": "It would be rescheduled",
+            "C": "It would be extended",
+            "D": "It might be relocated"
+          },
+          "correct_answer": "A",
+          "explanation": "Since the email asks Sam to reply to confirm, the session might not be held without confirmation."
+        }
+      ],
+      "difficulty": "medium",
+      "id": "rdl-short_mpvfq0rk_5"
+    },
+    {
+      "genre": "advertisement",
+      "variant": "short",
+      "text": "USED TEXTBOOK SALE! This Saturday, March 8, from 9 AM to 1 PM in Marshall Hall, Room 100. Hundreds of titles priced from $5. Cash only. Sponsored by the Student Council. Arrive early for the best selection. All proceeds support campus clubs!",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the advertisement, how may buyers pay?",
+          "options": {
+            "A": "With cash only",
+            "B": "With card only",
+            "C": "With a check",
+            "D": "With an app"
+          },
+          "correct_answer": "A",
+          "explanation": "The advertisement states the sale is cash only."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about arriving when the sale opens?",
+          "options": {
+            "A": "Prices would be lower",
+            "B": "Selection would be better",
+            "C": "Entry would be free",
+            "D": "Parking would be easier"
+          },
+          "correct_answer": "B",
+          "explanation": "The ad advises arriving early for the best selection, so arriving at opening would mean a better selection."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mpvfq0rk_6"
+    },
+    {
+      "genre": "notice",
+      "variant": "short",
+      "text": "NOTICE: South Lot C will be closed for repaving on Monday, June 2, from 7:00 AM to 5:00 PM. Vehicles must be removed by 6:00 AM that day. Permit holders may park in North Lot A at no charge. Contact Campus Parking with questions.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, by when must vehicles be removed?",
+          "options": {
+            "A": "By 6:00 AM",
+            "B": "By 7:00 AM",
+            "C": "By 5:00 PM",
+            "D": "By 6:00 PM"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice states vehicles must be removed by 6:00 AM on June 2."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about permit holders using North Lot A that day?",
+          "options": {
+            "A": "They would pay extra",
+            "B": "They would need passes",
+            "C": "They would park free",
+            "D": "They would reserve spaces"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice states permit holders may park in North Lot A at no charge, meaning they would park free."
+        }
+      ],
+      "difficulty": "medium",
+      "id": "rdl-short_mpvfq0rk_7"
+    },
+    {
+      "genre": "notice",
+      "variant": "short",
+      "text": "NOTICE: During spring break (March 9-15), the Main Library will operate on reduced hours, 10:00 AM to 4:00 PM daily. The third-floor study rooms remain closed. A $5 late fee per day applies to all overdue items returned after March 8.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what happens to items returned after March 8?",
+          "options": {
+            "A": "A waiver request must be submitted.",
+            "B": "A replacement charge is assessed.",
+            "C": "A daily charge of $5 is added.",
+            "D": "A borrowing block is applied."
+          },
+          "correct_answer": "C",
+          "explanation": "The notice states a $5 late fee per day applies to overdue items returned after March 8, which option C paraphrases as a daily charge of $5."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about the library during spring break?",
+          "options": {
+            "A": "It stays open fewer hours than usual.",
+            "B": "It moves all materials to another building.",
+            "C": "It charges visitors an entry fee.",
+            "D": "It opens earlier than on regular days."
+          },
+          "correct_answer": "A",
+          "explanation": "The notice describes 'reduced hours' of 10 AM to 4 PM, implying the library is open for a shorter period than it normally would be."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mpvr2ny0_0"
+    },
+    {
+      "genre": "email",
+      "variant": "short",
+      "text": "Hi Jordan,\n\nA package arrived for you and is being held at the Wexler Hall mailroom. Please collect it by Friday, April 18, between 1:00 and 5:00 PM. Bring your student ID, as we cannot release parcels without it.\n\nThanks,\nResident Assistant Mia",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what must Jordan bring to the mailroom?",
+          "options": {
+            "A": "A signed claim form",
+            "B": "A tracking number",
+            "C": "A student identification card",
+            "D": "A pickup confirmation slip"
+          },
+          "correct_answer": "C",
+          "explanation": "The email instructs Jordan to bring a student ID, since parcels cannot be released without it. Option C restates this as a student identification card."
+        },
+        {
+          "question_type": "vocabulary_in_context",
+          "stem": "In this email, the word \"release\" most nearly means to",
+          "options": {
+            "A": "deliver to a new address",
+            "B": "hand over to a person",
+            "C": "discard or throw away",
+            "D": "announce to the public"
+          },
+          "correct_answer": "B",
+          "explanation": "Here 'release parcels' means to give the package to the student, so 'hand over to a person' best matches the meaning in context."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mpvr2ny0_1"
+    },
+    {
+      "genre": "email",
+      "variant": "short",
+      "text": "Dear Members,\n\nThis week's Photography Club meeting has been moved. We'll now gather Thursday, May 7, at 6:30 PM instead of 5:00, and we've relocated to Room 312 in Brooks Hall. Please bring your edited photos for review.\n\nBest,\nClub President Dev",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, where will the meeting now take place?",
+          "options": {
+            "A": "In the campus photography studio",
+            "B": "In the usual fifth-floor lounge",
+            "C": "In the Brooks Hall auditorium",
+            "D": "In Room 312 of Brooks Hall"
+          },
+          "correct_answer": "D",
+          "explanation": "The email states the meeting has relocated to Room 312 in Brooks Hall, which option D directly identifies."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about the original meeting plan?",
+          "options": {
+            "A": "It was set for an earlier hour.",
+            "B": "It had been canceled entirely.",
+            "C": "It was open to non-members.",
+            "D": "It required an entry payment."
+          },
+          "correct_answer": "A",
+          "explanation": "The email notes the new time is 6:30 PM 'instead of 5:00,' implying the meeting was originally scheduled for an earlier time."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mpvr2ny0_2"
+    },
+    {
+      "genre": "notice",
+      "variant": "short",
+      "text": "ATTENTION: The west elevator in Carter Hall will be out of service for repairs from June 1 through June 5. Residents should use the east stairwell or the freight lift. A $10 deposit is required to borrow the moving cart at the front desk.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what is required to borrow the moving cart?",
+          "options": {
+            "A": "A reservation made in advance",
+            "B": "A signature from the manager",
+            "C": "A valid building access pass",
+            "D": "A deposit of ten dollars"
+          },
+          "correct_answer": "D",
+          "explanation": "The notice states a $10 deposit is required to borrow the moving cart at the front desk, which option D paraphrases as a deposit of ten dollars."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about residents during the repair period?",
+          "options": {
+            "A": "They must relocate to another building.",
+            "B": "They need another way to reach upper floors.",
+            "C": "They will receive a rent reduction.",
+            "D": "They should report damage to security."
+          },
+          "correct_answer": "B",
+          "explanation": "Since the west elevator is out of service and residents are told to use the stairwell or freight lift, it can be inferred they need an alternative route to upper floors."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mpvr2ny0_3"
+    },
+    {
+      "genre": "notice",
+      "variant": "short",
+      "text": "NOTICE: The Student Health Center will close early on Tuesday, October 14, at 2:00 PM for staff training. Walk-in appointments end at 1:30 PM that day. For urgent care after closing, please visit Riverside Clinic on Oak Street. Normal hours resume Wednesday.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, when do walk-in appointments end on October 14?",
+          "options": {
+            "A": "At noon sharp",
+            "B": "At 1:30 in the afternoon",
+            "C": "At 2:00 in the afternoon",
+            "D": "At the close of business"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice states walk-in appointments end at 1:30 PM on October 14, matching option B."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about students needing care Tuesday evening?",
+          "options": {
+            "A": "They should go to an off-campus facility.",
+            "B": "They must wait until the following week.",
+            "C": "They can call the training staff directly.",
+            "D": "They will be charged a higher fee."
+          },
+          "correct_answer": "A",
+          "explanation": "Because the center closes early and directs urgent cases to Riverside Clinic on Oak Street, students needing evening care should visit an off-campus location."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mpvr2ny0_4"
+    },
+    {
+      "genre": "flyer",
+      "variant": "short",
+      "text": "USED TEXTBOOK SALE! Saturday, September 6, 9:00 AM to 3:00 PM, Student Union Lobby. Science, math, and language titles from $4. Cash only. Sell your old books too—bring them by 8:30 AM for pricing. Sponsored by the Economics Society.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the flyer, how can students pay for books?",
+          "options": {
+            "A": "With cash only",
+            "B": "With a campus card",
+            "C": "With a credit card",
+            "D": "With a mobile app"
+          },
+          "correct_answer": "A",
+          "explanation": "The flyer clearly states 'Cash only,' so option A is correct."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about students who want to sell books?",
+          "options": {
+            "A": "They must arrive before the sale opens.",
+            "B": "They will receive a fixed flat rate.",
+            "C": "They need to register online first.",
+            "D": "They can drop books off any time."
+          },
+          "correct_answer": "A",
+          "explanation": "Sellers are told to bring books by 8:30 AM, which is before the 9:00 AM start, implying they must arrive before the sale begins."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mpvr2ny0_5"
+    },
+    {
+      "genre": "social_media",
+      "variant": "short",
+      "text": "Heads up, everyone! The campus shuttle to Downtown Station is switching to a new schedule starting Monday, November 3. First pickup is now 7:15 AM from Lot C, not 7:45. Fare stays at $2.50. Don't miss the early run!",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the post, what is the shuttle fare?",
+          "options": {
+            "A": "It is one dollar.",
+            "B": "It is two dollars.",
+            "C": "It is free of charge.",
+            "D": "It is two-fifty."
+          },
+          "correct_answer": "D",
+          "explanation": "The post states the fare stays at $2.50, which option D expresses as two-fifty."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about the new shuttle schedule?",
+          "options": {
+            "A": "It begins service earlier than before.",
+            "B": "It adds a second pickup location.",
+            "C": "It raises the cost of a ride.",
+            "D": "It runs less often each day."
+          },
+          "correct_answer": "A",
+          "explanation": "The first pickup moves from 7:45 to 7:15 AM, so the new schedule starts earlier than the previous one."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mpvr2ny0_6"
+    },
+    {
+      "genre": "email",
+      "variant": "short",
+      "text": "Hi Sam,\n\nJust a reminder that your library study room booking for Room 5B is confirmed for Monday, February 9, from 2:00 to 4:00 PM. If you can't make it, please cancel online by Sunday night so others can use the space.\n\nBest,\nFront Desk",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what should Sam do if unable to attend?",
+          "options": {
+            "A": "Cancel the booking online beforehand",
+            "B": "Call the front desk during hours",
+            "C": "Email a staff member directly",
+            "D": "Transfer the room to a friend"
+          },
+          "correct_answer": "A",
+          "explanation": "The email instructs Sam to cancel online by Sunday night if he cannot attend, matching option A."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about the study rooms?",
+          "options": {
+            "A": "They are in high demand among students.",
+            "B": "They require a paid membership.",
+            "C": "They are open only on weekdays.",
+            "D": "They must be booked a month ahead."
+          },
+          "correct_answer": "A",
+          "explanation": "The request to cancel so 'others can use the space' implies the rooms are sought after by many students."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mpvr2ny0_7"
     }
   ]
 }

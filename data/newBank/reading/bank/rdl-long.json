@@ -98,6 +98,396 @@
       ],
       "difficulty": "medium",
       "id": "rdl-long_mpveuehl_1"
+    },
+    {
+      "genre": "notice",
+      "text": "Notice: Temporary Closure of the West Wing Study Commons\n\nDate: September 8\nLocation: Harmon Library, Third Floor\n\nThe West Wing Study Commons will be closed from Monday, September 15, through Friday, September 19, for the installation of new ventilation equipment. During this period, all 24-hour study access will be relocated to the East Reading Room on the second floor.\n\nStudents who reserved group rooms in the West Wing should note the following:\n\n- Existing reservations will be automatically transferred to comparable rooms in the East Reading Room.\n- A confirmation email will be sent to your campus address by September 12.\n- Lockers in the West Wing must be emptied before 6:00 PM on September 12. Items left behind will be moved to the lost-and-found desk.\n- A replacement key for any lost locker key may be obtained for a $5 fee at the circulation desk.\n\nThe West Wing is expected to reopen on Saturday, September 20, with extended weekend hours. Quiet study is still available throughout the building during construction, though some noise may occur between 9:00 AM and 4:00 PM.\n\nFor questions, please contact the library help desk at help@harmonlibrary.edu or visit the front office.",
+      "format_metadata": {
+        "title": "Notice: Temporary Closure of the West Wing Study Commons",
+        "location": "Harmon Library, Third Floor",
+        "date": "September 8"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what must students do before 6:00 PM on September 12?",
+          "options": {
+            "A": "Confirm their group room reservations by email",
+            "B": "Remove their belongings from the West Wing lockers",
+            "C": "Pay a $5 fee at the circulation desk",
+            "D": "Relocate to the East Reading Room study area"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice states that lockers in the West Wing must be emptied before 6:00 PM on September 12. Option A swaps the September 12 date with the confirmation email (which is sent, not done by students). Option C uses the real $5 fee but applies it to a different, optional situation (a lost key). Option D borrows the East Reading Room but attaches it to the wrong deadline."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about study options during the closure?",
+          "options": {
+            "A": "All study spaces will be completely unavailable during the week",
+            "B": "Group rooms will no longer be offered anywhere on campus",
+            "C": "The East Reading Room will charge a fee for overnight access",
+            "D": "Students can still find quiet places to study in the building"
+          },
+          "correct_answer": "D",
+          "explanation": "The notice says quiet study is still available throughout the building during construction, implying students can continue to study there. Option A reverses this logic with the absolute 'completely unavailable.' Option B contradicts the transfer of reservations to comparable rooms. Option C invents a fee for overnight access that the text never mentions."
+        },
+        {
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this notice?",
+          "options": {
+            "A": "To inform students about a temporary closure and related arrangements",
+            "B": "To announce permanent new weekend hours for the entire library",
+            "C": "To advertise the installation of upgraded ventilation equipment",
+            "D": "To remind students about the cost of replacing lost locker keys"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice's overall purpose is to inform students of the West Wing's temporary closure and the resulting changes to access, reservations, and lockers. Option B exaggerates with 'permanent' and 'entire library.' Option C captures only one detail (the equipment). Option D is too narrow, focusing on a single minor point about locker key fees."
+        }
+      ],
+      "difficulty": "medium",
+      "id": "rdl-long_mpvfq0rl_0"
+    },
+    {
+      "genre": "email",
+      "text": "Subject: New Procedure for Reserving Lab Equipment\n\nDear Engineering Students,\n\nStarting October 1, all reservations for equipment in the Fabrication Lab must be submitted through the online maintenance portal rather than the paper sign-up sheet. We're making this change so that equipment can be inspected and serviced between bookings, which should reduce the breakdowns many of you reported last semester.\n\nTo reserve a machine, log in to the portal with your student ID, select an available time slot, and confirm your booking at least 24 hours in advance. A refundable $10 deposit is required for the laser cutter and the 3D printers; the deposit is returned automatically once staff confirm the equipment was left clean and undamaged.\n\nPlease note that walk-in use will no longer be permitted after October 1. If you cannot make a reserved slot, cancel it online so another student can claim the time. Repeated no-shows may result in a one-week suspension of your booking privileges.\n\nIf you have trouble accessing the portal, stop by Room 112 in Whitmore Hall during staff hours, 9:00 AM to 5:00 PM.\n\nBest regards,\nDaniel Okafor\nLab Operations Coordinator",
+      "format_metadata": {
+        "from": "Daniel Okafor, Lab Operations Coordinator",
+        "to": "Engineering Students",
+        "subject": "New Procedure for Reserving Lab Equipment"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what is required to reserve the laser cutter?",
+          "options": {
+            "A": "A signature on the paper sign-up sheet in the lab",
+            "B": "A refundable deposit submitted along with the booking",
+            "C": "A staff inspection completed before each time slot",
+            "D": "A written request delivered to Room 112 in person"
+          },
+          "correct_answer": "B",
+          "explanation": "The email states a refundable $10 deposit is required for the laser cutter and 3D printers. Option A refers to the old paper sheet that is being discontinued. Option C uses real words ('staff', 'inspection') but the inspection happens between bookings, not as a reservation requirement. Option D borrows Room 112 but applies it to a fabricated written-request process."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about students who repeatedly miss their reserved slots?",
+          "options": {
+            "A": "They will receive a full refund of their equipment deposit",
+            "B": "They must switch back to using the paper sign-up sheet",
+            "C": "They may temporarily lose the ability to book equipment",
+            "D": "They will be charged an additional fee for each absence"
+          },
+          "correct_answer": "C",
+          "explanation": "The email warns that repeated no-shows may result in a one-week suspension of booking privileges, implying a temporary loss of access. Option A reverses the consequence into a reward. Option B introduces the discontinued paper sheet as a penalty, which is not supported. Option D invents an extra fee that the text never mentions."
+        },
+        {
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this email?",
+          "options": {
+            "A": "To remind students of the staff hours in Whitmore Hall",
+            "B": "To explain why equipment broke down during last semester",
+            "C": "To announce a new online system for reserving lab equipment",
+            "D": "To request that students clean machines after every booking"
+          },
+          "correct_answer": "C",
+          "explanation": "The email's overall purpose is to announce the shift to an online portal for reserving lab equipment and explain how it works. Option A captures only a minor closing detail. Option B addresses one reason for the change, not the main point. Option D focuses on a single condition tied to the deposit rather than the email's purpose."
+        }
+      ],
+      "difficulty": "medium",
+      "id": "rdl-long_mpvfq0rl_1"
+    },
+    {
+      "genre": "notice",
+      "text": "Notice: Updated Policy for the Campus Shuttle Service\n\nDate: November 3\nDeparture Point: Carver Student Center, North Entrance\n\nBeginning November 10, the campus shuttle will operate on a revised schedule to better serve evening classes. Shuttles will run every 20 minutes from 7:00 AM to 11:00 PM on weekdays and every 40 minutes on weekends. The late-night route to the residence halls has been extended to midnight.\n\nAll riders are reminded of the following policies:\n\n- A valid student ID must be shown to the driver upon boarding.\n- A semester shuttle pass may be purchased for $45 at the transit office in Carver Student Center.\n- Single rides are free for students but cost $2.00 for guests and visitors.\n- Bicycles are permitted only on the exterior rack and must be secured by the rider.\n\nThe transit office encourages students to download the TrackMyRide app, through which real-time shuttle locations can be viewed. Lost items are held at the transit office for fourteen days before being donated.\n\nRiders with accessibility needs should request a lift-equipped shuttle at least one day in advance by calling the transit office at 555-0148.",
+      "format_metadata": {
+        "title": "Notice: Updated Policy for the Campus Shuttle Service",
+        "location": "Carver Student Center, North Entrance",
+        "date": "November 3"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, how often will shuttles run on weekdays?",
+          "options": {
+            "A": "Every 40 minutes throughout the entire day",
+            "B": "Every 20 minutes between morning and night",
+            "C": "Every 14 minutes during peak class times",
+            "D": "Every hour after the late-night route ends"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice states shuttles will run every 20 minutes from 7:00 AM to 11:00 PM on weekdays. Option A uses the real 40-minute interval but misapplies it (that is the weekend frequency). Option C borrows the number 14 from the lost-items policy and attaches it to the wrong context. Option D fabricates an hourly schedule not mentioned in the text."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about a visitor who wants to ride the shuttle?",
+          "options": {
+            "A": "They must purchase a semester pass before boarding",
+            "B": "They are not allowed to ride the campus shuttle at all",
+            "C": "They can request a lift-equipped shuttle without notice",
+            "D": "They will pay a fare that students are not charged"
+          },
+          "correct_answer": "D",
+          "explanation": "Single rides are free for students but cost $2.00 for guests and visitors, implying visitors pay a fare students avoid. Option A wrongly requires the $45 semester pass, which is optional. Option B contradicts the policy by denying visitors access entirely. Option C ignores the rule that lift-equipped shuttles require one day's advance notice."
+        },
+        {
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this notice?",
+          "options": {
+            "A": "To announce a revised shuttle schedule and rider policies",
+            "B": "To promote the download of the TrackMyRide tracking app",
+            "C": "To explain how lost items are stored at the transit office",
+            "D": "To describe the cost of a semester pass for the shuttle"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice's overall purpose is to inform riders of the new shuttle schedule and the policies that govern its use. Option B captures only one supporting detail (the app). Option C is too narrow, addressing just the lost-items rule. Option D focuses on a single price rather than the full set of changes."
+        }
+      ],
+      "difficulty": "medium",
+      "id": "rdl-long_mpvfq0rl_2"
+    },
+    {
+      "genre": "notice",
+      "text": "Notice: Fall Sustainability Fair on the Quad\n\nDate: October 5\nLocation: Main Quad, in front of Bradley Hall\n\nThe Office of Campus Life invites all students to attend the annual Sustainability Fair on Saturday, October 18, from 10:00 AM to 3:00 PM. The event will be held on the Main Quad and will move indoors to the Bradley Hall atrium in case of rain.\n\nThis year's fair will feature local vendors, student organizations, and hands-on workshops on composting and energy conservation. Attendees can look forward to the following:\n\n- A free reusable water bottle for the first 200 visitors.\n- A clothing swap where students may exchange gently used items at no cost.\n- A repair station where volunteers will fix small electronics and bicycles.\n- A raffle for a $50 campus bookstore gift card; tickets are $1.00 each.\n\nStudents who wish to volunteer at the fair should sign up through the Campus Life portal by October 12. Volunteers will receive a free lunch and a certificate of participation.\n\nProceeds from the raffle support the campus community garden. For more information, please email campuslife@bradleyu.edu.",
+      "format_metadata": {
+        "title": "Notice: Fall Sustainability Fair on the Quad",
+        "location": "Main Quad, in front of Bradley Hall",
+        "date": "October 5"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what will the first 200 visitors receive?",
+          "options": {
+            "A": "A ticket for the campus bookstore raffle",
+            "B": "A free reusable water bottle at the fair",
+            "C": "A certificate for completing a workshop",
+            "D": "A gently used item from the clothing swap"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice states the first 200 visitors will receive a free reusable water bottle. Option A refers to the raffle, whose tickets cost $1.00 and are not tied to the first 200 visitors. Option C borrows 'certificate' from the volunteer benefits and misapplies it. Option D uses the clothing swap but wrongly frames it as a giveaway for early arrivals."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about students who want to volunteer at the fair?",
+          "options": {
+            "A": "They must pay a fee to receive their free lunch",
+            "B": "They are required to bring their own repair tools",
+            "C": "They cannot attend the fair as regular visitors",
+            "D": "They need to register before the event takes place"
+          },
+          "correct_answer": "D",
+          "explanation": "The notice says volunteers should sign up through the portal by October 12, before the October 18 fair, implying advance registration is needed. Option A contradicts the stated free lunch by adding a fee. Option B invents a tool requirement not mentioned. Option C wrongly assumes volunteering excludes someone from attending."
+        },
+        {
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this notice?",
+          "options": {
+            "A": "To announce a campus fair and its featured activities",
+            "B": "To raise funds specifically for the community garden",
+            "C": "To recruit volunteers for the Office of Campus Life",
+            "D": "To explain the rules for entering the bookstore raffle"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice's overall purpose is to invite students to the Sustainability Fair and describe what it offers. Option B captures only the raffle's beneficiary, a single detail. Option C focuses narrowly on the volunteer sign-up. Option D addresses just the raffle rules rather than the broader event."
+        }
+      ],
+      "difficulty": "medium",
+      "id": "rdl-long_mpvfq0rl_3"
+    },
+    {
+      "genre": "email",
+      "text": "Subject: Welcome to the Fairview Tool Library\n\nDear Mr. Okafor,\n\nThanks for signing up at the Fairview Tool Library, located inside the Maple Street Community Center next to the public garden. We're glad you've joined a network of neighbors who share equipment instead of buying it.\n\nYour membership runs for one year and costs a suggested donation of $20. With it, you can borrow up to three items at a time, from cordless drills to lawn aerators, for a seven-day period. Renewals are free if no one else has reserved the item. Late returns add a $1 charge per day to your account, so please check the due date printed on your receipt.\n\nWe also host a free repair workshop on the second Saturday of each month, from 1:00 PM to 3:00 PM. Volunteers will help you fix small appliances and bicycles at no cost, though you'll need to supply any specialty parts yourself.\n\nTo activate your card, stop by the front desk during open hours and bring a photo ID. If you have questions about reservations, just reply to this message.\n\nBest regards,\nDana Whitfield\nFairview Tool Library",
+      "format_metadata": {
+        "from": "Dana Whitfield, Fairview Tool Library",
+        "to": "Mr. Okafor",
+        "subject": "Welcome to the Fairview Tool Library"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, where is the Fairview Tool Library located?",
+          "options": {
+            "A": "Beside the Maple Street public garden entrance",
+            "B": "Across from the neighborhood hardware store",
+            "C": "Within the downtown public library branch",
+            "D": "Inside the Maple Street Community Center"
+          },
+          "correct_answer": "D",
+          "explanation": "The email states the library is 'located inside the Maple Street Community Center next to the public garden.' Option A swaps the relationship (the garden is adjacent, not the location); B and C introduce places never mentioned."
+        },
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what happens when a member returns a borrowed item late?",
+          "options": {
+            "A": "A daily charge is added to the member's account",
+            "B": "A second item is removed from the member's record",
+            "C": "A one-dollar charge is added for each day overdue",
+            "D": "A renewal request is automatically denied by staff"
+          },
+          "correct_answer": "C",
+          "explanation": "The email says 'Late returns add a $1 charge per day to your account.' Option A is true-sounding but omits the rate and overlaps with C's structure; B and D borrow membership vocabulary but change the consequence."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about the monthly repair workshop?",
+          "options": {
+            "A": "It charges members a small fee for replacement parts",
+            "B": "It does not provide specialty parts for every repair",
+            "C": "It is open only to members who borrow power tools",
+            "D": "It requires attendees to register one week in advance"
+          },
+          "correct_answer": "B",
+          "explanation": "Since 'you'll need to supply any specialty parts yourself,' the workshop clearly does not provide all parts. Option A reverses who pays for parts; C and D add conditions the email never states."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-long_mpvr2ny1_0"
+    },
+    {
+      "genre": "email",
+      "text": "Subject: Action Required: Parking Permit Renewal for Fall Term\n\nDear Ms. Castellano,\n\nYour student parking permit for Lot C expires on August 31, and renewals for the fall term are now open through the campus transportation portal. We're sending this reminder early so you won't lose your assigned space.\n\nThe annual permit fee is $90, payable online by debit, credit, or charge to your student account. Once you've paid, your existing decal stays valid—there's no need to pick up a new sticker. Please confirm that your vehicle's license plate is current in the portal, since enforcement now relies on plate scanning rather than visual decal checks.\n\nIf you do not renew before September 5, your space will be released to a student on the waiting list, and any vehicle parked in Lot C without an active permit may be ticketed at $40 per violation. Students who no longer need a permit should cancel online to avoid being charged automatically.\n\nQuestions about billing or lot assignments can be directed to our office at parking@university.edu.\n\nThanks,\nThe Campus Transportation Office",
+      "format_metadata": {
+        "from": "Campus Transportation Office",
+        "to": "Ms. Castellano",
+        "subject": "Action Required: Parking Permit Renewal for Fall Term"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what should Ms. Castellano do after she pays the renewal fee?",
+          "options": {
+            "A": "Collect a new parking decal from the office",
+            "B": "Verify that her license plate is up to date",
+            "C": "Join the waiting list for a Lot C space",
+            "D": "Cancel her permit through the online portal"
+          },
+          "correct_answer": "B",
+          "explanation": "The email says to 'confirm that your vehicle's license plate is current in the portal' because enforcement uses plate scanning. Option A reverses the stated fact ('no need to pick up a new sticker'); C and D borrow real terms but apply them to the wrong situation."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about how parking is now enforced in Lot C?",
+          "options": {
+            "A": "Permits are checked only during the first week of term",
+            "B": "Decals must be displayed clearly on every windshield",
+            "C": "Vehicles are identified mainly by their license plates",
+            "D": "Spaces are assigned through a daily online lottery"
+          },
+          "correct_answer": "C",
+          "explanation": "Because 'enforcement now relies on plate scanning rather than visual decal checks,' identification is plate-based. Option B reverses the new system back to decals; A and D introduce procedures not mentioned."
+        },
+        {
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this email?",
+          "options": {
+            "A": "To announce that Lot C will be permanently closed",
+            "B": "To remind a student to renew her parking permit",
+            "C": "To explain how to appeal a recent parking ticket",
+            "D": "To advertise additional parking spaces for visitors"
+          },
+          "correct_answer": "B",
+          "explanation": "The email's purpose is to prompt timely renewal of the permit before the deadline. Option A contradicts the text; C and D capture topically related but incorrect purposes the email never serves."
+        }
+      ],
+      "difficulty": "medium",
+      "id": "rdl-long_mpvr2ny1_1"
+    },
+    {
+      "genre": "notice",
+      "text": "Notice: Temporary Closure of the Hartwell Library Reading Room\n\nThe third-floor Reading Room in Hartwell Library will be closed for floor refinishing from Monday, June 9, through Friday, June 13. Crews will be on-site each day from 7:00 AM to 6:00 PM, and the area must remain sealed while the new surface cures.\n\nDuring the closure, please note the following arrangements:\n\n• Quiet study seating will be relocated to Room 210 on the second floor, open 8:00 AM to 10:00 PM.\n• Reserved materials normally shelved in the Reading Room can be picked up at the main circulation desk on the first floor.\n• Group study rooms remain available and may be booked online up to 48 hours in advance.\n\nStudents with belongings stored in the Reading Room lockers must remove them by 5:00 PM on Friday, June 6. Items left after that time will be held at the lost-and-found desk for two weeks and then donated. A $5 fee applies to replace any lost locker key before the deadline.\n\nWe apologize for the inconvenience and appreciate your patience. For updates, please check the library portal or contact the help desk on the first floor.",
+      "format_metadata": {
+        "issuer": "Hartwell Library",
+        "type": "facility_notice"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, where will quiet study seating be available during the closure?",
+          "options": {
+            "A": "At the first-floor circulation desk area",
+            "B": "In Room 210 on the second floor",
+            "C": "Inside the bookable group study rooms",
+            "D": "Within the third-floor Reading Room lobby"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice states quiet study seating 'will be relocated to Room 210 on the second floor.' Option A is where reserved materials are picked up; C names a different service; D is the closed area itself."
+        },
+        {
+          "question_type": "detail",
+          "stem": "What must students do with items stored in the Reading Room lockers?",
+          "options": {
+            "A": "Remove them by 5:00 PM on June 6",
+            "B": "Transfer them to a Room 210 locker",
+            "C": "Register them at the help desk online",
+            "D": "Claim them within two weeks of June 13"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice says students 'must remove them by 5:00 PM on Friday, June 6.' Option D swaps the date with the lost-and-found holding period; B and C borrow real terms but invent the action."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about the Reading Room floor during the week of June 9?",
+          "options": {
+            "A": "It will be open for limited evening hours only",
+            "B": "It needs time to harden before it can be used",
+            "C": "It will be inspected by students before reopening",
+            "D": "It must be cleaned by residents each afternoon"
+          },
+          "correct_answer": "B",
+          "explanation": "Since 'the area must remain sealed while the new surface cures,' the floor needs time to harden. Option A contradicts the full closure; C and D introduce activities not supported by the notice."
+        }
+      ],
+      "difficulty": "medium",
+      "id": "rdl-long_mpvr2ny1_2"
+    },
+    {
+      "genre": "notice",
+      "text": "Notice: Riverside Campus Autumn Lantern Festival\n\nDate: Saturday, October 18\nTime: 5:00 PM to 9:00 PM\nLocation: North Quad (Rain location: Bauer Field House)\n\nThe Office of Student Life invites all students, staff, and their families to the annual Autumn Lantern Festival, a celebration of the season featuring food stalls, live folk music, and a guided evening walk along the illuminated river path.\n\nEvent highlights:\n\n• A lantern-making station where you can decorate your own paper lantern using materials provided free of charge.\n• Food and craft vendors offering seasonal snacks; most items are priced between $2 and $6, cash or campus card accepted.\n• A short outdoor concert beginning at 7:00 PM near the central fountain.\n\nPlease keep the following in mind. The river path closes promptly at 8:45 PM for safety, so begin the walk early. Pets are not permitted on the path, though they are welcome elsewhere in the quad on a leash. Students who wish to volunteer at the lantern station should sign up through the Student Life portal by October 13; volunteers receive a free festival mug and priority parking in Lot B.\n\nFor questions, please contact the Office of Student Life at the Reynolds Center.",
+      "format_metadata": {
+        "issuer": "Office of Student Life",
+        "type": "event_announcement"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what is provided free of charge at the festival?",
+          "options": {
+            "A": "Seasonal snacks from the campus vendors",
+            "B": "Materials for decorating a paper lantern",
+            "C": "Reserved seating at the outdoor concert",
+            "D": "Guided transportation to the river path"
+          },
+          "correct_answer": "B",
+          "explanation": "The lantern-making station provides 'materials provided free of charge.' Option A contradicts the text (snacks cost $2–$6); C and D introduce services the notice never describes."
+        },
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what do volunteers at the lantern station receive?",
+          "options": {
+            "A": "A free mug and priority parking in Lot B",
+            "B": "A discount on all food and craft vendor items",
+            "C": "An early walk along the closed river path",
+            "D": "A reserved table near the central fountain stage"
+          },
+          "correct_answer": "A",
+          "explanation": "Volunteers 'receive a free festival mug and priority parking in Lot B.' Options B, C, and D reuse festival vocabulary but attach benefits that are not offered."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about the river path walk?",
+          "options": {
+            "A": "It is the most popular activity at the festival",
+            "B": "It should be started well before the evening ends",
+            "C": "It is open only to students who pre-register online",
+            "D": "It continues until the concert finishes at 9:00 PM"
+          },
+          "correct_answer": "B",
+          "explanation": "Because 'the river path closes promptly at 8:45 PM for safety, so begin the walk early,' attendees should start it well before the event ends. Option D contradicts the closing time; A and C add claims the notice does not support."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-long_mpvr2ny1_3"
     }
   ]
 }

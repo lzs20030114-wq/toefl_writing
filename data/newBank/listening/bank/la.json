@@ -220,6 +220,481 @@
         }
       ],
       "id": "la_mpveuehw_4"
+    },
+    {
+      "context": "facility_change",
+      "situation": "main library third floor closed for HVAC repair",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "Good morning, students. Please be aware that the third floor of the main library will be closed starting this Wednesday for emergency repairs to the heating and cooling system. The closure is expected to last through Friday afternoon, so we ask that you plan your study sessions accordingly. During this time, the group study rooms on the third floor will be unavailable, but you're welcome to reserve the rooms on the second floor instead. All books normally shelved on the third floor have been temporarily moved to the basement level. If you need help locating a specific title, please ask a librarian at the front desk. We appreciate your patience while we keep the building comfortable for everyone.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To advertise newly renovated study rooms",
+            "B": "To inform students about a temporary floor closure",
+            "C": "To announce permanent changes to library hours",
+            "D": "To recruit volunteers for a book relocation",
+            "E": ""
+          },
+          "answer": "B",
+          "explanation": "正确答案B：公告核心是告知三楼因供暖制冷系统维修将临时关闭，并说明相关安排。A错（too_narrow）：二楼房间只是替代方案的一个细节，并非整体目的，且房间是“可预约”而非“新装修”。C错（wrong_purpose）：关闭是临时的（周三到周五），不是永久改变开放时间。D错（reversed_intent）：书籍已被搬走，公告并未招募搬书志愿者，方向相反。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "C": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "Where have the third-floor books been moved?",
+          "options": {
+            "A": "To the second-floor study rooms",
+            "B": "To the basement level",
+            "C": "To the front desk for pickup",
+            "D": "To another campus library",
+            "E": ""
+          },
+          "answer": "B",
+          "explanation": "正确答案B：公告明确说三楼原本上架的书已临时搬到地下室（basement level）。A错（misattributed_detail）：二楼是用来预约自习室的，不是放书的地方。C错（wrong_detail）：前台是询问图书位置的地方，书籍本身并未搬到前台供取阅。D错（related_but_not_stated）：公告从未提到把书转移到校园其他图书馆。",
+          "distractor_types": {
+            "A": "misattributed_detail",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        }
+      ],
+      "id": "la_mpvfq0rz_0"
+    },
+    {
+      "context": "schedule_change",
+      "situation": "dining hall switching to reduced spring break hours",
+      "speaker_role": "department_staff",
+      "difficulty": "medium",
+      "announcement": "Attention students. As spring break approaches, the Hillcrest Dining Hall will be operating on a reduced schedule from next Monday through the following Sunday. During this period, the dining hall will serve only lunch and dinner, with breakfast service suspended for the entire week. Lunch will run from 11 a.m. to 1:30 p.m., and dinner from 5 p.m. to 7 p.m. Please note that the weekend brunch buffet will not be available during the break. Students remaining on campus who rely on a meal plan can pick up grab-and-go breakfast bags from the Student Center lobby each morning until 10 a.m. Regular dining hours will resume the Monday after break ends.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Which meal service is suspended during spring break?",
+          "options": {
+            "A": "Lunch on weekdays",
+            "B": "Dinner on weekends",
+            "C": "Breakfast for the whole week",
+            "D": "The grab-and-go bags",
+            "E": ""
+          },
+          "answer": "C",
+          "explanation": "正确答案C：公告明确说整周早餐服务暂停（breakfast service suspended for the entire week）。A错（wrong_detail）：午餐照常供应，时间为11点到1点半。B错（wrong_detail）：晚餐照常供应，5点到7点，并未取消。D错（reversed_intent）：grab-and-go早餐袋是关闭期间提供的替代品，恰恰是可用的，不是被取消的。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "wrong_detail",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students who stay on campus during the break?",
+          "options": {
+            "A": "They must cook their own breakfast",
+            "B": "They can still get a morning meal option",
+            "C": "They are charged extra for dinner",
+            "D": "They eat all meals at the Student Center",
+            "E": ""
+          },
+          "answer": "B",
+          "explanation": "正确答案B：虽然食堂早餐暂停，但留校学生可在学生中心领取grab-and-go早餐袋，可推断他们仍能获得一份早晨餐食。A错（over_inference）：公告提供了打包早餐，无需自己做饭，推得太远。C错（unrelated_inference）：公告完全没提晚餐加收费用，毫无依据。D错（wrong_detail）：学生中心只提供早餐袋，午餐和晚餐仍在食堂，并非所有餐食都在学生中心。",
+          "distractor_types": {
+            "A": "over_inference",
+            "C": "unrelated_inference",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "id": "la_mpvfq0rz_1"
+    },
+    {
+      "context": "policy_update",
+      "situation": "new printing quota and pay-per-page policy in computer labs",
+      "speaker_role": "department_staff",
+      "difficulty": "hard",
+      "announcement": "This is a reminder that, beginning next semester, the university is introducing a new printing policy across all computer labs. Each enrolled student will receive a free quota of three hundred black-and-white pages per semester, after which printing will be charged at five cents per page. Color printing is not included in the free quota and will be billed separately from the start. We're making this change to reduce paper waste, which has risen sharply over the past two years. To check your remaining balance, you'll log in to the printing portal using your student ID number. Any unused pages, please note, will not roll over into the following semester.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What is true about the new printing quota?",
+          "options": {
+            "A": "It covers three hundred free color pages",
+            "B": "It applies only to graduate students",
+            "C": "It gives free black-and-white pages each semester",
+            "D": "It carries unused pages into the next term",
+            "E": ""
+          },
+          "answer": "C",
+          "explanation": "正确答案C：公告说每位注册学生每学期获得300页黑白免费额度。A错（wrong_detail）：免费额度只针对黑白打印，彩色打印从一开始就单独收费。B错（related_but_not_stated）：政策面向所有注册学生，公告从未限定只对研究生。D错（reversed_intent）：公告明确说未使用页数不会结转到下学期，与该选项相反。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "Why does the speaker mention the rise in paper waste?",
+          "options": {
+            "A": "To explain the reason for the new policy",
+            "B": "To praise students for recycling efforts",
+            "C": "To announce a new campus garden project",
+            "D": "To warn that labs will close early",
+            "E": ""
+          },
+          "answer": "A",
+          "explanation": "正确答案A：说话者提到纸张浪费在过去两年急剧上升，是为了解释为什么要推出这项打印新政策。B错（reversed_intent）：公告是在指出浪费问题，而非表扬学生的回收行为。C错（unrelated_inference）：完全没提校园花园项目，毫无关联。D错（over_inference）：公告从未说机房会提前关闭，属于过度推断。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "reversed_intent",
+            "C": "unrelated_inference",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "id": "la_mpvfq0rz_2"
+    },
+    {
+      "context": "deadline",
+      "situation": "deadline to apply for on-campus housing for next year",
+      "speaker_role": "department_staff",
+      "difficulty": "medium",
+      "announcement": "Attention students. The Office of Residential Life would like to remind everyone that the deadline to apply for on-campus housing for the next academic year is this Friday, March fifteenth, at 11:59 p.m. To be eligible for the room selection lottery, you must submit both your housing application and the two-hundred-dollar deposit by that time. Students who miss this deadline will not be guaranteed a room and will be placed on a waiting list instead. Returning students hoping to keep their current room should select the renewal option within the online portal. If you have questions about roommate groups, stop by our office in Curtis Hall before Thursday.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What must students do to enter the room selection lottery?",
+          "options": {
+            "A": "Submit the application and the deposit on time",
+            "B": "Visit Curtis Hall in person before Friday",
+            "C": "Join a roommate group online",
+            "D": "Renew their current room assignment",
+            "E": ""
+          },
+          "answer": "A",
+          "explanation": "正确答案A：公告说要进入选房抽签，必须在截止前同时提交住宿申请和200美元押金。B错（misattributed_detail）：去Curtis Hall是为了咨询室友组问题，不是进入抽签的条件。C错（related_but_not_stated）：公告提到室友组的咨询，但从未把“加入室友组”列为进入抽签的要求。D错（wrong_detail）：续租选项是给想保留原房间的返校生的，与进入抽签是不同的路径。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "misattributed_detail",
+            "C": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students who miss the Friday deadline?",
+          "options": {
+            "A": "They will receive a full refund of the deposit",
+            "B": "They may not get on-campus housing right away",
+            "C": "They are barred from living on campus permanently",
+            "D": "They automatically keep their current room",
+            "E": ""
+          },
+          "answer": "B",
+          "explanation": "正确答案B：公告说错过截止日期的学生不保证有房间，会被放到等候名单，可推断他们不一定能立刻获得校内住宿。A错（unrelated_inference）：公告完全没提退还押金的事，毫无依据。C错（over_inference）：被放到等候名单不等于永久禁止住校，推断过头。D错（reversed_intent）：自动保留原房间需要主动选择续租选项，错过截止反而不被保证，方向相反。",
+          "distractor_types": {
+            "A": "unrelated_inference",
+            "B": "wrong_detail",
+            "C": "over_inference",
+            "D": "reversed_intent"
+          }
+        }
+      ],
+      "id": "la_mpvfq0rz_3"
+    },
+    {
+      "context": "event",
+      "situation": "campus blood drive hosted by the health center",
+      "speaker_role": "department_staff",
+      "difficulty": "easy",
+      "announcement": "Good afternoon, everyone. The Campus Health Center is excited to announce that our annual blood drive will take place next Tuesday in Memorial Hall from 9 a.m. to 4 p.m. The regional blood bank will be on site, and every donation can help save up to three lives in our local community. To donate, you must be at least seventeen years old and bring a photo ID. We recommend eating a full meal and drinking plenty of water beforehand so you feel your best. Walk-ins are welcome, but to skip the line, you can reserve a time slot on the health center's website. Everyone who donates will receive a free t-shirt as a thank-you.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement mainly about?",
+          "options": {
+            "A": "A free health screening for new students",
+            "B": "An upcoming campus blood donation event",
+            "C": "A fundraising sale of charity t-shirts",
+            "D": "A first-aid training course in Memorial Hall",
+            "E": ""
+          },
+          "answer": "B",
+          "explanation": "正确答案B：公告整体是宣布健康中心一年一度的献血活动及相关安排。A错（wrong_purpose）：这是献血活动，不是为新生做健康筛查。C错（too_narrow）：免费T恤只是献血者的小礼物，不是义卖募捐，把细节夸大成主题。D错（misattributed_detail）：Memorial Hall是献血地点，公告并未提供任何急救培训课程。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "wrong_purpose",
+            "C": "too_narrow",
+            "D": "misattributed_detail"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are donors recommended to do beforehand?",
+          "options": {
+            "A": "Bring a friend to donate with them",
+            "B": "Eat a full meal and drink water",
+            "C": "Pay a small registration fee",
+            "D": "Complete an online health survey",
+            "E": ""
+          },
+          "answer": "B",
+          "explanation": "正确答案B：公告建议献血前吃一顿正餐并多喝水，以保持良好状态。A错（related_but_not_stated）：公告没有建议带朋友一起来，纯属未提内容。C错（wrong_detail）：献血是免费的，从未提到任何报名费。D错（related_but_not_stated）：网站只用于预约时间段，公告并未要求填写在线健康问卷。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        }
+      ],
+      "id": "la_mpvfq0rz_4"
+    },
+    {
+      "context": "service",
+      "situation": "new late-night campus safety escort service launching",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "Attention students, faculty, and staff. Campus Public Safety is pleased to announce a new late-night walking escort service beginning this Sunday. If you're on campus after dark and would prefer not to walk alone, a trained student officer will accompany you to your residence hall, parking lot, or the shuttle stop. The service runs every night from 8 p.m. until 2 a.m. To request an escort, simply call the dispatch line or use the request button in the campus safety app. We ask that you allow about ten minutes for an escort to reach you. This free service is part of our ongoing effort to make everyone feel safer on campus.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To introduce a new nighttime walking escort service",
+            "B": "To report a recent rise in campus crime",
+            "C": "To extend the operating hours of the shuttle",
+            "D": "To recruit students as paid security guards",
+            "E": ""
+          },
+          "answer": "A",
+          "explanation": "正确答案A：公告核心是介绍公共安全部门即将推出的深夜步行护送服务及使用方式。B错（wrong_purpose）：公告意在提供安全服务，并未报告或提及校园犯罪率上升。C错（misattributed_detail）：班车站只是护送可达的目的地之一，公告并未延长班车运营时间。D错（reversed_intent）：服务由受过训练的学生护送员提供，但公告是宣布服务、并非招募付费保安。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "wrong_purpose",
+            "C": "misattributed_detail",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "How can students request a walking escort?",
+          "options": {
+            "A": "By signing up at the residence hall desk",
+            "B": "By emailing the public safety office",
+            "C": "By calling dispatch or using the safety app",
+            "D": "By waiting at the nearest shuttle stop",
+            "E": ""
+          },
+          "answer": "C",
+          "explanation": "正确答案C：公告说请求护送只需拨打调度电话或使用校园安全app里的请求按钮。A错（related_but_not_stated）：宿舍楼前台从未被提及为请求方式。B错（related_but_not_stated）：公告没有提供发邮件给安全办公室这一渠道。D错（misattributed_detail）：班车站是护送可送达的地点之一，并不是请求护送的方式。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "related_but_not_stated",
+            "C": "wrong_detail",
+            "D": "misattributed_detail"
+          }
+        }
+      ],
+      "id": "la_mpvfq0rz_5"
+    },
+    {
+      "context": "facility_change",
+      "situation": "campus gym pool closed for resurfacing",
+      "speaker_role": "department_staff",
+      "difficulty": "easy",
+      "announcement": "Good morning, everyone. We'd like to let you know that the swimming pool at the Recreation Center will be closed for resurfacing from this Monday through the end of the month. The locker rooms and fitness floor will stay open as usual, so you can still use the weights and cardio machines during this time. All scheduled swim classes and lap-swim hours are canceled until the pool reopens. For those who'd like to keep swimming, the city aquatic center two blocks away is offering free guest passes to our students if you show your campus ID. We're sorry for the inconvenience and look forward to welcoming you back to a fresh new pool soon.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To promote new fitness machines at the gym",
+            "B": "To notify students that the pool will close temporarily",
+            "C": "To announce a partnership with the city aquatic center",
+            "D": "To cancel all membership at the Recreation Center",
+            "E": ""
+          },
+          "answer": "B",
+          "explanation": "正确答案B：公告主要告知游泳池将因翻新临时关闭，并说明替代安排。A错（misattributed_detail）：力量和有氧器械只是仍可使用的部分，并非推广新器械。C错（too_narrow）：市游泳中心的免费通行证只是一个替代细节，不是公告的整体目的。D错（reversed_intent）：只有游泳池关闭，其他设施照常开放，并非取消所有会员资格，方向相反。",
+          "distractor_types": {
+            "A": "misattributed_detail",
+            "B": "wrong_purpose",
+            "C": "too_narrow",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What can students do to keep swimming during the closure?",
+          "options": {
+            "A": "Use the fitness floor and cardio machines",
+            "B": "Show their campus ID at the city aquatic center",
+            "C": "Sign up for rescheduled swim classes online",
+            "D": "Swim in the pool during limited morning hours",
+            "E": ""
+          },
+          "answer": "B",
+          "explanation": "正确答案B：公告说想继续游泳的学生可凭校园ID到两个街区外的市游泳中心使用免费访客通行证。A错（misattributed_detail）：健身区和有氧器械可用，但那是健身不是游泳，张冠李戴。C错（related_but_not_stated）：所有游泳课都被取消，公告从未提供线上改期报名。D错（wrong_detail）：泳池在关闭期间完全不开放，并没有所谓限时晨间开放。",
+          "distractor_types": {
+            "A": "misattributed_detail",
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "id": "la_mpvfq0rz_6"
+    },
+    {
+      "context": "schedule_change",
+      "situation": "campus health clinic moving to appointment-only hours",
+      "speaker_role": "department_staff",
+      "difficulty": "medium",
+      "announcement": "This is a reminder that, starting next Monday, the Student Health Clinic will be switching from walk-in service to an appointment-only system. To see a doctor or nurse, you'll need to book a visit in advance through the patient portal or by calling the clinic during office hours. Same-day appointments will still be available for urgent concerns, but they tend to fill up quickly in the morning. The clinic will continue its regular hours, open weekdays from 8 a.m. to 5 p.m. Please remember to bring your insurance card and arrive ten minutes early to complete any paperwork. For after-hours emergencies, you should still go directly to the county hospital.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement mainly about?",
+          "options": {
+            "A": "A change to an appointment-only booking system",
+            "B": "An extension of the clinic's weekday hours",
+            "C": "The opening of a new clinic location on campus",
+            "D": "A new insurance requirement for all students",
+            "E": ""
+          },
+          "answer": "A",
+          "explanation": "正确答案A：公告核心是宣布学生健康诊所从无预约接诊改为仅限预约的就诊系统。B错（wrong_detail）：诊所保持原有工作时间（工作日8点到5点），并未延长。C错（wrong_purpose）：公告完全没提开设新诊所地点。D错（misattributed_detail）：带保险卡只是就诊提醒中的一项，公告并未引入面向所有学生的新保险要求。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "wrong_detail",
+            "C": "wrong_purpose",
+            "D": "misattributed_detail"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are students advised to do before their appointment?",
+          "options": {
+            "A": "Pay the visit fee through the portal",
+            "B": "Arrive early with their insurance card",
+            "C": "Email their symptoms to a nurse",
+            "D": "Visit the county hospital first",
+            "E": ""
+          },
+          "answer": "B",
+          "explanation": "正确答案B：公告提醒学生带上保险卡并提前十分钟到达以完成相关手续。A错（related_but_not_stated）：portal用于预约，公告从未提到通过portal缴纳就诊费。C错（related_but_not_stated）：公告没有要求把症状发邮件给护士这一步骤。D错（misattributed_detail）：去县医院是针对“非工作时间的急诊”，并不是就诊前应做的事，张冠李戴。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ],
+      "id": "la_mpvfq0rz_7"
+    },
+    {
+      "context": "deadline",
+      "situation": "deadline to return library textbooks before summer",
+      "speaker_role": "department_staff",
+      "difficulty": "easy",
+      "announcement": "Attention students. As the semester comes to a close, the library would like to remind you that all borrowed textbooks and reserve materials are due back by Friday, May tenth. Items returned after this date will accrue a late fee of one dollar per day, up to the full replacement cost of the book. You can drop off your books at the main circulation desk or use the outdoor return bin near the east entrance, which is available around the clock. Graduating seniors, please note that any outstanding library balance must be cleared before your diploma can be released. If you'd like to renew a book for summer research, you can do so once through your online account.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce extended library hours for finals",
+            "B": "To remind students to return borrowed books by a deadline",
+            "C": "To introduce a new online renewal system",
+            "D": "To advertise a used-textbook sale at the library",
+            "E": ""
+          },
+          "answer": "B",
+          "explanation": "正确答案B：公告主要提醒学生在5月10日前归还借阅的教材和指定参考资料，并说明逾期后果。A错（wrong_purpose）：公告完全没提期末延长开放时间。C错（too_narrow）：在线续借只是结尾提到的一个细节选项，并非整体目的，且系统并非“新推出”。D错（wrong_purpose）：公告没有任何二手教材义卖的内容。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "wrong_purpose",
+            "C": "too_narrow",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What is true about returning books after May tenth?",
+          "options": {
+            "A": "Returns are no longer accepted at all",
+            "B": "A late fee of one dollar per day applies",
+            "C": "Books can only be returned at the east entrance",
+            "D": "A flat replacement fee is charged immediately",
+            "E": ""
+          },
+          "answer": "B",
+          "explanation": "正确答案B：公告说5月10日之后归还的书每天收取1美元滞纳金，上限为整本书的赔偿价。A错（reversed_intent）：逾期仍可归还，只是要交滞纳金，并非完全不接受归还。C错（wrong_detail）：东门外的还书箱只是其中一个归还点，主流通台也可归还，并非唯一渠道。D错（wrong_detail）：滞纳金是按天累计、最高才到赔偿价，而非一逾期就立即收取固定赔偿费。",
+          "distractor_types": {
+            "A": "reversed_intent",
+            "B": "wrong_detail",
+            "C": "wrong_detail",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "id": "la_mpvfq0rz_8"
+    },
+    {
+      "context": "event",
+      "situation": "professor announcing a guest lecture in class",
+      "speaker_role": "professor",
+      "difficulty": "hard",
+      "announcement": "Before we begin today, I'm pleased to announce that we'll have a guest speaker joining us next Thursday during our regular class time. Dr. Elena Ruiz, a marine biologist who's spent the last decade studying coral reef recovery, will be presenting her fieldwork from the Pacific. I'd really encourage you to attend, since the material connects directly to the unit on ecosystems we'll be wrapping up this week. There won't be a quiz that day, but I will expect you to submit one thoughtful question for Dr. Ruiz through our course page by Wednesday evening. We'll be meeting in the larger lecture hall in Bryant Building rather than our usual room, so don't show up here by mistake.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the professor require students to do before Thursday?",
+          "options": {
+            "A": "Submit a question for the guest speaker online",
+            "B": "Read Dr. Ruiz's published research paper",
+            "C": "Prepare for a quiz on ecosystems",
+            "D": "Sign up to attend in the lecture hall",
+            "E": ""
+          },
+          "answer": "A",
+          "explanation": "正确答案A：教授要求学生在周三晚前通过课程页面提交一个有思考的问题给Ruiz博士。B错（related_but_not_stated）：公告提到她的实地研究，但从未要求学生阅读她发表的论文。C错（reversed_intent）：教授明确说那天不会有测验，与该选项相反。D错（wrong_detail）：教授鼓励参加并告知改到Bryant楼的大讲堂，但并未要求报名登记。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "C": "reversed_intent",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "Why does the professor mention the unit on ecosystems?",
+          "options": {
+            "A": "To explain why attending the talk is worthwhile",
+            "B": "To announce that the unit deadline has been delayed",
+            "C": "To warn that the lecture will be very difficult",
+            "D": "To remind students of an upcoming final exam",
+            "E": ""
+          },
+          "answer": "A",
+          "explanation": "正确答案A：教授提到本周即将结束的生态系统单元，是为了说明这场讲座与课程内容直接相关、因此值得去听。B错（over_inference）：公告说本周“收尾”该单元，但从未说单元截止日期被推迟。C错（unrelated_inference）：教授并未对讲座难度做任何评价，毫无依据。D错（unrelated_inference）：公告完全没提期末考试，属于无关推断。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "over_inference",
+            "C": "unrelated_inference",
+            "D": "unrelated_inference"
+          }
+        }
+      ],
+      "id": "la_mpvfq0rz_9"
     }
   ]
 }
