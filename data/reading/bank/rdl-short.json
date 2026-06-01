@@ -6056,6 +6056,78 @@
       ],
       "difficulty": "easy",
       "id": "rdl-short_mpvlbkn2_3"
+    },
+    {
+      "id": "rdl_short_r2_routine-r2-20260601-193143_1",
+      "genre": "email",
+      "variant": "short",
+      "text": "Subject: Field Trip Permission Form\n\nHi Marcus, please drop off your signed field trip permission form at the Geology Office (Room 218, Stone Hall) by Friday, May 9. Include the $12 transportation fee in cash or check. Late forms cannot be accepted.\n\nThanks,\nDr. Lin",
+      "format_metadata": {
+        "from": "Dr. Lin",
+        "to": "Marcus",
+        "subject": "Field Trip Permission Form"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, where must Marcus drop off the form?",
+          "options": {
+            "A": "At the Field Trip Welcome Center on Sunday morning",
+            "B": "At the Geology Office in Stone Hall",
+            "C": "At the Visitor Information Desk in Stone Hall",
+            "D": "At Dr. Lin's mailbox in the Science Office"
+          },
+          "correct_answer": "B",
+          "explanation": "The email tells Marcus to deliver the form to the Geology Office located in Stone Hall, Room 218."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about forms submitted after the deadline?",
+          "options": {
+            "A": "They are sent to the dean's office for review",
+            "B": "They include an additional twenty-dollar penalty fee",
+            "C": "They are processed at the end of the semester",
+            "D": "They cannot be processed for the trip"
+          },
+          "correct_answer": "D",
+          "explanation": "The email states late forms cannot be accepted, which implies students who miss the deadline will not be able to join the trip."
+        }
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "rdl_short_r2_routine-r2-20260601-193143_2",
+      "genre": "notice",
+      "variant": "short",
+      "text": "Water Shutoff Notice\n\nBuilding maintenance will shut off water in Henderson Hall on Saturday, March 21, from 7:00 AM to 1:00 PM. Bathrooms and drinking fountains will be unavailable. Bottled water will be distributed at the front desk. Please plan accordingly.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what time will the water shutoff end?",
+          "options": {
+            "A": "At one in the afternoon",
+            "B": "At nine in the morning",
+            "C": "At seven in the evening",
+            "D": "At twelve noon sharp"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice states the shutoff runs from 7:00 AM to 1:00 PM, so water service resumes at one in the afternoon."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about students living in Henderson Hall?",
+          "options": {
+            "A": "They are required to move out for the entire day",
+            "B": "They will receive a meal voucher as compensation",
+            "C": "They should pick up bottled water on Saturday morning",
+            "D": "They must inform the front desk of any concerns"
+          },
+          "correct_answer": "C",
+          "explanation": "Because bottled water is being distributed at the front desk during the shutoff hours, students would benefit from collecting it on Saturday morning when bathrooms and fountains are unavailable."
+        }
+      ],
+      "difficulty": "easy"
     }
   ]
 }

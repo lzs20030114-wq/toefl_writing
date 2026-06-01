@@ -1,0 +1,167 @@
+{
+  "items": [
+    {
+      "id": "lc_r2_routine-r2-20260601-193143_1",
+      "context": "campus_dorm_life",
+      "situation": "two students debating which library floor is best for studying",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Hey, where do you usually study now? Third floor or basement?" },
+        { "speaker": "Man", "text": "Honestly, the third floor's gotten too noisy. They added group tables." },
+        { "speaker": "Woman", "text": "Oh, really? I haven't been since last spring." },
+        { "speaker": "Man", "text": "Try the basement. It's a silent zone, and there are private carrels by the windows." },
+        { "speaker": "Woman", "text": "Carrels by windows? That sounds perfect for my thesis work." },
+        { "speaker": "Man", "text": "Just grab one before two. They fill up fast after that." },
+        { "speaker": "Woman", "text": "Got it. I'll head there tomorrow morning." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man say has changed on the third floor?",
+          "options": {
+            "A": "It has become noisier than before",
+            "B": "It has added new vending machines",
+            "C": "It has limited hours for finals",
+            "D": "It has lost its window seating area"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：男生明确说三楼变得太吵，因为加了小组讨论桌。B错误：对话从未提到自动售货机。C错误：对话没提期末考试期间时间受限。D错误：对话只提到地下室有窗户旁的隔间，没说三楼失去窗座。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "wrong_detail",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do tomorrow morning?",
+          "options": {
+            "A": "Move her thesis work back upstairs as before",
+            "B": "Reserve a group table for her thesis discussion",
+            "C": "Head to the basement to find a private carrel",
+            "D": "Continue studying in her dorm room as usual"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：女生最后说\"明天早上我会去那里\"，结合男生让她在两点前到地下室抢隔间，可推断她会去地下室找隔间。A错误：三楼正是被否决的选项，她不会回去。B错误：小组桌正是导致三楼吵闹的原因，她不会去预订。D错误：对话中没有讨论待在宿舍的方案。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "related_but_not_stated",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_r2_routine-r2-20260601-193143_2",
+      "context": "plans_social",
+      "situation": "two friends planning to split a textbook cost for a chemistry course",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Man", "role": "student", "gender": "male" },
+        { "name": "Woman", "role": "student", "gender": "female" }
+      ],
+      "conversation": [
+        { "speaker": "Man", "text": "Did you see how much the chemistry textbook costs this semester? Almost two hundred dollars." },
+        { "speaker": "Woman", "text": "Yikes. I was thinking we could split a used copy and share notes through the term." },
+        { "speaker": "Man", "text": "Actually, that could work. We have the same lab section anyway, so we'd be on the same pace." },
+        { "speaker": "Woman", "text": "Right, and the library has one on reserve too, in case we both need it the same night." },
+        { "speaker": "Man", "text": "Good backup plan. Let's check the bookstore's used section after lunch today." },
+        { "speaker": "Woman", "text": "Sounds great. I'll bring my student ID for the discount." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What is the woman's main suggestion to the man?",
+          "options": {
+            "A": "Buy a brand-new copy from the campus bookstore directly",
+            "B": "Share a used textbook and split the cost",
+            "C": "Borrow detailed notes from a previous classmate",
+            "D": "Sign up for a totally different lab section"
+          },
+          "answer": "B",
+          "explanation": "正确答案B：女生明确提出\"我们可以合买一本二手书然后共享笔记\"。A错误：对话中没有提到全新书，反而是买二手。C错误：对话从未提及向以前的同学借笔记。D错误：他们已经在同一个实验班，不需要换班。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "C": "unrelated_next_step",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the library copy of the textbook?",
+          "options": {
+            "A": "It is currently checked out by another student all term",
+            "B": "It can be borrowed for the whole semester at once",
+            "C": "It is missing several important chapters in the book",
+            "D": "It serves as a backup when their copy is taken"
+          },
+          "answer": "D",
+          "explanation": "正确答案D：女生提到图书馆有一本作为备用，\"以防我们两个同一晚都需要它\"，所以图书馆的书是他们共享本不可用时的备用方案。A错误：对话没说图书馆的书被借走。B错误：对话没提整学期可借。C错误：对话从未提到缺章。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "over_inference",
+            "C": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_r2_routine-r2-20260601-193143_3",
+      "context": "campus_dorm_life",
+      "situation": "two roommates deciding how to decorate their dorm for the holidays",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "So, are we doing anything for the dorm before break? Last year was so plain." },
+        { "speaker": "Man", "text": "Yeah, I was thinking some string lights and a small fake tree from the dollar store." },
+        { "speaker": "Woman", "text": "Oh, that's cute. But weren't string lights banned in dorms because of the wiring issue?" },
+        { "speaker": "Man", "text": "Hmm, you're right. The RA said battery-operated ones are okay though." },
+        { "speaker": "Woman", "text": "Perfect. I'll grab a set at the campus store tomorrow." },
+        { "speaker": "Man", "text": "And I'll figure out the tree situation this weekend." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man originally suggest buying?",
+          "options": {
+            "A": "A large fabric wreath for the dorm door",
+            "B": "A pair of decorative pillows from the bookstore",
+            "C": "A string of lights and a small tree",
+            "D": "A scented candle set for the study desks"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：男生说\"我在想灯串和一棵小假树\"，所以最初的建议就是灯串和小树。A错误：对话没提花环。B错误：男生提的是dollar store，不是bookstore，且没提枕头。D错误：对话从未提到香薰蜡烛。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "misattributed",
+            "D": "unrelated_next_step"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about plug-in string lights?",
+          "options": {
+            "A": "They are not permitted in the dorm rooms",
+            "B": "They are sold only at off-campus stores",
+            "C": "They are too expensive for most students",
+            "D": "They are difficult to install on dorm walls"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：女生提到灯串因为线路问题在宿舍被禁，男生确认\"你说得对，电池式的才被允许\"，可推断插电式灯串不被允许。B错误：对话没提销售地点。C错误：价格从未讨论。D错误：安装难度未涉及。",
+          "distractor_types": {
+            "B": "over_inference",
+            "C": "unrelated_next_step",
+            "D": "related_but_not_stated"
+          }
+        }
+      ]
+    }
+  ]
+}
