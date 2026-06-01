@@ -118,6 +118,21 @@ const SECTIONS = [
   },
 ];
 
+// NEWBANK_ROOT (optional): when set (e.g. NEWBANK_ROOT=data/newBank), validated+deduped
+// output is written to the NEW bank under that root instead of the live bank — so a fresh
+// bank can be staged for a one-shot replacement without ever touching production. Staging is
+// still read from the normal data/<section>/staging dirs. Default (unset) = live bank.
+const NEWBANK_ROOT = (process.env.NEWBANK_ROOT || "").trim()
+  ? resolve(ROOT, (process.env.NEWBANK_ROOT || "").trim())
+  : null;
+if (NEWBANK_ROOT) {
+  for (const section of SECTIONS) {
+    // section.bankDir is join(ROOT, 'data/<x>/bank'); redirect the 'data' prefix to NEWBANK_ROOT.
+    section.bankDir = section.bankDir.replace(join(ROOT, "data"), NEWBANK_ROOT);
+  }
+  console.log(`NEWBANK_ROOT set → writing banks to ${NEWBANK_ROOT} (live bank untouched)`);
+}
+
 // Legacy aliases
 const STAGING_DIR = join(ROOT, 'data/reading/staging');
 const BANK_DIR = join(ROOT, 'data/reading/bank');

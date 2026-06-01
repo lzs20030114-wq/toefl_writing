@@ -29,6 +29,17 @@ const ROOT = resolve(__dirname, "..");
 const { validateQuestion, validateQuestionSet } = require("../lib/questionBank/buildSentenceSchema.js");
 const { validateAllSets } = require("./validate-bank.js");
 
+// NEWBANK_ROOT (optional): when set (e.g. NEWBANK_ROOT=data/newBank), validated items are
+// appended to the NEW bank under that root instead of the live bank, so a fresh bank can be
+// staged for a one-shot replacement without touching production. Default (unset) = live bank.
+const NEWBANK_ROOT = (process.env.NEWBANK_ROOT || "").trim()
+  ? resolve(ROOT, (process.env.NEWBANK_ROOT || "").trim())
+  : null;
+function bankFilePath(relFromData) {
+  return NEWBANK_ROOT ? resolve(NEWBANK_ROOT, relFromData) : resolve(ROOT, "data", relFromData);
+}
+if (NEWBANK_ROOT) console.log(`NEWBANK_ROOT set → writing bank to ${NEWBANK_ROOT} (live bank untouched)`);
+
 const bank = String(process.argv[2] || "").trim();
 const stagingFile = process.argv[3];
 
@@ -79,7 +90,7 @@ function mergeBS(stagingPath) {
   }
 
   // Compose sets of exactly 10
-  const bankPath = resolve(ROOT, "data/buildSentence/questions.json");
+  const bankPath = bankFilePath("buildSentence/questions.json");
   const prod = readJSON(bankPath);
   const existingSets = prod.question_sets || [];
   const nextSetId = existingSets.length > 0 ? Math.max(...existingSets.map((s) => s.set_id || 0)) + 1 : 1;
@@ -142,7 +153,7 @@ function mergeDisc(stagingPath) {
   const staging = readJSON(stagingPath);
   const items = Array.isArray(staging.items) ? staging.items : Array.isArray(staging) ? staging : [];
 
-  const bankPath = resolve(ROOT, "data/academicWriting/prompts.json");
+  const bankPath = bankFilePath("academicWriting/prompts.json");
   const prod = readJSON(bankPath);
   const existingIds = new Set((prod || []).map((q) => q.id).filter(Boolean));
   const nextN = (prod || []).length > 0
@@ -209,7 +220,7 @@ function mergeEmail(stagingPath) {
   const staging = readJSON(stagingPath);
   const items = Array.isArray(staging.items) ? staging.items : Array.isArray(staging) ? staging : [];
 
-  const bankPath = resolve(ROOT, "data/emailWriting/prompts.json");
+  const bankPath = bankFilePath("emailWriting/prompts.json");
   const prod = readJSON(bankPath);
   const nextN = (prod || []).length > 0
     ? Math.max(...(prod || []).map((q) => Number((q.id || "").replace(/^em/, "")) || 0)) + 1
