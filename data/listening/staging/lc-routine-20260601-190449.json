@@ -1,0 +1,281 @@
+{
+  "items": [
+    {
+      "context": "errands_service",
+      "situation": "two friends figuring out a bus or train schedule for a day trip",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Hey, did you figure out how we're getting to Riverton on Saturday? I checked the bus schedule and the express only runs at seven in the morning." },
+        { "speaker": "Man", "text": "Seven? Yikes, that's brutal." },
+        { "speaker": "Woman", "text": "I know. But if we take the regular bus, it stops everywhere and gets there around noon. We'd barely have any time at the festival." },
+        { "speaker": "Man", "text": "Actually, what about the train? My roommate said there's a new weekend train that leaves at nine." },
+        { "speaker": "Woman", "text": "Really? That sounds way better. Is it expensive?" },
+        { "speaker": "Man", "text": "It's twelve dollars one way with a student ID. I'll book the tickets tonight through the rail app." },
+        { "speaker": "Woman", "text": "Perfect, I'll pay you back tomorrow." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What is the problem with the express bus?",
+          "options": {
+            "A": "It departs very early in the morning",
+            "B": "It costs more than the train ticket",
+            "C": "It does not run on Saturdays",
+            "D": "It is fully booked for the weekend"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：女生明确说快车只在早上七点发车，男生反应说\"太残酷了\"，说明问题在于出发时间太早。B错误：对话从未比较快车和火车的价格。C错误：女生说的是发车时间，没说不在周六运营。D错误：对话中没有提到座位售罄的问题。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do tonight?",
+          "options": {
+            "A": "Take the regular bus to Riverton",
+            "B": "Ask his roommate for a ride to the station",
+            "C": "Reserve train tickets through a mobile app",
+            "D": "Cancel the trip to the festival"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：男生明确说\"今晚我会通过铁路应用订票\"，因此他最可能做的就是用手机应用订火车票。A错误：男生和女生已决定不坐公交，普通公交是被否决的选项。B错误：对话中虽然提到室友，但只是室友告诉他有这趟火车，不涉及让室友送他去车站。D错误：他们正在积极规划去节日，没有任何取消行程的迹象。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "unrelated_next_step",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two students talking about a new restaurant downtown and which dish to try",
+      "difficulty": "hard",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "So you finally tried Beacon Street? I've been hearing nonstop hype about it. Was it actually worth the wait?" },
+        { "speaker": "Man", "text": "Honestly, the atmosphere's gorgeous, but the menu is hit or miss. The pasta everyone raves about online? Pretty average." },
+        { "speaker": "Woman", "text": "Oh no. So what should I order if I go?" },
+        { "speaker": "Man", "text": "Skip the pasta and go straight for the duck confit. It's the only dish the chef actually trained on, and you can tell." },
+        { "speaker": "Woman", "text": "Duck? I usually wouldn't pick that, but I trust you." },
+        { "speaker": "Man", "text": "Trust me, it's the move. Oh, and the desserts come from a bakery next door, so don't waste room on those." },
+        { "speaker": "Woman", "text": "Good to know. I'll grab dessert somewhere else after." },
+        { "speaker": "Man", "text": "Smart. There's a little gelato shop two blocks over that's incredible." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of the conversation?",
+          "options": {
+            "A": "To complain about the high prices at a new restaurant",
+            "B": "To share advice about what to order at a restaurant",
+            "C": "To decide whether to eat downtown this weekend",
+            "D": "To recommend a bakery and gelato shop nearby"
+          },
+          "answer": "B",
+          "explanation": "正确答案B：整段对话围绕男生告诉女生在这家新餐厅应该点什么菜（鸭肉而不是意面）以及避开什么（甜点）。A错误：对话从未提到价格高的问题。C错误：女生已经决定要去，不是在犹豫是否去市中心吃饭。D错误：甜点店和冰淇淋店只是次要细节，不是对话主旨。",
+          "distractor_types": {
+            "A": "wrong_topic",
+            "C": "reversed_situation",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the woman's plan after dinner?",
+          "options": {
+            "A": "She will return to Beacon Street another night",
+            "B": "She will order the pasta despite the man's warning",
+            "C": "She will write an online review of the restaurant",
+            "D": "She will buy dessert at a different location"
+          },
+          "answer": "D",
+          "explanation": "正确答案D：女生明确说\"我会在别的地方买甜点\"，男生还推荐了两个街区外的冰淇淋店，所以她饭后会去别的地方买甜点。A错误：对话中没有任何关于她再次光顾Beacon Street的暗示，是过度推理。B错误：她说\"我信你\"，表示会听男生的建议，意面是被否决的选项。C错误：对话中没有提到写评论，与对话无关。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "rejected_option",
+            "C": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two friends discussing a movie one just saw — good twists but too long",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "I finally saw that thriller you've been talking about. The Quiet Hour." },
+        { "speaker": "Man", "text": "Oh nice! What did you think?" },
+        { "speaker": "Woman", "text": "Honestly, the twists were brilliant. I didn't see the ending coming at all, and the second one in the middle? Total shock." },
+        { "speaker": "Man", "text": "Right? That's why I keep recommending it." },
+        { "speaker": "Woman", "text": "But, wow, it's long. Almost three hours. There's a whole subplot with the sister that they could've cut entirely." },
+        { "speaker": "Man", "text": "Yeah, I'll admit that part dragged. I actually checked my watch twice." },
+        { "speaker": "Woman", "text": "Same. I might rewatch it sometime, but I'd skip ahead through the sister scenes." },
+        { "speaker": "Man", "text": "Smart. There's actually a fan edit online that trims about forty minutes. I'll send you the link." },
+        { "speaker": "Woman", "text": "Yes, please do!" }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What specific part of the movie did the woman think should have been cut?",
+          "options": {
+            "A": "The opening sequence of the film",
+            "B": "The final twist near the end",
+            "C": "A subplot involving a sister character",
+            "D": "A long flashback in the middle"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：女生明确说\"姐姐那条副线他们完全可以剪掉\"，所以她认为应该删除涉及姐姐这个角色的副线。A错误：对话从未提到开场镜头有问题。B错误：女生其实非常赞美结尾的反转，认为它出人意料。D错误：对话中没有提到中段的闪回情节，这是听起来合理但未提及的细节。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do after the conversation?",
+          "options": {
+            "A": "Send the woman a link to a shorter fan edit",
+            "B": "Rewatch the movie with the woman this weekend",
+            "C": "Write a negative review about the movie's length",
+            "D": "Stop recommending the movie to other friends"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：男生明确说\"我会把链接发给你\"，指的是网上一个删减了约四十分钟的影迷版本。B错误：对话中没有提到他们要一起重看这部电影，是过度推理。C错误：男生承认有部分拖沓，但他仍然在推荐这部电影，写差评违背他的态度。D错误：他明显仍然欣赏这部电影并继续向他人推荐，与对话信息相反。",
+          "distractor_types": {
+            "B": "over_inference",
+            "C": "unrelated_next_step",
+            "D": "reversed_situation"
+          }
+        }
+      ]
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "two friends discussing whether to join a campus club or intramural team",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Hey, the activities fair ended yesterday and I still can't decide. Should I sign up for the photography club or the intramural soccer team?" },
+        { "speaker": "Man", "text": "Hmm, both meet on Tuesdays, right? You can't really do both." },
+        { "speaker": "Woman", "text": "Exactly. And I already have my chemistry lab on Thursday nights, so I need to be careful." },
+        { "speaker": "Man", "text": "Well, what are you actually hoping to get out of it? Like, friends? Exercise? A new skill?" },
+        { "speaker": "Woman", "text": "Honestly, I want to meet people outside my major. The chem crowd's nice but kind of intense." },
+        { "speaker": "Man", "text": "Then soccer, hands down. The intramural league is super social, and they go out together every weekend." },
+        { "speaker": "Woman", "text": "Even if I'm not great at soccer?" },
+        { "speaker": "Man", "text": "Totally. Half the team had never played before this year. It's all about showing up." },
+        { "speaker": "Woman", "text": "Okay, I'm convinced. I'll register tonight." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "How to balance lab work with social activities",
+            "B": "Whether photography club fees are worth paying",
+            "C": "The best way to make friends outside one's major",
+            "D": "Which extracurricular activity the woman should join"
+          },
+          "answer": "D",
+          "explanation": "正确答案D：整段对话围绕女生在摄影社和校内足球队之间犹豫不决，男生帮她做选择。A错误：化学实验只是被简单提及作为时间冲突，不是讨论的主题。B错误：对话中完全没有提到会费问题。C错误：交友是她选择活动的动机之一，但这是太狭窄的视角，主题是选哪个活动。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "wrong_topic",
+            "C": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the woman's soccer ability?",
+          "options": {
+            "A": "She played competitively in high school",
+            "B": "She has limited experience with the sport",
+            "C": "She refuses to join because of her skill level",
+            "D": "She is the team's most talented new member"
+          },
+          "answer": "B",
+          "explanation": "正确答案B：女生问\"即使我足球踢得不好也可以吗？\"暗示她经验有限，所以可以推断她对这项运动经验不多。A错误：她担心自己技术不好，与高中竞技踢球矛盾，与对话信息相反。C错误：男生说不用紧张后她答应报名，她并没有拒绝加入，被否决的选项。D错误：她担心自己不擅长，称她是队里最有天赋的新成员是过度推理。",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "C": "rejected_option",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "errands_service",
+      "situation": "two students chatting about a gardening or art class they took",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Hey, didn't you take that weekend pottery class at the community center last month? How was it?" },
+        { "speaker": "Man", "text": "Oh, I loved it. Way more relaxing than I expected. The instructor was really patient." },
+        { "speaker": "Woman", "text": "I was thinking about signing up. What did you actually make?" },
+        { "speaker": "Man", "text": "We started with simple bowls the first weekend, then moved on to mugs. Mine came out a little crooked, but it works." },
+        { "speaker": "Woman", "text": "Aww, that's so cute. Was it expensive?" },
+        { "speaker": "Man", "text": "Sixty bucks for four sessions, and that includes all the clay and glazes. Pretty good deal." },
+        { "speaker": "Woman", "text": "That's reasonable. Do I need to bring anything?" },
+        { "speaker": "Man", "text": "Just wear old clothes. Trust me, you'll get clay everywhere." },
+        { "speaker": "Woman", "text": "Got it. I'll register this afternoon." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What was the first item the man made in the pottery class?",
+          "options": {
+            "A": "A simple bowl",
+            "B": "A crooked coffee mug",
+            "C": "A glazed dinner plate",
+            "D": "A small clay vase"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：男生明确说\"我们第一个周末从简单的碗开始\"，所以他做的第一件东西是简单的碗。B错误：杯子是第二个周末做的，不是第一件，是混淆细节。C错误：对话中没有提到盘子，听起来合理但未提及。D错误：对话中没有提到花瓶，听起来合理但未提及。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do this afternoon?",
+          "options": {
+            "A": "Go shopping for new clothes to wear",
+            "B": "Ask the man to attend the class with her",
+            "C": "Sign up for the pottery class herself",
+            "D": "Visit the community center to see the studio"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：女生在对话最后明确说\"我下午就去报名\"，因此她下午最可能做的事是给陶艺课报名。A错误：男生让她穿旧衣服，而不是去买新衣服，与男生的建议相反。B错误：对话中没有提到邀请男生一起上课，与对话无关。D错误：她说要去报名，没说要先去社区中心实地参观，是过度推理。",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "B": "unrelated_next_step",
+            "D": "over_inference"
+          }
+        }
+      ]
+    }
+  ]
+}

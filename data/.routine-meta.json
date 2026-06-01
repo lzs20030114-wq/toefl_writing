@@ -1,19 +1,17 @@
 {
-  "session_id": "routine-20260531-190444",
-  "completed_at": "2026-05-31T19:24:00.000Z",
-  "duration_minutes": 19,
-  "r2_completed_at": "2026-05-31T19:35:00.000Z",
-  "r2_session_id": "routine-r2-20260531-193107",
-  "highlight": "PASS 1 全 12 个题库 70/70 全数通过；BS 新增 2 套 20 题校园对话；首次出现 geology/plate tectonics 学术阅读与 astronomy/dark matter 学术听力",
+  "session_id": "routine-20260601-190449",
+  "completed_at": "2026-06-01T19:25:00Z",
+  "duration_minutes": 21,
+  "highlight": "首次出现 art_history/Expressionism 听力学术讲座主题",
   "commit_sha": "",
   "results": {
     "bs": {
       "generated": 20,
-      "accepted": 20,
-      "topics": ["campus_life", "indirect_questions", "negation", "comparatives", "passive", "wh_questions"],
+      "accepted": 10,
+      "topics": ["campus life", "library", "writing center", "dorms", "advisor", "professor"],
       "favorite": {
-        "prompt": "Tell me about the new study area in the union.",
-        "answer": "The lounge feels much quieter than the basement library."
+        "prompt": "I just transferred here this semester.",
+        "answer": "Where do I sign up for the writing center?"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -21,10 +19,10 @@
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["computer science", "sociology", "public health", "environmental science"],
+      "topics": ["computer science", "public health", "environmental science", "business"],
       "favorite": {
         "subtopic": "public health",
-        "preview": "For this week's discussion, let's think about a question that keeps emerging in campus wellness committees: should u"
+        "preview": "We've been examining how cities respond to rising rates of loneliness, which public health researche"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -32,10 +30,10 @@
     "email": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["服务与活动", "校园学业", "消费售后", "日常社交"],
+      "topics": ["服务与活动", "校园学业", "消费售后"],
       "favorite": {
-        "subtopic": "消费售后",
-        "preview": "You ordered a refurbished noise-canceling headset from Audiograph Electronics three weeks ago. The right earcup produces persistent crackling and the carrying case was missing from the shipment."
+        "subtopic": "服务与活动",
+        "preview": "You recently signed up for a weekend ceramics class at the Brookfield Community Studio"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -43,10 +41,10 @@
     "reading-ap": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["biology/animal behavior", "environmental_science/wind energy", "history/ancient civilizations", "geology/plate tectonics", "psychology/sleep psychology"],
+      "topics": ["history/ancient Egypt", "art/cinema history", "anthropology/oral traditions", "sociology/globalization", "psychology/perception"],
       "favorite": {
-        "subtopic": "geology/plate tectonics",
-        "preview": "Subduction zones are regions where one tectonic plate slides beneath another and descends slowly into the mantle."
+        "subtopic": "anthropology/oral traditions",
+        "preview": "Oral traditions are the body of historical narrative, ritual song, and instructional knowledge passe"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -54,10 +52,10 @@
     "reading-ctw": {
       "generated": 6,
       "accepted": 6,
-      "topics": ["biology/ecosystems", "environmental_science/carbon cycle", "psychology/habit formation", "history/ancient Egypt", "geology/river deltas", "astronomy/satellite technology"],
+      "topics": ["biology/symbiosis", "environmental_science/water purification", "psychology/group dynamics", "history/agricultural revolution", "geology/mountain formation", "astronomy/nebulae"],
       "favorite": {
-        "subtopic": "biology/ecosystems",
-        "preview": "Mangrove forests form along sheltered tropical coastlines where saltwater meets shifting layers of soft mud."
+        "subtopic": "biology/symbiosis",
+        "preview": "Cleaner shrimp and large reef fish form one of the most reliable cooperative partnerships found in"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -65,38 +63,32 @@
     "reading-rdl-short": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["notice/library-hours", "email/resume-review", "email/office-hours", "notice/elevator-service"],
+      "topics": ["social_media", "email", "notice"],
       "favorite": {
-        "subtopic": "notice/library-hours",
-        "preview": "Spring Break Library Hours — The Anderson Library will operate on reduced hours from March 14 to March 20."
+        "subtopic": "social_media",
+        "preview": "Quick reminder! The Riverside Campus Garden reopens this Saturday, March 22. Open hours are Tuesdays"
       },
       "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_session_id": "routine-r2-20260531-193107",
-      "r2_items_added": 2
+      "failure_reason": ""
     },
     "reading-rdl-long": {
       "generated": 2,
       "accepted": 2,
-      "topics": ["email/radio-recruitment", "email/flu-shot-confirmation"],
+      "topics": ["notice"],
       "favorite": {
-        "subtopic": "email/radio-recruitment",
-        "preview": "Hi Briar, I'm writing to invite you to volunteer at WCRX, the student-run campus radio station, for the spring semester."
+        "subtopic": "notice",
+        "preview": "DINING HALL ALLERGEN POLICY UPDATE — Effective Monday, September 8, the Anderson Dining Hall adopts"
       },
       "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_session_id": "routine-r2-20260531-193107",
-      "r2_items_added": 1
+      "failure_reason": ""
     },
     "listening-lat": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["astronomy/dark matter", "geology/stalactite climate records", "environmental_science/carbon sequestration", "art_history/impressionist color theory"],
+      "topics": ["art_history/Expressionism", "social_psychology/diffusion of responsibility", "anthropology/time concepts", "cognitive_psychology/cocktail party effect"],
       "favorite": {
-        "subtopic": "astronomy/dark matter",
-        "preview": "Okay, today I want to talk about something that's been puzzling astronomers for decades. The math just doesn't add up."
+        "subtopic": "art_history/Expressionism",
+        "preview": "Expressionism is one of the most influential art movements of the early twentieth century, and it w"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -104,24 +96,21 @@
     "listening-lc": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["plans_social/birthday-surprise", "campus_dorm_life/commute-options", "errands_service/day-trip-transit", "plans_social/cheese-board", "campus_dorm_life/factory-job"],
+      "topics": ["errands_service", "campus_routines", "social_planning"],
       "favorite": {
-        "subtopic": "errands_service/day-trip-transit",
-        "preview": "Okay, so for the day trip to Riverton on Saturday, I'm looking at the transit schedule and it's confusing."
+        "subtopic": "errands_service",
+        "preview": "Two friends figuring out a bus schedule for a day trip to Riverton — express only runs at seven"
       },
       "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_session_id": "routine-r2-20260531-193107",
-      "r2_items_added": 3
+      "failure_reason": ""
     },
     "listening-la": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["academic_event/showcase", "facility_change/cardio-equipment", "logistics/bike-share-stations", "logistics/shuttle-construction", "guest_speaker/career-paths"],
+      "topics": ["academic_event", "info_session", "facility_change", "logistics"],
       "favorite": {
-        "subtopic": "facility_change/cardio-equipment",
-        "preview": "Good afternoon, members of the campus community. The Recreation Center will install a new set of cardio and strength equipment between June second and June ninth."
+        "subtopic": "academic_event",
+        "preview": "End-of-semester Honors Society academic showcase with Dean's Excellence Awards in Whitman Hall"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -129,10 +118,10 @@
     "listening-lcr": {
       "generated": 8,
       "accepted": 8,
-      "topics": ["campus_academic/database", "campus_academic/case-study", "general_daily/business-hours", "campus_daily/radiator", "general_daily/cleaning", "campus_daily/brunch", "general_daily/ride-share", "social/availability"],
+      "topics": ["general_daily", "campus_daily", "campus_academic", "social"],
       "favorite": {
-        "subtopic": "campus_daily/radiator",
-        "preview": "The radiator in my room has been knocking all week."
+        "subtopic": "general_daily",
+        "preview": "Asking a neighbor about noise or shared space — hammering coming from this morning"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -140,10 +129,10 @@
     "speaking-repeat": {
       "generated": 3,
       "accepted": 3,
-      "topics": ["Travel Booking", "Salad Making", "Watercolor Painting"],
+      "topics": ["Recycling Center Tour", "Bike Tire Repair", "Theater Rehearsal"],
       "favorite": {
-        "subtopic": "Watercolor Painting",
-        "preview": "First, prepare your watercolor palette."
+        "subtopic": "Recycling Center Tour",
+        "preview": "Glass bins are located near the entrance. Please rinse your containers first."
       },
       "retried_after_fail": false,
       "failure_reason": ""

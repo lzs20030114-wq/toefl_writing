@@ -3177,6 +3177,134 @@
         "C": "off_topic"
       },
       "audio_url": "/api/audio/choose-response/lcr_r1_routine-20260531-190444_8.mp3"
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a neighbor about noise or shared space",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Where's all that hammering coming from this morning?",
+      "options": {
+        "A": "I'll go ask them to wrap it up soon.",
+        "B": "Hammers are stored in the basement closet.",
+        "C": "The morning light hits that window perfectly.",
+        "D": "He fixed the fence last weekend already."
+      },
+      "answer": "A",
+      "explanation": "正确答案 A 体现 context_shift 范式：没有直接回答\"在哪里\"，而是直接解决说话人潜在的不满——主动去叫对方停下来。B 是语义联想陷阱（hammering → hammers 工具存放位置），与说话人想知道噪音来源无关。C 是离题选项（用 morning 这个词造一个无关的句子）。D 是答错问题类型（说话人问的是 where，D 回答的是 when 和 what，且时间不对）。",
+      "id": "lcr_mpvlbko3_0"
+    },
+    {
+      "context": "general_daily",
+      "situation": "checking if a service (post office, bank) is open",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I really need to mail this package before five.",
+      "options": {
+        "A": "Stamps come in books of twenty now.",
+        "B": "Actually, the post office stays open till six tonight.",
+        "C": "He sent the letter from Boston last week.",
+        "D": "Yes, you can ship it however you like."
+      },
+      "answer": "B",
+      "explanation": "正确答案 B 以话语标记 Actually 开头，间接回应说话人的担忧——告诉对方时间还来得及。A 是语义联想陷阱（mail → stamps 邮票），没有回应说话人的时间压力。C 是离题但语法正确的句子（不同的人、不同的时间、不同的城市）。D 是答错问题类型（说话人是陈述句表达担忧，D 却给出 yes/no 式许可，逻辑错位）。",
+      "id": "lcr_mpvlbko3_1"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student checking bus or shuttle schedule",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Why does the shuttle skip the south lot on Sundays?",
+      "options": {
+        "A": "The shuttle is painted blue and white.",
+        "B": "Yes, the schedule changed last semester.",
+        "C": "Are you trying to get to the dorms by noon?",
+        "D": "Sunday brunch is served until two."
+      },
+      "answer": "C",
+      "explanation": "正确答案 C 体现 counter_question 范式：用一个推进对话的反问，弄清说话人真正的需求，从而能给出有用建议。A 是语义联想陷阱（shuttle → 描述班车外观），完全没回应问题。B 是答错问题类型（说话人问 why，B 用 yes 开头答非所问）。D 是离题选项（借用 Sunday 这个词造无关的句子）。",
+      "id": "lcr_mpvlbko3_2"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student discussing a presentation topic with partner",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "What angle should we take on the climate paper?",
+      "options": {
+        "A": "Climate is one of the required units this term.",
+        "B": "I turned in my draft on Tuesday morning.",
+        "C": "Yes, that section was pretty long.",
+        "D": "How about focusing on coastal cities?"
+      },
+      "answer": "D",
+      "explanation": "正确答案 D 体现 counter_question 范式：用一个具体的提议性反问推进讨论，给出可行的切入点。A 是语义联想陷阱（climate → 关于气候课程的事实陈述），没有回答如何取角度。B 是离题但语法正确（说自己交了草稿，与角度选择无关）。C 是答错问题类型（说话人问 what angle，C 却用 yes 回应，逻辑不通）。",
+      "id": "lcr_mpvlbko3_3"
+    },
+    {
+      "context": "social",
+      "situation": "offering help to someone who seems stressed",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "You look completely wiped out today.",
+      "options": {
+        "A": "Want me to grab you a coffee?",
+        "B": "The towel is hanging by the sink.",
+        "C": "I cleaned the whole kitchen last night.",
+        "D": "No, that movie wasn't very good."
+      },
+      "answer": "A",
+      "explanation": "正确答案 A 体现 counter_question 范式：不直接评论对方的状态，而是用一个体贴的反问主动提供帮助，自然推进对话。B 是语义联想陷阱（wiped → wipe/towel 抹布毛巾，利用一词多义）。C 是离题选项（说自己昨晚做了什么，与对方的疲惫无关）。D 是答错问题类型（说话人是关切的陈述，D 却用 no 回应一个根本没问的问题）。",
+      "id": "lcr_mpvlbko3_4"
+    },
+    {
+      "context": "social",
+      "situation": "friend sharing news or personal update",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "How did your sister's wedding go last weekend?",
+      "options": {
+        "A": "Weddings are usually held in the spring.",
+        "B": "It was beautiful — everyone had a great time.",
+        "C": "She lives in Chicago with her husband now.",
+        "D": "Where did you find that recipe again?"
+      },
+      "answer": "B",
+      "explanation": "正确答案 B 体现 direct_topical 范式：直接、温暖地回答说话人问的婚礼怎么样。A 是语义联想陷阱（wedding → 关于婚礼季节的一般性事实，没回答这一场）。C 是离题选项（讲妹妹现在住哪里，没回答婚礼本身怎么样）。D 是答错问题类型（说话人问 how，D 反问 where 完全转换话题）。",
+      "id": "lcr_mpvlbko3_5"
+    },
+    {
+      "context": "general_daily",
+      "situation": "making or rescheduling an appointment",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Can we push my haircut to Thursday afternoon?",
+      "options": {
+        "A": "The salon redecorated the front lobby.",
+        "B": "Yes, I trimmed mine just last month.",
+        "C": "Actually, Friday morning would work better for us.",
+        "D": "When did the new stylist start working?"
+      },
+      "answer": "C",
+      "explanation": "正确答案 C 以话语标记 Actually 开头，间接回应预约请求——提出一个更可行的替代时间。A 是语义联想陷阱（haircut → salon 美发店装修），与改约时间无关。B 是答错问题类型/误解（把对方的预约请求理解成了关于剪头发的一般经验）。D 是离题选项（反问新发型师入职时间，完全偏离改约这件事）。",
+      "id": "lcr_mpvlbko3_6"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking about a reading list for a course",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Did the professor finalize the reading list yet?",
+      "options": {
+        "A": "Reading rooms close at midnight on weekdays.",
+        "B": "She lectured for almost two hours yesterday.",
+        "C": "I finished the novel over the break.",
+        "D": "Your guess is as good as mine."
+      },
+      "answer": "D",
+      "explanation": "正确答案 D 体现 idiomatic 范式：用地道的英语习语 \"Your guess is as good as mine\"（我也不知道，跟你一样不清楚）自然回应。A 是语义联想陷阱（reading → reading rooms 阅览室开放时间）。B 是离题选项（讲教授昨天讲课多久，没回答阅读清单是否定下来）。C 是误解/答错问题类型（把 reading list 误解成具体的小说阅读经历）。",
+      "id": "lcr_mpvlbko3_7"
     }
   ]
 }

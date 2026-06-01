@@ -1,0 +1,219 @@
+{
+  "items": [
+    {
+      "context": "academic_event",
+      "situation": "end-of-semester academic showcase with awards",
+      "speaker_role": "society_president",
+      "difficulty": "medium",
+      "announcement": "Good afternoon, everyone. As president of the Honors Society, I'm thrilled to invite you to our end-of-semester academic showcase next Thursday at 5 p.m. in Whitman Hall. Students from every department will present their top projects, and we'll close the evening by handing out the Dean's Excellence Awards in three categories. Light refreshments will be provided, but seating is limited to roughly 150 guests. To attend, you must reserve a spot through the Honors Society portal by Tuesday at noon. We hope you'll come celebrate your classmates' achievements with us.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "Invite the campus to a project showcase and awards ceremony",
+            "B": "Recruit new members for the Honors Society this term",
+            "C": "Apologize for changes to the Dean's Excellence Awards",
+            "D": "Discourage attendance because seating is too limited"
+          },
+          "answer": "A",
+          "explanation": "正确答案是 A，因为整则通知的核心是邀请大家参加下周四的学期末学术展示和颁奖晚会。B 错在公告完全没有提到招募新成员，是 wrong_purpose。C 错在公告并未对奖项做出任何道歉或变更说明，属于 wrong_purpose。D 错在虽然提到席位有限，但通知的目的是邀请而非劝退，属于 reversed_intent。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What must students do in order to attend the event?",
+          "options": {
+            "A": "Submit a project abstract before Tuesday",
+            "B": "Pay a small fee at the door on Thursday",
+            "C": "Reserve a spot on the Honors Society portal",
+            "D": "Sign up through their academic advisor"
+          },
+          "answer": "C",
+          "explanation": "正确答案是 C，因为通知明确指出必须在周二中午前通过 Honors Society portal 预约席位。A 错在公告说的是为了出席要预约，而不是提交项目摘要，混淆了出席者与展示者的要求，属于 misattributed_detail。B 错在公告并未提到任何门票费用，属于 wrong_detail。D 错在通过学术导师报名只是合理的校园做法，但本公告并未提及，属于 related_but_not_stated。",
+          "distractor_types": {
+            "A": "misattributed_detail",
+            "B": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        }
+      ]
+    },
+    {
+      "context": "info_session",
+      "situation": "financial aid office workshop on scholarship applications",
+      "speaker_role": "advisor",
+      "difficulty": "hard",
+      "announcement": "This is a reminder that the Financial Aid Office is hosting a scholarship application workshop this coming Wednesday from 3 to 4:30 p.m. in Room 210 of Carver Hall. We'll walk you through the new online portal, explain how to request faculty recommendation letters, and review the personal statement rubric used by reviewers. To get the most out of the session, please bring a rough draft of one essay and a list of three scholarships you're considering. Drop-in advising afterward is first-come, first-served. Students who attend will be given priority review on submissions filed before the March 15th deadline.",
+          "questions": [
+        {
+          "type": "detail",
+          "stem": "What are students asked to bring to the workshop?",
+          "options": {
+            "A": "A printed copy of the personal statement rubric",
+            "B": "A draft essay and a list of three scholarships",
+            "C": "Letters of recommendation from two faculty members",
+            "D": "A completed copy of the online application form"
+          },
+          "answer": "B",
+          "explanation": "正确答案是 B，因为通知明确要求带一份初稿和三个感兴趣的奖学金清单。A 错在评审标准是由办公室在现场讲解的内容，并不是学生需要带的东西，属于 misattributed_detail。C 错在公告说的是讨论如何请求推荐信，而不是当天带推荐信来，属于 wrong_detail。D 错在没有提到要带完成的申请表，属于 related_but_not_stated。",
+          "distractor_types": {
+            "A": "misattributed_detail",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students who attend the workshop?",
+          "options": {
+            "A": "They are guaranteed to receive at least one scholarship",
+            "B": "They must submit their applications during the session",
+            "C": "They are required to apply for three separate awards",
+            "D": "They may have their applications reviewed sooner than others"
+          },
+          "answer": "D",
+          "explanation": "正确答案是 D，因为公告说参加者在 3 月 15 日前提交可获得优先审阅，可以合理推断他们的申请会比其他人更早被审。A 错在保证获奖远远超出公告内容范围，属于 over_inference。B 错在公告并未要求当场提交，属于 wrong_detail。C 错在公告只是建议带三个奖学金清单，并不强制申请三项，属于 wrong_detail。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "wrong_detail",
+            "C": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "facility_change",
+      "situation": "campus bookstore moving to a new building",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "Attention students, faculty, and staff. The campus bookstore will be moving from its current location in Henderson Hall to the renovated ground floor of the Student Union starting Monday, October 14th. The new space is larger and will include a dedicated study lounge and a small coffee bar. During the move, the bookstore will be closed from Thursday afternoon through Sunday evening. You can still order textbooks online during that period, and we'll hold any pickups until the new store reopens. Please stop by the Student Union next Monday morning to check out the new space.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "Encourage students to order more textbooks online",
+            "B": "Apologize for delays in textbook deliveries this term",
+            "C": "Inform the campus that the bookstore is relocating",
+            "D": "Announce a permanent closure of Henderson Hall"
+          },
+          "answer": "C",
+          "explanation": "正确答案是 C，因为通知的核心信息是书店从 Henderson Hall 搬到学生中心。A 错在线上订购只是搬迁期间的临时安排，并非通知的主要目的，属于 too_narrow。B 错在公告完全没有对延迟交付道歉，属于 wrong_purpose。D 错在公告只说书店搬走，并没有说整个 Henderson Hall 永久关闭，属于 over_inference。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "wrong_purpose",
+            "D": "over_inference"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What will the new bookstore location include?",
+          "options": {
+            "A": "A study lounge and a coffee bar",
+            "B": "A printing center for course materials",
+            "C": "An expanded faculty office area",
+            "D": "A 24-hour textbook pickup locker"
+          },
+          "answer": "A",
+          "explanation": "正确答案是 A，因为公告明确说新店面包含一个专门的自习休息区和一个小咖啡吧。B 错在公告并未提到打印中心，属于 related_but_not_stated。C 错在公告只字未提教师办公区域，属于 related_but_not_stated。D 错在公告说搬迁期间会保留取书订单，并未提到 24 小时自助取书柜，属于 wrong_detail。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "academic_event",
+      "situation": "interdisciplinary conference call for papers",
+      "speaker_role": "department_head",
+      "difficulty": "easy",
+      "announcement": "I'm pleased to announce that our department is hosting an interdisciplinary conference on technology and society this April, and we're now accepting paper proposals. We welcome submissions from undergraduates, graduate students, and faculty across all departments, including the arts and humanities. Proposals should be no longer than 400 words and must be uploaded to the conference website by February 20th. Selected presenters will be notified by early March and will receive a small travel stipend if traveling from another campus. If you've been working on a project that connects two or more fields, this is a great chance to share it with a wider audience.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "Recap last year's interdisciplinary conference findings",
+            "B": "Recruit volunteers to staff the April conference",
+            "C": "Warn students that proposal rules have changed",
+            "D": "Invite proposals for an upcoming interdisciplinary conference"
+          },
+          "answer": "D",
+          "explanation": "正确答案是 D，因为整则公告的目的是邀请大家在 2 月 20 日前为四月的跨学科会议提交论文提案。A 错在公告完全没有回顾以往会议，属于 wrong_purpose。B 错在公告并未招募志愿者，属于 wrong_purpose。C 错在公告并未提到规则有任何变化，属于 wrong_purpose。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "wrong_purpose",
+            "C": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What is true about the paper proposals?",
+          "options": {
+            "A": "They must be co-authored with a faculty mentor",
+            "B": "They must not exceed 400 words in length",
+            "C": "They must be submitted in person at the department",
+            "D": "They are only open to graduate students this year"
+          },
+          "answer": "B",
+          "explanation": "正确答案是 B，因为公告明确指出 proposals 不应超过 400 字。A 错在公告并未要求必须有教师合作者，属于 related_but_not_stated。C 错在公告说要上传到会议网站，并非线下递交，属于 wrong_detail（与事实相反）。D 错在公告说欢迎本科生、研究生和教师，并非只对研究生开放，属于 wrong_detail（与事实相反）。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "C": "wrong_detail",
+            "D": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "logistics",
+      "situation": "temporary road closure and detour instructions",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "Due to scheduled utility work, Maple Avenue between the library and the science quad will be closed to vehicles from 6 a.m. Tuesday until 8 p.m. Thursday. Drivers should use Elm Street as a marked detour, which adds about five minutes to most campus routes. Pedestrians and cyclists may still pass through using the sidewalk on the north side, though we ask that you slow down near the work zone. Shuttle service will continue, but the East Loop bus will skip the library stop and pick up at the Student Union instead. Please plan a few extra minutes into your commute.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What change will affect the East Loop shuttle service?",
+          "options": {
+            "A": "It will skip the library stop and use the Student Union instead",
+            "B": "It will be canceled entirely for the rest of the week",
+            "C": "It will start running every five minutes during the closure",
+            "D": "It will reroute to Elm Street and add two extra stops"
+          },
+          "answer": "A",
+          "explanation": "正确答案是 A，因为公告说东环巴士会跳过图书馆站，改在学生中心上下客。B 错在公告说班车继续运行，并未取消，属于 wrong_detail（与事实相反）。C 错在公告并未提及任何加密班次的信息，属于 related_but_not_stated。D 错在 Elm Street 是车辆的绕行路线，并非班车的新路线，属于 misattributed_detail。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about pedestrians during the closure?",
+          "options": {
+            "A": "They are required to use the Elm Street detour as well",
+            "B": "They will be charged a small fee to cross the work area",
+            "C": "They can still walk through but should move carefully",
+            "D": "They must show their student ID at a checkpoint"
+          },
+          "answer": "C",
+          "explanation": "正确答案是 C，因为公告说行人和骑行者仍可通过北侧人行道，但要在施工区附近放慢速度，可推断他们仍可通行但需小心。A 错在 Elm Street 是车辆的绕行路线，并非行人必须走的，属于 misattributed_detail。B 错在公告完全没有提及任何费用，属于 unrelated_inference。D 错在公告没有提到任何身份验证或检查点，属于 over_inference。",
+          "distractor_types": {
+            "A": "misattributed_detail",
+            "B": "unrelated_inference",
+            "D": "over_inference"
+          }
+        }
+      ]
+    }
+  ]
+}
