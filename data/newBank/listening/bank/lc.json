@@ -1,4 +1,405 @@
 {
   "version": 2,
-  "items": []
+  "items": [
+    {
+      "context": "campus_service",
+      "situation": "a student asks an advising-office staff member which elective to register for next term",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "advising_staff",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hi, I'm trying to pick an elective for next term, and I'm stuck between Intro to Film and Public Speaking."
+        },
+        {
+          "speaker": "Man",
+          "text": "Both are popular. What's your major again?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Marketing. I figured Public Speaking might be more useful, but it meets at eight in the morning."
+        },
+        {
+          "speaker": "Man",
+          "text": "Well, the system shows Public Speaking still has a few open seats. Film's actually waitlisted already."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh, waitlisted? Then I guess the choice kind of makes itself."
+        },
+        {
+          "speaker": "Man",
+          "text": "Pretty much. And honestly, presentation skills will help you a lot in marketing."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man tell the woman about the Intro to Film course?",
+          "options": {
+            "A": "It already has a waitlist.",
+            "B": "It meets early in the morning.",
+            "C": "It is not useful for marketing.",
+            "D": "It has several open seats left."
+          },
+          "answer": "A",
+          "explanation": "男生明确说“Film's actually waitlisted already”，所以电影课已经有等候名单，A 正确。B 把“早上八点上课”这个细节张冠李戴了——那是女生说的 Public Speaking 的情况；C 男生说的是 Public Speaking 对市场营销有帮助，并没说电影课没用；D 与对话相反，有空位的是 Public Speaking，不是电影课。",
+          "distractor_types": {
+            "B": "misattributed",
+            "C": "wrong_detail",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do?",
+          "options": {
+            "A": "Drop the elective requirement entirely",
+            "B": "Add her name to the film course waitlist",
+            "C": "Register for the public speaking course",
+            "D": "Switch her major to communications"
+          },
+          "answer": "C",
+          "explanation": "电影课已满且需排队，而 Public Speaking 还有空位、又对市场营销有用，女生也说“the choice kind of makes itself”，因此她最可能报名 Public Speaking，C 正确。A 属于过度推断，她从未想放弃选修；B 是她实际上要避开的选项（排队等候）；D 完全没有依据，对话从未提到换专业。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "rejected_option",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_mpveuehy_0"
+    },
+    {
+      "context": "campus_service",
+      "situation": "a student asks a bookstore clerk whether to buy a course textbook now or wait for the rental restock",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "bookstore_staff",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Excuse me, do you still have the biology textbook for sale? The shelf looks empty."
+        },
+        {
+          "speaker": "Man",
+          "text": "We sold out of the new copies this morning, but the rental version comes back in stock Friday."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Friday? My first lecture is Thursday, though."
+        },
+        {
+          "speaker": "Man",
+          "text": "The first chapter's posted free online, so you'd be fine for one class."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh, that helps. Is the rental a lot cheaper?"
+        },
+        {
+          "speaker": "Man",
+          "text": "About half the price. I'd just wait the two days if I were you."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why is the textbook currently unavailable?",
+          "options": {
+            "A": "The store never ordered enough copies.",
+            "B": "The new copies sold out that morning.",
+            "C": "The publisher delayed the latest edition.",
+            "D": "It can only be purchased online now."
+          },
+          "answer": "B",
+          "explanation": "店员说“We sold out of the new copies this morning”，所以是当天上午新书售罄，B 正确。A 没有依据，店员没说订得不够；C 对话从未提到出版社延迟；D 把“第一章免费在线”误读成整本书只能网购，店员说的是周五租赁版会补货。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "C": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do?",
+          "options": {
+            "A": "Buy a new copy from another bookstore",
+            "B": "Drop the biology course this term",
+            "C": "Skip her Thursday lecture entirely",
+            "D": "Wait until Friday for the rental copy"
+          },
+          "answer": "D",
+          "explanation": "第一章免费在线让她周四的课不受影响，租赁版又便宜一半且周五到货，店员也建议“just wait the two days”，所以她最可能等到周五租书，D 正确。A 没有依据，没提到去别家书店；B 属于过度推断，她从未想退课；C 与对话相反——免费章节正是让她不必缺课。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "B": "over_inference",
+            "C": "rejected_option"
+          }
+        }
+      ],
+      "id": "lc_mpveuehy_1"
+    },
+    {
+      "context": "campus_service",
+      "situation": "a student talks with a transportation-office clerk about getting a bus pass, a bike permit, or just walking",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "transportation_staff",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hi, I just moved into the north dorms and I'm trying to figure out the cheapest way to get to class."
+        },
+        {
+          "speaker": "Man",
+          "text": "Sure. We offer a semester bus pass, a bike permit, or, if you're close, walking's free of course."
+        },
+        {
+          "speaker": "Woman",
+          "text": "The north dorms are about a twenty-five minute walk, which feels like a lot before an early class."
+        },
+        {
+          "speaker": "Man",
+          "text": "Then the bus pass is probably your best bet. The route from north dorms runs every ten minutes."
+        },
+        {
+          "speaker": "Woman",
+          "text": "And the bike permit? I do have a bike back home I could bring up."
+        },
+        {
+          "speaker": "Man",
+          "text": "It's cheaper than the bus, but with winter coming, most students up north end up regretting it."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "How to register a bicycle on campus",
+            "B": "Which dormitory the woman should choose",
+            "C": "The best commuting option for the woman",
+            "D": "Why the campus bus route was changed"
+          },
+          "answer": "C",
+          "explanation": "整段对话围绕女生“最便宜/最合适的到课方式”——公交、自行车还是步行——展开，因此主旨是为她选择通勤方式，C 正确。A 只是其中一个被讨论的选项（自行车许可），太窄；B 她已经搬进北宿舍，并不在选宿舍；D 对话从未提到线路变更。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "wrong_topic",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What does the man imply about getting the bike permit?",
+          "options": {
+            "A": "It may be a poor choice once winter arrives",
+            "B": "It is currently sold out for the semester",
+            "C": "It costs more than the semester bus pass",
+            "D": "It is not available to north dorm residents"
+          },
+          "answer": "A",
+          "explanation": "男生说自行车许可虽更便宜，但“with winter coming, most students up north end up regretting it”，暗示入冬后骑车不是好选择，A 正确。B 没有依据，他没说许可售罄；C 与对话相反，他明确说自行车比公交便宜；D 也不成立，他并未说北宿舍居民不能办许可。",
+          "distractor_types": {
+            "B": "over_inference",
+            "C": "reversed_situation",
+            "D": "related_but_not_stated"
+          }
+        }
+      ],
+      "id": "lc_mpveuehy_2"
+    },
+    {
+      "context": "campus_service",
+      "situation": "a student asks a library staff member about a novel that is checked out, exploring why it is in such high demand",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "library_staff",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hi, I'm looking for the novel Northern Light, but the catalog says all copies are checked out."
+        },
+        {
+          "speaker": "Man",
+          "text": "Ah, that one. A professor put it on the required reading list for two big literature sections this term."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh, that explains the wait. So it's not just me who couldn't find it."
+        },
+        {
+          "speaker": "Man",
+          "text": "Not at all. We've actually ordered extra copies, but they won't arrive for a couple of weeks."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Hmm. I just need it for one essay, not the whole term."
+        },
+        {
+          "speaker": "Man",
+          "text": "In that case, the e-book version has no waitlist at all. You can borrow it instantly."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the conversation mainly about?",
+          "options": {
+            "A": "A complaint about an inaccurate library catalog",
+            "B": "A disagreement over a professor's reading list",
+            "C": "Why the library is purchasing fewer novels",
+            "D": "A student's difficulty obtaining a popular novel"
+          },
+          "answer": "D",
+          "explanation": "对话核心是女生想借却借不到这本热门小说，馆员解释原因并给出替代方案，因此主旨是她获取这本小说遇到困难，D 正确。A 目录其实是准确的（确实都被借走了），并非投诉目录有误；B 没人对阅读书单有异议；C 与对话相反，图书馆是加订而非减少。",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "B": "wrong_topic",
+            "C": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do?",
+          "options": {
+            "A": "Wait two weeks for the new print copies",
+            "B": "Borrow the e-book version of the novel",
+            "C": "Add her name to the physical hold list",
+            "D": "Ask the professor to lend her a copy"
+          },
+          "answer": "B",
+          "explanation": "女生只为一篇论文短期需要这本书，而电子版“no waitlist at all, borrow it instantly”，因此她最可能借电子版，B 正确。A 是被排除的选项——她明说不需要等整个学期；C 纸质版仍要排队，与她“只用一篇论文”的需求不符，且馆员已提供更快的电子版；D 完全没有依据，对话没提向教授借书。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "C": "rejected_option",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_mpveuehy_3"
+    },
+    {
+      "context": "campus_service",
+      "situation": "a student asks a dining-services staff member about a meal-plan swipe problem before grabbing lunch",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "dining_staff",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hi, my meal card just got declined at the register, but I'm sure I still have swipes left."
+        },
+        {
+          "speaker": "Man",
+          "text": "Let me check. Hmm, the system shows your plan reset this morning, so your swipes are actually fine."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Then why won't it scan?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Looks like the magnetic strip on your card is worn out. The reader just can't read it anymore."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh no. Can I still get lunch right now?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Of course. I'll enter your ID number manually today, and you can grab a free replacement card at the ID office."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why was the woman's meal card declined?",
+          "options": {
+            "A": "The card's magnetic strip is worn out.",
+            "B": "Her meal plan ran out of swipes.",
+            "C": "Her plan had not reset for the term.",
+            "D": "She typed in the wrong ID number."
+          },
+          "answer": "A",
+          "explanation": "店员检查后说“the magnetic strip on your card is worn out. The reader just can't read it anymore”，所以是磁条磨损导致刷不出，A 正确。B 与对话相反，系统显示她的次数其实够用；C 也相反，店员说她的套餐当天早上已经重置；D 没有依据，手动输 ID 是店员之后才做的事，不是被拒原因。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do after lunch?",
+          "options": {
+            "A": "Add more swipes to her meal plan",
+            "B": "Pay for her lunch with cash instead",
+            "C": "Get a replacement card at the ID office",
+            "D": "Report the broken register to a manager"
+          },
+          "answer": "C",
+          "explanation": "店员明确说她可以去 ID 办公室“grab a free replacement card”，磁条坏了也确实需要换卡，因此她午饭后最可能去办新卡，C 正确。A 没有依据，她的次数本来就够，不需要加；B 是被排除的——店员手动输入 ID 让她不必付现；D 问题出在卡的磁条而非收银机，所以无需报修收银机。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "B": "rejected_option",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "id": "lc_mpveuehy_4"
+    }
+  ]
 }

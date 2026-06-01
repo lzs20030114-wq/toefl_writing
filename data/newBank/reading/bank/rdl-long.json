@@ -1,5 +1,103 @@
 {
   "version": "1.1",
   "variant": "long",
-  "items": []
+  "items": [
+    {
+      "genre": "notice",
+      "text": "Annual E-Waste Recycling Drive — Save the Date\n\nThe Office of Campus Sustainability will host its annual e-waste recycling drive on Saturday, October 18, from 9:00 AM to 3:00 PM in the Henderson Hall parking lot. All students, faculty, and staff are encouraged to dispose of outdated electronics responsibly rather than discarding them in regular trash bins.\n\nAccepted items include laptops, monitors, printers, cables, and small kitchen appliances. Please note the following guidelines:\n\n- All personal data must be erased before drop-off; the University is not responsible for information left on devices.\n- A nominal handling fee of $5.00 will be charged for each television or large monitor.\n- Batteries should be removed and placed in the separate collection bin provided on-site.\n\nVolunteers will be stationed throughout the lot to assist participants and direct traffic. Proceeds collected will be donated to the campus tree-planting fund. For questions regarding accepted materials or to arrange a bulk pickup, contact the Sustainability Office at sustainability@university.edu or call 555-0192.",
+      "format_metadata": {
+        "issuer": "Office of Campus Sustainability",
+        "type": "campus_announcement"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what is required of participants before they drop off a device?",
+          "options": {
+            "A": "Erasing all personal data from the device",
+            "B": "Removing the cables from the device",
+            "C": "Registering the device at the Sustainability Office",
+            "D": "Paying a fee for every accepted item"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice states that 'All personal data must be erased before drop-off,' which matches option A. Option B confuses cables (an accepted item) with a removal requirement; only batteries must be removed. Option C invents a registration step not mentioned. Option D distorts the fee rule, which applies only to televisions and large monitors, not every item."
+        },
+        {
+          "question_type": "vocabulary_in_context",
+          "stem": "The word 'nominal' in the second bullet point is closest in meaning to",
+          "options": {
+            "A": "Mandatory",
+            "B": "Small",
+            "C": "Refundable",
+            "D": "Occasional"
+          },
+          "correct_answer": "B",
+          "explanation": "In context, a 'nominal handling fee of $5.00' refers to a small or token amount, so B is correct. A ('mandatory') describes whether it is required rather than its size. C ('refundable') and D ('occasional') introduce qualities the passage never assigns to the fee."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about the money collected at the drive?",
+          "options": {
+            "A": "It will be returned to participants after the event.",
+            "B": "It will be used to cover the cost of the volunteers.",
+            "C": "It will support an environmental project on campus.",
+            "D": "It will be added to the Sustainability Office budget."
+          },
+          "correct_answer": "C",
+          "explanation": "The notice says proceeds 'will be donated to the campus tree-planting fund,' a clearly environmental purpose, supporting C. A reverses the logic, since donated proceeds are not returned. B borrows the passage word 'volunteers' but wrongly links the money to paying them, when volunteers are simply stationed to assist. D names a plausible but unstated destination for the funds."
+        }
+      ],
+      "difficulty": "medium",
+      "id": "rdl-long_mpveuehl_0"
+    },
+    {
+      "genre": "email",
+      "text": "Subject: Reminder — Summer Internship Applications Due Friday\n\nDear Daniel,\n\nThis is a friendly reminder from the Career Services Center that applications for the Summer Industry Internship Program are due this Friday, March 14, by 5:00 PM. We noticed that your profile in the careers portal is started but not yet submitted, and we don't want you to miss this opportunity.\n\nBefore you submit, please make sure your resume and a one-page cover letter are uploaded to the portal. You'll also need a confirmation of enrollment, which you can download directly from the student records page. Applications missing any of these three documents cannot be reviewed, so it's worth double-checking everything tonight.\n\nIf you'd like a staff member to look over your materials first, we hold drop-in advising in Room 210 of Carver Hall until 4:00 PM each weekday. No appointment is necessary, but spots fill quickly in the afternoons. Feel free to reply to this email if you have any questions.\n\nBest regards,\nMaria Lopez\nCareer Services Center",
+      "format_metadata": {
+        "from": "careers@university.edu",
+        "to": "daniel.kim@university.edu",
+        "subject": "Reminder — Summer Internship Applications Due Friday"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what must Daniel include with his application besides a resume and cover letter?",
+          "options": {
+            "A": "A letter of recommendation from a professor",
+            "B": "A confirmation of his current enrollment",
+            "C": "A completed advising appointment form",
+            "D": "A summary of his previous work experience"
+          },
+          "correct_answer": "B",
+          "explanation": "The email lists three required documents: a resume, a one-page cover letter, and 'a confirmation of enrollment.' Since the stem names the first two, the remaining item is B. A introduces a recommendation letter that is never mentioned. C borrows the passage word 'advising' but advising is optional, not a required form. D sounds plausible for an internship but is not among the stated documents."
+        },
+        {
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of the email?",
+          "options": {
+            "A": "To announce a new summer internship program",
+            "B": "To remind Daniel to finish submitting his application",
+            "C": "To schedule an advising appointment for Daniel",
+            "D": "To explain why Daniel's application was rejected"
+          },
+          "correct_answer": "B",
+          "explanation": "The email opens by calling itself a reminder that applications are due Friday and notes Daniel's profile is 'started but not yet submitted,' making B the overall purpose. A is too narrow and wrong in focus, since the program already exists and is not being newly announced. C captures only the optional drop-in advising detail. D contradicts the email, which urges completion rather than reporting a rejection."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about visiting the drop-in advising in the afternoon?",
+          "options": {
+            "A": "It guarantees that an application will be approved.",
+            "B": "It is available only to students who make an appointment.",
+            "C": "It may be difficult to get help later in the day.",
+            "D": "It is held in a different building each weekday."
+          },
+          "correct_answer": "C",
+          "explanation": "The email notes that drop-in advising runs until 4:00 PM but 'spots fill quickly in the afternoons,' implying help may be hard to get later in the day, which supports C. A overstates the benefit, as advising reviews materials but does not guarantee approval. B reverses the stated policy that 'no appointment is necessary.' D contradicts the fixed location, Room 210 of Carver Hall."
+        }
+      ],
+      "difficulty": "medium",
+      "id": "rdl-long_mpveuehl_1"
+    }
+  ]
 }

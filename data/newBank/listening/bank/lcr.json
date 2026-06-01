@@ -1,4 +1,174 @@
 {
   "version": 2,
-  "items": []
+  "items": [
+    {
+      "context": "campus_academic",
+      "situation": "student asking a professor where to submit a revised essay",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Where should I submit the revised essay by Friday?",
+      "options": {
+        "A": "The library closes early on Fridays.",
+        "B": "My revisions took me almost all weekend.",
+        "C": "Actually, just email it straight to me.",
+        "D": "No, the deadline hasn't changed."
+      },
+      "answer": "C",
+      "explanation": "学生问教授应该把修改稿交到哪里。正确答案C以话语标记词\"Actually\"开头，间接地给出投递方式（直接发邮件给我），既回应了\"在哪交\"的核心需求，又是教授这类权威者自然的口吻。A是语义联想陷阱：抓住\"Friday\"联想到\"图书馆周五早关门\"，但完全没说该交到哪里。B是离题项：只谈自己改稿花了多长时间，与\"在哪提交\"无关，且不是对该问题的回应。D是答错问题类型：用\"No\"回答了一个关于截止日期是否变动的是非问题，而学生问的是地点（Where），并非deadline是否改变。只有C真正告诉了学生提交的去处。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_mpveuehz_0"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student telling gym staff they want to use the pool",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I was hoping to use the pool this afternoon.",
+      "options": {
+        "A": "The pool was just repainted this summer.",
+        "B": "I prefer swimming early in the morning.",
+        "C": "Well, the swim team has it until four.",
+        "D": "Yes, the locker rooms are down the hall."
+      },
+      "answer": "C",
+      "explanation": "学生向体育馆工作人员表示下午想用泳池。正确答案C以话语标记词\"Well\"开头，间接告知现在不行的原因（游泳队四点前占用泳池），这是工作人员对使用请求的自然且得体的回应。A是语义联想陷阱：抓住\"pool\"去描述泳池被重新粉刷过，并未回应能否使用。B是离题项：只陈述说话者自己\"喜欢早上游泳\"的个人偏好，放在别的对话里也成立，但没有回应对方的请求。D是答错问题类型/关键词误用：用\"Yes\"加上更衣室方位来回应，像是在答一个\"在哪里\"的问题，而学生表达的是下午想用泳池这一意图。只有C真正处理了泳池此刻能否使用。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_mpveuehz_1"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking advisor's staff how soon they can get an appointment",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "How soon can the advisor squeeze me in?",
+      "options": {
+        "A": "Her office is just past the stairwell.",
+        "B": "Let me see what I can do.",
+        "C": "Yes, advising is part of her job.",
+        "D": "I already squeezed the oranges this morning."
+      },
+      "answer": "B",
+      "explanation": "学生（向导师办公室的工作人员）询问最快多久能安排上见导师。正确答案B \"Let me see what I can do\"是一句自然的习惯用语，表示\"我去看看能不能安排\"，正是工作人员面对加急请求时得体的回应，推进了对话。A是答错问题类型：回答的是导师办公室在哪（Where），而学生问的是\"多快\"（How soon）。C是离题/泛泛而谈：用\"Yes\"陈述\"提供咨询是她的职责\"，听上去相关却没给出任何时间信息，并非对\"多久能约上\"的回应。D是一词多义陷阱：把\"squeeze (someone) in（挤出时间安排某人）\"误解成字面的\"squeeze oranges（榨橙子）\"，完全跑题。只有B回应了能否尽快安排这一核心诉求。",
+      "distractor_types": {
+        "A": "wrong_question_type",
+        "C": "off_topic",
+        "D": "polysemy_misinterpretation"
+      },
+      "id": "lcr_mpveuehz_2"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student questioning a professor about why an exam section was marked wrong",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Why did you mark my whole second section wrong?",
+      "options": {
+        "A": "The marker on the whiteboard ran out.",
+        "B": "Section two meets in a different room.",
+        "C": "Office hours are listed on the syllabus.",
+        "D": "Did you address the prompt's actual question?"
+      },
+      "answer": "D",
+      "explanation": "学生质问教授为什么把整个第二部分都判错了。正确答案D用一个反问\"你回答的是题目真正问的问题吗？\"来推进对话，间接点出扣分的可能原因，是教授面对质疑时常见且有效的回应方式。A是语义联想/一词多义陷阱：把动词\"mark（批改、判分）\"联想成名词\"marker（白板笔）\"，说笔没墨了，完全跑题。B是语义联想陷阱：抓住\"section\"联想到\"第二部分在另一个教室上课\"，与判分对错无关。C是离题项：提到\"office hours在教学大纲上\"，虽涉及学业但根本没解释为何判错，放在别的对话里才成立。只有D真正回应了\"为什么判错\"这一核心争议。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "semantic_association_trap",
+        "C": "off_topic"
+      },
+      "id": "lcr_mpveuehz_3"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "classmate mentions the gym weight room hours",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "The coach said the weight room closes early on Fridays.",
+      "options": {
+        "A": "I lift weights three times a week.",
+        "B": "The new treadmills arrived this morning.",
+        "C": "Actually, it stays open till nine tonight.",
+        "D": "Yes, the coach is really strict."
+      },
+      "answer": "C",
+      "explanation": "正确答案C用话语标记词\"Actually\"开头，间接纠正对方的信息——其实今晚开到九点，自然地推进了对话。A是语义联想干扰项（由\"weight room\"联想到\"lift weights\"，只谈个人习惯，不回应信息）。B也是语义联想干扰项（由健身房联想到\"treadmills\"设备，答非所问）。D是错误问题类型/答非所问（用Yes回答了一个陈述句，且只评价教练性格，没回应关门时间）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "semantic_association_trap",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_mpveuehz_4"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "classmate asking about weekend plans",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "What are you up to this weekend?",
+      "options": {
+        "A": "Well, I'm just catching up on sleep.",
+        "B": "The weekend forecast looks pretty rainy.",
+        "C": "Yes, I had a great time.",
+        "D": "It's up on the second floor."
+      },
+      "answer": "A",
+      "explanation": "正确答案A用话语标记词\"Well\"开头，间接而自然地回答了周末打算干什么——补觉，符合口语习惯。B是语义联想干扰项（由\"weekend\"联想到\"weekend forecast\"天气，偏离了\"你打算干什么\"）。C是错误问题类型（用Yes回答了一个本应说明计划的WH问句，且谈的是过去而非这个周末）。D是一词多义/答非所问陷阱（把\"up to\"误当成方位\"up on\"，回答了位置）。",
+      "distractor_types": {
+        "A": "marker_led_indirect",
+        "B": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "polysemy_misinterpretation"
+      },
+      "id": "lcr_mpveuehz_5"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a librarian where to return reserved books",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Where do I return the reserved books?",
+      "options": {
+        "A": "I reserved them online last night.",
+        "B": "Those books are due next Tuesday.",
+        "C": "Just drop them at the front desk.",
+        "D": "Yes, you can borrow up to five."
+      },
+      "answer": "C",
+      "explanation": "正确答案C用话语标记词\"Just\"开头，间接而简洁地指明了归还地点——前台，直接解决了对方的需求。A是语义联想干扰项（由\"reserved\"联想到\"reserved them online\"，谈的是怎么预约的，不是去哪还）。B也是语义联想干扰项（由\"books\"联想到还书\"due date\"，答非所问）。D是错误问题类型（用Yes回答了一个问地点的Where问句，且谈的是借阅上限）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "semantic_association_trap",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_mpveuehz_6"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "two classmates deciding where to get lunch",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "I'm starving, but the dining hall's packed.",
+      "options": {
+        "A": "The dining hall serves pasta on Mondays.",
+        "B": "Yes, I ate lunch an hour ago.",
+        "C": "It's right next to the library.",
+        "D": "Want to try the cafe instead?"
+      },
+      "answer": "D",
+      "explanation": "正确答案D用一个反问\"Want to try the cafe instead?\"推进对话，提出去咖啡馆这一替代方案，直接化解了\"食堂太挤\"的困境。A是语义联想干扰项（由\"dining hall\"联想到食堂供应的食物，答非所问）。B是答非所问/错误语境（用Yes回应，且只谈自己一小时前吃过，没帮对方解决饿和拥挤的问题）。C是错误问题类型（回答了\"在哪儿\"这个位置问题，而对方根本没问食堂在哪）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      },
+      "id": "lcr_mpveuehz_7"
+    }
+  ]
 }

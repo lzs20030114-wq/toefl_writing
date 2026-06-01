@@ -259,6 +259,14 @@ for (const section of SECTIONS) {
     let added = 0;
     let duplicates = 0;
     for (const item of newItems) {
+      // Mint an id for id-less items. Generators sometimes omit `id` (it isn't a quality
+      // signal), and without this EVERY id-less item collapses to a single "duplicate"
+      // against `undefined`/`null` — silently destroying a batch's yield. CTW already gets
+      // an id from the blanker; this covers AP/RDL/listening/speaking.
+      if (item.id == null || item.id === "") {
+        const stem = bankFile.replace(/\.json$/, "");
+        item.id = `${stem}_${Date.now().toString(36)}_${added + duplicates}`;
+      }
       if (existingIds.has(item.id)) {
         duplicates++;
         continue;
