@@ -50,8 +50,9 @@ const VALIDATORS = {
 
 // Vet one staging item for a prefix → { ok, item, reason }.
 // CTW is special: it must be run through the mechanical blanker first (the staging
-// item is just a passage), then validated. A validator THROW (a bug) keeps the item
-// (with a warning) so one bad validator can't silently nuke a whole bank.
+// item is just a passage), then validated. A validator THROW means the item is
+// malformed enough to crash validation, so we REJECT it (see catch below) rather
+// than ship an unvalidated item to the bank.
 function vet(prefix, item) {
   try {
     if (prefix === 'ctw') {
@@ -227,11 +228,13 @@ for (const section of SECTIONS) {
   for (const [bankFile, newItems] of Object.entries(pendingItems)) {
     mkdirSync(section.bankDir, { recursive: true });
     const bankPath = join(section.bankDir, bankFile);
-    const bank = existsSync(bankPath) ? readJSON(bankPath) : { version: 1, items: [] };
-    // Normalize: if bank is an array, wrap it
+    let bank = existsSync(bankPath) ? readJSON(bankPath) : { version: 1, items: [] };
+    // Normalize: a legacy bank stored as a bare array → wrap into { version, items }.
+    // Must REASSIGN (not assign .items onto the Array): JSON.stringify drops non-index
+    // properties of an array, so the old `Object.assign(bank, {})` no-op would have
+    // silently dropped every newly-merged item on write.
     if (Array.isArray(bank)) {
-      const wrapped = { version: 1, items: bank };
-      Object.assign(bank, {});
+      bank = { version: 1, items: bank };
     }
     if (!bank.items) bank.items = [];
 

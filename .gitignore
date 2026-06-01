@@ -48,3 +48,12 @@ scripts/backfill-prefilled.ps1
 # Python bytecode
 __pycache__/
 *.pyc
+
+# QC export / bank backups / temp survey scripts
+.bank-backups/
+.tmp-*
+
+# Scratch full-repo copies from push / codex tooling (also ignored by jest)
+.codex-tmp/
+_tmp_push_main/
+_tmp_push_*/

@@ -21,7 +21,8 @@ const { uploadAudio } = require('../lib/tts/storage.js');
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
 const argv = process.argv.slice(2);
-const LIMIT = parseInt((argv.find(a => a.startsWith('--limit=')) || '').split('=')[1] || '0', 10) || Infinity;
+const LIMIT_RAW = (argv.find(a => a.startsWith('--limit=')) || '').split('=')[1];
+const LIMIT = (LIMIT_RAW == null || LIMIT_RAW === '') ? Infinity : (parseInt(LIMIT_RAW, 10) || 0);
 const ONLY = (argv.find(a => a.startsWith('--only=')) || '').split('=')[1];
 const ONLY_SET = ONLY ? new Set(ONLY.split(',')) : null;
 
@@ -80,11 +81,12 @@ async function backfillRepeat(bankPath) {
     let any = false;
     for (const s of ss) {
       if (s.audio_url || !s.sentence) continue;
+      if (budget <= 0) break;
       try {
         const buf = await generateSpeech(s.sentence, { preset: VMAP[s.difficulty] || 'lcr_staff_male', format: 'mp3' });
         const sid = s.id || `${set.id}_s${ss.indexOf(s) + 1}`;
         const { url } = await uploadAudio(`speaking/repeat/${sid}.mp3`, buf);
-        s.audio_url = url; sents++; any = true;
+        s.audio_url = url; sents++; any = true; budget--;
       } catch (e) { fail++; console.log(`  ✗ ${set.id}: ${e.message.slice(0, 80)}`); }
     }
     if (any) sets++;

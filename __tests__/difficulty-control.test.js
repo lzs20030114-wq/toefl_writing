@@ -86,14 +86,14 @@ describe("difficulty control", () => {
   });
 
   test("accepts a 10-question set close to target ratio", () => {
-    const easyQs = Array.from({ length: 1 }, (_, i) =>
+    const easyQs = Array.from({ length: 2 }, (_, i) =>
       makeQuestion(
         `e${i}`,
         "I do not go to the gym on weekends.",
         ["I", "do", "not", "go", "to", "the gym", "on weekends"],
         { grammar_points: ["negation"] },
       ));
-    const mediumQs = Array.from({ length: 7 }, (_, i) =>
+    const mediumQs = Array.from({ length: 6 }, (_, i) =>
       makeQuestion(
         `m${i}`,
         "Do you know if the lab is open tonight?",
