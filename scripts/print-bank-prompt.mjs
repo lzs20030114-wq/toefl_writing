@@ -47,12 +47,47 @@ function readJSON(rel) {
   return JSON.parse(readFileSync(resolve(ROOT, rel), "utf8"));
 }
 
+// NEWBANK_ROOT (optional): when the routine generates INTO the staging bank (data/newBank),
+// the anti-repeat exclusion lists must cover what's already in newBank too — otherwise
+// successive rebuild runs stop seeing each other (they'd all only exclude the old live bank)
+// and start repeating. readJSONMerged returns the live file UNION the newBank file (array
+// fields concatenated, live first), so dedup spans both. Unset = live only (unchanged).
+const NEWBANK_ROOT = (process.env.NEWBANK_ROOT || "").trim() || null;
+function mergeBanks(a, b) {
+  if (!a) return b;
+  if (!b) return a;
+  if (Array.isArray(a) && Array.isArray(b)) return a.concat(b);
+  if (typeof a === "object" && typeof b === "object") {
+    const out = { ...a };
+    for (const k of Object.keys(b)) {
+      if (Array.isArray(a[k]) && Array.isArray(b[k])) out[k] = a[k].concat(b[k]);
+      else if (out[k] === undefined) out[k] = b[k];
+    }
+    return out;
+  }
+  return a;
+}
+function readJSONMerged(rel) {
+  let live = null;
+  try { live = readJSON(rel); } catch {}
+  if (!NEWBANK_ROOT) {
+    if (live === null) throw new Error(`cannot read ${rel}`);
+    return live;
+  }
+  const nbRel = rel.replace(/^data\//, NEWBANK_ROOT.replace(/\/?$/, "/"));
+  let nb = null;
+  try { nb = JSON.parse(readFileSync(resolve(ROOT, nbRel), "utf8")); } catch {}
+  const merged = mergeBanks(live, nb);
+  if (merged === null) throw new Error(`cannot read ${rel} or its newBank mirror`);
+  return merged;
+}
+
 function loadBSExistingAnswers(limit = 100) {
   // Real DeepSeek pipeline (appendBSSets.mjs main()) passes the FULL existing
   // answer list to the prompt. We sample a recent slice to keep the prompt
   // length manageable for the routine.
   try {
-    const j = readJSON("data/buildSentence/questions.json");
+    const j = readJSONMerged("data/buildSentence/questions.json");
     const sets = j.question_sets || [];
     const all = sets.flatMap((s) => (s.questions || []).map((q) => q.answer).filter(Boolean));
     return all.slice(-limit);
@@ -63,7 +98,7 @@ function loadBSExistingAnswers(limit = 100) {
 
 function loadADExistingTopics(limit = 40) {
   try {
-    const items = readJSON("data/academicWriting/prompts.json");
+    const items = readJSONMerged("data/academicWriting/prompts.json");
     return (items || []).slice(-limit).map((q) => {
       const text = String(q?.professor?.text || "").trim();
       return text.slice(0, 80);
@@ -75,7 +110,7 @@ function loadADExistingTopics(limit = 40) {
 
 function loadEmailRecentNames(limit = 40) {
   try {
-    const items = readJSON("data/emailWriting/prompts.json");
+    const items = readJSONMerged("data/emailWriting/prompts.json");
     return Array.from(new Set((items || []).slice(-limit).map((q) => String(q?.to || "").trim()).filter(Boolean)));
   } catch {
     return [];
@@ -84,7 +119,7 @@ function loadEmailRecentNames(limit = 40) {
 
 function loadEmailRecentSubjects(limit = 20) {
   try {
-    const items = readJSON("data/emailWriting/prompts.json");
+    const items = readJSONMerged("data/emailWriting/prompts.json");
     return (items || []).slice(-limit).map((q) => String(q?.subject || "").trim()).filter(Boolean);
   } catch {
     return [];
@@ -93,7 +128,7 @@ function loadEmailRecentSubjects(limit = 20) {
 
 function loadEmailRecentVerbs(limit = 20) {
   try {
-    const items = readJSON("data/emailWriting/prompts.json");
+    const items = readJSONMerged("data/emailWriting/prompts.json");
     const verbs = (items || []).slice(-limit).flatMap((q) =>
       (q.goals || []).map((g) => String(g || "").trim().split(/\s+/)[0]).filter(Boolean),
     );
@@ -105,7 +140,7 @@ function loadEmailRecentVerbs(limit = 20) {
 
 function loadReadingExcludeSubjects(file, limit = 30) {
   try {
-    const j = readJSON(file);
+    const j = readJSONMerged(file);
     const items = j.items || [];
     return items.slice(-limit).map((it) => `${it.topic}/${it.subtopic || ""}`.trim()).filter(Boolean);
   } catch {
@@ -205,7 +240,7 @@ function printRDLLong() {
 // the builders supported these opts; the handlers just weren't passing them).
 function loadBankField(file, key, limit = 20) {
   try {
-    const j = readJSON(file);
+    const j = readJSONMerged(file);
     const arr = j?.items || j?.lectures || j?.conversations || j?.sets || (Array.isArray(j) ? j : []);
     return Array.from(new Set(arr.slice(-limit).map((it) => String(it?.[key] || "").trim()).filter(Boolean)));
   } catch { return []; }
