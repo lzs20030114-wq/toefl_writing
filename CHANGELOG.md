@@ -1,6 +1,18 @@
 # Changelog
 
-## 2026-06-02
+## 2026-06-02 — v1.8.1
+
+- **听力音频上线即可播放（v1.8.0 题库刷新后三连修复）**：新增 419 条音频后，线上音频经历三步才真正可播——
+  - `1f03530` 先把 `data/listening/audio` 挪到 `public/listening-audio`（CDN 静态，不再被 `/api/audio` 的 `readFileSync` 拖进 serverless 函数 → 避开 Vercel 250MB 上限），672 条 `audio_url` 重指，`/api/audio` 改 308 跳转保留旧链。
+  - `2920fe5` 进一步把全部 853 个文件搬到 Supabase Storage 公开桶 `listening_audio`，`git-rm` 本地音频 + gitignore，部署体积归零（250MB 上限再无法触发）。
+  - `0f304a1` 补 CSP：`media-src` 漏加 `https://*.supabase.co`（之前只改了 connect-src）导致 `<audio>` 被浏览器拦截，补齐后听力音频恢复加载；口语走 speechSynthesis + blob 录音不受影响。
+  - `eb3734a` 修每日 backfill 把新题音频写成死的本地 URL：根因 (1) `lib/tts/storage.js` 的 `getAdmin()` memo sentinel 初值 `null` 让 `_admin !== undefined` 守卫首调即短路，Supabase 上传路径在所有环境都是死代码；(2) `backfill-audio.yml` 没注入 Supabase 凭据。改 sentinel 为 `undefined` + 注入 secrets + 加 preflight/per-upload 硬失败（`TTS_ALLOW_LOCAL=1` 才允许本地）防止再悄悄回退。
+- **阅读真考双栏布局** (`6f25605`)：`RDLTask`（练习 RDL + 学术文章）与 `AdaptiveExamShell` MCQ（自适应模考 RDL/AP）改为「左原文 | 右题目」双栏独立滚动，对齐真实托福界面；CTW 填空与听力保持单栏；`<=768px` 堆叠回单栏。
+- **旧库退役为 V1 + 历史精确重练** (`ff762a4`)：题库 swap 到 V2（`6d737d1`）后，swap 前的练习记录打「V1题库」chip——`isV1Session`（`lib/history/bankVersion.js`）**按日期判定，非 id**，因 email `em*` id 在 V1/V2 间碰撞但内容不同。「再练一遍（同题）」改用一次性 `sessionStorage` 快照 handoff（`lib/history/retry.js` → `WritingTask` 预置）精确还原原题，不再 resolve `retryPromptId`（对 V1 会 404 + 误命中碰撞的 email id）。新 session 盖 `details.bankEpoch` 供未来精确判定；含 email id 碰撞的单测 + `WritingTask` 集成测试。
+- **微信群二维码** (`568fc34` + `66637d4` + `3b50220`)：刷新过期失效的群二维码；`WechatGroupModal` 改用共享 `WechatQrImage` 组件（点击全屏放大），与首页侧栏统一——这是最后一处内联 QR `<img>`，至此放大行为全站一致；补提交此前未跟踪、导致 Vercel 构建 module-not-found 的 `WechatQrImage` 组件文件。
+- **题库体验问卷 round v2** (`b2e6b1f` + `f0b4336` + `25c2fd7`)：借题库刷新对**所有**用户（含已答 round-1 的）重新发问卷，survey_type 升到 `first_set_completion_v2`（`lib/survey/firstSetSurveyType` 共享常量；`unique(user_code, survey_type)` 保留 round-1 数据为独立行）。门控只数 realExam2026 上线后（`FIRST_SET_SURVEY_SINCE = 2026-06-02T03:06Z`）完成的 session，避免返场用户一进页面即弹（实测可少误弹 36 人，符合「first-set」语义）。新增「再做两套看看」snooze（再完成 2 套自动重弹、再关则永久消失，至多一次；存为 `{snoozePending,baseline}` 标记行，无 schema 变更，且不计入 admin 跳过/完成统计）+ 首页侧栏（桌面 NavSidebar + 移动端，仅登录态）蓝绿渐变「填写题库体验问卷」入口，经 `window` 事件桥（`lib/survey/openFirstSetSurvey`）随时打开。admin `/api/admin/surveys` 加 `?round=`（current/previous/all）重新可查 round-1 的 17 份历史回答。
+
+## 2026-06-02 — v1.8.0
 
 - **整库重造并整体替换上线**：用 realExam2026（2026 改后真考）重新校准的 prompt 全新生成了全部 12 个题型、~938 道题，一次性替换原线上库（旧混版库已备份于 `data/newBank/.backup-2026-06-02T03-05-18-047Z/`，可回滚）。
 - 生成走 plan→fan-out workflow：每题型独立 writer，planner 预分配互斥切片防同波撞题；跨波多样性靠 `print-bank-prompt` 注入的 live∪newBank 排除（`NEWBANK_ROOT`）+ `dedup-newbank` 内容去重兜底。`scripts/merge-staging.mjs` 增加 id 兜底（无 id 项不再坍缩为单条"重复"）。
