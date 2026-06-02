@@ -14,6 +14,15 @@ import {
 } from "../../components/admin/primitives";
 import { callAdminApi, relativeTime, fmtDate } from "../../lib/adminHelpers";
 import { C } from "../../components/shared/ui";
+import {
+  FIRST_SET_SURVEY_ROUNDS,
+  FIRST_SET_SURVEY_TYPE,
+} from "../../lib/survey/firstSetSurveyType";
+
+// Round picker options: every past round + an "all rounds" aggregate. Older
+// rounds' responses stay in the DB across a round bump (separate survey_type),
+// so the operator can always revisit them here.
+const ROUND_OPTIONS = [...FIRST_SET_SURVEY_ROUNDS, { key: "all", label: "全部轮次" }];
 
 function DistributionBar({ label, count, pct, total, color }) {
   return (
@@ -121,12 +130,15 @@ export default function AdminSurveysPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [updatedAt, setUpdatedAt] = useState(null);
+  const [round, setRound] = useState(FIRST_SET_SURVEY_TYPE);
 
-  async function fetchData() {
+  async function fetchData(r = round) {
     setLoading(true);
     setError("");
     try {
-      const res = await callAdminApi("/api/admin/surveys?commentLimit=100");
+      const res = await callAdminApi(
+        `/api/admin/surveys?commentLimit=100&round=${encodeURIComponent(r)}`,
+      );
       setData(res);
       setUpdatedAt(new Date());
     } catch (e) {
@@ -137,9 +149,10 @@ export default function AdminSurveysPage() {
   }
 
   useEffect(() => {
-    const t = setTimeout(fetchData, 100);
+    const t = setTimeout(() => fetchData(round), 100);
     return () => clearTimeout(t);
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [round]);
 
   const stats = data?.stats;
   const distributions = data?.distributions;
@@ -160,11 +173,27 @@ export default function AdminSurveysPage() {
               : ""
           }
           right={
-            <Button variant="secondary" onClick={fetchData} disabled={loading}>
+            <Button variant="secondary" onClick={() => fetchData(round)} disabled={loading}>
               {loading ? "加载中…" : "刷新"}
             </Button>
           }
         />
+
+        {/* Round picker — past rounds stay queryable after a bump */}
+        <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 16, flexWrap: "wrap" }}>
+          <span style={{ fontSize: 12, color: C.t3, fontWeight: 600 }}>轮次</span>
+          {ROUND_OPTIONS.map((opt) => (
+            <Button
+              key={opt.key}
+              size="sm"
+              variant={round === opt.key ? "primary" : "secondary"}
+              onClick={() => setRound(opt.key)}
+              disabled={loading && round === opt.key}
+            >
+              {opt.label}
+            </Button>
+          ))}
+        </div>
 
         {error && <div style={{ marginBottom: 16 }}><InlineAlert tone="error">{error}</InlineAlert></div>}
 

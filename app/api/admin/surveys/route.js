@@ -1,7 +1,21 @@
 import { isAdminAuthorized } from "../../../../lib/adminAuth";
 import { isSupabaseAdminConfigured, supabaseAdmin } from "../../../../lib/supabaseAdmin";
 import { jsonError } from "../../../../lib/apiResponse";
-import { FIRST_SET_SURVEY_TYPE as SURVEY_TYPE } from "../../../../lib/survey/firstSetSurveyType";
+import {
+  FIRST_SET_SURVEY_TYPE as SURVEY_TYPE,
+  FIRST_SET_SURVEY_ROUNDS,
+} from "../../../../lib/survey/firstSetSurveyType";
+
+const ROUND_KEYS = FIRST_SET_SURVEY_ROUNDS.map((r) => r.key);
+
+// Resolve the ?round= param to a survey_type filter. Defaults to the active
+// round; "all" aggregates every round so the operator can see history that a
+// round bump would otherwise hide.
+function resolveRound(requested) {
+  if (requested === "all") return { round: "all", types: ROUND_KEYS };
+  if (ROUND_KEYS.includes(requested)) return { round: requested, types: [requested] };
+  return { round: SURVEY_TYPE, types: [SURVEY_TYPE] };
+}
 
 const Q1_LABELS = {
   better: "比预期好",
@@ -76,11 +90,12 @@ export async function GET(request) {
 
     const url = new URL(request.url);
     const commentLimit = Math.min(200, Math.max(1, Number(url.searchParams.get("commentLimit") || 50)));
+    const { round, types } = resolveRound(url.searchParams.get("round"));
 
     const { data, error } = await supabaseAdmin
       .from("user_surveys")
       .select("id,user_code,status,responses,created_at")
-      .eq("survey_type", SURVEY_TYPE)
+      .in("survey_type", types)
       .order("created_at", { ascending: false })
       .limit(5000);
     if (error) return jsonError(400, error.message || "List surveys failed");
@@ -122,6 +137,9 @@ export async function GET(request) {
 
     return Response.json({
       ok: true,
+      round,
+      activeRound: SURVEY_TYPE,
+      rounds: [...FIRST_SET_SURVEY_ROUNDS, { key: "all", label: "全部轮次" }],
       stats: {
         submitted: submitted.length,
         dismissed: dismissed.length,

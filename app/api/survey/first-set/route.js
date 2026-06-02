@@ -2,7 +2,10 @@ import { isSupabaseAdminConfigured, supabaseAdmin } from "../../../../lib/supaba
 import { createRateLimiter, getIp } from "../../../../lib/rateLimit";
 import { jsonError } from "../../../../lib/apiResponse";
 
-import { FIRST_SET_SURVEY_TYPE as SURVEY_TYPE } from "../../../../lib/survey/firstSetSurveyType";
+import {
+  FIRST_SET_SURVEY_TYPE as SURVEY_TYPE,
+  FIRST_SET_SURVEY_SINCE,
+} from "../../../../lib/survey/firstSetSurveyType";
 const REWARD_DAYS = 1;
 
 const submitLimiter = createRateLimiter("survey-first-set-submit", { max: 10 });
@@ -42,7 +45,10 @@ export async function GET(request) {
       supabaseAdmin
         .from("sessions")
         .select("id", { count: "exact", head: true })
-        .eq("user_code", userCode),
+        .eq("user_code", userCode)
+        // Only sets done in the CURRENT round count — a returning user's
+        // pre-refresh history must not trip the survey on bare page load.
+        .gte("date", FIRST_SET_SURVEY_SINCE),
       supabaseAdmin
         .from("users")
         .select("tier,tier_expires_at")

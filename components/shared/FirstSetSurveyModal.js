@@ -117,7 +117,10 @@ export function FirstSetSurveyModal({
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
           <div>
             <div style={{ fontSize: 16, fontWeight: 700, color: C.t1 }}>帮我们做得更好</div>
-            <div style={{ fontSize: 13, color: C.t2, marginTop: 4 }}>30 秒,只问 3 个问题</div>
+            <div style={{ fontSize: 13, color: C.t2, marginTop: 4 }}>
+              30 秒,只问 3 个问题
+              <span style={{ color: C.t3 }}>(本次针对全新升级的 V2 题库)</span>
+            </div>
           </div>
           <button
             onClick={() => onDismiss?.()}
