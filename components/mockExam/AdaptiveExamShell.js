@@ -277,132 +277,98 @@ function MCQInlineTask({ item, taskType, onComplete }) {
   const answeredAll = selections.every((s) => s !== null);
   const correctAnswer = (q) => q.correct_answer || q.answer;
 
-  return (
-    <div>
-      <div style={{ fontSize: 12, fontWeight: 700, color: C.t3, marginBottom: 8, letterSpacing: 0.5, textTransform: "uppercase" }}>
-        {taskType === "rdl" && "Read in Daily Life"}
-        {taskType === "ap" && "Academic Passage"}
-        {taskType === "la" && "Announcement"}
-        {taskType === "lc" && "Conversation"}
-        {taskType === "lat" && "Academic Talk"}
+  // Task label (shared)
+  const taskLabel = (
+    <div style={{ fontSize: 12, fontWeight: 700, color: C.t3, marginBottom: 10, letterSpacing: 0.5, textTransform: "uppercase" }}>
+      {taskType === "rdl" && "Read in Daily Life"}
+      {taskType === "ap" && "Academic Passage"}
+      {taskType === "la" && "Announcement"}
+      {taskType === "lc" && "Conversation"}
+      {taskType === "lat" && "Academic Talk"}
+    </div>
+  );
+
+  // Question stem + options + navigation (shared by both layouts)
+  const questionUI = (
+    <>
+      {isListeningType && (
+        <div style={{
+          display: "inline-flex", alignItems: "center", gap: 8,
+          padding: "4px 10px", borderRadius: 999, marginBottom: 10,
+          background: answerTimeLeft <= 10 ? "#fee2e2" : "#f5f3ff",
+          border: `1px solid ${answerTimeLeft <= 10 ? "#fecaca" : "#ddd6fe"}`,
+          color: answerTimeLeft <= 10 ? "#b91c1c" : "#6d28d9",
+          fontSize: 12, fontWeight: 800,
+          fontFamily: "Consolas, Menlo, 'Courier New', monospace",
+        }}>
+          Time left {formatAnswerTime(answerTimeLeft)}
+        </div>
+      )}
+      <div style={{ fontSize: 12, color: C.t3, marginBottom: 6 }}>
+        Question {currentQ + 1} of {questions.length}
+      </div>
+      <div style={{ fontSize: 15, fontWeight: 600, color: C.t1, lineHeight: 1.5, marginBottom: 14 }}>
+        {getStem(question)}
       </div>
 
-      {/* Passage for reading types */}
-      {passage && (
-        <div style={{
-          background: "#f8fafc",
-          border: "1px solid " + C.bdr,
-          borderRadius: 10,
-          padding: "14px 16px",
-          fontSize: 13,
-          lineHeight: 1.7,
-          color: C.t1,
-          marginBottom: 16,
-          maxHeight: 300,
-          overflowY: "auto",
-          whiteSpace: "pre-wrap",
-        }}>
-          {passage}
-        </div>
-      )}
+      {/* Options */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        {["A", "B", "C", "D"].map((key) => {
+          if (!question.options[key]) return null;
+          const isSelected = selections[currentQ] === key;
+          const isCorrectKey = submitted && key === correctAnswer(question);
+          const isWrongSelection = submitted && isSelected && key !== correctAnswer(question);
 
-      {/* Audio for listening types */}
-      {!passage && (taskType === "la" || taskType === "lc" || taskType === "lat") && (
-        <div style={{ marginBottom: 16 }}>
-          <AudioPlayer
-            src={item.audio_url || null}
-            text={
-              item.announcement ||
-              item.lecture ||
-              (item.conversation ? item.conversation.map((t) => `${t.speaker}: ${t.text}`).join(". ") : "")
-            }
-            maxReplays={0}
-            autoPlay
-          />
-        </div>
-      )}
+          let borderColor = C.bdr;
+          let bg = "#fff";
+          if (submitted) {
+            if (isCorrectKey) { borderColor = "#22c55e"; bg = "#f0fdf4"; }
+            else if (isWrongSelection) { borderColor = "#ef4444"; bg = "#fef2f2"; }
+          } else if (isSelected) {
+            borderColor = SECTION_CONFIG.reading.accent;
+            bg = "#eff6ff";
+          }
 
-      {/* Question */}
-      <div style={{ marginBottom: 12 }}>
-        {isListeningType && (
-          <div style={{
-            display: "inline-flex", alignItems: "center", gap: 8,
-            padding: "4px 10px", borderRadius: 999, marginBottom: 10,
-            background: answerTimeLeft <= 10 ? "#fee2e2" : "#f5f3ff",
-            border: `1px solid ${answerTimeLeft <= 10 ? "#fecaca" : "#ddd6fe"}`,
-            color: answerTimeLeft <= 10 ? "#b91c1c" : "#6d28d9",
-            fontSize: 12, fontWeight: 800,
-            fontFamily: "Consolas, Menlo, 'Courier New', monospace",
-          }}>
-            Time left {formatAnswerTime(answerTimeLeft)}
-          </div>
-        )}
-        <div style={{ fontSize: 12, color: C.t3, marginBottom: 6 }}>
-          Question {currentQ + 1} of {questions.length}
-        </div>
-        <div style={{ fontSize: 14, fontWeight: 600, color: C.t1, lineHeight: 1.5, marginBottom: 12 }}>
-          {getStem(question)}
-        </div>
-
-        {/* Options */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          {["A", "B", "C", "D"].map((key) => {
-            if (!question.options[key]) return null;
-            const isSelected = selections[currentQ] === key;
-            const isCorrectKey = submitted && key === correctAnswer(question);
-            const isWrongSelection = submitted && isSelected && key !== correctAnswer(question);
-
-            let borderColor = C.bdr;
-            let bg = "#fff";
-            if (submitted) {
-              if (isCorrectKey) { borderColor = "#22c55e"; bg = "#f0fdf4"; }
-              else if (isWrongSelection) { borderColor = "#ef4444"; bg = "#fef2f2"; }
-            } else if (isSelected) {
-              borderColor = SECTION_CONFIG.reading.accent;
-              bg = "#eff6ff";
-            }
-
-            return (
-              <button
-                key={key}
-                onClick={() => handleSelect(key)}
-                disabled={submitted}
-                style={{
-                  display: "flex",
-                  alignItems: "flex-start",
-                  gap: 10,
-                  padding: "10px 14px",
-                  background: bg,
-                  border: `2px solid ${borderColor}`,
-                  borderRadius: 10,
-                  cursor: submitted ? "default" : "pointer",
-                  textAlign: "left",
-                  fontFamily: FONT,
-                  fontSize: 13,
-                  color: C.t1,
-                  lineHeight: 1.5,
-                  transition: "all 120ms ease",
-                }}
-              >
-                <span style={{
-                  width: 24, height: 24, borderRadius: "50%", flexShrink: 0,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 12, fontWeight: 700,
-                  background: isSelected ? (submitted ? (isWrongSelection ? "#fee2e2" : "#dcfce7") : "#dbeafe") : "#f1f5f9",
-                  color: isSelected ? (submitted ? (isWrongSelection ? "#ef4444" : "#22c55e") : "#3b82f6") : C.t3,
-                }}>
-                  {key}
-                </span>
-                <span>{question.options[key]}</span>
-              </button>
-            );
-          })}
-        </div>
+          return (
+            <button
+              key={key}
+              onClick={() => handleSelect(key)}
+              disabled={submitted}
+              style={{
+                display: "flex",
+                alignItems: "flex-start",
+                gap: 10,
+                padding: "10px 14px",
+                background: bg,
+                border: `2px solid ${borderColor}`,
+                borderRadius: 10,
+                cursor: submitted ? "default" : "pointer",
+                textAlign: "left",
+                fontFamily: FONT,
+                fontSize: 13,
+                color: C.t1,
+                lineHeight: 1.5,
+                transition: "all 120ms ease",
+              }}
+            >
+              <span style={{
+                width: 24, height: 24, borderRadius: "50%", flexShrink: 0,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 12, fontWeight: 700,
+                background: isSelected ? (submitted ? (isWrongSelection ? "#fee2e2" : "#dcfce7") : "#dbeafe") : "#f1f5f9",
+                color: isSelected ? (submitted ? (isWrongSelection ? "#ef4444" : "#22c55e") : "#3b82f6") : C.t3,
+              }}>
+                {key}
+              </span>
+              <span>{question.options[key]}</span>
+            </button>
+          );
+        })}
       </div>
 
       {/* Navigation */}
       {!submitted && (
-        <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
+        <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
           {currentQ > 0 && !isListeningType && (
             <Btn onClick={handlePrev} variant="secondary" style={{ fontSize: 13 }}>
               上一题
@@ -425,6 +391,57 @@ function MCQInlineTask({ item, taskType, onComplete }) {
           已提交，即将进入下一题...
         </div>
       )}
+    </>
+  );
+
+  // ── Reading types (RDL / AP): real-exam two-column layout (passage | question) ──
+  if (passage) {
+    return (
+      <div>
+        {taskLabel}
+        <div
+          className="tp-reading-split"
+          style={{
+            display: "flex",
+            alignItems: "stretch",
+            height: "calc(100vh - 270px)",
+            minHeight: 340,
+          }}
+        >
+          {/* LEFT — passage (scrolls independently) */}
+          <div className="tp-reading-left" style={{ flex: 1, minWidth: 0, overflowY: "auto", paddingRight: 22, borderRight: `1px solid ${C.bdr}` }}>
+            <div style={{ fontSize: 14, lineHeight: 1.8, color: C.t1, whiteSpace: "pre-wrap" }}>
+              {passage}
+            </div>
+          </div>
+          {/* RIGHT — question (scrolls independently) */}
+          <div className="tp-reading-right" style={{ flex: 1, minWidth: 0, overflowY: "auto", paddingLeft: 22 }}>
+            {questionUI}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Listening types (audio) / no passage: single-column (unchanged) ──
+  return (
+    <div>
+      {taskLabel}
+      {(taskType === "la" || taskType === "lc" || taskType === "lat") && (
+        <div style={{ marginBottom: 16 }}>
+          <AudioPlayer
+            src={item.audio_url || null}
+            text={
+              item.announcement ||
+              item.lecture ||
+              (item.conversation ? item.conversation.map((t) => `${t.speaker}: ${t.text}`).join(". ") : "")
+            }
+            maxReplays={0}
+            autoPlay
+          />
+        </div>
+      )}
+      {questionUI}
     </div>
   );
 }
@@ -719,6 +736,11 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
 
   const totalItemsInCurrentModule = currentItems ? currentItems.length : 0;
 
+  // Reading passage tasks (RDL / AP) render as a wide two-column layout
+  // (passage | question) to match the real exam. CTW (fill-in-the-blanks) and
+  // every listening task stay single-column.
+  const isWideReading = (phase === "module1" || phase === "module2") && !!currentItem && (currentItem.taskType === "rdl" || currentItem.taskType === "ap");
+
   // ------ Phase transitions ------
 
   function handleStartExam() {
@@ -901,7 +923,7 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
         onExit={onExit}
       />
 
-      <div style={{ maxWidth: 800, margin: "24px auto", padding: "0 20px" }}>
+      <div className="tp-reading-exam-wrap" style={{ maxWidth: isWideReading ? 1180 : 800, margin: "24px auto", padding: "0 20px", transition: "max-width 200ms ease" }}>
         {/* Error state */}
         {error && (
           <SurfaceCard style={{ padding: 24, textAlign: "center" }}>

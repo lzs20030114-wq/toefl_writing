@@ -78,6 +78,21 @@
     grid-template-columns: 1fr !important;
   }
 
+  /* ── 阅读任务：左右分栏（文章 | 题目）→ 上下堆叠 ── */
+  .tp-reading-split {
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+  .tp-reading-left {
+    border-right: none !important;
+    border-bottom: 1px solid #dde5df !important;
+    max-height: 42vh !important;
+  }
+  .tp-reading-title {
+    font-size: 18px !important;
+  }
+
   /* ── 进度页：侧边栏 → 堆叠 ── */
   .tp-progress-layout {
     flex-direction: column !important;
