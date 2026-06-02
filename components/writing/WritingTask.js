@@ -7,6 +7,7 @@ import { saveSess, addDoneIds } from "../../lib/sessionStore";
 import { mapScoringError } from "../../lib/ai/client";
 import { evaluateWritingResponse } from "../../lib/ai/writingEval";
 import { BANK_EXHAUSTED_ERRORS, DONE_STORAGE_KEYS, normalizeEmailTopic, pickRandomPrompt } from "../../lib/questionSelector";
+import { peekRetrySnapshot, clearRetrySnapshot } from "../../lib/history/retry";
 import { C, FONT, Btn, InfoStrip, PageShell, SurfaceCard, DisclosureSection, Toast, TopBar } from "../shared/ui";
 import { WritingFeedbackPanel } from "./WritingFeedbackPanel";
 import { WritingPromptPanel } from "./WritingPromptPanel";
@@ -121,15 +122,23 @@ export function WritingTask({
   const [promptCollapsed, setPromptCollapsed] = useState(false);
   const uiReportLanguage = normalizeReportLanguage(reportLanguage || readReportLanguage());
   const dataRaw = type === "email" ? EM_DATA : AD_DATA;
-  const data = useMemo(
-    () =>
-      (Array.isArray(dataRaw)
-        ? dataRaw
-          .map((d, i) => normalizePrompt(type, d, `${type}-${i + 1}`))
-          .filter(Boolean)
-        : []),
-    [dataRaw, type]
+  const forcedPromptId = String(initialPromptId || "").trim();
+  // Retry-from-history hands the exact practiced question off via sessionStorage.
+  // Peek it once (read-only → SSR/StrictMode safe); clear it in the effect below.
+  const [retryPrompt] = useState(() =>
+    forcedPromptId ? normalizePrompt(type, peekRetrySnapshot(forcedPromptId), forcedPromptId) : null
   );
+  const data = useMemo(() => {
+    const base = Array.isArray(dataRaw)
+      ? dataRaw.map((d, i) => normalizePrompt(type, d, `${type}-${i + 1}`)).filter(Boolean)
+      : [];
+    // Prepend the practiced snapshot so it wins id resolution over any live (V2)
+    // item sharing the same id — email em30 exists in both V1 and V2 with different
+    // content, so without this a "retry" would silently load the new em30.
+    if (retryPrompt) return [retryPrompt, ...base.filter((p) => p.id !== retryPrompt.id)];
+    return base;
+  }, [dataRaw, type, retryPrompt]);
+  useEffect(() => { if (retryPrompt) clearRetrySnapshot(); }, [retryPrompt]);
   const defaultLimit = type === "email" ? 420 : 600;
   const limit = isPracticeMode ? 0 : (Number.isFinite(timeLimitSeconds) && timeLimitSeconds > 0 ? timeLimitSeconds : defaultLimit);
   const minW = type === "email" ? 80 : 100;
@@ -145,7 +154,6 @@ export function WritingTask({
   const usedRef = useRef(new Set());
   const [initialSelection] = useState(() => {
     if (data.length === 0) return { error: "题库为空或数据异常。", index: -1 };
-    const forcedPromptId = String(initialPromptId || "").trim();
     if (forcedPromptId) {
       const forcedIdx = data.findIndex((x) => String(x?.id || "") === forcedPromptId);
       if (forcedIdx >= 0) {

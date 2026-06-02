@@ -4,6 +4,8 @@ import { formatLocalDateTime, translateGrammarPoint } from "../../lib/utils";
 import { C, ChevronIcon, SurfaceCard, ModeChip } from "../shared/ui";
 import { ScoringReport } from "../writing/ScoringReport";
 import { useBsAiExplain, BsAiExplainBlock } from "../buildSentence/useBsAiExplain";
+import { buildRetryHref, startRetryFromHistory } from "../../lib/history/retry";
+import { isV1Session } from "../../lib/history/bankVersion";
 
 const MOCK_TASK_IDS = {
   BUILD: "build-sentence",
@@ -72,25 +74,6 @@ function getScoreColor(session) {
   if (session.score >= 4) return C.green;
   if (session.score >= 3) return C.orange;
   return C.red;
-}
-
-function buildRetryHref(session) {
-  const s = session || {};
-  if (s.type !== "email" && s.type !== "discussion") return "";
-  const promptId = String(s?.details?.promptId || s?.details?.promptData?.id || "").trim();
-  if (!promptId) return "";
-  const path = s.type === "email" ? "/email-writing" : "/academic-writing";
-  const qs = new URLSearchParams();
-  qs.set("retryPromptId", promptId);
-  const rootId = String(s?.details?.practiceRootId || "").trim();
-  if (rootId) qs.set("practiceRootId", rootId);
-  const attempt = Number(s?.details?.practiceAttempt || 1);
-  if (Number.isFinite(attempt) && attempt > 0) qs.set("retryFromAttempt", String(Math.floor(attempt)));
-  const mode = String(s?.mode || "").trim();
-  if (mode && mode !== "standard") qs.set("mode", mode);
-  const lang = String(s?.details?.feedback?.reportLanguage || "").trim();
-  if (lang) qs.set("lang", lang);
-  return `${path}?${qs.toString()}`;
 }
 
 function truncate(text, max = 40) {
@@ -379,6 +362,7 @@ export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, type
   const bsAi = useBsAiExplain();
   const practiceAttempt = Number(session?.details?.practiceAttempt || 1);
   const retryHref = buildRetryHref(session);
+  const isV1 = isV1Session(session);
 
   const mockTasks = Array.isArray(session?.details?.tasks) ? session.details.tasks : [];
   const mockBuild = mockTasks.find((task) => task?.taskId === MOCK_TASK_IDS.BUILD);
@@ -395,6 +379,7 @@ export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, type
             <ChevronIcon open={isExpanded} size={10} />
             <span style={{ fontSize: 11, fontWeight: 700, whiteSpace: "nowrap" }}>{getTypeLabel(session.type)}</span>
             <ModeChip mode={session.mode} />
+            {isV1 ? <Chip color="#a16207" bg="#fef9c3">V1题库</Chip> : null}
             {(session.type === "email" || session.type === "discussion") && practiceAttempt > 1 ? <Chip color="#0f766e" bg="#ccfbf1">第 {practiceAttempt} 次练习</Chip> : null}
             {session.type === "mock" && Number.isFinite(session?.band) ? <Chip>{session.band.toFixed(1)}</Chip> : null}
             <span style={{ fontSize: 10.5, color: C.t2, whiteSpace: "nowrap" }}>{formatLocalDateTime(session.date)}</span>
@@ -480,7 +465,8 @@ export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, type
           {session.details.promptSummary ? <div style={{ fontSize: 11, color: C.t2, marginBottom: 7 }}>题目摘要：{session.details.promptSummary}</div> : null}
           {retryHref ? (
             <div style={{ marginBottom: 8 }}>
-              <OutlineButton onClick={() => { window.location.href = retryHref; }}>再练一遍（同题）</OutlineButton>
+              <OutlineButton onClick={() => startRetryFromHistory(session)}>再练一遍（同题）</OutlineButton>
+              {isV1 ? <div style={{ fontSize: 10.5, color: C.t3, marginTop: 5 }}>此题来自旧题库（V1），重练将使用当时的原题。</div> : null}
             </div>
           ) : null}
           {session.details.userText ? (

@@ -43,10 +43,13 @@ function AcademicWritingPageClient() {
   const retryPromptId = String(searchParams.get("retryPromptId") || "").trim();
   const initialPracticeRootId = String(searchParams.get("practiceRootId") || "").trim();
   const retryFromAttempt = Number(searchParams.get("retryFromAttempt") || 0);
+  // A retry from history reloads that exact prompt and bypasses the practice picker,
+  // regardless of mode — so the WritingTask snapshot handoff always gets to run.
+  const isRetry = retryPromptId.length > 0;
   const [pickedPromptId, setPickedPromptId] = useState(null);
   const onExit = () => router.push(isPractice ? "/?mode=practice" : "/");
 
-  if (isPractice && !pickedPromptId) {
+  if (isPractice && !isRetry && !pickedPromptId) {
     const doneIds = loadDoneIds(DONE_STORAGE_KEYS.DISCUSSION);
     return (
       <UsageGateWrapper onExit={onExit} practiceMode={mode}>
@@ -66,14 +69,14 @@ function AcademicWritingPageClient() {
   return (
     <UsageGateWrapper onExit={onExit} practiceMode={mode}>
       <WritingTask
-        onExit={isPractice ? () => setPickedPromptId(null) : onExit}
+        onExit={isPractice && !isRetry ? () => setPickedPromptId(null) : onExit}
         type="discussion"
         timeLimitSeconds={getTaskTimeSeconds("discussion", mode)}
         practiceMode={mode}
         reportLanguage={reportLanguage}
-        initialPromptId={isPractice ? pickedPromptId : retryPromptId}
-        initialPracticeRootId={isPractice ? "" : initialPracticeRootId}
-        initialPracticeAttempt={isPractice ? 1 : (Number.isFinite(retryFromAttempt) && retryFromAttempt > 0 ? retryFromAttempt + 1 : 1)}
+        initialPromptId={isRetry ? retryPromptId : (isPractice ? pickedPromptId : "")}
+        initialPracticeRootId={isRetry ? initialPracticeRootId : ""}
+        initialPracticeAttempt={isRetry ? (Number.isFinite(retryFromAttempt) && retryFromAttempt > 0 ? retryFromAttempt + 1 : 1) : 1}
       />
     </UsageGateWrapper>
   );

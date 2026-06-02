@@ -3,6 +3,8 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { clearAllSessions, deleteSession, loadHist, SESSION_STORE_EVENTS, setCurrentUser } from "../lib/sessionStore";
 import { getSavedCode } from "../lib/AuthContext";
 import { buildHistoryEntries, buildHistoryStats } from "../lib/history/viewModel";
+import { startRetryFromHistory, buildRetryHref } from "../lib/history/retry";
+import { isV1Session } from "../lib/history/bankVersion";
 import { formatLocalDateTime, translateGrammarPoint } from "../lib/utils";
 import { ChevronIcon, FONT } from "./shared/ui";
 import { HistoryRow } from "./history/HistoryRow";
@@ -443,6 +445,7 @@ function SessionRow({ entry, expanded, onToggle, onDelete, typeAvgs, isActive, o
   const s = entry.session;
   const m = TYPE[s.type] || TYPE.email;
   const isWriting = s.type === "email" || s.type === "discussion";
+  const isV1 = isV1Session(s);
   let scoreStr, pct, bandStr;
   if (s.type === "bs") {
     const t = Number(s.total || 0), c = Number(s.correct || 0);
@@ -487,7 +490,10 @@ function SessionRow({ entry, expanded, onToggle, onDelete, typeAvgs, isActive, o
         </div>
         {/* Label + date */}
         <div style={{ flex: 1, textAlign: "left", minWidth: 0 }}>
-          <div style={{ fontSize: 13.5, fontWeight: isActive ? 700 : 580, color: P.text, lineHeight: 1.3 }}>{m.label}</div>
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <span style={{ fontSize: 13.5, fontWeight: isActive ? 700 : 580, color: P.text, lineHeight: 1.3 }}>{m.label}</span>
+            {isV1 ? <Tag color="#a16207" bg="#fef9c3" style={{ fontSize: 10 }}>V1题库</Tag> : null}
+          </div>
           <div style={{ fontSize: 11, color: P.textDim, marginTop: 3, fontVariantNumeric: "tabular-nums", letterSpacing: "0.01em" }}>{formatLocalDateTime(s.date)}</div>
         </div>
         {/* Score pill */}
@@ -930,6 +936,7 @@ function FullMockReport({ entry, onClose }) {
           <div style={{ marginTop: 5, display: "flex", gap: 6, flexWrap: "wrap" }}>
             {s.cefr ? <Tag color={P.purple} bg={P.purpleSoft}>CEFR {s.cefr}</Tag> : null}
             {s.scaledScore != null ? <Tag color={P.textSec}>换算分 {s.scaledScore}/30</Tag> : null}
+            {isV1Session(s) ? <Tag color="#a16207" bg="#fef9c3">V1题库</Tag> : null}
           </div>
         </div>
         <div style={{ textAlign: "right", flexShrink: 0 }}>
@@ -1258,8 +1265,7 @@ export function ProgressView({ onBack }) {
                         const fb = s.details?.feedback || null;
                         const pd = s.details?.promptData || null;
                         const userText = s.details?.userText || "";
-                        const promptId = String(s.details?.promptId || pd?.id || "").trim();
-                        const retryHref = promptId ? `/${s.type === "email" ? "email-writing" : "academic-writing"}?retryPromptId=${promptId}` : null;
+                        const retryHref = buildRetryHref(s);
                         const mc = TYPE[s.type]?.color || P.border;
                         return (
                           <React.Fragment key={entry.sourceIndex}>
@@ -1286,7 +1292,7 @@ export function ProgressView({ onBack }) {
                                   pd={pd}
                                   userText={userText}
                                   containerHeight="720px"
-                                  onRetry={retryHref ? () => { window.location.href = retryHref; } : null}
+                                  onRetry={retryHref ? () => startRetryFromHistory(s) : null}
                                   onNext={null}
                                   onExit={() => setActivePracticeSrcIdx(null)}
                                 />

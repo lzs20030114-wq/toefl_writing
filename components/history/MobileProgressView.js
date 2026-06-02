@@ -5,6 +5,7 @@ import { formatLocalDateTime, translateGrammarPoint } from "../../lib/utils";
 import { WritingFeedbackPanel } from "../writing/WritingFeedbackPanel";
 import { useBsAiExplain, BsAiExplainBlock } from "../buildSentence/useBsAiExplain";
 import { HistoryRow } from "./HistoryRow";
+import { isV1Session } from "../../lib/history/bankVersion";
 
 const P = {
   bg: "#f4f7f5", surface: "#ffffff", border: "#dde5df", borderSubtle: "#ebf0ed",
@@ -179,7 +180,10 @@ function WritingDetailView({ entry, onBack }) {
     <div style={{ position: "fixed", inset: 0, zIndex: 100, background: P.bg, fontFamily: FONT, display: "flex", flexDirection: "column", height: "100dvh" }}>
       <div style={{ flexShrink: 0, padding: "0 12px", borderBottom: `1px solid ${P.border}`, display: "flex", alignItems: "center", justifyContent: "space-between", minHeight: 48, background: P.surface }}>
         <BackBtn onClick={onBack} />
-        <span style={{ fontSize: 14, fontWeight: 700, color: P.text }}>{tc.label}反馈</span>
+        <span style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 14, fontWeight: 700, color: P.text }}>
+          {tc.label}反馈
+          {isV1Session(s) ? <Tag color="#a16207" bg="#fef9c3">V1题库</Tag> : null}
+        </span>
         <span style={{ fontSize: 15, fontWeight: 800, color: getScoreColor(s), minWidth: 44, textAlign: "right" }}>{getScoreLabel(s)}</span>
       </div>
       <div style={{ flex: 1, overflowY: "auto", WebkitOverflowScrolling: "touch", overscrollBehavior: "contain" }}>
@@ -335,6 +339,7 @@ export default function MobileProgressView({ vm }) {
                         <div style={{ fontSize: 13, fontWeight: 700, color: P.text, display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
                           <span>{tc.label}</span>
                           <ModeChip mode={s.mode} />
+                          {isV1Session(s) ? <Tag color="#a16207" bg="#fef9c3">V1题库</Tag> : null}
                         </div>
                         <div style={{ fontSize: 11, color: P.textDim, marginTop: 1 }}>{formatLocalDateTime(s.date)}</div>
                       </div>
