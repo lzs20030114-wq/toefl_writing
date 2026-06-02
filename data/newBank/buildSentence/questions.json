@@ -2705,6 +2705,775 @@
           ]
         }
       ]
+    },
+    {
+      "set_id": 12,
+      "questions": [
+        {
+          "id": "ets_s12_q1",
+          "prompt": "Have you heard from the intramural office?",
+          "answer": "They asked whether our team had enough players.",
+          "chunks": [
+            "they",
+            "whether",
+            "our team",
+            "had",
+            "enough",
+            "players"
+          ],
+          "prefilled": [
+            "asked"
+          ],
+          "prefilled_positions": {
+            "asked": 1
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question",
+            "declarative word order"
+          ]
+        },
+        {
+          "id": "ets_s12_q2",
+          "prompt": "What did your lab partner ask you afterward?",
+          "answer": "She asked whether I had submitted the report.",
+          "chunks": [
+            "she",
+            "asked",
+            "i",
+            "had",
+            "submitted",
+            "the",
+            "report"
+          ],
+          "prefilled": [
+            "whether"
+          ],
+          "prefilled_positions": {
+            "whether": 2
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question",
+            "past perfect"
+          ]
+        },
+        {
+          "id": "ets_s12_q3",
+          "prompt": "Did you ask the clerk about reserving a booth?",
+          "answer": "I asked how long groups could stay.",
+          "chunks": [
+            "i",
+            "asked",
+            "groups",
+            "could",
+            "stay"
+          ],
+          "prefilled": [
+            "how long"
+          ],
+          "prefilled_positions": {
+            "how long": 2
+          },
+          "distractor": "can",
+          "has_question_mark": false,
+          "grammar_points": [
+            "indirect question",
+            "declarative word order"
+          ]
+        },
+        {
+          "id": "ets_s12_q4",
+          "prompt": "Have you settled on a major yet?",
+          "answer": "I have not chosen between economics and statistics.",
+          "chunks": [
+            "have",
+            "not",
+            "chosen",
+            "between",
+            "economics",
+            "and",
+            "statistics"
+          ],
+          "prefilled": [
+            "I"
+          ],
+          "prefilled_positions": {
+            "i": 0
+          },
+          "distractor": "choosing",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation",
+            "present perfect"
+          ]
+        },
+        {
+          "id": "ets_s12_q5",
+          "prompt": "Your group seemed stressed about the presentation.",
+          "answer": "Where do I find a quieter meeting room?",
+          "chunks": [
+            "do",
+            "i",
+            "find",
+            "a",
+            "quieter",
+            "meeting",
+            "room"
+          ],
+          "prefilled": [
+            "Where"
+          ],
+          "prefilled_positions": {
+            "where": 0
+          },
+          "distractor": "is",
+          "has_question_mark": true,
+          "grammar_points": [
+            "direct wh-question",
+            "subject-auxiliary inversion"
+          ]
+        },
+        {
+          "id": "ets_s12_q6",
+          "prompt": "I really need a room for our group project.",
+          "answer": "Where do you reserve the study rooms here?",
+          "chunks": [
+            "where",
+            "do",
+            "you",
+            "reserve",
+            "the",
+            "study",
+            "rooms",
+            "here"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "did",
+          "has_question_mark": true,
+          "grammar_points": [
+            "direct wh-question",
+            "subject-auxiliary inversion"
+          ]
+        },
+        {
+          "id": "ets_s12_q7",
+          "prompt": "Did you catch the early shuttle today?",
+          "answer": "I missed it and walked to class.",
+          "chunks": [
+            "missed",
+            "it",
+            "and",
+            "walked",
+            "to class"
+          ],
+          "prefilled": [
+            "I"
+          ],
+          "prefilled_positions": {
+            "i": 0
+          },
+          "distractor": "was",
+          "has_question_mark": false,
+          "grammar_points": [
+            "conjoined predicate",
+            "past tense"
+          ]
+        },
+        {
+          "id": "ets_s12_q8",
+          "prompt": "What did the front desk tell you?",
+          "answer": "My replacement key is ready at the office.",
+          "chunks": [
+            "my",
+            "replacement",
+            "key",
+            "ready",
+            "at",
+            "the office"
+          ],
+          "prefilled": [
+            "is"
+          ],
+          "prefilled_positions": {
+            "is": 3
+          },
+          "distractor": "was",
+          "has_question_mark": false,
+          "grammar_points": [
+            "simple present statement",
+            "prepositional phrase"
+          ]
+        },
+        {
+          "id": "ets_s12_q9",
+          "prompt": "Why did you switch dorm buildings?",
+          "answer": "The rooms that face the courtyard stay quieter.",
+          "chunks": [
+            "the rooms",
+            "that",
+            "face",
+            "the courtyard",
+            "stay",
+            "quieter"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "are",
+          "has_question_mark": false,
+          "grammar_points": [
+            "relative clause",
+            "comparative"
+          ]
+        },
+        {
+          "id": "ets_s12_q10",
+          "prompt": "Have you booked your ticket for the city trip?",
+          "answer": "I have not paid the deposit yet.",
+          "chunks": [
+            "I",
+            "not",
+            "paid",
+            "the deposit",
+            "yet"
+          ],
+          "prefilled": [
+            "have"
+          ],
+          "prefilled_positions": {
+            "have": 1
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation",
+            "present perfect"
+          ]
+        }
+      ]
+    },
+    {
+      "set_id": 13,
+      "questions": [
+        {
+          "id": "ets_s13_q1",
+          "prompt": "Did you ask about the registration deadline?",
+          "answer": "I wanted to know when add/drop ends.",
+          "chunks": [
+            "I",
+            "wanted to",
+            "know",
+            "when",
+            "add/drop",
+            "ends"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "does",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question",
+            "declarative order"
+          ]
+        },
+        {
+          "id": "ets_s13_q2",
+          "prompt": "What did the advisor explain to you?",
+          "answer": "He explained how the waitlist actually works.",
+          "chunks": [
+            "explained",
+            "how",
+            "the",
+            "waitlist",
+            "actually",
+            "works"
+          ],
+          "prefilled": [
+            "He"
+          ],
+          "prefilled_positions": {
+            "he": 0
+          },
+          "distractor": "working",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded wh-clause"
+          ]
+        },
+        {
+          "id": "ets_s13_q3",
+          "prompt": "Did you meet with your advisor about the change?",
+          "answer": "She asked whether I had declared a major.",
+          "chunks": [
+            "she",
+            "asked",
+            "whether",
+            "had",
+            "declared",
+            "a",
+            "major"
+          ],
+          "prefilled": [
+            "I"
+          ],
+          "prefilled_positions": {
+            "i": 3
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded yes/no question",
+            "past perfect"
+          ]
+        },
+        {
+          "id": "ets_s13_q4",
+          "prompt": "Have you signed up for next semester?",
+          "answer": "I have not chosen my electives yet.",
+          "chunks": [
+            "I",
+            "have",
+            "not",
+            "chosen",
+            "my",
+            "electives",
+            "yet"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "choosing",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation",
+            "present perfect"
+          ]
+        },
+        {
+          "id": "ets_s13_q5",
+          "prompt": "I missed the add-drop deadline this morning.",
+          "answer": "Where do I file a late request?",
+          "chunks": [
+            "where",
+            "do",
+            "i",
+            "file",
+            "a",
+            "late",
+            "request"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "did",
+          "has_question_mark": true,
+          "grammar_points": [
+            "wh-question",
+            "subject-auxiliary inversion"
+          ]
+        },
+        {
+          "id": "ets_s13_q6",
+          "prompt": "I just transferred here this semester.",
+          "answer": "Where do I sign up for intramural soccer?",
+          "chunks": [
+            "where",
+            "I",
+            "sign",
+            "up",
+            "for",
+            "intramural soccer"
+          ],
+          "prefilled": [
+            "do"
+          ],
+          "prefilled_positions": {
+            "do": 1
+          },
+          "distractor": "does",
+          "has_question_mark": true,
+          "grammar_points": [
+            "direct wh-question",
+            "subject-auxiliary inversion"
+          ]
+        },
+        {
+          "id": "ets_s13_q7",
+          "prompt": "Did you finish the reading for class?",
+          "answer": "The chapter was longer than I expected.",
+          "chunks": [
+            "the",
+            "chapter",
+            "longer",
+            "than",
+            "I",
+            "expected"
+          ],
+          "prefilled": [
+            "was"
+          ],
+          "prefilled_positions": {
+            "was": 2
+          },
+          "distractor": "more",
+          "has_question_mark": false,
+          "grammar_points": [
+            "comparative",
+            "past tense"
+          ]
+        },
+        {
+          "id": "ets_s13_q8",
+          "prompt": "What did the professor tell you after class?",
+          "answer": "She moved the essay deadline to Friday.",
+          "chunks": [
+            "she",
+            "moved",
+            "the",
+            "essay",
+            "deadline",
+            "to",
+            "Friday"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "had",
+          "has_question_mark": false,
+          "grammar_points": [
+            "simple past tense",
+            "prepositional phrase"
+          ]
+        },
+        {
+          "id": "ets_s13_q9",
+          "prompt": "What did the librarian tell you about my book?",
+          "answer": "Your reserved copy is waiting at the desk.",
+          "chunks": [
+            "your",
+            "reserved",
+            "copy",
+            "is",
+            "at the",
+            "desk"
+          ],
+          "prefilled": [
+            "waiting"
+          ],
+          "prefilled_positions": {
+            "waiting": 4
+          },
+          "distractor": "was",
+          "has_question_mark": false,
+          "grammar_points": [
+            "present progressive",
+            "prepositional phrase of place"
+          ]
+        },
+        {
+          "id": "ets_s13_q10",
+          "prompt": "I really need a place for our group project.",
+          "answer": "You can book a study room online.",
+          "chunks": [
+            "you",
+            "can",
+            "book",
+            "a",
+            "study",
+            "room"
+          ],
+          "prefilled": [
+            "online"
+          ],
+          "prefilled_positions": {
+            "online": 6
+          },
+          "distractor": "booking",
+          "has_question_mark": false,
+          "grammar_points": [
+            "modal verb can",
+            "simple statement"
+          ]
+        }
+      ]
+    },
+    {
+      "set_id": 14,
+      "questions": [
+        {
+          "id": "ets_s14_q1",
+          "prompt": "What did the lecturer mention about tomorrow's chemistry quiz?",
+          "prompt_context": "",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did the lecturer mention about tomorrow's chemistry quiz?",
+          "answer": "The lecturer asked if you'd reviewed the practice problems.",
+          "chunks": [
+            "the",
+            "lecturer",
+            "asked",
+            "reviewed",
+            "the practice",
+            "problems"
+          ],
+          "prefilled": [
+            "if you'd"
+          ],
+          "prefilled_positions": {
+            "if you'd": 3
+          },
+          "distractor": "was",
+          "has_question_mark": false,
+          "grammar_points": [
+            "indirect question with if",
+            "contraction"
+          ]
+        },
+        {
+          "id": "ets_s14_q2",
+          "prompt": "What did your friend say about joining the debate club?",
+          "prompt_context": "",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did your friend say about joining the debate club?",
+          "answer": "A friend told me when they're meeting this Thursday.",
+          "chunks": [
+            "a",
+            "friend",
+            "told",
+            "me",
+            "meeting",
+            "this Thursday"
+          ],
+          "prefilled": [
+            "when they're"
+          ],
+          "prefilled_positions": {
+            "when they're": 4
+          },
+          "distractor": "where",
+          "has_question_mark": false,
+          "grammar_points": [
+            "indirect question with when",
+            "contraction"
+          ]
+        },
+        {
+          "id": "ets_s14_q3",
+          "prompt": "What did your dorm advisor tell you about quiet hours?",
+          "prompt_context": "",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did your dorm advisor tell you about quiet hours?",
+          "answer": "She explained why the quiet hours had been extended on weekdays.",
+          "chunks": [
+            "she",
+            "explained",
+            "hours",
+            "had been",
+            "extended",
+            "on",
+            "weekdays"
+          ],
+          "prefilled": [
+            "why the quiet"
+          ],
+          "prefilled_positions": {
+            "why the quiet": 2
+          },
+          "distractor": "when",
+          "has_question_mark": false,
+          "grammar_points": [
+            "indirect question with why",
+            "past perfect passive"
+          ]
+        },
+        {
+          "id": "ets_s14_q4",
+          "prompt": "Have you noticed anything strange about the dorm lounge?",
+          "prompt_context": "",
+          "prompt_task_kind": "yesno",
+          "prompt_task_text": "Have you noticed anything strange about the dorm lounge?",
+          "answer": "The vending machine no longer accepts our meal cards.",
+          "chunks": [
+            "the",
+            "vending machine",
+            "accepts",
+            "our",
+            "meal",
+            "cards"
+          ],
+          "prefilled": [
+            "no longer"
+          ],
+          "prefilled_positions": {
+            "no longer": 3
+          },
+          "distractor": "doesn't",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation with no longer",
+            "simple present"
+          ]
+        },
+        {
+          "id": "ets_s14_q5",
+          "prompt": "What did Julian tell you about the deadline change?",
+          "prompt_context": "",
+          "prompt_task_kind": "report",
+          "prompt_task_text": "What did Julian tell you about the deadline change?",
+          "answer": "The deadline has been pushed to next Friday afternoon.",
+          "chunks": [
+            "the",
+            "deadline",
+            "pushed",
+            "to",
+            "next Friday",
+            "afternoon"
+          ],
+          "prefilled": [
+            "has been"
+          ],
+          "prefilled_positions": {
+            "has been": 2
+          },
+          "distractor": "was",
+          "has_question_mark": false,
+          "grammar_points": [
+            "present perfect passive"
+          ]
+        },
+        {
+          "id": "ets_s14_q6",
+          "prompt": "Where did you hear about the new tutoring service?",
+          "prompt_context": "",
+          "prompt_task_kind": "respond",
+          "prompt_task_text": "Where did you hear about the new tutoring service?",
+          "answer": "The flyer that I saw was posted near the cafeteria entrance.",
+          "chunks": [
+            "the",
+            "flyer",
+            "that",
+            "I",
+            "saw",
+            "was posted",
+            "entrance"
+          ],
+          "prefilled": [
+            "near the cafeteria"
+          ],
+          "prefilled_positions": {
+            "near the cafeteria": 7
+          },
+          "distractor": "is",
+          "has_question_mark": false,
+          "grammar_points": [
+            "relative clause with that",
+            "passive past"
+          ]
+        },
+        {
+          "id": "ets_s14_q7",
+          "prompt": "Are you going to the gym today?",
+          "answer": "I'm heading there after my afternoon class.",
+          "chunks": [
+            "heading",
+            "there",
+            "after",
+            "my afternoon",
+            "class",
+            "going"
+          ],
+          "prefilled": [
+            "I'm"
+          ],
+          "prefilled_positions": {
+            "i'm": 0
+          },
+          "distractor": "going",
+          "has_question_mark": false,
+          "grammar_points": [
+            "simple present continuous",
+            "prepositional phrase"
+          ]
+        },
+        {
+          "id": "ets_s14_q8",
+          "prompt": "Did you finish your psychology reading last night?",
+          "answer": "I haven't started the second chapter yet.",
+          "chunks": [
+            "i",
+            "haven't",
+            "started",
+            "the second",
+            "chapter",
+            "didn't"
+          ],
+          "prefilled": [
+            "yet"
+          ],
+          "prefilled_positions": {
+            "yet": 6
+          },
+          "distractor": "didn't",
+          "has_question_mark": false,
+          "grammar_points": [
+            "present perfect negation",
+            "yet at end"
+          ]
+        },
+        {
+          "id": "ets_s14_q9",
+          "prompt": "What did Professor Cho ask you after class?",
+          "answer": "She wanted to know if my draft was ready.",
+          "chunks": [
+            "she",
+            "wanted to",
+            "know",
+            "my draft",
+            "ready",
+            "did"
+          ],
+          "prefilled": [
+            "if",
+            "was"
+          ],
+          "prefilled_positions": {
+            "if": 4,
+            "was": 7
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "indirect question with if",
+            "past tense"
+          ]
+        },
+        {
+          "id": "ets_s14_q10",
+          "prompt": "Tell me what your roommate said about quiet hours.",
+          "answer": "She wondered whether residents must observe quiet hours nightly.",
+          "chunks": [
+            "she",
+            "wondered",
+            "residents",
+            "must",
+            "observe",
+            "quiet hours",
+            "nightly",
+            "is"
+          ],
+          "prefilled": [
+            "whether"
+          ],
+          "prefilled_positions": {
+            "whether": 2
+          },
+          "distractor": "is",
+          "has_question_mark": false,
+          "grammar_points": [
+            "indirect question with whether",
+            "simple present"
+          ]
+        }
+      ]
     }
   ]
 }

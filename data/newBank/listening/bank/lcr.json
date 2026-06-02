@@ -2189,6 +2189,971 @@
         "C": "off_topic"
       },
       "id": "lcr_mpw14a7w_15"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking professor whether a draft is due before the holiday",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Is the rough draft due before the break?",
+      "options": {
+        "A": "The break is two weeks long this year.",
+        "B": "I broke my laptop screen last week.",
+        "C": "Actually, you've got until the Monday after.",
+        "D": "Yes, I've already started writing mine."
+      },
+      "answer": "C",
+      "explanation": "正确答案C用话语标记词Actually开头，间接地告知截止时间在假期后的周一，直接回应了学生的疑问。A是语义联想陷阱（抓住break谈论假期长度，却没回答截止时间）；B是谐音/多义陷阱（break被误用为弄坏broke，且与作业无关）；D是自然回应陷阱式错误——它分享了说话者的处境（我也开始写了），这种共情式回答看似合理却没有提供截止信息，属于应避免的干扰项类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "polysemy_trap",
+        "D": "off_topic"
+      },
+      "id": "lcr_mpw1ilch_0"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "advisor asking student about course registration progress",
+      "difficulty": "medium",
+      "answer_paradigm": "context_shift",
+      "speaker": "Have you signed up for next semester's classes yet?",
+      "options": {
+        "A": "Don't worry, I'll walk you through it now.",
+        "B": "The semester starts in early September.",
+        "C": "Yes, the classroom is on the second floor.",
+        "D": "No, I haven't seen the new schedule."
+      },
+      "answer": "A",
+      "explanation": "正确答案A采用情境转移范式——顾问没有停留在是否注册的字面问题上，而是直接解决学生背后的需求（我现在带你一步步弄）。B是语义联想陷阱（抓住semester谈论开学时间）；C是语义联想陷阱（抓住classes/class联想到教室位置，答非所问）；D虽以No开头看似合理，但属于错误情境——它把问句当成你看没看新课表，回应了错误的问题。",
+      "distractor_types": {
+        "A": "context_shift_solution",
+        "B": "semantic_association_trap",
+        "C": "semantic_association_trap",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_mpw1ilch_1"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "classmate asking where to meet before a study group",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Where are we meeting before the study group?",
+      "options": {
+        "A": "The group has about six people now.",
+        "B": "We studied really hard for that one.",
+        "C": "Let's meet by the cafe entrance.",
+        "D": "I joined the group last semester."
+      },
+      "answer": "C",
+      "explanation": "正确答案C直接回答了地点问题（在咖啡馆入口碰头），符合direct_topical范式。A是语义联想陷阱（抓住group谈论小组人数，答非所问）；B是语义联想陷阱（抓住study/studied谈论备考，且时态错位）；D是离题但合乎语法的句子（谈论何时加入小组，与碰头地点无关）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "semantic_association_trap",
+        "D": "off_topic"
+      },
+      "id": "lcr_mpw1ilch_2"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "staff member telling a student the printing quota is used up",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "You've used up your printing quota for the month.",
+      "options": {
+        "A": "Is there a way to add more credits?",
+        "B": "The printer is down the hall.",
+        "C": "I printed those slides yesterday.",
+        "D": "Yes, the month went by so fast."
+      },
+      "answer": "A",
+      "explanation": "正确答案A用反问推进对话（有没有办法加额度），积极应对了配额用尽的情况，符合counter_question范式。B是语义联想陷阱（抓住printing联想到打印机位置，答非所问）；C是语义联想陷阱（抓住printing/printed谈论昨天打印的事，与当前配额无关）；D是离题回应（附和月份过得快，没有处理配额问题）。",
+      "distractor_types": {
+        "A": "counter_question",
+        "B": "semantic_association_trap",
+        "C": "semantic_association_trap",
+        "D": "off_topic"
+      },
+      "id": "lcr_mpw1ilch_3"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "librarian asking if a student needs help locating a journal",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Can I help you track down that article?",
+      "options": {
+        "A": "The article was published last spring.",
+        "B": "Yes, I track my reading every week.",
+        "C": "Actually, I just found it myself.",
+        "D": "No, the printer ran out of paper."
+      },
+      "answer": "C",
+      "explanation": "正确答案C用话语标记词Actually开头，间接表明不需要帮助（我自己刚找到了），自然推进对话，符合marker_led_indirect范式。A是语义联想陷阱（抓住article谈论发表时间，答非所问）；B是多义陷阱（track被误用为追踪阅读进度，而非原句的找到article）；D虽以No开头看似拒绝，但属于错误情境——把帮助找文章误解为某个打印机缺纸的问题，离题。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "polysemy_trap",
+        "D": "off_topic"
+      },
+      "id": "lcr_mpw1ilch_4"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "coach asking why a player missed warm-ups",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Why weren't you at warm-ups this morning?",
+      "options": {
+        "A": "Warm weather always makes me tired.",
+        "B": "The morning session runs until ten.",
+        "C": "Yes, I usually warm up before games.",
+        "D": "My alarm didn't go off, I'm really sorry."
+      },
+      "answer": "D",
+      "explanation": "正确答案D采用情境转移范式——没有停留在为什么的解释上空谈，而是给出真实原因并道歉解决了教练关心的问题（闹钟没响，很抱歉）。A是语义联想陷阱（把warm-ups的warm误联想到warm weather暖天气）；B是语义联想陷阱（抓住morning谈论训练时长，答非所问）；C是错误问题类型（用Yes回答一个why问题，且谈论赛前热身习惯，答非所问）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "semantic_association_trap",
+        "C": "wrong_question_type"
+      },
+      "id": "lcr_mpw1ilch_5"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "professor asking what topic a student picked for the paper",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "What angle are you taking for your paper?",
+      "options": {
+        "A": "I'm still on the fence about it.",
+        "B": "The paper is due in two weeks.",
+        "C": "I bought new paper for the printer.",
+        "D": "Yes, I'm taking three classes this term."
+      },
+      "answer": "A",
+      "explanation": "正确答案A用习语on the fence（还在犹豫不决）自然回应了选题问题，符合idiomatic范式。B是语义联想陷阱（抓住paper谈论截止日期，答非所问）；C是多义陷阱（paper被误用为打印纸张，而非论文）；D是错误问题类型（用Yes回答一个what问题，且taking被误用为选课）。",
+      "distractor_types": {
+        "A": "idiomatic",
+        "B": "semantic_association_trap",
+        "C": "polysemy_trap",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_mpw1ilch_6"
+    },
+    {
+      "context": "general_daily",
+      "situation": "friend arranging a shared ride to the conference",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Why don't we just take one car downtown?",
+      "options": {
+        "A": "Downtown gets pretty crowded on weekends.",
+        "B": "The car wash is closed on Mondays.",
+        "C": "Yes, I drive downtown all the time.",
+        "D": "Sounds good, I'll swing by your place at eight."
+      },
+      "answer": "D",
+      "explanation": "正确答案D采用情境转移范式——没有讨论为什么的字面问题，而是直接接受提议并安排接送细节（好啊，我八点去你家接你），推进了实际计划。A是语义联想陷阱（抓住downtown谈论市中心拥挤，没回应拼车提议）；B是语义联想陷阱（抓住car联想到洗车店，答非所问）；C是错误问题类型（用Yes回答一个why don't we提议，且谈论自己常开车，没接受共乘）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "semantic_association_trap",
+        "C": "wrong_question_type"
+      },
+      "id": "lcr_mpw1ilch_7"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "RA reminding a resident about quiet hours",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Quiet hours start at eleven on weeknights.",
+      "options": {
+        "A": "Got it, I'll keep the music down.",
+        "B": "The hours feel really long this week.",
+        "C": "I stayed up till eleven studying.",
+        "D": "Yes, the weekend went by quietly."
+      },
+      "answer": "A",
+      "explanation": "正确答案A用Got it开头间接表示理解并承诺配合（我会把音乐调小），自然回应了RA的提醒，符合marker_led_indirect范式。B是语义联想陷阱（抓住hours谈论时间漫长，答非所问）；C是语义联想陷阱（抓住eleven谈论自己学到几点，与遵守安静时段无关）；D是离题回应（附和周末很安静，但提醒说的是工作日，时间错位且没处理要求）。",
+      "distractor_types": {
+        "A": "marker_led_indirect",
+        "B": "semantic_association_trap",
+        "C": "semantic_association_trap",
+        "D": "off_topic"
+      },
+      "id": "lcr_mpw1ilch_8"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "classmate asking if a lab partner finished the report section",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Did you finish your part of the lab report?",
+      "options": {
+        "A": "The lab is on the fourth floor.",
+        "B": "Reports are due every Friday.",
+        "C": "Yes, the report has four sections.",
+        "D": "Just about, give me ten more minutes."
+      },
+      "answer": "D",
+      "explanation": "正确答案D用话语标记词Just开头表示即将完成（差不多了，再给我十分钟），间接而具体地回应了是否完成，符合marker_led_indirect范式。A是语义联想陷阱（抓住lab联想到实验室楼层，答非所问）；B是语义联想陷阱（抓住report谈论交作业的周期，没回应是否完成）；C是错误问题类型——用Yes回答后却谈论报告有几部分，答非所问，且属于看似确认实则不切题的回应。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "semantic_association_trap",
+        "C": "wrong_question_type"
+      },
+      "id": "lcr_mpw1ilch_9"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "professor offering feedback on a thesis statement",
+      "difficulty": "hard",
+      "answer_paradigm": "counter_question",
+      "speaker": "Your thesis needs a sharper focus.",
+      "options": {
+        "A": "Which part feels too broad to you?",
+        "B": "The focus ring on my camera broke.",
+        "C": "Yes, I typed the thesis last night.",
+        "D": "Theses are usually pretty long."
+      },
+      "answer": "A",
+      "explanation": "正确答案A用反问推进对话（您觉得哪部分太宽泛），积极寻求具体反馈，符合counter_question范式。B是多义陷阱（focus被误用为相机的对焦环，而非论点焦点）；C是错误问题类型（用Yes回应一个建议，且谈论昨晚打字，答非所问）；D是语义联想陷阱（抓住thesis谈论论文长度，与需要更聚焦无关）。",
+      "distractor_types": {
+        "A": "counter_question",
+        "B": "polysemy_trap",
+        "C": "wrong_question_type",
+        "D": "semantic_association_trap"
+      },
+      "id": "lcr_mpw1ilch_10"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "coach asking a player how a sore knee feels before practice",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "How's that knee holding up today?",
+      "options": {
+        "A": "Much better, thanks for checking.",
+        "B": "The practice today runs pretty late.",
+        "C": "I held the door for the team.",
+        "D": "Yes, the gym floor is brand new."
+      },
+      "answer": "A",
+      "explanation": "正确答案A用自然的口语回应（好多了，谢谢关心）直接而温暖地回答了膝盖状况，符合idiomatic的会话套语风格。B是语义联想陷阱（抓住today谈论训练时长，没回应膝盖）；C是多义陷阱（hold/held被从holding up状况误用为held the door扶门）；D是错误问题类型（用Yes回答一个how问题，且谈论体育馆地板，答非所问）。",
+      "distractor_types": {
+        "A": "idiomatic",
+        "B": "semantic_association_trap",
+        "C": "polysemy_trap",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_mpw1ilch_13"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "librarian telling a student a requested book is now available",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "The book you reserved just came in.",
+      "options": {
+        "A": "Great, I'll swing by to grab it.",
+        "B": "The library closes early on Fridays.",
+        "C": "I read that book a while ago.",
+        "D": "Yes, the shelves are pretty full."
+      },
+      "answer": "A",
+      "explanation": "正确答案A用Great开头间接表示乐意取书（太好了，我顺路过来拿），自然推进对话，符合marker_led_indirect范式。B是语义联想陷阱（抓住book/library联想到图书馆闭馆时间，答非所问）；C是离题但合乎语法的句子（谈论自己早就读过那本书，与取预约书无关，甚至自相矛盾）；D是错误问题类型（用Yes回应一个陈述句通知，且谈论书架很满，答非所问）。",
+      "distractor_types": {
+        "A": "marker_led_indirect",
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_mpw1ilch_14"
+    },
+    {
+      "context": "general_daily",
+      "situation": "friend coordinating who drives to the airport",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "My flight gets in around midnight.",
+      "options": {
+        "A": "The airport food court is expensive.",
+        "B": "No problem, I'll be there to grab you.",
+        "C": "Flights are often cheaper at night.",
+        "D": "I flew in late last weekend too."
+      },
+      "answer": "B",
+      "explanation": "正确答案B用会话套语No problem开头主动解决接机需求（没问题，我去接你），符合idiomatic范式，且回应了航班深夜到达的潜在请求。A是语义联想陷阱（抓住flight/airport联想到机场餐饮贵，答非所问）；C是语义联想陷阱（抓住flight谈论夜间机票便宜，没回应接机）；D是离题回应，且属于应避免的共情式干扰——它分享了自己也曾深夜到达的经历，看似自然却没有解决接机问题。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "semantic_association_trap",
+        "D": "off_topic"
+      },
+      "id": "lcr_mpw1ilch_15"
+    },
+    {
+      "id": "lcr_r1_routine-20260531-134653_1",
+      "context": "campus_daily",
+      "situation": "friend inviting another to a study group or social event",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "How about we make a night of it after the chemistry midterm?",
+      "options": {
+        "A": "Count me in — I could use the break after that exam.",
+        "B": "The chemistry textbook is on the second shelf.",
+        "C": "I made an excellent night soup last weekend.",
+        "D": "Yes, the midterm covers chapters four through nine."
+      },
+      "answer": "A",
+      "explanation": "说话人在用习语式邀请\"make a night of it\"，A 用 \"Count me in\" 习语表达欣然接受，并连接上下文（考试后想放松）。B 抓住 chemistry 做语义陷阱，semantic_association_trap。C 把 \"make a night\" 误读成做菜，polysemy/misinterpretation。D 把发起邀请误当作问中期内容，wrong_question_type。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "polysemy_misinterpretation",
+        "D": "wrong_question_type"
+      },
+      "audio_url": "/api/audio/choose-response/lcr_r1_routine-20260531-134653_1.mp3"
+    },
+    {
+      "id": "lcr_r1_routine-20260531-134653_2",
+      "context": "campus_academic",
+      "situation": "student discussing a presentation topic with partner",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "What do you think about narrowing our presentation to just the case study from chapter three?",
+      "options": {
+        "A": "Yes, the auditorium has a great projector.",
+        "B": "Honestly, I think focusing on one case will make our argument much sharper.",
+        "C": "Chapter three is right after the introduction.",
+        "D": "I didn't finish reading the textbook this week."
+      },
+      "answer": "B",
+      "explanation": "说话人征求意见，B 用 \"Honestly\" 标记表态并解释为何赞同，符合 marker_led_indirect 模式。A 答会议室设备，off_topic。C 描述章节位置，semantic_association_trap。D 转移到自己没读书的话题，off_topic 但是回避问题。",
+      "distractor_types": {
+        "A": "off_topic",
+        "C": "semantic_association_trap",
+        "D": "off_topic"
+      },
+      "audio_url": "/api/audio/choose-response/lcr_r1_routine-20260531-134653_2.mp3"
+    },
+    {
+      "id": "lcr_r1_routine-20260531-134653_3",
+      "context": "general_daily",
+      "situation": "asking a neighbor about noise or shared space",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "The drumming next door has been driving me up the wall this week.",
+      "options": {
+        "A": "The wall is freshly painted.",
+        "B": "I bought a new drum last month.",
+        "C": "Same here — I might leave them a note this evening.",
+        "D": "Yes, the wall is twelve feet tall."
+      },
+      "answer": "C",
+      "explanation": "说话人用习语 \"driving me up the wall\" 抱怨噪音。C 表示同感并提出实际行动，呼应抱怨的语用意图。A 抓住 \"wall\" 字面意思，polysemy/literal trap。B 用 drum 做语义联想陷阱。D 答墙的高度，wrong_question_type。",
+      "distractor_types": {
+        "A": "polysemy_misinterpretation",
+        "B": "semantic_association_trap",
+        "D": "wrong_question_type"
+      },
+      "audio_url": "/api/audio/choose-response/lcr_r1_routine-20260531-134653_3.mp3"
+    },
+    {
+      "id": "lcr_r1_routine-20260531-134653_4",
+      "context": "general_daily",
+      "situation": "asking a store clerk about a return or exchange",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Where can I go to get the ball rolling on a return for these headphones?",
+      "options": {
+        "A": "The cafeteria is open until nine.",
+        "B": "I rolled my ankle on the stairs yesterday.",
+        "C": "Headphones are usually on aisle six.",
+        "D": "Customer service is just past the registers on the right."
+      },
+      "answer": "D",
+      "explanation": "说话人用习语 \"get the ball rolling\" 询问退货流程的起点。D 直接给出客服位置，正确回应 Where 问题并解决意图。A 是 off_topic。B 抓住 \"rolling\" 做习语字面误解，polysemy。C 描述耳机货架位置而非退货起点，semantic_association_trap。",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "polysemy_misinterpretation",
+        "C": "semantic_association_trap"
+      },
+      "audio_url": "/api/audio/choose-response/lcr_r1_routine-20260531-134653_4.mp3"
+    },
+    {
+      "id": "lcr_r1_routine-20260531-134653_5",
+      "context": "campus_daily",
+      "situation": "student checking bus or shuttle schedule",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Do you know if the campus shuttle still runs after eleven on weeknights?",
+      "options": {
+        "A": "Actually, the last weeknight shuttle leaves at ten-thirty now.",
+        "B": "The shuttle has new plastic seats this semester.",
+        "C": "Yes, I rode the shuttle to the airport once.",
+        "D": "It depends on whether your class is on the east side."
+      },
+      "answer": "A",
+      "explanation": "说话人问深夜班车是否还有，A 用 \"Actually\" 标记纠正并给出确切时间。B 描述座椅，semantic_association_trap。C 是不相关的过往事件，off_topic。D 把问题误读成日常通勤偏好，wrong_question_type。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "audio_url": "/api/audio/choose-response/lcr_r1_routine-20260531-134653_5.mp3"
+    },
+    {
+      "id": "lcr_r1_routine-20260531-134653_6",
+      "context": "social",
+      "situation": "acknowledging someone's unavailability or schedule conflict",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Why does it feel like every Friday lately you're booked solid?",
+      "options": {
+        "A": "Yes, Fridays have twenty-four hours.",
+        "B": "Honestly, I've been picking up extra shifts to save for the summer trip.",
+        "C": "The library is busiest on Fridays.",
+        "D": "I haven't been to the bookstore this month."
+      },
+      "answer": "B",
+      "explanation": "说话人问最近周五为何都被占满，B 用 \"Honestly\" 标记并解释加班存钱的原因，正面回应 Why。A 是 wrong_question_type，把问题当事实查询。C 是 off_topic 语义联想。D 与提问无关，off_topic。",
+      "distractor_types": {
+        "A": "wrong_question_type",
+        "C": "semantic_association_trap",
+        "D": "off_topic"
+      },
+      "audio_url": "/api/audio/choose-response/lcr_r1_routine-20260531-134653_6.mp3"
+    },
+    {
+      "id": "lcr_r1_routine-20260531-134653_7",
+      "context": "campus_academic",
+      "situation": "two classmates discussing a group project deadline",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Have you started the draft for our group project that's due Friday?",
+      "options": {
+        "A": "I usually print on heavy paper for projects.",
+        "B": "Yes, the library closes at midnight all week.",
+        "C": "Just the introduction so far, but I can send what I have tonight.",
+        "D": "No, I didn't get the email about the new instructor."
+      },
+      "answer": "C",
+      "explanation": "说话人问对方是否开始写草稿，C 用 \"Just\" 标记说明已写引言并提出分享，符合 marker_led_indirect。A 描述打印用纸，semantic_association_trap。B 答图书馆时间，off_topic。D 把问题错当成 \"did you see the email\"，wrong_question_type。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "audio_url": "/api/audio/choose-response/lcr_r1_routine-20260531-134653_7.mp3"
+    },
+    {
+      "id": "lcr_r1_routine-20260531-134653_8",
+      "context": "campus_daily",
+      "situation": "roommate discussing weekend plans",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "I'm thinking of biking out to the lake on Saturday if the weather holds.",
+      "options": {
+        "A": "The textbook chapter was about a lake in Canada.",
+        "B": "Yes, lakes form when rivers slow down.",
+        "C": "I haven't ridden my bike since last summer.",
+        "D": "That sounds great — count me in if I can borrow a helmet."
+      },
+      "answer": "D",
+      "explanation": "说话人提出周六骑车出游计划。D 接受邀请并提出借头盔的具体跟进，是 direct_topical 回应。A 是 semantic_association_trap，抓住 lake 转向课文。B 是 wrong_question_type，把陈述当地理问答。C 表达个人状态，未回应邀请，off_topic。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "wrong_question_type",
+        "C": "off_topic"
+      },
+      "audio_url": "/api/audio/choose-response/lcr_r1_routine-20260531-134653_8.mp3"
+    },
+    {
+      "id": "lcr_routine-20260531-184112_1",
+      "context": "campus_daily",
+      "situation": "student checking bus or shuttle schedule",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I can't quite remember when the late shuttle stops running.",
+      "options": {
+        "A": "Actually, I think the last one leaves around eleven.",
+        "B": "The shuttle stops at the main library.",
+        "C": "Yes, the schedule is posted online.",
+        "D": "I prefer biking around campus anyway."
+      },
+      "answer": "A",
+      "explanation": "正确答案用 marker \"Actually\" 引导间接回应，给出晚班车的大致末班时间。B 借词 \"shuttle\" 但只回答地点，C 答非所问，D 完全偏题。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "off_topic"
+      },
+      "audio_url": "/api/audio/choose-response/lcr_routine-20260531-184112_1.mp3"
+    },
+    {
+      "id": "lcr_routine-20260531-184112_2",
+      "context": "general_daily",
+      "situation": "arranging a ride or carpool with a friend",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I'm leaving for the airport at five tomorrow morning.",
+      "options": {
+        "A": "The airport has a new food court inside.",
+        "B": "Well, I can drive you if you'd like.",
+        "C": "Flights to Chicago are often delayed lately.",
+        "D": "Yes, I packed everything last night."
+      },
+      "answer": "B",
+      "explanation": "正确答案用 \"Well\" 引出实际帮助：提供接送，匹配 marker_led_indirect 范式。A 借 \"airport\" 偏向描述设施，C 与说话人飞行信息无关，D 答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "audio_url": "/api/audio/choose-response/lcr_routine-20260531-184112_2.mp3"
+    },
+    {
+      "id": "lcr_routine-20260531-184112_3",
+      "context": "social",
+      "situation": "acknowledging someone's unavailability or schedule conflict",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "How can we meet if you're booked every evening?",
+      "options": {
+        "A": "I attended that meeting last week too.",
+        "B": "Yes, my calendar is very full lately.",
+        "C": "How about Saturday morning instead?",
+        "D": "The library has private study rooms available."
+      },
+      "answer": "C",
+      "explanation": "正确答案以反问推进对话，提议周六上午这一替代时间。A 完全偏题，B 答 yes/no 但不推进，D 提供场地但回避时间问题。",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "wrong_question_type",
+        "D": "semantic_association_trap"
+      },
+      "audio_url": "/api/audio/choose-response/lcr_routine-20260531-184112_3.mp3"
+    },
+    {
+      "id": "lcr_routine-20260531-184112_4",
+      "context": "social",
+      "situation": "friend sharing news or personal update",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "What do you think? I finally got the scholarship.",
+      "options": {
+        "A": "I haven't finished the application yet.",
+        "B": "Scholarships usually require an essay.",
+        "C": "The university sends decisions by email.",
+        "D": "That's fantastic news — congratulations!"
+      },
+      "answer": "D",
+      "explanation": "正确答案用习惯性的祝贺表达回应好消息。A 偏向自己的情况，B 借 \"scholarship\" 但说事实，C 与朋友的好消息无关。",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "semantic_association_trap",
+        "C": "semantic_association_trap"
+      },
+      "audio_url": "/api/audio/choose-response/lcr_routine-20260531-184112_4.mp3"
+    },
+    {
+      "id": "lcr_routine-20260531-184112_5",
+      "context": "campus_academic",
+      "situation": "student discussing a presentation topic with partner",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Are you okay if we narrow our presentation to just two examples?",
+      "options": {
+        "A": "Actually, that would make our timing much easier.",
+        "B": "Presentations should be at least ten minutes long.",
+        "C": "I missed the last group meeting unfortunately.",
+        "D": "Two students dropped the course last week."
+      },
+      "answer": "A",
+      "explanation": "正确答案以 \"Actually\" 引导间接同意并指出实际好处。B 与话题相关但答非所问，C 偏题，D 借 \"two\" 但完全不相关。",
+      "distractor_types": {
+        "B": "wrong_question_type",
+        "C": "off_topic",
+        "D": "semantic_association_trap"
+      },
+      "audio_url": "/api/audio/choose-response/lcr_routine-20260531-184112_5.mp3"
+    },
+    {
+      "id": "lcr_routine-20260531-184112_6",
+      "context": "campus_academic",
+      "situation": "student asking a librarian about a book or resource",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Why is this journal not showing up in the catalog search?",
+      "options": {
+        "A": "Books on that floor were rearranged last week.",
+        "B": "It's currently being recataloged after a system upgrade.",
+        "C": "The library closes earlier on Saturdays.",
+        "D": "I think the printer is broken again."
+      },
+      "answer": "B",
+      "explanation": "正确答案直接解释 journal 在重新编目所以暂时搜不到。A 借 \"floor\" 偏题，C 谈关门时间不答问题，D 完全偏题。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "off_topic"
+      },
+      "audio_url": "/api/audio/choose-response/lcr_routine-20260531-184112_6.mp3"
+    },
+    {
+      "id": "lcr_routine-20260531-184112_7",
+      "context": "campus_academic",
+      "situation": "student asking a professor about office hours or assignment",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Have you decided when your office hours will move?",
+      "options": {
+        "A": "Office hours are usually held on Wednesdays.",
+        "B": "Yes, the policy was approved last term.",
+        "C": "Just email me your questions; I'll respond by tonight.",
+        "D": "The office is on the third floor of Mason Hall."
+      },
+      "answer": "C",
+      "explanation": "正确答案不正面回答时间问题，而是解决学生真正的需求——通过邮件回应问题（context_shift）。A 描述常规情况，B 答非所问，D 谈地点。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "wrong_question_type",
+        "D": "semantic_association_trap"
+      },
+      "audio_url": "/api/audio/choose-response/lcr_routine-20260531-184112_7.mp3"
+    },
+    {
+      "id": "lcr_routine-20260531-184112_8",
+      "context": "campus_daily",
+      "situation": "student checking lost-and-found at front desk",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Where can I track down a notebook I left in the lounge?",
+      "options": {
+        "A": "Notebooks are sold in the campus store.",
+        "B": "I haven't visited the lounge in weeks.",
+        "C": "The lounge has new study tables this semester.",
+        "D": "You've come to the right place — let's take a look."
+      },
+      "answer": "D",
+      "explanation": "正确答案是常见的习惯性礼貌回应 \"You've come to the right place\"，表示接下来会帮忙找。A、C 借词偏题，B 答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "semantic_association_trap"
+      },
+      "audio_url": "/api/audio/choose-response/lcr_routine-20260531-184112_8.mp3"
+    },
+    {
+      "id": "lcr_r1_routine-20260531-190444_1",
+      "context": "campus_academic",
+      "situation": "student asking a librarian about a book or resource",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Why is this database missing from the search results?",
+      "options": {
+        "A": "Actually, that's only available through the new portal.",
+        "B": "Yes, I read several articles from it last week.",
+        "C": "The library opens at eight every morning.",
+        "D": "It contains thousands of recent journal articles."
+      },
+      "answer": "A",
+      "explanation": "正确答案 A 用 marker（Actually）引出间接信息，解释了搜索结果中找不到的原因。B 直接回答“是”并补充无关信息，对“why”是错位回答；C 是营业时间，与问题无关；D 描述数据库内容，未解释为何缺失。",
+      "distractor_types": {
+        "B": "wrong_question_type",
+        "C": "off_topic",
+        "D": "semantic_association_trap"
+      },
+      "audio_url": "/api/audio/choose-response/lcr_r1_routine-20260531-190444_1.mp3"
+    },
+    {
+      "id": "lcr_r1_routine-20260531-190444_2",
+      "context": "campus_academic",
+      "situation": "student discussing a presentation topic with partner",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Are you fine with cutting the second case study?",
+      "options": {
+        "A": "I'm fine with the cafeteria menu changes.",
+        "B": "What if we kept it but trimmed it a bit?",
+        "C": "Yes, I always finish my reading on time.",
+        "D": "The second one was hard to find online."
+      },
+      "answer": "B",
+      "explanation": "正确答案 B 用反问推进对话，提出折中方案。A 把 fine 误用为食堂相关内容；C 直接回答 yes 但接无关信息；D 谈案例的可获取性，未回应是否同意删除。",
+      "distractor_types": {
+        "A": "homophone_word_trap",
+        "C": "wrong_question_type",
+        "D": "semantic_association_trap"
+      },
+      "audio_url": "/api/audio/choose-response/lcr_r1_routine-20260531-190444_2.mp3"
+    },
+    {
+      "id": "lcr_r1_routine-20260531-190444_3",
+      "context": "general_daily",
+      "situation": "calling to check business hours",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "What hours are you open on the weekend?",
+      "options": {
+        "A": "I think the manager hires part-time staff.",
+        "B": "The store is on the corner of Elm.",
+        "C": "Sorry, we're closed for the long weekend.",
+        "D": "Yes, weekends are when I do my shopping."
+      },
+      "answer": "C",
+      "explanation": "正确答案 C 用习惯表达直接说明情况——周末关门，间接回答了营业时间问题。A 谈招聘，与时间无关；B 谈地址，与时间无关；D 直接回答 yes 但答非所问。",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "semantic_association_trap",
+        "D": "wrong_question_type"
+      },
+      "audio_url": "/api/audio/choose-response/lcr_r1_routine-20260531-190444_3.mp3"
+    },
+    {
+      "id": "lcr_r1_routine-20260531-190444_4",
+      "context": "campus_daily",
+      "situation": "student asking about dorm maintenance issue",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "The radiator in my room has been knocking all week.",
+      "options": {
+        "A": "Yes, the dining hall closes at nine tonight.",
+        "B": "The radio in the lounge plays old jazz.",
+        "C": "Most rooms have new energy-efficient windows.",
+        "D": "Please file a maintenance request at the desk."
+      },
+      "answer": "D",
+      "explanation": "正确答案 D 没有直接讨论敲击声，而是转向解决问题的途径，符合 context_shift 模式。A 与暖气无关；B 把 radiator 与 radio 谐音混淆；C 谈窗户但未回应暖气问题。",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "homophone_word_trap",
+        "C": "semantic_association_trap"
+      },
+      "audio_url": "/api/audio/choose-response/lcr_r1_routine-20260531-190444_4.mp3"
+    },
+    {
+      "id": "lcr_r1_routine-20260531-190444_5",
+      "context": "general_daily",
+      "situation": "making or rescheduling an appointment",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "How long does the cleaning appointment usually take?",
+      "options": {
+        "A": "Actually, it depends on how busy we are.",
+        "B": "Yes, the appointment has been confirmed already.",
+        "C": "The waiting room is just past the front desk.",
+        "D": "We provide complimentary tea during your visit."
+      },
+      "answer": "A",
+      "explanation": "正确答案 A 用 Actually 引出间接回答，说明时长不固定。B 直接回答 yes 但答非所问；C 谈地点；D 谈附加服务。",
+      "distractor_types": {
+        "B": "wrong_question_type",
+        "C": "off_topic",
+        "D": "semantic_association_trap"
+      },
+      "audio_url": "/api/audio/choose-response/lcr_r1_routine-20260531-190444_5.mp3"
+    },
+    {
+      "id": "lcr_r1_routine-20260531-190444_6",
+      "context": "campus_daily",
+      "situation": "roommate discussing weekend plans",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Where did you end up going for brunch?",
+      "options": {
+        "A": "Yes, brunch ran longer than I expected.",
+        "B": "Just that little place near the bookstore.",
+        "C": "I made pancakes for everyone last weekend.",
+        "D": "Brunch is my favorite meal of the day."
+      },
+      "answer": "B",
+      "explanation": "正确答案 B 用 Just 引出间接但确切的地点回答。A 直接回答 yes 但答非所问；C 谈做饭，地点不对；D 谈喜好，未回答地点。",
+      "distractor_types": {
+        "A": "wrong_question_type",
+        "C": "semantic_association_trap",
+        "D": "off_topic"
+      },
+      "audio_url": "/api/audio/choose-response/lcr_r1_routine-20260531-190444_6.mp3"
+    },
+    {
+      "id": "lcr_r1_routine-20260531-190444_7",
+      "context": "general_daily",
+      "situation": "arranging a ride or carpool with a friend",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "I might leave for the airport around four.",
+      "options": {
+        "A": "Yes, airports are pretty busy these days.",
+        "B": "My flight last month was delayed two hours.",
+        "C": "Want me to drive you and split the gas?",
+        "D": "I always pack my suitcase the night before."
+      },
+      "answer": "C",
+      "explanation": "正确答案 C 用反问推进对话，提议拼车，回应了对方的计划。A 直接回答 yes 但答非所问；B 谈过往航班，与计划无关；D 谈打包习惯，与请求无关。",
+      "distractor_types": {
+        "A": "wrong_question_type",
+        "B": "semantic_association_trap",
+        "D": "off_topic"
+      },
+      "audio_url": "/api/audio/choose-response/lcr_r1_routine-20260531-190444_7.mp3"
+    },
+    {
+      "id": "lcr_r1_routine-20260531-190444_8",
+      "context": "social",
+      "situation": "acknowledging someone's unavailability or schedule conflict",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Are you sure you can't make it on Friday?",
+      "options": {
+        "A": "Yes, the project deadline is on Friday.",
+        "B": "Friday is when the new store opens.",
+        "C": "I usually go running on Friday evenings.",
+        "D": "Actually, I might be able to swing by briefly."
+      },
+      "answer": "D",
+      "explanation": "正确答案 D 用 Actually 引出间接回应，表明可能可以短暂赴约。A 直接回答 yes 但增加无关信息；B 谈新店开张，与是否赴约无关；C 谈跑步习惯，与是否赴约无关。",
+      "distractor_types": {
+        "A": "wrong_question_type",
+        "B": "semantic_association_trap",
+        "C": "off_topic"
+      },
+      "audio_url": "/api/audio/choose-response/lcr_r1_routine-20260531-190444_8.mp3"
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a neighbor about noise or shared space",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Where's all that hammering coming from this morning?",
+      "options": {
+        "A": "I'll go ask them to wrap it up soon.",
+        "B": "Hammers are stored in the basement closet.",
+        "C": "The morning light hits that window perfectly.",
+        "D": "He fixed the fence last weekend already."
+      },
+      "answer": "A",
+      "explanation": "正确答案 A 体现 context_shift 范式：没有直接回答\"在哪里\"，而是直接解决说话人潜在的不满——主动去叫对方停下来。B 是语义联想陷阱（hammering → hammers 工具存放位置），与说话人想知道噪音来源无关。C 是离题选项（用 morning 这个词造一个无关的句子）。D 是答错问题类型（说话人问的是 where，D 回答的是 when 和 what，且时间不对）。",
+      "id": "lcr_mpvlbko3_0",
+      "audio_url": "/api/audio/choose-response/lcr_mpvlbko3_0.mp3"
+    },
+    {
+      "context": "general_daily",
+      "situation": "checking if a service (post office, bank) is open",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I really need to mail this package before five.",
+      "options": {
+        "A": "Stamps come in books of twenty now.",
+        "B": "Actually, the post office stays open till six tonight.",
+        "C": "He sent the letter from Boston last week.",
+        "D": "Yes, you can ship it however you like."
+      },
+      "answer": "B",
+      "explanation": "正确答案 B 以话语标记 Actually 开头，间接回应说话人的担忧——告诉对方时间还来得及。A 是语义联想陷阱（mail → stamps 邮票），没有回应说话人的时间压力。C 是离题但语法正确的句子（不同的人、不同的时间、不同的城市）。D 是答错问题类型（说话人是陈述句表达担忧，D 却给出 yes/no 式许可，逻辑错位）。",
+      "id": "lcr_mpvlbko3_1",
+      "audio_url": "/api/audio/choose-response/lcr_mpvlbko3_1.mp3"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student checking bus or shuttle schedule",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Why does the shuttle skip the south lot on Sundays?",
+      "options": {
+        "A": "The shuttle is painted blue and white.",
+        "B": "Yes, the schedule changed last semester.",
+        "C": "Are you trying to get to the dorms by noon?",
+        "D": "Sunday brunch is served until two."
+      },
+      "answer": "C",
+      "explanation": "正确答案 C 体现 counter_question 范式：用一个推进对话的反问，弄清说话人真正的需求，从而能给出有用建议。A 是语义联想陷阱（shuttle → 描述班车外观），完全没回应问题。B 是答错问题类型（说话人问 why，B 用 yes 开头答非所问）。D 是离题选项（借用 Sunday 这个词造无关的句子）。",
+      "id": "lcr_mpvlbko3_2",
+      "audio_url": "/api/audio/choose-response/lcr_mpvlbko3_2.mp3"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student discussing a presentation topic with partner",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "What angle should we take on the climate paper?",
+      "options": {
+        "A": "Climate is one of the required units this term.",
+        "B": "I turned in my draft on Tuesday morning.",
+        "C": "Yes, that section was pretty long.",
+        "D": "How about focusing on coastal cities?"
+      },
+      "answer": "D",
+      "explanation": "正确答案 D 体现 counter_question 范式：用一个具体的提议性反问推进讨论，给出可行的切入点。A 是语义联想陷阱（climate → 关于气候课程的事实陈述），没有回答如何取角度。B 是离题但语法正确（说自己交了草稿，与角度选择无关）。C 是答错问题类型（说话人问 what angle，C 却用 yes 回应，逻辑不通）。",
+      "id": "lcr_mpvlbko3_3",
+      "audio_url": "/api/audio/choose-response/lcr_mpvlbko3_3.mp3"
+    },
+    {
+      "context": "social",
+      "situation": "offering help to someone who seems stressed",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "You look completely wiped out today.",
+      "options": {
+        "A": "Want me to grab you a coffee?",
+        "B": "The towel is hanging by the sink.",
+        "C": "I cleaned the whole kitchen last night.",
+        "D": "No, that movie wasn't very good."
+      },
+      "answer": "A",
+      "explanation": "正确答案 A 体现 counter_question 范式：不直接评论对方的状态，而是用一个体贴的反问主动提供帮助，自然推进对话。B 是语义联想陷阱（wiped → wipe/towel 抹布毛巾，利用一词多义）。C 是离题选项（说自己昨晚做了什么，与对方的疲惫无关）。D 是答错问题类型（说话人是关切的陈述，D 却用 no 回应一个根本没问的问题）。",
+      "id": "lcr_mpvlbko3_4",
+      "audio_url": "/api/audio/choose-response/lcr_mpvlbko3_4.mp3"
+    },
+    {
+      "context": "social",
+      "situation": "friend sharing news or personal update",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "How did your sister's wedding go last weekend?",
+      "options": {
+        "A": "Weddings are usually held in the spring.",
+        "B": "It was beautiful — everyone had a great time.",
+        "C": "She lives in Chicago with her husband now.",
+        "D": "Where did you find that recipe again?"
+      },
+      "answer": "B",
+      "explanation": "正确答案 B 体现 direct_topical 范式：直接、温暖地回答说话人问的婚礼怎么样。A 是语义联想陷阱（wedding → 关于婚礼季节的一般性事实，没回答这一场）。C 是离题选项（讲妹妹现在住哪里，没回答婚礼本身怎么样）。D 是答错问题类型（说话人问 how，D 反问 where 完全转换话题）。",
+      "id": "lcr_mpvlbko3_5",
+      "audio_url": "/api/audio/choose-response/lcr_mpvlbko3_5.mp3"
+    },
+    {
+      "context": "general_daily",
+      "situation": "making or rescheduling an appointment",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Can we push my haircut to Thursday afternoon?",
+      "options": {
+        "A": "The salon redecorated the front lobby.",
+        "B": "Yes, I trimmed mine just last month.",
+        "C": "Actually, Friday morning would work better for us.",
+        "D": "When did the new stylist start working?"
+      },
+      "answer": "C",
+      "explanation": "正确答案 C 以话语标记 Actually 开头，间接回应预约请求——提出一个更可行的替代时间。A 是语义联想陷阱（haircut → salon 美发店装修），与改约时间无关。B 是答错问题类型/误解（把对方的预约请求理解成了关于剪头发的一般经验）。D 是离题选项（反问新发型师入职时间，完全偏离改约这件事）。",
+      "id": "lcr_mpvlbko3_6",
+      "audio_url": "/api/audio/choose-response/lcr_mpvlbko3_6.mp3"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking about a reading list for a course",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Did the professor finalize the reading list yet?",
+      "options": {
+        "A": "Reading rooms close at midnight on weekdays.",
+        "B": "She lectured for almost two hours yesterday.",
+        "C": "I finished the novel over the break.",
+        "D": "Your guess is as good as mine."
+      },
+      "answer": "D",
+      "explanation": "正确答案 D 体现 idiomatic 范式：用地道的英语习语 \"Your guess is as good as mine\"（我也不知道，跟你一样不清楚）自然回应。A 是语义联想陷阱（reading → reading rooms 阅览室开放时间）。B 是离题选项（讲教授昨天讲课多久，没回答阅读清单是否定下来）。C 是误解/答错问题类型（把 reading list 误解成具体的小说阅读经历）。",
+      "id": "lcr_mpvlbko3_7",
+      "audio_url": "/api/audio/choose-response/lcr_mpvlbko3_7.mp3"
     }
   ]
 }
