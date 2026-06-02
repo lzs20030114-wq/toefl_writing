@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useMemo, useEffect } from "react";
-import { FONT, ModeChip } from "../shared/ui";
+import { FONT, ModeChip, NEUTRAL } from "../shared/ui";
+import { getBandColor } from "../../lib/history/bandColor";
 import { formatLocalDateTime, translateGrammarPoint } from "../../lib/utils";
 import { WritingFeedbackPanel } from "../writing/WritingFeedbackPanel";
 import { useBsAiExplain, BsAiExplainBlock } from "../buildSentence/useBsAiExplain";
@@ -8,15 +9,13 @@ import { HistoryRow } from "./HistoryRow";
 import { isV1Session } from "../../lib/history/bankVersion";
 
 const P = {
-  bg: "#f4f7f5", surface: "#ffffff", border: "#dde5df", borderSubtle: "#ebf0ed",
-  text: "#1a2420", textSec: "#5a6b62", textDim: "#94a39a",
+  ...NEUTRAL,
   primary: "#0d9668", primaryDeep: "#087355", primarySoft: "#ecfdf5",
   teal: "#0891B2", tealSoft: "#ecfeff",
   amber: "#d97706", amberSoft: "#fffbeb",
   indigo: "#6366F1", indigoSoft: "#eef2ff",
   rose: "#E11D48", roseSoft: "#fff1f2",
   purple: "#7C3AED", purpleSoft: "#f5f3ff",
-  shadow: "0 1px 3px rgba(10,40,25,0.04), 0 1px 2px rgba(10,40,25,0.02)",
 };
 
 const TYPE = {
@@ -27,14 +26,6 @@ const TYPE = {
 };
 
 const MOCK_IDS = { BUILD: "build-sentence", EMAIL: "email-writing", DISC: "academic-writing" };
-
-function getBandColor(band) {
-  if (band >= 5.5) return "#16a34a";
-  if (band >= 4.5) return "#2563eb";
-  if (band >= 3.5) return "#d97706";
-  if (band >= 2.5) return "#ea580c";
-  return "#dc2626";
-}
 
 function getScoreLabel(s) {
   if (!s) return "--";

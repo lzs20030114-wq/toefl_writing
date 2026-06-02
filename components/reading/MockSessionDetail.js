@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from "react";
 import { useReadingAiExplain, ReadingAiExplainBlock } from "./useReadingAiExplain";
 import { formatLocalDateTime } from "../../lib/utils";
+import { getBandColor } from "../../lib/history/bandColor";
 
 // — Color tokens (kept local so the component is reusable from listening etc.) —
 const C = {
@@ -40,15 +41,6 @@ const TASK_META = {
 
 function getTaskMeta(taskType) {
   return TASK_META[taskType] || { label: taskType || "Unknown", short: "?", icon: "•", color: C.textSec, soft: C.bg };
-}
-
-function getBandColor(band) {
-  if (!Number.isFinite(band)) return C.textDim;
-  if (band >= 5.5) return "#16a34a";
-  if (band >= 4.5) return "#2563eb";
-  if (band >= 3.5) return "#d97706";
-  if (band >= 2.5) return "#ea580c";
-  return "#dc2626";
 }
 
 function pct(c, t) {
