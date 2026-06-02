@@ -1,8 +1,7 @@
 import { isAdminAuthorized } from "../../../../lib/adminAuth";
 import { isSupabaseAdminConfigured, supabaseAdmin } from "../../../../lib/supabaseAdmin";
 import { jsonError } from "../../../../lib/apiResponse";
-
-const SURVEY_TYPE = "first_set_completion";
+import { FIRST_SET_SURVEY_TYPE as SURVEY_TYPE } from "../../../../lib/survey/firstSetSurveyType";
 
 const Q1_LABELS = {
   better: "比预期好",

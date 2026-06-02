@@ -1,8 +1,8 @@
 import { isSupabaseAdminConfigured, supabaseAdmin } from "../../../../../lib/supabaseAdmin";
 import { createRateLimiter, getIp } from "../../../../../lib/rateLimit";
 import { jsonError } from "../../../../../lib/apiResponse";
+import { FIRST_SET_SURVEY_TYPE as SURVEY_TYPE } from "../../../../../lib/survey/firstSetSurveyType";
 
-const SURVEY_TYPE = "first_set_completion";
 const limiter = createRateLimiter("survey-first-set-dismiss", { max: 10 });
 
 export async function POST(request) {
