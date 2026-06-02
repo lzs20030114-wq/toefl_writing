@@ -44,6 +44,13 @@ jobs:
 
       - name: Backfill TTS audio (edge-tts, free)
         run: node scripts/backfill-tts.mjs
+        env:
+          # Required. Without these, lib/tts/storage.js falls back to writing local
+          # /listening-audio/* paths into the bank — files that are .gitignored, never
+          # committed, and 404 in production. backfill-tts.mjs hard-fails when they are
+          # missing, so the job will fail loudly rather than write broken audio_urls.
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
 
       - name: Commit + push any new audio
         shell: bash
