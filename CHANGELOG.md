@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-06-02
+
+- **整库重造并整体替换上线**：用 realExam2026（2026 改后真考）重新校准的 prompt 全新生成了全部 12 个题型、~938 道题，一次性替换原线上库（旧混版库已备份于 `data/newBank/.backup-2026-06-02T03-05-18-047Z/`，可回滚）。
+- 生成走 plan→fan-out workflow：每题型独立 writer，planner 预分配互斥切片防同波撞题；跨波多样性靠 `print-bank-prompt` 注入的 live∪newBank 排除（`NEWBANK_ROOT`）+ `dedup-newbank` 内容去重兜底。`scripts/merge-staging.mjs` 增加 id 兜底（无 id 项不再坍缩为单条"重复"）。
+- BS 修复两层：(1) `validateQuestion` 新增 `incoherent_dialogue` 门——问句答案必须回应、不得复读，豁免 `task_kind="ask"` + 元指令；(2) direct-question 校验对齐两轮对话模型（`isConversationalDialogueTurn` 放行陈述开场），BS 集合做 chunk/prefilled 重叠修复 + `validateRuntimeQuestion` + 集合门组装。
+- 迁移：线上库中 2026-05-31 校准边界之后由 routine 自动产出的题，经当前全套校验器复核 + 去重后并入新库（+214 非 BS / +45 BS）；879 道旧混版 BS 正确排除。
+- 音频：419 条新听力/口语题用 edge-tts 补齐，听力 364/364、跟读 308/308，100% 覆盖。
+- 上线前接口验证：`jest` 全 319 个测试通过 + 逐题型渲染字段核对（阅读读 `correct_answer`、听力读 `answer`、interview 嵌套 `questions[].question`）+ id 覆盖 100% + 预检 0 非法（含 App 运行时检查）。
+- 新增 `components/home/BankUpdateModal.js`：登录后首次进首页自动弹出，告知题库已全部更新（localStorage 标记，只弹一次）。
+
 ## 2026-05-22
 
 - 修复阅读模考记录无法查看的问题：根因是 `842cd85` 合并冲突把 `f531a90` 的会话保存格式回退了。`AdaptiveExamShell` 用 `type: "adaptive-reading"`（无 `details` 字段）写入历史，而 `ReadingProgressView` 入口卡片只筛 `type: "reading"`，记录虽在但首页显示「暂无记录」。同时修了 `ReadingSectionContent` 的 `readingCount` 漏统计 legacy 类型。

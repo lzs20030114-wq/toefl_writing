@@ -12,6 +12,7 @@ import { MobileHomePage } from "./MobileHomePage";
 import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_PAGE_CSS, HOME_TOKENS as T, TASK_ACCENTS } from "./theme";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { AnnouncementButton } from "./AnnouncementModal";
+import { BankUpdateModal } from "./BankUpdateModal";
 import { countBsMistakes } from "../MistakeNotebook";
 import { countReadingMistakes } from "../../lib/readingMistakes";
 import { countListeningMistakes } from "../../lib/listeningMistakes";
@@ -290,6 +291,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
         {referralModalOpen && (
           <MyReferralModal userCode={userCode} onClose={() => setReferralModalOpen(false)} />
         )}
+        <BankUpdateModal isLoggedIn={isLoggedIn} />
         <InvitationCapturedToast isLoggedIn={isLoggedIn} onSignupClick={showLoginModal} />
         <ActivatedToast />
       </>
@@ -370,6 +372,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
       {referralModalOpen && (
         <MyReferralModal userCode={userCode} onClose={() => setReferralModalOpen(false)} />
       )}
+      <BankUpdateModal isLoggedIn={isLoggedIn} />
       <InvitationCapturedToast isLoggedIn={isLoggedIn} onSignupClick={showLoginModal} />
       <ActivatedToast />
     </>
