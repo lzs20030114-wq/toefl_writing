@@ -39,6 +39,7 @@ export function FirstSetSurveyModal({
   rewardDays = 1,
   onSubmit,
   onDismiss,
+  onSnooze,
 }) {
   const [q1, setQ1] = useState("");
   const [q2, setQ2] = useState("");
@@ -122,16 +123,35 @@ export function FirstSetSurveyModal({
               <span style={{ color: C.t3 }}>(本次针对全新升级的 V2 题库)</span>
             </div>
           </div>
-          <button
-            onClick={() => onDismiss?.()}
-            aria-label="关闭"
-            style={{
-              background: "transparent", border: "none", cursor: "pointer",
-              fontSize: 22, color: C.t3, lineHeight: 1, padding: 4,
-            }}
-          >
-            ×
-          </button>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+            <button
+              onClick={() => (onSnooze || onDismiss)?.()}
+              title="先关掉 · 做完两套新题后会再提醒你一次,也可随时在首页重新打开"
+              style={{
+                background: "transparent",
+                border: `1px solid ${C.bdr}`,
+                borderRadius: 999,
+                padding: "5px 11px",
+                fontSize: 12,
+                color: C.t2,
+                cursor: "pointer",
+                fontFamily: FONT,
+                whiteSpace: "nowrap",
+              }}
+            >
+              再做两套看看
+            </button>
+            <button
+              onClick={() => onDismiss?.()}
+              aria-label="关闭"
+              style={{
+                background: "transparent", border: "none", cursor: "pointer",
+                fontSize: 22, color: C.t3, lineHeight: 1, padding: 4,
+              }}
+            >
+              ×
+            </button>
+          </div>
         </div>
 
         <SurveyQuestion index={1} title="这套题感觉怎么样?">

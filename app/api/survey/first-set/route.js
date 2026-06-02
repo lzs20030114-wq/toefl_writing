@@ -5,6 +5,7 @@ import { jsonError } from "../../../../lib/apiResponse";
 import {
   FIRST_SET_SURVEY_TYPE as SURVEY_TYPE,
   FIRST_SET_SURVEY_SINCE,
+  FIRST_SET_SURVEY_SNOOZE_SETS,
 } from "../../../../lib/survey/firstSetSurveyType";
 const REWARD_DAYS = 1;
 
@@ -38,7 +39,7 @@ export async function GET(request) {
     const [{ data: existing }, { count: sessionCount }, { data: user }] = await Promise.all([
       supabaseAdmin
         .from("user_surveys")
-        .select("id,status")
+        .select("id,status,responses")
         .eq("user_code", userCode)
         .eq("survey_type", SURVEY_TYPE)
         .maybeSingle(),
@@ -56,13 +57,32 @@ export async function GET(request) {
         .maybeSingle(),
     ]);
 
-    const alreadyAsked = !!existing;
     const completedAtLeastOne = (sessionCount || 0) >= 1;
+    // A snooze ("再做两套看看") is a dismissed row flagged snoozePending — not a
+    // final answer. Re-show it once the user has done a couple more sets.
+    const isSnoozePending =
+      existing?.status === "dismissed" && existing?.responses?.snoozePending === true;
+
+    let shouldShow = false;
+    let alreadyAsked = false;
+    if (existing && !isSnoozePending) {
+      // Submitted, or a permanent dismiss → never auto-show again.
+      alreadyAsked = true;
+    } else if (isSnoozePending) {
+      // Re-show once the user is SNOOZE_SETS sets past the snooze baseline.
+      // Leave alreadyAsked=false so the client keeps re-checking each new set.
+      const baseline = Number(existing.responses?.baseline) || 0;
+      shouldShow = (sessionCount || 0) >= baseline + FIRST_SET_SURVEY_SNOOZE_SETS;
+    } else {
+      // No row yet → original gate: show after the first new-bank set.
+      shouldShow = completedAtLeastOne;
+    }
+
     const proDaysLeft = user ? daysLeftFromExpiry(user.tier, user.tier_expires_at) : 0;
 
     return Response.json({
       ok: true,
-      shouldShow: !alreadyAsked && completedAtLeastOne,
+      shouldShow,
       alreadyAsked,
       hasSessions: completedAtLeastOne,
       userExists: !!user,

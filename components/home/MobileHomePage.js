@@ -4,12 +4,14 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { BottomSheet } from "../shared/BottomSheet";
 import UpgradeModal from "../shared/UpgradeModal";
+import { WechatQrImage } from "../shared/WechatQrImage";
 import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
 import { PromoBanner } from "./HomePageClient";
 import { ReferralBanner } from "./ReferralBanner";
 import { PRACTICE_MODE } from "../../lib/practiceMode";
 import { FREE_DAILY_LIMIT } from "../../lib/dailyUsage";
 import { SECTIONS, SECTION_ACCENTS, SECTION_STATUS } from "./sections";
+import { openFirstSetSurvey } from "../../lib/survey/openFirstSetSurvey";
 
 /* ── 颜色工具 ── */
 const mC = (isChallenge, light, dark) => (isChallenge ? dark : light);
@@ -515,6 +517,25 @@ function MobileUserSheetContent({
       {/* 微信交流群 */}
       <MobileWechatGroupPanel />
 
+      {/* 题库体验问卷入口 */}
+      <button
+        onClick={openFirstSetSurvey}
+        style={{
+          width: "100%", display: "flex", alignItems: "center", gap: 10,
+          padding: "12px 14px",
+          background: "linear-gradient(135deg,#10b981,#06b6d4)",
+          border: "none", borderRadius: 10, cursor: "pointer",
+          fontFamily: HOME_FONT, textAlign: "left",
+        }}
+      >
+        <span style={{ fontSize: 16, flexShrink: 0 }}>📝</span>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: "#fff" }}>填写题库体验问卷</div>
+          <div style={{ fontSize: 11, color: "rgba(255,255,255,0.88)", marginTop: 1 }}>说说新题感受 · 得 +1 天 Pro</div>
+        </div>
+        <span style={{ fontSize: 13, color: "#fff", flexShrink: 0 }}>›</span>
+      </button>
+
       {/* 退出按钮 */}
       <button
         onClick={onLogout}
@@ -551,14 +572,7 @@ function MobileWechatGroupPanel() {
             扫码或长按保存,加入用户交流群
           </div>
           <div style={{ display: "flex", justifyContent: "center", padding: 6, background: "#fff", borderRadius: 8, border: "1px solid #ebf0ed" }}>
-            <img
-              src="/wechat-group-qr.jpg"
-              alt="微信群二维码"
-              width={220}
-              height={220}
-              style={{ display: "block", width: 220, height: 220, objectFit: "contain", borderRadius: 4 }}
-              onError={(e) => { e.currentTarget.style.display = "none"; }}
-            />
+            <WechatQrImage size={220} />
           </div>
         </div>
       </div>

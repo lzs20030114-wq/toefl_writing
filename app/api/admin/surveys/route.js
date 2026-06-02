@@ -102,7 +102,11 @@ export async function GET(request) {
 
     const rows = data || [];
     const submitted = rows.filter((r) => r.status === "submitted");
-    const dismissed = rows.filter((r) => r.status === "dismissed");
+    // A snoozed survey ("再做两套看看") is stored as a dismissed row flagged
+    // snoozePending — it's not a real dismissal, so keep it out of the stats.
+    const dismissed = rows.filter(
+      (r) => r.status === "dismissed" && !r.responses?.snoozePending,
+    );
     const totalShown = submitted.length + dismissed.length;
     const completionRate = totalShown > 0
       ? Math.round((submitted.length / totalShown) * 1000) / 10

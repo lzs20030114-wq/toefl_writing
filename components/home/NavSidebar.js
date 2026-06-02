@@ -5,11 +5,13 @@ import { createPortal } from "react-dom";
 import Link from "next/link";
 import { checkCanPractice, FREE_DAILY_LIMIT } from "../../lib/dailyUsage";
 import UpgradeModal from "../shared/UpgradeModal";
+import { WechatQrImage } from "../shared/WechatQrImage";
 import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
 import { SECTIONS, SECTION_ACCENTS, SECTION_STATUS, TOOLS } from "./sections";
 import {
   TierBadge, BindEmailModal, ContactCard, FbStatusBadge, sectionTitle,
 } from "./HomeSidebar";
+import { openFirstSetSurvey } from "../../lib/survey/openFirstSetSurvey";
 
 /* ── NavSidebar ── */
 
@@ -353,18 +355,39 @@ export function NavSidebar({
               borderRadius: 8, padding: 6,
               display: "flex", justifyContent: "center",
             }}>
-              <img
-                src="/wechat-group-qr.jpg"
-                alt="微信群二维码"
-                width={170}
-                height={170}
-                style={{ display: "block", width: 170, height: 170, objectFit: "contain", borderRadius: 4 }}
-                onError={(e) => { e.currentTarget.style.display = "none"; }}
-              />
+              <WechatQrImage size={170} />
             </div>
           </div>
         </div>
       </div>
+
+      {/* ── Survey re-open entry (logged-in only) ── */}
+      {isLoggedIn && (
+        <div style={{ borderTop: `1px solid ${navBdr}`, padding: "10px 14px 12px" }}>
+          <button
+            onClick={openFirstSetSurvey}
+            style={{
+              width: "100%",
+              display: "flex", alignItems: "center", gap: 8,
+              padding: "9px 11px",
+              background: "linear-gradient(135deg,#10b981,#06b6d4)",
+              border: "none", borderRadius: 8,
+              cursor: "pointer", fontFamily: HOME_FONT, textAlign: "left",
+              boxShadow: "0 2px 10px rgba(8,145,178,0.28)",
+              transition: "box-shadow 0.15s ease, transform 0.15s ease",
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.boxShadow = "0 4px 14px rgba(8,145,178,0.40)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.boxShadow = "0 2px 10px rgba(8,145,178,0.28)"; e.currentTarget.style.transform = "none"; }}
+          >
+            <span style={{ fontSize: 14, flexShrink: 0 }}>📝</span>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: 11.5, fontWeight: 700, color: "#fff", lineHeight: 1.3 }}>填写题库体验问卷</div>
+              <div style={{ fontSize: 10, color: "rgba(255,255,255,0.88)", marginTop: 1 }}>说说新题感受 · 得 +1 天 Pro</div>
+            </div>
+            <span style={{ fontSize: 12, color: "#fff", flexShrink: 0 }}>›</span>
+          </button>
+        </div>
+      )}
     </div>
   );
 }

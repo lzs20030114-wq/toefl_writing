@@ -5,6 +5,7 @@ import { FirstSetSurveyModal } from "./shared/FirstSetSurveyModal";
 import { WechatGroupModal } from "./shared/WechatGroupModal";
 import { AUTH_CHANGED_EVENT, getSavedCode } from "../lib/AuthContext";
 import { SESSION_STORE_EVENTS } from "../lib/sessionStore";
+import { FIRST_SET_SURVEY_OPEN_EVENT } from "../lib/survey/openFirstSetSurvey";
 
 // Admin surfaces are a different audience (the operator, not the end user),
 // so we never pop the consumer-facing survey there even if the operator's
@@ -97,15 +98,41 @@ export default function FirstSetSurveyTrigger() {
       maybeShow();
     }
 
+    async function onManualOpen() {
+      // Triggered by the homepage entry — force the modal open regardless of the
+      // auto-gate (the user may have already dismissed/answered this round). We
+      // still fetch so the reward-days / Pro-days line renders correctly.
+      const userCode = getSavedCode();
+      if (!userCode) return;
+      let data = {};
+      try {
+        const res = await fetch(
+          `/api/survey/first-set?userCode=${encodeURIComponent(userCode)}`,
+          { method: "GET", cache: "no-store" },
+        );
+        if (res.ok) data = await res.json().catch(() => ({}));
+      } catch {
+        // fall through with defaults
+      }
+      if (cancelled) return;
+      setState({
+        open: true,
+        proDaysLeft: Number(data?.proDaysLeft) || 0,
+        rewardDays: Number(data?.rewardDays) || 1,
+      });
+    }
+
     // Initial check (covers case where user already had >=1 session on load).
     maybeShow();
     window.addEventListener(SESSION_STORE_EVENTS.HISTORY_UPDATED_EVENT, onHistoryUpdate);
     window.addEventListener(AUTH_CHANGED_EVENT, onAuthChange);
+    window.addEventListener(FIRST_SET_SURVEY_OPEN_EVENT, onManualOpen);
 
     return () => {
       cancelled = true;
       window.removeEventListener(SESSION_STORE_EVENTS.HISTORY_UPDATED_EVENT, onHistoryUpdate);
       window.removeEventListener(AUTH_CHANGED_EVENT, onAuthChange);
+      window.removeEventListener(FIRST_SET_SURVEY_OPEN_EVENT, onManualOpen);
     };
   }, [pathname]);
 
@@ -134,10 +161,29 @@ export default function FirstSetSurveyTrigger() {
       await fetch("/api/survey/first-set/dismiss", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userCode }),
+        body: JSON.stringify({ userCode, mode: "dismiss" }),
       });
     } catch {
       // best-effort; if the dismiss write fails the modal will re-show next load
+    }
+  }
+
+  async function handleSnooze() {
+    // "再做两套看看" — close now, ask again after a couple more sets.
+    const userCode = getSavedCode();
+    setState((s) => ({ ...s, open: false }));
+    if (!userCode) return;
+    // Clear the per-userCode dedup so the auto-gate re-evaluates on the next
+    // session save (otherwise the snooze could never re-show).
+    checkedForCodeRef.current.delete(userCode);
+    try {
+      await fetch("/api/survey/first-set/dismiss", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userCode, mode: "snooze" }),
+      });
+    } catch {
+      // best-effort; on failure the modal simply re-shows next load
     }
   }
 
@@ -149,6 +195,7 @@ export default function FirstSetSurveyTrigger() {
         rewardDays={state.rewardDays}
         onSubmit={handleSubmit}
         onDismiss={handleDismiss}
+        onSnooze={handleSnooze}
       />
       <WechatGroupModal
         open={wechatOpen}
