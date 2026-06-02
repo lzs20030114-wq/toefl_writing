@@ -48,6 +48,76 @@ const VALIDATORS = {
   rpt:    (it) => require('../lib/speakingGen/speakingValidator.js').validateRepeatSet(it),
 };
 
+// 2026-06-02 FIX: vet() above only checks STRUCTURE (schema/profile). It cannot
+// catch a mis-keyed or ambiguous answer — a structurally-valid AP/RDL item with the
+// wrong correct_answer, or a CTW blank with two words that fit. The generate-*.mjs
+// scripts run an AI "second examiner" audit, but the bulk of the bank arrives here
+// from "*-routine-*" staging files that never ran it. So merge now ALSO answer-audits
+// every reading item (AP/RDL/CTW) and drops criticals — see auditAndKeep() below.
+const { auditItems } = require('../lib/readingGen/answerAuditor.js');
+
+// Pull DEEPSEEK_API_KEY (+ proxy) from .env.local for local merges. In CI the key
+// comes from the step's env, which takes precedence (we only fill what's unset).
+function loadEnv() {
+  try {
+    const envPath = resolve(dirname(fileURLToPath(import.meta.url)), '..', '.env.local');
+    if (existsSync(envPath)) {
+      for (const line of readFileSync(envPath, 'utf8').split('\n')) {
+        const m = line.match(/^([^#=]+)=(.*)$/);
+        if (m && !process.env[m[1].trim()]) process.env[m[1].trim()] = m[2].trim();
+      }
+    }
+  } catch {}
+}
+loadEnv();
+
+const TRUTHY = (v) => /^(1|true|yes|on)$/i.test(String(v || '').trim());
+const SKIP_AUDIT = TRUTHY(process.env.SKIP_AUDIT);
+const DRY_RUN = TRUTHY(process.env.DRY_RUN) || process.argv.includes('--dry-run');
+const AUDIT_CONCURRENCY = Math.max(1, parseInt(process.env.AUDIT_CONCURRENCY || '5', 10) || 5);
+const HAS_KEY = !!String(process.env.DEEPSEEK_API_KEY || '').trim();
+// CTW (C-test) tolerance: max ambiguous blanks allowed in a 10-blank item before reject.
+// The real exam reveals only floor(len/2) letters + grades each blank by exact match, so a
+// short/function word is inherently ambiguous — it ships those and absorbs them cumulatively,
+// never discarding a passage for one. So tolerate a few; reject only pervasive ambiguity.
+// AP/RDL are unaffected (any mis-keyed multiple-choice answer is always rejected).
+const CTW_AMBIGUITY_LIMIT = Math.max(0, parseInt(process.env.CTW_AMBIGUITY_LIMIT ?? '2', 10) || 0);
+
+// prefix → audit type. Only reading items are answer-audited; listening/speaking
+// (lcr/la/lc/lat/repeat/interview) have no second-examiner auditor → null = skip.
+function auditTypeFor(prefix) {
+  if (prefix === 'ap') return 'ap';
+  if (prefix === 'rdl') return 'rdl';
+  if (prefix === 'ctw') return 'ctw';
+  return null;
+}
+
+// Answer-audit a vetted batch and return only the items that pass. Logs each
+// rejection and each fail-open (kept-despite-AI-error). No-ops when audit is
+// disabled/skipped or the prefix isn't a reading type.
+async function auditAndKeep(prefix, file, items) {
+  const type = auditTypeFor(prefix);
+  if (!type || items.length === 0 || SKIP_AUDIT) return items;
+  if (!HAS_KEY) {
+    console.log(`  ⚠ ${file}: DEEPSEEK_API_KEY not set — merged WITHOUT answer audit (set SKIP_AUDIT=1 to silence)`);
+    return items;
+  }
+  let rejected = 0, errored = 0;
+  const results = await auditItems(type, items, {
+    concurrency: AUDIT_CONCURRENCY,
+    ctwLimit: CTW_AMBIGUITY_LIMIT,
+    onResult: (r) => {
+      if (r.audit && r.audit.error) { errored++; console.log(`    ⚠ audit ${r.item.id || '?'}: ${r.reason} (kept — could not verify)`); }
+      else if (!r.ok) { rejected++; console.log(`    ⊘ audit ${r.item.id || '?'}: ${r.reason}`); }
+    },
+  });
+  const kept = results.filter((r) => r.ok).map((r) => r.item);
+  if (rejected || errored) {
+    console.log(`  ${file}: ${rejected}/${items.length} rejected by answer audit` + (errored ? `, ${errored} kept on audit error` : ''));
+  }
+  return kept;
+}
+
 // Vet one staging item for a prefix → { ok, item, reason }.
 // CTW is special: it must be run through the mechanical blanker first (the staging
 // item is just a passage), then validated. A validator THROW means the item is
@@ -176,6 +246,11 @@ function classifyRdlItem(item) {
 // staging file untouched. Unset = merge everything in staging (legacy mode).
 const ONLY_RUN_ID = String(process.env.MERGE_RUN_ID || "").trim();
 
+const auditStatus = SKIP_AUDIT ? 'SKIPPED (SKIP_AUDIT=1)'
+  : !HAS_KEY ? 'DISABLED — no DEEPSEEK_API_KEY'
+  : `enabled (concurrency ${AUDIT_CONCURRENCY}, CTW tolerates ≤${CTW_AMBIGUITY_LIMIT} ambiguous blanks)`;
+console.log(`Answer audit: ${auditStatus}${DRY_RUN ? '  |  DRY-RUN (no bank writes)' : ''}`);
+
 const allSummary = [];
 let grandTotal = 0;
 
@@ -222,26 +297,32 @@ for (const section of SECTIONS) {
     if (rejected) console.log(`  ${file}: ${rejected}/${rawItems.length} rejected by validator`);
     if (items.length === 0) { console.log(`  ${file}: 0 valid items after validation, skipping`); continue; }
 
+    // Answer-correctness audit (the merge gate). Runs the same AI second-examiner
+    // check the generators do, dropping mis-keyed/ambiguous items that vet() can't
+    // catch. No-op for listening/speaking, or when SKIP_AUDIT=1 / no API key.
+    const merged = await auditAndKeep(prefix, file, items);
+    if (merged.length === 0) { console.log(`  ${file}: 0 items survived answer audit, skipping`); continue; }
+
     if (prefix === 'rdl') {
       // Special handling for RDL: classify into long/short
       const counts = {};
-      for (const item of items) {
+      for (const item of merged) {
         const bankFile = classifyRdlItem(item);
         pendingItems[bankFile] = (pendingItems[bankFile] || []).concat(item);
         counts[bankFile] = (counts[bankFile] || 0) + 1;
       }
       const parts = Object.entries(counts).map(([k, v]) => `${v}→${k}`).join(', ');
-      console.log(`  ${file}: ${items.length} valid (${parts})`);
+      console.log(`  ${file}: ${merged.length} merged (${parts})`);
     } else {
       const bankFile = section.prefixMap[prefix];
-      pendingItems[bankFile] = (pendingItems[bankFile] || []).concat(items);
-      console.log(`  ${file}: ${items.length} valid → ${bankFile}`);
+      pendingItems[bankFile] = (pendingItems[bankFile] || []).concat(merged);
+      console.log(`  ${file}: ${merged.length} merged → ${bankFile}`);
     }
   }
 
   // Merge into banks
   for (const [bankFile, newItems] of Object.entries(pendingItems)) {
-    mkdirSync(section.bankDir, { recursive: true });
+    if (!DRY_RUN) mkdirSync(section.bankDir, { recursive: true });
     const bankPath = join(section.bankDir, bankFile);
     let bank = existsSync(bankPath) ? readJSON(bankPath) : { version: 1, items: [] };
     // Normalize: a legacy bank stored as a bare array → wrap into { version, items }.
@@ -276,9 +357,9 @@ for (const section of SECTIONS) {
       added++;
     }
 
-    writeJSON(bankPath, bank);
+    if (!DRY_RUN) writeJSON(bankPath, bank);
     allSummary.push({ section: section.name, bankFile, before, added, duplicates, after: bank.items.length });
-    console.log(`  ${bankFile}: ${before} → ${bank.items.length} (+${added} new, ${duplicates} duplicates skipped)`);
+    console.log(`  ${bankFile}: ${before} → ${bank.items.length} (+${added} new, ${duplicates} duplicates skipped)` + (DRY_RUN ? '  [DRY-RUN: not written]' : ''));
     grandTotal += added;
   }
 }
