@@ -1225,6 +1225,278 @@
       ],
       "difficulty": "medium",
       "id": "rdl-short_mpw0icip_7"
+    },
+    {
+      "genre": "email",
+      "variant": "short",
+      "text": "Hi Daniel,\n\nYour meal plan ended with an unused balance of $42.50. We have processed a refund to your student account, minus a $5 administrative fee. Please allow three business days for it to appear.\n\nBest,\nCampus Dining Services",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, how much is the administrative fee?",
+          "options": {
+            "A": "Five dollars",
+            "B": "Three dollars",
+            "C": "Ten dollars",
+            "D": "Forty dollars"
+          },
+          "correct_answer": "A",
+          "explanation": "The email states the refund is processed 'minus a $5 administrative fee,' so the fee is five dollars."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about when Daniel will receive his refund?",
+          "options": {
+            "A": "It will arrive immediately after the email.",
+            "B": "It must be picked up in person.",
+            "C": "It will not be available the same day.",
+            "D": "It will be mailed as a paper check."
+          },
+          "correct_answer": "C",
+          "explanation": "Because the email asks Daniel to allow three business days for the refund to appear, it cannot be available on the same day he reads the message."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mpw0p1eq_0"
+    },
+    {
+      "genre": "email",
+      "variant": "short",
+      "text": "Dear Priya,\n\nYour parking permit is ready for pickup at the Transportation Office in Lewis Hall, Room 108. Please come by before Friday, April 18, and bring your student ID and license plate number.\n\nThank you,\nCampus Transportation",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what must Priya bring to pick up her permit?",
+          "options": {
+            "A": "Her course schedule and a photo",
+            "B": "A parking map and a receipt",
+            "C": "Her tuition statement and a key",
+            "D": "Her student ID and license plate number"
+          },
+          "correct_answer": "D",
+          "explanation": "The email instructs Priya to bring her student ID and license plate number when picking up the permit."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about picking up the permit after Friday, April 18?",
+          "options": {
+            "A": "It will be delivered to her dorm instead.",
+            "B": "It will cost an additional late charge.",
+            "C": "It will require approval from a professor.",
+            "D": "It may no longer be possible as planned."
+          },
+          "correct_answer": "D",
+          "explanation": "Since Priya is told to come by before the April 18 deadline, picking it up as arranged may no longer be possible after that date."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mpw0p1eq_1"
+    },
+    {
+      "genre": "notice",
+      "variant": "short",
+      "text": "NOTICE: HVAC maintenance will be performed in Carver Hall from May 6 to May 8. Heating and cooling will be shut off during this period, and indoor temperatures may rise. Occupants are advised to keep windows open and stay hydrated.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what will happen during the maintenance period?",
+          "options": {
+            "A": "The climate control system will be turned off.",
+            "B": "The building entrance will be locked daily.",
+            "C": "The elevators will be temporarily unavailable.",
+            "D": "The water supply will be shut down."
+          },
+          "correct_answer": "A",
+          "explanation": "The notice states that heating and cooling will be shut off, meaning the climate control system will be turned off."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about conditions inside Carver Hall during the maintenance?",
+          "options": {
+            "A": "The building will become unusually quiet.",
+            "B": "The building will feel warmer than usual.",
+            "C": "The building will be completely closed off.",
+            "D": "The building will smell of fresh paint."
+          },
+          "correct_answer": "B",
+          "explanation": "Because cooling is shut off and indoor temperatures may rise, occupants can infer the building will feel warmer than usual."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mpw0p1eq_2"
+    },
+    {
+      "genre": "email",
+      "variant": "short",
+      "text": "Hi Marcus,\n\nThanks for volunteering as a campus tour guide! Your shift is confirmed for Saturday, May 10, from 10:00 AM at the Visitor Center. Lunch is provided, and you'll receive a $15 bookstore voucher afterward.\n\nWarm regards,\nAdmissions Office",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what will Marcus receive after his shift?",
+          "options": {
+            "A": "A free parking pass",
+            "B": "A fifteen-dollar bookstore voucher",
+            "C": "A printed certificate",
+            "D": "A campus dining credit"
+          },
+          "correct_answer": "B",
+          "explanation": "The email states Marcus will receive a $15 bookstore voucher after his shift."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about Marcus's arrangements for the day?",
+          "options": {
+            "A": "He needs to reserve a parking spot.",
+            "B": "He should arrive the evening before.",
+            "C": "He does not need to bring his own meal.",
+            "D": "He must complete a written test first."
+          },
+          "correct_answer": "C",
+          "explanation": "Since lunch is provided during the shift, Marcus can infer that he does not need to bring his own meal."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mpw0p1eq_3"
+    },
+    {
+      "genre": "notice",
+      "variant": "short",
+      "text": "NOTICE: The Hartwell Library study rooms will be closed for recarpeting on March 12 and 13. Reservations made for those dates have been canceled. Students may book alternative rooms in the Annex by contacting the front desk at extension 4420.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, why will the study rooms be closed?",
+          "options": {
+            "A": "New flooring is being installed.",
+            "B": "A private event is being hosted.",
+            "C": "An inspection is being conducted.",
+            "D": "The lighting is being replaced."
+          },
+          "correct_answer": "A",
+          "explanation": "The notice states the study rooms will be closed for recarpeting, which means new flooring is being installed."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about students who had booked rooms for March 12?",
+          "options": {
+            "A": "They will receive a partial refund.",
+            "B": "They will be charged a rebooking fee.",
+            "C": "They will need to make other arrangements.",
+            "D": "They will be moved to the same floor."
+          },
+          "correct_answer": "C",
+          "explanation": "Because existing reservations for those dates have been canceled, affected students will need to make other arrangements, such as booking an Annex room."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mpw0p1eq_4"
+    },
+    {
+      "genre": "social_media",
+      "variant": "short",
+      "text": "Reminder from the Outdoor Club! Our spring hike to Cedar Ridge is this Sunday, May 4, leaving the Rec Center at 8:00 AM sharp. Sign-up costs $6 and covers the van. Bring water and sturdy shoes. Spots are filling fast!",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the post, what does the sign-up fee cover?",
+          "options": {
+            "A": "The transportation by van",
+            "B": "The trail entrance ticket",
+            "C": "The packed lunch box",
+            "D": "The rental hiking gear"
+          },
+          "correct_answer": "A",
+          "explanation": "The post states the $6 sign-up fee covers the van, meaning it pays for transportation."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about students who want to join the hike?",
+          "options": {
+            "A": "They should register without much delay.",
+            "B": "They can pay in cash on the trail.",
+            "C": "They must attend a safety meeting first.",
+            "D": "They will be picked up from their dorms."
+          },
+          "correct_answer": "A",
+          "explanation": "Because spots are described as filling fast, students who want to join should register without much delay."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mpw0p1eq_5"
+    },
+    {
+      "genre": "flyer",
+      "variant": "short",
+      "text": "USED TEXTBOOK SALE! Student Union Lobby, Tuesday, January 23, 11:00 AM to 3:00 PM. Hundreds of titles from $4. Cash only. Bring your booklist! Proceeds support the campus food pantry. Early arrival recommended for the best selection.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the flyer, how can buyers pay for textbooks?",
+          "options": {
+            "A": "With cash only",
+            "B": "With a student card",
+            "C": "By mobile app",
+            "D": "By credit card"
+          },
+          "correct_answer": "A",
+          "explanation": "The flyer states 'Cash only,' so buyers can pay only with cash."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about students who arrive late to the sale?",
+          "options": {
+            "A": "They may find fewer titles available.",
+            "B": "They will pay a higher entry price.",
+            "C": "They can reserve books in advance.",
+            "D": "They must show a valid booklist."
+          },
+          "correct_answer": "A",
+          "explanation": "Because early arrival is recommended for the best selection, students who come late may find fewer titles available."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mpw0p1eq_6"
+    },
+    {
+      "genre": "notice",
+      "variant": "short",
+      "text": "NOTICE: The shuttle stop outside Bramley Hall will be relocated to Maple Street beginning Monday, February 5, due to construction. The first morning departure remains at 7:15 AM. Riders should consult the updated route map posted at the Student Services desk.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what time is the first morning departure?",
+          "options": {
+            "A": "At 7:15 in the morning",
+            "B": "At 8:00 in the morning",
+            "C": "At 6:30 in the morning",
+            "D": "At 9:15 in the morning"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice states that the first morning departure remains at 7:15 AM."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about why the shuttle stop is being moved?",
+          "options": {
+            "A": "A building project is underway nearby.",
+            "B": "The old stop was rarely used.",
+            "C": "A new bus line is being added.",
+            "D": "The street is being renamed."
+          },
+          "correct_answer": "A",
+          "explanation": "Because the notice attributes the relocation to construction, it can be inferred that a building project is underway nearby."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mpw0p1eq_7"
     }
   ]
 }

@@ -1576,6 +1576,446 @@
         }
       ],
       "id": "la_mpw0icjm_9"
+    },
+    {
+      "context": "info_session",
+      "situation": "new student orientation schedule and requirements",
+      "speaker_role": "program_coordinator",
+      "difficulty": "easy",
+      "announcement": "Good morning, incoming students. Welcome to fall orientation week. Your mandatory orientation session begins this Thursday at 9 a.m. in Harper Hall, and it should wrap up by early afternoon. During the session, you'll meet your academic advisor, tour the main campus, and learn how to register for spring classes. Please remember to bring your student ID card, since you won't be able to check in without it. We'll provide a light breakfast and all the materials you'll need, so there's nothing else to prepare. If you have a scheduling conflict, contact the orientation office before Wednesday to arrange a makeup session.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To explain the orientation schedule and what to bring",
+            "B": "To describe how to register for spring classes",
+            "C": "To recruit student volunteers for campus tours",
+            "D": "To announce a change in advisor assignments"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。公告整体在介绍新生迎新会的时间、地点、内容以及需要携带的物品，属于对日程和要求的总体说明。B错误（too_narrow）：登记春季课程只是迎新会的一个环节，不是整篇的目的。C错误（wrong_purpose）：公告从未招募志愿者，校园参观是新生体验的一部分而非招募。D错误（wrong_purpose）：公告提到会见导师，但并未宣布任何导师分配的变更。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "wrong_purpose",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are students required to bring to the session?",
+          "options": {
+            "A": "A printed copy of their class schedule",
+            "B": "Their own breakfast and snacks",
+            "C": "Their student ID card",
+            "D": "A list of questions for their advisor"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。公告明确说\"Please remember to bring your student ID card, since you won't be able to check in without it\"，学生证是唯一要求携带的物品。A错误（related_but_not_stated）：公告说会教学生如何登记春季课程，但没有要求携带课表。B错误（wrong_detail）：公告说会提供清淡早餐，与自带早餐恰好相反。D错误（related_but_not_stated）：会见导师确有提及，但并未要求准备问题清单。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        }
+      ],
+      "id": "la_mpw0p1fm_0"
+    },
+    {
+      "context": "academic_event",
+      "situation": "honors thesis oral defense schedule announcement",
+      "speaker_role": "department_staff",
+      "difficulty": "medium",
+      "announcement": "Attention honors students in the History Department. The schedule for this semester's honors thesis oral defenses has now been posted outside the department office in Cromwell Hall. Defenses will take place over three days, from next Tuesday through Thursday, in seminar room 210. Each student is allotted a forty-five minute slot, which includes both your presentation and questions from the committee. Please arrive at least fifteen minutes early to set up any slides or handouts you plan to use. We strongly encourage you to invite fellow students to attend, as a supportive audience often makes the experience far less nerve-racking. A reception with refreshments will follow on Thursday afternoon to celebrate everyone's hard work.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To explain how honors theses will be graded",
+            "B": "To inform students of the thesis defense schedule and arrangements",
+            "C": "To recruit committee members for the defenses",
+            "D": "To remind students to submit their final thesis drafts"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。公告核心是通知荣誉论文口头答辩的日程安排（时间、地点、时长）以及相关注意事项，属于日程与安排的告知。A错误（wrong_purpose）：公告完全没有提到评分标准。C错误（wrong_purpose）：委员会被提及会提问，但公告并非招募委员。D错误（wrong_purpose）：公告谈的是答辩，而非提交论文终稿的提醒。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "C": "wrong_purpose",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "Why does the speaker encourage students to invite an audience?",
+          "options": {
+            "A": "Because the committee scores larger audiences higher",
+            "B": "Because attendance is required for graduation credit",
+            "C": "Because seminar room 210 must be filled to capacity",
+            "D": "Because peer support can ease presenters' nervousness"
+          },
+          "answer": "D",
+          "explanation": "正确答案是D。公告说\"a supportive audience often makes the experience far less nerve-racking\"，可推断邀请观众是为了通过同伴支持缓解答辩者的紧张。A错误（over_inference）：公告从未说委员会会因观众多而打高分，属过度推断。B错误（unrelated_inference）：没有任何证据表明出席是毕业学分要求。C错误（over_inference）：公告未提及需把房间坐满，纯属臆测。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_inference",
+            "C": "over_inference"
+          }
+        }
+      ],
+      "id": "la_mpw0p1fm_1"
+    },
+    {
+      "context": "career_services",
+      "situation": "career fair preparation workshop with resume review",
+      "speaker_role": "career_advisor",
+      "difficulty": "easy",
+      "announcement": "Hello, students. With the fall career fair just two weeks away, the Career Center is hosting a preparation workshop this Monday at 4 p.m. in the Brandt Center, room 105. We'll walk you through how to research employers, practice your introduction, and dress for success. The second half of the workshop is devoted to one-on-one resume reviews with our advisors, so please bring a printed copy of your current resume. There's no need to register in advance; just show up and sign in at the door. Seating is limited, though, so we recommend arriving a few minutes early to claim a spot.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce the date of the fall career fair",
+            "B": "To explain a new dress code for campus interviews",
+            "C": "To invite students to a career fair preparation workshop",
+            "D": "To collect resumes for employers at the fair"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。公告整体在邀请学生参加招聘会准备工作坊，并说明内容、时间和地点。A错误（too_narrow）：招聘会的时间只是背景信息，公告的重点是工作坊本身。B错误（wrong_purpose）：\"dress for success\"只是工作坊的一个环节，并非宣布新的着装规定。D错误（wrong_purpose）：简历是用于现场点评，不是为雇主收集。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "wrong_purpose",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are students asked to bring to the workshop?",
+          "options": {
+            "A": "A printed copy of their resume",
+            "B": "A completed registration form",
+            "C": "A list of target employers",
+            "D": "Professional interview attire"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。公告明确要求\"please bring a printed copy of your current resume\"用于一对一简历点评。B错误（wrong_detail）：公告说无需提前注册，直接到场签到即可，与带注册表相反。C错误（related_but_not_stated）：工作坊会教如何研究雇主，但没有要求带雇主清单。D错误（related_but_not_stated）：\"dress for success\"是讲解话题，并未要求当天穿着面试正装。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        }
+      ],
+      "id": "la_mpw0p1fm_2"
+    },
+    {
+      "context": "facility_change",
+      "situation": "grand reopening of renovated gallery or performance hall",
+      "speaker_role": "department_head",
+      "difficulty": "medium",
+      "announcement": "I'm delighted to announce that, after nearly a year of renovations, the Whitfield Art Gallery will hold its grand reopening this Saturday at noon. The newly expanded space features an additional exhibition wing and improved lighting throughout. Our opening exhibit showcases student artwork from across all four undergraduate years, and admission is completely free for the entire weekend. While the gallery is open to everyone, the first one hundred visitors on Saturday will receive a limited-edition commemorative print. Light refreshments will be served in the main lobby. We hope you'll join us to celebrate this exciting new chapter for the arts on campus.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What is featured in the gallery's opening exhibit?",
+          "options": {
+            "A": "Works on loan from a partner museum",
+            "B": "Pieces created by visiting faculty artists",
+            "C": "A retrospective of the gallery's history",
+            "D": "Student artwork from all four undergraduate years"
+          },
+          "answer": "D",
+          "explanation": "正确答案是D。公告明确说开幕展\"showcases student artwork from across all four undergraduate years\"。A错误（related_but_not_stated）：从未提及向合作博物馆借展。B错误（wrong_detail）：作品出自学生而非到访的教师艺术家。C错误（related_but_not_stated）：公告说这是新篇章的庆祝，并非回顾画廊历史的展览。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "C": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the commemorative print?",
+          "options": {
+            "A": "It must be purchased at the lobby desk",
+            "B": "It is available only while supplies last",
+            "C": "It will be mailed to all weekend visitors",
+            "D": "It is reserved for art majors only"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。公告说只有周六前一百名访客才能获得限量纪念版画，可推断它数量有限、先到先得，售完即止。A错误（over_inference）：公告说\"receive\"，是赠送而非购买。C错误（over_inference）：只发给前一百名访客，而非邮寄给所有周末访客。D错误（wrong_detail）：公告强调画廊对所有人开放，并未限定艺术专业学生。",
+          "distractor_types": {
+            "A": "over_inference",
+            "C": "over_inference",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "id": "la_mpw0p1fm_3"
+    },
+    {
+      "context": "career_services",
+      "situation": "professional wardrobe pop-up and free headshot clinic",
+      "speaker_role": "program_coordinator",
+      "difficulty": "hard",
+      "announcement": "Attention students preparing for internships and interviews. Next Wednesday, the Career Center is hosting a one-day professional wardrobe pop-up alongside a free headshot clinic in the Student Union ballroom, from 10 a.m. to 4 p.m. At the pop-up, you can borrow gently used business attire at no cost, keeping it for up to two weeks. Once you're dressed, a volunteer photographer will take a polished headshot you can use on your professional profiles. We do ask that you reserve a headshot time slot in advance through the Career Center portal, as walk-in photo appointments cannot be guaranteed. The clothing racks, however, are open to everyone throughout the day.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To promote a wardrobe pop-up and free headshot clinic",
+            "B": "To raise donations of used business clothing",
+            "C": "To announce a new dress code for internships",
+            "D": "To hire student photographers for the Career Center"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。公告整体在宣传一个为期一天的职业装借用快闪活动和免费形象照诊所，并说明如何参与。B错误（wrong_purpose）：活动是借出衣物，而非募集捐赠的旧衣。C错误（wrong_purpose）：公告从未规定实习着装要求。D错误（wrong_purpose）：摄影师是志愿者协助拍照，公告并非招聘学生摄影师。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "wrong_purpose",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about getting a headshot at the event?",
+          "options": {
+            "A": "It costs a small fee paid at the door",
+            "B": "It is available only to graduating seniors",
+            "C": "Students without a reservation may not get one",
+            "D": "Photos are emailed within three business days"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。公告说需提前在门户网站预约时段，因为\"walk-in photo appointments cannot be guaranteed\"，可推断没有预约的学生可能无法拍到形象照。A错误（wrong_detail）：公告明确说形象照诊所是免费的。B错误（over_inference）：面向准备实习和面试的学生，并未限定应届毕业生。D错误（over_inference）：公告完全没有提及照片的交付方式或时限，属臆测。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "over_inference",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "id": "la_mpw0p1fm_4"
+    },
+    {
+      "context": "facility_change",
+      "situation": "main library temporarily relocating to an annex during HVAC repairs",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "Attention students, faculty, and staff. Due to emergency repairs to the heating and cooling system, the main library building will be closed beginning this Monday and is expected to reopen in three weeks. During the closure, core library services will operate out of the Foster Annex, just east of the quad. Reference librarians, study rooms, and computer stations will all be available there, though seating will be more limited than usual. Books on the upper floors of the main building cannot be retrieved during this period, so please request any titles you'll need through the online catalog by this Friday. We apologize for the inconvenience and appreciate your patience.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To inform the campus of a temporary library closure and relocation",
+            "B": "To announce the permanent closing of the main library",
+            "C": "To promote the new study rooms in the Foster Annex",
+            "D": "To explain a change in library borrowing limits"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。公告核心是告知主图书馆因维修临时关闭，并将核心服务迁至Foster Annex。B错误（reversed_intent）：图书馆只是临时关闭三周，并非永久关闭，与原意相反。C错误（too_narrow）：自习室只是迁移后可用的服务之一，不是整篇的目的。D错误（wrong_purpose）：公告未涉及借书数量限制的变化。",
+          "distractor_types": {
+            "B": "reversed_intent",
+            "C": "too_narrow",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What must patrons do to access books from the upper floors?",
+          "options": {
+            "A": "Request the titles online by Friday",
+            "B": "Visit the main building during limited hours",
+            "C": "Email a reference librarian at the annex",
+            "D": "Wait until the building reopens in three weeks"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。公告说上层楼的图书在此期间无法取阅，因此\"please request any titles you'll need through the online catalog by this Friday\"。B错误（wrong_detail）：主楼是关闭的，无法进入，所谓限时开放与原文矛盾。C错误（related_but_not_stated）：参考馆员确实在Annex，但公告要求的是通过在线目录预约图书，而非发邮件。D错误（misattributed_detail）：三周是重新开放的预期时间，但公告给出的解决办法是周五前在线预约，而非干等。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ],
+      "id": "la_mpw0p1fm_5"
+    },
+    {
+      "context": "schedule_change",
+      "situation": "shuttle bus schedule changing to reduced winter break hours",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "This is a reminder that the campus shuttle will switch to its reduced winter break schedule starting next Monday, December 18th. During the break, shuttles will run only once an hour, from 8 a.m. to 6 p.m., rather than every fifteen minutes. The downtown route will be suspended entirely until classes resume in January. Riders should note that the updated timetable is posted at every shuttle stop and on the transportation page of the university website. If you rely on the shuttle to reach the train station, please plan extra travel time accordingly. Regular service will resume on the first day of spring semester.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce a reduced shuttle schedule over winter break",
+            "B": "To introduce a new downtown shuttle route",
+            "C": "To explain why the shuttle service is being canceled",
+            "D": "To remind riders to purchase shuttle passes"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。公告核心是提醒校园班车将在寒假期间改为缩减的运营时刻表。B错误（reversed_intent）：市区线路是被暂停，而非新增，与原意相反。C错误（wrong_purpose）：班车只是减少班次，并未取消整个服务。D错误（wrong_purpose）：公告完全没有提到购买班车票的事。",
+          "distractor_types": {
+            "B": "reversed_intent",
+            "C": "wrong_purpose",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "How often will shuttles run during winter break?",
+          "options": {
+            "A": "Every fifteen minutes",
+            "B": "Once every hour",
+            "C": "Only on weekends",
+            "D": "Twice each morning"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。公告明确说寒假期间班车\"will run only once an hour, from 8 a.m. to 6 p.m.\"。A错误（wrong_detail）：每十五分钟一班是平时的班次，而非寒假的班次。C错误（related_but_not_stated）：公告未提及只在周末运行。D错误（wrong_detail）：公告说从早八点到晚六点每小时一班，而非每早两班。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "id": "la_mpw0p1fm_6"
+    },
+    {
+      "context": "policy_update",
+      "situation": "new printing quota and pay-per-page policy in computer labs",
+      "speaker_role": "department_staff",
+      "difficulty": "medium",
+      "announcement": "Attention all students. Beginning next semester, the campus computer labs will introduce a new printing policy. Each student will receive a free printing allowance of five hundred pages per semester, which should cover typical coursework needs. Once you exceed that limit, additional pages will be charged at five cents each, billed automatically to your student account. To help you keep track, your remaining balance will appear on the screen each time you send a job to the printer. We're making this change to reduce paper waste, which has risen sharply in recent years. Double-sided printing is strongly encouraged and counts as a single page toward your quota.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce a new printing quota and charges in the labs",
+            "B": "To report that the computer labs will close for upgrades",
+            "C": "To encourage students to use personal printers instead",
+            "D": "To announce that printing will become entirely free"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。公告核心是宣布机房新的打印配额政策以及超额后的收费方式。B错误（wrong_purpose）：公告未提及机房关闭升级。C错误（wrong_purpose）：公告没有建议学生改用个人打印机。D错误（reversed_intent）：超过免费额度后要按页收费，并非完全免费，与原意相反。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What happens once a student exceeds the free page allowance?",
+          "options": {
+            "A": "Additional pages cost five cents each",
+            "B": "Printing is disabled until next semester",
+            "C": "The student must request a quota increase",
+            "D": "Color printing is no longer permitted"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。公告明确说超过额度后\"additional pages will be charged at five cents each\"。B错误（over_inference）：超额后仍可继续打印，只是收费，并非被禁用。C错误（related_but_not_stated）：公告未提及需要申请提高配额。D错误（related_but_not_stated）：公告没有涉及彩印的任何限制。",
+          "distractor_types": {
+            "B": "over_inference",
+            "C": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        }
+      ],
+      "id": "la_mpw0p1fm_7"
+    },
+    {
+      "context": "campus_event",
+      "situation": "annual winter charity fundraiser and donation drive",
+      "speaker_role": "club_leader",
+      "difficulty": "easy",
+      "announcement": "Hello, everyone. The Student Volunteer Association is excited to host our annual Winter Warmth Drive next week to support local families in need. From Monday through Friday, we'll be collecting new or gently used coats, blankets, and canned food in the lobby of the Student Center. On Friday evening at 7 p.m., we'll wrap up the week with a charity concert in Hale Auditorium, featuring several student bands. Admission to the concert is one canned good per person. All donations stay right here in our community, going directly to the downtown shelter. Come show your support and help us make this winter a little warmer for our neighbors.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To invite students to a winter charity drive and concert",
+            "B": "To recruit new members for the Volunteer Association",
+            "C": "To announce a change in Student Center lobby hours",
+            "D": "To raise money for a new auditorium sound system"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。公告整体在邀请大家参与冬季慈善募捐周以及周五的慈善音乐会。B错误（wrong_purpose）：公告未招募协会新成员。C错误（too_narrow）：大堂只是收集捐赠的地点，公告并非宣布大堂开放时间变更。D错误（wrong_purpose）：募集所得是给社区收容所，而非购买礼堂音响。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "too_narrow",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What is required to attend the Friday concert?",
+          "options": {
+            "A": "A canned good donated at the door",
+            "B": "A ticket purchased in advance",
+            "C": "A valid student ID card",
+            "D": "A signed volunteer sign-up sheet"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。公告明确说\"Admission to the concert is one canned good per person\"，即每人一份罐头食品作为入场凭证。B错误（wrong_detail）：入场凭的是罐头食品，而非提前购票。C错误（related_but_not_stated）：公告未要求出示学生证。D错误（related_but_not_stated）：这是志愿者协会主办，但并未要求签署志愿者报名表才能入场。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        }
+      ],
+      "id": "la_mpw0p1fm_8"
+    },
+    {
+      "context": "deadline",
+      "situation": "course registration deadline and add/drop period reminder",
+      "speaker_role": "department_staff",
+      "difficulty": "medium",
+      "announcement": "I want to remind everyone that the deadline to register for spring courses is this Friday at 11:59 p.m. After that, late registration will reopen in January, but a fifty-dollar late fee will apply. Keep in mind that classes filling popular requirements tend to reach capacity quickly, so I'd encourage you to finalize your schedule sooner rather than later. The add/drop period runs through the first two weeks of the semester, giving you time to adjust your courses without penalty. If a class you need is already full, be sure to join the waitlist, since spots often open up during add/drop. Reach out to your advisor if you run into any trouble.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To remind students of the registration deadline and related policies",
+            "B": "To announce that several spring courses have been canceled",
+            "C": "To introduce a brand-new online registration system",
+            "D": "To explain how final grades will be calculated"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。公告核心是提醒春季选课截止日期以及相关的迟注册费、加退课等政策。B错误（wrong_purpose）：公告说热门课会很快满员，但并未宣布课程被取消。C错误（wrong_purpose）：公告未提及任何新的在线选课系统。D错误（wrong_purpose）：公告与期末成绩计算无关。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "wrong_purpose",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "Why does the speaker advise students to join a waitlist?",
+          "options": {
+            "A": "Because waitlisted students receive a tuition discount",
+            "B": "Because openings often appear during add/drop",
+            "C": "Because waitlists guarantee a spot in any class",
+            "D": "Because the add/drop period has been canceled"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。公告说\"join the waitlist, since spots often open up during add/drop\"，可推断建议候补是因为加退课期间常有名额空出。A错误（unrelated_inference）：没有任何证据表明候补学生能享学费折扣。C错误（over_inference）：公告只说常有名额空出，并未保证一定有位，属过度推断。D错误（wrong_detail）：公告明确说加退课期持续前两周，并未取消。",
+          "distractor_types": {
+            "A": "unrelated_inference",
+            "C": "over_inference",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "id": "la_mpw0p1fm_9"
     }
   ]
 }
