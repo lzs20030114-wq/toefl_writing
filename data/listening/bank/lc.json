@@ -6665,6 +6665,410 @@
         }
       ],
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/conversation/lc_r2_routine-r2-20260601-193143_3.mp3"
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "a student asking a friend for recommendations on a new couch for the dorm",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hey, you got that couch for your common room last semester, right? Where did you end up finding it?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, the secondhand one. I picked it up from that warehouse on Elm Street. They had a bunch of options under three hundred dollars."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Three hundred is still kind of steep for me. My roommates and I are splitting it four ways, so we want to keep it under two hundred total."
+        },
+        {
+          "speaker": "Man",
+          "text": "In that case, honestly, just check the student housing forum. People dump furniture at the end of every semester. Last May I saw a leather one going for fifty bucks because the owner was moving out the next day."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Wait, really? Fifty? That's amazing."
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah. The trick is checking around finals week. Just be ready to pick it up the same day, because they usually want it gone immediately."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "According to the conversation, what is the woman's budget constraint?",
+          "options": {
+            "A": "Two hundred dollars total, split four ways",
+            "B": "Three hundred dollars for a single buyer",
+            "C": "Fifty dollars maximum from the warehouse",
+            "D": "Whatever the leather couch on the forum costs"
+          },
+          "answer": "A",
+          "explanation": "女生说四人合资，总预算两百以内。B 是男生提到的另一参考价，C 是男生提到的特价例子，D 是混淆。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "wrong_detail",
+            "D": "off_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about successfully finding a cheap couch on the forum?",
+          "options": {
+            "A": "Buyers must register with the Elm Street warehouse first",
+            "B": "Buyers must pay the original retail price plus delivery",
+            "C": "Buyers must be ready to pick up the same day they see the listing",
+            "D": "Buyers must wait until the beginning of a semester"
+          },
+          "answer": "C",
+          "explanation": "男生强调要当天搬走，因为卖家急着清空。A 与讲述无关，B 与便宜价格相反，D 时间反了。",
+          "distractor_types": {
+            "A": "off_topic",
+            "B": "reversed_situation",
+            "D": "wrong_topic"
+          }
+        }
+      ],
+      "id": "lc_mpx0wcrs_0"
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two friends debating whether a new cafe is worth the price",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "So I tried that new place on Birch Street yesterday — Loom Coffee. Have you been?"
+        },
+        {
+          "speaker": "Man",
+          "text": "I went once last week. The latte was good, but seven dollars feels like a lot for what's basically a regular drink."
+        },
+        {
+          "speaker": "Woman",
+          "text": "I actually thought the matcha was worth it. It comes with a tiny shortbread cookie and you can sit there with your laptop forever — nobody asks you to leave."
+        },
+        {
+          "speaker": "Man",
+          "text": "Okay, fair. The seating situation is way better than the cafe by the library. I'll give them that."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Right? And they have those long communal tables with actual outlets. The library cafe charges almost the same but you have to fight for a power strip."
+        },
+        {
+          "speaker": "Man",
+          "text": "Hm. Yeah, maybe I'm judging it on the wrong thing. I was just looking at the drink price by itself."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "According to the conversation, what is the man's initial complaint about Loom Coffee?",
+          "options": {
+            "A": "The matcha is too sweet for his taste",
+            "B": "The seating is uncomfortable for studying",
+            "C": "The latte is too expensive at seven dollars",
+            "D": "The cookies are stale by the afternoon"
+          },
+          "answer": "C",
+          "explanation": "男生最初的不满是拿铁七元太贵。其他都是错误描述。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "reversed_situation",
+            "D": "off_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the man's view by the end of the conversation?",
+          "options": {
+            "A": "He has decided never to visit Loom Coffee again",
+            "B": "He plans to write a critical review online",
+            "C": "He prefers the library cafe for its quieter atmosphere",
+            "D": "He realizes he was judging the cafe on price alone"
+          },
+          "answer": "D",
+          "explanation": "男生最后承认只看价格判断有偏差。A 与对话相反，B 没提，C 与对比内容相反。",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "B": "off_topic",
+            "C": "reversed_situation"
+          }
+        }
+      ],
+      "id": "lc_mpx0wcrs_1"
+    },
+    {
+      "context": "errands_service",
+      "situation": "two students chatting about a gardening or art class they took",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "I finally finished that watercolor class at the community center. Six weeks, every Saturday."
+        },
+        {
+          "speaker": "Man",
+          "text": "Oh, the one you signed up for in February? I was thinking about doing the spring session."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Honestly, it was harder than I expected. The instructor was great, but I thought I'd be making pretty landscapes and instead we spent four weeks just on color mixing."
+        },
+        {
+          "speaker": "Man",
+          "text": "Wait, four weeks on mixing? That sounds tedious."
+        },
+        {
+          "speaker": "Woman",
+          "text": "It was, at first. But by week five I realized why she made us do it. When we finally did landscapes, I actually knew how to get the colors I wanted. People in my class who skipped the early weeks were just guessing."
+        },
+        {
+          "speaker": "Man",
+          "text": "Hmm, okay. That actually makes me less worried about the spring session. I'd rather build a foundation than just produce something that looks okay but I can't replicate."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "The cost of art classes at the community center",
+            "B": "Whether community art classes accept student discounts",
+            "C": "The value of the watercolor class's slow technical foundation",
+            "D": "The instructor's qualifications and previous teaching record"
+          },
+          "answer": "C",
+          "explanation": "对话主要谈这门水彩课慢慢打基础的价值。其他都是分散注意。",
+          "distractor_types": {
+            "A": "wrong_topic",
+            "B": "off_topic",
+            "D": "off_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the man's likely decision regarding the spring session?",
+          "options": {
+            "A": "He is more inclined to enroll after hearing about the foundation",
+            "B": "He has decided to switch to a different art form entirely",
+            "C": "He is now hesitant because of the time commitment",
+            "D": "He has already paid for the session and cannot cancel"
+          },
+          "answer": "A",
+          "explanation": "男生最后说现在不那么担心，更倾向报名。其他都与对话相反或无关。",
+          "distractor_types": {
+            "B": "off_topic",
+            "C": "reversed_situation",
+            "D": "off_topic"
+          }
+        }
+      ],
+      "id": "lc_mpx0wcrs_2"
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two students talking about which textbook edition to buy for chemistry",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "I'm trying to decide between the new tenth edition of the chemistry textbook and the older ninth edition. The new one is one-fifty, the old one is twenty bucks used."
+        },
+        {
+          "speaker": "Man",
+          "text": "How different can they really be? Chemistry hasn't changed that much."
+        },
+        {
+          "speaker": "Woman",
+          "text": "That's what I thought. But Professor Castellano specifically said the practice problems are renumbered in the new edition, and homework references the tenth edition's problem numbers."
+        },
+        {
+          "speaker": "Man",
+          "text": "Hmm. That's a real problem. You'd have to map problems back and forth every week."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Right. My friend tried that last semester for organic chem and gave up by week four. She ended up borrowing the new edition from the library reserves every Sunday night."
+        },
+        {
+          "speaker": "Man",
+          "text": "Wait, the library has reserves? That might be the answer. You'd save the money and still have access to the right problem numbers."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main topic of the conversation?",
+          "options": {
+            "A": "Why Professor Castellano changed editions this semester",
+            "B": "Whether organic chemistry has become harder over time",
+            "C": "Why the textbook publisher renumbered the problems",
+            "D": "Whether to buy the new chemistry textbook or use a cheaper alternative"
+          },
+          "answer": "D",
+          "explanation": "对话核心是是否买新书或用便宜方案。其他都是支撑性细节或不相关。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "off_topic",
+            "C": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the man's suggestion regarding library reserves?",
+          "options": {
+            "A": "He thinks the woman should buy the new edition just in case",
+            "B": "He thinks reserves can substitute for owning the new edition",
+            "C": "He thinks the library has stopped offering reserves this year",
+            "D": "He thinks the older edition is academically superior"
+          },
+          "answer": "B",
+          "explanation": "男生提议用图书馆储备本省钱又有正确题号。其他都是相反或不相关。",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "C": "off_topic",
+            "D": "wrong_topic"
+          }
+        }
+      ],
+      "id": "lc_mpx0wcrs_3"
+    },
+    {
+      "context": "plans_social",
+      "situation": "two students arranging to study together before an exam",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Our linguistics midterm is on Thursday. Want to study together Tuesday night?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Tuesday is tough. I have my phonetics lab until eight. We could meet after, but I'd be pretty fried."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Hmm. Wednesday is too late — I want at least one full day to review on my own after."
+        },
+        {
+          "speaker": "Man",
+          "text": "What about Tuesday morning? I'm free from ten until my lab at two."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh, that actually works. I was thinking of evening because the library group rooms get crowded, but the morning slot is usually wide open."
+        },
+        {
+          "speaker": "Man",
+          "text": "Right. And we can grab the corner room with the whiteboard — that one's perfect for the syntax tree diagrams we'll need to practice."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Done. Tuesday at ten, the room with the whiteboard. I'll bring the practice tree problems."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly trying to do?",
+          "options": {
+            "A": "Schedule a joint study session before their linguistics midterm",
+            "B": "Decide whether to attend the phonetics lab on Tuesday",
+            "C": "Plan a long-term study group for the entire semester",
+            "D": "Choose between competing rooms in the linguistics building"
+          },
+          "answer": "A",
+          "explanation": "对话核心是约语言学期中考前的学习时间。其他都是片面或不相关。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "over_inference",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the corner room with the whiteboard?",
+          "options": {
+            "A": "It is normally reserved for graduate students",
+            "B": "It is particularly suited to the diagrams they need to practice",
+            "C": "It is crowded mainly during morning hours",
+            "D": "It can only be booked one day in advance"
+          },
+          "answer": "B",
+          "explanation": "男生说那个角落的白板房间很适合画句法树。其他都是没提到的或与对话相反。",
+          "distractor_types": {
+            "A": "off_topic",
+            "C": "reversed_situation",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "id": "lc_mpx0wcrs_4"
     }
   ]
 }

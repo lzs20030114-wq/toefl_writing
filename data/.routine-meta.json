@@ -1,24 +1,26 @@
 {
-  "session_id": "routine-20260601-190449",
-  "completed_at": "2026-06-01T19:25:00Z",
-  "duration_minutes": 21,
-  "highlight": "首次出现 art_history/Expressionism 听力学术讲座主题",
+  "session_id": "routine-20260602-190458",
+  "completed_at": "2026-06-02T19:21:22.000Z",
+  "duration_minutes": 16,
+  "highlight": "首次出现腓尼基贸易网络 AP 课题；BS 16/20 通过 (single set of 10 merged)",
   "commit_sha": "",
   "results": {
     "bs": {
       "generated": 20,
-      "accepted": 10,
+      "accepted": 16,
       "topics": [
         "campus life",
         "library",
-        "writing center",
-        "dorms",
+        "dorm",
         "advisor",
-        "professor"
+        "classes",
+        "registration",
+        "writing center",
+        "club"
       ],
       "favorite": {
-        "prompt": "I just transferred here this semester.",
-        "answer": "Where do I sign up for the writing center?"
+        "prompt": "Did you find a good study spot?",
+        "answer": "I sit upstairs near the big windows."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -27,14 +29,14 @@
       "generated": 4,
       "accepted": 4,
       "topics": [
-        "computer science",
+        "social studies",
         "public health",
-        "environmental science",
-        "business"
+        "technology and media",
+        "environmental science"
       ],
       "favorite": {
-        "subtopic": "public health",
-        "preview": "We've been examining how cities respond to rising rates of loneliness, which public health researche"
+        "subtopic": "social studies",
+        "preview": "We've been discussing how cities respond to housing shortages this semester. A growing approach is converting underused commercial buildings."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -43,48 +45,48 @@
       "generated": 4,
       "accepted": 4,
       "topics": [
-        "服务与活动",
         "校园学业",
+        "服务与活动",
+        "日常社交",
         "消费售后"
       ],
       "favorite": {
-        "subtopic": "服务与活动",
-        "preview": "You recently signed up for a weekend ceramics class at the Brookfield Community Studio"
+        "subtopic": "校园学业",
+        "preview": "You are a third-year student who recently submitted a research proposal for your independent study. Your advisor returned written comments."
       },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ap": {
       "generated": 5,
-      "accepted": 5,
+      "accepted": 4,
       "topics": [
-        "history/ancient Egypt",
-        "art/cinema history",
-        "anthropology/oral traditions",
-        "sociology/globalization",
-        "psychology/perception"
+        "business/trade networks",
+        "art/impressionism",
+        "environmental_science/invasive species",
+        "anthropology/tool development"
       ],
       "favorite": {
-        "subtopic": "anthropology/oral traditions",
-        "preview": "Oral traditions are the body of historical narrative, ritual song, and instructional knowledge passe"
+        "subtopic": "business/trade networks",
+        "preview": "The Phoenician trade network reshaped Mediterranean commerce between roughly 1200 and 800 BCE by linking previously isolated coastal communities."
       },
       "retried_after_fail": false,
-      "failure_reason": ""
+      "failure_reason": "Q5 insert_text marker count failed on materials_science/metallurgy passage (3 of 4 markers)"
     },
     "reading-ctw": {
       "generated": 6,
       "accepted": 6,
       "topics": [
-        "biology/symbiosis",
-        "environmental_science/water purification",
-        "psychology/group dynamics",
-        "history/agricultural revolution",
-        "geology/mountain formation",
-        "astronomy/nebulae"
+        "biology/animal camouflage",
+        "environmental_science/biodiversity",
+        "psychology/stress response",
+        "history/maritime navigation",
+        "geology/earthquakes",
+        "astronomy/Mars exploration"
       ],
       "favorite": {
-        "subtopic": "biology/symbiosis",
-        "preview": "Cleaner shrimp and large reef fish form one of the most reliable cooperative partnerships found in"
+        "subtopic": "biology/animal camouflage",
+        "preview": "Many animals rely on camouflage to avoid being seen by predators or prey. The patterns on their bodies often match the colors and textures."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -93,19 +95,15 @@
       "generated": 4,
       "accepted": 4,
       "topics": [
-        "social_media",
-        "email",
-        "notice"
+        "notice",
+        "social_media"
       ],
       "favorite": {
-        "subtopic": "social_media",
-        "preview": "Quick reminder! The Riverside Campus Garden reopens this Saturday, March 22. Open hours are Tuesdays"
+        "subtopic": "notice/bike rack removal",
+        "preview": "ATTENTION RESIDENTS: Bike racks outside Maple Hall will be removed Friday, May 9, from 8:00 AM to 4:00 PM for sidewalk repairs."
       },
       "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_session_id": "routine-r2-20260601-193143",
-      "r2_items_added": 2
+      "failure_reason": ""
     },
     "reading-rdl-long": {
       "generated": 2,
@@ -114,27 +112,24 @@
         "notice"
       ],
       "favorite": {
-        "subtopic": "notice",
-        "preview": "DINING HALL ALLERGEN POLICY UPDATE — Effective Monday, September 8, the Anderson Dining Hall adopts"
+        "subtopic": "notice/laundry renovation",
+        "preview": "LAUNDRY ROOM RENOVATION NOTICE — Effective Dates: Monday, June 16 through Friday, July 11 — Westbrook Residence Hall basement level."
       },
       "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_session_id": "routine-r2-20260601-193143",
-      "r2_items_added": 1
+      "failure_reason": ""
     },
     "listening-lat": {
       "generated": 4,
       "accepted": 4,
       "topics": [
-        "art_history/Expressionism",
-        "social_psychology/diffusion of responsibility",
-        "anthropology/time concepts",
-        "cognitive_psychology/cocktail party effect"
+        "art_history/impressionism outdoors",
+        "cognitive_psychology/dual-process theory",
+        "psychology/peak-end rule",
+        "physics/inertia"
       ],
       "favorite": {
-        "subtopic": "art_history/Expressionism",
-        "preview": "Expressionism is one of the most influential art movements of the early twentieth century, and it w"
+        "subtopic": "art_history/impressionism outdoors",
+        "preview": "So today I want to take you back to Paris, around 1870, and ask a question that probably sounds obvious now but was genuinely radical at the time."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -143,32 +138,30 @@
       "generated": 5,
       "accepted": 5,
       "topics": [
+        "campus_dorm_life",
+        "recommendations_opinions",
         "errands_service",
-        "campus_routines",
-        "social_planning"
+        "plans_social"
       ],
       "favorite": {
-        "subtopic": "errands_service",
-        "preview": "Two friends figuring out a bus schedule for a day trip to Riverton — express only runs at seven"
+        "subtopic": "campus_dorm_life",
+        "preview": "Hey, you got that couch for your common room last semester, right? Where did you end up finding it?"
       },
       "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_session_id": "routine-r2-20260601-193143",
-      "r2_items_added": 3
+      "failure_reason": ""
     },
     "listening-la": {
       "generated": 5,
       "accepted": 5,
       "topics": [
-        "academic_event",
-        "info_session",
         "facility_change",
-        "logistics"
+        "academic_event",
+        "campus_activity",
+        "info_session"
       ],
       "favorite": {
-        "subtopic": "academic_event",
-        "preview": "End-of-semester Honors Society academic showcase with Dean's Excellence Awards in Whitman Hall"
+        "subtopic": "facility_change",
+        "preview": "Good morning, students and faculty. Due to scheduled HVAC repairs, the main reading room on the second floor will be closed October 21 to 25."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -177,14 +170,14 @@
       "generated": 8,
       "accepted": 8,
       "topics": [
-        "general_daily",
-        "campus_daily",
+        "social",
         "campus_academic",
-        "social"
+        "general_daily",
+        "campus_daily"
       ],
       "favorite": {
-        "subtopic": "general_daily",
-        "preview": "Asking a neighbor about noise or shared space — hammering coming from this morning"
+        "subtopic": "social",
+        "preview": "Why didn't you make it to the meeting? → Long story — I'll tell you over coffee."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -193,18 +186,16 @@
       "generated": 3,
       "accepted": 3,
       "topics": [
-        "Recycling Center Tour",
+        "Cookie Baking",
         "Bike Tire Repair",
-        "Theater Rehearsal"
+        "IT Help Desk"
       ],
       "favorite": {
-        "subtopic": "Recycling Center Tour",
-        "preview": "Glass bins are located near the entrance. Please rinse your containers first."
+        "subtopic": "Cookie Baking",
+        "preview": "First, preheat the oven to 350. Next, line the tray with parchment paper. Cream the butter and sugar together in a bowl."
       },
       "retried_after_fail": false,
       "failure_reason": ""
     }
-  },
-  "r2_completed_at": "2026-06-01T19:38:21.874Z",
-  "r2_session_id": "routine-r2-20260601-193143"
+  }
 }
