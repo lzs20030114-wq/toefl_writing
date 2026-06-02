@@ -2,8 +2,7 @@
 import React, { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { C, FONT } from "./ui";
-
-const QR_IMAGE_SRC = "/wechat-group-qr.jpg";
+import { WechatQrImage } from "./WechatQrImage";
 
 export function WechatGroupModal({ open, onClose, rewardDays = 1 }) {
   useEffect(() => {
@@ -80,18 +79,11 @@ export function WechatGroupModal({ open, onClose, rewardDays = 1 }) {
             display: "flex", justifyContent: "center", alignItems: "center",
           }}
         >
-          <img
-            src={QR_IMAGE_SRC}
-            alt="微信群二维码"
-            width={240}
-            height={240}
-            style={{ display: "block", width: 240, height: 240, objectFit: "contain" }}
-            onError={(e) => { e.currentTarget.style.display = "none"; }}
-          />
+          <WechatQrImage size={240} />
         </div>
 
         <div style={{ fontSize: 12, color: C.t3, marginTop: 12, lineHeight: 1.5 }}>
-          长按图片保存,或用微信扫一扫
+          点击图片放大,长按保存或用微信扫一扫
         </div>
 
         <button
