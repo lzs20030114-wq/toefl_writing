@@ -1,0 +1,108 @@
+{
+  "type": "academicPassage",
+  "generated_at": "2026-05-31T07:48:46.113Z",
+  "total_generated": 5,
+  "total_accepted": 1,
+  "acceptance_rate": 0.2,
+  "items": [
+    {
+      "id": "ap_gen_1780213721866_001",
+      "passage": "The formation of sedimentary rock involves a cycle of deposition, compaction, and cementation that occurs over millions of years. [■] Initially, weathered material such as sand, silt, and organic debris accumulates in layers at the bottom of water bodies. [■] These sediments undergo gradual compaction as additional layers pile on top, creating immense pressure that squeezes out water and reduces pore space. [■] During the next phase, mineral-rich fluids percolate through the compacted sediments, depositing minerals like calcite or silica that bind the particles together—a process known as cementation. [■] Despite this well-understood sequence, challenges remain in precisely dating ancient formations, as later geological events can alter the rock structure.",
+      "word_count": 110,
+      "paragraphs": [
+        "The formation of sedimentary rock involves a cycle of deposition, compaction, and cementation that occurs over millions of years. [■] Initially, weathered material such as sand, silt, and organic debris accumulates in layers at the bottom of water bodies. [■] These sediments undergo gradual compaction as additional layers pile on top, creating immense pressure that squeezes out water and reduces pore space.",
+        "[■] During the next phase, mineral-rich fluids percolate through the compacted sediments, depositing minerals like calcite or silica that bind the particles together—a process known as cementation. [■] Despite this well-understood sequence, challenges remain in precisely dating ancient formations, as later geological events can alter the rock structure."
+      ],
+      "paragraph_count": 2,
+      "topic": "geology",
+      "subtopic": "rock formation",
+      "difficulty": "hard",
+      "questions": [
+        {
+          "qid": "ap_gen_1780213721866_001_q1",
+          "question_type": "vocabulary_in_context",
+          "stem": "The word 'percolate' in paragraph 2 is closest in meaning to",
+          "options": {
+            "A": "seep",
+            "B": "evaporate",
+            "C": "solidify",
+            "D": "expand"
+          },
+          "correct_answer": "A",
+          "explanation": "In the passage, 'mineral-rich fluids percolate through the compacted sediments' indicates a slow movement through the material, making 'seep' the best synonym."
+        },
+        {
+          "qid": "ap_gen_1780213721866_001_q2",
+          "question_type": "factual_detail",
+          "stem": "According to paragraph 1, what happens to sediments as additional layers accumulate on top?",
+          "options": {
+            "A": "They dissolve into the surrounding water.",
+            "B": "They become compacted under increasing pressure.",
+            "C": "They are transported to new locations by currents.",
+            "D": "They are cemented together by organic debris."
+          },
+          "correct_answer": "B",
+          "explanation": "The passage states 'These sediments undergo gradual compaction as additional layers pile on top, creating immense pressure'."
+        },
+        {
+          "qid": "ap_gen_1780213721866_001_q3",
+          "question_type": "inference",
+          "stem": "What can be inferred from paragraph 2 about the dating of ancient rock formations?",
+          "options": {
+            "A": "It is usually straightforward using the cementation rate.",
+            "B": "It relies primarily on the thickness of sediment layers.",
+            "C": "It is unaffected by later geological disturbances.",
+            "D": "It can be complicated by changes that occur after formation."
+          },
+          "correct_answer": "D",
+          "explanation": "The last sentence notes 'challenges remain in precisely dating ancient formations, as later geological events can alter the rock structure,' implying complications from post-formation changes."
+        },
+        {
+          "qid": "ap_gen_1780213721866_001_q4",
+          "question_type": "rhetorical_purpose",
+          "stem": "Why does the author mention 'calcite or silica' in paragraph 2?",
+          "options": {
+            "A": "To illustrate the types of minerals involved in cementation.",
+            "B": "To contrast the properties of different sedimentary rocks.",
+            "C": "To explain why compaction alone is insufficient.",
+            "D": "To provide examples of weathered material."
+          },
+          "correct_answer": "A",
+          "explanation": "The passage mentions 'depositing minerals like calcite or silica' to give concrete examples of the minerals that bind particles during cementation."
+        },
+        {
+          "qid": "ap_gen_1780213721866_001_q5",
+          "question_type": "insert_text",
+          "stem": "There are four locations [■] in the passage that indicate where the following sentence could be added. 'And because of the consistent layering, sedimentary rocks often preserve fossils that help geologists reconstruct ancient environments.' Where would the sentence best fit? Select a location to add the sentence to the passage.",
+          "options": {
+            "A": "Location 1 (after 'years.')",
+            "B": "Location 2 (after 'bodies.')",
+            "C": "Location 3 (after 'space.')",
+            "D": "Location 4 (after 'structure.')"
+          },
+          "correct_answer": "C",
+          "explanation": "The sentence about consistent layering and fossils logically elaborates on the compaction and pore space reduction just described at Location 3, before moving to the cementation phase at Location 4."
+        }
+      ],
+      "question_count": 5
+    }
+  ],
+  "rejected": [
+    {
+      "id": "ap_gen_1780213721866_002",
+      "reason": "passage_length: 106 words (need 110-230; real 2026改后 is 150-210); Q4: stem must be a non-empty string"
+    },
+    {
+      "id": "ap_gen_1780213721866_003",
+      "reason": "passage_length: 93 words (need 110-230; real 2026改后 is 150-210)"
+    },
+    {
+      "id": "ap_gen_1780213721866_004",
+      "reason": "passage_length: 100 words (need 110-230; real 2026改后 is 150-210)"
+    },
+    {
+      "id": "ap_gen_1780213721866_005",
+      "reason": "passage_length: 94 words (need 110-230; real 2026改后 is 150-210)"
+    }
+  ]
+}

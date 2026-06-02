@@ -1,0 +1,460 @@
+{
+  "items": [
+    {
+      "genre": "email",
+      "variant": "short",
+      "text": "Hi Daniel,\n\nYour meal plan ended with an unused balance of $42.50. We have processed a refund to your student account, minus a $5 administrative fee. Please allow three business days for it to appear.\n\nBest,\nCampus Dining Services",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, how much is the administrative fee?",
+          "options": {
+            "A": "Five dollars",
+            "B": "Three dollars",
+            "C": "Ten dollars",
+            "D": "Forty dollars"
+          },
+          "correct_answer": "A",
+          "explanation": "The email states the refund is processed 'minus a $5 administrative fee,' so the fee is five dollars."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about when Daniel will receive his refund?",
+          "options": {
+            "A": "It will arrive immediately after the email.",
+            "B": "It must be picked up in person.",
+            "C": "It will not be available the same day.",
+            "D": "It will be mailed as a paper check."
+          },
+          "correct_answer": "C",
+          "explanation": "Because the email asks Daniel to allow three business days for the refund to appear, it cannot be available on the same day he reads the message."
+        }
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "genre": "email",
+      "variant": "short",
+      "text": "Dear Priya,\n\nYour parking permit is ready for pickup at the Transportation Office in Lewis Hall, Room 108. Please come by before Friday, April 18, and bring your student ID and license plate number.\n\nThank you,\nCampus Transportation",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what must Priya bring to pick up her permit?",
+          "options": {
+            "A": "Her course schedule and a photo",
+            "B": "A parking map and a receipt",
+            "C": "Her tuition statement and a key",
+            "D": "Her student ID and license plate number"
+          },
+          "correct_answer": "D",
+          "explanation": "The email instructs Priya to bring her student ID and license plate number when picking up the permit."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about picking up the permit after Friday, April 18?",
+          "options": {
+            "A": "It will be delivered to her dorm instead.",
+            "B": "It will cost an additional late charge.",
+            "C": "It will require approval from a professor.",
+            "D": "It may no longer be possible as planned."
+          },
+          "correct_answer": "D",
+          "explanation": "Since Priya is told to come by before the April 18 deadline, picking it up as arranged may no longer be possible after that date."
+        }
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "genre": "notice",
+      "variant": "short",
+      "text": "NOTICE: HVAC maintenance will be performed in Carver Hall from May 6 to May 8. Heating and cooling will be shut off during this period, and indoor temperatures may rise. Occupants are advised to keep windows open and stay hydrated.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what will happen during the maintenance period?",
+          "options": {
+            "A": "The climate control system will be turned off.",
+            "B": "The building entrance will be locked daily.",
+            "C": "The elevators will be temporarily unavailable.",
+            "D": "The water supply will be shut down."
+          },
+          "correct_answer": "A",
+          "explanation": "The notice states that heating and cooling will be shut off, meaning the climate control system will be turned off."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about conditions inside Carver Hall during the maintenance?",
+          "options": {
+            "A": "The building will become unusually quiet.",
+            "B": "The building will feel warmer than usual.",
+            "C": "The building will be completely closed off.",
+            "D": "The building will smell of fresh paint."
+          },
+          "correct_answer": "B",
+          "explanation": "Because cooling is shut off and indoor temperatures may rise, occupants can infer the building will feel warmer than usual."
+        }
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "genre": "email",
+      "variant": "short",
+      "text": "Hi Marcus,\n\nThanks for volunteering as a campus tour guide! Your shift is confirmed for Saturday, May 10, from 10:00 AM at the Visitor Center. Lunch is provided, and you'll receive a $15 bookstore voucher afterward.\n\nWarm regards,\nAdmissions Office",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what will Marcus receive after his shift?",
+          "options": {
+            "A": "A free parking pass",
+            "B": "A fifteen-dollar bookstore voucher",
+            "C": "A printed certificate",
+            "D": "A campus dining credit"
+          },
+          "correct_answer": "B",
+          "explanation": "The email states Marcus will receive a $15 bookstore voucher after his shift."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about Marcus's arrangements for the day?",
+          "options": {
+            "A": "He needs to reserve a parking spot.",
+            "B": "He should arrive the evening before.",
+            "C": "He does not need to bring his own meal.",
+            "D": "He must complete a written test first."
+          },
+          "correct_answer": "C",
+          "explanation": "Since lunch is provided during the shift, Marcus can infer that he does not need to bring his own meal."
+        }
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "genre": "notice",
+      "variant": "short",
+      "text": "NOTICE: The Hartwell Library study rooms will be closed for recarpeting on March 12 and 13. Reservations made for those dates have been canceled. Students may book alternative rooms in the Annex by contacting the front desk at extension 4420.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, why will the study rooms be closed?",
+          "options": {
+            "A": "New flooring is being installed.",
+            "B": "A private event is being hosted.",
+            "C": "An inspection is being conducted.",
+            "D": "The lighting is being replaced."
+          },
+          "correct_answer": "A",
+          "explanation": "The notice states the study rooms will be closed for recarpeting, which means new flooring is being installed."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about students who had booked rooms for March 12?",
+          "options": {
+            "A": "They will receive a partial refund.",
+            "B": "They will be charged a rebooking fee.",
+            "C": "They will need to make other arrangements.",
+            "D": "They will be moved to the same floor."
+          },
+          "correct_answer": "C",
+          "explanation": "Because existing reservations for those dates have been canceled, affected students will need to make other arrangements, such as booking an Annex room."
+        }
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "genre": "social_media",
+      "variant": "short",
+      "text": "Reminder from the Outdoor Club! Our spring hike to Cedar Ridge is this Sunday, May 4, leaving the Rec Center at 8:00 AM sharp. Sign-up costs $6 and covers the van. Bring water and sturdy shoes. Spots are filling fast!",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the post, what does the sign-up fee cover?",
+          "options": {
+            "A": "The transportation by van",
+            "B": "The trail entrance ticket",
+            "C": "The packed lunch box",
+            "D": "The rental hiking gear"
+          },
+          "correct_answer": "A",
+          "explanation": "The post states the $6 sign-up fee covers the van, meaning it pays for transportation."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about students who want to join the hike?",
+          "options": {
+            "A": "They should register without much delay.",
+            "B": "They can pay in cash on the trail.",
+            "C": "They must attend a safety meeting first.",
+            "D": "They will be picked up from their dorms."
+          },
+          "correct_answer": "A",
+          "explanation": "Because spots are described as filling fast, students who want to join should register without much delay."
+        }
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "genre": "flyer",
+      "variant": "short",
+      "text": "USED TEXTBOOK SALE! Student Union Lobby, Tuesday, January 23, 11:00 AM to 3:00 PM. Hundreds of titles from $4. Cash only. Bring your booklist! Proceeds support the campus food pantry. Early arrival recommended for the best selection.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the flyer, how can buyers pay for textbooks?",
+          "options": {
+            "A": "With cash only",
+            "B": "With a student card",
+            "C": "By mobile app",
+            "D": "By credit card"
+          },
+          "correct_answer": "A",
+          "explanation": "The flyer states 'Cash only,' so buyers can pay only with cash."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about students who arrive late to the sale?",
+          "options": {
+            "A": "They may find fewer titles available.",
+            "B": "They will pay a higher entry price.",
+            "C": "They can reserve books in advance.",
+            "D": "They must show a valid booklist."
+          },
+          "correct_answer": "A",
+          "explanation": "Because early arrival is recommended for the best selection, students who come late may find fewer titles available."
+        }
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "genre": "notice",
+      "variant": "short",
+      "text": "NOTICE: The shuttle stop outside Bramley Hall will be relocated to Maple Street beginning Monday, February 5, due to construction. The first morning departure remains at 7:15 AM. Riders should consult the updated route map posted at the Student Services desk.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what time is the first morning departure?",
+          "options": {
+            "A": "At 7:15 in the morning",
+            "B": "At 8:00 in the morning",
+            "C": "At 6:30 in the morning",
+            "D": "At 9:15 in the morning"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice states that the first morning departure remains at 7:15 AM."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about why the shuttle stop is being moved?",
+          "options": {
+            "A": "A building project is underway nearby.",
+            "B": "The old stop was rarely used.",
+            "C": "A new bus line is being added.",
+            "D": "The street is being renamed."
+          },
+          "correct_answer": "A",
+          "explanation": "Because the notice attributes the relocation to construction, it can be inferred that a building project is underway nearby."
+        }
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "genre": "email",
+      "text": "Subject: Free Bicycle Maintenance Clinic — Saturday, October 18\n\nHi Riders,\n\nThe Campus Sustainability Office invites all students to a free bicycle maintenance clinic on Saturday, October 18, from 9:00 AM to 1:00 PM behind Foster Hall. There's no charge to attend, and you don't need to register in advance — just show up with your bike.\n\nOur volunteer mechanics will teach you how to fix a flat tire, adjust your brakes, and clean your chain. We'll supply all the tools, so leave yours at home. If you'd like to keep a basic repair kit afterward, you can purchase one at the clinic for a discounted price of $12, payable by card only.\n\nWe'll also be running a free safety-light giveaway for the first 40 students who complete the brake check, so it's worth arriving early. Light snacks and water will be available throughout the morning.\n\nQuestions? Email me at sustainability@campus.edu before October 17.\n\nBest regards,\nDaniel Ortega\nSustainability Office Coordinator",
+      "format_metadata": {
+        "from": "Daniel Ortega <sustainability@campus.edu>",
+        "to": "All Students",
+        "subject": "Free Bicycle Maintenance Clinic — Saturday, October 18"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what do students need to do to obtain a repair kit?",
+          "options": {
+            "A": "Register for the clinic before October 17",
+            "B": "Pay twelve dollars using a card at the clinic",
+            "C": "Bring their own tools to the event",
+            "D": "Complete the brake check before noon"
+          },
+          "correct_answer": "B",
+          "explanation": "The email states a basic repair kit can be purchased at the clinic for a discounted price of $12, payable by card only. Option A confuses the (waived) registration; C reverses the tools instruction (the office supplies tools); D borrows the brake-check detail tied to the light giveaway, not the kit."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about students who arrive after the clinic has been busy for a while?",
+          "options": {
+            "A": "They will be charged a small late fee",
+            "B": "They may miss the free safety lights",
+            "C": "They must bring their own repair tools",
+            "D": "They will need to register on arrival"
+          },
+          "correct_answer": "B",
+          "explanation": "Since the safety lights go to the first 40 students who complete the brake check and the email urges arriving early, late arrivals may miss the giveaway. A introduces a fee not mentioned; C reverses the supplied-tools detail; D contradicts the no-registration policy."
+        },
+        {
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this email?",
+          "options": {
+            "A": "To invite students to a free bike repair workshop",
+            "B": "To announce a new campus cycling fee policy",
+            "C": "To recruit volunteer mechanics for the office",
+            "D": "To remind students about a parking deadline"
+          },
+          "correct_answer": "A",
+          "explanation": "The email's purpose is to invite students to a free maintenance clinic where they learn basic repairs. B introduces a fee policy not present; C reverses the roles (mechanics are already arranged); D is an unrelated topic."
+        }
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "genre": "notice",
+      "text": "VENDING MACHINE REFUND PROCEDURE\n\nOffice of Student Facilities — Effective September 1\n\nStudents who lose money in any campus vending machine may now request a refund through the Facilities Office in Room 110 of Bradley Hall. Refunds are processed in person between 8:30 AM and 4:30 PM, Monday through Friday.\n\nTo be reimbursed, the following information must be provided:\n\n- The machine location and its six-digit ID number, printed on the front panel\n- The date and approximate time of the failed purchase\n- The amount lost, which may not exceed $5.00 per claim\n\nClaims are reviewed within two business days, and approved refunds are issued in cash. Amounts above $5.00 must instead be reported to the vending company using the toll-free number listed on each machine.\n\nPlease note that receipts are not required, but repeated claims from the same student may be verified against machine records. Machines found to be faulty are removed from service until repaired.\n\nFor questions, contact the Facilities Office at facilities@campus.edu or stop by Room 110.",
+      "format_metadata": {
+        "from": "Office of Student Facilities",
+        "to": "All Students",
+        "subject": "Vending Machine Refund Procedure"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what information must a student provide to receive a refund?",
+          "options": {
+            "A": "A receipt showing the failed purchase amount",
+            "B": "The machine's six-digit identification number",
+            "C": "A toll-free claim number from the company",
+            "D": "An email confirmation from the Facilities Office"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice lists the machine's six-digit ID number among the required information. A is contradicted (receipts are not required); C borrows the toll-free number, which is for amounts over $5.00, not a required claim detail; D introduces an email confirmation not mentioned."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about a student who loses $8.00 in a vending machine?",
+          "options": {
+            "A": "They will receive a cash refund within two days",
+            "B": "They must visit Room 110 in person to claim it",
+            "C": "They should contact the vending company directly",
+            "D": "They cannot recover any of the lost money"
+          },
+          "correct_answer": "C",
+          "explanation": "Because claims may not exceed $5.00 and larger amounts must be reported to the vending company by phone, an $8.00 loss should be directed to the company. A and B describe the in-office process that applies only to claims of $5.00 or less; D wrongly assumes no recovery is possible."
+        },
+        {
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this notice?",
+          "options": {
+            "A": "To announce that faulty machines are being replaced",
+            "B": "To warn students against filing repeated claims",
+            "C": "To advertise new vending machines on campus",
+            "D": "To explain how students can recover lost money"
+          },
+          "correct_answer": "D",
+          "explanation": "The notice's central purpose is to explain the procedure for recovering money lost in vending machines. A and B each capture only a single minor detail (faulty-machine removal; repeated-claim verification); C introduces advertising of new machines, which is absent."
+        }
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "genre": "notice",
+      "text": "EXTENDED LIBRARY HOURS DURING FINAL EXAMS\n\nMorrison Library — Notice to All Students\n\nBeginning Monday, December 8, Morrison Library will extend its operating hours to support students during the final examination period. The library will remain open from 7:00 AM until 2:00 AM daily, including weekends, through December 19.\n\nThe following services will be available during the extended period:\n\n- Group study rooms on the second floor, bookable online through the student portal for up to three hours\n- A quiet study zone on the fourth floor, where talking and phone calls are not permitted\n- Free coffee and tea in the main lobby after 9:00 PM, sponsored by the Student Union\n\nTo access the building after 11:00 PM, students must tap their valid student ID card at the side entrance on Wexler Street; the main doors will be locked at that time for safety. Guests and visitors are not admitted during late-night hours.\n\nLaptops and chargers may be borrowed from the front desk for a refundable deposit of $20. Items must be returned before closing each day.\n\nFor assistance, please contact the circulation desk at 555-0192.",
+      "format_metadata": {
+        "from": "Morrison Library",
+        "to": "All Students",
+        "subject": "Extended Library Hours During Final Exams"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, how can students enter the library after 11:00 PM?",
+          "options": {
+            "A": "By signing a guest register in the main lobby",
+            "B": "By tapping a student ID at the side entrance",
+            "C": "By paying a refundable deposit at the desk",
+            "D": "By booking a study room through the portal"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice states that to enter after 11:00 PM, students must tap a valid student ID card at the Wexler Street side entrance. A introduces a guest register, and guests are explicitly barred at night; C borrows the laptop deposit detail; D borrows the study-room booking, which is unrelated to entry."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about a visitor who wishes to use the library at midnight?",
+          "options": {
+            "A": "They may enter through the main doors freely",
+            "B": "They can borrow a laptop with a deposit",
+            "C": "They will not be allowed inside the building",
+            "D": "They must reserve a study room in advance"
+          },
+          "correct_answer": "C",
+          "explanation": "Since guests and visitors are not admitted during late-night hours and midnight falls after 11:00 PM, a visitor would be turned away. A contradicts the locked main doors; B and D describe services available to enrolled students, not late-night visitors."
+        },
+        {
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this notice?",
+          "options": {
+            "A": "To announce a new fee for library laptops",
+            "B": "To describe a recent renovation of the library",
+            "C": "To recruit student volunteers for exam week",
+            "D": "To inform students of extended exam-period hours"
+          },
+          "correct_answer": "D",
+          "explanation": "The notice's main purpose is to inform students that library hours and related services are extended for finals. A captures only the laptop-deposit detail and mislabels it a fee; B introduces a renovation not mentioned; C introduces volunteer recruitment absent from the text."
+        }
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "genre": "notice",
+      "text": "FALL CAREER FAIR — REGISTRATION NOW OPEN\n\nCareer Development Center — Hartwell Student Center, Room 305\n\nThe annual Fall Career Fair will be held on Thursday, November 6, from 10:00 AM to 4:00 PM in the Hartwell Ballroom. More than sixty employers from technology, healthcare, and finance will attend, and all currently enrolled students are welcome.\n\nStudents are strongly encouraged to prepare before attending:\n\n- Register online through the Career Center portal by November 3 to receive a printed name badge\n- Upload a current resume for the optional employer resume book; the upload closes November 1\n- Reserve a free 15-minute mock interview, offered on a first-come, first-served basis\n\nProfessional attire is expected. A coat check will be available near the ballroom entrance at no cost. Students who did not register in advance may still attend but must sign in at the front desk and wait for a handwritten badge, which may cause delays.\n\nResume printing is available at the Career Center for $0.25 per page on the day of the event. For questions, email careers@campus.edu or visit Room 305 during office hours, 9:00 AM to 5:00 PM.",
+      "format_metadata": {
+        "from": "Career Development Center",
+        "to": "All Students",
+        "subject": "Fall Career Fair — Registration Now Open"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what must students do by November 3?",
+          "options": {
+            "A": "Upload a resume to the employer book",
+            "B": "Register online to get a printed badge",
+            "C": "Reserve a slot for a mock interview",
+            "D": "Pay a fee for on-site resume printing"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice states students should register online by November 3 to receive a printed name badge. A swaps the deadline (resume upload closes November 1); C describes the mock interview, which has no listed deadline; D borrows the printing fee, which applies on the event day, not as a November 3 task."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about a student who arrives without registering in advance?",
+          "options": {
+            "A": "They will be turned away at the front desk",
+            "B": "They must pay a fee to enter the ballroom",
+            "C": "They may experience a wait for a badge",
+            "D": "They cannot speak with any employers"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice says unregistered students may attend but must wait for a handwritten badge, which may cause delays — implying a wait. A contradicts the statement that they may still attend; B introduces an entry fee not mentioned; D wrongly assumes they are barred from employers."
+        },
+        {
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this notice?",
+          "options": {
+            "A": "To report the results of last year's career fair",
+            "B": "To advertise paid resume-writing workshops",
+            "C": "To announce a change in the event's location",
+            "D": "To inform students about the fair and how to prepare"
+          },
+          "correct_answer": "D",
+          "explanation": "The notice's central purpose is to announce the Fall Career Fair and explain how students should prepare and register. A introduces past results not present; B introduces paid workshops absent from the text; C captures no stated location change."
+        }
+      ],
+      "difficulty": "medium"
+    }
+  ]
+}
