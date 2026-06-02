@@ -6,6 +6,7 @@ import { buildHistoryEntries, buildHistoryStats } from "../lib/history/viewModel
 import { startRetryFromHistory, buildRetryHref } from "../lib/history/retry";
 import { isV1Session } from "../lib/history/bankVersion";
 import { getBandColor } from "../lib/history/bandColor";
+import { relativeDateLabel } from "../lib/history/dateGroup";
 import { formatLocalDateTime, translateGrammarPoint } from "../lib/utils";
 import { ChevronIcon, FONT, NEUTRAL } from "./shared/ui";
 import { HistoryRow } from "./history/HistoryRow";
@@ -1243,11 +1244,7 @@ export function ProgressView({ onBack }) {
                       return filteredPractice.map((entry) => {
                         const s = entry.session;
                         const d = new Date(s.date);
-                        const today = new Date();
-                        const yesterday = new Date(today); yesterday.setDate(today.getDate() - 1);
-                        const isToday = d.toDateString() === today.toDateString();
-                        const isYesterday = d.toDateString() === yesterday.toDateString();
-                        const dateLabel = isToday ? "今天" : isYesterday ? "昨天" : `${d.getMonth() + 1}月${d.getDate()}日`;
+                        const dateLabel = relativeDateLabel(d);
                         const showDateHeader = dateLabel !== lastDateLabel;
                         lastDateLabel = dateLabel;
 

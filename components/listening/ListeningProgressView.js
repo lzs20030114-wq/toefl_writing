@@ -3,10 +3,12 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { C, FONT, Btn, PageShell, SurfaceCard, TopBar, ChevronIcon, ModeChip, NEUTRAL } from "../shared/ui";
 import { StatCard } from "../shared/StatCard";
+import { AccuracyTrendChart } from "../shared/AccuracyTrendChart";
 import { loadHist, deleteSession, clearAllSessions, SESSION_STORE_EVENTS, setCurrentUser } from "../../lib/sessionStore";
 import { getSavedCode } from "../../lib/AuthContext";
 import { formatLocalDateTime } from "../../lib/utils";
-import { buildDailyAveragePoints, formatMonthDayFromDateKey, getAccuracyPercent } from "../../lib/history/scoreMetrics";
+import { buildDailyAveragePoints, getAccuracyPercent } from "../../lib/history/scoreMetrics";
+import { relativeDateLabel } from "../../lib/history/dateGroup";
 
 const ACCENT = { color: "#8B5CF6", soft: "#F5F3FF" };
 
@@ -59,40 +61,9 @@ function normalizeListeningSession(s) {
 // -- Trend Chart (SVG) --
 
 function ListeningTrendChart({ sessions, filter }) {
-  const svgRef = useRef(null);
-
   const filtered = filter === "all" ? sessions : sessions.filter(s => s.details?.subtype === filter);
   const pts = buildDailyAveragePoints(filtered, getAccuracyPercent);
-
-  if (pts.length < 2) return <div style={{ padding: "16px 0", textAlign: "center", fontSize: 11, color: P.textDim }}>练习 2 天以上后显示趋势</div>;
-
-  const W = 400, H = 120, ML = 30, MR = 10, MT = 10, MB = 22;
-  const cW = W - ML - MR, cH = H - MT - MB;
-  const minTs = Math.min(...pts.map(p => p.ts)), maxTs = Math.max(...pts.map(p => p.ts));
-  const span = maxTs - minTs || 864e5;
-  const toX = ts => ML + ((ts - minTs) / span) * cW;
-  const toY = v => MT + (1 - v / 100) * cH;
-
-  const pathD = pts.map((p, i) => `${i === 0 ? "M" : "L"}${toX(p.ts).toFixed(1)},${toY(p.avg).toFixed(1)}`).join(" ");
-
-  return (
-    <svg ref={svgRef} viewBox={`0 0 ${W} ${H}`} width="100%" style={{ display: "block" }}>
-      {[0, 50, 100].map(y => (
-        <g key={y}>
-          <line x1={ML} y1={toY(y)} x2={ML + cW} y2={toY(y)} stroke="#edf2ef" strokeWidth={1} strokeDasharray="3,3" />
-          <text x={ML - 4} y={toY(y) + 3} fontSize={8} fill={P.textDim} textAnchor="end">{y}%</text>
-        </g>
-      ))}
-      <path d={pathD} fill="none" stroke={ACCENT.color} strokeWidth={2} strokeLinecap="round" />
-      {pts.map((p, i) => <circle key={i} cx={toX(p.ts).toFixed(1)} cy={toY(p.avg).toFixed(1)} r={3} fill="#fff" stroke={ACCENT.color} strokeWidth={1.5} />)}
-      {pts.length > 0 && (() => {
-        const dates = [pts[0], pts[pts.length - 1]];
-        return dates.map((p, i) => {
-          return <text key={i} x={toX(p.ts)} y={H - 4} fontSize={8} fill={P.textDim} textAnchor={i === 0 ? "start" : "end"}>{formatMonthDayFromDateKey(p.date)}</text>;
-        });
-      })()}
-    </svg>
-  );
+  return <AccuracyTrendChart pts={pts} accentColor={ACCENT.color} ticks={[0, 50, 100]} maxValue={100} tickSuffix="%" />;
 }
 
 // -- Session Row --
@@ -583,9 +554,7 @@ export function ListeningProgressView({ onBack }) {
                   let lastLabel = "";
                   return filtered.map((s, i) => {
                     const d = new Date(s.date);
-                    const today = new Date();
-                    const yesterday = new Date(today); yesterday.setDate(today.getDate() - 1);
-                    const label = d.toDateString() === today.toDateString() ? "今天" : d.toDateString() === yesterday.toDateString() ? "昨天" : `${d.getMonth() + 1}月${d.getDate()}日`;
+                    const label = relativeDateLabel(d);
                     const showHeader = label !== lastLabel;
                     lastLabel = label;
                     const sourceIdx = hist.sessions.indexOf(s);
