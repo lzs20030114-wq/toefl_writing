@@ -17,5 +17,7 @@ export async function GET(request, { params }) {
   if (!/\.(mp3|wav|ogg|opus|aac|flac)$/i.test(filePath) || filePath.includes("..") || filePath.includes("\\")) {
     return NextResponse.json({ error: "Invalid path" }, { status: 403 });
   }
-  return NextResponse.redirect(new URL(`/listening-audio/${filePath}`, request.url), 308);
+  const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  if (!base) return NextResponse.json({ error: "Audio storage not configured" }, { status: 500 });
+  return NextResponse.redirect(`${base}/storage/v1/object/public/listening_audio/${filePath}`, 308);
 }
