@@ -73,6 +73,37 @@ function DistributionBlock({ title, dist, color }) {
   );
 }
 
+// Renders one matrix question: each dimension is a labeled group of scale bars.
+function MatrixBlock({ title, matrix, color }) {
+  const answered = Array.isArray(matrix) && matrix.some((d) => d.total > 0);
+  if (!answered) {
+    return (
+      <SectionCard title={title}>
+        <EmptyState title="暂无作答" hint="提交后会在这里聚合分布" />
+      </SectionCard>
+    );
+  }
+  return (
+    <SectionCard title={title}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+        {matrix.map((dim) => {
+          const max = Math.max(...dim.options.map((o) => o.count), 1);
+          return (
+            <div key={dim.key}>
+              <div style={{ fontSize: 12.5, fontWeight: 600, color: C.t1, marginBottom: 6 }}>
+                {dim.label} <span style={{ color: C.t3, fontWeight: 400 }}>· {dim.total} 人</span>
+              </div>
+              {dim.options.map((o) => (
+                <DistributionBar key={o.value} label={o.label} count={o.count} pct={o.pct} total={max} color={color} />
+              ))}
+            </div>
+          );
+        })}
+      </div>
+    </SectionCard>
+  );
+}
+
 function TrendChart({ trend }) {
   if (!trend || trend.length === 0) return <EmptyState title="暂无数据" />;
   const max = Math.max(...trend.map((d) => d.submitted + d.dismissed), 1);
@@ -124,6 +155,15 @@ const Q2_BADGE_COLOR = {
   maybe: "#d97706",
   probably_not: "#dc2626",
 };
+const VARIANT_BADGE_COLOR = {
+  v1: "#0891b2",
+  new: "#16a34a",
+  legacy: "#94a3b8",
+};
+const RECALL_BADGE_COLOR = {
+  clear: "#0891b2",
+  fuzzy: "#94a3b8",
+};
 
 export default function AdminSurveysPage() {
   const [data, setData] = useState(null);
@@ -156,6 +196,7 @@ export default function AdminSurveysPage() {
 
   const stats = data?.stats;
   const distributions = data?.distributions;
+  const matrices = data?.matrices;
   const trend = data?.trend;
   const comments = data?.comments || [];
   const labels = data?.labels || {};
@@ -273,12 +314,31 @@ export default function AdminSurveysPage() {
             ))
           ) : (
             <>
-              <DistributionBlock title="Q1 · 这套题感觉怎么样?" dist={distributions?.q1} color="#16a34a" />
-              <DistributionBlock title="Q2 · Pro 期间打算?" dist={distributions?.q2} color={C.blue} />
-              <DistributionBlock title="Q3 · 影响最大的一点?" dist={distributions?.q3} color="#7c3aed" />
+              <DistributionBlock title="人群分布(老用户 / 新用户)" dist={distributions?.variant} color={C.nav} />
+              <DistributionBlock title="这套题感觉怎么样?(新用户)" dist={distributions?.q1} color="#16a34a" />
+              <DistributionBlock title="对 V1 还有印象吗?(老用户)" dist={distributions?.recall} color="#0891b2" />
+              <DistributionBlock title="Pro 期间打算?" dist={distributions?.q2} color={C.blue} />
+              <DistributionBlock title="影响最大的一点?" dist={distributions?.q3} color="#7c3aed" />
             </>
           )}
         </div>
+
+        {/* Matrix questions (各维度评价) */}
+        {!loading && (
+          <div
+            className="adm-grid-3"
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+              gap: 14,
+              marginBottom: 14,
+            }}
+          >
+            <MatrixBlock title="新用户 · 各维度评价" matrix={matrices?.newAbs} color="#16a34a" />
+            <MatrixBlock title="老用户(印象清楚)· 相比 V1" matrix={matrices?.v1Cmp} color="#0891b2" />
+            <MatrixBlock title="老用户(记不清)· V2 绝对评价" matrix={matrices?.v1Abs} color="#7c3aed" />
+          </div>
+        )}
 
         {/* Comments */}
         <div style={{ marginBottom: 14 }}>
@@ -303,6 +363,8 @@ export default function AdminSurveysPage() {
                       <span style={{ fontFamily: "monospace", fontSize: 11, fontWeight: 700, color: C.nav }}>
                         {c.user_code || "—"}
                       </span>
+                      {c.variant && <Badge color={VARIANT_BADGE_COLOR[c.variant] || "#64748b"}>{labels.variant?.[c.variant] || c.variant}</Badge>}
+                      {c.recall && <Badge color={RECALL_BADGE_COLOR[c.recall] || "#64748b"}>{labels.recall?.[c.recall] || c.recall}</Badge>}
                       {c.q1 && <Badge color={Q1_BADGE_COLOR[c.q1] || "#64748b"}>{labels.q1?.[c.q1] || c.q1}</Badge>}
                       {c.q2 && <Badge color={Q2_BADGE_COLOR[c.q2] || "#64748b"}>{labels.q2?.[c.q2] || c.q2}</Badge>}
                       {c.q3 && <Badge color="#7c3aed">{c.q3Label || c.q3}</Badge>}
