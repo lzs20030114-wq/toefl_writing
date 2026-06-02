@@ -180,6 +180,18 @@ export function MockExamResult({
         })}
       </div>
 
+      {/* Review hint — the per-task feedback is also kept in the practice
+          records, so users can revisit the full report later. */}
+      <div style={{
+        display: "flex", alignItems: "flex-start", gap: 8,
+        background: "#eff6ff", border: "1px solid #bfdbfe",
+        borderRadius: 8, padding: "11px 14px",
+        fontSize: 13, color: C.t2, lineHeight: 1.6,
+      }}>
+        <span style={{ fontSize: 15, flexShrink: 0 }}>{"\u{1F4A1}"}</span>
+        <span>本次模考已保存，之后可在首页 <strong style={{ color: C.blue }}>练习记录</strong> 中再次查看答题详情与 AI 批改。</span>
+      </div>
+
       {/* Actions */}
       <div style={{ display: "flex", gap: 10 }}>
         {scoringPhase !== "pending" && canRetryScoring && typeof onRetryScoring === "function" && (

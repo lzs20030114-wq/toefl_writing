@@ -788,6 +788,18 @@ function ResultsCard({ score, elapsed, onRestart, onExit }) {
         </div>
       </SurfaceCard>
 
+      {/* Review hint — speaking mocks save a score summary (no per-question
+          answer key, unlike reading/listening), so word this as "回看成绩". */}
+      <div style={{
+        display: "flex", alignItems: "flex-start", gap: 8,
+        background: "#FFF7ED", border: "1px solid #FED7AA",
+        borderRadius: 8, padding: "11px 14px",
+        fontSize: 13, color: C.t2, lineHeight: 1.6,
+      }}>
+        <span style={{ fontSize: 15, flexShrink: 0 }}>{"💡"}</span>
+        <span>{"本次模考成绩已保存，可在首页 "}<strong style={{ color: ACCENT }}>{"口语练习记录"}</strong>{" 中回看。"}</span>
+      </div>
+
       {/* Actions */}
       <div style={{ display: "flex", gap: 10 }}>
         <Btn onClick={onRestart} style={{ background: ACCENT, borderColor: ACCENT }}>

@@ -1215,6 +1215,19 @@ function ResultsCard({ score, m1Results, m2Results, config, onRestart, onExit })
         </div>
       </SurfaceCard>
 
+      {/* Review hint — the completion screen shows only the band; the
+          per-question review (right/wrong + AI explanation) lives in the
+          practice records, so point users there before they leave. */}
+      <div style={{
+        display: "flex", alignItems: "flex-start", gap: 8,
+        background: config.accentSoft, border: `1px solid ${config.accent}33`,
+        borderRadius: 8, padding: "11px 14px",
+        fontSize: 13, color: C.t2, lineHeight: 1.6,
+      }}>
+        <span style={{ fontSize: 15, flexShrink: 0 }}>{"\u{1F4A1}"}</span>
+        <span>想回看每道题的作答与解析？可在首页 <strong style={{ color: config.accent }}>{config.labelZh}练习记录</strong> 中查看本次模考详情。</span>
+      </div>
+
       {/* Actions */}
       <div style={{ display: "flex", gap: 10 }}>
         <Btn onClick={onRestart} style={{ background: config.accent, borderColor: config.accent }}>
