@@ -1,0 +1,281 @@
+{
+  "type": "listenAcademicTalk",
+  "version": 2,
+  "generated_at": "2026-05-31T07:44:06.367Z",
+  "total_generated": 3,
+  "total_accepted": 3,
+  "acceptance_rate": 1,
+  "tts_generated": false,
+  "tts_provider": null,
+  "batch_quality": {
+    "avg_flavor": 0.66,
+    "answer_distribution": {
+      "A": 3,
+      "B": 1,
+      "C": 5,
+      "D": 3
+    },
+    "balanced": true,
+    "q_type_distribution": {
+      "main_idea": 3,
+      "detail": 3,
+      "function": 5,
+      "inference": 1
+    },
+    "subject_distribution": {
+      "art_history": 1,
+      "biology": 1,
+      "cognitive_psychology": 1
+    },
+    "difficulty_distribution": {
+      "easy": 1,
+      "medium": 1,
+      "hard": 1
+    },
+    "register_metrics": {
+      "contractionRate": 67,
+      "discourseMarkerRate": 100,
+      "youAddressRate": 33,
+      "questionRate": 33
+    },
+    "correct_is_longest_rate": 67,
+    "avg_word_count": 196
+  },
+  "items": [
+    {
+      "subject": "art_history",
+      "topic": "why Impressionists painted outdoors and what that meant for color theory",
+      "difficulty": "easy",
+      "transcript": "Impressionism is a pivotal art movement that emerged in France in the late nineteenth century. One of its defining innovations was painting outdoors, what the artists called 'en plein air.' Before this, most painters worked inside a studio, creating highly finished works based on sketches and careful studio lighting. The Impressionists rejected that approach. They set up their easels in fields, along riverbanks, and in city streets to capture the fleeting effects of natural light. This shift had profound consequences for color theory. When you paint outdoors, you notice that shadows are not simply gray or black. They contain reflected colors from the surroundings. A shadow on snow might appear blue because it reflects the sky. The Impressionists began using pure, unmixed colors straight from the tube, applying them in small visible brushstrokes. They understood that the viewer's eye would blend these colors optically rather than having the painter mix them on a palette. This technique, called optical mixing, produced more vibrant and luminous paintings. It was a radical departure from the academic tradition of smooth, blended surfaces and dark, brownish shadows. The movement ultimately changed how we see and represent the visual world.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the lecture mainly about?",
+          "options": {
+            "A": "How painting outdoors changed the Impressionists' approach to color",
+            "B": "The life of French painters in the late nineteenth century",
+            "C": "The difference between sketching and finished paintings",
+            "D": "Why shadows appear blue in winter landscapes"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。讲座主要讨论了印象派画家在户外作画（en plein air）这一创新，以及这一实践如何改变了他们对色彩的处理方式，特别是光学混合技法的运用。B选项过于宽泛，讲座并非关于画家的生平。C选项过于狭窄，讲座中提到素描和完成作品只是为了对比。D选项是一个具体的细节，不是讲座的主要论点。干扰项类型：B是wrong_topic，C是too_narrow，D是surface_word_trap。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "C": "wrong_topic",
+            "D": "surface_word_trap"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "According to the professor, what is 'optical mixing'?",
+          "options": {
+            "A": "A technique where painters mix colors on a palette before applying them",
+            "B": "A method of using only black and white to create shadows",
+            "C": "A process where the viewer's eye blends separate brushstrokes of pure color",
+            "D": "A style of painting that uses only large, smooth areas of color"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。教授明确解释光学混合是观众的眼睛在视觉上混合未调和的纯色笔触，而不是画家在调色板上混合。A选项描述的是传统工作室绘画的方法，与光学混合相反。B选项未在讲座中提及。D选项描述的是与印象派笔触相反的平滑区域。干扰项类型：A是reversed_logic，B是topic_adjacent，D是wrong_detail。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "topic_adjacent",
+            "D": "reversed_logic"
+          }
+        },
+        {
+          "type": "function",
+          "stem": "Why does the professor mention shadows on snow appearing blue?",
+          "options": {
+            "A": "To argue that Impressionists only painted winter scenes",
+            "B": "To suggest that the artists made a mistake about color",
+            "C": "To illustrate how outdoor light contains reflected colors",
+            "D": "To describe a typical subject of academic painting"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。教授用雪地上蓝色阴影的例子来说明自然光中包含反射色彩，这正是印象派画家在户外观察到的现象，从而改变了他们处理阴影的方式。A选项过度推断，讲座并未说他们只画冬季场景。B选项与讲座内容相反，教授称赞了这一观察。D选项错误，学术绘画通常使用黑暗的棕色阴影，而非蓝色阴影。干扰项类型：A是over_inference，B是wrong_purpose，D是wrong_purpose。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "over_inference",
+            "C": "literal_restatement"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What does the professor imply about traditional academic painting?",
+          "options": {
+            "A": "It produced more vibrant colors than Impressionism",
+            "B": "It was primarily done outdoors in natural light",
+            "C": "It relied on optical mixing to blend colors",
+            "D": "It favored smooth surfaces and dark shadows in its works"
+          },
+          "answer": "D",
+          "explanation": "正确答案是D。教授指出印象派与学术传统形成'激进背离'，该传统的特点是'平滑、混合的表面和深色、棕色的阴影'。由此可以推断，学术绘画偏好D选项描述的风格。A选项与讲座中印象派色彩更鲜艳的描述相反。B选项错误，传统画家在室内工作。C选项错误，光学混合是印象派的创新。干扰项类型：B是reversed_logic，C是over_generalization，A是topic_adjacent。",
+          "distractor_types": {
+            "B": "over_generalization",
+            "C": "reversed_logic",
+            "D": "topic_adjacent"
+          }
+        }
+      ],
+      "id": "lat_v2_1780213435379_001",
+      "flavor_score": 0.59
+    },
+    {
+      "subject": "biology",
+      "topic": "convergent evolution in unrelated species",
+      "difficulty": "medium",
+      "transcript": "Convergent evolution is a fascinating pattern in biology where unrelated species independently develop similar traits. This happens not because they share a recent ancestor, but because they face similar environmental pressures. The classic example is the marsupial mammals of Australia and the placental mammals found elsewhere. Take the Tasmanian tiger, or thylacine. It was a carnivorous marsupial that looked remarkably like a wolf. But it's not related to wolves. Wolves are placental mammals that evolved in the Northern Hemisphere. Yet both animals developed a similar body shape, powerful jaws, and a hunting lifestyle. Why? Because both filled the ecological role of a large predator in their respective environments. Natural selection favored similar solutions to the same problem. Another example is the eye. The complex camera-type eye evolved independently in vertebrates and in cephalopods like octopuses. The structures are almost identical, but they develop from different tissues during embryology. This tells us that certain evolutionary solutions are so effective that they emerge again and again. The concept challenges the idea that evolution is purely random. It shows that while mutation is random, natural selection is not. It directs change toward what works.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the lecture mainly about?",
+          "options": {
+            "A": "The extinction of the Tasmanian tiger in Australia",
+            "B": "How unrelated species develop similar traits due to similar pressures",
+            "C": "The differences between marsupials and placental mammals",
+            "D": "How the human eye compares to the octopus eye"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。讲座的核心概念是'趋同进化'，即不相关的物种由于面临相似的环境压力而独立发展出相似特征。A选项只是讲座中的一个具体例子，不是主旨。C选项是相关但非讲座主题的对比。D选项是另一个例子，同样过于狭窄。干扰项类型：A是too_narrow，C是wrong_topic，D是surface_word_trap。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "C": "wrong_topic",
+            "D": "surface_word_trap"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "According to the professor, what is true about the Tasmanian tiger and the wolf?",
+          "options": {
+            "A": "They share a recent common ancestor",
+            "B": "They both lived in the Northern Hemisphere",
+            "C": "They developed similar body shapes despite being unrelated",
+            "D": "They are both examples of marsupial mammals"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。教授明确指出袋狼和狼虽然不相关，但都发展出相似的身体形态、强有力的下颚和捕猎生活方式。A选项与讲座内容相反，教授说它们不共享近期祖先。B选项错误，只有狼生活在北半球。D选项错误，狼是有胎盘的哺乳动物，不是有袋类。干扰项类型：A是reversed_logic，B是wrong_detail，D是wrong_detail。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "topic_adjacent",
+            "D": "reversed_logic"
+          }
+        },
+        {
+          "type": "function",
+          "stem": "Why does the professor mention the camera-type eye in vertebrates and cephalopods?",
+          "options": {
+            "A": "To argue that the eye evolved only once in history",
+            "B": "To compare the intelligence of different animal groups",
+            "C": "To prove that all animals share a single common ancestor",
+            "D": "To provide another example of convergent evolution"
+          },
+          "answer": "D",
+          "explanation": "正确答案是D。教授在讨论了袋狼和狼之后，提到眼睛的例子是为了提供趋同进化的另一个实例，说明相同的解决方案会反复出现。A选项与讲座中眼睛独立进化多次的观点相反。B选项未在讲座中讨论。C选项过度推断，讲座并未讨论共同祖先问题。干扰项类型：A是reversed_logic，B是wrong_purpose，C是over_inference。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "over_inference",
+            "C": "literal_restatement"
+          }
+        },
+        {
+          "type": "function",
+          "stem": "Why does the professor mention that the eye develops from different tissues in different groups?",
+          "options": {
+            "A": "To emphasize that the similarity is due to convergent evolution, not common ancestry",
+            "B": "To suggest that the eye is not a very important adaptation",
+            "C": "To argue that embryology is more important than natural selection",
+            "D": "To show that vertebrates and cephalopods are actually closely related"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。教授指出眼睛从不同的胚胎组织发育而来，这强调了相似性并非源于共同祖先，而是趋同进化的结果。B选项与讲座观点相反，眼睛被描述为非常有效的解决方案。C选项过度推断，讲座并未比较胚胎学和自然选择的重要性。D选项与讲座内容相反，教授明确说两者不相关。干扰项类型：B是wrong_purpose，C是over_inference，D是reversed_logic。",
+          "distractor_types": {
+            "B": "over_generalization",
+            "C": "reversed_logic",
+            "D": "topic_adjacent"
+          }
+        }
+      ],
+      "id": "lat_v2_1780213435379_002",
+      "flavor_score": 0.63
+    },
+    {
+      "subject": "cognitive_psychology",
+      "topic": "inattentional blindness in everyday perception",
+      "difficulty": "hard",
+      "transcript": "Inattentional blindness is a well-established concept in cognitive psychology. It refers to the failure to notice a fully visible object because attention is focused elsewhere. The most famous demonstration is the invisible gorilla experiment by Daniel Simons and Christopher Chabris. Participants watched a video of people passing a basketball and were asked to count the number of passes. During the video, a person in a gorilla suit walked through the scene. Remarkably, about half of the participants did not see the gorilla at all. This isn't a failure of vision. It's a failure of attention. Our visual system has limited capacity. We cannot process everything in our field of view. So the brain selects what to attend to based on our goals. When we are focused on counting passes, the gorilla is effectively invisible. The implications are significant. In real-world tasks like driving, inattentional blindness can cause accidents. A driver focused on a GPS might not see a pedestrian. It also raises questions about eyewitness testimony. A witness who was focused on something else might be completely wrong about what happened. The phenomenon shows that perception is not a passive recording of reality. It is an active construction shaped by our attention.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the lecture mainly about?",
+          "options": {
+            "A": "The design of the invisible gorilla experiment",
+            "B": "How visual illusions trick the human brain",
+            "C": "The failure to notice visible objects when attention is occupied",
+            "D": "The limits of short-term memory in processing visual information"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。讲座的核心是'非注意盲视'，即当注意力被占用时，人们会无法注意到完全可见的物体。A选项只是讲座中的一个例子，不是主旨。B选项错误，讲座讨论的是注意力失败，而非视觉错觉或欺骗。D选项错误，讲座未讨论短期记忆。干扰项类型：A是too_narrow，B是wrong_topic，D是surface_word_trap。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "C": "wrong_topic",
+            "D": "surface_word_trap"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "According to the professor, what did the invisible gorilla experiment demonstrate?",
+          "options": {
+            "A": "People always see unexpected objects in their field of view",
+            "B": "The gorilla suit was designed to blend into the background",
+            "C": "Participants could not remember the number of passes they counted",
+            "D": "About half of the participants failed to notice the gorilla"
+          },
+          "answer": "D",
+          "explanation": "正确答案是D。教授明确说明实验中大约一半的参与者没有看到大猩猩。A选项与实验结果相反。B选项未在讲座中提及。C选项错误，参与者被要求数传球次数，讲座未说他们记不住数字。干扰项类型：A是reversed_logic，B是topic_adjacent，C是wrong_detail。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "topic_adjacent",
+            "D": "reversed_logic"
+          }
+        },
+        {
+          "type": "function",
+          "stem": "Why does the professor mention driving and eyewitness testimony?",
+          "options": {
+            "A": "To provide real-world implications of inattentional blindness",
+            "B": "To argue that inattentional blindness only occurs in experiments",
+            "C": "To compare the accuracy of drivers and witnesses",
+            "D": "To suggest that these activities require no attention"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。教授提到驾驶和目击者证词是为了说明非注意盲视在现实世界中的重大影响，比如导致事故或错误证词。B选项与讲座内容相反，教授强调其现实应用。C选项过度推断，讲座并未比较两者的准确性。D选项错误，这些活动需要注意力，而正是注意力被占用了才出问题。干扰项类型：B是wrong_purpose，C是over_inference，D是reversed_logic。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "over_inference",
+            "C": "literal_restatement"
+          }
+        },
+        {
+          "type": "function",
+          "stem": "Why does the professor say that perception is 'an active construction shaped by our attention'?",
+          "options": {
+            "A": "To explain that our brains can process everything in our visual field",
+            "B": "To suggest that perception is a completely random process",
+            "C": "To emphasize that what we perceive depends on what we focus on",
+            "D": "To argue that attention has no effect on what we see"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。教授用这句话来总结非注意盲视的核心观点：感知不是被动的记录，而是由我们的注意力主动构建的。A选项与讲座中视觉系统容量有限的描述相反。B选项错误，讲座强调感知是有方向的。D选项与整个讲座内容相反。干扰项类型：A是reversed_logic，B是over_generalization，D是reversed_logic。",
+          "distractor_types": {
+            "B": "over_generalization",
+            "C": "reversed_logic",
+            "D": "topic_adjacent"
+          }
+        }
+      ],
+      "id": "lat_v2_1780213435379_003",
+      "flavor_score": 0.76
+    }
+  ],
+  "rejected": []
+}

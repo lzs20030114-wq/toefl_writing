@@ -1,0 +1,434 @@
+{
+  "items": [
+    {
+      "context": "campus_activity",
+      "situation": "campus tree-planting and trail restoration day",
+      "speaker_role": "program_coordinator",
+      "difficulty": "hard",
+      "announcement": "Good morning, everyone. I'm excited to announce that the Campus Green Initiative is hosting its first Trail Restoration Day this Saturday, beginning at 8 a.m. at the trailhead behind Holloway Residence Hall. We'll be planting native saplings and rebuilding the eroded sections of the north loop, so volunteers should expect physically demanding work in uneven terrain. We'll provide shovels, gloves, and a catered lunch, but you'll want to bring a refillable water bottle and dress for the weather. Because the grant funding this project requires us to document community participation, everyone must sign in at the registration tent before starting. Spots are limited, so reserve yours through the Initiative's online portal by Thursday evening.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To recruit volunteers for a trail restoration project",
+            "B": "To explain why the north loop trail was closed",
+            "C": "To announce a new outdoor recreation course",
+            "D": "To discourage hiking on the eroded north loop"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。通告的核心是邀请志愿者参加周六的步道修复日，植树和重建被侵蚀的路段——这正是组织者的主要目的。B错误（wrong_purpose）：通告从未说步道因何关闭，只说要修复被侵蚀的路段，这不是通告目的。C错误（wrong_purpose）：完全没有提到任何课程，这是一个志愿活动而非学术课程。D错误（reversed_intent）：通告是号召大家来参与修复，而非劝阻人们使用步道，意思正好相反。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the requirement to sign in at the registration tent?",
+          "options": {
+            "A": "It is intended to prevent overcrowding on the trail",
+            "B": "It allows volunteers to collect their free lunch",
+            "C": "It helps the organizers meet a grant's reporting condition",
+            "D": "It is required by campus safety regulations"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。通告明确说\"资助该项目的拨款要求我们记录社区参与情况，因此每个人必须在登记帐篷签到\"，可推断签到是为了满足拨款方对参与人数报告的要求。A错误（over_inference）：限制名额（spots are limited）确实存在，但签到的原因被明确归于拨款记录，把签到说成防止步道拥挤是过度推断。B错误（wrong_detail）：午餐是提供的，但签到与领午餐无关，这是张冠李戴的细节。D错误（unrelated_inference）：通告完全没有提到校园安全规定，没有任何依据支持这一推断。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "wrong_detail",
+            "D": "unrelated_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "facility_change",
+      "situation": "campus bookstore moving to a new building",
+      "speaker_role": "department_head",
+      "difficulty": "medium",
+      "announcement": "Attention students, faculty, and staff. Please be aware that the campus bookstore will be relocating from its current spot in the Student Union to the newly renovated ground floor of Carver Hall. The current location will close permanently after business hours this Friday, and the new store will open the following Monday at 9 a.m. During the move, all online orders will still be processed without interruption, so you can continue purchasing course materials through the bookstore's website. Please note that any textbook rentals due for return next week should now be dropped off at the temporary kiosk outside the library, not at the old store. We appreciate your patience during this transition.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "When will the new bookstore location open?",
+          "options": {
+            "A": "After business hours this Friday",
+            "B": "The Monday following the Friday closure",
+            "C": "Immediately at the temporary library kiosk",
+            "D": "As soon as online orders are processed"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。通告说旧店本周五营业结束后永久关闭，新店\"接下来的周一上午9点\"开业，因此是周五关闭之后的那个周一。A错误（misattributed_detail）：本周五营业后是旧店关闭的时间，而非新店开业时间，张冠李戴。C错误（wrong_detail）：图书馆旁的临时服务台是用来归还教材租赁的，不是新书店开业地点。D错误（related_but_not_stated）：在线订单一直照常处理，但通告从未把开业时间与订单处理挂钩，这是文中未述的关联。",
+          "distractor_types": {
+            "A": "misattributed_detail",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about purchasing course materials during the move?",
+          "options": {
+            "A": "It will be unavailable until the new store opens",
+            "B": "It must be done in person at Carver Hall",
+            "C": "It requires returning rentals to the old store first",
+            "D": "It can continue without disruption through the website"
+          },
+          "answer": "D",
+          "explanation": "正确答案是D。通告说搬迁期间所有在线订单照常处理，学生可继续通过书店网站购买课程材料，因此可推断购买不会中断。A错误（reversed_intent）：通告强调在线购买不中断，说\"要等到新店开业才能买\"与原意相反。B错误（wrong_detail）：Carver Hall是新店地址且周一才开，搬迁期间无法在那里当面购买。C错误（misattributed_detail）：归还租赁教材到临时服务台是另一件事，与购买课程材料无关，属张冠李戴。",
+          "distractor_types": {
+            "A": "reversed_intent",
+            "B": "wrong_detail",
+            "C": "misattributed_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "academic_event",
+      "situation": "student research poster session open to all majors",
+      "speaker_role": "society_president",
+      "difficulty": "easy",
+      "announcement": "Hi everyone, this is a reminder from the Student Research Society. We're hosting our spring poster session next Wednesday afternoon in the Whitman Hall atrium, and we'd love to see you there. This event showcases student projects from every department, so whether you study chemistry, history, or music, your work belongs here. Presenters will stand by their posters from 1 to 4 p.m. to discuss their research and answer questions from visitors. If you'd like to present, you must submit your poster title and a short summary through our online form by this Friday. Light refreshments will be served, and all students are welcome to attend, even if you're just curious.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement mainly about?",
+          "options": {
+            "A": "Judging criteria for a research competition",
+            "B": "A change to the Whitman Hall atrium hours",
+            "C": "An upcoming poster session open to all students",
+            "D": "A new requirement for science majors to present"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。通告主旨是宣传下周三举办、面向所有院系学生开放的春季海报展示会，并邀请大家参加或报名展示。A错误（wrong_purpose）：通告完全没有提到评审标准，这不是一场带评分的竞赛。B错误（too_narrow）：虽提到展示时间为下午1到4点，但这只是细节，通告并非在通知场馆开放时间的变更。D错误（reversed_intent）：通告说欢迎所有专业且自愿报名，而非要求理科生必须展示，意思相反。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "too_narrow",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What must students do if they want to present a poster?",
+          "options": {
+            "A": "Submit a title and summary through the online form",
+            "B": "Reserve a table in the atrium by Wednesday",
+            "C": "Be enrolled in a science department",
+            "D": "Bring printed refreshments for visitors"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。通告明确说想展示的人必须在本周五前通过在线表格提交海报标题和简短摘要。B错误（related_but_not_stated）：通告未提及预订桌位，下周三是活动日而非报名截止日，属文中未述。C错误（wrong_detail）：活动面向所有院系学生，不要求是理科专业，与原文相反。D错误（misattributed_detail）：通告说主办方提供茶点，而非要求参展者自带，张冠李戴。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "wrong_detail",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "academic_event",
+      "situation": "senior capstone presentation schedule",
+      "speaker_role": "department_staff",
+      "difficulty": "easy",
+      "announcement": "Good afternoon, seniors. This is an important reminder about the schedule for your capstone presentations. All graduating students in the engineering program will present their final projects in Lambert Lecture Hall during the last week of April. Each presentation slot is twenty minutes long, including time for the faculty panel to ask questions. The full schedule listing your assigned day and time has been posted on the department's bulletin board and emailed to your university account. Please arrive at least fifteen minutes early and bring a backup copy of your slides on a USB drive. If you have a scheduling conflict, contact the department office before this Friday to request a change.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To explain how capstone projects will be graded",
+            "B": "To recruit faculty members for a review panel",
+            "C": "To announce a new graduation requirement",
+            "D": "To inform seniors about the capstone presentation schedule"
+          },
+          "answer": "D",
+          "explanation": "正确答案是D。通告的主要目的是告知毕业班学生关于毕业设计展示的安排——时间、地点、时长以及如何查看个人时段。A错误（wrong_purpose）：通告提到教师小组会提问，但完全没有说明如何评分，评分标准不是目的。B错误（wrong_purpose）：教师小组已经存在并将提问，通告并非在招募评审教师。C错误（wrong_purpose）：毕业设计展示是既有安排，通告通知的是日程，而非宣布一项新的毕业要求。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "wrong_purpose",
+            "C": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are students advised to bring to their presentation?",
+          "options": {
+            "A": "A signed permission form from an advisor",
+            "B": "A backup copy of their slides on a USB drive",
+            "C": "Printed handouts for the faculty panel",
+            "D": "A laptop borrowed from the department office"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。通告明确建议学生提前至少十五分钟到场，并用U盘带一份幻灯片的备份。A错误（related_but_not_stated）：通告从未提到任何导师签字的许可表，属文中未述。C错误（related_but_not_stated）：通告没有要求为教师小组准备纸质讲义，这是合理但未提及的内容。D错误（misattributed_detail）：系办公室是用来联系调整日程的，通告没有说从那里借笔记本电脑，张冠李戴。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "C": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "logistics",
+      "situation": "campus shuttle route change due to construction",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "Attention all shuttle riders. Due to construction beginning on Maple Avenue next Monday, the campus shuttle will follow a modified route for approximately three weeks. During this period, the shuttle will no longer stop at the Maple Avenue station; instead, riders should board at the temporary stop in front of the Recreation Center. To make up for the longer walk, we'll be adding an extra shuttle to the line, so buses will arrive every eight minutes during peak hours. The updated route map and timetable are available on the transportation office website. We apologize for any inconvenience and thank you for your patience while these improvements are completed.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To inform riders of a temporary change to the shuttle route",
+            "B": "To announce that shuttle service will be discontinued",
+            "C": "To advertise a new recreation center opening",
+            "D": "To explain how to purchase shuttle passes online"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。通告主旨是告知乘客因Maple Avenue施工，校园班车将在约三周内改走临时路线并调整停靠站。B错误（reversed_intent）：通告说班车继续运营，还会增加一班车，而非停运，意思相反。C错误（wrong_purpose）：Recreation Center只是临时停靠点，通告并非在宣传它开业。D错误（wrong_purpose）：通告提到网站上有路线图和时刻表，但完全没有涉及购买班车票，这不是目的。",
+          "distractor_types": {
+            "B": "reversed_intent",
+            "C": "wrong_purpose",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "Where should riders board the shuttle during the construction period?",
+          "options": {
+            "A": "At the Maple Avenue station as usual",
+            "B": "At any stop listed on the printed timetable",
+            "C": "At the temporary stop in front of the Recreation Center",
+            "D": "At the transportation office on Maple Avenue"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。通告明确说施工期间班车不再停靠Maple Avenue站，乘客应在Recreation Center门前的临时停靠点上车。A错误（wrong_detail）：Maple Avenue站正是施工期间停用的站点，与原文相反。B错误（related_but_not_stated）：网站上有更新的时刻表，但通告并未说可在时刻表上的任意站点上车，属文中未述。D错误（misattributed_detail）：交通办公室只是查询路线图和时刻表的渠道，并非上车地点，且Maple Avenue正在施工，属张冠李戴。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "facility_change",
+      "situation": "dining hall temporary closure for kitchen upgrade",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "Attention residents of the North Quad. We want to let you know that the Birchwood Dining Hall will be closed for a kitchen equipment upgrade from this Sunday through the following Wednesday. While Birchwood is closed, your meal plan will be fully honored at the Hillside Dining Hall, which will extend its dinner hours until 9 p.m. to handle the additional guests. We understand Hillside is a longer walk for many of you, so a complimentary shuttle will run between North Quad and Hillside every fifteen minutes during meal times. Birchwood is scheduled to reopen for breakfast that Thursday with its new equipment. Thank you for bearing with us during this short upgrade.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To inform residents of a temporary dining hall closure",
+            "B": "To announce permanent changes to meal plan options",
+            "C": "To advertise extended dinner hours as a new policy",
+            "D": "To encourage students to eat at Hillside more often"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。通告主旨是告知North Quad住宿生Birchwood餐厅将因厨房设备升级而临时关闭，并说明替代用餐安排。B错误（wrong_purpose）：餐饮计划在Hillside照常有效，通告并未宣布对餐饮计划做任何永久性更改。C错误（too_narrow）：延长晚餐到9点只是关闭期间的临时安排，并非一项新政策，且只是细节。D错误（reversed_intent）：通告是因Birchwood临时关闭才让大家暂去Hillside，而非长期鼓励大家更多去Hillside吃饭，意图相反。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "too_narrow",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "How can residents get to the Hillside Dining Hall during the closure?",
+          "options": {
+            "A": "By taking a complimentary shuttle every fifteen minutes",
+            "B": "By reserving a seat through the dining services website",
+            "C": "By using a meal voucher issued at North Quad",
+            "D": "By walking along the newly opened Maple Avenue path"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。通告明确说关闭期间用餐时段会有一班免费班车每十五分钟往返North Quad和Hillside。B错误（related_but_not_stated）：通告从未提到通过网站预订座位，属合理但未述的内容。C错误（wrong_detail）：通告说餐饮计划在Hillside照常有效，并未提到发放餐券，与原文不符。D错误（misattributed_detail）：通告没有提及任何\"新开的Maple Avenue步道\"，这是借用了无关地名的虚构细节，属张冠李戴。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "wrong_detail",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "policy_update",
+      "situation": "new quiet-hours policy in the main library",
+      "speaker_role": "department_head",
+      "difficulty": "medium",
+      "announcement": "This is a reminder that the main library is introducing new quiet-hours guidelines beginning next Monday. In response to student requests during finals season, the entire third and fourth floors will become designated silent-study zones, where conversation and phone calls are no longer permitted. Group discussion and collaborative work should now take place on the first floor or in the bookable study rooms on the second floor. To help everyone adjust, library staff will hand out small reminder cards near the entrances during the first week. These guidelines will remain in effect through the end of the exam period. If you need a group room, reserve one in advance through the library's booking system.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce new quiet-hours rules for the library",
+            "B": "To explain how to extend a study room reservation",
+            "C": "To report a shortage of seating during finals",
+            "D": "To discourage students from studying in groups"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。通告主旨是宣布主图书馆从下周一起实行新的安静时段规定，将三、四楼设为静音自习区。B错误（too_narrow）：通告末尾提到可预订小组讨论室，但只是细节指引，并非关于如何延长预订。C错误（wrong_purpose）：通告提到是回应期末季的学生请求，但并未报告座位短缺问题，这不是目的。D错误（reversed_intent）：通告仍为小组讨论保留了一楼和二楼讨论室，是在划分区域而非劝阻小组学习，意图相反。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "Where should students go for group discussion under the new guidelines?",
+          "options": {
+            "A": "To the first floor or the second-floor study rooms",
+            "B": "To the silent-study zones on the upper floors",
+            "C": "To the reminder card station near the entrance",
+            "D": "To any open seat in the library after Monday"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。通告明确说小组讨论和协作应在一楼或二楼可预订的自习室进行。B错误（wrong_detail）：三、四楼是禁止交谈的静音区，正是不能进行小组讨论的地方，与原文相反。C错误（misattributed_detail）：入口附近发放的是提醒卡片，那不是供讨论的场所，张冠李戴。D错误（over_inference）：通告对小组讨论的地点有明确规定，说\"周一后随便找空位\"超出了文中信息，属过度推断。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "misattributed_detail",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "academic_event",
+      "situation": "guest lecture by a visiting economist",
+      "speaker_role": "department_head",
+      "difficulty": "medium",
+      "announcement": "I'm pleased to announce that the Economics Department will be hosting a special guest lecture next Thursday evening. Dr. Elena Park, a leading researcher on global trade policy, will speak in Foster Auditorium at 6 p.m. on the future of international supply chains. The talk is free and open to all students, regardless of major, though seating is limited and will be available on a first-come, first-served basis. Following the lecture, there will be a thirty-minute question-and-answer session, so come prepared with your questions. Because we expect a large turnout, we recommend arriving by 5:30 to secure a seat. Copies of Dr. Park's recent book will also be available for purchase in the lobby.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To promote the sale of Dr. Park's recent book",
+            "B": "To announce a guest lecture open to all students",
+            "C": "To recruit economics majors for a research project",
+            "D": "To explain changes to the Foster Auditorium schedule"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。通告主旨是宣布经济系下周四晚举办、向所有学生开放的客座讲座。A错误（too_narrow）：大厅出售Dr. Park新书只是结尾提到的一个细节，绝非通告的主要目的。C错误（wrong_purpose）：讲座面向所有专业的学生，通告并非在为某个研究项目招募经济学专业的学生。D错误（wrong_purpose）：Foster Auditorium只是讲座地点，通告并未涉及该礼堂日程的任何变更。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "C": "wrong_purpose",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "Why does the speaker recommend arriving by 5:30?",
+          "options": {
+            "A": "Because tickets must be purchased before the talk",
+            "B": "Because the question-and-answer session begins early",
+            "C": "Because seating is limited and fills on a first-come basis",
+            "D": "Because the lecture will start earlier than scheduled"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。通告说座位有限、先到先得，且预计人多，因此建议5:30前到场以确保有座。A错误（wrong_detail）：讲座免费开放，无需购票，与原文相反；出售的是书，不是门票。B错误（misattributed_detail）：问答环节是在讲座之后进行的三十分钟，与建议提前到场的原因无关，张冠李戴。D错误（wrong_detail）：讲座时间是晚上6点，通告从未说会提前开始，这与原文不符。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "misattributed_detail",
+            "D": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "policy_update",
+      "situation": "new lab safety certification requirement",
+      "speaker_role": "department_staff",
+      "difficulty": "hard",
+      "announcement": "Attention all chemistry students. Starting this semester, the department is implementing a new safety requirement for anyone using the research laboratories. Before you can be granted lab access, you must complete the online safety certification module and pass the accompanying quiz with a score of at least eighty percent. The module covers proper handling of chemicals, emergency procedures, and waste disposal, and it takes roughly two hours to finish. You must complete this certification by the end of the second week of classes; students who miss this deadline will have their lab swipe access temporarily suspended until they comply. The link to the module has been posted on the department portal under the announcements tab.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce a new safety certification required for lab access",
+            "B": "To describe recent renovations to the research laboratories",
+            "C": "To remind students of an upcoming chemistry exam",
+            "D": "To advertise an optional workshop on chemical safety"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。通告主旨是宣布本学期起使用研究实验室必须先完成在线安全认证这一新要求。B错误（wrong_purpose）：通告完全没有提到实验室翻修，这不是内容。C错误（wrong_purpose）：通告提到认证模块附带一个测验，但那不是某门化学课程的考试，且重点是认证要求而非考试提醒。D错误（reversed_intent）：该认证是强制性的、缺席会被暂停实验室门禁，而非一个可选的研讨会，意思相反。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What happens to students who miss the certification deadline?",
+          "options": {
+            "A": "They must retake the quiz in person at the office",
+            "B": "Their lab swipe access is temporarily suspended",
+            "C": "They are removed from the chemistry program",
+            "D": "They receive a failing grade on their coursework"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。通告明确说错过截止期限的学生其实验室刷卡门禁会被临时暂停，直到完成认证为止。A错误（misattributed_detail）：测验是在线完成的，通告没有说要去办公室当面重考，张冠井戴。C错误（over_inference）：通告只说暂停门禁，远未到将学生开除出化学专业的程度，属过度推断。D错误（related_but_not_stated）：通告完全没有提到课程成绩或不及格，这是文中未述的合理猜测。",
+          "distractor_types": {
+            "A": "misattributed_detail",
+            "C": "over_inference",
+            "D": "related_but_not_stated"
+          }
+        }
+      ]
+    },
+    {
+      "context": "campus_activity",
+      "situation": "international food festival on the main quad",
+      "speaker_role": "society_president",
+      "difficulty": "easy",
+      "announcement": "Hello everyone, the International Students Association is thrilled to invite you to our annual Global Food Festival this Saturday on the Main Quad. From noon until 4 p.m., student groups from more than twenty countries will be serving traditional dishes from their home regions. Tickets are not required, but you'll need to purchase food tokens at the entrance booth, with all proceeds going toward our scholarship fund for international students. There will also be live music and cultural performances on the central stage throughout the afternoon. In case of rain, the festival will move indoors to the Student Union ballroom. We can't wait to share our cultures with you, so bring your friends and an empty stomach.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To request volunteers to cook traditional dishes",
+            "B": "To announce a fundraising scholarship application",
+            "C": "To invite students to an international food festival",
+            "D": "To explain a new policy on campus food vendors"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。通告主旨是邀请大家参加本周六在主广场举办的国际美食节，品尝各国传统菜肴并欣赏文化表演。A错误（wrong_purpose）：负责做菜的是来自各国的学生团体，通告并非在招募做菜志愿者。B错误（too_narrow）：购买餐券的收益用于国际学生奖学金基金，但这只是细节，通告不是在宣布奖学金申请。D错误（wrong_purpose）：通告完全没有涉及校园餐饮供应商的任何政策，这不是内容。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "too_narrow",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What will happen to the festival if it rains?",
+          "options": {
+            "A": "It will move indoors to the Student Union ballroom",
+            "B": "It will be postponed to the following Saturday",
+            "C": "It will continue under tents on the Main Quad",
+            "D": "It will be cancelled and tokens refunded"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。通告明确说如遇下雨，美食节将移至室内的Student Union宴会厅举行。B错误（related_but_not_stated）：通告说的是改到室内而非改期，延后到下周六属文中未述。C错误（wrong_detail）：下雨时是转移到室内，而非在主广场搭帐篷继续，与原文相反。D错误（over_inference）：通告给出的应对是移至室内，并未提到取消或退还餐券，属过度推断。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "wrong_detail",
+            "D": "over_inference"
+          }
+        }
+      ]
+    }
+  ]
+}

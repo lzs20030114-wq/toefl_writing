@@ -1,0 +1,458 @@
+{
+  "type": "listenConversation",
+  "version": 2,
+  "generated_at": "2026-05-31T07:55:51.367Z",
+  "total_generated": 5,
+  "total_accepted": 5,
+  "acceptance_rate": 1,
+  "tts_generated": false,
+  "tts_provider": null,
+  "batch_quality": {
+    "avg_flavor": 0.86,
+    "answer_distribution": {
+      "A": 3,
+      "B": 2,
+      "C": 3,
+      "D": 2
+    },
+    "balanced": true,
+    "q_type_distribution": {
+      "detail": 2,
+      "main_idea": 3,
+      "inference": 5
+    },
+    "context_distribution": {
+      "recommendations_opinions": 1,
+      "errands_service": 2,
+      "plans_social": 1,
+      "campus_dorm_life": 1
+    },
+    "difficulty_distribution": {
+      "hard": 1,
+      "medium": 2,
+      "easy": 2
+    },
+    "register_metrics": {
+      "contractionRate": 100,
+      "fillerRate": 20,
+      "discourseMarkerRate": 100
+    },
+    "correct_is_longest_rate": 40
+  },
+  "items": [
+    {
+      "context": "recommendations_opinions",
+      "situation": "two friends discussing a movie one just saw — good twists but too long",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hey, I just got back from seeing 'The Chrono Paradox'. Wow, those plot twists really caught me off guard."
+        },
+        {
+          "speaker": "Man",
+          "text": "Oh yeah? I've been thinking about catching it this weekend. Was it worth the ticket price?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Absolutely. The storyline is incredibly clever. Honestly, I didn't see the ending coming at all."
+        },
+        {
+          "speaker": "Man",
+          "text": "That sounds great. Any downsides I should know about?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Well, it's almost three hours long. I'll admit, my legs were getting a bit numb by the final act."
+        },
+        {
+          "speaker": "Man",
+          "text": "Hmm, that's a long sit. I'll probably grab a seat in the back row so I can stretch out a bit."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Good call. And maybe skip the large soda unless you want to miss a key scene."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the conversation mainly about?",
+          "options": {
+            "A": "The woman is recommending a movie she enjoyed despite a minor flaw.",
+            "B": "The woman is complaining that the movie was too confusing to follow.",
+            "C": "The man is trying to convince the woman to see a different film.",
+            "D": "The man is asking for directions to the nearest movie theater."
+          },
+          "answer": "A",
+          "explanation": "正确答案A: 对话主旨是女生推荐她刚看过的电影，虽然有点长，但非常精彩。B选项错误，因为女生没有抱怨电影难懂，而是称赞剧情巧妙。C选项错误，男生没有试图说服女生看别的电影，而是想去看这部。D选项错误，对话没有涉及去电影院的路线。",
+          "distractor_types": {
+            "B": "reversed_situation",
+            "C": "wrong_topic",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do when he goes to see the movie?",
+          "options": {
+            "A": "Arrive early to avoid the long lines.",
+            "B": "Ask the woman to come with him.",
+            "C": "Choose a seat in the back row.",
+            "D": "Leave before the movie ends to avoid the crowd."
+          },
+          "answer": "C",
+          "explanation": "正确答案C: 男生明确说“I'll probably grab a seat in the back row so I can stretch out a bit”，所以他会选择后排座位。A选项错误，对话没有提到排队。B选项错误，女生已经看过了，不会再一起去。D选项错误，对话没有说他会在电影结束前离开。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "B": "over_inference",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "id": "lc_v2_1780214140176_001",
+      "flavor_score": 0.93
+    },
+    {
+      "context": "errands_service",
+      "situation": "a student returning a too-small sweater at a store counter",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "customer",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "store_clerk",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hi, I'd like to return this sweater I bought yesterday. I tried it on at home and it's way too small."
+        },
+        {
+          "speaker": "Man",
+          "text": "Sure, do you have the receipt with you? I can process a refund or an exchange."
+        },
+        {
+          "speaker": "Woman",
+          "text": "I think I do. Let me check my bag... Oh, here it is."
+        },
+        {
+          "speaker": "Man",
+          "text": "Great. Unfortunately, this sweater was part of a clearance sale. According to our policy, clearance items can only be exchanged, not refunded."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh, I didn't realize that. An exchange would be fine. Do you have this in a medium?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Let me check the back. I think we might have one left. Give me just a minute."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "Why does the woman go to the store counter?",
+          "options": {
+            "A": "To complain about the quality of the sweater.",
+            "B": "To return a sweater that does not fit her.",
+            "C": "To ask about the store's return policy.",
+            "D": "To buy a different color of the same sweater."
+          },
+          "answer": "B",
+          "explanation": "正确答案B: 女生明确说“I'd like to return this sweater... it's way too small”，所以她是来退货的，因为尺寸不合适。A选项错误，她没有抱怨质量，只是说太小了。C选项错误，她不是来询问退货政策的，而是来退货的，政策是店员后来解释的。D选项错误，她不是来买不同颜色的，而是来退换同款不同尺码。",
+          "distractor_types": {
+            "A": "wrong_topic",
+            "C": "too_narrow",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Leave the store without the sweater.",
+            "B": "Ask for a refund in cash.",
+            "C": "Complain to the store manager.",
+            "D": "Wait for the man to check for a medium size."
+          },
+          "answer": "D",
+          "explanation": "正确答案D: 店员说“Let me check the back... Give me just a minute”，所以女生很可能会在店里等店员去查是否有中码。A选项错误，女生已经同意换货，不会空手离开。B选项错误，店员已经说明清仓商品只能换不能退款，所以退款不可能。C选项错误，女生没有表示不满，而是接受了换货方案。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "wrong_detail",
+            "C": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_v2_1780214140176_002",
+      "flavor_score": 0.68
+    },
+    {
+      "context": "plans_social",
+      "situation": "two students figuring out a time to meet for a group project",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hey, we need to get together to work on the history presentation. Does Thursday afternoon work for you?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Thursday? I've got a chemistry lab from two until five. How about Friday morning instead?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Friday morning works for me. I'm free after ten. Where should we meet?"
+        },
+        {
+          "speaker": "Man",
+          "text": "How about the library? The group study rooms are usually open then."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Sounds good. I'll book a room for ten thirty. Does that give you enough time?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Perfect. I'll bring my laptop with the slides I've started."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "When will the students meet to work on their project?",
+          "options": {
+            "A": "Thursday at two o'clock.",
+            "B": "Friday at ten o'clock.",
+            "C": "Friday at ten thirty.",
+            "D": "Thursday at five o'clock."
+          },
+          "answer": "C",
+          "explanation": "正确答案C: 女生说“I'll book a room for ten thirty”，男生同意，所以他们会面时间是周五十点半。A选项错误，周四下午两点男生有化学实验，不能见面。B选项错误，女生说她十点后有空，但最终确定的时间是十点半。D选项错误，周四五点男生刚下课，不是约定时间。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely bring to the meeting?",
+          "options": {
+            "A": "His laptop with presentation slides.",
+            "B": "A printed copy of the history textbook.",
+            "C": "Snacks for both of them.",
+            "D": "A list of questions for the professor."
+          },
+          "answer": "A",
+          "explanation": "正确答案A: 男生明确说“I'll bring my laptop with the slides I've started”，所以他最可能带笔记本电脑和已经开始的幻灯片。B选项错误，对话没有提到带课本。C选项错误，没有提到带零食。D选项错误，没有提到要给教授准备问题清单。",
+          "distractor_types": {
+            "B": "unrelated_next_step",
+            "C": "unrelated_next_step",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_v2_1780214140176_003",
+      "flavor_score": 0.91
+    },
+    {
+      "context": "errands_service",
+      "situation": "two friends figuring out a bus or train schedule for a day trip",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "So for our trip to the lake this Saturday, should we take the early bus or the train? I know the bus is cheaper."
+        },
+        {
+          "speaker": "Man",
+          "text": "The train is faster though. It only takes an hour and a half, while the bus is over two hours."
+        },
+        {
+          "speaker": "Woman",
+          "text": "True. But the bus station is right next to my apartment, so I wouldn't have to walk far."
+        },
+        {
+          "speaker": "Man",
+          "text": "Well, the train station is closer to me. What if we take the bus, but we leave earlier? There's a 7:15 AM bus."
+        },
+        {
+          "speaker": "Woman",
+          "text": "7:15? That's pretty early for a Saturday. But I guess it means we'll have more time at the lake."
+        },
+        {
+          "speaker": "Man",
+          "text": "Exactly. We can grab coffee on the way and be there by nine thirty."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Alright, let's do it. I'll check the bus schedule online and send you the details."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main topic of the conversation?",
+          "options": {
+            "A": "Deciding which bus stop is closest to the woman's apartment.",
+            "B": "Complaining about the high cost of train tickets.",
+            "C": "Planning what activities to do at the lake.",
+            "D": "Choosing the best transportation for a weekend trip."
+          },
+          "answer": "D",
+          "explanation": "正确答案D: 对话的核心是两人讨论周六去湖边玩应该坐公交还是火车，最终决定坐早班公交。A选项错误，虽然提到了公交站离女生公寓近，但这只是讨论中的一个小细节，不是主旨。B选项错误，女生只说公交更便宜，没有抱怨火车票贵。C选项错误，对话没有讨论在湖边做什么活动。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "wrong_topic",
+            "C": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Buy train tickets for Saturday morning.",
+            "B": "Look up the bus departure times online.",
+            "C": "Walk to the train station to check the schedule.",
+            "D": "Call the man to change their plans."
+          },
+          "answer": "B",
+          "explanation": "正确答案B: 女生最后说“I'll check the bus schedule online and send you the details”，所以她下一步最可能是上网查公交时刻表。A选项错误，他们决定坐公交，不是火车。C选项错误，她会在网上查，不是去车站。D选项错误，她没有要改变计划的意思。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "C": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_v2_1780214140176_004",
+      "flavor_score": 0.93
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "two friends discussing whether to join a campus club or intramural team",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "I'm thinking of joining something this semester. Maybe the photography club or the intramural soccer team."
+        },
+        {
+          "speaker": "Man",
+          "text": "Both sound fun. What are you leaning towards?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "I'm not sure. I love taking pictures, but I also miss playing soccer from high school."
+        },
+        {
+          "speaker": "Man",
+          "text": "Well, the soccer team practices twice a week. The photography club only meets once a month."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Hmm, I do have a pretty busy schedule this term. Maybe the club would be easier to manage."
+        },
+        {
+          "speaker": "Man",
+          "text": "That's a good point. And you can still go to the soccer games to watch and support our school."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "How often does the photography club meet?",
+          "options": {
+            "A": "Once a month.",
+            "B": "Twice a week.",
+            "C": "Once a week.",
+            "D": "Twice a month."
+          },
+          "answer": "A",
+          "explanation": "正确答案A: 男生明确说“The photography club only meets once a month”，所以摄影俱乐部每月聚会一次。B选项错误，这是足球队的训练频率。C和D选项错误，对话中没有提到这些频率。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely decide to do?",
+          "options": {
+            "A": "Join the soccer team and practice twice a week.",
+            "B": "Join both the soccer team and the photography club.",
+            "C": "Join the photography club to save time.",
+            "D": "Decide not to join any club this semester."
+          },
+          "answer": "C",
+          "explanation": "正确答案C: 女生说“Maybe the club would be easier to manage”，暗示她倾向于选择时间投入更少的摄影俱乐部。A选项错误，她担心日程太忙，所以不太可能选训练更多的足球队。B选项错误，两个都参加会占用更多时间，与她担心日程忙矛盾。D选项错误，她没有表示不参加任何社团。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_v2_1780214140176_005",
+      "flavor_score": 0.84
+    }
+  ],
+  "rejected": []
+}

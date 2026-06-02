@@ -1,0 +1,338 @@
+{
+  "type": "listenChooseResponse",
+  "version": 2,
+  "generated_at": "2026-05-31T07:44:43.245Z",
+  "total_generated": 8,
+  "total_accepted": 5,
+  "acceptance_rate": 0.63,
+  "tts_generated": false,
+  "batch_quality": {
+    "avg_flavor": 0.85,
+    "answer_distribution": {
+      "A": 1,
+      "B": 2,
+      "C": 1,
+      "D": 1
+    },
+    "balanced": true,
+    "contraction_rate": 20,
+    "dm_rate": 60,
+    "paradigm_distribution": {
+      "context_shift": 1,
+      "marker_led_indirect": 1,
+      "idiomatic": 1,
+      "counter_question": 1,
+      "direct_topical": 1
+    },
+    "difficulty_distribution": {
+      "hard": 1,
+      "medium": 3,
+      "easy": 1
+    }
+  },
+  "items": [
+    {
+      "context": "campus_academic",
+      "situation": "two classmates discussing a group project deadline",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Do you think we can finish the project by Friday?",
+      "options": {
+        "A": "Friday is the last day of classes.",
+        "B": "Why don't we ask the professor for an extension?",
+        "C": "The project has to include a bibliography.",
+        "D": "I think I finished my part already."
+      },
+      "B": "Why don't we ask the professor for an extension?",
+      "answer": "B",
+      "explanation": "正确答案是B。说话人担心能否按时完成，B选项提出向教授申请延期，直接解决了时间压力问题，是context_shift。A选项是off_topic，只陈述了周五是最后一天上课，没有帮助。C选项是semantic_association_trap，由'project'联想到'bibliography'，但无关紧要。D选项是wrong_question_type，回答的是'是否完成自己的部分'，而不是'能否完成整个项目'。",
+      "distractor_types": {
+        "A": "off_topic",
+        "C": "semantic_association_trap",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_1780213468917_002",
+      "_audit": {
+        "match": true,
+        "ambiguous": false,
+        "validCount": 1
+      },
+      "flavor_score": 0.83
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student discussing a presentation topic with partner",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I'm worried our presentation topic is too broad.",
+      "options": {
+        "A": "The presentation is next Tuesday.",
+        "B": "I think the professor likes broad topics.",
+        "C": "Well, we could focus on just one aspect.",
+        "D": "The topic was assigned by the professor."
+      },
+      "answer": "C",
+      "explanation": "正确答案是C。C以话语标记'Well'开头，提出缩小范围的实际建议，是marker_led_indirect。A选项是off_topic，只说了演示日期，没有回应担心。B选项是semantic_association_trap，由'presentation'和'professor'联想到教授喜好，但并非事实。D选项是off_topic，陈述话题来源，无助于解决问题。",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "semantic_association_trap",
+        "D": "off_topic"
+      },
+      "id": "lcr_v2_1780213468917_003",
+      "_audit": {
+        "match": true,
+        "ambiguous": false,
+        "validCount": 1
+      },
+      "flavor_score": 0.95
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a neighbor about noise or shared space",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Could you please keep the music down after 10 PM?",
+      "options": {
+        "A": "Absolutely, I'll turn it down.",
+        "B": "The music is my favorite band.",
+        "C": "I usually go to bed at 11 PM.",
+        "D": "The walls are very thin in this building."
+      },
+      "answer": "A",
+      "explanation": "正确答案是A。'Absolutely'是自然习语，表示爽快同意，符合idiomatic范式。B选项是semantic_association_trap，由'music'联想到'band'，但无关。C选项是off_topic，说自己睡觉时间，没有回应请求。D选项是off_topic，抱怨墙薄，没有同意或拒绝。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "off_topic"
+      },
+      "id": "lcr_v2_1780213468917_005",
+      "_audit": {
+        "match": true,
+        "ambiguous": false,
+        "validCount": 1
+      },
+      "flavor_score": 0.91
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a professor about office hours or assignment",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Professor, when is your office hours this week?",
+      "options": {
+        "A": "The assignment is due next Friday.",
+        "B": "What time works best for you?",
+        "C": "I have a meeting at 3 PM.",
+        "D": "Office hours are usually in the library."
+      },
+      "answer": "B",
+      "explanation": "正确答案是B。B以反问回应，询问对方方便时间，是counter_question，推进对话。A选项是semantic_association_trap，由'office hours'联想到'assignment'，但无关。C选项是off_topic，说自己有会议，没有回答。D选项是wrong_question_type，回答了'办公室时间在哪里'，而不是'什么时候'。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_1780213468917_006",
+      "_audit": {
+        "match": true,
+        "ambiguous": false,
+        "validCount": 1
+      },
+      "flavor_score": 0.88
+    },
+    {
+      "context": "campus_academic",
+      "situation": "classmate asking to borrow lecture notes",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Could I borrow your notes from yesterday's history lecture?",
+      "options": {
+        "A": "The history lecture was very long.",
+        "B": "I need to study for the exam too.",
+        "C": "The notes are in my locker right now.",
+        "D": "Sure, I'll send you a copy later."
+      },
+      "answer": "D",
+      "explanation": "正确答案是D。D直接同意并承诺发送，是direct_topical。A选项是semantic_association_trap，由'lecture'联想到'long'，但无关。B选项是off_topic，说自己也要复习，没有回应请求。C选项是off_topic，说笔记在储物柜，但没有同意或拒绝借用。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "off_topic"
+      },
+      "id": "lcr_v2_1780213468917_008",
+      "_audit": {
+        "match": true,
+        "ambiguous": false,
+        "validCount": 1
+      },
+      "flavor_score": 0.66
+    }
+  ],
+  "rejected": [
+    {
+      "context": "campus_daily",
+      "situation": "student asking about a campus event or concert",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Do you know when the tickets for the jazz concert go on sale?",
+      "options": {
+        "A": "Don't worry about it. I already grabbed one for you.",
+        "B": "The concert is in the auditorium this Friday.",
+        "C": "I heard the band is really popular this year.",
+        "D": "The ticket office opens at 8 AM on weekdays."
+      },
+      "answer": "A",
+      "explanation": "正确答案是A。说话人问售票时间，但A选项没有直接回答时间，而是说已经帮你买了票，解决了根本问题（担心买不到票）。这是典型的context_shift（转移焦点）。B选项是off_topic，虽然提到了concert和auditorium，但说的是演出地点，不是售票时间。C选项是semantic_association_trap，由'jazz concert'联想到'band'和'popular'，但完全无关。D选项是wrong_question_type，回答了售票处开门时间，但问的是具体票务销售时间（go on sale），不是办公时间。",
+      "distractor_types": {
+        "B": "off_topic",
+        "C": "semantic_association_trap",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_1780213468917_001",
+      "_flavor": {
+        "scores": {
+          "indirect_answer": 1,
+          "word_trap": 1,
+          "distractor_diversity": 1,
+          "natural_register": 0.4,
+          "constructive_tone": 1,
+          "plausible_distractors": 1,
+          "length_neutrality": 0
+        },
+        "total": 0.86,
+        "weights": {
+          "indirect_answer": 0.25,
+          "word_trap": 0.2,
+          "distractor_diversity": 0.15,
+          "natural_register": 0.15,
+          "constructive_tone": 0.1,
+          "plausible_distractors": 0.1,
+          "length_neutrality": 0.05
+        }
+      },
+      "audit_result": {
+        "aiAnswer": "D",
+        "ourAnswer": "A",
+        "match": false,
+        "ambiguous": true,
+        "ratings": {
+          "A": "invalid",
+          "B": "invalid",
+          "C": "invalid",
+          "D": "valid"
+        },
+        "reasoning": "The speaker is asking for the sale time of tickets. Option D directly answers the question with specific information about when the ticket office opens, which is a natural and appropriate response. Options A, B, and C do not address the query about sale timing."
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a store clerk about a return or exchange",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Can I return this shirt if it doesn't fit?",
+      "options": {
+        "A": "The shirt is made of cotton.",
+        "B": "You should buy a smaller size.",
+        "C": "Returns are only for defective items.",
+        "D": "Actually, you'll need the receipt for that."
+      },
+      "answer": "D",
+      "explanation": "正确答案是D。D以'Actually'开头，间接告知退货需要收据，是marker_led_indirect。A选项是semantic_association_trap，由'shirt'联想到'cotton'，但无关。B选项是off_topic，直接建议买小号，但问题关于退货政策。C选项是wrong_question_type，回答了'退货条件是什么'，但问的是'能否退货'，且答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      },
+      "id": "lcr_v2_1780213468917_004",
+      "_flavor": {
+        "scores": {
+          "indirect_answer": 1,
+          "word_trap": 1,
+          "distractor_diversity": 1,
+          "natural_register": 1,
+          "constructive_tone": 1,
+          "plausible_distractors": 1,
+          "length_neutrality": 0
+        },
+        "total": 0.95,
+        "weights": {
+          "indirect_answer": 0.25,
+          "word_trap": 0.2,
+          "distractor_diversity": 0.15,
+          "natural_register": 0.15,
+          "constructive_tone": 0.1,
+          "plausible_distractors": 0.1,
+          "length_neutrality": 0.05
+        }
+      },
+      "audit_result": {
+        "aiAnswer": "C",
+        "ourAnswer": "D",
+        "match": false,
+        "ambiguous": true,
+        "ratings": {
+          "A": "invalid",
+          "B": "partially_valid",
+          "C": "valid",
+          "D": "valid"
+        },
+        "reasoning": "The speaker is asking about the return policy for a shirt that doesn't fit. Option C directly addresses the policy by stating that returns are only for defective items, which implies that a fit issue would not be covered. Option D is also valid as it provides a practical requirement (receipt) for returns, but it doesn't directly answer the question about fit. Option B suggests a solution but doesn't address the return policy. Option A is irrelevant to the question."
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "checking if a service (post office, bank) is open",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Is the post office still open this late?",
+      "options": {
+        "A": "The post office sells stamps and packages.",
+        "B": "I mailed a letter there yesterday.",
+        "C": "Why don't you check their website?",
+        "D": "It usually closes at 5 PM."
+      },
+      "answer": "C",
+      "explanation": "正确答案是C。C以反问'Why don't you...'建议查官网，是counter_question，间接解决疑惑。A选项是semantic_association_trap，由'post office'联想到'stamps'，但无关。B选项是off_topic，说自己寄信经历，没有回答。D选项是wrong_question_type，回答了'平时几点关门'，但问的是'现在是否还开门'。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_1780213468917_007",
+      "_flavor": {
+        "scores": {
+          "indirect_answer": 1,
+          "word_trap": 1,
+          "distractor_diversity": 1,
+          "natural_register": 0.2,
+          "constructive_tone": 1,
+          "plausible_distractors": 1,
+          "length_neutrality": 1
+        },
+        "total": 0.88,
+        "weights": {
+          "indirect_answer": 0.25,
+          "word_trap": 0.2,
+          "distractor_diversity": 0.15,
+          "natural_register": 0.15,
+          "constructive_tone": 0.1,
+          "plausible_distractors": 0.1,
+          "length_neutrality": 0.05
+        }
+      },
+      "audit_result": {
+        "aiAnswer": "D",
+        "ourAnswer": "C",
+        "match": false,
+        "ambiguous": true,
+        "ratings": {
+          "A": "invalid",
+          "B": "invalid",
+          "C": "partially_valid",
+          "D": "valid"
+        },
+        "reasoning": "The speaker is asking about the current operating hours of the post office. Option D directly answers the question by providing the typical closing time, which is the most natural and helpful response. Option C is partially valid as it suggests a way to find the information, but it's less direct and could be seen as dismissive. Options A and B are irrelevant to the question about hours."
+      }
+    }
+  ]
+}

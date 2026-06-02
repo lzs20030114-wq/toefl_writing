@@ -1,0 +1,434 @@
+{
+  "items": [
+    {
+      "context": "logistics",
+      "situation": "campus shuttle route change due to construction",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "Attention students, faculty, and staff. Starting next Monday, the campus shuttle will follow a new route because of construction near the Engineering Building. The shuttle will no longer stop at the West Quad station for the next three weeks. Instead, riders heading to that area should get off at the Library stop and walk five minutes north. Buses will continue to run every fifteen minutes during regular hours. We're sorry for any inconvenience, and the updated route map is now posted at every shuttle stop and on the transportation page of the university website.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To explain a temporary change to the shuttle route",
+            "B": "To announce that shuttle service is ending",
+            "C": "To recruit drivers for the campus shuttle",
+            "D": "To describe a new Engineering Building"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。通知的核心是因施工导致班车路线临时调整，明确说明改道、停靠点变化和持续时间。B错误（reversed_intent）：班车并未停运，仍每十五分钟一班，只是改道。C错误（wrong_purpose）：通知完全没有提到招募司机。D错误（too_narrow/wrong_purpose）：施工的工程楼只是改道的原因，通知不是在介绍这栋楼。",
+          "distractor_types": {
+            "B": "reversed_intent",
+            "C": "wrong_purpose",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What should riders heading to the West Quad area do?",
+          "options": {
+            "A": "Wait at the West Quad station as usual",
+            "B": "Take a taxi to the Engineering Building",
+            "C": "Get off at the Library stop and walk north",
+            "D": "Use the shuttle only during evening hours"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。通知明确指出前往该区域的乘客应在图书馆站下车，然后向北步行五分钟。A错误（wrong_detail，与原文相反）：West Quad站在三周内停用，不能照常等车。B错误（related_but_not_stated）：通知从未提及打车。D错误（misattributed_detail）：班车在常规时间正常每十五分钟运行，并非只在晚间运营。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "academic_event",
+      "situation": "student research poster session open to all majors",
+      "speaker_role": "society_president",
+      "difficulty": "easy",
+      "announcement": "Good afternoon, everyone. As president of the Undergraduate Scholars Society, I'm excited to invite you to our spring research poster session this Thursday in the Hartman Student Center. What makes this event special is that it's open to students from every major, not just the sciences. If you've worked on any project this year, you're welcome to present it. Posters will be displayed from 1 p.m. to 4 p.m., and light refreshments will be served. To reserve a display board, just email the society by Tuesday evening. We hope to see your work on the wall this Thursday.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To explain how poster sessions are judged",
+            "B": "To invite students of all majors to a poster session",
+            "C": "To announce the winners of a research contest",
+            "D": "To recruit new members for the society"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。通知的核心是邀请所有专业的本科生参加春季研究海报展示，并强调活动对每个专业开放。A错误（wrong_purpose）：通知没有解释评判标准，这甚至不是一个竞赛。C错误（wrong_purpose）：没有宣布任何获奖者。D错误（too_narrow/wrong_purpose）：虽然由学会主办，但目的不是招募会员，而是邀请大家来展示作品。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "C": "wrong_purpose",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What must students do to get a display board?",
+          "options": {
+            "A": "Pay a small registration fee online",
+            "B": "Submit a completed research paper first",
+            "C": "Sign up at the Hartman Student Center desk",
+            "D": "Email the society by Tuesday evening"
+          },
+          "answer": "D",
+          "explanation": "正确答案是D。通知明确说明要预订展板，只需在周二晚上之前给学会发邮件。A错误（related_but_not_stated）：通知没有提到任何费用。B错误（wrong_detail，与原文相反）：通知说做过任何项目都可参加，并未要求先提交完整论文。C错误（misattributed_detail）：Hartman学生中心是活动举办地点，而非报名地点；报名方式是发邮件。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "C": "misattributed_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "info_session",
+      "situation": "health insurance enrollment information session",
+      "speaker_role": "advisor",
+      "difficulty": "hard",
+      "announcement": "Good morning, students. This is a reminder that our annual health insurance information session will be held this Wednesday at 3 p.m. in Room 210 of the Student Services Building. During the session, an advisor will walk you through the enrollment steps and answer questions about coverage options. Please remember that all students are automatically enrolled in the university plan unless you submit a waiver showing you already have comparable coverage. The waiver form must be uploaded through the student portal by September 30th. If you miss that deadline, the plan's cost will be added to your tuition bill automatically.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce a change in the university health plan",
+            "B": "To explain why insurance costs have increased",
+            "C": "To inform students about an insurance information session",
+            "D": "To require all students to visit the health clinic"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。通知的核心是提醒学生参加年度健康保险信息说明会，并附带说明自动参保和豁免的相关事项。A错误（wrong_purpose）：通知没有宣布保险计划有任何变更。B错误（wrong_purpose）：通知从未提及费用上涨或解释原因。D错误（over_reach/wrong_purpose）：通知谈的是说明会和保险参保，并未要求所有学生去健康诊所。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about a student who already has comparable coverage?",
+          "options": {
+            "A": "They should submit a waiver before the deadline",
+            "B": "They will be charged twice for insurance",
+            "C": "They are not allowed to attend the session",
+            "D": "They must cancel their outside insurance plan"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。通知说明学生会被自动参保，除非提交豁免表证明已有同等保险，且表格须在9月30日前上传，因此已有同等保险的学生应在截止日期前提交豁免。B错误（over_inference）：恰恰相反，提交豁免正是为了避免被收费。C错误（unrelated_inference）：说明会对所有学生开放，没有任何限制。D错误（over_inference）：通知只要求出示已有同等保险的证明，从未要求取消校外保险。",
+          "distractor_types": {
+            "B": "over_inference",
+            "C": "unrelated_inference",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "campus_activity",
+      "situation": "community garden spring cleanup volunteer event",
+      "speaker_role": "program_coordinator",
+      "difficulty": "medium",
+      "announcement": "Hello, everyone. As the coordinator of the Green Campus program, I'd like to invite you to our spring cleanup of the community garden this Saturday. We'll be removing winter weeds and preparing the soil for planting, starting at 10 a.m. behind Foster Hall. Gloves and tools will be provided, but please wear closed-toe shoes and clothing you don't mind getting muddy. No gardening experience is needed, and you can stay for as long or as little as you like. To help us plan snacks, please add your name to the sign-up sheet outside the program office by Friday afternoon.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To explain new rules for using the garden",
+            "B": "To announce that the garden is closing",
+            "C": "To advertise a gardening course for credit",
+            "D": "To invite volunteers to a garden cleanup"
+          },
+          "answer": "D",
+          "explanation": "正确答案是D。通知的核心是邀请大家参加本周六的社区花园春季清理志愿活动。A错误（wrong_purpose）：通知没有解释使用花园的新规定。B错误（reversed_intent）：花园不是要关闭，而是要清理并为种植做准备。C错误（wrong_purpose）：这不是一门可获学分的课程，而是一次志愿活动。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "reversed_intent",
+            "C": "wrong_purpose"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "Why does the speaker ask people to sign up by Friday?",
+          "options": {
+            "A": "Because space in the garden is very limited",
+            "B": "So the program can prepare enough snacks",
+            "C": "Because only experienced gardeners may join",
+            "D": "So volunteers can be assigned to teams"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。通知明确说明请大家周五下午前报名是为了帮助他们安排零食，因此可推断报名是为了准备足够的零食。A错误（over_inference）：通知没有提到名额有限，反而说想待多久都行。C错误（unrelated_inference，与原文相反）：通知说不需要园艺经验。D错误（over_inference）：通知从未提到把志愿者分组。",
+          "distractor_types": {
+            "A": "over_inference",
+            "C": "unrelated_inference",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "career_services",
+      "situation": "LinkedIn profile photo day at career center",
+      "speaker_role": "program_coordinator",
+      "difficulty": "medium",
+      "announcement": "Hi, everyone. The Career Center is excited to host a free LinkedIn Photo Day this Friday from 11 a.m. to 3 p.m. in the lobby of Bishop Hall. A professional photographer will be on site to take headshots you can use on your LinkedIn profile or job applications. We recommend dressing in business attire, since the photos are meant to look professional. There's no cost, but spots are limited, so please reserve a time slot through the Career Center website in advance. Your edited photo will be emailed to you within one week of the event.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To promote a free professional headshot event",
+            "B": "To explain how to build a LinkedIn profile",
+            "C": "To announce a new dress code on campus",
+            "D": "To advertise a paid photography workshop"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。通知的核心是宣传职业中心举办的免费LinkedIn拍照日，由专业摄影师为学生拍摄职业头像。B错误（wrong_purpose）：通知是关于拍照活动，而非教如何搭建LinkedIn主页。C错误（wrong_purpose）：建议穿正装只是针对这次拍照，并非全校新着装规定。D错误（wrong_detail/wrong_purpose）：活动是免费的，也不是一个收费的摄影工作坊。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "wrong_purpose",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "Why does the speaker recommend wearing business attire?",
+          "options": {
+            "A": "Because casual clothing is banned in Bishop Hall",
+            "B": "Because the photographer charges less for it",
+            "C": "So the photos look suitable for professional use",
+            "D": "Because the event is a formal awards ceremony"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。通知说明建议穿正装是因为这些照片要显得专业，因此可推断穿正装是为了让照片适合用于求职等正式用途。A错误（over_inference）：通知没有说Bishop Hall禁止休闲着装，只是给出穿衣建议。B错误（unrelated_inference）：活动完全免费，摄影师不存在收费高低之说。D错误（over_inference）：这是拍照活动，并非正式颁奖典礼。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_inference",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "facility_change",
+      "situation": "student lounge furniture upgrade and temporary relocation",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "Attention students. The second-floor student lounge in the Union Building will be closed next week so that the old furniture can be replaced with new seating and study tables. The work is scheduled to begin Monday morning and should be finished by Friday afternoon. While the lounge is closed, students are welcome to use the temporary study space set up in Room 105 on the first floor. Please note that the vending machines on the second floor will remain accessible throughout the week. We appreciate your patience and think you'll really enjoy the upgraded space when it reopens.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To inform students of a temporary lounge closure for upgrades",
+            "B": "To announce that the Union Building is closing permanently",
+            "C": "To ask students to donate old furniture",
+            "D": "To explain new rules for using the study tables"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。通知的核心是告知学生二楼休息室将临时关闭以更换新家具，并提供临时学习空间。B错误（reversed_intent）：关闭的只是二楼休息室且是临时的，整栋Union大楼并未永久关闭。C错误（wrong_purpose）：通知是替换旧家具，并未请学生捐赠家具。D错误（wrong_purpose）：通知没有解释使用学习桌的新规定。",
+          "distractor_types": {
+            "B": "reversed_intent",
+            "C": "wrong_purpose",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "Where can students study while the lounge is closed?",
+          "options": {
+            "A": "At the vending machine area on the second floor",
+            "B": "In the library's upper-floor reading room",
+            "C": "In a temporary space in Room 105 on the first floor",
+            "D": "In the Union Building basement"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。通知明确说明休息室关闭期间，学生可使用一楼105房间设置的临时学习空间。A错误（misattributed_detail）：二楼自动售货机只是保持可用，并非学习空间。B错误（related_but_not_stated）：通知从未提到图书馆阅览室。D错误（related_but_not_stated）：通知没有提及任何地下室空间。",
+          "distractor_types": {
+            "A": "misattributed_detail",
+            "B": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        }
+      ]
+    },
+    {
+      "context": "info_session",
+      "situation": "study abroad program application info session",
+      "speaker_role": "advisor",
+      "difficulty": "medium",
+      "announcement": "Good morning, students. The Office of International Programs will hold an information session about next year's study abroad opportunities this Tuesday at 4 p.m. in Carver Hall, Room 120. An advisor will explain the partner universities available, the application timeline, and how credits transfer back to your degree. Please be aware that to apply, you'll need at least one full year of study completed by the time you go abroad. Applications open the following Monday and close on November 15th. If you can't attend in person, a recording will be posted on the international programs page later that week.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce the cancellation of study abroad programs",
+            "B": "To inform students about a study abroad information session",
+            "C": "To list the courses offered at partner universities",
+            "D": "To remind students to renew their passports"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。通知的核心是告知学生关于明年留学项目的信息说明会，并介绍合作院校、申请时间线和学分转换。A错误（reversed_intent）：项目不是被取消，而是正在介绍和开放申请。C错误（too_narrow）：合作院校只是说明会的一部分内容，且通知没有列出具体课程。D错误（wrong_purpose）：通知从未提到护照或续签事宜。",
+          "distractor_types": {
+            "A": "reversed_intent",
+            "C": "too_narrow",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What is required in order to apply for study abroad?",
+          "options": {
+            "A": "Having completed at least one year of study",
+            "B": "Submitting two letters of recommendation",
+            "C": "Attending the information session in person",
+            "D": "Paying a deposit by November 15th"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。通知明确说明申请的前提是出国时至少已完成一整年的学业。B错误（related_but_not_stated）：通知从未提到推荐信。C错误（wrong_detail，与原文相反）：通知说不能到场可看录像，因此现场出席并非申请条件。D错误（misattributed_detail）：11月15日是申请截止日期，而非缴纳押金的要求。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "wrong_detail",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "policy_update",
+      "situation": "new bike registration requirement on campus",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "Attention students and staff. Beginning this fall, all bicycles parked on campus must be registered with Campus Safety. This new policy is meant to help us return lost or stolen bikes to their owners more quickly. Registration is completely free and takes only a few minutes at the Campus Safety office in Lowell Hall. Once registered, you'll receive a small sticker to attach to your bike frame. Please note that unregistered bicycles found after October 1st may be tagged with a warning. To register, bring your bike and student ID to the office any weekday between 9 a.m. and 5 p.m.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce a new bike registration requirement",
+            "B": "To warn that bike parking is no longer allowed",
+            "C": "To advertise bicycles for sale on campus",
+            "D": "To explain how to repair a damaged bike"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。通知的核心是宣布从今秋起所有校内停放的自行车必须在校园安全办公室登记的新政策。B错误（reversed_intent）：自行车停放并未被禁止，只是需要登记。C错误（wrong_purpose）：通知不是在出售自行车。D错误（wrong_purpose）：通知没有涉及如何修理自行车。",
+          "distractor_types": {
+            "B": "reversed_intent",
+            "C": "wrong_purpose",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What should students bring in order to register a bike?",
+          "options": {
+            "A": "A receipt showing the bike's purchase price",
+            "B": "A registration fee paid in cash",
+            "C": "Their bike and student ID to the office",
+            "D": "A completed form mailed in advance"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。通知明确说明登记时要把自行车和学生证带到办公室。A错误（related_but_not_stated）：通知从未提到购买收据或价格。B错误（wrong_detail，与原文相反）：登记是完全免费的，无需缴费。D错误（misattributed_detail）：登记是本人带车到现场办理，并非邮寄表格。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "event",
+      "situation": "guest author reading and book signing in the library",
+      "speaker_role": "department_staff",
+      "difficulty": "easy",
+      "announcement": "Good evening, everyone. The English Department is delighted to announce that award-winning novelist Clara Mendez will visit campus next Thursday for a public reading and book signing. The event will take place at 6 p.m. in the main reading room of Whitman Library. Ms. Mendez will read from her latest novel and then take questions from the audience. Copies of her books will be available for purchase at the door, and she'll happily sign them afterward. Admission is free and open to the public, so feel free to bring friends and family. We hope to see a great turnout next Thursday evening.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement mainly about?",
+          "options": {
+            "A": "A creative writing course taught by a novelist",
+            "B": "A visiting author's public reading and book signing",
+            "C": "A sale of used books at the campus library",
+            "D": "A change in the library's evening hours"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。通知的核心是宣布获奖小说家Clara Mendez将到校举办公开朗读和签售活动。A错误（wrong_purpose）：这是一次朗读签售活动，而非一门写作课程。C错误（wrong_detail）：现场出售的是作者本人的新书，并非二手书义卖。D错误（wrong_purpose）：通知没有提到图书馆开放时间的变化。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "C": "wrong_detail",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What is true about attending the event?",
+          "options": {
+            "A": "Tickets must be reserved in advance",
+            "B": "Only English majors may attend",
+            "C": "Admission is free and open to the public",
+            "D": "Attendees must buy a book to enter"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。通知明确说明活动免费且向公众开放，欢迎带亲友参加。A错误（related_but_not_stated）：通知没有提到需要提前预订门票。B错误（wrong_detail，与原文相反）：活动对公众开放，并不限于英语专业学生。D错误（wrong_detail）：可以在门口购书，但购书并非入场条件。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "D": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "deadline",
+      "situation": "scholarship application deadline reminder from financial aid",
+      "speaker_role": "department_staff",
+      "difficulty": "hard",
+      "announcement": "This is a reminder from the Financial Aid Office about the Merit Scholarship, whose application closes this Friday at 11:59 p.m. To be considered, you must submit both the online application form and one letter of recommendation through the financial aid portal. We've noticed that some students forget the recommendation letter, so please confirm yours has been uploaded before the deadline. Awards are based on academic performance rather than financial need, so all eligible students are encouraged to apply. Decisions will be announced by email in early December. If you have questions, our office in Hale Hall is open until 5 p.m. on weekdays.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To explain how scholarship money can be spent",
+            "B": "To announce the winners of the Merit Scholarship",
+            "C": "To remind students of a scholarship application deadline",
+            "D": "To introduce a new financial aid office location"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。通知的核心是提醒学生Merit奖学金的申请将在本周五截止，并强调要提交申请表和推荐信。A错误（wrong_purpose）：通知没有解释奖学金资金如何使用。B错误（wrong_purpose）：获奖结果要到12月初才公布，此处并未宣布获奖者。D错误（wrong_purpose）：Hale Hall只是答疑办公地点，通知并非介绍新的办公地址。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "wrong_purpose",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students who do not demonstrate financial need?",
+          "options": {
+            "A": "They are still eligible to apply for the scholarship",
+            "B": "They will automatically receive the award",
+            "C": "They must submit two recommendation letters",
+            "D": "They should apply at the Hale Hall office in person"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。通知说明奖学金基于学业表现而非经济需求，鼓励所有符合条件的学生申请，因此可推断没有经济需求的学生同样有资格申请。B错误（over_inference）：有资格申请不等于会自动获奖，结果要经评选。C错误（wrong_detail）：只需一封推荐信，而非两封。D错误（over_inference）：Hale Hall只是答疑地点，申请是通过在线门户提交的。",
+          "distractor_types": {
+            "B": "over_inference",
+            "C": "wrong_detail",
+            "D": "over_inference"
+          }
+        }
+      ]
+    }
+  ]
+}

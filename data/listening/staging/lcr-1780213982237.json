@@ -1,0 +1,335 @@
+{
+  "type": "listenChooseResponse",
+  "version": 2,
+  "generated_at": "2026-05-31T07:53:20.324Z",
+  "total_generated": 10,
+  "total_accepted": 9,
+  "acceptance_rate": 0.9,
+  "tts_generated": false,
+  "batch_quality": {
+    "avg_flavor": 0.84,
+    "answer_distribution": {
+      "A": 3,
+      "B": 3,
+      "C": 2,
+      "D": 1
+    },
+    "balanced": true,
+    "contraction_rate": 33,
+    "dm_rate": 44,
+    "paradigm_distribution": {
+      "direct_topical": 2,
+      "context_shift": 1,
+      "idiomatic": 3,
+      "counter_question": 1,
+      "marker_led_indirect": 2
+    },
+    "difficulty_distribution": {
+      "easy": 2,
+      "hard": 3,
+      "medium": 4
+    }
+  },
+  "items": [
+    {
+      "context": "general_daily",
+      "situation": "checking if a service (post office, bank) is open",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Do you know if the post office is still open?",
+      "options": {
+        "A": "I think it closes at five today.",
+        "B": "I need to buy some stamps.",
+        "C": "The mail came an hour ago.",
+        "D": "Yes, I know the postman."
+      },
+      "answer": "A",
+      "explanation": "正确答案A直接回答对方的问题，提供了邮局关门时间的信息，是典型的直接事实回应。B选项说需要买邮票，是语义关联陷阱，因为提到了邮局相关物品，但并未回答是否开门的问题。C选项谈论邮件已送达，与询问营业时间无关，属于离题选项。D选项回答“认识邮递员”，将问题中的“知道”误解为“认识某人”，属于误解陷阱。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_1780213982237_001",
+      "_audit": {
+        "match": true,
+        "ambiguous": false,
+        "validCount": 1
+      },
+      "flavor_score": 0.58
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student checking bus or shuttle schedule",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "The bus to the library doesn't come for another twenty minutes.",
+      "options": {
+        "A": "The library is open until midnight.",
+        "B": "Let's just walk, it's not that far.",
+        "C": "I missed the bus yesterday too.",
+        "D": "Twenty minutes is a long time."
+      },
+      "answer": "B",
+      "explanation": "正确答案B没有直接回应等待时间，而是提出了一个替代方案（走路），解决了对方隐含的“如何到达图书馆”的问题，属于语境转换。A选项谈论图书馆开放时间，与等待公交车无关，是离题选项。C选项说昨天也错过了公交车，虽然关联了“公交车”主题，但并未解决当前困境，是语义关联陷阱。D选项只是重复了时间信息，没有推进对话或提供帮助，不够自然。",
+      "distractor_types": {
+        "A": "off_topic",
+        "C": "semantic_association_trap",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_1780213982237_002",
+      "_audit": {
+        "match": true,
+        "ambiguous": false,
+        "validCount": 1
+      },
+      "flavor_score": 0.95
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student seeking help at the writing center",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Can you take a look at my thesis statement before I submit it?",
+      "options": {
+        "A": "I wrote my thesis last semester.",
+        "B": "I submitted it this morning.",
+        "C": "Sure, I'd be happy to.",
+        "D": "The statement is on the board."
+      },
+      "answer": "C",
+      "explanation": "正确答案C使用了习语式回答“Sure, I'd be happy to”，直接且礼貌地表示愿意帮助，符合请求协助的对话场景。A选项说“我上学期写了论文”，将“thesis”理解为整个论文而非论文陈述，是语义关联陷阱。B选项说“我今早提交了”，混淆了“提交”这个动作的施动者，属于离题。D选项说“陈述在黑板上”，将“statement”字面理解为写在黑板上的文字，是误解陷阱。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_1780213982237_003",
+      "_audit": {
+        "match": true,
+        "ambiguous": false,
+        "validCount": 1
+      },
+      "flavor_score": 0.91
+    },
+    {
+      "context": "social",
+      "situation": "friend sharing news or personal update",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "I finally got the job I applied for last month.",
+      "options": {
+        "A": "You applied for a job last month?",
+        "B": "I got a new phone last week.",
+        "C": "The job market is tough right now.",
+        "D": "That's awesome, congratulations!"
+      },
+      "answer": "D",
+      "explanation": "正确答案D使用习语式表达“That's awesome, congratulations!”，这是对好消息的自然、热情回应，符合社交语境。A选项重复了对方话语中的部分信息，但以疑问形式出现，显得不自然且多余，属于离题。B选项说“我上周买了新手机”，完全转换话题，是离题选项。C选项谈论就业市场现状，虽然相关但过于泛泛，没有直接回应对方的喜讯，属于语义关联陷阱。",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "off_topic",
+        "C": "semantic_association_trap"
+      },
+      "id": "lcr_v2_1780213982237_004",
+      "_audit": {
+        "match": true,
+        "ambiguous": false,
+        "validCount": 1
+      },
+      "flavor_score": 0.88
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a neighbor about noise or shared space",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "How can I keep my music down when you're studying?",
+      "options": {
+        "A": "Could you just use headphones?",
+        "B": "I study in the library mostly.",
+        "C": "The music is too loud.",
+        "D": "I'm not studying right now."
+      },
+      "answer": "A",
+      "explanation": "正确答案A以反问形式提出解决方案（用耳机），既回应了问题又推进了对话，属于反问范式。B选项说“我大多在图书馆学习”，并未直接解决噪音问题，是离题选项。C选项抱怨音乐太大声，但对方已经在询问如何降低音量，重复问题无帮助，属于语义关联陷阱。D选项说“我现在没在学习”，暗示噪音当前没问题，但未解决未来可能的问题，属于误解陷阱。",
+      "distractor_types": {
+        "B": "off_topic",
+        "C": "semantic_association_trap",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_1780213982237_005",
+      "_audit": {
+        "match": true,
+        "ambiguous": false,
+        "validCount": 1
+      },
+      "flavor_score": 0.97
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about dorm maintenance issue",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "When is maintenance going to fix the broken heater?",
+      "options": {
+        "A": "The heater is very old.",
+        "B": "They said someone would come by tomorrow morning.",
+        "C": "I fixed my own heater once.",
+        "D": "Maintenance is closed on weekends."
+      },
+      "answer": "B",
+      "explanation": "正确答案B使用习语式回答，直接提供了维修人员何时来的信息，并带有“他们说”这一自然引述，符合对话预期。A选项描述暖气片老旧，没有回答时间问题，是语义关联陷阱。C选项说“我自己修过一次”，转移话题至个人经历，是离题选项。D选项说维修处周末关门，虽然与维修相关，但并未回答“何时来修”的具体问题，属于回答错误问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_1780213982237_006",
+      "_audit": {
+        "match": true,
+        "ambiguous": false,
+        "validCount": 1
+      },
+      "flavor_score": 0.83
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about printing or scanning at computer lab",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Do you know if this printer does double-sided printing?",
+      "options": {
+        "A": "Yes, I printed something yesterday.",
+        "B": "The printer is out of paper.",
+        "C": "Actually, I think you have to set it in the menu.",
+        "D": "I need to print my assignment too."
+      },
+      "answer": "C",
+      "explanation": "正确答案C以话语标记词“Actually”开头，间接提供了如何设置双面打印的信息，符合标记引导的间接范式。A选项回答“我昨天打印了东西”，虽然关联了“打印”，但并未回答双面打印的问题，属于语义关联陷阱。B选项说打印机缺纸，是离题信息，未回应核心问题。D选项说“我也要打印作业”，转移焦点至个人需求，属于离题选项。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "off_topic"
+      },
+      "id": "lcr_v2_1780213982237_007",
+      "_audit": {
+        "match": true,
+        "ambiguous": false,
+        "validCount": 1
+      },
+      "flavor_score": 0.86
+    },
+    {
+      "context": "social",
+      "situation": "offering help to someone who seems stressed",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Where did I put my keys? I'm going to be late.",
+      "options": {
+        "A": "You should calm down first.",
+        "B": "Check your jacket pocket.",
+        "C": "I lost my keys last week.",
+        "D": "The bus leaves in ten minutes."
+      },
+      "answer": "B",
+      "explanation": "正确答案B直接提出了一个具体的寻找钥匙的位置建议，是对问题的直接帮助，属于直接主题回答。A选项建议冷静，虽然合理但未直接解决找钥匙的问题，是离题选项。C选项说“我上周丢了钥匙”，转移话题至个人经历，是语义关联陷阱。D选项说公交车十分钟后出发，增加了时间压力但未帮助找钥匙，属于离题。",
+      "distractor_types": {
+        "A": "off_topic",
+        "C": "semantic_association_trap",
+        "D": "off_topic"
+      },
+      "id": "lcr_v2_1780213982237_008",
+      "_audit": {
+        "match": true,
+        "ambiguous": false,
+        "validCount": 1
+      },
+      "flavor_score": 0.72
+    },
+    {
+      "context": "general_daily",
+      "situation": "coordinating airport pickup with a friend",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "What time does your flight land on Friday?",
+      "options": {
+        "A": "Well, it's supposed to arrive around six, but it might be delayed.",
+        "B": "I prefer to fly on weekdays.",
+        "C": "The airport is very busy on Fridays.",
+        "D": "My flight number is UA 123."
+      },
+      "answer": "A",
+      "explanation": "正确答案A以话语标记词“Well”开头，间接提供了落地时间并预判了可能的延误，既回答了问题又提供了额外有用信息，符合标记引导的间接范式。B选项说喜欢工作日飞行，与问题无关，是离题选项。C选项谈论机场繁忙程度，是语义关联陷阱（关联“机场”和“周五”）。D选项提供了航班号，但并未回答落地时间问题，属于回答错误问题类型。",
+      "distractor_types": {
+        "B": "off_topic",
+        "C": "semantic_association_trap",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_1780213982237_009",
+      "_audit": {
+        "match": true,
+        "ambiguous": false,
+        "validCount": 1
+      },
+      "flavor_score": 0.86
+    }
+  ],
+  "rejected": [
+    {
+      "context": "campus_daily",
+      "situation": "roommate discussing weekend plans",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Why don't we go hiking this Saturday?",
+      "options": {
+        "A": "Hiking is too tiring for me.",
+        "B": "Actually, I was thinking we could see a movie instead.",
+        "C": "I went hiking last month.",
+        "D": "Saturday is a good day for hiking."
+      },
+      "answer": "B",
+      "explanation": "正确答案B以话语标记词“Actually”开头，间接提出了一个替代方案（看电影），礼貌地拒绝了原提议并推进了对话，符合标记引导的间接范式。A选项直接拒绝但未提供替代方案，显得生硬，是语义关联陷阱（关联“hiking”）。C选项说上个月去过，转移话题至过去经历，是离题选项。D选项同意提议但过于平淡，没有推进对话，属于离题。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "off_topic"
+      },
+      "id": "lcr_v2_1780213982237_010",
+      "_flavor": {
+        "scores": {
+          "indirect_answer": 1,
+          "word_trap": 1,
+          "distractor_diversity": 1,
+          "natural_register": 1,
+          "constructive_tone": 1,
+          "plausible_distractors": 1,
+          "length_neutrality": 0
+        },
+        "total": 0.95,
+        "weights": {
+          "indirect_answer": 0.25,
+          "word_trap": 0.2,
+          "distractor_diversity": 0.15,
+          "natural_register": 0.15,
+          "constructive_tone": 0.1,
+          "plausible_distractors": 0.1,
+          "length_neutrality": 0.05
+        }
+      },
+      "audit_result": {
+        "aiAnswer": "B",
+        "ourAnswer": "B",
+        "match": true,
+        "ambiguous": true,
+        "ratings": {
+          "A": "valid",
+          "B": "valid",
+          "C": "invalid",
+          "D": "partially_valid"
+        },
+        "reasoning": "Option B is the best because it directly addresses the suggestion with a polite alternative, which is a natural conversational move. Option A is valid but less collaborative. Option C is irrelevant as it doesn't respond to the proposal. Option D is partially valid as it acknowledges the day but doesn't engage with the suggestion."
+      }
+    }
+  ]
+}

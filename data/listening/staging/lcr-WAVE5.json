@@ -1,0 +1,324 @@
+{
+  "items": [
+    {
+      "context": "social",
+      "situation": "responding to an invitation or suggestion",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "How am I supposed to get to your place?",
+      "options": {
+        "A": "Don't worry, I'll come pick you up.",
+        "B": "My place is bigger than yours.",
+        "C": "I got there really late last night.",
+        "D": "Yes, you should definitely come along."
+      },
+      "answer": "A",
+      "explanation": "说话人表面问\"怎么去你家\"，实际担心交通方式。正确答案A不直接回答方式，而是直接解决他的难题——主动开车去接，属于context_shift。B是语义关联陷阱：抓住\"place\"却去比较房子大小，答非所问。C是语义关联陷阱：复用\"get there\"但说的是昨晚到达，与当前安排无关。D是错误问题类型：回答的是\"我该不该来\"这种是非问，而非\"怎么来\"。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "semantic_association_trap",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student discussing a presentation topic with partner",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Do you think our topic is too broad?",
+      "options": {
+        "A": "Yes, the room is pretty broad.",
+        "B": "Actually, we could narrow it down.",
+        "C": "The presentation is on Tuesday.",
+        "D": "I gave a great talk last semester."
+      },
+      "answer": "B",
+      "explanation": "说话人问选题是否太宽泛。正确答案B以话语标记\"Actually\"开头，间接回应——承认问题并提出缩小范围，属于marker_led_indirect。A是语义关联陷阱兼一词多义：把\"broad\"（宽泛）误用为\"宽敞\"形容房间。C是离题选项：说的是展示时间，与选题宽窄无关。D是离题选项：谈论上学期自己的演讲，与当前选题无关。",
+      "distractor_types": {
+        "A": "polysemy_misinterpretation",
+        "C": "off_topic",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "offering help to someone who seems stressed",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "You look like you've got a lot on your plate.",
+      "options": {
+        "A": "The plate is on the kitchen table.",
+        "B": "I ordered way too much food.",
+        "C": "Yeah, let me know if you can help out.",
+        "D": "She looks really tired today."
+      },
+      "answer": "C",
+      "explanation": "说话人用习语\"a lot on your plate\"表示\"事情很多/压力大\"，是在表达关心。正确答案C顺势回应——承认并请求帮助，自然推进对话。A是语义关联陷阱兼一词多义：把\"plate\"字面理解为餐盘。B是语义关联陷阱：抓住\"plate\"联想到点餐过多，答非所问。D是离题选项：转去评论第三人\"她\"很累，没有回应对方的关心。",
+      "distractor_types": {
+        "A": "polysemy_misinterpretation",
+        "B": "semantic_association_trap",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "friend sharing news or personal update",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Why didn't you tell me you got the job?",
+      "options": {
+        "A": "The job is downtown near the station.",
+        "B": "No, I haven't told her anything.",
+        "C": "Tell me where you parked the car.",
+        "D": "Honestly, I wanted to surprise you."
+      },
+      "answer": "D",
+      "explanation": "说话人责怪式地问\"为什么没告诉我你拿到工作了\"，是在分享好消息后的互动。正确答案D以话语标记\"Honestly\"开头，间接说明原因——想给对方惊喜，属于marker_led_indirect。A是语义关联陷阱：抓住\"job\"去说工作地点，没回答\"为什么\"。B是错误问题类型：把问题当成是非问回答\"没有\"，且对象错成\"她\"。C是语义关联陷阱兼一词多义：复用\"tell\"但变成命令对方说停车位置。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "wrong_question_type",
+        "C": "polysemy_misinterpretation"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student checking lost-and-found at front desk",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "I think I left my backpack here yesterday.",
+      "options": {
+        "A": "What color is it?",
+        "B": "The desk closes at five.",
+        "C": "I packed my bag this morning.",
+        "D": "Yes, yesterday was pretty busy."
+      },
+      "answer": "A",
+      "explanation": "学生在失物招领处说昨天落了背包。正确答案A以反问推进对话——询问颜色以便查找，属于counter_question。B是离题选项：说前台关门时间，没帮忙找包。C是语义关联陷阱：抓住\"backpack/bag\"去说自己今早收拾包，与失物无关。D是离题选项：附和\"昨天很忙\"，对找包毫无帮助。",
+      "distractor_types": {
+        "B": "off_topic",
+        "C": "semantic_association_trap",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "expressing concern about a friend's situation",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "What are you going to do about your rent?",
+      "options": {
+        "A": "The apartment is on the fifth floor.",
+        "B": "I can lend you some money if you need.",
+        "C": "Rent has gone up everywhere lately.",
+        "D": "When did you sign the lease?"
+      },
+      "answer": "B",
+      "explanation": "说话人关切地问朋友\"房租怎么办\"，潜台词是担心对方付不起。正确答案B不直接答\"怎么办\"，而是主动提出借钱解决根本问题，属于context_shift。A是语义关联陷阱：抓住\"rent\"联想到公寓楼层，答非所问。C是语义关联陷阱兼离题：泛泛评论\"房租到处都涨\"，没回应对方的处境。D是错误问题类型：用反问\"何时签约\"转移话题，没解决当前困境。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "semantic_association_trap",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "arranging a ride or carpool with a friend",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Where should I wait for you tomorrow?",
+      "options": {
+        "A": "I waited for almost an hour.",
+        "B": "Tomorrow is going to be sunny.",
+        "C": "Right by the main entrance works.",
+        "D": "Yes, I'll be driving the blue car."
+      },
+      "answer": "C",
+      "explanation": "说话人安排拼车，问明天在哪等。正确答案C用口语化的\"works\"（这个地点可行）自然给出地点——主入口旁，属于idiomatic且直接推进。A是语义关联陷阱兼一词多义：复用\"wait\"但说的是过去等了一小时。B是离题选项：抓住\"tomorrow\"去说天气，没回答地点。D是错误问题类型：把\"在哪\"答成是非问，给出车的信息而非地点。",
+      "distractor_types": {
+        "A": "polysemy_misinterpretation",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a professor about office hours or assignment",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Are you free to meet sometime this week?",
+      "options": {
+        "A": "The meeting room is down the hall.",
+        "B": "Yes, the assignment was due last week.",
+        "C": "I felt free all summer long.",
+        "D": "Well, my Thursday afternoon is open."
+      },
+      "answer": "D",
+      "explanation": "学生问教授本周是否有空见面。正确答案D以话语标记\"Well\"开头，间接给出可行时段——周四下午有空，属于marker_led_indirect。A是语义关联陷阱：抓住\"meet\"联想到会议室位置，没回答是否有空。B是错误问题类型兼一词多义：复用\"week\"但答成作业截止时间，文不对题。C是语义关联陷阱兼一词多义：把\"free\"（有空）误用为\"自由/无事\"形容整个夏天。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "wrong_question_type",
+        "C": "polysemy_misinterpretation"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "professor responding to a student question after lecture",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Why is my thesis statement still too weak?",
+      "options": {
+        "A": "Have you tried making a clearer claim?",
+        "B": "The thesis is due at the end of term.",
+        "C": "I write all my statements by hand.",
+        "D": "Yes, weak coffee keeps me up at night."
+      },
+      "answer": "A",
+      "explanation": "学生课后问教授论文论点为何仍然不够有力。正确答案A以反问推进对话——引导学生提出更清晰的主张，属于counter_question。B是语义关联陷阱：抓住\"thesis\"去说截止日期，没解释为何薄弱。C是语义关联陷阱兼一词多义：复用\"statement\"但理解成\"手写陈述\"。D是语义关联陷阱兼一词多义：把\"weak\"（薄弱）误用为形容\"淡咖啡\"，完全离题。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "polysemy_misinterpretation",
+        "D": "polysemy_misinterpretation"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "academic advisor reassuring a student about course load",
+      "difficulty": "medium",
+      "answer_paradigm": "context_shift",
+      "speaker": "I don't think I can handle five classes.",
+      "options": {
+        "A": "Let's drop one and lighten your schedule.",
+        "B": "The classroom is on the second floor.",
+        "C": "I handled the package very carefully.",
+        "D": "Yes, five is a nice round number."
+      },
+      "answer": "A",
+      "explanation": "学生向顾问坦言觉得五门课吃不消，潜台词是想减负。正确答案A不停留在表态，而是直接解决问题——退掉一门减轻负担，属于context_shift。B是语义关联陷阱：抓住\"classes\"联想到教室位置，答非所问。C是语义关联陷阱兼一词多义：复用\"handle\"但理解成\"搬运包裹\"。D是离题选项：附和\"五是个好数字\"，对学生的焦虑毫无帮助。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "polysemy_misinterpretation",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "librarian responding to a student returning a book",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Is there a fine for returning this late?",
+      "options": {
+        "A": "The book was a really fine read.",
+        "B": "Yes, the library closes at nine.",
+        "C": "The shelves are fine just as they are.",
+        "D": "Actually, we waived late fees this term."
+      },
+      "answer": "D",
+      "explanation": "学生还书时问逾期是否有罚款。正确答案D以话语标记\"Actually\"开头，间接给出好消息——本学期免除逾期费，属于marker_led_indirect。A是一词多义陷阱：把\"fine\"（罚款）误用为\"很好的\"形容读物。B是错误问题类型：答成图书馆关门时间，没回答是否罚款。C是一词多义陷阱：再次把\"fine\"误用为\"挺好\"形容书架。",
+      "distractor_types": {
+        "A": "polysemy_misinterpretation",
+        "B": "wrong_question_type",
+        "C": "polysemy_misinterpretation"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "coach checking in with a tired team member",
+      "difficulty": "medium",
+      "answer_paradigm": "context_shift",
+      "speaker": "You seem pretty worn out after practice.",
+      "options": {
+        "A": "Maybe sit out the next drill and rest.",
+        "B": "My shoes are completely worn out.",
+        "C": "Practice starts at six tomorrow.",
+        "D": "Yes, the field was muddy today."
+      },
+      "answer": "A",
+      "explanation": "教练观察到队员练完很疲惫，潜台词是关心其状态。正确答案A不停留在表态，而是直接解决问题——建议休息一轮，属于context_shift。B是语义关联陷阱兼一词多义：复用\"worn out\"但理解成\"鞋子磨破了\"。C是语义关联陷阱：抓住\"practice\"去说明天训练时间，没回应疲惫。D是离题选项：附和\"场地很泥泞\"，没回应队员的状态。",
+      "distractor_types": {
+        "B": "polysemy_misinterpretation",
+        "C": "semantic_association_trap",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "resident assistant addressing a noise complaint with a student",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Could you keep the music down after ten?",
+      "options": {
+        "A": "Would headphones be okay instead?",
+        "B": "The music festival is next month.",
+        "C": "I keep my room very tidy.",
+        "D": "Yes, ten dollars sounds fair."
+      },
+      "answer": "A",
+      "explanation": "宿管请学生十点后把音乐音量调小。正确答案A以反问推进协商——提议改用耳机，既配合又给出方案，属于counter_question。B是语义关联陷阱：抓住\"music\"去说音乐节，答非所问。C是语义关联陷阱兼一词多义：复用\"keep\"但变成\"保持房间整洁\"。D是错误问题类型兼一词多义：把\"ten\"（十点）误当成\"十美元\"来回答，文不对题。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "polysemy_misinterpretation",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "classmate asking about a missed study group",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "What did you guys cover in study group?",
+      "options": {
+        "A": "I can send you my notes tonight.",
+        "B": "The cover of the book is torn.",
+        "C": "Our group has about six people.",
+        "D": "When does the group meet next?"
+      },
+      "answer": "A",
+      "explanation": "同学问\"学习小组讲了什么\"，潜台词是想补上错过的内容。正确答案A不逐条复述，而是直接解决需求——把笔记发过去，属于context_shift。B是一词多义陷阱：把\"cover\"（讲解）误用为\"书的封面\"。C是语义关联陷阱：抓住\"group\"去说人数，没回答讲了什么。D是错误问题类型：用反问\"下次何时聚\"转移话题，没回应当前问题。",
+      "distractor_types": {
+        "B": "polysemy_misinterpretation",
+        "C": "semantic_association_trap",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "front desk staff helping a student with a room key",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "My key card stopped working this morning.",
+      "options": {
+        "A": "The morning shift starts at eight.",
+        "B": "I worked really hard this morning.",
+        "C": "Let me print you a new one right now.",
+        "D": "She lost her keys last week too."
+      },
+      "answer": "C",
+      "explanation": "学生在前台反映门卡今早失灵。正确答案C直接回应并解决——立刻补办一张新卡，自然推进对话。A是语义关联陷阱：抓住\"morning\"去说早班时间，没解决门卡问题。B是语义关联陷阱兼一词多义：复用\"work/morning\"但说成\"今早工作很努力\"。D是离题选项：转去说第三人\"她\"上周也丢钥匙，没帮当前学生。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "polysemy_misinterpretation",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "advisor discussing an internship application with a student",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Did you submit the internship application yet?",
+      "options": {
+        "A": "The intern sits at that front desk.",
+        "B": "Yes, applications make great wall art.",
+        "C": "I submitted to the urge for a nap.",
+        "D": "Not quite, I'm still polishing my resume."
+      },
+      "answer": "D",
+      "explanation": "顾问问学生实习申请是否已提交。正确答案D以\"Not quite\"婉转作答，间接说明进度——还在完善简历，属于marker_led_indirect。A是语义关联陷阱：抓住\"internship\"去说实习生坐在哪，没回答是否提交。B是离题选项：把\"applications\"扯成\"墙面装饰\"，荒诞离题。C是一词多义陷阱：把\"submit\"（提交）误用为\"屈服于（睡意）\"，文不对题。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "polysemy_misinterpretation"
+      }
+    }
+  ]
+}

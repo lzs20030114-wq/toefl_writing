@@ -1,0 +1,351 @@
+{
+  "type": "listenAcademicTalk",
+  "version": 2,
+  "generated_at": "2026-05-31T07:52:35.182Z",
+  "total_generated": 3,
+  "total_accepted": 2,
+  "acceptance_rate": 0.67,
+  "tts_generated": false,
+  "tts_provider": null,
+  "batch_quality": {
+    "avg_flavor": 0.73,
+    "answer_distribution": {
+      "A": 2,
+      "B": 2,
+      "C": 2,
+      "D": 2
+    },
+    "balanced": true,
+    "q_type_distribution": {
+      "main_idea": 2,
+      "function": 3,
+      "detail": 2,
+      "inference": 1
+    },
+    "subject_distribution": {
+      "ecology": 1,
+      "geology": 1
+    },
+    "difficulty_distribution": {
+      "easy": 1,
+      "hard": 1
+    },
+    "register_metrics": {
+      "contractionRate": 50,
+      "discourseMarkerRate": 100,
+      "youAddressRate": 0,
+      "questionRate": 50
+    },
+    "correct_is_longest_rate": 25,
+    "avg_word_count": 178
+  },
+  "items": [
+    {
+      "subject": "ecology",
+      "topic": "the role of wetlands in flood prevention",
+      "difficulty": "easy",
+      "transcript": "Wetlands are often seen as wastelands, places to be drained and developed. But that view ignores a crucial ecological service they provide: flood prevention. This is the concept of natural water regulation. Wetlands, like marshes and swamps, act as natural sponges. They absorb excess rainfall and slow down the flow of water into rivers and streams. A study in Vermont found that watersheds with intact wetlands reduced peak flood flows by up to sixty percent compared to watersheds where wetlands had been converted to farmland. How does this work? Wetland plants have dense root systems that hold soil in place and create friction. This friction slows moving water, giving it time to soak into the ground. The standing water in a wetland also provides storage capacity. When heavy rain falls, that storage fills up first, preventing downstream flooding. The significance is huge. Instead of building expensive concrete flood walls, we can protect and restore wetlands as a natural, cost-effective buffer. It's a shift from engineering solutions to working with natural systems.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the lecture mainly about?",
+          "options": {
+            "A": "The role of wetlands in preventing floods",
+            "B": "The economic value of converting wetlands to farmland",
+            "C": "The types of plants that grow in wetlands",
+            "D": "The history of flood control policies in Vermont"
+          },
+          "answer": "A",
+          "explanation": "正确答案A。讲座主要讨论湿地如何通过吸收雨水、减缓水流来防止洪水。B选项错误，因为讲座批评了将湿地转为农田的做法，而不是强调其经济价值。C选项太窄，植物类型只是支撑湿地功能的细节。D选项错误，讲座提到Vermont的研究作为例子，但主旨是湿地防洪，不是政策历史。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "wrong_topic",
+            "C": "surface_word_trap",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "function",
+          "stem": "Why does the professor mention the study in Vermont?",
+          "options": {
+            "A": "To argue that all wetlands should be restored immediately",
+            "B": "To provide evidence that wetlands reduce peak flood flows",
+            "C": "To compare flood levels in different states",
+            "D": "To criticize the conversion of wetlands to farmland"
+          },
+          "answer": "B",
+          "explanation": "正确答案B。教授引用Vermont的研究，具体数据表明湿地可以减少高达60%的峰值洪水流量，这是为了提供证据支持湿地防洪的核心论点。A选项过度推断，讲座没有呼吁立即恢复所有湿地。C选项错误，讲座没有比较不同州的洪水水平。D选项错误，讲座虽然提到湿地被转为农田，但引用研究的目的是证明湿地功能，而非批评。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "wrong_purpose",
+            "C": "literal_restatement",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "According to the professor, how do wetland plants help slow down water?",
+          "options": {
+            "A": "By releasing chemicals that thicken the water",
+            "B": "By absorbing water into their leaves",
+            "C": "Through dense root systems that create friction",
+            "D": "By blocking the flow with their stems"
+          },
+          "answer": "C",
+          "explanation": "正确答案C。讲座明确说明湿地植物有密集的根系，能固定土壤并产生摩擦，从而减缓水流。A选项错误，讲座未提及化学物质。B选项错误，虽然植物吸收水，但核心机制是根系摩擦。D选项错误，讲座说的是根系，不是茎。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "topic_adjacent",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "function",
+          "stem": "Why does the professor mention concrete flood walls?",
+          "options": {
+            "A": "To explain how wetlands are built",
+            "B": "To describe a common engineering solution",
+            "C": "To argue that wetlands are better than concrete walls",
+            "D": "To contrast engineering solutions with natural systems"
+          },
+          "answer": "D",
+          "explanation": "正确答案D。教授提到混凝土防洪墙是为了与湿地这种自然系统形成对比，强调从工程解决方案转向与自然系统合作的转变。A选项错误，讲座没说湿地是建成的。B选项只是陈述事实，没有解释提及的目的。C选项错误，讲座没有说湿地绝对更好，而是指出它是一种有成本效益的缓冲方法。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "literal_restatement",
+            "C": "over_inference"
+          }
+        }
+      ],
+      "id": "lat_v2_1780213946002_001",
+      "flavor_score": 0.66
+    },
+    {
+      "subject": "geology",
+      "topic": "how geologists use ice cores to reconstruct ancient climates",
+      "difficulty": "hard",
+      "transcript": "To understand past climates, geologists drill deep into ice sheets in places like Greenland and Antarctica. They extract long cylinders called ice cores, which contain layers of ice that have accumulated over hundreds of thousands of years. The key concept is paleoclimatology, the study of ancient climates. Each layer in an ice core preserves a record of the atmospheric conditions when the snow originally fell. Trapped within the ice are tiny bubbles of ancient air. By analyzing the composition of these bubbles, scientists can measure past levels of greenhouse gases like carbon dioxide and methane. For instance, ice cores from the Vostok station in Antarctica have revealed a tight correlation between CO2 levels and temperature over the past 400,000 years. During ice ages, CO2 was low; during warmer interglacial periods, CO2 was high. This data is crucial for understanding climate change today. But there is a limitation: ice cores can only go back about 800,000 years. Beyond that, the ice becomes too compressed to preserve clear annual layers. So while ice cores provide an invaluable window into the past, they are not a complete record.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the lecture mainly about?",
+          "options": {
+            "A": "The technology used to drill ice cores in Antarctica",
+            "B": "The history of the Vostok research station",
+            "C": "How ice cores help reconstruct ancient climates",
+            "D": "The relationship between CO2 and temperature"
+          },
+          "answer": "C",
+          "explanation": "正确答案C。讲座主要介绍冰芯如何用于重建古气候，包括原理、数据和局限性。A选项太窄，钻探技术只是过程的一部分。B选项错误，Vostok是例子，不是主题。D选项错误，CO2与温度的关系是数据发现，不是讲座主旨。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "wrong_topic",
+            "D": "surface_word_trap"
+          }
+        },
+        {
+          "type": "function",
+          "stem": "Why does the professor mention the Vostok station ice cores?",
+          "options": {
+            "A": "To describe the oldest ice core ever extracted",
+            "B": "To list the types of greenhouse gases found in ice",
+            "C": "To explain how ice cores are drilled",
+            "D": "To provide evidence of the CO2-temperature link"
+          },
+          "answer": "D",
+          "explanation": "正确答案D。教授提到Vostok站的冰芯是为了展示CO2水平与温度之间的紧密相关性，这是支持冰芯研究价值的关键证据。A选项错误，讲座没有说Vostok的冰芯是最古老的。B选项错误，讲座只是举例说明气体类型，不是目的。C选项错误，讲座没有详细说明钻探过程。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "wrong_purpose",
+            "C": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "According to the professor, what do the tiny bubbles in ice cores contain?",
+          "options": {
+            "A": "Ancient air from past atmospheres",
+            "B": "Meltwater from the ice sheet surface",
+            "C": "Fossilized pollen and dust particles",
+            "D": "Traces of volcanic ash"
+          },
+          "answer": "A",
+          "explanation": "正确答案A。讲座明确说冰芯中的小气泡含有古代空气。B选项错误，气泡是封闭的，不是融化水。C和D选项错误，讲座提到的是气体分析，没有说花粉或火山灰。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "topic_adjacent",
+            "D": "topic_adjacent"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What does the professor imply about ice core data?",
+          "options": {
+            "A": "It is the only reliable method for studying ancient climates",
+            "B": "It has limitations and does not cover all of Earth's history",
+            "C": "It proves that CO2 levels are the main cause of ice ages",
+            "D": "It shows that climate change is a natural cycle"
+          },
+          "answer": "B",
+          "explanation": "正确答案B。讲座结尾指出冰芯只能追溯到大约80万年前，更早的冰层无法保存清晰年层，暗示了数据的局限性。A选项过度推断，讲座没有说这是唯一方法。C选项错误，讲座显示相关关系，没有说因果关系。D选项错误，讲座没有讨论气候变化是否自然。",
+          "distractor_types": {
+            "A": "over_generalization",
+            "C": "reversed_logic",
+            "D": "topic_adjacent"
+          }
+        }
+      ],
+      "id": "lat_v2_1780213946002_003",
+      "flavor_score": 0.8
+    }
+  ],
+  "rejected": [
+    {
+      "subject": "art_history",
+      "topic": "how the camera obscura influenced Renaissance painting techniques",
+      "difficulty": "medium",
+      "transcript": "Before the invention of photography, artists used a device called the camera obscura. The term means 'dark chamber' in Latin. It was essentially a box with a small hole on one side that projected an inverted image of the outside scene onto a surface inside. Renaissance painters, particularly in the fifteenth and sixteenth centuries, may have used this tool to achieve greater realism in their work. The key concept here is optical projection as an artistic aid. How did it work? An artist would set up the camera obscura in a darkened room, with the hole facing the subject. The image would be projected onto paper or canvas, and the artist could trace the outlines. This helped with accurate perspective and proportion. The Dutch master Johannes Vermeer is often linked to this technique. His painting 'The Music Lesson' shows a level of detail and light fidelity that some scholars argue would be difficult to achieve without optical assistance. The significance is that it challenges the romantic notion of the lone genius. Instead, it suggests that Renaissance artists were also early adopters of technology, blending art with emerging scientific knowledge.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the lecture mainly about?",
+          "options": {
+            "A": "The invention of the camera obscura in the fifteenth century",
+            "B": "The possible use of camera obscura in Renaissance painting",
+            "C": "The life and works of Johannes Vermeer",
+            "D": "The difference between painting and photography"
+          },
+          "answer": "B",
+          "explanation": "正确答案B。讲座主要讨论暗箱如何可能被文艺复兴画家用于提高绘画的写实性。A选项太窄，发明只是背景。C选项错误，Vermeer只是例子之一。D选项错误，讲座没有比较绘画和摄影。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "C": "wrong_topic",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "function",
+          "stem": "Why does the professor mention 'The Music Lesson'?",
+          "options": {
+            "A": "To prove that Vermeer definitely used a camera obscura",
+            "B": "To describe a typical Renaissance painting style",
+            "C": "To illustrate the level of detail achievable with optical aid",
+            "D": "To compare Vermeer's work with other painters"
+          },
+          "answer": "C",
+          "explanation": "正确答案C。教授提到《音乐课》是为了说明其细节和光线真实程度，一些学者认为没有光学辅助很难达到。A选项过度推断，讲座说的是'可能'，不是'肯定'。B选项错误，讲座没有描述典型的文艺复兴风格。D选项错误，讲座没有比较其他画家。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "wrong_purpose",
+            "D": "topic_adjacent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "According to the professor, how did artists use the camera obscura?",
+          "options": {
+            "A": "They painted directly onto the projected image",
+            "B": "They used it to create photographs of their subjects",
+            "C": "They traced the outlines of the projected image",
+            "D": "They copied images from books onto canvas"
+          },
+          "answer": "C",
+          "explanation": "正确答案C。讲座说艺术家可以描摹投影的轮廓线（trace the outlines）。A选项错误，讲座没有说直接画在投影上。B选项错误，摄影是后来才发明的。D选项错误，讲座没有提到书籍。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "wrong_topic",
+            "D": "topic_adjacent"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What does the professor imply about Renaissance artists?",
+          "options": {
+            "A": "They may have combined art with scientific tools",
+            "B": "They were primarily concerned with religious themes",
+            "C": "They rejected technology in favor of pure creativity",
+            "D": "They invented the camera obscura themselves"
+          },
+          "answer": "A",
+          "explanation": "正确答案A。讲座结尾暗示文艺复兴艺术家是早期技术采用者，将艺术与新兴科学知识结合。B选项错误，讲座没有讨论主题。C选项与讲座观点相反，讲座认为他们使用了技术。D选项错误，讲座说暗箱在文艺复兴前就已存在。",
+          "distractor_types": {
+            "B": "topic_adjacent",
+            "C": "reversed_logic",
+            "D": "over_generalization"
+          }
+        }
+      ],
+      "id": "lat_v2_1780213946002_002",
+      "audit_result": {
+        "match": false,
+        "ambiguous": true,
+        "details": [
+          {
+            "questionIndex": 0,
+            "match": true,
+            "ambiguous": false,
+            "aiAnswer": "B",
+            "ourAnswer": "B",
+            "ratings": {
+              "A": "invalid",
+              "B": "valid",
+              "C": "invalid",
+              "D": "invalid"
+            },
+            "reasoning": "The lecture focuses on the possible use of the camera obscura as an aid for Renaissance painters, not on its invention, Vermeer's life, or the difference between painting and photography.",
+            "validCount": 1,
+            "partialCount": 0
+          },
+          {
+            "questionIndex": 1,
+            "match": true,
+            "ambiguous": false,
+            "aiAnswer": "C",
+            "ourAnswer": "C",
+            "ratings": {
+              "A": "invalid",
+              "B": "invalid",
+              "C": "valid",
+              "D": "invalid"
+            },
+            "reasoning": "The professor mentions 'The Music Lesson' to illustrate the level of detail and light fidelity that suggests optical assistance, not to prove definite use, describe typical style, or compare with other painters.",
+            "validCount": 1,
+            "partialCount": 0
+          },
+          {
+            "questionIndex": 2,
+            "match": true,
+            "ambiguous": false,
+            "aiAnswer": "C",
+            "ourAnswer": "C",
+            "ratings": {
+              "A": "invalid",
+              "B": "invalid",
+              "C": "valid",
+              "D": "invalid"
+            },
+            "reasoning": "The lecture explicitly states that artists would trace the outlines of the projected image onto paper or canvas.",
+            "validCount": 1,
+            "partialCount": 0
+          },
+          {
+            "questionIndex": 3,
+            "match": false,
+            "ambiguous": true,
+            "aiAnswer": "D",
+            "ourAnswer": "A",
+            "ratings": {
+              "A": "invalid",
+              "B": "invalid",
+              "C": "invalid",
+              "D": "valid"
+            },
+            "reasoning": "The professor implies that Renaissance artists may have combined art with scientific tools, as they were 'early adopters of technology, blending art with emerging scientific knowledge.'",
+            "validCount": 1,
+            "partialCount": 0
+          }
+        ]
+      }
+    }
+  ]
+}

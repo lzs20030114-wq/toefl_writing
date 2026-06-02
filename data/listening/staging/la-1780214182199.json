@@ -1,0 +1,361 @@
+{
+  "type": "listenAnnouncement",
+  "version": 2,
+  "generated_at": "2026-05-31T07:56:36.546Z",
+  "total_generated": 6,
+  "total_accepted": 5,
+  "acceptance_rate": 0.83,
+  "tts_generated": false,
+  "tts_provider": null,
+  "batch_quality": {
+    "avg_flavor": 0.83,
+    "answer_distribution": {
+      "A": 2,
+      "B": 4,
+      "C": 2,
+      "D": 2
+    },
+    "balanced": true,
+    "q_type_distribution": {
+      "detail": 2,
+      "main_idea": 5,
+      "inference": 3
+    },
+    "context_distribution": {
+      "facility_change": 2,
+      "guest_speaker": 1,
+      "academic_event": 1,
+      "info_session": 1
+    },
+    "difficulty_distribution": {
+      "easy": 2,
+      "medium": 1,
+      "hard": 2
+    },
+    "info_type_rates": {
+      "date": 100,
+      "time": 100,
+      "location": 60,
+      "requirement": 100,
+      "deadline": 60,
+      "action_channel": 20
+    },
+    "opening_distribution": {
+      "greeting": 1,
+      "direct": 3,
+      "reminder": 1
+    },
+    "correct_is_longest_rate": 70
+  },
+  "items": [
+    {
+      "context": "facility_change",
+      "situation": "recreation center extending hours during finals week",
+      "speaker_role": "department_head",
+      "difficulty": "easy",
+      "announcement": "Good morning, everyone. I'm pleased to announce that the campus recreation center will extend its hours during finals week to support your study breaks. Starting this Monday, the center will remain open until midnight, instead of our usual 10 p.m. closing time. This extended schedule will run through next Friday. Please note that you must bring your valid student ID to enter the facility after 9 p.m. We hope this helps you manage stress and stay healthy during exams.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce extended hours at the recreation center",
+            "B": "To remind students about finals week schedule",
+            "C": "To promote a new fitness class at the center",
+            "D": "To inform students about a temporary closure"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。公告的核心是宣布健身中心在期末考试周延长开放时间。B选项太狭窄，期末考试日程只是背景。C选项错误，公告没有提到任何新健身课程。D选项与事实相反，公告说的是延长开放时间，而不是关闭。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What must students do to enter the recreation center after 9 p.m.?",
+          "options": {
+            "A": "Sign up for a membership online",
+            "B": "Show a printed schedule of their exams",
+            "C": "Bring their valid student ID",
+            "D": "Arrive before 10 p.m."
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。公告明确说明晚上9点后进入需要有效的学生证。A选项是相关但未提及的，公告没有提到会员注册。B选项是错误细节，公告没有要求出示考试日程。D选项与事实相反，公告说的是延长到午夜，而不是要求10点前到达。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "D": "misattributed_detail"
+          }
+        }
+      ],
+      "id": "la_v2_1780214182199_001",
+      "flavor_score": 0.94
+    },
+    {
+      "context": "guest_speaker",
+      "situation": "renowned scientist giving a guest lecture on campus",
+      "speaker_role": "department_head",
+      "difficulty": "easy",
+      "announcement": "I'm excited to announce that Dr. Elena Torres, a leading climate scientist from Stanford University, will deliver a guest lecture this Thursday at 3 p.m. in Waldman Auditorium. Her talk is titled 'The Future of Our Planet: Climate Solutions for the Next Decade.' This event is free and open to all students and faculty. However, seats are limited, so we encourage you to arrive early. Please bring your student ID for entry. A brief Q&A session will follow the lecture.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the primary purpose of this announcement?",
+          "options": {
+            "A": "To advertise a new climate research project",
+            "B": "To announce a guest lecture by a climate scientist",
+            "C": "To require students to attend a lecture",
+            "D": "To discuss the effects of climate change"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。公告的主要目的是宣布一位著名气候科学家将举办客座讲座。A选项错误，公告没有提到任何研究项目。C选项错误，公告是鼓励参加，而非强制要求。D选项错误，讲座内容涉及气候变化解决方案，但公告本身不是讨论气候变化。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "C": "reversed_intent",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are attendees advised to do?",
+          "options": {
+            "A": "Register for the lecture online",
+            "B": "Read the speaker's book beforehand",
+            "C": "Bring a notebook for notes",
+            "D": "Arrive early because seats are limited"
+          },
+          "answer": "D",
+          "explanation": "正确答案是D。公告提到座位有限，建议尽早到达。A选项是相关但未提及的，公告没有要求在线注册。B选项是错误细节，公告没有要求提前阅读。C选项是相关但未提及的，公告没有提到笔记本。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "C": "related_but_not_stated"
+          }
+        }
+      ],
+      "id": "la_v2_1780214182199_002",
+      "flavor_score": 0.9
+    },
+    {
+      "context": "facility_change",
+      "situation": "campus dining hall switching to summer hours",
+      "speaker_role": "recreation_staff",
+      "difficulty": "medium",
+      "announcement": "Due to the upcoming summer break, the Main Street Dining Hall will transition to summer hours starting next Monday, June 5th. The dining hall will be open from 7:30 a.m. to 7:00 p.m., Monday through Friday, and will be closed on weekends. Breakfast and lunch will be served as usual, but dinner service will end at 6:30 p.m. Please note that meal swipes will still be accepted during all operating hours. We appreciate your understanding as we adjust our schedule for the summer.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce a new menu at the dining hall",
+            "B": "To inform about a temporary closure for renovations",
+            "C": "To notify students about changes to dining hours",
+            "D": "To remind students to use meal swipes"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。公告的核心是通知学生食堂将切换到夏季营业时间。A选项错误，公告没有提到新菜单。B选项错误，公告说的是时间调整，而非关闭装修。D选项太狭窄，使用餐券只是公告中提到的一个细节，不是主要目的。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "reversed_intent",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the dining hall's current hours?",
+          "options": {
+            "A": "They are likely longer than the summer hours",
+            "B": "They include weekend service",
+            "C": "They start earlier than 7:30 a.m.",
+            "D": "They end after 7:00 p.m."
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。公告提到夏季时间从7:30到19:00，周末关闭，暗示当前时间可能更长（比如更晚关门或周末开放）。B选项是字面复述，从公告可推断夏季周末关闭，但当前时间可能包括周末，但B选项直接陈述当前时间包括周末服务，这并非直接推断。A更合理：夏季时间缩短，因此当前时间更长。C选项过度推断，无法推断当前开始时间是否更早。D选项可能正确，但A更明确，因为公告提到夏季时间结束于19:00，暗示当前可能更晚。",
+          "distractor_types": {
+            "B": "literal_restatement",
+            "C": "over_inference",
+            "D": "unrelated_inference"
+          }
+        }
+      ],
+      "id": "la_v2_1780214182199_003",
+      "flavor_score": 0.79
+    },
+    {
+      "context": "academic_event",
+      "situation": "spring academic symposium with limited seats and prerequisites",
+      "speaker_role": "society_president",
+      "difficulty": "hard",
+      "announcement": "We're pleased to announce that the Spring Academic Symposium will take place on April 20th in the Student Union Ballroom. This year's theme is 'Innovations in Interdisciplinary Research.' Due to high demand, attendance is limited to the first 200 students who register. To be eligible, you must have a minimum GPA of 3.5 and submit a brief statement of interest by March 1st. Registration opens next Monday at 9 a.m. on the symposium website. Successful applicants will be notified by email.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce the theme of the symposium",
+            "B": "To remind students about the deadline",
+            "C": "To explain the registration process",
+            "D": "To announce the symposium and its eligibility requirements"
+          },
+          "answer": "D",
+          "explanation": "正确答案是D。公告的主要目的是宣布研讨会及其资格要求（GPA、兴趣陈述）。A选项太狭窄，主题只是公告的一部分。B选项太狭窄，截止日期只是细节。C选项虽然涉及注册流程，但公告还包括资格要求和日期等，D更全面地概括了公告目的。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "too_narrow",
+            "C": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the symposium?",
+          "options": {
+            "A": "It is open to all students regardless of GPA",
+            "B": "It is likely to be very competitive to attend",
+            "C": "It will feature only one speaker",
+            "D": "It is free for all registered students"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。公告提到名额有限（前200名），且有GPA要求，表明竞争激烈。A选项错误，公告明确要求GPA 3.5以上。C选项过度推断，公告未提及演讲者数量。D选项过度推断，公告未提及费用。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "over_inference",
+            "D": "unrelated_inference"
+          }
+        }
+      ],
+      "id": "la_v2_1780214182199_004",
+      "flavor_score": 0.74
+    },
+    {
+      "context": "info_session",
+      "situation": "health insurance enrollment information session",
+      "speaker_role": "advisor",
+      "difficulty": "hard",
+      "announcement": "This is a reminder that the university's health insurance enrollment period ends this Friday, March 10th. For those who still have questions, we'll be holding an information session tomorrow at 2 p.m. in room 302 of the Student Services Building. A representative from the insurance provider will be present to answer your questions. You must bring your student ID to enter the session. Please note that late enrollment will not be accepted after the deadline.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce a deadline extension for enrollment",
+            "B": "To remind students about the enrollment deadline and an info session",
+            "C": "To explain the benefits of the health insurance plan",
+            "D": "To require all students to enroll in health insurance"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。公告提醒学生注册截止日期，并通知有信息会。A选项错误，公告说截止日期是本周五，没有延期。C选项错误，公告没有解释保险福利。D选项错误，公告没有强制要求注册。",
+          "distractor_types": {
+            "A": "reversed_intent",
+            "C": "wrong_purpose",
+            "D": "over_inference"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the information session?",
+          "options": {
+            "A": "It is mandatory for all students",
+            "B": "It is intended for students with questions about insurance",
+            "C": "It will provide enrollment forms",
+            "D": "It will be held after the deadline"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。公告提到信息会是为仍有疑问的学生举办的，因此可推断其目的是解答疑问。A选项过度推断，公告没有说强制参加。C选项过度推断，公告未提供注册表格。D选项错误，信息会在截止日期前（明天）举行。",
+          "distractor_types": {
+            "A": "over_inference",
+            "C": "unrelated_inference",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "id": "la_v2_1780214182199_006",
+      "flavor_score": 0.79
+    }
+  ],
+  "rejected": [
+    {
+      "context": "campus_activity",
+      "situation": "annual outdoor movie night with blanket seating",
+      "speaker_role": "activity_coordinator",
+      "difficulty": "medium",
+      "announcement": "Get ready for the annual Outdoor Movie Night this Saturday! We'll be screening 'The Martian' on the main quad starting at 8 p.m. Bring your own blankets or low-back chairs, as seating is on the grass. Popcorn and drinks will be provided free of charge, while supplies last. In case of rain, the event will be moved to the Student Union Ballroom. No registration is required, so just come and enjoy the show. See you there!",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What are attendees advised to bring?",
+          "options": {
+            "A": "Blankets or low-back chairs",
+            "B": "Umbrellas for rain",
+            "C": "Snacks and drinks",
+            "D": "A valid student ID"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。公告明确提到自带毯子或矮背椅。B选项错误，公告说如果下雨活动会转移到室内，不需要雨伞。C选项错误，爆米花和饮料是免费提供的。D选项是相关但未提及的，公告没有要求带学生证。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "Why does the speaker mention 'while supplies last'?",
+          "options": {
+            "A": "To suggest that attendees should arrive early",
+            "B": "To indicate that popcorn is limited",
+            "C": "To warn that the event might be cancelled",
+            "D": "To explain the registration policy"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。提到'供应有限'暗示免费食物可能很快发完，因此建议尽早到达以确保获得。B选项是字面复述，但问题问的是为什么提到这个，A更合理。C选项错误，公告没有提到取消。D选项错误，公告说无需注册。",
+          "distractor_types": {
+            "B": "literal_restatement",
+            "C": "wrong_detail",
+            "D": "unrelated_inference"
+          }
+        }
+      ],
+      "id": "la_v2_1780214182199_005",
+      "audit_result": {
+        "match": false,
+        "ambiguous": true,
+        "details": [
+          {
+            "questionIndex": 0,
+            "match": true,
+            "ambiguous": false,
+            "aiAnswer": "A",
+            "ourAnswer": "A",
+            "ratings": {
+              "A": "valid",
+              "B": "invalid",
+              "C": "invalid",
+              "D": "invalid"
+            },
+            "reasoning": "The announcement explicitly states 'Bring your own blankets or low-back chairs', so option A is directly stated and correct.",
+            "validCount": 1,
+            "partialCount": 0
+          },
+          {
+            "questionIndex": 1,
+            "match": false,
+            "ambiguous": true,
+            "aiAnswer": "B",
+            "ourAnswer": "A",
+            "ratings": {
+              "A": "partially_valid",
+              "B": "valid",
+              "C": "invalid",
+              "D": "invalid"
+            },
+            "reasoning": "The phrase 'while supplies last' directly indicates that popcorn and drinks are limited, so option B is explicitly correct. Option A is a reasonable inference but not directly stated, and the question asks for the reason the speaker mentions the phrase, which is to indicate limited supply.",
+            "validCount": 1,
+            "partialCount": 1
+          }
+        ]
+      }
+    }
+  ]
+}

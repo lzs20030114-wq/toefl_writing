@@ -1,0 +1,325 @@
+{
+  "items": [
+    {
+      "context": "campus_academic",
+      "situation": "student checking with TA about lab report requirements",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "What format do you want the lab report in?",
+      "options": {
+        "A": "Just follow the template on the course page.",
+        "B": "The lab was canceled last Tuesday.",
+        "C": "I formatted my whole laptop yesterday.",
+        "D": "Reports are due at the end of term."
+      },
+      "answer": "A",
+      "explanation": "正确答案A用context_shift策略——不纠结于具体格式细节，而是直接指向课程页面的模板解决学生的根本需求，自然且有帮助。B是off_topic干扰项，谈论实验被取消，与格式问题无关。C是polysemy陷阱，把'format'当作'格式化电脑硬盘'的意思，是一词多义误用。D是wrong_question_type，学生问的是'什么格式'（how/format），D却回答了'什么时候交'（when），答非所问。",
+      "distractor_types": {
+        "B": "off_topic",
+        "C": "polysemy_misinterpretation",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking for directions to a nearby location",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Do you know how to get to the post office?",
+      "options": {
+        "A": "I mailed that package already.",
+        "B": "Are you going by car or walking?",
+        "C": "The office closes at five today.",
+        "D": "Yes, I sent a letter there once."
+      },
+      "answer": "B",
+      "explanation": "正确答案B用counter_question策略，反问对方是开车还是步行，从而能给出更准确的路线，推动对话前进。A是semantic_association_trap，'post office'联想到'mail/package'，谈论自己寄过包裹，不回答路线。C是off_topic，回答了营业时间（when），而非如何到达（how）。D是审核中标记的危险模式——'Yes, I sent a letter there once'看似自然，但它暗示说话者知道地点却不给路线，属于off_topic回避，且'letter/there'是语义关联陷阱。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student seeking help at the writing center",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I'm not sure my introduction is strong enough.",
+      "options": {
+        "A": "The library closes at midnight tonight.",
+        "B": "Introductions are the easiest part.",
+        "C": "Well, let's read through it together.",
+        "D": "I introduced myself to the new tutor."
+      },
+      "answer": "C",
+      "explanation": "正确答案C用marker_led_indirect策略，以话语标记'Well'开头，提议一起读一遍，间接而有帮助地回应了学生的担忧。A是off_topic，谈论图书馆关门时间，与开头段毫无关系。B是misinterpretation，反驳说开头最简单，没有回应学生想要帮助的实际需求，且语气不当。D是semantic_association_trap，把'introduction'（文章开头）误作'introduce oneself'（自我介绍），一词多义误用。",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "misinterpretation",
+        "D": "semantic_association_trap"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about dorm maintenance issue",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Did you ever get the heater fixed?",
+      "options": {
+        "A": "The dorm has a new lounge downstairs.",
+        "B": "I prefer the heat turned up high.",
+        "C": "Yes, you can fix it yourself easily.",
+        "D": "Finally, yes — it's working now."
+      },
+      "answer": "D",
+      "explanation": "正确答案D用idiomatic策略，以'Finally'这一自然口语开头确认暖气终于修好了，符合对话语境。A是off_topic，谈论宿舍新休息室，与暖气是否修好无关。B是semantic_association_trap，'heater'联想到'heat'，谈个人偏好而不回答是否修好。C是wrong_question_type，问的是'你修好了吗'（是否完成），C却回答'你可以自己修'（指导如何修），答非所问。",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "semantic_association_trap",
+        "C": "wrong_question_type"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "offering help to someone who seems stressed",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Why are you taking all this on alone?",
+      "options": {
+        "A": "Honestly, I didn't want to bother anyone.",
+        "B": "The train was alone on the track.",
+        "C": "Take the second one on the left.",
+        "D": "I took three classes last semester."
+      },
+      "answer": "A",
+      "explanation": "正确答案A用idiomatic策略，以'Honestly'这一自然口语标记开头，坦白解释自己不想麻烦别人，真实回应了'为什么独自承担'。B是semantic_association_trap，重复了'alone'一词却用在完全无关的火车语境。C是wrong_question_type，回答了'往哪走'（where/方向），而非'为什么'（why）。D是semantic_association_trap，重复了'take/took'一词，谈上学期选课，与当前情境无关。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "semantic_association_trap"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about gym or sports facility hours",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Where do I sign up for the gym?",
+      "options": {
+        "A": "The gym has brand-new treadmills.",
+        "B": "Actually, you just do it online now.",
+        "C": "Sign-ups closed two weeks ago.",
+        "D": "I work out almost every morning."
+      },
+      "answer": "B",
+      "explanation": "正确答案B用marker_led_indirect策略，以'Actually'开头，间接告知现在改为线上注册，有效回应了'在哪注册'的需求。A是semantic_association_trap，'gym'联想到'treadmills'，描述健身房设备而不回答在哪注册。C是off_topic，回答注册已截止（when），而非在哪注册（where）。D是off_topic，'I work out every morning'是审核中标记的危险模式——看似自然却是分享个人习惯，回避了问题。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about printing or scanning at computer lab",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "How do I scan these pages to my email?",
+      "options": {
+        "A": "The lab installed faster computers.",
+        "B": "Scanners use a lot of toner.",
+        "C": "Here, let me set it up for you.",
+        "D": "Email me the file when you're done."
+      },
+      "answer": "C",
+      "explanation": "正确答案C用context_shift策略——不逐步解释如何扫描，而是直接提出帮对方设置好，解决了根本需求，自然且热心。A是off_topic，谈论实验室换了更快的电脑，与扫描操作无关。B是semantic_association_trap，'scan'联想到'scanner/toner'，陈述关于扫描仪的事实却不帮忙。D是misinterpretation，把情境反转，让对方扫完发邮件给自己，误解了说话者是求助方。",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "semantic_association_trap",
+        "D": "misinterpretation"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "making or rescheduling an appointment",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "I'd like to move my appointment to Friday.",
+      "options": {
+        "A": "The dentist has a lovely waiting room.",
+        "B": "I moved into my new place last week.",
+        "C": "Appointments usually take an hour.",
+        "D": "Sure, Friday at two works fine."
+      },
+      "answer": "D",
+      "explanation": "正确答案D用direct_topical策略，直接确认周五两点可以，正面回应了改约请求。A是off_topic，谈论牙医候诊室，与改约无关。B是semantic_association_trap，重复了'move/moved'一词，却用在'搬家'的语义上，一词多义误用。C是off_topic，陈述预约通常的时长，与改到周五的请求无关。",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "semantic_association_trap",
+        "C": "off_topic"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "professor reminding student about a missed deadline",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Your draft was supposed to be in yesterday.",
+      "options": {
+        "A": "Actually, I emailed it last night.",
+        "B": "Drafts are usually double-spaced.",
+        "C": "Yesterday was a beautiful day outside.",
+        "D": "I draft all my essays by hand."
+      },
+      "answer": "A",
+      "explanation": "正确答案A用marker_led_indirect策略，以'Actually'开头，间接澄清自己昨晚已发邮件提交，恰当回应了教授的提醒。B是semantic_association_trap，'draft'联想到格式规范，陈述草稿通常双倍行距，回避了迟交问题。C是semantic_association_trap，重复了'yesterday'却谈天气，完全无关。D是semantic_association_trap，重复了'draft'一词谈论自己手写习惯，与是否按时交无关。",
+      "distractor_types": {
+        "A": "marker_led_indirect_correct",
+        "B": "semantic_association_trap",
+        "C": "semantic_association_trap",
+        "D": "semantic_association_trap"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking advisor which course to take next term",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Which elective should I register for next?",
+      "options": {
+        "A": "I registered my car on campus already.",
+        "B": "What are you hoping to focus on later?",
+        "C": "Electives are worth three credits each.",
+        "D": "The registrar's office is closed today."
+      },
+      "answer": "B",
+      "explanation": "正确答案B用counter_question策略，反问学生未来想专注的方向，从而能给出更贴合的选课建议，推动对话前进。A是semantic_association_trap，重复了'register/registered'一词，却用在'给车登记'的语义上。C是off_topic，陈述选修课的学分，与该选哪门无关。D是off_topic，谈注册办公室今天关门，回避了具体推荐。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "classmate asking about borrowing lecture notes",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Can I borrow your notes from Monday's class?",
+      "options": {
+        "A": "Of course, I'll send them right over.",
+        "B": "I take notes on my tablet now.",
+        "C": "The note on the door said it's closed.",
+        "D": "Did you write that down somewhere?"
+      },
+      "answer": "A",
+      "explanation": "正确答案A用idiomatic策略，以'Of course'这一自然口语爽快答应，并说马上发过去，恰当回应了借笔记的请求。B是semantic_association_trap，'notes'联想到记笔记方式，谈自己用平板，回避了是否能借。C是semantic_association_trap，'note'被误用为'门上的告示'，一词多义陷阱。D是wrong_question_type，问'你写下来没有'，把发问者当成被问的人，误解了情境。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "semantic_association_trap",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking librarian about extending a book loan",
+      "difficulty": "medium",
+      "answer_paradigm": "context_shift",
+      "speaker": "Can I keep this book another two weeks?",
+      "options": {
+        "A": "Let me just renew it for you now.",
+        "B": "That book has a torn cover.",
+        "C": "We added two new study rooms.",
+        "D": "The author wrote three other books."
+      },
+      "answer": "A",
+      "explanation": "正确答案A用context_shift策略——不简单回答'可以/不可以'，而是直接帮对方续借，解决了根本需求，自然高效。B是semantic_association_trap，'book'联想到书的破损，描述书况却不处理续借。C是off_topic，谈新增自习室，与续借无关。D是semantic_association_trap，'book'联想到作者其他著作，陈述无关事实。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "semantic_association_trap"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "coach checking on an athlete who missed practice",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "How come you skipped practice this morning?",
+      "options": {
+        "A": "The field was repainted over the break.",
+        "B": "Practice makes you a better player.",
+        "C": "Well, I had a doctor's appointment.",
+        "D": "I practice my serve every weekend."
+      },
+      "answer": "C",
+      "explanation": "正确答案C用marker_led_indirect策略，以'Well'开头，间接解释因为有医生预约而缺席，恰当回应了教练的询问。A是off_topic，谈球场重新刷漆，与缺席原因无关。B是semantic_association_trap，'practice'联想到'练习使人进步'的格言，答非所问。D是semantic_association_trap，重复了'practice'一词谈周末练发球，与今早为何缺席无关。",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "semantic_association_trap",
+        "D": "semantic_association_trap"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "RA asking student about a noise complaint",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "What was all that noise last night?",
+      "options": {
+        "A": "Sorry, I'll keep it down from now on.",
+        "B": "The walls here are pretty thin.",
+        "C": "Night classes are hard to stay awake in.",
+        "D": "I made some noise complaints last year."
+      },
+      "answer": "A",
+      "explanation": "正确答案A用context_shift策略——不解释噪音是什么，而是直接道歉并承诺以后保持安静，解决了RA关心的根本问题。B是semantic_association_trap，'noise'联想到隔音差，把责任推给墙薄而不正面回应。C是semantic_association_trap，重复了'night'却谈夜间课程犯困，完全无关。D是semantic_association_trap，重复了'noise'一词谈自己去年投诉过，把情境反转，误解了发问方。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "semantic_association_trap",
+        "D": "semantic_association_trap"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "staff member telling student about a parking permit",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Your parking permit expires at the end of May.",
+      "options": {
+        "A": "The parking lot was repaved recently.",
+        "B": "I parked closer to the gym today.",
+        "C": "Permits cost more for visitors.",
+        "D": "Thanks — I'll renew it this week."
+      },
+      "answer": "D",
+      "explanation": "正确答案D用direct_topical策略，直接致谢并表示本周会续办，正面回应了停车证到期的提醒。A是semantic_association_trap，'parking'联想到停车场重铺，陈述无关事实。B是semantic_association_trap，重复了'park/parked'一词谈今天停车位置，与到期提醒无关。C是off_topic，谈访客停车证更贵，回避了续办自己的证件。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "semantic_association_trap",
+        "C": "off_topic"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "librarian offering to help a student find a resource",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Are you finding everything you need today?",
+      "options": {
+        "A": "Actually, could you help me with this?",
+        "B": "I found my keys under the desk.",
+        "C": "The needle was hard to find.",
+        "D": "Yes, I need to study for finals."
+      },
+      "answer": "A",
+      "explanation": "正确答案A用idiomatic/marker_led策略，以'Actually'开头自然地把馆员的客套询问转为求助，真实推进对话。B是semantic_association_trap，重复了'find/found'一词却谈找到钥匙，语义无关。C是semantic_association_trap，'finding'联想到'needle'（大海捞针），用在无关语境。D是misinterpretation——'Yes, I need to study for finals'看似回应，但'need'被误接成自己的备考需求，没有回答是否找到所需资料，属审核中标记的危险模式（顺着关键词给看似相关却答非所问的回答）。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "semantic_association_trap",
+        "D": "misinterpretation"
+      }
+    }
+  ]
+}

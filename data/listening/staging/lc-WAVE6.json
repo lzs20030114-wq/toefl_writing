@@ -1,0 +1,794 @@
+{
+  "items": [
+    {
+      "context": "registrar",
+      "situation": "Student asks the registrar how to add her preferred name to the class roster so professors stop using her legal name.",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "registrar_staff",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hi, I'm hoping to get my preferred name showing up on the class rosters. Every professor keeps reading out my legal name on the first day, and it's a little awkward."
+        },
+        {
+          "speaker": "Man",
+          "text": "Oh, that's totally fixable. We added a preferred-name field to the student portal last year. Have you filled that part in yet?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "I put it in my profile, but the rosters still show the old one. Did I miss a step?"
+        },
+        {
+          "speaker": "Man",
+          "text": "The profile and the roster pull from two different places, actually. You have to go to the 'Academic Records' tab and submit a separate display-name request there."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Ah, I never opened that tab. How long until the professors see the change?"
+        },
+        {
+          "speaker": "Man",
+          "text": "It syncs overnight, so it'll be updated by tomorrow morning. Just submit it before midnight and you're set for the rest of the term."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Where does the man say the woman must submit her request?",
+          "options": {
+            "A": "Under the 'Academic Records' tab",
+            "B": "On her main profile page",
+            "C": "At the registrar's front desk",
+            "D": "Through an email to each professor"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。男生明确说显示姓名的请求要去'Academic Records'标签里单独提交。B错误：她已经在个人资料里填了，但名册不是从那里读取的，所以不是正确地点。C错误：对话从未提到要去前台办理。D错误：对话没有提到给每位教授发邮件，这是看似合理但未被提及的做法。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Email all of her professors directly",
+            "B": "Wait a full week for the change",
+            "C": "Submit the display-name request before midnight",
+            "D": "Change her legal name on record"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。男生说在午夜前提交、系统隔夜同步，明早就会更新，所以女生接下来最可能去提交显示姓名请求。A错误：发邮件给教授是无关的步骤，对话里给出的解决方案是portal提交，不是发邮件。B错误：男生说隔夜就更新，根本不用等一周，与对话相反。D错误：她只想改显示名，不是法定姓名，属于过度推断。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "B": "rejected_option",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "library",
+      "situation": "Student asks library staff how to recall a book that another patron has checked out because she needs it for a paper.",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "library_staff",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hi, the book I need for my history paper is checked out by someone else. Is there any way I can get it sooner?"
+        },
+        {
+          "speaker": "Man",
+          "text": "You can place a recall on it. That basically forces the current borrower to return it early, usually within a week."
+        },
+        {
+          "speaker": "Woman",
+          "text": "A week? My paper's due in four days, though."
+        },
+        {
+          "speaker": "Man",
+          "text": "Hmm, that's cutting it close. Honestly, you might be better off requesting it through interlibrary loan from the branch campus. They can ship a copy here in two days."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh, that's much faster. Where do I put in that request?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Just use the 'Request from Partner Library' link on the catalog page. I'd do it today, though, so it arrives in time."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "Why does the woman come to the library desk?",
+          "options": {
+            "A": "To pay a fine on an overdue history book",
+            "B": "To get access to a book that is checked out",
+            "C": "To extend the loan period on a book she has",
+            "D": "To ask where the history section is located"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。女生开门见山说她写论文需要的书被别人借走了，问能不能早点拿到，整段对话都围绕如何尽快拿到这本书。A错误：对话从没提到罚款或逾期，是另一个常见图书馆话题。C错误：她不是要续借自己手里的书，而是想拿到别人借走的书，情况正好相反。D错误：她要的是具体某本书，不是问历史区在哪，属于太狭隘的误读。",
+          "distractor_types": {
+            "A": "wrong_topic",
+            "C": "reversed_situation",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What does the man suggest the woman do?",
+          "options": {
+            "A": "Place a recall and wait the full week",
+            "B": "Buy her own copy of the book online",
+            "C": "Ask the current borrower to return it",
+            "D": "Request the book through interlibrary loan today"
+          },
+          "answer": "D",
+          "explanation": "正确答案是D。男生算了一下召回要一周来不及，于是建议改用馆际互借从分校调书，两天到，并提醒今天就提交。A错误：男生恰恰指出召回等一周来不及，这是被否决的选项。B错误：网上自己买书在对话里从未提及，属于无关步骤。C错误：直接联系借书人在对话里没有出现，是看似合理但未提到的做法。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "unrelated_next_step",
+            "C": "related_but_not_stated"
+          }
+        }
+      ]
+    },
+    {
+      "context": "housing",
+      "situation": "Student asks housing staff how to report a broken heater in her dorm room before a cold weekend.",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "housing_staff",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hi, the heater in my room totally stopped working last night, and it's supposed to get really cold this weekend."
+        },
+        {
+          "speaker": "Man",
+          "text": "Oh no, that's the worst timing. Let's get a work order in for you right away. What's your room number?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "It's 412 in Carver Hall. Do I need to be there when they come?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Nope, our maintenance crew has a master key. But if you want, you can leave a note on the desk describing the problem."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Okay. How fast do you think someone can come take a look?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Heating issues are top priority, so they'll be there this afternoon. I'll mark it urgent in the system right now."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What is the woman's room number?",
+          "options": {
+            "A": "Room 214 in Carver Hall",
+            "B": "Room 421 in Harper Hall",
+            "C": "Room 412 in Carver Hall",
+            "D": "Room 124 in Carver Hall"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。女生明确说房间是Carver Hall的412。A错误：把房号说成214，数字顺序被改了。B错误：房号和楼名都错了，说成Harper Hall的421。D错误：把412说成124，关键数字被打乱。这三个干扰项都用了对话里出现的数字但篡改了关键事实。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "wrong_detail",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What does the man imply about the repair?",
+          "options": {
+            "A": "It will be handled quickly because it's urgent",
+            "B": "It may take several days to schedule",
+            "C": "The woman must be present for the repair",
+            "D": "She should buy a space heater herself"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。男生说供暖问题是最高优先级，今天下午就会来，还要在系统里标记为紧急，暗示会很快处理。B错误：男生说今天下午就到，不是要等好几天，与对话相反。C错误：男生明确说维修队有万能钥匙，女生不必在场，这是被对话否定的。D错误：自己买取暖器在对话里从没提到，属于无关步骤。",
+          "distractor_types": {
+            "B": "reversed_situation",
+            "C": "rejected_option",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "IT",
+      "situation": "Student asks IT staff why she cannot log into the exam-proctoring software the night before a test.",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "IT_staff",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hi, I can't log into the exam-proctoring app. My midterm opens at eight tomorrow and it just keeps saying 'authentication failed.'"
+        },
+        {
+          "speaker": "Man",
+          "text": "Okay, don't panic. Nine times out of ten, that error means the app hasn't been updated to the latest version. When did you last update it?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Um, I installed it back in September and haven't touched it since."
+        },
+        {
+          "speaker": "Man",
+          "text": "That's almost certainly it, then. The proctoring service pushed a security patch last month, and the old version can't connect anymore."
+        },
+        {
+          "speaker": "Woman",
+          "text": "So I just need to reinstall it?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Update, not reinstall. Delete the old one, grab the current version from the software portal, and log in with your usual credentials. That should clear it up."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the woman's main problem?",
+          "options": {
+            "A": "She forgot the password to her exam account",
+            "B": "She cannot log into the proctoring software",
+            "C": "Her midterm exam has been cancelled",
+            "D": "Her laptop will not turn on at all"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。女生一上来就说登不进考试监考软件，一直提示'authentication failed'，整段都在解决这个登录问题。A错误：问题不是忘记密码，而是软件版本过旧，男生最后还让她用平常的账号密码登录，可见密码没问题。C错误：考试被取消在对话里从未提及，是另一个话题。D错误：电脑开不了机也没有出现，属于篡改的细节。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "wrong_topic",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Email her professor to delay the midterm",
+            "B": "Keep using the old version of the app",
+            "C": "Reset her account password",
+            "D": "Download the latest version from the software portal"
+          },
+          "answer": "D",
+          "explanation": "正确答案是D。男生说要更新而不是重装，删掉旧版、从软件门户下载最新版再用原账号登录，所以女生接下来最可能去门户下载最新版。A错误：给教授发邮件推迟考试在对话里没出现，属于无关步骤。B错误：男生说旧版根本连不上，继续用旧版正是被否决的做法。C错误：重置密码是看似合理但被排除的，男生说用'平常的账号密码'即可，问题不在密码。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "B": "rejected_option",
+            "C": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "dining",
+      "situation": "Student asks dining-hall staff how to flag a nut allergy so the kitchen can prepare safe meals.",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "dining_staff",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hi, I just found out I have a pretty serious nut allergy. Is there a way for the kitchen to know that when I come in?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Absolutely. We have an allergen profile you can set up. Once it's on file, the staff at each station gets a heads-up when you scan your meal card."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh, that's reassuring. Where do I set up the profile?"
+        },
+        {
+          "speaker": "Man",
+          "text": "You register it at the dining services office in the student center, not online. They'll want a quick note from the health center confirming the allergy."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Got it. I actually have an appointment there on Thursday, so I'll grab the note then."
+        },
+        {
+          "speaker": "Man",
+          "text": "Perfect. Bring it straight to the office and they'll have your profile active the same day."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man say the woman needs to bring?",
+          "options": {
+            "A": "A note from the health center about the allergy",
+            "B": "A printed copy of her meal-plan receipt",
+            "C": "A doctor's prescription for medication",
+            "D": "A signed form from her academic advisor"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。男生说办理过敏档案需要健康中心开一张确认过敏的便条。B错误：餐卡收据在对话里没有提到，属于篡改的细节。C错误：处方药也没有出现，是看似相关但未被提及的东西。D错误：导师签字的表格与过敏登记无关，属于misattribution，把别的流程套到这里。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do on Thursday?",
+          "options": {
+            "A": "Set up her allergen profile online",
+            "B": "Pick up the confirmation note at her appointment",
+            "C": "Cancel her meal plan entirely",
+            "D": "Eat only at off-campus restaurants"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。女生说周四正好在健康中心有预约，会顺便拿便条，所以周四最可能去取这张确认便条。A错误：男生明确说要去学生中心办公室登记，不是网上，这是被对话否定的。C错误：取消餐卡在对话里从没提到，属于无关步骤。D错误：只在校外吃饭是过度推断，对话只是想让食堂安全备餐，没说放弃食堂。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "C": "unrelated_next_step",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "advising",
+      "situation": "Student asks an academic advisor whether dropping a class now will hurt her financial aid and full-time status.",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "academic_advisor",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hi, I'm thinking about dropping my statistics class, but I'm worried it'll mess up my financial aid. Is that a real concern?"
+        },
+        {
+          "speaker": "Man",
+          "text": "It can be. Aid usually requires full-time status, which here means twelve credits. How many are you carrying right now?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Fifteen. Statistics is four of those."
+        },
+        {
+          "speaker": "Man",
+          "text": "Then you're fine on that front. Drop it and you'd still have eleven... wait, no, that puts you at eleven, just under the line."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh, so that one credit actually matters a lot."
+        },
+        {
+          "speaker": "Man",
+          "text": "It really does. If you pick up a one-credit seminar to replace it, you'd stay full-time and keep your aid. I'd sort that out before you drop anything."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the woman mainly concerned about?",
+          "options": {
+            "A": "Whether her statistics grade will drop",
+            "B": "Whether dropping a class affects her financial aid",
+            "C": "Whether her advisor can change her major",
+            "D": "Whether she can graduate a semester early"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。女生一开始就说想退掉统计课，但担心会影响助学金，整段都在讨论学分和全日制身份对助学金的影响。A错误：她担心的不是成绩高低，而是退课后的助学金，属于篡改的细节。C错误：换专业在对话里从未提及，是另一个话题。D错误：提前一学期毕业也没有出现，属于无关话题。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "wrong_topic",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What does the advisor recommend the woman do?",
+          "options": {
+            "A": "Drop statistics immediately to lighten her load",
+            "B": "Switch from financial aid to a student loan",
+            "C": "Accept losing her full-time status",
+            "D": "Add a one-credit seminar before dropping statistics"
+          },
+          "answer": "D",
+          "explanation": "正确答案是D。顾问算出退课后只剩11学分、刚好低于全日制线，于是建议先加一门一学分的研讨课保住全日制再退课。A错误：直接马上退课会掉到11学分、低于全日制线，这正是顾问让她避免的，是被否决的选项。B错误：改用学生贷款在对话里从未提到，属于无关步骤。C错误：接受失去全日制身份与顾问的建议相反，他正是要帮她保住全日制。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "unrelated_next_step",
+            "C": "reversed_situation"
+          }
+        }
+      ]
+    },
+    {
+      "context": "bookstore",
+      "situation": "Student asks bookstore staff how to sell back used textbooks at the end of the term for the best value.",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "bookstore_staff",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hi, I've got a stack of textbooks I want to sell back. How does that work here?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Easy. Bring them to the buyback counter, we scan the barcodes, and you get cash or store credit on the spot."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Is the cash and the credit the same amount?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Good question. Store credit gets you about twenty percent more than the cash offer, so it depends what you'd rather have."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Hmm. I do need to buy books for next term anyway."
+        },
+        {
+          "speaker": "Man",
+          "text": "Then credit's probably the smarter move for you. Buyback runs through Friday, so don't leave it too late."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man say about store credit?",
+          "options": {
+            "A": "It is worth about twenty percent more than cash",
+            "B": "It is worth the same as the cash offer",
+            "C": "It can only be used at the branch campus",
+            "D": "It expires at the end of the week"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。男生明确说店内credit比现金报价多约20%。B错误：男生说两者并不相等，credit更多，这是被对话否定的篡改细节。C错误：只能在分校用在对话里从未提到，属于看似相关但未提及。D错误：周五截止的是回购活动本身，不是credit过期，把别处的信息错误地套到credit上，属于misattribution。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely choose?",
+          "options": {
+            "A": "Store credit, since she'll buy books next term",
+            "B": "Cash, so she can spend it anywhere",
+            "C": "To keep all of her textbooks",
+            "D": "To sell them at a different store"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。女生说反正下学期也要买书，男生也说那选credit更划算，所以她最可能选店内credit。B错误：选现金与她下学期要买书、且credit更多的情形相反，是被否决的方向。C错误：留着所有课本和她一开始就想卖书的意图矛盾，属于相反情形。D错误：去别的店卖在对话里从没提到，属于无关步骤。",
+          "distractor_types": {
+            "B": "rejected_option",
+            "C": "reversed_situation",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "gym",
+      "situation": "Student asks gym staff how to sign up for a beginner rock-climbing orientation before using the climbing wall.",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "gym_staff",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hi, I'd love to try the climbing wall, but I've literally never climbed before. Can I just hop on?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Not quite. First-timers have to do a short orientation so we know you can belay and tie in safely. It's only about forty-five minutes."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh, that's not bad. How do I sign up for one?"
+        },
+        {
+          "speaker": "Man",
+          "text": "We run them Tuesday and Thursday evenings. You reserve a spot at the front desk or on the rec center app."
+        },
+        {
+          "speaker": "Woman",
+          "text": "I've got the app already. Do I need to bring my own gear?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Nope, we lend out shoes and harnesses for the orientation. Just wear something you can move in."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why can't the woman use the climbing wall right away?",
+          "options": {
+            "A": "She must first complete a safety orientation",
+            "B": "She needs to bring her own climbing gear",
+            "C": "The wall is closed for repairs that day",
+            "D": "She has to pay an extra membership fee"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。男生说新手必须先做一个短的orientation，确认会保护和打结才能上墙。B错误：男生明确说装备由场馆出借，不用自带，这是被对话否定的。C错误：墙因维修关闭在对话里从未提到，属于篡改的细节。D错误：额外会员费也没有出现，属于看似相关但未提及。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Buy her own harness and shoes",
+            "B": "Reserve an orientation spot on the app",
+            "C": "Climb the wall without any training",
+            "D": "Sign up for a different sport instead"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。女生说自己已经装了rec center的app，男生说在app上就能预约orientation，所以她最可能用app预约。A错误：男生说装备可借，自己买装备属于无关步骤。C错误：不培训直接上墙正是规则不允许、被否决的做法。D错误：改报别的运动在对话里从没出现，属于无关步骤。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "C": "rejected_option",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "health_center",
+      "situation": "Student asks health-center staff how to get a flu shot before the campus clinic runs out of doses.",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "health_center_staff",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hi, I heard you're giving flu shots this week. Can I still get one?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Yes, we've got doses left, but they're going fast. Walk-ins are welcome, though appointments jump the line."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Is there a cost? I'm a little worried about the bill."
+        },
+        {
+          "speaker": "Man",
+          "text": "It's completely free for enrolled students. Just bring your student ID and we'll handle the rest."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh, great. When's the best time to come by?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Mornings are quiet. If you book a slot online for tomorrow at nine, you'll barely wait at all."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man say about the cost of the flu shot?",
+          "options": {
+            "A": "It is free for enrolled students",
+            "B": "It costs a small co-pay at the desk",
+            "C": "It is billed to the student's insurance",
+            "D": "It is only free with an appointment"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。男生明确说对在校学生完全免费，带学生证即可。B错误：现场付小额自付费在对话里没出现，属于篡改的细节。C错误：走保险报销也没有提到，属于看似相关但未提及。D错误：把'免费'错误地和'预约'绑在一起，男生说免费对所有在校生，预约只是少排队，属于misattribution。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do?",
+          "options": {
+            "A": "Book a morning appointment online",
+            "B": "Show up as a walk-in this afternoon",
+            "C": "Wait until next week to decide",
+            "D": "Get the shot at an off-campus pharmacy"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。男生说早上人少，建议明早九点在网上订个时段几乎不用等，女生问的正是什么时候来最好，所以她最可能预约早上的时段。B错误：下午来且走walk-in与男生'早上人少、建议预约'的建议相反，属于被否决的方向。C错误：拖到下周再决定和她担心疫苗发完、想尽快打的情形矛盾，属于相反情形。D错误：去校外药房在对话里从没提到，且校内免费，属于无关步骤。",
+          "distractor_types": {
+            "B": "rejected_option",
+            "C": "reversed_situation",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "financial_aid",
+      "situation": "Student asks financial-aid staff why her scholarship disbursement hasn't shown up in her account yet.",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "financial_aid_staff",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hi, my scholarship was supposed to hit my account two weeks ago, but there's still nothing there. Did something go wrong?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Let me check... Okay, the scholarship's approved, but disbursement is on hold pending one missing document."
+        },
+        {
+          "speaker": "Woman",
+          "text": "A missing document? Nobody told me anything was missing."
+        },
+        {
+          "speaker": "Man",
+          "text": "It looks like the enrollment-verification form never came through. Without it, the system won't release the funds, even though everything else is set."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Ugh. So how do I fix it?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Submit the form through your aid portal today. Once it's processed, the money should post within three business days."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "Why is the woman's scholarship money not in her account?",
+          "options": {
+            "A": "Her scholarship application was rejected",
+            "B": "A required document is still missing",
+            "C": "She enrolled in too few credit hours",
+            "D": "The bank reversed the deposit by mistake"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。男生查后说奖学金已批准，但因为缺一份入学验证表，发放被冻结，整段都在解决这份缺失文件。A错误：奖学金其实已批准，不是被拒，与对话相反。C错误：学分不够在对话里从未提到，属于另一个话题。D错误：银行误冲账也没有出现，属于篡改的细节。",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "C": "wrong_topic",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Reapply for the scholarship from scratch",
+            "B": "Wait two more weeks for the deposit",
+            "C": "Call the bank to trace the payment",
+            "D": "Submit the enrollment-verification form online"
+          },
+          "answer": "D",
+          "explanation": "正确答案是D。男生说今天就在助学金portal里提交那份表，处理后三个工作日内款项就会到账，所以女生接下来最可能去提交入学验证表。A错误：奖学金已批准，重新从头申请毫无必要，属于过度推断。B错误：再等两周和她已经等了两周、现在要解决问题的情形相反，是被否决的方向。C错误：打电话给银行查账在对话里从没提到，且问题出在缺文件不在银行，属于无关步骤。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "rejected_option",
+            "C": "unrelated_next_step"
+          }
+        }
+      ]
+    }
+  ]
+}
