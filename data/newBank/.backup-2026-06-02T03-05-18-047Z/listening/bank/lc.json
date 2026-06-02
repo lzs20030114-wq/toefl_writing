@@ -1,0 +1,4311 @@
+{
+  "version": 2,
+  "items": [
+    {
+      "context": "campus",
+      "situation": "student talking to dorm RA about noise complaint",
+      "speakers": [
+        {
+          "name": "Casey",
+          "role": "student"
+        },
+        {
+          "name": "Sarah",
+          "role": "resident_advisor"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Casey",
+          "text": "Hey Sarah, got a sec? I really need to talk about my neighbor."
+        },
+        {
+          "speaker": "Sarah",
+          "text": "Sure, Casey. What's going on?"
+        },
+        {
+          "speaker": "Casey",
+          "text": "It's the music. Every night after midnight, it's so loud I can't sleep."
+        },
+        {
+          "speaker": "Sarah",
+          "text": "Oh, that's not good. Have you tried talking to them directly?"
+        },
+        {
+          "speaker": "Casey",
+          "text": "Yeah, I knocked last night. They turned it down, but it was back up in an hour."
+        },
+        {
+          "speaker": "Sarah",
+          "text": "Hmm, okay. For a formal complaint, I need the room number and specific times."
+        },
+        {
+          "speaker": "Casey",
+          "text": "It's 305. And it's always like 12:30 to 2 AM."
+        },
+        {
+          "speaker": "Sarah",
+          "text": "Got it. I'll speak to them today. If it continues, we can escalate."
+        },
+        {
+          "speaker": "Casey",
+          "text": "Thanks, I appreciate it. I just need some quiet to study."
+        }
+      ],
+      "questions": [
+        {
+          "question_type": "detail",
+          "question": "What specific action has Casey already taken regarding the noise?",
+          "options": {
+            "A": "She filed a formal written complaint with the housing office.",
+            "B": "She asked the RA to immediately confront the neighbor.",
+            "C": "She spoke to the neighbor about the problem herself.",
+            "D": "She recorded the noise to use as evidence."
+          },
+          "answer": "C",
+          "explanation": "凯西说：'我昨晚敲过门了。他们拒绝了……' 表明她已经直接和邻居谈过了。",
+          "stem": "What specific action has Casey already taken regarding the noise?"
+        },
+        {
+          "question_type": "inference",
+          "question": "What will Sarah most likely do immediately after this conversation?",
+          "options": {
+            "A": "Escalate the complaint to the campus police.",
+            "B": "Visit room 305 to address the issue.",
+            "C": "Ask Casey to gather more evidence over the weekend.",
+            "D": "Schedule a meeting between Casey and the neighbor."
+          },
+          "answer": "B",
+          "explanation": "莎拉说：'我今天会和他们谈谈，' 暗示她的下一步是直接与305房间的邻居沟通。",
+          "stem": "What will Sarah most likely do immediately after this conversation?"
+        }
+      ],
+      "id": "lc_gen_1776236749905_001",
+      "difficulty": "medium",
+      "audio_url": "/api/audio/conversation/lc_gen_1776236749905_001.mp3"
+    },
+    {
+      "context": "daily_life",
+      "situation": "student checking in at campus health center",
+      "speakers": [
+        {
+          "name": "Avery",
+          "role": "student"
+        },
+        {
+          "name": "Jordan",
+          "role": "receptionist"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Avery",
+          "text": "Hi, I have an appointment? It's at 10:30."
+        },
+        {
+          "speaker": "Jordan",
+          "text": "Name, please?"
+        },
+        {
+          "speaker": "Avery",
+          "text": "Avery Jones."
+        },
+        {
+          "speaker": "Jordan",
+          "text": "Okay, I see you. For Dr. Lee. You're a few minutes early, that's fine."
+        },
+        {
+          "speaker": "Avery",
+          "text": "Great. Um, do I need to fill anything out? I've never been here before."
+        },
+        {
+          "speaker": "Jordan",
+          "text": "Yes, just this new patient form. Here's a clipboard and pen."
+        },
+        {
+          "speaker": "Avery",
+          "text": "Thanks. Also, will this be covered by the student insurance?"
+        },
+        {
+          "speaker": "Jordan",
+          "text": "For a routine visit, yes. If you need labs or meds, there might be a small copay."
+        },
+        {
+          "speaker": "Avery",
+          "text": "Okay, that's a relief. I'll just fill this out then."
+        },
+        {
+          "speaker": "Jordan",
+          "text": "Perfect. Have a seat, and we'll call you when the doctor's ready."
+        }
+      ],
+      "questions": [
+        {
+          "question_type": "detail",
+          "question": "Why does Jordan give Avery a clipboard?",
+          "options": {
+            "A": "To sign a consent form for a specific procedure.",
+            "B": "To complete a new patient information form.",
+            "C": "To write down a list of current symptoms.",
+            "D": "To provide proof of student insurance coverage."
+          },
+          "answer": "B",
+          "explanation": "乔丹明确表示：'是的，就这份新患者表格。这是写字板和笔。'",
+          "stem": "Why does Jordan give Avery a clipboard?"
+        },
+        {
+          "question_type": "inference",
+          "question": "What can be inferred about Avery's visit?",
+          "options": {
+            "A": "Avery is running late for a very important appointment.",
+            "B": "Avery is concerned about the potential cost of the visit.",
+            "C": "Avery is seeing a specialist for a serious condition.",
+            "D": "Avery has visited this health center many times before."
+          },
+          "answer": "B",
+          "explanation": "艾弗里询问就诊是否在保险范围内，得知肯定答复后松了口气，暗示费用曾是她的顾虑。",
+          "stem": "What can be inferred about Avery's visit?"
+        }
+      ],
+      "id": "lc_gen_1776236749905_002",
+      "difficulty": "medium",
+      "audio_url": "/api/audio/conversation/lc_gen_1776236749905_002.mp3"
+    },
+    {
+      "context": "campus",
+      "situation": "student asking admin staff about registration",
+      "speakers": [
+        {
+          "name": "Rachel",
+          "role": "student"
+        },
+        {
+          "name": "Casey",
+          "role": "admin_staff"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Rachel",
+          "text": "Excuse me, I'm trying to register for Chemistry 101, but the portal says it's closed."
+        },
+        {
+          "speaker": "Casey",
+          "text": "Let me check... Hmm, it looks full. There's a waitlist, though."
+        },
+        {
+          "speaker": "Rachel",
+          "text": "A waitlist? How does that work?"
+        },
+        {
+          "speaker": "Casey",
+          "text": "You add yourself online. If a spot opens, you get an email and have 24 hours to register."
+        },
+        {
+          "speaker": "Rachel",
+          "text": "Oh, okay. What are my chances? I really need this class for my major."
+        },
+        {
+          "speaker": "Casey",
+          "text": "Pretty good, actually. A lot of students drop in the first week. Just check your email constantly."
+        },
+        {
+          "speaker": "Rachel",
+          "text": "I will. And if I don't get in...?"
+        },
+        {
+          "speaker": "Casey",
+          "text": "Then come see me. We can look at alternative courses or a permission number from the professor."
+        },
+        {
+          "speaker": "Rachel",
+          "text": "Alright, thanks for your help. I'll go get on that list now."
+        }
+      ],
+      "questions": [
+        {
+          "question_type": "detail",
+          "question": "According to Casey, what must Rachel do if a spot in the class opens?",
+          "options": {
+            "A": "Call the admin office within one business day.",
+            "B": "Register for the class within 24 hours of notification.",
+            "C": "Meet with the professor to get a permission number.",
+            "D": "Immediately pay the tuition for the course."
+          },
+          "answer": "B",
+          "explanation": "凯西说：'如果有空位，你会收到邮件，并有24小时注册。'",
+          "stem": "According to Casey, what must Rachel do if a spot in the class opens?"
+        },
+        {
+          "question_type": "inference",
+          "question": "What does Casey imply about the first week of the chemistry class?",
+          "options": {
+            "A": "It is when the most difficult material is covered.",
+            "B": "It is when many students decide to drop the course.",
+            "C": "It is the only time to join the class waitlist.",
+            "D": "It is when the professor distributes permission numbers."
+          },
+          "answer": "B",
+          "explanation": "凯西表示：'很多学生第一周会退课，' 暗示这就是为什么瑞秋在候补名单上机会很大的原因。",
+          "stem": "What does Casey imply about the first week of the chemistry class?"
+        }
+      ],
+      "id": "lc_gen_1776236749905_003",
+      "difficulty": "medium",
+      "audio_url": "/api/audio/conversation/lc_gen_1776236749905_003.mp3"
+    },
+    {
+      "context": "daily_life",
+      "situation": "student discussing lease renewal with landlord",
+      "speakers": [
+        {
+          "name": "Taylor",
+          "role": "student"
+        },
+        {
+          "name": "James",
+          "role": "landlord"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Taylor",
+          "text": "Hi James, I got your email about renewing the lease. I'd like to stay another year."
+        },
+        {
+          "speaker": "James",
+          "text": "Great, Taylor. You've been a good tenant. The new lease is ready, but there's a small rent increase."
+        },
+        {
+          "speaker": "Taylor",
+          "text": "An increase? How much are we talking?"
+        },
+        {
+          "speaker": "James",
+          "text": "Just fifty dollars a month. It's standard, covers rising property taxes."
+        },
+        {
+          "speaker": "Taylor",
+          "text": "Fifty... Okay, I guess that's manageable. Does it include anything new, like parking?"
+        },
+        {
+          "speaker": "James",
+          "text": "Parking's still extra, I'm afraid. But I did have the HVAC serviced, so you shouldn't have AC issues again."
+        },
+        {
+          "speaker": "Taylor",
+          "text": "That's a plus. Last summer was rough. Can I sign the new lease tomorrow?"
+        },
+        {
+          "speaker": "James",
+          "text": "Sure thing. Stop by the office after noon. I'll have it printed."
+        },
+        {
+          "speaker": "Taylor",
+          "text": "Perfect. See you then."
+        }
+      ],
+      "questions": [
+        {
+          "question_type": "detail",
+          "question": "What reason does James give for the rent increase?",
+          "options": {
+            "A": "To pay for a new parking area for tenants.",
+            "B": "To cover increased property tax costs.",
+            "C": "To fund major renovations to the building.",
+            "D": "To compensate for Taylor's past late payments."
+          },
+          "answer": "B",
+          "explanation": "詹姆斯明确说明涨价是'标准操作，用于覆盖上涨的房产税。'",
+          "stem": "What reason does James give for the rent increase?"
+        },
+        {
+          "question_type": "inference",
+          "question": "What problem did Taylor likely experience in the previous year?",
+          "options": {
+            "A": "Difficulty finding parking near the apartment.",
+            "B": "Issues with the air conditioning system.",
+            "C": "Frequent disagreements with the landlord.",
+            "D": "Problems paying the rent on time."
+          },
+          "answer": "B",
+          "explanation": "泰勒提到'去年夏天很艰难，' 詹姆斯接话说他检修了空调系统，所以泰勒'应该不会再遇到空调问题了。'",
+          "stem": "What problem did Taylor likely experience in the previous year?"
+        }
+      ],
+      "id": "lc_gen_1776236749905_004",
+      "difficulty": "medium",
+      "audio_url": "/api/audio/conversation/lc_gen_1776236749905_004.mp3"
+    },
+    {
+      "context": "daily_life",
+      "situation": "friends planning a weekend trip",
+      "speakers": [
+        {
+          "name": "Alex",
+          "role": "student"
+        },
+        {
+          "name": "Morgan",
+          "role": "student"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Alex",
+          "text": "So, for the trip this weekend... I was thinking we could camp at Lake Serene."
+        },
+        {
+          "speaker": "Morgan",
+          "text": "Camping? I don't know. The forecast says it might rain."
+        },
+        {
+          "speaker": "Alex",
+          "text": "Oh, I didn't check. Rain would be a bummer. We could get a cabin instead?"
+        },
+        {
+          "speaker": "Morgan",
+          "text": "Cabins are pricey, though. What about just a day hike? We drive up, hike, and come back."
+        },
+        {
+          "speaker": "Alex",
+          "text": "That's less fun. I wanted to get away from campus overnight."
+        },
+        {
+          "speaker": "Morgan",
+          "text": "Okay, how about this: we camp, but we also book a cheap motel as a backup? If it pours, we bail."
+        },
+        {
+          "speaker": "Alex",
+          "text": "That's smart! I can look for a refundable motel room near the lake."
+        },
+        {
+          "speaker": "Morgan",
+          "text": "Perfect. And I'll double-check the gear to make sure our tent is waterproof."
+        },
+        {
+          "speaker": "Alex",
+          "text": "Deal. Let's hope for clear skies, but have a plan B."
+        }
+      ],
+      "questions": [
+        {
+          "question_type": "detail",
+          "question": "What is Morgan's initial concern about Alex's camping idea?",
+          "options": {
+            "A": "Camping gear is too expensive to rent.",
+            "B": "The weather might be bad.",
+            "C": "The lake is too far to drive to.",
+            "D": "Camping permits are difficult to obtain."
+          },
+          "answer": "B",
+          "explanation": "摩根对露营提议回应道：'天气预报说可能会下雨。'",
+          "stem": "What is Morgan's initial concern about Alex's camping idea?"
+        },
+        {
+          "question_type": "inference",
+          "question": "What do the friends finally decide to do?",
+          "options": {
+            "A": "Cancel the trip entirely due to the weather risk.",
+            "B": "Go camping but have a motel reservation as a backup.",
+            "C": "Stay in a cabin regardless of the cost.",
+            "D": "Take a day hike instead of an overnight trip."
+          },
+          "answer": "B",
+          "explanation": "他们同意了摩根的计划：'我们去露营，但也预订一个便宜的汽车旅馆作为后备。' 亚历克斯同意寻找可退款的房间。",
+          "stem": "What do the friends finally decide to do?"
+        }
+      ],
+      "id": "lc_gen_1776236749905_005",
+      "difficulty": "medium",
+      "audio_url": "/api/audio/conversation/lc_gen_1776236749905_005.mp3"
+    },
+    {
+      "context": "campus",
+      "situation": "student calling IT help desk about login issue",
+      "speakers": [
+        {
+          "name": "Taylor",
+          "role": "student"
+        },
+        {
+          "name": "Maria",
+          "role": "it_staff"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Maria",
+          "text": "IT help desk, this is Maria."
+        },
+        {
+          "speaker": "Taylor",
+          "text": "Hi, I can't log into the student portal. It says my password's invalid."
+        },
+        {
+          "speaker": "Maria",
+          "text": "Okay, let's start with the basics. Are you sure you're using your full student email?"
+        },
+        {
+          "speaker": "Taylor",
+          "text": "Yeah, taylor.jones@university.edu. I just changed the password yesterday, actually."
+        },
+        {
+          "speaker": "Maria",
+          "text": "Ah, that might be it. Sometimes the system takes a few hours to update. Did you get a confirmation email?"
+        },
+        {
+          "speaker": "Taylor",
+          "text": "I think so... Wait, no, I don't see one."
+        },
+        {
+          "speaker": "Maria",
+          "text": "Then the change probably didn't go through. I can reset it for you right now. You'll get a temporary password."
+        },
+        {
+          "speaker": "Taylor",
+          "text": "That would be great. I need to register for classes today."
+        },
+        {
+          "speaker": "Maria",
+          "text": "No problem. Check your email in two minutes. Use the temp password, then create a new one immediately."
+        },
+        {
+          "speaker": "Taylor",
+          "text": "Will do. Thanks for your help, Maria."
+        }
+      ],
+      "questions": [
+        {
+          "question_type": "detail",
+          "question": "Why does Maria think Taylor's password change might not have worked?",
+          "options": {
+            "A": "Taylor did not use a complex enough password.",
+            "B": "The system update can sometimes be delayed.",
+            "C": "Taylor likely entered the wrong student email address.",
+            "D": "Password changes are not allowed right before registration."
+          },
+          "answer": "B",
+          "explanation": "玛丽亚说：'系统有时需要几个小时更新。'",
+          "stem": "Why does Maria think Taylor's password change might not have worked?"
+        },
+        {
+          "question_type": "inference",
+          "question": "What will Taylor need to do immediately after using the temporary password?",
+          "options": {
+            "A": "Call the help desk again to confirm the login worked.",
+            "B": "Wait 24 hours before attempting to log in again.",
+            "C": "Create a new permanent password.",
+            "D": "Check for a confirmation email from the day before."
+          },
+          "answer": "C",
+          "explanation": "玛丽亚的指示是：'使用临时密码，然后立即创建新密码。'",
+          "stem": "What will Taylor need to do immediately after using the temporary password?"
+        }
+      ],
+      "id": "lc_gen_1776236749905_006",
+      "difficulty": "medium",
+      "audio_url": "/api/audio/conversation/lc_gen_1776236749905_006.mp3"
+    },
+    {
+      "context": "daily_life",
+      "situation": "roommates discussing apartment chores",
+      "speakers": [
+        {
+          "name": "David",
+          "role": "roommate"
+        },
+        {
+          "name": "Lisa",
+          "role": "roommate"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "David",
+          "text": "Hey Lisa, we need to talk about the kitchen. The sink's been full of dishes for two days."
+        },
+        {
+          "speaker": "Lisa",
+          "text": "I know, I'm sorry. I had that huge biology midterm. I'll do them tonight, I promise."
+        },
+        {
+          "speaker": "David",
+          "text": "It's just... we agreed. Whoever cooks, the other cleans. I cooked last night."
+        },
+        {
+          "speaker": "Lisa",
+          "text": "You're right, you're right. I dropped the ball. Tonight, I'll clean everything, even the pans."
+        },
+        {
+          "speaker": "David",
+          "text": "Thanks. And look, maybe our system isn't working during exam weeks. What if we just alternate days?"
+        },
+        {
+          "speaker": "Lisa",
+          "text": "That could be simpler. Like, I'm responsible for Mondays, Wednesdays, Fridays?"
+        },
+        {
+          "speaker": "David",
+          "text": "Yeah, and I'll take the other days. That way it's clear, even when we're busy."
+        },
+        {
+          "speaker": "Lisa",
+          "text": "Deal. And again, sorry about the mess. I'll get it handled right after class."
+        },
+        {
+          "speaker": "David",
+          "text": "Okay, cool. Good luck on your midterm, by the way."
+        }
+      ],
+      "questions": [
+        {
+          "question_type": "detail",
+          "question": "What was the roommates' original agreement about kitchen chores?",
+          "options": {
+            "A": "They would hire a cleaning service every other week.",
+            "B": "The person who did not cook would clean the dishes.",
+            "C": "They would each clean their own dishes immediately.",
+            "D": "They would alternate full cleaning days each week."
+          },
+          "answer": "B",
+          "explanation": "大卫说：'我们约定好了。谁做饭，另一个人就洗碗。'",
+          "stem": "What was the roommates' original agreement about kitchen chores?"
+        },
+        {
+          "question_type": "inference",
+          "question": "Why does David suggest changing the chore system?",
+          "options": {
+            "A": "He believes Lisa is intentionally avoiding her chores.",
+            "B": "He thinks the current system fails during busy academic periods.",
+            "C": "He wants to take on more chores to help Lisa study.",
+            "D": "He is planning to cook less often in the future."
+          },
+          "answer": "B",
+          "explanation": "大卫说：'也许我们的系统在考试周失灵了，' 暗示系统在他们忙于学业时会出问题。",
+          "stem": "Why does David suggest changing the chore system?"
+        }
+      ],
+      "id": "lc_gen_1776236749905_007",
+      "difficulty": "medium",
+      "audio_url": "/api/audio/conversation/lc_gen_1776236749905_007.mp3"
+    },
+    {
+      "context": "campus_services",
+      "situation": "student checking with mail room about a missing package",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Laura",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Kevin",
+          "role": "mail_staff",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Laura",
+          "text": "Hi, I'm hoping you can help me. I got a notification that a package was delivered to the mail room yesterday, but I can't find it in my locker."
+        },
+        {
+          "speaker": "Kevin",
+          "text": "Oh no! That's not good. Did you get a text with the locker combination?"
+        },
+        {
+          "speaker": "Laura",
+          "text": "Yeah, I did. But when I went to locker 42, it was completely empty."
+        },
+        {
+          "speaker": "Kevin",
+          "text": "Hmm, okay. Actually, we've had a few issues with the new automated system. Sometimes it assigns a locker but the notification gets delayed."
+        },
+        {
+          "speaker": "Laura",
+          "text": "Really? So my package might still be here?"
+        },
+        {
+          "speaker": "Kevin",
+          "text": "It's possible. Let me check the back room. We hold oversized items there if they don't fit in the lockers. What's the tracking number?"
+        },
+        {
+          "speaker": "Laura",
+          "text": "It's on my phone... here, it's 9Z-781-445."
+        },
+        {
+          "speaker": "Kevin",
+          "text": "Got it. I'll be right back."
+        },
+        {
+          "speaker": "Kevin",
+          "text": "Good news! It's right here. It's a large box, so it didn't go to a locker. Sorry about the confusion."
+        },
+        {
+          "speaker": "Laura",
+          "text": "Whew, that's a relief! Thanks so much. I'll definitely double-check the back room next time."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "Why does Laura approach Kevin?",
+          "options": {
+            "A": "To report that she cannot locate a package she was notified about",
+            "B": "To complain about a broken locker in the mail room",
+            "C": "To ask how to sign up for delivery notifications",
+            "D": "To return an incorrectly delivered package"
+          },
+          "answer": "A",
+          "explanation": "劳拉直接陈述了她的问题：她收到了包裹送达通知，但发现指定的储物柜是空的。B是错误话题；未提及储物柜损坏。C是相关但未陈述的行动；未讨论注册通知。D是反向情况；她是去取包裹，而不是退货。",
+          "distractor_types": {
+            "A": "correct_answer",
+            "B": "wrong_topic",
+            "C": "related_but_not_stated",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the mail room's procedure?",
+          "options": {
+            "A": "Students must show ID to collect any package.",
+            "B": "The staff prefers students to use an online contact form.",
+            "C": "Oversized packages are handled differently than standard ones.",
+            "D": "The automated locker system is completely reliable."
+          },
+          "answer": "C",
+          "explanation": "凯文解释说超大件物品存放在后室而非储物柜，表明流程不同。A是相关但未陈述的细节；未提及出示身份证。B是不相关的下一步；未讨论在线表格。D是反向情况；对话提到系统问题，暗示它并不完全可靠。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "unrelated_next_step",
+            "C": "correct_answer",
+            "D": "reversed_situation"
+          }
+        }
+      ],
+      "id": "lc_v2_1776248279616_001",
+      "flavor_score": 0.95,
+      "audio_url": "/api/audio/conversation/lc_v2_1776248279616_001.mp3"
+    },
+    {
+      "context": "campus_life",
+      "situation": "two students talking about a new vending machine or campus facility",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Jessica",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Eric",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Jessica",
+          "text": "Hey Eric, have you tried the new hydration station next to the gym? I just filled my bottle there."
+        },
+        {
+          "speaker": "Eric",
+          "text": "The what? You mean a water fountain?"
+        },
+        {
+          "speaker": "Jessica",
+          "text": "Well, it's way more than that. It's this high-tech machine that dispenses chilled, filtered water, but you can also add electrolytes or vitamins with a tap. It's free for students."
+        },
+        {
+          "speaker": "Eric",
+          "text": "Wait, seriously? That sounds great. I'm always buying sports drinks after my workouts."
+        },
+        {
+          "speaker": "Jessica",
+          "text": "Exactly! You can customize it. I had the lemon-electrolyte mix today. It was perfect."
+        },
+        {
+          "speaker": "Eric",
+          "text": "Huh. I've been going to the vending machine in the lobby for a Gatorade. That's like three dollars a pop."
+        },
+        {
+          "speaker": "Jessica",
+          "text": "I know, right? The station's been there for a week, but there's no sign or anything. I only found it because someone in my yoga class mentioned it."
+        },
+        {
+          "speaker": "Eric",
+          "text": "Good call telling me. I'll definitely check it out after my session today. Does it get crowded?"
+        },
+        {
+          "speaker": "Jessica",
+          "text": "Not yet, but I bet it will once word gets out. You should bring your own bottle, though. It doesn't provide cups."
+        },
+        {
+          "speaker": "Eric",
+          "text": "Got it. Thanks for the tip! I'm gonna save so much money."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main topic of the conversation?",
+          "options": {
+            "A": "A problem with the gym's vending machine prices",
+            "B": "A new campus resource that one student is informing the other about",
+            "C": "Planning a joint workout session at the campus gym",
+            "D": "Comparing the benefits of different types of sports drinks"
+          },
+          "answer": "B",
+          "explanation": "杰西卡向不知情的埃里克介绍并描述了新的饮水站。A是错误话题；虽然提到自动售货机价格，但这不是核心问题。C是错误话题；未讨论锻炼计划。D是过于狭隘的细节；比较饮料是讨论的一部分，但不是主要焦点，焦点是新设施本身。",
+          "distractor_types": {
+            "A": "wrong_topic",
+            "B": "correct_answer",
+            "C": "wrong_topic",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What does Eric imply about his past habit?",
+          "options": {
+            "A": "He often forgot to bring a water bottle to the gym.",
+            "B": "He was unaware of healthier drink alternatives.",
+            "C": "He preferred the taste of brand-name sports drinks.",
+            "D": "He spent more money than necessary on post-workout drinks."
+          },
+          "answer": "D",
+          "explanation": "埃里克说他一直在买三美元的运动饮料，并总结说使用免费饮水站将'省下很多钱'，暗示他过去的习惯是不必要的开销。A是相关但未陈述的细节；未讨论忘记带水杯。B是过度推断；对话未涉及健康意识。C是相关但未陈述的细节；未提及口味偏好。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "over_inference",
+            "C": "related_but_not_stated",
+            "D": "correct_answer"
+          }
+        }
+      ],
+      "id": "lc_v2_1776248279616_002",
+      "flavor_score": 0.95,
+      "audio_url": "/api/audio/conversation/lc_v2_1776248279616_002.mp3"
+    },
+    {
+      "context": "library",
+      "situation": "student reporting an issue with self-checkout machine",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Ashley",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "James",
+          "role": "library_staff",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Ashley",
+          "text": "Excuse me, the self-checkout machine isn't working for me. It won't scan my book."
+        },
+        {
+          "speaker": "James",
+          "text": "Okay, let's see. Did it show an error message?"
+        },
+        {
+          "speaker": "Ashley",
+          "text": "Yeah, it says 'Item not recognized.' But it's definitely a library book. Look, here's the barcode."
+        },
+        {
+          "speaker": "James",
+          "text": "Hmm. Actually, sometimes the barcode gets worn out. I can check it out for you manually at the main desk."
+        },
+        {
+          "speaker": "Ashley",
+          "text": "Oh, that'd be great. I'm in a bit of a rush."
+        },
+        {
+          "speaker": "James",
+          "text": "No worries. Just bring it over here. I'll need your student ID."
+        },
+        {
+          "speaker": "Ashley",
+          "text": "Sure, here it is. So, does this happen a lot?"
+        },
+        {
+          "speaker": "James",
+          "text": "With older books, yeah. The sun from the windows fades the barcodes. We're replacing them gradually."
+        },
+        {
+          "speaker": "Ashley",
+          "text": "I see. Well, thanks for your help!"
+        },
+        {
+          "speaker": "James",
+          "text": "You're welcome. You're all set. The book's due in three weeks."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What problem does Ashley report?",
+          "options": {
+            "A": "The library book she wants is not on the shelf.",
+            "B": "Her student ID card is not scanning properly.",
+            "C": "The self-checkout machine cannot read her book's barcode.",
+            "D": "The main desk is closed and she cannot check out her book."
+          },
+          "answer": "C",
+          "explanation": "阿什利说机器'扫不了我的书'，并显示'物品无法识别'错误。A是错误细节；她手里拿着书。B是归属错误的细节；后来要求出示学生证，但这不是最初的问题。D是反向情况；主服务台是开放的，詹姆斯提出在那里提供帮助。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "misattributed",
+            "C": "correct_answer",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will Ashley most likely do the next time she has a similar problem?",
+          "options": {
+            "A": "Go directly to the main desk for assistance.",
+            "B": "Try using a different self-checkout machine.",
+            "C": "Report the faded barcode to the library director.",
+            "D": "Avoid checking out older books from the library."
+          },
+          "answer": "A",
+          "explanation": "詹姆斯通过在主服务台手动借出这本书解决了她当前的问题，提供了一个她可能会再次使用的成功解决方案。B是被拒绝的选项；她试过一台机器，但隐含原因（条形码褪色）在任何机器上都可能持续存在。C是过度推断；向主管报告过于极端且未被建议。D是不相关的下一步；未讨论或暗示避免借阅旧书。",
+          "distractor_types": {
+            "A": "correct_answer",
+            "B": "rejected_option",
+            "C": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_v2_1776248279616_003",
+      "flavor_score": 0.76,
+      "audio_url": "/api/audio/conversation/lc_v2_1776248279616_003.mp3"
+    },
+    {
+      "context": "library",
+      "situation": "A student inquires about new quiet study pods but learns they are not yet available for general booking.",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Sarah",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "David",
+          "role": "library_staff",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Sarah",
+          "text": "Hi, I heard you installed those new, super-quiet study pods. I'd love to book one for my online exam next week."
+        },
+        {
+          "speaker": "David",
+          "text": "Oh, I'm afraid they're not quite ready for student reservations yet."
+        },
+        {
+          "speaker": "Sarah",
+          "text": "Really? But the campus newsletter said they were launching this week."
+        },
+        {
+          "speaker": "David",
+          "text": "Right, the hardware is installed, but the booking software's still being tested. We're hoping to have it live by Friday."
+        },
+        {
+          "speaker": "Sarah",
+          "text": "Hmm, my exam is on Monday. Is there any way to get on a waitlist or something?"
+        },
+        {
+          "speaker": "David",
+          "text": "Actually, there is a pilot program. You can sign up at the front desk to be a beta tester. If you're selected, you'd get early access and provide feedback."
+        },
+        {
+          "speaker": "Sarah",
+          "text": "A beta tester? That sounds interesting. What does the feedback involve?"
+        },
+        {
+          "speaker": "David",
+          "text": "Just a short online survey about your experience with the pod and the app. It'd help us work out any bugs before the full launch."
+        },
+        {
+          "speaker": "Sarah",
+          "text": "Okay, I'll definitely sign up for that. Where's the form?"
+        },
+        {
+          "speaker": "David",
+          "text": "Just ask Julie at the circulation desk. She's managing the sign-up list. Good luck with your exam!"
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "Why does Sarah approach David?",
+          "options": {
+            "A": "To inquire about booking a new type of study space",
+            "B": "To report a problem with the library's newsletter",
+            "C": "To ask for help finding a book for her exam",
+            "D": "To volunteer for a library event next week"
+          },
+          "answer": "A",
+          "explanation": "莎拉的开场白是关于为考试预订新的学习舱，这是核心话题。B是错误话题；通讯被提及，但报告其问题并非她的目的。C是错误话题；找书未被讨论。D是错误话题；志愿活动未被提及。",
+          "distractor_types": {
+            "B": "wrong_topic",
+            "C": "wrong_topic",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will Sarah most likely do next?",
+          "options": {
+            "A": "Wait until Friday to book a pod online",
+            "B": "Complain to the university about the delay",
+            "C": "Go to the circulation desk to sign up",
+            "D": "Look for a different library to take her exam"
+          },
+          "answer": "C",
+          "explanation": "大卫告诉莎拉去借阅台找朱莉报名测试员计划，莎拉同意（'我肯定会报名'）。A是排除选项；她不会等待，因为她周一需要学习舱，且正在寻求测试员选项。B是过度推断；没有迹象表明她会投诉。D是无关后续步骤；寻找其他图书馆未被讨论。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_v2_1776248779812_001",
+      "audio_url": "/api/audio/conversation/lc_v2_1776248779812_001.mp3",
+      "flavor_score": 0.84
+    },
+    {
+      "context": "campus_life",
+      "situation": "Two friends discuss a new policy that limits guest parking passes on weekends.",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Emily",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Brian",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Emily",
+          "text": "Hey Brian, did you see the email about weekend parking? My parents are visiting tomorrow."
+        },
+        {
+          "speaker": "Brian",
+          "text": "Oh no, the one from campus security? Yeah, it's a new rule."
+        },
+        {
+          "speaker": "Emily",
+          "text": "Right! It says each student can only get one free guest pass per month now. Last semester it was unlimited."
+        },
+        {
+          "speaker": "Brian",
+          "text": "I know, it's because of all the construction. They've closed like half the lots."
+        },
+        {
+          "speaker": "Emily",
+          "text": "Wow, that's a huge change. My brother was going to visit next weekend too. What am I supposed to tell him?"
+        },
+        {
+          "speaker": "Brian",
+          "text": "Well, you could have him park at the shopping center down the road and walk. It's only a ten-minute walk from here."
+        },
+        {
+          "speaker": "Emily",
+          "text": "Hmm, that's not ideal with all his luggage. Is there any way to get a second pass?"
+        },
+        {
+          "speaker": "Brian",
+          "text": "Actually, the email said you can buy extra daily passes for ten dollars online. It's not free, but it's an option."
+        },
+        {
+          "speaker": "Emily",
+          "text": "Okay, ten dollars isn't too bad. I'll check the website. Thanks for the tip!"
+        },
+        {
+          "speaker": "Brian",
+          "text": "No worries. Good luck with your parents!"
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What is the new parking policy?",
+          "options": {
+            "A": "All weekend parking is now free for guests",
+            "B": "Students get one free guest pass per month",
+            "C": "Guest parking is banned on weekends due to construction",
+            "D": "Students must pay twenty dollars for a weekend pass"
+          },
+          "answer": "B",
+          "explanation": "艾米丽明确说明新规定：'现在每位学生每月只能获得一张免费访客通行证。'A是相反情况；限制更严格，而非更自由。C是错误细节；停车未被禁止，只是受限。D是错误细节；额外通行证的费用是十美元，而非二十美元。",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "C": "wrong_detail",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will Emily most likely do about her brother's visit?",
+          "options": {
+            "A": "Tell him he cannot visit at all",
+            "B": "Ask Brian to use his free pass for her",
+            "C": "Have him park at the shopping center",
+            "D": "Buy an extra parking pass online"
+          },
+          "answer": "D",
+          "explanation": "艾米丽在将免费通行证用于父母后，需要为下周末的弟弟申请通行证。布莱恩提到可以在线购买额外通行证，费用十美元，艾米丽表示会'查看网站'，暗示这可能是她的计划。A是过度推断；她在寻找解决方案，而非取消。B是无关后续步骤；共享通行证未被讨论。C是排除选项；布莱恩建议了，但艾米丽表示因行李问题'不太理想'，可能性较低。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_next_step",
+            "C": "rejected_option"
+          }
+        }
+      ],
+      "id": "lc_v2_1776248779812_002",
+      "audio_url": "/api/audio/conversation/lc_v2_1776248779812_002.mp3",
+      "flavor_score": 1
+    },
+    {
+      "context": "daily_errands",
+      "situation": "A student tries to return a malfunctioning desk lamp at the campus store.",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Karen",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Chris",
+          "role": "store_clerk",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Karen",
+          "text": "Hi, I'd like to return this lamp. I bought it last week, but the dimmer switch doesn't work at all."
+        },
+        {
+          "speaker": "Chris",
+          "text": "Okay, do you have your receipt with you?"
+        },
+        {
+          "speaker": "Karen",
+          "text": "I don't, actually. I think I threw it away. But it's got the store's price tag right here."
+        },
+        {
+          "speaker": "Chris",
+          "text": "Hmm, without a receipt, I can't process a refund. Store policy."
+        },
+        {
+          "speaker": "Karen",
+          "text": "Seriously? Even if it's defective? I just want one that works."
+        },
+        {
+          "speaker": "Chris",
+          "text": "I can offer you an even exchange for the same model. We'll just swap it out right now."
+        },
+        {
+          "speaker": "Karen",
+          "text": "Oh, that would be perfect! Are you sure the new one will work okay?"
+        },
+        {
+          "speaker": "Chris",
+          "text": "We can test it at the counter before you leave. If there's a problem, bring it right back."
+        },
+        {
+          "speaker": "Karen",
+          "text": "Sounds great. Thanks for being so helpful!"
+        },
+        {
+          "speaker": "Chris",
+          "text": "No problem at all. I'll go grab a new one from the stockroom."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why is Karen unable to get a refund for the lamp?",
+          "options": {
+            "A": "The lamp is more than a week old",
+            "B": "The price tag is missing from the lamp",
+            "C": "She does not have the sales receipt",
+            "D": "The store does not sell that model anymore"
+          },
+          "answer": "C",
+          "explanation": "克里斯说：'没有收据，我无法办理退款。'A是错误细节；她'上周'购买，在典型退货期内，原因在于收据而非时间。B是相反情况；她指出价格标签还在。D是相关但未提及；未提及型号已停产。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "reversed_situation",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will Karen most likely do before leaving the store?",
+          "options": {
+            "A": "Test the replacement lamp at the counter",
+            "B": "Look for her original receipt at home",
+            "C": "Decide to keep the broken lamp",
+            "D": "File a complaint with the store manager"
+          },
+          "answer": "A",
+          "explanation": "克里斯提出在柜台测试新台灯，凯伦同意换货，这是合理的后续步骤。B是排除选项；她已说扔掉了收据，且问题通过换货解决。C是相反情况；她将获得替换品，而非保留损坏品。D是过度推断；她对解决方案满意并感谢克里斯，因此投诉可能性低。",
+          "distractor_types": {
+            "B": "rejected_option",
+            "C": "reversed_situation",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "id": "lc_v2_1776248779812_003",
+      "audio_url": "/api/audio/conversation/lc_v2_1776248779812_003.mp3",
+      "flavor_score": 0.88
+    },
+    {
+      "context": "campus_life",
+      "situation": "two students discussing an issue with a campus sustainability program",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Ashley",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Mark",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Ashley",
+          "text": "Hey Mark, have you tried using the new campus compost bins? I just got a warning sticker on my dorm room door."
+        },
+        {
+          "speaker": "Mark",
+          "text": "Oh no! Seriously? I haven't, but I've seen them around. What's the problem?"
+        },
+        {
+          "speaker": "Ashley",
+          "text": "Well, I put my coffee grounds and a banana peel in one yesterday, but apparently you can't use the regular plastic bags. It has to be a certified compostable bag."
+        },
+        {
+          "speaker": "Mark",
+          "text": "Huh, I didn't know that. Where do you even get those special bags?"
+        },
+        {
+          "speaker": "Ashley",
+          "text": "That's the thing! The sustainability office gives out a free roll at the start of the semester, but I must've missed it. Now I have to go to the campus store to buy some."
+        },
+        {
+          "speaker": "Mark",
+          "text": "That's annoying. But wait, couldn't you just dump the food scraps directly into the bin without a bag?"
+        },
+        {
+          "speaker": "Ashley",
+          "text": "Actually, you're right. The sticker says that's totally fine. I guess I was just on autopilot, grabbing a bag."
+        },
+        {
+          "speaker": "Mark",
+          "text": "Good call. I'll remember that too. No bag, no problem."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "Why does Ashley talk to Mark?",
+          "options": {
+            "A": "To discuss a problem she encountered with a campus program",
+            "B": "To invite him to a sustainability office event",
+            "C": "To ask where to buy plastic bags for her dorm",
+            "D": "To complain about the location of the compost bins"
+          },
+          "answer": "A",
+          "explanation": "阿什利以收到堆肥桶警告贴纸开启对话，并讨论具体问题（使用了错误的袋子）。B是错误话题（未提及活动）。C是错误细节（她需要可堆肥袋，而非塑料袋）。D是相关但未提及（桶的位置未讨论）。",
+          "distractor_types": {
+            "B": "wrong_topic",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will Ashley most likely do the next time she uses the compost bin?",
+          "options": {
+            "A": "Go to the campus store to buy the correct bags",
+            "B": "Ignore the compost program entirely",
+            "C": "Put her food scraps in without using a bag",
+            "D": "Apply for a new roll of bags from the sustainability office"
+          },
+          "answer": "C",
+          "explanation": "阿什利同意马克直接倾倒残渣的建议，马克总结'不用袋子，就没问题'，暗示这是接受的解决方案。A是排除选项（她了解到无需购买袋子）。B是过度推断（无证据表明她会退出计划）。D是无关后续步骤（获取新卷袋未作为此认知后的下一步讨论）。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_v2_1776249027035_001",
+      "audio_url": "/api/audio/conversation/lc_v2_1776249027035_001.mp3",
+      "flavor_score": 0.95
+    },
+    {
+      "context": "daily_errands",
+      "situation": "student checking with a receptionist about an appointment",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Megan",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Tom",
+          "role": "receptionist",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Megan",
+          "text": "Hi, I'm here for my 3:30 appointment with Dr. Evans? I'm a few minutes early."
+        },
+        {
+          "speaker": "Tom",
+          "text": "Okay, let me check... Hmm, I don't see a Megan on the schedule for today with Dr. Evans."
+        },
+        {
+          "speaker": "Megan",
+          "text": "What? That can't be right. I booked it online last week for career counseling."
+        },
+        {
+          "speaker": "Tom",
+          "text": "Oh, wait. Dr. Evans is out of the office this afternoon. All his appointments were automatically rescheduled. Didn't you get a text message?"
+        },
+        {
+          "speaker": "Megan",
+          "text": "A text? I don't think so. I always check my email for confirmations."
+        },
+        {
+          "speaker": "Tom",
+          "text": "Ah, that's it. Our system sends reschedule alerts via text only. Your new time is tomorrow at 11 AM. I can print you a confirmation slip right now."
+        },
+        {
+          "speaker": "Megan",
+          "text": "Tomorrow at 11? Actually, I have a class then. Is there anything later in the week?"
+        },
+        {
+          "speaker": "Tom",
+          "text": "Let's see... How about Friday at 2 PM? He has an opening."
+        },
+        {
+          "speaker": "Megan",
+          "text": "That works perfectly. Thanks for sorting that out!"
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why was Megan's original appointment not on the schedule?",
+          "options": {
+            "A": "She accidentally booked it for the wrong month.",
+            "B": "The doctor was out, and it had been rescheduled.",
+            "C": "She did not confirm the appointment by email.",
+            "D": "The receptionist could not find her name in the system."
+          },
+          "answer": "B",
+          "explanation": "汤姆说：'埃文斯博士今天下午不在办公室。他的所有预约已自动重新安排。'A是错误细节（未提及错误月份）。C是相关但未提及（邮件用于确认，而非重新安排的原因）。D是归因错误（他找不到预约是因为被重新安排，而非核心原因）。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will Megan probably do to avoid this problem in the future?",
+          "options": {
+            "A": "Call the office instead of booking online",
+            "B": "Arrive much earlier for all appointments",
+            "C": "Double-check the doctor's schedule before booking",
+            "D": "Pay more attention to text messages from the office"
+          },
+          "answer": "D",
+          "explanation": "问题源于系统仅通过短信发送重新安排提醒，而梅根不查看短信。合理推断她将开始关注短信。A是过度推断（她成功在线预订；问题在于通知）。B是无关后续步骤（到达时间非问题所在）。C是排除选项（日程变更出乎意料，她无法提前查看）。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_next_step",
+            "C": "rejected_option"
+          }
+        }
+      ],
+      "id": "lc_v2_1776249027035_002",
+      "audio_url": "/api/audio/conversation/lc_v2_1776249027035_002.mp3",
+      "flavor_score": 0.95
+    },
+    {
+      "context": "daily_errands",
+      "situation": "student returning a defective item at the campus store",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Maria",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Brian",
+          "role": "store_clerk",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Maria",
+          "text": "Hi, I'd like to return this desk lamp. I just bought it two days ago, and it flickers constantly."
+        },
+        {
+          "speaker": "Brian",
+          "text": "Sure, do you have the receipt with you?"
+        },
+        {
+          "speaker": "Maria",
+          "text": "I don't, actually. I paid cash and must've tossed it. But it's your store brand, and I can show you the charge on my bank app."
+        },
+        {
+          "speaker": "Brian",
+          "text": "Hmm, without a receipt, our policy is store credit only. But for defective electronics, we usually make an exception if it's within a week."
+        },
+        {
+          "speaker": "Maria",
+          "text": "So I could get a refund back to my card?"
+        },
+        {
+          "speaker": "Brian",
+          "text": "Well, since you paid cash, we'd have to issue the refund in cash. But I'll need a manager's approval for that. She's on her break for another fifteen minutes."
+        },
+        {
+          "speaker": "Maria",
+          "text": "I can wait, that's fine. I'd really prefer not to have store credit."
+        },
+        {
+          "speaker": "Brian",
+          "text": "Okay, I'll put a note here. If you want to look around, I'll call you over when she's back."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is Maria's main purpose for speaking with Brian?",
+          "options": {
+            "A": "To exchange a lamp for a different model",
+            "B": "To find out the store's hours for returns",
+            "C": "To get a refund for a malfunctioning product",
+            "D": "To complain about the store's payment policy"
+          },
+          "answer": "C",
+          "explanation": "玛丽亚表示她想退回有缺陷的台灯并寻求退款，这是核心问题。A过于狭隘（换货未讨论；她想要退货/退款）。B是错误话题（营业时间未提及）。D是相反情况（她讨论了政策，但主要目的并非投诉政策）。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "wrong_topic",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the store's return policy?",
+          "options": {
+            "A": "It is more flexible for defective items than for other returns.",
+            "B": "It requires all returns to be approved by a manager.",
+            "C": "It does not allow returns without the original packaging.",
+            "D": "It only offers exchanges, not refunds, for cash purchases."
+          },
+          "answer": "A",
+          "explanation": "布莱恩说无收据时政策是提供商店积分，'但对于有缺陷的电子产品，我们通常破例'，暗示更具灵活性。B是过度推断（经理批准仅针对此特定现金/例外情况，而非'所有退货'）。C是相关但未提及（包装未提及）。D是错误细节（经批准可能获得现金退款）。",
+          "distractor_types": {
+            "B": "over_inference",
+            "C": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "id": "lc_v2_1776249027035_003",
+      "audio_url": "/api/audio/conversation/lc_v2_1776249027035_003.mp3",
+      "flavor_score": 0.79
+    },
+    {
+      "context": "campus_life",
+      "situation": "friends discussing an unexpected campus policy change",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Amy",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Nathan",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Amy",
+          "text": "Nathan, did you see the email about the laundry rooms? They're changing how we pay."
+        },
+        {
+          "speaker": "Nathan",
+          "text": "No, what's happening? I still have a bunch of those old tokens."
+        },
+        {
+          "speaker": "Amy",
+          "text": "Exactly! That's the problem. Starting next Monday, they won't take tokens anymore. It's all through an app on your phone."
+        },
+        {
+          "speaker": "Nathan",
+          "text": "You're kidding. I just bought ten tokens last week! What do we do with the old ones?"
+        },
+        {
+          "speaker": "Amy",
+          "text": "The email says you can exchange them for app credit at the housing office, but only until the end of the month."
+        },
+        {
+          "speaker": "Nathan",
+          "text": "Whew, okay. I'll have to do that this week then. I hope the app is easy to use."
+        },
+        {
+          "speaker": "Amy",
+          "text": "Me too. At least we won't have to hunt for quarters anymore!"
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What is the new policy for using the laundry rooms?",
+          "options": {
+            "A": "Payment must be made through a mobile application.",
+            "B": "The cost per load is being reduced.",
+            "C": "Tokens can only be used on certain days.",
+            "D": "Students must pay with quarters instead of tokens."
+          },
+          "answer": "A",
+          "explanation": "艾米说：'从下周一始，他们将不再接受代币。全部通过手机应用进行。'B是相关但未提及（费用变更未提及）。C是错误细节（代币将完全不被接受）。D是相反情况（他们正在远离硬币等实体货币）。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "wrong_detail",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will Nathan probably do before the end of the month?",
+          "options": {
+            "A": "Use all his remaining tokens quickly",
+            "B": "Complain to the housing office about the change",
+            "C": "Exchange his tokens for credit at the housing office",
+            "D": "Download the app and test it with one load"
+          },
+          "answer": "C",
+          "explanation": "内森说他刚买了代币，得知可兑换后表示，'我这周得去办。'这直接暗示他将前往住宿办公室。A是排除选项（代币周一后将失效，他无法直接使用）。B是过度推断（他表示惊讶，但无投诉意图）。D是无关后续步骤（测试应用与他关于代币的即时关切无关）。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_v2_1776249027035_004",
+      "audio_url": "/api/audio/conversation/lc_v2_1776249027035_004.mp3",
+      "flavor_score": 0.75
+    },
+    {
+      "context": "library",
+      "situation": "student reporting an issue with a self-checkout machine",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Katie",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Alex",
+          "role": "library_staff",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Katie",
+          "text": "Hi, I'm having a weird problem with the self-checkout machine over there."
+        },
+        {
+          "speaker": "Alex",
+          "text": "Oh no! What's going on?"
+        },
+        {
+          "speaker": "Katie",
+          "text": "Well, I scanned my student ID and it accepted it, but when I put my books on the pad, it charged me for five books instead of the two I'm actually checking out."
+        },
+        {
+          "speaker": "Alex",
+          "text": "Hmm, that's odd. Did you have any other items in your bag on the scale?"
+        },
+        {
+          "speaker": "Katie",
+          "text": "Actually, yeah, I did. My heavy water bottle was still in there. Wait, seriously? Does the scale weigh everything?"
+        },
+        {
+          "speaker": "Alex",
+          "text": "Exactly. The system uses the weight to verify the number of items. It must've thought your bottle was three extra books."
+        },
+        {
+          "speaker": "Katie",
+          "text": "Wow, I had no idea. So what should I do now? The receipt says I owe for five."
+        },
+        {
+          "speaker": "Alex",
+          "text": "No worries. I can void that transaction at the main desk. Just bring your books and ID over, and we'll do a manual check-out. And next time, make sure the scale is clear."
+        },
+        {
+          "speaker": "Katie",
+          "text": "Okay, that's a huge relief. I'll definitely do that. Thanks!"
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "Why does Katie approach Alex?",
+          "options": {
+            "A": "To report an incorrect charge from a self-checkout machine",
+            "B": "To ask how to use the library's new self-checkout system",
+            "C": "To complain that a library book is missing from the shelves",
+            "D": "To request help finding a specific book for her class"
+          },
+          "answer": "A",
+          "explanation": "凯蒂的问题是自助借阅机向她收取了五本书而非两本的费用，她向亚历克斯报告了此事。B是错误话题（她知道如何使用，但遇到了错误）。C是错误话题（问题在于借阅，而非找书）。D是错误话题（她正在借书，而非找书）。",
+          "distractor_types": {
+            "B": "wrong_topic",
+            "C": "wrong_topic",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will Katie most likely do the next time she uses the self-checkout machine?",
+          "options": {
+            "A": "Avoid using it and always go to the main desk",
+            "B": "Make sure her student ID is properly scanned first",
+            "C": "Remove all other items from the scale before weighing her books",
+            "D": "Count her books aloud to confirm the number with the machine"
+          },
+          "answer": "C",
+          "explanation": "亚历克斯解释问题源于她的水瓶放在秤上，并建议'下次确保秤上无物。'这强烈暗示她会遵循该建议。A是过度推断（她对解决方案感到宽慰，无回避机器的意图）。B是相关但未提及（她已成功扫描ID；新启示在于秤）。D是无关后续步骤（大声计数未提及或暗示）。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "related_but_not_stated",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_v2_1776249034313_001",
+      "audio_url": "/api/audio/conversation/lc_v2_1776249034313_001.mp3",
+      "flavor_score": 0.95
+    },
+    {
+      "context": "campus_life",
+      "situation": "two students discussing an issue with a campus sustainability program",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Jessica",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Jason",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Jessica",
+          "text": "Hey Jason, you're in the Eco-Club, right? I wanted to ask about the reusable container program at the dining hall."
+        },
+        {
+          "speaker": "Jason",
+          "text": "Yeah, definitely. What's up?"
+        },
+        {
+          "speaker": "Jessica",
+          "text": "Well, I borrowed one of the green containers for my salad yesterday, but I can't figure out where to return it. The sign at the dish drop-off is really confusing."
+        },
+        {
+          "speaker": "Jason",
+          "text": "Oh, I know the one you mean. Actually, they moved the return bin last week. It's not by the regular dishes anymore."
+        },
+        {
+          "speaker": "Jessica",
+          "text": "Really? So where is it now?"
+        },
+        {
+          "speaker": "Jason",
+          "text": "It's right next to the beverage station, by the wall. There's a new blue bin with a big logo on it."
+        },
+        {
+          "speaker": "Jessica",
+          "text": "Huh, I must've walked right past it. I've been carrying this container around all day."
+        },
+        {
+          "speaker": "Jason",
+          "text": "No worries. Just drop it there. And if the bin's full, you can also give it to any cashier—they'll scan it as returned so you don't get charged."
+        },
+        {
+          "speaker": "Jessica",
+          "text": "Okay, good call. I'll head over there now. Thanks!"
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What is Jessica's problem?",
+          "options": {
+            "A": "She was charged for a reusable container she already returned.",
+            "B": "She does not know where to return a borrowed reusable container.",
+            "C": "The reusable container she borrowed is broken.",
+            "D": "She cannot find the dining hall's beverage station."
+          },
+          "answer": "B",
+          "explanation": "杰西卡说：'我不知道该还到哪里。'A是错误细节（她尚未归还，被收费仅是潜在未来问题）。C是错误细节（容器状况未提及）。D是归因错误（她找不到归还箱，而非饮料站本身）。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "wrong_detail",
+            "D": "misattributed"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will Jessica most likely do if the blue return bin is full?",
+          "options": {
+            "A": "Take the container back to her dorm and try again tomorrow",
+            "B": "Leave the container on top of the bin",
+            "C": "Complain to the dining hall manager about the poor signage",
+            "D": "Give the container to a cashier to scan as returned"
+          },
+          "answer": "D",
+          "explanation": "贾森明确说明替代方案：'如果箱子满了，你也可以交给任何收银员——他们会扫描确认归还。'这是直接提及的计划。A是排除选项（她正前往并想归还）。B是无关后续步骤（未提及或暗示）。C是过度推断（她获得了所需信息，无投诉意图）。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "unrelated_next_step",
+            "C": "over_inference"
+          }
+        }
+      ],
+      "id": "lc_v2_1776249034313_002",
+      "audio_url": "/api/audio/conversation/lc_v2_1776249034313_002.mp3",
+      "flavor_score": 0.95
+    },
+    {
+      "context": "daily_errands",
+      "situation": "two students discussing a problem with the campus shuttle",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Amy",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Michael",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Amy",
+          "text": "Michael, you take the campus shuttle to the north dorms, right? Is it running on time today?"
+        },
+        {
+          "speaker": "Michael",
+          "text": "Actually, no. I just got the alert. The 3:15 shuttle is canceled."
+        },
+        {
+          "speaker": "Amy",
+          "text": "Oh no! I have a study group at 3:30. How did you find out?"
+        },
+        {
+          "speaker": "Michael",
+          "text": "There's a text alert system. You can sign up on the transportation website. But don't worry, the next one is at 3:45."
+        },
+        {
+          "speaker": "Amy",
+          "text": "3:45? I'll be so late. Is walking faster?"
+        },
+        {
+          "speaker": "Michael",
+          "text": "It's about a twenty-minute walk from here. The shuttle, even at 3:45, would get you there by 3:55."
+        },
+        {
+          "speaker": "Amy",
+          "text": "Hmm. So if I walk now, I'll only be about five minutes late. That's better than twenty-five."
+        },
+        {
+          "speaker": "Michael",
+          "text": "Yeah, good call. I'd walk if I were you. And you should really sign up for those alerts."
+        },
+        {
+          "speaker": "Amy",
+          "text": "I'll definitely do that. Thanks!"
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why is Amy concerned about the shuttle?",
+          "options": {
+            "A": "She missed the shuttle and is waiting for the next one.",
+            "B": "She thinks the shuttle route has changed.",
+            "C": "Her shuttle has been canceled, and she has an appointment soon.",
+            "D": "She does not know how to sign up for shuttle alerts."
+          },
+          "answer": "C",
+          "explanation": "迈克尔告诉她3:15的班车取消，她回应说3:30有学习小组。A是错误细节（她未错过；班车被取消）。B是错误话题（路线未讨论）。D是相关但未提及（她后来得知提醒，但这不是她的初始关切）。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "wrong_topic",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will Amy most likely do next?",
+          "options": {
+            "A": "Walk to her study group",
+            "B": "Wait for the 3:45 shuttle",
+            "C": "Cancel her study group meeting",
+            "D": "Go to the transportation website immediately"
+          },
+          "answer": "A",
+          "explanation": "艾米计算步行只会迟到五分钟，而等待班车将迟到二十五分钟，迈克尔同意，'我要是你就步行。'这表明她的决定。B是排除选项（她认为步行更好）。C是过度推断（她在想办法到达，而非取消）。D是归因错误（她说会注册提醒，但即时后续步骤是前往学习小组）。",
+          "distractor_types": {
+            "B": "rejected_option",
+            "C": "over_inference",
+            "D": "misattributed"
+          }
+        }
+      ],
+      "id": "lc_v2_1776249034313_003",
+      "audio_url": "/api/audio/conversation/lc_v2_1776249034313_003.mp3",
+      "flavor_score": 0.95
+    },
+    {
+      "context": "campus_life",
+      "situation": "two students talking about a new vending machine or campus facility",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Karen",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Kevin",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Karen",
+          "text": "Kevin, have you tried the new snack vending machine in the student center? The one that takes campus cash?"
+        },
+        {
+          "speaker": "Kevin",
+          "text": "I have, but I ran into a glitch. I selected a granola bar, paid with my phone, and then it got stuck in the spiral."
+        },
+        {
+          "speaker": "Karen",
+          "text": "Wait, seriously? That's so frustrating. What did you do?"
+        },
+        {
+          "speaker": "Kevin",
+          "text": "Well, there's a small touchscreen on the front. I tapped 'Help' and it connected me via video call to a support person. They remotely released the spiral and it dropped right down."
+        },
+        {
+          "speaker": "Karen",
+          "text": "Wow, that's actually pretty high-tech. Did you get a refund or anything?"
+        },
+        {
+          "speaker": "Kevin",
+          "text": "Not a refund, but they gave me a digital coupon for a free item next time. The whole thing took less than two minutes."
+        },
+        {
+          "speaker": "Karen",
+          "text": "Hmm, so it's annoying but they fix it fast. I guess I'll still use it—the prices are better than the cafe."
+        },
+        {
+          "speaker": "Kevin",
+          "text": "Exactly. Just be ready to tap that help screen if your snack gets hung up."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the students mainly discussing?",
+          "options": {
+            "A": "A problem with the student center's payment system",
+            "B": "The high prices at the campus cafe",
+            "C": "How to get a refund from a vending machine",
+            "D": "A student's experience with a malfunctioning vending machine and its resolution"
+          },
+          "answer": "D",
+          "explanation": "对话围绕凯文的零食卡住经历展开，讲述他如何通过帮助功能解决问题并获得优惠券。A选项过于局限（支付成功，问题是机械故障）。B选项偏离主题（仅作为对比简要提及）。C选项过于局限（他获得的是优惠券而非退款）。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "wrong_topic",
+            "C": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What does Kevin imply about using the new vending machine in the future?",
+          "options": {
+            "A": "He will probably avoid it due to the risk of items getting stuck.",
+            "B": "He will use it but knows how to quickly resolve any issues.",
+            "C": "He will only use it if he has a digital coupon.",
+            "D": "He will recommend the campus cafe instead."
+          },
+          "answer": "B",
+          "explanation": "凯文描述了高效的解决过程，并建议凯伦准备好使用帮助界面，暗示他懂得如何处理问题且未来可能会再次使用。A选项情境颠倒（他描述的是快速解决，并未建议不要使用）。C选项过度推断（优惠券是一次性补偿，并非未来使用条件）。D选项情境颠倒（他未推荐咖啡馆；凯伦指出自动售货机价格更优）。",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "C": "over_inference",
+            "D": "reversed_situation"
+          }
+        }
+      ],
+      "id": "lc_v2_1776249034313_004",
+      "audio_url": "/api/audio/conversation/lc_v2_1776249034313_004.mp3",
+      "flavor_score": 0.84
+    },
+    {
+      "context": "campus_services",
+      "situation": "student checking with mail room about a missing package",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Lisa",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Brian",
+          "role": "mail_staff",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Lisa",
+          "text": "Hi, I got a notification that a package was delivered to the mail room yesterday, but I don't see it in my pickup box."
+        },
+        {
+          "speaker": "Brian",
+          "text": "Okay, let me check. What's your last name and box number?"
+        },
+        {
+          "speaker": "Lisa",
+          "text": "It's Lopez, box 312."
+        },
+        {
+          "speaker": "Brian",
+          "text": "Hmm. Lopez, 312... I see it here. Actually, this one's too big for the box. It's on the oversized shelf in the back."
+        },
+        {
+          "speaker": "Lisa",
+          "text": "Oh, really? I didn't know you had a separate shelf for big items."
+        },
+        {
+          "speaker": "Brian",
+          "text": "Yeah, we put a yellow slip in your box when that happens. You might've missed it."
+        },
+        {
+          "speaker": "Lisa",
+          "text": "Ah, I probably just grabbed my letters and didn't look. Can I get it now?"
+        },
+        {
+          "speaker": "Brian",
+          "text": "Of course. I'll need to see your student ID, and I'll go grab it from the back. It'll just be a minute."
+        },
+        {
+          "speaker": "Lisa",
+          "text": "Great, I've got my ID right here. Thanks!"
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why was Lisa's package not in her pickup box?",
+          "options": {
+            "A": "It was too large and placed on a separate shelf.",
+            "B": "It was delivered to the wrong mail room.",
+            "C": "Someone else had already picked it up by mistake.",
+            "D": "The delivery notification was sent in error."
+          },
+          "answer": "A",
+          "explanation": "布莱恩解释道：'这个包裹太大放不进信箱，放在后面的超大件货架上了。'B选项细节错误（包裹已正确送达收发室）。C选项相关但未提及（未说明或暗示）。D选项细节错误（通知是正确的；包裹就在那里）。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will Lisa most likely do in the future when she gets a mail notification?",
+          "options": {
+            "A": "Call the mail room first to check the package size.",
+            "B": "Wait an extra day before coming to pick up packages.",
+            "C": "Look more carefully in her pickup box for any slips.",
+            "D": "Ask a friend to pick up her packages for her."
+          },
+          "answer": "C",
+          "explanation": "布莱恩提到他们为超大件在信箱放了黄色通知单，丽莎说：'我可能只拿了信件没注意看。'这暗示她未来会更留意通知单。A选项过度推断（未提及或暗示要打电话）。B选项无关后续步骤（未建议等待）。D选项无关后续步骤（未提及）。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_next_step",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_v2_1776249034313_005",
+      "audio_url": "/api/audio/conversation/lc_v2_1776249034313_005.mp3",
+      "flavor_score": 0.79
+    },
+    {
+      "context": "campus_life",
+      "situation": "two students debating whether to use a new campus app feature for finding study spots",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Sarah",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Kevin",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Sarah",
+          "text": "Hey Kevin, have you tried that new 'Spot Finder' feature in the campus app? It supposedly shows real-time availability for every study space on campus."
+        },
+        {
+          "speaker": "Kevin",
+          "text": "I've seen the icon, but I didn't bother. Sounds like a gimmick. I usually just go to the library and hope for the best."
+        },
+        {
+          "speaker": "Sarah",
+          "text": "Actually, I tested it this morning. It said the third-floor quiet zone had three open desks, and when I got there, it was spot on. No wasted time wandering around."
+        },
+        {
+          "speaker": "Kevin",
+          "text": "Hmm, that's pretty impressive. But does it cover all the buildings? I often work in the student union or the science building basement."
+        },
+        {
+          "speaker": "Sarah",
+          "text": "Yeah, it includes like twenty locations. Even the little nooks in the art building. You just filter by type—quiet zone, group study, or even café seating—and it shows a map."
+        },
+        {
+          "speaker": "Kevin",
+          "text": "Okay, that might actually save me a ton of time. I wasted fifteen minutes yesterday walking between floors at the library because every room was full."
+        },
+        {
+          "speaker": "Sarah",
+          "text": "Exactly! And it updates every minute. So if someone leaves, the spot frees up almost instantly."
+        },
+        {
+          "speaker": "Kevin",
+          "text": "Alright, you've convinced me. I'll give it a shot tomorrow. Thanks for the tip!"
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main topic of the conversation?",
+          "options": {
+            "A": "Sarah is encouraging Kevin to try a new app feature that helps find available study spaces.",
+            "B": "Kevin is complaining about how crowded the library has become recently.",
+            "C": "Sarah and Kevin are comparing different study locations on campus.",
+            "D": "Kevin is asking Sarah for directions to a specific study room in the art building."
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。对话的核心是Sarah向Kevin推荐并说服他使用新的校园App功能'Spot Finder'来寻找空余的学习位置。B选项错误，因为Kevin并没有抱怨图书馆拥挤，而是提到了他浪费时间的经历，但这只是讨论的背景。C选项错误，因为两人没有比较不同的学习地点，而是聚焦于一个工具。D选项错误，因为Kevin没有询问任何具体房间的方向。",
+          "distractor_types": {
+            "A": "correct",
+            "B": "too_narrow",
+            "C": "wrong_topic",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about Kevin's previous approach to finding a study spot?",
+          "options": {
+            "A": "He always used a different app to check availability.",
+            "B": "He relied on asking friends for recommendations.",
+            "C": "He would physically check multiple locations until he found a spot.",
+            "D": "He never had trouble finding an empty desk before."
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。Kevin提到'I usually just go to the library and hope for the best'以及'I wasted fifteen minutes yesterday walking between floors at the library because every room was full'，这表明他之前的方法是亲自去各个地方查看，直到找到空位。A选项错误，因为Kevin明确表示没有使用过这个功能。B选项错误，对话中没有提到他向朋友询问建议。D选项错误，他提到昨天浪费了15分钟，说明他确实遇到了困难。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "B": "over_inference",
+            "C": "correct",
+            "D": "reversed_situation"
+          }
+        }
+      ],
+      "id": "lc_v2_1778696259983_001",
+      "flavor_score": 0.86,
+      "audio_url": "/api/audio/conversation/lc_v2_1778696259983_001.mp3"
+    },
+    {
+      "id": "lc_r1_routine-20260531-134653_1",
+      "context": "recommendations_opinions",
+      "situation": "two students swapping music recommendations because one is bored of the same pop singers",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "I'm so tired of my playlist. Every song sounds like the same three pop singers."
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, I went through that last semester. What kinds of things have you actually liked recently?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "I guess songs with strong storytelling? Like a clear narrator and a few real-life details."
+        },
+        {
+          "speaker": "Man",
+          "text": "Then you should try indie folk. There's a singer named Hana Bryant — she basically writes short stories. Her album from last fall, the one called 'Bus Stop Mornings,' is the place to start."
+        },
+        {
+          "speaker": "Woman",
+          "text": "How does it compare to the regular pop stuff?"
+        },
+        {
+          "speaker": "Man",
+          "text": "The arrangements are sparser — usually just guitar, sometimes piano. The whole point is that you focus on the lyrics."
+        },
+        {
+          "speaker": "Woman",
+          "text": "That sounds like exactly what I need. I keep skipping tracks because they all blur together."
+        },
+        {
+          "speaker": "Man",
+          "text": "Then I'd say start with the third track, 'Letters to Iowa.' If that one doesn't pull you in, you can give the rest a miss."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Okay, third track. I'll listen on the bus tonight."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "According to the man, what makes Hana Bryant's music different from the pop songs the woman is tired of?",
+          "options": {
+            "A": "The arrangements are sparser and meant to focus attention on the lyrics",
+            "B": "The songs are produced entirely with electronic instruments",
+            "C": "The albums are usually shorter than ten minutes",
+            "D": "The singer rarely writes her own material"
+          },
+          "answer": "A",
+          "explanation": "男生明说编曲简洁，多为吉他和钢琴，重点是让你专注歌词。A 正确。B 与原文相反，reversed_situation。C 没有依据，over_inference。D 与男生称她“写短篇小说”相反，wrong_detail。",
+          "distractor_types": {
+            "B": "reversed_situation",
+            "C": "over_inference",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Buy the entire album on physical CD this evening",
+            "B": "Send Hana Bryant a personal email asking for new music",
+            "C": "Listen to the third track from 'Bus Stop Mornings' on the bus tonight",
+            "D": "Cancel her current pop music subscription completely"
+          },
+          "answer": "C",
+          "explanation": "女生最后明确说今晚在公车上从第三首听起。C 正确。A 没提到买实体专辑，over_inference。B 完全没有这一情节，unrelated_next_step。D 是过度推断，over_inference。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_next_step",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "audio_url": "/api/audio/conversation/lc_r1_routine-20260531-134653_1.mp3"
+    },
+    {
+      "id": "lc_r1_routine-20260531-134653_2",
+      "context": "recommendations_opinions",
+      "situation": "two friends discussing a movie one just saw — good twists but too long",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "You saw 'Lighthouse Echo' last night, right? What did you think?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Honestly, I'm torn. The plot twists were really clever — I didn't see the ending coming at all."
+        },
+        {
+          "speaker": "Woman",
+          "text": "That's what everyone keeps saying online."
+        },
+        {
+          "speaker": "Man",
+          "text": "But it was way too long. Almost three hours, and at least forty minutes in the middle could have been cut."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Like a slow stretch in the second act?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Exactly. There's this whole subplot about the brother that doesn't go anywhere. By the time the twist arrives, you've already lost some momentum."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Did the audience seem bored?"
+        },
+        {
+          "speaker": "Man",
+          "text": "A few people behind me actually got up. Not walked out, but went to get popcorn around the ninety-minute mark."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Hmm. I was thinking of seeing it tomorrow. Worth it for the twists?"
+        },
+        {
+          "speaker": "Man",
+          "text": "If you go in expecting a long ride, yes. Don't watch it tired."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What is the man's main complaint about the film?",
+          "options": {
+            "A": "The acting performances were uneven across the cast",
+            "B": "The film was nearly three hours long, with a slow middle act that should have been cut",
+            "C": "The opening twist was given away too early in the trailer",
+            "D": "The soundtrack distracted from the film's most important scenes"
+          },
+          "answer": "B",
+          "explanation": "男生明说时长接近三小时，中间部分本可以削减四十分钟。B 正确。A、C、D 男生都未提及，分别是 wrong_topic、over_inference、wrong_topic。",
+          "distractor_types": {
+            "A": "wrong_topic",
+            "C": "over_inference",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What does the man imply when he says \"Don't watch it tired\"?",
+          "options": {
+            "A": "The film should only be watched in a movie theater, not at home",
+            "B": "The woman should plan to see the film with a large group of friends",
+            "C": "The film contains scenes that are unsuitable for evening viewing",
+            "D": "The film's length and slow middle will be harder to enjoy if she is already tired"
+          },
+          "answer": "D",
+          "explanation": "男生暗示电影偏长、中段慢，疲倦时更难坚持。D 正确。A 没提观影方式，over_inference。B 没提到一群朋友，unrelated_next_step。C 是过度联想，over_inference。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_next_step",
+            "C": "over_inference"
+          }
+        }
+      ],
+      "audio_url": "/api/audio/conversation/lc_r1_routine-20260531-134653_2.mp3"
+    },
+    {
+      "id": "lc_r1_routine-20260531-134653_4",
+      "context": "errands_service",
+      "situation": "two students chatting about a gardening or art class they took",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Did you finish the watercolor class at the community center?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Last week, actually. Six sessions, every Tuesday evening."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Was it worth signing up?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Honestly, more than I expected. The instructor focused on three basic skills: mixing colors, controlling water, and layering washes. By session four we were doing small landscapes."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Did you need to bring your own materials?"
+        },
+        {
+          "speaker": "Man",
+          "text": "The first session everything was provided — paper, brushes, paints. From session two on, you had to bring your own paper. Brushes and paints stayed in the room."
+        },
+        {
+          "speaker": "Woman",
+          "text": "I was worried about the cost of supplies. How much did the paper come to?"
+        },
+        {
+          "speaker": "Man",
+          "text": "I spent about eighteen dollars at the art store on a pad that lasted the whole course."
+        },
+        {
+          "speaker": "Woman",
+          "text": "That's manageable. I think I'll sign up for the next round."
+        },
+        {
+          "speaker": "Man",
+          "text": "They open registration in two weeks. Don't wait — the evening section fills up fast."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What did students need to bring to the watercolor class starting from the second session?",
+          "options": {
+            "A": "A set of brushes and an apron",
+            "B": "A small framed canvas for landscape work",
+            "C": "Their own selection of dry paint pigments",
+            "D": "Their own paper for the class exercises"
+          },
+          "answer": "D",
+          "explanation": "男生说从第二节起需要自带纸张，画笔和颜料留在教室。D 正确。A、C 与原文相反，reversed_situation 或 wrong_detail。B 没有此环节，wrong_detail。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "wrong_detail",
+            "C": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What does the man suggest the woman do?",
+          "options": {
+            "A": "Avoid the watercolor class because it requires expensive materials",
+            "B": "Register early when the next round opens because evening sections fill quickly",
+            "C": "Choose a daytime art class because evenings are reserved for advanced students",
+            "D": "Take the class only after she completes a beginner sketching course"
+          },
+          "answer": "B",
+          "explanation": "男生提醒别等，两周后开放报名，晚间段很快报满。B 正确。A 与他对课程的正面态度相反，reversed_situation。C、D 没有这种内容，unrelated_next_step。",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "C": "unrelated_next_step",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "audio_url": "/api/audio/conversation/lc_r1_routine-20260531-134653_4.mp3"
+    },
+    {
+      "id": "lc_r1_routine-20260531-134653_5",
+      "context": "campus_dorm_life",
+      "situation": "two roommates working out a fair chore or quiet-hours schedule",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Can we finally settle the chores and quiet-hours thing? I think we've been winging it for three weeks."
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, agreed. The dishes have piled up twice already."
+        },
+        {
+          "speaker": "Woman",
+          "text": "I was thinking we split it by day. You take dishes Monday and Wednesday, I take Tuesday and Thursday, and we trade Friday weekly."
+        },
+        {
+          "speaker": "Man",
+          "text": "Friday I'm usually out, so weekly trade works if you start. What about the trash?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Whoever's day it isn't, takes it down. That keeps it even."
+        },
+        {
+          "speaker": "Man",
+          "text": "Fair. And quiet hours? I have an 8 a.m. class three days a week, so anything past 11 is hard."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Eleven works for me, but I sometimes have group projects that go late. Could I use headphones after eleven if I'm on a call?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Sure, as long as the conversation stays at a low volume. And the desk lamp instead of the overhead, if I'm sleeping."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Done. I'll write it up and stick it on the fridge."
+        },
+        {
+          "speaker": "Man",
+          "text": "Make sure the trash rule is in there. That's the one we always forget."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the two roommates mainly trying to do?",
+          "options": {
+            "A": "Agree on a written schedule for chores and quiet hours",
+            "B": "Decide whether to move into a larger apartment next semester",
+            "C": "Complain to the resident advisor about a noisy neighbor",
+            "D": "Plan a weekend study session for their group project"
+          },
+          "answer": "A",
+          "explanation": "整段对话围绕家务分工和安静时段安排，最后女生还说要写下来贴冰箱上。A 正确。B、C、D 都没有出现，都是 wrong_topic。",
+          "distractor_types": {
+            "B": "wrong_topic",
+            "C": "wrong_topic",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about how the roommates handle late-night noise?",
+          "options": {
+            "A": "They are unable to compromise and need a third party to mediate",
+            "B": "They will rely on the resident advisor to enforce a strict 11 p.m. cutoff",
+            "C": "They agree to flexibility past 11 p.m. as long as headphones and low-volume conversation are used",
+            "D": "They have decided to ban all late-night calls or group work entirely"
+          },
+          "answer": "C",
+          "explanation": "男生同意女生 11 点后可以用耳机低声通话，作为安静时段的灵活安排。C 正确。A、B、D 都与对话中达成的妥协相反，reversed_situation。",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "B": "reversed_situation",
+            "D": "reversed_situation"
+          }
+        }
+      ],
+      "audio_url": "/api/audio/conversation/lc_r1_routine-20260531-134653_5.mp3"
+    },
+    {
+      "id": "lc_routine-20260531-184112_1",
+      "context": "errands_service",
+      "situation": "two students chatting about a gardening or art class they took",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "How's your urban-sketching elective going? I'm thinking of taking it next semester."
+        },
+        {
+          "speaker": "Man",
+          "text": "Honestly, it's been harder than I expected. The instructor pushes us to draw outside in twenty-minute bursts, and weather wrecks half the sessions."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh wow. Do you actually finish anything?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Sometimes. But what surprised me is that the time pressure helps. Once you stop trying to be perfect, you actually start seeing things."
+        },
+        {
+          "speaker": "Woman",
+          "text": "That sounds kind of inspiring, actually. Maybe I'll sign up after all."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "Why does the woman approach the man?",
+          "options": {
+            "A": "To ask about his experience in an urban-sketching class",
+            "B": "To borrow his sketching supplies for the weekend",
+            "C": "To complain about the weather on campus",
+            "D": "To recommend a different art elective to him"
+          },
+          "answer": "A",
+          "explanation": "女生开场就问 \"How's your urban-sketching elective going?\"，表示她在考虑下学期选这门课。其他选项与对话开头主题无关。",
+          "distractor_types": {
+            "B": "wrong_topic",
+            "C": "wrong_topic",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What does the man imply about working under time pressure?",
+          "options": {
+            "A": "It made him quit the elective early.",
+            "B": "It mainly causes him to make more mistakes.",
+            "C": "It has unexpectedly improved how he observes scenes.",
+            "D": "It only works when the weather is perfect."
+          },
+          "answer": "C",
+          "explanation": "男生说当你不再追求完美时，开始 \"start seeing things\"，暗示时间压力反而改善了他观察的方式。其他选项与他的语气或事实相反。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "reversed_logic",
+            "D": "rejected_option"
+          }
+        }
+      ],
+      "audio_url": "/api/audio/conversation/lc_routine-20260531-184112_1.mp3"
+    },
+    {
+      "id": "lc_routine-20260531-184112_2",
+      "context": "recommendations_opinions",
+      "situation": "two friends recommending a podcast or TV series to each other",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Have you tried that science podcast I mentioned, the one about everyday physics?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Not yet. I've been hooked on a history series about ancient libraries. Episodes are about thirty minutes each."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh, that sounds great! Where did you find it?"
+        },
+        {
+          "speaker": "Man",
+          "text": "It's actually on the campus library's free streaming portal. You just log in with your student ID."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Wait, seriously? I didn't even know we had that."
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, it's pretty hidden. I'll send you the link tonight."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Where can the man's history series be accessed?",
+          "options": {
+            "A": "Through a paid podcast subscription",
+            "B": "Through the campus library's free streaming portal",
+            "C": "Through a commercial radio app",
+            "D": "Through the science department's website"
+          },
+          "answer": "B",
+          "explanation": "男生明确说节目在校园图书馆的免费流媒体平台上，用学生 ID 登录即可。其他来源与他的描述不符。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Cancel her existing podcast subscriptions",
+            "B": "Recommend her physics podcast to the library",
+            "C": "Wait for the man to send her the link",
+            "D": "Look for the series through a paid streaming service"
+          },
+          "answer": "C",
+          "explanation": "男生说今晚会把链接发给她，她最自然的下一步就是等他发链接。其他选项要么是对话未提及的行为，要么与谈话方向相反。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_next_step",
+            "D": "rejected_option"
+          }
+        }
+      ],
+      "audio_url": "/api/audio/conversation/lc_routine-20260531-184112_2.mp3"
+    },
+    {
+      "id": "lc_routine-20260531-184112_3",
+      "context": "errands_service",
+      "situation": "two students talking about a pet or houseplant one is caring for",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "How's that giant fern you adopted last month?"
+        },
+        {
+          "speaker": "Man",
+          "text": "It's actually thriving, surprisingly. I moved it next to my desk lamp and the new leaves came in within two weeks."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Really? I thought ferns hated bright light."
+        },
+        {
+          "speaker": "Man",
+          "text": "I thought so too. But this one's tropical, so it likes the warmth more than the brightness, I guess."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Huh, interesting. Mine keeps dropping leaves. Maybe I'm overwatering it."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What did the man do that helped his fern grow?",
+          "options": {
+            "A": "He moved it outside to a sunny balcony.",
+            "B": "He repotted it in larger drainage soil.",
+            "C": "He placed it near his desk lamp.",
+            "D": "He started fertilizing it weekly."
+          },
+          "answer": "C",
+          "explanation": "男生说他把蕨类植物挪到 desk lamp 旁边，两周内长出新叶。其他选项是对话中未出现的具体动作。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the woman's fern?",
+          "options": {
+            "A": "It may be suffering from too much watering.",
+            "B": "It is the same tropical species as the man's.",
+            "C": "It has already died this semester.",
+            "D": "It was originally a gift from the man."
+          },
+          "answer": "A",
+          "explanation": "女生说自己的蕨类在掉叶子，并猜测可能是浇水过多，所以最可能的推断就是 overwatering 是问题来源。其他选项无依据。",
+          "distractor_types": {
+            "B": "over_inference",
+            "C": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "audio_url": "/api/audio/conversation/lc_routine-20260531-184112_3.mp3"
+    },
+    {
+      "id": "lc_routine-20260531-184112_4",
+      "context": "recommendations_opinions",
+      "situation": "two friends discussing a movie one just saw that surprised them",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "I caught that documentary about urban farming last night. It honestly changed how I think about food."
+        },
+        {
+          "speaker": "Man",
+          "text": "Really? I'd assumed it was going to be more political."
+        },
+        {
+          "speaker": "Woman",
+          "text": "I expected that too! But it focused on individual rooftop farmers in three different cities. Each story was super personal."
+        },
+        {
+          "speaker": "Man",
+          "text": "That sounds way better than the trailer suggested."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Exactly. The trailer made it look preachy, but the actual film is mostly conversations."
+        },
+        {
+          "speaker": "Man",
+          "text": "I'll definitely give it a watch this weekend, then."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why did the woman find the documentary effective?",
+          "options": {
+            "A": "It featured well-known political activists in detail.",
+            "B": "It centered on personal stories of individual rooftop farmers.",
+            "C": "It compared rooftop farming to traditional rural farming directly.",
+            "D": "It included sweeping landscape footage of the countryside."
+          },
+          "answer": "B",
+          "explanation": "女生说纪录片聚焦三座城市的个别屋顶农夫的个人故事，所以这才是她觉得有效的原因。其他选项与她描述相反或无据。",
+          "distractor_types": {
+            "A": "reversed_logic",
+            "C": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the documentary's trailer?",
+          "options": {
+            "A": "It did not accurately represent the film's tone.",
+            "B": "It was banned by several streaming services.",
+            "C": "It was longer than the film itself.",
+            "D": "It featured the same farmers as the documentary."
+          },
+          "answer": "A",
+          "explanation": "女生说 trailer 让纪录片看上去 preachy，但实际内容主要是对话，暗示预告片误导了观众对影片基调的判断。其他选项无依据。",
+          "distractor_types": {
+            "B": "over_inference",
+            "C": "over_inference",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "audio_url": "/api/audio/conversation/lc_routine-20260531-184112_4.mp3"
+    },
+    {
+      "id": "lc_routine-20260531-184112_5",
+      "context": "plans_social",
+      "situation": "two friends coordinating a weekend hiking or beach trip",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Are we still on for the Cedar Ridge hike Saturday morning?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, definitely. But weather says rain after one, so we should aim for an early start."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Smart. I can pick you up at six-thirty if that works."
+        },
+        {
+          "speaker": "Man",
+          "text": "Six-thirty's perfect. Could you also bring an extra water bottle? Mine cracked last week."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Sure, no problem. Anything else?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Just snacks, maybe. I'll bring the trail map."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What time will the woman pick up the man on Saturday?",
+          "options": {
+            "A": "6:30 AM",
+            "B": "7:00 AM",
+            "C": "1:00 PM",
+            "D": "6:30 PM"
+          },
+          "answer": "A",
+          "explanation": "女生提议六点半接他，男生说 perfect。其他时间或来自其他细节，或与对话事实不符。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "misattributed",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the man's preparation?",
+          "options": {
+            "A": "He will replace his cracked water bottle himself.",
+            "B": "He plans to navigate the hike using the trail map.",
+            "C": "He will not need any snacks during the hike.",
+            "D": "He intends to cancel the trip if it rains."
+          },
+          "answer": "B",
+          "explanation": "男生说自己会带 trail map，暗示他会用它在路上导航。其他选项与他的话相反或没有依据。",
+          "distractor_types": {
+            "A": "reversed_logic",
+            "C": "reversed_logic",
+            "D": "rejected_option"
+          }
+        }
+      ],
+      "audio_url": "/api/audio/conversation/lc_routine-20260531-184112_5.mp3"
+    },
+    {
+      "id": "lc_r1_routine-20260531-190444_1",
+      "context": "plans_social",
+      "situation": "two friends planning a birthday surprise for a classmate",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hey, are we still doing something for Daniela's birthday on Thursday?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, I was thinking we could do a surprise at the study lounge after her seminar."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh, that's a cute idea, but the lounge gets really loud around five. People are leaving the library. It'd ruin the moment."
+        },
+        {
+          "speaker": "Man",
+          "text": "Hmm, fair point. What if we did the kitchenette in our dorm instead? It's quieter and there's a fridge for the cake."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Better. But Daniela never goes to your dorm. She'd be suspicious if you randomly invited her."
+        },
+        {
+          "speaker": "Man",
+          "text": "Right. Okay, here's a thought — what if you ask her to come help you with the chemistry homework, and I just show up with the cake when she gets there?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "That's perfect, actually. She offered to help me last week, so it won't seem weird."
+        },
+        {
+          "speaker": "Man",
+          "text": "Great. I'll handle the cake and decorations. Can you message everyone else and tell them to be at your room by four-thirty?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Sure. And I'll text Daniela tonight about the homework so she's expecting it."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "How to organize a surprise birthday celebration for their friend",
+            "B": "How to finish their chemistry homework before Thursday evening",
+            "C": "How to find a quiet place to study during the busy week",
+            "D": "How to convince Daniela to move out of her current dorm"
+          },
+          "answer": "A",
+          "explanation": "对话主要讨论如何为 Daniela 安排惊喜生日派对，A 正确。B 把化学作业当成主题（其实只是借口）；C 把安静地点过度概括；D 与对话无关。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "wrong_topic",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "She will go pick up the birthday cake from the bakery",
+            "B": "She will go finish her chemistry homework before the seminar",
+            "C": "She will text Daniela about meeting to do homework together",
+            "D": "She will go decorate her dorm room before everyone arrives"
+          },
+          "answer": "C",
+          "explanation": "女生最后说她今晚会给 Daniela 发消息约一起做作业，C 正确。A 是男生负责；B 不是即将的行动；D 与对话中分工不符。",
+          "distractor_types": {
+            "A": "misattributed",
+            "B": "related_but_not_stated",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "audio_url": "/api/audio/conversation/lc_r1_routine-20260531-190444_1.mp3"
+    },
+    {
+      "id": "lc_r1_routine-20260531-190444_2",
+      "context": "campus_dorm_life",
+      "situation": "two students comparing how they get to campus — bike, bus, or walk",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "How's the new apartment? You moved off campus this semester, right?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, it's been great except for the commute. I'm trying to figure out the best way to get to my morning class."
+        },
+        {
+          "speaker": "Woman",
+          "text": "How are you getting there now?"
+        },
+        {
+          "speaker": "Man",
+          "text": "I've been taking the bus. It's reliable, but it takes thirty-five minutes because of all the stops."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Have you thought about biking? I bike every day. It's only twenty minutes if you take the riverside trail."
+        },
+        {
+          "speaker": "Man",
+          "text": "I don't have a bike, and honestly, on rainy days that sounds miserable."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Fair. The bus is probably your best bet for now, then. Walking would take forever from your place — at least forty-five minutes."
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, I tried walking once. Never again."
+        },
+        {
+          "speaker": "Woman",
+          "text": "You could rent one of those campus share bikes by the month. Then on nice days, you switch to biking, and you keep the bus pass for bad weather."
+        },
+        {
+          "speaker": "Man",
+          "text": "Oh, that's actually a smart compromise. I'll look into it."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "How long does it take the man to reach campus by bus?",
+          "options": {
+            "A": "About twenty minutes each morning",
+            "B": "About thirty-five minutes each morning",
+            "C": "About forty-five minutes each morning",
+            "D": "About one full hour each morning"
+          },
+          "answer": "B",
+          "explanation": "男生说坐巴士要 35 分钟，B 正确。A 是女生骑车的时间；C 是步行时间；D 与对话无关。",
+          "distractor_types": {
+            "A": "misattributed",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do next?",
+          "options": {
+            "A": "He will sell his new bus pass to a different student",
+            "B": "He will move back to his old on-campus dormitory soon",
+            "C": "He will buy a brand-new bike and a rain jacket today",
+            "D": "He will look into renting a monthly campus share bike"
+          },
+          "answer": "D",
+          "explanation": "男生最后说会去了解共享单车月租，D 正确。A 与对话无关；B 与对话相反；C 把买车与租车混淆，男生明确说不想买车。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "B": "reversed_situation",
+            "C": "over_inference"
+          }
+        }
+      ],
+      "audio_url": "/api/audio/conversation/lc_r1_routine-20260531-190444_2.mp3"
+    },
+    {
+      "id": "lc_r1_routine-20260531-190444_3",
+      "context": "errands_service",
+      "situation": "two friends figuring out a bus or train schedule for a day trip",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Okay, so for the day trip to Riverton on Saturday, I'm looking at the transit schedule and it's confusing."
+        },
+        {
+          "speaker": "Man",
+          "text": "Why? What's the issue?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Well, the train leaves at seven-fifteen, which is great, but it only runs to the old Riverton station, which is forty-five minutes from the actual downtown."
+        },
+        {
+          "speaker": "Man",
+          "text": "Oh. And the bus?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "The bus goes straight to downtown but doesn't leave until nine-thirty. By the time we arrive, it'll be after eleven."
+        },
+        {
+          "speaker": "Man",
+          "text": "That cuts our day short. The galleries close at six."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Right. There's also a ride-share with another student club, but you have to commit by Wednesday and they're full."
+        },
+        {
+          "speaker": "Man",
+          "text": "Already? Okay. What if we just took the train and grabbed a taxi from the old station?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "I checked. Taxis from there are expensive — like forty dollars each. That's almost double the train ticket."
+        },
+        {
+          "speaker": "Man",
+          "text": "Hmm. You know what, the train is fine. Let's just split the taxi and treat ourselves. We'll still have most of the day for the galleries."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Yeah, okay. Splitting it makes it manageable."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "Which gallery in Riverton they should visit first on Saturday",
+            "B": "Whether to join a student club that runs a ride-share program",
+            "C": "How to choose a transportation option for their Saturday day trip",
+            "D": "Why the train schedule changed recently for the Riverton route"
+          },
+          "answer": "C",
+          "explanation": "他们主要讨论如何选择周六的交通方式，C 正确。A 是旁支细节；B 只是被排除的选项之一；D 与对话无关。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "wrong_topic",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the speakers most likely do for the trip?",
+          "options": {
+            "A": "They will take the early train and share a taxi together from the station",
+            "B": "They will leave on the nine-thirty bus and cut their gallery visit short",
+            "C": "They will wait for a spot to open up in the student club ride-share",
+            "D": "They will cancel the trip and reschedule for the following weekend"
+          },
+          "answer": "A",
+          "explanation": "男生提议坐火车再合租出租车，女生同意分摊费用，A 正确。B 与最终决定不符；C 已被排除（满了）；D 没有讨论取消。",
+          "distractor_types": {
+            "B": "rejected_option",
+            "C": "rejected_option",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "audio_url": "/api/audio/conversation/lc_r1_routine-20260531-190444_3.mp3"
+    },
+    {
+      "id": "lc_r1_routine-20260531-190444_4",
+      "context": "plans_social",
+      "situation": "two students planning what cheese and food to buy for a dinner party",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Okay, for Friday's dinner party, I'm doing a cheese board. What should I get?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Definitely something soft, like brie. And then a harder one — sharp cheddar or maybe gouda."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Good. I was thinking three cheeses total. What's the third one?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Something blue, if people are into it. But blue cheese is risky — not everyone likes it."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Yeah, maybe skip it. What about a goat cheese instead?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Oh, that's safer. People generally like goat cheese. Get the kind with herbs on the outside."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Done. What else? I need crackers, obviously."
+        },
+        {
+          "speaker": "Man",
+          "text": "Crackers, and grapes. Grapes are essential. And get some honey for the goat cheese — trust me."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Honey, really? Okay, I'll trust you on that. What about meat? Should I add prosciutto?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Yes, but only a small package. People go for the cheese first."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man specifically recommend buying for the goat cheese?",
+          "options": {
+            "A": "A small jar of honey to serve with it",
+            "B": "A wedge of imported gouda for the pairing",
+            "C": "A package of dried fruit and salted nuts",
+            "D": "A bottle of olive oil to brush on top"
+          },
+          "answer": "A",
+          "explanation": "男生明确建议买蜂蜜搭配山羊奶酪，A 正确。B 把另一种奶酪误置；C 与对话无关；D 与对话无关。",
+          "distractor_types": {
+            "B": "misattributed",
+            "C": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about why the speakers decided against blue cheese?",
+          "options": {
+            "A": "Blue cheese was unavailable at the local grocery store",
+            "B": "Blue cheese might not appeal to all of their guests",
+            "C": "Blue cheese was too expensive for the small party budget",
+            "D": "Blue cheese spoils more quickly than the other selections"
+          },
+          "answer": "B",
+          "explanation": "男生说蓝奶酪有风险，并非人人喜欢，所以推断它可能不合所有客人口味，B 正确。A 与对话无关；C 与对话无关；D 与对话无关。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "C": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "audio_url": "/api/audio/conversation/lc_r1_routine-20260531-190444_4.mp3"
+    },
+    {
+      "id": "lc_r1_routine-20260531-190444_5",
+      "context": "campus_dorm_life",
+      "situation": "two students chatting about a part-time job one just started at a factory",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "I haven't seen you all week. How's the new job going?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Honestly, it's been an adjustment. I started that part-time job at the bottling plant on Monday."
+        },
+        {
+          "speaker": "Woman",
+          "text": "The bottling plant? I didn't think you'd take something like that."
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, well, the pay is much better than the campus jobs. Sixteen an hour, plus a meal voucher each shift."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Wow, that's good. But what about the schedule? Doesn't it conflict with your classes?"
+        },
+        {
+          "speaker": "Man",
+          "text": "That's the part I'm still figuring out. They want me on the four-to-eight shift Monday through Thursday. My Tuesday lab usually runs until five."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oof. Can you switch labs?"
+        },
+        {
+          "speaker": "Man",
+          "text": "I emailed the professor about moving to the Wednesday section. She hasn't replied yet, but I'm hoping she will."
+        },
+        {
+          "speaker": "Woman",
+          "text": "If not, can you switch shifts at work? Like, do Friday instead of Tuesday?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Maybe. I haven't asked. I was waiting to hear back from the professor first."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "How the man is adjusting to his new part-time factory job",
+            "B": "How the man should choose between two competing internships",
+            "C": "Why the campus jobs typically pay less than off-campus jobs",
+            "D": "How the woman could find part-time work at the same plant"
+          },
+          "answer": "A",
+          "explanation": "对话主要讨论男生新工作的适应情况，特别是与课程的冲突，A 正确。B 偏离主题；C 把片段细节当主题；D 与对话无关。",
+          "distractor_types": {
+            "B": "wrong_topic",
+            "C": "too_narrow",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do next regarding the schedule conflict?",
+          "options": {
+            "A": "He will quit the new job and apply to campus positions",
+            "B": "He will wait for the professor's reply before contacting his manager",
+            "C": "He will immediately swap his Tuesday shift to a Friday slot",
+            "D": "He will drop the Tuesday lab and retake it next semester"
+          },
+          "answer": "B",
+          "explanation": "男生说在听到教授回复前不打算和工厂谈，B 正确。A 与对话无关；C 与他说的“先等教授”相反；D 与对话无关。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "C": "reversed_logic",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "audio_url": "/api/audio/conversation/lc_r1_routine-20260531-190444_5.mp3"
+    },
+    {
+      "id": "lc_r2_routine-r2-20260531-193107_1",
+      "context": "plans_social",
+      "situation": "two friends debating whether to buy concert tickets early or wait for last-minute deals",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Did you see the concert at the Riverside Arena got announced? I'm thinking of grabbing tickets tonight."
+        },
+        {
+          "speaker": "Man",
+          "text": "Already? The show isn't until June. Last-minute deals usually pop up the week before."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Yeah, but the good seats sell out fast. My cousin waited last time and ended up in the back row."
+        },
+        {
+          "speaker": "Man",
+          "text": "Hmm, that's a good point. Maybe split the difference — buy now if presale opens, otherwise wait."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Smart. I'll set an alert and check Friday morning."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "When to purchase tickets for the concert",
+            "B": "Where to sit at the Riverside Arena",
+            "C": "Whether to attend the concert in June",
+            "D": "How to find discount tickets online"
+          },
+          "answer": "A",
+          "explanation": "对话主要围绕“现在买票还是等到临场再买”展开，因此他们讨论的核心是何时购票。B 只是顺带提到“好座位会被抢光”，并非主要话题；C 他们都没质疑要不要去；D 也没有讨论网上折扣。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "wrong_topic",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do on Friday morning?",
+          "options": {
+            "A": "Wait until late June to purchase her tickets",
+            "B": "Travel to Riverside Arena to buy paper tickets",
+            "C": "Check whether early presale tickets are available",
+            "D": "Ask her cousin which seats to buy first"
+          },
+          "answer": "C",
+          "explanation": "男生建议“presale 一开就买，否则再等”，女生回应“好主意，我周五早上看看”，所以她最可能在周五查看是否开了预售。A 是她原本想避免的“等等再买”；B 没有讨论亲自去现场；D 她只是提到表姐的经历，没说要请教她。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "related_but_not_stated",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "audio_url": "/api/audio/conversation/lc_r2_routine-r2-20260531-193107_1.mp3"
+    },
+    {
+      "id": "lc_r2_routine-r2-20260531-193107_2",
+      "context": "recommendations_opinions",
+      "situation": "two students discussing a new restaurant downtown and which dish to try",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Have you tried that new place, Maple Spoon, downtown yet?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Not yet. I heard the noodle bowls are amazing but the line at lunch is brutal."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Skip the lunch rush. Go around three in the afternoon. I had the spicy peanut noodles and they were unreal — best meal I've had all month."
+        },
+        {
+          "speaker": "Man",
+          "text": "Sold. Was anything overpriced or just kind of average?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Honestly, the desserts. They look pretty but taste flat. Get the noodles, then grab coffee somewhere else."
+        },
+        {
+          "speaker": "Man",
+          "text": "Good tip. I'll head over this Sunday."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Which dish does the woman recommend?",
+          "options": {
+            "A": "The mushroom dumplings on the appetizer menu",
+            "B": "The spicy peanut noodles she ordered there",
+            "C": "The seasonal dessert with a maple sauce",
+            "D": "The grilled fish bowl with brown rice"
+          },
+          "answer": "B",
+          "explanation": "女生明确说她点的“spicy peanut noodles”是这个月最好的一餐，所以推荐这道菜。A、D 完全没提及；C 与对话相反，她说甜点中看不中吃。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "C": "misattributed",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the woman's overall opinion of Maple Spoon?",
+          "options": {
+            "A": "She thinks the restaurant is overpriced and rarely worth visiting",
+            "B": "She believes the lunch hour is the best time to dine there",
+            "C": "She regrets recommending the place to her classmate",
+            "D": "She considers the main dishes better than the desserts"
+          },
+          "answer": "D",
+          "explanation": "她大力推荐面条但批评甜点“taste flat”，因此她认为主菜比甜点好。A 她只批评甜点，不是整家店；B 她建议避开午餐高峰；C 她主动推荐并未表现后悔。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "rejected_option",
+            "C": "over_inference"
+          }
+        }
+      ],
+      "audio_url": "/api/audio/conversation/lc_r2_routine-r2-20260531-193107_2.mp3"
+    },
+    {
+      "id": "lc_r2_routine-r2-20260531-193107_3",
+      "context": "errands_service",
+      "situation": "two students at the rec center talking about a free intro yoga class",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        },
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Man",
+          "text": "Hey, did you sign up for that free intro yoga class at the rec center yet?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "I tried this morning, but the website said the session was full."
+        },
+        {
+          "speaker": "Man",
+          "text": "Really? They added a second slot on Thursday at 7:00 PM. Check again."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh, nice. Do I need to bring my own mat?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, no rentals this time. There's a sign-up form at the front desk too if the website acts up."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Perfect. I'll swing by after my chem lab."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man tell the woman about Thursday?",
+          "options": {
+            "A": "A new yoga instructor will lead the class",
+            "B": "A registration fee was added that morning",
+            "C": "A second class session was opened that day",
+            "D": "A mat rental program was launched recently"
+          },
+          "answer": "C",
+          "explanation": "男生说“他们周四晚上 7:00 加了第二场”，所以那天新开了一节课。A、B、D 在对话中均未出现。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "related_but_not_stated",
+            "D": "misattributed"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Visit the rec center after her chemistry lab",
+            "B": "Buy a yoga mat at the campus bookstore",
+            "C": "Email the front desk to request a refund",
+            "D": "Wait until the morning session reopens"
+          },
+          "answer": "A",
+          "explanation": "女生最后说“化学实验课后我顺路过去”，且男生提到前台也能报名，所以她最可能化学课后去 rec center 报名。B 她从未说要新买垫子；C 没有退款话题；D 上午的课她说不上。",
+          "distractor_types": {
+            "B": "unrelated_next_step",
+            "C": "unrelated_next_step",
+            "D": "rejected_option"
+          }
+        }
+      ],
+      "audio_url": "/api/audio/conversation/lc_r2_routine-r2-20260531-193107_3.mp3"
+    },
+    {
+      "context": "errands_service",
+      "situation": "two friends figuring out a bus or train schedule for a day trip",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hey, did you figure out how we're getting to Riverton on Saturday? I checked the bus schedule and the express only runs at seven in the morning."
+        },
+        {
+          "speaker": "Man",
+          "text": "Seven? Yikes, that's brutal."
+        },
+        {
+          "speaker": "Woman",
+          "text": "I know. But if we take the regular bus, it stops everywhere and gets there around noon. We'd barely have any time at the festival."
+        },
+        {
+          "speaker": "Man",
+          "text": "Actually, what about the train? My roommate said there's a new weekend train that leaves at nine."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Really? That sounds way better. Is it expensive?"
+        },
+        {
+          "speaker": "Man",
+          "text": "It's twelve dollars one way with a student ID. I'll book the tickets tonight through the rail app."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Perfect, I'll pay you back tomorrow."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What is the problem with the express bus?",
+          "options": {
+            "A": "It departs very early in the morning",
+            "B": "It costs more than the train ticket",
+            "C": "It does not run on Saturdays",
+            "D": "It is fully booked for the weekend"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：女生明确说快车只在早上七点发车，男生反应说\"太残酷了\"，说明问题在于出发时间太早。B错误：对话从未比较快车和火车的价格。C错误：女生说的是发车时间，没说不在周六运营。D错误：对话中没有提到座位售罄的问题。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do tonight?",
+          "options": {
+            "A": "Take the regular bus to Riverton",
+            "B": "Ask his roommate for a ride to the station",
+            "C": "Reserve train tickets through a mobile app",
+            "D": "Cancel the trip to the festival"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：男生明确说\"今晚我会通过铁路应用订票\"，因此他最可能做的就是用手机应用订火车票。A错误：男生和女生已决定不坐公交，普通公交是被否决的选项。B错误：对话中虽然提到室友，但只是室友告诉他有这趟火车，不涉及让室友送他去车站。D错误：他们正在积极规划去节日，没有任何取消行程的迹象。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "unrelated_next_step",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "id": "lc_mpvlbko0_0",
+      "audio_url": "/api/audio/conversation/lc_mpvlbko0_0.mp3"
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two students talking about a new restaurant downtown and which dish to try",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "So you finally tried Beacon Street? I've been hearing nonstop hype about it. Was it actually worth the wait?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Honestly, the atmosphere's gorgeous, but the menu is hit or miss. The pasta everyone raves about online? Pretty average."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh no. So what should I order if I go?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Skip the pasta and go straight for the duck confit. It's the only dish the chef actually trained on, and you can tell."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Duck? I usually wouldn't pick that, but I trust you."
+        },
+        {
+          "speaker": "Man",
+          "text": "Trust me, it's the move. Oh, and the desserts come from a bakery next door, so don't waste room on those."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Good to know. I'll grab dessert somewhere else after."
+        },
+        {
+          "speaker": "Man",
+          "text": "Smart. There's a little gelato shop two blocks over that's incredible."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of the conversation?",
+          "options": {
+            "A": "To complain about the high prices at a new restaurant",
+            "B": "To share advice about what to order at a restaurant",
+            "C": "To decide whether to eat downtown this weekend",
+            "D": "To recommend a bakery and gelato shop nearby"
+          },
+          "answer": "B",
+          "explanation": "正确答案B：整段对话围绕男生告诉女生在这家新餐厅应该点什么菜（鸭肉而不是意面）以及避开什么（甜点）。A错误：对话从未提到价格高的问题。C错误：女生已经决定要去，不是在犹豫是否去市中心吃饭。D错误：甜点店和冰淇淋店只是次要细节，不是对话主旨。",
+          "distractor_types": {
+            "A": "wrong_topic",
+            "C": "reversed_situation",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the woman's plan after dinner?",
+          "options": {
+            "A": "She will return to Beacon Street another night",
+            "B": "She will order the pasta despite the man's warning",
+            "C": "She will write an online review of the restaurant",
+            "D": "She will buy dessert at a different location"
+          },
+          "answer": "D",
+          "explanation": "正确答案D：女生明确说\"我会在别的地方买甜点\"，男生还推荐了两个街区外的冰淇淋店，所以她饭后会去别的地方买甜点。A错误：对话中没有任何关于她再次光顾Beacon Street的暗示，是过度推理。B错误：她说\"我信你\"，表示会听男生的建议，意面是被否决的选项。C错误：对话中没有提到写评论，与对话无关。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "rejected_option",
+            "C": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_mpvlbko0_1",
+      "audio_url": "/api/audio/conversation/lc_mpvlbko0_1.mp3"
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two friends discussing a movie one just saw — good twists but too long",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "I finally saw that thriller you've been talking about. The Quiet Hour."
+        },
+        {
+          "speaker": "Man",
+          "text": "Oh nice! What did you think?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Honestly, the twists were brilliant. I didn't see the ending coming at all, and the second one in the middle? Total shock."
+        },
+        {
+          "speaker": "Man",
+          "text": "Right? That's why I keep recommending it."
+        },
+        {
+          "speaker": "Woman",
+          "text": "But, wow, it's long. Almost three hours. There's a whole subplot with the sister that they could've cut entirely."
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, I'll admit that part dragged. I actually checked my watch twice."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Same. I might rewatch it sometime, but I'd skip ahead through the sister scenes."
+        },
+        {
+          "speaker": "Man",
+          "text": "Smart. There's actually a fan edit online that trims about forty minutes. I'll send you the link."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Yes, please do!"
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What specific part of the movie did the woman think should have been cut?",
+          "options": {
+            "A": "The opening sequence of the film",
+            "B": "The final twist near the end",
+            "C": "A subplot involving a sister character",
+            "D": "A long flashback in the middle"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：女生明确说\"姐姐那条副线他们完全可以剪掉\"，所以她认为应该删除涉及姐姐这个角色的副线。A错误：对话从未提到开场镜头有问题。B错误：女生其实非常赞美结尾的反转，认为它出人意料。D错误：对话中没有提到中段的闪回情节，这是听起来合理但未提及的细节。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do after the conversation?",
+          "options": {
+            "A": "Send the woman a link to a shorter fan edit",
+            "B": "Rewatch the movie with the woman this weekend",
+            "C": "Write a negative review about the movie's length",
+            "D": "Stop recommending the movie to other friends"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：男生明确说\"我会把链接发给你\"，指的是网上一个删减了约四十分钟的影迷版本。B错误：对话中没有提到他们要一起重看这部电影，是过度推理。C错误：男生承认有部分拖沓，但他仍然在推荐这部电影，写差评违背他的态度。D错误：他明显仍然欣赏这部电影并继续向他人推荐，与对话信息相反。",
+          "distractor_types": {
+            "B": "over_inference",
+            "C": "unrelated_next_step",
+            "D": "reversed_situation"
+          }
+        }
+      ],
+      "id": "lc_mpvlbko0_2",
+      "audio_url": "/api/audio/conversation/lc_mpvlbko0_2.mp3"
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "two friends discussing whether to join a campus club or intramural team",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hey, the activities fair ended yesterday and I still can't decide. Should I sign up for the photography club or the intramural soccer team?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Hmm, both meet on Tuesdays, right? You can't really do both."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Exactly. And I already have my chemistry lab on Thursday nights, so I need to be careful."
+        },
+        {
+          "speaker": "Man",
+          "text": "Well, what are you actually hoping to get out of it? Like, friends? Exercise? A new skill?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Honestly, I want to meet people outside my major. The chem crowd's nice but kind of intense."
+        },
+        {
+          "speaker": "Man",
+          "text": "Then soccer, hands down. The intramural league is super social, and they go out together every weekend."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Even if I'm not great at soccer?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Totally. Half the team had never played before this year. It's all about showing up."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Okay, I'm convinced. I'll register tonight."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "How to balance lab work with social activities",
+            "B": "Whether photography club fees are worth paying",
+            "C": "The best way to make friends outside one's major",
+            "D": "Which extracurricular activity the woman should join"
+          },
+          "answer": "D",
+          "explanation": "正确答案D：整段对话围绕女生在摄影社和校内足球队之间犹豫不决，男生帮她做选择。A错误：化学实验只是被简单提及作为时间冲突，不是讨论的主题。B错误：对话中完全没有提到会费问题。C错误：交友是她选择活动的动机之一，但这是太狭窄的视角，主题是选哪个活动。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "wrong_topic",
+            "C": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the woman's soccer ability?",
+          "options": {
+            "A": "She played competitively in high school",
+            "B": "She has limited experience with the sport",
+            "C": "She refuses to join because of her skill level",
+            "D": "She is the team's most talented new member"
+          },
+          "answer": "B",
+          "explanation": "正确答案B：女生问\"即使我足球踢得不好也可以吗？\"暗示她经验有限，所以可以推断她对这项运动经验不多。A错误：她担心自己技术不好，与高中竞技踢球矛盾，与对话信息相反。C错误：男生说不用紧张后她答应报名，她并没有拒绝加入，被否决的选项。D错误：她担心自己不擅长，称她是队里最有天赋的新成员是过度推理。",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "C": "rejected_option",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "id": "lc_mpvlbko0_3",
+      "audio_url": "/api/audio/conversation/lc_mpvlbko0_3.mp3"
+    },
+    {
+      "context": "errands_service",
+      "situation": "two students chatting about a gardening or art class they took",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hey, didn't you take that weekend pottery class at the community center last month? How was it?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Oh, I loved it. Way more relaxing than I expected. The instructor was really patient."
+        },
+        {
+          "speaker": "Woman",
+          "text": "I was thinking about signing up. What did you actually make?"
+        },
+        {
+          "speaker": "Man",
+          "text": "We started with simple bowls the first weekend, then moved on to mugs. Mine came out a little crooked, but it works."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Aww, that's so cute. Was it expensive?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Sixty bucks for four sessions, and that includes all the clay and glazes. Pretty good deal."
+        },
+        {
+          "speaker": "Woman",
+          "text": "That's reasonable. Do I need to bring anything?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Just wear old clothes. Trust me, you'll get clay everywhere."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Got it. I'll register this afternoon."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What was the first item the man made in the pottery class?",
+          "options": {
+            "A": "A simple bowl",
+            "B": "A crooked coffee mug",
+            "C": "A glazed dinner plate",
+            "D": "A small clay vase"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：男生明确说\"我们第一个周末从简单的碗开始\"，所以他做的第一件东西是简单的碗。B错误：杯子是第二个周末做的，不是第一件，是混淆细节。C错误：对话中没有提到盘子，听起来合理但未提及。D错误：对话中没有提到花瓶，听起来合理但未提及。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do this afternoon?",
+          "options": {
+            "A": "Go shopping for new clothes to wear",
+            "B": "Ask the man to attend the class with her",
+            "C": "Sign up for the pottery class herself",
+            "D": "Visit the community center to see the studio"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：女生在对话最后明确说\"我下午就去报名\"，因此她下午最可能做的事是给陶艺课报名。A错误：男生让她穿旧衣服，而不是去买新衣服，与男生的建议相反。B错误：对话中没有提到邀请男生一起上课，与对话无关。D错误：她说要去报名，没说要先去社区中心实地参观，是过度推理。",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "B": "unrelated_next_step",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "id": "lc_mpvlbko0_4",
+      "audio_url": "/api/audio/conversation/lc_mpvlbko0_4.mp3"
+    },
+    {
+      "id": "lc_r2_routine-r2-20260601-193143_1",
+      "context": "campus_dorm_life",
+      "situation": "two students debating which library floor is best for studying",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hey, where do you usually study now? Third floor or basement?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Honestly, the third floor's gotten too noisy. They added group tables."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh, really? I haven't been since last spring."
+        },
+        {
+          "speaker": "Man",
+          "text": "Try the basement. It's a silent zone, and there are private carrels by the windows."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Carrels by windows? That sounds perfect for my thesis work."
+        },
+        {
+          "speaker": "Man",
+          "text": "Just grab one before two. They fill up fast after that."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Got it. I'll head there tomorrow morning."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man say has changed on the third floor?",
+          "options": {
+            "A": "It has become noisier than before",
+            "B": "It has added new vending machines",
+            "C": "It has limited hours for finals",
+            "D": "It has lost its window seating area"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：男生明确说三楼变得太吵，因为加了小组讨论桌。B错误：对话从未提到自动售货机。C错误：对话没提期末考试期间时间受限。D错误：对话只提到地下室有窗户旁的隔间，没说三楼失去窗座。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "wrong_detail",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do tomorrow morning?",
+          "options": {
+            "A": "Move her thesis work back upstairs as before",
+            "B": "Reserve a group table for her thesis discussion",
+            "C": "Head to the basement to find a private carrel",
+            "D": "Continue studying in her dorm room as usual"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：女生最后说\"明天早上我会去那里\"，结合男生让她在两点前到地下室抢隔间，可推断她会去地下室找隔间。A错误：三楼正是被否决的选项，她不会回去。B错误：小组桌正是导致三楼吵闹的原因，她不会去预订。D错误：对话中没有讨论待在宿舍的方案。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "related_but_not_stated",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "audio_url": "/api/audio/conversation/lc_r2_routine-r2-20260601-193143_1.mp3"
+    },
+    {
+      "id": "lc_r2_routine-r2-20260601-193143_2",
+      "context": "plans_social",
+      "situation": "two friends planning to split a textbook cost for a chemistry course",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        },
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Man",
+          "text": "Did you see how much the chemistry textbook costs this semester? Almost two hundred dollars."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Yikes. I was thinking we could split a used copy and share notes through the term."
+        },
+        {
+          "speaker": "Man",
+          "text": "Actually, that could work. We have the same lab section anyway, so we'd be on the same pace."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Right, and the library has one on reserve too, in case we both need it the same night."
+        },
+        {
+          "speaker": "Man",
+          "text": "Good backup plan. Let's check the bookstore's used section after lunch today."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Sounds great. I'll bring my student ID for the discount."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What is the woman's main suggestion to the man?",
+          "options": {
+            "A": "Buy a brand-new copy from the campus bookstore directly",
+            "B": "Share a used textbook and split the cost",
+            "C": "Borrow detailed notes from a previous classmate",
+            "D": "Sign up for a totally different lab section"
+          },
+          "answer": "B",
+          "explanation": "正确答案B：女生明确提出\"我们可以合买一本二手书然后共享笔记\"。A错误：对话中没有提到全新书，反而是买二手。C错误：对话从未提及向以前的同学借笔记。D错误：他们已经在同一个实验班，不需要换班。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "C": "unrelated_next_step",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the library copy of the textbook?",
+          "options": {
+            "A": "It is currently checked out by another student all term",
+            "B": "It can be borrowed for the whole semester at once",
+            "C": "It is missing several important chapters in the book",
+            "D": "It serves as a backup when their copy is taken"
+          },
+          "answer": "D",
+          "explanation": "正确答案D：女生提到图书馆有一本作为备用，\"以防我们两个同一晚都需要它\"，所以图书馆的书是他们共享本不可用时的备用方案。A错误：对话没说图书馆的书被借走。B错误：对话没提整学期可借。C错误：对话从未提到缺章。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "over_inference",
+            "C": "unrelated_next_step"
+          }
+        }
+      ],
+      "audio_url": "/api/audio/conversation/lc_r2_routine-r2-20260601-193143_2.mp3"
+    },
+    {
+      "id": "lc_r2_routine-r2-20260601-193143_3",
+      "context": "campus_dorm_life",
+      "situation": "two roommates deciding how to decorate their dorm for the holidays",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "So, are we doing anything for the dorm before break? Last year was so plain."
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, I was thinking some string lights and a small fake tree from the dollar store."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh, that's cute. But weren't string lights banned in dorms because of the wiring issue?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Hmm, you're right. The RA said battery-operated ones are okay though."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Perfect. I'll grab a set at the campus store tomorrow."
+        },
+        {
+          "speaker": "Man",
+          "text": "And I'll figure out the tree situation this weekend."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man originally suggest buying?",
+          "options": {
+            "A": "A large fabric wreath for the dorm door",
+            "B": "A pair of decorative pillows from the bookstore",
+            "C": "A string of lights and a small tree",
+            "D": "A scented candle set for the study desks"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：男生说\"我在想灯串和一棵小假树\"，所以最初的建议就是灯串和小树。A错误：对话没提花环。B错误：男生提的是dollar store，不是bookstore，且没提枕头。D错误：对话从未提到香薰蜡烛。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "misattributed",
+            "D": "unrelated_next_step"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about plug-in string lights?",
+          "options": {
+            "A": "They are not permitted in the dorm rooms",
+            "B": "They are sold only at off-campus stores",
+            "C": "They are too expensive for most students",
+            "D": "They are difficult to install on dorm walls"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：女生提到灯串因为线路问题在宿舍被禁，男生确认\"你说得对，电池式的才被允许\"，可推断插电式灯串不被允许。B错误：对话没提销售地点。C错误：价格从未讨论。D错误：安装难度未涉及。",
+          "distractor_types": {
+            "B": "over_inference",
+            "C": "unrelated_next_step",
+            "D": "related_but_not_stated"
+          }
+        }
+      ],
+      "audio_url": "/api/audio/conversation/lc_r2_routine-r2-20260601-193143_3.mp3"
+    }
+  ]
+}

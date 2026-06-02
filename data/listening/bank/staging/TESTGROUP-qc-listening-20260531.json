@@ -1,0 +1,93 @@
+{
+  "_meta": { "test_group": "qc-listening-20260531", "generated_by": "claude (quality-check sample, recalibrated listening prompts)", "note": "QC: lat ~250w arts-domain declarative low-contraction; lc ~85w peer Man/Woman; la ~80w varied openers; lcr wh-heavy with valid distractors." },
+  "lectures": [
+    {
+      "id": "QC_lat_1", "subject": "art_history",
+      "transcript": "Impressionism was a movement in painting that began in France in the 1870s, and it changed the way artists thought about light. Impressionism is characterized by an attempt to capture the fleeting effects of light and atmosphere rather than precise detail. Earlier painters had worked mainly in studios, finishing their canvases slowly and aiming for smooth, almost invisible brushwork. The Impressionists did something different. They carried their materials outdoors and painted quickly, on the spot, trying to record a single moment before the light changed. To do this, they used short, broken strokes of pure color placed side by side. Up close, the surface can look like a chaos of dabs. But step back, and the eye blends the colors into shimmering water or sunlight on a field. The subjects changed too. Instead of grand historical scenes, the painters chose ordinary modern life: train stations, cafes, gardens, boating parties. At first, critics were hostile, complaining that the works looked unfinished, more like sketches than serious art. The very name began as an insult, taken from a Monet canvas titled Impression, Sunrise. Over time, though, the public came to value exactly what the critics had mocked. By focusing on perception itself, on how a scene strikes the eye in a single instant, the Impressionists opened the door to much of modern art.",
+      "questions": [
+        { "type": "main_idea", "stem": "What is the lecture mainly about?", "options": { "A": "How and why Impressionist painting broke with earlier traditions", "B": "The life of the painter Claude Monet", "C": "Techniques for mixing paint in a studio", "D": "The history of French train stations" }, "correct_answer": "A", "explanation": "The talk traces what made Impressionism new and how it was eventually accepted." },
+        { "type": "detail", "stem": "How did the Impressionists create a sense of shimmering light?", "options": { "A": "By using short, broken strokes of pure color side by side", "B": "By blending colors smoothly and invisibly", "C": "By painting only indoors at night", "D": "By avoiding the color of sunlight" }, "correct_answer": "A", "explanation": "\"They used short, broken strokes of pure color placed side by side.\"" },
+        { "type": "function", "stem": "Why does the speaker mention the painting Impression, Sunrise?", "options": { "A": "To explain where the movement's name came from", "B": "To name Monet's most valuable work", "C": "To describe a train station scene", "D": "To prove the critics were correct" }, "correct_answer": "A", "explanation": "The name 'Impressionism' came from that painting's title, originally used as an insult." },
+        { "type": "inference", "stem": "What can be inferred about the critics' early reaction?", "options": { "A": "It later proved to be the opposite of the public's lasting view", "B": "It was shared by Monet himself", "C": "It prevented the movement from spreading", "D": "It was based on the paintings' high cost" }, "correct_answer": "A", "explanation": "\"The public came to value exactly what the critics had mocked,\" implying the critics' view did not last." }
+      ]
+    },
+    {
+      "id": "QC_lat_2", "subject": "music",
+      "transcript": "Jazz is a musical style that emerged in the United States, particularly in New Orleans, around the beginning of the twentieth century. What makes jazz distinctive is improvisation, the practice of inventing music spontaneously as it is performed. In most European classical music, performers play notes written in advance by a composer. In jazz, by contrast, a musician takes a basic melody and reshapes it on the spot, adding rhythms and notes that may never be played the same way twice. New Orleans was an unusually mixed city, where musical traditions from Africa, the Caribbean, and Europe met and blended. From the African tradition came complex, layered rhythms and a call-and-response pattern between players. From the European side came harmony and instruments such as the trumpet and clarinet. Early bands played at dances, parades, and even funerals, adapting their music to each occasion. As the style spread up the river to cities like Chicago, recordings carried it to a national audience, and listeners who had never visited New Orleans could suddenly hear the sound at home. Some critics dismissed jazz as noisy and undisciplined. Musicians, however, treated improvisation as a demanding skill that required deep knowledge of harmony and rhythm; a soloist had to create faster than the music moved. That balance between individual freedom and the structure of the group is what gives jazz its lasting energy.",
+      "questions": [
+        { "type": "main_idea", "stem": "What does the speaker mainly discuss?", "options": { "A": "What defines jazz and where it came from", "B": "How to play the trumpet", "C": "The history of the city of Chicago", "D": "Why classical music uses written notes" }, "correct_answer": "A", "explanation": "The lecture explains improvisation and the mixed origins of jazz." },
+        { "type": "detail", "stem": "According to the speaker, what came from the African musical tradition?", "options": { "A": "Layered rhythms and call-and-response", "B": "The trumpet and clarinet", "C": "Written musical scores", "D": "The idea of the funeral parade" }, "correct_answer": "A", "explanation": "\"From the African tradition came complex, layered rhythms and a call-and-response pattern.\"" },
+        { "type": "function", "stem": "Why does the speaker describe New Orleans as an unusually mixed city?", "options": { "A": "To explain how different musical traditions blended into jazz", "B": "To argue that jazz could only be played there", "C": "To list the city's main exports", "D": "To compare it with Chicago" }, "correct_answer": "A", "explanation": "The mix of African, Caribbean, and European traditions is presented as the source of jazz." },
+        { "type": "inference", "stem": "What can be inferred about the musicians' view of improvisation?", "options": { "A": "They considered it a serious, skilled discipline", "B": "They agreed it was noisy and undisciplined", "C": "They thought it required no training", "D": "They preferred written music" }, "correct_answer": "A", "explanation": "They \"treated improvisation as a demanding skill that required deep knowledge,\" countering the critics." }
+      ]
+    }
+  ],
+  "conversations": [
+    { "id": "QC_lc_1", "relationship": "student_student",
+      "conversation": [
+        { "speaker": "Woman", "text": "I've been listening to the same playlists for months. Can you recommend something new?" },
+        { "speaker": "Man", "text": "Sure. What mood are you after, something calm or more upbeat?" },
+        { "speaker": "Woman", "text": "Upbeat, definitely. Something I can play while I'm running." },
+        { "speaker": "Man", "text": "Then try that new electronic album everyone's posting about. The beats are perfect for a run." },
+        { "speaker": "Woman", "text": "Is it on the usual app?" },
+        { "speaker": "Man", "text": "Yeah, it's everywhere. I'll send you the link after class." }
+      ],
+      "questions": [
+        { "type": "main_idea", "stem": "What are the speakers mainly discussing?", "options": { "A": "Music the woman could listen to while running", "B": "A running route on campus", "C": "How to fix a broken playlist app", "D": "A class they both attend" }, "correct_answer": "A", "explanation": "The woman wants new upbeat music for running; the man recommends an album." },
+        { "type": "detail", "stem": "What will the man do after class?", "options": { "A": "Send the woman a link to the album", "B": "Go for a run with her", "C": "Buy her the album", "D": "Make a new playlist" }, "correct_answer": "A", "explanation": "\"I'll send you the link after class.\"" }
+      ]
+    },
+    { "id": "QC_lc_2", "relationship": "student_student",
+      "conversation": [
+        { "speaker": "Woman", "text": "I'm making pasta for a few friends on Friday. Any tips?" },
+        { "speaker": "Man", "text": "Don't overcook the noodles. Take them out a minute early; they keep cooking in the sauce." },
+        { "speaker": "Woman", "text": "Good to know. What about the sauce itself?" },
+        { "speaker": "Man", "text": "Keep it simple. A good tomato sauce with fresh basil beats anything complicated." },
+        { "speaker": "Woman", "text": "That sounds manageable. Should I make a salad too?" },
+        { "speaker": "Man", "text": "Definitely, something light, so people don't fill up before the main course." }
+      ],
+      "questions": [
+        { "type": "main_idea", "stem": "What is the woman planning?", "options": { "A": "A pasta dinner for friends", "B": "A cooking class", "C": "A trip to a restaurant", "D": "A grocery delivery service" }, "correct_answer": "A", "explanation": "\"I'm making pasta for a few friends on Friday.\"" },
+        { "type": "detail", "stem": "What does the man advise about the noodles?", "options": { "A": "Take them out a minute early", "B": "Cook them twice as long", "C": "Rinse them in cold water", "D": "Add them to the salad" }, "correct_answer": "A", "explanation": "\"Take them out a minute early; they keep cooking in the sauce.\"" }
+      ]
+    },
+    { "id": "QC_lc_3", "relationship": "student_student",
+      "conversation": [
+        { "speaker": "Woman", "text": "How's the new job at the bookstore going?" },
+        { "speaker": "Man", "text": "Pretty well. The hours fit around my classes, which is the main thing." },
+        { "speaker": "Woman", "text": "That's lucky. Is the work itself interesting?" },
+        { "speaker": "Man", "text": "Mostly shelving and helping customers find things. It's quiet, but I see all the new titles." },
+        { "speaker": "Woman", "text": "And a staff discount, I bet?" },
+        { "speaker": "Man", "text": "Twenty percent. I'm spending half my paycheck on books already." }
+      ],
+      "questions": [
+        { "type": "detail", "stem": "Why does the man like his new job?", "options": { "A": "The hours fit around his classes", "B": "It pays better than his old job", "C": "He can study while working", "D": "It is close to his dorm" }, "correct_answer": "A", "explanation": "\"The hours fit around my classes, which is the main thing.\"" },
+        { "type": "inference", "stem": "What does the woman correctly guess about the job?", "options": { "A": "That it comes with a staff discount", "B": "That it requires night shifts", "C": "That the man dislikes it", "D": "That it is unpaid" }, "correct_answer": "A", "explanation": "She says \"a staff discount, I bet?\" and the man confirms twenty percent." }
+      ]
+    }
+  ],
+  "announcements": [
+    { "id": "QC_la_1", "opener_type": "professor_first_person",
+      "announcement": "Good morning, everyone. Before we begin, I want to remind you that the deadline for your research proposals is this Friday at 5 p.m. Please submit them through the course website, not by email. I've also posted three sample proposals from previous years so you can see the level of detail expected. If you're struggling to narrow your topic, my office hours are Wednesday afternoon, and I'm happy to talk it through. A clear, focused question is worth more than a broad one.",
+      "questions": [
+        { "type": "main_idea", "stem": "What is the main purpose of the announcement?", "options": { "A": "To remind students about the proposal deadline and offer help", "B": "To cancel Friday's class", "C": "To introduce a guest speaker", "D": "To explain a change in the grading scale" }, "correct_answer": "A", "explanation": "The professor states the deadline, how to submit, and offers office hours." },
+        { "type": "detail", "stem": "How should students submit their proposals?", "options": { "A": "Through the course website", "B": "By email to the professor", "C": "On paper in class", "D": "During office hours" }, "correct_answer": "A", "explanation": "\"Please submit them through the course website, not by email.\"" }
+      ]
+    },
+    { "id": "QC_la_2", "opener_type": "due_to_cause",
+      "announcement": "Attention, residents. Due to scheduled electrical work, the power in the east wing of the dormitory will be shut off this Saturday from 8 a.m. to noon. Elevators and hallway lighting will not be available during that time, so please use the stairs and plan accordingly. The west wing will not be affected. If you rely on medical equipment that needs power, contact the residence office today so we can make arrangements.",
+      "questions": [
+        { "type": "detail", "stem": "What will happen on Saturday morning?", "options": { "A": "The power in the east wing will be shut off", "B": "The whole dormitory will close", "C": "The elevators will be repaired in the west wing", "D": "Residents must move out temporarily" }, "correct_answer": "A", "explanation": "\"The power in the east wing of the dormitory will be shut off this Saturday from 8 a.m. to noon.\"" },
+        { "type": "detail", "stem": "What should residents who use medical equipment do?", "options": { "A": "Contact the residence office today", "B": "Use the elevators instead of the stairs", "C": "Move to the east wing", "D": "Wait until Saturday to ask" }, "correct_answer": "A", "explanation": "\"Contact the residence office today so we can make arrangements.\"" }
+      ]
+    }
+  ],
+  "shortResponse": [
+    { "id": "QC_lcr_1", "speaker": "Where can I pick up my student ID card?", "options": { "A": "At the registrar's office on the first floor.", "B": "I got mine last week.", "C": "You'll need a photo for it.", "D": "It's open until five." }, "correct_answer": "A", "explanation": "Answers the 'where' directly; B/C/D answer when/requirement/hours instead." },
+    { "id": "QC_lcr_2", "speaker": "Why is the reading room closed today?", "options": { "A": "They're installing new carpet.", "B": "It opens again at nine.", "C": "I have a book to return.", "D": "It's on the upper floor." }, "correct_answer": "A", "explanation": "Gives a reason ('why'); the others answer when/personal/where." },
+    { "id": "QC_lcr_3", "speaker": "How do I sign up for the campus shuttle?", "options": { "A": "There's a form on the transportation website.", "B": "It runs every fifteen minutes.", "C": "The stop is right by the gym.", "D": "I take it every morning." }, "correct_answer": "A", "explanation": "Explains the method ('how'); the others give frequency/location/personal habit." },
+    { "id": "QC_lcr_4", "speaker": "Did you finish the lab report?", "options": { "A": "Almost, I just need to add the graphs.", "B": "The lab is on the third floor.", "C": "Reports are usually due on Friday.", "D": "I really enjoy chemistry." }, "correct_answer": "A", "explanation": "A direct yes/no-style answer about progress; the others are off-topic." },
+    { "id": "QC_lcr_5", "speaker": "What time does the career fair start?", "options": { "A": "I think it opens at ten.", "B": "It's in the main hall.", "C": "Bring a few copies of your resume.", "D": "A lot of companies are coming." }, "correct_answer": "A", "explanation": "Answers 'what time'; the others answer where/advice/who." },
+    { "id": "QC_lcr_6", "speaker": "I can't find a quiet place to study tonight.", "options": { "A": "Have you tried the third floor of the library?", "B": "I studied there yesterday.", "C": "The library has a lot of books.", "D": "Studying is really important." }, "correct_answer": "A", "explanation": "Offers a helpful suggestion to the implied problem; the others don't address it." }
+  ]
+}

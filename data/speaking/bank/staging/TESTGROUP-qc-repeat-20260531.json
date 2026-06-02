@@ -1,0 +1,29 @@
+{
+  "_meta": { "test_group": "qc-repeat-20260531", "generated_by": "claude (quality-check sample, recalibrated repeat prompt)", "note": "QC: orientation + procedure sets; bare-declarative / step openers (no Welcome), 0 questions, 0 punitive, long comma-split closer, varied signature, last sentence longest." },
+  "sets": [
+    {
+      "id": "QC_rpt_1", "scenario": "Botanical Garden Tour", "speaker_role": "garden guide", "set_type": "orientation",
+      "sentences": [
+        { "sentence": "The main entrance is just ahead.", "difficulty": "easy", "word_count": 6 },
+        { "sentence": "Maps are available at the front desk.", "difficulty": "easy", "word_count": 7 },
+        { "sentence": "The rose garden is in full bloom this month.", "difficulty": "medium", "word_count": 9 },
+        { "sentence": "Please stay on the marked paths at all times.", "difficulty": "medium", "word_count": 9 },
+        { "sentence": "Our greenhouse holds plants from tropical regions around the world.", "difficulty": "medium", "word_count": 10 },
+        { "sentence": "Guided tours leave from this spot every hour.", "difficulty": "medium", "word_count": 8 },
+        { "sentence": "If you would like to learn more, check the schedule posted near the main gate.", "difficulty": "hard", "word_count": 15 }
+      ]
+    },
+    {
+      "id": "QC_rpt_2", "scenario": "Tea Brewing (how-to)", "speaker_role": "workshop instructor", "set_type": "procedure",
+      "sentences": [
+        { "sentence": "First, boil a cup of water.", "difficulty": "easy", "word_count": 6 },
+        { "sentence": "Next, warm the teapot briefly.", "difficulty": "easy", "word_count": 5 },
+        { "sentence": "Add one spoonful of loose tea for each person.", "difficulty": "medium", "word_count": 9 },
+        { "sentence": "Pour the hot water slowly over the leaves.", "difficulty": "medium", "word_count": 8 },
+        { "sentence": "Let the tea steep for about four minutes.", "difficulty": "medium", "word_count": 8 },
+        { "sentence": "Strain it carefully into a clean, warm cup.", "difficulty": "medium", "word_count": 8 },
+        { "sentence": "Before you serve it, taste a little and add honey if you prefer.", "difficulty": "hard", "word_count": 13 }
+      ]
+    }
+  ]
+}

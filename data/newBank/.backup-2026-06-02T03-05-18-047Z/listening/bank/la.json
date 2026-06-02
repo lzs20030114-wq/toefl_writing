@@ -1,0 +1,2262 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "context": "campus",
+      "situation": "dormitory quiet hours reminder",
+      "speaker_role": "Resident Advisor",
+      "announcement": "Hello everyone, this is your RA. A quick reminder that quiet hours in all campus dormitories are from 10 PM to 8 AM, Sunday through Thursday. During these hours, please keep noise to a minimum in hallways and common areas. This policy is especially important with midterm exams starting next week. If you need to study in a group, please use the 24-hour study lounge in the student union. Repeated violations may result in a meeting with housing staff. Thank you for your cooperation.",
+      "questions": [
+        {
+          "question_type": "detail",
+          "question": "When do quiet hours begin on weeknights?",
+          "options": {
+            "A": "At 8 PM",
+            "B": "At 9 PM",
+            "C": "At 10 PM",
+            "D": "At 11 PM"
+          },
+          "answer": "C",
+          "explanation": "公告明确指出，安静时段为晚上10点至次日上午8点。",
+          "stem": "When do quiet hours begin on weeknights?"
+        },
+        {
+          "question_type": "inference",
+          "question": "What can be inferred about the reason for this reminder?",
+          "options": {
+            "A": "There have been many recent noise complaints.",
+            "B": "Students are preparing for upcoming exams.",
+            "C": "New residents are moving into the dormitory.",
+            "D": "The quiet hours policy has just been changed."
+          },
+          "answer": "B",
+          "explanation": "公告提到，鉴于下周中期考试即将开始，此项提醒尤为重要，暗示学生需要安静环境备考。",
+          "stem": "What can be inferred about the reason for this reminder?"
+        }
+      ],
+      "id": "la_gen_1776236579185_001",
+      "difficulty": "medium",
+      "audio_url": "/api/audio/announcement/la_gen_1776236579185_001.mp3"
+    },
+    {
+      "context": "classroom",
+      "situation": "reading assignment for next week",
+      "speaker_role": "Professor Chen",
+      "announcement": "Before our next lecture, please read chapters four and five in your biology textbook. Focus on the sections about cellular respiration. We will begin class with a short quiz on this material. Also, the article I mentioned on mitochondrial DNA is now available as a PDF on the course website under 'Resources.' I recommend you read it as well, as it provides useful context for our lab on Wednesday. Bring your questions to class.",
+      "questions": [
+        {
+          "question_type": "detail",
+          "question": "What are the students required to read before the next class?",
+          "options": {
+            "A": "Chapters three and four",
+            "B": "A single article on the course website",
+            "C": "Chapters four and five",
+            "D": "Only the sections on mitochondrial DNA"
+          },
+          "answer": "C",
+          "explanation": "教授明确指示：'请阅读生物教科书第四章和第五章。'",
+          "stem": "What are the students required to read before the next class?"
+        },
+        {
+          "question_type": "inference",
+          "question": "What will most likely happen at the start of the next class?",
+          "options": {
+            "A": "The professor will return previous exams.",
+            "B": "Students will begin a new lab experiment.",
+            "C": "There will be a quiz on the reading.",
+            "D": "The class will discuss the PDF article."
+          },
+          "answer": "C",
+          "explanation": "教授表示：'我们将以本部分内容的简短测验开始课程'，暗示这是第一项课堂活动。",
+          "stem": "What will most likely happen at the start of the next class?"
+        },
+        {
+          "question_type": "main_idea",
+          "question": "What is the main purpose of the announcement?",
+          "options": {
+            "A": "To cancel an upcoming lab session",
+            "B": "To outline preparation for the next class",
+            "C": "To change the required textbook for the course",
+            "D": "To remind students about office hours"
+          },
+          "answer": "B",
+          "explanation": "总体信息是告知学生阅读任务、测验以及为下节课和实验准备的补充文章。",
+          "stem": "What is the main purpose of the announcement?"
+        }
+      ],
+      "id": "la_gen_1776236579185_002",
+      "difficulty": "medium",
+      "audio_url": "/api/audio/announcement/la_gen_1776236579185_002.mp3"
+    },
+    {
+      "context": "campus",
+      "situation": "building closure for maintenance",
+      "speaker_role": "Facilities Manager",
+      "announcement": "Attention. The Science Hall will be closed all day this coming Saturday, November 12th, for mandatory fire alarm system testing and maintenance. No one will be permitted to enter. This includes all labs, classrooms, and faculty offices. If you have lab work scheduled, please consult your professor for an alternative arrangement. The building will reopen Sunday morning at its usual time. We appreciate your understanding as we ensure campus safety.",
+      "questions": [
+        {
+          "question_type": "detail",
+          "question": "Why is the Science Hall being closed?",
+          "options": {
+            "A": "For a deep cleaning of all laboratories",
+            "B": "For fire alarm system testing",
+            "C": "Because of a scheduled power outage",
+            "D": "To host a private campus event"
+          },
+          "answer": "B",
+          "explanation": "公告明确说明关闭原因是'进行强制性的火灾报警系统测试和维护'。",
+          "stem": "Why is the Science Hall being closed?"
+        },
+        {
+          "question_type": "inference",
+          "question": "What should a student with a Saturday lab session do?",
+          "options": {
+            "A": "Come to the building on Sunday instead.",
+            "B": "Contact their professor for instructions.",
+            "C": "Wait in the hallway until testing is complete.",
+            "D": "Use a lab in a different building without asking."
+          },
+          "answer": "B",
+          "explanation": "公告要求'咨询教授以获取替代安排'，暗示学生应主动寻求指导。",
+          "stem": "What should a student with a Saturday lab session do?"
+        }
+      ],
+      "id": "la_gen_1776236579185_003",
+      "difficulty": "medium",
+      "audio_url": "/api/audio/announcement/la_gen_1776236579185_003.mp3"
+    },
+    {
+      "context": "classroom",
+      "situation": "textbook edition update",
+      "speaker_role": "Dr. Miller",
+      "announcement": "A quick note about the textbook. I've been informed that the new, fifth edition of 'Introduction to Sociology' has been released. For this course, you may use either the fourth or the fifth edition. The chapter topics are the same, though some examples are updated. However, please note that the page numbers and some minor section headings differ. I will always refer to chapter numbers in my lectures. If you are buying the book new, I suggest getting the fifth edition, but don't feel you need to replace an older copy.",
+      "questions": [
+        {
+          "question_type": "detail",
+          "question": "Which editions of the textbook are acceptable for the course?",
+          "options": {
+            "A": "Only the new fifth edition",
+            "B": "The third or the fourth edition",
+            "C": "Either the fourth or the fifth edition",
+            "D": "Any edition from the past five years"
+          },
+          "answer": "C",
+          "explanation": "教授明确说明：'第四版或第五版教材均可使用。'",
+          "stem": "Which editions of the textbook are acceptable for the course?"
+        },
+        {
+          "question_type": "inference",
+          "question": "What is a potential problem if a student uses the older edition?",
+          "options": {
+            "A": "The core theories will be completely different.",
+            "B": "The page numbers may not match the professor's references.",
+            "C": "The older edition will be missing several key chapters.",
+            "D": "The professor will not allow it in the classroom."
+          },
+          "answer": "B",
+          "explanation": "教授提到不同版本页码存在差异，暗示若按页码布置阅读，使用旧版教材的学生可能难以定位。",
+          "stem": "What is a potential problem if a student uses the older edition?"
+        },
+        {
+          "question_type": "main_idea",
+          "question": "What is the professor's primary message?",
+          "options": {
+            "A": "Announcing a change to the required textbook.",
+            "B": "Providing flexibility regarding the textbook edition.",
+            "C": "Warning students about incorrect information in the old book.",
+            "D": "Informing students that the textbook is optional."
+          },
+          "answer": "B",
+          "explanation": "核心信息是告知学生两个版本皆可接受并提供指导，强调灵活性。",
+          "stem": "What is the professor's primary message?"
+        }
+      ],
+      "id": "la_gen_1776236579185_004",
+      "difficulty": "medium",
+      "audio_url": "/api/audio/announcement/la_gen_1776236579185_004.mp3"
+    },
+    {
+      "context": "campus",
+      "situation": "campus bookstore sale announcement",
+      "speaker_role": "Bookstore Manager",
+      "announcement": "The campus bookstore's end-of-semester sale starts this Monday. All general merchandise, like clothing, gifts, and supplies, will be 30% off. This discount does not apply to textbooks, course packets, or technology items. The sale runs from Monday through Friday during regular store hours. It's a great chance to stock up on university spirit wear before the holidays. Remember, you can use your student ID for an additional 5% off sale items. We hope to see you there!",
+      "questions": [
+        {
+          "question_type": "detail",
+          "question": "What is the discount on general merchandise during the sale?",
+          "options": {
+            "A": "5% off",
+            "B": "20% off",
+            "C": "30% off",
+            "D": "50% off"
+          },
+          "answer": "C",
+          "explanation": "公告清楚写明：'所有普通商品...将享受七折优惠。'",
+          "stem": "What is the discount on general merchandise during the sale?"
+        },
+        {
+          "question_type": "inference",
+          "question": "What would be the best reason for a student to visit the bookstore during the sale?",
+          "options": {
+            "A": "To buy a required textbook at a lower price.",
+            "B": "To purchase a new laptop for next semester.",
+            "C": "To get a discount on a university sweatshirt.",
+            "D": "To sell back their old course packets."
+          },
+          "answer": "C",
+          "explanation": "促销适用于服装（校园文化衫）等普通商品，不包含教材或电子产品。购买卫衣符合该类别。",
+          "stem": "What would be the best reason for a student to visit the bookstore during the sale?"
+        }
+      ],
+      "id": "la_gen_1776236579185_005",
+      "difficulty": "medium",
+      "audio_url": "/api/audio/announcement/la_gen_1776236579185_005.mp3"
+    },
+    {
+      "context": "classroom",
+      "situation": "reading assignment for next week",
+      "speaker_role": "Professor Williams",
+      "announcement": "For Wednesday, I want you to read the first three short stories in our anthology, 'Modern American Voices.' Pay particular attention to the use of symbolism in the story 'Clay.' We'll be comparing the authors' narrative techniques. Also, please note that your first short analysis paper will now be due next Friday, not this Friday as originally scheduled. The paper should focus on one of the stories we discuss this week. Any questions, see me after class.",
+      "questions": [
+        {
+          "question_type": "detail",
+          "question": "What specific element should students focus on in the story 'Clay'?",
+          "options": {
+            "A": "The historical context",
+            "B": "The author's biography",
+            "C": "The use of symbolism",
+            "D": "The comparative narrative techniques"
+          },
+          "answer": "C",
+          "explanation": "教授直接要求学生：'请特别关注《黏土》这篇故事中象征手法的运用。'",
+          "stem": "What specific element should students focus on in the story 'Clay'?"
+        },
+        {
+          "question_type": "inference",
+          "question": "What does the change in the due date imply about the assignment?",
+          "options": {
+            "A": "It has been canceled entirely.",
+            "B": "Students will have more time to write it.",
+            "C": "It must now be about a different topic.",
+            "D": "It will be completed during class time."
+          },
+          "answer": "B",
+          "explanation": "截止日期从本周五推迟至下周五，意味着学生多出一周时间。",
+          "stem": "What does the change in the due date imply about the assignment?"
+        },
+        {
+          "question_type": "main_idea",
+          "question": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To introduce a new textbook for the course",
+            "B": "To assign reading and clarify an assignment deadline",
+            "C": "To cancel the upcoming Wednesday class session",
+            "D": "To discuss the grades for the previous paper"
+          },
+          "answer": "B",
+          "explanation": "教授布置了具体阅读任务，并宣布首篇论文截止日期变更。",
+          "stem": "What is the main purpose of this announcement?"
+        }
+      ],
+      "id": "la_gen_1776236579185_006",
+      "difficulty": "medium",
+      "audio_url": "/api/audio/announcement/la_gen_1776236579185_006.mp3"
+    },
+    {
+      "context": "campus",
+      "situation": "parking notice about lot closure",
+      "speaker_role": "Campus Security",
+      "announcement": "This is a parking notice. Lot B, behind the gymnasium, will be closed for repaving from 6 AM Monday until 6 PM next Wednesday. All vehicles must be removed by Sunday night. Alternative parking is available in Lot D near the library, but spaces there fill quickly. We strongly encourage using the campus shuttle from the remote Lot F during this period. Parking permits will be temporarily valid in Lot D. Tow trucks will be on site Monday morning. Thank you.",
+      "questions": [
+        {
+          "question_type": "detail",
+          "question": "How long will Lot B be closed?",
+          "options": {
+            "A": "From Monday morning to Wednesday evening",
+            "B": "For the entire weekend",
+            "C": "From Sunday night to Friday morning",
+            "D": "For one full week"
+          },
+          "answer": "A",
+          "explanation": "公告说明关闭时间为'周一早6点至下周三晚6点'。",
+          "stem": "How long will Lot B be closed?"
+        },
+        {
+          "question_type": "inference",
+          "question": "What is the implied best option for a commuter student during the closure?",
+          "options": {
+            "A": "Park in Lot D very early in the morning.",
+            "B": "Park in Lot B after Monday morning.",
+            "C": "Use the shuttle from the remote Lot F.",
+            "D": "Request a special permit for faculty lots."
+          },
+          "answer": "C",
+          "explanation": "公告'强烈建议使用从偏远F停车场出发的校园接驳车'，暗示这是最可靠的替代方案，因为D停车场很快会停满。",
+          "stem": "What is the implied best option for a commuter student during the closure?"
+        }
+      ],
+      "id": "la_gen_1776236579185_007",
+      "difficulty": "medium",
+      "audio_url": "/api/audio/announcement/la_gen_1776236579185_007.mp3"
+    },
+    {
+      "context": "classroom",
+      "situation": "project group assignments posted",
+      "speaker_role": "Professor Gibson",
+      "announcement": "Good morning. Your group assignments for the final research project are now posted on the course website. I've formed the groups based on your topic preferences from the survey. Each group has four or five students. Your first task is to find your group members and schedule a meeting outside of class this week to choose a specific research question. I've also reserved conference rooms in the library for group work; you can book them online. The project proposal is due in two weeks.",
+      "questions": [
+        {
+          "question_type": "detail",
+          "question": "Where can students find their group assignments?",
+          "options": {
+            "A": "On a paper list outside the classroom",
+            "B": "By asking the professor after class",
+            "C": "On the course website",
+            "D": "In an email sent to each student"
+          },
+          "answer": "C",
+          "explanation": "教授明确说明作业'现已发布在课程网站上'。",
+          "stem": "Where can students find their group assignments?"
+        },
+        {
+          "question_type": "inference",
+          "question": "How did the professor most likely decide the group compositions?",
+          "options": {
+            "A": "By random selection of student names",
+            "B": "Based on students' grades on the midterm",
+            "C": "According to students' topic preferences",
+            "D": "By allowing students to choose their own groups"
+          },
+          "answer": "C",
+          "explanation": "教授表示分组是'根据你们在问卷调查中的选题意向'确定的。",
+          "stem": "How did the professor most likely decide the group compositions?"
+        },
+        {
+          "question_type": "main_idea",
+          "question": "What is the professor primarily doing in this announcement?",
+          "options": {
+            "A": "Explaining the grading criteria for the final exam",
+            "B": "Initiating the first steps of the group project",
+            "C": "Canceling the previously assigned individual project",
+            "D": "Returning graded assignments from last week"
+          },
+          "answer": "B",
+          "explanation": "公告通知学生分组已公布，并说明首项任务要求，标志着项目正式启动。",
+          "stem": "What is the professor primarily doing in this announcement?"
+        }
+      ],
+      "id": "la_gen_1776236579185_008",
+      "difficulty": "medium",
+      "audio_url": "/api/audio/announcement/la_gen_1776236579185_008.mp3"
+    },
+    {
+      "context": "campus",
+      "situation": "schedule change for shuttle bus",
+      "speaker_role": "Transportation Office",
+      "announcement": "Attention shuttle riders. Due to construction on University Avenue, the Blue Line shuttle route will be altered starting tomorrow. The shuttle will not stop at the Science Hall or the Student Union. Instead, temporary stops are set up at the north entrance of the Library and behind the Dining Hall. The new route map is available on our website. We expect this detour to last for approximately three weeks. Regular service will resume once the construction is complete. Thank you for your patience.",
+      "questions": [
+        {
+          "question_type": "detail",
+          "question": "What is the reason for the shuttle route change?",
+          "options": {
+            "A": "A special campus event",
+            "B": "Construction on University Avenue",
+            "C": "A shortage of shuttle bus drivers",
+            "D": "Regular seasonal schedule adjustment"
+          },
+          "answer": "B",
+          "explanation": "通知开头写道：'由于大学大道施工，蓝线班车路线将进行调整。'",
+          "stem": "What is the reason for the shuttle route change?"
+        },
+        {
+          "question_type": "inference",
+          "question": "Where should a student who needs to go to the Science Hall get off the shuttle?",
+          "options": {
+            "A": "At the regular Science Hall stop.",
+            "B": "At the temporary stop behind the Dining Hall.",
+            "C": "At the Student Union stop as usual.",
+            "D": "The shuttle no longer serves that area directly."
+          },
+          "answer": "D",
+          "explanation": "通知说明班车'将不在科学馆停靠'，这意味着学生需要在临时站点下车步行。",
+          "stem": "Where should a student who needs to go to the Science Hall get off the shuttle?"
+        }
+      ],
+      "id": "la_gen_1776236579185_009",
+      "difficulty": "medium",
+      "audio_url": "/api/audio/announcement/la_gen_1776236579185_009.mp3"
+    },
+    {
+      "context": "classroom",
+      "situation": "exam format change from essay to multiple choice",
+      "speaker_role": "Dr. Williams",
+      "announcement": "I have an update about the final exam. After reviewing the syllabus, I've decided to change the format. Instead of one long essay, the exam will now consist of fifty multiple-choice questions covering all the major concepts from the lectures and the textbook. This will allow me to test a broader range of material. The exam date and time remain the same. I will post a study guide on the course portal by Friday. This change is final, so please prepare accordingly.",
+      "questions": [
+        {
+          "question_type": "detail",
+          "question": "What is the new format for the final exam?",
+          "options": {
+            "A": "Two short essay questions",
+            "B": "An oral presentation",
+            "C": "Fifty multiple-choice questions",
+            "D": "A combination of essays and short answers"
+          },
+          "answer": "C",
+          "explanation": "教授明确表示：'考试将改为五十道选择题。'",
+          "stem": "What is the new format for the final exam?"
+        },
+        {
+          "question_type": "inference",
+          "question": "Why did the professor most likely make this change?",
+          "options": {
+            "A": "To reduce the amount of grading required.",
+            "B": "To test a wider variety of course content.",
+            "C": "Because students requested an easier format.",
+            "D": "To align with the format of the midterm exam."
+          },
+          "answer": "B",
+          "explanation": "教授说新形式'能让我测试更广泛的内容'，这意味着涵盖的知识范围更广。",
+          "stem": "Why did the professor most likely make this change?"
+        },
+        {
+          "question_type": "main_idea",
+          "question": "What is the main point of the professor's announcement?",
+          "options": {
+            "A": "To postpone the final exam to a later date",
+            "B": "To announce a significant change in exam structure",
+            "C": "To remind students about the required textbook",
+            "D": "To cancel the final exam entirely"
+          },
+          "answer": "B",
+          "explanation": "核心信息是告知学生考试形式从论述题改为选择题。",
+          "stem": "What is the main point of the professor's announcement?"
+        }
+      ],
+      "id": "la_gen_1776236579185_010",
+      "difficulty": "medium",
+      "audio_url": "/api/audio/announcement/la_gen_1776236579185_010.mp3"
+    },
+    {
+      "context": "academic_event",
+      "situation": "senior capstone presentation schedule",
+      "speaker_role": "department_staff",
+      "difficulty": "hard",
+      "announcement": "Attention all senior psychology majors. The schedule for your mandatory capstone presentations has been finalized and posted. Presentations will take place next Monday and Tuesday, April 14th and 15th, in the Behavioral Sciences Building, Room 205. Each student is required to present for exactly fifteen minutes, followed by a five-minute faculty question period. Please note that attendance for the entire two-day session is compulsory for all majors, as it is a core program requirement. We strongly advise you to review the posted schedule carefully to confirm your assigned time slot.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To inform seniors of the finalized capstone presentation schedule and requirements.",
+            "B": "To describe the grading criteria for the capstone project.",
+            "C": "To recruit faculty volunteers to judge the presentations.",
+            "D": "To encourage students from other majors to attend the presentations."
+          },
+          "answer": "A",
+          "explanation": "A正确，因为它抓住了通知的核心目的：宣布活动的时间、地点和强制性。B是错误目的；未提及评分。C是相关但未说明的行动，通知中未要求。D是反向意图；通知说明出勤对主修生是强制的，并非公开邀请他人。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "related_but_not_stated",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the capstone presentations?",
+          "options": {
+            "A": "They are optional but recommended for psychology majors.",
+            "B": "Students will be graded solely on their presentation slides.",
+            "C": "The event is considered a significant part of the psychology program.",
+            "D": "The schedule is subject to frequent last-minute changes."
+          },
+          "answer": "C",
+          "explanation": "C是有效推断，得到通知中'强制性'、'核心课程要求'和'全程参加'的支持。A是反向意图，与'强制性'和'必须参加'直接矛盾。B是过度推断；未提供评分细节。D是不相关推断；通知说明时间表'已确定'，暗示稳定性，而非频繁变动。",
+          "distractor_types": {
+            "A": "reversed_intent",
+            "B": "over_inference",
+            "D": "unrelated_inference"
+          }
+        }
+      ],
+      "id": "la_v2_1776246227434_001",
+      "audio_url": "/api/audio/announcement/la_v2_1776246227434_001.mp3",
+      "flavor_score": 0.8
+    },
+    {
+      "context": "facility_change",
+      "situation": "computer lab relocating to a different floor",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "Good afternoon. This is an announcement from Information Technology Services. The main computer lab in Dunham Library is relocating from the basement to the third floor, starting this Friday. The new lab will open next Monday morning at eight a.m. Please be aware that the basement lab will be closed all day Friday for equipment moving and setup. All printing stations and specialized software will be available in the new location. We apologize for any temporary inconvenience and appreciate your patience during this upgrade.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement mainly about?",
+          "options": {
+            "A": "New hours for the Dunham Library.",
+            "B": "A relocation of the main computer lab.",
+            "C": "A temporary closure of the entire library.",
+            "D": "An increase in printing fees for students."
+          },
+          "answer": "B",
+          "explanation": "B正确；核心消息是实验室从地下室搬到三楼。A是错误细节；未讨论开放时间，只提到新实验室的开放时间。C是过度推断；只有实验室周五关闭，不是整个图书馆。D是相关但未提及的话题，通知中未涉及。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "over_inference",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are students advised about the basement computer lab this Friday?",
+          "options": {
+            "A": "It will have reduced hours.",
+            "B": "It will offer limited software access.",
+            "C": "It will be open for emergency use only.",
+            "D": "It will be closed all day."
+          },
+          "answer": "D",
+          "explanation": "D正确，如直接说明：'地下室实验室周五全天关闭。'A是错误细节；是关闭，不仅仅是缩短时间。B是错误归属细节；有限访问可能合理，但通知说明是关闭。C是相关但未提及的可能性。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "misattributed_detail",
+            "C": "related_but_not_stated"
+          }
+        }
+      ],
+      "id": "la_v2_1776246227434_002",
+      "audio_url": "/api/audio/announcement/la_v2_1776246227434_002.mp3",
+      "flavor_score": 0.69
+    },
+    {
+      "context": "career_services",
+      "situation": "career fair preparation workshop with resume review",
+      "speaker_role": "program_coordinator",
+      "difficulty": "easy",
+      "announcement": "Attention students. The Career Development Center is hosting a preparation workshop for next month's university-wide career fair. The session will be held this Wednesday at 4 p.m. in the Student Union, Conference Room B. We will cover strategies for engaging with recruiters and conducting effective follow-up. Most importantly, we are offering a personalized resume review for all attendees. Please bring a printed copy of your current resume. Space is limited, so we encourage you to register on our website by Tuesday evening to secure your spot.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the primary purpose of the announcement?",
+          "options": {
+            "A": "To announce the dates for the university career fair.",
+            "B": "To describe the companies attending the career fair.",
+            "C": "To promote a workshop that prepares students for the career fair.",
+            "D": "To remind students to update their online career profiles."
+          },
+          "answer": "C",
+          "explanation": "C正确；通知的核心是推广预备研讨会。A太狭隘；提到招聘会是背景，但其日期不是重点。B是错误目的；未列出具体公司。D是相关但未要求的行动。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "wrong_purpose",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are students asked to bring to the workshop?",
+          "options": {
+            "A": "A printed copy of their resume.",
+            "B": "A list of target companies.",
+            "C": "Their student identification card.",
+            "D": "A notebook and pen."
+          },
+          "answer": "A",
+          "explanation": "A正确，如直接说明：'请携带当前简历的打印版。'B是相关但未提及的物品，可能有用但未要求。C是错误归属细节；学生证在校园活动中常见，但此处未指定。D是错误细节；虽然合理，但通知未提及这些物品。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "misattributed_detail",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "id": "la_v2_1776246227434_003",
+      "audio_url": "/api/audio/announcement/la_v2_1776246227434_003.mp3",
+      "flavor_score": 0.8
+    },
+    {
+      "context": "academic_event",
+      "situation": "honors thesis oral defense schedule announcement",
+      "speaker_role": "department_staff",
+      "difficulty": "medium",
+      "announcement": "This is a reminder for history department honors candidates. Your oral thesis defenses are scheduled for the week of May 5th. Each defense will be held in Professor Clayborne's seminar room, Ferguson Hall 312, and will last approximately one hour. It is mandatory for the defending student to provide a digital copy of their full thesis to the committee at least one week prior. The defenses are open to the university community, and we encourage fellow students to attend. Please confirm your specific date and time with the department secretary by this Friday.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What must honors candidates do at least one week before their defense?",
+          "options": {
+            "A": "Schedule a practice session with Professor Clayborne.",
+            "B": "Post a summary of their thesis on the department website.",
+            "C": "Attend another student's defense for practice.",
+            "D": "Provide a digital thesis copy to the committee."
+          },
+          "answer": "D",
+          "explanation": "D正确，如直接说明：'至少在答辩前一周向委员会提交完整论文的电子版。'A是相关但未提及的行动。B是错误细节；未要求发布摘要。C是错误归属细节；鼓励社区成员参加其他答辩，但对候选人非强制。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "C": "misattributed_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the thesis defenses?",
+          "options": {
+            "A": "They are private meetings only for faculty and the student.",
+            "B": "They are considered a formal part of the honors program.",
+            "C": "They will be recorded and posted online for later viewing.",
+            "D": "They focus primarily on the student's written grammar."
+          },
+          "answer": "B",
+          "explanation": "B是有效推断，得到正式安排、强制性要求和对大学社区开放邀请的支持，表明这是正式课程组成部分。A是反向意图，因为答辩'对大学社区开放'。C是过度推断；未提及录制。D是不相关推断；答辩重点未指定。",
+          "distractor_types": {
+            "A": "reversed_intent",
+            "C": "over_inference",
+            "D": "unrelated_inference"
+          }
+        }
+      ],
+      "id": "la_v2_1776246227434_004",
+      "audio_url": "/api/audio/announcement/la_v2_1776246227434_004.mp3",
+      "flavor_score": 0.79
+    },
+    {
+      "context": "info_session",
+      "situation": "study abroad information session with returned students",
+      "speaker_role": "program_coordinator",
+      "difficulty": "hard",
+      "announcement": "Attention students interested in studying abroad next year. The Office of International Programs is hosting an information session this Thursday at 4 p.m. in the Global Commons, Room 205. We are thrilled to announce that several students who recently returned from programs in Spain, Japan, and South Africa will be sharing their firsthand experiences. Please note that this session is specifically for students who have already completed the preliminary application on our portal. We want to emphasize that attending this session is a mandatory step before your application interview can be scheduled. Don't miss this valuable opportunity to get your questions answered.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What must students do to have their application interview scheduled?",
+          "options": {
+            "A": "Attend the Thursday information session",
+            "B": "Submit letters of recommendation",
+            "C": "Contact a returned student directly",
+            "D": "Complete a language proficiency test"
+          },
+          "answer": "A",
+          "explanation": "通知说明参加该环节是安排面试前的强制性步骤，因此A正确。B、C和D与留学相关，但在此通知中未提及作为要求。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "misattributed_detail",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the students speaking at the session?",
+          "options": {
+            "A": "They are faculty members from the host countries.",
+            "B": "They have already graduated from the university.",
+            "C": "They have personal experience with the programs.",
+            "D": "They will help students complete applications."
+          },
+          "answer": "C",
+          "explanation": "通知说学生将分享他们的'第一手经验'，这直接支持他们拥有个人经验的推断。A错误，因为他们是学生，不是教职员工。B是过度推断；他们是最近返回，不一定已毕业。D是相关但未说明的行动；他们的角色被描述为分享经验。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "over_inference",
+            "D": "related_but_not_stated"
+          }
+        }
+      ],
+      "id": "la_v2_1776246456772_001",
+      "audio_url": "/api/audio/announcement/la_v2_1776246456772_001.mp3",
+      "flavor_score": 0.85
+    },
+    {
+      "context": "campus_activity",
+      "situation": "student art market in the quad",
+      "speaker_role": "activity_coordinator",
+      "difficulty": "medium",
+      "announcement": "Good afternoon. The Campus Arts Council is excited to announce our annual Spring Student Art Market, taking place this Friday and Saturday from 10 a.m. to 4 p.m. in the Main Quad. This event showcases and sells original artwork, jewelry, and ceramics created exclusively by our undergraduate students. All proceeds go directly to the student artists. Please be aware that we are accepting cash and major credit cards, but we cannot process mobile payments. We encourage everyone to come out, support your fellow students, and find unique gifts. Rain location will be the Student Union Ballroom.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To recruit volunteers for an arts festival",
+            "B": "To advertise a student art sale event",
+            "C": "To announce a change in the quad's hours",
+            "D": "To explain new payment systems on campus"
+          },
+          "answer": "B",
+          "explanation": "通知的主要目的是宣传学生艺术市场的日期、地点和详情。A错误，因为它提到招募志愿者，但通知未说明。C太狭隘，专注于次要细节（时间/地点）。D错误，因为它专注于关于支付方式的次要细节。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "C": "too_narrow",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the artwork at the market?",
+          "options": {
+            "A": "It is donated by professional artists.",
+            "B": "It will be available at a discounted price.",
+            "C": "It has been judged in a competition.",
+            "D": "It is made by current students."
+          },
+          "answer": "D",
+          "explanation": "通知说明艺术品'完全由我们本科生创作'，因此D是直接推断。A错误，因为是学生创作，不是专业人士。B是过度推断；未提及折扣。C是相关但未说明的细节；活动是市场，不一定是评审比赛。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "over_inference",
+            "C": "related_but_not_stated"
+          }
+        }
+      ],
+      "id": "la_v2_1776246456772_002",
+      "audio_url": "/api/audio/announcement/la_v2_1776246456772_002.mp3",
+      "flavor_score": 0.8
+    },
+    {
+      "context": "guest_speaker",
+      "situation": "renowned scientist giving a guest lecture on campus",
+      "speaker_role": "professor",
+      "difficulty": "medium",
+      "announcement": "Attention all science majors and interested students. We are thrilled to host Dr. Elena Vance, a renowned astrophysicist, for a guest lecture next Tuesday, April 12th, at 7:30 p.m. in Waldman Auditorium. Dr. Vance will be discussing her recent research on exoplanet atmospheres and the search for habitable worlds. This is a rare opportunity to hear from a leader in the field. Please note that while the event is free, you must reserve a ticket in advance through the university's events website due to limited seating. We strongly recommend registering early, as we expect this to be a popular event.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To promote a new astrophysics course",
+            "B": "To announce a change in the auditorium location",
+            "C": "To publicize a free lecture requiring tickets",
+            "D": "To recruit students for a research project"
+          },
+          "answer": "C",
+          "explanation": "通知的核心是告知需要门票预订的免费客座讲座。A和D是未提及的错误目的。B是错误归属细节；给出了地点但未改变。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "misattributed_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "Why does the speaker recommend registering early?",
+          "options": {
+            "A": "Seating capacity is limited.",
+            "B": "Ticket prices may increase.",
+            "C": "Registration confirms major eligibility.",
+            "D": "The website often crashes."
+          },
+          "answer": "A",
+          "explanation": "通知说明需要门票'因为座位有限'，这直接支持建议提前注册是因为空间有限的推断。B错误，因为活动免费。C是错误细节；活动针对'感兴趣的学生'，不仅限于特定专业。D是无证据的不相关推断。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "misattributed_detail",
+            "D": "unrelated_inference"
+          }
+        }
+      ],
+      "id": "la_v2_1776246456772_003",
+      "audio_url": "/api/audio/announcement/la_v2_1776246456772_003.mp3",
+      "flavor_score": 0.95
+    },
+    {
+      "context": "info_session",
+      "situation": "financial aid office workshop on scholarship applications",
+      "speaker_role": "advisor",
+      "difficulty": "easy",
+      "announcement": "This is a reminder from the Financial Aid Office. We are holding a workshop this Wednesday at 3 p.m. in Student Services, Room 108, to help students navigate the process for applying for internal university scholarships. Our advisors will walk you through the application forms and provide tips for writing strong personal statements. Please bring your student ID and a laptop or notebook if possible. While walk-ins are welcome, we strongly encourage you to sign up on our office's webpage to guarantee we have enough materials. The deadline for the major scholarship applications is next Friday.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce new scholarship funding",
+            "B": "To remind students of a financial aid deadline",
+            "C": "To describe changes in tuition fees",
+            "D": "To inform students about a helpful workshop"
+          },
+          "answer": "D",
+          "explanation": "通知的主要目的是告知学生提供奖学金申请帮助的研讨会。A和C是未提及的错误目的。B太狭隘；提到了截止日期，但不是通知的主要焦点。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "too_narrow",
+            "C": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are students advised to bring to the workshop?",
+          "options": {
+            "A": "A completed application form",
+            "B": "A student ID",
+            "C": "Proof of income",
+            "D": "Letters of recommendation"
+          },
+          "answer": "B",
+          "explanation": "通知明确写着'请携带学生证'。A选项错误，因为该工作坊旨在协助填写表格，而非审阅已完成的表格。C和D选项虽与助学金相关，但并未被列为需携带至此工作坊的物品。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ],
+      "id": "la_v2_1776246456772_004",
+      "audio_url": "/api/audio/announcement/la_v2_1776246456772_004.mp3",
+      "flavor_score": 0.84
+    },
+    {
+      "context": "facility_change",
+      "situation": "campus bookstore moving to a new building",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "Attention. Please be aware that the campus bookstore will be temporarily closed from May 15th through May 22nd as we relocate to the new University Center building. During this week, online orders will still be processed, but in-person purchases and textbook buybacks will be unavailable. We apologize for any inconvenience. The grand reopening in our new, larger space will be on Monday, May 23rd, at 9 a.m. To celebrate, we're offering a 20% discount on all spirit wear and school supplies for the first three days. We appreciate your patience during this exciting transition.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement mainly about?",
+          "options": {
+            "A": "A temporary bookstore closure for a move",
+            "B": "The grand opening of a new University Center",
+            "C": "Changes to the textbook buyback policy",
+            "D": "An apology for recent poor service"
+          },
+          "answer": "A",
+          "explanation": "通知的核心是告知因搬迁而临时关闭。B选项过于狭隘，仅关注重新开放部分。C选项属细节错置；通知提到搬迁期间无法回购，但政策并未改变。D选项目的错误；虽有致歉，但并非主要内容。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "misattributed_detail",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the new bookstore location?",
+          "options": {
+            "A": "It will have shorter operating hours.",
+            "B": "It will sell a wider variety of food.",
+            "C": "It will be larger than the old one.",
+            "D": "It will be farther from most classrooms."
+          },
+          "answer": "C",
+          "explanation": "通知将新空间描述为'更大'，因此C是合理推断。A选项意图颠倒；未讨论营业时间，但盛大重开暗示全面运营。B选项是关于产品种类的无关推断。D选项属过度推断；未提供邻近性信息。",
+          "distractor_types": {
+            "A": "reversed_intent",
+            "B": "unrelated_inference",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "id": "la_v2_1776246456772_005",
+      "audio_url": "/api/audio/announcement/la_v2_1776246456772_005.mp3",
+      "flavor_score": 0.69
+    },
+    {
+      "context": "guest_speaker",
+      "situation": "industry professional speaking about career paths",
+      "speaker_role": "department_head",
+      "difficulty": "hard",
+      "announcement": "Good morning, computer science majors. The Department is hosting a special talk next Thursday at 5 p.m. in the Tech Hub, Room 101. Our speaker is Maria Chen, a senior product manager at a leading tech firm, who will discuss non-traditional career paths for CS graduates, including roles in product management, UX design, and tech consulting. Please note that this session is designed for juniors and seniors actively considering their post-graduation options. While attendance is not mandatory, we strongly believe it will be invaluable for your career planning. You are required to RSVP by Monday using the link in the department newsletter to secure your spot.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the primary purpose of this announcement?",
+          "options": {
+            "A": "To announce a mandatory department meeting",
+            "B": "To promote an optional career-focused talk",
+            "C": "To recruit students for a new UX design course",
+            "D": "To introduce a new faculty member"
+          },
+          "answer": "B",
+          "explanation": "通知宣传职业路径讲座，明确说明非强制但很有价值，且需预约。A选项错误，因通知表明出席非强制。C选项相关但未明确说明。D选项目的错误；演讲者是行业专家，而非新教员。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the intended audience for this talk?",
+          "options": {
+            "A": "They are all seeking internships.",
+            "B": "They are primarily first-year students.",
+            "C": "They have already secured job offers.",
+            "D": "They are nearing graduation."
+          },
+          "answer": "D",
+          "explanation": "通知说明该环节'面向积极考虑毕业后选择的大三、大四学生'，这支持了他们临近毕业的推断。A选项属过度推断；他们是在考虑选择，不一定仅限于实习。B选项与所述受众相反。C选项是无证据的无关推断。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "wrong_detail",
+            "C": "unrelated_inference"
+          }
+        }
+      ],
+      "id": "la_v2_1776246456772_006",
+      "audio_url": "/api/audio/announcement/la_v2_1776246456772_006.mp3",
+      "flavor_score": 0.84
+    },
+    {
+      "context": "facility_change",
+      "situation": "building wing closure for asbestos removal",
+      "speaker_role": "recreation_staff",
+      "difficulty": "medium",
+      "announcement": "Attention all campus recreation users. Please be advised that the east wing of the Anderson Athletic Center, which houses the racquetball courts and two dance studios, will be closed for asbestos abatement starting Monday, October 3rd. This necessary safety project is expected to last approximately two weeks. During this time, all scheduled activities in those spaces are canceled or relocated. We have arranged for racquetball players to use courts at the downtown community center by presenting their student ID. The main gym, weight room, and pool will remain open on their regular schedules. We apologize for the disruption.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What must racquetball players do to use an alternative facility?",
+          "options": {
+            "A": "Pay a fee at the downtown center",
+            "B": "Register online with Campus Recreation",
+            "C": "Show their student identification",
+            "D": "Use the facility only on weekends"
+          },
+          "answer": "C",
+          "explanation": "通知说明'出示学生证'即可进入。A选项错误，因未提及费用。B选项相关但未明确说明。D选项属细节错置；未提及仅限于周末的限制。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the closure?",
+          "options": {
+            "A": "It is for urgent safety reasons.",
+            "B": "It will reduce membership fees.",
+            "C": "It affects the entire athletic center.",
+            "D": "It was requested by student athletes."
+          },
+          "answer": "A",
+          "explanation": "关闭是因'石棉清除'，描述为'必要的安全项目'，这支持了出于紧急安全原因的推断。B选项是无证据的无关推断。C选项错误，因主健身房、举重室和泳池保持开放。D选项属过度推断；无证据表明是谁提出的要求。",
+          "distractor_types": {
+            "B": "unrelated_inference",
+            "C": "wrong_detail",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "id": "la_v2_1776246456772_007",
+      "audio_url": "/api/audio/announcement/la_v2_1776246456772_007.mp3",
+      "flavor_score": 0.89
+    },
+    {
+      "context": "logistics",
+      "situation": "parking lot closure for alumni weekend with shuttle alternative",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "Attention students and staff. This is a parking notice for Homecoming Weekend. Lot G, located behind the Alumni Hall, will be closed to all university parking from 5 p.m. this Friday until Sunday evening. The lot is being reserved for visiting alumni event parking. Any vehicles left in Lot G after 5 p.m. on Friday will be towed. To accommodate displaced parkers, we will run a complimentary shuttle bus from the remote Lot Z on the south edge of campus. The shuttle will run every fifteen minutes from 7 a.m. to 10 p.m. on Saturday and Sunday. Please plan accordingly.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement mainly about?",
+          "options": {
+            "A": "Announcing new shuttle bus routes",
+            "B": "Describing Homecoming Weekend events",
+            "C": "Warning about increased traffic delays",
+            "D": "Informing about a parking lot closure"
+          },
+          "answer": "D",
+          "explanation": "通知核心是G停车场因返校节关闭、其后果及班车替代方案。A选项过于狭隘，仅关注班车细节。B选项错误；虽提及周末但未描述活动。C选项相关但未明确说明；未提及交通状况。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "wrong_purpose",
+            "C": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What will happen to cars left in Lot G after 5 p.m. Friday?",
+          "options": {
+            "A": "They will be relocated to Lot Z.",
+            "B": "They will be towed away.",
+            "C": "They will receive a parking ticket.",
+            "D": "They will be allowed to stay until Sunday."
+          },
+          "answer": "B",
+          "explanation": "通知明确说明车辆'将被拖走'。A选项属细节错置；班车从Z停车场出发，但车辆不会被移至该处。C选项看似合理但错误；明确说明的后果是拖车。D选项与所述内容相反。",
+          "distractor_types": {
+            "A": "misattributed_detail",
+            "C": "wrong_detail",
+            "D": "reversed_intent"
+          }
+        }
+      ],
+      "id": "la_v2_1776246456772_008",
+      "audio_url": "/api/audio/announcement/la_v2_1776246456772_008.mp3",
+      "flavor_score": 0.69
+    },
+    {
+      "context": "academic_event",
+      "situation": "honors thesis oral defense schedule announcement",
+      "speaker_role": "department_staff",
+      "difficulty": "easy",
+      "announcement": "Attention all honors students and faculty. The Philosophy Department is pleased to announce the schedule for this semester's honors thesis oral defenses. The presentations will take place next Monday and Tuesday, April 14th and 15th, in the third-floor seminar room of the Humanities Building. Each student will have twenty minutes to present, followed by a ten-minute question period. We strongly encourage all students, especially those considering an honors thesis in the future, to attend these sessions. Please note that the room has limited seating, so we advise arriving a few minutes early to secure a spot.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce the schedule for thesis presentations",
+            "B": "To recruit faculty for thesis committees",
+            "C": "To explain the grading criteria for theses",
+            "D": "To remind students of a thesis submission deadline"
+          },
+          "answer": "A",
+          "explanation": "A选项正确，因为通知的主要目的是告知口头答辩的时间与地点。B选项目的错误，未提及招聘教员。C选项目的错误，未讨论评分标准。D选项意图颠倒；通知是关于参加答辩，而非提交作品。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are students advised to do to secure a seat at the presentations?",
+          "options": {
+            "A": "Register online in advance",
+            "B": "Bring their own chair",
+            "C": "Arrive a few minutes early",
+            "D": "Contact the department secretary"
+          },
+          "answer": "C",
+          "explanation": "C选项正确，因通知中直接说明。A选项属相关但未明确说明的行为；未提及在线注册。B选项属细节错置，将座位有限的概念极端化。D选项细节错误；未建议联系秘书以确保座位。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "misattributed_detail",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "id": "la_v2_1776246457449_001",
+      "audio_url": "/api/audio/announcement/la_v2_1776246457449_001.mp3",
+      "flavor_score": 0.85
+    },
+    {
+      "context": "facility_change",
+      "situation": "student lounge or study area closing for pipe/ceiling repair",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "Attention students. Please be aware that the main student lounge in the University Center will be closed for emergency ceiling repairs starting this Wednesday, October 8th. A burst pipe over the weekend has caused water damage, making the space unsafe for use. The closure is expected to last through Friday, October 10th. During this time, we are opening the multipurpose room in the adjacent Student Activities Building as an alternative study space. We apologize for the inconvenience and ask for your patience while we complete these necessary repairs to restore the lounge.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the primary purpose of this announcement?",
+          "options": {
+            "A": "To describe the cause of water damage in a building",
+            "B": "To inform about a temporary lounge closure and alternative space",
+            "C": "To apologize for ongoing construction noise",
+            "D": "To announce a permanent relocation of the student lounge"
+          },
+          "answer": "B",
+          "explanation": "B选项正确，涵盖了主要消息（关闭）和关键细节（替代空间）。A选项过于狭隘，仅关注原因而非目的。C选项目的错误；未提及噪音。D选项意图颠倒；关闭是临时性的，非永久。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "C": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "Where are students directed to go while the lounge is closed?",
+          "options": {
+            "A": "The library's 24-hour study zone",
+            "B": "The cafeteria on the first floor",
+            "C": "Any open classroom in the University Center",
+            "D": "The multipurpose room in the Student Activities Building"
+          },
+          "answer": "D",
+          "explanation": "D选项正确，因直接说明。A选项属相关但未明确说明的常见替代方案。B选项细节错误；未提及食堂作为替代。C选项属细节错置；虽提及大学中心，但未提供具体教室作为解决方案。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "C": "misattributed_detail"
+          }
+        }
+      ],
+      "id": "la_v2_1776246457449_002",
+      "audio_url": "/api/audio/announcement/la_v2_1776246457449_002.mp3",
+      "flavor_score": 0.9
+    },
+    {
+      "context": "career_services",
+      "situation": "LinkedIn profile photo day at career center",
+      "speaker_role": "program_coordinator",
+      "difficulty": "medium",
+      "announcement": "Good afternoon. The Career Development Center is excited to offer a professional LinkedIn headshot day next Thursday, November 6th, from 10 a.m. to 4 p.m. in our main lobby. A professional photographer will be on-site to take high-quality photos suitable for your online profiles and resumes. This service is free for all currently enrolled students. We do require that you sign up for a 10-minute time slot in advance through the events page on our website. Please dress in business casual attire for your session, and don't miss this great opportunity to enhance your professional image.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement mainly about?",
+          "options": {
+            "A": "A new career counseling workshop series",
+            "B": "A job fair requiring professional attire",
+            "C": "A free opportunity to get a professional headshot",
+            "D": "A photography contest with a cash prize"
+          },
+          "answer": "C",
+          "explanation": "C选项正确，总结了活动的核心内容。A选项目的错误；未提及系列工作坊。B选项属细节错置；将着装细节应用于不同活动（招聘会）。D选项意图颠倒；这是一项服务，而非比赛。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "misattributed_detail",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What must students do to participate in the headshot event?",
+          "options": {
+            "A": "Sign up for a time slot online in advance",
+            "B": "Bring their own digital camera",
+            "C": "Pay a small fee at the door",
+            "D": "Submit a resume for review"
+          },
+          "answer": "A",
+          "explanation": "A选项正确，因直接说明（'需提前报名'）。B选项细节错误；提供摄影师。C选项意图颠倒；服务明确免费。D选项属相关但未明确说明的职业中心常见活动。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "reversed_intent",
+            "D": "related_but_not_stated"
+          }
+        }
+      ],
+      "id": "la_v2_1776246457449_003",
+      "audio_url": "/api/audio/announcement/la_v2_1776246457449_003.mp3",
+      "flavor_score": 0.48
+    },
+    {
+      "context": "campus_activity",
+      "situation": "cultural food festival organized by international club",
+      "speaker_role": "activity_coordinator",
+      "difficulty": "hard",
+      "announcement": "Attention. The International Students Association is thrilled to host our annual Global Bites Festival this Saturday on the Main Quad from noon until 6 p.m. This event features food stalls from over fifteen different student cultural organizations, offering small tasting portions for just two dollars each. The festival is open to the entire campus community. Proceeds from food sales will support the ISA's scholarship fund for study abroad programs. We want to emphasize that this is a cash-only event, so please plan accordingly. Come enjoy delicious food while supporting a great cause.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "How much does each food tasting portion cost at the festival?",
+          "options": {
+            "A": "One dollar",
+            "B": "They are free of charge",
+            "C": "Five dollars",
+            "D": "Two dollars"
+          },
+          "answer": "D",
+          "explanation": "D选项正确，因直接说明。A选项细节错误（一美元 vs. 两美元）。B选项意图颠倒（并非免费）。C选项细节错误（五美元 vs. 两美元）。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "reversed_intent",
+            "C": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the International Students Association?",
+          "options": {
+            "A": "It organizes weekly cooking classes for members.",
+            "B": "It uses some event funds to support student scholarships.",
+            "C": "It requires membership for festival attendance.",
+            "D": "It is funded primarily by the university administration."
+          },
+          "answer": "B",
+          "explanation": "B选项是合理推断，因通知说明收益支持ISA奖学金基金。A选项属过度推断；未提及或暗示每周课程。C选项意图颠倒；活动面向整个校园开放。D选项属无关推断；未讨论资金来源。",
+          "distractor_types": {
+            "A": "over_inference",
+            "C": "reversed_intent",
+            "D": "unrelated_inference"
+          }
+        }
+      ],
+      "id": "la_v2_1776246457449_004",
+      "audio_url": "/api/audio/announcement/la_v2_1776246457449_004.mp3",
+      "flavor_score": 0.66
+    },
+    {
+      "context": "facility_change",
+      "situation": "grand reopening of renovated gallery or performance hall",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "This is a reminder that the grand reopening of the fully renovated campus art gallery is this Friday, September 12th. We are thrilled to invite all students, faculty, and staff to the celebration, which begins at 5:00 p.m. with remarks from the university president. The gallery, located on the first floor of the Fine Arts Building, will then be open for self-guided tours until 8:00 p.m. Light refreshments will be served. Please note that backpacks and large bags must be checked at the entrance. We look forward to showcasing the new space and the inaugural exhibition, 'Contemporary Perspectives.'",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce the reopening event for the art gallery",
+            "B": "To describe the new art exhibition in detail",
+            "C": "To remind students about a bag policy for all buildings",
+            "D": "To advertise a speech by the university president"
+          },
+          "answer": "A",
+          "explanation": "A选项正确，涵盖了活动目的。B选项过于狭隘，仅关注活动的一个细节。C选项过于狭隘，仅关注单一规则。D选项过于狭隘，仅关注部分日程。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "too_narrow",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are attendees required to do with large bags?",
+          "options": {
+            "A": "Leave them in their vehicles",
+            "B": "Carry them at all times",
+            "C": "Check them at the entrance",
+            "D": "Place them under their seats"
+          },
+          "answer": "C",
+          "explanation": "C选项正确，因直接说明。A选项属相关但未明确说明的常见规则。B选项意图颠倒；必须寄存，而非携带。D选项属细节错置，套用了剧院等不同场所的规则。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "reversed_intent",
+            "D": "misattributed_detail"
+          }
+        }
+      ],
+      "id": "la_v2_1776246457449_005",
+      "audio_url": "/api/audio/announcement/la_v2_1776246457449_005.mp3",
+      "flavor_score": 0.95
+    },
+    {
+      "context": "campus_activity",
+      "situation": "annual outdoor movie night with blanket seating",
+      "speaker_role": "program_coordinator",
+      "difficulty": "hard",
+      "announcement": "Attention students. The Campus Programming Board presents our annual Fall Film Night this coming Saturday on the South Lawn. We'll be showing a classic comedy starting at dusk, around 7:30 p.m. We encourage you to bring blankets or lawn chairs for seating, as no permanent chairs will be provided. Complimentary popcorn and hot chocolate will be available while supplies last. In case of rain, the event will be moved to the auditorium in the Student Union. Please be aware that pets, with the exception of service animals, are not permitted at this event. We hope to see you there!",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What are students encouraged to bring for seating at the film night?",
+          "options": {
+            "A": "Folding tables for snacks",
+            "B": "Blankets or lawn chairs",
+            "C": "Cushions from their dorm rooms",
+            "D": "Reserved seat tickets"
+          },
+          "answer": "B",
+          "explanation": "B选项正确，因直接说明。A选项属相关但未明确说明的物品（零食桌）。C选项细节错误；未提及靠垫，提及的是毯子。D选项属细节错置；这是免费开放活动，非售票活动。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "C": "wrong_detail",
+            "D": "misattributed_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the South Lawn as a venue?",
+          "options": {
+            "A": "It is primarily used for athletic events.",
+            "B": "It has permanent seating for large audiences.",
+            "C": "It is located far from student housing.",
+            "D": "It is an open space without built-in seating."
+          },
+          "answer": "D",
+          "explanation": "D是有效推断，因为通知声明不提供固定座椅，意味着没有内置座位。A是无关推断；其主要用途未讨论。B是反向意图；缺少固定座椅与此矛盾。C是过度推断；未提及或暗示与住宿的距离。",
+          "distractor_types": {
+            "A": "unrelated_inference",
+            "B": "reversed_intent",
+            "C": "over_inference"
+          }
+        }
+      ],
+      "id": "la_v2_1776246457449_006",
+      "audio_url": "/api/audio/announcement/la_v2_1776246457449_006.mp3",
+      "flavor_score": 0.65
+    },
+    {
+      "context": "logistics",
+      "situation": "temporary road closure and detour instructions",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "Good morning. This is an important traffic advisory. A portion of Campus Loop Road, between the library and the engineering complex, will be closed for repaving from 6 a.m. to 6 p.m. this Wednesday, March 5th. All vehicular traffic, including campus shuttles, must use the marked detour via Service Drive behind the athletic fields. Pedestrian and bicycle access will remain open on the sidewalks. We apologize for the inconvenience and ask drivers to please plan for extra travel time. The road will reopen fully by Wednesday evening. Thank you for your cooperation.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What must drivers do during the road closure on Wednesday?",
+          "options": {
+            "A": "Park their vehicles and use the shuttle",
+            "B": "Avoid the campus entirely that day",
+            "C": "Use the detour via Service Drive",
+            "D": "Obtain a special parking permit"
+          },
+          "answer": "C",
+          "explanation": "C正确，因为直接陈述。A是错误细节；班车也必须绕行，且不建议停车。B是过度推断；无需避免。D是相关但未陈述的常见校园后勤事项。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "over_inference",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "Why does the speaker mention that sidewalks will remain open?",
+          "options": {
+            "A": "To assure pedestrians and cyclists they can still pass through",
+            "B": "To warn that sidewalks may be crowded with vehicles",
+            "C": "To remind people to walk instead of drive",
+            "D": "To indicate that the repaving includes sidewalk repairs"
+          },
+          "answer": "A",
+          "explanation": "A是有效推断；声明人行道开放直接回应了非车辆通行的担忧。B是反向意图；车辆不允许上人行道。C是过度推断；虽然步行是选项，但声明并未积极鼓励。D是错误细节；通知是关于道路重铺，而非人行道维修。",
+          "distractor_types": {
+            "B": "reversed_intent",
+            "C": "over_inference",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "id": "la_v2_1776246457449_007",
+      "audio_url": "/api/audio/announcement/la_v2_1776246457449_007.mp3",
+      "flavor_score": 0.83
+    },
+    {
+      "context": "academic_event",
+      "situation": "end-of-semester academic showcase with awards",
+      "speaker_role": "society_president",
+      "difficulty": "medium",
+      "announcement": "Attention all members of the Biology Society. This is a final reminder about our End-of-Semester Research Showcase this Friday at 4 p.m. in the Life Sciences Auditorium. Undergraduate researchers from all biology sub-disciplines will present their semester projects. Following the presentations, we will announce the winners of the annual Excellence in Undergraduate Research awards. Attendance is mandatory for society members, as noted in our constitution. We also welcome any students interested in biology to attend. Please arrive by 3:45 p.m. to check in and find seating.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "For whom is attendance at the showcase mandatory?",
+          "options": {
+            "A": "All undergraduate biology majors",
+            "B": "Faculty judges of the awards",
+            "C": "Students presenting their research",
+            "D": "Members of the Biology Society"
+          },
+          "answer": "D",
+          "explanation": "D正确，因为直接陈述（'对社团成员强制要求'）。A是错误细节；这是针对社团成员，而非所有专业。B是相关但未陈述的合理群体。C是错误细节；演讲者可能需要参加，但强制规则明确针对社团成员。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "C": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the Biology Society?",
+          "options": {
+            "A": "It organizes social events every weekend.",
+            "B": "It recognizes outstanding student research with awards.",
+            "C": "Its membership is limited to graduate students.",
+            "D": "It requires members to present research each semester."
+          },
+          "answer": "B",
+          "explanation": "B是有效推断，因为社团正在举办宣布研究奖项的活动。A是过度推断；未提及每周社交活动。C是反向意图；活动以本科生研究者为特色，暗示本科生成员资格。D是过度推断；虽然部分成员可能演讲，但未声明对所有成员是要求。",
+          "distractor_types": {
+            "A": "over_inference",
+            "C": "reversed_intent",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "id": "la_v2_1776246457449_008",
+      "audio_url": "/api/audio/announcement/la_v2_1776246457449_008.mp3",
+      "flavor_score": 0.89
+    },
+    {
+      "context": "logistics",
+      "situation": "new bike-share station locations",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "Attention students and faculty. We are thrilled to announce the expansion of our campus bike-share program with three new stations. These stations will be located near the library, the student union, and the science complex. They will be operational starting next Monday. To use the bikes, you are required to download the campus mobility app and register with your student ID. Please note that the first thirty minutes of each ride are free. We encourage everyone to take advantage of this eco-friendly transportation option to help reduce traffic on campus.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To inform about new bike-share stations",
+            "B": "To announce a reduction in campus traffic",
+            "C": "To promote an eco-friendly transportation option",
+            "D": "To require registration for a campus program"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。公告的核心是宣布新增三个共享单车站点及其位置、启用时间等具体信息。B选项（减少校园交通）是使用共享单车的预期效果，但不是公告的主要目的。C选项（推广环保交通方式）是公告中提到的鼓励性内容，但属于次要信息，不是整体目的。D选项（要求注册项目）虽然公告中提到了注册要求，但这只是使用新站点的具体步骤，而不是公告的主旨。",
+          "distractor_types": {
+            "A": "correct",
+            "B": "too_narrow",
+            "C": "wrong_purpose",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What must students do to use the new bike-share stations?",
+          "options": {
+            "A": "Pay a registration fee",
+            "B": "Visit the campus transportation office",
+            "C": "Download an app and register their ID",
+            "D": "Sign up for a free trial membership"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。公告明确说明'you are required to download the campus mobility app and register with your student ID'。A选项（支付注册费）公告中未提及。B选项（访问校园交通办公室）公告中没有提到需要亲自前往办公室。D选项（注册免费试用会员）公告中虽然提到前30分钟免费，但并未要求注册试用会员，注册要求是使用学生ID。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "D": "misattributed_detail"
+          }
+        }
+      ],
+      "id": "la_v2_1778696246453_001",
+      "flavor_score": 0.95,
+      "audio_url": "/api/audio/announcement/la_v2_1778696246453_001.mp3"
+    },
+    {
+      "id": "la_r1_routine-20260531-134653_2",
+      "context": "academic_event",
+      "situation": "undergraduate research symposium abstract submission deadline",
+      "speaker_role": "department_head",
+      "difficulty": "medium",
+      "announcement": "Good morning, everyone. As department head, I want to remind all juniors and seniors about the Undergraduate Research Symposium this October. Abstracts of no more than 250 words are due to the symposium portal by 11:59 PM on Friday, September 13. Late submissions will not be reviewed. Please attach a one-page faculty endorsement letter; without it, your abstract will be returned. Travel funds are available for accepted presenters whose research involves off-campus fieldwork. If you are unsure whether your project qualifies, please email Dr. Kennedy in our office before the end of August.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What document must accompany each submitted abstract?",
+          "options": {
+            "A": "A signed travel-funds request form",
+            "B": "A one-page faculty endorsement letter",
+            "C": "A printed copy of the student's transcript",
+            "D": "A research timeline covering the full semester"
+          },
+          "answer": "B",
+          "explanation": "广播明确要求附一封一页的导师推荐信，否则摘要会被退回。B 正确。A 与广播将旅费视为后续福利相悖，topic_adjacent。C、D 没有提到，wrong_detail。",
+          "distractor_types": {
+            "A": "topic_adjacent",
+            "C": "wrong_detail",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students whose research takes them off campus?",
+          "options": {
+            "A": "They will be excluded from the symposium for safety reasons",
+            "B": "They must apply separately for travel insurance before submitting",
+            "C": "They can only present posters and not give oral talks",
+            "D": "They may be eligible for additional travel funding if their abstract is accepted"
+          },
+          "answer": "D",
+          "explanation": "广播说被接收的、涉及校外田野工作的项目有旅费支持。D 正是合理推断。A 与广播鼓励参赛相反，reversed_intent。B 没提到保险，over_inference。C 没有区分海报和口头，wrong_detail。",
+          "distractor_types": {
+            "A": "reversed_intent",
+            "B": "over_inference",
+            "C": "wrong_detail"
+          }
+        }
+      ],
+      "audio_url": "/api/audio/announcement/la_r1_routine-20260531-134653_2.mp3"
+    },
+    {
+      "id": "la_r1_routine-20260531-134653_3",
+      "context": "facility_change",
+      "situation": "recreation center extending hours during finals week",
+      "speaker_role": "campus_admin",
+      "difficulty": "hard",
+      "announcement": "Attention, students. The University Recreation Center will operate on extended hours during finals week, December 9 through December 15. The fitness floor and indoor track will be available from 5:00 AM until 1:00 AM the following morning. Group fitness classes, however, will run on a reduced schedule, with only morning yoga and evening cardio on offer. The climbing wall will close at 9:00 PM each evening for routine maintenance. Lockers will be cleared every night at midnight, so please remove your belongings before leaving the building. Regular hours resume Monday, December 16.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "When will the climbing wall close during finals week?",
+          "options": {
+            "A": "At 5:00 AM each morning",
+            "B": "At 1:00 PM each afternoon",
+            "C": "At 9:00 PM each evening",
+            "D": "At 1:00 AM the following morning"
+          },
+          "answer": "C",
+          "explanation": "广播明说攀岩墙每晚 9 点关闭以做保养。C 正确。A、B、D 都是时间陷阱：5 AM 是健身楼层开放时间，1 AM 是健身楼层关闭时间，B 没出现。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "wrong_detail",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students who leave items in their lockers overnight?",
+          "options": {
+            "A": "Their belongings will be removed when the lockers are cleared at midnight",
+            "B": "Their items will be safely stored for the entire finals week",
+            "C": "Their lockers will be permanently reassigned to other members",
+            "D": "Their access cards will be suspended until they retrieve their belongings"
+          },
+          "answer": "A",
+          "explanation": "广播说储物柜每晚午夜清空，请离开前取走物品。A 是合理推断：留下的物品会被清空。B 与广播相反，reversed_intent。C 没有依据，over_inference。D 没出现，wrong_detail。",
+          "distractor_types": {
+            "B": "reversed_intent",
+            "C": "over_inference",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "audio_url": "/api/audio/announcement/la_r1_routine-20260531-134653_3.mp3"
+    },
+    {
+      "id": "la_r1_routine-20260531-134653_4",
+      "context": "campus_activity",
+      "situation": "annual outdoor movie night with blanket seating",
+      "speaker_role": "club_leader",
+      "difficulty": "easy",
+      "announcement": "Hi, everyone, this is Tara from the Student Activities Board. We're hosting our annual outdoor movie night next Friday, September 27, at Grover Field. The film will start at 8:30 PM, but please arrive by 8:00 to find a good spot. There is no chair seating; bring a blanket or a small ground mat. Free popcorn and lemonade will be served beside the projection booth. In case of rain, the event will move into Grover Hall, room 110, the following evening. We hope to see all of you under the stars.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of the announcement?",
+          "options": {
+            "A": "To remind students about safety rules for outdoor events on campus",
+            "B": "To explain the Student Activities Board's budget for the year",
+            "C": "To recruit volunteers for a new film studies club",
+            "D": "To invite students to an outdoor movie night and explain seating and weather plans"
+          },
+          "answer": "D",
+          "explanation": "广播主旨是邀请学生参加户外电影夜并说明座位和雨天安排。D 正确。A、B、C 都没出现，都是 wrong_topic 或 wrong_purpose。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "wrong_topic",
+            "C": "wrong_topic"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What should students bring with them to the event?",
+          "options": {
+            "A": "A folding chair and an umbrella",
+            "B": "A blanket or a small ground mat",
+            "C": "A bottle of lemonade for themselves",
+            "D": "A donation for the activities board"
+          },
+          "answer": "B",
+          "explanation": "广播明说现场没有椅子，请自带毯子或小垫子。B 正确。A 与广播相反，reversed_intent。C、D 没提到，wrong_detail。",
+          "distractor_types": {
+            "A": "reversed_intent",
+            "C": "wrong_detail",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "audio_url": "/api/audio/announcement/la_r1_routine-20260531-134653_4.mp3"
+    },
+    {
+      "id": "la_r1_routine-20260531-134653_5",
+      "context": "guest_speaker",
+      "situation": "industry professional speaking about career paths",
+      "speaker_role": "professor",
+      "difficulty": "medium",
+      "announcement": "Good morning, everyone. Next Tuesday at 4:00 PM in Tisch Hall room 220, our department will host a guest lecture by Mei Lin, a senior product manager at the engineering firm Halverson Dynamics. Ms. Lin will speak about realistic career paths for computer-science majors, including positions that do not require advanced degrees. The talk will be followed by a thirty-minute open question session. Please email Camila in our office by Friday if you plan to attend; we need a head count for refreshments. A short writing sample is not required, but recent graduates are encouraged to bring a copy of their resume.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement mainly about?",
+          "options": {
+            "A": "An upcoming guest lecture on realistic career paths for computer-science majors",
+            "B": "A required interview workshop for graduating seniors only",
+            "C": "Changes to the graduate admission requirements at Halverson Dynamics",
+            "D": "Funding opportunities for students who want to attend academic conferences"
+          },
+          "answer": "A",
+          "explanation": "广播主旨是宣布关于计算机专业现实职业路径的客座讲座。A 正确。B、C、D 都没出现，都是 wrong_topic。",
+          "distractor_types": {
+            "B": "wrong_topic",
+            "C": "wrong_topic",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students who plan to attend the talk?",
+          "options": {
+            "A": "They must wait outside the room until after Ms. Lin's introduction",
+            "B": "They are required to submit a writing sample before the talk",
+            "C": "They should email Camila by Friday so the office can plan refreshments",
+            "D": "They will receive course credit for attending and asking questions"
+          },
+          "answer": "C",
+          "explanation": "广播请有意参加的同学周五前发邮件给 Camila 以便统计茶点份数。C 正确。A 没提到，over_inference。B 与广播相反，reversed_intent。D 没出现，over_inference。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "reversed_intent",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "audio_url": "/api/audio/announcement/la_r1_routine-20260531-134653_5.mp3"
+    },
+    {
+      "id": "la_routine-20260531-184112_1",
+      "context": "academic_event",
+      "situation": "interdisciplinary conference call for papers",
+      "speaker_role": "department_staff",
+      "difficulty": "medium",
+      "announcement": "Good afternoon, students. The Center for Interdisciplinary Studies is now accepting paper proposals for our spring symposium on Climate and Culture, scheduled for April 18 in Whitman Auditorium. We welcome submissions from any discipline, including arts, humanities, sciences, and policy. Abstracts should be 250 to 300 words and uploaded through the symposium portal by March 7 at 5:00 PM. Selected papers will receive a small travel stipend. Please note that proposals submitted by email will not be reviewed, so be sure to use the portal.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To remind students of an upcoming graduation rehearsal",
+            "B": "To call for paper proposals for an interdisciplinary symposium",
+            "C": "To explain a new requirement for graduate thesis submissions",
+            "D": "To recruit volunteers for an arts and culture festival"
+          },
+          "answer": "B",
+          "explanation": "公告核心是征集 symposium 论文提案，并说明提交方式和时限。其他选项与公告主题无关。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "C": "wrong_purpose",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about proposals sent by email?",
+          "options": {
+            "A": "They will receive a delayed response from the committee.",
+            "B": "They must be accompanied by an additional cover letter.",
+            "C": "They will be forwarded to the symposium chair manually.",
+            "D": "They will not be considered for the symposium."
+          },
+          "answer": "D",
+          "explanation": "公告明确说通过邮件提交的提案不会被审查，等于不会被考虑。其他选项与原文不符或无据。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "related_but_not_stated",
+            "C": "wrong_detail"
+          }
+        }
+      ],
+      "audio_url": "/api/audio/announcement/la_routine-20260531-184112_1.mp3"
+    },
+    {
+      "id": "la_routine-20260531-184112_2",
+      "context": "logistics",
+      "situation": "campus shuttle route change due to construction",
+      "speaker_role": "campus_admin",
+      "difficulty": "hard",
+      "announcement": "Attention students, faculty, and staff. Due to ongoing repairs on Madison Drive, the Blue Line shuttle will operate on a modified route starting Monday, March 3. The shuttle will skip the Engineering stop entirely and instead run from the Library directly to Foster Hall. Service frequency will increase to every twelve minutes during peak hours to compensate. Riders heading to Engineering should board the Red Line at Foster Hall and transfer near the South Lot. The standard schedule will resume once paving is complete, which is expected around April 14.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What change will Blue Line riders experience during the modification?",
+          "options": {
+            "A": "Service will be suspended entirely on weekends.",
+            "B": "Stops at Foster Hall will be temporarily eliminated.",
+            "C": "The route will skip the Engineering stop entirely.",
+            "D": "Riders must reserve seats through a mobile app."
+          },
+          "answer": "C",
+          "explanation": "公告明确说蓝线将跳过 Engineering 站。其他选项要么与事实相反，要么是无关行为。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "reversed_intent",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about Engineering-bound riders?",
+          "options": {
+            "A": "They will need to make a transfer to reach their destination.",
+            "B": "They will receive a free monthly transit pass during repairs.",
+            "C": "They will travel faster than they did under the standard schedule.",
+            "D": "They will not be able to reach Engineering until April 14."
+          },
+          "answer": "A",
+          "explanation": "公告说前往 Engineering 的乘客需在 Foster Hall 上红线并在 South Lot 换乘，即需要换乘。其他选项缺乏依据或与原文相反。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "over_inference",
+            "D": "reversed_logic"
+          }
+        }
+      ],
+      "audio_url": "/api/audio/announcement/la_routine-20260531-184112_2.mp3"
+    },
+    {
+      "id": "la_routine-20260531-184112_3",
+      "context": "facility_change",
+      "situation": "grand reopening of renovated gallery or performance hall",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "We're excited to announce that the renovated Brandt Performance Hall will officially reopen on Saturday, March 22. The opening evening features a free chamber concert at 7:00 PM, with seating available on a first-come, first-served basis from 6:15 PM. Tickets are not required, but a valid student or staff ID must be shown at the door. Please be aware that the lobby coat check has been replaced with a self-service locker system. Quarters are no longer accepted; you'll need a tap-enabled student ID or a mobile wallet to operate the lockers.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What is required to enter the reopening concert?",
+          "options": {
+            "A": "A ticket purchased through the campus portal",
+            "B": "A small donation to the renovation fund",
+            "C": "A printed program from the music department",
+            "D": "A valid student or staff ID at the door"
+          },
+          "answer": "D",
+          "explanation": "公告明确说门口需出示有效学生或教职工证。其他选项均未被提到为入场要求。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "C": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students who carry only cash to the concert?",
+          "options": {
+            "A": "They will receive a refund at the end of the evening.",
+            "B": "They will not be able to use the new locker system.",
+            "C": "They will be denied entry to the performance hall.",
+            "D": "They will be redirected to the basement coat check."
+          },
+          "answer": "B",
+          "explanation": "公告说储物柜不接受硬币，需 tap-enabled 学生证或手机钱包，因此只带现金的人无法使用储物柜。其他选项与公告事实矛盾。",
+          "distractor_types": {
+            "A": "over_inference",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        }
+      ],
+      "audio_url": "/api/audio/announcement/la_routine-20260531-184112_3.mp3"
+    },
+    {
+      "id": "la_routine-20260531-184112_4",
+      "context": "facility_change",
+      "situation": "campus dining hall switching to summer hours",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "Attention students. Starting Monday, May 19, the Hartwood Dining Hall will switch to its summer schedule. Breakfast will continue from 8:00 to 10:30 AM, but lunch service ends at 1:30 instead of 2:00, and dinner will run from 5:30 to 7:30 only. The grab-and-go bar at the south entrance will remain open until 9:00 PM for late evening snacks. Please bring your campus ID for the grab-and-go scanner. Summer meal-plan refunds for unused balances over fifteen dollars will be processed automatically at the end of the term.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To inform students of new summer dining hours",
+            "B": "To explain a recent change in meal-plan prices",
+            "C": "To recruit student workers for the dining hall",
+            "D": "To advertise a new grab-and-go menu of items"
+          },
+          "answer": "A",
+          "explanation": "公告核心是告知夏季就餐时间和相关安排。其他选项偏离主题。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "wrong_purpose",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "Until what time does the grab-and-go bar remain open?",
+          "options": {
+            "A": "Until 7:30 PM",
+            "B": "Until 8:00 PM",
+            "C": "Until 9:00 PM",
+            "D": "Until 10:30 PM"
+          },
+          "answer": "C",
+          "explanation": "公告说南门 grab-and-go bar 营业到晚上 9:00。其他时间与公告中其他细节相关或不符。",
+          "distractor_types": {
+            "A": "misattributed_detail",
+            "B": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ],
+      "audio_url": "/api/audio/announcement/la_routine-20260531-184112_4.mp3"
+    },
+    {
+      "id": "la_routine-20260531-184112_5",
+      "context": "campus_activity",
+      "situation": "student art market in the quad",
+      "speaker_role": "club_leader",
+      "difficulty": "easy",
+      "announcement": "Attention students. The Spring Art Market will return to Wexler Quad this Friday from 11:00 AM to 4:00 PM. Over forty student artists will be selling original prints, ceramics, jewelry, and zines, with most items priced between five and twenty-five dollars. Cash and mobile payments are accepted at every booth. Bring a reusable bag if you can; the club is reducing single-use plastic this year. Sign-ups for next semester's market booth slots will also be available at the volunteer table.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To promote a student-run art market on campus",
+            "B": "To advertise paid internships at a campus art club",
+            "C": "To announce a fundraiser for the ceramics program",
+            "D": "To remind students about a printmaking competition"
+          },
+          "answer": "A",
+          "explanation": "公告核心是宣传周五在 Wexler Quad 举办的学生艺术市集。其他选项均不是公告内容。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "wrong_purpose",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What does the speaker ask attendees to bring if possible?",
+          "options": {
+            "A": "An updated student ID card",
+            "B": "A printout of the artist directory",
+            "C": "A reusable shopping bag",
+            "D": "A signed plastic waste pledge"
+          },
+          "answer": "C",
+          "explanation": "公告明确说带可重复使用的购物袋以减少一次性塑料。其他选项与公告不符。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "audio_url": "/api/audio/announcement/la_routine-20260531-184112_5.mp3"
+    },
+    {
+      "id": "la_r1_routine-20260531-190444_1",
+      "context": "academic_event",
+      "situation": "end-of-semester academic showcase with awards",
+      "speaker_role": "department_staff",
+      "difficulty": "medium",
+      "announcement": "Attention all undergraduates. The Department of Engineering will host its annual End-of-Semester Showcase next Saturday afternoon in Greenfield Auditorium. The event begins at one o'clock with poster presentations from senior capstone teams. Awards for outstanding design, sustainability, and community impact will be announced at four o'clock. All registered participants must arrive by twelve-thirty to set up their displays. Light refreshments will be provided, and family members are warmly welcome. If you have not yet confirmed your attendance, please email the department office before Thursday at five o'clock so that name tags and seating can be prepared in advance.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce details about the upcoming engineering showcase",
+            "B": "To recruit volunteers for the showcase day setup",
+            "C": "To explain the criteria for the sustainability design award",
+            "D": "To remind students about an unrelated department meeting"
+          },
+          "answer": "A",
+          "explanation": "通告主要宣布工程系学期末作品展的详细安排，A 正确。B 不是要点；C 把奖项细节当成主旨；D 与通告无关。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students who do not respond by Thursday at five?",
+          "options": {
+            "A": "They will be barred from entering the auditorium that Saturday",
+            "B": "They will receive a written reminder from the department office",
+            "C": "They may not have name tags or reserved seats prepared in advance",
+            "D": "They will need to pay an additional registration fee on site"
+          },
+          "answer": "C",
+          "explanation": "通告说请在周四前确认以便准备名牌和座位，因此推断未确认者可能没有这些，C 正确。A 过度推断；B 无依据；D 与通告无关。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "literal_restatement",
+            "D": "unrelated_inference"
+          }
+        }
+      ],
+      "audio_url": "/api/audio/announcement/la_r1_routine-20260531-190444_1.mp3"
+    },
+    {
+      "id": "la_r1_routine-20260531-190444_2",
+      "context": "facility_change",
+      "situation": "new fitness equipment installation at recreation center",
+      "speaker_role": "department_head",
+      "difficulty": "hard",
+      "announcement": "Good afternoon, members of the campus community. The Recreation Center will install a new set of cardio and strength equipment between June second and June ninth. During this period, the second-floor fitness room will be entirely closed for safety reasons. The first-floor gym, swimming pool, and squash courts will remain open during normal hours. Members holding annual passes may use the partner gym at Hadley Recreation free of charge during the closure by showing their membership card at the front desk. Once the installation is complete, an orientation session for the new machines will be offered on June tenth at five o'clock in the lobby.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To recruit new members for the campus recreation center program",
+            "B": "To inform users about a temporary closure for new equipment installation",
+            "C": "To explain why the annual membership fee has recently increased",
+            "D": "To advertise a partnership with another recreation facility nearby"
+          },
+          "answer": "B",
+          "explanation": "通告主要告知成员设备更新带来的临时关闭，B 正确。A 偏离主旨；C 与通告无关；D 把附带福利当成主旨。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "C": "reversed_intent",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about annual pass holders during the closure period?",
+          "options": {
+            "A": "They will receive a partial refund automatically applied to their accounts",
+            "B": "They are encouraged to skip exercise for that week to avoid injuries",
+            "C": "They will have to attend the orientation session before June tenth",
+            "D": "They can continue exercising at no extra cost using Hadley Recreation"
+          },
+          "answer": "D",
+          "explanation": "通告说年卡持有人可免费使用 Hadley，故推断他们可以照常锻炼且不需额外付费，D 正确。A 无依据；B 与通告精神相反；C 把日期弄反。",
+          "distractor_types": {
+            "A": "unrelated_inference",
+            "B": "reversed_intent",
+            "C": "wrong_detail"
+          }
+        }
+      ],
+      "audio_url": "/api/audio/announcement/la_r1_routine-20260531-190444_2.mp3"
+    },
+    {
+      "id": "la_r1_routine-20260531-190444_3",
+      "context": "logistics",
+      "situation": "new bike-share station locations",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "Attention students and staff. Campus Transportation is pleased to announce three additional bike-share stations that will be activated this Friday morning. The new stations are located outside Robertson Hall, behind the Westmoreland Library, and at the south entrance of the Athletic Complex. Each station holds twelve bikes and supports the same mobile application currently used for the existing stations. Riders are reminded to return bikes to any official station within sixty minutes to avoid an overtime fee of three dollars per hour. A printable map of all stations is available on the transportation office website, and questions may be directed to Ms. Bertram at the campus mobility desk.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To remind riders of the rules for returning bikes on time",
+            "B": "To explain why the bike-share fee structure was recently revised",
+            "C": "To announce three new bike-share stations activating this Friday",
+            "D": "To recruit volunteers for maintaining the mobile bike-share application"
+          },
+          "answer": "C",
+          "explanation": "通告主要宣布周五启用的三个新站点，C 正确。A 只是辅助提醒；B 与通告无关；D 与通告无关。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about a rider who keeps a bike for ninety minutes?",
+          "options": {
+            "A": "The rider would owe an overtime fee for keeping the bike too long",
+            "B": "The rider would receive a free bonus credit for extended usage",
+            "C": "The rider would be reported to the campus mobility office automatically",
+            "D": "The rider would be required to return the bike to its original station"
+          },
+          "answer": "A",
+          "explanation": "通告说超过 60 分钟会有 3 美元每小时的超时费，所以 90 分钟需要交费，A 正确。B 与通告相反；C 过度推断；D 把要求弄错（任何官方站点都可以）。",
+          "distractor_types": {
+            "B": "reversed_intent",
+            "C": "over_inference",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "audio_url": "/api/audio/announcement/la_r1_routine-20260531-190444_3.mp3"
+    },
+    {
+      "id": "la_r1_routine-20260531-190444_4",
+      "context": "logistics",
+      "situation": "campus shuttle route change due to construction",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "Good morning, riders. Beginning Monday, the campus shuttle's evening route will be temporarily modified because of construction on Maple Avenue. The shuttle will no longer stop at the Maple and Fifth crossing, and the South Quad stop will be moved one block east. Service to the medical center and the off-campus apartments will continue without change. Buses will run every twenty minutes between six o'clock in the evening and midnight. Riders are encouraged to check the transit app for live updates, and additional staff will be at the main stop on Monday evening to answer questions about the new route.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To explain a recent fare increase on the evening shuttle service",
+            "B": "To recruit student riders to help survey other commuters",
+            "C": "To announce that the shuttle will stop running entirely next week",
+            "D": "To inform riders of a temporary route change caused by construction"
+          },
+          "answer": "D",
+          "explanation": "通告主要说明因施工而临时调整路线，D 正确。A 与通告无关；B 与通告无关；C 把临时改道夸大为停运。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "unrelated_inference",
+            "C": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "According to the announcement, what is changing about the South Quad stop?",
+          "options": {
+            "A": "The stop will be eliminated entirely from the evening route",
+            "B": "The stop will be relocated one block east during construction",
+            "C": "The stop will be served only on weekdays for the next month",
+            "D": "The stop will be moved to a different building's lobby entrance"
+          },
+          "answer": "B",
+          "explanation": "通告明确说南广场站点东移一个街区，B 正确。A 把改动夸大为取消；C 与通告无关；D 与通告无关。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ],
+      "audio_url": "/api/audio/announcement/la_r1_routine-20260531-190444_4.mp3"
+    },
+    {
+      "id": "la_r1_routine-20260531-190444_5",
+      "context": "guest_speaker",
+      "situation": "industry professional speaking about career paths",
+      "speaker_role": "professor",
+      "difficulty": "easy",
+      "announcement": "Hello, students. The Career Development Office is delighted to host Ms. Carla Brennan, senior product manager at a major technology firm, for an evening talk on career paths in the technology sector. The event will take place Wednesday at six-thirty in Holloway Auditorium. Ms. Brennan will discuss how she transitioned from a biology background into product management and will offer practical advice for students considering similar shifts. A brief question-and-answer period will follow the talk, and copies of her recent book will be available for purchase at the entrance. Light snacks will be provided, and seating is on a first-come basis.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce an evening talk by a guest speaker on technology careers",
+            "B": "To promote the sale of Ms. Brennan's recently published book",
+            "C": "To advertise the Career Development Office's spring internship program",
+            "D": "To request student volunteers to help organize the auditorium event"
+          },
+          "answer": "A",
+          "explanation": "通告主要宣布关于职业道路的讲座，A 正确。B 是附带细节；C 与通告无关；D 与通告无关。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "According to the announcement, what topic will Ms. Brennan focus on?",
+          "options": {
+            "A": "Advanced research methods used in modern biology laboratories",
+            "B": "Investment opportunities in early-stage technology startups",
+            "C": "Her shift from biology into product management work",
+            "D": "Strategies for negotiating starting salaries in technology firms"
+          },
+          "answer": "C",
+          "explanation": "通告说她会谈从生物学背景到产品经理的转型，C 正确。A 把背景错放为主题；B 与通告无关；D 与通告无关。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ],
+      "audio_url": "/api/audio/announcement/la_r1_routine-20260531-190444_5.mp3"
+    },
+    {
+      "context": "academic_event",
+      "situation": "end-of-semester academic showcase with awards",
+      "speaker_role": "society_president",
+      "difficulty": "medium",
+      "announcement": "Good afternoon, everyone. As president of the Honors Society, I'm thrilled to invite you to our end-of-semester academic showcase next Thursday at 5 p.m. in Whitman Hall. Students from every department will present their top projects, and we'll close the evening by handing out the Dean's Excellence Awards in three categories. Light refreshments will be provided, but seating is limited to roughly 150 guests. To attend, you must reserve a spot through the Honors Society portal by Tuesday at noon. We hope you'll come celebrate your classmates' achievements with us.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "Invite the campus to a project showcase and awards ceremony",
+            "B": "Recruit new members for the Honors Society this term",
+            "C": "Apologize for changes to the Dean's Excellence Awards",
+            "D": "Discourage attendance because seating is too limited"
+          },
+          "answer": "A",
+          "explanation": "正确答案是 A，因为整则通知的核心是邀请大家参加下周四的学期末学术展示和颁奖晚会。B 错在公告完全没有提到招募新成员，是 wrong_purpose。C 错在公告并未对奖项做出任何道歉或变更说明，属于 wrong_purpose。D 错在虽然提到席位有限，但通知的目的是邀请而非劝退，属于 reversed_intent。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What must students do in order to attend the event?",
+          "options": {
+            "A": "Submit a project abstract before Tuesday",
+            "B": "Pay a small fee at the door on Thursday",
+            "C": "Reserve a spot on the Honors Society portal",
+            "D": "Sign up through their academic advisor"
+          },
+          "answer": "C",
+          "explanation": "正确答案是 C，因为通知明确指出必须在周二中午前通过 Honors Society portal 预约席位。A 错在公告说的是为了出席要预约，而不是提交项目摘要，混淆了出席者与展示者的要求，属于 misattributed_detail。B 错在公告并未提到任何门票费用，属于 wrong_detail。D 错在通过学术导师报名只是合理的校园做法，但本公告并未提及，属于 related_but_not_stated。",
+          "distractor_types": {
+            "A": "misattributed_detail",
+            "B": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        }
+      ],
+      "id": "la_mpvlbknu_0",
+      "audio_url": "/api/audio/announcement/la_mpvlbknu_0.mp3"
+    },
+    {
+      "context": "info_session",
+      "situation": "financial aid office workshop on scholarship applications",
+      "speaker_role": "advisor",
+      "difficulty": "hard",
+      "announcement": "This is a reminder that the Financial Aid Office is hosting a scholarship application workshop this coming Wednesday from 3 to 4:30 p.m. in Room 210 of Carver Hall. We'll walk you through the new online portal, explain how to request faculty recommendation letters, and review the personal statement rubric used by reviewers. To get the most out of the session, please bring a rough draft of one essay and a list of three scholarships you're considering. Drop-in advising afterward is first-come, first-served. Students who attend will be given priority review on submissions filed before the March 15th deadline.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What are students asked to bring to the workshop?",
+          "options": {
+            "A": "A printed copy of the personal statement rubric",
+            "B": "A draft essay and a list of three scholarships",
+            "C": "Letters of recommendation from two faculty members",
+            "D": "A completed copy of the online application form"
+          },
+          "answer": "B",
+          "explanation": "正确答案是 B，因为通知明确要求带一份初稿和三个感兴趣的奖学金清单。A 错在评审标准是由办公室在现场讲解的内容，并不是学生需要带的东西，属于 misattributed_detail。C 错在公告说的是讨论如何请求推荐信，而不是当天带推荐信来，属于 wrong_detail。D 错在没有提到要带完成的申请表，属于 related_but_not_stated。",
+          "distractor_types": {
+            "A": "misattributed_detail",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students who attend the workshop?",
+          "options": {
+            "A": "They are guaranteed to receive at least one scholarship",
+            "B": "They must submit their applications during the session",
+            "C": "They are required to apply for three separate awards",
+            "D": "They may have their applications reviewed sooner than others"
+          },
+          "answer": "D",
+          "explanation": "正确答案是 D，因为公告说参加者在 3 月 15 日前提交可获得优先审阅，可以合理推断他们的申请会比其他人更早被审。A 错在保证获奖远远超出公告内容范围，属于 over_inference。B 错在公告并未要求当场提交，属于 wrong_detail。C 错在公告只是建议带三个奖学金清单，并不强制申请三项，属于 wrong_detail。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "wrong_detail",
+            "C": "wrong_detail"
+          }
+        }
+      ],
+      "id": "la_mpvlbknu_1",
+      "audio_url": "/api/audio/announcement/la_mpvlbknu_1.mp3"
+    },
+    {
+      "context": "facility_change",
+      "situation": "campus bookstore moving to a new building",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "Attention students, faculty, and staff. The campus bookstore will be moving from its current location in Henderson Hall to the renovated ground floor of the Student Union starting Monday, October 14th. The new space is larger and will include a dedicated study lounge and a small coffee bar. During the move, the bookstore will be closed from Thursday afternoon through Sunday evening. You can still order textbooks online during that period, and we'll hold any pickups until the new store reopens. Please stop by the Student Union next Monday morning to check out the new space.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "Encourage students to order more textbooks online",
+            "B": "Apologize for delays in textbook deliveries this term",
+            "C": "Inform the campus that the bookstore is relocating",
+            "D": "Announce a permanent closure of Henderson Hall"
+          },
+          "answer": "C",
+          "explanation": "正确答案是 C，因为通知的核心信息是书店从 Henderson Hall 搬到学生中心。A 错在线上订购只是搬迁期间的临时安排，并非通知的主要目的，属于 too_narrow。B 错在公告完全没有对延迟交付道歉，属于 wrong_purpose。D 错在公告只说书店搬走，并没有说整个 Henderson Hall 永久关闭，属于 over_inference。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "wrong_purpose",
+            "D": "over_inference"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What will the new bookstore location include?",
+          "options": {
+            "A": "A study lounge and a coffee bar",
+            "B": "A printing center for course materials",
+            "C": "An expanded faculty office area",
+            "D": "A 24-hour textbook pickup locker"
+          },
+          "answer": "A",
+          "explanation": "正确答案是 A，因为公告明确说新店面包含一个专门的自习休息区和一个小咖啡吧。B 错在公告并未提到打印中心，属于 related_but_not_stated。C 错在公告只字未提教师办公区域，属于 related_but_not_stated。D 错在公告说搬迁期间会保留取书订单，并未提到 24 小时自助取书柜，属于 wrong_detail。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "id": "la_mpvlbknu_2",
+      "audio_url": "/api/audio/announcement/la_mpvlbknu_2.mp3"
+    },
+    {
+      "context": "academic_event",
+      "situation": "interdisciplinary conference call for papers",
+      "speaker_role": "department_head",
+      "difficulty": "easy",
+      "announcement": "I'm pleased to announce that our department is hosting an interdisciplinary conference on technology and society this April, and we're now accepting paper proposals. We welcome submissions from undergraduates, graduate students, and faculty across all departments, including the arts and humanities. Proposals should be no longer than 400 words and must be uploaded to the conference website by February 20th. Selected presenters will be notified by early March and will receive a small travel stipend if traveling from another campus. If you've been working on a project that connects two or more fields, this is a great chance to share it with a wider audience.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "Recap last year's interdisciplinary conference findings",
+            "B": "Recruit volunteers to staff the April conference",
+            "C": "Warn students that proposal rules have changed",
+            "D": "Invite proposals for an upcoming interdisciplinary conference"
+          },
+          "answer": "D",
+          "explanation": "正确答案是 D，因为整则公告的目的是邀请大家在 2 月 20 日前为四月的跨学科会议提交论文提案。A 错在公告完全没有回顾以往会议，属于 wrong_purpose。B 错在公告并未招募志愿者，属于 wrong_purpose。C 错在公告并未提到规则有任何变化，属于 wrong_purpose。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "wrong_purpose",
+            "C": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What is true about the paper proposals?",
+          "options": {
+            "A": "They must be co-authored with a faculty mentor",
+            "B": "They must not exceed 400 words in length",
+            "C": "They must be submitted in person at the department",
+            "D": "They are only open to graduate students this year"
+          },
+          "answer": "B",
+          "explanation": "正确答案是 B，因为公告明确指出 proposals 不应超过 400 字。A 错在公告并未要求必须有教师合作者，属于 related_but_not_stated。C 错在公告说要上传到会议网站，并非线下递交，属于 wrong_detail（与事实相反）。D 错在公告说欢迎本科生、研究生和教师，并非只对研究生开放，属于 wrong_detail（与事实相反）。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "C": "wrong_detail",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "id": "la_mpvlbknv_3",
+      "audio_url": "/api/audio/announcement/la_mpvlbknv_3.mp3"
+    },
+    {
+      "context": "logistics",
+      "situation": "temporary road closure and detour instructions",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "Due to scheduled utility work, Maple Avenue between the library and the science quad will be closed to vehicles from 6 a.m. Tuesday until 8 p.m. Thursday. Drivers should use Elm Street as a marked detour, which adds about five minutes to most campus routes. Pedestrians and cyclists may still pass through using the sidewalk on the north side, though we ask that you slow down near the work zone. Shuttle service will continue, but the East Loop bus will skip the library stop and pick up at the Student Union instead. Please plan a few extra minutes into your commute.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What change will affect the East Loop shuttle service?",
+          "options": {
+            "A": "It will skip the library stop and use the Student Union instead",
+            "B": "It will be canceled entirely for the rest of the week",
+            "C": "It will start running every five minutes during the closure",
+            "D": "It will reroute to Elm Street and add two extra stops"
+          },
+          "answer": "A",
+          "explanation": "正确答案是 A，因为公告说东环巴士会跳过图书馆站，改在学生中心上下客。B 错在公告说班车继续运行，并未取消，属于 wrong_detail（与事实相反）。C 错在公告并未提及任何加密班次的信息，属于 related_but_not_stated。D 错在 Elm Street 是车辆的绕行路线，并非班车的新路线，属于 misattributed_detail。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about pedestrians during the closure?",
+          "options": {
+            "A": "They are required to use the Elm Street detour as well",
+            "B": "They will be charged a small fee to cross the work area",
+            "C": "They can still walk through but should move carefully",
+            "D": "They must show their student ID at a checkpoint"
+          },
+          "answer": "C",
+          "explanation": "正确答案是 C，因为公告说行人和骑行者仍可通过北侧人行道，但要在施工区附近放慢速度，可推断他们仍可通行但需小心。A 错在 Elm Street 是车辆的绕行路线，并非行人必须走的，属于 misattributed_detail。B 错在公告完全没有提及任何费用，属于 unrelated_inference。D 错在公告没有提到任何身份验证或检查点，属于 over_inference。",
+          "distractor_types": {
+            "A": "misattributed_detail",
+            "B": "unrelated_inference",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "id": "la_mpvlbknv_4",
+      "audio_url": "/api/audio/announcement/la_mpvlbknv_4.mp3"
+    }
+  ]
+}

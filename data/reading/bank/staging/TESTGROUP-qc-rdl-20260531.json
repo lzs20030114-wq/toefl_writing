@@ -1,0 +1,39 @@
+{
+  "_meta": { "test_group": "qc-rdl-20260531", "generated_by": "claude (quality-check sample)", "note": "RDL short (40-60w/2Q) + long (80-150w/3Q), email+notice genres, campus settings." },
+  "items": [
+    {
+      "id": "QC_rdl_s1", "variant": "short", "genre": "email",
+      "text": "Hi Maya, I'm scheduled at the front desk this Saturday from 9 to 1, but I have a dentist appointment I can't move. Could you cover the shift for me? I'm happy to take one of your weekday shifts in return. Let me know by Thursday. Thanks, Devin",
+      "questions": [
+        { "question_type": "detail", "stem": "What does Devin ask Maya to do?", "options": { "A": "Cover his Saturday shift", "B": "Reschedule his dentist appointment", "C": "Work at a different front desk", "D": "Meet him on Thursday" }, "correct_answer": "A", "explanation": "Devin asks, \"Could you cover the shift for me?\"" },
+        { "question_type": "detail", "stem": "What does Devin offer in return?", "options": { "A": "To pay Maya for the shift", "B": "To take one of her weekday shifts", "C": "To bring her to the dentist", "D": "To work next Saturday" }, "correct_answer": "B", "explanation": "He offers to \"take one of your weekday shifts in return.\"" }
+      ]
+    },
+    {
+      "id": "QC_rdl_s2", "variant": "short", "genre": "notice",
+      "text": "Notice: The campus pool will be closed for maintenance from Monday, June 2, through Wednesday, June 4. The fitness center and indoor track will remain open during regular hours. Members with questions may contact the front desk. We thank you for your patience.",
+      "questions": [
+        { "question_type": "detail", "stem": "When will the pool reopen?", "options": { "A": "Monday, June 2", "B": "Wednesday, June 4", "C": "Thursday, June 5", "D": "It does not say it will reopen" }, "correct_answer": "C", "explanation": "It is closed through Wednesday June 4, so it reopens the next day, Thursday June 5." },
+        { "question_type": "detail", "stem": "What remains open during the closure?", "options": { "A": "The fitness center and indoor track", "B": "Only the front desk", "C": "The pool, at reduced hours", "D": "Nothing in the building" }, "correct_answer": "A", "explanation": "\"The fitness center and indoor track will remain open during regular hours.\"" }
+      ]
+    },
+    {
+      "id": "QC_rdl_l1", "variant": "long", "genre": "email",
+      "text": "Dear new members, Welcome to the Campus Photography Club! We meet every Tuesday at 6 p.m. in Room 214 of the Arts Building. Our first session will cover the basics of composition, so bring a camera if you have one — phone cameras are perfectly fine. Throughout the semester we will organize two weekend photo walks and a final exhibition in the main gallery. Membership is free, but the exhibition entry costs five dollars to cover printing. If you cannot attend a meeting, check our online group, where we post slides and announcements. Best, The Club Officers",
+      "questions": [
+        { "question_type": "main_idea", "stem": "What is the main purpose of this email?", "options": { "A": "To welcome new members and explain how the club works", "B": "To cancel the first club meeting", "C": "To sell photography equipment", "D": "To apologize for a scheduling error" }, "correct_answer": "A", "explanation": "The email welcomes new members and lays out meeting time, activities, and fees." },
+        { "question_type": "detail", "stem": "What are members told to bring to the first session?", "options": { "A": "Five dollars", "B": "A camera, including a phone camera", "C": "A printed photo", "D": "A laptop" }, "correct_answer": "B", "explanation": "\"Bring a camera if you have one — phone cameras are perfectly fine.\"" },
+        { "question_type": "detail", "stem": "What does the email say costs money?", "options": { "A": "Club membership", "B": "The weekend photo walks", "C": "The exhibition entry", "D": "Room 214" }, "correct_answer": "C", "explanation": "\"Membership is free, but the exhibition entry costs five dollars.\"" }
+      ]
+    },
+    {
+      "id": "QC_rdl_l2", "variant": "long", "genre": "notice",
+      "text": "Attention all students: Beginning next week, the library will extend its hours during the final examination period. From June 9 to June 20, the building will stay open until 2 a.m. on weekdays and until midnight on weekends. Group study rooms can be reserved online up to three days in advance, and reservations are limited to two hours per group. Please note that the café on the ground floor will close at its usual time of 8 p.m. Quiet floors will be strictly enforced during this period, so students who wish to work together should book a study room.",
+      "questions": [
+        { "question_type": "detail", "stem": "How late will the library stay open on weekdays during exams?", "options": { "A": "Until 8 p.m.", "B": "Until midnight", "C": "Until 2 a.m.", "D": "All night" }, "correct_answer": "C", "explanation": "\"open until 2 a.m. on weekdays and until midnight on weekends.\"" },
+        { "question_type": "detail", "stem": "What is the limit on study-room reservations?", "options": { "A": "Two hours per group", "B": "Three hours per group", "C": "One hour per student", "D": "There is no limit" }, "correct_answer": "A", "explanation": "\"reservations are limited to two hours per group.\"" },
+        { "question_type": "inference", "stem": "Where should students who want to work in a group go?", "options": { "A": "A reserved study room", "B": "A quiet floor", "C": "The ground-floor café", "D": "Outside the building" }, "correct_answer": "A", "explanation": "Quiet floors are strictly enforced, so groups \"should book a study room.\"" }
+      ]
+    }
+  ]
+}
