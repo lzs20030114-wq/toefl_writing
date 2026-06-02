@@ -4,7 +4,7 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { C, FONT, Btn, TopBar, SurfaceCard, PageShell } from "../shared/ui";
 import { AudioPlayer } from "./AudioPlayer";
 import { buildDraftKey, loadDraft, clearDraft, useDraftPersist } from "../../lib/draftPersist";
-import { LISTENING_SECONDS_PER_ITEM, formatAnswerTime } from "../../lib/listeningTiming";
+import { LCR_SECONDS_PER_ITEM, formatAnswerTime } from "../../lib/listeningTiming";
 
 const ACCENT = { color: "#8B5CF6", soft: "#F3E8FF" };
 const OPTION_KEYS = ["A", "B", "C", "D"];
@@ -39,7 +39,7 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
   const [hoverOption, setHoverOption] = useState(null);
   const [hoverBtn, setHoverBtn] = useState(null);
   const [reviewIndex, setReviewIndex] = useState(null); // for reviewing individual questions in results
-  const [answerTimeLeft, setAnswerTimeLeft] = useState(LISTENING_SECONDS_PER_ITEM);
+  const [answerTimeLeft, setAnswerTimeLeft] = useState(LCR_SECONDS_PER_ITEM);
 
   const audioPlayedRef = useRef(false);
   const isTimed = !isPractice;
@@ -77,7 +77,7 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
       setPhase("listen");
       setSelected(null);
       setHoverOption(null);
-      setAnswerTimeLeft(LISTENING_SECONDS_PER_ITEM);
+      setAnswerTimeLeft(LCR_SECONDS_PER_ITEM);
       audioPlayedRef.current = false;
     } else {
       // All done — compute results and show summary
@@ -103,7 +103,7 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
 
   useEffect(() => {
     if (!isTimed || phase !== "choose" || finished) return;
-    setAnswerTimeLeft(LISTENING_SECONDS_PER_ITEM);
+    setAnswerTimeLeft(LCR_SECONDS_PER_ITEM);
     const timer = setInterval(() => {
       setAnswerTimeLeft((prev) => Math.max(0, prev - 1));
     }, 1000);

@@ -8,7 +8,7 @@ import { buildReadingModule1, routeModule2 as routeReadingM2, buildReadingModule
 import { buildListeningModule1, routeModule2 as routeListeningM2, buildListeningModule2 } from "../../lib/mockExam/listeningPlanner";
 import { saveSess } from "../../lib/sessionStore";
 import { fmt } from "../../lib/utils";
-import { LISTENING_SECONDS_PER_ITEM, TOEFL_LISTENING_SECTION_SECONDS, formatAnswerTime } from "../../lib/listeningTiming";
+import { LISTENING_SECONDS_PER_ITEM, LCR_SECONDS_PER_ITEM, TOEFL_LISTENING_SECTION_SECONDS, formatAnswerTime } from "../../lib/listeningTiming";
 
 // ------ Constants ------
 
@@ -453,7 +453,7 @@ function LCRInlineTask({ item, onComplete }) {
   const [phase, setPhase] = useState("listen");
   const [selected, setSelected] = useState(null);
   const [submitted, setSubmitted] = useState(false);
-  const [answerTimeLeft, setAnswerTimeLeft] = useState(LISTENING_SECONDS_PER_ITEM);
+  const [answerTimeLeft, setAnswerTimeLeft] = useState(LCR_SECONDS_PER_ITEM);
 
   function handleAudioEnded() {
     setPhase("choose");
@@ -480,7 +480,7 @@ function LCRInlineTask({ item, onComplete }) {
 
   useEffect(() => {
     if (phase !== "choose" || submitted) return;
-    setAnswerTimeLeft(LISTENING_SECONDS_PER_ITEM);
+    setAnswerTimeLeft(LCR_SECONDS_PER_ITEM);
     const timer = setInterval(() => {
       setAnswerTimeLeft((prev) => Math.max(0, prev - 1));
     }, 1000);
