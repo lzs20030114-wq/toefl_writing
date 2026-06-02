@@ -23,6 +23,16 @@ export const C = {
 };
 export const FONT = "'Plus Jakarta Sans','Noto Sans SC','Segoe UI',sans-serif";
 
+// Neutral design tokens shared by the per-skill progress views' local `P` palettes.
+// Each view spreads NEUTRAL and adds its own area accent, e.g.
+//   const P = { ...NEUTRAL, primary: "#3B82F6", primarySoft: "#EFF6FF" };
+// These mirror C's neutral values under the `P`-style key names those views use.
+export const NEUTRAL = {
+  bg: "#f4f7f5", surface: "#ffffff", border: "#dde5df", borderSubtle: "#ebf0ed",
+  text: "#1a2420", textSec: "#5a6b62", textDim: "#94a39a",
+  shadow: "0 1px 3px rgba(10,40,25,0.04), 0 1px 2px rgba(10,40,25,0.02)",
+};
+
 
 export function Btn({ children, onClick, disabled, variant, style: extraStyle, ...props }) {
   const colors = {

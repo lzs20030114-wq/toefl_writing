@@ -36,26 +36,35 @@ export async function GET(request) {
     const userCode = normalizeUserCode(url.searchParams.get("userCode"));
     if (!userCode) return jsonError(400, "Missing userCode");
 
-    const [{ data: existing }, { count: sessionCount }, { data: user }] = await Promise.all([
-      supabaseAdmin
-        .from("user_surveys")
-        .select("id,status,responses")
-        .eq("user_code", userCode)
-        .eq("survey_type", SURVEY_TYPE)
-        .maybeSingle(),
-      supabaseAdmin
-        .from("sessions")
-        .select("id", { count: "exact", head: true })
-        .eq("user_code", userCode)
-        // Only sets done in the CURRENT round count — a returning user's
-        // pre-refresh history must not trip the survey on bare page load.
-        .gte("date", FIRST_SET_SURVEY_SINCE),
-      supabaseAdmin
-        .from("users")
-        .select("tier,tier_expires_at")
-        .eq("code", userCode)
-        .maybeSingle(),
-    ]);
+    const [{ data: existing }, { count: sessionCount }, { count: priorSessionCount }, { data: user }] =
+      await Promise.all([
+        supabaseAdmin
+          .from("user_surveys")
+          .select("id,status,responses")
+          .eq("user_code", userCode)
+          .eq("survey_type", SURVEY_TYPE)
+          .maybeSingle(),
+        supabaseAdmin
+          .from("sessions")
+          .select("id", { count: "exact", head: true })
+          .eq("user_code", userCode)
+          // Only sets done in the CURRENT round count — a returning user's
+          // pre-refresh history must not trip the survey on bare page load.
+          .gte("date", FIRST_SET_SURVEY_SINCE),
+        supabaseAdmin
+          .from("sessions")
+          .select("id", { count: "exact", head: true })
+          .eq("user_code", userCode)
+          // Sessions BEFORE the V2 epoch ⇒ this user practiced on the old V1 bank.
+          // Same cutoff as lib/history/bankVersion.js, so it agrees with the
+          // "V1题库" labels the user already sees in their history.
+          .lt("date", FIRST_SET_SURVEY_SINCE),
+        supabaseAdmin
+          .from("users")
+          .select("tier,tier_expires_at")
+          .eq("code", userCode)
+          .maybeSingle(),
+      ]);
 
     const completedAtLeastOne = (sessionCount || 0) >= 1;
     // A snooze ("再做两套看看") is a dismissed row flagged snoozePending — not a
@@ -79,6 +88,10 @@ export async function GET(request) {
     }
 
     const proDaysLeft = user ? daysLeftFromExpiry(user.tier, user.tier_expires_at) : 0;
+    // Cohort = which questionnaire to show. Pre-6.2 sessions positively confirm a
+    // V1 user; otherwise "new" (the modal still offers a self-report fallback to
+    // catch users who did V1 anonymously before logging in).
+    const cohort = (priorSessionCount || 0) >= 1 ? "v1" : "new";
 
     return Response.json({
       ok: true,
@@ -88,29 +101,76 @@ export async function GET(request) {
       userExists: !!user,
       proDaysLeft,
       rewardDays: REWARD_DAYS,
+      cohort,
     });
   } catch (e) {
     return jsonError(500, e.message || "Unexpected error");
   }
 }
 
+// Matrix dimension keys / allowed cell values per scale. Mirror the modal.
+const V1_DIMS = ["quality", "difficulty", "ai", "similarity"];
+const NEW_DIMS = ["quality", "difficulty", "ai", "similarity", "ui"];
+const CMP_VALUES = ["better", "same", "worse"];
+const ABS_VALUES = ["good", "ok", "bad"];
+const FEEL_VALUES = ["better", "same", "worse"];
+
+// Every dimension must carry an allowed value, else the matrix is incomplete → reject.
+function validateMatrix(obj, dimKeys, allowed) {
+  if (!obj || typeof obj !== "object") return null;
+  const out = {};
+  for (const k of dimKeys) {
+    const v = String(obj[k] || "").trim();
+    if (!allowed.includes(v)) return null;
+    out[k] = v;
+  }
+  return out;
+}
+
+// Two questionnaires share this endpoint, distinguished by `variant`:
+//   "v1"  → recall (clear/fuzzy) + one matrix (compare vs absolute) + optional text
+//   "new" → feel + absolute matrix (5 dims) + Pro-plans + biggest-factor + optional text
 function validateResponses(input) {
   if (!input || typeof input !== "object") return null;
-  const q1 = String(input.q1 || "").trim();
-  const q2 = String(input.q2 || "").trim();
-  const q3 = String(input.q3 || "").trim();
-  const q3Other = String(input.q3Other || "").trim().slice(0, 500);
-  const q4 = String(input.q4 || "").trim().slice(0, 2000);
-  if (!q1 || !q2 || !q3) return null;
-  // If user picked "其他" they must explain — otherwise the answer is noise.
-  if (q3 === "other" && !q3Other) return null;
-  return {
-    q1: q1.slice(0, 60),
-    q2: q2.slice(0, 60),
-    q3: q3.slice(0, 60),
-    q3Other: q3Other || null,
-    q4: q4 || null,
-  };
+  const variant = String(input.variant || "").trim();
+  const q4 = String(input.q4 || "").trim().slice(0, 2000) || null;
+
+  if (variant === "v1") {
+    const recall = String(input.recall || "").trim();
+    if (recall !== "clear" && recall !== "fuzzy") return null;
+    if (recall === "clear") {
+      const cmp = validateMatrix(input.cmp, V1_DIMS, CMP_VALUES);
+      if (!cmp) return null;
+      return { variant, recall, cmp, q4 };
+    }
+    const abs = validateMatrix(input.abs, V1_DIMS, ABS_VALUES);
+    if (!abs) return null;
+    return { variant, recall, abs, q4 };
+  }
+
+  if (variant === "new") {
+    const q1 = String(input.q1 || "").trim();
+    if (!FEEL_VALUES.includes(q1)) return null;
+    const abs = validateMatrix(input.abs, NEW_DIMS, ABS_VALUES);
+    if (!abs) return null;
+    const q2 = String(input.q2 || "").trim();
+    const q3 = String(input.q3 || "").trim();
+    const q3Other = String(input.q3Other || "").trim().slice(0, 500);
+    if (!q2 || !q3) return null;
+    // If user picked "其他" they must explain — otherwise the answer is noise.
+    if (q3 === "other" && !q3Other) return null;
+    return {
+      variant,
+      q1,
+      abs,
+      q2: q2.slice(0, 60),
+      q3: q3.slice(0, 60),
+      q3Other: q3Other || null,
+      q4,
+    };
+  }
+
+  return null;
 }
 
 async function userExists(userCode) {

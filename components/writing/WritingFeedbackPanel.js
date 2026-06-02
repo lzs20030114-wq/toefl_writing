@@ -1,20 +1,18 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import { FONT } from "../shared/ui";
+import { FONT, NEUTRAL } from "../shared/ui";
 import { getSavedCode, getSavedTier } from "../../lib/AuthContext";
 import UpgradeModal from "../shared/UpgradeModal";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import VocabCEFRPanel from "./VocabCEFRPanel";
 
 const P = {
-  bg: "#f4f7f5", surface: "#ffffff", border: "#dde5df", borderSubtle: "#ebf0ed",
-  text: "#1a2420", textSec: "#5a6b62", textDim: "#94a39a",
+  ...NEUTRAL,
   primary: "#0d9668", primaryDeep: "#087355", primarySoft: "#ecfdf5",
   teal: "#0891B2", tealSoft: "#ecfeff",
   amber: "#d97706", amberSoft: "#fffbeb",
   rose: "#E11D48", roseSoft: "#fff1f2",
   purple: "#7c3aed", purpleSoft: "#f5f3ff",
-  shadow: "0 1px 3px rgba(10,40,25,0.04), 0 1px 2px rgba(10,40,25,0.02)",
   shadowMd: "0 4px 14px rgba(10,40,25,0.06), 0 1px 3px rgba(10,40,25,0.03)",
 };
 

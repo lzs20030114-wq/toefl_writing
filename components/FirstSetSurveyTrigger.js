@@ -28,6 +28,7 @@ export default function FirstSetSurveyTrigger() {
     open: false,
     proDaysLeft: 0,
     rewardDays: 1,
+    cohort: "new",
   });
   const [wechatOpen, setWechatOpen] = useState(false);
   const [wechatRewardDays, setWechatRewardDays] = useState(1);
@@ -75,6 +76,7 @@ export default function FirstSetSurveyTrigger() {
             open: true,
             proDaysLeft: Number(data.proDaysLeft) || 0,
             rewardDays: Number(data.rewardDays) || 1,
+            cohort: data.cohort === "v1" ? "v1" : "new",
           });
         }
       } catch {
@@ -119,6 +121,7 @@ export default function FirstSetSurveyTrigger() {
         open: true,
         proDaysLeft: Number(data?.proDaysLeft) || 0,
         rewardDays: Number(data?.rewardDays) || 1,
+        cohort: data?.cohort === "v1" ? "v1" : "new",
       });
     }
 
@@ -191,6 +194,7 @@ export default function FirstSetSurveyTrigger() {
     <>
       <FirstSetSurveyModal
         open={state.open}
+        cohort={state.cohort}
         proDaysLeft={state.proDaysLeft}
         rewardDays={state.rewardDays}
         onSubmit={handleSubmit}

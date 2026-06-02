@@ -1,19 +1,20 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, useRef } from "react";
-import { C, FONT, Btn, PageShell, SurfaceCard, TopBar, ChevronIcon, ModeChip } from "../shared/ui";
+import { C, FONT, Btn, PageShell, SurfaceCard, TopBar, ChevronIcon, ModeChip, NEUTRAL } from "../shared/ui";
+import { StatCard } from "../shared/StatCard";
+import { AccuracyTrendChart } from "../shared/AccuracyTrendChart";
 import { loadHist, deleteSession, clearAllSessions, SESSION_STORE_EVENTS, setCurrentUser } from "../../lib/sessionStore";
 import { getSavedCode } from "../../lib/AuthContext";
 import { formatLocalDateTime } from "../../lib/utils";
-import { buildDailyAveragePoints, formatMonthDayFromDateKey, getSpeakingAverageScore, getSpeakingBandScore } from "../../lib/history/scoreMetrics";
+import { buildDailyAveragePoints, getSpeakingAverageScore, getSpeakingBandScore } from "../../lib/history/scoreMetrics";
+import { relativeDateLabel } from "../../lib/history/dateGroup";
 
 const ACCENT = { color: "#F59E0B", soft: "#FFFBEB" };
 
 const P = {
-  bg: "#f4f7f5", surface: "#ffffff", border: "#dde5df", borderSubtle: "#ebf0ed",
-  text: "#1a2420", textSec: "#5a6b62", textDim: "#94a39a",
+  ...NEUTRAL,
   primary: "#F59E0B", primarySoft: "#FFFBEB",
-  shadow: "0 1px 3px rgba(10,40,25,0.04), 0 1px 2px rgba(10,40,25,0.02)",
 };
 
 const SUBTYPE_META = {
@@ -55,8 +56,6 @@ function normalizeSpeakingSession(s) {
 // -- Trend Chart (SVG) --
 
 function SpeakingTrendChart({ sessions, filter }) {
-  const svgRef = useRef(null);
-
   const isMockFilter = filter === "mock";
   const filtered = filter === "all"
     ? sessions.filter(s => s.details?.subtype !== "mock")
@@ -65,76 +64,7 @@ function SpeakingTrendChart({ sessions, filter }) {
     filtered,
     isMockFilter ? getSpeakingBandScore : getSpeakingAverageScore,
   );
-
-  if (pts.length < 2) return <div style={{ padding: "16px 0", textAlign: "center", fontSize: 11, color: P.textDim }}>练习 2 天以上后显示趋势</div>;
-
-  const maxScore = isMockFilter ? 6 : 5;
-  const ticks = isMockFilter ? [0, 3, 6] : [0, 2.5, 5];
-  const W = 400, H = 120, ML = 30, MR = 10, MT = 10, MB = 22;
-  const cW = W - ML - MR, cH = H - MT - MB;
-  const minTs = Math.min(...pts.map(p => p.ts)), maxTs = Math.max(...pts.map(p => p.ts));
-  const span = maxTs - minTs || 864e5;
-  const toX = ts => ML + ((ts - minTs) / span) * cW;
-  const toY = v => MT + (1 - v / maxScore) * cH;
-
-  const pathD = pts.map((p, i) => `${i === 0 ? "M" : "L"}${toX(p.ts).toFixed(1)},${toY(p.avg).toFixed(1)}`).join(" ");
-
-  return (
-    <svg ref={svgRef} viewBox={`0 0 ${W} ${H}`} width="100%" style={{ display: "block" }}>
-      {ticks.map(y => (
-        <g key={y}>
-          <line x1={ML} y1={toY(y)} x2={ML + cW} y2={toY(y)} stroke="#edf2ef" strokeWidth={1} strokeDasharray="3,3" />
-          <text x={ML - 4} y={toY(y) + 3} fontSize={8} fill={P.textDim} textAnchor="end">{y}</text>
-        </g>
-      ))}
-      <path d={pathD} fill="none" stroke={ACCENT.color} strokeWidth={2} strokeLinecap="round" />
-      {pts.map((p, i) => <circle key={i} cx={toX(p.ts).toFixed(1)} cy={toY(p.avg).toFixed(1)} r={3} fill="#fff" stroke={ACCENT.color} strokeWidth={1.5} />)}
-      {pts.length > 0 && (() => {
-        const dates = [pts[0], pts[pts.length - 1]];
-        return dates.map((p, i) => {
-          return <text key={i} x={toX(p.ts)} y={H - 4} fontSize={8} fill={P.textDim} textAnchor={i === 0 ? "start" : "end"}>{formatMonthDayFromDateKey(p.date)}</text>;
-        });
-      })()}
-    </svg>
-  );
-}
-
-// -- Stat Card --
-
-function StatCard({ icon, short, count, avg, color, active, onClick }) {
-  const [hov, setHov] = useState(false);
-  const avgMatch = typeof avg === "string" ? avg.match(/(\d+(?:\.\d+)?)/) : null;
-  const avgNum = avgMatch ? parseFloat(avgMatch[1]) : null;
-  // For speaking, scores are out of 5, so normalize to percentage for the progress bar
-  const progressPct = avgNum != null ? (avgNum / 5) * 100 : null;
-
-  return (
-    <button onClick={onClick} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
-      style={{
-        padding: "14px 14px 12px", borderRadius: 14, textAlign: "left", cursor: "pointer",
-        border: active ? `1.5px solid ${color}40` : `1px solid ${hov ? P.border : P.borderSubtle}`,
-        background: active ? `${color}08` : hov ? "#fafbfa" : P.surface,
-        transform: (active || hov) ? "translateY(-2px)" : "none",
-        boxShadow: active ? `0 6px 20px ${color}14` : hov ? P.shadow : "none",
-        transition: "all 0.25s cubic-bezier(0.16,1,0.3,1)", position: "relative", overflow: "hidden",
-      }}>
-      {active && <div style={{ position: "absolute", top: -20, right: -20, width: 50, height: 50, borderRadius: "50%", background: `${color}12`, filter: "blur(14px)", pointerEvents: "none" }} />}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8, position: "relative" }}>
-        <span style={{ fontSize: 11, fontWeight: 650, color: active ? color : P.textSec }}>{short}</span>
-        <span style={{ width: 24, height: 24, borderRadius: 8, background: `${color}10`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12 }}>{icon}</span>
-      </div>
-      <div style={{ fontSize: 26, fontWeight: 800, color: active ? color : P.text, lineHeight: 1, letterSpacing: "-0.03em", marginBottom: progressPct != null ? 8 : 2, position: "relative" }}>{count}</div>
-      {progressPct != null && (
-        <div>
-          <div style={{ height: 3, borderRadius: 2, background: `${color}12`, overflow: "hidden" }}>
-            <div style={{ height: "100%", borderRadius: 2, width: `${Math.min(progressPct, 100)}%`, background: active ? color : `${color}60`, transition: "width 0.5s" }} />
-          </div>
-          <div style={{ fontSize: 10, color: active ? color : P.textDim, marginTop: 4, fontWeight: 550 }}>{avg}</div>
-        </div>
-      )}
-      {progressPct == null && avg ? <div style={{ fontSize: 10, color: P.textDim, fontWeight: 500, position: "relative" }}>{avg}</div> : null}
-    </button>
-  );
+  return <AccuracyTrendChart pts={pts} accentColor={ACCENT.color} ticks={isMockFilter ? [0, 3, 6] : [0, 2.5, 5]} maxValue={isMockFilter ? 6 : 5} />;
 }
 
 // -- Session Row --
@@ -629,7 +559,7 @@ export function SpeakingProgressView({ onBack }) {
             <div style={{ display: "flex", gap: 14, marginBottom: 18, alignItems: "stretch", animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 80ms both" }}>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, flex: "0 0 48%" }}>
                 {statItems.map(item => (
-                  <StatCard key={item.key} {...item} active={filter === item.key} onClick={() => setFilter(item.key)} />
+                  <StatCard key={item.key} {...item} avgMax={5} active={filter === item.key} onClick={() => setFilter(item.key)} />
                 ))}
               </div>
               <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
@@ -656,9 +586,7 @@ export function SpeakingProgressView({ onBack }) {
                   let lastLabel = "";
                   return filtered.map((s, i) => {
                     const d = new Date(s.date);
-                    const today = new Date();
-                    const yesterday = new Date(today); yesterday.setDate(today.getDate() - 1);
-                    const label = d.toDateString() === today.toDateString() ? "今天" : d.toDateString() === yesterday.toDateString() ? "昨天" : `${d.getMonth() + 1}月${d.getDate()}日`;
+                    const label = relativeDateLabel(d);
                     const showHeader = label !== lastLabel;
                     lastLabel = label;
                     const sourceIdx = hist.sessions.indexOf(s);
