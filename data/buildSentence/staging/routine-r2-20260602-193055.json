@@ -1,0 +1,114 @@
+{
+  "items": [
+    {
+      "id": "tmp_r2_q1",
+      "prompt": "Have you spoken with Olivia today?",
+      "answer": "She left her keys at the desk.",
+      "chunks": ["she", "left", "her", "keys", "the desk"],
+      "prefilled": ["at"],
+      "prefilled_positions": {"at": 4},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["past simple", "prepositional phrase"]
+    },
+    {
+      "id": "tmp_r2_q2",
+      "prompt": "I heard you and Harold went out last weekend.",
+      "answer": "We watched the new comedy on Saturday.",
+      "chunks": ["we", "watched", "the", "comedy", "on saturday"],
+      "prefilled": ["new"],
+      "prefilled_positions": {"new": 3},
+      "distractor": "saw",
+      "has_question_mark": false,
+      "grammar_points": ["past simple", "time phrase"]
+    },
+    {
+      "id": "tmp_r2_q3",
+      "prompt": "I lost track of Mariana after the seminar.",
+      "answer": "Where did she go after the dance class started?",
+      "chunks": ["where", "she", "go", "after", "the dance class", "started"],
+      "prefilled": ["did"],
+      "prefilled_positions": {"did": 1},
+      "distractor": "does",
+      "has_question_mark": true,
+      "grammar_points": ["wh-question", "past simple"]
+    },
+    {
+      "id": "tmp_r2_q4",
+      "prompt": "Why did Hector skip helping you with your move?",
+      "answer": "He has not returned from his family trip.",
+      "chunks": ["he", "not", "returned", "his", "family", "trip"],
+      "prefilled": ["has", "from"],
+      "prefilled_positions": {"has": 1, "from": 4},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["present perfect", "negation"]
+    },
+    {
+      "id": "tmp_r2_q5",
+      "prompt": "Did Margot follow up with you about the volunteer schedule?",
+      "answer": "She asked whether I had signed up for Saturday.",
+      "chunks": ["she", "whether", "i", "signed up", "for", "saturday"],
+      "prefilled": ["asked", "had"],
+      "prefilled_positions": {"asked": 1, "had": 4},
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question", "past perfect"]
+    },
+    {
+      "id": "tmp_r2_q6",
+      "prompt": "I keep forgetting our classmate's full name.",
+      "answer": "Emma is the classmate who took the chemistry seminar.",
+      "chunks": ["emma", "the", "classmate", "took", "the chemistry", "seminar"],
+      "prefilled": ["is", "who"],
+      "prefilled_positions": {"is": 1, "who": 4},
+      "distractor": "taken",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause", "past simple"]
+    },
+    {
+      "id": "tmp_r2_q7",
+      "prompt": "Why did you skip the orientation session today?",
+      "answer": "Julian needed help moving boxes into his dorm.",
+      "chunks": ["julian", "needed", "help", "boxes", "into", "his dorm"],
+      "prefilled": ["moving"],
+      "prefilled_positions": {"moving": 3},
+      "distractor": "lifting",
+      "has_question_mark": false,
+      "grammar_points": ["past simple", "gerund complement"]
+    },
+    {
+      "id": "tmp_r2_q8",
+      "prompt": "You should ask Matthew about the new chemistry seminar.",
+      "answer": "Where do I sign up for that seminar?",
+      "chunks": ["where", "i", "sign", "up", "for", "seminar"],
+      "prefilled": ["do", "that"],
+      "prefilled_positions": {"do": 1, "that": 6},
+      "distractor": "did",
+      "has_question_mark": true,
+      "grammar_points": ["wh-question", "phrasal verb"]
+    },
+    {
+      "id": "tmp_r2_q9",
+      "prompt": "Did anyone update you about Alison's room situation?",
+      "answer": "The advisor asked whether the lounge furniture had been replaced.",
+      "chunks": ["the advisor", "whether", "the lounge", "furniture", "replaced"],
+      "prefilled": ["asked", "had been"],
+      "prefilled_positions": {"asked": 2, "had been": 7},
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question", "past perfect passive"]
+    },
+    {
+      "id": "tmp_r2_q10",
+      "prompt": "Did you hear why Naomi visited financial aid?",
+      "answer": "She wanted to know whether the scholarship deadline had already passed.",
+      "chunks": ["she", "wanted to", "know", "whether", "the", "scholarship deadline", "already passed"],
+      "prefilled": ["had"],
+      "prefilled_positions": {"had": 8},
+      "distractor": "would",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question", "past perfect"]
+    }
+  ]
+}

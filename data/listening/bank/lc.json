@@ -7074,6 +7074,246 @@
       ],
       "id": "lc_mpx0wcrs_4",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/conversation/lc_mpx0wcrs_4.mp3"
+    },
+    {
+      "id": "lc_r2_routine-r2-20260602-193055_1",
+      "context": "campus_dorm_life",
+      "situation": "two students debating whether to keep their early-morning gym routine",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Are you still hitting the gym at six-thirty every morning this term?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Honestly, I'm tempted to switch to evenings. The weight room is packed by six forty-five."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Really? It used to be pretty empty that early last semester."
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, but the new fitness app dropped a six AM strength class, and everyone wants in."
+        },
+        {
+          "speaker": "Woman",
+          "text": "I bet the seven PM slot is quieter then. I might join you."
+        },
+        {
+          "speaker": "Man",
+          "text": "Good plan. Just be ready for the cardio machines after dinner."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "According to the conversation, what has recently changed at the morning gym?",
+          "options": {
+            "A": "It now hosts a popular early strength class",
+            "B": "It has started charging a new entry fee",
+            "C": "It has reduced its weekday operating hours",
+            "D": "It moved its weight machines to another floor"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：男生提到新的健身app开了一个早上六点的力量训练课，导致器械区六点四十五就被挤满。B错误：对话中从未提到收费变化。C错误：对话讨论的是人多而非营业时间缩短。D错误：器械只是被人占满，并没有提到搬到别处。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "wrong_detail",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do?",
+          "options": {
+            "A": "Cancel his gym membership for the rest of the term",
+            "B": "Wake up even earlier to beat the morning crowd",
+            "C": "Move his workout to the seven PM evening slot",
+            "D": "Sign up for the popular early strength class"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：男生明确说想改到晚上锻炼，女生提出晚上七点的时段更安静，男生表示同意。A错误：男生只是换时间，并没说退掉会员。B错误：早起会更挤，他正是要避开这种情况，是被否决的选项。D错误：那个抢手的强训课正是让他想躲开的原因。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "rejected_option",
+            "D": "rejected_option"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_r2_routine-r2-20260602-193055_2",
+      "context": "errands_service",
+      "situation": "a student picking up a held package from the campus mailroom",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        },
+        {
+          "name": "Woman",
+          "role": "mailroom_staff",
+          "gender": "female"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Man",
+          "text": "Hi, I got a slip saying my package is being held. Can you check on it?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Sure, do you have your student ID? I'll need that to release it."
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, here it is. The slip says the box arrived three days ago."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Hmm, the holding rule kicked in. Anything over forty-eight hours gets a one-dollar daily fee."
+        },
+        {
+          "speaker": "Man",
+          "text": "Oh, really? I didn't see that on the notice."
+        },
+        {
+          "speaker": "Woman",
+          "text": "It's posted by the door now. You owe two dollars today. Cash or card?"
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "Why does the man come to the mailroom?",
+          "options": {
+            "A": "To send an outgoing package by overnight mail",
+            "B": "To pick up a package that is being held",
+            "C": "To complain about a missing delivery slip",
+            "D": "To update the address on his student account"
+          },
+          "answer": "B",
+          "explanation": "正确答案B：对话开头男生明确说他拿了取件单，想取被代收的包裹。A错误：他来取件，不是寄件。C错误：他有取件单，没投诉单据丢失。D错误：对话只用了学生证核验身份，从未谈到改地址。",
+          "distractor_types": {
+            "A": "wrong_topic",
+            "C": "wrong_topic",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What does the woman say about the package-holding rule?",
+          "options": {
+            "A": "Packages incur a daily fee after forty-eight hours",
+            "B": "Packages are returned to the sender after seven days",
+            "C": "Packages must be retrieved during morning hours only",
+            "D": "Packages require a signed approval from a roommate"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：女生说超过48小时之后，每天加收一美元保管费。B错误：对话没提到包裹会被退回。C错误：对话没说只能上午取。D错误：对话只要求学生证，没要求室友签字。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_r2_routine-r2-20260602-193055_3",
+      "context": "plans_social",
+      "situation": "two students figuring out how to attend a guest lecture and a club meeting on the same evening",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "I can't decide — the linguistics talk or the debate club meeting tonight?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Why not both? The talk starts at six and only runs an hour. You'd make the meeting by seven-fifteen."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Hmm, but the speaker takes questions afterward. I might miss that part."
+        },
+        {
+          "speaker": "Man",
+          "text": "Skip the Q-and-A. The slides usually go up online by morning anyway."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Right, that's true. And debate practice runs late, so I shouldn't miss the start."
+        },
+        {
+          "speaker": "Man",
+          "text": "Exactly. Hit the talk first, then sprint over to Brennan Hall."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the conversation mainly about?",
+          "options": {
+            "A": "Choosing a topic for an upcoming debate competition",
+            "B": "Finding a quiet study space for a linguistics class",
+            "C": "Fitting two campus events into the same evening",
+            "D": "Comparing two newly renovated halls on campus"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：整段对话的核心是女生想同时去语言学讲座和辩论俱乐部，男生帮她设计如何兼顾两个活动。A错误：他们在讨论日程，并非辩题。B错误：对话没提找安静的学习空间。D错误：Brennan Hall只是个聚会地点，没有对比新楼。",
+          "distractor_types": {
+            "A": "wrong_topic",
+            "B": "wrong_topic",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the linguistics talk?",
+          "options": {
+            "A": "Its main speaker also leads the debate club",
+            "B": "Its question-and-answer session is optional to attend",
+            "C": "Its slides will be shown again at the debate meeting",
+            "D": "Its location has been moved to a different hall"
+          },
+          "answer": "B",
+          "explanation": "正确答案B：男生说幻灯片会上传到网上，可以跳过Q&A，暗示问答环节并非必须。A错误：对话从未把讲座主讲人和辩论俱乐部联系起来。C错误：幻灯片只是会上传网络，不是在辩论会议上重新展示。D错误：对话没提到讲座更换地点。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "C": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
     }
   ]
 }
