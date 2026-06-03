@@ -1,32 +1,42 @@
 {
-  "session_id": "routine-20260601-190449",
-  "generated_at": "2026-06-01T19:18:54.381Z",
+  "session_id": "routine-20260602-190458",
+  "generated_at": "2026-06-02T19:22:32.948Z",
   "needs_retry": true,
   "overall_scores": {
-    "diversity": 95,
-    "quality": 88
+    "diversity": 94,
+    "quality": 90
   },
   "retry_banks": [
     {
-      "bank": "reading-rdl-short",
-      "diversity_score": 90,
-      "diversity_threshold": 80,
-      "quality_score": 75,
-      "quality_threshold": 85,
+      "bank": "bs",
+      "diversity_score": 88,
+      "diversity_threshold": 90,
+      "quality_score": 100,
+      "quality_threshold": 95,
       "failures": [
-        "质量 75 < 85"
+        "多样性 88 < 90"
       ],
       "diversity_breakdown": [
-        "话题 4/4",
-        "notice 2 · email 1"
+        "角色名 4/20",
+        "场景 20/20",
+        "句型 5/5",
+        "开头 3/4",
+        "prefilled类型 5/4 (top:mid-noun-or-adj 7/20)",
+        "人物当prefilled 4/20 (20%, TPO~30%)",
+        "干扰词 12种 (top:did 35%)",
+        "chunk颗粒 5.8块/题 单词率79% (TPO~6块/77%)",
+        "题面对话化 16/20 (80% 含you, TPO~72%)"
       ],
       "quality_breakdown": [
-        "词数 3/4"
+        "块数 20/20",
+        "干扰词 20/20",
+        "答案长度 20/20",
+        "重组正确 20/20"
       ],
       "hints": [
-        "质量校验有偏差: 词数 3/4 — recheck schema compliance"
+        "角色名重复严重 (4/20 distinct) — use 15+ distinct character names from: Olivia, Harold, Mariana, Hector, Margot, Emma, Julian, Matthew, Alison, Juan, Angelina, Professor Cho, Naomi, Diane"
       ],
-      "items_to_supplement": 2
+      "items_to_supplement": 10
     },
     {
       "bank": "reading-rdl-long",
@@ -55,23 +65,23 @@
       "bank": "listening-lc",
       "diversity_score": 100,
       "diversity_threshold": 72,
-      "quality_score": 20,
+      "quality_score": 0,
       "quality_threshold": 80,
       "failures": [
-        "质量 20 < 80"
+        "质量 0 < 80"
       ],
       "diversity_breakdown": [
         "distinct openings 5/5"
       ],
       "quality_breakdown": [
-        "conv words 68-105: 1/5"
+        "conv words 68-105: 0/5"
       ],
       "hints": [
-        "质量校验有偏差: conv words 68-105: 1/5 — recheck schema compliance"
+        "质量校验有偏差: conv words 68-105: 0/5 — recheck schema compliance"
       ],
       "items_to_supplement": 3
     }
   ],
-  "resolved_at": "2026-06-01T19:38:21.874Z",
+  "resolved_at": "2026-06-02T19:42:04.000Z",
   "resolution_status": "supplemented"
 }

@@ -1860,6 +1860,146 @@
         }
       ],
       "difficulty": "easy"
+    },
+    {
+      "genre": "notice",
+      "text": "LAUNDRY ROOM RENOVATION NOTICE\nEffective Dates: Monday, June 16 through Friday, July 11\nLocation: Westbrook Residence Hall, Basement Level\n\nThe laundry room in Westbrook Residence Hall will be closed for a complete renovation starting Monday, June 16, at 7:00 AM. During this four-week period, all washers and dryers will be replaced with new energy-efficient units. The room will reopen on Saturday, July 12, at 9:00 AM.\n\nResidents may use the following alternative locations during the closure:\n• Eastgate Hall Laundry Room (4-minute walk)\n• Pine Court Laundry Annex (open 24 hours)\n• Northway Apartments Shared Facility\n\nPlease note the following during the renovation period:\n• A $5 temporary access pass to Northway is available at the Front Desk\n• Carts will be available outside Westbrook for transporting laundry\n• Lost or abandoned items left in the closed room will be donated after June 14\n\nFor questions, contact the Housing Office at 555-3120 or visit Room 110 in Westbrook between 9:00 AM and 5:00 PM on weekdays.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, when will the renovated laundry room reopen?",
+          "options": {
+            "A": "Monday, June 16",
+            "B": "Friday, July 11",
+            "C": "Saturday, July 12",
+            "D": "Sunday, June 14"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice states the room will reopen on Saturday, July 12, at 9:00 AM."
+        },
+        {
+          "question_type": "detail",
+          "stem": "What must residents do to access the Northway facility?",
+          "options": {
+            "A": "Sign up online by June 14",
+            "B": "Bring their student ID to Pine Court",
+            "C": "Wait until July 12 for new access cards",
+            "D": "Purchase a $5 access pass at the Front Desk"
+          },
+          "correct_answer": "D",
+          "explanation": "The notice indicates a $5 temporary access pass to Northway is available at the Front Desk."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about laundry items left in Westbrook after June 14?",
+          "options": {
+            "A": "They will be moved to Eastgate Hall storage",
+            "B": "They will be returned to owners by mail",
+            "C": "They will no longer be available for owners to reclaim",
+            "D": "They will remain in the closed room until July 12"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice says lost or abandoned items will be donated after June 14, meaning owners can no longer recover them."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-long_mpx0vpea_0"
+    },
+    {
+      "genre": "notice",
+      "text": "RECREATION CENTER POLICY UPDATE\nEffective Date: Monday, September 9\nLocation: Harrison Recreation Center\n\nThe Harrison Recreation Center will implement the following updated facility policies beginning Monday, September 9. These changes are being introduced to improve member safety and equipment availability during peak hours.\n\nUpdated Hours and Access:\n• Weekday hours extended to 5:30 AM through 11:30 PM\n• Saturday hours reduced to 8:00 AM through 8:00 PM\n• Sunday hours unchanged at 10:00 AM through 6:00 PM\n\nNew Policies:\n• Cardio equipment is now subject to a 30-minute time limit when others are waiting\n• A $10 day-pass option is available for non-member campus visitors\n• Lockers must be cleared daily; padlocks left overnight will be cut by staff\n• Reservations for racquetball courts open at 6:00 AM each morning\n\nMembers who wish to review the full policy document may pick up a printed copy at the Welcome Desk or download it from the Recreation Center website. For questions, please contact Member Services at 555-7745 weekdays between 9:00 AM and 4:00 PM.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what change is being made to Saturday hours?",
+          "options": {
+            "A": "Saturday hours are shortened to 8:00 AM through 8:00 PM",
+            "B": "Saturday hours are extended to 5:30 AM through 11:30 PM",
+            "C": "Saturday hours are unchanged from the previous schedule",
+            "D": "Saturday hours are limited to members only"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice indicates Saturday hours are reduced to 8:00 AM through 8:00 PM."
+        },
+        {
+          "question_type": "detail",
+          "stem": "What happens to padlocks left on lockers overnight?",
+          "options": {
+            "A": "Lockers are reassigned to other members",
+            "B": "Padlocks are removed by recreation center staff",
+            "C": "Owners receive a written warning by mail",
+            "D": "Items inside are donated to local charities"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice states padlocks left overnight will be cut by staff."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about the timing of racquetball court reservations?",
+          "options": {
+            "A": "Reservations are no longer accepted under the new policy",
+            "B": "Early risers have the best chance to reserve a court",
+            "C": "Reservations are only available to members who pay extra",
+            "D": "Saturday courts cannot be reserved at all"
+          },
+          "correct_answer": "B",
+          "explanation": "Since reservations open at 6:00 AM each morning, members who book early can claim preferred times."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-long_mpx0vpea_1"
+    },
+    {
+      "id": "rdl_long_r2_routine-r2-20260602-193055_1",
+      "genre": "email",
+      "variant": "long",
+      "text": "Subject: Spring Internship Fair — Confirmation for Friday, April 24\n\nDear Daniel,\n\nThank you for registering for the Spring Internship Fair on Friday, April 24, in Wexler Auditorium from 10:00 AM to 3:00 PM.\n\nA few notes before you arrive:\n- Please bring at least ten printed copies of your résumé; recruiter booths will not accept emailed versions on-site.\n- The $5 entry fee covers your name badge and a portfolio folder. Cash only at the welcome desk.\n- A free professional headshot station closes at 1:30 PM, so plan to visit early if interested.\n\nBusiness casual attire is required for entry. If you cannot attend, email me by Wednesday, April 22, to release your spot for waitlisted students.\n\nBest,\nCarla Reyes\nCareer Services",
+      "format_metadata": {
+        "from": "Carla Reyes (Career Services)",
+        "to": "Daniel",
+        "subject": "Spring Internship Fair — Confirmation for Friday, April 24"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what must Daniel bring to the fair on April 24?",
+          "options": {
+            "A": "A signed permission form from his academic advisor",
+            "B": "A digital copy of his résumé on a USB drive",
+            "C": "At least ten printed copies of his résumé",
+            "D": "A list of companies he wants to interview with"
+          },
+          "correct_answer": "C",
+          "explanation": "The email instructs Daniel to bring at least ten printed copies of his résumé and notes that recruiters will not accept emailed versions on-site."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about students who arrive after 1:30 PM?",
+          "options": {
+            "A": "They will not be admitted to the fair at all",
+            "B": "They will miss the chance to get a free headshot",
+            "C": "They must pay a higher entry fee than early arrivals",
+            "D": "They will receive a partial refund of the entry fee"
+          },
+          "correct_answer": "B",
+          "explanation": "The email states the free headshot station closes at 1:30 PM, so students arriving after that time will no longer have access to that service."
+        },
+        {
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this email?",
+          "options": {
+            "A": "To confirm Daniel's registration and outline fair logistics",
+            "B": "To advertise an upcoming networking workshop for students",
+            "C": "To request Daniel's feedback about last year's fair",
+            "D": "To remind Daniel about a missed payment deadline"
+          },
+          "correct_answer": "A",
+          "explanation": "The email confirms Daniel's registration for April 24 and walks through what to bring, the entry fee, the headshot station, and the cancellation deadline."
+        }
+      ],
+      "difficulty": "medium"
     }
   ]
 }
