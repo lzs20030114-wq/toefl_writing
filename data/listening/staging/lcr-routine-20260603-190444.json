@@ -1,0 +1,132 @@
+{
+  "items": [
+    {
+      "context": "campus_academic",
+      "situation": "student asking about a reading list for a course",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I still haven't found the reading list for History 220.",
+      "options": {
+        "A": "It should be on the course portal.",
+        "B": "Yes, the library is open until midnight.",
+        "C": "I love the historical fiction section.",
+        "D": "We meet every Tuesday and Thursday."
+      },
+      "answer": "A",
+      "explanation": "对方在说找不到 reading list，自然回应是指出获取路径。A 正确。B 答非所问（开门时间）；C 离题；D 是关于上课时间的联想陷阱。",
+      "distractor_types": {"B": "wrong_question_type", "C": "off_topic", "D": "semantic_association_trap"}
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about gym or sports facility hours",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Why does the pool close at noon on Saturdays?",
+      "options": {
+        "A": "It's just down the hall from the locker rooms.",
+        "B": "They reserve afternoons for swim team training.",
+        "C": "I love swimming early in the morning.",
+        "D": "Yes, you should bring a towel."
+      },
+      "answer": "B",
+      "explanation": "对方在问 Why 关闭，B 给出真正原因（swim team 训练）。A 回答地点，错问题类型；C 离题；D 是 swim 联想陷阱。",
+      "distractor_types": {"A": "wrong_question_type", "C": "off_topic", "D": "semantic_association_trap"}
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a librarian about a book or resource",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Do you know if the library has the Tomasello book on shared intentionality?",
+      "options": {
+        "A": "Yes, it's a fascinating cognitive science topic.",
+        "B": "No, I haven't read it yet myself.",
+        "C": "Try the inter-library loan if needed.",
+        "D": "The reference desk closes at nine."
+      },
+      "answer": "C",
+      "explanation": "对方在找一本书，C 直接给出解决方案（如果本馆没有，去馆际互借）。A 把焦点转到话题趣味，是 cog sci 联想；B 答非所问；D 离题。",
+      "distractor_types": {"A": "semantic_association_trap", "B": "wrong_question_type", "D": "off_topic"}
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about printing or scanning at computer lab",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "How do I print double-sided in the computer lab?",
+      "options": {
+        "A": "Yes, the lab is open until eleven.",
+        "B": "I usually scan documents at the front desk.",
+        "C": "The scanner accepts USB sticks too.",
+        "D": "Check the duplex box before you print."
+      },
+      "answer": "D",
+      "explanation": "D 直接给出操作步骤（勾 duplex），回答 How 问题。A 是 yes/no，错问题类型；B 偏到 scan；C 是 scanner 联想。",
+      "distractor_types": {"A": "wrong_question_type", "B": "off_topic", "C": "semantic_association_trap"}
+    },
+    {
+      "context": "general_daily",
+      "situation": "checking if a service is still open",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Is the post office at the student union still open?",
+      "options": {
+        "A": "I think they close at five today.",
+        "B": "No, I haven't received any packages yet.",
+        "C": "The union sells the best smoothies on campus.",
+        "D": "Yes, it's a great place to study together."
+      },
+      "answer": "A",
+      "explanation": "A 间接回答\"是否还开门\"，告知关门时间。B 答非所问（包裹）；C 离题（smoothies）；D 把 union 当成自习空间联想。",
+      "distractor_types": {"B": "wrong_question_type", "C": "off_topic", "D": "semantic_association_trap"}
+    },
+    {
+      "context": "general_daily",
+      "situation": "calling to check business hours",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "What time does the bookshop close on weekends?",
+      "options": {
+        "A": "Yes, they sell secondhand chemistry texts.",
+        "B": "Their website probably lists the holiday hours.",
+        "C": "I picked up a great cookbook there last week.",
+        "D": "The mall stays open until eleven on Saturdays."
+      },
+      "answer": "B",
+      "explanation": "B 给出查询途径（看网站），间接回应 What time。A 是 yes/no 错类型；C 离题；D 是相邻 mall 联想陷阱。",
+      "distractor_types": {"A": "wrong_question_type", "C": "off_topic", "D": "semantic_association_trap"}
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student checking with TA about lab report requirements",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Where am I supposed to upload the chemistry lab report?",
+      "options": {
+        "A": "Yes, the deadline is tonight at midnight.",
+        "B": "I borrowed the lab manual from a classmate.",
+        "C": "Did your TA share the new link?",
+        "D": "The chemistry building is on the south side."
+      },
+      "answer": "C",
+      "explanation": "C 用反问澄清前提（TA 是否发过新链接），属于 counter_question 套路。A 是 yes/no 错类型；B 偏题；D 是 chemistry 物理位置联想。",
+      "distractor_types": {"A": "wrong_question_type", "B": "off_topic", "D": "semantic_association_trap"}
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student discussing a presentation topic with partner",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "I'm completely drawing a blank for our project topic.",
+      "options": {
+        "A": "The presentation is worth thirty percent of our grade.",
+        "B": "Yes, I love drawing maps for our slides.",
+        "C": "The library has new whiteboards on the second floor.",
+        "D": "Let's grab coffee and brainstorm together this afternoon."
+      },
+      "answer": "D",
+      "explanation": "\"Drawing a blank\" 是想不出主意的习语，D 提议一起头脑风暴，正面回应。A 离题；B 把 drawing 字面理解为画画；C 是\"whiteboard/blank\"联想陷阱。",
+      "distractor_types": {"A": "off_topic", "B": "polysemy", "C": "semantic_association_trap"}
+    }
+  ]
+}

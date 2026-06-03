@@ -1,0 +1,228 @@
+{
+  "items": [
+    {
+      "context": "recommendations_opinions",
+      "situation": "two students comparing notes on a novel they both read",
+      "difficulty": "hard",
+      "speakers": [
+        {"name": "Woman", "role": "student", "gender": "female"},
+        {"name": "Man", "role": "student", "gender": "male"}
+      ],
+      "conversation": [
+        {"speaker": "Woman", "text": "Did you finally finish The Lighthouse Keeper last night?"},
+        {"speaker": "Man", "text": "Yeah. The ending wasn't what I expected at all."},
+        {"speaker": "Woman", "text": "Really? I thought the second half lost steam, especially after the storm chapter."},
+        {"speaker": "Man", "text": "I get that, but I think the slower pace was the point. The keeper was clearly cracking, and you needed to feel it."},
+        {"speaker": "Woman", "text": "Hmm. Maybe I rushed through it."},
+        {"speaker": "Man", "text": "Try going back to the journal entries near the end. They totally reframe his choices."}
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the conversation mainly about?",
+          "options": {
+            "A": "Their differing reactions to a novel they both read",
+            "B": "Whether to recommend the novel to a friend",
+            "C": "The author's earlier books in the same series",
+            "D": "A film adaptation of The Lighthouse Keeper"
+          },
+          "answer": "A",
+          "explanation": "整段是两人对同一本书不同的反应。A 正确。B、C、D 都是讲座未涉及的别的话题。",
+          "distractor_types": {"B": "wrong_topic", "C": "wrong_topic", "D": "wrong_topic"}
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Buy a different novel by the same author",
+            "B": "Recommend the book to her study group",
+            "C": "Revisit the journal entries near the end of the book",
+            "D": "Argue with the man about the storm chapter"
+          },
+          "answer": "C",
+          "explanation": "男生建议她回去看 journal entries，女生承认自己读太快，可推出她会回看那些段落。C 正确。A、B 都是未提及；D 与她 \"也许我读太快了\" 的态度相反。",
+          "distractor_types": {"A": "unrelated_next_step", "B": "unrelated_next_step", "D": "rejected_option"}
+        }
+      ]
+    },
+    {
+      "context": "plans_social",
+      "situation": "two students arranging to study together before an exam",
+      "difficulty": "easy",
+      "speakers": [
+        {"name": "Woman", "role": "student", "gender": "female"},
+        {"name": "Man", "role": "student", "gender": "male"}
+      ],
+      "conversation": [
+        {"speaker": "Woman", "text": "Hey, want to study for the chemistry midterm together on Thursday?"},
+        {"speaker": "Man", "text": "Sure. The library or the dorm lounge?"},
+        {"speaker": "Woman", "text": "I booked Group Room 4 in the library for two hours starting at six."},
+        {"speaker": "Man", "text": "Perfect. Do we need to bring practice problems?"},
+        {"speaker": "Woman", "text": "I printed out the Chapter 7 set already. Could you bring the whiteboard markers?"},
+        {"speaker": "Man", "text": "I have a fresh pack. See you at six."}
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Where will the speakers meet to study?",
+          "options": {
+            "A": "The dorm lounge on the second floor",
+            "B": "Group Room 4 in the library",
+            "C": "The chemistry building lounge",
+            "D": "A coffee shop just off campus"
+          },
+          "answer": "B",
+          "explanation": "女生明确说 booked Group Room 4 in the library。B 正确。A 是被讨论却被否决的备选；C、D 都未出现。",
+          "distractor_types": {"A": "rejected_option", "C": "related_but_not_stated", "D": "unrelated_next_step"}
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do before Thursday?",
+          "options": {
+            "A": "Print out the Chapter 7 practice problems",
+            "B": "Reserve a separate group study room himself",
+            "C": "Buy a new chemistry textbook for the midterm",
+            "D": "Make sure he has whiteboard markers ready"
+          },
+          "answer": "D",
+          "explanation": "男生说 I have a fresh pack — 即他将带白板笔。D 正确。A 是女生已做；B 房间已订；C 无关。",
+          "distractor_types": {"A": "misattributed", "B": "rejected_option", "C": "unrelated_next_step"}
+        }
+      ]
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two students talking about a new restaurant downtown and which dish to try",
+      "difficulty": "medium",
+      "speakers": [
+        {"name": "Woman", "role": "student", "gender": "female"},
+        {"name": "Man", "role": "student", "gender": "male"}
+      ],
+      "conversation": [
+        {"speaker": "Man", "text": "Have you been to that new Korean place on Maple Street yet?"},
+        {"speaker": "Woman", "text": "Not yet, but I keep hearing about the bibimbap."},
+        {"speaker": "Man", "text": "Honestly, the kimchi pancake is what everyone should be ordering."},
+        {"speaker": "Woman", "text": "Pancake? At a Korean restaurant?"},
+        {"speaker": "Man", "text": "It's savory, super crispy, and just five dollars at lunch. Better than the bibimbap, in my opinion."},
+        {"speaker": "Woman", "text": "Okay, I'll order that next time instead. Thanks for the tip."}
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the conversation mainly about?",
+          "options": {
+            "A": "The history of Korean cooking in the area",
+            "B": "Why the new restaurant became popular so quickly",
+            "C": "Which dish at a new restaurant is worth ordering",
+            "D": "How much lunch typically costs at the restaurant"
+          },
+          "answer": "C",
+          "explanation": "两人在讨论哪道菜值得点。C 正确。A 偏题；B、D 都只是一处细节。",
+          "distractor_types": {"A": "wrong_topic", "B": "too_narrow", "D": "too_narrow"}
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do on her next visit?",
+          "options": {
+            "A": "Order the kimchi pancake instead of the bibimbap",
+            "B": "Bring some friends along to try every dish",
+            "C": "Skip the lunch menu and order from dinner",
+            "D": "Ask the chef directly for the pancake recipe"
+          },
+          "answer": "A",
+          "explanation": "女生说 I'll order that next time instead，that 指 kimchi pancake，instead 指代替 bibimbap。A 正确。其余都未提或夸大推论。",
+          "distractor_types": {"B": "unrelated_next_step", "C": "unrelated_next_step", "D": "over_inference"}
+        }
+      ]
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "two students comparing how they get to campus — bike, bus, or walk",
+      "difficulty": "medium",
+      "speakers": [
+        {"name": "Woman", "role": "student", "gender": "female"},
+        {"name": "Man", "role": "student", "gender": "male"}
+      ],
+      "conversation": [
+        {"speaker": "Woman", "text": "How are you getting to the new humanities building every morning? It's pretty far from the dorms."},
+        {"speaker": "Man", "text": "I tried biking last week, but the hill on Pierce Street is brutal. Now I just take the campus shuttle."},
+        {"speaker": "Woman", "text": "Really? I always walk, but it takes me about thirty minutes."},
+        {"speaker": "Man", "text": "The shuttle runs every ten minutes and stops right by the dorm entrance. You should try it."},
+        {"speaker": "Woman", "text": "Hmm, maybe tomorrow. I usually like the exercise though."}
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why did the man stop biking to the humanities building?",
+          "options": {
+            "A": "He could not find a safe place to lock his bike",
+            "B": "He preferred the social aspect of the campus shuttle",
+            "C": "He damaged his bicycle in a small accident",
+            "D": "He found the hill on Pierce Street too difficult"
+          },
+          "answer": "D",
+          "explanation": "男生原话: the hill on Pierce Street is brutal。D 正确。A、B、C 均未提及。",
+          "distractor_types": {"A": "related_but_not_stated", "B": "unrelated_next_step", "C": "wrong_detail"}
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Buy a new bicycle for her morning commute",
+            "B": "Consider trying the campus shuttle tomorrow",
+            "C": "Move to a dorm closer to the humanities building",
+            "D": "Set her alarm earlier to give herself more time"
+          },
+          "answer": "B",
+          "explanation": "女生说 Hmm, maybe tomorrow — 表示她会考虑明早试试 shuttle。B 正确。A、C、D 都是夸大或无关的下一步。",
+          "distractor_types": {"A": "over_inference", "C": "over_inference", "D": "unrelated_next_step"}
+        }
+      ]
+    },
+    {
+      "context": "plans_social",
+      "situation": "two friends coordinating a weekend hiking or beach trip",
+      "difficulty": "easy",
+      "speakers": [
+        {"name": "Woman", "role": "student", "gender": "female"},
+        {"name": "Man", "role": "student", "gender": "male"}
+      ],
+      "conversation": [
+        {"speaker": "Woman", "text": "We're still on for Saturday, right? Beach or that hiking trail near the lake?"},
+        {"speaker": "Man", "text": "The forecast says rain in the afternoon. Maybe the trail with the covered shelters?"},
+        {"speaker": "Woman", "text": "Oh, good call. The shelters mean we can keep going if it starts pouring."},
+        {"speaker": "Man", "text": "I'll grab my rain jacket and bring some extra trail snacks."},
+        {"speaker": "Woman", "text": "I'll handle the car and gas this time. Pick you up at eight."},
+        {"speaker": "Man", "text": "Perfect. Let's do it."}
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why did the speakers choose the hiking trail over the beach?",
+          "options": {
+            "A": "The trail has shelters that protect them from rain",
+            "B": "The trail is much closer to their dormitory",
+            "C": "The beach has been crowded the last few weekends",
+            "D": "The man does not enjoy swimming in the lake"
+          },
+          "answer": "A",
+          "explanation": "男生说选 trail with the covered shelters，女生回 the shelters mean we can keep going if it starts pouring。A 正确。其余均未涉及。",
+          "distractor_types": {"B": "related_but_not_stated", "C": "unrelated_next_step", "D": "wrong_detail"}
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do before Saturday?",
+          "options": {
+            "A": "Buy a new rain jacket for herself",
+            "B": "Cancel the trip if the rain continues",
+            "C": "Make sure the car has enough gas",
+            "D": "Pack a picnic lunch for both of them"
+          },
+          "answer": "C",
+          "explanation": "女生明说 I'll handle the car and gas this time，因此她会确保油充足。C 正确。A 是男生准备 jacket；B 与对话相反；D 未提。",
+          "distractor_types": {"A": "misattributed", "B": "rejected_option", "D": "unrelated_next_step"}
+        }
+      ]
+    }
+  ]
+}

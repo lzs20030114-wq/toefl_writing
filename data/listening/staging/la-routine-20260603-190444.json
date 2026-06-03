@@ -1,0 +1,179 @@
+{
+  "items": [
+    {
+      "context": "info_session",
+      "situation": "health insurance enrollment information session",
+      "difficulty": "easy",
+      "speaker": {"name": "Advisor", "role": "advisor"},
+      "announcement": "Welcome, everyone. This information session walks you through health insurance enrollment for the spring semester. Domestic students are auto-renewed in the basic campus plan unless you opt out by January 18 through the student portal. International students must select either the standard or the comprehensive plan during the same window; the comprehensive plan adds dental and vision coverage for a flat fee of $185. Forms submitted after January 18 will only be processed for the following semester. Please bring your enrollment confirmation to the Student Health Center on the first day you need care.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To explain how students enroll in health insurance for spring",
+            "B": "To advertise a new dental coverage package",
+            "C": "To remind students about the Student Health Center hours",
+            "D": "To announce a new flat fee for all health plans"
+          },
+          "answer": "A",
+          "explanation": "讲话核心介绍春季 health insurance 的注册流程。A 正确。B 只是细节；C 偏题；D 与原话不符 ($185 只针对 comprehensive plan)。",
+          "distractor_types": {"B": "too_narrow", "C": "wrong_topic", "D": "wrong_detail"}
+        },
+        {
+          "type": "detail",
+          "stem": "What must international students do before January 18?",
+          "options": {
+            "A": "Pay their tuition balance for the spring semester",
+            "B": "Bring an enrollment confirmation to the Student Health Center",
+            "C": "Select either the standard or the comprehensive plan",
+            "D": "Opt out of the basic campus plan through the portal"
+          },
+          "answer": "C",
+          "explanation": "公告说国际生必须在 1 月 18 日前在 standard 与 comprehensive 之间二选一。C 正确。A 完全没提；B 是看病第一天才做；D 是 domestic 学生的操作。",
+          "distractor_types": {"A": "wrong_topic", "B": "wrong_detail", "D": "misattributed"}
+        }
+      ]
+    },
+    {
+      "context": "facility_change",
+      "situation": "new fitness equipment installation at recreation center",
+      "difficulty": "medium",
+      "speaker": {"name": "Department Head", "role": "department_head"},
+      "announcement": "Attention recreation center members: starting Monday, March 9, we'll be installing four new strength training machines in the upper gym. Hours for the upper gym will be limited to 6 to 10 a.m. and 4 to 9 p.m. throughout that week so contractors can finish safely. The lower gym, the cardio room, and the climbing wall remain open during normal hours. Members with personal training appointments in the upper gym will be moved to the lower gym automatically. You'll receive a text confirming the new room number by Friday evening. The new machines require a brief safety orientation; sign-up opens March 16.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What are the limited hours for the upper gym during installation week?",
+          "options": {
+            "A": "From 10 a.m. to 4 p.m. each day",
+            "B": "From 6 to 10 a.m. and 4 to 9 p.m.",
+            "C": "From 9 a.m. to 9 p.m. throughout the week",
+            "D": "Closed completely for the full week"
+          },
+          "answer": "B",
+          "explanation": "公告原话: Hours for the upper gym will be limited to 6 to 10 a.m. and 4 to 9 p.m.。B 正确。A 把开放时段反过来；C 编造一个全天连贯时段；D 与 \"hours are limited\" 矛盾。",
+          "distractor_types": {"A": "reversed_logic", "C": "related_but_not_stated", "D": "wrong_detail"}
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about members with personal training appointments in the upper gym?",
+          "options": {
+            "A": "They will need to cancel and rebook their sessions themselves",
+            "B": "They will receive a partial refund for the affected week",
+            "C": "They are required to attend the safety orientation in advance",
+            "D": "They do not need to contact staff to be reassigned a room"
+          },
+          "answer": "D",
+          "explanation": "公告说 will be moved to the lower gym automatically，且会主动短信确认。D 正确。A、B 都未提及；C 是新机器才需要 orientation，与训练课改地点无关。",
+          "distractor_types": {"A": "rejected_option", "B": "unrelated_next_step", "C": "related_but_not_stated"}
+        }
+      ]
+    },
+    {
+      "context": "career_services",
+      "situation": "LinkedIn profile photo day at career center",
+      "difficulty": "medium",
+      "speaker": {"name": "Career Advisor", "role": "career_advisor"},
+      "announcement": "Hi everyone, the career center is hosting LinkedIn profile photo day this Thursday, March 13, from 11 a.m. to 4 p.m. in the Atwood Conference Room. There's no charge for current students. Please come dressed in business or business-casual attire — we recommend solid colors and avoiding busy patterns, which can look distracting in a small photo. Walk-ins are welcome, but the line tends to get long after lunch, so we'd suggest signing up for a 10-minute slot through the career portal. You'll receive two edited photos by email within five business days of your session.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "When is LinkedIn profile photo day scheduled?",
+          "options": {
+            "A": "On Tuesday from 11 a.m. to 4 p.m.",
+            "B": "On Thursday from 9 a.m. to noon",
+            "C": "On Thursday, March 13, from 11 a.m. to 4 p.m.",
+            "D": "On Thursday afternoon by appointment only"
+          },
+          "answer": "C",
+          "explanation": "原话: this Thursday, March 13, from 11 a.m. to 4 p.m。C 正确。A 改了星期；B 改了时段；D 限制方式不对，公告说欢迎 walk-in。",
+          "distractor_types": {"A": "wrong_detail", "B": "wrong_detail", "D": "wrong_detail"}
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students who arrive after lunch as walk-ins?",
+          "options": {
+            "A": "They are likely to face a longer wait time",
+            "B": "They will not be photographed that day at all",
+            "C": "They will be charged a small late fee for the slot",
+            "D": "They should bring a printed resume to the session"
+          },
+          "answer": "A",
+          "explanation": "公告说 walk-ins 可以，但午餐后排队会变长，因此走读者下午到会等更久。A 正确。B 夸大；C、D 都是无关或编造内容。",
+          "distractor_types": {"B": "over_inference", "C": "related_but_not_stated", "D": "unrelated_next_step"}
+        }
+      ]
+    },
+    {
+      "context": "facility_change",
+      "situation": "student lounge or study area closing for pipe/ceiling repair",
+      "difficulty": "easy",
+      "speaker": {"name": "Recreation Staff", "role": "recreation_staff"},
+      "announcement": "Quick announcement for everyone studying in the Drake Hall second-floor lounge: the room will be closed from Wednesday, April 8, through Friday, April 10, while plumbers replace a leaking pipe above the ceiling. The chairs and tables will be moved out by Tuesday evening. During the closure, please use the first-floor commons or the connected Library Annex, both of which extend their hours until midnight that week. If you left a personal item in the lounge — books, a sweater, anything in the cubbies — pick it up by 5 p.m. Tuesday or it'll be moved to lost and found.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To inform students about new furniture for the lounge",
+            "B": "To recommend the Library Annex as a quiet study spot",
+            "C": "To warn students about overnight construction noise",
+            "D": "To explain a temporary closure of the second-floor lounge"
+          },
+          "answer": "D",
+          "explanation": "公告核心通知二楼休息室因修管道短期关闭。D 正确。A 偏题；B 只是替代地点提示；C 内容偏离（公告没强调噪音）。",
+          "distractor_types": {"A": "wrong_topic", "B": "too_narrow", "C": "wrong_topic"}
+        },
+        {
+          "type": "detail",
+          "stem": "By when must students retrieve their personal items from the lounge?",
+          "options": {
+            "A": "By midnight on Wednesday, April 8",
+            "B": "By 5 p.m. on Tuesday",
+            "C": "Before the plumbers begin work on April 8",
+            "D": "By the end of the day on April 10"
+          },
+          "answer": "B",
+          "explanation": "公告原话: pick it up by 5 p.m. Tuesday。B 正确。A、D 都是用了公告中真实日期错配；C 表面合理但具体时间不准确。",
+          "distractor_types": {"A": "wrong_detail", "C": "related_but_not_stated", "D": "reversed_situation"}
+        }
+      ]
+    },
+    {
+      "context": "career_services",
+      "situation": "mock interview sessions with alumni volunteers",
+      "difficulty": "hard",
+      "speaker": {"name": "Program Coordinator", "role": "program_coordinator"},
+      "announcement": "Welcome to the mock interview program. This semester, alumni from finance, public health, and design firms will conduct one-on-one practice interviews during the first three Fridays of November. Each session lasts forty-five minutes: thirty minutes for the interview itself and fifteen for tailored feedback. To register, log into the career portal by October 25 and rank your top three industries; we'll match you with an alumnus based on availability and your stated career interests. Once matched, you'll receive a confirmation containing the alumnus's bio, suggested prep questions, and a virtual meeting link. The program is most useful for students who arrive with specific learning goals.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To explain how mock interview sessions with alumni are structured and scheduled",
+            "B": "To advertise career options in finance and public health",
+            "C": "To recruit current alumni as new volunteers for the program",
+            "D": "To announce a new virtual meeting platform used for interviews"
+          },
+          "answer": "A",
+          "explanation": "公告系统介绍 mock interview 流程、报名步骤与时间表。A 正确。B 只是举例的领域；C 完全反向；D 是细节而非主题。",
+          "distractor_types": {"B": "too_narrow", "C": "wrong_topic", "D": "wrong_detail"}
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students who do not rank their industries by October 25?",
+          "options": {
+            "A": "They will be assigned to a generalist alumnus for the session",
+            "B": "They will be charged a late registration fee for November",
+            "C": "They will not be matched for a November session",
+            "D": "They can attend a walk-in slot during the second Friday"
+          },
+          "answer": "C",
+          "explanation": "公告说在 10 月 25 日前排序行业才会被匹配，因此晚交的人不会被分配。C 正确。A 是过度推论；B、D 都是公告未提的内容。",
+          "distractor_types": {"A": "over_inference", "B": "unrelated_next_step", "D": "rejected_option"}
+        }
+      ]
+    }
+  ]
+}

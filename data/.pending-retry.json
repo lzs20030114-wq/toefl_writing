@@ -1,10 +1,10 @@
 {
-  "session_id": "routine-20260602-190458",
-  "generated_at": "2026-06-02T19:22:32.948Z",
+  "session_id": "routine-20260603-190444",
+  "generated_at": "2026-06-03T19:31:41.997Z",
   "needs_retry": true,
   "overall_scores": {
     "diversity": 94,
-    "quality": 90
+    "quality": 97
   },
   "retry_banks": [
     {
@@ -19,13 +19,13 @@
       "diversity_breakdown": [
         "角色名 4/20",
         "场景 20/20",
-        "句型 5/5",
-        "开头 3/4",
-        "prefilled类型 5/4 (top:mid-noun-or-adj 7/20)",
-        "人物当prefilled 4/20 (20%, TPO~30%)",
-        "干扰词 12种 (top:did 35%)",
-        "chunk颗粒 5.8块/题 单词率79% (TPO~6块/77%)",
-        "题面对话化 16/20 (80% 含you, TPO~72%)"
+        "句型 4/5",
+        "开头 4/4",
+        "prefilled类型 8/4 (top:subject-np 4/20)",
+        "人物当prefilled 3/20 (15%, TPO~30%)",
+        "干扰词 11种 (top:did 20%)",
+        "chunk颗粒 6.0块/题 单词率84% (TPO~6块/77%)",
+        "题面对话化 14/20 (70% 含you, TPO~72%)"
       ],
       "quality_breakdown": [
         "块数 20/20",
@@ -42,22 +42,20 @@
       "bank": "reading-rdl-long",
       "diversity_score": 60,
       "diversity_threshold": 70,
-      "quality_score": 0,
+      "quality_score": 100,
       "quality_threshold": 85,
       "failures": [
-        "多样性 60 < 70",
-        "质量 0 < 85"
+        "多样性 60 < 70"
       ],
       "diversity_breakdown": [
         "话题 2/2",
-        "notice 2 · email 0"
+        "notice 0 · email 2"
       ],
       "quality_breakdown": [
-        "词数 0/2"
+        "词数 2/2"
       ],
       "hints": [
-        "多样性 < gate — choose distinct topic/subtopic combos; avoid same discipline twice",
-        "质量校验有偏差: 词数 0/2 — recheck schema compliance"
+        "多样性 < gate — choose distinct topic/subtopic combos; avoid same discipline twice"
       ],
       "items_to_supplement": 1
     },
@@ -65,23 +63,21 @@
       "bank": "listening-lc",
       "diversity_score": 100,
       "diversity_threshold": 72,
-      "quality_score": 0,
+      "quality_score": 60,
       "quality_threshold": 80,
       "failures": [
-        "质量 0 < 80"
+        "质量 60 < 80"
       ],
       "diversity_breakdown": [
         "distinct openings 5/5"
       ],
       "quality_breakdown": [
-        "conv words 68-105: 0/5"
+        "conv words 68-105: 3/5"
       ],
       "hints": [
-        "质量校验有偏差: conv words 68-105: 0/5 — recheck schema compliance"
+        "质量校验有偏差: conv words 68-105: 3/5 — recheck schema compliance"
       ],
       "items_to_supplement": 3
     }
-  ],
-  "resolved_at": "2026-06-02T19:42:04.000Z",
-  "resolution_status": "supplemented"
+  ]
 }
