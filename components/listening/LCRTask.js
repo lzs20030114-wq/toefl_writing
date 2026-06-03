@@ -233,13 +233,23 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
                   {/* Expanded detail — options + explanation */}
                   {isOpen && reviewItem && (
                     <div style={{ borderTop: `1px solid ${C.bdrSubtle}`, padding: "16px 18px", background: C.bg }}>
-                      {/* Speaker text */}
-                      <div style={{
-                        padding: "10px 14px", borderRadius: 8, marginBottom: 14,
-                        background: ACCENT.soft, border: `1px solid #E9D5FF`,
-                        fontSize: 13, color: "#5B21B6", lineHeight: 1.6, fontStyle: "italic",
-                      }}>
-                        "{reviewItem.speaker}"
+                      {/* Speaker text + replay audio */}
+                      <div style={{ marginBottom: 14 }}>
+                        <div style={{
+                          padding: "10px 14px", borderRadius: 8,
+                          background: ACCENT.soft, border: `1px solid #E9D5FF`,
+                          fontSize: 13, color: "#5B21B6", lineHeight: 1.6, fontStyle: "italic",
+                        }}>
+                          "{reviewItem.speaker}"
+                        </div>
+                        <div style={{ marginTop: 8 }}>
+                          <AudioPlayer
+                            compact
+                            src={reviewItem.audio_url || null}
+                            text={reviewItem.speaker}
+                            isPractice
+                          />
+                        </div>
                       </div>
 
                       {/* All 4 options with correct/wrong highlighting */}

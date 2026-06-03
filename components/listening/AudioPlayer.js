@@ -15,8 +15,9 @@ const ACCENT = { color: "#8B5CF6", soft: "#F3E8FF" };
  *  - maxReplays: max replay count (0 = unlimited)
  *  - isPractice: if true, unlimited replays
  *  - autoPlay: if true, starts playback when mounted or when content changes
+ *  - compact: if true, render a single inline replay pill (for review / results pages)
  */
-export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = false, autoPlay = false }) {
+export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = false, autoPlay = false, compact = false }) {
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [replays, setReplays] = useState(0);
@@ -202,6 +203,16 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
     playAudio();
   }, [playing, canReplay, playAudio]);
 
+  // Compact pill toggles play/stop in one button (no separate replay control).
+  const handleCompactToggle = useCallback(() => {
+    if (playing) {
+      stopPlayback();
+      setPlaying(false);
+      return;
+    }
+    handlePlay();
+  }, [playing, stopPlayback, handlePlay]);
+
   // Waveform bars animation
   const WaveformBars = () => {
     const barCount = 24;
@@ -228,6 +239,41 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
   const replayText = isPractice
     ? "Replay"
     : `Replay (${Math.max(replayLimit - replays, 0)} left)`;
+
+  // ── Compact mode: a single inline replay pill (review / results pages) ──
+  if (compact) {
+    return (
+      <span style={{ display: "inline-flex" }}>
+        {src && <audio ref={audioRef} src={src} preload="none" />}
+        <button
+          onClick={handleCompactToggle}
+          onMouseEnter={() => setHover("compact")}
+          onMouseLeave={() => setHover(null)}
+          style={{
+            display: "inline-flex", alignItems: "center", gap: 6,
+            padding: "6px 14px", borderRadius: 999,
+            border: `1px solid ${ACCENT.color}`,
+            background: playing ? ACCENT.color : hover === "compact" ? ACCENT.soft : "#fff",
+            color: playing ? "#fff" : ACCENT.color,
+            fontSize: 12, fontWeight: 700, cursor: "pointer",
+            fontFamily: FONT, transition: "all 0.15s ease",
+          }}
+        >
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+            {playing ? (
+              <>
+                <rect x="6" y="5" width="4" height="14" rx="1" />
+                <rect x="14" y="5" width="4" height="14" rx="1" />
+              </>
+            ) : (
+              <path d="M8 5.14v13.72a1 1 0 001.5.86l11-6.86a1 1 0 000-1.72l-11-6.86A1 1 0 008 5.14z" />
+            )}
+          </svg>
+          {playing ? "Playing…" : "Replay"}
+        </button>
+      </span>
+    );
+  }
 
   return (
     <div style={{ textAlign: "center" }}>
