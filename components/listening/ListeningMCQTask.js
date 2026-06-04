@@ -259,14 +259,7 @@ export function ListeningMCQTask({ item, taskType, onComplete, onExit, isPractic
         qInfo={`Q ${currentQ + 1}/${totalQ}`}
       />
 
-      {/* Replay audio button */}
-      <div style={{ display: isPractice ? "flex" : "none", justifyContent: "center", marginTop: 16, marginBottom: 8 }}>
-        <Btn onClick={() => setPhase("listen")} variant="secondary" style={{ fontSize: 12, padding: "6px 14px" }}>
-          🔊 Replay audio
-        </Btn>
-      </div>
-
-      <SurfaceCard style={{ padding: "24px", marginTop: 8 }}>
+      <SurfaceCard style={{ padding: "24px", marginTop: 20 }}>
         <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 12 }}>
           <div style={{
             display: "inline-flex", alignItems: "center", gap: 8,

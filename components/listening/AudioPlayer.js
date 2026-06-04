@@ -196,13 +196,6 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
     playAudio();
   }, [playing, hasPlayed, canReplay, playAudio]);
 
-  const handleReplay = useCallback(() => {
-    if (playing || !canReplay) return;
-    setReplays((r) => r + 1);
-    setProgress(0);
-    playAudio();
-  }, [playing, canReplay, playAudio]);
-
   // Compact pill toggles play/stop in one button (no separate replay control).
   const handleCompactToggle = useCallback(() => {
     if (playing) {
@@ -235,10 +228,6 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
       </div>
     );
   };
-
-  const replayText = isPractice
-    ? "Replay"
-    : `Replay (${Math.max(replayLimit - replays, 0)} left)`;
 
   // ── Compact mode: a single inline replay pill (review / results pages) ──
   if (compact) {
@@ -345,30 +334,6 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
         />
       </div>
 
-      {/* Replay button */}
-      {hasPlayed && !playing && (
-        <button
-          onClick={handleReplay}
-          disabled={!canReplay}
-          onMouseEnter={() => setHover("replay")}
-          onMouseLeave={() => setHover(null)}
-          style={{
-            marginTop: 14,
-            padding: "8px 20px",
-            borderRadius: 8,
-            border: `1px solid ${canReplay ? ACCENT.color : C.bdr}`,
-            background: canReplay ? (hover === "replay" ? ACCENT.soft : "#fff") : "#F3F4F6",
-            color: canReplay ? ACCENT.color : C.t3,
-            fontSize: 13,
-            fontWeight: 600,
-            cursor: canReplay ? "pointer" : "not-allowed",
-            fontFamily: FONT,
-            transition: "all 0.15s ease",
-          }}
-        >
-          {replayText}
-        </button>
-      )}
     </div>
   );
 }
