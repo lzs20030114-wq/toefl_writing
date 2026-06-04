@@ -7,6 +7,7 @@ import { calculateAdaptiveScore, getScoreColor, bandToCEFR } from "../../lib/moc
 import { buildReadingModule1, routeModule2 as routeReadingM2, buildReadingModule2 } from "../../lib/mockExam/readingPlanner";
 import { buildListeningModule1, routeModule2 as routeListeningM2, buildListeningModule2 } from "../../lib/mockExam/listeningPlanner";
 import { saveSess } from "../../lib/sessionStore";
+import { saveAdaptiveCheckpoint, loadAdaptiveCheckpoint, clearAdaptiveCheckpoint } from "../../lib/mockExam/adaptiveCheckpoint";
 import { fmt } from "../../lib/utils";
 import { listeningSecondsForType, LCR_SECONDS_PER_ITEM, TOEFL_LISTENING_SECTION_SECONDS, formatAnswerTime } from "../../lib/listeningTiming";
 
@@ -719,12 +720,40 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
   const [usedIds, setUsedIds] = useState(new Set());
   const [error, setError] = useState(null);
 
+  // Resume support: load any in-progress checkpoint for this section once, so
+  // the intro can offer "continue where you left off". Restored on demand via
+  // handleResume (not auto-applied, so the user can also choose a fresh start).
+  const [resumed] = useState(() => loadAdaptiveCheckpoint(section));
+
   // Timer — each module has its own countdown. Real ETS resets the on-screen
   // clock when you enter Module 2, so the autoFinished ref is also keyed on
   // phase so a Module 1 timeout doesn't suppress the Module 2 timeout.
   const [timeLeft, setTimeLeft] = useState(config.module1TimeSeconds);
   const timerRef = useRef(null);
   const autoFinishedRef = useRef(false);
+  // Latest timeLeft for the checkpoint, read without making the save-effect a
+  // per-second writer (we checkpoint on progress milestones, not every tick).
+  const timeLeftRef = useRef(timeLeft);
+  useEffect(() => { timeLeftRef.current = timeLeft; }, [timeLeft]);
+
+  // Checkpoint in-progress exam state on every progress change (item answered,
+  // module switch, route decided) so an exit mid-exam can be resumed. timeLeft
+  // is snapshotted from the ref so this doesn't fire each second.
+  useEffect(() => {
+    if (phase !== "module1" && phase !== "module2") return;
+    const items = phase === "module1" ? m1Items : m2Items;
+    const moduleResults = phase === "module1" ? m1Results : m2Results;
+    // Skip the transient "module fully answered" state (just before the phase
+    // advances to routing/results) so every saved checkpoint keeps
+    // currentItemIndex === results.length — i.e. resume lands on the next
+    // unanswered item and never re-scores the last one.
+    if (!Array.isArray(items) || (Array.isArray(moduleResults) && moduleResults.length >= items.length)) return;
+    saveAdaptiveCheckpoint(section, {
+      phase, m1Items, m2Items, m1Results, m2Results,
+      currentItemIndex, routePath, timeLeft: timeLeftRef.current,
+      usedIds: Array.from(usedIds),
+    });
+  }, [section, phase, m1Items, m2Items, m1Results, m2Results, currentItemIndex, routePath, usedIds]);
 
   // Start timer when exam begins
   useEffect(() => {
@@ -770,6 +799,7 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
 
   function handleStartExam() {
     try {
+      clearAdaptiveCheckpoint(section); // fresh start — drop any stale checkpoint
       const m1 = config.buildM1();
       if (!m1.items || m1.items.length === 0) {
         setError("题库数据不足，无法开始考试。请稍后再试。");
@@ -785,6 +815,26 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
       setPhase("module1");
     } catch (e) {
       setError("初始化考试失败: " + (e.message || "unknown error"));
+    }
+  }
+
+  // Resume an in-progress exam from the saved checkpoint (offered on the intro).
+  function handleResume() {
+    if (!resumed) return;
+    try {
+      setM1Items(resumed.m1Items || null);
+      setM2Items(resumed.m2Items || null);
+      setM1Results(Array.isArray(resumed.m1Results) ? resumed.m1Results : []);
+      setM2Results(Array.isArray(resumed.m2Results) ? resumed.m2Results : []);
+      setCurrentItemIndex(Number.isFinite(resumed.currentItemIndex) ? resumed.currentItemIndex : 0);
+      setRoutePath(resumed.routePath || null);
+      setUsedIds(new Set(Array.isArray(resumed.usedIds) ? resumed.usedIds : []));
+      setTimeLeft(Number.isFinite(resumed.timeLeft) ? resumed.timeLeft : config.module1TimeSeconds);
+      autoFinishedRef.current = false;
+      setPhase(resumed.phase === "module2" ? "module2" : "module1");
+    } catch {
+      clearAdaptiveCheckpoint(section);
+      setError("无法恢复上次模考进度，请重新开始。");
     }
   }
 
@@ -897,10 +947,12 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
       });
     } catch {}
 
+    clearAdaptiveCheckpoint(section); // exam finished — checkpoint no longer needed
     setPhase("results");
   }
 
   function handleRestart() {
+    clearAdaptiveCheckpoint(section);
     setPhase("intro");
     setM1Items(null);
     setM2Items(null);
@@ -965,6 +1017,8 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
             accent={accent}
             accentSoft={accentSoft}
             onStart={handleStartExam}
+            onResume={handleResume}
+            hasResume={!!resumed}
             onExit={onExit}
           />
         )}
@@ -1014,7 +1068,7 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
 
 // ------ Sub-components ------
 
-function IntroCard({ config, accent, accentSoft, onStart, onExit }) {
+function IntroCard({ config, accent, accentSoft, onStart, onResume, hasResume, onExit }) {
   const isReading = config.label === "Reading";
   const m1Count = isReading ? "16 项 (10 CTW + 5 RDL + 1 AP)" : "12 项 (10 LCR + 1 LA + 1 LC)";
   const m2UpperCount = isReading ? "8 项 (5 CTW + 2 RDL + 1 AP)" : "8 项 (5 LCR + 1 LA + 1 LC + 1 LAT)";
@@ -1082,9 +1136,28 @@ function IntroCard({ config, accent, accentSoft, onStart, onExit }) {
         Module 1 时间用尽会自动进入 Module 2，无法回到上一个 Module 的题目。
       </div>
 
-      <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
-        <Btn onClick={onStart} style={{ background: accent, borderColor: accent, padding: "12px 32px", fontSize: 15 }}>
-          开始考试
+      {hasResume && (
+        <div style={{
+          background: accentSoft, border: `1px solid ${accent}40`,
+          borderRadius: 10, padding: "10px 14px", marginBottom: 14,
+          fontSize: 13, color: C.t1, lineHeight: 1.6, textAlign: "left",
+        }}>
+          检测到未完成的{config.labelZh}模考，可<strong style={{ color: accent }}>继续作答</strong>，或重新开始（重新开始会清空上次进度）。
+        </div>
+      )}
+
+      <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
+        {hasResume && (
+          <Btn onClick={onResume} style={{ background: accent, borderColor: accent, padding: "12px 32px", fontSize: 15 }}>
+            继续上次模考
+          </Btn>
+        )}
+        <Btn
+          onClick={onStart}
+          variant={hasResume ? "secondary" : undefined}
+          style={hasResume ? undefined : { background: accent, borderColor: accent, padding: "12px 32px", fontSize: 15 }}
+        >
+          {hasResume ? "重新开始" : "开始考试"}
         </Btn>
         <Btn onClick={onExit} variant="secondary">返回</Btn>
       </div>

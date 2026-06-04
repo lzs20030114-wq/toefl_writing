@@ -120,14 +120,32 @@ describe("ToeflApp navigation", () => {
     );
   });
 
-  test("submit is disabled until all slots are filled", () => {
+  test("next/submit is enabled even before all slots are filled (skipping allowed)", () => {
     render(<BuildSentenceTask onExit={() => {}} questions={[BUILD_TEST_Q]} />);
     fireEvent.click(screen.getByTestId("build-start"));
 
+    // Free navigation: the user may skip ahead without filling every slot.
     const submit = screen.getByTestId("build-submit");
-    expect(submit).toBeDisabled();
+    expect(submit).not.toBeDisabled();
     fireEvent.click(screen.getByRole("button", { name: "send" }));
-    expect(submit).toBeDisabled();
+    expect(submit).not.toBeDisabled();
+  });
+
+  test("can skip ahead, then jump back via the navigator to answer later", () => {
+    render(<BuildSentenceTask onExit={() => {}} questions={[BUILD_TEST_Q, BUILD_ALT_Q]} />);
+    fireEvent.click(screen.getByTestId("build-start"));
+
+    // Skip Q1 entirely (empty) by clicking next.
+    expect(screen.getByTestId("slot-0")).toHaveTextContent("1");
+    fireEvent.click(screen.getByTestId("build-submit"));
+    // Now on Q2 (its first prompt word differs).
+    expect(screen.getByText(BUILD_ALT_Q.prompt)).toBeInTheDocument();
+
+    // Jump back to Q1 via the navigator and answer it now.
+    fireEvent.click(screen.getByTestId("bs-nav-0"));
+    expect(screen.getByText(BUILD_TEST_Q.prompt)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "could" }));
+    expect(screen.getByTestId("slot-0")).toHaveTextContent("Could");
   });
 
   test("slot remove and replace behaviors work", () => {

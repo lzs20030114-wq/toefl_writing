@@ -120,7 +120,6 @@ export function BuildSentenceTask({
     setHoverSlot,
     setHoverBank,
     givenSlots,
-    allFilled,
     punct,
     startTimer,
     resetQ,
@@ -137,6 +136,7 @@ export function BuildSentenceTask({
     isPracticeMode,
     canGoBack,
     goBack,
+    jumpTo,
     getProgress,
     elapsed,
   } = useBuildSentenceSession(questions, { persistSession, onComplete, onTimerChange, timeLimitSeconds, practiceMode, initialResults });
@@ -548,6 +548,47 @@ export function BuildSentenceTask({
     </div>
   );
 
+  // Question navigator — jump to any question (skip ahead / come back to a
+  // skipped one). Answered questions get a subtle filled style.
+  const navStrip = qs.length > 1 ? (
+    <div
+      data-testid="bs-nav"
+      style={{
+        display: "flex", gap: 6, marginBottom: 12, flexShrink: 0,
+        flexWrap: isMobile ? "nowrap" : "wrap",
+        overflowX: isMobile ? "auto" : "visible",
+        paddingBottom: isMobile ? 2 : 0,
+      }}
+    >
+      {qs.map((_, i) => {
+        const isCurrent = i === idx;
+        const answered = !!(results[i] && results[i].userAnswer && results[i].userAnswer !== "(no answer)");
+        return (
+          <button
+            key={`nav-${i}`}
+            data-testid={`bs-nav-${i}`}
+            onClick={() => jumpTo(i)}
+            disabled={isCurrent}
+            title={`第 ${i + 1} 题`}
+            style={{
+              flex: "0 0 auto",
+              width: isMobile ? 26 : 30, height: isMobile ? 26 : 30,
+              borderRadius: 6,
+              border: `1px solid ${isCurrent ? C.nav : answered ? "#86b7a0" : C.bdr}`,
+              background: isCurrent ? C.nav : answered ? "#eef6f1" : "#fff",
+              color: isCurrent ? "#fff" : C.t2,
+              fontSize: 12, fontWeight: 700,
+              cursor: isCurrent ? "default" : "pointer",
+              fontFamily: FONT,
+            }}
+          >
+            {i + 1}
+          </button>
+        );
+      })}
+    </div>
+  ) : null;
+
   const bankJSX = (compact) => (
     <div
       data-bank-area="true"
@@ -624,10 +665,11 @@ export function BuildSentenceTask({
           </div>
           {/* 词块区 — 填充剩余空间 */}
           {bankJSX(true)}
+          {navStrip}
           {/* 按钮 */}
           <div style={{ display: "flex", gap: 8, flexShrink: 0, flexWrap: "wrap" }}>
             {canGoBack && <Btn onClick={goBack} variant="secondary" style={{ padding: "10px 14px", fontSize: 13 }}>上一题</Btn>}
-            <Btn data-testid="build-submit" onClick={handleSubmitClick} disabled={!allFilled} style={{ flex: 1, padding: "10px 0", fontSize: 14 }}>
+            <Btn data-testid="build-submit" onClick={handleSubmitClick} style={{ flex: 1, padding: "10px 0", fontSize: 14 }}>
               {idx < qs.length - 1 ? "下一题" : (embedded ? "提交" : "完成")}
             </Btn>
             <Btn onClick={resetQ} variant="secondary" style={{ padding: "10px 16px", fontSize: 13 }}>重置</Btn>
@@ -650,9 +692,10 @@ export function BuildSentenceTask({
             {slotsJSX}
           </SurfaceCard>
           {bankJSX(false)}
+          {navStrip}
           <div style={{ display: "flex", gap: 12 }}>
             {canGoBack && <Btn onClick={goBack} variant="secondary">上一题</Btn>}
-            <Btn data-testid="build-submit" onClick={handleSubmitClick} disabled={!allFilled}>
+            <Btn data-testid="build-submit" onClick={handleSubmitClick}>
               {idx < qs.length - 1 ? "下一题" : (embedded ? "提交" : "完成并查看结果")}
             </Btn>
             <Btn onClick={resetQ} variant="secondary">重置</Btn>

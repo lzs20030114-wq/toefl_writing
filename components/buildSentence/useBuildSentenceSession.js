@@ -412,12 +412,32 @@ export function useBuildSentenceSession(questions, options = {}) {
     freshInitQ(idx, qs);
   }
 
+  function recordAndSaveCurrent() {
+    // Capture the current question's answer + slot state before navigating away
+    // (back or jump) so a skipped/edited question is never lost and the final
+    // submit always sees the latest answer for it.
+    const nr = [...resultsRef.current];
+    nr[idx] = evaluateQ(idx, slots);
+    setResults(nr);
+    saveCurrentState();
+  }
+
   function goBack() {
     if (idx <= 0 || phase !== "active") return;
-    saveCurrentState();
+    recordAndSaveCurrent();
     const prevIdx = idx - 1;
     setIdx(prevIdx);
     restoreOrInitQ(prevIdx, qs);
+  }
+
+  // Jump to any question (free navigation: skip ahead, or return to a skipped
+  // one). Preserves the current answer first, then restores the target's state.
+  function jumpTo(target) {
+    if (phase !== "active") return;
+    if (!Number.isInteger(target) || target === idx || target < 0 || target >= qs.length) return;
+    recordAndSaveCurrent();
+    setIdx(target);
+    restoreOrInitQ(target, qs);
   }
 
   function submit() {
@@ -503,6 +523,7 @@ export function useBuildSentenceSession(questions, options = {}) {
     resetQ,
     submit,
     goBack,
+    jumpTo,
     pickChunk,
     removeChunk,
     placeChunkAt,
