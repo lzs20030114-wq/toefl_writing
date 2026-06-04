@@ -8,6 +8,7 @@ import { buildReadingModule1, routeModule2 as routeReadingM2, buildReadingModule
 import { buildListeningModule1, routeModule2 as routeListeningM2, buildListeningModule2 } from "../../lib/mockExam/listeningPlanner";
 import { saveSess } from "../../lib/sessionStore";
 import { saveAdaptiveCheckpoint, loadAdaptiveCheckpoint, clearAdaptiveCheckpoint } from "../../lib/mockExam/adaptiveCheckpoint";
+import { getVocabTargetWord, splitForHighlight, VOCAB_HIGHLIGHT_STYLE } from "../../lib/reading/vocabHighlight";
 import { fmt } from "../../lib/utils";
 import { listeningSecondsForType, LCR_SECONDS_PER_ITEM, TOEFL_LISTENING_SECTION_SECONDS, formatAnswerTime } from "../../lib/listeningTiming";
 
@@ -284,6 +285,9 @@ function MCQInlineTask({ item, taskType, onComplete, revealAnswers = false }) {
   if (!question) return null;
 
   const passage = getPassageContent();
+  // Highlight the target word in the passage when the current question is a
+  // vocabulary-in-context item (null otherwise → no highlight).
+  const vocabWord = getVocabTargetWord(question);
   const answeredAll = selections.every((s) => s !== null);
   const correctAnswer = (q) => q.correct_answer || q.answer;
 
@@ -425,7 +429,13 @@ function MCQInlineTask({ item, taskType, onComplete, revealAnswers = false }) {
           {/* LEFT — passage (scrolls independently) */}
           <div className="tp-reading-left" style={{ flex: 1, minWidth: 0, overflowY: "auto", paddingRight: 22, borderRight: `1px solid ${C.bdr}` }}>
             <div style={{ fontSize: 14, lineHeight: 1.8, color: C.t1, whiteSpace: "pre-wrap" }}>
-              {passage}
+              {vocabWord
+                ? splitForHighlight(passage, vocabWord).map((seg, i) =>
+                    seg.hit
+                      ? <mark key={i} style={VOCAB_HIGHLIGHT_STYLE}>{seg.text}</mark>
+                      : <React.Fragment key={i}>{seg.text}</React.Fragment>
+                  )
+                : passage}
             </div>
           </div>
           {/* RIGHT — question (scrolls independently) */}

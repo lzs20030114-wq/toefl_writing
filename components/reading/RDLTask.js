@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { C, FONT, Btn, SurfaceCard, TopBar } from "../shared/ui";
 import { buildDraftKey, loadDraft, clearDraft, useDraftPersist } from "../../lib/draftPersist";
+import { getVocabTargetWord, splitForHighlight, VOCAB_HIGHLIGHT_STYLE } from "../../lib/reading/vocabHighlight";
 
 /**
  * RDL Task — matches real TOEFL interface:
@@ -41,6 +42,8 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
   const accent = { color: "#3B82F6", soft: "#EFF6FF" };
   const questions = item.questions || [];
   const question = questions[currentQ];
+  // Vocab-in-context: highlight the asked word in the passage (real-exam behavior).
+  const vocabWord = getVocabTargetWord(question);
   const answeredCount = selections.filter(s => s !== null).length;
   const allAnswered = answeredCount === questions.length;
 
@@ -189,7 +192,13 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
             </div>
             {/* Passage */}
             <div style={{ fontSize: 15, color: C.t1, lineHeight: 1.9, whiteSpace: "pre-wrap", fontFamily: FONT }}>
-              {item.text}
+              {vocabWord
+                ? splitForHighlight(item.text, vocabWord).map((seg, i) =>
+                    seg.hit
+                      ? <mark key={i} style={VOCAB_HIGHLIGHT_STYLE}>{seg.text}</mark>
+                      : <span key={i}>{seg.text}</span>
+                  )
+                : item.text}
             </div>
           </div>
 
