@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-06-05 — v1.8.2
+
+- **模考贴近真考（6.4 反馈批量）** (`4458d45` + `21e743a` + `2959de8` + `992016e`)：
+  - tier-1：阅读/听力模考返回改回各自板块（`/?section=reading|listening`，原先一律回写作首页）；造句句首字母自动大写（`formatChunkDisplay` 加 `capitalizeFirst`，只大写答题区首 token）；模考态造句按钮 `embedded ? "提交" : "完成并查看结果"` + 顶部「第 X/Y 题」；错题本返回键移右上对齐全站。
+  - **模考过程不再泄露答案**：`AdaptiveExamShell` 内联答题组件加 `revealAnswers`（默认 false）门，提交后不再染红绿/显示正确答案；内部判分与自适应分流不变，复盘仍在历史记录。同步收紧填空 `maxLength`（`missingLen+2` → `missingLen`）并移除内联填空的回车直接提交。
+  - **模考续考**：新增 `lib/mockExam/adaptiveCheckpoint.js`（section-keyed、2h TTL、仅 module1/2）。`AdaptiveExamShell` 在进度里程碑落盘（timeLeft 走 ref 不每秒写；guard 跳过「整模块刚答完」瞬态保证 `currentItemIndex===results.length`，恢复不重复计分）；intro 提供「继续上次模考 / 重新开始」，退出保留、交卷/重开/新开清空。
+  - **造句自由导航**：去 `disabled={!allFilled}`（可跳题），保留「上一题」；`recordAndSaveCurrent()` 让 goBack 离开即记录避免丢答案。曾加的题号索引条按真考无此功能移除（`992016e`，删 `jumpTo`/`navStrip`/`bs-nav`）。
+  - **学术文章词汇题高亮**：新增纯函数 `lib/reading/vocabHighlight.js`（`getVocabTargetWord` 解析题干 `The word/phrase "X"`、`splitForHighlight` 整词大小写不敏感切分、共享 `VOCAB_HIGHLIGHT_STYLE`，8 单测）；接入 `MCQInlineTask`（模考）+ `RDLTask`（练习），仅当前题为 vocab-in-context 时高亮。
+- **听力节奏 + 回放** (`0f35211` + `ea3e27a` + `697b6fa` + `1d6ea46` + `15c1c8e`)：答题计时改为音频结束后才起、按题型配速；练习/模考移除重播按钮 + 加「真实考试只播一次」提示；LCR 结果复盘加回放音频按钮；LCR 答题计时缩短到 15s。
+- **历史记录复盘** (`9d441ef` + `7f2bdea` + `0d6614c`)：听力模考记录逐题复盘；修复听力/写作练习记录题目内容不显示；模考成绩页引导去练习记录看逐题详情。
+- **AI 评分稳定性** (`23ede3c`)：DeepSeek 传输层瞬时失败有界重试，减少偶发评分失败。
+- **其它**：每日 AI 额度服务端计量（`e0b7f27`，`/api/ai`）；IAP webhook 签名常量时间比较（`9b0c89a`）；progress 视图抽取共享 trend chart / bandColor / StatCard（`7dff11f` + `2ad4e57`）；first-set 问卷 V1对比/新用户变体重设计（`2e9e0d1`）。
+
 ## 2026-06-02 — v1.8.1
 
 - **听力音频上线即可播放（v1.8.0 题库刷新后三连修复）**：新增 419 条音频后，线上音频经历三步才真正可播——
