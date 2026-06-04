@@ -334,6 +334,12 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
         />
       </div>
 
+      {/* Practice-only reminder: the real exam plays the audio only once */}
+      {isPractice && (
+        <div style={{ marginTop: 12, fontSize: 12, color: C.t3, fontFamily: FONT }}>
+          提示：真实考试音频仅播放一遍
+        </div>
+      )}
     </div>
   );
 }
