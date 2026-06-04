@@ -148,6 +148,14 @@ function MockDetail({ session }) {
   const m1Pct = m1.total > 0 ? Math.round((m1.correct / m1.total) * 100) : null;
   const m2Pct = m2.total > 0 ? Math.round((m2.correct / m2.total) * 100) : null;
 
+  // Per-task snapshots saved by buildTaskSnapshots (AdaptiveExamShell): new
+  // mocks carry them so every question can be replayed; older mocks only kept
+  // the score summary.
+  const tasks = [
+    ...(Array.isArray(m1.tasks) ? m1.tasks : []).map((t) => ({ ...t, module: 1 })),
+    ...(Array.isArray(m2.tasks) ? m2.tasks : []).map((t) => ({ ...t, module: 2 })),
+  ];
+
   const cell = (label, value, hint) => (
     <div style={{ flex: 1, padding: "10px 12px", background: "#f8faf9", border: `1px solid ${P.borderSubtle}`, borderRadius: 8, textAlign: "center" }}>
       <div style={{ fontSize: 10, color: P.textDim, marginBottom: 2 }}>{label}</div>
@@ -166,6 +174,81 @@ function MockDetail({ session }) {
       {path && (
         <div style={{ fontSize: 11, color: P.textSec, padding: "8px 12px", background: `${ACCENT.color}08`, borderRadius: 8, borderLeft: `3px solid ${ACCENT.color}` }}>
           <span style={{ fontWeight: 700, color: ACCENT.color, marginRight: 6 }}>路径</span>{path}
+        </div>
+      )}
+      {tasks.length > 0 ? (
+        <div style={{ marginTop: 4, display: "flex", flexDirection: "column", gap: 6 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: P.textSec, letterSpacing: "0.02em" }}>题目回顾 ({tasks.length})</div>
+          {tasks.map((task, i) => (
+            <MockTaskCard key={`${task.itemId || "t"}-${task.module}-${i}`} task={task} index={i} />
+          ))}
+        </div>
+      ) : (
+        <div style={{ fontSize: 11, color: P.textDim, fontStyle: "italic", marginTop: 2 }}>
+          这条模考记录只保存了分数概览；完成新的模考后即可逐题回顾。
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Adapt a mock per-task snapshot (buildTaskSnapshots) into the details shape the
+// per-subtype review renderers (LCRDetail / LADetail / LCDetail) expect. Each
+// result is normalized so `.correct` is always present — older snapshots may
+// omit it, and without it the correct option wouldn't be highlighted.
+function taskToReviewDetails(task) {
+  const subtype = task.taskType;
+  if (subtype === "lcr") {
+    return {
+      subtype,
+      results: (task.results || []).map((r) => ({ ...r, correct: r.correct ?? task.answer ?? null })),
+      items: [{
+        id: task.itemId,
+        speaker: task.speaker,
+        options: task.options,
+        answer: task.answer,
+        explanation: task.explanation,
+      }],
+    };
+  }
+  const questions = Array.isArray(task.questions) ? task.questions : [];
+  return {
+    subtype,
+    results: (task.results || []).map((r, i) => ({ ...r, correct: r.correct ?? questions[i]?.answer ?? null })),
+    questions,
+    transcript: task.transcript || task.announcement || task.lecture || task.text || task.passage || "",
+    conversation: task.conversation || null,
+  };
+}
+
+// One collapsible card per mock task, reusing the practice-review renderers.
+function MockTaskCard({ task, index }) {
+  const [open, setOpen] = useState(false);
+  const m = getSubtypeInfo(task.taskType);
+  const t = Number(task.total) || (Array.isArray(task.results) ? task.results.length : 0);
+  const c = Number(task.correct) || 0;
+  const statusColor = t > 0 && c === t ? "#059669" : "#E11D48";
+  const adapted = { details: taskToReviewDetails(task) };
+
+  return (
+    <div style={{ border: `1px solid ${P.borderSubtle}`, borderRadius: 10, overflow: "hidden", background: P.surface }}>
+      <button onClick={() => setOpen((o) => !o)}
+        style={{ width: "100%", display: "flex", alignItems: "center", gap: 10, padding: "9px 12px", background: open ? `${m.color}06` : "transparent", border: "none", cursor: "pointer", textAlign: "left" }}>
+        <span style={{ width: 24, height: 24, borderRadius: 7, background: `${m.color}14`, color: m.color, fontSize: 12, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{m.icon}</span>
+        <span style={{ flex: 1, fontSize: 12.5, fontWeight: 600, color: P.text, display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+          {m.label}
+          <span style={{ fontSize: 10, color: P.textDim, fontWeight: 500 }}>#{index + 1}</span>
+          {task.module ? <span style={{ fontSize: 9, fontWeight: 700, padding: "1px 6px", borderRadius: 999, background: `${ACCENT.color}12`, color: ACCENT.color }}>M{task.module}</span> : null}
+          {task.topic ? <span style={{ fontSize: 10, color: P.textDim, fontWeight: 400 }}>{task.topic}</span> : null}
+        </span>
+        <span style={{ fontSize: 11, fontWeight: 700, color: statusColor, background: `${statusColor}12`, padding: "2px 8px", borderRadius: 999, fontVariantNumeric: "tabular-nums" }}>{c}/{t}</span>
+        <ChevronIcon open={open} color={P.textDim} />
+      </button>
+      {open && (
+        <div style={{ padding: "10px 12px 12px", borderTop: `1px solid ${P.borderSubtle}`, background: "#fbfcfb" }}>
+          {task.taskType === "lcr" ? <LCRDetail session={adapted} />
+            : task.taskType === "lc" ? <LCDetail session={adapted} />
+            : <LADetail session={adapted} />}
         </div>
       )}
     </div>

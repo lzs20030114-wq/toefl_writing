@@ -685,12 +685,14 @@ function buildTaskSnapshots(results) {
       // For LCR (single-question listen-and-choose)
       options: item.options || null,
       answer: item.answer || null,
+      explanation: item.explanation || null,
       // Audio refs (URLs / text fallback for TTS) — keep so listening review
       // can re-play. Strings only, no blobs.
       audio_url: item.audio_url || null,
       speaker: item.speaker || null,
       announcement: item.announcement || null,
       lecture: item.lecture || null,
+      transcript: item.transcript || null,
       conversation: item.conversation || null,
       // Performance
       correct: r.correct ?? 0,
