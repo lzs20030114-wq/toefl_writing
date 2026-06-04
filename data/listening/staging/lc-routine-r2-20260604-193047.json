@@ -1,0 +1,164 @@
+{
+  "items": [
+    {
+      "context": "campus_service",
+      "situation": "a student asking the writing center about thesis tutoring hours",
+      "difficulty": "medium",
+      "speakers": [
+        {"name": "Woman", "role": "student", "gender": "female"},
+        {"name": "Man", "role": "writing_center_staff", "gender": "male"}
+      ],
+      "conversation": [
+        {"speaker": "Woman", "text": "Hi, I want to set up regular tutoring for my senior thesis. Are the hours different this semester?"},
+        {"speaker": "Man", "text": "Yeah, actually. We've extended evening hours to nine, but Saturday slots got cut. Thursdays fill up fastest."},
+        {"speaker": "Woman", "text": "Oh no. I work Thursday mornings. Can I book recurring weekly sessions?"},
+        {"speaker": "Man", "text": "Definitely. You can lock in the same Tuesday or Wednesday slot for the whole term."},
+        {"speaker": "Woman", "text": "Tuesday at five sounds perfect. Do I sign up online?"},
+        {"speaker": "Man", "text": "Yep, just use the writing center portal. Pick recurring, and I'll confirm it from this end."}
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the woman mainly trying to do?",
+          "options": {
+            "A": "Reschedule a session that conflicts with her Thursday job",
+            "B": "Arrange recurring tutoring meetings for her senior thesis",
+            "C": "Apply for a part-time job at the writing center",
+            "D": "Find out why the Saturday hours have been canceled"
+          },
+          "answer": "B",
+          "explanation": "女生一开口就说要为毕业论文安排长期的固定辅导，所以B是对话的核心目的。A把周四工作这个细节当主话题，属于以偏概全；C完全没在对话里出现；D只是男生顺带提到的一个变动，并不是女生求助的主要原因。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "C": "wrong_topic",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "According to the man, how should the woman book her sessions?",
+          "options": {
+            "A": "By calling the writing center front desk directly",
+            "B": "By emailing the man her preferred weekly schedule",
+            "C": "By signing a paper clipboard outside the office",
+            "D": "By using the writing center's online booking portal"
+          },
+          "answer": "D",
+          "explanation": "男生明确说\"just use the writing center portal\"，所以D正确。A、B、C都没有在对话中提到，是与情境相关但未被提及的干扰项。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "related_but_not_stated",
+            "C": "related_but_not_stated"
+          }
+        }
+      ]
+    },
+    {
+      "context": "errands_service",
+      "situation": "a student checking on a special-ordered textbook at the campus bookstore",
+      "difficulty": "easy",
+      "speakers": [
+        {"name": "Woman", "role": "student", "gender": "female"},
+        {"name": "Man", "role": "bookstore_staff", "gender": "male"}
+      ],
+      "conversation": [
+        {"speaker": "Woman", "text": "Hi, I'm checking on a special order. The book is called Practical Linguistics."},
+        {"speaker": "Man", "text": "Yeah, it's listed. Shipped from the publisher Monday — usually about five business days."},
+        {"speaker": "Woman", "text": "Oh, that's cutting it close. My paper is due Saturday."},
+        {"speaker": "Man", "text": "Well, if you're nervous, the library keeps a reserve copy you can borrow overnight."},
+        {"speaker": "Woman", "text": "Smart. I didn't realize they had reserves on this one. Thanks!"},
+        {"speaker": "Man", "text": "No problem. We'll text you when yours arrives either way."}
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man say about the special-ordered book?",
+          "options": {
+            "A": "It typically arrives about five business days after shipping",
+            "B": "It was shipped from a regional warehouse on Friday",
+            "C": "It costs more than the library's reserve copy edition",
+            "D": "It is currently out of stock at the publisher's office"
+          },
+          "answer": "A",
+          "explanation": "男生明确说\"Shipped from the publisher Monday — usually about five business days\"，所以A是对的。B把发货日期改了（实际是周一，不是周五）；C和D的价格和缺货信息对话里完全没提，属于相关但未陈述/错误细节。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do before Saturday?",
+          "options": {
+            "A": "Ask the publisher to expedite her shipment directly",
+            "B": "Cancel her special order at the campus bookstore",
+            "C": "Borrow the library's reserve copy of the book",
+            "D": "Submit her paper without using the book at all"
+          },
+          "answer": "C",
+          "explanation": "女生听到\"library keeps a reserve copy\"后说\"Smart\"并道谢，强烈暗示她会去图书馆借这本备用书，所以C正确。A过度推断（没说要联系出版社）；B被她拒绝（she's still keeping the order, will be texted when it arrives）；D完全没依据。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "rejected_option",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "two students discussing broken machines in the dorm laundry room",
+      "difficulty": "medium",
+      "speakers": [
+        {"name": "Woman", "role": "student", "gender": "female"},
+        {"name": "Man", "role": "student", "gender": "male"}
+      ],
+      "conversation": [
+        {"speaker": "Woman", "text": "Hey, did you try the laundry room last night? Every dryer was broken or jammed."},
+        {"speaker": "Man", "text": "Yeah, the basement set has been a nightmare all week. I started using the second-floor machines instead."},
+        {"speaker": "Woman", "text": "Wait, second floor has machines? I had no idea."},
+        {"speaker": "Man", "text": "They just installed them in August. Honestly, half the residents still don't know."},
+        {"speaker": "Woman", "text": "Are they busy? I always end up waiting forty minutes downstairs."},
+        {"speaker": "Man", "text": "Almost empty most evenings. Most people stick with what they know."},
+        {"speaker": "Woman", "text": "Perfect. I'll switch tonight. Thanks for the tip!"}
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man tell the woman about the basement laundry room?",
+          "options": {
+            "A": "It has been closed for major renovations this week",
+            "B": "Its machines have been malfunctioning all week long",
+            "C": "It now requires an extra coin fee per load to use",
+            "D": "Only graduate residents are allowed to access it"
+          },
+          "answer": "B",
+          "explanation": "男生说\"the basement set has been a nightmare all week\"，与女生看到的\"every dryer was broken or jammed\"互相印证，B正确。A把\"机器坏了\"夸大成\"整个房间关闭装修\"；C、D额外的收费和资格限制对话里完全没有依据。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do tonight?",
+          "options": {
+            "A": "Try the laundry machines on the second floor",
+            "B": "Report the broken dryers to the dorm office",
+            "C": "Wait downstairs until the basement set is repaired",
+            "D": "Carry her laundry to an off-campus laundromat"
+          },
+          "answer": "A",
+          "explanation": "女生听完男生介绍\"second-floor machines\"后说\"I'll switch tonight\"，所以她最可能晚上去试二楼的机器，A正确。B、D对话里都没有提到的延伸动作；C恰好相反——她明确要切换、不再等地下室。",
+          "distractor_types": {
+            "B": "unrelated_next_step",
+            "C": "rejected_option",
+            "D": "over_inference"
+          }
+        }
+      ]
+    }
+  ]
+}

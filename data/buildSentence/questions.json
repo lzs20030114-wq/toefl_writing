@@ -1,6 +1,6 @@
 {
   "version": "1.3",
-  "generated_at": "2026-06-04T19:07:44.915Z",
+  "generated_at": "2026-06-04T19:39:26.216Z",
   "question_sets": [
     {
       "set_id": 1,
@@ -4982,6 +4982,262 @@
           "grammar_points": [
             "simple past",
             "time phrase"
+          ]
+        }
+      ]
+    },
+    {
+      "set_id": 21,
+      "questions": [
+        {
+          "id": "ets_s21_q1",
+          "prompt": "Did you finish your conclusion section?",
+          "answer": "Emma helped me revise the final paragraph.",
+          "chunks": [
+            "emma",
+            "me",
+            "revise",
+            "the final",
+            "paragraph",
+            "helps"
+          ],
+          "prefilled": [
+            "helped"
+          ],
+          "prefilled_positions": {
+            "helped": 1
+          },
+          "distractor": "helps",
+          "has_question_mark": false,
+          "grammar_points": [
+            "simple_past"
+          ]
+        },
+        {
+          "id": "ets_s21_q2",
+          "prompt": "Did Juan tell you about the climbing trip?",
+          "answer": "Harold reserved spots for the whole group.",
+          "chunks": [
+            "harold",
+            "spots",
+            "for",
+            "the whole",
+            "group",
+            "reserves"
+          ],
+          "prefilled": [
+            "reserved"
+          ],
+          "prefilled_positions": {
+            "reserved": 1
+          },
+          "distractor": "reserves",
+          "has_question_mark": false,
+          "grammar_points": [
+            "simple_past"
+          ]
+        },
+        {
+          "id": "ets_s21_q3",
+          "prompt": "What did Diane tell you about the seminar room?",
+          "answer": "She asked whether we had completed the booking form.",
+          "chunks": [
+            "she",
+            "asked",
+            "whether",
+            "we had",
+            "completed",
+            "the booking",
+            "form",
+            "did"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "indirect_question",
+            "past_perfect"
+          ]
+        },
+        {
+          "id": "ets_s21_q4",
+          "prompt": "Have you decided on a topic for your essay?",
+          "answer": "Mariana asked whether the lab deadline could be extended.",
+          "chunks": [
+            "mariana",
+            "whether",
+            "the lab",
+            "deadline",
+            "could be",
+            "extended",
+            "is"
+          ],
+          "prefilled": [
+            "asked"
+          ],
+          "prefilled_positions": {
+            "asked": 1
+          },
+          "distractor": "is",
+          "has_question_mark": false,
+          "grammar_points": [
+            "indirect_question",
+            "modal_passive"
+          ]
+        },
+        {
+          "id": "ets_s21_q5",
+          "prompt": "Have you contacted Julian about the field trip?",
+          "answer": "He has not replied to my message yet.",
+          "chunks": [
+            "he",
+            "has not",
+            "replied",
+            "to",
+            "my message",
+            "yet",
+            "did"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation",
+            "present_perfect"
+          ]
+        },
+        {
+          "id": "ets_s21_q6",
+          "prompt": "What did Margot say about the study room you wanted?",
+          "answer": "Margot chose the room that has bigger windows.",
+          "chunks": [
+            "margot",
+            "the room",
+            "that",
+            "has",
+            "bigger",
+            "windows",
+            "choose"
+          ],
+          "prefilled": [
+            "chose"
+          ],
+          "prefilled_positions": {
+            "chose": 1
+          },
+          "distractor": "choose",
+          "has_question_mark": false,
+          "grammar_points": [
+            "relative_clause",
+            "simple_past"
+          ]
+        },
+        {
+          "id": "ets_s21_q7",
+          "prompt": "What did Professor Cho say about Naomi's project?",
+          "answer": "He gave her an unusually detailed reading list.",
+          "chunks": [
+            "he",
+            "gave",
+            "her",
+            "an",
+            "detailed",
+            "reading list",
+            "give"
+          ],
+          "prefilled": [
+            "unusually"
+          ],
+          "prefilled_positions": {
+            "unusually": 4
+          },
+          "distractor": "give",
+          "has_question_mark": false,
+          "grammar_points": [
+            "simple_past",
+            "adverb_modifier"
+          ]
+        },
+        {
+          "id": "ets_s21_q8",
+          "prompt": "Angelina loved the writing seminar I joined.",
+          "answer": "Where can I register for that workshop?",
+          "chunks": [
+            "where",
+            "can",
+            "i",
+            "for",
+            "that",
+            "workshop",
+            "did"
+          ],
+          "prefilled": [
+            "register"
+          ],
+          "prefilled_positions": {
+            "register": 3
+          },
+          "distractor": "did",
+          "has_question_mark": true,
+          "grammar_points": [
+            "direct_question",
+            "wh_question"
+          ]
+        },
+        {
+          "id": "ets_s21_q9",
+          "prompt": "Did Olivia tell you what happened to the climbing helmets?",
+          "answer": "They were inspected by Hector's safety team last Monday morning.",
+          "chunks": [
+            "they",
+            "were",
+            "inspected",
+            "by",
+            "hector's",
+            "safety team",
+            "morning",
+            "are"
+          ],
+          "prefilled": [
+            "last monday"
+          ],
+          "prefilled_positions": {
+            "last monday": 7
+          },
+          "distractor": "are",
+          "has_question_mark": false,
+          "grammar_points": [
+            "passive_voice",
+            "simple_past"
+          ]
+        },
+        {
+          "id": "ets_s21_q10",
+          "prompt": "What did Alison say after she heard about the list?",
+          "answer": "She thought Matthew had been added to the list instead.",
+          "chunks": [
+            "she",
+            "thought",
+            "matthew",
+            "had been",
+            "added",
+            "to the",
+            "list",
+            "was"
+          ],
+          "prefilled": [
+            "instead"
+          ],
+          "prefilled_positions": {
+            "instead": 9
+          },
+          "distractor": "was",
+          "has_question_mark": false,
+          "grammar_points": [
+            "past_perfect_passive",
+            "embedded_clause"
           ]
         }
       ]
