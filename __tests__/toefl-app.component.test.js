@@ -131,18 +131,18 @@ describe("ToeflApp navigation", () => {
     expect(submit).not.toBeDisabled();
   });
 
-  test("can skip ahead, then jump back via the navigator to answer later", () => {
+  test("can skip ahead, then go back (上一题) to answer a skipped question", () => {
     render(<BuildSentenceTask onExit={() => {}} questions={[BUILD_TEST_Q, BUILD_ALT_Q]} />);
     fireEvent.click(screen.getByTestId("build-start"));
 
     // Skip Q1 entirely (empty) by clicking next.
     expect(screen.getByTestId("slot-0")).toHaveTextContent("1");
     fireEvent.click(screen.getByTestId("build-submit"));
-    // Now on Q2 (its first prompt word differs).
+    // Now on Q2 (its prompt differs).
     expect(screen.getByText(BUILD_ALT_Q.prompt)).toBeInTheDocument();
 
-    // Jump back to Q1 via the navigator and answer it now.
-    fireEvent.click(screen.getByTestId("bs-nav-0"));
+    // Go back to Q1 via the Back button and answer it now.
+    fireEvent.click(screen.getByRole("button", { name: "上一题" }));
     expect(screen.getByText(BUILD_TEST_Q.prompt)).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "could" }));
     expect(screen.getByTestId("slot-0")).toHaveTextContent("Could");

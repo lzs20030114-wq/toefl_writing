@@ -430,16 +430,6 @@ export function useBuildSentenceSession(questions, options = {}) {
     restoreOrInitQ(prevIdx, qs);
   }
 
-  // Jump to any question (free navigation: skip ahead, or return to a skipped
-  // one). Preserves the current answer first, then restores the target's state.
-  function jumpTo(target) {
-    if (phase !== "active") return;
-    if (!Number.isInteger(target) || target === idx || target < 0 || target >= qs.length) return;
-    recordAndSaveCurrent();
-    setIdx(target);
-    restoreOrInitQ(target, qs);
-  }
-
   function submit() {
     if (phase !== "active") return;
     if (submitLockRef.current) return;
@@ -523,7 +513,6 @@ export function useBuildSentenceSession(questions, options = {}) {
     resetQ,
     submit,
     goBack,
-    jumpTo,
     pickChunk,
     removeChunk,
     placeChunkAt,
