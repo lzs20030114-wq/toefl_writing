@@ -120,6 +120,54 @@ async function fail(meta, status, payload) {
   return Response.json(payload, { status });
 }
 
+// Atomically record one unit of AI usage for the day, enforcing the cap as a
+// race backstop. Prefers the increment_daily_usage RPC (single round-trip, no
+// read-then-write race); if that RPC is missing — e.g. the migration hasn't
+// been applied yet — it falls back to a best-effort upsert so usage is never
+// silently un-metered. Always best-effort: a metering write must never turn a
+// successful AI response into an error for the user.
+async function recordAiUsage(userCode, cap, day) {
+  if (!isSupabaseAdminConfigured || !userCode) return;
+  try {
+    const { error } = await supabaseAdmin.rpc("increment_daily_usage", {
+      p_user_code: userCode,
+      p_count: 1,
+      p_cap: cap,
+      p_date: day,
+    });
+    if (!error) return;
+    await fallbackIncrementUsage(userCode, cap, day);
+  } catch {
+    await fallbackIncrementUsage(userCode, cap, day);
+  }
+}
+
+async function fallbackIncrementUsage(userCode, cap, day) {
+  try {
+    const { data: existing } = await supabaseAdmin
+      .from("daily_usage")
+      .select("usage_count")
+      .eq("user_code", userCode)
+      .eq("date", day)
+      .maybeSingle();
+    const used = existing?.usage_count || 0;
+    if (used >= cap) return; // race backstop, mirrors the RPC's cap check
+    if (existing) {
+      await supabaseAdmin
+        .from("daily_usage")
+        .update({ usage_count: used + 1 })
+        .eq("user_code", userCode)
+        .eq("date", day);
+    } else {
+      await supabaseAdmin
+        .from("daily_usage")
+        .insert({ user_code: userCode, date: day, usage_count: 1 });
+    }
+  } catch {
+    // Best-effort only — never block a successful AI response on a metering write.
+  }
+}
+
 export async function POST(request) {
   const requestMeta = {
     clientId: request.headers.get("x-client-id") || "",
@@ -145,7 +193,14 @@ export async function POST(request) {
       return fail({ ...requestMeta, stage: "input", errorType: "validation" }, 400, { error: bodyError });
     }
 
-    // Server-side usage check: require valid user code and enforce daily limits
+    // Server-side usage check + metering. Require a valid user code and enforce
+    // the daily limit BEFORE spending a DeepSeek call. The authoritative
+    // increment happens AFTER a successful response (see recordAiUsage below) so
+    // that (a) the limit cannot be bypassed by a client that simply never calls
+    // /api/usage, and (b) failed/transient AI errors don't consume a credit.
+    let usageUserCode = "";
+    let usageCap = 0;
+    let usageDay = "";
     if (isSupabaseAdminConfigured) {
       const userCode = String(payload.userCode || "").toUpperCase().trim();
       if (!userCode || userCode.length !== 6) {
@@ -160,7 +215,7 @@ export async function POST(request) {
         return fail({ ...requestMeta, stage: "auth", errorType: "invalid_user" }, 403, { error: "Invalid user." });
       }
       // Check tier + expiry
-      let isPro = user.tier === "legacy" || (user.tier === "pro" && !(user.tier_expires_at && new Date(user.tier_expires_at).getTime() <= Date.now()));
+      const isPro = user.tier === "legacy" || (user.tier === "pro" && !(user.tier_expires_at && new Date(user.tier_expires_at).getTime() <= Date.now()));
       const dailyLimit = isPro ? 100 : 3;
       const today = new Date().toISOString().split("T")[0];
       const { data: usage } = await supabaseAdmin
@@ -173,6 +228,9 @@ export async function POST(request) {
         const errMsg = isPro ? "服务繁忙，请稍后再试" : "Daily limit reached.";
         return fail({ ...requestMeta, stage: "usage", errorType: "daily_limit" }, 429, { error: errMsg });
       }
+      usageUserCode = userCode;
+      usageCap = dailyLimit;
+      usageDay = today;
     }
 
     const { system, message } = payload;
@@ -197,6 +255,7 @@ export async function POST(request) {
           ],
         },
       });
+      await recordAiUsage(usageUserCode, usageCap, usageDay);
       return Response.json({ content });
     }
 
@@ -230,6 +289,7 @@ export async function POST(request) {
 
     const data = await res.json();
     const content = data.choices?.[0]?.message?.content || "";
+    await recordAiUsage(usageUserCode, usageCap, usageDay);
     return Response.json({ content });
   } catch (e) {
     return fail(
