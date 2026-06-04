@@ -3624,6 +3624,174 @@
       },
       "id": "lcr_mpygmorj_7",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/choose-response/lcr_mpygmorj_7.mp3"
+    },
+    {
+      "context": "social",
+      "situation": "expressing concern about a friend's situation",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "How are you holding up after the move?",
+      "options": {
+        "A": "Honestly, still unpacking boxes everywhere.",
+        "B": "I really enjoyed the weather yesterday.",
+        "C": "The library is open until eleven.",
+        "D": "Yes, I know several people there."
+      },
+      "answer": "A",
+      "explanation": "正确答案以\"Honestly\"开头并间接回应搬家后的状态，符合marker_led_indirect模式。B话题完全无关；C回答地点而非状况；D是知人不是知状态，属polysemy陷阱。",
+      "distractor_types": {
+        "B": "off_topic",
+        "C": "wrong_question_type",
+        "D": "semantic_association_trap"
+      },
+      "id": "lcr_mpzvq35n_0"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student checking with TA about lab report requirements",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Why didn't we have to include raw data this time?",
+      "options": {
+        "A": "I haven't seen the data file yet either.",
+        "B": "Beats me, that part wasn't on the rubric.",
+        "C": "The lab is on the second floor.",
+        "D": "Yes, raw data is important to include."
+      },
+      "answer": "B",
+      "explanation": "正确答案使用习语\"Beats me\"承认不知道并补充说明，符合idiomatic paradigm。A是模糊共情，是经典的\"shares the speaker's concern\"陷阱；C回答地点；D矛盾且明显错误。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_mpzvq35n_1"
+    },
+    {
+      "context": "general_daily",
+      "situation": "making or rescheduling an appointment",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Where should we meet for the consultation?",
+      "options": {
+        "A": "I'm free Tuesday morning, actually.",
+        "B": "Yes, I know that coffee shop.",
+        "C": "How about the lobby of City Hall?",
+        "D": "The consultation took about an hour."
+      },
+      "answer": "C",
+      "explanation": "正确答案用反问\"How about...\"提出地点建议，推进对话，符合counter_question paradigm。A回答时间而非地点；B只是认知陷阱；D谈时长，话题已过。",
+      "distractor_types": {
+        "A": "wrong_question_type",
+        "B": "semantic_association_trap",
+        "D": "off_topic"
+      },
+      "id": "lcr_mpzvq35n_2"
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a store clerk about a return or exchange",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "I'd like to exchange this jacket for a smaller size.",
+      "options": {
+        "A": "The jacket section is upstairs by escalators.",
+        "B": "Yes, I bought it here last week.",
+        "C": "I returned my coat just two days ago.",
+        "D": "Of course, can I see your receipt?"
+      },
+      "answer": "D",
+      "explanation": "正确答案以\"Of course\"开头并自然推进交易（要收据），符合idiomatic paradigm。A回答地点而非业务；B无关；C是和店员无关的另一人经历。",
+      "distractor_types": {
+        "A": "wrong_question_type",
+        "B": "semantic_association_trap",
+        "C": "off_topic"
+      },
+      "id": "lcr_mpzvq35n_3"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a librarian about a book or resource",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Do you have any books on Renaissance music theory?",
+      "options": {
+        "A": "Absolutely, follow me to the music section.",
+        "B": "I read a music history book yesterday.",
+        "C": "The library closes at midnight tonight.",
+        "D": "Yes, I love Renaissance paintings too."
+      },
+      "answer": "A",
+      "explanation": "正确答案用习语\"Absolutely\"承诺帮助并引导到位置，符合idiomatic paradigm。B是别人经历；C回答时间；D偷换主题到paintings。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "off_topic"
+      },
+      "id": "lcr_mpzvq35n_4"
+    },
+    {
+      "context": "general_daily",
+      "situation": "arranging a ride or carpool with a friend",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Can you pick me up before the meeting?",
+      "options": {
+        "A": "The meeting will start at three sharp.",
+        "B": "What time should I be at your place?",
+        "C": "Yes, I drove to the meeting last time.",
+        "D": "I left my keys on the table."
+      },
+      "answer": "B",
+      "explanation": "正确答案用反问推进时间细节，符合counter_question paradigm。A回答会议时间而非接送；C回答历史而非未来；D无关。",
+      "distractor_types": {
+        "A": "wrong_question_type",
+        "C": "semantic_association_trap",
+        "D": "off_topic"
+      },
+      "id": "lcr_mpzvq35n_5"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about campus shuttle or parking",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "What time does the last shuttle leave campus?",
+      "options": {
+        "A": "The shuttle is usually packed in mornings.",
+        "B": "Yes, I take the shuttle pretty often.",
+        "C": "It departs at eleven o'clock sharp.",
+        "D": "The stop is by the science building."
+      },
+      "answer": "C",
+      "explanation": "正确答案直接回答时间问题，符合罕见的direct_topical paradigm。A谈人多而非时间；B只是肯定坐班车；D回答地点。",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "semantic_association_trap",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_mpzvq35n_6"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about dorm maintenance issue",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "My shower has been draining slowly all week.",
+      "options": {
+        "A": "The dorm has new water heaters installed.",
+        "B": "Yes, I had a slow drain last semester.",
+        "C": "I usually shower in the morning anyway.",
+        "D": "Did you submit a maintenance request online?"
+      },
+      "answer": "D",
+      "explanation": "正确答案用反问推进解决方案，符合counter_question paradigm。A切换到无关话题；B是\"我也有过\"的共情陷阱；C转向无关的个人习惯。",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "semantic_association_trap",
+        "C": "wrong_question_type"
+      },
+      "id": "lcr_mpzvq35n_7"
     }
   ]
 }

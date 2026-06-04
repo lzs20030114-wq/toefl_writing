@@ -1,17 +1,17 @@
 {
-  "session_id": "routine-20260603-190444",
-  "generated_at": "2026-06-03T19:31:41.997Z",
+  "session_id": "routine-20260604-190449",
+  "generated_at": "2026-06-04T19:20:58.457Z",
   "needs_retry": true,
   "overall_scores": {
     "diversity": 94,
-    "quality": 97
+    "quality": 92
   },
   "retry_banks": [
     {
       "bank": "bs",
       "diversity_score": 88,
       "diversity_threshold": 90,
-      "quality_score": 100,
+      "quality_score": 96,
       "quality_threshold": 95,
       "failures": [
         "多样性 88 < 90"
@@ -21,16 +21,16 @@
         "场景 20/20",
         "句型 4/5",
         "开头 4/4",
-        "prefilled类型 8/4 (top:subject-np 4/20)",
-        "人物当prefilled 3/20 (15%, TPO~30%)",
-        "干扰词 11种 (top:did 20%)",
-        "chunk颗粒 6.0块/题 单词率84% (TPO~6块/77%)",
-        "题面对话化 14/20 (70% 含you, TPO~72%)"
+        "prefilled类型 7/4 (top:empty 4/20)",
+        "人物当prefilled 4/20 (20%, TPO~30%)",
+        "干扰词 10种 (top:asked 20%)",
+        "chunk颗粒 6.0块/题 单词率91% (TPO~6块/77%)",
+        "题面对话化 16/20 (80% 含you, TPO~72%)"
       ],
       "quality_breakdown": [
-        "块数 20/20",
+        "块数 19/20",
         "干扰词 20/20",
-        "答案长度 20/20",
+        "答案长度 18/20",
         "重组正确 20/20"
       ],
       "hints": [
@@ -42,20 +42,22 @@
       "bank": "reading-rdl-long",
       "diversity_score": 60,
       "diversity_threshold": 70,
-      "quality_score": 100,
+      "quality_score": 50,
       "quality_threshold": 85,
       "failures": [
-        "多样性 60 < 70"
+        "多样性 60 < 70",
+        "质量 50 < 85"
       ],
       "diversity_breakdown": [
         "话题 2/2",
-        "notice 0 · email 2"
+        "notice 2 · email 0"
       ],
       "quality_breakdown": [
-        "词数 2/2"
+        "词数 1/2"
       ],
       "hints": [
-        "多样性 < gate — choose distinct topic/subtopic combos; avoid same discipline twice"
+        "多样性 < gate — choose distinct topic/subtopic combos; avoid same discipline twice",
+        "质量校验有偏差: 词数 1/2 — recheck schema compliance"
       ],
       "items_to_supplement": 1
     },
@@ -63,19 +65,19 @@
       "bank": "listening-lc",
       "diversity_score": 100,
       "diversity_threshold": 72,
-      "quality_score": 60,
+      "quality_score": 20,
       "quality_threshold": 80,
       "failures": [
-        "质量 60 < 80"
+        "质量 20 < 80"
       ],
       "diversity_breakdown": [
         "distinct openings 5/5"
       ],
       "quality_breakdown": [
-        "conv words 68-105: 3/5"
+        "conv words 68-105: 1/5"
       ],
       "hints": [
-        "质量校验有偏差: conv words 68-105: 3/5 — recheck schema compliance"
+        "质量校验有偏差: conv words 68-105: 1/5 — recheck schema compliance"
       ],
       "items_to_supplement": 3
     }

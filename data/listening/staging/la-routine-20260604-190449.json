@@ -1,0 +1,219 @@
+{
+  "items": [
+    {
+      "context": "academic_event",
+      "situation": "annual essay competition with faculty judges",
+      "speaker_role": "department_head",
+      "difficulty": "medium",
+      "announcement": "Good morning, students. I'm pleased to announce that the Humanities Department is accepting submissions for our seventeenth annual undergraduate essay competition. Essays must address one of three assigned prompts available on our department website starting Monday. The submission deadline is April 30 at 5:00 PM, with final judging by a panel of five faculty members. First prize is $500 and publication in our annual journal. Late submissions cannot be accepted under any circumstances, so plan your time carefully. We look forward to reading your best work.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What is the first-prize award for the competition?",
+          "options": {
+            "A": "Five hundred dollars and publication in the journal",
+            "B": "A summer research stipend at the department",
+            "C": "Automatic admission to graduate seminars",
+            "D": "An invited reading at the spring lecture series"
+          },
+          "answer": "A",
+          "explanation": "讲话明确说一等奖是500美元加在年刊上发表。其他选项都没有提到。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "topic_adjacent",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students who miss the April 30 deadline?",
+          "options": {
+            "A": "They may submit with a documented medical excuse",
+            "B": "They can submit at a reduced prize tier",
+            "C": "They will not be considered for any prize this year",
+            "D": "They must request a review by the department head"
+          },
+          "answer": "C",
+          "explanation": "讲话强调任何情况下都不接受迟交，因此错过截止日期的学生本年度无法参赛。A、B、D提供的\"补救\"方式都被\"under any circumstances\"排除。",
+          "distractor_types": {
+            "A": "literal_restatement",
+            "B": "reversed_intent",
+            "D": "related_but_not_stated"
+          }
+        }
+      ]
+    },
+    {
+      "context": "academic_event",
+      "situation": "undergraduate research symposium abstract submission deadline",
+      "speaker_role": "department_head",
+      "difficulty": "medium",
+      "announcement": "Good afternoon. I'm reminding all undergraduate researchers that abstracts for the spring research symposium are due by Friday, March 14 at 11:59 PM. Each abstract should be no longer than 250 words and must be submitted through the symposium portal, not by email. Faculty mentors must sign off electronically before submission. Accepted presenters will be notified by March 28. The symposium itself runs April 22 and 23 in the science quad. Please reach out to the symposium committee if you have questions about format or eligibility.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "How must abstracts be submitted?",
+          "options": {
+            "A": "By email to the symposium committee",
+            "B": "Through the official symposium portal",
+            "C": "On printed forms turned in at the department",
+            "D": "By upload through each faculty mentor's account"
+          },
+          "answer": "B",
+          "explanation": "讲话明确说必须通过symposium portal提交，且不通过邮件。其他三个方式都被排除或未提。",
+          "distractor_types": {
+            "A": "reversed_intent",
+            "C": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the role of faculty mentors?",
+          "options": {
+            "A": "Mentors choose the order of all student presentations",
+            "B": "Mentors join the symposium committee for that year",
+            "C": "Mentors organize travel reimbursement for presenters",
+            "D": "Mentors must approve student abstracts before submission"
+          },
+          "answer": "D",
+          "explanation": "讲话说导师必须在提交前电子签字，意味着导师在提交前要审核认可。其他选项无依据。",
+          "distractor_types": {
+            "A": "over_generalization",
+            "B": "topic_adjacent",
+            "C": "related_but_not_stated"
+          }
+        }
+      ]
+    },
+    {
+      "context": "career_services",
+      "situation": "LinkedIn profile photo day at career center",
+      "speaker_role": "program_coordinator",
+      "difficulty": "hard",
+      "announcement": "Hello, everyone. The Career Services Office will host a complimentary LinkedIn profile photo session on Wednesday, March 19, from 10:00 AM to 3:00 PM in Robinson Hall. Sessions are by appointment only and will be booked in fifteen-minute slots. A professional photographer will be on site. Please dress in business attire and bring a fully charged phone with the LinkedIn app already installed. Sign-ups open through the career portal on Friday at 9:00 AM, and slots typically fill within hours. Walk-ins cannot be accommodated this year due to time constraints. Contact us at careers@university.edu with questions.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What item are students instructed to bring with them?",
+          "options": {
+            "A": "A printed copy of their current resume",
+            "B": "A USB drive for receiving photo files",
+            "C": "A fully charged phone with the LinkedIn app installed",
+            "D": "A signed permission form from a faculty advisor"
+          },
+          "answer": "C",
+          "explanation": "讲话明确要求带充满电的手机并预装LinkedIn应用。其他选项无依据。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "D": "topic_adjacent"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students who do not sign up by Friday morning?",
+          "options": {
+            "A": "They are unlikely to secure a session before slots fill",
+            "B": "They will receive automatic priority on the next event",
+            "C": "They will need to pay an additional fee for a photo",
+            "D": "They can simply walk in if they arrive before 10:00 AM"
+          },
+          "answer": "A",
+          "explanation": "讲话说名额通常几小时内就被订满，因此不在开放时段尽早报名的学生很可能抢不到。B、C、D无依据；D尤其被\"walk-ins cannot be accommodated\"明确排除。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "topic_adjacent",
+            "D": "reversed_intent"
+          }
+        }
+      ]
+    },
+    {
+      "context": "facility_change",
+      "situation": "new fitness equipment installation at recreation center",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "Attention recreation center members. New cardiovascular equipment will be installed in the main fitness room over spring break, from March 11 through March 18. The fitness room will remain closed during this period, but the weight room and swimming pool will remain open on normal hours. Installation includes ten new treadmills, six rowing machines, and four stationary bikes, all replacing units that have reached the end of their service life. Members are welcome to attend a brief demonstration of the new equipment on March 19 at 4:00 PM in the lobby.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of the announcement?",
+          "options": {
+            "A": "To recruit volunteers to help install new equipment",
+            "B": "To request feedback about treadmill brands for the future",
+            "C": "To explain new safety procedures during equipment use",
+            "D": "To inform members about new fitness equipment and the related closure"
+          },
+          "answer": "D",
+          "explanation": "讲话目的是告知会员新设备安装计划及健身房临时关闭。A、B、C都不在讲话中。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "related_but_not_stated",
+            "C": "too_narrow"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "Which facilities will remain open during the installation week?",
+          "options": {
+            "A": "Only the main fitness room",
+            "B": "The weight room and the swimming pool",
+            "C": "Only the swimming pool on weekends",
+            "D": "All facilities except the swimming pool"
+          },
+          "answer": "B",
+          "explanation": "讲话明确说健身房关闭，但举重房和泳池正常开放。其他选项颠倒或不准确。",
+          "distractor_types": {
+            "A": "reversed_intent",
+            "C": "wrong_detail",
+            "D": "reversed_intent"
+          }
+        }
+      ]
+    },
+    {
+      "context": "logistics",
+      "situation": "new bike-share station locations",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "Good morning. Transportation Services is pleased to announce four new bike-share stations opening campus-wide on Monday, April 7. New stations will be located outside Bryson Library, near the south entrance of the Student Union, behind the Lopez Athletic Complex, and at the visitor lot off Maple Avenue. Each station holds twelve bikes, including two adaptive models for riders who need them. All stations will support the existing campus mobility app, and the first thirty minutes of any ride remain free for students with a valid identification card. We hope these additions will make crossing campus faster, especially during peak class times.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of the announcement?",
+          "options": {
+            "A": "To announce the opening of four new bike-share stations on campus",
+            "B": "To explain how to repair adaptive bikes in the existing network",
+            "C": "To recruit student volunteers for spring traffic surveys",
+            "D": "To warn that the campus mobility app will be discontinued"
+          },
+          "answer": "A",
+          "explanation": "讲话核心是介绍四个新bike-share站点的开放。B、C、D都与讲话无关。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "How many bikes will each new station hold?",
+          "options": {
+            "A": "Eight bikes including adaptive models",
+            "B": "Ten bikes for student use only",
+            "C": "Twelve bikes including two adaptive models",
+            "D": "Fifteen bikes restricted to campus staff"
+          },
+          "answer": "C",
+          "explanation": "讲话明确每站12辆，包括2辆适配型。其他都是混淆的数字。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "wrong_detail",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,224 @@
+{
+  "items": [
+    {
+      "id": "tmp_r1_q1",
+      "prompt": "I just started working at the bookstore.",
+      "answer": "Where do I clock in each morning?",
+      "chunks": ["where", "do", "i", "clock", "in", "each", "morning?", "will"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "will",
+      "has_question_mark": true,
+      "grammar_points": ["direct wh-question", "subject-auxiliary inversion"]
+    },
+    {
+      "id": "tmp_r1_q2",
+      "prompt": "Did you remember your library card today?",
+      "answer": "I left it on the kitchen table.",
+      "chunks": ["left", "it", "on the", "kitchen", "table", "have"],
+      "prefilled": ["I"],
+      "prefilled_positions": {"i": 0},
+      "distractor": "have",
+      "has_question_mark": false,
+      "grammar_points": ["simple past", "prepositional phrase"]
+    },
+    {
+      "id": "tmp_r1_q3",
+      "prompt": "What did Professor Patel mention after class?",
+      "answer": "He wondered whether my topic was too narrow.",
+      "chunks": ["he", "my", "topic", "was", "too narrow", "asked"],
+      "prefilled": ["wondered whether"],
+      "prefilled_positions": {"wondered whether": 1},
+      "distractor": "asked",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question with whether", "past simple"]
+    },
+    {
+      "id": "tmp_r1_q4",
+      "prompt": "Did you hear about the chemistry lab?",
+      "answer": "The equipment was upgraded over the break.",
+      "chunks": ["was", "upgraded", "over the", "break", "is"],
+      "prefilled": ["the equipment"],
+      "prefilled_positions": {"the equipment": 0},
+      "distractor": "is",
+      "has_question_mark": false,
+      "grammar_points": ["passive voice", "time phrase"]
+    },
+    {
+      "id": "tmp_r1_q5",
+      "prompt": "Did you find a quiet study area?",
+      "answer": "The corner near the periodicals stays empty most evenings.",
+      "chunks": ["the corner", "near", "the", "periodicals", "stays", "empty", "most", "evenings", "stayed"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "stayed",
+      "has_question_mark": false,
+      "grammar_points": ["simple present", "prepositional phrase"]
+    },
+    {
+      "id": "tmp_r1_q6",
+      "prompt": "What did your roommate say about the laundry room?",
+      "answer": "The dryers will run again starting tomorrow.",
+      "chunks": ["the dryers", "run", "again", "starting", "tomorrow", "have"],
+      "prefilled": ["will"],
+      "prefilled_positions": {"will": 2},
+      "distractor": "have",
+      "has_question_mark": false,
+      "grammar_points": ["modal will", "time phrase"]
+    },
+    {
+      "id": "tmp_r1_q7",
+      "prompt": "Have you started the term paper yet?",
+      "answer": "Honestly, I have not chosen my thesis topic.",
+      "chunks": ["i", "have", "not", "chosen", "my", "thesis", "topic", "did"],
+      "prefilled": ["Honestly,"],
+      "prefilled_positions": {"honestly,": 0},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["present perfect negation", "sentence-opener adverb"]
+    },
+    {
+      "id": "tmp_r1_q8",
+      "prompt": "What did the housing office tell you?",
+      "answer": "She explained how the room transfer works.",
+      "chunks": ["she", "explained", "the", "room transfer", "works", "asked"],
+      "prefilled": ["how"],
+      "prefilled_positions": {"how": 2},
+      "distractor": "asked",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question with how", "simple present"]
+    },
+    {
+      "id": "tmp_r1_q9",
+      "prompt": "Did you stay for the entire orientation?",
+      "answer": "The advisor asked whether I had registered yet.",
+      "chunks": ["the advisor", "asked", "i", "had", "registered", "yet", "did"],
+      "prefilled": ["whether"],
+      "prefilled_positions": {"whether": 2},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question with whether", "past perfect"]
+    },
+    {
+      "id": "tmp_r1_q10",
+      "prompt": "Did you grab your study materials?",
+      "answer": "The folder that I packed is missing some notes.",
+      "chunks": ["the folder", "i", "packed", "is", "missing", "some", "notes", "was"],
+      "prefilled": ["that"],
+      "prefilled_positions": {"that": 2},
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause with that", "simple present"]
+    },
+    {
+      "id": "tmp_r1_q11",
+      "prompt": "Are you settling into your new suite?",
+      "answer": "My new roommates keep regular hours.",
+      "chunks": ["my new", "roommates", "keep", "regular", "hours", "are"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "are",
+      "has_question_mark": false,
+      "grammar_points": ["simple present", "subject-verb-object"]
+    },
+    {
+      "id": "tmp_r1_q12",
+      "prompt": "I'm signing up for the volunteer fair tomorrow.",
+      "answer": "Where do new volunteers register?",
+      "chunks": ["do", "new", "volunteers", "register?", "can"],
+      "prefilled": ["Where"],
+      "prefilled_positions": {"where": 0},
+      "distractor": "can",
+      "has_question_mark": true,
+      "grammar_points": ["direct wh-question", "subject-auxiliary inversion"]
+    },
+    {
+      "id": "tmp_r1_q13",
+      "prompt": "Why did you stop by the writing center?",
+      "answer": "She asked when my paper would be ready.",
+      "chunks": ["she", "asked", "my", "paper", "would", "be", "ready", "did"],
+      "prefilled": ["when"],
+      "prefilled_positions": {"when": 2},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question with when", "modal would"]
+    },
+    {
+      "id": "tmp_r1_q14",
+      "prompt": "Did you finalize your seminar choices?",
+      "answer": "I picked the literature seminar this morning.",
+      "chunks": ["picked", "the", "literature", "seminar", "this", "morning", "have"],
+      "prefilled": ["I"],
+      "prefilled_positions": {"i": 0},
+      "distractor": "have",
+      "has_question_mark": false,
+      "grammar_points": ["simple past", "time phrase"]
+    },
+    {
+      "id": "tmp_r1_q15",
+      "prompt": "What did the dining hall announce this morning?",
+      "answer": "The breakfast menu has been expanded with pastries.",
+      "chunks": ["has", "been", "expanded", "with", "pastries", "will"],
+      "prefilled": ["the breakfast menu"],
+      "prefilled_positions": {"the breakfast menu": 0},
+      "distractor": "will",
+      "has_question_mark": false,
+      "grammar_points": ["present perfect passive", "prepositional phrase"]
+    },
+    {
+      "id": "tmp_r1_q16",
+      "prompt": "Did you finish setting up your laptop?",
+      "answer": "I have not installed the math software yet.",
+      "chunks": ["i", "have", "not", "installed", "the", "math software", "yet", "did"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["present perfect negation"]
+    },
+    {
+      "id": "tmp_r1_q17",
+      "prompt": "Have you talked to your teaching assistant?",
+      "answer": "She suggested I rewrite the second section.",
+      "chunks": ["she", "i", "rewrite", "the", "second", "section", "asked"],
+      "prefilled": ["suggested"],
+      "prefilled_positions": {"suggested": 1},
+      "distractor": "asked",
+      "has_question_mark": false,
+      "grammar_points": ["subjunctive complement", "past tense"]
+    },
+    {
+      "id": "tmp_r1_q18",
+      "prompt": "Did you go on the museum trip?",
+      "answer": "I joined the gallery tour on Wednesday afternoon.",
+      "chunks": ["joined", "the", "gallery", "tour", "on", "wednesday", "afternoon", "went"],
+      "prefilled": ["I"],
+      "prefilled_positions": {"i": 0},
+      "distractor": "went",
+      "has_question_mark": false,
+      "grammar_points": ["simple past", "prepositional phrase"]
+    },
+    {
+      "id": "tmp_r1_q19",
+      "prompt": "What did your study group ask you?",
+      "answer": "They wondered whether the final included an essay portion.",
+      "chunks": ["they", "wondered", "whether", "the final", "an", "essay", "portion", "asked"],
+      "prefilled": ["included"],
+      "prefilled_positions": {"included": 4},
+      "distractor": "asked",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question with whether", "past simple"]
+    },
+    {
+      "id": "tmp_r1_q20",
+      "prompt": "Did your visit to the lab go smoothly?",
+      "answer": "The microscope that I borrowed was returned this morning.",
+      "chunks": ["the microscope", "that", "i", "borrowed", "this", "morning", "is"],
+      "prefilled": ["was returned"],
+      "prefilled_positions": {"was returned": 4},
+      "distractor": "is",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause", "passive past"]
+    }
+  ]
+}

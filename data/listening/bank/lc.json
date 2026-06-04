@@ -7718,6 +7718,458 @@
       ],
       "id": "lc_mpygi0s5_4",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/conversation/lc_mpygi0s5_4.mp3"
+    },
+    {
+      "context": "plans_social",
+      "situation": "two friends coordinating a weekend hiking or beach trip",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hey, are we still on for Saturday? I've been looking at the forecast and it's supposed to be perfect."
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, I'm in. But I was thinking, maybe we should do the coast trail instead of Bear Ridge? It's only an hour drive."
+        },
+        {
+          "speaker": "Woman",
+          "text": "The coast trail? I'd love to, but my car is in the shop until Monday."
+        },
+        {
+          "speaker": "Man",
+          "text": "Oh. Hmm. Well, I can drive. My tank's full anyway."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Are you sure? I can chip in for gas. And I'll grab sandwiches from that place by the library you like."
+        },
+        {
+          "speaker": "Man",
+          "text": "Don't worry about gas, but sandwiches sound great. Should we leave around eight? Parking fills up fast there."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Eight works for me. I'll text you Friday night to confirm. Oh, and should I bring a swimsuit? Last time I forgot mine."
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, definitely. The tide pools by the south end are amazing if you have time to wade in. We can hike first, then check those out."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "Final arrangements for a weekend trip to the coast",
+            "B": "Whether to repair the woman's car before the weekend",
+            "C": "How to find a parking spot at Bear Ridge",
+            "D": "Comparing trails for an upcoming class assignment"
+          },
+          "answer": "A",
+          "explanation": "对话围绕周末去海岸路线的最终安排：行程改变、谁开车、出发时间、带什么。其他选项要么是次要细节（修车、停车），要么不在对话内（课程任务）。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "too_narrow",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the man?",
+          "options": {
+            "A": "He plans to spend most of the day in the tide pools",
+            "B": "He has never been to the coast trail before",
+            "C": "He is willing to cover the driving without compensation",
+            "D": "He prefers Bear Ridge over the coast trail in general"
+          },
+          "answer": "C",
+          "explanation": "男生说\"我可以开车，油箱也满了\"，并明确拒绝女生分摊油费（Don't worry about gas），说明他愿意自己承担驾车成本。A夸大；B反转（他建议去海岸说明他了解那里）；D相反（是他建议改去海岸）。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "reversed_situation",
+            "D": "rejected_option"
+          }
+        }
+      ],
+      "id": "lc_mpzvq35i_0"
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two students swapping music recommendations because one is bored of the same pop singers",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Honestly, my playlist has felt stale for months. Every pop singer sounds identical now. Got anything different to recommend?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Define different. Like, completely outside pop, or just a less mainstream version of it?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Outside, I think. I tried a jazz album last week and actually liked it more than I expected."
+        },
+        {
+          "speaker": "Man",
+          "text": "Then you should try modern Afrobeat. The drumming is incredible, and the vocals layer in a way pop doesn't. Start with the Lagos compilations."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Lagos? Like, from Nigeria?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah. There's a producer called Tunde who's released three this year. Each track has like five instruments going at once but it never feels crowded."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Okay, I'm sold. Anything else? I need variety."
+        },
+        {
+          "speaker": "Man",
+          "text": "If you liked the jazz, look into Brazilian bossa nova too. It's mellower but the chord changes will keep your brain busy. I'd start with the older recordings from the sixties — they're sharper."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Sixties recordings. Got it. I'll send you my reactions tonight."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of the conversation?",
+          "options": {
+            "A": "To debate which music genre is most technically demanding to perform",
+            "B": "To exchange suggestions that broaden the woman's listening beyond pop",
+            "C": "To plan a joint music project that combines several different genres",
+            "D": "To compare the woman's musical taste with the man's collection of albums"
+          },
+          "answer": "B",
+          "explanation": "女生明确想换口味，男生给出具体推荐（Afrobeat、bossa nova）。A、C、D不是对话的主要目的。",
+          "distractor_types": {
+            "A": "wrong_topic",
+            "C": "too_narrow",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What does the man imply about Brazilian bossa nova?",
+          "options": {
+            "A": "Listening to it requires understanding Portuguese lyrics first",
+            "B": "Only recordings from the 2010s have well-mixed audio quality",
+            "C": "It will eventually replace jazz as the dominant lounge style",
+            "D": "Older recordings offer sharper sound than newer ones"
+          },
+          "answer": "D",
+          "explanation": "男生明确说六十年代的旧录音更清晰（sharper）。A未提；B正好相反；C过度推断。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "B": "reversed_situation",
+            "C": "over_inference"
+          }
+        }
+      ],
+      "id": "lc_mpzvq35i_1"
+    },
+    {
+      "context": "errands_service",
+      "situation": "two students chatting about a pottery class one just took",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "I finally took that beginner pottery class at the community center. It's so much harder than I expected."
+        },
+        {
+          "speaker": "Man",
+          "text": "Oh nice. Centering the clay on the wheel, right? People underestimate it."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Exactly. My first bowl looked like an oval. I spent the second half just fixing it."
+        },
+        {
+          "speaker": "Man",
+          "text": "That's actually normal. Took me three weeks before I could center consistently. Did the instructor show you the wedging trick?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Wedging? She showed me how to slap the clay down a few times but I didn't catch a name for it."
+        },
+        {
+          "speaker": "Man",
+          "text": "That's wedging. It pushes the air bubbles out. If you skip it your pot can crack when it's fired."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh, that's good to know. The kiln firing is next week and I was getting nervous."
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, you'll be fine if you wedge properly. Also, don't make the walls too thin. They look elegant but they warp easily."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "Whether the woman should switch to a different pottery class",
+            "B": "How to repair a cracked bowl after kiln firing has finished",
+            "C": "The woman's experience in her beginner pottery class",
+            "D": "Where to buy supplies for a personal pottery studio"
+          },
+          "answer": "C",
+          "explanation": "对话围绕女生陶艺课经历及男生分享的技巧。A、B、D都没出现。",
+          "distractor_types": {
+            "A": "wrong_topic",
+            "B": "topic_adjacent",
+            "D": "unrelated_next_step"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the woman before this conversation?",
+          "options": {
+            "A": "She did not know the term \"wedging\" before talking with the man",
+            "B": "She had taken a previous pottery class at the same center",
+            "C": "She intended to drop the class before the kiln firing",
+            "D": "She had been making thin-walled pots on purpose all along"
+          },
+          "answer": "A",
+          "explanation": "女生说她不知道\"wedging\"这个名字，只看到老师拍打粘土。其他选项无依据。",
+          "distractor_types": {
+            "B": "wrong_topic",
+            "C": "over_inference",
+            "D": "reversed_situation"
+          }
+        }
+      ],
+      "id": "lc_mpzvq35i_2"
+    },
+    {
+      "context": "plans_social",
+      "situation": "two students arranging to study together before an exam",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hey, are you ready for the macroeconomics midterm on Thursday?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Not really. I'm shaky on the monetary policy chapters. You?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Same. I was thinking we should study together. Maybe Wednesday afternoon?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Wednesday works. Where, though? The main library's been packed all week."
+        },
+        {
+          "speaker": "Woman",
+          "text": "What about the third floor of the economics building? There's that small lounge nobody uses."
+        },
+        {
+          "speaker": "Man",
+          "text": "Oh right, the one with the whiteboards. Yeah, perfect for working through diagrams."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Around two? I'll bring my notes from Professor Yamada's review session."
+        },
+        {
+          "speaker": "Man",
+          "text": "Two is good. I'll bring the practice problems from the textbook. Maybe coffees from the cart downstairs first?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Definitely coffees first. See you Wednesday."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Where do the students decide to meet?",
+          "options": {
+            "A": "At the cart downstairs in the main library",
+            "B": "In Professor Yamada's office during her hours",
+            "C": "In the third-floor lounge of the main library",
+            "D": "In the third-floor lounge of the economics building"
+          },
+          "answer": "D",
+          "explanation": "女生提议经济学楼三楼的小休息室，男生同意。A、C混淆了地点细节；B未提。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "unrelated_next_step",
+            "C": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the man's exam preparation?",
+          "options": {
+            "A": "He has already finished the practice problems by himself",
+            "B": "He has only fully reviewed the monetary policy chapters",
+            "C": "He feels weakest on the monetary policy chapters",
+            "D": "He plans to skip the review session by Professor Yamada"
+          },
+          "answer": "C",
+          "explanation": "男生明确说自己对货币政策章节没把握（shaky on）。A正相反；B反转（不是已经复习好）；D无依据。",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "B": "reversed_situation",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_mpzvq35i_3"
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "two students comparing how they get to campus — bike, bus, or walk",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "How are you getting to campus this semester now that you moved off the main quad?"
+        },
+        {
+          "speaker": "Man",
+          "text": "I'm biking. It's about fifteen minutes each way. Faster than waiting for the shuttle."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Fifteen? That's not bad. Do you bring rain gear for the wet days?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, I keep a jacket in my backpack. Worse case, I lock the bike and grab the bus."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Smart. I take the seven A bus. It's reliable but it gets crowded around eight."
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, the seven A is intense in the morning. What about walking? You're closer than I am."
+        },
+        {
+          "speaker": "Woman",
+          "text": "I tried walking the first two weeks. It took twenty-five minutes and my legs were tired by the time I sat down in class."
+        },
+        {
+          "speaker": "Man",
+          "text": "Right, walking's deceptive. Looks short on the map but the hill near the engineering building is brutal."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Exactly. The bus is worth it just to skip that hill."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "How long does the man's bike commute take each way?",
+          "options": {
+            "A": "About fifteen minutes",
+            "B": "Around twenty-five minutes",
+            "C": "Roughly thirty minutes",
+            "D": "Less than ten minutes"
+          },
+          "answer": "A",
+          "explanation": "男生明确说骑车单程大约十五分钟。其他都是混淆的时间数。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "Why does the woman choose to take the bus rather than walk?",
+          "options": {
+            "A": "She prefers reading on the bus during her commute",
+            "B": "She finds the hill near engineering too tiring to walk",
+            "C": "She lives much farther than the man from campus",
+            "D": "Her schedule prevents her from walking before class"
+          },
+          "answer": "B",
+          "explanation": "女生明确说工程楼附近那段坡很费力，公交是为了避开那段坡。A、D未提；C相反（男生在更远的地方）。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "C": "reversed_situation",
+            "D": "related_but_not_stated"
+          }
+        }
+      ],
+      "id": "lc_mpzvq35i_4"
     }
   ]
 }
