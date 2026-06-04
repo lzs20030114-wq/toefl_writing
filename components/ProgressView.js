@@ -37,6 +37,13 @@ const TYPE = {
 
 const MOCK_IDS = { BUILD: "build-sentence", EMAIL: "email-writing", DISC: "academic-writing" };
 
+// Session types this writing-centric page renders in its practice list (mock is
+// shown separately). reading / listening / speaking each have a dedicated
+// records page, so they're intentionally excluded here. Allowlist, not denylist:
+// a denylist drifted before (reading excluded but listening/speaking weren't),
+// leaking them in as unlabeled "未知类型" rows.
+const PRACTICE_TYPES = ["bs", "email", "discussion"];
+
 // — Helpers —
 
 function getWeaknesses(session) {
@@ -1005,7 +1012,7 @@ export function ProgressView({ onBack }) {
     [entries]
   );
   const practiceEntries = useMemo(() =>
-    entries.filter((e) => e.session.type !== "mock" && e.session.type !== "reading").sort((a, b) => new Date(b.session.date) - new Date(a.session.date)),
+    entries.filter((e) => PRACTICE_TYPES.includes(e.session.type)).sort((a, b) => new Date(b.session.date) - new Date(a.session.date)),
     [entries]
   );
 

@@ -176,19 +176,24 @@ function MockDetail({ session }) {
 
 function LCRDetail({ session }) {
   const results = session.details?.results || [];
-  const questions = session.details?.questions || [];
+  // LCR persists its per-item snapshot under details.items (parallel to
+  // results) — see saveListeningSession in app/listening/page.js and the
+  // matching reader in lib/listeningMistakes.js. Fall back to details.questions
+  // for any legacy/alternate shape.
+  const items = session.details?.items || session.details?.questions || [];
 
-  if (results.length === 0 && questions.length === 0) {
+  if (results.length === 0 && items.length === 0) {
     return <div style={{ fontSize: 12, color: P.textDim, fontStyle: "italic" }}>暂无详细题目数据</div>;
   }
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
       {results.map((r, i) => {
-        const q = questions[i] || {};
+        const q = items[i] || {};
         const speakerText = q.speaker || q.stem || r.stem || "";
         const options = q.options || r.options || {};
         const explanation = q.explanation || r.explanation || "";
+        const correctKey = r.correct || q.answer || "";
 
         return (
           <div key={i} style={{ padding: "10px 12px", borderRadius: 10, background: r.isCorrect ? "#F0FDF4" : "#FEF2F2", border: `1px solid ${r.isCorrect ? "#BBF7D0" : "#FECACA"}` }}>
@@ -205,7 +210,7 @@ function LCRDetail({ session }) {
                 {["A", "B", "C", "D"].map(key => {
                   if (!options[key]) return null;
                   const isUserChoice = r.selected === key;
-                  const isCorrectOpt = r.correct === key;
+                  const isCorrectOpt = correctKey === key;
                   let bg = "transparent";
                   let color = P.textDim;
                   let fontW = 400;
@@ -225,7 +230,7 @@ function LCRDetail({ session }) {
             {Object.keys(options).length === 0 && (
               <div style={{ fontSize: 12, color: P.textSec, marginBottom: explanation ? 8 : 0 }}>
                 <span style={{ fontWeight: 700, color: r.isCorrect ? "#059669" : "#DC2626", marginRight: 4 }}>{r.isCorrect ? "\u2713" : "\u2717"}</span>
-                选择: {r.selected}{!r.isCorrect && <span style={{ color: "#DC2626" }}> (正确: {r.correct})</span>}
+                选择: {r.selected}{!r.isCorrect && <span style={{ color: "#DC2626" }}> (正确: {correctKey})</span>}
               </div>
             )}
             {/* Explanation */}
