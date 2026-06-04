@@ -8,7 +8,7 @@ import { buildReadingModule1, routeModule2 as routeReadingM2, buildReadingModule
 import { buildListeningModule1, routeModule2 as routeListeningM2, buildListeningModule2 } from "../../lib/mockExam/listeningPlanner";
 import { saveSess } from "../../lib/sessionStore";
 import { fmt } from "../../lib/utils";
-import { LISTENING_SECONDS_PER_ITEM, LCR_SECONDS_PER_ITEM, TOEFL_LISTENING_SECTION_SECONDS, formatAnswerTime } from "../../lib/listeningTiming";
+import { listeningSecondsForType, LCR_SECONDS_PER_ITEM, TOEFL_LISTENING_SECTION_SECONDS, formatAnswerTime } from "../../lib/listeningTiming";
 
 // ------ Constants ------
 
@@ -200,13 +200,22 @@ function CTWInlineTask({ item, onComplete }) {
  */
 function MCQInlineTask({ item, taskType, onComplete }) {
   const questions = item.questions || [];
+  const isListeningType = taskType === "la" || taskType === "lc" || taskType === "lat";
+  const answerSeconds = listeningSecondsForType(taskType);
   const [currentQ, setCurrentQ] = useState(0);
   const [selections, setSelections] = useState(() => questions.map(() => null));
   const [submitted, setSubmitted] = useState(false);
-  const [answerTimeLeft, setAnswerTimeLeft] = useState(LISTENING_SECONDS_PER_ITEM);
-  const isListeningType = taskType === "la" || taskType === "lc" || taskType === "lat";
+  const [answerTimeLeft, setAnswerTimeLeft] = useState(answerSeconds);
+  // Listening tasks play their audio first; the answer timer must not start
+  // until playback ends (real TOEFL runs the clock only while you answer, never
+  // during audio). Reading tasks have no audio, so they begin answering at once.
+  const [phase, setPhase] = useState(isListeningType ? "listen" : "answer");
 
   const question = questions[currentQ];
+
+  const handleAudioEnded = useCallback(() => {
+    setPhase((p) => (p === "listen" ? "answer" : p));
+  }, []);
 
   // Get the text content to display
   function getPassageContent() {
@@ -253,23 +262,25 @@ function MCQInlineTask({ item, taskType, onComplete }) {
     }, 1200);
   }, [onComplete, questions, selections]);
 
+  // Answer timer — only runs in the answer phase, i.e. after the audio has
+  // finished for listening tasks. Resets for each question.
   useEffect(() => {
-    if (!isListeningType || submitted) return;
-    setAnswerTimeLeft(LISTENING_SECONDS_PER_ITEM);
+    if (!isListeningType || submitted || phase !== "answer") return;
+    setAnswerTimeLeft(answerSeconds);
     const timer = setInterval(() => {
       setAnswerTimeLeft((prev) => Math.max(0, prev - 1));
     }, 1000);
     return () => clearInterval(timer);
-  }, [currentQ, isListeningType, submitted]);
+  }, [answerSeconds, currentQ, isListeningType, submitted, phase]);
 
   useEffect(() => {
-    if (!isListeningType || submitted || answerTimeLeft !== 0) return;
+    if (!isListeningType || submitted || phase !== "answer" || answerTimeLeft !== 0) return;
     if (currentQ < questions.length - 1) {
       setCurrentQ((idx) => Math.min(questions.length - 1, idx + 1));
       return;
     }
     handleSubmit(selections);
-  }, [answerTimeLeft, currentQ, handleSubmit, isListeningType, questions.length, selections, submitted]);
+  }, [answerTimeLeft, currentQ, handleSubmit, isListeningType, phase, questions.length, selections, submitted]);
 
   if (!question) return null;
 
@@ -379,7 +390,10 @@ function MCQInlineTask({ item, taskType, onComplete }) {
               下一题
             </Btn>
           )}
-          {answeredAll && (
+          {/* Submit: reading shows it once everything is answered; a listening
+              task can finish early from its last question (the countdown is only
+              an upper bound — 可以提前跳过, no need to wait it out). */}
+          {(answeredAll || (isListeningType && currentQ === questions.length - 1)) && (
             <Btn onClick={() => handleSubmit()} style={{ fontSize: 13 }}>
               提交
             </Btn>
@@ -423,11 +437,13 @@ function MCQInlineTask({ item, taskType, onComplete }) {
     );
   }
 
-  // ── Listening types (audio) / no passage: single-column (unchanged) ──
+  // ── Listening types (audio) / no passage: single-column ──
+  // The audio plays first (autoPlay); the questions + answer timer only appear
+  // once playback ends, so the clock never runs while the audio is playing.
   return (
     <div>
       {taskLabel}
-      {(taskType === "la" || taskType === "lc" || taskType === "lat") && (
+      {isListeningType && (
         <div style={{ marginBottom: 16 }}>
           <AudioPlayer
             src={item.audio_url || null}
@@ -436,12 +452,19 @@ function MCQInlineTask({ item, taskType, onComplete }) {
               item.lecture ||
               (item.conversation ? item.conversation.map((t) => `${t.speaker}: ${t.text}`).join(". ") : "")
             }
+            onEnded={handleAudioEnded}
             maxReplays={0}
             autoPlay
           />
         </div>
       )}
-      {questionUI}
+      {isListeningType && phase === "listen" ? (
+        <div style={{ fontSize: 13, color: C.t3, textAlign: "center", padding: 20 }}>
+          请先听完音频，听力结束后开始答题…
+        </div>
+      ) : (
+        questionUI
+      )}
     </div>
   );
 }

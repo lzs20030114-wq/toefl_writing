@@ -287,6 +287,7 @@ function ListeningPageClient() {
     <ListeningMCQTask
       key={activeItem.id}
       item={activeItem}
+      taskType={type}
       onComplete={handleMCQComplete}
       onExit={isPractice ? taskOnExit : onExit}
       isPractice={isPractice}

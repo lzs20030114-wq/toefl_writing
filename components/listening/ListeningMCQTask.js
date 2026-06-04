@@ -4,7 +4,7 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import { C, FONT, Btn, TopBar, SurfaceCard, PageShell } from "../shared/ui";
 import { AudioPlayer } from "./AudioPlayer";
 import { buildDraftKey, loadDraft, clearDraft, useDraftPersist } from "../../lib/draftPersist";
-import { LISTENING_SECONDS_PER_ITEM, formatAnswerTime } from "../../lib/listeningTiming";
+import { listeningSecondsForType, formatAnswerTime } from "../../lib/listeningTiming";
 
 const ACCENT = { color: "#8B5CF6", soft: "#F3E8FF" };
 const KEYS = ["A", "B", "C", "D"];
@@ -19,9 +19,10 @@ const KEYS = ["A", "B", "C", "D"];
  *
  * Flow: listen to audio → answer questions one by one → results
  */
-export function ListeningMCQTask({ item, onComplete, onExit, isPractice = false, title = "Listening", section = "Listening" }) {
+export function ListeningMCQTask({ item, taskType, onComplete, onExit, isPractice = false, title = "Listening", section = "Listening" }) {
   const questions = item?.questions || [];
   const totalQ = questions.length;
+  const answerSeconds = listeningSecondsForType(taskType);
 
   // Get the text for TTS fallback
   const transcript = item?.transcript || item?.announcement || item?.lecture || "";
@@ -57,7 +58,7 @@ export function ListeningMCQTask({ item, onComplete, onExit, isPractice = false,
   });
   const [submitted, setSubmitted] = useState(false);
   const [hover, setHover] = useState(null);
-  const [answerTimeLeft, setAnswerTimeLeft] = useState(LISTENING_SECONDS_PER_ITEM);
+  const [answerTimeLeft, setAnswerTimeLeft] = useState(answerSeconds);
 
   const resultsRef = useRef(null);
   const isTimed = !isPractice;
@@ -124,12 +125,12 @@ export function ListeningMCQTask({ item, onComplete, onExit, isPractice = false,
   useEffect(() => {
     if (!isTimed || phase !== "answer" || submitted) return;
     if (lockedQuestions[currentQ]) return;
-    setAnswerTimeLeft(LISTENING_SECONDS_PER_ITEM);
+    setAnswerTimeLeft(answerSeconds);
     const timer = setInterval(() => {
       setAnswerTimeLeft((prev) => Math.max(0, prev - 1));
     }, 1000);
     return () => clearInterval(timer);
-  }, [currentQ, isTimed, lockedQuestions, phase, submitted]);
+  }, [answerSeconds, currentQ, isTimed, lockedQuestions, phase, submitted]);
 
   const handleQuestionTimeout = useCallback(() => {
     lockCurrentQuestion();
