@@ -8,7 +8,7 @@ import UsageGateWrapper from "../../components/shared/UsageGateWrapper";
 function ListeningExamClient() {
   const router = useRouter();
   const searchParams = useSearchParams(); // force dynamic rendering
-  const onExit = () => router.push("/");
+  const onExit = () => router.push("/?section=listening");
   return (
     <UsageGateWrapper onExit={onExit}>
       <AdaptiveExamShell section="listening" onExit={onExit} />

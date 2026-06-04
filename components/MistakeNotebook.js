@@ -599,8 +599,16 @@ export default function MistakeNotebook({ onBack, initialSection = "bs" }) {
 
   return (
     <PageShell>
-      {/* header */}
-      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 18 }}>
+      {/* header — back button on the top-right to match the rest of the app */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: 18 }}>
+        <div>
+          <h1 style={{ fontSize: 20, fontWeight: 800, color: C.t1, margin: 0 }}>
+            错题本
+          </h1>
+          <div style={{ fontSize: 12, color: C.t3, marginTop: 2 }}>
+            {sectionMeta.subtitle}
+          </div>
+        </div>
         <button
           onClick={onBack}
           style={{
@@ -612,18 +620,11 @@ export default function MistakeNotebook({ onBack, initialSection = "bs" }) {
             fontWeight: 600,
             color: C.t2,
             cursor: "pointer",
+            flexShrink: 0,
           }}
         >
-          ← 返回
+          返回
         </button>
-        <div>
-          <h1 style={{ fontSize: 20, fontWeight: 800, color: C.t1, margin: 0 }}>
-            错题本
-          </h1>
-          <div style={{ fontSize: 12, color: C.t3, marginTop: 2 }}>
-            {sectionMeta.subtitle}
-          </div>
-        </div>
       </div>
 
       {/* loading state — wait for first sync before showing "no mistakes" */}

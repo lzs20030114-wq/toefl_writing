@@ -57,8 +57,8 @@ const BS_INTERACTION_CSS = `
 }
 `;
 
-function formatChunkDisplay(text) {
-  return String(text || "")
+function formatChunkDisplay(text, capitalizeFirst = false) {
+  const out = String(text || "")
     .split(/\s+/)
     .map((w) => {
       const lower = w.toLowerCase();
@@ -70,6 +70,10 @@ function formatChunkDisplay(text) {
       return w;
     })
     .join(" ");
+  if (capitalizeFirst && out) {
+    return out.charAt(0).toUpperCase() + out.slice(1);
+  }
+  return out;
 }
 
 function confirmEarlySubmit() {
@@ -492,6 +496,11 @@ export function BuildSentenceTask({
   };
 
   /* ── shared sub-elements ── */
+  // Auto-capitalize the sentence's first letter. The first position is a given
+  // chunk at index 0 if one exists, otherwise slot 0 (capitalized once filled).
+  // A given at a *later* index must NOT be capitalized just because slot 0 is
+  // still empty — only the true sentence-initial token gets the capital.
+  const firstTokenKey = givenSlots.some((gs) => gs.givenIndex === 0) ? "given-0" : "slot-0";
   const slotsJSX = (
     <div data-answer-area="true" style={{ display: "flex", flexWrap: "wrap", gap: isMobile ? 6 : 8, minHeight: isMobile ? 36 : 48, alignItems: "center", lineHeight: 1.5 }}>
       {Array.from({ length: slots.length + 1 }, (_, i) => i).map((i) => (
@@ -511,7 +520,7 @@ export function BuildSentenceTask({
                 opacity: 0.85,
               }}
             >
-              {formatChunkDisplay(gs.chunk)}
+              {formatChunkDisplay(gs.chunk, gi === 0 && firstTokenKey === `given-${i}`)}
             </span>
           ))}
           {i < slots.length && (
@@ -530,7 +539,7 @@ export function BuildSentenceTask({
               onTouchStart={isMobile && slots[i] ? (e) => startTouch(e, { from: "slot", chunk: slots[i], slotIndex: i }) : undefined}
               onClick={() => { if (suppressClick.current) return; slots[i] && handleRemoveChunk(i); }}
             >
-              {slots[i] ? formatChunkDisplay(slots[i].text) : i + 1}
+              {slots[i] ? formatChunkDisplay(slots[i].text, firstTokenKey === `slot-${i}`) : i + 1}
             </div>
           )}
         </React.Fragment>
@@ -608,6 +617,7 @@ export function BuildSentenceTask({
         <div style={{ flex: 1, display: "flex", flexDirection: "column", padding: "8px 12px 12px", gap: 6, overflow: "hidden", minHeight: 0 }}>
           {/* 紧凑题目 + 作答区 */}
           <div style={{ background: C.card, border: "1px solid " + C.bdr, borderRadius: 10, padding: "10px 12px", flexShrink: 0, boxShadow: C.shadow }}>
+            {embedded && <div style={{ fontSize: 11, fontWeight: 700, color: C.nav, marginBottom: 4 }}>第 {idx + 1} / {qs.length} 题</div>}
             <div style={{ fontSize: 13, color: C.t1, lineHeight: 1.4, marginBottom: 6 }}>{q.prompt}</div>
             <div style={{ fontSize: 10, color: C.t3, marginBottom: 4 }}>拖动或点击词块 · 可能含干扰项</div>
             {slotsJSX}
@@ -618,7 +628,7 @@ export function BuildSentenceTask({
           <div style={{ display: "flex", gap: 8, flexShrink: 0, flexWrap: "wrap" }}>
             {canGoBack && <Btn onClick={goBack} variant="secondary" style={{ padding: "10px 14px", fontSize: 13 }}>上一题</Btn>}
             <Btn data-testid="build-submit" onClick={handleSubmitClick} disabled={!allFilled} style={{ flex: 1, padding: "10px 0", fontSize: 14 }}>
-              {idx < qs.length - 1 ? "下一题" : "完成"}
+              {idx < qs.length - 1 ? "下一题" : (embedded ? "提交" : "完成")}
             </Btn>
             <Btn onClick={resetQ} variant="secondary" style={{ padding: "10px 16px", fontSize: 13 }}>重置</Btn>
             {onSaveExit && <Btn onClick={handleSaveExitClick} variant="secondary" style={{ width: "100%", padding: "8px 0", fontSize: 12, color: C.t3 }}>保存进度并退出</Btn>}
@@ -631,7 +641,10 @@ export function BuildSentenceTask({
             <b>Directions: </b>Use the word chunks below to form a grammatically correct sentence. There may be one distractor chunk that does not belong.
           </InfoStrip>
           <SurfaceCard style={{ padding: 20, marginBottom: 20 }}>
-            <div style={{ fontSize: 11, color: C.t2, letterSpacing: 1, marginBottom: 8 }}>题目</div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+              <div style={{ fontSize: 11, color: C.t2, letterSpacing: 1 }}>题目</div>
+              {embedded && <div style={{ fontSize: 12, fontWeight: 700, color: C.nav }}>第 {idx + 1} / {qs.length} 题</div>}
+            </div>
             <div style={{ fontSize: 15, color: C.t1, marginBottom: 14, lineHeight: 1.5 }}>{q.prompt}</div>
             <div style={{ fontSize: 11, color: C.t2, letterSpacing: 1, marginBottom: 8 }}>作答区</div>
             {slotsJSX}
@@ -640,7 +653,7 @@ export function BuildSentenceTask({
           <div style={{ display: "flex", gap: 12 }}>
             {canGoBack && <Btn onClick={goBack} variant="secondary">上一题</Btn>}
             <Btn data-testid="build-submit" onClick={handleSubmitClick} disabled={!allFilled}>
-              {idx < qs.length - 1 ? "下一题" : "完成并查看结果"}
+              {idx < qs.length - 1 ? "下一题" : (embedded ? "提交" : "完成并查看结果")}
             </Btn>
             <Btn onClick={resetQ} variant="secondary">重置</Btn>
             {onSaveExit && <Btn onClick={handleSaveExitClick} variant="secondary">保存进度并退出</Btn>}

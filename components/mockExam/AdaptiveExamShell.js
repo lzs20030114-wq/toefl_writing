@@ -71,7 +71,7 @@ const LEVEL_LABELS = {
  * CTW Inline — fill-in-the-blanks within a passage.
  * Each blank shows the displayed_fragment + input for the missing letters.
  */
-function CTWInlineTask({ item, onComplete }) {
+function CTWInlineTask({ item, onComplete, revealAnswers = false }) {
   const [answers, setAnswers] = useState(() => item.blanks.map(() => ""));
   const [submitted, setSubmitted] = useState(false);
   const inputRefs = useRef([]);
@@ -96,8 +96,6 @@ function CTWInlineTask({ item, onComplete }) {
       const nextIdx = index + 1;
       if (nextIdx < item.blanks.length && inputRefs.current[nextIdx]) {
         inputRefs.current[nextIdx].focus();
-      } else if (e.key === "Enter") {
-        handleSubmit();
       }
     }
   }
@@ -143,15 +141,15 @@ function CTWInlineTask({ item, onComplete }) {
             ref={(el) => (inputRefs.current[bi] = el)}
             type="text"
             value={answers[bi]}
-            onChange={(e) => handleChange(bi, e.target.value.slice(0, missingLen + 2), missingLen)}
+            onChange={(e) => handleChange(bi, e.target.value.slice(0, missingLen), missingLen)}
             onKeyDown={(e) => handleKeyDown(bi, e)}
             disabled={submitted}
-            maxLength={missingLen + 2}
+            maxLength={missingLen}
             style={{
               width: Math.max(missingLen * 12, 36),
               border: "none",
-              borderBottom: `2px solid ${submitted ? (isCorrect ? "#22c55e" : "#ef4444") : "#94a3b8"}`,
-              background: submitted ? (isCorrect ? "#f0fdf4" : "#fef2f2") : "#f8fafc",
+              borderBottom: `2px solid ${submitted ? (revealAnswers ? (isCorrect ? "#22c55e" : "#ef4444") : "#cbd5e1") : "#94a3b8"}`,
+              background: submitted ? (revealAnswers ? (isCorrect ? "#f0fdf4" : "#fef2f2") : "#f1f5f9") : "#f8fafc",
               fontSize: 14,
               fontFamily: FONT,
               padding: "2px 4px",
@@ -161,7 +159,7 @@ function CTWInlineTask({ item, onComplete }) {
             }}
             placeholder={"_".repeat(missingLen)}
           />
-          {submitted && !isCorrect && (
+          {submitted && revealAnswers && !isCorrect && (
             <span style={{ fontSize: 11, color: "#ef4444", marginLeft: 4 }}>
               {blank.original_word}
             </span>
@@ -198,7 +196,7 @@ function CTWInlineTask({ item, onComplete }) {
  * MCQ Inline — generic multiple-choice for RDL, AP, LA, LC, LAT.
  * Shows passage/text, then one question at a time with A/B/C/D buttons.
  */
-function MCQInlineTask({ item, taskType, onComplete }) {
+function MCQInlineTask({ item, taskType, onComplete, revealAnswers = false }) {
   const questions = item.questions || [];
   const isListeningType = taskType === "la" || taskType === "lc" || taskType === "lat";
   const answerSeconds = listeningSecondsForType(taskType);
@@ -327,12 +325,13 @@ function MCQInlineTask({ item, taskType, onComplete }) {
         {["A", "B", "C", "D"].map((key) => {
           if (!question.options[key]) return null;
           const isSelected = selections[currentQ] === key;
-          const isCorrectKey = submitted && key === correctAnswer(question);
-          const isWrongSelection = submitted && isSelected && key !== correctAnswer(question);
+          const reveal = submitted && revealAnswers;
+          const isCorrectKey = reveal && key === correctAnswer(question);
+          const isWrongSelection = reveal && isSelected && key !== correctAnswer(question);
 
           let borderColor = C.bdr;
           let bg = "#fff";
-          if (submitted) {
+          if (reveal) {
             if (isCorrectKey) { borderColor = "#22c55e"; bg = "#f0fdf4"; }
             else if (isWrongSelection) { borderColor = "#ef4444"; bg = "#fef2f2"; }
           } else if (isSelected) {
@@ -366,8 +365,8 @@ function MCQInlineTask({ item, taskType, onComplete }) {
                 width: 24, height: 24, borderRadius: "50%", flexShrink: 0,
                 display: "flex", alignItems: "center", justifyContent: "center",
                 fontSize: 12, fontWeight: 700,
-                background: isSelected ? (submitted ? (isWrongSelection ? "#fee2e2" : "#dcfce7") : "#dbeafe") : "#f1f5f9",
-                color: isSelected ? (submitted ? (isWrongSelection ? "#ef4444" : "#22c55e") : "#3b82f6") : C.t3,
+                background: isSelected ? (reveal ? (isWrongSelection ? "#fee2e2" : "#dcfce7") : "#dbeafe") : "#f1f5f9",
+                color: isSelected ? (reveal ? (isWrongSelection ? "#ef4444" : "#22c55e") : "#3b82f6") : C.t3,
               }}>
                 {key}
               </span>
@@ -472,7 +471,7 @@ function MCQInlineTask({ item, taskType, onComplete }) {
 /**
  * LCR Inline — listen and choose a response (single question per item).
  */
-function LCRInlineTask({ item, onComplete }) {
+function LCRInlineTask({ item, onComplete, revealAnswers = false }) {
   const [phase, setPhase] = useState("listen");
   const [selected, setSelected] = useState(null);
   const [submitted, setSubmitted] = useState(false);
@@ -555,12 +554,13 @@ function LCRInlineTask({ item, onComplete }) {
             {["A", "B", "C", "D"].map((key) => {
               if (!item.options[key]) return null;
               const isSelected = selected === key;
-              const isCorrectKey = submitted && key === item.answer;
-              const isWrongSelection = submitted && isSelected && key !== item.answer;
+              const reveal = submitted && revealAnswers;
+              const isCorrectKey = reveal && key === item.answer;
+              const isWrongSelection = reveal && isSelected && key !== item.answer;
 
               let borderColor = C.bdr;
               let bg = "#fff";
-              if (submitted) {
+              if (reveal) {
                 if (isCorrectKey) { borderColor = "#22c55e"; bg = "#f0fdf4"; }
                 else if (isWrongSelection) { borderColor = "#ef4444"; bg = "#fef2f2"; }
               } else if (isSelected) {
@@ -586,8 +586,8 @@ function LCRInlineTask({ item, onComplete }) {
                     width: 24, height: 24, borderRadius: "50%", flexShrink: 0,
                     display: "flex", alignItems: "center", justifyContent: "center",
                     fontSize: 12, fontWeight: 700,
-                    background: isSelected ? (submitted ? (isWrongSelection ? "#fee2e2" : "#dcfce7") : "#ede9fe") : "#f1f5f9",
-                    color: isSelected ? (submitted ? (isWrongSelection ? "#ef4444" : "#22c55e") : "#8B5CF6") : C.t3,
+                    background: isSelected ? (reveal ? (isWrongSelection ? "#fee2e2" : "#dcfce7") : "#ede9fe") : "#f1f5f9",
+                    color: isSelected ? (reveal ? (isWrongSelection ? "#ef4444" : "#22c55e") : "#8B5CF6") : C.t3,
                   }}>
                     {key}
                   </span>

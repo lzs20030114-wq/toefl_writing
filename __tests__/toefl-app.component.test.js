@@ -79,6 +79,21 @@ describe("ToeflApp navigation", () => {
     expect(screen.getByTestId("slot-7")).toHaveTextContent("8");
   });
 
+  test("only the sentence-initial token is auto-capitalized", () => {
+    render(<BuildSentenceTask onExit={() => {}} questions={[BUILD_TEST_Q]} />);
+    fireEvent.click(screen.getByTestId("build-start"));
+
+    // "you" is prefilled at position 1, so it must stay lowercase while slot-0
+    // (the true first position) is still empty — not capitalized just because
+    // an earlier slot is empty.
+    expect(screen.getByTestId("given-token-1").textContent.trim()).toBe("you");
+
+    // Filling slot-0 capitalizes the first word; the mid-sentence given is untouched.
+    fireEvent.click(screen.getByRole("button", { name: "could" }));
+    expect(screen.getByTestId("slot-0")).toHaveTextContent("Could");
+    expect(screen.getByTestId("given-token-1").textContent.trim()).toBe("you");
+  });
+
   test("build directions are readable and match iBT wording", () => {
     render(<BuildSentenceTask onExit={() => {}} questions={[BUILD_TEST_Q]} />);
     fireEvent.click(screen.getByTestId("build-start"));
@@ -120,7 +135,8 @@ describe("ToeflApp navigation", () => {
     fireEvent.click(screen.getByTestId("build-start"));
 
     fireEvent.click(screen.getByRole("button", { name: "send" }));
-    expect(screen.getByTestId("slot-0")).toHaveTextContent("send");
+    // First token of the sentence is auto-capitalized for display (slot-0).
+    expect(screen.getByTestId("slot-0")).toHaveTextContent("Send");
 
     fireEvent.click(screen.getByTestId("slot-0"));
     expect(screen.getByTestId("slot-0")).toHaveTextContent("1");
@@ -131,7 +147,8 @@ describe("ToeflApp navigation", () => {
     fireEvent.dragStart(screen.getByRole("button", { name: "the" }), { dataTransfer: dragData });
     fireEvent.drop(screen.getByTestId("slot-0"), { dataTransfer: dragData });
 
-    expect(screen.getByTestId("slot-0")).toHaveTextContent("the");
+    // slot-0 is the sentence's first token, so its display is auto-capitalized.
+    expect(screen.getByTestId("slot-0")).toHaveTextContent("The");
     expect(screen.getByRole("button", { name: "send" })).toBeInTheDocument();
   });
 
