@@ -1,33 +1,28 @@
 {
-  "session_id": "routine-20260604-190449",
-  "completed_at": "2026-06-04T19:20:03Z",
+  "session_id": "routine-20260605-190529",
+  "completed_at": "2026-06-05T19:21:00Z",
   "duration_minutes": 16,
-  "highlight": "首次出现海洋生物保护与考古遗骸伦理类Discussion题",
+  "highlight": "首次出现公共政策心理健康响应与表现主义艺术类Discussion题",
   "commit_sha": "",
-  "r2_completed_at": "2026-06-04T19:35:00Z",
-  "r2_session_id": "routine-r2-20260604-193047",
   "results": {
     "bs": {
       "generated": 20,
       "accepted": 10,
       "topics": ["campus life", "academic"],
       "favorite": {
-        "prompt": "I just started working at the bookstore.",
-        "answer": "Where do I clock in each morning?"
+        "prompt": "Did you visit the career fair this afternoon?",
+        "answer": "The recruiter asked if I had submitted my resume online."
       },
       "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_session_id": "routine-r2-20260604-193047",
-      "r2_items_added": 10
+      "failure_reason": ""
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["public health", "computer science", "history and culture", "marine biology"],
+      "topics": ["public policy", "business", "history and culture", "psychology"],
       "favorite": {
-        "subtopic": "marine biology",
-        "preview": "We've been discussing how coastal cities respond to declining shellfish populations in their harbors"
+        "subtopic": "public policy",
+        "preview": "We've been discussing how cities respond to growing demand for emergency services. One proposal gain"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -35,32 +30,32 @@
     "email": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["服务与活动", "校园学业", "消费售后", "日常社交"],
+      "topics": ["服务与活动", "校园学业", "日常社交", "消费售后"],
       "favorite": {
-        "subtopic": "日常社交",
-        "preview": "Your friend Priya invited you to join a four-day camping trip at Maple Ridge State Park next month"
+        "subtopic": "校园学业",
+        "preview": "You are a junior taking an environmental policy seminar and you have been working on a term paper"
       },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ap": {
       "generated": 5,
-      "accepted": 5,
-      "topics": ["geology/ocean floor", "sociology/immigration patterns", "psychology/stress response", "materials_science/concrete chemistry", "anthropology/migration patterns"],
+      "accepted": 4,
+      "topics": ["biology", "anthropology", "psychology", "materials_science", "physics"],
       "favorite": {
-        "subtopic": "geology/ocean floor",
-        "preview": "Abyssal plains are vast, nearly flat regions of the deep ocean floor that lie at depths between"
+        "subtopic": "anthropology/language origins",
+        "preview": "The origins of human language remain among the most contested questions in anthropology, with theor"
       },
       "retried_after_fail": false,
-      "failure_reason": ""
+      "failure_reason": "1 item rejected by validator (passage_length: 232 words)"
     },
     "reading-ctw": {
       "generated": 6,
-      "accepted": 5,
-      "topics": ["biology/coral reefs", "environmental_science/permafrost melting", "psychology/memory", "history/early medicine", "geology/fossils", "astronomy/star formation"],
+      "accepted": 6,
+      "topics": ["biology", "environmental_science", "psychology", "history", "geology", "astronomy"],
       "favorite": {
-        "subtopic": "geology/fossils",
-        "preview": "Fossils are preserved remains or traces of organisms that lived in distant geological eras"
+        "subtopic": "astronomy/dwarf planets",
+        "preview": "Dwarf planets are small celestial bodies that orbit the Sun but lack the size and gravity needed to"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -68,10 +63,10 @@
     "reading-rdl-short": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["notice", "email"],
+      "topics": ["notice", "email", "social_media"],
       "favorite": {
         "subtopic": "notice",
-        "preview": "Notice: Water fountains on the third floor of Anderson Hall will be unavailable on March 12 from"
+        "preview": "Elevator in Hadley Hall will be out of service from May 18 through May 22 for inspection. Residents"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -79,24 +74,21 @@
     "reading-rdl-long": {
       "generated": 2,
       "accepted": 2,
-      "topics": ["notice"],
+      "topics": ["syllabus", "notice"],
       "favorite": {
-        "subtopic": "notice",
-        "preview": "Notice: Launch of CampusConnect App. The Office of Student Affairs is pleased to announce the launch"
+        "subtopic": "syllabus",
+        "preview": "Introduction to Biology — Lab Component Guidelines (Spring Semester). The laboratory portion of BIO"
       },
       "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_session_id": "routine-r2-20260604-193047",
-      "r2_items_added": 1
+      "failure_reason": ""
     },
     "listening-lat": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["biology", "anthropology", "architecture", "art_history"],
+      "topics": ["geology", "art_history", "environmental_science", "biology"],
       "favorite": {
-        "subtopic": "biology",
-        "preview": "Let me tell you about one of the strangest organisms on Earth, the tardigrade. These tiny eight-legged"
+        "subtopic": "geology/ice cores",
+        "preview": "Ice cores are cylinders of ice drilled from glaciers and polar ice sheets, and they're one of the m"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -104,24 +96,21 @@
     "listening-lc": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["plans_social", "recommendations_opinions", "errands_service", "campus_dorm_life"],
+      "topics": ["plans_social", "campus_dorm_life", "errands_service", "recommendations_opinions"],
       "favorite": {
-        "subtopic": "recommendations_opinions",
-        "preview": "Honestly, my playlist has felt stale for months. Every pop singer sounds identical now. Got anything"
+        "subtopic": "errands_service/transit planning",
+        "preview": "Okay, so the bus schedule's confusing — the 8:15 express to Riverton runs weekdays only, but the lo"
       },
       "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_session_id": "routine-r2-20260604-193047",
-      "r2_items_added": 3
+      "failure_reason": ""
     },
     "listening-la": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["academic_event", "career_services", "facility_change", "logistics"],
+      "topics": ["logistics", "campus_activity", "info_session", "academic_event"],
       "favorite": {
-        "subtopic": "career_services",
-        "preview": "Hello, everyone. The Career Services Office will host a complimentary LinkedIn profile photo session"
+        "subtopic": "campus_activity/cultural food festival",
+        "preview": "Good afternoon, everyone. The International Students' Association is excited to announce our annual"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -129,10 +118,10 @@
     "listening-lcr": {
       "generated": 8,
       "accepted": 8,
-      "topics": ["social", "campus_academic", "general_daily", "campus_daily"],
+      "topics": ["general_daily", "campus_academic", "campus_daily", "social"],
       "favorite": {
-        "subtopic": "campus_academic",
-        "preview": "Why didn't we have to include raw data this time?"
+        "subtopic": "campus_daily/computer lab help",
+        "preview": "I'm at my wits' end trying to figure out the new scanning station."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -140,10 +129,10 @@
     "speaking-repeat": {
       "generated": 3,
       "accepted": 3,
-      "topics": ["Tutoring Center", "Chemistry Lab Safety", "Career Services Workshop"],
+      "topics": ["Art Gallery Opening", "Campus Gym Induction", "Swimming Pool Orientation"],
       "favorite": {
-        "subtopic": "Tutoring Center",
-        "preview": "Tutors are available throughout the main lobby."
+        "subtopic": "Art Gallery Opening",
+        "preview": "If you would like a printed schedule of upcoming events, check the wooden rack by the main entrance"
       },
       "retried_after_fail": false,
       "failure_reason": ""

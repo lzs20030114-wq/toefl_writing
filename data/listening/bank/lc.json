@@ -8422,6 +8422,406 @@
       ],
       "id": "lc_mpzwgymr_2",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/conversation/lc_mpzwgymr_2.mp3"
+    },
+    {
+      "context": "plans_social",
+      "situation": "two students planning what cheese and food to buy for a dinner party",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "So for Saturday's dinner, I was thinking we'd grab some cheese from that little shop on Elm Street."
+        },
+        {
+          "speaker": "Man",
+          "text": "Oh, good call. What were you thinking? Maybe a brie and a sharp cheddar?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Exactly. And maybe a goat cheese too, since Lily said she's lactose sensitive but can handle goat."
+        },
+        {
+          "speaker": "Man",
+          "text": "Nice. I'll grab some crackers, grapes, and a baguette on my way over."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Perfect. Don't forget the honey — it's amazing with the cheddar."
+        },
+        {
+          "speaker": "Man",
+          "text": "Will do. I'll text you a photo of everything before I head to your place."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "According to the woman, why is she choosing goat cheese?",
+          "options": {
+            "A": "Lily can tolerate goat cheese despite being lactose sensitive.",
+            "B": "It is the cheapest option at the Elm Street shop.",
+            "C": "It pairs best with the bread the man is bringing.",
+            "D": "It is the only cheese the shop has in stock today."
+          },
+          "answer": "A",
+          "explanation": "女生提到Lily乳糖不耐受但可以接受山羊奶酪。其他选项都没有在对话中出现。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do before going to the dinner?",
+          "options": {
+            "A": "Pick up additional cheese from the same shop.",
+            "B": "Call Lily to confirm what she can eat.",
+            "C": "Buy crackers, grapes, and a baguette.",
+            "D": "Skip the dinner because of work obligations."
+          },
+          "answer": "C",
+          "explanation": "男生明确表示会带饼干、葡萄和法棍。A、B、D都与他的承诺不符。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "rejected_option",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_mq1b7gjv_0"
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "two students chatting about a part-time job one just started at a factory",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hey, how's the new job at the soap factory going? You said you started last week."
+        },
+        {
+          "speaker": "Man",
+          "text": "It's actually been okay. The shifts are long, but I make eighteen dollars an hour, which is way better than the cafe paid."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh nice. And it's only on weekends, right?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, Saturday and Sunday mornings. So I can still take my Tuesday-Thursday classes without any conflict."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Smart. Are you saving the extra income for something specific?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, I'm trying to put away enough for the summer field study in Ecuador."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "According to the man, what is one advantage of his new job?",
+          "options": {
+            "A": "The factory is closer to campus than the cafe was.",
+            "B": "It pays significantly more per hour than the cafe paid.",
+            "C": "It offers free training in industrial machinery.",
+            "D": "It provides a fixed Wednesday lunch break daily."
+          },
+          "answer": "B",
+          "explanation": "男生明确表示新工作的时薪比咖啡店高很多。其他选项都未提及。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the man's plans for the summer?",
+          "options": {
+            "A": "He plans to take additional weekday classes.",
+            "B": "He intends to switch back to working at the cafe.",
+            "C": "He hopes to live in the dorms permanently year-round.",
+            "D": "He hopes to participate in a field study abroad."
+          },
+          "answer": "D",
+          "explanation": "男生明确说存钱是为了去厄瓜多尔的暑期野外研究。其他选项与对话信息不符。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "rejected_option",
+            "C": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_mq1b7gjv_1"
+    },
+    {
+      "context": "errands_service",
+      "situation": "two friends figuring out a bus or train schedule for a day trip",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Okay, so the bus schedule's confusing — the 8:15 express to Riverton runs weekdays only, but the local on Saturday leaves at 8:45."
+        },
+        {
+          "speaker": "Man",
+          "text": "Hmm. The local takes about an hour longer, right?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Yeah, about 70 extra minutes. We'd hit Riverton just after 11."
+        },
+        {
+          "speaker": "Man",
+          "text": "That's cutting it close. The lighthouse tour begins at 11:30."
+        },
+        {
+          "speaker": "Woman",
+          "text": "True. There's a regional train at 8:00 — same arrival as the express but a tiny bit more expensive."
+        },
+        {
+          "speaker": "Man",
+          "text": "Worth it. Let's grab the train. Way less stress."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly trying to decide?",
+          "options": {
+            "A": "Whether to skip the lighthouse tour entirely.",
+            "B": "Which lighthouse to visit on the weekend.",
+            "C": "Which form of transportation to take to Riverton.",
+            "D": "Whether to invite additional friends on the trip."
+          },
+          "answer": "C",
+          "explanation": "整段对话围绕选择前往Riverton的交通方式。其他选项偏离话题。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "wrong_topic",
+            "D": "unrelated_next_step"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the train option?",
+          "options": {
+            "A": "It will allow them to arrive in time for the tour.",
+            "B": "It runs only on weekdays during the season.",
+            "C": "It costs significantly less than the local bus.",
+            "D": "It is the slowest of the three options discussed."
+          },
+          "answer": "A",
+          "explanation": "男生说火车选项压力小，结合到达时间与游览开始时间，可推断他们能赶上。其他选项与对话内容相反或不符。",
+          "distractor_types": {
+            "B": "reversed_situation",
+            "C": "wrong_detail",
+            "D": "rejected_option"
+          }
+        }
+      ],
+      "id": "lc_mq1b7gjv_2"
+    },
+    {
+      "context": "plans_social",
+      "situation": "two students arranging to study together before an exam",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hey, are you free tomorrow afternoon? I really need a study buddy for Thursday's calculus exam."
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, I'm free after 2. The chapter on series is killing me."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Same. Want to meet at the engineering library? The fourth floor's quieter than the main one."
+        },
+        {
+          "speaker": "Man",
+          "text": "Actually, can we try Cafe Linden instead? They have whiteboards now."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh, perfect for working through proofs."
+        },
+        {
+          "speaker": "Man",
+          "text": "Right. Let's do Linden at 2:30 then."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "According to the man, why does he suggest Cafe Linden?",
+          "options": {
+            "A": "It has shorter lines than the engineering library.",
+            "B": "It opens earlier on weekday mornings.",
+            "C": "It offers free coffee to engineering students.",
+            "D": "It now has whiteboards available for use."
+          },
+          "answer": "D",
+          "explanation": "男生明确说咖啡店现在有白板。其他选项都未提及。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "C": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the students most likely do on Wednesday afternoon?",
+          "options": {
+            "A": "Visit the engineering library on the fourth floor.",
+            "B": "Meet at Cafe Linden to study together.",
+            "C": "Postpone studying until the day of the exam.",
+            "D": "Form a larger group with additional classmates."
+          },
+          "answer": "B",
+          "explanation": "对话最后他们约定在Linden咖啡馆见面。其他选项与对话结论不符。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "C": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_mq1b7gjv_3"
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two friends recommending a podcast or TV series to each other",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Have you finished that history podcast I sent you last week?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, the one about ancient navigation. It was actually fantastic — I binged the whole series."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Right? The host explains everything so clearly."
+        },
+        {
+          "speaker": "Man",
+          "text": "Exactly. Hey, you should try that documentary series on glassblowing. Each episode is short — only twenty minutes."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Glassblowing? Hmm, I wouldn't have thought of that."
+        },
+        {
+          "speaker": "Man",
+          "text": "Trust me, the cinematography is incredible. You'll be hooked after one episode."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly doing?",
+          "options": {
+            "A": "Exchanging recommendations for shows they enjoyed.",
+            "B": "Planning a documentary project for a class assignment.",
+            "C": "Complaining about the price of streaming subscriptions.",
+            "D": "Discussing which professor recommended the podcast."
+          },
+          "answer": "A",
+          "explanation": "对话围绕互相推荐播客和纪录片展开。其他选项偏离对话焦点。",
+          "distractor_types": {
+            "B": "over_inference",
+            "C": "wrong_topic",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the woman's reaction to the glassblowing series?",
+          "options": {
+            "A": "She has already finished watching the series.",
+            "B": "She refuses to watch any documentary content.",
+            "C": "She is curious and likely to give the series a try.",
+            "D": "She prefers podcasts to visual media in general."
+          },
+          "answer": "C",
+          "explanation": "女生表示\"没想到\"但没拒绝，加上男生强调摄影出色，暗示她可能愿意尝试。其他选项与对话不符。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "reversed_situation",
+            "D": "related_but_not_stated"
+          }
+        }
+      ],
+      "id": "lc_mq1b7gjv_4"
     }
   ]
 }

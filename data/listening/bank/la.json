@@ -4056,6 +4056,226 @@
       ],
       "id": "la_mpzvq355_4",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/announcement/la_mpzvq355_4.mp3"
+    },
+    {
+      "context": "logistics",
+      "situation": "campus shuttle route change due to construction",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "Attention students. Due to construction along Birch Avenue, the West Campus shuttle route will be temporarily rerouted starting this Monday at 6:00 a.m. Buses will skip the Birch Avenue and Library Plaza stops and instead detour through Maple Lane, with new pickup points behind Maxwell Hall and outside the recreation center. We'll add an extra bus during the 8 a.m. to 10 a.m. window to handle the additional foot traffic. Please check the transit app for live arrival times before heading out. The original route is expected to resume on April 14, weather permitting.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To inform students about a temporary change to a shuttle route.",
+            "B": "To advertise a new transit app being launched on campus.",
+            "C": "To explain why Birch Avenue will be permanently closed.",
+            "D": "To recruit student volunteers for transit assistance positions."
+          },
+          "answer": "A",
+          "explanation": "公告中心是说明因施工临时更改班车路线。B、C、D偏离主题。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "over_generalization",
+            "D": "unrelated_next_step"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "According to the announcement, where will the new pickup points be located?",
+          "options": {
+            "A": "On Birch Avenue and inside Library Plaza.",
+            "B": "Inside Maxwell Hall and the recreation center lobby.",
+            "C": "Behind Maxwell Hall and outside the recreation center.",
+            "D": "On Maple Lane next to the football stadium."
+          },
+          "answer": "C",
+          "explanation": "公告明确说新停靠点设在Maxwell Hall后面和娱乐中心外。A是被绕过的站点；B、D不符合公告描述。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ],
+      "id": "la_mq1b7gj4_0"
+    },
+    {
+      "context": "campus_activity",
+      "situation": "cultural food festival organized by international club",
+      "speaker_role": "program_coordinator",
+      "difficulty": "hard",
+      "announcement": "Good afternoon, everyone. The International Students' Association is excited to announce our annual Cultural Food Festival, which we'll hold this Saturday from noon to 4 p.m. in Hartwell Plaza. Over twenty student groups will set up tasting stations representing cuisines from across five continents. Tickets are five dollars at the door and include a tasting passport. We're also accepting last-minute student volunteers — sign up through the club's website by Thursday evening. Proceeds this year support a community partnership with the downtown food pantry, so every ticket purchased helps fund free meals across the city.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement primarily about?",
+          "options": {
+            "A": "A new community partnership with the downtown food pantry.",
+            "B": "An upcoming cultural food festival organized by a student group.",
+            "C": "The launch of a new volunteer recruitment portal on campus.",
+            "D": "A change to weekend lunch hours at the campus dining hall."
+          },
+          "answer": "B",
+          "explanation": "公告主要介绍国际学生协会即将举办的文化美食节。A、C、D是次要信息或偏离主题。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "C": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students who buy tickets to the festival?",
+          "options": {
+            "A": "They will receive a refund if they cannot attend.",
+            "B": "They are required to volunteer at least one hour.",
+            "C": "They must reserve a spot at each station in advance.",
+            "D": "They will help fund free meals through the food pantry."
+          },
+          "answer": "D",
+          "explanation": "公告明确说门票收入支持社区食品仓库的免费餐食项目。A、B、C都缺乏依据。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "over_inference",
+            "C": "related_but_not_stated"
+          }
+        }
+      ],
+      "id": "la_mq1b7gj4_1"
+    },
+    {
+      "context": "logistics",
+      "situation": "parking lot closure for alumni weekend with shuttle alternative",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "Attention students. This is a reminder that Lots E and F will be closed for the Spring Alumni Weekend this Friday, beginning at 5:00 p.m. and reopening on Sunday evening at 9. Permit holders may park free of charge in the overflow lot near the athletic fields throughout the weekend. We'll be running a continuous shuttle every fifteen minutes between the overflow lot and the main quad, from 7 a.m. to midnight. Please don't leave personal vehicles in the closed lots after 5 p.m. on Friday, as they will be towed at the owner's expense.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To recruit student volunteers for the Spring Alumni Weekend.",
+            "B": "To explain new permanent parking restrictions on campus.",
+            "C": "To inform students about temporary parking closures and a shuttle.",
+            "D": "To announce the cancellation of the Spring Alumni Weekend events."
+          },
+          "answer": "C",
+          "explanation": "公告中心是通知临时停车关闭和替代班车安排。其他选项偏离主旨。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "over_generalization",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "According to the announcement, what can permit holders do during the weekend?",
+          "options": {
+            "A": "Park free of charge in the overflow lot near the athletic fields.",
+            "B": "Receive a refund of their semester permit fee from the office.",
+            "C": "Park in Lots E and F if they register in advance.",
+            "D": "Use the alumni parking pass at the visitor information desk."
+          },
+          "answer": "A",
+          "explanation": "公告明确说许可证持有者可在田径场附近的备用停车场免费停车。其他选项都不符合公告。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "reversed_situation",
+            "D": "misattributed_detail"
+          }
+        }
+      ],
+      "id": "la_mq1b7gj4_2"
+    },
+    {
+      "context": "info_session",
+      "situation": "financial aid office workshop on scholarship applications",
+      "speaker_role": "program_coordinator",
+      "difficulty": "medium",
+      "announcement": "Good morning, students. The Financial Aid Office will be hosting a free scholarship application workshop next Tuesday at 4:00 p.m. in Briggs Hall, Room 215. The session is led by counselor Linda Park and walks through the most common errors that delay or disqualify student submissions. You'll learn how to draft a strong personal statement, request recommendation letters effectively, and pull together your financial documents. Please bring a laptop and a draft of any essay you're already working on. Sign up on the financial aid portal by Monday evening — we can take about thirty students per session.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To explain new eligibility rules for university scholarships.",
+            "B": "To recruit volunteers to staff the financial aid office.",
+            "C": "To remind students of the financial aid application deadline.",
+            "D": "To promote a workshop that helps students apply for scholarships."
+          },
+          "answer": "D",
+          "explanation": "公告主要是宣传一个奖学金申请研讨会。其他选项偏离主旨。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "reversed_intent",
+            "C": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students who want to attend the workshop?",
+          "options": {
+            "A": "They must already have submitted their applications.",
+            "B": "They should sign up early because space is limited.",
+            "C": "They need to bring a printed recommendation letter.",
+            "D": "They are not eligible if they are first-year students."
+          },
+          "answer": "B",
+          "explanation": "公告说每场可容纳约30人，并要求在周一晚之前报名，暗示名额有限要尽早报名。其他选项与公告不符。",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        }
+      ],
+      "id": "la_mq1b7gj4_3"
+    },
+    {
+      "context": "academic_event",
+      "situation": "student research poster session open to all majors",
+      "speaker_role": "society_president",
+      "difficulty": "easy",
+      "announcement": "Hi everyone, this is a reminder that the Undergraduate Research Society's annual poster session takes place this Friday from 1:00 to 4:00 p.m. in Sterling Hall Atrium. Posters from over fifty students across the humanities, sciences, and engineering will be on display. All majors are welcome — you don't need to be a Research Society member to attend. Light refreshments will be served, and a few alumni judges will be giving small prizes for the strongest projects in each category. Stop by, ask questions, and learn what your classmates are working on.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To invite students to attend an undergraduate research poster session.",
+            "B": "To recruit new members for the Undergraduate Research Society.",
+            "C": "To announce new prize categories for student research projects.",
+            "D": "To explain how to submit posters to the Research Society this year."
+          },
+          "answer": "A",
+          "explanation": "公告主要邀请学生参加海报展览。B、C、D是次要信息或偏离主题。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "too_narrow",
+            "D": "misattributed_detail"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "According to the announcement, who will be giving prizes at the session?",
+          "options": {
+            "A": "Faculty members from each academic department.",
+            "B": "Graduate student mentors selected by the society.",
+            "C": "Alumni judges in each of the poster categories.",
+            "D": "Members of the Undergraduate Research Society board."
+          },
+          "answer": "C",
+          "explanation": "公告明确说有校友评委会为最佳项目颁奖。其他选项与公告内容不符。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ],
+      "id": "la_mq1b7gj4_4"
     }
   ]
 }

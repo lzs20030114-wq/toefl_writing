@@ -1,87 +1,128 @@
 {
-  "session_id": "routine-20260604-190449",
-  "generated_at": "2026-06-04T19:20:58.457Z",
-  "resolved_at": "2026-06-04T19:35:00Z",
-  "resolution_status": "supplemented",
+  "session_id": "routine-20260605-190529",
+  "generated_at": "2026-06-05T19:22:53.303Z",
   "needs_retry": true,
   "overall_scores": {
-    "diversity": 94,
-    "quality": 92
+    "diversity": 91,
+    "quality": 95
   },
   "retry_banks": [
     {
       "bank": "bs",
-      "diversity_score": 88,
+      "diversity_score": 80,
       "diversity_threshold": 90,
-      "quality_score": 96,
+      "quality_score": 100,
       "quality_threshold": 95,
       "failures": [
-        "多样性 88 < 90"
+        "多样性 80 < 90"
       ],
       "diversity_breakdown": [
-        "角色名 4/20",
+        "角色名 6/20",
         "场景 20/20",
         "句型 4/5",
-        "开头 4/4",
-        "prefilled类型 7/4 (top:empty 4/20)",
-        "人物当prefilled 4/20 (20%, TPO~30%)",
-        "干扰词 10种 (top:asked 20%)",
-        "chunk颗粒 6.0块/题 单词率91% (TPO~6块/77%)",
-        "题面对话化 16/20 (80% 含you, TPO~72%)"
+        "开头 3/4",
+        "prefilled类型 6/4 (top:mid-noun-or-adj 10/20)",
+        "人物当prefilled 5/20 (25%, TPO~30%)",
+        "干扰词 8种 (top:did 40%)",
+        "chunk颗粒 6.1块/题 单词率89% (TPO~6块/77%)",
+        "题面对话化 15/20 (75% 含you, TPO~72%)"
       ],
       "quality_breakdown": [
-        "块数 19/20",
+        "块数 20/20",
         "干扰词 20/20",
-        "答案长度 18/20",
+        "答案长度 20/20",
         "重组正确 20/20"
       ],
       "hints": [
-        "角色名重复严重 (4/20 distinct) — use 15+ distinct character names from: Olivia, Harold, Mariana, Hector, Margot, Emma, Julian, Matthew, Alison, Juan, Angelina, Professor Cho, Naomi, Diane"
+        "角色名重复严重 (6/20 distinct) — use 15+ distinct character names from: Olivia, Harold, Mariana, Hector, Margot, Emma, Julian, Matthew, Alison, Juan, Angelina, Professor Cho, Naomi, Diane"
       ],
       "items_to_supplement": 10
     },
     {
-      "bank": "reading-rdl-long",
-      "diversity_score": 60,
-      "diversity_threshold": 70,
-      "quality_score": 50,
-      "quality_threshold": 85,
+      "bank": "reading-ap",
+      "diversity_score": 0,
+      "diversity_threshold": 85,
+      "quality_score": 0,
+      "quality_threshold": 90,
       "failures": [
-        "多样性 60 < 70",
-        "质量 50 < 85"
+        "多样性 0 < 85",
+        "质量 0 < 90"
       ],
       "diversity_breakdown": [
-        "话题 2/2",
-        "notice 2 · email 0"
+        "找不到 staging 文件"
       ],
       "quality_breakdown": [
-        "词数 1/2"
+        "找不到 staging 文件"
       ],
       "hints": [
         "多样性 < gate — choose distinct topic/subtopic combos; avoid same discipline twice",
-        "质量校验有偏差: 词数 1/2 — recheck schema compliance"
-      ],
-      "items_to_supplement": 1
-    },
-    {
-      "bank": "listening-lc",
-      "diversity_score": 100,
-      "diversity_threshold": 72,
-      "quality_score": 20,
-      "quality_threshold": 80,
-      "failures": [
-        "质量 20 < 80"
-      ],
-      "diversity_breakdown": [
-        "distinct openings 5/5"
-      ],
-      "quality_breakdown": [
-        "conv words 68-105: 1/5"
-      ],
-      "hints": [
-        "质量校验有偏差: conv words 68-105: 1/5 — recheck schema compliance"
+        "质量校验有偏差: 找不到 staging 文件 — recheck schema compliance"
       ],
       "items_to_supplement": 3
+    },
+    {
+      "bank": "reading-ctw",
+      "diversity_score": 0,
+      "diversity_threshold": 85,
+      "quality_score": 0,
+      "quality_threshold": 90,
+      "failures": [
+        "多样性 0 < 85",
+        "质量 0 < 90"
+      ],
+      "diversity_breakdown": [
+        "找不到 staging 文件"
+      ],
+      "quality_breakdown": [
+        "找不到 staging 文件"
+      ],
+      "hints": [
+        "多样性 < gate — choose distinct topic/subtopic combos; avoid same discipline twice",
+        "质量校验有偏差: 找不到 staging 文件 — recheck schema compliance"
+      ],
+      "items_to_supplement": 3
+    },
+    {
+      "bank": "reading-rdl-short",
+      "diversity_score": 90,
+      "diversity_threshold": 80,
+      "quality_score": 75,
+      "quality_threshold": 85,
+      "failures": [
+        "质量 75 < 85"
+      ],
+      "diversity_breakdown": [
+        "话题 4/4",
+        "notice 2 · email 1"
+      ],
+      "quality_breakdown": [
+        "词数 3/4"
+      ],
+      "hints": [
+        "质量校验有偏差: 词数 3/4 — recheck schema compliance"
+      ],
+      "items_to_supplement": 2
+    },
+    {
+      "bank": "reading-rdl-long",
+      "diversity_score": 80,
+      "diversity_threshold": 70,
+      "quality_score": 0,
+      "quality_threshold": 85,
+      "failures": [
+        "质量 0 < 85"
+      ],
+      "diversity_breakdown": [
+        "话题 2/2",
+        "notice 1 · email 0"
+      ],
+      "quality_breakdown": [
+        "词数 0/2"
+      ],
+      "hints": [
+        "质量校验有偏差: 词数 0/2 — recheck schema compliance"
+      ],
+      "items_to_supplement": 1
     }
   ]
 }

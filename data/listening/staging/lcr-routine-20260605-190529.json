@@ -1,0 +1,164 @@
+{
+  "items": [
+    {
+      "context": "general_daily",
+      "situation": "coordinating airport pickup with a friend",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "I won't be able to pick up Megan from the airport tomorrow.",
+      "options": {
+        "A": "No worries, I'll grab her instead.",
+        "B": "Megan said she prefers a window seat.",
+        "C": "The airport food court has improved a lot.",
+        "D": "Yes, the flight is right on schedule."
+      },
+      "answer": "A",
+      "explanation": "说话者表达自己无法去机场接Megan，最合适的回应是主动接替任务而不是直接回应字面意思。B、C是语义联想陷阱（机场→飞机/机场设施）；D是答非所问。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "semantic_association_trap",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "classmate asking to borrow lecture notes",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Where did you save your notes from yesterday's economics lecture?",
+      "options": {
+        "A": "Economics has become my favorite course this term.",
+        "B": "I uploaded them to the shared course folder this morning.",
+        "C": "Sure, I would love to grab coffee later today.",
+        "D": "No, I haven't taken that class yet myself."
+      },
+      "answer": "B",
+      "explanation": "对方问笔记保存在哪里，最佳回应是直接说明上传位置。A是话题联想陷阱（经济学话题）；C是答非所问；D答错了问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about a campus event or concert",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "What night does the jazz band perform at the student center?",
+      "options": {
+        "A": "Yes, the student center is open until midnight.",
+        "B": "The jazz band has been around for ten years.",
+        "C": "I think they go on at eight on Friday.",
+        "D": "Sure, I'd be happy to join you for dinner."
+      },
+      "answer": "C",
+      "explanation": "对方问演出时间，最佳回应是给出具体时间。A答错了问题类型；B是关于乐队的偏题信息；D是答非所问。",
+      "distractor_types": {
+        "A": "wrong_question_type",
+        "B": "semantic_association_trap",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "friend inviting another to a study group or social event",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "How about joining our study group for biology this Thursday evening?",
+      "options": {
+        "A": "Biology is my hardest class this semester.",
+        "B": "Yes, I went to a great concert last Thursday.",
+        "C": "She thinks the textbook is overpriced this year.",
+        "D": "Sure, what time were you planning to meet?"
+      },
+      "answer": "D",
+      "explanation": "对方邀请加入学习小组，最自然的回应是接受并问细节。A是语义联想陷阱；B是偏题；C是话题转移。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "off_topic"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "offering help to someone who seems stressed",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Why do you look so overwhelmed right now?",
+      "options": {
+        "A": "My thesis draft is due first thing in the morning.",
+        "B": "Yes, the cafeteria gets busy around this time.",
+        "C": "I usually study in the library on weekends.",
+        "D": "No, I have not seen him since yesterday."
+      },
+      "answer": "A",
+      "explanation": "对方问为什么显得不堪重负，最佳回应是说明压力的具体原因。B答错了问题类型；C偏离话题；D是答非所问。",
+      "distractor_types": {
+        "B": "wrong_question_type",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student checking with TA about lab report requirements",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Do we need to include raw data tables in this week's lab report?",
+      "options": {
+        "A": "Yes, the laboratory closes at six on weekdays.",
+        "B": "Which experiment are you asking about exactly?",
+        "C": "The new microscopes were finally delivered.",
+        "D": "I bought a binder for my report last week."
+      },
+      "answer": "B",
+      "explanation": "TA以反问明确所指实验，是符合实际场景的回应。A答错问题；C是话题联想陷阱；D是偏题。",
+      "distractor_types": {
+        "A": "wrong_question_type",
+        "C": "semantic_association_trap",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a store clerk about a return or exchange",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Can I exchange this sweater for a different size?",
+      "options": {
+        "A": "Yes, sweaters are usually heavier in the winter.",
+        "B": "The store closed for renovations last weekend.",
+        "C": "Sure, do you have your original receipt with you?",
+        "D": "I prefer cotton blends for everyday clothing."
+      },
+      "answer": "C",
+      "explanation": "店员通过追问收据来回应换货请求，是合理且自然的回应。A是语义联想陷阱；B是偏题；D是话题转移。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about printing or scanning at computer lab",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "I'm at my wits' end trying to figure out the new scanning station.",
+      "options": {
+        "A": "I'll buy more printer ink tomorrow afternoon.",
+        "B": "Scanning is faster than printing these days.",
+        "C": "The lab has been open since seven this morning.",
+        "D": "Let me show you the ropes — it took me a while too."
+      },
+      "answer": "D",
+      "explanation": "说话者用习语\"at my wits' end\"表示束手无策，D用习语\"show you the ropes\"提供帮助是最自然的回应。A、B是语义联想陷阱；C是偏题。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "semantic_association_trap",
+        "C": "off_topic"
+      }
+    }
+  ]
+}
