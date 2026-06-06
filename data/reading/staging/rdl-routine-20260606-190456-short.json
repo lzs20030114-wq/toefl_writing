@@ -1,0 +1,130 @@
+{
+  "items": [
+    {
+      "id": "rdl_short_rt_001",
+      "genre": "notice",
+      "variant": "short",
+      "text": "Vending Machine Refund Notice. Students who lose money in any campus vending machine may submit a refund request to the Facilities Office in Room 105. Refunds are issued in cash up to $2.00. Bring the machine number and the date of loss before Friday, March 15.",
+      "format_metadata": {},
+      "difficulty": "easy",
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what is the maximum refund amount?",
+          "options": {"A": "$1.00", "B": "$2.00", "C": "$5.00", "D": "$10.00"},
+          "correct_answer": "B",
+          "explanation": "The notice states that refunds are issued in cash 'up to $2.00.'"
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about students requesting a refund?",
+          "options": {
+            "A": "They will receive their refund by mail",
+            "B": "They will need to apply online before visiting",
+            "C": "They need to record the machine number themselves",
+            "D": "They must contact the dean's office for approval"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice asks students to bring the machine number, implying they must record it themselves at the time of loss."
+        }
+      ]
+    },
+    {
+      "id": "rdl_short_rt_002",
+      "genre": "email",
+      "variant": "short",
+      "text": "Hi Olivia, I'm writing to confirm that the Student Services Office can produce a replacement student ID. Please bring proof of identity to Hayes Hall, Room 220, between 9:00 AM and 4:00 PM. The replacement fee is $10.00, payable by cash or card. Best, Mr. Whitfield",
+      "format_metadata": {},
+      "difficulty": "easy",
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what is the replacement fee for the student ID?",
+          "options": {"A": "$5.00", "B": "$20.00", "C": "$15.00", "D": "$10.00"},
+          "correct_answer": "D",
+          "explanation": "The email explicitly states 'The replacement fee is $10.00.'"
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about acceptable payment methods?",
+          "options": {
+            "A": "Students may pay only with cash",
+            "B": "Students may pay only with checks",
+            "C": "Students may pay with cash or card",
+            "D": "Students may pay only with credit cards"
+          },
+          "correct_answer": "C",
+          "explanation": "The email states the fee is 'payable by cash or card,' so both methods are accepted."
+        }
+      ]
+    },
+    {
+      "id": "rdl_short_rt_003",
+      "genre": "email",
+      "variant": "short",
+      "text": "Dear Mr. Sutton, Your fall semester parking permit is ready to collect. Please come to the Campus Security Desk in Lot B between Monday and Thursday, 8:00 AM to 5:00 PM. Bring your student ID and the receipt from your $45 payment. Best, Ms. Reyes",
+      "format_metadata": {},
+      "difficulty": "easy",
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, where should Mr. Sutton go to collect his permit?",
+          "options": {
+            "A": "The Campus Security Desk in Lot B",
+            "B": "The Facilities Office in the main building",
+            "C": "The Student Services Office near the gym",
+            "D": "The Transportation Department in Lot D"
+          },
+          "correct_answer": "A",
+          "explanation": "The email instructs Mr. Sutton to 'come to the Campus Security Desk in Lot B.'"
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about Mr. Sutton's parking payment?",
+          "options": {
+            "A": "He has not paid the parking fee yet",
+            "B": "He has already paid for his parking permit",
+            "C": "He must pay an additional fee at pickup",
+            "D": "He has overpaid for the parking permit"
+          },
+          "correct_answer": "B",
+          "explanation": "The email asks him to bring 'the receipt from your $45 payment,' implying he has already paid."
+        }
+      ]
+    },
+    {
+      "id": "rdl_short_rt_004",
+      "genre": "notice",
+      "variant": "short",
+      "text": "Wi-Fi Maintenance Notice. The campus wireless network will be unavailable on Tuesday, April 10, from 2:00 AM to 6:00 AM for routine upgrades. Students needing urgent files may visit the 24-hour computer lab in Carter Hall. A $5 printing voucher will be provided to those affected.",
+      "format_metadata": {},
+      "difficulty": "easy",
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, when will the Wi-Fi network be unavailable?",
+          "options": {
+            "A": "Tuesday, April 10, from 2:00 AM to 6:00 AM",
+            "B": "Monday, April 10, from 1:00 AM to 5:00 AM",
+            "C": "Thursday, April 12, from 3:00 AM to 7:00 AM",
+            "D": "Friday, April 13, from 4:00 AM to 8:00 AM"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice clearly specifies 'Tuesday, April 10, from 2:00 AM to 6:00 AM.'"
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about students who need to print during the outage?",
+          "options": {
+            "A": "They must wait until the network is fully restored",
+            "B": "They will be charged extra printing fees during the outage",
+            "C": "They will need to use printers located off campus",
+            "D": "They may use the printer lab located in Carter Hall"
+          },
+          "correct_answer": "D",
+          "explanation": "The notice directs affected students to 'the 24-hour computer lab in Carter Hall,' which can serve their printing needs."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,224 @@
+{
+  "items": [
+    {
+      "id": "la_rt_001",
+      "context": "guest_speaker",
+      "situation": "guest lecture by a marine biologist about coral reef restoration",
+      "speaker_role": "professor",
+      "difficulty": "easy",
+      "announcement": "Good afternoon, students. I'm pleased to announce that Dr. Helena Park, a leading marine biologist from the Pacific Research Institute, will deliver a guest lecture next Thursday at 4 PM in Whitman Auditorium. Dr. Park's research focuses on coral reef restoration in the South Pacific, and she'll be sharing footage from her recent expedition off the coast of Vanuatu. The lecture is open to all students, but advance registration is required due to limited seating. Please sign up through the Biology Department website by Tuesday evening. A brief reception with refreshments will follow the talk in the lobby.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To publicize an upcoming guest lecture by a visiting researcher",
+            "B": "To recruit volunteers for a marine biology research trip",
+            "C": "To announce a permanent change to the Biology Department staff",
+            "D": "To request donations for coral reef restoration projects"
+          },
+          "answer": "A",
+          "explanation": "通告核心是宣传Dr. Park将做的客座讲座并请学生注册参加，主旨即此。B、C、D都触及'珊瑚/生物'但与发布的实际信息不符。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "reversed_intent",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "By when must students register to attend the lecture?",
+          "options": {
+            "A": "Tuesday morning",
+            "B": "Thursday at 4 PM",
+            "C": "Tuesday evening",
+            "D": "Thursday evening"
+          },
+          "answer": "C",
+          "explanation": "通告说'sign up through the Biology Department website by Tuesday evening'，截止时间是周二晚上。A具体时间错误；B是讲座本身的时间；D是错误日期。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "misattributed_detail",
+            "D": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "la_rt_002",
+      "context": "info_session",
+      "situation": "information session about new health insurance enrollment process",
+      "speaker_role": "advisor",
+      "difficulty": "medium",
+      "announcement": "Attention students. The Office of Student Health Services will hold an information session about the new student health insurance enrollment process on Wednesday, October 4, at 6 PM in Carver Hall, Room 220. Staff will explain the three available plans, the documents required for enrollment, and the deadline for switching providers. Students currently enrolled in the basic plan should note that premiums will increase by twelve dollars per semester starting in January. Bring a valid student ID and any existing insurance card. Light refreshments will be available, and a Q&A period will follow the presentation.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What will staff explain at the session?",
+          "options": {
+            "A": "The history of student health insurance at the university",
+            "B": "The available plans, required documents, and switching deadline",
+            "C": "The reasons behind the recent provider change",
+            "D": "The complaints filed against the previous insurance company"
+          },
+          "answer": "B",
+          "explanation": "通告明确说工作人员将讲解'three available plans, the documents required for enrollment, and the deadline for switching providers'，即三项内容。A、C、D均未被提到。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "C": "wrong_purpose",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students currently on the basic plan?",
+          "options": {
+            "A": "They will be automatically switched to a different plan next year",
+            "B": "They will receive a discounted rate on the new higher premiums",
+            "C": "They will lose their existing coverage starting in January",
+            "D": "They will pay more for the same plan starting in January"
+          },
+          "answer": "D",
+          "explanation": "通告说'premiums will increase by twelve dollars per semester starting in January'，可推断基本计划学员明年起需多付钱。A、B无依据；C说法过激，通告说的是保费上涨不是失去保险。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "reversed_intent",
+            "C": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "id": "la_rt_003",
+      "context": "academic_event",
+      "situation": "schedule announcement for honors society senior thesis defenses",
+      "speaker_role": "society_president",
+      "difficulty": "easy",
+      "announcement": "Hello, society members. As president of the Honors Society, I'm writing to share the schedule for this semester's senior thesis defenses. Eight seniors will present their original research to the faculty committee between April 15 and April 19 in the Whittaker Building. Each defense begins at 2 PM and runs about ninety minutes, with the first thirty minutes reserved for the student's presentation and the remainder for committee questions. Defenses are open to the public, and society members are especially encouraged to attend in support of our seniors. The full schedule of dates and topics will be posted outside the dean's office by Friday.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To request that members volunteer at the thesis defenses",
+            "B": "To explain how to write a successful honors thesis",
+            "C": "To inform members of the upcoming defense schedule",
+            "D": "To collect feedback on last semester's defenses"
+          },
+          "answer": "C",
+          "explanation": "通告核心是分享本学期八位senior答辩的日程，并鼓励到场支持，主旨即告知答辩安排。A、B、D均与实际内容不符。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "wrong_topic",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "Where will the defenses take place?",
+          "options": {
+            "A": "The Whittaker Building",
+            "B": "The dean's office",
+            "C": "The library auditorium",
+            "D": "The Honors Society lounge"
+          },
+          "answer": "A",
+          "explanation": "通告明确说'in the Whittaker Building'，即Whittaker楼。B是张贴日程表的位置而非答辩地点；C、D均未被提到。",
+          "distractor_types": {
+            "B": "misattributed_detail",
+            "C": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        }
+      ]
+    },
+    {
+      "id": "la_rt_004",
+      "context": "academic_event",
+      "situation": "spring symposium with limited seats and coursework prerequisites",
+      "speaker_role": "department_staff",
+      "difficulty": "medium",
+      "announcement": "Good morning, undergraduates. The Sociology Department is pleased to announce its annual Spring Symposium on Urban Inequality, scheduled for March 22 in Carlton Hall. Six visiting scholars will present new research in three back-to-back panels from 9 AM to 4 PM. Because seating is limited to seventy attendees, students must register through the department portal by March 8 to be considered. Priority will be given to students who have completed at least one upper-level sociology course or who can provide a brief statement of relevant research interest. Selected students will be notified by email no later than March 12.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "How will students be selected for attendance?",
+          "options": {
+            "A": "By a first-come, first-served registration system",
+            "B": "By professor nomination from each sociology course",
+            "C": "By payment of a registration fee before the deadline",
+            "D": "By prior coursework or a statement of research interest"
+          },
+          "answer": "D",
+          "explanation": "通告说优先权给予已修过upper-level社会学课程或能提供research interest声明的学生。A与'limited seats + selected'选拔机制不符；B、C均无依据。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "C": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students who register before the deadline?",
+          "options": {
+            "A": "They will receive priority over upper-level sociology majors",
+            "B": "They are not guaranteed a seat even after registering",
+            "C": "They will be required to present their own research",
+            "D": "They must attend all three panels to receive credit"
+          },
+          "answer": "B",
+          "explanation": "由于座位仅七十个且需要'be considered'后由部门'selected'，可推断注册不等于一定入选。A与通告中优先标准相反；C、D均无依据。",
+          "distractor_types": {
+            "A": "reversed_intent",
+            "C": "over_inference",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "id": "la_rt_005",
+      "context": "info_session",
+      "situation": "financial aid office workshop on Whitfield and Brookhaven scholarship applications",
+      "speaker_role": "advisor",
+      "difficulty": "hard",
+      "announcement": "Attention juniors and seniors. The Financial Aid Office will host a scholarship application workshop on Thursday, November 9, at 5:30 PM in Brewster Lounge, Room 110. Senior advisor Mr. Tanaka will walk students through the application timeline for the Whitfield Foundation and Brookhaven Trust scholarships, both of which open for submissions on December 1. Attendees should bring a current resume and an unofficial transcript. Students are encouraged to draft personal statements ahead of the workshop, as Mr. Tanaka will offer individual feedback during the final thirty minutes. Both scholarships require academic transcripts and a faculty recommendation that must reach the office by January 15.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What should attendees bring to the workshop?",
+          "options": {
+            "A": "A current resume and an unofficial transcript",
+            "B": "A printed copy of last semester's grade report",
+            "C": "A signed faculty recommendation letter",
+            "D": "A draft of the personal statement only"
+          },
+          "answer": "A",
+          "explanation": "通告明确说'bring a current resume and an unofficial transcript'。B、C都不在bring范围；D不完整——通告说鼓励但未要求带，且工作人员要求的是简历+成绩单。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "misattributed_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students who skip drafting a personal statement?",
+          "options": {
+            "A": "They will be ineligible to apply for the scholarships",
+            "B": "They will be required to submit their application later",
+            "C": "They will miss out on the individual feedback session",
+            "D": "They will need to attend a follow-up workshop in December"
+          },
+          "answer": "C",
+          "explanation": "通告说Mr. Tanaka在最后30分钟给personal statement提供个别反馈，可推断没准备草稿的学生将错过个别反馈。A过度推断；B无依据；D无相关信息。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_inference",
+            "D": "unrelated_inference"
+          }
+        }
+      ]
+    }
+  ]
+}

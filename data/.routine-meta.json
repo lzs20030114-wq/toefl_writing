@@ -1,33 +1,28 @@
 {
-  "session_id": "routine-20260605-190529",
-  "completed_at": "2026-06-05T19:21:00Z",
-  "duration_minutes": 16,
-  "highlight": "首次出现公共政策心理健康响应与表现主义艺术类Discussion题",
+  "session_id": "routine-20260606-190456",
+  "completed_at": "2026-06-06T19:55:00.000Z",
+  "duration_minutes": 50,
+  "highlight": "全部 12 个题库 70/70 全通过，含罕见的 marine biology 海洋养殖与 political science 16 岁投票权辩论。",
   "commit_sha": "",
-  "r2_completed_at": "2026-06-05T19:35:00Z",
-  "r2_session_id": "routine-r2-20260605-193212",
   "results": {
     "bs": {
       "generated": 20,
-      "accepted": 10,
-      "topics": ["campus life", "academic"],
+      "accepted": 20,
+      "topics": ["campus social", "library/bookstore", "research/thesis", "housing", "internship", "course registration"],
       "favorite": {
-        "prompt": "Did you visit the career fair this afternoon?",
-        "answer": "The recruiter asked if I had submitted my resume online."
+        "prompt": "I just started working at the library.",
+        "answer": "Where do I drop off the returned books?"
       },
       "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_session_id": "routine-r2-20260605-193212",
-      "r2_items_added": 10
+      "failure_reason": ""
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["public policy", "business", "history and culture", "psychology"],
+      "topics": ["marine biology", "public policy", "history and culture", "political science"],
       "favorite": {
-        "subtopic": "public policy",
-        "preview": "We've been discussing how cities respond to growing demand for emergency services. One proposal gain"
+        "subtopic": "marine biology",
+        "preview": "We've been discussing how coastal communities are adapting to declining wild fish stocks this semester. A growing number of nations"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -35,77 +30,65 @@
     "email": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["服务与活动", "校园学业", "日常社交", "消费售后"],
+      "topics": ["服务与活动", "住宿", "职场工作", "社区生活"],
       "favorite": {
-        "subtopic": "校园学业",
-        "preview": "You are a junior taking an environmental policy seminar and you have been working on a term paper"
+        "subtopic": "社区生活",
+        "preview": "You are a regular patron of the Willowbank Public Library and have been attending its monthly evening lecture series."
       },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ap": {
       "generated": 5,
-      "accepted": 4,
-      "topics": ["biology", "anthropology", "psychology", "materials_science", "physics"],
+      "accepted": 5,
+      "topics": ["business", "psychology", "history", "biology", "astronomy"],
       "favorite": {
-        "subtopic": "anthropology/language origins",
-        "preview": "The origins of human language remain among the most contested questions in anthropology, with theor"
+        "subtopic": "business/consumer behavior",
+        "preview": "Choice architecture refers to the deliberate design of decision-making environments that shape how consumers select among options."
       },
       "retried_after_fail": false,
-      "failure_reason": "1 item rejected by validator (passage_length: 232 words)",
-      "r2_supplemented": true,
-      "r2_session_id": "routine-r2-20260605-193212",
-      "r2_items_added": 3
+      "failure_reason": ""
     },
     "reading-ctw": {
       "generated": 6,
       "accepted": 6,
       "topics": ["biology", "environmental_science", "psychology", "history", "geology", "astronomy"],
       "favorite": {
-        "subtopic": "astronomy/dwarf planets",
-        "preview": "Dwarf planets are small celestial bodies that orbit the Sun but lack the size and gravity needed to"
+        "subtopic": "biology/anglerfish bioluminescence",
+        "preview": "Anglerfish are deep-sea predators famous for the glowing lure that dangles above their head."
       },
       "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_session_id": "routine-r2-20260605-193212",
-      "r2_items_added": 3
+      "failure_reason": ""
     },
     "reading-rdl-short": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["notice", "email", "social_media"],
+      "topics": ["notice", "email"],
       "favorite": {
-        "subtopic": "notice",
-        "preview": "Elevator in Hadley Hall will be out of service from May 18 through May 22 for inspection. Residents"
+        "subtopic": "notice/Wi-Fi maintenance",
+        "preview": "Wi-Fi Maintenance Notice. The campus wireless network will be unavailable on Tuesday, April 10, from 2:00 AM to 6:00 AM."
       },
       "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_session_id": "routine-r2-20260605-193212",
-      "r2_items_added": 2
+      "failure_reason": ""
     },
     "reading-rdl-long": {
       "generated": 2,
       "accepted": 2,
-      "topics": ["syllabus", "notice"],
+      "topics": ["email"],
       "favorite": {
-        "subtopic": "syllabus",
-        "preview": "Introduction to Biology — Lab Component Guidelines (Spring Semester). The laboratory portion of BIO"
+        "subtopic": "email/shift swap",
+        "preview": "Subject: Trading Thursday shift at the Library Café. Hi Jordan, I hope you had a good weekend."
       },
       "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_session_id": "routine-r2-20260605-193212",
-      "r2_items_added": 1
+      "failure_reason": ""
     },
     "listening-lat": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["geology", "art_history", "environmental_science", "biology"],
+      "topics": ["art_history", "ecology", "biology", "architecture"],
       "favorite": {
-        "subtopic": "geology/ice cores",
-        "preview": "Ice cores are cylinders of ice drilled from glaciers and polar ice sheets, and they're one of the m"
+        "subtopic": "biology/bioluminescence",
+        "preview": "Let's turn to one of the most striking adaptations in deep-ocean biology: bioluminescence, the ability of an organism to produce its own light."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -113,10 +96,10 @@
     "listening-lc": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["plans_social", "campus_dorm_life", "errands_service", "recommendations_opinions"],
+      "topics": ["errands_service", "plans_social", "recommendations_opinions", "campus_dorm_life"],
       "favorite": {
-        "subtopic": "errands_service/transit planning",
-        "preview": "Okay, so the bus schedule's confusing — the 8:15 express to Riverton runs weekdays only, but the lo"
+        "subtopic": "recommendations_opinions/podcast",
+        "preview": "You've been listening to that history podcast nonstop. What's it called again?"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -124,10 +107,10 @@
     "listening-la": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["logistics", "campus_activity", "info_session", "academic_event"],
+      "topics": ["guest_speaker", "info_session", "academic_event"],
       "favorite": {
-        "subtopic": "campus_activity/cultural food festival",
-        "preview": "Good afternoon, everyone. The International Students' Association is excited to announce our annual"
+        "subtopic": "guest_speaker/marine biology lecture",
+        "preview": "Good afternoon, students. I'm pleased to announce that Dr. Helena Park, a leading marine biologist from the Pacific Research Institute, will deliver a guest lecture."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -135,10 +118,10 @@
     "listening-lcr": {
       "generated": 8,
       "accepted": 8,
-      "topics": ["general_daily", "campus_academic", "campus_daily", "social"],
+      "topics": ["campus_daily", "campus_academic", "general_daily", "social"],
       "favorite": {
-        "subtopic": "campus_daily/computer lab help",
-        "preview": "I'm at my wits' end trying to figure out the new scanning station."
+        "subtopic": "campus_daily/parking",
+        "preview": "Why's the south parking lot blocked off this morning?"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -146,10 +129,10 @@
     "speaking-repeat": {
       "generated": 3,
       "accepted": 3,
-      "topics": ["Art Gallery Opening", "Campus Gym Induction", "Swimming Pool Orientation"],
+      "topics": ["Campus Bookstore", "Residence Hall Move-In", "Hardware Store Help"],
       "favorite": {
-        "subtopic": "Art Gallery Opening",
-        "preview": "If you would like a printed schedule of upcoming events, check the wooden rack by the main entrance"
+        "subtopic": "Campus Bookstore",
+        "preview": "Textbooks are arranged on these center aisles. Used copies can be purchased at a discount from the front counter."
       },
       "retried_after_fail": false,
       "failure_reason": ""

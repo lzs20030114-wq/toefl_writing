@@ -8827,6 +8827,446 @@
       ],
       "id": "lc_mq1b7gjv_4",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/conversation/lc_mq1b7gjv_4.mp3"
+    },
+    {
+      "id": "lc_rt_001",
+      "context": "errands_service",
+      "situation": "two students talking about a fern one is caring for while a sister is studying abroad",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Emma",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Tom",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Emma",
+          "text": "Hey Tom, did you remember to water the fern this morning?"
+        },
+        {
+          "speaker": "Tom",
+          "text": "Oh shoot. I was rushing to get to economics, and I completely forgot."
+        },
+        {
+          "speaker": "Emma",
+          "text": "It's been three days now. The leaves were starting to droop yesterday."
+        },
+        {
+          "speaker": "Tom",
+          "text": "That's not great. I promised your sister I'd keep it alive while she was studying abroad."
+        },
+        {
+          "speaker": "Emma",
+          "text": "Well, fortunately ferns are pretty tough. Just soak it now and put it back in the indirect light."
+        },
+        {
+          "speaker": "Tom",
+          "text": "Should I move it back to the front window? It seemed to be doing better there last week."
+        },
+        {
+          "speaker": "Emma",
+          "text": "Actually no — the afternoon sun was scorching the new fronds. The hallway spot is better."
+        },
+        {
+          "speaker": "Tom",
+          "text": "Okay, hallway it is. And I'll set a reminder on my phone for every other morning."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "How to keep a houseplant alive while caring for it",
+            "B": "Whether to move a houseplant to a sunnier location",
+            "C": "The challenges of houseplant care during exam periods",
+            "D": "Why ferns are particularly difficult to grow indoors"
+          },
+          "answer": "A",
+          "explanation": "对话从'你浇水了吗'开始，围绕如何让蕨类植物存活展开（位置、浇水频率、提醒），主旨即植物养护。B、C只触及部分细节；D与对话不符——Emma说蕨类'pretty tough'。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "topic_adjacent",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about Tom?",
+          "options": {
+            "A": "He has clear experience taking care of many houseplants",
+            "B": "He plans to return the fern to his sister very soon",
+            "C": "He had been forgetting his responsibility to water the fern",
+            "D": "He prefers the hallway spot for purely aesthetic reasons"
+          },
+          "answer": "C",
+          "explanation": "Tom承认完全忘记，且Emma指出已三天未浇水，可推断他一直在忽略浇水责任。A与他状态相反；B对话无相关信息；D Emma说放在走廊是因为前窗下午阳光过强，是功能而非美学。",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "B": "over_inference",
+            "D": "wrong_topic"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_rt_002",
+      "context": "plans_social",
+      "situation": "two students figuring out a meeting time for a group presentation",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Sarah",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Mark",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Sarah",
+          "text": "Are you free Tuesday afternoon to work on the group presentation?"
+        },
+        {
+          "speaker": "Mark",
+          "text": "I've got the chemistry lab from 2 to 4, but I'm open after that."
+        },
+        {
+          "speaker": "Sarah",
+          "text": "How about 5 PM in the library study room?"
+        },
+        {
+          "speaker": "Mark",
+          "text": "Five works, but I have to grab a quick dinner first. Could we push it to 5:30?"
+        },
+        {
+          "speaker": "Sarah",
+          "text": "Sure, 5:30 is fine. I'll book the room on the second floor."
+        },
+        {
+          "speaker": "Mark",
+          "text": "Great. Want me to bring the slide deck so we can work off the same version?"
+        },
+        {
+          "speaker": "Sarah",
+          "text": "Yes, please. I'll send Mia the time so she knows when to join us."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What time did the speakers finally agree to meet?",
+          "options": {
+            "A": "2:00 PM",
+            "B": "5:30 PM",
+            "C": "5:00 PM",
+            "D": "6:00 PM"
+          },
+          "answer": "B",
+          "explanation": "Mark请求推迟到5:30，Sarah回复'Sure, 5:30 is fine'，最终时间确定为5:30 PM。A是Mark的化学实验时间；C是初次提议的时间；D无依据。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "topic_adjacent",
+            "D": "over_inference"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about Mia?",
+          "options": {
+            "A": "She originally organized the group project from the beginning",
+            "B": "She refused to meet on Tuesday for personal reasons",
+            "C": "She typically works at the campus library on weekdays",
+            "D": "She is part of the same project group"
+          },
+          "answer": "D",
+          "explanation": "Sarah说'send Mia the time so she knows when to join us'，明显表明Mia也是该小组成员需要加入此次会议。A、B、C均无依据。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "reversed_situation",
+            "C": "topic_adjacent"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_rt_003",
+      "context": "recommendations_opinions",
+      "situation": "two friends recommending a history podcast to each other",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Lily",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Ben",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Lily",
+          "text": "You've been listening to that history podcast nonstop. What's it called again?"
+        },
+        {
+          "speaker": "Ben",
+          "text": "'Forgotten Empires.' Each episode covers a civilization most people barely remember."
+        },
+        {
+          "speaker": "Lily",
+          "text": "Like which ones?"
+        },
+        {
+          "speaker": "Ben",
+          "text": "Last week was the Garamantes in the Sahara. They built underground water tunnels through solid rock to grow crops two thousand years ago."
+        },
+        {
+          "speaker": "Lily",
+          "text": "Wait, in the desert?"
+        },
+        {
+          "speaker": "Ben",
+          "text": "Exactly. And the host explains how new satellite imagery is changing what archaeologists think about them."
+        },
+        {
+          "speaker": "Lily",
+          "text": "Okay, that sounds way better than another true-crime series. How long are episodes?"
+        },
+        {
+          "speaker": "Ben",
+          "text": "About forty-five minutes. New ones drop every Wednesday."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What is the focus of the podcast Ben recommends?",
+          "options": {
+            "A": "Modern archaeological techniques used in deserts",
+            "B": "The construction of ancient water systems worldwide",
+            "C": "Civilizations that most people barely remember",
+            "D": "The history of true-crime documentary podcasts"
+          },
+          "answer": "C",
+          "explanation": "Ben明确说每期讲'a civilization most people barely remember'，这是节目核心。A、B只是单期具体细节；D是Lily比较时提到的不同体裁，不是这个节目内容。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "topic_adjacent",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about Lily?",
+          "options": {
+            "A": "She has grown tired of true-crime podcast series",
+            "B": "She plans to download the podcast immediately after the conversation",
+            "C": "She has already heard of the Garamantes from a course",
+            "D": "She prefers visual content like documentaries over podcasts"
+          },
+          "answer": "A",
+          "explanation": "Lily说'way better than another true-crime series'，'another'与不耐烦语气表明她对真实犯罪节目已感厌倦。B无依据；C她'in the desert?'的反应显示她不熟悉Garamantes；D与对话场景不符。",
+          "distractor_types": {
+            "B": "over_inference",
+            "C": "reversed_situation",
+            "D": "wrong_topic"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_rt_004",
+      "context": "campus_dorm_life",
+      "situation": "two roommates working out a fair chore and quiet-hours arrangement",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Maya",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Jake",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Maya",
+          "text": "Hey, can we talk about the apartment for a minute?"
+        },
+        {
+          "speaker": "Jake",
+          "text": "Sure. What's up?"
+        },
+        {
+          "speaker": "Maya",
+          "text": "I've been doing the dishes after every meal we share, and it's getting old. Can we work out a fair split?"
+        },
+        {
+          "speaker": "Jake",
+          "text": "Honestly, I didn't notice. I thought we were rotating. Let's actually write something down this time."
+        },
+        {
+          "speaker": "Maya",
+          "text": "Yeah. And while we're at it, can we agree on quiet hours? I have early labs three mornings a week."
+        },
+        {
+          "speaker": "Jake",
+          "text": "How about no music or speakerphone after eleven?"
+        },
+        {
+          "speaker": "Maya",
+          "text": "Eleven works. And maybe we vacuum the living room every other Saturday — alternating who does it."
+        },
+        {
+          "speaker": "Jake",
+          "text": "Done. I'll write it all up on the whiteboard tonight so we both see it."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the roommates mainly trying to do?",
+          "options": {
+            "A": "Decide whether to renew their apartment lease together",
+            "B": "Plan a cleaning party with mutual friends from school",
+            "C": "Discuss buying new kitchen appliances for the apartment",
+            "D": "Set up a fair schedule for shared household tasks"
+          },
+          "answer": "D",
+          "explanation": "对话从洗碗轮值开始，扩展到安静时间和打扫客厅，主旨是共同制定家务和共享空间的公平安排。A、B、C都未在对话中涉及。",
+          "distractor_types": {
+            "A": "wrong_topic",
+            "B": "topic_adjacent",
+            "C": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about Maya?",
+          "options": {
+            "A": "She rarely uses the apartment's shared living room",
+            "B": "She had been bothered by the situation for some time",
+            "C": "She prefers to handle all the cleaning herself",
+            "D": "She plans to move out at the end of the semester"
+          },
+          "answer": "B",
+          "explanation": "Maya说'it's getting old'，表明她已经为此事困扰一段时间才开口。A无依据；C与她要求公平分担矛盾；D无相关信息。",
+          "distractor_types": {
+            "A": "topic_adjacent",
+            "C": "reversed_situation",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_rt_005",
+      "context": "recommendations_opinions",
+      "situation": "two friends debating whether a new cafe is worth the higher prices",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Zoe",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Alex",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Zoe",
+          "text": "Did you try that new espresso place on Maple Street yet?"
+        },
+        {
+          "speaker": "Alex",
+          "text": "Yeah, last Thursday. Six dollars for a cortado seemed steep, honestly."
+        },
+        {
+          "speaker": "Zoe",
+          "text": "That's almost twice what the campus coffee bar charges."
+        },
+        {
+          "speaker": "Alex",
+          "text": "I know. But the espresso shot itself was actually outstanding — way better than what I get on campus."
+        },
+        {
+          "speaker": "Zoe",
+          "text": "So you think it's worth the price?"
+        },
+        {
+          "speaker": "Alex",
+          "text": "Once a week, maybe. Not every morning. The bagels they sell are also really good, but they're seven dollars each."
+        },
+        {
+          "speaker": "Zoe",
+          "text": "Seven? For a bagel?"
+        },
+        {
+          "speaker": "Alex",
+          "text": "With cream cheese, sure, but still. I think the campus bagels are perfectly fine."
+        },
+        {
+          "speaker": "Zoe",
+          "text": "Got it. So I should go for the espresso but skip the bagel."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "Whether the new cafe is worth its higher prices",
+            "B": "How to find cheaper coffee options near the campus",
+            "C": "Why specialty coffee has become more expensive recently",
+            "D": "The differences between cortados and other espresso drinks"
+          },
+          "answer": "A",
+          "explanation": "对话围绕新咖啡馆6美元cortado和7美元百吉饼的性价比展开评估，Zoe最终结论体现了核心问题。B、C、D均与对话核心无关。",
+          "distractor_types": {
+            "B": "topic_adjacent",
+            "C": "over_inference",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the man's view of the cafe's bagels?",
+          "options": {
+            "A": "He thinks they are slightly better than the campus bagels",
+            "B": "He plans to order them despite the high price",
+            "C": "He considers them overpriced for what they offer",
+            "D": "He prefers the cafe's bagels to its espresso"
+          },
+          "answer": "C",
+          "explanation": "Alex说7美元百吉饼后停顿表示并不值，并补充'campus bagels are perfectly fine'，可推断他认为定价过高。A与他说法相反；B与他的态度相反；D对话无依据。",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "B": "over_inference",
+            "D": "wrong_topic"
+          }
+        }
+      ]
     }
   ]
 }

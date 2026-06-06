@@ -1,0 +1,172 @@
+{
+  "items": [
+    {
+      "id": "lcr_rt_001",
+      "context": "campus_daily",
+      "situation": "student asking about a blocked parking lot",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Why's the south parking lot blocked off this morning?",
+      "options": {
+        "A": "The west lot has open spaces today.",
+        "B": "Yes, I parked there myself yesterday.",
+        "C": "I think the gates open at seven.",
+        "D": "It's been blocked since last semester."
+      },
+      "answer": "A",
+      "explanation": "A采用context_shift——不解释原因而直接帮助解决停车问题，符合自然对话。B是yes/no错配；C回答时间而非原因；D将临时封闭说成长期封闭，事实错误。",
+      "distractor_types": {
+        "B": "wrong_question_type",
+        "C": "off_topic",
+        "D": "wrong_information"
+      }
+    },
+    {
+      "id": "lcr_rt_002",
+      "context": "campus_academic",
+      "situation": "student asking about midterm exam format",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "How's the new exam format this year?",
+      "options": {
+        "A": "The library has every old exam on file.",
+        "B": "As a matter of fact, it's almost identical.",
+        "C": "I'll be taking it on Monday morning.",
+        "D": "Yes, the format definitely matters for prep."
+      },
+      "answer": "B",
+      "explanation": "B使用习语'As a matter of fact'引出对格式的直接比较，符合idiomatic范式。A答非所问；C讲自己什么时候考试；D是yes/no错配。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "id": "lcr_rt_003",
+      "context": "campus_academic",
+      "situation": "student checking with TA about lab report graph requirements",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Aren't graphs required in this week's lab report?",
+      "options": {
+        "A": "I usually use blue ink for my graphs.",
+        "B": "The report should be at least four pages.",
+        "C": "Do you mean from the calibration data or the trial?",
+        "D": "Yes, the lab opens at eight on weekends."
+      },
+      "answer": "C",
+      "explanation": "C用counter_question要求澄清是哪一组数据的图，是助教自然的反问，符合范式。A关于书写工具；B关于篇幅而非图表；D是错配yes/no答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "id": "lcr_rt_004",
+      "context": "campus_daily",
+      "situation": "two friends deciding where to get lunch",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "I'm really craving something hot and spicy.",
+      "options": {
+        "A": "The student cafeteria opens at eleven on weekdays.",
+        "B": "Sure, I had a quick sandwich earlier today.",
+        "C": "Yeah, I think those reviews are mostly positive.",
+        "D": "Absolutely, let's hit that Thai place on Maple."
+      },
+      "answer": "D",
+      "explanation": "D使用习语'Absolutely'+'let's hit'积极响应辛辣食物的偏好，建议去Thai餐馆，符合idiomatic范式。A答非所问；B描述自己已吃过；C关于评价不对应美食选择。",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "semantic_association_trap",
+        "C": "off_topic"
+      }
+    },
+    {
+      "id": "lcr_rt_005",
+      "context": "campus_daily",
+      "situation": "roommate sharing quiet weekend plans",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I'm probably staying in to catch up on reading.",
+      "options": {
+        "A": "Actually, count me in — I need to study too.",
+        "B": "The bookstore is closing early on Saturday.",
+        "C": "I read three chapters last weekend.",
+        "D": "Yes, the library is usually quiet then."
+      },
+      "answer": "A",
+      "explanation": "A以discourse marker'Actually'开头并间接表态加入对方的安静计划，符合marker_led_indirect范式。B、C、D都答非所问，只重复reading这个语义关联词。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "id": "lcr_rt_006",
+      "context": "general_daily",
+      "situation": "customer asking a clerk where to leave a returned bag",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Where's the right place to leave a returned bag?",
+      "options": {
+        "A": "I bought my own jacket online last week.",
+        "B": "Just take it to the counter near fitting rooms.",
+        "C": "The store usually closes at nine on Sunday.",
+        "D": "Yes, all returned bags must be sealed first."
+      },
+      "answer": "B",
+      "explanation": "B用习语副词'Just'引出明确而口语化的指引，符合idiomatic范式。A答非所问讲购物方式；C讲营业时间；D是yes/no错配。",
+      "distractor_types": {
+        "A": "off_topic",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "id": "lcr_rt_007",
+      "context": "campus_academic",
+      "situation": "student asking a librarian about books on Roman engineering",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Aren't there books on Roman aqueduct engineering here?",
+      "options": {
+        "A": "Yes, the Roman art exhibit closes next week.",
+        "B": "We open at eight on weekday mornings only.",
+        "C": "Yes, the engineering section has several recent ones.",
+        "D": "I read about aqueducts in high school years."
+      },
+      "answer": "C",
+      "explanation": "C直接回应可借到的书所在区域，是direct_topical范式的恰当回答。A借用Roman做语义陷阱但答非所问；B回答时间；D讲个人经历。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "off_topic"
+      }
+    },
+    {
+      "id": "lcr_rt_008",
+      "context": "social",
+      "situation": "acknowledging a Thursday volunteer schedule conflict",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "What's our plan for Thursday's volunteer slot?",
+      "options": {
+        "A": "Yes, every Thursday is usually pretty busy.",
+        "B": "The community garden is over on Maple Street.",
+        "C": "It typically starts at four every single week.",
+        "D": "Could you swap with Lily for Friday's morning shift?"
+      },
+      "answer": "D",
+      "explanation": "D用counter_question提出具体解决方案——和Lily调班，是推进对话的反问，符合counter_question范式。A是yes/no错配；B回答地点；C回答时间。",
+      "distractor_types": {
+        "A": "wrong_question_type",
+        "B": "off_topic",
+        "C": "off_topic"
+      }
+    }
+  ]
+}
