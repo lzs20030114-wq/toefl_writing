@@ -1,0 +1,66 @@
+{
+  "type": "readInDailyLife",
+  "generated_at": "2026-06-07T19:30:57.000Z",
+  "_meta": {
+    "session": "routine-r2-20260607-193057",
+    "supplements_session": "routine-20260607-190214",
+    "hint": "email genre to balance long bank (R1 produced 1 menu + 1 notice, no email)"
+  },
+  "items": [
+    {
+      "id": "rdl_gen_routine_r2_20260607_193057_001",
+      "variant": "long",
+      "genre": "email",
+      "text": "Subject: Summer Research Stipend Application — Important Updates\n\nDear Students,\n\nThis email outlines the updated procedures for the Summer Research Stipend application, due May 30. Please read carefully, as several requirements have changed since last year.\n\nTo apply, you must:\n- Submit your faculty endorsement form by May 15 through the portal at research.collegeport.edu\n- Upload a two-page project proposal in PDF format\n- Provide an official transcript showing a minimum 3.2 GPA\n- Pay the $25.00 administrative processing fee\n\nLate applications will not be accepted under any circumstances. Selected students will receive a $4,500 stipend distributed in two payments: $2,000 on June 15 and $2,500 on July 30. Recipients must attend the orientation meeting in Sutton Hall, Room 312, on June 5 at 2:00 PM.\n\nIf you have questions about eligibility or proposal formatting, please email researchoffice@college.edu or visit our office in Hopkins Building, Room 204, Monday through Thursday from 9:00 AM to 4:00 PM. We're encouraging all eligible juniors to apply.\n\nBest regards,\nDr. Allen Chen\nOffice of Undergraduate Research",
+      "format_metadata": {
+        "from": "Dr. Allen Chen, Office of Undergraduate Research",
+        "to": "Eligible Junior Students",
+        "subject": "Summer Research Stipend Application — Important Updates"
+      },
+      "questions": [
+        {
+          "qid": "rdl_gen_routine_r2_20260607_193057_001_q1",
+          "question_type": "detail",
+          "stem": "According to the email, what must students complete by May 15?",
+          "options": {
+            "A": "Submit a faculty endorsement form through the portal.",
+            "B": "Submit a two-page project proposal in PDF format.",
+            "C": "Submit an official transcript showing a 3.2 GPA.",
+            "D": "Submit the orientation meeting registration form."
+          },
+          "correct_answer": "A",
+          "explanation": "The email states students must 'submit your faculty endorsement form by May 15 through the portal at research.collegeport.edu.'"
+        },
+        {
+          "qid": "rdl_gen_routine_r2_20260607_193057_001_q2",
+          "question_type": "detail",
+          "stem": "According to the email, how is the stipend distributed?",
+          "options": {
+            "A": "It is paid in three equal monthly installments.",
+            "B": "It is paid weekly throughout the summer program.",
+            "C": "It is paid as a single lump sum at orientation.",
+            "D": "It is paid in two installments on different dates."
+          },
+          "correct_answer": "D",
+          "explanation": "The email states the stipend is 'distributed in two payments: $2,000 on June 15 and $2,500 on July 30.'"
+        },
+        {
+          "qid": "rdl_gen_routine_r2_20260607_193057_001_q3",
+          "question_type": "inference",
+          "stem": "What can be inferred about students who miss the May 30 deadline?",
+          "options": {
+            "A": "They may request a brief extension from Dr. Chen.",
+            "B": "They will not be considered for this stipend program.",
+            "C": "They will receive partial funding for their research projects.",
+            "D": "They must reapply during the upcoming fall semester."
+          },
+          "correct_answer": "B",
+          "explanation": "The email states 'Late applications will not be accepted under any circumstances,' implying applicants who miss the deadline are excluded entirely."
+        }
+      ],
+      "question_count": 3,
+      "word_count": 175,
+      "difficulty": "medium"
+    }
+  ]
+}

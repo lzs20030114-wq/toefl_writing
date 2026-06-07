@@ -1,0 +1,119 @@
+{
+  "_meta": {
+    "session": "routine-r2-20260607-193057",
+    "supplements_session": "routine-20260607-190214",
+    "hint": "fix character name repetition — 10 distinct names used across the set"
+  },
+  "items": [
+    {
+      "id": "tmp_r2_q1",
+      "prompt": "Tell me what you did over the long weekend.",
+      "answer": "Olivia and I biked along the river trail.",
+      "chunks": ["olivia", "and i", "biked", "along", "the", "river trail"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": null,
+      "has_question_mark": false,
+      "grammar_points": ["simple past", "prepositional phrase"]
+    },
+    {
+      "id": "tmp_r2_q2",
+      "prompt": "Harold told me about the new volunteer fair.",
+      "answer": "Where can I sign up to volunteer this weekend?",
+      "chunks": ["can", "i", "sign up", "to", "volunteer", "this", "weekend", "does"],
+      "prefilled": ["Where"],
+      "prefilled_positions": {"where": 0},
+      "distractor": "does",
+      "has_question_mark": true,
+      "grammar_points": ["direct wh-question", "modal can"]
+    },
+    {
+      "id": "tmp_r2_q3",
+      "prompt": "Did the librarian help you find the book?",
+      "answer": "She asked whether Mariana had checked it out.",
+      "chunks": ["she", "asked", "mariana", "had", "checked", "it out", "did"],
+      "prefilled": ["whether"],
+      "prefilled_positions": {"whether": 2},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question with whether", "past perfect"]
+    },
+    {
+      "id": "tmp_r2_q4",
+      "prompt": "Where did you eat after rehearsal?",
+      "answer": "The bistro that Hector recommended closes at nine.",
+      "chunks": ["the bistro", "hector", "recommended", "closes", "at", "nine", "which"],
+      "prefilled": ["that"],
+      "prefilled_positions": {"that": 2},
+      "distractor": "which",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause", "simple present"]
+    },
+    {
+      "id": "tmp_r2_q5",
+      "prompt": "I haven't met your study group yet.",
+      "answer": "When does Margot host the next study session?",
+      "chunks": ["does", "margot", "host", "the", "next", "study", "session", "did"],
+      "prefilled": ["When"],
+      "prefilled_positions": {"when": 0},
+      "distractor": "did",
+      "has_question_mark": true,
+      "grammar_points": ["direct wh-question", "simple present"]
+    },
+    {
+      "id": "tmp_r2_q6",
+      "prompt": "Are you still working on the group slides?",
+      "answer": "Emma has finished editing the slides for our presentation.",
+      "chunks": ["emma", "finished", "editing", "the slides", "for", "our", "presentation", "had"],
+      "prefilled": ["has"],
+      "prefilled_positions": {"has": 1},
+      "distractor": "had",
+      "has_question_mark": false,
+      "grammar_points": ["present perfect", "prepositional phrase"]
+    },
+    {
+      "id": "tmp_r2_q7",
+      "prompt": "Have you settled on a roommate yet?",
+      "answer": "Julian no longer plans to live off campus.",
+      "chunks": ["julian", "no longer", "plans", "to", "live", "off", "campus", "does"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "does",
+      "has_question_mark": false,
+      "grammar_points": ["negation with no longer", "simple present"]
+    },
+    {
+      "id": "tmp_r2_q8",
+      "prompt": "Tell me how the tutoring session went today.",
+      "answer": "Matthew asked how my reading speed had improved.",
+      "chunks": ["matthew", "asked", "my", "reading speed", "had", "improved", "was"],
+      "prefilled": ["how"],
+      "prefilled_positions": {"how": 2},
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question with how", "past perfect"]
+    },
+    {
+      "id": "tmp_r2_q9",
+      "prompt": "What did your career counselor say about internships?",
+      "answer": "Alison wanted to know whether the deadline had been formally extended.",
+      "chunks": ["alison", "wanted to", "know", "the deadline", "had been", "formally", "extended", "if"],
+      "prefilled": ["whether"],
+      "prefilled_positions": {"whether": 4},
+      "distractor": "if",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question with whether", "past perfect passive"]
+    },
+    {
+      "id": "tmp_r2_q10",
+      "prompt": "Did you hear what happened in the chemistry lab?",
+      "answer": "The shattered beakers were carefully replaced by Juan over the weekend.",
+      "chunks": ["the shattered", "beakers", "carefully", "replaced by", "juan", "over the", "weekend", "had"],
+      "prefilled": ["were"],
+      "prefilled_positions": {"were": 3},
+      "distractor": "had",
+      "has_question_mark": false,
+      "grammar_points": ["passive voice", "adverb modifier"]
+    }
+  ]
+}
