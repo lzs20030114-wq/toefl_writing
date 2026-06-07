@@ -1,0 +1,219 @@
+{
+  "items": [
+    {
+      "context": "academic_event",
+      "situation": "spring academic symposium with limited seats and prerequisites",
+      "speaker_role": "department_head",
+      "difficulty": "easy",
+      "announcement": "Good morning, students. I'm pleased to announce that registration is now open for the Spring Linguistics Symposium, which will take place in Whitman Hall on Friday, April 24, from 9 a.m. to 4 p.m. This year's symposium is limited to forty undergraduate participants because of the small-group discussion format. To register, you must have completed at least one upper-level seminar in linguistics. Please submit your registration through the department portal by Wednesday, April 15, along with the name of your faculty sponsor. Boxed lunches will be provided at no cost to confirmed attendees.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce the opening of registration for an academic symposium",
+            "B": "To explain how to apply for upper-level seminar courses",
+            "C": "To advertise free boxed lunches in Whitman Hall",
+            "D": "To recruit faculty sponsors for student research projects"
+          },
+          "answer": "A",
+          "explanation": "通告核心是研讨会注册已开放。B借用seminar做表面陷阱，但通告不是介绍课程。C只是次要细节。D完全跑题。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "too_narrow",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What is required for a student to register?",
+          "options": {
+            "A": "Department portal account from a previous symposium",
+            "B": "A completed senior thesis in linguistics",
+            "C": "Completion of at least one upper-level linguistics seminar",
+            "D": "Approval from the dean of undergraduate studies"
+          },
+          "answer": "C",
+          "explanation": "通告明确说需完成至少一门高级研讨课。A借用'portal'词汇但是凭空捏造。B改变了真实要求。D是话题相关但通告未提。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        }
+      ]
+    },
+    {
+      "context": "facility_change",
+      "situation": "new fitness equipment installation at recreation center",
+      "speaker_role": "department_head",
+      "difficulty": "hard",
+      "announcement": "Attention students and faculty. New cardiovascular equipment will be installed at the Crawford Recreation Center beginning Monday, May 4. As a result, the cardio room on the second floor will be temporarily closed from May 4 through May 8, and the rowing machines will not be available during this period. Members can still use the weight floor, the indoor track, and the lap pool throughout the week. Please be aware that the staff will offer two demonstration sessions of the new machines on Saturday, May 9, at 10 a.m. and 2 p.m. Pre-registration through the rec center app is encouraged but not required.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What will be unavailable during the installation period?",
+          "options": {
+            "A": "Both the weight floor and the indoor track",
+            "B": "The second-floor cardio room and rowing machines",
+            "C": "The indoor swimming pool for several days",
+            "D": "The locker room facilities in the basement"
+          },
+          "answer": "B",
+          "explanation": "通告明确指出二楼cardio room关闭和划船机不可用。A颠倒事实——这些仍然开放。C同样与通告相反。D完全没提到。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the new equipment?",
+          "options": {
+            "A": "The cost will be added to member fees this semester",
+            "B": "The machines will replace only the rowing equipment",
+            "C": "Demonstrations will be limited to certified members only",
+            "D": "Staff want users to learn how the machines work properly"
+          },
+          "answer": "D",
+          "explanation": "通告提供两次演示场次，可推知工作人员希望用户学会使用。A是无关推论。B过度推论——通告未说只换划船机。C颠倒事实——是预注册建议而非限制。",
+          "distractor_types": {
+            "A": "unrelated_inference",
+            "B": "over_inference",
+            "C": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "academic_event",
+      "situation": "end-of-semester academic showcase with awards",
+      "speaker_role": "department_head",
+      "difficulty": "medium",
+      "announcement": "This is a reminder that the End-of-Semester Engineering Showcase will take place in the Daniels Atrium on Thursday, December 11, from 1 p.m. to 5 p.m. All senior-design teams must register their projects through the engineering office by Monday, December 8. The showcase will feature poster presentations, live demonstrations, and faculty judging in three categories. Cash prizes of three hundred, two hundred, and one hundred dollars will be awarded to the top three teams. We strongly recommend that team members arrive by 12:30 p.m. to set up their displays. Light refreshments will be served throughout the afternoon.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What will be awarded at the showcase?",
+          "options": {
+            "A": "Letters of recommendation from the dean",
+            "B": "Internship offers from corporate sponsors",
+            "C": "Cash prizes for the top three teams",
+            "D": "Graduate-school waivers for senior students"
+          },
+          "answer": "C",
+          "explanation": "通告明确列出三百、两百、一百美元的现金奖。A、B、D都是话题相关但通告未提。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "Why does the speaker suggest arriving by 12:30 p.m.?",
+          "options": {
+            "A": "Teams need time to assemble their displays before judging",
+            "B": "Refreshments will be served before the main event",
+            "C": "Late arrivals will be disqualified from the competition",
+            "D": "Faculty judges will give a short opening lecture"
+          },
+          "answer": "A",
+          "explanation": "通告说'arrive by 12:30 to set up their displays'，1点正式开始，可推知是为了布置展示。B借用refreshments做无关推论。C过度推论。D完全没提及。",
+          "distractor_types": {
+            "B": "unrelated_inference",
+            "C": "over_inference",
+            "D": "unrelated_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "campus_activity",
+      "situation": "annual outdoor movie night with blanket seating",
+      "speaker_role": "program_coordinator",
+      "difficulty": "easy",
+      "announcement": "Welcome, everyone. The Student Activities Board is excited to host its annual Outdoor Movie Night on the main quad this Saturday, May 16, at 8:30 p.m. This year's feature will be 'Pacific Crossing,' a documentary about ocean exploration. We will be providing limited folding chairs, so we strongly encourage attendees to bring their own blankets or beach towels for seating on the grass. Free popcorn and lemonade will be available at the refreshment tent near the fountain. Please note that the event will move indoors to the Hartley Gymnasium in the event of rain.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To recruit volunteers for the Student Activities Board",
+            "B": "To advertise a new documentary release in theaters",
+            "C": "To explain weather policies for outdoor campus events",
+            "D": "To invite students to an annual outdoor film screening"
+          },
+          "answer": "D",
+          "explanation": "通告核心是邀请学生参加年度户外电影。A完全跑题。B错——是校内放映，不是影院发行。C只是次要细节。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "wrong_purpose",
+            "C": "too_narrow"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are attendees encouraged to bring?",
+          "options": {
+            "A": "Folding chairs from their dorm rooms",
+            "B": "A blanket or beach towel for grass seating",
+            "C": "Their own popcorn and snacks",
+            "D": "A waterproof jacket in case of rain"
+          },
+          "answer": "B",
+          "explanation": "通告说带毯子或浴巾在草地上坐。A借用折叠椅词汇但是反——主办方提供折叠椅。C颠倒事实——爆米花是免费提供。D是话题相关但未要求带。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        }
+      ]
+    },
+    {
+      "context": "career_services",
+      "situation": "LinkedIn profile photo day at career center",
+      "speaker_role": "program_coordinator",
+      "difficulty": "medium",
+      "announcement": "Good afternoon. The Career Services Office will be hosting LinkedIn Profile Photo Day this coming Thursday, October 22, in the Carver Career Center, Room 110. Professional photographers will be on site from 11 a.m. to 3 p.m. taking complimentary headshots for any registered student. Sign-ups must be completed through the career services portal by Tuesday at noon. Please come dressed in business or business-casual attire. We strongly recommend looking at the sample poses on our website beforehand. Walk-ins will only be accepted if photographer time slots remain available at the end of the day.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What must students do before Tuesday at noon?",
+          "options": {
+            "A": "Sign up through the career services portal",
+            "B": "Submit their existing LinkedIn profile for review",
+            "C": "Email the photographer with their preferred time",
+            "D": "Buy formal attire from the campus bookstore"
+          },
+          "answer": "A",
+          "explanation": "通告明确说周二中午前在career services portal注册。B凭空捏造，通告没要求提交profile。C改变了真实流程。D是话题相关但通告未要求。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about walk-in participants?",
+          "options": {
+            "A": "They must pay an additional photo session fee",
+            "B": "They will receive priority over registered students",
+            "C": "They may not get a slot if registrations fill the day",
+            "D": "They will be photographed in the hallway instead"
+          },
+          "answer": "C",
+          "explanation": "通告说walk-ins只在场次有空时才接受，可推知如果注册满了walk-ins可能轮不到。A过度推论。B完全相反。D完全无关。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "over_inference",
+            "D": "unrelated_inference"
+          }
+        }
+      ]
+    }
+  ]
+}

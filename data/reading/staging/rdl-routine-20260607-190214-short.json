@@ -1,0 +1,136 @@
+{
+  "items": [
+    {
+      "genre": "notice",
+      "variant": "short",
+      "text": "Vending Machine Refund Process\n\nStudents who lost money in the second-floor vending machine should submit a refund request to Facilities Office, Room 112, by Friday, June 12. Refunds are limited to $2 per request. Please include your transaction date and student ID. Contact Mr. Patel at extension 4421 with questions.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what is the maximum refund amount?",
+          "options": {
+            "A": "Up to $1 per request",
+            "B": "Up to $5 per request",
+            "C": "Up to $2 per request",
+            "D": "Up to $10 per request"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice states 'Refunds are limited to $2 per request.'"
+        },
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, where should refund requests be submitted?",
+          "options": {
+            "A": "The Facilities Office, Room 112",
+            "B": "The second-floor vending machine itself",
+            "C": "Mr. Patel's extension 4421 directly",
+            "D": "The student services help desk"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice directs students to submit requests 'to Facilities Office, Room 112.'"
+        }
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "genre": "email",
+      "variant": "short",
+      "text": "Hi Maya,\n\nYour interlibrary loan request for 'Pacific Migrations' arrived this morning from Westgate University. Please pick it up at the circulation desk on the second floor of Brookhaven Library by Tuesday, June 16. A $1 holding fee applies after that date.\n\nBest,\nDr. Reilly",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, where should Maya pick up the book?",
+          "options": {
+            "A": "The circulation desk in Brookhaven Library",
+            "B": "The interlibrary loan office at Westgate",
+            "C": "Dr. Reilly's office on the second floor",
+            "D": "The Pacific Migrations exhibit hall"
+          },
+          "correct_answer": "A",
+          "explanation": "The email tells Maya to pick it up 'at the circulation desk on the second floor of Brookhaven Library.'"
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about the book if it is not picked up by Tuesday?",
+          "options": {
+            "A": "It will be returned immediately to Westgate.",
+            "B": "A new request must be submitted by Maya.",
+            "C": "Dr. Reilly will deliver it to Maya's mailbox.",
+            "D": "Maya will be charged a small fee."
+          },
+          "correct_answer": "D",
+          "explanation": "The email states 'A $1 holding fee applies after that date,' implying a charge if not picked up on time."
+        }
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "genre": "social_media",
+      "variant": "short",
+      "text": "Just discovered the best study spot at Atherton Library! The basement carrels near the back wall stay completely empty after 6 PM, even during finals week. Outlets at every seat. If you need quiet, head there — you'll thank me later! Going back tonight around 7.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the post, when does the study area become empty?",
+          "options": {
+            "A": "Right when the library opens",
+            "B": "After 6 PM each evening",
+            "C": "Only during finals week",
+            "D": "Around 7 in the morning"
+          },
+          "correct_answer": "B",
+          "explanation": "The post states the carrels 'stay completely empty after 6 PM, even during finals week.'"
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about the writer of the post?",
+          "options": {
+            "A": "She prefers working in the library lobby.",
+            "B": "She studies only during exam periods.",
+            "C": "She has used this study spot before.",
+            "D": "She does not enjoy quiet environments."
+          },
+          "correct_answer": "C",
+          "explanation": "She says she is 'going back tonight,' implying she has visited the spot before."
+        }
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "genre": "email",
+      "variant": "short",
+      "text": "Hi Jordan,\n\nMy office hours have moved to Tuesday and Thursday, 2:00-4:00 PM this week only, in Sterling 209. Please bring the $5 printing fee for your transcript packet. Email me by Monday if you need an alternative time slot.\n\nBest,\nProfessor Lin",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "When will Professor Lin hold office hours this week?",
+          "options": {
+            "A": "Only on Mondays this week",
+            "B": "On Tuesday and Thursday afternoons",
+            "C": "Only on Wednesdays this week",
+            "D": "Only on Friday afternoons this week"
+          },
+          "correct_answer": "B",
+          "explanation": "The email specifies office hours have moved 'to Tuesday and Thursday, 2:00-4:00 PM this week only.'"
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about students attending these office hours?",
+          "options": {
+            "A": "They must bring last week's homework.",
+            "B": "They cannot reschedule under any condition.",
+            "C": "They need to bring a printed textbook.",
+            "D": "They will pay a fee when arriving."
+          },
+          "correct_answer": "D",
+          "explanation": "The email instructs them to 'bring the $5 printing fee for your transcript packet,' implying payment at the meeting."
+        }
+      ],
+      "difficulty": "easy"
+    }
+  ]
+}

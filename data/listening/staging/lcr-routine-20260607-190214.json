@@ -1,0 +1,164 @@
+{
+  "items": [
+    {
+      "context": "general_daily",
+      "situation": "arranging a ride or carpool with a friend",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Are you driving to the conference tomorrow morning?",
+      "options": {
+        "A": "Sure thing, I've got a spare seat.",
+        "B": "The conference room is on the third floor.",
+        "C": "I lost my keys somewhere yesterday.",
+        "D": "Drivers must register at the gate."
+      },
+      "answer": "A",
+      "explanation": "A用'Sure thing'惯用语并主动提供搭车，正面回应。B是'conference'词陷阱，谈房间位置。C完全跑题。D是'driver'词陷阱。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "semantic_association_trap"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "expressing concern about a friend's situation",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "You've been so quiet at lunch lately.",
+      "options": {
+        "A": "Lunch starts at noon today.",
+        "B": "Actually, I've had a rough week.",
+        "C": "She lives quite far from campus.",
+        "D": "The cafeteria is closed for repairs."
+      },
+      "answer": "B",
+      "explanation": "B用'Actually'开头并解释原因，回应朋友的关心。A是'lunch'词陷阱。C是无关话题。D借用'lunch'语境但跑题。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "semantic_association_trap"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student seeking help at the writing center",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Why is the writing center so busy today?",
+      "options": {
+        "A": "Yes, I went there a few times yesterday.",
+        "B": "The center employs eight tutors in total.",
+        "C": "Well, midterm essays are due Monday.",
+        "D": "I usually prefer the library for studying."
+      },
+      "answer": "C",
+      "explanation": "C用'Well'开头解释原因——期中论文要交。A答错了问题类型（why问原因，答了yes/no）。B借用'center'但答了不同方面。D完全跑题。",
+      "distractor_types": {
+        "A": "wrong_question_type",
+        "B": "semantic_association_trap",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about dorm maintenance issue",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "What should I do about my broken heater?",
+      "options": {
+        "A": "The dorm has three different heaters total.",
+        "B": "Yes, the cold spell starts tomorrow.",
+        "C": "I bought a small space heater online.",
+        "D": "Just call the maintenance hotline."
+      },
+      "answer": "D",
+      "explanation": "D用'Just'引导给出实用建议——直接打维修电话。A是'heater'词陷阱。B答了yes/no而非what。C用'heater'但跑题。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "wrong_question_type",
+        "C": "off_topic"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a professor about office hours",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Are your office hours still on Thursday?",
+      "options": {
+        "A": "Actually, I moved them to Friday.",
+        "B": "The office is on the second floor.",
+        "C": "Yes, I always teach on Mondays.",
+        "D": "Library hours extend until midnight tonight."
+      },
+      "answer": "A",
+      "explanation": "A用'Actually'开头并间接更正——办公时间已改到周五。B是'office'词陷阱，答位置。C答yes但说错信息。D是'hours'词陷阱。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "semantic_association_trap"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student checking with TA about lab report requirements",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "I'm not sure how to format the data tables.",
+      "options": {
+        "A": "Tables are usually rectangular in shape.",
+        "B": "Have you checked the sample report online?",
+        "C": "Reports are due by Friday at noon.",
+        "D": "Data shows we improved this semester."
+      },
+      "answer": "B",
+      "explanation": "B以反问推进对话，引导学生去看示范。A是'table'多义陷阱。C是'report'词陷阱，答时间不答格式。D是'data'词陷阱。",
+      "distractor_types": {
+        "A": "polysemy_misinterpretation",
+        "C": "semantic_association_trap",
+        "D": "semantic_association_trap"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "friend inviting another to a study group or social event",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "How about coffee before the study group?",
+      "options": {
+        "A": "Coffee was discovered centuries ago by accident.",
+        "B": "Yes, I drink coffee every single morning.",
+        "C": "Sounds perfect, let's meet at six.",
+        "D": "Groups must register at the front desk."
+      },
+      "answer": "C",
+      "explanation": "C用'Sounds perfect'惯用语接受邀请并约时间。A是'coffee'词陷阱跑题。B答yes但与提议无关。D是'group'词陷阱。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "wrong_question_type",
+        "D": "semantic_association_trap"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a professor about an assignment extension",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Did you get my email about the assignment extension?",
+      "options": {
+        "A": "Email is faster than regular mail.",
+        "B": "Yes, the assignments are due next week.",
+        "C": "Office hours are on Wednesdays this term.",
+        "D": "Actually, I responded this morning."
+      },
+      "answer": "D",
+      "explanation": "D用'Actually'开头间接确认收到邮件并已回复。A是'email'词陷阱。B借用'assignment'答了截止日期但与邮件无关。C完全跑题。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "semantic_association_trap",
+        "C": "off_topic"
+      }
+    }
+  ]
+}

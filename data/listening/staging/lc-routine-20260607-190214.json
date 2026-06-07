@@ -1,0 +1,273 @@
+{
+  "items": [
+    {
+      "context": "recommendations_opinions",
+      "situation": "two students swapping music recommendations because one is bored of the same pop singers",
+      "difficulty": "medium",
+      "speakers": [
+        {"name": "Woman", "role": "student", "gender": "female"},
+        {"name": "Man", "role": "student", "gender": "male"}
+      ],
+      "conversation": [
+        {"speaker": "Woman", "text": "Hey, can you suggest some new music? I'm tired of the same pop singers everyone plays."},
+        {"speaker": "Man", "text": "Oh, definitely! Try indie folk. There's a band called Wildwood Echo that's been on repeat for me."},
+        {"speaker": "Woman", "text": "Wildwood Echo? Never heard of them. What's their sound like?"},
+        {"speaker": "Man", "text": "Acoustic, soft harmonies, mellow vibes. Their new album just dropped last Friday."},
+        {"speaker": "Woman", "text": "That sounds great. Where can I stream it?"},
+        {"speaker": "Man", "text": "Any major app. I'll text you the playlist tonight."},
+        {"speaker": "Woman", "text": "Yes please! I'll listen on my walk tomorrow."}
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man recommend the woman listen to?",
+          "options": {
+            "A": "A new indie folk album from Wildwood Echo",
+            "B": "A jazz playlist his friend just made",
+            "C": "Classical music for studying late at night",
+            "D": "Live recordings from a campus concert series"
+          },
+          "answer": "A",
+          "explanation": "男生明确推荐Wildwood Echo的indie folk新专辑。B是凭空捏造的细节。C完全没在对话中出现。D借用了对话词汇但不相关。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "wrong_topic",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do tonight?",
+          "options": {
+            "A": "Download the Wildwood Echo album for the woman",
+            "B": "Walk the woman to her morning class",
+            "C": "Send the woman a playlist by text message",
+            "D": "Buy concert tickets for the new album release"
+          },
+          "answer": "C",
+          "explanation": "男生说今晚会发短信给女生分享歌单，可推知他会发短信。A过度推论。B是话题相关但与对话无关。D是无关延伸。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_next_step",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two friends discussing a movie one just saw — good twists but too long",
+      "difficulty": "medium",
+      "speakers": [
+        {"name": "Woman", "role": "student", "gender": "female"},
+        {"name": "Man", "role": "student", "gender": "male"}
+      ],
+      "conversation": [
+        {"speaker": "Woman", "text": "Hey, did you finally watch 'The Quiet Hour' last weekend? You said you were planning to."},
+        {"speaker": "Man", "text": "I did! The twists honestly blew me away. There's one near the end I never saw coming."},
+        {"speaker": "Woman", "text": "Really? My roommate said the same thing. So you'd recommend it?"},
+        {"speaker": "Man", "text": "With one big warning. It runs almost three hours. I started fidgeting around the two-hour mark."},
+        {"speaker": "Woman", "text": "Yikes, three hours? I was thinking of seeing it tomorrow night."},
+        {"speaker": "Man", "text": "Just make sure you've got snacks and a comfortable seat. And maybe skip the giant soda."}
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "Which movie to watch this coming weekend",
+            "B": "A movie one of them recently saw and enjoyed",
+            "C": "A late-night snack recommendation for the cinema",
+            "D": "How to find comfortable seating at the local theater"
+          },
+          "answer": "B",
+          "explanation": "对话的核心是男生上周末看的电影和给女生的建议。A颠倒了情景。C只是男生最后一句的细节。D借用了对话中的'舒适座位'做表面陷阱。",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "C": "too_narrow",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the woman's plans?",
+          "options": {
+            "A": "She has decided to skip the movie entirely",
+            "B": "She will read the book the movie is based on",
+            "C": "She will avoid going to any long movies in the future",
+            "D": "She intends to watch the same movie tomorrow night"
+          },
+          "answer": "D",
+          "explanation": "女生说她考虑明晚去看，并听了男生关于零食和座位的建议，因此可推知她仍打算去看。A与对话相反。B完全没提到。C过度概括。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "unrelated_next_step",
+            "C": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "plans_social",
+      "situation": "two students planning what cheese and food to buy for a dinner party",
+      "difficulty": "easy",
+      "speakers": [
+        {"name": "Woman", "role": "student", "gender": "female"},
+        {"name": "Man", "role": "student", "gender": "male"}
+      ],
+      "conversation": [
+        {"speaker": "Woman", "text": "Okay, what cheese should we grab for Saturday's dinner? Marco said he'd bring wine, but we need everything else."},
+        {"speaker": "Man", "text": "Definitely a soft brie. Maybe a sharp cheddar too — people always reach for both."},
+        {"speaker": "Woman", "text": "And crackers?"},
+        {"speaker": "Man", "text": "Crackers, fresh grapes, and some olives if the deli has the kalamatas. Skip nuts — Sara has the allergy."},
+        {"speaker": "Woman", "text": "Right, good call. Should we get one block or two?"},
+        {"speaker": "Man", "text": "Two blocks for sure. Eight guests will tear through one in twenty minutes."},
+        {"speaker": "Woman", "text": "Got it. I'll handle the cheese run after class."}
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man suggest they avoid buying?",
+          "options": {
+            "A": "The kalamata olives at the deli counter",
+            "B": "Both brie and sharp cheddar varieties",
+            "C": "Any nuts because of a guest's allergy",
+            "D": "Crackers because they often go stale fast"
+          },
+          "answer": "C",
+          "explanation": "男生明确说skip nuts因为Sara过敏。A是男生推荐买的。B也是男生推荐的。D凭空捏造的理由。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do after class?",
+          "options": {
+            "A": "Stop at the store to pick up the cheese and snacks",
+            "B": "Call Sara to confirm her food allergies",
+            "C": "Cancel the dinner because of allergy concerns",
+            "D": "Ask Marco to bring extra wine bottles"
+          },
+          "answer": "A",
+          "explanation": "女生最后说会handle the cheese run after class，所以会去商店买。B是话题相关但她没说要打电话。C完全相反。D是无关延伸。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "reversed_situation",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "errands_service",
+      "situation": "a student asking a shop about repairing a cracked phone screen",
+      "difficulty": "easy",
+      "speakers": [
+        {"name": "Woman", "role": "customer", "gender": "female"},
+        {"name": "Man", "role": "shop_staff", "gender": "male"}
+      ],
+      "conversation": [
+        {"speaker": "Woman", "text": "Hi, my phone screen cracked yesterday when I dropped it on the sidewalk. Can someone here fix it?"},
+        {"speaker": "Man", "text": "Sure, we do screen replacements. Is the phone still turning on?"},
+        {"speaker": "Woman", "text": "It is, and the touch still works. Just lots of cracks across the surface."},
+        {"speaker": "Man", "text": "Good. For your model, the replacement runs about sixty-five dollars and takes around two hours."},
+        {"speaker": "Woman", "text": "Two hours? I have class at three."},
+        {"speaker": "Man", "text": "Then I'd suggest dropping it off in the morning. We open at eight, and your phone will be ready before your class."},
+        {"speaker": "Woman", "text": "Perfect. I'll come back tomorrow at eight sharp."}
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man tell the woman about the repair?",
+          "options": {
+            "A": "The phone needs new internal components",
+            "B": "The repair will be free with student ID",
+            "C": "The shop closes early on weekends only",
+            "D": "The repair takes about two hours to complete"
+          },
+          "answer": "D",
+          "explanation": "男生明确说大约需要两小时。A是凭空捏造的细节——只换屏幕。B完全没提。C是无关信息。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "C": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do tomorrow morning?",
+          "options": {
+            "A": "Take her phone to a different repair shop",
+            "B": "Bring her phone to the shop when it opens at eight",
+            "C": "Buy a brand-new phone instead of fixing this one",
+            "D": "Skip her three o'clock class entirely"
+          },
+          "answer": "B",
+          "explanation": "女生最后说明天八点回来，所以会在开门时把手机送过来。A是相反选择。C她已决定修不是换。D无关延伸。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "C": "rejected_option",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "errands_service",
+      "situation": "two friends sharing cooking tips while grocery shopping",
+      "difficulty": "hard",
+      "speakers": [
+        {"name": "Woman", "role": "student", "gender": "female"},
+        {"name": "Man", "role": "student", "gender": "male"}
+      ],
+      "conversation": [
+        {"speaker": "Woman", "text": "Wait, do you always pick the bunched broccoli over the pre-cut florets? I usually just grab the bag."},
+        {"speaker": "Man", "text": "Yeah, the bunched ones last way longer in the fridge. Pre-cut florets start wilting in three days."},
+        {"speaker": "Woman", "text": "Huh. I've definitely had to toss a half-eaten bag."},
+        {"speaker": "Man", "text": "Same with herbs. Buy them as a whole bunch, wrap them in a damp paper towel, and they'll stay fresh for a week."},
+        {"speaker": "Woman", "text": "Damp paper towel? I've been throwing herbs in a plastic bag and watching them go slimy."},
+        {"speaker": "Man", "text": "Try it next time. Honestly changed my cooking."},
+        {"speaker": "Woman", "text": "I'm definitely going to test that tonight."}
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "Practical tips for keeping produce fresh longer",
+            "B": "The best supermarket to shop at near campus",
+            "C": "A recipe one of them wants to try tonight",
+            "D": "The cost of broccoli compared to other vegetables"
+          },
+          "answer": "A",
+          "explanation": "对话核心是男生分享如何让蔬菜和香草保鲜更久。B完全没提。C借用了'tonight'做表面陷阱但跑题。D只是表层细节。",
+          "distractor_types": {
+            "B": "wrong_topic",
+            "C": "too_narrow",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do tonight?",
+          "options": {
+            "A": "Throw out the herbs she bought last week",
+            "B": "Switch to buying only canned vegetables in the future",
+            "C": "Try wrapping her fresh herbs in a damp paper towel",
+            "D": "Cook the broccoli before it has a chance to wilt"
+          },
+          "answer": "C",
+          "explanation": "女生最后说今晚要试一下，指的是男生教的湿纸巾包香草的方法。A借用了她以前的做法。B过度推论。D是话题相关但不是她说要做的。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "over_inference",
+            "D": "related_but_not_stated"
+          }
+        }
+      ]
+    }
+  ]
+}

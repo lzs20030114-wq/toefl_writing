@@ -1,0 +1,94 @@
+{
+  "items": [
+    {
+      "genre": "menu",
+      "variant": "long",
+      "text": "Stack & Stir Café — Student Union, Level 2\n\nOpen Monday through Friday, 7:00 AM to 9:00 PM. Pay at the counter or use your campus meal card.\n\nBREAKFAST (served until 11:00 AM)\n- Buttermilk pancake stack — $4.50\n- Steel-cut oats with seasonal fruit — $3.75\n- Egg and avocado wrap — $5.25\n- House yogurt parfait — $3.25\n\nLUNCH AND DINNER\n- Grilled chicken salad — $7.50\n- Roasted vegetable bowl — $6.25\n- House grain bowl with hummus — $6.75\n- Daily soup with fresh bread — $4.50\n\nSTUDY-HOUR SPECIALS (Tuesday and Thursday, 2:00–4:00 PM only)\n- Any drip coffee — $1.50\n- Pastry of the day — $2.00\n- Combo deal: one drink plus one pastry — $3.00\n\nBottomless tea is $2.00 with refills until close. Show your valid student ID at the register for ten percent off any sandwich. Please note that the café no longer accepts cash after 7:00 PM; meal cards and credit only. Contact Manager Ms. Owens at owens@union.edu with feedback or questions.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the menu, when are study-hour specials available?",
+          "options": {
+            "A": "On Monday and Wednesday afternoons",
+            "B": "On Tuesday and Thursday afternoons",
+            "C": "On weekdays during morning hours",
+            "D": "On weekends from noon to evening"
+          },
+          "correct_answer": "B",
+          "explanation": "The menu states study-hour specials run 'Tuesday and Thursday, 2:00–4:00 PM only.'"
+        },
+        {
+          "question_type": "detail",
+          "stem": "What is the price of the combo deal in the study-hour specials?",
+          "options": {
+            "A": "Two dollars per item",
+            "B": "Two dollars and fifty cents",
+            "C": "One dollar and fifty cents",
+            "D": "Three dollars total"
+          },
+          "correct_answer": "D",
+          "explanation": "The menu lists 'Combo deal: one drink plus one pastry — $3.00.'"
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about evening customers who want to pay with cash?",
+          "options": {
+            "A": "They receive a small late-night discount.",
+            "B": "They must pay before 7:00 PM.",
+            "C": "They are required to leave a tip.",
+            "D": "They can only buy combo specials."
+          },
+          "correct_answer": "B",
+          "explanation": "Since the café 'no longer accepts cash after 7:00 PM,' cash customers must pay before that time."
+        }
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "genre": "notice",
+      "variant": "long",
+      "text": "Updated Printing Quota and Kiosk Notice\n\nEffective Monday, June 15, the library printing system will operate under a new quota and station layout. All current student accounts will be reset to the new monthly limit, and several kiosks will be relocated during the transition week.\n\nKey changes:\n- Each undergraduate account receives 200 free pages per month.\n- Pages beyond the quota are billed at $0.08 per black-and-white page and $0.25 per color page.\n- Unused pages no longer roll over to the next month.\n- The third-floor kiosk has been moved to the second-floor reference area near the help desk.\n- The basement kiosk will be closed permanently after June 30.\n\nStudents who arrive before 9:00 AM may use any open kiosk without a wait. Please load files through the new portal at print.collegeport.edu. The IT help desk in Carver Hall, Room 118, can assist with login problems Monday through Friday, 8:00 AM to 5:00 PM. Contact Mr. Howard at extension 3201 for billing questions.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, how many free pages does an undergraduate account receive each month?",
+          "options": {
+            "A": "Up to 100 pages per month",
+            "B": "Up to 150 pages per month",
+            "C": "Up to 200 pages per month",
+            "D": "Up to 300 pages per month"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice states 'Each undergraduate account receives 200 free pages per month.'"
+        },
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, where has the third-floor kiosk been relocated?",
+          "options": {
+            "A": "To the second-floor reference area",
+            "B": "To the basement of the library",
+            "C": "To the IT help desk in Carver Hall",
+            "D": "To the first-floor student lounge"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice states the third-floor kiosk 'has been moved to the second-floor reference area near the help desk.'"
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about students who print color documents?",
+          "options": {
+            "A": "They receive an automatic monthly discount.",
+            "B": "They pay more per color page.",
+            "C": "They must request approval from Mr. Howard.",
+            "D": "They cannot use the new printing portal."
+          },
+          "correct_answer": "B",
+          "explanation": "The notice charges '$0.08 per black-and-white page and $0.25 per color page,' so color printing costs more per page."
+        }
+      ],
+      "difficulty": "easy"
+    }
+  ]
+}

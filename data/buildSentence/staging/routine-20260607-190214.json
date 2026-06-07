@@ -1,0 +1,224 @@
+{
+  "items": [
+    {
+      "id": "tmp_r1_q1",
+      "prompt": "Did you grab lunch already?",
+      "answer": "I packed a sandwich this morning.",
+      "chunks": ["packed", "a", "sandwich", "this", "morning"],
+      "prefilled": ["I"],
+      "prefilled_positions": {"i": 0},
+      "distractor": "had",
+      "has_question_mark": false,
+      "grammar_points": ["simple past", "time phrase"]
+    },
+    {
+      "id": "tmp_r1_q2",
+      "prompt": "I missed practice yesterday.",
+      "answer": "Did Coach Diaz mention me?",
+      "chunks": ["did", "coach", "diaz", "mention", "me"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "does",
+      "has_question_mark": true,
+      "grammar_points": ["direct yes-no question", "simple past"]
+    },
+    {
+      "id": "tmp_r1_q3",
+      "prompt": "Why are you packing tonight?",
+      "answer": "I forgot my hiking boots at home.",
+      "chunks": ["i", "forgot", "my", "hiking", "boots"],
+      "prefilled": ["at home"],
+      "prefilled_positions": {"at home": 5},
+      "distractor": "to",
+      "has_question_mark": false,
+      "grammar_points": ["simple past", "prepositional phrase"]
+    },
+    {
+      "id": "tmp_r1_q4",
+      "prompt": "I lost my student ID.",
+      "answer": "Where do I get a replacement card?",
+      "chunks": ["do", "i", "get", "a", "replacement card"],
+      "prefilled": ["Where"],
+      "prefilled_positions": {"where": 0},
+      "distractor": null,
+      "has_question_mark": true,
+      "grammar_points": ["direct wh-question", "simple present"]
+    },
+    {
+      "id": "tmp_r1_q5",
+      "prompt": "How did your interview go yesterday?",
+      "answer": "The manager asked when I could start next week.",
+      "chunks": ["the manager", "asked", "when", "i", "could", "start", "next week"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question with when", "modal could"]
+    },
+    {
+      "id": "tmp_r1_q6",
+      "prompt": "Have you talked to your advisor recently?",
+      "answer": "I have not booked an appointment for next Monday.",
+      "chunks": ["i", "have not", "booked", "appointment", "for", "next monday"],
+      "prefilled": ["an"],
+      "prefilled_positions": {"an": 4},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["present perfect negation", "time phrase"]
+    },
+    {
+      "id": "tmp_r1_q7",
+      "prompt": "Where do you usually grab dinner on Wednesdays?",
+      "answer": "The food truck behind the gym serves great tacos.",
+      "chunks": ["behind", "the", "gym", "serves", "great", "tacos"],
+      "prefilled": ["The food truck"],
+      "prefilled_positions": {"the food truck": 0},
+      "distractor": "is",
+      "has_question_mark": false,
+      "grammar_points": ["simple present", "prepositional phrase"]
+    },
+    {
+      "id": "tmp_r1_q8",
+      "prompt": "Which courses did you sign up for?",
+      "answer": "Yusuf and I signed up for both economics courses.",
+      "chunks": ["yusuf", "and i", "for", "both", "economics", "courses"],
+      "prefilled": ["signed up"],
+      "prefilled_positions": {"signed up": 3},
+      "distractor": "has",
+      "has_question_mark": false,
+      "grammar_points": ["simple past", "phrasal verb"]
+    },
+    {
+      "id": "tmp_r1_q9",
+      "prompt": "What did you decide about study spots?",
+      "answer": "The bench that overlooks the courtyard stays quiet.",
+      "chunks": ["that", "overlooks", "the", "courtyard", "stays", "quiet"],
+      "prefilled": ["The bench"],
+      "prefilled_positions": {"the bench": 0},
+      "distractor": "which",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause", "simple present"]
+    },
+    {
+      "id": "tmp_r1_q10",
+      "prompt": "What did you do over winter break?",
+      "answer": "Pierre showed me around his hometown for three days.",
+      "chunks": ["pierre", "me", "around", "his", "hometown", "for three days"],
+      "prefilled": ["showed"],
+      "prefilled_positions": {"showed": 1},
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["simple past", "prepositional phrase"]
+    },
+    {
+      "id": "tmp_r1_q11",
+      "prompt": "Did your professor email back about the extension?",
+      "answer": "She wondered whether my outline included a counterargument.",
+      "chunks": ["she", "wondered", "my", "outline", "included", "a counterargument"],
+      "prefilled": ["whether"],
+      "prefilled_positions": {"whether": 2},
+      "distractor": "if",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question with whether", "simple past"]
+    },
+    {
+      "id": "tmp_r1_q12",
+      "prompt": "I saw a poster on the bulletin board.",
+      "answer": "The pool will be closed until next Monday.",
+      "chunks": ["the", "pool", "will be", "closed", "next", "monday"],
+      "prefilled": ["until"],
+      "prefilled_positions": {"until": 5},
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["passive voice with modal", "time phrase"]
+    },
+    {
+      "id": "tmp_r1_q13",
+      "prompt": "What did you do to prepare for the trip?",
+      "answer": "I have not unpacked my camping gear yet.",
+      "chunks": ["have not", "unpacked", "my", "camping", "gear", "yet"],
+      "prefilled": ["I"],
+      "prefilled_positions": {"i": 0},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["present perfect negation"]
+    },
+    {
+      "id": "tmp_r1_q14",
+      "prompt": "How was your meeting with the advisor today?",
+      "answer": "He asked how my research timeline was going.",
+      "chunks": ["he", "asked", "my", "research", "timeline", "was going"],
+      "prefilled": ["how"],
+      "prefilled_positions": {"how": 2},
+      "distractor": "is",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question with how", "past progressive"]
+    },
+    {
+      "id": "tmp_r1_q15",
+      "prompt": "What's new in your dorm common area?",
+      "answer": "I no longer rely on the basement printers.",
+      "chunks": ["i", "no longer", "rely", "on", "the", "basement printers"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": null,
+      "has_question_mark": false,
+      "grammar_points": ["negation with no longer", "simple present"]
+    },
+    {
+      "id": "tmp_r1_q16",
+      "prompt": "I just got assigned a senior thesis advisor.",
+      "answer": "Where can I find her posted office hours?",
+      "chunks": ["can", "i", "find", "her", "posted", "office", "hours"],
+      "prefilled": ["Where"],
+      "prefilled_positions": {"where": 0},
+      "distractor": "does",
+      "has_question_mark": true,
+      "grammar_points": ["direct wh-question", "modal can"]
+    },
+    {
+      "id": "tmp_r1_q17",
+      "prompt": "What did the dining hall manager say to you?",
+      "answer": "She asked whether the dining staff had addressed my refund request.",
+      "chunks": ["she", "asked", "the dining staff", "had", "addressed", "my", "refund request"],
+      "prefilled": ["whether"],
+      "prefilled_positions": {"whether": 2},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question with whether", "past perfect"]
+    },
+    {
+      "id": "tmp_r1_q18",
+      "prompt": "What did the lab staff explain to you about the incident?",
+      "answer": "The damaged glassware was carefully replaced by the entire chemistry department.",
+      "chunks": ["the damaged", "glassware", "carefully", "replaced", "by", "the entire", "chemistry department"],
+      "prefilled": ["was"],
+      "prefilled_positions": {"was": 3},
+      "distractor": "had",
+      "has_question_mark": false,
+      "grammar_points": ["passive voice", "adverb modifier"]
+    },
+    {
+      "id": "tmp_r1_q19",
+      "prompt": "Did you find someone to share your lecture notes?",
+      "answer": "The classmate who sat behind me copied everything onto her tablet.",
+      "chunks": ["the classmate", "sat behind", "me", "copied", "everything", "onto", "her tablet"],
+      "prefilled": ["who"],
+      "prefilled_positions": {"who": 2},
+      "distractor": "and",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause", "simple past"]
+    },
+    {
+      "id": "tmp_r1_q20",
+      "prompt": "What did the scholarship committee tell you?",
+      "answer": "He confirmed that my essay had been selected for the final round.",
+      "chunks": ["he", "confirmed", "my essay", "had been", "selected", "for the", "final round"],
+      "prefilled": ["that"],
+      "prefilled_positions": {"that": 2},
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["embedded clause that", "past perfect passive"]
+    }
+  ]
+}
