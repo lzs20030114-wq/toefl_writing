@@ -11601,6 +11601,150 @@
       ],
       "difficulty": "easy",
       "id": "rdl-short_mq4691j1_3"
+    },
+    {
+      "id": "rdl_sht_rt_20260608_1",
+      "genre": "email",
+      "passage_type": "email",
+      "subtype": "short",
+      "text": "Hi Jordan,\n\nYour spring meal plan ended with a balance of $18.40. Please stop by the Dining Services Office in Reynolds Hall before May 30 to claim your refund. Bring your student ID and a printout of this email so our staff can process the request quickly at the front desk.\n\nThanks,\nDining Services",
+      "word_count": 53,
+      "questions": [
+        {
+          "qid": "rdl_sht_rt_20260608_1_q1",
+          "question_type": "detail",
+          "stem": "What amount will be refunded?",
+          "options": {
+            "A": "A balance of $5.30",
+            "B": "A balance of $8.40",
+            "C": "A balance of $18.40",
+            "D": "A balance of $30.00"
+          },
+          "correct_answer": "C",
+          "explanation": "The email states the balance is $18.40."
+        },
+        {
+          "qid": "rdl_sht_rt_20260608_1_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about claiming the refund?",
+          "options": {
+            "A": "It must be done in person before the deadline.",
+            "B": "It can be deposited online by the student.",
+            "C": "It is forfeited automatically each summer.",
+            "D": "It must be mailed by the office."
+          },
+          "correct_answer": "A",
+          "explanation": "The student must visit Reynolds Hall with their ID before May 30, indicating in-person collection."
+        }
+      ]
+    },
+    {
+      "id": "rdl_sht_rt_20260608_2",
+      "genre": "flyer",
+      "passage_type": "flyer",
+      "subtype": "short",
+      "text": "STUDENT THEATER PRESENTS: THE LIGHTHOUSE KEEPER\n\nTwo nights only — Friday, April 12 and Saturday, April 13 at 7:30 PM. Whitman Hall Stage. Tickets $5 at the door. Cash or campus card accepted. Doors open thirty minutes before curtain. Latecomers will be seated only during scene breaks for the comfort of other audience members.",
+      "word_count": 53,
+      "questions": [
+        {
+          "qid": "rdl_sht_rt_20260608_2_q1",
+          "question_type": "detail",
+          "stem": "Where is the show being performed?",
+          "options": {
+            "A": "At Reynolds Hall Stage",
+            "B": "At South Lot B Theater",
+            "C": "At Anderson Outdoor Stage",
+            "D": "At Whitman Hall Stage"
+          },
+          "correct_answer": "D",
+          "explanation": "The flyer states the performance is at Whitman Hall Stage."
+        },
+        {
+          "qid": "rdl_sht_rt_20260608_2_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about ticket purchases?",
+          "options": {
+            "A": "They are reserved only for faculty members.",
+            "B": "They are available without advance booking.",
+            "C": "They include guaranteed reserved seating.",
+            "D": "They are limited to theater majors only."
+          },
+          "correct_answer": "B",
+          "explanation": "Tickets are sold $5 at the door, indicating no advance booking is necessary."
+        }
+      ]
+    },
+    {
+      "id": "rdl_sht_rt_20260608_3",
+      "genre": "notice",
+      "passage_type": "notice",
+      "subtype": "short",
+      "text": "NOTICE: The water fountains on the third floor of Bishop Hall will be out of service from Monday, March 10 through Wednesday, March 12 for scheduled maintenance. Please use the second-floor fountains during this period. A staff member will be available to assist students with bottled water needs at the third-floor reception desk between classes.",
+      "word_count": 55,
+      "questions": [
+        {
+          "qid": "rdl_sht_rt_20260608_3_q1",
+          "question_type": "detail",
+          "stem": "Which floor's fountains are being repaired?",
+          "options": {
+            "A": "The first floor",
+            "B": "The second floor",
+            "C": "The third floor",
+            "D": "The fourth floor"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice specifies the third-floor fountains will be out of service."
+        },
+        {
+          "qid": "rdl_sht_rt_20260608_3_q2",
+          "question_type": "inference",
+          "stem": "What should students on the third floor do for water?",
+          "options": {
+            "A": "Walk one floor down to find water.",
+            "B": "Wait until evening for restored service.",
+            "C": "Visit a different building entirely.",
+            "D": "Report any leaks to facilities staff."
+          },
+          "correct_answer": "A",
+          "explanation": "Students are advised to use the second-floor fountains during the outage."
+        }
+      ]
+    },
+    {
+      "id": "rdl_sht_rt_20260608_4",
+      "genre": "notice",
+      "passage_type": "notice",
+      "subtype": "short",
+      "text": "NOTICE: Campus Wi-Fi will undergo maintenance on Sunday, April 21 from 2:00 AM to 6:00 AM. Wired connections in Anderson Hall remain available throughout the window. A $5 lab pass covers visitor printing during the outage at the help desk. Students should save any active work before the maintenance window begins on Sunday morning.",
+      "word_count": 55,
+      "questions": [
+        {
+          "qid": "rdl_sht_rt_20260608_4_q1",
+          "question_type": "detail",
+          "stem": "How long will the maintenance last?",
+          "options": {
+            "A": "About two hours",
+            "B": "About four hours",
+            "C": "About six hours",
+            "D": "About eight hours"
+          },
+          "correct_answer": "B",
+          "explanation": "Maintenance runs from 2:00 AM to 6:00 AM, which is four hours."
+        },
+        {
+          "qid": "rdl_sht_rt_20260608_4_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about Anderson Hall during the outage?",
+          "options": {
+            "A": "It will be closed to students overnight.",
+            "B": "It will only allow faculty access.",
+            "C": "It will require a wireless password.",
+            "D": "It will still allow internet use through cables."
+          },
+          "correct_answer": "D",
+          "explanation": "Wired connections in Anderson Hall remain available, implying cabled internet access continues."
+        }
+      ]
     }
   ]
 }

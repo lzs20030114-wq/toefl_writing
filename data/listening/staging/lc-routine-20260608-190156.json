@@ -1,0 +1,215 @@
+{
+  "type": "listenConversation",
+  "generated_at": "2026-06-08T19:18:00.000Z",
+  "items": [
+    {
+      "id": "lc_rt_20260608_1",
+      "setting": "campus_library",
+      "difficulty": "easy",
+      "speakers": [{"name": "Woman", "role": "student", "gender": "female"}, {"name": "Man", "role": "library_staff", "gender": "male"}],
+      "conversation": [
+        {"speaker": "Woman", "text": "Hi, I'm looking for a book that's supposed to be on the third floor, but it's not on the shelf where the catalog says it should be."},
+        {"speaker": "Man", "text": "Oh, that happens more than you'd think. Did you check the cart by the elevator? Returned books usually sit there for a day before getting reshelved."},
+        {"speaker": "Woman", "text": "I didn't even know about that cart. Let me run up and check."},
+        {"speaker": "Man", "text": "If it's not there, come back down and I'll place a hold for you. We'll grab it from the returns area within twenty-four hours."},
+        {"speaker": "Woman", "text": "That works. Thanks so much for the help."},
+        {"speaker": "Man", "text": "No problem at all. Let me know if you can't find it upstairs."}
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "Why does the woman approach the man?",
+          "options": {
+            "A": "To pay an overdue fine for a book",
+            "B": "To ask about a book missing from the shelf",
+            "C": "To recommend a new book for purchase",
+            "D": "To complain about the third-floor noise"
+          },
+          "answer": "B",
+          "explanation": "女学生因书未在书架上而求助。其他选项与对话内容无关。",
+          "distractor_types": {"A": "wrong_topic", "C": "wrong_topic", "D": "wrong_topic"}
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Order the book from another library",
+            "B": "Check the cart by the elevator on the third floor",
+            "C": "Leave the library and try a bookstore",
+            "D": "Ask another staff member for help"
+          },
+          "answer": "B",
+          "explanation": "男馆员建议先查电梯旁的小推车，女生表示要去看看。其他选项不是下一步。",
+          "distractor_types": {"A": "over_inference", "C": "unrelated_next_step", "D": "rejected_option"}
+        }
+      ]
+    },
+    {
+      "id": "lc_rt_20260608_2",
+      "setting": "campus_advising",
+      "difficulty": "medium",
+      "speakers": [{"name": "Man", "role": "student", "gender": "male"}, {"name": "Woman", "role": "advisor", "gender": "female"}],
+      "conversation": [
+        {"speaker": "Man", "text": "Hi Professor Lin. I was hoping you could sign off on my plan to take statistics this summer instead of next fall."},
+        {"speaker": "Woman", "text": "Sure, let's take a look. You know, summer statistics is condensed — it covers a full semester in six weeks. That's a lot."},
+        {"speaker": "Man", "text": "I figured. But I'm not taking anything else, so I'd be able to focus on it."},
+        {"speaker": "Woman", "text": "That actually makes a big difference. Most students who struggle with the summer section are juggling a part-time job or another course. If you're free, you should be fine."},
+        {"speaker": "Man", "text": "Great. So you'll sign the form?"},
+        {"speaker": "Woman", "text": "I'll sign it now. Just promise me you'll start the practice problems in week one — don't wait until the first exam."}
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "Why is the man meeting with the advisor?",
+          "options": {
+            "A": "To request approval for a summer statistics course",
+            "B": "To withdraw from a current statistics course",
+            "C": "To change his academic major to mathematics",
+            "D": "To complain about a difficult professor"
+          },
+          "answer": "A",
+          "explanation": "男生想得到顾问批准夏季选统计课。其他选项与对话内容无关。",
+          "distractor_types": {"B": "reversed_situation", "C": "wrong_topic", "D": "wrong_topic"}
+        },
+        {
+          "type": "inference",
+          "stem": "What does the advisor imply about the summer course?",
+          "options": {
+            "A": "It is easier than the fall version",
+            "B": "It usually challenges students with competing commitments",
+            "C": "It will be cancelled this year",
+            "D": "It is only open to mathematics majors"
+          },
+          "answer": "B",
+          "explanation": "顾问暗示通常那些有兼职或另选课的学生才会吃力。其他选项与对话不符。",
+          "distractor_types": {"A": "reversed_situation", "C": "wrong_detail", "D": "wrong_topic"}
+        }
+      ]
+    },
+    {
+      "id": "lc_rt_20260608_3",
+      "setting": "campus_dorm",
+      "difficulty": "easy",
+      "speakers": [{"name": "Woman", "role": "student", "gender": "female"}, {"name": "Man", "role": "student", "gender": "male"}],
+      "conversation": [
+        {"speaker": "Woman", "text": "Hey, did you grab the last printer pass at the front desk earlier this afternoon?"},
+        {"speaker": "Man", "text": "Yeah, sorry — was that really the last one? I honestly didn't realize."},
+        {"speaker": "Woman", "text": "It's fine. The thing is, I need to print my paper tonight. Any chance I can borrow it after you?"},
+        {"speaker": "Man", "text": "Definitely. I'll be done in about an hour. I'll slide it right under your door when I'm done."},
+        {"speaker": "Woman", "text": "You're a total lifesaver. Thanks, Marco."},
+        {"speaker": "Man", "text": "No problem — just leave it in my mailbox when you're finished tonight."}
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the woman ask the man for?",
+          "options": {
+            "A": "Help editing her paper",
+            "B": "Use of his printer pass when he is finished",
+            "C": "A ride to the campus print shop",
+            "D": "Permission to use his laptop"
+          },
+          "answer": "B",
+          "explanation": "女生明确请求借打印通行证。其他选项与对话不符。",
+          "distractor_types": {"A": "wrong_topic", "C": "wrong_topic", "D": "wrong_topic"}
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do next?",
+          "options": {
+            "A": "Buy a second printer pass for the woman",
+            "B": "Cancel his printing plans for the night",
+            "C": "Drop the pass off at her door once he finishes",
+            "D": "Go to the library to find another pass"
+          },
+          "answer": "C",
+          "explanation": "男生答应打印完后塞到她门下。其他选项与他说的话相悖。",
+          "distractor_types": {"A": "over_inference", "B": "reversed_situation", "D": "unrelated_next_step"}
+        }
+      ]
+    },
+    {
+      "id": "lc_rt_20260608_4",
+      "setting": "campus_cafe",
+      "difficulty": "medium",
+      "speakers": [{"name": "Man", "role": "student", "gender": "male"}, {"name": "Woman", "role": "cafe_staff", "gender": "female"}],
+      "conversation": [
+        {"speaker": "Man", "text": "Hi — I tried to use the app to pay for my coffee but it kept giving me an error message."},
+        {"speaker": "Woman", "text": "Oh, the payment system is down across all the campus cafes today. We've been telling people since the morning."},
+        {"speaker": "Man", "text": "Yikes. Do you take cash, or should I come back tomorrow?"},
+        {"speaker": "Woman", "text": "Cash is fine. You can also tap your campus card if you have one."},
+        {"speaker": "Man", "text": "Perfect, I have my card. Sorry about that."},
+        {"speaker": "Woman", "text": "No worries — happens all morning. Hopefully they fix the app by tonight."}
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main reason for the man's problem?",
+          "options": {
+            "A": "His coffee order was prepared incorrectly",
+            "B": "The cafe's payment app is not working today",
+            "C": "He forgot to bring his campus card",
+            "D": "The cafe ran out of his favorite drink"
+          },
+          "answer": "B",
+          "explanation": "对话核心是支付应用故障。其他选项与文本不符。",
+          "distractor_types": {"A": "wrong_topic", "C": "reversed_situation", "D": "wrong_topic"}
+        },
+        {
+          "type": "detail",
+          "stem": "What does the man decide to do?",
+          "options": {
+            "A": "Use his campus card to pay",
+            "B": "Come back to the cafe the next morning",
+            "C": "Ask another customer to lend him cash",
+            "D": "Cancel his order entirely"
+          },
+          "answer": "A",
+          "explanation": "男生说有校园卡，并选择用卡付款。其他选项与他选的方案不符。",
+          "distractor_types": {"B": "rejected_option", "C": "wrong_topic", "D": "wrong_topic"}
+        }
+      ]
+    },
+    {
+      "id": "lc_rt_20260608_5",
+      "setting": "campus_gym",
+      "difficulty": "easy",
+      "speakers": [{"name": "Woman", "role": "student", "gender": "female"}, {"name": "Man", "role": "gym_staff", "gender": "male"}],
+      "conversation": [
+        {"speaker": "Woman", "text": "Excuse me — I'm trying to sign up for the climbing wall but the website keeps saying the session is full."},
+        {"speaker": "Man", "text": "Yeah, Thursday slots fill up almost instantly. Have you tried Friday morning? They added two extra sessions this term."},
+        {"speaker": "Woman", "text": "Friday morning could work. Is there a waitlist for Thursday though, just in case?"},
+        {"speaker": "Man", "text": "There is, but honestly I'd grab the Friday spot now. The Thursday waitlist almost never moves."},
+        {"speaker": "Woman", "text": "Okay, I'll register for Friday right now then."}
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What problem is the woman trying to solve?",
+          "options": {
+            "A": "She cannot find space in a climbing wall session",
+            "B": "She locked her membership card in the locker room",
+            "C": "She has an injury and needs special instruction",
+            "D": "She wants to cancel her gym membership"
+          },
+          "answer": "A",
+          "explanation": "女生想报名攀岩但课已满。其他选项与对话不符。",
+          "distractor_types": {"B": "wrong_topic", "C": "wrong_topic", "D": "wrong_topic"}
+        },
+        {
+          "type": "inference",
+          "stem": "What does the man imply about the Thursday waitlist?",
+          "options": {
+            "A": "It is faster to clear than the Friday list",
+            "B": "It usually does not produce open spots",
+            "C": "It requires extra payment to join",
+            "D": "It is closed for the rest of the term"
+          },
+          "answer": "B",
+          "explanation": "男员工说候补几乎不动，暗示别等候补。其他选项与他建议相悖。",
+          "distractor_types": {"A": "reversed_situation", "C": "wrong_detail", "D": "over_inference"}
+        }
+      ]
+    }
+  ]
+}

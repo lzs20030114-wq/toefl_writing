@@ -1,33 +1,28 @@
 {
-  "session_id": "routine-20260607-190214",
-  "completed_at": "2026-06-07T19:25:32Z",
-  "duration_minutes": 23,
-  "highlight": "听口模块全部通过，新增社会研究与公共政策类讨论题",
+  "session_id": "routine-20260608-190156",
+  "completed_at": "2026-06-08T19:35:00.000Z",
+  "duration_minutes": 33,
+  "highlight": "首次新增材料科学陶瓷与水化学 AP，BS 多样性达 6+ 干扰词",
   "commit_sha": "",
-  "r2_completed_at": "2026-06-07T19:31:00Z",
-  "r2_session_id": "routine-r2-20260607-193057",
   "results": {
     "bs": {
       "generated": 20,
       "accepted": 10,
-      "topics": ["campus小聊（午餐/学习/作业）", "indirect questions with whether/how", "passive voice", "relative clauses", "present perfect negation"],
+      "topics": ["campus_life", "professor_advisor", "library", "registration", "study_group"],
       "favorite": {
-        "prompt": "Did you find someone to share your lecture notes?",
-        "answer": "The classmate who sat behind me copied everything onto her tablet."
+        "prompt": "What did the front desk staff tell you?",
+        "answer": "The lobby printers were quietly repaired over the weekend."
       },
       "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_session_id": "routine-r2-20260607-193057",
-      "r2_items_added": 10
+      "failure_reason": ""
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["social studies", "public policy", "political science", "history and culture"],
+      "topics": ["marine biology", "psychology", "education", "business"],
       "favorite": {
-        "subtopic": "political science",
-        "preview": "Citizen assemblies — randomly selected residents asked to recommend policy on contested issues — have moved from political theory"
+        "subtopic": "marine biology",
+        "preview": "We've been discussing how coastal cities are adapting their stormwater systems as rainfall patterns shift."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -35,35 +30,32 @@
     "email": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["服务与活动", "校园学业", "住宿", "社区生活"],
+      "topics": ["服务与活动", "校园学业", "日常社交", "消费售后"],
       "favorite": {
-        "subtopic": "社区生活",
-        "preview": "You volunteer twice a month at the Linden Park branch library, helping run the children's reading hour on Saturday mornings."
+        "subtopic": "服务与活动",
+        "preview": "Pottery workshop missing supply list — student needs tool guidance"
       },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ap": {
       "generated": 5,
-      "accepted": 3,
-      "topics": ["anthropology/burial customs", "biology/ecosystems", "astronomy/nebulae", "anthropology/early agriculture", "biology/camouflage"],
+      "accepted": 4,
+      "topics": ["materials_science/ceramics", "sociology/education systems", "technology/computing", "chemistry/water chemistry"],
       "favorite": {
-        "subtopic": "anthropology/burial customs",
-        "preview": "Secondary burial customs involve a two-stage process in which the deceased is first interred temporarily and later exhumed"
+        "subtopic": "materials_science/ceramics",
+        "preview": "Ceramic materials are inorganic, non-metallic solids that are shaped from powders and then hardened at high temperatures."
       },
       "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_session_id": "routine-r2-20260607-193057",
-      "r2_items_added": 3
+      "failure_reason": ""
     },
     "reading-ctw": {
       "generated": 6,
-      "accepted": 5,
-      "topics": ["biology/seed dispersal", "environmental_science/wildlife reserves", "psychology/intrinsic and extrinsic motivation", "history/child labor reforms", "geology/Chicxulub impact", "astronomy/cosmic ray showers"],
+      "accepted": 6,
+      "topics": ["biology/ecosystems", "environmental_science/climate change", "psychology/placebo effect", "history/medieval guilds", "geology/ocean floor", "astronomy/planetary atmospheres"],
       "favorite": {
-        "subtopic": "geology/Chicxulub impact",
-        "preview": "The Chicxulub impact occurred about sixty-six million years ago near the modern Yucatán coast. The asteroid was roughly ten"
+        "subtopic": "psychology/placebo effect",
+        "preview": "The placebo effect occurs when patients feel better after taking a treatment that contains no active medicine."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -71,10 +63,10 @@
     "reading-rdl-short": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["notice", "email", "social_media", "email"],
+      "topics": ["email", "flyer", "notice", "notice"],
       "favorite": {
-        "subtopic": "social_media",
-        "preview": "Just discovered the best study spot at Atherton Library! The basement carrels near the back wall stay completely empty after"
+        "subtopic": "flyer",
+        "preview": "STUDENT THEATER PRESENTS: THE LIGHTHOUSE KEEPER. Two nights only — Friday, April 12 and Saturday."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -82,24 +74,21 @@
     "reading-rdl-long": {
       "generated": 2,
       "accepted": 2,
-      "topics": ["menu", "notice"],
+      "topics": ["email", "notice"],
       "favorite": {
-        "subtopic": "menu",
-        "preview": "Stack & Stir Café — Student Union, Level 2. Open Monday through Friday, 7:00 AM to 9:00 PM. Pay at the counter."
+        "subtopic": "email",
+        "preview": "Subject: Saturday Urban Sketching Walk — Visual Arts Club invites students to a spring sketching and photography walk."
       },
       "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_session_id": "routine-r2-20260607-193057",
-      "r2_items_added": 1
+      "failure_reason": ""
     },
     "listening-lat": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["anthropology/oral traditions", "art_history/Renaissance perspective", "music/recording technology", "social_psychology/stereotype threat"],
+      "topics": ["biology/convergent evolution", "psychology/mere-exposure", "geology/sedimentary rocks", "history/medieval paper"],
       "favorite": {
-        "subtopic": "music/recording technology",
-        "preview": "Until the early twentieth century, music was almost entirely a live phenomenon. A composer wrote down notes; performers played."
+        "subtopic": "biology/convergent evolution",
+        "preview": "Convergent evolution is one of the most striking patterns in biology — unrelated lineages developing similar body plans."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -107,10 +96,10 @@
     "listening-lc": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["music recommendations", "movie discussion", "dinner party planning", "phone repair service", "grocery cooking tips"],
+      "topics": ["library", "advising", "dorm", "cafe", "gym"],
       "favorite": {
-        "subtopic": "music recommendations",
-        "preview": "Woman: Hey, can you suggest some new music? I'm tired of the same pop singers everyone plays."
+        "subtopic": "advising",
+        "preview": "Student requests summer statistics approval — advisor warns about condensed schedule."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -118,10 +107,10 @@
     "listening-la": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["academic_event/linguistics symposium", "facility_change/recreation center", "academic_event/engineering showcase", "campus_activity/outdoor movie", "career_services/LinkedIn photos"],
+      "topics": ["library_repair", "guest_lecture", "shuttle_reroute", "registration", "cultural_fair"],
       "favorite": {
-        "subtopic": "academic_event/engineering showcase",
-        "preview": "This is a reminder that the End-of-Semester Engineering Showcase will take place in the Daniels Atrium on Thursday, December 11"
+        "subtopic": "cultural_fair",
+        "preview": "Annual Campus Cultural Fair on April 26 — thirty student clubs, free shuttle, volunteer signup."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -129,10 +118,10 @@
     "listening-lcr": {
       "generated": 8,
       "accepted": 8,
-      "topics": ["general_daily", "social", "campus_academic", "campus_daily"],
+      "topics": ["chapter_assignment", "dinner_invite", "printer", "study_group", "registration_form", "quiet_friend", "stuck_window", "lab_report"],
       "favorite": {
-        "subtopic": "campus_academic/writing center",
-        "preview": "Speaker: Why is the writing center so busy today? — Correct: Well, midterm essays are due Monday."
+        "subtopic": "registration_form",
+        "preview": "I'm at my wits' end trying to make this registration form work."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -140,10 +129,10 @@
     "speaking-repeat": {
       "generated": 3,
       "accepted": 3,
-      "topics": ["Library Orientation", "Car Rental Agency", "Recycling Center Tour"],
+      "topics": ["theater_rehearsal", "radio_station", "bike_repair"],
       "favorite": {
-        "subtopic": "Recycling Center Tour",
-        "preview": "If you bring electronics or batteries, check the schedule for our weekly drop-off times posted near the main entrance."
+        "subtopic": "bike_repair",
+        "preview": "Before you take the bike out for a test ride, pump up the tire and confirm the patch holds."
       },
       "retried_after_fail": false,
       "failure_reason": ""

@@ -11706,6 +11706,174 @@
       },
       "id": "lcr_mq4691ku_7",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/choose-response/lcr_mq4691ku_7.mp3"
+    },
+    {
+      "id": "lcr_rt_20260608_1",
+      "context": "campus_academic",
+      "situation": "Asking about a chapter assignment",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Do you know which chapters Professor Lin assigned for Friday?",
+      "options": {
+        "A": "Chapters four and five, plus the practice problems.",
+        "B": "Friday is my favorite day of the week.",
+        "C": "I'll get a new copy of the textbook tomorrow.",
+        "D": "She is one of the best lecturers in the department."
+      },
+      "answer": "A",
+      "explanation": "A 直接给出章节信息。B 与日期相关但无意义。C 谈买教材，与所问无关。D 评价教授本人，未回答问题。",
+      "distractor_types": {
+        "B": "off_topic",
+        "C": "semantic_association_trap",
+        "D": "semantic_association_trap"
+      }
+    },
+    {
+      "id": "lcr_rt_20260608_2",
+      "context": "campus_dining",
+      "situation": "Friend invites to grab dinner",
+      "difficulty": "medium",
+      "answer_paradigm": "indirect_refusal",
+      "speaker": "Want to grab dinner at the new ramen place tonight?",
+      "options": {
+        "A": "I had a huge lunch and I'm still pretty full.",
+        "B": "The ramen there comes with extra noodles.",
+        "C": "Yes, dinner is the most important meal.",
+        "D": "I'd like to apply for the part-time job there."
+      },
+      "answer": "A",
+      "explanation": "A 给出婉拒的理由——不饿，是间接拒绝的自然回应。B 谈拉面细节，回避邀请。C 错误意见。D 跳到打工话题。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "off_topic"
+      }
+    },
+    {
+      "id": "lcr_rt_20260608_3",
+      "context": "campus_facility",
+      "situation": "Printer in use",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Are you almost done with the printer? I need to print my paper before class.",
+      "options": {
+        "A": "Just one more page — go ahead and queue your file.",
+        "B": "The printer was replaced last semester.",
+        "C": "Thanks, I appreciate the help.",
+        "D": "I bought new ink cartridges last weekend."
+      },
+      "answer": "A",
+      "explanation": "A 直接解决问题——还有一页，可以排队。B 描述打印机历史，回避请求。C 答非所问。D 与情境无关。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "wrong_register",
+        "D": "off_topic"
+      }
+    },
+    {
+      "id": "lcr_rt_20260608_4",
+      "context": "campus_academic",
+      "situation": "Inviting to study group",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Would you want to join our biology study group on Wednesday evening?",
+      "options": {
+        "A": "Sure, what time should I show up?",
+        "B": "Biology is one of the oldest sciences.",
+        "C": "I left my notebook in the lab again.",
+        "D": "Wednesday is the middle of the week."
+      },
+      "answer": "A",
+      "explanation": "A 接受邀请并询问时间。B 给出无关事实。C 谈遗失笔记本，偏题。D 关于星期的无意义评论。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "off_topic"
+      }
+    },
+    {
+      "id": "lcr_rt_20260608_5",
+      "context": "campus_admin",
+      "situation": "Need help in a stressful moment",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "I'm at my wits' end trying to make this registration form work.",
+      "options": {
+        "A": "Let me take a look — I had the same trouble last week.",
+        "B": "Wits are an interesting topic in psychology.",
+        "C": "Yes, the forms are printed on green paper now.",
+        "D": "I'll bring my own form next time."
+      },
+      "answer": "A",
+      "explanation": "A 理解习语意为快崩溃，主动伸出援手。B 玩弄 wits 这个词，偏题。C 谈表格颜色，与困境无关。D 关于未来打印，回避当下求助。",
+      "distractor_types": {
+        "B": "polysemy_misinterpretation",
+        "C": "semantic_association_trap",
+        "D": "off_topic"
+      }
+    },
+    {
+      "id": "lcr_rt_20260608_6",
+      "context": "campus_social",
+      "situation": "Asking why someone is quiet",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "You've been awfully quiet at lunch lately. Is everything okay?",
+      "options": {
+        "A": "Honestly, I've been worried about my thesis deadline.",
+        "B": "Lunch starts at noon every day this week.",
+        "C": "The cafeteria added new vegetarian options.",
+        "D": "Yes, the room is usually quiet during exams."
+      },
+      "answer": "A",
+      "explanation": "A 诚实分享焦虑原因，符合关心提问。B 谈午餐时间，回避情感。C 谈菜单，无关。D 利用 quiet 重复，错读语境。",
+      "distractor_types": {
+        "B": "off_topic",
+        "C": "semantic_association_trap",
+        "D": "polysemy_misinterpretation"
+      }
+    },
+    {
+      "id": "lcr_rt_20260608_7",
+      "context": "campus_facility",
+      "situation": "Reporting a maintenance issue",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "My dorm window has been stuck open since last Friday.",
+      "options": {
+        "A": "Submit a quick request through the maintenance portal — they usually respond within a day.",
+        "B": "Last Friday I went to the football game.",
+        "C": "Dorms get especially warm in the spring.",
+        "D": "Yes, windows are made of double-paned glass these days."
+      },
+      "answer": "A",
+      "explanation": "A 给出实际解决方案。B 回到上周五但偏题。C 谈宿舍温度，回避问题。D 关于玻璃材质，与情境无关。",
+      "distractor_types": {
+        "B": "off_topic",
+        "C": "semantic_association_trap",
+        "D": "off_topic"
+      }
+    },
+    {
+      "id": "lcr_rt_20260608_8",
+      "context": "campus_academic",
+      "situation": "Asking about a deadline",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Have you submitted your lab report yet?",
+      "options": {
+        "A": "Wait — was that due before today?",
+        "B": "Reports should always include a hypothesis.",
+        "C": "Yes, labs are scheduled for Tuesdays.",
+        "D": "I usually wear gloves during the experiments."
+      },
+      "answer": "A",
+      "explanation": "A 反问截止日期，自然推进对话。B 谈一般写作建议，偏题。C 谈课时，回避问题。D 谈实验装束，无关。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "off_topic"
+      }
     }
   ]
 }

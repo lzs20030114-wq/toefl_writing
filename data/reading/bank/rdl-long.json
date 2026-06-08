@@ -8350,6 +8350,104 @@
       "question_count": 3,
       "word_count": 175,
       "difficulty": "medium"
+    },
+    {
+      "id": "rdl_lng_rt_20260608_1",
+      "genre": "email",
+      "passage_type": "email",
+      "subtype": "long",
+      "text": "Subject: Saturday Urban Sketching Walk — Bring Your Camera or Pad\n\nHi Sketchers,\n\nThe Visual Arts Club is hosting our spring urban sketching and photography walk on Saturday, May 18, from 10:00 AM to 1:30 PM. We'll meet at the bench outside Carlson Hall and then walk together through the historic district, stopping at three locations chosen by club leaders.\n\nThe walk is open to all students, regardless of experience. Please bring either a sketchpad and pencils or a camera; we'll have a small loan kit at the meeting point if you need supplies. The optional materials kit is $4 and includes paper, two pencils, and an eraser.\n\nLight refreshments will be served during the lunch stop at the public square. If you plan to attend, please reply by Thursday, May 16 so we can confirm numbers with the cafe.\n\nThanks,\nDana Park\nVisual Arts Club",
+      "word_count": 142,
+      "questions": [
+        {
+          "qid": "rdl_lng_rt_20260608_1_q1",
+          "question_type": "detail",
+          "stem": "Where will the group first meet?",
+          "options": {
+            "A": "Inside the Visual Arts Club studio",
+            "B": "Outside Carlson Hall on the bench",
+            "C": "At the cafe in the public square",
+            "D": "By the entrance to the historic district"
+          },
+          "correct_answer": "B",
+          "explanation": "The email states the meeting point is the bench outside Carlson Hall."
+        },
+        {
+          "qid": "rdl_lng_rt_20260608_1_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about students who forgot their materials?",
+          "options": {
+            "A": "They will be asked to skip the sketching activities.",
+            "B": "They may borrow basic supplies from the meeting kit.",
+            "C": "They must return home to retrieve their pencils.",
+            "D": "They will receive a full refund for the event."
+          },
+          "correct_answer": "B",
+          "explanation": "The email mentions a small loan kit at the meeting point for students who need supplies."
+        },
+        {
+          "qid": "rdl_lng_rt_20260608_1_q3",
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this email?",
+          "options": {
+            "A": "To recruit new members for the Visual Arts Club.",
+            "B": "To raise funds for spring art supplies.",
+            "C": "To complain about a previous campus event.",
+            "D": "To invite students to a sketching and photography walk."
+          },
+          "correct_answer": "D",
+          "explanation": "The email invites students to an organized urban sketching and photography walk."
+        }
+      ]
+    },
+    {
+      "id": "rdl_lng_rt_20260608_2",
+      "genre": "notice",
+      "passage_type": "notice",
+      "subtype": "long",
+      "text": "NOTICE: Updated Recreation Center Membership Policy\n\nBeginning Monday, August 26, the campus Recreation Center will update its membership policy. The following rules will apply to all student members:\n\n- A current student ID must be presented at every visit. Replacement IDs cost $8 at the Card Office in Reynolds Hall.\n- Equipment lockers may be reserved for a full semester at a $15 fee, payable online through the recreation portal.\n- Guests must be signed in by a student member at the front desk. Each member may host one guest per visit, and the guest pass is $5.\n- The pool and indoor track will close one hour earlier, at 9:00 PM, on weekdays during the fall semester.\n\nMembers with questions should contact Coach Ramirez at the front desk or by email during posted office hours, Monday through Friday, 1:00 PM to 4:00 PM.",
+      "word_count": 144,
+      "questions": [
+        {
+          "qid": "rdl_lng_rt_20260608_2_q1",
+          "question_type": "detail",
+          "stem": "How much does a replacement student ID cost?",
+          "options": {
+            "A": "It costs $8 at the Card Office.",
+            "B": "It costs $5 at the front desk.",
+            "C": "It costs $15 through the portal.",
+            "D": "It costs nothing for current members."
+          },
+          "correct_answer": "A",
+          "explanation": "The notice states that replacement IDs cost $8 at the Card Office in Reynolds Hall."
+        },
+        {
+          "qid": "rdl_lng_rt_20260608_2_q2",
+          "question_type": "detail",
+          "stem": "What is the new weekday closing time for the pool and indoor track?",
+          "options": {
+            "A": "It closes at 7:00 PM.",
+            "B": "It closes at 8:00 PM.",
+            "C": "It closes at 9:00 PM.",
+            "D": "It closes at 10:00 PM."
+          },
+          "correct_answer": "C",
+          "explanation": "The notice specifies a 9:00 PM weekday closing time for the pool and indoor track."
+        },
+        {
+          "qid": "rdl_lng_rt_20260608_2_q3",
+          "question_type": "inference",
+          "stem": "What can be inferred about members who bring more than one guest?",
+          "options": {
+            "A": "They will receive a discount on the second pass.",
+            "B": "They must register guests through the portal in advance.",
+            "C": "They will not be allowed to bring additional guests under the new policy.",
+            "D": "They will pay double the guest fee for each extra person."
+          },
+          "correct_answer": "C",
+          "explanation": "The notice limits each member to one guest per visit, implying additional guests are not allowed."
+        }
+      ]
     }
   ]
 }

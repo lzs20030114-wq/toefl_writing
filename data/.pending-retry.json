@@ -1,38 +1,36 @@
 {
-  "session_id": "routine-20260607-190214",
-  "generated_at": "2026-06-07T19:26:30.887Z",
-  "resolved_at": "2026-06-07T19:31:00Z",
-  "resolution_status": "supplemented",
+  "session_id": "routine-20260608-190156",
+  "generated_at": "2026-06-08T19:20:20.174Z",
   "needs_retry": true,
   "overall_scores": {
-    "diversity": 92,
-    "quality": 94
+    "diversity": 91,
+    "quality": 95
   },
   "retry_banks": [
     {
       "bank": "bs",
-      "diversity_score": 84,
+      "diversity_score": 74,
       "diversity_threshold": 90,
-      "quality_score": 95,
+      "quality_score": 98,
       "quality_threshold": 95,
       "failures": [
-        "多样性 84 < 90"
+        "多样性 74 < 90"
       ],
       "diversity_breakdown": [
         "角色名 3/20",
         "场景 20/20",
         "句型 4/5",
         "开头 3/4",
-        "prefilled类型 7/4 (top:mid-noun-or-adj 6/20)",
-        "人物当prefilled 2/20 (10%, TPO~30%)",
-        "干扰词 10种 (top:was 22%)",
-        "chunk颗粒 6.1块/题 单词率80% (TPO~6块/77%)",
-        "题面对话化 16/20 (80% 含you, TPO~72%)"
+        "prefilled类型 6/4 (top:mid-noun-or-adj 10/20)",
+        "人物当prefilled 1/20 (5%, TPO~30%)",
+        "干扰词 10种 (top:did 39%)",
+        "chunk颗粒 5.7块/题 单词率69% (TPO~6块/77%)",
+        "题面对话化 17/20 (85% 含you, TPO~72%)"
       ],
       "quality_breakdown": [
         "块数 20/20",
         "干扰词 18/20",
-        "答案长度 18/20",
+        "答案长度 20/20",
         "重组正确 20/20"
       ],
       "hints": [
@@ -41,49 +39,24 @@
       "items_to_supplement": 10
     },
     {
-      "bank": "reading-ap",
-      "diversity_score": 80,
-      "diversity_threshold": 85,
-      "quality_score": 80,
-      "quality_threshold": 90,
+      "bank": "listening-lc",
+      "diversity_score": 100,
+      "diversity_threshold": 72,
+      "quality_score": 60,
+      "quality_threshold": 80,
       "failures": [
-        "多样性 80 < 85",
-        "质量 80 < 90"
+        "质量 60 < 80"
       ],
       "diversity_breakdown": [
-        "话题组合 5/5",
-        "学科 3/5"
+        "distinct openings 5/5"
       ],
       "quality_breakdown": [
-        "词数 3/5",
-        "段落数 5/5"
+        "conv words 68-105: 3/5"
       ],
       "hints": [
-        "多样性 < gate — choose distinct topic/subtopic combos; avoid same discipline twice",
-        "质量校验有偏差: 词数 3/5, 段落数 5/5 — recheck schema compliance"
+        "质量校验有偏差: conv words 68-105: 3/5 — recheck schema compliance"
       ],
       "items_to_supplement": 3
-    },
-    {
-      "bank": "reading-rdl-long",
-      "diversity_score": 80,
-      "diversity_threshold": 70,
-      "quality_score": 0,
-      "quality_threshold": 85,
-      "failures": [
-        "质量 0 < 85"
-      ],
-      "diversity_breakdown": [
-        "话题 2/2",
-        "notice 1 · email 0"
-      ],
-      "quality_breakdown": [
-        "词数 0/2"
-      ],
-      "hints": [
-        "质量校验有偏差: 词数 0/2 — recheck schema compliance"
-      ],
-      "items_to_supplement": 1
     }
   ]
 }
