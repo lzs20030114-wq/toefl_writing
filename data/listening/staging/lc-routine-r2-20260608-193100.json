@@ -1,0 +1,169 @@
+{
+  "_meta": {
+    "session": "routine-r2-20260608-193100",
+    "supplements_session": "routine-20260608-190156",
+    "hint": "ensure conv word count strictly within 68-105 to fix the conv-words quality check failure"
+  },
+  "items": [
+    {
+      "context": "campus_service",
+      "situation": "a student asking a TA about a makeup chemistry quiz after being sick",
+      "difficulty": "easy",
+      "speakers": [
+        {"name": "Woman", "role": "student", "gender": "female"},
+        {"name": "Man", "role": "teaching_assistant", "gender": "male"}
+      ],
+      "conversation": [
+        {"speaker": "Woman", "text": "Hi, I missed the chemistry quiz last Thursday because I had the flu. Can I still take it?"},
+        {"speaker": "Man", "text": "Sure. Professor Lee handles makeups. She's holding office hours tomorrow from two until four."},
+        {"speaker": "Woman", "text": "Oh, I have lab tomorrow afternoon. Is Friday possible instead?"},
+        {"speaker": "Man", "text": "Friday works. Just email her by tonight so she can pull a fresh copy."},
+        {"speaker": "Woman", "text": "Got it. Do I need a doctor's note for proof?"},
+        {"speaker": "Man", "text": "Yep, bring it to her office along with your student ID."}
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man tell the woman about Professor Lee's office hours?",
+          "options": {
+            "A": "They are scheduled tomorrow afternoon from two to four",
+            "B": "They were cancelled because of the recent holiday",
+            "C": "They have moved permanently to Friday afternoons",
+            "D": "They are only available by appointment this week"
+          },
+          "answer": "A",
+          "explanation": "男生明确说Professor Lee明天from two until four有办公室时间，所以A正确。B、C、D都没有在对话里出现，是话题相关但未被提及的干扰项。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Drop by Professor Lee's office tomorrow afternoon",
+            "B": "Retake the entire chemistry course next semester",
+            "C": "Email Professor Lee tonight and bring her note Friday",
+            "D": "Ask another student to share the quiz answers"
+          },
+          "answer": "C",
+          "explanation": "女生明天下午有lab所以不能去，男生建议Friday并要她今晚email，还要带医生证明，所以C正确。A被她自己排除（lab冲突）；B属于过度推断，没人提过重修；D完全不在对话中。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two students discussing a botanical garden orchid exhibit they recently visited",
+      "difficulty": "medium",
+      "speakers": [
+        {"name": "Man", "role": "student", "gender": "male"},
+        {"name": "Woman", "role": "student", "gender": "female"}
+      ],
+      "conversation": [
+        {"speaker": "Man", "text": "Did you finally make it to the botanical garden's orchid exhibit?"},
+        {"speaker": "Woman", "text": "Yes! Honestly, the rare cloud-forest section completely blew me away."},
+        {"speaker": "Man", "text": "Oh, I missed that part. I spent most of my time at the carnivorous plants display."},
+        {"speaker": "Woman", "text": "Really? Was it worth it? The online reviews were pretty mixed."},
+        {"speaker": "Man", "text": "Definitely. They had a live pitcher plant demonstration every hour. It's not in the brochure though."},
+        {"speaker": "Woman", "text": "Wow, I have to go back. Did you grab a seedling kit at the gift shop?"},
+        {"speaker": "Man", "text": "No, a friend told me those sold out by Sunday afternoon."}
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What did the man find most worthwhile at the exhibit?",
+          "options": {
+            "A": "The rare cloud-forest orchid display section",
+            "B": "The botanical garden's online reviews and brochure",
+            "C": "The hourly live pitcher plant demonstration",
+            "D": "The seedling kits sold at the small gift shop"
+          },
+          "answer": "C",
+          "explanation": "男生明说Carnivorous plants部分的pitcher plant demonstration绝对值得，所以C正确。A是女生最喜欢的部分，属misattributed；B只是被提到，男生没说有价值；D男生没买到，是相关但非他喜欢的。",
+          "distractor_types": {
+            "A": "misattributed",
+            "B": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Return to the garden to see the pitcher plant demonstration",
+            "B": "Order a botanical seedling kit through an online store",
+            "C": "Write a negative review based on the man's comments",
+            "D": "Skip the orchid section on her next garden visit"
+          },
+          "answer": "A",
+          "explanation": "女生说\"I have to go back\"，男生刚刚强烈推荐了pitcher plant demonstration，所以她最可能去看，A正确。B无依据；C与她的态度相反，过度推断；D她已经表达对orchid喜爱，与对话相反。",
+          "distractor_types": {
+            "B": "unrelated_next_step",
+            "C": "over_inference",
+            "D": "rejected_option"
+          }
+        }
+      ]
+    },
+    {
+      "context": "campus_service",
+      "situation": "a student asking the registrar about withdrawing from a class after the deadline",
+      "difficulty": "hard",
+      "speakers": [
+        {"name": "Woman", "role": "student", "gender": "female"},
+        {"name": "Man", "role": "registrar_staff", "gender": "male"}
+      ],
+      "conversation": [
+        {"speaker": "Woman", "text": "Hi, I need to drop my statistics class. The deadline already passed, right?"},
+        {"speaker": "Man", "text": "Yeah, last Friday. Late withdrawals need a signed petition from your academic advisor."},
+        {"speaker": "Woman", "text": "Will it still show as a regular W on my transcript, or a failing grade?"},
+        {"speaker": "Man", "text": "If approved, just a standard W with no GPA impact. If denied, the course stays."},
+        {"speaker": "Woman", "text": "Stressful. Can my advisor sign remotely? She's at a conference until Wednesday."},
+        {"speaker": "Man", "text": "She can email a scan, but the original signature must reach our office by month-end."}
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the woman mainly trying to do?",
+          "options": {
+            "A": "Switch her statistics section to a different professor",
+            "B": "Withdraw from her statistics class after the official deadline",
+            "C": "Argue that her low statistics grade is unfair this term",
+            "D": "Confirm that her transcript has no failing grades listed"
+          },
+          "answer": "B",
+          "explanation": "女生一开口就说\"I need to drop my statistics class\"，整段对话围绕逾期退课流程，所以B正确。A、C都不是对话内容；D只是顺带询问的细节，不是主要目的。",
+          "distractor_types": {
+            "A": "wrong_topic",
+            "C": "wrong_topic",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What does the man say about the advisor's signature requirement?",
+          "options": {
+            "A": "It must be delivered to the office only in person",
+            "B": "A statement from a doctor can substitute for the signature",
+            "C": "Permission from the statistics professor is also required",
+            "D": "An emailed scan works, but the original is due by month-end"
+          },
+          "answer": "D",
+          "explanation": "男生明确说She can email a scan，但the original signature must reach our office by month-end，所以D正确。A与对话相反（可以先发扫描件）；B、C都没在对话中提到，是相关但未被陈述。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "C": "related_but_not_stated"
+          }
+        }
+      ]
+    }
+  ]
+}

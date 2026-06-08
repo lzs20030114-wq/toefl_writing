@@ -1,0 +1,119 @@
+{
+  "_meta": {
+    "session": "routine-r2-20260608-193100",
+    "supplements_session": "routine-20260608-190156",
+    "hint": "fix character name repetition — 13+ distinct names; cut distractor concentration on 'did'; reduce mid-noun-or-adj prefilled; raise person-prefilled toward TPO 30%"
+  },
+  "items": [
+    {
+      "id": "tmp_r2_q1",
+      "prompt": "Did you find anyone to share the chemistry textbook with?",
+      "answer": "Naomi agreed to lend hers until next month.",
+      "chunks": ["agreed", "to", "lend", "hers", "until", "next", "month"],
+      "prefilled": ["Naomi"],
+      "prefilled_positions": {"naomi": 0},
+      "distractor": null,
+      "has_question_mark": false,
+      "grammar_points": ["simple past", "infinitive"]
+    },
+    {
+      "id": "tmp_r2_q2",
+      "prompt": "Did you meet anyone interesting after the orientation tour?",
+      "answer": "Matthew introduced me to Diane near the courtyard.",
+      "chunks": ["matthew", "me", "to", "diane", "near", "the", "courtyard", "by"],
+      "prefilled": ["introduced"],
+      "prefilled_positions": {"introduced": 1},
+      "distractor": "by",
+      "has_question_mark": false,
+      "grammar_points": ["simple past", "prepositional phrase"]
+    },
+    {
+      "id": "tmp_r2_q3",
+      "prompt": "Has Alison decided on a summer placement?",
+      "answer": "She wanted to know if the architecture firm covered relocation costs.",
+      "chunks": ["she", "to", "know", "if", "the architecture", "firm", "covered", "relocation costs", "does"],
+      "prefilled": ["wanted"],
+      "prefilled_positions": {"wanted": 1},
+      "distractor": "does",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question with if", "simple past"]
+    },
+    {
+      "id": "tmp_r2_q4",
+      "prompt": "I haven't seen the orientation roster yet.",
+      "answer": "Juan and Angelina are both leading the freshman tours.",
+      "chunks": ["juan", "and angelina", "are", "both", "leading", "the freshman", "tours", "is"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "is",
+      "has_question_mark": false,
+      "grammar_points": ["simple present", "conjunction"]
+    },
+    {
+      "id": "tmp_r2_q5",
+      "prompt": "I'm looking for the new advising office signs.",
+      "answer": "Where did Hector say the temporary advising signs were posted today?",
+      "chunks": ["did", "hector", "say the", "temporary advising", "signs", "were", "posted today", "are"],
+      "prefilled": ["Where"],
+      "prefilled_positions": {"where": 0},
+      "distractor": "are",
+      "has_question_mark": true,
+      "grammar_points": ["direct wh-question", "passive voice"]
+    },
+    {
+      "id": "tmp_r2_q6",
+      "prompt": "Were you able to swap shifts this week?",
+      "answer": "Margot has not started covering my Friday hours yet.",
+      "chunks": ["margot", "started", "covering", "friday", "hours", "yet", "had"],
+      "prefilled": ["has not", "my"],
+      "prefilled_positions": {"has not": 1, "my": 5},
+      "distractor": "had",
+      "has_question_mark": false,
+      "grammar_points": ["negation present perfect", "prepositional phrase"]
+    },
+    {
+      "id": "tmp_r2_q7",
+      "prompt": "Did you hear from Julian this week?",
+      "answer": "He asked whether I had signed up for orientation.",
+      "chunks": ["he", "i", "had", "signed", "up", "for", "orientation", "signing"],
+      "prefilled": ["asked whether"],
+      "prefilled_positions": {"asked whether": 1},
+      "distractor": "signing",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question with whether", "past perfect"]
+    },
+    {
+      "id": "tmp_r2_q8",
+      "prompt": "What did Mariana say about Professor Cho's lecture?",
+      "answer": "Mariana said the slides were unusually clear and detailed.",
+      "chunks": ["mariana", "the", "slides", "were", "unusually", "clear", "and", "detailed", "looked"],
+      "prefilled": ["said"],
+      "prefilled_positions": {"said": 1},
+      "distractor": "looked",
+      "has_question_mark": false,
+      "grammar_points": ["simple past", "embedded clause"]
+    },
+    {
+      "id": "tmp_r2_q9",
+      "prompt": "I picked up a recipe pamphlet at the dining hall.",
+      "answer": "Did Olivia try the new vegetarian station?",
+      "chunks": ["olivia", "try", "the", "new", "vegetarian", "station", "does"],
+      "prefilled": ["Did"],
+      "prefilled_positions": {"did": 0},
+      "distractor": "does",
+      "has_question_mark": true,
+      "grammar_points": ["direct yes/no question", "simple past"]
+    },
+    {
+      "id": "tmp_r2_q10",
+      "prompt": "Did the abandoned lockers ever get cleared?",
+      "answer": "They were finally cleared out by Harold's maintenance team.",
+      "chunks": ["they", "finally cleared", "out", "by", "maintenance", "team", "was"],
+      "prefilled": ["were", "Harold's"],
+      "prefilled_positions": {"were": 1, "harold's": 6},
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["passive voice", "simple past"]
+    }
+  ]
+}
