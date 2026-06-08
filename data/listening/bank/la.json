@@ -12263,6 +12263,221 @@
       ],
       "id": "la_mq4691jt_4",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/announcement/la_mq4691jt_4.mp3"
+    },
+    {
+      "id": "la_rt_20260608_1",
+      "context": "campus_admin",
+      "category": "facility_change",
+      "difficulty": "easy",
+      "announcement": "Attention students. Due to weekend roof repairs, the main entrance of Hopkins Library will be closed from Friday, October 4 at 7:00 p.m. through Sunday, October 6 at 8:00 a.m. During this period, please use the side entrance on Oak Avenue. Twenty-four-hour study spaces and group rooms remain available with a valid student ID. Returns can still be dropped off at the drive-up box outside the Oak Avenue door. We're sorry for any inconvenience and appreciate your patience while we keep the building safe.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce a temporary entrance change due to repairs",
+            "B": "To request student volunteers for library projects",
+            "C": "To advertise a new twenty-four-hour study space",
+            "D": "To explain a permanent change to library hours"
+          },
+          "answer": "A",
+          "explanation": "通告主要告知因维修临时改入口。其他选项与文本不符。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "too_narrow",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What should students do during the repair period?",
+          "options": {
+            "A": "Avoid coming to the library entirely",
+            "B": "Use the side entrance on Oak Avenue",
+            "C": "Return all borrowed books before Friday",
+            "D": "Schedule appointments for group rooms in advance"
+          },
+          "answer": "B",
+          "explanation": "通告明确要求使用橡树大街侧门。其他选项与文本不符。",
+          "distractor_types": {
+            "A": "over_inference",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        }
+      ]
+    },
+    {
+      "id": "la_rt_20260608_2",
+      "context": "department_staff",
+      "category": "academic_event",
+      "difficulty": "medium",
+      "announcement": "Good morning, students. The Economics Department is pleased to announce a guest lecture by Dr. Helena Park on Tuesday, November 12, at 4:30 p.m. in Linden Hall, Room 207. Dr. Park will speak about labor market shifts in coastal regions. Seating is limited, so please reserve a spot through the department website by Friday, November 8. A short reception will follow the lecture, and refreshments will be provided. We strongly encourage Economics majors and minors to attend, as the topic connects directly to material covered in upper-level courses.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement primarily about?",
+          "options": {
+            "A": "A scholarship for Economics majors",
+            "B": "A guest lecture and reservation deadline",
+            "C": "A required examination in November",
+            "D": "A change to the Economics department office hours"
+          },
+          "answer": "B",
+          "explanation": "通告主要介绍客座讲座和预约截止日期。其他选项与内容不符。",
+          "distractor_types": {
+            "A": "wrong_topic",
+            "C": "wrong_topic",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What must students do to attend?",
+          "options": {
+            "A": "Pay a small registration fee in person",
+            "B": "Submit a research summary to the department",
+            "C": "Reserve a seat through the department website",
+            "D": "Bring a printed copy of their major declaration"
+          },
+          "answer": "C",
+          "explanation": "通告说必须通过院系网站预定座位。其他选项与文本不符。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        }
+      ]
+    },
+    {
+      "id": "la_rt_20260608_3",
+      "context": "campus_admin",
+      "category": "service_update",
+      "difficulty": "easy",
+      "announcement": "Attention students, faculty, and staff. The campus shuttle route along North Ridge Road will be temporarily rerouted starting Monday, September 16, due to construction near the engineering complex. Buses will instead travel along Maple Street and stop at the South Quad. Service will continue every fifteen minutes during peak hours and every thirty minutes after 6:00 p.m. Please allow extra time for your commute during the first week, as drivers adjust to the new route. The original route is expected to resume by early October.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement mainly about?",
+          "options": {
+            "A": "A temporary change to the campus shuttle route",
+            "B": "A permanent expansion of the engineering complex",
+            "C": "A new ridesharing service for students",
+            "D": "A safety warning about North Ridge Road"
+          },
+          "answer": "A",
+          "explanation": "通告主要讲临时改线。其他选项与文本不符。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "wrong_topic",
+            "D": "over_inference"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about commuters during the first week?",
+          "options": {
+            "A": "They may experience longer travel times than usual",
+            "B": "They must register for an alternate shuttle pass",
+            "C": "They should avoid the South Quad area entirely",
+            "D": "They will pay a temporary fare adjustment"
+          },
+          "answer": "A",
+          "explanation": "通告建议预留更多时间，暗示通勤会更长。其他选项与文本不符。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "reversed_situation",
+            "D": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "la_rt_20260608_4",
+      "context": "campus_admin",
+      "category": "registration",
+      "difficulty": "medium",
+      "announcement": "This is a reminder that spring course registration closes this Friday, December 6, at 11:59 p.m. Students who have not yet selected courses should meet with their academic advisor before submitting. Late registration will reopen on Monday, December 9, but a $25 late fee will apply to each course added after the deadline. Please check the registration portal for any holds on your account, as unresolved holds will prevent you from enrolling. The advising office in Sutton Hall offers walk-in hours from 1:00 p.m. to 4:00 p.m. all week.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of the announcement?",
+          "options": {
+            "A": "To remind students of an approaching registration deadline",
+            "B": "To recruit students for academic advising positions",
+            "C": "To announce a new policy on tuition refunds",
+            "D": "To describe a new walk-in advising location"
+          },
+          "answer": "A",
+          "explanation": "通告主要提醒春季选课截止日期。其他选项与重点不符。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "wrong_topic",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What will happen if a student registers after the deadline?",
+          "options": {
+            "A": "They will be removed from their major program",
+            "B": "They must complete an advising session first",
+            "C": "They will be charged a fee for each added course",
+            "D": "They will lose access to the registration portal"
+          },
+          "answer": "C",
+          "explanation": "通告明确指出每加一门课收 25 美元滞纳费。其他选项与文本不符。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "wrong_detail",
+            "D": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "la_rt_20260608_5",
+      "context": "campus_admin",
+      "category": "campus_event",
+      "difficulty": "easy",
+      "announcement": "We're excited to announce that the annual Campus Cultural Fair will take place on Saturday, April 26, from 11:00 a.m. to 5:00 p.m. on the South Lawn. More than thirty student clubs will host booths featuring food, music, and crafts from around the world. Admission is free, and a free shuttle will run from the Visitor Center every twenty minutes. Volunteers are still needed for set-up and clean-up shifts. If you'd like to help, please sign up through the Student Life portal by Friday, April 18. We hope to see you there.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement mainly about?",
+          "options": {
+            "A": "An upcoming campus cultural event",
+            "B": "A new policy on club registration",
+            "C": "A change to the Visitor Center hours",
+            "D": "A scholarship sponsored by Student Life"
+          },
+          "answer": "A",
+          "explanation": "通告主要介绍即将举办的文化集会。其他选项与文本不符。",
+          "distractor_types": {
+            "B": "wrong_topic",
+            "C": "wrong_topic",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "How can students volunteer for the event?",
+          "options": {
+            "A": "By emailing the Student Life office directly",
+            "B": "By signing up on the Student Life portal by April 18",
+            "C": "By visiting the South Lawn during the event",
+            "D": "By calling the Visitor Center on the day of"
+          },
+          "answer": "B",
+          "explanation": "通告说在 4 月 18 日前通过学生生活门户报名。其他选项与文本不符。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        }
+      ]
     }
   ]
 }
