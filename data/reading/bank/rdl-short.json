@@ -11745,6 +11745,90 @@
           "explanation": "Wired connections in Anderson Hall remain available, implying cabled internet access continues."
         }
       ]
+    },
+    {
+      "id": "rdl_gen_27310393453-short_001",
+      "variant": "short",
+      "text": "Campus Players Present: The Cherry Orchard! March 3-7 at 7:30 PM in Anderson Hall. Tickets just $5 at the door. Don’t miss this funny and moving show. Bring your friends!",
+      "word_count": 30,
+      "genre": "flyer",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_27310393453-short_001_q1",
+          "question_type": "detail",
+          "stem": "According to the flyer, what is the price of a ticket?",
+          "options": {
+            "A": "Five dollars",
+            "B": "Ten dollars",
+            "C": "Three dollars",
+            "D": "Seven dollars"
+          },
+          "correct_answer": "A",
+          "explanation": "The flyer states 'Tickets just $5 at the door'."
+        },
+        {
+          "qid": "rdl_gen_27310393453-short_001_q2",
+          "question_type": "detail",
+          "stem": "According to the flyer, where will the show take place?",
+          "options": {
+            "A": "At the Campus Players theater",
+            "B": "At the Student Center",
+            "C": "In Anderson Hall",
+            "D": "In the Cherry Orchard building"
+          },
+          "correct_answer": "C",
+          "explanation": "The flyer states the show takes place in Anderson Hall."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_27310393453-short_002",
+      "variant": "short",
+      "text": "Free yoga in the quad this Saturday at 10 AM! Bring your own mat and water. All levels welcome. I tried it last week and felt amazing. See you there!",
+      "word_count": 30,
+      "genre": "social_media",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_27310393453-short_002_q1",
+          "question_type": "detail",
+          "stem": "According to the post, what time does the yoga class start?",
+          "options": {
+            "A": "At 9 AM",
+            "B": "At 11 AM",
+            "C": "At noon",
+            "D": "At 10 AM"
+          },
+          "correct_answer": "D",
+          "explanation": "The post says the class is 'this Saturday at 10 AM'."
+        },
+        {
+          "qid": "rdl_gen_27310393453-short_002_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the person who wrote the post?",
+          "options": {
+            "A": "They have never done yoga before",
+            "B": "They teach the yoga class",
+            "C": "They enjoyed a previous yoga session",
+            "D": "They think the class is too easy"
+          },
+          "correct_answer": "C",
+          "explanation": "The writer says 'I tried it last week and felt amazing,' indicating they enjoyed a prior experience."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
     }
   ]
 }
