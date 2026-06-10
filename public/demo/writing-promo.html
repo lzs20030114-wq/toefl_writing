@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TreePractice — 写作答题与 AI 批改 · 演示宣传片</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   TreePractice 演示宣传片
+   设计令牌与 components/shared/ui.js 保持一致
+   ============================================================ */
+:root{
+  --nav:#0f172a; --bg:#f4f7f5; --card:#ffffff;
+  --bdr:#dde5df; --bdr-subtle:#ebf0ed;
+  --t1:#1a2420; --t2:#5a6b62; --t3:#94a39a;
+  --primary:#0d9668; --primary-deep:#087355; --teal:#0891B2;
+  --green:#15803d; --orange:#d97706; --red:#dc2626; --purple:#7c3aed;
+  --lt:#ecfdf5; --soft-amber:#fffbeb; --rose-soft:#fff1f2; --purple-soft:#f5f3ff;
+  --score-dark:#0f2318;
+  --brand-grad:linear-gradient(135deg,#087355,#0891B2);
+  --font:'Plus Jakarta Sans','Noto Sans SC','Segoe UI',sans-serif;
+  --shadow:0 1px 3px rgba(10,40,25,.04),0 1px 2px rgba(10,40,25,.02);
+  --shadow-lg:0 24px 60px rgba(10,40,25,.14),0 8px 24px rgba(10,40,25,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)}
+
+/* ---------- 16:9 舞台（1600×900 设计坐标，自动缩放适配窗口） ---------- */
+#viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+#stage{position:relative;width:1600px;height:900px;background:var(--bg);overflow:hidden;transform-origin:center center}
+
+/* ---------- 场景容器 ---------- */
+.scene{position:absolute;inset:0;opacity:0;visibility:hidden;pointer-events:none}
+.scene.on{opacity:1;visibility:visible;transition:opacity .7s ease}
+.scene.off{opacity:0;visibility:visible;transition:opacity .6s ease}
+
+/* ---------- 通用入场动效 ---------- */
+.rise{opacity:0;transform:translateY(36px)}
+.rise.go{opacity:1;transform:translateY(0);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
+.pop{opacity:0;transform:scale(.6)}
+.pop.go{opacity:1;transform:scale(1);transition:opacity .45s ease,transform .55s cubic-bezier(.34,1.56,.64,1)}
+.slide-l{opacity:0;transform:translateX(-56px)}
+.slide-l.go{opacity:1;transform:translateX(0);transition:all .7s cubic-bezier(.22,1,.36,1)}
+.slide-r{opacity:0;transform:translateX(56px)}
+.slide-r.go{opacity:1;transform:translateX(0);transition:all .7s cubic-bezier(.22,1,.36,1)}
+.fade{opacity:0}
+.fade.go{opacity:1;transition:opacity .8s ease}
+
+/* ---------- 渐变光斑背景（开场 / 收尾） ---------- */
+.mesh{position:absolute;inset:0;background:radial-gradient(1200px 700px at 75% -10%,#0b3a2a 0%,transparent 60%),radial-gradient(1000px 700px at 15% 110%,#06283b 0%,transparent 55%),#081410}
+.orb{position:absolute;border-radius:50%;filter:blur(70px);opacity:.55;animation:drift 11s ease-in-out infinite alternate}
+.orb.o1{width:520px;height:520px;left:-120px;top:-140px;background:radial-gradient(circle,#0d966855,transparent 70%)}
+.orb.o2{width:620px;height:620px;right:-160px;bottom:-220px;background:radial-gradient(circle,#0891B24d,transparent 70%);animation-delay:-4s}
+.orb.o3{width:380px;height:380px;left:42%;top:46%;background:radial-gradient(circle,#34d39933,transparent 70%);animation-delay:-7s}
+@keyframes drift{from{transform:translate(0,0) scale(1)}to{transform:translate(60px,-44px) scale(1.12)}}
+.grain{position:absolute;inset:0;opacity:.05;background-image:radial-gradient(#fff 1px,transparent 1px);background-size:26px 26px}
+
+/* ---------- 开场 ---------- */
+#s-intro{display:flex;align-items:center;justify-content:center}
+.intro-inner{position:relative;text-align:center;color:#fff;z-index:2}
+.logo-tile{width:112px;height:112px;border-radius:28px;background:var(--brand-grad);display:flex;align-items:center;justify-content:center;margin:0 auto 30px;box-shadow:0 24px 70px rgba(8,145,178,.4),0 0 0 1px rgba(255,255,255,.08) inset}
+.logo-tile span{color:#fff;font-size:58px;font-weight:800}
+.logo-glow{position:absolute;left:50%;top:56px;transform:translate(-50%,-50%);width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,#0d966840,transparent 65%);animation:pulse 3s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.6;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.14)}}
+.brand-name{font-size:66px;font-weight:800;letter-spacing:-1px;display:flex;justify-content:center;gap:1px}
+.brand-name .ch{display:inline-block;opacity:0;transform:translateY(34px) rotate(4deg)}
+.brand-name .ch.go{opacity:1;transform:translateY(0) rotate(0);transition:all .6s cubic-bezier(.22,1,.36,1)}
+.intro-tag{margin-top:20px;font-size:25px;color:#9fd6c2;font-weight:600;letter-spacing:6px}
+.intro-sub{margin-top:34px;display:inline-flex;align-items:center;gap:14px;padding:13px 30px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);backdrop-filter:blur(8px);font-size:19px;color:#d8efe5;font-weight:600}
+.intro-sub .dot{width:7px;height:7px;border-radius:50%;background:#34d399;box-shadow:0 0 14px #34d399;animation:pulse-dot 1.6s infinite}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.35}}
+.shine{position:relative;overflow:hidden}
+.shine::after{content:"";position:absolute;top:0;left:-130%;width:60%;height:100%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.32),transparent);transform:skewX(-20deg);animation:sweep 3.2s ease-in-out infinite}
+@keyframes sweep{0%{left:-130%}45%,100%{left:160%}}
+
+/* ---------- 章节字幕条 ---------- */
+.caption{position:absolute;left:50%;bottom:46px;transform:translateX(-50%) translateY(26px);opacity:0;display:flex;align-items:center;gap:14px;background:rgba(15,35,24,.92);color:#fff;padding:15px 30px;border-radius:999px;box-shadow:var(--shadow-lg);backdrop-filter:blur(10px);white-space:nowrap;z-index:60}
+.caption.go{opacity:1;transform:translateX(-50%) translateY(0);transition:all .65s cubic-bezier(.22,1,.36,1)}
+.caption .num{width:32px;height:32px;border-radius:50%;background:var(--brand-grad);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;flex-shrink:0}
+.caption .txt{font-size:19px;font-weight:700;letter-spacing:.5px}
+
+/* ---------- 应用窗口框架 ---------- */
+.appwin{position:absolute;left:120px;right:120px;top:74px;bottom:118px;background:var(--bg);border-radius:22px;box-shadow:var(--shadow-lg),0 0 0 1px rgba(10,40,25,.06);overflow:hidden;display:flex;flex-direction:column}
+.topbar{height:60px;background:rgba(255,255,255,.94);border-bottom:1px solid var(--bdr-subtle);display:flex;align-items:center;justify-content:space-between;padding:0 26px;flex-shrink:0}
+.tb-left{display:flex;align-items:center;gap:13px}
+.tb-logo{width:30px;height:30px;border-radius:8px;background:var(--brand-grad);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:800}
+.tb-name{font-weight:700;font-size:16px;color:var(--t1)}
+.tb-sep{opacity:.35;color:var(--t2)}
+.tb-section{font-size:14px;color:var(--t2)}
+.tb-right{display:flex;align-items:center;gap:13px}
+.timer-pill{background:var(--lt);color:var(--primary);padding:7px 15px;border-radius:999px;font-family:Consolas,Menlo,monospace;font-size:17px;font-weight:700;border:1px solid #d1fae5;font-variant-numeric:tabular-nums}
+.tb-exit{background:#fff;border:1px solid var(--bdr);color:var(--t2);padding:8px 14px;border-radius:10px;font-size:13px;font-weight:700}
+.appbody{flex:1;display:flex;gap:18px;padding:20px 24px;min-height:0}
+
+/* ---------- 场景一：题目面板 ---------- */
+.panel{background:var(--card);border:1px solid var(--bdr);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column}
+.panel-head{padding:14px 20px;border-bottom:1px solid var(--bdr-subtle);display:flex;align-items:center;gap:10px;flex-shrink:0}
+.panel-head .ic{width:30px;height:30px;border-radius:9px;background:var(--lt);display:flex;align-items:center;justify-content:center;font-size:15px}
+.panel-head .tt{font-size:15px;font-weight:800;color:var(--t1)}
+.panel-head .pv{font-size:11px;color:var(--t3);margin-left:auto}
+.prompt-body{padding:20px;overflow:hidden;display:flex;flex-direction:column;gap:14px}
+.msg{display:flex;gap:13px}
+.avatar{width:42px;height:42px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:16px}
+.av-prof{background:linear-gradient(135deg,#087355,#0d9668)}
+.av-s1{background:linear-gradient(135deg,#0891B2,#38bdf8)}
+.av-s2{background:linear-gradient(135deg,#d97706,#fbbf24)}
+.bubble{background:var(--bg);border:1px solid var(--bdr-subtle);border-radius:4px 14px 14px 14px;padding:13px 16px;font-size:13.5px;line-height:1.65;color:var(--t2);flex:1}
+.bubble b{color:var(--t1);font-size:13px;display:block;margin-bottom:5px}
+.bubble .role{font-size:10.5px;color:var(--primary);background:var(--lt);border-radius:999px;padding:1px 8px;margin-left:7px;font-weight:700}
+
+/* ---------- 场景二：作答编辑器 ---------- */
+.editor{flex:1;display:flex;flex-direction:column}
+.ed-area{flex:1;padding:20px 22px;font-size:15.5px;line-height:1.85;color:var(--t1);position:relative;overflow:hidden}
+.ed-placeholder{color:var(--t3);position:absolute;transition:opacity .3s}
+.cursor{display:inline-block;width:2px;height:1.25em;background:var(--primary);vertical-align:text-bottom;animation:blink 0.9s step-end infinite;border-radius:1px}
+@keyframes blink{50%{opacity:0}}
+.ed-foot{padding:13px 20px;border-top:1px solid var(--bdr-subtle);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.wc{font-size:13px;color:var(--t2);font-weight:600}
+.wc b{color:var(--primary);font-size:17px;font-variant-numeric:tabular-nums}
+.btn-submit{background:var(--primary);color:#fff;border:1px solid var(--primary);padding:11px 26px;border-radius:10px;font-size:14px;font-weight:700;box-shadow:var(--shadow);position:relative;overflow:hidden;font-family:var(--font)}
+.btn-submit.pressed{transform:scale(.94);transition:transform .12s}
+.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.5);transform:scale(0);animation:rip .65s ease-out forwards;pointer-events:none}
+@keyframes rip{to{transform:scale(5);opacity:0}}
+
+/* ---------- 场景三：AI 分析中 ---------- */
+#s-scoring .appwin{display:flex;align-items:center;justify-content:center;flex-direction:column}
+.scan-card{width:620px;background:var(--card);border:1px solid var(--bdr);border-radius:18px;box-shadow:var(--shadow-lg);padding:38px 44px;position:relative;overflow:hidden}
+.scan-doc{display:flex;flex-direction:column;gap:13px;margin-top:28px}
+.skel{height:11px;border-radius:6px;background:linear-gradient(90deg,#e8efe9 25%,#f4f8f5 50%,#e8efe9 75%);background-size:200% 100%;animation:shimmer 1.4s linear infinite}
+@keyframes shimmer{to{background-position:-200% 0}}
+.scan-beam{position:absolute;left:0;right:0;height:90px;background:linear-gradient(180deg,transparent,rgba(13,150,104,.16) 45%,rgba(13,150,104,.34) 50%,rgba(13,150,104,.16) 55%,transparent);animation:beam 2.1s ease-in-out infinite;border-radius:8px}
+@keyframes beam{0%,100%{top:-10%}50%{top:85%}}
+.ai-badge{display:flex;align-items:center;gap:13px}
+.ai-ring{width:46px;height:46px;border-radius:50%;border:3.5px solid var(--lt);border-top-color:var(--primary);animation:spin 0.9s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ai-status{font-size:17px;font-weight:800;color:var(--t1)}
+.ai-step{font-size:13.5px;color:var(--t2);margin-top:4px;min-height:20px;transition:opacity .3s}
+.scan-chips{display:flex;gap:9px;margin-top:26px}
+.scan-chip{font-size:12px;font-weight:700;color:var(--t3);background:var(--bg);border:1px solid var(--bdr-subtle);border-radius:999px;padding:6px 13px;transition:all .4s}
+.scan-chip.done{color:var(--primary);background:var(--lt);border-color:#bbf7d0}
+.scan-chip.done::before{content:"✓ "}
+
+/* ---------- 场景四：评分报告 ---------- */
+.score-card{background:var(--score-dark);border-radius:18px;padding:28px 32px;color:#fff;box-shadow:0 26px 70px rgba(15,35,24,.45)}
+.score-row{display:flex;justify-content:space-between;align-items:flex-start}
+.score-big{display:flex;align-items:flex-end;gap:9px}
+.score-num{font-size:84px;font-weight:800;line-height:.95;background:linear-gradient(135deg,#fff,#a7f3d0);-webkit-background-clip:text;background-clip:text;color:transparent;font-variant-numeric:tabular-nums}
+.score-den{font-size:19px;color:rgba(255,255,255,.45);font-weight:700;margin-bottom:10px}
+.band-chips{display:flex;flex-direction:column;align-items:flex-end;gap:7px}
+.chip-band{padding:5px 14px;background:rgba(52,211,153,.15);color:#34d399;border-radius:999px;font-size:14px;font-weight:700}
+.chip-ets{padding:4px 11px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.55);border-radius:999px;font-size:12px;font-weight:600}
+.score-summary{font-size:14.5px;color:rgba(255,255,255,.72);line-height:1.8;margin-top:16px}
+.dim{margin-top:8px}
+.dim-row{display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:7px}
+.dim-row .dn{color:var(--t2)}.dim-row .dv{color:var(--primary);font-variant-numeric:tabular-nums}
+.dim-track{height:9px;border-radius:999px;background:var(--bdr-subtle);overflow:hidden}
+.dim-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#0d9668,#0891B2);width:0;transition:width 1.3s cubic-bezier(.22,1,.36,1);position:relative}
+.dim-fill::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.45) 50%,transparent 60%);background-size:200% 100%;animation:shimmer 2s linear infinite}
+.report-tabs{display:flex;gap:8px;margin-bottom:16px}
+.rtab{font-size:12.5px;font-weight:700;padding:8px 15px;border-radius:999px;background:#fff;border:1px solid var(--bdr);color:var(--t2)}
+.rtab.act{background:var(--score-dark);color:#fff;border-color:var(--score-dark)}
+
+/* ---------- 场景五：逐句批注 ---------- */
+.anno-wrap{padding:24px 28px;font-size:16.5px;line-height:2.15;color:var(--t1)}
+.mk{border-radius:4px;padding:1px 3px;position:relative;transition:background .45s,box-shadow .45s;white-space:nowrap}
+.mk.red.lit{background:var(--rose-soft);box-shadow:inset 0 -2.5px 0 var(--red)}
+.mk.orange.lit{background:var(--soft-amber);box-shadow:inset 0 -2.5px 0 var(--orange)}
+.mk.purple.lit{background:var(--purple-soft);box-shadow:inset 0 -2.5px 0 var(--purple)}
+.tip{position:absolute;left:50%;transform:translateX(-50%) translateY(-10px);top:calc(100% + 13px);width:330px;background:#fff;border:1px solid var(--bdr);border-radius:14px;box-shadow:var(--shadow-lg);padding:15px 17px;opacity:0;pointer-events:none;z-index:40;white-space:normal;line-height:1.6}
+.tip.show{opacity:1;transform:translateX(-50%) translateY(0);transition:all .5s cubic-bezier(.34,1.56,.64,1)}
+.tip::after{content:"";position:absolute;bottom:100%;left:50%;transform:translateX(-50%);border:9px solid transparent;border-bottom-color:#fff}
+.tip .cat{font-size:11px;font-weight:800;border-radius:999px;padding:2px 9px;display:inline-block;margin-bottom:8px}
+.tip.t-red .cat{color:var(--red);background:var(--rose-soft)}
+.tip.t-orange .cat{color:var(--orange);background:var(--soft-amber)}
+.tip.t-purple .cat{color:var(--purple);background:var(--purple-soft)}
+.tip .cat{display:block;width:fit-content}
+.tip .fix{display:block;font-size:14px;font-weight:700;color:var(--t1);margin-bottom:5px}
+.tip .fix s{color:var(--t3);font-weight:500;margin-right:7px}
+.tip .fix em{font-style:normal;color:var(--green)}
+.tip .fix em::before{content:"→ ";color:var(--t3);font-weight:500}
+.tip .note{display:block;font-size:12.5px;color:var(--t2)}
+.legend{display:flex;gap:10px;margin-top:6px;padding:0 28px 18px}
+.lg{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;border-radius:999px;padding:6px 14px}
+.lg i{width:9px;height:9px;border-radius:3px}
+.lg.r{color:var(--red);background:var(--rose-soft)}.lg.r i{background:var(--red)}
+.lg.o{color:var(--orange);background:var(--soft-amber)}.lg.o i{background:var(--orange)}
+.lg.p{color:var(--purple);background:var(--purple-soft)}.lg.p i{background:var(--purple)}
+
+/* ---------- 场景六：功能矩阵 ---------- */
+#s-features .appwin{align-items:center;justify-content:center;flex-direction:row;gap:26px;padding:0 60px}
+.feat{width:380px;background:var(--card);border:1px solid var(--bdr);border-radius:18px;box-shadow:var(--shadow-lg);padding:28px;flex-shrink:0}
+.feat .fi{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:25px;margin-bottom:18px}
+.feat h3{font-size:19px;font-weight:800;color:var(--t1);margin-bottom:8px}
+.feat p{font-size:13.5px;color:var(--t2);line-height:1.7;margin-bottom:18px}
+.cefr-bars{display:flex;align-items:flex-end;gap:9px;height:74px}
+.cefr-bar{flex:1;border-radius:6px 6px 3px 3px;background:linear-gradient(180deg,#0891B2,#0d9668);height:0;transition:height 1s cubic-bezier(.22,1,.36,1);position:relative}
+.cefr-bar span{position:absolute;bottom:-21px;left:50%;transform:translateX(-50%);font-size:10.5px;font-weight:700;color:var(--t3)}
+.diff-line{font-size:12.5px;line-height:1.8;border-radius:10px;padding:9px 13px;margin-bottom:7px}
+.diff-line.mine{background:var(--rose-soft);color:#9f1239}
+.diff-line.model{background:var(--lt);color:var(--primary-deep)}
+.diff-line b{font-size:10.5px;display:block;opacity:.7;margin-bottom:2px}
+.todo{display:flex;align-items:center;gap:11px;font-size:13.5px;color:var(--t2);padding:8px 0;font-weight:600}
+.todo .cb{width:21px;height:21px;border-radius:7px;border:2px solid var(--bdr);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;transition:all .35s}
+.todo.done .cb{background:var(--primary);border-color:var(--primary)}
+.todo.done .cb::after{content:"✓"}
+
+/* ---------- 收尾 CTA ---------- */
+#s-cta{display:flex;align-items:center;justify-content:center}
+.cta-inner{position:relative;text-align:center;color:#fff;z-index:2}
+.cta-title{font-size:54px;font-weight:800;letter-spacing:-.5px;line-height:1.3}
+.cta-title .hl{background:linear-gradient(135deg,#34d399,#22d3ee);-webkit-background-clip:text;background-clip:text;color:transparent}
+.cta-sub{margin-top:18px;font-size:21px;color:#9fd6c2;font-weight:600;letter-spacing:2px}
+.cta-chips{margin-top:38px;display:flex;gap:16px;justify-content:center}
+.cta-chip{padding:13px 26px;border-radius:999px;font-size:16px;font-weight:700;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.07);color:#d8efe5;backdrop-filter:blur(8px)}
+.cta-chip.primary{background:var(--brand-grad);border-color:transparent;box-shadow:0 14px 44px rgba(8,145,178,.45)}
+.cta-logo{width:84px;height:84px;border-radius:22px;background:var(--brand-grad);display:flex;align-items:center;justify-content:center;margin:0 auto 26px;box-shadow:0 20px 60px rgba(8,145,178,.4)}
+.cta-logo span{color:#fff;font-size:44px;font-weight:800}
+
+/* ---------- 播放控制 ---------- */
+#progress{position:absolute;left:0;bottom:0;height:4px;background:var(--brand-grad);width:0;z-index:90;border-radius:0 3px 3px 0}
+#replay{position:absolute;right:22px;top:18px;z-index:95;background:rgba(15,35,24,.65);color:#fff;border:1px solid rgba(255,255,255,.15);border-radius:999px;padding:9px 19px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);backdrop-filter:blur(8px);opacity:.85}
+#replay:hover{opacity:1}
+</style>
+</head>
+<body>
+<div id="viewport"><div id="stage">
+
+  <!-- ════════ S0 · 开场 ════════ -->
+  <div class="scene" id="s-intro">
+    <div class="mesh"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="grain"></div></div>
+    <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">
+      <div class="intro-inner">
+        <div class="logo-glow"></div>
+        <div class="logo-tile pop shine" id="introLogo"><span>T</span></div>
+        <div class="brand-name" id="brandName"></div>
+        <div class="intro-tag fade" id="introTag">AI 驱动的托福写作全真练习</div>
+        <div class="intro-sub pop" id="introSub"><span class="dot"></span>功能演示 · 写作答题 &amp; 智能批改</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ S1 · 题目呈现 ════════ -->
+  <div class="scene" id="s-prompt">
+    <div class="appwin rise" id="pWin">
+      <div class="topbar">
+        <div class="tb-left"><div class="tb-logo">T</div><span class="tb-name">TreePractice</span><span class="tb-sep">|</span><span class="tb-section">学术讨论写作</span></div>
+        <div class="tb-section">Task 2 · Academic Discussion</div>
+        <div class="tb-right"><div class="timer-pill" id="timer1">10:00</div><div class="tb-exit">返回</div></div>
+      </div>
+      <div class="appbody">
+        <div class="panel" style="flex:1">
+          <div class="panel-head"><div class="ic">📖</div><span class="tt">阅读讨论 · Sociology</span><span class="pv">阅读教授问题与两位同学的观点</span></div>
+          <div class="prompt-body">
+            <div class="msg slide-l" id="msgProf">
+              <div class="avatar av-prof">O</div>
+              <div class="bubble"><b>Dr. Okafor<span class="role">教授</span></b>We've been discussing how people form social ties in an age of constant connectivity. Many young adults report having hundreds of online acquaintances but only one or two people they would call in a crisis. What's your view — has digital life made our friendships shallower, or not?</div>
+            </div>
+            <div class="msg slide-l" id="msgS1">
+              <div class="avatar av-s1">L</div>
+              <div class="bubble"><b>Lena<span class="role" style="color:var(--teal);background:#ecfeff">同学</span></b>I lean toward the erosion argument. When most of our interactions are likes and short comments, we rarely practice the vulnerability that real closeness requires.</div>
+            </div>
+            <div class="msg slide-l" id="msgS2">
+              <div class="avatar av-s2">M</div>
+              <div class="bubble"><b>Marco<span class="role" style="color:var(--orange);background:var(--soft-amber)">同学</span></b>Honestly, I think the panic is overstated. The medium changes, but the underlying need for intimacy doesn't disappear.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="caption" id="cap1"><span class="num">1</span><span class="txt">真题级学术讨论题目 · 教授提问 + 同学观点</span></div>
+  </div>
+
+  <!-- ════════ S2 · 沉浸作答 ════════ -->
+  <div class="scene" id="s-write">
+    <div class="appwin">
+      <div class="topbar">
+        <div class="tb-left"><div class="tb-logo">T</div><span class="tb-name">TreePractice</span><span class="tb-sep">|</span><span class="tb-section">学术讨论写作</span></div>
+        <div class="tb-section">建议 100 词以上</div>
+        <div class="tb-right"><div class="timer-pill" id="timer2">09:41</div><div class="tb-exit">返回</div></div>
+      </div>
+      <div class="appbody">
+        <div class="panel slide-l" id="wPrompt" style="width:430px;flex-shrink:0">
+          <div class="panel-head"><div class="ic">📖</div><span class="tt">题目</span><span class="pv">可随时折叠</span></div>
+          <div class="prompt-body" style="gap:11px">
+            <div class="msg"><div class="avatar av-prof" style="width:34px;height:34px;font-size:13px">O</div>
+              <div class="bubble" style="font-size:12px;line-height:1.6"><b style="font-size:12px">Dr. Okafor</b>…has digital life made our friendships shallower, or not?</div></div>
+            <div class="msg"><div class="avatar av-s1" style="width:34px;height:34px;font-size:13px">L</div>
+              <div class="bubble" style="font-size:12px;line-height:1.6"><b style="font-size:12px">Lena</b>I lean toward the erosion argument…</div></div>
+            <div class="msg"><div class="avatar av-s2" style="width:34px;height:34px;font-size:13px">M</div>
+              <div class="bubble" style="font-size:12px;line-height:1.6"><b style="font-size:12px">Marco</b>Honestly, I think the panic is overstated…</div></div>
+          </div>
+        </div>
+        <div class="panel editor slide-r" id="wEditor">
+          <div class="panel-head"><div class="ic">✍️</div><span class="tt">你的回答</span><span class="pv">实时字数统计</span></div>
+          <div class="ed-area"><span class="ed-placeholder" id="edPh">在这里输入你的观点…</span><span id="edText"></span><span class="cursor" id="edCursor" style="opacity:0"></span></div>
+          <div class="ed-foot">
+            <span class="wc">字数 <b id="wcNum">0</b> <span style="color:var(--t3)">/ 100+</span></span>
+            <button class="btn-submit" id="btnSubmit">提交并获取 AI 批改</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="caption" id="cap2"><span class="num">2</span><span class="txt">沉浸式限时作答 · 实时字数 · 自动保存草稿</span></div>
+  </div>
+
+  <!-- ════════ S3 · AI 分析中 ════════ -->
+  <div class="scene" id="s-scoring">
+    <div class="appwin">
+      <div class="scan-card pop" id="scanCard">
+        <div class="ai-badge">
+          <div class="ai-ring"></div>
+          <div><div class="ai-status">AI 正在深度批改你的作文</div><div class="ai-step" id="aiStep">正在解析文章结构…</div></div>
+        </div>
+        <div class="scan-doc" style="position:relative">
+          <div class="skel" style="width:92%"></div><div class="skel" style="width:100%"></div>
+          <div class="skel" style="width:96%"></div><div class="skel" style="width:74%"></div>
+          <div class="skel" style="width:88%"></div>
+          <div class="scan-beam"></div>
+        </div>
+        <div class="scan-chips">
+          <span class="scan-chip" id="ck1">语法检测</span>
+          <span class="scan-chip" id="ck2">论证逻辑</span>
+          <span class="scan-chip" id="ck3">词汇水平</span>
+          <span class="scan-chip" id="ck4">ETS 标准对齐</span>
+        </div>
+      </div>
+    </div>
+    <div class="caption" id="cap3"><span class="num">3</span><span class="txt">AI 引擎逐句分析 · 对照 ETS 官方评分标准</span></div>
+  </div>
+
+  <!-- ════════ S4 · 评分报告 ════════ -->
+  <div class="scene" id="s-score">
+    <div class="appwin">
+      <div class="topbar">
+        <div class="tb-left"><div class="tb-logo">T</div><span class="tb-name">TreePractice</span><span class="tb-sep">|</span><span class="tb-section">批改报告</span></div>
+        <div class="tb-section">学术讨论 · Dr. Okafor</div>
+        <div class="tb-right"><div class="tb-exit">返回</div></div>
+      </div>
+      <div style="flex:1;display:flex;gap:20px;padding:22px 26px;min-height:0">
+        <div style="flex:1.1;display:flex;flex-direction:column;gap:0">
+          <div class="report-tabs rise" id="rTabs">
+            <span class="rtab act">宏观评价与建议</span><span class="rtab">逐句批注大纲</span><span class="rtab">词汇分析</span><span class="rtab">范文对比分析</span>
+          </div>
+          <div class="score-card rise" id="scoreCard">
+            <div class="score-row">
+              <div class="score-big"><span class="score-num" id="scoreNum">0.0</span><span class="score-den">/ 5</span></div>
+              <div class="band-chips">
+                <span class="chip-band pop" id="chipBand">换算 5.5 / 6</span>
+                <span class="chip-ets pop" id="chipEts">ETS Band · Good</span>
+              </div>
+            </div>
+            <p class="score-summary fade" id="scoreSummary">观点鲜明，与 Lena 的立场形成了有效互动，论证链完整。语言整体准确流畅，存在少量主谓一致与搭配问题；若能在让步段加入更具体的例证，可冲击满分档。</p>
+          </div>
+        </div>
+        <div class="panel slide-r" id="dimPanel" style="width:430px;flex-shrink:0">
+          <div class="panel-head"><div class="ic">📊</div><span class="tt">多维度评价</span><span class="pv">对照 ETS Rubric</span></div>
+          <div style="padding:22px 22px 12px;display:flex;flex-direction:column;gap:19px">
+            <div class="dim"><div class="dim-row"><span class="dn">观点与论证 Relevance</span><span class="dv" id="dv1">0%</span></div><div class="dim-track"><div class="dim-fill" id="df1"></div></div></div>
+            <div class="dim"><div class="dim-row"><span class="dn">组织与连贯 Coherence</span><span class="dv" id="dv2">0%</span></div><div class="dim-track"><div class="dim-fill" id="df2"></div></div></div>
+            <div class="dim"><div class="dim-row"><span class="dn">语法准确度 Grammar</span><span class="dv" id="dv3">0%</span></div><div class="dim-track"><div class="dim-fill" id="df3"></div></div></div>
+            <div class="dim"><div class="dim-row"><span class="dn">词汇丰富度 Lexical</span><span class="dv" id="dv4">0%</span></div><div class="dim-track"><div class="dim-fill" id="df4"></div></div></div>
+            <div style="border-top:1px solid var(--bdr-subtle);padding-top:15px;margin-top:3px">
+              <div style="font-size:12px;font-weight:800;color:var(--t3);letter-spacing:1px;margin-bottom:9px">下一步行动</div>
+              <div class="todo rise" id="act1"><span class="cb"></span>复习主谓一致：第三人称单数动词形式</div>
+              <div class="todo rise" id="act2"><span class="cb"></span>让步段补充一个具体研究或数据例证</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="caption" id="cap4"><span class="num">4</span><span class="txt">ETS 标准评分 · 6 分制换算 · 多维度诊断</span></div>
+  </div>
+
+  <!-- ════════ S5 · 逐句批注 ════════ -->
+  <div class="scene" id="s-anno">
+    <div class="appwin">
+      <div class="topbar">
+        <div class="tb-left"><div class="tb-logo">T</div><span class="tb-name">TreePractice</span><span class="tb-sep">|</span><span class="tb-section">批改报告</span></div>
+        <div class="tb-section">逐句批注 · 点击高亮查看建议</div>
+        <div class="tb-right"><div class="tb-exit">返回</div></div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;padding:18px 26px;min-height:0">
+        <div class="panel rise" id="annoPanel" style="flex:1">
+          <div class="panel-head"><div class="ic">🖍️</div><span class="tt">你的作文 · 逐句批注</span><span class="pv">红 = 语法 · 橙 = 表达 · 紫 = 拔高</span></div>
+          <div class="anno-wrap">
+            I largely agree with Lena that digital life is reshaping friendship, but I would add a nuance.
+            <span class="mk red" id="mk1">Social media often <s style="text-decoration:none">make</s>&nbsp;people feel connected
+              <span class="tip t-red" id="tip1"><span class="cat">语法错误 · 主谓一致</span><span class="fix"><s>make</s><em>makes</em></span><span class="note">主语 Social media 在此为单数概念，动词需用第三人称单数形式。</span></span></span>
+            while the depth of each tie quietly declines.
+            <span class="mk orange" id="mk2">In my opinion, I think
+              <span class="tip t-orange" id="tip2"><span class="cat">表达建议 · 冗余</span><span class="fix"><s>In my opinion, I think</s><em>I believe</em></span><span class="note">两个表观点的短语重复堆叠，精简后语气更有力。</span></span></span>
+            that maintaining a few honest conversations matters more than collecting hundreds of contacts.
+            <span class="mk purple" id="mk3">This is very important
+              <span class="tip t-purple" id="tip3"><span class="cat">拔高建议 · 词汇升级</span><span class="fix"><s>very important</s><em>indispensable to genuine intimacy</em></span><span class="note">用更精准的学术表达替代 very + 普通形容词，可体现 C1 级词汇能力。</span></span></span>
+            for anyone who wants friendship to survive the algorithm age.
+          </div>
+          <div class="legend">
+            <span class="lg r pop" id="lg1"><i></i>语法 / 拼写错误</span>
+            <span class="lg o pop" id="lg2"><i></i>表达建议</span>
+            <span class="lg p pop" id="lg3"><i></i>拔高建议</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="caption" id="cap5"><span class="num">5</span><span class="txt">逐句三色批注 · 错误定位 + 修改建议 + 原因讲解</span></div>
+  </div>
+
+  <!-- ════════ S6 · 功能矩阵 ════════ -->
+  <div class="scene" id="s-features">
+    <div class="appwin">
+      <div class="feat rise" id="ft1">
+        <div class="fi" style="background:var(--lt)">📚</div>
+        <h3>词汇 CEFR 分析</h3>
+        <p>逐词标注 A1–C2 等级，量化词汇丰富度，定位提分词汇区间。</p>
+        <div class="cefr-bars">
+          <div class="cefr-bar" id="cb1" data-h="30%"><span>A2</span></div>
+          <div class="cefr-bar" id="cb2" data-h="62%"><span>B1</span></div>
+          <div class="cefr-bar" id="cb3" data-h="92%"><span>B2</span></div>
+          <div class="cefr-bar" id="cb4" data-h="48%"><span>C1</span></div>
+          <div class="cefr-bar" id="cb5" data-h="18%"><span>C2</span></div>
+        </div>
+      </div>
+      <div class="feat rise" id="ft2">
+        <div class="fi" style="background:var(--purple-soft)">📝</div>
+        <h3>范文对比分析</h3>
+        <p>AI 满分范文逐段对照，看见你与 5 分作文之间的差距。</p>
+        <div class="diff-line mine"><b>你的表达</b>People get comfortable with easy relationships.</div>
+        <div class="diff-line model"><b>范文表达</b>People grow accustomed to low-stakes bonds that demand little emotional investment.</div>
+      </div>
+      <div class="feat rise" id="ft3">
+        <div class="fi" style="background:var(--soft-amber)">🎯</div>
+        <h3>行动建议清单</h3>
+        <p>每次批改生成可执行的提分任务，配合写后练习巩固。</p>
+        <div class="todo" id="td1"><span class="cb"></span>复习主谓一致专项</div>
+        <div class="todo" id="td2"><span class="cb"></span>积累 3 个 C1 级替换词</div>
+        <div class="todo" id="td3"><span class="cb"></span>重写让步段并二次批改</div>
+      </div>
+    </div>
+    <div class="caption" id="cap6"><span class="num">6</span><span class="txt">词汇分析 · 范文对比 · 行动清单，一次批改全覆盖</span></div>
+  </div>
+
+  <!-- ════════ S7 · 收尾 CTA ════════ -->
+  <div class="scene" id="s-cta">
+    <div class="mesh"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="grain"></div></div>
+    <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">
+      <div class="cta-inner">
+        <div class="cta-logo pop shine" id="ctaLogo"><span>T</span></div>
+        <div class="cta-title rise" id="ctaTitle">从答题到批改<br><span class="hl">一站式托福写作提分</span></div>
+        <div class="cta-sub fade" id="ctaSub">TreePractice · AI 智能批改 · 即刻提分</div>
+        <div class="cta-chips">
+          <span class="cta-chip primary pop" id="ctaC1">每天免费练 3 次</span>
+          <span class="cta-chip pop" id="ctaC2">新用户赠 3 天 Pro</span>
+          <span class="cta-chip pop" id="ctaC3">模考 · 写作 · 造句全覆盖</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="progress"></div>
+  <button id="replay" onclick="restart()">⟲ 重播</button>
+</div></div>
+
+<script>
+/* ============================================================
+   时间轴导演引擎 — 所有动效按绝对时间(ms)编排，可重播
+   ============================================================ */
+const $ = id => document.getElementById(id);
+let timers = [];
+function at(t, fn){ timers.push(setTimeout(fn, t)); }
+function go(id){ const el=$(id); if(el) el.classList.add("go"); }
+function sceneOn(id){ const el=$(id); el.classList.remove("off"); el.classList.add("on"); }
+function sceneOff(id){ const el=$(id); el.classList.remove("on"); el.classList.add("off");
+  timers.push(setTimeout(()=>{el.classList.remove("off");}, 700)); }
+
+const TOTAL = 64000;
+
+/* ---------- 工具 ---------- */
+function countTo(el, target, dur, decimals=1, suffix=""){
+  const t0 = performance.now();
+  function step(now){
+    const p = Math.min(1,(now-t0)/dur);
+    const ease = 1-Math.pow(1-p,3);
+    el.textContent = (target*ease).toFixed(decimals)+suffix;
+    if(p<1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+function typewriter(el, cursorEl, text, cps, onWord){
+  cursorEl.style.opacity = 1;
+  let i = 0, words = 0;
+  const iv = setInterval(()=>{
+    i++;
+    el.textContent = text.slice(0,i);
+    const w = text.slice(0,i).trim().split(/\s+/).filter(Boolean).length;
+    if(w!==words){ words=w; onWord && onWord(w); }
+    if(i>=text.length){ clearInterval(iv); }
+  }, 1000/cps);
+  timers.push(iv);
+}
+function tickTimer(el, fromSec, durMs){
+  let s = fromSec;
+  const iv = setInterval(()=>{
+    s--; if(s<0){clearInterval(iv);return;}
+    el.textContent = String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
+  },1000);
+  timers.push(iv);
+  timers.push(setTimeout(()=>clearInterval(iv), durMs));
+}
+
+/* ---------- 主时间轴 ---------- */
+function play(){
+  /* —— S0 · 开场 (0 – 6.5s) —— */
+  sceneOn("s-intro");
+  at(300, ()=>go("introLogo"));
+  at(800, ()=>{
+    const name = "TreePractice";
+    const wrap = $("brandName"); wrap.innerHTML = "";
+    [...name].forEach((c,i)=>{
+      const s=document.createElement("span"); s.className="ch"; s.textContent=c;
+      wrap.appendChild(s);
+      at(820+i*55, ()=>s.classList.add("go"));
+    });
+  });
+  at(1700, ()=>go("introTag"));
+  at(2400, ()=>go("introSub"));
+  at(6000, ()=>sceneOff("s-intro"));
+
+  /* —— S1 · 题目呈现 (6.5 – 16s) —— */
+  at(6500, ()=>{ sceneOn("s-prompt"); go("pWin"); tickTimer($("timer1"), 600, 9000); });
+  at(7300, ()=>go("msgProf"));
+  at(8500, ()=>go("msgS1"));
+  at(9400, ()=>go("msgS2"));
+  at(10200, ()=>go("cap1"));
+  at(15400, ()=>sceneOff("s-prompt"));
+
+  /* —— S2 · 沉浸作答 (16 – 31s) —— */
+  const ESSAY = "I largely agree with Lena that digital life is reshaping friendship. Social media often make people feel connected, while the depth of each tie quietly declines. In my opinion, I think a few honest conversations matter far more than hundreds of contacts...";
+  at(16000, ()=>{ sceneOn("s-write"); go("wPrompt"); go("wEditor"); tickTimer($("timer2"), 581, 14000); });
+  at(16900, ()=>go("cap2"));
+  at(17400, ()=>{
+    $("edPh").style.opacity = 0;
+    typewriter($("edText"), $("edCursor"), ESSAY, 38, w=>{ $("wcNum").textContent = w; });
+  });
+  /* 提交按钮：按压 + 涟漪 */
+  at(26200, ()=>{
+    const btn=$("btnSubmit");
+    btn.classList.add("pressed");
+    const r=document.createElement("span"); r.className="ripple";
+    r.style.cssText+="width:40px;height:40px;left:50%;top:50%;margin:-20px 0 0 -20px";
+    btn.appendChild(r);
+    at(150,()=>btn.classList.remove("pressed"));
+  });
+  at(26900, ()=>sceneOff("s-write"));
+
+  /* —— S3 · AI 分析中 (27.5 – 36s) —— */
+  const steps=["正在解析文章结构…","正在检测语法与拼写…","正在评估论证逻辑与连贯性…","正在对照 ETS 官方评分标准…","正在生成逐句批注与范文…"];
+  at(27500, ()=>{ sceneOn("s-scoring"); go("scanCard"); });
+  at(28300, ()=>go("cap3"));
+  steps.forEach((s,i)=> at(28000+i*1450, ()=>{ const el=$("aiStep"); el.style.opacity=0; setTimeout(()=>{el.textContent=s;el.style.opacity=1;},200); }));
+  ["ck1","ck2","ck3","ck4"].forEach((id,i)=> at(29400+i*1300, ()=>$(id).classList.add("done")));
+  at(35200, ()=>sceneOff("s-scoring"));
+
+  /* —— S4 · 评分报告 (36 – 47s) —— */
+  at(36000, ()=>{ sceneOn("s-score"); go("rTabs"); go("scoreCard"); });
+  at(36700, ()=>countTo($("scoreNum"), 4.5, 1600));
+  at(38000, ()=>go("chipBand"));
+  at(38400, ()=>go("chipEts"));
+  at(38800, ()=>go("scoreSummary"));
+  at(37400, ()=>go("dimPanel"));
+  const dims=[["df1","dv1",90],["df2","dv2",85],["df3","dv3",72],["df4","dv4",78]];
+  dims.forEach(([f,v,pct],i)=> at(38200+i*420, ()=>{
+    $(f).style.width=pct+"%";
+    const t0=performance.now();
+    const step=now=>{const p=Math.min(1,(now-t0)/1300);$(v).textContent=Math.round(pct*(1-Math.pow(1-p,3)))+"%";if(p<1)requestAnimationFrame(step);};
+    requestAnimationFrame(step);
+  }));
+  at(40600, ()=>go("act1"));
+  at(41000, ()=>go("act2"));
+  at(41600, ()=>$("act1").classList.add("done"));
+  at(42000, ()=>$("act2").classList.add("done"));
+  at(39400, ()=>go("cap4"));
+  at(46300, ()=>sceneOff("s-score"));
+
+  /* —— S5 · 逐句批注 (47 – 58s) —— */
+  at(47000, ()=>{ sceneOn("s-anno"); go("annoPanel"); });
+  at(47700, ()=>{ go("lg1"); at(140,()=>go("lg2")); at(280,()=>go("lg3")); });
+  at(48300, ()=>go("cap5"));
+  const marks=[["mk1","tip1"],["mk2","tip2"],["mk3","tip3"]];
+  marks.forEach(([mk,tip],i)=>{
+    at(48800+i*2900, ()=>$(mk).classList.add("lit"));
+    at(49200+i*2900, ()=>$(tip).classList.add("show"));
+    if(i<marks.length-1) at(51300+i*2900, ()=>$(tip).classList.remove("show"));
+  });
+  at(57300, ()=>sceneOff("s-anno"));
+
+  /* —— S6 · 功能矩阵 (58 – 64.5s) —— */
+  at(58000, ()=>{ sceneOn("s-features"); go("ft1"); });
+  at(58450, ()=>go("ft2"));
+  at(58900, ()=>go("ft3"));
+  at(59300, ()=>["cb1","cb2","cb3","cb4","cb5"].forEach((id,i)=>at(i*120,()=>{const b=$(id);b.style.height=b.dataset.h;})));
+  at(59800, ()=>["td1","td2","td3"].forEach((id,i)=>at(i*420,()=>$(id).classList.add("done"))));
+  at(59100, ()=>go("cap6"));
+  at(63800, ()=>sceneOff("s-features"));
+
+  /* —— S7 · 收尾 CTA (64.5s – ) —— */
+  at(64500, ()=>{ sceneOn("s-cta"); go("ctaLogo"); });
+  at(65100, ()=>go("ctaTitle"));
+  at(65700, ()=>go("ctaSub"));
+  at(66300, ()=>{ go("ctaC1"); at(160,()=>go("ctaC2")); at(320,()=>go("ctaC3")); });
+
+  /* 进度条 */
+  const bar=$("progress"); bar.style.transition="none"; bar.style.width="0";
+  requestAnimationFrame(()=>{ bar.style.transition=`width ${TOTAL+6000}ms linear`; bar.style.width="100%"; });
+
+  /* 自动循环 */
+  at(TOTAL+8000, restart);
+}
+
+function restart(){
+  timers.forEach(t=>{clearTimeout(t);clearInterval(t);});
+  timers=[];
+  document.querySelectorAll(".scene").forEach(s=>s.classList.remove("on","off"));
+  document.querySelectorAll(".go").forEach(e=>e.classList.remove("go"));
+  document.querySelectorAll(".lit").forEach(e=>e.classList.remove("lit"));
+  document.querySelectorAll(".tip.show").forEach(e=>e.classList.remove("show"));
+  document.querySelectorAll(".done").forEach(e=>e.classList.remove("done"));
+  document.querySelectorAll(".cefr-bar").forEach(e=>e.style.height=0);
+  document.querySelectorAll(".dim-fill").forEach(e=>e.style.width=0);
+  ["dv1","dv2","dv3","dv4"].forEach(id=>$(id).textContent="0%");
+  $("edText").textContent=""; $("edPh").style.opacity=1; $("edCursor").style.opacity=0;
+  $("wcNum").textContent="0"; $("scoreNum").textContent="0.0";
+  $("timer1").textContent="10:00"; $("timer2").textContent="09:41";
+  $("aiStep").textContent="正在解析文章结构…";
+  document.querySelectorAll(".ripple").forEach(e=>e.remove());
+  const bar=$("progress"); bar.style.transition="none"; bar.style.width="0";
+  setTimeout(play, 80);
+}
+
+/* ---------- 舞台缩放适配 ---------- */
+function fit(){
+  const s = Math.min(innerWidth/1600, innerHeight/900);
+  $("stage").style.transform = `scale(${s})`;
+}
+addEventListener("resize", fit); fit();
+play();
+</script>
+</body>
+</html>
