@@ -1,0 +1,246 @@
+{
+  "type": "readInDailyLife",
+  "generated_at": "2026-06-10T22:28:28.113Z",
+  "total_generated": 4,
+  "total_accepted": 4,
+  "acceptance_rate": 1,
+  "items": [
+    {
+      "id": "rdl_gen_27310393453-long_001",
+      "variant": "long",
+      "text": "Notice: Updated Allergen Policy for Dining Halls\nEffective: October 16, 2023\nLocation: All Campus Dining Halls\n\nThe university has revised its allergen policy to enhance safety for students with food allergies. As of October 16, all dining halls will require students to declare any severe allergies through the online portal before the start of each semester. A $5.00 penalty will be applied to meal plans if a student fails to update their allergy information by the deadline.\n\nKey updates:\n- A dedicated allergen-free station will be available in each dining hall during lunch and dinner hours (11:00 AM to 8:00 PM).\n- Students must present their student ID at the station to receive a meal.\n- Menu items containing common allergens will be clearly labeled.\n- Any student who experiences an allergic reaction should report it immediately to dining hall staff.\n\nFor questions or to update your allergy information, please contact the Dining Services Office at extension 555-0199.",
+      "word_count": 158,
+      "genre": "notice",
+      "format_metadata": {
+        "from": "Dining Services Office",
+        "to": "All Students",
+        "subject": "Updated Allergen Policy for Dining Halls"
+      },
+      "questions": [
+        {
+          "qid": "rdl_gen_27310393453-long_001_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, what must students do before each semester?",
+          "options": {
+            "A": "To pay a $5.00 fee to the dining services office",
+            "B": "To present their student ID at the allergen-free station",
+            "C": "To declare any severe allergies through the online portal",
+            "D": "To report any allergic reactions to the dining hall staff"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice states that students must declare any severe allergies through the online portal before the start of each semester."
+        },
+        {
+          "qid": "rdl_gen_27310393453-long_001_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the allergen-free station?",
+          "options": {
+            "A": "It is only available during specific meal times each day",
+            "B": "It is located in a separate building from the main dining hall",
+            "C": "It is exclusively for students with severe food allergies",
+            "D": "It is open to all students regardless of their meal plan type"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice indicates the allergen-free station is available from 11:00 AM to 8:00 PM, implying it is only operational during lunch and dinner hours."
+        },
+        {
+          "qid": "rdl_gen_27310393453-long_001_q3",
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this notice?",
+          "options": {
+            "A": "To inform students about new safety rules for dining with allergies",
+            "B": "To announce a new penalty for students who miss meal plan deadlines",
+            "C": "To describe the location of allergen-free stations across campus",
+            "D": "To request that students report allergic reactions to staff"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice primarily communicates the updated allergen policy, including new requirements for students with food allergies and changes to dining hall procedures."
+        }
+      ],
+      "question_count": 3,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "3/3"
+      }
+    },
+    {
+      "id": "rdl_gen_27310393453-long_002",
+      "variant": "long",
+      "text": "Notice: Change to Package Delivery Procedure\nEffective: November 5, 2023\nLocation: Campus Mail Center, Room 101, Anderson Hall\n\nStarting November 5, the Campus Mail Center will implement a new procedure for package delivery to improve security and efficiency. All packages must now be collected within 48 hours of notification, or a $5.00 late fee will be charged. Students must bring their student ID and the delivery notification email to receive their package.\n\nImportant changes:\n- Packages can be picked up Monday through Friday from 9:00 AM to 5:00 PM.\n- After 48 hours, packages will be moved to the overflow storage area and a $5.00 fee will apply.\n- Packages not collected within 7 days will be returned to the sender.\n- For oversized packages, students must schedule a pickup appointment online.\n\nFor questions about this policy, contact the Mail Center Supervisor at extension 555-0142.",
+      "word_count": 145,
+      "genre": "notice",
+      "format_metadata": {
+        "from": "Campus Mail Center",
+        "to": "All Students and Staff",
+        "subject": "Change to Package Delivery Procedure"
+      },
+      "questions": [
+        {
+          "qid": "rdl_gen_27310393453-long_002_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, what must a student bring to pick up a package?",
+          "options": {
+            "A": "A printed copy of the delivery notification email",
+            "B": "A student ID and the delivery notification email",
+            "C": "A valid credit card to pay any late fees",
+            "D": "A signed authorization form from the sender"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice states: 'Students must bring their student ID and the delivery notification email to receive their package.'"
+        },
+        {
+          "qid": "rdl_gen_27310393453-long_002_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about packages not collected within the first 48 hours?",
+          "options": {
+            "A": "They will be returned to the sender immediately",
+            "B": "They will be held at the front desk without any additional charge",
+            "C": "They can still be picked up without an appointment",
+            "D": "They will incur a fee before being moved to storage"
+          },
+          "correct_answer": "D",
+          "explanation": "The notice implies that after 48 hours, a $5.00 fee is applied before packages are moved to overflow storage, as indicated by the sequence of rules."
+        },
+        {
+          "qid": "rdl_gen_27310393453-long_002_q3",
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this notice?",
+          "options": {
+            "A": "To list the operating hours of the Campus Mail Center",
+            "B": "To announce new rules for collecting packages from the mail center",
+            "C": "To describe the process for scheduling a pickup appointment",
+            "D": "To explain the fees associated with delayed package retrieval"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice primarily communicates a change in the package delivery procedure, including new rules for collection times, fees, and required documentation."
+        }
+      ],
+      "question_count": 3,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "3/3"
+      }
+    },
+    {
+      "id": "rdl_gen_27310393453-long_003",
+      "variant": "long",
+      "text": "Subject: Flu Shot Appointment Confirmation\n\nFrom: Health Services <healthservices@university.edu>\nTo: Maria Chen <maria.chen@university.edu>\n\nDear Maria,\n\nThis email confirms your appointment for a flu shot at the Student Health Clinic on November 10, 2023, at 10:30 AM. Please arrive 15 minutes early to complete the required paperwork. The appointment will take place in Room 204 of the Health Services Building.\n\nPlease bring your student ID and your insurance card. If you don't have insurance, you can still receive the shot for a $25.00 fee, payable at the time of service. We recommend wearing a short-sleeved shirt to make the vaccination easier.\n\nIf you need to reschedule, please contact us at least 24 hours in advance by calling extension 555-0211. We look forward to seeing you.\n\nBest regards,\nDr. Patricia Lee\nDirector, Student Health Clinic",
+      "word_count": 133,
+      "genre": "email",
+      "format_metadata": {
+        "from": "Health Services <healthservices@university.edu>",
+        "to": "Maria Chen <maria.chen@university.edu>",
+        "subject": "Flu Shot Appointment Confirmation"
+      },
+      "questions": [
+        {
+          "qid": "rdl_gen_27310393453-long_003_q1",
+          "question_type": "detail",
+          "stem": "According to the email, what must Maria bring to her appointment?",
+          "options": {
+            "A": "A short-sleeved shirt and a copy of her medical records",
+            "B": "Her insurance card and a signed consent form",
+            "C": "Her student ID and her insurance card",
+            "D": "Her appointment confirmation and a $25.00 fee"
+          },
+          "correct_answer": "C",
+          "explanation": "The email states: 'Please bring your student ID and your insurance card.'"
+        },
+        {
+          "qid": "rdl_gen_27310393453-long_003_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the $25.00 fee?",
+          "options": {
+            "A": "It is a standard charge for all flu shots at the clinic",
+            "B": "It is only required for students without health insurance",
+            "C": "It must be paid before the appointment can be scheduled",
+            "D": "It is refundable if the appointment is canceled in advance"
+          },
+          "correct_answer": "B",
+          "explanation": "The email says 'If you don't have insurance, you can still receive the shot for a $25.00 fee,' implying the fee applies only to uninsured students."
+        },
+        {
+          "qid": "rdl_gen_27310393453-long_003_q3",
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this email?",
+          "options": {
+            "A": "To inform Maria about the benefits of receiving a flu shot",
+            "B": "To confirm Maria's scheduled flu shot and provide instructions",
+            "C": "To explain the process for rescheduling a medical appointment",
+            "D": "To request Maria's insurance information for billing purposes"
+          },
+          "correct_answer": "B",
+          "explanation": "The email's primary purpose is to confirm the appointment and give Maria details about what to bring and do."
+        }
+      ],
+      "question_count": 3,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "3/3"
+      }
+    },
+    {
+      "id": "rdl_gen_27310393453-long_004",
+      "variant": "long",
+      "text": "Subject: Study Group for Biology 101 Final Exam\n\nFrom: James Park <james.park@university.edu>\nTo: Biology 101 Students <bio101-students@university.edu>\n\nHi everyone,\n\nI'm organizing a study group for the Biology 101 final exam on December 15. We'll meet in the library's Group Study Room 3 on December 10 and 12 from 6:00 PM to 8:00 PM. Each session will focus on key topics from the second half of the semester, including cell division and genetics.\n\nTo join, please reply to this email by December 5. There's a $5.00 fee to cover printed materials and snacks, which you can pay at the first meeting. I'll send out a study guide to everyone who signs up. If you can't afford the fee, don't worry—just let me know, and we can work something out.\n\nAlso, please bring your textbook and any notes from class. We'll review practice questions together. Let me know if you have any questions!\n\nBest,\nJames Park",
+      "word_count": 154,
+      "genre": "email",
+      "format_metadata": {
+        "from": "James Park <james.park@university.edu>",
+        "to": "Biology 101 Students <bio101-students@university.edu>",
+        "subject": "Study Group for Biology 101 Final Exam"
+      },
+      "questions": [
+        {
+          "qid": "rdl_gen_27310393453-long_004_q1",
+          "question_type": "detail",
+          "stem": "According to the email, what must students do to join the study group?",
+          "options": {
+            "A": "To pay the $5.00 fee at the library's front desk",
+            "B": "To reply to the email by December 5",
+            "C": "To bring their textbook to the first meeting",
+            "D": "To sign up for the group on the online portal"
+          },
+          "correct_answer": "B",
+          "explanation": "The email states: 'To join, please reply to this email by December 5.'"
+        },
+        {
+          "qid": "rdl_gen_27310393453-long_004_q2",
+          "question_type": "detail",
+          "stem": "What does James say about the $5.00 fee?",
+          "options": {
+            "A": "It is used to pay for the study group's room reservation",
+            "B": "It can be waived for students who cannot afford it",
+            "C": "It must be paid before the study group sessions begin",
+            "D": "It is refundable if a student cannot attend all sessions"
+          },
+          "correct_answer": "B",
+          "explanation": "The email says: 'If you can't afford the fee, don't worry—just let me know, and we can work something out,' indicating it can be waived."
+        },
+        {
+          "qid": "rdl_gen_27310393453-long_004_q3",
+          "question_type": "inference",
+          "stem": "What can be inferred about the study group sessions?",
+          "options": {
+            "A": "They will cover all topics from the entire semester",
+            "B": "They are intended for students who are struggling in the class",
+            "C": "They will include practice questions and review activities",
+            "D": "They will be held in a different location each night"
+          },
+          "correct_answer": "C",
+          "explanation": "The email implies practice questions will be reviewed: 'We'll review practice questions together.'"
+        }
+      ],
+      "question_count": 3,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "3/3"
+      }
+    }
+  ],
+  "rejected": []
+}
