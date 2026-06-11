@@ -18,6 +18,7 @@ import { countReadingMistakes } from "../../lib/readingMistakes";
 import { countListeningMistakes } from "../../lib/listeningMistakes";
 import { NavSidebar } from "./NavSidebar";
 import { SectionContent } from "./SectionContent";
+import { StudyPlanColumn } from "./StudyPlanColumn";
 import { MyReferralModal } from "./MyReferralModal";
 import { InvitationCapturedToast, ActivatedToast } from "../referral/ReferralToasts";
 
@@ -341,7 +342,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
           </div>
         ) : null}
 
-        <div className="home-shell" style={{ maxWidth: 1120, margin: "0 auto", padding: "28px 36px 60px", display: "flex", gap: 24, alignItems: "flex-start" }}>
+        <div className="home-shell" style={{ maxWidth: 1360, margin: "0 auto", padding: "28px 36px 60px", display: "flex", gap: 24, alignItems: "flex-start" }}>
           <NavSidebar
             activeSection={activeSection} onSectionChange={setActiveSection}
             isChallenge={isChallenge}
@@ -366,6 +367,14 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
             fadeIn={fadeIn}
             userTier={userTier} isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
             onOpenReferral={handleOpenReferral}
+          />
+          <StudyPlanColumn
+            userCode={userCode}
+            isChallenge={isChallenge}
+            sessions={sessions}
+            bestMock={bestMock}
+            sideCard={sideCard}
+            fadeIn={fadeIn}
           />
         </div>
       </div>

@@ -61,5 +61,10 @@ export const HOME_PAGE_CSS = `
 @keyframes ch-sweep{0%{left:-30%}100%{left:130%}}
 @keyframes ch-gradRot{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 @keyframes ch-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+/* 备考日历：今日打卡圈呼吸 + 连胜火焰轻跳（多邻国式督促动效） */
+@keyframes sp-todayPulse{0%,100%{box-shadow:0 0 0 0 rgba(217,119,6,0.45)}50%{box-shadow:0 0 0 4px rgba(217,119,6,0)}}
+@keyframes sp-flameBob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-2px) rotate(2deg)}}
+/* 备考日历右栏：窄屏桌面（<1100px）自动隐藏，回退到两栏，避免中间内容被挤窄 */
+@media (max-width: 1100px){ .home-study-col{ display:none !important; } }
 /* 响应式规则已移至 app/mobile.css（全局生效） */
 `;
