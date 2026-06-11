@@ -31,7 +31,7 @@
 html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)}
 
 #viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
-#stage{position:relative;width:1600px;height:900px;background:var(--bg);overflow:hidden;transform-origin:center center}
+#stage{position:relative;width:1280px;height:720px;background:var(--bg);overflow:hidden;transform-origin:center center}
 #camera{position:absolute;inset:0;transform-origin:50% 50%;will-change:transform}
 
 .scene{position:absolute;inset:0;opacity:0;visibility:hidden;pointer-events:none;transform:scale(1.035)}
@@ -50,7 +50,7 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
   font-family:var(--font);transform:skewX(14deg)}
 
 /* ---------- 模拟鼠标光标 ---------- */
-#cur{position:absolute;width:30px;height:34px;z-index:85;opacity:0;left:800px;top:450px;
+#cur{position:absolute;width:30px;height:34px;z-index:85;opacity:0;left:640px;top:360px;
   pointer-events:none;filter:drop-shadow(0 3px 8px rgba(0,0,0,.35));
   transition:left .6s cubic-bezier(.35,0,.25,1),top .6s cubic-bezier(.35,0,.25,1),opacity .3s ease}
 #cur svg{transition:transform .12s ease;transform-origin:6px 4px}
@@ -75,26 +75,26 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
    按每个画面的视觉重心选择落位：pos-r 右下 / pos-c 居中 / 默认左下） ---------- */
 .ft{position:absolute;z-index:60;opacity:0;pointer-events:none;transition:opacity .45s ease,transform .45s ease;transform:translateY(12px)}
 /* 逐分镜手工定位：放进各画面的内容留白区，避开屏幕底部（流媒体 UI 遮挡区） */
-#ft1{right:210px;top:600px;text-align:right}                /* 题目：气泡读完后的面板右下白区 */
-#ft2{left:790px;top:545px}                                  /* 作答：编辑器输入区下方空白 */
-#ft3{left:0;right:0;top:150px;text-align:center}            /* AI：扫描卡上方居中 */
-#ft4{left:0;right:0;top:585px;text-align:center}            /* 总览：收起分节标题行中部空白带 */
-#ft5{left:0;right:0;top:580px;text-align:center}            /* 批注：批注文下方居中（特写前退场） */
-#ft6{left:760px;top:560px}                                  /* 词汇：右栏建议下方 */
-#ft7{left:0;right:0;top:620px;text-align:center}            /* 范文：对照盒下方（第二组出现前退场） */
-#ft8{left:0;right:0;top:600px;text-align:center}            /* 模式：分节下方居中 */
-#ft9{left:0;right:0;top:620px;text-align:center}            /* 二次批改：对比卡下方居中 */
+#ft1{right:150px;top:470px;text-align:right}                /* 题目：气泡读完后的面板右下白区 */
+#ft2{left:600px;top:430px}                                  /* 作答：编辑器输入区下方空白 */
+#ft3{left:0;right:0;top:110px;text-align:center}            /* AI：扫描卡上方居中 */
+#ft4{left:0;right:0;top:465px;text-align:center}            /* 总览：收起分节标题行中部空白带 */
+#ft5{left:0;right:0;top:462px;text-align:center}            /* 批注：批注文下方居中（特写前退场） */
+#ft6{left:600px;top:445px}                                  /* 词汇：右栏建议下方 */
+#ft7{left:0;right:0;top:495px;text-align:center}            /* 范文：对照盒下方（第二组出现前退场） */
+#ft8{left:0;right:0;top:478px;text-align:center}            /* 模式：分节下方居中 */
+#ft9{left:0;right:0;top:495px;text-align:center}            /* 二次批改：对比卡下方居中 */
 .ft .ft-h,.ft .ft-s{text-shadow:0 2px 20px rgba(244,247,245,.95),0 0 8px rgba(244,247,245,.85),0 0 2px rgba(244,247,245,.9)}
 .ft .grad{text-shadow:none;filter:drop-shadow(0 2px 10px rgba(244,247,245,.8))}
 .ft.go{opacity:1;transform:translateY(0)}
-.ft-h{font-size:42px;font-weight:800;color:var(--t1);letter-spacing:-.5px;line-height:1.12}
+.ft-h{font-size:46px;font-weight:800;color:var(--t1);letter-spacing:-.5px;line-height:1.12}
 .ft-h .mask{display:inline-block;overflow:hidden;vertical-align:bottom}
 .ft-h .mask>span{display:inline-block;transform:translateY(115%);transition:transform .75s cubic-bezier(.22,1,.36,1)}
 .ft.go .ft-h .mask>span{transform:translateY(0)}
 .ft.go .ft-h .mask:nth-child(2)>span{transition-delay:.1s}
 .ft.go .ft-h .mask:nth-child(3)>span{transition-delay:.2s}
 .ft-h .grad{background:var(--brand-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-.ft-s{margin-top:7px;font-size:18px;font-weight:600;color:var(--t2);opacity:0;transform:translateY(14px);transition:opacity .55s .3s ease,transform .55s .3s cubic-bezier(.22,1,.36,1)}
+.ft-s{margin-top:8px;font-size:19px;font-weight:600;color:var(--t2);opacity:0;transform:translateY(14px);transition:opacity .55s .3s ease,transform .55s .3s cubic-bezier(.22,1,.36,1)}
 .ft.go .ft-s{opacity:1;transform:translateY(0)}
 
 /* ---------- 亮色光斑背景（片头 / 片尾） ---------- */
@@ -128,7 +128,7 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
 @keyframes sweep{0%{left:-130%}45%,100%{left:160%}}
 
 /* ---------- 应用窗口框架 ---------- */
-.appwin{position:absolute;left:120px;right:120px;top:64px;bottom:128px;background:var(--bg);border-radius:22px;box-shadow:var(--shadow-lg),0 0 0 1px rgba(10,40,25,.06);overflow:hidden;display:flex;flex-direction:column}
+.appwin{position:absolute;left:48px;right:48px;top:42px;bottom:84px;background:var(--bg);border-radius:22px;box-shadow:var(--shadow-lg),0 0 0 1px rgba(10,40,25,.06);overflow:hidden;display:flex;flex-direction:column}
 .topbar{height:60px;background:rgba(255,255,255,.94);border-bottom:1px solid var(--bdr-subtle);display:flex;align-items:center;justify-content:space-between;padding:0 26px;flex-shrink:0}
 .tb-left{display:flex;align-items:center;gap:13px}
 .tb-logo{width:30px;height:30px;border-radius:8px;background:var(--brand-grad);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:800}
@@ -172,7 +172,7 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
 
 /* ---------- AI 分析中 ---------- */
 #s-scoring .appwin{display:flex;align-items:center;justify-content:center;flex-direction:column}
-.scan-card{width:620px;background:var(--card);border:1px solid var(--bdr);border-radius:18px;box-shadow:var(--shadow-lg);padding:38px 44px;position:relative;overflow:hidden}
+.scan-card{width:580px;background:var(--card);border:1px solid var(--bdr);border-radius:18px;box-shadow:var(--shadow-lg);padding:38px 44px;position:relative;overflow:hidden}
 .scan-doc{display:flex;flex-direction:column;gap:13px;margin-top:28px}
 .skel{height:11px;border-radius:6px;background:linear-gradient(90deg,#e8efe9 25%,#f4f8f5 50%,#e8efe9 75%);background-size:200% 100%;animation:shimmer 1.4s linear infinite}
 @keyframes shimmer{to{background-position:-200% 0}}
@@ -205,7 +205,7 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
 .gl-chip{font-size:10.5px;font-weight:800;border-radius:999px;padding:2px 9px;flex-shrink:0}
 .gl-chip.ok{background:rgba(74,222,128,.15);color:#4ade80}
 .gl-chip.miss{background:rgba(248,113,113,.15);color:#f87171}
-.dims-panel{width:430px;flex-shrink:0;background:var(--card);border:1px solid var(--bdr);border-radius:14px;box-shadow:var(--shadow)}
+.dims-panel{width:400px;flex-shrink:0;background:var(--card);border:1px solid var(--bdr);border-radius:14px;box-shadow:var(--shadow)}
 .dim{margin-top:8px}
 .dim-row{display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:7px}
 .dim-row .dn{color:var(--t2)}.dim-row .dv{color:var(--primary);font-variant-numeric:tabular-nums}
@@ -268,7 +268,7 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
 
 /* ---------- 词汇分析 ---------- */
 .vocab-row{display:flex;gap:18px;padding:18px 20px}
-.vcol-l{width:480px;flex-shrink:0}
+.vcol-l{width:430px;flex-shrink:0}
 .vcol-r{flex:1}
 .vtitle{font-size:11.5px;font-weight:800;color:var(--t3);letter-spacing:1px;margin-bottom:10px}
 .cefr-stage{display:flex;align-items:flex-end;gap:14px;height:185px;padding:6px 4px 0}
@@ -325,7 +325,7 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
 
 
 /* ---------- 二次批改 · 进步对比 ---------- */
-.rw-card{width:900px;background:#fff;border:1px solid var(--bdr);border-radius:20px;box-shadow:var(--shadow-lg);padding:32px 40px}
+.rw-card{width:840px;background:#fff;border:1px solid var(--bdr);border-radius:20px;box-shadow:var(--shadow-lg);padding:32px 40px}
 .rw-title{display:flex;align-items:center;gap:11px;font-size:17px;font-weight:800;color:var(--t1);margin-bottom:22px}
 .rw-title .ic{width:34px;height:34px;border-radius:10px;background:var(--lt);display:flex;align-items:center;justify-content:center;font-size:17px}
 .rw-title .when{margin-left:auto;font-size:12px;color:var(--t3);font-weight:600}
@@ -424,7 +424,7 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
         <div class="tb-right"><div class="timer-pill" id="timer2">09:41</div><div class="tb-exit">返回</div></div>
       </div>
       <div class="appbody">
-        <div class="panel slide-l" id="wPrompt" style="width:430px;flex-shrink:0">
+        <div class="panel slide-l" id="wPrompt" style="width:380px;flex-shrink:0">
           <div class="panel-head"><div class="ic">📖</div><span class="tt">题目</span><span class="pv">可随时折叠</span></div>
           <div class="prompt-body" style="gap:11px">
             <div class="msg"><div class="avatar av-prof" style="width:34px;height:34px;font-size:13px">L</div>
@@ -771,7 +771,7 @@ function wipe(){
 }
 
 const TOTAL = 64000;
-const SW = 1600, SH = 900;
+const SW = 1280, SH = 720;
 
 /* ---------- 虚拟镜头 ---------- */
 let cam = {x:SW/2, y:SH/2, s:1};
@@ -890,7 +890,7 @@ function play(){
 
   /* —— S1 · 题目呈现 (4 – 10s · 压缩) —— */
   at(4000, ()=>{ sceneOn("s-prompt"); go("pWin"); tickTimer($("timer1"), 600, 5500);
-    camTo(800, 432, 1.05, 5400, "linear"); });
+    camTo(640, 346, 1.05, 5400, "linear"); });
   at(4400, ()=>go("msgProf"));
   at(5200, ()=>go("msgS1"));
   at(5900, ()=>go("msgS2"));
@@ -907,7 +907,7 @@ function play(){
     $("edPh").style.opacity = 0;
     typewriter($("edText"), $("edCursor"), ESSAY, 78, w=>{ $("wcNum").textContent = w; });
   });
-  at(10900, ()=>camTo(985, 415, 1.1, 3200));
+  at(10900, ()=>camTo(790, 335, 1.1, 3200));
   at(13900, ()=>{ const p = posOf("btnSubmit"); curShow(p.x-180, p.y-120);
     at(260, ()=>curMove(p.x-6, p.y-4, 600)); });
   at(14900, ()=>{ $("btnSubmit").classList.add("hov"); unGo("ft2"); });
@@ -941,7 +941,7 @@ function play(){
   at(20450, ()=>go("secVocab"));
   at(20600, ()=>{ go("secCmp"); go("secPat"); });
   at(20400, ()=>countTo($("scoreNum"), 3.0, 1100));
-  at(20750, ()=>{ const p = posOf("scoreNum"); camTo(p.x+170, p.y+60, 1.26, 850); });
+  at(20750, ()=>{ const p = posOf("scoreNum"); camTo(p.x+135, p.y+50, 1.26, 850); });
   at(21000, ()=>go("ft4"));
   at(21650, ()=>go("chipBand"));
   at(21950, ()=>go("chipEts"));
@@ -976,7 +976,7 @@ function play(){
     at(base, ()=>{ const p = posOf(mk); curMove(p.x-4, p.y+6, 460); });
     at(base+500, ()=>curClick());
     at(base+580, ()=>$(tip).classList.add("show"));
-    at(base+640, ()=>{ const p = posOf(mk); camTo(p.x, p.y+120, 1.3, 740); });
+    at(base+640, ()=>{ const p = posOf(mk); camTo(p.x, p.y+95, 1.3, 740); });
     if(i<tipSeq.length-1) at(base+1320, ()=>$(tip).classList.remove("show"));
   });
   at(29300, ()=>unGo("ft5"));
@@ -1111,7 +1111,7 @@ function restart(){
 
 /* ---------- 舞台缩放适配 ---------- */
 function fit(){
-  const s = Math.min(innerWidth/1600, innerHeight/900);
+  const s = Math.min(innerWidth/1280, innerHeight/720);
   $("stage").style.transform = `scale(${s})`;
 }
 addEventListener("resize", fit); fit();
