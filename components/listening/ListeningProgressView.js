@@ -4,6 +4,7 @@ import React, { useState, useEffect, useMemo, useRef } from "react";
 import { C, FONT, Btn, PageShell, SurfaceCard, TopBar, ChevronIcon, ModeChip, NEUTRAL } from "../shared/ui";
 import { StatCard } from "../shared/StatCard";
 import { AccuracyTrendChart } from "../shared/AccuracyTrendChart";
+import { AudioPlayer } from "./AudioPlayer";
 import { loadHist, deleteSession, clearAllSessions, SESSION_STORE_EVENTS, setCurrentUser } from "../../lib/sessionStore";
 import { getSavedCode } from "../../lib/AuthContext";
 import { formatLocalDateTime } from "../../lib/utils";
@@ -208,6 +209,7 @@ function taskToReviewDetails(task) {
         options: task.options,
         answer: task.answer,
         explanation: task.explanation,
+        audio_url: task.audio_url || null,
       }],
     };
   }
@@ -218,6 +220,7 @@ function taskToReviewDetails(task) {
     questions,
     transcript: task.transcript || task.announcement || task.lecture || task.text || task.passage || "",
     conversation: task.conversation || null,
+    audio_url: task.audio_url || null,
   };
 }
 
@@ -287,6 +290,12 @@ function LCRDetail({ session }) {
                 {speakerText}
               </div>
             )}
+            {/* Replay the recording for 精听 (TTS fallback off speaker text) */}
+            {(q.audio_url || speakerText) && (
+              <div style={{ marginBottom: 8 }}>
+                <AudioPlayer compact src={q.audio_url || null} text={speakerText} isPractice />
+              </div>
+            )}
             {/* Options A/B/C/D */}
             {Object.keys(options).length > 0 && (
               <div style={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: explanation ? 8 : 0 }}>
@@ -335,9 +344,17 @@ function LADetail({ session }) {
   const results = session.details?.results || [];
   const questions = session.details?.questions || [];
   const transcript = session.details?.transcript || session.details?.passage || "";
+  const audioUrl = session.details?.audio_url || null;
 
   return (
     <div>
+      {/* Replay audio alongside the transcript for 精听 */}
+      {(audioUrl || transcript) && (
+        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8, flexWrap: "wrap" }}>
+          <span style={{ fontSize: 11, fontWeight: 700, color: P.textSec, letterSpacing: "0.02em" }}>原文精听</span>
+          <AudioPlayer compact src={audioUrl} text={transcript} isPractice />
+        </div>
+      )}
       {/* Transcript / announcement text */}
       {transcript && (
         <div style={{ fontSize: 13, color: P.text, lineHeight: 1.7, padding: "10px 14px", background: "#f8faf9", borderRadius: 10, marginBottom: 10, whiteSpace: "pre-wrap", maxHeight: 180, overflow: "auto", fontStyle: "italic", borderLeft: `3px solid ${P.textDim}` }}>
@@ -410,9 +427,18 @@ function LCDetail({ session }) {
   const questions = session.details?.questions || [];
   const conversation = session.details?.conversation || session.details?.turns || [];
   const transcript = session.details?.transcript || session.details?.passage || "";
+  const audioUrl = session.details?.audio_url || null;
+  const audioText = transcript || conversation.map(t => t.text || t.content || "").join(" ");
 
   return (
     <div>
+      {/* Replay audio alongside the conversation for 精听 */}
+      {(audioUrl || audioText) && (
+        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8, flexWrap: "wrap" }}>
+          <span style={{ fontSize: 11, fontWeight: 700, color: P.textSec, letterSpacing: "0.02em" }}>原文精听</span>
+          <AudioPlayer compact src={audioUrl} text={audioText} isPractice />
+        </div>
+      )}
       {/* Conversation turns as chat bubbles */}
       {conversation.length > 0 ? (
         <div style={{ marginBottom: 12, display: "flex", flexDirection: "column", gap: 6 }}>

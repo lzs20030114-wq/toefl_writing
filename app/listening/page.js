@@ -207,22 +207,27 @@ function ListeningPageClient() {
     const firstItem = Array.isArray(itemsUsed) ? itemsUsed[0] : itemsUsed;
     const reviewData = {};
     if (subtype === "lcr" && Array.isArray(itemsUsed)) {
-      // LCR batch: store each item's speaker + options for review
+      // LCR batch: store each item's speaker + options + audio for review.
+      // audio_url lets the history page replay the real recording later;
+      // null falls back to TTS off the speaker text.
       reviewData.items = itemsUsed.map(i => ({
         id: i.id, speaker: i.speaker, options: i.options, answer: i.answer,
         explanation: i.explanation, pragmatic_function: i.pragmatic_function,
+        audio_url: i.audio_url || null,
       }));
     } else if (subtype === "lcr" && firstItem) {
       reviewData.items = [{
         id: firstItem.id, speaker: firstItem.speaker, options: firstItem.options,
         answer: firstItem.answer, explanation: firstItem.explanation,
+        audio_url: firstItem.audio_url || null,
       }];
     } else if (firstItem) {
-      // LA/LC/LAT: store transcript + questions for review
+      // LA/LC/LAT: store transcript + questions + audio for review
       reviewData.transcript = firstItem.transcript || firstItem.announcement || firstItem.lecture || "";
       reviewData.conversation = firstItem.conversation || null;
       reviewData.questions = firstItem.questions || [];
       reviewData.topic = firstItem.topic || firstItem.context || "";
+      reviewData.audio_url = firstItem.audio_url || null;
     }
 
     saveSess({
