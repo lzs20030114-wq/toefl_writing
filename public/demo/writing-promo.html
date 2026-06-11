@@ -73,7 +73,17 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
 
 /* ---------- 苹果风自由文字解说（位于镜头层外，不随缩放移动；
    按每个画面的视觉重心选择落位：pos-r 右下 / pos-c 居中 / 默认左下） ---------- */
-.ft{position:absolute;left:0;right:0;bottom:34px;text-align:center;z-index:60;opacity:0;pointer-events:none;transition:opacity .45s ease,transform .45s ease;transform:translateY(12px)}
+.ft{position:absolute;z-index:60;opacity:0;pointer-events:none;transition:opacity .45s ease,transform .45s ease;transform:translateY(12px)}
+/* 逐分镜手工定位：放进各画面的内容留白区，避开屏幕底部（流媒体 UI 遮挡区） */
+#ft1{right:210px;top:600px;text-align:right}                /* 题目：气泡读完后的面板右下白区 */
+#ft2{left:790px;top:545px}                                  /* 作答：编辑器输入区下方空白 */
+#ft3{left:0;right:0;top:150px;text-align:center}            /* AI：扫描卡上方居中 */
+#ft4{left:0;right:0;top:585px;text-align:center}            /* 总览：收起分节标题行中部空白带 */
+#ft5{left:0;right:0;top:580px;text-align:center}            /* 批注：批注文下方居中（特写前退场） */
+#ft6{left:760px;top:560px}                                  /* 词汇：右栏建议下方 */
+#ft7{left:0;right:0;top:620px;text-align:center}            /* 范文：对照盒下方（第二组出现前退场） */
+#ft8{left:0;right:0;top:600px;text-align:center}            /* 模式：分节下方居中 */
+#ft9{left:0;right:0;top:620px;text-align:center}            /* 二次批改：对比卡下方居中 */
 .ft .ft-h,.ft .ft-s{text-shadow:0 2px 20px rgba(244,247,245,.95),0 0 8px rgba(244,247,245,.85),0 0 2px rgba(244,247,245,.9)}
 .ft .grad{text-shadow:none;filter:drop-shadow(0 2px 10px rgba(244,247,245,.8))}
 .ft.go{opacity:1;transform:translateY(0)}
@@ -686,16 +696,6 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
     </div>
   </div>
 
-  <!-- 模拟鼠标光标 -->
-  <div id="cur">
-    <svg viewBox="0 0 30 34" width="30" height="34">
-      <path d="M6 2 L6 26 L12.5 20.5 L17 30 L21.5 28 L17 18.8 L25 18 Z"
-            fill="#1a2420" stroke="#fff" stroke-width="2" stroke-linejoin="round"/>
-    </svg>
-  </div>
-
-</div><!-- /camera -->
-
   <div class="ft" id="ft1">
       <div class="ft-h"><span class="mask"><span>题库，<span class="grad">常练常新</span></span></span></div>
       <div class="ft-s">AI 生成真题级 Academic Discussion · 教授提问 + 双观点</div>
@@ -732,6 +732,17 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
     <div class="ft-h"><span class="mask"><span>重写一次，<span class="grad">看见进步</span></span></span></div>
     <div class="ft-s">二次批改自动对比两稿 · 进步沉淀到练习历史</div>
   </div>
+
+  <!-- 模拟鼠标光标 -->
+  <div id="cur">
+    <svg viewBox="0 0 30 34" width="30" height="34">
+      <path d="M6 2 L6 26 L12.5 20.5 L17 30 L21.5 28 L17 18.8 L25 18 Z"
+            fill="#1a2420" stroke="#fff" stroke-width="2" stroke-linejoin="round"/>
+    </svg>
+  </div>
+
+</div><!-- /camera -->
+
 
 
   <div id="wipe"><div class="wlogo">T</div></div>
@@ -1008,7 +1019,7 @@ function play(){
   at(45200, ()=>$("hm2").classList.add("lit"));
   at(45550, ()=>$("hd4").classList.add("lit"));
   at(45900, ()=>$("hd5").classList.add("lit"));
-  at(46300, ()=>unGo("ft7"));
+  at(44500, ()=>unGo("ft7"));
 
   /* —— 报告 P5 · 高频问题模式 + 重写入口 (47 – 52s) —— */
   at(46600, ()=>scrollRep(secTop("secPat") - 40, 800));
