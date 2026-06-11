@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
-   TreePractice 演示宣传片 v6 · 竖屏社媒版 (1080×1920)
+   TreePractice 演示宣传片 v7 · 竖屏社媒版 (1080×1920)
    - 在用题库 ad3 · 3.0/5 低分样例 · 报告页总览滑动展开
    - 苹果风自由文字解说（无框大字 + 渐变关键词 + 行掩码入场）
    - 报告新增：互动质量(回应同学) + 高频问题模式 + 一键重写
@@ -71,8 +71,11 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
 .fade{opacity:0}
 .fade.go{opacity:1;transition:opacity .7s ease}
 
-/* ---------- 苹果风自由文字解说 ---------- */
-.ft{position:absolute;left:124px;bottom:20px;z-index:60;opacity:0;pointer-events:none;transition:opacity .45s ease,transform .45s ease;transform:translateY(10px)}
+/* ---------- 苹果风自由文字解说（位于镜头层外，不随缩放移动；
+   按每个画面的视觉重心选择落位：pos-r 右下 / pos-c 居中 / 默认左下） ---------- */
+.ft{position:absolute;left:0;right:0;bottom:34px;text-align:center;z-index:60;opacity:0;pointer-events:none;transition:opacity .45s ease,transform .45s ease;transform:translateY(12px)}
+.ft .ft-h,.ft .ft-s{text-shadow:0 2px 20px rgba(244,247,245,.95),0 0 8px rgba(244,247,245,.85),0 0 2px rgba(244,247,245,.9)}
+.ft .grad{text-shadow:none;filter:drop-shadow(0 2px 10px rgba(244,247,245,.8))}
 .ft.go{opacity:1;transform:translateY(0)}
 .ft-h{font-size:42px;font-weight:800;color:var(--t1);letter-spacing:-.5px;line-height:1.12}
 .ft-h .mask{display:inline-block;overflow:hidden;vertical-align:bottom}
@@ -310,6 +313,32 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
 .btn-rewrite.pressed{transform:scale(.95);transition:transform .1s}
 .btn-ghost{display:flex;align-items:center;justify-content:center;width:100%;margin-top:10px;background:#fff;color:var(--t2);border:1px solid var(--bdr);padding:11px 20px;border-radius:12px;font-size:13px;font-weight:700;font-family:var(--font)}
 
+
+/* ---------- 二次批改 · 进步对比 ---------- */
+.rw-card{width:900px;background:#fff;border:1px solid var(--bdr);border-radius:20px;box-shadow:var(--shadow-lg);padding:32px 40px}
+.rw-title{display:flex;align-items:center;gap:11px;font-size:17px;font-weight:800;color:var(--t1);margin-bottom:22px}
+.rw-title .ic{width:34px;height:34px;border-radius:10px;background:var(--lt);display:flex;align-items:center;justify-content:center;font-size:17px}
+.rw-title .when{margin-left:auto;font-size:12px;color:var(--t3);font-weight:600}
+.rw-row{display:flex;align-items:stretch;gap:24px}
+.rw-box{flex:1;text-align:center;border-radius:16px;padding:20px;border:1px solid}
+.rw-box.d1{background:var(--rose-soft);border-color:#fecdd3}
+.rw-box.d2{background:var(--lt);border-color:#bbf7d0}
+.rw-lab{font-size:12.5px;font-weight:800;color:var(--t3);letter-spacing:1px}
+.rw-score{font-size:56px;font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums;margin-top:4px}
+.rw-box.d1 .rw-score{color:#be123c}
+.rw-box.d2 .rw-score{color:var(--primary)}
+.rw-sub{font-size:12px;font-weight:700;color:var(--t2)}
+.rw-mid{display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;width:90px}
+.rw-arrow{font-size:34px;color:var(--primary);opacity:0;transform:translateX(-12px);transition:all .5s ease}
+.rw-arrow.go{opacity:1;transform:translateX(0)}
+.rw-delta{position:absolute;top:8px;background:var(--brand-grad);color:#fff;font-size:14px;font-weight:800;padding:4px 14px;border-radius:999px;box-shadow:0 6px 18px rgba(8,115,85,.3)}
+.rw-stats{display:flex;gap:12px;margin-top:22px}
+.rw-stat{flex:1;background:var(--bg);border:1px solid var(--bdr-subtle);border-radius:12px;padding:12px 16px;font-size:13px;font-weight:700;color:var(--t2);text-align:center}
+.rw-stat b{font-size:15px}
+.rw-stat .from{color:var(--t3);text-decoration:line-through;margin-right:6px}
+.rw-stat .to{color:var(--primary)}
+.rw-foot{margin-top:18px;font-size:12.5px;color:var(--t3);text-align:center;font-weight:600}
+
 /* ---------- 收尾 CTA ---------- */
 #s-cta{display:flex;align-items:center;justify-content:center}
 .cta-inner{position:relative;text-align:center;color:var(--t1);z-index:2}
@@ -352,7 +381,6 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
 .ai-status{font-size:22px}
 .ai-step{font-size:17px}
 .scan-chip{font-size:15px;padding:8px 16px}
-/* 报告页 */
 .rep-scroll{padding:18px 26px 0}
 .rep-row{flex-direction:column}
 .dims-panel{width:100%!important}
@@ -413,9 +441,25 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
 .pat-hint{font-size:14.5px;padding:12px 15px}
 .btn-rewrite{font-size:18.5px;padding:16px 24px}
 .btn-ghost{font-size:16px;padding:14px 24px}
-/* 苹果风文字（竖屏放大 + 底部留白区） */
-.ft{left:48px;bottom:48px}
-.ft-h{font-size:58px;letter-spacing:-1px}
+/* 二次批改对比卡 */
+.rw-card{width:88%;padding:36px 38px}
+.rw-row{flex-direction:column;gap:18px}
+.rw-mid{width:auto;flex-direction:row;gap:14px;height:64px}
+.rw-arrow{transform:rotate(90deg) translateX(-12px)}
+.rw-arrow.go{transform:rotate(90deg) translateX(0)}
+.rw-delta{position:static}
+.rw-score{font-size:64px}
+.rw-lab{font-size:15px}
+.rw-sub{font-size:15px}
+.rw-stats{flex-direction:column}
+.rw-stat{font-size:16px}
+.rw-stat b{font-size:18px}
+.rw-title{font-size:20px}
+.rw-title .when{font-size:14px}
+.rw-foot{font-size:15px}
+/* 苹果风文字：底部留白区居中，任何缩放都在视野正中 */
+.ft{bottom:64px}
+.ft-h{font-size:56px;letter-spacing:-1px}
 .ft-s{font-size:24px;margin-top:12px}
 /* 片头片尾 */
 .brand-name{font-size:64px}
@@ -473,10 +517,6 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
         </div>
       </div>
     </div>
-    <div class="ft" id="ft1">
-      <div class="ft-h"><span class="mask"><span>题库，<span class="grad">常练常新</span></span></span></div>
-      <div class="ft-s">AI 生成真题级 Academic Discussion · 教授提问 + 双观点</div>
-    </div>
   </div>
 
   <!-- ════════ S2 · 沉浸作答 ════════ -->
@@ -509,10 +549,6 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
         </div>
       </div>
     </div>
-    <div class="ft" id="ft2">
-      <div class="ft-h"><span class="mask"><span><span class="grad">沉浸式</span>限时作答</span></span></div>
-      <div class="ft-s">倒计时 · 实时字数 · 草稿自动保存</div>
-    </div>
   </div>
 
   <!-- ════════ S3 · AI 分析中 ════════ -->
@@ -536,10 +572,6 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
           <span class="scan-chip" id="ck4">ETS 标准对齐</span>
         </div>
       </div>
-    </div>
-    <div class="ft" id="ft3">
-      <div class="ft-h"><span class="mask"><span>AI <span class="grad">深度批改</span></span></span></div>
-      <div class="ft-s">逐句分析 · 对照 ETS 官方评分标准</div>
     </div>
   </div>
 
@@ -676,6 +708,18 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
                 <div class="cmp-note rise" id="cn3"><span class="st">✦</span><span><b>因果收尾</b>：破折号点明机制，rewarding in itself 替代 fun</span></div>
               </div>
             </div>
+            <div class="cmp-row rise" id="cmpRow2" style="padding-top:0">
+              <div class="cmp-box">
+                <div class="cmp-head">📝 你的开头句</div>
+                <div class="cmp-quote">I agree that removing letter grades is
+                  <span class="hl-mine" id="hm2">benifitial for young childrens</span>.</div>
+              </div>
+              <div class="cmp-box model">
+                <div class="cmp-head">🏆 范文开头句 · 立场更有层次</div>
+                <div class="cmp-quote"><span class="hl-model" id="hd4">On balance</span>, replacing letter grades with narrative feedback
+                  <span class="hl-model" id="hd5">would serve young learners far better</span>, as Phoebe suggests.</div>
+              </div>
+            </div>
           </div></div>
         </div>
 
@@ -709,25 +753,33 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
         <div style="height:140px;flex-shrink:0"></div><!-- 滚动余量 -->
       </div></div>
     </div>
-    <div class="ft" id="ft4">
-      <div class="ft-h"><span class="mask"><span>一份<span class="grad">完整</span>的批改报告</span></span></div>
-      <div class="ft-s">评分 · 互动质量 · 多维诊断，一次拿全</div>
-    </div>
-    <div class="ft" id="ft5">
-      <div class="ft-h"><span class="mask"><span><span class="grad">逐句批注</span>，错在哪一目了然</span></span></div>
-      <div class="ft-s">5 处问题 · 红橙紫三级 · 修改建议 + 原因讲解</div>
-    </div>
-    <div class="ft" id="ft6">
-      <div class="ft-h"><span class="mask"><span>词汇短板，<span class="grad">一眼可见</span></span></span></div>
-      <div class="ft-s">逐词 CEFR 定级 · B2+ 占比对标同分段考生</div>
-    </div>
-    <div class="ft" id="ft7">
-      <div class="ft-h"><span class="mask"><span>和<span class="grad">满分范文</span>，对照着学</span></span></div>
-      <div class="ft-s">同段落改写示范 · 差距点逐条讲透</div>
-    </div>
-    <div class="ft" id="ft8">
-      <div class="ft-h"><span class="mask"><span>练完，知道<span class="grad">下一步</span></span></span></div>
-      <div class="ft-s">高频问题模式 · 一键重写 · 二次批改看进步</div>
+  </div>
+
+
+  <!-- ════════ S-rewrite · 二次批改对比 ════════ -->
+  <div class="scene" id="s-rewrite">
+    <div class="appwin">
+      <div class="topbar">
+        <div class="tb-left"><div class="tb-logo">T</div><span class="tb-name">TreePractice</span><span class="tb-sep">|</span><span class="tb-section">二次批改</span></div>
+        <div class="tb-section">重写本题 · 两稿对比</div>
+        <div class="tb-right"><div class="tb-exit">返回</div></div>
+      </div>
+      <div style="flex:1;display:flex;align-items:center;justify-content:center">
+        <div class="rw-card pop" id="rwCard">
+          <div class="rw-title"><span class="ic">📈</span>进步对比 · Dr. Lin 学术讨论<span class="when">第 1 稿 昨天 · 第 2 稿 刚刚</span></div>
+          <div class="rw-row">
+            <div class="rw-box d1"><div class="rw-lab">第 1 稿</div><div class="rw-score">3.0</div><div class="rw-sub">5 处问题 · Fair</div></div>
+            <div class="rw-mid"><span class="rw-delta pop" id="rwDelta">+1.0</span><span class="rw-arrow" id="rwArrow">→</span></div>
+            <div class="rw-box d2"><div class="rw-lab">第 2 稿</div><div class="rw-score" id="rwScore2">0.0</div><div class="rw-sub">2 处问题 · Good</div></div>
+          </div>
+          <div class="rw-stats">
+            <div class="rw-stat rise" id="rs1">问题数 <b><span class="from">5 处</span><span class="to">2 处</span></b></div>
+            <div class="rw-stat rise" id="rs2">语法准确度 <b><span class="from">41%</span><span class="to">68%</span></b></div>
+            <div class="rw-stat rise" id="rs3">B2+ 词汇 <b><span class="from">14%</span><span class="to">23%</span></b></div>
+          </div>
+          <div class="rw-foot fade" id="rwFoot">对比报告自动保存到练习历史 · 每一稿的进步都看得见</div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -757,6 +809,44 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
   </div>
 
 </div><!-- /camera -->
+
+  <div class="ft" id="ft1">
+      <div class="ft-h"><span class="mask"><span>题库，<span class="grad">常练常新</span></span></span></div>
+      <div class="ft-s">AI 生成真题级 Academic Discussion · 教授提问 + 双观点</div>
+  </div>
+  <div class="ft" id="ft2">
+      <div class="ft-h"><span class="mask"><span><span class="grad">沉浸式</span>限时作答</span></span></div>
+      <div class="ft-s">倒计时 · 实时字数 · 草稿自动保存</div>
+  </div>
+  <div class="ft" id="ft3">
+      <div class="ft-h"><span class="mask"><span>AI <span class="grad">深度批改</span></span></span></div>
+      <div class="ft-s">逐句分析 · 对照 ETS 官方评分标准</div>
+  </div>
+  <div class="ft" id="ft4">
+      <div class="ft-h"><span class="mask"><span>一份<span class="grad">完整</span>的批改报告</span></span></div>
+      <div class="ft-s">评分 · 互动质量 · 多维诊断，一次拿全</div>
+  </div>
+  <div class="ft" id="ft5">
+      <div class="ft-h"><span class="mask"><span><span class="grad">逐句批注</span>，错在哪一目了然</span></span></div>
+      <div class="ft-s">5 处问题 · 红橙紫三级 · 修改建议 + 原因讲解</div>
+  </div>
+  <div class="ft" id="ft6">
+      <div class="ft-h"><span class="mask"><span>词汇短板，<span class="grad">一眼可见</span></span></span></div>
+      <div class="ft-s">逐词 CEFR 定级 · B2+ 占比对标同分段考生</div>
+  </div>
+  <div class="ft" id="ft7">
+      <div class="ft-h"><span class="mask"><span>和<span class="grad">满分范文</span>，对照着学</span></span></div>
+      <div class="ft-s">同段落改写示范 · 差距点逐条讲透</div>
+  </div>
+  <div class="ft" id="ft8">
+      <div class="ft-h"><span class="mask"><span>练完，知道<span class="grad">下一步</span></span></span></div>
+      <div class="ft-s">高频问题模式 · 一键重写 · 二次批改看进步</div>
+  </div>
+  <div class="ft" id="ft9">
+    <div class="ft-h"><span class="mask"><span>重写一次，<span class="grad">看见进步</span></span></span></div>
+    <div class="ft-s">二次批改自动对比两稿 · 进步沉淀到练习历史</div>
+  </div>
+
 
   <div id="wipe"><div class="wlogo">T</div></div>
   <div id="progress"></div>
@@ -901,29 +991,30 @@ function play(){
   at(3380, wipe);
   at(3920, ()=>sceneOff("s-intro"));
 
-  /* —— S1 · 题目呈现 (4 – 12s) —— */
-  at(4000, ()=>{ sceneOn("s-prompt"); go("pWin"); tickTimer($("timer1"), 600, 7500);
-    camTo(540, 930, 1.06, 7400, "linear"); });
-  at(4450, ()=>go("msgProf"));
-  at(5500, ()=>go("msgS1"));
-  at(6300, ()=>go("msgS2"));
-  at(7000, ()=>go("ft1"));
-  at(11380, wipe);
-  at(11920, ()=>{ sceneOff("s-prompt"); camReset(150); });
+  /* —— S1 · 题目呈现 (4 – 10s · 压缩) —— */
+  at(4000, ()=>{ sceneOn("s-prompt"); go("pWin"); tickTimer($("timer1"), 600, 5500);
+    camTo(540, 930, 1.06, 5400, "linear"); });
+  at(4400, ()=>go("msgProf"));
+  at(5200, ()=>go("msgS1"));
+  at(5900, ()=>go("msgS2"));
+  at(6300, ()=>go("ft1"));
+  at(9200, ()=>unGo("ft1"));
+  at(9380, wipe);
+  at(9920, ()=>{ sceneOff("s-prompt"); camReset(150); });
 
-  /* —— S2 · 沉浸作答 (12 – 20s) —— */
+  /* —— S2 · 沉浸作答 (10 – 16s · 压缩) —— */
   const ESSAY = "I agree that removing letter grades is benifitial for young childrens. Because they will not feel so much pressure. My little brother always worry about his grade, he even cry before the test. If school give him feedback instead of a letter, he can focus on what he need to improve and learning become more fun...";
-  at(12000, ()=>{ sceneOn("s-write"); go("wPrompt"); go("wEditor"); tickTimer($("timer2"), 581, 7500); });
-  at(12550, ()=>go("ft2"));
-  at(12650, ()=>{
+  at(10000, ()=>{ sceneOn("s-write"); go("wPrompt"); go("wEditor"); tickTimer($("timer2"), 581, 5500); });
+  at(10500, ()=>go("ft2"));
+  at(10550, ()=>{
     $("edPh").style.opacity = 0;
-    typewriter($("edText"), $("edCursor"), ESSAY, 66, w=>{ $("wcNum").textContent = w; });
+    typewriter($("edText"), $("edCursor"), ESSAY, 78, w=>{ $("wcNum").textContent = w; });
   });
-  at(13000, ()=>camTo(540, 1150, 1.12, 3800));
-  at(17150, ()=>{ const p = posOf("btnSubmit"); curShow(p.x-180, p.y-120);
-    at(260, ()=>curMove(p.x-6, p.y-4, 640)); });
-  at(18250, ()=>$("btnSubmit").classList.add("hov"));
-  at(18750, ()=>{
+  at(10900, ()=>camTo(540, 1150, 1.12, 3200));
+  at(13900, ()=>{ const p = posOf("btnSubmit"); curShow(p.x-180, p.y-120);
+    at(260, ()=>curMove(p.x-6, p.y-4, 600)); });
+  at(14900, ()=>{ $("btnSubmit").classList.add("hov"); unGo("ft2"); });
+  at(15250, ()=>{
     curClick();
     const btn=$("btnSubmit");
     btn.classList.remove("hov"); btn.classList.add("pressed");
@@ -932,114 +1023,123 @@ function play(){
     btn.appendChild(r);
     at(140,()=>btn.classList.remove("pressed"));
   });
-  at(18900, ()=>{ const p = posOf("btnSubmit"); camTo(p.x, p.y, 1.22, 460); });
-  at(19350, ()=>curHide());
-  at(19380, wipe);
-  at(19920, ()=>{ sceneOff("s-write"); camReset(150); });
+  at(15330, ()=>{ const p = posOf("btnSubmit"); camTo(p.x, p.y, 1.22, 380); });
+  at(15360, ()=>curHide());
+  at(15380, wipe);
+  at(15920, ()=>{ sceneOff("s-write"); camReset(150); });
 
-  /* —— S3 · AI 分析中 (20 – 24s · 配乐 breakdown) —— */
+  /* —— S3 · AI 分析中 (16 – 20s · 配乐 breakdown) —— */
   const steps=["正在解析文章结构…","正在检测语法与拼写…","正在评估论证逻辑…","正在对照 ETS 评分标准…"];
-  at(20000, ()=>{ sceneOn("s-scoring"); go("scanCard"); });
-  at(20500, ()=>go("ft3"));
-  steps.forEach((s,i)=> at(20300+i*820, ()=>{ const el=$("aiStep"); el.style.opacity=0; setTimeout(()=>{el.textContent=s;el.style.opacity=1;},170); }));
-  ["ck1","ck2","ck3","ck4"].forEach((id,i)=> at(20800+i*700, ()=>$(id).classList.add("done")));
-  at(23380, wipe);
-  at(23920, ()=>sceneOff("s-scoring"));
+  at(16000, ()=>{ sceneOn("s-scoring"); go("scanCard"); });
+  at(16400, ()=>go("ft3"));
+  steps.forEach((s,i)=> at(16250+i*800, ()=>{ const el=$("aiStep"); el.style.opacity=0; setTimeout(()=>{el.textContent=s;el.style.opacity=1;},170); }));
+  ["ck1","ck2","ck3","ck4"].forEach((id,i)=> at(16700+i*620, ()=>$(id).classList.add("done")));
+  at(19200, ()=>unGo("ft3"));
+  at(19380, wipe);
+  at(19920, ()=>sceneOff("s-scoring"));
 
-  /* —— 报告 P1 · 总览 (24 – 32s · 第二次 drop) —— */
-  at(24000, ()=>{ sceneOn("s-report"); go("ovRow"); });
-  at(24300, ()=>go("secAnno"));
-  at(24450, ()=>go("secVocab"));
-  at(24600, ()=>{ go("secCmp"); go("secPat"); });
-  at(24500, ()=>countTo($("scoreNum"), 3.0, 1100));
-  at(24850, ()=>{ const p = posOf("scoreNum"); camTo(p.x+140, p.y+90, 1.12, 850); });
-  at(25100, ()=>go("ft4"));
-  at(25750, ()=>go("chipBand"));
-  at(26050, ()=>go("chipEts"));
-  at(26350, ()=>go("scoreSummary"));
-  at(26900, ()=>go("gl1"));
-  at(27200, ()=>go("gl2"));
-  at(27500, ()=>camReset(850));
+  /* —— 报告 P1 · 总览 (20 – 26.5s · 第二次 drop) —— */
+  at(20000, ()=>{ sceneOn("s-report"); go("ovRow"); });
+  at(20300, ()=>go("secAnno"));
+  at(20450, ()=>go("secVocab"));
+  at(20600, ()=>{ go("secCmp"); go("secPat"); });
+  at(20400, ()=>countTo($("scoreNum"), 3.0, 1100));
+  at(20750, ()=>{ const p = posOf("scoreNum"); camTo(p.x+140, p.y+90, 1.12, 850); });
+  at(21000, ()=>go("ft4"));
+  at(21650, ()=>go("chipBand"));
+  at(21950, ()=>go("chipEts"));
+  at(22250, ()=>go("scoreSummary"));
+  at(22800, ()=>go("gl1"));
+  at(23100, ()=>go("gl2"));
+  at(23400, ()=>camReset(850));
   const dims=[["df1","dv1",72],["df2","dv2",58],["df3","dv3",41],["df4","dv4",38]];
-  dims.forEach(([f,v,pct],i)=> at(28100+i*300, ()=>{
+  dims.forEach(([f,v,pct],i)=> at(24000+i*300, ()=>{
     $(f).style.width=pct+"%";
     const t0=performance.now();
     const step=now=>{const p=Math.min(1,(now-t0)/1100);$(v).textContent=Math.round(pct*(1-Math.pow(1-p,3)))+"%";if(p<1)requestAnimationFrame(step);};
     requestAnimationFrame(step);
   }));
-  at(29500, ()=>go("act1"));
-  at(29800, ()=>go("act2"));
-  at(30200, ()=>$("act1").classList.add("done"));
-  at(30500, ()=>$("act2").classList.add("done"));
+  at(25300, ()=>go("act1"));
+  at(25600, ()=>go("act2"));
+  at(25900, ()=>$("act1").classList.add("done"));
+  at(26150, ()=>$("act2").classList.add("done"));
+  at(26200, ()=>unGo("ft4"));
 
-  /* —— 报告 P2 · 逐句批注 (32 – 40s) —— */
-  at(30700, ()=>{ const p = posOf("annoHead"); curShow(p.x-220, p.y-140);
+  /* —— 报告 P2 · 逐句批注 (26.5 – 34s) —— */
+  at(26000, ()=>{ const p = posOf("annoHead"); curShow(p.x-220, p.y-140);
     at(280, ()=>curMove(p.x+120, p.y, 620)); });
-  at(31700, ()=>curClick());
-  at(31800, ()=>{ openSec("secAnno"); unGo("ft4"); });
-  at(32000, ()=>scrollRep(secTop("secAnno"), 850));
-  at(32400, ()=>go("ft5"));
-  ["mk1","mk2","mk3","mk4","mk5"].forEach((id,i)=> at(33000+i*220, ()=>$(id).classList.add("lit")));
+  at(26950, ()=>curClick());
+  at(27050, ()=>openSec("secAnno"));
+  at(27250, ()=>scrollRep(secTop("secAnno"), 850));
+  at(27500, ()=>go("ft5"));
+  ["mk1","mk2","mk3","mk4","mk5"].forEach((id,i)=> at(27900+i*200, ()=>$(id).classList.add("lit")));
   const tipSeq = [["mk1","tip1"],["mk3","tip3"],["mk5","tip5"]];
   tipSeq.forEach(([mk,tip],i)=>{
-    const base = 33600 + i*2300;
-    at(base, ()=>{ const p = posOf(mk); curMove(p.x-4, p.y+6, 480); });
-    at(base+520, ()=>curClick());
-    at(base+600, ()=>$(tip).classList.add("show"));
-    at(base+660, ()=>{ const p = posOf(mk); camTo(p.x, p.y+120, 1.3, 760); });
-    if(i<tipSeq.length-1) at(base+2100, ()=>$(tip).classList.remove("show"));
+    const base = 29400 + i*1500;
+    at(base, ()=>{ const p = posOf(mk); curMove(p.x-4, p.y+6, 460); });
+    at(base+500, ()=>curClick());
+    at(base+580, ()=>$(tip).classList.add("show"));
+    at(base+640, ()=>{ const p = posOf(mk); camTo(p.x, p.y+120, 1.3, 740); });
+    if(i<tipSeq.length-1) at(base+1320, ()=>$(tip).classList.remove("show"));
   });
-  at(39400, ()=>camReset(700));
+  at(29300, ()=>unGo("ft5"));
+  at(33600, ()=>camReset(700));
 
-  /* —— 报告 P3 · 词汇分析 (40 – 46s) —— */
-  at(39700, ()=>{ scrollRep(secTop("secVocab") - 40, 850); unGo("ft5"); $("tip5").classList.remove("show"); });
-  at(40600, ()=>{ const p = posOf("vocabHead"); curMove(p.x+120, p.y, 480); });
-  at(41150, ()=>curClick());
-  at(41250, ()=>openSec("secVocab"));
-  at(41450, ()=>scrollRep(secTop("secVocab"), 700));
-  at(41600, ()=>go("ft6"));
-  ["cb1","cb2","cb3","cb4","cb5","cb6"].forEach((id,i)=> at(42000+i*110, ()=>{const b=$(id);b.style.height=b.dataset.h;}));
-  ["cv1","cv2","cv3","cv4","cv5","cv6"].forEach((id,i)=> at(42500+i*110, ()=>go(id)));
-  at(43300, ()=>{ go("vStat");
+  /* —— 报告 P3 · 词汇分析 (34 – 40s) —— */
+  at(33900, ()=>{ scrollRep(secTop("secVocab") - 40, 800); $("tip5").classList.remove("show"); });
+  at(34700, ()=>{ const p = posOf("vocabHead"); curMove(p.x+120, p.y, 460); });
+  at(35200, ()=>curClick());
+  at(35300, ()=>openSec("secVocab"));
+  at(35500, ()=>scrollRep(secTop("secVocab"), 650));
+  at(35750, ()=>go("ft6"));
+  ["cb1","cb2","cb3","cb4","cb5","cb6"].forEach((id,i)=> at(35900+i*100, ()=>{const b=$(id);b.style.height=b.dataset.h;}));
+  ["cv1","cv2","cv3","cv4","cv5","cv6"].forEach((id,i)=> at(36450+i*100, ()=>go(id)));
+  at(37200, ()=>{ go("vStat");
     const el=$("vStatNum"), t0=performance.now();
     const step=now=>{const p=Math.min(1,(now-t0)/800);el.textContent=Math.round(14*(1-Math.pow(1-p,3)))+"%";if(p<1)requestAnimationFrame(step);};
     requestAnimationFrame(step);
   });
-  at(43500, ()=>go("wc1")); at(43680, ()=>go("wc2")); at(43860, ()=>go("wc3"));
-  at(44400, ()=>go("vs1"));
-  at(44850, ()=>go("vs2"));
+  at(37500, ()=>go("wc1")); at(37650, ()=>go("wc2")); at(37800, ()=>go("wc3"));
+  at(38200, ()=>go("vs1"));
+  at(38600, ()=>go("vs2"));
+  at(39400, ()=>unGo("ft6"));
 
-  /* —— 报告 P4 · 范文对比 (46 – 52s) —— */
-  at(45700, ()=>{ scrollRep(secTop("secCmp") - 40, 850); unGo("ft6"); });
-  at(46600, ()=>{ const p = posOf("cmpHead"); curMove(p.x+120, p.y, 480); });
-  at(47150, ()=>curClick());
-  at(47250, ()=>openSec("secCmp"));
-  at(47450, ()=>scrollRep(secTop("secCmp"), 700));
-  at(47600, ()=>go("ft7"));
-  at(48050, ()=>$("hm1").classList.add("lit"));
-  at(48500, ()=>$("hd1").classList.add("lit"));
-  at(48950, ()=>$("hd2").classList.add("lit"));
-  at(49400, ()=>$("hd3").classList.add("lit"));
-  at(49850, ()=>go("cn1"));
-  at(50250, ()=>go("cn2"));
-  at(50650, ()=>go("cn3"));
+  /* —— 报告 P4 · 范文对比 (40 – 47s · 两组对照) —— */
+  at(39800, ()=>scrollRep(secTop("secCmp") - 40, 800));
+  at(40600, ()=>{ const p = posOf("cmpHead"); curMove(p.x+120, p.y, 460); });
+  at(41100, ()=>curClick());
+  at(41200, ()=>openSec("secCmp"));
+  at(41400, ()=>scrollRep(secTop("secCmp"), 650));
+  at(41650, ()=>go("ft7"));
+  at(42000, ()=>$("hm1").classList.add("lit"));
+  at(42350, ()=>$("hd1").classList.add("lit"));
+  at(42700, ()=>$("hd2").classList.add("lit"));
+  at(43050, ()=>$("hd3").classList.add("lit"));
+  at(43450, ()=>go("cn1"));
+  at(43800, ()=>go("cn2"));
+  at(44150, ()=>go("cn3"));
+  at(44700, ()=>{ go("cmpRow2"); scrollRep(secTop("secCmp") + 120, 700); });
+  at(45200, ()=>$("hm2").classList.add("lit"));
+  at(45550, ()=>$("hd4").classList.add("lit"));
+  at(45900, ()=>$("hd5").classList.add("lit"));
+  at(46300, ()=>unGo("ft7"));
 
-  /* —— 报告 P5 · 高频问题模式 + 下一步 (52 – 58s) —— */
-  at(51600, ()=>{ scrollRep(secTop("secPat") - 40, 850); unGo("ft7"); });
-  at(52500, ()=>{ const p = posOf("patHead"); curMove(p.x+120, p.y, 480); });
-  at(53050, ()=>curClick());
-  at(53150, ()=>openSec("secPat"));
-  at(53350, ()=>scrollRep(secTop("secPat"), 700));
-  at(53500, ()=>go("ft8"));
-  ["pf1","pf2","pf3"].forEach((id,i)=> at(53900+i*240, ()=>{const b=$(id);b.style.width=b.dataset.w;}));
-  at(54700, ()=>go("patHint"));
-  at(55100, ()=>go("btnRewrite"));
-  at(55400, ()=>go("btnDrill"));
-  at(55700, ()=>go("nextHint"));
-  /* 光标点击「重写本题」收束整个闭环 */
-  at(55900, ()=>{ const p = posOf("btnRewrite"); curMove(p.x-8, p.y-2, 560); });
-  at(56600, ()=>$("btnRewrite").classList.add("hov"));
-  at(56950, ()=>{
+  /* —— 报告 P5 · 高频问题模式 + 重写入口 (47 – 52s) —— */
+  at(46600, ()=>scrollRep(secTop("secPat") - 40, 800));
+  at(47400, ()=>{ const p = posOf("patHead"); curMove(p.x+120, p.y, 460); });
+  at(47900, ()=>curClick());
+  at(48000, ()=>openSec("secPat"));
+  at(48200, ()=>scrollRep(secTop("secPat"), 650));
+  at(48400, ()=>go("ft8"));
+  ["pf1","pf2","pf3"].forEach((id,i)=> at(48600+i*200, ()=>{const b=$(id);b.style.width=b.dataset.w;}));
+  at(49400, ()=>go("patHint"));
+  at(49750, ()=>go("btnRewrite"));
+  at(50000, ()=>go("btnDrill"));
+  at(50250, ()=>go("nextHint"));
+  at(50400, ()=>{ const p = posOf("btnRewrite"); curMove(p.x-8, p.y-2, 560); });
+  at(50900, ()=>unGo("ft8"));
+  at(51050, ()=>$("btnRewrite").classList.add("hov"));
+  at(51250, ()=>{
     curClick();
     const btn=$("btnRewrite");
     btn.classList.remove("hov"); btn.classList.add("pressed");
@@ -1048,10 +1148,24 @@ function play(){
     btn.appendChild(r);
     at(140,()=>btn.classList.remove("pressed"));
   });
-  at(57100, ()=>{ const p = posOf("btnRewrite"); camTo(p.x, p.y, 1.18, 420); });
-  at(57300, ()=>curHide());
+  at(51330, ()=>{ const p = posOf("btnRewrite"); camTo(p.x, p.y, 1.18, 360); });
+  at(51360, ()=>curHide());
+  at(51380, wipe);
+  at(51920, ()=>{ sceneOff("s-report"); camReset(150); });
+
+  /* —— S-rewrite · 二次批改对比 (52 – 58s) —— */
+  at(52000, ()=>{ sceneOn("s-rewrite"); go("rwCard"); });
+  at(52600, ()=>go("ft9"));
+  at(53100, ()=>go("rwArrow"));
+  at(53250, ()=>countTo($("rwScore2"), 4.0, 1000));
+  at(54350, ()=>go("rwDelta"));
+  at(54750, ()=>go("rs1"));
+  at(55050, ()=>go("rs2"));
+  at(55350, ()=>go("rs3"));
+  at(55900, ()=>go("rwFoot"));
+  at(57200, ()=>unGo("ft9"));
   at(57380, wipe);
-  at(57920, ()=>{ sceneOff("s-report"); camReset(150); });
+  at(57920, ()=>sceneOff("s-rewrite"));
 
   /* —— S9 · 收尾 CTA (58 – 64s · 终止和弦) —— */
   at(58000, ()=>{ sceneOn("s-cta"); go("ctaLogo"); });
@@ -1083,7 +1197,7 @@ function restart(){
   ["dv1","dv2","dv3","dv4"].forEach(id=>$(id).textContent="0%");
   $("vStatNum").textContent="0%";
   $("edText").textContent=""; $("edPh").style.opacity=1; $("edCursor").style.opacity=0;
-  $("wcNum").textContent="0"; $("scoreNum").textContent="0.0";
+  $("wcNum").textContent="0"; $("scoreNum").textContent="0.0"; $("rwScore2").textContent="0.0";
   $("timer1").textContent="10:00"; $("timer2").textContent="09:41";
   $("aiStep").textContent="正在解析文章结构…";
   $("btnSubmit").classList.remove("hov","pressed");
