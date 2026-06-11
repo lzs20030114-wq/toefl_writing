@@ -8,11 +8,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
-   TreePractice 演示宣传片 v5 · 竖屏社媒版 (1080×1920)
-   - 在用题库真题 ad3 (Education · 取消低年级字母等级)
-   - 低分样例作文 (3.0/5, 5 处问题) 全面展示批改能力
-   - 批改报告仿真实页面：总览 + 滑动到各部分展开 (DisclosureSection)
-   - 亮色片头片尾；120 BPM 节拍对齐；品牌擦除转场；镜头 + 光标
+   TreePractice 演示宣传片 v6 · 竖屏社媒版 (1080×1920)
+   - 在用题库 ad3 · 3.0/5 低分样例 · 报告页总览滑动展开
+   - 苹果风自由文字解说（无框大字 + 渐变关键词 + 行掩码入场）
+   - 报告新增：互动质量(回应同学) + 高频问题模式 + 一键重写
+   - 总长 64s；120 BPM 对齐；品牌擦除转场；镜头 + 光标
    ============================================================ */
 :root{
   --nav:#0f172a; --bg:#f4f7f5; --card:#ffffff;
@@ -50,7 +50,7 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
   font-family:var(--font);transform:skewX(14deg)}
 
 /* ---------- 模拟鼠标光标 ---------- */
-#cur{position:absolute;width:34px;height:38px;z-index:85;opacity:0;left:540px;top:960px;
+#cur{position:absolute;width:38px;height:42px;z-index:85;opacity:0;left:540px;top:960px;
   pointer-events:none;filter:drop-shadow(0 3px 8px rgba(0,0,0,.35));
   transition:left .6s cubic-bezier(.35,0,.25,1),top .6s cubic-bezier(.35,0,.25,1),opacity .3s ease}
 #cur svg{transition:transform .12s ease;transform-origin:6px 4px}
@@ -71,7 +71,20 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
 .fade{opacity:0}
 .fade.go{opacity:1;transition:opacity .7s ease}
 
-/* ---------- 亮色光斑背景（片头 / 片尾，与应用浅色审美一致） ---------- */
+/* ---------- 苹果风自由文字解说 ---------- */
+.ft{position:absolute;left:124px;bottom:20px;z-index:60;opacity:0;pointer-events:none;transition:opacity .45s ease,transform .45s ease;transform:translateY(10px)}
+.ft.go{opacity:1;transform:translateY(0)}
+.ft-h{font-size:42px;font-weight:800;color:var(--t1);letter-spacing:-.5px;line-height:1.12}
+.ft-h .mask{display:inline-block;overflow:hidden;vertical-align:bottom}
+.ft-h .mask>span{display:inline-block;transform:translateY(115%);transition:transform .75s cubic-bezier(.22,1,.36,1)}
+.ft.go .ft-h .mask>span{transform:translateY(0)}
+.ft.go .ft-h .mask:nth-child(2)>span{transition-delay:.1s}
+.ft.go .ft-h .mask:nth-child(3)>span{transition-delay:.2s}
+.ft-h .grad{background:var(--brand-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ft-s{margin-top:7px;font-size:18px;font-weight:600;color:var(--t2);opacity:0;transform:translateY(14px);transition:opacity .55s .3s ease,transform .55s .3s cubic-bezier(.22,1,.36,1)}
+.ft.go .ft-s{opacity:1;transform:translateY(0)}
+
+/* ---------- 亮色光斑背景（片头 / 片尾） ---------- */
 .mesh{position:absolute;inset:0;background:
   radial-gradient(1100px 650px at 78% -8%,#d7f2e6 0%,transparent 60%),
   radial-gradient(950px 620px at 12% 108%,#d6ecf6 0%,transparent 55%),
@@ -83,7 +96,7 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
 @keyframes drift{from{transform:translate(0,0) scale(1)}to{transform:translate(60px,-44px) scale(1.12)}}
 .grain{position:absolute;inset:0;opacity:.05;background-image:radial-gradient(#0f2318 1px,transparent 1px);background-size:26px 26px}
 
-/* ---------- 开场（亮色） ---------- */
+/* ---------- 开场 ---------- */
 #s-intro{display:flex;align-items:center;justify-content:center}
 .intro-inner{position:relative;text-align:center;color:var(--t1);z-index:2}
 .logo-tile{width:112px;height:112px;border-radius:28px;background:var(--brand-grad);display:flex;align-items:center;justify-content:center;margin:0 auto 30px;box-shadow:0 24px 60px rgba(8,115,85,.28),0 0 0 1px rgba(255,255,255,.2) inset}
@@ -101,14 +114,8 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
 .shine::after{content:"";position:absolute;top:0;left:-130%;width:60%;height:100%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.32),transparent);transform:skewX(-20deg);animation:sweep 3.2s ease-in-out infinite}
 @keyframes sweep{0%{left:-130%}45%,100%{left:160%}}
 
-/* ---------- 章节字幕条 ---------- */
-.caption{position:absolute;left:50%;bottom:46px;transform:translateX(-50%) translateY(26px);opacity:0;display:flex;align-items:center;gap:14px;background:rgba(15,35,24,.92);color:#fff;padding:15px 30px;border-radius:999px;box-shadow:var(--shadow-lg);backdrop-filter:blur(10px);white-space:nowrap;z-index:60;transition:all .4s ease}
-.caption.go{opacity:1;transform:translateX(-50%) translateY(0);transition:all .55s cubic-bezier(.22,1,.36,1)}
-.caption .num{width:32px;height:32px;border-radius:50%;background:var(--brand-grad);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;flex-shrink:0}
-.caption .txt{font-size:19px;font-weight:700;letter-spacing:.5px}
-
 /* ---------- 应用窗口框架 ---------- */
-.appwin{position:absolute;left:120px;right:120px;top:74px;bottom:118px;background:var(--bg);border-radius:22px;box-shadow:var(--shadow-lg),0 0 0 1px rgba(10,40,25,.06);overflow:hidden;display:flex;flex-direction:column}
+.appwin{position:absolute;left:120px;right:120px;top:64px;bottom:128px;background:var(--bg);border-radius:22px;box-shadow:var(--shadow-lg),0 0 0 1px rgba(10,40,25,.06);overflow:hidden;display:flex;flex-direction:column}
 .topbar{height:60px;background:rgba(255,255,255,.94);border-bottom:1px solid var(--bdr-subtle);display:flex;align-items:center;justify-content:space-between;padding:0 26px;flex-shrink:0}
 .tb-left{display:flex;align-items:center;gap:13px}
 .tb-logo{width:30px;height:30px;border-radius:8px;background:var(--brand-grad);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:800}
@@ -172,15 +179,19 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
 .rep-scroll{flex:1;overflow:hidden;padding:16px 26px 0;min-height:0}
 .rep-inner{position:relative;display:flex;flex-direction:column;gap:14px;will-change:transform}
 .rep-row{display:flex;gap:18px}
-.score-card{background:var(--score-dark);border-radius:18px;padding:26px 30px;color:#fff;box-shadow:0 22px 60px rgba(15,35,24,.4);flex:1.15}
+.score-card{background:var(--score-dark);border-radius:18px;padding:24px 30px;color:#fff;box-shadow:0 22px 60px rgba(15,35,24,.4);flex:1.15}
 .score-row{display:flex;justify-content:space-between;align-items:flex-start}
 .score-big{display:flex;align-items:flex-end;gap:9px}
-.score-num{font-size:80px;font-weight:800;line-height:.95;background:linear-gradient(135deg,#fff,#a7f3d0);-webkit-background-clip:text;background-clip:text;color:transparent;font-variant-numeric:tabular-nums}
-.score-den{font-size:19px;color:rgba(255,255,255,.45);font-weight:700;margin-bottom:9px}
+.score-num{font-size:76px;font-weight:800;line-height:.95;background:linear-gradient(135deg,#fff,#a7f3d0);-webkit-background-clip:text;background-clip:text;color:transparent;font-variant-numeric:tabular-nums}
+.score-den{font-size:18px;color:rgba(255,255,255,.45);font-weight:700;margin-bottom:9px}
 .band-chips{display:flex;flex-direction:column;align-items:flex-end;gap:7px}
 .chip-band{padding:5px 14px;background:rgba(251,146,60,.18);color:#fb923c;border-radius:999px;font-size:14px;font-weight:700}
 .chip-ets{padding:4px 11px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.55);border-radius:999px;font-size:12px;font-weight:600}
-.score-summary{font-size:13.5px;color:rgba(255,255,255,.72);line-height:1.75;margin-top:14px}
+.score-summary{font-size:13px;color:rgba(255,255,255,.72);line-height:1.7;margin-top:12px}
+.goal-row{display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:8px 12px;font-size:12.5px;color:rgba(255,255,255,.85);margin-top:8px;font-weight:600}
+.gl-chip{font-size:10.5px;font-weight:800;border-radius:999px;padding:2px 9px;flex-shrink:0}
+.gl-chip.ok{background:rgba(74,222,128,.15);color:#4ade80}
+.gl-chip.miss{background:rgba(248,113,113,.15);color:#f87171}
 .dims-panel{width:430px;flex-shrink:0;background:var(--card);border:1px solid var(--bdr);border-radius:14px;box-shadow:var(--shadow)}
 .dim{margin-top:8px}
 .dim-row{display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:7px}
@@ -195,7 +206,11 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
 .todo.done .cb::after{content:"✓"}
 
 /* ---------- 可展开报告分节（仿 DisclosureSection） ---------- */
-.sec{background:var(--card);border:1px solid var(--bdr);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;flex-shrink:0}
+.sec{background:var(--card);border:1px solid var(--bdr);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;flex-shrink:0;position:relative}
+.sec.open{z-index:6}
+/* 展开动画结束后解除裁剪，让批注弹窗可越过卡片边界 */
+.sec.settled{overflow:visible}
+.sec.settled .sec-body>div{overflow:visible}
 .sec-head{display:flex;align-items:center;gap:10px;padding:12px 15px}
 .sec-head .ic2{width:30px;height:30px;border-radius:9px;background:var(--lt);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
 .sec-head .smeta{flex:1;min-width:0}
@@ -205,13 +220,13 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
 .sec-badge.warn{color:var(--red);background:var(--rose-soft)}
 .sec-badge.amber{color:var(--orange);background:var(--soft-amber)}
 .sec-badge.ok{color:var(--primary);background:var(--lt)}
+.sec-badge.info{color:var(--teal);background:#ecfeff}
 .sec-head .exp{font-size:10.5px;color:var(--t3);margin-left:6px;flex-shrink:0}
 .chev{width:18px;height:18px;color:var(--t3);transition:transform .3s ease;flex-shrink:0}
 .sec.open .chev{transform:rotate(180deg)}
 .sec-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .65s cubic-bezier(.4,0,.2,1)}
 .sec-body>div{overflow:hidden}
-.sec.open .sec-body{border-top:1px solid var(--bdr-subtle)}
-.sec.open .sec-body{grid-template-rows:1fr}
+.sec.open .sec-body{grid-template-rows:1fr;border-top:1px solid var(--bdr-subtle)}
 
 /* ---------- 逐句批注 ---------- */
 .anno-wrap{padding:20px 24px;font-size:16px;line-height:2.15;color:var(--t1)}
@@ -243,7 +258,7 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
 .vcol-l{width:480px;flex-shrink:0}
 .vcol-r{flex:1}
 .vtitle{font-size:11.5px;font-weight:800;color:var(--t3);letter-spacing:1px;margin-bottom:10px}
-.cefr-stage{display:flex;align-items:flex-end;gap:14px;height:190px;padding:6px 4px 0}
+.cefr-stage{display:flex;align-items:flex-end;gap:14px;height:185px;padding:6px 4px 0}
 .cefr-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;height:100%;justify-content:flex-end}
 .cefr-val{font-size:12.5px;font-weight:800;color:var(--primary);opacity:0;transform:translateY(8px);font-variant-numeric:tabular-nums}
 .cefr-val.go{opacity:1;transform:translateY(0);transition:all .4s ease}
@@ -275,7 +290,27 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
 .cmp-note .st{width:20px;height:20px;border-radius:6px;background:var(--lt);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;font-weight:800}
 .cmp-note b{color:var(--t1)}
 
-/* ---------- 收尾 CTA（亮色） ---------- */
+/* ---------- 高频问题模式 + 下一步 ---------- */
+.pat-row2{display:flex;gap:18px;padding:18px 20px}
+.pat-col{flex:1.2}
+.next-col{flex:1;border-left:1px solid var(--bdr-subtle);padding-left:18px}
+.pat-item{display:flex;align-items:center;gap:12px;padding:9px 0}
+.pat-name{width:190px;font-size:13.5px;font-weight:700;color:var(--t1)}
+.pat-name small{display:block;font-size:10.5px;color:var(--t3);font-weight:600}
+.pat-track{flex:1;height:10px;border-radius:999px;background:var(--bdr-subtle);overflow:hidden}
+.pat-fill{height:100%;width:0;border-radius:999px;transition:width .9s cubic-bezier(.22,1,.36,1)}
+.pat-fill.r{background:linear-gradient(90deg,#dc2626,#f87171)}
+.pat-fill.o{background:linear-gradient(90deg,#d97706,#fbbf24)}
+.pat-fill.p{background:linear-gradient(90deg,#7c3aed,#a78bfa)}
+.pat-cnt{font-size:12px;font-weight:800;color:var(--t2);width:64px;text-align:right;font-variant-numeric:tabular-nums}
+.pat-hint{margin-top:10px;padding:10px 13px;background:var(--bg);border:1px solid var(--bdr-subtle);border-radius:10px;font-size:12px;color:var(--t2);font-weight:600;line-height:1.6}
+.pat-hint b{color:var(--red)}
+.btn-rewrite{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;background:var(--brand-grad);color:#fff;border:none;padding:13px 20px;border-radius:12px;font-size:14.5px;font-weight:800;font-family:var(--font);box-shadow:0 8px 24px rgba(8,115,85,.25);position:relative;overflow:hidden;transition:transform .2s ease,box-shadow .2s ease}
+.btn-rewrite.hov{transform:translateY(-2px) scale(1.03);box-shadow:0 12px 30px rgba(8,115,85,.38)}
+.btn-rewrite.pressed{transform:scale(.95);transition:transform .1s}
+.btn-ghost{display:flex;align-items:center;justify-content:center;width:100%;margin-top:10px;background:#fff;color:var(--t2);border:1px solid var(--bdr);padding:11px 20px;border-radius:12px;font-size:13px;font-weight:700;font-family:var(--font)}
+
+/* ---------- 收尾 CTA ---------- */
 #s-cta{display:flex;align-items:center;justify-content:center}
 .cta-inner{position:relative;text-align:center;color:var(--t1);z-index:2}
 .cta-title{font-size:54px;font-weight:800;letter-spacing:-.5px;line-height:1.3;color:var(--t1)}
@@ -292,53 +327,111 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
 #replay{position:absolute;right:22px;top:18px;z-index:95;background:rgba(15,35,24,.65);color:#fff;border:1px solid rgba(255,255,255,.15);border-radius:999px;padding:9px 19px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);backdrop-filter:blur(8px);opacity:.85}
 #replay:hover{opacity:1}
 
-/* ════════ 竖屏 1080×1920 布局覆盖 ════════ */
-.appwin{left:36px;right:36px;top:130px;bottom:250px;border-radius:26px}
-.topbar{height:74px;padding:0 28px}
+/* ════════ 竖屏 1080×1920 布局覆盖（手机屏字号整体放大） ════════ */
+.appwin{left:32px;right:32px;top:120px;bottom:300px;border-radius:28px}
+.topbar{height:84px;padding:0 30px}
 .topbar>.tb-section{display:none}
-.tb-name{font-size:18px}.tb-logo{width:34px;height:34px;font-size:16px}
-.timer-pill{font-size:19px;padding:8px 17px}
-.appbody{flex-direction:column;gap:20px;padding:22px 24px}
+.tb-name{font-size:21px}.tb-logo{width:38px;height:38px;font-size:18px;border-radius:10px}
+.timer-pill{font-size:22px;padding:9px 19px}
+.tb-exit{font-size:16px;padding:10px 17px}
+.appbody{flex-direction:column;gap:20px;padding:24px 26px}
 #wPrompt{width:100%!important;flex-shrink:0}
-.bubble{font-size:14.5px}.bubble b{font-size:14px}
-.ed-area{font-size:18.5px;line-height:1.9}
-.ed-foot{padding:16px 22px}
-.btn-submit{padding:14px 30px;font-size:16px}
-.wc{font-size:15px}.wc b{font-size:20px}
-.scan-card{width:86%;padding:42px 46px}
-/* 报告页：总览与各分节纵向堆叠 */
+.panel-head{padding:16px 22px}
+.panel-head .tt{font-size:19px}
+.panel-head .pv{font-size:13px}
+.panel-head .ic{width:36px;height:36px;font-size:18px}
+.bubble{font-size:17.5px;line-height:1.68}.bubble b{font-size:17px}
+.bubble .role{font-size:12.5px}
+.avatar{width:48px;height:48px;font-size:18px}
+.ed-area{font-size:22px;line-height:1.9}
+.ed-placeholder{font-size:22px}
+.ed-foot{padding:18px 24px}
+.btn-submit{padding:16px 34px;font-size:19px;border-radius:13px}
+.wc{font-size:17px}.wc b{font-size:23px}
+.scan-card{width:88%;padding:46px 50px}
+.ai-status{font-size:22px}
+.ai-step{font-size:17px}
+.scan-chip{font-size:15px;padding:8px 16px}
+/* 报告页 */
+.rep-scroll{padding:18px 26px 0}
 .rep-row{flex-direction:column}
 .dims-panel{width:100%!important}
-.score-num{font-size:96px}
-.score-summary{font-size:14.5px}
-.vocab-row{flex-direction:column;gap:20px}
-.vcol-l{width:100%!important}
-.cefr-stage{height:230px}
-.cmp-row{flex-direction:column}
-.cmp-box.model{flex:1}
-.cmp-quote{font-size:15px}
-.anno-wrap{font-size:17.5px;line-height:2.25;padding:24px 26px}
-.tip{width:350px;left:-14px;transform:translateX(0) translateY(-10px)}
+.score-num{font-size:104px}
+.score-den{font-size:22px}
+.chip-band{font-size:17px;padding:7px 17px}
+.chip-ets{font-size:14px}
+.score-summary{font-size:16.5px;line-height:1.75}
+.goal-row{font-size:15.5px;padding:11px 14px}
+.gl-chip{font-size:13px}
+.dim-row{font-size:16px}
+.dim-track{height:11px}
+.todo{font-size:16px}
+.todo .cb{width:24px;height:24px;font-size:13px}
+.sec-head{padding:16px 18px}
+.sec-head .ic2{width:38px;height:38px;font-size:19px}
+.sec-head .st1{font-size:19.5px}
+.sec-head .st2{font-size:13.5px;margin-top:3px}
+.sec-badge{font-size:14px;padding:4px 13px}
+.sec-head .exp{font-size:13.5px}
+.chev{width:22px;height:22px}
+.anno-wrap{font-size:21px;line-height:2.2;padding:24px 26px}
+.tip{width:430px;left:-14px;transform:translateX(0) translateY(-10px)}
 .tip.show{transform:translateX(0) translateY(0)}
 .tip::after{left:54px}
-.sec-head .st1{font-size:16px}
-.sec-head .st2{font-size:11.5px}
-.caption{bottom:130px;padding:14px 26px}
-.caption .txt{font-size:17px}
-.caption .num{width:30px;height:30px;font-size:14px}
-.brand-name{font-size:58px}
-.intro-tag{font-size:21px;letter-spacing:4px}
-.intro-sub{font-size:17px;padding:12px 26px}
-.cta-title{font-size:46px}
-.cta-sub{font-size:18px}
-.cta-chips{flex-direction:column;align-items:center;gap:14px}
+.tip .cat{font-size:13.5px;padding:3px 11px}
+.tip .fix{font-size:17px}
+.tip .note{font-size:15px}
+.legend{padding:0 26px 18px}
+.lg{font-size:15px;padding:8px 16px}
+.vocab-row{flex-direction:column;gap:22px;padding:20px 22px}
+.vcol-l{width:100%!important}
+.vtitle{font-size:14px}
+.cefr-stage{height:240px}
+.cefr-val{font-size:15.5px}
+.cefr-lab{font-size:14px}
+.vstat{font-size:15.5px;padding:13px 16px}
+.vstat b{font-size:21px}
+.wchip{font-size:16.5px;padding:9px 16px}
+.wchip .lv{font-size:12px}
+.vsug{padding:13px 16px}
+.vsug s{font-size:16px}
+.vsug em{font-size:17px}
+.vsug .lv{font-size:12px}
+.cmp-row{flex-direction:column;padding:20px 22px}
+.cmp-box.model{flex:1}
+.cmp-head{font-size:16px;padding:12px 16px}
+.cmp-badge{font-size:13.5px}
+.cmp-quote{font-size:17.5px;line-height:1.95;padding:16px 18px}
+.cmp-note{font-size:15px;padding:10px 16px}
+.cmp-note .st{width:24px;height:24px;font-size:13px}
+.pat-row2{flex-direction:column;padding:20px 22px;gap:22px}
+.next-col{border-left:none;padding-left:0;border-top:1px solid var(--bdr-subtle);padding-top:18px}
+.pat-name{width:230px;font-size:16.5px}
+.pat-name small{font-size:12.5px}
+.pat-track{height:12px}
+.pat-cnt{font-size:15px;width:74px}
+.pat-hint{font-size:14.5px;padding:12px 15px}
+.btn-rewrite{font-size:18.5px;padding:16px 24px}
+.btn-ghost{font-size:16px;padding:14px 24px}
+/* 苹果风文字（竖屏放大 + 底部留白区） */
+.ft{left:48px;bottom:48px}
+.ft-h{font-size:58px;letter-spacing:-1px}
+.ft-s{font-size:24px;margin-top:12px}
+/* 片头片尾 */
+.brand-name{font-size:64px}
+.intro-tag{font-size:24px;letter-spacing:4px}
+.intro-sub{font-size:19px;padding:14px 30px}
+.cta-title{font-size:52px}
+.cta-sub{font-size:22px}
+.cta-chips{flex-direction:column;align-items:center;gap:15px}
+.cta-chip{font-size:18px;padding:15px 30px}
 </style>
 </head>
 <body>
 <div id="viewport"><div id="stage">
 <div id="camera">
 
-  <!-- ════════ S0 · 开场（亮色） ════════ -->
+  <!-- ════════ S0 · 开场 ════════ -->
   <div class="scene" id="s-intro">
     <div class="mesh"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="grain"></div></div>
     <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">
@@ -352,7 +445,7 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
     </div>
   </div>
 
-  <!-- ════════ S1 · 题目呈现 (在用题库 ad3 · Education) ════════ -->
+  <!-- ════════ S1 · 题目呈现 ════════ -->
   <div class="scene" id="s-prompt">
     <div class="appwin rise" id="pWin">
       <div class="topbar">
@@ -380,7 +473,10 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
         </div>
       </div>
     </div>
-    <div class="caption" id="cap1"><span class="num">1</span><span class="txt">AI 生成题库 · 教授提问 + 同学观点</span></div>
+    <div class="ft" id="ft1">
+      <div class="ft-h"><span class="mask"><span>题库，<span class="grad">常练常新</span></span></span></div>
+      <div class="ft-s">AI 生成真题级 Academic Discussion · 教授提问 + 双观点</div>
+    </div>
   </div>
 
   <!-- ════════ S2 · 沉浸作答 ════════ -->
@@ -413,7 +509,10 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
         </div>
       </div>
     </div>
-    <div class="caption" id="cap2"><span class="num">2</span><span class="txt">沉浸式限时作答 · 实时字数 · 自动保存草稿</span></div>
+    <div class="ft" id="ft2">
+      <div class="ft-h"><span class="mask"><span><span class="grad">沉浸式</span>限时作答</span></span></div>
+      <div class="ft-s">倒计时 · 实时字数 · 草稿自动保存</div>
+    </div>
   </div>
 
   <!-- ════════ S3 · AI 分析中 ════════ -->
@@ -438,10 +537,13 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
         </div>
       </div>
     </div>
-    <div class="caption" id="cap3"><span class="num">3</span><span class="txt">AI 引擎逐句分析 · 对照 ETS 官方评分标准</span></div>
+    <div class="ft" id="ft3">
+      <div class="ft-h"><span class="mask"><span>AI <span class="grad">深度批改</span></span></span></div>
+      <div class="ft-s">逐句分析 · 对照 ETS 官方评分标准</div>
+    </div>
   </div>
 
-  <!-- ════════ S4-7 · 批改报告（总览 + 滑动展开各部分） ════════ -->
+  <!-- ════════ S4-8 · 批改报告（总览 + 滑动展开四个分节） ════════ -->
   <div class="scene" id="s-report">
     <div class="appwin">
       <div class="topbar">
@@ -451,7 +553,7 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
       </div>
       <div class="rep-scroll"><div class="rep-inner" id="repInner">
 
-        <!-- 总览：评分卡 + 多维度 -->
+        <!-- 总览：评分卡(含互动质量) + 多维度 -->
         <div class="rep-row rise" id="ovRow">
           <div class="score-card">
             <div class="score-row">
@@ -461,7 +563,9 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
                 <span class="chip-ets pop" id="chipEts">ETS Band · Fair</span>
               </div>
             </div>
-            <p class="score-summary fade" id="scoreSummary">立场明确，弟弟的例子真实可感，回应了 Phoebe 的方向。但语法错误密集——拼写、名词复数、主谓一致各一处，because 碎片句破坏连贯，词汇集中在 A1–B1。先修语法地基、再升级关键表达，4 分档触手可及。</p>
+            <p class="score-summary fade" id="scoreSummary">立场明确，弟弟的例子真实可感。但语法错误密集——拼写、名词复数、主谓一致各一处，because 碎片句破坏连贯，词汇集中在 A1–B1。先修语法地基、再升级关键表达，4 分档触手可及。</p>
+            <div class="goal-row pop" id="gl1"><span class="gl-chip ok">✓ 已回应</span>Phoebe 的核心论点：反馈比字母等级更可操作</div>
+            <div class="goal-row pop" id="gl2"><span class="gl-chip miss">✗ 未回应</span>Jared 的过渡担忧 —— 高分档必答的让步点</div>
           </div>
           <div class="dims-panel">
             <div class="panel-head"><div class="ic">📊</div><span class="tt">多维度评价</span><span class="pv">对照 ETS Rubric</span></div>
@@ -575,16 +679,59 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
           </div></div>
         </div>
 
-        <div style="height:120px;flex-shrink:0"></div><!-- 滚动余量 -->
+        <!-- 分节 4 · 高频问题模式 + 下一步 -->
+        <div class="sec rise" id="secPat">
+          <div class="sec-head" id="patHead">
+            <div class="ic2">🔁</div>
+            <div class="smeta"><div class="st1">高频问题模式</div><div class="st2">结合历史 7 次练习 · 找到反复出现的失分点</div></div>
+            <span class="sec-badge info">2 类高频</span><span class="exp">展开</span>
+            <svg class="chev" viewBox="0 0 12 12" fill="none"><path d="M2.5 4.25 6 7.75l3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="sec-body"><div>
+            <div class="pat-row2">
+              <div class="pat-col">
+                <div class="vtitle">近 7 次练习 · 问题统计</div>
+                <div class="pat-item"><span class="pat-name">主谓一致<small>subject-verb agreement</small></span><div class="pat-track"><div class="pat-fill r" id="pf1" data-w="84%"></div></div><span class="pat-cnt" id="pc1">× 5 次</span></div>
+                <div class="pat-item"><span class="pat-name">句子碎片<small>sentence fragment</small></span><div class="pat-track"><div class="pat-fill o" id="pf2" data-w="50%"></div></div><span class="pat-cnt" id="pc2">× 3 次</span></div>
+                <div class="pat-item"><span class="pat-name">非正式用词<small>informal word choice</small></span><div class="pat-track"><div class="pat-fill p" id="pf3" data-w="34%"></div></div><span class="pat-cnt" id="pc3">× 2 次</span></div>
+                <div class="pat-hint pop" id="patHint">💡 <b>主谓一致</b>已连续 3 次出现 —— 建议先完成专项练习，再重写本题验证</div>
+              </div>
+              <div class="next-col">
+                <div class="vtitle">下一步</div>
+                <button class="btn-rewrite rise" id="btnRewrite">✍️ 重写本题 · 二次批改</button>
+                <button class="btn-ghost rise" id="btnDrill">进入写后练习 · 主谓一致专项 →</button>
+                <div class="pat-hint rise" id="nextHint" style="margin-top:12px">二次批改自动对比两稿分数与问题数，看见自己的进步曲线</div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <div style="height:140px;flex-shrink:0"></div><!-- 滚动余量 -->
       </div></div>
     </div>
-    <div class="caption" id="cap4"><span class="num">4</span><span class="txt">一份完整批改报告 · 评分总览 + 多维诊断</span></div>
-    <div class="caption" id="cap5"><span class="num">5</span><span class="txt">逐句批注 · 5 处问题精准定位 + 修改讲解</span></div>
-    <div class="caption" id="cap6"><span class="num">6</span><span class="txt">词汇 CEFR 分析 · 量化短板 · 给出升级路径</span></div>
-    <div class="caption" id="cap7"><span class="num">7</span><span class="txt">范文对比 · 同段落改写示范 · 学会高分表达</span></div>
+    <div class="ft" id="ft4">
+      <div class="ft-h"><span class="mask"><span>一份<span class="grad">完整</span>的批改报告</span></span></div>
+      <div class="ft-s">评分 · 互动质量 · 多维诊断，一次拿全</div>
+    </div>
+    <div class="ft" id="ft5">
+      <div class="ft-h"><span class="mask"><span><span class="grad">逐句批注</span>，错在哪一目了然</span></span></div>
+      <div class="ft-s">5 处问题 · 红橙紫三级 · 修改建议 + 原因讲解</div>
+    </div>
+    <div class="ft" id="ft6">
+      <div class="ft-h"><span class="mask"><span>词汇短板，<span class="grad">一眼可见</span></span></span></div>
+      <div class="ft-s">逐词 CEFR 定级 · B2+ 占比对标同分段考生</div>
+    </div>
+    <div class="ft" id="ft7">
+      <div class="ft-h"><span class="mask"><span>和<span class="grad">满分范文</span>，对照着学</span></span></div>
+      <div class="ft-s">同段落改写示范 · 差距点逐条讲透</div>
+    </div>
+    <div class="ft" id="ft8">
+      <div class="ft-h"><span class="mask"><span>练完，知道<span class="grad">下一步</span></span></span></div>
+      <div class="ft-s">高频问题模式 · 一键重写 · 二次批改看进步</div>
+    </div>
   </div>
 
-  <!-- ════════ S8 · 收尾 CTA（亮色） ════════ -->
+  <!-- ════════ S9 · 收尾 CTA ════════ -->
   <div class="scene" id="s-cta">
     <div class="mesh"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="grain"></div></div>
     <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">
@@ -618,9 +765,9 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
 
 <script>
 /* ============================================================
-   时间轴导演引擎 v5 — 120 BPM 节拍对齐（小节 = 2000ms）
-   场景: 0 开场 | 4 题目 | 12 作答 | 20 AI | 24 报告(总览→批注→词汇→范文) | 52 CTA
-   报告为单页滚动：光标点击分节头展开，页面滑动跟随（仿真实页面）
+   时间轴导演引擎 v6 — 120 BPM 对齐（小节 = 2000ms），总长 64s
+   0 开场 | 4 题目 | 12 作答 | 20 AI | 24 报告 | 58 CTA
+   报告内部: 24 总览 | 32 批注 | 40 词汇 | 46 范文 | 52 问题模式
    ============================================================ */
 const $ = id => document.getElementById(id);
 let timers = [];
@@ -628,7 +775,7 @@ function at(t, fn){ timers.push(setTimeout(fn, t)); }
 function go(id){ const el=$(id); if(el) el.classList.add("go"); }
 function unGo(id){ const el=$(id); if(el) el.classList.remove("go"); }
 function sceneOn(id){ const el=$(id); el.classList.remove("off"); el.classList.add("on"); }
-function sceneOff(id){ $(id).classList.remove("on"); } /* 在擦除遮挡下瞬时隐藏 */
+function sceneOff(id){ $(id).classList.remove("on"); }
 function wipe(){
   const w = $("wipe");
   w.classList.remove("run"); void w.offsetWidth;
@@ -636,10 +783,10 @@ function wipe(){
   at(1100, ()=>w.classList.remove("run"));
 }
 
-const TOTAL = 58000;
+const TOTAL = 64000;
 const SW = 1080, SH = 1920;
 
-/* ---------- 虚拟镜头（取景框 clamp 在舞台内） ---------- */
+/* ---------- 虚拟镜头 ---------- */
 let cam = {x:SW/2, y:SH/2, s:1};
 function camTo(cx, cy, s, dur, ease){
   if(s > 1){
@@ -654,7 +801,7 @@ function camTo(cx, cy, s, dur, ease){
 }
 function camReset(dur){ camTo(SW/2, SH/2, 1, dur); }
 
-/* ---------- 报告页滚动 ---------- */
+/* ---------- 报告页滚动 / 分节展开 ---------- */
 function scrollRep(y, dur=800){
   const el = $("repInner");
   el.style.transition = `transform ${dur}ms cubic-bezier(.5,0,.15,1)`;
@@ -665,6 +812,8 @@ function openSec(id){
   const sec = $(id);
   sec.classList.add("open");
   const exp = sec.querySelector(".exp"); if(exp) exp.textContent = "收起";
+  /* 展开动画结束后解除 overflow 裁剪，批注弹窗可越界显示 */
+  timers.push(setTimeout(()=>sec.classList.add("settled"), 700));
 }
 
 /* ---------- 模拟光标 ---------- */
@@ -758,14 +907,14 @@ function play(){
   at(4450, ()=>go("msgProf"));
   at(5500, ()=>go("msgS1"));
   at(6300, ()=>go("msgS2"));
-  at(7000, ()=>go("cap1"));
+  at(7000, ()=>go("ft1"));
   at(11380, wipe);
   at(11920, ()=>{ sceneOff("s-prompt"); camReset(150); });
 
   /* —— S2 · 沉浸作答 (12 – 20s) —— */
   const ESSAY = "I agree that removing letter grades is benifitial for young childrens. Because they will not feel so much pressure. My little brother always worry about his grade, he even cry before the test. If school give him feedback instead of a letter, he can focus on what he need to improve and learning become more fun...";
   at(12000, ()=>{ sceneOn("s-write"); go("wPrompt"); go("wEditor"); tickTimer($("timer2"), 581, 7500); });
-  at(12550, ()=>go("cap2"));
+  at(12550, ()=>go("ft2"));
   at(12650, ()=>{
     $("edPh").style.opacity = 0;
     typewriter($("edText"), $("edCursor"), ESSAY, 66, w=>{ $("wcNum").textContent = w; });
@@ -791,97 +940,124 @@ function play(){
   /* —— S3 · AI 分析中 (20 – 24s · 配乐 breakdown) —— */
   const steps=["正在解析文章结构…","正在检测语法与拼写…","正在评估论证逻辑…","正在对照 ETS 评分标准…"];
   at(20000, ()=>{ sceneOn("s-scoring"); go("scanCard"); });
-  at(20500, ()=>go("cap3"));
+  at(20500, ()=>go("ft3"));
   steps.forEach((s,i)=> at(20300+i*820, ()=>{ const el=$("aiStep"); el.style.opacity=0; setTimeout(()=>{el.textContent=s;el.style.opacity=1;},170); }));
   ["ck1","ck2","ck3","ck4"].forEach((id,i)=> at(20800+i*700, ()=>$(id).classList.add("done")));
   at(23380, wipe);
   at(23920, ()=>sceneOff("s-scoring"));
 
-  /* —— S4 · 报告总览 (24 – 32s · 第二次 drop) —— */
+  /* —— 报告 P1 · 总览 (24 – 32s · 第二次 drop) —— */
   at(24000, ()=>{ sceneOn("s-report"); go("ovRow"); });
   at(24300, ()=>go("secAnno"));
   at(24450, ()=>go("secVocab"));
-  at(24600, ()=>go("secCmp"));
+  at(24600, ()=>{ go("secCmp"); go("secPat"); });
   at(24500, ()=>countTo($("scoreNum"), 3.0, 1100));
-  at(24850, ()=>{ const p = posOf("scoreNum"); camTo(p.x+140, p.y+80, 1.12, 850); });
-  at(25100, ()=>go("cap4"));
+  at(24850, ()=>{ const p = posOf("scoreNum"); camTo(p.x+140, p.y+90, 1.12, 850); });
+  at(25100, ()=>go("ft4"));
   at(25750, ()=>go("chipBand"));
   at(26050, ()=>go("chipEts"));
   at(26350, ()=>go("scoreSummary"));
-  at(27100, ()=>camReset(850));
+  at(26900, ()=>go("gl1"));
+  at(27200, ()=>go("gl2"));
+  at(27500, ()=>camReset(850));
   const dims=[["df1","dv1",72],["df2","dv2",58],["df3","dv3",41],["df4","dv4",38]];
-  dims.forEach(([f,v,pct],i)=> at(27700+i*320, ()=>{
+  dims.forEach(([f,v,pct],i)=> at(28100+i*300, ()=>{
     $(f).style.width=pct+"%";
     const t0=performance.now();
     const step=now=>{const p=Math.min(1,(now-t0)/1100);$(v).textContent=Math.round(pct*(1-Math.pow(1-p,3)))+"%";if(p<1)requestAnimationFrame(step);};
     requestAnimationFrame(step);
   }));
-  at(29200, ()=>go("act1"));
-  at(29500, ()=>go("act2"));
-  at(29900, ()=>$("act1").classList.add("done"));
-  at(30200, ()=>$("act2").classList.add("done"));
+  at(29500, ()=>go("act1"));
+  at(29800, ()=>go("act2"));
+  at(30200, ()=>$("act1").classList.add("done"));
+  at(30500, ()=>$("act2").classList.add("done"));
 
-  /* —— S5 · 滑到逐句批注并展开 (31 – 40s) —— */
-  at(30600, ()=>{ const p = posOf("annoHead"); curShow(p.x-220, p.y-140);
+  /* —— 报告 P2 · 逐句批注 (32 – 40s) —— */
+  at(30700, ()=>{ const p = posOf("annoHead"); curShow(p.x-220, p.y-140);
     at(280, ()=>curMove(p.x+120, p.y, 620)); });
-  at(31600, ()=>curClick());
-  at(31700, ()=>{ openSec("secAnno"); unGo("cap4"); });
-  at(31900, ()=>scrollRep(secTop("secAnno"), 850));
-  at(32300, ()=>go("cap5"));
-  ["mk1","mk2","mk3","mk4","mk5"].forEach((id,i)=> at(32900+i*220, ()=>$(id).classList.add("lit")));
-  /* 三处光标点击 + 弹窗 + 镜头特写：红拼写 → 橙碎片句 → 紫拔高 */
+  at(31700, ()=>curClick());
+  at(31800, ()=>{ openSec("secAnno"); unGo("ft4"); });
+  at(32000, ()=>scrollRep(secTop("secAnno"), 850));
+  at(32400, ()=>go("ft5"));
+  ["mk1","mk2","mk3","mk4","mk5"].forEach((id,i)=> at(33000+i*220, ()=>$(id).classList.add("lit")));
   const tipSeq = [["mk1","tip1"],["mk3","tip3"],["mk5","tip5"]];
   tipSeq.forEach(([mk,tip],i)=>{
-    const base = 33500 + i*2250;
+    const base = 33600 + i*2300;
     at(base, ()=>{ const p = posOf(mk); curMove(p.x-4, p.y+6, 480); });
     at(base+520, ()=>curClick());
     at(base+600, ()=>$(tip).classList.add("show"));
     at(base+660, ()=>{ const p = posOf(mk); camTo(p.x, p.y+120, 1.3, 760); });
-    if(i<tipSeq.length-1) at(base+2050, ()=>$(tip).classList.remove("show"));
+    if(i<tipSeq.length-1) at(base+2100, ()=>$(tip).classList.remove("show"));
   });
-  at(39300, ()=>{ camReset(700); });
+  at(39400, ()=>camReset(700));
 
-  /* —— S6 · 滑到词汇分析并展开 (40 – 46s) —— */
-  at(39600, ()=>{ scrollRep(secTop("secVocab") - 40, 850); unGo("cap5"); $("tip5").classList.remove("show"); });
-  at(40500, ()=>{ const p = posOf("vocabHead"); curMove(p.x+120, p.y, 480); });
-  at(41050, ()=>curClick());
-  at(41150, ()=>openSec("secVocab"));
-  at(41350, ()=>scrollRep(secTop("secVocab"), 700));
-  at(41500, ()=>go("cap6"));
-  ["cb1","cb2","cb3","cb4","cb5","cb6"].forEach((id,i)=> at(41900+i*110, ()=>{const b=$(id);b.style.height=b.dataset.h;}));
-  ["cv1","cv2","cv3","cv4","cv5","cv6"].forEach((id,i)=> at(42400+i*110, ()=>go(id)));
-  at(43200, ()=>{ go("vStat");
+  /* —— 报告 P3 · 词汇分析 (40 – 46s) —— */
+  at(39700, ()=>{ scrollRep(secTop("secVocab") - 40, 850); unGo("ft5"); $("tip5").classList.remove("show"); });
+  at(40600, ()=>{ const p = posOf("vocabHead"); curMove(p.x+120, p.y, 480); });
+  at(41150, ()=>curClick());
+  at(41250, ()=>openSec("secVocab"));
+  at(41450, ()=>scrollRep(secTop("secVocab"), 700));
+  at(41600, ()=>go("ft6"));
+  ["cb1","cb2","cb3","cb4","cb5","cb6"].forEach((id,i)=> at(42000+i*110, ()=>{const b=$(id);b.style.height=b.dataset.h;}));
+  ["cv1","cv2","cv3","cv4","cv5","cv6"].forEach((id,i)=> at(42500+i*110, ()=>go(id)));
+  at(43300, ()=>{ go("vStat");
     const el=$("vStatNum"), t0=performance.now();
     const step=now=>{const p=Math.min(1,(now-t0)/800);el.textContent=Math.round(14*(1-Math.pow(1-p,3)))+"%";if(p<1)requestAnimationFrame(step);};
     requestAnimationFrame(step);
   });
-  at(43400, ()=>go("wc1")); at(43580, ()=>go("wc2")); at(43760, ()=>go("wc3"));
-  at(44300, ()=>go("vs1"));
-  at(44750, ()=>go("vs2"));
+  at(43500, ()=>go("wc1")); at(43680, ()=>go("wc2")); at(43860, ()=>go("wc3"));
+  at(44400, ()=>go("vs1"));
+  at(44850, ()=>go("vs2"));
 
-  /* —— S7 · 滑到范文对比并展开 (46 – 52s) —— */
-  at(45600, ()=>{ scrollRep(secTop("secCmp") - 40, 850); unGo("cap6"); });
-  at(46500, ()=>{ const p = posOf("cmpHead"); curMove(p.x+120, p.y, 480); });
-  at(47050, ()=>curClick());
-  at(47150, ()=>openSec("secCmp"));
-  at(47350, ()=>scrollRep(secTop("secCmp"), 700));
-  at(47500, ()=>go("cap7"));
-  at(47950, ()=>$("hm1").classList.add("lit"));
-  at(48400, ()=>$("hd1").classList.add("lit"));
-  at(48850, ()=>$("hd2").classList.add("lit"));
-  at(49300, ()=>$("hd3").classList.add("lit"));
-  at(49750, ()=>go("cn1"));
-  at(50150, ()=>go("cn2"));
-  at(50550, ()=>go("cn3"));
-  at(51200, ()=>curHide());
-  at(51380, wipe);
-  at(51920, ()=>{ sceneOff("s-report"); camReset(150); });
+  /* —— 报告 P4 · 范文对比 (46 – 52s) —— */
+  at(45700, ()=>{ scrollRep(secTop("secCmp") - 40, 850); unGo("ft6"); });
+  at(46600, ()=>{ const p = posOf("cmpHead"); curMove(p.x+120, p.y, 480); });
+  at(47150, ()=>curClick());
+  at(47250, ()=>openSec("secCmp"));
+  at(47450, ()=>scrollRep(secTop("secCmp"), 700));
+  at(47600, ()=>go("ft7"));
+  at(48050, ()=>$("hm1").classList.add("lit"));
+  at(48500, ()=>$("hd1").classList.add("lit"));
+  at(48950, ()=>$("hd2").classList.add("lit"));
+  at(49400, ()=>$("hd3").classList.add("lit"));
+  at(49850, ()=>go("cn1"));
+  at(50250, ()=>go("cn2"));
+  at(50650, ()=>go("cn3"));
 
-  /* —— S8 · 收尾 CTA (52 – 58s · 终止和弦) —— */
-  at(52000, ()=>{ sceneOn("s-cta"); go("ctaLogo"); });
-  at(52450, ()=>go("ctaTitle"));
-  at(52900, ()=>go("ctaSub"));
-  at(53350, ()=>{ go("ctaC1"); at(150,()=>go("ctaC2")); at(300,()=>go("ctaC3")); });
+  /* —— 报告 P5 · 高频问题模式 + 下一步 (52 – 58s) —— */
+  at(51600, ()=>{ scrollRep(secTop("secPat") - 40, 850); unGo("ft7"); });
+  at(52500, ()=>{ const p = posOf("patHead"); curMove(p.x+120, p.y, 480); });
+  at(53050, ()=>curClick());
+  at(53150, ()=>openSec("secPat"));
+  at(53350, ()=>scrollRep(secTop("secPat"), 700));
+  at(53500, ()=>go("ft8"));
+  ["pf1","pf2","pf3"].forEach((id,i)=> at(53900+i*240, ()=>{const b=$(id);b.style.width=b.dataset.w;}));
+  at(54700, ()=>go("patHint"));
+  at(55100, ()=>go("btnRewrite"));
+  at(55400, ()=>go("btnDrill"));
+  at(55700, ()=>go("nextHint"));
+  /* 光标点击「重写本题」收束整个闭环 */
+  at(55900, ()=>{ const p = posOf("btnRewrite"); curMove(p.x-8, p.y-2, 560); });
+  at(56600, ()=>$("btnRewrite").classList.add("hov"));
+  at(56950, ()=>{
+    curClick();
+    const btn=$("btnRewrite");
+    btn.classList.remove("hov"); btn.classList.add("pressed");
+    const r=document.createElement("span"); r.className="ripple";
+    r.style.cssText+="width:40px;height:40px;left:50%;top:50%;margin:-20px 0 0 -20px";
+    btn.appendChild(r);
+    at(140,()=>btn.classList.remove("pressed"));
+  });
+  at(57100, ()=>{ const p = posOf("btnRewrite"); camTo(p.x, p.y, 1.18, 420); });
+  at(57300, ()=>curHide());
+  at(57380, wipe);
+  at(57920, ()=>{ sceneOff("s-report"); camReset(150); });
+
+  /* —— S9 · 收尾 CTA (58 – 64s · 终止和弦) —— */
+  at(58000, ()=>{ sceneOn("s-cta"); go("ctaLogo"); });
+  at(58450, ()=>go("ctaTitle"));
+  at(58900, ()=>go("ctaSub"));
+  at(59350, ()=>{ go("ctaC1"); at(150,()=>go("ctaC2")); at(300,()=>go("ctaC3")); });
 
   /* 进度条 */
   const bar=$("progress"); bar.style.transition="none"; bar.style.width="0";
@@ -899,10 +1075,11 @@ function restart(){
   document.querySelectorAll(".lit").forEach(e=>e.classList.remove("lit"));
   document.querySelectorAll(".tip.show").forEach(e=>e.classList.remove("show"));
   document.querySelectorAll(".done").forEach(e=>e.classList.remove("done"));
-  document.querySelectorAll(".sec.open").forEach(e=>e.classList.remove("open"));
+  document.querySelectorAll(".sec").forEach(e=>e.classList.remove("open","settled"));
   document.querySelectorAll(".sec .exp").forEach(e=>e.textContent="展开");
   document.querySelectorAll(".cefr-bar2").forEach(e=>e.style.height=0);
   document.querySelectorAll(".dim-fill").forEach(e=>e.style.width=0);
+  document.querySelectorAll(".pat-fill").forEach(e=>e.style.width=0);
   ["dv1","dv2","dv3","dv4"].forEach(id=>$(id).textContent="0%");
   $("vStatNum").textContent="0%";
   $("edText").textContent=""; $("edPh").style.opacity=1; $("edCursor").style.opacity=0;
@@ -910,6 +1087,7 @@ function restart(){
   $("timer1").textContent="10:00"; $("timer2").textContent="09:41";
   $("aiStep").textContent="正在解析文章结构…";
   $("btnSubmit").classList.remove("hov","pressed");
+  $("btnRewrite").classList.remove("hov","pressed");
   document.querySelectorAll(".ripple,.click-ring").forEach(e=>e.remove());
   $("wipe").classList.remove("run");
   const ri=$("repInner"); ri.style.transition="none"; ri.style.transform="none";
