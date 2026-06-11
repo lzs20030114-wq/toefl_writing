@@ -35,12 +35,23 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
 /* 虚拟镜头：所有场景与光标都在镜头内，推拉缩放同步生效 */
 #camera{position:absolute;inset:0;transform-origin:50% 50%;will-change:transform}
 
-/* ---------- 场景容器 + 丝滑转场（缩放 + 模糊 交叉溶解） ---------- */
-.scene{position:absolute;inset:0;opacity:0;visibility:hidden;pointer-events:none;transform:scale(1.05);filter:blur(7px)}
-.scene.on{opacity:1;visibility:visible;transform:scale(1);filter:blur(0);
-  transition:opacity .5s ease,transform .62s cubic-bezier(.22,1,.36,1),filter .5s ease}
-.scene.off{opacity:0;visibility:visible;transform:scale(.962);filter:blur(6px);
-  transition:opacity .45s ease,transform .5s cubic-bezier(.55,0,.55,.2),filter .45s ease}
+/* ---------- 场景容器 + 转场 ----------
+   场景自身只做轻量淡入缩放（无 blur 滤镜，避免软渲染掉帧），
+   场景切换由 #wipe 品牌渐变斜向擦除完成，切换发生在被完全遮住的瞬间 */
+.scene{position:absolute;inset:0;opacity:0;visibility:hidden;pointer-events:none;transform:scale(1.035)}
+.scene.on{opacity:1;visibility:visible;transform:scale(1);
+  transition:opacity .22s ease,transform .45s cubic-bezier(.22,1,.36,1)}
+
+/* ---------- 品牌擦除转场 ---------- */
+#wipe{position:absolute;top:-10%;left:-80%;width:260%;height:120%;z-index:75;pointer-events:none;
+  transform:translateX(-100%) skewX(-14deg);
+  background:linear-gradient(100deg,transparent 0%,rgba(8,115,85,.97) 8%,#087355 15%,#0a5c70 50%,#0891B2 85%,rgba(8,145,178,.97) 92%,transparent 100%)}
+#wipe.run{animation:wipeSweep 1.05s cubic-bezier(.55,0,.25,1) forwards}
+@keyframes wipeSweep{from{transform:translateX(-100%) skewX(-14deg)}to{transform:translateX(100%) skewX(-14deg)}}
+#wipe .wlogo{position:absolute;left:50%;top:50%;width:96px;height:96px;margin:-48px 0 0 -48px;
+  border-radius:24px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:46px;font-weight:800;
+  font-family:var(--font);transform:skewX(14deg)}
 
 /* ---------- 模拟鼠标光标 ---------- */
 #cur{position:absolute;width:30px;height:34px;z-index:85;opacity:0;left:800px;top:450px;
@@ -486,6 +497,7 @@ html,body{height:100%;background:#070d0a;overflow:hidden;font-family:var(--font)
 
 </div><!-- /camera -->
 
+  <div id="wipe"><div class="wlogo">T</div></div>
   <div id="progress"></div>
   <button id="replay" onclick="restart()">⟲ 重播</button>
 </div></div>
@@ -500,31 +512,43 @@ let timers = [];
 function at(t, fn){ timers.push(setTimeout(fn, t)); }
 function go(id){ const el=$(id); if(el) el.classList.add("go"); }
 function sceneOn(id){ const el=$(id); el.classList.remove("off"); el.classList.add("on"); }
-function sceneOff(id){ const el=$(id); el.classList.remove("on"); el.classList.add("off");
-  timers.push(setTimeout(()=>{el.classList.remove("off");}, 600)); }
+function sceneOff(id){ $(id).classList.remove("on"); } /* 在擦除遮挡下瞬时隐藏 */
+/* 品牌擦除：动画 1.05s，约 47% 处全屏遮挡 → 在那一刻换场景 */
+function wipe(){
+  const w = $("wipe");
+  w.classList.remove("run"); void w.offsetWidth;
+  w.classList.add("run");
+  at(1100, ()=>w.classList.remove("run"));
+}
 
 const TOTAL = 56000;
+const SW = 1600, SH = 900;
 
 /* ---------- 虚拟镜头 ---------- */
-let cam = {x:800, y:450, s:1};
+let cam = {x:SW/2, y:SH/2, s:1};
 function camTo(cx, cy, s, dur, ease){
+  if(s > 1){ /* 取景框始终留在舞台内 */
+    const hw = SW/(2*s), hh = SH/(2*s);
+    cx = Math.min(Math.max(cx, hw), SW-hw);
+    cy = Math.min(Math.max(cy, hh), SH-hh);
+  }
   const el = $("camera");
   el.style.transition = `transform ${dur}ms ${ease || "cubic-bezier(.5,0,.15,1)"}`;
-  el.style.transform = `translate(${(800-cx)*s}px,${(450-cy)*s}px) scale(${s})`;
+  el.style.transform = `translate(${(SW/2-cx)*s}px,${(SH/2-cy)*s}px) scale(${s})`;
   cam = {x:cx, y:cy, s};
 }
-function camReset(dur){ camTo(800, 450, 1, dur); }
+function camReset(dur){ camTo(SW/2, SH/2, 1, dur); }
 
 /* ---------- 模拟光标 ---------- */
 /* 元素中心 → 镜头本地坐标（反算当前镜头变换，保证光标贴住目标） */
 function posOf(id, dx=0, dy=0){
   const r = $(id).getBoundingClientRect();
   const st = $("stage").getBoundingClientRect();
-  const sc = st.width / 1600;
+  const sc = st.width / SW;
   const px = (r.left + r.width/2 - st.left) / sc;
   const py = (r.top + r.height/2 - st.top) / sc;
-  const tx = (800-cam.x)*cam.s, ty = (450-cam.y)*cam.s;
-  return { x: 800 + (px-800-tx)/cam.s + dx, y: 450 + (py-450-ty)/cam.s + dy };
+  const tx = (SW/2-cam.x)*cam.s, ty = (SH/2-cam.y)*cam.s;
+  return { x: SW/2 + (px-SW/2-tx)/cam.s + dx, y: SH/2 + (py-SH/2-ty)/cam.s + dy };
 }
 function curShow(x, y){
   const c = $("cur");
@@ -598,7 +622,8 @@ function play(){
   });
   at(1050, ()=>go("introTag"));
   at(1500, ()=>go("introSub"));
-  at(3500, ()=>sceneOff("s-intro"));
+  at(3380, wipe);
+  at(3920, ()=>sceneOff("s-intro"));
 
   /* —— S1 · 题目呈现 (4 – 12s | 鼓点进入) —— */
   at(4000, ()=>{ sceneOn("s-prompt"); go("pWin"); tickTimer($("timer1"), 600, 7500);
@@ -607,7 +632,8 @@ function play(){
   at(5150, ()=>go("msgS1"));
   at(5800, ()=>go("msgS2"));
   at(6400, ()=>go("cap1"));
-  at(11400, ()=>{ sceneOff("s-prompt"); camReset(650); });
+  at(11380, wipe);
+  at(11920, ()=>{ sceneOff("s-prompt"); camReset(250); });
 
   /* —— S2 · 沉浸作答 (12 – 22s) —— */
   const ESSAY = "I largely agree with Lena that digital life is reshaping friendship. Social media often make people feel connected, while the depth of each tie quietly declines. In my opinion, I think a few honest conversations matter far more than hundreds of contacts...";
@@ -633,7 +659,8 @@ function play(){
   });
   at(19950, ()=>{ const p = posOf("btnSubmit"); camTo(p.x, p.y, 1.22, 480); }); /* 点击瞬间镜头快推 */
   at(21000, ()=>curHide());
-  at(21350, ()=>{ sceneOff("s-write"); camReset(620); });
+  at(21380, wipe);
+  at(21920, ()=>{ sceneOff("s-write"); camReset(250); });
 
   /* —— S3 · AI 分析中 (22 – 26s | 鼓点抽空) —— */
   const steps=["正在解析文章结构…","正在检测语法与拼写…","正在评估论证逻辑与连贯性…","正在对照 ETS 官方评分标准…"];
@@ -641,7 +668,8 @@ function play(){
   at(22500, ()=>go("cap3"));
   steps.forEach((s,i)=> at(22300+i*880, ()=>{ const el=$("aiStep"); el.style.opacity=0; setTimeout(()=>{el.textContent=s;el.style.opacity=1;},180); }));
   ["ck1","ck2","ck3","ck4"].forEach((id,i)=> at(22900+i*750, ()=>$(id).classList.add("done")));
-  at(25450, ()=>sceneOff("s-scoring"));
+  at(25380, wipe);
+  at(25920, ()=>sceneOff("s-scoring"));
 
   /* —— S4 · 评分报告 (26 – 34s | 第二次 drop) —— */
   at(26000, ()=>{ sceneOn("s-score"); go("rTabs"); go("scoreCard"); });
@@ -664,7 +692,8 @@ function play(){
   at(31650, ()=>go("act2"));
   at(32200, ()=>$("act1").classList.add("done"));
   at(32550, ()=>$("act2").classList.add("done"));
-  at(33450, ()=>sceneOff("s-score"));
+  at(33380, wipe);
+  at(33920, ()=>sceneOff("s-score"));
 
   /* —— S5 · 逐句批注 (34 – 44s | 光标逐处点击 + 镜头跟随) —— */
   at(34000, ()=>{ sceneOn("s-anno"); go("annoPanel"); });
@@ -683,7 +712,8 @@ function play(){
     if(i<marks.length-1) at(base+2550, ()=>$(tip).classList.remove("show"));
   });
   at(42950, ()=>{ camReset(800); curHide(); });
-  at(43400, ()=>sceneOff("s-anno"));
+  at(43380, wipe);
+  at(43920, ()=>sceneOff("s-anno"));
 
   /* —— S6 · 功能矩阵 (44 – 48s) —— */
   at(44000, ()=>{ sceneOn("s-features"); go("ft1");
@@ -693,7 +723,8 @@ function play(){
   at(44900, ()=>["cb1","cb2","cb3","cb4","cb5"].forEach((id,i)=>at(i*100,()=>{const b=$(id);b.style.height=b.dataset.h;})));
   at(45200, ()=>go("cap6"));
   at(45300, ()=>["td1","td2","td3"].forEach((id,i)=>at(i*360,()=>$(id).classList.add("done"))));
-  at(47450, ()=>{ sceneOff("s-features"); camReset(550); });
+  at(47380, wipe);
+  at(47920, ()=>{ sceneOff("s-features"); camReset(200); });
 
   /* —— S7 · 收尾 CTA (48 – 56s | 终止和弦) —— */
   at(48000, ()=>{ sceneOn("s-cta"); go("ctaLogo"); });
@@ -726,9 +757,10 @@ function restart(){
   $("aiStep").textContent="正在解析文章结构…";
   $("btnSubmit").classList.remove("hov","pressed");
   document.querySelectorAll(".ripple,.click-ring").forEach(e=>e.remove());
+  $("wipe").classList.remove("run");
   const c=$("cur"); c.style.transition="none"; c.style.opacity=0;
   const camEl=$("camera"); camEl.style.transition="none"; camEl.style.transform="none";
-  cam={x:800,y:450,s:1};
+  cam={x:SW/2,y:SH/2,s:1};
   const bar=$("progress"); bar.style.transition="none"; bar.style.width="0";
   setTimeout(play, 80);
 }
