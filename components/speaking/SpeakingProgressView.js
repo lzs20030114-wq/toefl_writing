@@ -4,6 +4,7 @@ import React, { useState, useEffect, useMemo, useRef } from "react";
 import { C, FONT, Btn, PageShell, SurfaceCard, TopBar, ChevronIcon, ModeChip, NEUTRAL } from "../shared/ui";
 import { StatCard } from "../shared/StatCard";
 import { AccuracyTrendChart } from "../shared/AccuracyTrendChart";
+import { AudioPlayer } from "../listening/AudioPlayer";
 import { loadHist, deleteSession, clearAllSessions, SESSION_STORE_EVENTS, setCurrentUser } from "../../lib/sessionStore";
 import { getSavedCode } from "../../lib/AuthContext";
 import { formatLocalDateTime } from "../../lib/utils";
@@ -228,6 +229,12 @@ function RepeatDetail({ session }) {
                     {item.sentence || "（句子内容不可用）"}
                   </div>
                 )}
+                {/* Replay the target sentence (TTS) for 精听 / 复述对照 */}
+                {item.sentence && (
+                  <div style={{ marginTop: 6 }}>
+                    <AudioPlayer compact text={item.sentence} isPractice />
+                  </div>
+                )}
               </div>
             </div>
 
@@ -381,6 +388,12 @@ function InterviewDetail({ session }) {
             {isExpanded && (
               <div style={{ marginTop: 10, paddingTop: 10, borderTop: `1px solid ${P.borderSubtle}` }}
                 onClick={e => e.stopPropagation()}>
+                {/* Replay the interview question (TTS) for review */}
+                {item.question && (
+                  <div style={{ marginBottom: 10 }}>
+                    <AudioPlayer compact text={item.question} isPractice />
+                  </div>
+                )}
                 {/* Dimension bars */}
                 {hasScore && sc.dimensions && (
                   <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 10 }}>
