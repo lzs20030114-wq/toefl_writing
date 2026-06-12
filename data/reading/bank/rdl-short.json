@@ -11997,6 +11997,174 @@
         "status": "passed",
         "accuracy": "2/2"
       }
+    },
+    {
+      "id": "rdl_gen_27445812820-short_001",
+      "variant": "short",
+      "text": "Refunds for overpayments from the Anderson Hall vending machines are available at the Facilities Office, Room 204. Requests must be submitted by March 3-7 between 9:00 AM and 3:00 PM. Maximum refund amount is $2. Bring your receipt.",
+      "word_count": 38,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_27445812820-short_001_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, what is required to receive a refund?",
+          "options": {
+            "A": "To visit the vending machine directly",
+            "B": "To pay a $2 processing fee",
+            "C": "To submit your request by March 3-7",
+            "D": "To contact the vending machine company"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice states that requests must be submitted by March 3-7 between 9:00 AM and 3:00 PM."
+        },
+        {
+          "qid": "rdl_gen_27445812820-short_001_q2",
+          "question_type": "detail",
+          "stem": "According to the notice, what must be brought when requesting a refund?",
+          "options": {
+            "A": "A valid student identification card",
+            "B": "The vending machine key code",
+            "C": "A written explanation of the error",
+            "D": "Your original purchase receipt"
+          },
+          "correct_answer": "D",
+          "explanation": "The notice explicitly says to bring your receipt."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_27445812820-short_002",
+      "variant": "short",
+      "text": "Hi everyone,\nThe Environmental Club meeting has been rescheduled to this Friday at 4:00 PM in Room 302 of the Science Building. Please bring your project ideas. Sorry for the change.\nBest,\nDr. Chen",
+      "word_count": 34,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_27445812820-short_002_q1",
+          "question_type": "detail",
+          "stem": "When will the rescheduled Environmental Club meeting take place?",
+          "options": {
+            "A": "This Friday at 4:00 PM",
+            "B": "Next Monday at 4:00 PM",
+            "C": "This Friday at 2:00 PM",
+            "D": "Next Wednesday at 4:00 PM"
+          },
+          "correct_answer": "A",
+          "explanation": "The email states the meeting is rescheduled to this Friday at 4:00 PM."
+        },
+        {
+          "qid": "rdl_gen_27445812820-short_002_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the original meeting time?",
+          "options": {
+            "A": "It was scheduled for later this week",
+            "B": "It was held in the same building",
+            "C": "It was changed due to a conflict",
+            "D": "It was canceled permanently"
+          },
+          "correct_answer": "C",
+          "explanation": "The email apologizes for the change, implying a conflict or scheduling issue."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_27445812820-short_003",
+      "variant": "short",
+      "text": "Taco Tuesday is here early! The Green Truck is at South Lot B today with a $3 special on chicken tacos! Seriously, best lunch deal on campus. Come grab one before they run out!",
+      "word_count": 34,
+      "genre": "social_media",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_27445812820-short_003_q1",
+          "question_type": "detail",
+          "stem": "Where is the food truck located today?",
+          "options": {
+            "A": "Near the main library entrance",
+            "B": "Next to the science building",
+            "C": "At the student union plaza",
+            "D": "At South Lot B"
+          },
+          "correct_answer": "D",
+          "explanation": "The post explicitly says the Green Truck is at South Lot B today."
+        },
+        {
+          "qid": "rdl_gen_27445812820-short_003_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the $3 taco special?",
+          "options": {
+            "A": "It is available every Tuesday",
+            "B": "It may not be available later",
+            "C": "It includes a free drink",
+            "D": "It is the only item on the menu"
+          },
+          "correct_answer": "B",
+          "explanation": "The post encourages readers to come before they run out, implying limited availability."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_27445812820-short_004",
+      "variant": "short",
+      "text": "Hi Jordan,\nThis confirms your tutoring appointment for this Thursday at 2:00 PM in Room 105 of the Library. The fee is $15, payable at the desk. Please arrive five minutes early.\nBest,\nMs. Rivera",
+      "word_count": 35,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_27445812820-short_004_q1",
+          "question_type": "detail",
+          "stem": "What is the confirmed time for the tutoring appointment?",
+          "options": {
+            "A": "This Wednesday at 2:00 PM",
+            "B": "This Thursday at 2:00 PM",
+            "C": "This Thursday at 3:00 PM",
+            "D": "This Friday at 2:00 PM"
+          },
+          "correct_answer": "B",
+          "explanation": "The email says the appointment is this Thursday at 2:00 PM."
+        },
+        {
+          "qid": "rdl_gen_27445812820-short_004_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the tutoring fee?",
+          "options": {
+            "A": "It must be paid before the session starts",
+            "B": "It can be paid online in advance",
+            "C": "It is included in the semester tuition",
+            "D": "It is refundable if canceled"
+          },
+          "correct_answer": "A",
+          "explanation": "The email says the fee is payable at the desk and to arrive early, implying payment is required before the session."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
     }
   ]
 }
