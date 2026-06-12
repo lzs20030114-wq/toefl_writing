@@ -633,17 +633,16 @@ export function ListeningProgressView({ onBack }) {
             {/* Stats row: cards + trend chart */}
             <div style={{ display: "flex", gap: 14, marginBottom: 18, alignItems: "stretch", animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 80ms both" }}>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, flex: "0 0 52%" }}>
-                {statItems.slice(0, 4).map(item => (
-                  <StatCard key={item.key} {...item} active={filter === item.key} onClick={() => setFilter(item.key)} />
+                {statItems.slice(0, 4).map(({ key, ...rest }) => (
+                  <StatCard key={key} {...rest} active={filter === key} onClick={() => setFilter(key)} />
                 ))}
               </div>
               <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 10 }}>
                 {/* LAT + Mock (5th & 6th) side-by-side */}
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-                  <StatCard {...statItems[4]} active={filter === statItems[4].key} onClick={() => setFilter(statItems[4].key)} />
-                  {statItems[5] && (
-                    <StatCard {...statItems[5]} active={filter === statItems[5].key} onClick={() => setFilter(statItems[5].key)} />
-                  )}
+                  {statItems.slice(4).map(({ key, ...rest }) => (
+                    <StatCard key={key} {...rest} active={filter === key} onClick={() => setFilter(key)} />
+                  ))}
                 </div>
                 {/* Trend chart */}
                 <div style={{ flex: 1, minWidth: 0, padding: "12px 14px 8px", background: P.surface, borderRadius: 14, border: `1px solid ${P.borderSubtle}`, display: "flex", flexDirection: "column" }}>

@@ -571,8 +571,8 @@ export function SpeakingProgressView({ onBack }) {
             {/* Stats row: cards + trend chart */}
             <div style={{ display: "flex", gap: 14, marginBottom: 18, alignItems: "stretch", animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 80ms both" }}>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, flex: "0 0 48%" }}>
-                {statItems.map(item => (
-                  <StatCard key={item.key} {...item} avgMax={5} active={filter === item.key} onClick={() => setFilter(item.key)} />
+                {statItems.map(({ key, ...rest }) => (
+                  <StatCard key={key} {...rest} avgMax={5} active={filter === key} onClick={() => setFilter(key)} />
                 ))}
               </div>
               <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>

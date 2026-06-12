@@ -684,8 +684,8 @@ export function ReadingProgressView({ onBack }) {
                   }}
                 >
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, flex: "0 0 52%" }}>
-                    {statItems.map((item) => (
-                      <StatCard key={item.key} {...item} active={filter === item.key} onClick={() => setFilter(item.key)} />
+                    {statItems.map(({ key, ...rest }) => (
+                      <StatCard key={key} {...rest} active={filter === key} onClick={() => setFilter(key)} />
                     ))}
                   </div>
                   <div
