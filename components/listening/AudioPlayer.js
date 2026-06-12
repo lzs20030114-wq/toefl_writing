@@ -5,6 +5,12 @@ import { C, FONT } from "../shared/ui";
 
 const ACCENT = { color: "#8B5CF6", soft: "#F3E8FF" };
 
+// Only one AudioPlayer should sound at a time. Each instance owns an
+// independent <audio> element, and speechSynthesis is global, so without a
+// shared coordinator two clips overlap (the listening history page renders one
+// player per question). Holds the currently-sounding instance's stop fn.
+let activePlayerStop = null;
+
 /**
  * Reusable audio player with Web Speech API fallback.
  *
@@ -46,10 +52,21 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
     }
   }, []);
 
-  // Clean up on unmount
-  useEffect(() => {
-    return () => stopPlayback();
+  // Stop this instance and reset its button. Called directly, or by another
+  // instance taking over the single playback slot.
+  const stopSelf = useCallback(() => {
+    stopPlayback();
+    setPlaying(false);
   }, [stopPlayback]);
+
+  // Clean up on unmount. Also release the shared slot so no other instance
+  // calls our (now-unmounted) stop fn and sets state on an unmounted component.
+  useEffect(() => {
+    return () => {
+      stopPlayback();
+      if (activePlayerStop === stopSelf) activePlayerStop = null;
+    };
+  }, [stopPlayback, stopSelf]);
 
   useEffect(() => {
     setPlaying(false);
@@ -95,6 +112,10 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
   }, []);
 
   const playAudio = useCallback(() => {
+    // Claim the single playback slot, stopping whoever held it so two players
+    // can't sound at once.
+    if (activePlayerStop && activePlayerStop !== stopSelf) activePlayerStop();
+    activePlayerStop = stopSelf;
     if (src && audioRef.current) {
       audioRef.current.currentTime = 0;
       setPlaying(true);
@@ -172,7 +193,7 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
       speechSynthesis.removeEventListener("voiceschanged", onVoicesChanged);
       speak(speechSynthesis.getVoices());
     }, 600);
-  }, [src, text, onEnded, animateTTSProgress]);
+  }, [src, text, onEnded, animateTTSProgress, stopSelf]);
 
   useEffect(() => {
     if (!autoPlay) return;
