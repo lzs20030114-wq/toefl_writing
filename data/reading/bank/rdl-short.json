@@ -12165,6 +12165,90 @@
         "status": "passed",
         "accuracy": "2/2"
       }
+    },
+    {
+      "id": "rdl_gen_27480038600-short_001",
+      "variant": "short",
+      "text": "Dear Ms. Lee, Your requested book from City Library has arrived. A $2.50 processing fee is due upon pickup. Please collect it at the Circulation Desk by this Friday, May 12. Best regards, Interlibrary Loan Office.",
+      "word_count": 36,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_27480038600-short_001_q1",
+          "question_type": "detail",
+          "stem": "According to the email, what must the recipient do by Friday?",
+          "options": {
+            "A": "To request another book from the City Library",
+            "B": "To pay a $5.00 fee at the Circulation Desk",
+            "C": "To return the book to the Interlibrary Loan Office",
+            "D": "To pick up the book and pay the processing fee"
+          },
+          "correct_answer": "D",
+          "explanation": "The email states the book is at the Circulation Desk and a $2.50 fee is due upon pickup, so the recipient must collect it and pay."
+        },
+        {
+          "qid": "rdl_gen_27480038600-short_001_q2",
+          "question_type": "detail",
+          "stem": "What is the fee mentioned in the email?",
+          "options": {
+            "A": "A $1.50 late charge",
+            "B": "A $2.50 processing fee",
+            "C": "A $3.00 library fine",
+            "D": "A $5.00 deposit fee"
+          },
+          "correct_answer": "B",
+          "explanation": "The email specifies a $2.50 processing fee is due upon pickup."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_27480038600-short_003",
+      "variant": "short",
+      "text": "Hi Mark, Your volunteer shift as a campus tour guide on May 15 from 2:00-4:00 PM is confirmed. Please report to Anderson Hall lobby 15 minutes early. Thanks, Dr. Park.",
+      "word_count": 30,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_27480038600-short_003_q1",
+          "question_type": "detail",
+          "stem": "According to the email, where should Mark report for his shift?",
+          "options": {
+            "A": "At the Anderson Hall lobby",
+            "B": "At the student center office",
+            "C": "At the campus tour bus stop",
+            "D": "At the main library entrance"
+          },
+          "correct_answer": "A",
+          "explanation": "The email instructs Mark to 'report to Anderson Hall lobby'."
+        },
+        {
+          "qid": "rdl_gen_27480038600-short_003_q2",
+          "question_type": "vocabulary_in_context",
+          "stem": "In the email, the word 'confirmed' is closest in meaning to:",
+          "options": {
+            "A": "Cancelled",
+            "B": "Delayed",
+            "C": "Verified",
+            "D": "Requested"
+          },
+          "correct_answer": "C",
+          "explanation": "'Confirmed' in this context means the shift is officially scheduled or verified."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
     }
   ]
 }
