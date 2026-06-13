@@ -1,0 +1,137 @@
+{
+  "type": "readInDailyLife",
+  "generated_at": "2026-06-13T21:46:35.783Z",
+  "total_generated": 4,
+  "total_accepted": 2,
+  "acceptance_rate": 0.5,
+  "items": [
+    {
+      "id": "rdl_gen_27480038600-long_001",
+      "variant": "long",
+      "text": "University Recreation Center — Group Fitness Class Schedule (Spring Semester)\n\nEffective January 15 through May 10. All classes are held in the Fitness Studio (Room 102) unless otherwise noted.\n\nMonday:\n7:00 AM – Yoga (45 min)\n12:00 PM – Spin (45 min)\n5:30 PM – Zumba (60 min)\n\nTuesday:\n6:30 AM – Pilates (45 min)\n12:00 PM – HIIT (30 min)\n6:00 PM – Strength Training (60 min)\n\nWednesday:\n7:00 AM – Yoga (45 min)\n12:00 PM – Spin (45 min)\n5:30 PM – Zumba (60 min)\n\nThursday:\n6:30 AM – Pilates (45 min)\n12:00 PM – HIIT (30 min)\n6:00 PM – Strength Training (60 min)\n\nFriday:\n7:00 AM – Yoga (45 min)\n12:00 PM – Spin (45 min)\n\nSaturday:\n9:00 AM – Boot Camp (60 min) – Outdoor Field (Weather Permitting)\n\nPolicies:\n- A $5 late cancellation fee applies if you cancel less than 2 hours before class.\n- Arrive at least 5 minutes early to sign in. Late arrivals may not be admitted.\n- Bring a towel and water bottle. Mats are provided.\n- Class schedules may change during holidays or exam weeks.",
+      "word_count": 186,
+      "genre": "schedule",
+      "format_metadata": {
+        "from": "University Recreation Center",
+        "to": "All Students",
+        "subject": "Group Fitness Class Schedule Spring Semester"
+      },
+      "questions": [
+        {
+          "qid": "rdl_gen_27480038600-long_001_q1",
+          "question_type": "detail",
+          "stem": "According to the schedule, what is the fee for canceling a class reservation within two hours of its start time?",
+          "options": {
+            "A": "A $5 late cancellation fee is charged.",
+            "B": "A $10 penalty is applied.",
+            "C": "A $2.00 processing fee is required.",
+            "D": "A $45 pass is forfeited."
+          },
+          "correct_answer": "A",
+          "explanation": "The policies section states: 'A $5 late cancellation fee applies if you cancel less than 2 hours before class.'"
+        },
+        {
+          "qid": "rdl_gen_27480038600-long_001_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the Saturday Boot Camp class?",
+          "options": {
+            "A": "It may be canceled if the weather is bad.",
+            "B": "It requires participants to bring their own mats.",
+            "C": "It is held in the Fitness Studio like other classes.",
+            "D": "It does not have a late cancellation fee."
+          },
+          "correct_answer": "A",
+          "explanation": "The schedule notes 'Outdoor Field (Weather Permitting)' for Saturday Boot Camp, implying it could be canceled due to inclement weather."
+        },
+        {
+          "qid": "rdl_gen_27480038600-long_001_q3",
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this schedule?",
+          "options": {
+            "A": "To list the times and locations of all recreation center activities.",
+            "B": "To announce a new spring semester class schedule.",
+            "C": "To describe the policies for attending fitness classes.",
+            "D": "To inform students about group fitness class offerings and rules."
+          },
+          "correct_answer": "D",
+          "explanation": "The schedule provides the class times, locations, and associated policies for the spring semester, making D the most comprehensive summary."
+        }
+      ],
+      "question_count": 3,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "3/3"
+      }
+    },
+    {
+      "id": "rdl_gen_27480038600-long_003",
+      "variant": "long",
+      "text": "Subject: Your bookstore order is ready for pickup\n\nDear Maria,\n\nYour textbook order (Order #BX-78432) is now available for pickup at the Campus Bookstore in the Student Union Building. Your order includes:\n- Biology 101: Concepts and Connections (3rd Edition) — $85.00\n- Lab Manual for Biology 101 — $25.00\n- Chemistry 101: Principles and Reactions (2nd Edition) — $110.00\n\nPickup hours are Monday through Friday, 9:00 AM to 6:00 PM, and Saturday, 10:00 AM to 4:00 PM. The bookstore is closed on Sundays. Please bring your student ID and the order confirmation email. If someone else will pick up your order, they must bring a signed note from you along with their ID.\n\nOrders not picked up within 10 business days will be returned to inventory and you'll receive a refund, minus a $5 restocking fee.\n\nIf you have any questions, reply to this email or call us at 555-0192.\n\nBest regards,\nCampus Bookstore",
+      "word_count": 155,
+      "genre": "email",
+      "format_metadata": {
+        "from": "Campus Bookstore",
+        "to": "Maria",
+        "subject": "Your bookstore order is ready for pickup"
+      },
+      "questions": [
+        {
+          "qid": "rdl_gen_27480038600-long_003_q1",
+          "question_type": "detail",
+          "stem": "According to the email, what must a person who picks up Maria's order bring?",
+          "options": {
+            "A": "A $5 restocking fee and a student ID.",
+            "B": "A signed note from Maria and their own ID.",
+            "C": "The order confirmation email and a credit card.",
+            "D": "A photo of Maria and the order number."
+          },
+          "correct_answer": "B",
+          "explanation": "The email states: 'If someone else will pick up your order, they must bring a signed note from you along with their ID.'"
+        },
+        {
+          "qid": "rdl_gen_27480038600-long_003_q2",
+          "question_type": "detail",
+          "stem": "What will happen if the order is not picked up within 10 business days?",
+          "options": {
+            "A": "The order will be canceled without a refund.",
+            "B": "The books will be put on sale for a lower price.",
+            "C": "The order will be returned to inventory with a $5 restocking fee.",
+            "D": "The bookstore will charge an additional $10 late fee."
+          },
+          "correct_answer": "C",
+          "explanation": "The email says: 'Orders not picked up within 10 business days will be returned to inventory and you'll receive a refund, minus a $5 restocking fee.'"
+        },
+        {
+          "qid": "rdl_gen_27480038600-long_003_q3",
+          "question_type": "inference",
+          "stem": "What can be inferred about the Campus Bookstore's hours?",
+          "options": {
+            "A": "It is open every day of the week.",
+            "B": "It is closed on Sundays.",
+            "C": "It has extended hours during exam week.",
+            "D": "It opens at 10:00 AM on weekdays."
+          },
+          "correct_answer": "B",
+          "explanation": "The email states: 'Pickup hours are Monday through Friday... and Saturday... The bookstore is closed on Sundays.'"
+        }
+      ],
+      "question_count": 3,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "3/3"
+      }
+    }
+  ],
+  "rejected": [
+    {
+      "id": "rdl_gen_27480038600-long_002",
+      "reason": "answer_position: all 3 answers are \"B\" — must vary"
+    },
+    {
+      "id": "rdl_gen_27480038600-long_004",
+      "reason": "answer_position: all 3 answers are \"C\" — must vary"
+    }
+  ]
+}
