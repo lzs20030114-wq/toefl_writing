@@ -10,6 +10,7 @@ import { getSavedCode } from "../../lib/AuthContext";
 import { formatLocalDateTime } from "../../lib/utils";
 import { buildDailyAveragePoints, getAccuracyPercent } from "../../lib/history/scoreMetrics";
 import { relativeDateLabel } from "../../lib/history/dateGroup";
+import { listeningAudioUrlFromId } from "../../lib/listening/bankAudio";
 
 const ACCENT = { color: "#8B5CF6", soft: "#F5F3FF" };
 
@@ -209,7 +210,7 @@ function taskToReviewDetails(task) {
         options: task.options,
         answer: task.answer,
         explanation: task.explanation,
-        audio_url: task.audio_url || null,
+        audio_url: task.audio_url || listeningAudioUrlFromId(task.itemId),
       }],
     };
   }
@@ -220,7 +221,7 @@ function taskToReviewDetails(task) {
     questions,
     transcript: task.transcript || task.announcement || task.lecture || task.text || task.passage || "",
     conversation: task.conversation || null,
-    audio_url: task.audio_url || null,
+    audio_url: task.audio_url || listeningAudioUrlFromId(task.itemId),
   };
 }
 
@@ -290,10 +291,12 @@ function LCRDetail({ session }) {
                 {speakerText}
               </div>
             )}
-            {/* Replay the recording for 精听 (TTS fallback off speaker text) */}
+            {/* Replay the original recording. Records saved before audio_url was
+                persisted reconstruct it from the item id; speakerText is the
+                last-resort TTS fallback. */}
             {(q.audio_url || speakerText) && (
               <div style={{ marginBottom: 8 }}>
-                <AudioPlayer compact src={q.audio_url || null} text={speakerText} isPractice />
+                <AudioPlayer compact src={q.audio_url || listeningAudioUrlFromId(q.id || r.itemId)} text={speakerText} isPractice />
               </div>
             )}
             {/* Options A/B/C/D */}
@@ -344,7 +347,7 @@ function LADetail({ session }) {
   const results = session.details?.results || [];
   const questions = session.details?.questions || [];
   const transcript = session.details?.transcript || session.details?.passage || "";
-  const audioUrl = session.details?.audio_url || null;
+  const audioUrl = session.details?.audio_url || listeningAudioUrlFromId(session.details?.itemIds?.[0]);
 
   return (
     <div>
@@ -427,7 +430,7 @@ function LCDetail({ session }) {
   const questions = session.details?.questions || [];
   const conversation = session.details?.conversation || session.details?.turns || [];
   const transcript = session.details?.transcript || session.details?.passage || "";
-  const audioUrl = session.details?.audio_url || null;
+  const audioUrl = session.details?.audio_url || listeningAudioUrlFromId(session.details?.itemIds?.[0]);
   const audioText = transcript || conversation.map(t => t.text || t.content || "").join(" ");
 
   return (
