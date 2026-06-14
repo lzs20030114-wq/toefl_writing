@@ -12249,6 +12249,90 @@
         "status": "passed",
         "accuracy": "2/2"
       }
+    },
+    {
+      "id": "rdl_gen_27513159145-short_003",
+      "variant": "short",
+      "text": "Effective May 15, the recycling bins near the library will be relocated to the back of the Student Union. All bins must be emptied by 4:00 PM on May 14. Contact Facilities Office for details.",
+      "word_count": 35,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_27513159145-short_003_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, what must happen by 4:00 PM on May 14?",
+          "options": {
+            "A": "To empty all recycling bins near the library",
+            "B": "To relocate the recycling bins to the library",
+            "C": "To contact the Facilities Office for bin keys",
+            "D": "To move the bins to the Student Union entrance"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice says 'All bins must be emptied by 4:00 PM on May 14,' so emptying is required."
+        },
+        {
+          "qid": "rdl_gen_27513159145-short_003_q2",
+          "question_type": "detail",
+          "stem": "Where will the recycling bins be placed after May 15?",
+          "options": {
+            "A": "To empty all recycling bins near the library",
+            "B": "To relocate the recycling bins to the library",
+            "C": "To contact the Facilities Office for bin keys",
+            "D": "To move the bins to the back of the Student Union"
+          },
+          "correct_answer": "D",
+          "explanation": "The notice states the bins 'will be relocated to the back of the Student Union' effective May 15."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_27513159145-short_004",
+      "variant": "short",
+      "text": "Dear Jamie, your shift as a campus tour guide volunteer is confirmed for this Saturday, April 12, from 10:00 AM to 12:00 PM. Please arrive at the Welcome Center by 9:45 AM and bring a $10 deposit for the guide materials. Thank you, Tour Office.",
+      "word_count": 45,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_27513159145-short_004_q1",
+          "question_type": "detail",
+          "stem": "What does the email ask Jamie to do for the volunteer shift?",
+          "options": {
+            "A": "To bring a $10 deposit for the guide materials",
+            "B": "To confirm the shift with the Tour Office",
+            "C": "To arrive at the Welcome Center by 10:00 AM",
+            "D": "To prepare a campus tour script in advance"
+          },
+          "correct_answer": "A",
+          "explanation": "The email says 'bring a $10 deposit for the guide materials,' so a deposit is required."
+        },
+        {
+          "qid": "rdl_gen_27513159145-short_004_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the campus tour guide shift?",
+          "options": {
+            "A": "To bring a $10 deposit for the guide materials",
+            "B": "To confirm the shift with the Tour Office",
+            "C": "To arrive at the Welcome Center by 10:00 AM",
+            "D": "To arrive 15 minutes before the shift starts"
+          },
+          "correct_answer": "D",
+          "explanation": "The email requests arrival by 9:45 AM for a shift starting at 10:00 AM, so arriving 15 minutes early is inferred."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
     }
   ]
 }
