@@ -1,0 +1,178 @@
+{
+  "type": "readInDailyLife",
+  "generated_at": "2026-06-15T22:34:58.450Z",
+  "total_generated": 4,
+  "total_accepted": 4,
+  "acceptance_rate": 1,
+  "items": [
+    {
+      "id": "rdl_gen_27580831758-short_001",
+      "variant": "short",
+      "text": "Dear Student,\nYour replacement student ID is ready for pickup at the Campus Card Office in Anderson Hall. A $10 fee is required before issuance. Please bring your current photo ID and pay by cash or card during business hours.\nBest regards,\nCampus Card Services",
+      "word_count": 45,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_27580831758-short_001_q1",
+          "question_type": "detail",
+          "stem": "According to the email, what must a student do before receiving a replacement ID?",
+          "options": {
+            "A": "To provide a photo ID for verification",
+            "B": "To visit the Campus Card Office after hours",
+            "C": "To submit an online application form",
+            "D": "To pay a fee of ten dollars in cash or by card"
+          },
+          "correct_answer": "D",
+          "explanation": "The email states 'A $10 fee is required before issuance' and 'pay by cash or card', so paying the fee is necessary."
+        },
+        {
+          "qid": "rdl_gen_27580831758-short_001_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the replacement ID process?",
+          "options": {
+            "A": "The student must have a previous ID to get a replacement",
+            "B": "The fee can be waived for students with financial need",
+            "C": "The original ID is likely lost or damaged",
+            "D": "The office requires an appointment for pickup"
+          },
+          "correct_answer": "C",
+          "explanation": "The email refers to 'replacement student ID,' which implies the original ID is unavailable, typically due to loss or damage."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_27580831758-short_002",
+      "variant": "short",
+      "text": "Free Flu Shot Clinic!\nProtect yourself this season. Get your free flu shot on October 15, from 10:00 AM to 2:00 PM, at the Student Health Center, Room 104. No appointment needed. Bring your student ID. For questions, call 555-0199.",
+      "word_count": 40,
+      "genre": "flyer",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_27580831758-short_002_q1",
+          "question_type": "detail",
+          "stem": "According to the flyer, what is required to receive a flu shot?",
+          "options": {
+            "A": "A prior appointment with the health center",
+            "B": "A payment of five dollars for the vaccine",
+            "C": "A student identification card be brought",
+            "D": "A signed consent form from a parent"
+          },
+          "correct_answer": "C",
+          "explanation": "The flyer states 'Bring your student ID,' indicating it is required."
+        },
+        {
+          "qid": "rdl_gen_27580831758-short_002_q2",
+          "question_type": "detail",
+          "stem": "Where will the flu shot clinic take place?",
+          "options": {
+            "A": "Room 104 at the Student Health Center",
+            "B": "The main lobby of Anderson Hall",
+            "C": "A mobile unit near the library",
+            "D": "The Campus Card Office in South Lot B"
+          },
+          "correct_answer": "A",
+          "explanation": "The flyer specifies 'at the Student Health Center, Room 104.'"
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_27580831758-short_003",
+      "variant": "short",
+      "text": "Hi Alex,\nYour library books are due this Friday, March 10. Please return them to the front desk in the Main Library by 5:00 PM. A late fee of $0.25 per day applies. Don't forget to check your account for any holds.\nThanks,\nLibrary Staff",
+      "word_count": 45,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_27580831758-short_003_q1",
+          "question_type": "detail",
+          "stem": "According to the email, what action does the student need to take?",
+          "options": {
+            "A": "To return library books by Friday afternoon",
+            "B": "To renew books online before the deadline",
+            "C": "To pay a late fee of twenty-five cents",
+            "D": "To check for holds on a different account"
+          },
+          "correct_answer": "A",
+          "explanation": "The email says 'Please return them to the front desk... by 5:00 PM' on Friday, March 10."
+        },
+        {
+          "qid": "rdl_gen_27580831758-short_003_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the student's library account?",
+          "options": {
+            "A": "The student has no overdue books at this time",
+            "B": "The student may have other items on hold",
+            "C": "The student has already paid the late fee",
+            "D": "The student must visit the library after hours"
+          },
+          "correct_answer": "B",
+          "explanation": "The email advises to 'check your account for any holds,' implying there might be holds present."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_27580831758-short_004",
+      "variant": "short",
+      "text": "Dear Student,\nMy office hours this week have changed. I will be available on Wednesday, May 15, from 2:00 PM to 4:00 PM in Room 302. Please bring your draft essay for review. A $5 printing fee applies if you need materials.\nBest,\nDr. Park",
+      "word_count": 45,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_27580831758-short_004_q1",
+          "question_type": "detail",
+          "stem": "When can the student meet with Dr. Park this week?",
+          "options": {
+            "A": "On Friday, May 17, from 9:00 AM to 11:00 AM",
+            "B": "On Monday, May 13, at 2:00 PM in Room 302",
+            "C": "On Thursday, May 16, from 10:00 AM to noon",
+            "D": "On Wednesday, May 15, between 2:00 and 4:00 PM"
+          },
+          "correct_answer": "D",
+          "explanation": "The email states 'on Wednesday, May 15, from 2:00 PM to 4:00 PM.'"
+        },
+        {
+          "qid": "rdl_gen_27580831758-short_004_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the student's situation?",
+          "options": {
+            "A": "The student has already completed a draft essay",
+            "B": "The student may need to pay a fee for printing",
+            "C": "The student prefers to meet in the morning hours",
+            "D": "The student must schedule a separate appointment"
+          },
+          "correct_answer": "B",
+          "explanation": "Dr. Park mentions 'A $5 printing fee applies if you need materials,' implying printing might be needed."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    }
+  ],
+  "rejected": []
+}
