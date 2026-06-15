@@ -9325,6 +9325,124 @@
         "status": "passed",
         "accuracy": "3/3"
       }
+    },
+    {
+      "id": "rdl_gen_27580831758-long_002",
+      "variant": "long",
+      "text": "NOTICE: Elevator Maintenance in Anderson Hall\n\nDate: Monday, May 15\nTime: 9:00 AM to 4:00 PM\nLocation: Anderson Hall, Main Elevator\n\nPlease be advised that the main elevator in Anderson Hall will be out of service for scheduled maintenance on May 15. During this time:\n\n- Only the stairwells will be available for access to floors 2 through 6.\n- Residents on the first floor will not be affected.\n- All maintenance work will be performed by certified technicians.\n- A $10 late fee will be charged for any items left in the elevator after 4:00 PM.\n\nWe apologize for any inconvenience. For questions, contact Facilities at extension 555-0199.\n\nThank you for your cooperation.",
+      "word_count": 114,
+      "genre": "notice",
+      "format_metadata": {
+        "from": "Facilities Office",
+        "to": "Anderson Hall Residents",
+        "subject": "Elevator Maintenance in Anderson Hall"
+      },
+      "questions": [
+        {
+          "qid": "rdl_gen_27580831758-long_002_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, when will the elevator maintenance take place?",
+          "options": {
+            "A": "On a weekend in early May",
+            "B": "From 9:00 AM to 4:00 PM on May 15",
+            "C": "During the entire month of May",
+            "D": "After 4:00 PM on Monday"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice states: 'Time: 9:00 AM to 4:00 PM' and 'Date: Monday, May 15.'"
+        },
+        {
+          "qid": "rdl_gen_27580831758-long_002_q2",
+          "question_type": "detail",
+          "stem": "Which of the following is NOT mentioned as a consequence of the maintenance?",
+          "options": {
+            "A": "Residents must use the stairwells for upper floors",
+            "B": "A $10 fee applies to items left in the elevator after hours",
+            "C": "Certified technicians will perform all work",
+            "D": "The building will be closed to visitors during maintenance"
+          },
+          "correct_answer": "D",
+          "explanation": "The notice mentions using stairwells, a $10 fee, and certified technicians, but does not mention closing the building to visitors."
+        },
+        {
+          "qid": "rdl_gen_27580831758-long_002_q3",
+          "question_type": "inference",
+          "stem": "What can be inferred about residents on the first floor?",
+          "options": {
+            "A": "They will not need to use the stairwells",
+            "B": "They must evacuate during the maintenance",
+            "C": "They will be charged a $10 fee for elevator use",
+            "D": "They should contact Facilities for more details"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice says 'Residents on the first floor will not be affected,' implying they do not need to use the stairwells."
+        }
+      ],
+      "question_count": 3,
+      "difficulty": "medium",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "3/3"
+      }
+    },
+    {
+      "id": "rdl_gen_27580831758-long_004",
+      "variant": "long",
+      "text": "NOTICE: Water Shutoff for Campus Maintenance\n\nDate: Saturday, March 18\nTime: 7:00 AM to 12:00 PM (noon)\nAffected Buildings: Smith Hall, Davis Library, and the Student Union\n\nDue to scheduled maintenance, water service will be temporarily shut off in the buildings listed above. During this time:\n\n- All restrooms and drinking fountains in these buildings will be unavailable.\n- Students and staff are advised to use facilities in nearby buildings (e.g., Johnson Gym or the Science Center).\n- A $10 refund will be issued to any student who prepaid for a campus meal plan and cannot access dining facilities due to the shutoff.\n- Maintenance crews will work to restore service by noon.\n\nWe apologize for the inconvenience. For more information, contact the Facilities Office at 555-0234 or visit our website.",
+      "word_count": 131,
+      "genre": "notice",
+      "format_metadata": {
+        "from": "Facilities Office",
+        "to": "Campus Community",
+        "subject": "Water Shutoff for Campus Maintenance"
+      },
+      "questions": [
+        {
+          "qid": "rdl_gen_27580831758-long_004_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, when will the water shutoff occur?",
+          "options": {
+            "A": "On a weekday from 7:00 AM to noon",
+            "B": "On a Sunday afternoon in March",
+            "C": "On March 18 from 7:00 AM to 12:00 PM",
+            "D": "During the entire weekend of March 18"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice states: 'Date: Saturday, March 18' and 'Time: 7:00 AM to 12:00 PM (noon).'"
+        },
+        {
+          "qid": "rdl_gen_27580831758-long_004_q2",
+          "question_type": "detail",
+          "stem": "Which of the following is NOT mentioned as an affected building?",
+          "options": {
+            "A": "Smith Hall",
+            "B": "Davis Library",
+            "C": "Johnson Gym",
+            "D": "The Student Union"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice lists Smith Hall, Davis Library, and the Student Union as affected. Johnson Gym is mentioned as an alternative facility, not an affected building."
+        },
+        {
+          "qid": "rdl_gen_27580831758-long_004_q3",
+          "question_type": "inference",
+          "stem": "What can be inferred about students with prepaid meal plans?",
+          "options": {
+            "A": "They will lose access to all campus dining for the day",
+            "B": "They may receive a $10 refund due to the shutoff",
+            "C": "They must use meal vouchers at nearby restaurants",
+            "D": "They can access dining facilities in affected buildings"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice says a $10 refund will be issued to students who prepaid for a meal plan and cannot access dining facilities due to the shutoff, implying refunds are possible."
+        }
+      ],
+      "question_count": 3,
+      "difficulty": "medium",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "3/3"
+      }
     }
   ]
 }
