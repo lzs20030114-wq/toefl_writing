@@ -1,0 +1,114 @@
+{
+  "items": [
+    {
+      "id": "tmp_r2_q1",
+      "prompt": "What did Mariana tell you about the bookstore hours?",
+      "answer": "Mariana said our bookstore opens at nine sharp.",
+      "chunks": ["mariana", "said", "opens at", "nine", "sharp", "is"],
+      "prefilled": ["our bookstore"],
+      "prefilled_positions": {"our bookstore": 2},
+      "distractor": "is",
+      "has_question_mark": false,
+      "grammar_points": ["past simple", "third person subject"]
+    },
+    {
+      "id": "tmp_r2_q2",
+      "prompt": "I think Mariana mentioned a conference on linguistics.",
+      "answer": "When does Olivia leave for our conference?",
+      "chunks": ["when does", "olivia", "leave", "for", "our conference", "did"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "did",
+      "has_question_mark": true,
+      "grammar_points": ["direct question", "wh-question"]
+    },
+    {
+      "id": "tmp_r2_q3",
+      "prompt": "Did you finally try Hector's homemade dumplings?",
+      "answer": "Hector said our new spice blend was perfect.",
+      "chunks": ["hector", "said", "our new", "spice", "blend", "perfect", "are"],
+      "prefilled": ["was"],
+      "prefilled_positions": {"was": 6},
+      "distractor": "are",
+      "has_question_mark": false,
+      "grammar_points": ["past simple", "reported speech"]
+    },
+    {
+      "id": "tmp_r2_q4",
+      "prompt": "Did you hear what Margot decided about the mixer?",
+      "answer": "Margot needed to know if my venue is booked.",
+      "chunks": ["margot", "if", "my", "venue", "is", "booked", "was"],
+      "prefilled": ["needed to know"],
+      "prefilled_positions": {"needed to know": 1},
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["embedded question (needed to know)", "indirect if-clause"]
+    },
+    {
+      "id": "tmp_r2_q5",
+      "prompt": "What did Julian tell you about the lab partnership?",
+      "answer": "Julian hasn't told me whether the lab opens tonight.",
+      "chunks": ["hasn't", "told me", "whether", "the lab", "opens", "tonight", "didn't"],
+      "prefilled": ["Julian"],
+      "prefilled_positions": {"julian": 0},
+      "distractor": "didn't",
+      "has_question_mark": false,
+      "grammar_points": ["negation", "embedded question (told whether)"]
+    },
+    {
+      "id": "tmp_r2_q6",
+      "prompt": "What did Alison ask you after the poster session?",
+      "answer": "Alison wondered if you took the printed handouts.",
+      "chunks": ["alison", "wondered", "you", "took", "the", "printed handouts", "has"],
+      "prefilled": ["if"],
+      "prefilled_positions": {"if": 2},
+      "distractor": "has",
+      "has_question_mark": false,
+      "grammar_points": ["embedded question (wondered if)", "past simple"]
+    },
+    {
+      "id": "tmp_r2_q7",
+      "prompt": "Why did you skip the budget meeting yesterday?",
+      "answer": "Honestly, Juan needed help moving into his apartment.",
+      "chunks": ["juan", "needed", "help", "moving", "into", "his apartment", "were"],
+      "prefilled": ["Honestly,"],
+      "prefilled_positions": {"honestly,": 0},
+      "distractor": "were",
+      "has_question_mark": false,
+      "grammar_points": ["sentence-opener adverb", "past simple"]
+    },
+    {
+      "id": "tmp_r2_q8",
+      "prompt": "Where can you pick up the new student handbooks?",
+      "answer": "Your handbooks were quietly left at the front desk by Naomi this morning.",
+      "chunks": ["were", "quietly", "left at", "the front", "desk", "by", "naomi", "this morning", "have"],
+      "prefilled": ["Your handbooks"],
+      "prefilled_positions": {"your handbooks": 0},
+      "distractor": "have",
+      "has_question_mark": false,
+      "grammar_points": ["passive voice", "time adjunct"]
+    },
+    {
+      "id": "tmp_r2_q9",
+      "prompt": "Have you met Diane, the new graduate TA?",
+      "answer": "Yeah, Diane currently runs the study sessions that I joined last week.",
+      "chunks": ["yeah", "currently runs", "the study", "sessions", "that I", "joined", "last week", "would"],
+      "prefilled": ["Diane"],
+      "prefilled_positions": {"diane": 1},
+      "distractor": "would",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause", "present simple"]
+    },
+    {
+      "id": "tmp_r2_q10",
+      "prompt": "I heard Professor Cho announced a new research scholarship.",
+      "answer": "Did Angelina submit our grant application on time?",
+      "chunks": ["did", "submit", "our", "grant", "application", "on time", "does"],
+      "prefilled": ["Angelina"],
+      "prefilled_positions": {"angelina": 1},
+      "distractor": "does",
+      "has_question_mark": true,
+      "grammar_points": ["direct question", "yes/no question"]
+    }
+  ]
+}
