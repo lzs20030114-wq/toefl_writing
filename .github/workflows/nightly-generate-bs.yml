@@ -61,6 +61,13 @@ jobs:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
           DEEPSEEK_PROXY_URL: ${{ vars.DEEPSEEK_PROXY_URL }}
           BS_APPEND_SETS: "2"
+          # Enforce the frozen real-exam difficulty gate (locked 2026-06-17): a batch that
+          # would drag the live bank out of calibration is REJECTED instead of merged. Safe
+          # now that the live bank is gate-clean. On FAIL appendBSSets exits non-zero → the
+          # commit step (if: generate.outcome == 'success') is skipped, bank untouched.
+          # Isolated to BS (this is BS's own called workflow). To revert to monitor-only,
+          # set "0" or remove this line.
+          BS_GATE_ENFORCE: "1"
         shell: bash
         run: |
           set -u
