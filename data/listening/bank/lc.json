@@ -31670,6 +31670,394 @@
       ],
       "id": "lc_mq5magpt_2",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/conversation/lc_mq5magpt_2.mp3"
+    },
+    {
+      "context": "plans_social",
+      "situation": "two friends coordinating a weekend hiking or beach trip",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hey, are we still on for the Cascade ridge hike this Saturday? I've been checking the weather and it's looking pretty rainy."
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, I saw that too. Honestly, the trail gets really slick when it's wet, and the view at the top is the whole point. Want to push it to next weekend instead?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "That works for me. But maybe we just swap to the coastal walk this Saturday? It's covered most of the way and we don't waste the day."
+        },
+        {
+          "speaker": "Man",
+          "text": "Oh, that's a great call. The coastal route has those cafés near the lighthouse. We can grab lunch halfway."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Perfect. I'll text Sam too, so she can come if she wants. I'll meet you at the bus stop by nine."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the conversation mainly about?",
+          "options": {
+            "A": "How to change weekend plans because of bad hiking weather",
+            "B": "Why the Cascade ridge trail closes during the autumn season",
+            "C": "How the lighthouse café upgraded its lunch menu recently",
+            "D": "Why Sam refused to join the coastal walk this Saturday"
+          },
+          "answer": "A",
+          "explanation": "对话围绕因下雨更改原定登山计划展开，A 正确。B、C 凭空发挥；D 与对话中邀请 Sam 矛盾。",
+          "distractor_types": {
+            "B": "wrong_topic",
+            "C": "wrong_topic",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the speakers most likely do this Saturday?",
+          "options": {
+            "A": "Hike the Cascade ridge in the rain despite the conditions",
+            "B": "Cancel all weekend plans and stay home in the dorms",
+            "C": "Take the coastal walk and stop for lunch near the lighthouse",
+            "D": "Drive to a different city to avoid the rainy weather entirely"
+          },
+          "answer": "C",
+          "explanation": "对话最终敲定改走海岸路线并在灯塔附近吃午餐，故 C 对。A 与决定相反；B、D 与对话无依据。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_mqh1b5nn_0"
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "two students talking about which elective class to take next term",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "I'm trying to pick an elective for next term and I can't decide. Have you taken any good ones?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Honestly, the film analysis seminar with Professor Cho was the best class I've taken. Tons of writing but really small group."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Hmm. I was looking at that one. Is the workload actually heavy though? I've got organic chem next term."
+        },
+        {
+          "speaker": "Man",
+          "text": "It's manageable if you stay on top of the weekly responses. The screenings happen Thursday evenings, so plan your lab nights around that."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh, that's a good warning. I'll check whether the Thursday evening lab block works first."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "According to the man, what makes the film analysis seminar valuable?",
+          "options": {
+            "A": "It requires no writing assignments throughout the semester",
+            "B": "It is taught by Professor Cho in a small group setting",
+            "C": "It meets only twice a month for short discussions",
+            "D": "It guarantees a high grade for all enrolled students"
+          },
+          "answer": "B",
+          "explanation": "男生强调课程是 Professor Cho 教、小组小，故 B 对。A 与'tons of writing'相反；C、D 凭空发挥。",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman likely do before enrolling?",
+          "options": {
+            "A": "Drop her planned organic chemistry course for next term",
+            "B": "Wait until Professor Cho announces a different time slot",
+            "C": "Speak with Professor Cho about reducing the workload",
+            "D": "Check whether her Thursday evening lab schedule will work"
+          },
+          "answer": "D",
+          "explanation": "女生在结尾明确说要先确认周四晚上的实验时间，故 D 对。A、B、C 都没有依据，且与她最后的发言不一致。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_next_step",
+            "C": "over_inference"
+          }
+        }
+      ],
+      "id": "lc_mqh1b5nn_1"
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two friends recommending a podcast or TV series to each other",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Have you finished that medical drama yet? The one with the rural clinic?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, I burned through it last week. The first season is amazing, but I'd skip the second."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh really? What's wrong with the second?"
+        },
+        {
+          "speaker": "Man",
+          "text": "They added too many side characters and the pacing falls apart. If you want something better, try that podcast on long-haul truckers. It's only six episodes and totally absorbing."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Hmm, a podcast is honestly easier with my study schedule. Send me the link?"
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why does the man advise skipping the second season of the drama?",
+          "options": {
+            "A": "Its first episode was poorly written",
+            "B": "Its rural clinic setting was abandoned",
+            "C": "It added too many side characters and the pacing breaks down",
+            "D": "It was canceled before the season finale aired"
+          },
+          "answer": "C",
+          "explanation": "男生直接说'They added too many side characters and the pacing falls apart'，故 C 对。A、B、D 都未提及。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do after the conversation?",
+          "options": {
+            "A": "Watch the entire second season of the medical drama",
+            "B": "Recommend the drama to her organic chemistry classmates",
+            "C": "Listen to the long-haul trucker podcast in her free time",
+            "D": "Send the man a link to a different podcast she likes"
+          },
+          "answer": "C",
+          "explanation": "女生说播客更适合自己的日程并要链接，故 C 对。A 与男生建议相反；B、D 没有依据。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "unrelated_next_step",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_mqh1b5nn_2"
+    },
+    {
+      "context": "errands_service",
+      "situation": "a student returning a too-small sweater at a store counter",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "customer",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "store_clerk",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hi, I bought this sweater here last week but it's a bit tight in the shoulders. Can I exchange it for a larger size?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Sure, do you have the receipt with you?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "I have the digital one on my phone. Does that work?"
+        },
+        {
+          "speaker": "Man",
+          "text": "That's fine. Let me see if we still carry that color in a medium. Hmm, looks like the cream is sold out, but we have it in dark green and navy."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh, the navy actually sounds better with what I wear. Let's go with that."
+        },
+        {
+          "speaker": "Man",
+          "text": "Great. I'll grab it from the back and we'll process the swap at the register."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why is the woman returning the sweater?",
+          "options": {
+            "A": "Because the color faded after one wash",
+            "B": "Because she lost the original paper receipt entirely",
+            "C": "Because the cream color was discontinued by the brand",
+            "D": "Because the sweater is too tight in the shoulders for her"
+          },
+          "answer": "D",
+          "explanation": "女生明确说'a bit tight in the shoulders'，故 D 对。A、C 没有依据；B 与对话中她有电子收据相反。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "reversed_situation",
+            "C": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will most likely happen next?",
+          "options": {
+            "A": "The woman will leave with the same sweater unchanged",
+            "B": "The man will refund her purchase entirely without exchange",
+            "C": "The man will order the cream color from another store branch",
+            "D": "The woman will receive a navy sweater after the swap at the register"
+          },
+          "answer": "D",
+          "explanation": "对话结尾男生取一件海军蓝去收银台办理调换，故 D 对。A、B 与决定相反；C 凭空发挥。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "rejected_option",
+            "C": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_mqh1b5nn_3"
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two students swapping music recommendations because one is bored of the same pop singers",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "I'm so bored of the same pop singers on my playlist. Any suggestions?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Honestly, you should try some indie folk. There's a Norwegian duo whose harmonies are unreal."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Hmm, folk isn't usually my thing. Is it the gentle acoustic kind?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Not really. They use a lot of layered synthesizer textures under the vocals, so it's more atmospheric than acoustic. The latest album has been on repeat for me."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh, that sounds interesting actually. Synthesizers with folk vocals could break me out of the loop."
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, give it one full listen on the bus tomorrow."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main point of the conversation?",
+          "options": {
+            "A": "The man is recommending atmospheric indie folk to the woman who is tired of pop",
+            "B": "The woman is convincing the man to abandon his Norwegian duo entirely",
+            "C": "The two friends are debating whether folk vocals should use synthesizers",
+            "D": "The man wants the woman to stop using her commute for listening to music"
+          },
+          "answer": "A",
+          "explanation": "男生向厌烦流行的女生推荐挪威组合的氛围民谣，A 概括最准确。B、C、D 与对话事实相反或凭空发挥。",
+          "distractor_types": {
+            "B": "reversed_situation",
+            "C": "wrong_topic",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do tomorrow?",
+          "options": {
+            "A": "Buy a vinyl copy of the album from a downtown store",
+            "B": "Ask Sam for an alternative pop singer recommendation",
+            "C": "Listen to the Norwegian duo's album during her bus ride",
+            "D": "Take the man to a live concert by the same Norwegian duo"
+          },
+          "answer": "C",
+          "explanation": "男生建议在公交上完整听一遍，女生表现出兴趣，故 C 对。A、B、D 都没有对话依据。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_next_step",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "id": "lc_mqh1b5nn_4"
     }
   ]
 }

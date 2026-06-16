@@ -9443,6 +9443,102 @@
         "status": "passed",
         "accuracy": "3/3"
       }
+    },
+    {
+      "genre": "email",
+      "variant": "long",
+      "text": "Subject: Shift swap request for next Wednesday\n\nHi Jordan,\n\nI'm writing to ask whether you would be willing to swap shifts with me at the campus bookstore. I'm scheduled to work the 2:00 to 8:00 p.m. shift on Wednesday, October 18, but I have a microbiology midterm at 6:00 p.m. the same evening that I just learned about. If you could take my Wednesday slot, I would gladly take your 9:00 a.m. to 3:00 p.m. shift this Saturday, October 21, in return.\n\nIf the swap works for you, please let Ms. Patel at the front desk know by Friday so she can update the schedule and process the $5 swap fee on my account. I would really appreciate it, and I'm happy to bring you coffee from the union as a thank-you next week.\n\nThanks so much,\nDavid",
+      "format_metadata": {
+        "from": "David",
+        "to": "Jordan",
+        "subject": "Shift swap request for next Wednesday"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what must Jordan do if she accepts the swap?",
+          "options": {
+            "A": "Pay a five dollar swap fee at the bookstore counter",
+            "B": "Inform Ms. Patel at the front desk by Friday",
+            "C": "Email the department supervisor about the change",
+            "D": "Sign a written form at the staff meeting Thursday"
+          },
+          "correct_answer": "B",
+          "explanation": "The email asks Jordan to let Ms. Patel at the front desk know by Friday so she can update the schedule."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about why David is asking for the swap?",
+          "options": {
+            "A": "He prefers working morning shifts on weekends",
+            "B": "He recently received a notice from his supervisor",
+            "C": "He has a midterm exam during his scheduled shift",
+            "D": "He plans to attend a campus event Wednesday evening"
+          },
+          "correct_answer": "C",
+          "explanation": "The email explicitly states David has a microbiology midterm at 6:00 p.m. on Wednesday during his scheduled shift."
+        },
+        {
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this email?",
+          "options": {
+            "A": "To complain about how the bookstore schedule was assigned",
+            "B": "To remind Jordan about an upcoming microbiology midterm",
+            "C": "To confirm a swap fee that was applied last weekend",
+            "D": "To request that Jordan trade work shifts with David"
+          },
+          "correct_answer": "D",
+          "explanation": "The entire email centers on requesting a shift swap with Jordan, offering David's Saturday shift in exchange for Jordan's Wednesday slot."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-long_mqh13fiv_0"
+    },
+    {
+      "genre": "notice",
+      "variant": "long",
+      "text": "Notice: Library Study Room Reservation System Update\n\nEffective Monday, November 6, the library will move all study room reservations from the paper sign-up sheet to the new online portal at library.greenhill.edu. The change affects the small group rooms on the second floor and the four soundproof pods on the third floor.\n\nReservation rules:\n\n• Each student may book up to four hours per day across all rooms.\n• Reservations open seventy-two hours in advance.\n• A $10 no-show fee will be charged to any student who fails to cancel at least sixty minutes before the start time.\n• Bookings for the soundproof pods require a brief orientation video, available on the portal.\n\nStaff at the front desk will continue to assist drop-in users, and walk-in availability will be displayed on the lobby monitor in real time. For questions, please contact Ms. Vargas at the circulation desk or library@greenhill.edu.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, how far in advance can a student reserve a room?",
+          "options": {
+            "A": "Up to twenty-four hours before the booking time",
+            "B": "Up to forty-eight hours before the booking time",
+            "C": "Up to seventy-two hours before the booking time",
+            "D": "Up to ninety-six hours before the booking time"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice states reservations open seventy-two hours in advance."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred from the notice about students who want to use a soundproof pod?",
+          "options": {
+            "A": "They must complete an orientation video before booking",
+            "B": "They will receive priority access over group-room users",
+            "C": "They are allowed unlimited daily reservation hours",
+            "D": "They cannot use the room without staff supervision"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice states that bookings for the soundproof pods require a brief orientation video, so a student would need to complete it first."
+        },
+        {
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this notice?",
+          "options": {
+            "A": "To remind students about library closing hours next month",
+            "B": "To announce a new online reservation system and its rules",
+            "C": "To advertise newly added soundproof pods on the third floor",
+            "D": "To explain how to contact circulation staff during exams"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice introduces the new online portal and details the reservation rules that will apply."
+        }
+      ],
+      "difficulty": "medium",
+      "id": "rdl-long_mqh13fiv_1"
     }
   ]
 }

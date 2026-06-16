@@ -11883,6 +11883,174 @@
         "D": "off_topic"
       },
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/choose-response/lcr_rt_20260608_8.mp3"
+    },
+    {
+      "context": "general_daily",
+      "situation": "checking if a service (post office, bank) is open",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "The post office should still be open this late.",
+      "options": {
+        "A": "Actually, they closed at four today.",
+        "B": "The mail truck just drove away.",
+        "C": "I always mail my packages on Mondays.",
+        "D": "Did you know it's a federal holiday tomorrow?"
+      },
+      "answer": "A",
+      "explanation": "正确答案以 Actually 引导，含蓄地纠正说话人的假设，符合 marker_led_indirect 范式。B 用了相关词 mail 但不回答；C 偏离话题；D 答非所问，错问回应。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_mqh1b5o3_0"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student checking with TA about lab report requirements",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Why do we have to include the calibration data this time?",
+      "options": {
+        "A": "I forgot to submit my own report.",
+        "B": "Because the new sensors drift more than last semester's.",
+        "C": "The lab is closed for the holiday.",
+        "D": "Calibration sounds like a useful word."
+      },
+      "answer": "B",
+      "explanation": "Why 问题直接回答原因，B 用 Because 引出新传感器漂移，符合 direct_topical。A 转向自身经历；C 离题；D 抓 calibration 这词造无意义回答。",
+      "distractor_types": {
+        "A": "off_topic",
+        "C": "off_topic",
+        "D": "semantic_association_trap"
+      },
+      "id": "lcr_mqh1b5o3_1"
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a neighbor about noise or shared space",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Have you been hearing that drilling next door all week?",
+      "options": {
+        "A": "Yes, I always drill before assignments.",
+        "B": "The next door restaurant opens at noon.",
+        "C": "I'll talk to the building manager today.",
+        "D": "Drills are sold at the hardware store."
+      },
+      "answer": "C",
+      "explanation": "正确答案不直接回答听到与否，而是直接解决问题（context_shift）。A 利用 drill 多义；B 利用 next door 但无关；D 是词汇陷阱。",
+      "distractor_types": {
+        "A": "polysemy_trap",
+        "B": "semantic_association_trap",
+        "D": "semantic_association_trap"
+      },
+      "id": "lcr_mqh1b5o3_2"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking about course enrollment or prerequisites",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "What courses do I need before taking organic chemistry?",
+      "options": {
+        "A": "Organic chemistry meets twice a week.",
+        "B": "I bought my textbooks online.",
+        "C": "Yes, the professor is really nice.",
+        "D": "Actually, just general chemistry one and two."
+      },
+      "answer": "D",
+      "explanation": "正确答案以 Actually 引导，直接说明前置课程。A 描述课程信息但答非所问；B 偏离；C 答错问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      },
+      "id": "lcr_mqh1b5o3_3"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "friend inviting another to a study group or social event",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Are you free Friday night for game night at our place?",
+      "options": {
+        "A": "Actually, I'm covering a friend's shift then.",
+        "B": "Board games are quite popular here.",
+        "C": "Yes, I love your place very much.",
+        "D": "Did you watch the championship game?"
+      },
+      "answer": "A",
+      "explanation": "正确答案以 Actually 引导，含蓄拒绝并给出理由，符合 marker_led_indirect。B 抓 game；C 抓 place 但答错；D 抓 game 又答非所问。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_mqh1b5o3_4"
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a store clerk about a return or exchange",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "I'd like to return this jacket, please.",
+      "options": {
+        "A": "Jackets are on the second floor.",
+        "B": "Sure, do you have the receipt?",
+        "C": "The store closes at nine tonight.",
+        "D": "I prefer wool jackets in the winter."
+      },
+      "answer": "B",
+      "explanation": "正确答案用反问推动对话（counter_question），询问凭据。A 给出与退货无关的位置；C 离题；D 表达个人偏好答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "off_topic"
+      },
+      "id": "lcr_mqh1b5o3_5"
+    },
+    {
+      "context": "social",
+      "situation": "expressing concern about a friend's situation",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Where are you finding the time for all those clubs?",
+      "options": {
+        "A": "Our club meets in the basement Wednesdays.",
+        "B": "The library closes at midnight on weeknights.",
+        "C": "Honestly, I dropped two of my electives last week.",
+        "D": "Time really does fly when finals approach."
+      },
+      "answer": "C",
+      "explanation": "正确答案不直接回答地点，而是解释如何腾出时间（context_shift）。A、B 词汇陷阱；D 是套话答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "off_topic"
+      },
+      "id": "lcr_mqh1b5o3_6"
+    },
+    {
+      "context": "general_daily",
+      "situation": "calling to check business hours",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "How late are you open on Sunday evenings?",
+      "options": {
+        "A": "Late nights are tough on weekends.",
+        "B": "Sundays are usually slow around here.",
+        "C": "We opened a second location last month.",
+        "D": "Which Sunday are you planning to come?"
+      },
+      "answer": "D",
+      "explanation": "正确答案用反问推进对话，确认具体日期，符合 counter_question。A、B 给出主观或宽泛信息；C 离题。",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "off_topic",
+        "C": "off_topic"
+      },
+      "id": "lcr_mqh1b5o3_7"
     }
   ]
 }

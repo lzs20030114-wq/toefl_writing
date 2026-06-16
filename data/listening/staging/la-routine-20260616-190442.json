@@ -1,0 +1,179 @@
+{
+  "items": [
+    {
+      "context": "campus_activity",
+      "situation": "annual outdoor movie night with blanket seating",
+      "speaker_role": "activity_coordinator",
+      "difficulty": "hard",
+      "announcement": "Good afternoon, students. The Campus Activities Office is excited to announce that our annual Outdoor Movie Night will take place this Friday, October 20, on the south lawn behind the library. The featured film will be a recent international documentary about urban beekeeping. Seating is blanket-style, so please bring your own blanket or low folding chair, as no rental chairs will be available this year. Doors and snack tables open at seven fifteen, and the projection begins promptly at eight o'clock once natural light fades. In case of rain, the screening will move indoors to the Waldman Auditorium with the same start time.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "According to the announcement, what must students bring with them?",
+          "options": {
+            "A": "Their own blanket or low folding chair for seating",
+            "B": "A printed ticket purchased from the activities office",
+            "C": "A handheld flashlight to use during the screening",
+            "D": "A reusable cup for the snack table refreshments"
+          },
+          "answer": "A",
+          "explanation": "公告明确指出由于今年不提供租用椅子，须自备毯子或低折叠椅，故 A 对。B、C、D 都未提及。",
+          "distractor_types": {"B": "related_but_not_stated", "C": "wrong_detail", "D": "related_but_not_stated"}
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred from the announcement?",
+          "options": {
+            "A": "The projection equipment cannot operate when natural light is still strong",
+            "B": "Snack tables will remain closed during the film projection itself",
+            "C": "The screening time will not change even if there is rain",
+            "D": "The featured documentary will be shown only to graduate students"
+          },
+          "answer": "C",
+          "explanation": "公告说雨天移至室内但起始时间不变，故 C 可推。A 把'自然光褪去开始'过度推断为设备无法运行；B、D 无依据。",
+          "distractor_types": {"A": "over_inference", "B": "literal_restatement", "D": "wrong_detail"}
+        }
+      ]
+    },
+    {
+      "context": "campus_activity",
+      "situation": "campus sustainability cleanup day",
+      "speaker_role": "program_coordinator",
+      "difficulty": "easy",
+      "announcement": "Attention students. The Sustainability Office is hosting our quarterly campus cleanup day this Saturday, October 21, beginning at nine in the morning. Volunteers should gather at the fountain plaza in front of Briarwood Hall. We'll provide gloves, trash grabbers, and a complimentary lunch from the dining commons for everyone who participates. Please register by Thursday evening through the sustainability portal so we can confirm head counts and pizza orders. No prior experience is required, and family members and friends are welcome to join as long as they also register on the portal in advance.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce a renovation of Briarwood Hall fountain plaza",
+            "B": "To recruit volunteers for a quarterly campus cleanup day",
+            "C": "To advertise a new course on sustainability and the environment",
+            "D": "To remind students about an upcoming dining commons closure"
+          },
+          "answer": "B",
+          "explanation": "公告整体在号召志愿者参与季度清洁日，B 对。A、C、D 均与公告核心目的不符。",
+          "distractor_types": {"A": "wrong_purpose", "C": "wrong_purpose", "D": "wrong_purpose"}
+        },
+        {
+          "type": "detail",
+          "stem": "According to the announcement, what will participants receive?",
+          "options": {
+            "A": "Cash payment delivered after their shift ends",
+            "B": "Credit toward a future sustainability course offering",
+            "C": "Discounted tickets to the next dining commons event",
+            "D": "Gloves, trash grabbers, and a complimentary lunch"
+          },
+          "answer": "D",
+          "explanation": "公告列出参与者得到手套、垃圾抓取器和餐厅免费午餐，故 D 对。A、B、C 都未提及。",
+          "distractor_types": {"A": "related_but_not_stated", "B": "wrong_detail", "C": "misattributed_detail"}
+        }
+      ]
+    },
+    {
+      "context": "facility_change",
+      "situation": "student lounge or study area closing for pipe/ceiling repair",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "Attention students, faculty, and staff. Due to a recent leak in the third-floor ceiling, the Harrington student lounge will be closed for repair from Monday, November 6, through Wednesday, November 8. During the closure, the alternative study area in the basement of Anderson Hall will extend its hours from seven in the morning until midnight. Vending machines and the printing station in the lounge will be temporarily unavailable, but a smaller print station will be set up just outside the Anderson Hall study area for the duration of the closure. We apologize for the inconvenience and appreciate your patience.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To explain why ceiling leaks have become more common on campus",
+            "B": "To recruit students to assist with the lounge repair work",
+            "C": "To inform the campus community that the lounge will close for repair",
+            "D": "To advertise newly added vending machines in Anderson Hall"
+          },
+          "answer": "C",
+          "explanation": "公告核心是通知关闭和替代方案，C 对。A、B、D 均与公告意图不符。",
+          "distractor_types": {"A": "wrong_purpose", "B": "wrong_purpose", "D": "too_narrow"}
+        },
+        {
+          "type": "detail",
+          "stem": "According to the announcement, what hours will the Anderson Hall study area keep during the closure?",
+          "options": {
+            "A": "From seven in the morning until midnight",
+            "B": "From nine in the morning until six in the evening",
+            "C": "From eight in the morning until nine at night",
+            "D": "Around the clock with no scheduled break"
+          },
+          "answer": "A",
+          "explanation": "公告明确说'extend its hours from seven in the morning until midnight'，故 A 对。其余时段均与公告不符。",
+          "distractor_types": {"B": "wrong_detail", "C": "wrong_detail", "D": "over_inference"}
+        }
+      ]
+    },
+    {
+      "context": "facility_change",
+      "situation": "recreation center extending hours during finals week",
+      "speaker_role": "recreation_staff",
+      "difficulty": "medium",
+      "announcement": "This is a reminder that the Greenhill Recreation Center will extend its operating hours during finals week, from Monday, December 11, through Friday, December 15. The cardio room and weight floor will open at five in the morning and remain available until two in the morning the following day. Stress relief programming, including free yoga, mindfulness sessions, and guided stretching, will run every evening at seven and nine in studio B. Students do not need to register in advance for those sessions, but mats should be picked up at the front desk fifteen minutes before each class begins.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce the permanent closure of studio B during finals",
+            "B": "To advertise paid personal-training sessions at the front desk",
+            "C": "To explain why mat rentals require advance online registration",
+            "D": "To inform students that the recreation center will extend hours and stress-relief programs during finals"
+          },
+          "answer": "D",
+          "explanation": "公告通告延长营业时间并增加减压课程，D 对。A、B 与公告事实矛盾；C 凭空发挥。",
+          "distractor_types": {"A": "reversed_intent", "B": "wrong_purpose", "C": "wrong_detail"}
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the yoga and mindfulness sessions?",
+          "options": {
+            "A": "Each session has a strict twenty-person attendance cap",
+            "B": "Students can simply show up after picking up a mat",
+            "C": "Sessions will be canceled if fewer than five attend",
+            "D": "Students must pay a small fee to access studio B"
+          },
+          "answer": "B",
+          "explanation": "公告说不需提前注册，只需提前 15 分钟取垫子，可推 B。A、C、D 均无依据。",
+          "distractor_types": {"A": "over_inference", "C": "topic_adjacent", "D": "wrong_detail"}
+        }
+      ]
+    },
+    {
+      "context": "logistics",
+      "situation": "campus shuttle route change due to construction",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "Attention students. Due to ongoing construction near the science quad, the campus shuttle will follow a temporary route starting Monday, October 16. The shuttle will skip the science quad stop and will instead stop at the lower library entrance and the visitor parking lot. The Linden Avenue stop is unaffected. Buses will run every twelve minutes between seven in the morning and ten at night. Please plan an extra five minutes if you usually transfer at the science quad. Live route updates and arrival times can be checked on the campus mobility app.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To inform students about a temporary change to the shuttle route",
+            "B": "To request student feedback on shuttle stop locations",
+            "C": "To announce a complete shutdown of the shuttle service",
+            "D": "To advertise a new mobile application from the city government"
+          },
+          "answer": "A",
+          "explanation": "公告通告临时改道，A 对。B 凭空发挥；C 与公告事实相反；D 与公告意图不符。",
+          "distractor_types": {"B": "wrong_purpose", "C": "reversed_intent", "D": "wrong_purpose"}
+        },
+        {
+          "type": "detail",
+          "stem": "According to the announcement, what should riders allow extra time for?",
+          "options": {
+            "A": "Buying a new shuttle pass at the lower library entrance",
+            "B": "Completing a survey on the campus mobility app",
+            "C": "Transferring at the discontinued science quad stop",
+            "D": "Walking around the closed Linden Avenue intersection"
+          },
+          "answer": "C",
+          "explanation": "公告建议在原来科学方场换乘的乘客多留 5 分钟，故 C 对。A、B、D 都未提及。",
+          "distractor_types": {"A": "wrong_detail", "B": "related_but_not_stated", "D": "wrong_detail"}
+        }
+      ]
+    }
+  ]
+}
