@@ -136,20 +136,23 @@ function mergeBS(stagingPath) {
   // shipped BS items WITHOUT ever checking them against the real-exam standard — the
   // exact hole that let the live bank drift out of calibration. We now gate every BS
   // merge here, on the would-be-merged bank, BEFORE committing it.
-  //   - Default: WARNING-ONLY (logs the verdict, still merges) — because the current
-  //     live bank itself fails the gate; blocking now would halt all BS production.
-  //   - BS_GATE_ENFORCE=1: blocking — a FAIL refuses the merge, leaving the bank
-  //     untouched. Flip this on AFTER the bank is replaced with the gate-clean corpus.
+  //   - Default (since 2026-06-17, live bank now gate-clean): ENFORCE — a FAIL refuses
+  //     the merge and leaves the bank untouched.
+  //   - BS_GATE_ENFORCE=0: warning-only escape hatch (logs the verdict, still merges).
   const gateTmp = bankPath + ".gatecheck.tmp";
   writeJSON(gateTmp, merged);
   let gatePass = true;
   try {
     execSync(`node ${resolve(ROOT, "scripts/bs-difficulty-scorer.mjs")} --gate ${gateTmp}`, { stdio: "inherit" });
   } catch { gatePass = false; }
-  const enforceGate = (process.env.BS_GATE_ENFORCE || "").trim() === "1";
+  // Enforce by DEFAULT as of 2026-06-17 (the live bank is now gate-clean). Opt out with
+  // BS_GATE_ENFORCE=0 for a warning-only run. Default-on is what locks the PRIMARY path:
+  // the claude.ai R1/R2 routine calls this script and its env can't be edited from the
+  // repo, so making enforcement the code default locks it without a routine-side change.
+  const enforceGate = (process.env.BS_GATE_ENFORCE || "1").trim() !== "0";
   if (!gatePass && enforceGate) {
     rmSync(gateTmp, { force: true });
-    console.error("✗ BS 难度冻结门 FAIL + BS_GATE_ENFORCE=1 → 拒绝合库，live 题库未改动。先把漂移维度修回真题带内再重跑。");
+    console.error("✗ BS 难度冻结门 FAIL → 拒绝合库，live 题库未改动（默认强制；BS_GATE_ENFORCE=0 可临时改回仅警告）。先把漂移维度修回真题带内再重跑。");
     process.exit(1);
   }
   rmSync(gateTmp, { force: true });
@@ -159,7 +162,7 @@ function mergeBS(stagingPath) {
   console.log(`✅ Appended ${newSets.length} set(s) (set_id ${newSets[0].set_id}–${newSets[newSets.length - 1].set_id}) to ${bankPath}`);
   console.log(`   Total sets now: ${merged.question_sets.length}`);
   if (gatePass) console.log("✓ BS 难度冻结门 PASS");
-  else console.warn("⚠ BS 难度冻结门 FAIL（warning-only：本次仍合库）。现库未达真题校准标准；替换为 gate-clean 库后设 BS_GATE_ENFORCE=1 启用拦截。");
+  else console.warn("⚠ BS 难度冻结门 FAIL（BS_GATE_ENFORCE=0 → 仅警告，本次仍合库）。");
   process.exit(0);
 }
 
