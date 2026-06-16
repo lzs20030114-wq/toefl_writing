@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-06-17 — v1.9.0
+
+- **造句题库整体升级 + 防退化门接进 live** (`f18cad0` + `fe49677`，merge `2d79d74`)：
+  - 线上造句题库整库替换为 gate-clean 的 claudeGen 语料（20 套 / 194 题，`cg_bs_*`）；旧 29 套 / 290 题（`ets_*`，冻结门 7 硬闸 + 3 漂移 FAIL）退役，快照存 `data/eval-profiles/bs-selfcheck-degraded.json`。新库冻结门 PASS（长度档 / 语域 / 多样性 / prefilled / 可重建全过，结构漂移带在带内）。
+  - 冻结难度门（`scripts/bs-difficulty-scorer.mjs --gate`，真题校准标准 `bs-difficulty-standard.json`）接进两条 live 合库路 `mergeClaude.mjs` + `appendBSSets.mjs`：合库前对"将合成的库"过门，默认 **warning-only**，`BS_GATE_ENFORCE=1` 改为 FAIL 即拒合（此前门只在离线 `bs-accept.mjs`，nightly 自动合库绕过真题标准）。`check-quality-gates.mjs` 把 `bs_difficulty_gate` 判定写进夜间报告（非阻断）。
+  - 配套修复：`questionSelector.js` 放宽"每套必须 10 题"为 1–20 题（新库 6 套为 9 题）；`BS_DONE_KEY` → `toefl-bs-done-sets-v2`（新 set_id 1-20 与旧 1-29 撞车，会让用户跳过新题 → 重置造句已完成进度，练习历史走 per-session 快照独立保留）。`bs-difficulty-scorer.mjs` 自校验的"已知退化"参照从 live 库改为冻结退化样本（否则库一变好自校验即坏）+ history 写入自愈（mkdir + try/catch）。
+  - 验证：冻结门 PASS、自校验 PASS、picker 选出全部 20 套、单测 362/362；provenance（9 批 `accepted/` + `_bs_cumulative.json`）入库。未办：`BS_GATE_ENFORCE=1` 待翻；阅读 / 听力审题器接 merge（D）待定；`answer_hashes.json` 已陈旧待重生。
+- **备考日历 / 火苗连续打卡** (`f252680`)：首页右栏（桌面端）新增考试倒计时 + 目标分数环、连续打卡火苗（按连续天数升温配色）、周 / 月练习热力图；目标存 localStorage（按用户隔离）。
+- **听力 / 口语练习记录回放** (`de6cddf` + `0f45a0f`)：听力练习记录支持回放原音 + 原文精听；口语练习记录支持回放题目原音。
+- **修复**：`AudioPlayer` 多实例不再同时播放、互相串音（`e5327e3`）；progress `StatCard` key-in-spread 警告（`56edf7c`）。
+
 ## 2026-06-05 — v1.8.2
 
 - **模考贴近真考（6.4 反馈批量）** (`4458d45` + `21e743a` + `2959de8` + `992016e`)：
