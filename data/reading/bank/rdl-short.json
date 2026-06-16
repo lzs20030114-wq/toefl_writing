@@ -12501,6 +12501,108 @@
         "status": "passed",
         "accuracy": "2/2"
       }
+    },
+    {
+      "genre": "notice",
+      "variant": "short",
+      "text": "Notice: South Lot B will close for repaving on October 14 and 15. Vehicles must be removed by 6:00 a.m. on October 14. Permit holders may park in North Lot C at no extra charge during the closure. A $25 fine applies to any vehicle left in South Lot B.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what is the penalty for leaving a vehicle in South Lot B during the closure?",
+          "options": {
+            "A": "A warning letter sent by mail",
+            "B": "A one-week parking suspension",
+            "C": "A loss of the parking permit",
+            "D": "A twenty-five dollar fine"
+          },
+          "correct_answer": "D",
+          "explanation": "The notice states that a $25 fine applies to any vehicle left in South Lot B during the closure."
+        },
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, where may permit holders park during the closure?",
+          "options": {
+            "A": "In North Lot C at no extra charge",
+            "B": "In the visitor lot near the library",
+            "C": "In South Lot B before 6:00 a.m.",
+            "D": "In any city street within two blocks"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice states permit holders may park in North Lot C at no extra charge during the closure."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mqh12lm8_0"
+    },
+    {
+      "genre": "email",
+      "variant": "short",
+      "text": "Hi Maria,\n\nThis is a quick note to confirm your resume review appointment with Career Services on Thursday, October 12, at 2:00 p.m. in Room 204 of Anderson Hall. Please bring a printed copy of your resume.\n\nThanks,\nMs. Chen",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, where will the appointment take place?",
+          "options": {
+            "A": "Anywhere in the Career Services lobby",
+            "B": "At the Anderson Hall information desk",
+            "C": "Inside the Anderson Hall career office",
+            "D": "In Room 204 of Anderson Hall building"
+          },
+          "correct_answer": "D",
+          "explanation": "The email states the appointment is in Room 204 of Anderson Hall."
+        },
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what should Maria bring to the appointment?",
+          "options": {
+            "A": "A printed copy of her resume",
+            "B": "A list of three possible employers",
+            "C": "A signed confidentiality form for review",
+            "D": "A formal letter of recommendation"
+          },
+          "correct_answer": "A",
+          "explanation": "The email asks Maria to bring a printed copy of her resume."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mqh12lm8_1"
+    },
+    {
+      "genre": "social_media",
+      "variant": "short",
+      "text": "Tried the new chai latte at Quad Café this morning! Smooth, gently spiced, and only $4.50 — way better than the chain place across the street. The new seasonal menu is up through November, so go grab one before the line gets crazy!",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the post, how much does the new chai latte cost?",
+          "options": {
+            "A": "Three dollars and fifty cents",
+            "B": "Four dollars and fifty cents",
+            "C": "Five dollars and fifty cents",
+            "D": "Six dollars and fifty cents"
+          },
+          "correct_answer": "B",
+          "explanation": "The post states the new chai latte costs $4.50."
+        },
+        {
+          "question_type": "detail",
+          "stem": "According to the post, when does the seasonal menu end?",
+          "options": {
+            "A": "Sometime in late September",
+            "B": "On the first day of October",
+            "C": "At the end of November",
+            "D": "On the last day of December"
+          },
+          "correct_answer": "C",
+          "explanation": "The post says the seasonal menu is up through November."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mqh12lm8_2"
     }
   ]
 }

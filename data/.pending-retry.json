@@ -1,37 +1,36 @@
 {
-  "session_id": "routine-20260608-190156",
-  "generated_at": "2026-06-08T19:20:20.174Z",
+  "session_id": "routine-20260616-190442",
+  "generated_at": "2026-06-16T19:29:40.021Z",
   "needs_retry": true,
-  "resolved_at": "2026-06-08T19:31:30.000Z",
-  "resolution_status": "supplemented",
   "overall_scores": {
-    "diversity": 91,
-    "quality": 95
+    "diversity": 95,
+    "quality": 97
   },
+  "bs_difficulty_gate": "PASS",
   "retry_banks": [
     {
       "bank": "bs",
-      "diversity_score": 74,
+      "diversity_score": 84,
       "diversity_threshold": 90,
-      "quality_score": 98,
+      "quality_score": 100,
       "quality_threshold": 95,
       "failures": [
-        "多样性 74 < 90"
+        "多样性 84 < 90"
       ],
       "diversity_breakdown": [
         "角色名 3/20",
         "场景 20/20",
         "句型 4/5",
         "开头 3/4",
-        "prefilled类型 6/4 (top:mid-noun-or-adj 10/20)",
-        "人物当prefilled 1/20 (5%, TPO~30%)",
-        "干扰词 10种 (top:did 39%)",
-        "chunk颗粒 5.7块/题 单词率69% (TPO~6块/77%)",
-        "题面对话化 17/20 (85% 含you, TPO~72%)"
+        "prefilled类型 5/4 (top:mid-noun-or-adj 12/20)",
+        "人物当prefilled 4/20 (20%, TPO~30%)",
+        "干扰词 9种 (top:do 20%)",
+        "chunk颗粒 6.0块/题 单词率83% (TPO~6块/77%)",
+        "题面对话化 11/20 (55% 含you, TPO~72%)"
       ],
       "quality_breakdown": [
         "块数 20/20",
-        "干扰词 18/20",
+        "干扰词 20/20",
         "答案长度 20/20",
         "重组正确 20/20"
       ],
@@ -41,24 +40,25 @@
       "items_to_supplement": 10
     },
     {
-      "bank": "listening-lc",
+      "bank": "reading-rdl-short",
       "diversity_score": 100,
-      "diversity_threshold": 72,
-      "quality_score": 60,
-      "quality_threshold": 80,
+      "diversity_threshold": 80,
+      "quality_score": 75,
+      "quality_threshold": 85,
       "failures": [
-        "质量 60 < 80"
+        "质量 75 < 85"
       ],
       "diversity_breakdown": [
-        "distinct openings 5/5"
+        "话题 4/4",
+        "notice 1 · email 1"
       ],
       "quality_breakdown": [
-        "conv words 68-105: 3/5"
+        "词数 3/4"
       ],
       "hints": [
-        "质量校验有偏差: conv words 68-105: 3/5 — recheck schema compliance"
+        "质量校验有偏差: 词数 3/4 — recheck schema compliance"
       ],
-      "items_to_supplement": 3
+      "items_to_supplement": 2
     }
   ]
 }

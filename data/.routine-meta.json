@@ -1,33 +1,28 @@
 {
-  "session_id": "routine-20260608-190156",
-  "completed_at": "2026-06-08T19:35:00.000Z",
-  "duration_minutes": 33,
-  "highlight": "首次新增材料科学陶瓷与水化学 AP，BS 多样性达 6+ 干扰词",
+  "session_id": "routine-20260616-190442",
+  "completed_at": "2026-06-16T19:28:31Z",
+  "duration_minutes": 23,
+  "highlight": "BS 难度冻结门 PASS、首次覆盖建筑/神经科学/海洋养殖等新主题",
   "commit_sha": "",
-  "r2_completed_at": "2026-06-08T19:31:00.000Z",
-  "r2_session_id": "routine-r2-20260608-193100",
   "results": {
     "bs": {
       "generated": 20,
-      "accepted": 10,
-      "topics": ["campus_life", "professor_advisor", "library", "registration", "study_group"],
+      "accepted": 20,
+      "topics": ["campus life", "service trips", "library", "shuttle", "writing center", "dance club", "volleyball", "salsa lessons", "transfer credits", "swim trials"],
       "favorite": {
-        "prompt": "What did the front desk staff tell you?",
-        "answer": "The lobby printers were quietly repaired over the weekend."
+        "prompt": "I'm thinking of joining the service trip this year.",
+        "answer": "Where do I sign up for the trip?"
       },
       "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_session_id": "routine-r2-20260608-193100",
-      "r2_items_added": 10
+      "failure_reason": ""
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["marine biology", "psychology", "education", "business"],
+      "topics": ["marine biology", "computer science", "public health", "technology and media"],
       "favorite": {
         "subtopic": "marine biology",
-        "preview": "We've been discussing how coastal cities are adapting their stormwater systems as rainfall patterns shift."
+        "preview": "We've been examining how aquaculture is changing coastal economies this semester. Salmon and shrimp farms"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -37,8 +32,8 @@
       "accepted": 4,
       "topics": ["服务与活动", "校园学业", "日常社交", "消费售后"],
       "favorite": {
-        "subtopic": "服务与活动",
-        "preview": "Pottery workshop missing supply list — student needs tool guidance"
+        "subtopic": "消费售后",
+        "preview": "You recently ordered a refurbished burr coffee grinder from a specialty kitchen retailer."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -46,43 +41,43 @@
     "reading-ap": {
       "generated": 5,
       "accepted": 4,
-      "topics": ["materials_science/ceramics", "sociology/education systems", "technology/computing", "chemistry/water chemistry"],
+      "topics": ["materials_science/concrete chemistry", "physics/acoustics", "chemistry/molecular bonding", "sociology/globalization", "anthropology/migration patterns"],
       "favorite": {
-        "subtopic": "materials_science/ceramics",
-        "preview": "Ceramic materials are inorganic, non-metallic solids that are shaped from powders and then hardened at high temperatures."
+        "subtopic": "physics/acoustics",
+        "preview": "Sound waves are mechanical disturbances that travel through a medium by alternately compressing and stretching"
       },
       "retried_after_fail": false,
-      "failure_reason": ""
+      "failure_reason": "1/5 rejected: correct_is_longest in anthropology item"
     },
     "reading-ctw": {
       "generated": 6,
-      "accepted": 6,
-      "topics": ["biology/ecosystems", "environmental_science/climate change", "psychology/placebo effect", "history/medieval guilds", "geology/ocean floor", "astronomy/planetary atmospheres"],
+      "accepted": 5,
+      "topics": ["biology/plant biology", "psychology/cognitive bias", "history/Roman engineering", "geology/ocean floor", "astronomy/dwarf planets"],
       "favorite": {
-        "subtopic": "psychology/placebo effect",
-        "preview": "The placebo effect occurs when patients feel better after taking a treatment that contains no active medicine."
+        "subtopic": "history/Roman engineering",
+        "preview": "Roman aqueducts carried water from distant springs into cities through stone channels that could span dozens"
       },
       "retried_after_fail": false,
-      "failure_reason": ""
+      "failure_reason": "1/6 rejected: first_person 'our' in environmental_science item"
     },
     "reading-rdl-short": {
       "generated": 4,
-      "accepted": 4,
-      "topics": ["email", "flyer", "notice", "notice"],
+      "accepted": 3,
+      "topics": ["notice", "email", "social_media"],
       "favorite": {
-        "subtopic": "flyer",
-        "preview": "STUDENT THEATER PRESENTS: THE LIGHTHOUSE KEEPER. Two nights only — Friday, April 12 and Saturday."
+        "subtopic": "notice/parking closure",
+        "preview": "Notice: South Lot B will close for repaving on October 14 and 15. Vehicles must be removed"
       },
       "retried_after_fail": false,
-      "failure_reason": ""
+      "failure_reason": "1/4 rejected: flyer below 30-word minimum"
     },
     "reading-rdl-long": {
       "generated": 2,
       "accepted": 2,
-      "topics": ["email", "notice"],
+      "topics": ["email/shift swap", "notice/library reservation"],
       "favorite": {
-        "subtopic": "email",
-        "preview": "Subject: Saturday Urban Sketching Walk — Visual Arts Club invites students to a spring sketching and photography walk."
+        "subtopic": "notice/library reservation",
+        "preview": "Notice: Library Study Room Reservation System Update. Effective Monday, November 6, the library will move all"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -90,10 +85,10 @@
     "listening-lat": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["biology/convergent evolution", "psychology/mere-exposure", "geology/sedimentary rocks", "history/medieval paper"],
+      "topics": ["architecture/vernacular housing", "neuroscience/mirror neurons", "physics/Doppler effect", "social_psychology/diffusion of responsibility"],
       "favorite": {
-        "subtopic": "biology/convergent evolution",
-        "preview": "Convergent evolution is one of the most striking patterns in biology — unrelated lineages developing similar body plans."
+        "subtopic": "neuroscience/mirror neurons",
+        "preview": "Mirror neurons are some of the most discussed cells in cognitive neuroscience, and there's still real debate"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -101,24 +96,21 @@
     "listening-lc": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["library", "advising", "dorm", "cafe", "gym"],
+      "topics": ["plans_social/hiking", "campus_dorm_life/electives", "recommendations/podcast", "errands_service/sweater return", "recommendations/indie folk"],
       "favorite": {
-        "subtopic": "advising",
-        "preview": "Student requests summer statistics approval — advisor warns about condensed schedule."
+        "subtopic": "recommendations_opinions/indie folk",
+        "preview": "I'm so bored of the same pop singers on my playlist. Any suggestions?"
       },
       "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_session_id": "routine-r2-20260608-193100",
-      "r2_items_added": 3
+      "failure_reason": ""
     },
     "listening-la": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["library_repair", "guest_lecture", "shuttle_reroute", "registration", "cultural_fair"],
+      "topics": ["campus_activity/movie night", "campus_activity/cleanup", "facility_change/lounge", "facility_change/recreation hours", "logistics/shuttle"],
       "favorite": {
-        "subtopic": "cultural_fair",
-        "preview": "Annual Campus Cultural Fair on April 26 — thirty student clubs, free shuttle, volunteer signup."
+        "subtopic": "campus_activity/movie night",
+        "preview": "Good afternoon, students. The Campus Activities Office is excited to announce that our annual Outdoor Movie"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -126,10 +118,10 @@
     "listening-lcr": {
       "generated": 8,
       "accepted": 8,
-      "topics": ["chapter_assignment", "dinner_invite", "printer", "study_group", "registration_form", "quiet_friend", "stuck_window", "lab_report"],
+      "topics": ["service hours", "lab requirements", "neighbor noise", "course prerequisites", "game night", "return jacket", "club time", "business hours"],
       "favorite": {
-        "subtopic": "registration_form",
-        "preview": "I'm at my wits' end trying to make this registration form work."
+        "subtopic": "social/club time",
+        "preview": "Where are you finding the time for all those clubs?"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -137,10 +129,10 @@
     "speaking-repeat": {
       "generated": 3,
       "accepted": 3,
-      "topics": ["theater_rehearsal", "radio_station", "bike_repair"],
+      "topics": ["IT Help Desk", "Planetarium Visit", "Bike Tire Repair"],
       "favorite": {
-        "subtopic": "bike_repair",
-        "preview": "Before you take the bike out for a test ride, pump up the tire and confirm the patch holds."
+        "subtopic": "Bike Tire Repair (how-to)",
+        "preview": "Before you ride away, reinflate the tube to full pressure and check that the patch holds."
       },
       "retried_after_fail": false,
       "failure_reason": ""
