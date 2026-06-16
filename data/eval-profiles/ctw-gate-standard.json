@@ -1,0 +1,53 @@
+{
+  "type": "ctw",
+  "derived_from": "data/realExam2026/reading/completeTheWords.json",
+  "n": 75,
+  "dimensions": {
+    "passage_word_count": {
+      "policy": "hard",
+      "target": 69.32,
+      "detector_precision": 1,
+      "band": [
+        60.31999999999999,
+        78.32
+      ]
+    },
+    "first_sentence_words": {
+      "policy": "hard",
+      "target": 16.706666666666667,
+      "detector_precision": 1,
+      "band": [
+        13.706666666666667,
+        19.706666666666667
+      ]
+    },
+    "first_sentence_avg_word_len": {
+      "policy": "hard",
+      "target": 6.003248211609679,
+      "detector_precision": 1,
+      "band": [
+        5.553248211609679,
+        6.453248211609679
+      ]
+    },
+    "first_sentence_long_word_share": {
+      "policy": "hard",
+      "target": 0.38125835021332377,
+      "detector_precision": 1,
+      "band": [
+        0.2812583502133238,
+        0.48125835021332375
+      ]
+    },
+    "sentence_count": {
+      "policy": "monitor",
+      "target": 4.24,
+      "detector_precision": 0.9
+    },
+    "sentence_length_cv": {
+      "policy": "monitor",
+      "target": 0.29851798291508547,
+      "detector_precision": 0.7
+    }
+  }
+}

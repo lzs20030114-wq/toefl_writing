@@ -1,0 +1,13 @@
+{
+  "title": "CTW instrument self-check NEGATIVE fixture — deliberately degraded",
+  "purpose": "Hand-built short+plain passages that MUST FAIL every CTW hard gate (passage_word_count, first_sentence_words, first_sentence_avg_word_len, first_sentence_long_word_share). Proves the gate discriminates: the real corpus passes these gates, this fixture fails them. Regenerate (and keep failing every hard gate) whenever a new CTW hard-gate dimension is added.",
+  "tier": "synthetic-degraded",
+  "items": [
+    { "paragraph": "Dogs are good pets for many people. They like to run and play in the yard. A dog can learn to sit and stay. Dogs eat meat and dry food. Some dogs are big and some are small. People walk their dogs every day." },
+    { "paragraph": "Rain falls from the clouds. The water goes into rivers and lakes. Plants need water to grow tall. Animals drink water every day. When the sun is hot, the water dries up. Then new clouds form in the sky." },
+    { "paragraph": "Cars help people go to work. They drive on roads in the city. A car needs gas to run. Some cars are fast and some are slow. People must drive in a safe way. Many people own a car today." },
+    { "paragraph": "The sun gives us light and heat. It is very far away in space. Plants use the sun to make food. We see the sun in the day. At night the sun goes down. Then the moon comes out." },
+    { "paragraph": "Fish live in the water. They use fins to swim fast. Big fish eat small fish for food. Some fish live in the sea and some in lakes. People catch fish to eat. Fish come in many shapes." },
+    { "paragraph": "A farm has many animals. Cows give us milk to drink. Hens lay eggs in the morning. The farmer plants corn and beans. Rain helps the crops grow well. People buy food from the farm." }
+  ]
+}
