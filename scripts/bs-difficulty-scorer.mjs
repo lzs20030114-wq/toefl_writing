@@ -22,7 +22,12 @@ import { dirname } from "path";
 
 const STANDARD_PATH = "data/eval-profiles/bs-difficulty-standard.json";
 const REAL_PATH = "data/realExam2026/writing/buildSentence-targets.json";
-const V2_PATH = "data/buildSentence/questions.json";
+// Frozen "known-degraded" reference for the instrument self-check. MUST NOT point at the
+// live bank: once the live bank is replaced with a gate-clean corpus (2026-06-16), a live
+// reference would make the self-check's "V2 must FAIL" assertion fail and break every gate
+// run. This is a snapshot of the pre-2026-06-16 degraded bank (old 290-q ets_* bank that
+// failed 7 hard + 3 drift gates) — a stable negative fixture proving the scorer discriminates.
+const V2_PATH = "data/eval-profiles/bs-selfcheck-degraded.json";
 
 /* ─────────────── tokenization & feature detectors ─────────────── */
 const WORD_RE = /[A-Za-z][A-Za-z'-]*/g;
@@ -366,7 +371,7 @@ function selfcheckCore(quiet = false) {
   if (!quiet) {
     console.log("══ SELF-CHECK (打分器判别力验证) ══");
     console.log(`真题(应=标准) 难档=${realAgg.length_bands.hard} 中位词数=${realAgg.length.median} 第一人称=${realAgg.register.first_person}`);
-    console.log(`V2线上(应退化) 难档=${v2Agg.length_bands.hard} 中位词数=${v2Agg.length.median} 第一人称=${v2Agg.register.first_person}`);
+    console.log(`退化样本(冻结,应退化) 难档=${v2Agg.length_bands.hard} 中位词数=${v2Agg.length.median} 第一人称=${v2Agg.register.first_person}`);
     console.log(`\n判别结果: 真题难档达标=${realHardOk ? "✓PASS" : "✗"}   V2难档退化检出=${v2HardFail ? "✓检出FAIL" : "✗未检出"}`);
     console.log(ok ? "\n✓ 打分器可信：真题判达标、V2判退化。" : "\n✗ 打分器判别力不足 — 修正后再用，切勿用它驱动循环。");
   }

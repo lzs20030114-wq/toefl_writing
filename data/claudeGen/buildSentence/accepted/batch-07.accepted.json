@@ -1,0 +1,511 @@
+{
+ "version": "claudeGen-bs-accepted",
+ "batch": "batch-07",
+ "question_sets": [
+  {
+   "set_id": 15,
+   "questions": [
+    {
+     "id": "cg_bs_s15_q1",
+     "prompt": "Did you catch the bookstore buyback this morning?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Did you catch the bookstore buyback this morning?",
+     "answer": "Yeah, I sold my textbooks back early.",
+     "chunks": [
+      "yeah I",
+      "sold my",
+      "textbooks",
+      "back",
+      "did"
+     ],
+     "prefilled": [
+      "early"
+     ],
+     "prefilled_positions": {
+      "early": 6
+     },
+     "distractor": "did",
+     "has_question_mark": false,
+     "grammar_points": [
+      "past simple"
+     ],
+     "difficulty": "easy"
+    },
+    {
+     "id": "cg_bs_s15_q2",
+     "prompt": "When does the campus radio show start?",
+     "prompt_task_kind": "respond",
+     "prompt_task_text": "When does the campus radio show start?",
+     "answer": "I'm not sure when the show starts.",
+     "chunks": [
+      "I'm not",
+      "sure when",
+      "the",
+      "show",
+      "was"
+     ],
+     "prefilled": [
+      "starts"
+     ],
+     "prefilled_positions": {
+      "starts": 6
+     },
+     "distractor": "was",
+     "has_question_mark": false,
+     "grammar_points": [
+      "embedded question (not sure)"
+     ],
+     "difficulty": "easy"
+    },
+    {
+     "id": "cg_bs_s15_q3",
+     "prompt": "The telescope night got pushed back an hour.",
+     "prompt_task_kind": "statement",
+     "prompt_task_text": "The telescope night got pushed back an hour.",
+     "answer": "Oh, did the clouds finally clear up tonight?",
+     "chunks": [
+      "oh did",
+      "the clouds",
+      "finally clear",
+      "up tonight",
+      "does"
+     ],
+     "prefilled": [],
+     "prefilled_positions": {},
+     "distractor": "does",
+     "has_question_mark": true,
+     "grammar_points": [
+      "direct question"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s15_q4",
+     "prompt": "Do you know if your pottery class still has open seats?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Do you know if your pottery class still has open seats?",
+     "answer": "Apparently two spots opened up when my friend dropped.",
+     "chunks": [
+      "apparently two",
+      "spots opened",
+      "up when",
+      "my friend",
+      "is"
+     ],
+     "prefilled": [
+      "dropped"
+     ],
+     "prefilled_positions": {
+      "dropped": 8
+     },
+     "distractor": "is",
+     "has_question_mark": false,
+     "grammar_points": [
+      "subordinate clause"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s15_q5",
+     "prompt": "Did you sign up for the blood drive today?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Did you sign up for the blood drive today?",
+     "answer": "No, the nurses told me sign-ups close at three.",
+     "chunks": [
+      "no the",
+      "nurses told",
+      "me sign-ups",
+      "close at",
+      "were"
+     ],
+     "prefilled": [
+      "three"
+     ],
+     "prefilled_positions": {
+      "three": 8
+     },
+     "distractor": "were",
+     "has_question_mark": false,
+     "grammar_points": [
+      "negation",
+      "reported speech"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s15_q6",
+     "prompt": "Where can I find your resume workshop sign-up sheet?",
+     "prompt_task_kind": "respond",
+     "prompt_task_text": "Where can I find your resume workshop sign-up sheet?",
+     "answer": "The sheet that lists the open slots is right by the door.",
+     "chunks": [
+      "that lists",
+      "the open",
+      "slots is",
+      "right by",
+      "the door",
+      "had"
+     ],
+     "prefilled": [
+      "The sheet"
+     ],
+     "prefilled_positions": {
+      "The sheet": 0
+     },
+     "distractor": "had",
+     "has_question_mark": false,
+     "grammar_points": [
+      "relative clause"
+     ],
+     "difficulty": "hard"
+    },
+    {
+     "id": "cg_bs_s15_q7",
+     "prompt": "The food truck on the quad switched its menu.",
+     "prompt_task_kind": "statement",
+     "prompt_task_text": "The food truck on the quad switched its menu.",
+     "answer": "Do you know if they're still making dumplings?",
+     "chunks": [
+      "do you",
+      "know if",
+      "they're",
+      "still making",
+      "would"
+     ],
+     "prefilled": [
+      "dumplings"
+     ],
+     "prefilled_positions": {
+      "dumplings": 7
+     },
+     "distractor": "would",
+     "has_question_mark": true,
+     "grammar_points": [
+      "indirect question"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s15_q8",
+     "prompt": "Have you tried the new vending machines in the lobby?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Have you tried the new vending machines in the lobby?",
+     "answer": "Not yet, but someone said they are cash-free now.",
+     "chunks": [
+      "not yet",
+      "but someone",
+      "said they",
+      "are cash-free",
+      "now",
+      "been"
+     ],
+     "prefilled": [],
+     "prefilled_positions": {},
+     "distractor": "been",
+     "has_question_mark": false,
+     "grammar_points": [
+      "hearsay frame",
+      "negation"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s15_q9",
+     "prompt": "Did the art exhibit opening get moved to Friday?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Did the art exhibit opening get moved to Friday?",
+     "answer": "I was wondering when the gallery would announce that.",
+     "chunks": [
+      "I",
+      "was",
+      "wondering",
+      "the",
+      "gallery",
+      "would",
+      "announce",
+      "do"
+     ],
+     "prefilled": [
+      "when",
+      "that"
+     ],
+     "prefilled_positions": {
+      "when": 3,
+      "that": 8
+     },
+     "distractor": "do",
+     "has_question_mark": false,
+     "grammar_points": [
+      "embedded question (wondering)"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s15_q10",
+     "prompt": "What did the coach tell you about the pool hours?",
+     "prompt_task_kind": "respond",
+     "prompt_task_text": "What did the coach tell you about the pool hours?",
+     "answer": "He told me the lanes that were roped off for practice stay blocked.",
+     "chunks": [
+      "he told",
+      "me the",
+      "lanes that",
+      "were roped",
+      "off for",
+      "practice stay",
+      "blocked",
+      "are"
+     ],
+     "prefilled": [],
+     "prefilled_positions": {},
+     "distractor": "are",
+     "has_question_mark": false,
+     "grammar_points": [
+      "relative clause",
+      "reported speech"
+     ],
+     "difficulty": "hard"
+    }
+   ]
+  },
+  {
+   "set_id": 16,
+   "questions": [
+    {
+     "id": "cg_bs_s16_q1",
+     "prompt": "Are the theater auditions in the main hall?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Are the theater auditions in the main hall?",
+     "answer": "Yeah, my audition wrapped up at five.",
+     "chunks": [
+      "my audition",
+      "wrapped up",
+      "at",
+      "five",
+      "does"
+     ],
+     "prefilled": [
+      "Yeah"
+     ],
+     "prefilled_positions": {
+      "Yeah": 0
+     },
+     "distractor": "does",
+     "has_question_mark": false,
+     "grammar_points": [
+      "past simple"
+     ],
+     "difficulty": "easy"
+    },
+    {
+     "id": "cg_bs_s16_q2",
+     "prompt": "Did my package arrive at the mail center?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Did my package arrive at the mail center?",
+     "answer": "Yes, your box came in this morning.",
+     "chunks": [
+      "yes your",
+      "box came",
+      "in",
+      "this",
+      "is"
+     ],
+     "prefilled": [
+      "morning"
+     ],
+     "prefilled_positions": {
+      "morning": 6
+     },
+     "distractor": "is",
+     "has_question_mark": false,
+     "grammar_points": [
+      "past simple"
+     ],
+     "difficulty": "easy"
+    },
+    {
+     "id": "cg_bs_s16_q3",
+     "prompt": "The bike share docks by you are empty.",
+     "prompt_task_kind": "statement",
+     "prompt_task_text": "The bike share docks by you are empty.",
+     "answer": "Sorry, I docked mine by the gym.",
+     "chunks": [
+      "sorry I",
+      "docked mine",
+      "by the",
+      "gym",
+      "do"
+     ],
+     "prefilled": [],
+     "prefilled_positions": {},
+     "distractor": "do",
+     "has_question_mark": false,
+     "grammar_points": [
+      "adverbial of place"
+     ],
+     "difficulty": "easy"
+    },
+    {
+     "id": "cg_bs_s16_q4",
+     "prompt": "Do you know whether the quiet floor policy starts this week?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Do you know whether the quiet floor policy starts this week?",
+     "answer": "Apparently the rule that bans music kicks in Monday.",
+     "chunks": [
+      "apparently the",
+      "rule that",
+      "bans music",
+      "kicks in",
+      "did"
+     ],
+     "prefilled": [
+      "Monday"
+     ],
+     "prefilled_positions": {
+      "Monday": 8
+     },
+     "distractor": "did",
+     "has_question_mark": false,
+     "grammar_points": [
+      "indirect question",
+      "relative clause"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s16_q5",
+     "prompt": "Why did the farmers market move off the quad?",
+     "prompt_task_kind": "respond",
+     "prompt_task_text": "Why did the farmers market move off the quad?",
+     "answer": "The vendors wanted the shade that our courtyard provides.",
+     "chunks": [
+      "the vendors",
+      "wanted the",
+      "shade that",
+      "our courtyard",
+      "are"
+     ],
+     "prefilled": [
+      "provides"
+     ],
+     "prefilled_positions": {
+      "provides": 8
+     },
+     "distractor": "are",
+     "has_question_mark": false,
+     "grammar_points": [
+      "relative clause"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s16_q6",
+     "prompt": "The language exchange meets somewhere new tonight.",
+     "prompt_task_kind": "statement",
+     "prompt_task_text": "The language exchange meets somewhere new tonight.",
+     "answer": "Do you know if the room was changed again?",
+     "chunks": [
+      "do you",
+      "know if",
+      "the room",
+      "was changed",
+      "will"
+     ],
+     "prefilled": [
+      "again"
+     ],
+     "prefilled_positions": {
+      "again": 8
+     },
+     "distractor": "will",
+     "has_question_mark": true,
+     "grammar_points": [
+      "indirect question",
+      "passive voice"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s16_q7",
+     "prompt": "The a cappella concert starts a bit late.",
+     "prompt_task_kind": "statement",
+     "prompt_task_text": "The a cappella concert starts a bit late.",
+     "answer": "Do you know who's opening for them tonight?",
+     "chunks": [
+      "do you",
+      "know who's",
+      "opening for",
+      "them",
+      "was"
+     ],
+     "prefilled": [
+      "tonight"
+     ],
+     "prefilled_positions": {
+      "tonight": 7
+     },
+     "distractor": "was",
+     "has_question_mark": true,
+     "grammar_points": [
+      "indirect question"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s16_q8",
+     "prompt": "Have they posted your climbing wall hours yet?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Have they posted your climbing wall hours yet?",
+     "answer": "Not yet, but I'll find out when the desk reopens.",
+     "chunks": [
+      "not yet",
+      "but I'll",
+      "find out",
+      "when the",
+      "desk",
+      "were"
+     ],
+     "prefilled": [
+      "reopens"
+     ],
+     "prefilled_positions": {
+      "reopens": 9
+     },
+     "distractor": "were",
+     "has_question_mark": false,
+     "grammar_points": [
+      "embedded question (find out)",
+      "negation"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s16_q10",
+     "prompt": "What did the organizer tell you about the film screening?",
+     "prompt_task_kind": "respond",
+     "prompt_task_text": "What did the organizer tell you about the film screening?",
+     "answer": "She wanted to know whether the room that we booked would be free.",
+     "chunks": [
+      "she wanted",
+      "to know",
+      "whether the",
+      "room that",
+      "we booked",
+      "would be",
+      "free",
+      "can"
+     ],
+     "prefilled": [],
+     "prefilled_positions": {},
+     "distractor": "can",
+     "has_question_mark": false,
+     "grammar_points": [
+      "indirect question (wanted to know)",
+      "relative clause"
+     ],
+     "difficulty": "hard"
+    }
+   ]
+  }
+ ]
+}

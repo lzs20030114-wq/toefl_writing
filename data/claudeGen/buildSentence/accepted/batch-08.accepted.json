@@ -1,0 +1,530 @@
+{
+ "version": "claudeGen-bs-accepted",
+ "batch": "batch-08",
+ "question_sets": [
+  {
+   "set_id": 17,
+   "questions": [
+    {
+     "id": "cg_bs_s17_q1",
+     "prompt": "Are you heading to the planetarium show tonight?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Are you heading to the planetarium show tonight?",
+     "answer": "Yeah, my friends grabbed our seats already.",
+     "chunks": [
+      "yeah my",
+      "friends grabbed",
+      "our",
+      "seats",
+      "does"
+     ],
+     "prefilled": [
+      "already"
+     ],
+     "prefilled_positions": {
+      "already": 6
+     },
+     "distractor": "does",
+     "has_question_mark": false,
+     "grammar_points": [
+      "present perfect",
+      "short affirmative"
+     ],
+     "difficulty": "easy"
+    },
+    {
+     "id": "cg_bs_s17_q2",
+     "prompt": "Did the bakery run out of cinnamon rolls?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Did the bakery run out of cinnamon rolls?",
+     "answer": "Yes, they sold the last batch already.",
+     "chunks": [
+      "yes they",
+      "sold the",
+      "last",
+      "batch",
+      "did"
+     ],
+     "prefilled": [
+      "already"
+     ],
+     "prefilled_positions": {
+      "already": 6
+     },
+     "distractor": "did",
+     "has_question_mark": false,
+     "grammar_points": [
+      "present perfect",
+      "short affirmative"
+     ],
+     "difficulty": "easy"
+    },
+    {
+     "id": "cg_bs_s17_q3",
+     "prompt": "Have you visited the botany greenhouse this semester?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Have you visited the botany greenhouse this semester?",
+     "answer": "Not yet, but my roommate went yesterday.",
+     "chunks": [
+      "not yet",
+      "but my",
+      "roommate",
+      "went yesterday",
+      "is"
+     ],
+     "prefilled": [],
+     "prefilled_positions": {},
+     "distractor": "is",
+     "has_question_mark": false,
+     "grammar_points": [
+      "past simple",
+      "negation"
+     ],
+     "difficulty": "easy"
+    },
+    {
+     "id": "cg_bs_s17_q4",
+     "prompt": "What did the coordinator tell you about the darkroom hours?",
+     "prompt_task_kind": "respond",
+     "prompt_task_text": "What did the coordinator tell you about the darkroom hours?",
+     "answer": "She told me the darkroom stays open late.",
+     "chunks": [
+      "she told",
+      "me",
+      "the",
+      "darkroom",
+      "open",
+      "late",
+      "was"
+     ],
+     "prefilled": [
+      "stays"
+     ],
+     "prefilled_positions": {
+      "stays": 5
+     },
+     "distractor": "was",
+     "has_question_mark": false,
+     "grammar_points": [
+      "reported speech",
+      "present simple"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s17_q5",
+     "prompt": "The salsa night instructor changed the room again.",
+     "prompt_task_kind": "statement",
+     "prompt_task_text": "The salsa night instructor changed the room again.",
+     "answer": "Do you know whether the new room was reserved?",
+     "chunks": [
+      "do you",
+      "know whether",
+      "the new",
+      "room was",
+      "are"
+     ],
+     "prefilled": [
+      "reserved"
+     ],
+     "prefilled_positions": {
+      "reserved": 8
+     },
+     "distractor": "are",
+     "has_question_mark": true,
+     "grammar_points": [
+      "indirect question",
+      "be-passive"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s17_q6",
+     "prompt": "Can you tell me where the locker rentals are handled?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Can you tell me where the locker rentals are handled?",
+     "answer": "The office that reopened handles them for you.",
+     "chunks": [
+      "that reopened",
+      "handles them",
+      "for",
+      "you",
+      "do"
+     ],
+     "prefilled": [
+      "The office"
+     ],
+     "prefilled_positions": {
+      "The office": 0
+     },
+     "distractor": "do",
+     "has_question_mark": false,
+     "grammar_points": [
+      "present simple",
+      "relative clause"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s17_q7",
+     "prompt": "Someone signed me up for the debate tryouts.",
+     "prompt_task_kind": "statement",
+     "prompt_task_text": "Someone signed me up for the debate tryouts.",
+     "answer": "Do you know if the first round has started?",
+     "chunks": [
+      "do you",
+      "know if",
+      "the first",
+      "round has",
+      "will"
+     ],
+     "prefilled": [
+      "started"
+     ],
+     "prefilled_positions": {
+      "started": 8
+     },
+     "distractor": "will",
+     "has_question_mark": true,
+     "grammar_points": [
+      "indirect question",
+      "present perfect"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s17_q8",
+     "prompt": "What did the captain tell you after the escape-room run?",
+     "prompt_task_kind": "respond",
+     "prompt_task_text": "What did the captain tell you after the escape-room run?",
+     "answer": "He didn't say, so I'll find out tomorrow.",
+     "chunks": [
+      "didn't say",
+      "so I'll",
+      "find",
+      "out tomorrow",
+      "were"
+     ],
+     "prefilled": [
+      "He"
+     ],
+     "prefilled_positions": {
+      "He": 0
+     },
+     "distractor": "were",
+     "has_question_mark": false,
+     "grammar_points": [
+      "embedded question (find out)",
+      "negation"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s17_q9",
+     "prompt": "Why did the juggling club move out of your old gym?",
+     "prompt_task_kind": "respond",
+     "prompt_task_text": "Why did the juggling club move out of your old gym?",
+     "answer": "Because the room we used lost its overhead lighting.",
+     "chunks": [
+      "because",
+      "the",
+      "room",
+      "we",
+      "lost",
+      "its",
+      "overhead",
+      "am"
+     ],
+     "prefilled": [
+      "used",
+      "lighting"
+     ],
+     "prefilled_positions": {
+      "used": 4,
+      "lighting": 8
+     },
+     "distractor": "am",
+     "has_question_mark": false,
+     "grammar_points": [
+      "adverbial clause",
+      "relative clause"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s17_q10",
+     "prompt": "Why did they postpone the escape-room fundraiser again this term?",
+     "prompt_task_kind": "respond",
+     "prompt_task_text": "Why did they postpone the escape-room fundraiser again this term?",
+     "answer": "Apparently the student volunteers who built the puzzles needed another full week.",
+     "chunks": [
+      "apparently the",
+      "student volunteers",
+      "who built",
+      "the puzzles",
+      "needed another",
+      "full week",
+      "can"
+     ],
+     "prefilled": [],
+     "prefilled_positions": {},
+     "distractor": "can",
+     "has_question_mark": false,
+     "grammar_points": [
+      "relative clause",
+      "reported speech"
+     ],
+     "difficulty": "hard"
+    }
+   ]
+  },
+  {
+   "set_id": 18,
+   "questions": [
+    {
+     "id": "cg_bs_s18_q1",
+     "prompt": "Is the campus observatory open for volunteers tonight?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Is the campus observatory open for volunteers tonight?",
+     "answer": "Yeah, they're short, so I'll help tonight.",
+     "chunks": [
+      "yeah they're",
+      "short so",
+      "I'll",
+      "help",
+      "did"
+     ],
+     "prefilled": [
+      "tonight"
+     ],
+     "prefilled_positions": {
+      "tonight": 6
+     },
+     "distractor": "did",
+     "has_question_mark": false,
+     "grammar_points": [
+      "present simple",
+      "short affirmative"
+     ],
+     "difficulty": "easy"
+    },
+    {
+     "id": "cg_bs_s18_q2",
+     "prompt": "Did you sign up for the midnight breakfast event?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Did you sign up for the midnight breakfast event?",
+     "answer": "Sorry, the deadline slipped past me yesterday.",
+     "chunks": [
+      "sorry the",
+      "deadline slipped",
+      "past",
+      "me",
+      "does"
+     ],
+     "prefilled": [
+      "yesterday"
+     ],
+     "prefilled_positions": {
+      "yesterday": 6
+     },
+     "distractor": "does",
+     "has_question_mark": false,
+     "grammar_points": [
+      "past simple",
+      "negation"
+     ],
+     "difficulty": "easy"
+    },
+    {
+     "id": "cg_bs_s18_q3",
+     "prompt": "What did the organizer tell you about the succulent sale?",
+     "prompt_task_kind": "respond",
+     "prompt_task_text": "What did the organizer tell you about the succulent sale?",
+     "answer": "She told me the pots that arrived sold quickly.",
+     "chunks": [
+      "she told",
+      "me the",
+      "pots that",
+      "arrived sold",
+      "quickly",
+      "is"
+     ],
+     "prefilled": [],
+     "prefilled_positions": {},
+     "distractor": "is",
+     "has_question_mark": false,
+     "grammar_points": [
+      "reported speech",
+      "relative clause"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s18_q4",
+     "prompt": "Do you know whether the board-game cafe takes reservations?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Do you know whether the board-game cafe takes reservations?",
+     "answer": "Honestly I'm not sure they hold weekend tables.",
+     "chunks": [
+      "honestly I'm",
+      "not sure",
+      "they hold",
+      "weekend",
+      "was"
+     ],
+     "prefilled": [
+      "tables"
+     ],
+     "prefilled_positions": {
+      "tables": 7
+     },
+     "distractor": "was",
+     "has_question_mark": false,
+     "grammar_points": [
+      "embedded question (not sure)",
+      "present simple"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s18_q6",
+     "prompt": "The tutoring sessions for veterans were rescheduled again.",
+     "prompt_task_kind": "statement",
+     "prompt_task_text": "The tutoring sessions for veterans were rescheduled again.",
+     "answer": "Do you know whether our usual room still works?",
+     "chunks": [
+      "do you",
+      "know whether",
+      "our usual",
+      "room still",
+      "had"
+     ],
+     "prefilled": [
+      "works"
+     ],
+     "prefilled_positions": {
+      "works": 8
+     },
+     "distractor": "had",
+     "has_question_mark": true,
+     "grammar_points": [
+      "indirect question",
+      "present simple"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s18_q7",
+     "prompt": "The photography darkroom looks completely different now.",
+     "prompt_task_kind": "statement",
+     "prompt_task_text": "The photography darkroom looks completely different now.",
+     "answer": "Did you hear it was repainted over the weekend?",
+     "chunks": [
+      "did you",
+      "hear it",
+      "was repainted",
+      "over the",
+      "do"
+     ],
+     "prefilled": [
+      "weekend"
+     ],
+     "prefilled_positions": {
+      "weekend": 8
+     },
+     "distractor": "do",
+     "has_question_mark": true,
+     "grammar_points": [
+      "reported speech",
+      "be-passive"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s18_q8",
+     "prompt": "Could you find out when the planetarium projector gets fixed?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Could you find out when the planetarium projector gets fixed?",
+     "answer": "Sure, let me find out whether they shipped it.",
+     "chunks": [
+      "let me",
+      "find out",
+      "whether they",
+      "shipped it",
+      "are"
+     ],
+     "prefilled": [
+      "Sure"
+     ],
+     "prefilled_positions": {
+      "Sure": 0
+     },
+     "distractor": "are",
+     "has_question_mark": false,
+     "grammar_points": [
+      "embedded question (find out)",
+      "present simple"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s18_q9",
+     "prompt": "Why did the salsa instructor switch the lessons to Thursday evenings?",
+     "prompt_task_kind": "respond",
+     "prompt_task_text": "Why did the salsa instructor switch the lessons to Thursday evenings?",
+     "answer": "Because the studio that we booked freed up only on Thursday evenings.",
+     "chunks": [
+      "because the",
+      "studio that",
+      "we",
+      "booked",
+      "up",
+      "only on",
+      "Thursday",
+      "will"
+     ],
+     "prefilled": [
+      "freed",
+      "evenings"
+     ],
+     "prefilled_positions": {
+      "freed": 6,
+      "evenings": 11
+     },
+     "distractor": "will",
+     "has_question_mark": false,
+     "grammar_points": [
+      "adverbial clause",
+      "relative clause"
+     ],
+     "difficulty": "hard"
+    },
+    {
+     "id": "cg_bs_s18_q10",
+     "prompt": "Why did the bakery move its grand opening up a week?",
+     "prompt_task_kind": "respond",
+     "prompt_task_text": "Why did the bakery move its grand opening up a week?",
+     "answer": "Because the new ovens that they ordered arrived far sooner than expected.",
+     "chunks": [
+      "because the",
+      "new ovens",
+      "that they",
+      "ordered arrived",
+      "far sooner",
+      "than expected",
+      "am"
+     ],
+     "prefilled": [],
+     "prefilled_positions": {},
+     "distractor": "am",
+     "has_question_mark": false,
+     "grammar_points": [
+      "adverbial clause",
+      "relative clause"
+     ],
+     "difficulty": "hard"
+    }
+   ]
+  }
+ ]
+}

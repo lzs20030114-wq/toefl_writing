@@ -1,0 +1,546 @@
+{
+ "version": "claudeGen-bs-accepted",
+ "batch": "batch-03",
+ "question_sets": [
+  {
+   "set_id": 5,
+   "questions": [
+    {
+     "id": "cg_bs_s5_q1",
+     "prompt": "Where did you park this morning?",
+     "prompt_task_kind": "respond",
+     "prompt_task_text": "Where did you park this morning?",
+     "answer": "I parked by the athletic center instead.",
+     "chunks": [
+      "parked by",
+      "the",
+      "athletic",
+      "center instead",
+      "does"
+     ],
+     "prefilled": [
+      "I"
+     ],
+     "prefilled_positions": {
+      "I": 0
+     },
+     "distractor": "does",
+     "has_question_mark": false,
+     "grammar_points": [
+      "past simple"
+     ],
+     "difficulty": "easy"
+    },
+    {
+     "id": "cg_bs_s5_q2",
+     "prompt": "Are you almost done with the project?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Are you almost done with the project?",
+     "answer": "I haven't started the data analysis yet.",
+     "chunks": [
+      "haven't started",
+      "the data",
+      "analysis",
+      "yet",
+      "is"
+     ],
+     "prefilled": [
+      "I"
+     ],
+     "prefilled_positions": {
+      "I": 0
+     },
+     "distractor": "is",
+     "has_question_mark": false,
+     "grammar_points": [
+      "present perfect negation"
+     ],
+     "difficulty": "easy"
+    },
+    {
+     "id": "cg_bs_s5_q3",
+     "prompt": "I can never remember when office hours are.",
+     "prompt_task_kind": "statement",
+     "prompt_task_text": "I can never remember when office hours are.",
+     "answer": "You can find them on the syllabus.",
+     "chunks": [
+      "you can",
+      "find them",
+      "on the",
+      "syllabus",
+      "did"
+     ],
+     "prefilled": [],
+     "prefilled_positions": {},
+     "distractor": "did",
+     "has_question_mark": false,
+     "grammar_points": [
+      "present simple"
+     ],
+     "difficulty": "easy"
+    },
+    {
+     "id": "cg_bs_s5_q4",
+     "prompt": "Did you check out the tutoring center?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Did you check out the tutoring center?",
+     "answer": "I want to know whether they help with statistics.",
+     "chunks": [
+      "I want",
+      "to know",
+      "whether they",
+      "help with",
+      "was"
+     ],
+     "prefilled": [
+      "statistics"
+     ],
+     "prefilled_positions": {
+      "statistics": 8
+     },
+     "distractor": "was",
+     "has_question_mark": false,
+     "grammar_points": [
+      "indirect question"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s5_q5",
+     "prompt": "Have you picked your thesis topic yet?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Have you picked your thesis topic yet?",
+     "answer": "I chose the subject that my professor suggested last spring.",
+     "chunks": [
+      "chose the",
+      "subject that",
+      "my professor",
+      "suggested last",
+      "do"
+     ],
+     "prefilled": [
+      "I",
+      "spring"
+     ],
+     "prefilled_positions": {
+      "I": 0,
+      "spring": 9
+     },
+     "distractor": "do",
+     "has_question_mark": false,
+     "grammar_points": [
+      "relative clause",
+      "past simple"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s5_q6",
+     "prompt": "Where can I do laundry while the machines are down?",
+     "prompt_task_kind": "respond",
+     "prompt_task_text": "Where can I do laundry while the machines are down?",
+     "answer": "The closest open laundromat is just two blocks away.",
+     "chunks": [
+      "open laundromat",
+      "is",
+      "just two",
+      "blocks away",
+      "were"
+     ],
+     "prefilled": [
+      "The closest"
+     ],
+     "prefilled_positions": {
+      "The closest": 0
+     },
+     "distractor": "were",
+     "has_question_mark": false,
+     "grammar_points": [
+      "present simple"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s5_q7",
+     "prompt": "I need to drop a class.",
+     "prompt_task_kind": "statement",
+     "prompt_task_text": "I need to drop a class.",
+     "answer": "Do you know if the deadline has passed already?",
+     "chunks": [
+      "do you",
+      "know if",
+      "the deadline",
+      "has passed",
+      "are"
+     ],
+     "prefilled": [
+      "already"
+     ],
+     "prefilled_positions": {
+      "already": 8
+     },
+     "distractor": "are",
+     "has_question_mark": true,
+     "grammar_points": [
+      "indirect question"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s5_q8",
+     "prompt": "Did you decide between the two dorms?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Did you decide between the two dorms?",
+     "answer": "I prefer the residence hall that has the bigger common study lounge.",
+     "chunks": [
+      "prefer the",
+      "residence hall",
+      "that has",
+      "the bigger",
+      "common study",
+      "lounge",
+      "had"
+     ],
+     "prefilled": [
+      "I"
+     ],
+     "prefilled_positions": {
+      "I": 0
+     },
+     "distractor": "had",
+     "has_question_mark": false,
+     "grammar_points": [
+      "relative clause"
+     ],
+     "difficulty": "hard"
+    },
+    {
+     "id": "cg_bs_s5_q9",
+     "prompt": "Do you have any plans after midterms?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Do you have any plans after midterms?",
+     "answer": "I'm taking this whole weekend off to recharge.",
+     "chunks": [
+      "I'm",
+      "taking",
+      "this",
+      "weekend",
+      "off",
+      "to",
+      "would"
+     ],
+     "prefilled": [
+      "whole",
+      "recharge"
+     ],
+     "prefilled_positions": {
+      "whole": 3,
+      "recharge": 7
+     },
+     "distractor": "would",
+     "has_question_mark": false,
+     "grammar_points": [
+      "present continuous"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s5_q10",
+     "prompt": "Did you get into that popular class?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Did you get into that popular class?",
+     "answer": "I asked the registrar whether the class I wanted still had open spots.",
+     "chunks": [
+      "I asked",
+      "the registrar",
+      "whether the",
+      "class I",
+      "wanted",
+      "still had",
+      "open spots",
+      "will"
+     ],
+     "prefilled": [],
+     "prefilled_positions": {},
+     "distractor": "will",
+     "has_question_mark": false,
+     "grammar_points": [
+      "indirect question",
+      "contact clause"
+     ],
+     "difficulty": "hard"
+    }
+   ]
+  },
+  {
+   "set_id": 6,
+   "questions": [
+    {
+     "id": "cg_bs_s6_q1",
+     "prompt": "When does the campus cafe close these days?",
+     "prompt_task_kind": "respond",
+     "prompt_task_text": "When does the campus cafe close these days?",
+     "answer": "The campus cafe now closes at nine.",
+     "chunks": [
+      "cafe now",
+      "closes",
+      "at",
+      "nine",
+      "did"
+     ],
+     "prefilled": [
+      "The campus"
+     ],
+     "prefilled_positions": {
+      "The campus": 0
+     },
+     "distractor": "did",
+     "has_question_mark": false,
+     "grammar_points": [
+      "present simple"
+     ],
+     "difficulty": "easy"
+    },
+    {
+     "id": "cg_bs_s6_q2",
+     "prompt": "Did you finish the problem set?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Did you finish the problem set?",
+     "answer": "I couldn't solve the last two questions.",
+     "chunks": [
+      "I couldn't",
+      "solve the",
+      "last",
+      "two",
+      "was"
+     ],
+     "prefilled": [
+      "questions"
+     ],
+     "prefilled_positions": {
+      "questions": 6
+     },
+     "distractor": "was",
+     "has_question_mark": false,
+     "grammar_points": [
+      "negation",
+      "past tense"
+     ],
+     "difficulty": "easy"
+    },
+    {
+     "id": "cg_bs_s6_q3",
+     "prompt": "Are you going to the research assistant orientation?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Are you going to the research assistant orientation?",
+     "answer": "I want to know whether they expect everyone to attend.",
+     "chunks": [
+      "I want",
+      "to know",
+      "whether they",
+      "expect everyone",
+      "to attend",
+      "were"
+     ],
+     "prefilled": [],
+     "prefilled_positions": {},
+     "distractor": "were",
+     "has_question_mark": false,
+     "grammar_points": [
+      "indirect question"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s6_q4",
+     "prompt": "Did you find a good study playlist?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Did you find a good study playlist?",
+     "answer": "I shared the playlist that helps me focus better.",
+     "chunks": [
+      "I",
+      "the playlist",
+      "that helps",
+      "me focus",
+      "better",
+      "does"
+     ],
+     "prefilled": [
+      "shared"
+     ],
+     "prefilled_positions": {
+      "shared": 1
+     },
+     "distractor": "does",
+     "has_question_mark": false,
+     "grammar_points": [
+      "relative clause",
+      "past simple"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s6_q5",
+     "prompt": "I'm not sure which dining hall to try.",
+     "prompt_task_kind": "statement",
+     "prompt_task_text": "I'm not sure which dining hall to try.",
+     "answer": "You should try the one that serves late-night food.",
+     "chunks": [
+      "should try",
+      "the one",
+      "that serves",
+      "late-night",
+      "had"
+     ],
+     "prefilled": [
+      "You",
+      "food"
+     ],
+     "prefilled_positions": {
+      "You": 0,
+      "food": 8
+     },
+     "distractor": "had",
+     "has_question_mark": false,
+     "grammar_points": [
+      "relative clause"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s6_q6",
+     "prompt": "Are you signing up for any clubs this week?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Are you signing up for any clubs this week?",
+     "answer": "I'm leaning toward joining the photography club this term.",
+     "chunks": [
+      "leaning toward",
+      "joining the",
+      "photography",
+      "club this term",
+      "would"
+     ],
+     "prefilled": [
+      "I'm"
+     ],
+     "prefilled_positions": {
+      "I'm": 0
+     },
+     "distractor": "would",
+     "has_question_mark": false,
+     "grammar_points": [
+      "present continuous"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s6_q7",
+     "prompt": "Why does your exam schedule look so rough?",
+     "prompt_task_kind": "respond",
+     "prompt_task_text": "Why does your exam schedule look so rough?",
+     "answer": "Three final exams land on the same day.",
+     "chunks": [
+      "exams land",
+      "on the",
+      "same",
+      "day",
+      "been"
+     ],
+     "prefilled": [
+      "Three final"
+     ],
+     "prefilled_positions": {
+      "Three final": 0
+     },
+     "distractor": "been",
+     "has_question_mark": false,
+     "grammar_points": [
+      "present simple"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s6_q8",
+     "prompt": "The library reorganized the study rooms.",
+     "prompt_task_kind": "statement",
+     "prompt_task_text": "The library reorganized the study rooms.",
+     "answer": "Do you know how to reserve one now?",
+     "chunks": [
+      "you know",
+      "how to",
+      "reserve one",
+      "now",
+      "is"
+     ],
+     "prefilled": [
+      "Do"
+     ],
+     "prefilled_positions": {
+      "Do": 0
+     },
+     "distractor": "is",
+     "has_question_mark": true,
+     "grammar_points": [
+      "indirect question"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s6_q9",
+     "prompt": "Did you find a charger before the deadline?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Did you find a charger before the deadline?",
+     "answer": "I borrowed a charger from the friend who sits beside me.",
+     "chunks": [
+      "I borrowed",
+      "a charger",
+      "from",
+      "the",
+      "who",
+      "sits",
+      "beside",
+      "me",
+      "do"
+     ],
+     "prefilled": [
+      "friend"
+     ],
+     "prefilled_positions": {
+      "friend": 6
+     },
+     "distractor": "do",
+     "has_question_mark": false,
+     "grammar_points": [
+      "relative clause",
+      "past simple"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s6_q10",
+     "prompt": "Are you prepared for your advising meeting?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Are you prepared for your advising meeting?",
+     "answer": "I asked the upperclassmen which electives they would recommend for my major.",
+     "chunks": [
+      "I asked",
+      "the upperclassmen",
+      "which electives",
+      "they would",
+      "recommend for",
+      "my major",
+      "are"
+     ],
+     "prefilled": [],
+     "prefilled_positions": {},
+     "distractor": "are",
+     "has_question_mark": false,
+     "grammar_points": [
+      "indirect question"
+     ],
+     "difficulty": "hard"
+    }
+   ]
+  }
+ ]
+}
