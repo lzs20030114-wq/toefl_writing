@@ -1,0 +1,543 @@
+{
+ "version": "claudeGen-bs-accepted",
+ "batch": "batch-04",
+ "question_sets": [
+  {
+   "set_id": 7,
+   "questions": [
+    {
+     "id": "cg_bs_s7_q1",
+     "prompt": "Did you turn in your registration form?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Did you turn in your registration form?",
+     "answer": "I dropped my form at the office.",
+     "chunks": [
+      "dropped my",
+      "form at",
+      "the",
+      "office",
+      "does"
+     ],
+     "prefilled": [
+      "I"
+     ],
+     "prefilled_positions": {
+      "I": 0
+     },
+     "distractor": "does",
+     "has_question_mark": false,
+     "grammar_points": [
+      "past simple"
+     ],
+     "difficulty": "easy"
+    },
+    {
+     "id": "cg_bs_s7_q2",
+     "prompt": "Didn't you make it to the lecture today?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Didn't you make it to the lecture today?",
+     "answer": "I wasn't able to make it today.",
+     "chunks": [
+      "I wasn't",
+      "able to",
+      "make",
+      "it",
+      "did"
+     ],
+     "prefilled": [
+      "today"
+     ],
+     "prefilled_positions": {
+      "today": 6
+     },
+     "distractor": "did",
+     "has_question_mark": false,
+     "grammar_points": [
+      "negation",
+      "past tense"
+     ],
+     "difficulty": "easy"
+    },
+    {
+     "id": "cg_bs_s7_q3",
+     "prompt": "I can't log into the course portal.",
+     "prompt_task_kind": "statement",
+     "prompt_task_text": "I can't log into the course portal.",
+     "answer": "You should clear your browser cache first.",
+     "chunks": [
+      "you should",
+      "clear your",
+      "browser",
+      "cache first",
+      "was"
+     ],
+     "prefilled": [],
+     "prefilled_positions": {},
+     "distractor": "was",
+     "has_question_mark": false,
+     "grammar_points": [
+      "present simple"
+     ],
+     "difficulty": "easy"
+    },
+    {
+     "id": "cg_bs_s7_q4",
+     "prompt": "Are you going to Thursday's guest lecture?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Are you going to Thursday's guest lecture?",
+     "answer": "I want to know whether the talk counts for credit.",
+     "chunks": [
+      "I want",
+      "to know",
+      "whether the",
+      "talk counts",
+      "for",
+      "were"
+     ],
+     "prefilled": [
+      "credit"
+     ],
+     "prefilled_positions": {
+      "credit": 9
+     },
+     "distractor": "were",
+     "has_question_mark": false,
+     "grammar_points": [
+      "indirect question"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s7_q5",
+     "prompt": "I'm looking for a lab partner.",
+     "prompt_task_kind": "statement",
+     "prompt_task_text": "I'm looking for a lab partner.",
+     "answer": "You could partner with the student who sits behind you.",
+     "chunks": [
+      "you could",
+      "partner with",
+      "the student",
+      "who sits",
+      "behind you",
+      "had"
+     ],
+     "prefilled": [],
+     "prefilled_positions": {},
+     "distractor": "had",
+     "has_question_mark": false,
+     "grammar_points": [
+      "relative clause"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s7_q6",
+     "prompt": "Did the writing center change its schedule?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Did the writing center change its schedule?",
+     "answer": "Apparently they just added some evening appointments too.",
+     "chunks": [
+      "they",
+      "just added",
+      "some evening",
+      "appointments too",
+      "is"
+     ],
+     "prefilled": [
+      "Apparently"
+     ],
+     "prefilled_positions": {
+      "Apparently": 0
+     },
+     "distractor": "is",
+     "has_question_mark": false,
+     "grammar_points": [
+      "present simple"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s7_q7",
+     "prompt": "Did your essay submission go through?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Did your essay submission go through?",
+     "answer": "I'm not sure whether my essay uploaded correctly.",
+     "chunks": [
+      "I'm not",
+      "sure whether",
+      "my essay",
+      "uploaded",
+      "do"
+     ],
+     "prefilled": [
+      "correctly"
+     ],
+     "prefilled_positions": {
+      "correctly": 7
+     },
+     "distractor": "do",
+     "has_question_mark": false,
+     "grammar_points": [
+      "indirect question"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s7_q8",
+     "prompt": "What did your professor say about your capstone ideas?",
+     "prompt_task_kind": "respond",
+     "prompt_task_text": "What did your professor say about your capstone ideas?",
+     "answer": "I picked the research question that my professor found the most promising.",
+     "chunks": [
+      "picked the",
+      "research question",
+      "that my",
+      "professor found",
+      "the most",
+      "promising",
+      "are"
+     ],
+     "prefilled": [
+      "I"
+     ],
+     "prefilled_positions": {
+      "I": 0
+     },
+     "distractor": "are",
+     "has_question_mark": false,
+     "grammar_points": [
+      "relative clause",
+      "past simple"
+     ],
+     "difficulty": "hard"
+    },
+    {
+     "id": "cg_bs_s7_q9",
+     "prompt": "Is your presentation ready for tomorrow?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Is your presentation ready for tomorrow?",
+     "answer": "I'm still polishing a couple of my slides.",
+     "chunks": [
+      "I'm",
+      "still polishing",
+      "a",
+      "of",
+      "my",
+      "would"
+     ],
+     "prefilled": [
+      "couple",
+      "slides"
+     ],
+     "prefilled_positions": {
+      "couple": 4,
+      "slides": 7
+     },
+     "distractor": "would",
+     "has_question_mark": false,
+     "grammar_points": [
+      "present continuous"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s7_q10",
+     "prompt": "Did you check on your transfer credits?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Did you check on your transfer credits?",
+     "answer": "I asked the dean whether the courses I took abroad would count here.",
+     "chunks": [
+      "I asked",
+      "the dean",
+      "whether the",
+      "courses I",
+      "took abroad",
+      "would count",
+      "here",
+      "will"
+     ],
+     "prefilled": [],
+     "prefilled_positions": {},
+     "distractor": "will",
+     "has_question_mark": false,
+     "grammar_points": [
+      "indirect question",
+      "contact clause"
+     ],
+     "difficulty": "hard"
+    }
+   ]
+  },
+  {
+   "set_id": 8,
+   "questions": [
+    {
+     "id": "cg_bs_s8_q1",
+     "prompt": "Where does the new shuttle stop?",
+     "prompt_task_kind": "respond",
+     "prompt_task_text": "Where does the new shuttle stop?",
+     "answer": "Apparently it stops at the science quad.",
+     "chunks": [
+      "it stops",
+      "at the",
+      "science",
+      "quad",
+      "did"
+     ],
+     "prefilled": [
+      "Apparently"
+     ],
+     "prefilled_positions": {
+      "Apparently": 0
+     },
+     "distractor": "did",
+     "has_question_mark": false,
+     "grammar_points": [
+      "present simple"
+     ],
+     "difficulty": "easy"
+    },
+    {
+     "id": "cg_bs_s8_q2",
+     "prompt": "Why do you look so tired?",
+     "prompt_task_kind": "respond",
+     "prompt_task_text": "Why do you look so tired?",
+     "answer": "I didn't sleep much before the exam.",
+     "chunks": [
+      "didn't sleep",
+      "much before",
+      "the",
+      "exam",
+      "was"
+     ],
+     "prefilled": [
+      "I"
+     ],
+     "prefilled_positions": {
+      "I": 0
+     },
+     "distractor": "was",
+     "has_question_mark": false,
+     "grammar_points": [
+      "negation",
+      "past tense"
+     ],
+     "difficulty": "easy"
+    },
+    {
+     "id": "cg_bs_s8_q3",
+     "prompt": "Did you read about the housing lottery deadline?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Did you read about the housing lottery deadline?",
+     "answer": "I want to know whether I should apply early.",
+     "chunks": [
+      "I want",
+      "to know",
+      "whether I",
+      "should apply",
+      "early",
+      "were"
+     ],
+     "prefilled": [],
+     "prefilled_positions": {},
+     "distractor": "were",
+     "has_question_mark": false,
+     "grammar_points": [
+      "indirect question"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s8_q4",
+     "prompt": "Have you asked anyone for a reference yet?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Have you asked anyone for a reference yet?",
+     "answer": "I asked the professor who taught my favorite seminar.",
+     "chunks": [
+      "I",
+      "the professor",
+      "who taught",
+      "my favorite",
+      "seminar",
+      "does"
+     ],
+     "prefilled": [
+      "asked"
+     ],
+     "prefilled_positions": {
+      "asked": 1
+     },
+     "distractor": "does",
+     "has_question_mark": false,
+     "grammar_points": [
+      "relative clause",
+      "past simple"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s8_q5",
+     "prompt": "I keep missing the recycling pickup.",
+     "prompt_task_kind": "statement",
+     "prompt_task_text": "I keep missing the recycling pickup.",
+     "answer": "You can drop bottles at the bin downstairs.",
+     "chunks": [
+      "can drop",
+      "bottles at",
+      "the",
+      "bin",
+      "had"
+     ],
+     "prefilled": [
+      "You",
+      "downstairs"
+     ],
+     "prefilled_positions": {
+      "You": 0,
+      "downstairs": 7
+     },
+     "distractor": "had",
+     "has_question_mark": false,
+     "grammar_points": [
+      "present simple"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s8_q6",
+     "prompt": "Did you even get lunch today?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Did you even get lunch today?",
+     "answer": "I grabbed a quick sandwich between my classes.",
+     "chunks": [
+      "I grabbed",
+      "a quick",
+      "sandwich between",
+      "my",
+      "is"
+     ],
+     "prefilled": [
+      "classes"
+     ],
+     "prefilled_positions": {
+      "classes": 7
+     },
+     "distractor": "is",
+     "has_question_mark": false,
+     "grammar_points": [
+      "past simple"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s8_q7",
+     "prompt": "Are you cramming for Friday's quiz?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Are you cramming for Friday's quiz?",
+     "answer": "I'm reviewing the chapters that the quiz will cover.",
+     "chunks": [
+      "I'm reviewing",
+      "the chapters",
+      "that the",
+      "quiz will",
+      "would"
+     ],
+     "prefilled": [
+      "cover"
+     ],
+     "prefilled_positions": {
+      "cover": 8
+     },
+     "distractor": "would",
+     "has_question_mark": false,
+     "grammar_points": [
+      "relative clause"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s8_q8",
+     "prompt": "The TA changed the review session.",
+     "prompt_task_kind": "statement",
+     "prompt_task_text": "The TA changed the review session.",
+     "answer": "Do you know if it moved to Wednesday?",
+     "chunks": [
+      "do you",
+      "know if",
+      "it moved",
+      "to",
+      "are"
+     ],
+     "prefilled": [
+      "Wednesday"
+     ],
+     "prefilled_positions": {
+      "Wednesday": 7
+     },
+     "distractor": "are",
+     "has_question_mark": true,
+     "grammar_points": [
+      "indirect question"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s8_q9",
+     "prompt": "When does the club meet again?",
+     "prompt_task_kind": "respond",
+     "prompt_task_text": "When does the club meet again?",
+     "answer": "The next session starts right after spring break.",
+     "chunks": [
+      "the",
+      "next",
+      "session",
+      "right",
+      "after",
+      "spring",
+      "been"
+     ],
+     "prefilled": [
+      "starts",
+      "break"
+     ],
+     "prefilled_positions": {
+      "starts": 3,
+      "break": 7
+     },
+     "distractor": "been",
+     "has_question_mark": false,
+     "grammar_points": [
+      "present simple"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s8_q10",
+     "prompt": "Did you finalize your summer plans?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Did you finalize your summer plans?",
+     "answer": "I asked whether the internship I accepted also offers any housing support.",
+     "chunks": [
+      "I asked",
+      "whether the",
+      "internship I",
+      "accepted",
+      "also offers",
+      "any housing",
+      "support",
+      "do"
+     ],
+     "prefilled": [],
+     "prefilled_positions": {},
+     "distractor": "do",
+     "has_question_mark": false,
+     "grammar_points": [
+      "indirect question",
+      "contact clause"
+     ],
+     "difficulty": "hard"
+    }
+   ]
+  }
+ ]
+}

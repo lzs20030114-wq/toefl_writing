@@ -22,6 +22,7 @@
 import { readFileSync, writeFileSync, existsSync } from "fs";
 import { resolve, dirname, join } from "path";
 import { fileURLToPath } from "url";
+import { execSync } from "child_process";
 import { scoreBatch, isPersonOveruse, PERSON_PREFILLED_GATE, isDistractorCollapsed, DISTRACTOR_TOP_FRAC_GATE, DISTRACTOR_MIN_DISTINCT, isPromptAddressingLow, PROMPT_SECOND_PERSON_GATE } from "../lib/quality/scoreBatch.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -227,11 +228,30 @@ for (const bank of BANK_ORDER) {
   summary.push(`  ✗ ${bank}: ${failures.join(", ")} — will retry`);
 }
 
+// ── BS frozen difficulty gate (visibility, NON-BLOCKING) ─────────────────
+// 2026-06-16: surface the real-exam frozen-standard verdict on the live BS bank
+// into the nightly report + quality-monitor trend. This script never blocks (exit
+// 0 always); the ENFORCING copies of this gate live in mergeClaude.mjs /
+// appendBSSets.mjs at the actual merge point. Once the bank is gate-clean and
+// BS_GATE_ENFORCE is flipped on there, a FAIL here means the merge gate let
+// something slip and warrants investigation. Detail is logged to
+// data/claudeGen/reports/bs-quality-history.jsonl by the scorer itself.
+let bsDifficultyGate = "unknown";
+try {
+  execSync(`node ${join(ROOT, "scripts/bs-difficulty-scorer.mjs")} --gate ${join(ROOT, "data/buildSentence/questions.json")}`, { stdio: "ignore" });
+  bsDifficultyGate = "PASS";
+  summary.push("  ✓ bs(难度冻结门): PASS");
+} catch {
+  bsDifficultyGate = "FAIL";
+  summary.push("  ⚠ bs(难度冻结门): FAIL — 现库未达真题校准标准 (run: node scripts/bs-difficulty-scorer.mjs --gate data/buildSentence/questions.json)");
+}
+
 const out = {
   session_id: meta.session_id,
   generated_at: new Date().toISOString(),
   needs_retry: retryBanks.length > 0,
   overall_scores: scores.overall,
+  bs_difficulty_gate: bsDifficultyGate,
   retry_banks: retryBanks,
 };
 

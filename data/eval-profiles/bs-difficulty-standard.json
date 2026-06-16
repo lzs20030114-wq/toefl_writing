@@ -1,0 +1,159 @@
+{
+  "type": "bs",
+  "derived_from": "data/realExam2026/writing/buildSentence-targets.json (n=504, 50 exam papers, tier=recalled)",
+  "derived_by": "scripts/bs-difficulty-scorer.mjs --derive",
+  "note": "recalled corpus → tolerances are intentionally WIDE; relClause/passive are direction-only (detector ~80-90%).",
+  "difficulty": {
+    "length_bands": {
+      "easy_le7": 0.246,
+      "med_8_11": 0.595,
+      "hard_ge12": 0.159,
+      "tol_pp": 0.05,
+      "gate": true
+    },
+    "length_words": {
+      "mean": 9.16,
+      "median": 9,
+      "p10": 6,
+      "p90": 12,
+      "max": 15
+    }
+  },
+  "register": {
+    "first_person": {
+      "target": 0.623,
+      "band": [
+        0.55,
+        0.69
+      ],
+      "gate": true
+    },
+    "contraction": {
+      "target": 0.226,
+      "band": [
+        0.18,
+        0.29
+      ],
+      "gate": true
+    },
+    "third_person_formal": {
+      "target": 0.119,
+      "max": 0.17,
+      "gate": true
+    },
+    "casual_opener": {
+      "target": 0.101,
+      "band": [
+        0.04,
+        0.18
+      ],
+      "gate": false
+    }
+  },
+  "structure_direction_only": {
+    "relative_clause": 0.228,
+    "passive": 0.089,
+    "embedded_question": 0.062,
+    "negation": 0.284,
+    "modal": 0.167,
+    "subordinate": 0.048
+  },
+  "hard_band_profile": {
+    "n": 80,
+    "first_person": 0.788,
+    "relative_clause": 0.463,
+    "passive": 0.138
+  },
+  "diversity": {
+    "opening_trigram_diversity_min": 0.38,
+    "exact_dup_max": 0.02,
+    "gate": true
+  },
+  "intra_set": {
+    "per_set_items": 10,
+    "typical_mix": {
+      "easy": 0.24,
+      "med": 0.6,
+      "hard": 0.16
+    },
+    "min_index_range": 6,
+    "rule": "every set must contain easy AND med AND hard; no single-band set",
+    "gate": true
+  },
+  "correctness": {
+    "reconstructable_from_chunks": {
+      "target": 1,
+      "gate": true
+    },
+    "distractor_presence": {
+      "target": 0,
+      "policy": "real render shows 0 distractor tiles; MONITOR (reconcile vs etsProfile 82%)",
+      "gate": false
+    },
+    "unique_arrangement": {
+      "verdict": "deferred-to-word-audit",
+      "gate": "human"
+    },
+    "grammatical_and_reads_real": {
+      "verdict": "deferred-to-word-audit",
+      "gate": "human"
+    }
+  },
+  "prompt_register": {
+    "n": 234,
+    "ends_question": {
+      "target": 0.705,
+      "band": [
+        0.51,
+        0.96
+      ],
+      "gate": true
+    },
+    "addresses_you": {
+      "target": 0.628,
+      "band": [
+        0.45,
+        0.83
+      ],
+      "gate": true
+    }
+  },
+  "prefilled_register": {
+    "source": "etsProfile.PREFILLED_PROFILE + eval-profiles/bs.json (inherited, not corpus-derived)",
+    "presence": {
+      "target": 0.85,
+      "band": [
+        0.68,
+        0.97
+      ],
+      "gate": true
+    },
+    "bare_subject_pronoun": {
+      "target": 0.3,
+      "max": 0.45,
+      "gate": true
+    },
+    "multi_anchor": {
+      "target": 0.25,
+      "band": [
+        0.08,
+        0.45
+      ],
+      "gate": true
+    },
+    "non_start_position": {
+      "target": 0.35,
+      "min": 0.1,
+      "gate": true
+    }
+  },
+  "answer_style_monitor": {
+    "signature_q_rate": {
+      "target": 0.167
+    },
+    "first_person_opener": {
+      "target": 0.325,
+      "warn_above": 0.48
+    }
+  }
+}

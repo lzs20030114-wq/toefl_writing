@@ -11,10 +11,11 @@
  *   BS_APPEND_SETS=5                            (default 5)
  */
 
-import { readFileSync, writeFileSync } from "fs";
+import { readFileSync, writeFileSync, rmSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
+import { execSync } from "child_process";
 import { genPrompt, reviewPrompt, consistencyPrompt } from "../lib/bsGen/prompts.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -325,7 +326,26 @@ async function main() {
     question_sets: [...existingSets, ...newSets],
   };
 
+  // ── Anti-regression difficulty gate (frozen real-exam standard) ──────────
+  // 2026-06-16: this DeepSeek fallback path previously shipped BS straight to the
+  // live bank using only difficultyControl.js heuristics — bypassing the frozen
+  // real-exam gate (same hole closed in mergeClaude.mjs). Gate the would-be-merged
+  // bank BEFORE writing. WARNING-ONLY by default; BS_GATE_ENFORCE=1 blocks on FAIL.
+  const gateTmp = OUTPUT_PATH + ".gatecheck.tmp";
+  writeFileSync(gateTmp, JSON.stringify(merged, null, 2) + "\n", "utf8");
+  let gatePass = true;
+  try {
+    execSync(`node ${resolve(__dirname, "bs-difficulty-scorer.mjs")} --gate ${gateTmp}`, { stdio: "inherit" });
+  } catch { gatePass = false; }
+  rmSync(gateTmp, { force: true });
+  if (!gatePass && (process.env.BS_GATE_ENFORCE || "").trim() === "1") {
+    console.error("✗ BS 难度冻结门 FAIL + BS_GATE_ENFORCE=1 → 拒绝合库，live 题库未改动。先把漂移维度修回真题带内再重跑。");
+    process.exit(1);
+  }
+
   writeFileSync(OUTPUT_PATH, JSON.stringify(merged, null, 2) + "\n", "utf8");
+  if (gatePass) console.log("✓ BS 难度冻结门 PASS");
+  else console.warn("⚠ BS 难度冻结门 FAIL（warning-only：本次仍合库）。替换为 gate-clean 库后设 BS_GATE_ENFORCE=1 启用拦截。");
   console.log(`\n✅ Saved ${merged.question_sets.length} total sets to ${OUTPUT_PATH}`);
   newSets.forEach(s => {
     const d = evaluateSetDifficultyAgainstTarget(s.questions);

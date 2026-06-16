@@ -1,0 +1,274 @@
+{
+ "version": "claudeGen-bs-accepted",
+ "batch": "batch-06",
+ "question_sets": [
+  {
+   "set_id": 14,
+   "questions": [
+    {
+     "id": "cg_bs_s14_q1",
+     "prompt": "I want to join the intramural soccer team.",
+     "prompt_task_kind": "statement",
+     "prompt_task_text": "I want to join the intramural soccer team.",
+     "answer": "Do you know if the team still needs players?",
+     "chunks": [
+      "do you",
+      "know if",
+      "the team",
+      "still needs",
+      "did"
+     ],
+     "prefilled": [
+      "players"
+     ],
+     "prefilled_positions": {
+      "players": 8
+     },
+     "distractor": "did",
+     "has_question_mark": true,
+     "grammar_points": [
+      "indirect question"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s14_q2",
+     "prompt": "Did you ever find your lost umbrella?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Did you ever find your lost umbrella?",
+     "answer": "No, someone probably grabbed it by mistake.",
+     "chunks": [
+      "no someone",
+      "probably grabbed",
+      "it",
+      "by",
+      "does"
+     ],
+     "prefilled": [
+      "mistake"
+     ],
+     "prefilled_positions": {
+      "mistake": 6
+     },
+     "distractor": "does",
+     "has_question_mark": false,
+     "grammar_points": [
+      "negation",
+      "past simple"
+     ],
+     "difficulty": "easy"
+    },
+    {
+     "id": "cg_bs_s14_q3",
+     "prompt": "Is the guest wifi working for you today?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Is the guest wifi working for you today?",
+     "answer": "It cuts out whenever I sit outside.",
+     "chunks": [
+      "it cuts",
+      "out whenever",
+      "I sit",
+      "outside",
+      "was"
+     ],
+     "prefilled": [],
+     "prefilled_positions": {},
+     "distractor": "was",
+     "has_question_mark": false,
+     "grammar_points": [
+      "present simple"
+     ],
+     "difficulty": "easy"
+    },
+    {
+     "id": "cg_bs_s14_q4",
+     "prompt": "I had to skip the lab safety training.",
+     "prompt_task_kind": "statement",
+     "prompt_task_text": "I had to skip the lab safety training.",
+     "answer": "Do you know if the makeup session was rescheduled?",
+     "chunks": [
+      "do you",
+      "know if",
+      "the makeup",
+      "session was",
+      "is"
+     ],
+     "prefilled": [
+      "rescheduled"
+     ],
+     "prefilled_positions": {
+      "rescheduled": 8
+     },
+     "distractor": "is",
+     "has_question_mark": true,
+     "grammar_points": [
+      "indirect question",
+      "passive voice"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s14_q5",
+     "prompt": "Have you cleared your overdue library fines yet?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Have you cleared your overdue library fines yet?",
+     "answer": "Sorry, I haven't checked my account this week.",
+     "chunks": [
+      "I haven't",
+      "checked my",
+      "account",
+      "this",
+      "do"
+     ],
+     "prefilled": [
+      "Sorry",
+      "week"
+     ],
+     "prefilled_positions": {
+      "Sorry": 0,
+      "week": 7
+     },
+     "distractor": "do",
+     "has_question_mark": false,
+     "grammar_points": [
+      "present perfect negation"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s14_q6",
+     "prompt": "Does the dorm kitchen close early on weekends?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Does the dorm kitchen close early on weekends?",
+     "answer": "Apparently they've cut our kitchen hours since last week.",
+     "chunks": [
+      "they've cut",
+      "our kitchen",
+      "hours",
+      "since last week",
+      "were"
+     ],
+     "prefilled": [
+      "Apparently"
+     ],
+     "prefilled_positions": {
+      "Apparently": 0
+     },
+     "distractor": "were",
+     "has_question_mark": false,
+     "grammar_points": [
+      "present perfect",
+      "subordinate clause"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s14_q7",
+     "prompt": "Where do you usually practice your music?",
+     "prompt_task_kind": "respond",
+     "prompt_task_text": "Where do you usually practice your music?",
+     "answer": "The studio that you showed me has a great piano.",
+     "chunks": [
+      "the studio",
+      "that you",
+      "showed me",
+      "has a",
+      "great",
+      "are"
+     ],
+     "prefilled": [
+      "piano"
+     ],
+     "prefilled_positions": {
+      "piano": 9
+     },
+     "distractor": "are",
+     "has_question_mark": false,
+     "grammar_points": [
+      "relative clause"
+     ],
+     "difficulty": "medium"
+    },
+    {
+     "id": "cg_bs_s14_q9",
+     "prompt": "Is there anywhere to dry your laundry nearby?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Is there anywhere to dry your laundry nearby?",
+     "answer": "You can use the basement dryers downstairs.",
+     "chunks": [
+      "can use",
+      "the basement",
+      "dryers",
+      "downstairs",
+      "had"
+     ],
+     "prefilled": [
+      "You"
+     ],
+     "prefilled_positions": {
+      "You": 0
+     },
+     "distractor": "had",
+     "has_question_mark": false,
+     "grammar_points": [
+      "modal verb"
+     ],
+     "difficulty": "easy"
+    },
+    {
+     "id": "cg_bs_s14_q10",
+     "prompt": "Did you hear about our missed night class?",
+     "prompt_task_kind": "yesno",
+     "prompt_task_text": "Did you hear about our missed night class?",
+     "answer": "Someone said the lecture that we missed was recorded and posted online.",
+     "chunks": [
+      "someone said",
+      "the lecture",
+      "that we",
+      "missed was",
+      "and",
+      "posted",
+      "will"
+     ],
+     "prefilled": [
+      "recorded",
+      "online"
+     ],
+     "prefilled_positions": {
+      "recorded": 8,
+      "online": 11
+     },
+     "distractor": "will",
+     "has_question_mark": false,
+     "grammar_points": [
+      "relative clause",
+      "passive voice"
+     ],
+     "difficulty": "hard"
+    },
+    {
+     "id": "cg_bs_s14_q11",
+     "prompt": "The bike repair station disappeared from the quad.",
+     "prompt_task_kind": "statement",
+     "prompt_task_text": "The bike repair station disappeared from the quad.",
+     "answer": "Someone was asking where the bike station went.",
+     "chunks": [
+      "someone was",
+      "asking where",
+      "the bike",
+      "station went",
+      "am"
+     ],
+     "prefilled": [],
+     "prefilled_positions": {},
+     "distractor": "am",
+     "has_question_mark": false,
+     "grammar_points": [
+      "indirect question"
+     ],
+     "difficulty": "medium"
+    }
+   ]
+  }
+ ]
+}
