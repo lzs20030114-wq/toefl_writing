@@ -77,6 +77,51 @@ function vet(prefix, item) {
   }
 }
 
+// ── Answer-correctness audit (READING MCQ only), fail-closed ─────────────────
+// 2026-06-17: re-audit reading items at merge with an independent AI "second examiner"
+// (answerAuditor) so a mis-keyed / guessable item that reached staging is caught BEFORE
+// it ships — not just at generation time. FAIL-CLOSED:
+//   - critical answer mismatch → REJECT (drop, never merged)
+//   - transient audit error    → HOLD (not merged this run; the staging file persists, so
+//                                it is re-audited on the next run)
+// SKIPPED (NOT fail-closed) when the audit infra is unavailable — no DEEPSEEK_API_KEY, or
+// SKIP_AUDIT=1 — because failing closed on infra-absence would block ALL reading merges.
+// Only reading (ap/rdl/ctw) is wired: the listening auditors exist but have never run in
+// the pipeline and use a different interface, so they are intentionally not enabled yet.
+const AUDITABLE = new Set(['ap', 'rdl', 'ctw']);
+let auditDisabled = String(process.env.SKIP_AUDIT || '').trim() === '1';
+async function auditReadingItems(prefix, items) {
+  if (auditDisabled || !AUDITABLE.has(prefix) || items.length === 0) return items;
+  const { auditRDLItem, auditCTWItem } = require('../lib/readingGen/answerAuditor.js');
+  const kept = [];
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i];
+    let audit;
+    try {
+      audit = prefix === 'ctw'
+        ? await auditCTWItem(item)
+        : await auditRDLItem(prefix === 'ap' ? { ...item, text: item.passage } : item); // AP reuses the RDL auditor (maps passage→text)
+    } catch (e) {
+      audit = { error: String((e && e.message) || e) };
+    }
+    if (audit.error) {
+      if (/api[_ ]?key|not set|deepseek_api_key/i.test(audit.error)) {
+        console.log(`  ⓘ answer-audit skipped — DEEPSEEK_API_KEY unavailable; merging ${prefix} on structural validation only.`);
+        auditDisabled = true;
+        return kept.concat(items.slice(i)); // keep already-passed + current + remaining, unaudited
+      }
+      console.log(`    ⏸ ${item.id || '?'}: audit error — held for retry (${audit.error})`);
+      continue; // fail-closed: transient error → don't merge this run
+    }
+    if ((audit.criticalFlags || 0) > 0) {
+      console.log(`    ✗ ${item.id || '?'}: ${audit.criticalFlags} critical answer mismatch(es) — rejected`);
+      continue; // fail-closed: drop the mis-keyed item
+    }
+    kept.push(item);
+  }
+  return kept;
+}
+
 // Portable repo-root resolution: this file lives at scripts/merge-staging.mjs,
 // so the parent of scripts/ is the repo root. Works on both local Windows
 // dev and the Linux GitHub Actions runner.
@@ -222,20 +267,26 @@ for (const section of SECTIONS) {
     if (rejected) console.log(`  ${file}: ${rejected}/${rawItems.length} rejected by validator`);
     if (items.length === 0) { console.log(`  ${file}: 0 valid items after validation, skipping`); continue; }
 
+    // Answer-correctness audit (reading MCQ only), fail-closed — see auditReadingItems.
+    const audited = await auditReadingItems(prefix, items);
+    const heldOrRejected = items.length - audited.length;
+    if (heldOrRejected > 0) console.log(`  ${file}: ${heldOrRejected} item(s) held/rejected by answer-audit (fail-closed)`);
+    if (audited.length === 0) { console.log(`  ${file}: 0 items after answer-audit, skipping`); continue; }
+
     if (prefix === 'rdl') {
       // Special handling for RDL: classify into long/short
       const counts = {};
-      for (const item of items) {
+      for (const item of audited) {
         const bankFile = classifyRdlItem(item);
         pendingItems[bankFile] = (pendingItems[bankFile] || []).concat(item);
         counts[bankFile] = (counts[bankFile] || 0) + 1;
       }
       const parts = Object.entries(counts).map(([k, v]) => `${v}→${k}`).join(', ');
-      console.log(`  ${file}: ${items.length} valid (${parts})`);
+      console.log(`  ${file}: ${audited.length} merged (${parts})`);
     } else {
       const bankFile = section.prefixMap[prefix];
-      pendingItems[bankFile] = (pendingItems[bankFile] || []).concat(items);
-      console.log(`  ${file}: ${items.length} valid → ${bankFile}`);
+      pendingItems[bankFile] = (pendingItems[bankFile] || []).concat(audited);
+      console.log(`  ${file}: ${audited.length} merged → ${bankFile}`);
     }
   }
 
