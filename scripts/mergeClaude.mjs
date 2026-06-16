@@ -17,10 +17,11 @@
 // Exit codes: 0 = success, 1 = error, 2 = no items merged (still success in
 // the routine's view — staging committed but bank unchanged)
 
-import { readFileSync, writeFileSync } from "fs";
+import { readFileSync, writeFileSync, rmSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
+import { execSync } from "child_process";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
@@ -122,15 +123,43 @@ function mergeBS(stagingPath) {
   }
   check.strictWarnings.forEach((x) => console.warn(`WARN ${x.label}: ${x.reasons.join("; ")}`));
 
-  // Append + write
+  // Append (compose the merged bank in memory first — do NOT write yet)
   const merged = {
     version: "1.3",
     generated_at: new Date().toISOString(),
     question_sets: [...existingSets, ...newSets],
   };
+
+  // ── Anti-regression difficulty gate (frozen real-exam standard) ──────────
+  // 2026-06-16: the frozen difficulty gate (scripts/bs-difficulty-scorer.mjs --gate)
+  // used to run ONLY in the offline bs-accept.mjs, so this nightly/Claude merge path
+  // shipped BS items WITHOUT ever checking them against the real-exam standard — the
+  // exact hole that let the live bank drift out of calibration. We now gate every BS
+  // merge here, on the would-be-merged bank, BEFORE committing it.
+  //   - Default: WARNING-ONLY (logs the verdict, still merges) — because the current
+  //     live bank itself fails the gate; blocking now would halt all BS production.
+  //   - BS_GATE_ENFORCE=1: blocking — a FAIL refuses the merge, leaving the bank
+  //     untouched. Flip this on AFTER the bank is replaced with the gate-clean corpus.
+  const gateTmp = bankPath + ".gatecheck.tmp";
+  writeJSON(gateTmp, merged);
+  let gatePass = true;
+  try {
+    execSync(`node ${resolve(ROOT, "scripts/bs-difficulty-scorer.mjs")} --gate ${gateTmp}`, { stdio: "inherit" });
+  } catch { gatePass = false; }
+  const enforceGate = (process.env.BS_GATE_ENFORCE || "").trim() === "1";
+  if (!gatePass && enforceGate) {
+    rmSync(gateTmp, { force: true });
+    console.error("✗ BS 难度冻结门 FAIL + BS_GATE_ENFORCE=1 → 拒绝合库，live 题库未改动。先把漂移维度修回真题带内再重跑。");
+    process.exit(1);
+  }
+  rmSync(gateTmp, { force: true });
+
+  // Commit
   writeJSON(bankPath, merged);
   console.log(`✅ Appended ${newSets.length} set(s) (set_id ${newSets[0].set_id}–${newSets[newSets.length - 1].set_id}) to ${bankPath}`);
   console.log(`   Total sets now: ${merged.question_sets.length}`);
+  if (gatePass) console.log("✓ BS 难度冻结门 PASS");
+  else console.warn("⚠ BS 难度冻结门 FAIL（warning-only：本次仍合库）。现库未达真题校准标准；替换为 gate-clean 库后设 BS_GATE_ENFORCE=1 启用拦截。");
   process.exit(0);
 }
 
