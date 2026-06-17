@@ -254,44 +254,66 @@ describe("chunk granularity — calibration lock (single-word default, ~6 chunks
   });
 });
 
-describe("reading quality — word_count fallback (locks the staging-scoring fix)", () => {
-  // Bug: reading staging has no word_count (added at merge time). scoreBatch
-  // read word_count=0 → quality 0 → the gate falsely retried reading every
-  // night. Fix: compute word count from passage/text/paragraphs when absent.
+describe("validator-driven quality (locks scoreBatch quality = calibration dimensions, not length)", () => {
+  // scoreBatch.quality now runs each bank's real generation validator and scores
+  // calibration adherence (hard error → item=0; warnings dock a little). It exposes:
+  //   - score: rich number for display (warnings included)
+  //   - passRate: errors-only fraction (0-100) the gate/email key on
+  // These lock that valid items aren't falsely zeroed and that a hard validator
+  // error actually drags the number down (which length-only scoring never did).
   function writeReadingStaging(prefix, session, items, suffix = "") {
     const file = path.join(ROOT, `data/reading/staging/${prefix}-${session}${suffix}.json`);
     fs.writeFileSync(file, JSON.stringify({ items }));
     return file;
   }
 
-  test("AP staging WITHOUT word_count scores on real passage length (not 0)", () => {
-    const session = "_regtest_apwc";
-    // ~250-word passage in 3 paragraphs, no word_count field
-    const para = (n) => Array(n).fill("word").join(" ");
-    const items = Array.from({ length: 5 }, (_, i) => ({
-      id: `ap${i}`, topic: "biology", subtopic: "cells",
-      paragraphs: [para(85), para(85), para(85)], // 255 words, 3 paragraphs
-      questions: [],
-    }));
+  const AP_PASSAGE = "Coral reefs form when tiny animals called polyps settle on hard surfaces and slowly build limestone skeletons around themselves. Over many centuries these skeletons accumulate into vast underwater structures that shelter thousands of species. The polyps depend on microscopic algae living inside their tissues, and the algae supply food through photosynthesis. When ocean water grows too warm, the algae are expelled and the coral loses its main energy source. This process, known as bleaching, can leave a reef pale and weakened. If warm conditions persist, large sections of the reef may die, and the many fish that rely on it for shelter must move elsewhere or perish in the barren ruins that remain.";
+  const apQ = (stem, options, correct_answer) => ({ question_type: "factual_detail", stem, options, correct_answer });
+  const validApItem = (i) => ({
+    id: `ap${i}`, topic: "biology", subtopic: "coral", passage: AP_PASSAGE, paragraphs: [AP_PASSAGE],
+    questions: [
+      apQ("What do polyps build around themselves?", { A: "Limestone skeletons", B: "Soft tissue that dissolves in warm tropical seawater quickly", C: "Algae", D: "Sand" }, "A"),
+      apQ("What do the algae supply to the polyps?", { A: "Shelter from predators that hunt across the reef at night", B: "Food", C: "Limestone", D: "Cooler water" }, "B"),
+      apQ("What causes bleaching?", { A: "Heavy rain", B: "New fish", C: "Warm water", D: "Strong currents that carry polyps far away from the reef" }, "C"),
+      apQ("What happens to fish when a reef dies?", { A: "They build new skeletons themselves over many following centuries", B: "They eat algae", C: "They grow larger", D: "They leave" }, "D"),
+      apQ("What are coral skeletons made of?", { A: "Limestone", B: "Photosynthetic algae cells packed tightly within the tissue", C: "Plankton", D: "Salt" }, "A"),
+    ],
+  });
+
+  test("valid AP items → passRate 100, score not zeroed", () => {
+    const session = "_regtest_apvalid";
+    const items = Array.from({ length: 5 }, (_, i) => validApItem(i));
     const file = writeReadingStaging("ap", session, items);
     try {
-      const r = mod.scoreBatch(ROOT, session, { "reading-ap": { accepted: 5 } });
-      expect(r.perBank["reading-ap"].quality.score).toBeGreaterThan(0);
+      const q = mod.scoreBatch(ROOT, session, { "reading-ap": { accepted: 5 } }).perBank["reading-ap"].quality;
+      expect(q.passRate).toBe(100);
+      expect(q.score).toBeGreaterThan(0);
     } finally {
       fs.unlinkSync(file);
     }
   });
 
-  test("CTW staging WITHOUT word_count scores on real passage length", () => {
-    const session = "_regtest_ctwwc";
-    const items = Array.from({ length: 6 }, (_, i) => ({
-      id: `ctw${i}`, topic: "history", subtopic: "rome",
-      passage: Array(80).fill("word").join(" "), // 80 words, in 50-130 band
-    }));
+  test("AP items with a hard validator error (no questions) → passRate < 100", () => {
+    const session = "_regtest_apbad";
+    const items = Array.from({ length: 5 }, (_, i) => ({ ...validApItem(i), questions: [] }));
+    const file = writeReadingStaging("ap", session, items);
+    try {
+      const q = mod.scoreBatch(ROOT, session, { "reading-ap": { accepted: 5 } }).perBank["reading-ap"].quality;
+      expect(q.passRate).toBeLessThan(100);
+    } finally {
+      fs.unlinkSync(file);
+    }
+  });
+
+  test("valid CTW prose → passRate 100, score not zeroed", () => {
+    const session = "_regtest_ctwvalid";
+    const passage = "The city council voted on Tuesday to extend the hours of the central library. Starting next month, the building will remain open until ten in the evening on weekdays. Supporters argued that students and night-shift workers need a quiet place to study after their classes and jobs end. A few members worried about the cost of staffing the extra hours, but the measure passed easily after a short debate about the budget.";
+    const items = Array.from({ length: 6 }, (_, i) => ({ id: `ctw${i}`, topic: "civics", subtopic: "library", passage }));
     const file = writeReadingStaging("ctw", session, items);
     try {
-      const r = mod.scoreBatch(ROOT, session, { "reading-ctw": { accepted: 6 } });
-      expect(r.perBank["reading-ctw"].quality.score).toBeGreaterThan(0);
+      const q = mod.scoreBatch(ROOT, session, { "reading-ctw": { accepted: 6 } }).perBank["reading-ctw"].quality;
+      expect(q.passRate).toBe(100);
+      expect(q.score).toBeGreaterThan(0);
     } finally {
       fs.unlinkSync(file);
     }

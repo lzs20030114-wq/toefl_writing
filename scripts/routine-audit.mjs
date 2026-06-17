@@ -45,7 +45,7 @@ const SOLVED_PATH = join(ROOT, "data/.audit-solved.json");
 const REPORT_PATH = join(ROOT, "data/.audit-report.json");
 
 const cmd = (process.argv[2] || "").trim();
-let session = (process.argv[3] || "").trim();
+const sessionArg = (process.argv[3] || "").trim();
 
 function die(msg) {
   console.error(msg);
@@ -53,27 +53,38 @@ function die(msg) {
 }
 
 if (!["extract", "apply"].includes(cmd)) {
-  die("Usage:\n  node scripts/routine-audit.mjs extract [SESSION_ID]\n  node scripts/routine-audit.mjs apply [SESSION_ID]\n  (SESSION_ID defaults to session_id in data/.routine-meta.json)");
+  die("Usage:\n  node scripts/routine-audit.mjs extract [SESSION_ID]\n  node scripts/routine-audit.mjs apply [SESSION_ID]\n  (SESSION_ID defaults to session_id [+ r2_session_id] in data/.routine-meta.json)");
 }
 
-// SESSION_ID is optional: a separate audit routine can omit it and we read the
-// session R1 just wrote into data/.routine-meta.json. Keeps the audit prompt from
-// having to reconstruct the session string itself.
-if (!session) {
+// SESSION_ID is optional. When omitted, the dedicated audit routine audits BOTH
+// R1's batch (session_id) and, on retry nights, R2's supplement (r2_session_id) —
+// so one pass covers everything pending. An explicit arg overrides to a single one.
+let sessions;
+if (sessionArg) {
+  sessions = [sessionArg];
+} else {
   const metaPath = join(ROOT, "data/.routine-meta.json");
+  sessions = [];
   if (existsSync(metaPath)) {
-    try { session = String(JSON.parse(readFileSync(metaPath, "utf8")).session_id || "").trim(); } catch { /* fall through */ }
+    try {
+      const m = JSON.parse(readFileSync(metaPath, "utf8"));
+      for (const s of [m.session_id, m.r2_session_id]) {
+        if (s && String(s).trim()) sessions.push(String(s).trim());
+      }
+    } catch { /* fall through */ }
   }
 }
-if (!session) die(`No SESSION_ID given and none found in data/.routine-meta.json.`);
+if (sessions.length === 0) die(`No SESSION_ID given and none found in data/.routine-meta.json.`);
+// Primary id used for the receipt's `session` field (compute-quality-report matches it).
+const session = sessions[0];
 
-// Staging files for this session that map to an auditable MCQ bank.
+// Staging files for any of the target sessions that map to an auditable MCQ bank.
 function matchingFiles() {
   const out = [];
   for (const dir of STAGING_DIRS) {
     if (!existsSync(dir)) continue;
     for (const f of readdirSync(dir).filter((x) => x.endsWith(".json"))) {
-      if (!f.includes(session)) continue;
+      if (!sessions.some((s) => f.includes(s))) continue;
       const prefix = prefixOf(f);
       if (!MCQ_CONFIG[prefix]) continue; // not an MCQ bank (e.g. ctw, speaking)
       out.push({ file: f, prefix, path: join(dir, f) });

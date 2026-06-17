@@ -1,29 +1,32 @@
 # Audit Routine — independent second-examiner (paste into a NEW Anthropic trigger)
 
-A dedicated routine, separate from R1, that answer-audits the reading + listening
-MCQs R1 staged, then merges them. Because it runs in its own session (same model,
-fresh context — it never saw R1 generate the items or mark the keys), it is a
-genuinely independent examiner, not the author re-checking its own work.
+A dedicated routine, separate from R1 and R2, that answer-audits the reading +
+listening MCQs they staged, then merges them and sends the nightly email. Because
+it runs in its own session (same model, fresh context — it never saw the items get
+generated or the keys marked), it is a genuinely independent examiner, not the
+author re-checking its own work.
 
-## How the work is divided
+## How the work is divided (three routines, in time order)
 
-- **R1** (existing generator): generates all banks, writes staging, merges ONLY
-  bs/disc/email (via `mergeClaude.mjs`), commits + pushes. It does **NOT** run
-  `merge-staging.mjs` — reading/listening/speaking stay in staging for this
-  routine. (See r1-audit-phase.md for the exact R1 change.)
-- **This audit routine**: pulls, re-solves every reading/listening MCQ blind,
-  drops mis-keyed items, then runs `merge-staging.mjs` to merge
-  reading/listening/speaking from the cleaned staging.
+- **R1** (03:00): generates all banks, merges ONLY bs/disc/email, stages
+  reading/listening/speaking, writes meta, commits. No audit / merge of
+  reading-listening / email. (See r1-audit-phase.md.)
+- **R2** (~03:35, retry nights only): supplements gate-failed banks, merges
+  bs/disc/email, STAGES reading/listening, writes `r2_session_id` to meta, commits.
+  No audit / email. (See r2-retry.md.)
+- **This audit routine** (~04:00, every night): pulls, re-solves every pending
+  reading/listening MCQ blind (both R1's and R2's sessions), drops mis-keyed items,
+  merges reading/listening/speaking, and sends the single nightly email.
 
-So an item is only merged into a reading/listening bank AFTER an independent
-session has confirmed its answer key. If this routine never runs, the items sit
-in staging unmerged — fail-safe (unverified items never go live).
+An item is merged into a reading/listening bank only AFTER an independent session
+confirmed its answer key. If this routine never runs, items sit in staging unmerged
+and no email is sent — a fail-safe and a visible "something's wrong" signal.
 
 ## Scheduling
 
-Create a new Anthropic routine that fires ~10–15 min after R1 (R1 runs 03:00
-Beijing / 19:00 UTC). It is cheap and idempotent: if there's nothing to audit it
-exits clean.
+Fire this AFTER R2's window: R1 03:00, R2 ~03:35 Beijing, so schedule this at
+~04:00 Beijing (20:00 UTC). Cheap and idempotent — if there's nothing to audit, or
+it already ran tonight, it exits clean.
 
 ═════════════════════════════════════════════════════════════════════════════
 
@@ -45,23 +48,23 @@ PHASE 0 — Setup
   git pull --rebase origin main
 
 ═════════════════════════════════════════════════════════════════════════════
-PHASE 1 — Find the session to audit, guard against re-runs
+PHASE 1 — Read meta, guard against re-runs
 ═════════════════════════════════════════════════════════════════════════════
-Read `data/.routine-meta.json` and take `session_id` (call it SID).
+Read `data/.routine-meta.json`: take `session_id` (SID) and, if present,
+`r2_session_id` (R2SID).
 
 If `data/.audit-report.json` exists AND its `session` equals SID:
-  → already audited this session. Print "audit: SID already done — exiting clean"
-    and STOP. Do NOT commit or push.
+  → already audited tonight. Print "audit: SID already done — exiting clean" and
+    STOP. Do NOT commit or push.
 
 ═════════════════════════════════════════════════════════════════════════════
-PHASE 2 — Extract the blind questions
+PHASE 2 — Extract the blind questions (covers R1 + R2 automatically)
 ═════════════════════════════════════════════════════════════════════════════
   node scripts/routine-audit.mjs extract
-  (no SID needed — it reads session_id from .routine-meta.json)
 
-This writes `data/.audit-blind.json`. If it prints "0 questions", there is no
-reading/listening MCQ to audit:
-  → run PHASE 4 (merge) anyway in case speaking/CTW staging exists, then PHASE 5.
+No SID needed — with no argument it audits BOTH session_id and r2_session_id from
+meta. Writes `data/.audit-blind.json`. If it prints "0 questions", skip to PHASE 4
+(speaking/CTW staging may still need merging).
 
 ═════════════════════════════════════════════════════════════════════════════
 PHASE 3 — Solve blind, then apply
@@ -77,38 +80,31 @@ using each question's `key` verbatim.
 
 Then:
   node scripts/routine-audit.mjs apply
-This compares your answers to the marked keys, DROPS any item with a mismatch from
-its staging file, and writes the receipt `data/.audit-report.json`. Read it and
-note totals (matched / mismatched / dropped) for the summary in PHASE 5.
+Compares your answers to the marked keys, DROPS any item with a mismatch from its
+staging file, and writes the receipt `data/.audit-report.json`.
 
 ═════════════════════════════════════════════════════════════════════════════
 PHASE 4 — Merge reading + listening + speaking (cleaned staging)
 ═════════════════════════════════════════════════════════════════════════════
   MERGE_RUN_ID=$SID node scripts/merge-staging.mjs
+  # On retry nights, also merge R2's supplements:
+  if R2SID is set:  MERGE_RUN_ID=$R2SID node scripts/merge-staging.mjs
 
-One call merges every reading/listening/speaking staging file for this session
-(all are named with SID). apply already removed mis-keyed MCQ items, so only
-audited items reach the bank. merge-staging's own DeepSeek audit will skip here
-(this routine has no DEEPSEEK_API_KEY) — that's fine, the Claude audit already ran.
-
-Capture the per-bank "+N new" counts from the merge stdout.
+Each call merges every reading/listening/speaking staging file whose name contains
+that id. apply already removed mis-keyed MCQ items, so only audited items reach the
+bank. merge-staging's own DeepSeek audit skips here (no DEEPSEEK_API_KEY) — fine,
+the Claude audit already ran. Capture the per-bank "+N new" counts.
 
 ═════════════════════════════════════════════════════════════════════════════
-PHASE 5 — Generate the (single) email summary + commit + push
+PHASE 5 — Generate the single email summary + commit + push
 ═════════════════════════════════════════════════════════════════════════════
-This routine — NOT R1 — sends the nightly email, so there is exactly one email
-and it already reflects the audit. (R1 no longer writes the summary; see
-r1-audit-phase.md.)
-
-FIRST check data/.pending-retry.json: if `needs_retry` is TRUE, R2 will run after
-you and send the final email — so SKIP this whole phase (just commit your merges
-below WITHOUT writing the summary). Only write the summary when no retry is pending:
+You run AFTER R2, so you are always last — you send the one nightly email.
 
   node scripts/compute-quality-report.mjs > data/.last-nightly-summary.md
 
 compute-quality-report auto-reads data/.audit-report.json and puts "二审 N/M 一致"
-in the header (and lists any dropped item under 需要注意). You do NOT need to edit
-the summary by hand.
+in the header (and lists any dropped item under 需要注意). It also shows the model
+from meta.model. You do NOT edit the summary by hand.
 
   git add data/
   git commit -m "bot(audit): independent answer-audit + merge reading/listening $SID"
@@ -123,22 +119,21 @@ email, complete.
 ═════════════════════════════════════════════════════════════════════════════
 DONE
 ═════════════════════════════════════════════════════════════════════════════
-Print: "audit done for SID: <merged> merged, <dropped> dropped by answer-audit."
+Print: "audit done for SID (+R2SID): <merged> merged, <dropped> dropped by answer-audit."
 
 COVERAGE (what this audits, and the one thing it does NOT):
 - Audited blind by you: reading ap/rdl + listening la/lat/lc/lcr (all MCQ).
 - NOT answer-audited here: CTW (c-test). Its blanks are created by the mechanical
   blanker DURING merge-staging, so there is nothing to blind-solve at extract time.
-  CTW relies on the blanker + ctwValidator (structural) on this path; its
-  uniqueness check (answerAuditor.auditCTWItem) only runs on the CI path with a
-  DeepSeek key. If you want CTW uniqueness verified automatically too, that needs a
-  separate blank-then-fill audit step — not built yet.
+  CTW relies on the blanker + ctwValidator (structural) here; its uniqueness check
+  (answerAuditor.auditCTWItem) only runs on the CI path with a DeepSeek key. A
+  separate blank-then-fill audit step would be needed — not built yet.
 - bs/disc/email/speaking-repeat have no answer key, so nothing to audit.
 
 ERROR PHILOSOPHY:
 - No `.routine-meta.json` / no SID → exit clean, no work.
 - Already audited (PHASE 1 guard) → exit clean.
-- You couldn't answer some questions → they're recorded as `skipped` and kept
-  (not dropped); re-run is safe (the guard only triggers after a full apply).
+- You couldn't answer some questions → recorded as `skipped` and kept (not dropped);
+  re-run is safe (the guard only triggers after a full apply writes the receipt).
 - If merge fails for a bank → log it, still commit the receipt + summary so the
-  failure is visible.
+  failure is visible in the email.

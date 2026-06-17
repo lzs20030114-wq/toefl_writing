@@ -33,10 +33,15 @@ summary at the very end (PHASE 5), so the single nightly email already includes 
 off: if the audit routine never runs, no email is sent — which is itself a visible
 "something's wrong" signal.)
 
+Also record the actual generator model in meta: when R1 writes
+`data/.routine-meta.json`, add a top-level field `"model": "<the model you are>"`
+(e.g. "Claude Opus 4.8"). The nightly email shows `meta.model` verbatim instead of
+a hardcoded guess — so the report always states which model really generated the batch.
+
 R1 still does everything else unchanged: generate all banks, write every staging
-file, run `scripts/check-quality-gates.mjs`, write `data/.routine-meta.json`, then
-commit + push `data/`. The committed staging files are what the audit routine
-reads.
+file, run `scripts/check-quality-gates.mjs`, write `data/.routine-meta.json` (now
+with `model`), then commit + push `data/`. The committed staging files are what the
+audit routine reads.
 
 ## Why staging-only is safe
 

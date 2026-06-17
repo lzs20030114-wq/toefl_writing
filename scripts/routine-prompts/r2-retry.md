@@ -4,13 +4,15 @@ This is the prompt for the **R2 polling routine** that fires daily ~35 minutes
 after R1. It reads `data/.pending-retry.json` and supplements banks that R1
 flagged as below the diversity/quality gate.
 
-Architecture:
-- R1 (existing routine `trig_01SmJeXr8ySEZRo2dEoohzTP`) generates all 12 banks
-  (7 reading/writing + 5 listening/speaking: lat/lc/la/lcr/repeat),
-  scores them via `scripts/check-quality-gates.mjs`, writes pending-retry.json.
-- R2 (this routine) polls. If pending-retry says no retry needed, exits clean
-  (cheap no-op). If retry needed, generates supplementary items for the failed
-  banks with the hints from pending-retry.
+Architecture (three routines, in time order each night):
+- R1 (`trig_01SmJeXr8ySEZRo2dEoohzTP`) generates all 12 banks, merges bs/disc/email,
+  stages reading/listening, scores via `check-quality-gates.mjs`, writes
+  pending-retry.json. Does NOT audit/merge reading/listening or send email.
+- R2 (this routine, ~35 min after R1) polls pending-retry. No retry needed → exits
+  clean. Else generates supplements for the failed banks; merges bs/disc/email;
+  STAGES reading/listening for the audit routine. Does NOT audit/merge them or email.
+- Audit routine (audit-routine.md, after R2's window) independently audits BOTH R1's
+  and R2's reading/listening MCQ, merges them, and sends the single nightly email.
 
 R2 prompt content (paste into a new Anthropic routine config):
 
@@ -85,74 +87,43 @@ For each entry in `retry_banks`:
        listening-lcr      → data/listening/staging/lcr-$R2_SESSION_ID.json
        speaking-repeat    → data/speaking/staging/repeat-$R2_SESSION_ID.json
 
-  (Do NOT merge inside this loop. Write ALL retry banks' staging files first, then
-   run the answer-audit in PHASE 2.5, then merge in PHASE 2.6 — so the audit can
-   drop any mis-keyed reading/listening item BEFORE it is merged.)
+  (Do NOT audit or merge reading/listening inside this loop. You do NOT run the
+   answer-audit yourself — the dedicated audit routine (audit-routine.md) runs AFTER
+   you and independently audits both R1's and R2's MCQ supplements before merging
+   them. Your job is only to generate + stage them.)
 
 ═════════════════════════════════════════════════════════════════════════════
-PHASE 2.5 — Answer-audit (you are the second examiner — required before merge)
+PHASE 2.6 — Merge only the no-MCQ banks; leave reading/listening for the audit routine
 ═════════════════════════════════════════════════════════════════════════════
-Only relevant if any retry bank is a reading or listening MCQ bank
-(reading-ap/ctw/rdl-*, listening-lat/lc/la/lcr). If none are, skip to PHASE 2.6.
-
-NOTE: R1's main batch is audited by the separate, fully-independent audit routine
-(see audit-routine.md). R2 is a small supplement of gate-failed banks and audits
-its own supplements inline here — less independent (same session that generated
-them), but it still re-solves blind and catches a mis-keyed answer.
-
-  a) node scripts/routine-audit.mjs extract $R2_SESSION_ID
-     Writes data/.audit-blind.json — every MCQ from this session's staging,
-     WITHOUT its answer key. If it reports 0 questions, skip to PHASE 2.6.
-  b) Read data/.audit-blind.json. For EACH question, independently pick the single
-     best option using ONLY that question's `context` (passage / conversation /
-     prompt). Do not look at the staging files and do not use outside knowledge —
-     you are re-solving blind to catch a mis-keyed answer.
-  c) Write data/.audit-solved.json:  { "answers": { "<key>": "B", ... } }
-     using each question's `key` verbatim. Answer EVERY question.
-  d) node scripts/routine-audit.mjs apply $R2_SESSION_ID
-     Drops any item whose marked answer disagrees with yours, rewrites the staging
-     file, and writes the receipt data/.audit-report.json. Note the dropped count
-     per bank — those items will NOT be merged.
+For each retry bank:
+  - bs / disc / email → merge now (no answer key to audit):
+       node scripts/mergeClaude.mjs <bank> <staging-file>   (bank: bs / disc / email)
+    Capture the accepted count; log "R2 <bank>: supplemented <accepted>/<wanted>".
+  - reading-* / listening-* / speaking-repeat → do NOT merge. Leave the staging file
+    in place. The audit routine will audit (reading/listening) and merge them. Just
+    log "R2 <bank>: staged <n> for audit routine".
 
 ═════════════════════════════════════════════════════════════════════════════
-PHASE 2.6 — Merge each retry bank
+PHASE 3 — Update meta; do NOT send the email
 ═════════════════════════════════════════════════════════════════════════════
-For each retry bank, merge with the appropriate command:
-       bs/disc/email → node scripts/mergeClaude.mjs <bank> <staging-file>
-                       (bank string: bs / disc / email)
-       reading-ap    → MERGE_RUN_ID=$R2_SESSION_ID node scripts/merge-staging.mjs
-       reading-ctw   → MERGE_RUN_ID=$R2_SESSION_ID node scripts/merge-staging.mjs
-       reading-rdl-short → MERGE_RUN_ID=$R2_SESSION_ID-short node scripts/merge-staging.mjs
-       reading-rdl-long  → MERGE_RUN_ID=$R2_SESSION_ID-long node scripts/merge-staging.mjs
-       listening-lat / listening-lc / listening-la / listening-lcr / speaking-repeat
-                         → MERGE_RUN_ID=$R2_SESSION_ID node scripts/merge-staging.mjs
-                           (merge-staging scans reading+listening+speaking staging dirs)
-
-  Then capture the acceptance count from merge stdout for each bank, and log
-  "R2 <bank>: supplemented <accepted>/<items_to_supplement>".
-
-═════════════════════════════════════════════════════════════════════════════
-PHASE 3 — Update meta + recompute summary
-═════════════════════════════════════════════════════════════════════════════
-Read existing `data/.routine-meta.json`. For each bank you supplemented, add
-fields:
+Read existing `data/.routine-meta.json`. For each bs/disc/email bank you merged:
   results[bank].r2_supplemented = true
-  results[bank].r2_session_id = $R2_SESSION_ID
-  results[bank].r2_items_added = <accepted from merge>
-  results[bank].accepted += <accepted>  (so total reflects R1 + R2)
+  results[bank].r2_items_added  = <accepted from merge>
+  results[bank].accepted       += <accepted>
 
-Add at top level:
+Add at top level (CRITICAL — this is how the audit routine finds your reading/
+listening staging files):
   r2_completed_at = ISO timestamp
-  r2_session_id = $R2_SESSION_ID
+  r2_session_id   = $R2_SESSION_ID
 
 Also update `data/.pending-retry.json`:
   resolved_at = ISO timestamp
-  resolution_status = "supplemented" or "still_failing" depending on whether
-                      Phase 2 merges all succeeded
-  (keep retry_banks for audit, don't delete)
+  resolution_status = "supplemented" or "still_failing"
+  (keep retry_banks; don't delete)
 
-Then run: node scripts/compute-quality-report.mjs > data/.last-nightly-summary.md
-This regenerates the email body with R1+R2 combined scoring.
+Do NOT run compute-quality-report.mjs and do NOT write data/.last-nightly-summary.md.
+The audit routine runs after you, audits+merges your reading/listening supplements
+(it picks up r2_session_id automatically), and sends the single nightly email.
 
 ═════════════════════════════════════════════════════════════════════════════
 PHASE 4 — Commit + push
@@ -164,17 +135,17 @@ PHASE 4 — Commit + push
     sleep 10
   done
 
-The push to data/.last-nightly-summary.md triggers the
-send-nightly-email.yml workflow automatically. No curl needed.
+Do NOT trigger the email — you did not write data/.last-nightly-summary.md. The
+audit routine sends the single nightly email after it merges your supplements.
 
 ═════════════════════════════════════════════════════════════════════════════
 DONE
 ═════════════════════════════════════════════════════════════════════════════
 Print a final status line:
-  "R2 done: supplemented <N> banks, total items added <M>. Session: $R2_SESSION_ID"
+  "R2 done: supplemented <N> banks, staged reading/listening for audit routine. Session: $R2_SESSION_ID"
 
 ERROR PHILOSOPHY:
 - If pending-retry.json is missing or unparseable → exit clean, no work
 - If a specific bank's merge fails → log it, continue to next bank
-- If ALL bank merges fail → still write meta update + summary so email
-  reports "R2 also failed for X banks"
+- Always commit the meta update (esp. r2_session_id) so the audit routine can find
+  and merge your reading/listening supplements even if some bs/disc/email merge failed

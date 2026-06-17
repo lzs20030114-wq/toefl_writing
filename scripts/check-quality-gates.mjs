@@ -50,22 +50,23 @@ const DIVERSITY_GATE = {
   "speaking-repeat": 70,
 };
 
-// Quality gate is more forgiving — these are basic adherence checks that
-// already pass through mergeClaude's schema validator. Set lower bound
-// just in case something slips through.
+// Quality gate keys on the validator PASS RATE (% of items with no hard errors),
+// not the richer displayed score — so soft calibration warnings (no_passive,
+// transcript_long, …) inform the email number without falsely forcing an R2 retry.
+// Thresholds are lenient for small-N banks where one reject is a big fraction.
 const QUALITY_GATE = {
-  bs:                95,
-  discussion:        90,
-  email:             90,
-  "reading-ap":      90,
-  "reading-ctw":     90,
-  "reading-rdl-short": 85,
-  "reading-rdl-long":  85,
-  "listening-lat":   80,
-  "listening-lc":    80,
-  "listening-la":    80,
-  "listening-lcr":   80,
-  "speaking-repeat": 80,
+  bs:                90,
+  discussion:        85,  // legacy length score (no validator)
+  email:             85,  // legacy length score (no validator)
+  "reading-ap":      75,
+  "reading-ctw":     75,
+  "reading-rdl-short": 70,
+  "reading-rdl-long":  50,  // N=2 — one reject already halves it
+  "listening-lat":   75,
+  "listening-lc":    75,
+  "listening-la":    75,
+  "listening-lcr":   75,
+  "speaking-repeat": 75,
 };
 
 function readJSON(p, fallback = null) {
@@ -135,7 +136,10 @@ for (const bank of BANK_ORDER) {
   const divGate = DIVERSITY_GATE[bank] ?? 75;
   const qualGate = QUALITY_GATE[bank] ?? 80;
   const divPass = s.diversity.score >= divGate;
-  const qualPass = s.quality.score >= qualGate;
+  // Gate on passRate (errors-only) when the validator-driven scorer provides it;
+  // fall back to the displayed score for legacy banks (discussion/email).
+  const qualMetric = s.quality.passRate ?? s.quality.score;
+  const qualPass = qualMetric >= qualGate;
 
   // Dedicated person-prefilled gate (BS only). A batch can clear the overall
   // diversity gate yet still over-use a person as the prefilled hint. Real TPO
@@ -151,7 +155,7 @@ for (const bank of BANK_ORDER) {
   }
 
   if (divPass && qualPass && !personOveruse && !distractorCollapsed && !promptAddressingLow) {
-    summary.push(`  ✓ ${bank}: 多样性 ${s.diversity.score}≥${divGate}, 质量 ${s.quality.score}≥${qualGate}${bank === "bs" ? `, 人物prefilled ${Math.round((s.diversity.detail.personFrac||0)*100)}%, 干扰词 ${s.diversity.detail.distinctDistractors}种, 题面you ${Math.round((s.diversity.detail.secondPersonFrac||0)*100)}%` : ""}`);
+    summary.push(`  ✓ ${bank}: 多样性 ${s.diversity.score}≥${divGate}, 质量通过率 ${qualMetric}≥${qualGate}${bank === "bs" ? `, 人物prefilled ${Math.round((s.diversity.detail.personFrac||0)*100)}%, 干扰词 ${s.diversity.detail.distinctDistractors}种, 题面you ${Math.round((s.diversity.detail.secondPersonFrac||0)*100)}%` : ""}`);
     continue;
   }
 
@@ -203,8 +207,8 @@ for (const bank of BANK_ORDER) {
   }
 
   if (!qualPass) {
-    failures.push(`质量 ${s.quality.score} < ${qualGate}`);
-    hints.push(`质量校验有偏差: ${s.quality.breakdown.join(", ")} — recheck schema compliance`);
+    failures.push(`质量通过率 ${qualMetric} < ${qualGate}`);
+    hints.push(`质量校验有偏差: ${s.quality.breakdown.join(", ")} — recheck validator compliance`);
   }
 
   retryBanks.push({

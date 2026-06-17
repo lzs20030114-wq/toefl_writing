@@ -176,7 +176,7 @@ if (failedRows.length === 0 && retriedRows.length === 0 && r2SupplementedRows.le
 const today = (meta.completed_at || new Date().toISOString()).slice(0, 10);
 
 console.log(`# ${header}\n`);
-console.log(`${today} · 用时 ${meta.duration_minutes || "—"} 分钟`);
+console.log(`${today}${meta.model ? ` · ${meta.model}` : ""} · 用时 ${meta.duration_minutes || "—"} 分钟`);
 console.log(`📊 多样性 ${scores.overall.diversity} · 质量 ${scores.overall.quality} · ${auditSummary}\n`);
 
 // Per-bank one-liners: count + topics. Scores are NOT shown here — only the
@@ -221,7 +221,10 @@ for (const r of rows) {
   if (r.retried_after_fail) notes.push(`🟡 ${r.label}: 第一轮失败,第二轮救回`);
   if (!s) continue;
   if (s.diversity.score < 90) notes.push(`🟡 ${r.label}: 多样性 ${s.diversity.score} — ${s.diversity.breakdown.join(" · ")}`);
-  if (s.quality.score < 90) notes.push(`🟡 ${r.label}: 质量 ${s.quality.score} — ${s.quality.breakdown.join(" · ")}`);
+  // Quality shows up only when items were actually rejected (passRate < 100) — soft
+  // warnings still move the header 质量 number but don't flood this section.
+  const passRate = s.quality.passRate ?? s.quality.score;
+  if (passRate < 100) notes.push(`🟡 ${r.label}: 质量 ${s.quality.score}(通过率 ${passRate}%) — ${s.quality.breakdown.join(" · ")}`);
 }
 // Answer-audit: list dropped items, or warn loudly if the audit never ran.
 if (auditValid) {
