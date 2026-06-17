@@ -94,12 +94,21 @@ audited items reach the bank. merge-staging's own DeepSeek audit will skip here
 Capture the per-bank "+N new" counts from the merge stdout.
 
 ═════════════════════════════════════════════════════════════════════════════
-PHASE 5 — Commit + push + refresh summary
+PHASE 5 — Generate the (single) email summary + commit + push
 ═════════════════════════════════════════════════════════════════════════════
-Optionally fold the audit totals into the nightly email:
-  - Read `data/.last-nightly-summary.md`; append a line under 评分明细, e.g.
-    "二审(独立 agent): 82/83 一致 · 剔除 1 道 (lcr)".
-  (Or re-run: node scripts/compute-quality-report.mjs > data/.last-nightly-summary.md)
+This routine — NOT R1 — sends the nightly email, so there is exactly one email
+and it already reflects the audit. (R1 no longer writes the summary; see
+r1-audit-phase.md.)
+
+FIRST check data/.pending-retry.json: if `needs_retry` is TRUE, R2 will run after
+you and send the final email — so SKIP this whole phase (just commit your merges
+below WITHOUT writing the summary). Only write the summary when no retry is pending:
+
+  node scripts/compute-quality-report.mjs > data/.last-nightly-summary.md
+
+compute-quality-report auto-reads data/.audit-report.json and puts "二审 N/M 一致"
+in the header (and lists any dropped item under 需要注意). You do NOT need to edit
+the summary by hand.
 
   git add data/
   git commit -m "bot(audit): independent answer-audit + merge reading/listening $SID"
@@ -107,6 +116,9 @@ Optionally fold the audit totals into the nightly email:
     if git pull --rebase origin main && git push origin main; then break; fi
     sleep 10
   done
+
+The push to data/.last-nightly-summary.md triggers send-nightly-email.yml — one
+email, complete.
 
 ═════════════════════════════════════════════════════════════════════════════
 DONE

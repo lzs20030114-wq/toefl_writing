@@ -26,6 +26,13 @@ In R1's merge phase, **merge only the no-MCQ banks** and **stop calling
   i.e. R1 no longer merges reading (ap/ctw/rdl) or listening (la/lat/lc/lcr) or
   speaking (repeat). It just **writes their staging files** as before.
 
+Also remove R1's email step: **do NOT run `compute-quality-report.mjs` and do NOT
+write `data/.last-nightly-summary.md` in R1.** The audit routine generates that
+summary at the very end (PHASE 5), so the single nightly email already includes the
+二审 line. If R1 also wrote it, the file would be pushed twice → two emails. (Trade-
+off: if the audit routine never runs, no email is sent — which is itself a visible
+"something's wrong" signal.)
+
 R1 still does everything else unchanged: generate all banks, write every staging
 file, run `scripts/check-quality-gates.mjs`, write `data/.routine-meta.json`, then
 commit + push `data/`. The committed staging files are what the audit routine

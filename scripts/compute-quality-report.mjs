@@ -141,6 +141,18 @@ const r2SupplementedRows = rows.filter((r) => r.r2_supplemented);
 // Overall = item-weighted average across banks.
 const scores = scoreBatch(ROOT, meta.session_id || "", results);
 
+// ── Independent answer-audit receipt (if the audit routine ran) ───────
+// Written by scripts/routine-audit.mjs apply. If it's missing or for a different
+// session, the audit did NOT run for this batch — we say "二审 未运行" plainly so a
+// structural "质量 100" never masquerades as verified answer-correctness.
+const audit = readJSON(join(ROOT, "data/.audit-report.json"));
+// Match R1's session OR R2's (on retry nights R2's inline audit overwrites the
+// receipt with its own session id, while meta.session_id stays R1's).
+const auditValid = !!(audit && audit.totals && (audit.session === meta.session_id || audit.session === meta.r2_session_id));
+const auditSummary = auditValid
+  ? `二审 ${audit.totals.matched}/${audit.totals.questions} 一致${audit.totals.rejected_items ? ` · 剔除 ${audit.totals.rejected_items} 道` : ""}`
+  : "二审 未运行";
+
 // Total bank size before and after
 const totalNowByBank = Object.fromEntries(bankOrder.map((b) => [b, bankTotal(b)]));
 const totalNow = Object.values(totalNowByBank).reduce((s, v) => s + v, 0);
@@ -164,98 +176,69 @@ if (failedRows.length === 0 && retriedRows.length === 0 && r2SupplementedRows.le
 const today = (meta.completed_at || new Date().toISOString()).slice(0, 10);
 
 console.log(`# ${header}\n`);
-console.log(`日期: **${today}** · 模型: Claude Opus 4.7 · 用时: ${meta.duration_minutes || "—"} 分钟`);
-console.log(`📊 **多样性 ${scores.overall.diversity}/100  ·  质量 ${scores.overall.quality}/100**\n`);
+console.log(`${today} · 用时 ${meta.duration_minutes || "—"} 分钟`);
+console.log(`📊 多样性 ${scores.overall.diversity} · 质量 ${scores.overall.quality} · ${auditSummary}\n`);
 
-// Per-bank line summary
+// Per-bank one-liners: count + topics. Scores are NOT shown here — only the
+// "需要注意" block below surfaces a score, and only when it's actually low.
 for (const r of rows) {
-  // Join with " · " so individual topics that contain "/" (e.g. "物理 / 声学")
-  // remain visually distinct.
-  const topicSnippet = r.topics.length > 0
-    ? `  (${r.topics.slice(0, 4).join(" · ")}${r.topics.length > 4 ? " ..." : ""})`
-    : "";
-  const noteSnippet = r.note ? `  — ${r.note}` : "";
-  const s = scores.perBank[r.bank];
   const totalForBank = r.accepted + r.r2_items_added;
-  const scoreSnippet = (s && totalForBank > 0)
-    ? `  [多样性 ${s.diversity.score} / 质量 ${s.quality.score}]`
-    : "";
   if (totalForBank === 0) {
-    console.log(`${r.icon} **${r.label}** — 0 道${noteSnippet}`);
-  } else if (r.r2_items_added > 0) {
-    console.log(`${r.icon} **${r.label}** — ${r.accepted}+${r.r2_items_added} 道${topicSnippet}${scoreSnippet}${noteSnippet}`);
-  } else {
-    console.log(`${r.icon} **${r.label}** — ${r.accepted} 道${topicSnippet}${scoreSnippet}${noteSnippet}`);
-  }
-}
-
-console.log(`\n题库总数: **${totalBefore} → ${totalNow}**\n`);
-
-// Highlight (one-liner from agent)
-if (meta.highlight) {
-  console.log(`本批亮点: ${meta.highlight}\n`);
-}
-
-// Sample preview — show 1-2 favorites
-const favs = rows.filter((r) => r.favorite && r.accepted > 0);
-if (favs.length > 0) {
-  console.log("## 样题预览\n");
-  // Always show BS favorite if available
-  const bsFav = favs.find((r) => r.bank === "bs");
-  if (bsFav) {
-    const f = bsFav.favorite;
-    console.log(`**造句:**`);
-    console.log(`> ${f.prompt || ""}`);
-    console.log(`> 答案: ${f.answer || ""}\n`);
-  }
-  // One more random favorite from a different category
-  const otherFav = favs.find((r) => r.bank !== "bs");
-  if (otherFav) {
-    const f = otherFav.favorite;
-    console.log(`**${otherFav.label}${f.subtopic ? ` (${f.subtopic})` : ""}:**`);
-    if (f.preview) console.log(`> ${f.preview.slice(0, 200)}${f.preview.length > 200 ? "..." : ""}\n`);
-  }
-}
-
-// Score breakdown — per-bank detail. Always rendered so you can see WHY a
-// score is what it is, not just the number.
-console.log("## 评分明细\n");
-console.log("| 品类 | 多样性 | 质量 |");
-console.log("| --- | --- | --- |");
-for (const r of rows) {
-  const s = scores.perBank[r.bank];
-  if (!s || r.accepted === 0) {
-    console.log(`| ${r.label} | — | — |`);
+    console.log(`${r.icon} ${r.label} — 0 道${r.note ? `  (${r.note})` : ""}`);
     continue;
   }
-  const divDetail = s.diversity.breakdown.join(" · ");
-  const qualDetail = s.quality.breakdown.join(" · ");
-  console.log(`| ${r.label} | **${s.diversity.score}** — ${divDetail} | **${s.quality.score}** — ${qualDetail} |`);
+  const cnt = r.r2_items_added > 0 ? `${r.accepted}+${r.r2_items_added}` : `${r.accepted}`;
+  const topicSnippet = r.topics.length > 0
+    ? `  (${r.topics.slice(0, 4).join(" · ")}${r.topics.length > 4 ? " …" : ""})`
+    : "";
+  console.log(`${r.icon} ${r.label} — ${cnt} 道${topicSnippet}`);
 }
-console.log("");
-console.log("> *多样性 100 = 所有维度 distinct / 均衡;质量 100 = 每道题都落在 TPO 校准的目标区间。整体分按本批 item 数加权平均。*\n");
 
-// Anomaly / retry log
-const anomalies = [];
-for (const r of retriedRows) anomalies.push(`- **${r.label}**: 第一轮失败 (${r.failure_reason || "原因略"}), routine 自动重试,第二轮通过 ✓`);
-for (const r of failedRows) anomalies.push(`- ⚠️ **${r.label}**: 两轮都失败. 原因: ${r.failure_reason || "未知"}`);
-if (anomalies.length > 0) {
-  console.log("## 异常 / 自愈记录\n");
-  console.log(anomalies.join("\n"));
-  console.log("");
-  if (failedRows.length > 0) {
-    console.log("如果某品类连续 3 天失败, 请手动跑现有 nightly workflow 兜底:");
-    console.log("https://github.com/lzs20030114-wq/toefl_writing/actions/workflows/nightly-bank-refresh.yml");
-    console.log("");
+console.log(`\n题库总数: ${totalBefore} → ${totalNow}`);
+if (meta.highlight) console.log(`亮点: ${meta.highlight}`);
+
+// Sample preview — one BS + one other, kept short.
+const favs = rows.filter((r) => r.favorite && r.accepted > 0);
+const bsFav = favs.find((r) => r.bank === "bs");
+const otherFav = favs.find((r) => r.bank !== "bs");
+if (bsFav || otherFav) {
+  console.log("\n## 样题");
+  if (bsFav) console.log(`- 造句: ${bsFav.favorite.prompt || ""} → ${bsFav.favorite.answer || ""}`);
+  if (otherFav && otherFav.favorite.preview) {
+    console.log(`- ${otherFav.label}: ${otherFav.favorite.preview.slice(0, 140)}${otherFav.favorite.preview.length > 140 ? "…" : ""}`);
+  }
+}
+
+// ── 需要注意 — ONLY the banks/issues that need a human look ──────────────
+// Replaces the always-on 12-row breakdown table. A bank shows up here only if it
+// failed, was retried, scored below a soft threshold, or had an item dropped by
+// the answer-audit. Clean batches print "全部正常".
+const notes = [];
+for (const r of rows) {
+  const s = scores.perBank[r.bank];
+  const total = r.accepted + r.r2_items_added;
+  if (total === 0) { notes.push(`🔴 ${r.label}: 未入库 — ${r.failure_reason || "失败"}`); continue; }
+  if (r.retried_after_fail) notes.push(`🟡 ${r.label}: 第一轮失败,第二轮救回`);
+  if (!s) continue;
+  if (s.diversity.score < 90) notes.push(`🟡 ${r.label}: 多样性 ${s.diversity.score} — ${s.diversity.breakdown.join(" · ")}`);
+  if (s.quality.score < 90) notes.push(`🟡 ${r.label}: 质量 ${s.quality.score} — ${s.quality.breakdown.join(" · ")}`);
+}
+// Answer-audit: list dropped items, or warn loudly if the audit never ran.
+if (auditValid) {
+  for (const m of (audit.rejected || [])) {
+    const bankTag = m.file.replace(/-routine.*$/, "").replace(/-r2.*$/, "");
+    notes.push(`🔴 二审剔除 (${bankTag}): 标注=${m.marked} / 模型=${m.claude} — ${m.stem || ""}`);
   }
 } else {
-  console.log("异常: 无\n");
+  notes.push(`⚠️ 二审未运行 — 本批"质量"仅代表结构合规,答案正确性未独立核验`);
 }
 
-// Footer — metadata for traceability
-console.log("---");
-console.log(`Session: \`${meta.session_id || "?"}\``);
-if (meta.commit_sha) {
-  console.log(`Commit: [${meta.commit_sha.slice(0, 7)}](https://github.com/lzs20030114-wq/toefl_writing/commit/${meta.commit_sha})`);
+console.log("\n## 需要注意");
+console.log(notes.length ? notes.join("\n") : "全部正常 ✓");
+if (failedRows.length > 0) {
+  console.log("\n连续失败可手动兜底: https://github.com/lzs20030114-wq/toefl_writing/actions/workflows/nightly-bank-refresh.yml");
 }
-console.log("下次自动运行: 明早 03:00 北京");
+
+// Footer
+console.log("\n---");
+console.log(`Session: \`${meta.session_id || "?"}\` · 下次 03:00 北京`);
