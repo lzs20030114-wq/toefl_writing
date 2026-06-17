@@ -129,8 +129,23 @@ const rows = bankOrder.map((bank) => {
 });
 
 // ── Aggregate ─────────────────────────────────────────────────────────
-// totalAccepted = R1's count + R2's supplements
-const totalAccepted = rows.reduce((s, r) => s + r.accepted + r.r2_items_added, 0);
+// Accurate "added tonight" per bank = current bank total − R1's pre-run snapshot
+// (data/.bank-stats.json, written in R1 PHASE 1). This reflects what ACTUALLY
+// merged — including items dropped by the audit/validator at merge — instead of
+// R1's gen-time `accepted` (which over-counts reading/listening). Falls back to
+// accepted+R2 when the snapshot lacks a bank.
+const bankStats = readJSON(join(ROOT, "data/.bank-stats.json"), null);
+function snapshotBefore(bankKey) {
+  if (!bankStats) return null;
+  const s = bankStats[bankKey.replace(/-/g, "_")];
+  if (!s) return null;
+  return bankKey === "bs" ? (s.total_questions ?? null) : (s.total ?? null);
+}
+for (const r of rows) {
+  const before = snapshotBefore(r.bank);
+  r.added = before == null ? (r.accepted + r.r2_items_added) : Math.max(0, bankTotal(r.bank) - before);
+}
+const totalAdded = rows.reduce((s, r) => s + r.added, 0);
 const failedRows = rows.filter((r) => (r.accepted + r.r2_items_added) === 0);
 const retriedRows = rows.filter((r) => r.retried_after_fail && r.accepted > 0);
 const r2SupplementedRows = rows.filter((r) => r.r2_supplemented);
@@ -156,18 +171,18 @@ const auditSummary = auditValid
 // Total bank size before and after
 const totalNowByBank = Object.fromEntries(bankOrder.map((b) => [b, bankTotal(b)]));
 const totalNow = Object.values(totalNowByBank).reduce((s, v) => s + v, 0);
-const totalBefore = totalNow - totalAccepted;
+const totalBefore = totalNow - totalAdded;
 
 // Overall status header
 let header;
 if (failedRows.length === 0 && retriedRows.length === 0 && r2SupplementedRows.length === 0) {
-  header = `✅ 题库更新成功 — 今天加了 ${totalAccepted} 道`;
+  header = `✅ 题库更新成功 — 今天加了 ${totalAdded} 道`;
 } else if (failedRows.length === 0 && r2SupplementedRows.length > 0) {
-  header = `✅ 题库更新成功 — 今天加了 ${totalAccepted} 道(${r2SupplementedRows.length} 个品类 R2 补救)`;
+  header = `✅ 题库更新成功 — 今天加了 ${totalAdded} 道(${r2SupplementedRows.length} 个品类 R2 补救)`;
 } else if (failedRows.length === 0 && retriedRows.length > 0) {
-  header = `✅ 题库更新成功 — 今天加了 ${totalAccepted} 道(${retriedRows.length} 个品类第二轮才过)`;
-} else if (totalAccepted > 0) {
-  header = `⚠️ 题库部分更新 — 加了 ${totalAccepted} 道,${failedRows.length} 个品类失败`;
+  header = `✅ 题库更新成功 — 今天加了 ${totalAdded} 道(${retriedRows.length} 个品类第二轮才过)`;
+} else if (totalAdded > 0) {
+  header = `⚠️ 题库部分更新 — 加了 ${totalAdded} 道,${failedRows.length} 个品类失败`;
 } else {
   header = `❌ 凌晨题库失败 — 0 道入库`;
 }
@@ -182,16 +197,14 @@ console.log(`📊 多样性 ${scores.overall.diversity} · 质量 ${scores.overa
 // Per-bank one-liners: count + topics. Scores are NOT shown here — only the
 // "需要注意" block below surfaces a score, and only when it's actually low.
 for (const r of rows) {
-  const totalForBank = r.accepted + r.r2_items_added;
-  if (totalForBank === 0) {
+  if (r.added === 0 && (r.accepted + r.r2_items_added) === 0) {
     console.log(`${r.icon} ${r.label} — 0 道${r.note ? `  (${r.note})` : ""}`);
     continue;
   }
-  const cnt = r.r2_items_added > 0 ? `${r.accepted}+${r.r2_items_added}` : `${r.accepted}`;
   const topicSnippet = r.topics.length > 0
     ? `  (${r.topics.slice(0, 4).join(" · ")}${r.topics.length > 4 ? " …" : ""})`
     : "";
-  console.log(`${r.icon} ${r.label} — ${cnt} 道${topicSnippet}`);
+  console.log(`${r.icon} ${r.label} — ${r.added} 道${topicSnippet}`);
 }
 
 console.log(`\n题库总数: ${totalBefore} → ${totalNow}`);

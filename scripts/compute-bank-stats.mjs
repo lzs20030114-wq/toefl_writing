@@ -133,6 +133,24 @@ function readingStats(file, label) {
   }
 }
 
+// ── Listening / Speaking helper ──
+// Leaner than readingStats — we mainly need an accurate `total` so the nightly
+// report can compute真实入库增量 (current bank total − this snapshot). Added
+// 2026-06-17 so listening/speaking are covered too (compute-quality-report diffs
+// against this snapshot instead of trusting R1's gen-time `accepted`).
+function bankItemTotal(file, keyFn) {
+  try {
+    const j = readJSON(file);
+    const items = j.items || j.sets || [];
+    return {
+      total: items.length,
+      recent_subjects: items.slice(-30).map(keyFn).filter(Boolean),
+    };
+  } catch (e) {
+    return { total: 0, error: e.message };
+  }
+}
+
 // ── Main ──
 const stats = {
   generated_at: new Date().toISOString(),
@@ -143,6 +161,11 @@ const stats = {
   reading_ctw: readingStats("data/reading/bank/ctw.json", "CTW"),
   reading_rdl_short: readingStats("data/reading/bank/rdl-short.json", "RDL-short"),
   reading_rdl_long: readingStats("data/reading/bank/rdl-long.json", "RDL-long"),
+  listening_lat: bankItemTotal("data/listening/bank/lat.json", (it) => it.subject || it.topic || ""),
+  listening_lc: bankItemTotal("data/listening/bank/lc.json", (it) => it.situation || it.context || ""),
+  listening_la: bankItemTotal("data/listening/bank/la.json", (it) => it.situation || it.context || ""),
+  listening_lcr: bankItemTotal("data/listening/bank/lcr.json", (it) => it.situation || it.context || ""),
+  speaking_repeat: bankItemTotal("data/speaking/bank/repeat.json", (it) => it.scenario || ""),
 };
 
 writeFileSync(OUTPUT, JSON.stringify(stats, null, 2) + "\n", "utf8");

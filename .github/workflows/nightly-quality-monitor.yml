@@ -1,22 +1,24 @@
 name: Nightly Quality Monitor
 
-# Deterministic regression watchdog. Runs ~04:30 Beijing (20:30 UTC), AFTER
-# R1 (03:00) and R2 (03:30) routines have committed the night's batch.
+# Deterministic regression watchdog. Runs ~05:00 Beijing (21:00 UTC), AFTER
+# R1 (03:00), R2 (03:30) and the R3 audit routine (~04:00) have committed the night.
 #
 # It catches what the per-night quality gate cannot:
 #   - R1 didn't run at all (cron died / PAT expired / quota out) → STALE
+#   - R3 audit routine didn't run (R1 fresh but no audit-report) → AUDIT_MISSING
+#     (reading/listening stuck unmerged + no nightly email sent)
 #   - final BS still over the person-prefilled gate → PERSON_DRIFT
 #   - slow downward trend across nights → TREND_DOWN
 #   - the measurement / tpo_source.md broke → MACHINERY
 #
 # On regression: emails an alert. If specifically STALE (R1 absent), it also
 # dispatches the DeepSeek fallback pipeline so the bank still gets fresh items.
-# On a healthy night: silently commits the history row (no email — R1 already
-# sent the nightly summary; this channel is reserved for "something's wrong").
+# It also prunes routine staging files older than 14 days (they accumulate forever
+# otherwise). On a healthy night it silently commits the history row + any prune.
 
 on:
   schedule:
-    - cron: "30 20 * * *" # 20:30 UTC = 04:30 Beijing
+    - cron: "0 21 * * *" # 21:00 UTC = 05:00 Beijing (after R1/R2/R3)
   workflow_dispatch: {}
 
 permissions:
@@ -50,16 +52,22 @@ jobs:
           # subject for the alert email
           echo "subject=⚠️ 题库质量退化告警 — $(date -u +%Y-%m-%d)" >> "$GITHUB_OUTPUT"
 
-      - name: Commit history + report
+      - name: Prune old staging files (>14 days)
+        shell: bash
+        run: node scripts/prune-staging.mjs --days 14
+
+      - name: Commit history + report + staging prune
         shell: bash
         run: |
           git config user.email "quality-monitor[bot]@users.noreply.github.com"
           git config user.name "quality-monitor[bot]"
           git add data/.quality-history.jsonl data/.quality-monitor-report.md
+          # Stage any staging files the prune deleted (and only those dirs).
+          git add -A data/buildSentence/staging data/academicWriting/staging data/emailWriting/staging data/reading/staging data/listening/staging data/speaking/staging
           if git diff --cached --quiet; then
             echo "No monitor changes to commit."
           else
-            git commit -m "chore(monitor): nightly quality audit $(date -u +%Y-%m-%d) [skip ci]"
+            git commit -m "chore(monitor): nightly quality audit + staging prune $(date -u +%Y-%m-%d) [skip ci]"
             for i in 1 2 3; do
               git pull --rebase origin main && git push origin main && break
               sleep 5

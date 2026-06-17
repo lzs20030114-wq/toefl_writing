@@ -30,6 +30,7 @@ import { scoreBatch, PERSON_PREFILLED_GATE, isDistractorCollapsed, isPromptAddre
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
 const META = resolve(ROOT, "data/.routine-meta.json");
+const AUDIT_REPORT = resolve(ROOT, "data/.audit-report.json");
 const HISTORY = resolve(ROOT, "data/.quality-history.jsonl");
 const REPORT = resolve(ROOT, "data/.quality-monitor-report.md");
 const TPO = resolve(ROOT, "data/buildSentence/tpo_source.md");
@@ -55,6 +56,23 @@ if (!meta) {
     }
   } else {
     reasons.push("STALE: meta has no completed_at timestamp.");
+  }
+}
+
+// ── 1b. Audit watchdog: did the R3 audit routine run for this session? ───
+// R3 (the independent audit routine) merges reading/listening and sends the one
+// nightly email; it ALWAYS writes data/.audit-report.json for the night's session.
+// If R1 ran (meta is fresh) but the report is missing or for an older session, R3
+// did NOT run → reading/listening are stuck unmerged in staging AND no nightly email
+// went out. The STALE check can't see this (meta is fresh), so flag it explicitly.
+// Not a STALE condition → no DeepSeek fallback dispatch; this is an R3 problem (its
+// trigger / PAT / schedule), which the alert email tells the user to check.
+if (meta && session && staleHours != null && staleHours <= 28) {
+  const rep = readJSON(AUDIT_REPORT);
+  const repSession = rep && rep.session;
+  const repOK = repSession && (repSession === session || repSession === (meta.r2_session_id || null));
+  if (!repOK) {
+    reasons.push(`AUDIT_MISSING: R1 ran (session ${session}) but data/.audit-report.json is missing or for an older session (found ${repSession || "none"}). The R3 audit routine did not run — reading/listening are likely unmerged in staging and NO nightly email was sent. Check the audit routine's trigger / PAT / schedule (it must run after R2, ~04:00 Beijing).`);
   }
 }
 
