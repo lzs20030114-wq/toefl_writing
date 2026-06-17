@@ -1,0 +1,66 @@
+{
+  "type": "readInDailyLife",
+  "generated_at": "2026-06-17T22:59:19.000Z",
+  "_meta": {
+    "session": "routine-r2-20260617-225919",
+    "supplements_session": "routine-20260617-223153",
+    "hint": "R1 long items were 178/180 words and failed the 80-150 quality gate (词数 0/2). This email is ~135 words, in-range, and adds the missing email genre to the long bank."
+  },
+  "items": [
+    {
+      "id": "rdl_gen_routine_r2_20260617_225919_001",
+      "variant": "long",
+      "genre": "email",
+      "text": "Subject: Parking Permit Renewal — Action Required by August 20\n\nDear Residents,\n\nYour campus parking permit expires on August 31. To keep your assigned space in the West Lot, you must renew before August 20 through the student portal at parking.westfield.edu.\n\nRenewal requires a $45.00 annual fee, payable by credit card or campus account. Students who renew after August 20 will be charged a $15.00 late fee and may lose their reserved space.\n\nPlease upload a current vehicle registration and your updated license plate number. The Parking Office in Carver Hall, Room 110, is open Monday through Friday, 8:30 AM to 4:00 PM, if you'd prefer to renew in person.\n\nQuestions? Contact us at parking@westfield.edu.\n\nBest regards,\nMs. Dana Pruitt\nCampus Parking Services",
+      "format_metadata": {
+        "from": "Ms. Dana Pruitt, Campus Parking Services",
+        "to": "West Lot Permit Holders",
+        "subject": "Parking Permit Renewal — Action Required by August 20"
+      },
+      "questions": [
+        {
+          "qid": "rdl_gen_routine_r2_20260617_225919_001_q1",
+          "question_type": "detail",
+          "stem": "According to the email, what must students do to keep their assigned space?",
+          "options": {
+            "A": "To submit a new vehicle photo to the office.",
+            "B": "To pay the $15.00 fee before August 31.",
+            "C": "To visit Carver Hall during the weekend.",
+            "D": "To renew the permit before August 20."
+          },
+          "correct_answer": "D",
+          "explanation": "The email states students 'must renew before August 20' to 'keep your assigned space in the West Lot.'"
+        },
+        {
+          "qid": "rdl_gen_routine_r2_20260617_225919_001_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about a student who renews on August 25?",
+          "options": {
+            "A": "They will pay more than the standard renewal cost.",
+            "B": "They will receive a refund on the annual fee.",
+            "C": "They will be assigned a space in another lot.",
+            "D": "They will need to request a new plate number."
+          },
+          "correct_answer": "A",
+          "explanation": "Renewing after August 20 adds a '$15.00 late fee' on top of the '$45.00 annual fee,' so a late renewer pays more than the standard cost."
+        },
+        {
+          "qid": "rdl_gen_routine_r2_20260617_225919_001_q3",
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this email?",
+          "options": {
+            "A": "To announce a new parking lot opening on campus.",
+            "B": "To remind students to renew their parking permits.",
+            "C": "To explain how to appeal a parking violation fine.",
+            "D": "To introduce a new member of the parking staff."
+          },
+          "correct_answer": "B",
+          "explanation": "The email's central message is the upcoming permit expiration and the deadline to renew, making a renewal reminder its overall purpose."
+        }
+      ],
+      "question_count": 3,
+      "word_count": 123,
+      "difficulty": "medium"
+    }
+  ]
+}

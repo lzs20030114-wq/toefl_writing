@@ -1,0 +1,119 @@
+{
+  "_meta": {
+    "session": "routine-r2-20260617-225919",
+    "supplements_session": "routine-20260617-223153",
+    "hint": "R1 diversity 84/100 — fix character-name repetition (R1 had 3/20 distinct). These 10 use 14 distinct names and anchor non-subject prefilled hints."
+  },
+  "items": [
+    {
+      "id": "tmp_r2_q1",
+      "prompt": "Did you catch Margot before class today?",
+      "answer": "She's left a note on your desk.",
+      "chunks": ["she's", "left", "a", "note", "on", "your", "desk"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "leaves",
+      "has_question_mark": false,
+      "grammar_points": ["present perfect", "prepositional phrase"]
+    },
+    {
+      "id": "tmp_r2_q2",
+      "prompt": "Have you tried Angelina's new cafe yet?",
+      "answer": "Juan says it's a really great latte.",
+      "chunks": ["juan", "says", "it's", "a", "great", "latte"],
+      "prefilled": ["really"],
+      "prefilled_positions": {"really": 4},
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["simple present", "reported speech"]
+    },
+    {
+      "id": "tmp_r2_q3",
+      "prompt": "I haven't heard back from Harold in admin.",
+      "answer": "Emma asked whether my transfer was approved.",
+      "chunks": ["emma", "asked", "my", "transfer", "was approved"],
+      "prefilled": ["whether"],
+      "prefilled_positions": {"whether": 2},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["embedded question", "past tense"]
+    },
+    {
+      "id": "tmp_r2_q4",
+      "prompt": "Did Julian tell you why the lab is locked?",
+      "answer": "Hector reset the keypad code late last night.",
+      "chunks": ["hector", "reset", "the", "keypad", "code", "late", "last night"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "resets",
+      "has_question_mark": false,
+      "grammar_points": ["simple past", "time phrase"]
+    },
+    {
+      "id": "tmp_r2_q5",
+      "prompt": "Matthew told me the gym moved upstairs.",
+      "answer": "Which floor has the new weight machines?",
+      "chunks": ["floor", "has", "the", "new", "weight", "machines"],
+      "prefilled": ["Which"],
+      "prefilled_positions": {"which": 0},
+      "distractor": "have",
+      "has_question_mark": true,
+      "grammar_points": ["direct wh-question", "simple present"]
+    },
+    {
+      "id": "tmp_r2_q6",
+      "prompt": "Did you sign up for Professor Cho's seminar?",
+      "answer": "I've grabbed a seat off the waitlist.",
+      "chunks": ["i've", "grabbed", "a", "seat", "waitlist"],
+      "prefilled": ["off the"],
+      "prefilled_positions": {"off the": 4},
+      "distractor": "had",
+      "has_question_mark": false,
+      "grammar_points": ["present perfect", "prepositional phrase"]
+    },
+    {
+      "id": "tmp_r2_q7",
+      "prompt": "Did Alison send you the shuttle schedule?",
+      "answer": "Mariana found out it runs every hour.",
+      "chunks": ["mariana", "it", "runs", "every", "hour"],
+      "prefilled": ["found out"],
+      "prefilled_positions": {"found out": 1},
+      "distractor": "ran",
+      "has_question_mark": false,
+      "grammar_points": ["embedded question", "simple present"]
+    },
+    {
+      "id": "tmp_r2_q8",
+      "prompt": "Are you coming to Diane's recital tonight?",
+      "answer": "I haven't picked up my ticket yet.",
+      "chunks": ["i", "picked", "up", "my", "ticket", "yet"],
+      "prefilled": ["haven't"],
+      "prefilled_positions": {"haven't": 1},
+      "distractor": "no",
+      "has_question_mark": false,
+      "grammar_points": ["negation", "present perfect"]
+    },
+    {
+      "id": "tmp_r2_q9",
+      "prompt": "Did you talk to your advisor today?",
+      "answer": "Olivia recommended the writing elective that fills up before everyone registers.",
+      "chunks": ["olivia", "recommended", "the writing", "elective", "fills up", "before", "everyone", "registers"],
+      "prefilled": ["that"],
+      "prefilled_positions": {"that": 5},
+      "distractor": "fill",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause", "simple present"]
+    },
+    {
+      "id": "tmp_r2_q10",
+      "prompt": "Have you checked the bulletin board lately?",
+      "answer": "Naomi asked whether the keynote was moved for repairs.",
+      "chunks": ["naomi", "asked", "the", "keynote", "was moved", "for", "repairs"],
+      "prefilled": ["whether"],
+      "prefilled_positions": {"whether": 2},
+      "distractor": "were",
+      "has_question_mark": false,
+      "grammar_points": ["embedded question", "passive voice"]
+    }
+  ]
+}
