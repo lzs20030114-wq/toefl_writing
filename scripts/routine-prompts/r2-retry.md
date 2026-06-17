@@ -95,6 +95,11 @@ PHASE 2.5 — Answer-audit (you are the second examiner — required before merg
 Only relevant if any retry bank is a reading or listening MCQ bank
 (reading-ap/ctw/rdl-*, listening-lat/lc/la/lcr). If none are, skip to PHASE 2.6.
 
+NOTE: R1's main batch is audited by the separate, fully-independent audit routine
+(see audit-routine.md). R2 is a small supplement of gate-failed banks and audits
+its own supplements inline here — less independent (same session that generated
+them), but it still re-solves blind and catches a mis-keyed answer.
+
   a) node scripts/routine-audit.mjs extract $R2_SESSION_ID
      Writes data/.audit-blind.json — every MCQ from this session's staging,
      WITHOUT its answer key. If it reports 0 questions, skip to PHASE 2.6.

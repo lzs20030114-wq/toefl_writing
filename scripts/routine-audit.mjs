@@ -45,7 +45,7 @@ const SOLVED_PATH = join(ROOT, "data/.audit-solved.json");
 const REPORT_PATH = join(ROOT, "data/.audit-report.json");
 
 const cmd = (process.argv[2] || "").trim();
-const session = (process.argv[3] || "").trim();
+let session = (process.argv[3] || "").trim();
 
 function die(msg) {
   console.error(msg);
@@ -53,9 +53,19 @@ function die(msg) {
 }
 
 if (!["extract", "apply"].includes(cmd)) {
-  die("Usage:\n  node scripts/routine-audit.mjs extract <SESSION_ID>\n  node scripts/routine-audit.mjs apply <SESSION_ID>");
+  die("Usage:\n  node scripts/routine-audit.mjs extract [SESSION_ID]\n  node scripts/routine-audit.mjs apply [SESSION_ID]\n  (SESSION_ID defaults to session_id in data/.routine-meta.json)");
 }
-if (!session) die(`Missing <SESSION_ID> for "${cmd}".`);
+
+// SESSION_ID is optional: a separate audit routine can omit it and we read the
+// session R1 just wrote into data/.routine-meta.json. Keeps the audit prompt from
+// having to reconstruct the session string itself.
+if (!session) {
+  const metaPath = join(ROOT, "data/.routine-meta.json");
+  if (existsSync(metaPath)) {
+    try { session = String(JSON.parse(readFileSync(metaPath, "utf8")).session_id || "").trim(); } catch { /* fall through */ }
+  }
+}
+if (!session) die(`No SESSION_ID given and none found in data/.routine-meta.json.`);
 
 // Staging files for this session that map to an auditable MCQ bank.
 function matchingFiles() {
