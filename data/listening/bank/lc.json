@@ -32063,6 +32063,410 @@
       ],
       "id": "lc_mqh1b5nn_4",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/conversation/lc_mqh1b5nn_4.mp3"
+    },
+    {
+      "context": "errands_service",
+      "situation": "two friends sharing cooking tips while grocery shopping",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Are you grabbing tomatoes for that pasta sauce you keep raving about? Mine never tastes right."
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, but honestly the trick isn't the tomatoes. It's adding a pinch of sugar at the end to cut the acidity."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Sugar? Huh, I always thought you had to simmer it for hours."
+        },
+        {
+          "speaker": "Man",
+          "text": "It helps, but the sugar does most of the work. Oh, and grab the canned ones, not fresh. They're riper."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Wait, canned are actually better? That feels backwards."
+        },
+        {
+          "speaker": "Man",
+          "text": "For sauce, totally. They're picked at peak ripeness. I'll text you the recipe with the amounts."
+        },
+        {
+          "speaker": "Woman",
+          "text": "That'd be perfect. I'm definitely making this tonight."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "How to improve the woman's homemade pasta sauce.",
+            "B": "Which grocery store has the freshest vegetables.",
+            "C": "Why the man stopped cooking pasta at home.",
+            "D": "How long it takes to simmer a tomato sauce."
+          },
+          "answer": "A",
+          "explanation": "正确答案A：对话核心是男生向女生分享让番茄酱更好吃的技巧（加糖、用罐装番茄），帮助她改进做不好的酱料。B选项错误，对话没有比较哪家超市蔬菜更新鲜。C选项错误，男生并没有停止在家做意面，反而在分享自己的做法。D选项错误，炖煮时间只是对话中的一个小细节，不是主旨。",
+          "distractor_types": {
+            "B": "wrong_topic",
+            "C": "reversed_situation",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do later?",
+          "options": {
+            "A": "Simmer her sauce for several hours as usual.",
+            "B": "Ask the man to cook the pasta sauce for her.",
+            "C": "Try making the sauce with canned tomatoes and sugar.",
+            "D": "Switch to buying only fresh tomatoes from now on."
+          },
+          "answer": "C",
+          "explanation": "正确答案C：女生说她今晚一定要做（I'm definitely making this tonight），并接受了男生关于用罐装番茄和加糖的建议，所以她最可能按新方法尝试。A选项错误，男生说糖才是关键，长时间炖煮不是重点，女生也不再坚持老办法。B选项错误，对话没有提到让男生替她做。D选项错误，男生建议做酱时用罐装而非新鲜番茄，所以只买新鲜番茄与对话相反。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "unrelated_next_step",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "id": "lc_mqiq4y1g_0"
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two students swapping music recommendations because one is bored of the same pop singers",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Honestly, I'm so bored of my playlist. It's the same three pop singers on repeat."
+        },
+        {
+          "speaker": "Man",
+          "text": "Oh, you should check out this jazz trio I've been into. They're super relaxing for studying."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Jazz? I've never really listened to it. Isn't it kind of old-fashioned?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Not these guys. They mix in electronic beats, so it feels modern. I'll send you their album link."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Okay, that actually sounds cool. Send it over."
+        },
+        {
+          "speaker": "Man",
+          "text": "Done. Start with the third track. It's the one that got me hooked."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What kind of music does the man recommend?",
+          "options": {
+            "A": "Classical piano music.",
+            "B": "A jazz trio with electronic beats.",
+            "C": "The same pop singers she already likes.",
+            "D": "Old-fashioned big-band swing."
+          },
+          "answer": "B",
+          "explanation": "正确答案B：男生说他推荐的是一个融合电子节拍的爵士三重奏（this jazz trio... they mix in electronic beats）。A选项错误，对话没有提到古典钢琴。C选项错误，那些流行歌手正是女生听腻了的，不是男生的推荐。D选项错误，男生特意强调这些音乐不是老派的，所以老式大乐队摇摆乐与对话相反。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "C": "wrong_detail",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Delete all the pop songs from her playlist.",
+            "B": "Ask the man to make her a new playlist.",
+            "C": "Go to a live jazz concert with the man.",
+            "D": "Listen to the album the man sent her."
+          },
+          "answer": "D",
+          "explanation": "正确答案D：女生说听起来很酷、让男生发过来（that actually sounds cool. Send it over），男生发了专辑链接并建议先听第三首，所以她最可能去听这张专辑。A选项错误，她只是听腻了，没说要删掉流行歌曲。B选项错误，男生只是发链接，没说要替她做歌单。C选项错误，对话没有提到去看现场演出。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_next_step",
+            "C": "over_inference"
+          }
+        }
+      ],
+      "id": "lc_mqiq4y1g_1"
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "two roommates working out a fair quiet-hours schedule",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Can we talk about quiet hours? I've got an early biology lab, so I really need to sleep by eleven."
+        },
+        {
+          "speaker": "Man",
+          "text": "Oh, no worries. The thing is, I usually do my gaming calls late at night. How about I just use headphones after ten?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "That would help a ton, actually."
+        },
+        {
+          "speaker": "Man",
+          "text": "And you can have the room to yourself in the early mornings since I sleep in. Fair trade?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Totally fair. Should we write it down so we don't forget?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Good idea. I'll stick a note on the fridge with the agreement."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "Why does the woman start the conversation?",
+          "options": {
+            "A": "To complain that the man games too much.",
+            "B": "To ask the man to switch dorm rooms with her.",
+            "C": "To set up a quiet-hours arrangement with her roommate.",
+            "D": "To borrow the man's headphones for her lab."
+          },
+          "answer": "C",
+          "explanation": "正确答案C：女生开口是想商量安静时段（Can we talk about quiet hours?），因为她有早课需要早睡，最终两人达成了协议。A选项错误，她没有抱怨男生玩游戏太多，而是友好地协商。B选项错误，对话没有提到换宿舍。D选项错误，是男生提出自己戴耳机，女生并不是来借耳机的。",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "B": "wrong_topic",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do at night from now on?",
+          "options": {
+            "A": "Wear headphones during his late gaming calls.",
+            "B": "Stop making gaming calls entirely.",
+            "C": "Move his gaming to the dorm common room.",
+            "D": "Wake up early to game in the mornings."
+          },
+          "answer": "A",
+          "explanation": "正确答案A：男生提议十点后自己戴耳机（I just use headphones after ten），女生表示这很有帮助，所以他晚上打游戏时最可能戴耳机。B选项错误，他没说要完全停止打游戏，只是戴耳机。C选项错误，对话没有提到去公共休息室。D选项错误，男生说自己会睡懒觉，把清晨留给女生，并非早起打游戏。",
+          "distractor_types": {
+            "B": "over_inference",
+            "C": "unrelated_next_step",
+            "D": "reversed_situation"
+          }
+        }
+      ],
+      "id": "lc_mqiq4y1g_2"
+    },
+    {
+      "context": "plans_social",
+      "situation": "two friends planning a birthday surprise for a classmate",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "So Daniel's birthday is Friday. I was thinking we surprise him after his afternoon seminar."
+        },
+        {
+          "speaker": "Man",
+          "text": "Love it. Should we do it in the lounge? There's space for everyone there."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Perfect. I'll handle the decorations and the cake."
+        },
+        {
+          "speaker": "Man",
+          "text": "Great. Then I'll text the rest of the group so everyone knows to hide by four."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh, and let's keep it quiet around him. He has no idea, right?"
+        },
+        {
+          "speaker": "Man",
+          "text": "None at all. I'll message everyone the second I leave here."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Where will the surprise party take place?",
+          "options": {
+            "A": "Outside Daniel's seminar room.",
+            "B": "At a nearby cafe.",
+            "C": "In Daniel's dorm room.",
+            "D": "In the student lounge."
+          },
+          "answer": "D",
+          "explanation": "正确答案D：男生提议在休息室办（Should we do it in the lounge?），女生回答很好，所以惊喜派对会在学生休息室举行。A选项错误，对话只提到在他研讨课后给他惊喜，地点是休息室，不是教室门外。B选项错误，对话没有提到咖啡馆。C选项错误，对话没有提到在宿舍。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "related_but_not_stated",
+            "C": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do after the conversation?",
+          "options": {
+            "A": "Buy the birthday cake himself.",
+            "B": "Message the group about hiding by four.",
+            "C": "Tell Daniel about the surprise party.",
+            "D": "Decorate the lounge for the party."
+          },
+          "answer": "B",
+          "explanation": "正确答案B：男生说他一离开就给大家发消息（I'll message everyone the second I leave here），要通知大家四点前藏好，所以他最可能去给小组发消息。A选项错误，女生说蛋糕由她负责。C选项错误，他们想保密，男生说Daniel完全不知情，不会告诉他。D选项错误，布置和蛋糕都由女生负责。",
+          "distractor_types": {
+            "A": "misattributed",
+            "C": "reversed_situation",
+            "D": "misattributed"
+          }
+        }
+      ],
+      "id": "lc_mqiq4y1g_3"
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two friends discussing a movie one just saw — good twists but too long",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "I finally saw that detective movie everyone's talking about. The twist at the end completely fooled me."
+        },
+        {
+          "speaker": "Man",
+          "text": "Oh nice, so you'd recommend it? I've been on the fence."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Mostly, yeah. My only complaint is that it drags in the middle. It's almost three hours long."
+        },
+        {
+          "speaker": "Man",
+          "text": "Three hours? Yikes. That's a big commitment for a weeknight."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Right. If you go, save it for the weekend when you're not tired."
+        },
+        {
+          "speaker": "Man",
+          "text": "Good call. I'll plan to catch it Saturday afternoon then."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What complaint does the woman have about the movie?",
+          "options": {
+            "A": "It is too long and drags in the middle.",
+            "B": "The ending twist was easy to predict.",
+            "C": "The detective plot was hard to follow.",
+            "D": "The ticket was too expensive."
+          },
+          "answer": "A",
+          "explanation": "正确答案A：女生说她唯一的不满是中段拖沓、电影近三个小时长（My only complaint is that it drags in the middle. It's almost three hours long），所以她唯一的不满是电影太长、中段拖沓。B选项错误，她说结局的反转把她完全骗到了，所以反转并不容易猜。C选项错误，对话没有说剧情难懂。D选项错误，对话没有提到票价。",
+          "distractor_types": {
+            "B": "reversed_situation",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do?",
+          "options": {
+            "A": "Skip the movie because it is too long.",
+            "B": "Watch the movie on a weeknight after class.",
+            "C": "See the movie on Saturday afternoon.",
+            "D": "Wait for the movie to come out online."
+          },
+          "answer": "C",
+          "explanation": "正确答案C：男生说他打算周六下午去看（I'll plan to catch it Saturday afternoon then），采纳了女生周末看的建议，所以他最可能周六下午去看。A选项错误，他没有放弃，而是打算周末去看。B选项错误，女生建议别在疲惫的工作日晚上看，男生也同意周末看，所以工作日晚上被否决了。D选项错误，对话没有提到等线上版本。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "rejected_option",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_mqiq4y1g_4"
     }
   ]
 }

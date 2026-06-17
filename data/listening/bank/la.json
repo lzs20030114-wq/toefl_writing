@@ -12708,6 +12708,226 @@
       ],
       "id": "la_mqh1b5mi_4",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/announcement/la_mqh1b5mi_4.mp3"
+    },
+    {
+      "context": "campus_activity",
+      "situation": "student art market in the quad",
+      "speaker_role": "activity_coordinator",
+      "difficulty": "hard",
+      "announcement": "Good afternoon, everyone. We're excited to announce that the first-ever Student Art Market will be held in the central quad this Saturday from 11 a.m. to 4 p.m. Local student artists will sell handmade prints, ceramics, and jewelry, and a portion of every sale supports the campus arts fund. If you'd like to sell your own work, you must reserve a table by Wednesday through the Arts Office portal, since spaces are limited to twenty vendors. Please be aware that the quad fountain area will be roped off to make room for the booths. We hope you'll stop by and support your fellow students.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What must students do in order to sell their own work at the market?",
+          "options": {
+            "A": "Reserve a table through the Arts Office portal by Wednesday",
+            "B": "Donate a finished piece to the campus arts fund",
+            "C": "Set up a booth near the quad fountain area",
+            "D": "Pay a vendor registration fee at the Arts Office"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。公告明确说明想摆摊卖作品的学生必须在周三前通过艺术办公室门户预订桌位。B选项是错误细节，公告说的是每笔销售的一部分支持艺术基金，而不是必须捐赠成品。C选项是误置细节，喷泉区被围起来腾出空间，并不是让学生在那里摆摊。D选项是相关但未提及的，公告没有提到任何注册费用。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "misattributed_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the table reservations?",
+          "options": {
+            "A": "They are reserved only for art majors",
+            "B": "They include free booth materials and signage",
+            "C": "They may fill up quickly because spaces are limited",
+            "D": "They are available throughout the day on Saturday"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。公告提到摊位仅限二十个供应商，且需提前在周三前预订，由此可推断名额可能很快被订满。A选项是过度推断，公告并未说仅限艺术专业的学生。B选项是无关推断，公告完全没有提到提供免费材料或标牌。D选项是错误细节，预订需在周三前完成，而非周六当天全天开放。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_inference",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "id": "la_mqiq4xzh_0"
+    },
+    {
+      "context": "academic_event",
+      "situation": "student research poster session open to all majors",
+      "speaker_role": "department_staff",
+      "difficulty": "easy",
+      "announcement": "This is a reminder that the Undergraduate Research Poster Session will be held next Thursday at 1 p.m. in the Bradley Library atrium. We want to stress that this session welcomes students from every major, not only the sciences, so projects from history, art, and economics are all encouraged. There's no need to have finished results; works in progress are perfectly fine to present. Faculty members and graduate mentors will circulate to give friendly feedback on your posters. To take part, please upload a one-paragraph project summary to the research portal by this Monday.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce the winners of a research competition",
+            "B": "To invite students from all majors to a poster session",
+            "C": "To require science majors to present completed research",
+            "D": "To describe how to apply for a research grant"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。公告的核心目的是邀请所有专业的学生参加海报展示会。A选项是错误目的，公告没有宣布任何比赛获奖者。C选项与事实相反，公告强调欢迎所有专业且接受进行中的项目，并非只针对理科或要求已完成的研究。D选项是错误目的，公告完全没有提到申请研究经费。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "C": "reversed_intent",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What must students do to take part in the session?",
+          "options": {
+            "A": "Present only fully completed research results",
+            "B": "Attend a mandatory orientation with their mentor",
+            "C": "Reserve a poster board at the library front desk",
+            "D": "Upload a one-paragraph project summary by Monday"
+          },
+          "answer": "D",
+          "explanation": "正确答案是D。公告明确要求参与者在本周一前向研究门户上传一段项目简介。A选项与事实相反，公告说进行中的项目也可以展示，不必是已完成的成果。B选项是相关但未提及的，公告没有提到任何强制性的说明会。C选项是相关但未提及的，公告没有提到在图书馆前台预订海报板。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "C": "related_but_not_stated"
+          }
+        }
+      ],
+      "id": "la_mqiq4xzh_1"
+    },
+    {
+      "context": "academic_event",
+      "situation": "spring linguistics symposium with limited seats and prerequisites",
+      "speaker_role": "society_president",
+      "difficulty": "medium",
+      "announcement": "On behalf of the Linguistics Society, I'm pleased to announce our Spring Symposium on language and the brain, taking place on April 12th in Hartwell Hall. Because the venue is small, attendance is capped at one hundred students, and seats tend to go fast. To register, you must have already completed the Introduction to Linguistics course, since the sessions assume that background. Registration opens this Friday at noon on the Society's website, and we'll email a confirmation once your spot is secured. We look forward to a lively day of talks and discussion.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To summarize the findings of recent brain research",
+            "B": "To remind members to renew their society dues",
+            "C": "To announce a symposium and its registration requirements",
+            "D": "To recruit student volunteers to run the event"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。公告的主要目的是宣布春季研讨会并说明其注册要求（名额上限、先修课程、注册时间）。A选项是错误目的，公告并没有总结脑科学的研究发现，只是说明了研讨会主题。B选项是错误目的，公告没有提到续交会费。D选项是错误目的，公告没有招募志愿者。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "wrong_purpose",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What is required in order to register for the symposium?",
+          "options": {
+            "A": "Having completed the Introduction to Linguistics course",
+            "B": "Maintaining a minimum grade point average of 3.5",
+            "C": "Submitting a short writing sample to the society",
+            "D": "Being an officially enrolled linguistics major"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。公告明确要求注册者必须已经修完语言学导论课程，因为讲座默认听众具备该基础。B选项是相关但未提及的，公告没有提到任何GPA要求。C选项是相关但未提及的，公告没有要求提交写作样本。D选项是错误细节，公告要求的是修过某门课程，而非必须是语言学专业的注册学生。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "id": "la_mqiq4xzh_2"
+    },
+    {
+      "context": "facility_change",
+      "situation": "grand reopening of a renovated performance hall",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "Attention students, faculty, and staff. After nearly a year of renovations, the Mercer Performance Hall will hold its grand reopening this Friday at 7 p.m. The updated hall features improved acoustics, new seating, and a fully accessible main entrance. To celebrate, the university orchestra will give a free opening concert, and light refreshments will be served in the lobby afterward. Doors open at 6:30 p.m., and seating is first-come, first-served, so we recommend arriving a little early. We're delighted to welcome the campus community back to this wonderful space.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To explain why the hall was closed for repairs",
+            "B": "To recruit musicians for the university orchestra",
+            "C": "To warn that the hall will close for renovations",
+            "D": "To announce the grand reopening of the renovated hall"
+          },
+          "answer": "D",
+          "explanation": "正确答案是D。公告的核心是宣布翻修后的表演厅将盛大重新开放。A选项太狭窄，公告只是简短提到翻修一年，重点并不是解释关闭原因。B选项是错误目的，公告没有招募乐团成员。C选项与事实相反，公告说的是重新开放，而非即将关闭翻修。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "wrong_purpose",
+            "C": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What is true about the opening concert?",
+          "options": {
+            "A": "Tickets must be purchased in advance online",
+            "B": "It is free and seating is first-come, first-served",
+            "C": "It is open only to music department students",
+            "D": "It will be held outdoors on the main quad"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。公告说明开幕音乐会是免费的，且座位是先到先得。A选项是错误细节，公告说的是先到先得，没有要求提前在线购票。C选项是错误细节，公告欢迎整个校园社区，而非仅限音乐系学生。D选项是误置细节，音乐会在表演厅内举行，而非户外的中央广场。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "wrong_detail",
+            "D": "misattributed_detail"
+          }
+        }
+      ],
+      "id": "la_mqiq4xzh_3"
+    },
+    {
+      "context": "campus_activity",
+      "situation": "community garden spring cleanup volunteer event",
+      "speaker_role": "club_leader",
+      "difficulty": "medium",
+      "announcement": "Good morning, students. The Green Roots Club is recruiting volunteers for our annual spring cleanup of the campus community garden this Sunday, beginning at 8:30 a.m. behind Lincoln Hall. We'll be pulling weeds, turning over the soil, and planting this season's herb beds. Tools and gloves are all provided, but please wear closed-toe shoes and clothing you don't mind getting muddy. No gardening experience is needed, and you're welcome to come for just an hour or stay the whole morning. If you plan to join us, please sign up on the club's page by Friday so we can prepare enough snacks.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What are volunteers asked to wear to the event?",
+          "options": {
+            "A": "Closed-toe shoes and clothing that can get muddy",
+            "B": "The official Green Roots Club t-shirt",
+            "C": "Gardening gloves brought from home",
+            "D": "A bright safety vest provided at sign-in"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。公告明确要求志愿者穿包脚趾的鞋和不怕弄脏的衣服。B选项是相关但未提及的，公告没有提到俱乐部T恤。C选项是错误细节，手套由活动提供，并非要求自带。D选项是相关但未提及的，公告完全没有提到安全背心。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "Why does the speaker ask people to sign up by Friday?",
+          "options": {
+            "A": "Because volunteers must complete a safety training first",
+            "B": "Because only a limited number of people can attend",
+            "C": "To help organizers prepare enough snacks for everyone",
+            "D": "Because experienced gardeners are given priority"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。公告说请在周五前报名，以便准备足够的零食，因此可推断报名是为了帮助组织者准备食物。A选项是过度推断，公告没有提到任何安全培训。B选项是无关推断，公告没有说人数有限制，反而欢迎大家随意参加。D选项与事实相反，公告说明无需园艺经验，并未给有经验者优先权。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_inference",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "id": "la_mqiq4xzh_4"
     }
   ]
 }
