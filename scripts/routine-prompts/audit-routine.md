@@ -113,6 +113,16 @@ DONE
 ═════════════════════════════════════════════════════════════════════════════
 Print: "audit done for SID: <merged> merged, <dropped> dropped by answer-audit."
 
+COVERAGE (what this audits, and the one thing it does NOT):
+- Audited blind by you: reading ap/rdl + listening la/lat/lc/lcr (all MCQ).
+- NOT answer-audited here: CTW (c-test). Its blanks are created by the mechanical
+  blanker DURING merge-staging, so there is nothing to blind-solve at extract time.
+  CTW relies on the blanker + ctwValidator (structural) on this path; its
+  uniqueness check (answerAuditor.auditCTWItem) only runs on the CI path with a
+  DeepSeek key. If you want CTW uniqueness verified automatically too, that needs a
+  separate blank-then-fill audit step — not built yet.
+- bs/disc/email/speaking-repeat have no answer key, so nothing to audit.
+
 ERROR PHILOSOPHY:
 - No `.routine-meta.json` / no SID → exit clean, no work.
 - Already audited (PHASE 1 guard) → exit clean.
