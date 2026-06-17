@@ -1,0 +1,164 @@
+{
+  "items": [
+    {
+      "context": "campus_academic",
+      "situation": "student seeking help at the writing center",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Why does my thesis statement keep getting marked weak?",
+      "options": {
+        "A": "What's the main argument you're trying to make?",
+        "B": "The writing center is open until six tonight.",
+        "C": "I marked your last essay as well.",
+        "D": "Where did you submit the paper?"
+      },
+      "answer": "A",
+      "explanation": "正确答案是A。说话人问论文主旨句为什么总被批薄弱，A用反问追问其核心论点，从而引导学生自己发现问题，是counter_question，推进对话。B选项是semantic_association_trap，由'writing center'联想到开放时间，但没有回应问题。C选项是polysemy_trap，把'marked'（批改）误用为另一处批改经历，答非所问。D选项是wrong_question_type，回答的是'在哪里提交'，而问的是'为什么'。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "polysemy_trap",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student checking with TA about lab report requirements",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Do we need to graph the results in the lab report?",
+      "options": {
+        "A": "The lab is on the second floor of the science hall.",
+        "B": "I'll post a sample report on the course site tonight.",
+        "C": "Yes, I graphed mine over the weekend.",
+        "D": "When is the report actually due?"
+      },
+      "answer": "B",
+      "explanation": "正确答案是B。说话人不确定报告是否要画图，B没有直接回答是否，而是承诺发布一份样例报告，直接解决了'不知道格式要求'这个根本困惑，是context_shift。A选项是semantic_association_trap，由'lab'联想到实验室位置，但无关。C选项是bad pattern的反例规避后的off_topic，谈自己周末画图的经历，没有告诉对方要不要画。D选项是wrong_question_type，回答的是'什么时候交'，而问的是'要不要画图'。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "friend inviting another to a study group or social event",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Are you coming to our study session at the cafe?",
+      "options": {
+        "A": "The cafe makes a really good latte.",
+        "B": "I studied there all last semester.",
+        "C": "What time are you all meeting up?",
+        "D": "No, I haven't finished the reading."
+      },
+      "answer": "C",
+      "explanation": "正确答案是C。说话人邀请去咖啡馆学习，C用反问询问集合时间，是counter_question，推进对话并表达愿意参加。A选项是semantic_association_trap，由'cafe'联想到拿铁，但无关。B选项是off_topic，谈自己上学期在那学习的经历，没有回应邀请。D选项是off_topic干扰，'No'但理由（没读完）与是否参加学习小组并不直接相关，未能推进安排。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "friend sharing news or personal update",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "I finally got into the architecture program.",
+      "options": {
+        "A": "The building downtown is brand new.",
+        "B": "I got lost on the way over here.",
+        "C": "Did you lock the door behind you?",
+        "D": "That's fantastic, congratulations!"
+      },
+      "answer": "D",
+      "explanation": "正确答案是D。说话人分享被建筑专业录取的好消息，D用'That's fantastic, congratulations!'这一自然的祝贺习语回应，是idiomatic。A选项是semantic_association_trap，由'architecture'联想到楼房，但无关。B选项是polysemy/word_trap，重复了'got'但意思变成'迷路'，答非所问。C选项是off_topic，问是否锁门，与喜讯毫无关系。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "polysemy_trap",
+        "C": "off_topic"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "roommate discussing weekend plans",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "What should we do this weekend for a change?",
+      "options": {
+        "A": "How about that hiking trail you mentioned?",
+        "B": "The weekend went by really fast last time.",
+        "C": "I changed the bedsheets this morning.",
+        "D": "Where did you put my charger?"
+      },
+      "answer": "A",
+      "explanation": "正确答案是A。室友问周末换个花样做什么，A用反问提出去对方提过的徒步小径，是counter_question，推进计划。B选项是semantic_association_trap，由'weekend'联想到上次周末过得快，但无关。C选项是polysemy_trap，把'change'（换换花样）误用为'换床单'，答非所问。D选项是off_topic，问充电器在哪，与周末计划无关。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "polysemy_trap",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about gym or sports facility hours",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "How early does the campus gym open on weekdays?",
+      "options": {
+        "A": "The gym just added a new climbing wall.",
+        "B": "Actually, the hours are posted right by the door.",
+        "C": "Yes, you can sign up for classes there.",
+        "D": "Where do I find a locker for my stuff?"
+      },
+      "answer": "B",
+      "explanation": "正确答案是B。说话人问健身房工作日几点开门，B以话语标记'Actually'开头，间接指向门口贴着的时间表，是marker_led_indirect。A选项是semantic_association_trap，由'gym'联想到攀岩墙，但没回答时间。C选项是wrong_question_type，用'Yes'回答了一个是非问题，而问的是'多早'。D选项是off_topic，问储物柜位置，与开门时间无关。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a store clerk about a return or exchange",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "I'd like to exchange these boots for a larger size.",
+      "options": {
+        "A": "These boots are very popular this season.",
+        "B": "I bought a similar pair last winter.",
+        "C": "Sure, let me check what we have in stock.",
+        "D": "Where is the nearest shoe store?"
+      },
+      "answer": "C",
+      "explanation": "正确答案是C。顾客想把靴子换大一号，C直接答应并去查库存，是direct_topical。A选项是semantic_association_trap，由'boots'联想到流行款式，但没有处理换货请求。B选项是off_topic，店员谈自己买过类似的，与顾客请求无关。D选项是wrong_question_type，反问最近的鞋店在哪，答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "arranging a ride or carpool with a friend",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Where should I pick you up tomorrow morning?",
+      "options": {
+        "A": "The car needs an oil change soon.",
+        "B": "I picked up some groceries earlier.",
+        "C": "What time are we leaving anyway?",
+        "D": "Maybe just outside my apartment building."
+      },
+      "answer": "D",
+      "explanation": "正确答案是D。朋友问明早在哪接你，D以话语标记'Maybe'开头，间接给出地点（公寓楼外），是marker_led_indirect。A选项是semantic_association_trap，由'pick up'相关的'car'联想到换机油，但无关。B选项是polysemy_trap，把'pick up'（接人）误用为'买了些杂货'，答非所问。C选项是wrong_question_type，反问几点出发，而问的是'在哪里'。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "polysemy_trap",
+        "C": "wrong_question_type"
+      }
+    }
+  ]
+}

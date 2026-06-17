@@ -1,33 +1,45 @@
 {
-  "session_id": "routine-20260616-190442",
-  "completed_at": "2026-06-16T19:28:31Z",
-  "duration_minutes": 23,
-  "highlight": "BS 难度冻结门 PASS、首次覆盖建筑/神经科学/海洋养殖等新主题",
+  "session_id": "routine-20260617-223153",
+  "completed_at": "2026-06-17T22:41:02.177Z",
+  "duration_minutes": 9,
+  "model": "Claude Opus 4.8",
+  "highlight": "PASS 1 满额 70/70:12 个题库全部生成,新增物理流体力学 AP、缓步动物(tardigrade)学术听力等多样题材",
   "commit_sha": "",
-  "r2_completed_at": "2026-06-16T19:34:00Z",
-  "r2_session_id": "routine-r2-20260616-193400",
   "results": {
     "bs": {
       "generated": 20,
       "accepted": 20,
-      "topics": ["campus life", "service trips", "library", "shuttle", "writing center", "dance club", "volleyball", "salsa lessons", "transfer credits", "swim trials"],
+      "topics": [
+        "indirect-question",
+        "negation",
+        "relative-clause",
+        "present-perfect",
+        "past-perfect",
+        "passive-voice",
+        "reported-speech",
+        "modal",
+        "wh-question",
+        "time/place-adverbial"
+      ],
       "favorite": {
-        "prompt": "I'm thinking of joining the service trip this year.",
-        "answer": "Where do I sign up for the trip?"
+        "prompt": "What did the advisor tell you this morning?",
+        "answer": "She wanted to know whether the transfer form that I submitted was complete."
       },
       "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_session_id": "routine-r2-20260616-193400",
-      "r2_items_added": 10
+      "failure_reason": ""
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["marine biology", "computer science", "public health", "technology and media"],
+      "topics": [
+        "computer science",
+        "economics",
+        "history and culture",
+        "public health"
+      ],
       "favorite": {
-        "subtopic": "marine biology",
-        "preview": "We've been examining how aquaculture is changing coastal economies this semester. Salmon and shrimp farms"
+        "subtopic": "computer science",
+        "preview": "We've been discussing how software teams handle bugs and outages this semester. Many companies now run"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -35,57 +47,79 @@
     "email": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["服务与活动", "校园学业", "日常社交", "消费售后"],
+      "topics": [
+        "服务与活动",
+        "校园学业",
+        "消费售后",
+        "日常社交"
+      ],
       "favorite": {
-        "subtopic": "消费售后",
-        "preview": "You recently ordered a refurbished burr coffee grinder from a specialty kitchen retailer."
+        "subtopic": "服务与活动",
+        "preview": "You are a regular swimmer who booked a six-week lap-swimming pass at a city aquatic center. After two"
       },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ap": {
       "generated": 5,
-      "accepted": 4,
-      "topics": ["materials_science/concrete chemistry", "physics/acoustics", "chemistry/molecular bonding", "sociology/globalization", "anthropology/migration patterns"],
+      "accepted": 5,
+      "topics": [
+        "business/consumer behavior",
+        "physics/fluid dynamics",
+        "environmental_science/conservation",
+        "astronomy/space exploration",
+        "materials_science/alloys"
+      ],
       "favorite": {
-        "subtopic": "physics/acoustics",
-        "preview": "Sound waves are mechanical disturbances that travel through a medium by alternately compressing and stretching"
+        "subtopic": "physics/fluid dynamics",
+        "preview": "Cavitation is the formation and violent collapse of vapor bubbles in a flowing liquid when local pressure"
       },
       "retried_after_fail": false,
-      "failure_reason": "1/5 rejected: correct_is_longest in anthropology item"
+      "failure_reason": ""
     },
     "reading-ctw": {
       "generated": 6,
-      "accepted": 5,
-      "topics": ["biology/plant biology", "psychology/cognitive bias", "history/Roman engineering", "geology/ocean floor", "astronomy/dwarf planets"],
+      "accepted": 6,
+      "topics": [
+        "economics/supply and demand",
+        "linguistics/language change",
+        "acoustics/sound waves",
+        "materials_science/metal alloys",
+        "oceanography/ocean currents",
+        "meteorology/cloud formation"
+      ],
       "favorite": {
-        "subtopic": "history/Roman engineering",
-        "preview": "Roman aqueducts carried water from distant springs into cities through stone channels that could span dozens"
+        "subtopic": "economics/supply and demand",
+        "preview": "Prices in a market economy emerge from the constant interaction between buyers and sellers. When deman"
       },
       "retried_after_fail": false,
-      "failure_reason": "1/6 rejected: first_person 'our' in environmental_science item"
+      "failure_reason": ""
     },
     "reading-rdl-short": {
       "generated": 4,
-      "accepted": 3,
-      "topics": ["notice", "email", "social_media"],
+      "accepted": 4,
+      "topics": [
+        "email",
+        "notice",
+        "flyer"
+      ],
       "favorite": {
-        "subtopic": "notice/parking closure",
-        "preview": "Notice: South Lot B will close for repaving on October 14 and 15. Vehicles must be removed"
+        "subtopic": "flyer/used-textbook-sale",
+        "preview": "USED TEXTBOOK SALE! Save big before classes start. Friday, August 28, in Carver Hall, Room 210."
       },
       "retried_after_fail": false,
-      "failure_reason": "1/4 rejected: flyer below 30-word minimum",
-      "r2_supplemented": true,
-      "r2_session_id": "routine-r2-20260616-193400",
-      "r2_items_added": 2
+      "failure_reason": ""
     },
     "reading-rdl-long": {
       "generated": 2,
       "accepted": 2,
-      "topics": ["email/shift swap", "notice/library reservation"],
+      "topics": [
+        "syllabus",
+        "menu"
+      ],
       "favorite": {
-        "subtopic": "notice/library reservation",
-        "preview": "Notice: Library Study Room Reservation System Update. Effective Monday, November 6, the library will move all"
+        "subtopic": "menu/campus_cafe_weekly_lunch",
+        "preview": "The Quad Cafe — Weekly Lunch Menu. Served Monday through Friday, 11:00 AM to 2:30 PM, in the Student Union basement."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -93,10 +127,15 @@
     "listening-lat": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["architecture/vernacular housing", "neuroscience/mirror neurons", "physics/Doppler effect", "social_psychology/diffusion of responsibility"],
+      "topics": [
+        "steel-frame construction and skyscrapers",
+        "recording technology and music composition",
+        "Impressionists and color theory",
+        "tardigrade cryptobiosis"
+      ],
       "favorite": {
-        "subtopic": "neuroscience/mirror neurons",
-        "preview": "Mirror neurons are some of the most discussed cells in cognitive neuroscience, and there's still real debate"
+        "subtopic": "how tardigrades survive extreme environments",
+        "preview": "Tardigrades are tiny animals, barely half a millimeter long, often called water bears because of"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -104,10 +143,16 @@
     "listening-lc": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["plans_social/hiking", "campus_dorm_life/electives", "recommendations/podcast", "errands_service/sweater return", "recommendations/indie folk"],
+      "topics": [
+        "grocery cooking tips",
+        "jazz trio recommendations",
+        "roommate quiet-hours",
+        "surprise birthday planning",
+        "movie review"
+      ],
       "favorite": {
-        "subtopic": "recommendations_opinions/indie folk",
-        "preview": "I'm so bored of the same pop singers on my playlist. Any suggestions?"
+        "subtopic": "two friends sharing cooking tips while grocery shopping",
+        "preview": "Are you grabbing tomatoes for that pasta sauce you keep raving about? Mine never tastes right."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -115,10 +160,16 @@
     "listening-la": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["campus_activity/movie night", "campus_activity/cleanup", "facility_change/lounge", "facility_change/recreation hours", "logistics/shuttle"],
+      "topics": [
+        "student art market",
+        "undergraduate research poster session",
+        "spring linguistics symposium",
+        "performance hall reopening",
+        "community garden cleanup"
+      ],
       "favorite": {
-        "subtopic": "campus_activity/movie night",
-        "preview": "Good afternoon, students. The Campus Activities Office is excited to announce that our annual Outdoor Movie"
+        "subtopic": "spring linguistics symposium with limited seats and prerequisites",
+        "preview": "On behalf of the Linguistics Society, I'm pleased to announce our Spring Symposium on language and the brain, taking place"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -126,10 +177,19 @@
     "listening-lcr": {
       "generated": 8,
       "accepted": 8,
-      "topics": ["service hours", "lab requirements", "neighbor noise", "course prerequisites", "game night", "return jacket", "club time", "business hours"],
+      "topics": [
+        "writing center thesis help",
+        "lab report graphing",
+        "study session invite",
+        "architecture program acceptance",
+        "roommate weekend plans",
+        "campus gym hours",
+        "store boot exchange",
+        "morning carpool"
+      ],
       "favorite": {
-        "subtopic": "social/club time",
-        "preview": "Where are you finding the time for all those clubs?"
+        "subtopic": "architecture program acceptance news",
+        "preview": "I finally got into the architecture program."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -137,10 +197,14 @@
     "speaking-repeat": {
       "generated": 3,
       "accepted": 3,
-      "topics": ["IT Help Desk", "Planetarium Visit", "Bike Tire Repair"],
+      "topics": [
+        "bike tire repair",
+        "student health center",
+        "chemistry lab safety"
+      ],
       "favorite": {
         "subtopic": "Bike Tire Repair (how-to)",
-        "preview": "Before you ride away, reinflate the tube to full pressure and check that the patch holds."
+        "preview": "First, stand the bike on its seat."
       },
       "retried_after_fail": false,
       "failure_reason": ""

@@ -1,12 +1,10 @@
 {
-  "session_id": "routine-20260616-190442",
-  "generated_at": "2026-06-16T19:29:40.021Z",
+  "session_id": "routine-20260617-223153",
+  "generated_at": "2026-06-17T22:41:06.114Z",
   "needs_retry": true,
-  "resolved_at": "2026-06-16T19:34:00Z",
-  "resolution_status": "supplemented",
   "overall_scores": {
-    "diversity": 95,
-    "quality": 97
+    "diversity": 94,
+    "quality": 96
   },
   "bs_difficulty_gate": "PASS",
   "retry_banks": [
@@ -14,7 +12,7 @@
       "bank": "bs",
       "diversity_score": 84,
       "diversity_threshold": 90,
-      "quality_score": 100,
+      "quality_score": 96,
       "quality_threshold": 95,
       "failures": [
         "多样性 84 < 90"
@@ -24,14 +22,14 @@
         "场景 20/20",
         "句型 4/5",
         "开头 3/4",
-        "prefilled类型 5/4 (top:mid-noun-or-adj 12/20)",
-        "人物当prefilled 4/20 (20%, TPO~30%)",
-        "干扰词 9种 (top:do 20%)",
-        "chunk颗粒 6.0块/题 单词率83% (TPO~6块/77%)",
-        "题面对话化 11/20 (55% 含you, TPO~72%)"
+        "prefilled类型 6/4 (top:subject-pronoun 6/20)",
+        "人物当prefilled 7/20 (35%, TPO~30%)",
+        "干扰词 18种 (top:did 15%)",
+        "chunk颗粒 5.8块/题 单词率74% (TPO~6块/77%)",
+        "题面对话化 17/20 (85% 含you, TPO~72%)"
       ],
       "quality_breakdown": [
-        "块数 20/20",
+        "块数 17/20",
         "干扰词 20/20",
         "答案长度 20/20",
         "重组正确 20/20"
@@ -42,25 +40,25 @@
       "items_to_supplement": 10
     },
     {
-      "bank": "reading-rdl-short",
+      "bank": "reading-rdl-long",
       "diversity_score": 100,
-      "diversity_threshold": 80,
-      "quality_score": 75,
+      "diversity_threshold": 70,
+      "quality_score": 0,
       "quality_threshold": 85,
       "failures": [
-        "质量 75 < 85"
+        "质量 0 < 85"
       ],
       "diversity_breakdown": [
-        "话题 4/4",
-        "notice 1 · email 1"
+        "话题 2/2",
+        "notice 0 · email 0"
       ],
       "quality_breakdown": [
-        "词数 3/4"
+        "词数 0/2"
       ],
       "hints": [
-        "质量校验有偏差: 词数 3/4 — recheck schema compliance"
+        "质量校验有偏差: 词数 0/2 — recheck schema compliance"
       ],
-      "items_to_supplement": 2
+      "items_to_supplement": 1
     }
   ]
 }
