@@ -77,44 +77,98 @@ function vet(prefix, item) {
   }
 }
 
-// ── Answer-correctness audit (READING MCQ only), fail-closed ─────────────────
-// 2026-06-17: re-audit reading items at merge with an independent AI "second examiner"
-// (answerAuditor) so a mis-keyed / guessable item that reached staging is caught BEFORE
-// it ships — not just at generation time. FAIL-CLOSED:
+// ── Answer-correctness audit (MCQ banks), fail-closed ────────────────────────
+// 2026-06-17: re-audit items at merge with an independent AI "second examiner"
+// so a mis-keyed / guessable item that reached staging is caught BEFORE it ships
+// — not just at generation time. FAIL-CLOSED:
 //   - critical answer mismatch → REJECT (drop, never merged)
 //   - transient audit error    → HOLD (not merged this run; the staging file persists, so
 //                                it is re-audited on the next run)
 // SKIPPED (NOT fail-closed) when the audit infra is unavailable — no DEEPSEEK_API_KEY, or
-// SKIP_AUDIT=1 — because failing closed on infra-absence would block ALL reading merges.
-// Only reading (ap/rdl/ctw) is wired: the listening auditors exist but have never run in
-// the pipeline and use a different interface, so they are intentionally not enabled yet.
-const AUDITABLE = new Set(['ap', 'rdl', 'ctw']);
+// SKIP_AUDIT=1 — because failing closed on infra-absence would block ALL merges.
+//
+// Two examiners share this gate:
+//   - Reading (ap/rdl/ctw): answerAuditor.js (re-solve + guessability).
+//   - Listening (la/lat/lc/lcr): the per-type listening auditors, which take an
+//     injected callAI — wired here 2026-06-17 so listening MCQ answers are no
+//     longer shipped unverified.
+// Both call DeepSeek, so on the routine path (no DEEPSEEK_API_KEY) this whole gate
+// SKIPS — that path is covered instead by the Claude-in-routine audit, which
+// re-solves blind and drops mis-keyed items from staging BEFORE merge
+// (scripts/routine-audit.mjs). This merge-time gate is the CI / manual-fallback
+// backstop (those workflows DO inject the key).
+const AUDITABLE = new Set(['ap', 'rdl', 'ctw', 'la', 'lat', 'lc', 'lcr']);
 let auditDisabled = String(process.env.SKIP_AUDIT || '').trim() === '1';
-async function auditReadingItems(prefix, items) {
+
+// DeepSeek caller shared by the listening auditors (same shape answerAuditor uses
+// internally). Throws "DEEPSEEK_API_KEY not set" when the key is absent so the
+// skip path below recognises infra-absence and stops auditing.
+async function deepseekCallAI(prompt) {
+  const { callDeepSeekViaCurl } = require('../lib/ai/deepseekHttp.js');
+  const apiKey = process.env.DEEPSEEK_API_KEY;
+  if (!apiKey) throw new Error('DEEPSEEK_API_KEY not set');
+  const payload = {
+    model: 'deepseek-chat',
+    messages: [
+      { role: 'system', content: 'You are a TOEFL listening comprehension expert. Answer precisely and return only valid JSON.' },
+      { role: 'user', content: prompt },
+    ],
+    temperature: 0.1,
+    max_tokens: 2000,
+  };
+  const r = await callDeepSeekViaCurl({ apiKey, payload, timeoutMs: 30000 });
+  return typeof r === 'string' ? r : (r?.choices?.[0]?.message?.content || JSON.stringify(r));
+}
+
+const LISTEN_AUDITORS = {
+  la:  (it) => require('../lib/listeningGen/laAuditor.js').auditLAItem(it, deepseekCallAI),
+  lat: (it) => require('../lib/listeningGen/latAuditor.js').auditLATItem(it, deepseekCallAI),
+  lc:  (it) => require('../lib/listeningGen/lcAuditor.js').auditLCItem(it, deepseekCallAI),
+  lcr: (it) => require('../lib/listeningGen/lcrAuditor.js').auditLCRItem(it, deepseekCallAI),
+};
+
+const API_KEY_ERR = /api[_ ]?key|not set|deepseek_api_key/i;
+
+async function auditItems(prefix, items) {
   if (auditDisabled || !AUDITABLE.has(prefix) || items.length === 0) return items;
-  const { auditRDLItem, auditCTWItem } = require('../lib/readingGen/answerAuditor.js');
+  const isListening = !!LISTEN_AUDITORS[prefix];
+  if (!isListening) require('../lib/readingGen/answerAuditor.js'); // fail fast if reading auditor missing
   const kept = [];
   for (let i = 0; i < items.length; i++) {
     const item = items[i];
-    let audit;
+
+    // Run the right examiner; normalise both into { skipKey, errored, reject }.
+    let skipKey = false, errored = null, reject = false;
     try {
-      audit = prefix === 'ctw'
-        ? await auditCTWItem(item)
-        : await auditRDLItem(prefix === 'ap' ? { ...item, text: item.passage } : item); // AP reuses the RDL auditor (maps passage→text)
+      if (isListening) {
+        const res = await LISTEN_AUDITORS[prefix](item);
+        // Auditors are inconsistent: la/lat/lc report errors in `errorMsg`, lcr in
+        // `reasoning`. Capture either so the api-key skip path can still match.
+        if (res.error) errored = res.errorMsg || res.reasoning || 'audit error';
+        else reject = res.match === false; // mismatch with marked key → drop
+      } else {
+        const { auditRDLItem, auditCTWItem } = require('../lib/readingGen/answerAuditor.js');
+        const audit = prefix === 'ctw'
+          ? await auditCTWItem(item)
+          : await auditRDLItem(prefix === 'ap' ? { ...item, text: item.passage } : item); // AP reuses RDL auditor (passage→text)
+        if (audit.error) errored = audit.error;
+        else reject = (audit.criticalFlags || 0) > 0;
+      }
     } catch (e) {
-      audit = { error: String((e && e.message) || e) };
+      errored = String((e && e.message) || e);
     }
-    if (audit.error) {
-      if (/api[_ ]?key|not set|deepseek_api_key/i.test(audit.error)) {
+
+    if (errored) {
+      if (API_KEY_ERR.test(errored)) {
         console.log(`  ⓘ answer-audit skipped — DEEPSEEK_API_KEY unavailable; merging ${prefix} on structural validation only.`);
         auditDisabled = true;
         return kept.concat(items.slice(i)); // keep already-passed + current + remaining, unaudited
       }
-      console.log(`    ⏸ ${item.id || '?'}: audit error — held for retry (${audit.error})`);
+      console.log(`    ⏸ ${item.id || '?'}: audit error — held for retry (${errored})`);
       continue; // fail-closed: transient error → don't merge this run
     }
-    if ((audit.criticalFlags || 0) > 0) {
-      console.log(`    ✗ ${item.id || '?'}: ${audit.criticalFlags} critical answer mismatch(es) — rejected`);
+    if (reject) {
+      console.log(`    ✗ ${item.id || '?'}: answer mismatch vs second examiner — rejected`);
       continue; // fail-closed: drop the mis-keyed item
     }
     kept.push(item);
@@ -267,8 +321,8 @@ for (const section of SECTIONS) {
     if (rejected) console.log(`  ${file}: ${rejected}/${rawItems.length} rejected by validator`);
     if (items.length === 0) { console.log(`  ${file}: 0 valid items after validation, skipping`); continue; }
 
-    // Answer-correctness audit (reading MCQ only), fail-closed — see auditReadingItems.
-    const audited = await auditReadingItems(prefix, items);
+    // Answer-correctness audit (reading + listening MCQ), fail-closed — see auditItems.
+    const audited = await auditItems(prefix, items);
     const heldOrRejected = items.length - audited.length;
     if (heldOrRejected > 0) console.log(`  ${file}: ${heldOrRejected} item(s) held/rejected by answer-audit (fail-closed)`);
     if (audited.length === 0) { console.log(`  ${file}: 0 items after answer-audit, skipping`); continue; }

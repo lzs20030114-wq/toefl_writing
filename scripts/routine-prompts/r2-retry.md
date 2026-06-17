@@ -85,7 +85,34 @@ For each entry in `retry_banks`:
        listening-lcr      → data/listening/staging/lcr-$R2_SESSION_ID.json
        speaking-repeat    → data/speaking/staging/repeat-$R2_SESSION_ID.json
 
-  e) Merge with the appropriate command:
+  (Do NOT merge inside this loop. Write ALL retry banks' staging files first, then
+   run the answer-audit in PHASE 2.5, then merge in PHASE 2.6 — so the audit can
+   drop any mis-keyed reading/listening item BEFORE it is merged.)
+
+═════════════════════════════════════════════════════════════════════════════
+PHASE 2.5 — Answer-audit (you are the second examiner — required before merge)
+═════════════════════════════════════════════════════════════════════════════
+Only relevant if any retry bank is a reading or listening MCQ bank
+(reading-ap/ctw/rdl-*, listening-lat/lc/la/lcr). If none are, skip to PHASE 2.6.
+
+  a) node scripts/routine-audit.mjs extract $R2_SESSION_ID
+     Writes data/.audit-blind.json — every MCQ from this session's staging,
+     WITHOUT its answer key. If it reports 0 questions, skip to PHASE 2.6.
+  b) Read data/.audit-blind.json. For EACH question, independently pick the single
+     best option using ONLY that question's `context` (passage / conversation /
+     prompt). Do not look at the staging files and do not use outside knowledge —
+     you are re-solving blind to catch a mis-keyed answer.
+  c) Write data/.audit-solved.json:  { "answers": { "<key>": "B", ... } }
+     using each question's `key` verbatim. Answer EVERY question.
+  d) node scripts/routine-audit.mjs apply $R2_SESSION_ID
+     Drops any item whose marked answer disagrees with yours, rewrites the staging
+     file, and writes the receipt data/.audit-report.json. Note the dropped count
+     per bank — those items will NOT be merged.
+
+═════════════════════════════════════════════════════════════════════════════
+PHASE 2.6 — Merge each retry bank
+═════════════════════════════════════════════════════════════════════════════
+For each retry bank, merge with the appropriate command:
        bs/disc/email → node scripts/mergeClaude.mjs <bank> <staging-file>
                        (bank string: bs / disc / email)
        reading-ap    → MERGE_RUN_ID=$R2_SESSION_ID node scripts/merge-staging.mjs
@@ -96,8 +123,8 @@ For each entry in `retry_banks`:
                          → MERGE_RUN_ID=$R2_SESSION_ID node scripts/merge-staging.mjs
                            (merge-staging scans reading+listening+speaking staging dirs)
 
-  f) Capture acceptance count from merge stdout for this bank.
-  g) Log: "R2 <bank>: supplemented <accepted>/<items_to_supplement>"
+  Then capture the acceptance count from merge stdout for each bank, and log
+  "R2 <bank>: supplemented <accepted>/<items_to_supplement>".
 
 ═════════════════════════════════════════════════════════════════════════════
 PHASE 3 — Update meta + recompute summary
