@@ -9702,6 +9702,153 @@
       "question_count": 3,
       "word_count": 123,
       "difficulty": "medium"
+    },
+    {
+      "genre": "menu",
+      "text": "Maple Street Mobile Kitchen — Weekly Specials\n\nFind us beside Carver Hall, Monday through Friday, 11:00 AM to 2:00 PM.\n\nMonday — Smoky Black Bean Bowl: brown rice, roasted corn, and avocado. $7.50\nTuesday — Crispy Chicken Wrap: grilled chicken, slaw, and chipotle sauce. $8.00\nWednesday — Garden Flatbread: tomato, basil, and fresh mozzarella. $6.50\nThursday — Spiced Lentil Soup with warm sourdough. $5.00\nFriday — Korean BBQ Tacos (two per order). $8.50\n\nStudent Deal: Show your campus ID and any special is just $5.00, all day, every day.\n\nAdd a house lemonade or iced tea for $2.00. Bring your own cup and the drink is free.\n\nWe accept cards and the campus meal card only — please note we no longer take cash. Orders placed after 1:45 PM may be limited while supplies last. Follow us on the student portal for daily sell-out updates.",
+      "format_metadata": {
+        "vendor": "Maple Street Mobile Kitchen",
+        "location": "beside Carver Hall",
+        "hours": "Monday-Friday, 11:00 AM to 2:00 PM"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the menu, how can a student get any weekly special for $5.00?",
+          "options": {
+            "A": "By ordering before 11:00 AM on weekdays",
+            "B": "By showing a campus identification card",
+            "C": "By bringing a personal reusable cup",
+            "D": "By paying with the campus meal card"
+          },
+          "correct_answer": "B",
+          "explanation": "The menu states that showing your campus ID makes any special just $5.00, all day, every day. Bringing your own cup applies only to the free drink, and the meal card is one accepted payment method, not the source of the discount."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about a customer who arrives at 1:50 PM?",
+          "options": {
+            "A": "They will receive a free lemonade with any order",
+            "B": "They might not find every special available",
+            "C": "They must pay an extra fee for late service",
+            "D": "They are required to order from a printed list"
+          },
+          "correct_answer": "B",
+          "explanation": "The menu warns that orders placed after 1:45 PM may be limited while supplies last, implying some items could be sold out by 1:50 PM. The other options introduce fees or rules the menu never mentions."
+        },
+        {
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this menu?",
+          "options": {
+            "A": "To explain why the truck has stopped taking cash",
+            "B": "To compare prices with other campus restaurants",
+            "C": "To present the truck's weekly specials and policies",
+            "D": "To announce a permanent change in operating hours"
+          },
+          "correct_answer": "C",
+          "explanation": "The text lists each day's special, prices, the student deal, and payment rules, so its purpose is to present the weekly specials and policies. The cash policy and supply limits are single details, not the overall point, and no comparison or hours change is announced."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-long_mqjxqd73_0"
+    },
+    {
+      "genre": "notice",
+      "text": "Spring Campus Bicycle Rental Program\n\nThe Office of Campus Transportation is pleased to announce that the bicycle rental program will reopen for the spring term on March 18. Bicycles may be reserved at the Anderson Hall service desk, which is open Monday through Saturday, 8:00 AM to 6:00 PM.\n\nProgram details are listed below:\n\n- A refundable deposit of $20.00 is required when a bicycle is collected.\n- The standard semester pass costs $45.00 and includes a safety helmet.\n- Bicycles must be returned by 9:00 PM each day to avoid a $10.00 late fee.\n- Helmets are to be worn at all times while riding on campus paths.\n\nMaintenance checks are performed every Friday, so reservations are not accepted on that day. Riders who report a mechanical problem promptly will not be charged for repairs.\n\nFor questions, contact the Office of Campus Transportation at transport@campus.edu or visit Room 112 in Anderson Hall.",
+      "format_metadata": {
+        "title": "Spring Campus Bicycle Rental Program",
+        "from": "Office of Campus Transportation",
+        "contact": "transport@campus.edu, Room 112, Anderson Hall"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what does the $45.00 semester pass include?",
+          "options": {
+            "A": "A safety helmet for the rider",
+            "B": "A refund of the daily late fee",
+            "C": "A reserved bicycle for Fridays",
+            "D": "A discount at Anderson Hall desk"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice states that the standard semester pass costs $45.00 and includes a safety helmet. The other options mix real terms from the text into relationships the notice never establishes."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about a rider who damages a bicycle through normal use?",
+          "options": {
+            "A": "They forfeit the entire $20.00 deposit amount",
+            "B": "They must purchase a new semester pass first",
+            "C": "They avoid repair charges by reporting it quickly",
+            "D": "They are banned from the program until spring"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice says riders who report a mechanical problem promptly will not be charged for repairs, so reporting damage quickly avoids charges. The other options describe penalties the notice does not state."
+        },
+        {
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this notice?",
+          "options": {
+            "A": "To warn riders about a new $10.00 late fee",
+            "B": "To inform students about the spring rental program",
+            "C": "To explain why Friday maintenance is necessary",
+            "D": "To request volunteers for the transportation office"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice announces the spring reopening and lays out the rules, fees, and contact information, so its purpose is to inform students about the program. The late fee and Friday maintenance are single details, and no volunteers are requested."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-long_mqjxqd73_1"
+    },
+    {
+      "genre": "email",
+      "text": "Subject: Updated Details for the Geology Field Trip\n\nDear Students,\n\nI am writing to confirm the new arrangements for our field trip to Granite Ridge State Park. Because of the storm last week, the trip has been moved to Saturday, October 18. We will meet outside Brennan Hall at 7:30 AM and return by 5:00 PM.\n\nPlease remember the following:\n- The transportation fee of $15.00 is due at the Geology Department office by October 10.\n- Bring sturdy boots, a water bottle, and a packed lunch, as no food will be sold at the site.\n- Students who have not paid by the deadline cannot board the bus.\n\nIf you have any questions, please email me or stop by Room 214 during my office hours on Tuesday afternoons. I look forward to a productive day in the field.\n\nBest regards,\nProfessor Lin",
+      "format_metadata": {
+        "from": "Professor Lin",
+        "to": "Geology students",
+        "subject": "Updated Details for the Geology Field Trip"
+      },
+      "questions": [
+        {
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this email?",
+          "options": {
+            "A": "To advertise a new geology course offered next semester",
+            "B": "To collect student feedback about an earlier field trip",
+            "C": "To inform students of the rescheduled field trip details",
+            "D": "To warn students about dangerous weather in the park"
+          },
+          "correct_answer": "C",
+          "explanation": "The email opens by confirming the new arrangements for the field trip and then lists the updated date, meeting place, fee, and items to bring. Its overall purpose is to inform students of the rescheduled trip details, not to advertise a course, gather feedback, or issue a weather warning."
+        },
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what must students do by October 10?",
+          "options": {
+            "A": "To meet the group outside Brennan Hall at 7:30 AM",
+            "B": "To pay the transportation fee at the department office",
+            "C": "To bring sturdy boots and a packed lunch for the day",
+            "D": "To email the professor during her Tuesday office hours"
+          },
+          "correct_answer": "B",
+          "explanation": "The email states that the transportation fee of $15.00 is due at the Geology Department office by October 10. The meeting time, the items to bring, and contacting the professor are mentioned elsewhere but are not the action tied to the October 10 deadline."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about students who have not paid by the deadline?",
+          "options": {
+            "A": "They will receive a full refund of the fee later",
+            "B": "They must bring extra food to share at the site",
+            "C": "They can pay the driver in cash on the bus",
+            "D": "They will not be permitted to join the field trip"
+          },
+          "correct_answer": "D",
+          "explanation": "The email warns that students who have not paid by the deadline cannot board the bus, which implies they will not be able to join the trip. The other options either reverse this rule or add details the email never mentions."
+        }
+      ],
+      "difficulty": "medium",
+      "id": "rdl-long_mqjxqfv1_0"
     }
   ]
 }

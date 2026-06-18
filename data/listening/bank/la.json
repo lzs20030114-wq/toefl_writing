@@ -12933,6 +12933,226 @@
       ],
       "id": "la_mqiq4xzh_4",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/announcement/la_mqiq4xzh_4.mp3"
+    },
+    {
+      "context": "academic_event",
+      "situation": "spring data-science symposium with limited seats and prerequisites",
+      "speaker_role": "society_president",
+      "difficulty": "hard",
+      "announcement": "Good morning, everyone. As president of the Data Science Society, I'm pleased to announce our Spring Analytics Symposium, taking place next Thursday at 3 p.m. in Hartwell Hall, Room 204. We've invited three industry researchers to lead hands-on workshops, but seating is capped at forty because each participant gets a personal coding station. To register, you'll need to have completed at least one introductory statistics course, since the sessions move quickly and assume that background. We won't be able to admit walk-ins, so please confirm your spot through the society's portal by this Tuesday. Light refreshments will be provided, and we'd love to see a full room.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To invite eligible students to register for a limited-seat symposium",
+            "B": "To describe the research findings of three industry speakers",
+            "C": "To recruit new officers for the Data Science Society",
+            "D": "To cancel an introductory statistics course this spring"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。公告的核心是宣布春季分析研讨会并邀请符合条件的学生在周二前报名，因为名额有限。B选项过于狭窄，公告只是提到三位嘉宾会带工作坊，并未介绍他们的研究成果。C选项是错误目的，公告完全没有提到招募社团干部。D选项是相反意图，公告把统计课作为报名前提，而不是宣布取消该课程。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students who have not taken a statistics course?",
+          "options": {
+            "A": "They will receive a tuition discount for the workshops",
+            "B": "They can attend as observers without a coding station",
+            "C": "They are unlikely to be eligible to register",
+            "D": "They may sign up as walk-ins on the day of the event"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。公告说明报名需至少完成一门入门统计课，由此可推断没修过该课的学生很可能不符合报名资格。A选项是无关推断，公告没有提到任何学费折扣。B选项是过度推断，公告并未说可以作为旁听者参加。D选项是错误细节，公告明确表示不接受现场临时加入者。",
+          "distractor_types": {
+            "A": "unrelated_inference",
+            "B": "over_inference",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "id": "la_mqjxqd8q_0"
+    },
+    {
+      "context": "logistics",
+      "situation": "parking lot closure for alumni weekend with shuttle alternative",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "Attention students, faculty, and staff. Because of this weekend's Homecoming Alumni Reunion, the north-side parking structure and Lot F will be closed to regular permit holders beginning Friday at noon. These areas are being reserved for registered alumni guests throughout the event. To keep everyone moving, we'll run an expanded shuttle loop from the West Stadium overflow lot, with buses arriving every eight minutes from 7 a.m. to 9 p.m. Please don't leave vehicles in the closed lots after the deadline, as they may be ticketed. Normal parking access will resume on Monday morning. Thanks for your patience during the celebration.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Where can students park while the north-side lots are closed?",
+          "options": {
+            "A": "In Lot F with a temporary alumni pass",
+            "B": "At the West Stadium overflow lot served by shuttles",
+            "C": "Inside the north-side parking structure after noon",
+            "D": "Along the main campus loop road on Saturday"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。公告说明在封闭期间会从西体育场溢出停车场开通加密班车，供大家停车换乘。A选项是错误细节，Lot F是保留给已登记的校友嘉宾的，不是凭临时通行证给学生用。C选项是相反意图，北侧停车楼正是被关闭的区域。D选项是相关但未提及的，公告没有提到在校园环路沿线停车。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "reversed_intent",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about vehicles left in the closed lots after the deadline?",
+          "options": {
+            "A": "They will be moved to the overflow lot for free",
+            "B": "They will be granted alumni guest status automatically",
+            "C": "They can remain until Monday without consequence",
+            "D": "Their owners risk receiving a parking ticket"
+          },
+          "answer": "D",
+          "explanation": "正确答案是D。公告提醒不要在截止时间后把车留在封闭停车场，否则可能被开罚单，由此可推断车主有被罚款的风险。A选项是无关推断，公告没有说会免费把车移走。B选项是过度推断，公告并未说留下的车会自动获得校友嘉宾身份。C选项是错误细节，正常停车要到周一才恢复，而留在封闭区的车会有后果。",
+          "distractor_types": {
+            "A": "unrelated_inference",
+            "B": "over_inference",
+            "C": "wrong_detail"
+          }
+        }
+      ],
+      "id": "la_mqjxqd8q_1"
+    },
+    {
+      "context": "info_session",
+      "situation": "financial aid office workshop on scholarship applications",
+      "speaker_role": "program_coordinator",
+      "difficulty": "easy",
+      "announcement": "Good afternoon, students. The Financial Aid Office is hosting a free scholarship application workshop this coming Wednesday at 4 p.m. in the Student Services Center, Room 110. A coordinator will walk you through finding scholarships, writing strong personal statements, and avoiding common application mistakes. This session is open to all undergraduates, whether you're a first-year student or about to graduate. To get the most out of it, we recommend bringing a draft of your résumé and a list of scholarships you're interested in. No sign-up is needed, so just drop by. We hope this helps you find funding for next year.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce the winners of several scholarships",
+            "B": "To remind students of a tuition payment deadline",
+            "C": "To invite students to a workshop on scholarship applications",
+            "D": "To require seniors to reapply for financial aid"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。公告的核心是邀请学生参加关于奖学金申请的免费工作坊。A选项是错误目的，公告没有宣布任何奖学金获奖者。B选项是错误目的，公告与学费缴纳截止日期无关。D选项是过度且不符的内容，公告说工作坊对所有本科生开放，并未要求毕业班学生重新申请助学金。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are students advised to bring to the workshop?",
+          "options": {
+            "A": "A résumé draft and a list of scholarships",
+            "B": "A signed financial aid award letter",
+            "C": "Proof of enrollment from the registrar",
+            "D": "A completed scholarship application form"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。公告建议学生带上简历草稿和感兴趣的奖学金清单。B选项是相关但未提及的，公告没有要求带助学金批准信。C选项是相关但未提及的，公告没有提到注册处的在读证明。D选项是错误细节，工作坊是教大家如何申请，而不是要求带已完成的申请表。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "id": "la_mqjxqd8q_2"
+    },
+    {
+      "context": "campus_activity",
+      "situation": "cultural food festival organized by international club",
+      "speaker_role": "program_coordinator",
+      "difficulty": "easy",
+      "announcement": "Hello, everyone. The International Students Club is thrilled to invite you to our annual World Flavors Food Festival next Saturday from 12 p.m. to 5 p.m. on the Memorial Lawn. Student groups from more than fifteen countries will share traditional dishes, music, and craft demonstrations. Tasting tickets are just two dollars each and can be bought at the entrance, with all proceeds going toward next year's cultural events. If you'd like to volunteer at a booth, please email the club by Thursday so we can plan staffing. Come hungry, bring your friends, and enjoy an afternoon of food and culture.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To recruit new members for the International Students Club",
+            "B": "To announce a change to the dining hall menu",
+            "C": "To explain how to apply for a study-abroad program",
+            "D": "To invite students to a cultural food festival"
+          },
+          "answer": "D",
+          "explanation": "正确答案是D。公告的核心是邀请大家参加国际学生俱乐部举办的世界风味美食节。A选项是错误目的，公告招募的是当天的志愿者，而不是俱乐部新成员。B选项是错误目的，公告与食堂菜单的变更无关。C选项是错误目的，公告完全没有提到出国留学项目的申请。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "wrong_purpose",
+            "C": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "How can students obtain tasting tickets?",
+          "options": {
+            "A": "By emailing the club before Thursday",
+            "B": "By purchasing them for two dollars at the entrance",
+            "C": "By volunteering at one of the food booths",
+            "D": "By presenting a valid student ID card"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。公告说明品尝券每张两美元，可在入口处购买。A选项是误置细节，周四前发邮件是为了报名当志愿者，而不是买券。C选项是误置细节，去摊位当志愿者与购买品尝券是两回事。D选项是相关但未提及的，公告没有提到需要出示学生证才能拿券。",
+          "distractor_types": {
+            "A": "misattributed_detail",
+            "C": "misattributed_detail",
+            "D": "related_but_not_stated"
+          }
+        }
+      ],
+      "id": "la_mqjxqd8q_3"
+    },
+    {
+      "context": "info_session",
+      "situation": "health insurance enrollment information session",
+      "speaker_role": "advisor",
+      "difficulty": "medium",
+      "announcement": "This is a reminder that the Student Health Office will hold an information session on next year's health insurance enrollment this Monday at 5 p.m. in Caldwell Hall, Room 3B. An advisor will explain the new plan options, what each one covers, and how to waive coverage if you already have qualifying insurance. Please remember that enrollment closes on September 30th, and students who miss the deadline will be automatically placed on the standard plan and billed for it. We strongly recommend that you review the comparison chart on the health portal before attending. Bring any questions about your current coverage, and we'll be happy to help.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To inform students about a health insurance enrollment session",
+            "B": "To announce that the standard health plan has been canceled",
+            "C": "To collect insurance payments before September 30th",
+            "D": "To advertise a new on-campus health clinic"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。公告的核心是通知学生即将举行的健康保险注册信息说明会。B选项是相反意图，公告说错过截止日期的学生会被自动安排到标准计划，而不是说标准计划被取消。C选项是错误目的，说明会是讲解选项，而不是当场收取保费。D选项是错误目的，公告没有提到任何新的校园诊所。",
+          "distractor_types": {
+            "B": "reversed_intent",
+            "C": "wrong_purpose",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students who miss the September 30th deadline?",
+          "options": {
+            "A": "They will lose all access to campus health services",
+            "B": "They can enroll later without any extra cost",
+            "C": "They will be charged for a plan they did not choose",
+            "D": "They must schedule a private meeting with an advisor"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。公告说明错过截止日期的学生会被自动列入标准计划并被收费，由此可推断他们会为一个自己没有选择的计划付费。A选项是过度推断，公告并未说他们会失去所有校园医疗服务。B选项是错误细节，公告明确说错过截止日期会被自动收费，并非可以无额外费用补报。D选项是无关推断，公告没有提到必须与顾问单独预约会面。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "wrong_detail",
+            "D": "unrelated_inference"
+          }
+        }
+      ],
+      "id": "la_mqjxqd8q_4"
     }
   ]
 }

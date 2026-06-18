@@ -32473,6 +32473,414 @@
       ],
       "id": "lc_mqiq4y1g_4",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/conversation/lc_mqiq4y1g_4.mp3"
+    },
+    {
+      "context": "errands_service",
+      "situation": "two students talking about a pet or houseplant one is caring for",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hey, I'm watching my roommate's cat this week while she's at the conference. But I think something's wrong with him."
+        },
+        {
+          "speaker": "Man",
+          "text": "Oh no. What's he doing?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "He keeps ignoring his food. I've filled the bowl twice and he barely touches it. He just sits by the window."
+        },
+        {
+          "speaker": "Man",
+          "text": "Hmm. Did your roommate leave instructions?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "She left a note, but I can't read her handwriting. It might say something about wet food."
+        },
+        {
+          "speaker": "Man",
+          "text": "Why don't you just text her a photo of the note? She can tell you exactly what to do."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh, that's a good call. I'll send it right now."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What problem is the woman having with the cat?",
+          "options": {
+            "A": "The cat is not eating its food.",
+            "B": "The cat scratched the furniture.",
+            "C": "The cat ran away from the apartment.",
+            "D": "The cat is afraid of the window."
+          },
+          "answer": "A",
+          "explanation": "正确答案A：女生明确说猫一直不碰食物（keeps ignoring his food, barely touches it），这是她担心的核心问题。B选项错误，对话完全没有提到抓家具。C选项错误，猫并没有跑掉，它就坐在窗边。D选项错误，猫坐在窗边并不是害怕窗户，只是没吃东西，这是对细节的曲解。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "wrong_detail",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Take the cat to a veterinarian immediately.",
+            "B": "Buy a different brand of cat food.",
+            "C": "Send her roommate a photo of the note.",
+            "D": "Wait until her roommate comes home."
+          },
+          "answer": "C",
+          "explanation": "正确答案C：男生建议把字条拍照发给室友，女生回答\"that's a good call. I'll send it right now\"，所以她接下来会发字条照片。A选项过度推断，对话中没人提到去看兽医。B选项错误，换猫粮只是男生的猜测，女生并没有决定这么做。D选项错误，女生急于现在就解决，并没有说要等室友回来。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "rejected_option",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_mqjxqda0_0"
+    },
+    {
+      "context": "errands_service",
+      "situation": "two friends figuring out a bus or train schedule for a day trip",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "So for Saturday's trip to the coast, I checked and there's a train at eight and another at ten. Which should we take?"
+        },
+        {
+          "speaker": "Man",
+          "text": "The eight o'clock one. The ten gets us there too late to do anything."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Okay. Oh wait, the eight only runs on weekdays. On Saturdays the first one is actually nine fifteen."
+        },
+        {
+          "speaker": "Man",
+          "text": "Seriously? That's annoying. Well, nine fifteen still beats ten."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Right. And return trains leave every hour until eight, so we don't have to rush back."
+        },
+        {
+          "speaker": "Man",
+          "text": "Perfect. Let's book the nine fifteen. I'll grab the tickets online so we don't have to line up."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Which train will the friends take on Saturday?",
+          "options": {
+            "A": "The eight o'clock train.",
+            "B": "The nine fifteen train.",
+            "C": "The ten o'clock train.",
+            "D": "The last train of the day."
+          },
+          "answer": "B",
+          "explanation": "正确答案B：女生指出周六最早的车是九点十五（first one is actually nine fifteen），男生说\"Let's book the nine fifteen\"，所以他们坐九点十五的车。A选项错误，八点的车只在工作日开，周六没有。C选项错误，男生明确说十点太晚了。D选项错误，最后一班是傍晚的返程车，不是他们出发要坐的车，这是对信息的张冠李戴。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "wrong_detail",
+            "D": "misattributed"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What does the man imply he will do?",
+          "options": {
+            "A": "Drive to the coast instead of taking the train.",
+            "B": "Wait to buy tickets at the station on Saturday.",
+            "C": "Cancel the trip because of the schedule change.",
+            "D": "Purchase the tickets ahead of time online."
+          },
+          "answer": "D",
+          "explanation": "正确答案D：男生说\"I'll grab the tickets online so we don't have to line up\"，暗示他会提前在网上买票。A选项无依据，全程没有提到开车。B选项与原文相反，他正是为了不排队才提前网购。C选项过度推断，时刻表变了但两人照常出行，没人提取消。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "B": "rejected_option",
+            "C": "over_inference"
+          }
+        }
+      ],
+      "id": "lc_mqjxqda0_1"
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two friends debating whether a new cafe is worth the price",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Have you tried that new cafe on Fifth Street? Everyone's posting about it."
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, I went yesterday. The coffee's amazing, honestly. But a latte is six dollars."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Six dollars? Wow. That's almost double the place by campus."
+        },
+        {
+          "speaker": "Man",
+          "text": "Exactly. The drinks are great, but I can't afford it more than once in a while."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Hmm. Maybe it's a treat-yourself kind of spot, not an everyday thing."
+        },
+        {
+          "speaker": "Man",
+          "text": "That's a good way to put it. I'd go again for a special occasion, just not on a regular Tuesday."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man say about the new cafe?",
+          "options": {
+            "A": "The coffee tastes terrible.",
+            "B": "It is always too crowded to sit.",
+            "C": "The coffee is good but expensive.",
+            "D": "It is closer than the campus cafe."
+          },
+          "answer": "C",
+          "explanation": "正确答案C：男生说咖啡\"amazing\"但一杯拿铁要六美元（好喝但贵），这正是他的评价。A选项与原文相反，他说咖啡很棒。B选项无依据，对话没提拥挤或没座位。D选项错误，女生说这家几乎是校园那家价格的两倍，而且没有比较距离，是对细节的曲解。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about how the man will use the cafe?",
+          "options": {
+            "A": "He will go there only on special occasions.",
+            "B": "He will go there every morning before class.",
+            "C": "He will stop drinking coffee altogether.",
+            "D": "He will ask the cafe to lower its prices."
+          },
+          "answer": "A",
+          "explanation": "正确答案A：男生说\"I'd go again for a special occasion, just not on a regular Tuesday\"，暗示他只会偶尔在特殊场合去。B选项与原文相反，他明确说不会平常日子常去。C选项过度推断，他只是少去这家贵店，没说要戒咖啡。D选项无依据，没人提让店家降价。",
+          "distractor_types": {
+            "B": "rejected_option",
+            "C": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_mqjxqda0_2"
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "two students chatting about a part-time job one just started at a factory",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "I heard you started that part-time job at the packaging factory. How's it going so far?"
+        },
+        {
+          "speaker": "Man",
+          "text": "It's okay, but the schedule's killing me. My shift starts at five in the morning."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Five? Yikes. How do you even make your nine o'clock lecture?"
+        },
+        {
+          "speaker": "Man",
+          "text": "That's the thing, I barely do. I'm exhausted by the time class starts, and I keep nodding off."
+        },
+        {
+          "speaker": "Woman",
+          "text": "That doesn't sound sustainable. Can you switch to a later shift?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Maybe. My supervisor mentioned there might be afternoon openings next month. I should probably ask about it."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Definitely. Your grades matter more than a few extra early shifts."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main topic of the conversation?",
+          "options": {
+            "A": "How to find a part-time job near campus.",
+            "B": "Why the man decided to quit his job.",
+            "C": "Which lecture the man finds most difficult.",
+            "D": "The problem the man's work schedule is causing."
+          },
+          "answer": "D",
+          "explanation": "正确答案D：对话核心是男生五点的早班让他疲惫、上课打瞌睡，影响学习，这是贯穿始终的问题。A选项错误，男生已经有工作了，不是在找工作。B选项与情况相反，他没决定辞职，而是考虑换班次。C选项太狭窄，打瞌睡只是问题的一个表现，且并非某门课特别难。",
+          "distractor_types": {
+            "A": "wrong_topic",
+            "B": "reversed_situation",
+            "C": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do?",
+          "options": {
+            "A": "Drop his nine o'clock lecture.",
+            "B": "Ask his supervisor about an afternoon shift.",
+            "C": "Quit the factory job right away.",
+            "D": "Start going to bed much earlier each night."
+          },
+          "answer": "B",
+          "explanation": "正确答案B：男生说主管提到下个月可能有下午的空缺，\"I should probably ask about it\"，所以他很可能去问换下午班。A选项过度推断，他想解决的是上课打瞌睡，没说要退课。C选项与原文相反，他考虑的是换班次而非立刻辞职。D选项无依据，对话里没提早点睡这个方案。",
+          "distractor_types": {
+            "A": "over_inference",
+            "C": "rejected_option",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_mqjxqda0_3"
+    },
+    {
+      "context": "plans_social",
+      "situation": "two students planning what cheese and food to buy for a dinner party",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Okay, for Saturday's dinner party, I'm thinking we do a cheese board to start. Maybe three kinds?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Sounds great. Just remember Priya's coming, and she can't do anything too strong-smelling. The blue cheese last time was a disaster."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh right, I forgot. So let's skip the blue. A soft brie, a sharp cheddar, and something milder?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Perfect. And crackers, obviously. I'll handle those and grab some grapes too."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Great. I'll get the cheeses on my way home, since the good shop is right by my bus stop."
+        },
+        {
+          "speaker": "Man",
+          "text": "Deal. Oh, and don't forget honey for the brie. Trust me, it makes a difference."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly trying to decide?",
+          "options": {
+            "A": "What food to prepare for their dinner party.",
+            "B": "Whether to invite Priya to the party.",
+            "C": "Which grocery store has the lowest prices.",
+            "D": "How to make a blue cheese dish for guests."
+          },
+          "answer": "A",
+          "explanation": "正确答案A：整段对话都在商量晚宴前的食物——选哪几种奶酪、配饼干、葡萄和蜂蜜，这是主旨。B选项错误，Priya已经确定要来，他们只是考虑她的口味，不是讨论是否邀请。C选项无依据，没有比较哪家店便宜。D选项与情况相反，他们专门决定不做蓝纹奶酪，因为上次很糟糕。",
+          "distractor_types": {
+            "B": "wrong_topic",
+            "C": "wrong_topic",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "Why will the speakers avoid blue cheese this time?",
+          "options": {
+            "A": "It is the most expensive cheese available.",
+            "B": "The shop near the bus stop is out of it.",
+            "C": "One guest dislikes strong-smelling foods.",
+            "D": "Neither of them knows how to serve it."
+          },
+          "answer": "C",
+          "explanation": "正确答案C：男生提到Priya受不了气味太重的东西，上次的蓝纹奶酪是\"a disaster\"，可推断他们为了照顾这位客人而避开蓝纹奶酪。A选项无依据，对话没提价格。B选项无依据，店里是否有货从未提及。D选项错误，他们不做蓝纹是因为客人口味，不是不会摆盘，属于编造的理由。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "B": "related_but_not_stated",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "id": "lc_mqjxqda0_4"
     }
   ]
 }
