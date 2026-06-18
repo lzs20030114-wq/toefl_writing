@@ -5,14 +5,18 @@
   "model": "Claude Opus 4.8",
   "highlight": "12 个题库全部刷新，PASS 1 共 60/70；首次出现开源软件维护、合金材料学、消防队起源等新课题",
   "commit_sha": "",
+  "r2_completed_at": "2026-06-18T19:33:43Z",
+  "r2_session_id": "routine-r2-20260618-193343",
   "results": {
     "bs": {
       "generated": 20,
-      "accepted": 10,
+      "accepted": 20,
       "topics": ["future simple + prepositional phrase", "embedded/indirect questions (whether/if/found out)", "present perfect negation with contractions", "direct wh-questions with inversion", "relative clauses", "passive voice"],
       "favorite": {"prompt": "I just transferred here this semester.", "answer": "Where do I find the registration office?"},
-      "retried_after_fail": false,
-      "failure_reason": ""
+      "retried_after_fail": true,
+      "failure_reason": "diversity 82 < 90 (角色名 4/20 distinct, prefilled 过度集中于 mid-noun-or-adj)",
+      "r2_supplemented": true,
+      "r2_items_added": 10
     },
     "discussion": {
       "generated": 4,

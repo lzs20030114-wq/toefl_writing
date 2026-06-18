@@ -1,13 +1,13 @@
 {
   "file": "/home/user/toefl_writing/data/buildSentence/questions.json.gatecheck.tmp",
-  "n": 284,
-  "aggregateVerdict": "FAIL",
-  "forceWordAudit": false,
+  "n": 274,
+  "aggregateVerdict": "PASS",
+  "forceWordAudit": true,
   "checks": [
     {
       "name": "length_band.easy",
       "verdict": "PASS",
-      "detail": "got 0.282 want 0.246±0.05"
+      "detail": "got 0.277 want 0.246±0.05"
     },
     {
       "name": "length_band.med",
@@ -17,32 +17,32 @@
     {
       "name": "length_band.hard",
       "verdict": "PASS",
-      "detail": "got 0.113 want 0.159±0.05"
+      "detail": "got 0.117 want 0.159±0.05"
     },
     {
       "name": "register.first_person",
       "verdict": "PASS",
-      "detail": "got 0.648 band [0.55,0.69]"
+      "detail": "got 0.635 band [0.55,0.69]"
     },
     {
       "name": "register.contraction",
       "verdict": "PASS",
-      "detail": "got 0.197 band [0.18,0.29]"
+      "detail": "got 0.186 band [0.18,0.29]"
     },
     {
       "name": "register.third_person_formal",
       "verdict": "PASS",
-      "detail": "got 0.158 max 0.17"
+      "detail": "got 0.164 max 0.17"
     },
     {
       "name": "diversity.opening",
       "verdict": "PASS",
-      "detail": "got 0.725 min 0.38"
+      "detail": "got 0.748 min 0.38"
     },
     {
       "name": "diversity.exact_dup",
-      "verdict": "FAIL",
-      "detail": "got 0.035 max 0.02"
+      "verdict": "PASS",
+      "detail": "got 0 max 0.02"
     },
     {
       "name": "intra_set.mixed",
@@ -57,22 +57,22 @@
     {
       "name": "prompt.ends_question",
       "verdict": "PASS",
-      "detail": "got 0.789 band [0.51,0.96] (real 0.705)"
+      "detail": "got 0.777 band [0.51,0.96] (real 0.705)"
     },
     {
       "name": "prompt.addresses_you",
       "verdict": "PASS",
-      "detail": "got 0.669 band [0.45,0.83] (real 0.628)"
+      "detail": "got 0.653 band [0.45,0.83] (real 0.628)"
     },
     {
       "name": "prefilled.presence",
       "verdict": "PASS",
-      "detail": "got 0.838 band [0.68,0.97]"
+      "detail": "got 0.828 band [0.68,0.97]"
     },
     {
       "name": "prefilled.bare_pronoun",
       "verdict": "PASS",
-      "detail": "got 0.13 max 0.45"
+      "detail": "got 0.141 max 0.45"
     },
     {
       "name": "prefilled.multi_anchor",
@@ -82,44 +82,44 @@
     {
       "name": "prefilled.non_start_position",
       "verdict": "PASS",
-      "detail": "got 0.739 min 0.1"
+      "detail": "got 0.718 min 0.1"
     },
     {
       "name": "correctness.reconstructable",
       "verdict": "PASS",
-      "detail": "0/284 fail"
+      "detail": "0/274 fail"
     }
   ],
   "metrics": {
     "length": {
-      "mean": 8.65,
+      "mean": 8.67,
       "median": 8,
       "p10": 7,
       "p90": 12,
       "max": 13
     },
     "length_bands": {
-      "easy": 0.282,
+      "easy": 0.277,
       "med": 0.606,
-      "hard": 0.113
+      "hard": 0.117
     },
     "register": {
-      "first_person": 0.648,
-      "contraction": 0.197,
-      "casual_opener": 0.109,
-      "third_person_formal": 0.158
+      "first_person": 0.635,
+      "contraction": 0.186,
+      "casual_opener": 0.106,
+      "third_person_formal": 0.164
     },
     "structure": {
-      "relative_clause": 0.169,
-      "passive": 0.07,
-      "embedded_question": 0.123,
-      "negation": 0.169,
-      "modal": 0.095,
-      "subordinate": 0.109
+      "relative_clause": 0.175,
+      "passive": 0.069,
+      "embedded_question": 0.128,
+      "negation": 0.164,
+      "modal": 0.099,
+      "subordinate": 0.106
     },
     "diversity": {
-      "opening_trigram_diversity": 0.725,
-      "exact_dup_rate": 0.035
+      "opening_trigram_diversity": 0.748,
+      "exact_dup_rate": 0
     },
     "hard_band_profile": {
       "n": 32,
@@ -5829,15 +5829,14 @@
       ]
     },
     {
-      "answer": "I'll meet you at the library entrance.",
+      "answer": "I borrowed Olivia's notes for the morning lecture.",
       "setId": 28,
-      "W": 7,
-      "band": "easy",
-      "index": 7,
+      "W": 8,
+      "band": "med",
+      "index": 8,
       "struct": [],
       "register": [
-        "firstPerson",
-        "contraction"
+        "firstPerson"
       ],
       "reconstructable": true,
       "flags": [
@@ -5850,49 +5849,7 @@
       ]
     },
     {
-      "answer": "Yes, the professor explained the topic very well.",
-      "setId": 28,
-      "W": 8,
-      "band": "med",
-      "index": 8,
-      "struct": [],
-      "register": [
-        "casualOpener"
-      ],
-      "reconstructable": true,
-      "flags": [
-        "HAS_DISTRACTOR(真题=0)",
-        "LOW_PROMPT_COHERENCE?"
-      ],
-      "needs_human": [
-        "语法正确?",
-        "排列唯一合理?",
-        "读着像真题口吻?"
-      ]
-    },
-    {
-      "answer": "My bus broke down and I'm late now.",
-      "setId": 28,
-      "W": 8,
-      "band": "med",
-      "index": 8,
-      "struct": [],
-      "register": [
-        "firstPerson",
-        "contraction"
-      ],
-      "reconstructable": true,
-      "flags": [
-        "HAS_DISTRACTOR(真题=0)"
-      ],
-      "needs_human": [
-        "语法正确?",
-        "排列唯一合理?",
-        "读着像真题口吻?"
-      ]
-    },
-    {
-      "answer": "I haven't written the final conclusion yet.",
+      "answer": "I have not received the refund yet.",
       "setId": 28,
       "W": 7,
       "band": "easy",
@@ -5901,8 +5858,7 @@
         "negation"
       ],
       "register": [
-        "firstPerson",
-        "contraction"
+        "firstPerson"
       ],
       "reconstructable": true,
       "flags": [
@@ -5915,35 +5871,11 @@
       ]
     },
     {
-      "answer": "She wanted to know whether the morning bus leaves before eight.",
+      "answer": "I asked Mariana whether the lab reopened today.",
       "setId": 28,
-      "W": 11,
+      "W": 8,
       "band": "med",
-      "index": 15,
-      "struct": [
-        "embeddedQ",
-        "subord"
-      ],
-      "register": [
-        "thirdFormal"
-      ],
-      "reconstructable": true,
-      "flags": [
-        "HAS_DISTRACTOR(真题=0)",
-        "LOW_PROMPT_COHERENCE?"
-      ],
-      "needs_human": [
-        "语法正确?",
-        "排列唯一合理?",
-        "读着像真题口吻?"
-      ]
-    },
-    {
-      "answer": "I asked if the elective still has open seats.",
-      "setId": 28,
-      "W": 9,
-      "band": "med",
-      "index": 11,
+      "index": 10,
       "struct": [
         "embeddedQ"
       ],
@@ -5961,7 +5893,27 @@
       ]
     },
     {
-      "answer": "I found out the museum opens at noon.",
+      "answer": "You can find Hector's notes in the study room.",
+      "setId": 28,
+      "W": 9,
+      "band": "med",
+      "index": 10,
+      "struct": [
+        "modal"
+      ],
+      "register": [],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "Where do I pick up my student ID?",
       "setId": 28,
       "W": 8,
       "band": "med",
@@ -5981,16 +5933,17 @@
       ]
     },
     {
-      "answer": "The journals that I requested last week finally arrived this morning.",
+      "answer": "Julian asked when the evening seminar starts.",
       "setId": 28,
-      "W": 11,
-      "band": "med",
-      "index": 13,
+      "W": 7,
+      "band": "easy",
+      "index": 11,
       "struct": [
-        "relClause"
+        "embeddedQ",
+        "subord"
       ],
       "register": [
-        "firstPerson"
+        "thirdFormal"
       ],
       "reconstructable": true,
       "flags": [
@@ -6003,12 +5956,35 @@
       ]
     },
     {
-      "answer": "Which floor has the new rowing machines?",
+      "answer": "Unfortunately, I missed the early registration deadline.",
       "setId": 28,
       "W": 7,
       "band": "easy",
       "index": 7,
       "struct": [],
+      "register": [
+        "firstPerson",
+        "casualOpener"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "Diane recommended the tutor who explains the statistics homework very clearly.",
+      "setId": 28,
+      "W": 11,
+      "band": "med",
+      "index": 13,
+      "struct": [
+        "relClause"
+      ],
       "register": [
         "thirdFormal"
       ],
@@ -6024,28 +6000,8 @@
       ]
     },
     {
-      "answer": "Where do I find the registration office?",
+      "answer": "I emailed Harold about the missing lab results.",
       "setId": 28,
-      "W": 7,
-      "band": "easy",
-      "index": 7,
-      "struct": [],
-      "register": [
-        "firstPerson"
-      ],
-      "reconstructable": true,
-      "flags": [
-        "HAS_DISTRACTOR(真题=0)"
-      ],
-      "needs_human": [
-        "语法正确?",
-        "排列唯一合理?",
-        "读着像真题口吻?"
-      ]
-    },
-    {
-      "answer": "I wondered if Emma had any feedback yet.",
-      "setId": 29,
       "W": 8,
       "band": "med",
       "index": 8,
@@ -6064,193 +6020,16 @@
       ]
     },
     {
-      "answer": "I haven't rehearsed the final slides yet.",
-      "setId": 29,
-      "W": 7,
-      "band": "easy",
-      "index": 8,
-      "struct": [
-        "negation"
-      ],
-      "register": [
-        "firstPerson",
-        "contraction"
-      ],
-      "reconstructable": true,
-      "flags": [
-        "HAS_DISTRACTOR(真题=0)"
-      ],
-      "needs_human": [
-        "语法正确?",
-        "排列唯一合理?",
-        "读着像真题口吻?"
-      ]
-    },
-    {
-      "answer": "He asked whether we will repeat the experiment.",
-      "setId": 29,
-      "W": 8,
+      "answer": "I asked Naomi whether the debate club accepts beginners.",
+      "setId": 28,
+      "W": 9,
       "band": "med",
       "index": 11,
       "struct": [
-        "embeddedQ",
-        "modal"
+        "embeddedQ"
       ],
       "register": [
         "firstPerson"
-      ],
-      "reconstructable": true,
-      "flags": [
-        "HAS_DISTRACTOR(真题=0)"
-      ],
-      "needs_human": [
-        "语法正确?",
-        "排列唯一合理?",
-        "读着像真题口吻?"
-      ]
-    },
-    {
-      "answer": "Unfortunately, I left them in the other room.",
-      "setId": 29,
-      "W": 8,
-      "band": "med",
-      "index": 8,
-      "struct": [],
-      "register": [
-        "firstPerson",
-        "casualOpener"
-      ],
-      "reconstructable": true,
-      "flags": [
-        "HAS_DISTRACTOR(真题=0)"
-      ],
-      "needs_human": [
-        "语法正确?",
-        "排列唯一合理?",
-        "读着像真题口吻?"
-      ]
-    },
-    {
-      "answer": "My proposal was approved by the committee without major changes.",
-      "setId": 29,
-      "W": 10,
-      "band": "med",
-      "index": 12,
-      "struct": [
-        "passive"
-      ],
-      "register": [
-        "firstPerson"
-      ],
-      "reconstructable": true,
-      "flags": [
-        "HAS_DISTRACTOR(真题=0)"
-      ],
-      "needs_human": [
-        "语法正确?",
-        "排列唯一合理?",
-        "读着像真题口吻?"
-      ]
-    },
-    {
-      "answer": "Not yet, but I plan to register tonight.",
-      "setId": 29,
-      "W": 8,
-      "band": "med",
-      "index": 9,
-      "struct": [
-        "negation"
-      ],
-      "register": [
-        "firstPerson"
-      ],
-      "reconstructable": true,
-      "flags": [
-        "HAS_DISTRACTOR(真题=0)"
-      ],
-      "needs_human": [
-        "语法正确?",
-        "排列唯一合理?",
-        "读着像真题口吻?"
-      ]
-    },
-    {
-      "answer": "I was wondering when they review the applications.",
-      "setId": 29,
-      "W": 8,
-      "band": "med",
-      "index": 10,
-      "struct": [
-        "subord"
-      ],
-      "register": [
-        "firstPerson"
-      ],
-      "reconstructable": true,
-      "flags": [
-        "HAS_DISTRACTOR(真题=0)"
-      ],
-      "needs_human": [
-        "语法正确?",
-        "排列唯一合理?",
-        "读着像真题口吻?"
-      ]
-    },
-    {
-      "answer": "Do they open before my early lecture?",
-      "setId": 29,
-      "W": 7,
-      "band": "easy",
-      "index": 9,
-      "struct": [
-        "subord"
-      ],
-      "register": [
-        "firstPerson"
-      ],
-      "reconstructable": true,
-      "flags": [
-        "HAS_DISTRACTOR(真题=0)"
-      ],
-      "needs_human": [
-        "语法正确?",
-        "排列唯一合理?",
-        "读着像真题口吻?"
-      ]
-    },
-    {
-      "answer": "My package was mistakenly delivered to the wrong building.",
-      "setId": 29,
-      "W": 9,
-      "band": "med",
-      "index": 9,
-      "struct": [],
-      "register": [
-        "firstPerson"
-      ],
-      "reconstructable": true,
-      "flags": [
-        "HAS_DISTRACTOR(真题=0)"
-      ],
-      "needs_human": [
-        "语法正确?",
-        "排列唯一合理?",
-        "读着像真题口吻?"
-      ]
-    },
-    {
-      "answer": "No, I don't have it with me.",
-      "setId": 29,
-      "W": 7,
-      "band": "easy",
-      "index": 8,
-      "struct": [
-        "negation"
-      ],
-      "register": [
-        "firstPerson",
-        "contraction",
-        "casualOpener"
       ],
       "reconstructable": true,
       "flags": [
