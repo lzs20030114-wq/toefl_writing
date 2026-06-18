@@ -1,0 +1,224 @@
+{
+  "items": [
+    {
+      "id": "tmp_r1_q1",
+      "prompt": "Are you coming to the study group later?",
+      "answer": "I'll meet you at the library entrance.",
+      "chunks": ["i'll", "you", "at", "the library", "entrance", "did"],
+      "prefilled": ["meet"],
+      "prefilled_positions": {"meet": 1},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["future simple", "prepositional phrase"]
+    },
+    {
+      "id": "tmp_r1_q2",
+      "prompt": "Did you like the lecture this afternoon?",
+      "answer": "Yes, the professor explained the topic very well.",
+      "chunks": ["yes", "the professor", "explained", "the topic", "very", "was"],
+      "prefilled": ["well"],
+      "prefilled_positions": {"well": 7},
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["past simple", "simple statement"]
+    },
+    {
+      "id": "tmp_r1_q3",
+      "prompt": "Why did you miss our morning seminar?",
+      "answer": "My bus broke down and I'm late now.",
+      "chunks": ["my bus", "broke", "and", "i'm", "late", "now", "broken"],
+      "prefilled": ["down"],
+      "prefilled_positions": {"down": 3},
+      "distractor": "broken",
+      "has_question_mark": false,
+      "grammar_points": ["past simple", "phrasal verb"]
+    },
+    {
+      "id": "tmp_r1_q4",
+      "prompt": "Have you finished your research paper yet?",
+      "answer": "I haven't written the final conclusion yet.",
+      "chunks": ["i", "haven't", "written", "the final", "yet", "no"],
+      "prefilled": ["conclusion"],
+      "prefilled_positions": {"conclusion": 5},
+      "distractor": "no",
+      "has_question_mark": false,
+      "grammar_points": ["present perfect", "negation"]
+    },
+    {
+      "id": "tmp_r1_q5",
+      "prompt": "What did Mariana ask you about the trip?",
+      "answer": "She wanted to know whether the morning bus leaves before eight.",
+      "chunks": ["she", "know", "whether", "the morning", "bus", "leaves", "before", "eight", "did"],
+      "prefilled": ["wanted to"],
+      "prefilled_positions": {"wanted to": 1},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question", "embedded clause"]
+    },
+    {
+      "id": "tmp_r1_q6",
+      "prompt": "Did you talk to your advisor about courses?",
+      "answer": "I asked if the elective still has open seats.",
+      "chunks": ["i", "asked", "the elective", "still", "has", "open seats", "does"],
+      "prefilled": ["if"],
+      "prefilled_positions": {"if": 2},
+      "distractor": "does",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question", "embedded clause"]
+    },
+    {
+      "id": "tmp_r1_q7",
+      "prompt": "Did you check the museum hours for us?",
+      "answer": "I found out the museum opens at noon.",
+      "chunks": ["i", "found", "out", "the museum", "opens", "noon", "did"],
+      "prefilled": ["at"],
+      "prefilled_positions": {"at": 6},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question", "find out"]
+    },
+    {
+      "id": "tmp_r1_q8",
+      "prompt": "What did the librarian tell you earlier?",
+      "answer": "The journals that I requested last week finally arrived this morning.",
+      "chunks": ["the journals", "that", "i", "requested", "last week", "finally arrived", "have"],
+      "prefilled": ["this morning"],
+      "prefilled_positions": {"this morning": 9},
+      "distractor": "have",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause", "past simple"]
+    },
+    {
+      "id": "tmp_r1_q9",
+      "prompt": "I heard the gym added new equipment.",
+      "answer": "Which floor has the new rowing machines?",
+      "chunks": ["which floor", "has", "the new", "rowing", "is"],
+      "prefilled": ["machines"],
+      "prefilled_positions": {"machines": 6},
+      "distractor": "is",
+      "has_question_mark": true,
+      "grammar_points": ["direct wh-question", "subject-verb inversion"]
+    },
+    {
+      "id": "tmp_r1_q10",
+      "prompt": "I just transferred here this semester.",
+      "answer": "Where do I find the registration office?",
+      "chunks": ["where", "do", "i", "the registration", "office", "is"],
+      "prefilled": ["find"],
+      "prefilled_positions": {"find": 3},
+      "distractor": "is",
+      "has_question_mark": true,
+      "grammar_points": ["direct wh-question", "auxiliary do"]
+    },
+    {
+      "id": "tmp_r1_q11",
+      "prompt": "Are you nervous about the writing workshop?",
+      "answer": "I wondered if Emma had any feedback yet.",
+      "chunks": ["i", "if", "emma", "had", "any", "feedback", "yet", "was"],
+      "prefilled": ["wondered"],
+      "prefilled_positions": {"wondered": 1},
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question", "embedded clause"]
+    },
+    {
+      "id": "tmp_r1_q12",
+      "prompt": "Are you ready for tomorrow's presentation?",
+      "answer": "I haven't rehearsed the final slides yet.",
+      "chunks": ["i", "haven't", "rehearsed", "slides", "yet", "did"],
+      "prefilled": ["the final"],
+      "prefilled_positions": {"the final": 3},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["present perfect", "negation"]
+    },
+    {
+      "id": "tmp_r1_q13",
+      "prompt": "Did Professor Cho mention the next lab session?",
+      "answer": "He asked whether we will repeat the experiment.",
+      "chunks": ["he", "asked", "we", "will", "repeat", "the experiment", "did"],
+      "prefilled": ["whether"],
+      "prefilled_positions": {"whether": 2},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question", "embedded clause"]
+    },
+    {
+      "id": "tmp_r1_q14",
+      "prompt": "Where did you put the lab notebooks?",
+      "answer": "Unfortunately, I left them in the other room.",
+      "chunks": ["i", "left", "in", "the other room", "leaving"],
+      "prefilled": ["unfortunately,", "them"],
+      "prefilled_positions": {"unfortunately,": 0, "them": 3},
+      "distractor": "leaving",
+      "has_question_mark": false,
+      "grammar_points": ["sentence adverb", "past simple"]
+    },
+    {
+      "id": "tmp_r1_q15",
+      "prompt": "You met with the dean about your proposal.",
+      "answer": "My proposal was approved by the committee without major changes.",
+      "chunks": ["my proposal", "was", "approved", "by", "the committee", "without", "changes", "approving"],
+      "prefilled": ["major"],
+      "prefilled_positions": {"major": 8},
+      "distractor": "approving",
+      "has_question_mark": false,
+      "grammar_points": ["passive voice", "prepositional phrase"]
+    },
+    {
+      "id": "tmp_r1_q16",
+      "prompt": "Did you sign up for the volunteer event?",
+      "answer": "Not yet, but I plan to register tonight.",
+      "chunks": ["not", "yet,", "but", "i", "register", "tonight", "will"],
+      "prefilled": ["plan to"],
+      "prefilled_positions": {"plan to": 4},
+      "distractor": "will",
+      "has_question_mark": false,
+      "grammar_points": ["infinitive of purpose", "conjoined clause"]
+    },
+    {
+      "id": "tmp_r1_q17",
+      "prompt": "Have you heard back about your housing form?",
+      "answer": "I was wondering when they review the applications.",
+      "chunks": ["i", "was wondering", "they", "review", "the applications", "are"],
+      "prefilled": ["when"],
+      "prefilled_positions": {"when": 3},
+      "distractor": "are",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question", "embedded clause"]
+    },
+    {
+      "id": "tmp_r1_q18",
+      "prompt": "You mentioned Julian's new coffee place to me.",
+      "answer": "Do they open before my early lecture?",
+      "chunks": ["do", "they", "open", "my early", "lecture", "are"],
+      "prefilled": ["before"],
+      "prefilled_positions": {"before": 3},
+      "distractor": "are",
+      "has_question_mark": true,
+      "grammar_points": ["direct yes-no question", "auxiliary do"]
+    },
+    {
+      "id": "tmp_r1_q19",
+      "prompt": "What did the clerk tell you at the desk?",
+      "answer": "My package was mistakenly delivered to the wrong building.",
+      "chunks": ["my package", "was", "mistakenly delivered", "the wrong", "building", "delivering"],
+      "prefilled": ["to"],
+      "prefilled_positions": {"to": 5},
+      "distractor": "delivering",
+      "has_question_mark": false,
+      "grammar_points": ["passive voice", "prepositional phrase"]
+    },
+    {
+      "id": "tmp_r1_q20",
+      "prompt": "Did you ever return that overdue textbook?",
+      "answer": "No, I don't have it with me.",
+      "chunks": ["no,", "i", "don't", "have", "it", "not"],
+      "prefilled": ["with me"],
+      "prefilled_positions": {"with me": 5},
+      "distractor": "not",
+      "has_question_mark": false,
+      "grammar_points": ["negation", "prepositional phrase"]
+    }
+  ]
+}

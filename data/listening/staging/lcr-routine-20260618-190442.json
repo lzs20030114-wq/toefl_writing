@@ -1,0 +1,164 @@
+{
+  "items": [
+    {
+      "context": "general_daily",
+      "situation": "arranging a ride or carpool with a friend",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Why are you driving instead of taking the train?",
+      "options": {
+        "A": "Well, my car's actually cheaper for the three of us.",
+        "B": "The train station has a new coffee stand.",
+        "C": "Yes, I parked it right out front.",
+        "D": "She drives to work every single morning."
+      },
+      "answer": "A",
+      "explanation": "正确答案是A。说话人问为什么选择开车而不坐火车，A以话语标记'Well'开头，间接说明开车对三个人来说更便宜，给出了理由，是marker_led_indirect。B是semantic_association_trap，由'train'联想到火车站的咖啡摊，但没回答原因。C是wrong_question_type，回答的是'是否/停在哪'的是非或地点问题，而问的是'为什么'。D是off_topic，谈另一个人每天开车上班，与本对话无关。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student checking lost-and-found at front desk",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Did anyone turn in a gray umbrella today?",
+      "options": {
+        "A": "The weather app says it'll rain again tomorrow.",
+        "B": "Let me take a look in the back for you.",
+        "C": "Yes, I turned in my paper this morning.",
+        "D": "The desk closes at five on Fridays."
+      },
+      "answer": "B",
+      "explanation": "正确答案是B。说话人问今天有没有人交来一把灰色雨伞，B用自然的口语套话'Let me take a look'表示马上去后面帮忙查看，推进了对话并解决需求，是idiomatic。A是semantic_association_trap，由'umbrella'联想到天气下雨，但没去查。C是polysemy_trap，把'turn in'（上交失物）误用为'交论文'，答非所问。D是off_topic，谈前台周五关门时间，与是否有伞无关。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "polysemy_trap",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about a campus event or concert",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Are tickets for the jazz concert still available?",
+      "options": {
+        "A": "The band played really well last spring.",
+        "B": "No, I haven't listened to jazz before.",
+        "C": "Actually, they sold out about an hour ago.",
+        "D": "The hall is across from the library."
+      },
+      "answer": "C",
+      "explanation": "正确答案是C。说话人问爵士音乐会的票是否还有，C以话语标记'Actually'开头，间接说明大约一小时前已售罄，自然回应了是否还有票，是marker_led_indirect。A是semantic_association_trap，由'concert'联想到乐队上次的演出，但没回答票务。B是wrong_question_type，回答的是'你听没听过爵士'，而问的是'有没有票'。D是off_topic，谈演出厅位置，与票是否还有无关。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "wrong_question_type",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student checking with TA about lab report requirements",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I'm not sure how long the report should be.",
+      "options": {
+        "A": "The lab closes at nine on weeknights.",
+        "B": "Yes, I finished writing mine already.",
+        "C": "Reports are due at the end of the term.",
+        "D": "Well, four to five pages is usually plenty."
+      },
+      "answer": "D",
+      "explanation": "正确答案是D。说话人不确定报告该写多长，D以话语标记'Well'开头，间接给出四到五页通常就够了，直接回应了篇幅困惑，是marker_led_indirect。A是semantic_association_trap，由'report/lab'联想到实验室关门时间，但无关。B是off_topic，谈自己已写完，没告诉对方该多长。C是wrong_question_type，回答的是'什么时候交'，而问的是'写多长'。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking about exam format or study materials",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Where can I find practice problems for the final?",
+      "options": {
+        "A": "I'll email everyone a full review packet tonight.",
+        "B": "The final is scheduled for next Thursday.",
+        "C": "Yes, practice really does help a lot.",
+        "D": "The exam room is in the math building."
+      },
+      "answer": "A",
+      "explanation": "正确答案是A。说话人问去哪里找期末练习题，A没有直接给地点，而是承诺今晚把完整复习资料发邮件给大家，直接解决了'找不到练习题'这个根本需求，是context_shift。B是semantic_association_trap，由'final'联想到考试时间，但没回答去哪找。C是wrong_question_type，回答的是'练习是否有用'的是非问题，而问的是'在哪里'。D是off_topic，谈考场位置，与练习题来源无关。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "checking if a service (post office, bank) is open",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "What time does the bank close on Saturdays?",
+      "options": {
+        "A": "The bank just remodeled its lobby last month.",
+        "B": "Actually, it shuts at noon on weekends.",
+        "C": "Yes, you can open an account there.",
+        "D": "It's right beside the grocery store."
+      },
+      "answer": "B",
+      "explanation": "正确答案是B。说话人问银行周六几点关门，B以话语标记'Actually'开头，间接说明周末中午就关，直接回应了关门时间，是marker_led_indirect。A是semantic_association_trap，由'bank'联想到上月装修大堂，但没回答时间。C是wrong_question_type，回答的是'能否开户'的是非问题，而问的是'几点关门'。D是off_topic，谈银行旁边是杂货店，回答的是位置而非时间。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "classmate asking to borrow lecture notes",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I missed today's lecture and need the notes.",
+      "options": {
+        "A": "The lecture hall was packed this morning.",
+        "B": "Yes, I take notes in every class.",
+        "C": "Sure, I'll send you a photo tonight.",
+        "D": "The professor speaks pretty fast."
+      },
+      "answer": "C",
+      "explanation": "正确答案是C。说话人错过了今天的课需要笔记，C以'Sure'应允并说今晚发照片过去，间接而自然地满足了借笔记的请求，是marker_led_indirect。A是semantic_association_trap，由'lecture'联想到课堂很满，但没回应请求。B是off_topic，谈自己每节课都记笔记，没说能否借出。D是off_topic，谈教授语速快，与借笔记无关。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "friend inviting another to a study group or social event",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "How about joining our study group tonight?",
+      "options": {
+        "A": "The group meets in the science building.",
+        "B": "Yes, I studied biology last year.",
+        "C": "We have about six members right now.",
+        "D": "Count me in, I could use the help."
+      },
+      "answer": "D",
+      "explanation": "正确答案是D。说话人邀请对方今晚加入学习小组，D用自然口语习语'Count me in'表示乐意参加，并补充自己正需要帮助，是idiomatic，欣然接受邀请。A是semantic_association_trap，由'study group'联想到聚会地点，但没回应邀请。B是polysemy_trap/off_topic，把话题岔到去年学生物，答非所问。C是off_topic，谈小组现有成员数，没回应是否参加。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "off_topic"
+      }
+    }
+  ]
+}

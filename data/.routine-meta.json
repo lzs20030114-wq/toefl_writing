@@ -1,215 +1,104 @@
 {
-  "session_id": "routine-20260617-223153",
-  "completed_at": "2026-06-17T22:41:02.177Z",
-  "r2_completed_at": "2026-06-17T23:05:00.000Z",
-  "r2_session_id": "routine-r2-20260617-225919",
-  "duration_minutes": 9,
+  "session_id": "routine-20260618-190442",
+  "completed_at": "2026-06-18T19:13:14Z",
+  "duration_minutes": 8.5,
   "model": "Claude Opus 4.8",
-  "highlight": "PASS 1 满额 70/70:12 个题库全部生成,新增物理流体力学 AP、缓步动物(tardigrade)学术听力等多样题材",
+  "highlight": "12 个题库全部刷新，PASS 1 共 60/70；首次出现开源软件维护、合金材料学、消防队起源等新课题",
   "commit_sha": "",
   "results": {
     "bs": {
       "generated": 20,
-      "accepted": 30,
-      "r2_supplemented": true,
-      "r2_items_added": 10,
-      "topics": [
-        "indirect-question",
-        "negation",
-        "relative-clause",
-        "present-perfect",
-        "past-perfect",
-        "passive-voice",
-        "reported-speech",
-        "modal",
-        "wh-question",
-        "time/place-adverbial"
-      ],
-      "favorite": {
-        "prompt": "What did the advisor tell you this morning?",
-        "answer": "She wanted to know whether the transfer form that I submitted was complete."
-      },
+      "accepted": 10,
+      "topics": ["future simple + prepositional phrase", "embedded/indirect questions (whether/if/found out)", "present perfect negation with contractions", "direct wh-questions with inversion", "relative clauses", "passive voice"],
+      "favorite": {"prompt": "I just transferred here this semester.", "answer": "Where do I find the registration office?"},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": [
-        "computer science",
-        "economics",
-        "history and culture",
-        "public health"
-      ],
-      "favorite": {
-        "subtopic": "computer science",
-        "preview": "We've been discussing how software teams handle bugs and outages this semester. Many companies now run"
-      },
+      "topics": ["computer science", "public policy", "history and culture", "economics"],
+      "favorite": {"subtopic": "computer science", "preview": "We've been discussing how open-source software gets maintained this semester. Many critical projects that power banks, hospitals"},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "email": {
       "generated": 4,
       "accepted": 4,
-      "topics": [
-        "服务与活动",
-        "校园学业",
-        "消费售后",
-        "日常社交"
-      ],
-      "favorite": {
-        "subtopic": "服务与活动",
-        "preview": "You are a regular swimmer who booked a six-week lap-swimming pass at a city aquatic center. After two"
-      },
+      "topics": ["服务与活动", "校园学业", "日常社交", "消费售后"],
+      "favorite": {"subtopic": "消费售后", "preview": "You recently bought a monthly streaming-and-audiobook subscription that promised offline downloads. The downloads keep disappearing"},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ap": {
       "generated": 5,
       "accepted": 5,
-      "topics": [
-        "business/consumer behavior",
-        "physics/fluid dynamics",
-        "environmental_science/conservation",
-        "astronomy/space exploration",
-        "materials_science/alloys"
-      ],
-      "favorite": {
-        "subtopic": "physics/fluid dynamics",
-        "preview": "Cavitation is the formation and violent collapse of vapor bubbles in a flowing liquid when local pressure"
-      },
+      "topics": ["materials_science/alloys", "sociology/inequality", "psychology/attention", "anthropology/early humans", "technology/materials science"],
+      "favorite": {"subtopic": "psychology/attention", "preview": "Attention is the cognitive process by which the mind selects certain stimuli for focused processing while"},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ctw": {
       "generated": 6,
       "accepted": 6,
-      "topics": [
-        "economics/supply and demand",
-        "linguistics/language change",
-        "acoustics/sound waves",
-        "materials_science/metal alloys",
-        "oceanography/ocean currents",
-        "meteorology/cloud formation"
-      ],
-      "favorite": {
-        "subtopic": "economics/supply and demand",
-        "preview": "Prices in a market economy emerge from the constant interaction between buyers and sellers. When deman"
-      },
+      "topics": ["biology/bird navigation during migration", "environmental_science/the carbon cycle", "psychology/selective attention", "history/factory labor in the Industrial Revolution", "geology/formation of sedimentary rock", "astronomy/the structure and tails of comets"],
+      "favorite": {"subtopic": "astronomy/the structure and tails of comets", "preview": "Comets are icy bodies that travel along stretched orbits carrying them from the cold outer solar"},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-rdl-short": {
       "generated": 4,
       "accepted": 4,
-      "topics": [
-        "email",
-        "notice",
-        "flyer"
-      ],
-      "favorite": {
-        "subtopic": "flyer/used-textbook-sale",
-        "preview": "USED TEXTBOOK SALE! Save big before classes start. Friday, August 28, in Carver Hall, Room 210."
-      },
+      "topics": ["email", "email", "notice", "notice"],
+      "favorite": {"subtopic": "notice/shuttle-detour", "preview": "Notice: Due to road repairs on Elm Street, the campus shuttle will follow a detour from Monday, June 8"},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-rdl-long": {
       "generated": 2,
       "accepted": 2,
-      "topics": [
-        "syllabus",
-        "menu"
-      ],
-      "favorite": {
-        "subtopic": "menu/campus_cafe_weekly_lunch",
-        "preview": "The Quad Cafe — Weekly Lunch Menu. Served Monday through Friday, 11:00 AM to 2:30 PM, in the Student Union basement."
-      },
+      "topics": ["menu", "notice"],
+      "favorite": {"subtopic": "menu/campus food truck weekly specials", "preview": "Maple Street Mobile Kitchen — Weekly Specials. Find us beside Carver Hall, Monday through Friday, 11:00 AM to 2:00 PM."},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lat": {
       "generated": 4,
       "accepted": 4,
-      "topics": [
-        "steel-frame construction and skyscrapers",
-        "recording technology and music composition",
-        "Impressionists and color theory",
-        "tardigrade cryptobiosis"
-      ],
-      "favorite": {
-        "subtopic": "how tardigrades survive extreme environments",
-        "preview": "Tardigrades are tiny animals, barely half a millimeter long, often called water bears because of"
-      },
+      "topics": ["history: unexpected origins of the modern fire department", "cognitive_psychology: dual-process theory", "ecology: rewilding to restore degraded habitats", "anthropology: gift-giving rituals reinforcing social bonds"],
+      "favorite": {"subtopic": "history: unexpected origins of the modern fire department", "preview": "The modern fire department did not begin as a public service. In fact, the earliest organized firefighting grew out of insurance."},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lc": {
       "generated": 5,
       "accepted": 5,
-      "topics": [
-        "grocery cooking tips",
-        "jazz trio recommendations",
-        "roommate quiet-hours",
-        "surprise birthday planning",
-        "movie review"
-      ],
-      "favorite": {
-        "subtopic": "two friends sharing cooking tips while grocery shopping",
-        "preview": "Are you grabbing tomatoes for that pasta sauce you keep raving about? Mine never tastes right."
-      },
+      "topics": ["pet/houseplant care", "bus/train schedule for a coast day trip", "debating if a new cafe is worth the price", "part-time factory job with a 5am shift", "cheese board planning for a dinner party"],
+      "favorite": {"subtopic": "part-time factory job with a brutal 5am shift", "preview": "I heard you started that part-time job at the packaging factory. How's it going so far? — It's okay, but the schedule's killing me."},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-la": {
       "generated": 5,
       "accepted": 5,
-      "topics": [
-        "student art market",
-        "undergraduate research poster session",
-        "spring linguistics symposium",
-        "performance hall reopening",
-        "community garden cleanup"
-      ],
-      "favorite": {
-        "subtopic": "spring linguistics symposium with limited seats and prerequisites",
-        "preview": "On behalf of the Linguistics Society, I'm pleased to announce our Spring Symposium on language and the brain, taking place"
-      },
+      "topics": ["spring data-science symposium", "parking lot closure for alumni weekend", "financial aid scholarship workshop", "cultural food festival", "health insurance enrollment session"],
+      "favorite": {"subtopic": "cultural food festival organized by international club", "preview": "Hello, everyone. The International Students Club is thrilled to invite you to our annual World Flavors Food Festival next Saturday"},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lcr": {
       "generated": 8,
       "accepted": 8,
-      "topics": [
-        "writing center thesis help",
-        "lab report graphing",
-        "study session invite",
-        "architecture program acceptance",
-        "roommate weekend plans",
-        "campus gym hours",
-        "store boot exchange",
-        "morning carpool"
-      ],
-      "favorite": {
-        "subtopic": "architecture program acceptance news",
-        "preview": "I finally got into the architecture program."
-      },
+      "topics": ["carpool ride arrangement", "lost-and-found umbrella", "jazz concert tickets", "lab report length", "final exam practice problems", "bank Saturday hours", "borrowing lecture notes", "study group invite"],
+      "favorite": {"subtopic": "lost-and-found gray umbrella (hard, idiomatic)", "preview": "Did anyone turn in a gray umbrella today? Correct reply uses the idiom 'Let me take a look in the back for you.'"},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "speaking-repeat": {
       "generated": 3,
       "accepted": 3,
-      "topics": [
-        "bike tire repair",
-        "student health center",
-        "chemistry lab safety"
-      ],
-      "favorite": {
-        "subtopic": "Bike Tire Repair (how-to)",
-        "preview": "First, stand the bike on its seat."
-      },
+      "topics": ["Campus Gym Induction (orientation)", "Tutoring Center (orientation)", "Watercolor Painting (how-to procedure)"],
+      "favorite": {"subtopic": "Watercolor Painting (how-to procedure)", "preview": "Next, dampen the surface with a clean, wet brush. Then mix small amounts of paint on the palette."},
       "retried_after_fail": false,
       "failure_reason": ""
     }
