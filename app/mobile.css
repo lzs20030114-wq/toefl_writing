@@ -78,6 +78,17 @@
     grid-template-columns: 1fr !important;
   }
 
+  /* P1.5: mobile-only fixed countdown bar in the mock exam (the desktop
+     SectionTimerPanel is pushed off-screen on phones). The bar is rendered with
+     inline display:none and flipped on here; .tp-exam-grid--timer reserves the
+     44px the fixed bar occupies so the task's submit button stays on-screen. */
+  .tp-mobile-timer {
+    display: flex !important;
+  }
+  .tp-exam-grid--timer {
+    padding-top: 44px !important;
+  }
+
   /* ── 阅读任务：左右分栏（文章 | 题目）→ 上下堆叠 ── */
   .tp-reading-split {
     flex-direction: column !important;
