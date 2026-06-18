@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-06-18 — v1.9.1
+
+- **产品 / UX 批修复（第 1 批）** (分支 `fix/product-ux-batch-1`；每条"设计 → 独立复核"后实施，逐条单测 / 浏览器验证)：
+  - **学术讨论选题器标题残缺修复** (`app/academic-writing/page.js` + 新 `lib/academicWriting/topicTitle.js` + `__tests__/academic-topic-title.test.js`)：`extractShortTitle` 触发词正则缺词边界，`discuss` / `question` 会匹配进 `discussing` / `discussion`，约 1/3（35/111）练习选题标题以半截 "ing …" 开头。改为 `\bdiscuss\b` 等词边界，失配回落首句；新增测试断言全部 111 题无 "ing/ion" 开头。
+  - **造句对题回顾正确答案显示修复** (`lib/questionBank/renderResponseSentence.js` + 测试)：回顾页"正确答案"此前由去标点 / 小写化的 `answerWords` 重建，专有名词被小写、句内逗号被删。改为直接取权威的 `q.answer`（保留大小写与逗号）；用户作答句仍走原 `finishSentence`，判分仍大小写 / 标点不敏感。
+  - **iOS Safari 口语录音卡死修复** (`components/speaking/InterviewTask.js` + `VoiceRecorder.js`)：面试题 45s 倒计时此前在 TTS 后即启动，而 iOS Safari 自动 `getUserMedia` 因缺用户手势被拦时录音从未开始，计时归零后 `recorderStopRef`（从未赋值）空操作，用户卡在 0:00 无录音。现倒计时仅在录音真正开始（`onRecordingStart`）后才走；`VoiceRecorder` 暴露可选 `onStopRef` / `onAutoStartBlocked`（对其它调用方向后兼容）；自动启动被拦时计时器暂停并显示"待开始"+ 手动提示，每题进出重置状态。
+  - **未登录练习页 SSR 报错修复** (`components/shared/UsageGateWrapper.js`)：`LoginRequiredModal` / `PracticeLockedGate` 的 `createPortal(…, document.body)` 在 SSR 抛 `document is not defined`（每次未登录打开做题页刷错误日志）。改用 mount-flag 守卫（`useEffect` 置位后再渲染 portal）—— 复核原建议的 `typeof document` 守卫经浏览器实测会引入 hydration 警告（弹窗首屏即渲染，服务端 null 与客户端水合不一致），故采用 mount-flag 使客户端首帧也返回 null、与服务端一致。
+  - 验证：全量单测 49 套 / 380 项通过；浏览器实测 LIVE.1（无 SSR / hydration 报错）、P1.1（选题器标题正常）通过；P1.9 编译 + 渲染通过，真机 iOS Safari 行为待设备确认。
+  - 搁置（需产品决策 / 大工程，下一批处理）：造句干扰项多样性重生、插入句阅读题渲染、模考评分失败显示、听力可猜、口语发音维度、显示分口径、计时器漂移、移动端倒计时 / tab 溢出等。
+
 ## 2026-06-17 — v1.9.0
 
 - **造句题库整体升级 + 防退化门接进 live** (`f18cad0` + `fe49677`，merge `2d79d74`)：

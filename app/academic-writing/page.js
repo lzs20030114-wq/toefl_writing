@@ -9,19 +9,7 @@ import { normalizeReportLanguage } from "../../lib/reportLanguage";
 import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
 import { loadDoneIds } from "../../lib/sessionStore";
 import AD_DATA from "../../data/academicWriting/prompts.json";
-
-function extractShortTitle(professorText) {
-  const text = String(professorText || "").trim();
-  // Try to find the core question — often after "talk about", "discuss", etc.
-  const match = text.match(/(?:talk about|discuss|question[:\s]+)(.*?)(?:[.?]|$)/i);
-  if (match) {
-    const fragment = match[1].trim();
-    if (fragment.length > 5 && fragment.length <= 80) return fragment;
-  }
-  // Fallback: first sentence, truncated
-  const first = text.split(/[.!?]/).filter(Boolean)[0]?.trim() || text;
-  return first.length > 80 ? first.slice(0, 77) + "..." : first;
-}
+import { extractShortTitle } from "../../lib/academicWriting/topicTitle";
 
 function buildAcademicTopics() {
   return (Array.isArray(AD_DATA) ? AD_DATA : [])
