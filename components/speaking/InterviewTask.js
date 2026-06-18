@@ -35,6 +35,8 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
   const [totalElapsed, setTotalElapsed] = useState(0);
   const [ttsSupported, setTtsSupported] = useState(true);
   const [autoRecordReady, setAutoRecordReady] = useState(false);
+  const [recordingStarted, setRecordingStarted] = useState(false); // true once the recorder actually starts
+  const [autoBlocked, setAutoBlocked] = useState(false); // auto-start blocked (e.g. iOS Safari gesture requirement)
   const [transcripts, setTranscripts] = useState([]); // STT transcript per index
   // Per-question STT lifecycle: null | "processing" | "done" | "failed"
   const [transcriptStatus, setTranscriptStatus] = useState([]);
@@ -83,7 +85,10 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
 
   // Countdown timer for answer phase
   useEffect(() => {
-    if (phase !== "answer") {
+    // Only run the answer countdown once recording has actually started. On iOS
+    // Safari the auto-start can be blocked (needs a user gesture); gating here
+    // keeps the clock from draining to 0:00 and auto-submitting an empty answer.
+    if (phase !== "answer" || !recordingStarted) {
       if (timerRef.current) clearInterval(timerRef.current);
       return;
     }
@@ -100,7 +105,7 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
       });
     }, 1000);
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
-  }, [phase, current]);
+  }, [phase, current, recordingStarted]);
 
   const playQuestion = useCallback(() => {
     if (!ttsSupported || !question) return;
@@ -260,6 +265,8 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
     });
     setPhase("review");
     setAutoRecordReady(false);
+    setRecordingStarted(false);
+    setAutoBlocked(false);
 
     // Skip if Pro gate already failed, or if we never got a blob.
     if (notPro || !blob) {
@@ -329,6 +336,8 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
       setCurrent(current + 1);
       setPhase("prep");
       setAutoRecordReady(false);
+      setRecordingStarted(false);
+      setAutoBlocked(false);
       return;
     }
     // Last question — hold the finish call if anything's still in flight
@@ -580,17 +589,28 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
               {categoryBadge(question.category)}
             </div>
             {phase === "answer" && (
-              <div style={{
-                padding: "8px 16px", borderRadius: 999,
-                background: timeLeft <= 10 ? "#FEE2E2" : SPK.soft,
-                border: "1px solid " + (timeLeft <= 10 ? "#FECACA" : "#FDE68A"),
-                fontFamily: "Consolas, Menlo, 'Courier New', monospace", fontSize: 20, fontWeight: 800,
-                color: timeLeft <= 10 ? C.red : "#92400E",
-                animation: timeLeft <= 10 ? "spk-timer-pulse 1s ease-in-out infinite" : "none",
-                minWidth: 70, textAlign: "center",
-              }}>
-                {formatTime(timeLeft)}
-              </div>
+              recordingStarted ? (
+                <div style={{
+                  padding: "8px 16px", borderRadius: 999,
+                  background: timeLeft <= 10 ? "#FEE2E2" : SPK.soft,
+                  border: "1px solid " + (timeLeft <= 10 ? "#FECACA" : "#FDE68A"),
+                  fontFamily: "Consolas, Menlo, 'Courier New', monospace", fontSize: 20, fontWeight: 800,
+                  color: timeLeft <= 10 ? C.red : "#92400E",
+                  animation: timeLeft <= 10 ? "spk-timer-pulse 1s ease-in-out infinite" : "none",
+                  minWidth: 70, textAlign: "center",
+                }}>
+                  {formatTime(timeLeft)}
+                </div>
+              ) : (
+                <div style={{
+                  padding: "8px 16px", borderRadius: 999,
+                  background: SPK.soft, border: "1px dashed #FDE68A",
+                  fontSize: 13, fontWeight: 700, color: "#92400E",
+                  minWidth: 70, textAlign: "center",
+                }}>
+                  {autoBlocked ? "待开始" : "准备中…"}
+                </div>
+              )
             )}
           </div>
 
@@ -633,6 +653,9 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
                 onRecordingComplete={handleRecordingComplete}
                 maxDuration={ANSWER_DURATION}
                 autoStart={autoRecordReady}
+                onRecordingStart={() => setRecordingStarted(true)}
+                onStopRef={recorderStopRef}
+                onAutoStartBlocked={() => setAutoBlocked(true)}
               />
 
               {/* Timer bar */}
@@ -645,10 +668,15 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
                   background: timeLeft <= 10
                     ? `linear-gradient(90deg, ${C.red}, #EF4444)`
                     : `linear-gradient(90deg, ${SPK.color}, #F97316)`,
-                  width: `${(timeLeft / ANSWER_DURATION) * 100}%`,
+                  width: `${(recordingStarted ? timeLeft / ANSWER_DURATION : 1) * 100}%`,
                   transition: "width 1s linear, background 300ms ease",
                 }} />
               </div>
+              {autoBlocked && !recordingStarted && (
+                <div style={{ marginTop: 12, fontSize: 13, color: "#92400E", lineHeight: 1.5 }}>
+                  录音未自动开始，请点击上方按钮手动开始（iOS Safari 需手动授权麦克风）。
+                </div>
+              )}
             </div>
           )}
 

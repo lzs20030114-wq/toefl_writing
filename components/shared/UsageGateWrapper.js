@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
 import { getSavedCode, getSavedTier } from "../../lib/AuthContext";
@@ -12,6 +12,12 @@ import { C, FONT } from "./ui";
  * Login prompt shown when an unauthenticated user tries to practice.
  */
 function LoginRequiredModal({ onGoLogin }) {
+  // Portal targets document.body, which doesn't exist during SSR. Use a mount
+  // flag (not a bare typeof-document guard) so the client's first hydration
+  // render also returns null and matches the server, avoiding a hydration mismatch.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
   return createPortal(
     <div
       onClick={onGoLogin}
@@ -60,6 +66,8 @@ function LoginRequiredModal({ onGoLogin }) {
  */
 function PracticeLockedGate({ children, onExit, userCode }) {
   const [showUpgrade, setShowUpgrade] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   return (
     <>
       {/* Lightly blurred, non-interactive preview — let users see the topic list */}
@@ -68,7 +76,7 @@ function PracticeLockedGate({ children, onExit, userCode }) {
       </div>
 
       {/* Compact floating banner at bottom */}
-      {createPortal(
+      {mounted && createPortal(
         <div
           style={{
             position: "fixed", bottom: 0, left: 0, right: 0,

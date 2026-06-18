@@ -98,7 +98,7 @@ function describePermissionError(err) {
  *   autoStart                     — start recording on mount (best-effort; Safari may require a manual tap)
  *   disabled                      — prevent interaction
  */
-export function VoiceRecorder({ onRecordingComplete, onRecordingStart, maxDuration = 0, autoStart = false, disabled = false }) {
+export function VoiceRecorder({ onRecordingComplete, onRecordingStart, onStopRef = null, onAutoStartBlocked, maxDuration = 0, autoStart = false, disabled = false }) {
   const [state, setState] = useState("idle"); // idle | recording | playback
   const [blobUrl, setBlobUrl] = useState(null);
   const [elapsed, setElapsed] = useState(0);
@@ -213,8 +213,12 @@ export function VoiceRecorder({ onRecordingComplete, onRecordingStart, maxDurati
       if (!mountedRef.current) return;
       setPermError(describePermissionError(err));
       setState("idle");
+      // If this was an auto-start attempt that failed (common on iOS Safari,
+      // where getUserMedia needs a real user gesture), tell the parent so it
+      // keeps its timer paused and prompts a manual tap instead of stranding.
+      if (autoStart && onAutoStartBlocked) onAutoStartBlocked();
     }
-  }, [disabled, maxDuration, onRecordingComplete, onRecordingStart]);
+  }, [disabled, maxDuration, onRecordingComplete, onRecordingStart, autoStart, onAutoStartBlocked]);
 
   const stopRecording = useCallback(() => {
     if (timerRef.current) {
@@ -225,6 +229,13 @@ export function VoiceRecorder({ onRecordingComplete, onRecordingStart, maxDurati
       try { mediaRecorderRef.current.stop(); } catch {}
     }
   }, []);
+
+  // Expose stopRecording to the parent via an optional ref so a parent-owned
+  // countdown can stop the active recording when time runs out.
+  useEffect(() => {
+    if (onStopRef) onStopRef.current = stopRecording;
+    return () => { if (onStopRef && onStopRef.current === stopRecording) onStopRef.current = null; };
+  }, [onStopRef, stopRecording]);
 
   // Auto-start (best effort). Safari is stricter about user-gesture timing —
   // if we don't have a real gesture context, the start may fail. We probe
@@ -245,6 +256,7 @@ export function VoiceRecorder({ onRecordingComplete, onRecordingStart, maxDurati
           if (!cancelled && status.state === "denied") {
             setAutoStartBlocked(true);
             setPermError(describePermissionError({ name: "NotAllowedError" }));
+            if (onAutoStartBlocked) onAutoStartBlocked();
             return;
           }
         }

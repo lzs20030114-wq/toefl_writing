@@ -33,4 +33,33 @@ describe("renderResponseSentence", () => {
     const out = renderResponseSentence(q, ["could", "send me", "the slides", "today"]);
     expect(out.correctSentenceFull).toBe("Could you send me the slides after class today?");
   });
+
+  // P1.6: the reference answer must be shown verbatim from q.answer — preserving
+  // proper-noun capitalization and internal commas (previously lowercased/stripped).
+  test("renders correct answer verbatim — proper noun + internal comma", () => {
+    const q = {
+      answer: "Honestly, Juan needed help moving into his apartment.",
+      has_question_mark: false,
+      prefilled: [],
+      prefilled_positions: {},
+    };
+    const out = renderResponseSentence(q, []);
+    expect(out.correctSentenceFull).toBe("Honestly, Juan needed help moving into his apartment.");
+  });
+
+  test("renders correct answer verbatim — proper noun + question mark", () => {
+    const q = {
+      answer: "When does Olivia leave for our conference?",
+      has_question_mark: true,
+      prefilled: [],
+      prefilled_positions: {},
+    };
+    const out = renderResponseSentence(q, []);
+    expect(out.correctSentenceFull).toBe("When does Olivia leave for our conference?");
+  });
+
+  test("missing q.answer returns a non-crashing string", () => {
+    const out = renderResponseSentence({ has_question_mark: false }, []);
+    expect(typeof out.correctSentenceFull).toBe("string");
+  });
 });
