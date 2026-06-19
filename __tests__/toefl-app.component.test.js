@@ -255,6 +255,8 @@ describe("ToeflApp navigation", () => {
     const submitBtn = screen.getByTestId("writing-submit");
     fireEvent.click(submitBtn);
     fireEvent.click(submitBtn);
+    // early submit (time remaining) now shows an in-app confirm modal — confirm it
+    fireEvent.click(screen.getByText("确定提交"));
 
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalledTimes(1);
@@ -325,15 +327,15 @@ describe("ToeflApp navigation", () => {
       },
     });
     fireEvent.click(screen.getByTestId("writing-submit"));
+    fireEvent.click(screen.getByText("确定提交"));
 
     await waitFor(() => {
       expect(screen.getByTestId("score-error-reason")).toHaveTextContent("429");
     });
   });
 
-  test("writing early submit can be canceled by confirm dialog", async () => {
+  test("writing early submit can be canceled by confirm modal", async () => {
     global.fetch = jest.fn();
-    const confirmSpy = jest.spyOn(window, "confirm").mockReturnValue(false);
 
     render(<WritingTask onExit={() => {}} type="email" />);
     fireEvent.click(screen.getByTestId("writing-intro-start"));
@@ -342,9 +344,12 @@ describe("ToeflApp navigation", () => {
     });
     fireEvent.click(screen.getByTestId("writing-submit"));
 
+    // early submit (time remaining) shows an in-app confirm modal; cancel it
     await waitFor(() => {
-      expect(confirmSpy).toHaveBeenCalled();
+      expect(screen.getByText("确定要提前提交吗？")).toBeInTheDocument();
     });
+    fireEvent.click(screen.getByText("继续作答"));
+
     expect(global.fetch).not.toHaveBeenCalled();
     expect(screen.getByTestId("writing-submit")).toBeInTheDocument();
   });
@@ -374,6 +379,7 @@ describe("ToeflApp navigation", () => {
       target: { value: "this response has enough words to pass submit threshold quickly" },
     });
     fireEvent.click(screen.getByTestId("writing-submit"));
+    fireEvent.click(screen.getByText("确定提交"));
 
     await waitFor(() => {
       expect(screen.getByText("再练一遍")).toBeInTheDocument();
