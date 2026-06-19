@@ -1,89 +1,43 @@
 {
-  "session_id": "routine-20260618-190442",
-  "generated_at": "2026-06-18T19:14:15.171Z",
+  "session_id": "routine-20260619-190410",
+  "generated_at": "2026-06-19T19:17:36.850Z",
   "needs_retry": true,
-  "resolved_at": "2026-06-18T19:33:43Z",
-  "resolution_status": "supplemented",
-  "r2_session_id": "routine-r2-20260618-193343",
   "overall_scores": {
-    "diversity": 94,
-    "quality": 97
+    "diversity": 91,
+    "quality": 99
   },
   "bs_difficulty_gate": "PASS",
   "retry_banks": [
     {
       "bank": "bs",
-      "diversity_score": 82,
+      "diversity_score": 74,
       "diversity_threshold": 90,
-      "quality_score": 99,
+      "quality_score": 98,
       "quality_threshold": 95,
       "failures": [
-        "多样性 82 < 90"
+        "多样性 74 < 90"
       ],
       "diversity_breakdown": [
-        "角色名 4/20",
+        "角色名 3/20",
         "场景 20/20",
-        "句型 5/5",
-        "开头 4/4",
-        "prefilled类型 6/4 (top:mid-noun-or-adj 13/20)",
-        "人物当prefilled 0/20 (0%, TPO~30%)",
-        "干扰词 13种 (top:did 25%)",
-        "chunk颗粒 5.5块/题 单词率81% (TPO~6块/77%)",
-        "题面对话化 17/20 (85% 含you, TPO~72%)"
+        "句型 3/5",
+        "开头 2/4",
+        "prefilled类型 5/4 (top:mid-noun-or-adj 9/20)",
+        "人物当prefilled 1/20 (5%, TPO~30%)",
+        "干扰词 9种 (top:was 22%)",
+        "chunk颗粒 5.3块/题 单词率91% (TPO~6块/77%)",
+        "题面对话化 16/20 (80% 含you, TPO~72%)"
       ],
       "quality_breakdown": [
-        "块数 19/20",
-        "干扰词 20/20",
+        "块数 20/20",
+        "干扰词 18/20",
         "答案长度 20/20",
         "重组正确 20/20"
       ],
       "hints": [
-        "角色名重复严重 (4/20 distinct) — use 15+ distinct character names from: Olivia, Harold, Mariana, Hector, Margot, Emma, Julian, Matthew, Alison, Juan, Angelina, Professor Cho, Naomi, Diane",
-        "prefilled 单一化 (mid-noun-or-adj 占 65%) — spread across 5+ TPO types: subject-pronoun, subject-np, adverb-opener, prep-phrase, verb-phrase, mid-noun-or-adj, conjunction-wh"
+        "角色名重复严重 (3/20 distinct) — use 15+ distinct character names from: Olivia, Harold, Mariana, Hector, Margot, Emma, Julian, Matthew, Alison, Juan, Angelina, Professor Cho, Naomi, Diane"
       ],
       "items_to_supplement": 10
-    },
-    {
-      "bank": "reading-ctw",
-      "diversity_score": 100,
-      "diversity_threshold": 85,
-      "quality_score": 83,
-      "quality_threshold": 90,
-      "failures": [
-        "质量 83 < 90"
-      ],
-      "diversity_breakdown": [
-        "话题组合 6/6",
-        "学科 6/6"
-      ],
-      "quality_breakdown": [
-        "词数 5/6"
-      ],
-      "hints": [
-        "质量校验有偏差: 词数 5/6 — recheck schema compliance"
-      ],
-      "items_to_supplement": 3
-    },
-    {
-      "bank": "reading-rdl-long",
-      "diversity_score": 80,
-      "diversity_threshold": 70,
-      "quality_score": 50,
-      "quality_threshold": 85,
-      "failures": [
-        "质量 50 < 85"
-      ],
-      "diversity_breakdown": [
-        "话题 2/2",
-        "notice 1 · email 0"
-      ],
-      "quality_breakdown": [
-        "词数 1/2"
-      ],
-      "hints": [
-        "质量校验有偏差: 词数 1/2 — recheck schema compliance"
-      ],
-      "items_to_supplement": 1
     }
   ]
 }

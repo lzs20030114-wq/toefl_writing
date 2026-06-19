@@ -1,0 +1,100 @@
+{
+  "items": [
+    {
+      "genre": "email",
+      "text": "Subject: Your Writing Center Appointment Is Confirmed\n\nDear Marcus,\n\nThis email confirms your tutoring appointment for Thursday, October 9, from 3:00 PM to 4:00 PM in Room 215 of Bellamy Hall. Your tutor, Ms. Patel, will help you revise the argument paper for your History 200 course.\n\nPlease bring a printed copy of your draft and your assignment sheet. There's no charge for the session itself, but printing in the center costs $0.10 per page, so we'd suggest printing your draft beforehand. If you can't make it, cancel through the student portal at least 24 hours ahead; otherwise a $5 missed-session fee will be added to your account.\n\nArrive a few minutes early to sign in at the front desk.\n\nThanks,\nThe Bellamy Writing Center",
+      "format_metadata": {
+        "from": "The Bellamy Writing Center",
+        "to": "Marcus",
+        "subject": "Your Writing Center Appointment Is Confirmed"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what should Marcus bring to his appointment?",
+          "options": {
+            "A": "A printed copy of his draft and assignment sheet",
+            "B": "A receipt showing the session fee was paid",
+            "C": "A confirmation code from the student portal",
+            "D": "A reading list provided by his History tutor"
+          },
+          "correct_answer": "A",
+          "explanation": "The email instructs Marcus to bring a printed copy of his draft and his assignment sheet. The other options reuse terms like the portal, the fee, and the tutor but attach them to items the email never asks him to bring."
+        },
+        {
+          "question_type": "detail",
+          "stem": "According to the email, how can Marcus avoid the $5 missed-session fee?",
+          "options": {
+            "A": "By printing his draft before the session begins",
+            "B": "By canceling through the portal at least 24 hours ahead",
+            "C": "By arriving a few minutes early to sign in",
+            "D": "By emailing Ms. Patel directly about the conflict"
+          },
+          "correct_answer": "B",
+          "explanation": "The email states that canceling through the student portal at least 24 hours ahead avoids the $5 missed-session fee. Printing early and arriving early are separate instructions, and contacting the tutor directly is never mentioned."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about printing a draft at the Writing Center?",
+          "options": {
+            "A": "It is included free with every tutoring session",
+            "B": "It is required before any appointment can begin",
+            "C": "It is handled entirely by the front desk staff",
+            "D": "It can be avoided by preparing pages in advance"
+          },
+          "correct_answer": "D",
+          "explanation": "Because printing costs $0.10 per page and the email suggests printing the draft beforehand, students can avoid that cost by preparing pages in advance. The session is free, but printing is not, and the email never says staff print for students or that printing is required."
+        }
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "genre": "notice",
+      "text": "Notice: Change to Student Package Delivery Procedure\n\nEffective Monday, November 3, all student packages will be processed at the new Mail Center in Whitford Hall, Room 8, rather than at the residence hall front desks. The Mail Center is open Monday through Friday, 10:00 AM to 6:00 PM.\n\nPlease review the updated procedure:\n\n- A pickup notice will be sent to your campus email when a package arrives.\n- Packages must be collected within five days, or a $3.00 daily storage fee applies.\n- A valid student ID is required at the counter; deliveries cannot be released without one.\n- Perishable items are not accepted and will be returned to the sender.\n\nWeekend deliveries are now held until the following Monday. Questions should be directed to the Mail Center at mail@campus.edu or 555-0148.",
+      "format_metadata": {
+        "title": "Change to Student Package Delivery Procedure",
+        "from": "Mail Center, Whitford Hall",
+        "contact": "mail@campus.edu, 555-0148"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, where will student packages now be processed?",
+          "options": {
+            "A": "At the residence hall front desks as before",
+            "B": "At a temporary counter near the campus portal",
+            "C": "At the new Mail Center in Whitford Hall",
+            "D": "At the sender's nearest local post office"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice states that packages will be processed at the new Mail Center in Whitford Hall, Room 8, rather than at the residence hall front desks. The front-desk option describes the old procedure, and the other locations are not mentioned."
+        },
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what is required to collect a package at the counter?",
+          "options": {
+            "A": "A printed copy of the pickup notice email",
+            "B": "A payment of the $3.00 daily storage fee",
+            "C": "A valid student identification card",
+            "D": "A signature from the residence hall staff"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice states that a valid student ID is required at the counter and that deliveries cannot be released without one. The storage fee applies only after five days, and the email notice and a staff signature are not collection requirements."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about a package that arrives on a Saturday?",
+          "options": {
+            "A": "It is delivered directly to the student's room",
+            "B": "It will not be available for pickup until Monday",
+            "C": "It is returned to the sender after the weekend",
+            "D": "It is charged the storage fee starting that day"
+          },
+          "correct_answer": "B",
+          "explanation": "Since the Mail Center is closed on weekends and weekend deliveries are held until the following Monday, a Saturday package cannot be picked up until Monday. Returns apply only to perishables, and storage fees begin after five days, not on arrival."
+        }
+      ],
+      "difficulty": "easy"
+    }
+  ]
+}

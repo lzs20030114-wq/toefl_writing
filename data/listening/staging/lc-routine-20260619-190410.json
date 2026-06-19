@@ -1,0 +1,269 @@
+{
+  "items": [
+    {
+      "context": "recommendations_opinions",
+      "situation": "two friends debating whether a new cafe is worth the price",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Have you tried that new cafe on Elm Street? I went yesterday and the latte cost six dollars." },
+        { "speaker": "Man", "text": "Six dollars? Wow, that's pricey. Was it actually any good?" },
+        { "speaker": "Woman", "text": "Honestly, it tasted the same as the cheaper place near the library. I think you're paying for the fancy decor." },
+        { "speaker": "Man", "text": "Right. I'd rather save my money and sit somewhere plain. The library cafe has free refills too." },
+        { "speaker": "Woman", "text": "Exactly. I won't be going back to Elm Street. Want to grab a coffee at the library spot later instead?" },
+        { "speaker": "Man", "text": "Sounds great. Let's meet there around three." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "How much did the woman pay for her latte?",
+          "options": {
+            "A": "Six dollars",
+            "B": "Three dollars",
+            "C": "It was free with a refill",
+            "D": "She got a student discount"
+          },
+          "answer": "A",
+          "explanation": "女士明确说拿铁花了六美元（the latte cost six dollars），所以A正确。B三美元在对话中是约定见面的时间“around three”，被错误挪用为价格，属于wrong_detail。C免费续杯说的是图书馆咖啡店的福利，并非她付的价钱，属于misattributed。D学生折扣对话中从未提及，属于related_but_not_stated。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "misattributed",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the two speakers most likely do later?",
+          "options": {
+            "A": "Return to the Elm Street cafe together",
+            "B": "Complain to the cafe about the prices",
+            "C": "Get coffee at the library cafe",
+            "D": "Make coffee at home to save money"
+          },
+          "answer": "C",
+          "explanation": "女士提议晚点去图书馆咖啡店，男士回答“Sounds great. Let's meet there around three.”，所以C正确。A返回Elm Street咖啡店是女士明确拒绝的（I won't be going back），属于rejected_option。B去咖啡店投诉价格对话中没有任何依据，属于over_inference。D在家自己煮咖啡也从未被提及，属于unrelated_next_step。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "two roommates working out a fair chore schedule",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Hey, can we figure out a cleaning schedule? The kitchen is getting kind of messy." },
+        { "speaker": "Man", "text": "Yeah, good idea. How about we split it up by week?" },
+        { "speaker": "Woman", "text": "Okay. Why don't you take the kitchen this week, and I'll handle the bathroom?" },
+        { "speaker": "Man", "text": "That works. Then we swap next week so it's fair." },
+        { "speaker": "Woman", "text": "Perfect. I'll write it on the whiteboard by the fridge so we don't forget." },
+        { "speaker": "Man", "text": "Great. I'll start on the dishes tonight then." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Which area will the man clean this week?",
+          "options": {
+            "A": "The bathroom",
+            "B": "The kitchen",
+            "C": "The whole apartment",
+            "D": "The bedroom"
+          },
+          "answer": "B",
+          "explanation": "女士说“you take the kitchen this week”，男士同意，所以本周男士打扫厨房，B正确。A浴室是女士本周负责的区域，属于misattributed。C整个公寓与他们分工轮流的安排相反，属于wrong_detail。D卧室对话中从未提到，属于related_but_not_stated。",
+          "distractor_types": {
+            "A": "misattributed",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Start cleaning the kitchen herself",
+            "B": "Ask another roommate to help",
+            "C": "Cancel the schedule idea",
+            "D": "Write the schedule on the whiteboard"
+          },
+          "answer": "D",
+          "explanation": "女士说“I'll write it on the whiteboard by the fridge”，所以D正确。A自己打扫厨房与分工安排矛盾，厨房本周归男士，属于reversed_situation。B找另一个室友帮忙对话中没有出现，属于unrelated_next_step。C取消计划与她积极安排时间表的态度相反，属于over_inference。",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "B": "unrelated_next_step",
+            "C": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "errands_service",
+      "situation": "two friends sharing cooking tips while grocery shopping",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "I'm grabbing these tomatoes for pasta sauce, but mine always turns out kind of watery." },
+        { "speaker": "Man", "text": "Oh, I had that problem too. The trick is to let the sauce simmer way longer than you think." },
+        { "speaker": "Woman", "text": "Really? How long are we talking?" },
+        { "speaker": "Man", "text": "At least forty minutes on low heat. And add a pinch of sugar to balance the acidity." },
+        { "speaker": "Woman", "text": "Huh, I never knew about the sugar. I'll definitely try that tonight." },
+        { "speaker": "Man", "text": "You'll see a huge difference. Grab some fresh basil too while we're here." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man say causes the woman's sauce to be watery?",
+          "options": {
+            "A": "She uses the wrong kind of tomatoes",
+            "B": "She adds too much water",
+            "C": "She doesn't simmer it long enough",
+            "D": "The heat is set too high"
+          },
+          "answer": "C",
+          "explanation": "男士说窍门是让酱汁炖得比想象的久得多（simmer way longer），至少四十分钟，说明问题在于炖煮时间不够，C正确。A番茄种类不对对话中未提及，属于related_but_not_stated。B加太多水从未被说，属于related_but_not_stated。D火太大正好相反，他建议用小火（low heat），属于wrong_detail。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do tonight?",
+          "options": {
+            "A": "Add a pinch of sugar to her sauce",
+            "B": "Order pasta from a restaurant",
+            "C": "Use canned sauce instead",
+            "D": "Skip the tomatoes entirely"
+          },
+          "answer": "A",
+          "explanation": "女士说从不知道加糖这一招，并说“I'll definitely try that tonight”，所以今晚她最可能加一撮糖，A正确。B去餐厅点意面与她打算自己做饭相反，属于unrelated_next_step。C改用罐装酱汁对话中没有依据，属于unrelated_next_step。D完全不用番茄与她正在买番茄做酱矛盾，属于reversed_situation/over_inference。",
+          "distractor_types": {
+            "B": "unrelated_next_step",
+            "C": "unrelated_next_step",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two friends recommending a podcast or TV series to each other",
+      "difficulty": "hard",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "You have to check out this history podcast I found. Each episode breaks down one ancient mystery." },
+        { "speaker": "Man", "text": "Hmm, podcasts aren't really my thing. I usually fall asleep listening to people just talk." },
+        { "speaker": "Woman", "text": "I get that, but this one has sound effects and interviews, so it feels more like a story." },
+        { "speaker": "Man", "text": "Okay, that does sound different. Maybe I'll give the first episode a shot on my commute." },
+        { "speaker": "Woman", "text": "Start with the one about the lost city. It hooked me completely." },
+        { "speaker": "Man", "text": "Alright, I'll queue it up for tomorrow morning." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "How to record their own podcast",
+            "B": "A history class they are both taking",
+            "C": "The man's trouble sleeping at night",
+            "D": "A podcast the woman is recommending"
+          },
+          "answer": "D",
+          "explanation": "整段对话围绕女士向男士推荐一档历史播客展开，所以D正确。A录制自己的播客从未被讨论，属于wrong_topic。B两人一起上的历史课对话中没有，属于wrong_topic。C男士的睡眠问题只是他随口提到“听人讲话会睡着”的一个细节，并非主旨，属于too_narrow。",
+          "distractor_types": {
+            "A": "wrong_topic",
+            "B": "wrong_topic",
+            "C": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do?",
+          "options": {
+            "A": "Recommend a different podcast to the woman",
+            "B": "Listen to the lost-city episode first",
+            "C": "Stop listening to podcasts for good",
+            "D": "Take a nap during his commute"
+          },
+          "answer": "B",
+          "explanation": "女士让他从“the lost city”那一集开始听，男士回答“I'll queue it up for tomorrow morning”，所以他最可能先听这一集，B正确。A向女士推荐别的播客对话中没有依据，属于unrelated_next_step。C从此不再听播客与他答应试听相反，属于reversed_situation/over_inference。D通勤时打盹是他原来的担忧，但他已决定去听这集，属于rejected_option。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "C": "over_inference",
+            "D": "rejected_option"
+          }
+        }
+      ]
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "two students talking about which elective class to take next term",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Have you picked your elective for next term yet? I can't decide between photography and astronomy." },
+        { "speaker": "Man", "text": "I'm leaning toward astronomy. My friend took it and said the night observation labs were amazing." },
+        { "speaker": "Woman", "text": "Oh, that does sound cool. But doesn't astronomy meet at eight in the morning?" },
+        { "speaker": "Man", "text": "Yeah, it's an early class. I don't mind, though. I'm always up early anyway." },
+        { "speaker": "Woman", "text": "I am definitely not a morning person, so I think I'll go with photography instead." },
+        { "speaker": "Man", "text": "That makes sense. Photography's a better fit for your schedule." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why did the man's friend recommend astronomy?",
+          "options": {
+            "A": "The night observation labs were amazing",
+            "B": "The class meets in the morning",
+            "C": "It is easier than photography",
+            "D": "The professor gives few exams"
+          },
+          "answer": "A",
+          "explanation": "男士说朋友上过这门课，说夜间观测实验室很棒（the night observation labs were amazing），所以A正确。B课在早上是关于上课时间的细节，并不是朋友推荐的理由，属于misattributed。C比摄影更容易对话中从未提及，属于related_but_not_stated。D教授考试少也没有出现，属于related_but_not_stated。",
+          "distractor_types": {
+            "B": "misattributed",
+            "C": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "Why will the woman most likely choose photography?",
+          "options": {
+            "A": "She thinks it is more useful for her major",
+            "B": "Her friends are all taking photography",
+            "C": "She prefers not to take an early class",
+            "D": "The astronomy class is already full"
+          },
+          "answer": "C",
+          "explanation": "女士说自己绝对不是早起的人（not a morning person），而天文学早上八点上课，所以她选摄影是为了避开早课，C正确。A对专业更有用对话中没有依据，属于unrelated_next_step。B朋友都选摄影从未被提及，属于related_but_not_stated。D天文学已满也没有出现，属于over_inference。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "B": "related_but_not_stated",
+            "D": "over_inference"
+          }
+        }
+      ]
+    }
+  ]
+}

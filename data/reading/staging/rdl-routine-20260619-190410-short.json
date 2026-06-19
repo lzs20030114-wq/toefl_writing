@@ -1,0 +1,135 @@
+{
+  "items": [
+    {
+      "genre": "email",
+      "variant": "short",
+      "text": "Hi Marcus, Our records show your meal plan ended with an unused balance of $42.50. A refund will be issued to your student account by Friday, May 22. If you re-enroll before then, the credit instead transfers to next term. Best, Dining Services",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, where will the unused balance be sent?",
+          "options": {
+            "A": "To a personal bank account",
+            "B": "To the campus bookstore credit",
+            "C": "To the student account",
+            "D": "To a prepaid dining card"
+          },
+          "correct_answer": "C",
+          "explanation": "The email states a refund will be issued to Marcus's student account by Friday, May 22."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about students who re-enroll before May 22?",
+          "options": {
+            "A": "They forfeit the leftover money entirely",
+            "B": "They must contact Dining Services directly",
+            "C": "They keep the money for future dining",
+            "D": "They receive an additional bonus credit"
+          },
+          "correct_answer": "C",
+          "explanation": "Because re-enrolling transfers the credit to next term, those students keep the money for future dining rather than receiving a refund."
+        }
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "genre": "notice",
+      "variant": "short",
+      "text": "Campus Wi-Fi maintenance is scheduled for Tuesday, June 9, from 1:00 AM to 4:00 AM. During this three-hour window, wireless access in all residence halls will be unavailable. Wired connections in the library will remain active. Service is expected to resume automatically afterward.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, how long will the maintenance last?",
+          "options": {
+            "A": "Approximately two hours",
+            "B": "Approximately three hours",
+            "C": "Approximately four hours",
+            "D": "Approximately five hours"
+          },
+          "correct_answer": "B",
+          "explanation": "The window runs from 1:00 AM to 4:00 AM, a span of three hours, which the notice calls a three-hour window."
+        },
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what will still function during the window?",
+          "options": {
+            "A": "Wired library connections",
+            "B": "Residence hall wireless access",
+            "C": "Dormitory printing stations",
+            "D": "Outdoor campus hotspots"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice says wired connections in the library will remain active during the maintenance."
+        }
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "genre": "flyer",
+      "variant": "short",
+      "text": "FREE FLU SHOTS — No Appointment Needed! Protect yourself this season. Thursday, October 16, 10:00 AM to 3:00 PM at the Student Health Center, Room 110. Bring your student ID. Sleeves up, in and out in minutes. Walk-ins welcome all afternoon. Stay healthy, Wildcats!",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the flyer, what should attendees bring?",
+          "options": {
+            "A": "A valid student ID",
+            "B": "A signed consent form",
+            "C": "A small cash payment",
+            "D": "A scheduled appointment slip"
+          },
+          "correct_answer": "A",
+          "explanation": "The flyer instructs attendees to bring their student ID."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about scheduling for the clinic?",
+          "options": {
+            "A": "Slots fill quickly each year",
+            "B": "Faculty receive priority access",
+            "C": "Online registration is required",
+            "D": "Advance booking is unnecessary"
+          },
+          "correct_answer": "D",
+          "explanation": "Because the flyer says no appointment is needed and walk-ins are welcome, advance booking is unnecessary."
+        }
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "genre": "notice",
+      "variant": "short",
+      "text": "Effective Monday, April 6, the recycling bins outside Foster Hall will be relocated to the courtyard near Gate 3. A $5 fee will be charged for any bin reserved for private events. Questions should be directed to the Facilities Office before the moving date.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, where will the bins be moved?",
+          "options": {
+            "A": "Behind the Facilities Office",
+            "B": "Inside the Foster Hall lobby",
+            "C": "Beside the main parking lot",
+            "D": "Into the courtyard near Gate 3"
+          },
+          "correct_answer": "D",
+          "explanation": "The notice states the bins will be relocated to the courtyard near Gate 3."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about reserving a bin for a private event?",
+          "options": {
+            "A": "It is prohibited entirely on campus",
+            "B": "It involves an extra charge",
+            "C": "It requires Facilities Office staffing",
+            "D": "It delays the scheduled relocation"
+          },
+          "correct_answer": "B",
+          "explanation": "Because a $5 fee applies to any bin reserved for private events, reserving one involves an extra charge."
+        }
+      ]
+    }
+  ]
+}

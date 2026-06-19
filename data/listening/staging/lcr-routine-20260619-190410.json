@@ -1,0 +1,165 @@
+{
+  "items": [
+    {
+      "context": "campus_academic",
+      "situation": "student asking about course enrollment or prerequisites",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Do I have to take statistics before this course?",
+      "options": {
+        "A": "Have you checked with your advisor yet?",
+        "B": "Statistics is held in the math building.",
+        "C": "I really enjoyed that course last term.",
+        "D": "The textbook costs about forty dollars."
+      },
+      "answer": "A",
+      "explanation": "正确答案 A 用一个反问推进对话，提示学生去咨询顾问以确认先修要求，这是自然且有帮助的回应。B 是语义联想陷阱，抓住关键词\"statistics\"却只描述上课地点，没回答是否为先修课。C 是离题但合语法的句子，表达个人感受，与先修问题无关。D 也是语义联想陷阱，抓住\"course\"扯到教材价格，答非所问。"
+      ,
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "semantic_association_trap"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking for directions to a nearby location",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "How do I get to the nearest pharmacy?",
+      "options": {
+        "A": "I picked up my prescription this morning.",
+        "B": "Just turn left at the second light.",
+        "C": "Are you feeling sick again today?",
+        "D": "The pharmacy hired three new workers."
+      },
+      "answer": "B",
+      "explanation": "正确答案 B 直接给出明确的方向指引，准确回答了\"怎么走\"的问题。A 是语义联想陷阱，抓住\"pharmacy\"扯到取药，没给方向。C 是答错问题类型，问的是\"怎么走\"却回问对方身体状况。D 是语义联想陷阱，抓住\"pharmacy\"描述其招聘情况，与路线无关。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "semantic_association_trap"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "roommate discussing weekend plans",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Where are we going for your birthday this weekend?",
+      "options": {
+        "A": "My birthday was a lot of fun last year.",
+        "B": "Yes, the weekend went by really fast.",
+        "C": "Honestly, let's just stay in and order food.",
+        "D": "The restaurant downtown was completely full."
+      },
+      "answer": "C",
+      "explanation": "正确答案 C 以话语标记\"Honestly\"开头，间接但明确地提出在家点外卖的安排，自然回应了\"去哪儿\"的问题。A 是语义联想陷阱，抓住\"birthday\"回忆去年，没回答地点。B 是答错问题类型，把\"where\"当成对周末的评论。D 是离题但合语法，描述某餐厅满座，但并未回答两人要去哪里。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "wrong_question_type",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a store clerk about a return or exchange",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Can I return this shirt without the receipt?",
+      "options": {
+        "A": "The shirt comes in three other colors.",
+        "B": "Yes, I bought a shirt here last week.",
+        "C": "Did you enjoy wearing it this season?",
+        "D": "Actually, store credit is all we can offer."
+      },
+      "answer": "D",
+      "explanation": "正确答案 D 以话语标记\"Actually\"开头，间接告知没有小票只能退成购物额度，自然处理了退货请求。A 是语义联想陷阱，抓住\"shirt\"描述颜色款式，未回应能否退货。B 也是语义联想陷阱，抓住\"shirt\"讲自己买东西的经历，毫无帮助。C 是答错问题类型，问的是能否退货却反问穿着体验。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "semantic_association_trap",
+        "C": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student checking lost-and-found at front desk",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "What color was the wallet someone turned in?",
+      "options": {
+        "A": "Let me unlock the cabinet so you can look.",
+        "B": "Brown is a very popular wallet color.",
+        "C": "The desk closes at five every evening.",
+        "D": "Have you reported it to campus security?"
+      },
+      "answer": "A",
+      "explanation": "正确答案 A 不直接回答颜色，而是转向解决学生的真正需求——打开柜子让其亲自辨认，这是 context_shift 范式的典型应对。B 是语义联想陷阱，抓住\"wallet/color\"泛谈颜色流行度，没帮上忙。C 是离题但合语法，讲服务台关门时间，与认领无关。D 是答错问题类型，把找钱包的请求转成是否报案的反问，偏离了当下需求。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "classmate asking to borrow lecture notes",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "I was sick and missed yesterday's whole lecture.",
+      "options": {
+        "A": "The lecture hall was freezing cold yesterday.",
+        "B": "I'll email you my notes this afternoon.",
+        "C": "Being sick is really no fun at all.",
+        "D": "Did the professor cancel the lecture too?"
+      },
+      "answer": "B",
+      "explanation": "正确答案 B 不停留在对方的陈述上，而是主动解决其潜在需求——发笔记过去，符合 context_shift 范式。A 是语义联想陷阱，抓住\"lecture\"描述教室太冷，没提供帮助。C 是离题但合语法的同情话，但本质上是该避免的\"自然回应\"以外的空泛感慨，并未推进解决问题。D 是答错问题类型，把缺课的陈述转成是否停课的反问，偏离对方真正的需要。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student checking bus or shuttle schedule",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Why does the shuttle skip the north dorms?",
+      "options": {
+        "A": "The shuttle was painted bright blue last month.",
+        "B": "Yes, the north dorms are pretty far away.",
+        "C": "Did you check the updated route map online?",
+        "D": "Every shuttle leaves from the main gate."
+      },
+      "answer": "C",
+      "explanation": "正确答案 C 用反问推进对话，提示对方查看更新后的线路图以解开疑问，是自然有帮助的回应。A 是语义联想陷阱，抓住\"shuttle\"描述其外观颜色，与原因无关。B 是答错问题类型，问\"为什么\"却用 yes 加距离评论作答。D 是离题但合语法，讲所有班车的发车点，并未解释为何跳过北宿舍。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "wrong_question_type",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about gym or sports facility hours",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I'm hoping to swim before my morning class.",
+      "options": {
+        "A": "Swimming is great exercise for your back.",
+        "B": "The pool was just repainted last week.",
+        "C": "Did you bring your goggles with you?",
+        "D": "Well, the pool doesn't open until nine."
+      },
+      "answer": "D",
+      "explanation": "正确答案 D 以话语标记\"Well\"开头，间接告知泳池九点才开门，这恰好回应了对方想在早课前游泳的打算。A 是语义联想陷阱，抓住\"swim\"泛谈游泳的好处，没回应时间问题。B 也是语义联想陷阱，抓住\"pool\"讲粉刷情况，无关紧要。C 是答错问题类型，把对方的打算转成是否带泳镜的反问，偏离开放时间这一核心。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "semantic_association_trap",
+        "C": "wrong_question_type"
+      }
+    }
+  ]
+}
