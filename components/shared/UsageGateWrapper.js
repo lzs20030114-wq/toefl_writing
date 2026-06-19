@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
-import { getSavedCode, getSavedTier } from "../../lib/AuthContext";
+import { getSavedCode, getSavedTier, saveAuth } from "../../lib/AuthContext";
 import { useUsageGate } from "../../lib/useUsageGate";
 import UsageLimitModal from "./UsageLimitModal";
 import UpgradeModal from "./UpgradeModal";
@@ -67,6 +67,7 @@ function LoginRequiredModal({ onGoLogin }) {
 function PracticeLockedGate({ children, onExit, userCode }) {
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const router = useRouter();
   useEffect(() => setMounted(true), []);
   return (
     <>
@@ -133,7 +134,7 @@ function PracticeLockedGate({ children, onExit, userCode }) {
           userCode={userCode}
           currentTier="free"
           onClose={() => setShowUpgrade(false)}
-          onUpgraded={() => window.location.reload()}
+          onUpgraded={() => { saveAuth(userCode, { tier: "pro" }); setShowUpgrade(false); router.refresh(); }}
         />
       )}
     </>
@@ -175,7 +176,21 @@ export default function UsageGateWrapper({ children, onExit, practiceMode }) {
     );
   }
 
-  if (loading) return null;
+  // Pro/legacy have unlimited usage, so don't block them on the usage fetch —
+  // render the task immediately. Free users see a spinner instead of a blank
+  // white screen (which reads as "the tap didn't register / app froze").
+  const isUnlimited = tier === "pro" || tier === "legacy";
+  if (loading && !isUnlimited) {
+    return (
+      <div style={{ minHeight: "60vh", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: FONT, color: C.t2 }}>
+        <style>{`@keyframes tp-gate-spin { to { transform: rotate(360deg); } }`}</style>
+        <div style={{ textAlign: "center" }}>
+          <div style={{ width: 32, height: 32, margin: "0 auto 12px", border: `3px solid ${C.bdr}`, borderTopColor: C.blue, borderRadius: "50%", animation: "tp-gate-spin 0.8s linear infinite" }} />
+          <div style={{ fontSize: 14 }}>加载中…</div>
+        </div>
+      </div>
+    );
+  }
 
   // Logged in but no usage remaining
   if (!canPractice) {

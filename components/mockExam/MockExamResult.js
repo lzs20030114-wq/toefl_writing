@@ -78,6 +78,21 @@ export function MockExamResult({
           写作部分结果
         </div>
 
+        {scoringPhase === "pending" ? (
+          /* While deferred scoring runs, show a loading card instead of a
+             finished-looking "--" band circle (which reads as a crashed report). */
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", margin: "8px auto 4px", padding: "8px 0" }}>
+            <style>{`@keyframes tp-result-spin { to { transform: rotate(360deg); } }`}</style>
+            <div style={{
+              width: 40, height: 40, marginBottom: 12,
+              border: `4px solid ${C.bdr}`, borderTopColor: C.blue,
+              borderRadius: "50%", animation: "tp-result-spin 0.8s linear infinite",
+            }} />
+            <div style={{ fontSize: 15, fontWeight: 700, color: C.t1, fontFamily: FONT, marginBottom: 4 }}>正在生成成绩…</div>
+            <div style={{ fontSize: 13, color: C.t2 }}>AI 正在评分任务 2 和任务 3，通常需 30–90 秒，请保持页面打开。</div>
+          </div>
+        ) : (
+          <>
         {/* Band circle */}
         <div style={{
           display: "inline-flex",
@@ -112,11 +127,7 @@ export function MockExamResult({
         }}>
           欧框：{cefr} {levelLabel && `\u00B7 ${levelLabel}`}
         </div>
-
-        {scoringPhase === "pending" && (
-          <div style={{ marginTop: 14, fontSize: 13, color: C.blue }}>
-            AI 正在评分任务 2 和任务 3，请稍候。
-          </div>
+          </>
         )}
         {scoringPhase === "error" && (
           <div style={{ marginTop: 14, fontSize: 13, color: C.red }}>

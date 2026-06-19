@@ -137,7 +137,12 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
   const [sectionTimer, setSectionTimer] = useState(null);
   const [scoringPhase, setScoringPhase] = useState(() => {
     const cp = loadMockCheckpoint();
-    return cp?.scoringPhase || "idle";
+    // A persisted "pending" means scoring was interrupted (reload / crash / lost
+    // connection mid-scoring). Restore as "idle" so the idempotent finalize effect
+    // re-fires and re-scores the unscored tasks, instead of stranding a completed
+    // exam on "AI 正在评分…请稍候" forever.
+    const phase = cp?.scoringPhase || "idle";
+    return phase === "pending" ? "idle" : phase;
   });
   const [scoringError, setScoringError] = useState("");
   const finalizedSessionIdsRef = useRef(new Set());

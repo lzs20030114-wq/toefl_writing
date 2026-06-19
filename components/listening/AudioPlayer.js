@@ -29,6 +29,7 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
   const [replays, setReplays] = useState(0);
   const [hasPlayed, setHasPlayed] = useState(false);
   const [hover, setHover] = useState(null); // "play" | "replay" | null
+  const [buffering, setBuffering] = useState(false); // mp3 fetched but not yet audible
 
   const audioRef = useRef(null);
   const ttsTimerRef = useRef(null);
@@ -88,15 +89,28 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
     };
     const onEnd = () => {
       setPlaying(false);
+      setBuffering(false);
       setProgress(1);
       if (onEnded) onEnded();
     };
+    // Distinguish "fetching/buffering" from "audible": show a spinner while the
+    // mp3 hasn't started/has stalled so the animated waveform never implies sound.
+    const onWaiting = () => setBuffering(true);
+    const onResume = () => setBuffering(false);
 
     audio.addEventListener("timeupdate", onTimeUpdate);
     audio.addEventListener("ended", onEnd);
+    audio.addEventListener("waiting", onWaiting);
+    audio.addEventListener("stalled", onWaiting);
+    audio.addEventListener("playing", onResume);
+    audio.addEventListener("canplay", onResume);
     return () => {
       audio.removeEventListener("timeupdate", onTimeUpdate);
       audio.removeEventListener("ended", onEnd);
+      audio.removeEventListener("waiting", onWaiting);
+      audio.removeEventListener("stalled", onWaiting);
+      audio.removeEventListener("playing", onResume);
+      audio.removeEventListener("canplay", onResume);
     };
   }, [src, onEnded]);
 
@@ -119,12 +133,14 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
     if (src && audioRef.current) {
       audioRef.current.currentTime = 0;
       setPlaying(true);
+      setBuffering(true);
       const playPromise = audioRef.current.play();
       if (playPromise && typeof playPromise.then === "function") {
         playPromise
           .then(() => setHasPlayed(true))
           .catch(() => {
             setPlaying(false);
+            setBuffering(false);
             setHasPlayed(false);
           });
       } else {
@@ -238,11 +254,11 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
             style={{
               width: 3,
               borderRadius: 2,
-              background: playing ? ACCENT.color : C.bdr,
-              height: playing ? undefined : 4,
-              animation: playing ? `waveBar 0.8s ease-in-out ${i * 0.05}s infinite alternate` : "none",
+              background: (playing && !buffering) ? ACCENT.color : C.bdr,
+              height: (playing && !buffering) ? undefined : 4,
+              animation: (playing && !buffering) ? `waveBar 0.8s ease-in-out ${i * 0.05}s infinite alternate` : "none",
               transition: "background 0.2s ease",
-              ...(playing ? { minHeight: 4, maxHeight: 28 } : {}),
+              ...((playing && !buffering) ? { minHeight: 4, maxHeight: 28 } : {}),
             }}
           />
         ))}
@@ -279,7 +295,7 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
               <path d="M8 5.14v13.72a1 1 0 001.5.86l11-6.86a1 1 0 000-1.72l-11-6.86A1 1 0 008 5.14z" />
             )}
           </svg>
-          {playing ? "Playing…" : "Replay"}
+          {buffering ? "缓冲中…" : playing ? "Playing…" : "Replay"}
         </button>
       </span>
     );
@@ -341,6 +357,9 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
 
       {/* Waveform */}
       <WaveformBars />
+      {buffering && (
+        <div style={{ marginTop: 6, fontSize: 12, color: C.t2, fontFamily: FONT }}>缓冲中…</div>
+      )}
 
       {/* Progress bar */}
       <div style={{ margin: "12px auto 0", maxWidth: 260, height: 4, background: C.bdr, borderRadius: 2, overflow: "hidden" }}>
