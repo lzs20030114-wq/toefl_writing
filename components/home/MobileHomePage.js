@@ -117,7 +117,7 @@ export function MobileHomePage({
       </div>
 
       {/* ── Section tabs ── */}
-      <div style={{ display: "flex", gap: 0, marginBottom: 14, overflowX: "auto", WebkitOverflowScrolling: "touch", borderBottom: `1px solid ${isChallenge ? CH.cardBorder : T.bdr}` }}>
+      <div style={{ display: "flex", gap: 0, marginBottom: 14, width: "100%", borderBottom: `1px solid ${isChallenge ? CH.cardBorder : T.bdr}` }}>
         {SECTIONS.map((sec) => {
           const isActive = sec.id === activeSection;
           const isSoon = sec.status === SECTION_STATUS.COMING_SOON;
@@ -127,8 +127,10 @@ export function MobileHomePage({
               key={sec.id}
               onClick={() => setActiveSection(sec.id)}
               style={{
-                flex: "0 0 auto", border: "none", background: "transparent",
-                padding: "10px 16px", fontSize: 13,
+                flex: "1 1 0", minWidth: 0,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                border: "none", background: "transparent",
+                padding: "10px 4px", fontSize: 12,
                 fontWeight: isActive ? 700 : 500,
                 color: isActive ? (isChallenge ? CH.t1 : accent.color) : (isSoon ? (isChallenge ? "rgba(255,255,255,0.25)" : "#b0b8c0") : t2),
                 cursor: "pointer", fontFamily: HOME_FONT,
@@ -137,7 +139,8 @@ export function MobileHomePage({
                 whiteSpace: "nowrap",
               }}
             >
-              {sec.icon} {sec.label}
+              {/* emoji dropped on mobile to keep the 4 tabs from clipping (e.g. "Listening" at 320px); desktop NavSidebar keeps it */}
+              {sec.label}
             </button>
           );
         })}

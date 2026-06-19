@@ -978,6 +978,7 @@ function FullMockReport({ entry, onClose }) {
 export function ProgressView({ onBack }) {
   const isMobile = useIsMobile();
   const [hist, setHist] = useState(null);
+  const [synced, setSynced] = useState(false);
   const [activeMockSrcIdx, setActiveMockSrcIdx] = useState(null);
   const [activePracticeSrcIdx, setActivePracticeSrcIdx] = useState(null);
   const [filter, setFilter] = useState("all");
@@ -991,11 +992,19 @@ export function ProgressView({ onBack }) {
     setCurrentUser(getSavedCode());
     const refresh = () => setHist(loadHist());
     refresh();
-    window.addEventListener(SESSION_STORE_EVENTS.HISTORY_UPDATED_EVENT, refresh);
+    // Avoid flashing the '还没有练习记录' empty state before the cloud sync lands for
+    // logged-in users: hold the loading state until the first HISTORY_UPDATED event,
+    // with a 1.5s safety net (and skip the wait entirely for logged-out users).
+    if (!getSavedCode()) setSynced(true);
+    const markSynced = () => setSynced(true);
+    const onUpdate = () => { refresh(); markSynced(); };
+    window.addEventListener(SESSION_STORE_EVENTS.HISTORY_UPDATED_EVENT, onUpdate);
     window.addEventListener("storage", refresh);
+    const safety = setTimeout(markSynced, 1500);
     return () => {
-      window.removeEventListener(SESSION_STORE_EVENTS.HISTORY_UPDATED_EVENT, refresh);
+      window.removeEventListener(SESSION_STORE_EVENTS.HISTORY_UPDATED_EVENT, onUpdate);
       window.removeEventListener("storage", refresh);
+      clearTimeout(safety);
     };
   }, []);
 
@@ -1135,7 +1144,7 @@ export function ProgressView({ onBack }) {
         </div>
       </div>
 
-      {!hist ? (
+      {(!hist || !synced) ? (
         <div style={{ maxWidth: 1520, margin: "0 auto", padding: "32px" }}>
           <div style={{ background: P.surface, borderRadius: 14, border: `1px solid ${P.border}`, padding: 32, textAlign: "center", color: P.textDim, fontSize: 13 }}>加载中…</div>
         </div>

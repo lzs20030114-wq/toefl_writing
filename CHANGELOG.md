@@ -1,5 +1,23 @@
 # Changelog
 
+## 2026-06-18 — v1.9.2
+
+- **产品 / UX 第 2 批（`fix/product-ux-batch-2` `3f5c9ad`）—— 计时与移动端**：
+  - **计时器墙钟锚定**（`WritingTask.js` + `useBuildSentenceSession.js`）：限时写作/造句倒计时改为按绝对截止时间每秒重算 + `visibilitychange` 回前台立即重算（BS 路径归零时置 `autoSubmitRef` 才真正交卷），切后台/锁屏导致 `setInterval` 被节流时不再漂移。AdaptiveExamShell/Speaking 计时器作为更高风险后续单独处理。
+  - **手机端模考固定倒计时条**（`MockExamShell.js` + `app/mobile.css`）：移动端答题区顶部 `position:fixed` 显示倒计时（复用已上抬的 `sectionTimer`），`.tp-exam-grid--timer` 预留 44px、嵌入态 `WritingTask` 高度收为 `calc(100dvh - 44px)` 防止「提交」被挤出；桌面端不变。
+  - **移动端任务 tab 等宽不溢出**（`MobileHomePage.js`）：四个分区 tab 改 `flex:1 1 0` 等宽 + 移动端隐藏 emoji + 缩小字号/内边距，320–414px 不再横向滚动/截断。
+- **产品 / UX 第 3 批（`fix/product-ux-batch-3` `c741871`）—— 等待反馈 + 断头路兜底**（源自 2026-06-18 用户流程/卡顿 review，报告 `data/claudeGen/reports/FLOW-JANK-REVIEW-2026-06-18.md`）：
+  - **AI 评分等待可见进度**（`WritingResponsePanel.js`）：评分中显示转圈 + 计时 + 预期耗时，替代原来最长 150s 的一行静态字。
+  - **进入任务不再白屏**（`UsageGateWrapper.js`）：usage 检查期间显示骨架转圈；pro/legacy 直接乐观渲染不阻塞。
+  - **模考出分前 loading 卡**（`MockExamResult.js`）：`scoringPhase==='pending'` 时显示「正在生成成绩…」而非看着像崩了的 `--` 段位圈。
+  - **听力音频缓冲态**（`AudioPlayer.js`）：新增 `buffering`（`waiting`/`stalled`→true，`playing`/`canplay`→false），缓冲时显示「缓冲中…」、不再用动画波形假装在放。
+  - **升级成功不再整页 reload**（`UsageGateWrapper.js`）：`saveAuth(pro)` + `router.refresh()` 取代 `window.location.reload()`，不再重下多 MB 题库。
+  - **练习记录加载到同步完成**（`ProgressView.js`）：登录用户加 `synced` 标志（首个 `HISTORY_UPDATED` 或 1.5s 兜底），不再先闪「还没有练习记录」。
+  - **P0 免费次数用完给升级入口**（`api/ai/route.js` + `lib/ai/client.js` + `WritingResponsePanel.js`）：服务端给免费 429 打 `code:"DAILY_LIMIT"`，客户端读 body 经 `isDailyLimitError` 映射为「今日免费次数已用完」+ 升级 Pro 按钮，替代假「服务繁忙」+ 无效重试；错误消息保留 `API error <status>` 以维持状态分类（单测验证）。
+  - **P0 付款轮询封顶兜底**（`UpgradeModal.js`）：轮询 2 分钟无到账即停并显示兜底（确认登录码已填入留言 / 重新检查 / 联系我们），不再无限转圈。
+  - **P0 评分中刷新自愈**（`MockExamShell.js`）：把存档的 `scoringPhase==='pending'` 恢复为 `'idle'`，幂等评分重跑，不再把做完的模考永久卡在「请稍候」。
+  - 验证：全量单测 49 套 / 380 项通过；改动页面 SSR + 实跑加载零报错。未办（deferred）：reading/listening 题库客户端代码分割（~4–5MB）、AdaptiveExamShell/Speaking 计时器、其余 7 处升级 `window.location.reload`、MockExamShell 额度不足弹窗的 SSR hydration 警告（与 batch-1 LIVE.1 同类）。
+
 ## 2026-06-18 — v1.9.1
 
 - **产品 / UX 批修复（第 1 批）** (分支 `fix/product-ux-batch-1`；每条"设计 → 独立复核"后实施，逐条单测 / 浏览器验证)：

@@ -206,6 +206,7 @@ export function WritingTask({
   const [toast, setToast] = useState(null);
   const [intro, setIntro] = useState(showTaskIntro);
   const tr = useRef(null);
+  const deadlineRef = useRef(0);
   const elapsedRef = useRef(null);
   const submitLockRef = useRef(false);
   const practiceRootIdRef = useRef("");
@@ -282,10 +283,14 @@ export function WritingTask({
     setElapsed(0);
     elapsedRef.current = setInterval(() => setElapsed(e => e + 1), 1000);
     if (!isPracticeMode) {
-      tr.current = setInterval(() => setTl(p => {
-        if (p <= 1) { clearInterval(tr.current); setRun(false); return 0; }
-        return p - 1;
-      }), 1000);
+      // Wall-clock anchored: each tick recomputes from an absolute deadline so a
+      // backgrounded tab / locked phone (which throttles setInterval) can't drift.
+      deadlineRef.current = Date.now() + limit * 1000;
+      tr.current = setInterval(() => {
+        const rem = Math.max(0, Math.round((deadlineRef.current - Date.now()) / 1000));
+        setTl(rem);
+        if (rem <= 0) { clearInterval(tr.current); setRun(false); }
+      }, 1000);
     }
   }
 
@@ -426,6 +431,20 @@ export function WritingTask({
 
   useEffect(() => { if (!isPracticeMode && tl === 0 && phaseRef.current === "writing") { submitRef.current({ skipConfirm: true }); } }, [tl]);
 
+  // Recompute the wall-clock countdown immediately on returning to the foreground
+  // so a throttled background interval doesn't leave a stale time on screen.
+  useEffect(() => {
+    function onVis() {
+      if (typeof document === "undefined") return;
+      if (document.visibilityState === "visible" && !isPracticeMode && phaseRef.current === "writing" && deadlineRef.current) {
+        const rem = Math.max(0, Math.round((deadlineRef.current - Date.now()) / 1000));
+        setTl(rem); // rem === 0 → the tl===0 effect above fires the auto-submit
+      }
+    }
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, [isPracticeMode]);
+
   useEffect(() => {
     function handleKey(e) { if (e.ctrlKey && e.key === "Enter" && phaseRef.current === "writing") { e.preventDefault(); submitRef.current(); } }
     window.addEventListener("keydown", handleKey);
@@ -445,12 +464,15 @@ export function WritingTask({
     practiceRootIdRef.current = createPracticeRootId(type, data[n]?.id);
     practiceAttemptRef.current = 1;
     if (elapsedRef.current) clearInterval(elapsedRef.current);
+    if (tr.current) clearInterval(tr.current);
+    deadlineRef.current = 0;
     setPi(n); setPd(data[n]); setText(""); setTl(limit); setElapsed(0); setRun(false); setPhase("ready"); setFb(null); setRequestState("idle"); setScoreError(""); submitLockRef.current = false; completionSentRef.current = false; sessionSavedRef.current = false; setIntro(showTaskIntro);
   }
 
   function retryCurrentPrompt() {
     if (!pd) return;
     clearInterval(tr.current);
+    deadlineRef.current = 0;
     if (elapsedRef.current) clearInterval(elapsedRef.current);
     practiceAttemptRef.current += 1;
     setText("");
@@ -488,7 +510,13 @@ export function WritingTask({
     <div style={{
       background: C.bg, fontFamily: FONT,
       ...(mobileActiveWriting
-        ? { height: "100dvh", display: "flex", flexDirection: "column", overflow: "hidden" }
+        ? {
+            // In an embedded mock the shell pins a fixed 44px mobile countdown bar at
+            // the top (and the grid reserves 44px padding for it), so shrink the task
+            // to match and keep the 提交 button on-screen. Standalone keeps full 100dvh.
+            height: embedded ? "calc(100dvh - 44px)" : "100dvh",
+            display: "flex", flexDirection: "column", overflow: "hidden",
+          }
         : { minHeight: "100vh" }),
     }}>
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}

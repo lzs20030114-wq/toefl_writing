@@ -226,7 +226,9 @@ export async function POST(request) {
         .maybeSingle();
       if ((usage?.usage_count || 0) >= dailyLimit) {
         const errMsg = isPro ? "服务繁忙，请稍后再试" : "Daily limit reached.";
-        return fail({ ...requestMeta, stage: "usage", errorType: "daily_limit" }, 429, { error: errMsg });
+        // `code` lets the client distinguish a free-tier daily limit (show an upgrade
+        // path, not a futile "server busy" retry) from a transient rate limit.
+        return fail({ ...requestMeta, stage: "usage", errorType: "daily_limit" }, 429, { error: errMsg, code: isPro ? "PRO_DAILY_CAP" : "DAILY_LIMIT" });
       }
       usageUserCode = userCode;
       usageCap = dailyLimit;

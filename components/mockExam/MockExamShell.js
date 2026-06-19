@@ -2,6 +2,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { C, FONT, TopBar } from "../shared/ui";
+import { fmt } from "../../lib/utils";
 import { mockExamRunner } from "../../lib/mockExam/runner";
 import { MOCK_EXAM_STATUS, TASK_IDS } from "../../lib/mockExam/contracts";
 import { loadMockExamHistory, saveMockExamSession, saveMockCheckpoint, loadMockCheckpoint, clearMockCheckpoint } from "../../lib/mockExam/storage";
@@ -136,7 +137,12 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
   const [sectionTimer, setSectionTimer] = useState(null);
   const [scoringPhase, setScoringPhase] = useState(() => {
     const cp = loadMockCheckpoint();
-    return cp?.scoringPhase || "idle";
+    // A persisted "pending" means scoring was interrupted (reload / crash / lost
+    // connection mid-scoring). Restore as "idle" so the idempotent finalize effect
+    // re-fires and re-scores the unscored tasks, instead of stranding a completed
+    // exam on "AI 正在评分…请稍候" forever.
+    const phase = cp?.scoringPhase || "idle";
+    return phase === "pending" ? "idle" : phase;
   });
   const [scoringError, setScoringError] = useState("");
   const finalizedSessionIdsRef = useRef(new Set());
@@ -318,7 +324,35 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
         )}
 
         {!!session && (
-          <div className="tp-exam-grid" style={{ display: "grid", gridTemplateColumns: "1fr 280px", gap: 16, alignItems: "start" }}>
+          <>
+            {/* Mobile-only sticky countdown: the desktop SectionTimerPanel gets pushed
+                far below the answer area on phones, so reuse the already-lifted
+                sectionTimer as a fixed top bar. Hidden on desktop (display:none →
+                flipped to flex by app/mobile.css). */}
+            {session.status === MOCK_EXAM_STATUS.RUNNING && sectionTimer != null && (
+              <div
+                className="tp-mobile-timer"
+                style={{
+                  display: "none",
+                  position: "fixed", top: 0, left: 0, right: 0, zIndex: 60,
+                  alignItems: "center", justifyContent: "space-between",
+                  background: "#fff", borderBottom: "1px solid " + C.bdr,
+                  padding: "8px 14px", fontFamily: FONT,
+                }}
+              >
+                <span style={{ fontSize: 12, color: C.t2, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", marginRight: 12 }}>
+                  {currentTask ? currentTask.title : ""}
+                </span>
+                <span style={{
+                  fontSize: 20, fontWeight: 800,
+                  fontFamily: "Consolas, Menlo, 'Courier New', monospace",
+                  color: sectionTimer <= 60 ? C.red : C.nav,
+                }}>
+                  {fmt(sectionTimer)}
+                </span>
+              </div>
+            )}
+            <div className={"tp-exam-grid" + (session.status === MOCK_EXAM_STATUS.RUNNING && sectionTimer != null ? " tp-exam-grid--timer" : "")} style={{ display: "grid", gridTemplateColumns: "1fr 280px", gap: 16, alignItems: "start" }}>
             <MockExamMainPanel
               session={session}
               currentTask={currentTask}
@@ -344,7 +378,8 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
               aggregate={session.aggregate}
               isAborted={session.status === MOCK_EXAM_STATUS.ABORTED}
             />
-          </div>
+            </div>
+          </>
         )}
       </div>
     </div>

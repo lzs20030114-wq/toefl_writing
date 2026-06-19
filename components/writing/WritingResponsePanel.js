@@ -1,9 +1,38 @@
 ﻿"use client";
 import React, { useEffect, useRef, useState } from "react";
 import { C, Btn, FONT, SurfaceCard } from "../shared/ui";
+import UpgradeModal from "../shared/UpgradeModal";
+import { getSavedCode, saveAuth } from "../../lib/AuthContext";
 
 const CJK_RE = /[\u2E80-\u9FFF\uF900-\uFAFF\uFE30-\uFE4F\uFF00-\uFFEF\u3000-\u303F\u3040-\u30FF]/g;
 const IME_TIP_DISMISSED_KEY = "toefl-ime-tip-dismissed";
+
+// AI scoring can take 20-40s (timeout 150s). A single static line is
+// indistinguishable from a hang on the core paid action, so show a live
+// spinner + count-up so the user can tell it's working, not frozen.
+function ScoringWaitCard() {
+  const [secs, setSecs] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => setSecs((s) => s + 1), 1000);
+    return () => clearInterval(t);
+  }, []);
+  return (
+    <SurfaceCard style={{ padding: 32, textAlign: "center", color: C.t2 }}>
+      <style>{`@keyframes tp-score-spin { to { transform: rotate(360deg); } }`}</style>
+      <div style={{
+        width: 28, height: 28, margin: "0 auto 14px",
+        border: `3px solid ${C.bdr}`, borderTopColor: C.blue,
+        borderRadius: "50%", animation: "tp-score-spin 0.8s linear infinite",
+      }} />
+      <div style={{ fontSize: 15, fontWeight: 700, color: C.t1, marginBottom: 4, fontFamily: FONT }}>
+        AI \u6B63\u5728\u8BC4\u5206\u2026\uFF08{secs}s\uFF09
+      </div>
+      <div style={{ fontSize: 13, color: C.t2, fontFamily: FONT }}>
+        \u901A\u5E38\u9700 20\u201340 \u79D2\uFF0C\u8BF7\u4FDD\u6301\u9875\u9762\u6253\u5F00\u3001\u4E0D\u8981\u5237\u65B0\u3002
+      </div>
+    </SurfaceCard>
+  );
+}
 
 function ExamToolbar({ taRef, onTextChange, disabled, historyRef, prevTextRef }) {
   async function handleCopy() {
@@ -90,6 +119,7 @@ export function WritingResponsePanel({
   const prevTextRef = useRef(text);
   const isEditable = phase === "writing";
   const [imeTipVisible, setImeTipVisible] = useState(false);
+  const [showUpgrade, setShowUpgrade] = useState(false);
   const imeTipDismissedRef = useRef(false);
   // IME-agnostic CJK filter: rather than tracking composition state (which
   // misbehaves across macOS native IME / Sogou / Microsoft Pinyin / fcitx),
@@ -229,7 +259,7 @@ export function WritingResponsePanel({
         </>
       )}
 
-      {phase === "scoring" ? <SurfaceCard style={{ padding: 32, textAlign: "center", color: C.t2 }}>AI 正在评分，请稍候...</SurfaceCard> : null}
+      {phase === "scoring" ? <ScoringWaitCard /> : null}
 
       {phase === "done" && deferScoring && !fb && requestState !== "error" ? (
         <div style={{ marginTop: 20 }}>
@@ -253,15 +283,39 @@ export function WritingResponsePanel({
       {phase === "done" && !fb && !deferScoring ? (
         <div style={{ marginTop: 20 }}>
           <SurfaceCard style={{ padding: 32, textAlign: "center" }}>
-            <div style={{ fontSize: 40, marginBottom: 12 }}>!</div>
-            <div style={{ fontSize: 16, fontWeight: 700, color: C.red, marginBottom: 8 }}>评分失败</div>
-            <div style={{ fontSize: 14, color: C.t2, marginBottom: 20 }}>当前暂时无法完成评分，请稍后重试。</div>
-            {!!scoreError ? <div data-testid="score-error-reason" style={{ fontSize: 12, color: C.red, marginBottom: 12 }}>{scoreError}</div> : null}
-            <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
-              <Btn onClick={onRetry}>重新评分</Btn>
-              <Btn onClick={onExit} variant="secondary">{embedded ? "返回" : "返回菜单"}</Btn>
-            </div>
+            {(typeof scoreError === "string" && scoreError.includes("今日免费次数已用完")) ? (
+              /* Daily-limit, not a server error — offer the upgrade path instead of a
+                 futile "重新评分" retry that can never succeed today. */
+              <>
+                <div style={{ fontSize: 40, marginBottom: 12 }}>🔒</div>
+                <div style={{ fontSize: 16, fontWeight: 700, color: C.t1, marginBottom: 8 }}>今日免费次数已用完</div>
+                <div style={{ fontSize: 14, color: C.t2, marginBottom: 20 }}>免费用户每日 3 次练习已用完。升级 Pro 可无限次练习与 AI 评分——你刚写的内容已保存，升级后可直接重新评分。</div>
+                <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
+                  <Btn onClick={() => setShowUpgrade(true)}>升级 Pro</Btn>
+                  <Btn onClick={onExit} variant="secondary">{embedded ? "返回" : "返回菜单"}</Btn>
+                </div>
+              </>
+            ) : (
+              <>
+                <div style={{ fontSize: 40, marginBottom: 12 }}>!</div>
+                <div style={{ fontSize: 16, fontWeight: 700, color: C.red, marginBottom: 8 }}>评分失败</div>
+                <div style={{ fontSize: 14, color: C.t2, marginBottom: 20 }}>当前暂时无法完成评分，请稍后重试。</div>
+                {!!scoreError ? <div data-testid="score-error-reason" style={{ fontSize: 12, color: C.red, marginBottom: 12 }}>{scoreError}</div> : null}
+                <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
+                  <Btn onClick={onRetry}>重新评分</Btn>
+                  <Btn onClick={onExit} variant="secondary">{embedded ? "返回" : "返回菜单"}</Btn>
+                </div>
+              </>
+            )}
           </SurfaceCard>
+          {showUpgrade && (
+            <UpgradeModal
+              userCode={(() => { try { return getSavedCode(); } catch { return null; } })()}
+              currentTier="free"
+              onClose={() => setShowUpgrade(false)}
+              onUpgraded={() => { try { saveAuth(getSavedCode(), { tier: "pro" }); } catch {} setShowUpgrade(false); if (onRetry) onRetry(); }}
+            />
+          )}
         </div>
       ) : null}
     </div>

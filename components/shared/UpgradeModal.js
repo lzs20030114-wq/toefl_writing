@@ -36,6 +36,7 @@ export default function UpgradeModal({ userCode, currentTier, onClose, onUpgrade
   // Shared state
   const [upgraded, setUpgraded] = useState(false);
   const [checking, setChecking] = useState(false);
+  const [pollTimedOut, setPollTimedOut] = useState(false);
   const pollRef = useRef(null);
   const initialExpiresRef = useRef(null);
 
@@ -84,7 +85,18 @@ export default function UpgradeModal({ userCode, currentTier, onClose, onUpgrade
   const startPolling = useCallback(() => {
     captureInitialState();
     clearInterval(pollRef.current);
-    pollRef.current = setInterval(checkUpgradeStatus, POLL_INTERVAL);
+    setPollTimedOut(false);
+    // Don't spin forever: after ~2 min with no tier change (a delayed webhook, or an
+    // Afdian remark that never received the login code), stop and surface a recovery
+    // fallback instead of a spinner indistinguishable from a hang.
+    const deadline = Date.now() + 120000;
+    pollRef.current = setInterval(async () => {
+      const ok = await checkUpgradeStatus();
+      if (!ok && Date.now() > deadline) {
+        clearInterval(pollRef.current);
+        setPollTimedOut(true);
+      }
+    }, POLL_INTERVAL);
   }, [captureInitialState, checkUpgradeStatus]);
 
   // Visibility re-check
@@ -264,24 +276,33 @@ export default function UpgradeModal({ userCode, currentTier, onClose, onUpgrade
 
   const renderPollingStatus = () => (
     <div style={{ marginBottom: 8, display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
-      <div style={{
-        fontSize: 12, color: C.blue,
-        display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
-      }}>
-        <span style={{
-          display: "inline-block", width: 8, height: 8, borderRadius: "50%",
-          border: "2px solid " + C.blue, borderTopColor: "transparent",
-          animation: "spin 1s linear infinite",
-        }} />
-        等待付款确认中...
-      </div>
-      <button onClick={handleManualCheck} disabled={checking} style={{
+      {pollTimedOut ? (
+        <>
+          <div style={{ fontSize: 13, fontWeight: 700, color: C.t1, textAlign: "center" }}>还没检测到开通</div>
+          <div style={{ fontSize: 12, color: C.t2, textAlign: "center", lineHeight: 1.6, maxWidth: 300 }}>
+            若已完成付款：请确认已在爱发电留言里粘贴你的登录码{userCode ? ` ${userCode}` : ""}（漏填会导致无法自动开通）。到账可能有几分钟延迟，可点下方重新检查；仍未开通请通过首页「反馈」联系我们并附付款截图。
+          </div>
+        </>
+      ) : (
+        <div style={{
+          fontSize: 12, color: C.blue,
+          display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+        }}>
+          <span style={{
+            display: "inline-block", width: 8, height: 8, borderRadius: "50%",
+            border: "2px solid " + C.blue, borderTopColor: "transparent",
+            animation: "spin 1s linear infinite",
+          }} />
+          等待付款确认中...
+        </div>
+      )}
+      <button onClick={pollTimedOut ? () => { checkUpgradeStatus(); startPolling(); } : handleManualCheck} disabled={checking} style={{
         padding: "8px 18px", borderRadius: 8,
         border: "1px solid " + C.bdr, background: "#fff",
         color: C.t2, fontSize: 12, fontWeight: 600,
         cursor: checking ? "not-allowed" : "pointer", fontFamily: FONT,
       }}>
-        {checking ? "检查中..." : "已完成付款？点击检查"}
+        {checking ? "检查中..." : pollTimedOut ? "重新检查" : "已完成付款？点击检查"}
       </button>
     </div>
   );

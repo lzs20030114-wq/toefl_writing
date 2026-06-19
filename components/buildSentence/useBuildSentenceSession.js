@@ -104,6 +104,7 @@ export function useBuildSentenceSession(questions, options = {}) {
   const tr = useRef(null);
   const elapsedRef = useRef(null);
   const autoSubmitRef = useRef(false);
+  const deadlineRef = useRef(0);
   const resultsRef = useRef(results);
   const idxRef = useRef(0);
   const slotsRef = useRef([]);
@@ -159,15 +160,18 @@ export function useBuildSentenceSession(questions, options = {}) {
     setRun(true);
     elapsedRef.current = setInterval(() => setElapsed((e) => e + 1), 1000);
     if (!isPracticeMode) {
-      tr.current = setInterval(() => setTl((p) => {
-        if (p <= 1) {
+      // Wall-clock anchored: recompute from an absolute deadline each tick so a
+      // backgrounded tab / locked phone (which throttles setInterval) can't drift.
+      deadlineRef.current = Date.now() + timeLimitSeconds * 1000;
+      tr.current = setInterval(() => {
+        const rem = Math.max(0, Math.round((deadlineRef.current - Date.now()) / 1000));
+        setTl(rem);
+        if (rem <= 0) {
           clearInterval(tr.current);
           setRun(false);
           autoSubmitRef.current = true;
-          return 0;
         }
-        return p - 1;
-      }), 1000);
+      }, 1000);
     }
   }
 
@@ -179,6 +183,22 @@ export function useBuildSentenceSession(questions, options = {}) {
       onTimerChange({ timeLeft: tl, isRunning: run, phase });
     }
   }, [tl, run, phase, onTimerChange]);
+
+  // Recompute the wall-clock countdown on returning to the foreground. On the
+  // mobile pause path the per-second interval is frozen, so without this the
+  // clock would show a stale value and never reach 0 to auto-submit.
+  useEffect(() => {
+    function onVis() {
+      if (typeof document === "undefined") return;
+      if (document.visibilityState === "visible" && run && phase === "active" && deadlineRef.current) {
+        const rem = Math.max(0, Math.round((deadlineRef.current - Date.now()) / 1000));
+        if (rem <= 0) autoSubmitRef.current = true; // BS gates auto-submit on this ref
+        setTl(rem);
+      }
+    }
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, [run, phase]);
 
   // Autosave the resume pointer (setId + idx + lightweight results) for
   // standalone BS while the session is running. Debounced to avoid spam.
@@ -308,6 +328,7 @@ export function useBuildSentenceSession(questions, options = {}) {
       if (elapsedRef.current) clearInterval(elapsedRef.current);
       saveSession(nr);
       submitLockRef.current = false;
+      deadlineRef.current = 0;
     }
   }, [tl, phase, qs]);
 
