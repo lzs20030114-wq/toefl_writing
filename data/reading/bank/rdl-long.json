@@ -9849,6 +9849,109 @@
       ],
       "difficulty": "medium",
       "id": "rdl-long_mqjxqfv1_0"
+    },
+    {
+      "id": "rdl_r1_long_001",
+      "variant": "long",
+      "genre": "social_media",
+      "difficulty": "medium",
+      "format_metadata": {
+        "handle": "@maya_writes"
+      },
+      "text": "@maya_writes\n\nOkay, I have to gush about last night's Open Mic at the Roastery Café — easily the best campus event I've been to all semester!! 🎤\n\nThe space only holds about forty people, so it filled up fast, but the $3 entry covered a free hot drink, which honestly made it worth it. There were poets, a jazz duo, and one guy whose stand-up had the whole room crying with laughter. The host kept things moving and even coaxed a few nervous first-timers onto the stage.\n\nThe next one is the first Thursday of December, same place, 7 p.m. If you want a spot, get there early — they don't take reservations and the line was out the door by 6:45. Bring a friend and maybe something to perform! Who's coming with me? 🙌",
+      "questions": [
+        {
+          "qid": "rdl_r1_long_001_q1",
+          "question_type": "detail",
+          "stem": "According to the post, what did the entry fee include?",
+          "options": {
+            "A": "A reserved seat near the stage",
+            "B": "A free hot drink",
+            "C": "A ticket to a future show",
+            "D": "A discount on the café menu"
+          },
+          "correct_answer": "B",
+          "explanation": "The post says 'the $3 entry covered a free hot drink.'"
+        },
+        {
+          "qid": "rdl_r1_long_001_q2",
+          "question_type": "detail",
+          "stem": "According to the post, when will the next Open Mic take place?",
+          "options": {
+            "A": "The last Friday of November",
+            "B": "The first Saturday of December",
+            "C": "The first Thursday of December",
+            "D": "The second Thursday of January"
+          },
+          "correct_answer": "C",
+          "explanation": "The writer states the next one is 'the first Thursday of December.'"
+        },
+        {
+          "qid": "rdl_r1_long_001_q3",
+          "question_type": "inference",
+          "stem": "What can be inferred about getting into the next event?",
+          "options": {
+            "A": "Tickets must be purchased online first",
+            "B": "The venue can hold a very large crowd",
+            "C": "Performers are always guaranteed a seat",
+            "D": "Arriving late may mean missing out"
+          },
+          "correct_answer": "D",
+          "explanation": "Because there are no reservations and the line formed early, latecomers risk not getting in."
+        }
+      ]
+    },
+    {
+      "id": "rdl_r1_long_002",
+      "variant": "long",
+      "genre": "email",
+      "difficulty": "medium",
+      "format_metadata": {
+        "subject": "Introducing the new Campus Tool Library",
+        "from": "The Tool Library Team"
+      },
+      "text": "Subject: Introducing the new Campus Tool Library\n\nDear residents,\n\nWe're excited to announce that the Campus Tool Library is now open in the basement of Hartwell Hall. Instead of buying equipment you will use only once, you can now borrow it for free with your student card.\n\nOur shelves include power drills, hand tools, sewing machines, camping gear, and even a few musical instruments. Most items can be borrowed for up to one week. Larger tools, such as ladders and tile cutters, are limited to three days so that everyone gets a turn.\n\nPlease return items clean and on time; a $2 daily fee applies to late returns. If a tool is damaged, just let us know — honest reports help us keep everything in good working order.\n\nStop by Monday through Friday, 1 to 6 p.m.\n\nBest,\nThe Tool Library Team",
+      "questions": [
+        {
+          "qid": "rdl_r1_long_002_q1",
+          "question_type": "detail",
+          "stem": "According to the email, how long can most items be borrowed?",
+          "options": {
+            "A": "For a single day only",
+            "B": "For up to one week",
+            "C": "For up to three days",
+            "D": "For the entire semester"
+          },
+          "correct_answer": "B",
+          "explanation": "The email states 'most items can be borrowed for up to one week.'"
+        },
+        {
+          "qid": "rdl_r1_long_002_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about larger tools such as ladders?",
+          "options": {
+            "A": "They cost more to borrow than small tools",
+            "B": "They are in higher demand than smaller items",
+            "C": "They must be returned to a different building",
+            "D": "They are available only to staff members"
+          },
+          "correct_answer": "B",
+          "explanation": "Their shorter loan period 'so that everyone gets a turn' implies these tools are in higher demand."
+        },
+        {
+          "qid": "rdl_r1_long_002_q3",
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this email?",
+          "options": {
+            "A": "To remind students to return overdue tools",
+            "B": "To request donations of used equipment",
+            "C": "To announce a new free tool-borrowing service",
+            "D": "To explain new rules for living in Hartwell Hall"
+          },
+          "correct_answer": "C",
+          "explanation": "The email's purpose is to announce that the new Campus Tool Library now lends equipment for free."
+        }
+      ]
     }
   ]
 }

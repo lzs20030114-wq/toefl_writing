@@ -12411,6 +12411,174 @@
       },
       "id": "lcr_mqjxqdan_7",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/choose-response/lcr_mqjxqdan_7.mp3"
+    },
+    {
+      "id": "lcr_r1_001",
+      "context": "general_daily",
+      "situation": "arranging a ride or carpool with a friend",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Why don't we just carpool to the airport together?",
+      "options": {
+        "A": "Sounds like a plan to me.",
+        "B": "The airport has a new parking garage.",
+        "C": "I missed my flight last spring.",
+        "D": "Every twenty minutes, I think."
+      },
+      "answer": "A",
+      "explanation": "A 用习惯表达 'Sounds like a plan' 自然地答应提议，正确。B 借 'airport' 设词陷阱；C 离题谈过去误机；D 答成频率，答非所问。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "id": "lcr_r1_002",
+      "context": "campus_academic",
+      "situation": "student asking a librarian about a book or resource",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Do you have this textbook available as an ebook?",
+      "options": {
+        "A": "The library closes at nine tonight.",
+        "B": "Actually, let me check the catalog for you.",
+        "C": "I returned my library books last week.",
+        "D": "The printer is out of paper again."
+      },
+      "answer": "B",
+      "explanation": "B 以 'Actually' 开头，间接地提出去查目录，正确回应。A 借 'library' 答营业时间，词陷阱；C、D 都离题谈还书和打印机。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "off_topic"
+      }
+    },
+    {
+      "id": "lcr_r1_003",
+      "context": "campus_academic",
+      "situation": "student checking with a TA about lab report requirements",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "How long should the lab report actually be?",
+      "options": {
+        "A": "Reports are usually graded within a week.",
+        "B": "The lab is on the third floor.",
+        "C": "I'll email you the full assignment sheet.",
+        "D": "Yes, you should definitely include graphs."
+      },
+      "answer": "C",
+      "explanation": "C 不直接答字数，而是发完整作业要求解决根本需求，符合 context_shift。A 答成批改时间，问非所答；B 借 'lab' 设词陷阱；D 对 how-long 问题答成 yes，答非所问。",
+      "distractor_types": {
+        "A": "wrong_question_type",
+        "B": "semantic_association_trap",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "id": "lcr_r1_004",
+      "context": "general_daily",
+      "situation": "asking a store clerk about a return or exchange",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "These shoes are too small, unfortunately.",
+      "options": {
+        "A": "Shoes are all on sale this weekend.",
+        "B": "I walk to work every single morning.",
+        "C": "Yes, they do look brand new.",
+        "D": "I can grab you the next size up."
+      },
+      "answer": "D",
+      "explanation": "D 不纠结字面，而是直接提出拿大一号解决问题，符合 context_shift。A 借 'shoes' 设词陷阱；B 离题谈走路上班；C 只附和却不回应需求。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "off_topic"
+      }
+    },
+    {
+      "id": "lcr_r1_005",
+      "context": "general_daily",
+      "situation": "calling to check a shop's business hours",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Where can I find your opening hours online?",
+      "options": {
+        "A": "Actually, they're listed on our homepage.",
+        "B": "The store is right next to the bank.",
+        "C": "We close at six on weekdays.",
+        "D": "I love shopping there on weekends."
+      },
+      "answer": "A",
+      "explanation": "A 以 'Actually' 引出在主页能查到，正面回应了 where。B 答店铺位置，借词陷阱、答错方面；C 答成关门时间，问非所答；D 离题表达喜好。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "off_topic"
+      }
+    },
+    {
+      "id": "lcr_r1_006",
+      "context": "general_daily",
+      "situation": "checking whether a service like the post office is still open",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "I really need to mail this package today.",
+      "options": {
+        "A": "The package looks a little damaged.",
+        "B": "Do you want me to drive you there?",
+        "C": "I sent a letter just last Tuesday.",
+        "D": "Yes, stamps have gotten so expensive."
+      },
+      "answer": "B",
+      "explanation": "B 用反问主动提出开车送你，推进对话并解决需求，符合 counter_question。A 借 'package' 设词陷阱；C、D 离题谈寄信和邮票价格。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "off_topic"
+      }
+    },
+    {
+      "id": "lcr_r1_007",
+      "context": "campus_academic",
+      "situation": "a classmate asking to borrow lecture notes",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "What did I miss in today's lecture?",
+      "options": {
+        "A": "The lecture hall was freezing today.",
+        "B": "I take all my notes on a laptop.",
+        "C": "Want me to send you my notes?",
+        "D": "Class starts at ten tomorrow morning."
+      },
+      "answer": "C",
+      "explanation": "C 用反问提出把笔记发给你，自然推进对话，符合 counter_question。A 借 'lecture' 设词陷阱；B 离题谈记笔记方式；D 答上课时间，答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "id": "lcr_r1_008",
+      "context": "campus_daily",
+      "situation": "a student checking the lost-and-found at a front desk",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Has anyone turned in a blue water bottle?",
+      "options": {
+        "A": "The water fountain is down the hall.",
+        "B": "I lost my keys here just yesterday.",
+        "C": "Yes, lost items really pile up fast.",
+        "D": "Could you tell me where you left it?"
+      },
+      "answer": "D",
+      "explanation": "D 用反问请对方说明丢失地点以便查找，推进对话，符合 counter_question。A 借 'water' 设词陷阱；B 离题谈丢钥匙；C 只感慨却不帮忙。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "off_topic"
+      }
     }
   ]
 }

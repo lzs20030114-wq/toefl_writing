@@ -32886,6 +32886,406 @@
       ],
       "id": "lc_mqjxqda0_4",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/conversation/lc_mqjxqda0_4.mp3"
+    },
+    {
+      "id": "lc_r1_001",
+      "context": "campus_dorm_life",
+      "situation": "two students chatting about a part-time job one just started at a warehouse",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hey, you started that warehouse packing job, right? How's it going?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Honestly, it's exhausting. I'm on my feet for eight hours, and the shifts are mostly late at night."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Late nights? Doesn't that wreck your class schedule?"
+        },
+        {
+          "speaker": "Man",
+          "text": "That's the thing. I keep dozing off in my morning lecture, and my grades are starting to slip."
+        },
+        {
+          "speaker": "Woman",
+          "text": "That sounds rough. Maybe ask your supervisor about switching to weekend shifts?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, I think I have to. The money's good, but it's not worth failing a course over."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "The drawbacks of the man's new job",
+            "B": "How to find a part-time job on campus",
+            "C": "The man's decision to drop a course",
+            "D": "A disagreement about working night shifts"
+          },
+          "answer": "A",
+          "explanation": "对话围绕这份工作带来的疲惫与影响成绩等弊端，A 正确。B 找工作未谈；C 他只是担心挂科并非决定退课；D 两人并无争执。",
+          "distractor_types": {
+            "B": "wrong_topic",
+            "C": "too_narrow",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do?",
+          "options": {
+            "A": "Quit the job right away",
+            "B": "Stop going to his morning lecture",
+            "C": "Ask to change his work shifts",
+            "D": "Hire a tutor for the course"
+          },
+          "answer": "C",
+          "explanation": "他认同要找主管换成周末班，C 正确。A 立刻辞职过度推断；B 是问题不是打算；D 请家教未提。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "rejected_option",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_r1_002",
+      "context": "errands_service",
+      "situation": "two friends sharing cooking tips while grocery shopping",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        },
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Man",
+          "text": "These tomatoes look great. I'm finally going to try making that pasta sauce."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh, nice! Quick tip: add a pinch of sugar to balance the acidity. It makes a huge difference."
+        },
+        {
+          "speaker": "Man",
+          "text": "Sugar? In a tomato sauce? I never would've guessed."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Trust me. And let it simmer on low for at least an hour. Don't rush it."
+        },
+        {
+          "speaker": "Man",
+          "text": "An hour, okay. I usually get impatient and crank up the heat."
+        },
+        {
+          "speaker": "Woman",
+          "text": "That's the mistake. High heat turns it bitter. Low and slow is the real secret."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the woman suggest adding to the sauce?",
+          "options": {
+            "A": "A handful of fresh basil",
+            "B": "A small amount of sugar",
+            "C": "A splash of olive oil",
+            "D": "A pinch of black pepper"
+          },
+          "answer": "B",
+          "explanation": "她建议加少许糖来中和酸味，B 正确。A、C 罗勒和橄榄油未提及；D 黑胡椒是改动的细节。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "C": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do differently this time?",
+          "options": {
+            "A": "Buy a jar of canned sauce instead",
+            "B": "Add even more tomatoes",
+            "C": "Skip the simmering step entirely",
+            "D": "Cook the sauce over low heat"
+          },
+          "answer": "D",
+          "explanation": "他过去爱开大火，现在会改用小火慢炖，D 正确。A 买现成酱无关；B 加更多番茄未提；C 跳过慢炖与建议相反。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "B": "related_but_not_stated",
+            "C": "rejected_option"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_r1_003",
+      "context": "errands_service",
+      "situation": "two students chatting about an art class one just signed up for",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "I just signed up for that weekend pottery class at the community center."
+        },
+        {
+          "speaker": "Man",
+          "text": "Pottery? I took the watercolor one there last term. Did they make you buy your own supplies?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "That's exactly what I wanted to ask. The flyer wasn't clear about it."
+        },
+        {
+          "speaker": "Man",
+          "text": "For watercolor, the basic materials were included, but you paid extra for the nicer brushes."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Good to know. I'll bring some cash in case the clay tools cost extra."
+        },
+        {
+          "speaker": "Man",
+          "text": "Smart. Email the instructor too. They answered all my questions really fast."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What class did the man take previously?",
+          "options": {
+            "A": "A pottery class",
+            "B": "A gardening class",
+            "C": "A watercolor painting class",
+            "D": "A photography class"
+          },
+          "answer": "C",
+          "explanation": "男生说上学期上过水彩课，C 正确。A 陶艺是女生报的；B、D 园艺和摄影都未提及。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do?",
+          "options": {
+            "A": "Bring extra money to the class",
+            "B": "Cancel her class registration",
+            "C": "Buy expensive brushes in advance",
+            "D": "Switch into the watercolor class"
+          },
+          "answer": "A",
+          "explanation": "她打算带些现金以防工具另收费，A 正确。B 取消报名过度推断；C 买贵画笔是水彩课的情况；D 换课无依据。",
+          "distractor_types": {
+            "B": "over_inference",
+            "C": "rejected_option",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_r1_004",
+      "context": "plans_social",
+      "situation": "two friends deciding whether to buy concert tickets now or wait",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        },
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Man",
+          "text": "Did you see the band we both like is playing here next month?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Yes! But the tickets are kind of pricey right now. Should we wait a bit?"
+        },
+        {
+          "speaker": "Man",
+          "text": "I've heard prices sometimes drop closer to the date, if a show doesn't sell out."
+        },
+        {
+          "speaker": "Woman",
+          "text": "True, but this band is really popular. It could easily sell out within days."
+        },
+        {
+          "speaker": "Man",
+          "text": "Good point. I'd rather pay a little more than miss it completely."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Same here. Let's just grab them tonight before they're gone."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why is the woman hesitant to buy the tickets right now?",
+          "options": {
+            "A": "She is not free on that night",
+            "B": "She does not really like the band",
+            "C": "She has already seen them perform",
+            "D": "The tickets are expensive at the moment"
+          },
+          "answer": "D",
+          "explanation": "她说现在票价偏贵，故而犹豫，D 正确。A 时间冲突未提；B 与两人都喜欢相反；C 看过演出未提。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "C": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the speakers most likely do?",
+          "options": {
+            "A": "Wait until the prices drop later",
+            "B": "Buy the tickets tonight",
+            "C": "Look for a different concert",
+            "D": "Ask other friends to buy them"
+          },
+          "answer": "B",
+          "explanation": "两人决定今晚就买，B 正确。A 等降价被否决；C 换演出无依据；D 让别人买是无关步骤。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "C": "unrelated_next_step",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_r1_005",
+      "context": "campus_dorm_life",
+      "situation": "two students comparing how they get to campus",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "You bike to campus every day, right? Isn't that exhausting?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Not really. It's faster than the bus, and I skip the crowded stops."
+        },
+        {
+          "speaker": "Woman",
+          "text": "I take the bus, but lately it's always packed and running late."
+        },
+        {
+          "speaker": "Man",
+          "text": "That's why I switched. Though when it rains, I admit I really miss the dry bus."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Yeah, the weather's the catch. Maybe I'll try walking on nice days."
+        },
+        {
+          "speaker": "Man",
+          "text": "Walking's great if you have the time. It's about thirty minutes from the dorms."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly talking about?",
+          "options": {
+            "A": "Different ways of getting to campus",
+            "B": "A problem with the campus bus schedule",
+            "C": "How to stay fit while commuting",
+            "D": "Why the man dislikes biking"
+          },
+          "answer": "A",
+          "explanation": "两人比较骑车、坐公交、步行等通勤方式，A 正确。B 公交只是其一，过窄；C 健身偏题；D 与他喜欢骑车相反。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "wrong_topic",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do on a sunny day?",
+          "options": {
+            "A": "Buy a bicycle of her own",
+            "B": "Keep taking the crowded bus",
+            "C": "Try walking to campus",
+            "D": "Ask the man for a ride"
+          },
+          "answer": "C",
+          "explanation": "她说天气好时想试着步行，C 正确。A 买自行车过度推断；B 继续坐拥挤公交被她想避开；D 搭车无依据。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "rejected_option",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
     }
   ]
 }
