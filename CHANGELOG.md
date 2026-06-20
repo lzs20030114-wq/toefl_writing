@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-06-18 — v1.9.3
+
+- **写作提前提交确认改为应用内弹窗**（`components/writing/WritingTask.js`，`50d91c3`）：原本用浏览器原生 `window.confirm`——样式与全站自定义弹窗不一致，且原生对话框会**阻塞主线程、冻结整页**。改为 app 内 styled 弹窗（继续作答 / 确定提交）；超时自动交卷仍走 `skipConfirm` 不弹框。删除不再使用的 `confirmEarlySubmit`，更新 4 个提前提交相关组件测试改为驱动弹窗。全量 49 套 / 380 测试通过。
+- **已知未办**：写作页（`useSearchParams` + `Suspense fallback={null}`）的 hydration 开发期报错——**线上无感**（React 自动兜底，生产构建无报错浮层），真正症状仅为加载时一闪空白；彻底修复需重构这几页的 SSR/Suspense 结构，留作后续单独任务（曾尝试 `WritingTask` mount 守卫，因根因在其上层 Suspense 边界而无效，已回退）。
+
 ## 2026-06-18 — v1.9.2
 
 - **产品 / UX 第 2 批（`fix/product-ux-batch-2` `3f5c9ad`）—— 计时与移动端**：

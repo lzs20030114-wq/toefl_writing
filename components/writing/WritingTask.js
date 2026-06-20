@@ -72,18 +72,6 @@ function summarizePrompt(type, pd) {
   return text.length > 80 ? `${text.slice(0, 80)}...` : text;
 }
 
-function confirmEarlySubmit() {
-  const confirmFn = typeof window !== "undefined" ? window.confirm : null;
-  if (typeof confirmFn !== "function") return true;
-  const isJsdom = typeof navigator !== "undefined" && /jsdom/i.test(String(navigator.userAgent || ""));
-  if (isJsdom && !confirmFn._isMockFunction) return true;
-  try {
-    return confirmFn("还有剩余时间，确定要提前提交吗？");
-  } catch {
-    // jsdom and some embedded contexts do not implement confirm; default allow.
-  }
-  return true;
-}
 
 function isPromptExhaustedError(err) {
   return String(err?.message || "").includes(BANK_EXHAUSTED_ERRORS.PROMPT);
@@ -205,6 +193,7 @@ export function WritingTask({
   const [scoreError, setScoreError] = useState("");
   const [toast, setToast] = useState(null);
   const [intro, setIntro] = useState(showTaskIntro);
+  const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
   const tr = useRef(null);
   const deadlineRef = useRef(0);
   const elapsedRef = useRef(null);
@@ -385,8 +374,10 @@ export function WritingTask({
 
   async function submitScore({ skipConfirm = false } = {}) {
     if (!skipConfirm && shouldConfirmEarlySubmit()) {
-      const ok = confirmEarlySubmit();
-      if (!ok) return;
+      // In-app modal (consistent with the rest of the app) instead of a native
+      // window.confirm, which is unstyled and freezes the page.
+      setShowSubmitConfirm(true);
+      return;
     }
     if (deferScoring) {
       if (submitLockRef.current) return;
@@ -520,6 +511,21 @@ export function WritingTask({
         : { minHeight: "100vh" }),
     }}>
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
+      {showSubmitConfirm && (
+        <div
+          onClick={() => setShowSubmitConfirm(false)}
+          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", WebkitBackdropFilter: "blur(4px)", backdropFilter: "blur(4px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 10000, fontFamily: FONT }}
+        >
+          <div onClick={(e) => e.stopPropagation()} style={{ background: "#fff", borderRadius: 16, padding: "28px 24px", maxWidth: 360, width: "90%", textAlign: "center", boxShadow: "0 20px 60px rgba(0,0,0,0.15)" }}>
+            <h3 style={{ fontSize: 17, fontWeight: 700, color: C.t1, marginBottom: 8 }}>确定要提前提交吗？</h3>
+            <p style={{ fontSize: 14, color: C.t2, marginBottom: 20, lineHeight: 1.6 }}>还有剩余时间。提交后将进入评分，无法再修改本篇作答。</p>
+            <div style={{ display: "flex", gap: 12 }}>
+              <Btn variant="secondary" style={{ flex: 1 }} onClick={() => setShowSubmitConfirm(false)}>继续作答</Btn>
+              <Btn style={{ flex: 1 }} onClick={() => { setShowSubmitConfirm(false); submitScore({ skipConfirm: true }); }}>确定提交</Btn>
+            </div>
+          </div>
+        </div>
+      )}
       {!embedded && <TopBar title={type === "email" ? "Email Writing" : "Academic Discussion Writing"} section={type === "email" ? "Writing Practice | Task 2" : "Writing Practice | Task 3"} timeLeft={isPracticeMode ? undefined : (phase !== "ready" ? tl : undefined)} elapsedTime={isPracticeMode && phase === "writing" ? elapsed : undefined} examTimeNote={isPracticeMode ? "考试限时 " + formatLongDuration(type === "email" ? STANDARD_TIME_SECONDS.email : STANDARD_TIME_SECONDS.discussion) : undefined} isRunning={run} onExit={onExit} />}
 
       {phase === "done" && fb ? (
