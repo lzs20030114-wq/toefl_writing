@@ -1,0 +1,108 @@
+{
+  "items": [
+    {
+      "id": "rdl_r1_short_001",
+      "variant": "short",
+      "genre": "email",
+      "difficulty": "easy",
+      "format_metadata": {},
+      "text": "Hi Jordan, thanks for volunteering as a campus tour guide! Your first shift is this Friday at 10 a.m. by the Visitor Center. Please pick up your guide badge from the front desk beforehand; there is a $5 refundable deposit. Wear comfortable shoes. Best, Maria",
+      "questions": [
+        {
+          "qid": "rdl_r1_short_001_q1",
+          "question_type": "detail",
+          "stem": "According to the email, what must Jordan do before the shift starts?",
+          "options": {"A": "Collect a guide badge from the front desk", "B": "Pay a non-refundable registration fee", "C": "Email the Visitor Center for directions", "D": "Attend a training session on Thursday"},
+          "correct_answer": "A",
+          "explanation": "The email asks Jordan to 'pick up your guide badge from the front desk beforehand.'"
+        },
+        {
+          "qid": "rdl_r1_short_001_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the deposit?",
+          "options": {"A": "It pays for the cost of the tour", "B": "It must be paid only in cash", "C": "It can be returned after the badge is given back", "D": "It rises for later volunteer shifts"},
+          "correct_answer": "C",
+          "explanation": "Because the deposit is described as 'refundable,' it can be returned once the badge is returned."
+        }
+      ]
+    },
+    {
+      "id": "rdl_r1_short_002",
+      "variant": "short",
+      "genre": "flyer",
+      "difficulty": "easy",
+      "format_metadata": {},
+      "text": "FREE FLU SHOTS — no appointment needed! Student Health Center, Room 120. Wednesday, October 8, from 9 a.m. to 4 p.m. Bring your student ID and your insurance card. Walk-ins are welcome all day. Protect yourself and your classmates this season!",
+      "questions": [
+        {
+          "qid": "rdl_r1_short_002_q1",
+          "question_type": "detail",
+          "stem": "According to the flyer, where will the flu shots be given?",
+          "options": {"A": "At the off-campus pharmacy", "B": "In Room 120 of the Student Health Center", "C": "Outside the main campus library", "D": "In the recreation center lobby"},
+          "correct_answer": "B",
+          "explanation": "The flyer lists the location as 'Student Health Center, Room 120.'"
+        },
+        {
+          "qid": "rdl_r1_short_002_q2",
+          "question_type": "detail",
+          "stem": "According to the flyer, what should students bring to the clinic?",
+          "options": {"A": "A student ID and an insurance card", "B": "A completed appointment form", "C": "A small cash payment", "D": "A signed parental consent slip"},
+          "correct_answer": "A",
+          "explanation": "The flyer says to 'bring your student ID and your insurance card.'"
+        }
+      ]
+    },
+    {
+      "id": "rdl_r1_short_003",
+      "variant": "short",
+      "genre": "email",
+      "difficulty": "easy",
+      "format_metadata": {},
+      "text": "Hi Sam, this confirms your tutoring appointment with the Writing Center. We will meet on Tuesday at 2 p.m. in Room 305, Henley Hall. Please bring a printed draft of your essay so we can review it together. Let me know if you need to reschedule. Thanks, Dana",
+      "questions": [
+        {
+          "qid": "rdl_r1_short_003_q1",
+          "question_type": "detail",
+          "stem": "According to the email, where will the appointment take place?",
+          "options": {"A": "In the main library reading room", "B": "At the front desk of Henley Hall", "C": "In Dana's private faculty office", "D": "In Room 305 of Henley Hall"},
+          "correct_answer": "D",
+          "explanation": "The email states the meeting will be 'in Room 305, Henley Hall.'"
+        },
+        {
+          "qid": "rdl_r1_short_003_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the tutoring session?",
+          "options": {"A": "It will be conducted entirely online", "B": "Sam is expected to have written something already", "C": "Sam must pay a fee before attending", "D": "The meeting will continue for several hours"},
+          "correct_answer": "B",
+          "explanation": "Since Sam must bring 'a printed draft of your essay,' he is expected to have written a draft beforehand."
+        }
+      ]
+    },
+    {
+      "id": "rdl_r1_short_004",
+      "variant": "short",
+      "genre": "email",
+      "difficulty": "easy",
+      "format_metadata": {},
+      "text": "Hi Lee, your campus parking permit is ready for pickup at the Transportation Office in Building C. Office hours are weekdays from 8 a.m. to 3 p.m. Please bring $20 and your vehicle registration. Permits not collected by Friday will be released to the waitlist. Regards, Omar",
+      "questions": [
+        {
+          "qid": "rdl_r1_short_004_q1",
+          "question_type": "detail",
+          "stem": "According to the email, what must Lee bring to pick up the permit?",
+          "options": {"A": "A completed campus parking map", "B": "A photo for the permit card", "C": "Twenty dollars and a vehicle registration", "D": "A signed letter from an advisor"},
+          "correct_answer": "C",
+          "explanation": "The email asks Lee to 'bring $20 and your vehicle registration.'"
+        },
+        {
+          "qid": "rdl_r1_short_004_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about permits not collected by Friday?",
+          "options": {"A": "They will be mailed to the student", "B": "They can be picked up the next month", "C": "They will be refunded automatically", "D": "They may be given to another person"},
+          "correct_answer": "D",
+          "explanation": "Since uncollected permits are 'released to the waitlist,' they may be given to someone else."
+        }
+      ]
+    }
+  ]
+}

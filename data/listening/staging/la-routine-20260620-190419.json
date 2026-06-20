@@ -1,0 +1,134 @@
+{
+  "items": [
+    {
+      "id": "la_r1_001",
+      "context": "academic_event",
+      "situation": "end-of-semester academic showcase with awards",
+      "speaker_role": "society_president",
+      "difficulty": "easy",
+      "announcement": "Good afternoon, everyone. The Honors Society is proud to host our end-of-semester Student Showcase next Thursday at 6 p.m. in the Maple Hall atrium. Students from every department will present their best projects from the term, and a panel of faculty will hand out awards for outstanding work in research, design, and community service. Light refreshments will be served throughout the evening. If you would like to display a project, please submit your title on our website by this Monday. Whether you are presenting or simply curious, come celebrate a great semester with us.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {"A": "To invite people to a student project showcase", "B": "To explain how to join the Honors Society", "C": "To announce who has already won the awards", "D": "To describe recent renovations to Maple Hall"},
+          "answer": "A",
+          "explanation": "公告目的是邀请大家参加学生作品展示会，A 正确。B 入会方式未讲；C 奖项是活动当晚才颁，并非已揭晓；D 场馆翻修未涉及。",
+          "distractor_types": {"B": "wrong_purpose", "C": "reversed_intent", "D": "wrong_purpose"}
+        },
+        {
+          "type": "detail",
+          "stem": "What must students do in order to display a project?",
+          "options": {"A": "Pay a small entry fee in advance", "B": "Bring refreshments to share with guests", "C": "Submit a project title online by Monday", "D": "Arrive one hour early on Thursday"},
+          "answer": "C",
+          "explanation": "想展示作品须周一前在网站提交标题，C 正确。A 报名费未提；B 茶点由主办方提供，张冠李戴；D 提前一小时未要求。",
+          "distractor_types": {"A": "related_but_not_stated", "B": "misattributed_detail", "D": "related_but_not_stated"}
+        }
+      ]
+    },
+    {
+      "id": "la_r1_002",
+      "context": "facility_change",
+      "situation": "campus bookstore moving to a new building",
+      "speaker_role": "recreation_staff",
+      "difficulty": "easy",
+      "announcement": "Attention, students. Please note that the campus bookstore will be relocating to its new home on the ground floor of the Lewis Student Center. The current location in Foster Hall will close after this Friday, and the new store opens the following Monday at 9 a.m. The new space will offer expanded hours and a small café. During the move, online orders will continue as usual and can be picked up at the information desk. Be sure to update your bookmarks, since the store's web address will change as well.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement mainly about?",
+          "options": {"A": "The opening of a brand-new campus café", "B": "The bookstore moving to a new location", "C": "A short closure for building repairs", "D": "Changes to the main library's hours"},
+          "answer": "B",
+          "explanation": "公告核心是书店搬迁到新地点，B 正确。A 咖啡馆只是附带细节，过窄；C 并非临时维修关闭，而是永久搬迁；D 图书馆时间无关。",
+          "distractor_types": {"A": "too_narrow", "C": "reversed_intent", "D": "wrong_purpose"}
+        },
+        {
+          "type": "detail",
+          "stem": "How can students get their online orders during the move?",
+          "options": {"A": "By having them shipped to a dorm room", "B": "By visiting the old Foster Hall store", "C": "By waiting until the new store opens", "D": "By picking them up at the information desk"},
+          "answer": "D",
+          "explanation": "搬迁期间网订商品在问询台领取，D 正确。A 寄到宿舍未提；B 老店将关闭，张冠李戴；C 须等新店开业与原文矛盾。",
+          "distractor_types": {"A": "related_but_not_stated", "B": "misattributed_detail", "C": "wrong_detail"}
+        }
+      ]
+    },
+    {
+      "id": "la_r1_003",
+      "context": "academic_event",
+      "situation": "senior capstone presentation schedule",
+      "speaker_role": "society_president",
+      "difficulty": "hard",
+      "announcement": "This is a reminder for all graduating seniors about next week's capstone presentations. Sessions run Tuesday through Thursday in Room 210 of the Science Building, beginning promptly at 9 a.m. each day. Your assigned time slot has been emailed to you, and you must arrive at least fifteen minutes early to upload your slides onto the room's computer. Personal laptops will not be permitted at the podium. Each presentation is limited to twelve minutes, followed by questions from the faculty panel. If you have a scheduling conflict, please contact the department office before Friday.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What must seniors do when they arrive for their session?",
+          "options": {"A": "Submit a printed copy of their slides", "B": "Sign in directly with the faculty panel", "C": "Upload their slides onto the room's computer", "D": "Connect their own personal laptops"},
+          "answer": "C",
+          "explanation": "到场须提前把幻灯片上传到教室电脑，C 正确。A 纸质版未要求；B 向评委签到张冠李戴；D 个人笔记本被明确禁止。",
+          "distractor_types": {"A": "wrong_detail", "B": "related_but_not_stated", "D": "misattributed_detail"}
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students who bring their own laptops?",
+          "options": {"A": "They will not be allowed to present from them", "B": "They must email their slides in advance", "C": "They will receive extra presentation time", "D": "They should sit closest to the panel"},
+          "answer": "A",
+          "explanation": "既然讲台不允许个人笔记本，自带笔记本者无法用其演示，A 正确。B 提前发邮件过度推断；C、D 加时和座位都无依据。",
+          "distractor_types": {"B": "over_inference", "C": "unrelated_inference", "D": "unrelated_inference"}
+        }
+      ]
+    },
+    {
+      "id": "la_r1_004",
+      "context": "campus_activity",
+      "situation": "student art market in the quad",
+      "speaker_role": "activity_coordinator",
+      "difficulty": "medium",
+      "announcement": "Hello, everyone! The Student Arts Council is excited to announce our first Spring Art Market, happening this Saturday from 11 a.m. to 4 p.m. on the main quad. Student artists will sell handmade jewelry, prints, ceramics, and much more, with all proceeds going directly to the creators. Admission is completely free, so bring your friends and some cash, since not every booth can accept cards. In case of rain, the market will simply move indoors to the Union ballroom. A few tables are still available for sellers who sign up by Thursday afternoon.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What are visitors advised to bring to the market?",
+          "options": {"A": "A reusable shopping bag", "B": "Their student ID for entry", "C": "A completed seller registration form", "D": "Cash, since some booths cannot take cards"},
+          "answer": "D",
+          "explanation": "提醒带现金，因为有摊位不收卡，D 正确。A 购物袋未提；B 入场免费无需 ID，张冠李戴；C 报名表是卖家的事。",
+          "distractor_types": {"A": "related_but_not_stated", "B": "misattributed_detail", "C": "misattributed_detail"}
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the market if it rains?",
+          "options": {"A": "It will be canceled for the entire day", "B": "It will still take place, but indoors", "C": "Admission will then require a small fee", "D": "Only sellers who take cards may attend"},
+          "answer": "B",
+          "explanation": "下雨则改到 Union 舞厅室内举行，故仍会进行，B 正确。A 取消与原文相反；C 收费、D 限制卖家都无依据。",
+          "distractor_types": {"A": "over_inference", "C": "unrelated_inference", "D": "unrelated_inference"}
+        }
+      ]
+    },
+    {
+      "id": "la_r1_005",
+      "context": "info_session",
+      "situation": "new student orientation schedule and requirements",
+      "speaker_role": "program_coordinator",
+      "difficulty": "medium",
+      "announcement": "Welcome, new students! This is an important reminder about next week's orientation. The opening session begins Monday at 8:30 a.m. in Carter Auditorium, and attendance is mandatory for all first-year students. Over the three days, you will meet your academic advisor, tour the campus, and complete your course registration. Please bring a photo ID and your enrollment letter in order to check in. Lunch is provided on the first day only. The full schedule is posted on the student portal, so review it carefully, as some sessions require signing up in advance.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {"A": "To inform new students about orientation", "B": "To explain how to register for classes online", "C": "To introduce the academic advising staff", "D": "To tell students that orientation is optional"},
+          "answer": "A",
+          "explanation": "公告意在告知新生迎新安排，A 正确。B 选课只是其中一项，过窄；C 介绍顾问偏离主旨；D 与强制出席相反。",
+          "distractor_types": {"B": "too_narrow", "C": "wrong_purpose", "D": "reversed_intent"}
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about some of the orientation sessions?",
+          "options": {"A": "They are open only to academic advisors", "B": "They will be repeated again the next week", "C": "Students may not attend without signing up first", "D": "They provide a free lunch on every day"},
+          "answer": "C",
+          "explanation": "有些环节需提前报名，因此不报名可能无法参加，C 正确。A 仅限顾问无依据；B 下周重办过度推断；D 与午餐仅首日相反。",
+          "distractor_types": {"A": "unrelated_inference", "B": "over_inference", "D": "unrelated_inference"}
+        }
+      ]
+    }
+  ]
+}

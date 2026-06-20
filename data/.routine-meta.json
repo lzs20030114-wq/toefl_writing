@@ -1,108 +1,140 @@
 {
-  "session_id": "routine-20260618-190442",
-  "completed_at": "2026-06-18T19:13:14Z",
-  "duration_minutes": 8.5,
+  "session_id": "routine-20260620-190419",
+  "completed_at": "2026-06-20T19:37:40Z",
+  "duration_minutes": 33,
   "model": "Claude Opus 4.8",
-  "highlight": "12 个题库全部刷新，PASS 1 共 60/70；首次出现开源软件维护、合金材料学、消防队起源等新课题",
+  "highlight": "首次出现物理杠杆与水熊虫学术听力讲座；BS 难度冻结门一次通过，20/20 合库",
   "commit_sha": "",
-  "r2_completed_at": "2026-06-18T19:33:43Z",
-  "r2_session_id": "routine-r2-20260618-193343",
   "results": {
     "bs": {
       "generated": 20,
       "accepted": 20,
-      "topics": ["future simple + prepositional phrase", "embedded/indirect questions (whether/if/found out)", "present perfect negation with contractions", "direct wh-questions with inversion", "relative clauses", "passive voice"],
-      "favorite": {"prompt": "I just transferred here this semester.", "answer": "Where do I find the registration office?"},
-      "retried_after_fail": true,
-      "failure_reason": "diversity 82 < 90 (角色名 4/20 distinct, prefilled 过度集中于 mid-noun-or-adj)",
-      "r2_supplemented": true,
-      "r2_items_added": 10
+      "topics": ["campus life", "classes & assignments", "library & dorms", "registration"],
+      "favorite": {
+        "prompt": "Did you hear back from the housing office?",
+        "answer": "She wondered whether the housing form that I mailed last week got approved."
+      },
+      "retried_after_fail": false,
+      "failure_reason": ""
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["computer science", "public policy", "history and culture", "economics"],
-      "favorite": {"subtopic": "computer science", "preview": "We've been discussing how open-source software gets maintained this semester. Many critical projects that power banks, hospitals"},
+      "topics": ["marine biology", "technology and media", "economics", "computer science"],
+      "favorite": {
+        "subtopic": "marine biology",
+        "preview": "We've been examining how the deep ocean is becoming a frontier for mineral extraction."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "email": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["服务与活动", "校园学业", "日常社交", "消费售后"],
-      "favorite": {"subtopic": "消费售后", "preview": "You recently bought a monthly streaming-and-audiobook subscription that promised offline downloads. The downloads keep disappearing"},
+      "topics": ["服务与活动", "校园学业", "消费售后", "日常社交"],
+      "favorite": {
+        "subtopic": "消费售后",
+        "preview": "You bought a pair of wireless noise-cancelling headphones eight months ago, and they are still under warranty."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ap": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["materials_science/alloys", "sociology/inequality", "psychology/attention", "anthropology/early humans", "technology/materials science"],
-      "favorite": {"subtopic": "psychology/attention", "preview": "Attention is the cognitive process by which the mind selects certain stimuli for focused processing while"},
+      "topics": ["history", "biology", "psychology", "geology", "materials_science"],
+      "favorite": {
+        "subtopic": "history/ancient civilizations",
+        "preview": "Ancient irrigation systems were among the earliest large-scale engineering achievements of human civilization."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ctw": {
       "generated": 6,
       "accepted": 6,
-      "topics": ["biology/bird navigation during migration", "environmental_science/the carbon cycle", "psychology/selective attention", "history/factory labor in the Industrial Revolution", "geology/formation of sedimentary rock", "astronomy/the structure and tails of comets"],
-      "favorite": {"subtopic": "astronomy/the structure and tails of comets", "preview": "Comets are icy bodies that travel along stretched orbits carrying them from the cold outer solar"},
+      "topics": ["biology", "environmental_science", "psychology", "history", "geology", "astronomy"],
+      "favorite": {
+        "subtopic": "history/silk road",
+        "preview": "The Silk Road was a vast network of trade routes that linked China with the markets of the Mediterranean."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-rdl-short": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["email", "email", "notice", "notice"],
-      "favorite": {"subtopic": "notice/shuttle-detour", "preview": "Notice: Due to road repairs on Elm Street, the campus shuttle will follow a detour from Monday, June 8"},
+      "topics": ["email", "flyer"],
+      "favorite": {
+        "subtopic": "flyer/flu shot clinic",
+        "preview": "FREE FLU SHOTS — no appointment needed! Student Health Center, Room 120, Wednesday, October 8."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-rdl-long": {
       "generated": 2,
       "accepted": 2,
-      "topics": ["menu", "notice"],
-      "favorite": {"subtopic": "menu/campus food truck weekly specials", "preview": "Maple Street Mobile Kitchen — Weekly Specials. Find us beside Carver Hall, Monday through Friday, 11:00 AM to 2:00 PM."},
+      "topics": ["social_media", "email"],
+      "favorite": {
+        "subtopic": "email/campus tool library",
+        "preview": "We're excited to announce that the Campus Tool Library is now open in the basement of Hartwell Hall."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lat": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["history: unexpected origins of the modern fire department", "cognitive_psychology: dual-process theory", "ecology: rewilding to restore degraded habitats", "anthropology: gift-giving rituals reinforcing social bonds"],
-      "favorite": {"subtopic": "history: unexpected origins of the modern fire department", "preview": "The modern fire department did not begin as a public service. In fact, the earliest organized firefighting grew out of insurance."},
+      "topics": ["physics", "biology", "psychology", "geology"],
+      "favorite": {
+        "subtopic": "biology/how tardigrades survive extreme environments",
+        "preview": "Today I want to introduce you to one of the toughest animals on Earth: the tardigrade."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lc": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["pet/houseplant care", "bus/train schedule for a coast day trip", "debating if a new cafe is worth the price", "part-time factory job with a 5am shift", "cheese board planning for a dinner party"],
-      "favorite": {"subtopic": "part-time factory job with a brutal 5am shift", "preview": "I heard you started that part-time job at the packaging factory. How's it going so far? — It's okay, but the schedule's killing me."},
+      "topics": ["campus_dorm_life", "errands_service", "plans_social"],
+      "favorite": {
+        "subtopic": "errands_service/cooking tips",
+        "preview": "Quick tip: add a pinch of sugar to balance the acidity. It makes a huge difference."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-la": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["spring data-science symposium", "parking lot closure for alumni weekend", "financial aid scholarship workshop", "cultural food festival", "health insurance enrollment session"],
-      "favorite": {"subtopic": "cultural food festival organized by international club", "preview": "Hello, everyone. The International Students Club is thrilled to invite you to our annual World Flavors Food Festival next Saturday"},
+      "topics": ["academic_event", "facility_change", "campus_activity", "info_session"],
+      "favorite": {
+        "subtopic": "campus_activity/student art market",
+        "preview": "The Student Arts Council is excited to announce our first Spring Art Market on the main quad."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lcr": {
       "generated": 8,
       "accepted": 8,
-      "topics": ["carpool ride arrangement", "lost-and-found umbrella", "jazz concert tickets", "lab report length", "final exam practice problems", "bank Saturday hours", "borrowing lecture notes", "study group invite"],
-      "favorite": {"subtopic": "lost-and-found gray umbrella (hard, idiomatic)", "preview": "Did anyone turn in a gray umbrella today? Correct reply uses the idiom 'Let me take a look in the back for you.'"},
+      "topics": ["general_daily", "campus_academic", "campus_daily"],
+      "favorite": {
+        "subtopic": "campus_academic/lab report requirements",
+        "preview": "How long should the lab report actually be?"
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "speaking-repeat": {
       "generated": 3,
       "accepted": 3,
-      "topics": ["Campus Gym Induction (orientation)", "Tutoring Center (orientation)", "Watercolor Painting (how-to procedure)"],
-      "favorite": {"subtopic": "Watercolor Painting (how-to procedure)", "preview": "Next, dampen the surface with a clean, wet brush. Then mix small amounts of paint on the palette."},
+      "topics": ["Art Gallery Opening", "Residence Hall Move-In", "Salad Making"],
+      "favorite": {
+        "subtopic": "Salad Making (how-to)",
+        "preview": "Once everything is coated evenly, garnish the salad with herbs and serve it right away."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     }
