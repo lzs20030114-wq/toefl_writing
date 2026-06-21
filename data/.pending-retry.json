@@ -1,6 +1,6 @@
 {
-  "session_id": "routine-20260620-190419",
-  "generated_at": "2026-06-20T19:38:46.275Z",
+  "session_id": "routine-20260621-190406",
+  "generated_at": "2026-06-21T19:12:15.950Z",
   "needs_retry": true,
   "overall_scores": {
     "diversity": 93,
@@ -10,32 +10,32 @@
   "retry_banks": [
     {
       "bank": "bs",
-      "diversity_score": 85,
+      "diversity_score": 83,
       "diversity_threshold": 90,
-      "quality_score": 98,
+      "quality_score": 100,
       "quality_threshold": 95,
       "failures": [
-        "多样性 85 < 90"
+        "多样性 83 < 90"
       ],
       "diversity_breakdown": [
-        "角色名 5/20",
+        "角色名 2/20",
         "场景 20/20",
         "句型 4/5",
         "开头 3/4",
-        "prefilled类型 8/4 (top:mid-noun-or-adj 5/20)",
-        "人物当prefilled 3/20 (15%, TPO~30%)",
-        "干扰词 14种 (top:did 17%)",
-        "chunk颗粒 5.5块/题 单词率69% (TPO~6块/77%)",
-        "题面对话化 14/20 (70% 含you, TPO~72%)"
+        "prefilled类型 5/4 (top:mid-noun-or-adj 10/20)",
+        "人物当prefilled 6/20 (30%, TPO~30%)",
+        "干扰词 12种 (top:did 25%)",
+        "chunk颗粒 6.6块/题 单词率99% (TPO~6块/77%)",
+        "题面对话化 18/20 (90% 含you, TPO~72%)"
       ],
       "quality_breakdown": [
         "块数 20/20",
-        "干扰词 18/20",
+        "干扰词 20/20",
         "答案长度 20/20",
         "重组正确 20/20"
       ],
       "hints": [
-        "角色名重复严重 (5/20 distinct) — use 15+ distinct character names from: Olivia, Harold, Mariana, Hector, Margot, Emma, Julian, Matthew, Alison, Juan, Angelina, Professor Cho, Naomi, Diane"
+        "角色名重复严重 (2/20 distinct) — use 15+ distinct character names from: Olivia, Harold, Mariana, Hector, Margot, Emma, Julian, Matthew, Alison, Juan, Angelina, Professor Cho, Naomi, Diane"
       ],
       "items_to_supplement": 10
     },
@@ -59,6 +59,27 @@
         "多样性 < gate — choose distinct topic/subtopic combos; avoid same discipline twice"
       ],
       "items_to_supplement": 2
+    },
+    {
+      "bank": "reading-rdl-long",
+      "diversity_score": 100,
+      "diversity_threshold": 70,
+      "quality_score": 50,
+      "quality_threshold": 85,
+      "failures": [
+        "质量 50 < 85"
+      ],
+      "diversity_breakdown": [
+        "话题 2/2",
+        "notice 0 · email 0"
+      ],
+      "quality_breakdown": [
+        "词数 1/2"
+      ],
+      "hints": [
+        "质量校验有偏差: 词数 1/2 — recheck schema compliance"
+      ],
+      "items_to_supplement": 1
     }
   ]
 }

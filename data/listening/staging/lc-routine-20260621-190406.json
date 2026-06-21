@@ -1,0 +1,269 @@
+{
+  "items": [
+    {
+      "context": "recommendations_opinions",
+      "situation": "Two students discuss a new restaurant downtown and which dish to order.",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Hey, did you try that new Thai place downtown? Everyone's talking about it." },
+        { "speaker": "Man", "text": "Yeah, I went last week! Honestly, the green curry was good, but the mango sticky rice is what you really go for. It's incredible." },
+        { "speaker": "Woman", "text": "Really? I usually skip dessert. Is it that special?" },
+        { "speaker": "Man", "text": "Trust me. The rice is warm, the mango's super ripe. I'd go back just for that, even though it's a bit pricey." },
+        { "speaker": "Woman", "text": "Hmm, okay. I'm meeting Lena there Friday, so I'll have to convince her to save room." },
+        { "speaker": "Man", "text": "Good call. Just don't fill up on the appetizers first." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Which dish does the man recommend most highly?",
+          "options": {
+            "A": "The mango sticky rice",
+            "B": "The green curry",
+            "C": "The appetizer platter",
+            "D": "The Thai iced tea"
+          },
+          "answer": "A",
+          "explanation": "男生明确说芒果糯米饭才是真正值得去吃的（what you really go for），是他最推荐的菜。B绿咖喱他只说good，并非最推荐，属于wrong_detail。C开胃菜他反而提醒不要吃太多，属于misattributed。D红茶对话中根本没提到，属于related_but_not_stated。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "misattributed",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do on Friday?",
+          "options": {
+            "A": "Cancel her dinner plans with Lena",
+            "B": "Order only appetizers to save money",
+            "C": "Try the dessert the man suggested",
+            "D": "Eat at a different restaurant instead"
+          },
+          "answer": "C",
+          "explanation": "女生原本不吃甜点，但被男生说服后表示要让Lena也留肚子（save room），暗示她打算尝尝那道甜点，所以C正确。A取消计划与对话相反，属于over_inference。B她反而被提醒别吃太多开胃菜，属于rejected_option。D换餐厅没有任何依据，属于unrelated_next_step。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "rejected_option",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "Two roommates work out a fair cleaning schedule for shared spaces.",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "We really need a plan for the kitchen. It's getting out of hand, and I keep ending up cleaning it alone." },
+        { "speaker": "Man", "text": "Yeah, sorry about that. My class schedule's been brutal. How about we just split it by week? I take this week, you take next?" },
+        { "speaker": "Woman", "text": "Hmm, a whole week feels like too much at once. What if we each take specific days instead?" },
+        { "speaker": "Man", "text": "Oh, that's smarter. Okay, I'll do Mondays, Wednesdays, and Fridays. You take the other days?" },
+        { "speaker": "Woman", "text": "Deal. And let's put it on a sticky note on the fridge so nobody forgets." },
+        { "speaker": "Man", "text": "Perfect. I'll write it up tonight." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "How do the roommates decide to divide the cleaning?",
+          "options": {
+            "A": "By alternating full weeks",
+            "B": "By assigning specific days to each person",
+            "C": "By hiring a cleaning service",
+            "D": "By cleaning together every evening"
+          },
+          "answer": "B",
+          "explanation": "两人最终决定按具体的星期几分工，男生负责周一三五，女生负责其余几天，所以B正确。A整周轮换是男生最初的提议，被女生否决了，属于rejected的wrong_detail。C请清洁服务对话从未提及，属于related_but_not_stated。D每晚一起打扫与他们分日子的方案相反，属于reversed_situation。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do tonight?",
+          "options": {
+            "A": "Clean the kitchen by himself",
+            "B": "Ask for a new roommate",
+            "C": "Complain to the dorm manager",
+            "D": "Write the schedule on a note for the fridge"
+          },
+          "answer": "D",
+          "explanation": "男生说今晚会把分工写下来（I'll write it up tonight），而女生提议贴在冰箱上的便利贴，所以D正确。A今晚打扫厨房不是他答应的事，属于unrelated_next_step。B换室友过于极端，属于over_inference。C向宿管投诉对话毫无依据，属于unrelated_next_step。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "B": "over_inference",
+            "C": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "Two friends recommend a documentary series to each other.",
+      "difficulty": "hard",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "You finished that nature documentary series, right? The one about deep oceans?" },
+        { "speaker": "Man", "text": "I did, and honestly, I was skeptical at first. I figured it'd just be pretty footage with no real substance." },
+        { "speaker": "Woman", "text": "And? Was it actually any good?" },
+        { "speaker": "Man", "text": "It surprised me. The science was solid, and each episode built on the last one. By the end I felt like I'd actually learned something." },
+        { "speaker": "Woman", "text": "Wow. I've got a long train ride home this weekend. Maybe I'll download it." },
+        { "speaker": "Man", "text": "Do it. Just start from episode one, though. They really build on each other." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the man mainly saying about the documentary series?",
+          "options": {
+            "A": "It has beautiful footage but little real content",
+            "B": "It is too scientific for casual viewers",
+            "C": "It was better and more informative than he expected",
+            "D": "It would be good for a long train ride"
+          },
+          "answer": "C",
+          "explanation": "男生主旨是这部纪录片超出他的预期，内容扎实、让他真正学到东西，所以C正确。A漂亮画面没内容正是他原本的怀疑，后来被推翻，属于reversed_situation。B太偏科学难懂对话没说，且与他的赞赏相反，属于wrong_topic。D适合长途火车是女生的想法，且只是一个细节，并非男生对纪录片的总体评价，属于too_narrow。",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "B": "wrong_topic",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What does the man suggest the woman do?",
+          "options": {
+            "A": "Watch the episodes in order from the beginning",
+            "B": "Skip ahead to the most exciting episode",
+            "C": "Watch it only after reading reviews",
+            "D": "Find a shorter series for the train ride"
+          },
+          "answer": "A",
+          "explanation": "男生强调要从第一集开始按顺序看，因为各集层层递进，所以A正确。B跳着看与他的建议相反，属于rejected_option。C看影评后再看对话没提，属于unrelated_next_step。D找更短的剧集没有依据，属于unrelated_next_step。",
+          "distractor_types": {
+            "B": "rejected_option",
+            "C": "unrelated_next_step",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "Two students compare how they get to campus each morning.",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Do you take the bus to campus? I always see you near the stop." },
+        { "speaker": "Man", "text": "Actually, no. I just walk. It's only fifteen minutes from my place, and it wakes me up." },
+        { "speaker": "Woman", "text": "Wow, lucky. I'm way too far to walk, so I bike. It's fast, but it's freezing this time of year." },
+        { "speaker": "Man", "text": "Yikes, biking in the cold sounds rough. Why not take the bus then?" },
+        { "speaker": "Woman", "text": "It's always packed in the morning, and it takes forever with all the stops." },
+        { "speaker": "Man", "text": "Fair enough. Maybe just bundle up more until spring." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "How does the man usually get to campus?",
+          "options": {
+            "A": "By bus",
+            "B": "By bike",
+            "C": "By car",
+            "D": "On foot"
+          },
+          "answer": "D",
+          "explanation": "男生说他就是走路去（I just walk），只要十五分钟，所以D正确。A坐公交是女生看到他在车站附近的误会，他明确否认了，属于wrong_detail。B骑车是女生的方式，属于misattributed。C开车对话从未提及，属于related_but_not_stated。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "misattributed",
+            "C": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely keep doing to get to campus?",
+          "options": {
+            "A": "Start taking the crowded bus",
+            "B": "Keep biking but dress more warmly",
+            "C": "Begin walking like the man",
+            "D": "Ask a friend for a ride each day"
+          },
+          "answer": "B",
+          "explanation": "女生抱怨公交又挤又慢，男生建议她在春天前多穿点保暖，暗示她会继续骑车只是穿暖些，所以B正确。A改坐公交与她对公交的抱怨相反，属于rejected_option。C像男生一样走路她说自己住得太远走不了，属于rejected_option。D每天求人搭车对话毫无依据，属于unrelated_next_step。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "C": "rejected_option",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "plans_social",
+      "situation": "Two students plan what snacks and drinks to buy for a movie night.",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Okay, for the movie night Saturday, what should we grab from the store?" },
+        { "speaker": "Man", "text": "Definitely popcorn. You can't have a movie night without it. And maybe some soda?" },
+        { "speaker": "Woman", "text": "Good thinking. Although, half the group doesn't drink soda anymore. Maybe sparkling water instead?" },
+        { "speaker": "Man", "text": "Oh, right. Let's do sparkling water then. And I'll grab some chocolate too." },
+        { "speaker": "Woman", "text": "Perfect. I'll handle the popcorn and the drinks if you get the chocolate." },
+        { "speaker": "Man", "text": "Deal. I'll stop by the store on my way home tomorrow." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What snack do both students agree is essential for the movie night?",
+          "options": {
+            "A": "Popcorn",
+            "B": "Chocolate",
+            "C": "Potato chips",
+            "D": "Cookies"
+          },
+          "answer": "A",
+          "explanation": "男生说看电影一定要有爆米花（You can't have a movie night without it），女生也赞同，所以A正确。B巧克力只是男生额外加的，并非两人都认为必不可少，属于wrong_detail。C薯片和D饼干对话都没提到，属于related_but_not_stated。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What drink will they most likely buy?",
+          "options": {
+            "A": "Regular soda for everyone",
+            "B": "Coffee for the group",
+            "C": "Sparkling water",
+            "D": "Fruit juice boxes"
+          },
+          "answer": "C",
+          "explanation": "女生指出半数人不喝苏打水了，提议改买气泡水，男生也同意，所以C正确。A普通苏打水被女生否决了，属于rejected_option。B咖啡和D果汁对话都没提，属于unrelated_next_step。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "unrelated_next_step",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    }
+  ]
+}

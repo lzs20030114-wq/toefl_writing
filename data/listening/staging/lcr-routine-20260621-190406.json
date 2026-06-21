@@ -1,0 +1,165 @@
+{
+  "items": [
+    {
+      "context": "campus_academic",
+      "situation": "student asking about exam format or study materials",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "What's the exam format going to be this term?",
+      "options": {
+        "A": "Your guess is as good as mine.",
+        "B": "The exam room is on the second floor.",
+        "C": "Yes, the term ends in December.",
+        "D": "I formatted my essay last night."
+      },
+      "answer": "A",
+      "explanation": "正确答案A是一个地道的口语习语，意思是\"我也不清楚\"，自然地回应了对方的疑问，符合idiomatic范式。B是语义联想陷阱，利用了\"exam\"联想到考场地点，却没有回答格式问题。C回答的是\"什么时候\"而非\"什么格式\"，属于答非所问，且\"term\"是关键词陷阱。D利用了\"format\"一词的双关（排版/格式），转向了无关的论文排版，属于多义词误读。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "polysemy_misinterpretation"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "two classmates discussing a group project deadline",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Why is our project due so early this time?",
+      "options": {
+        "A": "The project room is always crowded.",
+        "B": "Because the professor's traveling next week.",
+        "C": "I finished my part of the slides.",
+        "D": "Yes, I think we should start soon."
+      },
+      "answer": "B",
+      "explanation": "正确答案B直接回答了\"为什么\"提前——因为教授下周要出差，符合direct_topical范式。A是语义联想陷阱，由\"project\"联想到项目教室，却没解释原因。C陈述了一个无关的个人事实（自己完成了幻灯片），属于离题但语法正确的干扰项。D用\"Yes\"回答了一个\"为什么\"的问题，属于答非所问的问题类型错误。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a librarian about a book or resource",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Do you have the second edition of this textbook?",
+      "options": {
+        "A": "The textbook cover is bright red.",
+        "B": "I edited that chapter myself.",
+        "C": "Would the third edition work for you?",
+        "D": "No, I haven't read it yet."
+      },
+      "answer": "C",
+      "explanation": "正确答案C用一个反问来推进对话——询问对方第三版是否可以，巧妙地暗示第二版可能没有但有替代，符合counter_question范式。A是语义联想陷阱，由\"textbook\"联想到书的封面颜色，毫无帮助。B利用了\"edition\"和\"edited\"的词形相近，是关键词陷阱兼多义误读。D回答的是\"你有没有读过\"，而非\"你这里有没有\"，属于回答了错误的问题。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "polysemy_misinterpretation",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking about a reading list for a course",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "I can't make heads or tails of this reading list.",
+      "options": {
+        "A": "Reading by the window is so relaxing.",
+        "B": "The list was posted on Tuesday.",
+        "C": "Heads up, the bookstore is closed.",
+        "D": "Let's go through it together."
+      },
+      "answer": "D",
+      "explanation": "说话人用习语\"can't make heads or tails of\"表示\"完全看不懂\"。正确答案D提议\"一起来看看\"，是对困惑最自然、最有帮助的回应，符合idiomatic情境下的助人范式。A是语义联想陷阱，由\"reading\"联想到阅读这件事本身，离题。B回答的是清单何时发布，属于答非所问。C用了\"heads\"一词制造关键词陷阱，转向无关的书店信息。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "wrong_question_type",
+        "C": "semantic_association_trap"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "offering help to someone who seems stressed",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Are you doing okay? You seem really tense.",
+      "options": {
+        "A": "Honestly, I've just got a lot on my plate.",
+        "B": "The tent is set up by the lake.",
+        "C": "Yes, ten people are coming tonight.",
+        "D": "I'm okay with the new schedule."
+      },
+      "answer": "A",
+      "explanation": "正确答案A以话语标记\"Honestly\"开头，间接承认自己确实压力大（\"a lot on my plate\"是\"事情很多\"的习语），符合marker_led_indirect范式。B利用\"tense\"与\"tent\"读音相近制造关键词陷阱，转向无关的帐篷。C利用\"tense\"与\"ten\"的谐音，回答了无关的人数。D表面用了\"okay\"，但回应的是对新日程的态度，属于错误语境。",
+      "distractor_types": {
+        "A": "marker_led_indirect_correct",
+        "B": "semantic_association_trap",
+        "C": "semantic_association_trap",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking about course enrollment or prerequisites",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Where do I sign up for the prerequisite course?",
+      "options": {
+        "A": "The course covers a lot of material.",
+        "B": "Actually, you can do it all online now.",
+        "C": "Yes, that's a required class.",
+        "D": "I signed my lease last weekend."
+      },
+      "answer": "B",
+      "explanation": "正确答案B以话语标记\"Actually\"开头，间接告知报名地点——现在都在网上办理，巧妙地回应了\"在哪报名\"，符合marker_led_indirect范式。A是语义联想陷阱，由\"course\"联想到课程内容，没有回答地点。C用\"Yes\"回答了\"在哪里\"的问题，属于答非所问。D利用\"sign up\"与\"signed\"词形相近，转向无关的租房合同，是关键词陷阱兼多义误读。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "polysemy_misinterpretation"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student checking with TA about lab report requirements",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I'm not sure if we need to include raw data.",
+      "options": {
+        "A": "The lab smelled like chemicals today.",
+        "B": "Raw vegetables are healthier, they say.",
+        "C": "Well, the rubric says to attach it.",
+        "D": "Did you finish the experiment already?"
+      },
+      "answer": "C",
+      "explanation": "正确答案C以话语标记\"Well\"开头，间接给出依据——评分标准要求附上原始数据，自然回应了对方的不确定，符合marker_led_indirect范式。A是语义联想陷阱，由\"lab\"联想到实验室的气味，离题。B利用\"raw\"一词的双关（原始数据/生的蔬菜），转向无关的饮食话题，属于多义误读。D反问对方是否做完实验，回避了数据问题，属于离题/错误问题。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "polysemy_misinterpretation",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about dorm maintenance issue",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "How do I report the broken heater in my room?",
+      "options": {
+        "A": "The room gets really cold at night.",
+        "B": "Yes, the heater is quite old.",
+        "C": "I reported my lost keycard yesterday.",
+        "D": "Have you tried the maintenance app?"
+      },
+      "answer": "D",
+      "explanation": "正确答案D用反问推进对话——建议对方试试维修App，间接告诉了\"怎么报修\"，符合counter_question范式。A是语义联想陷阱，由\"heater\"联想到房间寒冷，没有回答方法。B用\"Yes\"回答了一个\"怎么做\"的问题，属于答非所问。C利用\"report\"一词，转向无关的丢失门卡事件，是关键词陷阱兼离题。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "wrong_question_type",
+        "C": "off_topic"
+      }
+    }
+  ]
+}

@@ -1,0 +1,219 @@
+{
+  "items": [
+    {
+      "context": "logistics",
+      "situation": "temporary road closure and detour instructions",
+      "speaker_role": "campus_admin",
+      "difficulty": "hard",
+      "announcement": "Good morning, everyone. Due to emergency water-main repairs, University Drive between the library and the dining hall will be fully closed to all traffic from this Wednesday at 7 a.m. until Friday evening. During this time, please follow the marked detour along Chestnut Avenue, which loops behind the gymnasium before rejoining the main campus road. We'll also be relocating the Wednesday farmers' market from its usual spot on University Drive to the plaza outside the student center. Crews will be working with heavy machinery, so we ask drivers and cyclists to slow down and watch for flaggers directing traffic near the repair zone.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To explain a temporary road closure and detour",
+            "B": "To announce the cancellation of the farmers' market",
+            "C": "To recruit volunteers for the water-main repairs",
+            "D": "To encourage students to use University Drive"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：公告核心是因水管抢修，University Drive临时封闭并提供绕行路线，属于解释道路封闭与改道。B为wrong_purpose：农贸市场只是被搬到学生中心广场，并未取消，把次要信息当成了主旨。C为wrong_purpose：施工由工作人员负责，公告从未招募志愿者。D为reversed_intent：公告恰恰是要求大家避开被封闭的University Drive，与之相反。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the area near the repair zone?",
+          "options": {
+            "A": "It will reopen earlier than Friday evening",
+            "B": "It is normally closed to cyclists",
+            "C": "It may be hazardous to pass through quickly",
+            "D": "It is located outside the student center"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：公告提到有重型机械作业，要求司机和骑行者减速并留意指挥交通的旗手，可推断该区域快速通过存在危险。A为over_inference：公告明确说封闭到周五傍晚，没有任何提前开放的依据。B为wrong_detail：公告并未说该路平时禁止骑行，只是提醒骑行者减速。D为wrong_detail：搬到学生中心广场的是农贸市场，而非维修区，属于错位的细节。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "wrong_detail",
+            "D": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "academic_event",
+      "situation": "honors thesis oral defense schedule announcement",
+      "speaker_role": "department_staff",
+      "difficulty": "medium",
+      "announcement": "This is a reminder that the schedule for this semester's honors thesis oral defenses has now been posted outside the department office in Harrow Hall. Defenses will take place over three days, beginning next Tuesday, in seminar room 204. Each candidate has been assigned a forty-minute slot, and you'll find your exact time on the printed schedule. Please arrive at least fifteen minutes early and bring two printed copies of your final thesis for the committee. We'd also like to remind students that the defenses are open to the public, so feel free to invite friends and family to attend.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To explain how thesis grades are calculated",
+            "B": "To inform students that the defense schedule is posted",
+            "C": "To recruit faculty members for the committee",
+            "D": "To announce a change in the department office location"
+          },
+          "answer": "B",
+          "explanation": "正确答案B：公告中心是通知荣誉论文答辩的日程已经张贴，并说明相关安排，属于告知日程已发布。A为wrong_purpose：公告完全没有涉及成绩如何评定。C为wrong_purpose：委员会成员已定，公告未招募教师。D为wrong_detail：公告只是说日程贴在系办公室外，并未说办公室搬迁。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "C": "wrong_purpose",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are candidates required to bring to their defense?",
+          "options": {
+            "A": "A signed permission form from an advisor",
+            "B": "A laptop with their presentation slides",
+            "C": "Two letters of recommendation",
+            "D": "Two printed copies of their final thesis"
+          },
+          "answer": "D",
+          "explanation": "正确答案D：公告明确要求每位答辩者带两份打印好的最终论文交给委员会。A为related_but_not_stated：导师签字表是合理但公告未提及的内容。B为related_but_not_stated：演示幻灯片在答辩中常见，但本公告并未要求带笔记本电脑。C为wrong_detail：公告里出现的是“两份论文”，把“两份”这个数字错配到了推荐信上。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "related_but_not_stated",
+            "C": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "logistics",
+      "situation": "campus shuttle route change due to construction",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "Attention students. Beginning this Monday, the campus shuttle will follow a new route while construction continues on Maple Street. Instead of stopping at the east gate, the shuttle will now pick up and drop off riders at the temporary stop in front of the recreation center. All other stops along the route will stay the same, and the shuttle will keep running every fifteen minutes from 7 a.m. to 9 p.m. We expect this change to last about a month. Updated route maps are posted at every stop and on the transportation page of the university website.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement mainly about?",
+          "options": {
+            "A": "A new fee for riding the campus shuttle",
+            "B": "The closing of the recreation center",
+            "C": "A change to the campus shuttle route",
+            "D": "An increase in shuttle service hours"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：公告主旨是因Maple Street施工，校园班车改走新路线，东门停靠点改到康乐中心前。A为related_but_not_stated：公告完全没有提到任何车费。B为wrong_detail：康乐中心是临时上下车点，并未关闭。D为wrong_detail：班车仍是每十五分钟一班、7点到21点，时间没有增加。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "Where will the shuttle now stop instead of the east gate?",
+          "options": {
+            "A": "In front of the recreation center",
+            "B": "On Maple Street near the construction",
+            "C": "At the main library entrance",
+            "D": "Behind the university dining hall"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：公告明确说班车不再停东门，改在康乐中心前的临时站点上下客。B为wrong_detail：Maple Street正在施工，恰恰是班车要避开的地方。C为related_but_not_stated：图书馆是合理地点但公告未提及。D为related_but_not_stated：餐厅同样未在公告中出现。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        }
+      ]
+    },
+    {
+      "context": "career_services",
+      "situation": "LinkedIn profile photo day at career center",
+      "speaker_role": "career_advisor",
+      "difficulty": "easy",
+      "announcement": "Good afternoon, students. The Career Center is excited to host our free LinkedIn Profile Photo Day this Thursday from 10 a.m. to 3 p.m. in the lobby of Bryson Hall. A professional photographer will be on site to take polished headshots that you can use on LinkedIn and other job applications, all at no cost. We recommend dressing in business attire to make the best impression. No appointment is needed, but spots fill up quickly, so we suggest arriving early. Photos will be emailed to you within two business days, so please be sure to check your university inbox.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce a workshop on writing resumes",
+            "B": "To remind students to update their LinkedIn profiles",
+            "C": "To recruit a photographer for the Career Center",
+            "D": "To promote a free professional headshot event"
+          },
+          "answer": "D",
+          "explanation": "正确答案D：公告主旨是宣传职业中心举办的免费LinkedIn证件照活动，由专业摄影师拍摄头像。A为wrong_purpose：公告是拍照活动，没有简历写作工作坊。B为too_narrow：更新LinkedIn只是照片用途之一，并非公告目的。C为reversed_intent：摄影师是已请好来服务学生的，公告并非招募摄影师。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "too_narrow",
+            "C": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are students advised to do for the event?",
+          "options": {
+            "A": "Book an appointment online in advance",
+            "B": "Wear business attire to the session",
+            "C": "Bring a printed copy of their resume",
+            "D": "Pay a small fee for the headshot"
+          },
+          "answer": "B",
+          "explanation": "正确答案B：公告建议学生穿正装以留下最好印象。A为wrong_detail：公告明说无需预约，与此相反。C为related_but_not_stated：带简历是合理但公告未提及的做法。D为wrong_detail：活动是免费的，公告强调at no cost，不存在收费。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "facility_change",
+      "situation": "grand reopening of a renovated gallery",
+      "speaker_role": "recreation_staff",
+      "difficulty": "medium",
+      "announcement": "We're excited to announce that the newly renovated Westfield Gallery will hold its grand reopening this Saturday at 1 p.m. on the second floor of the arts building. After nearly a year of renovations, the gallery now features improved lighting, a climate-controlled exhibition room, and a spacious new lobby. The opening celebration will include a guided tour of the inaugural student photography exhibit, along with light refreshments. Admission is free, but because seating for the opening remarks is limited, we encourage you to reserve a spot through the gallery's online form. We hope to see you there.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What new feature does the renovated gallery now have?",
+          "options": {
+            "A": "A climate-controlled exhibition room",
+            "B": "A rooftop sculpture garden",
+            "C": "An expanded gift shop",
+            "D": "A second-floor coffee bar"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：公告明确说翻新后的画廊新增了温控展厅、改善的照明和宽敞的大厅。B为related_but_not_stated：屋顶雕塑花园是合理但公告未提及的设施。C为related_but_not_stated：礼品店同样未在公告中出现。D为misattributed_detail：公告里提到的是“二楼”这个位置和“清淡茶点”，这里把二楼错配到了一个并不存在的咖啡吧上。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the opening remarks?",
+          "options": {
+            "A": "They will be given by a famous artist",
+            "B": "They will be held outside the arts building",
+            "C": "Not everyone who attends may get a seat",
+            "D": "They will be recorded and posted online"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：公告说开幕致辞的座位有限并建议提前在线预约，可推断并非所有到场者都能有座位。A为over_inference：公告未提及致辞人身份，更没说是名家。B为wrong_detail：活动在艺术楼二楼举行，并非楼外。D为over_inference：公告只提到在线预约表单，从未说致辞会录制并上传。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "wrong_detail",
+            "D": "over_inference"
+          }
+        }
+      ]
+    }
+  ]
+}

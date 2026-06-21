@@ -1,0 +1,108 @@
+{
+  "items": [
+    {
+      "id": "rdl_r1_short_001",
+      "variant": "short",
+      "genre": "flyer",
+      "difficulty": "easy",
+      "format_metadata": {},
+      "text": "SPRING STAGE PRESENTS \"The Lantern Keeper\"! An original drama written and performed by students. April 17-19 at 7 p.m. in the Bramwell Theater, Fine Arts Building. Tickets are just $5 at the door. Seating is limited, so arrive early. Don't miss this unforgettable show!",
+      "questions": [
+        {
+          "qid": "rdl_r1_short_001_q1",
+          "question_type": "detail",
+          "stem": "According to the flyer, how much does a ticket cost?",
+          "options": {"A": "Five dollars at the door", "B": "Ten dollars in advance", "C": "Three dollars for students", "D": "Eight dollars per evening"},
+          "correct_answer": "A",
+          "explanation": "The flyer states 'Tickets just $5 at the door.'"
+        },
+        {
+          "qid": "rdl_r1_short_001_q2",
+          "question_type": "vocabulary_in_context",
+          "stem": "In the flyer, the word \"limited\" is closest in meaning to",
+          "options": {"A": "extended", "B": "expensive", "C": "restricted", "D": "reserved"},
+          "correct_answer": "C",
+          "explanation": "\"Seating is limited\" means the number of available seats is restricted, which is why the flyer advises arriving early."
+        }
+      ]
+    },
+    {
+      "id": "rdl_r1_short_002",
+      "variant": "short",
+      "genre": "email",
+      "difficulty": "easy",
+      "format_metadata": {},
+      "text": "Dear Ravi, this is a reminder that your required lab safety training takes place on Thursday, March 6, at 1 p.m. in Room 210, Carver Science Hall. Please arrive a few minutes early to sign in. You can't enter the chemistry lab until this session is complete. Thanks, Dr. Olsen",
+      "questions": [
+        {
+          "qid": "rdl_r1_short_002_q1",
+          "question_type": "detail",
+          "stem": "According to the email, where will the safety training be held?",
+          "options": {"A": "In the main chemistry storeroom", "B": "At the front office of the building", "C": "In a shared campus study lounge", "D": "In Room 210 of Carver Science Hall"},
+          "correct_answer": "D",
+          "explanation": "The email states the training takes place 'in Room 210, Carver Science Hall.'"
+        },
+        {
+          "qid": "rdl_r1_short_002_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about Ravi's access to the chemistry lab?",
+          "options": {"A": "It depends on passing a written exam", "B": "It requires approval from another professor", "C": "It is limited to certain hours of the day", "D": "It is blocked until he finishes the training"},
+          "correct_answer": "D",
+          "explanation": "Because Ravi 'can't enter the chemistry lab until this session is complete,' his access is blocked until the training is finished."
+        }
+      ]
+    },
+    {
+      "id": "rdl_r1_short_003",
+      "variant": "short",
+      "genre": "email",
+      "difficulty": "medium",
+      "format_metadata": {},
+      "text": "Hi Priya, thank you for agreeing to join our memory research study. Your session is scheduled for Monday, May 11, at 3 p.m. in the Psychology Annex, Room 7. You'll receive $15 in compensation right after the session ends. Please bring your student ID. Best, Professor Lane",
+      "questions": [
+        {
+          "qid": "rdl_r1_short_003_q1",
+          "question_type": "detail",
+          "stem": "According to the email, how much will Priya be paid for taking part?",
+          "options": {"A": "Fifteen dollars after the session", "B": "Twenty dollars upon arrival", "C": "Ten dollars per completed task", "D": "Five dollars as a deposit"},
+          "correct_answer": "A",
+          "explanation": "The email states Priya 'will receive $15 in compensation right after the session ends.'"
+        },
+        {
+          "qid": "rdl_r1_short_003_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about how Priya will be paid?",
+          "options": {"A": "She is paid before the study begins", "B": "She is paid once her session is finished", "C": "She is paid in weekly installments", "D": "She is paid only by bank transfer"},
+          "correct_answer": "B",
+          "explanation": "Since payment comes 'right after the session ends,' Priya receives it once her session is finished."
+        }
+      ]
+    },
+    {
+      "id": "rdl_r1_short_004",
+      "variant": "short",
+      "genre": "email",
+      "difficulty": "medium",
+      "format_metadata": {},
+      "text": "Hi Marcus, this confirms your math tutoring appointment with the Learning Center. We'll meet Wednesday at 4 p.m. in Room 118, Foster Hall. There is a $3 materials fee, payable at the desk. Please bring your homework so we can work through it. Thanks, Tara",
+      "questions": [
+        {
+          "qid": "rdl_r1_short_004_q1",
+          "question_type": "detail",
+          "stem": "According to the email, when is the tutoring appointment scheduled?",
+          "options": {"A": "On Tuesday at noon", "B": "On Wednesday at 4 p.m.", "C": "On Thursday at 2 p.m.", "D": "On Friday at 9 a.m."},
+          "correct_answer": "B",
+          "explanation": "The email states the meeting is 'Wednesday at 4 p.m. in Room 118, Foster Hall.'"
+        },
+        {
+          "qid": "rdl_r1_short_004_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the tutoring session?",
+          "options": {"A": "It is offered free of charge to students", "B": "It can be rescheduled only by phone", "C": "It involves reviewing Marcus's own assignments", "D": "It is held in a large group classroom"},
+          "correct_answer": "C",
+          "explanation": "Because Marcus is asked to bring his homework 'so we can work through it,' the session involves reviewing his own assignments."
+        }
+      ]
+    }
+  ]
+}
