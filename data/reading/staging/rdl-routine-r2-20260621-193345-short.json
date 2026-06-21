@@ -1,0 +1,80 @@
+{
+  "items": [
+    {
+      "id": "rdl_r2_short_routine-r2-20260621-193345_1",
+      "variant": "short",
+      "genre": "notice",
+      "subtopic": "fitness center maintenance closure",
+      "difficulty": "easy",
+      "word_count": 45,
+      "format_metadata": {},
+      "text": "NOTICE: The third-floor weight room in Hartley Gym will be closed for equipment servicing from October 14 to October 16. Members may use the second-floor fitness area during regular hours, 6:00 AM to 11:00 PM. A replacement guest pass costs $4 at the front desk.",
+      "questions": [
+        {
+          "qid": "rdl_r2_short_routine-r2-20260621-193345_1_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, where can members work out while the weight room is closed?",
+          "options": {
+            "A": "The second-floor fitness area",
+            "B": "The third-floor weight room",
+            "C": "The first-floor reception lounge",
+            "D": "The outdoor running track"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice states members may use the second-floor fitness area during regular hours."
+        },
+        {
+          "qid": "rdl_r2_short_routine-r2-20260621-193345_1_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred from the notice?",
+          "options": {
+            "A": "The entire gym will be unavailable for three days.",
+            "B": "Members must pay a fee to enter the building.",
+            "C": "Members can still exercise elsewhere in the building.",
+            "D": "The weight room will reopen by mid-November."
+          },
+          "correct_answer": "C",
+          "explanation": "Only the weight room closes; the second-floor fitness area stays open, so members can still exercise in the building."
+        }
+      ]
+    },
+    {
+      "id": "rdl_r2_short_routine-r2-20260621-193345_2",
+      "variant": "short",
+      "genre": "email",
+      "subtopic": "dining meal-plan balance refund",
+      "difficulty": "easy",
+      "word_count": 45,
+      "format_metadata": {},
+      "text": "Hi Jordan, your dining plan has a remaining balance of $23.50 for the spring term. Refunds will be processed to your student account by May 20. If you'd like the balance moved to next term instead, please reply before May 12. Thanks, Campus Dining Services",
+      "questions": [
+        {
+          "qid": "rdl_r2_short_routine-r2-20260621-193345_2_q1",
+          "question_type": "detail",
+          "stem": "According to the email, what will happen to the remaining balance by May 20?",
+          "options": {
+            "A": "It will be donated to a campus fund.",
+            "B": "It will be refunded to the student account.",
+            "C": "It will be applied to a library fine.",
+            "D": "It will be added to next year's plan."
+          },
+          "correct_answer": "B",
+          "explanation": "The email says refunds will be processed to your student account by May 20."
+        },
+        {
+          "qid": "rdl_r2_short_routine-r2-20260621-193345_2_q2",
+          "question_type": "inference",
+          "stem": "What must a student do to keep the balance for next term?",
+          "options": {
+            "A": "They must visit the dining office in person.",
+            "B": "They must pay an additional service fee.",
+            "C": "They must wait until after May 20.",
+            "D": "They must reply before May 12."
+          },
+          "correct_answer": "D",
+          "explanation": "To move the balance to next term, the student must reply before May 12."
+        }
+      ]
+    }
+  ]
+}

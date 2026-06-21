@@ -8,99 +8,213 @@
   "results": {
     "bs": {
       "generated": 20,
-      "accepted": 20,
-      "topics": ["simple past", "present perfect", "past perfect", "passive voice", "negation", "indirect/embedded questions", "reported speech", "relative clauses", "coordination", "direct wh-questions", "time/place adverbials", "causal/prepositional phrases"],
-      "favorite": {"prompt": "Did you ask your advisor about the form?", "answer": "She wanted to know whether I'd registered yet."},
+      "accepted": 30,
+      "topics": [
+        "simple past",
+        "present perfect",
+        "past perfect",
+        "passive voice",
+        "negation",
+        "indirect/embedded questions",
+        "reported speech",
+        "relative clauses",
+        "coordination",
+        "direct wh-questions",
+        "time/place adverbials",
+        "causal/prepositional phrases"
+      ],
+      "favorite": {
+        "prompt": "Did you ask your advisor about the form?",
+        "answer": "She wanted to know whether I'd registered yet."
+      },
       "retried_after_fail": false,
-      "failure_reason": ""
+      "failure_reason": "",
+      "r2_supplemented": true,
+      "r2_items_added": 10
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["marine biology", "computer science", "technology and media", "social studies"],
-      "favorite": {"subtopic": "marine biology", "preview": "We've been examining how coastal communities respond to declining fish stocks. One contested tool is the 'no-take' reserve, a stretch of ocean closed to all fishing"},
+      "topics": [
+        "marine biology",
+        "computer science",
+        "technology and media",
+        "social studies"
+      ],
+      "favorite": {
+        "subtopic": "marine biology",
+        "preview": "We've been examining how coastal communities respond to declining fish stocks. One contested tool is the 'no-take' reserve, a stretch of ocean closed to all fishing"
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "email": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["消费售后", "住宿", "日常社交", "职场工作"],
-      "favorite": {"subtopic": "住宿", "preview": "You are a tenant in a campus apartment, and the heating in your unit has stopped working for two days. The temperature outside has dropped sharply, and your earlier phone call to the front desk was never returned."},
+      "topics": [
+        "消费售后",
+        "住宿",
+        "日常社交",
+        "职场工作"
+      ],
+      "favorite": {
+        "subtopic": "住宿",
+        "preview": "You are a tenant in a campus apartment, and the heating in your unit has stopped working for two days. The temperature outside has dropped sharply, and your earlier phone call to the front desk was never returned."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ap": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["history/cultural exchange", "environmental_science/ocean acidification", "biology/immune system", "materials_science/metallurgy", "technology/bridge design"],
-      "favorite": {"subtopic": "materials_science/metallurgy", "preview": "Annealing is a heat treatment in which a metal is heated to a specific temperature and then cooled slowly to make it softer and easier to shape."},
+      "topics": [
+        "history/cultural exchange",
+        "environmental_science/ocean acidification",
+        "biology/immune system",
+        "materials_science/metallurgy",
+        "technology/bridge design"
+      ],
+      "favorite": {
+        "subtopic": "materials_science/metallurgy",
+        "preview": "Annealing is a heat treatment in which a metal is heated to a specific temperature and then cooled slowly to make it softer and easier to shape."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ctw": {
       "generated": 6,
       "accepted": 6,
-      "topics": ["chemistry/catalysts", "technology/3D printing", "art/fresco painting", "sociology/urbanization", "oceanography/tides", "economics/international trade"],
-      "favorite": {"subtopic": "oceanography/tides", "preview": "Ocean tides are the regular rise and fall of sea levels along the world's coastlines."},
+      "topics": [
+        "chemistry/catalysts",
+        "technology/3D printing",
+        "art/fresco painting",
+        "sociology/urbanization",
+        "oceanography/tides",
+        "economics/international trade"
+      ],
+      "favorite": {
+        "subtopic": "oceanography/tides",
+        "preview": "Ocean tides are the regular rise and fall of sea levels along the world's coastlines."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-rdl-short": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["flyer", "email", "email", "email"],
-      "favorite": {"subtopic": "flyer", "preview": "SPRING STAGE PRESENTS \"The Lantern Keeper\"! An original drama written and performed by students. April 17-19 at 7 p.m."},
+      "topics": [
+        "flyer",
+        "email",
+        "email",
+        "email"
+      ],
+      "favorite": {
+        "subtopic": "flyer",
+        "preview": "SPRING STAGE PRESENTS \"The Lantern Keeper\"! An original drama written and performed by students. April 17-19 at 7 p.m."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-rdl-long": {
       "generated": 2,
       "accepted": 2,
-      "topics": ["schedule", "menu"],
-      "favorite": {"subtopic": "menu", "preview": "The Birch Counter — Weekday Lunch Menu. Served Monday to Friday, 11:00 AM to 2:30 PM, Student Union ground floor"},
+      "topics": [
+        "schedule",
+        "menu"
+      ],
+      "favorite": {
+        "subtopic": "menu",
+        "preview": "The Birch Counter — Weekday Lunch Menu. Served Monday to Friday, 11:00 AM to 2:30 PM, Student Union ground floor"
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lat": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["social_psychology/stereotype threat", "psychology/mere exposure effect", "architecture/Roman concrete", "art_history/Renaissance perspective"],
-      "favorite": {"subtopic": "the rediscovery of perspective in early Renaissance painting", "preview": "If you compare a medieval painting with one from the early Renaissance, one difference jumps out immediately."},
+      "topics": [
+        "social_psychology/stereotype threat",
+        "psychology/mere exposure effect",
+        "architecture/Roman concrete",
+        "art_history/Renaissance perspective"
+      ],
+      "favorite": {
+        "subtopic": "the rediscovery of perspective in early Renaissance painting",
+        "preview": "If you compare a medieval painting with one from the early Renaissance, one difference jumps out immediately."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lc": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["restaurant recommendation", "kitchen-cleaning schedule", "documentary recommendation", "campus commuting", "movie-night planning"],
-      "favorite": {"subtopic": "Two roommates working out a fair kitchen-cleaning schedule", "preview": "We really need a plan for the kitchen. It's getting out of hand, and I keep ending up cleaning it alone."},
+      "topics": [
+        "restaurant recommendation",
+        "kitchen-cleaning schedule",
+        "documentary recommendation",
+        "campus commuting",
+        "movie-night planning"
+      ],
+      "favorite": {
+        "subtopic": "Two roommates working out a fair kitchen-cleaning schedule",
+        "preview": "We really need a plan for the kitchen. It's getting out of hand, and I keep ending up cleaning it alone."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-la": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["logistics/road closure", "academic_event/thesis defense", "logistics/shuttle change", "career_services/photo day", "facility_change/gallery reopening"],
-      "favorite": {"subtopic": "temporary road closure and detour instructions", "preview": "Good morning, everyone. Due to emergency water-main repairs, University Drive between the library and the dining hall will be"},
+      "topics": [
+        "logistics/road closure",
+        "academic_event/thesis defense",
+        "logistics/shuttle change",
+        "career_services/photo day",
+        "facility_change/gallery reopening"
+      ],
+      "favorite": {
+        "subtopic": "temporary road closure and detour instructions",
+        "preview": "Good morning, everyone. Due to emergency water-main repairs, University Drive between the library and the dining hall will be"
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lcr": {
       "generated": 8,
       "accepted": 8,
-      "topics": ["exam format", "group project deadline", "textbook edition", "reading list", "offering help", "prerequisite enrollment", "lab report data", "dorm heater"],
-      "favorite": {"subtopic": "confusing course reading list", "preview": "I can't make heads or tails of this reading list."},
+      "topics": [
+        "exam format",
+        "group project deadline",
+        "textbook edition",
+        "reading list",
+        "offering help",
+        "prerequisite enrollment",
+        "lab report data",
+        "dorm heater"
+      ],
+      "favorite": {
+        "subtopic": "confusing course reading list",
+        "preview": "I can't make heads or tails of this reading list."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "speaking-repeat": {
       "generated": 3,
       "accepted": 3,
-      "topics": ["Botanical Garden Tour", "Grocery Store Tour", "Dining Hall Tour"],
-      "favorite": {"subtopic": "Dining Hall Tour", "preview": "Trays are stacked by the entrance."},
+      "topics": [
+        "Botanical Garden Tour",
+        "Grocery Store Tour",
+        "Dining Hall Tour"
+      ],
+      "favorite": {
+        "subtopic": "Dining Hall Tour",
+        "preview": "Trays are stacked by the entrance."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     }
-  }
+  },
+  "r2_completed_at": "2026-06-21T20:07:26Z",
+  "r2_session_id": "routine-r2-20260621-193345"
 }
