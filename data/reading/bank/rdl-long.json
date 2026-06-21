@@ -9952,6 +9952,110 @@
           "explanation": "The email's purpose is to announce that the new Campus Tool Library now lends equipment for free."
         }
       ]
+    },
+    {
+      "id": "rdl_r1_long_20260621_001",
+      "variant": "long",
+      "genre": "schedule",
+      "difficulty": "medium",
+      "format_metadata": {
+        "title": "Wexler Library Study Room Reservation Schedule",
+        "location": "Wexler Library, 3rd Floor"
+      },
+      "text": "Wexler Library — Study Room Reservation Schedule\nEffective Monday, October 6\n\nStudents may reserve a group study room on the third floor of Wexler Library using the library portal. Please note the following rates and rules:\n\n- Rooms 301-305 (seats 4): free for the first two hours, then $1.00 per hour.\n- Rooms 310-312 (seats 8): $2.00 per hour, with a two-hour minimum.\n- The media room (Room 320): $5.00 per hour; a projector and screen are included.\n\nReservation hours run from 8:00 AM to 10:00 PM, seven days a week. Each student may hold no more than two bookings at one time. A reserved room is held for fifteen minutes after the start time; if no one arrives, the booking is released to other students.\n\nTo cancel, sign in to the portal at least one hour ahead to avoid a $3.00 no-show charge. Questions? Email the front desk at studyrooms@wexler.edu.",
+      "questions": [
+        {
+          "qid": "rdl_r1_long_20260621_001_q1",
+          "question_type": "detail",
+          "stem": "According to the schedule, what is the cost of using one of Rooms 301-305 for the first two hours?",
+          "options": {
+            "A": "Two dollars per hour",
+            "B": "One dollar per hour",
+            "C": "No charge at all",
+            "D": "Five dollars per hour"
+          },
+          "correct_answer": "C",
+          "explanation": "The schedule states that Rooms 301-305 are 'free for the first two hours,' so there is no charge during that period."
+        },
+        {
+          "qid": "rdl_r1_long_20260621_001_q2",
+          "question_type": "detail",
+          "stem": "According to the schedule, what happens if a student does not arrive within fifteen minutes of the start time?",
+          "options": {
+            "A": "The room rate doubles for the booking",
+            "B": "The student loses portal access for a day",
+            "C": "The booking is released to other students",
+            "D": "The reservation moves to a different room"
+          },
+          "correct_answer": "C",
+          "explanation": "The schedule says a reserved room is held for fifteen minutes, and if no one arrives, 'the booking is released to other students.'"
+        },
+        {
+          "qid": "rdl_r1_long_20260621_001_q3",
+          "question_type": "inference",
+          "stem": "What can be inferred about reserving the media room instead of Room 310?",
+          "options": {
+            "A": "It can be booked for longer periods",
+            "B": "It comes with equipment the others lack",
+            "C": "It is located on a different floor",
+            "D": "It may be reserved without a portal account"
+          },
+          "correct_answer": "B",
+          "explanation": "The media room listing notes 'a projector and screen are included,' which is not mentioned for the other rooms, implying it offers equipment the others do not."
+        }
+      ]
+    },
+    {
+      "id": "rdl_r1_long_20260621_002",
+      "variant": "long",
+      "genre": "menu",
+      "difficulty": "medium",
+      "format_metadata": {
+        "title": "The Birch Counter — Weekday Lunch Menu",
+        "location": "Student Union, Ground Floor"
+      },
+      "text": "The Birch Counter — Weekday Lunch Menu\nServed Monday to Friday, 11:00 AM to 2:30 PM, Student Union ground floor\n\nBowls\n- Roasted Vegetable Bowl — $7.50\n- Grilled Chicken Bowl — $8.50\n- Tofu Noodle Bowl — $7.00 (vegan)\n\nSandwiches\n- Turkey Club — $6.50\n- Caprese Melt — $6.00\n\nSides and Drinks\n- Soup of the day — $3.00\n- Bottled juice or iced tea — $2.00\n- Coffee — free refills with any bowl\n\nPlease note: every bowl comes with a side of bread at no extra cost. Students who bring their own reusable cup receive a $0.50 discount on any drink. We accept the campus meal card and cards, but the counter is cash-free. To skip the line, order ahead through the dining portal before 10:30 AM and pick up at the express window.",
+      "questions": [
+        {
+          "qid": "rdl_r1_long_20260621_002_q1",
+          "question_type": "detail",
+          "stem": "According to the menu, which item is the least expensive bowl?",
+          "options": {
+            "A": "The Grilled Chicken Bowl",
+            "B": "The Roasted Vegetable Bowl",
+            "C": "The Tofu Noodle Bowl",
+            "D": "The Caprese Melt"
+          },
+          "correct_answer": "C",
+          "explanation": "Among the bowls, the Tofu Noodle Bowl is priced at $7.00, lower than the Roasted Vegetable Bowl ($7.50) and the Grilled Chicken Bowl ($8.50). The Caprese Melt is a sandwich, not a bowl."
+        },
+        {
+          "qid": "rdl_r1_long_20260621_002_q2",
+          "question_type": "detail",
+          "stem": "According to the menu, how can a student receive a discount on a drink?",
+          "options": {
+            "A": "By ordering a soup of the day",
+            "B": "By bringing a reusable cup",
+            "C": "By paying with the meal card",
+            "D": "By picking up at the express window"
+          },
+          "correct_answer": "B",
+          "explanation": "The menu states that students who bring their own reusable cup receive a $0.50 discount on any drink."
+        },
+        {
+          "qid": "rdl_r1_long_20260621_002_q3",
+          "question_type": "inference",
+          "stem": "What can be inferred about paying at The Birch Counter?",
+          "options": {
+            "A": "Tips are added automatically to each order",
+            "B": "Coins and bills will not be accepted",
+            "C": "Prices rise after the lunch rush ends",
+            "D": "Drinks must be purchased before bowls"
+          },
+          "correct_answer": "B",
+          "explanation": "The menu says the counter accepts the meal card and cards but is 'cash-free,' which implies that coins and bills will not be accepted."
+        }
+      ]
     }
   ]
 }
