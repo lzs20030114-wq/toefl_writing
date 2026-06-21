@@ -1,0 +1,14 @@
+{
+  "_comment": "A/B 试听样本。两段是同一段讲座、同一角色，只有 TTS 引擎不同，保证对比公平。url 为空时弹窗不会显示。运行 `node scripts/voice-ab-sample.mjs`（只需 OPENAI_API_KEY）会把 A/B 两段 mp3 写到 public/voice-ab/ 并回填下面的 url。",
+  "transcript": "Woman: Hi, I'm taking six courses this term, and I'm completely overwhelmed. I'm thinking of dropping one, but I'm worried about falling behind.\nMan: Six is a lot. Which one are you considering dropping?\nWoman: Probably the elective, the art history one. It's interesting, but it's the heaviest reading load.\nMan: Here's the thing: dropping an elective won't delay your graduation at all, since you've already met your core requirements for the year. You can always retake it later.\nWoman: Oh, that's reassuring. So it won't hurt me down the line?\nMan: Not at all. And the drop deadline is Friday, so you have time to think it over before deciding.",
+  "voiceA": {
+    "label": "现在线上正在用的版本",
+    "engine": "deployed",
+    "url": "/voice-ab/a.mp3"
+  },
+  "voiceB": {
+    "label": "升级版（GPT-4o）",
+    "engine": "openai",
+    "url": "/voice-ab/b.wav"
+  }
+}
