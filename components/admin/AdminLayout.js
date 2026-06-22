@@ -69,6 +69,7 @@ const NAV_GROUPS = [
       { label: "邀请活动", href: "/admin-referrals", icon: "gift" },
       { label: "用户反馈", href: "/admin-feedback", icon: "msg" },
       { label: "新手问卷", href: "/admin-surveys", icon: "msg" },
+      { label: "语音投票", href: "/admin-voice-vote", icon: "chart" },
       { label: "API 日志", href: "/admin-api-errors", icon: "alert" },
       { label: "BS 错题统计", href: "/admin-bs-errors", icon: "target" },
     ],
