@@ -33615,6 +33615,405 @@
       ],
       "id": "lc_mqo7swhh_3",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/conversation/lc_mqo7swhh_3.mp3"
+    },
+    {
+      "id": "lc_rt_20260622_1",
+      "setting": "campus_dorm",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Honestly, I'm so tired of the same pop singers on every playlist. Do you know any bands that actually sound different?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Oh, definitely. You should check out this jazz-folk group called The Quiet Hours. They're nothing like what's on the radio."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Jazz-folk? I've never even heard of that mix."
+        },
+        {
+          "speaker": "Man",
+          "text": "It's mostly acoustic guitar with a little saxophone. Really relaxing. They've got a new album that just dropped last week."
+        },
+        {
+          "speaker": "Woman",
+          "text": "That sounds perfect for studying. Where can I listen to them?"
+        },
+        {
+          "speaker": "Man",
+          "text": "They're on every streaming app. Just search the band name and start with the album — the first track is the best one."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What kind of music does the man recommend?",
+          "options": {
+            "A": "A jazz-folk group",
+            "B": "A classic rock band",
+            "C": "A new pop singer",
+            "D": "A radio playlist"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：男生明确推荐了一个叫The Quiet Hours的jazz-folk（爵士民谣）乐队。B选项错误，对话从未提到摇滚乐。C选项错误，女生恰恰是厌倦了流行歌手，男生推荐的不是流行歌手。D选项错误，电台播放列表正是女生想要避开的东西，而非推荐内容。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "reversed_situation",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Buy a physical copy of the album at a store",
+            "B": "Ask the man to make her a playlist",
+            "C": "Search for the band on a streaming app",
+            "D": "Go to one of the band's live concerts"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：男生说乐队在所有流媒体应用上都有，让女生搜索乐队名字，女生对此很感兴趣，所以她接下来最可能去流媒体上搜索。A选项过度推断，对话只提到流媒体，没人说要买实体唱片。B选项错误，女生并没有请男生帮她做播放列表。D选项过度推断，对话完全没有提到现场演唱会。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_next_step",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_rt_20260622_2",
+      "setting": "campus_cafe",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "So I finally saw that mystery movie everyone's been talking about last night."
+        },
+        {
+          "speaker": "Man",
+          "text": "Oh, the one with the detective? Was it as good as people say?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "The twists were incredible — I genuinely didn't see the ending coming. But honestly, it was way too long. Almost three hours."
+        },
+        {
+          "speaker": "Man",
+          "text": "Three hours? Yikes. I can barely sit still for two."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Right? The middle really dragged. They could've cut a whole subplot and nothing would change."
+        },
+        {
+          "speaker": "Man",
+          "text": "Hmm. Maybe I'll just wait and stream it at home, so I can pause when I get restless."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the woman say about the movie?",
+          "options": {
+            "A": "The acting was disappointing",
+            "B": "It had great twists but was too long",
+            "C": "The ending was easy to predict",
+            "D": "The middle section was the best part"
+          },
+          "answer": "B",
+          "explanation": "正确答案B：女生说反转非常精彩（twists were incredible），但电影太长了（way too long）。A选项错误，她从未评价演技。C选项错误，她说自己根本没猜到结局（didn't see the ending coming），与\"容易预测\"相反。D选项错误，她说中段拖沓（really dragged），并非最精彩的部分。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "C": "reversed_situation",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do?",
+          "options": {
+            "A": "Go see the movie in the theater this weekend",
+            "B": "Avoid the movie completely",
+            "C": "Ask the woman to lend him the DVD",
+            "D": "Watch the movie at home so he can pause it"
+          },
+          "answer": "D",
+          "explanation": "正确答案D：男生说自己坐不住，打算在家用流媒体看，这样累了能暂停（stream it at home, so I can pause）。A选项与他的话相反，他明确说要在家看而非去影院。B选项错误，他没有说完全不看，只是改换在家看。C选项错误，对话从未提到DVD或向女生借。",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "B": "wrong_detail",
+            "C": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_rt_20260622_3",
+      "setting": "campus_dorm",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "I really want to do something this semester besides class, but I can't decide. Should I join the debate club or the intramural soccer team?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Hmm. Well, what are you actually looking to get out of it?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Mostly to meet people and have a regular reason to leave my room. The debate club meets twice a week, which feels like a lot of prep."
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, debate is a big time commitment. Soccer's more casual — you just show up and play, and everyone goes for food after."
+        },
+        {
+          "speaker": "Woman",
+          "text": "That social part really appeals to me. And I don't have to be good at soccer, right?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Not at all. It's all just for fun. I think you'd love it."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "How to improve the woman's soccer skills",
+            "B": "Whether the debate club is too competitive",
+            "C": "Which campus activity the woman should join",
+            "D": "How to manage a heavy course schedule"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：整段对话围绕女生该参加辩论俱乐部还是校内足球队展开，这是核心话题。A选项太窄，提升球技只是顺带提到，不是主题。B选项太窄，辩论的时间投入只是讨论的一个细节。D选项错误，对话谈的是课外活动，而非如何安排繁重课程。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "too_narrow",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do?",
+          "options": {
+            "A": "Join the intramural soccer team",
+            "B": "Sign up for the debate club instead",
+            "C": "Take some time before deciding",
+            "D": "Try out for the varsity soccer squad"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：女生被足球队的社交氛围吸引，且得知不必踢得好，男生也鼓励她，所以她最可能加入校内足球队。B选项与对话趋势相反，她觉得辩论准备太花时间。C选项错误，她已明显倾向某一选择，没有表示要拖延。D选项过度推断，她想要的是休闲娱乐，而非加入校队竞技。",
+          "distractor_types": {
+            "B": "reversed_situation",
+            "C": "rejected_option",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_rt_20260622_4",
+      "setting": "campus_dorm",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Are we still on for the hiking trip this Saturday? I've been looking forward to it all week."
+        },
+        {
+          "speaker": "Man",
+          "text": "Absolutely. The forecast says clear skies, so it should be perfect."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Great. What time should we leave? The trailhead is about an hour's drive."
+        },
+        {
+          "speaker": "Man",
+          "text": "Let's leave by seven. That way we beat the crowds and the heat. Oh, and don't forget to bring lots of water."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Good call. Should I pack lunch for both of us, or are we stopping somewhere?"
+        },
+        {
+          "speaker": "Man",
+          "text": "There's no place to eat on the trail, so yeah — pack something. I'll bring snacks and the first-aid kit."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man tell the woman to bring?",
+          "options": {
+            "A": "A first-aid kit",
+            "B": "Extra snacks for the trail",
+            "C": "A map of the hiking route",
+            "D": "Plenty of water"
+          },
+          "answer": "D",
+          "explanation": "正确答案D：男生明确提醒女生别忘了带很多水（don't forget to bring lots of water）。A选项错误，急救包是男生自己负责带的。B选项错误，零食也是男生说他来带。C选项错误，对话完全没有提到地图。",
+          "distractor_types": {
+            "A": "misattributed",
+            "B": "misattributed",
+            "C": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the woman's role in the trip?",
+          "options": {
+            "A": "She will drive everyone to the trailhead",
+            "B": "She will be responsible for bringing lunch",
+            "C": "She plans to cancel if the weather changes",
+            "D": "She has hiked this particular trail before"
+          },
+          "answer": "B",
+          "explanation": "正确答案B：女生主动提出由她为两人准备午餐，男生说路上没地方吃饭，让她带上，所以午餐归她负责。A选项过度推断，对话没说谁开车，只说要开一小时。C选项错误，天气预报是晴天，没人提到取消。D选项过度推断，对话没有任何迹象表明她以前走过这条路。",
+          "distractor_types": {
+            "A": "over_inference",
+            "C": "unrelated_next_step",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_rt_20260622_5",
+      "setting": "errands_service",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "customer",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "store_clerk",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hi, I bought this sweater last week, but it turned out to be too small. I'd like to return it."
+        },
+        {
+          "speaker": "Man",
+          "text": "Sure, I can help with that. Do you have the receipt with you?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "I do, right here. Although — I actually still love the design. Is the same one available in a medium?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Let me check the system. Yes, we've got mediums in stock, but only in the navy and the gray, not the original burgundy."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Hmm, I really wanted the burgundy. Could you order it in my size?"
+        },
+        {
+          "speaker": "Man",
+          "text": "I can place a special order. It'd take about a week to arrive, and we'd hold it here for you to pick up."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Okay, let me think — a week isn't too bad."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "Why does the woman come to the store?",
+          "options": {
+            "A": "To return a sweater that does not fit",
+            "B": "To complain about a defective sweater",
+            "C": "To ask for a refund on a damaged receipt",
+            "D": "To buy a sweater as a gift for a friend"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：女生开门见山说毛衣太小想退货，这是她来店的主要原因。B选项错误，毛衣没有质量问题，只是尺码不合。C选项错误，她带着完好的收据，没有提到收据损坏。D选项错误，毛衣是她自己买的，对话没有提到送礼。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "wrong_detail",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What is the woman most likely to do?",
+          "options": {
+            "A": "Take the gray sweater in a medium right away",
+            "B": "Get a full refund and leave the store",
+            "C": "Place a special order for the burgundy sweater",
+            "D": "Return next week to look for other colors"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：女生坚持要酒红色，店员提出可以特别订货一周到货，女生回应\"一周不算太糟\"，倾向于接受订货。A选项被她否决，她明确说想要酒红色而非灰色。B选项错误，她仍然喜欢这个款式，并未表示只想退款走人。D选项错误，她不是过一周再来挑别的颜色，而是为酒红色下特别订单等取货。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "reversed_situation",
+            "D": "wrong_detail"
+          }
+        }
+      ]
     }
   ]
 }

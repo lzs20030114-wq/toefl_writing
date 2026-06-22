@@ -1,13 +1,28 @@
 {
-  "session": "routine-20260621-190406",
+  "session": "routine-20260622-190415",
   "r2_session": null,
-  "audited_at": "2026-06-21T20:04:00.891Z",
+  "audited_at": "2026-06-22T20:05:52.373Z",
   "total_questions": 83,
   "answered": 83,
-  "matched": 83,
-  "mismatched": 0,
+  "matched": 82,
+  "mismatched": 1,
   "skipped": 0,
-  "items_dropped": 0,
-  "agreement_pct": 100,
-  "dropped": []
+  "items_dropped": 1,
+  "agreement_pct": 98.8,
+  "dropped": [
+    {
+      "file": "ap-routine-20260622-190415",
+      "item_index": 2,
+      "subtopic": "early agriculture",
+      "mismatches": [
+        {
+          "question_index": 4,
+          "key": "ap-routine-20260622-190415:2:4",
+          "stem_preview": "There are four locations [■] in the passage that indicate where the following se",
+          "marked": "B",
+          "mine": "A"
+        }
+      ]
+    }
+  ]
 }
