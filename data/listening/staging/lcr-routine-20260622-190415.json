@@ -1,0 +1,164 @@
+{
+  "items": [
+    {
+      "context": "general_daily",
+      "situation": "arranging a ride or carpool with a friend",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Why aren't you driving to the concert tonight?",
+      "options": {
+        "A": "Well, my car's still at the shop.",
+        "B": "The concert hall seats two thousand.",
+        "C": "Yes, the tickets sold out fast.",
+        "D": "I drove past there this morning."
+      },
+      "answer": "A",
+      "explanation": "正确答案A以话语标记\"Well\"开头，间接说明不开车的原因——车还在修理店，符合marker_led_indirect范式。B是语义联想陷阱，由\"concert\"联想到音乐厅座位数，没有回答原因。C用\"Yes\"回答了一个\"为什么\"的问题，属于答非所问的问题类型错误。D利用\"driving\"与\"drove\"词形相近，转向无关的早晨开车经过，是关键词陷阱兼离题。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "making or rescheduling an appointment",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "I'd like to move my dentist appointment to Friday.",
+      "options": {
+        "A": "The dentist's office has new chairs.",
+        "B": "Sure, I can fit you in at two.",
+        "C": "I moved into my new place last month.",
+        "D": "Yes, brushing twice a day really helps."
+      },
+      "answer": "B",
+      "explanation": "正确答案B直接答应了改期请求，并给出周五两点的具体时间，符合direct_topical范式。A是语义联想陷阱，由\"dentist\"联想到诊所的新椅子，没有处理改期。C利用\"move\"一词的双关（改期/搬家），转向无关的搬家事件，属于多义误读。D离题谈刷牙习惯，是语法正确但毫无关联的句子。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "polysemy_misinterpretation",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "classmate asking to borrow lecture notes",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Where did you put your notes from Monday's class?",
+      "options": {
+        "A": "The classroom was freezing on Monday.",
+        "B": "I noted the deadline in my planner.",
+        "C": "They're right at your fingertips.",
+        "D": "Yes, I attended every lecture."
+      },
+      "answer": "C",
+      "explanation": "正确答案C用习语\"right at your fingertips\"（近在手边、随时可取）地道地回应了对方找笔记的需求，符合idiomatic范式。A是语义联想陷阱，由\"class\"联想到教室很冷，离题。B利用\"notes\"与\"noted\"词形相近，转向无关的记录截止日期，是关键词陷阱兼多义误读。D用\"Yes\"回答了一个\"在哪里\"的问题，属于答非所问的问题类型错误。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "polysemy_misinterpretation",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student checking with TA about lab report requirements",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "How should we format the references section?",
+      "options": {
+        "A": "The lab ran out of beakers today.",
+        "B": "Yes, references are very important.",
+        "C": "I referred my roommate to that course.",
+        "D": "Just follow the APA style guide."
+      },
+      "answer": "D",
+      "explanation": "正确答案D以话语标记\"Just\"开头，简洁地给出格式依据——按APA风格指南，符合marker_led_indirect范式。A是语义联想陷阱，由\"lab\"联想到实验室缺烧杯，离题。B用\"Yes\"加上无关评价回应了一个\"怎么做\"的问题，属于答非所问。C利用\"references\"与\"referred\"词形相近，转向无关的推荐室友选课，是关键词陷阱兼多义误读。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "wrong_question_type",
+        "C": "polysemy_misinterpretation"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "checking if a service (post office, bank) is open",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "The post office probably isn't open this late.",
+      "options": {
+        "A": "There's a drop box right outside.",
+        "B": "The post office repainted its sign.",
+        "C": "I posted those photos online already.",
+        "D": "Yes, the line was really long today."
+      },
+      "answer": "A",
+      "explanation": "正确答案A不纠结于营业时间，而是解决了对方的潜在需求——门口就有投递箱可以寄信，符合context_shift范式。B是语义联想陷阱，由\"post office\"联想到重新粉刷招牌，毫无帮助。C利用\"post\"一词的双关（邮局/发帖），转向无关的网上发照片，属于多义误读。D虽用\"Yes\"，却离题谈今天排队很长，属于离题但语法正确的干扰项。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "polysemy_misinterpretation",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "expressing concern about a friend's situation",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Have you been sleeping at all this week?",
+      "options": {
+        "A": "The sheets are in the dryer now.",
+        "B": "Why, do I look that tired?",
+        "C": "Yes, I sleep on the left side.",
+        "D": "I weakened the coffee this morning."
+      },
+      "answer": "B",
+      "explanation": "正确答案B用一个反问\"我看起来有那么累吗？\"推进了对话，自然回应了对方的关心，符合counter_question范式。A是语义联想陷阱，由\"sleeping\"联想到床单晾在烘干机里，离题。C用\"Yes\"加无关细节回答，回应的是睡哪一侧而非是否睡了，属于答非所问。D利用\"week\"与\"weakened\"的谐音，转向无关的早晨冲咖啡，是关键词陷阱兼离题。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "two friends deciding where to get lunch",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Do you want to try the new noodle place today?",
+      "options": {
+        "A": "The kitchen smelled amazing earlier.",
+        "B": "I tried out for the team last fall.",
+        "C": "How about that taco truck instead?",
+        "D": "Yes, I finished my noodles already."
+      },
+      "answer": "C",
+      "explanation": "正确答案C用反问提出了另一个选择——那辆塔可车，推进了关于去哪吃的对话，符合counter_question范式。A是语义联想陷阱，由\"noodle place\"联想到厨房的香味，没有作出决定。B利用\"try\"与\"tried out\"词形相近，转向无关的参加球队选拔，是关键词陷阱兼多义误读。D虽用\"Yes\"，却谈自己已经吃完了面，属于错误语境/离题。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "polysemy_misinterpretation",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "friend sharing news or personal update",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "What made you decide to move across the country?",
+      "options": {
+        "A": "The country roads are so scenic.",
+        "B": "Yes, it's a very big decision.",
+        "C": "I moved the couch by myself.",
+        "D": "Well, I finally landed my dream job."
+      },
+      "answer": "D",
+      "explanation": "正确答案D以话语标记\"Well\"开头，间接给出搬家的原因——终于得到了梦寐以求的工作，符合marker_led_indirect范式。A是语义联想陷阱，由\"country\"联想到乡间小路风景，没有回答原因。B用\"Yes\"加无关评价回应了一个\"是什么原因\"的问题，属于答非所问。C利用\"move\"一词的双关（搬迁/搬动），转向无关的搬沙发，属于多义误读。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "wrong_question_type",
+        "C": "polysemy_misinterpretation"
+      }
+    }
+  ]
+}

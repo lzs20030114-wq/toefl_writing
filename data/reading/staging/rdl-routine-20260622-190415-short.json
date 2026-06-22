@@ -1,0 +1,108 @@
+{
+  "items": [
+    {
+      "id": "rdl_r1_short_001",
+      "variant": "short",
+      "genre": "social_media",
+      "difficulty": "easy",
+      "format_metadata": {},
+      "text": "Great news, plant lovers! The campus community garden behind Holloway Hall is now open daily from 8 a.m. to 6 p.m. through spring. Grab a raised bed for a $5 seasonal fee at the shed. Come dig in the dirt with us!",
+      "questions": [
+        {
+          "qid": "rdl_r1_short_001_q1",
+          "question_type": "detail",
+          "stem": "According to the post, what is required to claim a raised bed?",
+          "options": {"A": "A reservation made online", "B": "A signed garden agreement", "C": "A volunteer work shift", "D": "A five-dollar seasonal fee"},
+          "correct_answer": "D",
+          "explanation": "The post states you can 'grab a raised bed for a $5 seasonal fee at the shed.'"
+        },
+        {
+          "qid": "rdl_r1_short_001_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the garden's hours?",
+          "options": {"A": "It is accessible every day of the week", "B": "It opens only on spring weekends", "C": "It stays open late into the evening", "D": "It is closed during the morning hours"},
+          "correct_answer": "A",
+          "explanation": "Because the garden is 'open daily from 8 a.m. to 6 p.m.,' it can be visited every day of the week."
+        }
+      ]
+    },
+    {
+      "id": "rdl_r1_short_002",
+      "variant": "short",
+      "genre": "notice",
+      "difficulty": "medium",
+      "format_metadata": {},
+      "text": "NOTICE: Campus Wi-Fi will be unavailable for scheduled maintenance on Saturday, June 13, from 1 a.m. to 5 a.m. Service in all residence halls and the Pruitt Library will be interrupted during this window. Wired connections in computer labs will remain active throughout the maintenance period.",
+      "questions": [
+        {
+          "qid": "rdl_r1_short_002_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, how long will the maintenance window last?",
+          "options": {"A": "About two hours", "B": "About four hours", "C": "About six hours", "D": "About eight hours"},
+          "correct_answer": "B",
+          "explanation": "The notice gives the window as 'from 1 a.m. to 5 a.m.,' a span of about four hours."
+        },
+        {
+          "qid": "rdl_r1_short_002_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the computer labs during the maintenance?",
+          "options": {"A": "They will be locked to all students", "B": "They will lose every form of access", "C": "They will still allow internet use", "D": "They will switch to backup generators"},
+          "correct_answer": "C",
+          "explanation": "Since 'wired connections in computer labs will remain active,' students there can still access the internet."
+        }
+      ]
+    },
+    {
+      "id": "rdl_r1_short_003",
+      "variant": "short",
+      "genre": "email",
+      "difficulty": "easy",
+      "format_metadata": {},
+      "text": "Hi Devon, your replacement student ID is ready at the Campus Card Office in Whitley Center. We're open weekdays until 4 p.m. Please bring $10 to cover the replacement charge and a photo ID for verification. Your old card has already been deactivated. Thanks, Renata",
+      "questions": [
+        {
+          "qid": "rdl_r1_short_003_q1",
+          "question_type": "detail",
+          "stem": "According to the email, what must Devon bring to the office?",
+          "options": {"A": "A printed appointment slip", "B": "A new passport photo", "C": "A completed request form", "D": "Ten dollars and a photo ID"},
+          "correct_answer": "D",
+          "explanation": "The email asks Devon to 'bring $10 to cover the replacement charge and a photo ID for verification.'"
+        },
+        {
+          "qid": "rdl_r1_short_003_q2",
+          "question_type": "detail",
+          "stem": "According to the email, what is the status of Devon's old card?",
+          "options": {"A": "It is being mailed back", "B": "It has been turned off", "C": "It can still be used briefly", "D": "It needs to be returned"},
+          "correct_answer": "B",
+          "explanation": "The email states 'your old card has already been deactivated,' meaning it has been turned off."
+        }
+      ]
+    },
+    {
+      "id": "rdl_r1_short_004",
+      "variant": "short",
+      "genre": "email",
+      "difficulty": "medium",
+      "format_metadata": {},
+      "text": "Hi Amara, our records show your meal plan ended the semester with a remaining balance of $42. Dining Services will issue this as a refund to your student account by Friday, May 22. If you'd prefer the funds rolled over instead, just reply by Wednesday. Best, Dining Services",
+      "questions": [
+        {
+          "qid": "rdl_r1_short_004_q1",
+          "question_type": "detail",
+          "stem": "According to the email, how will the leftover balance be handled?",
+          "options": {"A": "It will be donated to a campus fund", "B": "It will be paid out in cash at the desk", "C": "It will be returned to the student account", "D": "It will be applied to next year's tuition"},
+          "correct_answer": "C",
+          "explanation": "The email says the balance will be issued 'as a refund to your student account by Friday, May 22.'"
+        },
+        {
+          "qid": "rdl_r1_short_004_q2",
+          "question_type": "vocabulary_in_context",
+          "stem": "In the email, the phrase \"rolled over\" is closest in meaning to",
+          "options": {"A": "carried forward", "B": "paid back", "C": "set aside", "D": "split up"},
+          "correct_answer": "A",
+          "explanation": "Offering to have the funds 'rolled over instead' of refunded means carrying the balance forward for future use."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "items": [
+    {
+      "id": "rdl_r1_long_20260622_001",
+      "variant": "long",
+      "genre": "notice",
+      "difficulty": "medium",
+      "format_metadata": {"title": "Fall Textbook Buyback — New Location", "location": "Harmon Student Center, Room 118"},
+      "text": "Fall Textbook Buyback — New Location\nDecember 8 to December 12\n\nThe campus bookstore will hold its end-of-semester textbook buyback during finals week. Please note that the event has been moved from the bookstore floor to Room 118 in the Harmon Student Center, where longer counter hours can be offered.\n\nBuyback hours are 9:00 AM to 4:00 PM each day. To sell a book, students must present a valid student ID and the book itself. Cash payment of up to $50.00 per title will be issued on the spot; titles worth more than that amount are paid by check, which is mailed within five business days.\n\nPlease note the following:\n- Books with water damage or missing pages cannot be accepted.\n- Lab manuals and workbooks that have been written in are not eligible.\n- Editions older than the one listed for spring courses are valued at a reduced rate.\n\nQuestions about a specific title may be directed to the buyback desk at buyback@harmon.edu before December 5.",
+      "questions": [
+        {
+          "qid": "rdl_r1_long_20260622_001_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, what must a student bring in order to sell a textbook?",
+          "options": {"A": "A receipt and the original packaging", "B": "A valid student ID and the book", "C": "A course list and a check stub", "D": "A lab manual and a workbook"},
+          "correct_answer": "B",
+          "explanation": "The notice states that to sell a book, students must present a valid student ID and the book itself. The other options recombine campus-sounding terms (receipts, course lists, lab manuals) that are not the stated requirement."
+        },
+        {
+          "qid": "rdl_r1_long_20260622_001_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about a textbook valued at more than $50.00?",
+          "options": {"A": "It will be rejected at the buyback desk", "B": "It will be paid for by mailed check", "C": "It will be sold on the bookstore floor", "D": "It will be exchanged for store credit"},
+          "correct_answer": "B",
+          "explanation": "The notice says cash of up to $50.00 per title is issued on the spot, while titles worth more than that amount are paid by check mailed within five business days. So a book above $50.00 would not be paid in cash but by mailed check. The other options reverse or fabricate the payment rule."
+        },
+        {
+          "qid": "rdl_r1_long_20260622_001_q3",
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this notice?",
+          "options": {"A": "To list the textbooks required for spring courses", "B": "To explain the rules for course final examinations", "C": "To announce a relocated textbook buyback event", "D": "To invite students to apply for bookstore jobs"},
+          "correct_answer": "C",
+          "explanation": "The notice announces the end-of-semester buyback, emphasizes the move to Room 118, and gives hours, payment terms, and eligibility rules. Its overall purpose is to announce the relocated buyback event, not to list spring textbooks, explain exam rules, or advertise jobs."
+        }
+      ]
+    },
+    {
+      "id": "rdl_r1_long_20260622_002",
+      "variant": "long",
+      "genre": "email",
+      "difficulty": "medium",
+      "format_metadata": {"from": "Dana Reyes", "to": "Marcus Webb", "subject": "Covering my Friday library shift"},
+      "text": "Subject: Covering my Friday library shift\n\nHi Marcus,\n\nI hope your week is going well. I'm scheduled to work the circulation desk this Friday, September 19, from 1:00 PM to 5:00 PM, but I have a dentist appointment that I couldn't move. Would you be able to take the shift for me?\n\nIf you can cover it, I'd be happy to work your Sunday morning shift next weekend in return. Either way, we both need to log the swap in the staff portal by Thursday at noon so that Ms. Okafor can approve it before payroll closes. Without her approval the hours won't be paid correctly.\n\nLet me know by tomorrow if you can do it, and I'll enter the request right away. Thanks so much for considering it.\n\nThanks,\nDana",
+      "questions": [
+        {
+          "qid": "rdl_r1_long_20260622_002_q1",
+          "question_type": "detail",
+          "stem": "According to the email, why is Dana unable to work the Friday shift?",
+          "options": {"A": "She has been moved to a Sunday shift", "B": "She must close the staff portal early", "C": "She has a dentist appointment that day", "D": "She has to meet with Ms. Okafor"},
+          "correct_answer": "C",
+          "explanation": "Dana writes that she is scheduled for Friday but has a dentist appointment she couldn't move, which is why she asks Marcus to cover. The other options reuse real terms (Sunday shift, staff portal, Ms. Okafor) but attach them to the wrong reason."
+        },
+        {
+          "qid": "rdl_r1_long_20260622_002_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the swap if it is not logged by Thursday at noon?",
+          "options": {"A": "Dana will have to work the shift anyway", "B": "Marcus will be moved to Sunday mornings", "C": "The hours may not be paid correctly", "D": "The circulation desk will stay closed"},
+          "correct_answer": "C",
+          "explanation": "Dana explains that the swap must be logged by Thursday at noon so Ms. Okafor can approve it before payroll closes, and that without her approval the hours won't be paid correctly. So missing the deadline risks the hours not being paid correctly. The other options are not supported by the email."
+        },
+        {
+          "qid": "rdl_r1_long_20260622_002_q3",
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this email?",
+          "options": {"A": "To ask a coworker to cover a work shift", "B": "To report a problem with the staff portal", "C": "To confirm a payroll deadline with a manager", "D": "To schedule a dentist appointment for Friday"},
+          "correct_answer": "A",
+          "explanation": "The email's central request is for Marcus to take Dana's Friday circulation shift, with the portal logging and payroll details offered as supporting conditions. Its main purpose is to ask a coworker to cover a shift, not to report a portal problem, confirm payroll, or arrange an appointment."
+        }
+      ]
+    }
+  ]
+}

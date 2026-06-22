@@ -1,0 +1,224 @@
+{
+  "items": [
+    {
+      "id": "la_r1_001",
+      "context": "facility_change",
+      "situation": "recreation center extending hours during finals week",
+      "speaker_role": "department_head",
+      "difficulty": "medium",
+      "announcement": "Good afternoon, everyone. To help you stay active and relieve stress during finals, the Campus Recreation Center will extend its hours next week, from Monday, December 8 through Friday, December 12. We'll open at 6:00 a.m. and stay open until 2:00 a.m. each of those nights. To enter after 10:00 p.m., you'll need to swipe your current student ID at the front desk, since regular staff will have left for the evening. The pool and climbing wall will keep their normal closing time of 9:00 p.m., but the cardio and weight rooms will follow the extended schedule. We hope these longer hours give you a healthy way to take a break from studying.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What must students do to enter the center after 10:00 p.m.?",
+          "options": {
+            "A": "Swipe their current student ID at the front desk",
+            "B": "Reserve a workout slot on the recreation website",
+            "C": "Sign in with a staff member at the pool",
+            "D": "Pay a small after-hours access fee"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：公告明确说晚上10点后进入需在前台刷有效学生证。B为related_but_not_stated：公告从未提到在网站预约时段。C为misattributed_detail：公告说常规工作人员已离开，泳池也在9点关闭，把签到与泳池错误关联。D为related_but_not_stated：公告没有提及任何额外收费。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "misattributed_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the pool during finals week?",
+          "options": {
+            "A": "It will be reserved for swim team practice",
+            "B": "It will require a separate reservation to use",
+            "C": "It will be unavailable during the late-night hours",
+            "D": "It will open earlier than the weight rooms"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：公告说泳池保持晚上9点的常规关闭时间，而中心延长到凌晨2点，可推断深夜时段无法使用泳池。A为over_inference：公告完全没有提到游泳队或训练用途。B为related_but_not_stated：公告未提及泳池需要单独预约。D为wrong_detail：公告说整个中心早上6点统一开门，并未说泳池比力量房更早开放。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "la_r1_002",
+      "context": "academic_event",
+      "situation": "student research poster session open to all majors",
+      "speaker_role": "society_president",
+      "difficulty": "easy",
+      "announcement": "Hi everyone, I'm the president of the Honors Student Society, and we're excited to announce our spring Research Poster Showcase on Thursday, March 19, from 1:00 to 4:00 p.m. in the Atrium of Caldwell Hall. This event welcomes presenters from every major, whether you study chemistry, history, or music, so don't think it's only for science students. You don't need finished results to take part; a poster describing your work in progress is perfectly fine. Light snacks and coffee will be served throughout the afternoon. If you'd like to present, just email a one-line title to our society by Monday, March 16.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To explain how posters will be judged for prizes",
+            "B": "To invite students from all majors to present at a poster showcase",
+            "C": "To announce the winners of a research competition",
+            "D": "To recruit faculty mentors for honors students"
+          },
+          "answer": "B",
+          "explanation": "正确答案B：公告核心是宣布海报展示活动并欢迎所有专业的学生参加。A为wrong_purpose：公告从未提到评奖或评审标准。C为wrong_purpose：这是一个即将举办的活动，并非公布获奖者。D为wrong_purpose：公告没有招募教师导师，焦点在于学生展示。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "C": "wrong_purpose",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "How can students sign up to present?",
+          "options": {
+            "A": "By submitting a completed research paper",
+            "B": "By registering at the Atrium on the day of the event",
+            "C": "By attending an information meeting beforehand",
+            "D": "By emailing a one-line title to the society by March 16"
+          },
+          "answer": "D",
+          "explanation": "正确答案D：公告明确说在3月16日前把一行标题发邮件给社团即可报名。A为wrong_detail：公告说在研的海报即可，不需要完成的论文。B为related_but_not_stated：公告未提到当天在中庭现场登记。C为related_but_not_stated：公告从未提及需要先参加说明会。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "C": "related_but_not_stated"
+          }
+        }
+      ]
+    },
+    {
+      "id": "la_r1_003",
+      "context": "campus_activity",
+      "situation": "cultural food festival organized by international club",
+      "speaker_role": "club_leader",
+      "difficulty": "medium",
+      "announcement": "Attention students. The International Students Club is hosting our annual Taste of the World food festival this Saturday, April 11, from noon to 4:00 p.m. on the Memorial Green. Students from more than twenty countries will prepare and share traditional dishes, and there will be live folk music between performances. Tickets cost five dollars and include five tasting tickets, which you can exchange at any booth. Please note that tickets are sold only in advance through the club's online page; we will not be selling them at the gate this year. Any leftover proceeds will support scholarships for international students.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement mainly about?",
+          "options": {
+            "A": "A fundraising drive for a new club office",
+            "B": "A cooking class taught by international students",
+            "C": "A cultural food festival hosted by the International Students Club",
+            "D": "A change to the campus dining hall menu"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：公告主旨是国际学生俱乐部举办的世界美食节。A为wrong_purpose：盈余用于奖学金只是次要信息，并非为俱乐部办公室筹款。B为wrong_topic：活动是品尝传统菜肴，而非烹饪课。D为wrong_topic：公告与食堂菜单变化毫无关系。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "wrong_topic",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "How can students obtain tickets for the festival?",
+          "options": {
+            "A": "By buying them in advance on the club's online page",
+            "B": "By purchasing them at the gate on Saturday",
+            "C": "By signing up at a booth on the Memorial Green",
+            "D": "By picking them up free with a student ID"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：公告明确说门票只在活动前通过俱乐部线上页面出售。B为wrong_detail：公告特别强调今年现场不售票，与文本相反。C为misattributed_detail：摊位是用来兑换品尝券的，不是报名买票的地方。D为wrong_detail：门票收费五美元，并非凭学生证免费领取。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "misattributed_detail",
+            "D": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "la_r1_004",
+      "context": "academic_event",
+      "situation": "undergraduate research symposium abstract submission deadline",
+      "speaker_role": "department_head",
+      "difficulty": "easy",
+      "announcement": "Good morning, students. I'm writing as chair of the Biology Department to remind you that abstracts for the Undergraduate Research Symposium are due next Wednesday, May 6, by 5:00 p.m. The symposium itself will be held two weeks later in Harmon Auditorium, but you must submit your abstract first to be included. Each abstract should be no longer than three hundred words and uploaded through the department portal. Please don't wait until the last minute, since the portal tends to slow down as the deadline nears. If you have questions about formatting, the writing center on the second floor of Harmon offers drop-in help all week.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To describe the schedule of symposium presentations",
+            "B": "To introduce a new writing center on campus",
+            "C": "To announce the location of Harmon Auditorium",
+            "D": "To remind students of the abstract submission deadline"
+          },
+          "answer": "D",
+          "explanation": "正确答案D：公告核心是提醒本科生研讨会摘要的提交截止日期。A为too_narrow：研讨会日程只是次要细节，并非主旨。B为wrong_purpose：写作中心只是顺带提及的帮助渠道，并非新设立的中心。C为too_narrow：礼堂位置只是一个细节，不是公告的目的。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "wrong_purpose",
+            "C": "too_narrow"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What is one requirement for the abstracts?",
+          "options": {
+            "A": "They must be presented in Harmon Auditorium first",
+            "B": "They must be no more than three hundred words",
+            "C": "They must be reviewed at the writing center",
+            "D": "They must be submitted on paper at the department office"
+          },
+          "answer": "B",
+          "explanation": "正确答案B：公告明确要求摘要不超过三百字。A为misattributed_detail：礼堂是研讨会举办地点，而非摘要要先在那里展示。C为related_but_not_stated：写作中心只是可选的帮助，公告并未要求必须经其审核。D为wrong_detail：摘要需通过院系门户在线上传，而非纸质提交。",
+          "distractor_types": {
+            "A": "misattributed_detail",
+            "C": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "la_r1_005",
+      "context": "facility_change",
+      "situation": "student lounge or study area closing for pipe/ceiling repair",
+      "speaker_role": "department_head",
+      "difficulty": "hard",
+      "announcement": "This is an important notice from the Facilities Office. The third-floor study lounge in Wexler Hall will be closed for ceiling and pipe repairs from this Monday, February 2, through the following Friday, February 13. A leak discovered above the ceiling tiles must be fixed before the space can safely reopen. During the closure, the reservable group rooms on the first floor will be available without a booking, on a first-come, first-served basis. The vending machines normally on the third floor have been moved temporarily to the lobby. We expect to reopen the lounge the week of February 16, though that date could shift depending on what the crews find behind the walls.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To inform students that a study lounge will close for repairs",
+            "B": "To introduce a new first-come group room policy permanently",
+            "C": "To relocate the vending machines to a different building",
+            "D": "To apologize for an unexpected increase in study space demand"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：公告核心是告知三楼自习室将因天花板和管道维修而关闭。B为too_narrow：一楼小组室免预约只是临时安排，并非永久新政策，且只是次要信息。C为too_narrow：自动售货机的搬迁只是一个细节，不是公告的目的。D为wrong_purpose：公告并未为学习空间需求增加而致歉，关闭原因是漏水维修。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "too_narrow",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the reopening date of February 16?",
+          "options": {
+            "A": "It has been confirmed by the repair crews",
+            "B": "It applies only to the first-floor group rooms",
+            "C": "It might change depending on what the crews discover",
+            "D": "It marks the start of a longer renovation project"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：公告说重新开放日期可能随墙内发现的情况而变动，可推断该日期并不确定。A为wrong_detail：公告明确说日期可能改变，与已确认相反。B为misattributed_detail：一楼小组室在关闭期间一直开放，重开日期指的是三楼自习室。D为over_inference：公告只提到一次维修，没有任何关于更长翻新项目的依据。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "misattributed_detail",
+            "D": "over_inference"
+          }
+        }
+      ]
+    }
+  ]
+}
