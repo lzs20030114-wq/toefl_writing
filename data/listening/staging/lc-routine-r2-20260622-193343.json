@@ -1,0 +1,130 @@
+{
+  "type": "listenConversation",
+  "generated_at": "2026-06-22T19:33:43.000Z",
+  "items": [
+    {
+      "id": "lc_r2_20260622193343_1",
+      "setting": "campus_dorm",
+      "difficulty": "medium",
+      "speakers": [{"name": "Woman", "role": "student", "gender": "female"}, {"name": "Man", "role": "student", "gender": "male"}],
+      "conversation": [
+        {"speaker": "Woman", "text": "Our dorm room is getting messy fast. Should we set up some kind of chore schedule for the semester?"},
+        {"speaker": "Man", "text": "Yeah, good idea. I hate arguing about whose turn it is to take out the trash."},
+        {"speaker": "Woman", "text": "Exactly. How about we switch jobs every week? One person does dishes, the other vacuums."},
+        {"speaker": "Man", "text": "That works. But honestly, I'd rather just always do the dishes. I really don't mind them."},
+        {"speaker": "Woman", "text": "Oh, perfect. Then I'll take vacuuming and trash, since you're handling the dishes every time."},
+        {"speaker": "Man", "text": "Sounds fair. Let's write it on the whiteboard so we both remember."}
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "How to decorate their dorm room",
+            "B": "Whose turn it is to buy cleaning supplies",
+            "C": "How to divide household chores for the semester",
+            "D": "Whether to move to a different dorm"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：整段对话围绕如何为整个学期制定打扫分工展开，这是核心话题。A选项错误，对话谈的是打扫而不是装饰房间。B选项太窄，谁该买清洁用品根本没有讨论，只是顺带提到倒垃圾的轮值。D选项错误，没有人提到搬到别的宿舍。",
+          "distractor_types": {"A": "wrong_topic", "B": "too_narrow", "D": "wrong_topic"}
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely be responsible for?",
+          "options": {
+            "A": "Washing the dishes",
+            "B": "Vacuuming the room",
+            "C": "Taking out the trash",
+            "D": "Buying a new whiteboard"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：男生明确说他宁愿一直负责洗碗，因为他不介意，所以洗碗归他。B选项与对话相反，吸尘是女生承担的。C选项也与对话相反，倒垃圾同样归女生。D选项过度推断，他们只是说把分工写在白板上，没人提到要买新白板。",
+          "distractor_types": {"B": "reversed_situation", "C": "reversed_situation", "D": "over_inference"}
+        }
+      ]
+    },
+    {
+      "id": "lc_r2_20260622193343_2",
+      "setting": "campus_gym",
+      "difficulty": "easy",
+      "speakers": [{"name": "Woman", "role": "student", "gender": "female"}, {"name": "Man", "role": "gym_staff", "gender": "male"}],
+      "conversation": [
+        {"speaker": "Woman", "text": "Hi, I just joined the fitness center. Can I rent a locker for the whole semester here?"},
+        {"speaker": "Man", "text": "Welcome! Yes, semester lockers are twenty dollars, and you can sign up right at this desk."},
+        {"speaker": "Woman", "text": "Great. Do you also have group classes, like yoga or spin? I'd love to try a few."},
+        {"speaker": "Man", "text": "We do. The full class schedule is posted on the app, and most classes are free for members."},
+        {"speaker": "Woman", "text": "Perfect. I'll grab a locker now and check the app for a yoga class tonight."}
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "How much does a locker for the whole semester cost?",
+          "options": {
+            "A": "Twenty dollars",
+            "B": "It is free for members",
+            "C": "Ten dollars a month",
+            "D": "The same price as a class"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：工作人员明确说整学期的储物柜是二十美元。B选项错误，免费的是健身课程，不是储物柜。C选项错误，对话从未提到每月十美元这样的价格。D选项错误，对话没有把储物柜价格和课程价格做比较，课程对会员免费。",
+          "distractor_types": {"B": "wrong_detail", "C": "wrong_detail", "D": "related_but_not_stated"}
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Cancel her gym membership",
+            "B": "Sign up for a spin class instead",
+            "C": "Rent a locker and look for a yoga class",
+            "D": "Pay twenty dollars for each class"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：女生说她现在就去租一个储物柜，并在应用上找今晚的瑜伽课，所以她接下来会租柜子并查找瑜伽课。A选项错误，她刚加入健身中心，没有任何取消的意思。B选项错误，她说的是瑜伽课而不是动感单车课。D选项错误，二十美元是储物柜的费用，课程对会员免费。",
+          "distractor_types": {"A": "over_inference", "B": "wrong_detail", "D": "wrong_detail"}
+        }
+      ]
+    },
+    {
+      "id": "lc_r2_20260622193343_3",
+      "setting": "campus_museum",
+      "difficulty": "medium",
+      "speakers": [{"name": "Woman", "role": "student", "gender": "female"}, {"name": "Man", "role": "student", "gender": "male"}],
+      "conversation": [
+        {"speaker": "Woman", "text": "There's a free museum day this Saturday. Do you want to go check out the new exhibits with me?"},
+        {"speaker": "Man", "text": "Sure! I heard they have a big dinosaur exhibit and a modern art wing. Which one sounds better to you?"},
+        {"speaker": "Woman", "text": "Honestly, the dinosaur one. I've seen the art wing twice already, and the fossils are supposed to be amazing."},
+        {"speaker": "Man", "text": "Works for me. Should we get there early? Those popular exhibits get really crowded by noon."},
+        {"speaker": "Woman", "text": "Definitely. Let's meet at nine so we can see the fossils before the crowds show up."}
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Which exhibit does the woman want to see?",
+          "options": {
+            "A": "The modern art wing",
+            "B": "The dinosaur fossil exhibit",
+            "C": "A photography exhibit",
+            "D": "Both exhibits in one day"
+          },
+          "answer": "B",
+          "explanation": "正确答案B：女生说她想看恐龙化石那个展，因为艺术馆她已经去过两次了。A选项与对话相反，艺术馆是她已经看腻的部分。C选项错误，对话从未提到摄影展。D选项错误，她明确选了恐龙展，并没有说一天看完两个展。",
+          "distractor_types": {"A": "reversed_situation", "C": "related_but_not_stated", "D": "wrong_detail"}
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about why they plan to arrive early?",
+          "options": {
+            "A": "The museum closes at noon",
+            "B": "The fossils are only shown in the morning",
+            "C": "They want to see the art wing first",
+            "D": "They want to avoid the midday crowds"
+          },
+          "answer": "D",
+          "explanation": "正确答案D：男生说热门展到中午会很拥挤，女生同意九点见面，好在人群涌入前看化石，所以早到是为了避开中午的人潮。A选项错误，对话只说中午变挤，没说博物馆中午关门。B选项过度推断，没人说化石只在早上展出。C选项与对话相反，女生已经看过艺术馆，他们要先看的是化石。",
+          "distractor_types": {"A": "wrong_detail", "B": "over_inference", "C": "reversed_situation"}
+        }
+      ]
+    }
+  ]
+}

@@ -8,99 +8,203 @@
   "results": {
     "bs": {
       "generated": 20,
-      "accepted": 20,
-      "topics": ["campus small-talk", "embedded questions", "negation", "relative clauses", "direct wh-questions"],
-      "favorite": {"prompt": "Did you check the gym hours?", "answer": "I asked whether the gym opens early tomorrow."},
+      "accepted": 30,
+      "topics": [
+        "campus small-talk",
+        "embedded questions",
+        "negation",
+        "relative clauses",
+        "direct wh-questions"
+      ],
+      "favorite": {
+        "prompt": "Did you check the gym hours?",
+        "answer": "I asked whether the gym opens early tomorrow."
+      },
       "retried_after_fail": false,
-      "failure_reason": ""
+      "failure_reason": "",
+      "r2_supplemented": true,
+      "r2_items_added": 10
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["social studies", "economics", "education", "technology and media"],
-      "favorite": {"subtopic": "social studies", "preview": "We've been discussing how cities use their limited downtown land this semester. Several mid-sized cities have begun tearing out ground-level parking lots."},
+      "topics": [
+        "social studies",
+        "economics",
+        "education",
+        "technology and media"
+      ],
+      "favorite": {
+        "subtopic": "social studies",
+        "preview": "We've been discussing how cities use their limited downtown land this semester. Several mid-sized cities have begun tearing out ground-level parking lots."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "email": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["社区生活", "职场工作", "住宿", "日常社交"],
-      "favorite": {"subtopic": "社区生活", "preview": "You are a regular volunteer at your neighborhood community library. The branch recently cut its Saturday and Sunday opening hours, and several volunteers can no longer cover the shifts they had committed to."},
+      "topics": [
+        "社区生活",
+        "职场工作",
+        "住宿",
+        "日常社交"
+      ],
+      "favorite": {
+        "subtopic": "社区生活",
+        "preview": "You are a regular volunteer at your neighborhood community library. The branch recently cut its Saturday and Sunday opening hours, and several volunteers can no longer cover the shifts they had committed to."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ap": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["art/impressionism", "history/ancient civilizations", "anthropology/early agriculture", "psychology/creativity", "sociology/social movements"],
-      "favorite": {"subtopic": "anthropology/early agriculture", "preview": "Domestication is the long process by which humans reshaped wild plants into reliable crops through repeated selection."},
+      "topics": [
+        "art/impressionism",
+        "history/ancient civilizations",
+        "anthropology/early agriculture",
+        "psychology/creativity",
+        "sociology/social movements"
+      ],
+      "favorite": {
+        "subtopic": "anthropology/early agriculture",
+        "preview": "Domestication is the long process by which humans reshaped wild plants into reliable crops through repeated selection."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ctw": {
       "generated": 6,
       "accepted": 6,
-      "topics": ["biology/genetics", "environmental_science/green architecture", "psychology/group dynamics", "history/ancient astronomy", "geology/erosion", "astronomy/planetary atmospheres"],
-      "favorite": {"subtopic": "geology/erosion", "preview": "Erosion is the slow process by which wind, water, and ice gradually wear away the surface of the land."},
+      "topics": [
+        "biology/genetics",
+        "environmental_science/green architecture",
+        "psychology/group dynamics",
+        "history/ancient astronomy",
+        "geology/erosion",
+        "astronomy/planetary atmospheres"
+      ],
+      "favorite": {
+        "subtopic": "geology/erosion",
+        "preview": "Erosion is the slow process by which wind, water, and ice gradually wear away the surface of the land."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-rdl-short": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["social_media", "notice", "email", "email"],
-      "favorite": {"subtopic": "social_media", "preview": "Great news, plant lovers! The campus community garden behind Holloway Hall is now open daily from 8 a.m."},
+      "topics": [
+        "social_media",
+        "notice",
+        "email",
+        "email"
+      ],
+      "favorite": {
+        "subtopic": "social_media",
+        "preview": "Great news, plant lovers! The campus community garden behind Holloway Hall is now open daily from 8 a.m."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-rdl-long": {
       "generated": 2,
       "accepted": 2,
-      "topics": ["notice", "email"],
-      "favorite": {"subtopic": "notice", "preview": "Fall Textbook Buyback — New Location. December 8 to December 12. The campus bookstore will hold its"},
+      "topics": [
+        "notice",
+        "email"
+      ],
+      "favorite": {
+        "subtopic": "notice",
+        "preview": "Fall Textbook Buyback — New Location. December 8 to December 12. The campus bookstore will hold its"
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lat": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["psychology/peak-end rule", "biology/coral reefs ocean acidification", "art_history/Baroque patronage", "environmental_science/green roofs"],
-      "favorite": {"subtopic": "biology/how coral reefs respond to ocean acidification", "preview": "Coral reefs are often called the rainforests of the sea, and like rainforests, they're under serious pressure."},
+      "topics": [
+        "psychology/peak-end rule",
+        "biology/coral reefs ocean acidification",
+        "art_history/Baroque patronage",
+        "environmental_science/green roofs"
+      ],
+      "favorite": {
+        "subtopic": "biology/how coral reefs respond to ocean acidification",
+        "preview": "Coral reefs are often called the rainforests of the sea, and like rainforests, they're under serious pressure."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lc": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["campus_dorm", "campus_cafe", "campus_dorm", "campus_dorm", "errands_service"],
-      "favorite": {"subtopic": "returning a too-small sweater", "preview": "Hi, I bought this sweater last week, but it turned out to be too small. I'd like to return it."},
+      "topics": [
+        "campus_dorm",
+        "campus_cafe",
+        "campus_dorm",
+        "campus_dorm",
+        "errands_service"
+      ],
+      "favorite": {
+        "subtopic": "returning a too-small sweater",
+        "preview": "Hi, I bought this sweater last week, but it turned out to be too small. I'd like to return it."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-la": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["facility_change/rec center hours", "academic_event/poster session", "campus_activity/food festival", "academic_event/research symposium", "facility_change/lounge repair"],
-      "favorite": {"subtopic": "facility_change/student lounge closing for pipe repair", "preview": "This is an important notice from the Facilities Office. The third-floor study lounge in Wexler Hall"},
+      "topics": [
+        "facility_change/rec center hours",
+        "academic_event/poster session",
+        "campus_activity/food festival",
+        "academic_event/research symposium",
+        "facility_change/lounge repair"
+      ],
+      "favorite": {
+        "subtopic": "facility_change/student lounge closing for pipe repair",
+        "preview": "This is an important notice from the Facilities Office. The third-floor study lounge in Wexler Hall"
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lcr": {
       "generated": 8,
       "accepted": 8,
-      "topics": ["marker_led_indirect", "direct_topical", "idiomatic", "context_shift", "counter_question"],
-      "favorite": {"subtopic": "context_shift", "preview": "The post office probably isn't open this late. — correct reply solves the need: There's a drop box right outside."},
+      "topics": [
+        "marker_led_indirect",
+        "direct_topical",
+        "idiomatic",
+        "context_shift",
+        "counter_question"
+      ],
+      "favorite": {
+        "subtopic": "context_shift",
+        "preview": "The post office probably isn't open this late. — correct reply solves the need: There's a drop box right outside."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "speaking-repeat": {
       "generated": 3,
       "accepted": 3,
-      "topics": ["Travel Booking", "Library Orientation", "Salad Making"],
-      "favorite": {"subtopic": "Library Orientation", "preview": "If you cannot locate a title on the shelf, check the floor map posted near the main staircase."},
+      "topics": [
+        "Travel Booking",
+        "Library Orientation",
+        "Salad Making"
+      ],
+      "favorite": {
+        "subtopic": "Library Orientation",
+        "preview": "If you cannot locate a title on the shelf, check the floor map posted near the main staircase."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     }
-  }
+  },
+  "r2_completed_at": "2026-06-22T19:46:15.840Z",
+  "r2_session_id": "routine-r2-20260622-193343"
 }
