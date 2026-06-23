@@ -1,0 +1,219 @@
+{
+  "items": [
+    {
+      "context": "academic_event",
+      "situation": "spring academic symposium with limited seats and prerequisites",
+      "speaker_role": "department_head",
+      "difficulty": "medium",
+      "announcement": "Good afternoon, everyone. I'm pleased to announce that our department's Spring Symposium on Renewable Energy will take place next Thursday at 1 p.m. in Brewster Hall. Because seating is limited to just forty attendees, we'll be admitting students on a first-come, first-served basis at the door. Please be aware that you must have completed at least one introductory engineering course before you can attend, since the talks assume some background knowledge. We won't be recording the sessions this year, so attending in person is the only way to benefit. If you plan to come, arrive a few minutes early to secure a seat.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To inform students about an upcoming symposium",
+            "B": "To explain why the talks will not be recorded",
+            "C": "To recruit speakers for the engineering department",
+            "D": "To discourage beginners from studying energy"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。通告的核心目的是告知学生即将举行的可再生能源研讨会的时间、地点、座位和参加条件。B错误（too_narrow）：不录制只是其中一个细节，并非整体目的。C错误（wrong_purpose）：通告并未招募演讲者，而是面向参加者。D错误（reversed_intent）：通告只是说明需完成一门入门课，并非劝退初学者。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students who miss the symposium?",
+          "options": {
+            "A": "They can request a private session later",
+            "B": "They will receive a full transcript by email",
+            "C": "They will not be able to access the content",
+            "D": "They must repay a registration deposit"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。通告说今年不录制，且现场参加是唯一获益方式，因此可推断错过的学生将无法获取内容。A错误（over_inference）：通告完全没有提到私人补讲。B错误（unrelated_inference）：既然不录制，就不可能发送完整文字记录。D错误（unrelated_inference）：通告从未提及任何报名押金。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_inference",
+            "D": "unrelated_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "logistics",
+      "situation": "new bike-share station locations",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "Attention students, faculty, and staff. We're excited to announce that three new bike-share stations will open across campus this Monday. You'll find them outside the main library, beside the student union, and near the east residence halls. Each station will hold up to fifteen bikes, and rides under thirty minutes will be completely free for anyone with a valid student ID. To unlock a bike, simply tap your ID card on the docking post. Please remember to return your bike to any official station when you're finished. We hope this makes getting around campus faster and greener for everyone.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement mainly about?",
+          "options": {
+            "A": "A new policy requiring helmets on campus",
+            "B": "The opening of new bike-share stations",
+            "C": "A fee increase for parking permits",
+            "D": "The closing of the campus shuttle service"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。通告主要宣布周一将开放三个新的共享单车站点。A错误（related_but_not_stated）：通告完全没有提到头盔要求。C错误（wrong_purpose）：没有涉及停车许可费用。D错误（reversed_intent）：通告是新增交通方式，而非取消班车。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "C": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "How do users unlock a bike at a station?",
+          "options": {
+            "A": "By scanning a code on the bike seat",
+            "B": "By paying a deposit at the front desk",
+            "C": "By signing up on the transportation website",
+            "D": "By tapping their student ID on the post"
+          },
+          "answer": "D",
+          "explanation": "正确答案是D。通告明确说明用学生证轻触停车桩即可解锁。A错误（wrong_detail）：通告说的是轻触ID卡，而非扫描车座上的码。B错误（related_but_not_stated）：从未提到押金或前台。C错误（misattributed_detail）：网站注册是其它通告常见动作，本通告并未提及。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "C": "misattributed_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "facility_change",
+      "situation": "recreation center extending hours during finals week",
+      "speaker_role": "department_head",
+      "difficulty": "hard",
+      "announcement": "This is a reminder that the Recreation Center will adjust its schedule for finals week, beginning next Sunday. To give students more chances to relieve stress, we'll keep the building open until 2 a.m. every night through the end of exams. However, please be aware that the swimming pool and climbing wall will close at their usual 10 p.m. time, since those areas require trained supervisors. The cardio and weight rooms will remain available throughout the extended hours. You'll need to swipe your student ID at the entrance after 11 p.m., as the front desk will be unstaffed late at night.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What is required to enter the building after 11 p.m.?",
+          "options": {
+            "A": "A reservation made on the recreation website",
+            "B": "A signed waiver from a trained supervisor",
+            "C": "Swiping a student ID at the entrance",
+            "D": "A pass collected from the front desk"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。通告明确说11点后需在入口刷学生证，因为前台无人值守。A错误（related_but_not_stated）：从未提到网站预约。B错误（misattributed_detail）：训练有素的监督员是与泳池/攀岩相关的细节，被错误套用到入场要求。D错误（wrong_detail）：通告恰恰说前台深夜无人，所以不可能从前台领取通行证。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "misattributed_detail",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the pool and climbing wall?",
+          "options": {
+            "A": "They depend on staff who are unavailable late",
+            "B": "They will be permanently removed after finals",
+            "C": "They are the most popular areas in the center",
+            "D": "They require an extra fee during finals week"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。通告说泳池和攀岩墙照常10点关闭，因为这些区域需要受训监督员，可推断深夜没有相应人员值班。B错误（over_inference）：通告只是说当晚提前关闭，并未说永久移除。C错误（unrelated_inference）：通告从未比较各区域的受欢迎程度。D错误（unrelated_inference）：没有任何关于额外费用的信息。",
+          "distractor_types": {
+            "B": "over_inference",
+            "C": "unrelated_inference",
+            "D": "unrelated_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "academic_event",
+      "situation": "undergraduate research symposium abstract submission deadline",
+      "speaker_role": "department_head",
+      "difficulty": "medium",
+      "announcement": "Good morning, students. I want to remind you that abstracts for the Undergraduate Research Symposium are due this Friday at noon. We've heard from many of you that the format felt unclear, so let me be specific: each abstract should be no more than three hundred words and must be uploaded through the online portal, not emailed to my office. Faculty reviewers will read every submission and notify applicants by the following Wednesday. Keep in mind that students who present will earn one extra credit toward their seminar requirement. If you have questions about your topic, stop by my office hours before Thursday afternoon.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "How must students submit their abstracts?",
+          "options": {
+            "A": "By emailing them to the department head",
+            "B": "By delivering printed copies to reviewers",
+            "C": "By presenting them during office hours",
+            "D": "By uploading them through the online portal"
+          },
+          "answer": "D",
+          "explanation": "正确答案是D。通告明确要求通过在线门户上传，而非邮件发送。A错误（wrong_detail）：通告恰恰说不要发邮件到办公室。B错误（related_but_not_stated）：从未提到打印纸质件交给评审。C错误（misattributed_detail）：办公时间是用于咨询选题的，被错误套用为提交方式。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "C": "misattributed_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about presenting at the symposium?",
+          "options": {
+            "A": "It is required for all seminar students",
+            "B": "It can benefit a student's seminar grade",
+            "C": "It guarantees publication of the research",
+            "D": "It replaces the need to submit an abstract"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。通告说参展学生可获得一个研讨课的额外学分，可推断这对其研讨课成绩有益。A错误（over_inference）：通告说的是额外学分激励，并非所有研讨课学生都必须参展。C错误（unrelated_inference）：从未提到发表论文。D错误（over_inference）：参展并不取代提交摘要，所有人仍需先交摘要。",
+          "distractor_types": {
+            "A": "over_inference",
+            "C": "unrelated_inference",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "facility_change",
+      "situation": "new fitness equipment installation at recreation center",
+      "speaker_role": "recreation_staff",
+      "difficulty": "easy",
+      "announcement": "Attention students. We're excited to announce that the Recreation Center has installed a brand-new set of rowing machines and adjustable dumbbells on the second floor. The new equipment will be ready to use starting this Wednesday at 8 a.m. To help everyone get comfortable, our staff will offer short, free demonstrations near the entrance throughout the day on Wednesday and Thursday. Please remember to wipe down each machine after your workout, since the gym is now busier than ever. If you'd like a quick tour of the upgrades, just ask any staff member wearing a blue shirt. We hope you enjoy the new gear.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce newly installed fitness equipment",
+            "B": "To explain a rise in gym membership fees",
+            "C": "To warn that the second floor will close",
+            "D": "To recruit new staff for the recreation center"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。通告主要宣布二楼安装了全新健身器材并将开放使用。B错误（wrong_purpose）：通告没有任何关于会费上涨的内容。C错误（reversed_intent）：二楼是开放使用新器材，而非关闭。D错误（wrong_purpose）：通告并未招募员工，而是提供器材使用演示。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "reversed_intent",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are gym users asked to do after exercising?",
+          "options": {
+            "A": "Return weights to the front desk",
+            "B": "Sign out on a sheet by the door",
+            "C": "Wipe down each machine they used",
+            "D": "Report any problems to a blue-shirted staffer"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。通告明确要求锻炼后擦拭每台机器。A错误（related_but_not_stated）：从未提到把器材交回前台。B错误（related_but_not_stated）：没有任何关于在门口登记签退的说法。D错误（misattributed_detail）：蓝衣工作人员是用来提供参观和咨询的，被错误套用为报告问题的对象。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,104 +1,210 @@
 {
-  "session_id": "routine-20260622-190415",
-  "completed_at": "2026-06-22T19:27:00Z",
-  "duration_minutes": 23,
+  "session_id": "routine-20260623-190440",
+  "completed_at": "2026-06-23T19:16:42.583Z",
+  "duration_minutes": 12,
   "model": "Claude Opus 4.8",
-  "highlight": "BS 难度冻结门 PASS（修正缩写/三人称语域漂移），12 库全刷新；听力新增 peak-end 记忆规律与珊瑚礁酸化讲座",
+  "highlight": "PASS 1 满分 70/70，12 个题库全部一次通过；BS 难度冻结门 PASS，听力新增「话到嘴边」记忆现象与锚定偏差等题材",
   "commit_sha": "",
   "results": {
     "bs": {
       "generated": 20,
       "accepted": 20,
-      "topics": ["campus small-talk", "embedded questions", "negation", "relative clauses", "direct wh-questions"],
-      "favorite": {"prompt": "Did you check the gym hours?", "answer": "I asked whether the gym opens early tomorrow."},
+      "topics": [
+        "simple past statements",
+        "present simple + time phrases",
+        "past continuous + prepositional phrases",
+        "indirect/embedded questions (whether/if, declarative order)",
+        "indirect statements (found out)",
+        "relative clauses",
+        "reduced relative clauses",
+        "passive voice",
+        "negation (have not / never / no longer)",
+        "direct wh- and yes/no questions with inversion",
+        "sentence-opener adverb (Honestly)"
+      ],
+      "favorite": {
+        "prompt": "Did you settle on a topic for your essay?",
+        "answer": "I finally chose the research angle that my professor recommended last week."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["social studies", "economics", "education", "technology and media"],
-      "favorite": {"subtopic": "social studies", "preview": "We've been discussing how cities use their limited downtown land this semester. Several mid-sized cities have begun tearing out ground-level parking lots."},
+      "topics": [
+        "public policy",
+        "history and culture",
+        "computer science",
+        "social studies"
+      ],
+      "favorite": {
+        "subtopic": "public policy",
+        "preview": "We've been discussing how governments fund public broadcasting this semester. Several countries finance national radio and television through a mandatory annual fee"
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "email": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["社区生活", "职场工作", "住宿", "日常社交"],
-      "favorite": {"subtopic": "社区生活", "preview": "You are a regular volunteer at your neighborhood community library. The branch recently cut its Saturday and Sunday opening hours, and several volunteers can no longer cover the shifts they had committed to."},
+      "topics": [
+        "服务与活动",
+        "校园学业",
+        "消费售后"
+      ],
+      "favorite": {
+        "subtopic": "服务与活动",
+        "preview": "You booked a guided kayaking tour through a small outdoor adventure company for next Saturday. You just real"
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ap": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["art/impressionism", "history/ancient civilizations", "anthropology/early agriculture", "psychology/creativity", "sociology/social movements"],
-      "favorite": {"subtopic": "anthropology/early agriculture", "preview": "Domestication is the long process by which humans reshaped wild plants into reliable crops through repeated selection."},
+      "topics": [
+        "anthropology/oral traditions",
+        "art/sculpture",
+        "biology/pollination",
+        "environmental_science/desertification",
+        "chemistry/polymer science"
+      ],
+      "favorite": {
+        "subtopic": "biology/pollination",
+        "preview": "Pollination is the transfer of pollen from a flower's male structures to its female structures, enabling fertilization."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ctw": {
       "generated": 6,
       "accepted": 6,
-      "topics": ["biology/genetics", "environmental_science/green architecture", "psychology/group dynamics", "history/ancient astronomy", "geology/erosion", "astronomy/planetary atmospheres"],
-      "favorite": {"subtopic": "geology/erosion", "preview": "Erosion is the slow process by which wind, water, and ice gradually wear away the surface of the land."},
+      "topics": [
+        "biology/deep sea anglerfish",
+        "environmental_science/coral reef conservation",
+        "psychology/cognitive development in children",
+        "history/the invention of the printing press",
+        "geology/mountain formation through plate collision",
+        "astronomy/gravitational waves"
+      ],
+      "favorite": {
+        "subtopic": "history/the invention of the printing press",
+        "preview": "The printing press transformed how knowledge spread across Europe during the fifteenth century."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-rdl-short": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["social_media", "notice", "email", "email"],
-      "favorite": {"subtopic": "social_media", "preview": "Great news, plant lovers! The campus community garden behind Holloway Hall is now open daily from 8 a.m."},
+      "topics": [
+        "notice",
+        "flyer"
+      ],
+      "favorite": {
+        "subtopic": "flyer",
+        "preview": "ONE NIGHT ONLY! The Drama Club proudly presents \"Midnight Echo,\" a thrilling student-written mystery."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-rdl-long": {
       "generated": 2,
       "accepted": 2,
-      "topics": ["notice", "email"],
-      "favorite": {"subtopic": "notice", "preview": "Fall Textbook Buyback — New Location. December 8 to December 12. The campus bookstore will hold its"},
+      "topics": [
+        "email (study group formation)",
+        "email (event invitation)"
+      ],
+      "favorite": {
+        "subtopic": "email — event invitation",
+        "preview": "Subject: You're invited: Spring Robotics Showcase — On behalf of the Robotics Club"
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lat": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["psychology/peak-end rule", "biology/coral reefs ocean acidification", "art_history/Baroque patronage", "environmental_science/green roofs"],
-      "favorite": {"subtopic": "biology/how coral reefs respond to ocean acidification", "preview": "Coral reefs are often called the rainforests of the sea, and like rainforests, they're under serious pressure."},
+      "topics": [
+        "how the sonata form structured Classical-era symphonies",
+        "anchoring bias in numerical judgments",
+        "the influence of climate on traditional vernacular housing",
+        "the tip-of-the-tongue phenomenon and memory retrieval"
+      ],
+      "favorite": {
+        "subtopic": "the tip-of-the-tongue phenomenon and memory retrieval",
+        "preview": "You know that maddening feeling when a word is right there, on the tip of your tongue, but you simply"
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lc": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["campus_dorm", "campus_cafe", "campus_dorm", "campus_dorm", "errands_service"],
-      "favorite": {"subtopic": "returning a too-small sweater", "preview": "Hi, I bought this sweater last week, but it turned out to be too small. I'd like to return it."},
+      "topics": [
+        "new downtown Korean restaurant and which dish to try",
+        "part-time job at a bottling factory and the early shift",
+        "caring for a friend's houseplant over the weekend",
+        "commuting to campus by bike versus bus",
+        "a novel for class with a confusing ending"
+      ],
+      "favorite": {
+        "subtopic": "new downtown Korean restaurant and which dish to try",
+        "preview": "Have you tried that new Korean place on Fifth Street yet? I keep hearing about it, but I can't decide if it's worth the trip."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-la": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["facility_change/rec center hours", "academic_event/poster session", "campus_activity/food festival", "academic_event/research symposium", "facility_change/lounge repair"],
-      "favorite": {"subtopic": "facility_change/student lounge closing for pipe repair", "preview": "This is an important notice from the Facilities Office. The third-floor study lounge in Wexler Hall"},
+      "topics": [
+        "spring renewable-energy symposium with limited seats",
+        "new bike-share station locations across campus",
+        "recreation center extended hours during finals week",
+        "undergraduate research symposium abstract deadline",
+        "new fitness equipment installation at recreation center"
+      ],
+      "favorite": {
+        "subtopic": "recreation center extending hours during finals week",
+        "preview": "This is a reminder that the Recreation Center will adjust its schedule for finals week, beginning next Sunday."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lcr": {
       "generated": 8,
       "accepted": 8,
-      "topics": ["marker_led_indirect", "direct_topical", "idiomatic", "context_shift", "counter_question"],
-      "favorite": {"subtopic": "context_shift", "preview": "The post office probably isn't open this late. — correct reply solves the need: There's a drop box right outside."},
+      "topics": [
+        "gym/rec center hours",
+        "borrowing lecture notes",
+        "finding a library book",
+        "arranging a ride to a wedding",
+        "concern about a friend's stress",
+        "jazz concert venue change",
+        "lab report cover page requirement",
+        "weekend trip destination"
+      ],
+      "favorite": {
+        "subtopic": "arranging a ride or carpool with a friend",
+        "preview": "How're we getting to the wedding on Saturday? — correct: \"Leave the driving to me.\""
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "speaking-repeat": {
       "generated": 3,
       "accepted": 3,
-      "topics": ["Travel Booking", "Library Orientation", "Salad Making"],
-      "favorite": {"subtopic": "Library Orientation", "preview": "If you cannot locate a title on the shelf, check the floor map posted near the main staircase."},
+      "topics": [
+        "Car Rental Agency orientation",
+        "Photography Darkroom orientation",
+        "Theater Rehearsal orientation"
+      ],
+      "favorite": {
+        "subtopic": "Photography Darkroom orientation",
+        "preview": "Trays are stacked beside the sink. Keep the door closed during printing. Chemical baths are mixed."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     }

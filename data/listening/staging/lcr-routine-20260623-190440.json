@@ -1,0 +1,164 @@
+{
+  "items": [
+    {
+      "context": "campus_daily",
+      "situation": "student asking about gym or sports facility hours",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I thought the rec center stayed open later on Fridays.",
+      "options": {
+        "A": "Actually, they cut back the hours this term.",
+        "B": "The new treadmills are really popular.",
+        "C": "I left my gym bag in the locker room.",
+        "D": "Yes, you can sign up for a class there."
+      },
+      "answer": "A",
+      "explanation": "正确答案A以话语标记词\"Actually\"开头，间接纠正说话者的假设，说明本学期缩短了开放时间，自然地推进对话。B是语义联想陷阱（rec center→treadmills，只描述器材而不回应开放时间）。C是离题但语法正确的句子（在另一个场景说得通，但与开放时间无关）。D是答错问题类型（说话者没有问能否报名课程，而是关于开放时间的陈述）。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "classmate asking to borrow lecture notes",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Can I copy your notes from yesterday's lecture?",
+      "options": {
+        "A": "The lecture hall was freezing yesterday.",
+        "B": "I'll just email you my whole folder.",
+        "C": "Yes, I take notes in every class.",
+        "D": "My notebook has a blue cover."
+      },
+      "answer": "B",
+      "explanation": "正确答案B不直接回答\"能不能复印\"，而是通过解决潜在需求来回应——直接把整个文件夹发邮件给对方，这是context_shift范式。A是离题但语法正确（描述教室很冷，与借笔记无关）。C看似回答yes，但只是补充无用信息（\"我每节课都记笔记\"并未真正答应借出，是答错重点/自然对话陷阱）。D是语义联想陷阱（notes→notebook，只描述笔记本外观而不回应请求）。",
+      "distractor_types": {
+        "A": "off_topic",
+        "C": "wrong_question_type",
+        "D": "semantic_association_trap"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a librarian about a book or resource",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I can't seem to find this title on the shelves.",
+      "options": {
+        "A": "The shelves were just reorganized last week.",
+        "B": "I love the new reading room upstairs.",
+        "C": "Well, it might be checked out right now.",
+        "D": "No, you can't reserve a study room here."
+      },
+      "answer": "C",
+      "explanation": "正确答案C以话语标记词\"Well\"开头，间接给出书找不到的合理原因（可能被借走了），自然推进对话，属于marker_led_indirect范式。A是语义联想陷阱（shelves→重新整理书架，绕开了书的去向）。B是离题但语法正确（聊楼上的阅览室，与找书无关）。D是答错问题类型（说话者没有问能否预订自习室）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "arranging a ride or carpool with a friend",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "How're we getting to the wedding on Saturday?",
+      "options": {
+        "A": "The highway is always busy on weekends.",
+        "B": "Yes, I got a new car last month.",
+        "C": "The wedding starts at four o'clock.",
+        "D": "Leave the driving to me."
+      },
+      "answer": "D",
+      "explanation": "正确答案D是地道的口语表达\"Leave the driving to me\"（交给我开就行），自然回应了怎么去的问题，属于idiomatic范式。A是语义联想陷阱（getting there→highway，只谈高速路况而不解决出行安排）。B是答错问题类型（问的是怎么去，不是yes/no关于车）。C是语义联想陷阱（wedding→婚礼时间，答错了方面，问的是怎么去而非几点）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "wrong_question_type",
+        "C": "semantic_association_trap"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "expressing concern about a friend's situation",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "What's been bothering you all week?",
+      "options": {
+        "A": "Is it that obvious to everyone?",
+        "B": "The week went by really fast.",
+        "C": "I bought a new planner yesterday.",
+        "D": "No, I haven't met her yet."
+      },
+      "answer": "A",
+      "explanation": "正确答案A用一个反问\"Is it that obvious to everyone?\"来回应关切，承认确实有心事并推进对话，属于counter_question范式。B是语义联想陷阱（week→\"这周过得很快\"，重复关键词但不回应烦恼）。C是离题但语法正确（买了新记事本，与烦恼无关）。D是答错语境（用no回答，但针对的是完全不同的问题，关于是否见过某人）。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about a campus event or concert",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Why was the jazz concert moved to the gym?",
+      "options": {
+        "A": "Jazz isn't really my kind of music.",
+        "B": "The usual hall is being repainted.",
+        "C": "The gym has brand new equipment.",
+        "D": "No, I didn't buy a ticket yet."
+      },
+      "answer": "B",
+      "explanation": "正确答案B直接回答了为什么改到体育馆——平时用的礼堂在重新粉刷，属于direct_topical范式。A是离题但语法正确（表达个人对爵士乐的偏好，不回答原因）。C是语义联想陷阱（gym→新器材，只描述体育馆而不回答\"为什么改地点\"）。D是答错问题类型（问的是why，不是关于是否买票的yes/no）。",
+      "distractor_types": {
+        "A": "off_topic",
+        "C": "semantic_association_trap",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student checking with TA about lab report requirements",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Don't we need a separate cover page for this?",
+      "options": {
+        "A": "The lab equipment was hard to set up.",
+        "B": "Yes, I covered that topic last week.",
+        "C": "Actually, a simple header at the top is fine.",
+        "D": "The printer in the lab is out of toner."
+      },
+      "answer": "C",
+      "explanation": "正确答案C以话语标记词\"Actually\"开头，间接回答不需要单独封面页，顶部一个简单标题即可，属于marker_led_indirect范式。A是离题但语法正确（谈实验设备难装，与封面页要求无关）。B是多义/误解陷阱（cover作\"讲过某主题\"的意思，而非\"封面\"）。D是语义联想陷阱（lab→打印机没墨，绕开了封面页问题）。",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "polysemy_misinterpretation",
+        "D": "semantic_association_trap"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "roommate discussing weekend plans",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Where're we headed for the long weekend?",
+      "options": {
+        "A": "The weekend always feels too short.",
+        "B": "I packed my bag last night.",
+        "C": "No, I haven't booked anything yet.",
+        "D": "How about the coast for a change?"
+      },
+      "answer": "D",
+      "explanation": "正确答案D用反问\"How about the coast for a change?\"提出一个具体的去处建议，推进对话，属于counter_question范式。A是语义联想陷阱（weekend→\"周末总是太短\"，重复关键词但不回答去哪）。B是离题但语法正确（昨晚收拾了行李，与去哪无关）。C是答错问题类型（问的是where，却用no回答关于是否预订）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      }
+    }
+  ]
+}
