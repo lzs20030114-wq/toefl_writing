@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 import AdminLayout from "../../components/admin/AdminLayout";
 import {
   StatCard,
@@ -164,6 +164,145 @@ const RECALL_BADGE_COLOR = {
   clear: "#0891b2",
   fuzzy: "#94a3b8",
 };
+// Tier badge shown next to the user code in the detail table (free → none).
+const TIER_BADGE = {
+  pro: { label: "Pro", color: "#16a34a" },
+  legacy: { label: "Legacy", color: "#7c3aed" },
+};
+// Matrix cell colors — abs (good/ok/bad) and cmp (better/same/worse) scales.
+const MATRIX_VALUE_COLOR = {
+  good: "#16a34a", ok: "#d97706", bad: "#dc2626",
+  better: "#16a34a", same: "#64748b", worse: "#dc2626",
+};
+
+// Compact "MM-DD HH:mm" for the detail table (full timestamp on hover).
+function shortDateTime(v) {
+  const d = new Date(v);
+  if (Number.isNaN(d.getTime())) return "-";
+  const p = (n) => String(n).padStart(2, "0");
+  return `${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+
+// Per-response detail table: one row per submitted questionnaire, showing time
+// + 来源 (variant cohort) + that person's answers. Rows with a matrix / 其他原因
+// / 留言 expand to reveal the full detail. Respects the round picker (entries
+// come from the same round-filtered set as the aggregates above).
+function ResponsesTable({ entries, truncated, labels }) {
+  const [expanded, setExpanded] = useState(() => new Set());
+  if (!entries || entries.length === 0) {
+    return <EmptyState title="暂无作答" hint="用户提交问卷后,每一份会在这里逐条列出" />;
+  }
+  function toggle(id) {
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+  const th = {
+    textAlign: "left", fontSize: 11, fontWeight: 700, color: C.t3,
+    padding: "8px 10px", whiteSpace: "nowrap", borderBottom: "1px solid " + C.bdr,
+  };
+  const td = {
+    fontSize: 12.5, color: C.t1, padding: "9px 10px",
+    borderBottom: "1px solid " + C.bdrSubtle, verticalAlign: "middle",
+  };
+  const dash = <span style={{ color: C.t3 }}>—</span>;
+  return (
+    <div>
+      <div style={{ overflowX: "auto" }}>
+        <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 720 }}>
+          <thead>
+            <tr>
+              <th style={{ ...th, width: 28 }} aria-label="展开" />
+              <th style={th}>时间</th>
+              <th style={th}>用户</th>
+              <th style={th}>分群</th>
+              <th style={th}>感觉 / 印象</th>
+              <th style={th}>Pro 打算</th>
+              <th style={th}>影响最大</th>
+              <th style={th}>留言</th>
+            </tr>
+          </thead>
+          <tbody>
+            {entries.map((e) => {
+              const isOpen = expanded.has(e.id);
+              const dims = e.matrix?.dims?.filter((d) => d.value) || [];
+              const hasDetail = dims.length > 0 || e.q3Other || e.q4;
+              return (
+                <Fragment key={e.id}>
+                  <tr
+                    onClick={() => hasDetail && toggle(e.id)}
+                    style={{ cursor: hasDetail ? "pointer" : "default", background: isOpen ? "#f8fafc" : "transparent" }}
+                  >
+                    <td style={{ ...td, textAlign: "center", color: C.t3 }}>{hasDetail ? (isOpen ? "▾" : "▸") : ""}</td>
+                    <td style={{ ...td, whiteSpace: "nowrap", color: C.t2, fontVariantNumeric: "tabular-nums" }} title={fmtDate(e.created_at)}>
+                      {shortDateTime(e.created_at)}
+                    </td>
+                    <td style={td}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                        <span style={{ fontFamily: "monospace", fontWeight: 700, color: C.nav }}>{e.user_code || "—"}</span>
+                        {e.tier && TIER_BADGE[e.tier] && <Badge color={TIER_BADGE[e.tier].color}>{TIER_BADGE[e.tier].label}</Badge>}
+                      </div>
+                      <div
+                        style={{ fontSize: 11, color: C.t3, maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
+                        title={e.email || ""}
+                      >
+                        {e.email || <span style={{ color: C.t3 }}>无邮箱(登录码用户)</span>}
+                      </div>
+                    </td>
+                    <td style={td}>{e.variant ? <Badge color={VARIANT_BADGE_COLOR[e.variant] || "#64748b"}>{labels.variant?.[e.variant] || e.variant}</Badge> : dash}</td>
+                    <td style={td}>
+                      {e.q1 && <Badge color={Q1_BADGE_COLOR[e.q1] || "#64748b"}>{labels.q1?.[e.q1] || e.q1}</Badge>}
+                      {e.recall && <Badge color={RECALL_BADGE_COLOR[e.recall] || "#64748b"}>{labels.recall?.[e.recall] || e.recall}</Badge>}
+                      {!e.q1 && !e.recall && dash}
+                    </td>
+                    <td style={td}>{e.q2 ? <Badge color={Q2_BADGE_COLOR[e.q2] || "#64748b"}>{labels.q2?.[e.q2] || e.q2}</Badge> : dash}</td>
+                    <td style={td}>{e.q3 ? <Badge color="#7c3aed">{e.q3Label || e.q3}</Badge> : dash}</td>
+                    <td style={{ ...td, textAlign: "center" }}>{e.q4 ? "💬" : dash}</td>
+                  </tr>
+                  {isOpen && hasDetail && (
+                    <tr>
+                      <td style={{ background: "#f8fafc", borderBottom: "1px solid " + C.bdrSubtle }} />
+                      <td colSpan={7} style={{ padding: "2px 10px 14px", borderBottom: "1px solid " + C.bdrSubtle, background: "#f8fafc" }}>
+                        {dims.length > 0 && (
+                          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: e.q3Other || e.q4 ? 10 : 0 }}>
+                            {dims.map((d) => (
+                              <span key={d.key} style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 12, padding: "3px 9px", borderRadius: 7, background: "#fff", border: "1px solid " + C.bdr }}>
+                                <span style={{ color: C.t2 }}>{d.label}</span>
+                                <span style={{ fontWeight: 700, color: MATRIX_VALUE_COLOR[d.value] || C.t1 }}>{d.valueLabel}</span>
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                        {e.q3Other && (
+                          <div style={{ fontSize: 12, color: C.t2, marginBottom: e.q4 ? 6 : 0 }}>
+                            <span style={{ color: C.t3 }}>其他原因:</span> {e.q3Other}
+                          </div>
+                        )}
+                        {e.q4 && (
+                          <div style={{ fontSize: 13, color: C.t1, lineHeight: 1.55, whiteSpace: "pre-wrap" }}>
+                            <span style={{ color: C.t3, fontSize: 12 }}>留言:</span> {e.q4}
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  )}
+                </Fragment>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      {truncated && (
+        <div style={{ fontSize: 11, color: C.t3, marginTop: 10 }}>
+          仅显示最新 1000 份,更早的作答未列出。
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function AdminSurveysPage() {
   const [data, setData] = useState(null);
@@ -199,6 +338,7 @@ export default function AdminSurveysPage() {
   const matrices = data?.matrices;
   const trend = data?.trend;
   const comments = data?.comments || [];
+  const entries = data?.entries || [];
   const labels = data?.labels || {};
 
   return (
@@ -383,6 +523,20 @@ export default function AdminSurveysPage() {
                   </div>
                 ))}
               </div>
+            )}
+          </SectionCard>
+        </div>
+
+        {/* Per-response detail — one row per submitted questionnaire */}
+        <div style={{ marginBottom: 14 }}>
+          <SectionCard
+            title={`逐份作答明细 (${entries.length})`}
+            right={<span style={{ fontSize: 11, color: C.t3 }}>点击行可展开各维度评价 / 留言</span>}
+          >
+            {loading ? (
+              <Skeleton height={160} />
+            ) : (
+              <ResponsesTable entries={entries} truncated={data?.entriesTruncated} labels={labels} />
             )}
           </SectionCard>
         </div>

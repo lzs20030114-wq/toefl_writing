@@ -103,6 +103,57 @@ function buildMatrixDistribution(rows, matrixKey, dimKeys, order, scaleLabels) {
   });
 }
 
+// Flatten one submitted row into a per-response entry for the detail table.
+// `variant` is the user's source/cohort (v1 老用户 / new 新用户 / legacy 旧版),
+// and the matrix is normalized to whichever scale that row actually carries:
+//   new        → abs scale, 5 dims
+//   v1 + clear → cmp scale, 4 dims
+//   v1 + fuzzy → abs scale, 4 dims
+//   legacy     → no matrix (only q1/q2/q3)
+function buildEntry(row) {
+  const resp = row?.responses || {};
+  // Match buildVariantSplit's bucketing: a row with no variant is an old v2
+  // submission ⇒ "legacy" (旧版问卷), not an unknown source.
+  const variant = resp.variant || "legacy";
+  const recall = resp.recall || null;
+
+  let matrix = null;
+  if (variant === "new") {
+    matrix = { scale: "abs", dims: NEW_DIMS };
+  } else if (variant === "v1" && recall === "clear") {
+    matrix = { scale: "cmp", dims: V1_DIMS };
+  } else if (variant === "v1" && recall === "fuzzy") {
+    matrix = { scale: "abs", dims: V1_DIMS };
+  }
+
+  if (matrix) {
+    const src = matrix.scale === "cmp" ? resp.cmp : resp.abs;
+    const scaleLabels = matrix.scale === "cmp" ? CMP_LABELS : ABS_LABELS;
+    matrix = {
+      scale: matrix.scale,
+      dims: matrix.dims.map((key) => {
+        const value = src && typeof src === "object" ? String(src[key] || "") || null : null;
+        return { key, label: DIM_LABELS[key] || key, value, valueLabel: value ? scaleLabels[value] || value : null };
+      }),
+    };
+  }
+
+  return {
+    id: row.id,
+    user_code: row.user_code,
+    created_at: row.created_at,
+    variant,
+    recall,
+    q1: resp.q1 || null,
+    q2: resp.q2 || null,
+    q3: resp.q3 || null,
+    q3Label: Q3_LABELS[resp.q3] || null,
+    q3Other: String(resp.q3Other || "").trim() || null,
+    q4: String(resp.q4 || "").trim() || null,
+    matrix,
+  };
+}
+
 // Split submitted rows by questionnaire variant (v1 / new / legacy).
 function buildVariantSplit(rows) {
   const counts = { v1: 0, new: 0, legacy: 0 };
@@ -207,6 +258,34 @@ export async function GET(request) {
 
     const trend = buildDailyTrend(rows, 14);
 
+    // Per-response detail rows for the "逐份作答" table — every submitted
+    // questionnaire (newest first), capped so the payload stays bounded.
+    const ENTRY_CAP = 1000;
+    const entries = submitted.slice(0, ENTRY_CAP).map(buildEntry);
+    const entriesTruncated = submitted.length > ENTRY_CAP;
+
+    // Enrich each entry with the actual user identity (email + tier) so the
+    // operator can see WHICH specific user filled each questionnaire — a bare
+    // 6-digit user_code is opaque. One batched, deduped lookup (the "all rounds"
+    // view can repeat a code across rounds). Mirrors app/api/admin/grant-pro.
+    // Email/tier are already surfaced in the token-gated admin (api/admin/users),
+    // so this is no new exposure. Degrades gracefully: a lookup error just
+    // leaves email/tier null rather than failing the whole dashboard.
+    const codes = [...new Set(entries.map((e) => e.user_code).filter(Boolean))];
+    if (codes.length > 0) {
+      const { data: users } = await supabaseAdmin
+        .from("users")
+        .select("code,email,tier,tier_expires_at")
+        .in("code", codes);
+      const byCode = new Map((users || []).map((u) => [u.code, u]));
+      for (const e of entries) {
+        const u = byCode.get(e.user_code);
+        e.email = u?.email || null;
+        e.tier = u?.tier || null;
+        e.tierExpiresAt = u?.tier_expires_at || null;
+      }
+    }
+
     const comments = submitted
       .filter((r) => {
         const q3Other = String(r?.responses?.q3Other || "").trim();
@@ -243,6 +322,8 @@ export async function GET(request) {
       matrices,
       trend,
       comments,
+      entries,
+      entriesTruncated,
       labels: {
         q1: Q1_LABELS,
         q2: Q2_LABELS,
