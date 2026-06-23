@@ -1,0 +1,119 @@
+{
+  "_meta": {
+    "session": "routine-r2-20260623-193418",
+    "supplements_session": "routine-20260622-190415",
+    "hint": "diversity 77<90; character names 2/20 distinct — spread distinct names (Mariana/Harold/Emma/Margot/Olivia) across prompts+answers; keep person-as-prefilled at 0; vary distractors away from 'did'; keep thirdFormal low and include genuine 12-word hard items"
+  },
+  "items": [
+    {
+      "id": "tmp_r2_q1",
+      "prompt": "Are you heading to the gym later?",
+      "answer": "I left my gym bag at home.",
+      "chunks": ["i", "left", "my", "gym", "bag", "at", "home", "leaving"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "leaving",
+      "has_question_mark": false,
+      "grammar_points": ["past simple"]
+    },
+    {
+      "id": "tmp_r2_q2",
+      "prompt": "There's an info session tonight.",
+      "answer": "Where do I sign up for it?",
+      "chunks": ["do", "i", "sign", "up", "for", "it", "did"],
+      "prefilled": ["Where"],
+      "prefilled_positions": {"where": 0},
+      "distractor": "did",
+      "has_question_mark": true,
+      "grammar_points": ["direct question", "wh-question"]
+    },
+    {
+      "id": "tmp_r2_q3",
+      "prompt": "Did Mariana mention the deadline?",
+      "answer": "I wanted to know when the essay is due.",
+      "chunks": ["i", "know", "when", "the", "essay", "is", "due", "was"],
+      "prefilled": ["wanted to"],
+      "prefilled_positions": {"wanted to": 1},
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question", "present simple"]
+    },
+    {
+      "id": "tmp_r2_q4",
+      "prompt": "Have you started the lab report?",
+      "answer": "I haven't finished the second data section yet.",
+      "chunks": ["i", "finished", "the", "second", "data", "section", "yet", "didn't"],
+      "prefilled": ["haven't"],
+      "prefilled_positions": {"haven't": 1},
+      "distractor": "didn't",
+      "has_question_mark": false,
+      "grammar_points": ["negation", "present perfect"]
+    },
+    {
+      "id": "tmp_r2_q5",
+      "prompt": "Do you know where Harold went?",
+      "answer": "Harold left the keys with the front desk.",
+      "chunks": ["harold", "left", "keys", "with", "the", "front", "desk", "leaving"],
+      "prefilled": ["the"],
+      "prefilled_positions": {"the": 2},
+      "distractor": "leaving",
+      "has_question_mark": false,
+      "grammar_points": ["past simple", "prepositional phrase"]
+    },
+    {
+      "id": "tmp_r2_q6",
+      "prompt": "Did you hear from Emma yet?",
+      "answer": "I asked whether the weekend trip was canceled.",
+      "chunks": ["i", "asked", "the", "weekend", "trip", "was", "canceled", "is"],
+      "prefilled": ["whether"],
+      "prefilled_positions": {"whether": 2},
+      "distractor": "is",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question", "whether"]
+    },
+    {
+      "id": "tmp_r2_q7",
+      "prompt": "I heard the schedule changed this week.",
+      "answer": "The evening seminar was moved to Thursday afternoon.",
+      "chunks": ["the", "evening", "seminar", "moved", "to", "Thursday", "afternoon"],
+      "prefilled": ["was"],
+      "prefilled_positions": {"was": 3},
+      "distractor": null,
+      "has_question_mark": false,
+      "grammar_points": ["passive voice", "past simple"]
+    },
+    {
+      "id": "tmp_r2_q8",
+      "prompt": "Do you remember the tutor's name?",
+      "answer": "Margot recommended the new writing tutor who lives right near the campus.",
+      "chunks": ["margot", "recommended", "the new", "writing", "tutor", "who lives", "near the", "campus", "recommends"],
+      "prefilled": ["right"],
+      "prefilled_positions": {"right": 8},
+      "distractor": "recommends",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause", "present simple"]
+    },
+    {
+      "id": "tmp_r2_q9",
+      "prompt": "Did you notice anything about the new dorm?",
+      "answer": "I think the corner room that faces the courtyard is the quietest.",
+      "chunks": ["i", "think", "the corner", "room", "faces", "the courtyard", "is the", "quietest", "face"],
+      "prefilled": ["that"],
+      "prefilled_positions": {"that": 5},
+      "distractor": "face",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause", "present simple"]
+    },
+    {
+      "id": "tmp_r2_q10",
+      "prompt": "Have you talked to Olivia about the budget?",
+      "answer": "Olivia wanted to know whether the new research grant fully covers travel.",
+      "chunks": ["olivia", "know", "whether", "the new", "research", "grant", "fully", "covers travel", "does"],
+      "prefilled": ["wanted to"],
+      "prefilled_positions": {"wanted to": 1},
+      "distractor": "does",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question", "whether"]
+    }
+  ]
+}

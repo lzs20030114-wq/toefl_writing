@@ -1,0 +1,168 @@
+{
+  "_meta": {
+    "session": "routine-r2-20260623-193418",
+    "supplements_session": "routine-20260622-190415",
+    "hint": "lc quality 60<80; conv words 68-105: 3/5 — R1 items 117 and 122 words ran long. These 3 supplements keep every conversation strictly within 68-105 words."
+  },
+  "items": [
+    {
+      "context": "errands_service",
+      "situation": "a student asking gym front-desk staff about replacing a lost locker key",
+      "difficulty": "easy",
+      "speakers": [
+        {"name": "Woman", "role": "student", "gender": "female"},
+        {"name": "Man", "role": "gym_staff", "gender": "male"}
+      ],
+      "conversation": [
+        {"speaker": "Woman", "text": "Hi, I think I lost the key to locker forty-two. Can I get a new one?"},
+        {"speaker": "Man", "text": "Sure, no worries. We can cut a replacement, but there's a small five-dollar fee."},
+        {"speaker": "Woman", "text": "Oh, that's fine. Do you need anything from me first?"},
+        {"speaker": "Man", "text": "Just your student ID so I can confirm the locker is yours."},
+        {"speaker": "Woman", "text": "Here it is. How long will the new key take?"},
+        {"speaker": "Man", "text": "About ten minutes. Grab a seat and I'll call you when it's ready."}
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "Why does the woman approach the man?",
+          "options": {
+            "A": "To get a replacement for a lost locker key",
+            "B": "To complain that her locker will not open",
+            "C": "To sign up for a new gym membership",
+            "D": "To report that her ID card was stolen"
+          },
+          "answer": "A",
+          "explanation": "女生一开口就说丢了locker forty-two的钥匙并想要新的，所以A正确。B她没说锁打不开，而是钥匙丢了；C她不是来办会员；D丢的是钥匙不是ID，都是干扰项。",
+          "distractor_types": {
+            "B": "reversed_situation",
+            "C": "wrong_topic",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Leave the gym to find her old key",
+            "B": "Wait nearby until her new key is ready",
+            "C": "Pay a monthly fee for a bigger locker",
+            "D": "Ask a friend to lend her a key"
+          },
+          "answer": "B",
+          "explanation": "男生让她坐下等，大约十分钟做好后会叫她，所以她最可能在附近等待，B正确。A她已经放弃找旧钥匙；C没人提到月费或更大柜子；D对话里没有朋友借钥匙的情节。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "C": "unrelated_next_step",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "two students deciding whether to attend a second guest lecture in a campus series",
+      "difficulty": "medium",
+      "speakers": [
+        {"name": "Man", "role": "student", "gender": "male"},
+        {"name": "Woman", "role": "student", "gender": "female"}
+      ],
+      "conversation": [
+        {"speaker": "Man", "text": "Did you make it to the climate talk last night? It was packed."},
+        {"speaker": "Woman", "text": "I did! The speaker was great, but I couldn't see a single slide from the back."},
+        {"speaker": "Man", "text": "Same here. Apparently there's a second talk Thursday in the bigger auditorium."},
+        {"speaker": "Woman", "text": "Oh, that's good. The seats there are tiered, so the view should be much better."},
+        {"speaker": "Man", "text": "Exactly. Want to go together and grab seats early this time?"},
+        {"speaker": "Woman", "text": "Definitely. Let's meet at the entrance around six-thirty."}
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What problem did the woman have at the first talk?",
+          "options": {
+            "A": "She arrived after the lecture had started",
+            "B": "She could not see the slides from the back",
+            "C": "She found the speaker difficult to follow",
+            "D": "She could not find an empty seat at all"
+          },
+          "answer": "B",
+          "explanation": "女生说演讲很好，但从后排一张幻灯片都看不到，所以B正确。A她没说迟到；C她说speaker很棒，不是难懂；D她坐在后排，说明有座位，只是看不清，都是干扰项。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "C": "wrong_detail",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "Why do the speakers expect the second talk to be better?",
+          "options": {
+            "A": "The auditorium has tiered seating with clearer views",
+            "B": "The same speaker will use larger slides",
+            "C": "Fewer students are expected to attend",
+            "D": "The talk will be recorded for later viewing"
+          },
+          "answer": "A",
+          "explanation": "女生指出第二场在更大的礼堂，座位是阶梯式的，视野会好很多，所以A正确。B没人提幻灯片变大；C没说人会变少；D没提录像，都是无依据的推断。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "campus_service",
+      "situation": "a student asking the IT help desk about resetting a locked campus portal password",
+      "difficulty": "medium",
+      "speakers": [
+        {"name": "Woman", "role": "student", "gender": "female"},
+        {"name": "Man", "role": "it_staff", "gender": "male"}
+      ],
+      "conversation": [
+        {"speaker": "Woman", "text": "Hi, I'm locked out of the campus portal. I tried my password too many times."},
+        {"speaker": "Man", "text": "No problem. For security, the account locks after five failed attempts. I can reset it for you."},
+        {"speaker": "Woman", "text": "Great. Do I need to come back later, or can you do it now?"},
+        {"speaker": "Man", "text": "Right now. I'll send a reset link to your student email in a minute."},
+        {"speaker": "Woman", "text": "Perfect. Should I change anything else once I'm back in?"},
+        {"speaker": "Man", "text": "Just set up the backup phone number so you can reset it yourself next time."}
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why is the woman locked out of the portal?",
+          "options": {
+            "A": "She entered her password too many times",
+            "B": "Her student account has already expired",
+            "C": "She forgot her username completely",
+            "D": "The portal was down for maintenance"
+          },
+          "answer": "A",
+          "explanation": "女生说密码试了太多次被锁，男生证实失败五次后账户会锁定，所以A正确。B没提账户过期；C她忘的是密码不是用户名；D不是系统维护，都是干扰项。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "wrong_detail",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What does the man suggest the woman do to avoid this problem in the future?",
+          "options": {
+            "A": "Memorize a longer and stronger password",
+            "B": "Set up a backup phone number for self-reset",
+            "C": "Visit the help desk once every semester",
+            "D": "Log in only from campus computers"
+          },
+          "answer": "B",
+          "explanation": "男生建议她设置备用手机号，以后就能自己重置密码，所以B正确。A没提更强的密码；C没说每学期来一次；D没限制只能用校内电脑，都是无依据的干扰项。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "C": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    }
+  ]
+}
