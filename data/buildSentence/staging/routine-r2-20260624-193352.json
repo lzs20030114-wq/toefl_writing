@@ -1,0 +1,114 @@
+{
+  "items": [
+    {
+      "id": "tmp_r2_q1",
+      "prompt": "Why do you look so cold?",
+      "answer": "I left my jacket in the gym.",
+      "chunks": ["I", "left", "my jacket", "in the", "gym"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": null,
+      "has_question_mark": false,
+      "grammar_points": ["simple past statement"]
+    },
+    {
+      "id": "tmp_r2_q2",
+      "prompt": "Did you lose something at the entrance?",
+      "answer": "I can't find my dorm key anywhere.",
+      "chunks": ["can't", "find", "my", "dorm key", "anywhere"],
+      "prefilled": ["I"],
+      "prefilled_positions": {"I": 0},
+      "distractor": null,
+      "has_question_mark": false,
+      "grammar_points": ["modal", "statement"]
+    },
+    {
+      "id": "tmp_r2_q3",
+      "prompt": "What did Hector ask you earlier?",
+      "answer": "Hector wanted to know whether you returned the projector.",
+      "chunks": ["hector", "wanted to", "know", "you", "returned", "the projector", "did"],
+      "prefilled": ["whether"],
+      "prefilled_positions": {"whether": 4},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question", "declarative order"]
+    },
+    {
+      "id": "tmp_r2_q4",
+      "prompt": "What did Emma ask about the writing center?",
+      "answer": "Emma asked me when the writing center closes tonight.",
+      "chunks": ["emma", "me", "when", "the", "writing center", "closes", "tonight", "does"],
+      "prefilled": ["asked"],
+      "prefilled_positions": {"asked": 1},
+      "distractor": "does",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question", "wh-clause"]
+    },
+    {
+      "id": "tmp_r2_q5",
+      "prompt": "Are you joining the geology field trip?",
+      "answer": "I haven't signed up for the geology field trip.",
+      "chunks": ["I", "signed up", "for the", "geology", "field trip", "didn't"],
+      "prefilled": ["haven't"],
+      "prefilled_positions": {"haven't": 1},
+      "distractor": "didn't",
+      "has_question_mark": false,
+      "grammar_points": ["negation", "present perfect"]
+    },
+    {
+      "id": "tmp_r2_q6",
+      "prompt": "I can't find the chemistry lab anymore.",
+      "answer": "Juan found out the chemistry lab moved upstairs.",
+      "chunks": ["juan", "found out", "the", "chemistry", "lab", "moved", "upstairs", "was"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question", "found out"]
+    },
+    {
+      "id": "tmp_r2_q7",
+      "prompt": "You'll need paperwork for the housing transfer.",
+      "answer": "Which form do I submit for the housing transfer?",
+      "chunks": ["form", "do", "I", "submit", "for the", "housing", "transfer", "does"],
+      "prefilled": ["which"],
+      "prefilled_positions": {"which": 0},
+      "distractor": "does",
+      "has_question_mark": true,
+      "grammar_points": ["direct question"]
+    },
+    {
+      "id": "tmp_r2_q8",
+      "prompt": "I heard you're missing your biology notes.",
+      "answer": "Margot has not returned the biology notes that I lent her yesterday.",
+      "chunks": ["margot", "has not", "returned", "that", "I", "lent her yesterday", "have"],
+      "prefilled": ["the biology notes"],
+      "prefilled_positions": {"the biology notes": 4},
+      "distractor": "have",
+      "has_question_mark": false,
+      "grammar_points": ["negation", "relative clause"]
+    },
+    {
+      "id": "tmp_r2_q9",
+      "prompt": "What did Naomi want to know about tutoring?",
+      "answer": "Naomi wondered whether the tutor who explains statistics has any openings left.",
+      "chunks": ["naomi", "wondered", "the tutor", "who explains", "statistics", "has any", "openings", "left", "did"],
+      "prefilled": ["whether"],
+      "prefilled_positions": {"whether": 2},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question", "relative clause"]
+    },
+    {
+      "id": "tmp_r2_q10",
+      "prompt": "Are you going to the relocated seminar?",
+      "answer": "I still don't know whether the seminar that moved buildings starts at noon.",
+      "chunks": ["still", "don't", "know", "the seminar", "that moved", "buildings", "starts", "at noon", "starting"],
+      "prefilled": ["I", "whether"],
+      "prefilled_positions": {"I": 0, "whether": 4},
+      "distractor": "starting",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question", "relative clause"]
+    }
+  ]
+}
