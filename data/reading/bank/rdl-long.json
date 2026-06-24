@@ -10161,6 +10161,104 @@
           "explanation": "The email's central request is for Marcus to take Dana's Friday circulation shift, with the portal logging and payroll details offered as supporting conditions. Its main purpose is to ask a coworker to cover a shift, not to report a portal problem, confirm payroll, or arrange an appointment."
         }
       ]
+    },
+    {
+      "genre": "email",
+      "text": "Subject: Introducing the Campus Tool Library\n\nDear Residents,\n\nWe are pleased to announce that the new Tool Library has opened in the basement of Maxwell Hall, Room B12. Students living on campus can now borrow hand tools, power drills, ladders, and gardening equipment instead of buying their own. The library is open Monday through Friday, from 10:00 AM to 6:00 PM.\n\nTo borrow an item, please bring your student ID to the front desk and speak with our coordinator, Mr. Daniels. Each tool may be kept for up to seven days. A refundable deposit of $10 is required for power tools, and it will be returned when you bring the item back undamaged. There is no charge for hand tools.\n\nIf a tool is returned late, a $2 daily fee will apply until it is returned. We also welcome donations of gently used equipment, which help us expand our collection for everyone.\n\nWe hope this service makes campus life easier and more affordable. Please stop by to see what's available!\n\nBest regards,\nThe Housing Office",
+      "format_metadata": {
+        "from": "The Housing Office",
+        "to": "Campus Residents",
+        "subject": "Introducing the Campus Tool Library"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what is required to borrow a power tool?",
+          "options": {
+            "A": "A signed agreement with the coordinator",
+            "B": "A weekly membership in the library",
+            "C": "A donation of used equipment",
+            "D": "A refundable deposit of ten dollars"
+          },
+          "correct_answer": "D",
+          "explanation": "The email states that a refundable deposit of $10 is required for power tools and will be returned when the item is brought back undamaged."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about a student who keeps a borrowed ladder for ten days?",
+          "options": {
+            "A": "They will lose access to the library permanently.",
+            "B": "They will forfeit their student identification card.",
+            "C": "They will owe a fee for the days past the limit.",
+            "D": "They will receive a refund for the extra days."
+          },
+          "correct_answer": "C",
+          "explanation": "Items may be kept for up to seven days, and a $2 daily late fee applies after that, so ten days would result in a fee for the days beyond the seven-day limit."
+        },
+        {
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this email?",
+          "options": {
+            "A": "To request donations of power drills and ladders",
+            "B": "To announce a new equipment-borrowing service",
+            "C": "To remind students about overdue tool fees",
+            "D": "To describe repairs being done in Maxwell Hall"
+          },
+          "correct_answer": "B",
+          "explanation": "The email's overall purpose is to introduce and announce the new Tool Library where students can borrow equipment rather than buy it."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-long_mqsic4mw_0"
+    },
+    {
+      "genre": "email",
+      "text": "Subject: Kitchen Faucet and Saturday Errand\n\nHi Marcus,\n\nI hope your week is going well. I wanted to flag a couple of things about the apartment before the weekend. The kitchen faucet has started leaking again, and the cabinet underneath is getting damp. I called the building manager, Ms. Patel, this morning, and she said a plumber can come on Thursday between 1:00 PM and 3:00 PM. Since I have class until 4:00 PM that day, could you be home to let the plumber in?\n\nAlso, our water filter needs replacing. The hardware store on Birch Street sells the right cartridge for $15. If you can pick one up on Saturday, I'll cover the cost and pay you back. I've left a note on the fridge with the exact model number so you grab the correct one.\n\nThanks so much for handling this. Let me know if Thursday doesn't work for you, and I'll try to reschedule with Ms. Patel.\n\nBest,\nElena",
+      "format_metadata": {
+        "from": "Elena",
+        "to": "Marcus",
+        "subject": "Kitchen Faucet and Saturday Errand"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, why does Elena ask Marcus to be home on Thursday?",
+          "options": {
+            "A": "To meet with the building manager, Ms. Patel",
+            "B": "To replace the leaking faucet by himself",
+            "C": "To let the plumber into the apartment",
+            "D": "To pick up the filter cartridge on Birch Street"
+          },
+          "correct_answer": "C",
+          "explanation": "Elena has class until 4:00 PM on Thursday and asks Marcus to be home to let the plumber in during the 1:00 PM to 3:00 PM window."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about the note Elena left on the fridge?",
+          "options": {
+            "A": "It lists the plumber's arrival time and fee.",
+            "B": "It helps Marcus buy the correct cartridge.",
+            "C": "It contains Ms. Patel's phone number.",
+            "D": "It explains how to repair the faucet leak."
+          },
+          "correct_answer": "B",
+          "explanation": "Elena says she left a note with the exact model number so Marcus grabs the correct cartridge, implying the note is meant to guide his purchase."
+        },
+        {
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this email?",
+          "options": {
+            "A": "To coordinate two household tasks with a roommate",
+            "B": "To complain about the conditions of the apartment",
+            "C": "To request a refund from the hardware store",
+            "D": "To reschedule a class that conflicts with a repair"
+          },
+          "correct_answer": "A",
+          "explanation": "The email's overall purpose is to arrange two shared responsibilities, the plumber visit and buying a replacement filter, with the roommate."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-long_mqsic4mw_1"
     }
   ]
 }

@@ -12940,6 +12940,174 @@
       },
       "id": "lcr_mqpnc22w_7",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/choose-response/lcr_mqpnc22w_7.mp3"
+    },
+    {
+      "context": "social",
+      "situation": "expressing concern about a friend's overwhelming schedule",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "You've really been burning the candle at both ends.",
+      "options": {
+        "A": "Yeah, I'm running on empty lately.",
+        "B": "The candles are on the kitchen shelf.",
+        "C": "I lit both of them last night.",
+        "D": "She left around the same time."
+      },
+      "answer": "A",
+      "explanation": "正确答案 A 用习语 \"running on empty\" 回应对方关于自己过度劳累的关心，自然承认精疲力竭，符合 idiomatic 范式。B 是语义联想陷阱，抓住 \"candle\" 这个词去谈论实物蜡烛，完全误读了习语含义。C 也是语义陷阱，把 \"both ends\" 字面理解成点了两支蜡烛。D 是离题但语法正确的句子，谈论另一个人在另一场景，与对话无关。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "semantic_association_trap",
+        "D": "off_topic"
+      },
+      "id": "lcr_mqsic4qb_0"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a librarian whether a journal can be accessed",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Do you have access to last year's conference papers?",
+      "options": {
+        "A": "The conference was held downtown.",
+        "B": "Let me check that for you.",
+        "C": "I attended a few of those talks.",
+        "D": "Papers are due at the front desk."
+      },
+      "answer": "B",
+      "explanation": "正确答案 B 用自然的会话套语 \"Let me check that for you\" 回应学生的请求，是图书管理员典型的助人回答，符合 idiomatic 范式。A 是语义联想陷阱，抓住 \"conference\" 去谈会议地点，没回答能否获取。C 也是语义陷阱，谈自己参加过相关讲座，听上去相关却没回答问题。D 是误用关键词 \"papers\"，把它理解成要上交的作业，答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "semantic_association_trap",
+        "D": "polysemy_misinterpretation"
+      },
+      "id": "lcr_mqsic4qb_1"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking why the lab printer keeps failing",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Why won't this printer connect to my laptop?",
+      "options": {
+        "A": "The printer is brand new this term.",
+        "B": "Yes, you can scan documents here.",
+        "C": "Actually, you have to install the driver first.",
+        "D": "I printed my essay yesterday morning."
+      },
+      "answer": "C",
+      "explanation": "正确答案 C 以话语标记 \"Actually\" 开头，间接给出连接失败的原因和解决办法，符合 marker_led_indirect 范式。A 是语义联想陷阱，抓住 \"printer\" 去描述打印机很新，没解决连接问题。B 是答错问题类型，学生问 why，却用 yes 回答另一个 can 类问题。D 是离题但语法正确的句子，谈自己昨天打印过，与当前连接问题无关。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "wrong_question_type",
+        "D": "off_topic"
+      },
+      "id": "lcr_mqsic4qb_2"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student mentioning an upcoming campus concert",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "There's a free jazz concert in the quad tonight.",
+      "options": {
+        "A": "The quad was just repaved last week.",
+        "B": "Jazz started in New Orleans, you know.",
+        "C": "Tickets are usually pretty expensive.",
+        "D": "Want to grab dinner and head over?"
+      },
+      "answer": "D",
+      "explanation": "正确答案 D 用反问 \"Want to grab dinner and head over?\" 推进对话，提出一起去的计划，符合 counter_question 范式。A 是语义联想陷阱，抓住 \"quad\" 去谈广场重铺路面，与音乐会无关。B 也是语义陷阱，抓住 \"jazz\" 去讲爵士乐历史，离题。C 谈门票很贵，但对方明说是 free 免费的，属于误读语境的离题回答。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "semantic_association_trap",
+        "C": "off_topic"
+      },
+      "id": "lcr_mqsic4qb_3"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking whether the late shuttle still runs",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Does the campus shuttle still run after nine?",
+      "options": {
+        "A": "Why not just walk with me instead?",
+        "B": "The shuttle is painted bright blue.",
+        "C": "I lost my bus pass somewhere yesterday.",
+        "D": "Yes, the driver seemed friendly enough."
+      },
+      "answer": "A",
+      "explanation": "正确答案 A 用反问 \"Why not just walk with me instead?\" 推进对话，提出替代方案，符合 counter_question 范式。B 是语义联想陷阱，抓住 \"shuttle\" 去描述它的颜色，没回答时间问题。C 是离题但语法正确的句子，谈丢了公交卡，与运营时间无关。D 是误读语境，虽然以 yes 开头，但谈的是司机态度而非班车是否还运行，答非所问。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_mqsic4qb_4"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student seeking help with an essay at the writing center",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "How can I make my thesis statement stronger?",
+      "options": {
+        "A": "The writing center closes at six today.",
+        "B": "Well, try making your claim more specific.",
+        "C": "Yes, statements should be grammatically correct.",
+        "D": "I wrote three essays last semester."
+      },
+      "answer": "B",
+      "explanation": "正确答案 B 以话语标记 \"Well\" 开头，间接给出让论点更有力的具体建议，符合 marker_led_indirect 范式。A 是离题但语法正确的句子，谈写作中心关门时间，没回答如何改进。C 是答错问题类型，学生问 how，却用 yes 回答，且只泛谈语法正确。D 是离题句子，谈自己上学期写过几篇文章，与当前论点修改无关。",
+      "distractor_types": {
+        "A": "off_topic",
+        "C": "wrong_question_type",
+        "D": "off_topic"
+      },
+      "id": "lcr_mqsic4qb_5"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "two friends deciding where to get lunch",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Where should we grab lunch before class?",
+      "options": {
+        "A": "I had a huge breakfast this morning.",
+        "B": "Class starts at noon on Tuesdays.",
+        "C": "Maybe that new cafe by the gym.",
+        "D": "Lunch boxes are sold near the entrance."
+      },
+      "answer": "C",
+      "explanation": "正确答案 C 以话语标记 \"Maybe\" 开头，间接给出吃饭地点的建议，符合 marker_led_indirect 范式。A 是离题但语法正确的句子，谈自己早餐吃得多，没回答去哪吃午饭。B 是答错问题类型，对方问 where，却回答 when 上课时间。D 是语义联想陷阱，抓住 \"lunch\" 去谈盒饭售卖处，没真正回答去哪儿吃。",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "wrong_question_type",
+        "D": "semantic_association_trap"
+      },
+      "id": "lcr_mqsic4qb_6"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student checking with the TA about lab report requirements",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "What should we include in the lab report?",
+      "options": {
+        "A": "The lab is on the second floor.",
+        "B": "Yes, reports are graded out of fifty.",
+        "C": "I finished my report a week ago.",
+        "D": "Just add your methods and results."
+      },
+      "answer": "D",
+      "explanation": "正确答案 D 以话语标记 \"Just\" 开头，简洁间接地说明报告该包含的内容，符合 marker_led_indirect 范式。A 是语义联想陷阱，抓住 \"lab\" 去谈实验室楼层位置，没回答内容要求。B 是答错问题类型，学生问 what，却用 yes 回答，且只谈评分。C 是离题但语法正确的句子，谈自己一周前写完了报告，与该写什么无关。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "wrong_question_type",
+        "C": "off_topic"
+      },
+      "id": "lcr_mqsic4qb_7"
     }
   ]
 }

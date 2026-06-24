@@ -34019,6 +34019,398 @@
         }
       ],
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/conversation/lc_rt_20260622_5.mp3"
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "two students chatting about a part-time job one just started at a factory",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hey, I heard you started that part-time job at the chocolate factory. How's it going?"
+        },
+        {
+          "speaker": "Man",
+          "text": "It's good, actually! But my shift starts at five in the morning, so I'm always exhausted by afternoon."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Five a.m.? Yikes. That's brutal with classes too."
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, the early start is rough. The pay's great, though, and they let me leave by ten, so I still make my lectures."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Hmm, well, if you're that tired, maybe you should drop your eight-thirty seminar and take the evening section instead."
+        },
+        {
+          "speaker": "Man",
+          "text": "You know, that's a really good idea. I'll talk to my advisor about switching this week."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man say is difficult about his new job?",
+          "options": {
+            "A": "His shift begins very early in the morning",
+            "B": "The factory is far from campus",
+            "C": "The pay is lower than he expected",
+            "D": "He often has to work late at night"
+          },
+          "answer": "A",
+          "explanation": "男士明确说他的班次早上五点开始，所以总是很累，A正确。B距离从未被提及，属于related_but_not_stated。C与对话相反，男士说工资很高，属于wrong_detail。D把时间弄反了，他是早班并十点前下班，属于wrong_detail。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "wrong_detail",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do this week?",
+          "options": {
+            "A": "Quit his job at the factory",
+            "B": "Ask for a later shift at work",
+            "C": "Talk to his advisor about changing a class",
+            "D": "Sign up for an extra morning seminar"
+          },
+          "answer": "C",
+          "explanation": "男士最后说要和导师谈谈换到晚间班次的课，C正确。A过度推断，他没说要辞职且说工资很好，属于over_inference。B无对话依据，他没打算改班次而是改课，属于unrelated_next_step。D与情境相反，他想避开早上的课，属于rejected_option。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_next_step",
+            "D": "rejected_option"
+          }
+        }
+      ],
+      "id": "lc_mqsic4ps_0"
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "two roommates working out a fair chore and quiet-hours schedule",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "So now that we're rooming together, I think we should sort out chores and a quiet-hours rule before it becomes a problem."
+        },
+        {
+          "speaker": "Man",
+          "text": "Good call. I'm a night owl, so I usually study till about one a.m. Does that bother you?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "A little. I have early labs, so I'd love lights out by midnight. Could you use the lounge after that?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Sure, no worries. I'll move to the lounge after twelve. And for chores, want to just alternate weeks?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Perfect. I'll take this week's cleaning, you take next. Let's write it on the whiteboard so we don't forget."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the two roommates mainly discussing?",
+          "options": {
+            "A": "Whether to find a different apartment",
+            "B": "How to set up rules for living together",
+            "C": "Which classes they should take this term",
+            "D": "A disagreement about a shared electricity bill"
+          },
+          "answer": "B",
+          "explanation": "整段对话围绕安排家务和安静时间的规则，B正确。A情境相反，他们是在协商同住而非搬走，属于reversed_situation。C从未提及，属于wrong_topic。D账单话题完全没出现，属于wrong_topic。",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "C": "wrong_topic",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do after midnight on study nights?",
+          "options": {
+            "A": "Go to sleep at the same time as the woman",
+            "B": "Ask the woman to study somewhere else",
+            "C": "Stop studying so late altogether",
+            "D": "Study in the lounge instead of the room"
+          },
+          "answer": "D",
+          "explanation": "男士同意午夜后去休息室学习，D正确。A与他夜猫子习惯不符且无依据，属于unrelated_next_step。B情境相反，是他自己让步去别处，属于reversed_situation。C过度推断，他只是换地点而非不再熬夜，属于over_inference。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "B": "reversed_situation",
+            "C": "over_inference"
+          }
+        }
+      ],
+      "id": "lc_mqsic4ps_1"
+    },
+    {
+      "context": "plans_social",
+      "situation": "two students figuring out a time to meet for a group project",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "We really need to meet about the history project. When are you free this week?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Hmm, Monday and Tuesday are packed with labs. How about Wednesday afternoon?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Wednesday I have work until six. Could we do it then, like six-thirty?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Actually, the library closes early on Wednesdays. Let's just meet Thursday at three instead."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Thursday at three works great. I'll book a study room and message the others."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "When do the students finally agree to meet?",
+          "options": {
+            "A": "Monday morning",
+            "B": "Wednesday evening",
+            "C": "Thursday afternoon",
+            "D": "Tuesday during labs"
+          },
+          "answer": "C",
+          "explanation": "两人最终定在周四下午三点，C正确。A周一被排除因为有实验课，属于wrong_detail。B周三晚被否决因为图书馆早关门，属于wrong_detail。D周二也满是实验课，属于wrong_detail。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "wrong_detail",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Reserve a study room and contact the group",
+            "B": "Cancel her Wednesday work shift",
+            "C": "Ask the professor for an extension",
+            "D": "Finish the project entirely on her own"
+          },
+          "answer": "A",
+          "explanation": "女士说她会订一个学习室并通知其他人，A正确。B无依据，她没说要请假，属于unrelated_next_step。C延期话题从未出现，属于unrelated_next_step。D过度推断，这是小组项目，她没打算独自完成，属于over_inference。",
+          "distractor_types": {
+            "B": "unrelated_next_step",
+            "C": "unrelated_next_step",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "id": "lc_mqsic4ps_2"
+    },
+    {
+      "context": "errands_service",
+      "situation": "a student returning a too-small sweater at a store counter",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "customer",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "store_clerk",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hi, I bought this wool sweater last weekend, but it's a medium and it's way too tight on me."
+        },
+        {
+          "speaker": "Man",
+          "text": "No problem at all. Do you have your receipt with you?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "I do, right here. I was hoping to exchange it for a large in the same color."
+        },
+        {
+          "speaker": "Man",
+          "text": "Let me check the stock. Hmm, we're out of large in navy here, but our downtown branch has two in stock."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh. Could you have one shipped here instead? I'd rather not make the trip downtown."
+        },
+        {
+          "speaker": "Man",
+          "text": "Of course. I'll order it to this store, and we'll text you when it arrives, usually within three days."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "Why does the woman come to the store?",
+          "options": {
+            "A": "To ask for a full cash refund",
+            "B": "To buy a sweater as a gift",
+            "C": "To complain about poor stitching",
+            "D": "To exchange a sweater for a bigger size"
+          },
+          "answer": "D",
+          "explanation": "女士因毛衣太小想换成大号，D正确。A情境相反，她要的是换货不是退款，属于reversed_situation。B从未提及买礼物，属于wrong_topic。C她没抱怨质量问题，只是尺码太小，属于wrong_topic。",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "B": "wrong_topic",
+            "C": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do after this conversation?",
+          "options": {
+            "A": "Drive to the downtown branch herself",
+            "B": "Wait for a text that the sweater has arrived",
+            "C": "Choose a different color of sweater",
+            "D": "Return the sweater for store credit"
+          },
+          "answer": "B",
+          "explanation": "店员说会把货订到这家店并发短信通知，女士同意，所以她会等短信，B正确。A情境相反，她明确说不想去市区，属于rejected_option。C她坚持要同色，属于rejected_option。D她要换货而非退积分，属于over_inference。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "C": "rejected_option",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "id": "lc_mqsic4ps_3"
+    },
+    {
+      "context": "plans_social",
+      "situation": "two students planning what cheese and food to buy for a dinner party",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Okay, for Saturday's dinner I want a really nice cheese board as the centerpiece. Any ideas?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Well, a sharp cheddar and a creamy brie usually please everyone. But remember Dana's lactose intolerant."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh, right! I totally forgot. So we'd need something dairy-free for her too."
+        },
+        {
+          "speaker": "Man",
+          "text": "Exactly. There's a cashew-based cheese at the co-op that's surprisingly good. We could add some olives and crackers around it."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Perfect. So cheddar, brie, the cashew one, plus olives and crackers. That covers everybody."
+        },
+        {
+          "speaker": "Man",
+          "text": "Sounds great. The co-op closes at eight, so let's swing by right after our four o'clock class."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the conversation mainly about?",
+          "options": {
+            "A": "Deciding what foods to serve at a dinner party",
+            "B": "Choosing a restaurant for Saturday night",
+            "C": "Planning the guest list for a party",
+            "D": "Learning how to make cheese at home"
+          },
+          "answer": "A",
+          "explanation": "两人整段在商量晚宴要买的奶酪和配菜，A正确。B情境相反，他们是在家办晚宴而非去餐厅，属于reversed_situation。C只提到一位客人但重点是食物，属于too_narrow。D从未谈到自制奶酪，属于wrong_topic。",
+          "distractor_types": {
+            "B": "reversed_situation",
+            "C": "too_narrow",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "Why do they decide to include the cashew-based cheese?",
+          "options": {
+            "A": "Because it is the cheapest option at the co-op",
+            "B": "Because the man prefers it to cheddar",
+            "C": "So that a guest who can't eat dairy has a choice",
+            "D": "Because the other cheeses were sold out"
+          },
+          "answer": "C",
+          "explanation": "他们想到Dana乳糖不耐受，需要无乳制品的选择，所以加坚果奶酪，C正确。A价格从未提及，属于unrelated_next_step。B男士没说更喜欢它，属于over_inference。D其他奶酪并非售罄，属于wrong_detail。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "B": "over_inference",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "id": "lc_mqsic4ps_4"
     }
   ]
 }
