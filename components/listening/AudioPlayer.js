@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { C, FONT } from "../shared/ui";
+import { sameOriginAudio } from "../../lib/listening/audioSrc";
 
 const ACCENT = { color: "#8B5CF6", soft: "#F3E8FF" };
 
@@ -18,7 +19,8 @@ let activePlayerStop = null;
  *  - src: audio URL (optional, uses TTS fallback if null)
  *  - text: text to speak via TTS when src is absent
  *  - onEnded: callback when playback finishes
- *  - maxReplays: max replay count (0 = unlimited)
+ *  - maxReplays: replays allowed after the first full listen (exam mode: 0 = play once).
+ *               isPractice overrides this to unlimited.
  *  - isPractice: if true, unlimited replays
  *  - autoPlay: if true, starts playback when mounted or when content changes
  *  - compact: if true, render a single inline replay pill (for review / results pages)
@@ -27,7 +29,11 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [replays, setReplays] = useState(0);
-  const [hasPlayed, setHasPlayed] = useState(false);
+  // `completed` flips true only when a clip actually finishes (audio 'ended' or
+  // TTS onend) — NOT when playback merely starts. This keeps the manual play
+  // button enabled through a blocked/stalled autoplay (so it stays recoverable)
+  // while still enforcing the play-once rule once a real listen has finished.
+  const [completed, setCompleted] = useState(false);
   const [hover, setHover] = useState(null); // "play" | "replay" | null
   const [buffering, setBuffering] = useState(false); // mp3 fetched but not yet audible
 
@@ -37,9 +43,15 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
   const ttsDurationRef = useRef(0);
   const animFrameRef = useRef(null);
   const autoPlayKeyRef = useRef("");
+  // Lets the <audio> 'error' listener reach the latest startTTS without making
+  // the progress effect depend on it (avoids a TDZ on the dep array).
+  const startTTSRef = useRef(null);
 
   const replayLimit = isPractice ? Infinity : maxReplays;
   const canReplay = replays < replayLimit;
+  // Serve audio over our own origin (reachable where supabase.co is blocked).
+  // Only the <audio src> is rewritten; play/reset logic keys on the raw `src`.
+  const audioSrc = sameOriginAudio(src);
 
   const stopPlayback = useCallback(() => {
     if (ttsTimerRef.current) clearTimeout(ttsTimerRef.current);
@@ -73,7 +85,7 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
     setPlaying(false);
     setProgress(0);
     setReplays(0);
-    setHasPlayed(false);
+    setCompleted(false);
     stopPlayback();
   }, [src, text, stopPlayback]);
 
@@ -91,7 +103,16 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
       setPlaying(false);
       setBuffering(false);
       setProgress(1);
+      setCompleted(true);
       if (onEnded) onEnded();
+    };
+    // A media error (unreachable CDN file, decode failure, CORS) must NOT
+    // dead-end the listen phase. Clear the spinner and rescue with TTS off the
+    // `text` prop so the consumer's onEnded still fires and the exam advances.
+    const onError = () => {
+      setPlaying(false);
+      setBuffering(false);
+      if (startTTSRef.current) startTTSRef.current();
     };
     // Distinguish "fetching/buffering" from "audible": show a spinner while the
     // mp3 hasn't started/has stalled so the animated waveform never implies sound.
@@ -100,6 +121,7 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
 
     audio.addEventListener("timeupdate", onTimeUpdate);
     audio.addEventListener("ended", onEnd);
+    audio.addEventListener("error", onError);
     audio.addEventListener("waiting", onWaiting);
     audio.addEventListener("stalled", onWaiting);
     audio.addEventListener("playing", onResume);
@@ -107,6 +129,7 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
     return () => {
       audio.removeEventListener("timeupdate", onTimeUpdate);
       audio.removeEventListener("ended", onEnd);
+      audio.removeEventListener("error", onError);
       audio.removeEventListener("waiting", onWaiting);
       audio.removeEventListener("stalled", onWaiting);
       audio.removeEventListener("playing", onResume);
@@ -125,32 +148,15 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
     }
   }, []);
 
-  const playAudio = useCallback(() => {
-    // Claim the single playback slot, stopping whoever held it so two players
-    // can't sound at once.
+  // Speak `text` via the Web Speech API. Used when there is no audio src, and
+  // also as a rescue when the <audio> element errors (e.g. an unreachable CDN
+  // file) so the listen phase still completes instead of dead-ending. Returns
+  // false when TTS is unavailable / there is no text to speak.
+  const startTTS = useCallback(() => {
+    if (typeof speechSynthesis === "undefined" || !text) return false;
+    // Claim the single playback slot, stopping whoever held it.
     if (activePlayerStop && activePlayerStop !== stopSelf) activePlayerStop();
     activePlayerStop = stopSelf;
-    if (src && audioRef.current) {
-      audioRef.current.currentTime = 0;
-      setPlaying(true);
-      setBuffering(true);
-      const playPromise = audioRef.current.play();
-      if (playPromise && typeof playPromise.then === "function") {
-        playPromise
-          .then(() => setHasPlayed(true))
-          .catch(() => {
-            setPlaying(false);
-            setBuffering(false);
-            setHasPlayed(false);
-          });
-      } else {
-        setHasPlayed(true);
-      }
-      return;
-    }
-
-    // Web Speech API fallback
-    if (typeof speechSynthesis === "undefined" || !text) return;
 
     // Build the utterance once; we may delay speaking until Safari finishes
     // populating its voice list (getVoices() returns [] on first call).
@@ -174,18 +180,18 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
 
       utterance.onstart = () => {
         setPlaying(true);
-        setHasPlayed(true);
+        setBuffering(false);
         animFrameRef.current = requestAnimationFrame(animateTTSProgress);
       };
       utterance.onend = () => {
         setPlaying(false);
         setProgress(1);
+        setCompleted(true);
         if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
         if (onEnded) onEnded();
       };
       utterance.onerror = () => {
         setPlaying(false);
-        setHasPlayed(false);
         if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
       };
 
@@ -193,7 +199,7 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
     }
 
     const initial = speechSynthesis.getVoices();
-    if (initial && initial.length > 0) { speak(initial); return; }
+    if (initial && initial.length > 0) { speak(initial); return true; }
     // Safari: wait for voiceschanged (with 600ms hard timeout) before speaking.
     let fired = false;
     const onVoicesChanged = () => {
@@ -209,29 +215,60 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
       speechSynthesis.removeEventListener("voiceschanged", onVoicesChanged);
       speak(speechSynthesis.getVoices());
     }, 600);
-  }, [src, text, onEnded, animateTTSProgress, stopSelf]);
+    return true;
+  }, [text, onEnded, animateTTSProgress, stopSelf]);
+  // Expose the latest startTTS to the <audio> 'error' listener (see above).
+  startTTSRef.current = startTTS;
+
+  const playAudio = useCallback(() => {
+    // Claim the single playback slot, stopping whoever held it so two players
+    // can't sound at once.
+    if (activePlayerStop && activePlayerStop !== stopSelf) activePlayerStop();
+    activePlayerStop = stopSelf;
+    if (src && audioRef.current) {
+      audioRef.current.currentTime = 0;
+      setPlaying(true);
+      setBuffering(true);
+      const playPromise = audioRef.current.play();
+      if (playPromise && typeof playPromise.then === "function") {
+        // Swallow autoplay rejections quietly. We deliberately do NOT mark the
+        // clip completed, so the manual play button stays enabled and a blocked
+        // autoplay is recoverable with a single tap (the tap is a fresh user
+        // gesture the browser accepts). A genuine load failure is handled by the
+        // <audio> 'error' listener, which rescues via TTS — don't TTS here or a
+        // merely-needs-a-gesture clip would lose its real audio.
+        playPromise.catch(() => {
+          setPlaying(false);
+          setBuffering(false);
+        });
+      }
+      return;
+    }
+    // No audio src — speak the text directly.
+    startTTS();
+  }, [src, startTTS, stopSelf]);
 
   useEffect(() => {
     if (!autoPlay) return;
     const key = `${src || ""}::${text || ""}`;
     if (autoPlayKeyRef.current === key) return;
     autoPlayKeyRef.current = key;
-    const timer = setTimeout(() => {
-      setProgress(0);
-      playAudio();
-    }, 120);
-    return () => clearTimeout(timer);
+    // Call play() synchronously (no setTimeout) so when autoPlay rides in on the
+    // start-exam click it stays inside the user-gesture stack and the browser
+    // accepts it. If it's still blocked, the manual play button recovers it.
+    setProgress(0);
+    playAudio();
   }, [autoPlay, src, text, playAudio]);
 
   const handlePlay = useCallback(() => {
     if (playing) return;
-    if (hasPlayed) {
+    if (completed) {
       if (!canReplay) return;
       setReplays((r) => r + 1);
     }
     setProgress(0);
     playAudio();
-  }, [playing, hasPlayed, canReplay, playAudio]);
+  }, [playing, completed, canReplay, playAudio]);
 
   // Compact pill toggles play/stop in one button (no separate replay control).
   const handleCompactToggle = useCallback(() => {
@@ -270,7 +307,7 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
   if (compact) {
     return (
       <span style={{ display: "inline-flex" }}>
-        {src && <audio ref={audioRef} src={src} preload="none" />}
+        {src && <audio ref={audioRef} src={audioSrc} preload="none" />}
         <button
           onClick={handleCompactToggle}
           onMouseEnter={() => setHover("compact")}
@@ -310,12 +347,12 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
         }
       `}</style>
 
-      {src && <audio ref={audioRef} src={src} preload="auto" />}
+      {src && <audio ref={audioRef} src={audioSrc} preload="auto" />}
 
       {/* Play button */}
       <button
         onClick={handlePlay}
-        disabled={playing || (hasPlayed && !canReplay)}
+        disabled={playing || (completed && !canReplay)}
         onMouseEnter={() => setHover("play")}
         onMouseLeave={() => setHover(null)}
         style={{
@@ -325,14 +362,14 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
           border: "none",
           background: playing
             ? ACCENT.soft
-            : hover === "play" && !(hasPlayed && !canReplay)
+            : hover === "play" && !(completed && !canReplay)
               ? ACCENT.color
-              : (hasPlayed && !canReplay)
+              : (completed && !canReplay)
                 ? "#E5E7EB"
                 : ACCENT.color,
           color: playing ? ACCENT.color : "#fff",
           fontSize: 28,
-          cursor: playing || (hasPlayed && !canReplay) ? "default" : "pointer",
+          cursor: playing || (completed && !canReplay) ? "default" : "pointer",
           display: "inline-flex",
           alignItems: "center",
           justifyContent: "center",
@@ -340,7 +377,7 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
           boxShadow: playing ? "none" : `0 4px 14px ${ACCENT.color}33`,
           transform: hover === "play" && !playing ? "scale(1.05)" : "scale(1)",
           fontFamily: FONT,
-          opacity: (hasPlayed && !canReplay) ? 0.5 : 1,
+          opacity: (completed && !canReplay) ? 0.5 : 1,
         }}
       >
         {playing ? (

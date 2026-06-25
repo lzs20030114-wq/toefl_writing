@@ -460,6 +460,7 @@ function MCQInlineTask({ item, taskType, onComplete, revealAnswers = false }) {
             text={
               item.announcement ||
               item.lecture ||
+              item.transcript ||
               (item.conversation ? item.conversation.map((t) => `${t.speaker}: ${t.text}`).join(". ") : "")
             }
             onEnded={handleAudioEnded}
@@ -469,8 +470,13 @@ function MCQInlineTask({ item, taskType, onComplete, revealAnswers = false }) {
         </div>
       )}
       {isListeningType && phase === "listen" ? (
-        <div style={{ fontSize: 13, color: C.t3, textAlign: "center", padding: 20 }}>
-          请先听完音频，听力结束后开始答题…
+        <div style={{ textAlign: "center", padding: "8px 20px 12px" }}>
+          <div style={{ fontSize: 13, color: C.t3, marginBottom: 14, lineHeight: 1.6 }}>
+            音频会自动播放；如果没有声音，请点击上方的播放按钮。
+          </div>
+          <Btn onClick={() => setPhase("answer")} variant="secondary" style={{ fontSize: 13 }}>
+            开始答题
+          </Btn>
         </div>
       ) : (
         questionUI
@@ -543,8 +549,13 @@ function LCRInlineTask({ item, onComplete, revealAnswers = false }) {
       </div>
 
       {phase === "listen" && (
-        <div style={{ fontSize: 13, color: C.t3, textAlign: "center", padding: 20 }}>
-          请先播放并听完音频...
+        <div style={{ textAlign: "center", padding: "8px 20px 12px" }}>
+          <div style={{ fontSize: 13, color: C.t3, marginBottom: 14, lineHeight: 1.6 }}>
+            音频会自动播放；如果没有声音，请点击上方的播放按钮。
+          </div>
+          <Btn onClick={() => setPhase("choose")} variant="secondary" style={{ fontSize: 13 }}>
+            开始答题
+          </Btn>
         </div>
       )}
 

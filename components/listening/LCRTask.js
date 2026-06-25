@@ -371,7 +371,10 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
                 autoPlay
               />
 
-              {isPractice && <div style={{ marginTop: 24 }}>
+              {/* Manual advance — always available (not just practice). A blocked
+                  autoplay or failed audio must never trap a timed session: this
+                  lets the user proceed, and the play button above replays. */}
+              <div style={{ marginTop: 24 }}>
                 <button
                   onClick={handleReady}
                   onMouseEnter={() => setHoverBtn("ready")}
@@ -385,9 +388,9 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
                     transition: "all 0.15s ease",
                   }}
                 >
-                  I'm ready — show options
+                  {isPractice ? "I'm ready — show options" : "开始答题"}
                 </button>
-              </div>}
+              </div>
             </div>
           )}
 
