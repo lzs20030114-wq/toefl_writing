@@ -183,36 +183,31 @@ function pickVoicePresets(item) {
 async function generateTTS(item, id) {
   if (!WITH_TTS) return null;
   try {
-    const voiceMap = pickVoicePresets(item);
-    const voiceLookup = {};
-    for (const v of voiceMap) {
-      voiceLookup[v.name] = v.preset;
-    }
-
-    // Build segments for multi-voice generation
-    const segments = item.conversation.map(t => ({
-      text: t.text,
-      preset: voiceLookup[t.speaker] || "default",
-    }));
-
-    let buffer;
+    let buffer, ext, contentType;
     if (TTS_PROVIDER === "openai") {
-      const { generateSpeech } = require("../lib/tts/openaiTts.js");
-      const buffers = [];
-      for (const seg of segments) {
-        const buf = await generateSpeech(seg.text, { preset: seg.preset, format: "mp3" });
-        buffers.push(buf);
-      }
-      buffer = Buffer.concat(buffers);
+      // Deterministic persona render: derivePersona (safe voices, 2 speakers always
+      // distinct — fixes the marin/cedar 400 + named-speaker collapse), per-sentence
+      // split (no question-intonation bleed), loudness-normalized WAV concat.
+      const { renderConversation } = require("../lib/tts/renderListening.js");
+      buffer = await renderConversation(item);
+      ext = "wav";
+      contentType = "audio/wav";
     } else {
+      // Edge path unchanged (tone-blind, fast, default).
+      const voiceMap = pickVoicePresets(item);
+      const voiceLookup = {};
+      for (const v of voiceMap) voiceLookup[v.name] = v.preset;
+      const segments = item.conversation.map(t => ({ text: t.text, preset: voiceLookup[t.speaker] || "default" }));
       const { generateConversation } = require("../lib/tts/edgeTts.js");
       buffer = await generateConversation(segments, { format: "mp3" });
+      ext = "mp3";
+      contentType = "audio/mpeg";
     }
 
-    console.log(`   [TTS ${TTS_PROVIDER}] ${buffer.length} bytes, ${segments.length} segments`);
+    console.log(`   [TTS ${TTS_PROVIDER}] ${buffer.length} bytes`);
 
     const { uploadAudio } = require("../lib/tts/storage.js");
-    const result = await uploadAudio(`conversation/${id}.mp3`, buffer);
+    const result = await uploadAudio(`conversation/${id}.${ext}`, buffer, contentType);
     return result.url;
   } catch (err) {
     console.log(`   TTS failed for ${id}: ${err.message}`);
@@ -321,7 +316,7 @@ async function main() {
     console.log(`  Q type dist: detail=${batch.qTypeDist.detail} main_idea=${batch.qTypeDist.main_idea} inference=${batch.qTypeDist.inference}`);
     console.log(`  Context dist: ${JSON.stringify(batch.contextDist)}`);
     console.log(`  Difficulty: ${JSON.stringify(batch.difficultyDist)}`);
-    console.log(`  Register: contractions=${batch.registerMetrics.contractionRate}% fillers=${batch.registerMetrics.fillerRate}% DM=${batch.registerMetrics.discourseMarkerRate}%`);
+    console.log(`  Register: contractions=${batch.registerMetrics.contractionRate}% fillers=${batch.registerMetrics.fillerRate}% DM=${batch.registerMetrics.discourseMarkerRate}% mincedOaths=${batch.registerMetrics.mincedOathRate}% (target 0%)`);
     console.log(`  Correct-is-longest rate: ${batch.correctIsLongestRate}% (target <= 30%)`);
   }
 
