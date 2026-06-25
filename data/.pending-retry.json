@@ -1,85 +1,61 @@
 {
-  "session_id": "routine-20260624-190422",
-  "generated_at": "2026-06-24T19:23:09.719Z",
+  "session_id": "routine-20260625-190427",
+  "generated_at": "2026-06-25T19:19:39.835Z",
   "needs_retry": true,
   "overall_scores": {
-    "diversity": 95,
-    "quality": 93
+    "diversity": 94,
+    "quality": 97
   },
   "bs_difficulty_gate": "PASS",
   "retry_banks": [
     {
       "bank": "bs",
-      "diversity_score": 88,
+      "diversity_score": 82,
       "diversity_threshold": 90,
-      "quality_score": 99,
+      "quality_score": 100,
       "quality_threshold": 95,
       "failures": [
-        "多样性 88 < 90"
+        "多样性 82 < 90"
       ],
       "diversity_breakdown": [
-        "角色名 3/20",
+        "角色名 4/20",
         "场景 20/20",
-        "句型 4/5",
-        "开头 4/4",
-        "prefilled类型 5/4 (top:mid-noun-or-adj 9/20)",
-        "人物当prefilled 4/20 (20%, TPO~30%)",
-        "干扰词 10种 (top:was 25%)",
-        "chunk颗粒 5.7块/题 单词率69% (TPO~6块/77%)",
-        "题面对话化 18/20 (90% 含you, TPO~72%)"
+        "句型 3/5",
+        "开头 3/4",
+        "prefilled类型 7/4 (top:mid-noun-or-adj 10/20)",
+        "人物当prefilled 3/20 (15%, TPO~30%)",
+        "干扰词 14种 (top:did 15%)",
+        "chunk颗粒 6.5块/题 单词率85% (TPO~6块/77%)",
+        "题面对话化 16/20 (80% 含you, TPO~72%)"
       ],
       "quality_breakdown": [
-        "块数 19/20",
+        "块数 20/20",
         "干扰词 20/20",
         "答案长度 20/20",
         "重组正确 20/20"
       ],
       "hints": [
-        "角色名重复严重 (3/20 distinct) — use 15+ distinct character names from: Olivia, Harold, Mariana, Hector, Margot, Emma, Julian, Matthew, Alison, Juan, Angelina, Professor Cho, Naomi, Diane"
+        "角色名重复严重 (4/20 distinct) — use 15+ distinct character names from: Olivia, Harold, Mariana, Hector, Margot, Emma, Julian, Matthew, Alison, Juan, Angelina, Professor Cho, Naomi, Diane"
       ],
       "items_to_supplement": 10
     },
     {
-      "bank": "reading-ap",
-      "diversity_score": 100,
-      "diversity_threshold": 85,
-      "quality_score": 70,
-      "quality_threshold": 90,
-      "failures": [
-        "质量 70 < 90"
-      ],
-      "diversity_breakdown": [
-        "话题组合 5/5",
-        "学科 5/5"
-      ],
-      "quality_breakdown": [
-        "词数 2/5",
-        "段落数 5/5"
-      ],
-      "hints": [
-        "质量校验有偏差: 词数 2/5, 段落数 5/5 — recheck schema compliance"
-      ],
-      "items_to_supplement": 3
-    },
-    {
       "bank": "reading-rdl-long",
-      "diversity_score": 60,
+      "diversity_score": 100,
       "diversity_threshold": 70,
       "quality_score": 0,
       "quality_threshold": 85,
       "failures": [
-        "多样性 60 < 70",
         "质量 0 < 85"
       ],
       "diversity_breakdown": [
         "话题 2/2",
-        "notice 0 · email 2"
+        "notice 1 · email 1"
       ],
       "quality_breakdown": [
         "词数 0/2"
       ],
       "hints": [
-        "多样性 < gate — choose distinct topic/subtopic combos; avoid same discipline twice",
         "质量校验有偏差: 词数 0/2 — recheck schema compliance"
       ],
       "items_to_supplement": 1

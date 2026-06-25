@@ -1,47 +1,55 @@
 {
-  "session_id": "routine-20260624-190422",
-  "completed_at": "2026-06-24T19:22:55.038Z",
-  "duration_minutes": 18,
+  "session_id": "routine-20260625-190427",
+  "completed_at": "2026-06-25T19:19:39.671Z",
+  "duration_minutes": 15,
   "model": "Claude Opus 4.8",
-  "highlight": "12 个题库全部刷新；BS 首轮被校验打回后重生成至 20/20 通过；本轮共入库/暂存 70 题",
+  "highlight": "12 个题库全部生成 70/70; AP 首现物理热力学(熵)课题; BS 难度冻结门修复后通过。",
   "commit_sha": "",
   "results": {
     "bs": {
       "generated": 20,
       "accepted": 20,
       "topics": [
-        "simple past statement",
-        "direct wh-question",
-        "inversion",
-        "indirect question",
-        "declarative order",
-        "embedded question",
-        "negation",
-        "past perfect",
-        "relative clause",
-        "passive voice",
-        "direct yes/no question",
-        "statement"
+        "class schedule",
+        "coffee/sleep",
+        "study group",
+        "bookstore",
+        "scholarship paperwork",
+        "dorm meal plan",
+        "section switch",
+        "advisor credits",
+        "library fine",
+        "photography club",
+        "shuttle",
+        "art gallery",
+        "draft deadline",
+        "mailroom package",
+        "dean meeting/major",
+        "gym pass",
+        "volunteer orientation",
+        "housing form",
+        "lounge study desk",
+        "registrar transcripts"
       ],
       "favorite": {
-        "prompt": "Are you coming to soccer practice today?",
-        "answer": "I twisted my ankle during practice today."
+        "prompt": "Did you talk to your advisor about credits?",
+        "answer": "She needed to know which of the courses I'd dropped would still count."
       },
       "retried_after_fail": true,
-      "failure_reason": "PASS 1 merge rejected 13/20 (chunk-case, answer length, narration prompts); regenerated to validator spec."
+      "failure_reason": "初次合库被 BS 难度冻结门拒绝 (register.contraction 0.179<0.18, length_band.hard 0.107 偏低) + 首版集合级校验未达 embedded/negation 阈值; 同会话内修复后 PASS 并合库。"
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
       "topics": [
-        "education",
-        "economics",
-        "technology and media",
-        "public health"
+        "computer science",
+        "history and culture",
+        "social studies",
+        "public policy"
       ],
       "favorite": {
-        "subtopic": "education",
-        "preview": "We've been discussing how schools handle homework this semester. A growing number of districts have started ba"
+        "subtopic": "history and culture",
+        "preview": "We've been examining how museums handle contested objects this semester. Several major institutions have begun returning artifacts acquired"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -50,14 +58,14 @@
       "generated": 4,
       "accepted": 4,
       "topics": [
-        "服务与活动",
+        "消费售后",
         "住宿",
-        "校园学业",
-        "日常社交"
+        "社区生活",
+        "服务与活动"
       ],
       "favorite": {
-        "subtopic": "服务与活动",
-        "preview": "You signed up for a weekend pottery workshop at a community studio. The confirmation lists a 9 a.m. start, but"
+        "subtopic": "社区生活",
+        "preview": "You take part in a weekly recycling program in your neighborhood. The collection day was recently moved from Friday to Monday without notice."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -66,15 +74,15 @@
       "generated": 5,
       "accepted": 5,
       "topics": [
-        "astronomy/comets",
-        "business/economic history",
-        "materials_science/polymer composites",
-        "environmental_science/invasive species",
-        "anthropology/burial customs"
+        "environmental_science/climate change",
+        "art/cinema history",
+        "physics/thermodynamics",
+        "anthropology/early agriculture",
+        "materials_science/textile fibers"
       ],
       "favorite": {
-        "subtopic": "astronomy/comets",
-        "preview": "A comet is a small icy body that orbits the Sun and releases gas and dust when heated. Each comet consists of "
+        "subtopic": "physics/thermodynamics",
+        "preview": "Entropy is a measure of how many microscopic arrangements correspond to the same observable state of a system."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -83,16 +91,16 @@
       "generated": 6,
       "accepted": 6,
       "topics": [
-        "astronomy/the rings of Saturn",
-        "geology/cave formation and stalactites",
-        "engineering/suspension bridges",
-        "history/the printing press",
-        "physics/lightning and thunder",
-        "music/the development of the orchestra"
+        "technology/lithium-ion batteries",
+        "anthropology/the development of kinship systems",
+        "chemistry/the periodic table",
+        "physics/the Doppler effect",
+        "economics/comparative advantage",
+        "art/the invention of linear perspective"
       ],
       "favorite": {
-        "subtopic": "astronomy/the rings of Saturn",
-        "preview": "Saturn is famous for the bright system of rings that circle its equator and stretch far into space. These ring"
+        "subtopic": "physics/the Doppler effect",
+        "preview": "The Doppler effect describes how the observed frequency of a wave changes when its source moves."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -101,12 +109,14 @@
       "generated": 4,
       "accepted": 4,
       "topics": [
-        "email",
-        "notice"
+        "notice/campus shuttle route detour",
+        "notice/building HVAC maintenance",
+        "email/campus tour guide volunteer shift",
+        "email/student ID replacement"
       ],
       "favorite": {
-        "subtopic": "email",
-        "preview": "Hi Marcus, please note that my office hours move to Thursday, 2:00-4:00 p.m. this week in Bell Hall, Room 218."
+        "subtopic": "notice/campus_shuttle_detour",
+        "preview": "Beginning March 3, the Blue Line campus shuttle will detour around Maple Avenue construction. New temporary stops are at Carver Hall and South Lot B."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -115,11 +125,12 @@
       "generated": 2,
       "accepted": 2,
       "topics": [
-        "email"
+        "email/campus tool library introduction",
+        "notice/textbook buyback event"
       ],
       "favorite": {
-        "subtopic": "email",
-        "preview": "Subject: Introducing the Campus Tool Library Dear Residents, We are pleased to announce that the new Tool Libr"
+        "subtopic": "email/campus tool library",
+        "preview": "We're excited to announce that the Campus Tool Library has opened in the basement of Hartwell Hall, Room B12."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -128,14 +139,14 @@
       "generated": 4,
       "accepted": 4,
       "topics": [
-        "cognitive dissonance and attitude change",
-        "the role of patronage in shaping Baroque art",
-        "inattentional blindness in everyday perception",
-        "how gift-giving rituals reinforce social bonds across cultures"
+        "how invasive species disrupt native food webs",
+        "the unexpected origins of the modern fire department",
+        "the diffusion of responsibility in large groups",
+        "the role of dark matter in galaxy formation"
       ],
       "favorite": {
-        "subtopic": "psychology",
-        "preview": "cognitive dissonance and attitude change"
+        "subtopic": "the unexpected origins of the modern fire department",
+        "preview": "The publicly funded fire department, the one you call by dialing a number and that costs you nothing at the moment of crisis, is a fairly recent invention."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -144,13 +155,15 @@
       "generated": 5,
       "accepted": 5,
       "topics": [
-        "campus_dorm_life",
-        "plans_social",
-        "errands_service"
+        "returning a too-small sweater",
+        "caring for a roommate's houseplant",
+        "recommending a history podcast",
+        "coordinating a weekend beach trip",
+        "comparing bike/bus/walk commutes"
       ],
       "favorite": {
-        "subtopic": "campus_dorm_life",
-        "preview": "two students chatting about a part-time job one just started at a factory"
+        "subtopic": "recommendations_opinions",
+        "preview": "You have to try this history podcast I found. Each episode is only twenty minutes, so it's perfect for the bus."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -159,14 +172,15 @@
       "generated": 5,
       "accepted": 5,
       "topics": [
-        "logistics",
-        "campus_activity",
-        "facility_change",
-        "info_session"
+        "parking garage resurfacing closure with valet",
+        "philosophy society essay competition",
+        "returning alumna marine biologist talk",
+        "graduate thesis poster session schedule",
+        "new fitness equipment at recreation center"
       ],
       "favorite": {
-        "subtopic": "announcement",
-        "preview": ""
+        "subtopic": "returning alumna marine biologist public talk",
+        "preview": "I'm pleased to tell you that one of our former students, now a marine biologist, will be visiting next Wednesday to give a public talk"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -175,13 +189,18 @@
       "generated": 8,
       "accepted": 8,
       "topics": [
-        "social",
-        "campus_academic",
-        "campus_daily"
+        "exam format study materials",
+        "course reading list",
+        "campus film screening",
+        "business hours early closing",
+        "concern after a friend's move",
+        "study group location",
+        "dorm faucet maintenance",
+        "offering help to stressed friend"
       ],
       "favorite": {
-        "subtopic": "social",
-        "preview": "{\"context\":\"social\",\"situation\":\"expressing concern about a friend's overwhelming schedule\",\"difficulty\":\"hard"
+        "subtopic": "offering help to someone who seems stressed",
+        "preview": "Can I take something off your plate? — a warm idiomatic offer to share another person's burden when they look overwhelmed."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -190,13 +209,13 @@
       "generated": 3,
       "accepted": 3,
       "topics": [
-        "Photography Darkroom",
-        "Car Rental Agency",
-        "Career Services Workshop"
+        "Watercolor Painting (how-to)",
+        "Hardware Store Help",
+        "Campus Bookstore"
       ],
       "favorite": {
-        "subtopic": "Photography Darkroom",
-        "preview": "Chemical trays are stored beneath the sink. Print dryers sit along the back wall. Fresh developer can be acces"
+        "subtopic": "Watercolor Painting (how-to)",
+        "preview": "Lastly, when your painting is fully dry, peel the tape away and sign the bottom corner."
       },
       "retried_after_fail": false,
       "failure_reason": ""

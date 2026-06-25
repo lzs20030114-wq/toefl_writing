@@ -1,0 +1,219 @@
+{
+  "items": [
+    {
+      "context": "logistics",
+      "situation": "parking garage closure for resurfacing with valet alternative",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "Good afternoon, students and staff. Please be aware that the Maple Street parking garage will be closed for resurfacing from this Thursday through the following Monday. During those five days, the entire structure is off-limits, and any cars left inside after Wednesday at 9 p.m. will be ticketed and towed. To make up for the lost spaces, we'll run a free valet service at the West Entrance from 7 a.m. to 7 p.m. each day. Just hand your keys to an attendant, and they'll park your car in the staff lot for you. We'll send a text the moment the garage reopens, so there's no need to keep checking.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What must drivers do to avoid being towed?",
+          "options": {
+            "A": "Remove their cars before Wednesday at 9 p.m.",
+            "B": "Pay a resurfacing fee at the gate",
+            "C": "Display a valid staff parking permit",
+            "D": "Park only on the top level of the garage"
+          },
+          "answer": "A",
+          "explanation": "正确答案A。公告明确说周三晚9点后仍留在车库内的车将被开罚单并拖走，所以司机必须在此之前把车开走。B错误，公告从未提及任何整修费用。C错误，公告未要求出示员工停车许可证，这只是合理但未提及的校园做法。D错误，整个车库都封闭，没有所谓只停顶层的安排，这是把细节张冠李戴。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the valet service?",
+          "options": {
+            "A": "It runs only on Thursday morning",
+            "B": "It charges drivers a daily rate",
+            "C": "It is meant to offset the lost parking spaces",
+            "D": "It will continue after the garage reopens"
+          },
+          "answer": "C",
+          "explanation": "正确答案C。公告说为弥补失去的车位而开设免费代客泊车服务，可推断它的目的就是抵偿封闭期间减少的停车位。A错误，代客服务每天7点至19点运行，并非只在周四上午。B错误，服务是免费的，不收取每日费用。D错误，公告没有任何依据表明车库重开后代客服务仍继续，属于过度推断。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "wrong_detail",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "academic_event",
+      "situation": "annual essay competition with faculty judges",
+      "speaker_role": "society_president",
+      "difficulty": "easy",
+      "announcement": "Attention students. The Philosophy Society is excited to announce our annual Essay Competition, now open for entries. This year's theme is \"What does it mean to live well?\", and we welcome submissions from students in any major, not just philosophy. A panel of three faculty judges will read every entry and select the top three essays. Essays should be between two and three thousand words and must be emailed to the society's address by Friday, April 10th. The winner will receive a two-hundred-dollar prize and have their work published in the campus journal. We'll hold the awards ceremony in Hadley Hall on the last day of the month.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement mainly about?",
+          "options": {
+            "A": "A new philosophy course for non-majors",
+            "B": "An essay competition now accepting entries",
+            "C": "A fundraiser for the campus journal",
+            "D": "A change to the society's meeting schedule"
+          },
+          "answer": "B",
+          "explanation": "正确答案B。公告主要是宣布哲学社团一年一度的征文比赛现已开放投稿，并介绍主题、规则和奖项。A错误，公告未涉及任何新开设的课程，只是说欢迎各专业学生参赛。C错误，校园期刊只是获奖作品的发表平台，公告并非为其筹款。D错误，公告从未提及社团例会时间的任何变化。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "C": "too_narrow",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "How should students submit their essays?",
+          "options": {
+            "A": "By posting them on the society's website",
+            "B": "By handing them in at Hadley Hall",
+            "C": "By printing and mailing a paper copy",
+            "D": "By emailing them to the society's address"
+          },
+          "answer": "D",
+          "explanation": "正确答案D。公告明确说论文须在4月10日周五前用电子邮件发送到社团的邮箱地址。A错误，公告未提及在网站上发布的方式。B错误，Hadley Hall是颁奖典礼地点，而非交稿地点，属张冠李戴。C错误，公告要求电子邮件提交，并未要求打印邮寄纸质稿，与事实相反。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "misattributed_detail",
+            "C": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "guest_speaker",
+      "situation": "alumnus sharing research experience at public talk",
+      "speaker_role": "professor",
+      "difficulty": "hard",
+      "announcement": "I'm pleased to tell you that one of our former students, now a marine biologist, will be visiting next Wednesday to give a public talk in Brennan Auditorium at 3 p.m. She graduated from this very department a decade ago, and she'll be describing how her undergraduate fieldwork here grew into the deep-sea research she leads today. Rather than a formal lecture, she's planned an informal session built around your questions, so come ready to ask about graduate study and life after college. The talk is open to everyone, and no registration is needed. She has also offered to stay afterward for anyone who wants advice on applying to research programs.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To recruit students for a deep-sea research project",
+            "B": "To explain new requirements for graduate study",
+            "C": "To invite students to a returning alumna's talk",
+            "D": "To celebrate the department's tenth anniversary"
+          },
+          "answer": "C",
+          "explanation": "正确答案C。公告核心是邀请大家参加下周三一位本系毕业的海洋生物学家校友的公开讲座。A错误，校友只是分享研究经历，公告并非在为某个深海研究项目招募成员。B错误，公告未说明任何研究生学习的新要求，只是说可以现场提问。D错误，公告提到她十年前毕业，但这并非在庆祝系庆十周年，属过度引申。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "related_but_not_stated",
+            "D": "over_inference"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the format of the talk?",
+          "options": {
+            "A": "It will be driven by audience questions",
+            "B": "It will require advance registration",
+            "C": "It will be limited to biology majors",
+            "D": "It will be a recorded online broadcast"
+          },
+          "answer": "A",
+          "explanation": "正确答案A。公告说这不是正式讲座，而是围绕听众提问展开的非正式交流，并请大家准备好问题，可推断讲座将以听众提问为主导。B错误，公告明确说无需报名，与之相反。C错误，公告说讲座向所有人开放，并未限定生物专业。D错误，公告说在Brennan礼堂现场举行，没有任何线上录播的依据。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "wrong_detail",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "academic_event",
+      "situation": "graduate thesis poster session schedule",
+      "speaker_role": "department_staff",
+      "difficulty": "medium",
+      "announcement": "This is a reminder about the Graduate Thesis Poster Session, which takes place next Thursday in the Whitman Hall lobby from 1 to 4 p.m. Every second-year graduate student will present a poster summarizing their research and answer questions from visiting faculty. Presenters should arrive by 12:30 to hang their posters on the assigned boards, which are numbered to match the program. Department faculty are expected to attend and will use a short rubric to give each presenter written feedback. Undergraduates and the public are warmly welcome to drop by at any point during the afternoon. Refreshments will be available near the entrance throughout the event.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To recruit volunteers to judge posters",
+            "B": "To cancel this year's poster session",
+            "C": "To advertise a new graduate program",
+            "D": "To remind people about an upcoming poster session"
+          },
+          "answer": "D",
+          "explanation": "正确答案D。公告核心是提醒大家下周四举行的研究生论文海报展示会，并说明安排。A错误，公告说教师将用评分表给反馈，但这是既定职责，并非在招募评委志愿者。B错误，活动照常举行而非取消，与公告相反。C错误，公告未推广任何新的研究生项目。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "reversed_intent",
+            "C": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What must presenters do before the session begins?",
+          "options": {
+            "A": "Email their posters to the department",
+            "B": "Arrive by 12:30 to hang their posters",
+            "C": "Register online by Wednesday evening",
+            "D": "Collect a numbered badge at the entrance"
+          },
+          "answer": "B",
+          "explanation": "正确答案B。公告明确说展示者应在12:30前到场，把海报挂到编号对应的展板上。A错误，公告要求现场张贴海报，并未要求把海报用邮件发给系里，与事实不符。C错误，公告从未提及网上报名，属合理但未提及的内容。D错误，编号的是展板而非入口处领取的徽章，属张冠李戴。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "facility_change",
+      "situation": "new fitness equipment installation at recreation center",
+      "speaker_role": "department_head",
+      "difficulty": "easy",
+      "announcement": "Good morning, everyone. I'm happy to share that the Recreation Center's strength room has just received a full set of brand-new fitness equipment, and it's ready for you to use starting this Monday. We've added rowing machines, adjustable weight benches, and a row of stationary bikes along the north wall. Because some of the machines work differently from the old ones, free fifteen-minute orientation sessions will run all week at the front desk. You don't need to book ahead; simply ask a staff member when you arrive. Please remember to wipe down each machine after use and to return any free weights to their racks.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce new fitness equipment at the center",
+            "B": "To explain how to wipe down machines",
+            "C": "To apologize for closing the strength room",
+            "D": "To discourage students from using free weights"
+          },
+          "answer": "A",
+          "explanation": "正确答案A。公告核心是宣布娱乐中心力量训练室新添了一整套健身器材，周一起可供使用。B只是其中一条使用规则，过于狭隘，并非主要目的。C错误，公告并未为关闭力量训练室道歉，房间照常开放。D与公告意图相反，公告只是请大家用后归位自由重量，并非劝阻使用。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "How can students get an orientation on the new machines?",
+          "options": {
+            "A": "By reserving a slot on the website",
+            "B": "By paying a small training fee",
+            "C": "By asking a staff member at the front desk",
+            "D": "By attending a class on the north wall"
+          },
+          "answer": "C",
+          "explanation": "正确答案C。公告说免费的十五分钟入门指导整周在前台进行，无需预约，到场时直接向工作人员询问即可。A错误，公告明确说无需提前预订，并非在网站预约。B错误，指导是免费的，不收费。D错误，north wall是新摆放器材的位置，而非上课地点，属张冠李戴。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "wrong_detail",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    }
+  ]
+}

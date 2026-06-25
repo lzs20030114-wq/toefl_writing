@@ -1,0 +1,136 @@
+{
+  "items": [
+    {
+      "genre": "notice",
+      "variant": "short",
+      "text": "Beginning March 3, the Blue Line campus shuttle will detour around Maple Avenue construction. New temporary stops are located at Carver Hall and South Lot B. A reduced fare of $1.50 applies until March 17. Contact Transit Services with questions.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what is the fare during the detour period?",
+          "options": {
+            "A": "A charge of $3.50",
+            "B": "A charge of $1.50",
+            "C": "A charge of $5.00",
+            "D": "A charge of $1.17"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice states a reduced fare of $1.50 applies until March 17, so $1.50 is the correct amount."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about the Blue Line shuttle after March 17?",
+          "options": {
+            "A": "It will charge passengers a higher daily deposit.",
+            "B": "It will permanently end service to Carver Hall.",
+            "C": "It will likely return to its regular route and fare.",
+            "D": "It will replace South Lot B with a new station."
+          },
+          "correct_answer": "C",
+          "explanation": "Because the reduced fare and detour stops are described as temporary and lasting only until March 17, the shuttle is expected to resume its normal route and pricing afterward."
+        }
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "genre": "notice",
+      "variant": "short",
+      "text": "Notice: HVAC maintenance will be performed in Anderson Hall from June 8 to June 10. Temperatures in classrooms may rise above normal levels during these dates. Instructors are advised to relocate afternoon sessions to Room 112 in the adjacent building.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what will happen in Anderson Hall during the maintenance?",
+          "options": {
+            "A": "Classrooms will be locked to all instructors.",
+            "B": "Classrooms may become warmer than usual.",
+            "C": "Classrooms will be cleaned every afternoon.",
+            "D": "Classrooms will be moved to another campus."
+          },
+          "correct_answer": "B",
+          "explanation": "The notice warns that temperatures may rise above normal levels, meaning the rooms may become warmer than usual."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about afternoon classes during this period?",
+          "options": {
+            "A": "They may be more comfortable in Room 112.",
+            "B": "They will be cancelled for three full days.",
+            "C": "They must be rescheduled to early mornings.",
+            "D": "They will require students to pay a fee."
+          },
+          "correct_answer": "A",
+          "explanation": "Instructors are advised to relocate afternoon sessions to Room 112, implying that room avoids the rising heat and would be more comfortable."
+        }
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "genre": "email",
+      "variant": "short",
+      "text": "Hi Daniel, thanks for signing up. Your campus tour guide shift is confirmed for Friday, April 18, from 1:00 PM to 3:00 PM. Please report to the Visitor Center desk and check in with Ms. Reyes before your tour begins. Best, Admissions Office",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what should Daniel do before his tour starts?",
+          "options": {
+            "A": "Email Ms. Reyes a copy of his schedule",
+            "B": "Collect a name badge from the office",
+            "C": "Pay a deposit at the Visitor Center",
+            "D": "Check in with Ms. Reyes at the desk"
+          },
+          "correct_answer": "D",
+          "explanation": "The email instructs Daniel to report to the Visitor Center desk and check in with Ms. Reyes before the tour begins."
+        },
+        {
+          "question_type": "vocabulary_in_context",
+          "stem": "In the email, the word \"confirmed\" is closest in meaning to",
+          "options": {
+            "A": "finalized",
+            "B": "requested",
+            "C": "cancelled",
+            "D": "delayed"
+          },
+          "correct_answer": "A",
+          "explanation": "\"Confirmed\" here means the shift is settled and certain, which matches \"finalized.\""
+        }
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "genre": "email",
+      "variant": "short",
+      "text": "Dear Priya, we received your request for a replacement student ID. A $10 fee will be charged to your account, and your new card will be ready for pickup at the Campus Card Office on Tuesday, May 6, after 2:00 PM. Regards, Card Services",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, when can Priya pick up her new ID?",
+          "options": {
+            "A": "On Tuesday, May 6, before noon",
+            "B": "On Monday, May 6, after closing",
+            "C": "On Tuesday, May 6, after 2:00 PM",
+            "D": "On Tuesday, May 16, after 2:00 PM"
+          },
+          "correct_answer": "C",
+          "explanation": "The email states the card will be ready for pickup on Tuesday, May 6, after 2:00 PM."
+        },
+        {
+          "question_type": "vocabulary_in_context",
+          "stem": "In the email, the word \"charged\" is closest in meaning to",
+          "options": {
+            "A": "refunded",
+            "B": "doubled",
+            "C": "waived",
+            "D": "billed"
+          },
+          "correct_answer": "D",
+          "explanation": "\"Charged to your account\" means the $10 will be billed to her, so \"billed\" is the closest meaning."
+        }
+      ],
+      "difficulty": "medium"
+    }
+  ]
+}

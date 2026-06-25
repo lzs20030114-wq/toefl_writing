@@ -1,0 +1,164 @@
+{
+  "items": [
+    {
+      "context": "campus_academic",
+      "situation": "student asking about exam format or study materials",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "What format is the midterm going to be?",
+      "options": {
+        "A": "I'll email everyone the study guide tonight.",
+        "B": "The midterm is worth thirty percent.",
+        "C": "Formatting the paper took me hours.",
+        "D": "Which class did you say you missed?"
+      },
+      "answer": "A",
+      "explanation": "正确答案 A 没有直接回答考试是什么形式，而是解决学生背后的真正需求——提供复习指南，符合 context_shift 范式。B 是离题但语法正确的句子，谈论的是考试分值而非形式，答非所问。C 是语义联想陷阱，抓住 \"format/formatting\" 这个词去谈排版论文，与考试形式无关。D 是错误的问题类型，反问学生缺了哪节课，转移了话题，没有解决需求。",
+      "distractor_types": {
+        "B": "off_topic",
+        "C": "semantic_association_trap",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking about a reading list for a course",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Did the professor post the reading list yet?",
+      "options": {
+        "A": "I really enjoy reading by the window.",
+        "B": "Yes, it went up this morning.",
+        "C": "The professor's office is upstairs.",
+        "D": "No, I haven't met her yet."
+      },
+      "answer": "B",
+      "explanation": "正确答案 B 直接回答了 yes/no 问题，明确说阅读清单今早已发布，符合 direct_topical 范式。A 是语义联想陷阱，抓住 \"reading\" 这个词去谈个人阅读习惯，没有回答清单是否发布。C 也是语义陷阱，抓住 \"professor\" 去谈办公室位置，答非所问。D 是错误的问题类型，回答的是 \"你见过教授吗\" 而不是 \"清单发了吗\"。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "semantic_association_trap",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about a campus event or concert",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "There's a student film screening this Friday.",
+      "options": {
+        "A": "The film was shot entirely on campus.",
+        "B": "I returned the movie tickets already.",
+        "C": "Want to grab seats together beforehand?",
+        "D": "The projector broke down last week."
+      },
+      "answer": "C",
+      "explanation": "正确答案 C 用一个反问推进对话，提议一起提前占座，自然回应了对方分享的活动信息，符合 counter_question 范式。A 是语义联想陷阱，抓住 \"film\" 去谈拍摄地点，没有推进对话。B 是离题但语法正确的句子，谈论退电影票，与本次放映无关。D 也是语义陷阱，抓住放映相关的 \"projector\" 去谈上周设备故障，偏离了对方的邀约意图。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "semantic_association_trap"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "calling to check business hours",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Why are you closing so early today?",
+      "options": {
+        "A": "The store is two blocks down.",
+        "B": "We open again at nine tomorrow.",
+        "C": "Closets are on sale this week.",
+        "D": "We're short-staffed, I'm afraid."
+      },
+      "answer": "D",
+      "explanation": "正确答案 D 用自然的会话套语 \"I'm afraid\" 委婉解释提前关门的原因是人手不足，直接回应了 \"为什么\"，符合 idiomatic 范式。A 是错误的问题类型，回答的是地点（在哪）而不是原因（为什么）。B 是离题但语法正确的句子，谈论的是次日营业时间，没回答今天为何早关。C 是语义联想陷阱，把 \"closing\" 谐音联想到 \"closets\" 去谈打折，完全误读。",
+      "distractor_types": {
+        "A": "wrong_question_type",
+        "B": "off_topic",
+        "C": "semantic_association_trap"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "expressing concern about a friend's situation",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "You've seemed pretty down since the move.",
+      "options": {
+        "A": "Want to talk about it over coffee?",
+        "B": "The movers were late that day.",
+        "C": "I moved the boxes upstairs already.",
+        "D": "Downtown is just past the bridge."
+      },
+      "answer": "A",
+      "explanation": "正确答案 A 用一个温暖的反问推进对话，提议一起喝咖啡聊聊，自然回应了对方的关心，符合 counter_question 范式。B 是语义联想陷阱，抓住 \"move\" 去谈搬家公司迟到，没有回应情绪关心。C 也是语义陷阱，抓住 \"move/moved\" 去谈搬箱子，答非所问。D 是错误的问题类型/语义陷阱，把 \"down\" 字面理解成方位去谈市中心位置，完全误读了对方的关心。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "semantic_association_trap",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "friend inviting another to a study group or social event",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Where is the study group meeting tonight?",
+      "options": {
+        "A": "I studied there all last semester.",
+        "B": "In the library's third-floor room.",
+        "C": "Around seven, right after dinner.",
+        "D": "Because the exam is next week."
+      },
+      "answer": "B",
+      "explanation": "正确答案 B 直接回答了 \"where\"（哪里），给出具体地点——图书馆三楼，符合 direct_topical 范式。A 是语义联想陷阱，抓住 \"study\" 去谈自己上学期的学习经历，没回答地点。C 是错误的问题类型，回答的是 \"when\"（几点）而不是 \"where\"。D 也是错误的问题类型，回答的是 \"why\"（为什么）而不是地点。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about dorm maintenance issue",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "How do I get the leaky faucet fixed?",
+      "options": {
+        "A": "The water tastes a bit strange lately.",
+        "B": "Plumbing is such an old profession.",
+        "C": "Have you filed a maintenance request yet?",
+        "D": "Yes, the sink is in the bathroom."
+      },
+      "answer": "C",
+      "explanation": "正确答案 C 用一个反问推进对话，引导学生先提交维修申请，是解决问题的实际下一步，符合 counter_question 范式。A 是语义联想陷阱，抓住 \"faucet\" 关联到自来水去谈水味，没回答如何修理。B 也是语义陷阱，抓住漏水关联的 \"plumbing\" 去发表无关感慨。D 是错误的问题类型，用 yes/no 加地点回答 \"how\"（怎么做）的提问，答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "semantic_association_trap",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "offering help to someone who seems stressed",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Can I take something off your plate?",
+      "options": {
+        "A": "The plates are in the top cabinet.",
+        "B": "I already ate before I came here.",
+        "C": "Where did you buy those dishes?",
+        "D": "Honestly, that would be a lifesaver."
+      },
+      "answer": "D",
+      "explanation": "正确答案 D 用自然的会话套语 \"that would be a lifesaver\" 接受对方分担压力的好意，正确理解了习语 \"take something off your plate\"（帮忙分担），符合 idiomatic 范式。A 是语义联想陷阱，把 \"plate\" 字面理解成盘子去谈橱柜位置。B 也是语义陷阱，把 \"plate\" 联想到吃饭去谈自己吃过了。C 同样是语义陷阱，抓住餐具相关的 \"dishes\" 去问购买地点，全都误读了习语含义。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "semantic_association_trap",
+        "C": "semantic_association_trap"
+      }
+    }
+  ]
+}

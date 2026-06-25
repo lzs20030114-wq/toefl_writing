@@ -1,0 +1,269 @@
+{
+  "items": [
+    {
+      "context": "errands_service",
+      "situation": "a student returning a too-small sweater at a store counter",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "customer", "gender": "female" },
+        { "name": "Man", "role": "store_clerk", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Hi, I bought this sweater last week, but it's way too small. I'd like to return it for a refund, if that's okay." },
+        { "speaker": "Man", "text": "Sure, no worries. Do you happen to have the receipt?" },
+        { "speaker": "Woman", "text": "Oh no, I think I tossed it. Is that a problem?" },
+        { "speaker": "Man", "text": "Without the receipt I can't give a cash refund, but I can offer store credit, or swap it for a bigger size right now." },
+        { "speaker": "Woman", "text": "Hmm. Actually, I really love this color, and I saw a large on the rack near the door." },
+        { "speaker": "Man", "text": "Perfect. Grab the large and bring it over, and I'll sort out the exchange." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "Why does the woman come to the counter?",
+          "options": {
+            "A": "To return a sweater that doesn't fit",
+            "B": "To complain about a damaged sweater",
+            "C": "To ask where the sweaters are displayed",
+            "D": "To buy a sweater in a new color"
+          },
+          "answer": "A",
+          "explanation": "女士开口就说毛衣太小，想退货拿回钱，所以A正确。B错：她从未说毛衣有破损，只是尺码不合，属于wrong_topic。C错：她不是来问陈列位置，她已经买过了，属于wrong_topic。D错：她最初目的是退货而非购买新颜色，方向相反，属于reversed_situation。",
+          "distractor_types": {
+            "B": "wrong_topic",
+            "C": "wrong_topic",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Demand a cash refund from the clerk",
+            "B": "Leave the store to find her receipt",
+            "C": "Pick up a larger sweater from the rack",
+            "D": "Choose a sweater in a different color"
+          },
+          "answer": "C",
+          "explanation": "店员建议换大码，女士说她喜欢这个颜色而且门口货架上看到有大码，店员让她去拿，所以C正确。A错：没有收据无法现金退款，店员已明确拒绝，属于rejected_option。B错：她说收据已经丢了，并未打算回去找，属于unrelated_next_step。D错：她明确说喜欢这个颜色，不会换别的颜色，属于over_inference。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "unrelated_next_step",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "errands_service",
+      "situation": "two students talking about a houseplant one is caring for",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Hey, how's that little fern doing that you're watching for your roommate while she's home?" },
+        { "speaker": "Man", "text": "Honestly, not great. The leaves are turning brown at the tips and I have no idea why." },
+        { "speaker": "Woman", "text": "Oh! That usually means it's getting too much direct sun. Where do you keep it?" },
+        { "speaker": "Man", "text": "Right on the windowsill, where the afternoon sun hits it for hours." },
+        { "speaker": "Woman", "text": "That's the problem. Ferns like shade. Move it to your bookshelf away from the window and it should bounce back." },
+        { "speaker": "Man", "text": "Okay, good call. I'll shift it over there tonight." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "According to the woman, why are the fern's leaves turning brown?",
+          "options": {
+            "A": "It has not been watered enough",
+            "B": "It is getting too much direct sunlight",
+            "C": "The room is too cold for it",
+            "D": "It needs a larger pot"
+          },
+          "answer": "B",
+          "explanation": "女士说叶尖变褐通常是因为晒太多直射阳光，所以B正确。A错：对话从未提到浇水不足，属于related_but_not_stated。C错：没有提到房间太冷，属于related_but_not_stated。D错：没有提到需要更大的花盆，属于related_but_not_stated。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "C": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do tonight?",
+          "options": {
+            "A": "Water the fern more frequently",
+            "B": "Buy a new fern for his roommate",
+            "C": "Return the fern to his roommate",
+            "D": "Move the fern away from the window"
+          },
+          "answer": "D",
+          "explanation": "女士建议把蕨类移到远离窗户的书架上，男士说\"好主意，今晚就挪过去\"，所以D正确。A错：问题是阳光太强而非缺水，他不会改浇水，属于unrelated_next_step。B错：没有任何买新蕨类的想法，属于over_inference。C错：室友还在家，他在帮忙照看，没说要还回去，属于unrelated_next_step。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "B": "over_inference",
+            "C": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two friends recommending a podcast or TV series to each other",
+      "difficulty": "hard",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "You have to try this history podcast I found. Each episode is only twenty minutes, so it's perfect for the bus." },
+        { "speaker": "Man", "text": "Twenty minutes? That's my whole commute. What's it actually about, though?" },
+        { "speaker": "Woman", "text": "Forgotten inventions, mostly. It's narrated really well, but I'll admit some episodes drag in the middle." },
+        { "speaker": "Man", "text": "Hmm. I've been meaning to swap my true-crime show for something I can learn from, actually." },
+        { "speaker": "Woman", "text": "Then this is ideal. Start with episode four on the printing press; it's the strongest one by far." },
+        { "speaker": "Man", "text": "Episode four, got it. I'll queue it up for tomorrow morning." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "How long the man's daily commute is",
+            "B": "Why true-crime shows are popular",
+            "C": "A podcast the woman recommends to the man",
+            "D": "Which episode was the hardest to follow"
+          },
+          "answer": "C",
+          "explanation": "整段对话围绕女士向男士推荐一档历史播客展开，所以C正确。A错：通勤时长只是顺带提到的细节，并非主旨，属于too_narrow。B错：真实犯罪节目只被一带而过，对话并未讨论它为何流行，属于wrong_topic。D错：他们没有讨论哪集最难懂，只提到第四集最强，属于too_narrow。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "wrong_topic",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the man's listening habits?",
+          "options": {
+            "A": "He currently listens to true-crime content",
+            "B": "He has already heard episode four",
+            "C": "He dislikes podcasts about history",
+            "D": "He never listens during his commute"
+          },
+          "answer": "A",
+          "explanation": "男士说想把他的真实犯罪节目换成能学到东西的内容，说明他目前在听真实犯罪类，所以A正确。B错：他说要明早再听第四集，显然还没听过，属于rejected_option。C错：他主动表示有意尝试这档历史播客，并不讨厌历史，属于over_inference。D错：他说二十分钟正好是他通勤时长，说明他通勤时会听，属于over_inference。",
+          "distractor_types": {
+            "B": "rejected_option",
+            "C": "over_inference",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "plans_social",
+      "situation": "two friends coordinating a weekend beach trip",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "So, are we still on for the beach on Saturday? I checked, and it's supposed to be sunny all day." },
+        { "speaker": "Man", "text": "Definitely! But Saturday morning I have a dentist appointment, so can we leave after lunch?" },
+        { "speaker": "Woman", "text": "Sure, that works. Should we take your car or the train?" },
+        { "speaker": "Man", "text": "Let's drive. The train doesn't stop near the beach, and we'd have to walk forever with all our stuff." },
+        { "speaker": "Woman", "text": "Good point. I'll bring the umbrella and snacks, then." },
+        { "speaker": "Man", "text": "And I'll grab a cooler with some drinks. This is going to be great." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why do the speakers decide to drive instead of taking the train?",
+          "options": {
+            "A": "The train tickets are too expensive",
+            "B": "The train is running late on Saturday",
+            "C": "The man enjoys driving to the coast",
+            "D": "The train does not stop near the beach"
+          },
+          "answer": "D",
+          "explanation": "男士说火车不在海滩附近停，他们得拎着东西走很远，所以D正确。A错：对话没有提到票价，属于related_but_not_stated。B错：没有提到火车晚点，属于wrong_detail。C错：他选择开车是因为火车不方便，而非因为喜欢开车，属于related_but_not_stated。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "C": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about Saturday morning?",
+          "options": {
+            "A": "The weather will probably be rainy",
+            "B": "The man will be busy until after lunch",
+            "C": "The woman will buy train tickets",
+            "D": "They will arrive at the beach early"
+          },
+          "answer": "B",
+          "explanation": "男士说周六上午有牙医预约，要求午饭后再出发，可推断他上午一直忙到午饭后，所以B正确。A错：女士说全天晴朗，不会下雨，属于reversed_situation。C错：他们决定开车而非坐火车，不会买火车票，属于rejected_option。D错：他们午饭后才出发，不可能很早到海滩，属于over_inference。",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "C": "rejected_option",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "two students comparing how they get to campus — bike, bus, or walk",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "I'm so tired of waiting for the campus shuttle every morning. It's always packed and never on time." },
+        { "speaker": "Man", "text": "Why not bike? I ride in every day and it takes me less than ten minutes from the east dorms." },
+        { "speaker": "Woman", "text": "I'd love to, but I don't own a bike, and buying one sounds expensive." },
+        { "speaker": "Man", "text": "Oh, you don't need to buy one. The student center rents them by the semester for almost nothing." },
+        { "speaker": "Woman", "text": "Wait, seriously? That changes everything. Where exactly do I sign up?" },
+        { "speaker": "Man", "text": "Just go to the front desk at the student center. Bring your ID and they'll set you up." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the woman's main concern at the start of the conversation?",
+          "options": {
+            "A": "The campus shuttle is unreliable and crowded",
+            "B": "Bikes are too expensive for students to buy",
+            "C": "The east dorms are far from campus",
+            "D": "The student center closes too early"
+          },
+          "answer": "A",
+          "explanation": "女士一开口就抱怨校园班车总是拥挤又不准时，这是她最初的烦恼，所以A正确。B错：自行车贵是后面才提到的次要顾虑，并非开头的主要问题，属于too_narrow。C错：东宿舍是男士骑车的起点，与女士无关，属于wrong_topic。D错：对话从未提到学生中心关门太早，属于wrong_topic。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "wrong_topic",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Keep taking the crowded campus shuttle",
+            "B": "Buy a brand-new bike from a store",
+            "C": "Go to the student center to rent a bike",
+            "D": "Start walking to campus every morning"
+          },
+          "answer": "C",
+          "explanation": "男士说学生中心可按学期低价租自行车，到前台带上学生证即可办理，女士非常感兴趣并问在哪报名，所以她最可能去学生中心租车，C正确。A错：她正是因为厌倦班车才在寻找替代方案，不会继续坐班车，属于rejected_option。B错：她觉得买车太贵，且男士说不必买，属于rejected_option。D错：对话从未提到步行上学，属于unrelated_next_step。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "rejected_option",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    }
+  ]
+}
