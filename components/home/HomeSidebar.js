@@ -445,6 +445,18 @@ export function HomeSidebar({
         </button>
       </div>
 
+      {/* 我的题库入口 */}
+      <a href="/my-bank" style={{ textDecoration: "none" }}>
+        <div style={{ ...sideCard({ padding: "14px 18px" }), ...fadeIn(150), display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }}>
+          <span style={{ fontSize: 18, flexShrink: 0 }}>📒</span>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: isChallenge ? CH.t1 : T.t1 }}>我的题库</div>
+            <div style={{ fontSize: 11, color: isChallenge ? CH.t2 : T.t3, lineHeight: 1.4 }}>导入自己的题目来练习</div>
+          </div>
+          <span style={{ fontSize: 14, color: isChallenge ? CH.t2 : T.t3, flexShrink: 0 }}>›</span>
+        </div>
+      </a>
+
       {/* Feedback Card */}
       <div style={{ ...sideCard({}), ...fadeIn(180) }}>
         <button onClick={() => setFbOpen((v) => !v)} style={{ width: "100%", display: "flex", alignItems: "center", gap: 8, padding: "14px 18px", background: "transparent", border: "none", cursor: "pointer", fontFamily: HOME_FONT, textAlign: "left" }}>
