@@ -78,27 +78,35 @@ function CTWInlineTask({ item, onComplete, revealAnswers = false }) {
   const [submitted, setSubmitted] = useState(false);
   const inputRefs = useRef([]);
 
+  function focusBlank(idx) {
+    if (idx >= 0 && idx < item.blanks.length && inputRefs.current[idx]) {
+      inputRefs.current[idx].focus();
+    }
+  }
+
   function handleChange(index, value, missingLen) {
     if (submitted) return;
     const next = [...answers];
     next[index] = value;
     setAnswers(next);
+    // Auto-advance once the missing letters are filled (keyboard-only flow). The
+    // given prefix is a locked gray chip, so users type only the missing letters.
     if (value.length >= missingLen) {
-      const nextIdx = index + 1;
-      if (nextIdx < item.blanks.length && inputRefs.current[nextIdx]) {
-        inputRefs.current[nextIdx].focus();
-      }
+      focusBlank(index + 1);
     }
   }
 
   function handleKeyDown(index, e) {
     if (submitted) return;
-    if (e.key === "Tab" || e.key === "Enter") {
+    if (e.key === "Enter") {
       e.preventDefault();
-      const nextIdx = index + 1;
-      if (nextIdx < item.blanks.length && inputRefs.current[nextIdx]) {
-        inputRefs.current[nextIdx].focus();
-      }
+      focusBlank(index + 1);
+    } else if (e.key === "Tab") {
+      e.preventDefault();
+      focusBlank(e.shiftKey ? index - 1 : index + 1); // Shift+Tab → previous blank
+    } else if (e.key === "Backspace" && !e.currentTarget.value) {
+      e.preventDefault();
+      focusBlank(index - 1);
     }
   }
 
@@ -138,7 +146,14 @@ function CTWInlineTask({ item, onComplete, revealAnswers = false }) {
         : null;
       rendered.push(
         <span key={`b-${bi}`} style={{ display: "inline-flex", alignItems: "baseline", margin: "2px 3px" }}>
-          <span style={{ fontWeight: 600, color: C.t1 }}>{blank.displayed_fragment}</span>
+          {/* Given prefix — shaded "locked" chip so users don't re-type it. */}
+          <span style={{
+            fontWeight: 700,
+            color: submitted ? (revealAnswers ? (isCorrect ? "#16a34a" : "#dc2626") : C.t1) : "#475569",
+            background: submitted ? "transparent" : "#E2E8F0",
+            borderRadius: 3,
+            padding: submitted ? 0 : "0 2px",
+          }}>{blank.displayed_fragment}</span>
           <input
             ref={(el) => (inputRefs.current[bi] = el)}
             type="text"

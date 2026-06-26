@@ -45,29 +45,39 @@ export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
 
   const accent = { color: "#3B82F6", soft: "#EFF6FF" };
 
+  function focusBlank(idx) {
+    if (idx >= 0 && idx < item.blanks.length && inputRefs.current[idx]) {
+      inputRefs.current[idx].focus();
+    }
+  }
+
   function handleChange(index, value, missingLen) {
     if (submitted) return;
     const next = [...answers];
     next[index] = value;
     setAnswers(next);
 
-    // Auto-advance: when this blank is full, jump to the next one
+    // Auto-advance: when this blank's missing letters are all filled, jump to the
+    // next blank so the user can type straight through the whole passage with the
+    // keyboard alone. The given letters are shown as a locked gray chip, so users
+    // fill only the missing letters (not the whole word).
     if (value.length >= missingLen) {
-      const nextIdx = index + 1;
-      if (nextIdx < item.blanks.length && inputRefs.current[nextIdx]) {
-        inputRefs.current[nextIdx].focus();
-      }
+      focusBlank(index + 1);
     }
   }
 
   function handleKeyDown(index, e) {
     if (submitted) return;
-    if (e.key === "Tab" || e.key === "Enter") {
+    if (e.key === "Enter") {
       e.preventDefault();
-      const nextIdx = index + 1;
-      if (nextIdx < item.blanks.length && inputRefs.current[nextIdx]) {
-        inputRefs.current[nextIdx].focus();
-      }
+      focusBlank(index + 1);
+    } else if (e.key === "Tab") {
+      e.preventDefault();
+      focusBlank(e.shiftKey ? index - 1 : index + 1); // Shift+Tab → previous blank
+    } else if (e.key === "Backspace" && !e.currentTarget.value) {
+      // Backspace on an already-empty blank hops back to the previous one
+      e.preventDefault();
+      focusBlank(index - 1);
     }
   }
 
@@ -117,8 +127,18 @@ export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
 
         elements.push(
           <span key={`blank-${bi}`} style={{ display: "inline", whiteSpace: "nowrap" }}>
-            {/* Visible prefix letters */}
-            <span style={{ fontSize: 16, fontWeight: 600, color: C.t1, fontFamily: "'Courier New', monospace", letterSpacing: "1px" }}>{fragment}</span>
+            {/* Given prefix — shown as a shaded "locked" chip so users see these
+                letters are PROVIDED and only the underscores need filling. */}
+            <span style={{
+              fontSize: 16,
+              fontWeight: 700,
+              fontFamily: "'Courier New', monospace",
+              letterSpacing: "1px",
+              color: submitted ? (isCorrect ? "#059669" : "#DC2626") : "#475569",
+              background: submitted ? "transparent" : "#E2E8F0",
+              borderRadius: "3px",
+              padding: submitted ? "0" : "0 2px",
+            }}>{fragment}</span>
             {/* Input styled as underscores — each underscore = 1 missing letter */}
             <span style={{ position: "relative", display: "inline-block", verticalAlign: "baseline" }}>
               {/* Underscore guides underneath */}
@@ -188,7 +208,9 @@ export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
       <PageShell narrow>
         {/* Instructions */}
         <div style={{ fontSize: 13, color: C.t2, marginBottom: 16, lineHeight: 1.6 }}>
-          阅读文章，根据上下文补全每个空缺单词的缺失字母。每个单词的开头字母已给出。
+          阅读文章，根据上下文补全每个空缺单词。
+          <span style={{ fontWeight: 700, fontFamily: "'Courier New', monospace", color: "#475569", background: "#E2E8F0", borderRadius: 3, padding: "0 3px", margin: "0 2px" }}>灰底字母</span>
+          是已给出的开头，你只需填写后面下划线处缺失的字母（填满会自动跳到下一个空，也可用 Tab / Shift+Tab 或鼠标在空格间移动）。
         </div>
 
         {/* Topic badge */}
