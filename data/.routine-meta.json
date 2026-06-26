@@ -1,226 +1,104 @@
 {
-  "session_id": "routine-20260625-190427",
-  "completed_at": "2026-06-25T19:19:39.671Z",
-  "duration_minutes": 15,
+  "session_id": "routine-20260626-190439",
+  "completed_at": "2026-06-26T19:12:07.000Z",
+  "duration_minutes": 8,
   "model": "Claude Opus 4.8",
-  "highlight": "12 个题库全部生成 70/70; AP 首现物理热力学(熵)课题; BS 难度冻结门修复后通过。",
+  "highlight": "BS 本批 20 题仅 9 条过逐题校验、不足以成套（已交 R2 重生）；其余 11 库全部入库/暂存，阅读首现 stigmergy 群集行为与磁学等冷门题材。",
   "commit_sha": "",
-  "r2_completed_at": "2026-06-25T19:53:35Z",
-  "r2_session_id": "routine-r2-20260625-193344",
   "results": {
     "bs": {
       "generated": 20,
-      "accepted": 30,
-      "r2_supplemented": true,
-      "r2_items_added": 10,
-      "topics": [
-        "class schedule",
-        "coffee/sleep",
-        "study group",
-        "bookstore",
-        "scholarship paperwork",
-        "dorm meal plan",
-        "section switch",
-        "advisor credits",
-        "library fine",
-        "photography club",
-        "shuttle",
-        "art gallery",
-        "draft deadline",
-        "mailroom package",
-        "dean meeting/major",
-        "gym pass",
-        "volunteer orientation",
-        "housing form",
-        "lounge study desk",
-        "registrar transcripts"
-      ],
-      "favorite": {
-        "prompt": "Did you talk to your advisor about credits?",
-        "answer": "She needed to know which of the courses I'd dropped would still count."
-      },
-      "retried_after_fail": true,
-      "failure_reason": "初次合库被 BS 难度冻结门拒绝 (register.contraction 0.179<0.18, length_band.hard 0.107 偏低) + 首版集合级校验未达 embedded/negation 阈值; 同会话内修复后 PASS 并合库。"
+      "accepted": 0,
+      "topics": ["campus classes & registration", "library & study spaces", "advisor/professor chats", "gym & shuttle logistics", "dorm & roommate life"],
+      "favorite": { "prompt": "How was your meeting with the advisor?", "answer": "She wanted to know whether I had switched majors." },
+      "retried_after_fail": false,
+      "failure_reason": "9/20 passed per-item validation but fewer than 10 valid in any 10-item block, so no set merged. Main rejects: answer word count 6 (<7 min), isolated floating adverbs (today/yesterday) needing verb-binding, one background-only narration prompt."
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": [
-        "computer science",
-        "history and culture",
-        "social studies",
-        "public policy"
-      ],
-      "favorite": {
-        "subtopic": "history and culture",
-        "preview": "We've been examining how museums handle contested objects this semester. Several major institutions have begun returning artifacts acquired"
-      },
+      "topics": ["public policy", "social studies", "environmental science", "technology and media"],
+      "favorite": { "subtopic": "public policy", "preview": "We've been discussing how cities try to keep emergency rooms from overflowing this semester. A few mu" },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "email": {
       "generated": 4,
       "accepted": 4,
-      "topics": [
-        "消费售后",
-        "住宿",
-        "社区生活",
-        "服务与活动"
-      ],
-      "favorite": {
-        "subtopic": "社区生活",
-        "preview": "You take part in a weekly recycling program in your neighborhood. The collection day was recently moved from Friday to Monday without notice."
-      },
+      "topics": ["服务与活动", "日常社交", "消费售后", "住宿"],
+      "favorite": { "subtopic": "消费售后", "preview": "You ordered a standing desk online and it arrived last week. The desktop has a deep scratch across on" },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ap": {
       "generated": 5,
       "accepted": 5,
-      "topics": [
-        "environmental_science/climate change",
-        "art/cinema history",
-        "physics/thermodynamics",
-        "anthropology/early agriculture",
-        "materials_science/textile fibers"
-      ],
-      "favorite": {
-        "subtopic": "physics/thermodynamics",
-        "preview": "Entropy is a measure of how many microscopic arrangements correspond to the same observable state of a system."
-      },
+      "topics": ["materials_science/ceramics", "art/calligraphy", "biology/animal behavior", "environmental_science/wetlands", "psychology/learning"],
+      "favorite": { "subtopic": "biology/animal behavior", "preview": "Stigmergy is a form of indirect coordination in which the trace left by an action in the environment " },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ctw": {
       "generated": 6,
       "accepted": 6,
-      "topics": [
-        "technology/lithium-ion batteries",
-        "anthropology/the development of kinship systems",
-        "chemistry/the periodic table",
-        "physics/the Doppler effect",
-        "economics/comparative advantage",
-        "art/the invention of linear perspective"
-      ],
-      "favorite": {
-        "subtopic": "physics/the Doppler effect",
-        "preview": "The Doppler effect describes how the observed frequency of a wave changes when its source moves."
-      },
+      "topics": ["anthropology/the origins of pottery", "technology/the development of the steam engine", "art/stained glass windows", "chemistry/the properties of acids and bases", "physics/how magnets work", "sociology/the spread of human languages"],
+      "favorite": { "subtopic": "art/stained glass windows", "preview": "Stained glass windows became a defining feature of the great cathedrals built dur" },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-rdl-short": {
       "generated": 4,
       "accepted": 4,
-      "topics": [
-        "notice/campus shuttle route detour",
-        "notice/building HVAC maintenance",
-        "email/campus tour guide volunteer shift",
-        "email/student ID replacement"
-      ],
-      "favorite": {
-        "subtopic": "notice/campus_shuttle_detour",
-        "preview": "Beginning March 3, the Blue Line campus shuttle will detour around Maple Avenue construction. New temporary stops are at Carver Hall and South Lot B."
-      },
+      "topics": ["email", "notice"],
+      "favorite": { "subtopic": "email", "preview": "Hi Marcus, A package arrived for you today at the Brooks Hall mailroom. Please pick it up from Ms. Re" },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-rdl-long": {
       "generated": 2,
       "accepted": 2,
-      "topics": [
-        "email/campus tool library introduction",
-        "notice/textbook buyback event"
-      ],
-      "favorite": {
-        "subtopic": "email/campus tool library",
-        "preview": "We're excited to announce that the Campus Tool Library has opened in the basement of Hartwell Hall, Room B12."
-      },
+      "topics": ["notice"],
+      "favorite": { "subtopic": "notice", "preview": "NOTICE: Updated Recreation Center Policies. Effective Monday, September 12, the Hargrove Recreation Ce" },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lat": {
       "generated": 4,
       "accepted": 4,
-      "topics": [
-        "how invasive species disrupt native food webs",
-        "the unexpected origins of the modern fire department",
-        "the diffusion of responsibility in large groups",
-        "the role of dark matter in galaxy formation"
-      ],
-      "favorite": {
-        "subtopic": "the unexpected origins of the modern fire department",
-        "preview": "The publicly funded fire department, the one you call by dialing a number and that costs you nothing at the moment of crisis, is a fairly recent invention."
-      },
+      "topics": ["light refraction / rainbows", "social facilitation", "Baroque art patronage", "deep-sea bioluminescence"],
+      "favorite": { "subtopic": "social facilitation", "preview": "Imagine you've practiced a song until you can play it in your sleep. Now imagine " },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lc": {
       "generated": 5,
       "accepted": 5,
-      "topics": [
-        "returning a too-small sweater",
-        "caring for a roommate's houseplant",
-        "recommending a history podcast",
-        "coordinating a weekend beach trip",
-        "comparing bike/bus/walk commutes"
-      ],
-      "favorite": {
-        "subtopic": "recommendations_opinions",
-        "preview": "You have to try this history podcast I found. Each episode is only twenty minutes, so it's perfect for the bus."
-      },
+      "topics": ["sci-fi movie", "true-crime podcast", "photography vs public speaking elective", "surprise birthday party", "cracked phone screen repair"],
+      "favorite": { "subtopic": "cracked phone screen repair", "preview": "Hi, I dropped my phone and the screen's badly cracked. Can you fix it today? Let me check the model." },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-la": {
       "generated": 5,
       "accepted": 5,
-      "topics": [
-        "parking garage resurfacing closure with valet",
-        "philosophy society essay competition",
-        "returning alumna marine biologist talk",
-        "graduate thesis poster session schedule",
-        "new fitness equipment at recreation center"
-      ],
-      "favorite": {
-        "subtopic": "returning alumna marine biologist public talk",
-        "preview": "I'm pleased to tell you that one of our former students, now a marine biologist, will be visiting next Wednesday to give a public talk"
-      },
+      "topics": ["study abroad info session", "student art market", "asbestos wing closure", "parking lot closure / shuttle", "industry career talk"],
+      "favorite": { "subtopic": "asbestos wing closure", "preview": "Attention faculty and students. Please be aware that the east wing of Harlow Hall will be closed for " },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lcr": {
       "generated": 8,
       "accepted": 8,
-      "topics": [
-        "exam format study materials",
-        "course reading list",
-        "campus film screening",
-        "business hours early closing",
-        "concern after a friend's move",
-        "study group location",
-        "dorm faucet maintenance",
-        "offering help to stressed friend"
-      ],
-      "favorite": {
-        "subtopic": "offering help to someone who seems stressed",
-        "preview": "Can I take something off your plate? — a warm idiomatic offer to share another person's burden when they look overwhelmed."
-      },
+      "topics": ["night bus schedule", "dinner meetup", "bank Friday hours", "writing center help", "gym late hours", "full seminar enrollment", "course reading list", "airport pickup"],
+      "favorite": { "subtopic": "full seminar enrollment", "preview": "Why is this seminar already full? — reply shifts to solving the need: I can add you to the waitlist now." },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "speaking-repeat": {
       "generated": 3,
       "accepted": 3,
-      "topics": [
-        "Watercolor Painting (how-to)",
-        "Hardware Store Help",
-        "Campus Bookstore"
-      ],
-      "favorite": {
-        "subtopic": "Watercolor Painting (how-to)",
-        "preview": "Lastly, when your painting is fully dry, peel the tape away and sign the bottom corner."
-      },
+      "topics": ["Theater Rehearsal", "Recycling Center Tour", "Watercolor Painting"],
+      "favorite": { "subtopic": "Watercolor Painting", "preview": "First, tape your paper down." },
       "retried_after_fail": false,
       "failure_reason": ""
     }
