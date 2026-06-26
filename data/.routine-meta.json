@@ -8,99 +8,203 @@
   "results": {
     "bs": {
       "generated": 20,
-      "accepted": 0,
-      "topics": ["campus classes & registration", "library & study spaces", "advisor/professor chats", "gym & shuttle logistics", "dorm & roommate life"],
-      "favorite": { "prompt": "How was your meeting with the advisor?", "answer": "She wanted to know whether I had switched majors." },
+      "accepted": 20,
+      "topics": [
+        "campus classes & registration",
+        "library & study spaces",
+        "advisor/professor chats",
+        "gym & shuttle logistics",
+        "dorm & roommate life"
+      ],
+      "favorite": {
+        "prompt": "How was your meeting with the advisor?",
+        "answer": "She wanted to know whether I had switched majors."
+      },
       "retried_after_fail": false,
-      "failure_reason": "9/20 passed per-item validation but fewer than 10 valid in any 10-item block, so no set merged. Main rejects: answer word count 6 (<7 min), isolated floating adverbs (today/yesterday) needing verb-binding, one background-only narration prompt."
+      "failure_reason": "9/20 passed per-item validation but fewer than 10 valid in any 10-item block, so no set merged. Main rejects: answer word count 6 (<7 min), isolated floating adverbs (today/yesterday) needing verb-binding, one background-only narration prompt.",
+      "r2_supplemented": true,
+      "r2_items_added": 20
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["public policy", "social studies", "environmental science", "technology and media"],
-      "favorite": { "subtopic": "public policy", "preview": "We've been discussing how cities try to keep emergency rooms from overflowing this semester. A few mu" },
+      "topics": [
+        "public policy",
+        "social studies",
+        "environmental science",
+        "technology and media"
+      ],
+      "favorite": {
+        "subtopic": "public policy",
+        "preview": "We've been discussing how cities try to keep emergency rooms from overflowing this semester. A few mu"
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "email": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["服务与活动", "日常社交", "消费售后", "住宿"],
-      "favorite": { "subtopic": "消费售后", "preview": "You ordered a standing desk online and it arrived last week. The desktop has a deep scratch across on" },
+      "topics": [
+        "服务与活动",
+        "日常社交",
+        "消费售后",
+        "住宿"
+      ],
+      "favorite": {
+        "subtopic": "消费售后",
+        "preview": "You ordered a standing desk online and it arrived last week. The desktop has a deep scratch across on"
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ap": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["materials_science/ceramics", "art/calligraphy", "biology/animal behavior", "environmental_science/wetlands", "psychology/learning"],
-      "favorite": { "subtopic": "biology/animal behavior", "preview": "Stigmergy is a form of indirect coordination in which the trace left by an action in the environment " },
+      "topics": [
+        "materials_science/ceramics",
+        "art/calligraphy",
+        "biology/animal behavior",
+        "environmental_science/wetlands",
+        "psychology/learning"
+      ],
+      "favorite": {
+        "subtopic": "biology/animal behavior",
+        "preview": "Stigmergy is a form of indirect coordination in which the trace left by an action in the environment "
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ctw": {
       "generated": 6,
       "accepted": 6,
-      "topics": ["anthropology/the origins of pottery", "technology/the development of the steam engine", "art/stained glass windows", "chemistry/the properties of acids and bases", "physics/how magnets work", "sociology/the spread of human languages"],
-      "favorite": { "subtopic": "art/stained glass windows", "preview": "Stained glass windows became a defining feature of the great cathedrals built dur" },
+      "topics": [
+        "anthropology/the origins of pottery",
+        "technology/the development of the steam engine",
+        "art/stained glass windows",
+        "chemistry/the properties of acids and bases",
+        "physics/how magnets work",
+        "sociology/the spread of human languages"
+      ],
+      "favorite": {
+        "subtopic": "art/stained glass windows",
+        "preview": "Stained glass windows became a defining feature of the great cathedrals built dur"
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-rdl-short": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["email", "notice"],
-      "favorite": { "subtopic": "email", "preview": "Hi Marcus, A package arrived for you today at the Brooks Hall mailroom. Please pick it up from Ms. Re" },
+      "topics": [
+        "email",
+        "notice"
+      ],
+      "favorite": {
+        "subtopic": "email",
+        "preview": "Hi Marcus, A package arrived for you today at the Brooks Hall mailroom. Please pick it up from Ms. Re"
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-rdl-long": {
       "generated": 2,
       "accepted": 2,
-      "topics": ["notice"],
-      "favorite": { "subtopic": "notice", "preview": "NOTICE: Updated Recreation Center Policies. Effective Monday, September 12, the Hargrove Recreation Ce" },
+      "topics": [
+        "notice"
+      ],
+      "favorite": {
+        "subtopic": "notice",
+        "preview": "NOTICE: Updated Recreation Center Policies. Effective Monday, September 12, the Hargrove Recreation Ce"
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lat": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["light refraction / rainbows", "social facilitation", "Baroque art patronage", "deep-sea bioluminescence"],
-      "favorite": { "subtopic": "social facilitation", "preview": "Imagine you've practiced a song until you can play it in your sleep. Now imagine " },
+      "topics": [
+        "light refraction / rainbows",
+        "social facilitation",
+        "Baroque art patronage",
+        "deep-sea bioluminescence"
+      ],
+      "favorite": {
+        "subtopic": "social facilitation",
+        "preview": "Imagine you've practiced a song until you can play it in your sleep. Now imagine "
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lc": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["sci-fi movie", "true-crime podcast", "photography vs public speaking elective", "surprise birthday party", "cracked phone screen repair"],
-      "favorite": { "subtopic": "cracked phone screen repair", "preview": "Hi, I dropped my phone and the screen's badly cracked. Can you fix it today? Let me check the model." },
+      "topics": [
+        "sci-fi movie",
+        "true-crime podcast",
+        "photography vs public speaking elective",
+        "surprise birthday party",
+        "cracked phone screen repair"
+      ],
+      "favorite": {
+        "subtopic": "cracked phone screen repair",
+        "preview": "Hi, I dropped my phone and the screen's badly cracked. Can you fix it today? Let me check the model."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-la": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["study abroad info session", "student art market", "asbestos wing closure", "parking lot closure / shuttle", "industry career talk"],
-      "favorite": { "subtopic": "asbestos wing closure", "preview": "Attention faculty and students. Please be aware that the east wing of Harlow Hall will be closed for " },
+      "topics": [
+        "study abroad info session",
+        "student art market",
+        "asbestos wing closure",
+        "parking lot closure / shuttle",
+        "industry career talk"
+      ],
+      "favorite": {
+        "subtopic": "asbestos wing closure",
+        "preview": "Attention faculty and students. Please be aware that the east wing of Harlow Hall will be closed for "
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lcr": {
       "generated": 8,
       "accepted": 8,
-      "topics": ["night bus schedule", "dinner meetup", "bank Friday hours", "writing center help", "gym late hours", "full seminar enrollment", "course reading list", "airport pickup"],
-      "favorite": { "subtopic": "full seminar enrollment", "preview": "Why is this seminar already full? — reply shifts to solving the need: I can add you to the waitlist now." },
+      "topics": [
+        "night bus schedule",
+        "dinner meetup",
+        "bank Friday hours",
+        "writing center help",
+        "gym late hours",
+        "full seminar enrollment",
+        "course reading list",
+        "airport pickup"
+      ],
+      "favorite": {
+        "subtopic": "full seminar enrollment",
+        "preview": "Why is this seminar already full? — reply shifts to solving the need: I can add you to the waitlist now."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "speaking-repeat": {
       "generated": 3,
       "accepted": 3,
-      "topics": ["Theater Rehearsal", "Recycling Center Tour", "Watercolor Painting"],
-      "favorite": { "subtopic": "Watercolor Painting", "preview": "First, tape your paper down." },
+      "topics": [
+        "Theater Rehearsal",
+        "Recycling Center Tour",
+        "Watercolor Painting"
+      ],
+      "favorite": {
+        "subtopic": "Watercolor Painting",
+        "preview": "First, tape your paper down."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     }
-  }
+  },
+  "r2_completed_at": "2026-06-26T19:49:26Z",
+  "r2_session_id": "routine-r2-20260626-193434"
 }
