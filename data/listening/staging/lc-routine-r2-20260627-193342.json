@@ -1,0 +1,246 @@
+{
+  "_meta": {
+    "session": "routine-r2-20260627-193342",
+    "supplements_session": "routine-20260627-190416",
+    "hint": "ensure conv word count strictly within 68-105 to fix the conv-words quality check failure; distinct situations not in bank"
+  },
+  "items": [
+    {
+      "context": "campus_service",
+      "situation": "a student asking the front desk about renewing a gym locker rental",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "recreation_staff",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hi, my gym locker rental expires this Friday. Can I renew it for next semester?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Sure. Renewals opened on Monday. You can do it right here at the desk or through the recreation app."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh, the app would be easier. Is the price still twenty dollars?"
+        },
+        {
+          "speaker": "Man",
+          "text": "It went up to twenty-five this year, but that now includes a towel service."
+        },
+        {
+          "speaker": "Woman",
+          "text": "That's not bad, actually. Do I get to keep the same locker number?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Only if you renew before Friday. After that, any unclaimed lockers get reassigned."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "How can the woman renew her locker rental?",
+          "options": {
+            "A": "Through the recreation app or at the desk",
+            "B": "By emailing the recreation office directly",
+            "C": "By visiting the gym manager in person",
+            "D": "Through a form mailed to her dorm"
+          },
+          "answer": "A",
+          "explanation": "男生说可以“right here at the desk or through the recreation app”办理续租，所以A正确。B、C、D都是对话中没有提到的办理方式，属于话题相关但未陈述的干扰项。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will probably happen if the woman waits until after Friday?",
+          "options": {
+            "A": "She will receive a full refund",
+            "B": "She will pay a lower renewal price",
+            "C": "She may be assigned a different locker",
+            "D": "She will lose access to the gym entirely"
+          },
+          "answer": "C",
+          "explanation": "男生说Friday之后“unclaimed lockers get reassigned”，所以等到周五之后她可能被分到不同的储物柜，C正确。A退款没提到；B价格是涨了不是降；D失去整个健身房使用权属于过度推断。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two students comparing notes after a guest lecture on ocean currents",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Did you catch everything in that guest lecture on ocean currents? My notes are a mess."
+        },
+        {
+          "speaker": "Man",
+          "text": "Mostly. The part about how wind drives the surface currents made sense, but the deep-water section lost me."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Same here. Apparently temperature and salt levels pull the colder water downward."
+        },
+        {
+          "speaker": "Man",
+          "text": "Right, and that's what keeps the whole system circulating. The professor called it a conveyor belt."
+        },
+        {
+          "speaker": "Woman",
+          "text": "That image actually helps. Want to combine our notes before the quiz on Thursday?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Definitely. Let's meet at the library tomorrow afternoon."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "A disagreement about the lecture's accuracy",
+            "B": "A lecture they are trying to understand together",
+            "C": "A research project on ocean temperatures",
+            "D": "A change to their Thursday quiz schedule"
+          },
+          "answer": "B",
+          "explanation": "两人都说没完全听懂讲座，正在互相帮助理解内容，所以B正确。A他们并没有争论讲座对错；C不是在做研究项目；D只是顺带提到周四的quiz，并非主旨。",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "C": "wrong_topic",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the speakers most likely do next?",
+          "options": {
+            "A": "Email the professor for the lecture slides",
+            "B": "Listen to the whole lecture again next week",
+            "C": "Skip the quiz scheduled for Thursday",
+            "D": "Meet at the library to combine their notes"
+          },
+          "answer": "D",
+          "explanation": "女生提议合并笔记，男生说明天下午在图书馆见面，所以D正确。A找教授要slides没提到；B重听整场讲座属于过度推断；C跳过quiz与对话相反。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "over_inference",
+            "C": "reversed_situation"
+          }
+        }
+      ]
+    },
+    {
+      "context": "library",
+      "situation": "a student asking a librarian how to open an online journal from off campus",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        },
+        {
+          "name": "Woman",
+          "role": "library_staff",
+          "gender": "female"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Man",
+          "text": "Excuse me, I'm trying to open a journal for my history paper, but the site keeps asking me to pay."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Are you connecting from off campus? The library subscription only works through our own system."
+        },
+        {
+          "speaker": "Man",
+          "text": "I'm at my apartment, yeah. So I can't read it from home at all?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "You can, but you have to log in through the library's proxy link first, using your student ID."
+        },
+        {
+          "speaker": "Man",
+          "text": "Oh, I didn't even know that existed. Where do I find the link?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "It's on the database page, top right corner. Bookmark it for next time."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why can't the man open the journal from home?",
+          "options": {
+            "A": "His student account has already expired",
+            "B": "The journal is no longer subscribed to",
+            "C": "He is not connecting through the library system",
+            "D": "The database is down for maintenance"
+          },
+          "answer": "C",
+          "explanation": "女生指出图书馆订阅只在“our own system”里有效，他从校外直接连所以要付费，C正确。A账号过期、B不再订阅、D系统维护都未在对话中提到。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do next?",
+          "options": {
+            "A": "Use the proxy link to log in with his ID",
+            "B": "Pay the fee to read the article online",
+            "C": "Choose a different topic for his paper",
+            "D": "Go to the library to read it in person"
+          },
+          "answer": "A",
+          "explanation": "女生告诉他用proxy link加学生ID登录，并让他收藏链接，所以他最可能用proxy link登录，A正确。B付费与建议相反（rejected）；C换题目无依据；D去图书馆现场读未提及。",
+          "distractor_types": {
+            "B": "rejected_option",
+            "C": "unrelated_next_step",
+            "D": "related_but_not_stated"
+          }
+        }
+      ]
+    }
+  ]
+}

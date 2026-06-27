@@ -8,19 +8,33 @@
   "results": {
     "bs": {
       "generated": 20,
-      "accepted": 10,
-      "topics": ["campus life", "classes & deadlines", "dorm & social", "registration", "library & gym", "professors"],
+      "accepted": 20,
+      "topics": [
+        "campus life",
+        "classes & deadlines",
+        "dorm & social",
+        "registration",
+        "library & gym",
+        "professors"
+      ],
       "favorite": {
         "prompt": "What did the professor say about your draft?",
         "answer": "She wanted to know why I changed the topic."
       },
       "retried_after_fail": false,
-      "failure_reason": "20 生成，仅 1 套(10 题)能同时满足 set 嵌入问句下限(≥3/10)与全库 embedded 漂移带(≤2.5x)，故入库 10；难度门 PASS。"
+      "failure_reason": "20 生成，仅 1 套(10 题)能同时满足 set 嵌入问句下限(≥3/10)与全库 embedded 漂移带(≤2.5x)，故入库 10；难度门 PASS。",
+      "r2_supplemented": true,
+      "r2_items_added": 10
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["economics/corporate tax incentives", "public health/pharmacist prescribing", "education/handwritten exams vs AI", "media/news paywalls"],
+      "topics": [
+        "economics/corporate tax incentives",
+        "public health/pharmacist prescribing",
+        "education/handwritten exams vs AI",
+        "media/news paywalls"
+      ],
       "favorite": {
         "subtopic": "education",
         "preview": "Several departments are now requiring students to submit handwritten, in-class exams instead of take-home essays, largely in response to AI writing tools."
@@ -31,7 +45,12 @@
     "email": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["cooking club stove maintenance", "community composting talk timing", "food bank volunteer sign-up errors", "campus radio training schedule"],
+      "topics": [
+        "cooking club stove maintenance",
+        "community composting talk timing",
+        "food bank volunteer sign-up errors",
+        "campus radio training schedule"
+      ],
       "favorite": {
         "subtopic": "服务与活动",
         "preview": "campus cooking club booked a demonstration kitchen for a guest chef night next Thursday; two stoves will be under maintenance"
@@ -42,7 +61,13 @@
     "reading-ap": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["physics/gravity", "biology/plant biology", "history/ancient astronomy", "sociology/aging populations", "business/labor economics"],
+      "topics": [
+        "physics/gravity",
+        "biology/plant biology",
+        "history/ancient astronomy",
+        "sociology/aging populations",
+        "business/labor economics"
+      ],
       "favorite": {
         "subtopic": "history/ancient astronomy",
         "preview": "A gnomon is a simple upright rod or pillar whose shadow, cast by the sun, was used by ancient peoples to track time."
@@ -53,7 +78,14 @@
     "reading-ctw": {
       "generated": 6,
       "accepted": 6,
-      "topics": ["biology/deep-sea vents", "environmental_science/microplastics", "psychology/language development", "history/Egyptian pyramids", "geology/plate tectonics", "astronomy/exoplanets"],
+      "topics": [
+        "biology/deep-sea vents",
+        "environmental_science/microplastics",
+        "psychology/language development",
+        "history/Egyptian pyramids",
+        "geology/plate tectonics",
+        "astronomy/exoplanets"
+      ],
       "favorite": {
         "subtopic": "biology/deep-sea hydrothermal vent communities",
         "preview": "Hydrothermal vents are cracks on the ocean floor where superheated, mineral-rich water rises from below the crust."
@@ -64,7 +96,12 @@
     "reading-rdl-short": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["advisor office-hours change", "campus taco food truck", "parking permit pickup", "campus café lavender latte"],
+      "topics": [
+        "advisor office-hours change",
+        "campus taco food truck",
+        "parking permit pickup",
+        "campus café lavender latte"
+      ],
       "favorite": {
         "subtopic": "social_media/campus café drink recommendation",
         "preview": "Okay, you have to try the new lavender latte at the Birch Street Café! It's only $4.50 and they're serving it through Sunday"
@@ -75,7 +112,10 @@
     "reading-rdl-long": {
       "generated": 2,
       "accepted": 2,
-      "topics": ["elevator maintenance / residence hall", "mailroom holiday hours"],
+      "topics": [
+        "elevator maintenance / residence hall",
+        "mailroom holiday hours"
+      ],
       "favorite": {
         "subtopic": "notice/mailroom-holiday-hours",
         "preview": "The Student Mailroom in Bradley Center will operate on a reduced schedule during the Thanksgiving break, from"
@@ -86,7 +126,12 @@
     "listening-lat": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["ecology/urban-heat-islands", "neuroscience/mirror-neurons", "biology/tardigrades", "psychology/confirmation-bias"],
+      "topics": [
+        "ecology/urban-heat-islands",
+        "neuroscience/mirror-neurons",
+        "biology/tardigrades",
+        "psychology/confirmation-bias"
+      ],
       "favorite": {
         "subtopic": "biology/how tardigrades survive extreme environments",
         "preview": "Imagine an animal you can boil, freeze near absolute zero, blast with radiation, or even launch into the vacuum of space"
@@ -97,7 +142,13 @@
     "listening-lc": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["weekend hiking trip / shuttle", "dinner party cheese board", "gardening class herb pots", "dorm couch advice", "cracked phone screen repair"],
+      "topics": [
+        "weekend hiking trip / shuttle",
+        "dinner party cheese board",
+        "gardening class herb pots",
+        "dorm couch advice",
+        "cracked phone screen repair"
+      ],
       "favorite": {
         "subtopic": "campus_dorm_life/dorm couch fitting through a narrow doorway",
         "preview": "You got a couch for your dorm last semester, right? I want one, but mine has to fit through that narrow doorway."
@@ -108,7 +159,13 @@
     "listening-la": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["mock interviews with alumni", "winter gear swap voucher", "dining hall summer hours", "research poster night award", "guest speaker career paths"],
+      "topics": [
+        "mock interviews with alumni",
+        "winter gear swap voucher",
+        "dining hall summer hours",
+        "research poster night award",
+        "guest speaker career paths"
+      ],
       "favorite": {
         "subtopic": "campus_activity/winter gear swap with voucher system",
         "preview": "Attention students. The Outdoor Recreation Office is hosting its annual Winter Gear Swap this Saturday"
@@ -119,7 +176,16 @@
     "listening-lcr": {
       "generated": 8,
       "accepted": 8,
-      "topics": ["job-news", "borrow-notes", "shuttle-parking", "writing-center", "spring-concert", "library-textbook", "weekend-hours", "neighbor-noise"],
+      "topics": [
+        "job-news",
+        "borrow-notes",
+        "shuttle-parking",
+        "writing-center",
+        "spring-concert",
+        "library-textbook",
+        "weekend-hours",
+        "neighbor-noise"
+      ],
       "favorite": {
         "subtopic": "general_daily/neighbor noise or shared space",
         "preview": "Why is there banging coming from upstairs? — the right reply skips the why and offers to go ask them to quiet down."
@@ -130,7 +196,11 @@
     "speaking-repeat": {
       "generated": 3,
       "accepted": 3,
-      "topics": ["Campus Radio Station", "Swimming Pool Orientation", "Watercolor Painting"],
+      "topics": [
+        "Campus Radio Station",
+        "Swimming Pool Orientation",
+        "Watercolor Painting"
+      ],
       "favorite": {
         "subtopic": "Campus Radio Station",
         "preview": "If you experience any trouble during your show, check the schedule taped beside the control board."
@@ -138,5 +208,7 @@
       "retried_after_fail": false,
       "failure_reason": ""
     }
-  }
+  },
+  "r2_completed_at": "2026-06-27T19:50:09.735Z",
+  "r2_session_id": "routine-r2-20260627-193342"
 }
