@@ -13833,6 +13833,226 @@
       ],
       "id": "la_mqsic4on_4",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/announcement/la_mqsic4on_4.mp3"
+    },
+    {
+      "context": "career_services",
+      "situation": "mock interview sessions with alumni volunteers",
+      "speaker_role": "career_advisor",
+      "difficulty": "medium",
+      "announcement": "Good afternoon, students. The Career Center is excited to announce a series of mock interview sessions next Wednesday, designed to help you prepare for the spring recruiting season. This year, the interviews will be conducted by alumni volunteers who now work in fields ranging from finance to engineering. Sessions run from 10 a.m. to 4 p.m. in the Hartwell Conference Room, and each lasts about thirty minutes. To reserve a slot, you must upload a current copy of your resume through the Career Center portal by Monday evening. We'll do our best to match you with an alumnus from your intended industry, so please indicate your field when you sign up.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What must students do to reserve an interview slot?",
+          "options": {
+            "A": "Upload their resume through the portal",
+            "B": "Email the Career Center directly",
+            "C": "Arrive early on Wednesday morning",
+            "D": "Pay a small registration fee"
+          },
+          "answer": "A",
+          "explanation": "正确答案 A：公告明确说要预约必须在周一晚前通过 Career Center 门户上传当前简历。B 错（related_but_not_stated）：公告没有提到发邮件，是合理但未提及的方式。C 错（misattributed_detail）：周三是面试当天，并非预约方式，把时间细节错配到预约场景。D 错（related_but_not_stated）：公告完全没有提到任何费用。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "misattributed_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the alumni volunteers?",
+          "options": {
+            "A": "They are paid for their time",
+            "B": "They all work in finance",
+            "C": "They bring real-world workplace experience",
+            "D": "They graduated within the past year"
+          },
+          "answer": "C",
+          "explanation": "正确答案 C：公告说面试由如今在金融、工程等领域工作的校友担任，可推断他们带来真实的职场经验。A 错（over_inference）：公告称他们是志愿者，无任何报酬信息，推断过度。B 错（wrong_detail）：公告说领域涵盖金融到工程，并非全在金融。D 错（over_inference）：公告未提及校友毕业时间，推不出是近一年毕业。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "wrong_detail",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "id": "la_mqwshavl_0"
+    },
+    {
+      "context": "campus_activity",
+      "situation": "winter gear swap with voucher system",
+      "speaker_role": "program_coordinator",
+      "difficulty": "hard",
+      "announcement": "Attention students. The Outdoor Recreation Office is hosting its annual Winter Gear Swap this Saturday from noon to 5 p.m. in the Field House lobby. Here's how it works: when you drop off a clean, usable item such as a coat, boots, or gloves, you'll receive one voucher per item donated. You may then redeem those vouchers for gear that other students have brought in. Please note that you cannot take an item without first donating one, so there's no cash exchange involved. Any unclaimed gear left at the end of the day will be donated to a local shelter. We hope this helps everyone stay warm without buying new equipment.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To raise money for a local shelter",
+            "B": "To explain how a gear-exchange event works",
+            "C": "To sell discounted winter clothing",
+            "D": "To recruit volunteers for the Field House"
+          },
+          "answer": "B",
+          "explanation": "正确答案 B：公告核心是介绍冬季装备交换活动的运作方式——捐物换券、用券换物。A 错（too_narrow）：捐给收容所只是结尾的一个小细节，并非整体目的。C 错（reversed_intent）：公告明确说没有现金交易，与售卖相反。D 错（wrong_purpose）：公告完全没有招募志愿者的意图。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "C": "reversed_intent",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about a student who brings nothing to swap?",
+          "options": {
+            "A": "They will be charged an entry fee",
+            "B": "They can still browse and buy gear",
+            "C": "They must volunteer at the shelter instead",
+            "D": "They will be unable to take any gear"
+          },
+          "answer": "D",
+          "explanation": "正确答案 D：公告说不先捐物就不能拿走物品，且每件捐赠换一张券，可推断没带东西的学生拿不到券、也就拿不到任何装备。A 错（over_inference）：公告未提任何入场费。B 错（wrong_detail）：公告明说没有现金交易，无法购买。C 错（unrelated_inference）：去收容所做志愿者与本活动规则无关，是无依据的推断。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "wrong_detail",
+            "C": "unrelated_inference"
+          }
+        }
+      ],
+      "id": "la_mqwshavl_1"
+    },
+    {
+      "context": "facility_change",
+      "situation": "campus dining hall switching to summer hours",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "Attention students and staff. Beginning next Monday, the Riverside Dining Hall will switch to its summer schedule for the remainder of the break. During the summer, the dining hall will be open from 8 a.m. to 7 p.m. on weekdays and will remain closed on weekends. Please be aware that the late-night grill, which normally runs until midnight, will not operate during this period. Students living on campus over the summer can still use their meal plans as usual during the new hours. If the dining hall is closed when you need a meal, the convenience store in the Student Union will stay open until 10 p.m. each night.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement mainly about?",
+          "options": {
+            "A": "A new menu at the dining hall",
+            "B": "A temporary closure of the Student Union",
+            "C": "A change in the dining hall's hours",
+            "D": "An increase in meal plan prices"
+          },
+          "answer": "C",
+          "explanation": "正确答案 C：公告整体在通报 Riverside 餐厅从下周一起改用夏季营业时间。A 错（wrong_purpose）：公告没有提到菜单变化。B 错（misattributed_detail/wrong_purpose）：学生中心的便利店只是替代选项，并非关闭，且不是公告主题。D 错（wrong_purpose）：公告完全未提价格上涨。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "wrong_purpose",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What is true about the dining hall's summer schedule?",
+          "options": {
+            "A": "It will be closed on weekends",
+            "B": "It will stay open until midnight",
+            "C": "It will serve breakfast only",
+            "D": "It will operate seven days a week"
+          },
+          "answer": "A",
+          "explanation": "正确答案 A：公告明确说夏季餐厅周末关闭。B 错（wrong_detail）：开到午夜的是平时的深夜烤肉档，公告说该档夏季不营业。C 错（related_but_not_stated）：公告说从早 8 点到晚 7 点供餐，并非只供早餐。D 错（wrong_detail）：公告说周末关闭，并非一周七天营业。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "id": "la_mqwshavl_2"
+    },
+    {
+      "context": "academic_event",
+      "situation": "end-of-semester research poster night with travel award",
+      "speaker_role": "society_president",
+      "difficulty": "medium",
+      "announcement": "Good evening, everyone. As president of the Biology Honor Society, I'm pleased to announce our end-of-semester Research Poster Night, taking place this Thursday at 6 p.m. in the Atrium of the Life Sciences Building. Members will present posters summarizing their lab projects from this term. A panel of three faculty judges will review each poster, and the presenter judged most outstanding will receive a travel grant to attend a regional conference this summer. If you'd like to present, you must submit your poster title to me by Tuesday at noon. Light refreshments will be served, and all students are welcome to attend, even if they aren't presenting.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What must a student do in order to present a poster?",
+          "options": {
+            "A": "Pay a society membership fee",
+            "B": "Bring a faculty judge as a sponsor",
+            "C": "Attend the regional conference first",
+            "D": "Submit a poster title by Tuesday noon"
+          },
+          "answer": "D",
+          "explanation": "正确答案 D：公告明确说想展示海报必须在周二中午前把海报标题提交给社长。A 错（related_but_not_stated）：公告未提任何会费要求。B 错（misattributed_detail）：评委是教师，但并非由学生自带做担保人，错配了细节。C 错（wrong_detail）：参加区域会议是获奖者得到的旅行资助，不是参展的前提。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "misattributed_detail",
+            "C": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the travel grant?",
+          "options": {
+            "A": "Every presenter will receive one",
+            "B": "It is awarded based on poster quality",
+            "C": "It covers a full year of tuition",
+            "D": "It is funded by the refreshments budget"
+          },
+          "answer": "B",
+          "explanation": "正确答案 B：公告说三位教师评委评审海报，被评为最优秀的展示者获得旅行资助，可推断该奖依据海报质量评定。A 错（over_inference）：只有被评为最优秀的一人获奖，并非人人都有。C 错（over_inference）：公告说是参加暑期区域会议的旅行资助，与全年学费无关。D 错（unrelated_inference）：把茶点与奖金资金来源联系起来毫无依据。",
+          "distractor_types": {
+            "A": "over_inference",
+            "C": "over_inference",
+            "D": "unrelated_inference"
+          }
+        }
+      ],
+      "id": "la_mqwshavl_3"
+    },
+    {
+      "context": "guest_speaker",
+      "situation": "industry professional speaking about career paths",
+      "speaker_role": "department_head",
+      "difficulty": "easy",
+      "announcement": "I'm pleased to announce that our department will host a special guest speaker this Friday at 3 p.m. in Room 204 of Maxwell Hall. Our guest, Ms. Diane Carter, is a senior engineer who has spent fifteen years working across the renewable energy industry. She'll talk about the different career paths available to graduates and offer advice on landing that first job. After her talk, there will be time for a question-and-answer session, so come prepared with your questions. The event is free and open to all majors, but seating is limited, so please arrive a few minutes early to find a seat.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To promote an upcoming guest speaker event",
+            "B": "To announce a change in class location",
+            "C": "To recruit students for an engineering major",
+            "D": "To remind students of a final exam date"
+          },
+          "answer": "A",
+          "explanation": "正确答案 A：公告整体在宣传周五由资深工程师 Diane Carter 主讲的客座讲座。B 错（wrong_purpose）：Room 204 只是讲座地点，并非课程换地点的通知。C 错（wrong_purpose）：讲座面向所有专业，并非招募工程专业学生。D 错（wrong_purpose）：公告完全没有提及任何考试。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "wrong_purpose",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are students advised to do?",
+          "options": {
+            "A": "Submit questions in advance by email",
+            "B": "Register on the department website",
+            "C": "Arrive a few minutes early for a seat",
+            "D": "Bring a copy of their resume"
+          },
+          "answer": "C",
+          "explanation": "正确答案 C：公告说座位有限，建议学生提前几分钟到场找座位。A 错（wrong_detail）：公告说讲座后现场有问答环节，让大家备好问题，并非提前用邮件提交。B 错（related_but_not_stated）：公告未提任何网上注册。D 错（related_but_not_stated）：公告没有要求带简历，是合理但未提及的动作。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        }
+      ],
+      "id": "la_mqwshavl_4"
     }
   ]
 }
