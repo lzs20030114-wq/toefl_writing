@@ -1,0 +1,164 @@
+{
+  "items": [
+    {
+      "context": "social",
+      "situation": "friend sharing news or personal update",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I finally got the job at the museum.",
+      "options": {
+        "A": "Well, that's the news I was hoping for.",
+        "B": "The museum has a new dinosaur exhibit.",
+        "C": "I lost my job there last spring.",
+        "D": "Where did you leave your application?"
+      },
+      "answer": "A",
+      "explanation": "正确答案A以话语标记词\"Well\"开头，间接地表达了为朋友感到高兴和欣慰，是对好消息的自然回应。B是语义联想陷阱，抓住\"museum\"扯到展览，没有回应这个好消息。C跑题，谈的是说话人自己丢工作的过去事件，情感和情境都不匹配。D答非所问，对方分享的是已经得到工作的结果，却问申请放在哪里，属于错误问题类型。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "classmate asking to borrow lecture notes",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "How can I get your notes from today's lecture?",
+      "options": {
+        "A": "The lecture hall was completely full today.",
+        "B": "Sure, I'll email them to you tonight.",
+        "C": "I take notes on my laptop now.",
+        "D": "When does the next lecture start?"
+      },
+      "answer": "B",
+      "explanation": "正确答案B以\"Sure\"开头，间接答应并说明具体方式（晚上发邮件），自然推进对话。A是语义联想陷阱，抓住\"lecture\"描述讲堂很满，没有回应借笔记的请求。C跑题，只说自己用笔记本电脑记笔记，并没有回答怎么把笔记给对方。D答非所问，对方问怎么拿到笔记，却回答下节课什么时候开始，属于错误问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about campus shuttle or parking",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "What's the fastest way to reach the north lot?",
+      "options": {
+        "A": "The lot was just repaved over the weekend.",
+        "B": "Yes, parking permits are required there.",
+        "C": "Your best bet is the shuttle out front.",
+        "D": "I parked there once last semester."
+      },
+      "answer": "C",
+      "explanation": "正确答案C用了习语\"Your best bet is...\"（你最好的选择是），自然地给出最快的方式——坐门口的班车。A是语义联想陷阱，抓住\"lot\"说停车场刚重铺，没回答怎么去。B答非所问，对方问\"怎么去\"却用\"Yes\"回答许可证问题，属于错误问题类型。D跑题，只说自己上学期在那停过车，没有提供到达方式。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "wrong_question_type",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student seeking help at the writing center",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Can someone here look over my essay draft?",
+      "options": {
+        "A": "I wrote three essays last term.",
+        "B": "The center moved to the second floor.",
+        "C": "Are you taking the writing seminar?",
+        "D": "Yes, a tutor can read it with you now."
+      },
+      "answer": "D",
+      "explanation": "正确答案D直接回答了问题——是的，现在有辅导员可以陪你看草稿。A跑题，只谈自己上学期写了三篇文章，与当下求助无关。B是语义联想陷阱，抓住\"center\"说写作中心搬到二楼，没回答能不能帮看草稿。C答非所问，对方问能否帮忙看，却反问是否在上写作研讨课，属于错误问题类型。",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "semantic_association_trap",
+        "C": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about a campus event or concert",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "The spring concert is happening this Friday.",
+      "options": {
+        "A": "Actually, I already bought us two tickets.",
+        "B": "The concert hall seats about a thousand.",
+        "C": "I missed last year's spring festival.",
+        "D": "Where do you usually buy your groceries?"
+      },
+      "answer": "A",
+      "explanation": "正确答案A以话语标记词\"Actually\"开头，间接回应说自己已经买好两张票，自然推进对话并暗示一起去。B是语义联想陷阱，抓住\"concert\"说音乐厅能坐多少人，没回应这个消息。C跑题，谈的是自己错过去年春季活动的过去事件。D完全跑题，问对方平时在哪买杂货，与音乐会毫无关系。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a librarian about a book or resource",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Do you have the second edition of this textbook?",
+      "options": {
+        "A": "I read that textbook over the summer.",
+        "B": "Would the third edition work for you instead?",
+        "C": "The reading room closes at eight tonight.",
+        "D": "Yes, I know several students using it."
+      },
+      "answer": "B",
+      "explanation": "正确答案B用反问推进对话，提出第三版是否也可以，是图书馆员处理\"有没有某版本\"的自然方式。A跑题，只说自己暑假读过这本书，没回答馆藏问题。C是语义联想陷阱，抓住图书馆情境说阅览室八点关门，与版本无关。D是审计中常见的歧义陷阱类型——用\"know\"的\"认识\"义（认识几个用书的学生），并没有真正回答是否有这一版，属于多义/误读陷阱。",
+      "distractor_types": {
+        "A": "off_topic",
+        "C": "semantic_association_trap",
+        "D": "polysemy_misinterpretation"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "calling to check business hours",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Where can I find your weekend opening hours?",
+      "options": {
+        "A": "The weekend crowds are usually pretty heavy.",
+        "B": "Yes, we open quite early on Saturdays.",
+        "C": "Don't worry, we're open all weekend long.",
+        "D": "The store moved to a new location downtown."
+      },
+      "answer": "C",
+      "explanation": "正确答案C是情境转移——不纠结于\"在哪查\"，而是直接解决背后的真实需求（用\"Don't worry\"安抚并告知周末全天营业）。A是语义联想陷阱，抓住\"weekend\"说周末人很多，没解决需求。B答非所问，对方问\"在哪查营业时间\"，却用\"Yes\"回答，属于错误问题类型。D跑题，说店搬到市中心新址，与营业时间无关。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "wrong_question_type",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a neighbor about noise or shared space",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Why is there banging coming from upstairs?",
+      "options": {
+        "A": "The upstairs unit has a lovely balcony.",
+        "B": "Banging on doors is rude, I agree.",
+        "C": "When did you move into this building?",
+        "D": "I'll go ask them to keep it down."
+      },
+      "answer": "D",
+      "explanation": "正确答案D是情境转移——不解释为什么有声音，而是直接解决背后的困扰（我去让他们小声点）。A是语义联想陷阱，抓住\"upstairs\"夸楼上阳台漂亮，无视困扰。B误读了意图，把\"banging\"理解成敲门并空泛附和，没有解决问题。C答非所问，对方问声音原因，却反问你什么时候搬进来的，属于错误问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "polysemy_misinterpretation",
+        "C": "wrong_question_type"
+      }
+    }
+  ]
+}

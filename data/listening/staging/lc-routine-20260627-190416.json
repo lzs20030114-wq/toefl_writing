@@ -1,0 +1,268 @@
+{
+  "items": [
+    {
+      "context": "plans_social",
+      "situation": "two friends coordinating a weekend hiking trip",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Hey, are you still up for hiking Pine Ridge on Saturday? I checked the forecast and it's supposed to be sunny." },
+        { "speaker": "Man", "text": "Definitely. But I heard the main trailhead lot fills up by eight, so we'd have to leave really early." },
+        { "speaker": "Woman", "text": "Oh no, eight? I was hoping to sleep in a little." },
+        { "speaker": "Man", "text": "Well, there's a shuttle from the rec center that runs all morning. We could just take that instead of driving." },
+        { "speaker": "Woman", "text": "That sounds great, actually. No parking stress. What time does the first one leave?" },
+        { "speaker": "Man", "text": "Around nine, I think. Let me double-check the rec center website tonight and text you the schedule." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the two speakers mainly discussing?",
+          "options": {
+            "A": "How to get to a hiking trail on the weekend",
+            "B": "Whether the weekend weather will be good enough to hike",
+            "C": "Which hiking trail is the most challenging one nearby",
+            "D": "How to sign up for a guided hiking tour"
+          },
+          "answer": "A",
+          "explanation": "对话主线是周六去 Pine Ridge 徒步以及如何到达——是开车赶早占车位还是坐 rec center 的班车，故 A 正确。B 是 too_narrow：天气只在开头一句被顺带提到，不是核心话题。C 是 wrong_topic：从未比较过哪条路线最难。D 是 wrong_topic：没有任何关于报名向导团的内容。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "wrong_topic",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the speakers most likely do on Saturday?",
+          "options": {
+            "A": "Arrive at the trailhead lot before eight o'clock",
+            "B": "Cancel the trip if the parking lot is full",
+            "C": "Take the rec center shuttle to the trail",
+            "D": "Drive separately and meet at the summit"
+          },
+          "answer": "C",
+          "explanation": "女生对班车方案说 'That sounds great'，男生还要发班车时刻表，可推断他们会坐班车，故 C 正确。A 是 rejected_option：女生不想那么早，两人转而选择班车，所以早于八点到停车场被否决了。B 是 over_inference：没人提到要取消行程。D 是 unrelated_next_step：对话中没有分开开车或在山顶碰面的任何依据。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "plans_social",
+      "situation": "two students planning what cheese and food to buy for a dinner party",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "So for the dinner party, I'm thinking we set out a cheese board before the main course. What should we grab?" },
+        { "speaker": "Man", "text": "Let's get a soft brie and a sharp cheddar. Oh, and some crackers to go with them." },
+        { "speaker": "Woman", "text": "Good call. Should we add grapes too? They always look nice on the board." },
+        { "speaker": "Man", "text": "Sure, grapes work. But skip the blue cheese this time—remember, Tom can't stand the smell." },
+        { "speaker": "Woman", "text": "Right, I forgot about that. Okay, brie, cheddar, crackers, and grapes. I'll stop by the market after my last class." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Which item do the speakers decide NOT to buy?",
+          "options": {
+            "A": "Crackers for the cheese board",
+            "B": "Blue cheese",
+            "C": "A sharp cheddar",
+            "D": "Grapes for decoration"
+          },
+          "answer": "B",
+          "explanation": "男生明确说 'skip the blue cheese this time'，因为 Tom 受不了它的气味，故 B 是他们决定不买的，正确。A、C、D 都被明确列入购买清单（饼干、切达、葡萄），所以都是 wrong_detail：把要买的说成不买的。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "wrong_detail",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Ask Tom which cheeses he prefers",
+            "B": "Cancel the dinner party",
+            "C": "Borrow a cheese board from a neighbor",
+            "D": "Go to the market to buy the food"
+          },
+          "answer": "D",
+          "explanation": "女生最后说 'I'll stop by the market after my last class'，可推断她接下来会去市场买东西，故 D 正确。A 是 unrelated_next_step：他们已替 Tom 做了决定，没说要再问他。B 是 over_inference：完全没有取消聚会的迹象。C 是 unrelated_next_step：对话从未提到借奶酪拼盘。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "B": "over_inference",
+            "C": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "errands_service",
+      "situation": "two students chatting about a gardening class one of them took",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "I just got back from that weekend gardening class at the campus greenhouse. It was so much fun." },
+        { "speaker": "Man", "text": "Oh nice! What did you actually do there?" },
+        { "speaker": "Woman", "text": "We each potted our own herb garden—basil, mint, and parsley. They let us take the pots home." },
+        { "speaker": "Man", "text": "That's a great deal. Was it hard to get a spot? I've heard those fill up fast." },
+        { "speaker": "Woman", "text": "Honestly, yeah. I signed up the day registration opened. You should grab a spot early if you want in next month." },
+        { "speaker": "Man", "text": "I'll definitely do that. I've been wanting to grow something on my windowsill." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What did the woman do in the gardening class?",
+          "options": {
+            "A": "She learned to design a flower garden",
+            "B": "She watched a demonstration on composting",
+            "C": "She potted her own herb garden to take home",
+            "D": "She helped plant trees around the greenhouse"
+          },
+          "answer": "C",
+          "explanation": "女生说 'We each potted our own herb garden... They let us take the pots home'，故 C 正确。A 是 wrong_detail：种的是香草盆栽，不是设计花园。B 是 related_but_not_stated：堆肥从未被提及。D 是 related_but_not_stated：种树在对话中没有出现。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What does the woman suggest the man do?",
+          "options": {
+            "A": "Register early for next month's class",
+            "B": "Buy his herbs from a local nursery instead",
+            "C": "Ask the instructor for private lessons",
+            "D": "Join her in the greenhouse this weekend"
+          },
+          "answer": "A",
+          "explanation": "女生说名额很快满，建议 'grab a spot early if you want in next month'，故 A 正确。B 是 unrelated_next_step：她从未建议去苗圃买香草。C 是 over_inference：没有提到私人课程。D 是 wrong_detail：课程在下个月，不是本周末和她一起去。",
+          "distractor_types": {
+            "B": "unrelated_next_step",
+            "C": "over_inference",
+            "D": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "a student asking a friend for recommendations on a new couch for the dorm",
+      "difficulty": "hard",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "You got a couch for your dorm last semester, right? I want one, but mine has to fit through that narrow doorway." },
+        { "speaker": "Man", "text": "Yeah, that's exactly why I didn't go with a big sectional. I got a futon that folds flat, so it slid right in." },
+        { "speaker": "Woman", "text": "Hmm, a futon. Is it comfortable enough to actually sit on every day, though?" },
+        { "speaker": "Man", "text": "Mine is, but honestly the cheap ones sag fast. I'd spend a bit more and check the frame is metal, not wood." },
+        { "speaker": "Woman", "text": "Okay. And where did you even find one that wasn't huge?" },
+        { "speaker": "Man", "text": "The home store on Fifth Street has compact ones. I'd measure your doorway first, then go look this weekend." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "Why is the woman talking to the man?",
+          "options": {
+            "A": "To complain that her current couch is uncomfortable",
+            "B": "To ask him to help move furniture into her dorm",
+            "C": "To find out where the nearest furniture store is",
+            "D": "To get advice on choosing a couch for her dorm"
+          },
+          "answer": "D",
+          "explanation": "女生说想买沙发，并不断向有经验的男生请教款式、质量和购买地点，故主旨是征求买沙发的建议，D 正确。A 是 reversed_situation：她还没有沙发，谈不上抱怨现有的不舒服。B 是 wrong_topic：从未请他帮忙搬家具。C 是 too_narrow：商店位置只是众多建议中的一条，不是整体目的。",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "B": "wrong_topic",
+            "C": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do before buying a couch?",
+          "options": {
+            "A": "Order a large sectional sofa online",
+            "B": "Measure the width of her doorway",
+            "C": "Borrow the man's futon for a week",
+            "D": "Ask the dorm office for a couch"
+          },
+          "answer": "B",
+          "explanation": "男生最后建议 'measure your doorway first, then go look'，而女生整段都担心门窄，可推断她会先量门，故 B 正确。A 是 rejected_option：男生正因门窄而放弃大型组合沙发，她也不会去订。C 是 unrelated_next_step：没有任何借用对方沙发的提议。D 是 unrelated_next_step：对话中从未提到向宿舍办公室要沙发。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "C": "unrelated_next_step",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "errands_service",
+      "situation": "a student asking a shop about repairing a cracked phone screen",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "customer", "gender": "female" },
+        { "name": "Man", "role": "shop_staff", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Hi, I dropped my phone and the whole screen is cracked. Can you fix it here today?" },
+        { "speaker": "Man", "text": "Let me take a look. Ah, it's a deep crack. We can replace the screen, but we're out of this model's part right now." },
+        { "speaker": "Woman", "text": "Oh no. How long would it take to get the part in?" },
+        { "speaker": "Man", "text": "We'd order it overnight, so it'd be ready by tomorrow afternoon. The repair itself takes about an hour once it's here." },
+        { "speaker": "Woman", "text": "That works. Do I need to leave the phone with you now?" },
+        { "speaker": "Man", "text": "No, hang on to it. I'll text you the moment the part arrives, and you can bring it in then." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "Why does the woman go to the shop?",
+          "options": {
+            "A": "To have a cracked phone screen repaired",
+            "B": "To buy a brand-new phone of the same model",
+            "C": "To return a phone she recently purchased",
+            "D": "To ask about extending her phone's warranty"
+          },
+          "answer": "A",
+          "explanation": "女生开头就说手机摔了屏幕全裂，问能否修，故 A 正确。B 是 wrong_topic：她要修屏，不是买新机。C 是 reversed_situation：她不是来退货的。D 是 wrong_topic：保修延长从未被提及。",
+          "distractor_types": {
+            "B": "wrong_topic",
+            "C": "reversed_situation",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do after this conversation?",
+          "options": {
+            "A": "Leave her phone at the shop today",
+            "B": "Buy the replacement part herself online",
+            "C": "Wait for a text before returning to the shop",
+            "D": "Go to a different shop for a faster repair"
+          },
+          "answer": "C",
+          "explanation": "男生说零件到货时会发短信通知她再带手机过来，可推断她会等短信再回店，故 C 正确。A 是 rejected_option：男生明确说 'hang on to it'，不必现在留下手机。B 是 unrelated_next_step：自己网购零件从未被提及。D 是 over_inference：她已说 'That works'，没有迹象要换别家。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "unrelated_next_step",
+            "D": "over_inference"
+          }
+        }
+      ]
+    }
+  ]
+}

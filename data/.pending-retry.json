@@ -1,32 +1,43 @@
 {
-  "session_id": "routine-20260626-190439",
-  "generated_at": "2026-06-26T19:12:58.911Z",
+  "session_id": "routine-20260627-190416",
+  "generated_at": "2026-06-27T19:19:46.307Z",
   "needs_retry": true,
   "overall_scores": {
-    "diversity": 96,
-    "quality": 96
+    "diversity": 94,
+    "quality": 93
   },
   "bs_difficulty_gate": "PASS",
   "retry_banks": [
     {
       "bank": "bs",
-      "diversity_score": 0,
+      "diversity_score": 87,
       "diversity_threshold": 90,
-      "quality_score": 0,
+      "quality_score": 98,
       "quality_threshold": 95,
       "failures": [
-        "R1 accepted=0 (full failure)"
+        "多样性 87 < 90"
       ],
       "diversity_breakdown": [
-        "R1 produced 0 valid items"
+        "角色名 4/10",
+        "场景 10/10",
+        "句型 4/5",
+        "开头 4/4",
+        "prefilled类型 4/4 (top:verb-phrase 4/10)",
+        "人物当prefilled 0/10 (0%, TPO~30%)",
+        "干扰词 6种 (top:did 33%)",
+        "chunk颗粒 5.9块/题 单词率76% (TPO~6块/77%)",
+        "题面对话化 9/10 (90% 含you, TPO~72%)"
       ],
       "quality_breakdown": [
-        "9/20 passed per-item validation but fewer than 10 valid in any 10-item block, so no set merged. Main rejects: answer word count 6 (<7 min), isolated floating adverbs (today/yesterday) needing verb-binding, one background-only narration prompt."
+        "块数 10/10",
+        "干扰词 9/10",
+        "答案长度 10/10",
+        "重组正确 10/10"
       ],
       "hints": [
-        "R1 generated 20 items but all were rejected. Failure reason: \"9/20 passed per-item validation but fewer than 10 valid in any 10-item block, so no set merged. Main rejects: answer word count 6 (<7 min), isolated floating adverbs (today/yesterday) needing verb-binding, one background-only narration prompt.\". Generate fresh items strictly following the print-bank-prompt rules — pay extra attention to schema compliance."
+        "角色名重复严重 (4/10 distinct) — use 15+ distinct character names from: Olivia, Harold, Mariana, Hector, Margot, Emma, Julian, Matthew, Alison, Juan, Angelina, Professor Cho, Naomi, Diane"
       ],
-      "items_to_supplement": 20
+      "items_to_supplement": 10
     },
     {
       "bank": "reading-rdl-long",
@@ -50,6 +61,26 @@
         "质量校验有偏差: 词数 0/2 — recheck schema compliance"
       ],
       "items_to_supplement": 1
+    },
+    {
+      "bank": "listening-lc",
+      "diversity_score": 100,
+      "diversity_threshold": 72,
+      "quality_score": 60,
+      "quality_threshold": 80,
+      "failures": [
+        "质量 60 < 80"
+      ],
+      "diversity_breakdown": [
+        "distinct openings 5/5"
+      ],
+      "quality_breakdown": [
+        "conv words 68-105: 3/5"
+      ],
+      "hints": [
+        "质量校验有偏差: conv words 68-105: 3/5 — recheck schema compliance"
+      ],
+      "items_to_supplement": 3
     }
   ]
 }

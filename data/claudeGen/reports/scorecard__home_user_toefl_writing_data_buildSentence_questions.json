@@ -1,23 +1,23 @@
 {
   "file": "/home/user/toefl_writing/data/buildSentence/questions.json",
-  "n": 394,
+  "n": 404,
   "aggregateVerdict": "PASS",
   "forceWordAudit": true,
   "checks": [
     {
       "name": "length_band.easy",
       "verdict": "PASS",
-      "detail": "got 0.287 want 0.246±0.05"
+      "detail": "got 0.285 want 0.246±0.05"
     },
     {
       "name": "length_band.med",
       "verdict": "PASS",
-      "detail": "got 0.596 want 0.595±0.05"
+      "detail": "got 0.597 want 0.595±0.05"
     },
     {
       "name": "length_band.hard",
       "verdict": "PASS",
-      "detail": "got 0.117 want 0.159±0.05"
+      "detail": "got 0.119 want 0.159±0.05"
     },
     {
       "name": "register.first_person",
@@ -27,17 +27,17 @@
     {
       "name": "register.contraction",
       "verdict": "PASS",
-      "detail": "got 0.193 band [0.18,0.29]"
+      "detail": "got 0.188 band [0.18,0.29]"
     },
     {
       "name": "register.third_person_formal",
       "verdict": "PASS",
-      "detail": "got 0.165 max 0.17"
+      "detail": "got 0.166 max 0.17"
     },
     {
       "name": "diversity.opening",
       "verdict": "PASS",
-      "detail": "got 0.723 min 0.38"
+      "detail": "got 0.715 min 0.38"
     },
     {
       "name": "diversity.exact_dup",
@@ -57,22 +57,22 @@
     {
       "name": "prompt.ends_question",
       "verdict": "PASS",
-      "detail": "got 0.799 band [0.51,0.96] (real 0.705)"
+      "detail": "got 0.8 band [0.51,0.96] (real 0.705)"
     },
     {
       "name": "prompt.addresses_you",
       "verdict": "PASS",
-      "detail": "got 0.701 band [0.45,0.83] (real 0.628)"
+      "detail": "got 0.705 band [0.45,0.83] (real 0.628)"
     },
     {
       "name": "prefilled.presence",
       "verdict": "PASS",
-      "detail": "got 0.86 band [0.68,0.97]"
+      "detail": "got 0.864 band [0.68,0.97]"
     },
     {
       "name": "prefilled.bare_pronoun",
       "verdict": "PASS",
-      "detail": "got 0.127 max 0.45"
+      "detail": "got 0.123 max 0.45"
     },
     {
       "name": "prefilled.multi_anchor",
@@ -82,50 +82,50 @@
     {
       "name": "prefilled.non_start_position",
       "verdict": "PASS",
-      "detail": "got 0.746 min 0.1"
+      "detail": "got 0.751 min 0.1"
     },
     {
       "name": "correctness.reconstructable",
       "verdict": "PASS",
-      "detail": "0/394 fail"
+      "detail": "0/404 fail"
     }
   ],
   "metrics": {
     "length": {
-      "mean": 8.63,
+      "mean": 8.64,
       "median": 8,
       "p10": 7,
       "p90": 12,
       "max": 13
     },
     "length_bands": {
-      "easy": 0.287,
-      "med": 0.596,
-      "hard": 0.117
+      "easy": 0.285,
+      "med": 0.597,
+      "hard": 0.119
     },
     "register": {
       "first_person": 0.668,
-      "contraction": 0.193,
-      "casual_opener": 0.079,
-      "third_person_formal": 0.165
+      "contraction": 0.188,
+      "casual_opener": 0.077,
+      "third_person_formal": 0.166
     },
     "structure": {
       "relative_clause": 0.178,
-      "passive": 0.074,
-      "embedded_question": 0.152,
-      "negation": 0.157,
-      "modal": 0.091,
-      "subordinate": 0.109
+      "passive": 0.072,
+      "embedded_question": 0.153,
+      "negation": 0.158,
+      "modal": 0.089,
+      "subordinate": 0.106
     },
     "diversity": {
-      "opening_trigram_diversity": 0.723,
+      "opening_trigram_diversity": 0.715,
       "exact_dup_rate": 0
     },
     "hard_band_profile": {
-      "n": 46,
-      "first_person": 0.826,
-      "relative_clause": 0.63,
-      "passive": 0.13
+      "n": 48,
+      "first_person": 0.833,
+      "relative_clause": 0.646,
+      "passive": 0.125
     }
   },
   "per_item_audit": [
@@ -8623,6 +8623,217 @@
       "band": "easy",
       "index": 7,
       "struct": [],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "She wanted to know why I changed the topic.",
+      "setId": 41,
+      "W": 9,
+      "band": "med",
+      "index": 11,
+      "struct": [
+        "embeddedQ"
+      ],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "He found out it was in his closet.",
+      "setId": 41,
+      "W": 8,
+      "band": "med",
+      "index": 8,
+      "struct": [],
+      "register": [
+        "thirdFormal"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)",
+        "LOW_PROMPT_COHERENCE?"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "She asked whether the weekend trip was finally cancelled.",
+      "setId": 41,
+      "W": 9,
+      "band": "med",
+      "index": 11,
+      "struct": [
+        "embeddedQ"
+      ],
+      "register": [
+        "thirdFormal"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)",
+        "LOW_PROMPT_COHERENCE?"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "My alarm did not ring this morning.",
+      "setId": 41,
+      "W": 7,
+      "band": "easy",
+      "index": 8,
+      "struct": [
+        "negation"
+      ],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "I have not written the final conclusion section yet.",
+      "setId": 41,
+      "W": 9,
+      "band": "med",
+      "index": 10,
+      "struct": [
+        "negation"
+      ],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "Where do I get a campus parking permit now?",
+      "setId": 41,
+      "W": 9,
+      "band": "med",
+      "index": 9,
+      "struct": [],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "Did you try their lunch special too?",
+      "setId": 41,
+      "W": 7,
+      "band": "easy",
+      "index": 7,
+      "struct": [],
+      "register": [],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)",
+        "LOW_PROMPT_COHERENCE?"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "I have a tough chemistry quiz later this afternoon.",
+      "setId": 41,
+      "W": 9,
+      "band": "med",
+      "index": 9,
+      "struct": [],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "I rode the old bike that my roommate had lent me yesterday.",
+      "setId": 41,
+      "W": 12,
+      "band": "hard",
+      "index": 14,
+      "struct": [
+        "relClause"
+      ],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "We hiked the scenic trail that winds along the far northern ridge.",
+      "setId": 41,
+      "W": 12,
+      "band": "hard",
+      "index": 14,
+      "struct": [
+        "relClause"
+      ],
       "register": [
         "firstPerson"
       ],
