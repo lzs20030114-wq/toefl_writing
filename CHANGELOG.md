@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-06-28 — 后台 / 基建补记（未发用户公告）
+
+> v1.9.3（6-18）→ v1.9.4（6-26）之间合入但当时未进 CHANGELOG 的非用户面改动，集中补记。均不构成用户可感知发布（opt-in / 一次性问卷 / 后台），故不发版本公告。
+
+- **persona-only 听力配音渲染管线**（`287fa1b`，6-26）：gpt-4o-mini-tts（`openai`）provider 的确定性渲染路。新增 `lib/tts/toneDirector.js`（`derivePersona`：role+gender → SAFE 音色，同段对话两位说话人恒不同 + `renderInstructions`：persona 基线 + 冻结的 never-slow 配速）、`lib/tts/wavTools.js`（逐句 WAV 切分 + 响度归一 + 带间隔拼接，防疑问句母语升调泄漏到下一句、抹平各音色响度）、`lib/tts/renderListening.js`（`renderConversation` 编排 + 瞬时失败重试）。`openaiTts.js` 导出 `SAFE_VOICES` 并清除会 400 的 marin/cedar；`generate-lc.mjs` 的 openai 分支改走 `renderConversation`；修 `lcPromptBuilder.js` 输出示例（Sarah/David 与「标 Woman/Man」自相矛盾——具名说话人音色塌缩的根因）。**默认 edge 路不变、openai 路 opt-in（`TTS_PROVIDER=openai`），用户当前无感**；LLM 逐句韵律层经实测引擎不可 steer（情绪/重读/疑问升调几乎听不出）已砍，只保留好音色 + 固有语调。新增 19 单测，全量绿。
+- **听力配音 A/B 投票弹窗**（`fdc3213`，6-22）：首页一次性弹窗，A=现役会话音频（`lc_mpvfq0s1_5`）vs B=响度归一的 gpt-4o 升级样本，收「支持升级/维持现状」票。`components/home/VoiceUpgradeModal.js` + `VoiceUpgradeVoteTrigger.js`（`app/layout.js` 全局挂载，每浏览器仅一次、gated on demo 音频存在）；intake `app/api/survey/voice-vote`，票存 `user_surveys`（`survey_type=voice_upgrade_2026_06`，零迁移，复用 `unique(user_code,survey_type)` 去重）。
+- **后台配音投票统计页**（`82c1dfa`，6-22）：`GET /api/admin/voice-vote` 汇总票数。
+- **后台新人问卷逐份作答明细表**（`18b5439`，6-23）：first-set 问卷支持逐份明细 + 用户身份关联。
+- **docs**：content-aware tone-director 执行计划锁定（`3afd416`，6-22）。
+
 ## 2026-06-26 — v1.9.4
 
 - **听力模考"做不了"修复**（`fix/listening-mock-audio-hang` `f475e1d`）：听力自适应模考把答题阶段（选项 + 答题倒计时）只挂在音频 `ended` 事件上，而到达 `ended` 唯一靠 autoplay 成功——浏览器拦截 autoplay 或 Supabase CDN 不可达（国内无代理）时整道题永久卡在"请先播放并听完音频"，模块倒计时仍在流失，超时按 0 分跳过。分三层修复：
