@@ -1,43 +1,29 @@
 {
-  "session_id": "routine-20260627-190416",
-  "completed_at": "2026-06-27T19:18:45Z",
-  "duration_minutes": 14,
+  "session_id": "routine-20260628-190428",
+  "completed_at": "2026-06-28T19:26:54Z",
+  "duration_minutes": 22,
   "model": "Claude Opus 4.8",
-  "highlight": "BS 难度冻结门通过（精修后 10/20 入库）；听力新增缓步动物、镜像神经元等科普题",
+  "highlight": "BS 经难度冻结门校准后两套 20 题一次性合库；阅读首现物理热力学(AP)与数学“零”概念(CTW)",
   "commit_sha": "",
   "results": {
     "bs": {
       "generated": 20,
       "accepted": 20,
-      "topics": [
-        "campus life",
-        "classes & deadlines",
-        "dorm & social",
-        "registration",
-        "library & gym",
-        "professors"
-      ],
+      "topics": ["past simple", "indirect/embedded question", "relative clause", "negation", "passive voice", "present perfect", "wh-question"],
       "favorite": {
-        "prompt": "What did the professor say about your draft?",
-        "answer": "She wanted to know why I changed the topic."
+        "prompt": "Are you moving out of your dorm today?",
+        "answer": "My roommate is helping me move out of the dorm tonight after dinner."
       },
-      "retried_after_fail": false,
-      "failure_reason": "20 生成，仅 1 套(10 题)能同时满足 set 嵌入问句下限(≥3/10)与全库 embedded 漂移带(≤2.5x)，故入库 10；难度门 PASS。",
-      "r2_supplemented": true,
-      "r2_items_added": 10
+      "retried_after_fail": true,
+      "failure_reason": ""
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": [
-        "economics/corporate tax incentives",
-        "public health/pharmacist prescribing",
-        "education/handwritten exams vs AI",
-        "media/news paywalls"
-      ],
+      "topics": ["political science", "psychology", "history and culture", "sociology"],
       "favorite": {
-        "subtopic": "education",
-        "preview": "Several departments are now requiring students to submit handwritten, in-class exams instead of take-home essays, largely in response to AI writing tools."
+        "subtopic": "sociology",
+        "preview": "For this week's discussion, let's think about how people build friendships as adults. A number of cities have started funding programs"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -45,15 +31,10 @@
     "email": {
       "generated": 4,
       "accepted": 4,
-      "topics": [
-        "cooking club stove maintenance",
-        "community composting talk timing",
-        "food bank volunteer sign-up errors",
-        "campus radio training schedule"
-      ],
+      "topics": ["服务与活动", "校园学业", "住宿", "社区生活"],
       "favorite": {
-        "subtopic": "服务与活动",
-        "preview": "campus cooking club booked a demonstration kitchen for a guest chef night next Thursday; two stoves will be under maintenance"
+        "subtopic": "社区生活",
+        "preview": "You volunteer at a neighborhood food pantry, and a new online shift-booking system was introduced last month. Many regular volunteers, including you, find it hard to use and have started missing their slots by accident."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -61,16 +42,10 @@
     "reading-ap": {
       "generated": 5,
       "accepted": 5,
-      "topics": [
-        "physics/gravity",
-        "biology/plant biology",
-        "history/ancient astronomy",
-        "sociology/aging populations",
-        "business/labor economics"
-      ],
+      "topics": ["physics/thermodynamics", "materials_science/textile fibers", "anthropology/early agriculture", "technology/materials science", "geology/ice ages"],
       "favorite": {
-        "subtopic": "history/ancient astronomy",
-        "preview": "A gnomon is a simple upright rod or pillar whose shadow, cast by the sun, was used by ancient peoples to track time."
+        "subtopic": "physics/thermodynamics",
+        "preview": "Entropy is a measure of the number of microscopic arrangements that correspond to a system's observable state"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -78,17 +53,10 @@
     "reading-ctw": {
       "generated": 6,
       "accepted": 6,
-      "topics": [
-        "biology/deep-sea vents",
-        "environmental_science/microplastics",
-        "psychology/language development",
-        "history/Egyptian pyramids",
-        "geology/plate tectonics",
-        "astronomy/exoplanets"
-      ],
+      "topics": ["astronomy/comets", "chemistry/the periodic table", "engineering/wind turbines", "linguistics/writing systems", "mathematics/the concept of zero", "meteorology/how hurricanes form"],
       "favorite": {
-        "subtopic": "biology/deep-sea hydrothermal vent communities",
-        "preview": "Hydrothermal vents are cracks on the ocean floor where superheated, mineral-rich water rises from below the crust."
+        "subtopic": "mathematics/the concept of zero",
+        "preview": "The number zero represents the complete absence of any quantity or measured amount. Ancient traders"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -96,15 +64,10 @@
     "reading-rdl-short": {
       "generated": 4,
       "accepted": 4,
-      "topics": [
-        "advisor office-hours change",
-        "campus taco food truck",
-        "parking permit pickup",
-        "campus café lavender latte"
-      ],
+      "topics": ["social_media", "email", "flyer"],
       "favorite": {
-        "subtopic": "social_media/campus café drink recommendation",
-        "preview": "Okay, you have to try the new lavender latte at the Birch Street Café! It's only $4.50 and they're serving it through Sunday"
+        "subtopic": "social_media/free_yoga",
+        "preview": "Free sunrise yoga in the Eastman Quad this Saturday at 8 AM! Bring your own mat, though the rec center lends spares"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -112,13 +75,10 @@
     "reading-rdl-long": {
       "generated": 2,
       "accepted": 2,
-      "topics": [
-        "elevator maintenance / residence hall",
-        "mailroom holiday hours"
-      ],
+      "topics": ["syllabus", "social_media"],
       "favorite": {
-        "subtopic": "notice/mailroom-holiday-hours",
-        "preview": "The Student Mailroom in Bradley Center will operate on a reduced schedule during the Thanksgiving break, from"
+        "subtopic": "syllabus/cognitive_psychology",
+        "preview": "PSYC 210: Introduction to Cognitive Psychology — Course Syllabus. Instructor: Dr. Marina Velasquez | Office: Harlow Hall, Room 318"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -126,15 +86,10 @@
     "listening-lat": {
       "generated": 4,
       "accepted": 4,
-      "topics": [
-        "ecology/urban-heat-islands",
-        "neuroscience/mirror-neurons",
-        "biology/tardigrades",
-        "psychology/confirmation-bias"
-      ],
+      "topics": ["astronomy/transit method", "environmental_science/green roofs", "ecology/wetlands flood control", "geology/ice cores"],
       "favorite": {
-        "subtopic": "biology/how tardigrades survive extreme environments",
-        "preview": "Imagine an animal you can boil, freeze near absolute zero, blast with radiation, or even launch into the vacuum of space"
+        "subtopic": "ecology/the role of wetlands in flood prevention",
+        "preview": "We often think of wetlands as wastelands, soggy ground that's good for nothing until it's drained."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -142,16 +97,10 @@
     "listening-lc": {
       "generated": 5,
       "accepted": 5,
-      "topics": [
-        "weekend hiking trip / shuttle",
-        "dinner party cheese board",
-        "gardening class herb pots",
-        "dorm couch advice",
-        "cracked phone screen repair"
-      ],
+      "topics": ["recommendations_opinions", "errands_service", "plans_social"],
       "favorite": {
-        "subtopic": "campus_dorm_life/dorm couch fitting through a narrow doorway",
-        "preview": "You got a couch for your dorm last semester, right? I want one, but mine has to fit through that narrow doorway."
+        "subtopic": "recommendations_opinions/podcast and cooking series",
+        "preview": "You've got to listen to that improv comedy podcast I mentioned. The hosts make up a whole town in every episode."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -159,16 +108,10 @@
     "listening-la": {
       "generated": 5,
       "accepted": 5,
-      "topics": [
-        "mock interviews with alumni",
-        "winter gear swap voucher",
-        "dining hall summer hours",
-        "research poster night award",
-        "guest speaker career paths"
-      ],
+      "topics": ["facility_change", "campus_activity", "career_services"],
       "favorite": {
-        "subtopic": "campus_activity/winter gear swap with voucher system",
-        "preview": "Attention students. The Outdoor Recreation Office is hosting its annual Winter Gear Swap this Saturday"
+        "subtopic": "career_services/professional headshot day",
+        "preview": "Good afternoon. The Career Center is hosting a Professional Headshot Day this coming Tuesday, May 13, in the Loring Building."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -176,19 +119,10 @@
     "listening-lcr": {
       "generated": 8,
       "accepted": 8,
-      "topics": [
-        "job-news",
-        "borrow-notes",
-        "shuttle-parking",
-        "writing-center",
-        "spring-concert",
-        "library-textbook",
-        "weekend-hours",
-        "neighbor-noise"
-      ],
+      "topics": ["lab report length", "grad school news", "gym hours", "group project deadline", "borrow lecture notes", "lost-and-found backpack", "computer lab printing", "bank open hours"],
       "favorite": {
-        "subtopic": "general_daily/neighbor noise or shared space",
-        "preview": "Why is there banging coming from upstairs? — the right reply skips the why and offers to go ask them to quiet down."
+        "subtopic": "campus_academic / group project deadline",
+        "preview": "Why are we leaving the whole project until the weekend? — answered idiomatically with 'Let's not put all our eggs in one basket.'"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -196,19 +130,13 @@
     "speaking-repeat": {
       "generated": 3,
       "accepted": 3,
-      "topics": [
-        "Campus Radio Station",
-        "Swimming Pool Orientation",
-        "Watercolor Painting"
-      ],
+      "topics": ["Salad Making (how-to)", "Bike Tire Repair (how-to)", "IT Help Desk"],
       "favorite": {
-        "subtopic": "Campus Radio Station",
-        "preview": "If you experience any trouble during your show, check the schedule taped beside the control board."
+        "subtopic": "IT Help Desk",
+        "preview": "The service counter is straight ahead."
       },
       "retried_after_fail": false,
       "failure_reason": ""
     }
-  },
-  "r2_completed_at": "2026-06-27T19:50:09.735Z",
-  "r2_session_id": "routine-r2-20260627-193342"
+  }
 }

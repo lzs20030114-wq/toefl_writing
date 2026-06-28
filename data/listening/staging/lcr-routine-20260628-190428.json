@@ -1,0 +1,142 @@
+{
+  "type": "listenChooseResponse",
+  "generated_at": "2026-06-28T19:04:28.000Z",
+  "items": [
+    {
+      "id": "lcr_rt_20260628_1",
+      "context": "campus_academic",
+      "situation": "Student checking lab report requirements with TA",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "I'm not sure how long the lab report should be.",
+      "options": {
+        "A": "Did you check the rubric she handed out?",
+        "B": "The lab smelled like vinegar all afternoon.",
+        "C": "Reports are stapled in the top left corner.",
+        "D": "Yes, the experiment took about two hours."
+      },
+      "answer": "A",
+      "explanation": "A 用反问推进对话，指向能解答长度问题的评分标准，是自然回应。B 谈实验室气味，完全偏题。C 谈装订细节，借用 report 联想但不回答长度。D 用 yes 回答了一个没被问的问题，属答错问题类型。",
+      "distractor_types": {"B": "off_topic", "C": "semantic_association_trap", "D": "wrong_question_type"}
+    },
+    {
+      "id": "lcr_rt_20260628_2",
+      "context": "social",
+      "situation": "Friend sharing personal news",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Did you hear I got into grad school?",
+      "options": {
+        "A": "School lunches were better when we were kids.",
+        "B": "That's wonderful — congratulations!",
+        "C": "I heard the radio was broken again.",
+        "D": "Grades come out at the end of the term."
+      },
+      "answer": "B",
+      "explanation": "B 直接、热情地回应好消息，是最恰当的回应。A 借用 school 这个词谈无关往事。C 玩弄 heard 一词，谈收音机，偏题。D 谈成绩公布时间，与录取消息无关。",
+      "distractor_types": {"A": "semantic_association_trap", "C": "polysemy_misinterpretation", "D": "off_topic"}
+    },
+    {
+      "id": "lcr_rt_20260628_3",
+      "context": "campus_daily",
+      "situation": "Student asking about gym hours",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Where can I check when the gym closes tonight?",
+      "options": {
+        "A": "The gym got new treadmills last month.",
+        "B": "Yes, the pool is on the lower level.",
+        "C": "Don't bother — I'm headed there now, come with me.",
+        "D": "Tonight there's a basketball game on TV."
+      },
+      "answer": "C",
+      "explanation": "C 不直接回答在哪查，而是解决潜在需求——一起过去，属语境转移，是最佳回应。A 描述健身房新设备，借词偏题。B 答了位置而非所问的时间，且 yes 答非所问。D 借用 tonight 谈比赛，完全偏题。",
+      "distractor_types": {"A": "semantic_association_trap", "B": "wrong_question_type", "D": "off_topic"}
+    },
+    {
+      "id": "lcr_rt_20260628_4",
+      "context": "campus_academic",
+      "situation": "Classmates discussing a group project deadline",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Why are we leaving the whole project until the weekend?",
+      "options": {
+        "A": "The weekend forecast says it might rain.",
+        "B": "Projectors need a new bulb in that room.",
+        "C": "Yes, weekends are usually pretty busy.",
+        "D": "Let's not put all our eggs in one basket."
+      },
+      "answer": "D",
+      "explanation": "D 用习语表达不该把所有事压到一处，恰当回应了对拖延的担忧。A 借 weekend 谈天气，偏题。B 玩弄 project/projector 谐音，谈灯泡，偏题。C 用 yes 回应了未被问的问题，答错问题类型。",
+      "distractor_types": {"A": "semantic_association_trap", "B": "polysemy_misinterpretation", "C": "wrong_question_type"}
+    },
+    {
+      "id": "lcr_rt_20260628_5",
+      "context": "campus_academic",
+      "situation": "Classmate asking to borrow lecture notes",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "I missed today's lecture and have no idea what happened.",
+      "options": {
+        "A": "No worries — I've got you covered.",
+        "B": "The lecture hall seats almost three hundred.",
+        "C": "Today is the first warm day all month.",
+        "D": "Did you remember to bring an umbrella?"
+      },
+      "answer": "A",
+      "explanation": "A 用习语表示别担心、我帮你（暗示可分享笔记），是温暖自然的回应。B 谈教室容量，借词偏题。C 借 today 谈天气，偏题。D 完全转向另一话题，答错问题。",
+      "distractor_types": {"B": "semantic_association_trap", "C": "off_topic", "D": "wrong_question_type"}
+    },
+    {
+      "id": "lcr_rt_20260628_6",
+      "context": "campus_daily",
+      "situation": "Student checking lost-and-found at front desk",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "How do I report a backpack I left in the library?",
+      "options": {
+        "A": "Backpacks come in a lot of bright colors now.",
+        "B": "What did it look like, and which floor?",
+        "C": "Yes, the library closes at midnight tonight.",
+        "D": "I report to the lab supervisor every Friday."
+      },
+      "answer": "B",
+      "explanation": "B 用反问索取识别信息，自然推进失物登记流程，是最佳回应。A 谈背包颜色，借词偏题。C 答了闭馆时间而非报告流程，且 yes 答非所问。D 玩弄 report 的另一含义（汇报），偏题。",
+      "distractor_types": {"A": "semantic_association_trap", "C": "wrong_question_type", "D": "polysemy_misinterpretation"}
+    },
+    {
+      "id": "lcr_rt_20260628_7",
+      "context": "campus_daily",
+      "situation": "Student asking about printing at computer lab",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "What do I need to print from a lab computer?",
+      "options": {
+        "A": "The computers were upgraded over the summer.",
+        "B": "Yes, you can definitely use that machine.",
+        "C": "Just your student ID to log in and pay.",
+        "D": "Labs stay open until ten on weeknights."
+      },
+      "answer": "C",
+      "explanation": "C 直接回答所需之物——学生证，最贴切。A 谈电脑升级，借词偏题。B 用 yes 回答了未被问的是非问题，答错问题类型。D 谈实验室开放时间，与所问无关。",
+      "distractor_types": {"A": "semantic_association_trap", "B": "wrong_question_type", "D": "off_topic"}
+    },
+    {
+      "id": "lcr_rt_20260628_8",
+      "context": "general_daily",
+      "situation": "Checking if the bank is open",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Is the bank still open at this hour?",
+      "options": {
+        "A": "The river bank flooded after the storm.",
+        "B": "Yes, banking is a competitive industry.",
+        "C": "I opened a savings account last spring.",
+        "D": "Why not just use the ATM out front?"
+      },
+      "answer": "D",
+      "explanation": "D 用反问提出替代方案——用门口的 ATM，绕开是否营业的问题并解决需求，是最佳回应。A 玩弄 bank 的另一含义（河岸），偏题。B 用 yes 谈行业，答非所问。C 谈过去开户，与当下是否营业无关。",
+      "distractor_types": {"A": "polysemy_misinterpretation", "B": "wrong_question_type", "C": "off_topic"}
+    }
+  ]
+}

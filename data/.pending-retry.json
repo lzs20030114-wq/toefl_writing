@@ -1,63 +1,62 @@
 {
-  "session_id": "routine-20260627-190416",
-  "generated_at": "2026-06-27T19:19:46.307Z",
+  "session_id": "routine-20260628-190428",
+  "generated_at": "2026-06-28T19:27:59.841Z",
   "needs_retry": true,
   "overall_scores": {
-    "diversity": 94,
+    "diversity": 89,
     "quality": 93
   },
   "bs_difficulty_gate": "PASS",
   "retry_banks": [
     {
       "bank": "bs",
-      "diversity_score": 87,
+      "diversity_score": 67,
       "diversity_threshold": 90,
-      "quality_score": 98,
+      "quality_score": 95,
       "quality_threshold": 95,
       "failures": [
-        "多样性 87 < 90"
+        "多样性 67 < 90"
       ],
       "diversity_breakdown": [
-        "角色名 4/10",
-        "场景 10/10",
-        "句型 4/5",
-        "开头 4/4",
-        "prefilled类型 4/4 (top:verb-phrase 4/10)",
-        "人物当prefilled 0/10 (0%, TPO~30%)",
-        "干扰词 6种 (top:did 33%)",
-        "chunk颗粒 5.9块/题 单词率76% (TPO~6块/77%)",
-        "题面对话化 9/10 (90% 含you, TPO~72%)"
+        "角色名 1/20",
+        "场景 19/20",
+        "句型 3/5",
+        "开头 2/4",
+        "prefilled类型 5/4 (top:mid-noun-or-adj 13/20)",
+        "人物当prefilled 1/20 (5%, TPO~30%)",
+        "干扰词 15种 (top:does 15%)",
+        "chunk颗粒 6.8块/题 单词率70% (TPO~6块/77%)",
+        "题面对话化 19/20 (95% 含you, TPO~72%)"
       ],
       "quality_breakdown": [
-        "块数 10/10",
-        "干扰词 9/10",
-        "答案长度 10/10",
-        "重组正确 10/10"
+        "块数 16/20",
+        "干扰词 20/20",
+        "答案长度 20/20",
+        "重组正确 20/20"
       ],
       "hints": [
-        "角色名重复严重 (4/10 distinct) — use 15+ distinct character names from: Olivia, Harold, Mariana, Hector, Margot, Emma, Julian, Matthew, Alison, Juan, Angelina, Professor Cho, Naomi, Diane"
+        "角色名重复严重 (1/20 distinct) — use 15+ distinct character names from: Olivia, Harold, Mariana, Hector, Margot, Emma, Julian, Matthew, Alison, Juan, Angelina, Professor Cho, Naomi, Diane",
+        "prefilled 单一化 (mid-noun-or-adj 占 65%) — spread across 5+ TPO types: subject-pronoun, subject-np, adverb-opener, prep-phrase, verb-phrase, mid-noun-or-adj, conjunction-wh"
       ],
       "items_to_supplement": 10
     },
     {
       "bank": "reading-rdl-long",
-      "diversity_score": 60,
+      "diversity_score": 100,
       "diversity_threshold": 70,
       "quality_score": 0,
       "quality_threshold": 85,
       "failures": [
-        "多样性 60 < 70",
         "质量 0 < 85"
       ],
       "diversity_breakdown": [
         "话题 2/2",
-        "notice 2 · email 0"
+        "notice 0 · email 0"
       ],
       "quality_breakdown": [
         "词数 0/2"
       ],
       "hints": [
-        "多样性 < gate — choose distinct topic/subtopic combos; avoid same discipline twice",
         "质量校验有偏差: 词数 0/2 — recheck schema compliance"
       ],
       "items_to_supplement": 1
@@ -82,7 +81,5 @@
       ],
       "items_to_supplement": 3
     }
-  ],
-  "resolved_at": "2026-06-27T19:50:09.735Z",
-  "resolution_status": "supplemented"
+  ]
 }

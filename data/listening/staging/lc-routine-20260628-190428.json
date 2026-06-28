@@ -1,0 +1,229 @@
+{
+  "items": [
+    {
+      "context": "recommendations_opinions",
+      "situation": "two friends recommending a comedy podcast and a cooking series to each other",
+      "difficulty": "medium",
+      "speakers": [
+        {"name": "Woman", "role": "student", "gender": "female"},
+        {"name": "Man", "role": "student", "gender": "male"}
+      ],
+      "conversation": [
+        {"speaker": "Woman", "text": "You've got to listen to that improv comedy podcast I mentioned. The hosts make up a whole town in every episode. I cannot stop laughing on the bus."},
+        {"speaker": "Man", "text": "Oh, that sounds fun. Is it long? My commute's only twenty minutes."},
+        {"speaker": "Woman", "text": "The episodes are short, like fifteen minutes each. Perfect for a quick ride."},
+        {"speaker": "Man", "text": "Nice, I'll try it. Honestly, if you want something to watch instead, that street-food cooking series is incredible. The night-market episode made me so hungry."},
+        {"speaker": "Woman", "text": "Really? I keep seeing it pop up. Is it relaxing or kind of intense?"},
+        {"speaker": "Man", "text": "It's super calm, no shouting chefs. Just start with episode one, the dumpling stall. You'll be hooked."}
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly doing?",
+          "options": {
+            "A": "Recommending a podcast and a series to each other",
+            "B": "Planning to host a night-market dinner party together",
+            "C": "Complaining about the length of their daily commutes",
+            "D": "Deciding which cooking class to enroll in next term"
+          },
+          "answer": "A",
+          "explanation": "对话中两人互相推荐一档即兴喜剧播客和一部街头美食剧，A 概括最准确。B、C、D 均凭空发挥或只抓住对话中的次要细节（通勤、夜市），不是主旨。",
+          "distractor_types": {"B": "wrong_topic", "C": "too_narrow", "D": "wrong_topic"}
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do with the cooking series?",
+          "options": {
+            "A": "Skip it because the chefs are too loud for him",
+            "B": "Wait until the woman finishes watching it first",
+            "C": "Suggest the woman begin with the dumpling stall episode",
+            "D": "Watch every episode before his commute tomorrow"
+          },
+          "answer": "C",
+          "explanation": "男生已看过该剧并明确建议女生从'第一集，饺子摊'开始，故 C 对。A 与他说'no shouting chefs'相反；B、D 都没有对话依据，且 D 过度推断。",
+          "distractor_types": {"A": "reversed_situation", "B": "unrelated_next_step", "D": "over_inference"}
+        }
+      ]
+    },
+    {
+      "context": "errands_service",
+      "situation": "a student returning a too-small sweater at a store counter",
+      "difficulty": "easy",
+      "speakers": [
+        {"name": "Woman", "role": "customer", "gender": "female"},
+        {"name": "Man", "role": "store_clerk", "gender": "male"}
+      ],
+      "conversation": [
+        {"speaker": "Woman", "text": "Hi, I'd like to return this sweater. I ordered a medium online but it's way too small in the arms."},
+        {"speaker": "Man", "text": "No problem. Do you want a refund, or an exchange for a larger size?"},
+        {"speaker": "Woman", "text": "An exchange would be great, if you have it in a large."},
+        {"speaker": "Man", "text": "Let me check the back. Hmm, we're out of large in this shop, but the branch across the river has two in stock."},
+        {"speaker": "Woman", "text": "Oh, that's a bit far for today. Can you just refund it for now?"},
+        {"speaker": "Man", "text": "Of course. I'll put it back on your card. It usually shows up in three business days."}
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why is the woman returning the sweater?",
+          "options": {
+            "A": "The color was different from the website photo",
+            "B": "It is too small in the arms for her",
+            "C": "It arrived with a tear near the collar",
+            "D": "She accidentally ordered two of the same item"
+          },
+          "answer": "B",
+          "explanation": "女生明确说'too small in the arms'，故 B 对。A、C、D 都未在对话中提及，属凭空发挥。",
+          "distractor_types": {"A": "related_but_not_stated", "C": "related_but_not_stated", "D": "wrong_detail"}
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do?",
+          "options": {
+            "A": "Travel to the branch across the river today",
+            "B": "Wait at the counter for a large to arrive",
+            "C": "Choose a different color in the same size",
+            "D": "Get a refund back on her payment card"
+          },
+          "answer": "D",
+          "explanation": "女生说过河取货太远，让店员先退款，店员答应退到卡上，故 D 对。A 与她说'a bit far for today'相反；B、C 没有对话依据。",
+          "distractor_types": {"A": "rejected_option", "B": "unrelated_next_step", "C": "related_but_not_stated"}
+        }
+      ]
+    },
+    {
+      "context": "plans_social",
+      "situation": "two students arranging where and when to study together before a statistics exam",
+      "difficulty": "hard",
+      "speakers": [
+        {"name": "Woman", "role": "student", "gender": "female"},
+        {"name": "Man", "role": "student", "gender": "male"}
+      ],
+      "conversation": [
+        {"speaker": "Woman", "text": "We really need to study together for the stats exam. The chapter on regression is killing me, and you seemed to get it."},
+        {"speaker": "Man", "text": "Sure, I'd be up for that. I was thinking the library, but the group rooms are always booked by Wednesday."},
+        {"speaker": "Woman", "text": "Right. What about the empty seminar room in the math building? It's quiet and there's a whiteboard for working problems."},
+        {"speaker": "Man", "text": "Oh, that's actually a better idea. Whiteboard practice is exactly what I need for regression. Tomorrow at seven?"},
+        {"speaker": "Woman", "text": "Seven works. I'll bring my problem sets so we can work through the ones I keep getting wrong."},
+        {"speaker": "Man", "text": "Great, and I'll print the formula sheet the professor posted. See you there."}
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the conversation mainly about?",
+          "options": {
+            "A": "Why the library group rooms are always fully booked",
+            "B": "How regression differs from other statistics topics",
+            "C": "Setting up a study session before a statistics exam",
+            "D": "Choosing a major that requires less math coursework"
+          },
+          "answer": "C",
+          "explanation": "对话核心是两人商定考前一起复习统计的时间和地点，C 正确。A 只是对话中提到的一个细节（图书馆订满）；B、D 偏离主题，凭空发挥。",
+          "distractor_types": {"A": "too_narrow", "B": "too_narrow", "D": "wrong_topic"}
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely bring to the session?",
+          "options": {
+            "A": "Her problem sets with the questions she got wrong",
+            "B": "The formula sheet the professor posted online",
+            "C": "A reservation slip for the library group room",
+            "D": "A new whiteboard to set up in the seminar room"
+          },
+          "answer": "A",
+          "explanation": "女生明确说会带上自己做错的习题集，故 A 对。B 是男生负责打印的公式表，属张冠李戴；C 与他们改用研讨室相反；D 过度推断（研讨室本就有白板）。",
+          "distractor_types": {"B": "misattributed", "C": "rejected_option", "D": "over_inference"}
+        }
+      ]
+    },
+    {
+      "context": "errands_service",
+      "situation": "two friends figuring out a train schedule for a day trip to a coastal town",
+      "difficulty": "easy",
+      "speakers": [
+        {"name": "Woman", "role": "student", "gender": "female"},
+        {"name": "Man", "role": "student", "gender": "male"}
+      ],
+      "conversation": [
+        {"speaker": "Woman", "text": "So for our day trip Saturday, what time does the train to Harborville leave?"},
+        {"speaker": "Man", "text": "There's one at eight and another at ten. The eight gets us there before the shops open, which is kind of pointless."},
+        {"speaker": "Woman", "text": "True. Let's take the ten then. How long is the ride?"},
+        {"speaker": "Man", "text": "Just over an hour. And the last train back is at six, so we won't have to rush."},
+        {"speaker": "Woman", "text": "Six? That gives us a full afternoon. Should we buy tickets online tonight?"},
+        {"speaker": "Man", "text": "Yeah, let's book them now. Weekend trains to the coast fill up fast."}
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Which train do the speakers decide to take?",
+          "options": {
+            "A": "The eight o'clock train to Harborville",
+            "B": "The last train, which leaves at six",
+            "C": "A train that takes just under an hour",
+            "D": "The ten o'clock train to Harborville"
+          },
+          "answer": "D",
+          "explanation": "女生说'Let's take the ten'，男生同意，故 D 对。A 被他们否决（去太早商店没开）；B 是返程车而非去程；C 与'just over an hour'矛盾。",
+          "distractor_types": {"A": "rejected_option", "B": "misattributed", "C": "wrong_detail"}
+        },
+        {
+          "type": "inference",
+          "stem": "What will the speakers most likely do tonight?",
+          "options": {
+            "A": "Walk to the station to check the timetable",
+            "B": "Buy their train tickets online in advance",
+            "C": "Cancel the trip because trains are full",
+            "D": "Take the eight o'clock train the next morning"
+          },
+          "answer": "B",
+          "explanation": "两人决定今晚就在网上订票以防周末车票售罄，故 B 对。A、C 没有依据；D 与他们选十点车矛盾且时间错乱。",
+          "distractor_types": {"A": "unrelated_next_step", "C": "over_inference", "D": "rejected_option"}
+        }
+      ]
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two students talking about a new restaurant downtown and which dish to try",
+      "difficulty": "medium",
+      "speakers": [
+        {"name": "Woman", "role": "student", "gender": "female"},
+        {"name": "Man", "role": "student", "gender": "male"}
+      ],
+      "conversation": [
+        {"speaker": "Woman", "text": "Have you been to that new noodle place downtown? Everyone in my dorm keeps raving about it."},
+        {"speaker": "Man", "text": "Yeah, I went last week. The spicy beef noodle soup is the thing to get. It's what they're known for."},
+        {"speaker": "Woman", "text": "Spicy? I can't really handle a lot of heat. Is there a milder option that's still good?"},
+        {"speaker": "Man", "text": "Definitely. The sesame cold noodles are mild and honestly just as popular. Get those instead."},
+        {"speaker": "Woman", "text": "Oh, those sound perfect. Is it expensive though? I'm on a tight budget this month."},
+        {"speaker": "Man", "text": "Not at all, most bowls are under ten dollars. Go around two to skip the lunch crowd."}
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What dish is the restaurant best known for?",
+          "options": {
+            "A": "The spicy beef noodle soup",
+            "B": "The sesame cold noodles",
+            "C": "A budget lunch set under ten dollars",
+            "D": "A mild vegetable broth special"
+          },
+          "answer": "A",
+          "explanation": "男生说招牌是 spicy beef noodle soup（'what they're known for'），故 A 对。B 是他另外推荐的清淡替代品，不是招牌；C 是价格信息；D 未提及。",
+          "distractor_types": {"B": "wrong_detail", "C": "related_but_not_stated", "D": "related_but_not_stated"}
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely order?",
+          "options": {
+            "A": "The spicy beef noodle soup despite the heat",
+            "B": "Nothing, because the place is too expensive",
+            "C": "The sesame cold noodles, which are milder",
+            "D": "A second bowl to share with her dormmates"
+          },
+          "answer": "C",
+          "explanation": "女生不能吃辣，男生推荐清淡的芝麻凉面，女生回应'those sound perfect'，故 C 对。A 与她不吃辣相反；B 与男生说价格便宜相反；D 凭空发挥。",
+          "distractor_types": {"A": "rejected_option", "B": "reversed_situation", "D": "over_inference"}
+        }
+      ]
+    }
+  ]
+}
