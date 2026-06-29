@@ -35060,6 +35060,338 @@
       ],
       "id": "lc_mqwshf7l_2",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/conversation/lc_mqwshf7l_2.mp3"
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "Two friends discuss whether to join a campus club or an intramural team.",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "I'm trying to figure out how to meet more people this semester. I'm thinking about joining either the photography club or the intramural volleyball team."
+        },
+        {
+          "speaker": "Man",
+          "text": "Both sound fun. What's holding you back?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Well, the volleyball team practices three evenings a week, and that overlaps with my chemistry lab. The photography club only meets on Sundays."
+        },
+        {
+          "speaker": "Man",
+          "text": "Then it kind of decides itself, doesn't it? You can't skip lab."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Right. But I really wanted something more active. Sitting all day is getting to me."
+        },
+        {
+          "speaker": "Man",
+          "text": "You could still do the club and just start running with me in the mornings. We jog by the river before classes."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh, that's a good call. I'll come along tomorrow and see how it feels."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the two students mainly discussing?",
+          "options": {
+            "A": "Which campus activity the woman should join",
+            "B": "How to improve the woman's chemistry grade",
+            "C": "Where the photography club takes its photos",
+            "D": "Why the volleyball team changed its schedule"
+          },
+          "answer": "A",
+          "explanation": "对话围绕女生在摄影社和排球队之间如何选择展开，A正确。B错：化学实验只是排球练习时间冲突的原因，不是讨论主题（too_narrow）。C错：对话从未提及摄影社去哪里拍照（wrong_topic）。D错：没有谈到排球队改时间，是误读情境（reversed_situation）。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "wrong_topic",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do?",
+          "options": {
+            "A": "Quit her chemistry lab to play volleyball",
+            "B": "Stop trying to meet new people this semester",
+            "C": "Join the photography club and jog in the mornings",
+            "D": "Sign up for the intramural volleyball team"
+          },
+          "answer": "C",
+          "explanation": "女生接受了男生的建议——参加周日的摄影社，同时早上跟他一起跑步，C正确。A错：她明确说不能翘实验课（rejected_option）。D错：排球队和实验课冲突，她已放弃（rejected_option）。B错：她的初衷就是认识更多人，不会放弃，属于过度推断（over_inference）。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "over_inference",
+            "D": "rejected_option"
+          }
+        }
+      ],
+      "id": "lc_mqzndtyk_0"
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "Two students compare their reactions to a novel they both read.",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "So you finally finished the novel for Professor Adler's seminar. What did you think of the ending?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Honestly, it frustrated me. The author leaves it totally open whether the narrator is telling the truth."
+        },
+        {
+          "speaker": "Woman",
+          "text": "See, that's exactly what I loved. It made me want to reread the whole thing looking for clues."
+        },
+        {
+          "speaker": "Man",
+          "text": "Hmm. I guess I prefer a story that resolves things. But maybe I missed the point."
+        },
+        {
+          "speaker": "Woman",
+          "text": "I wouldn't say that. We're just reading for different reasons. You want closure; I want a puzzle."
+        },
+        {
+          "speaker": "Man",
+          "text": "Fair enough. Actually, now I'm curious what those clues were. Maybe I'll skim it again before class."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the conversation mainly about?",
+          "options": {
+            "A": "Whether the narrator of the novel lied",
+            "B": "The students' differing opinions of the novel's ending",
+            "C": "How long it took the man to finish reading",
+            "D": "Why Professor Adler assigned the novel"
+          },
+          "answer": "B",
+          "explanation": "整段对话是两人对小说开放式结局的不同看法的交流，B正确。A错：叙述者是否说谎只是结局的一个细节，不是整体主题（too_narrow）。C错：阅读用时从未被讨论（wrong_topic）。D错：没有谈教授为何布置这本书，是另一个话题（wrong_topic）。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "C": "wrong_topic",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the man by the end of the conversation?",
+          "options": {
+            "A": "He now dislikes the novel even more",
+            "B": "He plans to drop Professor Adler's seminar",
+            "C": "He thinks the woman misunderstood the book",
+            "D": "He is becoming more open to the woman's view"
+          },
+          "answer": "D",
+          "explanation": "男生最后说被勾起了好奇心、想重读找线索，说明他开始接受女生欣赏开放式结局的视角，D正确。A错：他从沮丧转为好奇，并未更讨厌（reversed_situation）。B错：没有任何退课的迹象（over_inference）。C错：是男生自己说‘也许我没读懂’，并未指责女生误解（misattributed/over_inference）。",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "B": "over_inference",
+            "C": "over_inference"
+          }
+        }
+      ],
+      "id": "lc_mqzndtyk_1"
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "Two friends recommend a podcast to each other.",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Have you found anything good to listen to on your commute lately?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Actually, yeah. There's this history podcast called Buried Lines. Each episode digs into one forgotten invention."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Ooh, that sounds right up my alley. How long are the episodes?"
+        },
+        {
+          "speaker": "Man",
+          "text": "About twenty minutes each, so it's perfect for a short bus ride. The host explains everything really clearly."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Twenty minutes is ideal. My bus trip is exactly that long."
+        },
+        {
+          "speaker": "Man",
+          "text": "Then start with the one on early refrigeration. It's the episode that got me hooked."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Refrigeration it is. I'll queue it up for tomorrow morning."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "According to the man, what is each episode of the podcast about?",
+          "options": {
+            "A": "A famous historical figure",
+            "B": "A current news event",
+            "C": "One forgotten invention",
+            "D": "A different country's history"
+          },
+          "answer": "C",
+          "explanation": "男生明确说每集深入讲一个被遗忘的发明，C正确。A错：节目讲的是发明，不是人物，改了关键事实（wrong_detail）。B错：是历史节目，不是时事新闻（wrong_detail）。D错：节目按发明分集，不是按国家，未提及（related_but_not_stated）。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do tomorrow morning?",
+          "options": {
+            "A": "Listen to the refrigeration episode on the bus",
+            "B": "Record her own history podcast",
+            "C": "Recommend the podcast to the man",
+            "D": "Walk to campus instead of taking the bus"
+          },
+          "answer": "A",
+          "explanation": "女生说要为明早排上那集（早期制冷），且她的公交车程正好二十分钟，A正确。B错：她只是收听，没有要自己做节目（over_inference）。C错：是男生向她推荐，方向反了（misattributed）。D错：她计划坐公交时听，没有改成步行（unrelated_next_step）。",
+          "distractor_types": {
+            "B": "over_inference",
+            "C": "misattributed",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_mqzndtyk_2"
+    },
+    {
+      "context": "errands_service",
+      "situation": "A student returns a too-small sweater at a store counter.",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "customer",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "store_clerk",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hi, I'd like to return this sweater. I ordered it online, but it's a bit too small."
+        },
+        {
+          "speaker": "Man",
+          "text": "No problem. Do you have the receipt or the order confirmation?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "I've got the email confirmation right here on my phone."
+        },
+        {
+          "speaker": "Man",
+          "text": "Perfect. Would you like a refund, or would you rather exchange it for a larger size?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "I'd love the next size up, actually. Do you have it in store?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Let me check the back. If we don't have it here, I can have it shipped to your home for free."
+        },
+        {
+          "speaker": "Woman",
+          "text": "That'd be great, thanks."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why does the woman want to return the sweater?",
+          "options": {
+            "A": "It is the wrong color",
+            "B": "It arrived damaged",
+            "C": "She found a cheaper one",
+            "D": "It is too small for her"
+          },
+          "answer": "D",
+          "explanation": "女生一开始就说毛衣有点太小，D正确。A错：她没说颜色不对（wrong_detail）。B错：没有提到毛衣有损坏（related_but_not_stated）。C错：她从未提及找到更便宜的（related_but_not_stated）。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "C": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do next?",
+          "options": {
+            "A": "Give the woman a full cash refund",
+            "B": "Check the stockroom for a larger size",
+            "C": "Cancel the woman's original order",
+            "D": "Direct her to a different store"
+          },
+          "answer": "B",
+          "explanation": "男生说‘让我去后面查查’，即去库房看有没有大一号，B正确。A错：女生选择换货而非退款（rejected_option）。C错：没有提到取消原订单（unrelated_next_step）。D错：他说店里没有就免费寄到家，不是让她去别的店（over_inference）。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "C": "unrelated_next_step",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "id": "lc_mqzndtyk_3"
     }
   ]
 }

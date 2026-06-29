@@ -13223,6 +13223,223 @@
       ],
       "difficulty": "easy",
       "id": "rdl-short_mqwshaus_3"
+    },
+    {
+      "genre": "notice",
+      "variant": "short",
+      "text": "Notice: From October 6 to 10, the Blue Line shuttle will be detoured around Carter Hall due to road repairs. Temporary stops will be added at Lawson Library and the Student Center. A $2 fare applies during the detour. Schedules are posted online by the Transit Office.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, why is the shuttle being detoured?",
+          "options": {
+            "A": "Because work is being done on a road",
+            "B": "Because Carter Hall is being painted",
+            "C": "Because the library is being renovated",
+            "D": "Because the route is being permanently closed"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice states the detour is due to road repairs, which the option paraphrases as work being done on a road."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about riding the shuttle during the detour?",
+          "options": {
+            "A": "It will become free for all students",
+            "B": "It will stop running on weekends",
+            "C": "It will cost riders money to use",
+            "D": "It will no longer reach the Student Center"
+          },
+          "correct_answer": "C",
+          "explanation": "Because a $2 fare applies during the detour, riders can infer the shuttle will cost money to use."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mqzndtw2_0"
+    },
+    {
+      "genre": "notice",
+      "variant": "short",
+      "text": "Notice: The north elevator in Bradley Hall will be out of service from March 12 through March 14 for safety inspection. During this period, the south elevator near Room 110 should be used instead. Repairs are scheduled to finish by Friday afternoon. Please contact Facilities with any questions.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what should people do while the north elevator is closed?",
+          "options": {
+            "A": "Use the stairs near the main entrance",
+            "B": "Take the south elevator near Room 110",
+            "C": "Report delays to the Transit Office",
+            "D": "Wait for the inspection to be canceled"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice directs people to use the south elevator near Room 110 during the closure."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about the north elevator after March 14?",
+          "options": {
+            "A": "It will be moved to another building",
+            "B": "It will require a fee to operate",
+            "C": "It will stay closed for several weeks",
+            "D": "It will likely be available again"
+          },
+          "correct_answer": "D",
+          "explanation": "Since repairs are scheduled to finish by Friday afternoon, the elevator will likely be available again afterward."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mqzndtw2_1"
+    },
+    {
+      "genre": "notice",
+      "variant": "short",
+      "text": "Notice: The water fountains on the third floor of Hale Science Building will be shut off for cleaning from June 2 to June 4. Fountains on the first and second floors remain open during this time. Work begins at 8:00 AM daily. Questions may be directed to the Facilities Office.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, which fountains will be unavailable?",
+          "options": {
+            "A": "The ones in the Facilities Office",
+            "B": "The ones on the first floor",
+            "C": "The ones on the second floor",
+            "D": "The ones on the third floor"
+          },
+          "correct_answer": "D",
+          "explanation": "The notice states the third-floor fountains will be shut off for cleaning."
+        },
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, when does the daily work begin?",
+          "options": {
+            "A": "At eight in the morning",
+            "B": "At noon each afternoon",
+            "C": "At the end of the day",
+            "D": "At ten in the evening"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice says work begins at 8:00 AM daily, which the option restates as eight in the morning."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mqzndtw2_2"
+    },
+    {
+      "genre": "flyer",
+      "variant": "short",
+      "text": "Join Campus Cleanup Day! Saturday, April 19, 9:00 AM at Memorial Park. Bring gloves and energy. Volunteers receive a free T-shirt and lunch. A $3 donation supports new recycling bins. Sign up at the Student Center desk by April 17. Help keep our campus green!",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the flyer, what do volunteers get for participating?",
+          "options": {
+            "A": "A parking pass and a map",
+            "B": "A gift card and a poster",
+            "C": "A free shirt and a meal",
+            "D": "A backpack and a water bottle"
+          },
+          "correct_answer": "C",
+          "explanation": "The flyer states volunteers receive a free T-shirt and lunch, paraphrased as a free shirt and a meal."
+        },
+        {
+          "question_type": "detail",
+          "stem": "According to the flyer, how should people join the event?",
+          "options": {
+            "A": "By calling the Facilities Office",
+            "B": "By signing up at the Student Center",
+            "C": "By emailing the event organizer",
+            "D": "By arriving early at the park gate"
+          },
+          "correct_answer": "B",
+          "explanation": "The flyer instructs people to sign up at the Student Center desk by April 17."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mqzndtw2_3"
+    },
+    {
+      "id": "rdl_r2_short_001",
+      "variant": "short",
+      "text": "Dear Students, Our records show your meal plan has a remaining balance of $35. To receive a refund, please visit the Dining Office in Foster Hall before May 20. Refunds will be processed within five business days. Thank you, Campus Dining Services",
+      "word_count": 42,
+      "genre": "email",
+      "format_metadata": {
+        "from": "Campus Dining Services",
+        "subject": "Meal Plan Balance Refund"
+      },
+      "questions": [
+        {
+          "qid": "rdl_r2_short_001_q1",
+          "question_type": "detail",
+          "stem": "According to the email, what must students do to receive a refund?",
+          "options": {
+            "A": "To submit a written request by email",
+            "B": "To visit the Dining Office before May 20",
+            "C": "To call the Dining Office during business hours",
+            "D": "To wait five business days for processing"
+          },
+          "correct_answer": "B",
+          "explanation": "The email states that to receive a refund, students should visit the Dining Office in Foster Hall before May 20."
+        },
+        {
+          "qid": "rdl_r2_short_001_q2",
+          "question_type": "vocabulary_in_context",
+          "stem": "The word \"processed\" in the email is closest in meaning to:",
+          "options": {
+            "A": "delayed",
+            "B": "refused",
+            "C": "cancelled",
+            "D": "handled"
+          },
+          "correct_answer": "D",
+          "explanation": "In context, refunds being \"processed\" means they will be handled or dealt with within five business days."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy"
+    },
+    {
+      "id": "rdl_r2_short_002",
+      "variant": "short",
+      "text": "Join the Spring Campus Cleanup! Volunteers needed Saturday, April 12, from 9:00 AM to noon. Meet at the Student Center lawn. Free t-shirt and lunch for all participants. A $5 deposit holds your spot and is refunded on arrival. Sign up at the Activities Office today!",
+      "word_count": 46,
+      "genre": "flyer",
+      "format_metadata": {
+        "headline": "Spring Campus Cleanup"
+      },
+      "questions": [
+        {
+          "qid": "rdl_r2_short_002_q1",
+          "question_type": "detail",
+          "stem": "According to the flyer, what do volunteers receive for participating?",
+          "options": {
+            "A": "A free t-shirt and lunch",
+            "B": "A cash payment for their time",
+            "C": "A parking pass for the weekend",
+            "D": "A discount at the Student Center"
+          },
+          "correct_answer": "A",
+          "explanation": "The flyer states that a free t-shirt and lunch are provided for all participants."
+        },
+        {
+          "qid": "rdl_r2_short_002_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the $5 deposit?",
+          "options": {
+            "A": "It covers the cost of the t-shirt.",
+            "B": "It must be paid in cash only.",
+            "C": "It is refunded when volunteers arrive.",
+            "D": "It reserves a spot for next year."
+          },
+          "correct_answer": "C",
+          "explanation": "The flyer says the deposit holds a spot and is refunded on arrival, so volunteers get it back when they show up."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy"
     }
   ]
 }
