@@ -1,0 +1,164 @@
+{
+  "items": [
+    {
+      "context": "general_daily",
+      "situation": "arranging a ride or carpool with a friend",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "My car's in the shop until Thursday.",
+      "options": {
+        "A": "Want me to drive you in the meantime?",
+        "B": "The shop downtown has great prices.",
+        "C": "I just got my oil changed too.",
+        "D": "Yes, the weather's been pretty bad."
+      },
+      "answer": "A",
+      "explanation": "说话人是在暗示自己这几天没车、需要帮助。A 用反问提出主动载对方，推进了对话并解决了潜在需求，是最恰当的回应。B 抓住‘shop（修车店）’这个词转而谈论店家价格，属于语义联想陷阱，没有回应需求。C 重复‘car/oil’相关话题，谈自己换机油，属于语义联想陷阱且答非所问。D 用‘yes’回应一个并非是非问句的陈述，且转到天气，属于答错问题类型，与缺车无关。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "semantic_association_trap",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student checking with TA about lab report requirements",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "I'm not sure how detailed the methods section should be.",
+      "options": {
+        "A": "The lab is open until six tonight.",
+        "B": "Better safe than sorry—include everything.",
+        "C": "I bought a new lab notebook yesterday.",
+        "D": "Methods can be tricky to memorize."
+      },
+      "answer": "B",
+      "explanation": "说话人在不确定方法部分要写多详细，B 用习惯用语‘Better safe than sorry’给出建议——宁可写全，自然又贴切地给出指导。A 抓住‘lab’联想到实验室开放时间，属于语义联想陷阱，没回应内容。C 谈自己买了实验记录本，重复‘lab’相关词，属于语义联想陷阱。D 把‘methods’误读为需要‘背诵’的东西，属于一词多义/误解陷阱，偏离了‘要写多详细’这个问题。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "semantic_association_trap",
+        "D": "polysemy_misinterpretation"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "roommate discussing weekend plans",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "How do you feel about a road trip this weekend?",
+      "options": {
+        "A": "The road near campus is always busy.",
+        "B": "I felt sick after the last trip.",
+        "C": "Count me in—I could use a break.",
+        "D": "Weekends are only two days long."
+      },
+      "answer": "C",
+      "explanation": "说话人在邀请对方周末自驾游，C 用习惯说法‘Count me in’热情答应并补充理由，是自然又恰当的回应。A 抓住‘road’联想到校园附近的路很堵，属于语义联想陷阱。B 把‘feel’误解为身体感受，谈上次旅行后生病，属于一词多义/误解陷阱，没回应这次邀请。D 重复‘weekend’却只是陈述周末有两天，属于答非所问的离题回答。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "polysemy_misinterpretation",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "two classmates discussing a group project deadline",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Did the professor push our deadline back?",
+      "options": {
+        "A": "The professor's lecture ran long today.",
+        "B": "Deadlines are stressful for everyone.",
+        "C": "Yes, I really enjoy group projects.",
+        "D": "Why don't we just ask her after class?"
+      },
+      "answer": "D",
+      "explanation": "说话人不确定截止日期是否延后，D 用反问提议课后直接去问教授，推进了对话并指向解决办法，是最恰当的回应。A 抓住‘professor’联想到今天讲课拖堂，属于语义联想陷阱。B 抓住‘deadline’泛泛感慨压力大，属于语义联想陷阱，没给信息。C 用‘yes’但答非所问，回答的是‘你喜不喜欢小组项目’这类完全不同的问题，属于答错问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "semantic_association_trap",
+        "C": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student checking lost-and-found at front desk",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Why didn't anyone turn in my umbrella?",
+      "options": {
+        "A": "Well, things often show up a day later.",
+        "B": "The umbrella shop is across the street.",
+        "C": "It rained pretty hard this morning.",
+        "D": "I turned in my keys last week."
+      },
+      "answer": "A",
+      "explanation": "说话人在抱怨没人上交他的雨伞，A 以话语标记‘Well’开头，间接安抚说东西常常晚一天才出现，是自然、得体的回应。B 抓住‘umbrella’联想到对面的伞店，属于语义联想陷阱。C 抓住‘umbrella/rain’联想到早上下大雨，属于语义联想陷阱，没回应问题。D 重复‘turn in’却谈自己上周交了钥匙，属于答非所问的离题回答。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "semantic_association_trap",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a professor about office hours or assignment",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Where can I find the reading you mentioned in class?",
+      "options": {
+        "A": "The reading room is on the second floor.",
+        "B": "I'll just email it to you right now.",
+        "C": "That class was unusually crowded today.",
+        "D": "Yes, the reading was quite long."
+      },
+      "answer": "B",
+      "explanation": "说话人问哪里能找到课上提到的阅读材料，B 不直接回答地点，而是直接解决其根本需求——立刻把材料发邮件给他，属于情境转移，是最佳回应。A 把‘reading’误读为‘阅读室’并谈其楼层，属于一词多义/语义联想陷阱。C 抓住‘class’联想到今天人很多，属于离题。D 用‘yes’但答非所问，回应的是‘阅读是不是很长’这类不同问题，属于答错问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student discussing a presentation topic with partner",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "What topic should we pick for our presentation?",
+      "options": {
+        "A": "The presentation hall seats two hundred.",
+        "B": "I picked up coffee for us earlier.",
+        "C": "Let's do renewable energy—it's timely.",
+        "D": "Yes, presentations make me nervous."
+      },
+      "answer": "C",
+      "explanation": "说话人在问演讲该选什么主题，C 直接给出具体建议‘可再生能源’并说明理由，是直接而恰当的回答。A 抓住‘presentation’联想到报告厅座位数，属于语义联想陷阱。B 把‘pick’误解为‘pick up（取咖啡）’，属于一词多义/误解陷阱，与选题无关。D 用‘yes’但答非所问，回应的是‘紧不紧张’，属于答错问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "polysemy_misinterpretation",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student seeking help at the writing center",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Can someone help me tighten up my conclusion?",
+      "options": {
+        "A": "The center closes early on Fridays.",
+        "B": "Conclusions usually go at the end.",
+        "C": "Yes, I tightened the screws yesterday.",
+        "D": "Sure, I'd be happy to take a look."
+      },
+      "answer": "D",
+      "explanation": "说话人在写作中心请人帮忙润色结尾，D 用习惯客气的表达‘Sure, I'd be happy to take a look’欣然答应帮忙，是自然得体的回应。A 抓住‘center’联想到周五早关门，属于语义联想陷阱。B 泛泛陈述结论位置，属于语义联想/离题，没提供帮助。C 把‘tighten’误读为‘拧紧螺丝’，属于一词多义/误解陷阱。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "polysemy_misinterpretation"
+      }
+    }
+  ]
+}

@@ -1,43 +1,45 @@
 {
-  "session_id": "routine-20260627-190416",
-  "completed_at": "2026-06-27T19:18:45Z",
-  "duration_minutes": 14,
+  "session_id": "routine-20260629-190433",
+  "completed_at": "2026-06-29T19:09:43.622Z",
+  "duration_minutes": 5,
   "model": "Claude Opus 4.8",
-  "highlight": "BS 难度冻结门通过（精修后 10/20 入库）；听力新增缓步动物、镜像神经元等科普题",
+  "highlight": "新增磁制冷物理 AP 阅读题；BS 20 题因答案长度校验全数未过，已交 R2 重试",
   "commit_sha": "",
   "results": {
     "bs": {
       "generated": 20,
-      "accepted": 20,
+      "accepted": 0,
       "topics": [
-        "campus life",
-        "classes & deadlines",
-        "dorm & social",
-        "registration",
-        "library & gym",
-        "professors"
+        "simple past statement",
+        "prepositional phrase",
+        "direct yes/no question",
+        "indirect question",
+        "negation",
+        "present perfect",
+        "relative clause",
+        "direct wh-question",
+        "passive",
+        "comparative"
       ],
       "favorite": {
-        "prompt": "What did the professor say about your draft?",
-        "answer": "She wanted to know why I changed the topic."
+        "prompt": "Did you make it to your morning lecture?",
+        "answer": "I sat near the front today."
       },
       "retried_after_fail": false,
-      "failure_reason": "20 生成，仅 1 套(10 题)能同时满足 set 嵌入问句下限(≥3/10)与全库 embedded 漂移带(≤2.5x)，故入库 10；难度门 PASS。",
-      "r2_supplemented": true,
-      "r2_items_added": 10
+      "failure_reason": "All 20 rejected by buildSentenceSchema: answers were 6 words (validator requires 7-15) and chunks(minus distractor)+prefilled did not equal answer words; floating-adverb ambiguity."
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
       "topics": [
-        "economics/corporate tax incentives",
-        "public health/pharmacist prescribing",
-        "education/handwritten exams vs AI",
-        "media/news paywalls"
+        "psychology",
+        "political science",
+        "business",
+        "history and culture"
       ],
       "favorite": {
-        "subtopic": "education",
-        "preview": "Several departments are now requiring students to submit handwritten, in-class exams instead of take-home essays, largely in response to AI writing tools."
+        "subtopic": "political science",
+        "preview": "For this week's discussion, let's think about how democracies select citizens for civic duties."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -46,14 +48,14 @@
       "generated": 4,
       "accepted": 4,
       "topics": [
-        "cooking club stove maintenance",
-        "community composting talk timing",
-        "food bank volunteer sign-up errors",
-        "campus radio training schedule"
+        "消费售后",
+        "社区生活",
+        "住宿",
+        "服务与活动"
       ],
       "favorite": {
-        "subtopic": "服务与活动",
-        "preview": "campus cooking club booked a demonstration kitchen for a guest chef night next Thursday; two stoves will be under maintenance"
+        "subtopic": "社区生活",
+        "preview": "You volunteer at a neighborhood community garden, and the new watering schedule posted last Monday assigns everyone"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -62,15 +64,15 @@
       "generated": 5,
       "accepted": 5,
       "topics": [
-        "physics/gravity",
-        "biology/plant biology",
-        "history/ancient astronomy",
-        "sociology/aging populations",
-        "business/labor economics"
+        "technology/refrigeration",
+        "anthropology/early agriculture",
+        "chemistry/chemical reactions",
+        "physics/magnetism",
+        "psychology/stress response"
       ],
       "favorite": {
-        "subtopic": "history/ancient astronomy",
-        "preview": "A gnomon is a simple upright rod or pillar whose shadow, cast by the sun, was used by ancient peoples to track time."
+        "subtopic": "technology/refrigeration",
+        "preview": "Magnetic refrigeration is a cooling technology that exploits the magnetocaloric effect, the tendency"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -79,16 +81,16 @@
       "generated": 6,
       "accepted": 6,
       "topics": [
-        "biology/deep-sea vents",
-        "environmental_science/microplastics",
-        "psychology/language development",
-        "history/Egyptian pyramids",
-        "geology/plate tectonics",
-        "astronomy/exoplanets"
+        "biology/ribosomes and protein synthesis",
+        "environmental_science/kudzu and invasive vines",
+        "psychology/selective attention",
+        "history/the agricultural revolution",
+        "geology/ice ages and glaciation",
+        "astronomy/lunar geology and craters"
       ],
       "favorite": {
-        "subtopic": "biology/deep-sea hydrothermal vent communities",
-        "preview": "Hydrothermal vents are cracks on the ocean floor where superheated, mineral-rich water rises from below the crust."
+        "subtopic": "astronomy/lunar geology and craters",
+        "preview": "The Moon's gray surface preserves a detailed record of violent collisions that happened billions of years ago."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -97,14 +99,14 @@
       "generated": 4,
       "accepted": 4,
       "topics": [
-        "advisor office-hours change",
-        "campus taco food truck",
-        "parking permit pickup",
-        "campus café lavender latte"
+        "notice",
+        "notice",
+        "notice",
+        "flyer"
       ],
       "favorite": {
-        "subtopic": "social_media/campus café drink recommendation",
-        "preview": "Okay, you have to try the new lavender latte at the Birch Street Café! It's only $4.50 and they're serving it through Sunday"
+        "subtopic": "flyer",
+        "preview": "Join Campus Cleanup Day! Saturday, April 19, 9:00 AM at Memorial Park. Bring gloves and energy."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -113,12 +115,11 @@
       "generated": 2,
       "accepted": 2,
       "topics": [
-        "elevator maintenance / residence hall",
-        "mailroom holiday hours"
+        "email"
       ],
       "favorite": {
-        "subtopic": "notice/mailroom-holiday-hours",
-        "preview": "The Student Mailroom in Bradley Center will operate on a reduced schedule during the Thanksgiving break, from"
+        "subtopic": "email",
+        "preview": "Subject: Join the Astronomy Club's Spring Stargazing Night - Dear Students, The Riverside Astronomy"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -127,14 +128,14 @@
       "generated": 4,
       "accepted": 4,
       "topics": [
-        "ecology/urban-heat-islands",
-        "neuroscience/mirror-neurons",
-        "biology/tardigrades",
-        "psychology/confirmation-bias"
+        "confirmation bias in decision-making",
+        "urban heat islands and local ecosystems",
+        "green roofs and urban stormwater runoff",
+        "camera obscura and Renaissance painting"
       ],
       "favorite": {
-        "subtopic": "biology/how tardigrades survive extreme environments",
-        "preview": "Imagine an animal you can boil, freeze near absolute zero, blast with radiation, or even launch into the vacuum of space"
+        "subtopic": "urban heat islands and local ecosystems",
+        "preview": "Walk from a leafy park into a dense downtown on a summer afternoon, and you can feel the temperature jump."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -143,15 +144,15 @@
       "generated": 5,
       "accepted": 5,
       "topics": [
-        "weekend hiking trip / shuttle",
-        "dinner party cheese board",
-        "gardening class herb pots",
-        "dorm couch advice",
-        "cracked phone screen repair"
+        "joining a campus club vs. intramural team",
+        "comparing reactions to a novel ending",
+        "recommending a history podcast",
+        "returning a too-small sweater",
+        "negotiating roommate quiet hours"
       ],
       "favorite": {
-        "subtopic": "campus_dorm_life/dorm couch fitting through a narrow doorway",
-        "preview": "You got a couch for your dorm last semester, right? I want one, but mine has to fit through that narrow doorway."
+        "subtopic": "recommending a history podcast",
+        "preview": "Have you found anything good to listen to on your commute lately? Actually, yeah. There's this history podcast."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -160,15 +161,15 @@
       "generated": 5,
       "accepted": 5,
       "topics": [
-        "mock interviews with alumni",
-        "winter gear swap voucher",
-        "dining hall summer hours",
-        "research poster night award",
-        "guest speaker career paths"
+        "study lounge closure for pipe repair",
+        "reopening of renovated performance hall",
+        "international club food festival",
+        "student society call for papers",
+        "study abroad information session"
       ],
       "favorite": {
-        "subtopic": "campus_activity/winter gear swap with voucher system",
-        "preview": "Attention students. The Outdoor Recreation Office is hosting its annual Winter Gear Swap this Saturday"
+        "subtopic": "study abroad information session",
+        "preview": "This is a reminder that the Office of Global Programs will host its study abroad information session this Wednesday."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -177,18 +178,18 @@
       "generated": 8,
       "accepted": 8,
       "topics": [
-        "job-news",
-        "borrow-notes",
-        "shuttle-parking",
-        "writing-center",
-        "spring-concert",
-        "library-textbook",
-        "weekend-hours",
-        "neighbor-noise"
+        "arranging a carpool ride",
+        "lab report methods detail",
+        "weekend road trip plans",
+        "group project deadline change",
+        "lost-and-found umbrella",
+        "finding class reading material",
+        "presentation topic choice",
+        "writing center conclusion help"
       ],
       "favorite": {
-        "subtopic": "general_daily/neighbor noise or shared space",
-        "preview": "Why is there banging coming from upstairs? — the right reply skips the why and offers to go ask them to quiet down."
+        "subtopic": "finding class reading material",
+        "preview": "Where can I find the reading you mentioned in class? Correct answer solves the need instead of giving a location."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -197,18 +198,16 @@
       "generated": 3,
       "accepted": 3,
       "topics": [
-        "Campus Radio Station",
-        "Swimming Pool Orientation",
-        "Watercolor Painting"
+        "Bike Tire Repair (how-to)",
+        "Cookie Baking (how-to)",
+        "Campus Bookstore orientation"
       ],
       "favorite": {
-        "subtopic": "Campus Radio Station",
-        "preview": "If you experience any trouble during your show, check the schedule taped beside the control board."
+        "subtopic": "Campus Bookstore orientation",
+        "preview": "Textbooks are shelved along this wall."
       },
       "retried_after_fail": false,
       "failure_reason": ""
     }
-  },
-  "r2_completed_at": "2026-06-27T19:50:09.735Z",
-  "r2_session_id": "routine-r2-20260627-193342"
+  }
 }
