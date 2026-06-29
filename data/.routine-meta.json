@@ -5,10 +5,14 @@
   "model": "Claude Opus 4.8",
   "highlight": "新增磁制冷物理 AP 阅读题；BS 20 题因答案长度校验全数未过，已交 R2 重试",
   "commit_sha": "",
+  "r2_completed_at": "2026-06-29T19:34:00.000Z",
+  "r2_session_id": "routine-r2-20260629-193347",
   "results": {
     "bs": {
       "generated": 20,
-      "accepted": 0,
+      "accepted": 20,
+      "r2_supplemented": true,
+      "r2_items_added": 20,
       "topics": [
         "simple past statement",
         "prepositional phrase",

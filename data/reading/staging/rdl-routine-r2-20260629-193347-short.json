@@ -1,0 +1,86 @@
+{
+  "type": "readInDailyLife",
+  "generated_at": "2026-06-29T19:34:00.000Z",
+  "total_generated": 2,
+  "total_accepted": 2,
+  "acceptance_rate": 1,
+  "items": [
+    {
+      "id": "rdl_r2_short_001",
+      "variant": "short",
+      "text": "Dear Students, Our records show your meal plan has a remaining balance of $35. To receive a refund, please visit the Dining Office in Foster Hall before May 20. Refunds will be processed within five business days. Thank you, Campus Dining Services",
+      "word_count": 42,
+      "genre": "email",
+      "format_metadata": {"from": "Campus Dining Services", "subject": "Meal Plan Balance Refund"},
+      "questions": [
+        {
+          "qid": "rdl_r2_short_001_q1",
+          "question_type": "detail",
+          "stem": "According to the email, what must students do to receive a refund?",
+          "options": {
+            "A": "To submit a written request by email",
+            "B": "To visit the Dining Office before May 20",
+            "C": "To call the Dining Office during business hours",
+            "D": "To wait five business days for processing"
+          },
+          "correct_answer": "B",
+          "explanation": "The email states that to receive a refund, students should visit the Dining Office in Foster Hall before May 20."
+        },
+        {
+          "qid": "rdl_r2_short_001_q2",
+          "question_type": "vocabulary_in_context",
+          "stem": "The word \"processed\" in the email is closest in meaning to:",
+          "options": {
+            "A": "delayed",
+            "B": "refused",
+            "C": "cancelled",
+            "D": "handled"
+          },
+          "correct_answer": "D",
+          "explanation": "In context, refunds being \"processed\" means they will be handled or dealt with within five business days."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy"
+    },
+    {
+      "id": "rdl_r2_short_002",
+      "variant": "short",
+      "text": "Join the Spring Campus Cleanup! Volunteers needed Saturday, April 12, from 9:00 AM to noon. Meet at the Student Center lawn. Free t-shirt and lunch for all participants. A $5 deposit holds your spot and is refunded on arrival. Sign up at the Activities Office today!",
+      "word_count": 46,
+      "genre": "flyer",
+      "format_metadata": {"headline": "Spring Campus Cleanup"},
+      "questions": [
+        {
+          "qid": "rdl_r2_short_002_q1",
+          "question_type": "detail",
+          "stem": "According to the flyer, what do volunteers receive for participating?",
+          "options": {
+            "A": "A free t-shirt and lunch",
+            "B": "A cash payment for their time",
+            "C": "A parking pass for the weekend",
+            "D": "A discount at the Student Center"
+          },
+          "correct_answer": "A",
+          "explanation": "The flyer states that a free t-shirt and lunch are provided for all participants."
+        },
+        {
+          "qid": "rdl_r2_short_002_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the $5 deposit?",
+          "options": {
+            "A": "It covers the cost of the t-shirt.",
+            "B": "It must be paid in cash only.",
+            "C": "It is refunded when volunteers arrive.",
+            "D": "It reserves a spot for next year."
+          },
+          "correct_answer": "C",
+          "explanation": "The flyer says the deposit holds a spot and is refunded on arrival, so volunteers get it back when they show up."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy"
+    }
+  ],
+  "rejected": []
+}
