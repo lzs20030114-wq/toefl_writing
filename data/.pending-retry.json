@@ -1,78 +1,86 @@
 {
-  "session_id": "routine-20260629-190433",
-  "generated_at": "2026-06-29T19:09:46.746Z",
+  "session_id": "routine-20260630-190413",
+  "generated_at": "2026-06-30T19:14:03.772Z",
   "needs_retry": true,
-  "resolved_at": "2026-06-29T19:34:00.000Z",
-  "resolution_status": "supplemented",
   "overall_scores": {
-    "diversity": 95,
-    "quality": 96
+    "diversity": 92,
+    "quality": 94
   },
   "bs_difficulty_gate": "PASS",
   "retry_banks": [
     {
       "bank": "bs",
-      "diversity_score": 0,
+      "diversity_score": 80,
       "diversity_threshold": 90,
-      "quality_score": 0,
+      "quality_score": 100,
       "quality_threshold": 95,
       "failures": [
-        "R1 accepted=0 (full failure)"
+        "多样性 80 < 90"
       ],
       "diversity_breakdown": [
-        "R1 produced 0 valid items"
+        "角色名 3/20",
+        "场景 20/20",
+        "句型 4/5",
+        "开头 3/4",
+        "prefilled类型 5/4 (top:mid-noun-or-adj 9/20)",
+        "人物当prefilled 0/20 (0%, TPO~30%)",
+        "干扰词 14种 (top:did 25%)",
+        "chunk颗粒 5.5块/题 单词率88% (TPO~6块/77%)",
+        "题面对话化 16/20 (80% 含you, TPO~72%)"
       ],
       "quality_breakdown": [
-        "All 20 rejected by buildSentenceSchema: answers were 6 words (validator requires 7-15) and chunks(minus distractor)+prefilled did not equal answer words; floating-adverb ambiguity."
+        "块数 20/20",
+        "干扰词 20/20",
+        "答案长度 20/20",
+        "重组正确 20/20"
       ],
       "hints": [
-        "R1 generated 20 items but all were rejected. Failure reason: \"All 20 rejected by buildSentenceSchema: answers were 6 words (validator requires 7-15) and chunks(minus distractor)+prefilled did not equal answer words; floating-adverb ambiguity.\". Generate fresh items strictly following the print-bank-prompt rules — pay extra attention to schema compliance."
+        "角色名重复严重 (3/20 distinct) — use 15+ distinct character names from: Olivia, Harold, Mariana, Hector, Margot, Emma, Julian, Matthew, Alison, Juan, Angelina, Professor Cho, Naomi, Diane"
       ],
-      "items_to_supplement": 20
-    },
-    {
-      "bank": "reading-rdl-short",
-      "diversity_score": 70,
-      "diversity_threshold": 80,
-      "quality_score": 100,
-      "quality_threshold": 85,
-      "failures": [
-        "多样性 70 < 80"
-      ],
-      "diversity_breakdown": [
-        "话题 4/4",
-        "notice 3 · email 0"
-      ],
-      "quality_breakdown": [
-        "词数 4/4"
-      ],
-      "hints": [
-        "多样性 < gate — choose distinct topic/subtopic combos; avoid same discipline twice"
-      ],
-      "items_to_supplement": 2
+      "items_to_supplement": 10
     },
     {
       "bank": "reading-rdl-long",
       "diversity_score": 60,
       "diversity_threshold": 70,
-      "quality_score": 50,
+      "quality_score": 0,
       "quality_threshold": 85,
       "failures": [
         "多样性 60 < 70",
-        "质量 50 < 85"
+        "质量 0 < 85"
       ],
       "diversity_breakdown": [
         "话题 2/2",
         "notice 0 · email 2"
       ],
       "quality_breakdown": [
-        "词数 1/2"
+        "词数 0/2"
       ],
       "hints": [
         "多样性 < gate — choose distinct topic/subtopic combos; avoid same discipline twice",
-        "质量校验有偏差: 词数 1/2 — recheck schema compliance"
+        "质量校验有偏差: 词数 0/2 — recheck schema compliance"
       ],
       "items_to_supplement": 1
+    },
+    {
+      "bank": "listening-lc",
+      "diversity_score": 100,
+      "diversity_threshold": 72,
+      "quality_score": 60,
+      "quality_threshold": 80,
+      "failures": [
+        "质量 60 < 80"
+      ],
+      "diversity_breakdown": [
+        "distinct openings 5/5"
+      ],
+      "quality_breakdown": [
+        "conv words 68-105: 3/5"
+      ],
+      "hints": [
+        "质量校验有偏差: conv words 68-105: 3/5 — recheck schema compliance"
+      ],
+      "items_to_supplement": 3
     }
   ]
 }

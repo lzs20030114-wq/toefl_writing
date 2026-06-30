@@ -1,162 +1,9 @@
 {
-  "generated_at": "2026-06-29T19:04:37.127Z",
+  "generated_at": "2026-06-30T19:04:16.635Z",
   "bs": {
-    "total_sets": 42,
-    "total_questions": 414,
+    "total_sets": 44,
+    "total_questions": 434,
     "recent_60_samples": [
-      {
-        "prompt": "Did you make it to your morning class?",
-        "answer": "My alarm did not go off today.",
-        "grammar": [
-          "negation",
-          "statement"
-        ]
-      },
-      {
-        "prompt": "Did you grab a coffee before class?",
-        "answer": "The campus cafe was already closed today.",
-        "grammar": [
-          "simple past statement"
-        ]
-      },
-      {
-        "prompt": "What did you ask the coach after tryouts?",
-        "answer": "I asked whether the final roster had already been posted online.",
-        "grammar": [
-          "embedded question",
-          "declarative order"
-        ]
-      },
-      {
-        "prompt": "Have you decided on a topic with your group?",
-        "answer": "We picked the research subject that the panel recommended last week.",
-        "grammar": [
-          "relative clause"
-        ]
-      },
-      {
-        "prompt": "Why did you arrive so late this morning?",
-        "answer": "My bus broke down near the bridge.",
-        "grammar": [
-          "simple past statement"
-        ]
-      },
-      {
-        "prompt": "Are you ready for your big presentation?",
-        "answer": "I have not rehearsed the closing slides yet.",
-        "grammar": [
-          "negation",
-          "present perfect"
-        ]
-      },
-      {
-        "prompt": "I just moved into the north dorm.",
-        "answer": "Where can I do my laundry around here?",
-        "grammar": [
-          "direct wh-question",
-          "inversion"
-        ]
-      },
-      {
-        "prompt": "Did you hear what happened to your housing form?",
-        "answer": "I found out the form that I mailed last week got approved.",
-        "grammar": [
-          "embedded question",
-          "declarative order"
-        ]
-      },
-      {
-        "prompt": "Did you check on the bike racks for me?",
-        "answer": "I asked whether the racks behind the new gym were free.",
-        "grammar": [
-          "embedded question",
-          "declarative order"
-        ]
-      },
-      {
-        "prompt": "Did the professor mention anything to you about Friday?",
-        "answer": "The lecture has been moved to the larger hall downtown.",
-        "grammar": [
-          "passive voice"
-        ]
-      },
-      {
-        "prompt": "Are you free to grab coffee later today?",
-        "answer": "I finish my last class at noon.",
-        "grammar": [
-          "simple present statement"
-        ]
-      },
-      {
-        "prompt": "Did you sleep well before your big presentation?",
-        "answer": "I woke up before my alarm rang.",
-        "grammar": [
-          "simple past statement"
-        ]
-      },
-      {
-        "prompt": "I heard your group meeting got rescheduled.",
-        "answer": "She asked if everyone could come on Thursday.",
-        "grammar": [
-          "indirect question",
-          "declarative word order"
-        ]
-      },
-      {
-        "prompt": "Did you talk to the new student at orientation?",
-        "answer": "She wanted to know whether the labs that I booked are still open.",
-        "grammar": [
-          "indirect question",
-          "relative clause",
-          "declarative word order"
-        ]
-      },
-      {
-        "prompt": "Have you turned in your scholarship paperwork?",
-        "answer": "I haven't signed the second page yet.",
-        "grammar": [
-          "negation",
-          "present perfect"
-        ]
-      },
-      {
-        "prompt": "I just moved into the dorm this week.",
-        "answer": "Where can I get a meal plan card?",
-        "grammar": [
-          "direct wh-question",
-          "inversion"
-        ]
-      },
-      {
-        "prompt": "Why did you switch your morning section?",
-        "answer": "The earlier lecture overlapped with my chemistry lab.",
-        "grammar": [
-          "past tense statement"
-        ]
-      },
-      {
-        "prompt": "Did you talk to your advisor about credits?",
-        "answer": "She needed to know which of the courses I'd dropped would still count.",
-        "grammar": [
-          "indirect question",
-          "declarative word order"
-        ]
-      },
-      {
-        "prompt": "Did you ever get that library fine sorted out?",
-        "answer": "The late fee was waived right after I'd explained the whole situation.",
-        "grammar": [
-          "passive voice"
-        ]
-      },
-      {
-        "prompt": "Are you joining the photography club this term?",
-        "answer": "Honestly, I'm still comparing a few options.",
-        "grammar": [
-          "present continuous",
-          "sentence-opener adverb"
-        ]
-      },
       {
         "prompt": "Did you make it to the study session?",
         "answer": "I caught the shuttle right on time.",
@@ -462,74 +309,202 @@
         "grammar": [
           "embedded question"
         ]
+      },
+      {
+        "prompt": "Did you make it to class on time?",
+        "answer": "I missed the early bus this morning.",
+        "grammar": [
+          "simple past",
+          "statement"
+        ]
+      },
+      {
+        "prompt": "There's a study group forming for chemistry.",
+        "answer": "Where do I sign up for it?",
+        "grammar": [
+          "direct question",
+          "wh-question"
+        ]
+      },
+      {
+        "prompt": "Did you ever hear back about the lab hours?",
+        "answer": "I wanted to know whether the lab opens early.",
+        "grammar": [
+          "embedded question",
+          "whether-clause"
+        ]
+      },
+      {
+        "prompt": "Are you ready to hand in the assignment?",
+        "answer": "I haven't finished the final lab report yet.",
+        "grammar": [
+          "negation",
+          "present perfect"
+        ]
+      },
+      {
+        "prompt": "Did you ever return those library books?",
+        "answer": "I returned the books that I'd borrowed last week.",
+        "grammar": [
+          "relative clause",
+          "past tense"
+        ]
+      },
+      {
+        "prompt": "I still need to get my ID badge.",
+        "answer": "You can pick up your badge at the front desk.",
+        "grammar": [
+          "modal verb",
+          "statement"
+        ]
+      },
+      {
+        "prompt": "I heard the chemistry lecture got rescheduled.",
+        "answer": "The lecture was moved to the bigger lecture hall.",
+        "grammar": [
+          "passive voice",
+          "statement"
+        ]
+      },
+      {
+        "prompt": "Did you check on the deadline?",
+        "answer": "I tried to find out when the deadline was.",
+        "grammar": [
+          "embedded question",
+          "when-clause"
+        ]
+      },
+      {
+        "prompt": "I wasn't sure if I could come along.",
+        "answer": "You're welcome to join us for the trip.",
+        "grammar": [
+          "statement",
+          "contraction"
+        ]
+      },
+      {
+        "prompt": "Did the advisor explain your credit situation?",
+        "answer": "He had to figure out which of the classes I dropped still counted.",
+        "grammar": [
+          "embedded question",
+          "which-clause"
+        ]
+      },
+      {
+        "prompt": "Have you seen my notebook anywhere?",
+        "answer": "I left my notebook in the library.",
+        "grammar": [
+          "simple past",
+          "statement"
+        ]
+      },
+      {
+        "prompt": "There's an open seat next to me.",
+        "answer": "Do you want to sit with us?",
+        "grammar": [
+          "direct question",
+          "yes-no question"
+        ]
+      },
+      {
+        "prompt": "Did you get the room change notice?",
+        "answer": "I needed to find out where the seminar met.",
+        "grammar": [
+          "embedded question",
+          "where-clause"
+        ]
+      },
+      {
+        "prompt": "Are you heading to the gym later?",
+        "answer": "I don't think the gym is open yet.",
+        "grammar": [
+          "negation",
+          "present simple"
+        ]
+      },
+      {
+        "prompt": "I'm not sure who to ask about transferring.",
+        "answer": "You should talk to the advisor who handles transfers.",
+        "grammar": [
+          "relative clause",
+          "modal verb"
+        ]
+      },
+      {
+        "prompt": "I heard the library is staying open longer.",
+        "answer": "The library hours were extended for final exams.",
+        "grammar": [
+          "passive voice",
+          "statement"
+        ]
+      },
+      {
+        "prompt": "Are you signed up for the writing workshop?",
+        "answer": "I've already signed up for the writing workshop.",
+        "grammar": [
+          "present perfect",
+          "statement"
+        ]
+      },
+      {
+        "prompt": "Did you find out the gym schedule?",
+        "answer": "I asked whether the new gym opens before eight.",
+        "grammar": [
+          "embedded question",
+          "whether-clause"
+        ]
+      },
+      {
+        "prompt": "I can't find the textbook on the shelves.",
+        "answer": "I wonder if the bookstore still has the textbook.",
+        "grammar": [
+          "embedded question",
+          "if-clause"
+        ]
+      },
+      {
+        "prompt": "Did you hear back about your lab results?",
+        "answer": "I returned the bike that my roommate had lent me last week.",
+        "grammar": [
+          "relative clause",
+          "past perfect"
+        ]
       }
     ],
     "opener_freq_recent60": {
-      "yes-no Q": 28,
-      "statement": 21,
-      "what did X": 6,
-      "wh-Q": 4,
-      "I-statement": 1
+      "yes-no Q": 26,
+      "statement": 25,
+      "what did X": 5,
+      "wh-Q": 2,
+      "I-statement": 2
     },
     "sentence_type_freq_recent60": {
       "other": 30,
       "indirect-Q": 18,
-      "negation": 4,
-      "passive": 4,
-      "relative-clause": 4
+      "relative-clause": 5,
+      "passive": 5,
+      "negation": 2
     }
   },
   "discussion": {
-    "total": 147,
+    "total": 151,
     "course_dist": {
       "technology and media": 13,
       "education": 12,
       "public health": 12,
       "economics": 12,
+      "business": 11,
       "environmental science": 11,
+      "psychology": 11,
+      "political science": 11,
+      "history and culture": 11,
       "sociology": 10,
-      "business": 10,
-      "psychology": 10,
-      "political science": 10,
       "computer science": 10,
       "social studies": 10,
-      "history and culture": 10,
       "public policy": 10,
       "marine biology": 7
     },
     "recent_40_samples": [
-      {
-        "course": "marine biology",
-        "prof_text_preview": "We've been examining how aquaculture is changing coastal economies this semester. Salmon and shrimp ",
-        "student_names": [
-          "Yuki",
-          "Marco"
-        ]
-      },
-      {
-        "course": "computer science",
-        "prof_text_preview": "For this week's discussion, let's think about how universities are responding to AI coding assistant",
-        "student_names": [
-          "Aisha",
-          "Phil"
-        ]
-      },
-      {
-        "course": "public health",
-        "prof_text_preview": "We've been studying how cities respond to seasonal heat waves this semester. Several mid-sized citie",
-        "student_names": [
-          "Hailey",
-          "Eric"
-        ]
-      },
-      {
-        "course": "technology and media",
-        "prof_text_preview": "More and more news outlets have begun labeling articles that were drafted or partially written by ge",
-        "student_names": [
-          "Zoe",
-          "Cameron"
-        ]
-      },
       {
         "course": "computer science",
         "prof_text_preview": "We've been discussing how software teams handle bugs and outages this semester. Many companies now r",
@@ -817,19 +792,51 @@
           "Phoebe",
           "Eric"
         ]
+      },
+      {
+        "course": "psychology",
+        "prof_text_preview": "We've been discussing how feedback shapes motivation this semester. A number of fitness and language",
+        "student_names": [
+          "Aisha",
+          "Marco"
+        ]
+      },
+      {
+        "course": "political science",
+        "prof_text_preview": "For this week's discussion, let's think about how democracies select citizens for civic duties. Seve",
+        "student_names": [
+          "Lena",
+          "Jared"
+        ]
+      },
+      {
+        "course": "business",
+        "prof_text_preview": "We've been studying how companies disclose information about their products this semester. A growing",
+        "student_names": [
+          "Carlos",
+          "Zoe"
+        ]
+      },
+      {
+        "course": "history and culture",
+        "prof_text_preview": "We've been examining how societies preserve languages that are fading from daily use. Several commun",
+        "student_names": [
+          "Yuki",
+          "Tom"
+        ]
       }
     ]
   },
   "email": {
-    "total": 152,
+    "total": 156,
     "topic_dist": {
+      "服务与活动": 30,
       "校园学业": 29,
-      "服务与活动": 29,
       "日常社交": 21,
-      "住宿": 19,
+      "住宿": 20,
+      "消费售后": 18,
       "职场工作": 17,
-      "消费售后": 17,
-      "社区生活": 12,
+      "社区生活": 13,
       "campus services": 2,
       "academic": 2,
       "jobs/internships": 2,
@@ -837,30 +844,6 @@
       "clubs/events": 1
     },
     "recent_30_samples": [
-      {
-        "topic": "日常社交",
-        "to": "Marco",
-        "subject": "Something about your bike's rear brake",
-        "scenario_preview": "You borrowed a friend's road bike for a cycling trip last weekend. When you retu"
-      },
-      {
-        "topic": "消费售后",
-        "to": "Mr. Castellano",
-        "subject": "Disappearing downloads and a double charge this month",
-        "scenario_preview": "You recently bought a monthly streaming-and-audiobook subscription that promised"
-      },
-      {
-        "topic": "服务与活动",
-        "to": "Ms. Pemberton",
-        "subject": "Switching my members-only guided tour slot",
-        "scenario_preview": "You are a new member of the city science museum, and you signed up for a members"
-      },
-      {
-        "topic": "校园学业",
-        "to": "Dr. Sorenson",
-        "subject": "Enrolling in your graduate seminar as an undergraduate",
-        "scenario_preview": "You are a senior majoring in linguistics who hopes to take Dr. Sorenson's gradua"
-      },
       {
         "topic": "消费售后",
         "to": "Mr. Lindqvist",
@@ -1016,18 +999,42 @@
         "to": "Mr. Castellanos",
         "subject": "Training schedule for the hosting segment",
         "scenario_preview": "You finished your first month as a part-time assistant at a campus radio station"
+      },
+      {
+        "topic": "消费售后",
+        "to": "Mr. Caldwell",
+        "subject": "Mismatched shoes in my recent order",
+        "scenario_preview": "You ordered a pair of running shoes online for a race next week, but the box tha"
+      },
+      {
+        "topic": "社区生活",
+        "to": "Ms. Donovan",
+        "subject": "Watering shifts for the community garden",
+        "scenario_preview": "You volunteer at a neighborhood community garden, and the new watering schedule "
+      },
+      {
+        "topic": "住宿",
+        "to": "Dr. Mehta",
+        "subject": "Heating still not working in my apartment",
+        "scenario_preview": "You moved into a furnished apartment last month, and the heating system has now "
+      },
+      {
+        "topic": "服务与活动",
+        "to": "Ms. Fairbanks",
+        "subject": "Location mix-up for the photography workshop",
+        "scenario_preview": "You signed up for a weekend photography workshop, and the confirmation lists a l"
       }
     ]
   },
   "reading_ap": {
-    "total": 314,
+    "total": 318,
     "topic_dist": {
       "anthropology": 33,
       "history": 27,
       "biology": 22,
+      "psychology": 19,
       "environmental_science": 18,
       "life sciences": 18,
-      "psychology": 18,
       "business": 17,
       "sociology": 15,
       "art": 15,
@@ -1039,11 +1046,11 @@
       "arts & humanities": 9,
       "social_sciences": 9,
       "materials_science": 9,
-      "physics": 6,
+      "physics": 7,
+      "technology": 7,
+      "chemistry": 6,
       "arts_and_humanities": 6,
-      "technology": 6,
       "astronomy": 6,
-      "chemistry": 5,
       "art_history": 4,
       "economics": 3,
       "linguistics": 1,
@@ -1070,6 +1077,7 @@
       "art/Renaissance": 4,
       "business/economic history": 4,
       "anthropology/cultural rituals": 4,
+      "psychology/stress response": 4,
       "materials_science/concrete chemistry": 4,
       "business/consumer behavior": 4,
       "psychology/motivation": 4,
@@ -1118,7 +1126,6 @@
       "technology/battery technology": 3,
       "geology/ocean floor": 3,
       "sociology/immigration patterns": 3,
-      "psychology/stress response": 3,
       "history/Polynesian navigation": 3,
       "biology/vertebrate jaw evolution": 3,
       "astronomy/ion propulsion": 3,
@@ -1189,13 +1196,12 @@
       "materials_science/metallurgy": 1,
       "technology/bridge design": 1,
       "astronomy/comets": 1,
-      "business/labor economics": 1
+      "business/labor economics": 1,
+      "technology/refrigeration": 1,
+      "chemistry/chemical reactions": 1,
+      "physics/magnetism": 1
     },
     "recent_subjects": [
-      "psychology / placebo effect/mechanisms of the placebo effect",
-      "psychology/cognitive development",
-      "environmental_science / green architecture/green roofs",
-      "environmental_science/biodiversity",
       "geology/volcanism",
       "sociology/urbanization",
       "materials_science/glass technology",
@@ -1221,18 +1227,22 @@
       "business/economic history",
       "environmental_science/invasive species",
       "history/ancient astronomy",
-      "business/labor economics"
+      "business/labor economics",
+      "technology/refrigeration",
+      "chemistry/chemical reactions",
+      "physics/magnetism",
+      "psychology/stress response"
     ]
   },
   "reading_ctw": {
-    "total": 552,
+    "total": 558,
     "topic_dist": {
-      "biology": 98,
-      "environmental_science": 92,
-      "psychology": 88,
-      "history": 87,
-      "geology": 77,
-      "astronomy": 64,
+      "biology": 99,
+      "environmental_science": 93,
+      "psychology": 89,
+      "history": 88,
+      "geology": 78,
+      "astronomy": 65,
       "technology": 12,
       "anthropology": 11,
       "art": 3,
@@ -1386,6 +1396,7 @@
       "astronomy/solar system": 2,
       "astronomy/planetary atmospheres": 2,
       "psychology/sleep psychology": 2,
+      "psychology/selective attention": 2,
       "geology/rock formation": 1,
       "psychology/cognitive development": 1,
       "biology/mycorrhizal networks": 1,
@@ -1450,7 +1461,6 @@
       "oceanography/ocean currents": 1,
       "meteorology/cloud formation": 1,
       "biology/bird navigation during migration": 1,
-      "psychology/selective attention": 1,
       "history/factory labor in the Industrial Revolution": 1,
       "geology/formation of sedimentary rock": 1,
       "astronomy/the structure and tails of comets": 1,
@@ -1470,15 +1480,14 @@
       "environmental_science/microplastic pollution in oceans": 1,
       "psychology/early language development in children": 1,
       "history/the building of ancient Egyptian pyramids": 1,
-      "geology/plate tectonics and continental movement": 1
+      "geology/plate tectonics and continental movement": 1,
+      "biology/ribosomes and protein synthesis": 1,
+      "environmental_science/kudzu and invasive vines": 1,
+      "history/the agricultural revolution": 1,
+      "geology/ice ages and glaciation": 1,
+      "astronomy/lunar geology and craters": 1
     },
     "recent_subjects": [
-      "biology/bioluminescence in deep-sea creatures",
-      "environmental_science/wetland restoration",
-      "biology/hibernation",
-      "environmental_science/sustainable agriculture",
-      "psychology/learning",
-      "history/silk road",
       "geology/earthquakes",
       "chemistry/catalysts",
       "technology/3D printing",
@@ -1502,36 +1511,36 @@
       "environmental_science/microplastic pollution in oceans",
       "psychology/early language development in children",
       "history/the building of ancient Egyptian pyramids",
-      "geology/plate tectonics and continental movement"
+      "geology/plate tectonics and continental movement",
+      "biology/ribosomes and protein synthesis",
+      "environmental_science/kudzu and invasive vines",
+      "psychology/selective attention",
+      "history/the agricultural revolution",
+      "geology/ice ages and glaciation",
+      "astronomy/lunar geology and craters"
     ]
   },
   "reading_rdl_short": {
-    "total": 379,
+    "total": 385,
     "topic_dist": {
-      "email": 137,
-      "notice": 137,
+      "notice": 140,
+      "email": 138,
       "social_media": 50,
-      "flyer": 40,
+      "flyer": 42,
       "advertisement": 6,
       "schedule": 6,
       "ad": 3
     },
     "subtopic_dist": {
-      "email/": 137,
-      "notice/": 137,
+      "notice/": 140,
+      "email/": 138,
       "social_media/": 50,
-      "flyer/": 40,
+      "flyer/": 42,
       "advertisement/": 6,
       "schedule/": 6,
       "ad/": 3
     },
     "recent_subjects": [
-      "email",
-      "email",
-      "email",
-      "notice",
-      "email",
-      "email",
       "flyer",
       "email",
       "email",
@@ -1555,31 +1564,34 @@
       "email",
       "social_media",
       "email",
-      "social_media"
+      "social_media",
+      "notice",
+      "notice",
+      "notice",
+      "flyer",
+      "email",
+      "flyer"
     ]
   },
   "reading_rdl_long": {
-    "total": 207,
+    "total": 210,
     "topic_dist": {
       "notice": 110,
-      "email": 75,
+      "email": 77,
       "menu": 8,
       "schedule": 6,
-      "syllabus": 4,
+      "syllabus": 5,
       "social_media": 4
     },
     "subtopic_dist": {
       "notice/": 110,
-      "email/": 75,
+      "email/": 77,
       "menu/": 8,
       "schedule/": 6,
-      "syllabus/": 4,
+      "syllabus/": 5,
       "social_media/": 4
     },
     "recent_subjects": [
-      "email",
-      "email",
-      "notice",
       "notice",
       "email",
       "schedule",
@@ -1606,7 +1618,10 @@
       "email",
       "notice",
       "notice",
-      "email"
+      "email",
+      "email",
+      "email",
+      "syllabus"
     ]
   }
 }

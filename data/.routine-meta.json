@@ -1,49 +1,40 @@
 {
-  "session_id": "routine-20260629-190433",
-  "completed_at": "2026-06-29T19:09:43.622Z",
-  "duration_minutes": 5,
+  "session_id": "routine-20260630-190413",
+  "completed_at": "2026-06-30T19:13:53.953Z",
+  "duration_minutes": 10,
   "model": "Claude Opus 4.8",
-  "highlight": "新增磁制冷物理 AP 阅读题；BS 20 题因答案长度校验全数未过，已交 R2 重试",
+  "highlight": "BS 难度冻结门 PASS（干扰词 14 个去重）；听力首现表现主义艺术史与归因偏差题",
   "commit_sha": "",
-  "r2_completed_at": "2026-06-29T19:34:00.000Z",
-  "r2_session_id": "routine-r2-20260629-193347",
   "results": {
     "bs": {
       "generated": 20,
       "accepted": 20,
-      "r2_supplemented": true,
-      "r2_items_added": 20,
       "topics": [
-        "simple past statement",
-        "prepositional phrase",
-        "direct yes/no question",
-        "indirect question",
-        "negation",
-        "present perfect",
+        "campus small-talk",
         "relative clause",
-        "direct wh-question",
+        "embedded question",
         "passive",
-        "comparative"
+        "negation"
       ],
       "favorite": {
-        "prompt": "Did you make it to your morning lecture?",
-        "answer": "I sat near the front today."
+        "prompt": "I heard the chemistry section changed rooms.",
+        "answer": "The class was moved to the science building."
       },
-      "retried_after_fail": false,
-      "failure_reason": "All 20 rejected by buildSentenceSchema: answers were 6 words (validator requires 7-15) and chunks(minus distractor)+prefilled did not equal answer words; floating-adverb ambiguity."
+      "retried_after_fail": true,
+      "failure_reason": ""
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
       "topics": [
-        "psychology",
-        "political science",
-        "business",
-        "history and culture"
+        "computer science",
+        "public policy",
+        "sociology",
+        "social studies"
       ],
       "favorite": {
-        "subtopic": "political science",
-        "preview": "For this week's discussion, let's think about how democracies select citizens for civic duties."
+        "subtopic": "computer science",
+        "preview": "We've been studying how open-source projects sustain themselves this semester. A growing number of maintainers"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -53,13 +44,13 @@
       "accepted": 4,
       "topics": [
         "消费售后",
-        "社区生活",
         "住宿",
-        "服务与活动"
+        "社区生活",
+        "日常社交"
       ],
       "favorite": {
-        "subtopic": "社区生活",
-        "preview": "You volunteer at a neighborhood community garden, and the new watering schedule posted last Monday assigns everyone"
+        "subtopic": "消费售后",
+        "preview": "You ordered a wireless keyboard from an online store two weeks ago, but the package that arrived contained a p"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -68,15 +59,15 @@
       "generated": 5,
       "accepted": 5,
       "topics": [
-        "technology/refrigeration",
-        "anthropology/early agriculture",
-        "chemistry/chemical reactions",
-        "physics/magnetism",
-        "psychology/stress response"
+        "business/supply chains",
+        "biology/microbiology",
+        "geology/ice ages",
+        "history/Roman engineering",
+        "art/Renaissance"
       ],
       "favorite": {
-        "subtopic": "technology/refrigeration",
-        "preview": "Magnetic refrigeration is a cooling technology that exploits the magnetocaloric effect, the tendency"
+        "subtopic": "business/supply chains",
+        "preview": "A supply chain is the connected network of organizations, people, and processes that moves a product from raw "
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -85,16 +76,16 @@
       "generated": 6,
       "accepted": 6,
       "topics": [
-        "biology/ribosomes and protein synthesis",
-        "environmental_science/kudzu and invasive vines",
-        "psychology/selective attention",
-        "history/the agricultural revolution",
-        "geology/ice ages and glaciation",
-        "astronomy/lunar geology and craters"
+        "biology/camouflage",
+        "environmental_science/climate change",
+        "psychology/learning",
+        "history/cultural exchange",
+        "geology/meteor impacts",
+        "astronomy/exoplanets"
       ],
       "favorite": {
-        "subtopic": "astronomy/lunar geology and craters",
-        "preview": "The Moon's gray surface preserves a detailed record of violent collisions that happened billions of years ago."
+        "subtopic": "biology/camouflage",
+        "preview": "Many animals survive by blending into their surroundings through a remarkable adaptation called camouflage. So"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -103,14 +94,14 @@
       "generated": 4,
       "accepted": 4,
       "topics": [
+        "social_media",
+        "email",
         "notice",
-        "notice",
-        "notice",
-        "flyer"
+        "notice"
       ],
       "favorite": {
-        "subtopic": "flyer",
-        "preview": "Join Campus Cleanup Day! Saturday, April 19, 9:00 AM at Memorial Park. Bring gloves and energy."
+        "subtopic": "social_media",
+        "preview": "Heads up, everyone! The Tech Lab in Bryant Hall is offering totally free printing all week, through this Frida"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -119,11 +110,12 @@
       "generated": 2,
       "accepted": 2,
       "topics": [
+        "email",
         "email"
       ],
       "favorite": {
         "subtopic": "email",
-        "preview": "Subject: Join the Astronomy Club's Spring Stargazing Night - Dear Students, The Riverside Astronomy"
+        "preview": "Subject: Welcome to the Brightwood Makerspace! Hi Maya, Welcome to the Brightwood Makerspace on the lower floo"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -132,14 +124,14 @@
       "generated": 4,
       "accepted": 4,
       "topics": [
-        "confirmation bias in decision-making",
-        "urban heat islands and local ecosystems",
-        "green roofs and urban stormwater runoff",
-        "camera obscura and Renaissance painting"
+        "social_psychology",
+        "art_history",
+        "cognitive_psychology",
+        "biology"
       ],
       "favorite": {
-        "subtopic": "urban heat islands and local ecosystems",
-        "preview": "Walk from a leafy park into a dense downtown on a summer afternoon, and you can feel the temperature jump."
+        "subtopic": "social_psychology/the fundamental attribution error in everyday judgments",
+        "preview": "Imagine you're waiting in line and someone cuts right in front of you. Your first thought is probably, what a "
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -148,15 +140,15 @@
       "generated": 5,
       "accepted": 5,
       "topics": [
-        "joining a campus club vs. intramural team",
-        "comparing reactions to a novel ending",
-        "recommending a history podcast",
-        "returning a too-small sweater",
-        "negotiating roommate quiet hours"
+        "recommendations_opinions",
+        "recommendations_opinions",
+        "campus_dorm_life",
+        "plans_social",
+        "errands_service"
       ],
       "favorite": {
-        "subtopic": "recommending a history podcast",
-        "preview": "Have you found anything good to listen to on your commute lately? Actually, yeah. There's this history podcast."
+        "subtopic": "recommendations_opinions",
+        "preview": "two friends debating whether a new cafe is worth the price"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -165,15 +157,15 @@
       "generated": 5,
       "accepted": 5,
       "topics": [
-        "study lounge closure for pipe repair",
-        "reopening of renovated performance hall",
-        "international club food festival",
-        "student society call for papers",
-        "study abroad information session"
+        "logistics",
+        "facility_change",
+        "facility_change",
+        "info_session",
+        "campus_activity"
       ],
       "favorite": {
-        "subtopic": "study abroad information session",
-        "preview": "This is a reminder that the Office of Global Programs will host its study abroad information session this Wednesday."
+        "subtopic": "logistics",
+        "preview": "Good morning, students. Beginning this Monday, the Blue Line shuttle won't be stopping at its usual spot in fr"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -182,18 +174,18 @@
       "generated": 8,
       "accepted": 8,
       "topics": [
-        "arranging a carpool ride",
-        "lab report methods detail",
-        "weekend road trip plans",
-        "group project deadline change",
-        "lost-and-found umbrella",
-        "finding class reading material",
-        "presentation topic choice",
-        "writing center conclusion help"
+        "campus_daily",
+        "campus_daily",
+        "general_daily",
+        "campus_daily",
+        "general_daily",
+        "campus_academic",
+        "social",
+        "campus_academic"
       ],
       "favorite": {
-        "subtopic": "finding class reading material",
-        "preview": "Where can I find the reading you mentioned in class? Correct answer solves the need instead of giving a location."
+        "subtopic": "campus_daily",
+        "preview": "Why does the pool close so early on weekends?"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -202,13 +194,13 @@
       "generated": 3,
       "accepted": 3,
       "topics": [
-        "Bike Tire Repair (how-to)",
-        "Cookie Baking (how-to)",
-        "Campus Bookstore orientation"
+        "Campus Gym Induction",
+        "Chemistry Lab Safety",
+        "Salad Making (how-to)"
       ],
       "favorite": {
-        "subtopic": "Campus Bookstore orientation",
-        "preview": "Textbooks are shelved along this wall."
+        "subtopic": "Campus Gym Induction",
+        "preview": "Lockers are located by the entrance."
       },
       "retried_after_fail": false,
       "failure_reason": ""

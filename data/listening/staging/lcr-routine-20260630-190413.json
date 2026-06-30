@@ -1,0 +1,172 @@
+{
+  "items": [
+    {
+      "id": "lcr_routine-20260630-190413_1",
+      "context": "campus_daily",
+      "situation": "student asking about gym or sports facility hours",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Why does the pool close so early on weekends?",
+      "options": {
+        "A": "Beats me, I've wondered that too.",
+        "B": "The pool was just repainted last month.",
+        "C": "Swimming is great exercise for everyone.",
+        "D": "Every hour on the half hour."
+      },
+      "answer": "A",
+      "explanation": "正确答案A使用习语\"Beats me\"（意为\"我也不知道\"），自然地表达说话者同样不清楚原因，符合idiomatic范式。B是语义联想陷阱，借用\"pool\"谈论油漆翻新，没有回答原因。C是泛泛陈述游泳的好处，与提问完全无关，属于off-topic。D回答的是\"多久一次/时间\"，答非所问，属于wrong_question_type。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "id": "lcr_routine-20260630-190413_2",
+      "context": "campus_daily",
+      "situation": "roommate discussing weekend plans",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "I really wanted to see that movie this weekend.",
+      "options": {
+        "A": "The theater downtown is huge.",
+        "B": "I'll grab tickets for us right now.",
+        "C": "Movies are too expensive these days.",
+        "D": "Yes, I watched it last night."
+      },
+      "answer": "B",
+      "explanation": "正确答案B不直接回应\"想看电影\"这句话，而是主动解决潜在需求——立刻去买票，符合context_shift范式。A是语义联想陷阱，借\"movie\"谈论电影院本身，没有帮上忙。C是泛泛抱怨电影票价，属off-topic。D说\"我昨晚看了\"，误解了说话者的意图（对方是想去看，不是问别人看没看），属于misinterpretation。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "polysemy_misinterpretation"
+      }
+    },
+    {
+      "id": "lcr_routine-20260630-190413_3",
+      "context": "general_daily",
+      "situation": "asking for directions to a nearby location",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Do you know how to get to the train station?",
+      "options": {
+        "A": "The train was late again this morning.",
+        "B": "Yes, I take the train every day.",
+        "C": "Are you walking or driving there?",
+        "D": "Trains are a great way to travel."
+      },
+      "answer": "C",
+      "explanation": "正确答案C用反问\"你是走路还是开车\"推进对话，因为路线取决于交通方式，符合counter_question范式。A是语义联想陷阱，借\"train\"谈论火车晚点，没回答怎么走。B说\"我每天坐火车\"虽含\"yes\"但谈的是乘车经历，不是路线，属off-topic。D是泛泛评价火车旅行，与问路无关，属off-topic。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "off_topic"
+      }
+    },
+    {
+      "id": "lcr_routine-20260630-190413_4",
+      "context": "campus_daily",
+      "situation": "friend inviting another to a study group or social event",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "What do you say we join the study group tonight?",
+      "options": {
+        "A": "The group meets in the library basement.",
+        "B": "I studied really hard for that exam.",
+        "C": "Saying nice things is always good.",
+        "D": "Sure, count me in."
+      },
+      "answer": "D",
+      "explanation": "正确答案D用习语\"count me in\"（算我一个）爽快接受邀请，符合idiomatic范式。A是语义联想陷阱，借\"group\"谈论小组地点，没回应邀请。B说\"我为考试努力学习\"借\"study\"转向无关往事，属off-topic。C把\"what do you say\"误解成字面\"说话\"的含义，属于polysemy陷阱。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "polysemy_misinterpretation"
+      }
+    },
+    {
+      "id": "lcr_routine-20260630-190413_5",
+      "context": "general_daily",
+      "situation": "making or rescheduling an appointment",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "How about we move my appointment to Friday?",
+      "options": {
+        "A": "Works for me, Friday's open.",
+        "B": "The clinic is across from the bank.",
+        "C": "I moved into my new place on Friday.",
+        "D": "Doctors are very busy people."
+      },
+      "answer": "A",
+      "explanation": "正确答案A用口语习语\"Works for me\"表示同意改期，符合idiomatic范式。B是语义联想陷阱，借\"appointment/clinic\"谈论诊所位置，没回应改期。C把\"move\"误用为\"搬家\"的含义，属于polysemy陷阱。D是泛泛评价医生很忙，与改期无关，属off-topic。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "polysemy_misinterpretation",
+        "D": "off_topic"
+      }
+    },
+    {
+      "id": "lcr_routine-20260630-190413_6",
+      "context": "campus_academic",
+      "situation": "two classmates discussing a group project deadline",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Have you finished your part of the project yet?",
+      "options": {
+        "A": "The project topic is really interesting.",
+        "B": "Almost, just polishing the last slide.",
+        "C": "Yes, I finished my coffee already.",
+        "D": "How many parts are there total?"
+      },
+      "answer": "B",
+      "explanation": "正确答案B以话语标记\"Almost\"开头，间接回应进度并说明还差最后一张幻灯片，符合marker_led_indirect范式。A是语义联想陷阱，借\"project\"谈论选题有趣，没回答进度。C用\"finished\"但接的是\"咖啡\"，属于polysemy/误解陷阱。D反问\"一共几部分\"答非所问，属于wrong_question_type。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "polysemy_misinterpretation",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "id": "lcr_routine-20260630-190413_7",
+      "context": "social",
+      "situation": "acknowledging someone's unavailability or schedule conflict",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I can't make it to dinner on Saturday.",
+      "options": {
+        "A": "Dinner was delicious last time.",
+        "B": "No, I haven't seen him today.",
+        "C": "Well, maybe we can try Sunday instead.",
+        "D": "The restaurant is fully booked."
+      },
+      "answer": "C",
+      "explanation": "正确答案C以话语标记\"Well\"开头，间接提出改到周日的替代方案，符合marker_led_indirect范式。A是语义联想陷阱，借\"dinner\"夸赞上次饭菜，没回应日程冲突。B答非所问，回答的是\"见没见某人\"，属于wrong_question_type/off-topic。D说\"餐厅订满了\"借\"dinner\"转向无关信息，属off-topic。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "wrong_question_type",
+        "D": "off_topic"
+      }
+    },
+    {
+      "id": "lcr_routine-20260630-190413_8",
+      "context": "campus_academic",
+      "situation": "student asking a professor about office hours or assignment",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Where can I drop off my assignment?",
+      "options": {
+        "A": "The assignment was quite difficult.",
+        "B": "It's due by Friday at noon.",
+        "C": "I dropped my pen on the floor.",
+        "D": "Actually, just leave it on my desk."
+      },
+      "answer": "D",
+      "explanation": "正确答案D以话语标记\"Actually\"开头，间接指明放在我桌上即可，符合marker_led_indirect范式。A是语义联想陷阱，借\"assignment\"评价作业很难，没回答地点。B回答的是\"何时截止\"，答非所问，属于wrong_question_type。C把\"drop\"误用为\"掉落\"的含义，属于polysemy陷阱。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "wrong_question_type",
+        "C": "polysemy_misinterpretation"
+      }
+    }
+  ]
+}
