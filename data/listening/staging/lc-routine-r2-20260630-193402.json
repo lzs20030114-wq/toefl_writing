@@ -1,0 +1,173 @@
+{
+  "_meta": {
+    "type": "lc",
+    "generated_at": "2026-06-30T19:34:02Z",
+    "source": "routine-r2-20260630-193402",
+    "total_generated": 3,
+    "total_accepted": 3
+  },
+  "items": [
+    {
+      "id": "lc_r2_20260630_193402_1",
+      "context": "campus_service",
+      "situation": "a student asking library staff about a delayed interlibrary loan",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "library_staff", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Hi, I requested a book through interlibrary loan last week, but it still hasn't arrived. Could you check on it?" },
+        { "speaker": "Man", "text": "Sure, let me look. It says the book shipped from a partner library on Tuesday, so it should be here by Friday." },
+        { "speaker": "Woman", "text": "Oh, that's cutting it close. My research paper is due Monday morning." },
+        { "speaker": "Man", "text": "If you're worried, we actually have an e-book version you can read right now through the library portal." },
+        { "speaker": "Woman", "text": "Really? That would solve everything. How do I find it?" },
+        { "speaker": "Man", "text": "Just search the title in the catalog and click the online access link. You'll need to log in with your student ID." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man suggest the woman do?",
+          "options": {
+            "A": "Borrow a copy from a partner library",
+            "B": "Access an electronic version through the portal",
+            "C": "Wait until the book arrives on Friday",
+            "D": "Submit a new interlibrary loan request"
+          },
+          "answer": "B",
+          "explanation": "男生建议她现在就通过图书馆门户阅读电子书版本，所以B正确。A、C、D都不是男生给出的建议，属于话题相关但未陈述的干扰项。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "Why is the woman concerned about the delivery time?",
+          "options": {
+            "A": "Her library account is about to expire",
+            "B": "The partner library is closing for a holiday",
+            "C": "She needs the book before a Monday deadline",
+            "D": "She has already paid a late fee"
+          },
+          "answer": "C",
+          "explanation": "女生说她的研究论文周一早上要交，担心周五才到太赶，所以C正确。A、B、D都没有在对话中提到，属于过度推断或无关信息。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "related_but_not_stated",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_r2_20260630_193402_2",
+      "context": "campus_life",
+      "situation": "two students discussing a relocated group-project meeting",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Man", "role": "student", "gender": "male" },
+        { "name": "Woman", "role": "student", "gender": "female" }
+      ],
+      "conversation": [
+        { "speaker": "Man", "text": "Hey, did you hear our project meeting got moved out of the usual room in Carver Hall?" },
+        { "speaker": "Woman", "text": "No, I didn't. Where are we supposed to go now?" },
+        { "speaker": "Man", "text": "They booked us a study room on the third floor of the library instead, room 304." },
+        { "speaker": "Woman", "text": "Oh, that actually works better for me. It's closer to my afternoon lab." },
+        { "speaker": "Man", "text": "Same here. Just remember the library rooms lock automatically, so we'll need someone's student ID to get in." },
+        { "speaker": "Woman", "text": "Good point. I'll bring mine and message the group so nobody shows up at the old room." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Where will the project meeting now take place?",
+          "options": {
+            "A": "In a study room in the library",
+            "B": "In their usual room in Carver Hall",
+            "C": "In a lab on the third floor",
+            "D": "In the group leader's dorm room"
+          },
+          "answer": "A",
+          "explanation": "男生说他们订了图书馆三楼的304自习室，所以A正确。B是原来的房间，C混淆了楼层与实验室，D对话中没有提到。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Reserve a different room for the group",
+            "B": "Notify the group about the new location",
+            "C": "Ask a professor to unlock the room",
+            "D": "Cancel the meeting for the afternoon"
+          },
+          "answer": "B",
+          "explanation": "女生说她会给小组发消息，免得有人去错旧房间，所以B正确。A、C、D都与她说的话不符，属于过度推断。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "over_inference",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_r2_20260630_193402_3",
+      "context": "campus_service",
+      "situation": "a student asking dining services about changing a meal plan",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "dining_staff", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Excuse me, I'd like to switch from the unlimited meal plan to the smaller weekly one. Is that possible?" },
+        { "speaker": "Man", "text": "It is, but plan changes are only processed during the first two weeks of the semester." },
+        { "speaker": "Woman", "text": "Oh no, have I already missed the window? Classes started three weeks ago." },
+        { "speaker": "Man", "text": "Unfortunately, yes. The next chance to change will be at the start of spring term." },
+        { "speaker": "Woman", "text": "That's frustrating. The unlimited plan is really more than I need." },
+        { "speaker": "Man", "text": "I understand. For now, you could add guest passes to your account so the extra meals don't go to waste." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why can't the woman change her meal plan right now?",
+          "options": {
+            "A": "The change period has already ended",
+            "B": "She has not paid her tuition balance",
+            "C": "The smaller plan is fully booked",
+            "D": "Her student account has been frozen"
+          },
+          "answer": "A",
+          "explanation": "男生说套餐更改只在学期前两周办理，而开学已经三周，所以更改窗口已过，A正确。B、C、D都没有在对话中出现。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What does the man suggest as a temporary solution?",
+          "options": {
+            "A": "Requesting a refund for unused meals",
+            "B": "Switching to the plan next semester",
+            "C": "Adding guest passes to her account",
+            "D": "Speaking with the dining hall manager"
+          },
+          "answer": "C",
+          "explanation": "男生建议她暂时把客人餐券加到账户上，免得多余的餐食浪费，所以C正确。B是下学期才能正式换套餐，不是临时方案；A、D对话中没有提到。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        }
+      ]
+    }
+  ]
+}
