@@ -1,0 +1,51 @@
+{
+  "items": [
+    {
+      "genre": "notice",
+      "text": "Laundry Room Renovation — Building C Residents\n\nThe Office of Residential Life will renovate the basement laundry room in Building C from Monday, November 3, through Friday, November 14. During this period, all washers and dryers on the lower level will be unavailable. Residents are asked to use the temporary facilities in Building D, which will remain open from 6:00 AM to midnight daily.\n\nPlease note the following:\n\n- A temporary access card is required to enter Building D after 10:00 PM. Cards may be collected at the front desk in Room 110.\n- The flat laundry fee of $1.50 per load will be waived at the Building D machines for the duration of the renovation.\n- Personal items left in the Building C room must be removed before November 3; unclaimed belongings will be donated to charity.\n\nUpgraded high-efficiency machines will be installed by the reopening date. Questions should be directed to Residential Life at reslife@campus.edu or 555-0192.",
+      "format_metadata": {
+        "issuer": "Office of Residential Life",
+        "type": "campus_announcement"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what is required to enter Building D after 10:00 PM?",
+          "options": {
+            "A": "A temporary access card collected at the front desk",
+            "B": "A resident parking permit issued by Residential Life",
+            "C": "A renovation fee paid on the lower level",
+            "D": "A laundry reservation booked online in advance"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice states that 'A temporary access card is required to enter Building D after 10:00 PM,' with cards collected at the front desk in Room 110, matching option A. Option B borrows 'Residential Life' but invents a parking permit never mentioned. Option C reuses 'fee' and 'lower level' but ties them to entry, when the fee actually concerns laundry loads. Option D fabricates an online reservation step absent from the notice."
+        },
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what happens to the usual laundry fee during the renovation?",
+          "options": {
+            "A": "It increases to help pay for the new machines",
+            "B": "It is charged only for loads after 10:00 PM",
+            "C": "It is waived at the Building D machines",
+            "D": "It is refunded to residents of Building C"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice says 'The flat laundry fee of $1.50 per load will be waived at the Building D machines,' so option C is correct. Option A reverses the situation, since the fee is dropped, not raised. Option B misapplies the 10:00 PM detail, which concerns the access card, not the fee. Option D introduces a refund that the notice never describes."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about the Building C laundry room after November 14?",
+          "options": {
+            "A": "It will stay closed for the rest of the term",
+            "B": "It will reopen with more efficient equipment",
+            "C": "It will be turned into extra storage space",
+            "D": "It will charge a higher fee than before"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice states that 'Upgraded high-efficiency machines will be installed by the reopening date,' so it can be inferred the room will reopen with better equipment, matching option B. Option A contradicts the stated reopening. Option C invents a storage conversion not mentioned. Option D assumes a higher fee, though the notice only mentions waiving the existing fee."
+        }
+      ],
+      "difficulty": "medium"
+    }
+  ]
+}

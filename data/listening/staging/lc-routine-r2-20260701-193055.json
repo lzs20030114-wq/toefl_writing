@@ -1,0 +1,241 @@
+{
+  "items": [
+    {
+      "context": "recommendations_opinions",
+      "situation": "two students talking about a campus photography exhibit one just visited",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hey, did you make it to that new photography exhibit at the campus gallery?"
+        },
+        {
+          "speaker": "Man",
+          "text": "I did, yesterday afternoon. Honestly, the black-and-white street photos were incredible. I ended up staying almost two hours."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Two hours? Wow. Was it crowded? I heard everyone's been going since it opened."
+        },
+        {
+          "speaker": "Man",
+          "text": "It wasn't bad in the afternoon, actually. Mornings are packed, but by three the rooms were pretty quiet."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Good to know. I'll try to swing by after my seminar tomorrow, then."
+        },
+        {
+          "speaker": "Man",
+          "text": "Definitely do. And grab the free audio guide at the entrance; it explains the background of each series."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man suggest the woman do at the exhibit?",
+          "options": {
+            "A": "Pick up the free audio guide at the entrance",
+            "B": "Arrive in the morning to avoid the crowds",
+            "C": "Buy a ticket before her afternoon seminar",
+            "D": "Plan to stay for at least two hours"
+          },
+          "answer": "A",
+          "explanation": "男生最后建议她在入口处拿免费的语音导览，所以 A 正确。B 与事实相反——男生说早上人很多，不是让她早上去。C 无中生有，展览是免费的，没提到买票。D 张冠李戴，两小时是男生自己待的时间，不是他的建议。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about visiting the gallery in the afternoon?",
+          "options": {
+            "A": "It requires booking a reservation ahead",
+            "B": "It costs more than a morning visit",
+            "C": "It is less crowded than in the morning",
+            "D": "It closes earlier than on weekdays"
+          },
+          "answer": "C",
+          "explanation": "男生说下午人不多，早上很挤，到三点房间就很安静了，可推断下午比早上人少，C 正确。A、B、D 都是对话没有依据的推断：没有提到预约、票价差异或提前闭馆。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_next_step",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "errands_service",
+      "situation": "a student asking a cafe worker about a water bottle left behind",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        },
+        {
+          "name": "Woman",
+          "role": "cafe_staff",
+          "gender": "female"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Man",
+          "text": "Hi, I think I left a blue water bottle here yesterday, near the window seats. Has anyone turned one in?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Let me check the lost and found box behind the counter. We do get a lot of bottles, actually."
+        },
+        {
+          "speaker": "Man",
+          "text": "Thanks. It's a metal one with a couple of stickers, dented on the bottom."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Hmm, I see two blue ones here. Oh, is this the one with the mountain sticker?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Yes, that's it! I can't believe it's still here. Thank you so much."
+        },
+        {
+          "speaker": "Woman",
+          "text": "No worries. Next time, just ask at the counter; we keep things about a week."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What is the man trying to find?",
+          "options": {
+            "A": "A pair of gloves",
+            "B": "A blue water bottle",
+            "C": "A metal lunchbox",
+            "D": "A notebook covered in stickers"
+          },
+          "answer": "B",
+          "explanation": "男生一开始就说他把一个蓝色水瓶落在这里了，所以 B 正确。A 完全没提到手套。C 把“金属”这个细节安到了饭盒上，其实是水瓶。D 把“贴纸”这个细节挪到了笔记本上，误导性干扰。",
+          "distractor_types": {
+            "A": "wrong_topic",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What does the woman suggest the man do in the future?",
+          "options": {
+            "A": "Check the window seats on his own",
+            "B": "Buy a replacement bottle at the cafe",
+            "C": "Return to look within the same day",
+            "D": "Ask at the counter about lost items"
+          },
+          "answer": "D",
+          "explanation": "女生最后说下次直接到柜台问，他们会保管失物大约一周，可推断她建议以后到柜台询问失物，D 正确。A、B、C 都不是她的建议：她没让他自己去找座位，没提买新瓶子，也没说当天回来。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "B": "over_inference",
+            "C": "related_but_not_stated"
+          }
+        }
+      ]
+    },
+    {
+      "context": "plans_social",
+      "situation": "two students deciding between a jazz night and a film festival on the same evening",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "There's a jazz night at the student union on Saturday, but the film festival's the same evening. I can't decide."
+        },
+        {
+          "speaker": "Man",
+          "text": "Oh, tough call. I went to the jazz night last month, and it was fun, but pretty loud and packed."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Really? I was leaning toward that. Maybe the festival is more my speed, then. What's playing?"
+        },
+        {
+          "speaker": "Man",
+          "text": "A couple of documentaries, I think. They're showing them outdoors on the quad, so bring a jacket."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Outdoors sounds lovely. Okay, I'll go with the festival. Want to come along?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Sure, why not. Let's meet at the quad around seven."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "Which weekend event the woman should attend",
+            "B": "How to buy tickets for a jazz concert",
+            "C": "Why the film festival was moved outdoors",
+            "D": "Where to meet for a group study session"
+          },
+          "answer": "A",
+          "explanation": "整段对话都在讨论女生周六该去爵士之夜还是电影节，所以 A 概括了主旨。B 只抓住“爵士”这一个细节且对话没提买票。C 把“户外”这个细节夸大成整段主题。D 完全是另一个话题，属于张冠李戴。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "too_narrow",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the man's opinion of the jazz night?",
+          "options": {
+            "A": "He thought it was too expensive",
+            "B": "He hopes to attend it again this weekend",
+            "C": "He found it enjoyable but noisy",
+            "D": "He never actually went to it"
+          },
+          "answer": "C",
+          "explanation": "男生说他上个月去过爵士之夜，很好玩但又吵又挤，可推断他觉得好玩但太吵，C 正确。A 没提到价格。B 与语气相反，他并没有表示想再去。D 与事实相反，他明确说自己去过。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "B": "over_inference",
+            "D": "reversed_situation"
+          }
+        }
+      ]
+    }
+  ]
+}

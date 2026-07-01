@@ -8,99 +8,212 @@
   "results": {
     "bs": {
       "generated": 20,
-      "accepted": 0,
-      "topics": ["simple past statement", "present continuous", "present simple with time phrase", "indirect/embedded question (declarative order)", "negation (have not / could not)", "direct wh-question", "direct question with inversion", "relative clause", "reported statement", "passive-like predicate", "prepositional/place phrase"],
-      "favorite": {"prompt": "I just moved into the residence hall this week.", "answer": "Where do I pick up my mail?"},
+      "accepted": 20,
+      "topics": [
+        "simple past statement",
+        "present continuous",
+        "present simple with time phrase",
+        "indirect/embedded question (declarative order)",
+        "negation (have not / could not)",
+        "direct wh-question",
+        "direct question with inversion",
+        "relative clause",
+        "reported statement",
+        "passive-like predicate",
+        "prepositional/place phrase"
+      ],
+      "favorite": {
+        "prompt": "I just moved into the residence hall this week.",
+        "answer": "Where do I pick up my mail?"
+      },
       "retried_after_fail": false,
-      "failure_reason": "merge rejected 15/20: answer word count <7 on easy items, capitalized first chunk (must be lowercase except I-forms), floating adverb creating multi-solution ambiguity; not enough valid items to form a set"
+      "failure_reason": "merge rejected 15/20: answer word count <7 on easy items, capitalized first chunk (must be lowercase except I-forms), floating adverb creating multi-solution ambiguity; not enough valid items to form a set",
+      "r2_supplemented": true,
+      "r2_items_added": 20
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["public policy", "history and culture", "computer science", "sociology"],
-      "favorite": {"subtopic": "computer science", "preview": "We've been examining how software teams keep their code trustworthy this semester. A growing number of companies now rely on AI coding assistants."},
+      "topics": [
+        "public policy",
+        "history and culture",
+        "computer science",
+        "sociology"
+      ],
+      "favorite": {
+        "subtopic": "computer science",
+        "preview": "We've been examining how software teams keep their code trustworthy this semester. A growing number of companies now rely on AI coding assistants."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "email": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["服务与活动", "校园学业", "消费售后", "日常社交"],
-      "favorite": {"subtopic": "服务与活动", "preview": "You booked a Friday cooking class through a culinary studio, but the confirmation says pasta while the site you registered on advertised the seafood menu you wanted."},
+      "topics": [
+        "服务与活动",
+        "校园学业",
+        "消费售后",
+        "日常社交"
+      ],
+      "favorite": {
+        "subtopic": "服务与活动",
+        "preview": "You booked a Friday cooking class through a culinary studio, but the confirmation says pasta while the site you registered on advertised the seafood menu you wanted."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ap": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["physics/friction", "business/supply chains", "geology/meteor impacts", "psychology/habit formation", "sociology/aging populations"],
-      "favorite": {"subtopic": "geology/meteor impacts", "preview": "Large meteor impacts pose a rare but catastrophic threat, yet for much of the twentieth century geologists struggled to prove"},
+      "topics": [
+        "physics/friction",
+        "business/supply chains",
+        "geology/meteor impacts",
+        "psychology/habit formation",
+        "sociology/aging populations"
+      ],
+      "favorite": {
+        "subtopic": "geology/meteor impacts",
+        "preview": "Large meteor impacts pose a rare but catastrophic threat, yet for much of the twentieth century geologists struggled to prove"
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ctw": {
       "generated": 6,
       "accepted": 6,
-      "topics": ["biology/marine biology", "environmental_science/climate change", "psychology/sleep psychology", "history/technological inventions", "geology/mountain formation", "astronomy/asteroid belts"],
-      "favorite": {"subtopic": "astronomy/asteroid belts", "preview": "The asteroid belt is a broad region of rocky bodies orbiting between Mars and Jupiter."},
+      "topics": [
+        "biology/marine biology",
+        "environmental_science/climate change",
+        "psychology/sleep psychology",
+        "history/technological inventions",
+        "geology/mountain formation",
+        "astronomy/asteroid belts"
+      ],
+      "favorite": {
+        "subtopic": "astronomy/asteroid belts",
+        "preview": "The asteroid belt is a broad region of rocky bodies orbiting between Mars and Jupiter."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-rdl-short": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["notice/vending-refund", "email/tour-guide-shift", "notice/library-spring-break-hours", "email/advisor-office-hours"],
-      "favorite": {"subtopic": "notice/library-spring-break-hours", "preview": "Notice: During spring break, March 16-20, the Ellis Library will operate on reduced hours, opening at 10:00 AM"},
+      "topics": [
+        "notice/vending-refund",
+        "email/tour-guide-shift",
+        "notice/library-spring-break-hours",
+        "email/advisor-office-hours"
+      ],
+      "favorite": {
+        "subtopic": "notice/library-spring-break-hours",
+        "preview": "Notice: During spring break, March 16-20, the Ellis Library will operate on reduced hours, opening at 10:00 AM"
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-rdl-long": {
       "generated": 2,
       "accepted": 2,
-      "topics": ["email/Career fair RSVP confirmation with booth map", "email/Tutoring center appointment confirmation"],
-      "favorite": {"subtopic": "email/Tutoring center appointment confirmation", "preview": "This email confirms your one-on-one tutoring appointment at the Lakeside Learning Center."},
+      "topics": [
+        "email/Career fair RSVP confirmation with booth map",
+        "email/Tutoring center appointment confirmation"
+      ],
+      "favorite": {
+        "subtopic": "email/Tutoring center appointment confirmation",
+        "preview": "This email confirms your one-on-one tutoring appointment at the Lakeside Learning Center."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lat": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["architecture: steel-frame construction and the skyscraper", "social_psychology: stereotype threat and academic performance", "art_history: Japanese woodblock prints and European modern art", "history: unexpected origins of the modern fire department"],
-      "favorite": {"subtopic": "history: unexpected origins of the modern fire department", "preview": "When you picture a fire department, you probably imagine a public service, funded by taxes and open to everyone."},
+      "topics": [
+        "architecture: steel-frame construction and the skyscraper",
+        "social_psychology: stereotype threat and academic performance",
+        "art_history: Japanese woodblock prints and European modern art",
+        "history: unexpected origins of the modern fire department"
+      ],
+      "favorite": {
+        "subtopic": "history: unexpected origins of the modern fire department",
+        "preview": "When you picture a fire department, you probably imagine a public service, funded by taxes and open to everyone."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lc": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["errands_service (pottery class)", "errands_service (phone screen repair)", "plans_social (birthday surprise)", "recommendations_opinions (music discovery)", "recommendations_opinions (mystery novel)"],
-      "favorite": {"subtopic": "plans_social (birthday surprise)", "preview": "So Dana's birthday is Friday. I was thinking we could throw her a surprise party after her seminar ends."},
+      "topics": [
+        "errands_service (pottery class)",
+        "errands_service (phone screen repair)",
+        "plans_social (birthday surprise)",
+        "recommendations_opinions (music discovery)",
+        "recommendations_opinions (mystery novel)"
+      ],
+      "favorite": {
+        "subtopic": "plans_social (birthday surprise)",
+        "preview": "So Dana's birthday is Friday. I was thinking we could throw her a surprise party after her seminar ends."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-la": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["facility_change: gallery/hall reopening", "academic_event: research poster session", "campus_activity: student art market", "facility_change: dining hall summer hours", "academic_event: essay competition"],
-      "favorite": {"subtopic": "campus_activity: student art market", "preview": "Attention students. The Student Activities Office is hosting a campus art market this Saturday from 10 a.m. to 3 p.m. on the central quad."},
+      "topics": [
+        "facility_change: gallery/hall reopening",
+        "academic_event: research poster session",
+        "campus_activity: student art market",
+        "facility_change: dining hall summer hours",
+        "academic_event: essay competition"
+      ],
+      "favorite": {
+        "subtopic": "campus_activity: student art market",
+        "preview": "Attention students. The Student Activities Office is hosting a campus art market this Saturday from 10 a.m. to 3 p.m. on the central quad."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lcr": {
       "generated": 8,
       "accepted": 8,
-      "topics": ["exam format", "weekend plans", "dorm maintenance", "store return/exchange", "friend concern", "gym hours", "shuttle schedule", "airport pickup"],
-      "favorite": {"subtopic": "friend concern", "preview": "Why do you look so down today? — correct reply 'It's a long story, honestly.' hinges on the down=sad vs down=direction polysemy trap."},
+      "topics": [
+        "exam format",
+        "weekend plans",
+        "dorm maintenance",
+        "store return/exchange",
+        "friend concern",
+        "gym hours",
+        "shuttle schedule",
+        "airport pickup"
+      ],
+      "favorite": {
+        "subtopic": "friend concern",
+        "preview": "Why do you look so down today? — correct reply 'It's a long story, honestly.' hinges on the down=sad vs down=direction polysemy trap."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "speaking-repeat": {
       "generated": 3,
       "accepted": 3,
-      "topics": ["Student Health Center orientation", "Salad Making how-to", "Chemistry Lab Safety orientation"],
-      "favorite": {"subtopic": "Chemistry Lab Safety orientation", "preview": "If you cannot find your assigned station, check the seating chart posted beside the main entrance."},
+      "topics": [
+        "Student Health Center orientation",
+        "Salad Making how-to",
+        "Chemistry Lab Safety orientation"
+      ],
+      "favorite": {
+        "subtopic": "Chemistry Lab Safety orientation",
+        "preview": "If you cannot find your assigned station, check the seating chart posted beside the main entrance."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     }
-  }
+  },
+  "r2_completed_at": "2026-07-01T19:44:24Z",
+  "r2_session_id": "routine-r2-20260701-193055"
 }
