@@ -1,0 +1,164 @@
+{
+  "items": [
+    {
+      "context": "campus_academic",
+      "situation": "student seeking help at the writing center",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Where's the writing center in this building?",
+      "options": {
+        "A": "You've come to the right place.",
+        "B": "Your essay draft looks well organized.",
+        "C": "The elevator's been broken all week.",
+        "D": "It's open until eight tonight."
+      },
+      "answer": "A",
+      "explanation": "说话者在问写作中心在哪里（Where）。A用习语\"You've come to the right place\"（你来对地方了）间接表明\"就是这里\"，是自然又地道的回应，正确。B抓住\"essay\"这个关联词去评价文章内容，属于语义联想陷阱，没有回答地点。C关于电梯坏了，是语法正确但完全离题的句子。D回答的是\"什么时候开门\"（when），而问题问的是\"在哪里\"（where），属于答非所问的错误问题类型。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about a campus event or concert",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "How's the concert looking for tonight?",
+      "options": {
+        "A": "The lead singer is really talented.",
+        "B": "Actually, it's completely sold out.",
+        "C": "I need to charge my phone soon.",
+        "D": "It's over at the amphitheater."
+      },
+      "answer": "B",
+      "explanation": "说话者在问今晚音乐会的情况（How）。B以话语标记\"Actually\"开头，间接说\"票已经全卖光了\"，隐含地回应了音乐会很火爆的现状，是标记引导的间接回应，正确。A抓住\"concert\"关联到主唱去评价，属于语义联想陷阱，没有回答问题。C要给手机充电，是语法正确但完全离题的句子。D回答的是\"在哪里\"（where），而问题问的是\"怎么样\"（how），属于答非所问的错误问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "friend inviting another to a study group",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Aren't you coming to the study group tonight?",
+      "options": {
+        "A": "That study room is always booked.",
+        "B": "I returned the library books already.",
+        "C": "I'll email you my notes instead.",
+        "D": "I already came by earlier today."
+      },
+      "answer": "C",
+      "explanation": "朋友在问对方今晚来不来学习小组。C不直接回答来或不来，而是转而解决背后的真正需求（分享学习材料）——\"我把笔记发邮件给你\"，属于情境转移，隐含了自己不来但仍愿意帮忙，正确。A抓住\"study\"关联到自习室，属于语义联想陷阱。B说已经还了图书馆的书，是语法正确但完全离题的句子。D把\"coming\"误当作\"came（来过）\"，用了同词不同义/误解，说\"我今天早些时候来过了\"，与邀请无关，属于多义/误解陷阱。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "polysemy_misinterpretation"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking about course enrollment or prerequisites",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Why can't I register for the chemistry course?",
+      "options": {
+        "A": "Chemistry labs meet on Fridays.",
+        "B": "I dropped my keys near here.",
+        "C": "Registration is just down the hall.",
+        "D": "Beats me, honestly."
+      },
+      "answer": "D",
+      "explanation": "说话者在问为什么自己无法注册化学课（Why）。D用习语\"Beats me\"（我也搞不懂/不知道），以自然口语化的方式回应对方的困惑，属于地道习语回应，是唯一真正针对这个问题作出回应的选项，正确。A抓住\"chemistry\"关联到实验课时间，属于语义联想陷阱，没有解释原因。B说钥匙掉了，是语法正确但完全离题的句子。C回答的是\"注册处在哪里\"（where），而问题问的是\"为什么\"（why），属于答非所问的错误问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student checking lost-and-found at front desk",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I think I've left my backpack in here.",
+      "options": {
+        "A": "Actually, someone turned one in today.",
+        "B": "That backpack brand is really durable.",
+        "C": "The cafeteria closes early on weekends.",
+        "D": "Yes, you can leave it here."
+      },
+      "answer": "A",
+      "explanation": "说话者在失物招领处说自己可能把背包落在这里了。A以话语标记\"Actually\"开头，间接给出线索\"今天有人交来一个（背包）\"，推动对方去认领，属于标记引导的间接回应，正确。B抓住\"backpack\"去评价品牌耐用，属于语义联想陷阱。C关于餐厅营业时间，是语法正确但完全离题的句子。D把说话者的意图误解为\"想寄存背包\"而回答\"你可以放在这里\"，其实对方是想找回背包，属于误解陷阱。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "misinterpretation"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about campus parking",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Can't I park near the science building today?",
+      "options": {
+        "A": "The parking garage was just repainted.",
+        "B": "Do you have a permit?",
+        "C": "I grabbed coffee before the meeting.",
+        "D": "It opens at seven each morning."
+      },
+      "answer": "B",
+      "explanation": "说话者在问今天能不能在理科楼附近停车。B用反问\"你有停车许可证吗？\"来推进对话，因为能否停车取决于是否有许可证，属于反问式回应，正确。A抓住\"parking\"关联到停车楼重新粉刷，属于语义联想陷阱，没有回应能否停车。C说开会前买了咖啡，是语法正确但完全离题的句子。D回答的是\"几点开门\"（when），而问题是能不能停（yes/no），属于答非所问的错误问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "friend sharing personal news",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "I just found out I'm going to grad school.",
+      "options": {
+        "A": "Grad school is really expensive nowadays.",
+        "B": "I need to return this jacket.",
+        "C": "No way, that's wonderful news!",
+        "D": "I accepted the invitation already."
+      },
+      "answer": "C",
+      "explanation": "朋友在分享自己被研究生院录取的好消息。C用习语\"No way\"表达惊喜，再加上\"太棒了\"的祝贺，是对好消息最自然的地道回应，正确。A抓住\"grad school\"陈述\"读研很贵\"这一事实，忽略了对方的喜悦情绪，属于语义联想陷阱。B说要去退夹克，是语法正确但完全离题的句子。D把\"accepted（被录取）\"误当作\"accept（接受邀请）\"，用了同词不同义，说\"我已经接受邀请了\"，与消息无关，属于多义陷阱。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "polysemy_misinterpretation"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "acknowledging someone's schedule conflict",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "What's a better time for you then?",
+      "options": {
+        "A": "Time really flies these days.",
+        "B": "The restaurant added some new dishes.",
+        "C": "Let's just meet at the cafe.",
+        "D": "Tomorrow after lunch works for me."
+      },
+      "answer": "D",
+      "explanation": "在得知对方没空后，说话者直接问\"那你什么时间更合适？\"（What time）。D直接给出一个具体时间\"明天午饭后我可以\"，是对问题的直接事实性回答，正确。A把\"time\"用在\"时光飞逝\"的固定表达里，属于语义联想陷阱。B说餐厅出了新菜，是语法正确但完全离题的句子。C回答的是\"在哪里见面\"（where），而问题问的是\"什么时间\"（when），属于答非所问的错误问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      }
+    }
+  ]
+}

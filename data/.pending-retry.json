@@ -1,10 +1,10 @@
 {
-  "session_id": "routine-20260701-190415",
-  "generated_at": "2026-07-01T19:09:39.868Z",
+  "session_id": "routine-20260702-190417",
+  "generated_at": "2026-07-02T19:18:15.387Z",
   "needs_retry": true,
   "overall_scores": {
-    "diversity": 98,
-    "quality": 92
+    "diversity": 94,
+    "quality": 96
   },
   "bs_difficulty_gate": "PASS",
   "retry_banks": [
@@ -21,12 +21,33 @@
         "R1 produced 0 valid items"
       ],
       "quality_breakdown": [
-        "merge rejected 15/20: answer word count <7 on easy items, capitalized first chunk (must be lowercase except I-forms), floating adverb creating multi-solution ambiguity; not enough valid items to form a set"
+        "20/20 通过单项校验，但 BS 难度冻结门 FAIL：register.contraction 0.175<0.18、register.third_person_formal 0.171>0.17、embedded_question 漂移 2.52x（真库聚合门，非本批单独问题）；live 库未改动"
       ],
       "hints": [
-        "R1 generated 20 items but all were rejected. Failure reason: \"merge rejected 15/20: answer word count <7 on easy items, capitalized first chunk (must be lowercase except I-forms), floating adverb creating multi-solution ambiguity; not enough valid items to form a set\". Generate fresh items strictly following the print-bank-prompt rules — pay extra attention to schema compliance."
+        "R1 generated 20 items but all were rejected. Failure reason: \"20/20 通过单项校验，但 BS 难度冻结门 FAIL：register.contraction 0.175<0.18、register.third_person_formal 0.171>0.17、embedded_question 漂移 2.52x（真库聚合门，非本批单独问题）；live 库未改动\". Generate fresh items strictly following the print-bank-prompt rules — pay extra attention to schema compliance."
       ],
       "items_to_supplement": 20
+    },
+    {
+      "bank": "reading-rdl-short",
+      "diversity_score": 60,
+      "diversity_threshold": 80,
+      "quality_score": 100,
+      "quality_threshold": 85,
+      "failures": [
+        "多样性 60 < 80"
+      ],
+      "diversity_breakdown": [
+        "话题 4/4",
+        "notice 4 · email 0"
+      ],
+      "quality_breakdown": [
+        "词数 4/4"
+      ],
+      "hints": [
+        "多样性 < gate — choose distinct topic/subtopic combos; avoid same discipline twice"
+      ],
+      "items_to_supplement": 2
     },
     {
       "bank": "reading-rdl-long",
@@ -50,26 +71,6 @@
         "质量校验有偏差: 词数 0/2 — recheck schema compliance"
       ],
       "items_to_supplement": 1
-    },
-    {
-      "bank": "listening-lc",
-      "diversity_score": 100,
-      "diversity_threshold": 72,
-      "quality_score": 60,
-      "quality_threshold": 80,
-      "failures": [
-        "质量 60 < 80"
-      ],
-      "diversity_breakdown": [
-        "distinct openings 5/5"
-      ],
-      "quality_breakdown": [
-        "conv words 68-105: 3/5"
-      ],
-      "hints": [
-        "质量校验有偏差: conv words 68-105: 3/5 — recheck schema compliance"
-      ],
-      "items_to_supplement": 3
     }
   ]
 }
