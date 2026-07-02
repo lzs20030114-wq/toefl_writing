@@ -8,99 +8,210 @@
   "results": {
     "bs": {
       "generated": 20,
-      "accepted": 0,
-      "topics": ["campus life", "classes/registration", "library/dorms", "fitness center", "embedded questions (whether/if/when)", "negation", "passive voice", "relative clauses", "direct wh/yes-no questions"],
-      "favorite": {"prompt": "What did you need to find out before registration?", "answer": "I really needed to know which of the two electives still counted."},
+      "accepted": 20,
+      "topics": [
+        "campus life",
+        "classes/registration",
+        "library/dorms",
+        "fitness center",
+        "embedded questions (whether/if/when)",
+        "negation",
+        "passive voice",
+        "relative clauses",
+        "direct wh/yes-no questions"
+      ],
+      "favorite": {
+        "prompt": "What did you need to find out before registration?",
+        "answer": "I really needed to know which of the two electives still counted."
+      },
       "retried_after_fail": false,
-      "failure_reason": "20/20 通过单项校验，但 BS 难度冻结门 FAIL：register.contraction 0.175<0.18、register.third_person_formal 0.171>0.17、embedded_question 漂移 2.52x（真库聚合门，非本批单独问题）；live 库未改动"
+      "failure_reason": "20/20 通过单项校验，但 BS 难度冻结门 FAIL：register.contraction 0.175<0.18、register.third_person_formal 0.171>0.17、embedded_question 漂移 2.52x（真库聚合门，非本批单独问题）；live 库未改动",
+      "r2_supplemented": true,
+      "r2_items_added": 20
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["environmental science", "business", "psychology", "political science"],
-      "favorite": {"subtopic": "environmental science", "preview": "We've been examining how cities can cool themselves as summers grow hotter this semester. One proposal"},
+      "topics": [
+        "environmental science",
+        "business",
+        "psychology",
+        "political science"
+      ],
+      "favorite": {
+        "subtopic": "environmental science",
+        "preview": "We've been examining how cities can cool themselves as summers grow hotter this semester. One proposal"
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "email": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["职场工作", "社区生活", "住宿", "消费售后"],
-      "favorite": {"subtopic": "社区生活", "preview": "You volunteer at a neighborhood community garden that recently switched to a new online sign-up system for weekend shifts. The system keeps double-booking people, and last Saturday four volunteers all showed up to weed the same plot."},
+      "topics": [
+        "职场工作",
+        "社区生活",
+        "住宿",
+        "消费售后"
+      ],
+      "favorite": {
+        "subtopic": "社区生活",
+        "preview": "You volunteer at a neighborhood community garden that recently switched to a new online sign-up system for weekend shifts. The system keeps double-booking people, and last Saturday four volunteers all showed up to weed the same plot."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ap": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["sociology/aging populations", "physics/optics", "materials_science/textile fibers", "astronomy/lunar geology", "technology/steam power"],
-      "favorite": {"subtopic": "astronomy/lunar geology", "preview": "Regolith is the layer of loose, shattered rock and fine dust that blankets the solid bedrock of the Moon."},
+      "topics": [
+        "sociology/aging populations",
+        "physics/optics",
+        "materials_science/textile fibers",
+        "astronomy/lunar geology",
+        "technology/steam power"
+      ],
+      "favorite": {
+        "subtopic": "astronomy/lunar geology",
+        "preview": "Regolith is the layer of loose, shattered rock and fine dust that blankets the solid bedrock of the Moon."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ctw": {
       "generated": 6,
       "accepted": 6,
-      "topics": ["biology/microbiology", "environmental_science/ozone layer", "psychology/placebo effect", "history/silk road", "geology/minerals", "astronomy/cosmic radiation"],
-      "favorite": {"subtopic": "history/silk road", "preview": "The Silk Road was a vast network of trade routes that once linked China with distant lands to the west."},
+      "topics": [
+        "biology/microbiology",
+        "environmental_science/ozone layer",
+        "psychology/placebo effect",
+        "history/silk road",
+        "geology/minerals",
+        "astronomy/cosmic radiation"
+      ],
+      "favorite": {
+        "subtopic": "history/silk road",
+        "preview": "The Silk Road was a vast network of trade routes that once linked China with distant lands to the west."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-rdl-short": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["notice", "notice", "notice", "notice"],
-      "favorite": {"subtopic": "notice/shuttle-detour", "preview": "Notice: Because of road repairs on Elm Street, the Blue Line shuttle will follow a detour from May 5"},
+      "topics": [
+        "notice",
+        "notice",
+        "notice",
+        "notice"
+      ],
+      "favorite": {
+        "subtopic": "notice/shuttle-detour",
+        "preview": "Notice: Because of road repairs on Elm Street, the Blue Line shuttle will follow a detour from May 5"
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-rdl-long": {
       "generated": 2,
       "accepted": 2,
-      "topics": ["email/library-overdue", "email/roommate-maintenance"],
-      "favorite": {"subtopic": "email/roommate-maintenance", "preview": "Subject: Kitchen Faucet Repair — This Thursday Morning. Hi Daniel, I wanted to let you know"},
+      "topics": [
+        "email/library-overdue",
+        "email/roommate-maintenance"
+      ],
+      "favorite": {
+        "subtopic": "email/roommate-maintenance",
+        "preview": "Subject: Kitchen Faucet Repair — This Thursday Morning. Hi Daniel, I wanted to let you know"
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lat": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["the fundamental attribution error in everyday judgments", "how recording technology changed the way music was composed", "why Impressionists painted outdoors and what that meant for color theory", "the concept of ecological succession after a wildfire"],
-      "favorite": {"subtopic": "the concept of ecological succession after a wildfire", "preview": "A forest fire looks like an ending. The trees are blackened, the ground is ash, and the animals are"},
+      "topics": [
+        "the fundamental attribution error in everyday judgments",
+        "how recording technology changed the way music was composed",
+        "why Impressionists painted outdoors and what that meant for color theory",
+        "the concept of ecological succession after a wildfire"
+      ],
+      "favorite": {
+        "subtopic": "the concept of ecological succession after a wildfire",
+        "preview": "A forest fire looks like an ending. The trees are blackened, the ground is ash, and the animals are"
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lc": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["planning a birthday surprise party for a classmate", "swapping music recommendations (bored of pop)", "returning a too-small sweater at a store counter", "caring for a sister's struggling houseplant (fern)", "choosing an elective for next term"],
-      "favorite": {"subtopic": "caring for a sister's struggling houseplant (fern)", "preview": "You've been carrying that fern everywhere. What's wrong with it? I'm plant-sitting my sister's fern"},
+      "topics": [
+        "planning a birthday surprise party for a classmate",
+        "swapping music recommendations (bored of pop)",
+        "returning a too-small sweater at a store counter",
+        "caring for a sister's struggling houseplant (fern)",
+        "choosing an elective for next term"
+      ],
+      "favorite": {
+        "subtopic": "caring for a sister's struggling houseplant (fern)",
+        "preview": "You've been carrying that fern everywhere. What's wrong with it? I'm plant-sitting my sister's fern"
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-la": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["community garden rooftop spring cleanup volunteer event", "campus shuttle temporary detour due to bridge renovation", "undergraduate poster session open to all majors", "alumna guest lecture on her research career path", "biology end-of-semester project showcase with awards"],
-      "favorite": {"subtopic": "alumna guest lecture on her research career path", "preview": "I'm pleased to announce that our department will host a special guest lecture this coming Wednesday evening."},
+      "topics": [
+        "community garden rooftop spring cleanup volunteer event",
+        "campus shuttle temporary detour due to bridge renovation",
+        "undergraduate poster session open to all majors",
+        "alumna guest lecture on her research career path",
+        "biology end-of-semester project showcase with awards"
+      ],
+      "favorite": {
+        "subtopic": "alumna guest lecture on her research career path",
+        "preview": "I'm pleased to announce that our department will host a special guest lecture this coming Wednesday evening."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lcr": {
       "generated": 8,
       "accepted": 8,
-      "topics": ["writing center location", "concert status tonight", "study group invitation", "chemistry course registration", "lost-and-found backpack", "campus parking permit", "grad school acceptance", "rescheduling a better time"],
-      "favorite": {"subtopic": "grad school acceptance", "preview": "I just found out I'm going to grad school. — friend sharing exciting personal news, idiomatic congrats"},
+      "topics": [
+        "writing center location",
+        "concert status tonight",
+        "study group invitation",
+        "chemistry course registration",
+        "lost-and-found backpack",
+        "campus parking permit",
+        "grad school acceptance",
+        "rescheduling a better time"
+      ],
+      "favorite": {
+        "subtopic": "grad school acceptance",
+        "preview": "I just found out I'm going to grad school. — friend sharing exciting personal news, idiomatic congrats"
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "speaking-repeat": {
       "generated": 3,
       "accepted": 3,
-      "topics": ["Hardware Store Help", "Campus Gym Induction", "Chemistry Lab Safety"],
-      "favorite": {"subtopic": "Chemistry Lab Safety", "preview": "Safety goggles are kept by the door."},
+      "topics": [
+        "Hardware Store Help",
+        "Campus Gym Induction",
+        "Chemistry Lab Safety"
+      ],
+      "favorite": {
+        "subtopic": "Chemistry Lab Safety",
+        "preview": "Safety goggles are kept by the door."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     }
-  }
+  },
+  "r2_completed_at": "2026-07-02T19:47:28Z",
+  "r2_session_id": "routine-r2-20260702-193047"
 }
