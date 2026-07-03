@@ -1,0 +1,276 @@
+{
+  "items": [
+    {
+      "id": "lc_r1_routine-20260703-170354_1",
+      "context": "errands_service",
+      "situation": "two friends figuring out a bus or train schedule for a day trip",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Are we still taking the 9:15 train to the coast tomorrow, or should we grab the earlier one?" },
+        { "speaker": "Man", "text": "The 9:15 works for me, but I checked the schedule and it only runs on weekdays. Tomorrow's Saturday." },
+        { "speaker": "Woman", "text": "Oh, right. I completely forgot about that." },
+        { "speaker": "Man", "text": "The weekend option leaves at 10:40 instead, and it's a bus, not a train." },
+        { "speaker": "Woman", "text": "That's fine, as long as we still get there before noon. Does it stop anywhere on the way?" },
+        { "speaker": "Man", "text": "Just once, at the harbor stop, for about five minutes. We'll still make it by eleven-thirty." },
+        { "speaker": "Woman", "text": "Great, let's meet at the station at ten then." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man tell the woman about the 9:15 train?",
+          "options": {
+            "A": "It doesn't run on weekends",
+            "B": "It requires a reserved seat",
+            "C": "It stops at the harbor for five minutes",
+            "D": "It was cancelled due to construction"
+          },
+          "answer": "A",
+          "explanation": "男生说9:15的火车“只在工作日运行，明天是周六”，所以这趟车周末不开。B对话中没有提到预留座位；C“在码头停靠五分钟”指的是周末的巴士，不是9:15的火车，属于张冠李戴；D从未提到施工取消。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "misattributed",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman and man most likely do?",
+          "options": {
+            "A": "Take the 9:15 train as originally planned",
+            "B": "Postpone the trip until next weekend",
+            "C": "Meet at the station at ten to catch the weekend bus",
+            "D": "Drive to the coast instead of taking public transit"
+          },
+          "answer": "C",
+          "explanation": "女生最后说“那我们十点在车站见”，呼应男生提到的10:40周末巴士，所以他们会去赶那趟巴士。A是他们已经排除的方案，因为9:15周末不开；B对话中完全没提到推迟行程；D两人从未讨论开车。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "unrelated_next_step",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_r1_routine-20260703-170354_2",
+      "context": "recommendations_opinions",
+      "situation": "two friends debating whether a new cafe is worth the price",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Did you end up trying Bloom Café near the library?" },
+        { "speaker": "Man", "text": "Yeah, yesterday. The latte was great, but six dollars for a small cup felt steep." },
+        { "speaker": "Woman", "text": "Six dollars? Wow, that's more than the place downtown." },
+        { "speaker": "Man", "text": "I know. The pastries are cheaper though, only two dollars each, and they're actually pretty filling." },
+        { "speaker": "Woman", "text": "Hmm, maybe I'll just get a pastry and skip the coffee." },
+        { "speaker": "Man", "text": "That's probably the smart move. I'll stick to downtown for my coffee from now on." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "How much does a pastry cost at Bloom Café?",
+          "options": {
+            "A": "Six dollars, the same as the latte",
+            "B": "Two dollars each",
+            "C": "Free with any coffee purchase",
+            "D": "Two dollars more than downtown's price"
+          },
+          "answer": "B",
+          "explanation": "男生说“糕点便宜多了，只要两块钱一个”，所以答案是B。A把拿铁的价格错误地安到了糕点上；C对话中从未提到免费赠送；D是编造的对比说法，对话没有说贵两块钱。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do at Bloom Café?",
+          "options": {
+            "A": "Order both a latte and a pastry",
+            "B": "Continue buying her coffee downtown instead",
+            "C": "Stop visiting Bloom Café altogether",
+            "D": "Order a pastry without buying coffee"
+          },
+          "answer": "D",
+          "explanation": "女生说“也许我就买个糕点，不买咖啡了”，所以她最可能只点糕点。A与她“跳过咖啡”的决定相反，是她已经放弃的选项；B是男生自己打算做的事，被错误地安到了女生身上；C对话没有说她要彻底不去这家店。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "misattributed",
+            "C": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_r1_routine-20260703-170354_3",
+      "context": "errands_service",
+      "situation": "two students talking about a pet or houseplant one is caring for",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "How's the basil plant you're watching for your neighbor doing? You mentioned it wasn't looking great last week." },
+        { "speaker": "Man", "text": "Honestly, it got worse. The leaves started turning yellow, so I moved it away from the window." },
+        { "speaker": "Woman", "text": "Yellow leaves usually mean overwatering, not too much sun. Did you check the soil before watering?" },
+        { "speaker": "Man", "text": "Not really, I just watered it every morning like she told me to." },
+        { "speaker": "Woman", "text": "That's probably the problem. Let it dry out a few days, then only water when the soil's dry." },
+        { "speaker": "Man", "text": "Okay, I'll hold off and check the soil first. Thanks, I don't want to kill her plant before she's back." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the woman think caused the plant's yellow leaves?",
+          "options": {
+            "A": "Too much direct sunlight",
+            "B": "A cold draft near the window",
+            "C": "Watering the plant too often",
+            "D": "The neighbor giving him incorrect plant food"
+          },
+          "answer": "C",
+          "explanation": "女生说“叶子发黄通常是浇水太多，而不是晒太阳太多”，所以她认为原因是浇水过勤。A正好说反了，她明确排除了这个原因；B对话中从未提到窗边有冷风；D从未提到施肥的问题。",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "B": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do next?",
+          "options": {
+            "A": "Wait a few days before watering the plant again",
+            "B": "Ask the neighbor to take the plant back early",
+            "C": "Repot the basil plant in fresh soil",
+            "D": "Continue watering it every morning as before"
+          },
+          "answer": "A",
+          "explanation": "男生最后说“好，我先不浇水，先检查土壤”，采纳了女生的建议，所以他会先等几天再浇水。B对话中完全没有提到提前归还植物；C没有讨论换盆；D是他之前的做法，正是被建议改掉的，属于已被否定的选项。",
+          "distractor_types": {
+            "B": "unrelated_next_step",
+            "C": "over_inference",
+            "D": "rejected_option"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_r1_routine-20260703-170354_4",
+      "context": "plans_social",
+      "situation": "two friends deciding whether to buy concert tickets now or wait",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "The Nova Sound concert tickets go on sale tonight at eight. Should we buy them right when they drop?" },
+        { "speaker": "Man", "text": "I'd rather wait. Prices sometimes drop closer to the date if it doesn't sell out." },
+        { "speaker": "Woman", "text": "True, but this venue is small, only four hundred seats. It could sell out in an hour." },
+        { "speaker": "Man", "text": "Four hundred? Okay, that changes things. What time does the box office open online?" },
+        { "speaker": "Woman", "text": "Eight sharp, and mobile-only orders start ten minutes early through the app." },
+        { "speaker": "Man", "text": "Let's just download the app now and be ready right at eight." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "How many seats does the venue have?",
+          "options": {
+            "A": "Two hundred seats",
+            "B": "An unlimited number of standing-room spots",
+            "C": "Four hundred seats, but only for members",
+            "D": "Four hundred seats"
+          },
+          "answer": "D",
+          "explanation": "女生明确说“这个场地很小，只有四百个座位”，所以答案是D。A把数字改成了两百，是错误细节；B对话没有提到站票区；C编造了“仅限会员”这一限制，对话中并未出现。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "C": "misattributed"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do tonight?",
+          "options": {
+            "A": "Wait until closer to the concert date to buy tickets",
+            "B": "Download the ticket app before eight o'clock",
+            "C": "Call the box office to reserve seats by phone",
+            "D": "Convince the woman to skip the concert"
+          },
+          "answer": "B",
+          "explanation": "男生最后说“我们现在就下载app，八点准时准备好”，所以他会在八点前下载app。A是他一开始的想法，后来因为座位少而放弃了；C对话没有提到打电话预订；D没有任何迹象表明他想放弃看演唱会，属于过度推断。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "C": "unrelated_next_step",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_r1_routine-20260703-170354_5",
+      "context": "recommendations_opinions",
+      "situation": "two students swapping music recommendations because one is bored of the same pop singers",
+      "difficulty": "hard",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "I've been stuck on the same five pop artists for months. I need something different." },
+        { "speaker": "Man", "text": "Try jazz. My sister got me into it, and it's nothing like the radio stuff." },
+        { "speaker": "Woman", "text": "Jazz always seemed intimidating, like I wouldn't know where to start." },
+        { "speaker": "Man", "text": "Start upbeat, not ballads. A trio called Blue Hour plays free shows at the coffeehouse Fridays." },
+        { "speaker": "Woman", "text": "Free? Low-risk then, if I hate it I haven't lost any money." },
+        { "speaker": "Man", "text": "Exactly. If you like it, I'll send a playlist with their studio tracks." },
+        { "speaker": "Woman", "text": "Deal, I'll meet you there Friday." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "Trying a new music genre to escape a listening rut",
+            "B": "Finding a free concert to attend this week",
+            "C": "Convincing the man to stop listening to jazz",
+            "D": "Learning to play a musical instrument together"
+          },
+          "answer": "A",
+          "explanation": "对话核心是女生厌倦了同样的流行歌手，男生建议她尝试爵士乐这个新曲风，因此主旨是“尝试新的音乐类型摆脱单调”。B只是次要细节（免费演出），不是主要话题；C与实际情况相反，是男生在向女生推荐爵士乐，而不是女生劝男生放弃；D对话中完全没有提到学乐器。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "reversed_situation",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do on Friday?",
+          "options": {
+            "A": "Purchase a jazz album instead of going to the show",
+            "B": "Ask her sister to introduce her to jazz",
+            "C": "Attend Blue Hour's free performance at the coffeehouse",
+            "D": "Quit listening to pop music entirely"
+          },
+          "answer": "C",
+          "explanation": "女生最后说“说定了，我周五在那儿见你”，指的就是去咖啡馆看Blue Hour的免费演出，所以答案是C。A与她的计划相反，她选择的正是免费演出而不是花钱买专辑，这是被排除的选项；B把男生的姐姐错误地安在了女生身上；D对话没有说她要彻底放弃流行音乐，属于过度推断。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "misattributed",
+            "D": "over_inference"
+          }
+        }
+      ]
+    }
+  ]
+}
