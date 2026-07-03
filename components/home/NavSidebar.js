@@ -2,15 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import Link from "next/link";
 import { checkCanPractice, FREE_DAILY_LIMIT } from "../../lib/dailyUsage";
 import UpgradeModal from "../shared/UpgradeModal";
 import { WechatQrImage } from "../shared/WechatQrImage";
 import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
-import { SECTIONS, SECTION_ACCENTS, SECTION_STATUS, TOOLS } from "./sections";
-import {
-  TierBadge, BindEmailModal, ContactCard, FbStatusBadge, sectionTitle,
-} from "./HomeSidebar";
+import { SECTIONS, SECTION_ACCENTS, SECTION_STATUS } from "./sections";
+import { TierBadge, BindEmailModal, FbStatusBadge } from "./sidebarWidgets";
 import { openFirstSetSurvey } from "../../lib/survey/openFirstSetSurvey";
 
 /* ── NavSidebar ── */
@@ -52,20 +49,16 @@ export function NavSidebar({
   isChallenge,
   // user/auth
   userCode, userTier, userEmail, authMethod, isLoggedIn, showLoginModal, onLogout,
-  // stats
-  totalCount, weekCount, bestMock,
   // feedback
   fbOpen, setFbOpen, fbText, setFbText, fbBusy, fbSent, feedbackMsg, submitFeedback,
-  fbHistory, fbHistLoading,
+  fbHistory,
   // code copy
   copied, copyCode,
   logoutHover, setLogoutHover,
-  // tools badges
-  bsMistakeCount, postWritingCounts,
   // referral
   onOpenReferral,
   // style helpers
-  sideCard, fadeIn,
+  fadeIn,
 }) {
   const [logoutConfirm, setLogoutConfirm] = useState(false);
   const [bindEmailOpen, setBindEmailOpen] = useState(false);
@@ -74,14 +67,12 @@ export function NavSidebar({
   const [tierExpiresAt, setTierExpiresAt] = useState(null);
   const [upgradeOpen, setUpgradeOpen] = useState(false);
   const [codeHidden, setCodeHidden] = useState(true);
-  const [contactOpen, setContactOpen] = useState(false);
   const [wechatOpen, setWechatOpen] = useState(false);
 
   const tier = userTier || "free";
   const email = boundEmail || userEmail;
   const isCodeUser = authMethod === "code" || authMethod === "both";
   const isEmailUser = authMethod === "email" || authMethod === "both";
-  const showCode = isCodeUser && userCode;
 
   useEffect(() => {
     if (!isLoggedIn || !userCode) return;
@@ -124,14 +115,14 @@ export function NavSidebar({
         <div onClick={() => setLogoutConfirm(false)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.35)", WebkitBackdropFilter: "blur(4px)", backdropFilter: "blur(4px)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center" }}>
           <div onClick={(e) => e.stopPropagation()} style={{ background: "#fff", borderRadius: 12, padding: "24px 24px 20px", width: 300, boxShadow: "0 10px 40px rgba(0,0,0,0.12)", display: "flex", flexDirection: "column", gap: 14, fontFamily: HOME_FONT }}>
             <div>
-              <div style={{ fontSize: 15, fontWeight: 800, color: "#1a2420", marginBottom: 6 }}>确认退出登录？</div>
-              <div style={{ fontSize: 13, color: "#5a6b62", lineHeight: 1.6 }}>
+              <div style={{ fontSize: 15, fontWeight: 700, color: T.t1, marginBottom: 6 }}>确认退出登录？</div>
+              <div style={{ fontSize: 13, color: T.t2, lineHeight: 1.6 }}>
                 {isEmailUser ? "退出后需重新验证邮箱才能继续使用。" : "退出后需重新输入登录码才能继续使用。"}
               </div>
             </div>
             <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
-              <button onClick={() => setLogoutConfirm(false)} style={{ padding: "7px 16px", borderRadius: 8, border: "1px solid #dde5df", background: "#fff", color: "#5a6b62", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: HOME_FONT }}>取消</button>
-              <button onClick={() => { setLogoutConfirm(false); onLogout(); }} style={{ padding: "7px 16px", borderRadius: 8, border: "none", background: "#dc2626", color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: HOME_FONT }}>确认退出</button>
+              <button onClick={() => setLogoutConfirm(false)} style={{ padding: "7px 16px", borderRadius: 8, border: `1px solid ${T.bdr}`, background: "#fff", color: T.t2, fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: HOME_FONT }}>取消</button>
+              <button onClick={() => { setLogoutConfirm(false); onLogout(); }} style={{ padding: "7px 16px", borderRadius: 8, border: "none", background: T.rose, color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: HOME_FONT }}>确认退出</button>
             </div>
           </div>
         </div>,
@@ -189,7 +180,7 @@ export function NavSidebar({
                 </div>
               </div>
               {isSoon && (
-                <span style={{ fontSize: 9, fontWeight: 600, color: t3, background: isChallenge ? "rgba(255,255,255,0.06)" : "#f1f5f9", borderRadius: 4, padding: "2px 6px", flexShrink: 0 }}>
+                <span style={{ fontSize: 10, fontWeight: 600, color: t3, background: isChallenge ? "rgba(255,255,255,0.06)" : T.navItemHover, borderRadius: 4, padding: "2px 6px", flexShrink: 0 }}>
                   即将推出
                 </span>
               )}
@@ -208,7 +199,7 @@ export function NavSidebar({
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
               <div style={{ width: 32, height: 32, borderRadius: 8, background: "linear-gradient(135deg,#087355,#0891B2)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                <span style={{ color: "#fff", fontSize: 14, fontWeight: 800 }}>?</span>
+                <span style={{ color: "#fff", fontSize: 14, fontWeight: 700 }}>?</span>
               </div>
               <div>
                 <div style={{ fontSize: 13, fontWeight: 700, color: t1 }}>未登录</div>
@@ -234,7 +225,7 @@ export function NavSidebar({
             {/* Compact user row */}
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
               <div style={{ width: 32, height: 32, borderRadius: 8, background: "linear-gradient(135deg,#087355,#0891B2)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                <span style={{ color: "#fff", fontSize: 14, fontWeight: 800 }}>T</span>
+                <span style={{ color: "#fff", fontSize: 14, fontWeight: 700 }}>T</span>
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
@@ -255,7 +246,7 @@ export function NavSidebar({
                 <div style={{ display: "flex", alignItems: "center", gap: 4, marginTop: 2 }}>
                   <TierBadge tier={tier} tierExpiresAt={tierExpiresAt} isChallenge={isChallenge} />
                   {tier === "free" && freeRemaining !== null && (
-                    <span style={{ fontSize: 9, fontWeight: 700, padding: "1px 6px", borderRadius: 999, background: freeRemaining > 0 ? "#f0fdf4" : "#fff5f5", color: freeRemaining > 0 ? "#15803d" : "#dc2626" }}>
+                    <span style={{ fontSize: 10, fontWeight: 700, padding: "1px 6px", borderRadius: 999, background: freeRemaining > 0 ? T.primarySoft : T.roseSoft, color: freeRemaining > 0 ? T.primaryDeep : T.rose }}>
                       {freeRemaining}/{FREE_DAILY_LIMIT}
                     </span>
                   )}
@@ -282,20 +273,6 @@ export function NavSidebar({
               </button>
             )}
 
-            {/* Inline stats */}
-            <div style={{ display: "flex", gap: 12, marginBottom: 8, padding: "6px 0" }}>
-              {[
-                { label: "练习", value: totalCount > 0 ? String(totalCount) : "-" },
-                { label: "7日", value: String(weekCount) },
-                { label: "模考", value: bestMock !== null ? bestMock.toFixed(1) : "-" },
-              ].map(({ label, value }) => (
-                <div key={label} style={{ textAlign: "center" }}>
-                  <div style={{ fontSize: 14, fontWeight: 700, color: t1, fontVariantNumeric: "tabular-nums" }}>{value}</div>
-                  <div style={{ fontSize: 9, color: t3 }}>{label}</div>
-                </div>
-              ))}
-            </div>
-
             {/* Referral entry */}
             {onOpenReferral && (
               <SidebarActionItem
@@ -313,23 +290,23 @@ export function NavSidebar({
             </button>
             <div style={{ maxHeight: fbOpen ? 500 : 0, overflow: "hidden", transition: "max-height 0.35s cubic-bezier(0.25,1,0.5,1)" }}>
               <div style={{ paddingTop: 6 }}>
-                <textarea value={fbText} onChange={(e) => setFbText(e.target.value)} placeholder="遇到问题或建议..." style={{ width: "100%", height: 70, resize: "none", background: isChallenge ? "rgba(255,255,255,0.04)" : "#f8fafb", border: `1px solid ${navBdr}`, borderRadius: 8, padding: "6px 8px", fontSize: 11, lineHeight: 1.5, color: t1, fontFamily: HOME_FONT, outline: "none", boxSizing: "border-box" }} />
-                <button onClick={submitFeedback} disabled={!fbText.trim() || fbBusy || fbSent} style={{ width: "100%", marginTop: 4, padding: "6px 0", fontSize: 11, fontWeight: 700, borderRadius: 6, border: "none", cursor: fbText.trim() && !fbBusy && !fbSent ? "pointer" : "default", background: fbSent ? T.primarySoft : (fbText.trim() ? T.primary : (isChallenge ? "rgba(255,255,255,0.07)" : "#f1f5f9")), color: fbSent ? T.primary : (fbText.trim() ? "#fff" : t3), fontFamily: HOME_FONT }}>
+                <textarea value={fbText} onChange={(e) => setFbText(e.target.value)} placeholder="遇到问题或建议..." style={{ width: "100%", height: 70, resize: "none", background: isChallenge ? "rgba(255,255,255,0.04)" : T.navBg, border: `1px solid ${navBdr}`, borderRadius: 8, padding: "6px 8px", fontSize: 11, lineHeight: 1.5, color: t1, fontFamily: HOME_FONT, outline: "none", boxSizing: "border-box" }} />
+                <button onClick={submitFeedback} disabled={!fbText.trim() || fbBusy || fbSent} style={{ width: "100%", marginTop: 4, padding: "6px 0", fontSize: 11, fontWeight: 700, borderRadius: 6, border: "none", cursor: fbText.trim() && !fbBusy && !fbSent ? "pointer" : "default", background: fbSent ? T.primarySoft : (fbText.trim() ? T.primary : (isChallenge ? "rgba(255,255,255,0.07)" : T.navItemHover)), color: fbSent ? T.primary : (fbText.trim() ? "#fff" : t3), fontFamily: HOME_FONT }}>
                   {fbSent ? "已提交" : fbBusy ? "提交中..." : "提交"}
                 </button>
                 {feedbackMsg && <div style={{ marginTop: 4, fontSize: 10, color: feedbackMsg.ok ? T.primary : T.rose }}>{feedbackMsg.text}</div>}
                 {fbHistory.length > 0 && (
                   <div style={{ marginTop: 8, borderTop: `1px solid ${navBdr}`, paddingTop: 6 }}>
-                    <div style={{ fontSize: 9, fontWeight: 700, color: t3, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 4 }}>历史</div>
+                    <div style={{ fontSize: 10, fontWeight: 700, color: t3, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 4 }}>历史</div>
                     {fbHistory.slice(0, 3).map((item) => (
-                      <div key={item.id} style={{ marginBottom: 6, background: isChallenge ? "rgba(255,255,255,0.04)" : "#f8fafb", borderRadius: 6, padding: "5px 7px", border: `1px solid ${navBdr}` }}>
+                      <div key={item.id} style={{ marginBottom: 6, background: isChallenge ? "rgba(255,255,255,0.04)" : T.navBg, borderRadius: 6, padding: "5px 7px", border: `1px solid ${navBdr}` }}>
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 2 }}>
-                          <span style={{ fontSize: 9, color: t3 }}>{new Date(item.created_at).toLocaleDateString("zh-CN")}</span>
+                          <span style={{ fontSize: 10, color: t3 }}>{new Date(item.created_at).toLocaleDateString("zh-CN")}</span>
                           <FbStatusBadge status={item.status} hasReply={!!item.admin_reply} />
                         </div>
                         <div style={{ fontSize: 10, color: t2, lineHeight: 1.4 }}>{String(item.content || "").slice(0, 50)}{item.content?.length > 50 ? "..." : ""}</div>
                         {item.admin_reply && (
-                          <div style={{ marginTop: 3, padding: "3px 5px", background: isChallenge ? "rgba(99,102,241,0.12)" : "#eff6ff", borderRadius: 4, fontSize: 10, color: isChallenge ? "#a5b4fc" : "#1d4ed8", lineHeight: 1.4 }}>
+                          <div style={{ marginTop: 3, padding: "3px 5px", background: isChallenge ? "rgba(99,102,241,0.12)" : T.indigoSoft, borderRadius: 4, fontSize: 10, color: isChallenge ? "#a5b4fc" : T.indigo, lineHeight: 1.4 }}>
                             <b>回复:</b> {item.admin_reply}
                           </div>
                         )}
@@ -371,7 +348,7 @@ export function NavSidebar({
               扫码加群,反馈问题与接收更新
             </div>
             <div style={{
-              background: isChallenge ? "rgba(255,255,255,0.04)" : "#f8fafb",
+              background: isChallenge ? "rgba(255,255,255,0.04)" : T.navBg,
               border: `1px solid ${navBdr}`,
               borderRadius: 8, padding: 6,
               display: "flex", justifyContent: "center",

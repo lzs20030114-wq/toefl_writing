@@ -1,6 +1,6 @@
 "use client";
 
-import { SECTIONS, SECTION_STATUS, SECTION_ACCENTS } from "./sections";
+import { SECTIONS, SECTION_STATUS } from "./sections";
 import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
 import { PRACTICE_MODE } from "../../lib/practiceMode";
 import { HomeLinkCard, HomeTaskCard } from "./HomeTaskCard";
@@ -75,7 +75,7 @@ export function SectionContent({
       {/* Section header + mode switcher */}
       <div style={{ marginBottom: 16, ...fadeIn(50) }}>
         <div className="tp-home-header" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, marginBottom: 10 }}>
-          <h1 style={{ margin: 0, fontSize: 28, fontWeight: 800, color: isChallenge ? CH.t1 : T.t1, letterSpacing: -0.5, lineHeight: 1.2 }}>
+          <h1 style={{ margin: 0, fontSize: 28, fontWeight: 700, color: isChallenge ? CH.t1 : T.t1, letterSpacing: -0.5, lineHeight: 1.2 }}>
             {isChallenge
               ? <>Writing <span style={{ color: CH.accent }}>Challenge</span></>
               : isPractice

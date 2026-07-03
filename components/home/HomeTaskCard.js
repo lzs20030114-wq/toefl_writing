@@ -38,11 +38,11 @@ export function HomeTaskCard({ item, hoverKey, setHoverKey, isChallenge, footer 
       <div style={{ width: 68, minWidth: 68, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: isChallenge ? CH.timeBg : (isMock ? `${T.primary}18` : T.bgSoft), padding: "12px 4px", gap: isChallenge ? 3 : 0 }}>
         {isChallenge ? (
           <>
-            <div style={{ fontSize: 15, fontWeight: 800, color: CH.accent, animation: "ch-pulse 2s ease-in-out infinite", whiteSpace: "nowrap" }}>{timeLabel}</div>
+            <div style={{ fontSize: 15, fontWeight: 700, color: CH.accent, animation: "ch-pulse 2s ease-in-out infinite", whiteSpace: "nowrap" }}>{timeLabel}</div>
             <div style={{ fontSize: 10, color: CH.t2, textDecoration: "line-through", whiteSpace: "nowrap" }}>{standardLabel}</div>
           </>
         ) : (
-          <div style={{ fontSize: 17, fontWeight: 800, color: acc.color, whiteSpace: "nowrap" }}>{timeLabel}</div>
+          <div style={{ fontSize: 17, fontWeight: 700, color: acc.color, whiteSpace: "nowrap" }}>{timeLabel}</div>
         )}
       </div>
       <div style={{ width: 1, flexShrink: 0, background: isChallenge ? CH.cardBorder : T.bdrSubtle }} />
@@ -113,7 +113,7 @@ export function HomeLinkCard({ href, cardKey, hoverKey, setHoverKey, isChallenge
       <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 3, background: color, opacity: isHover ? 1 : 0, transition: "opacity 150ms ease" }} />
       <div style={{ width: 68, minWidth: 68, display: "flex", alignItems: "center", justifyContent: "center", background: isChallenge ? "rgba(255,255,255,0.05)" : T.bgSoft, padding: "12px 4px" }}>
         <div style={{ width: 40, height: 40, borderRadius: 10, background: isChallenge ? "rgba(255,255,255,0.06)" : T.bdrSubtle, display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <span style={{ fontSize: 18, fontWeight: 800, color: isChallenge ? CH.t1 : T.t2 }}>{icon}</span>
+          <span style={{ fontSize: 18, fontWeight: 700, color: isChallenge ? CH.t1 : T.t2 }}>{icon}</span>
         </div>
       </div>
       <div style={{ width: 1, background: isChallenge ? CH.cardBorder : T.bdrSubtle, flexShrink: 0 }} />

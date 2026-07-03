@@ -6,8 +6,6 @@ import { loadHist, SESSION_STORE_EVENTS } from "../../lib/sessionStore";
 import { formatMinutesLabel, getTaskTimeSeconds, normalizePracticeMode, PRACTICE_MODE, STANDARD_TIME_SECONDS } from "../../lib/practiceMode";
 import { extractPostWritingPracticeItems, groupPostWritingPracticeItems } from "../../lib/postWritingPractice";
 import { ChallengeEffects } from "./ChallengeEffects";
-import { HomeLinkCard, HomeTaskCard } from "./HomeTaskCard";
-import { HomeSidebar } from "./HomeSidebar";
 import { MobileHomePage } from "./MobileHomePage";
 import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_PAGE_CSS, HOME_TOKENS as T, TASK_ACCENTS } from "./theme";
 import { useIsMobile } from "../../hooks/useIsMobile";
@@ -104,7 +102,6 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
   const [fbSent, setFbSent] = useState(false);
   const [feedbackMsg, setFeedbackMsg] = useState(null);
   const [fbHistory, setFbHistory] = useState([]);
-  const [fbHistLoading, setFbHistLoading] = useState(false);
   const [copied, setCopied] = useState(false);
   const [logoutHover, setLogoutHover] = useState(false);
   const [referralModalOpen, setReferralModalOpen] = useState(false);
@@ -180,14 +177,11 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
 
   async function loadFbHistory() {
     if (!userCode) return;
-    setFbHistLoading(true);
     try {
       const res = await fetch(`/api/feedback?userCode=${encodeURIComponent(userCode)}`);
       const body = await parseJsonSafe(res);
       if (res.ok) setFbHistory(Array.isArray(body?.rows) ? body.rows : []);
-    } catch { /* silent */ } finally {
-      setFbHistLoading(false);
-    }
+    } catch { /* silent */ }
   }
 
   useEffect(() => { if (fbOpen) loadFbHistory(); }, [fbOpen, userCode]);
@@ -268,7 +262,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
             borderBottom: isChallenge ? `2px solid ${CH.navBorder}` : `1px solid ${T.bdrSubtle}`,
           }}>
             <div style={{ width: 24, height: 24, borderRadius: 6, background: "linear-gradient(135deg,#087355,#0891B2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <span style={{ color: "#fff", fontSize: 11, fontWeight: 800 }}>T</span>
+              <span style={{ color: "#fff", fontSize: 11, fontWeight: 700 }}>T</span>
             </div>
             <span style={{ marginLeft: 8, fontWeight: 700, fontSize: 14, color: isChallenge ? "#fff" : T.t1 }}>TreePractice</span>
             <div style={{ marginLeft: "auto" }}><AnnouncementButton isChallenge={isChallenge} /></div>
@@ -322,7 +316,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
           <div className="home-nav" style={{ position: "sticky", top: 0, zIndex: 10, height: 52, display: "flex", alignItems: "center", padding: "0 36px", background: "rgba(255,255,255,0.92)", WebkitBackdropFilter: "blur(12px)", backdropFilter: "blur(12px)", borderBottom: `1px solid ${T.bdrSubtle}` }}>
             <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
               <div style={{ width: 28, height: 28, borderRadius: 8, background: "linear-gradient(135deg,#087355,#0891B2)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                <span style={{ color: "#fff", fontSize: 13, fontWeight: 800 }}>T</span>
+                <span style={{ color: "#fff", fontSize: 13, fontWeight: 700 }}>T</span>
               </div>
               <span style={{ fontWeight: 700, fontSize: 15, color: T.t1 }}>TreePractice</span>
               <span style={{ fontSize: 10, fontWeight: 700, color: T.primary, background: T.primarySoft, border: `1px solid ${T.primaryMist}`, borderRadius: 5, padding: "1px 6px", letterSpacing: 0.3 }}>TOEFL 备考</span>
@@ -347,13 +341,11 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
             isChallenge={isChallenge}
             userCode={userCode} userTier={userTier} userEmail={userEmail} authMethod={authMethod}
             isLoggedIn={isLoggedIn} showLoginModal={showLoginModal} onLogout={onLogout}
-            totalCount={totalCount} weekCount={weekCount} bestMock={bestMock}
             fbOpen={fbOpen} setFbOpen={setFbOpen} fbText={fbText} setFbText={setFbText}
             fbBusy={fbBusy} fbSent={fbSent} feedbackMsg={feedbackMsg} submitFeedback={submitFeedback}
-            fbHistory={fbHistory} fbHistLoading={fbHistLoading}
+            fbHistory={fbHistory}
             copied={copied} copyCode={copyCode} logoutHover={logoutHover} setLogoutHover={setLogoutHover}
-            bsMistakeCount={bsMistakeCount} postWritingCounts={postWritingCounts}
-            sideCard={sideCard} fadeIn={fadeIn}
+            fadeIn={fadeIn}
             onOpenReferral={handleOpenReferral}
           />
           <SectionContent
