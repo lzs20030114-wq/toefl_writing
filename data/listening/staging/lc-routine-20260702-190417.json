@@ -1,0 +1,270 @@
+{
+  "items": [
+    {
+      "context": "plans_social",
+      "situation": "two friends planning a birthday surprise for a classmate",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Hey, Priya's birthday is next Friday. I want to throw her a surprise party in the common room. Are you in?" },
+        { "speaker": "Man", "text": "Definitely! What do you need me to handle?" },
+        { "speaker": "Woman", "text": "Could you take care of the cake? She's obsessed with lemon, so grab a lemon one from the bakery on Oak Street." },
+        { "speaker": "Man", "text": "Lemon it is. Should I keep her busy beforehand too?" },
+        { "speaker": "Woman", "text": "Actually, that'd be perfect. Maybe take her out around six so I can set up the decorations." },
+        { "speaker": "Man", "text": "Got it. I'll text you when we're heading back." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What kind of cake does the woman ask the man to buy?",
+          "options": {
+            "A": "A lemon cake",
+            "B": "A chocolate cake",
+            "C": "A strawberry cake",
+            "D": "A vanilla cake"
+          },
+          "answer": "A",
+          "explanation": "女士明确说 Priya 特别喜欢柠檬味，让男士去 Oak Street 的面包店买一个柠檬蛋糕，所以 A 正确。B 巧克力和 C 草莓都改变了对话中的关键事实，属于 wrong_detail。D 香草蛋糕在对话中从未提及，属于貌似合理但未陈述的干扰项。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do before the party on Friday?",
+          "options": {
+            "A": "Bake the birthday cake himself",
+            "B": "Set up the party decorations",
+            "C": "Take Priya out for a walk",
+            "D": "Invite more guests to the party"
+          },
+          "answer": "C",
+          "explanation": "女士让男士在六点左右把 Priya 带出去，好让自己布置场地，男士答应了，因此可推断他会带 Priya 出去，C 正确。A 错在男士是去面包店买蛋糕而非自己烤，属于过度推断。B 布置装饰是女士的任务，男士负责的是拖住寿星，属于张冠李戴。D 邀请更多客人在对话中毫无依据，属于无关的下一步。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_next_step",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two students swapping music recommendations because one is bored of the same pop singers",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Honestly, I'm so bored of my playlist. It's the same three pop singers on repeat. Got anything fresh?" },
+        { "speaker": "Man", "text": "Oh, you should try some indie folk. There's this band called River Stone — really mellow guitar stuff." },
+        { "speaker": "Woman", "text": "Hmm, folk isn't usually my thing. Is it slow?" },
+        { "speaker": "Man", "text": "Some of it, but their newer album is upbeat, almost like pop with banjos. I'll send you the link." },
+        { "speaker": "Woman", "text": "Okay, I'll give it a shot. If I like it, I might check out their concert next month." },
+        { "speaker": "Man", "text": "They're playing downtown, actually. We could go together!" }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What kind of music does the man recommend?",
+          "options": {
+            "A": "Classic pop songs",
+            "B": "Indie folk music",
+            "C": "Electronic dance music",
+            "D": "Jazz from the 1950s"
+          },
+          "answer": "B",
+          "explanation": "男士建议她尝试独立民谣（indie folk），并举了 River Stone 这个乐队，所以 B 正确。A 流行乐正是女士听腻的类型，男士没有推荐它，属于 wrong_detail。C 电子舞曲和 D 五十年代爵士都未在对话中出现，属于貌似合理但未陈述的干扰项。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do first?",
+          "options": {
+            "A": "Buy concert tickets right away",
+            "B": "Delete her current playlist",
+            "C": "Learn to play the banjo",
+            "D": "Listen to the album the man sends"
+          },
+          "answer": "D",
+          "explanation": "男士说会把链接发给她，女士也说愿意试听，因此她最先会去听男士发来的专辑，D 正确。A 错在女士说的是‘如果喜欢再去看演唱会’，现在就买票属于过度推断。B 删除现有歌单在对话中没有依据。C 学班卓琴只是因为男士提到‘带班卓琴的流行乐’而衍生，属于无关的下一步。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_next_step",
+            "C": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "errands_service",
+      "situation": "a student returning a too-small sweater at a store counter",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "customer", "gender": "female" },
+        { "name": "Man", "role": "store_clerk", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Hi, I bought this sweater last week, but it's too small. I'd like to return it, please." },
+        { "speaker": "Man", "text": "Sure, do you have the receipt?" },
+        { "speaker": "Woman", "text": "Right here. I actually love the design — could I get the same one in a larger size?" },
+        { "speaker": "Man", "text": "Let me check... we're sold out of the large in this color, but a new shipment arrives Thursday." },
+        { "speaker": "Woman", "text": "Oh, that's not great. I need something before then for a trip this weekend." },
+        { "speaker": "Man", "text": "Well, I can give you a full refund now, or you could order online — though shipping takes about a week." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "Why does the woman come to the store?",
+          "options": {
+            "A": "To buy a sweater for an upcoming trip",
+            "B": "To complain about a defective sweater",
+            "C": "To return a sweater that doesn't fit",
+            "D": "To ask when a new shipment arrives"
+          },
+          "answer": "C",
+          "explanation": "女士开门见山说毛衣太小、想退货，这是她来店的主要目的，C 正确。A 把情境反过来了，她是来退货而不是买新的，属于 reversed_situation。B 说毛衣有质量问题，但她只是尺码太小，并非有瑕疵，属于 wrong_topic。D 只抓住对话中提到的到货日期这个细节，偏离主旨，属于 too_narrow。",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "B": "wrong_topic",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do?",
+          "options": {
+            "A": "Accept a refund for the sweater",
+            "B": "Wait for Thursday's new shipment",
+            "C": "Order the sweater from the website",
+            "D": "Exchange it for a different design"
+          },
+          "answer": "A",
+          "explanation": "女士这周末就要出行，而店里大号周四才到货、网购又要一周才能寄到，两条路都赶不上，因此她最可能当场接受全额退款，A 正确。B 等周四到货来不及，属于被否决的选项。C 网购运输要一周同样赶不上，也被否决。D 换一个不同的款式与她‘很喜欢这个设计’的表述矛盾，属于无关的下一步。",
+          "distractor_types": {
+            "B": "rejected_option",
+            "C": "rejected_option",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "errands_service",
+      "situation": "two students talking about a houseplant one is caring for",
+      "difficulty": "hard",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "You've been carrying that fern everywhere. What's wrong with it?" },
+        { "speaker": "Man", "text": "I'm plant-sitting my sister's fern while she's abroad, and I think I'm killing it. The leaves keep turning brown." },
+        { "speaker": "Woman", "text": "Brown tips usually mean the air's too dry — not too little water." },
+        { "speaker": "Man", "text": "Really? I assumed it was thirsty, so I've been soaking it every day." },
+        { "speaker": "Woman", "text": "That's probably the issue. Soggy roots rot. Try misting the leaves and letting the soil dry between waterings." },
+        { "speaker": "Man", "text": "Huh. I had it completely backwards." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "How to find a replacement plant for the man",
+            "B": "Where the man's sister is traveling",
+            "C": "Whether the man should buy his own fern",
+            "D": "Why the man's plant is struggling"
+          },
+          "answer": "D",
+          "explanation": "整段对话围绕蕨类植物叶子变褐、男士照料不当展开，女士帮他分析原因，主旨是这盆植物为什么长不好，D 正确。A 找替代植物在对话中根本没提，属于 wrong_topic。B 姐姐去了哪里只是背景一笔带过，抓住细节偏离主旨，属于 too_narrow。C 是否要自己买一盆蕨与情境相反，男士是在替姐姐照看现有的植物，属于 wrong_topic。",
+          "distractor_types": {
+            "A": "wrong_topic",
+            "B": "too_narrow",
+            "C": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do now?",
+          "options": {
+            "A": "Water the fern even more often",
+            "B": "Water the fern less and mist it",
+            "C": "Return the fern to his sister",
+            "D": "Move the fern to a sunnier window"
+          },
+          "answer": "B",
+          "explanation": "女士指出问题在于浇水过多导致烂根，建议改成给叶子喷雾、让土壤间隔干一干，男士也承认自己做反了，因此他会减少浇水并改用喷雾，B 正确。A 浇更多水与女士的建议正好相反，属于被否决的选项。C 把蕨还给姐姐不可能，因为她正在国外，属于过度推断。D 挪到阳光更充足的窗边对话中从未讨论，属于无关的下一步。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "C": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "two students talking about which elective class to take next term",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Have you picked your elective yet? I'm torn between astronomy and ceramics." },
+        { "speaker": "Man", "text": "I'm taking intro to photography. The professor lets you use the darkroom anytime." },
+        { "speaker": "Woman", "text": "Nice. Is there a lot of homework?" },
+        { "speaker": "Man", "text": "Not really — mostly hands-on projects, no exams. But you have to buy your own film, which gets pricey." },
+        { "speaker": "Woman", "text": "Hmm, my budget's tight this term. Maybe astronomy's safer, then." },
+        { "speaker": "Man", "text": "Astronomy has a night lab, though — you'd be on campus at ten p.m. twice a week." },
+        { "speaker": "Woman", "text": "Oh, I didn't realize that. I'll check the schedule before deciding." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man say is a downside of the photography class?",
+          "options": {
+            "A": "Students must buy their own film",
+            "B": "The class has difficult exams",
+            "C": "The darkroom is often crowded",
+            "D": "There is a lot of written homework"
+          },
+          "answer": "A",
+          "explanation": "男士说摄影课本身作业不多，但缺点是要自己买胶卷，而且价格不便宜，所以 A 正确。B 与事实相反，他明确说 no exams。D 也与事实相反，他说主要是动手项目、写作作业不多，两者都属于 wrong_detail。C 暗房很拥挤在对话中没有提到，反而说可以随时使用，属于貌似合理但未陈述的干扰项。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Sign up for the photography class",
+            "B": "Register for astronomy right away",
+            "C": "Check the astronomy class schedule",
+            "D": "Drop her elective for this term"
+          },
+          "answer": "C",
+          "explanation": "女士在得知天文课有深夜实验后说要先看课表再决定，因此她下一步最可能去查天文课的时间安排，C 正确。A 报摄影课不太可能，因为她预算紧张、又要买胶卷。B 立刻报天文课与她‘先看课表’的表态矛盾，属于过度推断。D 干脆放弃选修在对话中毫无依据，属于无关的下一步。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    }
+  ]
+}

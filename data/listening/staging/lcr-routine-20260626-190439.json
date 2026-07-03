@@ -1,0 +1,164 @@
+{
+  "items": [
+    {
+      "context": "campus_daily",
+      "situation": "student checking bus or shuttle schedule",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Do you know if the night bus still runs?",
+      "options": {
+        "A": "Actually, it stopped running last week.",
+        "B": "The bus was really crowded today.",
+        "C": "Yes, I take the train every morning.",
+        "D": "It's parked behind the dorm."
+      },
+      "answer": "A",
+      "explanation": "正确答案 A 以话语标记 \"Actually\" 开头，间接但有效地回答了夜班车是否还运行——它上周已经停运，直接解决了对方的疑问。B 是语义联想陷阱，重复了 \"bus\" 却讲今天车很挤，与是否运行无关。C 答非所问，讲自己坐火车，且 \"Yes\" 后给出无关信息。D 也是语义联想陷阱，回答车停在哪里，而问的是是否还运行。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "semantic_association_trap"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "responding to an invitation or suggestion",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Where do you want to meet for dinner?",
+      "options": {
+        "A": "Dinner was delicious last night.",
+        "B": "How about that café on Fifth Street?",
+        "C": "Yes, I'm really hungry now.",
+        "D": "She left the restaurant early."
+      },
+      "answer": "B",
+      "explanation": "正确答案 B 用反问推进对话，提出在第五街那家咖啡馆见面，直接回应了 \"Where\" 的提问并给出具体地点。A 是语义联想陷阱，重复 \"dinner\" 却谈昨晚饭很好吃，没回答地点。C 答错问题类型，对方问的是地点（Where），却用 \"Yes\" 回答是否饿。D 是无关但合乎语法的句子，讲别人提前离开餐厅，与约定地点无关。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "checking if a service (post office, bank) is open",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I think the bank closes early on Fridays.",
+      "options": {
+        "A": "I opened a new account there.",
+        "B": "The teller was very friendly.",
+        "C": "Actually, they're open until six today.",
+        "D": "Yes, I withdrew some cash."
+      },
+      "answer": "C",
+      "explanation": "正确答案 C 以话语标记 \"Actually\" 开头，间接纠正了对方的猜测——银行今天其实开到六点，自然地推进对话。A 是语义联想陷阱，重复 \"bank\" 的相关概念（开户），但没回应是否提前关门。B 也是语义联想陷阱，谈柜员友好，偏离了营业时间。D 答错问题类型，用 \"Yes\" 加取现的无关信息，没说营业时间。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "semantic_association_trap",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student seeking help at the writing center",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "What's the best way to fix my essay?",
+      "options": {
+        "A": "Essays are due next Monday.",
+        "B": "I can't fix the printer either.",
+        "C": "The library has writing guides.",
+        "D": "Let's go over it together."
+      },
+      "answer": "D",
+      "explanation": "正确答案 D 用自然的对话套语 \"Let's go over it together\"（我们一起过一遍），以解决问题的方式回应求助，符合写作中心的语境。A 是无关但合乎语法的句子，讲论文截止日期，没回答怎么修改。B 是一词多义/误解陷阱，把 \"fix\" 当成修理（打印机），而非改进文章。C 是语义联想陷阱，把求助引向图书馆的写作指南，回避了实际帮助。",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "polysemy",
+        "C": "semantic_association_trap"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about gym or sports facility hours",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Is the gym still open this late?",
+      "options": {
+        "A": "You're in luck, it just reopened.",
+        "B": "I left my gym bag at home.",
+        "C": "The pool is on the second floor.",
+        "D": "Yes, I lifted weights yesterday."
+      },
+      "answer": "A",
+      "explanation": "正确答案 A 用习语式表达 \"You're in luck\"（你运气好），自然地告知健身房刚重新开放，间接但明确地回答了是否还开着。B 是语义联想陷阱，重复 \"gym\" 却讲健身包落在家里，与营业时间无关。C 也是语义联想陷阱，给出游泳池位置这一无关方面。D 是质量审计中典型的坏干扰项形式，但这里答错问题——\"Yes\" 加上昨天举铁的旧事，并不说明现在是否还开。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "semantic_association_trap",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking about course enrollment or prerequisites",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Why is this seminar already full?",
+      "options": {
+        "A": "Seminars usually meet on Thursdays.",
+        "B": "I can add you to the waitlist now.",
+        "C": "The room only seats twenty people.",
+        "D": "Yes, registration opened last week."
+      },
+      "answer": "B",
+      "explanation": "正确答案 B 不纠结于解释\"为什么满了\"，而是直接解决背后的需求——把对方加进候补名单，属于 context_shift 范式。A 是无关但合乎语法的句子，讲研讨课通常周四上课，没解决报名问题。C 是语义联想陷阱，给出教室只能坐二十人这一相关却无用的细节。D 答错问题类型，对方问 \"Why\"，却用 \"Yes\" 加上注册时间作答。",
+      "distractor_types": {
+        "A": "off_topic",
+        "C": "semantic_association_trap",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking about a reading list for a course",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "How long is the reading list this term?",
+      "options": {
+        "A": "Reading helps you sleep better.",
+        "B": "The list is taped to the door.",
+        "C": "Well, it's just five short articles.",
+        "D": "Yes, I finished the novel already."
+      },
+      "answer": "C",
+      "explanation": "正确答案 C 以话语标记 \"Well\" 开头，间接但清楚地回答了书单长度——只有五篇短文章。A 是无关但合乎语法的句子，讲阅读助眠，偏离了书单长度。B 是语义联想陷阱，给出书单贴在门上这一位置信息，而非问的长度。D 答错问题类型，对方问 \"How long\"，却用 \"Yes\" 加上读完小说作答。",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "semantic_association_trap",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "coordinating airport pickup with a friend",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "My flight lands around eight tomorrow night.",
+      "options": {
+        "A": "The airport food is overpriced.",
+        "B": "I prefer an aisle seat myself.",
+        "C": "Yes, planes are often delayed.",
+        "D": "No worries, I'll be there waiting."
+      },
+      "answer": "D",
+      "explanation": "正确答案 D 用习语式安抚语 \"No worries\"（别担心），承诺会去接机，自然地回应了对方告知的落地时间。A 是语义联想陷阱，重复 \"airport\" 却吐槽机场食物贵，与接机无关。B 也是语义联想陷阱，把话题引向座位偏好（飞机相关），偏离接机安排。C 答错语境，用 \"Yes\" 加上航班常延误的泛泛之谈，没回应接机。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "semantic_association_trap",
+        "C": "wrong_question_type"
+      }
+    }
+  ]
+}

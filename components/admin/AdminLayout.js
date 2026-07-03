@@ -66,6 +66,8 @@ const NAV_GROUPS = [
     label: "运营",
     items: [
       { label: "数据分析", href: "/admin-analytics", icon: "chart" },
+      { label: "留存分析", href: "/admin-retention", icon: "trend" },
+      { label: "周报月报", href: "/admin-report", icon: "calendar" },
       { label: "邀请活动", href: "/admin-referrals", icon: "gift" },
       { label: "用户反馈", href: "/admin-feedback", icon: "msg" },
       { label: "新手问卷", href: "/admin-surveys", icon: "msg" },
@@ -84,6 +86,8 @@ const ICONS = {
   alert: "M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0zM12 9v4m0 4h.01",
   msg: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z",
   chart: "M18 20V10M12 20V4M6 20v-6",
+  trend: "M23 6l-9.5 9.5-5-5L1 18M17 6h6v6",
+  calendar: "M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z",
   book: "M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 19.5A2.5 2.5 0 0 0 6.5 22H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15z",
   zap: "M13 2L3 14h9l-1 10 10-12h-9l1-10z",
   target: "M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zm0-6a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0-2a2 2 0 1 1 0-4 2 2 0 0 1 0 4z",

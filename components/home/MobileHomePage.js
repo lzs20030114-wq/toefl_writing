@@ -208,11 +208,6 @@ export function MobileHomePage({
         </div>
       </div>
 
-      <PromoBanner isChallenge={isChallenge} fadeIn={() => ({})} />
-
-      {/* Referral banner — invite friends, get +3 days Pro */}
-      <ReferralBanner isLoggedIn={isLoggedIn} onOpen={onOpenReferral} fadeIn={() => ({})} />
-
       {/* ── 任务卡片列表 ── */}
       <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 14 }}>
         {gridItems.map((item) => (
@@ -292,6 +287,12 @@ export function MobileHomePage({
         }}>
           💬 反馈
         </button>
+      </div>
+
+      {/* Promo + Referral banners — moved below the tasks for a cleaner top of page */}
+      <div style={{ marginTop: 14 }}>
+        <PromoBanner isChallenge={isChallenge} fadeIn={() => ({})} />
+        <ReferralBanner isLoggedIn={isLoggedIn} onOpen={onOpenReferral} fadeIn={() => ({})} />
       </div>
 
       {/* ── 用户信息底部弹出 ── */}

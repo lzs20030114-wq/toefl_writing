@@ -1,55 +1,46 @@
 {
-  "session_id": "routine-20260625-190427",
-  "completed_at": "2026-06-25T19:19:39.671Z",
-  "duration_minutes": 15,
+  "session_id": "routine-20260702-190417",
+  "completed_at": "2026-07-02T19:17:15Z",
+  "duration_minutes": 12.8,
   "model": "Claude Opus 4.8",
-  "highlight": "12 个题库全部生成 70/70; AP 首现物理热力学(熵)课题; BS 难度冻结门修复后通过。",
+  "highlight": "阅读 AP 首现光学/纺织纤维/月球风化层选材，写作 disc/email 全数通过；BS 单项 20/20 但难度冻结门未过，待 R2 重试",
   "commit_sha": "",
   "results": {
     "bs": {
       "generated": 20,
       "accepted": 20,
       "topics": [
-        "class schedule",
-        "coffee/sleep",
-        "study group",
-        "bookstore",
-        "scholarship paperwork",
-        "dorm meal plan",
-        "section switch",
-        "advisor credits",
-        "library fine",
-        "photography club",
-        "shuttle",
-        "art gallery",
-        "draft deadline",
-        "mailroom package",
-        "dean meeting/major",
-        "gym pass",
-        "volunteer orientation",
-        "housing form",
-        "lounge study desk",
-        "registrar transcripts"
+        "campus life",
+        "classes/registration",
+        "library/dorms",
+        "fitness center",
+        "embedded questions (whether/if/when)",
+        "negation",
+        "passive voice",
+        "relative clauses",
+        "direct wh/yes-no questions"
       ],
       "favorite": {
-        "prompt": "Did you talk to your advisor about credits?",
-        "answer": "She needed to know which of the courses I'd dropped would still count."
+        "prompt": "What did you need to find out before registration?",
+        "answer": "I really needed to know which of the two electives still counted."
       },
-      "retried_after_fail": true,
-      "failure_reason": "初次合库被 BS 难度冻结门拒绝 (register.contraction 0.179<0.18, length_band.hard 0.107 偏低) + 首版集合级校验未达 embedded/negation 阈值; 同会话内修复后 PASS 并合库。"
+      "retried_after_fail": false,
+      "failure_reason": "20/20 通过单项校验，但 BS 难度冻结门 FAIL：register.contraction 0.175<0.18、register.third_person_formal 0.171>0.17、embedded_question 漂移 2.52x（真库聚合门，非本批单独问题）；live 库未改动",
+      "r2_supplemented": true,
+      "r2_items_added": 20
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
       "topics": [
-        "computer science",
-        "history and culture",
-        "social studies",
-        "public policy"
+        "environmental science",
+        "business",
+        "psychology",
+        "political science"
       ],
       "favorite": {
-        "subtopic": "history and culture",
-        "preview": "We've been examining how museums handle contested objects this semester. Several major institutions have begun returning artifacts acquired"
+        "subtopic": "environmental science",
+        "preview": "We've been examining how cities can cool themselves as summers grow hotter this semester. One proposal"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -58,14 +49,14 @@
       "generated": 4,
       "accepted": 4,
       "topics": [
-        "消费售后",
-        "住宿",
+        "职场工作",
         "社区生活",
-        "服务与活动"
+        "住宿",
+        "消费售后"
       ],
       "favorite": {
         "subtopic": "社区生活",
-        "preview": "You take part in a weekly recycling program in your neighborhood. The collection day was recently moved from Friday to Monday without notice."
+        "preview": "You volunteer at a neighborhood community garden that recently switched to a new online sign-up system for weekend shifts. The system keeps double-booking people, and last Saturday four volunteers all showed up to weed the same plot."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -74,15 +65,15 @@
       "generated": 5,
       "accepted": 5,
       "topics": [
-        "environmental_science/climate change",
-        "art/cinema history",
-        "physics/thermodynamics",
-        "anthropology/early agriculture",
-        "materials_science/textile fibers"
+        "sociology/aging populations",
+        "physics/optics",
+        "materials_science/textile fibers",
+        "astronomy/lunar geology",
+        "technology/steam power"
       ],
       "favorite": {
-        "subtopic": "physics/thermodynamics",
-        "preview": "Entropy is a measure of how many microscopic arrangements correspond to the same observable state of a system."
+        "subtopic": "astronomy/lunar geology",
+        "preview": "Regolith is the layer of loose, shattered rock and fine dust that blankets the solid bedrock of the Moon."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -91,16 +82,16 @@
       "generated": 6,
       "accepted": 6,
       "topics": [
-        "technology/lithium-ion batteries",
-        "anthropology/the development of kinship systems",
-        "chemistry/the periodic table",
-        "physics/the Doppler effect",
-        "economics/comparative advantage",
-        "art/the invention of linear perspective"
+        "biology/microbiology",
+        "environmental_science/ozone layer",
+        "psychology/placebo effect",
+        "history/silk road",
+        "geology/minerals",
+        "astronomy/cosmic radiation"
       ],
       "favorite": {
-        "subtopic": "physics/the Doppler effect",
-        "preview": "The Doppler effect describes how the observed frequency of a wave changes when its source moves."
+        "subtopic": "history/silk road",
+        "preview": "The Silk Road was a vast network of trade routes that once linked China with distant lands to the west."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -109,14 +100,14 @@
       "generated": 4,
       "accepted": 4,
       "topics": [
-        "notice/campus shuttle route detour",
-        "notice/building HVAC maintenance",
-        "email/campus tour guide volunteer shift",
-        "email/student ID replacement"
+        "notice",
+        "notice",
+        "notice",
+        "notice"
       ],
       "favorite": {
-        "subtopic": "notice/campus_shuttle_detour",
-        "preview": "Beginning March 3, the Blue Line campus shuttle will detour around Maple Avenue construction. New temporary stops are at Carver Hall and South Lot B."
+        "subtopic": "notice/shuttle-detour",
+        "preview": "Notice: Because of road repairs on Elm Street, the Blue Line shuttle will follow a detour from May 5"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -125,12 +116,12 @@
       "generated": 2,
       "accepted": 2,
       "topics": [
-        "email/campus tool library introduction",
-        "notice/textbook buyback event"
+        "email/library-overdue",
+        "email/roommate-maintenance"
       ],
       "favorite": {
-        "subtopic": "email/campus tool library",
-        "preview": "We're excited to announce that the Campus Tool Library has opened in the basement of Hartwell Hall, Room B12."
+        "subtopic": "email/roommate-maintenance",
+        "preview": "Subject: Kitchen Faucet Repair — This Thursday Morning. Hi Daniel, I wanted to let you know"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -139,14 +130,14 @@
       "generated": 4,
       "accepted": 4,
       "topics": [
-        "how invasive species disrupt native food webs",
-        "the unexpected origins of the modern fire department",
-        "the diffusion of responsibility in large groups",
-        "the role of dark matter in galaxy formation"
+        "the fundamental attribution error in everyday judgments",
+        "how recording technology changed the way music was composed",
+        "why Impressionists painted outdoors and what that meant for color theory",
+        "the concept of ecological succession after a wildfire"
       ],
       "favorite": {
-        "subtopic": "the unexpected origins of the modern fire department",
-        "preview": "The publicly funded fire department, the one you call by dialing a number and that costs you nothing at the moment of crisis, is a fairly recent invention."
+        "subtopic": "the concept of ecological succession after a wildfire",
+        "preview": "A forest fire looks like an ending. The trees are blackened, the ground is ash, and the animals are"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -155,15 +146,15 @@
       "generated": 5,
       "accepted": 5,
       "topics": [
-        "returning a too-small sweater",
-        "caring for a roommate's houseplant",
-        "recommending a history podcast",
-        "coordinating a weekend beach trip",
-        "comparing bike/bus/walk commutes"
+        "planning a birthday surprise party for a classmate",
+        "swapping music recommendations (bored of pop)",
+        "returning a too-small sweater at a store counter",
+        "caring for a sister's struggling houseplant (fern)",
+        "choosing an elective for next term"
       ],
       "favorite": {
-        "subtopic": "recommendations_opinions",
-        "preview": "You have to try this history podcast I found. Each episode is only twenty minutes, so it's perfect for the bus."
+        "subtopic": "caring for a sister's struggling houseplant (fern)",
+        "preview": "You've been carrying that fern everywhere. What's wrong with it? I'm plant-sitting my sister's fern"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -172,15 +163,15 @@
       "generated": 5,
       "accepted": 5,
       "topics": [
-        "parking garage resurfacing closure with valet",
-        "philosophy society essay competition",
-        "returning alumna marine biologist talk",
-        "graduate thesis poster session schedule",
-        "new fitness equipment at recreation center"
+        "community garden rooftop spring cleanup volunteer event",
+        "campus shuttle temporary detour due to bridge renovation",
+        "undergraduate poster session open to all majors",
+        "alumna guest lecture on her research career path",
+        "biology end-of-semester project showcase with awards"
       ],
       "favorite": {
-        "subtopic": "returning alumna marine biologist public talk",
-        "preview": "I'm pleased to tell you that one of our former students, now a marine biologist, will be visiting next Wednesday to give a public talk"
+        "subtopic": "alumna guest lecture on her research career path",
+        "preview": "I'm pleased to announce that our department will host a special guest lecture this coming Wednesday evening."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -189,18 +180,18 @@
       "generated": 8,
       "accepted": 8,
       "topics": [
-        "exam format study materials",
-        "course reading list",
-        "campus film screening",
-        "business hours early closing",
-        "concern after a friend's move",
-        "study group location",
-        "dorm faucet maintenance",
-        "offering help to stressed friend"
+        "writing center location",
+        "concert status tonight",
+        "study group invitation",
+        "chemistry course registration",
+        "lost-and-found backpack",
+        "campus parking permit",
+        "grad school acceptance",
+        "rescheduling a better time"
       ],
       "favorite": {
-        "subtopic": "offering help to someone who seems stressed",
-        "preview": "Can I take something off your plate? — a warm idiomatic offer to share another person's burden when they look overwhelmed."
+        "subtopic": "grad school acceptance",
+        "preview": "I just found out I'm going to grad school. — friend sharing exciting personal news, idiomatic congrats"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -209,16 +200,18 @@
       "generated": 3,
       "accepted": 3,
       "topics": [
-        "Watercolor Painting (how-to)",
         "Hardware Store Help",
-        "Campus Bookstore"
+        "Campus Gym Induction",
+        "Chemistry Lab Safety"
       ],
       "favorite": {
-        "subtopic": "Watercolor Painting (how-to)",
-        "preview": "Lastly, when your painting is fully dry, peel the tape away and sign the bottom corner."
+        "subtopic": "Chemistry Lab Safety",
+        "preview": "Safety goggles are kept by the door."
       },
       "retried_after_fail": false,
       "failure_reason": ""
     }
-  }
+  },
+  "r2_completed_at": "2026-07-02T19:47:28Z",
+  "r2_session_id": "routine-r2-20260702-193047"
 }

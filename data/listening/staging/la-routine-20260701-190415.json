@@ -1,0 +1,219 @@
+{
+  "items": [
+    {
+      "context": "facility_change",
+      "situation": "grand reopening of renovated gallery or performance hall",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "We're excited to announce that the Whitfield Recital Hall reopens this Thursday after eight months of renovation. The hall now features upgraded acoustics, wider seating, and a redesigned stage lobby. To celebrate, we'll host a free ribbon-cutting concert at 7 p.m. in the main auditorium, followed by a reception in the lobby. Seating is limited, so please reserve a ticket through the music department's website by Wednesday at noon. Doors open thirty minutes before the performance, and latecomers won't be seated until intermission. We hope you'll join us to experience the renewed space firsthand.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce the reopening of a renovated hall",
+            "B": "To describe how the hall's acoustics were tested",
+            "C": "To apologize for the renovation's long delay",
+            "D": "To discourage students from attending the concert"
+          },
+          "answer": "A",
+          "explanation": "通知的核心是宣布 Whitfield Recital Hall 经过翻修后重新开放，并举办庆祝音乐会，A 正确。B 属于 too_narrow，只涉及声学这一细节，不是整体目的，且通知并未讲测试过程。C 属于 wrong_purpose，通知从未道歉或提及延误。D 属于 reversed_intent，通知是邀请大家参加，而非劝阻。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What must students do in order to attend the concert?",
+          "options": {
+            "A": "Pay an admission fee at the door",
+            "B": "Join the music department in person",
+            "C": "Reserve a ticket online by Wednesday noon",
+            "D": "Arrive after the intermission begins"
+          },
+          "answer": "C",
+          "explanation": "通知明确说座位有限，须在周三中午前通过音乐系网站预订门票，C 正确。A 属于 wrong_detail，音乐会是免费的，无需付费。B 属于 related_but_not_stated，通知未要求当面报名。D 属于 misattributed_detail，中场休息与迟到者入场有关，被错误地当成入场条件。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "academic_event",
+      "situation": "student research poster session open to all majors",
+      "speaker_role": "society_president",
+      "difficulty": "hard",
+      "announcement": "Good afternoon, everyone. As president of the Undergraduate Scholars Society, I'm inviting you to our fall research poster session next Tuesday from 1 to 4 p.m. in Hollis Hall. This year the session is open to every major, so students in the arts and languages are just as welcome as those in engineering. You don't need finished results to present; a poster outlining your research question and early findings is enough. Faculty from several departments will circulate and offer feedback, and light refreshments will be served. To reserve a display board, email the society by this Friday. We hope to see a wide range of work.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce the winners of a research prize",
+            "B": "To invite students of all majors to present research",
+            "C": "To recruit new officers for the society",
+            "D": "To explain rules for grading student posters"
+          },
+          "answer": "B",
+          "explanation": "通知的核心是邀请各专业学生在海报展示会上展示研究，B 正确。A 属于 wrong_purpose，通知从未提及评奖或获奖者。C 属于 wrong_purpose，通知招募的是展示者而非学会干部。D 属于 wrong_purpose，通知说教师提供反馈，并无评分规则。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "C": "wrong_purpose",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the poster session?",
+          "options": {
+            "A": "It is restricted to engineering students",
+            "B": "It requires completed research results",
+            "C": "It replaces a formal written exam",
+            "D": "It values work still in progress"
+          },
+          "answer": "D",
+          "explanation": "通知说无需完成的结果，只要列出研究问题和初步发现的海报即可，可推断展示会看重进行中的研究，D 正确。A 属于 wrong_detail，通知明确面向所有专业，与之相反。B 属于 wrong_detail，通知说不需要完成的结果，正好相反。C 属于 over_inference，通知从未提及考试，无从推断替代考试。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "wrong_detail",
+            "C": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "campus_activity",
+      "situation": "student art market in the quad",
+      "speaker_role": "activity_coordinator",
+      "difficulty": "easy",
+      "announcement": "Attention students. The Student Activities Office is hosting a campus art market this Saturday from 10 a.m. to 3 p.m. on the central quad. Student artists will sell paintings, ceramics, jewelry, and handmade prints, with all proceeds going directly to the creators. Admission is free, and everyone is welcome to browse or buy. If you'd like to sell your own work, please register at the activities office by Thursday to claim a table, since space is limited. In case of rain, the market will move indoors to the Union ballroom. Come support your fellow students and pick up something unique.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To advertise a new art course on campus",
+            "B": "To collect donations for the activities office",
+            "C": "To promote a student art market on the quad",
+            "D": "To announce that the quad will be closed"
+          },
+          "answer": "C",
+          "explanation": "通知的核心是宣传周六在中央广场举办的学生艺术市集，C 正确。A 属于 wrong_purpose，通知未提及任何课程。B 属于 wrong_detail，收益归创作者所有，并非为办公室募捐。D 属于 reversed_intent，通知是邀请大家到广场，而非宣布封闭。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "wrong_detail",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What must students do in order to sell their own work?",
+          "options": {
+            "A": "Register at the office by Thursday",
+            "B": "Pay a small admission fee",
+            "C": "Bring their own display table",
+            "D": "Move their items to the ballroom"
+          },
+          "answer": "A",
+          "explanation": "通知说想卖作品的学生须在周四前到活动办公室登记以领取桌位，A 正确。B 属于 wrong_detail，入场是免费的。C 属于 related_but_not_stated，桌位由主办方提供，无需自带。D 属于 misattributed_detail，搬到舞厅是下雨时的备用方案，被错误地当成卖作品的要求。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "facility_change",
+      "situation": "campus dining hall switching to summer hours",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "This is a reminder that Carver Dining Hall switches to its summer schedule starting next Monday. From then on, the hall will serve breakfast and lunch only, from 8 a.m. to 2 p.m., and will remain closed for dinner throughout the break. Students staying on campus can use their meal plans at the Union café, which stays open until 8 p.m. every evening. Please note that weekend service at Carver will pause entirely until the fall term. If you have a special dietary need, contact dining services at least three days ahead so the café can prepare accordingly. Thank you for your patience during the transition.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What is true about Carver Dining Hall's summer schedule?",
+          "options": {
+            "A": "It will stay open later each evening",
+            "B": "It will add a new weekend brunch",
+            "C": "It will serve dinner at the Union café",
+            "D": "It will serve only breakfast and lunch"
+          },
+          "answer": "D",
+          "explanation": "通知说 Carver 夏季只供应早餐和午餐（8 点到 14 点），晚餐关闭，D 正确。A 属于 wrong_detail，通知说它晚餐关闭而非延长营业。B 属于 related_but_not_stated，周末服务反而暂停，且从未提到早午餐。C 属于 misattributed_detail，晚间用餐是在 Union café，被错误地归到 Carver 身上。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "C": "misattributed_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students staying on campus over the break?",
+          "options": {
+            "A": "They must cook all their own meals",
+            "B": "They can still eat evening meals somewhere",
+            "C": "They lose access to their meal plans",
+            "D": "They must leave campus every weekend"
+          },
+          "answer": "B",
+          "explanation": "通知说留校学生可在营业到晚 8 点的 Union café 使用餐饮计划，可推断他们晚上仍有地方吃饭，B 正确。A 属于 over_inference，café 提供晚餐，无需自己全部做饭。C 属于 wrong_detail，餐饮计划仍可在 café 使用，并未失效。D 属于 over_inference，通知只说 Carver 周末暂停，并未要求学生离校。",
+          "distractor_types": {
+            "A": "over_inference",
+            "C": "wrong_detail",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "academic_event",
+      "situation": "annual essay competition with faculty judges",
+      "speaker_role": "society_president",
+      "difficulty": "easy",
+      "announcement": "Good morning, students. On behalf of the Writers' Society, I'm pleased to announce our annual essay competition, now open for entries. This year's theme is \"Change and Community,\" and essays may be up to two thousand words on any related topic. A panel of faculty judges from the English and history departments will read every submission and select three winners. Entries must be uploaded to the society's website by March 20th, and the winners will read their work aloud at an awards evening in Feldman Library. There's no entry fee, and all majors are welcome. We can't wait to see what you write.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce an annual essay competition",
+            "B": "To describe the library's evening events",
+            "C": "To recruit faculty members as new judges",
+            "D": "To explain how essays are graded in class"
+          },
+          "answer": "A",
+          "explanation": "通知的核心是宣布一年一度的征文比赛并开放投稿，A 正确。B 属于 too_narrow，颁奖晚会只是一个细节，不是整体目的。C 属于 wrong_purpose，评委已由院系教师担任，通知并非招募评委。D 属于 wrong_purpose，通知讲的是比赛，与课堂评分无关。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "wrong_purpose",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "How are the competition winners selected?",
+          "options": {
+            "A": "By an online vote among students",
+            "B": "By the length of each essay",
+            "C": "By a panel of faculty judges",
+            "D": "By the order entries are received"
+          },
+          "answer": "C",
+          "explanation": "通知说由英语系和历史系的教师评委组成小组审阅所有投稿并选出三名获奖者，C 正确。A 属于 related_but_not_stated，通知未提到学生投票。B 属于 wrong_detail，两千字是上限，并非评选标准。D 属于 wrong_detail，评选靠评委而非投稿先后顺序。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "D": "wrong_detail"
+          }
+        }
+      ]
+    }
+  ]
+}

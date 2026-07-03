@@ -13833,6 +13833,456 @@
       ],
       "id": "la_mqsic4on_4",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/announcement/la_mqsic4on_4.mp3"
+    },
+    {
+      "context": "career_services",
+      "situation": "mock interview sessions with alumni volunteers",
+      "speaker_role": "career_advisor",
+      "difficulty": "medium",
+      "announcement": "Good afternoon, students. The Career Center is excited to announce a series of mock interview sessions next Wednesday, designed to help you prepare for the spring recruiting season. This year, the interviews will be conducted by alumni volunteers who now work in fields ranging from finance to engineering. Sessions run from 10 a.m. to 4 p.m. in the Hartwell Conference Room, and each lasts about thirty minutes. To reserve a slot, you must upload a current copy of your resume through the Career Center portal by Monday evening. We'll do our best to match you with an alumnus from your intended industry, so please indicate your field when you sign up.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What must students do to reserve an interview slot?",
+          "options": {
+            "A": "Upload their resume through the portal",
+            "B": "Email the Career Center directly",
+            "C": "Arrive early on Wednesday morning",
+            "D": "Pay a small registration fee"
+          },
+          "answer": "A",
+          "explanation": "正确答案 A：公告明确说要预约必须在周一晚前通过 Career Center 门户上传当前简历。B 错（related_but_not_stated）：公告没有提到发邮件，是合理但未提及的方式。C 错（misattributed_detail）：周三是面试当天，并非预约方式，把时间细节错配到预约场景。D 错（related_but_not_stated）：公告完全没有提到任何费用。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "misattributed_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the alumni volunteers?",
+          "options": {
+            "A": "They are paid for their time",
+            "B": "They all work in finance",
+            "C": "They bring real-world workplace experience",
+            "D": "They graduated within the past year"
+          },
+          "answer": "C",
+          "explanation": "正确答案 C：公告说面试由如今在金融、工程等领域工作的校友担任，可推断他们带来真实的职场经验。A 错（over_inference）：公告称他们是志愿者，无任何报酬信息，推断过度。B 错（wrong_detail）：公告说领域涵盖金融到工程，并非全在金融。D 错（over_inference）：公告未提及校友毕业时间，推不出是近一年毕业。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "wrong_detail",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "id": "la_mqwshavl_0",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/announcement/la_mqwshavl_0.mp3"
+    },
+    {
+      "context": "campus_activity",
+      "situation": "winter gear swap with voucher system",
+      "speaker_role": "program_coordinator",
+      "difficulty": "hard",
+      "announcement": "Attention students. The Outdoor Recreation Office is hosting its annual Winter Gear Swap this Saturday from noon to 5 p.m. in the Field House lobby. Here's how it works: when you drop off a clean, usable item such as a coat, boots, or gloves, you'll receive one voucher per item donated. You may then redeem those vouchers for gear that other students have brought in. Please note that you cannot take an item without first donating one, so there's no cash exchange involved. Any unclaimed gear left at the end of the day will be donated to a local shelter. We hope this helps everyone stay warm without buying new equipment.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To raise money for a local shelter",
+            "B": "To explain how a gear-exchange event works",
+            "C": "To sell discounted winter clothing",
+            "D": "To recruit volunteers for the Field House"
+          },
+          "answer": "B",
+          "explanation": "正确答案 B：公告核心是介绍冬季装备交换活动的运作方式——捐物换券、用券换物。A 错（too_narrow）：捐给收容所只是结尾的一个小细节，并非整体目的。C 错（reversed_intent）：公告明确说没有现金交易，与售卖相反。D 错（wrong_purpose）：公告完全没有招募志愿者的意图。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "C": "reversed_intent",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about a student who brings nothing to swap?",
+          "options": {
+            "A": "They will be charged an entry fee",
+            "B": "They can still browse and buy gear",
+            "C": "They must volunteer at the shelter instead",
+            "D": "They will be unable to take any gear"
+          },
+          "answer": "D",
+          "explanation": "正确答案 D：公告说不先捐物就不能拿走物品，且每件捐赠换一张券，可推断没带东西的学生拿不到券、也就拿不到任何装备。A 错（over_inference）：公告未提任何入场费。B 错（wrong_detail）：公告明说没有现金交易，无法购买。C 错（unrelated_inference）：去收容所做志愿者与本活动规则无关，是无依据的推断。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "wrong_detail",
+            "C": "unrelated_inference"
+          }
+        }
+      ],
+      "id": "la_mqwshavl_1",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/announcement/la_mqwshavl_1.mp3"
+    },
+    {
+      "context": "facility_change",
+      "situation": "campus dining hall switching to summer hours",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "Attention students and staff. Beginning next Monday, the Riverside Dining Hall will switch to its summer schedule for the remainder of the break. During the summer, the dining hall will be open from 8 a.m. to 7 p.m. on weekdays and will remain closed on weekends. Please be aware that the late-night grill, which normally runs until midnight, will not operate during this period. Students living on campus over the summer can still use their meal plans as usual during the new hours. If the dining hall is closed when you need a meal, the convenience store in the Student Union will stay open until 10 p.m. each night.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement mainly about?",
+          "options": {
+            "A": "A new menu at the dining hall",
+            "B": "A temporary closure of the Student Union",
+            "C": "A change in the dining hall's hours",
+            "D": "An increase in meal plan prices"
+          },
+          "answer": "C",
+          "explanation": "正确答案 C：公告整体在通报 Riverside 餐厅从下周一起改用夏季营业时间。A 错（wrong_purpose）：公告没有提到菜单变化。B 错（misattributed_detail/wrong_purpose）：学生中心的便利店只是替代选项，并非关闭，且不是公告主题。D 错（wrong_purpose）：公告完全未提价格上涨。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "wrong_purpose",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What is true about the dining hall's summer schedule?",
+          "options": {
+            "A": "It will be closed on weekends",
+            "B": "It will stay open until midnight",
+            "C": "It will serve breakfast only",
+            "D": "It will operate seven days a week"
+          },
+          "answer": "A",
+          "explanation": "正确答案 A：公告明确说夏季餐厅周末关闭。B 错（wrong_detail）：开到午夜的是平时的深夜烤肉档，公告说该档夏季不营业。C 错（related_but_not_stated）：公告说从早 8 点到晚 7 点供餐，并非只供早餐。D 错（wrong_detail）：公告说周末关闭，并非一周七天营业。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "id": "la_mqwshavl_2",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/announcement/la_mqwshavl_2.mp3"
+    },
+    {
+      "context": "academic_event",
+      "situation": "end-of-semester research poster night with travel award",
+      "speaker_role": "society_president",
+      "difficulty": "medium",
+      "announcement": "Good evening, everyone. As president of the Biology Honor Society, I'm pleased to announce our end-of-semester Research Poster Night, taking place this Thursday at 6 p.m. in the Atrium of the Life Sciences Building. Members will present posters summarizing their lab projects from this term. A panel of three faculty judges will review each poster, and the presenter judged most outstanding will receive a travel grant to attend a regional conference this summer. If you'd like to present, you must submit your poster title to me by Tuesday at noon. Light refreshments will be served, and all students are welcome to attend, even if they aren't presenting.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What must a student do in order to present a poster?",
+          "options": {
+            "A": "Pay a society membership fee",
+            "B": "Bring a faculty judge as a sponsor",
+            "C": "Attend the regional conference first",
+            "D": "Submit a poster title by Tuesday noon"
+          },
+          "answer": "D",
+          "explanation": "正确答案 D：公告明确说想展示海报必须在周二中午前把海报标题提交给社长。A 错（related_but_not_stated）：公告未提任何会费要求。B 错（misattributed_detail）：评委是教师，但并非由学生自带做担保人，错配了细节。C 错（wrong_detail）：参加区域会议是获奖者得到的旅行资助，不是参展的前提。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "misattributed_detail",
+            "C": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the travel grant?",
+          "options": {
+            "A": "Every presenter will receive one",
+            "B": "It is awarded based on poster quality",
+            "C": "It covers a full year of tuition",
+            "D": "It is funded by the refreshments budget"
+          },
+          "answer": "B",
+          "explanation": "正确答案 B：公告说三位教师评委评审海报，被评为最优秀的展示者获得旅行资助，可推断该奖依据海报质量评定。A 错（over_inference）：只有被评为最优秀的一人获奖，并非人人都有。C 错（over_inference）：公告说是参加暑期区域会议的旅行资助，与全年学费无关。D 错（unrelated_inference）：把茶点与奖金资金来源联系起来毫无依据。",
+          "distractor_types": {
+            "A": "over_inference",
+            "C": "over_inference",
+            "D": "unrelated_inference"
+          }
+        }
+      ],
+      "id": "la_mqwshavl_3",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/announcement/la_mqwshavl_3.mp3"
+    },
+    {
+      "context": "guest_speaker",
+      "situation": "industry professional speaking about career paths",
+      "speaker_role": "department_head",
+      "difficulty": "easy",
+      "announcement": "I'm pleased to announce that our department will host a special guest speaker this Friday at 3 p.m. in Room 204 of Maxwell Hall. Our guest, Ms. Diane Carter, is a senior engineer who has spent fifteen years working across the renewable energy industry. She'll talk about the different career paths available to graduates and offer advice on landing that first job. After her talk, there will be time for a question-and-answer session, so come prepared with your questions. The event is free and open to all majors, but seating is limited, so please arrive a few minutes early to find a seat.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To promote an upcoming guest speaker event",
+            "B": "To announce a change in class location",
+            "C": "To recruit students for an engineering major",
+            "D": "To remind students of a final exam date"
+          },
+          "answer": "A",
+          "explanation": "正确答案 A：公告整体在宣传周五由资深工程师 Diane Carter 主讲的客座讲座。B 错（wrong_purpose）：Room 204 只是讲座地点，并非课程换地点的通知。C 错（wrong_purpose）：讲座面向所有专业，并非招募工程专业学生。D 错（wrong_purpose）：公告完全没有提及任何考试。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "wrong_purpose",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are students advised to do?",
+          "options": {
+            "A": "Submit questions in advance by email",
+            "B": "Register on the department website",
+            "C": "Arrive a few minutes early for a seat",
+            "D": "Bring a copy of their resume"
+          },
+          "answer": "C",
+          "explanation": "正确答案 C：公告说座位有限，建议学生提前几分钟到场找座位。A 错（wrong_detail）：公告说讲座后现场有问答环节，让大家备好问题，并非提前用邮件提交。B 错（related_but_not_stated）：公告未提任何网上注册。D 错（related_but_not_stated）：公告没有要求带简历，是合理但未提及的动作。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        }
+      ],
+      "id": "la_mqwshavl_4",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/announcement/la_mqwshavl_4.mp3"
+    },
+    {
+      "context": "facility_change",
+      "situation": "third-floor study lounge closing for ceiling pipe repair",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "Attention students. The third-floor study lounge in the Bradley Library will be closed all next week, beginning this Monday, so that maintenance crews can repair a leaking ceiling pipe. We're sorry for the disruption, but the work can't be delayed any longer. During the closure, students may use the quiet study rooms on the first floor, which will stay open until midnight each night. Please remove any personal belongings from the lounge lockers before Friday at 5 p.m., since the lockers will be emptied during the repairs. We expect the lounge to reopen the following Monday. Thanks for your patience.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To explain a temporary closure of a study lounge",
+            "B": "To introduce new midnight library hours",
+            "C": "To encourage students to use the lockers more",
+            "D": "To advertise a newly renovated reading room"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：通知的核心是图书馆三楼自习室因维修水管而临时关闭，并说明替代方案，A准确概括了整体目的。B错（too_narrow）：一楼安静自习室开到午夜只是临时替代细节，不是通知的主要目的。C错（reversed_intent）：通知实际上要求学生在周五前清空储物柜，而非鼓励多用储物柜，意思相反。D错（wrong_purpose）：通知里没有任何新装修阅览室的内容，这是一个貌似合理但与本通知无关的目的。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "reversed_intent",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What must students do before Friday at 5 p.m.?",
+          "options": {
+            "A": "Reserve a first-floor quiet study room",
+            "B": "Report leaking pipes to maintenance staff",
+            "C": "Remove their belongings from the lounge lockers",
+            "D": "Return library books to the third floor"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：通知明确要求学生在周五下午五点前从自习室储物柜取走个人物品，因为维修期间储物柜会被清空。A错（related_but_not_stated）：一楼自习室是替代场所，但通知没有要求预约。B错（misattributed_detail）：漏水的管道是维修人员要修的对象，并非要学生去报告。D错（related_but_not_stated）：通知完全没有提到还书。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "misattributed_detail",
+            "D": "related_but_not_stated"
+          }
+        }
+      ],
+      "id": "la_mqzndtxb_0",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/announcement/la_mqzndtxb_0.mp3"
+    },
+    {
+      "context": "facility_change",
+      "situation": "grand reopening of a renovated campus performance hall",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "Good afternoon, everyone. We're excited to announce that the newly renovated Harmon Performance Hall will officially reopen this Saturday at 7 p.m. with a free concert by the university orchestra. The renovation added improved acoustic panels, wider seating, and a fully accessible side entrance off Lincoln Street. Doors will open at 6:15 p.m., and seating is first-come, first-served, so we recommend arriving early. Although the concert is free, you'll need to pick up a ticket in advance from the box office in the student center. Light refreshments will be served in the lobby after the performance. We hope to see you there.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement mainly about?",
+          "options": {
+            "A": "Construction delays at the performance hall",
+            "B": "The reopening of a renovated performance hall",
+            "C": "Auditions for the university orchestra",
+            "D": "A fundraiser to repair the concert hall"
+          },
+          "answer": "B",
+          "explanation": "正确答案B：通知核心是装修一新的Harmon演出厅本周六重新开放并举办免费音乐会，B准确概括。A错（reversed_intent）：通知宣布的是顺利重开，而非施工延误，意思相反。C错（wrong_purpose）：完全没有提到乐团选拔。D错（wrong_purpose）：音乐会是免费的，没有任何募捐修缮内容。",
+          "distractor_types": {
+            "A": "reversed_intent",
+            "C": "wrong_purpose",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What must attendees do before the concert?",
+          "options": {
+            "A": "Pay an admission fee at the door",
+            "B": "Reserve a numbered seat online",
+            "C": "Enter through the Lincoln Street entrance",
+            "D": "Pick up a free ticket from the box office"
+          },
+          "answer": "D",
+          "explanation": "正确答案D：通知说明音乐会虽免费，但需提前到学生中心售票处领取门票。A错（wrong_detail）：音乐会是免费的，门口不收费，与事实相反。B错（wrong_detail）：座位是先到先得，并非网上预订对号入座。C错（misattributed_detail）：Lincoln街入口是新增的无障碍侧门细节，并非所有人入场的必须步骤。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "wrong_detail",
+            "C": "misattributed_detail"
+          }
+        }
+      ],
+      "id": "la_mqzndtxb_1",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/announcement/la_mqzndtxb_1.mp3"
+    },
+    {
+      "context": "campus_activity",
+      "situation": "international club cultural food festival on the main green",
+      "speaker_role": "club_leader",
+      "difficulty": "medium",
+      "announcement": "Hi everyone, this is the International Students Club. We're thrilled to invite you to our annual Taste of the World food festival this Thursday from noon to 4 p.m. on the main green. Members from more than twenty countries will be serving homemade dishes, and everything is included with a single five-dollar wristband sold at the entrance tent. All proceeds this year will go toward a scholarship fund for incoming international students. Since dishes tend to run out quickly, we'd suggest coming closer to noon rather than later in the afternoon. Wristbands are cash only, so please plan ahead. We can't wait to share our food with you.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "How can students get food at the festival?",
+          "options": {
+            "A": "By signing up on the club's website",
+            "B": "By bringing a dish from their own country",
+            "C": "By buying a five-dollar wristband at the entrance",
+            "D": "By showing a valid student ID at the tent"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：通知说明在入口帐篷购买五美元手环即可享用全部菜品。A错（related_but_not_stated）：网上报名是常见校园做法，但本通知没有提及。B错（wrong_detail）：自带家乡菜的是来自各国的社团成员（供应方），普通学生不需要带菜。D错（related_but_not_stated）：出示学生证貌似合理，但通知里入场凭的是手环而非学生证。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "Why does the speaker recommend arriving closer to noon?",
+          "options": {
+            "A": "Because popular dishes may sell out later",
+            "B": "Because wristband prices rise in the afternoon",
+            "C": "Because the festival ends earlier than planned",
+            "D": "Because parking near the green is limited at noon"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：通知说菜品往往很快售罄，因此建议早些来——可推断出晚来可能买不到想吃的菜。B错（over_inference）：通知从未说手环下午涨价，属过度推断。C错（wrong_detail）：活动到下午四点结束，没有提前结束。D错（unrelated_inference）：停车位紧张是合理推断，但通知中毫无相关证据，属于无关推断。",
+          "distractor_types": {
+            "B": "over_inference",
+            "C": "wrong_detail",
+            "D": "unrelated_inference"
+          }
+        }
+      ],
+      "id": "la_mqzndtxb_2",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/announcement/la_mqzndtxb_2.mp3"
+    },
+    {
+      "context": "academic_event",
+      "situation": "interdisciplinary student society conference call for papers",
+      "speaker_role": "society_president",
+      "difficulty": "medium",
+      "announcement": "I'm pleased to announce that the Graduate Interdisciplinary Society is now accepting paper proposals for our spring conference, titled Crossing Boundaries. We welcome work that connects two or more fields, whether that's linking biology with ethics or economics with art history. Proposals should be a single page describing your topic and methods, and they must be submitted through the society's online portal by March 20th. Please note that you don't need a finished paper to apply; we're looking for promising ideas at any stage. Selected presenters will give fifteen-minute talks in Hartwell Hall on April 18th. If you have questions, stop by our office in room 210.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What is required to submit a proposal?",
+          "options": {
+            "A": "A completed and polished research paper",
+            "B": "A faculty advisor's written recommendation",
+            "C": "Membership in two academic departments",
+            "D": "A one-page description of the topic and methods"
+          },
+          "answer": "D",
+          "explanation": "正确答案D：通知明确要求提交一页纸说明选题和方法。A错（wrong_detail）：通知特别指出不需要完成的论文，与之相反。B错（related_but_not_stated）：导师推荐信是常见学术要求，但本通知没有提到。C错（misattributed_detail）：通知说的是研究要跨两个或更多领域，而非要求申请者属于两个院系，把内容张冠李戴了。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "C": "misattributed_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about who may apply to the conference?",
+          "options": {
+            "A": "Only students with published research",
+            "B": "Students whose work bridges different fields",
+            "C": "Students who have already finished their thesis",
+            "D": "Only graduate students in the sciences"
+          },
+          "answer": "B",
+          "explanation": "正确答案B：会议名为Crossing Boundaries，欢迎连接两个或更多领域的研究（如生物与伦理），可推断适合做跨学科研究的学生。A错（over_inference）：通知欢迎任何阶段的有潜力想法，并未要求已发表研究，属过度推断。C错（over_inference）：通知明确说无需完成论文，更不必完成学位论文。D错（wrong_detail）：例子里包含艺术史、经济学等，并不限于理科，属错误细节。",
+          "distractor_types": {
+            "A": "over_inference",
+            "C": "over_inference",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "id": "la_mqzndtxb_3",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/announcement/la_mqzndtxb_3.mp3"
+    },
+    {
+      "context": "info_session",
+      "situation": "study abroad information session featuring returned students",
+      "speaker_role": "program_coordinator",
+      "difficulty": "hard",
+      "announcement": "This is a reminder that the Office of Global Programs will host its study abroad information session this Wednesday at 4 p.m. in Carver Hall, room 105. Rather than a slideshow from staff, this session features four students who recently returned from semesters in Japan, Chile, Ghana, and France. They'll speak candidly about budgeting, coursework that transferred, and challenges they didn't expect. We'll leave plenty of time for your questions afterward. While walk-ins are welcome, we ask that you reserve a seat on the Global Programs website so we can prepare enough handouts. Bring a notebook; the returning students always share more practical tips than any brochure could.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To promote an information session led by returned students",
+            "B": "To announce new study abroad destinations for next year",
+            "C": "To collect applications for a study abroad scholarship",
+            "D": "To recruit students to study specifically in Japan"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：通知核心是宣传周三由四名刚归国学生主讲的留学信息说明会，A准确概括整体目的。B错（wrong_purpose）：日本、智利等只是这些学生去过的地方，而非宣布新增目的地。C错（wrong_purpose）：通知里没有任何奖学金申请内容。D错（too_narrow）：日本只是四个国家之一，把目的窄化为只推荐去日本是片面的。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "wrong_purpose",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about why returning students lead the session?",
+          "options": {
+            "A": "Staff members are unavailable on Wednesday",
+            "B": "The office wants to reduce printing costs",
+            "C": "Their firsthand experience is seen as more useful",
+            "D": "The session counts as academic course credit"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：通知特意说不用员工放幻灯片，而由归国学生分享，并强调他们给的实用建议比任何宣传册都多——可推断学校认为亲历者经验更有价值。A错（over_inference）：通知没说员工没空，属凭空推断。B错（unrelated_inference）：预约是为了准备足够讲义，与降低印刷成本无关。D错（over_inference）：通知完全没提学分，属过度推断。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_inference",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "id": "la_mqzndtxb_4",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/announcement/la_mqzndtxb_4.mp3"
     }
   ]
 }

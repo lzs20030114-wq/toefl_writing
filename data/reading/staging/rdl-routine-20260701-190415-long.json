@@ -1,0 +1,100 @@
+{
+  "items": [
+    {
+      "genre": "email",
+      "text": "Subject: Your Career Fair RSVP Is Confirmed\n\nDear Ms. Okafor,\n\nThank you for registering for the Spring Career Fair, held on March 18 in the Reynolds Student Center. Your reservation is confirmed, and doors open at 9:00 AM. Please arrive early, as the main hall fills quickly once the morning rush begins.\n\nWe've attached a booth map to help you plan your visit. Employers are grouped by field: technology firms line the east wall in Booths 1 through 12, while healthcare and education recruiters occupy the west side. The résumé review station sits near the north entrance, next to the coat check. Bring at least six printed copies of your résumé, since staff cannot make copies on site.\n\nA $5 lunch pass is available at the registration desk and grants access to the catered networking lounge from 12:00 PM to 1:30 PM. Payment is by card only. If you'd like a pass, purchase it before 11:00 AM, as they often sell out.\n\nWe look forward to seeing you there.\n\nBest regards,\nDaniel Reyes\nCareer Services Office",
+      "format_metadata": {
+        "from": "Daniel Reyes, Career Services Office",
+        "to": "Ms. Okafor",
+        "subject": "Your Career Fair RSVP Is Confirmed"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what should Ms. Okafor bring to the career fair?",
+          "options": {
+            "A": "A printed copy of the booth map",
+            "B": "A card to pay the registration desk",
+            "C": "At least six printed copies of her résumé",
+            "D": "A confirmation number for the coat check"
+          },
+          "correct_answer": "C",
+          "explanation": "The second paragraph states, \"Bring at least six printed copies of your résumé, since staff cannot make copies on site.\" The other options reuse passage words (booth map, card, coat check) but attach them to instructions the email never gives."
+        },
+        {
+          "question_type": "vocabulary_in_context",
+          "stem": "The word \"grants\" in the third paragraph is closest in meaning to",
+          "options": {
+            "A": "requests",
+            "B": "provides",
+            "C": "reserves",
+            "D": "delays"
+          },
+          "correct_answer": "B",
+          "explanation": "The lunch pass \"grants access\" to the networking lounge, meaning it gives or provides access. \"Provides\" best matches this sense, while the other options describe different actions."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about the lunch pass?",
+          "options": {
+            "A": "It is included free with every RSVP confirmation.",
+            "B": "It can be purchased with cash at the lounge.",
+            "C": "It guarantees a reserved seat in the main hall.",
+            "D": "It may be unavailable to students who arrive late."
+          },
+          "correct_answer": "D",
+          "explanation": "The email warns that passes \"often sell out\" and advises buying one before 11:00 AM, implying late arrivals might find none left. Option A reverses the fact that it costs $5, B contradicts \"payment is by card only,\" and C introduces a benefit never mentioned."
+        }
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "genre": "email",
+      "text": "Subject: Your Tutoring Appointment Is Booked\n\nHi Marcus,\n\nThis email confirms your one-on-one tutoring appointment at the Lakeside Learning Center. You're scheduled with Ms. Adler for Statistics 210 on Tuesday, April 7, from 2:00 PM to 3:00 PM in Room 118 of Foster Hall.\n\nPlease bring your textbook, your most recent problem set, and any graded quizzes you'd like to review. Ms. Adler focuses on the topics you flag ahead of time, so reply to this message with two or three questions before Monday evening. Sessions that begin without a clear focus tend to run short on time.\n\nA few reminders: appointments are free for enrolled students, but a $10 no-show fee applies if you miss the session without canceling at least 24 hours in advance. To cancel or reschedule, use the student portal or call the front desk at extension 4520. If you're more than ten minutes late, your slot may be given to a waiting student.\n\nWe're glad you're using the center, and we'll see you soon.\n\nThanks,\nPriya Nandakumar\nLakeside Learning Center",
+      "format_metadata": {
+        "from": "Priya Nandakumar, Lakeside Learning Center",
+        "to": "Marcus",
+        "subject": "Your Tutoring Appointment Is Booked"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what must Marcus do before Monday evening?",
+          "options": {
+            "A": "Submit a graded quiz to the front desk",
+            "B": "Send two or three questions in his reply",
+            "C": "Confirm his enrollment through the student portal",
+            "D": "Pay the appointment fee at Foster Hall"
+          },
+          "correct_answer": "B",
+          "explanation": "The second paragraph asks Marcus to \"reply to this message with two or three questions before Monday evening.\" The distractors borrow real passage terms (graded quiz, student portal, Foster Hall, fee) but assign them to tasks the email never requires."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about a student who arrives fifteen minutes late?",
+          "options": {
+            "A": "They will be charged the $10 no-show fee automatically.",
+            "B": "They must reschedule through the front desk first.",
+            "C": "They risk losing their session to another student.",
+            "D": "They will receive extra time at the end of the hour."
+          },
+          "correct_answer": "C",
+          "explanation": "The email states that if a student is \"more than ten minutes late, your slot may be given to a waiting student,\" so a fifteen-minute delay puts the slot at risk. Option A confuses lateness with a no-show, B and D describe outcomes the email never promises."
+        },
+        {
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this email?",
+          "options": {
+            "A": "To confirm a tutoring session and explain how to prepare for it",
+            "B": "To advertise free tutoring services to newly enrolled students",
+            "C": "To collect an outstanding no-show fee from a student's account",
+            "D": "To announce new operating hours for the Lakeside Learning Center"
+          },
+          "correct_answer": "A",
+          "explanation": "The email confirms the booked appointment and then details what to bring, what to send in advance, and the cancellation rules — its overall purpose is to confirm and help the student prepare. The other options each seize on a single detail or introduce a purpose the email does not serve."
+        }
+      ],
+      "difficulty": "medium"
+    }
+  ]
+}

@@ -1,0 +1,224 @@
+{
+  "items": [
+    {
+      "id": "la_routine-20260630-190413_1",
+      "context": "logistics",
+      "situation": "campus shuttle line is being rerouted because of road work near a residence hall",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "Good morning, students. Beginning this Monday, the Blue Line shuttle won't be stopping at its usual spot in front of Maple Residence Hall. Crews are repaving Birch Avenue, so the bus will use a temporary stop beside the campus bookstore until the work wraps up. The detour should add about five minutes to each trip, so please plan to leave a little earlier than normal. We'll post updated route maps at every shelter and on the transit page by Sunday evening. If you have questions, the transportation office is open daily from eight to five.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To explain a temporary change to a shuttle route",
+            "B": "To announce that the Blue Line is ending",
+            "C": "To recruit volunteers for a repaving project",
+            "D": "To advertise the new campus bookstore hours"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：通告核心是因birch大道修路，shuttle临时改用书店旁的站点，属于临时路线变更。B错误（reversed_intent）：班车只是临时改道，并未取消。C错误（wrong_purpose）：通告未招募任何志愿者，修路由施工队完成。D错误（too_narrow）：书店只是临时站点位置，营业时间根本未提及，不是通告目的。",
+          "distractor_types": {
+            "B": "reversed_intent",
+            "C": "wrong_purpose",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are students advised to do because of the detour?",
+          "options": {
+            "A": "Use the transportation office instead",
+            "B": "Take the bookstore entrance daily",
+            "C": "Leave a little earlier than usual",
+            "D": "Print maps before Sunday evening"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：因改道每趟多花约五分钟，通告明确建议学生比平时早一点出发。A错误（related_but_not_stated）：交通办公室只是答疑渠道，并非建议学生改用它代替班车。B错误（misattributed_detail）：书店只是临时停靠点，并非让学生走书店入口。D错误（wrong_detail）：地图是校方在周日晚前张贴上线，不是要求学生自行打印。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "misattributed_detail",
+            "D": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "la_routine-20260630-190413_2",
+      "context": "facility_change",
+      "situation": "grand reopening of a renovated performance hall with a free preview concert",
+      "speaker_role": "recreation_staff",
+      "difficulty": "medium",
+      "announcement": "We're excited to announce that Hartman Performance Hall reopens this Thursday after a full year of renovations. The space now has upgraded acoustics, wider seating, and a brand-new lobby café. To celebrate, we're hosting a free preview concert at 7 p.m. featuring the student jazz ensemble. Seating is limited, so you'll need to reserve a spot through the recreation portal before Wednesday at noon. Doors open thirty minutes early, and we recommend arriving promptly since reserved seats are released to the standby line shortly after the concert begins. We can't wait to welcome you back inside.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To apologize for a delayed renovation",
+            "B": "To announce a reopening and a celebration concert",
+            "C": "To recruit musicians for the jazz ensemble",
+            "D": "To describe the new lobby café menu"
+          },
+          "answer": "B",
+          "explanation": "正确答案B：通告宣布Hartman演奏厅本周四翻修后重新开放，并举办免费预演音乐会庆祝。A错误（wrong_purpose）：通告语气兴奋，未为任何延误致歉。C错误（wrong_purpose）：爵士乐团是演出方，通告并未招募乐手。D错误（too_narrow）：新增的咖啡厅只是改造亮点之一，并未介绍菜单，不是通告主旨。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "C": "wrong_purpose",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What must students do to attend the preview concert?",
+          "options": {
+            "A": "Pay an admission fee at the door",
+            "B": "Join the jazz ensemble first",
+            "C": "Bring a printed ticket to the café",
+            "D": "Reserve a spot through the recreation portal"
+          },
+          "answer": "D",
+          "explanation": "正确答案D：通告说座位有限，需在周三中午前通过recreation门户预约席位。A错误（wrong_detail）：音乐会是免费的，门口不收费。B错误（misattributed_detail）：加入乐团是演出者的事，与观众入场无关。C错误（related_but_not_stated）：通告从未提到纸质票或在咖啡厅出示门票。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "misattributed_detail",
+            "C": "related_but_not_stated"
+          }
+        }
+      ]
+    },
+    {
+      "id": "la_routine-20260630-190413_3",
+      "context": "facility_change",
+      "situation": "an entire wing of a building closes for asbestos removal, displacing classes",
+      "speaker_role": "recreation_staff",
+      "difficulty": "hard",
+      "announcement": "Please be aware that the east wing of Caldwell Hall will close completely starting next Tuesday for scheduled asbestos removal. The work is expected to last three weeks, and the wing will be sealed off behind plastic barriers while it's underway. All classes and office hours normally held there have been relocated to the annex behind the library; check your course portal for your room's new number. The main entrance and the west wing stay open as usual, so the rest of the building runs normally. We appreciate your patience, and we'll send a notice once the wing is cleared and safe to reenter.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To promote a newly renovated study annex",
+            "B": "To remind students about updated office hours",
+            "C": "To inform people that a building wing is closing for safety work",
+            "D": "To announce that all of Caldwell Hall is shutting down"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：通告告知Caldwell Hall东翼下周二起因石棉清除而封闭，属安全施工导致的关闭。A错误（wrong_purpose）：附楼只是临时上课地点，通告并非宣传它。B错误（too_narrow）：办公时间改到附楼只是细节，不是通告主旨。D错误（reversed_intent）：通告明确说主入口和西翼照常开放，整栋楼并未关闭。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "too_narrow",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the east wing during the three-week period?",
+          "options": {
+            "A": "It will not be accessible to students or staff",
+            "B": "It will reopen each weekday afternoon",
+            "C": "It will host relocated classes temporarily",
+            "D": "It is the busiest part of the building"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：通告说东翼将completely close并用塑料屏障sealed off，可推断施工期间师生都无法进入。B错误（over_inference）：通告未提任何下午开放，反而强调整翼封闭，属过度推断。C错误（misattributed_detail）：被迁走的课程改到图书馆后的附楼，而非留在东翼。D错误（unrelated_inference）：通告没有任何信息表明东翼是楼里最繁忙的部分。",
+          "distractor_types": {
+            "B": "over_inference",
+            "C": "misattributed_detail",
+            "D": "unrelated_inference"
+          }
+        }
+      ]
+    },
+    {
+      "id": "la_routine-20260630-190413_4",
+      "context": "info_session",
+      "situation": "an information session about enrolling in the student health insurance plan before the deadline",
+      "speaker_role": "advisor",
+      "difficulty": "medium",
+      "announcement": "This is a reminder that the student health office is holding an information session about enrolling in the campus health insurance plan. It takes place this Thursday at 4 p.m. in Room 210 of the Student Services Building. An advisor will walk you through coverage options and answer questions about costs and deadlines. If you already have private coverage, you can request a waiver instead, but you'll need to bring proof of your current plan to the session. Enrollment closes on September 30th, so don't wait until the last minute. Light refreshments will be served, and no appointment is needed.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What should students bring if they want a waiver?",
+          "options": {
+            "A": "A completed enrollment form",
+            "B": "A signed advisor approval slip",
+            "C": "A refreshment ticket from Room 210",
+            "D": "Proof of their current private coverage"
+          },
+          "answer": "D",
+          "explanation": "正确答案D：通告说已有私人保险者可申请豁免，但需带上现有保险计划的证明到会场。A错误（related_but_not_stated）：通告未要求带报名表，豁免与报名相反。B错误（related_but_not_stated）：通告从未提到需要顾问签字的批准单。C错误（misattributed_detail）：refreshments只是会上提供的茶点，与豁免所需材料无关。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "related_but_not_stated",
+            "C": "misattributed_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about attending the information session?",
+          "options": {
+            "A": "It is required for all enrolled students",
+            "B": "Students may simply drop in without scheduling",
+            "C": "It will be repeated several times this month",
+            "D": "Only first-year students are allowed to come"
+          },
+          "answer": "B",
+          "explanation": "正确答案B：通告说无需预约（no appointment is needed），可推断学生可以直接到场参加，无须事先安排。A错误（over_inference）：通告语气是提醒和邀请，并未说所有学生必须参加。C错误（over_inference）：通告只给出周四这一场，没有任何重复举办的信息。D错误（unrelated_inference）：通告未对参加者年级作任何限制。",
+          "distractor_types": {
+            "A": "over_inference",
+            "C": "over_inference",
+            "D": "unrelated_inference"
+          }
+        }
+      ]
+    },
+    {
+      "id": "la_routine-20260630-190413_5",
+      "context": "campus_activity",
+      "situation": "an international club is hosting a cultural food festival with tasting tickets",
+      "speaker_role": "activity_coordinator",
+      "difficulty": "easy",
+      "announcement": "Attention students. The International Club is hosting our annual World Flavors Festival this Saturday from noon to four on the main green. Student groups from more than fifteen countries will set up booths offering homemade dishes from their home regions. Tasting is free, but you'll need to grab a sample card at the welcome tent so we can track how much food to prepare. We'll also have live music and a short cooking demonstration at two o'clock. If it rains, we'll move everything into the Student Union ballroom, so check our page Saturday morning for the final location.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To invite students to a cultural food festival",
+            "B": "To recruit cooks for the International Club",
+            "C": "To announce a change to dining hall menus",
+            "D": "To advertise a paid international cooking class"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：通告邀请学生参加国际社举办的World Flavors美食节，介绍时间地点和活动。B错误（wrong_purpose）：摆摊的是各国学生团体，通告并未招募厨师。C错误（wrong_purpose）：通告与食堂菜单变动毫无关系。D错误（wrong_purpose）：现场只有两点的简短烹饪演示，并非收费课程，也不是通告目的。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "wrong_purpose",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What must students do before tasting the food?",
+          "options": {
+            "A": "Pay a small entrance fee",
+            "B": "Sign up on the club website",
+            "C": "Pick up a sample card at the welcome tent",
+            "D": "Reserve a booth in advance"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：通告说品尝免费，但需先在欢迎帐篷领取一张sample card以便统计食物用量。A错误（wrong_detail）：品尝是免费的，无需付入场费。B错误（related_but_not_stated）：通告只提到雨天查看主页，并未要求在网站报名。D错误（misattributed_detail）：摊位是各国学生团体设置的，普通学生无需预订摊位。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    }
+  ]
+}

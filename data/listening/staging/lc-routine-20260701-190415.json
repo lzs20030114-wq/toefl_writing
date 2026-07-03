@@ -1,0 +1,269 @@
+{
+  "items": [
+    {
+      "context": "errands_service",
+      "situation": "two students chatting about a pottery class one of them took",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "I finally finished that beginner pottery class at the community center. We made a full set of mugs on the wheel." },
+        { "speaker": "Man", "text": "That sounds great! Was it hard? I always thought spinning clay looked kind of tricky." },
+        { "speaker": "Woman", "text": "Honestly, the wheel was the tough part. But the instructor was super patient, and by the last session I made four mugs I'm actually proud of." },
+        { "speaker": "Man", "text": "Nice. Do they do other stuff too, like painting?" },
+        { "speaker": "Woman", "text": "Yeah, they've got a watercolor class starting next month. You should sign up. I'll send you the link tonight." },
+        { "speaker": "Man", "text": "You know what, I might. I've been meaning to try something creative for a while now." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What did the woman make in her class?",
+          "options": {
+            "A": "A set of mugs on the pottery wheel",
+            "B": "A watercolor painting of the center",
+            "C": "A large clay bowl for the instructor",
+            "D": "A set of plates and cups by hand"
+          },
+          "answer": "A",
+          "explanation": "女生明确说她在陶艺课上用转盘做了一整套马克杯（\"a full set of mugs on the wheel\"、\"four mugs\"），所以A正确。B是水彩课，那是下个月才开、她没上过，属于wrong_detail混淆。C的碗和给老师从未提及，属于related_but_not_stated。D把\"手工\"和\"盘子\"张冠李戴，她是用转盘做马克杯，属于wrong_detail。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do?",
+          "options": {
+            "A": "Take the same pottery class next term",
+            "B": "Ask the woman to teach him at home",
+            "C": "Consider signing up for the watercolor class",
+            "D": "Buy the woman's mugs from her"
+          },
+          "answer": "C",
+          "explanation": "男生对女生提到的下月水彩课回应\"I might\"并说自己一直想尝试有创意的东西，暗示他很可能会去报名水彩课，所以C正确。A把陶艺课误当成他要上的，但他感兴趣的是水彩课，属于over_inference。B让女生在家教他从未提及，属于unrelated_next_step。D买马克杯对话里完全没有基础，属于unrelated_next_step。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_next_step",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "errands_service",
+      "situation": "a student asking a shop about repairing a cracked phone screen",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "customer", "gender": "female" },
+        { "name": "Man", "role": "shop_staff", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Hi, I dropped my phone this morning and the screen is completely cracked. Can you fix it here?" },
+        { "speaker": "Man", "text": "Sure, we replace screens all the time. This model's a common one, so we've got the part in stock." },
+        { "speaker": "Woman", "text": "Oh good. How much, and how long will it take?" },
+        { "speaker": "Man", "text": "Eighty dollars. Normally it's ready in two hours, but our technician is out until three today, so it won't be done before four." },
+        { "speaker": "Woman", "text": "Four? Hmm, I have a class across town at two. I can't really wait around here." },
+        { "speaker": "Man", "text": "No worries. Just leave it with me and give me your number. I'll text you the moment it's finished." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why will the repair take longer than usual today?",
+          "options": {
+            "A": "The replacement part is out of stock",
+            "B": "The technician is not in until three",
+            "C": "The shop is closing early today",
+            "D": "The woman arrived too late in the day"
+          },
+          "answer": "B",
+          "explanation": "男员工说通常两小时能修好，但\"our technician is out until three today\"，所以要到四点才行，B正确。A与对话相反，员工明说\"we've got the part in stock\"，属于reversed_situation。C店铺提早关门从未提及，属于related_but_not_stated。D把延迟归咎于女生来得晚，但延迟原因是技师不在，属于misattributed。",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "C": "related_but_not_stated",
+            "D": "misattributed"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "How will the woman find out her phone is ready?",
+          "options": {
+            "A": "She will wait at the shop until four",
+            "B": "She will call the shop after her class",
+            "C": "She will receive an email confirmation",
+            "D": "She will get a text message from the man"
+          },
+          "answer": "D",
+          "explanation": "男员工说\"I'll text you the moment it's finished\"，所以女生会通过短信得知，D正确。A女生已明说她两点有课不能在店里等，属于rejected_option。B由女生打电话过去与员工主动短信通知的安排相反，属于rejected_option。C邮件确认从未提及，是把常见通知方式套错，属于unrelated_next_step。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "rejected_option",
+            "C": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "plans_social",
+      "situation": "two friends planning a birthday surprise for a classmate",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "So Dana's birthday is Friday. I was thinking we could throw her a surprise party after her seminar ends." },
+        { "speaker": "Man", "text": "Love it. She'd never see it coming. Where were you thinking, the common room in our dorm?" },
+        { "speaker": "Woman", "text": "Actually, that's booked. But I reserved the rooftop lounge on the fifth floor. It's got string lights and everything." },
+        { "speaker": "Man", "text": "Perfect. I'll handle the cake, then. She loves that lemon one from the bakery on Elm Street." },
+        { "speaker": "Woman", "text": "Great. Can you text everyone the plan? Just make sure nobody mentions it to Dana beforehand." },
+        { "speaker": "Man", "text": "Definitely. I'll set up a group chat without her and send out all the details tonight." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Where will the surprise party be held?",
+          "options": {
+            "A": "In the dorm common room",
+            "B": "At the bakery on Elm Street",
+            "C": "In the fifth-floor rooftop lounge",
+            "D": "In Dana's seminar room"
+          },
+          "answer": "C",
+          "explanation": "女生说她订了\"the rooftop lounge on the fifth floor\"，所以C正确。A公共休息室因被学习小组预订而放弃，属于rejected_option/wrong_detail。B Elm街的面包店只是买蛋糕的地方，不是聚会地点，属于misattributed。D研讨室只是Dana下课的地方，从未作为聚会地点，属于related_but_not_stated。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "misattributed",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do tonight?",
+          "options": {
+            "A": "Create a group chat that excludes Dana",
+            "B": "Reserve the rooftop lounge himself",
+            "C": "Tell Dana about the party plan",
+            "D": "Cancel the study group booking"
+          },
+          "answer": "A",
+          "explanation": "男生说\"I'll set up a group chat without her and send out all the details tonight\"，所以A正确。B场地已由女生预订，不是男生的任务，属于misattributed。C与\"确保没人提前告诉Dana\"直接相反，属于reversed_situation。D取消学习小组预订从未提及，属于unrelated_next_step。",
+          "distractor_types": {
+            "B": "misattributed",
+            "C": "reversed_situation",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two students swapping music recommendations because one is bored of the same pop singers",
+      "difficulty": "hard",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Honestly, I'm so tired of my playlist. It's the same three pop singers on repeat, and none of it excites me anymore." },
+        { "speaker": "Man", "text": "I know that feeling. Have you tried branching into anything with actual instruments? Like some indie folk or jazz?" },
+        { "speaker": "Woman", "text": "Not really. I wouldn't even know where to start looking." },
+        { "speaker": "Man", "text": "There's this app that builds you a mix based on one artist you already like. I found half my favorite bands that way." },
+        { "speaker": "Woman", "text": "Oh, that's clever. So it just kind of expands outward from what I know?" },
+        { "speaker": "Man", "text": "Exactly. I'll send you the name after lunch. Start with one folk artist and just let it run for a week." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "How to make a playlist for a party",
+            "B": "Why pop music has gotten worse lately",
+            "C": "Which instruments are hardest to learn",
+            "D": "Ways to discover new kinds of music"
+          },
+          "answer": "D",
+          "explanation": "整段对话围绕女生厌倦了老一套流行歌、男生建议用一款app发现新曲风展开，主旨是如何发现新的音乐类型，D正确。A为聚会做歌单从未提及，属于wrong_topic。B流行音乐\"变差\"没人这么说，女生只是听腻了，属于reversed_situation。C乐器只是被顺带提到，且并非讨论哪种最难学，属于too_narrow。",
+          "distractor_types": {
+            "A": "wrong_topic",
+            "B": "reversed_situation",
+            "C": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Delete all the pop songs from her playlist",
+            "B": "Try the app the man recommends",
+            "C": "Sign up for a music theory course",
+            "D": "Ask the man to make her a playlist"
+          },
+          "answer": "B",
+          "explanation": "男生说午饭后会把app名字发给她，还让她从一位民谣歌手开始试用一周，女生反应积极，所以她最可能去试那款app，B正确。A删掉所有流行歌是极端化推断，对话只说她听腻了，属于over_inference。C报音乐理论课从未提及，属于unrelated_next_step。D让男生帮她做歌单与app自动生成的方案不符，属于unrelated_next_step。",
+          "distractor_types": {
+            "A": "over_inference",
+            "C": "unrelated_next_step",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two students comparing notes on a mystery novel they both read",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Did you finish that mystery novel for lit class? The one set on the island?" },
+        { "speaker": "Man", "text": "I did, last night. That ending totally caught me off guard. I never suspected the lighthouse keeper." },
+        { "speaker": "Woman", "text": "Right? I was sure it was the doctor the whole time. The author really fooled me." },
+        { "speaker": "Man", "text": "Same. Though I thought the middle dragged a bit. All those pages describing the storm." },
+        { "speaker": "Woman", "text": "Yeah, I skimmed some of that. Anyway, we should compare our essay ideas before Thursday's discussion." },
+        { "speaker": "Man", "text": "Good call. Let's grab coffee tomorrow and go over our arguments together." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Who turned out to be responsible in the novel?",
+          "options": {
+            "A": "The lighthouse keeper",
+            "B": "The island doctor",
+            "C": "The visiting author",
+            "D": "The storm survivor"
+          },
+          "answer": "A",
+          "explanation": "男生说结局出人意料，\"I never suspected the lighthouse keeper\"，说明真凶是灯塔看守人，A正确。B医生是女生一直怀疑但猜错的对象，属于wrong_detail。C作者是写书的人而非书中人物，属于misattributed。D\"storm survivor\"从未出现，只是借用了暴风雨这个词，属于related_but_not_stated。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "misattributed",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the two students most likely do tomorrow?",
+          "options": {
+            "A": "Reread the storm chapters together",
+            "B": "Turn in their essays early",
+            "C": "Meet for coffee to discuss their essays",
+            "D": "Ask the professor to extend the deadline"
+          },
+          "answer": "C",
+          "explanation": "男生说\"Let's grab coffee tomorrow and go over our arguments\"，女生也同意，所以两人明天最可能一起喝咖啡讨论论文，C正确。A重读暴风雨章节与他们都嫌那部分拖沓、想略过相反，属于rejected_option。B提前交论文从未提及，他们只是先对想法，属于unrelated_next_step。D请老师延期毫无依据，属于over_inference。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "unrelated_next_step",
+            "D": "over_inference"
+          }
+        }
+      ]
+    }
+  ]
+}

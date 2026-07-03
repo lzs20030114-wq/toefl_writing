@@ -130,12 +130,6 @@ export function ListeningSectionContent({
         </div>
       </div>
 
-      {/* Promo banner — share to social → 7 days Pro */}
-      <PromoBanner isChallenge={isChallenge} fadeIn={fadeIn} />
-
-      {/* Referral banner — invite friends, get +3 days Pro */}
-      <ReferralBanner isLoggedIn={isLoggedIn} onOpen={onOpenReferral} fadeIn={fadeIn} />
-
       {/* Pro gate */}
       {!isPro && (
         <div style={{
@@ -220,6 +214,10 @@ export function ListeningSectionContent({
           mistakeCount={mistakeCount}
         />
       )}
+
+      {/* Promo + Referral banners — moved below the task grid for a cleaner top of page */}
+      <PromoBanner isChallenge={isChallenge} fadeIn={fadeIn} />
+      <ReferralBanner isLoggedIn={isLoggedIn} onOpen={onOpenReferral} fadeIn={fadeIn} />
 
       {/* Footer */}
       <div style={{ fontSize: 10, color: isChallenge ? CH.t2 : T.t3, opacity: 0.65, lineHeight: 1.6, textAlign: "center", ...fadeIn(520) }}>

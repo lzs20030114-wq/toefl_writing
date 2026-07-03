@@ -182,11 +182,13 @@ export function ListeningMCQTask({ item, taskType, onComplete, onExit, isPractic
             isPractice={isPractice}
             autoPlay
           />
-          {isPractice && <div style={{ marginTop: 24 }}>
+          {/* Manual advance — always available (not just practice) so a blocked
+              autoplay or failed audio never traps a timed session. */}
+          <div style={{ marginTop: 24 }}>
             <Btn onClick={() => setPhase("answer")} variant="secondary">
-              I'm ready to answer
+              {isPractice ? "I'm ready to answer" : "开始答题"}
             </Btn>
-          </div>}
+          </div>
         </SurfaceCard>
       </PageShell>
     );

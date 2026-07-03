@@ -1,0 +1,269 @@
+{
+  "items": [
+    {
+      "context": "recommendations_opinions",
+      "situation": "two friends discussing a sci-fi movie one just saw — great twists but too long",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "I finally watched that new space mystery film last night. Honestly, the plot twists totally caught me off guard." },
+        { "speaker": "Man", "text": "Really? Everyone keeps telling me to see it. Was it worth it?" },
+        { "speaker": "Woman", "text": "The story was clever, but it ran almost three hours. My back was killing me by the end." },
+        { "speaker": "Man", "text": "Three hours? That's a lot. I get restless after ninety minutes." },
+        { "speaker": "Woman", "text": "Then maybe wait for the streaming version. You can pause it whenever you want." },
+        { "speaker": "Man", "text": "Good call. I'll definitely do that instead of sitting in a theater that long." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What complaint does the woman have about the movie?",
+          "options": {
+            "A": "It was too long to sit through comfortably",
+            "B": "The plot twists were too confusing",
+            "C": "The ending felt rushed and incomplete",
+            "D": "The streaming version had poor picture quality"
+          },
+          "answer": "A",
+          "explanation": "女士明确说电影将近三个小时，看到最后她的背都疼了，所以正确答案是A（太长坐不住）。B错误：她说剧情转折很聪明、出乎意料，并没说混乱。C属于未提及的相关内容，她从未抱怨结尾仓促。D错误：流媒体版本是后面给的建议，她没评价其画质。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do?",
+          "options": {
+            "A": "Buy a ticket to see the movie in theaters",
+            "B": "Skip the movie entirely",
+            "C": "Watch the movie on a streaming service",
+            "D": "Read a review before deciding"
+          },
+          "answer": "C",
+          "explanation": "女士建议他等流媒体版本，可以随时暂停，男士回答'Good call'并说会那样做，所以会在流媒体上看，答案是C。A是他明确拒绝的选项（不想在影院坐那么久）。B属于过度推断，他并没说完全不看。D是无关的下一步，对话中从未提到看影评。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two friends recommending a true-crime podcast to each other",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Have you tried that true-crime podcast everyone's talking about? The episodes are only twenty minutes each." },
+        { "speaker": "Man", "text": "Twenty minutes? That's perfect for my walk to the lab. What's it called?" },
+        { "speaker": "Woman", "text": "It's called Cold Files. The host actually interviews retired detectives, so it feels really authentic." },
+        { "speaker": "Man", "text": "Oh, that sounds great. I usually just listen to music, but I've been wanting something new." },
+        { "speaker": "Woman", "text": "Start with episode four. That one hooked me completely." },
+        { "speaker": "Man", "text": "Episode four, got it. I'll put it on tomorrow morning." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "According to the woman, why does the podcast feel authentic?",
+          "options": {
+            "A": "It is produced by a famous news network",
+            "B": "The host interviews retired detectives",
+            "C": "Each episode is only twenty minutes long",
+            "D": "It is based on a best-selling book"
+          },
+          "answer": "B",
+          "explanation": "女士说主持人采访退休的警探，所以听起来很真实，答案是B。A属于未提及的相关内容，对话从未提到新闻机构制作。C错误：二十分钟说的是时长，是男士觉得方便的原因，不是'真实感'的来源。D属于未提及内容，没提到任何畅销书。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do tomorrow morning?",
+          "options": {
+            "A": "Listen to music as he usually does",
+            "B": "Interview a retired detective himself",
+            "C": "Search for a different podcast to try",
+            "D": "Listen to episode four of the podcast"
+          },
+          "answer": "D",
+          "explanation": "男士说'Episode four, got it. I'll put it on tomorrow morning'，明确表示明早会听第四集，答案是D。A是他正想替换掉的旧习惯（usually just listen to music），被他放弃了。B是对'采访警探'信息的过度推断，他自己并不会去采访。C是无关的下一步，他已经决定听这个播客，不会再找别的。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "over_inference",
+            "C": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "two students talking about which elective class to take next term",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "I can't decide between the photography elective and the public speaking one for next term. They both meet on Tuesdays." },
+        { "speaker": "Man", "text": "Well, public speaking helped me a ton. I used to freeze up during presentations, but not anymore." },
+        { "speaker": "Woman", "text": "Hmm, that's actually my biggest weakness. I get so nervous presenting research." },
+        { "speaker": "Man", "text": "Then it's a no-brainer. The professor gives you tons of practice in a low-pressure setting." },
+        { "speaker": "Woman", "text": "Photography just sounded more fun, but you're right, I should pick what helps my career." },
+        { "speaker": "Man", "text": "Exactly. You can always pick up photography as a hobby later." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the two students mainly discussing?",
+          "options": {
+            "A": "How to improve their photography skills",
+            "B": "A scheduling conflict with their Tuesday labs",
+            "C": "Which elective class the woman should take",
+            "D": "A presentation they have to give together"
+          },
+          "answer": "C",
+          "explanation": "整段对话围绕女士在摄影选修课和演讲选修课之间犹豫，男士帮她做选择，所以主旨是C（女士该选哪门选修课）。A太狭窄，摄影只是其中一个被讨论的选项，不是主题。B错误：周二只是两门课时间相同，并非与实验课冲突。D是误读情境，他们并没有要一起做展示。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "wrong_topic",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next term?",
+          "options": {
+            "A": "Enroll in the public speaking elective",
+            "B": "Take both elective classes at once",
+            "C": "Drop her research project entirely",
+            "D": "Switch all her classes to a different day"
+          },
+          "answer": "A",
+          "explanation": "女士承认演讲是她最大的弱点，并说'你说得对，我应该选对职业有帮助的'，倾向于选演讲课，答案是A。B是过度推断，两门课时间冲突无法同时选。C是无关且夸张的下一步，她从未说要放弃研究项目。D是无关下一步，对话中没提到换上课日期。",
+          "distractor_types": {
+            "B": "over_inference",
+            "C": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "plans_social",
+      "situation": "two friends planning a surprise birthday party for a classmate",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "So Daniel's birthday is Friday. I think we should throw him a surprise party at the common room." },
+        { "speaker": "Man", "text": "Love it. But how do we get him there without him suspecting anything?" },
+        { "speaker": "Woman", "text": "I'll tell him we're meeting to review notes for the chemistry final. He never skips a study session." },
+        { "speaker": "Man", "text": "Smart. I'll handle the cake and decorations, then. Chocolate's his favorite, right?" },
+        { "speaker": "Woman", "text": "Definitely chocolate. And let's tell everyone to arrive by six, before he gets there at six-thirty." },
+        { "speaker": "Man", "text": "Perfect. I'll text the group chat tonight so nobody spills the secret early." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly trying to do?",
+          "options": {
+            "A": "Organize a chemistry study session",
+            "B": "Decide what gift to buy a classmate",
+            "C": "Reschedule Daniel's birthday celebration",
+            "D": "Plan a surprise party for their friend"
+          },
+          "answer": "D",
+          "explanation": "整段对话都在策划周五给Daniel办一个惊喜生日派对，安排地点、蛋糕和到场时间，主旨是D。A是误读情境，学习会只是把他骗去的幌子，不是真正目的。B太狭窄且偏题，他们讨论的是蛋糕和布置，不是买礼物。C是误读情境，他们是在计划而非改期派对。",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "B": "too_narrow",
+            "C": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do tonight?",
+          "options": {
+            "A": "Buy a chocolate cake from the store",
+            "B": "Message the group chat about the plan",
+            "C": "Invite Daniel to the common room",
+            "D": "Cancel the chemistry study session"
+          },
+          "answer": "B",
+          "explanation": "男士说'I'll text the group chat tonight so nobody spills the secret early'，所以今晚会在群里发消息，答案是B。A是他负责的任务，但买蛋糕的时间没指明在今晚，且对话明确说今晚做的是发群消息。C错误：邀请Daniel是女士用学习会的借口去做的，不是男士今晚的事。D是无关下一步，那场学习会本就是幌子，没人会取消它。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "misattributed",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "errands_service",
+      "situation": "a student asking a shop about repairing a cracked phone screen",
+      "difficulty": "hard",
+      "speakers": [
+        { "name": "Woman", "role": "customer", "gender": "female" },
+        { "name": "Man", "role": "shop_staff", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Hi, I dropped my phone and the screen's badly cracked. Can you fix it today?" },
+        { "speaker": "Man", "text": "Let me check the model. Ah, for this one we don't keep the screen part in stock, so I'd have to order it." },
+        { "speaker": "Woman", "text": "Oh no. How long would that take? I really rely on this phone for work." },
+        { "speaker": "Man", "text": "The part usually arrives in two business days. Once it's here, the repair itself takes about an hour." },
+        { "speaker": "Woman", "text": "Two days without a phone is rough. Is there any way to speed it up?" },
+        { "speaker": "Man", "text": "I can offer you a basic loaner phone while you wait, at no extra charge. Just leave a deposit." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "Why is the woman speaking with the man?",
+          "options": {
+            "A": "To have her cracked phone screen repaired",
+            "B": "To buy a brand-new phone from the shop",
+            "C": "To return a phone she recently purchased",
+            "D": "To complain that a past repair failed"
+          },
+          "answer": "A",
+          "explanation": "女士一开口就说手机摔了、屏幕碎得很厉害，问能不能今天修，全程围绕修屏，所以来意是A。B是另一个合理的店内话题，但她要的是维修而非买新机。C偏题，她没有要退货。D是误读情境，对话里没有任何过往维修失败的内容。",
+          "distractor_types": {
+            "B": "wrong_topic",
+            "C": "wrong_topic",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do?",
+          "options": {
+            "A": "Buy a replacement phone instead of repairing",
+            "B": "Take her phone to a different repair shop",
+            "C": "Accept a loaner phone while she waits",
+            "D": "Demand that the repair be finished today"
+          },
+          "answer": "C",
+          "explanation": "女士担心两天没手机很难熬，店员提出可以免费借给她一部备用机只需押金，这正好解决她的顾虑，所以她很可能接受借用机，答案是C。A是无关下一步，她想修而非换机。B是无对话依据的无关选项，没提去别家。D是被现实否定的过度要求——零件要两天才到，今天根本修不了。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "B": "unrelated_next_step",
+            "D": "over_inference"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,274 @@
+{
+  "items": [
+    {
+      "id": "lc_routine-20260630-190413_1",
+      "context": "recommendations_opinions",
+      "situation": "two friends debating whether a new cafe is worth the price",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Have you tried that new cafe on Elm Street? I went yesterday, and a small latte was six dollars." },
+        { "speaker": "Man", "text": "Six dollars? That's almost double what the campus coffee shop charges. Was it actually any better?" },
+        { "speaker": "Woman", "text": "Honestly, the coffee tasted about the same. But they have huge couches and fast Wi-Fi, so I studied there for three hours." },
+        { "speaker": "Man", "text": "Hmm. So you're kind of paying for the workspace, not the drink." },
+        { "speaker": "Woman", "text": "Exactly. For a quick coffee, it's not worth it. But on a day I need to focus, I'd happily go back." },
+        { "speaker": "Man", "text": "That makes sense. I've got a big paper due Friday, so maybe I'll give it a shot this week." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "How much did the woman pay for a small latte?",
+          "options": {
+            "A": "Six dollars",
+            "B": "Three dollars",
+            "C": "Double on the campus shop's drinks",
+            "D": "Nothing, the first one was free"
+          },
+          "answer": "A",
+          "explanation": "女士明确说一杯小拿铁要六美元，所以A正确。B把校园咖啡店的较低价格误当成新咖啡馆的价格，属于wrong_detail。C混淆了她说的“几乎是校园店两倍”这一比较，而不是具体金额，属于misattributed。D凭空捏造了免费第一杯，对话中从未提及，属于related_but_not_stated。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "misattributed",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "Why does the man say he might visit the cafe this week?",
+          "options": {
+            "A": "He thinks the latte tastes much better there",
+            "B": "He wants to buy one of the large couches",
+            "C": "He needs a good place to work on a paper",
+            "D": "He plans to meet the woman there tomorrow"
+          },
+          "answer": "C",
+          "explanation": "男士提到周五有一篇大论文要交，正好对应女士说的“需要专注时值得去”，可推断他想要一个适合工作的环境，所以C正确。A与对话矛盾，女士说咖啡味道差不多，属于over_inference。B把“坐在大沙发上学习”误解成要购买沙发，属于over_inference。D凭空添加了见面安排，对话没有任何依据，属于unrelated_next_step。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_routine-20260630-190413_2",
+      "context": "recommendations_opinions",
+      "situation": "two friends discussing a movie one just saw with good twists but too long",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "I finally saw that detective movie last night. The plot twists were amazing. I never guessed who the thief really was." },
+        { "speaker": "Man", "text": "Oh, everyone's been talking about that ending. Was it as good as people say?" },
+        { "speaker": "Woman", "text": "The story, yes. But it ran almost three hours. By the last half hour, my legs were totally cramped and I just wanted it to end." },
+        { "speaker": "Man", "text": "Three hours? That's really long for a mystery." },
+        { "speaker": "Woman", "text": "Right. If they'd cut twenty minutes, it would've been perfect. Still, I'd recommend it." },
+        { "speaker": "Man", "text": "Okay. I'll wait for it to come out for streaming, then. That way I can pause whenever I need a break." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What did the woman dislike about the movie?",
+          "options": {
+            "A": "The plot twists were too confusing",
+            "B": "It was far too long",
+            "C": "The ending was disappointing",
+            "D": "The tickets were expensive"
+          },
+          "answer": "B",
+          "explanation": "女士说电影将近三小时，最后半小时她腿都麻了只想结束，所以B正确。A与对话矛盾，她称赞反转“amazing”，属于wrong_detail。C同样矛盾，她说结局很受好评且故事很好，属于wrong_detail。D凭空提到票价，对话从未涉及，属于related_but_not_stated。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "Why does the man plan to wait for the streaming release?",
+          "options": {
+            "A": "He thinks the movie sounds boring",
+            "B": "He cannot afford a movie ticket",
+            "C": "He already saw it in the theater",
+            "D": "He wants to be able to pause for breaks"
+          },
+          "answer": "D",
+          "explanation": "男士说等流媒体上线就能随时暂停休息，直接回应电影太长这一问题，所以D正确。A与对话矛盾，他对反转和结局很感兴趣，属于over_inference。B凭空捏造经济原因，对话没有依据，属于unrelated_next_step。C与事实相反，他还没看过这部电影，属于rejected_option。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_next_step",
+            "C": "rejected_option"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_routine-20260630-190413_3",
+      "context": "campus_dorm_life",
+      "situation": "two students comparing how they get to campus — bike, bus, or walk",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "How do you get to campus every morning? I've been taking the number nine bus, but it's always packed." },
+        { "speaker": "Man", "text": "I used to ride the bus too, but now I bike. It takes about fifteen minutes, and I skip all the traffic." },
+        { "speaker": "Woman", "text": "Fifteen minutes? That's faster than my bus. But what about rainy days?" },
+        { "speaker": "Man", "text": "On rainy days I just walk. It's only thirty minutes, and I bring an umbrella. Honestly, walking clears my head before class." },
+        { "speaker": "Woman", "text": "Hmm, maybe I should buy a bike. The crowded bus really isn't worth it." },
+        { "speaker": "Man", "text": "Good call. The shop near the library sells used ones cheap. You could check it out this weekend." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the two students mainly discussing?",
+          "options": {
+            "A": "How to repair a broken bicycle",
+            "B": "Which bus route is the fastest",
+            "C": "The different ways they travel to campus",
+            "D": "Where to buy umbrellas near campus"
+          },
+          "answer": "C",
+          "explanation": "整段对话围绕骑车、坐公交、步行等不同上学方式展开，所以C正确。A把结尾提到买车一带而过的内容夸大成主题，且话题是购买不是修理，属于wrong_topic。B只抓住公交这一个细节，忽略了整体比较，属于too_narrow。D把雨天带伞的次要细节当成主题，属于too_narrow。",
+          "distractor_types": {
+            "A": "wrong_topic",
+            "B": "too_narrow",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do this weekend?",
+          "options": {
+            "A": "Visit the shop near the library to look at bikes",
+            "B": "Buy a monthly pass for the number nine bus",
+            "C": "Ask the man to give her a ride to campus",
+            "D": "Sign up for a campus bus discount program"
+          },
+          "answer": "A",
+          "explanation": "女士说也许该买辆自行车，男士建议她周末去图书馆旁的二手车店看看，可推断她会去那家店，所以A正确。B与她“拥挤公交不值”的态度相反，属于rejected_option。C凭空添加搭车安排，对话没有依据，属于unrelated_next_step。D捏造了一个公交折扣项目，对话从未提及，属于unrelated_next_step。",
+          "distractor_types": {
+            "B": "rejected_option",
+            "C": "unrelated_next_step",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_routine-20260630-190413_4",
+      "context": "plans_social",
+      "situation": "two friends coordinating a weekend beach trip",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Are we still on for the beach on Saturday? I checked the weather, and it's supposed to be sunny all day." },
+        { "speaker": "Man", "text": "Definitely. Should we leave early to beat the crowds?" },
+        { "speaker": "Woman", "text": "Yeah, let's meet at the train station at eight. The ride is about an hour, so we'll get there by nine." },
+        { "speaker": "Man", "text": "Sounds great. I'll bring the cooler and some sandwiches. Can you grab sunscreen and a couple of towels?" },
+        { "speaker": "Woman", "text": "Sure, I've got those. Oh, and I'll borrow my brother's beach umbrella." },
+        { "speaker": "Man", "text": "Perfect. Then we're all set. I'll text you Friday night just to confirm the time." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What will the man bring to the beach?",
+          "options": {
+            "A": "Sunscreen and towels",
+            "B": "A beach umbrella",
+            "C": "The train tickets",
+            "D": "A cooler and sandwiches"
+          },
+          "answer": "D",
+          "explanation": "男士说他会带冷藏箱和三明治，所以D正确。A是女士负责带的东西，属于misattributed。B是女士说要向哥哥借的太阳伞，也属于misattributed。C凭空提到车票，对话从未说由谁购买，属于related_but_not_stated。",
+          "distractor_types": {
+            "A": "misattributed",
+            "B": "misattributed",
+            "C": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do on Friday night?",
+          "options": {
+            "A": "Buy the train tickets in advance",
+            "B": "Send the woman a message to confirm the time",
+            "C": "Pack the cooler and make sandwiches",
+            "D": "Check the weather forecast again"
+          },
+          "answer": "B",
+          "explanation": "男士明确说周五晚上会给女士发短信确认时间，所以B正确。A凭空添加买票动作，对话没有提到，属于unrelated_next_step。C是出发当天才做的准备，时间点不符，属于misattributed。D是女士已经做过的事，并非男士周五晚的计划，属于misattributed。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "C": "misattributed",
+            "D": "misattributed"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lc_routine-20260630-190413_5",
+      "context": "errands_service",
+      "situation": "two students talking about a houseplant one is caring for",
+      "difficulty": "hard",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "My roommate left me in charge of her fern while she's home for break, and the leaves are turning brown at the tips. I'm kind of panicking." },
+        { "speaker": "Man", "text": "Brown tips usually mean it's getting too much direct sun, or the air's too dry. Where do you keep it?" },
+        { "speaker": "Woman", "text": "Right on the windowsill, in full afternoon sun. I figured plants love light." },
+        { "speaker": "Man", "text": "Ferns actually prefer shade. Try moving it away from the window, and mist the leaves every couple of days." },
+        { "speaker": "Woman", "text": "Mist them? With plain water?" },
+        { "speaker": "Man", "text": "Yeah, just a spray bottle. It keeps the humidity up. Do that, and it should bounce back before she's even home." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the woman's main problem?",
+          "options": {
+            "A": "She doesn't know how to keep her roommate's fern healthy",
+            "B": "She forgot to water the fern for several days",
+            "C": "She wants to buy a new plant for the dorm",
+            "D": "She is unhappy that her roommate went home"
+          },
+          "answer": "A",
+          "explanation": "女士负责照看室友的蕨类植物，叶尖发黄发褐让她很慌，整段都在求助如何养好它，所以A正确。B捏造了忘记浇水的原因，问题其实是阳光太强空气太干，属于wrong_detail。C凭空提到买新植物，对话从未涉及，属于wrong_topic。D误读情境，她担心的是植物而非室友离开，属于reversed_situation。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "wrong_topic",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Leave the fern in the sunny window",
+            "B": "Buy a special fertilizer for the fern",
+            "C": "Move the fern and mist it with water",
+            "D": "Ask her roommate to come back early"
+          },
+          "answer": "C",
+          "explanation": "男士建议把植物移离窗户并每隔几天用清水喷雾，女士也接受了这个办法，可推断她会照做，所以C正确。A与建议相反，男士说蕨类喜阴，属于rejected_option。B凭空添加施肥，男士只提到喷水保湿，属于over_inference。D捏造让室友提前回来，男士还说植物会在她回来前恢复，属于unrelated_next_step。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    }
+  ]
+}

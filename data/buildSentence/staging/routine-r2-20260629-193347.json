@@ -1,0 +1,224 @@
+{
+  "items": [
+    {
+      "id": "tmp_r2_q1",
+      "prompt": "Did you make it to class on time?",
+      "answer": "I missed the early bus this morning.",
+      "chunks": ["I", "the", "early", "bus"],
+      "prefilled": ["missed", "this morning"],
+      "prefilled_positions": {"missed": 1, "this morning": 5},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["simple past", "statement"]
+    },
+    {
+      "id": "tmp_r2_q2",
+      "prompt": "There's a study group forming for chemistry.",
+      "answer": "Where do I sign up for it?",
+      "chunks": ["where", "do", "I", "for", "it"],
+      "prefilled": ["sign up"],
+      "prefilled_positions": {"sign up": 3},
+      "distractor": null,
+      "has_question_mark": true,
+      "grammar_points": ["direct question", "wh-question"]
+    },
+    {
+      "id": "tmp_r2_q3",
+      "prompt": "Did you ever hear back about the lab hours?",
+      "answer": "I wanted to know whether the lab opens early.",
+      "chunks": ["I", "whether", "the lab", "opens", "early"],
+      "prefilled": ["wanted to know"],
+      "prefilled_positions": {"wanted to know": 1},
+      "distractor": "does",
+      "has_question_mark": false,
+      "grammar_points": ["embedded question", "whether-clause"]
+    },
+    {
+      "id": "tmp_r2_q4",
+      "prompt": "Are you ready to hand in the assignment?",
+      "answer": "I haven't finished the final lab report yet.",
+      "chunks": ["I", "finished", "the final", "lab", "report"],
+      "prefilled": ["haven't", "yet"],
+      "prefilled_positions": {"haven't": 1, "yet": 7},
+      "distractor": "have",
+      "has_question_mark": false,
+      "grammar_points": ["negation", "present perfect"]
+    },
+    {
+      "id": "tmp_r2_q5",
+      "prompt": "Did you ever return those library books?",
+      "answer": "I returned the books that I'd borrowed last week.",
+      "chunks": ["I", "returned", "the books", "that", "I'd borrowed"],
+      "prefilled": ["last week"],
+      "prefilled_positions": {"last week": 7},
+      "distractor": "had",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause", "past tense"]
+    },
+    {
+      "id": "tmp_r2_q6",
+      "prompt": "I still need to get my ID badge.",
+      "answer": "You can pick up your badge at the front desk.",
+      "chunks": ["you", "can", "pick up", "your", "badge", "at"],
+      "prefilled": ["the front desk"],
+      "prefilled_positions": {"the front desk": 7},
+      "distractor": "will",
+      "has_question_mark": false,
+      "grammar_points": ["modal verb", "statement"]
+    },
+    {
+      "id": "tmp_r2_q7",
+      "prompt": "I heard the chemistry lecture got rescheduled.",
+      "answer": "The lecture was moved to the bigger lecture hall.",
+      "chunks": ["the lecture", "was", "moved", "to the", "bigger", "lecture hall"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "is",
+      "has_question_mark": false,
+      "grammar_points": ["passive voice", "statement"]
+    },
+    {
+      "id": "tmp_r2_q8",
+      "prompt": "Did you check on the deadline?",
+      "answer": "I tried to find out when the deadline was.",
+      "chunks": ["I", "tried", "to", "when", "the deadline", "was"],
+      "prefilled": ["find out"],
+      "prefilled_positions": {"find out": 3},
+      "distractor": "had",
+      "has_question_mark": false,
+      "grammar_points": ["embedded question", "when-clause"]
+    },
+    {
+      "id": "tmp_r2_q9",
+      "prompt": "I wasn't sure if I could come along.",
+      "answer": "You're welcome to join us for the trip.",
+      "chunks": ["you're", "join", "us", "for the", "trip"],
+      "prefilled": ["welcome to"],
+      "prefilled_positions": {"welcome to": 1},
+      "distractor": "are",
+      "has_question_mark": false,
+      "grammar_points": ["statement", "contraction"]
+    },
+    {
+      "id": "tmp_r2_q10",
+      "prompt": "Did the advisor explain your credit situation?",
+      "answer": "He had to figure out which of the classes I dropped still counted.",
+      "chunks": ["he", "had to", "which of", "the classes", "I dropped", "still", "counted"],
+      "prefilled": ["figure out"],
+      "prefilled_positions": {"figure out": 3},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["embedded question", "which-clause"]
+    },
+    {
+      "id": "tmp_r2_q11",
+      "prompt": "Have you seen my notebook anywhere?",
+      "answer": "I left my notebook in the library.",
+      "chunks": ["I", "left", "my", "notebook", "in the", "library"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["simple past", "statement"]
+    },
+    {
+      "id": "tmp_r2_q12",
+      "prompt": "There's an open seat next to me.",
+      "answer": "Do you want to sit with us?",
+      "chunks": ["do", "you", "sit", "with", "us"],
+      "prefilled": ["want to"],
+      "prefilled_positions": {"want to": 2},
+      "distractor": null,
+      "has_question_mark": true,
+      "grammar_points": ["direct question", "yes-no question"]
+    },
+    {
+      "id": "tmp_r2_q13",
+      "prompt": "Did you get the room change notice?",
+      "answer": "I needed to find out where the seminar met.",
+      "chunks": ["I", "needed", "to", "where", "the seminar", "met"],
+      "prefilled": ["find out"],
+      "prefilled_positions": {"find out": 3},
+      "distractor": "does",
+      "has_question_mark": false,
+      "grammar_points": ["embedded question", "where-clause"]
+    },
+    {
+      "id": "tmp_r2_q14",
+      "prompt": "Are you heading to the gym later?",
+      "answer": "I don't think the gym is open yet.",
+      "chunks": ["I", "the gym", "is", "open", "yet"],
+      "prefilled": ["don't think"],
+      "prefilled_positions": {"don't think": 1},
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["negation", "present simple"]
+    },
+    {
+      "id": "tmp_r2_q15",
+      "prompt": "I'm not sure who to ask about transferring.",
+      "answer": "You should talk to the advisor who handles transfers.",
+      "chunks": ["you", "should", "the advisor", "who", "handles", "transfers"],
+      "prefilled": ["talk to"],
+      "prefilled_positions": {"talk to": 2},
+      "distractor": "will",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause", "modal verb"]
+    },
+    {
+      "id": "tmp_r2_q16",
+      "prompt": "I heard the library is staying open longer.",
+      "answer": "The library hours were extended for final exams.",
+      "chunks": ["hours", "were extended", "final", "exams"],
+      "prefilled": ["the library", "for"],
+      "prefilled_positions": {"the library": 0, "for": 5},
+      "distractor": "are",
+      "has_question_mark": false,
+      "grammar_points": ["passive voice", "statement"]
+    },
+    {
+      "id": "tmp_r2_q17",
+      "prompt": "Are you signed up for the writing workshop?",
+      "answer": "I've already signed up for the writing workshop.",
+      "chunks": ["already signed", "up", "for", "workshop"],
+      "prefilled": ["I've", "the writing"],
+      "prefilled_positions": {"i've": 0, "the writing": 5},
+      "distractor": "have",
+      "has_question_mark": false,
+      "grammar_points": ["present perfect", "statement"]
+    },
+    {
+      "id": "tmp_r2_q18",
+      "prompt": "Did you find out the gym schedule?",
+      "answer": "I asked whether the new gym opens before eight.",
+      "chunks": ["I", "the new", "gym", "opens", "before", "eight"],
+      "prefilled": ["asked whether"],
+      "prefilled_positions": {"asked whether": 1},
+      "distractor": "does",
+      "has_question_mark": false,
+      "grammar_points": ["embedded question", "whether-clause"]
+    },
+    {
+      "id": "tmp_r2_q19",
+      "prompt": "I can't find the textbook on the shelves.",
+      "answer": "I wonder if the bookstore still has the textbook.",
+      "chunks": ["I", "the bookstore", "still", "has", "the textbook"],
+      "prefilled": ["wonder if"],
+      "prefilled_positions": {"wonder if": 1},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["embedded question", "if-clause"]
+    },
+    {
+      "id": "tmp_r2_q20",
+      "prompt": "Did you hear back about your lab results?",
+      "answer": "I returned the bike that my roommate had lent me last week.",
+      "chunks": ["I", "returned", "the bike", "that my", "roommate", "had lent", "me"],
+      "prefilled": ["last week"],
+      "prefilled_positions": {"last week": 10},
+      "distractor": "have",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause", "past perfect"]
+    }
+  ]
+}

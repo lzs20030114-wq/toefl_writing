@@ -1,0 +1,219 @@
+{
+  "items": [
+    {
+      "context": "campus_activity",
+      "situation": "community garden spring cleanup volunteer event",
+      "speaker_role": "activity_coordinator",
+      "difficulty": "medium",
+      "announcement": "Good afternoon, everyone. The Green Campus Initiative is organizing our spring cleanup of the rooftop community garden next Saturday, and we'd love your help. We'll meet at 8:30 a.m. on the terrace above Hartwell Hall to weed the flower beds and repair the compost bins. The team will supply gloves, rakes, and watering cans, so just bring a refillable water bottle and wear old clothes. Lunch will be provided once the work is finished around noon. To confirm your spot, please email the coordinator by this Wednesday, since space on the terrace is limited.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What must volunteers bring to the event?",
+          "options": {
+            "A": "A refillable water bottle",
+            "B": "Gloves and gardening rakes",
+            "C": "A signed permission form",
+            "D": "Bins for collecting compost"
+          },
+          "answer": "A",
+          "explanation": "原文明确说 \"just bring a refillable water bottle and wear old clothes\"，所以志愿者需要自带水瓶，A 正确。B 错误：手套和耙子是主办方提供的（The team will supply gloves, rakes...），不是自带。C 错误：公告中根本没有提到许可表格，属于合理但未提及的干扰项。D 错误：堆肥桶是要修理的对象，不是志愿者携带的物品，属于错置细节。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the terrace above Hartwell Hall?",
+          "options": {
+            "A": "It will become a permanent garden",
+            "B": "It is funded by student fees",
+            "C": "It holds only a few volunteers",
+            "D": "It is closed on the weekends"
+          },
+          "answer": "C",
+          "explanation": "公告结尾说 \"space on the terrace is limited\"，由此可推断露台能容纳的志愿者人数有限，C 正确。A 错误：把有限空间过度推断为要永久改建为花园，属于过度推理。B 错误：公告完全没有提到经费来源，属于无关推理。D 错误：公告说的是周六来劳动，并未说露台周末关闭，与事实相反。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_inference",
+            "D": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "logistics",
+      "situation": "campus shuttle route change due to construction",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "Due to the ongoing renovation of the Maple Street bridge, the number 4 campus shuttle will follow a temporary detour beginning this Monday. Instead of stopping at the library, it'll drop off passengers at the Student Union entrance until further notice. The morning route now starts fifteen minutes earlier, at 7:15 a.m., to account for the longer path. Riders heading to the library should transfer to the number 6 line at the Union. Please check the updated schedule posted at every stop and on the transportation office website. We're grateful for your patience during the construction.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "Announce the opening of a bridge",
+            "B": "Explain a temporary shuttle detour",
+            "C": "Report new campus library hours",
+            "D": "Cancel all shuttle service permanently"
+          },
+          "answer": "B",
+          "explanation": "公告核心是因桥梁施工导致 4 路校园班车临时改道及相关变化，B 正确。A 错误：桥梁正在翻修而非开通，属于错误目的。C 错误：图书馆只是停靠点变化，公告并非在通报图书馆开放时间，属于以偏概全。D 错误：班车是改道而非永久停运，与事实相反。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "C": "too_narrow",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What should riders going to the library do?",
+          "options": {
+            "A": "Board at the old library stop",
+            "B": "Buy a new transit pass",
+            "C": "Wait by the Maple Street bridge",
+            "D": "Transfer to the number 6 line"
+          },
+          "answer": "D",
+          "explanation": "原文说 \"Riders heading to the library should transfer to the number 6 line at the Union\"，所以去图书馆的乘客应换乘 6 路，D 正确。A 错误：图书馆停靠点已取消，无法在旧站上车，属于改动的错误细节。B 错误：公告没有提到购买新车票，属于合理但未提及。C 错误：Maple Street 桥是施工地点，不是候车地点，属于错置细节。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "C": "misattributed_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "academic_event",
+      "situation": "student research poster session open to all majors",
+      "speaker_role": "society_president",
+      "difficulty": "easy",
+      "announcement": "Hello, everyone. The Undergraduate Scholars Society is thrilled to invite you to our spring poster session next Thursday afternoon. The event runs from 1 to 4 p.m. in the Kessler Commons, and it's open to students from every major, not only the sciences. If you want to present, just bring a printed poster summarizing any project or paper you're proud of. You don't need finished results; work in progress is welcome, too. Refreshments will be served, and a few faculty members will stop by to chat. To reserve a display board, sign up on our society page by this Tuesday.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement mainly about?",
+          "options": {
+            "A": "Advertising free refreshments at an event",
+            "B": "Announcing winners of a research prize",
+            "C": "Inviting students to present posters",
+            "D": "Limiting the event to science majors"
+          },
+          "answer": "C",
+          "explanation": "整段公告是邀请各专业学生参加并展示他们的研究海报，C 正确。A 错误：茶点只是活动中的一个小细节，不能代表整体目的，属于以偏概全。B 错误：公告没有宣布任何获奖者，属于错误目的。D 错误：公告强调面向所有专业（not only the sciences），把它说成只限理科生与原意相反。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What must students do to present at the session?",
+          "options": {
+            "A": "Bring a printed research poster",
+            "B": "Submit completed results beforehand",
+            "C": "Pay a small registration fee",
+            "D": "Reserve a seat by Thursday"
+          },
+          "answer": "A",
+          "explanation": "原文说 \"just bring a printed poster summarizing any project or paper\"，所以要展示就得自带打印好的海报，A 正确。B 错误：公告说不需要完成的结果（You don't need finished results），与要求提交完成结果相反。C 错误：公告没有提到任何费用，属于合理但未提及。D 错误：截止日期是周二预定展板，而非周四预定座位，属于错置细节。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "guest_speaker",
+      "situation": "alumnus sharing research experience at public talk",
+      "speaker_role": "department_head",
+      "difficulty": "hard",
+      "announcement": "I'm pleased to announce that our department will host a special guest lecture this coming Wednesday evening. Dr. Elena Vargas, who graduated from our program a decade ago, will return to share how her early lab work led to her current research on renewable materials. The talk begins at 6 p.m. in Thornton Hall, Room 210, and will be followed by an informal question-and-answer session. Seniors considering graduate study are especially encouraged to attend, since Dr. Vargas will discuss how she chose her research path. Seats aren't reserved, so please arrive a few minutes early to find a spot.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "Recruit members for a research lab",
+            "B": "Describe a study of renewable materials",
+            "C": "Cancel a scheduled department lecture",
+            "D": "Announce a returning graduate's public talk"
+          },
+          "answer": "D",
+          "explanation": "公告的核心是宣布本系毕业校友 Dr. Vargas 回校做公开讲座，D 正确。A 错误：公告没有招募实验室成员的意图，属于错误目的。B 错误：可再生材料研究只是讲座内容的一部分，不是整段目的，属于以偏概全。C 错误：讲座是要举办而非取消，与事实相反。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "too_narrow",
+            "C": "reversed_intent"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about why seniors are encouraged to attend?",
+          "options": {
+            "A": "They will be admitted to graduate school",
+            "B": "The talk may guide their plans",
+            "C": "They can earn extra course credit",
+            "D": "They must present their own research"
+          },
+          "answer": "B",
+          "explanation": "公告说鼓励考虑读研的大四学生参加，因为 Dr. Vargas 会讲述她如何选择自己的研究道路，由此可推断讲座有助于他们规划升学，B 正确。A 错误：听讲座不等于会被研究生院录取，属于过度推理。C 错误：公告没有提到任何课程学分，属于无关推理。D 错误：公告没有要求学生展示自己的研究，属于错误细节。",
+          "distractor_types": {
+            "A": "over_inference",
+            "C": "unrelated_inference",
+            "D": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "academic_event",
+      "situation": "end-of-semester academic showcase with awards",
+      "speaker_role": "department_head",
+      "difficulty": "easy",
+      "announcement": "We're excited to announce the Biology Department's end-of-semester showcase, happening this Friday in the Atrium of Danforth Hall. From 2 to 5 p.m., students will present the projects they've completed this term, and outstanding work will be recognized with departmental awards. Family members and friends are warmly welcome to attend and cheer on the presenters. Light snacks and drinks will be available throughout the afternoon. If you'd like to enter your project for an award, submit your title to the department office by Wednesday at noon. We hope to see a great turnout.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "Invite people to a showcase",
+            "B": "Announce a new biology course",
+            "C": "Offer free snacks to students",
+            "D": "Postpone the department award ceremony"
+          },
+          "answer": "A",
+          "explanation": "公告的核心是邀请大家参加生物系学期末的项目展示活动，A 正确。B 错误：公告没有提到任何新开课程，属于错误目的。C 错误：茶点只是活动中的一个小细节，不能代表整体目的，属于以偏概全。D 错误：颁奖是活动的一部分且如期举行，说成推迟与事实相反。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "too_narrow",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What must students do to be considered for an award?",
+          "options": {
+            "A": "Present their project on Wednesday",
+            "B": "Pay an entry fee online",
+            "C": "Submit a title by Wednesday",
+            "D": "Bring family members to attend"
+          },
+          "answer": "C",
+          "explanation": "原文说 \"submit your title to the department office by Wednesday at noon\" 才能参评，C 正确。A 错误：展示是在周五进行，周三是提交标题的截止日，把展示说成周三属于错误细节。B 错误：公告没有提到任何报名费，属于合理但未提及。D 错误：欢迎家人来观看与是否有资格评奖无关，属于错置细节。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    }
+  ]
+}

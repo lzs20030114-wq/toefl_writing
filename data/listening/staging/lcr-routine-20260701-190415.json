@@ -1,0 +1,164 @@
+{
+  "items": [
+    {
+      "context": "campus_academic",
+      "situation": "student asking about exam format",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "What kind of questions are on the final?",
+      "options": {
+        "A": "Mostly multiple choice and one essay.",
+        "B": "The final grades come out next week.",
+        "C": "I studied really hard for that class.",
+        "D": "Yes, the exam is in the big hall."
+      },
+      "answer": "A",
+      "explanation": "题干问期末考的题型是什么。A直接回答“大部分是选择题加一篇作文”，正是所问的题型，正确。B是语义联想陷阱，抓住“final”联想到“成绩公布”，答非所问。C是离题句，谈自己努力学习，与题型无关，换个语境才成立。D是答错问题类型，用yes/no回答并谈考试地点，而题干问的是题型。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "roommate discussing weekend plans",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Where do you want to go this weekend?",
+      "options": {
+        "A": "The weekend went by so fast.",
+        "B": "How about that new hiking trail?",
+        "C": "I got there around eight last night.",
+        "D": "Yes, I'd love to come along."
+      },
+      "answer": "B",
+      "explanation": "题干问周末想去哪里。B用反问“去那条新的登山步道怎么样？”提出一个具体地点建议，推进对话，符合counter_question范式，正确。A是语义联想陷阱，抓“weekend”谈周末过得快，没回答地点。C是离题句，谈过去到达时间，换个语境才成立。D是答错问题类型，用yes/no回答，而题干问的是地点。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about dorm maintenance issue",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "The heater in my room stopped working again.",
+      "options": {
+        "A": "The heat really helps in winter.",
+        "B": "I bought a new blanket yesterday.",
+        "C": "Well, you should file a repair request online.",
+        "D": "Yes, the dorm is very close to campus."
+      },
+      "answer": "C",
+      "explanation": "题干陈述房间暖气又坏了，暗含需要帮助。C以话语标记“Well”开头，间接给出解决办法“你应该在网上提交报修申请”，符合marker_led_indirect范式，正确。A是语义联想陷阱，抓“heater/heat”谈暖气冬天有用，没帮上忙。B是离题句，谈买毯子，换个语境才成立。D是答错问题类型，用yes/no谈宿舍位置，与暖气故障无关。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a store clerk about a return or exchange",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Can I exchange this shirt for a bigger size?",
+      "options": {
+        "A": "The shirt looks great on you.",
+        "B": "I bought two shirts last month.",
+        "C": "The store closes at nine tonight.",
+        "D": "Sure, no problem at all."
+      },
+      "answer": "D",
+      "explanation": "题干问能否把衬衫换成大一号的。D用惯用表达“Sure, no problem at all（当然，完全没问题）”自然应允换货请求，符合idiomatic范式，正确。A是语义联想陷阱，抓“shirt”谈衬衫好看，没回答能否换。B是离题句，谈上个月买了两件，换个语境才成立。C是答错问题类型，回答营业时间，而题干问的是能否换货。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "expressing concern about a friend's situation",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Why do you look so down today?",
+      "options": {
+        "A": "It's a long story, honestly.",
+        "B": "I looked everywhere for it.",
+        "C": "The elevator only goes down.",
+        "D": "Yes, today is Thursday."
+      },
+      "answer": "A",
+      "explanation": "题干关切地问“你今天怎么看起来这么低落？”。A用惯用表达“It's a long story, honestly（说来话长）”自然回应情绪、暗示有难言之隐，符合idiomatic范式，正确。B是语义联想陷阱，抓“look”改成“looked”谈到处找东西，是词汇陷阱。C是一词多义陷阱，把“down（低落）”误读成方向“向下”。D是答错问题类型，用yes/no回答并谈星期几，与关切情绪无关。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "polysemy_misinterpretation",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about gym or sports facility hours",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "I'm not sure when the gym opens today.",
+      "options": {
+        "A": "The gym has new treadmills now.",
+        "B": "It opens at six in the morning.",
+        "C": "I go running by the river instead.",
+        "D": "Yes, the gym is quite popular here."
+      },
+      "answer": "B",
+      "explanation": "题干陈述“我不确定健身房今天几点开门”，暗含想知道开放时间。B直接给出“早上六点开门”，正是所需信息，符合direct_topical范式，正确。A是语义联想陷阱，抓“gym”谈新跑步机，没回答时间。C是离题句，谈自己去河边跑步，换个语境才成立。D是答错问题类型，用yes/no谈健身房受欢迎，而题干需要的是开放时间。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student checking bus or shuttle schedule",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Did the last shuttle already leave for downtown?",
+      "options": {
+        "A": "The downtown shops stay open late.",
+        "B": "I left my bag on the bus once.",
+        "C": "You just missed it, unfortunately.",
+        "D": "Yes, I know the whole route well."
+      },
+      "answer": "C",
+      "explanation": "题干问“去市中心的末班班车是不是已经走了？”。C用惯用表达“You just missed it, unfortunately（很遗憾，你刚好错过了）”自然确认车已走，符合idiomatic范式，正确。A是语义联想陷阱，抓“downtown”谈市中心商店营业晚，答非所问。B是词汇陷阱，把“leave”改成“left”谈曾把包落在车上，与末班车是否已走无关。D误用关键词“know”，谈自己熟悉整条路线，回避了车是否已离开这个问题，属于答错问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "semantic_association_trap",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "coordinating airport pickup with a friend",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "How should we handle picking you up tomorrow?",
+      "options": {
+        "A": "The airport parking is expensive.",
+        "B": "I handled the tickets already.",
+        "C": "Yes, my flight lands in the morning.",
+        "D": "Could you just meet me at arrivals?"
+      },
+      "answer": "D",
+      "explanation": "题干问“明天该怎么安排接你？”。D用反问“你能直接到到达口接我吗？”提出具体方案、推进对话，符合counter_question范式，正确。A是语义联想陷阱，抓“picking up→airport”谈机场停车贵，没回答怎么安排。B是词汇陷阱，把“handle”改成“handled”谈已处理好机票。C是答错问题类型，用yes/no回答并谈航班时间，而题干问的是“怎么安排”。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "semantic_association_trap",
+        "C": "wrong_question_type"
+      }
+    }
+  ]
+}

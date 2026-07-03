@@ -1,5 +1,24 @@
 # Changelog
 
+## 2026-06-28 — 后台 / 基建补记（未发用户公告）
+
+> v1.9.3（6-18）→ v1.9.4（6-26）之间合入但当时未进 CHANGELOG 的非用户面改动，集中补记。均不构成用户可感知发布（opt-in / 一次性问卷 / 后台），故不发版本公告。
+
+- **persona-only 听力配音渲染管线**（`287fa1b`，6-26）：gpt-4o-mini-tts（`openai`）provider 的确定性渲染路。新增 `lib/tts/toneDirector.js`（`derivePersona`：role+gender → SAFE 音色，同段对话两位说话人恒不同 + `renderInstructions`：persona 基线 + 冻结的 never-slow 配速）、`lib/tts/wavTools.js`（逐句 WAV 切分 + 响度归一 + 带间隔拼接，防疑问句母语升调泄漏到下一句、抹平各音色响度）、`lib/tts/renderListening.js`（`renderConversation` 编排 + 瞬时失败重试）。`openaiTts.js` 导出 `SAFE_VOICES` 并清除会 400 的 marin/cedar；`generate-lc.mjs` 的 openai 分支改走 `renderConversation`；修 `lcPromptBuilder.js` 输出示例（Sarah/David 与「标 Woman/Man」自相矛盾——具名说话人音色塌缩的根因）。**默认 edge 路不变、openai 路 opt-in（`TTS_PROVIDER=openai`），用户当前无感**；LLM 逐句韵律层经实测引擎不可 steer（情绪/重读/疑问升调几乎听不出）已砍，只保留好音色 + 固有语调。新增 19 单测，全量绿。
+- **听力配音 A/B 投票弹窗**（`fdc3213`，6-22）：首页一次性弹窗，A=现役会话音频（`lc_mpvfq0s1_5`）vs B=响度归一的 gpt-4o 升级样本，收「支持升级/维持现状」票。`components/home/VoiceUpgradeModal.js` + `VoiceUpgradeVoteTrigger.js`（`app/layout.js` 全局挂载，每浏览器仅一次、gated on demo 音频存在）；intake `app/api/survey/voice-vote`，票存 `user_surveys`（`survey_type=voice_upgrade_2026_06`，零迁移，复用 `unique(user_code,survey_type)` 去重）。
+- **后台配音投票统计页**（`82c1dfa`，6-22）：`GET /api/admin/voice-vote` 汇总票数。
+- **后台新人问卷逐份作答明细表**（`18b5439`，6-23）：first-set 问卷支持逐份明细 + 用户身份关联。
+- **docs**：content-aware tone-director 执行计划锁定（`3afd416`，6-22）。
+
+## 2026-06-26 — v1.9.4
+
+- **听力模考"做不了"修复**（`fix/listening-mock-audio-hang` `f475e1d`）：听力自适应模考把答题阶段（选项 + 答题倒计时）只挂在音频 `ended` 事件上，而到达 `ended` 唯一靠 autoplay 成功——浏览器拦截 autoplay 或 Supabase CDN 不可达（国内无代理）时整道题永久卡在"请先播放并听完音频"，模块倒计时仍在流失，超时按 0 分跳过。分三层修复：
+  - **P0 逃生口**：`AdaptiveExamShell.js` 的 `LCRInlineTask` / `MCQInlineTask` listen 阶段新增「开始答题」按钮（`isListeningType` 限定，不影响阅读 / CTW）；`LCRTask.js` / `ListeningMCQTask.js` 把原本仅练习模式出现的「I'm ready」按钮放开到限时模式；补 LAT 的 TTS 文案兜底缺失的 `item.transcript`。
+  - **P1 AudioPlayer 健壮化**（`AudioPlayer.js`）：新增 `<audio>` `error` 监听，加载失败回退浏览器 TTS（抽出 `startTTS` + `startTTSRef`）；把"已播完"与"已起播"解耦为 `completed`（卡顿不再误锁手动播放按钮，同时保住真题"只播一遍"）；autoplay 去掉 120ms `setTimeout`，改为手势内同步 `play()`。
+  - **P2 同源音频代理**（`app/api/audio/[...path]/route.js` 改为 Edge 流式代理 + 新增 `lib/listening/audioSrc.js`）：把 Supabase `listening_audio` 公链重写为同源 `/api/audio/<path>`，服务端拉取并把字节透传回应用自己的域、转发 Range、`cache-control: immutable`，让音频在 supabase.co 被墙的环境也能加载；upstream 失败返 502 → 客户端 `error` → P1 TTS 兜底（两层叠加）；带 `NEXT_PUBLIC_AUDIO_PROXY_DISABLED` kill switch。仅重写该一类 URL，`<audio src>` 走 `audioSrc`、播放 / 重置逻辑仍用原始 `src`，覆盖模考 / 练习 / 历史回看全部调用点。
+  - 新增 `__tests__/audio-player.regression.test.js`（3）+ `__tests__/audio-proxy.test.js`（6，node env）；全量 55 套 / 446 测试通过。浏览器实测：autoplay 被拦（`paused=true` `readyState=4`）时「开始答题」可进入答题；`<audio src>` 已走同源 `/api/audio` 且经代理加载成功（`/api/audio` 直 fetch 返 206 + Range + `audio/mpeg`）。
+  - **已知未办**：模块倒计时在 listen 阶段仍会走（逃生阀已消除永久挂起，残留仅决定跳过前的几秒 time-bleed，非关键），留作后续单独任务。
+
 ## 2026-06-18 — v1.9.3
 
 - **写作提前提交确认改为应用内弹窗**（`components/writing/WritingTask.js`，`50d91c3`）：原本用浏览器原生 `window.confirm`——样式与全站自定义弹窗不一致，且原生对话框会**阻塞主线程、冻结整页**。改为 app 内 styled 弹窗（继续作答 / 确定提交）；超时自动交卷仍走 `skipConfirm` 不弹框。删除不再使用的 `confirmEarlySubmit`，更新 4 个提前提交相关组件测试改为驱动弹窗。全量 49 套 / 380 测试通过。
