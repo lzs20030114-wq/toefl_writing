@@ -365,7 +365,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
             readingMistakeCount={readingMistakeCount} listeningMistakeCount={listeningMistakeCount}
             sessions={sessions}
             fadeIn={fadeIn}
-            userTier={userTier} isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
+            userCode={userCode} userTier={userTier} isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
             onOpenReferral={handleOpenReferral}
           />
           <StudyPlanColumn
