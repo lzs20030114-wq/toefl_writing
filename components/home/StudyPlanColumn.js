@@ -103,12 +103,12 @@ function Flame({ size = 44, grad = ["#FFD27A", "#FF7A2E"], id = "sp-flame" }) {
 function IconBadge({ name, isChallenge, tint, soft, border }) {
   return (
     <div style={{
-      width: 26, height: 26, borderRadius: 8, flexShrink: 0,
+      width: 23, height: 23, borderRadius: 7, flexShrink: 0,
       display: "flex", alignItems: "center", justifyContent: "center",
       background: soft || (isChallenge ? "rgba(13,150,104,0.16)" : T.primarySoft),
       border: `1px solid ${border || (isChallenge ? "rgba(13,150,104,0.28)" : T.primaryMist)}`,
     }}>
-      <Icon name={name} color={tint || T.primary} />
+      <Icon name={name} color={tint || T.primary} size={12} />
     </div>
   );
 }
@@ -182,7 +182,7 @@ export function StudyPlanColumn({ userCode, isChallenge, sessions, bestMock, sid
   const subBg = isChallenge ? "rgba(255,255,255,0.04)" : "#F7FAF9";
   const hairline = isChallenge ? CH.cardBorder : T.bdrSubtle;
   const ringTrack = isChallenge ? "rgba(255,255,255,0.08)" : "#ECF1EE";
-  const modernCard = (pad) => sideCard({ padding: pad, borderRadius: 18, boxShadow: isChallenge ? "none" : "0 2px 12px rgba(10,40,25,0.06)" });
+  const modernCard = (pad) => sideCard({ padding: pad, borderRadius: 16, boxShadow: isChallenge ? "none" : "0 2px 12px rgba(10,40,25,0.06)" });
 
   const ringProgress = useMemo(() => {
     if (days == null || days < 0) return 0;
@@ -215,17 +215,17 @@ export function StudyPlanColumn({ userCode, isChallenge, sessions, bestMock, sid
     <div
       className="home-study-col"
       style={{
-        width: 248, minWidth: 248, flexShrink: 0,
-        display: "flex", flexDirection: "column", gap: 10,
+        width: 216, minWidth: 216, flexShrink: 0,
+        display: "flex", flexDirection: "column", gap: 9,
         position: "sticky", top: 80, alignSelf: "flex-start",
         fontFamily: HOME_FONT,
       }}
     >
       {/* ══ 卡片一：备考目标 ══ */}
-      <div style={{ ...modernCard("15px 16px 16px"), ...fadeIn(140) }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+      <div style={{ ...modernCard("13px 14px 14px"), ...fadeIn(140) }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 10 }}>
           <IconBadge name="flag" isChallenge={isChallenge} />
-          <span style={{ fontSize: 14, fontWeight: 800, color: t1, flex: 1 }}>备考目标</span>
+          <span style={{ fontSize: 13, fontWeight: 800, color: t1, flex: 1 }}>备考目标</span>
           {goalSet && (
             <button
               onClick={() => setEditorOpen(true)} title="编辑目标"
@@ -239,55 +239,55 @@ export function StudyPlanColumn({ userCode, isChallenge, sessions, bestMock, sid
         </div>
 
         {!goalSet ? (
-          <div style={{ textAlign: "center", padding: "8px 4px 4px" }}>
-            <div style={{ width: 50, height: 50, borderRadius: 16, margin: "0 auto 12px", display: "flex", alignItems: "center", justifyContent: "center", background: isChallenge ? "rgba(13,150,104,0.12)" : T.primarySoft, border: `1px solid ${isChallenge ? "rgba(13,150,104,0.22)" : T.primaryMist}` }}>
-              <Icon name="flag" color={T.primary} size={24} />
+          <div style={{ textAlign: "center", padding: "6px 4px 4px" }}>
+            <div style={{ width: 44, height: 44, borderRadius: 14, margin: "0 auto 10px", display: "flex", alignItems: "center", justifyContent: "center", background: isChallenge ? "rgba(13,150,104,0.12)" : T.primarySoft, border: `1px solid ${isChallenge ? "rgba(13,150,104,0.22)" : T.primaryMist}` }}>
+              <Icon name="flag" color={T.primary} size={21} />
             </div>
-            <div style={{ fontSize: 12.5, color: t2, lineHeight: 1.65, marginBottom: 14 }}>
+            <div style={{ fontSize: 12, color: t2, lineHeight: 1.6, marginBottom: 12 }}>
               设置考试日期与目标分，<br />开启专属倒计时与每日督促。
             </div>
-            <PressButton onClick={() => setEditorOpen(true)} bg={T.primary} edge={T.primaryDeep} style={{ width: "100%", padding: "11px 0", fontSize: 13.5 }}>
+            <PressButton onClick={() => setEditorOpen(true)} bg={T.primary} edge={T.primaryDeep} style={{ width: "100%", padding: "10px 0", fontSize: 12.5 }}>
               设置目标
             </PressButton>
           </div>
         ) : (
           <>
             {plan.examDate && (
-              <div style={{ position: "relative", padding: "4px 0 14px" }}>
-                <div style={{ position: "absolute", top: 6, left: "50%", transform: "translateX(-50%)", width: 140, height: 140, borderRadius: "50%", background: `radial-gradient(circle, ${tone}16 0%, transparent 68%)`, pointerEvents: "none" }} />
-                <ProgressRing size={134} stroke={9} progress={ringProgress} color={tone} track={`${tone}26`}>
+              <div style={{ position: "relative", padding: "4px 0 12px" }}>
+                <div style={{ position: "absolute", top: 6, left: "50%", transform: "translateX(-50%)", width: 122, height: 122, borderRadius: "50%", background: `radial-gradient(circle, ${tone}16 0%, transparent 68%)`, pointerEvents: "none" }} />
+                <ProgressRing size={116} stroke={8} progress={ringProgress} color={tone} track={`${tone}26`}>
                   {days < 0 ? (
-                    <span style={{ fontSize: 17, fontWeight: 800, color: t3 }}>已结束</span>
+                    <span style={{ fontSize: 15, fontWeight: 800, color: t3 }}>已结束</span>
                   ) : days === 0 ? (
                     <>
-                      <span style={{ fontSize: 22, fontWeight: 800, color: tone }}>今天</span>
-                      <span style={{ fontSize: 11, color: t3, fontWeight: 700 }}>考试日 🎉</span>
+                      <span style={{ fontSize: 19, fontWeight: 800, color: tone }}>今天</span>
+                      <span style={{ fontSize: 10.5, color: t3, fontWeight: 700 }}>考试日 🎉</span>
                     </>
                   ) : (
                     <>
-                      <span style={{ fontSize: 10, color: t3, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase" }}>距考试</span>
-                      <span style={{ fontSize: 48, fontWeight: 800, color: tone, lineHeight: 1, fontVariantNumeric: "tabular-nums", letterSpacing: -1.5, marginTop: 1 }}>{days}</span>
-                      <span style={{ fontSize: 12, color: t2, fontWeight: 800, marginTop: 1 }}>天</span>
+                      <span style={{ fontSize: 9.5, color: t3, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase" }}>距考试</span>
+                      <span style={{ fontSize: 41, fontWeight: 800, color: tone, lineHeight: 1, fontVariantNumeric: "tabular-nums", letterSpacing: -1.5, marginTop: 1 }}>{days}</span>
+                      <span style={{ fontSize: 11, color: t2, fontWeight: 800, marginTop: 1 }}>天</span>
                     </>
                   )}
                 </ProgressRing>
               </div>
             )}
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 7 }}>
               <BentoTile label="考试日" subBg={subBg} hairline={hairline} t3={t3}>
                 {plan.examDate ? (
-                  <span style={{ fontSize: 14, fontWeight: 800, color: t1 }}>
-                    {exDate.md}<span style={{ fontSize: 10.5, fontWeight: 600, color: t3, marginLeft: 3 }}>{exDate.wd}</span>
+                  <span style={{ fontSize: 13, fontWeight: 800, color: t1 }}>
+                    {exDate.md}<span style={{ fontSize: 10, fontWeight: 600, color: t3, marginLeft: 3 }}>{exDate.wd}</span>
                   </span>
-                ) : <span style={{ fontSize: 13, fontWeight: 700, color: t3 }}>未设置</span>}
+                ) : <span style={{ fontSize: 12, fontWeight: 700, color: t3 }}>未设置</span>}
               </BentoTile>
               <BentoTile label="目标分" subBg={subBg} hairline={hairline} t3={t3}>
                 {plan.targetScore != null ? (
-                  <span style={{ fontSize: 16, fontWeight: 800, color: T.primary, fontVariantNumeric: "tabular-nums" }}>
-                    {fmtBand(plan.targetScore)}<span style={{ fontSize: 10.5, fontWeight: 600, color: t3, marginLeft: 2 }}>分</span>
+                  <span style={{ fontSize: 15, fontWeight: 800, color: T.primary, fontVariantNumeric: "tabular-nums" }}>
+                    {fmtBand(plan.targetScore)}<span style={{ fontSize: 10, fontWeight: 600, color: t3, marginLeft: 2 }}>分</span>
                   </span>
-                ) : <span style={{ fontSize: 13, fontWeight: 700, color: t3 }}>未设置</span>}
+                ) : <span style={{ fontSize: 12, fontWeight: 700, color: t3 }}>未设置</span>}
               </BentoTile>
             </div>
 
@@ -297,7 +297,7 @@ export function StudyPlanColumn({ userCode, isChallenge, sessions, bestMock, sid
               ) : (
                 <button
                   onClick={() => setEditorOpen(true)}
-                  style={{ width: "100%", marginTop: 9, padding: "8px 0", fontSize: 11.5, fontWeight: 700, color: T.primary, background: "transparent", border: `1.5px dashed ${isChallenge ? "rgba(13,150,104,0.4)" : T.primaryMist}`, borderRadius: 10, cursor: "pointer", fontFamily: HOME_FONT }}
+                  style={{ width: "100%", marginTop: 9, padding: "7px 0", fontSize: 11, fontWeight: 700, color: T.primary, background: "transparent", border: `1.5px dashed ${isChallenge ? "rgba(13,150,104,0.4)" : T.primaryMist}`, borderRadius: 10, cursor: "pointer", fontFamily: HOME_FONT }}
                 >
                   + 记录当前水平，追踪进步
                 </button>
@@ -305,7 +305,7 @@ export function StudyPlanColumn({ userCode, isChallenge, sessions, bestMock, sid
             )}
 
             {pep(days) && (
-              <div style={{ marginTop: 11, fontSize: 11.5, color: tone, fontWeight: 700, lineHeight: 1.5, textAlign: "center" }}>
+              <div style={{ marginTop: 10, fontSize: 11, color: tone, fontWeight: 700, lineHeight: 1.5, textAlign: "center" }}>
                 {pep(days)}
               </div>
             )}
@@ -314,17 +314,17 @@ export function StudyPlanColumn({ userCode, isChallenge, sessions, bestMock, sid
       </div>
 
       {/* ══ 卡片二：学习打卡（多邻国式连胜） ══ */}
-      <div style={{ ...modernCard("15px 16px 14px"), ...fadeIn(220) }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+      <div style={{ ...modernCard("13px 14px 12px"), ...fadeIn(220) }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 10 }}>
           <IconBadge name="flame" isChallenge={isChallenge} tint="#F2702E" soft="rgba(242,112,46,0.14)" border="rgba(242,112,46,0.28)" />
-          <span style={{ fontSize: 14, fontWeight: 800, color: t1, flex: 1 }}>学习打卡</span>
+          <span style={{ fontSize: 13, fontWeight: 800, color: t1, flex: 1 }}>学习打卡</span>
         </div>
 
         {/* 连胜火焰主视觉 */}
         <StreakHero streak={streak} isChallenge={isChallenge} t3={t3} />
 
         {/* 视图切换 */}
-        <div style={{ display: "flex", justifyContent: "center", marginTop: 13, marginBottom: 11 }}>
+        <div style={{ display: "flex", justifyContent: "center", marginTop: 11, marginBottom: 10 }}>
           <div style={{ display: "inline-flex", background: subBg, border: `1px solid ${hairline}`, borderRadius: 999, padding: 3, gap: 2 }}>
             {[{ k: "week", l: "本周" }, { k: "month", l: "本月" }, { k: "heat", l: "热力" }].map((o) => {
               const sel = calView === o.k;
@@ -332,7 +332,7 @@ export function StudyPlanColumn({ userCode, isChallenge, sessions, bestMock, sid
                 <button
                   key={o.k}
                   onClick={() => setCalView(o.k)}
-                  style={{ border: "none", borderRadius: 999, padding: "4px 13px", fontSize: 11.5, fontWeight: 700, cursor: "pointer", fontFamily: HOME_FONT, transition: "all .15s", background: sel ? (isChallenge ? "rgba(13,150,104,0.22)" : "#fff") : "transparent", color: sel ? T.primary : t3, boxShadow: sel && !isChallenge ? "0 1px 4px rgba(0,0,0,0.1)" : "none" }}
+                  style={{ border: "none", borderRadius: 999, padding: "4px 11px", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: HOME_FONT, transition: "all .15s", background: sel ? (isChallenge ? "rgba(13,150,104,0.22)" : "#fff") : "transparent", color: sel ? T.primary : t3, boxShadow: sel && !isChallenge ? "0 1px 4px rgba(0,0,0,0.1)" : "none" }}
                 >
                   {o.l}
                 </button>
@@ -350,12 +350,12 @@ export function StudyPlanColumn({ userCode, isChallenge, sessions, bestMock, sid
         )}
 
         {/* 今日状态 + 统计 */}
-        <div style={{ marginTop: 13, paddingTop: 11, borderTop: `1px solid ${hairline}`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 11.5, fontWeight: 700, color: practicedToday ? T.primary : t3 }}>
-            <span style={{ width: 7, height: 7, borderRadius: "50%", background: practicedToday ? T.primary : "transparent", border: practicedToday ? "none" : `1.5px solid ${t3}`, flexShrink: 0 }} />
+        <div style={{ marginTop: 11, paddingTop: 10, borderTop: `1px solid ${hairline}`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 11, fontWeight: 700, color: practicedToday ? T.primary : t3 }}>
+            <span style={{ width: 6, height: 6, borderRadius: "50%", background: practicedToday ? T.primary : "transparent", border: practicedToday ? "none" : `1.5px solid ${t3}`, flexShrink: 0 }} />
             {practicedToday ? "今日已打卡" : "今天还没练习"}
           </span>
-          <span style={{ fontSize: 10.5, color: t3, fontVariantNumeric: "tabular-nums" }}>
+          <span style={{ fontSize: 10, color: t3, fontVariantNumeric: "tabular-nums" }}>
             本月 {currentMonthCount} · 累计 {totalCount} 天
           </span>
         </div>
@@ -387,16 +387,16 @@ function StreakHero({ streak, isChallenge, t3 }) {
   if (streak <= 0) {
     return (
       <div style={{
-        display: "flex", alignItems: "center", gap: 13, borderRadius: 16, padding: "13px 16px",
+        display: "flex", alignItems: "center", gap: 11, borderRadius: 14, padding: "11px 13px",
         background: isChallenge ? "rgba(242,112,46,0.10)" : "linear-gradient(135deg,#FFF3E8 0%,#FFE3CC 100%)",
         border: `1px dashed ${isChallenge ? "rgba(242,112,46,0.42)" : "#FFC79A"}`,
       }}>
         <div style={{ flexShrink: 0, opacity: 0.92, animation: "sp-flameBob 3.4s ease-in-out infinite" }}>
-          <Flame size={34} grad={["#FFD27A", "#FF7A2E"]} id="sp-flame-zero" />
+          <Flame size={30} grad={["#FFD27A", "#FF7A2E"]} id="sp-flame-zero" />
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontSize: 15, fontWeight: 800, color: isChallenge ? CH.t1 : "#C2541E" }}>点燃今日的火苗</div>
-          <div style={{ fontSize: 11, color: isChallenge ? t3 : "#B0703E", marginTop: 3, lineHeight: 1.4 }}>完成一组练习，点亮连续打卡 🔥</div>
+          <div style={{ fontSize: 13.5, fontWeight: 800, color: isChallenge ? CH.t1 : "#C2541E" }}>点燃今日的火苗</div>
+          <div style={{ fontSize: 10.5, color: isChallenge ? t3 : "#B0703E", marginTop: 3, lineHeight: 1.4 }}>完成一组练习，点亮连续打卡 🔥</div>
         </div>
       </div>
     );
@@ -408,33 +408,33 @@ function StreakHero({ streak, isChallenge, t3 }) {
   const mPct = next ? Math.max(0.05, Math.min(1, (streak - tier.min) / (next.min - tier.min))) : 1;
 
   return (
-    <div style={{ position: "relative", overflow: "hidden", borderRadius: 16, padding: "14px 16px", background: `linear-gradient(135deg, ${tier.block[0]} 0%, ${tier.block[1]} 100%)`, boxShadow: `0 5px 16px ${tier.glow}` }}>
+    <div style={{ position: "relative", overflow: "hidden", borderRadius: 14, padding: "12px 14px", background: `linear-gradient(135deg, ${tier.block[0]} 0%, ${tier.block[1]} 100%)`, boxShadow: `0 5px 16px ${tier.glow}` }}>
       {/* 顶部柔光 */}
       <div style={{ position: "absolute", top: -34, left: -12, width: 130, height: 78, background: "radial-gradient(ellipse, rgba(255,255,255,0.42), transparent 70%)", pointerEvents: "none" }} />
-      <div style={{ position: "relative", display: "flex", alignItems: "center", gap: 13 }}>
+      <div style={{ position: "relative", display: "flex", alignItems: "center", gap: 11 }}>
         <div style={{ flexShrink: 0, animation: "sp-flameBob 2.6s ease-in-out infinite" }}>
-          <Flame size={44} grad={tier.flame} id="sp-flame-hero" />
+          <Flame size={38} grad={tier.flame} id="sp-flame-hero" />
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: "flex", alignItems: "baseline", gap: 5 }}>
-            <span style={{ fontSize: 34, fontWeight: 800, color: "#fff", lineHeight: 1, fontVariantNumeric: "tabular-nums", letterSpacing: -1, textShadow: "0 1px 3px rgba(120,30,0,0.32)" }}>{streak}</span>
-            <span style={{ fontSize: 13, fontWeight: 800, color: "#fff" }}>天</span>
-            <span style={{ fontSize: 10.5, fontWeight: 700, color: "rgba(255,255,255,0.85)", marginLeft: 2 }}>连续打卡</span>
+            <span style={{ fontSize: 29, fontWeight: 800, color: "#fff", lineHeight: 1, fontVariantNumeric: "tabular-nums", letterSpacing: -1, textShadow: "0 1px 3px rgba(120,30,0,0.32)" }}>{streak}</span>
+            <span style={{ fontSize: 12, fontWeight: 800, color: "#fff" }}>天</span>
+            <span style={{ fontSize: 10, fontWeight: 700, color: "rgba(255,255,255,0.85)", marginLeft: 2 }}>连续打卡</span>
           </div>
-          <div style={{ fontSize: 12.5, fontWeight: 700, color: "rgba(255,255,255,0.94)", marginTop: 5, lineHeight: 1.2, textShadow: "0 1px 2px rgba(120,30,0,0.22)" }}>
+          <div style={{ fontSize: 11.5, fontWeight: 700, color: "rgba(255,255,255,0.94)", marginTop: 4, lineHeight: 1.2, textShadow: "0 1px 2px rgba(120,30,0,0.22)" }}>
             {next ? "火苗正旺，别让它熄灭" : "🔥 传奇连胜，火苗不灭"}
           </div>
         </div>
       </div>
       {/* 下一里程碑进度（按天数，不设段位名） */}
-      <div style={{ position: "relative", marginTop: 12 }}>
+      <div style={{ position: "relative", marginTop: 10 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 5 }}>
-          <span style={{ fontSize: 10, color: "rgba(255,255,255,0.94)", fontWeight: 700 }}>
+          <span style={{ fontSize: 9.5, color: "rgba(255,255,255,0.94)", fontWeight: 700 }}>
             {next ? `🔥 再练 ${next.min - streak} 天满 ${next.min} 天` : "🔥 已达成 365 天里程碑"}
           </span>
-          {next && <span style={{ fontSize: 10, color: "#fff", fontWeight: 800, fontVariantNumeric: "tabular-nums" }}>{streak}/{next.min}</span>}
+          {next && <span style={{ fontSize: 9.5, color: "#fff", fontWeight: 800, fontVariantNumeric: "tabular-nums" }}>{streak}/{next.min}</span>}
         </div>
-        <div style={{ height: 6, borderRadius: 99, background: "rgba(255,255,255,0.32)", overflow: "hidden" }}>
+        <div style={{ height: 5, borderRadius: 99, background: "rgba(255,255,255,0.32)", overflow: "hidden" }}>
           <div style={{ width: `${mPct * 100}%`, height: "100%", borderRadius: 99, background: "#fff", boxShadow: "0 0 6px rgba(255,255,255,0.55)", transition: "width .7s cubic-bezier(.25,1,.5,1)" }} />
         </div>
       </div>
@@ -460,7 +460,7 @@ function WeekStrip({ practiceMap, now, examKey, isChallenge, t2, t3 }) {
 
         if (done) {
           circleBg = T.primary;
-          content = <Icon name="check" color="#fff" size={13} />;
+          content = <Icon name="check" color="#fff" size={12} />;
         } else if (cell.isToday) {
           circleBg = isChallenge ? "rgba(217,119,6,0.14)" : T.amberSoft;
           ring = `inset 0 0 0 2px ${T.amber}`;
@@ -471,10 +471,10 @@ function WeekStrip({ practiceMap, now, examKey, isChallenge, t2, t3 }) {
 
         return (
           <div key={cell.key} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
-            <span style={{ fontSize: 9.5, color: t3, fontWeight: 600 }}>{WEEKDAYS[i]}</span>
+            <span style={{ fontSize: 9, color: t3, fontWeight: 600 }}>{WEEKDAYS[i]}</span>
             <div
               title={done ? `练习 ${cell.count} 次` : (isExam ? "考试日" : "")}
-              style={{ width: 26, height: 26, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: circleBg, boxShadow: ring, animation: anim, fontSize: 11, fontWeight: 700, color: numColor, fontVariantNumeric: "tabular-nums" }}
+              style={{ width: 23, height: 23, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: circleBg, boxShadow: ring, animation: anim, fontSize: 10.5, fontWeight: 700, color: numColor, fontVariantNumeric: "tabular-nums" }}
             >
               {content || cell.date.getDate()}
             </div>
@@ -487,8 +487,8 @@ function WeekStrip({ practiceMap, now, examKey, isChallenge, t2, t3 }) {
 
 function BentoTile({ label, children, subBg, hairline, t3 }) {
   return (
-    <div style={{ background: subBg, border: `1px solid ${hairline}`, borderRadius: 12, padding: "9px 11px", display: "flex", flexDirection: "column", gap: 3, minWidth: 0 }}>
-      <span style={{ fontSize: 10, color: t3, fontWeight: 600 }}>{label}</span>
+    <div style={{ background: subBg, border: `1px solid ${hairline}`, borderRadius: 11, padding: "8px 10px", display: "flex", flexDirection: "column", gap: 3, minWidth: 0 }}>
+      <span style={{ fontSize: 9.5, color: t3, fontWeight: 600 }}>{label}</span>
       <span style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{children}</span>
     </div>
   );
@@ -498,12 +498,12 @@ function ScoreProgress({ current, target, label, t2, t3, ringTrack }) {
   const pct = target > 0 ? Math.max(0, Math.min(1, current / target)) : 0;
   const reached = current >= target;
   return (
-    <div style={{ marginTop: 11 }}>
+    <div style={{ marginTop: 10 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 5 }}>
-        <span style={{ fontSize: 10.5, color: t3 }}>{label || "当前"} <b style={{ color: t2, fontSize: 12, fontWeight: 800 }}>{fmtBand(current)}</b></span>
-        <span style={{ fontSize: 10.5, color: t3 }}>目标 <b style={{ color: T.primary, fontSize: 12, fontWeight: 800 }}>{fmtBand(target)}</b></span>
+        <span style={{ fontSize: 10, color: t3 }}>{label || "当前"} <b style={{ color: t2, fontSize: 11.5, fontWeight: 800 }}>{fmtBand(current)}</b></span>
+        <span style={{ fontSize: 10, color: t3 }}>目标 <b style={{ color: T.primary, fontSize: 11.5, fontWeight: 800 }}>{fmtBand(target)}</b></span>
       </div>
-      <div style={{ height: 9, borderRadius: 99, background: ringTrack, overflow: "hidden", boxShadow: "inset 0 1px 2px rgba(0,0,0,0.06)" }}>
+      <div style={{ height: 8, borderRadius: 99, background: ringTrack, overflow: "hidden", boxShadow: "inset 0 1px 2px rgba(0,0,0,0.06)" }}>
         <div style={{ width: `${pct * 100}%`, height: "100%", borderRadius: 99, background: reached ? `linear-gradient(90deg, ${T.cyan}, ${T.primary})` : `linear-gradient(90deg, ${T.primaryMist}, ${T.primary})`, transition: "width .7s cubic-bezier(.25,1,.5,1)" }} />
       </div>
     </div>
@@ -514,7 +514,7 @@ function MonthNavBtn({ dir, onClick, t2, hairline }) {
   return (
     <button
       onClick={onClick} aria-label={dir === "prev" ? "上个月" : "下个月"}
-      style={{ width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", border: `1px solid ${hairline}`, background: "transparent", color: t2, borderRadius: 7, cursor: "pointer", fontFamily: HOME_FONT, flexShrink: 0, transition: "background .15s" }}
+      style={{ width: 22, height: 22, display: "flex", alignItems: "center", justifyContent: "center", border: `1px solid ${hairline}`, background: "transparent", color: t2, borderRadius: 7, cursor: "pointer", fontFamily: HOME_FONT, flexShrink: 0, transition: "background .15s" }}
       onMouseEnter={(e) => { e.currentTarget.style.background = hairline; }}
       onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
     >
@@ -529,13 +529,13 @@ function MonthView({ view, setView, practiceMap, todayKey, examKey, isChallenge,
   const weeks = useMemo(() => buildMonthGrid(view.y, view.m), [view]);
   return (
     <>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 9 }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
         <MonthNavBtn dir="prev" t2={t2} hairline={hairline} onClick={() => setView(shiftMonth(view, -1))} />
-        <span style={{ fontSize: 12, fontWeight: 700, color: t1, fontVariantNumeric: "tabular-nums" }}>{view.y} 年 {view.m + 1} 月</span>
+        <span style={{ fontSize: 11.5, fontWeight: 700, color: t1, fontVariantNumeric: "tabular-nums" }}>{view.y} 年 {view.m + 1} 月</span>
         <MonthNavBtn dir="next" t2={t2} hairline={hairline} onClick={() => setView(shiftMonth(view, 1))} />
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 4, marginBottom: 5 }}>
-        {WEEKDAYS.map((w) => (<div key={w} style={{ textAlign: "center", fontSize: 10, color: t3, fontWeight: 600 }}>{w}</div>))}
+        {WEEKDAYS.map((w) => (<div key={w} style={{ textAlign: "center", fontSize: 9.5, color: t3, fontWeight: 600 }}>{w}</div>))}
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
         {weeks.map((week, wi) => (
@@ -553,7 +553,7 @@ function MonthView({ view, setView, practiceMap, todayKey, examKey, isChallenge,
               if (isExam) { ring = `inset 0 0 0 1.5px ${T.rose}`; if (!practiced) color = T.rose; }
               else if (isToday) { ring = `inset 0 0 0 1.5px ${practiced ? "rgba(255,255,255,0.85)" : T.primary}`; if (!practiced) color = T.primary; }
               return (
-                <div key={ci} title={isExam ? "考试日" : (practiced ? `练习 ${count} 次` : "")} style={{ height: 27, borderRadius: 7, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11.5, fontWeight: practiced || isToday || isExam ? 700 : 500, background: bg, color, boxShadow: ring, fontVariantNumeric: "tabular-nums", opacity: cell.inMonth ? 1 : 0.5 }}>
+                <div key={ci} title={isExam ? "考试日" : (practiced ? `练习 ${count} 次` : "")} style={{ height: 24, borderRadius: 7, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: practiced || isToday || isExam ? 700 : 500, background: bg, color, boxShadow: ring, fontVariantNumeric: "tabular-nums", opacity: cell.inMonth ? 1 : 0.5 }}>
                   {cell.date.getDate()}
                 </div>
               );
@@ -570,11 +570,11 @@ function HeatmapView({ practiceMap, now, examKey, isChallenge, t2, t3 }) {
   const cells = useMemo(() => columns.flat(), [columns]);
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 9 }}>
-        <span style={{ fontSize: 11, color: t3, fontWeight: 600 }}>近 {HEATMAP_WEEKS} 周</span>
-        <span style={{ fontSize: 10, color: t3 }}>每格 = 一天</span>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+        <span style={{ fontSize: 10.5, color: t3, fontWeight: 600 }}>近 {HEATMAP_WEEKS} 周</span>
+        <span style={{ fontSize: 9.5, color: t3 }}>每格 = 一天</span>
       </div>
-      <div style={{ display: "grid", gridTemplateRows: "repeat(7, 14px)", gridAutoFlow: "column", gap: 3 }}>
+      <div style={{ display: "grid", gridTemplateRows: "repeat(7, 12px)", gridAutoFlow: "column", gap: 2.5 }}>
         {cells.map((cell) => {
           const hc = heatColor(cell.isFuture ? 0 : cell.count, isChallenge);
           const isExam = cell.key === examKey;
@@ -586,10 +586,10 @@ function HeatmapView({ practiceMap, now, examKey, isChallenge, t2, t3 }) {
           );
         })}
       </div>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 4, marginTop: 9 }}>
-        <span style={{ fontSize: 9.5, color: t3 }}>少</span>
-        {[0, 1, 2, 3].map((n) => (<div key={n} style={{ width: 11, height: 11, borderRadius: 3, background: heatColor(n, isChallenge).bg }} />))}
-        <span style={{ fontSize: 9.5, color: t3 }}>多</span>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 4, marginTop: 8 }}>
+        <span style={{ fontSize: 9, color: t3 }}>少</span>
+        {[0, 1, 2, 3].map((n) => (<div key={n} style={{ width: 10, height: 10, borderRadius: 3, background: heatColor(n, isChallenge).bg }} />))}
+        <span style={{ fontSize: 9, color: t3 }}>多</span>
       </div>
     </div>
   );
