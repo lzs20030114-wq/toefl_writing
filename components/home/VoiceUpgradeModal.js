@@ -46,6 +46,7 @@ export function VoiceUpgradeModal({ open, sample, onVote, onDismiss }) {
 
   return createPortal(
     <div
+      data-tp-overlay
       role="dialog"
       aria-modal="true"
       aria-label="听力语音升级投票"

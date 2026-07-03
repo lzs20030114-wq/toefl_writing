@@ -146,6 +146,7 @@ export function NavSidebar({
           return (
             <button
               key={sec.id}
+              data-section-id={sec.id}
               onClick={() => onSectionChange(sec.id)}
               style={{
                 width: "100%",
